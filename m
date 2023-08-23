@@ -2,64 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A4D786054
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Aug 2023 21:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E5678605E
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Aug 2023 21:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235617AbjHWTHe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Aug 2023 15:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48058 "EHLO
+        id S236235AbjHWTLX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Aug 2023 15:11:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232338AbjHWTHW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Aug 2023 15:07:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A524FE79;
-        Wed, 23 Aug 2023 12:07:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 34A0061011;
-        Wed, 23 Aug 2023 19:07:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70C6EC433C8;
-        Wed, 23 Aug 2023 19:07:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692817639;
-        bh=RVSvLWhqUQB6+MmdE+gYscr3M5RJ7QG7NfKZTgCn9p8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BbT2WBMI3oVMLqutgb1CBas2Qx3soqd66Luskm7ByeGP5/vt2lTWQ0JkGmYW9W+MC
-         wVniEh+FnzAJX47IdhxhZjIXmoNDE6pV6/GJvmTxqWAXcnwPXOxC5Ok9UV0kquKSad
-         VtBxNeh5LqM/gZfW3lglL0+e93kk4ZbnGPl3uiqWlrGPS5DHycdwy3JKjcBpeFSU9O
-         2Gb1wEcl/wt/KETKap9GSp9me9jc0XH0MjwD1l1hHdyxT+YjBKV270+0slpUH3lxHR
-         8VyElkMop6Y7Brefg3H4HTPGo2ZSevcIEgeqF2g+Z65AS8pdxMHPnBd3p9OZQRoIYG
-         px82G4yElgy7A==
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2b9c907bc68so99222251fa.2;
-        Wed, 23 Aug 2023 12:07:19 -0700 (PDT)
-X-Gm-Message-State: AOJu0YyCz9gx5oRzbFrg0TofHaKDd1RBYh/dCVNtNc/KU5VQl/iJOpby
-        cMLTNN6G2aIidKCLdMCYuPM2T0ri3xrXPl7NgA==
-X-Google-Smtp-Source: AGHT+IFxdup1Kiqi+uIYfNj073uf1yswleXwMzYc0X8IUuQU//tQNBsizGTxXShOkFhTmyDUw3oBBN8mQpGvjtOHeYU=
-X-Received: by 2002:a2e:81d0:0:b0:2bc:d33e:ccc5 with SMTP id
- s16-20020a2e81d0000000b002bcd33eccc5mr4501945ljg.41.1692817637284; Wed, 23
- Aug 2023 12:07:17 -0700 (PDT)
+        with ESMTP id S238299AbjHWTLV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Aug 2023 15:11:21 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC62E7C;
+        Wed, 23 Aug 2023 12:11:15 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b9cdba1228so93681331fa.2;
+        Wed, 23 Aug 2023 12:11:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692817874; x=1693422674;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z/z++L67LsgS5CeBHRbV3vQihN14HaxRSYn9ahWfvaI=;
+        b=j5NWQxKgKxiyKasFqwOGDRncYcWX5tb0apAk/rligFF/9nY20cTHqm7QfzSbRog0Iv
+         0zbr1xpLQEWG8tXsZL9ShwNI1thvgYstvYrUA3N0ykI4dn9niP6hJEqHDPaior3M107f
+         da4TUZIyTOvU6BPFriAjPDBO72Q6UOnYo5ewB4aba1BgpTPSFm2HU7jvv7v1dfSb03DJ
+         OXfluvr5aF8yRJOTsdTm/PR65j/oe851GBxxk6YleLdenxTv7EmHcj5qY6ADMzNQc7f3
+         zeG86A0qlUwhgdbKVfM7B0SvA7rueFk3uffJeE/i/mxGUK8SDkOCy7I4sNO+GbH8xdhr
+         grGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692817874; x=1693422674;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=z/z++L67LsgS5CeBHRbV3vQihN14HaxRSYn9ahWfvaI=;
+        b=aOg2+P4ayWMHYa+zcYQpjlYElJSTgKD5cPGpQ36dgmRYZOzOO00v63NKKOo8az2Qws
+         3GPd4TeSRxzBgwbnzhHSY6muoV6bi+SN5TXmiXXZt4WAiUyXTDO2WkdMhIWzGBtpIHTr
+         QBXPUuC6QgpyNlCdf2lN2eAqLYLmNhOaqQi9Jp5muYTXzV6Go5TlXPcUlYmN+SS9Vsxv
+         byfnj/u8dCJutd5Q/FfHeXPI+bC5ivgfpZLpZadWxJJuAuQKKBH3YHyHdb0p5quHVYkV
+         DAPhXmUgO38UBfP5HQKaOomJ3zeI79HTVS+COkVzukt0JAjAr77cB+u3IUs0WPL6WBKi
+         FJAA==
+X-Gm-Message-State: AOJu0YyQcRnQT0e9Hcb7ja8liJcV7q6mlErn5pgpHii353O/RQLSPt03
+        fgUkbaqb4UpbopB6aCbjJ2k=
+X-Google-Smtp-Source: AGHT+IFTKofw15kfmJaES5wnAO8K/GJ/mqB+Un+40kpOipUOrSBoQbYDlcpIRBkEZyL3pswrSrTZ0Q==
+X-Received: by 2002:a2e:9104:0:b0:2ba:5ca7:2311 with SMTP id m4-20020a2e9104000000b002ba5ca72311mr10376164ljg.41.1692817873870;
+        Wed, 23 Aug 2023 12:11:13 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-12-148.dynamic.telemach.net. [82.149.12.148])
+        by smtp.gmail.com with ESMTPSA id rv6-20020a17090710c600b0099cc3c7ace2sm10189735ejb.140.2023.08.23.12.11.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Aug 2023 12:11:13 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2] genpd: Explicitly include correct DT includes
+Date:   Wed, 23 Aug 2023 21:11:10 +0200
+Message-ID: <12268735.O9o76ZdvQC@jernej-laptop>
+In-Reply-To: <20230823170438.2489746-1-robh@kernel.org>
+References: <20230823170438.2489746-1-robh@kernel.org>
 MIME-Version: 1.0
-References: <20230609183111.1765507-1-robh@kernel.org> <20230703030148.qqszljkgnyzt52da@vireshk-i7>
-In-Reply-To: <20230703030148.qqszljkgnyzt52da@vireshk-i7>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 23 Aug 2023 14:07:04 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLQCSHfQtYicBVYfjtcE2nJLZ=g_7ASj5LfBhOb2Y2ouw@mail.gmail.com>
-Message-ID: <CAL_JsqLQCSHfQtYicBVYfjtcE2nJLZ=g_7ASj5LfBhOb2Y2ouw@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: pmac32: Use of_property_read_reg() to parse "reg"
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,40 +78,29 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Jul 2, 2023 at 10:01=E2=80=AFPM Viresh Kumar <viresh.kumar@linaro.o=
-rg> wrote:
->
-> On 09-06-23, 12:31, Rob Herring wrote:
-> > Use the recently added of_property_read_reg() helper to get the
-> > untranslated "reg" address value.
-> >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  drivers/cpufreq/pmac32-cpufreq.c | 5 ++---
-> >  1 file changed, 2 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/cpufreq/pmac32-cpufreq.c b/drivers/cpufreq/pmac32-=
-cpufreq.c
-> > index ec75e79659ac..f53635ba16c1 100644
-> > --- a/drivers/cpufreq/pmac32-cpufreq.c
-> > +++ b/drivers/cpufreq/pmac32-cpufreq.c
-> > @@ -378,10 +378,9 @@ static int pmac_cpufreq_cpu_init(struct cpufreq_po=
-licy *policy)
-> >
-> >  static u32 read_gpio(struct device_node *np)
-> >  {
-> > -     const u32 *reg =3D of_get_property(np, "reg", NULL);
-> > -     u32 offset;
-> > +     u64 offset;
-> >
-> > -     if (reg =3D=3D NULL)
-> > +     if (of_property_read_reg(np, 0, &offset, NULL) < 0)
-> >               return 0;
-> >       /* That works for all keylargos but shall be fixed properly
-> >        * some day... The problem is that it seems we can't rely
->
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Dne sreda, 23. avgust 2023 ob 19:04:37 CEST je Rob Herring napisal(a):
+> The DT of_device.h and of_platform.h date back to the separate
+> of_platform_bus_type before it was merged into the regular platform bus.
+> As part of that merge prepping Arm DT support 13 years ago, they
+> "temporarily" include each other. They also include platform_device.h
+> and of.h. As a result, there's a pretty much random mix of those include
+> files used throughout the tree. In order to detangle these headers and
+> replace the implicit includes with struct declarations, users need to
+> explicitly include the correct includes.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> v2: Previously sent for drivers/soc/. Gathered up files which got moved
+>     to genpd to new patch.
+> ---
+>  drivers/genpd/mediatek/mtk-pm-domains.c | 2 +-
+>  drivers/genpd/mediatek/mtk-scpsys.c     | 2 +-
+>  drivers/genpd/sunxi/sun20i-ppu.c        | 2 +-
 
-Is someone going to apply this?
+for sun20i-ppu:
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Rob
+Best regards,
+Jernej
+
+
