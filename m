@@ -2,105 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E5678605E
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Aug 2023 21:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E3F778607E
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Aug 2023 21:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236235AbjHWTLX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Aug 2023 15:11:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
+        id S237435AbjHWTSz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Aug 2023 15:18:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238299AbjHWTLV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Aug 2023 15:11:21 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC62E7C;
-        Wed, 23 Aug 2023 12:11:15 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b9cdba1228so93681331fa.2;
-        Wed, 23 Aug 2023 12:11:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692817874; x=1693422674;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z/z++L67LsgS5CeBHRbV3vQihN14HaxRSYn9ahWfvaI=;
-        b=j5NWQxKgKxiyKasFqwOGDRncYcWX5tb0apAk/rligFF/9nY20cTHqm7QfzSbRog0Iv
-         0zbr1xpLQEWG8tXsZL9ShwNI1thvgYstvYrUA3N0ykI4dn9niP6hJEqHDPaior3M107f
-         da4TUZIyTOvU6BPFriAjPDBO72Q6UOnYo5ewB4aba1BgpTPSFm2HU7jvv7v1dfSb03DJ
-         OXfluvr5aF8yRJOTsdTm/PR65j/oe851GBxxk6YleLdenxTv7EmHcj5qY6ADMzNQc7f3
-         zeG86A0qlUwhgdbKVfM7B0SvA7rueFk3uffJeE/i/mxGUK8SDkOCy7I4sNO+GbH8xdhr
-         grGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692817874; x=1693422674;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=z/z++L67LsgS5CeBHRbV3vQihN14HaxRSYn9ahWfvaI=;
-        b=aOg2+P4ayWMHYa+zcYQpjlYElJSTgKD5cPGpQ36dgmRYZOzOO00v63NKKOo8az2Qws
-         3GPd4TeSRxzBgwbnzhHSY6muoV6bi+SN5TXmiXXZt4WAiUyXTDO2WkdMhIWzGBtpIHTr
-         QBXPUuC6QgpyNlCdf2lN2eAqLYLmNhOaqQi9Jp5muYTXzV6Go5TlXPcUlYmN+SS9Vsxv
-         byfnj/u8dCJutd5Q/FfHeXPI+bC5ivgfpZLpZadWxJJuAuQKKBH3YHyHdb0p5quHVYkV
-         DAPhXmUgO38UBfP5HQKaOomJ3zeI79HTVS+COkVzukt0JAjAr77cB+u3IUs0WPL6WBKi
-         FJAA==
-X-Gm-Message-State: AOJu0YyQcRnQT0e9Hcb7ja8liJcV7q6mlErn5pgpHii353O/RQLSPt03
-        fgUkbaqb4UpbopB6aCbjJ2k=
-X-Google-Smtp-Source: AGHT+IFTKofw15kfmJaES5wnAO8K/GJ/mqB+Un+40kpOipUOrSBoQbYDlcpIRBkEZyL3pswrSrTZ0Q==
-X-Received: by 2002:a2e:9104:0:b0:2ba:5ca7:2311 with SMTP id m4-20020a2e9104000000b002ba5ca72311mr10376164ljg.41.1692817873870;
-        Wed, 23 Aug 2023 12:11:13 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-12-148.dynamic.telemach.net. [82.149.12.148])
-        by smtp.gmail.com with ESMTPSA id rv6-20020a17090710c600b0099cc3c7ace2sm10189735ejb.140.2023.08.23.12.11.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Aug 2023 12:11:13 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Rob Herring <robh@kernel.org>
+        with ESMTP id S237786AbjHWTSk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Aug 2023 15:18:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B2ACD5;
+        Wed, 23 Aug 2023 12:18:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 290DE6378F;
+        Wed, 23 Aug 2023 19:18:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23854C433C7;
+        Wed, 23 Aug 2023 19:18:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692818317;
+        bh=JKOlWUIKDPkX1sCGD0EBVZpvcdpnHpPJU8ikm6imCbI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=b6h/tWHDoJTHDb+qS/aqiuy3rKQoxj/vsU8/LX+Ogvka47HTceWSF7GXXOrZ2yfta
+         qP5r7VAqqhdWo/cx3Pk7ILgtkGZF2Ppjc39SVRsPJKDAW8ePjLx25eRITdWJztCTS+
+         9LimSVoCYEIaFuzRvXa76HIkZVfSdX5cxmS+g1Efaevf54yZC1S5UaCLfgfaNjhk7O
+         c43vii/AgXjldWlNYdhxkVp5S7n9D/2qT/zP5/bApGHKCsXafejBAelB68Q+57oCyy
+         cHOIT0+AR+FWQCulmwCGsaOTsSNcxjMqwvzR7HnFMC4a3Q/prHvL9BUrywygOWvVtj
+         JMhRmRpgpHbjA==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     linux-pci@vger.kernel.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v2] genpd: Explicitly include correct DT includes
-Date:   Wed, 23 Aug 2023 21:11:10 +0200
-Message-ID: <12268735.O9o76ZdvQC@jernej-laptop>
-In-Reply-To: <20230823170438.2489746-1-robh@kernel.org>
-References: <20230823170438.2489746-1-robh@kernel.org>
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH] PCI: Tidy save/restore config messages
+Date:   Wed, 23 Aug 2023 14:18:31 -0500
+Message-Id: <20230823191831.476579-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dne sreda, 23. avgust 2023 ob 19:04:37 CEST je Rob Herring napisal(a):
-> The DT of_device.h and of_platform.h date back to the separate
-> of_platform_bus_type before it was merged into the regular platform bus.
-> As part of that merge prepping Arm DT support 13 years ago, they
-> "temporarily" include each other. They also include platform_device.h
-> and of.h. As a result, there's a pretty much random mix of those include
-> files used throughout the tree. In order to detangle these headers and
-> replace the implicit includes with struct declarations, users need to
-> explicitly include the correct includes.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> v2: Previously sent for drivers/soc/. Gathered up files which got moved
->     to genpd to new patch.
-> ---
->  drivers/genpd/mediatek/mtk-pm-domains.c | 2 +-
->  drivers/genpd/mediatek/mtk-scpsys.c     | 2 +-
->  drivers/genpd/sunxi/sun20i-ppu.c        | 2 +-
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-for sun20i-ppu:
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Update config space save/restore debug messages so they line up better.
+Previously:
 
-Best regards,
-Jernej
+  nvme 0000:05:00.0: saving config space at offset 0x4 (reading 0x20100006)
+  nvme 0000:05:00.0: saving config space at offset 0x8 (reading 0x1080200)
+  nvme 0000:05:00.0: saving config space at offset 0xc (reading 0x0)
 
+  nvme 0000:05:00.0: restoring config space at offset 0x4 (was 0x0, writing 0x20100006)
+
+Now:
+
+  nvme 0000:05:00.0: save config 0x04: 0x20100006
+  nvme 0000:05:00.0: save config 0x08: 0x01080200
+  nvme 0000:05:00.0: save config 0x0c: 0x00000000
+
+  nvme 0000:05:00.0: restore config 0x04: 0x00000000 -> 0x20100006
+
+No functional change intended.  Enable these messages by setting
+CONFIG_DYNAMIC_DEBUG=y and adding 'dyndbg="file drivers/pci/* +p"'
+to kernel parameters.
+
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+---
+ drivers/pci/pci.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index 60230da957e0..920c161575d4 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -1681,7 +1681,7 @@ int pci_save_state(struct pci_dev *dev)
+ 	/* XXX: 100% dword access ok here? */
+ 	for (i = 0; i < 16; i++) {
+ 		pci_read_config_dword(dev, i * 4, &dev->saved_config_space[i]);
+-		pci_dbg(dev, "saving config space at offset %#x (reading %#x)\n",
++		pci_dbg(dev, "save config %#04x: %#010x\n",
+ 			i * 4, dev->saved_config_space[i]);
+ 	}
+ 	dev->state_saved = true;
+@@ -1712,7 +1712,7 @@ static void pci_restore_config_dword(struct pci_dev *pdev, int offset,
+ 		return;
+ 
+ 	for (;;) {
+-		pci_dbg(pdev, "restoring config space at offset %#x (was %#x, writing %#x)\n",
++		pci_dbg(pdev, "restore config %#04x: %#010x -> %#010x\n",
+ 			offset, val, saved_val);
+ 		pci_write_config_dword(pdev, offset, saved_val);
+ 		if (retry-- <= 0)
+-- 
+2.34.1
 
