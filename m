@@ -2,214 +2,197 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C71677860FC
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Aug 2023 21:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 128E578610B
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Aug 2023 21:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238393AbjHWTtQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Aug 2023 15:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
+        id S238414AbjHWTxC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 23 Aug 2023 15:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238452AbjHWTtK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Aug 2023 15:49:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34B810CB;
-        Wed, 23 Aug 2023 12:49:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E80266355;
-        Wed, 23 Aug 2023 19:49:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CBD2C433C7;
-        Wed, 23 Aug 2023 19:49:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692820144;
-        bh=FobxdKGjk+XaZrxNDpLxP3Jm4scXYpkNdSMSYXKfLC8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VrIrnOXxJ1NiXM4eC6i5wDYcWnO2n2+H8JJ7WurOqnZVdoRfknp6PpjWUYjCL+aQg
-         wMlA0wo6so3p7NmsQ0lVQyCbPov43nWUsY7rhLIe6PonfQsB6CTB0/Rhp0M0C4A6MU
-         q2SUB837PnnyUGujlCNOu9nSpUD+SvH/iLA/gwec8Sbtxu2NpO7DkOahYZlGBkwSfS
-         UD9k3jsf7sxmyqoQz3f1cJrTPiJQ1BNKrUv6RZGp1Dj3WH13LlA5iLGQU2NbRw4CIs
-         Cq23xTOhm4MwfN+b05AcD8ruyhspDNVCNmPPFQN89U1kEI2tHpB3UT06BIKW68D0ef
-         SFhz9NSBmf9kA==
-Received: (nullmailer pid 2782531 invoked by uid 1000);
-        Wed, 23 Aug 2023 19:49:02 -0000
-Date:   Wed, 23 Aug 2023 14:49:02 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: use capital "OR" for multiple licenses in
- SPDX
-Message-ID: <20230823194902.GA2782125-robh@kernel.org>
-References: <20230823084540.112602-1-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S238428AbjHWTxA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Aug 2023 15:53:00 -0400
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81005CC7;
+        Wed, 23 Aug 2023 12:52:55 -0700 (PDT)
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-570e8bee8b5so476318eaf.1;
+        Wed, 23 Aug 2023 12:52:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692820374; x=1693425174;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JSk/7E/rTmVy54qULMkQ8kbJLW+iQiD+8RRV7vO8Hd0=;
+        b=iUVYKciCScl42d8TiIoBjGN0jLtPTKvK3BgZDeJ2cl6EakxYw3wwgx4im5rEb/4+7B
+         8Q0Np0tgsW8vsVqs8JkX6wWaFhsB0/n+1rmgqvq6ZDPWKz3ErBTSaXLAq9iYk/jUKbut
+         g1COhwNJVDj4CN3gWCyANNbJyW4kKO1ySy6bQmKaDnq/EbE0mZf0i9+ZLSFVW3St/Rgl
+         YxhIGGsNVnNLAkdsQmFcqzb1rNKyoro339F47vypp2XtK/ALPFjoRuFuHgl6ykrkiVHx
+         dyYnk6zo5FHRLXAK79D5DshcVnjTB2a2Pp+usPO4PaqMTdUnD1twTUI1YxgNLm+qaF8t
+         rYOQ==
+X-Gm-Message-State: AOJu0YxPOO2uvKTWGBPTQ6uW/mWksQwZ7kgj0mJUflmgMP06EPEUUtSU
+        Q0DS5Qs6sDoZNb1MjIYzftffY//V2ofNyXOeBXk=
+X-Google-Smtp-Source: AGHT+IFYRx/+X/l6djNLFTilRf2ceV7n65aIs/YjVG5EJI8tCJm+x70uVhFe4BcriKvwPz1wuIDjQl6E6yFzt/cj2LQ=
+X-Received: by 2002:a4a:bc85:0:b0:560:b01a:653d with SMTP id
+ m5-20020a4abc85000000b00560b01a653dmr13102153oop.0.1692820374698; Wed, 23 Aug
+ 2023 12:52:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230823084540.112602-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230822124837.3016641-1-zhanjie9@hisilicon.com>
+In-Reply-To: <20230822124837.3016641-1-zhanjie9@hisilicon.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 23 Aug 2023 21:52:43 +0200
+Message-ID: <CAJZ5v0gNZ_Uw4fLH00tzPtvY3GWu2qBAvQ=y2Bjwreqa=3kuuQ@mail.gmail.com>
+Subject: Re: [PATCH v2] cpufreq: Support per-policy performance boost
+To:     Jie Zhan <zhanjie9@hisilicon.com>, viresh.kumar@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxarm@huawei.com, xuwei5@huawei.com, wanghuiqiang@huawei.com,
+        jonathan.cameron@huawei.com, wangxiongfeng2@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 23, 2023 at 10:45:40AM +0200, Krzysztof Kozlowski wrote:
-> Documentation/process/license-rules.rst and checkpatch expect the SPDX
-> identifier syntax for multiple licenses to use capital "OR".  Correct it
-> to keep consistent format and avoid copy-paste issues.
-> 
-> Correct also the format // -> .* in few Allwinner binding headers as
-> pointed out by checkpatch:
-> 
->   WARNING: Improper SPDX comment style for 'include/dt-bindings/reset/sun50i-h6-ccu.h', please use '/*' instead
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Rebased on next-20230822, so might not apply cleanly.  What does not
-> apply, can be skipped and I will fix it after next RC.
-> ---
->  Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml    | 2 +-
->  .../devicetree/bindings/arm/arm,coresight-dummy-sink.yaml       | 2 +-
->  .../devicetree/bindings/arm/arm,coresight-dummy-source.yaml     | 2 +-
->  .../devicetree/bindings/arm/arm,embedded-trace-extension.yaml   | 2 +-
->  .../devicetree/bindings/arm/arm,trace-buffer-extension.yaml     | 2 +-
->  Documentation/devicetree/bindings/arm/arm,versatile-sysreg.yaml | 2 +-
->  Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml        | 2 +-
->  .../devicetree/bindings/arm/keystone/ti,k3-sci-common.yaml      | 2 +-
->  Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml      | 2 +-
->  Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml  | 2 +-
->  Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml  | 2 +-
->  Documentation/devicetree/bindings/clock/ti,cdce925.yaml         | 2 +-
->  Documentation/devicetree/bindings/clock/ti,sci-clk.yaml         | 2 +-
->  Documentation/devicetree/bindings/crypto/ti,sa2ul.yaml          | 2 +-
->  .../devicetree/bindings/display/msm/dsi-controller-main.yaml    | 2 +-
->  Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml | 2 +-
->  Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml | 2 +-
->  Documentation/devicetree/bindings/display/msm/dsi-phy-20nm.yaml | 2 +-
->  Documentation/devicetree/bindings/display/msm/dsi-phy-28nm.yaml | 2 +-
->  Documentation/devicetree/bindings/display/msm/dsi-phy-7nm.yaml  | 2 +-
->  .../devicetree/bindings/display/msm/dsi-phy-common.yaml         | 2 +-
->  Documentation/devicetree/bindings/display/msm/mdss-common.yaml  | 2 +-
->  Documentation/devicetree/bindings/display/msm/qcom,mdp5.yaml    | 2 +-
->  Documentation/devicetree/bindings/display/msm/qcom,mdss.yaml    | 2 +-
->  .../devicetree/bindings/display/msm/qcom,msm8998-dpu.yaml       | 2 +-
->  .../devicetree/bindings/display/msm/qcom,msm8998-mdss.yaml      | 2 +-
->  .../devicetree/bindings/display/msm/qcom,qcm2290-dpu.yaml       | 2 +-
->  .../devicetree/bindings/display/msm/qcom,qcm2290-mdss.yaml      | 2 +-
->  .../devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml        | 2 +-
->  .../devicetree/bindings/display/msm/qcom,sc7180-mdss.yaml       | 2 +-
->  .../devicetree/bindings/display/msm/qcom,sc7280-dpu.yaml        | 2 +-
->  .../devicetree/bindings/display/msm/qcom,sc7280-mdss.yaml       | 2 +-
->  .../devicetree/bindings/display/msm/qcom,sc8280xp-dpu.yaml      | 2 +-
->  .../devicetree/bindings/display/msm/qcom,sc8280xp-mdss.yaml     | 2 +-
->  .../devicetree/bindings/display/msm/qcom,sdm845-dpu.yaml        | 2 +-
->  .../devicetree/bindings/display/msm/qcom,sdm845-mdss.yaml       | 2 +-
->  .../devicetree/bindings/display/msm/qcom,sm6115-dpu.yaml        | 2 +-
->  .../devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml       | 2 +-
->  .../devicetree/bindings/display/msm/qcom,sm6350-mdss.yaml       | 2 +-
->  .../devicetree/bindings/display/msm/qcom,sm6375-mdss.yaml       | 2 +-
->  .../devicetree/bindings/display/msm/qcom,sm8150-dpu.yaml        | 2 +-
->  .../devicetree/bindings/display/msm/qcom,sm8150-mdss.yaml       | 2 +-
->  .../devicetree/bindings/display/msm/qcom,sm8250-dpu.yaml        | 2 +-
->  .../devicetree/bindings/display/msm/qcom,sm8250-mdss.yaml       | 2 +-
->  .../devicetree/bindings/display/msm/qcom,sm8350-dpu.yaml        | 2 +-
->  .../devicetree/bindings/display/msm/qcom,sm8350-mdss.yaml       | 2 +-
->  .../devicetree/bindings/display/msm/qcom,sm8450-dpu.yaml        | 2 +-
->  .../devicetree/bindings/display/msm/qcom,sm8450-mdss.yaml       | 2 +-
->  .../devicetree/bindings/display/msm/qcom,sm8550-dpu.yaml        | 2 +-
->  .../devicetree/bindings/display/msm/qcom,sm8550-mdss.yaml       | 2 +-
->  .../devicetree/bindings/display/panel/himax,hx8394.yaml         | 2 +-
->  .../devicetree/bindings/display/panel/mantix,mlaf057we51-x.yaml | 2 +-
->  .../devicetree/bindings/display/panel/orisetech,otm8009a.yaml   | 2 +-
->  .../devicetree/bindings/display/panel/panel-dsi-cm.yaml         | 2 +-
->  .../devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml   | 2 +-
->  .../devicetree/bindings/display/panel/panel-simple-dsi.yaml     | 2 +-
->  .../devicetree/bindings/display/panel/raydium,rm68200.yaml      | 2 +-
->  .../devicetree/bindings/display/panel/rocktech,jh057n00900.yaml | 2 +-
->  .../devicetree/bindings/display/panel/visionox,r66451.yaml      | 2 +-
->  .../devicetree/bindings/display/panel/visionox,rm69299.yaml     | 2 +-
->  .../devicetree/bindings/display/panel/visionox,vtdr6130.yaml    | 2 +-
->  .../devicetree/bindings/display/rockchip/rockchip-vop2.yaml     | 2 +-
->  .../bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml         | 2 +-
->  .../devicetree/bindings/hwlock/ti,omap-hwspinlock.yaml          | 2 +-
->  Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml         | 2 +-
->  Documentation/devicetree/bindings/hwmon/lltc,ltc4151.yaml       | 2 +-
->  Documentation/devicetree/bindings/hwmon/lm75.yaml               | 2 +-
->  Documentation/devicetree/bindings/hwmon/microchip,mcp3021.yaml  | 2 +-
->  Documentation/devicetree/bindings/hwmon/national,lm90.yaml      | 2 +-
->  Documentation/devicetree/bindings/hwmon/nxp,mc34vr500.yaml      | 2 +-
->  Documentation/devicetree/bindings/hwmon/sensirion,sht15.yaml    | 2 +-
->  Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml          | 2 +-
->  Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml          | 2 +-
->  Documentation/devicetree/bindings/input/elan,ekth3000.yaml      | 2 +-
->  .../devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml | 2 +-
->  Documentation/devicetree/bindings/iommu/xen,grant-dma.yaml      | 2 +-
->  Documentation/devicetree/bindings/mailbox/ti,omap-mailbox.yaml  | 2 +-
->  .../devicetree/bindings/phy/mediatek,mt7621-pci-phy.yaml        | 2 +-
->  .../devicetree/bindings/phy/nvidia,tegra210-xusb-padctl.yaml    | 2 +-
->  .../devicetree/bindings/power/reset/gpio-poweroff.yaml          | 2 +-
->  Documentation/devicetree/bindings/power/reset/gpio-restart.yaml | 2 +-
->  .../devicetree/bindings/power/reset/restart-handler.yaml        | 2 +-
->  Documentation/devicetree/bindings/power/supply/bq256xx.yaml     | 2 +-
->  .../devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml         | 2 +-
->  .../devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml         | 2 +-
->  .../devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml      | 2 +-
->  .../devicetree/bindings/remoteproc/ti,pru-consumer.yaml         | 2 +-
->  Documentation/devicetree/bindings/remoteproc/ti,pru-rproc.yaml  | 2 +-
->  .../devicetree/bindings/remoteproc/xlnx,zynqmp-r5fss.yaml       | 2 +-
->  Documentation/devicetree/bindings/reset/ti,sci-reset.yaml       | 2 +-
->  Documentation/devicetree/bindings/reset/ti,tps380x-reset.yaml   | 2 +-
->  Documentation/devicetree/bindings/soc/ti/sci-pm-domain.yaml     | 2 +-
->  Documentation/devicetree/bindings/usb/cypress,hx3.yaml          | 2 +-
->  Documentation/devicetree/bindings/usb/genesys,gl850g.yaml       | 2 +-
->  Documentation/devicetree/bindings/usb/realtek,rts5411.yaml      | 2 +-
->  Documentation/devicetree/bindings/usb/ti,usb8041.yaml           | 2 +-
->  Documentation/devicetree/bindings/usb/vialab,vl817.yaml         | 2 +-
->  include/dt-bindings/ata/ahci.h                                  | 2 +-
->  include/dt-bindings/clock/hi3559av100-clock.h                   | 2 +-
->  include/dt-bindings/clock/r8a779f0-cpg-mssr.h                   | 2 +-
->  include/dt-bindings/clock/rockchip,rk3588-cru.h                 | 2 +-
->  include/dt-bindings/clock/stm32mp1-clks.h                       | 2 +-
->  include/dt-bindings/clock/sun20i-d1-ccu.h                       | 2 +-
->  include/dt-bindings/clock/sun20i-d1-r-ccu.h                     | 2 +-
->  include/dt-bindings/clock/sun50i-a100-ccu.h                     | 2 +-
->  include/dt-bindings/clock/sun50i-h6-ccu.h                       | 2 +-
->  include/dt-bindings/clock/sun50i-h616-ccu.h                     | 2 +-
->  include/dt-bindings/clock/sun6i-rtc.h                           | 2 +-
->  include/dt-bindings/display/sdtv-standards.h                    | 2 +-
->  include/dt-bindings/gpio/meson-g12a-gpio.h                      | 2 +-
->  include/dt-bindings/power/amlogic,c3-pwrc.h                     | 2 +-
->  include/dt-bindings/power/meson-a1-power.h                      | 2 +-
->  include/dt-bindings/power/meson-axg-power.h                     | 2 +-
->  include/dt-bindings/power/meson-g12a-power.h                    | 2 +-
->  include/dt-bindings/power/meson-gxbb-power.h                    | 2 +-
->  include/dt-bindings/power/meson-s4-power.h                      | 2 +-
->  include/dt-bindings/power/meson-sm1-power.h                     | 2 +-
->  include/dt-bindings/power/meson8-power.h                        | 2 +-
->  include/dt-bindings/power/r8a779f0-sysc.h                       | 2 +-
->  include/dt-bindings/power/rk3588-power.h                        | 2 +-
->  include/dt-bindings/power/summit,smb347-charger.h               | 2 +-
->  include/dt-bindings/reset/rockchip,rk3588-cru.h                 | 2 +-
->  include/dt-bindings/reset/stm32mp1-resets.h                     | 2 +-
->  include/dt-bindings/reset/sun20i-d1-ccu.h                       | 2 +-
->  include/dt-bindings/reset/sun20i-d1-r-ccu.h                     | 2 +-
->  include/dt-bindings/reset/sun50i-a100-ccu.h                     | 2 +-
->  include/dt-bindings/reset/sun50i-a100-r-ccu.h                   | 2 +-
->  include/dt-bindings/reset/sun50i-h6-ccu.h                       | 2 +-
->  include/dt-bindings/reset/sun50i-h6-r-ccu.h                     | 2 +-
->  include/dt-bindings/reset/sun50i-h616-ccu.h                     | 2 +-
->  130 files changed, 130 insertions(+), 130 deletions(-)
+On Tue, Aug 22, 2023 at 2:51 PM Jie Zhan <zhanjie9@hisilicon.com> wrote:
+>
+> The boost control currently applies to the whole system.  However, users
+> may prefer to boost a subset of cores in order to provide prioritized
+> performance to workloads running on the boosted cores.
+>
+> Enable per-policy boost by adding a 'boost' sysfs interface under each
+> policy path.  This can be found at:
+>
+>         /sys/devices/system/cpu/cpufreq/policy<*>/boost
+>
+> Same to the global boost switch, writing 1/0 to the per-policy 'boost'
+> enables/disables boost on a cpufreq policy respectively.
+>
+> The user view of global and per-policy boost controls should be:
+>
+> 1. Enabling global boost initially enables boost on all policies, and
+> per-policy boost can then be enabled or disabled individually, given that
+> the platform does support so.
+>
+> 2. Disabling global boost makes the per-policy boost interface illegal.
+>
+> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
+> Reviewed-by: Wei Xu <xuwei5@hisilicon.com>
 
-Applied, thanks!
+Viresh, you had comments on the previous version of this.  Does it
+look better now?
 
-Rob
+> ---
+> A possible question could be: why not just limiting 'scaling_max_freq'?
+> Well, the fundamental difference is that per-policy boost could be more
+> user-friendly.  When global boost is enabled, it is not straightforward
+> to figure out the base frequency for setting 'scaling_max_freq' to a
+> non-boost value. Also, this is supposed to take effect on the physical
+> upper frequency limit, reflected through 'cpuinfo_max_freq'.
+>
+> v1->v2:
+> - Rename the interface from 'local_boost' to 'boost'.
+> - Illegalize writing 0 to per-policy even if global boost is off.
+> - Show the per-policy 'boost' file only when ->set_boost() is available.
+>
+> v1: https://lore.kernel.org/linux-pm/20230724075827.4160512-1-zhanjie9@hisilicon.com/
+>
+>  drivers/cpufreq/cpufreq.c | 43 +++++++++++++++++++++++++++++++++++++++
+>  include/linux/cpufreq.h   |  3 +++
+>  2 files changed, 46 insertions(+)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 50bbc969ffe5..81e21fa070e1 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -86,6 +86,7 @@ static void cpufreq_governor_limits(struct cpufreq_policy *policy);
+>  static int cpufreq_set_policy(struct cpufreq_policy *policy,
+>                               struct cpufreq_governor *new_gov,
+>                               unsigned int new_pol);
+> +static bool cpufreq_boost_supported(void);
+>
+>  /*
+>   * Two notifier lists: the "policy" list is involved in the
+> @@ -621,6 +622,40 @@ static ssize_t store_boost(struct kobject *kobj, struct kobj_attribute *attr,
+>  }
+>  define_one_global_rw(boost);
+>
+> +static ssize_t show_local_boost(struct cpufreq_policy *policy, char *buf)
+> +{
+> +       return sysfs_emit(buf, "%d\n", policy->boost_enabled);
+> +}
+> +
+> +static ssize_t store_local_boost(struct cpufreq_policy *policy,
+> +                                const char *buf, size_t count)
+> +{
+> +       int ret, enable;
+> +
+> +       ret = kstrtoint(buf, 10, &enable);
+> +       if (ret || enable < 0 || enable > 1)
+> +               return -EINVAL;
+> +
+> +       if (!cpufreq_driver->boost_enabled)
+> +               return -EINVAL;
+> +
+> +       if (policy->boost_enabled == enable)
+> +               return count;
+> +
+> +       cpus_read_lock();
+> +       ret = cpufreq_driver->set_boost(policy, enable);
+> +       cpus_read_unlock();
+> +
+> +       if (ret)
+> +               return ret;
+> +
+> +       policy->boost_enabled = enable;
+> +
+> +       return count;
+> +}
+> +
+> +static struct freq_attr local_boost = __ATTR(boost, 0644, show_local_boost, store_local_boost);
+> +
+>  static struct cpufreq_governor *find_governor(const char *str_governor)
+>  {
+>         struct cpufreq_governor *t;
+> @@ -1055,6 +1090,12 @@ static int cpufreq_add_dev_interface(struct cpufreq_policy *policy)
+>                         return ret;
+>         }
+>
+> +       if (cpufreq_boost_supported()) {
+> +               ret = sysfs_create_file(&policy->kobj, &local_boost.attr);
+> +               if (ret)
+> +                       return ret;
+> +       }
+> +
+>         return 0;
+>  }
+>
+> @@ -2716,6 +2757,8 @@ int cpufreq_boost_trigger_state(int state)
+>                 ret = cpufreq_driver->set_boost(policy, state);
+>                 if (ret)
+>                         goto err_reset_state;
+> +
+> +               policy->boost_enabled = state;
+>         }
+>         cpus_read_unlock();
+>
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index 172ff51c1b2a..fa02f2fa88c4 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -140,6 +140,9 @@ struct cpufreq_policy {
+>          */
+>         bool                    dvfs_possible_from_any_cpu;
+>
+> +       /* Per policy boost enabled flag. */
+> +       bool                    boost_enabled;
+> +
+>          /* Cached frequency lookup from cpufreq_driver_resolve_freq. */
+>         unsigned int cached_target_freq;
+>         unsigned int cached_resolved_idx;
+> --
+> 2.30.0
+>
