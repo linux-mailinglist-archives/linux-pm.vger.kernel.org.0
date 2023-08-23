@@ -2,76 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F39E78597F
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Aug 2023 15:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D582785AD2
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Aug 2023 16:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236169AbjHWNjt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Aug 2023 09:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40506 "EHLO
+        id S236296AbjHWOgi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Aug 2023 10:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234769AbjHWNjs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Aug 2023 09:39:48 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6343198;
-        Wed, 23 Aug 2023 06:39:46 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-26f3e26e59cso2537856a91.0;
-        Wed, 23 Aug 2023 06:39:46 -0700 (PDT)
+        with ESMTP id S236330AbjHWOgh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Aug 2023 10:36:37 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81599E7F
+        for <linux-pm@vger.kernel.org>; Wed, 23 Aug 2023 07:36:34 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-5007abb15e9so5828994e87.0
+        for <linux-pm@vger.kernel.org>; Wed, 23 Aug 2023 07:36:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692797986; x=1693402786;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NOK5CRwsaqs85wt6f2CGJEL5j+Al2yb9ep0E5pLTroM=;
-        b=bJLHAqQ5GZGeUGLTMgxzu6PG/h4EcSTPT67BPy7RnqnAlv7C9B3fssI97ZvfThO5iy
-         kdiZEh/pdRMCqJZNnQ3WOY65dKULMxBQsdqQsV9DJ49+VOTJdtzUpoXEzVmET9XyUJt5
-         RenohtVCeDqthFdOuWi1JPsByhsmxvDomR3zGhEe8S2Q/Na1ZZrHW04bE1YOzicaAcjP
-         IQ3HEAnws3KHRwHXPOoObT9H3SXJNN5POcQV6ROoI9E+L6ojac6Q+MEbv8YGlnNRYiMb
-         jr2ObCRM/gX/rzw8H22XzZRVbyzUkzabDO1RNc63uZd31kk1ghEKLccMlqsvF1gCvs7B
-         4VPA==
+        d=linaro.org; s=google; t=1692801393; x=1693406193;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xr0WXPB/dyDXmkBwE/up+Cse+tTESwjdOxAD9XzT4D4=;
+        b=I4OLaVDt8t6QuVqQW0oXUFyaVK+p7WZ/eQVqlFs8sYbXEtTdVBjMuQhMNJ9QLMHnEU
+         0fReHkk9UwbRYiWW7cZvqqAsECWh5ZJJ9wdI5vbHRtPN/wylFHPaOM10CfcUGsIKJWFl
+         Cw14UXUWKZyvyVuI9uWEgNk9pcE0tsKOZ3WKzOVH5MV/PDsEkkRXzOIsli8ItO8RpCoF
+         PgJvScEd3Q/A3NYiJdaIe82PtW1OHQSkzhcqQyhR7gW+LNeKXdzLj7R/81eEIxi1JAPN
+         5gcpU3tsQekgNBfxLgIIFoWqt3kV+1MMJTewS4RdROWxj0CgtwB21uy5S44M4H4ylEfg
+         093Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692797986; x=1693402786;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NOK5CRwsaqs85wt6f2CGJEL5j+Al2yb9ep0E5pLTroM=;
-        b=lJFz+ZFaJUQUln9Z1UFo3E6ItnALN953F8gblh4VHGvPIRdFacDTSLt4xbw17phFm4
-         +awhWuklhCkD/2PqGcECI7/EHnGmN0qS83HyrSFcPaWnaOdfuCnsPyRGywU0tizAiOPu
-         UnS2lQItzrvn1M87yO1JnK61kSBz0it6xmFHpE4Vo12lBJkToXmQVgX/rk5kGgJUESdj
-         0CFiK9DV1fS9/G5G1axlu7rDULvJ0gTUwp6IzpDYabc3jISmKNKu0tZTCL791vOc3KLF
-         z4fHY4ZcyHzu+UZU6IjMtayBERg6H+HZ97jaSWLQrLccr+bBaS5AH+UjJsUZAwNcfWUf
-         qnAA==
-X-Gm-Message-State: AOJu0YypqqtE/oomj3rf7ENHsK/jPqKvndmZnZhQbQAzFVKQUPhU/ag9
-        L2ZgNrlQ0Ulxgro9NDTltPU=
-X-Google-Smtp-Source: AGHT+IGjcViQKH3GHOWrPKrXnL7/axkeVL2dFUz1FSPB4G3KOxDlRDcMkp1/S2uPhYGLgxC46dQ0Wg==
-X-Received: by 2002:a17:90a:1508:b0:26d:23c3:9f30 with SMTP id l8-20020a17090a150800b0026d23c39f30mr18203197pja.14.1692797986143;
-        Wed, 23 Aug 2023 06:39:46 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v23-20020a17090ae99700b00263e4dc33aasm11337417pjy.11.2023.08.23.06.39.45
+        d=1e100.net; s=20221208; t=1692801393; x=1693406193;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xr0WXPB/dyDXmkBwE/up+Cse+tTESwjdOxAD9XzT4D4=;
+        b=Rbz51UFXtfTgO2IFuufwhsgKyY1ZkBEjBTz2ttEUFhRLP+2+lk3GmyoKOhlh7Pq15O
+         VdSk9desaL/w3kgp/HUoQG7sXgLPXIQYIOJI+m1YUYv1THgE8I3T9xJPL2/6xA8po8v+
+         L1B0ep2SSr+Z/VSjVXCFUI2yY3E2VRHPbpQp3fGVz/ADCCI4cH2emESYNR2gzV4bcMCN
+         6WGjLOzVdmLI04w4V2JmQyq9RkLwF10o5UlJufvG0ntmHLmgp+6UIGDGoVX+onJJ6vqr
+         +C9XPEgu4GLm+9eCit5tD011ye8Pjrxs9lJ+Iu2R2ubtHgUNaOb5uxISjfz6XQwEj2jP
+         XW9w==
+X-Gm-Message-State: AOJu0YwzoJcdpIuJ6IQWva6Ni8vXK8aDRlE1dUFSgBxI09anoTDYkhkx
+        I7Sc+/k6Ajql4pzNs5Wj8PWgSw==
+X-Google-Smtp-Source: AGHT+IEeAzz7Fc12Wo7U8YW9ztfNhpcjpgIT0TvWojmUwAQpAv63XRnUFQxMfqT5iNtoJ4mpMfzt6A==
+X-Received: by 2002:a05:6512:615:b0:4fd:c923:db59 with SMTP id b21-20020a056512061500b004fdc923db59mr8238274lfe.15.1692801392840;
+        Wed, 23 Aug 2023 07:36:32 -0700 (PDT)
+Received: from [192.168.1.101] (abyj76.neoplus.adsl.tpnet.pl. [83.9.29.76])
+        by smtp.gmail.com with ESMTPSA id z6-20020ac24186000000b004fe36bae2d6sm2668882lfh.81.2023.08.23.07.36.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Aug 2023 06:39:45 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 23 Aug 2023 06:39:44 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        Wed, 23 Aug 2023 07:36:32 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH RESEND v2 0/3] MM8013 fg driver
+Date:   Wed, 23 Aug 2023 16:36:12 +0200
+Message-Id: <20230621-topic-mm8013-v2-0-9f1b41f4bc06@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAF0Z5mQC/32NsQ7CIBiEX8Uwi6E/LW2dHOzqoKNxAIotSQsNV
+ KJp+u4im4lxvLt89y3IK6eVR/vNgpwK2mtrYoDtBsmem05h3caMgAAlDDI820lLPI4VySimJSu
+ LWtWVgApFRHCvsHDcyD5C5jEMsZycuutnclzRubk0pyO6xb7XfrbuldQhS+tvS8gwwXlOSsmAE
+ VLQw6ANd3ZnXZeeAvyj4UMLxQBoUZW8/aLXdX0D46K64AQBAAA=
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: use capital "OR" for multiple licenses in
- SPDX
-Message-ID: <f1197557-7d27-453b-b9df-c6dbb3e0f377@roeck-us.net>
-References: <20230823084540.112602-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230823084540.112602-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+        Sebastian Reichel <sre@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1692801391; l=1223;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=Tv3ZU/Y/oaQ4y5pFMlSPbbUL6DzIaXj6CuswkA+bj4I=;
+ b=/B5r4Op5WONnZuRO1PGIp3BIjVAGY9BDl1xMD2zOyDaOCzbxX32YcA++owcL9ZqgW/QBeg54G
+ /uXHBvX9edsCZui9lPRBF9nUFPOw+j5zT15cZxLYEIlSKMeYbQjOPEX
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,36 +87,37 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 23, 2023 at 10:45:40AM +0200, Krzysztof Kozlowski wrote:
-> Documentation/process/license-rules.rst and checkpatch expect the SPDX
-> identifier syntax for multiple licenses to use capital "OR".  Correct it
-> to keep consistent format and avoid copy-paste issues.
-> 
-> Correct also the format // -> .* in few Allwinner binding headers as
-> pointed out by checkpatch:
-> 
->   WARNING: Improper SPDX comment style for 'include/dt-bindings/reset/sun50i-h6-ccu.h', please use '/*' instead
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Rebased on next-20230822, so might not apply cleanly.  What does not
-> apply, can be skipped and I will fix it after next RC.
-> ---
-[ ... ]
->  Documentation/devicetree/bindings/hwmon/jedec,jc42.yaml         | 2 +-
->  Documentation/devicetree/bindings/hwmon/lltc,ltc4151.yaml       | 2 +-
->  Documentation/devicetree/bindings/hwmon/lm75.yaml               | 2 +-
->  Documentation/devicetree/bindings/hwmon/microchip,mcp3021.yaml  | 2 +-
->  Documentation/devicetree/bindings/hwmon/national,lm90.yaml      | 2 +-
->  Documentation/devicetree/bindings/hwmon/nxp,mc34vr500.yaml      | 2 +-
->  Documentation/devicetree/bindings/hwmon/sensirion,sht15.yaml    | 2 +-
->  Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml          | 2 +-
->  Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml          | 2 +-
+Resending due to no responses for 2 months.
 
-For the above:
+This series brings support for the Mitsumi MM8013 Li-Ion fuel gauge.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Changes in v2:
+- Fix typo in patch 2 commit message
+- Drop driver.owner in patch 3
+- Add PRESENT psy property
+- Pick up tags
+- Link to v1: https://lore.kernel.org/r/20230621-topic-mm8013-v1-0-4407c6260053@linaro.org
 
-Guenter
+---
+Konrad Dybcio (3):
+      dt-bindings: vendor-prefixes: Add Mitsumi Electric Co., Ltd.
+      dt-bindings: power: supply: Document Mitsumi MM8013 fuel gauge
+      power: supply: Introduce MM8013 fuel gauge driver
+
+ .../bindings/power/supply/mitsumi,mm8013.yaml      |  35 +++
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ MAINTAINERS                                        |   5 +
+ drivers/power/supply/Kconfig                       |   9 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/mm8013.c                      | 283 +++++++++++++++++++++
+ 6 files changed, 335 insertions(+)
+---
+base-commit: 60e7c4a25da68cd826719b685babbd23e73b85b0
+change-id: 20230621-topic-mm8013-376759e98b28
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
