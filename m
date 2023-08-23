@@ -2,103 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B7C7852A1
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Aug 2023 10:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8EF785531
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Aug 2023 12:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234118AbjHWIZG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Aug 2023 04:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
+        id S232599AbjHWKR2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Aug 2023 06:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234852AbjHWIWC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Aug 2023 04:22:02 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A5310C2;
-        Wed, 23 Aug 2023 01:19:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692778743; x=1724314743;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=8VGHBXydLPE3MC5NdTIE4LrW+tQQYjYZljdXLkryB8A=;
-  b=mCu63mKdPSh9bKPBLcF641b5NHq3BhfySnilE/XDQ7wHh1YiwEIG/lOc
-   aZZQGkY4ZT7UVddy/qRigoedDZRHnhjJqBvOK7gYqwJmgOocfjf30oWw2
-   ueOCa+YBo7Vc1LlzkiCE6P2VGkkXzif7erlQS9CSKaExrgqObRNYO/EHx
-   tTILizUFvtzj9yuBidf0C/EkEgLtrCyv8Wwv23DSVNroP+pJdUb20yRxU
-   esx1my/oKuqiOVdmbf8aB2smaoO/C5N7gEJNtoauCccY5ofyOv+zAARQl
-   4AWCXnG6VoDOcT2npd56+OHD5XC4oxVabkYRGYDYkr+3RYiaj00Yhjo0W
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="372990795"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="372990795"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2023 01:19:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="1067390623"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="1067390623"
-Received: from chenyu-dev.sh.intel.com ([10.239.62.164])
-  by fmsmga005.fm.intel.com with ESMTP; 23 Aug 2023 01:19:01 -0700
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chenzhou Feng <chenzhoux.feng@intel.com>,
-        Chen Yu <yu.c.chen@intel.com>,
-        syzbot+38d04642cea49f3a3d2e@syzkaller.appspotmail.com
-Subject: [PATCH] PM: hibernate: Fix the exclusive get block device in test_resume mode
-Date:   Thu, 24 Aug 2023 00:13:29 +0800
-Message-Id: <20230823161329.7348-1-yu.c.chen@intel.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S232853AbjHWKR0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Aug 2023 06:17:26 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2868210F3
+        for <linux-pm@vger.kernel.org>; Wed, 23 Aug 2023 03:16:56 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-523d2ef19e4so7009284a12.2
+        for <linux-pm@vger.kernel.org>; Wed, 23 Aug 2023 03:16:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692785793; x=1693390593;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PkhmhhTWHkeRQp2PPUUxTCXWp1T0OTe7aVdp4fg5upo=;
+        b=LO6EWlz79jJJ9v/UQCg4OZKmPJO9+j6QHM1tngs1xZjP73VY2yTNyozqbCEjmHkgOJ
+         /I25kU9siRPAlFrz9dpUhrfTb7C4hK1nJcapsvmczx4ZFMRu+Id4skeNROqiKQ5j7fC1
+         ZyyN0rEkpFnovXZ/Y9YFpI+20NzFPUlKW8oib55lhQS8AfgOyDR1cSStWeGIk4mOE/f8
+         e8jk+ITZo8/vSFO72g6rBQt9NS7/HQQrfF/hlcYS6bEX+Ay7j17UK9K0sHHCYLh/aFQD
+         moxfheS5gy+jsjw+9CZRAFxsIYJOD76OVSKpIkrcpc8QGv+VCkZ89LVZ+6AtV/ge1cjC
+         e99w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692785793; x=1693390593;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PkhmhhTWHkeRQp2PPUUxTCXWp1T0OTe7aVdp4fg5upo=;
+        b=haUVlj9tkd03CUD5ps9Vz1HU7aTSyY8x2b8vrDuWhnc5iEbzAI7OxCWv+gF5VGT0Zq
+         eaawqj2GJ8v2sE7XpG+r1JZA26igUrhco9e6L2kd1MBG3NVw/6LWuasN/g3RfXL6bgWl
+         1lAAwXROOavLTFmfAa1Ig+n8EaTYLcZMTBJuMdTt49fSvSx3yUETmAjC9yD8+pjXkMRS
+         C5sZQCk5Q+5uL7J5VqV3BdlK6DvPCVJj87r+xS2S1sFrw5TAG1Hbe210+UeOam9kSHlr
+         Rg9znDkk6vLSEguWWyzoLdY5km8s6sT1a4CrXvFdMXoaMYWk1ctQYfFdm1ism5Xgn7EL
+         fRpw==
+X-Gm-Message-State: AOJu0Yykv/oQDQjyqQjF8YHYghHouluUwzQUWVaa0ArXQbICIBARA9AY
+        bPvPNvJKwtj7KWKPy1mTwFYxsg==
+X-Google-Smtp-Source: AGHT+IG4cl/3Fz/QSS2cl3WXZt2VKfaSb/kNTKY6FTxfUyaMgKaOK/vEjbIWyu1Ae6CwwBgVchcQyg==
+X-Received: by 2002:a05:6402:1614:b0:522:1e2f:fa36 with SMTP id f20-20020a056402161400b005221e2ffa36mr8763754edv.28.1692785793520;
+        Wed, 23 Aug 2023 03:16:33 -0700 (PDT)
+Received: from [192.168.0.22] ([77.252.47.198])
+        by smtp.gmail.com with ESMTPSA id i15-20020a50fc0f000000b0051e1660a34esm9063699edr.51.2023.08.23.03.16.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Aug 2023 03:16:32 -0700 (PDT)
+Message-ID: <61b9e036-7864-65c6-d43b-463fff896ddc@linaro.org>
+Date:   Wed, 23 Aug 2023 12:16:28 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH v3 29/42] dt-bindings: rtc: Add ST M48T86
+Content-Language: en-US
+To:     nikita.shubin@maquefel.me,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Lennert Buytenhek <kernel@wantstofly.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Lukasz Majewski <lukma@denx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Michael Peters <mpeters@embeddedTS.com>,
+        Kris Bahnsen <kris@embeddedTS.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-input@vger.kernel.org, alsa-devel@alsa-project.org
+References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
+ <20230605-ep93xx-v3-29-3d63a5f1103e@maquefel.me>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230605-ep93xx-v3-29-3d63a5f1103e@maquefel.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-commit 5904de0d735b ("PM: hibernate: Do not get block device exclusively
-in test_resume mode") fixes a hibernation issue under test_resume mode.
-That commit is supposed to open the block device in non-exclusive mode
-when in test_resume. However the code did the opposite, which is against
-its description.
+On 20/07/2023 13:29, Nikita Shubin via B4 Relay wrote:
+> From: Nikita Shubin <nikita.shubin@maquefel.me>
+> 
+> Add YAML bindings for ST M48T86 / Dallas DS12887 RTC.
+> 
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 
-Fix this by really disabling exclusive mode under test_resume.
 
-Reported-by: syzbot+38d04642cea49f3a3d2e@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/lkml/000000000000761f5f0603324129@google.com/
-Fixes: 5904de0d735b ("PM: hibernate: Do not get block device exclusively in test_resume mode")
-Signed-off-by: Chen Yu <yu.c.chen@intel.com>
----
- kernel/power/swap.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index f6ebcd00c410..c12b34dd529c 100644
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -1518,7 +1518,7 @@ static void *swsusp_holder;
- 
- int swsusp_check(bool snapshot_test)
- {
--	void *holder = snapshot_test ? &swsusp_holder : NULL;
-+	void *holder = snapshot_test ? NULL : &swsusp_holder;
- 	int error;
- 
- 	hib_resume_bdev = blkdev_get_by_dev(swsusp_resume_device, BLK_OPEN_READ,
-@@ -1573,7 +1573,7 @@ void swsusp_close(bool snapshot_test)
- 		return;
- 	}
- 
--	blkdev_put(hib_resume_bdev, snapshot_test ? &swsusp_holder : NULL);
-+	blkdev_put(hib_resume_bdev, snapshot_test ? NULL : &swsusp_holder);
- }
- 
- /**
--- 
-2.25.1
+Best regards,
+Krzysztof
 
