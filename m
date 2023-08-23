@@ -2,52 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D8D7857FE
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Aug 2023 14:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62CE4785801
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Aug 2023 14:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234756AbjHWMos convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 23 Aug 2023 08:44:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44132 "EHLO
+        id S233603AbjHWMql convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 23 Aug 2023 08:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233196AbjHWMor (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Aug 2023 08:44:47 -0400
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD80D1;
-        Wed, 23 Aug 2023 05:44:46 -0700 (PDT)
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-570dae7932eso432057eaf.1;
-        Wed, 23 Aug 2023 05:44:46 -0700 (PDT)
+        with ESMTP id S233196AbjHWMql (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Aug 2023 08:46:41 -0400
+Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E22D1;
+        Wed, 23 Aug 2023 05:46:39 -0700 (PDT)
+Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5710b0547easo187015eaf.0;
+        Wed, 23 Aug 2023 05:46:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692794685; x=1693399485;
+        d=1e100.net; s=20221208; t=1692794798; x=1693399598;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NA94ssYMg+hOMxUBDUPz4rzxwqeehNk0LVzVo8IpmPw=;
-        b=PEGQTpVRSnq16ERqKGDK2uxeS2O8lQoKHCzviQKdskwC+QnGqz6YH1EdDjhxlsyj2N
-         kE68VUeh0E0aL+fDTJcfydiX8/owuVS2dVCej2KCvaw+Mt21NE1hy6U0dnJPGVzvrf6t
-         94fgDKzC+xnbwigFi91tlUCEXL6+IiEqXAUfH/Ds5nS7/bJjcLmvfCxmn11webhr5Gio
-         DjlFo6JGGUYXKFV7DigD9zyDRDeDC/pSBLKZTGdeDmOOGg14ygVEut/b7jpll4FnmqnU
-         Li5waSZVm4D9+vQDfdNuGIFP0hIApCbwAvOGtIWBDD6BizUfK7MMyiYGUOx61wjh0AT5
-         qrZA==
-X-Gm-Message-State: AOJu0YweooYrEA3qvbopW77K97hKRoDNZXfqr1lbpGbGOo4FucQ0QuyI
-        YR8/tHwZqy+WQIEAnnJGWHq366J5L34XJAW2kXMHXga0
-X-Google-Smtp-Source: AGHT+IGNe4omwsLTO6/XXJW7RrO/oGYZv0w9G42gAvVeUJ4jCmg8siaxS9QmFSkd7pG1V206druH2OhQ6NqEgVu6mlQ=
-X-Received: by 2002:a4a:d9c7:0:b0:563:3b56:5dc1 with SMTP id
- l7-20020a4ad9c7000000b005633b565dc1mr11967530oou.0.1692794685278; Wed, 23 Aug
- 2023 05:44:45 -0700 (PDT)
+        bh=eg8m8m3Txt0N+9hnfhaEqMmV+xfZ84EbGizWfB0wKnE=;
+        b=IkSOlsgkfyF93ntLJ+pypYR9kYm0Vm8aT2fgzzGsNportudLVbJtlJoyzHXZWpPmVn
+         V9PHZMeDRt4ELm0QYch4YyaAMhiASmNLWGKaHn+FOLV71mEiimSLB7RaLRw6iqxyymgc
+         9j9mhUW1ry6g7l4n/zw0nvyueGnUm95EdpbH3KIkPpOW5cEvZJ9oVK+MiN4y9VCV0cvf
+         L5L/omzGM+axL5fSYJqZcIdRYjquc6c8w308bRNaPV7rcqZWqGj8NykP4uFjbONX+t1k
+         fysRKB0DL2jpiBvo9Y/gIzx+Ax0kqB4XPxkyatQ0AxG5QTpu1u2pp5vMVuyIl5qzrknn
+         nXtQ==
+X-Gm-Message-State: AOJu0YykrsRcqp7WNUTvTWfo81iox+sCRZcpV55ic4FaFNUH3+Uchcfi
+        9U6RjkFX6p91Z+08ILUY/CBCXx6Ar1E/BhAvo7s=
+X-Google-Smtp-Source: AGHT+IFSzhPeOu2WXdeN/BSvevGFiWI04i/EWlQwYiSAdcgUW+TUqXf1UThlzpBioi5OugMtb8sYlZ1gRCs1/OdANJs=
+X-Received: by 2002:a4a:c3c8:0:b0:56e:487f:8caa with SMTP id
+ e8-20020a4ac3c8000000b0056e487f8caamr11923566ooq.1.1692794798581; Wed, 23 Aug
+ 2023 05:46:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230823161329.7348-1-yu.c.chen@intel.com>
-In-Reply-To: <20230823161329.7348-1-yu.c.chen@intel.com>
+References: <20230822115514.999111-1-chenfeiyang@loongson.cn>
+ <c8beef70-1639-c11e-ae38-d8a07279720@linux.intel.com> <CAJZ5v0hpngg6WF7Q2P-MhcTGN8qtAx2U2-ODm=YMzs9=C44DSQ@mail.gmail.com>
+ <68a839ff-817e-c5b6-c0a9-7862792786c2@linux.intel.com>
+In-Reply-To: <68a839ff-817e-c5b6-c0a9-7862792786c2@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 23 Aug 2023 14:44:32 +0200
-Message-ID: <CAJZ5v0hV7UFSz=REyVDuy90tW7k9NyBme-S8mEuHSRpEySAcuQ@mail.gmail.com>
-Subject: Re: [PATCH] PM: hibernate: Fix the exclusive get block device in
- test_resume mode
-To:     Chen Yu <yu.c.chen@intel.com>
+Date:   Wed, 23 Aug 2023 14:46:25 +0200
+Message-ID: <CAJZ5v0gvP3YRWTLtV9_b+W_QQ=K_wkFEDj-qT4cNW2RYfTPEgg@mail.gmail.com>
+Subject: Re: [PATCH v2] PCI/PM: Only read PCI_PM_CTRL register when available
+To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chenzhou Feng <chenzhoux.feng@intel.com>,
-        syzbot+38d04642cea49f3a3d2e@syzkaller.appspotmail.com
+        Feiyang Chen <chenfeiyang@loongson.cn>, bhelgaas@google.com,
+        rafael.j.wysocki@intel.com,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        helgaas@kernel.org, anders.roxell@linaro.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        guyinggang@loongson.cn, siyanteng@loongson.cn,
+        chenhuacai@loongson.cn, loongson-kernel@lists.loongnix.cn,
+        chris.chenfeiyang@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -60,46 +65,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 23, 2023 at 10:19 AM Chen Yu <yu.c.chen@intel.com> wrote:
+On Wed, Aug 23, 2023 at 9:28 AM Ilpo Järvinen
+<ilpo.jarvinen@linux.intel.com> wrote:
 >
-> commit 5904de0d735b ("PM: hibernate: Do not get block device exclusively
-> in test_resume mode") fixes a hibernation issue under test_resume mode.
-> That commit is supposed to open the block device in non-exclusive mode
-> when in test_resume. However the code did the opposite, which is against
-> its description.
+> On Tue, 22 Aug 2023, Rafael J. Wysocki wrote:
 >
-> Fix this by really disabling exclusive mode under test_resume.
+> > On Tue, Aug 22, 2023 at 3:24 PM Ilpo Järvinen
+> > <ilpo.jarvinen@linux.intel.com> wrote:
+> > >
+> > > On Tue, 22 Aug 2023, Feiyang Chen wrote:
+> > >
+> > > > When the current state is already PCI_D0, pci_power_up() will return
+> > > > 0 even though dev->pm_cap is not set. In that case, we should not
+> > > > read the PCI_PM_CTRL register in pci_set_full_power_state().
+> > >
+> > > IMHO, this is a bit misleading because after this patch, pci_power_up()
+> > > returns always an error if dev->pm_cap is not set.
+> >
+> > Yes, it does, but it has 2 callers only and the other one ignores the
+> > return value, so this only matters here.
 >
-> Reported-by: syzbot+38d04642cea49f3a3d2e@syzkaller.appspotmail.com
-> Closes: https://lore.kernel.org/lkml/000000000000761f5f0603324129@google.com/
-> Fixes: 5904de0d735b ("PM: hibernate: Do not get block device exclusively in test_resume mode")
-> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
-> ---
->  kernel/power/swap.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-> index f6ebcd00c410..c12b34dd529c 100644
-> --- a/kernel/power/swap.c
-> +++ b/kernel/power/swap.c
-> @@ -1518,7 +1518,7 @@ static void *swsusp_holder;
->
->  int swsusp_check(bool snapshot_test)
->  {
-> -       void *holder = snapshot_test ? &swsusp_holder : NULL;
-> +       void *holder = snapshot_test ? NULL : &swsusp_holder;
->         int error;
->
->         hib_resume_bdev = blkdev_get_by_dev(swsusp_resume_device, BLK_OPEN_READ,
-> @@ -1573,7 +1573,7 @@ void swsusp_close(bool snapshot_test)
->                 return;
->         }
->
-> -       blkdev_put(hib_resume_bdev, snapshot_test ? &swsusp_holder : NULL);
-> +       blkdev_put(hib_resume_bdev, snapshot_test ? NULL : &swsusp_holder);
->  }
->
->  /**
-> --
+> I did only mean that the changelog could be more clear how it achieves
+> the desired result (as currently it states opposite of what the code
+> does w.r.t. that return value).
 
-Applied as 6.6 material, thanks!
+Fair enough.
+
+It looks like the changelog has not been updated since v1.
+
+> I'm not against the approach taken by patch.
+
+Thanks!
