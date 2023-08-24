@@ -2,61 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E200787865
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Aug 2023 21:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9162E787866
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Aug 2023 21:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbjHXTOt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Aug 2023 15:14:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
+        id S243125AbjHXTPV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Aug 2023 15:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243028AbjHXTOY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Aug 2023 15:14:24 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60041BCE
-        for <linux-pm@vger.kernel.org>; Thu, 24 Aug 2023 12:14:21 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 37OJEAHm035062;
-        Thu, 24 Aug 2023 14:14:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1692904450;
-        bh=TzebilgSJoLVmCl+iiQZoyioyn73XvvWtrvGPKBc/Tg=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=ffOrdocYqD6wliRraz9rJQayjEzEbkyBrf8+4aNKFcfBSTHa6LxDBDYo5Vm3FYaXN
-         A7auC8RaPZA2Ba+iMceoEtNDcv6XjIC4FzVqtkzFQTLkOY10rQm/+P7dxghyGvJneD
-         bz1dmPBbJG4trg1PJkwlSz/CDg4fVTDwNmEDa7tA=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 37OJEAsb059792
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 24 Aug 2023 14:14:10 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 24
- Aug 2023 14:14:10 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 24 Aug 2023 14:14:10 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 37OJEA5q011741;
-        Thu, 24 Aug 2023 14:14:10 -0500
-Date:   Thu, 24 Aug 2023 14:14:10 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-CC:     Zhang Zekun <zhangzekun11@huawei.com>, <kristo@kernel.org>,
-        <ssantosh@kernel.org>, <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] soc: ti: Use for_each_node_with_property() simplify code
- logic
-Message-ID: <20230824191410.jylzj4x7p3sn2u4l@encounter>
-References: <20230818070149.23103-1-zhangzekun11@huawei.com>
- <CAPDyKFrL86MdfUwYm9UWy4AZtWBq0j_6sP8rimF7fwEXh0XtRw@mail.gmail.com>
+        with ESMTP id S243028AbjHXTOw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Aug 2023 15:14:52 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722CF1BCE
+        for <linux-pm@vger.kernel.org>; Thu, 24 Aug 2023 12:14:50 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-68a1af910e0so174302b3a.2
+        for <linux-pm@vger.kernel.org>; Thu, 24 Aug 2023 12:14:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1692904490; x=1693509290;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=T0T3L4UBWS4Ei3VNP47Pn+F05gPvGbch/e781qwl2qg=;
+        b=o+OyN+AG/6GQf6yt6sQVU1OA4hWaIB9fnN0LOv1bzID3m1BhqdwuPnUHbakdmkCZ91
+         q/bmAcpDWyGTmr5/sN5nXyJbm7sn9mzfyNthisnBbwQKN6+oZivSK/qE04ljSHiUJFFq
+         vHD1WOY8QbeNDsaU8PUENEgGd8VRoFZhMk6GRJbctEzk/HPeQD/eo+7VDcBXYNvTAhvR
+         07W3dSM8N4Qiu5ZSNyQ5TFID+hOGWT6Wah3Y7B02ZoSK9xLKm9zUZ/mBw0MpsC8ih8e2
+         p7t0jl6d+ul+3Wfq/JeSAUVRhhNHlVJjX0d9SsoI0q4Hj6OlEtMHmcWwRnOPElarSTmH
+         lLAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692904490; x=1693509290;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T0T3L4UBWS4Ei3VNP47Pn+F05gPvGbch/e781qwl2qg=;
+        b=d9a3TQFldXPpL+EM8IQBJzea0etuOlt3ORRsq2mSEooHd68m56cbSyLg/7N1DR4a+F
+         Dkqfh7Smi1h8J2o6eRN/wIHpoidseoJvTSFaUffcKr5WqjBnBLmIBntjz3lpsgWbPx4w
+         rRXuZqVdbRTt5+Y9KmpCnxxPcLnRcAb7oWXSZc87aVOwmk2p+DJZeLTxgF1gSzKzKYyd
+         6bxquLY4/STwbSsjU6Aq/dFiifzi22zvk+lot7+/taWUClUvqoUxlY0AU1O4aYIFr8O+
+         qJ3SZEZM6OVGKRNC95ESq5Sv/EdPvmiccDKX65XsFIAbprsILZivyklavepRyLWB3M5a
+         Vh6w==
+X-Gm-Message-State: AOJu0YxOOCsaXbc0LyGXir4CG0Tbprv36wiPq7WJUlcTRI91KLxGkIYt
+        xLOqwLtuLOdTnoZwZvnQW3Hziw==
+X-Google-Smtp-Source: AGHT+IGC+y8I1QIT//1uGsZkot+f9n08XzFdwXIzEYs+3PMyqtMsdeuinVgZykNqAdfF7IeKOLWfXA==
+X-Received: by 2002:a05:6a20:8f16:b0:14c:4dfc:9766 with SMTP id b22-20020a056a208f1600b0014c4dfc9766mr951357pzk.46.1692904489897;
+        Thu, 24 Aug 2023 12:14:49 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id m30-20020a63711e000000b0056365ee8603sm11811362pgc.67.2023.08.24.12.14.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Aug 2023 12:14:49 -0700 (PDT)
+Message-ID: <64e7ac29.630a0220.811c4.7793@mx.google.com>
+Date:   Thu, 24 Aug 2023 12:14:49 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFrL86MdfUwYm9UWy4AZtWBq0j_6sP8rimF7fwEXh0XtRw@mail.gmail.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: acpi-6.5-rc8-154-ge1903ccb69a7c
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (acpi-6.5-rc8-154-ge1903ccb69a7c)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,66 +71,100 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11:10-20230818, Ulf Hansson wrote:
-> On Fri, 18 Aug 2023 at 09:10, Zhang Zekun <zhangzekun11@huawei.com> wrote:
-> >
-> > Introduct for_each_node_with_property() to iterate through the
-> > nodes, this can simplify the code logic a bit, no functional
-> > change here.
-> 
-> I would prefer if we can start using the prefix "genpd: ti*" for the
-> commit message header.
-> 
-> >
-> > Signed-off-by: Zhang Zekun <zhangzekun11@huawei.com>
-> 
-> This looks good to me and I can pick it up, but awaiting and ack from
-> the soc maintainers too.
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (acpi-6.5-rc8-15=
+4-ge1903ccb69a7c)
 
-Acked-by: Nishanth Menon <nm@ti.com>
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/acp=
+i-6.5-rc8-154-ge1903ccb69a7c/
 
-Did some sanity tests around it as well.. I didn't see any obvious
-breakage that I related to this.
+Tree: pm
+Branch: testing
+Git Describe: acpi-6.5-rc8-154-ge1903ccb69a7c
+Git Commit: e1903ccb69a7c4c52d4cb4c8ffeefe18ae36bc0f
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-> 
-> Kind regards
-> Uffe
-> 
-> > ---
-> >  drivers/genpd/ti/ti_sci_pm_domains.c | 8 ++------
-> >  1 file changed, 2 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/genpd/ti/ti_sci_pm_domains.c b/drivers/genpd/ti/ti_sci_pm_domains.c
-> > index a33ec7eaf23d..34645104fe45 100644
-> > --- a/drivers/genpd/ti/ti_sci_pm_domains.c
-> > +++ b/drivers/genpd/ti/ti_sci_pm_domains.c
-> > @@ -119,7 +119,7 @@ static int ti_sci_pm_domain_probe(struct platform_device *pdev)
-> >         struct device *dev = &pdev->dev;
-> >         struct ti_sci_genpd_provider *pd_provider;
-> >         struct ti_sci_pm_domain *pd;
-> > -       struct device_node *np = NULL;
-> > +       struct device_node *np;
-> >         struct of_phandle_args args;
-> >         int ret;
-> >         u32 max_id = 0;
-> > @@ -138,11 +138,7 @@ static int ti_sci_pm_domain_probe(struct platform_device *pdev)
-> >         INIT_LIST_HEAD(&pd_provider->pd_list);
-> >
-> >         /* Find highest device ID used for power domains */
-> > -       while (1) {
-> > -               np = of_find_node_with_property(np, "power-domains");
-> > -               if (!np)
-> > -                       break;
-> > -
-> > +       for_each_node_with_property(np, "power-domains") {
-> >                 index = 0;
-> >
-> >                 while (1) {
-> > --
-> > 2.17.1
-> >
+Warnings Detected:
 
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
