@@ -2,104 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3894786F44
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Aug 2023 14:39:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98C1D786F48
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Aug 2023 14:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbjHXMjQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Aug 2023 08:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35460 "EHLO
+        id S237003AbjHXMkV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Aug 2023 08:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239371AbjHXMjB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Aug 2023 08:39:01 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B7919B0
-        for <linux-pm@vger.kernel.org>; Thu, 24 Aug 2023 05:38:58 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2bc63e0d8cdso77501961fa.2
-        for <linux-pm@vger.kernel.org>; Thu, 24 Aug 2023 05:38:58 -0700 (PDT)
+        with ESMTP id S238628AbjHXMkQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Aug 2023 08:40:16 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF75170C
+        for <linux-pm@vger.kernel.org>; Thu, 24 Aug 2023 05:40:14 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-52557cc5e7bso8581351a12.0
+        for <linux-pm@vger.kernel.org>; Thu, 24 Aug 2023 05:40:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692880737; x=1693485537;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1692880812; x=1693485612;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ow9NOphQ8IONMB2AXu8+252ehewy1z2boFnf/IKv/6M=;
-        b=eambqQ7pCYYmPdWFTxoyYu6uNFh5RJAGvl1KuHiF+JiLQCkcwk1qwhYKUoC8duBvIt
-         UGNesT9QHKJpk+Jl21nGs5aMbW8guDl+B2nayZHEA3NBQIX/1YzVwOajmaOJ87xyzBHd
-         89S4CfbMFpZrkk0iScQu3P+zmMF4Ftgi66dVGxvO06D5pZtrMKVjIvv6kr7P8UiWA5uR
-         Gw+gu+LpUDxT7dwgSSAqb58GnAqW2dXfnCbXRd8pt84XRtBbouS+DRqxw+YfoaMmxOqi
-         /c+PlP9rLRIFygSaopcWSuvHBSmNnbHsnNPn/KeMt/mhTicjwSJ2towFXy/WCKyo+go3
-         kxZg==
+        bh=wqMVuZgSs+Wu8Z+ehdcmYCmlouSlct+heFdmNRVbxgA=;
+        b=FIIljaCMS3LSAeyIwGG1CFHuk2amuKWkzFuUPAWNzTZVyoeIg97RcEyJkTNv1AOC4R
+         bUfZ8ZwJG1jNq1FzLnH4TVhJXMtiBMxTIFBgOokj5QQG7FCfPuimrHeeVxJ5n8lCP2wc
+         YiAMaKMi7q6EI9txbhyIKrnUtzLnixK9Fc9tFua9N0Ga5iXAjrWWyBnHfQxiUEx63+H4
+         bwnoKKrnVUIJieeXJQy67Lhk0jWP5HmSymaxiFHnBqLhROG0nBZHAhqZD30Vo1stVrAa
+         p9D9y67QUvlhYRhPfvm5M1ZxpMJGk/yKHWv4Uq+T3WEQY4XrVzJbSEzYjtsBtrpUFU4E
+         5F8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692880737; x=1693485537;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1692880812; x=1693485612;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ow9NOphQ8IONMB2AXu8+252ehewy1z2boFnf/IKv/6M=;
-        b=kf4vY6fE5R3ZurOP/7vHJB/2a1tnMvxZsiYiZiv5knjn+XJTHYWGezxt/xZS5l6ywt
-         jB++l4L29yVXod8RnUejtHDS7o3ZKcF50gj6z5eJl1LI8q4PKlTF7GJJy8eTzGirJP4p
-         TRPbrVQAcLx8fgpEF9/SK63a6mRmYTUYg+lzVmR2m4TFd0Nz6vI9hSPpr+pg569lI9if
-         6DAbl99+c9Be8PtWyrag4Rn3brRoHFh06qSMAO6x3SYGo+idhCte5DWJCl0jPq8usHYm
-         SzZMO5k68rGsj37R+4Xl964KQhdhz/99rpDOhh2Yk8zCY3YMn+e+dgXbBaEBrsJ5kWrQ
-         o/EQ==
-X-Gm-Message-State: AOJu0Yx9QHMAweCkjY19c0AbKiFbRqVThJmuPeNqAPEb3sD6/Noi64u8
-        o3OYDXxzrM8ek/EfWO4gEC0PxA==
-X-Google-Smtp-Source: AGHT+IGf+t2VSlw4E7BuiJ9UKPIOHMulAO3nhihDW7DtQAJO45zjGFW9mqDUSVrDAXTQ0TVcSk7qBA==
-X-Received: by 2002:a2e:860d:0:b0:2b7:1005:931b with SMTP id a13-20020a2e860d000000b002b71005931bmr11740315lji.0.1692880737196;
-        Thu, 24 Aug 2023 05:38:57 -0700 (PDT)
+        bh=wqMVuZgSs+Wu8Z+ehdcmYCmlouSlct+heFdmNRVbxgA=;
+        b=S0EiBqyvjcEyY185r4D0YPp2uQQCj4kSQlrkyPqy4JRSF7C0yRopkOjFEFt5P0NFdZ
+         cR852UmfbqA3cBOjBmDJZUHrVu/oazrncdhvUF5kYoljC6egL6wS9fIZhbt5C+tWX4qU
+         892euZ6xjARkkeE0PNpUztnT9me5vCbh3J7Bji2D+Q04ibI6Ty4l+VUNojLm+na4etrp
+         bY+i7FgivG3VbL5lj7Rk7f97Mp84k24/INPZ2QF04EzMibBhxKVIdSMjRfxWIDIOV188
+         47gTilKV3UpYGDEuK+n8i6rQ89AOxfWVdGzCnQ9DmQuQnp9MpQAoO+GxAnvbRFYehrLQ
+         kjmw==
+X-Gm-Message-State: AOJu0YxrfFcUjIhtF4W0lt79pKAa5/jpctmk4cfUnomI/0nN8Zene5jn
+        0bXcZFjsm7Wn1j85Ls41guyHKA==
+X-Google-Smtp-Source: AGHT+IEjcG+DIJTiu+zFCt/pQNZPjv8quz5M9OOkFjSmEnD6DO15qu9MPOQeD2ffsT+uLol9dT4AhA==
+X-Received: by 2002:aa7:d9c7:0:b0:529:4642:7933 with SMTP id v7-20020aa7d9c7000000b0052946427933mr13040061eds.36.1692880812560;
+        Thu, 24 Aug 2023 05:40:12 -0700 (PDT)
 Received: from [192.168.0.22] ([77.252.47.198])
-        by smtp.gmail.com with ESMTPSA id jt11-20020a170906dfcb00b0098921e1b064sm10884955ejc.181.2023.08.24.05.38.56
+        by smtp.gmail.com with ESMTPSA id l15-20020a056402124f00b0051dfa2e30b2sm10559541edw.9.2023.08.24.05.40.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Aug 2023 05:38:56 -0700 (PDT)
-Message-ID: <36e24244-3382-b6bb-5975-044112d21eed@linaro.org>
-Date:   Thu, 24 Aug 2023 14:38:55 +0200
+        Thu, 24 Aug 2023 05:40:12 -0700 (PDT)
+Message-ID: <46a562b5-6984-3b41-3c41-c346107b4c96@linaro.org>
+Date:   Thu, 24 Aug 2023 14:40:10 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.14.0
-Subject: Re: [PATCH 1/2] dt-bindings: imx8mm-thermal: Document
- 'nxp,reboot-on-critical'
-To:     Fabio Estevam <festevam@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>
-References: <20230823173334.304201-1-festevam@gmail.com>
- <cd1985cf-f13b-8d5b-1f67-f93bae98ce7d@linaro.org>
- <CAOMZO5CPz=ysfjb_x3T0FqKxjTPy1zippZRnkMXCTuyD7fF57g@mail.gmail.com>
- <8070b293-b187-b0cc-fd3d-d057c5623094@linaro.org>
- <CAOMZO5AZh6DUbZJecwaK8jwGBRCj+40GF5OqyuV2c8mgXT9ZYg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] power: supply: bq24190: Support bq24193
 Content-Language: en-US
+To:     Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
+Cc:     Alexandre Courbot <acourbot@nvidia.com>,
+        azkali <a.ffcc7@gmail.com>, CTCaer <ctcaer@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230824112741.201353-1-linkmauve@linkmauve.fr>
+ <20230824112741.201353-2-linkmauve@linkmauve.fr>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAOMZO5AZh6DUbZJecwaK8jwGBRCj+40GF5OqyuV2c8mgXT9ZYg@mail.gmail.com>
+In-Reply-To: <20230824112741.201353-2-linkmauve@linkmauve.fr>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24/08/2023 12:53, Fabio Estevam wrote:
-> Hi Daniel,
+On 24/08/2023 13:27, Emmanuel Gil Peyrot wrote:
+> From: Alexandre Courbot <acourbot@nvidia.com>
 > 
-> On Thu, Aug 24, 2023 at 7:35 AM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
+> This charger is working with the driver as-is, so enable it to be probed.
 > 
->>> I will try a different approach by introducing a Kconfig option.
->>
->> Alternatively, the 'chosen' DT node could be used, no ?
-
-Any DT property would be a problem, because I don't think it is static
-configuration. For example board with the same DTS once should reboot
-(during development) and once shutdown (some customer wants to be sure
-it will stay shutdown after critical condition). It's runtime feature.
-
+> It is used in the Nintendo Switch for instance.
 > 
-> Good idea. I will introduce a module_param() then.
+> Signed-off-by: Alexandre Courbot <acourbot@nvidia.com>
+> ---
+>  Documentation/devicetree/bindings/power/supply/bq24190.yaml | 1 +
+>  drivers/power/supply/bq24190_charger.c                      | 2 ++
 
-Module params are usually discouraged and it also does not allow any
-runtime configuration. I think you need sysfs ABI.
+Please run scripts/checkpatch.pl and fix reported warnings. Some
+warnings can be ignored, but the code here looks like it needs a fix.
+Feel free to get in touch if the warning is not clear.
+
+Bindings are always separate.
+
+Please use subject prefixes matching the subsystem. You can get them for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching.
+
+>  2 files changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq24190.yaml b/Documentation/devicetree/bindings/power/supply/bq24190.yaml
+> index d3ebc9de8c0b..92a28d3c3070 100644
+> --- a/Documentation/devicetree/bindings/power/supply/bq24190.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/bq24190.yaml
+> @@ -18,6 +18,7 @@ properties:
+>      enum:
+>        - ti,bq24190
+>        - ti,bq24192
+> +      - ti,bq24193
+>        - ti,bq24192i
+>        - ti,bq24196
+>  
+> diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
+> index ef8235848f56..a56122b39687 100644
+> --- a/drivers/power/supply/bq24190_charger.c
+> +++ b/drivers/power/supply/bq24190_charger.c
+> @@ -2018,6 +2018,7 @@ static const struct dev_pm_ops bq24190_pm_ops = {
+>  static const struct i2c_device_id bq24190_i2c_ids[] = {
+>  	{ "bq24190" },
+>  	{ "bq24192" },
+> +	{ "bq24193" },
+>  	{ "bq24192i" },
+>  	{ "bq24196" },
+>  	{ },
+> @@ -2027,6 +2028,7 @@ MODULE_DEVICE_TABLE(i2c, bq24190_i2c_ids);
+>  static const struct of_device_id bq24190_of_match[] = {
+>  	{ .compatible = "ti,bq24190", },
+>  	{ .compatible = "ti,bq24192", },
+> +	{ .compatible = "ti,bq24193", },
+>  	{ .compatible = "ti,bq24192i", },
+>  	{ .compatible = "ti,bq24196", },
+
+We should really stop doing this. All of them are compatible, aren't they?
 
 Best regards,
 Krzysztof
