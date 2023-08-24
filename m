@@ -2,165 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1023E787000
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Aug 2023 15:14:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE93B787036
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Aug 2023 15:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240684AbjHXNOT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Aug 2023 09:14:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
+        id S239145AbjHXN2Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Aug 2023 09:28:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240691AbjHXNNy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Aug 2023 09:13:54 -0400
-Received: from luna.linkmauve.fr (82-65-109-163.subs.proxad.net [82.65.109.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D7519A9;
-        Thu, 24 Aug 2023 06:13:52 -0700 (PDT)
-Received: by luna.linkmauve.fr (Postfix, from userid 1000)
-        id 49E5A8CC65D; Thu, 24 Aug 2023 15:13:51 +0200 (CEST)
-From:   Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
+        with ESMTP id S241340AbjHXN2H (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Aug 2023 09:28:07 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6895E5E
+        for <linux-pm@vger.kernel.org>; Thu, 24 Aug 2023 06:28:04 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id af79cd13be357-76da22c090dso345984985a.2
+        for <linux-pm@vger.kernel.org>; Thu, 24 Aug 2023 06:28:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692883684; x=1693488484;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=U9plhSlNaSngoiKUN/pWzQlNqfBvCwMMSYVTz79Dd2w=;
+        b=WSFcV96FNbri8lPqRZpcS4S8ihB8m9xYmyDdMqbV47jzXhDt4lICW+x0lZHflumEMC
+         HOBgYEvqET0wJjn4qEfHdegceZt21HOBCsvwDgz79p3U2IeNsRveZBpf6vvaGcvb2LEM
+         fru1u/D/YSr864u03dA0LtnDlHeSZH2ZHyya+gcfDL3aXJdJ8zTMWn90W6LVf4lYWxP9
+         8RmYBdWYykDKCJKZANZk5R4sChwfk8PItjyeaQ0vKPLeco7ckXvsJeo/bOElpH6UL9tT
+         zxpIgzUvKx7QnYscvxMPWzxKWWHXYVp/YfUYMbJWjC/FXmd4iGxMFJwAZN1jbLybkza9
+         pDPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692883684; x=1693488484;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=U9plhSlNaSngoiKUN/pWzQlNqfBvCwMMSYVTz79Dd2w=;
+        b=kyVqDJdqlYVj2AynrScv/sEtL8zl3Q9I9nAfZm+ty8i7icf708UdAITd49K5qCBlN6
+         20dkKx+si7T1KZAx5mKPbyecaj3hTepW0kUqtWnpULOvSw2cepk57xL0QlgzN3mMZnxr
+         V7B/1Bk+kg2aqqgz7Fj36mzmjwF0SUUgZDLIbWgzDSndeBGIgNSCEVxcO5UseAWDqZfm
+         VT63M8HnmQ3qW0x+KrXw8x+iwpB+CrQPMtKiq0ihF6YotBpBIbKjuH6eXuIB5DaenkuH
+         gir5PUtloQHzTwRY08ZROLhrTtfMp5960mfK52Wjj21KY7PHfBdbXfVFq5gZTUrPTCGe
+         wyHA==
+X-Gm-Message-State: AOJu0Yz4NM9nex5V9K8buYHn4PNyCESG9eNzNZ5qE2qvVKNhDPPcKM8L
+        3JGxG24FLzyJQXkE8cHY3Xgjpw==
+X-Google-Smtp-Source: AGHT+IHR/vpQvPhrcTPSsl7t5/L93LvdxtAc3sRkX2+cznhN+2iAnoKPAULi0G9gp7AFBC/sN/6dyw==
+X-Received: by 2002:a05:620a:c53:b0:76c:b293:84f with SMTP id u19-20020a05620a0c5300b0076cb293084fmr17579982qki.21.1692883683717;
+        Thu, 24 Aug 2023 06:28:03 -0700 (PDT)
+Received: from [192.168.0.22] ([77.252.47.198])
+        by smtp.gmail.com with ESMTPSA id 26-20020a05620a071a00b0076c60b95b87sm1969663qkc.96.2023.08.24.06.28.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Aug 2023 06:28:03 -0700 (PDT)
+Message-ID: <622faf2a-58ec-5ff4-1952-19c15d122642@linaro.org>
+Date:   Thu, 24 Aug 2023 15:28:00 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH 1/2] power: supply: bq24190: Support bq24193
+Content-Language: en-US
+To:     Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
 Cc:     Alexandre Courbot <acourbot@nvidia.com>,
-        Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
         azkali <a.ffcc7@gmail.com>, CTCaer <ctcaer@gmail.com>,
         Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] power: supply: bq24190_charger: Export current regulator
-Date:   Thu, 24 Aug 2023 15:13:31 +0200
-Message-ID: <20230824131342.206784-4-linkmauve@linkmauve.fr>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230824131342.206784-1-linkmauve@linkmauve.fr>
 References: <20230824112741.201353-1-linkmauve@linkmauve.fr>
- <20230824131342.206784-1-linkmauve@linkmauve.fr>
-MIME-Version: 1.0
+ <20230824112741.201353-2-linkmauve@linkmauve.fr>
+ <46a562b5-6984-3b41-3c41-c346107b4c96@linaro.org> <ZOdUiFsAjQCvwp1A@desktop>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZOdUiFsAjQCvwp1A@desktop>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SORBS_DUL,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Alexandre Courbot <acourbot@nvidia.com>
+On 24/08/2023 15:00, Emmanuel Gil Peyrot wrote:
 
-This prevents the charger from ever going over the current limit.
+>>> @@ -2027,6 +2028,7 @@ MODULE_DEVICE_TABLE(i2c, bq24190_i2c_ids);
+>>>  static const struct of_device_id bq24190_of_match[] = {
+>>>  	{ .compatible = "ti,bq24190", },
+>>>  	{ .compatible = "ti,bq24192", },
+>>> +	{ .compatible = "ti,bq24193", },
+>>>  	{ .compatible = "ti,bq24192i", },
+>>>  	{ .compatible = "ti,bq24196", },
+>>
+>> We should really stop doing this. All of them are compatible, aren't they?
+> 
+> From what I gather from the different datasheets, the main difference
+> between them is the maximum current they are able to provide, 1.5 A for
+> the bq24190 and bq24192i, 3 A for bq24192 and 4.5 A for bq24193. The
+> default current limit is also detected differently it seems.  But yeah,
+> those are otherwise similar enough to not require anything different in
+> the driver.
+> 
+> What would be a good way forward for that?  Adding a new ti,bq2419x
+> compatible and switching all devices to this one, as long as they don’t
+> require anything specific?
 
-Signed-off-by: Alexandre Courbot <acourbot@nvidia.com>
-Signed-off-by: Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
----
- drivers/power/supply/bq24190_charger.c | 82 ++++++++++++++++++++++++++
- 1 file changed, 82 insertions(+)
+Not a wildcard but any of existing ones, e.g. "ti,bq24196", "ti,bq24190".
 
-diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
-index a56122b39687..cc1bd87f4982 100644
---- a/drivers/power/supply/bq24190_charger.c
-+++ b/drivers/power/supply/bq24190_charger.c
-@@ -530,6 +530,79 @@ static int bq24190_set_otg_vbus(struct bq24190_dev_info *bdi, bool enable)
- }
- 
- #ifdef CONFIG_REGULATOR
-+static int bq24190_set_charging_current(struct regulator_dev *dev,
-+			int min_uA, int max_uA)
-+{
-+	struct bq24190_dev_info *bdi = rdev_get_drvdata(dev);
-+	u8 ss_reg;
-+	int in_current_limit;
-+	int ret = 0;
-+
-+	ret = bq24190_read(bdi, BQ24190_REG_SS, &ss_reg);
-+	if (ret < 0)
-+		goto error;
-+
-+	if (max_uA == 0 && ss_reg != 0)
-+		return ret;
-+
-+	if (!(ss_reg & BQ24190_REG_SS_VBUS_STAT_MASK))
-+		in_current_limit = 500;
-+	else
-+		in_current_limit = max_uA / 1000;
-+
-+	return bq24190_set_field_val(bdi, BQ24190_REG_ISC,
-+			BQ24190_REG_ISC_IINLIM_MASK,
-+			BQ24190_REG_ISC_IINLIM_SHIFT,
-+			bq24190_isc_iinlim_values,
-+			ARRAY_SIZE(bq24190_isc_iinlim_values),
-+			in_current_limit);
-+error:
-+	dev_err(bdi->dev, "Charger enable failed, err = %d\n", ret);
-+	return ret;
-+}
-+
-+static const struct regulator_ops bq24190_chrg_ops = {
-+	.set_current_limit = bq24190_set_charging_current,
-+};
-+
-+static const struct regulator_desc bq24190_chrg_desc = {
-+	.name = "charger",
-+	.of_match = "charger",
-+	.type = REGULATOR_CURRENT,
-+	.owner = THIS_MODULE,
-+	.ops = &bq24190_chrg_ops,
-+};
-+
-+static const struct regulator_init_data bq24190_chrg_init_data = {
-+	.constraints = {
-+		.valid_ops_mask = REGULATOR_CHANGE_STATUS | REGULATOR_CHANGE_CURRENT,
-+		.min_uA = 0,
-+		.max_uA = 3000000,
-+	},
-+};
-+
-+static int bq24190_register_chrg_regulator(struct bq24190_dev_info *bdi)
-+{
-+	struct bq24190_platform_data *pdata = bdi->dev->platform_data;
-+	struct regulator_config cfg = { };
-+	struct regulator_dev *reg;
-+	int ret = 0;
-+
-+	cfg.dev = bdi->dev;
-+	if (pdata && pdata->regulator_init_data)
-+		cfg.init_data = pdata->regulator_init_data;
-+	else
-+		cfg.init_data = &bq24190_chrg_init_data;
-+	cfg.driver_data = bdi;
-+	reg = devm_regulator_register(bdi->dev, &bq24190_chrg_desc, &cfg);
-+	if (IS_ERR(reg)) {
-+		ret = PTR_ERR(reg);
-+		dev_err(bdi->dev, "Can't register regulator: %d\n", ret);
-+	}
-+
-+	return ret;
-+}
-+
- static int bq24190_vbus_enable(struct regulator_dev *dev)
- {
- 	return bq24190_set_otg_vbus(rdev_get_drvdata(dev), true);
-@@ -611,6 +684,11 @@ static int bq24190_register_vbus_regulator(struct bq24190_dev_info *bdi)
- 	return ret;
- }
- #else
-+static int bq24190_register_chrg_regulator(struct bq24190_dev_info *bdi)
-+{
-+	return 0;
-+}
-+
- static int bq24190_register_vbus_regulator(struct bq24190_dev_info *bdi)
- {
- 	return 0;
-@@ -1879,6 +1957,10 @@ static int bq24190_probe(struct i2c_client *client)
- 		goto out_charger;
- 	}
- 
-+	ret = bq24190_register_chrg_regulator(bdi);
-+	if (ret < 0)
-+		goto out_charger;
-+
- 	ret = bq24190_register_vbus_regulator(bdi);
- 	if (ret < 0)
- 		goto out_charger;
--- 
-2.42.0
+Best regards,
+Krzysztof
 
