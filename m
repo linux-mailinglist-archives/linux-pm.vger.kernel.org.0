@@ -2,65 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 477767871C9
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Aug 2023 16:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C3E78728F
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Aug 2023 16:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232793AbjHXOha (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Aug 2023 10:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41354 "EHLO
+        id S241848AbjHXOzJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Aug 2023 10:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241701AbjHXOhC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Aug 2023 10:37:02 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6088193;
-        Thu, 24 Aug 2023 07:37:00 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1a2dd615ddcso1216646fac.0;
-        Thu, 24 Aug 2023 07:37:00 -0700 (PDT)
+        with ESMTP id S241918AbjHXOyu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Aug 2023 10:54:50 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F397B19B2
+        for <linux-pm@vger.kernel.org>; Thu, 24 Aug 2023 07:54:47 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3ff5ddb4329so6417415e9.0
+        for <linux-pm@vger.kernel.org>; Thu, 24 Aug 2023 07:54:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692887820; x=1693492620;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5tE5urQmLOnciHXtitwRyqKhpUKhIg/sORznqPn+7MY=;
-        b=M6a9jQ0lrv/aU5IjWIMXwP7EB3uYJ3sTkTPEHC3zJVsB2grEEXRnkVUybpesULHcmU
-         v5NRfv7Oj6xqwyQBhUOa7WeUiTXhAWv/cwYjOt7PfkbSiyx86wFdwXQCt9oonq1ZWDFO
-         uaZDLxUKEuMKQMTktLQPjrmWwpIx18fF+WgGi4ki9CTeqeMAptZFGJ142vH3j2J2xr7O
-         DPG7hJwhgwejSko4wR5UmeMN9n8diJ97YisfeB8ojtou4Ifoeq+95QfPrr6V5vsil+19
-         4jQ6Ll0SMoK7+HEleFRawQXRUHJLn7LrO5ucGrDxc8XOfRMM82nkJCIkBGqeXMrgpVsh
-         hwTA==
+        d=linaro.org; s=google; t=1692888886; x=1693493686;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mkAw/bivm1OGKzjaSsLX8nP7QHQBExerVYA8MZBISMY=;
+        b=lrBSCRCwwCFV0tQuVa7GVmAwI6r1yEuw7xAqRyOX1C427KUeSWUSX/F1ZsCwDzCaq7
+         s1S0LR1qK9q/YwFDa885VWWRy8iNRRnfaymnMqxR79SskbQdqEd3xpKbyIzMkM6bdCci
+         1u46jFW2FIYwyGWdYJ9HWRORrNo4RA4SJQQdFGi0MoXCfIx4KrOEByEpkDep8ISNWfnB
+         gRy5lMLNvW7ByMBB3sbKb1p1XtpTA4rfKN4yusY0l/vYQY3+JR08+he6xFUz2hintem0
+         8EhRttXtFQRoimFdyeIZDaNPqSYci0+SjuRqFlMp3BqAMbGvPpkDUfePfxv+gz68bTqv
+         xt3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692887820; x=1693492620;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5tE5urQmLOnciHXtitwRyqKhpUKhIg/sORznqPn+7MY=;
-        b=gBmqFdha9FT+QXgGlZdtcQDqFQaasp7v4Ibj5hh8dmIUZ2SpTacVvfUAVLbD5ju7wG
-         nyhUpwxel8AmckjKdfEK/X2Y/ebXhttUk+vCZqiFUlUyA6ibWeA5aY96eBrhjvZ/+Fbq
-         9gybKeDGG4LBeRVcSo3YL0OIYg40H79F0yxvBzH/upIY0Z266H8ZDmJRY8XEWW/bl8AP
-         VEavRhBPUrnJXR3wcIJZGQ+zWEXIqYy87TEyorDiHE7PFmdbTwCxnqQEioJDPPM8pkgc
-         dv4yq4S3B4CpMUcB6IUz+sqBiGIs2b/9cxPG9Vrp7LloPBWWgu6AgIFs2COuwrOA97YX
-         lpiw==
-X-Gm-Message-State: AOJu0YzRP7PvbREkvRugBr3OAbf1HbC07mTSi1CYGRONphynVm1Jumpw
-        UVStjjmXAOt8EBQSsIN74Lk=
-X-Google-Smtp-Source: AGHT+IGScxhSj64wzOKTUF/kjCoE+4F464sfIi5/Ag7EgDaLadEW7LdfqO1H8GqCC1wrOYBTOZFxqA==
-X-Received: by 2002:a05:6870:56a8:b0:1bb:b9d1:37fe with SMTP id p40-20020a05687056a800b001bbb9d137femr17847622oao.2.1692887819863;
-        Thu, 24 Aug 2023 07:36:59 -0700 (PDT)
-Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:8c51:3a01:4599:db3])
-        by smtp.gmail.com with ESMTPSA id n6-20020a05687104c600b001ccb5ea6ee5sm2916558oai.55.2023.08.24.07.36.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Aug 2023 07:36:59 -0700 (PDT)
-From:   Fabio Estevam <festevam@gmail.com>
-To:     daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, rafael@kernel.org, amitk@kernel.org,
-        rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-        Fabio Estevam <festevam@denx.de>
-Subject: [PATCH v4] thermal: imx8mm: Allow reboot after critical temperature
-Date:   Thu, 24 Aug 2023 11:36:52 -0300
-Message-Id: <20230824143652.529624-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20221208; t=1692888886; x=1693493686;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mkAw/bivm1OGKzjaSsLX8nP7QHQBExerVYA8MZBISMY=;
+        b=SSBFeG7Zf2Cq+hlm7GEhlcQPXVE3wk+keo8D6xe8cmr+e0DwvMGo6KQHEy5+UjxcuX
+         VK/xv5IuTh5MWAq//JEzZU8/e9hSCapu3JfQq0Li+oiuFZRM8q+kaDxd+fsYcxKrqUw5
+         Cty3Hnj9Nb5WKMtF/MOmR+5+ZDvLT5/f4moG+Yk/FeIge99dWyfGfra70VNTA3oY6kOL
+         /0NDmIEqJpUqS5fIdTpe9JMnGnCCO0lbVRsx2iXd6RRTVEW9U3CUqTeBZC7O+HoqtyCs
+         DbHkdlyhBcAUG2yS1r14wanGqJVqlHK3ovBiaaKR484mPrfctMZ8JWCQU/nkE85vH+MO
+         sT8Q==
+X-Gm-Message-State: AOJu0YzI4utPqAZN4FzvqZsPnlCnOn3ZAn9hv7QenmSG8wfv9XM72w+a
+        ltcTAMMuGl2aux8vOzn+42Zb0g==
+X-Google-Smtp-Source: AGHT+IHRtF42Gk2O/Jbn0im820D3YniuUrsfbfG6LB6IaJc38fjjssskEpoRn3XkIl8Ntlzt2PT2Qg==
+X-Received: by 2002:a5d:5412:0:b0:319:735f:92c5 with SMTP id g18-20020a5d5412000000b00319735f92c5mr14859666wrv.32.1692888886338;
+        Thu, 24 Aug 2023 07:54:46 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id i14-20020a5d630e000000b0031980783d78sm22380031wru.54.2023.08.24.07.54.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Aug 2023 07:54:45 -0700 (PDT)
+Message-ID: <71a842cb-86c4-cd36-ba4c-0be480f8b16c@linaro.org>
+Date:   Thu, 24 Aug 2023 16:54:45 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 1/2] dt-bindings: imx8mm-thermal: Document
+ 'nxp,reboot-on-critical'
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>
+Cc:     linux-pm@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, conor+dt@kernel.org,
+        devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>
+References: <20230823173334.304201-1-festevam@gmail.com>
+ <cd1985cf-f13b-8d5b-1f67-f93bae98ce7d@linaro.org>
+ <CAOMZO5CPz=ysfjb_x3T0FqKxjTPy1zippZRnkMXCTuyD7fF57g@mail.gmail.com>
+ <8070b293-b187-b0cc-fd3d-d057c5623094@linaro.org>
+ <CAOMZO5AZh6DUbZJecwaK8jwGBRCj+40GF5OqyuV2c8mgXT9ZYg@mail.gmail.com>
+ <36e24244-3382-b6bb-5975-044112d21eed@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <36e24244-3382-b6bb-5975-044112d21eed@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,135 +82,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Fabio Estevam <festevam@denx.de>
 
-Currently, after the SoC reaches the critical temperature, the board
-goes through a poweroff mechanism.
+Hi Krzysztof,
 
-In some cases, such behavior does not suit well, as the board may be
-unattended in the field and rebooting may be a better approach.
+On 24/08/2023 14:38, Krzysztof Kozlowski wrote:
+> On 24/08/2023 12:53, Fabio Estevam wrote:
+>> Hi Daniel,
+>>
+>> On Thu, Aug 24, 2023 at 7:35 AM Daniel Lezcano
+>> <daniel.lezcano@linaro.org> wrote:
+>>
+>>>> I will try a different approach by introducing a Kconfig option.
+>>>
+>>> Alternatively, the 'chosen' DT node could be used, no ?
+> 
+> Any DT property would be a problem, because I don't think it is static
+> configuration. For example board with the same DTS once should reboot
+> (during development) and once shutdown (some customer wants to be sure
+> it will stay shutdown after critical condition). It's runtime feature.
 
-The bootloader may also check the temperature and only allow the boot to
-proceed when the temperature is below a certain threshold.
+Fabio described the feature as a firmware feature where the board does 
+not boot until the temperature goes below a certain temperature.
 
-Introduce a 'reboot_on_crit' sysfs entry to indicate that the board
-will go through a reboot after the critical temperature is reached.
+That does not look a runtime feature but a platform specific one.
 
-By default, the original shutdown behavior is preserved.
+ From my POV, if the firmware wants to take over the thermal boot of the 
+board, it is probably for a good reason (eg. the board will overheat 
+between the boot and the kernel puts in place the mitigation framework). 
+Letting the user to change that behavior can be dangerous.
 
-Tested on a imx8mm-evk board by issuing the command below:
+>> Good idea. I will introduce a module_param() then.
+> 
+> Module params are usually discouraged
 
-echo 1 > /sys/devices/platform/soc@0/30000000.bus/30260000.tmu/reboot_on_crit
+Why?
 
-Confirmed that it goes through a reboot after the critical temperature
-is reached.
+> and it also does not allow any
+> runtime configuration. I think you need sysfs ABI.
 
-Signed-off-by: Fabio Estevam <festevam@denx.de>
----
-Changes since v3:
-- Add a sysfs entry.
+There is already the sysfs ABI with module params
 
- drivers/thermal/imx8mm_thermal.c | 57 ++++++++++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+/sys/module/<name>/parameters/reboot_on_critical
 
-diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
-index e89b11b3f2b9..07c6d21147ba 100644
---- a/drivers/thermal/imx8mm_thermal.c
-+++ b/drivers/thermal/imx8mm_thermal.c
-@@ -15,6 +15,7 @@
- #include <linux/platform_device.h>
- #include <linux/slab.h>
- #include <linux/thermal.h>
-+#include <linux/reboot.h>
- 
- #include "thermal_hwmon.h"
- 
-@@ -91,6 +92,7 @@ struct imx8mm_tmu {
- 	void __iomem *base;
- 	struct clk *clk;
- 	const struct thermal_soc_data *socdata;
-+	bool reboot;
- 	struct tmu_sensor sensors[];
- };
- 
-@@ -146,8 +148,58 @@ static int tmu_get_temp(struct thermal_zone_device *tz, int *temp)
- 	return tmu->socdata->get_temp(sensor, temp);
- }
- 
-+static ssize_t reboot_on_crit_show(struct device *dev,
-+				   struct device_attribute *attr, char *buf)
-+{
-+	struct imx8mm_tmu *tmu = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%d\n", tmu->reboot);
-+}
-+
-+static ssize_t reboot_on_crit_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t size)
-+{
-+	struct imx8mm_tmu *tmu = dev_get_drvdata(dev);
-+	int ret, reboot;
-+
-+	ret = kstrtoint(buf, 0, &reboot);
-+	if (ret < 0)
-+		return ret;
-+
-+	tmu->reboot = reboot;
-+
-+	return size;
-+}
-+
-+static DEVICE_ATTR_RW(reboot_on_crit);
-+
-+static struct attribute *reboot_on_crit_attrs[] = {
-+	&dev_attr_reboot_on_crit.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group reboot_attribute_group = {
-+	.attrs = reboot_on_crit_attrs,
-+};
-+
-+static void tmu_critical(struct thermal_zone_device *tz)
-+{
-+	struct tmu_sensor *sensor = thermal_zone_device_priv(tz);
-+	struct imx8mm_tmu *tmu = sensor->priv;
-+
-+	if (tmu->reboot) {
-+		dev_emerg(thermal_zone_device(tz), "%s: critical temperature reached\n",
-+			  thermal_zone_device_type(tz));
-+		kernel_restart(NULL);
-+	} else {
-+		thermal_zone_device_critical(tz);
-+	}
-+}
-+
- static const struct thermal_zone_device_ops tmu_tz_ops = {
- 	.get_temp = tmu_get_temp,
-+	.critical = tmu_critical,
- };
- 
- static void imx8mm_tmu_enable(struct imx8mm_tmu *tmu, bool enable)
-@@ -355,6 +407,10 @@ static int imx8mm_tmu_probe(struct platform_device *pdev)
- 	if (tmu->socdata->version == TMU_VER2)
- 		imx8mm_tmu_probe_sel_all(tmu);
- 
-+	ret = sysfs_create_group(&pdev->dev.kobj, &reboot_attribute_group);
-+	if (ret)
-+		goto disable_clk;
-+
- 	/* enable the monitor */
- 	imx8mm_tmu_enable(tmu, true);
- 
-@@ -372,6 +428,7 @@ static int imx8mm_tmu_remove(struct platform_device *pdev)
- 	/* disable TMU */
- 	imx8mm_tmu_enable(tmu, false);
- 
-+	sysfs_remove_group(&pdev->dev.kobj, &reboot_attribute_group);
- 	clk_disable_unprepare(tmu->clk);
- 	platform_set_drvdata(pdev, NULL);
- 
+
+
 -- 
-2.34.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
