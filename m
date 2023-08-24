@@ -2,86 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7C4786378
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Aug 2023 00:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACDBF786494
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Aug 2023 03:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238690AbjHWWhE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Aug 2023 18:37:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52466 "EHLO
+        id S236064AbjHXB2S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Aug 2023 21:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238737AbjHWWgv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Aug 2023 18:36:51 -0400
-Received: from ixit.cz (ip-89-177-23-149.bb.vodafone.cz [89.177.23.149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D4910E9;
-        Wed, 23 Aug 2023 15:36:46 -0700 (PDT)
-Received: from newone.lan (unknown [10.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id 1DC9F160ADF;
-        Thu, 24 Aug 2023 00:36:44 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1692830204;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=2K3T2tsGavfmgPfJ4flzoVVLERRqcAbSguOxWqKjpew=;
-        b=mXsKOFcNpsTBOR8TMI0D5P5zQ4kgVyUjWmjSQQ87CsTc/9wFdThUNd2gaXZgMY0eJsSsbe
-        Iw/+g2qj1q1d4wwYYJt52m9biEhNC9iyQRprGFudfoUAaMSOz1VVWhs+aF9ogPZEauDG9w
-        fOMOf6FMApOdSZMO2SptsTKkjImPiqM=
-From:   David Heidelberg <david@ixit.cz>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     David Heidelberg <david@ixit.cz>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: thermal: lmh: update maintainer address
-Date:   Thu, 24 Aug 2023 00:36:22 +0200
-Message-Id: <20230823223622.91789-1-david@ixit.cz>
-X-Mailer: git-send-email 2.40.1
+        with ESMTP id S238963AbjHXB2F (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Aug 2023 21:28:05 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E792A8;
+        Wed, 23 Aug 2023 18:28:03 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4ffa6e25ebbso485210e87.0;
+        Wed, 23 Aug 2023 18:28:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692840481; x=1693445281;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vetduGgViyjJuBVB9gXghwBbpYcZ8lgc6rsEZ+ryBhg=;
+        b=bSPmJe7askH7b9NH4mjqq6RLQC6eX0h5LXpSMm8NM6ys8+iLfWFFcs5CzdsXh4pKE9
+         qFLctkzCQzkdxYUm1VpTW8hNn0+HY57iabA36hAMbn5n8N/9dy0SiBHxpHzH/w10JKuM
+         mRnpIsqCND3C6BrmGekgBOTcA2yUgIeGtM3sZ60STB+b3pkhzzOAdHal6gS6dyK/pyB8
+         yz9Km4D6q8iokTdZdGaTpyi1BPpIiPiA6Ks7QpZY+53Voa3iEkKV3RTyt8GzVhWDMXSL
+         NRrSGqvtFEAhUux7POZyI2GNNkWac/19vUWIPUIKTCvZPz+JdehTW9P+iERmWneG+t29
+         +u/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692840481; x=1693445281;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vetduGgViyjJuBVB9gXghwBbpYcZ8lgc6rsEZ+ryBhg=;
+        b=liT9Kw9J0jzM7GcqGx4swcip2TCkNfQjpFsWvUCLlVdMB7a6UybbvHgB/gtIH0Ih5O
+         gjanRfUnaBYciVSU4I6IJgAx4ZPbT9xlYA/pztjXGGLZjcBetPUkye1wEXGFxN9VRfKu
+         3ozmc/UiBKY5ffdlJvVxdO5IjrYXqPLnxqmdz5zYWtX8YKY8EX+cMq1yZEngTh7yJBiC
+         MUbTwegZMxsB+GUpxfWST0Wxah+O3cPgCo2hPxZG0sGvrn9YZl/RLedHtvWZ1TNVmt+z
+         H/Fp5CaZnGnn/WIV7Gwwm88PsIqWJAXZ0rl7t2YaijGMo0HBy9k0J6CTSyjcUTUb//qY
+         fiLg==
+X-Gm-Message-State: AOJu0YxkcrPXm0+DHz4XTMY60vEpcRdYZDZHZPZrNyJHYnd8DNEROKBA
+        yV17WdhQt9c7vSF/9f6cDVdcbupPiPSj6q8+TzyrgRMc6/E=
+X-Google-Smtp-Source: AGHT+IFi/Mw7Vt2L+WyArvzM1+AIiEFUSEpUSgFh1dVwGs4f+9QtM7KcOZYse+N1/w7fBFFj2jDgMctFRlOKndymaYc=
+X-Received: by 2002:a05:6512:615:b0:4f8:5e62:b94b with SMTP id
+ b21-20020a056512061500b004f85e62b94bmr4577882lfe.9.1692840481031; Wed, 23 Aug
+ 2023 18:28:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_RDNS_DYNAMIC_FP,
-        RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+References: <CAJZ5v0gvP3YRWTLtV9_b+W_QQ=K_wkFEDj-qT4cNW2RYfTPEgg@mail.gmail.com>
+ <20230823205024.GA481013@bhelgaas>
+In-Reply-To: <20230823205024.GA481013@bhelgaas>
+From:   Feiyang Chen <chris.chenfeiyang@gmail.com>
+Date:   Thu, 24 Aug 2023 09:27:47 +0800
+Message-ID: <CACWXhKniWqJBHaMk7jQUnuF7PGHxoOtFQ4fYpHxFRkJ+9n5mJA@mail.gmail.com>
+Subject: Re: [PATCH v2] PCI/PM: Only read PCI_PM_CTRL register when available
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Feiyang Chen <chenfeiyang@loongson.cn>, bhelgaas@google.com,
+        rafael.j.wysocki@intel.com,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        anders.roxell@linaro.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, guyinggang@loongson.cn,
+        siyanteng@loongson.cn, chenhuacai@loongson.cn,
+        loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The old email is no longer functioning.
+On Thu, Aug 24, 2023 at 4:50=E2=80=AFAM Bjorn Helgaas <helgaas@kernel.org> =
+wrote:
+>
+> On Wed, Aug 23, 2023 at 02:46:25PM +0200, Rafael J. Wysocki wrote:
+> > On Wed, Aug 23, 2023 at 9:28=E2=80=AFAM Ilpo J=C3=A4rvinen
+> > <ilpo.jarvinen@linux.intel.com> wrote:
+> > > On Tue, 22 Aug 2023, Rafael J. Wysocki wrote:
+> > > > On Tue, Aug 22, 2023 at 3:24=E2=80=AFPM Ilpo J=C3=A4rvinen
+> > > > <ilpo.jarvinen@linux.intel.com> wrote:
+> > > > >
+> > > > > On Tue, 22 Aug 2023, Feiyang Chen wrote:
+> > > > >
+> > > > > > When the current state is already PCI_D0, pci_power_up() will r=
+eturn
+> > > > > > 0 even though dev->pm_cap is not set. In that case, we should n=
+ot
+> > > > > > read the PCI_PM_CTRL register in pci_set_full_power_state().
+> > > > >
+> > > > > IMHO, this is a bit misleading because after this patch, pci_powe=
+r_up()
+> > > > > returns always an error if dev->pm_cap is not set.
+> > > >
+> > > > Yes, it does, but it has 2 callers only and the other one ignores t=
+he
+> > > > return value, so this only matters here.
+> > >
+> > > I did only mean that the changelog could be more clear how it achieve=
+s
+> > > the desired result (as currently it states opposite of what the code
+> > > does w.r.t. that return value).
+> >
+> > Fair enough.
+> >
+> > It looks like the changelog has not been updated since v1.
+> >
+> > > I'm not against the approach taken by patch.
+>
+> Feiyang, would you update the commit log so it matches the code and
+> post it as a v3?
+>
 
-Fixes: 17b1362d4919 ("MAINTAINERS: Update email address")
-Signed-off-by: David Heidelberg <david@ixit.cz>
----
- Documentation/devicetree/bindings/thermal/qcom-lmh.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Sure. I will update the commit log.
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml b/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
-index 92762efc2120..5ff72ce5c887 100644
---- a/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
-@@ -8,7 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Qualcomm Limits Management Hardware(LMh)
- 
- maintainers:
--  - Thara Gopinath <thara.gopinath@linaro.org>
-+  - Thara Gopinath <thara.gopinath@gmail.com>
- 
- description:
-   Limits Management Hardware(LMh) is a hardware infrastructure on some
--- 
-2.40.1
+Thanks,
+Feiyang
 
+> Bjorn
