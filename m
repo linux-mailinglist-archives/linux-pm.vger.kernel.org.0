@@ -2,163 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1AE786EAC
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Aug 2023 14:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 301B7786EE6
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Aug 2023 14:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237027AbjHXMGk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Aug 2023 08:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57862 "EHLO
+        id S238517AbjHXMTM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Aug 2023 08:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232918AbjHXMGI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Aug 2023 08:06:08 -0400
-X-Greylist: delayed 880 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Aug 2023 05:06:02 PDT
-Received: from luna.linkmauve.fr (82-65-109-163.subs.proxad.net [82.65.109.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5513198D;
-        Thu, 24 Aug 2023 05:06:02 -0700 (PDT)
-Received: by luna.linkmauve.fr (Postfix, from userid 1000)
-        id DC99D8CC50D; Thu, 24 Aug 2023 13:27:57 +0200 (CEST)
-From:   Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
-Cc:     Alexandre Courbot <acourbot@nvidia.com>,
-        azkali <a.ffcc7@gmail.com>, CTCaer <ctcaer@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] power: supply: bq24190_charger: Export current regulator
-Date:   Thu, 24 Aug 2023 13:27:35 +0200
-Message-ID: <20230824112741.201353-3-linkmauve@linkmauve.fr>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230824112741.201353-1-linkmauve@linkmauve.fr>
-References: <20230824112741.201353-1-linkmauve@linkmauve.fr>
+        with ESMTP id S241367AbjHXMSs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Aug 2023 08:18:48 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43CF019B4;
+        Thu, 24 Aug 2023 05:18:46 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-2690803a368so1125767a91.1;
+        Thu, 24 Aug 2023 05:18:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692879526; x=1693484326;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AlrwwqTITMhKtvHsPQuVmQL/Kh4vzSe7uyS+aD745jU=;
+        b=koMPnyXn6Igj4hcEbLjqmvUXvWdPF22PQ1eOUIB/NDEaftA4pNLvYDLE8iv3qr5PRU
+         uBFIuKQcGMWwQEzGTrfTcAmnRq7N9m3x07niU3KimvJDZx4vQy4LL3ZIaotq5YX3L1KQ
+         1eiy96mitwWkxnWr94pnXWjKujPLAxX9qwtiIyfGehMbsrvdD+FnU3n2VMyYRfHa1AAU
+         CwD5LgkQrpo0bcRYc5Y9ySArIN1woeaU9kD1DmduHGrvXgktq1PLtEtvSshk2E4X/PeA
+         7BGwWz5q9LvJALDdZ11pP7YquIDNKo7q52A/+8O3cHg7n6PcksfRsz5UtszS53Zoor1q
+         1IYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692879526; x=1693484326;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AlrwwqTITMhKtvHsPQuVmQL/Kh4vzSe7uyS+aD745jU=;
+        b=IYXoYd9k75qSjJJ5QeEGkPpDhdMg2rbJQUUt1Jw2/OItAoesZSaJmMRiW9bg+RS2Tr
+         b/WFnST512E+xOaPjrPshrubAd8fjSHkjL+ifUFetojfiYLQNrwIVJPX+6j73jfMj9dr
+         7Q9BTlKpxii52M0d+6LJutc1d5xXPjdAgbihXKWAlsKFxeDMNV3BZPcWe3fHRiCQqPK3
+         WGJifcqx5RPezHfXogOvteTnGy7/tKPUyyOwIKgAyQqMC2Zt0YoKd8sz7rdIHgVH+vhZ
+         rKBBBTvxvxe+3tqAAN9K5A2bb84aiTH3vlavBUSfdX5NKoJdCBTD4xR4bc+4c8WhFj/y
+         X9/w==
+X-Gm-Message-State: AOJu0YzqnsnwpsDMikMa0TrirMX/Dqnuj8rFZWvetLAdjdICMoRnHinW
+        2DQG07pecmB0uIPeIkPfrl9/NUWS9gHjotE8wqK+Z6l2
+X-Google-Smtp-Source: AGHT+IEAoiKfYXAZ/wDNtwk7GNCrx6ELbsv4RClO7gblygmbcag2A2VLQgTJ9cLSOHt3L1H4LymrOeJ7i/vQNkmXYpg=
+X-Received: by 2002:a17:90a:6e4b:b0:269:34a6:d4ca with SMTP id
+ s11-20020a17090a6e4b00b0026934a6d4camr14130881pjm.0.1692879525718; Thu, 24
+ Aug 2023 05:18:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SORBS_DUL,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230824112705.451411-1-festevam@gmail.com> <a2a613ce-be6e-6bd9-774d-9e3ed994f45e@linaro.org>
+In-Reply-To: <a2a613ce-be6e-6bd9-774d-9e3ed994f45e@linaro.org>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Thu, 24 Aug 2023 09:18:34 -0300
+Message-ID: <CAOMZO5D=kzVMEeHqEBj2uos=BLDhKbOE7SZNL4kvpdVaMZkDww@mail.gmail.com>
+Subject: Re: [PATCH v2] thermal: imx8mm: Allow reboot after critical temperature
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-pm@vger.kernel.org, rafael@kernel.org, amitk@kernel.org,
+        rui.zhang@intel.com, linux-kernel@vger.kernel.org,
+        Fabio Estevam <festevam@denx.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Alexandre Courbot <acourbot@nvidia.com>
+Hi Daniel,
 
-Signed-off-by: Alexandre Courbot <acourbot@nvidia.com>
----
- drivers/power/supply/bq24190_charger.c | 84 ++++++++++++++++++++++++++
- 1 file changed, 84 insertions(+)
+On Thu, Aug 24, 2023 at 8:57=E2=80=AFAM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 
-diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
-index a56122b39687..8c026e86aeb3 100644
---- a/drivers/power/supply/bq24190_charger.c
-+++ b/drivers/power/supply/bq24190_charger.c
-@@ -530,6 +530,81 @@ static int bq24190_set_otg_vbus(struct bq24190_dev_info *bdi, bool enable)
- }
- 
- #ifdef CONFIG_REGULATOR
-+static int bq24190_set_charging_current(struct regulator_dev *dev,
-+			int min_uA, int max_uA)
-+{
-+	struct bq24190_dev_info *bdi = rdev_get_drvdata(dev);
-+	u8 ss_reg;
-+	int in_current_limit;
-+	int ret = 0;
-+
-+	dev_info(bdi->dev, "Setting charging current %d mA\n", max_uA/1000);
-+
-+	ret = bq24190_read(bdi, BQ24190_REG_SS, &ss_reg);
-+	if (ret < 0)
-+		goto error;
-+
-+	if (max_uA == 0 && ss_reg != 0)
-+		return ret;
-+
-+	if (!(ss_reg & BQ24190_REG_SS_VBUS_STAT_MASK))
-+		in_current_limit = 500;
-+	else
-+		in_current_limit = max_uA / 1000;
-+
-+	return bq24190_set_field_val(bdi, BQ24190_REG_ISC,
-+			BQ24190_REG_ISC_IINLIM_MASK,
-+			BQ24190_REG_ISC_IINLIM_SHIFT,
-+			bq24190_isc_iinlim_values,
-+			ARRAY_SIZE(bq24190_isc_iinlim_values),
-+			in_current_limit);
-+error:
-+	dev_err(bdi->dev, "Charger enable failed, err = %d\n", ret);
-+	return ret;
-+}
-+
-+static const struct regulator_ops bq24190_chrg_ops = {
-+	.set_current_limit = bq24190_set_charging_current,
-+};
-+
-+static const struct regulator_desc bq24190_chrg_desc = {
-+	.name = "charger",
-+	.of_match = "charger",
-+	.type = REGULATOR_CURRENT,
-+	.owner = THIS_MODULE,
-+	.ops = &bq24190_chrg_ops,
-+};
-+
-+static const struct regulator_init_data bq24190_chrg_init_data = {
-+	.constraints = {
-+		.valid_ops_mask = REGULATOR_CHANGE_STATUS | REGULATOR_CHANGE_CURRENT,
-+		.min_uA = 0,
-+		.max_uA = 3000000,
-+	},
-+};
-+
-+static int bq24190_register_chrg_regulator(struct bq24190_dev_info *bdi)
-+{
-+	struct bq24190_platform_data *pdata = bdi->dev->platform_data;
-+	struct regulator_config cfg = { };
-+	struct regulator_dev *reg;
-+	int ret = 0;
-+
-+	cfg.dev = bdi->dev;
-+	if (pdata && pdata->regulator_init_data)
-+		cfg.init_data = pdata->regulator_init_data;
-+	else
-+		cfg.init_data = &bq24190_chrg_init_data;
-+	cfg.driver_data = bdi;
-+	reg = devm_regulator_register(bdi->dev, &bq24190_chrg_desc, &cfg);
-+	if (IS_ERR(reg)) {
-+		ret = PTR_ERR(reg);
-+		dev_err(bdi->dev, "Can't register regulator: %d\n", ret);
-+	}
-+
-+	return ret;
-+}
-+
- static int bq24190_vbus_enable(struct regulator_dev *dev)
- {
- 	return bq24190_set_otg_vbus(rdev_get_drvdata(dev), true);
-@@ -611,6 +686,11 @@ static int bq24190_register_vbus_regulator(struct bq24190_dev_info *bdi)
- 	return ret;
- }
- #else
-+static int bq24190_register_chrg_regulator(struct bq24190_dev_info *bdi)
-+{
-+	return 0;
-+}
-+
- static int bq24190_register_vbus_regulator(struct bq24190_dev_info *bdi)
- {
- 	return 0;
-@@ -1879,6 +1959,10 @@ static int bq24190_probe(struct i2c_client *client)
- 		goto out_charger;
- 	}
- 
-+	ret = bq24190_register_chrg_regulator(bdi);
-+	if (ret < 0)
-+		goto out_charger;
-+
- 	ret = bq24190_register_vbus_regulator(bdi);
- 	if (ret < 0)
- 		goto out_charger;
--- 
-2.42.0
+> Is it possible to set the .critical ops at init time instead and get rid
+> of the thermal_zone_device_critical(tz) call ?
 
+Yes, I have just tested your suggestion and it works.
+
+It also looks better :-)
+
+I will send a v3, thanks.
