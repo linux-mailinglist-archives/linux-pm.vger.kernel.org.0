@@ -2,88 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8DA786DC6
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Aug 2023 13:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A71FE786DD1
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Aug 2023 13:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237583AbjHXLYh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Aug 2023 07:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48252 "EHLO
+        id S235276AbjHXL1u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Aug 2023 07:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234603AbjHXLYU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Aug 2023 07:24:20 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03B010FA;
-        Thu, 24 Aug 2023 04:24:18 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37O9vOaD011109;
-        Thu, 24 Aug 2023 11:24:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=2Dz1+hAiDbVufNU3Br/8pVgbKQsoS6jl9qrvTruWUIk=;
- b=L1IX3zJWLeCPAv23/fCw26uSN95XD9jk0GVb8W5OaMLhvMwAFmn9ecisEUTsvhZM256E
- DlVpLqajjoBg4tczYSzZJQ/T7SHWpIolZd7HsQQNKKHbzZkS6ww9SiEV1Lb8gwYTfe+5
- OKaCo8nN0TNLYh0GKSSfg2zJtLavY/8RVhpXTfnaR+i0o+v6gqAOBoynyGSlHmFLZWOQ
- FLdF6RdDFNjsGqTZqmnHD8Wu/NlQuPdF+tToEjUySGviuDFDctUGRuOcjeDbo8MFsvRC
- MZdTUJjrI0EWwkbWfj6U8RfhAHxalb6/OLihMpLSwWtkIvThnuNPXeQ4TwXCs9vusm7w YA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3snkumt5xw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Aug 2023 11:24:12 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37OBOBUm022309
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Aug 2023 11:24:11 GMT
-Received: from [10.216.60.202] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Thu, 24 Aug
- 2023 04:24:04 -0700
-Message-ID: <389f9df4-bcdb-4ec4-57d0-978b03fa862b@quicinc.com>
-Date:   Thu, 24 Aug 2023 16:53:59 +0530
+        with ESMTP id S232506AbjHXL1S (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Aug 2023 07:27:18 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE4710F3;
+        Thu, 24 Aug 2023 04:27:16 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id 46e09a7af769-6bca018afe8so1629696a34.0;
+        Thu, 24 Aug 2023 04:27:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692876435; x=1693481235;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HoX/1SqxDvI7G80pdYJhH4J1CONUc0UeZCbshQ9Td9o=;
+        b=mLfi8Zk7uVlgAUg7qCr6D5cmpwiFbHNFqs0Ab58xc/IcDknZLrLQjRjarQjvbqyOXh
+         jMKy3tyitZ6E5MrbALXilBKs0tqhsSr+aSSTw8yrnTrovu9WCLOeR7HWch9M3RpMtGa7
+         TH8xzN9YShfEB1BO0Y/ijHPqqTeZeb7qCivj+gtIvB5kaxIzXo3PJgRS8MmMg+GIj8qz
+         BMTbK/h1quUxcJkYbLK5zG+PXM46bZ7Fpl5FjegYWzIeUny+dDAZnYGHRl8UNq0Bjlhc
+         stNPvHhNjAkFCp3dOGajJnUk0FYohMlaI+uDCliACr2tdVYzos2wOyxkSw3So1tLqr8J
+         s5/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692876435; x=1693481235;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HoX/1SqxDvI7G80pdYJhH4J1CONUc0UeZCbshQ9Td9o=;
+        b=Cb6RPtlFBS89DHsTugKJ43CPB+IH0dDoBy3VSKBXZPuYF9bfkkebP9O7AcJyIIe4R8
+         Z9IcwmZhApkhhmUAA+Jf/wVQu1Yz45AmK8L+nkb0aScIMdOhtm+xFvGtRyLX3gjbDSso
+         sYxZnGmB/SvjwbWjbKbwkzXBSua/ODRkTU3HDZEM5ziPTUoq3NixaWuR4cxviF0NZERJ
+         2QQIgcVAd2n9y7Mo9dfpXrE9Gw1/7dJ0mBRsN6UDaSv0XiEEun7NkvNiC9E8SIJO1O09
+         jRTUZSbl1iV+tafXGjTR8fDwUFHOmE5gip2WeL1doZxuz/EC2Ojg5KuGZ/V9CY2DXv6e
+         eqLg==
+X-Gm-Message-State: AOJu0YyOCzS4q2t9yVBFRLr21oCxVmu1k4aXmuuUllO4Kp3X3KLHtw37
+        9AJy2gQ0jslAy6MhlOj3GGodMtXi6jk=
+X-Google-Smtp-Source: AGHT+IHF0VFZPTm/p/IU3XRMQd1DYFEMeND9nfqMLQIC5tv06ttFVnzhZWeaHrzOVEeOd3x3Ovd/6g==
+X-Received: by 2002:a05:6871:5223:b0:1bf:fe4f:db58 with SMTP id ht35-20020a056871522300b001bffe4fdb58mr19335561oac.5.1692876435653;
+        Thu, 24 Aug 2023 04:27:15 -0700 (PDT)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:8c51:3a01:4599:db3])
+        by smtp.gmail.com with ESMTPSA id bp4-20020a056808238400b003a8715d7f9esm2160567oib.19.2023.08.24.04.27.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Aug 2023 04:27:15 -0700 (PDT)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, rafael@kernel.org, amitk@kernel.org,
+        rui.zhang@intel.com, linux-kernel@vger.kernel.org,
+        Fabio Estevam <festevam@denx.de>
+Subject: [PATCH v2] thermal: imx8mm: Allow reboot after critical temperature
+Date:   Thu, 24 Aug 2023 08:27:05 -0300
+Message-Id: <20230824112705.451411-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: Enable tsens and thermal for
- sa8775p SoC
-Content-Language: en-US
-To:     Konrad Dybcio <konradybcio@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_manafm@quicinc.com>
-References: <20230821112928.19284-1-quic_priyjain@quicinc.com>
- <20230821112928.19284-3-quic_priyjain@quicinc.com>
- <ac153c9b-f698-47f4-9d52-b3ea5c9ba213@kernel.org>
-From:   Priyansh Jain <quic_priyjain@quicinc.com>
-In-Reply-To: <ac153c9b-f698-47f4-9d52-b3ea5c9ba213@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: QtilqEFlvBBJQg9hBqzSiOSUPzXNtoXS
-X-Proofpoint-ORIG-GUID: QtilqEFlvBBJQg9hBqzSiOSUPzXNtoXS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-08-24_07,2023-08-24_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=768
- spamscore=0 suspectscore=0 adultscore=0 clxscore=1011 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 phishscore=0 mlxscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2308100000
- definitions=main-2308240092
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -92,56 +69,83 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Konrad,
+From: Fabio Estevam <festevam@denx.de>
 
-On 8/21/2023 5:25 PM, Konrad Dybcio wrote:
-> On 21.08.2023 13:29, Priyansh Jain wrote:
->> Add tsens and thermal devicetree node for sa8775p SoC.
->>
->> Signed-off-by: Priyansh Jain <quic_priyjain@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/sa8775p.dtsi | 1096 +++++++++++++++++++++++++
->>   1 file changed, 1096 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
->> index b130136acffe..b9c622b3bf7e 100644
->> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
->> @@ -2306,6 +2306,1102 @@
->>   
->>   			#freq-domain-cells = <1>;
->>   		};
->> +
->> +		tsens0: thermal-sensor@c222000 {
->> +			compatible = "qcom,sa8775p-tsens", "qcom,tsens-v2";
->> +			reg = <0x0C263000 0x1ff>,  /* TM */
->> +				<0x0C222000 0x1ff>; /* SROT */
-> 1. Test your patches. This will obviously not work due to the
->     #address/size-cells values of /soc@0.
-Yes this needs to be updated, Will update in the next revision.
-> 
-> 2. Use lowercase hex.
-Sure will update in next revision.
-> 3. Align subsequent entries for a property with the previous line
-> 
-Sure will update in next revision.
-> 4. Are you sure SROT is 0x1ff-long?
-> 
-Yes it can be updated to 0x8 , will update in next revision.
-> 5. The usefulness of these comments is questionable, many DTs have
->     them because of copypasta but I think it's time to stop that.
-> 
-Yes will remove them in next revision.
-> 6. No pdc wake-capable interrupts?
-Yes they don't need to be pdc wakeup capable.
-> 
->> +			#qcom,sensors = <12>;
->> +			interrupts = <GIC_SPI 506 IRQ_TYPE_LEVEL_HIGH>,
->> +				<GIC_SPI 508 IRQ_TYPE_LEVEL_HIGH>;
->> +			interrupt-names = "uplow","critical";
-> Missing space after the comma
-Yes will update in next revision.
-> 
-> Please move interrupt properties right after 'reg'.
-Sure will update in next revision.
-> Konrad
+Currently, after the board reaches the critical temperature, the system
+goes through a poweroff mechanism.
+
+In some cases, such behavior does not suit well, as the board may be
+unattended in the field and rebooting may be a better approach.
+
+The bootloader may also check the temperature and only allow the boot to
+proceed when the temperature is below a certain threshold.
+
+Introduce a reboot_on_critical parameter to indicate that the board
+will go through a reboot after the critical temperature is reached.
+
+When this parameter is not selected, the default behavior of forcing a
+shutdown is preserved.
+
+Tested on a imx8mm-evk board by passing 'imx8mm_thermal.reboot_on_critical'
+via kernel command line.
+
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+---
+Changes since v1:
+- Introduce a module_param() instead of a devicetree property.
+
+ drivers/thermal/imx8mm_thermal.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
+index e89b11b3f2b9..2427bd46ac6c 100644
+--- a/drivers/thermal/imx8mm_thermal.c
++++ b/drivers/thermal/imx8mm_thermal.c
+@@ -10,9 +10,11 @@
+ #include <linux/err.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
++#include <linux/moduleparam.h>
+ #include <linux/nvmem-consumer.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
++#include <linux/reboot.h>
+ #include <linux/slab.h>
+ #include <linux/thermal.h>
+ 
+@@ -75,6 +77,11 @@
+ #define TMU_VER1		0x1
+ #define TMU_VER2		0x2
+ 
++static bool reboot_on_critical;
++module_param(reboot_on_critical, bool, 0444);
++MODULE_PARM_DESC(reboot_on_critical,
++		 "Reboot the system after the critical temperature is reached.");
++
+ struct thermal_soc_data {
+ 	u32 num_sensors;
+ 	u32 version;
+@@ -146,8 +153,20 @@ static int tmu_get_temp(struct thermal_zone_device *tz, int *temp)
+ 	return tmu->socdata->get_temp(sensor, temp);
+ }
+ 
++static void tmu_critical(struct thermal_zone_device *tz)
++{
++	if (reboot_on_critical) {
++		dev_emerg(thermal_zone_device(tz), "%s: critical temperature reached\n",
++			  thermal_zone_device_type(tz));
++		kernel_restart(NULL);
++	} else {
++		thermal_zone_device_critical(tz);
++	}
++}
++
+ static const struct thermal_zone_device_ops tmu_tz_ops = {
+ 	.get_temp = tmu_get_temp,
++	.critical = tmu_critical,
+ };
+ 
+ static void imx8mm_tmu_enable(struct imx8mm_tmu *tmu, bool enable)
+-- 
+2.34.1
+
