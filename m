@@ -2,152 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79EE4788D4D
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Aug 2023 18:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBD1D788D86
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Aug 2023 19:01:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344046AbjHYQnR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 25 Aug 2023 12:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
+        id S1344137AbjHYRBK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Aug 2023 13:01:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344076AbjHYQm4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Aug 2023 12:42:56 -0400
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC04E54;
-        Fri, 25 Aug 2023 09:42:52 -0700 (PDT)
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-573128cd77dso195582eaf.0;
-        Fri, 25 Aug 2023 09:42:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692981771; x=1693586571;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Mb6UwN7bqxNEBVBwpVvxzoowsG5Fs07U9AiGF9V4s0g=;
-        b=klRKXH3WoI0t7v1fqOX27ynJ/ZhUxAbEikGL9MHEO4+3YwPp08XPEQSUIZiV6LI9o0
-         EfwxOi9XcBsCxU33v6lqBjTRhypmUJpiFb9ZYkfbhMP4jGswrn+DPvFVv+ffdeGimk+G
-         jjUHejgQEH1DG/ZnGZUO8ZGY2WshCTIIZIes+/bDnCvUfM4b/FZMucG79uUrn+RYzGBW
-         oZhiKQ03x4AzhX+hhE+p22U2e9AJYTiQjEV0jvVLB/lplsikNYlcqCnfCb0JUosxFDAm
-         YtF6zMofJ7sEqs9bvRnNehDx4uOO9YPsCIojE6FVB7I8HXb3830NrBWCt8QnUAN+Tnnb
-         pyaA==
-X-Gm-Message-State: AOJu0YwL/2lMugyCdklAiufzVLmHXgtaP1llzWloin1TXRDf0/asocnJ
-        ilxXkBFIDMW6sTixjghp9glCk/bPREglqWh6o4o=
-X-Google-Smtp-Source: AGHT+IFo1xts08LHwvna+TJOgUK2rfrorRhxJjJfcSqsbQ7yNEqg3JkIMYrx2iieZeWVQwJ5+oqBkuK6NfjLbCwi4uk=
-X-Received: by 2002:a4a:e741:0:b0:56e:94ed:c098 with SMTP id
- n1-20020a4ae741000000b0056e94edc098mr19227852oov.0.1692981771638; Fri, 25 Aug
- 2023 09:42:51 -0700 (PDT)
+        with ESMTP id S230353AbjHYRAj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Aug 2023 13:00:39 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5128B10C3;
+        Fri, 25 Aug 2023 10:00:37 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37PECkBC007918;
+        Fri, 25 Aug 2023 17:00:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=7Ydgg4pJaP0kD/peIFkbYTaUPPhfK1TO7rA2tT1SOeY=;
+ b=d45kYWA7bW6ja0UE41uWifh5k8ojFYavxroKfQZSXOMxftRbU9DqkWYLyzfNuQQytH9p
+ V/D837m9AeWRQjmJQbFHBFoYR+/3LWrlYYcfYZEF+8tTTvQkv//1bYp8VVYO10Pp+sPC
+ f9kO9AaXUALKMVyDVnN4kRo7TAFDTacqetTzkzNb2ua7mgjQ0ucJs0HeLC7g2t9tj88n
+ D4sVcf/tA1/ydmI/FbuEym7sSxUOWe0YSNKi6jxCHCsRqop9q68loKljVagUjykaPmmh
+ c18uDlGG9JcnJQIIv8mc9t7kOrCpNfPu48CI4mdLsim1PzKUMZXj1qs9/V/SDT8p8IwP mA== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3spmm69h4t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Aug 2023 17:00:05 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37PH02Bv025880
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Aug 2023 17:00:04 GMT
+Received: from quicinc.com (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Fri, 25 Aug
+ 2023 10:00:03 -0700
+Date:   Fri, 25 Aug 2023 10:00:01 -0700
+From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
+To:     Nicolas Schier <nicolas@fjasle.eu>
+CC:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Kees Cook" <keescook@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <quic_pkondeti@quicinc.com>, <u.kleine-koenig@pengutronix.de>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>
+Subject: Re: [PATCH v2 1/1] scripts: Add add-maintainer.py
+Message-ID: <20230825170001.GB22659@quicinc.com>
+Mail-Followup-To: Nicolas Schier <nicolas@fjasle.eu>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        quic_pkondeti@quicinc.com, u.kleine-koenig@pengutronix.de,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+References: <cover.1691049436.git.quic_gurus@quicinc.com>
+ <829b08342568735095bbd3f8c44f435f44688018.1691049436.git.quic_gurus@quicinc.com>
+ <ZOYicEP8D7kNGFin@fjasle.eu>
+ <20230824214436.GA22659@quicinc.com>
+ <ZOiUOcMOeYvMzq58@bergen.fjasle.eu>
 MIME-Version: 1.0
-References: <12270283.O9o76ZdvQC@kreacher>
-In-Reply-To: <12270283.O9o76ZdvQC@kreacher>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 25 Aug 2023 18:42:40 +0200
-Message-ID: <CAJZ5v0iizEDW50Rr17qu2xCnPVE+4eY3aNMQ3FNRNTvmiRL1Zw@mail.gmail.com>
-Subject: Re: [PATCH v1] thermal: core: Drop unused .get_trip_*() callbacks
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Amit Kucheria <amitk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZOiUOcMOeYvMzq58@bergen.fjasle.eu>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: fz34qtDuVkPWFCbAnbkWr5SxCT20PqW0
+X-Proofpoint-GUID: fz34qtDuVkPWFCbAnbkWr5SxCT20PqW0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-25_15,2023-08-25_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ impostorscore=0 priorityscore=1501 malwarescore=0 phishscore=0
+ clxscore=1015 mlxscore=0 adultscore=0 bulkscore=0 lowpriorityscore=0
+ mlxlogscore=630 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2308250152
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Aug 25, 2023 at 6:17 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> After recent changes in the ACPI thermal driver and in the Intel DTS
-> IOSF thermal driver, all thermal zone drivers are expected to use trip
-> tables for initialization and none of them should implement
-> .get_trip_type(), .get_trip_temp() or .get_trip_hyst() callbacks, so
-> drop these callbacks entirely from the core.
->
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/thermal/thermal_core.c |    2 +-
->  drivers/thermal/thermal_trip.c |   22 +++-------------------
->  include/linux/thermal.h        |    4 ----
->  3 files changed, 4 insertions(+), 24 deletions(-)
->
-> Index: linux-pm/include/linux/thermal.h
-> ===================================================================
-> --- linux-pm.orig/include/linux/thermal.h
-> +++ linux-pm/include/linux/thermal.h
-> @@ -76,11 +76,7 @@ struct thermal_zone_device_ops {
->         int (*set_trips) (struct thermal_zone_device *, int, int);
->         int (*change_mode) (struct thermal_zone_device *,
->                 enum thermal_device_mode);
-> -       int (*get_trip_type) (struct thermal_zone_device *, int,
-> -               enum thermal_trip_type *);
-> -       int (*get_trip_temp) (struct thermal_zone_device *, int, int *);
->         int (*set_trip_temp) (struct thermal_zone_device *, int, int);
-> -       int (*get_trip_hyst) (struct thermal_zone_device *, int, int *);
->         int (*set_trip_hyst) (struct thermal_zone_device *, int, int);
->         int (*get_crit_temp) (struct thermal_zone_device *, int *);
->         int (*set_emul_temp) (struct thermal_zone_device *, int);
-> Index: linux-pm/drivers/thermal/thermal_trip.c
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_trip.c
-> +++ linux-pm/drivers/thermal/thermal_trip.c
-> @@ -118,27 +118,11 @@ int __thermal_zone_get_trip(struct therm
->  {
->         int ret;
+On Aug 25 2023 13:44, Nicolas Schier wrote:
+> On Thu 24 Aug 2023 14:44:36 GMT, Guru Das Srinagesh wrote:
+> > > While testing, I thought that adding addresses without filtering-out duplicates
+> > > was odd; but as git-send-email does the unique filtering, it doesn't matter.
+> > 
+> > Since I'm using `set()` in this script, the uniqueness is guaranteed here as
+> > well - there won't be any duplicates.
+> 
+> I thought about patch files that already have 'To/Cc' headers (e.g.  
+> 'git format-patch --to=... --cc=...' or by running add-maintainer.py 
+> multiple times for updating the lists of recipients.  The result is a 
+> patch file with possible duplicated lines; but as written: it does 
+> matter, effectively.
 
-The above needs to be dropped from this function too, but I'll fix it
-up when applying the patch.
+Sorry, did you mean "does" or "does *not*"?
 
-Hopefully, that will be fine with everyone.
+I'll make sure to test v3 of this script out on patches that have To/Cc already
+included and also run it multiple times on the same patch (effectively the same
+thing).
 
->
-> -       if (!tz || trip_id < 0 || trip_id >= tz->num_trips || !trip)
-> +       if (!tz || !tz->trips || trip_id < 0 || trip_id >= tz->num_trips || !trip)
->                 return -EINVAL;
->
-> -       if (tz->trips) {
-> -               *trip = tz->trips[trip_id];
-> -               return 0;
-> -       }
-> -
-> -       if (tz->ops->get_trip_hyst) {
-> -               ret = tz->ops->get_trip_hyst(tz, trip_id, &trip->hysteresis);
-> -               if (ret)
-> -                       return ret;
-> -       } else {
-> -               trip->hysteresis = 0;
-> -       }
-> -
-> -       ret = tz->ops->get_trip_temp(tz, trip_id, &trip->temperature);
-> -       if (ret)
-> -               return ret;
-> -
-> -       return tz->ops->get_trip_type(tz, trip_id, &trip->type);
-> +       *trip = tz->trips[trip_id];
-> +       return 0;
->  }
->  EXPORT_SYMBOL_GPL(__thermal_zone_get_trip);
->
-> Index: linux-pm/drivers/thermal/thermal_core.c
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_core.c
-> +++ linux-pm/drivers/thermal/thermal_core.c
-> @@ -1266,7 +1266,7 @@ thermal_zone_device_register_with_trips(
->                 return ERR_PTR(-EINVAL);
->         }
->
-> -       if (num_trips > 0 && (!ops->get_trip_type || !ops->get_trip_temp) && !trips)
-> +       if (num_trips > 0 && !trips)
->                 return ERR_PTR(-EINVAL);
->
->         if (!thermal_class)
->
->
->
+Thank you.
+
+Guru Das.
