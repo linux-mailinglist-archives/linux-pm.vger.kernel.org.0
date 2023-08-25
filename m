@@ -2,325 +2,209 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AD9C7885B3
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Aug 2023 13:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCDA67885D4
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Aug 2023 13:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243599AbjHYL1f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Aug 2023 07:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41912 "EHLO
+        id S230462AbjHYLeX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Aug 2023 07:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244058AbjHYL1X (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Aug 2023 07:27:23 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1727F2105
-        for <linux-pm@vger.kernel.org>; Fri, 25 Aug 2023 04:27:11 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4ff93a7f230so1023284e87.1
-        for <linux-pm@vger.kernel.org>; Fri, 25 Aug 2023 04:27:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692962829; x=1693567629;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+yaqKQIJTD9fZr98M4Nk4mccUrzQ5CJuGegE9vBYYR4=;
-        b=DWSjdOIv5y+qm50OsnbSd3qviVcIOLGh6K1BiEpruWYR09Pyvf6tL7Wn/wDRr1mMHM
-         qkJnXtuWelis0+ftSpuOU/MpPc51jWtDA4A1K9xtZ5yR9YmA+x4F8VtxkJS10luafAqC
-         sxs+BzA8KHbP8/VFgTYNlj+xsQqs3oGsTsOyN2tfIj8eB+aQgiWYAMZyGQ3SA3fGvmLN
-         mqXxaNHo/dl4d8CjCkoNAz3TCD/onvxzpWrYtn77CazrBd7zpZVr9bGW27qz41BpPztT
-         tPrwBZJVGOIS4DwUgVuOpPLexUTqgxcFpnv3EmIYfmch+5/n9epI4j79egeHKXJI2sjn
-         l2Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692962829; x=1693567629;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+yaqKQIJTD9fZr98M4Nk4mccUrzQ5CJuGegE9vBYYR4=;
-        b=HYHGdj5IjsI5XID1y4xvkwk+CBUZKezQG0knSP2pNJ2l0NV1IEw3ER9uI0t4VT0wtB
-         a4e4xEa+/uUFQyrGz7SBQU7moz/VUQcM2M69TZs2U1hFtwyj0RdzQywFQi6BwjnMKTHW
-         21qX0yS1a1G/tVnDKZ0IV3WBKPL8Vhvyvdx1lAPk8fvdvPX7pLre9ur7g5gMjoTV72Vp
-         Nu/9S+6O4YxdAcIWtpeSkjh+BT6YZzcwOQMoKCEADDziA5qPyGTuDyk5IY9G0cqqxz+f
-         yduG5mhO47wghXVLif6UAlkGZhGQaei+Xx0E1s8/QN7BpmFSsMjpa8f9BSoLLlgQ7c+D
-         3Qdw==
-X-Gm-Message-State: AOJu0Yw92OQtuUSJwpLX2aRAVPNO1fTrUyzeOWNAhD+WOHZLZo4qBgyS
-        rNinHka+erRyFz7dKZdC6VNBpQ==
-X-Google-Smtp-Source: AGHT+IFND7ZZImaElyIBPzTDo/oJNJCxu7ILVgX+4jNRZ6rUCSRHZxN1ounIRTIuY+4Up84WSnQeZQ==
-X-Received: by 2002:a05:6512:1105:b0:500:7756:644f with SMTP id l5-20020a056512110500b005007756644fmr6532078lfg.8.1692962829288;
-        Fri, 25 Aug 2023 04:27:09 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id g7-20020ac25387000000b004fb7ac67bbdsm259164lfh.41.2023.08.25.04.27.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Aug 2023 04:27:08 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Nikunj Kela <nkela@quicinc.com>,
-        Prasad Sodagudi <psodagud@quicinc.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 13/13] genpd: arm: Add the SCMI performance domain
-Date:   Fri, 25 Aug 2023 13:26:33 +0200
-Message-Id: <20230825112633.236607-14-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230825112633.236607-1-ulf.hansson@linaro.org>
-References: <20230825112633.236607-1-ulf.hansson@linaro.org>
+        with ESMTP id S240694AbjHYLdy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Aug 2023 07:33:54 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2060.outbound.protection.outlook.com [40.107.92.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288551FD7;
+        Fri, 25 Aug 2023 04:33:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H+erQsb1nw5OK+nYcOaIItpqHoqfNesOIkhpgC5LFfxNMZUVPWVUwirx6ZC9/7OizJTsg2TEytxgqot4PkQzHI81AUvUkYNbK2WvuJe7i3Wg83FukacrwjqEbqXCPbnvmGLHVbxn5yJEWqFMovJ/bgPez01Nuc1MgSe5NLwpO5Q05w4eYs/b/qIqQpBXmvJJFEdFfVeiHfYlOCKg8jxHcvwQbYj0hzXsWlUlaK6dq6BduArMGkftjYu86/4SJTCChabgBfqk/9wcAR9/o35NJxaBEeItIYWu660Q/1eOiDVKnJ3eNJ6s/Qw+QrWycRb7zwS56WvzXBomgQpXzUMHLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ymp+iHYDIG1jZB+PKaiOWJZWXFca8nrsnUbgxibJT/Q=;
+ b=PPKJIro/hbDNP+BEkXuFgSCL8K8G4yZNk9uhst3BmFZ7uoDRHBGUW7pUwT1WaDghRfJKMd9zUTfbO0U/6uInv8uqUb25v5UE9PJ2hNB0i/nn51x4U6syzbZVfVtV4rtN4q42ipmplM78qCJelDKz1yv16xJZR4YmJ1JQG4sh2dInmnB2S3EeOmMrNKaoFbXHh63wmkGOwSsdSPq4pDnTgReMzp3WQ3buEXYQuExMVkUnUZOfrSIDuoGBorrE/pTuSu2TTT9khfFzaRgLP/oP85Nk4/x0FDrumWpivSmmfwPc1OPC1BeM06tmU0NT4kPgLNTGfBqzAUN/1ZRUL1rE5A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=linaro.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ymp+iHYDIG1jZB+PKaiOWJZWXFca8nrsnUbgxibJT/Q=;
+ b=HAUi0dRkMnYyi+Xf/hRAchslRsu1yHv2ehQOmlWKqAl4VnvU5ARORnL4HYIm+aSFzsvKKW3Zjx2MTeNI0ZlNkY+mvBP21CAkEhYx5AdOMTeAfP4QeeAzOODi+ZkVYtEOlBkY58uPLyMjFVjddWjB59ou9W9hKGqA8ZDkEWn5lfU5TPr5P29X8lyabu4LGdsUVyZEZtdvvKSPOqWHIV/0DYDyzwEBDncR8gFqnmssi1yMkP0+Orjzpkacadly2gr3+VHDsDx04sb+H2+Huz+a2wPKjKxNcFuQFtJq7NE36mCjVPdMLmwEbiQAaQ18oeEfPxIwDz6Xl6k+GM5DUzUDVg==
+Received: from BY3PR05CA0050.namprd05.prod.outlook.com (2603:10b6:a03:39b::25)
+ by CH0PR12MB5331.namprd12.prod.outlook.com (2603:10b6:610:d6::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.30; Fri, 25 Aug
+ 2023 11:33:50 +0000
+Received: from CO1PEPF000042AE.namprd03.prod.outlook.com
+ (2603:10b6:a03:39b:cafe::ef) by BY3PR05CA0050.outlook.office365.com
+ (2603:10b6:a03:39b::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.15 via Frontend
+ Transport; Fri, 25 Aug 2023 11:33:49 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CO1PEPF000042AE.mail.protection.outlook.com (10.167.243.43) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6699.15 via Frontend Transport; Fri, 25 Aug 2023 11:33:49 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 25 Aug 2023
+ 04:33:34 -0700
+Received: from [10.41.21.79] (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 25 Aug
+ 2023 04:33:30 -0700
+Message-ID: <e8114572-3e4b-1b1c-40fa-1dbc44d4f098@nvidia.com>
+Date:   Fri, 25 Aug 2023 17:03:27 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Patch] cpufreq: tegra194: remove opp table in exit hook
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     <rafael@kernel.org>, <treding@nvidia.com>, <jonathanh@nvidia.com>,
+        <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bbasu@nvidia.com>,
+        Sumit Gupta <sumitg@nvidia.com>
+References: <20230809153455.29056-1-sumitg@nvidia.com>
+ <20230810053127.y4wmumlggkro7r66@vireshk-i7>
+ <17b11665-874a-5b06-bc97-70f5202f238b@nvidia.com>
+ <20230816033402.3abmugb5goypvllm@vireshk-i7>
+From:   Sumit Gupta <sumitg@nvidia.com>
+In-Reply-To: <20230816033402.3abmugb5goypvllm@vireshk-i7>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.231.35]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000042AE:EE_|CH0PR12MB5331:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3a61d9d7-d7b0-416d-712d-08dba55f270d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +8ScwLKLp6eGH5rhemhsGG9q78QGGF2g5h90tiXK2jVsYD8MXobg/rgr0EAs/XVJZzsgzoeRDf3DdZtV0U7/+v1n4zXD+YmNTfbp0lMyo2rQPuIlIUJhVln5uko6qyOgk72T/8ZgPAac+TcvIXUtVVL/FbE7rrsK2nd3/V+v0ZWYhPWCJezga03fs3vIg6PvL9PXBNNp7aBcrmSAb/tQwZBdnALB0cGcEUIQNWoENnnEvVy6M707RvSXvazZ7SBtoqSpGwS8IDG6afaGwLQDQsvMRnpkKxl2fRzuY35wWwh7rrhzA5dVSCpdIrEE04gjjT2OKN2Bq2+p485iuLBifes9kQmC1z7t29ArwgCZsaF0Lvy6zm+aeqKrrodqT5xGCHjGNe1E5XTPhw3K4KSxjQwDXyNnAcQjrjBH2XJBv7oWmEUVnktRmg0Ec5MxyfVksic/F8DGAi8swYL+vf2+ZZV/9C0dgz6f7YtnghMQIuiYiUIIWPUC6KcrO2Es5h2KG05wSdI4KAuKAMZhNCjwM9iwNwGtHvSP5y1G7xcWCADUv37Iw1zuceQLZ8Ajl2CnUvWbUTnUIHo9ZT2PtWI7TyBnA/aHnJUUFvInh/eqGRIKzH8D3uFYt6pLF/gCnPn1sylu3MQ01CICUYoDkyCr2OWfKRyepBegCcI9CAbTPayEQ4eweIEL3MHli9PftdEKdVvfXoGB2u3+bKTAw4V0oOmHodfgGzow5pQBT75tGExagB8HFalwJqMna5JTxONJqfOCGQbbAI9CcL4rWOMAxSdu24Vy2jJ+XYPnvwOGkNYXGY0h/tHEX0w1BS6kq6Yh
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(376002)(346002)(396003)(136003)(186009)(82310400011)(1800799009)(451199024)(36840700001)(40470700004)(46966006)(40460700003)(6666004)(83380400001)(336012)(426003)(82740400003)(356005)(7636003)(86362001)(31696002)(36860700001)(36756003)(47076005)(16526019)(40480700001)(26005)(2616005)(107886003)(316002)(2906002)(6916009)(54906003)(70586007)(16576012)(70206006)(41300700001)(31686004)(4326008)(8676002)(8936002)(5660300002)(478600001)(966005)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2023 11:33:49.7788
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a61d9d7-d7b0-416d-712d-08dba55f270d
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000042AE.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5331
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-To enable support for performance scaling (DVFS) for generic devices with
-the SCMI performance protocol, let's add an SCMI performance domain. This
-is being modelled as a genpd provider, with support for performance scaling
-through genpd's ->set_performance_state() callback.
 
-Note that, this adds the initial support that allows consumer drivers for
-attached devices, to vote for a new performance state via calling the
-dev_pm_genpd_set_performance_state(). However, this should be avoided as
-it's in most cases preferred to use the OPP library to vote for a new OPP
-instead. The support using the OPP library isn't part of this change, but
-needs to be implemented from subsequent changes.
+>>>> Add exit hook and remove OPP table when all the CPU's in a policy
+>>>> are offlined. It will fix the below error messages when onlining
+>>>> first CPU from a policy whose all CPU's were previously offlined.
+>>>>
+>>>>    debugfs: File 'cpu5' in directory 'opp' already present!
+>>>>    debugfs: File 'cpu6' in directory 'opp' already present!
+>>>>    debugfs: File 'cpu7' in directory 'opp' already present!
+>>>>
+>>>> Fixes: f41e1442ac5b ("cpufreq: tegra194: add OPP support and set bandwidth")
+>>>> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+>>>> ---
+>>>>    drivers/cpufreq/tegra194-cpufreq.c | 13 +++++++++++++
+>>>>    1 file changed, 13 insertions(+)
+>>>>
+>>>> diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
+>>>> index c90b30469165..66a9c23544db 100644
+>>>> --- a/drivers/cpufreq/tegra194-cpufreq.c
+>>>> +++ b/drivers/cpufreq/tegra194-cpufreq.c
+>>>> @@ -454,6 +454,8 @@ static int tegra_cpufreq_init_cpufreq_table(struct cpufreq_policy *policy,
+>>>>                 if (ret < 0)
+>>>>                         return ret;
+>>>>
+>>>> +             dev_pm_opp_put(opp);
+>>>> +
+>>>>                 freq_table[j].driver_data = pos->driver_data;
+>>>>                 freq_table[j].frequency = pos->frequency;
+>>>>                 j++;
+>>>> @@ -508,6 +510,16 @@ static int tegra194_cpufreq_init(struct cpufreq_policy *policy)
+>>>>         return 0;
+>>>>    }
+>>>>
+>>>> +static int tegra194_cpufreq_exit(struct cpufreq_policy *policy)
+>>>> +{
+>>>> +     struct device *cpu_dev = get_cpu_device(policy->cpu);
+>>>> +
+>>>> +     dev_pm_opp_remove_all_dynamic(cpu_dev);
+>>>> +     dev_pm_opp_of_cpumask_remove_table(policy->related_cpus);
+>>>> +
+>>>> +     return 0;
+>>>> +}
+>>>> +
+>>>>    static int tegra194_cpufreq_set_target(struct cpufreq_policy *policy,
+>>>>                                        unsigned int index)
+>>>>    {
+>>>> @@ -535,6 +547,7 @@ static struct cpufreq_driver tegra194_cpufreq_driver = {
+>>>>         .target_index = tegra194_cpufreq_set_target,
+>>>>         .get = tegra194_get_speed,
+>>>>         .init = tegra194_cpufreq_init,
+>>>> +     .exit = tegra194_cpufreq_exit,
+>>>>         .attr = cpufreq_generic_attr,
+>>>>    };
+>>>
+>>> If it is only about hotplugging of the CPUs, then you can also do this I guess.
+>>>
+>>> commit 263abfe74b5f ("cpufreq: dt: Implement online/offline() callbacks")
+> 
+> You should do this as well, this makes hotplugging paths much faster. i.e. on
+> top of this patch.
+> 
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
+Sent a separate patch to add online/offline callbacks.
+   https://lore.kernel.org/lkml/20230825111920.8257-1-sumitg@nvidia.com/
 
-Changes in v3:
-	- Move files to drivers/genpd/arm/ and update MAINTAINERS.
-	- Updated the commit msg header.
-	- Prevent setting performance level 0.
-	- Initialize the genpd as always-on.
-	- Note, the corresponding Kconfigs should be placed in the genpd dir
-	too, but that's better suited on top or through a later-version.
+Also, sent v2 of this patch with updated commit description.
+   https://lore.kernel.org/lkml/20230825111617.8069-1-sumitg@nvidia.com/
 
----
- MAINTAINERS                          |   1 +
- drivers/firmware/arm_scmi/Kconfig    |  12 +++
- drivers/genpd/Makefile               |   1 +
- drivers/genpd/arm/Makefile           |   3 +
- drivers/genpd/arm/scmi_perf_domain.c | 150 +++++++++++++++++++++++++++
- 5 files changed, 167 insertions(+)
- create mode 100644 drivers/genpd/arm/Makefile
- create mode 100644 drivers/genpd/arm/scmi_perf_domain.c
+Thank you,
+Sumit Gupta
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index dff5d812f3ff..8995a160b240 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20705,6 +20705,7 @@ F:	drivers/clk/clk-sc[mp]i.c
- F:	drivers/cpufreq/sc[mp]i-cpufreq.c
- F:	drivers/firmware/arm_scmi/
- F:	drivers/firmware/arm_scpi.c
-+F:	drivers/genpd/arm/
- F:	drivers/powercap/arm_scmi_powercap.c
- F:	drivers/regulator/scmi-regulator.c
- F:	drivers/reset/reset-scmi.c
-diff --git a/drivers/firmware/arm_scmi/Kconfig b/drivers/firmware/arm_scmi/Kconfig
-index ea0f5083ac47..706d1264d038 100644
---- a/drivers/firmware/arm_scmi/Kconfig
-+++ b/drivers/firmware/arm_scmi/Kconfig
-@@ -181,6 +181,18 @@ config ARM_SCMI_POWER_DOMAIN
- 	  will be called scmi_pm_domain. Note this may needed early in boot
- 	  before rootfs may be available.
- 
-+config ARM_SCMI_PERF_DOMAIN
-+	tristate "SCMI performance domain driver"
-+	depends on ARM_SCMI_PROTOCOL || (COMPILE_TEST && OF)
-+	default y
-+	select PM_GENERIC_DOMAINS if PM
-+	help
-+	  This enables support for the SCMI performance domains which can be
-+	  enabled or disabled via the SCP firmware.
-+
-+	  This driver can also be built as a module. If so, the module will be
-+	  called scmi_perf_domain.
-+
- config ARM_SCMI_POWER_CONTROL
- 	tristate "SCMI system power control driver"
- 	depends on ARM_SCMI_PROTOCOL || (COMPILE_TEST && OF)
-diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
-index 666753676e5c..f0326b27b30b 100644
---- a/drivers/genpd/Makefile
-+++ b/drivers/genpd/Makefile
-@@ -2,6 +2,7 @@
- obj-y					+= actions/
- obj-y					+= amlogic/
- obj-y					+= apple/
-+obj-y					+= arm/
- obj-y					+= bcm/
- obj-y					+= imx/
- obj-y					+= mediatek/
-diff --git a/drivers/genpd/arm/Makefile b/drivers/genpd/arm/Makefile
-new file mode 100644
-index 000000000000..7128db96deac
---- /dev/null
-+++ b/drivers/genpd/arm/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+obj-$(CONFIG_ARM_SCMI_PERF_DOMAIN) += scmi_perf_domain.o
-diff --git a/drivers/genpd/arm/scmi_perf_domain.c b/drivers/genpd/arm/scmi_perf_domain.c
-new file mode 100644
-index 000000000000..aa100270500f
---- /dev/null
-+++ b/drivers/genpd/arm/scmi_perf_domain.c
-@@ -0,0 +1,150 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * SCMI performance domain support.
-+ *
-+ * Copyright (C) 2023 Linaro Ltd.
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/device.h>
-+#include <linux/module.h>
-+#include <linux/pm_domain.h>
-+#include <linux/scmi_protocol.h>
-+#include <linux/slab.h>
-+
-+struct scmi_perf_domain {
-+	struct generic_pm_domain genpd;
-+	const struct scmi_perf_proto_ops *perf_ops;
-+	const struct scmi_protocol_handle *ph;
-+	const struct scmi_perf_domain_info *info;
-+	u32 domain_id;
-+};
-+
-+#define to_scmi_pd(pd) container_of(pd, struct scmi_perf_domain, genpd)
-+
-+static int
-+scmi_pd_set_perf_state(struct generic_pm_domain *genpd, unsigned int state)
-+{
-+	struct scmi_perf_domain *pd = to_scmi_pd(genpd);
-+	int ret;
-+
-+	if (!pd->info->set_perf)
-+		return 0;
-+
-+	if (!state)
-+		return -EINVAL;
-+
-+	ret = pd->perf_ops->level_set(pd->ph, pd->domain_id, state, true);
-+	if (ret)
-+		dev_warn(&genpd->dev, "Failed with %d when trying to set %d perf level",
-+			 ret, state);
-+
-+	return ret;
-+}
-+
-+static int scmi_perf_domain_probe(struct scmi_device *sdev)
-+{
-+	struct device *dev = &sdev->dev;
-+	const struct scmi_handle *handle = sdev->handle;
-+	const struct scmi_perf_proto_ops *perf_ops;
-+	struct scmi_protocol_handle *ph;
-+	struct scmi_perf_domain *scmi_pd;
-+	struct genpd_onecell_data *scmi_pd_data;
-+	struct generic_pm_domain **domains;
-+	int num_domains, i, ret = 0;
-+
-+	if (!handle)
-+		return -ENODEV;
-+
-+	/* The OF node must specify us as a power-domain provider. */
-+	if (!of_find_property(dev->of_node, "#power-domain-cells", NULL))
-+		return 0;
-+
-+	perf_ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_PERF, &ph);
-+	if (IS_ERR(perf_ops))
-+		return PTR_ERR(perf_ops);
-+
-+	num_domains = perf_ops->num_domains_get(ph);
-+	if (num_domains < 0) {
-+		dev_warn(dev, "Failed with %d when getting num perf domains\n",
-+			 num_domains);
-+		return num_domains;
-+	} else if (!num_domains) {
-+		return 0;
-+	}
-+
-+	scmi_pd = devm_kcalloc(dev, num_domains, sizeof(*scmi_pd), GFP_KERNEL);
-+	if (!scmi_pd)
-+		return -ENOMEM;
-+
-+	scmi_pd_data = devm_kzalloc(dev, sizeof(*scmi_pd_data), GFP_KERNEL);
-+	if (!scmi_pd_data)
-+		return -ENOMEM;
-+
-+	domains = devm_kcalloc(dev, num_domains, sizeof(*domains), GFP_KERNEL);
-+	if (!domains)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < num_domains; i++, scmi_pd++) {
-+		scmi_pd->info = perf_ops->info_get(ph, i);
-+
-+		scmi_pd->domain_id = i;
-+		scmi_pd->perf_ops = perf_ops;
-+		scmi_pd->ph = ph;
-+		scmi_pd->genpd.name = scmi_pd->info->name;
-+		scmi_pd->genpd.flags = GENPD_FLAG_ALWAYS_ON |
-+				       GENPD_FLAG_OPP_TABLE_FW;
-+		scmi_pd->genpd.set_performance_state = scmi_pd_set_perf_state;
-+
-+		ret = pm_genpd_init(&scmi_pd->genpd, NULL, false);
-+		if (ret)
-+			goto err;
-+
-+		domains[i] = &scmi_pd->genpd;
-+	}
-+
-+	scmi_pd_data->domains = domains;
-+	scmi_pd_data->num_domains = num_domains;
-+
-+	ret = of_genpd_add_provider_onecell(dev->of_node, scmi_pd_data);
-+	if (ret)
-+		goto err;
-+
-+	dev_set_drvdata(dev, scmi_pd_data);
-+	dev_info(dev, "Initialized %d performance domains", num_domains);
-+	return 0;
-+err:
-+	for (i--; i >= 0; i--)
-+		pm_genpd_remove(domains[i]);
-+	return ret;
-+}
-+
-+static void scmi_perf_domain_remove(struct scmi_device *sdev)
-+{
-+	struct device *dev = &sdev->dev;
-+	struct genpd_onecell_data *scmi_pd_data = dev_get_drvdata(dev);
-+	int i;
-+
-+	of_genpd_del_provider(dev->of_node);
-+
-+	for (i = 0; i < scmi_pd_data->num_domains; i++)
-+		pm_genpd_remove(scmi_pd_data->domains[i]);
-+}
-+
-+static const struct scmi_device_id scmi_id_table[] = {
-+	{ SCMI_PROTOCOL_PERF, "perf" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(scmi, scmi_id_table);
-+
-+static struct scmi_driver scmi_perf_domain_driver = {
-+	.name		= "scmi-perf-domain",
-+	.probe		= scmi_perf_domain_probe,
-+	.remove		= scmi_perf_domain_remove,
-+	.id_table	= scmi_id_table,
-+};
-+module_scmi_driver(scmi_perf_domain_driver);
-+
-+MODULE_AUTHOR("Ulf Hansson <ulf.hansson@linaro.org>");
-+MODULE_DESCRIPTION("ARM SCMI perf domain driver");
-+MODULE_LICENSE("GPL v2");
--- 
-2.34.1
-
+>>> But since your driver is capable of being built as a module, I suggest you try
+>>> to build it as one and insert remove it multiple times. It must cause you some
+>>> trouble as you don't implement an .exit() before this patch.
+>>>
+>>> Eventually, I think you need to do both, what this patch and 263abfe74b5f do.
+>>> Just that the reasons need to be correct for both the changes.
+>>>
+>>> --
+>>> viresh
+>>
+>> Hi Viresh,
+>> I got the same message on inserting and removing the module multiple times
+>> as you suggested. After applying this change, the message is not coming. So,
+>> the current change is resolving both scenarios as __cpufreq_offline() calls
+>> either exit() or offline().
+>> I can update the commit message to mention both scenarios and keep change as
+>> it is?
+>>
+>>    cpufreq_remove_dev
+>>    |-__cpufreq_offline
+>>    |--tegra194_cpufreq_exit
+>>
+>>    cpuhp_cpufreq_offline
+>>    |-__cpufreq_offline
+>>    |--tegra194_cpufreq_exit
+> 
+> --
+> viresh
