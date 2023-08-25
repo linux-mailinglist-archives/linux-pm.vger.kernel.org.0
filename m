@@ -2,242 +2,215 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE2C788FDD
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Aug 2023 22:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA069789061
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Aug 2023 23:26:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbjHYUbh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Aug 2023 16:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44758 "EHLO
+        id S229564AbjHYVZc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Aug 2023 17:25:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbjHYUbY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Aug 2023 16:31:24 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2F51BE6;
-        Fri, 25 Aug 2023 13:31:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692995481; x=1724531481;
-  h=date:from:to:cc:subject:message-id;
-  bh=++TkEGbsL0jK4oH5knq3rKGZEabvttSthN1xc9pKCxA=;
-  b=Qz24A7QQ1j3n4eTxCL/CrPBRXTNDYrSBcJmPc2PCr/RMputeAMzzy4ei
-   86v3pin0NPg4eybMNhfECcqg9opdzkaZUQE6jeVsJdrIt0SeDM0eAA+Vk
-   HxmV9u29V5zmxiXZN4YS7AgJbLblfYIn3fF5vIhZQDSbJUsI+Su/kVlSs
-   fjsJKCDpDNntms6D3Bd8Ru321FZ9UzFQ+CUpuz4CsxgM+GPDsDCnwa8ZL
-   UCxP1eNIKboFkTDlW1+gAFjNUGXap+4rbLwzXq917PZC9KFaf/6dG29Bp
-   YLzhoGFcemzagknCMy69BZK1aeVk3OufOz+o3HEs4++9R5/uvYNH83/uJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="438737588"
-X-IronPort-AV: E=Sophos;i="6.02,201,1688454000"; 
-   d="scan'208";a="438737588"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2023 13:31:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10813"; a="1068351824"
-X-IronPort-AV: E=Sophos;i="6.02,201,1688454000"; 
-   d="scan'208";a="1068351824"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 25 Aug 2023 13:31:18 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qZdSf-0003z9-1H;
-        Fri, 25 Aug 2023 20:31:17 +0000
-Date:   Sat, 26 Aug 2023 04:30:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 1d5e1321ead0b6172df55d47f190742f7a614bfd
-Message-ID: <202308260426.wCSfRBBP-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S231472AbjHYVZQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Aug 2023 17:25:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C3726A2;
+        Fri, 25 Aug 2023 14:25:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E8FF61EE0;
+        Fri, 25 Aug 2023 21:25:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BA37C433C8;
+        Fri, 25 Aug 2023 21:25:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692998709;
+        bh=/ndd9JvcnOZbrZ59TJ6yt5tniui40+xM/DyzWVsM1tI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=IybtaUFxSdTUnn2pZh+WWdSykTWHRi0lD13eMCFhqvngsarg0CzPMfJuf1eflfUiN
+         PK3gN8/vzav9SvRCG8ibtFyc9QaZJFfVFuDzt4V24YZXoCaEhpLYIOvLMuwI1iFkbU
+         j/FSx5kVwmCtn/LJahKCWOPBBd+rc9A8lOgOJcEVrjclIW8nOOt0BiARAgychZx1ld
+         J20YolI4eMFxW1Om9ZJSinBAV8yTwub87pPr1pE/YJhLSHGvap56/TvKhisJk06tmA
+         0HBt+NYdChA/O9+ek60ZXZ1x9j5WAH9XmKuK3j013iBx8Wt5mxCrsU1MiaoRJXpGd1
+         6A3qXjjEyLctQ==
+Date:   Fri, 25 Aug 2023 16:25:07 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Feiyang Chen <chris.chenfeiyang@gmail.com>
+Cc:     Feiyang Chen <chenfeiyang@loongson.cn>, bhelgaas@google.com,
+        rafael.j.wysocki@intel.com, mika.westerberg@linux.intel.com,
+        anders.roxell@linaro.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, guyinggang@loongson.cn,
+        siyanteng@loongson.cn, chenhuacai@loongson.cn,
+        loongson-kernel@lists.loongnix.cn,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v3] PCI/PM: Only read PCI_PM_CTRL register when available
+Message-ID: <20230825212507.GA627427@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACWXhKnyq_-Y_NSWznEr+gV7z0Uoo+dqT5jd-OygtdEmZWCW5A@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 1d5e1321ead0b6172df55d47f190742f7a614bfd  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
+On Fri, Aug 25, 2023 at 11:57:00AM +0800, Feiyang Chen wrote:
+> On Fri, Aug 25, 2023 at 5:59 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Thu, Aug 24, 2023 at 09:37:38AM +0800, Feiyang Chen wrote:
+> > > When the current state is already PCI_D0, pci_power_up() will return
+> > > 0 even though dev->pm_cap is not set. In that case, we should not
+> > > read the PCI_PM_CTRL register in pci_set_full_power_state().
+> > >
+> > > There is nothing more needs to be done below in that case.
+> > > Additionally, pci_power_up() has two callers only and the other one
+> > > ignores the return value, so we can safely move the current state
+> > > check from pci_power_up() to pci_set_full_power_state().
+> >
+> > Does this fix a bug?  I guess it does, because previously
+> > pci_set_full_power_state() did a config read at 0 + PCI_PM_CTRL, i.e.,
+> > offset 4, which is actually PCI_COMMAND, and set dev->current_state
+> > based on that.  So dev->current_state is now junk, right?
+> 
+> Yes.
+> 
+> > This might account for some "Refused to change power state from %s to D0"
+> > messages.
+> >
+> > How did you find this?  It's nice if we can mention a symptom so
+> > people can connect the problem with this fix.
+> 
+> We are attempting to add MSI support for our stmmac driver, but the
+> pci_alloc_irq_vectors() function always fails.
+> After looking into it more, we came across the message "Refused to
+> change power state from D3hot to D0" :)
 
-elapsed time: 1533m
+So I guess this device doesn't have a PM Capability at all?  Can you
+collect the "sudo lspci -vv" output?  The PM Capability is required
+for all PCIe devices, so maybe this is a conventional PCI device?
 
-configs tested: 165
-configs skipped: 2
+> > This sounds like something that probably should have a stable tag?
+> 
+> Do I need to include the symptom and Cc in the commit message and
+> then send v4?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> > > Fixes: e200904b275c ("PCI/PM: Split pci_power_up()")
+> > > Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+> > > Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
+> > > ---
+> > >  drivers/pci/pci.c | 9 +++++----
+> > >  1 file changed, 5 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> > > index 60230da957e0..7e90ab7b47a1 100644
+> > > --- a/drivers/pci/pci.c
+> > > +++ b/drivers/pci/pci.c
+> > > @@ -1242,9 +1242,6 @@ int pci_power_up(struct pci_dev *dev)
+> > >               else
+> > >                       dev->current_state = state;
+> > >
+> > > -             if (state == PCI_D0)
+> > > -                     return 0;
+> > > -
+> > >               return -EIO;
+> > >       }
+> > >
+> > > @@ -1302,8 +1299,12 @@ static int pci_set_full_power_state(struct pci_dev *dev)
+> > >       int ret;
+> > >
+> > >       ret = pci_power_up(dev);
+> > > -     if (ret < 0)
+> > > +     if (ret < 0) {
+> > > +             if (dev->current_state == PCI_D0)
+> > > +                     return 0;
+> > > +
+> > >               return ret;
+> > > +     }
+> > >       pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+> > >       dev->current_state = pmcsr & PCI_PM_CTRL_STATE_MASK;
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r014-20230825   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20230825   gcc  
-arc                  randconfig-r006-20230825   gcc  
-arc                  randconfig-r034-20230825   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                   randconfig-001-20230825   clang
-arm64                            allmodconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r003-20230825   gcc  
-csky                 randconfig-r025-20230825   gcc  
-hexagon               randconfig-001-20230825   clang
-hexagon               randconfig-002-20230825   clang
-i386         buildonly-randconfig-001-20230825   clang
-i386         buildonly-randconfig-002-20230825   clang
-i386         buildonly-randconfig-003-20230825   clang
-i386         buildonly-randconfig-004-20230825   clang
-i386         buildonly-randconfig-005-20230825   clang
-i386         buildonly-randconfig-006-20230825   clang
-i386                                defconfig   gcc  
-i386                  randconfig-001-20230825   clang
-i386                  randconfig-002-20230825   clang
-i386                  randconfig-003-20230825   clang
-i386                  randconfig-004-20230825   clang
-i386                  randconfig-005-20230825   clang
-i386                  randconfig-006-20230825   clang
-i386                  randconfig-011-20230825   gcc  
-i386                  randconfig-012-20230825   gcc  
-i386                  randconfig-013-20230825   gcc  
-i386                  randconfig-014-20230825   gcc  
-i386                  randconfig-015-20230825   gcc  
-i386                  randconfig-016-20230825   gcc  
-i386                 randconfig-r032-20230825   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20230825   gcc  
-loongarch            randconfig-r011-20230825   gcc  
-loongarch            randconfig-r016-20230825   gcc  
-loongarch            randconfig-r031-20230825   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r024-20230825   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                            gpr_defconfig   gcc  
-mips                           ip28_defconfig   clang
-mips                     loongson2k_defconfig   clang
-mips                 randconfig-r015-20230825   clang
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r026-20230825   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc                    or1ksim_defconfig   gcc  
-openrisc             randconfig-r033-20230825   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r005-20230825   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-powerpc                      obs600_defconfig   clang
-powerpc              randconfig-r036-20230825   clang
-powerpc                         wii_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20230825   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20230825   gcc  
-s390                 randconfig-r012-20230825   gcc  
-s390                 randconfig-r023-20230825   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                          polaris_defconfig   gcc  
-sh                   randconfig-r001-20230825   gcc  
-sh                          rsk7201_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64              randconfig-r002-20230825   gcc  
-sparc64              randconfig-r021-20230825   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-001-20230825   clang
-x86_64       buildonly-randconfig-002-20230825   clang
-x86_64       buildonly-randconfig-003-20230825   clang
-x86_64       buildonly-randconfig-004-20230825   clang
-x86_64       buildonly-randconfig-005-20230825   clang
-x86_64       buildonly-randconfig-006-20230825   clang
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20230825   gcc  
-x86_64                randconfig-002-20230825   gcc  
-x86_64                randconfig-003-20230825   gcc  
-x86_64                randconfig-004-20230825   gcc  
-x86_64                randconfig-005-20230825   gcc  
-x86_64                randconfig-006-20230825   gcc  
-x86_64                randconfig-011-20230825   clang
-x86_64                randconfig-012-20230825   clang
-x86_64                randconfig-013-20230825   clang
-x86_64                randconfig-014-20230825   clang
-x86_64                randconfig-015-20230825   clang
-x86_64                randconfig-016-20230825   clang
-x86_64                randconfig-071-20230825   clang
-x86_64                randconfig-072-20230825   clang
-x86_64                randconfig-073-20230825   clang
-x86_64                randconfig-074-20230825   clang
-x86_64                randconfig-075-20230825   clang
-x86_64                randconfig-076-20230825   clang
-x86_64               randconfig-r022-20230825   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa               randconfig-r004-20230825   gcc  
-xtensa               randconfig-r013-20230825   gcc  
-xtensa               randconfig-r035-20230825   gcc  
+One thing that makes me hesitate a little bit is that we rely on the
+failure return from pci_power_up() to guard the dev->pm_cap usage.
+That's slightly obscure, and I liked the way the v1 patch made it
+explicit.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+And it seems slightly weird that when there's no PM cap,
+pci_power_up() always returns failure even if the platform was able to
+put the device in D0.
+
+Anyway, here's a proposal for commit log and updated comment for
+pci_power_up():
+
+
+commit 5694ba13b004 ("PCI/PM: Only read PCI_PM_CTRL register when available")
+Author: Feiyang Chen <chenfeiyang@loongson.cn>
+Date:   Thu Aug 24 09:37:38 2023 +0800
+
+    PCI/PM: Only read PCI_PM_CTRL register when available
+    
+    For a device with no Power Management Capability, pci_power_up() previously
+    returned 0 (success) if the platform was able to put the device in D0,
+    which led to pci_set_full_power_state() trying to read PCI_PM_CTRL, even
+    though it doesn't exist.
+    
+    Since dev->pm_cap == 0 in this case, pci_set_full_power_state() actually
+    read the wrong register, interpreted it as PCI_PM_CTRL, and corrupted
+    dev->current_state.  This led to messages like this in some cases:
+    
+      pci 0000:01:00.0: Refused to change power state from D3hot to D0
+    
+    To prevent this, make pci_power_up() always return a negative failure code
+    if the device lacks a Power Management Capability, even if non-PCI platform
+    power management has been able to put the device in D0.  The failure will
+    prevent pci_set_full_power_state() from trying to access PCI_PM_CTRL.
+    
+    Fixes: e200904b275c ("PCI/PM: Split pci_power_up()")
+    Link: https://lore.kernel.org/r/20230824013738.1894965-1-chenfeiyang@loongson.cn
+    Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+    Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+    Reviewed-by: "Rafael J. Wysocki" <rafael@kernel.org>
+    Cc: stable@vger.kernel.org	# v5.19+
+
+
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index 60230da957e0..39728196e295 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -1226,6 +1226,10 @@ static int pci_dev_wait(struct pci_dev *dev, char *reset_type, int timeout)
+  *
+  * On success, return 0 or 1, depending on whether or not it is necessary to
+  * restore the device's BARs subsequently (1 is returned in that case).
++ *
++ * On failure, return a negative error code.  Always return failure if @dev
++ * lacks a Power Management Capability, even if the platform was able to
++ * put the device in D0 via non-PCI means.
+  */
+ int pci_power_up(struct pci_dev *dev)
+ {
+@@ -1242,9 +1246,6 @@ int pci_power_up(struct pci_dev *dev)
+ 		else
+ 			dev->current_state = state;
+ 
+-		if (state == PCI_D0)
+-			return 0;
+-
+ 		return -EIO;
+ 	}
+ 
+@@ -1302,8 +1303,12 @@ static int pci_set_full_power_state(struct pci_dev *dev)
+ 	int ret;
+ 
+ 	ret = pci_power_up(dev);
+-	if (ret < 0)
++	if (ret < 0) {
++		if (dev->current_state == PCI_D0)
++			return 0;
++
+ 		return ret;
++	}
+ 
+ 	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+ 	dev->current_state = pmcsr & PCI_PM_CTRL_STATE_MASK;
