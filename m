@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2BAB7885AF
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Aug 2023 13:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B7637885B1
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Aug 2023 13:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243435AbjHYL1d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Aug 2023 07:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39174 "EHLO
+        id S243528AbjHYL1e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Aug 2023 07:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243698AbjHYL1O (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Aug 2023 07:27:14 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFCF213D
-        for <linux-pm@vger.kernel.org>; Fri, 25 Aug 2023 04:27:05 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2bcc14ea414so12219091fa.0
-        for <linux-pm@vger.kernel.org>; Fri, 25 Aug 2023 04:27:05 -0700 (PDT)
+        with ESMTP id S243916AbjHYL1S (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Aug 2023 07:27:18 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B342681
+        for <linux-pm@vger.kernel.org>; Fri, 25 Aug 2023 04:27:07 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-500a398cda5so1242600e87.0
+        for <linux-pm@vger.kernel.org>; Fri, 25 Aug 2023 04:27:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692962824; x=1693567624;
+        d=linaro.org; s=google; t=1692962825; x=1693567625;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sJUIdrBleNavb554xBa5Uqs5DbW/RJbKX1E/c3YtlHo=;
-        b=Te2EDSPN3CzlisLFnbmuwmZ168JE5ESIkxCnGOa1SVjyyXR1QdFxFhSQLQHxI3wnwz
-         hvFxCVlke3m0ZbkPVXWQcgyz8UTE6mrq2GJsgEeRDsGzxhAnXQZONJuKfF/7/iqGX0w9
-         ZCcp7BrAnctWq3oNgdn6u2hASJQTGLYdiy91XP5jU7y5tSUGWJ94AE/k/fC3Hg9hXXNx
-         Eret5VAwxexxX9vhw583jwy9YjDFi7v1y+lKFdhfJKlMSjUKhqBKMl+n1xsQdlrYoVkr
-         BR+OSlwfiv12yef0l+eAYfkBmbdlbWWlFgknM/YEZU6tRhOfe5ItAQOWsliK4k/ToaIq
-         PiGQ==
+        bh=lxcpKq58Y0dVZy+8hut+gJq89Cu88bDtADLCXTUFucg=;
+        b=xWcNX43Tu9tRhvZRust1sHusglipxG0/TudWhZhAeLAWJGb53bc1b3mnXfXZ33PaD2
+         h/dgcZ/+5kCG/1wPxvAjiAbRCLyVudSHEEhWhi+PqbX2qQYEFZDon/j4/h5EoDrhk7l5
+         4l0z8lNFTKKyxEnpvgggZKjIucMh89Mln/ur/eOB+01sqXgF691T/wvDfvghQl8AQszJ
+         DI5my/j6re7sEYpVlb3mjO5TGlk3rRh/K5vV3Vyhb4wcPySP1I4hHpihQCThNIPngf69
+         wEwCV8GsSn7YJYwAFqN1i7aMYQwWa+RYwCBlm0Y60WqwHxV+ujJxKHtiVerLygpBQiea
+         6RZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692962824; x=1693567624;
+        d=1e100.net; s=20221208; t=1692962825; x=1693567625;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sJUIdrBleNavb554xBa5Uqs5DbW/RJbKX1E/c3YtlHo=;
-        b=U7WYFJrR0XzHAmvc4+UH6z64VkiFEas0kuQpPkNrvldhCKkpP3ypBlbea2OmX9cCTn
-         a9Osi6DDDOWNJT5sHF5rQ6C8VQt+JpwvV5cA0wcWncn9xi2dAn7SyKKWr+ZpLNjSeiqA
-         h/lgqscLx6t0AbO+1hj0CUJEv5NMXri2JwioyLesyNx9eLE3b14Y8h3luzJr8/4o7Lck
-         tjcyhVyWtB+/V7hqsYczcOUW4o6MXSvKJLsqDCzjjgB7H/Vv+YndPgDWD+m0wDcuCQ2G
-         z+ZYPfQWIo4cUU/4lneQ/D4nZKOv1bMX0yTtCU0rjDZw8Zur/wfp23cp1kh9BdWOtnGA
-         pgZg==
-X-Gm-Message-State: AOJu0YwcF2khuh2Sil/vbONyci2AsA4BZ+qiHq7kOjWtt2voPfT2gRFI
-        AKj5paaoxBrY+bKgBaDHfggGng==
-X-Google-Smtp-Source: AGHT+IGtQIwDm0FOs22Xu5kX2NYDv9FNIfCtezpP92/H+EH9JkerBVaCFjHFflxCHcrTiAB7U+GlCA==
-X-Received: by 2002:ac2:5597:0:b0:500:a397:d4f0 with SMTP id v23-20020ac25597000000b00500a397d4f0mr2038424lfg.31.1692962823992;
-        Fri, 25 Aug 2023 04:27:03 -0700 (PDT)
+        bh=lxcpKq58Y0dVZy+8hut+gJq89Cu88bDtADLCXTUFucg=;
+        b=M+D5MdcrJM7i4OwDC5L14X1HNxn55xCfzH9x6LE+IoFtUyMThrWZc8CVp6MEFIpCD+
+         EIJcS4Dh/UvwIqRx2Dyq47SrnkH+Lqriv3jxsYr27Xx2+8Ua9cme+O54HzgNiOm6gjm0
+         yZ31wN2JWKaLTRLPDUgPCybCBmsZOFkoJIkVEPEJe2UtPBH7sZUJrSVeD6lDYag3fIGM
+         RYH9b2FEQhOgWk1hceTbLeIInZ2y7I62heBjcXoB4syNi6Ft88Y94n/Iw3a3WIkxNnlp
+         ODILmn1nOMiRjVJdIHplJXQXcFfLmsGw10pGA0qD8mS+YYEE0HjTDA/L74Z/kG+zhdLg
+         hBOQ==
+X-Gm-Message-State: AOJu0YzUnYvfgmIaOS6Qz6A1cdI/TqGD2wG8QdUFbvXQvUXx514JDB56
+        Ouqcwx/NJm2REN/lhWW0JMI8kA==
+X-Google-Smtp-Source: AGHT+IGC2Vf7sjQDdr5V4QHRIfVkhDfG8KHUs1E6JqOKtM2FEDh4ZHWiW4GAfGWqyxVFmC3dv1Il+A==
+X-Received: by 2002:a05:6512:1081:b0:4fb:8f79:631 with SMTP id j1-20020a056512108100b004fb8f790631mr13843222lfg.46.1692962825383;
+        Fri, 25 Aug 2023 04:27:05 -0700 (PDT)
 Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id g7-20020ac25387000000b004fb7ac67bbdsm259164lfh.41.2023.08.25.04.27.02
+        by smtp.gmail.com with ESMTPSA id g7-20020ac25387000000b004fb7ac67bbdsm259164lfh.41.2023.08.25.04.27.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Aug 2023 04:27:03 -0700 (PDT)
+        Fri, 25 Aug 2023 04:27:04 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Sudeep Holla <sudeep.holla@arm.com>,
         Cristian Marussi <cristian.marussi@arm.com>,
@@ -59,12 +59,14 @@ Cc:     Nikunj Kela <nkela@quicinc.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
         Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: [PATCH v3 09/13] dt-bindings: firmware: arm,scmi: Extend bindings for protocol@13
-Date:   Fri, 25 Aug 2023 13:26:29 +0200
-Message-Id: <20230825112633.236607-10-ulf.hansson@linaro.org>
+Subject: [PATCH v3 10/13] dt-bindings: power: Clarify performance capabilities of power-domains
+Date:   Fri, 25 Aug 2023 13:26:30 +0200
+Message-Id: <20230825112633.236607-11-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230825112633.236607-1-ulf.hansson@linaro.org>
 References: <20230825112633.236607-1-ulf.hansson@linaro.org>
@@ -80,15 +82,16 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The protocol@13 node is describing the performance scaling option for the
-ARM SCMI interface, as a clock provider. This is unnecessary limiting, as
-performance scaling is in many cases not limited to switching a clock's
-frequency.
+The power-domains bindings has in many years been used to describe so
+called performance-domains too. Rather than using a separate binding it has
+been convenient to re-use the power-domain bindings, as in some cases it's
+in fact a combination of the both that would be the best description.
 
-Therefore, let's extend the binding so the interface can be modelled as a
-generic performance domain too. The common way to describe this, is to use
-the power-domain DT bindings, so let's use that.
+Therefore, let's make it more clear that the power-domains bindings can be
+used to describe a performance-domain too.
 
+Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
+Cc: Kevin Hilman <khilman@kernel.org>
 Cc: Rob Herring <robh+dt@kernel.org>
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc: Conor Dooley <conor+dt@kernel.org>
@@ -97,34 +100,54 @@ Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
 
 Changes in v3:
-	- None.
+	- New patch.
 
 ---
- .../devicetree/bindings/firmware/arm,scmi.yaml        | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ .../devicetree/bindings/power/power-domain.yaml | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
-index b138f3d23df8..563a87dfb31a 100644
---- a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
-+++ b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
-@@ -149,8 +149,15 @@ properties:
-       '#clock-cells':
-         const: 1
+diff --git a/Documentation/devicetree/bindings/power/power-domain.yaml b/Documentation/devicetree/bindings/power/power-domain.yaml
+index d1235e562041..8fdb529d560b 100644
+--- a/Documentation/devicetree/bindings/power/power-domain.yaml
++++ b/Documentation/devicetree/bindings/power/power-domain.yaml
+@@ -13,8 +13,9 @@ maintainers:
  
--    required:
--      - '#clock-cells'
-+      '#power-domain-cells':
-+        const: 1
-+
-+    oneOf:
-+      - required:
-+          - '#clock-cells'
-+
-+      - required:
-+          - '#power-domain-cells'
+ description: |+
+   System on chip designs are often divided into multiple PM domains that can be
+-  used for power gating of selected IP blocks for power saving by reduced leakage
+-  current.
++  used for power gating of selected IP blocks for power saving by reduced
++  leakage current. Moreover, in some cases the similar PM domains may also be
++  capable of scaling performance for a group of IP blocks.
  
-   protocol@14:
-     $ref: '#/$defs/protocol-node'
+   This device tree binding can be used to bind PM domain consumer devices with
+   their PM domains provided by PM domain providers. A PM domain provider can be
+@@ -25,7 +26,7 @@ description: |+
+ 
+ properties:
+   $nodename:
+-    pattern: "^(power-controller|power-domain)([@-].*)?$"
++    pattern: "^(power-controller|power-domain|performance-domain)([@-].*)?$"
+ 
+   domain-idle-states:
+     $ref: /schemas/types.yaml#/definitions/phandle-array
+@@ -44,11 +45,11 @@ properties:
+ 
+   operating-points-v2:
+     description:
+-      Phandles to the OPP tables of power domains provided by a power domain
+-      provider. If the provider provides a single power domain only or all
+-      the power domains provided by the provider have identical OPP tables,
+-      then this shall contain a single phandle. Refer to ../opp/opp-v2-base.yaml
+-      for more information.
++      Phandles to the OPP tables of power domains that are capable of scaling
++      performance, provided by a power domain provider. If the provider provides
++      a single power domain only or all the power domains provided by the
++      provider have identical OPP tables, then this shall contain a single
++      phandle. Refer to ../opp/opp-v2-base.yaml for more information.
+ 
+   "#power-domain-cells":
+     description:
 -- 
 2.34.1
 
