@@ -2,108 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCDA67885D4
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Aug 2023 13:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6C3788640
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Aug 2023 13:47:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230462AbjHYLeX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Aug 2023 07:34:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
+        id S243288AbjHYLqm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Aug 2023 07:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240694AbjHYLdy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Aug 2023 07:33:54 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2060.outbound.protection.outlook.com [40.107.92.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288551FD7;
-        Fri, 25 Aug 2023 04:33:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H+erQsb1nw5OK+nYcOaIItpqHoqfNesOIkhpgC5LFfxNMZUVPWVUwirx6ZC9/7OizJTsg2TEytxgqot4PkQzHI81AUvUkYNbK2WvuJe7i3Wg83FukacrwjqEbqXCPbnvmGLHVbxn5yJEWqFMovJ/bgPez01Nuc1MgSe5NLwpO5Q05w4eYs/b/qIqQpBXmvJJFEdFfVeiHfYlOCKg8jxHcvwQbYj0hzXsWlUlaK6dq6BduArMGkftjYu86/4SJTCChabgBfqk/9wcAR9/o35NJxaBEeItIYWu660Q/1eOiDVKnJ3eNJ6s/Qw+QrWycRb7zwS56WvzXBomgQpXzUMHLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ymp+iHYDIG1jZB+PKaiOWJZWXFca8nrsnUbgxibJT/Q=;
- b=PPKJIro/hbDNP+BEkXuFgSCL8K8G4yZNk9uhst3BmFZ7uoDRHBGUW7pUwT1WaDghRfJKMd9zUTfbO0U/6uInv8uqUb25v5UE9PJ2hNB0i/nn51x4U6syzbZVfVtV4rtN4q42ipmplM78qCJelDKz1yv16xJZR4YmJ1JQG4sh2dInmnB2S3EeOmMrNKaoFbXHh63wmkGOwSsdSPq4pDnTgReMzp3WQ3buEXYQuExMVkUnUZOfrSIDuoGBorrE/pTuSu2TTT9khfFzaRgLP/oP85Nk4/x0FDrumWpivSmmfwPc1OPC1BeM06tmU0NT4kPgLNTGfBqzAUN/1ZRUL1rE5A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linaro.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ymp+iHYDIG1jZB+PKaiOWJZWXFca8nrsnUbgxibJT/Q=;
- b=HAUi0dRkMnYyi+Xf/hRAchslRsu1yHv2ehQOmlWKqAl4VnvU5ARORnL4HYIm+aSFzsvKKW3Zjx2MTeNI0ZlNkY+mvBP21CAkEhYx5AdOMTeAfP4QeeAzOODi+ZkVYtEOlBkY58uPLyMjFVjddWjB59ou9W9hKGqA8ZDkEWn5lfU5TPr5P29X8lyabu4LGdsUVyZEZtdvvKSPOqWHIV/0DYDyzwEBDncR8gFqnmssi1yMkP0+Orjzpkacadly2gr3+VHDsDx04sb+H2+Huz+a2wPKjKxNcFuQFtJq7NE36mCjVPdMLmwEbiQAaQ18oeEfPxIwDz6Xl6k+GM5DUzUDVg==
-Received: from BY3PR05CA0050.namprd05.prod.outlook.com (2603:10b6:a03:39b::25)
- by CH0PR12MB5331.namprd12.prod.outlook.com (2603:10b6:610:d6::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.30; Fri, 25 Aug
- 2023 11:33:50 +0000
-Received: from CO1PEPF000042AE.namprd03.prod.outlook.com
- (2603:10b6:a03:39b:cafe::ef) by BY3PR05CA0050.outlook.office365.com
- (2603:10b6:a03:39b::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.15 via Frontend
- Transport; Fri, 25 Aug 2023 11:33:49 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CO1PEPF000042AE.mail.protection.outlook.com (10.167.243.43) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6699.15 via Frontend Transport; Fri, 25 Aug 2023 11:33:49 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 25 Aug 2023
- 04:33:34 -0700
-Received: from [10.41.21.79] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 25 Aug
- 2023 04:33:30 -0700
-Message-ID: <e8114572-3e4b-1b1c-40fa-1dbc44d4f098@nvidia.com>
-Date:   Fri, 25 Aug 2023 17:03:27 +0530
+        with ESMTP id S243379AbjHYLqR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Aug 2023 07:46:17 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81941FF7;
+        Fri, 25 Aug 2023 04:46:06 -0700 (PDT)
+Received: from leknes.fjasle.eu ([46.142.97.125]) by mrelayeu.kundenserver.de
+ (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MEVmm-1qTTv01F8M-00FzdC; Fri, 25 Aug 2023 13:45:04 +0200
+Received: from localhost.fjasle.eu (kirkenes.fjasle.eu [10.10.0.5])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by leknes.fjasle.eu (Postfix) with ESMTPS id BB75D3F91C;
+        Fri, 25 Aug 2023 13:45:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
+        t=1692963901; bh=LUBlIR9uims4Ic+E1eg4RARNsFeFff9QgTvUJ80cX8g=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=v+at3+xXvzcMRK3YtjLTFxfGKHkgIN9SjSwtL3aCndUvJg6FCmjoGiEVo9mf1G3U1
+         ePV8ilS9qxuvp/qw+eXm+nTceavdn1MPTbqFiSF7g2EK8NEURszwY1z/HTmN4I0BZl
+         Nh9pTbPB6H6NXqIAzGQKC+AaZ+k6VI3XIO0enmFM=
+Received: by localhost.fjasle.eu (Postfix, from userid 1000)
+        id 3A28C3949; Fri, 25 Aug 2023 13:44:57 +0200 (CEST)
+Date:   Fri, 25 Aug 2023 13:44:57 +0200
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        quic_pkondeti@quicinc.com, u.kleine-koenig@pengutronix.de,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] scripts: Add add-maintainer.py
+Message-ID: <ZOiUOcMOeYvMzq58@bergen.fjasle.eu>
+References: <cover.1691049436.git.quic_gurus@quicinc.com>
+ <829b08342568735095bbd3f8c44f435f44688018.1691049436.git.quic_gurus@quicinc.com>
+ <ZOYicEP8D7kNGFin@fjasle.eu>
+ <20230824214436.GA22659@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [Patch] cpufreq: tegra194: remove opp table in exit hook
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <rafael@kernel.org>, <treding@nvidia.com>, <jonathanh@nvidia.com>,
-        <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bbasu@nvidia.com>,
-        Sumit Gupta <sumitg@nvidia.com>
-References: <20230809153455.29056-1-sumitg@nvidia.com>
- <20230810053127.y4wmumlggkro7r66@vireshk-i7>
- <17b11665-874a-5b06-bc97-70f5202f238b@nvidia.com>
- <20230816033402.3abmugb5goypvllm@vireshk-i7>
-From:   Sumit Gupta <sumitg@nvidia.com>
-In-Reply-To: <20230816033402.3abmugb5goypvllm@vireshk-i7>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.231.35]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000042AE:EE_|CH0PR12MB5331:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3a61d9d7-d7b0-416d-712d-08dba55f270d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +8ScwLKLp6eGH5rhemhsGG9q78QGGF2g5h90tiXK2jVsYD8MXobg/rgr0EAs/XVJZzsgzoeRDf3DdZtV0U7/+v1n4zXD+YmNTfbp0lMyo2rQPuIlIUJhVln5uko6qyOgk72T/8ZgPAac+TcvIXUtVVL/FbE7rrsK2nd3/V+v0ZWYhPWCJezga03fs3vIg6PvL9PXBNNp7aBcrmSAb/tQwZBdnALB0cGcEUIQNWoENnnEvVy6M707RvSXvazZ7SBtoqSpGwS8IDG6afaGwLQDQsvMRnpkKxl2fRzuY35wWwh7rrhzA5dVSCpdIrEE04gjjT2OKN2Bq2+p485iuLBifes9kQmC1z7t29ArwgCZsaF0Lvy6zm+aeqKrrodqT5xGCHjGNe1E5XTPhw3K4KSxjQwDXyNnAcQjrjBH2XJBv7oWmEUVnktRmg0Ec5MxyfVksic/F8DGAi8swYL+vf2+ZZV/9C0dgz6f7YtnghMQIuiYiUIIWPUC6KcrO2Es5h2KG05wSdI4KAuKAMZhNCjwM9iwNwGtHvSP5y1G7xcWCADUv37Iw1zuceQLZ8Ajl2CnUvWbUTnUIHo9ZT2PtWI7TyBnA/aHnJUUFvInh/eqGRIKzH8D3uFYt6pLF/gCnPn1sylu3MQ01CICUYoDkyCr2OWfKRyepBegCcI9CAbTPayEQ4eweIEL3MHli9PftdEKdVvfXoGB2u3+bKTAw4V0oOmHodfgGzow5pQBT75tGExagB8HFalwJqMna5JTxONJqfOCGQbbAI9CcL4rWOMAxSdu24Vy2jJ+XYPnvwOGkNYXGY0h/tHEX0w1BS6kq6Yh
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(376002)(346002)(396003)(136003)(186009)(82310400011)(1800799009)(451199024)(36840700001)(40470700004)(46966006)(40460700003)(6666004)(83380400001)(336012)(426003)(82740400003)(356005)(7636003)(86362001)(31696002)(36860700001)(36756003)(47076005)(16526019)(40480700001)(26005)(2616005)(107886003)(316002)(2906002)(6916009)(54906003)(70586007)(16576012)(70206006)(41300700001)(31686004)(4326008)(8676002)(8936002)(5660300002)(478600001)(966005)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2023 11:33:49.7788
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a61d9d7-d7b0-416d-712d-08dba55f270d
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000042AE.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5331
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="jjpaJEitG6LbK2XV"
+Content-Disposition: inline
+In-Reply-To: <20230824214436.GA22659@quicinc.com>
+X-Operating-System: Debian GNU/Linux trixie/sid
+Jabber-ID: nicolas@jabber.no
+X-Provags-ID: V03:K1:OpjvI+EpoKm6ZYkk+K9aTJlDjF7uHsQ+qFvZk8KggGXWPyGKsrW
+ 6pVfhXWPooQ/5gpWW6ITajiNCTK7ZIzjNtU0dnWsawLj+akjZfHGeerrS7e/Cmca6ev4vqY
+ 7/cwNYlX5c+d4AODzpxUEVPSiiNUMSONN9Z3WLURXIu7OCrvJgiOV369DWvgP6xgPCT9o+i
+ m1kjau66iS3apeNEvEwBA==
+UI-OutboundReport: notjunk:1;M01:P0:xRdCoaZs1A4=;zq/8sb2ZB3CAJJ3Yb3QlMyo2aNf
+ /KqdfBUlF2LtwAb7FpfZMuzem3WzZUQ6WzrLIv0ndmQh/4dvFXyx//8fnAVjN9JEnEXzHHVHS
+ H6X+moSHU8KWtcdVknmm5eeR3D0FmXoFprOapA4KIbwqhNBGeKoazaVOANDHctYERoaJheNDr
+ i1mfjABNGWH23qu5YZCKEKYwQhoawv3P0YJxS9hKJMam+ELoxWv1EdYxNm0DL/oJeDXOat49L
+ PiJREIa+XZ08EWEfuSkebBuRYmskr/sD374dFAvkBwfBKFzFtHaJ2Z046KWozu6TuRqreAry6
+ TBARSy7XaR5mBGn/Po/VFHqsPvD/86vMd8xXwOZtBjVYivitbGSDM+P3uh6aas8rvrbvq6iyr
+ rwC5c8qhM0tHwHi8FO5oc7Fpj0aZVKH6JRVsh7AgISM4g8Zjgyu9aMTXF9W0uCyzzRl2r8oII
+ 2ZPajGUB7fshjz+aeBbDQpH+eeUMmu4+NTZthZGqP/ygK/S+YBv3GqCqNxmwYfLsbDuOdroDr
+ ArSPdj6YXXbLit6bpQDMguQD+R4OiuY7x6wlNmfWC8h1e58qHTDkT9OZjKZJGySRIFfx0G6z5
+ snzrfR3lsZyqoji79GO3eaPYAVGVo3YXdB/WttsV/eNUrRcHLCM4zQWrMutWwZIPKkAjMb1AG
+ KprKsXNo92RTxfEXf82V4HgYMUXS6PXDAWJ0SpriBpJQhiRe4BbS0oSl+Ca+Q0zYSoRLbU+OE
+ ozlxt8ARFGMkZ8Js3CR7nXthvFWTjusd5oDE+9C1pLpXawe88FAotjXxYblitZvTcyXUZ2zpB
+ KfbCVkHjf5qrQVe9BacOCvRIbiUItB/DE2wwGNhaP+UvsLGw1ln238z8MeggruXL+o0k6kTVH
+ 5GJqWZrUIUsVU3w==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -111,100 +86,126 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
->>>> Add exit hook and remove OPP table when all the CPU's in a policy
->>>> are offlined. It will fix the below error messages when onlining
->>>> first CPU from a policy whose all CPU's were previously offlined.
->>>>
->>>>    debugfs: File 'cpu5' in directory 'opp' already present!
->>>>    debugfs: File 'cpu6' in directory 'opp' already present!
->>>>    debugfs: File 'cpu7' in directory 'opp' already present!
->>>>
->>>> Fixes: f41e1442ac5b ("cpufreq: tegra194: add OPP support and set bandwidth")
->>>> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
->>>> ---
->>>>    drivers/cpufreq/tegra194-cpufreq.c | 13 +++++++++++++
->>>>    1 file changed, 13 insertions(+)
->>>>
->>>> diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
->>>> index c90b30469165..66a9c23544db 100644
->>>> --- a/drivers/cpufreq/tegra194-cpufreq.c
->>>> +++ b/drivers/cpufreq/tegra194-cpufreq.c
->>>> @@ -454,6 +454,8 @@ static int tegra_cpufreq_init_cpufreq_table(struct cpufreq_policy *policy,
->>>>                 if (ret < 0)
->>>>                         return ret;
->>>>
->>>> +             dev_pm_opp_put(opp);
->>>> +
->>>>                 freq_table[j].driver_data = pos->driver_data;
->>>>                 freq_table[j].frequency = pos->frequency;
->>>>                 j++;
->>>> @@ -508,6 +510,16 @@ static int tegra194_cpufreq_init(struct cpufreq_policy *policy)
->>>>         return 0;
->>>>    }
->>>>
->>>> +static int tegra194_cpufreq_exit(struct cpufreq_policy *policy)
->>>> +{
->>>> +     struct device *cpu_dev = get_cpu_device(policy->cpu);
->>>> +
->>>> +     dev_pm_opp_remove_all_dynamic(cpu_dev);
->>>> +     dev_pm_opp_of_cpumask_remove_table(policy->related_cpus);
->>>> +
->>>> +     return 0;
->>>> +}
->>>> +
->>>>    static int tegra194_cpufreq_set_target(struct cpufreq_policy *policy,
->>>>                                        unsigned int index)
->>>>    {
->>>> @@ -535,6 +547,7 @@ static struct cpufreq_driver tegra194_cpufreq_driver = {
->>>>         .target_index = tegra194_cpufreq_set_target,
->>>>         .get = tegra194_get_speed,
->>>>         .init = tegra194_cpufreq_init,
->>>> +     .exit = tegra194_cpufreq_exit,
->>>>         .attr = cpufreq_generic_attr,
->>>>    };
->>>
->>> If it is only about hotplugging of the CPUs, then you can also do this I guess.
->>>
->>> commit 263abfe74b5f ("cpufreq: dt: Implement online/offline() callbacks")
-> 
-> You should do this as well, this makes hotplugging paths much faster. i.e. on
-> top of this patch.
-> 
+--jjpaJEitG6LbK2XV
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Sent a separate patch to add online/offline callbacks.
-   https://lore.kernel.org/lkml/20230825111920.8257-1-sumitg@nvidia.com/
+On Thu 24 Aug 2023 14:44:36 GMT, Guru Das Srinagesh wrote:
+[...]
+> > > The script is quiet by default (only prints errors) and its verbosity
+> > > can be adjusted via an optional parameter.
+> >=20
+> > IMO, it would be nice to see which addresses are effectively added, e.g.
+> > comparable to the output of git send-email.  Perhaps somehing like:
+> >=20
+> >   $ scripts/add-maintainer.py *.patch
+> >   0001-fixup-scripts-Add-add-maintainer.py.patch: Adding 'To: Guru Das =
+Srinagesh <quic_gurus@quicinc.com>' (maintainer)
+> >   0001-fixup-scripts-Add-add-maintainer.py.patch: Adding 'Cc: linux-ker=
+nel@vger.kernel.org' (list)
+> >=20
+> > Perhaps verbosity should then be configurable.
+>=20
+> Yes, this is already implemented - you just need to pass "--verbosity deb=
+ug" to
+> the script. Example based on commit 8648aeb5d7b7 ("power: supply: add Qua=
+lcomm
+> PMI8998 SMB2 Charger driver") converted to a patch:
+>=20
+>     $ ./scripts/add-maintainer.py --verbosity debug $u/upstream/patches/t=
+est2/0001-power-supply-add-Qualcomm-PMI8998-SMB2-Charger-drive.patch
+>     INFO: GET: Patch: 0001-power-supply-add-Qualcomm-PMI8998-SMB2-Charger=
+-drive.patch
+>     DEBUG:
+>     Sebastian Reichel <sre@kernel.org> (maintainer:POWER SUPPLY CLASS/SUB=
+SYSTEM and DRIVERS)
+>     Andy Gross <agross@kernel.org> (maintainer:ARM/QUALCOMM SUPPORT)
+>     Bjorn Andersson <andersson@kernel.org> (maintainer:ARM/QUALCOMM SUPPO=
+RT)
+>     Konrad Dybcio <konrad.dybcio@linaro.org> (maintainer:ARM/QUALCOMM SUP=
+PORT)
+>     Nathan Chancellor <nathan@kernel.org> (supporter:CLANG/LLVM BUILD SUP=
+PORT)
+>     Nick Desaulniers <ndesaulniers@google.com> (supporter:CLANG/LLVM BUIL=
+D SUPPORT)
+>     Tom Rix <trix@redhat.com> (reviewer:CLANG/LLVM BUILD SUPPORT)
+>     linux-kernel@vger.kernel.org (open list)
+>     linux-pm@vger.kernel.org (open list:POWER SUPPLY CLASS/SUBSYSTEM and =
+DRIVERS)
+>     linux-arm-msm@vger.kernel.org (open list:ARM/QUALCOMM SUPPORT)
+>     llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT)
+>    =20
+>     INFO: ADD: Patch: 0001-power-supply-add-Qualcomm-PMI8998-SMB2-Charger=
+-drive.patch
+>     DEBUG: Cc Lists:
+>     Cc: linux-arm-msm@vger.kernel.org
+>     Cc: llvm@lists.linux.dev
+>     Cc: linux-pm@vger.kernel.org
+>     Cc: linux-kernel@vger.kernel.org
+>     DEBUG: Cc Others:
+>     Cc: Tom Rix <trix@redhat.com>
+>     Cc: Nick Desaulniers <ndesaulniers@google.com>
+>     Cc: Nathan Chancellor <nathan@kernel.org>
+>     DEBUG: Cc Maintainers:
+>     None
+>     DEBUG: To Maintainers:
+>     To: Sebastian Reichel <sre@kernel.org>
+>     To: Andy Gross <agross@kernel.org>
+>     To: Bjorn Andersson <andersson@kernel.org>
+>     To: Konrad Dybcio <konrad.dybcio@linaro.org>
+>    =20
+>     INFO: Maintainers added to all patch files successfully
+>=20
+> The first "GET:" output prints the output of `get_maintainer.pl` verbatim=
+, and
+> the "ADD:" output shows what exactly is getting added to that patch. Hope=
+ this
+> is what you were expecting. Please let me know if you'd prefer any other
+> modifications to this debug output.
 
-Also, sent v2 of this patch with updated commit description.
-   https://lore.kernel.org/lkml/20230825111617.8069-1-sumitg@nvidia.com/
+ups.  I tested with --verbosity=3Dinfo but not with =3Ddebug, therefore I=
+=20
+missed it.  Sorry for the noise.
 
-Thank you,
-Sumit Gupta
 
->>> But since your driver is capable of being built as a module, I suggest you try
->>> to build it as one and insert remove it multiple times. It must cause you some
->>> trouble as you don't implement an .exit() before this patch.
->>>
->>> Eventually, I think you need to do both, what this patch and 263abfe74b5f do.
->>> Just that the reasons need to be correct for both the changes.
->>>
->>> --
->>> viresh
->>
->> Hi Viresh,
->> I got the same message on inserting and removing the module multiple times
->> as you suggested. After applying this change, the message is not coming. So,
->> the current change is resolving both scenarios as __cpufreq_offline() calls
->> either exit() or offline().
->> I can update the commit message to mention both scenarios and keep change as
->> it is?
->>
->>    cpufreq_remove_dev
->>    |-__cpufreq_offline
->>    |--tegra194_cpufreq_exit
->>
->>    cpuhp_cpufreq_offline
->>    |-__cpufreq_offline
->>    |--tegra194_cpufreq_exit
-> 
-> --
-> viresh
+[...]
+> > While testing, I thought that adding addresses without filtering-out du=
+plicates
+> > was odd; but as git-send-email does the unique filtering, it doesn't ma=
+tter.
+>=20
+> Since I'm using `set()` in this script, the uniqueness is guaranteed here=
+ as
+> well - there won't be any duplicates.
+
+I thought about patch files that already have 'To/Cc' headers (e.g. =20
+'git format-patch --to=3D... --cc=3D...' or by running add-maintainer.py=20
+multiple times for updating the lists of recipients.  The result is a=20
+patch file with possible duplicated lines; but as written: it does=20
+matter, effectively.
+
+Kind regards,
+Nicolas
+
+--jjpaJEitG6LbK2XV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmTolDgACgkQB1IKcBYm
+EmkaMhAAkHXsFKcEogjsqkNaOcKrHgDBA9BLV6YXgTPR/BhMl7qgIbgDwKRdK5kG
+RZalx5oXxNTiGLTUxEZE+hBy/edkHXwuH9VQRRx+x7TuFijPP1vrU2UHQe/Cp3zP
++8TueB4h+1m/4QryDXX8gKDMUA8gBym9r48A0K2Vow2/KbKbnEw9fngx04csW9oU
+Kv/SPio3lT1xq4YaaHgVsyLwlQFRQqKKdLwn08U4D0RTQVuNwlv3Ozu/QnMhAtSf
+SPFJO+xU2SbXoQxRnKBlno1rHwsfGM7MmMpbViOzOl/r0pXAr29KEVx3t/ZwBRzn
+g+J0hzJ6uh1TRO2m0wX2tg1SeW+kCAHzEXrnh8LM3Z80AOEFQvRV47LwAT+86X56
+CxdPq7ug6B5XTJvGUxJ3asP3AGURIX8SriWScRv+r+WE12xg7FhvcV/Oy7m6ZUhi
+4B54Nob7OmaDTO93ZBW0RxKItz4mgZ0OGNqDhcey7bpmROimFArZESZQ+kKB9fes
+z6oHsDY+3TpMCSkDIXd9neZXAkU9krOG/uihmYOiyz39WENXcAsOYkh1UZd+u2+b
+hRLyeKIl9Oy8+r4wg9It0hyj2wOXshtigbU9tXt/4X3IVFFv43MplR0hetiMt5wx
+xwuWnk+MohuUCK2XU5TplUY4lURbBqgGEPecu+w3Ac51Ejltb1Q=
+=Ofrj
+-----END PGP SIGNATURE-----
+
+--jjpaJEitG6LbK2XV--
