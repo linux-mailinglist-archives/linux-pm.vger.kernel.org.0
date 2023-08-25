@@ -2,66 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A66B788010
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Aug 2023 08:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA685788447
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Aug 2023 12:08:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242058AbjHYGjm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Aug 2023 02:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50574 "EHLO
+        id S233119AbjHYKIK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Aug 2023 06:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236177AbjHYGjc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Aug 2023 02:39:32 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1931FCB
-        for <linux-pm@vger.kernel.org>; Thu, 24 Aug 2023 23:39:30 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1c8d895a602so362688fac.2
-        for <linux-pm@vger.kernel.org>; Thu, 24 Aug 2023 23:39:30 -0700 (PDT)
+        with ESMTP id S237034AbjHYKH4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Aug 2023 06:07:56 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7257170F
+        for <linux-pm@vger.kernel.org>; Fri, 25 Aug 2023 03:07:53 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-d77b9d574f8so704236276.2
+        for <linux-pm@vger.kernel.org>; Fri, 25 Aug 2023 03:07:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692945569; x=1693550369;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1WgDAlgwru6Ubk2nOTTHuUzG0ifZyKXeoH3bmFI55mQ=;
-        b=xWTap7b6KjGFd35uAPX1Yn9KWrq78hJY4xNw5NkbPEub9UgGozjUbF9N9i8OxKik+u
-         +USIVF4B7TJfRTVVrFPfKvf82W4sDKockuWbrQQ5OKZiJ4z2Yd5etj0veUynni9mqJPL
-         CoePRkRNs1PMTqL1uqHpq/s4nrUchUBlVeuYDcQu8nLDHLjt9CcmJAvnMnaTw76fzUts
-         ClK543zARJd/UhU34mp0+bTBW8Me8wHxUz5FtD5elnAodXrBB2Vi+dhRuDVvICYZdRLd
-         Efriu/xOPILeXGWM/ex8TkOMWSuQqpc+QhGibaPFlLZoG4MCAVhDcEIvEN2V/2EDF9BI
-         OpWg==
+        d=linaro.org; s=google; t=1692958073; x=1693562873;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HW2UAF/HSUIpmZEoZVJNF0dPuvEW58zX0YFi51LhB1E=;
+        b=b3UMKdL2iuUpE6zhi/YRcnml7zUhIBr/ysr7d7OvrWUPMA2p/iPFOJoZzH8iek6u21
+         p6nwMDPhYozdS3G5HqR/Zh0LL58cWOgiawMAswE35kpwr1MraB50LR1pyhwNP/RiBWdB
+         IYC3meTb/ym87FSeSeCL2dDlT6eEjVB6a0FUsp+gf5KTQSM06ejmQ8oFT5i3d/YjmrG9
+         R1zM0aBNyAR7T9ARkn9nzV56cLdrlwMMIvF12wZDsMjISue58N913b2bThfdfl4tK0re
+         CQzP1YMFalw1HzYGo2y9EXz13drwvOVNSTbUMlSXtb/I5Pv9AveIHsnfqoyexoB3jSyv
+         70Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692945569; x=1693550369;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1WgDAlgwru6Ubk2nOTTHuUzG0ifZyKXeoH3bmFI55mQ=;
-        b=RdTFV8JxtbOiLvHZEp8U9LLp1NrKALcPEUQN0Hl+Rws6xqy7v7AfD4Jb9vpJs9nVPr
-         SNw+9NUkgsFFxJi6/S4h4lgJTkmWvXrIMdDXy5UGtd5T9TKl34P2E2e80vwdeN6beVO0
-         y4hv+UwrrldVdPQTMCGFtqEBg7FUmaKCyy+hsNv6HgpJ/DA/2qqo8/JI2G3uiZrB47Jc
-         LvwZU6Wrg8Her/ZQ3DAVBnCmPNafIUn7xLkiXQKSDhSxTydo4DJ4oag76OA5lrhGgyAn
-         6Be88pz//x0hTDiBg2W+cAKz96dPGr8tgmH7eJ1TNulVWgQ7sHH8h5zv/D9tJgyr4oBE
-         GQWg==
-X-Gm-Message-State: AOJu0YyoLmKS/aubPDJH8Rq36ERra080PgdLex3gJbzi9gO0VugBtnTR
-        Z6ogVex2najWBXmeft6WJQSANg==
-X-Google-Smtp-Source: AGHT+IFufVvytaEwsJpH+al9V2KuRovl3mSJRnUVk55X3PudBOMaIgZHkzIJOrbKnS2pOnV/EtFM7Q==
-X-Received: by 2002:a05:6871:5c6:b0:1c0:fe16:90f8 with SMTP id v6-20020a05687105c600b001c0fe1690f8mr2183814oan.57.1692945569460;
-        Thu, 24 Aug 2023 23:39:29 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id x53-20020a056a000bf500b0064fde7ae1ffsm784566pfu.38.2023.08.24.23.39.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Aug 2023 23:39:28 -0700 (PDT)
-Date:   Fri, 25 Aug 2023 12:09:26 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Jie Zhan <zhanjie9@hisilicon.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxarm@huawei.com,
-        xuwei5@huawei.com, wanghuiqiang@huawei.com,
-        jonathan.cameron@huawei.com, wangxiongfeng2@huawei.com
-Subject: Re: [PATCH v2] cpufreq: Support per-policy performance boost
-Message-ID: <20230825063926.n4o7cp6x56r5i2it@vireshk-i7>
-References: <20230822124837.3016641-1-zhanjie9@hisilicon.com>
+        d=1e100.net; s=20221208; t=1692958073; x=1693562873;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HW2UAF/HSUIpmZEoZVJNF0dPuvEW58zX0YFi51LhB1E=;
+        b=lt0rUDhwUIMcqbiyb4dFz3C+JRv0UYVhEa11LJiW8E4uEaCnAjlZnujDElWEmjruV0
+         SfIUsOM5k2Vy7jMWFLY3nbEpRxg7BNyKYPBTtiQ4wdl633dl3S9JEUT8IB49xU6ngx91
+         AUAzJi6xy02uw/qQMZglna6/CLS9TZ5OaYGqyz8PyMd5Sr5QWD6tk7uYBYNXUOYdD9gT
+         pKLyEnD+rvtA6u5GvgIBv/wHno2c6Cz1wsUAa8i9VYbyvLnP8R1fVZDQYu4ibHFUXHlk
+         RFUdwQjw+kgBseBimYcNVBxJ63mrDuZfcxNdP0YDdiiJGH0nZy1xvWlIohYIDewknUl3
+         6McA==
+X-Gm-Message-State: AOJu0Yz1KHEx8Z+9B7Wb/IJh+1Dsq4YQnGv4afKMw+Wdtupw09RbrDut
+        yOGrsRujpXjw+AyKkNBhYyH7yeNZXm/LbbeDOw630w==
+X-Google-Smtp-Source: AGHT+IGrY/SuELYe2QJoSZ91zaP3rjUC9R5T6a9GvcGhiDoaU9nFEc/WpF/A5UvPtJC28KU4TeQ0sJogFfgsSye5jJ0=
+X-Received: by 2002:a25:7656:0:b0:c4b:ada8:8b86 with SMTP id
+ r83-20020a257656000000b00c4bada88b86mr18833327ybc.64.1692958072991; Fri, 25
+ Aug 2023 03:07:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230822124837.3016641-1-zhanjie9@hisilicon.com>
+References: <20230818070149.23103-1-zhangzekun11@huawei.com> <CAPDyKFrL86MdfUwYm9UWy4AZtWBq0j_6sP8rimF7fwEXh0XtRw@mail.gmail.com>
+In-Reply-To: <CAPDyKFrL86MdfUwYm9UWy4AZtWBq0j_6sP8rimF7fwEXh0XtRw@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 25 Aug 2023 12:07:17 +0200
+Message-ID: <CAPDyKFqR3jBR=oUDw-cqjpbOSaMC3pXBZ3DTwsJc0UZoohPsfA@mail.gmail.com>
+Subject: Re: [PATCH] soc: ti: Use for_each_node_with_property() simplify code logic
+To:     Zhang Zekun <zhangzekun11@huawei.com>
+Cc:     nm@ti.com, kristo@kernel.org, ssantosh@kernel.org,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -71,47 +65,63 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22-08-23, 20:48, Jie Zhan wrote:
-> The boost control currently applies to the whole system.  However, users
-> may prefer to boost a subset of cores in order to provide prioritized
-> performance to workloads running on the boosted cores.
-> 
-> Enable per-policy boost by adding a 'boost' sysfs interface under each
-> policy path.  This can be found at:
-> 
-> 	/sys/devices/system/cpu/cpufreq/policy<*>/boost
-> 
-> Same to the global boost switch, writing 1/0 to the per-policy 'boost'
-> enables/disables boost on a cpufreq policy respectively.
-> 
-> The user view of global and per-policy boost controls should be:
-> 
-> 1. Enabling global boost initially enables boost on all policies, and
-> per-policy boost can then be enabled or disabled individually, given that
-> the platform does support so.
-> 
-> 2. Disabling global boost makes the per-policy boost interface illegal.
-> 
-> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
-> Reviewed-by: Wei Xu <xuwei5@hisilicon.com>
-> ---
-> A possible question could be: why not just limiting 'scaling_max_freq'?
-> Well, the fundamental difference is that per-policy boost could be more
-> user-friendly.  When global boost is enabled, it is not straightforward
-> to figure out the base frequency for setting 'scaling_max_freq' to a
-> non-boost value. Also, this is supposed to take effect on the physical
-> upper frequency limit, reflected through 'cpuinfo_max_freq'.
-> 
-> v1->v2:
-> - Rename the interface from 'local_boost' to 'boost'.
-> - Illegalize writing 0 to per-policy even if global boost is off.
-> - Show the per-policy 'boost' file only when ->set_boost() is available.
-> 
-> v1: https://lore.kernel.org/linux-pm/20230724075827.4160512-1-zhanjie9@hisilicon.com/
+On Fri, 18 Aug 2023 at 11:10, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> On Fri, 18 Aug 2023 at 09:10, Zhang Zekun <zhangzekun11@huawei.com> wrote:
+> >
+> > Introduct for_each_node_with_property() to iterate through the
+> > nodes, this can simplify the code logic a bit, no functional
+> > change here.
+>
+> I would prefer if we can start using the prefix "genpd: ti*" for the
+> commit message header.
+>
+> >
+> > Signed-off-by: Zhang Zekun <zhangzekun11@huawei.com>
+>
+> This looks good to me and I can pick it up, but awaiting and ack from
+> the soc maintainers too.
 
-Looks good now, thanks.
+Applied for next and by amending the commit msg header, thanks!
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Kind regards
+Uffe
 
--- 
-viresh
+
+>
+> Kind regards
+> Uffe
+>
+> > ---
+> >  drivers/genpd/ti/ti_sci_pm_domains.c | 8 ++------
+> >  1 file changed, 2 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/genpd/ti/ti_sci_pm_domains.c b/drivers/genpd/ti/ti_sci_pm_domains.c
+> > index a33ec7eaf23d..34645104fe45 100644
+> > --- a/drivers/genpd/ti/ti_sci_pm_domains.c
+> > +++ b/drivers/genpd/ti/ti_sci_pm_domains.c
+> > @@ -119,7 +119,7 @@ static int ti_sci_pm_domain_probe(struct platform_device *pdev)
+> >         struct device *dev = &pdev->dev;
+> >         struct ti_sci_genpd_provider *pd_provider;
+> >         struct ti_sci_pm_domain *pd;
+> > -       struct device_node *np = NULL;
+> > +       struct device_node *np;
+> >         struct of_phandle_args args;
+> >         int ret;
+> >         u32 max_id = 0;
+> > @@ -138,11 +138,7 @@ static int ti_sci_pm_domain_probe(struct platform_device *pdev)
+> >         INIT_LIST_HEAD(&pd_provider->pd_list);
+> >
+> >         /* Find highest device ID used for power domains */
+> > -       while (1) {
+> > -               np = of_find_node_with_property(np, "power-domains");
+> > -               if (!np)
+> > -                       break;
+> > -
+> > +       for_each_node_with_property(np, "power-domains") {
+> >                 index = 0;
+> >
+> >                 while (1) {
+> > --
+> > 2.17.1
+> >
