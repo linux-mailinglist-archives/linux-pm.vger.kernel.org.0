@@ -2,215 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA069789061
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Aug 2023 23:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F101578930F
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Aug 2023 03:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjHYVZc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Aug 2023 17:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35442 "EHLO
+        id S231210AbjHZB0S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Aug 2023 21:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231472AbjHYVZQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Aug 2023 17:25:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C3726A2;
-        Fri, 25 Aug 2023 14:25:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E8FF61EE0;
-        Fri, 25 Aug 2023 21:25:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BA37C433C8;
-        Fri, 25 Aug 2023 21:25:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692998709;
-        bh=/ndd9JvcnOZbrZ59TJ6yt5tniui40+xM/DyzWVsM1tI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=IybtaUFxSdTUnn2pZh+WWdSykTWHRi0lD13eMCFhqvngsarg0CzPMfJuf1eflfUiN
-         PK3gN8/vzav9SvRCG8ibtFyc9QaZJFfVFuDzt4V24YZXoCaEhpLYIOvLMuwI1iFkbU
-         j/FSx5kVwmCtn/LJahKCWOPBBd+rc9A8lOgOJcEVrjclIW8nOOt0BiARAgychZx1ld
-         J20YolI4eMFxW1Om9ZJSinBAV8yTwub87pPr1pE/YJhLSHGvap56/TvKhisJk06tmA
-         0HBt+NYdChA/O9+ek60ZXZ1x9j5WAH9XmKuK3j013iBx8Wt5mxCrsU1MiaoRJXpGd1
-         6A3qXjjEyLctQ==
-Date:   Fri, 25 Aug 2023 16:25:07 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Feiyang Chen <chris.chenfeiyang@gmail.com>
-Cc:     Feiyang Chen <chenfeiyang@loongson.cn>, bhelgaas@google.com,
-        rafael.j.wysocki@intel.com, mika.westerberg@linux.intel.com,
-        anders.roxell@linaro.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, guyinggang@loongson.cn,
-        siyanteng@loongson.cn, chenhuacai@loongson.cn,
-        loongson-kernel@lists.loongnix.cn,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v3] PCI/PM: Only read PCI_PM_CTRL register when available
-Message-ID: <20230825212507.GA627427@bhelgaas>
+        with ESMTP id S231723AbjHZB0P (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Aug 2023 21:26:15 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5EEDE77;
+        Fri, 25 Aug 2023 18:26:12 -0700 (PDT)
+Received: from kwepemd100002.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RXfFR2dxLzNnH1;
+        Sat, 26 Aug 2023 09:22:35 +0800 (CST)
+Received: from huawei.com (10.67.174.28) by kwepemd100002.china.huawei.com
+ (7.221.188.184) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1258.23; Sat, 26 Aug
+ 2023 09:26:10 +0800
+From:   Liao Chang <liaochang1@huawei.com>
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] cpufreq: governor: Free dbs_data directly when gov->init() fails
+Date:   Sat, 26 Aug 2023 01:24:15 +0000
+Message-ID: <20230826012415.1126955-1-liaochang1@huawei.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACWXhKnyq_-Y_NSWznEr+gV7z0Uoo+dqT5jd-OygtdEmZWCW5A@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.28]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemd100002.china.huawei.com (7.221.188.184)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Aug 25, 2023 at 11:57:00AM +0800, Feiyang Chen wrote:
-> On Fri, Aug 25, 2023 at 5:59 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Thu, Aug 24, 2023 at 09:37:38AM +0800, Feiyang Chen wrote:
-> > > When the current state is already PCI_D0, pci_power_up() will return
-> > > 0 even though dev->pm_cap is not set. In that case, we should not
-> > > read the PCI_PM_CTRL register in pci_set_full_power_state().
-> > >
-> > > There is nothing more needs to be done below in that case.
-> > > Additionally, pci_power_up() has two callers only and the other one
-> > > ignores the return value, so we can safely move the current state
-> > > check from pci_power_up() to pci_set_full_power_state().
-> >
-> > Does this fix a bug?  I guess it does, because previously
-> > pci_set_full_power_state() did a config read at 0 + PCI_PM_CTRL, i.e.,
-> > offset 4, which is actually PCI_COMMAND, and set dev->current_state
-> > based on that.  So dev->current_state is now junk, right?
-> 
-> Yes.
-> 
-> > This might account for some "Refused to change power state from %s to D0"
-> > messages.
-> >
-> > How did you find this?  It's nice if we can mention a symptom so
-> > people can connect the problem with this fix.
-> 
-> We are attempting to add MSI support for our stmmac driver, but the
-> pci_alloc_irq_vectors() function always fails.
-> After looking into it more, we came across the message "Refused to
-> change power state from D3hot to D0" :)
+Due to the kobject embedded in the dbs_data doest not has a release()
+method yet, it needs to use kfree() to free dbs_data directly when
+governor fails to allocate the tunner field of dbs_data.
 
-So I guess this device doesn't have a PM Capability at all?  Can you
-collect the "sudo lspci -vv" output?  The PM Capability is required
-for all PCIe devices, so maybe this is a conventional PCI device?
+Signed-off-by: Liao Chang <liaochang1@huawei.com>
+---
+ drivers/cpufreq/cpufreq_governor.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-> > This sounds like something that probably should have a stable tag?
-> 
-> Do I need to include the symptom and Cc in the commit message and
-> then send v4?
-
-> > > Fixes: e200904b275c ("PCI/PM: Split pci_power_up()")
-> > > Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-> > > Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
-> > > ---
-> > >  drivers/pci/pci.c | 9 +++++----
-> > >  1 file changed, 5 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> > > index 60230da957e0..7e90ab7b47a1 100644
-> > > --- a/drivers/pci/pci.c
-> > > +++ b/drivers/pci/pci.c
-> > > @@ -1242,9 +1242,6 @@ int pci_power_up(struct pci_dev *dev)
-> > >               else
-> > >                       dev->current_state = state;
-> > >
-> > > -             if (state == PCI_D0)
-> > > -                     return 0;
-> > > -
-> > >               return -EIO;
-> > >       }
-> > >
-> > > @@ -1302,8 +1299,12 @@ static int pci_set_full_power_state(struct pci_dev *dev)
-> > >       int ret;
-> > >
-> > >       ret = pci_power_up(dev);
-> > > -     if (ret < 0)
-> > > +     if (ret < 0) {
-> > > +             if (dev->current_state == PCI_D0)
-> > > +                     return 0;
-> > > +
-> > >               return ret;
-> > > +     }
-> > >       pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-> > >       dev->current_state = pmcsr & PCI_PM_CTRL_STATE_MASK;
-
-One thing that makes me hesitate a little bit is that we rely on the
-failure return from pci_power_up() to guard the dev->pm_cap usage.
-That's slightly obscure, and I liked the way the v1 patch made it
-explicit.
-
-And it seems slightly weird that when there's no PM cap,
-pci_power_up() always returns failure even if the platform was able to
-put the device in D0.
-
-Anyway, here's a proposal for commit log and updated comment for
-pci_power_up():
-
-
-commit 5694ba13b004 ("PCI/PM: Only read PCI_PM_CTRL register when available")
-Author: Feiyang Chen <chenfeiyang@loongson.cn>
-Date:   Thu Aug 24 09:37:38 2023 +0800
-
-    PCI/PM: Only read PCI_PM_CTRL register when available
-    
-    For a device with no Power Management Capability, pci_power_up() previously
-    returned 0 (success) if the platform was able to put the device in D0,
-    which led to pci_set_full_power_state() trying to read PCI_PM_CTRL, even
-    though it doesn't exist.
-    
-    Since dev->pm_cap == 0 in this case, pci_set_full_power_state() actually
-    read the wrong register, interpreted it as PCI_PM_CTRL, and corrupted
-    dev->current_state.  This led to messages like this in some cases:
-    
-      pci 0000:01:00.0: Refused to change power state from D3hot to D0
-    
-    To prevent this, make pci_power_up() always return a negative failure code
-    if the device lacks a Power Management Capability, even if non-PCI platform
-    power management has been able to put the device in D0.  The failure will
-    prevent pci_set_full_power_state() from trying to access PCI_PM_CTRL.
-    
-    Fixes: e200904b275c ("PCI/PM: Split pci_power_up()")
-    Link: https://lore.kernel.org/r/20230824013738.1894965-1-chenfeiyang@loongson.cn
-    Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-    Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-    Reviewed-by: "Rafael J. Wysocki" <rafael@kernel.org>
-    Cc: stable@vger.kernel.org	# v5.19+
-
-
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index 60230da957e0..39728196e295 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -1226,6 +1226,10 @@ static int pci_dev_wait(struct pci_dev *dev, char *reset_type, int timeout)
-  *
-  * On success, return 0 or 1, depending on whether or not it is necessary to
-  * restore the device's BARs subsequently (1 is returned in that case).
-+ *
-+ * On failure, return a negative error code.  Always return failure if @dev
-+ * lacks a Power Management Capability, even if the platform was able to
-+ * put the device in D0 via non-PCI means.
-  */
- int pci_power_up(struct pci_dev *dev)
- {
-@@ -1242,9 +1246,6 @@ int pci_power_up(struct pci_dev *dev)
- 		else
- 			dev->current_state = state;
+diff --git a/drivers/cpufreq/cpufreq_governor.c b/drivers/cpufreq/cpufreq_governor.c
+index 85da677c43d6..6e1ac864e87e 100644
+--- a/drivers/cpufreq/cpufreq_governor.c
++++ b/drivers/cpufreq/cpufreq_governor.c
+@@ -438,8 +438,10 @@ int cpufreq_dbs_governor_init(struct cpufreq_policy *policy)
+ 	gov_attr_set_init(&dbs_data->attr_set, &policy_dbs->list);
  
--		if (state == PCI_D0)
--			return 0;
--
- 		return -EIO;
- 	}
- 
-@@ -1302,8 +1303,12 @@ static int pci_set_full_power_state(struct pci_dev *dev)
- 	int ret;
- 
- 	ret = pci_power_up(dev);
--	if (ret < 0)
-+	if (ret < 0) {
-+		if (dev->current_state == PCI_D0)
-+			return 0;
-+
- 		return ret;
+ 	ret = gov->init(dbs_data);
+-	if (ret)
++	if (ret) {
++		kfree(dbs_data);
+ 		goto free_policy_dbs_info;
 +	}
  
- 	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
- 	dev->current_state = pmcsr & PCI_PM_CTRL_STATE_MASK;
+ 	/*
+ 	 * The sampling interval should not be less than the transition latency
+-- 
+2.34.1
+
