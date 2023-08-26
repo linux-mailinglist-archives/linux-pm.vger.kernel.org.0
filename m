@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCEEF7898ED
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Aug 2023 22:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF36789905
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Aug 2023 22:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbjHZUJJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 26 Aug 2023 16:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
+        id S229758AbjHZU1U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 26 Aug 2023 16:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjHZUIg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 26 Aug 2023 16:08:36 -0400
+        with ESMTP id S229753AbjHZU1S (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 26 Aug 2023 16:27:18 -0400
 Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B88E51AD
-        for <linux-pm@vger.kernel.org>; Sat, 26 Aug 2023 13:08:32 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-401b3ea0656so18099715e9.0
-        for <linux-pm@vger.kernel.org>; Sat, 26 Aug 2023 13:08:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE7BCF1
+        for <linux-pm@vger.kernel.org>; Sat, 26 Aug 2023 13:27:14 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fee769fd53so17775465e9.1
+        for <linux-pm@vger.kernel.org>; Sat, 26 Aug 2023 13:27:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1693080511; x=1693685311;
+        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1693081633; x=1693686433;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gCdjXlz/JQCmuvXQ01789c2iXr7t5YUpKTlGIJ/Oy+w=;
-        b=bLMJeQgewk5hN8+4i7chr1Q/9Kos1wL5EEDYVJjNCzrL0e1qBpKCWOC+AwqrfBL1Fd
-         JmqS7jwzLEYX6pxE99NuLvFhSyZH/ngQmzihexmESlqHCIGUJA1X5Sslt72jGKcZU+uw
-         yPKSAr+0Ws3JLiZAMfMnJsUh+kumfM33rS0cZVpyxEQ9YVB0dbO3nNWJTW1z/58GWtEI
-         +y1yBlPKt+stmw44aqLE9HR4wnUXtN1mfNb7kZcfDpNFN+AqNi/Ldf5v8CHSaIwCO92O
-         64/AaURzwa449zo5YsIr4/3lvbScj9rd5kz8In3UZcBlk6CBJAQrcxaxWlPbp7SUKSAI
-         CSCA==
+        bh=72TWidDa5V3wcjBf5rFQ2XFVxxhYZZuMbJHwfYjO6bA=;
+        b=2TDhdcV9VXxzp4NxT5PJej22jakoZiFRsA1FJog+Hr2dQllce8U7PCMK7tsNwQPixP
+         D8pV6SF1bNMMpPsMdACPcRphO9QAo5lBnZBe2fk49BfAjAFbn3xzaCQNPUhg9jcL+A8U
+         ZNSAaovaj1SBT2CZnmE2yzQgh1AP4Ru4lcYwFv6fzkd9ltPuLxFzQxyMWts0nC3GNEaK
+         90t1hdjFwzqPZgjI0mL5fWxiP1ybzZ/aR5BVCM2AAdxOf2Y+y4Adc1Z2M1ECDfCI7FVw
+         61yqjiRFTIDL+XS/1rK+nzSgP9GMgACUVL5w9I3UVklHYA60mdilKGVb8ehv2ab5SOBt
+         NTMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693080511; x=1693685311;
+        d=1e100.net; s=20221208; t=1693081633; x=1693686433;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gCdjXlz/JQCmuvXQ01789c2iXr7t5YUpKTlGIJ/Oy+w=;
-        b=lEz39LBvITmLCGKcWsQsiWHQn7bT+31lwJJ2kOr//gKWznRDJkajVnXoG+E0xcAVbh
-         CfDzo2JR7VO4DE6I3tDR0QaDP5m4X9WT7TH0rO4LPBdFu0aiD3sRtNxg2pP/ttdC7nKN
-         r2vHlJ4F1KrVArpXOAVA+Hg1zQsZ8mZg8c6SgEYtzVoT5bNJlyva0OA8IzHXZIWgK1Za
-         HE26fymZvtvhn59mJ+I8w0ehdHymT+9O9puShy8/HnQjCL+PkGBwlzswAr2Khs8dHz1C
-         LG+/q4aafbBZdqwtBhszPn1pUTTYKPxqpSSlRTIEAlsHnDuWHe5FPukJjOWzff3NgvKU
-         +Ntg==
-X-Gm-Message-State: AOJu0Yz1FrYEejiYU6ns4cL5J+DCs2zd6BI9B2Tc46QPBvBtm71ONVay
-        cKAMQglXI2/Y6kF8o+kPNdBHiA==
-X-Google-Smtp-Source: AGHT+IEg0DL/HLR+9CwukqRsdBqw2gEW+oW5++odzrU3GExLkQ1YgGtZxur/wK0bv532q7cnNFf46A==
-X-Received: by 2002:a1c:7718:0:b0:401:b504:b695 with SMTP id t24-20020a1c7718000000b00401b504b695mr4377586wmi.37.1693080511066;
-        Sat, 26 Aug 2023 13:08:31 -0700 (PDT)
+        bh=72TWidDa5V3wcjBf5rFQ2XFVxxhYZZuMbJHwfYjO6bA=;
+        b=hZiidjDjMbzbfTq5U53wO8Vm6ssHm7Bf7TV21Hmhs11oGAzUYsSm+xmn7CpMrA4Qsu
+         juCovUTFwM3t2YgDVv/KRhgLX1nfLbgIASyyAKmdxwGWiQoPmD9Ou0PiiQ+vnUoCXyng
+         DiwnvLVJv/Kno8hKtXyRndZ9hpMg8euECefh2BSlY99qRumiGTKfQMUPshs+huhXT1S0
+         pmZvmFWi7oSi+246Zx9EX+lfIfepK8cOz+bj2/AlLhKOgs/EOjRQxcKbbZN1YqLWwyMZ
+         N4dj3HGabzxXm+XADp6fU395yfWP27n/hSz9iM/mnoolvcFT1xgVJShtrrwy5zOnv6PG
+         tv8A==
+X-Gm-Message-State: AOJu0YySG9vWu9q4t2CWGAOkOX7trD1QGt3O94iGy/esW+qZmU7AiUX8
+        BZbHGk8n4Yp4Ja8U5EaI43Dfv8L32OzLsBcpJFA=
+X-Google-Smtp-Source: AGHT+IEBWYTe9P61o6OWH0KI80+a0++6wrib1qOUIkg87AJysBhqFjAvztbJd83CdAy3PQC+bJh/6g==
+X-Received: by 2002:a05:600c:2349:b0:3fb:ac9c:e6f with SMTP id 9-20020a05600c234900b003fbac9c0e6fmr17660116wmq.38.1693081632924;
+        Sat, 26 Aug 2023 13:27:12 -0700 (PDT)
 Received: from airbuntu (host109-151-228-137.range109-151.btcentralplus.com. [109.151.228.137])
-        by smtp.gmail.com with ESMTPSA id g9-20020a056000118900b0031ad5fb5a0fsm5665214wrx.58.2023.08.26.13.08.30
+        by smtp.gmail.com with ESMTPSA id x23-20020a1c7c17000000b003fbb1a9586esm9052160wmc.15.2023.08.26.13.27.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Aug 2023 13:08:30 -0700 (PDT)
-Date:   Sat, 26 Aug 2023 21:08:29 +0100
+        Sat, 26 Aug 2023 13:27:12 -0700 (PDT)
+Date:   Sat, 26 Aug 2023 21:27:11 +0100
 From:   Qais Yousef <qyousef@layalina.io>
 To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -58,16 +58,15 @@ Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Lukasz Luba <lukasz.luba@arm.com>
-Subject: Re: [PATCH 2/4] sched: cpufreq: Fix apply_dvfs_headroom() escaping
- uclamp constraints
-Message-ID: <20230826200829.gnha7xcrjbyipjr2@airbuntu>
+Subject: Re: [PATCH RFC 4/4] sched: cpufreq: Apply DVFS headroom to CFS only
+Message-ID: <20230826202711.n73r5wcpibdoiiba@airbuntu>
 References: <20230820210640.585311-1-qyousef@layalina.io>
- <20230820210640.585311-3-qyousef@layalina.io>
- <7839dd5f-e7fd-7065-934d-436d012ac9d6@arm.com>
+ <20230820210640.585311-5-qyousef@layalina.io>
+ <7fdfff24-80ed-acbf-810f-b641570141fd@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <7839dd5f-e7fd-7065-934d-436d012ac9d6@arm.com>
+In-Reply-To: <7fdfff24-80ed-acbf-810f-b641570141fd@arm.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
@@ -77,56 +76,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/21/23 18:39, Dietmar Eggemann wrote:
+On 08/21/23 18:41, Dietmar Eggemann wrote:
 > On 20/08/2023 23:06, Qais Yousef wrote:
-> > DVFS headroom is applied after we calculate the effective_cpu_util()
-> > which is where we honour uclamp constraints. It makes more sense to
-> > apply the headroom there once and let all users naturally get the right
-> > thing without having to sprinkle the call around in various places.
-> 
-> uclamp is applied in effective_cpu_util(..., FREQUENCY_UTIL, ...) which
-> IMHO currently has 2 power callers: (1) schedutil: sugov_get_util() and
-> (2) EAS: eenv_pd_max_util()
-> 
-> > Before this fix running
+> > RT and Deadline have exact performance requirement when running. RT runs
+> > at max or a specific OPP defined by uclamp_min. Deadline's OPP is
+> > defined by its bandwidth. Both of which are known ahead of time and
+> > don't require a headroom to grow into.
 > > 
-> > 	uclampset -M 800 cat /dev/zero > /dev/null
+> > IRQs on the other hand have no specific performance requirement and
+> > cruises along at whatever the current OPP happens to be when they occur.
 > > 
-> > Will cause the test system to run at max freq of 2.8GHz. After the fix
-> > it runs at 2.2GHz instead which is the correct value that matches the
-> > capacity of 800.
+> > Now they all have PELT pressure signals that does impact frequency
+> > selection and task placement. The question is do they need DVFS
+> > headroom?
+> > 
+> > I think the answer is no because when CFS is not running at all, these
+> > pressure signal has no real impact on performance for RT, DL or IRQ.
+> > 
+> > If CFS util is not zero, we already add their pressure as an
+> > *additional* headroom to account for the lost/stolen time. So I argue
+> > that the pressure are headroom themselves and shouldn't need an
+> > additional DVFS headroom applied on top.
+> > 
+> > In summary final outcome should be:
+> > 
+> > 	CFS + DVFS headroom + (RT, DT, IRQ) pressure headroom
 > 
-> IMHO, a system at util = 800 (w/o uclamp) would also run at 2.8Ghz since
-> we would call map_util_to_perf() on 800, no matter from where we call it.
+> I assume here you want to align the difference that EAS deals with
 
-Sorry, I would very strongly disagree here. What you're saying the effective
-range of uclamp_max is 800 and anything above that will always go to max. How
-can this be acceptable?
+This function is used on all systems that use schedutil - EAS being one of them
+but not the only one. The definition isn't, and shouldn't, be tied to EAS.
+I'm certainly intending this change for all possible users of schedutil.
 
-> 
-> > Note that similar problem exist for uclamp_min. If util was 50, and
-> > uclamp_min is 100. Since we apply_dvfs_headroom() after apply uclamp
-> > constraints, we'll end up with util of 125 instead of 100. IOW, we get
-> > boosted twice, first time by uclamp_min, and second time by dvfs
-> > headroom.
-> 
-> I see what you want to change here but:
-> 
-> So far we have `util -> uclamp -> map_util_to_perf()`
+> `util_cfs` vs `capacity` whereas power deals with `util` vs
+> `capacity_orig`? You want that power should only apply the 1.25 to util_cfs?
 
-:-O
+I don't get what you're saying. But I think it's similar to what I'm saying.
 
-So when I set the system uclamp_max to 800 it will still run at max; and this
-is normal?!!
-
-> 
-> which is fine when we see uclamp as an entity which constrains util, not
-> the util after being mapped to a capacity constraint.
-
--ENOPARSE.
+To clarify. What I'm saying is that when we try to calculate the effective
+util, CFS is the only entity in practice that interacts with DVFS. DL and RT by
+design 'disable' DVFS and when they become runnable set the frequency to
+a constant fixed point.  For them DVFS latencies are not acceptable - although
+in practice they do take a single hit for the freq change on wake up. IRQ on
+the other hand doesn't really care about DVFS. So we end up in practice that
+CFS is the only entity that interacts with DVFS, so when we calculate the
+DVFS headroom, we should only take its util into account.
 
 
-Cheers
+Thanks!
 
 --
 Qais Yousef
