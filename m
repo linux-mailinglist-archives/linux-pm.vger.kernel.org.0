@@ -2,158 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D6D78936B
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Aug 2023 04:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE0F7894B2
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Aug 2023 10:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231747AbjHZC3d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Aug 2023 22:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
+        id S232140AbjHZIIz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 26 Aug 2023 04:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231722AbjHZC3E (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Aug 2023 22:29:04 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B41A8;
-        Fri, 25 Aug 2023 19:29:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=kRz17k12DLtH5ptlx3fiiancvtShyoQwDvuAAOUED4Y=; b=mPm/qZCa7MWW4zdrpIjhXYeIS6
-        8cbIgOvCf/9Y6gIxhhuc7MbOClbX1o3H4gTlXLJmOpOyil1pufLmdD8oxm6VhlxB4x6C/OQmKz1OC
-        9Sg7eN60e8HGn0pn/DtWEZ2zi7uHlJyyQNolWeGdXQEgqn78/62UYsbUB8gsUgOw68YkPTd36+fo0
-        kPzizyM3mKJ55bukbV99w6F1Yx4exn0ELF0EHA2mn4TEClpd2hjjcTiwEbEGv+vsWkEq4IC7ejHjR
-        rO8uE9/3ipL5VpLJjGdd7WJssIdQ5Tj/z+j2E3fQDWI0Qb9TMLDhfRhfBXk5sw2QK4rJI42xn3tDe
-        SBJa1VHw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qZj2i-0010QB-1S;
-        Sat, 26 Aug 2023 02:28:52 +0000
-Date:   Sat, 26 Aug 2023 03:28:52 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Jan Kara <jack@suse.cz>
-Cc:     linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Alasdair Kergon <agk@redhat.com>,
+        with ESMTP id S231337AbjHZII3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 26 Aug 2023 04:08:29 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A2F19A2;
+        Sat, 26 Aug 2023 01:08:27 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37Q87r7w003397;
+        Sat, 26 Aug 2023 08:07:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=RuSklkcagBLFU5of9raSa21FtXCQIuorKx7luzbnnl0=;
+ b=aBxIdvzNoBAL37ndhKAZQv6z1J23K1ha9jUjsaQ3tOYGsM8KCjTFFSoflRRYp3tm928h
+ lt3bzxKpOJ3CfGOm7juet6QnrKCfaVjcUuH7msLvQHiHgMaZEBHPeuQapqa9njA/Hx81
+ 7Zti+bxb/T+TUW5U+BpLXa90Y8IRWOzFpJlVe9ouHKn6ctM+szV1soQtdSjaSvdXMXkx
+ 6dXfXw/Vt563EL39b2lsbkYzlzQSvzOpmnNeY+ggJS1fCKU6ZwtfTrarlUYXo8gTCHb+
+ 0fR77TJMXFn1Sc6H7ckDrCEx+DrzCD5YasR/f2j5PWud8rfY8HgrcAcHC6N+megXsMe9 lw== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sq8by8b4k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 26 Aug 2023 08:07:52 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37Q87qQk000990
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 26 Aug 2023 08:07:52 GMT
+Received: from hu-gurus-sd.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.36; Sat, 26 Aug 2023 01:07:49 -0700
+From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Anna Schumaker <anna@kernel.org>, Chao Yu <chao@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Kleikamp <shaggy@kernel.org>,
-        David Sterba <dsterba@suse.com>, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com, Gao Xiang <xiang@kernel.org>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        jfs-discussion@lists.sourceforge.net,
-        Joern Engel <joern@lazybastard.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        linux-bcache@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-raid@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-xfs@vger.kernel.org,
-        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Minchan Kim <minchan@kernel.org>, ocfs2-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Song Liu <song@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        target-devel@vger.kernel.org, Ted Tso <tytso@mit.edu>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        xen-devel@lists.xenproject.org, Jens Axboe <axboe@kernel.dk>,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v2 0/29] block: Make blkdev_get_by_*() return handle
-Message-ID: <20230826022852.GO3390869@ZenIV>
-References: <20230810171429.31759-1-jack@suse.cz>
- <20230825015843.GB95084@ZenIV>
- <20230825134756.o3wpq6bogndukn53@quack3>
+        "Nicolas Schier" <nicolas@fjasle.eu>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Bjorn Andersson" <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, Will Deacon <will@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        <quic_pkondeti@quicinc.com>
+CC:     <linux-kernel@vger.kernel.org>, <kernel@quicinc.com>,
+        <workflows@vger.kernel.org>, <tools@linux.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        "Guru Das Srinagesh" <quic_gurus@quicinc.com>
+Subject: [PATCH v3 0/1] Add add-maintainer.py script
+Date:   Sat, 26 Aug 2023 01:07:41 -0700
+Message-ID: <cover.1693037031.git.quic_gurus@quicinc.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230825134756.o3wpq6bogndukn53@quack3>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 1CRp--2K1yfb6_mGSw-4Xgx5GqXzDMlf
+X-Proofpoint-ORIG-GUID: 1CRp--2K1yfb6_mGSw-4Xgx5GqXzDMlf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-26_05,2023-08-25_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 mlxlogscore=999 impostorscore=0
+ phishscore=0 spamscore=0 suspectscore=0 bulkscore=0 clxscore=1011
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2308260074
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Aug 25, 2023 at 03:47:56PM +0200, Jan Kara wrote:
+When pushing patches to upstream, the `get_maintainer.pl` script is used to
+determine whom to send the patches to. Instead of having to manually process
+the output of the script, add a wrapper script to do that for you.
 
-> I can see the appeal of not having to introduce the new bdev_handle type
-> and just using struct file which unifies in-kernel and userspace block
-> device opens. But I can see downsides too - the last fput() happening from
-> task work makes me a bit nervous whether it will not break something
-> somewhere with exclusive bdev opens. Getting from struct file to bdev is
-> somewhat harder but I guess a helper like F_BDEV() would solve that just
-> fine.
-> 
-> So besides my last fput() worry about I think this could work and would be
-> probably a bit nicer than what I have. But before going and redoing the whole
-> series let me gather some more feedback so that we don't go back and forth.
-> Christoph, Christian, Jens, any opinion?
+The add-maintainer.py script adds maintainers (and mailing lists) to a patch,
+editing it in-place. It also optionally undoes this operation if so desired.
 
-Redoing is not an issue - it can be done on top of your series just
-as well.  Async behaviour of fput() might be, but...  need to look
-through the actual users; for a lot of them it's perfectly fine.
+Please try out this script with `--verbosity debug` for verifying that it's
+doing "the right thing". I've tested this with a patch series from various
+subsystems to ensure variety of maintainers and lists output and found it to be
+behaving as expected. For an example output of this script, please see [1].
 
-FWIW, from a cursory look there appears to be a missing primitive: take
-an opened bdev (or bdev_handle, with your variant, or opened file if we
-go that way eventually) and claim it.
+Thanks to Bjorn for being a sounding board to this idea and for his valuable
+suggestions.
 
-I mean, look at claim_swapfile() for example:
-                p->bdev = blkdev_get_by_dev(inode->i_rdev,
-                                   FMODE_READ | FMODE_WRITE | FMODE_EXCL, p);
-                if (IS_ERR(p->bdev)) {
-                        error = PTR_ERR(p->bdev);
-                        p->bdev = NULL;
-                        return error;
-                }
-                p->old_block_size = block_size(p->bdev);
-                error = set_blocksize(p->bdev, PAGE_SIZE);
-                if (error < 0)
-                        return error;
-we already have the file opened, and we keep it opened all the way until
-the swapoff(2); here we have noticed that it's a block device and we
-	* open the fucker again (by device number), this time claiming
-it with our swap_info_struct as holder, to be closed at swapoff(2) time
-(just before we close the file)
-	* flip the block size to PAGE_SIZE, to be reverted at swapoff(2)
-time That really looks like it ought to be
-	* take the opened file, see that it's a block device
-	* try to claim it with that holder
-	* on success, flip the block size
-with close_filp() in the swapoff(2) (or failure exit path in swapon(2))
-doing what it would've done for an O_EXCL opened block device.
-The only difference from O_EXCL userland open is that here we would
-end up with holder pointing not to struct file in question, but to our
-swap_info_struct.  It will do the right thing.
+I referred to these links [2][3][4] during development of this script.
 
-This extra open is entirely due to "well, we need to claim it and the
-primitive that does that happens to be tied to opening"; feels rather
-counter-intuitive.
+Apropos workflow:
 
-For that matter, we could add an explicit "unclaim" primitive - might
-be easier to follow.  That would add another example where that could
-be used - in blkdev_bszset() we have an opened block device (it's an
-ioctl, after all), we want to change block size and we *really* don't
-want to have that happen under a mounted filesystem.  So if it's not
-opened exclusive, we do a temporary exclusive open of own and act on
-that instead.   Might as well go for a temporary claim...
+Thanks to Krzysztof for sharing his workflow - I found his suggestion to use
+git branch description as cover letter [5] particularly useful. Incorporating
+that into the ideal workflow envisioned [6] for this script, we get:
 
-BTW, what happens if two threads call ioctl(fd, BLKBSZSET, &n)
-for the same descriptor that happens to have been opened O_EXCL?
-Without O_EXCL they would've been unable to claim the sucker at the same
-time - the holder we are using is the address of a function argument,
-i.e. something that points to kernel stack of the caller.  Those would
-conflict and we either get set_blocksize() calls fully serialized, or
-one of the callers would eat -EBUSY.  Not so in "opened with O_EXCL"
-case - they can very well overlap and IIRC set_blocksize() does *not*
-expect that kind of crap...  It's all under CAP_SYS_ADMIN, so it's not
-as if it was a meaningful security hole anyway, but it does look fishy.
+    1. Do `git config format.coverFromDescription subject`
+    2. Do `git branch --edit-description` and write cover letter
+    3. Generate patches using `git format-patch --cover-letter -n --thread -v<N>`
+    4. Run `add-maintainer.py` on the above patches
+    5. `git send-email` the patches.
+
+b4 is an amazing tool whose `b4 prep --auto-to-cc` does part of what this
+script does, but with the above workflow, we have an in-tree solution to the
+basic problem of preparing patches to be sent to LKML.  For multiple patchsets,
+all one will need to do is to increment `-v` while git-formatting patches and
+make corresponding changes to the cover letter via step #2 as necessary!
+
+Changelog:
+
+(v2 -> v3)
+- Change patches nargs * -> + (Nicolas)
+- Add entry in MAINTAINERS and add self as maintainer (Pavan)
+- Bail out early if file does not exist (Pavan)
+- Change From: line determination logic (Nicolas)
+  - Look for From: line and stop at the first occurrence of it - don't search
+    entire file
+- Wrap the get_maintainer.pl call with a try-except block.
+- Use a better (arguably so) email validation regex
+- Don't disallow multiple "From:" in patch:
+  - When the change is authored by someone other than the person generating the
+    patch, there will be two "From: <email address>" lines in the patch. This
+    is very valid, so don't error out.
+- Reviewers also go in To: in addition to Maintainers.
+- Add new "--undo" flag to undo effects of this script on a patch (tested)
+
+(v1 -> v2)
+- Added set-union logic based on Pavan's comments [7] and Bjorn's early suggestion
+- Expanded audience and added more mailing lists to get more review comments and feedback
+
+[1] https://lore.kernel.org/lkml/20230824214436.GA22659@quicinc.com/
+[2] https://stackoverflow.com/questions/4427542/how-to-do-sed-like-text-replace-with-python
+[3] https://stackoverflow.com/questions/4146009/python-get-list-indexes-using-regular-expression
+[4] https://stackoverflow.com/questions/10507230/insert-line-at-middle-of-file-with-python
+[5] https://lore.kernel.org/lkml/6f475c9b-dc0e-078e-9aa2-d876a1e02467@linaro.org/
+[6] https://lore.kernel.org/lkml/20230816171538.GB26279@quicinc.com/
+[7] https://lore.kernel.org/lkml/63764b84-3ebd-4081-836f-4863af196228@quicinc.com/
+
+Guru Das Srinagesh (1):
+  scripts: Add add-maintainer.py
+
+ MAINTAINERS               |   5 ++
+ scripts/add-maintainer.py | 164 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 169 insertions(+)
+ create mode 100755 scripts/add-maintainer.py
+
+-- 
+2.41.0
+
