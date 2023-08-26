@@ -2,99 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A334789631
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Aug 2023 13:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A617898C9
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Aug 2023 21:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232495AbjHZLKC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 26 Aug 2023 07:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38278 "EHLO
+        id S229579AbjHZTSB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 26 Aug 2023 15:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232447AbjHZLJa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 26 Aug 2023 07:09:30 -0400
-Received: from out203-205-221-155.mail.qq.com (out203-205-221-155.mail.qq.com [203.205.221.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BEA1BCD;
-        Sat, 26 Aug 2023 04:09:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1693048164;
-        bh=6x9SthIipi5zMNzP+eLdpWxKQ9gTnEgpzpGWBsjqL1g=;
-        h=From:To:Cc:Subject:Date;
-        b=bs3hbKycXMa38l3VHP4M1EI917/z8bVE1meKEGOxsH+fvaaTw4hxKqjGHJ+7wvmaE
-         nyqcnqnc/92j0D6fskgAym7LuUZCOhXuWO7VVnS5t9P2G6jyfPIDYSKXa/I9YjJMyQ
-         PGJIRfXSyri6zePH6ZU7cWG2wiFh1wItfBAoDNP0=
-Received: from KernelDevBox.byted.org ([180.184.51.142])
-        by newxmesmtplogicsvrszc2-0.qq.com (NewEsmtp) with SMTP
-        id 2548824E; Sat, 26 Aug 2023 19:09:20 +0800
-X-QQ-mid: xmsmtpt1693048160td7zgcac0
-Message-ID: <tencent_A0D4966C4180DD7B582A20A06A49ECDD600A@qq.com>
-X-QQ-XMAILINFO: NMGzQWUSIfvTCXLSPHqXFkNH78mfyeG4g0i+qvp7q1FQqDqlqD7Tk6YBI+NCWy
-         NeyUuGjcQ/z84ydfd4fq+SCNKL4W2MTgkHKqtRM0tb0gOvhqXfRpKQg80XLrKz2a+mj+5F8Ox5ut
-         eJlfvZzk7vbVqDON4qNqDO8Lc1SdH22EYKWoL2nr2LSo4AF9kX8uNQSu+P1jjup3vlSQ1R0oQHtE
-         G6KiWUH5hVjLS1+lq0iSF6clxTvtMJ8nvqtzGd48qZXE8GTdAs2/KsXF1HaYqF4MMSONSV+hFTOc
-         BHGAfUozUi86AKHqRlHzs6WUt5fO6sB424L8nzrKEyGJPvyQ+B7OzCSo9RBDuvgN2Cf/73imHxcN
-         OYfWfHC9yvnX/ztp6R5OUSG2MYRUVaoYDtWmV1JQrM9ot+pn6swRQVCzSCkYfF96MMlzD9ksQG9r
-         Bnjj4bzW0dXYXM5/RkVbU/erFPU3BCv5alKAU2Zaz0ZEcfKPjE8RSUE1ETmT0Ya9PnmZ9QfscZAa
-         5wKacHnEephAO77BZq+w9Bglmxf8N82Pl+kTwYgaBkLK9APMO+V6bWZCvG+Sc3je5tyfBlYyItXc
-         ZIITqbCs4qddUKIHUXFlDR/r8cQWumHyeaEUhFJ7NIA0/+GiJWJVlcqL0JStytWlqhoqwipwczWK
-         Sr5CjhpjeBh5OMrOL2lLThFU+1rkQdGmUhgilUTRQnx5BGARMvUSgFenIxUhBueCA0+LbpM0D+3A
-         fu/gg3ZIGNg9xkhWzkzCbc4rSPPCFpHwTZ6iFQ6eUp+Ds5Xs79Z0f32SpwrhVw0LhpDzfCBY2knz
-         ODae7F0fSD6WbIpmFQZUt9d3nuziTVscorzrXVuxYwVZAj42hXHgywZLxR5ErbdkY0kMMRjWXlYo
-         gusuAhgAYSNtjDqSksRcgIW9cY9iJfm+5kk0YtXkOpSxolQtukTLSFzacyFyZ7uQXogiR+M+KEuG
-         mHQ6mffhzwlhXUeOiasn2A5abxXYhshyxVXyumTUEzGTfoDc19fywQUXyjsOrWG/1PnB71OT/8oZ
-         j7ohdvYQ==
-X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
-From:   Zhang Shurong <zhang_shurong@foxmail.com>
-To:     amitk@kernel.org
-Cc:     thara.gopinath@gmail.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Zhang Shurong <zhang_shurong@foxmail.com>
-Subject: [PATCH] thermal/drivers/qcom/lmh: Fix missing IRQ check in lmh_probe()
-Date:   Sat, 26 Aug 2023 19:09:19 +0800
-X-OQ-MSGID: <20230826110919.2334752-1-zhang_shurong@foxmail.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S229804AbjHZTSA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 26 Aug 2023 15:18:00 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0ACDE58
+        for <linux-pm@vger.kernel.org>; Sat, 26 Aug 2023 12:17:55 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-31c71898109so1617498f8f.2
+        for <linux-pm@vger.kernel.org>; Sat, 26 Aug 2023 12:17:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1693077474; x=1693682274;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=BB/Qrlh4uE7QKBKp3Vg1DlTdu+0RqqMvMBySv+hyH5g=;
+        b=Xbk1WqEoohVwYzHjVp3K5OML1bLdmr6oVxRZOLlWMpl8PuO2fzfQyze8lomKI0NYio
+         1Yyz5rh6Xz4w4bfDXFvNbHDvv++xPSN9lkSh884/c+1ufAm7nI4x99WWGeyrOZENpyC7
+         1wANlI8ptgHexqmIyTG6HvpNXW6g0+fZo90Wvta49zD2KETle9nchxrubVcDpjA7AB7c
+         wQlEFELi3j7eV4F4Um0Ib+XJ7iynxQp7JNoAvKc6YgpUNDyFvjdHNu+75D7q4ln1HAox
+         b4eeLfyjdCF/YK02ITV+wT0qClamYq0veWR5vnzmLXWgClBq0jNZ2RFHySDR4mWZ44K4
+         le1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693077474; x=1693682274;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BB/Qrlh4uE7QKBKp3Vg1DlTdu+0RqqMvMBySv+hyH5g=;
+        b=V4NM9QF6vbMiMmaxFsI2n/EhOjjQUoT7a4VzqoXPqWZ1aysdtd5wnRbD8kJjGZ2pa3
+         cueYRaSDGDEl7bzcGtVcT4dRsKXTDKDbSoqYrnhV9/3vYBUjVwxtHv2EJZxS5/Zpb+iY
+         DOB1sNHszn2DUeRtkm75pD9FF60gaJ54aqgMvZDPleZrE7lISxISs1kSU41YnURQ6hTZ
+         LtVH3UxBbTbYiuYaMmyyd0Z9ZRSq+cnKfZ8llTLYxGTNlpac+aRrJAG+KBEER3sEMFEl
+         zemJMSPFtKYxFuZZzii+wxaisYcIBMuorQhs8G5wu08wA7oEjepxhDfp/S87raYY8gPG
+         Y/wg==
+X-Gm-Message-State: AOJu0Yw8Uz/apF2B95/Opwc7/BtTuJJrkMs5d8CMzeUZ/s2Y9RzdTofz
+        BT0R53ap3Zk839tJ9KcC9eBdNw==
+X-Google-Smtp-Source: AGHT+IGFtsXkNGkIpL/vELEpU6KhQSL9Y+5+/WSzqlOrM+r+2Ec5NbNfB3iY9R6NUMMz0ZOxoS61Lw==
+X-Received: by 2002:a5d:45c6:0:b0:319:854a:9ea1 with SMTP id b6-20020a5d45c6000000b00319854a9ea1mr15521767wrs.15.1693077474061;
+        Sat, 26 Aug 2023 12:17:54 -0700 (PDT)
+Received: from airbuntu (host109-151-228-137.range109-151.btcentralplus.com. [109.151.228.137])
+        by smtp.gmail.com with ESMTPSA id g13-20020a5d64ed000000b003177f57e79esm5638305wri.88.2023.08.26.12.17.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Aug 2023 12:17:53 -0700 (PDT)
+Date:   Sat, 26 Aug 2023 20:17:52 +0100
+From:   Qais Yousef <qyousef@layalina.io>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Subject: Re: [PATCH 0/4] Fix dvfs_headroom escaping uclamp constraints
+Message-ID: <20230826191752.xus6c7ssuuc2rssu@airbuntu>
+References: <20230820210640.585311-1-qyousef@layalina.io>
+ <CAJZ5v0jjwKr0py8H34-8ZRS8xS455YUuew8GxBex13uRq7LBPQ@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAJZ5v0jjwKr0py8H34-8ZRS8xS455YUuew8GxBex13uRq7LBPQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This func misses checking for platform_get_irq()'s call and may passes the
-negative error codes to request_irq(), which takes unsigned IRQ #,
-causing it to fail with -EINVAL, overriding an original error code.
+On 08/21/23 12:34, Rafael J. Wysocki wrote:
+> On Sun, Aug 20, 2023 at 11:08 PM Qais Yousef <qyousef@layalina.io> wrote:
+> >
+> > DVFS headroom, or map_util_perf(), is applied after uclamp restrictions are
+> > applied in effective_cpu_util(). This will lead to two problems for uclamp:
+> >
+> >         1. If util < uclamp_min, we'll run faster than uclamp_min. For example
+> >            util = 50, uclamp_min = 100. map_util_perf() = 125 instead of 100.
+> >
+> >         2. If util > uclamp_max, we'll run faster than uclamp_max. For example
+> >            util = 900, uclamp_max = 800, map_util_perf() = 1000.
+> >
+> > First patch rename the function to apply_dvfs_headroom() to reflect what it
+> > really does. It is not really mapping util, but provides some headroom for the
+> > util to grow. Provide a documentation for the function too.
+> >
+> > Second patch is the actual fix.
+> >
+> > Third patch moves apply_dvfs_headroom() to sched.h as there are no longer
+> > users outside the scheduler.
+> >
+> > Fourth patch is an RFC to redefine what the headroom means for RT, DL and IRQ
+> > pressures.
+> >
+> > Thanks!
+> 
+> For the first 3 patches in the series
+> 
+> Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
-Fix this by stop calling request_irq() with invalid IRQ #s.
+Thanks for having a look!
 
-Fixes: 53bca371cdf7 ("thermal/drivers/qcom: Add support for LMh driver")
-Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
----
- drivers/thermal/qcom/lmh.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
-index f6edb12ec004..38aedb9a7c67 100644
---- a/drivers/thermal/qcom/lmh.c
-+++ b/drivers/thermal/qcom/lmh.c
-@@ -198,7 +198,11 @@ static int lmh_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	lmh_data->irq = platform_get_irq(pdev, 0);
-+	ret = platform_get_irq(pdev, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	lmh_data->irq = ret;
- 	lmh_data->domain = irq_domain_add_linear(np, 1, &lmh_irq_ops, lmh_data);
- 	if (!lmh_data->domain) {
- 		dev_err(dev, "Error adding irq_domain\n");
--- 
-2.30.2
+Cheers
 
+--
+Qais Yousef
