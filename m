@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8653B78A370
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 01:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20BE778A375
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 01:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbjH0XcX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 27 Aug 2023 19:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59196 "EHLO
+        id S229602AbjH0XcZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 27 Aug 2023 19:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjH0XcV (ORCPT
+        with ESMTP id S229600AbjH0XcV (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Aug 2023 19:32:21 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86292BC
-        for <linux-pm@vger.kernel.org>; Sun, 27 Aug 2023 16:32:18 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3fef4b063a7so25449965e9.2
-        for <linux-pm@vger.kernel.org>; Sun, 27 Aug 2023 16:32:18 -0700 (PDT)
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F90AC4
+        for <linux-pm@vger.kernel.org>; Sun, 27 Aug 2023 16:32:19 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-401c90ed2ecso5120395e9.0
+        for <linux-pm@vger.kernel.org>; Sun, 27 Aug 2023 16:32:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1693179137; x=1693783937;
+        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1693179138; x=1693783938;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=R5bbOUNHimZNEIeEbsqR6Op3Ym6DwMUs69DrKTMvK38=;
-        b=gDEUL0lSGmBoaPWfsdt3TIy8RSGSnjDc+yuy6jOtCoQs3riTpFg5BcpAg/47t5ETzA
-         uBEBzkWGVCP4rmYz+AG5I7SjwiA9c/DKIO8ce/UbRfn8vZWGo0wWUr4yDFlQvTKut4eg
-         lP3wAziUEizy9Jxu8vPPufPekOxYHt2oTwnTa/b4Qo5f7Jk+D7DjlE3YDfTCSoo5AXdC
-         /bPBxjmM79oD0K37l4OWKzrkMmOb4hud30gdwALN7Mz3swQDfSm/SHint0Ps+6zGXIwu
-         bB3ulNvSk/RkB9hOlHnfkdZO3HOppjPSxbrjVi4S7stzgZwp2uuE35P3TZj46EaAIfNo
-         LAFA==
+        bh=fFCzoEj222YOvKZmu/QASlOstFmAq8cTeKzq6GBcqv8=;
+        b=oPeuQP9SR40dh1ZhVoOKwREqhU5VDqMV9TCmS1XyyVy4V5Kc+3W1k9m5/q6La7UVCK
+         Why0ApkB6chSrJJ+2Lh8gnceaw6vPkvGh9icr45DvKaz+mQ/ejApMZU4AZgnGcOzfW1g
+         EaXxyT650SX088zB2MEwb2UfI2pzGKgKZju81jl0XGajyaQHsqURXL5abWK5yXtBo38Y
+         CpD1g6GopDdvnirmFPjmJoNqexrA+Eeel7uxylyRxnJJRcUgrDW9oBseuNyxAEOFBZE4
+         fYb6sMXwoW/UCp4DjtDLXcQ7fvtLFLoLzgYjn2n3mpVx2c+8DA/w9eZBIbpSOgcWVZQd
+         KmGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693179137; x=1693783937;
+        d=1e100.net; s=20221208; t=1693179138; x=1693783938;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=R5bbOUNHimZNEIeEbsqR6Op3Ym6DwMUs69DrKTMvK38=;
-        b=OuSSlxk4EwVbz2Gtl9TUZnx8gjV7BFJ/Zfw+8xx+mucnqDQbtyv8v1J+SDVKgGUtbq
-         3AZhj5T5SPmk0oExDBdH8DW6tcfLccUSAKY0Fscq0JpSdaPj+NVsbdT368jv1+en5/dU
-         XeNd04TMmv7SyQvDz7uk7bDI0ZuVvXEf/ucsNSH3QmZsZqG9Dw7y6Ek94sHFpiQkRFU4
-         sJaHljVIqzOkRogG37j8KPz9boYrorp3mPhdEM29h7BCLZn6gi0uSw1pq0kcQbuB5RA8
-         HijYvr0eDI9J3cvVaj37Cy0YcJjUXz0pUKPuQpd38pL2sfoI9isKsfNRN3j9DigFhOUq
-         XwZQ==
-X-Gm-Message-State: AOJu0YzNd/OD8zNcYalgOgJPqNHgAzHkvGSbXhtBOTr8vmb/4U4432Lg
-        SXCqRAHOlpkziVZdxGEZnMFOtBzA+h65s3MiSwg=
-X-Google-Smtp-Source: AGHT+IHYSiwQ3pMeW83Szi6hCgZxKzkWheiaQklAzkUroyHg+F/5J5GvycGMIWaS2P3qj3to1YJnLQ==
-X-Received: by 2002:a7b:ce11:0:b0:401:c636:8f4c with SMTP id m17-20020a7bce11000000b00401c6368f4cmr2111090wmc.3.1693179136997;
-        Sun, 27 Aug 2023 16:32:16 -0700 (PDT)
+        bh=fFCzoEj222YOvKZmu/QASlOstFmAq8cTeKzq6GBcqv8=;
+        b=Mbwi/cAWIUqhFcFvV5w3z58QNBJF4q7pdO6p19E/IkdrhRNuS1bi1DHg6GmvtD/Zzg
+         O4BWbJWLeWQ+7FWV+G9+eMoqYzbnbnMgg++2iii3yWWxDKHeLv4vf5l9vrxF/vlCotMW
+         XBETOdzOomQByRmEHrSE2FJ4Y3+qw3Xb6cFyi6vdbz7q8Kh6Gxap5WsA7ctqZUWWNml2
+         pb73qorWnsNyXdhqIJ8vnrWS711fJiF/+Q/SPGjefGAqG9eZ+CEhMFjXL4tLxEDFq4Uc
+         nboKjwhyPEXtYCi3wFfkQ8jpPi/ot6PBtE6wfqpVTdDSLYioiUSlOCLjd44MPqQxSgSm
+         NNKw==
+X-Gm-Message-State: AOJu0Yzrzxs52v1lXUOrCVhN+VoJ8n0Zj8SfKMzHPP0K+EOyaw2yPaFf
+        GFm9wpC2ADOswH0R5pHJnmUrgQ==
+X-Google-Smtp-Source: AGHT+IGmJ1ukE6kgXP4BwFh90Slk9aIfq9ysM3sXxR7HHWBVq7U3l502sYX87//+jFgXaGb8io1fSQ==
+X-Received: by 2002:a05:600c:3653:b0:401:b0f2:88cf with SMTP id y19-20020a05600c365300b00401b0f288cfmr6665902wmq.40.1693179137900;
+        Sun, 27 Aug 2023 16:32:17 -0700 (PDT)
 Received: from airbuntu.. (host109-151-228-137.range109-151.btcentralplus.com. [109.151.228.137])
-        by smtp.gmail.com with ESMTPSA id 21-20020a05600c029500b003fe1a96845bsm12220395wmk.2.2023.08.27.16.32.16
+        by smtp.gmail.com with ESMTPSA id 21-20020a05600c029500b003fe1a96845bsm12220395wmk.2.2023.08.27.16.32.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Aug 2023 16:32:16 -0700 (PDT)
+        Sun, 27 Aug 2023 16:32:17 -0700 (PDT)
 From:   Qais Yousef <qyousef@layalina.io>
 To:     Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -59,9 +59,9 @@ To:     Ingo Molnar <mingo@kernel.org>,
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Lukasz Luba <lukasz.luba@arm.com>,
         Qais Yousef <qyousef@layalina.io>
-Subject: [RFC PATCH 3/7] sched/fair: Remove magic margin in fits_capacity()
-Date:   Mon, 28 Aug 2023 00:31:59 +0100
-Message-Id: <20230827233203.1315953-4-qyousef@layalina.io>
+Subject: [RFC PATCH 4/7] sched: cpufreq: Remove magic 1.25 headroom from apply_dvfs_headroom()
+Date:   Mon, 28 Aug 2023 00:32:00 +0100
+Message-Id: <20230827233203.1315953-5-qyousef@layalina.io>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230827233203.1315953-1-qyousef@layalina.io>
 References: <20230827233203.1315953-1-qyousef@layalina.io>
@@ -76,65 +76,125 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-80% margin is a magic value that has served its purpose for now, but it
-no longer fits the variety of systems exist today. If a system is over
-powered specifically, this 80% will mean we leave a lot of capacity
-unused before we decide to upmigrate on HMP system.
+Instead of the magical 1.25 headroom, use the new approximate_util_avg()
+to provide headroom based on the dvfs_update_delay; which is the period
+at which the cpufreq governor will send DVFS updates to the hardware.
 
-The upmigration behavior should rely on the fact that a bad decision
-made will need load balance to kick in to perform misfit migration. And
-I think this is an adequate definition for what to consider as enough
-headroom to consider whether a util fits capacity or not.
-
-Use the new approximate_util_avg() function to predict the util if the
-task continues to run for TICK_US. If the value is not strictly less
-than the capacity, then it must not be placed there, ie considered
-misfit.
+Add a new percpu dvfs_update_delay that can be cheaply accessed whenever
+apply_dvfs_headroom() is called. We expect cpufreq governors that rely
+on util to drive its DVFS logic/algorithm to populate these percpu
+variables. schedutil is the only such governor at the moment.
 
 Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
 ---
- kernel/sched/fair.c | 21 ++++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
+ kernel/sched/core.c              |  3 ++-
+ kernel/sched/cpufreq_schedutil.c | 10 +++++++++-
+ kernel/sched/sched.h             | 25 ++++++++++++++-----------
+ 3 files changed, 25 insertions(+), 13 deletions(-)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 0b7445cd5af9..facbf3eb7141 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -109,16 +109,31 @@ int __weak arch_asym_cpu_priority(int cpu)
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 602e369753a3..f56eb44745a8 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -116,6 +116,7 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(sched_util_est_se_tp);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(sched_update_nr_running_tp);
+ 
+ DEFINE_PER_CPU_SHARED_ALIGNED(struct rq, runqueues);
++DEFINE_PER_CPU_SHARED_ALIGNED(u64, dvfs_update_delay);
+ 
+ #ifdef CONFIG_SCHED_DEBUG
+ /*
+@@ -7439,7 +7440,7 @@ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
+ 	 * frequency will be gracefully reduced with the utilization decay.
+ 	 */
+ 	if (type == FREQUENCY_UTIL) {
+-		util = apply_dvfs_headroom(util_cfs) + cpu_util_rt(rq);
++		util = apply_dvfs_headroom(util_cfs, cpu) + cpu_util_rt(rq);
+ 		util = uclamp_rq_util_with(rq, util, p);
+ 	} else {
+ 		util = util_cfs + cpu_util_rt(rq);
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index 0c7565ac31fb..04aa06846f31 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -519,15 +519,21 @@ rate_limit_us_store(struct gov_attr_set *attr_set, const char *buf, size_t count
+ 	struct sugov_tunables *tunables = to_sugov_tunables(attr_set);
+ 	struct sugov_policy *sg_policy;
+ 	unsigned int rate_limit_us;
++	int cpu;
+ 
+ 	if (kstrtouint(buf, 10, &rate_limit_us))
+ 		return -EINVAL;
+ 
+ 	tunables->rate_limit_us = rate_limit_us;
+ 
+-	list_for_each_entry(sg_policy, &attr_set->policy_list, tunables_hook)
++	list_for_each_entry(sg_policy, &attr_set->policy_list, tunables_hook) {
++
+ 		sg_policy->freq_update_delay_ns = rate_limit_us * NSEC_PER_USEC;
+ 
++		for_each_cpu(cpu, sg_policy->policy->cpus)
++			per_cpu(dvfs_update_delay, cpu) = rate_limit_us;
++	}
++
+ 	return count;
+ }
+ 
+@@ -772,6 +778,8 @@ static int sugov_start(struct cpufreq_policy *policy)
+ 		memset(sg_cpu, 0, sizeof(*sg_cpu));
+ 		sg_cpu->cpu			= cpu;
+ 		sg_cpu->sg_policy		= sg_policy;
++
++		per_cpu(dvfs_update_delay, cpu) = sg_policy->tunables->rate_limit_us;
+ 	}
+ 
+ 	if (policy_is_shared(policy))
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 2b889ad399de..e06e512af192 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -3001,6 +3001,15 @@ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
+ unsigned long approximate_util_avg(unsigned long util, u64 delta);
+ u64 approximate_runtime(unsigned long util);
+ 
++/*
++ * Any governor that relies on util signal to drive DVFS, must populate these
++ * percpu dvfs_update_delay variables.
++ *
++ * It should describe the rate/delay at which the governor sends DVFS freq
++ * update to the hardware in us.
++ */
++DECLARE_PER_CPU_SHARED_ALIGNED(u64, dvfs_update_delay);
++
+ /*
+  * DVFS decision are made at discrete points. If CPU stays busy, the util will
+  * continue to grow, which means it could need to run at a higher frequency
+@@ -3010,20 +3019,14 @@ u64 approximate_runtime(unsigned long util);
+  * to run at adequate performance point.
+  *
+  * This function provides enough headroom to provide adequate performance
+- * assuming the CPU continues to be busy.
+- *
+- * At the moment it is a constant multiplication with 1.25.
++ * assuming the CPU continues to be busy. This headroom is based on the
++ * dvfs_update_delay of the cpufreq governor.
+  *
+- * TODO: The headroom should be a function of the delay. 25% is too high
+- * especially on powerful systems. For example, if the delay is 500us, it makes
+- * more sense to give a small headroom as the next decision point is not far
+- * away and will follow the util if it continues to rise. On the other hand if
+- * the delay is 10ms, then we need a bigger headroom so the CPU won't struggle
+- * at a lower frequency if it never goes to idle until then.
++ * XXX: Should we provide headroom when the util is decaying?
+  */
+-static inline unsigned long apply_dvfs_headroom(unsigned long util)
++static inline unsigned long apply_dvfs_headroom(unsigned long util, int cpu)
+ {
+-	return util + (util >> 2);
++	return approximate_util_avg(util, per_cpu(dvfs_update_delay, cpu));
  }
  
  /*
-- * The margin used when comparing utilization with CPU capacity.
-+ * The util will fit the capacity if it has enough headroom to grow within the
-+ * next tick - which is when any load balancing activity happens to do the
-+ * correction.
-  *
-- * (default: ~20%)
-+ * If util stays within the capacity before tick has elapsed, then it should be
-+ * fine. If not, then a correction action must happen shortly after it starts
-+ * running, hence we treat it as !fit.
-+ *
-+ * TODO: TICK is not actually accurate enough. balance_interval is the correct
-+ * one to use as the next load balance doesn't not happen religiously at tick.
-+ * Accessing balance_interval might be tricky and will require some refactoring
-+ * first.
-  */
--#define fits_capacity(cap, max)	((cap) * 1280 < (max) * 1024)
-+static inline bool fits_capacity(unsigned long util, unsigned long capacity)
-+{
-+	return approximate_util_avg(util, TICK_USEC) < capacity;
-+}
- 
- /*
-  * The margin used when comparing CPU capacities.
-  * is 'cap1' noticeably greater than 'cap2'
-  *
-+ * TODO: use approximate_util_avg() to give something more quantifiable based
-+ * on time? Like 1ms?
-+ *
-  * (default: ~5%)
-  */
- #define capacity_greater(cap1, cap2) ((cap1) * 1024 > (cap2) * 1078)
 -- 
 2.34.1
 
