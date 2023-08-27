@@ -2,128 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF36789905
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Aug 2023 22:27:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6B4789B1F
+	for <lists+linux-pm@lfdr.de>; Sun, 27 Aug 2023 05:29:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbjHZU1U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 26 Aug 2023 16:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53544 "EHLO
+        id S229883AbjH0D2i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 26 Aug 2023 23:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjHZU1S (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 26 Aug 2023 16:27:18 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE7BCF1
-        for <linux-pm@vger.kernel.org>; Sat, 26 Aug 2023 13:27:14 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fee769fd53so17775465e9.1
-        for <linux-pm@vger.kernel.org>; Sat, 26 Aug 2023 13:27:14 -0700 (PDT)
+        with ESMTP id S229944AbjH0D2J (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 26 Aug 2023 23:28:09 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD3DCD
+        for <linux-pm@vger.kernel.org>; Sat, 26 Aug 2023 20:28:06 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4ffa6e25ebbso3773952e87.0
+        for <linux-pm@vger.kernel.org>; Sat, 26 Aug 2023 20:28:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1693081633; x=1693686433;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=72TWidDa5V3wcjBf5rFQ2XFVxxhYZZuMbJHwfYjO6bA=;
-        b=2TDhdcV9VXxzp4NxT5PJej22jakoZiFRsA1FJog+Hr2dQllce8U7PCMK7tsNwQPixP
-         D8pV6SF1bNMMpPsMdACPcRphO9QAo5lBnZBe2fk49BfAjAFbn3xzaCQNPUhg9jcL+A8U
-         ZNSAaovaj1SBT2CZnmE2yzQgh1AP4Ru4lcYwFv6fzkd9ltPuLxFzQxyMWts0nC3GNEaK
-         90t1hdjFwzqPZgjI0mL5fWxiP1ybzZ/aR5BVCM2AAdxOf2Y+y4Adc1Z2M1ECDfCI7FVw
-         61yqjiRFTIDL+XS/1rK+nzSgP9GMgACUVL5w9I3UVklHYA60mdilKGVb8ehv2ab5SOBt
-         NTMA==
+        d=linaro.org; s=google; t=1693106885; x=1693711685;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=48xtmF1RnTb+8jPIXovOcqZJ91keOMez755QP1H58RQ=;
+        b=XWRUrkYylmdHJ+m4eo20x5wpsT8zClDJNCgFw/AyBsMmAzdCWa9qJ7gPcZU9/JLX0v
+         wk1WCbbEpUTPKPUcU0tQYwJhLL6wt+0/NmYq26bbD8E5nZPV54Q0P8dLT/jHh4NRB/5P
+         MkhZwNh/fihWnNKvX5rXIY4RvMbMmBdJmvwokHsiPttOCHLuY8s5yhFItiGYSyUfXGMx
+         jTxAAL2zUYiuKFDeIdF2cdQNDu1kb+AvNGG33xrXDs1q2M8uje+M3QqXIfRzbFvSXJVp
+         +wgR9zp5qtuA2wK5S+90Soh6+sp6yGTnPiLhOk/RoUtWwUGZQ6g3mquIO46rNwquUnRZ
+         ViIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693081633; x=1693686433;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=72TWidDa5V3wcjBf5rFQ2XFVxxhYZZuMbJHwfYjO6bA=;
-        b=hZiidjDjMbzbfTq5U53wO8Vm6ssHm7Bf7TV21Hmhs11oGAzUYsSm+xmn7CpMrA4Qsu
-         juCovUTFwM3t2YgDVv/KRhgLX1nfLbgIASyyAKmdxwGWiQoPmD9Ou0PiiQ+vnUoCXyng
-         DiwnvLVJv/Kno8hKtXyRndZ9hpMg8euECefh2BSlY99qRumiGTKfQMUPshs+huhXT1S0
-         pmZvmFWi7oSi+246Zx9EX+lfIfepK8cOz+bj2/AlLhKOgs/EOjRQxcKbbZN1YqLWwyMZ
-         N4dj3HGabzxXm+XADp6fU395yfWP27n/hSz9iM/mnoolvcFT1xgVJShtrrwy5zOnv6PG
-         tv8A==
-X-Gm-Message-State: AOJu0YySG9vWu9q4t2CWGAOkOX7trD1QGt3O94iGy/esW+qZmU7AiUX8
-        BZbHGk8n4Yp4Ja8U5EaI43Dfv8L32OzLsBcpJFA=
-X-Google-Smtp-Source: AGHT+IEBWYTe9P61o6OWH0KI80+a0++6wrib1qOUIkg87AJysBhqFjAvztbJd83CdAy3PQC+bJh/6g==
-X-Received: by 2002:a05:600c:2349:b0:3fb:ac9c:e6f with SMTP id 9-20020a05600c234900b003fbac9c0e6fmr17660116wmq.38.1693081632924;
-        Sat, 26 Aug 2023 13:27:12 -0700 (PDT)
-Received: from airbuntu (host109-151-228-137.range109-151.btcentralplus.com. [109.151.228.137])
-        by smtp.gmail.com with ESMTPSA id x23-20020a1c7c17000000b003fbb1a9586esm9052160wmc.15.2023.08.26.13.27.11
+        d=1e100.net; s=20221208; t=1693106885; x=1693711685;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=48xtmF1RnTb+8jPIXovOcqZJ91keOMez755QP1H58RQ=;
+        b=LeQXVeyOCpng3zsYp6ExnHQ61ZycoaUK8Hc+ZyOscX3sM84RLJXjMlPQrJDRUJVC2D
+         nBFgpYnvq/N3nqBXj4slnT1LK5nIrGt1JDPH7a5qlamK7a1ZIZyQKz51z/4b/+D6Y2dB
+         KBnAIIDNjjRKu9zFVoQ+Iw3SAvx0y9ONqGMPFsACqxuD3AXhNVxSQGqtlN0kymWfjWUX
+         NKoRiHz/oIHPAqFdsYySmG5i43ogwYJA81TtcJhLgBPPb337mXlQ1AvcqLRoZcInNLZ+
+         Tyu1A8E4odU8TEAGZG27GFukDF+qA+sr9vJXhbZt6pugG3kl/2Wgq3VQcbFIoPYwi5PM
+         siAg==
+X-Gm-Message-State: AOJu0Yzca8QxEVhYwAPLwFu1I4Q5jUbmlUX0dFKGKXCGEqYSl0alkmYD
+        4Lb8oKNoEQWMUeLCmajbj5lXtA==
+X-Google-Smtp-Source: AGHT+IEP1TwgavtqGqI8GF+JZMvSgf4yFA5cu5rgQxO5fBAFgONeasxDuVAOx1984PXjxIsEg9lenw==
+X-Received: by 2002:a05:6512:3ba2:b0:500:91f6:f129 with SMTP id g34-20020a0565123ba200b0050091f6f129mr6263855lfv.26.1693106884785;
+        Sat, 26 Aug 2023 20:28:04 -0700 (PDT)
+Received: from umbar.unikie.fi ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id w7-20020ac254a7000000b004fb99da37e3sm955709lfk.220.2023.08.26.20.28.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Aug 2023 13:27:12 -0700 (PDT)
-Date:   Sat, 26 Aug 2023 21:27:11 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Subject: Re: [PATCH RFC 4/4] sched: cpufreq: Apply DVFS headroom to CFS only
-Message-ID: <20230826202711.n73r5wcpibdoiiba@airbuntu>
-References: <20230820210640.585311-1-qyousef@layalina.io>
- <20230820210640.585311-5-qyousef@layalina.io>
- <7fdfff24-80ed-acbf-810f-b641570141fd@arm.com>
+        Sat, 26 Aug 2023 20:28:04 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Stephan Gerhold <stephan@gerhold.net>
+Subject: [PATCH v4 0/6] cpufreq: qcom-nvmem: support apq8064 cpufreq scaling
+Date:   Sun, 27 Aug 2023 06:27:57 +0300
+Message-Id: <20230827032803.934819-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <7fdfff24-80ed-acbf-810f-b641570141fd@arm.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/21/23 18:41, Dietmar Eggemann wrote:
-> On 20/08/2023 23:06, Qais Yousef wrote:
-> > RT and Deadline have exact performance requirement when running. RT runs
-> > at max or a specific OPP defined by uclamp_min. Deadline's OPP is
-> > defined by its bandwidth. Both of which are known ahead of time and
-> > don't require a headroom to grow into.
-> > 
-> > IRQs on the other hand have no specific performance requirement and
-> > cruises along at whatever the current OPP happens to be when they occur.
-> > 
-> > Now they all have PELT pressure signals that does impact frequency
-> > selection and task placement. The question is do they need DVFS
-> > headroom?
-> > 
-> > I think the answer is no because when CFS is not running at all, these
-> > pressure signal has no real impact on performance for RT, DL or IRQ.
-> > 
-> > If CFS util is not zero, we already add their pressure as an
-> > *additional* headroom to account for the lost/stolen time. So I argue
-> > that the pressure are headroom themselves and shouldn't need an
-> > additional DVFS headroom applied on top.
-> > 
-> > In summary final outcome should be:
-> > 
-> > 	CFS + DVFS headroom + (RT, DT, IRQ) pressure headroom
-> 
-> I assume here you want to align the difference that EAS deals with
+This is a split of APQ8064 cpufreq series, as requested by Viresh. This
+series includes only opp and cpufreq parts, with the DT and soc parts
+being split to a separate patchset.
 
-This function is used on all systems that use schedutil - EAS being one of them
-but not the only one. The definition isn't, and shouldn't, be tied to EAS.
-I'm certainly intending this change for all possible users of schedutil.
+Each core has independent power and frequency control. Additionally the
+L2 cache is scaled to follow the CPU frequencies (failure to do so
+results in strange semi-random crashes).
 
-> `util_cfs` vs `capacity` whereas power deals with `util` vs
-> `capacity_orig`? You want that power should only apply the 1.25 to util_cfs?
+Core voltage is controlled through the SAW2 devices, one for each core.
+The L2 has two regulators, vdd-mem and vdd-dig.
 
-I don't get what you're saying. But I think it's similar to what I'm saying.
+Dmitry Baryshkov (6):
+  dt-bindings: opp: opp-v2-kryo-cpu: support Qualcomm Krait SoCs
+  cpufreq: qcom-nvmem: create L2 cache device
+  cpufreq: qcom-nvmem: also accept operating-points-v2-krait-cpu
+  cpufreq: qcom-nvmem: drop pvs_ver for format a fuses
+  cpufreq: qcom-nvmem: provide separate configuration data for apq8064
+  cpufreq: qcom-nvmem: enable core voltage scaling for MSM8960
 
-To clarify. What I'm saying is that when we try to calculate the effective
-util, CFS is the only entity in practice that interacts with DVFS. DL and RT by
-design 'disable' DVFS and when they become runnable set the frequency to
-a constant fixed point.  For them DVFS latencies are not acceptable - although
-in practice they do take a single hit for the freq change on wake up. IRQ on
-the other hand doesn't really care about DVFS. So we end up in practice that
-CFS is the only entity that interacts with DVFS, so when we calculate the
-DVFS headroom, we should only take its util into account.
+ .../bindings/opp/opp-v2-kryo-cpu.yaml         | 12 ++-
+ drivers/cpufreq/qcom-cpufreq-nvmem.c          | 80 +++++++++++++++++--
+ 2 files changed, 81 insertions(+), 11 deletions(-)
 
+-- 
+2.39.2
 
-Thanks!
-
---
-Qais Yousef
