@@ -2,112 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6317978B05D
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 14:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88FE578B0A9
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 14:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbjH1Mb4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Aug 2023 08:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51064 "EHLO
+        id S229810AbjH1Mj1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Aug 2023 08:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232663AbjH1Mbd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 08:31:33 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D2612E;
-        Mon, 28 Aug 2023 05:31:14 -0700 (PDT)
-Received: from kwepemd100002.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RZ8x84hPZzVk1Q;
-        Mon, 28 Aug 2023 20:28:44 +0800 (CST)
-Received: from [10.67.110.108] (10.67.110.108) by
- kwepemd100002.china.huawei.com (7.221.188.184) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1258.23; Mon, 28 Aug 2023 20:31:07 +0800
-Message-ID: <b7be717c-41d8-bbbf-3e97-3799948ab757@huawei.com>
-Date:   Mon, 28 Aug 2023 20:31:07 +0800
+        with ESMTP id S230173AbjH1MjA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 08:39:00 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C1F9107;
+        Mon, 28 Aug 2023 05:38:54 -0700 (PDT)
+Received: from loongson.cn (unknown [112.20.109.102])
+        by gateway (Coremail) with SMTP id _____8CxRuhclexk7oAcAA--.4825S3;
+        Mon, 28 Aug 2023 20:38:52 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.20.109.102])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx5sxalexkNrJlAA--.29195S2;
+        Mon, 28 Aug 2023 20:38:51 +0800 (CST)
+From:   Binbin Zhou <zhoubinbin@loongson.cn>
+To:     Binbin Zhou <zhoubb.aaron@gmail.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        loongson-kernel@lists.loongnix.cn, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, Xuerui Wang <kernel@xen0n.name>,
+        loongarch@lists.linux.dev, Binbin Zhou <zhoubinbin@loongson.cn>
+Subject: [PATCH 0/5] soc: loongson: Fix some issues about loongson_pm2
+Date:   Mon, 28 Aug 2023 20:38:30 +0800
+Message-Id: <cover.1693218539.git.zhoubinbin@loongson.cn>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] cpufreq: Fix inconsistency in error messages of
- cpufreq_resume/suspend()
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230826095201.1137288-1-liaochang1@huawei.com>
- <20230828070000.ooymfbw3qhs5xl5y@vireshk-i7>
-From:   "Liao, Chang" <liaochang1@huawei.com>
-In-Reply-To: <20230828070000.ooymfbw3qhs5xl5y@vireshk-i7>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.108]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemd100002.china.huawei.com (7.221.188.184)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8Dx5sxalexkNrJlAA--.29195S2
+X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj9xXoWrZrW3JrW3tr13Ww1kuw47WrX_yoWDAwbE9a
+        4Iqay8Jry3AF9rJayUXr48urW3WrWxZ3W0kF1Utr18W34Yyry5Xr1DurnxWFy3Xryjqr98
+        Xr48Wr4rAry0gosvyTuYvTs0mTUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvT
+        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+        cSsGvfJTRUUUbfkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+        vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+        Cr1j6rxdM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
+        twAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+        8JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
+        6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
+        AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
+        0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
+        v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AK
+        xVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUxYiiDUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi, Viresh
+Hi all:
 
-在 2023/8/28 15:00, Viresh Kumar 写道:
-> On 26-08-23, 09:52, Liao Chang wrote:
->> The error message printed by cpufreq_resume() currently is the pointer
->> value of the policy structure, while the error message printed by
->> cpufreq_suspend() is the name of the driver. In order to make the error
->> messages more consistent and easier to understand, change the error
->> message printed by cpufreq_resume() to the name of driver.
-> 
-> Also I don't think printing kernel addresses will help much anyway,
-> and it also may not be recommended.
-> 
->> Signed-off-by: Liao Chang <liaochang1@huawei.com>
->> ---
->>  drivers/cpufreq/cpufreq.c | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
->> index c835ff117386..2199c04ac64d 100644
->> --- a/drivers/cpufreq/cpufreq.c
->> +++ b/drivers/cpufreq/cpufreq.c
->> @@ -1943,8 +1943,8 @@ void cpufreq_resume(void)
->>  
->>  	for_each_active_policy(policy) {
->>  		if (cpufreq_driver->resume && cpufreq_driver->resume(policy)) {
->> -			pr_err("%s: Failed to resume driver: %p\n", __func__,
->> -				policy);
->> +			pr_err("%s: Failed to resume driver: %s\n", __func__,
->> +				cpufreq_driver->name);
->>  		} else if (has_target()) {
->>  			down_write(&policy->rwsem);
->>  			ret = cpufreq_start_governor(policy);
-> 
-> There is another print down here which prints policy, please update
-> that too in a similar way.
+Since commit 67694c076bd7 ("soc: loongson2_pm: add power management support"),
+the Loongson-2K PM driver was added, some issues have been found and
+this patch set is planned to fix these issues.
 
-What about printing message like this below when cpufreq_start_governor() fails.
+Specific:
+Patch 1: Compilation error found by Randy;
+Patch 2/3: Add Loongson-2K2000 support;
+Patch 4/5: Add Loongson-2K SoC reboot/shutdown support as part of power
+management.
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 50bbc969ffe5..b78b509429a6 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1943,16 +1943,16 @@ void cpufreq_resume(void)
+Thanks.
 
-                        if (ret)
--                               pr_err("%s: Failed to start governor for policy: %p\n",
--                                      __func__, policy);
-+                               pr_err("%s: Failed to start governor for policy%u\n",
-+                                      __func__, policy->cpu);
-                }
-        }
- }
+Binbin Zhou (5):
+  soc: loongson: loongson_pm2: add dependency for INPUT
+  dt-bindings: soc: loongson,ls2k-pmc: Add missing compatible for
+    Loongson-2K2000
+  soc: loongson: loongson_pm2: Add missing compatible for
+    Loongson-2K2000
+  dt-bindings: soc: loongson,ls2k-pmc: Allow
+    syscon-reboot/syscon-poweroff as child
+  soc: loongson: loongson_pm2: Populate children syscon nodes
 
-
-
-> 
+ .../soc/loongson/loongson,ls2k-pmc.yaml       | 30 ++++++++++++++++++-
+ drivers/soc/loongson/Kconfig                  |  1 +
+ drivers/soc/loongson/loongson2_pm.c           |  7 +++++
+ 3 files changed, 37 insertions(+), 1 deletion(-)
 
 -- 
-BR
-Liao, Chang
+2.39.3
+
