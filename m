@@ -2,92 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2896678A60D
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 08:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7AAE78A61E
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 08:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229449AbjH1GtS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Aug 2023 02:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50426 "EHLO
+        id S229485AbjH1G4v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Aug 2023 02:56:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjH1GtH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 02:49:07 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9414C10D;
-        Sun, 27 Aug 2023 23:49:05 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37S6196F021198;
-        Mon, 28 Aug 2023 06:48:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ZkKeM4FclNAHL+N6xLWvTF+AySgNT0OlDIdrec2T3hM=;
- b=GZVD8uLF7iary1yUcjjQ82tYYf57VtUakrCt4jZ48c6DoRnNqhT1tmp7rP1MzKNg3jKe
- ngeAPdHPRA3r3sREWuLwE/GieHQIucQPIrdxZBDqLCGfx2s6mXt/gyJyYzmEG6kifD1I
- LXIXtH0uwrnEBlRshqA72M+DWUp6eMH0QVPfYIuoAP8aH1D/aDaeSHIVwaITw9XBCuvz
- Cg6KRBvELuewUzP5CYHPx5gR9GIBfxUgG16fMlHZIej667Ia3rlGjt5u6P4c2b7frN+d
- 8iMrshmoGgBwjEGjfn6VcaOsO5kjv4HwdNPushoQ+f0GBZaogzlwo+aciKdwbUFvg2aY iQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sqa5ptv53-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Aug 2023 06:48:49 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37S6ml4d025319
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Aug 2023 06:48:47 GMT
-Received: from [10.217.216.47] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Sun, 27 Aug
- 2023 23:48:42 -0700
-Message-ID: <ef1439f8-4a9b-53b4-34be-1229b39d2310@quicinc.com>
-Date:   Mon, 28 Aug 2023 12:18:30 +0530
+        with ESMTP id S229556AbjH1G4e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 02:56:34 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0F6E0
+        for <linux-pm@vger.kernel.org>; Sun, 27 Aug 2023 23:56:29 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-68c3b9f83f4so1104485b3a.2
+        for <linux-pm@vger.kernel.org>; Sun, 27 Aug 2023 23:56:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1693205788; x=1693810588;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xhN4mtNsUWFDMN8D+eETjmwG67/vLS/iFwqcwOo96T4=;
+        b=KjwAjrAfreohxpiBzykExsMcO8KiPFM4rKqJuxLVzS8wumN48HLDdtA2XR7feEB3wH
+         Af1ttwaWYFvRGyj3kxl4uVSSJFVHwV9NEa/ASu4R7H5Bh0RnvA1c1EfiTKHLkN4FdEMn
+         zuLLcTPtHonyYW/zEX8NaWbS/EtdizensX9u8OLzDtF/biLFE9FRLMz/YDUm4JMMirqh
+         /wYXjZEMfVkL2bEWktyjlUZpkRzTzz+08IgNcKFQOHts5kAzdNT2RQtd/orYJw4XbHZp
+         pjdQ9mtVyIk4WWkkJoIW2EQG3l+oFgk0CGuwlhJDUKT0TIuGDgCPBEQAnMrQOomg7dt6
+         7jyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693205788; x=1693810588;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xhN4mtNsUWFDMN8D+eETjmwG67/vLS/iFwqcwOo96T4=;
+        b=PuPPleeY8Kdt2rXBA/h9bsBtAX3oh8Aak85s7RebZcECvBYJl8ZAQqtCYnXWneUSy6
+         3abSbo76ee7MHWVHlTHQyuyMX7MqW47Ep05brdQwayuRiC3cYLC86v9I/BGxp25ybbSv
+         UzFJ83twGrKB7msKKhYHKTuNFu4fWlix+jn+2qSl/0Q0fSlkfXdH1eIEStaTIAw/4i8e
+         ETBZiToiwPo8behCwh83G425uWC7gt20Ij+zgenY/Azipskhx8irR0sHWvaBQ9XT9iPW
+         9vqsTi29ehwMrSODQLin8qiahxQSejgH/joeDG5GAYaSwDt5eh2L8MkzTz11/2Iw/pqM
+         aU+w==
+X-Gm-Message-State: AOJu0YxFf/hsBsYFj/4TBgbYgGzqdxnbO1MrVjG3zFTSYvDmM9jyBWcf
+        b7/bIKMi3jvQfCoUGZMtxjaiXw==
+X-Google-Smtp-Source: AGHT+IFrQMoO7tYhslhoEddXU+QHLNpKSr4s4IaqnyDG6BcPpI/1VZ1uhOkjU0WPepTJsPCZSieqNQ==
+X-Received: by 2002:a05:6a20:3ca6:b0:14c:e4f8:e676 with SMTP id b38-20020a056a203ca600b0014ce4f8e676mr3608067pzj.23.1693205788480;
+        Sun, 27 Aug 2023 23:56:28 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id iz2-20020a170902ef8200b001b9e9f191f2sm6472844plb.15.2023.08.27.23.56.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Aug 2023 23:56:27 -0700 (PDT)
+Date:   Mon, 28 Aug 2023 12:26:25 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Liao Chang <liaochang1@huawei.com>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: governor: Free dbs_data directly when
+ gov->init() fails
+Message-ID: <20230828065625.ufp66goznd72rcyh@vireshk-i7>
+References: <20230826012415.1126955-1-liaochang1@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 4/6] clk: qcom: Use HW_CTRL_TRIGGER flag to switch
- video GDSC to HW mode
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>
-CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Andy Gross" <agross@kernel.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        "Stephen Boyd" <sboyd@kernel.org>,
-        Taniya Das <tdas@qti.qualcomm.com>, <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        Ajit Pandey <quic_ajipan@quicinc.com>,
-        Imran Shaik <quic_imrashai@quicinc.com>
-References: <20230816145741.1472721-1-abel.vesa@linaro.org>
- <20230816145741.1472721-5-abel.vesa@linaro.org>
- <2fc0d771-cee2-4826-a62a-56ed4bfad3a2@linaro.org>
- <ZOXiUzxfs1cj3SWT@linaro.org>
- <07e93a9d-69ac-41b7-aa21-b855b97bf801@linaro.org>
-From:   Jagadeesh Kona <quic_jkona@quicinc.com>
-In-Reply-To: <07e93a9d-69ac-41b7-aa21-b855b97bf801@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: xUzvyVDW9nBF7cT3b23So4sTWTa4jiaO
-X-Proofpoint-GUID: xUzvyVDW9nBF7cT3b23So4sTWTa4jiaO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-08-28_03,2023-08-25_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
- suspectscore=0 clxscore=1011 mlxlogscore=721 lowpriorityscore=0
- spamscore=0 adultscore=0 phishscore=0 impostorscore=0 priorityscore=1501
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2308280060
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230826012415.1126955-1-liaochang1@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,41 +70,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 8/26/2023 4:17 PM, Konrad Dybcio wrote:
-> On 23.08.2023 12:41, Abel Vesa wrote:
->> On 23-08-16 19:56:46, Konrad Dybcio wrote:
->>> On 16.08.2023 16:57, Abel Vesa wrote:
->>>> From: Jagadeesh Kona <quic_jkona@quicinc.com>
->>>>
->>>> The current HW_CTRL flag switches the video GDSC to HW control mode as
->>>> part of GDSC enable itself, instead of that use HW_CTRL_TRIGGER flag to
->>>> give consumer drivers more control and switch the GDSC mode as and when
->>>> required.
->>>>
->>>> HW_CTRL_TRIGGER flag allows consumer drivers to switch the video GDSC to
->>>> HW/SW control modes at runtime using dev_pm_genpd_set_hwmode API.
->>>>
->>>> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
->>>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
->>>> ---
->>> Do we have any use for the HW_CTRL flag?
->>>
->>> Perhaps it should be renamed to HW_CTRL_ALWAYS?
->>>
->>> Or even better, *if and only if* that is necessary, add a common
->>> property like "always_hw_managed" to the genpd code?
->>
->> The HW_CTRL flag is still needed for the consumers that expect the GDSC
->> to be have the HW control bit set right after it gets enabled.
-> Guess the correct question here would be.. Are there any?
+On 26-08-23, 01:24, Liao Chang wrote:
+> Due to the kobject embedded in the dbs_data doest not has a release()
+> method yet, it needs to use kfree() to free dbs_data directly when
+> governor fails to allocate the tunner field of dbs_data.
 > 
+> Signed-off-by: Liao Chang <liaochang1@huawei.com>
+> ---
+>  drivers/cpufreq/cpufreq_governor.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq_governor.c b/drivers/cpufreq/cpufreq_governor.c
+> index 85da677c43d6..6e1ac864e87e 100644
+> --- a/drivers/cpufreq/cpufreq_governor.c
+> +++ b/drivers/cpufreq/cpufreq_governor.c
+> @@ -438,8 +438,10 @@ int cpufreq_dbs_governor_init(struct cpufreq_policy *policy)
+>  	gov_attr_set_init(&dbs_data->attr_set, &policy_dbs->list);
+>  
+>  	ret = gov->init(dbs_data);
+> -	if (ret)
+> +	if (ret) {
+> +		kfree(dbs_data);
+>  		goto free_policy_dbs_info;
+> +	}
 
-Yes, Display GDSC(mdss_gdsc) is required to be controlled always in HW 
-control mode when it is enabled.
+What about this instead ?
 
-Thanks,
-Jagadeesh
+diff --git a/drivers/cpufreq/cpufreq_governor.c b/drivers/cpufreq/cpufreq_governor.c
+index 85da677c43d6..af44ee6a6430 100644
+--- a/drivers/cpufreq/cpufreq_governor.c
++++ b/drivers/cpufreq/cpufreq_governor.c
+@@ -439,7 +439,7 @@ int cpufreq_dbs_governor_init(struct cpufreq_policy *policy)
 
-> Konrad
+        ret = gov->init(dbs_data);
+        if (ret)
+-               goto free_policy_dbs_info;
++               goto free_dbs_data;
+
+        /*
+         * The sampling interval should not be less than the transition latency
+@@ -474,6 +474,8 @@ int cpufreq_dbs_governor_init(struct cpufreq_policy *policy)
+        if (!have_governor_per_policy())
+                gov->gdbs_data = NULL;
+        gov->exit(dbs_data);
++
++free_dbs_data:
+        kfree(dbs_data);
+
+ free_policy_dbs_info:
+
+-- 
+viresh
