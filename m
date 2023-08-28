@@ -2,128 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 770DF78BA2F
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 23:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB65C78BB11
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 00:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232738AbjH1VUJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Aug 2023 17:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59526 "EHLO
+        id S234000AbjH1Wjd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Aug 2023 18:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233648AbjH1VUG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 17:20:06 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C505B0
-        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 14:20:03 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id 5614622812f47-3a9b41ffe11so2363427b6e.2
-        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 14:20:03 -0700 (PDT)
+        with ESMTP id S234048AbjH1WjO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 18:39:14 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3FC185
+        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 15:39:11 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id e9e14a558f8ab-34bbc394fa0so2676695ab.1
+        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 15:39:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693257603; x=1693862403;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YIuUKH5HwO1E9pbfeUQWlkWarmbqHgkNrbIq8Hrhtq0=;
-        b=CZvl4j7uUfhlKcrWlrFV4x5q2sR/53TDV8j+rSvYGkY5OgkurpqG4/9LkRSmuTF+wx
-         LjgtGQXk9xttxTEqVcurzxUWGAhiiV2Fb4HEngM2syV81d4G2zdmNym+YTfxBvLhMNhl
-         3jvHyaFaOMhgT3Iuvr8eS56b6A1mZ0Ciya6noHmy2eruo1SjvKsv2XbOGdyom5aY1c2g
-         nSCBfZSgWOp5ZMdaOb0+2IgfE6zzpuurhWNDjZqH3hw4ZvfXKby5q6IUnWL2NMj3gvKj
-         HGJsYnnvV87BG4gJOg/2c/0sse7a+nktaBCQX8EvP7zS4zlmHRoSXBx6Y3WR1GRPPyQa
-         HoBA==
+        d=linuxfoundation.org; s=google; t=1693262351; x=1693867151;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=vBmVIkqWHQEa837GVRmryXEmyC96Ro8XfMG9WRXh9FQ=;
+        b=GdSEPouEjpzqLVTjSXKzN3n79A+2lZFWBJQZsSspboz1zKsENZpnlVnBmGLUd6m8X6
+         oUG28FouGokC0MOSrPd/QuYdBhCj3Gt8zDHh3js0mspw+yAIJ+q7pkFJU+refVDfI3H9
+         DBC57MEVOBfaKV/6mfX+HijIp8iuZKKctVHFI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693257603; x=1693862403;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1693262351; x=1693867151;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YIuUKH5HwO1E9pbfeUQWlkWarmbqHgkNrbIq8Hrhtq0=;
-        b=aQrngXMO80YLGXglTBEleYaAxx1l7ZGGg7VdLvteZpkolyVVwSyBTkBW0HnpNXnaUT
-         xqetra03Dfnt/uNsohK9Rsudqmcxq3zjF3p+U7+R1NAcl4SiMzmBMvX4R9YtR3w0BUIJ
-         3l7eHClrv5UU2s+R4cSyqletHK6MBzX5XIAFtvfrNYUkrb4ARLYdkPl9Gj9P34HxdCjb
-         ylBdNnq0Ypvh9WkZTpCVofarOwESLCKH4dAktGIqGOFZgyX575hpHLYWnuMPcXfW5IHP
-         rRJ99Gn7+XndSYjsnj6Qi/LNrqu2UvuUYpEnHgijSC0/TcjjvH26PflllLIlWXUNXhQY
-         fEXw==
-X-Gm-Message-State: AOJu0YxdFoexfGNrZm2kBiHsoJ+R4zr7f/OAOdpc5ixtLLdTF5fybngx
-        H6uQgi7q78ks8tUxjNH8OphsS8afY7kbK3cvu2HHSg==
-X-Google-Smtp-Source: AGHT+IFIR0wXTVo7lMdzb5cG9k85zy4w+X97lE+LJI5iBgLY8WXAYFNAyZCGRtaAEQNN8D/64HoFn6+DFjhGTKznGg4=
-X-Received: by 2002:a05:6358:7248:b0:134:d282:92e9 with SMTP id
- i8-20020a056358724800b00134d28292e9mr30904076rwa.29.1693257602734; Mon, 28
- Aug 2023 14:20:02 -0700 (PDT)
+        bh=vBmVIkqWHQEa837GVRmryXEmyC96Ro8XfMG9WRXh9FQ=;
+        b=i2WS34dRXeg8V2CJcNZIwoJR7OSuYOGNrEp5qM92hY2nZlmD+6B7zEnkzfgEz9sZzg
+         ImkCRrsu/L2ePC+CFyOvvLrgfx5KfwWTOltFdbTe0RNoITpOZ5UbYCuMRdCxKGYbUlWW
+         yd5rMMfa4R62UkSbFZJEQBevwSJW+5HsIXsvSCfbFyHGzgJDugIT0pMzJAleLmWbyfLG
+         ky+O+RmeckkTfPzNJT80JcDeRAVnNnpz1t9iWl3Evhzm1o9gcjCA6KOnxDUp+jugQ94i
+         /Z6iGVZCC/wkkQZ/vW/h2EVLZKiQnGMtk42hPf6G3hxaSl57upxWr9JR4sh5m02eqFA5
+         K+uA==
+X-Gm-Message-State: AOJu0YwA/o1TUAGGtAmlGqGsB3h9+/MqODVITDzfOjcbbVUJ7ubD5Szt
+        tyZfmMwUsTJJ+0pfbHG4r6c3Dg==
+X-Google-Smtp-Source: AGHT+IHA9MxCJtNG6yfDLCJ6N950f4emH+svW+A2yETCyvgmVJhx+eLpUz04hZsvoSuf4aLUY7GNLw==
+X-Received: by 2002:a92:da88:0:b0:349:4e1f:e9a0 with SMTP id u8-20020a92da88000000b003494e1fe9a0mr27738984iln.2.1693262351216;
+        Mon, 28 Aug 2023 15:39:11 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id c1-20020a92cf41000000b0034ca3b29c5asm2709408ilr.57.2023.08.28.15.39.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Aug 2023 15:39:10 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------FwGEhnp4yGGfwEPLEBIGjuQn"
+Message-ID: <7f3f12a8-fb4e-fa6a-aeb6-5ebcdfddbee0@linuxfoundation.org>
+Date:   Mon, 28 Aug 2023 16:39:10 -0600
 MIME-Version: 1.0
-References: <1693250307-8910-1-git-send-email-quic_srichara@quicinc.com> <1693250307-8910-7-git-send-email-quic_srichara@quicinc.com>
-In-Reply-To: <1693250307-8910-7-git-send-email-quic_srichara@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 29 Aug 2023 00:19:51 +0300
-Message-ID: <CAA8EJpoxQkQFaF5qsqMF-fofkH2T+hVoOax_27DGuaVC1M+riQ@mail.gmail.com>
-Subject: Re: [PATCH 6/7] arm64: dts: qcom: ipq5018: Add tsens node
-To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        thara.gopinath@gmail.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     shuah@kernel.org, skhan@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] cpupower update for Linux 6.6-rc2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 28 Aug 2023 at 22:20, Sricharan Ramabadhran
-<quic_srichara@quicinc.com> wrote:
->
-> IPQ5018 has tsens V1.0 IP with 4 sensors.
-> There is no RPM, so tsens has to manually enabled.
-> Adding the tsens and nvmem node.
->
-> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/ipq5018.dtsi | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/qcom/ipq5018.dtsi b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-> index 9f13d2dcdfd5..277b3cfc7f72 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-> @@ -93,6 +93,29 @@ soc: soc@0 {
->                 #size-cells = <1>;
->                 ranges = <0 0 0 0xffffffff>;
->
-> +               qfprom_nvmem: qfprom_nvmem@a0000 {
-> +                       #address-cells = <1>;
-> +                       #size-cells = <1>;
-> +                       compatible = "qcom,ipq5018-qfprom", "qcom,qfprom";
-> +                       reg = <0xa0000 0x1000>;
-> +
-> +                       tsens_calib: calib@248 {
-> +                               reg = <0x248 0x10>;
-> +                       };
+This is a multi-part message in MIME format.
+--------------FwGEhnp4yGGfwEPLEBIGjuQn
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-NAK. Please define per-sensor fields here.
+Hi Rafael,
 
-> +               };
-> +
-> +               tsens: thermal-sensor@4a9000 {
-> +                       compatible = "qcom,ipq5018-tsens", "qcom,tsens-v1";
-> +                       reg = <0x4a9000 0x1000>, /* TM */
-> +                             <0x4a8000 0x1000>; /* SORT */
-> +                       nvmem-cells = <&tsens_calib>;
-> +                       nvmem-cell-names = "calib";
-> +                       interrupts = <GIC_SPI 184 IRQ_TYPE_EDGE_RISING>;
-> +                       interrupt-names = "uplow";
-> +                       #qcom,sensors = <5>;
-> +                       #thermal-sensor-cells = <1>;
-> +               };
-> +
->                 tlmm: pinctrl@1000000 {
->                         compatible = "qcom,ipq5018-tlmm";
->                         reg = <0x01000000 0x300000>;
-> --
-> 2.34.1
->
+Please pull the following cpupower update for Linux 6.6-rc2
 
+This cpupower update for Linux 6.6-rc2 consists of a single fix to
+add Georgian translation to Makefile LANGUAGES.
 
--- 
-With best wishes
-Dmitry
+diff is attached.
+
+thanks,
+-- Shuah
+
+----------------------------------------------------------------
+The following changes since commit 99481d2195bfd13a663904e6014887abf46b57c7:
+
+   cpupower: Fix cpuidle_set to accept only numeric values for idle-set operation. (2023-07-18 16:07:08 -0600)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-cpupower-6.6-rc2
+
+for you to fetch changes up to af75504c38960d5331b8c6c83ea9981e26d659e6:
+
+   cpupower: Add Georgian translation to Makefile LANGUAGES (2023-08-17 14:28:16 -0600)
+
+----------------------------------------------------------------
+linux-cpupower-6.6-rc2
+
+This cpupower update for Linux 6.6-rc2 consists of a single fix to
+add Georgian translation to Makefile LANGUAGES.
+
+----------------------------------------------------------------
+Shuah Khan (1):
+       cpupower: Add Georgian translation to Makefile LANGUAGES
+
+  tools/power/cpupower/Makefile | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+
+----------------------------------------------------------------
+--------------FwGEhnp4yGGfwEPLEBIGjuQn
+Content-Type: text/x-patch; charset=UTF-8; name="linux-cpupower-6.6-rc2.diff"
+Content-Disposition: attachment; filename="linux-cpupower-6.6-rc2.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL01ha2VmaWxlIGIvdG9vbHMvcG93
+ZXIvY3B1cG93ZXIvTWFrZWZpbGUKaW5kZXggZGM1MzE4MDVhNTcwLi5iNTM3NTNkZWUwMmYg
+MTAwNjQ0Ci0tLSBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL01ha2VmaWxlCisrKyBiL3Rvb2xz
+L3Bvd2VyL2NwdXBvd2VyL01ha2VmaWxlCkBAIC01Nyw3ICs1Nyw3IEBAIExJQl9NSU49CQkJ
+MQogCiBQQUNLQUdFID0JCQljcHVwb3dlcgogUEFDS0FHRV9CVUdSRVBPUlQgPQkJbGludXgt
+cG1Admdlci5rZXJuZWwub3JnCi1MQU5HVUFHRVMgPSAJCQlkZSBmciBpdCBjcyBwdAorTEFO
+R1VBR0VTID0gCQkJZGUgZnIgaXQgY3MgcHQga2EKIAogCiAjIERpcmVjdG9yeSBkZWZpbml0
+aW9ucy4gVGhlc2UgYXJlIGRlZmF1bHQgYW5kIG1vc3QgcHJvYmFibHkK
+
+--------------FwGEhnp4yGGfwEPLEBIGjuQn--
