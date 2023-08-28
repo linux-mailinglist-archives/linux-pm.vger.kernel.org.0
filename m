@@ -2,143 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF8C78B611
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 19:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52F1378B632
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 19:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232117AbjH1RKP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Aug 2023 13:10:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59884 "EHLO
+        id S231398AbjH1RRp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Aug 2023 13:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232123AbjH1RJp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 13:09:45 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3655FE4F;
-        Mon, 28 Aug 2023 10:09:09 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 873FB1F37E;
-        Mon, 28 Aug 2023 17:07:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1693242465; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gY+yGRa61TK2BR8Nw1XPStAseZID7tr6EzNodmZtwGI=;
-        b=qVtknFwaytxobpauxbbKFuuIVi6tPH4Iq6U6De70imbcWuGOxhftHNb/4FbPSlc5GK5oK7
-        GshsV6S1hXqpxSKPutaEa7H9BjX/0wslT8a/D4qnl6I13zhL54OxmZm3biLLUgjj3B0284
-        RPao+ZPH1kv8DfDq9EfFHRPOBMpXacI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1693242465;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gY+yGRa61TK2BR8Nw1XPStAseZID7tr6EzNodmZtwGI=;
-        b=R3UkEJ5CJtN+ADS2q+nxkKoBRTSfFifpdVN9hgBj3Kx2evg21jSoeC6uq7LeWXoMGsRfiN
-        pZDyCc1pRe5jtEDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6A42A139CC;
-        Mon, 28 Aug 2023 17:07:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id scxcGWHU7GQMNQAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 28 Aug 2023 17:07:45 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id CE101A0774; Mon, 28 Aug 2023 19:07:44 +0200 (CEST)
-Date:   Mon, 28 Aug 2023 19:07:44 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Jan Kara <jack@suse.cz>, Jens Axboe <axboe@kernel.dk>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Alasdair Kergon <agk@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anna Schumaker <anna@kernel.org>, Chao Yu <chao@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Kleikamp <shaggy@kernel.org>,
-        David Sterba <dsterba@suse.com>, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com, Gao Xiang <xiang@kernel.org>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        jfs-discussion@lists.sourceforge.net,
-        Joern Engel <joern@lazybastard.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        linux-bcache@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-raid@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-xfs@vger.kernel.org,
-        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Minchan Kim <minchan@kernel.org>, ocfs2-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Song Liu <song@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        target-devel@vger.kernel.org, Ted Tso <tytso@mit.edu>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v3 0/29] block: Make blkdev_get_by_*() return handle
-Message-ID: <20230828170744.iifdmaw732cfiauf@quack3>
-References: <20230818123232.2269-1-jack@suse.cz>
- <20230825-hubraum-gedreht-8c5c4db9330a@brauner>
+        with ESMTP id S232758AbjH1RRd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 13:17:33 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9505119
+        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 10:17:30 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-5009969be25so5493697e87.3
+        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 10:17:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1693243049; x=1693847849;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mQeg43EwpI91Aj09DwcYLaFTjZMhje/qBXZO+eTb1Zw=;
+        b=SQzcB/g+CriLK6An7FPFhsuUnPBpMf5mwWAK7fZRZ9ovrEFbDULZnnPfA62fmRAWIs
+         EK4ZWgGmqvw5CjI0Ia3+xDotAyBvfTme3TD8yLecXxxfmHTS0vPbZMCtXEqE9fNKPa8w
+         xHY3dRGcqBN+oRhy2ijwBxjTkkjOd+b3hnaf292CMSLTqKmQQMviEwVO5NnJkrgseyJ6
+         4T9USph282xVU9t8/b/0CrpoETbSjz8UP1jI5A6Jp7CVgFV7YM0DTFJSXsh4QrpHQx0z
+         hQIH+IIhT2jvaBLlb+rUrwSpQlLSs7z/AK8nVpy8TgYBVqPZgJQpc4VWDoKG3CQAeQm6
+         auig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693243049; x=1693847849;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mQeg43EwpI91Aj09DwcYLaFTjZMhje/qBXZO+eTb1Zw=;
+        b=HapgsFwhdfhkX2vmaV7H4OHsh7/XBarWqgnywelKybw3sVfHGYCTfJhfyrslTa1ilJ
+         P+ct20Fjt/s2FKpiK9MI+rCZw9MTN44sRSGlgBA5NeOK13/JcwRcDvbKdK8txa/oUr7r
+         nZ4M7oFPTP5oXn1pBocQ7/lUCnM+rc4KV4rbZNJmpeErPIAecXzwQ4kNX0jsjz+v+Q0s
+         U0fA5DOfZ3micagrf2HZJkcvTsoFoQ2pcqiznE+fjAcsasZixQMvL+draEMkBhpCVYDM
+         j49aFEdaoAbIeJGksnZoMTJ5NTm6oyFhnZsh5OGql0Gml3Mt5f0aeqrkk0pZMlVZUNrD
+         KTVg==
+X-Gm-Message-State: AOJu0YxjRZn3W3jM/1SuCHtiRFz6mDD8T1CfEu8IHpCuiNR28+keSKiq
+        DCUM1+pxVdPtYxu4GdzT9cUOiQ==
+X-Google-Smtp-Source: AGHT+IF0NmfpUAaANidgsTjUWK8m8E8gL5or+z+Hx8aSZbRgJjqTZlji0yBXPr2ZxnQtqnxibAhL+Q==
+X-Received: by 2002:a05:6512:31c8:b0:4fe:8f66:28a3 with SMTP id j8-20020a05651231c800b004fe8f6628a3mr20255338lfe.0.1693243048901;
+        Mon, 28 Aug 2023 10:17:28 -0700 (PDT)
+Received: from [192.168.0.22] ([77.252.47.225])
+        by smtp.gmail.com with ESMTPSA id pg23-20020a170907205700b0098e34446464sm4933229ejb.25.2023.08.28.10.17.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Aug 2023 10:17:28 -0700 (PDT)
+Message-ID: <18b8b8b8-7f42-8e8c-1bfd-36d04eba7c40@linaro.org>
+Date:   Mon, 28 Aug 2023 19:17:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230825-hubraum-gedreht-8c5c4db9330a@brauner>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH 4/5] dt-bindings: soc: loongson,ls2k-pmc: Allow
+ syscon-reboot/syscon-poweroff as child
+Content-Language: en-US
+To:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        Binbin Zhou <zhoubb.aaron@gmail.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        loongson-kernel@lists.loongnix.cn, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, Xuerui Wang <kernel@xen0n.name>,
+        loongarch@lists.linux.dev
+References: <cover.1693218539.git.zhoubinbin@loongson.cn>
+ <2bec39b1001732de60c1521d78e44a45ff94d6b6.1693218539.git.zhoubinbin@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <2bec39b1001732de60c1521d78e44a45ff94d6b6.1693218539.git.zhoubinbin@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri 25-08-23 15:32:47, Christian Brauner wrote:
-> On Wed, Aug 23, 2023 at 12:48:11PM +0200, Jan Kara wrote:
-> > Hello,
-> > 
-> > this is a v3 of the patch series which implements the idea of blkdev_get_by_*()
-> > calls returning bdev_handle which is then passed to blkdev_put() [1]. This
-> > makes the get and put calls for bdevs more obviously matching and allows us to
-> > propagate context from get to put without having to modify all the users
-> > (again!). In particular I need to propagate used open flags to blkdev_put() to
-> > be able count writeable opens and add support for blocking writes to mounted
-> > block devices. I'll send that series separately.
-> > 
-> > The series is based on Christian's vfs tree as of today as there is quite
-> > some overlap. Patches have passed some reasonable testing - I've tested block
-> > changes, md, dm, bcache, xfs, btrfs, ext4, swap. More testing or review is
-> > always welcome. Thanks! I've pushed out the full branch to:
-> > 
-> > git://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.git bdev_handle
-> > 
-> > to ease review / testing. Since there were not many comments for v2 and
-> > Christoph has acked the series I think we should start discussing how to merge
-> > the series. Most collisions with this series seem to happen in the filesystems
-> > area so VFS tree would seem as the least painful way to merge this. Jens,
+On 28/08/2023 14:38, Binbin Zhou wrote:
+> The reboot and poweroff features are actually part of the Power
+> Management Unit system controller, thus allow them as its children,
+> instead of specifying as separate device nodes with syscon phandle.
 > 
-> I really do like this series especially struct bdev_handle and moving
-> the mode bits in there. I'll happily take this. So far there have only
-> been minor things that can easily be fixed.
 
-Thanks. Since Al is fine with just doing a potential conversion to 'struct
-file' as a handle on top of this series (it will be dumb Coccinelle
-replacement) I think we can go ahead with the series as is. As you said
-there will be some conflicts in btrfs and I've learned about f2fs conflicts
-as well so I can rebase & repost the series on top of rc1 to make life
-easier for you.
+>  required:
+>    - compatible
+>    - reg
+> @@ -44,10 +56,25 @@ examples:
+>    - |
+>      #include <dt-bindings/interrupt-controller/irq.h>
+>  
+> -    power-management@1fe27000 {
+> +    pmc: power-management@1fe27000 {
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Drop the label.
+
+>          compatible = "loongson,ls2k1000-pmc", "syscon";
+>          reg = <0x1fe27000 0x58>;
+>          interrupt-parent = <&liointc1>;
+>          interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
+>          loongson,suspend-address = <0x0 0x1c000500>;
+> +
+> +        syscon-reboot {
+> +            compatible ="syscon-reboot";
+> +            regmap = <&pmc>;
+
+No, why? It does not make much sense and is deprecated.
+
+> +            offset = <0x30>;
+> +            mask = <0x1>;
+> +        };
+> +
+> +        syscon-poweroff {
+> +            compatible ="syscon-poweroff";
+
+Missing space.
+
+Best regards,
+Krzysztof
+
