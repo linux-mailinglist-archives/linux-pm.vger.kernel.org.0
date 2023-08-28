@@ -2,78 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 964ED78BA24
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 23:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 770DF78BA2F
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 23:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233192AbjH1VTF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Aug 2023 17:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46310 "EHLO
+        id S232738AbjH1VUJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Aug 2023 17:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232738AbjH1VSf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 17:18:35 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18764B0
-        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 14:18:33 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-ccc462deca6so3546029276.0
-        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 14:18:33 -0700 (PDT)
+        with ESMTP id S233648AbjH1VUG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 17:20:06 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C505B0
+        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 14:20:03 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id 5614622812f47-3a9b41ffe11so2363427b6e.2
+        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 14:20:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693257512; x=1693862312;
+        d=linaro.org; s=google; t=1693257603; x=1693862403;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FliVY615SEVhU7q/mzsk+r1Q2msZnK6cJIUPdMDRRUs=;
-        b=cWLcHR4sSxaF1+1qqYC7UpzV+E6ieIqJHvwuenssIkM9Cr5x/uMmdwIfA8+hieDITg
-         vNNwvwOmUiXrG3+RScTdFFGfqHsTg8WNN95/fVmfljca/dI4cx2sjdZ+Q4J1nHu4NrE1
-         IGaW7B1NP+cloCZ/rmvXq+BXrJuQXa38/NWp/fqRgu5BfH+uruV7I1hK2Ne3MXEYVv3A
-         z1pl5VZDhzFOhn4m6Q2A189RCqhln0mRnqTZr8YhExbWfF2PoHSOxNZ4FkBVZzRuriYY
-         nTPOjnVHooNRKkrIxZmX0eYc5Gr9i41/0BI9DIilI7+k9vDZibgphNkWF1R/iv+n5Nxx
-         AYVg==
+        bh=YIuUKH5HwO1E9pbfeUQWlkWarmbqHgkNrbIq8Hrhtq0=;
+        b=CZvl4j7uUfhlKcrWlrFV4x5q2sR/53TDV8j+rSvYGkY5OgkurpqG4/9LkRSmuTF+wx
+         LjgtGQXk9xttxTEqVcurzxUWGAhiiV2Fb4HEngM2syV81d4G2zdmNym+YTfxBvLhMNhl
+         3jvHyaFaOMhgT3Iuvr8eS56b6A1mZ0Ciya6noHmy2eruo1SjvKsv2XbOGdyom5aY1c2g
+         nSCBfZSgWOp5ZMdaOb0+2IgfE6zzpuurhWNDjZqH3hw4ZvfXKby5q6IUnWL2NMj3gvKj
+         HGJsYnnvV87BG4gJOg/2c/0sse7a+nktaBCQX8EvP7zS4zlmHRoSXBx6Y3WR1GRPPyQa
+         HoBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693257512; x=1693862312;
+        d=1e100.net; s=20221208; t=1693257603; x=1693862403;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FliVY615SEVhU7q/mzsk+r1Q2msZnK6cJIUPdMDRRUs=;
-        b=VwmxD4YZ8QcicYy/gld+fUMQn2TfFthuayTnzTA9J9Zbn5EU5ZFGXa4xIl1u6Ll+V9
-         VNCAh6ALRHrSAhURVY+dLjOZujI69pCMYR8jcGfRFfsRRXg0C72CDkF7POGG2+BROFWL
-         SoCPMIxkUnaVimXz12kuMzS66JmmROxfPY8496yme4kasJaj9KwkdDdjNJgB69NNSmt3
-         qhxvfWjO2GbLyimhfWLpSo0BqhXlpuULa8GSXmXSVA+vSTW3sWCC2nCZ9vUS/aXkbftF
-         O2QX1iEm2em1+E9433yUsR1RUj7gefOMb4/AsJf5AGUwIl3F291LfbNkDThBXP/1dzES
-         x4KA==
-X-Gm-Message-State: AOJu0YynhMJ1D9u7ui8zYPxLT4ecQbteGsofme/OA9XoG5qPvNKYlbvN
-        msShl0/xov/cveTtaI/q/OhUCn6CcfHeNE4Bphvy+g==
-X-Google-Smtp-Source: AGHT+IGVY3Grt8v+TneGy63uFk333inJDlkXAPH94m3V0xoeYPtYcffqLrh79udacodPiOlKofhL6KWSVF8Dj92OMHg=
-X-Received: by 2002:a25:da0c:0:b0:d74:6163:db8c with SMTP id
- n12-20020a25da0c000000b00d746163db8cmr28524846ybf.41.1693257512343; Mon, 28
- Aug 2023 14:18:32 -0700 (PDT)
+        bh=YIuUKH5HwO1E9pbfeUQWlkWarmbqHgkNrbIq8Hrhtq0=;
+        b=aQrngXMO80YLGXglTBEleYaAxx1l7ZGGg7VdLvteZpkolyVVwSyBTkBW0HnpNXnaUT
+         xqetra03Dfnt/uNsohK9Rsudqmcxq3zjF3p+U7+R1NAcl4SiMzmBMvX4R9YtR3w0BUIJ
+         3l7eHClrv5UU2s+R4cSyqletHK6MBzX5XIAFtvfrNYUkrb4ARLYdkPl9Gj9P34HxdCjb
+         ylBdNnq0Ypvh9WkZTpCVofarOwESLCKH4dAktGIqGOFZgyX575hpHLYWnuMPcXfW5IHP
+         rRJ99Gn7+XndSYjsnj6Qi/LNrqu2UvuUYpEnHgijSC0/TcjjvH26PflllLIlWXUNXhQY
+         fEXw==
+X-Gm-Message-State: AOJu0YxdFoexfGNrZm2kBiHsoJ+R4zr7f/OAOdpc5ixtLLdTF5fybngx
+        H6uQgi7q78ks8tUxjNH8OphsS8afY7kbK3cvu2HHSg==
+X-Google-Smtp-Source: AGHT+IFIR0wXTVo7lMdzb5cG9k85zy4w+X97lE+LJI5iBgLY8WXAYFNAyZCGRtaAEQNN8D/64HoFn6+DFjhGTKznGg4=
+X-Received: by 2002:a05:6358:7248:b0:134:d282:92e9 with SMTP id
+ i8-20020a056358724800b00134d28292e9mr30904076rwa.29.1693257602734; Mon, 28
+ Aug 2023 14:20:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230827115033.935089-1-dmitry.baryshkov@linaro.org>
- <20230827115033.935089-6-dmitry.baryshkov@linaro.org> <493aff10d698c9ca5bdbeae45250f5fe.sboyd@kernel.org>
-In-Reply-To: <493aff10d698c9ca5bdbeae45250f5fe.sboyd@kernel.org>
+References: <1693250307-8910-1-git-send-email-quic_srichara@quicinc.com> <1693250307-8910-7-git-send-email-quic_srichara@quicinc.com>
+In-Reply-To: <1693250307-8910-7-git-send-email-quic_srichara@quicinc.com>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 29 Aug 2023 00:18:21 +0300
-Message-ID: <CAA8EJppBT2hOUfGkzj273pcniE2-Q4dn8aA9Of11X1JmkAbOiA@mail.gmail.com>
-Subject: Re: [PATCH v4 05/23] interconnect: icc-clk: add support for scaling
- using OPP
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Stephan Gerhold <stephan@gerhold.net>
+Date:   Tue, 29 Aug 2023 00:19:51 +0300
+Message-ID: <CAA8EJpoxQkQFaF5qsqMF-fofkH2T+hVoOax_27DGuaVC1M+riQ@mail.gmail.com>
+Subject: Re: [PATCH 6/7] arm64: dts: qcom: ipq5018: Add tsens node
+To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,31 +70,59 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 28 Aug 2023 at 21:10, Stephen Boyd <sboyd@kernel.org> wrote:
+On Mon, 28 Aug 2023 at 22:20, Sricharan Ramabadhran
+<quic_srichara@quicinc.com> wrote:
 >
-> Quoting Dmitry Baryshkov (2023-08-27 04:50:15)
-> > diff --git a/drivers/interconnect/icc-clk.c b/drivers/interconnect/icc-clk.c
-> > index d787f2ea36d9..45ffb068979d 100644
-> > --- a/drivers/interconnect/icc-clk.c
-> > +++ b/drivers/interconnect/icc-clk.c
-> > @@ -25,12 +28,16 @@ struct icc_clk_provider {
-> >  static int icc_clk_set(struct icc_node *src, struct icc_node *dst)
-> >  {
-> >         struct icc_clk_node *qn = src->data;
-> > +       unsigned long rate = icc_units_to_bps(src->peak_bw);
-> >         int ret;
-> >
-> >         if (!qn || !qn->clk)
-> >                 return 0;
-> >
-> > -       if (!src->peak_bw) {
-> > +       if (qn->opp)
-> > +               return dev_pm_opp_set_rate(qn->dev, rate);
+> IPQ5018 has tsens V1.0 IP with 4 sensors.
+> There is no RPM, so tsens has to manually enabled.
+> Adding the tsens and nvmem node.
 >
-> Just curious how does lockdep do with this? Doesn't OPP call into
-> interconnect code, so lockdep will complain about ABBA?
+> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/ipq5018.dtsi | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/ipq5018.dtsi b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
+> index 9f13d2dcdfd5..277b3cfc7f72 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq5018.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
+> @@ -93,6 +93,29 @@ soc: soc@0 {
+>                 #size-cells = <1>;
+>                 ranges = <0 0 0 0xffffffff>;
+>
+> +               qfprom_nvmem: qfprom_nvmem@a0000 {
+> +                       #address-cells = <1>;
+> +                       #size-cells = <1>;
+> +                       compatible = "qcom,ipq5018-qfprom", "qcom,qfprom";
+> +                       reg = <0xa0000 0x1000>;
+> +
+> +                       tsens_calib: calib@248 {
+> +                               reg = <0x248 0x10>;
+> +                       };
 
-Interesting question. I should check it.
+NAK. Please define per-sensor fields here.
+
+> +               };
+> +
+> +               tsens: thermal-sensor@4a9000 {
+> +                       compatible = "qcom,ipq5018-tsens", "qcom,tsens-v1";
+> +                       reg = <0x4a9000 0x1000>, /* TM */
+> +                             <0x4a8000 0x1000>; /* SORT */
+> +                       nvmem-cells = <&tsens_calib>;
+> +                       nvmem-cell-names = "calib";
+> +                       interrupts = <GIC_SPI 184 IRQ_TYPE_EDGE_RISING>;
+> +                       interrupt-names = "uplow";
+> +                       #qcom,sensors = <5>;
+> +                       #thermal-sensor-cells = <1>;
+> +               };
+> +
+>                 tlmm: pinctrl@1000000 {
+>                         compatible = "qcom,ipq5018-tlmm";
+>                         reg = <0x01000000 0x300000>;
+> --
+> 2.34.1
+>
+
 
 -- 
 With best wishes
