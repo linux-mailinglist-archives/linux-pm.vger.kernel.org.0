@@ -2,147 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0696C78A79A
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 10:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C934778A7AF
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 10:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbjH1IWf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Aug 2023 04:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54046 "EHLO
+        id S229644AbjH1I3i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Aug 2023 04:29:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbjH1IWS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 04:22:18 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4FCCEB
-        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 01:21:40 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-99c1d03e124so380174666b.2
-        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 01:21:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693210894; x=1693815694;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=R/ThTKBMXaBdcMw21bB4Tb4UrarGnjH7VR3jlnjNz0o=;
-        b=p0ofPENfE3XRABjMqYG0NDnT45lF6wkg4OivHw849Jmd0NTzi42hEWq4NSQm/ui6/H
-         mx+cwroHygO0OeNDvQFFKbX4ynkLaDOOF8/1d0TzAbG5PGFRXdDhu+hqF/kSxGrZdmvX
-         e6V0YiOH8qQPJoBgoNd331iQFOgFiRTtSX+bceYEo8QIdxaUjjggwwpKNCRG2lfuih9U
-         YUA9cUMkdFwbdO4XsGbhVJ9BbxWdk7vMCFIMK519m6PXam6shCgHvBUA+lep9Em5zDD3
-         AwQnmUMZj/8CrZwRg1r+SCdrak/ThkoTNCWe05o7IqFg06EMGtFoKmhu0dEJ+3/HhqUs
-         UKLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693210894; x=1693815694;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R/ThTKBMXaBdcMw21bB4Tb4UrarGnjH7VR3jlnjNz0o=;
-        b=iB/j2KXt8EVtuBU8eds8MmBbFtYRYKmzlwYzba5iAUtrWdbpmf0aC2NH8ADLLqE8rS
-         irvY9WI0GBGLaHNzYRJ14ZurXDbywS0KAJhTV2Jhx8WsXLESORN3QOsDT0fa1YvTUWVv
-         lYFVE8gWu2w/Mx5t7TVHukVZLxxmUl2zmsdXSnV9rzeHa1VPDuG/6jZWYYWTf4QOUOFB
-         DwAuanVDecdUfbM1peqNO9rlOFjyM8HnZChsOjGpYiaeA44qgfTvmrFkVQBbN0OvveS+
-         0EOP8fNtP6Amc1OJ6u+ZLNStA846XNkYYRjzqLy3bIUwGF5RLiOmK9Gm2hyaQhj/Rf7H
-         ZGxQ==
-X-Gm-Message-State: AOJu0YzSTmOMlenNdqV9TpmliytaFB9KTxoiAKYc+DJGWTTPjruLbwT1
-        kAa1IcODf+Tfe5Qn0mUvyXocWA==
-X-Google-Smtp-Source: AGHT+IFBUK6E4zrbQPaHC6jS5bTEiJnj2yId8vtYo61AG/BoM8FRNNTdWT0PxEWyM0E9uZwDnNK+lg==
-X-Received: by 2002:a17:907:a04a:b0:9a5:78c0:44e6 with SMTP id gz10-20020a170907a04a00b009a578c044e6mr5892043ejc.16.1693210894452;
-        Mon, 28 Aug 2023 01:21:34 -0700 (PDT)
-Received: from [192.168.0.22] ([77.252.47.225])
-        by smtp.gmail.com with ESMTPSA id v24-20020a17090606d800b0099364d9f0e2sm4368823ejb.98.2023.08.28.01.21.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Aug 2023 01:21:34 -0700 (PDT)
-Message-ID: <2efba6b3-2399-9deb-d0ce-78f7b5e12f30@linaro.org>
-Date:   Mon, 28 Aug 2023 10:21:32 +0200
+        with ESMTP id S229555AbjH1I3K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 04:29:10 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC4F9C;
+        Mon, 28 Aug 2023 01:29:07 -0700 (PDT)
+Received: from kwepemd100002.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RZ3XQ5zYfzNnKb;
+        Mon, 28 Aug 2023 16:25:26 +0800 (CST)
+Received: from [10.67.110.108] (10.67.110.108) by
+ kwepemd100002.china.huawei.com (7.221.188.184) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.1258.23; Mon, 28 Aug 2023 16:29:03 +0800
+Message-ID: <bcac1b3c-a2f7-7f18-4c2f-5cf27f4e89b5@huawei.com>
+Date:   Mon, 28 Aug 2023 16:29:02 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v3 1/1] scripts: Add add-maintainer.py
-To:     Guru Das Srinagesh <quic_gurus@quicinc.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        quic_pkondeti@quicinc.com
-Cc:     linux-kernel@vger.kernel.org, kernel@quicinc.com,
-        workflows@vger.kernel.org, tools@linux.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-References: <cover.1693037031.git.quic_gurus@quicinc.com>
- <141b9fcab2208ace3001df4fc10e3dfd42b9f5d9.1693037031.git.quic_gurus@quicinc.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <141b9fcab2208ace3001df4fc10e3dfd42b9f5d9.1693037031.git.quic_gurus@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] cpufreq: Fix the race condition while updating the
+ transition_task of policy
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     <rafael@kernel.org>, <srivatsa.bhat@linux.vnet.ibm.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230826095836.1138608-1-liaochang1@huawei.com>
+ <20230828072347.ly23mbptu3yw4zkv@vireshk-i7>
+From:   "Liao, Chang" <liaochang1@huawei.com>
+In-Reply-To: <20230828072347.ly23mbptu3yw4zkv@vireshk-i7>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.108]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemd100002.china.huawei.com (7.221.188.184)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26/08/2023 10:07, Guru Das Srinagesh wrote:
-> This script runs get_maintainer.py on a given patch file (or multiple
-> patch files) and adds its output to the patch file in place with the
-> appropriate email headers "To: " or "Cc: " as the case may be. These new
-> headers are added after the "From: " line in the patch.
-> 
-> Currently, for a single patch, maintainers and reviewers are added as
-> "To: ", mailing lists and all other roles are added as "Cc: ".
-> 
-> For a series of patches, however, a set-union scheme is employed in
-> order to solve the all-too-common problem of ending up sending only
-> subsets of a patch series to some lists, which results in important
-> pieces of context such as the cover letter (or other patches in the
-> series) being dropped from those lists. This scheme is as follows:
-> 
-> - Create set-union of all maintainers and reviewers from all patches and
->   use this to do the following per patch:
->   - add only that specific patch's maintainers and reviewers as "To: "
->   - add the other maintainers and reviewers from the other patches as "Cc: "
-> 
-> - Create set-union of all mailing lists corresponding to all patches and
->   add this to all patches as "Cc: "
-> 
-> - Create set-union of all other roles corresponding to all patches and
->   add this to all patches as "Cc: "
-> 
-> Please note that patch files that don't have any "Maintainer"s or
-> "Reviewers" explicitly listed in their `get_maintainer.pl` output will
+Hi Viresh.
 
-So before you will ignoring the reviewers, right? One more reason to not
-get it right...
-
-> not have any "To: " entries added to them; developers are expected to
-> manually make edits to the added entries in such cases to convert some
-> "Cc: " entries to "To: " as desired.
+在 2023/8/28 15:23, Viresh Kumar 写道:
+> On 26-08-23, 09:58, Liao Chang wrote:
+>> The field 'transition_task' of policy structure is used to track the
+>> task which is performing the frequency transition. Using this field to
+>> print a warning once detect a case where the same task is calling
+>> _begin() again before completing the preivous frequency transition via
+>> the _end().
+>>
+>> However, there is a potential race condition in _end() and _begin() APIs
+>> while updating the field 'transition_task' of policy, the scenario is
+>> depicted below:
+>>
+>>              Task A                            Task B
+>>
+>>         /* 1st freq transition */
+>>         Invoke _begin() {
+>>                 ...
+>>                 ...
+>>         }
+>>                                         /* 2nd freq transition */
+>>                                         Invoke _begin() {
+>>                                                 ... //waiting for A to
+>>                                                 ... //clear
+>>                                                 ... //transition_ongoing
+>>                                                 ... //in _end() for
+>>                                                 ... //the 1st transition
+>>                                                         |
+>>         Change the frequency                            |
+>>                                                         |
+>>         Invoke _end() {                                 |
+>>                 ...                                     |
+>>                 ...                                     |
+>>                 transition_ongoing = false;             V
+>>                                                 transition_ongoing = true;
+>>                                                 transition_task = current;
 > 
-> The script is quiet by default (only prints errors) and its verbosity
-> can be adjusted via an optional parameter.
+> Task B here won't move ahead until "wake_up(&policy->transition_wait)"
+> is called, isn't it ?
+
+Task B does not necessarily go to sleep when it calls wait_event(), it depends on
+the condition to wait for evaluate false or not. So there is a small race window
+where Task A already set 'transition_ongoing' to false and Task B can cross wait_event()
+immediately.
+
+wait_event:
+do {
+	might_sleep();
+	if (condition) // !transition_ongoing
+		break;
+	__wait_event();
+};
+
+I hope I do not miss something important in the code above.
+
 > 
-> Signed-off-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
-> ---
->  MAINTAINERS               |   5 ++
->  scripts/add-maintainer.py | 164 ++++++++++++++++++++++++++++++++++++++
->  2 files changed, 169 insertions(+)
->  create mode 100755 scripts/add-maintainer.py
+> Also I think the CPU is free to change the order of the two
+> instructions and so this commit won't make a difference. Also I don't
+
+Yes, if the CPU uses weak memroy model, it is possible for the instructions to be reordered.
+therefore, it is a good idea to insert an smb() between these two lines if there is race here.
+
+Thanks.
+
+> feel there is a race here as wake_up() hasn't happened.
+> 
+>>                 transition_task = NULL;
+>>                 ... //A overwrites the task
+>>                 ... //performing the transition
+>>                 ... //result in error warning.
+>>         }
+>>
+>> To fix this race condition, the order of the updates to the
+>> 'transition_task' and 'transition_ongoing' fields has been changed, the
+>> 'transition_task' field is now cleared before the 'transition_ongoing'
+>> field, which ensure that only one task can update the 'transition_task'
+>> field at a time.
+>>
+>> Fixes: ca654dc3a93d ("cpufreq: Catch double invocations of cpufreq_freq_transition_begin/end")
+>> Signed-off-by: Liao Chang <liaochang1@huawei.com>
+>> ---
+>>  drivers/cpufreq/cpufreq.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+>> index a757f90aa9d6..f8eb6dde57f2 100644
+>> --- a/drivers/cpufreq/cpufreq.c
+>> +++ b/drivers/cpufreq/cpufreq.c
+>> @@ -455,8 +455,8 @@ void cpufreq_freq_transition_end(struct cpufreq_policy *policy,
+>>  			    policy->cur,
+>>  			    policy->cpuinfo.max_freq);
+>>  
+>> -	policy->transition_ongoing = false;
+>>  	policy->transition_task = NULL;
+>> +	policy->transition_ongoing = false;
+>>  
+>>  	wake_up(&policy->transition_wait);
+>>  }
+>> -- 
+>> 2.34.1
 > 
 
-I do not see the benefits of this script. For me - it's unnecessarily
-more complicated instead of my simple bash function which makes
-everything one command less than here.
-One more thing to maintain.
-
-I don't see the benefits of this for newcomers, either. They should use
-b4. b4 can do much, much more, so anyone creating his workflow should
-start from b4, not from this script.
-
-Best regards,
-Krzysztof
-
+-- 
+BR
+Liao, Chang
