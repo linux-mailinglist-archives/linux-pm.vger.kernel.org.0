@@ -2,113 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A751D78B23E
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 15:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 371F578B29A
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 16:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbjH1Nsm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 28 Aug 2023 09:48:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42748 "EHLO
+        id S229721AbjH1OID (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Aug 2023 10:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbjH1Ns1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 09:48:27 -0400
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF554BA;
-        Mon, 28 Aug 2023 06:48:24 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-5921a962adfso38305927b3.1;
-        Mon, 28 Aug 2023 06:48:24 -0700 (PDT)
+        with ESMTP id S231545AbjH1OHg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 10:07:36 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80770114
+        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 07:07:32 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-68a3cae6d94so2814791b3a.0
+        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 07:07:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1693231652; x=1693836452;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=ve0utH9aRLXgDul2QQzlV5PL5KVO5A7dq2FT7NpTEUo=;
+        b=cQdyZctLxOt1C6AQOCTBCDvLc4dH7qEJD9KQwMZ5VtfpQYcOWpDQTLAVE0ZVlWQs1d
+         AcMSL+ZjP5cn2Oxh8p9x4qtVtAXoQUmCF/fYBSegxIafsUw33pD5Xmzc0QvGJ2lB9OAn
+         qOXlgsjLyhVK9RoO6cHjgf8/5ej6AWPQnVGBu20gN4EoBLmOoRV5UCWKxFUmHKbqgFJi
+         4yhrLTBo/pU4ScNNuIOtyrkZ+WyjOu22pobY5IJsDWwvMAiJBVonXiEiMOjjtMLx4Dxv
+         bViWcXAGqUslXgD2ebDiASGady2ud9ho2QsqGFMn6ZNn+wQP9bblyviRiMKKhWzX7r71
+         5lkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693230503; x=1693835303;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=blhUfqzVF8tP8mpgksXjcwth+y21tfThEGRNVYSwGqo=;
-        b=devQHdnNSEAvsloV66rJ3RMFyKr4XeX6oj3I1+sEodMBq+pZo0ahB7DzB4a7sMer7u
-         odKe9KPnSQoBt+8SXY0cY4XRYgP27MhPFauSdE3lKFEK14Rp2LZ8oBpxaSbSVBmPNwZP
-         dQH8nRNhu0kzIh5T60arNTEptOeIVMwE4w+dSoleeV+m3l/E3SY3ma5evohfXtNnnbRG
-         sj8sXUJHk52hJq6XrUTw7C0jz1i5aQK03jcwJtYwxRB/h6KRD6cL8EkMFyUKmZNVxz65
-         OMLXWSbd6Qyc5W8jL99/S+KoS23H0TwOwUXBtXsGlVyd3KaobhlZOnvSQUog+8JGxTNb
-         yZHA==
-X-Gm-Message-State: AOJu0YyB+LJfr3ZcqyjIBINyLZWWy6XzNDR9Gay9zGeUmZJnLPKFzQta
-        Kh8jJZWZzz4mmTFzSijs+yR5caa/GCh0QQ==
-X-Google-Smtp-Source: AGHT+IE/aG47xr4aFKQSQnWeTHix/moy4Q5+BWRyKz5ITnwbpKg8BY6e7aupaCttRi06B/NtdZweBw==
-X-Received: by 2002:a0d:c4c4:0:b0:57a:f72:ebf8 with SMTP id g187-20020a0dc4c4000000b0057a0f72ebf8mr27083807ywd.28.1693230503695;
-        Mon, 28 Aug 2023 06:48:23 -0700 (PDT)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id c66-20020a0dda45000000b0058427045833sm2151213ywe.133.2023.08.28.06.48.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Aug 2023 06:48:23 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-d746ea563f9so3081739276.1;
-        Mon, 28 Aug 2023 06:48:22 -0700 (PDT)
-X-Received: by 2002:a5b:b06:0:b0:d47:8db3:8bc8 with SMTP id
- z6-20020a5b0b06000000b00d478db38bc8mr26525998ybp.21.1693230502647; Mon, 28
- Aug 2023 06:48:22 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1693231652; x=1693836452;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ve0utH9aRLXgDul2QQzlV5PL5KVO5A7dq2FT7NpTEUo=;
+        b=iyzNFwT4VSlx/WZuS7/y3SDErqwSLiKlsooL7/elMyEKON5OQWPSB1Sz/+mJjo6UtP
+         1Fd3IFbj+mkPCqcEfKrq6aRBk3IEI2OgiDgHLUFtTli2aht1hABLXrgzEtWd+i/U+sGN
+         17JcA8C9FVCLZAZQEcDbyRdOXgMWLF/Cv2D0gG0ZQNc0JECgEjXhI7wRoxsIlXNG4rvy
+         Id8EnFBdqzGLypO2dJ2X0ftao5GcIDn/bl9HVbjFswZgfZ7hMRvZBpWTtI69mGfInZi9
+         ea5RNZ6fpMa6AwULFCWD6we0/J9+xNx+Em5p90cLnWrKk1eRCjOQgDreViuTdGRUzQLg
+         9fcA==
+X-Gm-Message-State: AOJu0YyIbGuKfkJ2AD6RhHUfhk3MQDuVB4HFnQLA4VUDHENuiRgXB8CS
+        PaN5fUzMEJhfsMmCddF6DGEhrzETiyJYmhpUSDk=
+X-Google-Smtp-Source: AGHT+IE0yFC1jRmIt/U+anSIMFO+aJenS0Qx0cBXKjXBhB3WYJppc8dGO7NKOg6lL1pyhLDzLDte7w==
+X-Received: by 2002:a05:6a00:150a:b0:68a:6d1a:b812 with SMTP id q10-20020a056a00150a00b0068a6d1ab812mr22480373pfu.9.1693231651914;
+        Mon, 28 Aug 2023 07:07:31 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id z31-20020a056a001d9f00b00689f3ae4ca8sm6642567pfw.112.2023.08.28.07.07.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Aug 2023 07:07:31 -0700 (PDT)
+Message-ID: <64ecaa23.050a0220.1fa23.a15f@mx.google.com>
+Date:   Mon, 28 Aug 2023 07:07:31 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <cover.1693037031.git.quic_gurus@quicinc.com> <141b9fcab2208ace3001df4fc10e3dfd42b9f5d9.1693037031.git.quic_gurus@quicinc.com>
- <87jztf37ny.fsf@intel.com> <20230828133554.GA818859@hu-bjorande-lv.qualcomm.com>
-In-Reply-To: <20230828133554.GA818859@hu-bjorande-lv.qualcomm.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 28 Aug 2023 15:48:11 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU+3oj+-3=f5WFVTRsKQjqCpU8SnVqKSZGk8XRxhsDcVQ@mail.gmail.com>
-Message-ID: <CAMuHMdU+3oj+-3=f5WFVTRsKQjqCpU8SnVqKSZGk8XRxhsDcVQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/1] scripts: Add add-maintainer.py
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Jani Nikula <jani.nikula@intel.com>,
-        Guru Das Srinagesh <quic_gurus@quicinc.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        quic_pkondeti@quicinc.com, linux-kernel@vger.kernel.org,
-        kernel@quicinc.com, workflows@vger.kernel.org,
-        tools@linux.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: pm-6.6-rc1-122-g07b618ec9d7a
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (pm-6.6-rc1-122-g07b618ec9d7a)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Bjorn,
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (pm-6.6-rc1-122-=
+g07b618ec9d7a)
 
-On Mon, Aug 28, 2023 at 3:37 PM Bjorn Andersson
-<quic_bjorande@quicinc.com> wrote:
-> On Mon, Aug 28, 2023 at 11:14:41AM +0300, Jani Nikula wrote:
-> > On Sat, 26 Aug 2023, Guru Das Srinagesh <quic_gurus@quicinc.com> wrote:
-> > > This script runs get_maintainer.py on a given patch file (or multiple
-> > > patch files) and adds its output to the patch file in place with the
-> > > appropriate email headers "To: " or "Cc: " as the case may be. These new
-> > > headers are added after the "From: " line in the patch.
-> >
-> > FWIW, I personally prefer tooling to operate on git branches and commits
-> > than patches. For me, the patches are just an intermediate step in
-> > getting the commits from my git branch to the mailing list. That's not
-> > where I add the Cc's, but rather in the commits in my local branch,
-> > where they're preserved. YMMV.
-> >
->
-> May I ask how you add/carry the recipients in a commit?
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/pm-=
+6.6-rc1-122-g07b618ec9d7a/
 
-I guess below a "---" line in the commit description?
+Tree: pm
+Branch: testing
+Git Describe: pm-6.6-rc1-122-g07b618ec9d7a
+Git Commit: 07b618ec9d7a09b421b8233f594632e379de0308
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-Gr{oetje,eeting}s,
+Warnings Detected:
 
-                        Geert
+arc:
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+arm64:
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
