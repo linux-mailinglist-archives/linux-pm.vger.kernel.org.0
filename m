@@ -2,63 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A877878B0B7
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 14:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3396878B0D8
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 14:45:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbjH1Mja (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Aug 2023 08:39:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
+        id S229719AbjH1Mot (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Aug 2023 08:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231253AbjH1MjI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 08:39:08 -0400
+        with ESMTP id S231414AbjH1MoV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 08:44:21 -0400
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 74CF0F0;
-        Mon, 28 Aug 2023 05:39:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77CBE102;
+        Mon, 28 Aug 2023 05:44:16 -0700 (PDT)
 Received: from loongson.cn (unknown [112.20.109.102])
-        by gateway (Coremail) with SMTP id _____8DxVuhnlexkN4EcAA--.22671S3;
-        Mon, 28 Aug 2023 20:39:03 +0800 (CST)
-Received: from localhost.localdomain (unknown [112.20.109.102])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax98xllexkQrJlAA--.29412S3;
-        Mon, 28 Aug 2023 20:39:03 +0800 (CST)
-From:   Binbin Zhou <zhoubinbin@loongson.cn>
-To:     Binbin Zhou <zhoubb.aaron@gmail.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        loongson-kernel@lists.loongnix.cn, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, Xuerui Wang <kernel@xen0n.name>,
-        loongarch@lists.linux.dev, Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: [PATCH 5/5] soc: loongson: loongson_pm2: Populate children syscon nodes
-Date:   Mon, 28 Aug 2023 20:39:00 +0800
-Message-Id: <64b7e1b1e88606821cfb4925fb2275bf44077b8e.1693218539.git.zhoubinbin@loongson.cn>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <cover.1693218539.git.zhoubinbin@loongson.cn>
-References: <cover.1693218539.git.zhoubinbin@loongson.cn>
+        by gateway (Coremail) with SMTP id _____8CxtPCbluxkhIEcAA--.58922S3;
+        Mon, 28 Aug 2023 20:44:11 +0800 (CST)
+Received: from [192.168.100.8] (unknown [112.20.109.102])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxzyOXluxkS7NlAA--.8361S3;
+        Mon, 28 Aug 2023 20:44:09 +0800 (CST)
+Message-ID: <2637fb35-4328-4cfe-ab16-566994c44b5a@loongson.cn>
+Date:   Mon, 28 Aug 2023 20:44:07 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] PCI/PM: Only read PCI_PM_CTRL register when available
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Feiyang Chen <chris.chenfeiyang@gmail.com>
+Cc:     Feiyang Chen <chenfeiyang@loongson.cn>, bhelgaas@google.com,
+        rafael.j.wysocki@intel.com, mika.westerberg@linux.intel.com,
+        anders.roxell@linaro.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, guyinggang@loongson.cn,
+        chenhuacai@loongson.cn, loongson-kernel@lists.loongnix.cn,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+References: <20230825212507.GA627427@bhelgaas>
+From:   Yanteng Si <siyanteng@loongson.cn>
+In-Reply-To: <20230825212507.GA627427@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Ax98xllexkQrJlAA--.29412S3
-X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj9xXoW7XF13WFy3tryUXr43AFy3KFX_yoWkKwc_u3
-        W29r48ur18JrnIy398Z3ZxAr9F9rn5u3WUuF1Dtw1Iqa4Ut3sxtFyUArnrGF17WF4Iyrs8
-        X3y0gw4Ikw1rCosvyTuYvTs0mTUanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvT
-        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-        cSsGvfJTRUUUbSkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-        vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6F4UJVW0owAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
-        Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Wrv_
-        ZF1lYx0Ex4A2jsIE14v26F4j6r4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-        Jr0_Gr1l4IxYO2xFxVAFwI0_GFv_Wrylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
-        cI8IcVAFwI0_Ar0_tr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw2
-        0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x02
-        67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU022NJUUUUU==
+X-CM-TRANSID: AQAAf8AxzyOXluxkS7NlAA--.8361S3
+X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxuw17Zr45XrW7Kw48Gr4xXwc_yoW3uw4Up3
+        9YkFnxGFWkJa48GFnIqr1UCF90939Fyr98Wr95C342vFnFgr95Kr15XFyYga47ArZ7Wa18
+        XFWjvr4UuF45CagCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AK
+        xVWxJr0_GcWln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26rWY
+        6Fy7McIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+        8JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
+        6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
+        AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
+        0xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
+        v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AK
+        xVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU022NJUUUUU==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
@@ -68,40 +67,220 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The syscon poweroff and reboot nodes logically belong to the Power
-Management Unit so populate possible children.
 
-Without it, the reboot/poweroff feature becomes unavailable.
+在 2023/8/26 05:25, Bjorn Helgaas 写道:
+> On Fri, Aug 25, 2023 at 11:57:00AM +0800, Feiyang Chen wrote:
+>> On Fri, Aug 25, 2023 at 5:59 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>>> On Thu, Aug 24, 2023 at 09:37:38AM +0800, Feiyang Chen wrote:
+>>>> When the current state is already PCI_D0, pci_power_up() will return
+>>>> 0 even though dev->pm_cap is not set. In that case, we should not
+>>>> read the PCI_PM_CTRL register in pci_set_full_power_state().
+>>>>
+>>>> There is nothing more needs to be done below in that case.
+>>>> Additionally, pci_power_up() has two callers only and the other one
+>>>> ignores the return value, so we can safely move the current state
+>>>> check from pci_power_up() to pci_set_full_power_state().
+>>> Does this fix a bug?  I guess it does, because previously
+>>> pci_set_full_power_state() did a config read at 0 + PCI_PM_CTRL, i.e.,
+>>> offset 4, which is actually PCI_COMMAND, and set dev->current_state
+>>> based on that.  So dev->current_state is now junk, right?
+>> Yes.
+>>
+>>> This might account for some "Refused to change power state from %s to D0"
+>>> messages.
+>>>
+>>> How did you find this?  It's nice if we can mention a symptom so
+>>> people can connect the problem with this fix.
+>> We are attempting to add MSI support for our stmmac driver, but the
+>> pci_alloc_irq_vectors() function always fails.
+>> After looking into it more, we came across the message "Refused to
+>> change power state from D3hot to D0" :)
+> So I guess this device doesn't have a PM Capability at all?  Can you
+> collect the "sudo lspci -vv" output?  The PM Capability is required
+> for all PCIe devices, so maybe this is a conventional PCI device?
 
-Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
----
- drivers/soc/loongson/loongson2_pm.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Hi
 
-diff --git a/drivers/soc/loongson/loongson2_pm.c b/drivers/soc/loongson/loongson2_pm.c
-index 6d2b3708e947..6e8fb170d454 100644
---- a/drivers/soc/loongson/loongson2_pm.c
-+++ b/drivers/soc/loongson/loongson2_pm.c
-@@ -11,6 +11,7 @@
- #include <linux/input.h>
- #include <linux/suspend.h>
- #include <linux/interrupt.h>
-+#include <linux/of_platform.h>
- #include <linux/pm_wakeirq.h>
- #include <linux/platform_device.h>
- #include <asm/bootinfo.h>
-@@ -192,6 +193,11 @@ static int loongson2_pm_probe(struct platform_device *pdev)
- 	if (loongson_sysconf.suspend_addr)
- 		suspend_set_ops(&loongson2_suspend_ops);
- 
-+	/* Populate children */
-+	retval = devm_of_platform_populate(dev);
-+	if (retval)
-+		dev_err(dev, "Error populating children, reboot and poweroff might not work properly\n");
-+
- 	return 0;
- }
- 
--- 
-2.39.3
+
+I executed this command on the LS2k2000 platform, and this is part of 
+the output：
+
+
+00:03.0 Ethernet controller: Loongson Technology LLC Device 7a13 (rev 01)
+
+     Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop+ ParErr- 
+Stepping- SERR- FastB2B- DisINTx-
+     Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- 
+<TAbort- <MAbort- >SERR- <PERR- INTx-
+     Latency: 0
+     Interrupt: pin A routed to IRQ 45
+     NUMA node: 0
+     Region 0: Memory at 51290000 (64-bit, non-prefetchable) [size=32K]
+     Capabilities: [40] MSI: Enable+ Count=32/32 Maskable- 64bit-
+         Address: 1fe01140  Data: 0060
+     Kernel driver in use: dwmac-loongson-pci
+
+00:03.1 Ethernet controller: Loongson Technology LLC Device 7a13 (rev 01)
+     Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop+ ParErr- 
+Stepping- SERR- FastB2B- DisINTx-
+     Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- 
+<TAbort- <MAbort- >SERR- <PERR- INTx-
+     Latency: 0
+     Interrupt: pin B routed to IRQ 78
+     NUMA node: 0
+     Region 0: Memory at 51298000 (64-bit, non-prefetchable) [size=32K]
+     Capabilities: [40] MSI: Enable+ Count=32/32 Maskable- 64bit-
+         Address: 1fe01140  Data: 0080
+     Kernel driver in use: dwmac-loongson-pci
+
+00:03.2 Ethernet controller: Loongson Technology LLC Gigabit Ethernet 
+Controller (rev 02)
+     Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop+ ParErr- 
+Stepping- SERR- FastB2B- DisINTx+
+     Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- 
+<TAbort- <MAbort- >SERR- <PERR- INTx-
+     Latency: 64, Cache Line Size: 64 bytes
+     Interrupt: pin C routed to IRQ 111
+     NUMA node: 0
+     Region 0: Memory at 512a0000 (64-bit, non-prefetchable) [size=32K]
+     Expansion ROM at 512b3000 [disabled] [size=2K]
+     Capabilities: [40] MSI: Enable+ Count=32/32 Maskable- 64bit-
+         Address: 1fe01140  Data: 00a0
+
+     Kernel driver in use: dwmac-loongson-pci
+
+
+00:04.0 USB controller: Loongson Technology LLC Device 7a44 (prog-if 30 
+[XHCI])
+
+...
+
+
+>
+>>> This sounds like something that probably should have a stable tag?
+>> Do I need to include the symptom and Cc in the commit message and
+>> then send v4?
+>>>> Fixes: e200904b275c ("PCI/PM: Split pci_power_up()")
+>>>> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+>>>> Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
+>>>> ---
+>>>>   drivers/pci/pci.c | 9 +++++----
+>>>>   1 file changed, 5 insertions(+), 4 deletions(-)
+>>>>
+>>>> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+>>>> index 60230da957e0..7e90ab7b47a1 100644
+>>>> --- a/drivers/pci/pci.c
+>>>> +++ b/drivers/pci/pci.c
+>>>> @@ -1242,9 +1242,6 @@ int pci_power_up(struct pci_dev *dev)
+>>>>                else
+>>>>                        dev->current_state = state;
+>>>>
+>>>> -             if (state == PCI_D0)
+>>>> -                     return 0;
+>>>> -
+>>>>                return -EIO;
+>>>>        }
+>>>>
+>>>> @@ -1302,8 +1299,12 @@ static int pci_set_full_power_state(struct pci_dev *dev)
+>>>>        int ret;
+>>>>
+>>>>        ret = pci_power_up(dev);
+>>>> -     if (ret < 0)
+>>>> +     if (ret < 0) {
+>>>> +             if (dev->current_state == PCI_D0)
+>>>> +                     return 0;
+>>>> +
+>>>>                return ret;
+>>>> +     }
+>>>>        pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+>>>>        dev->current_state = pmcsr & PCI_PM_CTRL_STATE_MASK;
+> One thing that makes me hesitate a little bit is that we rely on the
+> failure return from pci_power_up() to guard the dev->pm_cap usage.
+> That's slightly obscure, and I liked the way the v1 patch made it
+> explicit.
+>
+> And it seems slightly weird that when there's no PM cap,
+> pci_power_up() always returns failure even if the platform was able to
+> put the device in D0.
+>
+> Anyway, here's a proposal for commit log and updated comment for
+> pci_power_up():
+>
+>
+> commit 5694ba13b004 ("PCI/PM: Only read PCI_PM_CTRL register when available")
+> Author: Feiyang Chen <chenfeiyang@loongson.cn>
+> Date:   Thu Aug 24 09:37:38 2023 +0800
+>
+>      PCI/PM: Only read PCI_PM_CTRL register when available
+>      
+>      For a device with no Power Management Capability, pci_power_up() previously
+>      returned 0 (success) if the platform was able to put the device in D0,
+>      which led to pci_set_full_power_state() trying to read PCI_PM_CTRL, even
+>      though it doesn't exist.
+>      
+>      Since dev->pm_cap == 0 in this case, pci_set_full_power_state() actually
+>      read the wrong register, interpreted it as PCI_PM_CTRL, and corrupted
+>      dev->current_state.  This led to messages like this in some cases:
+>      
+>        pci 0000:01:00.0: Refused to change power state from D3hot to D0
+>      
+>      To prevent this, make pci_power_up() always return a negative failure code
+>      if the device lacks a Power Management Capability, even if non-PCI platform
+>      power management has been able to put the device in D0.  The failure will
+>      prevent pci_set_full_power_state() from trying to access PCI_PM_CTRL.
+>      
+>      Fixes: e200904b275c ("PCI/PM: Split pci_power_up()")
+>      Link: https://lore.kernel.org/r/20230824013738.1894965-1-chenfeiyang@loongson.cn
+>      Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+>      Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+>      Reviewed-by: "Rafael J. Wysocki" <rafael@kernel.org>
+>      Cc: stable@vger.kernel.org	# v5.19+
+>
+>
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 60230da957e0..39728196e295 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -1226,6 +1226,10 @@ static int pci_dev_wait(struct pci_dev *dev, char *reset_type, int timeout)
+>    *
+>    * On success, return 0 or 1, depending on whether or not it is necessary to
+>    * restore the device's BARs subsequently (1 is returned in that case).
+> + *
+> + * On failure, return a negative error code.  Always return failure if @dev
+> + * lacks a Power Management Capability, even if the platform was able to
+> + * put the device in D0 via non-PCI means.
+>    */
+>   int pci_power_up(struct pci_dev *dev)
+>   {
+> @@ -1242,9 +1246,6 @@ int pci_power_up(struct pci_dev *dev)
+>   		else
+>   			dev->current_state = state;
+>   
+> -		if (state == PCI_D0)
+> -			return 0;
+> -
+>   		return -EIO;
+>   	}
+>   
+> @@ -1302,8 +1303,12 @@ static int pci_set_full_power_state(struct pci_dev *dev)
+>   	int ret;
+>   
+>   	ret = pci_power_up(dev);
+> -	if (ret < 0)
+> +	if (ret < 0) {
+> +		if (dev->current_state == PCI_D0)
+> +			return 0;
+> +
+>   		return ret;
+> +	}
+>   
+>   	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+>   	dev->current_state = pmcsr & PCI_PM_CTRL_STATE_MASK;
+
+Thanks a lot!
+
+
+Thanks,
+
+Yanteng
 
