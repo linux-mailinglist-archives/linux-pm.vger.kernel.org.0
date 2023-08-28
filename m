@@ -2,123 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574C978A58E
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 08:15:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC0878A5DB
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 08:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjH1GOy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Aug 2023 02:14:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34374 "EHLO
+        id S229436AbjH1Gja (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Aug 2023 02:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjH1GO3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 02:14:29 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2583F9
-        for <linux-pm@vger.kernel.org>; Sun, 27 Aug 2023 23:14:26 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-3a88c422e23so1661779b6e.0
-        for <linux-pm@vger.kernel.org>; Sun, 27 Aug 2023 23:14:26 -0700 (PDT)
+        with ESMTP id S229618AbjH1GjL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 02:39:11 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E763128
+        for <linux-pm@vger.kernel.org>; Sun, 27 Aug 2023 23:39:08 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1bee82fad0fso14832235ad.2
+        for <linux-pm@vger.kernel.org>; Sun, 27 Aug 2023 23:39:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693203266; x=1693808066;
+        d=linaro.org; s=google; t=1693204748; x=1693809548;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=386ok7shWOJlruYDJGJwfZYhWifBb/vBMYMt3Zuo+Ow=;
-        b=wrBMPPHmYEigi+MvjNy+h3s8aCuog+9Wqj0hUDLhdpgJgqLqe9BN8Umna3Qq024uxT
-         joVL0t0pEAiLP0GNba/YQe8ngpjHZpFjgn5zOKJQ5O01D2LC+lP9oZTOANAujE9bII4J
-         LKHtaT+WPpr339YFT4Yu01NGVt06GhdZvJh773lfTJchICfjG9D2z3WNicQXysch9pco
-         +ZKawK4uywUSmNeG5gy2sYxkNKXrNPTaoVCom4tlNMTbypY5WdPJLYQdRD8hRd6h0gWd
-         s1KLxwpyH64aqYHuJrDAx1iuB33Bb2hVNavMWsnuWp9tq+aXEYKI+9+CK2VBTSBCl9Ah
-         abww==
+        bh=F/uI82MJmFahIjQ3JIe4Lm/fff5zAxsypmeNLjmcTDE=;
+        b=s9C+ZlFeazbUHsuLdqVbqTcWGL7inOGxjhgY0n91bMfEi9IyuGAzKL4SJL9Z5PUg02
+         oPVBLaPpy6rhMKu550XNryjD4rSMWqHK82cbVr4a0z8aezYDZNTmaVNatr8KKQvMl4tz
+         plgS3qt7THxbKDQHp5qtZxzkkZ12wFx+VWGENJNH5/w8sPLV2m5zxjb66OmyMZ1sWs4J
+         p/jtA8+39m+eGNnvwEdDoFoWe0R4VubfjzpdvHGKxvV9T0GDqgZRv6K9SdOCM0cjgT8C
+         OzDgSnkb6LicIF9U2Yv9QWLxk8l3EeY6beW1xoApfi6RVMtN+ayyckvE+hK9MDYyFiyu
+         NOaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693203266; x=1693808066;
+        d=1e100.net; s=20221208; t=1693204748; x=1693809548;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=386ok7shWOJlruYDJGJwfZYhWifBb/vBMYMt3Zuo+Ow=;
-        b=Hu6y3olKuV7er4/MXA219yJ/RYKUywpr7LNyECtUzYB+covsElrIrE/nXerwT0wJ5b
-         IoOZ+GNzGZ4WDvr23J/T3+QYtqJ1jbqCdvaCUiPcHCpqmw88XFonyK/rgZBYfexWB1lU
-         mi/tWLgcfBTcH+uq8YJpMiVLdPh0iqrjeHs2/mUtyVpAIgmdDxgbBcrUNQQgmKp6Vm8v
-         DMTm+45KbbuhL+i2Jt/0hFwn0DWMhiwXMoufoZlWP05XLoIN7VZW4wk9lhkf0Kyfxnpv
-         5vBoYAlhLZn0B1LbhnDkVPCv4tWc6aI66rjuRGOl/uVNVvm3HGKZHI3KLpzIkVVHo5do
-         DMtw==
-X-Gm-Message-State: AOJu0Yx++I21Ulnz9a/FMz/ZQrNfZo7+2cPVxxr4oHmFK+TT+ZLiNYzK
-        5ieX0xnSKrT+xXy2K2sRCl58Dg==
-X-Google-Smtp-Source: AGHT+IHZlduIK8tmAqKEeieK3IxWR14s2o9pmF6xMaL4d6UcGN8N3gP3vOap7FkxjhBcYFk20cGZPw==
-X-Received: by 2002:a05:6808:23c4:b0:3a4:8a41:c69c with SMTP id bq4-20020a05680823c400b003a48a41c69cmr9760903oib.13.1693203266006;
-        Sun, 27 Aug 2023 23:14:26 -0700 (PDT)
+        bh=F/uI82MJmFahIjQ3JIe4Lm/fff5zAxsypmeNLjmcTDE=;
+        b=YCReCUI/JHsJHTRcw7qv9oQ5nkHjK/nwvWA8Y/rLxE7EVe5ZQ+MBOSPYmuxJ3ZNTVm
+         Qs2DqPm5yYIS/gCpCos7uI4VojakDIvz+K/e5QAoeRtIN2mzZWzD4Ob88MayRnKI5MjA
+         DuYPZnqSbEyLz26Ql/hQ5MOhYOxfQv5/Ag37I1EzzyUEFdyOG0xKwJISVxFP8s7TANL4
+         7dxRsqeHVrxAK2baxCe9XtGiZYylJy650EOxm1KdyjxlM8ihgD4AQoTgc1HtNgIz8kMn
+         /14gPulo2NEcPs1PPIpPppTFssxEGkD5mDAqVyCoCISbUb5ynX2xGRnxfZrJG2le8FdW
+         Oomw==
+X-Gm-Message-State: AOJu0YxG3876SJXr0yQDPL7zn6HdUM9ZcdrNYuaCaf71uMwc5DmFfu31
+        qetkTAd7jfXf4dTBpHyqqUkJHQ==
+X-Google-Smtp-Source: AGHT+IEfX5Ydlmw9kYOWkdoMlgp8wqv8sIE0zKMiecMdmtoZoTVKzBqDjPdf1q5fjId4zhZFW4u3qg==
+X-Received: by 2002:a17:902:f814:b0:1bf:6ad7:2286 with SMTP id ix20-20020a170902f81400b001bf6ad72286mr16881098plb.43.1693204748067;
+        Sun, 27 Aug 2023 23:39:08 -0700 (PDT)
 Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id l6-20020a62be06000000b00688214cff65sm5785323pff.44.2023.08.27.23.14.25
+        by smtp.gmail.com with ESMTPSA id z11-20020a170903018b00b001b89b7e208fsm6426112plg.88.2023.08.27.23.39.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Aug 2023 23:14:25 -0700 (PDT)
-Date:   Mon, 28 Aug 2023 11:44:23 +0530
+        Sun, 27 Aug 2023 23:39:07 -0700 (PDT)
+Date:   Mon, 28 Aug 2023 12:09:04 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     rafael@kernel.org, treding@nvidia.com, jonathanh@nvidia.com,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bbasu@nvidia.com
-Subject: Re: [Patch] cpufreq: tegra194: add online/offline hooks
-Message-ID: <20230828061423.6u3xd4f7vuizyqls@vireshk-i7>
-References: <20230825111920.8257-1-sumitg@nvidia.com>
+To:     Mark Tseng <chun-jen.tseng@mediatek.com>
+Cc:     rafael@kernel.org, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, sumitg@nvidia.com,
+        sanjayc@nvidia.com, rafael.j.wysocki@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH] cpufreq: mediatek: change transition delay for MT8186
+Message-ID: <20230828063904.r7huxclehlblkkjx@vireshk-i7>
+References: <20230818020616.4748-1-chun-jen.tseng@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230825111920.8257-1-sumitg@nvidia.com>
+In-Reply-To: <20230818020616.4748-1-chun-jen.tseng@mediatek.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25-08-23, 16:49, Sumit Gupta wrote:
-> Implement the light-weight tear down and bring up helpers to reduce the
-> amount of work to do on CPU offline/online operation.
-> This change helps to make the hotplugging paths much faster.
-> 
-> Suggested-by: Viresh Kumar <viresh.kumar@linaro.org>
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> Link: https://lore.kernel.org/lkml/20230816033402.3abmugb5goypvllm@vireshk-i7/
-> ---
->  drivers/cpufreq/tegra194-cpufreq.c | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
-> index 66a9c23544db..09582696b83d 100644
-> --- a/drivers/cpufreq/tegra194-cpufreq.c
-> +++ b/drivers/cpufreq/tegra194-cpufreq.c
-> @@ -510,6 +510,21 @@ static int tegra194_cpufreq_init(struct cpufreq_policy *policy)
->  	return 0;
->  }
->  
-> +static int tegra194_cpufreq_online(struct cpufreq_policy *policy)
-> +{
-> +	/* We did light-weight tear down earlier, nothing to do here */
-> +	return 0;
-> +}
-> +
-> +static int tegra194_cpufreq_offline(struct cpufreq_policy *policy)
-> +{
-> +	/*
-> +	 * Preserve policy->driver_data and don't free resources on light-weight
-> +	 * tear down.
-> +	 */
-> +	return 0;
-> +}
-> +
->  static int tegra194_cpufreq_exit(struct cpufreq_policy *policy)
->  {
->  	struct device *cpu_dev = get_cpu_device(policy->cpu);
-> @@ -548,6 +563,8 @@ static struct cpufreq_driver tegra194_cpufreq_driver = {
->  	.get = tegra194_get_speed,
->  	.init = tegra194_cpufreq_init,
->  	.exit = tegra194_cpufreq_exit,
-> +	.online = tegra194_cpufreq_online,
-> +	.offline = tegra194_cpufreq_offline,
->  	.attr = cpufreq_generic_attr,
->  };
+Hi Mark,
 
-Applied. Thanks.
+I am not entirely clear by few things in the commit log.
+
+On 18-08-23, 10:06, Mark Tseng wrote:
+> For MT8186, it has policy0 and policy6 by different governor thread,so
+> it may be call cpufreq->set_target_index() by different core.
+
+Why does this matter ?
+
+> In general
+> case, it must check BCPU, LCPU and CCI together then take about 10ms.
+
+BCPU is Big CPU ? LCPU is Little CPU ?
+
+So are you saying that changing the frequency takes roughly 10 ms for
+MT8186 ?
+
+> Atfer 44295af5019f this patch, it may call cpufreq_out_of_sync() by
+> cpufreq_verify_current_freq() because current frequency is bigger
+> than clk_get_rate() ouver 1Mh. By the same time, it may call
+
+s/ouver/over/
+s/1Mh/1 MHz/
+
+> cpufreq->set_target_index() again.
+
+Where was it called for the first time ?
+
+> So, the CCI freq may be too lower for
+> BCPU cause BCPU kernel panic.
+
+I am not sure how a low frequency causes kernel panic here.
+
+> So, it should change the default transition delay 1ms to 10ms. It can
+> promise the next freq setting then governor trigger new freq change.
+
+There are few typos as well here, please fix them.
+
+> Fixes: 44295af5019f ("cpufreq: use correct unit when verify cur freq")
+
+I think you should drop this. The issue at hand may be visible now
+after 44295af5019f is applied, but it certainly didn't cause it.
 
 -- 
 viresh
