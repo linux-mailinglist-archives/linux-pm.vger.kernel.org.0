@@ -2,65 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C04278A63D
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 09:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F47A78A664
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 09:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229594AbjH1HCt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Aug 2023 03:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38100 "EHLO
+        id S229477AbjH1HYJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Aug 2023 03:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjH1HCc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 03:02:32 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654891A4
-        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 00:02:10 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-68becf931bfso1929606b3a.0
-        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 00:02:10 -0700 (PDT)
+        with ESMTP id S229675AbjH1HXx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 03:23:53 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CAB0F1
+        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 00:23:50 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1bdc19b782aso16591845ad.0
+        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 00:23:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693206130; x=1693810930;
+        d=linaro.org; s=google; t=1693207430; x=1693812230;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xsZIF9+60TMVxXmhZKS5XPgvvX8LG2+xbCqzfDRe3+E=;
-        b=FqYIeGOwn3SSNvjtNnm1rhX0BvyvuHNbPW83FPPLziQLaeyhHm6UoZCkmpO9sXvm4z
-         XKnnyAbqrS36WOiMtgpXwXUC49y9p4fvVVeU1B+sGkLfUZJi39uF3yWD9ydOHkbyvm6s
-         yeYAcvMspsrfX12NGfzO/vu4Efm2UGLBVzi/d8wVplDD1Gofc6V3Vd+KTyu3wzgvOUkS
-         7LFhTZKmFMHB0kGWfJYKGvX1IVPW1GvoACFkyWXYxL8z1aRnNgKN4ANLppptEIzyPDvE
-         Arv6ITG95xNT/5WzS5B4tdK59H6bazh7L+IZvb7hs+1atLy2UdLvF8Lc7HK2d2EjnmW3
-         ZuQA==
+        bh=CDHtlUKc0j7Q6lV6B5AgbW4Du27Uz8pjMuIX48zgRQM=;
+        b=zVe9PriBO0mzdqmpyQmC5t0sM+N5i50p9yljdC3wcrl9cogBdiqFqp2QM7Gtijgj7f
+         +HQ3RY3NpzhoS6ira/q5W8e37EP2l5E1AyXY3Hevbpv5Hhe5NRZjrnrAETQKdhe+Jprm
+         RcXDn660vXCoTWyNLpGWeGpSuc9bh0+czz79u9N8refd6RZPKnjPeDlssOsfdTpNMeEI
+         X7mEW0CpLNkGRd/HgTT053fPqOnhi6S/N1dyianv+KTV3Y+w+LEHeWp1LeirGg4Nb9xu
+         /yKovsc3dYpKxIvMM2VeaXXJU/RfGVBUUY0CgOfE+DCo/yqx6f+1e7/kZ44kZB6XPrbh
+         NCMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693206130; x=1693810930;
+        d=1e100.net; s=20221208; t=1693207430; x=1693812230;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xsZIF9+60TMVxXmhZKS5XPgvvX8LG2+xbCqzfDRe3+E=;
-        b=R72dsk/98Uupb5sHMlikGORakIs++Wg8ozJb7+TF0/1TiBeSMef17JdyRB8fvYO2oa
-         YKugMiSb3AbzQXZJJFhn86YKVWm8xwWJ+fYy2egmtCZUEmyrvrlma9iAn/3QCPzd5CW8
-         2EsOJ3eNs0lfJj2n8kbeK5t0ApzE3twgYJ5pSX0Ce3StonUcjWvd6oTL7cZMvRy8zE4w
-         mKku8VPVEslm9SIoX5muzpdSCUvb81MVUeRHH/qD/VgLNgKob2xDNaXq3Oa5DJHe5H5b
-         hVKsoBMACEFw+gprXpgbJH7uHLbsBfQPsjfckk6cfjGxr4TucNpLl9zgKZF21Jm3VeZg
-         pILQ==
-X-Gm-Message-State: AOJu0Yy0rMtdOg1qjz3XOs9JJBUFIQbk3jmxIDsEDqOZxLPEsqDNZfgu
-        TERw6EsSapA7t3bHNZgtJJ2cIQrxfGfzBtcu++w=
-X-Google-Smtp-Source: AGHT+IGJc2k99Qa1Tvg70j17m+GRIFLpV6j0x/Z3aoEHd7i/SC/vVcaGVxqWXJqQLw4iLTJSHQTq+g==
-X-Received: by 2002:a17:90b:ecd:b0:26c:f871:e6b1 with SMTP id gz13-20020a17090b0ecd00b0026cf871e6b1mr17355572pjb.22.1693206129440;
-        Mon, 28 Aug 2023 00:02:09 -0700 (PDT)
+        bh=CDHtlUKc0j7Q6lV6B5AgbW4Du27Uz8pjMuIX48zgRQM=;
+        b=eGhHbLQOnDstJImfZTkyg4HD5+QflOzDJn6o6BUXKN/X1r3QqRm8M0pKyWb0mnWvI9
+         5ywOtEXtafro6QLyS/irlbzoerRq/UFepmRd7mG35aukJg94cFhkhD/XpR1YUaJzQiLU
+         Gz9rAyEQI3T8lRSIQ6uxFaM/dU7T05OF28va5Ag+3KU8pgL1zCF3ntZVI844ErfuHwYT
+         AwBLB1JZ2Vxg1HgWdbSjubLBfbTO9vJW25QVg5D75HjiWDTRmBEBdYP85vtyL2EAl4mu
+         lri46dY7Xi29tff1360W7H1KfPWTMmyVpXRIw4STrbzCTOouQnYUfr7reDLgZ9NtY2Bj
+         Zmug==
+X-Gm-Message-State: AOJu0YwnqWd0zRG6Zj/8WdBrJ5cJpOqWZ5S33S5gsO86BoVRJpTXBajI
+        at1DafCcgbfjQAGWXQqcGvSzWg==
+X-Google-Smtp-Source: AGHT+IHZQilU+CWN49nN5rwoTIjvrnAgNV36NLb130EBcgvrkdhb35rHH+L4PEIAEw9zx8Y6RxOsPg==
+X-Received: by 2002:a17:902:e54c:b0:1bb:c7bc:ceb4 with SMTP id n12-20020a170902e54c00b001bbc7bcceb4mr23857204plf.60.1693207430129;
+        Mon, 28 Aug 2023 00:23:50 -0700 (PDT)
 Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id gw15-20020a17090b0a4f00b0026f90d7947csm6277659pjb.34.2023.08.28.00.02.08
+        by smtp.gmail.com with ESMTPSA id g20-20020a170902869400b001bbbbda70ccsm6506191plo.158.2023.08.28.00.23.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Aug 2023 00:02:08 -0700 (PDT)
-Date:   Mon, 28 Aug 2023 12:32:06 +0530
+        Mon, 28 Aug 2023 00:23:49 -0700 (PDT)
+Date:   Mon, 28 Aug 2023 12:53:47 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Liao Chang <liaochang1@huawei.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: pcc: Fix the potentinal scheduling delays in
- target_index()
-Message-ID: <20230828070206.dc44mhe4qztg52kc@vireshk-i7>
-References: <20230826095743.1138495-1-liaochang1@huawei.com>
+Cc:     rafael@kernel.org, srivatsa.bhat@linux.vnet.ibm.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: Fix the race condition while updating the
+ transition_task of policy
+Message-ID: <20230828072347.ly23mbptu3yw4zkv@vireshk-i7>
+References: <20230826095836.1138608-1-liaochang1@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230826095743.1138495-1-liaochang1@huawei.com>
+In-Reply-To: <20230826095836.1138608-1-liaochang1@huawei.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,42 +70,82 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26-08-23, 09:57, Liao Chang wrote:
-> pcc_cpufreq_target():
-> 	cpufreq_freq_transition_begin();
-> 	spin_lock(&pcc_lock);
-> 	[critical section]
-> 	cpufreq_freq_transition_end();
-> 	spin_unlock(&pcc_lock);
+On 26-08-23, 09:58, Liao Chang wrote:
+> The field 'transition_task' of policy structure is used to track the
+> task which is performing the frequency transition. Using this field to
+> print a warning once detect a case where the same task is calling
+> _begin() again before completing the preivous frequency transition via
+> the _end().
 > 
-> Above code has a performance issue, consider that Task0 executes
-> 'cpufreq_freq_transition_end()' to wake Task1 and preempted imediatedly
-> without releasing 'pcc_lock', then Task1 needs to wait for Task0 to
-> release 'pcc_lock'. In the worst case, this locking order can result in
-> Task1 wasting two scheduling rounds before it can enter the critical
-> section.
+> However, there is a potential race condition in _end() and _begin() APIs
+> while updating the field 'transition_task' of policy, the scenario is
+> depicted below:
 > 
+>              Task A                            Task B
+> 
+>         /* 1st freq transition */
+>         Invoke _begin() {
+>                 ...
+>                 ...
+>         }
+>                                         /* 2nd freq transition */
+>                                         Invoke _begin() {
+>                                                 ... //waiting for A to
+>                                                 ... //clear
+>                                                 ... //transition_ongoing
+>                                                 ... //in _end() for
+>                                                 ... //the 1st transition
+>                                                         |
+>         Change the frequency                            |
+>                                                         |
+>         Invoke _end() {                                 |
+>                 ...                                     |
+>                 ...                                     |
+>                 transition_ongoing = false;             V
+>                                                 transition_ongoing = true;
+>                                                 transition_task = current;
+
+Task B here won't move ahead until "wake_up(&policy->transition_wait)"
+is called, isn't it ?
+
+Also I think the CPU is free to change the order of the two
+instructions and so this commit won't make a difference. Also I don't
+feel there is a race here as wake_up() hasn't happened.
+
+>                 transition_task = NULL;
+>                 ... //A overwrites the task
+>                 ... //performing the transition
+>                 ... //result in error warning.
+>         }
+> 
+> To fix this race condition, the order of the updates to the
+> 'transition_task' and 'transition_ongoing' fields has been changed, the
+> 'transition_task' field is now cleared before the 'transition_ongoing'
+> field, which ensure that only one task can update the 'transition_task'
+> field at a time.
+> 
+> Fixes: ca654dc3a93d ("cpufreq: Catch double invocations of cpufreq_freq_transition_begin/end")
 > Signed-off-by: Liao Chang <liaochang1@huawei.com>
 > ---
->  drivers/cpufreq/pcc-cpufreq.c | 2 +-
+>  drivers/cpufreq/cpufreq.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/cpufreq/pcc-cpufreq.c b/drivers/cpufreq/pcc-cpufreq.c
-> index 73efbcf5513b..9d732a00e2a5 100644
-> --- a/drivers/cpufreq/pcc-cpufreq.c
-> +++ b/drivers/cpufreq/pcc-cpufreq.c
-> @@ -232,8 +232,8 @@ static int pcc_cpufreq_target(struct cpufreq_policy *policy,
->  	status = ioread16(&pcch_hdr->status);
->  	iowrite16(0, &pcch_hdr->status);
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index a757f90aa9d6..f8eb6dde57f2 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -455,8 +455,8 @@ void cpufreq_freq_transition_end(struct cpufreq_policy *policy,
+>  			    policy->cur,
+>  			    policy->cpuinfo.max_freq);
 >  
-> -	cpufreq_freq_transition_end(policy, &freqs, status != CMD_COMPLETE);
->  	spin_unlock(&pcc_lock);
-> +	cpufreq_freq_transition_end(policy, &freqs, status != CMD_COMPLETE);
+> -	policy->transition_ongoing = false;
+>  	policy->transition_task = NULL;
+> +	policy->transition_ongoing = false;
 >  
->  	if (status != CMD_COMPLETE) {
->  		pr_debug("target: FAILED for cpu %d, with status: 0x%x\n",
-
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+>  	wake_up(&policy->transition_wait);
+>  }
+> -- 
+> 2.34.1
 
 -- 
 viresh
