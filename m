@@ -2,70 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B04278B8EF
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 22:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C64E78B9C3
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 22:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233539AbjH1UAt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Aug 2023 16:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
+        id S229787AbjH1UvT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Aug 2023 16:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233632AbjH1UAN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 16:00:13 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FDECCF;
-        Mon, 28 Aug 2023 12:59:40 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id 46e09a7af769-6bca018afe8so943922a34.0;
-        Mon, 28 Aug 2023 12:59:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693252780; x=1693857580;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a3vGlWUaAYCJUCQ/766koKoxjA/r8oAudfQqyi82XgI=;
-        b=FaDJiFoE0NFwvf4LJlKqVbqfmi97PjYAwp/ni/QOevXBq2lSwC/Xe+jf++hoJLgqsq
-         N3kX4Vy3jR20nH8h4eA9Xxm1y0vGdl9+aq9ZU5mcWJJtM/Snc7ey8a8/O6tkokZpyLai
-         sk3ROoIOnrX5bfFV5r5o5slOvhMwOA6aLopoZsn+LzoFSMpLOIGa1bpoiIKdfd95XPqR
-         OeVhy+Nh/v3uhElIP9ujNF8Q0UdYPbg6WT0R3/UcoYeRXxQTl/ZaR8Dqdj6R6ER9MJ5O
-         bZXtfjRJL8kOK1HuWbgKbUzlshR8I3u0D7gVeeDDHD9/ees75T8lXhgsC+ajPoNCPNtx
-         RAYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693252780; x=1693857580;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a3vGlWUaAYCJUCQ/766koKoxjA/r8oAudfQqyi82XgI=;
-        b=Lyci9yS/u92vqU9TwEeo2nVXyOA2j18V/I1qfrF5IQmGu95hz37h2KwDk9c6v7ZDgx
-         52rpRswA0fCUK7yAOWxcfnk+xobIR18jJw9xbjlSOFfNd4g6Wwy6z4VuKfSyFeFYgLjv
-         r8EhUsy0OYYQphu1p2RZ2CLPkAc5hmmnZ/U/z3FAAfdEJ8ylqHItrRWvCtZHPo1LVRe1
-         bvXCWT9TSRDDuhraVIaxmrmlKaj6HQwL64/C978upCg+dppg3oyC+axDi/k1gygxUdZ2
-         QgrODpGtmNIA7hWJRblJRH2BUnY2pyYafAb2rfGfrBmyGiGtx20M/puqD4KXHxCsGDuO
-         A8Lg==
-X-Gm-Message-State: AOJu0Yz/o0dC0WIGpYd+UHCj9Sj6T2bY/BDBMGEOdnyaNrB8+jjShdM6
-        +AYrr+5Oc26E7GaQaYWxPoAxukiM1BM=
-X-Google-Smtp-Source: AGHT+IFkU98/VOHNtBJznN2IP+X6jC2asNOB3FiUGPptcXIMwS33Xppsv4sj3AfECf4HgdMSZ5UCEQ==
-X-Received: by 2002:a05:6808:2e93:b0:3a7:7366:7523 with SMTP id gt19-20020a0568082e9300b003a773667523mr30900914oib.3.1693252779779;
-        Mon, 28 Aug 2023 12:59:39 -0700 (PDT)
-Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:3c37:a69d:a4cd:94fc])
-        by smtp.gmail.com with ESMTPSA id k24-20020a544698000000b003a9a2362f66sm2254341oic.16.2023.08.28.12.59.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Aug 2023 12:59:39 -0700 (PDT)
-From:   Fabio Estevam <festevam@gmail.com>
-To:     daniel.lezcano@linaro.org
-Cc:     rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>
-Subject: [PATCH v3 3/3] thermal: thermal_core: Allow rebooting after critical temp
-Date:   Mon, 28 Aug 2023 16:59:02 -0300
-Message-Id: <20230828195902.1645169-3-festevam@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230828195902.1645169-1-festevam@gmail.com>
-References: <20230828195902.1645169-1-festevam@gmail.com>
+        with ESMTP id S230447AbjH1UvF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 16:51:05 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6A210E;
+        Mon, 28 Aug 2023 13:51:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=1VGN/7kaT0gr2v5iLutL5Ek3yl9HftUWq6xZh8Ol+A8=; b=dRPFd5R5dVR+XM6pQ80caayH0S
+        ZATYz4D36SUQTvDeGGScSp0homXaxxyKUjcrn/kx+nkgY3RrawnvbdCgIyiwlysAb9gmlb7DTVqfP
+        xbB8+RJL5Q7VQQfmfxPV6mp1MEjgaXIWIFgMLwFtVYCrc8/VS2yHThj5V//V26t13upeTMD69ichj
+        zW/Gf9sySlZ7hr7FFOiFXRdrV55K91jWAZmzaoDO7FBRLr7oalfAAMxkvep7Kst8Z+6GZMjWzdJEo
+        E55/bntNwunvlhc6C0ZwJujgNllxdmXbR8hKLcOUsWe9mxISNTpNVY7E0Yy8+uMLVY4RlOfa32Kqz
+        rIP/CM8A==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qajCI-00AGCg-14;
+        Mon, 28 Aug 2023 20:50:54 +0000
+Message-ID: <f510eafd-7561-89d2-5d5c-ae98901c2250@infradead.org>
+Date:   Mon, 28 Aug 2023 13:50:52 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH 1/5] soc: loongson: loongson_pm2: add dependency for INPUT
+Content-Language: en-US
+To:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        Binbin Zhou <zhoubb.aaron@gmail.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        loongson-kernel@lists.loongnix.cn, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, Xuerui Wang <kernel@xen0n.name>,
+        loongarch@lists.linux.dev
+References: <cover.1693218539.git.zhoubinbin@loongson.cn>
+ <08447374271c7df6d1543abce69195f1ae09f59c.1693218539.git.zhoubinbin@loongson.cn>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <08447374271c7df6d1543abce69195f1ae09f59c.1693218539.git.zhoubinbin@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,133 +63,55 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Fabio Estevam <festevam@denx.de>
+Hi--
 
-Currently, the default mechanism is to trigger a shutdown after the
-critical temperature is reached.
+On 8/28/23 05:38, Binbin Zhou wrote:
+> Since commit 67694c076bd7 ("soc: loongson2_pm: add power management
+> support"), the Loongson-2K PM driver was added, but it didn't update the
+> Kconfig entry for the INPUT dependency, leading to build errors, so
+> update the Kconfig entry to depend on INPUT.
+> 
+> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: drivers/soc/loongson/loongson2_pm.o: in function `loongson2_power_button_init':
+> /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:101:(.text+0x350): undefined reference to `input_allocate_device'
+> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:109:(.text+0x3dc): undefined reference to `input_set_capability'
+> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:111:(.text+0x3e4): undefined reference to `input_register_device'
+> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:125:(.text+0x3fc): undefined reference to `input_free_device'
+> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: drivers/soc/loongson/loongson2_pm.o: in function `input_report_key':
+> /work/lnx/next/linux-next-20230825/LOONG64/../include/linux/input.h:425:(.text+0x58c): undefined reference to `input_event'
+> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: drivers/soc/loongson/loongson2_pm.o: in function `input_sync':
+> /work/lnx/next/linux-next-20230825/LOONG64/../include/linux/input.h:450:(.text+0x5a0): undefined reference to `input_event'
+> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: drivers/soc/loongson/loongson2_pm.o: in function `input_report_key':
+> /work/lnx/next/linux-next-20230825/LOONG64/../include/linux/input.h:425:(.text+0x5b4): undefined reference to `input_event'
+> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: drivers/soc/loongson/loongson2_pm.o: in function `input_sync':
+> /work/lnx/next/linux-next-20230825/LOONG64/../include/linux/input.h:450:(.text+0x5c8): undefined reference to `input_event'
+> 
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> ---
+>  drivers/soc/loongson/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/soc/loongson/Kconfig b/drivers/soc/loongson/Kconfig
+> index 314e13bb3e01..1b57af1e5529 100644
+> --- a/drivers/soc/loongson/Kconfig
+> +++ b/drivers/soc/loongson/Kconfig
+> @@ -20,6 +20,7 @@ config LOONGSON2_GUTS
+>  config LOONGSON2_PM
+>  	bool "Loongson-2 SoC Power Management Controller Driver"
+>  	depends on LOONGARCH && OF
+> +	depends on INPUT
 
-In some embedded cases, such behavior does not suit well, as the board may
-be unattended in the field and rebooting may be a better approach.
+In the failing .config file, CONFIG_INPUT=m.
+This bool kconfig item is still set/enabled after this patch and the build still fails.
 
-The bootloader may also check the temperature and only allow the boot to
-proceed when the temperature is below a certain threshold.
+You could use
+	depends on INPUT=y
 
-Introduce support for allowing a reboot to be triggered after the
-critical temperature is reached.
+if that is appropriate. I dunno.
 
-If the "critical-action" devicetree property is not found, fall back to
-the shutdown action to preserve the existing default behavior.
+>  	help
+>  	  The Loongson-2's power management controller was ACPI, supports ACPI
+>  	  S2Idle (Suspend To Idle), ACPI S3 (Suspend To RAM), ACPI S4 (Suspend To
 
-Tested on a i.MX8MM board with the following devicetree changes:
-
-	thermal-zones {
-		cpu-thermal {
-			critical-action = "reboot";
-		};
-	};
-
-Signed-off-by: Fabio Estevam <festevam@denx.de>
----
-Changes since v2:
-- None.
-
- drivers/thermal/thermal_core.c |  8 +++++++-
- drivers/thermal/thermal_of.c   | 27 +++++++++++++++++++++++++++
- include/linux/thermal.h        |  6 ++++++
- 3 files changed, 40 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index a59700593d32..f69e1667acb1 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -320,11 +320,17 @@ void thermal_zone_device_critical(struct thermal_zone_device *tz)
- 	 * Its a must for forced_emergency_poweroff_work to be scheduled.
- 	 */
- 	int poweroff_delay_ms = CONFIG_THERMAL_EMERGENCY_POWEROFF_DELAY_MS;
-+	void (*hw_protection_action)(const char *reason, int ms_until_forced);
- 
- 	dev_emerg(&tz->device, "%s: critical temperature reached, "
- 		  "shutting down\n", tz->type);
- 
--	hw_protection_shutdown("Temperature too high", poweroff_delay_ms);
-+	hw_protection_action = hw_protection_shutdown;
-+
-+	if (tz->action == THERMAL_CRITICAL_ACTION_REBOOT)
-+		hw_protection_action = hw_protection_reboot;
-+
-+	hw_protection_action("Temperature too high", poweroff_delay_ms);
- }
- EXPORT_SYMBOL(thermal_zone_device_critical);
- 
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index 4ca905723429..8bc28cba7406 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -218,6 +218,31 @@ static struct device_node *of_thermal_zone_find(struct device_node *sensor, int
- 	return tz;
- }
- 
-+static const char * const critical_actions[] = {
-+	[THERMAL_CRITICAL_ACTION_SHUTDOWN]	= "shutdown",
-+	[THERMAL_CRITICAL_ACTION_REBOOT]	= "reboot",
-+};
-+
-+static void thermal_of_get_critical_action(struct device_node *np,
-+					   enum thermal_action *action)
-+{
-+	const char *action_string;
-+	int i, ret;
-+
-+	ret = of_property_read_string(np, "critical-action", &action_string);
-+	if (ret < 0)
-+		goto out_default_action;
-+
-+	for (i = 0; i < ARRAY_SIZE(critical_actions); i++)
-+		if (!strcasecmp(action_string, critical_actions[i])) {
-+			*action = i;
-+			return;
-+		}
-+
-+out_default_action:
-+	*action = THERMAL_CRITICAL_ACTION_SHUTDOWN;
-+}
-+
- static int thermal_of_monitor_init(struct device_node *np, int *delay, int *pdelay)
- {
- 	int ret;
-@@ -516,6 +541,8 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
- 		goto out_kfree_trips;
- 	}
- 
-+	thermal_of_get_critical_action(np, &tz->action);
-+
- 	ret = thermal_zone_device_enable(tz);
- 	if (ret) {
- 		pr_err("Failed to enabled thermal zone '%s', id=%d: %d\n",
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index b449a46766f5..08854f640db9 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -34,6 +34,11 @@ struct thermal_cooling_device;
- struct thermal_instance;
- struct thermal_attr;
- 
-+enum thermal_action {
-+	THERMAL_CRITICAL_ACTION_SHUTDOWN, /* shutdown when crit temperature is reached */
-+	THERMAL_CRITICAL_ACTION_REBOOT, /* reboot when crit temperature is reached */
-+};
-+
- enum thermal_trend {
- 	THERMAL_TREND_STABLE, /* temperature is stable */
- 	THERMAL_TREND_RAISING, /* temperature is raising */
-@@ -187,6 +192,7 @@ struct thermal_zone_device {
- 	struct list_head node;
- 	struct delayed_work poll_queue;
- 	enum thermal_notify_event notify_event;
-+	enum thermal_action action;
- };
- 
- /**
 -- 
-2.34.1
-
+~Randy
