@@ -2,127 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB65C78BB11
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 00:40:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAEB278BB19
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 00:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234000AbjH1Wjd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Aug 2023 18:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47730 "EHLO
+        id S234332AbjH1Wmp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Aug 2023 18:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234048AbjH1WjO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 18:39:14 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3FC185
-        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 15:39:11 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id e9e14a558f8ab-34bbc394fa0so2676695ab.1
-        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 15:39:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1693262351; x=1693867151;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=vBmVIkqWHQEa837GVRmryXEmyC96Ro8XfMG9WRXh9FQ=;
-        b=GdSEPouEjpzqLVTjSXKzN3n79A+2lZFWBJQZsSspboz1zKsENZpnlVnBmGLUd6m8X6
-         oUG28FouGokC0MOSrPd/QuYdBhCj3Gt8zDHh3js0mspw+yAIJ+q7pkFJU+refVDfI3H9
-         DBC57MEVOBfaKV/6mfX+HijIp8iuZKKctVHFI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693262351; x=1693867151;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vBmVIkqWHQEa837GVRmryXEmyC96Ro8XfMG9WRXh9FQ=;
-        b=i2WS34dRXeg8V2CJcNZIwoJR7OSuYOGNrEp5qM92hY2nZlmD+6B7zEnkzfgEz9sZzg
-         ImkCRrsu/L2ePC+CFyOvvLrgfx5KfwWTOltFdbTe0RNoITpOZ5UbYCuMRdCxKGYbUlWW
-         yd5rMMfa4R62UkSbFZJEQBevwSJW+5HsIXsvSCfbFyHGzgJDugIT0pMzJAleLmWbyfLG
-         ky+O+RmeckkTfPzNJT80JcDeRAVnNnpz1t9iWl3Evhzm1o9gcjCA6KOnxDUp+jugQ94i
-         /Z6iGVZCC/wkkQZ/vW/h2EVLZKiQnGMtk42hPf6G3hxaSl57upxWr9JR4sh5m02eqFA5
-         K+uA==
-X-Gm-Message-State: AOJu0YwA/o1TUAGGtAmlGqGsB3h9+/MqODVITDzfOjcbbVUJ7ubD5Szt
-        tyZfmMwUsTJJ+0pfbHG4r6c3Dg==
-X-Google-Smtp-Source: AGHT+IHA9MxCJtNG6yfDLCJ6N950f4emH+svW+A2yETCyvgmVJhx+eLpUz04hZsvoSuf4aLUY7GNLw==
-X-Received: by 2002:a92:da88:0:b0:349:4e1f:e9a0 with SMTP id u8-20020a92da88000000b003494e1fe9a0mr27738984iln.2.1693262351216;
-        Mon, 28 Aug 2023 15:39:11 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id c1-20020a92cf41000000b0034ca3b29c5asm2709408ilr.57.2023.08.28.15.39.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Aug 2023 15:39:10 -0700 (PDT)
-Content-Type: multipart/mixed; boundary="------------FwGEhnp4yGGfwEPLEBIGjuQn"
-Message-ID: <7f3f12a8-fb4e-fa6a-aeb6-5ebcdfddbee0@linuxfoundation.org>
-Date:   Mon, 28 Aug 2023 16:39:10 -0600
+        with ESMTP id S234199AbjH1WmM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 18:42:12 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B465139;
+        Mon, 28 Aug 2023 15:42:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=4eigGUxrdrCpyRfsWK1n2HYd03nY5w2QFJ6Q65waFT8=; b=jgzXEIMZURpG6S4DHt2vqrnTNM
+        pGlfKDW+1h2m9u6eyNOv8Mk50DZsGdxLF/U3vddCQnXAH70ulEMgROJeDM9mUB0LPehkVMAhnvjlL
+        M3LaOspUTBE26pLxeOOBMR21x5/LhUDVz2NWR2K5ERknMS/z/DFyUitsRFNOpzS+ZUWwy561nqecj
+        E3NH48WTF+oK1m41SAJ7ky1AGc0AovisxACq7YTJPexxpag6sh78mbIAep5cxE1ITV4qK8bGisDAc
+        7x6xoIBiy+fA3qjgjo3nKHUdIv+QGOWnimvFFl7bvNI9ZwTp9a9mc+i1EzQMXtu/KwISzSM3KjRX/
+        aitDSMJQ==;
+Received: from c-71-59-149-187.hsd1.or.comcast.net ([71.59.149.187] helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qakvv-00AOCT-2L;
+        Mon, 28 Aug 2023 22:42:07 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Jakob Hauser <jahau@rocketmail.com>,
+        Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] power: supply: rt5033_charger: recognize EXTCON setting
+Date:   Mon, 28 Aug 2023 15:42:01 -0700
+Message-ID: <20230828224201.26823-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     shuah@kernel.org, skhan@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] cpupower update for Linux 6.6-rc2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------FwGEhnp4yGGfwEPLEBIGjuQn
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+CHARGER_RT5033 should honor the EXTCON setting to prevent these
+build errors:
 
-Hi Rafael,
+riscv64-linux-ld: drivers/power/supply/rt5033_charger.o: in function `.L33':
+rt5033_charger.c:(.text.rt5033_charger_probe+0x578): undefined reference to `extcon_find_edev_by_node'
+riscv64-linux-ld: drivers/power/supply/rt5033_charger.o: in function `.L0 ':
+rt5033_charger.c:(.text.rt5033_charger_probe+0x64e): undefined reference to `devm_extcon_register_notifier_all'
+riscv64-linux-ld: drivers/power/supply/rt5033_charger.o: in function `.L96':
+rt5033_charger.c:(.text.rt5033_charger_extcon_work+0x32): undefined reference to `extcon_get_state'
 
-Please pull the following cpupower update for Linux 6.6-rc2
+Fixes: 12cc585f36b8 ("power: supply: rt5033_charger: Add cable detection and USB OTG supply")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Jakob Hauser <jahau@rocketmail.com>
+Cc: Sebastian Reichel <sre@kernel.org>
+Cc: Lee Jones <lee@kernel.org>
+Cc: linux-pm@vger.kernel.org
+---
+ drivers/power/supply/Kconfig |    1 +
+ 1 file changed, 1 insertion(+)
 
-This cpupower update for Linux 6.6-rc2 consists of a single fix to
-add Georgian translation to Makefile LANGUAGES.
-
-diff is attached.
-
-thanks,
--- Shuah
-
-----------------------------------------------------------------
-The following changes since commit 99481d2195bfd13a663904e6014887abf46b57c7:
-
-   cpupower: Fix cpuidle_set to accept only numeric values for idle-set operation. (2023-07-18 16:07:08 -0600)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-cpupower-6.6-rc2
-
-for you to fetch changes up to af75504c38960d5331b8c6c83ea9981e26d659e6:
-
-   cpupower: Add Georgian translation to Makefile LANGUAGES (2023-08-17 14:28:16 -0600)
-
-----------------------------------------------------------------
-linux-cpupower-6.6-rc2
-
-This cpupower update for Linux 6.6-rc2 consists of a single fix to
-add Georgian translation to Makefile LANGUAGES.
-
-----------------------------------------------------------------
-Shuah Khan (1):
-       cpupower: Add Georgian translation to Makefile LANGUAGES
-
-  tools/power/cpupower/Makefile | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
-
-----------------------------------------------------------------
---------------FwGEhnp4yGGfwEPLEBIGjuQn
-Content-Type: text/x-patch; charset=UTF-8; name="linux-cpupower-6.6-rc2.diff"
-Content-Disposition: attachment; filename="linux-cpupower-6.6-rc2.diff"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL01ha2VmaWxlIGIvdG9vbHMvcG93
-ZXIvY3B1cG93ZXIvTWFrZWZpbGUKaW5kZXggZGM1MzE4MDVhNTcwLi5iNTM3NTNkZWUwMmYg
-MTAwNjQ0Ci0tLSBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL01ha2VmaWxlCisrKyBiL3Rvb2xz
-L3Bvd2VyL2NwdXBvd2VyL01ha2VmaWxlCkBAIC01Nyw3ICs1Nyw3IEBAIExJQl9NSU49CQkJ
-MQogCiBQQUNLQUdFID0JCQljcHVwb3dlcgogUEFDS0FHRV9CVUdSRVBPUlQgPQkJbGludXgt
-cG1Admdlci5rZXJuZWwub3JnCi1MQU5HVUFHRVMgPSAJCQlkZSBmciBpdCBjcyBwdAorTEFO
-R1VBR0VTID0gCQkJZGUgZnIgaXQgY3MgcHQga2EKIAogCiAjIERpcmVjdG9yeSBkZWZpbml0
-aW9ucy4gVGhlc2UgYXJlIGRlZmF1bHQgYW5kIG1vc3QgcHJvYmFibHkK
-
---------------FwGEhnp4yGGfwEPLEBIGjuQn--
+diff -- a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+--- a/drivers/power/supply/Kconfig
++++ b/drivers/power/supply/Kconfig
+@@ -769,6 +769,7 @@ config BATTERY_RT5033
+ config CHARGER_RT5033
+ 	tristate "RT5033 battery charger support"
+ 	depends on MFD_RT5033
++	depends on EXTCON || !EXTCON
+ 	help
+ 	  This adds support for battery charger in Richtek RT5033 PMIC.
+ 	  The device supports pre-charge mode, fast charge mode and
