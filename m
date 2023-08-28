@@ -2,116 +2,261 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C64E78B9C3
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 22:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFFEB78BA17
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 23:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbjH1UvT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Aug 2023 16:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42620 "EHLO
+        id S231299AbjH1VPU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Aug 2023 17:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbjH1UvF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 16:51:05 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6A210E;
-        Mon, 28 Aug 2023 13:51:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=1VGN/7kaT0gr2v5iLutL5Ek3yl9HftUWq6xZh8Ol+A8=; b=dRPFd5R5dVR+XM6pQ80caayH0S
-        ZATYz4D36SUQTvDeGGScSp0homXaxxyKUjcrn/kx+nkgY3RrawnvbdCgIyiwlysAb9gmlb7DTVqfP
-        xbB8+RJL5Q7VQQfmfxPV6mp1MEjgaXIWIFgMLwFtVYCrc8/VS2yHThj5V//V26t13upeTMD69ichj
-        zW/Gf9sySlZ7hr7FFOiFXRdrV55K91jWAZmzaoDO7FBRLr7oalfAAMxkvep7Kst8Z+6GZMjWzdJEo
-        E55/bntNwunvlhc6C0ZwJujgNllxdmXbR8hKLcOUsWe9mxISNTpNVY7E0Yy8+uMLVY4RlOfa32Kqz
-        rIP/CM8A==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qajCI-00AGCg-14;
-        Mon, 28 Aug 2023 20:50:54 +0000
-Message-ID: <f510eafd-7561-89d2-5d5c-ae98901c2250@infradead.org>
-Date:   Mon, 28 Aug 2023 13:50:52 -0700
+        with ESMTP id S233823AbjH1VPS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 17:15:18 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B7EE9
+        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 14:15:14 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-d7ab8e1f27cso2579285276.3
+        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 14:15:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1693257313; x=1693862113;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cdPUuO+5Wgy+RzMxb25jT3lt4a9QfI+UniKfgePVb+c=;
+        b=FhmgJyb3lFJFozfVzZHVdM0pw03kugwk2zgj5CWbCZOEhEMM8h0Mj+cuNrv3QWwk+8
+         TD82/ZF+8WxXK4FPSlFehptBN1+GXGfE0XLFu5dWhqgYnluaO1qdyAjnEeE3vzrVbtGN
+         ouLPQYg2iVwzEGd3JaorDrXRJc05AlPWynDOfMKi63em8Ohze76IdSOMLChmqJgGKPaO
+         n4/Kwcb1WHYOELQUrt9yXrov/wIZZBu9sMrDwApcBmEtXingJJjSunVEc8NhffQxrmdC
+         VhQHmWtz5v3W5Wz3AwNQPRCsZu91QKZ/3y1Tmeyx3gWsMe/Zm8f4WDbce5RshU483XYU
+         nzZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693257313; x=1693862113;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cdPUuO+5Wgy+RzMxb25jT3lt4a9QfI+UniKfgePVb+c=;
+        b=cRHwUHHX3H/t3jhdsZcVlUNcUwTWvg+R3qGIKwOO0Y+QRrT+5tmSfJ125yxd2DClIQ
+         TIG/57yNRIgB9mbfurxvI7RbLKVHQ135fZz+tQYyG6Rilqd0qHmXlYJER0OCSQ0ZlTTc
+         sFDmiXxKR7XO9joG3otLYjsGqyBR0uSKOW6JxzGzyxeiG0xeYX0e6kMZD4rbe2/Oi4H0
+         s2sbjvYcpZquTyCps5793lJS2PZObdPt3YEo4n+9lx03fS6VdtS1J7WpJcbz0QaGu8Sr
+         yLbP5fIG68vSVvYCyrCcIb0l8b3IqF3np4IkjV6dZe1F9wSdJg2mSjrHkj/UfwssmwrG
+         w2xQ==
+X-Gm-Message-State: AOJu0YwEMyDJH7b3w9rK7+adlTYrkEekvQThCZ6j/QZ5rqDorbg+r8lu
+        8+7LE2IgOHQ2imBtf72VoA/T+exQ0LSMcB18j4wn3A==
+X-Google-Smtp-Source: AGHT+IGvmw0atX8oX/5HRlmnGPifcNLIAMBpgQDepD0vJlej1ChpIrVIY43hytZlMEp5wvrbu1ZxI4OKoFou1Wil3a0=
+X-Received: by 2002:a25:5:0:b0:d68:6f21:ddff with SMTP id 5-20020a250005000000b00d686f21ddffmr24841108yba.43.1693257313473;
+ Mon, 28 Aug 2023 14:15:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH 1/5] soc: loongson: loongson_pm2: add dependency for INPUT
-Content-Language: en-US
-To:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Binbin Zhou <zhoubb.aaron@gmail.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        loongson-kernel@lists.loongnix.cn, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, Xuerui Wang <kernel@xen0n.name>,
-        loongarch@lists.linux.dev
-References: <cover.1693218539.git.zhoubinbin@loongson.cn>
- <08447374271c7df6d1543abce69195f1ae09f59c.1693218539.git.zhoubinbin@loongson.cn>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <08447374271c7df6d1543abce69195f1ae09f59c.1693218539.git.zhoubinbin@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1693250307-8910-1-git-send-email-quic_srichara@quicinc.com> <1693250307-8910-4-git-send-email-quic_srichara@quicinc.com>
+In-Reply-To: <1693250307-8910-4-git-send-email-quic_srichara@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 29 Aug 2023 00:15:02 +0300
+Message-ID: <CAA8EJpoHCW2H12U9wzmz5a86TriZr9mLuPi6D6h02byAWOG2mQ@mail.gmail.com>
+Subject: Re: [PATCH 3/7] thermal/drivers/qcom/tsens: Add support for IPQ5018 tsens
+To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi--
-
-On 8/28/23 05:38, Binbin Zhou wrote:
-> Since commit 67694c076bd7 ("soc: loongson2_pm: add power management
-> support"), the Loongson-2K PM driver was added, but it didn't update the
-> Kconfig entry for the INPUT dependency, leading to build errors, so
-> update the Kconfig entry to depend on INPUT.
-> 
-> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: drivers/soc/loongson/loongson2_pm.o: in function `loongson2_power_button_init':
-> /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:101:(.text+0x350): undefined reference to `input_allocate_device'
-> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:109:(.text+0x3dc): undefined reference to `input_set_capability'
-> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:111:(.text+0x3e4): undefined reference to `input_register_device'
-> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:125:(.text+0x3fc): undefined reference to `input_free_device'
-> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: drivers/soc/loongson/loongson2_pm.o: in function `input_report_key':
-> /work/lnx/next/linux-next-20230825/LOONG64/../include/linux/input.h:425:(.text+0x58c): undefined reference to `input_event'
-> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: drivers/soc/loongson/loongson2_pm.o: in function `input_sync':
-> /work/lnx/next/linux-next-20230825/LOONG64/../include/linux/input.h:450:(.text+0x5a0): undefined reference to `input_event'
-> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: drivers/soc/loongson/loongson2_pm.o: in function `input_report_key':
-> /work/lnx/next/linux-next-20230825/LOONG64/../include/linux/input.h:425:(.text+0x5b4): undefined reference to `input_event'
-> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: drivers/soc/loongson/loongson2_pm.o: in function `input_sync':
-> /work/lnx/next/linux-next-20230825/LOONG64/../include/linux/input.h:450:(.text+0x5c8): undefined reference to `input_event'
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+On Mon, 28 Aug 2023 at 22:20, Sricharan Ramabadhran
+<quic_srichara@quicinc.com> wrote:
+>
+> IPQ5018 has tsens IP V1.0, 4 sensors and 1 interrupt.
+> The soc does not have a RPM, hence tsens has to be reset and
+> enabled in the driver init. Adding the driver support for same.
+>
+> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
 > ---
->  drivers/soc/loongson/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/soc/loongson/Kconfig b/drivers/soc/loongson/Kconfig
-> index 314e13bb3e01..1b57af1e5529 100644
-> --- a/drivers/soc/loongson/Kconfig
-> +++ b/drivers/soc/loongson/Kconfig
-> @@ -20,6 +20,7 @@ config LOONGSON2_GUTS
->  config LOONGSON2_PM
->  	bool "Loongson-2 SoC Power Management Controller Driver"
->  	depends on LOONGARCH && OF
-> +	depends on INPUT
+>  drivers/thermal/qcom/tsens-v1.c | 115 ++++++++++++++++++++++++++++++++
+>  drivers/thermal/qcom/tsens.h    |   2 +-
+>  2 files changed, 116 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
+> index dc1c4ae2d8b0..a74dae69408b 100644
+> --- a/drivers/thermal/qcom/tsens-v1.c
+> +++ b/drivers/thermal/qcom/tsens-v1.c
+> @@ -42,6 +42,59 @@ static struct tsens_legacy_calibration_format tsens_qcs404_nvmem = {
+>         },
+>  };
+>
+> +struct tsens_legacy_calibration_format tsens_ipq5018_nvmem = {
+> +       .base_len = 8,
+> +       .base_shift = 2,
+> +       .sp_len = 6,
+> +       .mode = { 0, 8 },
+> +       .invalid = { 0, 2 },
+> +       .base = { { 0, 11 }, { 0, 19 } },
+> +       .sp = {
+> +               { { 0, 27 },  { 1, 1 } },
+> +               { { 1, 7 },  { 1, 13 } },
+> +               { { 1, 19 },  { 1, 25 } },
+> +               { { 1, 31 },  { 2, 5 } },
+> +               { { 2, 11 },  { 3, 0 } },
+> +       },
+> +};
+> +
+> +static void fixup_ipq5018_points(int mode, u32 *p1, u32 *p2)
+> +{
+> +       if (mode == NO_PT_CALIB) {
+> +               p1[0] = 403;
+> +               p2[0] = 688;
+> +               p1[1] = 390;
+> +               p2[1] = 674;
+> +               p1[2] = 341;
+> +               p2[2] = 635;
+> +               p1[3] = 387;
+> +               p2[3] = 673;
+> +               p1[4] = 347;
+> +               p2[4] = 639;
+> +       }
+> +}
+> +
+> +static int calibrate_ipq5018(struct tsens_priv *priv)
+> +{
+> +       u32 p1[10], p2[10];
+> +       u32 *qfprom_cdata;
+> +       int mode;
+> +
+> +       qfprom_cdata = (u32 *)qfprom_read(priv->dev, "calib");
+> +       if (IS_ERR(qfprom_cdata))
+> +               return PTR_ERR(qfprom_cdata);
+> +
+> +       mode = tsens_read_calibration_legacy(priv, &tsens_ipq5018_nvmem,
+> +                                            p1, p2,
+> +                                            qfprom_cdata, NULL);
 
-In the failing .config file, CONFIG_INPUT=m.
-This bool kconfig item is still set/enabled after this patch and the build still fails.
+No, this should be used only in _legacy_ cases. Please use
+tsens_calibrate_common() / tsens_calibrate_nvmem() / etc.
 
-You could use
-	depends on INPUT=y
+> +
+> +       fixup_ipq5018_points(mode, p1, p2);
+> +       compute_intercept_slope(priv, p1, p2, mode);
+> +       kfree(qfprom_cdata);
+> +
+> +       return 0;
+> +}
+> +
+>  static int calibrate_v1(struct tsens_priv *priv)
+>  {
+>         u32 p1[10], p2[10];
+> @@ -79,6 +132,18 @@ static struct tsens_features tsens_v1_feat = {
+>         .trip_max_temp  = 120000,
+>  };
+>
+> +static struct tsens_features tsens_v1_ipq5018_feat = {
+> +       .ver_major      = VER_1_X,
+> +       .crit_int       = 0,
+> +       .combo_int      = 0,
+> +       .adc            = 1,
+> +       .srot_split     = 1,
+> +       .max_sensors    = 11,
+> +       .trip_min_temp  = -40000,
+> +       .trip_max_temp  = 120000,
+> +       .no_early_init  = 1,
+> +};
+> +
+>  static const struct reg_field tsens_v1_regfields[MAX_REGFIELDS] = {
+>         /* ----- SROT ------ */
+>         /* VERSION */
+> @@ -150,6 +215,43 @@ static int __init init_8956(struct tsens_priv *priv) {
+>         return init_common(priv);
+>  }
+>
+> +static int init_ipq5018(struct tsens_priv *priv)
+> +{
+> +       int ret;
+> +       u32 mask;
+> +
+> +       init_common(priv);
+> +       if (!priv->tm_map)
+> +               return -ENODEV;
+> +
+> +       ret = regmap_field_write(priv->rf[TSENS_SW_RST], 1);
+> +       if (ret) {
+> +               dev_err(priv->dev, "Reset failed\n");
+> +               return ret;
+> +       }
+> +
+> +       mask = GENMASK(10, 0);
 
-if that is appropriate. I dunno.
+#define this, then inline the variable. Or extract this codepiece into
+generic function which uses num_sensors to calculate the mask
 
->  	help
->  	  The Loongson-2's power management controller was ACPI, supports ACPI
->  	  S2Idle (Suspend To Idle), ACPI S3 (Suspend To RAM), ACPI S4 (Suspend To
+> +       ret = regmap_field_update_bits(priv->rf[SENSOR_EN], mask, mask);
+> +       if (ret) {
+> +               dev_err(priv->dev, "Sensor Enable failed\n");
+> +               return ret;
+> +       }
+> +
+> +       ret = regmap_field_write(priv->rf[TSENS_EN], 1);
+> +       if (ret) {
+> +               dev_err(priv->dev, "Enable failed\n");
+> +               return ret;
+> +       }
+> +
+> +       ret = regmap_field_write(priv->rf[TSENS_SW_RST], 0);
+> +       if (ret) {
+> +               dev_err(priv->dev, "Reset failed\n");
+
+This error message is useless. You can not determine if it comes from
+this error or from setting the reset bit.
+
+> +               return ret;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+>  static const struct tsens_ops ops_generic_v1 = {
+>         .init           = init_common,
+>         .calibrate      = calibrate_v1,
+> @@ -187,3 +289,16 @@ struct tsens_plat_data data_8976 = {
+>         .feat           = &tsens_v1_feat,
+>         .fields         = tsens_v1_regfields,
+>  };
+> +
+> +const struct tsens_ops ops_ipq5018 = {
+> +       .init           = init_ipq5018,
+> +       .calibrate      = calibrate_ipq5018,
+> +       .get_temp       = get_temp_tsens_valid,
+> +};
+> +
+> +struct tsens_plat_data data_ipq5018 = {
+> +       .num_sensors    = 5,
+> +       .ops            = &ops_ipq5018,
+> +       .feat           = &tsens_v1_ipq5018_feat,
+> +       .fields         = tsens_v1_regfields,
+> +};
+> diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+> index fb73e3dd0de9..5f0bdbeedf90 100644
+> --- a/drivers/thermal/qcom/tsens.h
+> +++ b/drivers/thermal/qcom/tsens.h
+> @@ -645,7 +645,7 @@ extern struct tsens_plat_data data_8960;
+>  extern struct tsens_plat_data data_8226, data_8909, data_8916, data_8939, data_8974, data_9607;
+>
+>  /* TSENS v1 targets */
+> -extern struct tsens_plat_data data_tsens_v1, data_8976, data_8956;
+> +extern struct tsens_plat_data data_tsens_v1, data_8976, data_8956, data_ipq5018;
+>
+>  /* TSENS v2 targets */
+>  extern struct tsens_plat_data data_8996, data_ipq8074, data_tsens_v2;
+> --
+> 2.34.1
+>
+
 
 -- 
-~Randy
+With best wishes
+Dmitry
