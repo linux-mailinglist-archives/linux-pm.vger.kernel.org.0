@@ -2,285 +2,324 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3396878B0D8
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 14:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90CEC78B122
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 14:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjH1Mot (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Aug 2023 08:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42700 "EHLO
+        id S230003AbjH1Mzh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Aug 2023 08:55:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231414AbjH1MoV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 08:44:21 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77CBE102;
-        Mon, 28 Aug 2023 05:44:16 -0700 (PDT)
-Received: from loongson.cn (unknown [112.20.109.102])
-        by gateway (Coremail) with SMTP id _____8CxtPCbluxkhIEcAA--.58922S3;
-        Mon, 28 Aug 2023 20:44:11 +0800 (CST)
-Received: from [192.168.100.8] (unknown [112.20.109.102])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxzyOXluxkS7NlAA--.8361S3;
-        Mon, 28 Aug 2023 20:44:09 +0800 (CST)
-Message-ID: <2637fb35-4328-4cfe-ab16-566994c44b5a@loongson.cn>
-Date:   Mon, 28 Aug 2023 20:44:07 +0800
+        with ESMTP id S230335AbjH1MzX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 08:55:23 -0400
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E505C3;
+        Mon, 28 Aug 2023 05:55:19 -0700 (PDT)
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-57328758a72so864615eaf.1;
+        Mon, 28 Aug 2023 05:55:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693227318; x=1693832118;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=m38t+6ENHSM7sxq7lBG7ajN0dx0/1nAUuWaIrnX+J0s=;
+        b=H7IoMFL2SvlnyOgR80St5WGm6iHO/KI7bbo/842+A5Z2O+WFnKaHQ3OtLn5poRxArr
+         JKAoyvfTCo05ULqKqll0tYM/vjfg2afiz7Oikr/+xOe44mNVechT2K3Sbwb9A96tuR9k
+         FaTfEOQQK9v8UDjD8JZDSs9cg/vzJLOQDLuUTg5KJ/y0OussdQVQQXd9PAmwK1Ww18MG
+         teKUJwhn+snX6T7e2i1+UovELqYST83SHZy5D1cPUOrH2b0zpXtCdRUiRTWZPbZksLvB
+         I30+qATOaiHW83DFDlrw7Wl30uuGD79Nb7cqxUeuRXMWFkEqPqQVew+X4Vr0phYONodz
+         VAXA==
+X-Gm-Message-State: AOJu0YwpYiN3GuInM68wBkhpIlyjORzngozHhEa9rvO7BsLziExocXxP
+        9C1Fgl1E80PojJved0ktRks5CYzTdBDiXggJJ0SZVdcYjKY=
+X-Google-Smtp-Source: AGHT+IEbzDvsKN7NxRk6ArW8L89mABVQymOMbOmA8WutwQKDSp7CMy6s79khs/kh12Ky8UX2gDSuQb4MEy0pJQQfwkI=
+X-Received: by 2002:a4a:d137:0:b0:571:1906:47f0 with SMTP id
+ n23-20020a4ad137000000b00571190647f0mr13795453oor.1.1693227318607; Mon, 28
+ Aug 2023 05:55:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] PCI/PM: Only read PCI_PM_CTRL register when available
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Feiyang Chen <chris.chenfeiyang@gmail.com>
-Cc:     Feiyang Chen <chenfeiyang@loongson.cn>, bhelgaas@google.com,
-        rafael.j.wysocki@intel.com, mika.westerberg@linux.intel.com,
-        anders.roxell@linaro.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, guyinggang@loongson.cn,
-        chenhuacai@loongson.cn, loongson-kernel@lists.loongnix.cn,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-References: <20230825212507.GA627427@bhelgaas>
-From:   Yanteng Si <siyanteng@loongson.cn>
-In-Reply-To: <20230825212507.GA627427@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxzyOXluxkS7NlAA--.8361S3
-X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxuw17Zr45XrW7Kw48Gr4xXwc_yoW3uw4Up3
-        9YkFnxGFWkJa48GFnIqr1UCF90939Fyr98Wr95C342vFnFgr95Kr15XFyYga47ArZ7Wa18
-        XFWjvr4UuF45CagCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AK
-        xVWxJr0_GcWln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26rWY
-        6Fy7McIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-        8JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
-        6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
-        AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
-        0xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
-        v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AK
-        xVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU022NJUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 28 Aug 2023 14:55:04 +0200
+Message-ID: <CAJZ5v0hsVwQ+F1NN5OfY7HG7tPcbcZi_X2SdgWXfF9ExW6r3hg@mail.gmail.com>
+Subject: [GIT PULL] ACPI updates for v6.6-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Linus,
 
-在 2023/8/26 05:25, Bjorn Helgaas 写道:
-> On Fri, Aug 25, 2023 at 11:57:00AM +0800, Feiyang Chen wrote:
->> On Fri, Aug 25, 2023 at 5:59 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
->>> On Thu, Aug 24, 2023 at 09:37:38AM +0800, Feiyang Chen wrote:
->>>> When the current state is already PCI_D0, pci_power_up() will return
->>>> 0 even though dev->pm_cap is not set. In that case, we should not
->>>> read the PCI_PM_CTRL register in pci_set_full_power_state().
->>>>
->>>> There is nothing more needs to be done below in that case.
->>>> Additionally, pci_power_up() has two callers only and the other one
->>>> ignores the return value, so we can safely move the current state
->>>> check from pci_power_up() to pci_set_full_power_state().
->>> Does this fix a bug?  I guess it does, because previously
->>> pci_set_full_power_state() did a config read at 0 + PCI_PM_CTRL, i.e.,
->>> offset 4, which is actually PCI_COMMAND, and set dev->current_state
->>> based on that.  So dev->current_state is now junk, right?
->> Yes.
->>
->>> This might account for some "Refused to change power state from %s to D0"
->>> messages.
->>>
->>> How did you find this?  It's nice if we can mention a symptom so
->>> people can connect the problem with this fix.
->> We are attempting to add MSI support for our stmmac driver, but the
->> pci_alloc_irq_vectors() function always fails.
->> After looking into it more, we came across the message "Refused to
->> change power state from D3hot to D0" :)
-> So I guess this device doesn't have a PM Capability at all?  Can you
-> collect the "sudo lspci -vv" output?  The PM Capability is required
-> for all PCIe devices, so maybe this is a conventional PCI device?
+Please pull from the tag
 
-Hi
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ acpi-6.6-rc1
 
+with top-most commit b483d3b8a54a544ab8854ca6dbb8d99c423b3ba4
 
-I executed this command on the LS2k2000 platform, and this is part of 
-the output：
+ Merge branch 'pnp'
 
+on top of commit 93f5de5f648d2b1ce3540a4ac71756d4a852dc23
 
-00:03.0 Ethernet controller: Loongson Technology LLC Device 7a13 (rev 01)
+ Merge tag 'acpi-6.5-rc8' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
 
-     Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop+ ParErr- 
-Stepping- SERR- FastB2B- DisINTx-
-     Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- 
-<TAbort- <MAbort- >SERR- <PERR- INTx-
-     Latency: 0
-     Interrupt: pin A routed to IRQ 45
-     NUMA node: 0
-     Region 0: Memory at 51290000 (64-bit, non-prefetchable) [size=32K]
-     Capabilities: [40] MSI: Enable+ Count=32/32 Maskable- 64bit-
-         Address: 1fe01140  Data: 0060
-     Kernel driver in use: dwmac-loongson-pci
+to receive ACPI updates for 6.6-rc1.
 
-00:03.1 Ethernet controller: Loongson Technology LLC Device 7a13 (rev 01)
-     Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop+ ParErr- 
-Stepping- SERR- FastB2B- DisINTx-
-     Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- 
-<TAbort- <MAbort- >SERR- <PERR- INTx-
-     Latency: 0
-     Interrupt: pin B routed to IRQ 78
-     NUMA node: 0
-     Region 0: Memory at 51298000 (64-bit, non-prefetchable) [size=32K]
-     Capabilities: [40] MSI: Enable+ Count=32/32 Maskable- 64bit-
-         Address: 1fe01140  Data: 0080
-     Kernel driver in use: dwmac-loongson-pci
+These include new ACPICA material, a rework of the ACPI thermal driver,
+a switch-over of the ACPI processor driver to using _OSC instead of
+(long deprecated) _PDC for CPU initialization, a rework of firmware
+notifications handling in several drivers, fixes and cleanups for
+suspend-to-idle handling on AMD systems, ACPI backlight driver
+updates and more.
 
-00:03.2 Ethernet controller: Loongson Technology LLC Gigabit Ethernet 
-Controller (rev 02)
-     Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop+ ParErr- 
-Stepping- SERR- FastB2B- DisINTx+
-     Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- 
-<TAbort- <MAbort- >SERR- <PERR- INTx-
-     Latency: 64, Cache Line Size: 64 bytes
-     Interrupt: pin C routed to IRQ 111
-     NUMA node: 0
-     Region 0: Memory at 512a0000 (64-bit, non-prefetchable) [size=32K]
-     Expansion ROM at 512b3000 [disabled] [size=2K]
-     Capabilities: [40] MSI: Enable+ Count=32/32 Maskable- 64bit-
-         Address: 1fe01140  Data: 00a0
+Specifics:
 
-     Kernel driver in use: dwmac-loongson-pci
+ - Update the ACPICA code in the kernel to upstream revision 20230628
+   including the following changes:
+   * Suppress a GCC 12 dangling-pointer warning (Philip Prindeville).
+   * Reformat the ACPI_STATE_COMMON macro and its users (George Guo).
+   * Replace the ternary operator with ACPI_MIN() (Jiangshan Yi).
+   * Add support for _DSC as per ACPI 6.5 (Saket Dumbre).
+   * Remove a duplicate macro from zephyr header (Najumon B.A).
+   * Add data structures for GED and _EVT tracking (Jose Marinho).
+   * Fix misspelled CDAT DSMAS define (Dave Jiang).
+   * Simplify an error message in acpi_ds_result_push() (Christophe
+     Jaillet).
+   * Add a struct size macro related to SRAT (Dave Jiang).
+   * Add AML_NO_OPERAND_RESOLVE flag to Timer (Abhishek Mainkar).
+   * Add support for RISC-V external interrupt controllers in MADT (Sunil
+     V L).
+   * Add RHCT flags, CMO and MMU nodes (Sunil V L).
+   * Change ACPICA version to 20230628 (Bob Moore).
 
+ - Introduce new wrappers for ACPICA notify handler install/remove and
+   convert multiple drivers to using their own Notify() handlers instead
+   of the ACPI bus type .notify() slated for removal (Michal Wilczynski).
 
-00:04.0 USB controller: Loongson Technology LLC Device 7a44 (prog-if 30 
-[XHCI])
+ - Add backlight=native DMI quirk for Apple iMac12,1 and iMac12,2 (Hans
+   de Goede).
 
-...
+ - Put ACPI video and its child devices explicitly into D0 on boot to
+   avoid platform firmware confusion (Kai-Heng Feng).
 
+ - Add backlight=native DMI quirk for Lenovo Ideapad Z470 (Jiri Slaby).
 
->
->>> This sounds like something that probably should have a stable tag?
->> Do I need to include the symptom and Cc in the commit message and
->> then send v4?
->>>> Fixes: e200904b275c ("PCI/PM: Split pci_power_up()")
->>>> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
->>>> Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
->>>> ---
->>>>   drivers/pci/pci.c | 9 +++++----
->>>>   1 file changed, 5 insertions(+), 4 deletions(-)
->>>>
->>>> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
->>>> index 60230da957e0..7e90ab7b47a1 100644
->>>> --- a/drivers/pci/pci.c
->>>> +++ b/drivers/pci/pci.c
->>>> @@ -1242,9 +1242,6 @@ int pci_power_up(struct pci_dev *dev)
->>>>                else
->>>>                        dev->current_state = state;
->>>>
->>>> -             if (state == PCI_D0)
->>>> -                     return 0;
->>>> -
->>>>                return -EIO;
->>>>        }
->>>>
->>>> @@ -1302,8 +1299,12 @@ static int pci_set_full_power_state(struct pci_dev *dev)
->>>>        int ret;
->>>>
->>>>        ret = pci_power_up(dev);
->>>> -     if (ret < 0)
->>>> +     if (ret < 0) {
->>>> +             if (dev->current_state == PCI_D0)
->>>> +                     return 0;
->>>> +
->>>>                return ret;
->>>> +     }
->>>>        pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
->>>>        dev->current_state = pmcsr & PCI_PM_CTRL_STATE_MASK;
-> One thing that makes me hesitate a little bit is that we rely on the
-> failure return from pci_power_up() to guard the dev->pm_cap usage.
-> That's slightly obscure, and I liked the way the v1 patch made it
-> explicit.
->
-> And it seems slightly weird that when there's no PM cap,
-> pci_power_up() always returns failure even if the platform was able to
-> put the device in D0.
->
-> Anyway, here's a proposal for commit log and updated comment for
-> pci_power_up():
->
->
-> commit 5694ba13b004 ("PCI/PM: Only read PCI_PM_CTRL register when available")
-> Author: Feiyang Chen <chenfeiyang@loongson.cn>
-> Date:   Thu Aug 24 09:37:38 2023 +0800
->
->      PCI/PM: Only read PCI_PM_CTRL register when available
->      
->      For a device with no Power Management Capability, pci_power_up() previously
->      returned 0 (success) if the platform was able to put the device in D0,
->      which led to pci_set_full_power_state() trying to read PCI_PM_CTRL, even
->      though it doesn't exist.
->      
->      Since dev->pm_cap == 0 in this case, pci_set_full_power_state() actually
->      read the wrong register, interpreted it as PCI_PM_CTRL, and corrupted
->      dev->current_state.  This led to messages like this in some cases:
->      
->        pci 0000:01:00.0: Refused to change power state from D3hot to D0
->      
->      To prevent this, make pci_power_up() always return a negative failure code
->      if the device lacks a Power Management Capability, even if non-PCI platform
->      power management has been able to put the device in D0.  The failure will
->      prevent pci_set_full_power_state() from trying to access PCI_PM_CTRL.
->      
->      Fixes: e200904b275c ("PCI/PM: Split pci_power_up()")
->      Link: https://lore.kernel.org/r/20230824013738.1894965-1-chenfeiyang@loongson.cn
->      Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
->      Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
->      Reviewed-by: "Rafael J. Wysocki" <rafael@kernel.org>
->      Cc: stable@vger.kernel.org	# v5.19+
->
->
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 60230da957e0..39728196e295 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -1226,6 +1226,10 @@ static int pci_dev_wait(struct pci_dev *dev, char *reset_type, int timeout)
->    *
->    * On success, return 0 or 1, depending on whether or not it is necessary to
->    * restore the device's BARs subsequently (1 is returned in that case).
-> + *
-> + * On failure, return a negative error code.  Always return failure if @dev
-> + * lacks a Power Management Capability, even if the platform was able to
-> + * put the device in D0 via non-PCI means.
->    */
->   int pci_power_up(struct pci_dev *dev)
->   {
-> @@ -1242,9 +1246,6 @@ int pci_power_up(struct pci_dev *dev)
->   		else
->   			dev->current_state = state;
->   
-> -		if (state == PCI_D0)
-> -			return 0;
-> -
->   		return -EIO;
->   	}
->   
-> @@ -1302,8 +1303,12 @@ static int pci_set_full_power_state(struct pci_dev *dev)
->   	int ret;
->   
->   	ret = pci_power_up(dev);
-> -	if (ret < 0)
-> +	if (ret < 0) {
-> +		if (dev->current_state == PCI_D0)
-> +			return 0;
-> +
->   		return ret;
-> +	}
->   
->   	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
->   	dev->current_state = pmcsr & PCI_PM_CTRL_STATE_MASK;
+ - Support obtaining physical CPU ID from MADT on LoongArch (Bibo Mao).
 
-Thanks a lot!
+ - Convert ACPI CPU initialization to using _OSC instead of _PDC that
+   has been deprecated since 2018 and dropped from the specification in
+   ACPI 6.5 (Michal Wilczynski, Rafael Wysocki).
+
+ - Drop non-functional nocrt parameter from ACPI thermal (Mario
+   Limonciello).
+
+ - Clean up the ACPI thermal driver, rework the handling of firmware
+   notifications in it and make it provide a table of generic trip point
+   structures to the core during initialization (Rafael Wysocki).
+
+ - Defer enumeration of devices with _DEP pointing to IVSC (Wentong Wu).
+
+ - Install SystemCMOS address space handler for ACPI000E (TAD) to meet
+   platform firmware expectations on some platforms (Zhang Rui).
+
+ - Fix finding the generic error data in the ACPi extlog driver for
+   compatibility with old and new firmware interface versions (Xiaochun
+   Lee).
+
+ - Remove assorted unused declarations of functions (Yue Haibing).
+
+ - Move AMBA bus scan handling into arm64 specific directory (Sudeep
+   Holla).
+
+ - Fix and clean up suspend-to-idle interface for AMD systems (Mario
+   Limonciello, Andy Shevchenko).
+
+ - Fix string truncation warning in pnpacpi_add_device() (Sunil V L).
+
+Thanks!
 
 
-Thanks,
+---------------
 
-Yanteng
+Abhishek Mainkar (1):
+      ACPICA: Add AML_NO_OPERAND_RESOLVE flag to Timer
 
+Andy Shevchenko (1):
+      ACPI: x86: s2idle: Add for_each_lpi_constraint() helper
+
+Bibo Mao (1):
+      ACPI: processor: LoongArch: Get physical ID from MADT
+
+Bob Moore (1):
+      ACPICA: Update version to 20230628
+
+Christophe Jaillet (1):
+      ACPICA: Slightly simplify an error message in acpi_ds_result_push()
+
+Dave Jiang (2):
+      ACPICA: Fix misspelled CDAT DSMAS define
+      ACPICA: Add a define for size of struct
+acpi_srat_generic_affinity device_handle
+
+George Guo (1):
+      ACPICA: Modify ACPI_STATE_COMMON
+
+Hans de Goede (1):
+      ACPI: video: Add backlight=native DMI quirk for Apple iMac12,1
+and iMac12,2
+
+Jiangshan Yi (1):
+      ACPICA: exserial.c: replace ternary operator with ACPI_MIN()
+
+Jiri Slaby (SUSE) (1):
+      ACPI: video: Add backlight=native DMI quirk for Lenovo Ideapad Z470
+
+Jose Marinho (2):
+      ACPICA: Detect GED device and keep track of _EVT
+      ACPICA: Add interrupt command to acpiexec
+
+Kai-Heng Feng (1):
+      ACPI: video: Put ACPI video and its child devices into D0 on boot
+
+Mario Limonciello (7):
+      ACPI: thermal: Drop nocrt parameter
+      ACPI: Adjust #ifdef for *_lps0_dev use
+      ACPI: x86: s2idle: Post-increment variables when getting constraints
+      ACPI: x86: s2idle: Catch multiple ACPI_TYPE_PACKAGE objects
+      ACPI: x86: s2idle: Fix a logic error parsing AMD constraints table
+      ACPI: x86: s2idle: Add more debugging for AMD constraints parsing
+      ACPI: x86: s2idle: Add a function to get LPS0 constraint for a device
+
+Michal Wilczynski (18):
+      ACPI: processor: Move MWAIT quirk out of acpi_processor.c
+      ACPI: processor: Move processor_physically_present() to acpi_processor.c
+      ACPI: processor: Refactor arch_acpi_set_pdc_bits()
+      ACPI: processor: Rename ACPI_PDC symbols
+      ACPI: processor: Clear C_C2C3_FFH and C_C1_FFH in
+arch_acpi_set_proc_cap_bits()
+      ACPI: processor: Set CAP_SMP_T_SWCOORD in arch_acpi_set_proc_cap_bits()
+      ACPI: processor: Introduce acpi_processor_osc()
+      ACPI: bus: Introduce wrappers for ACPICA notify handler install/remove
+      ACPI: bus: Set driver_data to NULL every time .add() fails
+      ACPI: AC: Install Notify() handler directly
+      ACPI: video: Install Notify() handler directly
+      ACPI: battery: Install Notify() handler directly
+      ACPI: HED: Install Notify() handler directly
+      ACPI: NFIT: Install Notify() handler directly
+      ACPI: NFIT: Remove unnecessary .remove callback
+      ACPI: thermal: Install Notify() handler directly
+      ACPI: processor: Use _OSC to convey OSPM processor support information
+      ACPI: processor: Remove acpi_hwp_native_thermal_lvt_osc()
+
+Najumon B.A (1):
+      ACPICA: fix for conflict macro definition on zephyr interface
+
+Philip Prindeville (1):
+      ACPICA: Fix GCC 12 dangling-pointer warning
+
+Rafael J. Wysocki (15):
+      ACPI: processor: Refine messages in acpi_early_processor_control_setup()
+      ACPI: thermal: Drop enabled flag from struct acpi_thermal_active
+      ACPI: thermal: Do not attach private data to ACPI handles
+      ACPI: thermal: Drop redundant local variable from acpi_thermal_resume()
+      thermal: core: Do not handle trip points with invalid temperature
+      thermal: core: Introduce thermal_zone_device_exec()
+      thermal: core: Add priv pointer to struct thermal_trip
+      ACPI: thermal: Clean up acpi_thermal_register_thermal_zone()
+      ACPI: thermal: Carry out trip point updates under zone lock
+      ACPI: thermal: Introduce struct acpi_thermal_trip
+      thermal: core: Rework and rename __for_each_thermal_trip()
+      ACPI: thermal: Use trip point table to register thermal zones
+      ACPI: thermal: Rework thermal_get_trend()
+      ACPI: thermal: Drop unnecessary thermal zone callbacks
+      ACPI: thermal: Eliminate code duplication from acpi_thermal_notify()
+
+Saket Dumbre (1):
+      ACPICA: Add support for _DSC as per ACPI 6.5
+
+Sudeep Holla (1):
+      ACPI: Move AMBA bus scan handling into arm64 specific directory
+
+Sunil V L (3):
+      ACPICA: MADT: Add RISC-V external interrupt controllers
+      ACPICA: RHCT: Add flags, CMO and MMU nodes
+      PNP: ACPI: Fix string truncation warning
+
+Wentong Wu (1):
+      ACPI: scan: Defer enumeration of devices with a _DEP pointing to
+IVSC device
+
+Xiaochun Lee (1):
+      ACPI: extlog: Fix finding the generic error data for v3 structure
+
+Yue Haibing (1):
+      ACPI: Remove assorted unused declarations of functions
+
+YueHaibing (1):
+      ACPI: Remove unused extern declaration acpi_paddr_to_node()
+
+Zhang Rui (1):
+      ACPI: TAD: Install SystemCMOS address space handler for ACPI000E
+
+---------------
+
+ Documentation/admin-guide/kernel-parameters.txt |   4 -
+ arch/ia64/include/asm/acpi.h                    |   6 +-
+ arch/x86/include/asm/acpi.h                     |  24 +-
+ arch/x86/xen/enlighten_pv.c                     |   8 +-
+ drivers/acpi/Makefile                           |   1 -
+ drivers/acpi/ac.c                               |  27 +-
+ drivers/acpi/acpi_cmos_rtc.c                    |  25 +-
+ drivers/acpi/acpi_extlog.c                      |   2 +-
+ drivers/acpi/acpi_processor.c                   | 124 +++++--
+ drivers/acpi/acpi_tad.c                         |  27 +-
+ drivers/acpi/acpi_video.c                       |  26 +-
+ drivers/acpi/acpica/acdebug.h                   |   2 +
+ drivers/acpi/acpica/acglobal.h                  |   1 +
+ drivers/acpi/acpica/aclocal.h                   |  38 +-
+ drivers/acpi/acpica/acpredef.h                  |   3 +
+ drivers/acpi/acpica/dbcmds.c                    |  58 +++
+ drivers/acpi/acpica/dbinput.c                   |   8 +
+ drivers/acpi/acpica/dswstate.c                  |   4 +-
+ drivers/acpi/acpica/exserial.c                  |   3 +-
+ drivers/acpi/acpica/psopcode.c                  |   2 +-
+ drivers/acpi/acpica/utdebug.c                   |   5 +
+ drivers/acpi/arm64/Makefile                     |   1 +
+ drivers/acpi/{acpi_amba.c => arm64/amba.c}      |   2 +-
+ drivers/acpi/arm64/init.c                       |   2 +
+ drivers/acpi/arm64/init.h                       |   1 +
+ drivers/acpi/battery.c                          |  24 +-
+ drivers/acpi/bus.c                              |  33 +-
+ drivers/acpi/hed.c                              |  15 +-
+ drivers/acpi/internal.h                         |  16 +-
+ drivers/acpi/nfit/core.c                        |  42 ++-
+ drivers/acpi/processor_core.c                   |  29 ++
+ drivers/acpi/processor_pdc.c                    |  97 +----
+ drivers/acpi/scan.c                             |   4 +-
+ drivers/acpi/thermal.c                          | 470 +++++++++++-------------
+ drivers/acpi/video_detect.c                     |  27 ++
+ drivers/acpi/x86/s2idle.c                       |  99 +++--
+ drivers/acpi/x86/utils.c                        |  35 ++
+ drivers/pnp/pnpacpi/core.c                      |   3 +
+ drivers/thermal/thermal_core.c                  |  22 +-
+ drivers/thermal/thermal_core.h                  |   4 -
+ drivers/thermal/thermal_trip.c                  |  18 +-
+ include/acpi/acnames.h                          |   1 +
+ include/acpi/acpi_bus.h                         |  17 +-
+ include/acpi/acpixf.h                           |   4 +-
+ include/acpi/actbl1.h                           |   2 +-
+ include/acpi/actbl2.h                           |  76 +++-
+ include/acpi/actbl3.h                           |   4 +-
+ include/acpi/pdc_intel.h                        |  36 --
+ include/acpi/platform/aclinux.h                 |   1 +
+ include/acpi/platform/aczephyr.h                |   3 -
+ include/acpi/proc_cap_intel.h                   |  40 ++
+ include/linux/acpi.h                            |  12 +-
+ include/linux/thermal.h                         |   9 +
+ 53 files changed, 967 insertions(+), 580 deletions(-)
