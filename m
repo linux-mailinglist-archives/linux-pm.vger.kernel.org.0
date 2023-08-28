@@ -2,187 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39F9F78AFE6
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 14:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8204478B009
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 14:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbjH1MS3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 28 Aug 2023 08:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52590 "EHLO
+        id S229827AbjH1MZb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Aug 2023 08:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232389AbjH1MSS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 08:18:18 -0400
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B88E6125
-        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 05:18:15 -0700 (PDT)
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5710b0547easo101641eaf.0
-        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 05:18:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693225095; x=1693829895;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sxAELGF0SKbyTTlbnOkSYslBbLTAhhX6+P9DhsSBHHE=;
-        b=lhU7bazwYccVeHkI7FVUdV8r+EOW3HS7EOe7h+/W6ryUpYay5mq9+iOSkTAUVQyz2L
-         hg9hWFwA9evKi4HLD3Q9G8gOz6U0EW5o0GN3PRJHszCGhNptczjBuB7delQl2U/5Q9E4
-         OOUAUXf2/9p+vQTQwM0ZJpRf64ftaOyX1E2olWWnRlTjWgn1LZmCSWC6Lmssh1yHOCnb
-         zl70C5P9894TIm8gKcQkc2dnoDs03Xhj3JjusuLTeICsADP0Yju9hlpapUxriWwcw9mH
-         XBCqjQBvTPcXGjKuicQUVGfOig5OjXx7MQvBUBJ9cmT6oTBlxyhPFqLXVLtKmpMDDBWW
-         XFMg==
-X-Gm-Message-State: AOJu0YxXI38u+JaB0U8TmVDOwiMFlQxe2wBT7f6e7iuyI2b9cxMoh5N0
-        yrrdqOKsL2yxyJCTATkn5G2arbjDGRLg8U/BdyY=
-X-Google-Smtp-Source: AGHT+IGsI4dDyjG6yLcb1sqAetAZ14r9Vedv0jBrxiY1Y/sUz9M8Nm5o0hmBQgGjIeDCTEHANDuaooJ9JgVQS1D9JrA=
-X-Received: by 2002:a4a:ded9:0:b0:573:55af:777c with SMTP id
- w25-20020a4aded9000000b0057355af777cmr6479352oou.0.1693225094937; Mon, 28 Aug
- 2023 05:18:14 -0700 (PDT)
+        with ESMTP id S230133AbjH1MZX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 08:25:23 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2048.outbound.protection.outlook.com [40.107.223.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A720EA0;
+        Mon, 28 Aug 2023 05:25:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fSSzz6bJvZNkQ/ywPaHWEHKFdmGtf1ilEBd4xuJchxEFMcfIaXNkATnl09F+XcdUN8LKv5LwIpfu3c0wgwn851r75nV9dPZG2nam8Aabz+v//WCvKqbD7pdF3R5FfwPzqAnajsAQwmTLIdOPD0kx8RN6dInp8GeQ47QYWkOs2w5r7mEJBKUDUMGydz/vtxNH3oPM6WCfUsP48m43E+wy+E/oVJXwIxCGYjgfrEeJ5tJfLiWkpZtwtKBbmY2MC4z3lGosS77yaHNvzjkeZ2jfBRtlhA8/jHKG1H/6NLxt25SJAPa+4ZkJlh3AAQsDMBWotyULuzZsSYMiwdcTrCpRpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3GvjNduzca11dkiU2MJUPk4eiY9eFQJu07tgRiUYnpE=;
+ b=WyxTZiSxPbtTzhSgybdpKMgDCJIP838BVKebethu7CK85Wwz6zJaqOS1hXvuDjyKw+7s6Gs4WEz1y7gtQHJ9P/fXyaf/cQg7zPNytBA5fkR/Tt3cBULY8ZP5LSxHQ7+ezkPfuKO2L69gyZlw/zBj58FDGLct+blXTZzWMuxNaEVEtcuR79XERMpyywW7e2lk9zHRoGTR96CtWPl0vYBK4Jz9ICGb/gTqdogm/nXPEHNqZkNKWZ9W4SDmPEAdfUvrBQDm9R0fKL/uHCvXyBuVLqXl4mwYt+hCvKsITo00hgouniVG8IR/IT8gvd2wRmm/NEilowU78kFwuFOnc8udqA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=linaro.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3GvjNduzca11dkiU2MJUPk4eiY9eFQJu07tgRiUYnpE=;
+ b=D3Is2L1vomeZJB0etfPmQyHWgGfcC2+VqugWSTbJ4Ipl2pP6fZdxqtmOb85wVITGYxHEjSm2rAl8VspgW0QWJxAWCP9j+nCCt+yMwhbpxjGqy1x355gJsb6OdPKnrIbNB8Pdw+XVln7d+fdFntLatyJUAHLrffLVKvnSoNeNU16On5NaCEb+OBugxLJscWD8sr+TwD3TsFu6HM38n1D4s7XECFSf55SunoqIXfQEIIsOtxbkkE/rTTAerPpuoES7FLjxMZM9cuTFEKl5BvejixHlRf3d03swEHznvnETWj/bF3zJw2732HafTlp2ncNNLmpWSqDMV1FgTziGLvW2hg==
+Received: from SN7P222CA0008.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:124::12)
+ by LV3PR12MB9268.namprd12.prod.outlook.com (2603:10b6:408:216::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.34; Mon, 28 Aug
+ 2023 12:25:17 +0000
+Received: from SA2PEPF00001506.namprd04.prod.outlook.com
+ (2603:10b6:806:124:cafe::4d) by SN7P222CA0008.outlook.office365.com
+ (2603:10b6:806:124::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.35 via Frontend
+ Transport; Mon, 28 Aug 2023 12:25:17 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ SA2PEPF00001506.mail.protection.outlook.com (10.167.242.38) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6745.17 via Frontend Transport; Mon, 28 Aug 2023 12:25:17 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 28 Aug 2023
+ 05:25:07 -0700
+Received: from [10.41.21.79] (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 28 Aug
+ 2023 05:25:04 -0700
+Message-ID: <d3318a98-4d61-73f7-07ab-787624edfdcd@nvidia.com>
+Date:   Mon, 28 Aug 2023 17:55:01 +0530
 MIME-Version: 1.0
-References: <20230828102554.7efox2bjzfxpa26j@vireshk-i7>
-In-Reply-To: <20230828102554.7efox2bjzfxpa26j@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 28 Aug 2023 14:18:00 +0200
-Message-ID: <CAJZ5v0hfoemyWHPj=Mg2dc2Yfon79-dTooCdwOOYywP_ya-TMg@mail.gmail.com>
-Subject: Re: [GIT PULL] cpufreq/arm updates for 6.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Patch v2] cpufreq: tegra194: remove opp table in exit hook
 To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+CC:     <rafael@kernel.org>, <treding@nvidia.com>, <jonathanh@nvidia.com>,
+        <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bbasu@nvidia.com>
+References: <20230825111617.8069-1-sumitg@nvidia.com>
+ <20230828061115.vsepgtexyv3hvffu@vireshk-i7>
+ <20230828101721.zq5vlc53p5umi63c@vireshk-i7>
+Content-Language: en-US
+From:   Sumit Gupta <sumitg@nvidia.com>
+In-Reply-To: <20230828101721.zq5vlc53p5umi63c@vireshk-i7>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.231.35]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF00001506:EE_|LV3PR12MB9268:EE_
+X-MS-Office365-Filtering-Correlation-Id: cef37d31-1716-4158-8ec1-08dba7c1d696
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SXDiUIMo5ZE9yXqkECl8akXrAeJ+H7TSI7jf1zu+7xeKW4V3ufpRKY2wag9hGkQoibGbBfK9jrz30CTz/GvTnEzxE3r0aFOP3FRwqWdoRaNs9CT6uF8Zuw2OrnPQrgOlG/XoYNmJijS6F2L36uLyKGvCY5rjZnBNydniOzZaSyABjEjaVHV60WUXlwGv4ezwNDVivgT+IQ7f5pQCwD6gyVKBjaXZyTXaq5zSMoFlPSvnHYlnfdNeU5DAY/G7iE/uNW06q5/UsQ8vPyUJa8geYK//KirpbApEsFpChgarQDUx7flKaCzfy8Hbx4xA7lrw+b3UMWWxFlaHuoEx6figJMybn51Qv9Re0GsrG6TzcyUzTy+M7EZ6Hkkdzzw47LMVJBDBRROrbw2jy+PnE9EKebOC50RRgm0C5o6L4v+tUCRsRMdAY9JY6hlNtG8BFr2v7WhhYCbKdRFSWrcofm5wLvozbPb3100kW8UlohuCAGc05oATcuclpmWxEBL0+uNYCTi/htALw9acGkbWJpKrN4kEcUWIBqoHPlI2uiClPBJU3R00xCOARD6wWcjkSuefwqvx/Vbngim4DLXSaQNNV1Bt6lnJHAfsJ/szy10Qh0tDht8AW5lsTlNR0+F7RkgQNwLfOQJjWzuInXdsrQSV9M2C0M/JgVVVH4a8YAsqNDm4/xEBbmE0Wf8XfHtfjBwf/pgmhIorVJgV+solk+HeMRC+NLqm0BIv28xUsMwTC+mKHw8n87Nsma8qPcQPvPF+AH67oD4HlxVrKIt5K22CiwKTe5RYMqVZTVI6IWnaOZcG4LXlAd1OkIwLQ85U883p
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(346002)(396003)(136003)(39860400002)(376002)(451199024)(1800799009)(82310400011)(186009)(36840700001)(46966006)(40470700004)(83380400001)(478600001)(7636003)(356005)(966005)(82740400003)(26005)(16526019)(31686004)(426003)(336012)(47076005)(36860700001)(107886003)(2616005)(40480700001)(53546011)(6666004)(31696002)(86362001)(2906002)(316002)(16576012)(4326008)(6916009)(70206006)(8676002)(70586007)(41300700001)(8936002)(54906003)(36756003)(5660300002)(40460700003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2023 12:25:17.2368
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cef37d31-1716-4158-8ec1-08dba7c1d696
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: SA2PEPF00001506.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR12MB9268
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh,
 
-On Mon, Aug 28, 2023 at 12:26 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> Hi Rafael,
->
-> The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
->
->   Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufreq-arm-updates-6.6
->
-> for you to fetch changes up to de0e85b29edfc68046d587c7d67bbd2bdc31b73f:
->
->   cpufreq: tegra194: remove opp table in exit hook (2023-08-28 15:45:24 +0530)
->
-> ----------------------------------------------------------------
-> ARM cpufreq updates for 6.6
->
-> - Migrate various platforms to use remove callback returning void
->   (Yangtao Li).
->
-> - Add online/offline/exit hooks for Tegra driver (Sumit Gupta).
->
-> - Explicitly include correct DT includes (Rob Herring).
->
-> - Frequency domain updates for qcom-hw driver (Neil Armstrong).
->
-> - Modify AMD pstate driver return the highest_perf value (Meng Li).
->
-> - Generic cleanups for cppc, mediatek and powernow driver (Liao Chang
->   and Konrad Dybcio).
->
-> - Add more platforms to cpufreq-arm driver's blocklist (AngeloGioacchino
->   Del Regno and Konrad Dybcio).
->
-> - brcmstb-avs-cpufreq: Fix -Warray-bounds bug (Gustavo A. R. Silva).
->
-> ----------------------------------------------------------------
-> AngeloGioacchino Del Regno (1):
->       cpufreq: blocklist MSM8998 in cpufreq-dt-platdev
->
-> Gustavo A. R. Silva (1):
->       cpufreq: brcmstb-avs-cpufreq: Fix -Warray-bounds bug
->
-> Konrad Dybcio (2):
->       cpufreq: blocklist more Qualcomm platforms in cpufreq-dt-platdev
->       cpufreq: mediatek-hw: Remove unused define
->
-> Liao Chang (4):
->       cpufreq: Prefer to print cpuid in MIN/MAX QoS register error message
->       cpufreq: cppc: cppc_cpufreq_get_rate() returns zero in all error cases.
->       cpufreq: cppc: Set fie_disabled to FIE_DISABLED if fails to create kworker_fie
->       cpufreq: powernow-k8: Use related_cpus instead of cpus in driver.exit()
->
-> Meng Li (1):
->       cpufreq: amd-pstate-ut: Modify the function to get the highest_perf value
->
-> Neil Armstrong (2):
->       dt-bindings: cpufreq: qcom-hw: add a 4th frequency domain
->       cpufreq: qcom-cpufreq-hw: add support for 4 freq domains
->
-> Rob Herring (1):
->       cpufreq: Explicitly include correct DT includes
->
-> Sumit Gupta (2):
->       cpufreq: tegra194: add online/offline hooks
->       cpufreq: tegra194: remove opp table in exit hook
->
-> Yangtao Li (19):
->       cpufreq: sun50i: Convert to platform remove callback returning void
->       cpufreq: dt: Convert to platform remove callback returning void
->       cpufreq: qcom-cpufreq-hw: Convert to platform remove callback returning void
->       cpufreq: vexpress: Convert to platform remove callback returning void
->       cpufreq: imx6q: Convert to platform remove callback returning void
->       cpufreq: mediatek-hw: Convert to platform remove callback returning void
->       cpufreq: scpi: Convert to platform remove callback returning void
->       cpufreq: tegra194: Convert to platform remove callback returning void
->       cpufreq: brcmstb-avs-cpufreq: Convert to platform remove callback returning void
->       cpufreq: imx-cpufreq-dt: Convert to platform remove callback returning void
->       cpufreq: davinci: Convert to platform remove callback returning void
->       cpufreq: raspberrypi: Convert to platform remove callback returning void
->       cpufreq: pcc-cpufreq: Convert to platform remove callback returning void
->       cpufreq: kirkwood: Convert to platform remove callback returning void
->       cpufreq: qcom-nvmem: Convert to platform remove callback returning void
->       cpufreq: tegra186: Convert to platform remove callback returning void
->       cpufreq: acpi: Convert to platform remove callback returning void
->       cpufreq: qoriq: Convert to platform remove callback returning void
->       cpufreq: omap: Convert to platform remove callback returning void
->
->  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml |  5 ++++-
->  drivers/cpufreq/acpi-cpufreq.c                                 |  6 ++----
->  drivers/cpufreq/amd-pstate-ut.c                                |  4 ++--
->  drivers/cpufreq/armada-37xx-cpufreq.c                          |  4 +---
->  drivers/cpufreq/brcmstb-avs-cpufreq.c                          | 12 +++++++-----
->  drivers/cpufreq/cppc_cpufreq.c                                 | 13 ++++++++-----
->  drivers/cpufreq/cpufreq-dt-platdev.c                           |  7 +++++++
->  drivers/cpufreq/cpufreq-dt.c                                   |  5 ++---
->  drivers/cpufreq/cpufreq.c                                      |  8 ++++----
->  drivers/cpufreq/davinci-cpufreq.c                              |  6 ++----
->  drivers/cpufreq/imx-cpufreq-dt.c                               |  6 ++----
->  drivers/cpufreq/imx6q-cpufreq.c                                |  6 ++----
->  drivers/cpufreq/kirkwood-cpufreq.c                             |  6 ++----
->  drivers/cpufreq/mediatek-cpufreq-hw.c                          |  9 ++++-----
->  drivers/cpufreq/mediatek-cpufreq.c                             |  2 --
->  drivers/cpufreq/omap-cpufreq.c                                 |  6 ++----
->  drivers/cpufreq/pcc-cpufreq.c                                  |  6 ++----
->  drivers/cpufreq/powernow-k8.c                                  |  3 ++-
->  drivers/cpufreq/ppc_cbe_cpufreq.c                              |  2 +-
->  drivers/cpufreq/ppc_cbe_cpufreq_pmi.c                          |  1 -
->  drivers/cpufreq/qcom-cpufreq-hw.c                              |  8 +++-----
->  drivers/cpufreq/qcom-cpufreq-nvmem.c                           |  7 ++-----
->  drivers/cpufreq/qoriq-cpufreq.c                                |  6 ++----
->  drivers/cpufreq/raspberrypi-cpufreq.c                          |  6 ++----
->  drivers/cpufreq/scpi-cpufreq.c                                 |  7 +++----
->  drivers/cpufreq/sti-cpufreq.c                                  |  2 +-
->  drivers/cpufreq/sun50i-cpufreq-nvmem.c                         |  6 ++----
->  drivers/cpufreq/tegra186-cpufreq.c                             |  6 ++----
->  drivers/cpufreq/tegra194-cpufreq.c                             | 35 +++++++++++++++++++++++++++++++----
->  drivers/cpufreq/ti-cpufreq.c                                   |  2 +-
->  drivers/cpufreq/vexpress-spc-cpufreq.c                         |  6 ++----
->  include/linux/cpufreq.h                                        |  2 +-
->  32 files changed, 108 insertions(+), 102 deletions(-)
->
->
+
+On 28/08/23 15:47, Viresh Kumar wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> On 28-08-23, 11:41, Viresh Kumar wrote:
+>> On 25-08-23, 16:46, Sumit Gupta wrote:
+>>> Add exit hook and remove OPP table when the device gets unregistered.
+>>> This will fix the error messages when the CPU FREQ driver module is
+>>> removed and then re-inserted. It also fixes these messages while
+>>> onlining the first CPU from a policy whose all CPU's were previously
+>>> offlined.
+>>>
+>>>   debugfs: File 'cpu5' in directory 'opp' already present!
+>>>   debugfs: File 'cpu6' in directory 'opp' already present!
+>>>   debugfs: File 'cpu7' in directory 'opp' already present!
+>>>
+>>> Fixes: f41e1442ac5b ("cpufreq: tegra194: add OPP support and set bandwidth")
+>>> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+>>> ---
+>>>
+>>> v1[1] -> v2:
+>>> - updated commit description.
+>>>
+>>> [1] https://lore.kernel.org/lkml/20230809153455.29056-1-sumitg@nvidia.com/
+>>>
+>>>   drivers/cpufreq/tegra194-cpufreq.c | 13 +++++++++++++
+>>>   1 file changed, 13 insertions(+)
+>>>
+>>> diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
+>>> index c90b30469165..66a9c23544db 100644
+>>> --- a/drivers/cpufreq/tegra194-cpufreq.c
+>>> +++ b/drivers/cpufreq/tegra194-cpufreq.c
+>>> @@ -454,6 +454,8 @@ static int tegra_cpufreq_init_cpufreq_table(struct cpufreq_policy *policy,
+>>>              if (ret < 0)
+>>>                      return ret;
+>>>
+>>> +           dev_pm_opp_put(opp);
+>>> +
+>>
+>> Missed this earlier, can you please do this in a separate patch please
+>> ?
+> 
+> I have pushed rest of this commit and dropped this part. Send it
+> separately. Thanks.
+> 
 > --
+> viresh
 
-Pulled, thanks!
+Thank you.
+Sent the change separately @
+  https://lore.kernel.org/lkml/20230828120959.24680-1-sumitg@nvidia.com/
+
+Regards,
+Sumit Gupta
