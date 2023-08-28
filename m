@@ -2,61 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF4B78AF24
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 13:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E103178AF13
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 13:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232500AbjH1LnG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Aug 2023 07:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56550 "EHLO
+        id S232479AbjH1LnE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Aug 2023 07:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232502AbjH1Lmo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 07:42:44 -0400
+        with ESMTP id S232505AbjH1Lmq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 07:42:46 -0400
 Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392CEC3
-        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 04:42:41 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-5007c8308c3so4862137e87.0
-        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 04:42:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D690710E
+        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 04:42:42 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-500b0f06136so2668236e87.0
+        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 04:42:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693222959; x=1693827759;
+        d=linaro.org; s=google; t=1693222961; x=1693827761;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8lczsHPUyJRmspH9y5x62IT1HsVcOeFxIgaLGYJlH4E=;
-        b=C5SjzzzMpbr18uc/DlxwwjMrmmjwVRITRtzuLcH5CIPnEwdSQsiP7YRvrVmootWtP/
-         yimvzQ+RFkjjU6f8R08QPdO4cT7F+W5gtwO+ir/t/nhkvkRbhN9YDQyiOS11hQVtSDBz
-         6+p25zA6urAwJvB0qZrjYbO+0uKstKS5Z1dtY6i6N+/vgj69h/sLkMlA3PAjpFW+/odE
-         CdYx2p6C4ukSjnxOm/eWp6KSAbAV59+kJVxufXcU5PXhbmodgGtvu2RNz2iy+gePnasS
-         DFY8xPPf249l7Fn4LZqWCZ1CZURBsJGePier9a2UmFQ4cXAYQZa5gXIhWcCbyfQdmEaJ
-         A67Q==
+        bh=Ukvy8+Hjdu2oas6MhPznZGI2niV1axKC09nEtbCzbKA=;
+        b=nT3QdztK8oJ/czFZBvHZ8kRRjQkXHbMCaBbwRVgoPsm7kKktXQ2kS/c4whgekPvTW+
+         mcG4kq3OeMa88Bu6tWgYgRdsFhU9aJ3uLpqtcn6zIeAp/BXMDDa0tcEeK/V37LsOwzmc
+         OXPFOdS0Q8xGQUXXVf3jnpufFqU2PBlPjhRxOil37Q9yJmZtGDeBJNMtEYdfMxz8JGg8
+         geKVnIA1R9aStKwOUO0Mo6yqKrioD/FnLRxam3e12WHrEv533qEdwyKhG3c0nH3X5H4+
+         5R1uWt24Pi4kEq2fmTImK52BXthZNBOMN6j6aMa76GoL5b7Ysx0IMyv4NaLhyx2ms9eu
+         /jlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693222959; x=1693827759;
+        d=1e100.net; s=20221208; t=1693222961; x=1693827761;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8lczsHPUyJRmspH9y5x62IT1HsVcOeFxIgaLGYJlH4E=;
-        b=gZ+X/f3o2XYR9Xl6nF6MTTP4aPseWnl76mFOy5r4Nd6uQfZSKT/tQgtB80b3NPbJVY
-         aTiZItcuRVglB1oAwp+QG5LGuqvO8ckEv7OqpZqVYMpiipQ90yXV0CTOIks0fFzDFuWm
-         TOx0gkohIZzTLwYwly4/mdFfBn3sulfagjZoeT/sWKwm1Ky+97cHMx9qYY0mYko20151
-         96aRIE6ChiyG1X8h1d4EFm551UuJkLVShtC1yAUI+6242vQIohPyXsS4mOgOD2o+aik1
-         4HL1i4GyOmZLANznN2bQQSYpK5fNMMt3QAinUVki6MGqNsUCdxbfdpeme21QNDHE8YG1
-         EzPw==
-X-Gm-Message-State: AOJu0YwD/T7uF7DrMTx9v/LZUidtC7NTFG7I5C3hL7EGycNuV52bmFbh
-        b6dQzCIi6WrqdQFgHKZN6IEiVQ==
-X-Google-Smtp-Source: AGHT+IGapV/pJW+FZOV9bNYIUhxqqJgkctTSP8QyEEptY1rT7ZXBDYXqmTIoWOn0ll3RCJCU5z+gZA==
-X-Received: by 2002:a05:6512:615:b0:4fd:d9dd:7a1a with SMTP id b21-20020a056512061500b004fdd9dd7a1amr17484607lfe.31.1693222959556;
-        Mon, 28 Aug 2023 04:42:39 -0700 (PDT)
+        bh=Ukvy8+Hjdu2oas6MhPznZGI2niV1axKC09nEtbCzbKA=;
+        b=ZVRMNl9KeLno2YL0/BvQBvSARvmn0+RSfDQPv3k1Z2/dmkUOrK/ghdq/fWCAVUIXGg
+         hEWIllwX7HTHV3Q4JWrHajAhXtPl296OyUKwyvsKs2s4b6k3/l2/sq8Uboby1ghjiu90
+         yejDh+UB9L67NqzqsuPwRPdIU/aINhDQNISCigERfMPn+5A1xwracHZsL5lu0DOpLX4G
+         gSrj6ukqzRPSBl1+uwLakKmOJ2OBl7aO6OGWpOUQCfPjiMMNx2ELZJRblrfyxu1K58sN
+         MYKN0OhnY7OAJtQfKNve7JB0iTDb1xz8LfHyyIGdInOZyMVOUH6vsViwPAVxwuP3AyiS
+         17fg==
+X-Gm-Message-State: AOJu0YzynHNT8Gmj0RI8iYuIJ5SOw+Y1T3SQWxTimMeVMtcdg6oJhX9D
+        boHH12DEvssyejoz/QOWXT5u4Q==
+X-Google-Smtp-Source: AGHT+IFKLQKQjWNIJtzHOeUnY3Z6dmCkBLByyd8W1WfIvfOqs1cMr9niG9gq2D8pRnbp9CNJaJE37Q==
+X-Received: by 2002:a05:6512:12c4:b0:4fb:9712:a717 with SMTP id p4-20020a05651212c400b004fb9712a717mr19822312lfg.13.1693222961157;
+        Mon, 28 Aug 2023 04:42:41 -0700 (PDT)
 Received: from [192.168.1.101] (abyl195.neoplus.adsl.tpnet.pl. [83.9.31.195])
-        by smtp.gmail.com with ESMTPSA id b2-20020ac247e2000000b005009920b6afsm1547799lfp.9.2023.08.28.04.42.37
+        by smtp.gmail.com with ESMTPSA id b2-20020ac247e2000000b005009920b6afsm1547799lfp.9.2023.08.28.04.42.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Aug 2023 04:42:39 -0700 (PDT)
+        Mon, 28 Aug 2023 04:42:40 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 28 Aug 2023 13:42:17 +0200
-Subject: [PATCH v14 5/9] soc: qcom: cpr-common: Add support for flat fuse
- adjustment
+Date:   Mon, 28 Aug 2023 13:42:18 +0200
+Subject: [PATCH v14 6/9] soc: qcom: cpr: Use u64 for frequency
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230217-topic-cpr3h-v14-5-9fd23241493d@linaro.org>
+Message-Id: <20230217-topic-cpr3h-v14-6-9fd23241493d@linaro.org>
 References: <20230217-topic-cpr3h-v14-0-9fd23241493d@linaro.org>
 In-Reply-To: <20230217-topic-cpr3h-v14-0-9fd23241493d@linaro.org>
 To:     AngeloGioacchino Del Regno 
@@ -78,87 +77,160 @@ Cc:     Robert Marko <robimarko@gmail.com>, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-pm@vger.kernel.org, Jeffrey Hugo <quic_jhugo@quicinc.com>,
         Marijn Suijten <marijn.suijten@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
+        Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1693222948; l=2102;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1693222948; l=4796;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=r+FZtgyjhOegt/rHxqeMXobV6M/mn9z4gyS+IPOc1vM=;
- b=U3Xoy4etONfYRJG0PDzYicPXwrijpIZrw7CCHzvb+YFPm0Kg6Ipp3U/krMDpjBkuNNqub+/gX
- 1ySzgw7dkBGCBLIFqtTScwGbLDDASrIy/h1K4nJCcrj4A1noF4mtXNF
+ bh=AILG5ZdRZ9L72zNAwxHpmrn3oVh0Tn/B7cbYES7hZlo=;
+ b=cto3m5fc/IX/ZNFBddXCLET5TFzEWruZxsodUJbn6J6EzqUT93zwp15dKKxpTlzuUtlYK09N5
+ S6CwoSt4M/mDhamD2JIxsTUG5jVEU+gS4oMx8lVU8XVQ04PuB05C+Uo
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+32 bits is not enough for over-2.changeGHz frequencies. Move all variables
+that operate on Hz to u64 to avoid overflows.
 
-CPR3 makes use of post-calculation flat value adjustments. Add the
-necessary bits to the common functions to support it.
-
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-[Konrad: separate this patch out of a bigger one]
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/genpd/qcom/cpr-common.c | 9 ++++++---
- drivers/genpd/qcom/cpr-common.h | 1 +
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ drivers/genpd/qcom/cpr-common.c | 13 +++++++------
+ drivers/genpd/qcom/cpr-common.h |  9 ++++-----
+ drivers/genpd/qcom/cpr.c        |  8 ++++----
+ 3 files changed, 15 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/genpd/qcom/cpr-common.c b/drivers/genpd/qcom/cpr-common.c
-index ea85f6b4bef8..44c681bbbf13 100644
+index 44c681bbbf13..3e3a4a61cfde 100644
 --- a/drivers/genpd/qcom/cpr-common.c
 +++ b/drivers/genpd/qcom/cpr-common.c
-@@ -49,7 +49,7 @@ int cpr_populate_ring_osc_idx(struct device *dev,
- EXPORT_SYMBOL_GPL(cpr_populate_ring_osc_idx);
- 
- static int cpr_read_fuse_uV(int init_v_width, int step_size_uV, int ref_uV,
--			    int step_volt, const char *init_v_efuse,
-+			    int adj, int step_volt, const char *init_v_efuse,
- 			    struct device *dev)
- {
- 	int steps, uV;
-@@ -67,6 +67,9 @@ static int cpr_read_fuse_uV(int init_v_width, int step_size_uV, int ref_uV,
- 
- 	uV = ref_uV + steps * step_size_uV;
- 
-+	/* Apply open-loop fixed adjustments to fused values */
-+	uV += adj;
-+
- 	return DIV_ROUND_UP(uV, step_volt) * step_volt;
+@@ -218,7 +218,7 @@ unsigned int cpr_get_fuse_corner(struct dev_pm_opp *opp)
  }
+ EXPORT_SYMBOL_GPL(cpr_get_fuse_corner);
  
-@@ -119,8 +122,8 @@ int cpr_populate_fuse_common(struct device *dev,
+-unsigned long cpr_get_opp_hz_for_req(struct dev_pm_opp *ref,
++u64 cpr_get_opp_hz_for_req(struct dev_pm_opp *ref,
+ 				     struct device *cpu_dev)
+ {
+ 	u64 rate = 0;
+@@ -250,7 +250,7 @@ unsigned long cpr_get_opp_hz_for_req(struct dev_pm_opp *ref,
+ out_ref:
+ 	of_node_put(desc_np);
  
- 	/* Populate uV */
- 	uV = cpr_read_fuse_uV(init_v_width, init_v_step,
--			      fdata->ref_uV, step_volt,
--			      cpr_fuse->init_voltage, dev);
-+			      fdata->ref_uV, fdata->volt_oloop_adjust,
-+			      step_volt, cpr_fuse->init_voltage, dev);
- 	if (uV < 0)
- 		return uV;
+-	return (unsigned long) rate;
++	return rate;
+ }
+ EXPORT_SYMBOL_GPL(cpr_get_opp_hz_for_req);
  
+@@ -260,7 +260,7 @@ int cpr_calculate_scaling(struct device *dev,
+ 			  const struct corner *corner)
+ {
+ 	u32 quot_diff = 0;
+-	unsigned long freq_diff;
++	u64 freq_diff;
+ 	int scaling;
+ 	const struct fuse_corner *fuse, *prev_fuse;
+ 	int ret;
+@@ -280,8 +280,9 @@ int cpr_calculate_scaling(struct device *dev,
+ 	}
+ 
+ 	freq_diff = fuse->max_freq - prev_fuse->max_freq;
+-	freq_diff /= 1000000; /* Convert to MHz */
+-	scaling = 1000 * quot_diff / freq_diff;
++	freq_diff = div_u64(freq_diff, 1000000); /* Convert to MHz */
++	scaling = 1000 * quot_diff;
++	do_div(scaling, freq_diff);
+ 	return min(scaling, fdata->max_quot_scale);
+ }
+ EXPORT_SYMBOL_GPL(cpr_calculate_scaling);
+@@ -289,7 +290,7 @@ EXPORT_SYMBOL_GPL(cpr_calculate_scaling);
+ int cpr_interpolate(const struct corner *corner, int step_volt,
+ 		    const struct fuse_corner_data *fdata)
+ {
+-	unsigned long f_high, f_low, f_diff;
++	u64 f_high, f_low, f_diff;
+ 	int uV_high, uV_low, uV;
+ 	u64 temp, temp_limit;
+ 	const struct fuse_corner *fuse, *prev_fuse;
 diff --git a/drivers/genpd/qcom/cpr-common.h b/drivers/genpd/qcom/cpr-common.h
-index 1f2ebf9394cf..0aa227617d2f 100644
+index 0aa227617d2f..1b2fa344eb09 100644
 --- a/drivers/genpd/qcom/cpr-common.h
 +++ b/drivers/genpd/qcom/cpr-common.h
-@@ -22,6 +22,7 @@ struct fuse_corner_data {
- 	int ref_uV;
- 	int max_uV;
- 	int min_uV;
-+	int volt_oloop_adjust;
- 	int max_volt_scale;
- 	int max_quot_scale;
- 	/* fuse quot */
+@@ -42,7 +42,7 @@ struct fuse_corner {
+ 	int step_quot;
+ 	const struct reg_sequence *accs;
+ 	int num_accs;
+-	unsigned long max_freq;
++	u64 max_freq;
+ 	u8 ring_osc_idx;
+ };
+ 
+@@ -54,13 +54,13 @@ struct corner {
+ 	int quot_adjust;
+ 	u32 save_ctl;
+ 	u32 save_irq;
+-	unsigned long freq;
++	u64 freq;
+ 	struct fuse_corner *fuse_corner;
+ };
+ 
+ struct corner_data {
+ 	unsigned int fuse_corner;
+-	unsigned long freq;
++	u64 freq;
+ };
+ 
+ struct acc_desc {
+@@ -92,8 +92,7 @@ int cpr_populate_fuse_common(struct device *dev,
+ int cpr_find_initial_corner(struct device *dev, struct clk *cpu_clk,
+ 			    struct corner *corners, int num_corners);
+ u32 cpr_get_fuse_corner(struct dev_pm_opp *opp);
+-unsigned long cpr_get_opp_hz_for_req(struct dev_pm_opp *ref,
+-				     struct device *cpu_dev);
++u64 cpr_get_opp_hz_for_req(struct dev_pm_opp *ref, struct device *cpu_dev);
+ int cpr_calculate_scaling(struct device *dev,
+ 			  const char *quot_offset,
+ 			  const struct fuse_corner_data *fdata,
+diff --git a/drivers/genpd/qcom/cpr.c b/drivers/genpd/qcom/cpr.c
+index 2cfeefebd24c..bd0ac95e86e7 100644
+--- a/drivers/genpd/qcom/cpr.c
++++ b/drivers/genpd/qcom/cpr.c
+@@ -826,8 +826,8 @@ static int cpr_corner_init(struct cpr_drv *drv)
+ 	struct corner_data *cdata;
+ 	const struct fuse_corner_data *fdata;
+ 	bool apply_scaling;
+-	unsigned long freq_diff, freq_diff_mhz;
+-	unsigned long freq;
++	unsigned long freq_diff_mhz;
++	u64 freq, freq_diff;
+ 	int step_volt = regulator_get_linear_step(drv->vdd_apc);
+ 	struct dev_pm_opp *opp;
+ 
+@@ -866,7 +866,7 @@ static int cpr_corner_init(struct cpr_drv *drv)
+ 		cdata[level - 1].freq = freq;
+ 
+ 		fuse = &drv->fuse_corners[fnum];
+-		dev_dbg(drv->dev, "freq: %lu level: %u fuse level: %u\n",
++		dev_dbg(drv->dev, "freq: %llu level: %u fuse level: %u\n",
+ 			freq, dev_pm_opp_get_level(opp) - 1, fnum);
+ 		if (freq > fuse->max_freq)
+ 			fuse->max_freq = freq;
+@@ -940,7 +940,7 @@ static int cpr_corner_init(struct cpr_drv *drv)
+ 
+ 		if (apply_scaling) {
+ 			freq_diff = fuse->max_freq - corner->freq;
+-			freq_diff_mhz = freq_diff / 1000000;
++			freq_diff_mhz = (u32)div_u64(freq_diff, 1000000);
+ 			corner->quot_adjust = scaling * freq_diff_mhz / 1000;
+ 
+ 			corner->uV = cpr_interpolate(corner, step_volt, fdata);
 
 -- 
 2.42.0
