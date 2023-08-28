@@ -2,45 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 728F478AFE1
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 14:18:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F9F78AFE6
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Aug 2023 14:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbjH1MR4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 28 Aug 2023 08:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35272 "EHLO
+        id S230239AbjH1MS3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 28 Aug 2023 08:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232680AbjH1MRv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 08:17:51 -0400
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F1FAB
-        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 05:17:49 -0700 (PDT)
-Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-6bc9353be9bso885274a34.1
-        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 05:17:49 -0700 (PDT)
+        with ESMTP id S232389AbjH1MSS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 08:18:18 -0400
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B88E6125
+        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 05:18:15 -0700 (PDT)
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5710b0547easo101641eaf.0
+        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 05:18:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693225068; x=1693829868;
+        d=1e100.net; s=20221208; t=1693225095; x=1693829895;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Up06LLsUHY6pDlZHYIUYAE8Jm+EV9igi4I9z7kRfRBQ=;
-        b=Za8so1zcIrV+v/RovmNOtTUYR8qMDsaPwVxneA5PHWbc9wZrvOxZYB7AZN4qwWLdU3
-         HtIoEEt2TMVvlpLwnsjsM7maseqoRgBpZerM7sejsmvPy46rnugBpJjkVnswl7ColSHM
-         Cope72Vtsn9IVzGwcm8J17GjXbtXElbUjJIjskE1Bo6DEJC5CVIb+TvdFBsLIuqb4vOd
-         XflrO259eRRtMHNdnNrScJxYYeH8aMjRHk3EigOSMKbpRP2w6mHEymV2TbC/EsOKejrE
-         OLUD1SMsyFrYeVxEyaTa34fv71dhsrAefzsSs26WSDBycQ0S91Qkdl+cSxtFXCM2JBVe
-         v3/w==
-X-Gm-Message-State: AOJu0YzxGZcaRenbJKRiuCYkwWWllSooqhuBjVXh+AKMldiuOp1Ua6iX
-        zes8sVjrye6Hzc5L8XHRO+TyNCiVnm8R68PHcTORQe45
-X-Google-Smtp-Source: AGHT+IG01y6mofuG8HfF2wFqb79bA4CXzx1tB8X8KYvg1rTCRIzHti+DpM/x8oZ6HO5dLov+kQFnNi1OjPtJkFyURcY=
-X-Received: by 2002:a4a:e699:0:b0:573:4a72:6ec with SMTP id
- u25-20020a4ae699000000b005734a7206ecmr7552428oot.1.1693225068314; Mon, 28 Aug
- 2023 05:17:48 -0700 (PDT)
+        bh=sxAELGF0SKbyTTlbnOkSYslBbLTAhhX6+P9DhsSBHHE=;
+        b=lhU7bazwYccVeHkI7FVUdV8r+EOW3HS7EOe7h+/W6ryUpYay5mq9+iOSkTAUVQyz2L
+         hg9hWFwA9evKi4HLD3Q9G8gOz6U0EW5o0GN3PRJHszCGhNptczjBuB7delQl2U/5Q9E4
+         OOUAUXf2/9p+vQTQwM0ZJpRf64ftaOyX1E2olWWnRlTjWgn1LZmCSWC6Lmssh1yHOCnb
+         zl70C5P9894TIm8gKcQkc2dnoDs03Xhj3JjusuLTeICsADP0Yju9hlpapUxriWwcw9mH
+         XBCqjQBvTPcXGjKuicQUVGfOig5OjXx7MQvBUBJ9cmT6oTBlxyhPFqLXVLtKmpMDDBWW
+         XFMg==
+X-Gm-Message-State: AOJu0YxXI38u+JaB0U8TmVDOwiMFlQxe2wBT7f6e7iuyI2b9cxMoh5N0
+        yrrdqOKsL2yxyJCTATkn5G2arbjDGRLg8U/BdyY=
+X-Google-Smtp-Source: AGHT+IGsI4dDyjG6yLcb1sqAetAZ14r9Vedv0jBrxiY1Y/sUz9M8Nm5o0hmBQgGjIeDCTEHANDuaooJ9JgVQS1D9JrA=
+X-Received: by 2002:a4a:ded9:0:b0:573:55af:777c with SMTP id
+ w25-20020a4aded9000000b0057355af777cmr6479352oou.0.1693225094937; Mon, 28 Aug
+ 2023 05:18:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230828102446.egoeuhxt3uwy7lr2@vireshk-i7>
-In-Reply-To: <20230828102446.egoeuhxt3uwy7lr2@vireshk-i7>
+References: <20230828102554.7efox2bjzfxpa26j@vireshk-i7>
+In-Reply-To: <20230828102554.7efox2bjzfxpa26j@vireshk-i7>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 28 Aug 2023 14:17:33 +0200
-Message-ID: <CAJZ5v0jLkBX2dnppfLKTGJ4phkKBCn-hFL=+x2duhS8MxuPc5A@mail.gmail.com>
-Subject: Re: [GIT PULL] OPP updates for 6.6
+Date:   Mon, 28 Aug 2023 14:18:00 +0200
+Message-ID: <CAJZ5v0hfoemyWHPj=Mg2dc2Yfon79-dTooCdwOOYywP_ya-TMg@mail.gmail.com>
+Subject: Re: [GIT PULL] cpufreq/arm updates for 6.6
 To:     Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>
@@ -58,7 +58,7 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Viresh,
 
-On Mon, Aug 28, 2023 at 12:24 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Mon, Aug 28, 2023 at 12:26 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
 > Hi Rafael,
 >
@@ -68,52 +68,120 @@ On Mon, Aug 28, 2023 at 12:24 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
 > are available in the Git repository at:
 >
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/opp-updates-6.6
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufreq-arm-updates-6.6
 >
-> for you to fetch changes up to e576a9a8603f7c6f8fed5159e2fe33f6d67a49e7:
+> for you to fetch changes up to de0e85b29edfc68046d587c7d67bbd2bdc31b73f:
 >
->   dt-bindings: cpufreq: Convert ti-cpufreq to json schema (2023-08-21 11:23:34 +0530)
->
-> ----------------------------------------------------------------
-> OPP updates for 6.6
->
-> - Minor core cleanup and addition of new frequency related APIs (Viresh
->   Kumar and Manivannan Sadhasivam).
->
-> - Convert ti cpufreq/opp bindings to json schema (Nishanth Menon).
+>   cpufreq: tegra194: remove opp table in exit hook (2023-08-28 15:45:24 +0530)
 >
 > ----------------------------------------------------------------
-> Manivannan Sadhasivam (5):
->       OPP: Introduce dev_pm_opp_find_freq_{ceil/floor}_indexed() APIs
->       OPP: Introduce dev_pm_opp_get_freq_indexed() API
->       OPP: Fix potential null ptr dereference in dev_pm_opp_get_required_pstate()
->       OPP: Fix passing 0 to PTR_ERR in _opp_attach_genpd()
->       dt-bindings: opp: Increase maxItems for opp-hz property
+> ARM cpufreq updates for 6.6
 >
-> Nishanth Menon (2):
->       dt-bindings: opp: Convert ti-omap5-opp-supply to json schema
->       dt-bindings: cpufreq: Convert ti-cpufreq to json schema
+> - Migrate various platforms to use remove callback returning void
+>   (Yangtao Li).
 >
-> Viresh Kumar (5):
->       OPP: Rearrange entries in pm_opp.h
->       OPP: Add dev_pm_opp_find_freq_exact_indexed()
->       OPP: Update _read_freq() to return the correct frequency
->       OPP: Reuse dev_pm_opp_get_freq_indexed()
->       OPP: Fix argument name in doc comment
+> - Add online/offline/exit hooks for Tegra driver (Sumit Gupta).
 >
->  Documentation/devicetree/bindings/cpufreq/ti-cpufreq.txt              | 132 ------------------------------------------------------------------------------------------------------------------------------------
->  Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml |  92 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  Documentation/devicetree/bindings/opp/opp-v2-base.yaml                |   2 +-
->  Documentation/devicetree/bindings/opp/ti,omap-opp-supply.yaml         | 101 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  Documentation/devicetree/bindings/opp/ti-omap5-opp-supply.txt         |  63 ---------------------------------------------------------------
->  drivers/opp/core.c                                                    | 117 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++------------------
->  drivers/opp/cpu.c                                                     |   4 ++--
->  include/linux/pm_opp.h                                                |  62 +++++++++++++++++++++++++++++++++++++++++++++++++-------------
->  8 files changed, 344 insertions(+), 229 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/cpufreq/ti-cpufreq.txt
->  create mode 100644 Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
->  create mode 100644 Documentation/devicetree/bindings/opp/ti,omap-opp-supply.yaml
->  delete mode 100644 Documentation/devicetree/bindings/opp/ti-omap5-opp-supply.txt
+> - Explicitly include correct DT includes (Rob Herring).
+>
+> - Frequency domain updates for qcom-hw driver (Neil Armstrong).
+>
+> - Modify AMD pstate driver return the highest_perf value (Meng Li).
+>
+> - Generic cleanups for cppc, mediatek and powernow driver (Liao Chang
+>   and Konrad Dybcio).
+>
+> - Add more platforms to cpufreq-arm driver's blocklist (AngeloGioacchino
+>   Del Regno and Konrad Dybcio).
+>
+> - brcmstb-avs-cpufreq: Fix -Warray-bounds bug (Gustavo A. R. Silva).
+>
+> ----------------------------------------------------------------
+> AngeloGioacchino Del Regno (1):
+>       cpufreq: blocklist MSM8998 in cpufreq-dt-platdev
+>
+> Gustavo A. R. Silva (1):
+>       cpufreq: brcmstb-avs-cpufreq: Fix -Warray-bounds bug
+>
+> Konrad Dybcio (2):
+>       cpufreq: blocklist more Qualcomm platforms in cpufreq-dt-platdev
+>       cpufreq: mediatek-hw: Remove unused define
+>
+> Liao Chang (4):
+>       cpufreq: Prefer to print cpuid in MIN/MAX QoS register error message
+>       cpufreq: cppc: cppc_cpufreq_get_rate() returns zero in all error cases.
+>       cpufreq: cppc: Set fie_disabled to FIE_DISABLED if fails to create kworker_fie
+>       cpufreq: powernow-k8: Use related_cpus instead of cpus in driver.exit()
+>
+> Meng Li (1):
+>       cpufreq: amd-pstate-ut: Modify the function to get the highest_perf value
+>
+> Neil Armstrong (2):
+>       dt-bindings: cpufreq: qcom-hw: add a 4th frequency domain
+>       cpufreq: qcom-cpufreq-hw: add support for 4 freq domains
+>
+> Rob Herring (1):
+>       cpufreq: Explicitly include correct DT includes
+>
+> Sumit Gupta (2):
+>       cpufreq: tegra194: add online/offline hooks
+>       cpufreq: tegra194: remove opp table in exit hook
+>
+> Yangtao Li (19):
+>       cpufreq: sun50i: Convert to platform remove callback returning void
+>       cpufreq: dt: Convert to platform remove callback returning void
+>       cpufreq: qcom-cpufreq-hw: Convert to platform remove callback returning void
+>       cpufreq: vexpress: Convert to platform remove callback returning void
+>       cpufreq: imx6q: Convert to platform remove callback returning void
+>       cpufreq: mediatek-hw: Convert to platform remove callback returning void
+>       cpufreq: scpi: Convert to platform remove callback returning void
+>       cpufreq: tegra194: Convert to platform remove callback returning void
+>       cpufreq: brcmstb-avs-cpufreq: Convert to platform remove callback returning void
+>       cpufreq: imx-cpufreq-dt: Convert to platform remove callback returning void
+>       cpufreq: davinci: Convert to platform remove callback returning void
+>       cpufreq: raspberrypi: Convert to platform remove callback returning void
+>       cpufreq: pcc-cpufreq: Convert to platform remove callback returning void
+>       cpufreq: kirkwood: Convert to platform remove callback returning void
+>       cpufreq: qcom-nvmem: Convert to platform remove callback returning void
+>       cpufreq: tegra186: Convert to platform remove callback returning void
+>       cpufreq: acpi: Convert to platform remove callback returning void
+>       cpufreq: qoriq: Convert to platform remove callback returning void
+>       cpufreq: omap: Convert to platform remove callback returning void
+>
+>  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml |  5 ++++-
+>  drivers/cpufreq/acpi-cpufreq.c                                 |  6 ++----
+>  drivers/cpufreq/amd-pstate-ut.c                                |  4 ++--
+>  drivers/cpufreq/armada-37xx-cpufreq.c                          |  4 +---
+>  drivers/cpufreq/brcmstb-avs-cpufreq.c                          | 12 +++++++-----
+>  drivers/cpufreq/cppc_cpufreq.c                                 | 13 ++++++++-----
+>  drivers/cpufreq/cpufreq-dt-platdev.c                           |  7 +++++++
+>  drivers/cpufreq/cpufreq-dt.c                                   |  5 ++---
+>  drivers/cpufreq/cpufreq.c                                      |  8 ++++----
+>  drivers/cpufreq/davinci-cpufreq.c                              |  6 ++----
+>  drivers/cpufreq/imx-cpufreq-dt.c                               |  6 ++----
+>  drivers/cpufreq/imx6q-cpufreq.c                                |  6 ++----
+>  drivers/cpufreq/kirkwood-cpufreq.c                             |  6 ++----
+>  drivers/cpufreq/mediatek-cpufreq-hw.c                          |  9 ++++-----
+>  drivers/cpufreq/mediatek-cpufreq.c                             |  2 --
+>  drivers/cpufreq/omap-cpufreq.c                                 |  6 ++----
+>  drivers/cpufreq/pcc-cpufreq.c                                  |  6 ++----
+>  drivers/cpufreq/powernow-k8.c                                  |  3 ++-
+>  drivers/cpufreq/ppc_cbe_cpufreq.c                              |  2 +-
+>  drivers/cpufreq/ppc_cbe_cpufreq_pmi.c                          |  1 -
+>  drivers/cpufreq/qcom-cpufreq-hw.c                              |  8 +++-----
+>  drivers/cpufreq/qcom-cpufreq-nvmem.c                           |  7 ++-----
+>  drivers/cpufreq/qoriq-cpufreq.c                                |  6 ++----
+>  drivers/cpufreq/raspberrypi-cpufreq.c                          |  6 ++----
+>  drivers/cpufreq/scpi-cpufreq.c                                 |  7 +++----
+>  drivers/cpufreq/sti-cpufreq.c                                  |  2 +-
+>  drivers/cpufreq/sun50i-cpufreq-nvmem.c                         |  6 ++----
+>  drivers/cpufreq/tegra186-cpufreq.c                             |  6 ++----
+>  drivers/cpufreq/tegra194-cpufreq.c                             | 35 +++++++++++++++++++++++++++++++----
+>  drivers/cpufreq/ti-cpufreq.c                                   |  2 +-
+>  drivers/cpufreq/vexpress-spc-cpufreq.c                         |  6 ++----
+>  include/linux/cpufreq.h                                        |  2 +-
+>  32 files changed, 108 insertions(+), 102 deletions(-)
+>
 >
 > --
 
