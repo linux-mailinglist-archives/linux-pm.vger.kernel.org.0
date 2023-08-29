@@ -2,204 +2,356 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C88C678CD1A
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 21:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A038778CECE
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 23:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231171AbjH2TmV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Aug 2023 15:42:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47168 "EHLO
+        id S234387AbjH2VfB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Aug 2023 17:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231783AbjH2TmR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Aug 2023 15:42:17 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93412CC;
-        Tue, 29 Aug 2023 12:42:14 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id 46e09a7af769-6bb1133b063so516214a34.1;
-        Tue, 29 Aug 2023 12:42:14 -0700 (PDT)
+        with ESMTP id S237225AbjH2Veu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Aug 2023 17:34:50 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38187139
+        for <linux-pm@vger.kernel.org>; Tue, 29 Aug 2023 14:34:46 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-50087d47d4dso7856146e87.1
+        for <linux-pm@vger.kernel.org>; Tue, 29 Aug 2023 14:34:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693338134; x=1693942934; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3CnFKgZAwucJ065KYoJ1cdZyJhgPG4k9NfUZYcn8fZ8=;
-        b=MK6Lm8+SyD077uGb4A6W7UleQJdHlYmjVwE0Xcqf5R2Sd8n3cE8z4nJb9S191Oe0LO
-         LaldQcukkDwQOfVF7WZQcWVESsPfGWXNi3Vw3Ccxh/AYRNFbnkFR/cQrTtjstmuSLbhD
-         ZcOnl6TvZcBP+OlmMeyCS4W3geCgyMorGstbh0JHS8qR8EIz6UdG7hny/YUcl6yOVPvC
-         R/8akHF1Qc79qm4T4xRryJf8bTL/KbsXzK+61u3oxv8qwE61jfRjbqvg9oe5ySB3FwV8
-         AW3DmfRu6hwAtlX0FiDKIabw8kYrV272JaDVBXBVFwVc31/74/ZI/v8tZ0FGBxwSY/iH
-         n7Vw==
+        d=linaro.org; s=google; t=1693344884; x=1693949684; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oaVlv6tUCut3MZgi+d135VbILB2oKzrGgB4uFS+DAjE=;
+        b=bY9arcjpbzi3pc3jUtyOr1HSV6PGklHVlKSQZ/P1zVd5j0iTit1k9dEEK3rVwr4Pc5
+         +iycpwXns/XVIMfmC7BAK8eoRhtqa3tjQOeqob1ppqQfLO+t/uKyjtoRbmlk3rI/4upn
+         tP18wVuwjCgFJdJny0WxTV4y57NRRg1kGYQfYMBQx6w1r/q5fPtWqw1Wk3hsdvbKekcy
+         IcZfX4bxRXleTsVa0HhkJ3NVtMYiqSrWXtWe6r/FrASNtT1FMQa1uA7m/GMgupr72Ql8
+         CcYAkHlvnqektAWz4cBLNxj6fcIn/RYVzzrta/x9ekNbP3rPBISrxgh4wmAo4YMTsVZB
+         sTkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693338134; x=1693942934;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3CnFKgZAwucJ065KYoJ1cdZyJhgPG4k9NfUZYcn8fZ8=;
-        b=LWBUxNFl8X0ymyOUpjAljsq3UEHa149WR7iYSyvrcMZaKAeYxE+G9rWKMzmXsM+jG3
-         1A/CEvI0QIxBc9pGfSU1GVPbxcUHxSqCZllaoMEGA5H6dLeb7mmeWnqjuAy9e7g0CIg8
-         2yu0D+G8rqJK1oyH5XdYY5Ru/zWOw5oWI0nXt1W/Yoe71b9MT3fTm0aYWYR1SCLWVYHF
-         WmgsahFBOR4wB1LrKh9pxwNrnN+bonNsaYfMQah93YGwJwfBiMh0CLBuUtTKQEWlz3eV
-         dQouxcd9ixYuFH/8fjroLPuMYGcSkDnLrbc1dOWdOvWZ3Rh5MUpns1WSTWUW9sUYcrB1
-         S8VQ==
-X-Gm-Message-State: AOJu0YwzllTv2U/tQah6Z1bx9aSYduKIagMQh8DqwWcDrJIjxZEv7qlB
-        K9oiRdr7KrT6+gEWza2+Z/c=
-X-Google-Smtp-Source: AGHT+IH+BInRWvBcHrLGkA3bTOk5HRNqBkDHkntkAbfYISNRKwX6hG+qY8z+Y9saBAzLyCZwgM/Yzw==
-X-Received: by 2002:a05:6830:6e18:b0:6b9:f169:99d with SMTP id ec24-20020a0568306e1800b006b9f169099dmr61699otb.2.1693338133899;
-        Tue, 29 Aug 2023 12:42:13 -0700 (PDT)
-Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:d5ec:d929:1621:6cc6])
-        by smtp.gmail.com with ESMTPSA id c21-20020a9d7855000000b006b9848f8aa7sm4905457otm.45.2023.08.29.12.42.10
+        d=1e100.net; s=20221208; t=1693344884; x=1693949684;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oaVlv6tUCut3MZgi+d135VbILB2oKzrGgB4uFS+DAjE=;
+        b=LxRdycUBHl7WWBxxEtXNaacAHYpoITatEyeugT8bNtH8DbBF19a8va0K6J/dRjxoyR
+         wOELM94Xqpph37qkJYgVMaEfbwveKgrOfTlJPYy2VfXRPMX0Bit06WXe9iSQLX/nCg0o
+         v4bDiZR22clVWoG7QNxQB167u99sWMkucYnHMnRW6mOqDLju7MBfnmVuwlWPZKcHU6nW
+         RtRBl0MXqZWOFTbqjX+E1Ry/reZgW30B9FfURetVSCoM3CNr+9gujLzmpmwDVl4HKLFm
+         KJEUZLXbs3kyvoHsFOnbS0YsS8FzfgT99DH/jZPHIw96oGs6EuRa/ic1HM5l9lrSrnD8
+         orDw==
+X-Gm-Message-State: AOJu0Ywmbffu+y0JrHFgwxMLwKq6mOX7RhK+SqEAhNjNuExi18r2IrRZ
+        vuZD8zupnx7yEK24emZ7ob/Ruw==
+X-Google-Smtp-Source: AGHT+IGMeoddZ4Uqxv7LTbdxlEDiXRAD3cvy/64PQTTsJ+iPQrMszaB0KX2XnU9SQ/scAJFsIbDsBA==
+X-Received: by 2002:a19:6914:0:b0:500:b890:fb38 with SMTP id e20-20020a196914000000b00500b890fb38mr97080lfc.24.1693344883430;
+        Tue, 29 Aug 2023 14:34:43 -0700 (PDT)
+Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
+        by smtp.gmail.com with ESMTPSA id c3-20020ac244a3000000b0050087b72169sm2078197lfm.24.2023.08.29.14.34.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Aug 2023 12:42:13 -0700 (PDT)
-From:   Fabio Estevam <festevam@gmail.com>
-To:     daniel.lezcano@linaro.org
-Cc:     rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>
-Subject: [PATCH v5 3/3] thermal: thermal_core: Allow rebooting after critical temp
-Date:   Tue, 29 Aug 2023 16:42:00 -0300
-Message-Id: <20230829194200.1901988-3-festevam@gmail.com>
+        Tue, 29 Aug 2023 14:34:42 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Linus <torvalds@linux-foundation.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>, soc@kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
+Date:   Tue, 29 Aug 2023 23:34:41 +0200
+Message-Id: <20230829213441.310655-1-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230829194200.1901988-1-festevam@gmail.com>
-References: <20230829194200.1901988-1-festevam@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Fabio Estevam <festevam@denx.de>
+Hi Linus,
 
-Currently, the default mechanism is to trigger a shutdown after the
-critical temperature is reached.
+Here's a pull-request that introduces the genpd provider subsystem.
 
-In some embedded cases, such behavior does not suit well, as the board may
-be unattended in the field and rebooting may be a better approach.
+Most of the changes have been shared via an immutable branch/tag, which has
+been pulled in by Arnd Bergmann into the soc tree. However, as I have also
+queued up a couple of additional changes on top, I am sending this pull request
+for you.
 
-The bootloader may also check the temperature and only allow the boot to
-proceed when the temperature is below a certain threshold.
+The changes have been tested in linux-next via
+git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git next|fixes
 
-Introduce support for allowing a reboot to be triggered after the
-critical temperature is reached.
+Beyond v6.6-rc1, I am planning to keep sending pull-requests with fixes and new
+material for new genpd provider subsystem to you. If you prefer another route,
+please let us know.
 
-If the "critical-action" devicetree property is not found, fall back to
-the shutdown action to preserve the existing default behavior.
+Kind regards
+Ulf Hansson
 
-Tested on a i.MX8MM board with the following devicetree changes:
 
-	thermal-zones {
-		cpu-thermal {
-			critical-action = "reboot";
-		};
-	};
+The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
-Signed-off-by: Fabio Estevam <festevam@denx.de>
----
-Changes since v4:
-- Simplify the logic inside thermal_zone_device_critical(). (Rafael)
-- Declare THERMAL_CRITICAL_ACTION_SHUTDOWN = 0 so it is clear what happens
-on non-DT platforms. (Rafael)
+  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
 
- drivers/thermal/thermal_core.c |  6 +++++-
- drivers/thermal/thermal_of.c   | 27 +++++++++++++++++++++++++++
- include/linux/thermal.h        |  6 ++++++
- 3 files changed, 38 insertions(+), 1 deletion(-)
+are available in the Git repository at:
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index a59700593d32..062114608667 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -320,11 +320,15 @@ void thermal_zone_device_critical(struct thermal_zone_device *tz)
- 	 * Its a must for forced_emergency_poweroff_work to be scheduled.
- 	 */
- 	int poweroff_delay_ms = CONFIG_THERMAL_EMERGENCY_POWEROFF_DELAY_MS;
-+	static const char *msg = "Temperature too high";
- 
- 	dev_emerg(&tz->device, "%s: critical temperature reached, "
- 		  "shutting down\n", tz->type);
- 
--	hw_protection_shutdown("Temperature too high", poweroff_delay_ms);
-+	if (tz->action == THERMAL_CRITICAL_ACTION_REBOOT)
-+		hw_protection_reboot(msg, poweroff_delay_ms);
-+	else
-+		hw_protection_shutdown(msg, poweroff_delay_ms);
- }
- EXPORT_SYMBOL(thermal_zone_device_critical);
- 
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index 4ca905723429..8bc28cba7406 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -218,6 +218,31 @@ static struct device_node *of_thermal_zone_find(struct device_node *sensor, int
- 	return tz;
- }
- 
-+static const char * const critical_actions[] = {
-+	[THERMAL_CRITICAL_ACTION_SHUTDOWN]	= "shutdown",
-+	[THERMAL_CRITICAL_ACTION_REBOOT]	= "reboot",
-+};
-+
-+static void thermal_of_get_critical_action(struct device_node *np,
-+					   enum thermal_action *action)
-+{
-+	const char *action_string;
-+	int i, ret;
-+
-+	ret = of_property_read_string(np, "critical-action", &action_string);
-+	if (ret < 0)
-+		goto out_default_action;
-+
-+	for (i = 0; i < ARRAY_SIZE(critical_actions); i++)
-+		if (!strcasecmp(action_string, critical_actions[i])) {
-+			*action = i;
-+			return;
-+		}
-+
-+out_default_action:
-+	*action = THERMAL_CRITICAL_ACTION_SHUTDOWN;
-+}
-+
- static int thermal_of_monitor_init(struct device_node *np, int *delay, int *pdelay)
- {
- 	int ret;
-@@ -516,6 +541,8 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
- 		goto out_kfree_trips;
- 	}
- 
-+	thermal_of_get_critical_action(np, &tz->action);
-+
- 	ret = thermal_zone_device_enable(tz);
- 	if (ret) {
- 		pr_err("Failed to enabled thermal zone '%s', id=%d: %d\n",
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index b449a46766f5..b68e5734823d 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -34,6 +34,11 @@ struct thermal_cooling_device;
- struct thermal_instance;
- struct thermal_attr;
- 
-+enum thermal_action {
-+	THERMAL_CRITICAL_ACTION_SHUTDOWN = 0, /* shutdown when crit temperature is reached */
-+	THERMAL_CRITICAL_ACTION_REBOOT, /* reboot when crit temperature is reached */
-+};
-+
- enum thermal_trend {
- 	THERMAL_TREND_STABLE, /* temperature is stable */
- 	THERMAL_TREND_RAISING, /* temperature is raising */
-@@ -187,6 +192,7 @@ struct thermal_zone_device {
- 	struct list_head node;
- 	struct delayed_work poll_queue;
- 	enum thermal_notify_event notify_event;
-+	enum thermal_action action;
- };
- 
- /**
--- 
-2.34.1
+  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/genpd-v6.6
 
+for you to fetch changes up to 5e536362f6ab97f709c07bfda962a7bb036c2563:
+
+  genpd: ti: Use for_each_node_with_property() simplify code logic (2023-08-25 12:04:57 +0200)
+
+----------------------------------------------------------------
+This pull-request adds a new subsystem for genpd providers in drivers/genpd
+and starts moving some of the corresponding code in there.
+
+We have currently ~60 users of the genpd provider interface, which are
+sprinkled across various subsystems. To release some burden from the soc
+maintainers (Arnd Bergmann, etc) in particular, but also to gain a better
+overall view of what goes on in the area, I will help out with maintenance.
+
+----------------------------------------------------------------
+Arnd Bergmann (2):
+      soc: starfive: remove stale Makefile entry
+      genpd: move owl-sps-helper.c from drivers/soc
+
+Lukas Bulwahn (1):
+      MAINTAINERS: adjust file entry in STARFIVE JH71XX PMU CONTROLLER DRIVER
+
+Peng Fan (7):
+      genpd: Makefile: build imx
+      genpd: imx: relocate scu-pd under genpd
+      genpd: imx: scu-pd: enlarge PD range
+      genpd: imx: scu-pd: add more PDs
+      genpd: imx: scu-pd: do not power off console if no_console_suspend
+      genpd: imx: scu-pd: Suppress bind attrs
+      genpd: imx: scu-pd: initialize is_off according to HW state
+
+Rob Herring (1):
+      genpd: Explicitly include correct DT includes
+
+Ulf Hansson (18):
+      genpd: Create a new subsystem directory to host genpd providers
+      soc: actions: Move power-domain driver to the genpd dir
+      soc: amlogic: Move power-domain drivers to the genpd dir
+      soc: apple: Move power-domain driver to the genpd dir
+      soc: bcm: Move power-domain drivers to the genpd dir
+      soc: imx: Move power-domain drivers to the genpd dir
+      soc: mediatek: Move power-domain drivers to the genpd dir
+      soc: qcom: Move power-domain drivers to the genpd dir
+      soc: renesas: Move power-domain drivers to the genpd dir
+      soc: rockchip: Mover power-domain driver to the genpd dir
+      soc: samsung: Move power-domain driver to the genpd dir
+      soc: starfive: Move the power-domain driver to the genpd dir
+      soc: sunxi: Move power-domain driver to the genpd dir
+      soc: tegra: Move powergate-bpmp driver to the genpd dir
+      soc: ti: Mover power-domain drivers to the genpd dir
+      soc: xilinx: Move power-domain driver to the genpd dir
+      ARM: ux500: Convert power-domain code into a regular platform driver
+      ARM: ux500: Move power-domain driver to the genpd dir
+
+Zhang Zekun (1):
+      genpd: ti: Use for_each_node_with_property() simplify code logic
+
+ MAINTAINERS                                        |  22 +++-
+ arch/arm/mach-ux500/Makefile                       |   1 -
+ arch/arm/mach-ux500/cpu-db8500.c                   |   5 -
+ arch/arm/mach-ux500/pm_domains.h                   |  17 ---
+ drivers/Makefile                                   |   1 +
+ drivers/firmware/imx/Makefile                      |   1 -
+ drivers/genpd/Makefile                             |  17 +++
+ drivers/genpd/actions/Makefile                     |   3 +
+ drivers/{soc => genpd}/actions/owl-sps-helper.c    |   0
+ drivers/{soc => genpd}/actions/owl-sps.c           |   0
+ drivers/genpd/amlogic/Makefile                     |   4 +
+ drivers/{soc => genpd}/amlogic/meson-ee-pwrc.c     |   0
+ drivers/{soc => genpd}/amlogic/meson-gx-pwrc-vpu.c |   0
+ drivers/{soc => genpd}/amlogic/meson-secure-pwrc.c |   0
+ drivers/genpd/apple/Makefile                       |   2 +
+ .../apple/pmgr-pwrstate.c}                         |   0
+ drivers/genpd/bcm/Makefile                         |   5 +
+ drivers/{soc/bcm/bcm63xx => genpd/bcm}/bcm-pmb.c   |   0
+ drivers/{soc => genpd}/bcm/bcm2835-power.c         |   0
+ .../{soc/bcm/bcm63xx => genpd/bcm}/bcm63xx-power.c |   0
+ drivers/{soc => genpd}/bcm/raspberrypi-power.c     |   0
+ drivers/genpd/imx/Makefile                         |   8 ++
+ drivers/{soc => genpd}/imx/gpc.c                   |   0
+ drivers/{soc => genpd}/imx/gpcv2.c                 |   0
+ drivers/{soc => genpd}/imx/imx8m-blk-ctrl.c        |   0
+ drivers/{soc => genpd}/imx/imx8mp-blk-ctrl.c       |   0
+ drivers/{soc => genpd}/imx/imx93-blk-ctrl.c        |   0
+ drivers/{soc => genpd}/imx/imx93-pd.c              |   0
+ drivers/{firmware => genpd}/imx/scu-pd.c           | 138 +++++++++++++++++++--
+ drivers/genpd/mediatek/Makefile                    |   3 +
+ .../{soc => genpd}/mediatek/mt6795-pm-domains.h    |   0
+ .../{soc => genpd}/mediatek/mt8167-pm-domains.h    |   0
+ .../{soc => genpd}/mediatek/mt8173-pm-domains.h    |   0
+ .../{soc => genpd}/mediatek/mt8183-pm-domains.h    |   0
+ .../{soc => genpd}/mediatek/mt8186-pm-domains.h    |   0
+ .../{soc => genpd}/mediatek/mt8188-pm-domains.h    |   0
+ .../{soc => genpd}/mediatek/mt8192-pm-domains.h    |   0
+ .../{soc => genpd}/mediatek/mt8195-pm-domains.h    |   0
+ drivers/{soc => genpd}/mediatek/mtk-pm-domains.c   |   2 +-
+ drivers/{soc => genpd}/mediatek/mtk-pm-domains.h   |   0
+ drivers/{soc => genpd}/mediatek/mtk-scpsys.c       |   2 +-
+ drivers/genpd/qcom/Makefile                        |   4 +
+ drivers/{soc => genpd}/qcom/cpr.c                  |   0
+ drivers/{soc => genpd}/qcom/rpmhpd.c               |   0
+ drivers/{soc => genpd}/qcom/rpmpd.c                |   0
+ drivers/genpd/renesas/Makefile                     |  30 +++++
+ drivers/{soc => genpd}/renesas/r8a7742-sysc.c      |   0
+ drivers/{soc => genpd}/renesas/r8a7743-sysc.c      |   0
+ drivers/{soc => genpd}/renesas/r8a7745-sysc.c      |   0
+ drivers/{soc => genpd}/renesas/r8a77470-sysc.c     |   0
+ drivers/{soc => genpd}/renesas/r8a774a1-sysc.c     |   0
+ drivers/{soc => genpd}/renesas/r8a774b1-sysc.c     |   0
+ drivers/{soc => genpd}/renesas/r8a774c0-sysc.c     |   0
+ drivers/{soc => genpd}/renesas/r8a774e1-sysc.c     |   0
+ drivers/{soc => genpd}/renesas/r8a7779-sysc.c      |   0
+ drivers/{soc => genpd}/renesas/r8a7790-sysc.c      |   0
+ drivers/{soc => genpd}/renesas/r8a7791-sysc.c      |   0
+ drivers/{soc => genpd}/renesas/r8a7792-sysc.c      |   0
+ drivers/{soc => genpd}/renesas/r8a7794-sysc.c      |   0
+ drivers/{soc => genpd}/renesas/r8a7795-sysc.c      |   0
+ drivers/{soc => genpd}/renesas/r8a7796-sysc.c      |   0
+ drivers/{soc => genpd}/renesas/r8a77965-sysc.c     |   0
+ drivers/{soc => genpd}/renesas/r8a77970-sysc.c     |   0
+ drivers/{soc => genpd}/renesas/r8a77980-sysc.c     |   0
+ drivers/{soc => genpd}/renesas/r8a77990-sysc.c     |   0
+ drivers/{soc => genpd}/renesas/r8a77995-sysc.c     |   0
+ drivers/{soc => genpd}/renesas/r8a779a0-sysc.c     |   0
+ drivers/{soc => genpd}/renesas/r8a779f0-sysc.c     |   0
+ drivers/{soc => genpd}/renesas/r8a779g0-sysc.c     |   0
+ drivers/{soc => genpd}/renesas/rcar-gen4-sysc.c    |   0
+ drivers/{soc => genpd}/renesas/rcar-gen4-sysc.h    |   0
+ drivers/{soc => genpd}/renesas/rcar-sysc.c         |   0
+ drivers/{soc => genpd}/renesas/rcar-sysc.h         |   0
+ drivers/{soc => genpd}/renesas/rmobile-sysc.c      |   0
+ drivers/genpd/rockchip/Makefile                    |   2 +
+ .../pm_domains.c => genpd/rockchip/pm-domains.c}   |   0
+ drivers/genpd/samsung/Makefile                     |   2 +
+ .../samsung/exynos-pm-domains.c}                   |   0
+ drivers/genpd/st/Makefile                          |   2 +
+ .../genpd/st/ste-ux500-pm-domain.c                 |  25 +++-
+ drivers/genpd/starfive/Makefile                    |   2 +
+ .../jh71xx_pmu.c => genpd/starfive/jh71xx-pmu.c}   |   0
+ drivers/genpd/sunxi/Makefile                       |   2 +
+ drivers/{soc => genpd}/sunxi/sun20i-ppu.c          |   2 +-
+ drivers/genpd/tegra/Makefile                       |   2 +
+ drivers/{soc => genpd}/tegra/powergate-bpmp.c      |   0
+ drivers/genpd/ti/Makefile                          |   3 +
+ drivers/{soc => genpd}/ti/omap_prm.c               |   0
+ drivers/{soc => genpd}/ti/ti_sci_pm_domains.c      |   8 +-
+ drivers/genpd/xilinx/Makefile                      |   2 +
+ .../xilinx/zynqmp-pm-domains.c}                    |   0
+ drivers/soc/Makefile                               |   2 -
+ drivers/soc/actions/Makefile                       |   4 -
+ drivers/soc/amlogic/Makefile                       |   3 -
+ drivers/soc/apple/Makefile                         |   2 -
+ drivers/soc/bcm/Kconfig                            |  22 +++-
+ drivers/soc/bcm/Makefile                           |   3 -
+ drivers/soc/bcm/bcm63xx/Kconfig                    |  21 ----
+ drivers/soc/bcm/bcm63xx/Makefile                   |   3 -
+ drivers/soc/imx/Makefile                           |   7 +-
+ drivers/soc/mediatek/Makefile                      |   2 -
+ drivers/soc/qcom/Makefile                          |   3 -
+ drivers/soc/renesas/Makefile                       |  27 ----
+ drivers/soc/rockchip/Makefile                      |   1 -
+ drivers/soc/samsung/Makefile                       |   1 -
+ drivers/soc/starfive/Makefile                      |   3 -
+ drivers/soc/sunxi/Makefile                         |   1 -
+ drivers/soc/tegra/Makefile                         |   1 -
+ drivers/soc/ti/Makefile                            |   2 -
+ drivers/soc/xilinx/Makefile                        |   1 -
+ 110 files changed, 288 insertions(+), 138 deletions(-)
+ delete mode 100644 arch/arm/mach-ux500/pm_domains.h
+ create mode 100644 drivers/genpd/Makefile
+ create mode 100644 drivers/genpd/actions/Makefile
+ rename drivers/{soc => genpd}/actions/owl-sps-helper.c (100%)
+ rename drivers/{soc => genpd}/actions/owl-sps.c (100%)
+ create mode 100644 drivers/genpd/amlogic/Makefile
+ rename drivers/{soc => genpd}/amlogic/meson-ee-pwrc.c (100%)
+ rename drivers/{soc => genpd}/amlogic/meson-gx-pwrc-vpu.c (100%)
+ rename drivers/{soc => genpd}/amlogic/meson-secure-pwrc.c (100%)
+ create mode 100644 drivers/genpd/apple/Makefile
+ rename drivers/{soc/apple/apple-pmgr-pwrstate.c => genpd/apple/pmgr-pwrstate.c} (100%)
+ create mode 100644 drivers/genpd/bcm/Makefile
+ rename drivers/{soc/bcm/bcm63xx => genpd/bcm}/bcm-pmb.c (100%)
+ rename drivers/{soc => genpd}/bcm/bcm2835-power.c (100%)
+ rename drivers/{soc/bcm/bcm63xx => genpd/bcm}/bcm63xx-power.c (100%)
+ rename drivers/{soc => genpd}/bcm/raspberrypi-power.c (100%)
+ create mode 100644 drivers/genpd/imx/Makefile
+ rename drivers/{soc => genpd}/imx/gpc.c (100%)
+ rename drivers/{soc => genpd}/imx/gpcv2.c (100%)
+ rename drivers/{soc => genpd}/imx/imx8m-blk-ctrl.c (100%)
+ rename drivers/{soc => genpd}/imx/imx8mp-blk-ctrl.c (100%)
+ rename drivers/{soc => genpd}/imx/imx93-blk-ctrl.c (100%)
+ rename drivers/{soc => genpd}/imx/imx93-pd.c (100%)
+ rename drivers/{firmware => genpd}/imx/scu-pd.c (75%)
+ create mode 100644 drivers/genpd/mediatek/Makefile
+ rename drivers/{soc => genpd}/mediatek/mt6795-pm-domains.h (100%)
+ rename drivers/{soc => genpd}/mediatek/mt8167-pm-domains.h (100%)
+ rename drivers/{soc => genpd}/mediatek/mt8173-pm-domains.h (100%)
+ rename drivers/{soc => genpd}/mediatek/mt8183-pm-domains.h (100%)
+ rename drivers/{soc => genpd}/mediatek/mt8186-pm-domains.h (100%)
+ rename drivers/{soc => genpd}/mediatek/mt8188-pm-domains.h (100%)
+ rename drivers/{soc => genpd}/mediatek/mt8192-pm-domains.h (100%)
+ rename drivers/{soc => genpd}/mediatek/mt8195-pm-domains.h (100%)
+ rename drivers/{soc => genpd}/mediatek/mtk-pm-domains.c (99%)
+ rename drivers/{soc => genpd}/mediatek/mtk-pm-domains.h (100%)
+ rename drivers/{soc => genpd}/mediatek/mtk-scpsys.c (99%)
+ create mode 100644 drivers/genpd/qcom/Makefile
+ rename drivers/{soc => genpd}/qcom/cpr.c (100%)
+ rename drivers/{soc => genpd}/qcom/rpmhpd.c (100%)
+ rename drivers/{soc => genpd}/qcom/rpmpd.c (100%)
+ create mode 100644 drivers/genpd/renesas/Makefile
+ rename drivers/{soc => genpd}/renesas/r8a7742-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a7743-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a7745-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a77470-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a774a1-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a774b1-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a774c0-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a774e1-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a7779-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a7790-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a7791-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a7792-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a7794-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a7795-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a7796-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a77965-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a77970-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a77980-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a77990-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a77995-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a779a0-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a779f0-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a779g0-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/rcar-gen4-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/rcar-gen4-sysc.h (100%)
+ rename drivers/{soc => genpd}/renesas/rcar-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/rcar-sysc.h (100%)
+ rename drivers/{soc => genpd}/renesas/rmobile-sysc.c (100%)
+ create mode 100644 drivers/genpd/rockchip/Makefile
+ rename drivers/{soc/rockchip/pm_domains.c => genpd/rockchip/pm-domains.c} (100%)
+ create mode 100644 drivers/genpd/samsung/Makefile
+ rename drivers/{soc/samsung/pm_domains.c => genpd/samsung/exynos-pm-domains.c} (100%)
+ create mode 100644 drivers/genpd/st/Makefile
+ rename arch/arm/mach-ux500/pm_domains.c => drivers/genpd/st/ste-ux500-pm-domain.c (75%)
+ create mode 100644 drivers/genpd/starfive/Makefile
+ rename drivers/{soc/starfive/jh71xx_pmu.c => genpd/starfive/jh71xx-pmu.c} (100%)
+ create mode 100644 drivers/genpd/sunxi/Makefile
+ rename drivers/{soc => genpd}/sunxi/sun20i-ppu.c (99%)
+ create mode 100644 drivers/genpd/tegra/Makefile
+ rename drivers/{soc => genpd}/tegra/powergate-bpmp.c (100%)
+ create mode 100644 drivers/genpd/ti/Makefile
+ rename drivers/{soc => genpd}/ti/omap_prm.c (100%)
+ rename drivers/{soc => genpd}/ti/ti_sci_pm_domains.c (97%)
+ create mode 100644 drivers/genpd/xilinx/Makefile
+ rename drivers/{soc/xilinx/zynqmp_pm_domains.c => genpd/xilinx/zynqmp-pm-domains.c} (100%)
+ delete mode 100644 drivers/soc/actions/Makefile
+ delete mode 100644 drivers/soc/bcm/bcm63xx/Kconfig
+ delete mode 100644 drivers/soc/bcm/bcm63xx/Makefile
+ delete mode 100644 drivers/soc/starfive/Makefile
