@@ -2,142 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B8278C80A
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 16:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6792E78C867
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 17:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236786AbjH2Owl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Aug 2023 10:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33716 "EHLO
+        id S237168AbjH2PPj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Aug 2023 11:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237139AbjH2Owc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Aug 2023 10:52:32 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE4A98;
-        Tue, 29 Aug 2023 07:52:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693320749; x=1724856749;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FylhOCBxnWrtavNBNeHVWqufiBk07ThM8X7Znf1QkXc=;
-  b=JylN52bCueV2zyyuKPGFW8ipJzYP3PQB+7dZJa8kQdiYwTeMknRYbq1L
-   TXWVPUSebg2tEZWO9rZBLP1m8nLTWUse1xv/KXDnX8/VcUbAZGbOvp2os
-   KWBVOLHCAD4Bv9Sp/htpR6rRIoZtJKG8m451FAHIbAWrmsK/QYXHq5QC4
-   BWf3IMN2kXmlQmZsZ+3I03yOjTxFZcYCUcxgTkeaZb9u9+racOnf6eD3d
-   Ap6jTm8SAqw3pcjqNHTYtb8LOOas0rhUu2odJvOK1R/6SgHkMeegJRCY6
-   axVBu4z3+0EwaDLie43SmHMknVHQ8YWShOXCxOdufG+a2d3IhEckGJP/2
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="406380415"
-X-IronPort-AV: E=Sophos;i="6.02,210,1688454000"; 
-   d="scan'208";a="406380415"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2023 07:52:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="985369271"
-X-IronPort-AV: E=Sophos;i="6.02,210,1688454000"; 
-   d="scan'208";a="985369271"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 29 Aug 2023 07:52:24 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qb04t-0008pB-3A;
-        Tue, 29 Aug 2023 14:52:23 +0000
-Date:   Tue, 29 Aug 2023 22:52:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Meng Li <li.meng@amd.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-acpi@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Shimmer Huang <shimmer.huang@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
+        with ESMTP id S237194AbjH2PPf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Aug 2023 11:15:35 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2B71B6;
+        Tue, 29 Aug 2023 08:15:33 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37T9pPL3001900;
+        Tue, 29 Aug 2023 15:15:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=n+qoRzSouWfIAkfU1nrJqei5rteFOw/ClcLeMDhq9zA=;
+ b=DKGXfH2I8YbFRNliBkDBOtQ2yxjPMS1ZbkUGvhntWwjZbUf5uSD9HtVdf7Be0LhXNQz5
+ 4Q6FWjwCG8EJ41obzCcmGId0tvTP4Ai5LAmQ9M7B5KTAZObSg/gBjv0l+6vjH+aTiGZ5
+ PGWnRofvC4F50uLxm1GSfmepLy9D/+JInI18zU0uY+vIG8MWPHcXoYCX9iyJN0kzgK4I
+ gQv8WXk+EHgbKmMzLgPEM8P3bGbVBR12NEgRfWpv9OuvQL0ASSPkrUCn1/59FUsuag3Y
+ dhOSXyjXtak1sTOJj+RZD0eZKXAJEKjNHSbsdcHDC6uALzjqdOT2wjP/tIwPYbiOP+c+ XA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ss2xba5u7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Aug 2023 15:15:12 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37TFFBj7011980
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Aug 2023 15:15:11 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Tue, 29 Aug 2023 08:15:10 -0700
+Date:   Tue, 29 Aug 2023 08:15:09 -0700
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+CC:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Niklas Cassel <nks@flawful.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>
-Subject: Re: [PATCH V4 3/7] cpufreq: amd-pstate: Enable AMD Pstate Preferred
- Core Supporting.
-Message-ID: <202308292233.XhcXfvSm-lkp@intel.com>
-References: <20230829064340.1136448-4-li.meng@amd.com>
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Robert Marko <robimarko@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Subject: Re: [PATCH v14 4/9] soc: qcom: cpr: Move common functions to new file
+Message-ID: <20230829151509.GN818859@hu-bjorande-lv.qualcomm.com>
+References: <20230217-topic-cpr3h-v14-0-9fd23241493d@linaro.org>
+ <20230217-topic-cpr3h-v14-4-9fd23241493d@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230829064340.1136448-4-li.meng@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230217-topic-cpr3h-v14-4-9fd23241493d@linaro.org>
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: JDMi5WBolj903Ew5F17GyyKJeqvNO907
+X-Proofpoint-GUID: JDMi5WBolj903Ew5F17GyyKJeqvNO907
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-29_11,2023-08-29_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ mlxscore=0 clxscore=1011 impostorscore=0 lowpriorityscore=0 bulkscore=0
+ spamscore=0 priorityscore=1501 mlxlogscore=999 adultscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2308100000
+ definitions=main-2308290133
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Meng,
+On Mon, Aug 28, 2023 at 01:42:16PM +0200, Konrad Dybcio wrote:
+> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> 
 
-kernel test robot noticed the following build warnings:
+It seems reasonable to update the subject prefix, now that things have
+moved to the genpd subsystem.
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on linus/master v6.5 next-20230829]
-[cannot apply to tip/x86/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> In preparation for implementing a new driver that will be handling
+> CPRv3, CPRv4 and CPR-Hardened, format out common functions to a new
+> file.
+> 
+> Update cpr_get_fuses in preparation for CPR3 implementation, change
+> parameters where necessary to not take cpr.c private data structures.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> [Konrad: rebase, apply review comments, improve msg, split]
+> Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  drivers/genpd/qcom/Makefile     |   2 +-
+>  drivers/genpd/qcom/cpr-common.c | 350 ++++++++++++++++++++++++++++++++++++
+>  drivers/genpd/qcom/cpr-common.h | 103 +++++++++++
+>  drivers/genpd/qcom/cpr.c        | 384 +++-------------------------------------
+>  4 files changed, 475 insertions(+), 364 deletions(-)
+> 
+> diff --git a/drivers/genpd/qcom/Makefile b/drivers/genpd/qcom/Makefile
+> index 403dfc5af095..b28c8d9128c4 100644
+> --- a/drivers/genpd/qcom/Makefile
+> +++ b/drivers/genpd/qcom/Makefile
+> @@ -1,4 +1,4 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> -obj-$(CONFIG_QCOM_CPR)		+= cpr.o
+> +obj-$(CONFIG_QCOM_CPR)		+= cpr-common.o cpr.o
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Meng-Li/x86-Drop-CPU_SUP_INTEL-from-SCHED_MC_PRIO-for-the-expansion/20230829-144723
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20230829064340.1136448-4-li.meng%40amd.com
-patch subject: [PATCH V4 3/7] cpufreq: amd-pstate: Enable AMD Pstate Preferred Core Supporting.
-config: x86_64-randconfig-r005-20230829 (https://download.01.org/0day-ci/archive/20230829/202308292233.XhcXfvSm-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230829/202308292233.XhcXfvSm-lkp@intel.com/reproduce)
+Is there a reason for this to be split in two drivers? Would it make
+sense to rewrite this such that the result ends up as a single .ko?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308292233.XhcXfvSm-lkp@intel.com/
+Then you shouldn't need to EXPORT_SYMBOL between the two parts of the
+same "driver".
 
-All warnings (new ones prefixed by >>):
-
->> drivers/cpufreq/amd-pstate.c:692: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Get the highest performance register value.
-
-
-vim +692 drivers/cpufreq/amd-pstate.c
-
-   690	
-   691	/**
- > 692	 * Get the highest performance register value.
-   693	 * @cpu: CPU from which to get highest performance.
-   694	 * @highest_perf: Return address.
-   695	 *
-   696	 * Return: 0 for success, -EIO otherwise.
-   697	 */
-   698	static int amd_pstate_get_highest_perf(int cpu, u64 *highest_perf)
-   699	{
-   700	       int ret;
-   701	
-   702	       if (boot_cpu_has(X86_FEATURE_CPPC)) {
-   703	               u64 cap1;
-   704	
-   705	               ret = rdmsrl_safe_on_cpu(cpu, MSR_AMD_CPPC_CAP1, &cap1);
-   706	               if (ret)
-   707	                       return ret;
-   708	               WRITE_ONCE(*highest_perf, AMD_CPPC_HIGHEST_PERF(cap1));
-   709	       } else {
-   710	               ret = cppc_get_highest_perf(cpu, highest_perf);
-   711	       }
-   712	
-   713	       return (ret);
-   714	}
-   715	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Bjorn
