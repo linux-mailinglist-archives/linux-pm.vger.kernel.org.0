@@ -2,137 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6792E78C867
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 17:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DDBD78C9B3
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 18:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237168AbjH2PPj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Aug 2023 11:15:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41050 "EHLO
+        id S234700AbjH2Qdw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Aug 2023 12:33:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237194AbjH2PPf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Aug 2023 11:15:35 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2B71B6;
-        Tue, 29 Aug 2023 08:15:33 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37T9pPL3001900;
-        Tue, 29 Aug 2023 15:15:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=n+qoRzSouWfIAkfU1nrJqei5rteFOw/ClcLeMDhq9zA=;
- b=DKGXfH2I8YbFRNliBkDBOtQ2yxjPMS1ZbkUGvhntWwjZbUf5uSD9HtVdf7Be0LhXNQz5
- 4Q6FWjwCG8EJ41obzCcmGId0tvTP4Ai5LAmQ9M7B5KTAZObSg/gBjv0l+6vjH+aTiGZ5
- PGWnRofvC4F50uLxm1GSfmepLy9D/+JInI18zU0uY+vIG8MWPHcXoYCX9iyJN0kzgK4I
- gQv8WXk+EHgbKmMzLgPEM8P3bGbVBR12NEgRfWpv9OuvQL0ASSPkrUCn1/59FUsuag3Y
- dhOSXyjXtak1sTOJj+RZD0eZKXAJEKjNHSbsdcHDC6uALzjqdOT2wjP/tIwPYbiOP+c+ XA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ss2xba5u7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Aug 2023 15:15:12 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37TFFBj7011980
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Aug 2023 15:15:11 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Tue, 29 Aug 2023 08:15:10 -0700
-Date:   Tue, 29 Aug 2023 08:15:09 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-CC:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Niklas Cassel <nks@flawful.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+        with ESMTP id S237474AbjH2Qdu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Aug 2023 12:33:50 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447EC184;
+        Tue, 29 Aug 2023 09:33:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693326828; x=1724862828;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LbBndQ30pApFIdN1pPSoRCOwu6jKcidtzAZxrTxto+I=;
+  b=G0mPdmDJyd0ZFftYDC1qtsdyRxiN4gpfjuxiq7XvUYR83T7NilQOG4IC
+   mvbpVNehg+xBptDZpExL21wpo+9EDcVc3v4FjchcDyUHg8aaeVDivhmDa
+   lrbbMONM+156SM5sy+jMr95Q/+q8kOG2KguvLrkj9solvalS76YYMp1gZ
+   JKTKvlHjQNJGt1O/2zSYK1YOLlRl51//a4iVsIQ+n+G6ijDOIq4c5WeT8
+   Ab5jpK1v2aWqR1jmPxUCn3W+CYgqCOPvsWbN+qSDyzgbTS/SbVhJGK3pK
+   B2o/fWnV6biXXqTnOK5QbG2O3WEsUCwPFwxGYmSBuoYDaUYLZEBsko2zD
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="461793834"
+X-IronPort-AV: E=Sophos;i="6.02,210,1688454000"; 
+   d="scan'208";a="461793834"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2023 09:28:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="741883388"
+X-IronPort-AV: E=Sophos;i="6.02,210,1688454000"; 
+   d="scan'208";a="741883388"
+Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 29 Aug 2023 09:27:56 -0700
+Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qb1ZL-0008u3-28;
+        Tue, 29 Aug 2023 16:27:55 +0000
+Date:   Wed, 30 Aug 2023 00:27:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Meng Li <li.meng@amd.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-acpi@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Robert Marko <robimarko@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Subject: Re: [PATCH v14 4/9] soc: qcom: cpr: Move common functions to new file
-Message-ID: <20230829151509.GN818859@hu-bjorande-lv.qualcomm.com>
-References: <20230217-topic-cpr3h-v14-0-9fd23241493d@linaro.org>
- <20230217-topic-cpr3h-v14-4-9fd23241493d@linaro.org>
+        Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>
+Subject: Re: [PATCH V4 4/7] cpufreq: Add a notification message that the
+ highest perf has changed
+Message-ID: <202308300057.ASUJQpsV-lkp@intel.com>
+References: <20230829064340.1136448-5-li.meng@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230217-topic-cpr3h-v14-4-9fd23241493d@linaro.org>
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: JDMi5WBolj903Ew5F17GyyKJeqvNO907
-X-Proofpoint-GUID: JDMi5WBolj903Ew5F17GyyKJeqvNO907
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-08-29_11,2023-08-29_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- mlxscore=0 clxscore=1011 impostorscore=0 lowpriorityscore=0 bulkscore=0
- spamscore=0 priorityscore=1501 mlxlogscore=999 adultscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2308100000
- definitions=main-2308290133
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230829064340.1136448-5-li.meng@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 28, 2023 at 01:42:16PM +0200, Konrad Dybcio wrote:
-> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> 
+Hi Meng,
 
-It seems reasonable to update the subject prefix, now that things have
-moved to the genpd subsystem.
+kernel test robot noticed the following build errors:
 
-> In preparation for implementing a new driver that will be handling
-> CPRv3, CPRv4 and CPR-Hardened, format out common functions to a new
-> file.
-> 
-> Update cpr_get_fuses in preparation for CPR3 implementation, change
-> parameters where necessary to not take cpr.c private data structures.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> [Konrad: rebase, apply review comments, improve msg, split]
-> Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  drivers/genpd/qcom/Makefile     |   2 +-
->  drivers/genpd/qcom/cpr-common.c | 350 ++++++++++++++++++++++++++++++++++++
->  drivers/genpd/qcom/cpr-common.h | 103 +++++++++++
->  drivers/genpd/qcom/cpr.c        | 384 +++-------------------------------------
->  4 files changed, 475 insertions(+), 364 deletions(-)
-> 
-> diff --git a/drivers/genpd/qcom/Makefile b/drivers/genpd/qcom/Makefile
-> index 403dfc5af095..b28c8d9128c4 100644
-> --- a/drivers/genpd/qcom/Makefile
-> +++ b/drivers/genpd/qcom/Makefile
-> @@ -1,4 +1,4 @@
->  # SPDX-License-Identifier: GPL-2.0
-> -obj-$(CONFIG_QCOM_CPR)		+= cpr.o
-> +obj-$(CONFIG_QCOM_CPR)		+= cpr-common.o cpr.o
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on linus/master v6.5 next-20230829]
+[cannot apply to tip/x86/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Is there a reason for this to be split in two drivers? Would it make
-sense to rewrite this such that the result ends up as a single .ko?
+url:    https://github.com/intel-lab-lkp/linux/commits/Meng-Li/x86-Drop-CPU_SUP_INTEL-from-SCHED_MC_PRIO-for-the-expansion/20230829-144723
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20230829064340.1136448-5-li.meng%40amd.com
+patch subject: [PATCH V4 4/7] cpufreq: Add a notification message that the highest perf has changed
+config: i386-randconfig-r031-20230829 (https://download.01.org/0day-ci/archive/20230830/202308300057.ASUJQpsV-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230830/202308300057.ASUJQpsV-lkp@intel.com/reproduce)
 
-Then you shouldn't need to EXPORT_SYMBOL between the two parts of the
-same "driver".
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308300057.ASUJQpsV-lkp@intel.com/
 
-Regards,
-Bjorn
+All errors (new ones prefixed by >>):
+
+>> drivers/acpi/processor_driver.c:88:3: error: call to undeclared function 'cpufreq_update_highest_perf'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   cpufreq_update_highest_perf(pr->id);
+                   ^
+   1 error generated.
+
+
+vim +/cpufreq_update_highest_perf +88 drivers/acpi/processor_driver.c
+
+    53	
+    54	static void acpi_processor_notify(acpi_handle handle, u32 event, void *data)
+    55	{
+    56		struct acpi_device *device = data;
+    57		struct acpi_processor *pr;
+    58		int saved;
+    59	
+    60		if (device->handle != handle)
+    61			return;
+    62	
+    63		pr = acpi_driver_data(device);
+    64		if (!pr)
+    65			return;
+    66	
+    67		switch (event) {
+    68		case ACPI_PROCESSOR_NOTIFY_PERFORMANCE:
+    69			saved = pr->performance_platform_limit;
+    70			acpi_processor_ppc_has_changed(pr, 1);
+    71			if (saved == pr->performance_platform_limit)
+    72				break;
+    73			acpi_bus_generate_netlink_event(device->pnp.device_class,
+    74							  dev_name(&device->dev), event,
+    75							  pr->performance_platform_limit);
+    76			break;
+    77		case ACPI_PROCESSOR_NOTIFY_POWER:
+    78			acpi_processor_power_state_has_changed(pr);
+    79			acpi_bus_generate_netlink_event(device->pnp.device_class,
+    80							  dev_name(&device->dev), event, 0);
+    81			break;
+    82		case ACPI_PROCESSOR_NOTIFY_THROTTLING:
+    83			acpi_processor_tstate_has_changed(pr);
+    84			acpi_bus_generate_netlink_event(device->pnp.device_class,
+    85							  dev_name(&device->dev), event, 0);
+    86			break;
+    87		case ACPI_PROCESSOR_NOTIFY_HIGEST_PERF_CHANGED:
+  > 88			cpufreq_update_highest_perf(pr->id);
+    89			acpi_bus_generate_netlink_event(device->pnp.device_class,
+    90							  dev_name(&device->dev), event, 0);
+    91			break;
+    92		default:
+    93			acpi_handle_debug(handle, "Unsupported event [0x%x]\n", event);
+    94			break;
+    95		}
+    96	
+    97		return;
+    98	}
+    99	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
