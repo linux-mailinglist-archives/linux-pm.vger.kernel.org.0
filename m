@@ -2,271 +2,211 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 060E678C9C2
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 18:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 684CF78C9F1
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 18:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237480AbjH2QiM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Aug 2023 12:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43804 "EHLO
+        id S230089AbjH2QwQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 29 Aug 2023 12:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237483AbjH2Qhr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Aug 2023 12:37:47 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08B8184
-        for <linux-pm@vger.kernel.org>; Tue, 29 Aug 2023 09:37:43 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-401ceda85cdso17586925e9.1
-        for <linux-pm@vger.kernel.org>; Tue, 29 Aug 2023 09:37:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1693327062; x=1693931862;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=A5NFsJWiFLxuFwl1EtWT4+lMNFFFs9m756sXu41LDDc=;
-        b=la4/8wPcMgNVCUJ1o/pxJDjq95ELpHln+3N6PIBdnXMRiLzK+iYsWDQaIxNSQmbBG7
-         jH8T+Hwk2+UCjACgbZ0K5jqHnR9dgYnpns4ZtqewZ6+sn7h78wvSR8Ujr2Ukg1i0Lydi
-         WcM7zASit5IboH2hn9cHso9ie0lLUPpvMymTiYcxIbTyRLildi2IcUcrgwFiVdahekU/
-         NXjmsJ2YALyJ+kHxMp8L6FpkDkEEK1wODOf6d/KybBEkFhJnpiRh9PkBCyDNM3xV/kbV
-         oRZMb2dYAWP7vzAGu4fPAR3fPihfzWfHoylfwW/SeLGDaDFf/Kb1j/U8IIuEABO4+bwb
-         YwTQ==
+        with ESMTP id S236421AbjH2Qvn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Aug 2023 12:51:43 -0400
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F5AB8;
+        Tue, 29 Aug 2023 09:51:39 -0700 (PDT)
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-56e280cc606so904896eaf.1;
+        Tue, 29 Aug 2023 09:51:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693327062; x=1693931862;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A5NFsJWiFLxuFwl1EtWT4+lMNFFFs9m756sXu41LDDc=;
-        b=kTcFlPGkOpmz/DHuS8uompNHFQv5dpZ3AZgJ5JaKcf+YQZcPCeIKPYRS8Yia3xE0Qt
-         BuYKRT1KeDf4dbuEOdfmSZpY7DlnqYuQqEAuic0V5BrZDluVFv4Ty0tThSPwqMeFJHuh
-         9jZbjV2G48YxUKmeYCzSWIYyTFeWQt/WGoNNJKnqsGVrLk0MNpI//oiBhlLMS55LzSyc
-         gL4TQ2c9cGIEnxvcDV54jvqZ9gr3GdE+CiHhNu4Pd5NB9xKMtTbo1i2PVFuCkQD2tX+e
-         BIH7zYrezklmR1jccMlLqRMZAElNx6jndz2OquaFM2WGw6Fo3xd4L/rntAt8n/5f8B/d
-         5/oA==
-X-Gm-Message-State: AOJu0Yzvp4b9uKfmq9TxnAiW8ruSa7Li/nDRqXxGbdbe6ZbzWhfTPB0A
-        BYaJs3X9GA89AT6TMU+vJ+3KNA==
-X-Google-Smtp-Source: AGHT+IEAYaMnD3Vdtzozuhq2AHDXpWlJzF4wgiZrhLV0vLTlTtr05Z49Uzvc2y8r4muGhZRIieHp/w==
-X-Received: by 2002:a05:600c:3653:b0:401:b0f2:88b4 with SMTP id y19-20020a05600c365300b00401b0f288b4mr10942322wmq.26.1693327062257;
-        Tue, 29 Aug 2023 09:37:42 -0700 (PDT)
-Received: from airbuntu ([104.132.45.98])
-        by smtp.gmail.com with ESMTPSA id k8-20020a7bc408000000b003fe23b10fdfsm17599960wmi.36.2023.08.29.09.37.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Aug 2023 09:37:41 -0700 (PDT)
-Date:   Tue, 29 Aug 2023 17:37:40 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Subject: Re: [PATCH 2/4] sched: cpufreq: Fix apply_dvfs_headroom() escaping
- uclamp constraints
-Message-ID: <20230829163740.uadhv2jfjuumqk3w@airbuntu>
-References: <20230820210640.585311-1-qyousef@layalina.io>
- <20230820210640.585311-3-qyousef@layalina.io>
- <CAKfTPtDY48jpO+b-2KXawzxh-ty+FMKX6YUXioNR7kpgO=ua6Q@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1693327899; x=1693932699;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=py8M/AaptzZRIkwjGpgtjECb2gZ1mnpcCUEmEGnuC0c=;
+        b=UIA/s3KfN8va0DSLkanuUSr4kddhCtu3Q/vXyc2baeREfDvT1khqkdxcASdPEBq6kV
+         lt/nGCRSTmK8zVOmcAh5US67K/pSdwRCQhmr2btDQjW2iDkBxp6qYnqO4RQWvgDxNHEm
+         MGeS43KJSDTxh55Az6FB2U5TUmSeG89ceQRxPeaz+ecp1rNS4NSuOUPiz8Fh7bu6BbGh
+         KwQt7/jZIwOQqo9YpLM/3GmLyUZGEYXeF/e3mHD7fuAOi+I8fk6W80pPGt3SBi7yT/Bj
+         3f75c7Rt1spSagvOKzSKruYCWcOn1xasHLlfr9pC2A4RI9sWT1Fv1RqX75J/RJPd5l0r
+         ZfWw==
+X-Gm-Message-State: AOJu0Yy9Qz48QpgxAdKtP0i1EJPDzwkBRdHiAxX0v08/c44EljgSGDIB
+        2oWILrSsPajp+O9YE/X7ufpvzoAxn4axGbggeBA=
+X-Google-Smtp-Source: AGHT+IF6cNBaER+yk77Bw9dyXOzdm1gDguFFajOqVO6CKVIHx5taxM5lBFbbSQ+Pik4fLudoXTm5SrNrgcGm76x5H6M=
+X-Received: by 2002:a4a:a681:0:b0:573:3a3b:594b with SMTP id
+ f1-20020a4aa681000000b005733a3b594bmr13825584oom.1.1693327898911; Tue, 29 Aug
+ 2023 09:51:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtDY48jpO+b-2KXawzxh-ty+FMKX6YUXioNR7kpgO=ua6Q@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <153c9f98-8d8f-a933-dca4-c3ce19ee1f6b@linaro.org>
+In-Reply-To: <153c9f98-8d8f-a933-dca4-c3ce19ee1f6b@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 29 Aug 2023 18:51:27 +0200
+Message-ID: <CAJZ5v0gHbbs+ipB1D37vBGHwpgN9qSW29K_mCJCSqBD1sjvkKA@mail.gmail.com>
+Subject: Re: [GIT PULL] thermal material for v6.6-rc1
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Li Zetao <lizetao1@huawei.com>,
+        Andrei Coardos <aboutphysycs@gmail.com>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        Krzysztof Kozlowski <k.kozlowski@samsung.com>,
+        Ruan Jinjie <ruanjinjie@huawei.com>,
+        Chen Jiahao <chenjiahao16@huawei.com>,
+        Mark Brown <broonie@kernel.org>,
+        Yangtao Li <frank.li@vivo.com>,
+        Min-Hua Chen <minhuadotchen@gmail.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Minjie Du <duminjie@vivo.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/29/23 16:35, Vincent Guittot wrote:
-> On Sun, 20 Aug 2023 at 23:08, Qais Yousef <qyousef@layalina.io> wrote:
-> >
-> > DVFS headroom is applied after we calculate the effective_cpu_util()
-> > which is where we honour uclamp constraints. It makes more sense to
-> > apply the headroom there once and let all users naturally get the right
-> > thing without having to sprinkle the call around in various places.
-> 
-> You have to take care of not mixing scheduler and cpufreq constraint and policy.
-> 
-> uclamp is a scheduler feature to highlight that the utilization
-> requirement of a task can't go above a level.
+Hi Daniel,
 
-uclamp is a performance hint, which utilization is how we represent it
-internally. A task with uclamp of 800 is not the same as util being actually
-800. In our previous discussions around util_fits_cpu() we had similar
-discussion on how the two can't be treated the same.
+On Tue, Aug 29, 2023 at 3:11 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+>
+> Hi Rafael,
+>
+> please consider this pull request for the thermal material
+>
+> Thanks
+>
+> The following changes since commit f6a756e8fb12923f0e3996a575e935e94f3594eb:
+>
+>    thermal: Explicitly include correct DT includes (2023-07-31 20:03:42
+> +0200)
+>
+> are available in the Git repository at:
+>
+>
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+> tags/thermal-v6.6-rc1
+>
+> for you to fetch changes up to 1ef5a9f61457b921158ef03f3a2b3e789b41be9f:
+>
+>    thermal/drivers/tegra-bpmp: Check if BPMP supports trip points
+> (2023-08-22 19:10:28 +0200)
+>
+> ----------------------------------------------------------------
+> - Check if the Tegra BPMP supports the trip points in order to set the
+>    .set_trips callback (Mikko Perttunen)
+>
+> - Add the new Loongson-2 thermal sensor along with the DT bindings
+>    (Yinbo Zhu)
+>
+> - Use IS_ERR_OR_NULL helper to replace a double test on the TI bandgap
+>    sensor (Li Zetao)
+>
+> - Remove the call to platform_set_drvdata() as there is no call to
+>    platform_get_drvdata() in a bunch of drivers where that happens
+>    (Andrei Coardos)
+>
+> - Switch the Mediatek LVTS mode to filtered in order to enable the
+>    interrupts (Nícolas F. R. A. Prado)
+>
+> - Fix Wvoid-pointer-to-enum-cast warning on the Exynos TMU (Krzysztof
+>    Kozlowski)
+>
+> - Remove redundant usage of of_match_ptr() as the driver db8500
+>    already depends on CONFIG_OF (Ruan Jinjie)
+>
+> - Remove redundant dev_err_probe() because the underlying function
+>    already called it in the Mediatek sensor (Chen Jiahao)
+>
+> - Free calibration nvmem after reading it on sun8i (Mark Brown)
+>
+> - Remove useless comment in the code on sun8i (Yangtao Li)
+>
+> - Make tsens_xxxx_nvmem static to fix sparse warning on QCom tsens
+> (Min-Hua Chen)
+>
+> - Remove error message at probe deferral on imx8mm (Ahmad Fatoum)
+>
+> - Fix parameter check in lvts_debugfs_init with IS_ERR on Mediatek
+>    LVTS (Minjie Du)
+>
+> - Fix the interrupt routine and configuratoin for the Mediatek LVTS
+>    (Nícolas F. R. A. Prado)
+>
+> ----------------------------------------------------------------
+> Ahmad Fatoum (1):
+>        thermal/drivers/imx8mm: Suppress log message on probe deferral
+>
+> Andrei Coardos (8):
+>        thermal/drivers/broadcom/sr-thermal: Removed call to
+> platform_set_drvdata()
+>        thermal/drivers/k3_j72xx_bandgap: Removed unneeded call to
+> platform_set_drvdata()
+>        thermal/drivers/k3_bandgap: Remove unneeded call to
+> platform_set_drvdata()
+>        thermal/drivers/broadcom/brcstb_thermal: Removed unneeded
+> platform_set_drvdata()
+>        thermal/drivers/sun8i_thermal: Remove unneeded call to
+> platform_set_drvdata()
+>        thermal/drivers/mediatek/auxadc_thermal: Removed call to
+> platform_set_drvdata()
+>        thermal/drivers/max77620_thermal: Removed unneeded call to
+> platform_set_drvdata()
+>        thermal/drivers/generic-adc: Removed unneeded call to
+> platform_set_drvdata()
+>
+> Chen Jiahao (1):
+>        thermal/drivers/mediatek: Clean up redundant dev_err_probe()
+>
+> Krzysztof Kozlowski (1):
+>        thermal/drivers/samsung: Fix Wvoid-pointer-to-enum-cast warning
+>
+> Li Zetao (1):
+>        thermal/drivers/ti-soc-thermal: Use helper function IS_ERR_OR_NULL()
+>
+> Mark Brown (1):
+>        thermal/drivers/sun8i: Free calibration nvmem after reading it
+>
+> Mikko Perttunen (1):
+>        thermal/drivers/tegra-bpmp: Check if BPMP supports trip points
+>
+> Min-Hua Chen (1):
+>        thermal/drivers/tsens: Make tsens_xxxx_nvmem static
+>
+> Minjie Du (1):
+>        thermal/drivers/mediatek/lvts: Fix parameter check in
+> lvts_debugfs_init()
+>
+> Nícolas F. R. A. Prado (7):
+>        thermal/drivers/mediatek/lvts_thermal: Handle IRQ on all controllers
+>        thermal/drivers/mediatek/lvts_thermal: Honor sensors in immediate
+> mode
+>        thermal/drivers/mediatek/lvts_thermal: Use offset threshold for IRQ
+>        thermal/drivers/mediatek/lvts_thermal: Disable undesired interrupts
+>        thermal/drivers/mediatek/lvts_thermal: Don't leave threshold zeroed
+>        thermal/drivers/mediatek/lvts_thermal: Manage threshold between
+> sensors
+>        thermal/drivers/mediatek/lvts_thermal: Make readings valid in
+> filtered mode
+>
+> Ruan Jinjie (1):
+>        thermal/drivers/db8500: Remove redundant of_match_ptr()
+>
+> Yangtao Li (1):
+>        thermal/drivers/sun8i: Remove unneeded comments
+>
+> Yinbo Zhu (2):
+>        thermal/drivers/loongson-2: Add thermal management support
+>        thermal: dt-bindings: add loongson-2 thermal
 
-Same with uclamp_min; if it is set to 1024 but there is a task with util say
-100, this task shouldn't cause overutilized as its actual utilization actually
-fits, but it just asked to run at a higher performance point. The actual
-utilization has to be in the over utilized range. Unless uclamp_max forces it
-to fit of course.
-
-So uclamp_max sets a cap to the performance that the task is allowed to reach.
-And this translates into frequency selection and cpu selection (in case of HMP)
-by design.
-
-I don't think we're mixing matters here. But the headroom should be applied to
-actual utilization, not uclamp. If the rq is capped to a specific performance
-level, we should honour this.
-
-We do the same with iowait boost where it is capped by uclamp_max. A task
-capped by uclamp_max shouldn't be the trigger of running at a frequency higher
-than this point. Otherwise we'd need to expose all these internal details to
-the user, which I think we all agree isn't something to consider at all.
-
-> 
-> dvfs head room is a cpufreq decision to anticipate either hw
-> limitation and responsiveness problem or performance hints.
-> 
-> they come from different sources and rational and this patch mixed
-> them which i'm not sure is a correct thing to do
-
-I don't think I'm mixing them up to be honest.
-
-The governor is driven by effective_cpu_util() to tell it what is the
-effective_cpu_util() when making frequency selection. This function takes into
-account all the factors that could impact frequency selection including all type
-of rq pressures (except thermal). I think it is appropriate to take headroom
-into account there and make sure we honour uclamp_max hint to cap the
-performance appropriately based on the effective uclamp_max value of the rq.
-
-For example if actually util was 640, then after the headroom it'd be 800. And
-if uclamp_max is 800, then this task will still get the 1.25 headroom. We are
-not changing this behavior.
-
-But if the task goes beyond that, then it'll stop at 800 because this what the
-request is all about. A headroom beyond this point is not required because the
-task (or rq to be more precise) is capped to this performance point and
-regardless how busy the cpu gets in terms of real utilization or headroom, it
-shouldn't go beyond this point. ie: if a task is a 1024 but uclamp_max of is
-800 then it'll only get a performance equivalent to OPP@800 would give.
-
-If we don't do that uclamp_max range effectively is from 0-819 (based on
-current headroom setting of 1.25). Which is not what we want or what we're
-telling userspace. Userspace sees the whole system performance levels
-abstracted from 0 - 1024. As it should. The only effect they would observe and
-there's no way around it is that OPPs are discrete points. So in reality our
-0-1024 is a staircase where a range of util values will map to the same OPP and
-then we'll get a jump. So the user can end up requesting for example 700 and
-720 and not notice any difference because they both map to the same OPP.
-I don't think we can fix that - but maybe I should add it to the uclamp doc as
-a caveat when setting uclamp.
-
-> 
-> >
-> > Before this fix running
-> >
-> >         uclampset -M 800 cat /dev/zero > /dev/null
-> >
-> > Will cause the test system to run at max freq of 2.8GHz. After the fix
-> > it runs at 2.2GHz instead which is the correct value that matches the
-> > capacity of 800.
-> 
-> So a task with an utilization of 800 will run at higher freq than a
-> task clamped to 800 by uclamp ? Why should they run at different freq
-> for the same utilization ?
-
-Because uclamp sets an upper limit on the performance level the task should be
-able to achieve. Imagine a task is 1024 and capped to 800, it should not run at
-max frequency, right? What's the point of the uclamp_max hint if the headroom
-will cause it to run at max anyway? We lost the meaning of the hint. And if
-this headroom changes in the future, people will start observing different
-behavior for existing uclamp_max settings on the same system because of this
-this rightfully hidden and unaccounted for factor.
-
-> 
-> >
-> > Note that similar problem exist for uclamp_min. If util was 50, and
-> > uclamp_min is 100. Since we apply_dvfs_headroom() after apply uclamp
-> > constraints, we'll end up with util of 125 instead of 100. IOW, we get
-> > boosted twice, first time by uclamp_min, and second time by dvfs
-> > headroom.
-> >
-> > Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
-> > ---
-> >  include/linux/energy_model.h     |  1 -
-> >  kernel/sched/core.c              | 11 ++++++++---
-> >  kernel/sched/cpufreq_schedutil.c |  5 ++---
-> >  3 files changed, 10 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-> > index 6ebde4e69e98..adec808b371a 100644
-> > --- a/include/linux/energy_model.h
-> > +++ b/include/linux/energy_model.h
-> > @@ -243,7 +243,6 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
-> >         scale_cpu = arch_scale_cpu_capacity(cpu);
-> >         ps = &pd->table[pd->nr_perf_states - 1];
-> >
-> > -       max_util = apply_dvfs_headroom(max_util);
-> >         max_util = min(max_util, allowed_cpu_cap);
-> >         freq = map_util_freq(max_util, ps->frequency, scale_cpu);
-> >
-> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > index efe3848978a0..441d433c83cd 100644
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -7439,8 +7439,10 @@ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
-> >          * frequency will be gracefully reduced with the utilization decay.
-> >          */
-> >         util = util_cfs + cpu_util_rt(rq);
-> > -       if (type == FREQUENCY_UTIL)
-> > +       if (type == FREQUENCY_UTIL) {
-> > +               util = apply_dvfs_headroom(util);
-> 
-> This is not the same as before because utilization has not being
-> scaled by irq steal time yet
-
-We do the scaling below, no?
-
-AFAICS, we had:
-
-	(util_cfs + util_rt + irq + ((max-irq)*(util_cfs + util_rt)/max)+ dl_bw) * scale
-
-Using U = (util_cfs + util_rt) * scale
-
-we can write this after the multiplication
-
-	U + irq * scale + ((max-irq)*U/max) + dl_bw * scale
-
-> 
-> >                 util = uclamp_rq_util_with(rq, util, p);
-> > +       }
-> >
-> >         dl_util = cpu_util_dl(rq);
-> >
-> > @@ -7471,9 +7473,12 @@ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
-> >          *              max - irq
-> >          *   U' = irq + --------- * U
-> >          *                 max
-> > +        *
-> > +        * We only need to apply dvfs headroom to irq part since the util part
-> > +        * already had it applied.
-> >          */
-> >         util = scale_irq_capacity(util, irq, max);
-> > -       util += irq;
-> > +       util += type ==  FREQUENCY_UTIL ? apply_dvfs_headroom(irq) : irq;
-> >
-> >         /*
-> >          * Bandwidth required by DEADLINE must always be granted while, for
-> > @@ -7486,7 +7491,7 @@ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
-> >          * an interface. So, we only do the latter for now.
-> >          */
-> >         if (type == FREQUENCY_UTIL)
-> > -               util += cpu_bw_dl(rq);
-> > +               util += apply_dvfs_headroom(cpu_bw_dl(rq));
-> 
-> If we follow your reasoning with uclamp on the dl bandwidth, should we
-> not skip this as well ?
-
-I do remove this in patch 4. Can fold that one into this one if you like.
-I opted to keep the current behavior in this patch and remove these later in
-patch 4.
-
-I do think that both RT and DL shouldn't need DVFS headroom in general as they
-both 'disable' it by default.
-
+Pulled, merged into the thermal branch and added to the linux-next
+branch in linux-pm.git.
 
 Thanks!
-
---
-Qais Yousef
