@@ -2,152 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD58278C2FC
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 13:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54EB878C304
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 13:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233230AbjH2LDC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Aug 2023 07:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51968 "EHLO
+        id S235290AbjH2LDh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Aug 2023 07:03:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235571AbjH2LC5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Aug 2023 07:02:57 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5ECE62
-        for <linux-pm@vger.kernel.org>; Tue, 29 Aug 2023 04:02:23 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5921a962adfso49228977b3.1
-        for <linux-pm@vger.kernel.org>; Tue, 29 Aug 2023 04:02:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693306942; x=1693911742;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=htUA3Pqo/wgLtU7I+zMlvC08LizycSF6y3MTiiAzjIA=;
-        b=SHVKGTKArE3D4BM2ZsqPPWSUAEyaHwP4S2Gx4s42htL72dNFX86nOXeclRNBARGLdQ
-         ft3NgLRsUXf27FqtWnL0TvxRlODwbu+HLiJsZ/aCxhDDt+ETnIBHk424sRlEQwuT0tmS
-         fL9XC9/7f48QWc4ogDzsHzWuwesB9hxxSutBhCvEWgVPinqCOc3G6lJEa6CeqqoMOCK2
-         eYclgA6jixDwTt++4hayHS6NqX4XO4nF4njBsFSl/mk/wS53yT1nK0NTwLC0D8QE0REf
-         5fqnhXxUWkB2UgPIbyUF2qEOuaWUlOq0ZWV5aXnSzWitbTLqkW5YitIN92Uzv4CpAPcN
-         67eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693306942; x=1693911742;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=htUA3Pqo/wgLtU7I+zMlvC08LizycSF6y3MTiiAzjIA=;
-        b=WHw28lIuzNYB+X0wyzJFn4hkTdks/fGM3k669GfwiSca07RTeOdcLyAkV94hykJntc
-         3TjbBfwtVbJDu34eFqusy2XZJ+p19YgGx/BwICBlkgF18zOf15KX5aPAZXJg9v4MUCEa
-         oaxmokOCT1LLVqZYArwmDQsOcgKjH4WvhghURQJwfumzpytq1nGTY/ryMTxJVdkbdmYB
-         xeMvtBLcVg/LHFf8FMshXWYgm5ePr/osFVLmIp+phrg2T3k6+gcO+Xdb9qCRfvoYkzeR
-         LAeJnsbSWHx6UOyO/nYTPZ4ka/tqbeBidMebX3h+sW5DY6vVwKxE5VUUuBlEKY7dFK+d
-         Xt8Q==
-X-Gm-Message-State: AOJu0YxilnS9ryQQ5HGhfvd7w7yqW2C9795O5/Ytz2NlKfsotYteJiM6
-        F1XvHbL4fcmVDIRWmyrlqWT9cnFu6lP35yBThtXVhQ==
-X-Google-Smtp-Source: AGHT+IHp3Ajd7M1WNI45jKTX2bxQ7+cfWJifOSd/dyJsestJojnJeanITjApP5TIGB6ATtG2mqNPkVJtIObLu75p+i0=
-X-Received: by 2002:a25:1ec4:0:b0:d0c:3be2:b626 with SMTP id
- e187-20020a251ec4000000b00d0c3be2b626mr24690245ybe.30.1693306942195; Tue, 29
- Aug 2023 04:02:22 -0700 (PDT)
+        with ESMTP id S235370AbjH2LDP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Aug 2023 07:03:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E8DCDA;
+        Tue, 29 Aug 2023 04:03:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54FF9654FA;
+        Tue, 29 Aug 2023 11:03:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A91DC433C8;
+        Tue, 29 Aug 2023 11:02:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693306979;
+        bh=U8tO0dLFljDnktuq80r4afitP93wv2ZaRihVU0Qyu2I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Zpf44oWH5Z2L6QhPNIGp7PeBhJpnP4KfVurKgcL9DEj/BIRmEq8ijJzbb6q5k8Ovs
+         9bWmbNzBkJw5MyDAxRy27lwjHGda6NbScABpEWJtXeah3765gQ9TUqIkk0ScRRsr4B
+         pgJc/+HtIStX4e0zZcs6Mgm/y0cAQCiR+vX0i9HUCQ2jW21Dvj1m5KvDe2xJG8sZD9
+         7J/ySnM4IatjDikdEeiDLegDHPGVAKFz5CZJOY4FIoLRlouJhKb12RDwuxVPSp/21Q
+         Im6ZTKLVuSh6T0hvwNEhJP5WmzsfCpgy49EfIICESoo8yOH/FPp5HVYEAtlfB2KJ19
+         jLNduaFs+ry8A==
+Date:   Tue, 29 Aug 2023 13:02:47 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Jan Kara <jack@suse.cz>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, Christoph Hellwig <hch@infradead.org>,
+        Alasdair Kergon <agk@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anna Schumaker <anna@kernel.org>, Chao Yu <chao@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Kleikamp <shaggy@kernel.org>,
+        David Sterba <dsterba@suse.com>, dm-devel@redhat.com,
+        drbd-dev@lists.linbit.com, Gao Xiang <xiang@kernel.org>,
+        Jack Wang <jinpu.wang@ionos.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        jfs-discussion@lists.sourceforge.net,
+        Joern Engel <joern@lazybastard.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        linux-bcache@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-raid@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-xfs@vger.kernel.org,
+        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Minchan Kim <minchan@kernel.org>, ocfs2-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Song Liu <song@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        target-devel@vger.kernel.org, Ted Tso <tytso@mit.edu>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v3 0/29] block: Make blkdev_get_by_*() return handle
+Message-ID: <20230829-stark-trapez-2251bf78c6a9@brauner>
+References: <20230818123232.2269-1-jack@suse.cz>
+ <20230825-hubraum-gedreht-8c5c4db9330a@brauner>
+ <20230828170744.iifdmaw732cfiauf@quack3>
 MIME-Version: 1.0
-References: <20230217-topic-cpr3h-v14-0-9fd23241493d@linaro.org> <20230217-topic-cpr3h-v14-3-9fd23241493d@linaro.org>
-In-Reply-To: <20230217-topic-cpr3h-v14-3-9fd23241493d@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 29 Aug 2023 13:01:44 +0200
-Message-ID: <CAPDyKFrXT+2NEMUzVv-kWjXAhLinXq99GKq4_Ge2VjthtYxtaA@mail.gmail.com>
-Subject: Re: [PATCH v14 3/9] dt-bindings: soc: qcom: cpr3: Add bindings for
- CPR3 driver
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Niklas Cassel <nks@flawful.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Robert Marko <robimarko@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230828170744.iifdmaw732cfiauf@quack3>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 28 Aug 2023 at 13:42, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
-> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
->
-> Add the bindings for the CPR3 driver to the documentation.
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> [Konrad: Make binding check pass; update AGdR's email]
-> Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../devicetree/bindings/soc/qcom/qcom,cpr3.yaml    | 286 +++++++++++++++++++++
->  1 file changed, 286 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
-> new file mode 100644
-> index 000000000000..acf2e294866b
+> replacement) I think we can go ahead with the series as is. As you said
+> there will be some conflicts in btrfs and I've learned about f2fs conflicts
+> as well so I can rebase & repost the series on top of rc1 to make life
+> easier for you.
 
-[...]
-
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/qcom,gcc-msm8998.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    cpus {
-> +        #address-cells = <2>;
-> +        #size-cells = <0>;
-> +
-> +        cpu@0 {
-> +            compatible = "qcom,kryo280";
-> +            device_type = "cpu";
-> +            reg = <0x0 0x0>;
-> +            operating-points-v2 = <&cpu0_opp_table>;
-> +            power-domains = <&apc_cprh 0>;
-> +            power-domain-names = "cprh";
-
-Rather than using a Qcom specific power-domain-name, perhaps a common
-power-domain-name for cpus, that can be used for "the performance
-domain" would be a good idea here?
-
-I have suggested using "perf" for the SCMI performance domain [1],
-perhaps that description should be extended to cover this and other
-performance domains too?
-
-> +        };
-> +
-> +        cpu@100 {
-> +            compatible = "qcom,kryo280";
-> +            device_type = "cpu";
-> +            reg = <0x0 0x100>;
-> +            operating-points-v2 = <&cpu4_opp_table>;
-> +            power-domains = <&apc_cprh 1>;
-> +            power-domain-names = "cprh";
-> +        };
-> +    };
-
-[...]
-
-Kind regards
-Uffe
-
-[1]
-https://lore.kernel.org/linux-arm-kernel/20230825112633.236607-9-ulf.hansson@linaro.org/
+That is be much appreciated. Thank you!
