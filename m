@@ -2,82 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828D978BE74
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 08:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D9E78BE9F
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 08:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233128AbjH2GaG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Aug 2023 02:30:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45294 "EHLO
+        id S229930AbjH2Gmd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Aug 2023 02:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233720AbjH2G3z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Aug 2023 02:29:55 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6EA1B9
-        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 23:29:46 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9a5be3166a2so168002066b.1
-        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 23:29:46 -0700 (PDT)
+        with ESMTP id S229563AbjH2GmE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Aug 2023 02:42:04 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CEB918D
+        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 23:42:01 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-52bcd4db4e6so701244a12.0
+        for <linux-pm@vger.kernel.org>; Mon, 28 Aug 2023 23:42:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693290585; x=1693895385;
+        d=linaro.org; s=google; t=1693291320; x=1693896120;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=VfulV8l9fAUi9Tsip5/92M0tbm/MGDJ64gWqHZKs5QM=;
-        b=M6U9uxGnbQr/fqYwdYbCqGLGUC5TUD21umeX91HrRYhQ9ru4ZrV22Oc73gfV+qTpfr
-         7xrf8ZFp3iXsdNCL9aJs+1orL7o0WUwiM/7C/U1GpYfzEj2hKL4B3rkscQzmw0hL9kcd
-         F+B0mr/KR0tu8xq/cbfrcyWYEiI8A9+IRlG4YYJjFt1xCFNZ6Xo6XU/LM7n29+9JSb0l
-         jMdltpPxtOW5wPQkWFY5lgUW4HxkuKHrBFA5tsqR1D+J6j5PqiRmomqNTRqLTf0XF39Y
-         QIgxnwhEkEgqQc3jKhkzwSpJ2uuPpfX5ulMqOkbRSriLqBkx67qgLplaaW1+G0Jd9XN6
-         JY/Q==
+        bh=FjfPeAhfUYBw/sXIgz8fmHiXM0sr1IQcX1df/SswdE4=;
+        b=VuhACe9AiWTu/WV9z8211V3yy1g2LRWqtdEvx0zlz7tzFvGeb2FkT7M5FQZSrrIxfm
+         4ex8HVLmHKTiUkGfUVzYyB+RPiIosm5kHUNsR/tWJbltCYZyWciRq2wgOZcxQh3/pZs5
+         yMKcSmKU/1Pco6PIseuKUQaby9oyzOX3OfOUWG3/QxZ/arXk8KPGL3mPq3KH4n9sHYgw
+         zYEhRiycXviWNI2zT/6WlPy2YsoUJed5Ie8LfDK7l+JzBFwpad6Xus3QiSLioIU0roni
+         MaEL1aj/8uV5e4EGdobgD3/UczFeziqM7qCqTFzPsmivhnBOSzA5KalZGnT7B3y+A37e
+         rrew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693290585; x=1693895385;
+        d=1e100.net; s=20221208; t=1693291320; x=1693896120;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VfulV8l9fAUi9Tsip5/92M0tbm/MGDJ64gWqHZKs5QM=;
-        b=gpB2Xp1Mb3FMgkf4PKgjBJSoZbwqFLEXz98CfC6YKiNRpClcqMrf3q+IVnU5NqEtzy
-         QUnuaDpRkBSOHJufS4RVnAInVHx6/ud6aMSEgP6vulI4EgcNkgutsxMhpU7f2b+oOefq
-         WKntUkApFY/SA21Cj1WQS2zJTBAyL/djcs/BIOD1/v7eI5iirhyWRstlXqanMWZkSpxJ
-         NeLVRmfgWzyaBAK/asbcfNIxlV7XG4B8FcRmCRwKhEXCCqpjCX5ChDUXMN9iQz1mkCaU
-         7FAX6vByblm1ImFFPg9lFzJ3nmRMo7pf4W4e0TKSfh3BclZLObZ16sUIf6IyZFySiE3D
-         fVVQ==
-X-Gm-Message-State: AOJu0Yzy5RoYqctgxBMV2ykX6nCtnJg97Kj1yuD815Ixzbk2Sdp3B03X
-        +Hjb3z+Fqf6y2QNiN52Q2Vywvg==
-X-Google-Smtp-Source: AGHT+IHmnbiTbRrVI1+kiRm4p8e06XXGWlBZtkv3p5iM1pfrWN1Ql5/ryaWvi4l3r6rYzjx7fJXLvw==
-X-Received: by 2002:a17:906:113:b0:9a2:120a:5779 with SMTP id 19-20020a170906011300b009a2120a5779mr11507129eje.60.1693290584856;
-        Mon, 28 Aug 2023 23:29:44 -0700 (PDT)
+        bh=FjfPeAhfUYBw/sXIgz8fmHiXM0sr1IQcX1df/SswdE4=;
+        b=VScFiNpKBGpqVBU5vihLmD12WdAMQaumCfsKxk+RgSWTp6NCCmr217PWNvF3DMfPH9
+         V+2r6rPAemVYT5Vr+7i+oEaO9pwuKpYBSI8+xwJmrREEu5spxTcjm9CseqCYx4oz/E3q
+         FG7YZSu8nvTFqIPchLsQAMMQBFbx1+EyCXLbXpFAnWBopit3NfYD2FqoG3tHdnfH5HOK
+         SUe4txXPGA3/NfVgV6DMrpsVgLEpVOX1FMJVxI1cK59OMBSSVxhJ4tQ5LRWiKFN9MmXh
+         9m0zxa3xN55SB+ztdHoG6v4zLoWXR005J1pV5MTQzY9l4k0VHjcYK4Ic+Tu+7VVGaCAJ
+         4QOw==
+X-Gm-Message-State: AOJu0YwaV2MVO9Pe74U7Cei98YSNot2aYxFkD+QUjRMtQUpwlzAFCE8d
+        B70KhVBdWES2Zx1RG9TW6MUdyQ==
+X-Google-Smtp-Source: AGHT+IE2hnf68ZZs5cjHk7ilR0OikTToDljPRaazsKZjQ74t15LWrQSogMSxNi+uen/atOSHa2B98Q==
+X-Received: by 2002:aa7:ccc9:0:b0:523:1ea3:b9a6 with SMTP id y9-20020aa7ccc9000000b005231ea3b9a6mr20326288edt.39.1693291319940;
+        Mon, 28 Aug 2023 23:41:59 -0700 (PDT)
 Received: from [192.168.0.22] ([77.252.47.196])
-        by smtp.gmail.com with ESMTPSA id k16-20020a170906971000b009a0955a7ad0sm5573160ejx.128.2023.08.28.23.29.43
+        by smtp.gmail.com with ESMTPSA id o8-20020aa7d3c8000000b0052544bca116sm5286014edr.13.2023.08.28.23.41.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Aug 2023 23:29:44 -0700 (PDT)
-Message-ID: <3fd27e64-2221-ec38-1320-9ae966f998aa@linaro.org>
-Date:   Tue, 29 Aug 2023 08:29:43 +0200
+        Mon, 28 Aug 2023 23:41:59 -0700 (PDT)
+Message-ID: <6aa6f1b0-0ccc-c2a7-8be1-ffd444193400@linaro.org>
+Date:   Tue, 29 Aug 2023 08:41:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.14.0
-Subject: Re: [PATCH 2/5] dt-bindings: soc: loongson,ls2k-pmc: Add missing
- compatible for Loongson-2K2000
+Subject: Re: [PATCH v3 1/3] dt-bindings: thermal-zones: Document
+ critical-action
 Content-Language: en-US
-To:     Binbin Zhou <zhoubb.aaron@gmail.com>,
-        Conor Dooley <conor@kernel.org>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        loongson-kernel@lists.loongnix.cn, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, Xuerui Wang <kernel@xen0n.name>,
-        loongarch@lists.linux.dev
-References: <cover.1693218539.git.zhoubinbin@loongson.cn>
- <54ee114c08f35ab8b5dc584fd76135ac9076f5a7.1693218539.git.zhoubinbin@loongson.cn>
- <20230828-shrewdly-payee-c5eb091a0417@spud>
- <CAMpQs4Jp0rb8sbrLrPnNziLph4Ym4LxBsFt-00G69ecd8bUHNg@mail.gmail.com>
+To:     Fabio Estevam <festevam@gmail.com>, daniel.lezcano@linaro.org
+Cc:     rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, conor+dt@kernel.org,
+        devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>
+References: <20230828195902.1645169-1-festevam@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMpQs4Jp0rb8sbrLrPnNziLph4Ym4LxBsFt-00G69ecd8bUHNg@mail.gmail.com>
+In-Reply-To: <20230828195902.1645169-1-festevam@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -88,64 +77,19 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29/08/2023 05:21, Binbin Zhou wrote:
-> HI Conor:
+On 28/08/2023 21:59, Fabio Estevam wrote:
+> From: Fabio Estevam <festevam@denx.de>
 > 
-> Thanks for your reply.
-> 
-> On Mon, Aug 28, 2023 at 11:49 PM Conor Dooley <conor@kernel.org> wrote:
->>
->> On Mon, Aug 28, 2023 at 08:38:32PM +0800, Binbin Zhou wrote:
->>> Document the Power Management Unit system controller compatible for
->>> Loongson-2K2000.
->>>
->>> This is a missing compatible, now we add it.
->>>
->>> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
->>> ---
->>>  .../devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml      | 1 +
->>>  1 file changed, 1 insertion(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
->>> index da2dcfeebf12..7473c5659929 100644
->>> --- a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
->>> +++ b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
->>> @@ -15,6 +15,7 @@ properties:
->>>        - enum:
->>>            - loongson,ls2k0500-pmc
->>>            - loongson,ls2k1000-pmc
->>> +          - loongson,ls2k2000-pmc
->>
->> Same thing here as the driver patch, the pmc on this newly added SoC
->> appears to use the same codepaths as the existing ones. Does it share a
->> programming model & should there be a fallback compatible here?
-> 
-> I noticed the guideline about fallback compatible:
-> 
-> "DO use fallback compatibles when devices are the same as or a subset
-> of prior implementations."
-> 
-> But in fact, ls2k0500/ls2k1000/ls2k2000 are independent, there is no subset.
-
-We do not consider here ls2k0500/ls2k1000/ls2k2000, but PMC in each of
-them. If they are independent, why would they use the same interface?
-
-> Can we define a "loongson,ls2k-pmc" superset for each ls2k SoC
-> compatible fallback.
-> 
-> Such as:
-> 
->   compatible:
->     oneOf:
->       - enum:
->           - loongson,ls2k0500-pmc
->           - loongson,ls2k1000-pmc
->           - loongson,ls2k2000-pmc
->       - const: loongson,ls2k-pmc
-
-This is discouraged. Use 0500 as fallback.
+> Document the critical-action property to describe the thermal action
+> the OS should perform after the critical temperature is reached.
 
 
+We see that from the diff. You should explain here why you need it, why
+this is good idea. You should provide here answers to my concerns on v1,
+so you do not get exactly the same question from Conor or Rob or anyone
+else.
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
