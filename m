@@ -2,66 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A3678BB8D
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 01:37:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8666D78BC14
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 02:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233941AbjH1Xgb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Aug 2023 19:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56920 "EHLO
+        id S234687AbjH2AYA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Aug 2023 20:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234475AbjH1XgF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 19:36:05 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95764CF1;
-        Mon, 28 Aug 2023 16:35:34 -0700 (PDT)
+        with ESMTP id S234671AbjH2AXu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Aug 2023 20:23:50 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3574F107;
+        Mon, 28 Aug 2023 17:23:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693265734; x=1724801734;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=hakGVM12/9hmPDK7z9Z5LVI5JCPqWQ5AkH+gJkXzxwo=;
-  b=MutGZTPwBwGrxvCs+KuCoNlEEA7p+fZ3PIJUUYMuQS1lQ1glngIveLuF
-   g9Y1D7hwZ+gZ7OvyyZx7cHy1bnUcg3rh6mvLPfQqVaiwFdPT/1g4Ilndx
-   KbyDRa3bIUUQwHtn+as+cfBQk4jMO+6D8GXzvCKJKCipPZmNN9puL6/fd
-   yTNZAyfzQ22/coUnBp+c20ww7/LxaryTP61nhagMCH42hJxokPibYE8W0
-   Rp+jZQMfGS75dv73tVmGTxgglurhInEupSq5lN2y1JwBQF9k9bMH1paAg
-   02gULXvQv3N1c7dMPIerOzmWQoaJwHfrS3nJDDUn+wCUSbPeyVRMPfICp
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10816"; a="377958774"
+  t=1693268628; x=1724804628;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=hFydJnI+CKQfNJv0VsuN7MM0FGUdBjbAEGTHSs6tld0=;
+  b=E8a9aWy19+Y3URpLBmJ498e2+eR2IBFlyeh46EMRHCdhi/qvDSBUeMle
+   PphoC8Ga7yBlsGGFugF7wwIl3/FBzh7V6Q0mSkeJLgUPnJCMdeaEkp0aA
+   TUVtlsesazbdWFKVAI6vsA4b5zI4Y7L0MHn4jJT46oHRzLLNSKNVC2BLZ
+   oafcYI/PhMjV6kZgCOMkersHtNk1v7526gWFhuSlV1ofyijsjnBjn+yXa
+   PEIInDFtvWT7nDjgCPtnFN2D8r760wSrI46MMSTOF4aab3A8peikf90oA
+   32DbsPvV62Gi6iLE9hxRotmrwJBwCoFaAnoXg8jVRUDlc9BN82eHZ88Bq
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10816"; a="354754211"
 X-IronPort-AV: E=Sophos;i="6.02,208,1688454000"; 
-   d="scan'208";a="377958774"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 16:35:23 -0700
+   d="scan'208";a="354754211"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 17:23:47 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10816"; a="862018513"
+X-IronPort-AV: E=McAfee;i="6600,9927,10816"; a="731989678"
 X-IronPort-AV: E=Sophos;i="6.02,208,1688454000"; 
-   d="scan'208";a="862018513"
-Received: from yjie-desk1.jf.intel.com (HELO [10.24.100.126]) ([10.24.100.126])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 16:35:23 -0700
-Message-ID: <9665af79-d439-e05a-5333-62f71a2ac55c@linux.intel.com>
-Date:   Mon, 28 Aug 2023 16:35:13 -0700
+   d="scan'208";a="731989678"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.14])
+  by orsmga007.jf.intel.com with ESMTP; 28 Aug 2023 17:23:47 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH v3 0/7] thermal: processor_thermal: Suport workload hint
+Date:   Mon, 28 Aug 2023 17:23:39 -0700
+Message-Id: <20230829002346.2104251-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2] cpufreq: intel_pstate: set stale CPU frequency to
- minimum
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Doug Smythies <dsmythies@telus.net>, gregkh@linuxfoundation.org
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <001d01d9d3a7$71736f50$545a4df0$@telus.net>
- <CAJZ5v0g=TEY0+dL9AGh1cYNnwQ=L6G8CRxXVD0AyWsaK5aDsdA@mail.gmail.com>
-Content-Language: en-US
-From:   Keyon Jie <yang.jie@linux.intel.com>
-In-Reply-To: <CAJZ5v0g=TEY0+dL9AGh1cYNnwQ=L6G8CRxXVD0AyWsaK5aDsdA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,LOTS_OF_MONEY,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,76 +57,51 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Add support for Meteor Lake workload hints. Before adding this support,
+some reorganization and clean up is required.
+First four changes are for clean up and to reorganize code to add
+support for workload hint. The last patch adds a test program as part
+of self tests.
 
+v3:
+Changes in the commit log
+Rename of files for using WT instead of WLT
+Address comments from Rafael on v2
 
-On 8/22/23 04:46, Rafael J. Wysocki wrote:
-> On Sun, Aug 20, 2023 at 10:46 PM Doug Smythies <dsmythies@telus.net> wrote:
->>
->> The intel_pstate CPU frequency scaling driver does not
->> use policy->cur and it is 0.
->> When the CPU frequency is outdated arch_freq_get_on_cpu()
->> will default to the nominal clock frequency when its call to
->> cpufreq_quick_getpolicy_cur returns the never updated 0.
->> Thus, the listed frequency might be outside of currently
->> set limits. Some users are complaining about the high
->> reported frequency, albeit stale, when their system is
->> idle and/or it is above the reduced maximum they have set.
->>
->> This patch will maintain policy_cur for the intel_pstate
->> driver at the current minimum CPU frequency.
->>
->> Reported-by: Yang Jie <yang.jie@linux.intel.com>
->> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217597
->> Signed-off-by: Doug Smythies <dsmythies@telus.net>
->> ---
->>
->> v1 -> v2:
->>     * v1 was a completely different approach, programming around
->>       the issue rather than fixing it at the source.
->>       reference:
->>       https://patchwork.kernel.org/project/linux-pm/patch/006901d9be8c$f4439930$dccacb90$@telus.net/
->>     * v2 does not fix an issue with the intel_cpufreq CPU scaling
->>       driver (A.K.A. the intel_pstate driver in passive mode) and
->>       the schedutil CPU frequency scaling governor when HWP is enabled
->>       where limit changes are not reflected in the stale listed frequencies.
->>       A fix for that will be some future patch.
->>
->> ---
->>   drivers/cpufreq/intel_pstate.c | 5 +++++
->>   1 file changed, 5 insertions(+)
->>
->> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
->> index 8ca2bce4341a..08284dee583a 100644
->> --- a/drivers/cpufreq/intel_pstate.c
->> +++ b/drivers/cpufreq/intel_pstate.c
->> @@ -2609,6 +2609,11 @@ static int intel_pstate_set_policy(struct cpufreq_policy *policy)
->>                          intel_pstate_clear_update_util_hook(policy->cpu);
->>                  intel_pstate_hwp_set(policy->cpu);
->>          }
->> +       /* policy current is never updated with the intel_pstate driver
->> +        * but it is used as a stale frequency value. So, keep it within
->> +        * limits.
->> +        */
->> +       policy->cur = policy->min;
->>
->>          mutex_unlock(&intel_pstate_limits_lock);
->>
->> --
-> 
-> Applied as 6.6 material, with some mailer-induced white space damage
-> fixed and the new comment adjusted to the kernel coding style.
-> 
-> Thanks!
+v2:
+Changes in comments and commit log
+Self test program is improved to disable workloadtype notification
+on exit
 
-Hi Doug and Rafael,
+Srinivas Pandruvada (7):
+  thermal: int340x: processor_thermal: Move mailbox code to common
+    module
+  thermal: int340x: processor_thermal: Add interrupt configuration
+  thermal: int340x: processor_thermal: Use non MSI interrupts by default
+  thermal/drivers/int340x: Remove PROC_THERMAL_FEATURE_WLT_REQ for
+    Meteor Lake
+  thermal: int340x: processor_thermal: Add workload type hint interface
+  thermal/drivers/int340x: Support workload hint interrupts
+  selftests/thermel/intel: Add test to read workload hint
 
-Thank you for making the fix happen.
+ .../driver-api/thermal/intel_dptf.rst         |  51 ++++
+ .../thermal/intel/int340x_thermal/Makefile    |   2 +
+ .../processor_thermal_device.c                |  17 +-
+ .../processor_thermal_device.h                |  21 +-
+ .../processor_thermal_device_pci.c            |  79 ++++--
+ .../processor_thermal_device_pci_legacy.c     |   3 +-
+ .../int340x_thermal/processor_thermal_mbox.c  | 179 ++++---------
+ .../processor_thermal_wt_hint.c               | 252 ++++++++++++++++++
+ .../processor_thermal_wt_req.c                | 136 ++++++++++
+ tools/testing/selftests/Makefile              |   1 +
+ .../thermal/intel/workload_hint/Makefile      |  12 +
+ .../intel/workload_hint/workload_hint_test.c  | 157 +++++++++++
+ 12 files changed, 752 insertions(+), 158 deletions(-)
+ create mode 100644 drivers/thermal/intel/int340x_thermal/processor_thermal_wt_hint.c
+ create mode 100644 drivers/thermal/intel/int340x_thermal/processor_thermal_wt_req.c
+ create mode 100644 tools/testing/selftests/thermal/intel/workload_hint/Makefile
+ create mode 100644 tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
 
-Hi Greg,
-
-Will this be picked to the stable linux-6.1.y and linux-6.4.y kernel, it 
-could benefit to users there.
-
-Thanks,
-~Keyon
+-- 
+2.40.1
 
