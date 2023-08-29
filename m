@@ -2,68 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CCE078C3D3
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 14:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB83378C3DD
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 14:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233774AbjH2MKI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Aug 2023 08:10:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47490 "EHLO
+        id S233865AbjH2MKJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Aug 2023 08:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233671AbjH2MJl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Aug 2023 08:09:41 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECC11AB;
-        Tue, 29 Aug 2023 05:09:37 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-1bb3df62b34so667986fac.0;
-        Tue, 29 Aug 2023 05:09:37 -0700 (PDT)
+        with ESMTP id S233736AbjH2MJn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Aug 2023 08:09:43 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F241AB;
+        Tue, 29 Aug 2023 05:09:41 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-1a2dd615ddcso912697fac.0;
+        Tue, 29 Aug 2023 05:09:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693310977; x=1693915777;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kr5OflaxijlUu3QWgWc7gDYfy7Y4CSexnvGXkJjSwAM=;
-        b=Zm4Z9FqLuM4CWgWGXt+m3PEM0MY6wvQDqxP2lvKwLzbN0Wj6rr/cuHyMvDJNUbXrdL
-         AxmhYkiW5qWy8gbiHFCZFKl1nEGJVj7mHv7iWQqxPxlGNUwgqZ4GeDpoofTw7LiRCFU5
-         MuA+R4cORFgGRoRKYcA3ryxAHdfht4Vf1wT/XllWl6CHG3bDzLidv0AoNEN4hj4UWrLl
-         fDp1vBW+konQSgy8F418o/0XriTMVO2YRh0ByzZyeOLCO6KhzG/tNvQp4xuBrn8gcIgZ
-         TLiZ8tMpa/Ki2E9jrdHiYmBzmnzkw+JEoHAQwabGge43ORqgbbjIMec3K+eI2xldY+Mk
-         IYMQ==
+        d=gmail.com; s=20221208; t=1693310980; x=1693915780;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TzUUjWIr8T0FZIbu34J9BGxTroSGsDdkY4ko+SJQrnc=;
+        b=A1pUETre5tdg0G0mCkuEDmy4RXfXoVCiPK8BP9Zk2ScIjVEg0wHFccq4IvvHXZzjcH
+         TMeSXa7o1SoGYvzjS3aBjI902WCfI/PTtZ2cNHUR1o8vfXTzqKslGQaUEg/hO1cc0v3i
+         ja0z+ev7TWav+syWR7HIYDzoQ5lF4S8xovd/jySoy4md02TwRQS8ZVgra+VCzsa5wQu0
+         fs5y/UVwz7TitMT0sZPC8PckpHwsB3a0A5nuHwjDaAJKZsc2Wbg56CAdBTjbMvQVfw91
+         KOjYlFI7t3ZjvccDeFLUnpIopjbB6He9vFcYHyMHz6f3vPcpYAjiB6K8P/hG3bJC/TaC
+         RM+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693310977; x=1693915777;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kr5OflaxijlUu3QWgWc7gDYfy7Y4CSexnvGXkJjSwAM=;
-        b=U/bPPXN0SubJapg9isOcO5d4fqnhFi2SpI3YM3r/DBr2w7B5LXplHtnEPHJblwwy5c
-         eoNm1nsUszmxbZ7xgpJl56NPgsNl9R2JgDF0gEeiMFYxj6oN/qK3N3bptKFIb1jOTXGi
-         wegrdbMI3yKoJ8wKr/v1UQ/+YvBxbCBgGI5nVEXkQjO7/VMpyST2eDvTzlNuN6JLVQ7w
-         GXw1gX9iqmI/bphnI+cS7fO4QPoxnqdTrIb8l946ouxX4iya6/MzBX3tV0gYt58c3POK
-         OZ6gYSmb5q/9ypj8Jz2YUQx47UAfP3ziTbZ8MRn20A/Fgw5+GgM2WxX9kGHwriejmmHk
-         ZUWQ==
-X-Gm-Message-State: AOJu0YxEc7FynjOXiUOS4+/bE33twXCVRCBO1vtxcbcrpcTNFiIKMg8O
-        M4f57VXWZjix882mguyEQgjVLjsh4aA=
-X-Google-Smtp-Source: AGHT+IGACckcLM25XRNoHKJifC7kN6/HoqpQh0ywe/xf0cp4oBMnbfPwa/Gm2ySVxd1CIWp97W80eQ==
-X-Received: by 2002:a05:6870:ecab:b0:1c8:bbd0:2fd5 with SMTP id eo43-20020a056870ecab00b001c8bbd02fd5mr35797067oab.4.1693310976789;
-        Tue, 29 Aug 2023 05:09:36 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1693310980; x=1693915780;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TzUUjWIr8T0FZIbu34J9BGxTroSGsDdkY4ko+SJQrnc=;
+        b=doC3kmpahhQGJSy62GRNRHvHD+j2rkf72aY5JsGAnG4minVN8S6oG/flYvkInMkhCg
+         efnfOvqDvz07wrlng23i9jyG6pcwwV5f8Rch0jT8xxt5XSi6UbpCFNT5bi3qGyvKliWa
+         Z8wFtlJjsRmLF4n1yx0u3dn5Jfoes57tOZU307hfscvAkYyrESehO0z4atAHYiOAkI4o
+         qfma/HAOykQAvGt1nDt5VNza/ykZv6gSDnl46FJuAZhi9FJ2DYk94/ieg8kvfy2bD7Fk
+         bL7PHDAQM8G1npuWXHTpCcubj7k4UYZAhyrcK/3FQJBNiXx2J/HispzuhFv/gNP+w21W
+         XBgA==
+X-Gm-Message-State: AOJu0YxlYNVmKCdf1jARyZ5YE12vpX+wUvjtgzOkUcwlVOLANc9Cbk67
+        yN5amLhiQpJ3/LVbKAyXK0c=
+X-Google-Smtp-Source: AGHT+IHt8NP1HZ0CNe6b49MjjmGovhfJS84ptGTRXqIGozLkPeFRI3XCCI1LO8hhfE7boSGFIWgpHA==
+X-Received: by 2002:a05:6870:d10f:b0:1be:ec3c:1ef with SMTP id e15-20020a056870d10f00b001beec3c01efmr31988232oac.0.1693310980312;
+        Tue, 29 Aug 2023 05:09:40 -0700 (PDT)
 Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:d5ec:d929:1621:6cc6])
-        by smtp.gmail.com with ESMTPSA id zc17-20020a056871271100b001d0ad5205fesm2000651oab.7.2023.08.29.05.09.33
+        by smtp.gmail.com with ESMTPSA id zc17-20020a056871271100b001d0ad5205fesm2000651oab.7.2023.08.29.05.09.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Aug 2023 05:09:35 -0700 (PDT)
+        Tue, 29 Aug 2023 05:09:39 -0700 (PDT)
 From:   Fabio Estevam <festevam@gmail.com>
 To:     daniel.lezcano@linaro.org
 Cc:     rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
         linux-pm@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
         robh+dt@kernel.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v4 1/3] dt-bindings: thermal-zones: Document critical-action
-Date:   Tue, 29 Aug 2023 09:09:22 -0300
-Message-Id: <20230829120924.1711175-1-festevam@gmail.com>
+        devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>
+Subject: [PATCH v4 2/3] reboot: Introduce hw_protection_reboot()
+Date:   Tue, 29 Aug 2023 09:09:23 -0300
+Message-Id: <20230829120924.1711175-2-festevam@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230829120924.1711175-1-festevam@gmail.com>
+References: <20230829120924.1711175-1-festevam@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,56 +75,81 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Fabio Estevam <festevam@denx.de>
 
-Document the critical-action property to describe the thermal action
-the OS should perform after the critical temperature is reached.
+Introduce hw_protection_reboot() to trigger an emergency reboot.
 
-The possible values are "shutdown" and "reboot".
+It is a counterpart of hw_protection_shutdown() with the difference
+that it will force a reboot instead of shutdown.
 
-The motivation for introducing the critical-action property is that
-different systems may need different thermal actions when the critical
-temperature is reached.
-
-For example, a desktop PC may want the OS to trigger a shutdown
-when the critical temperature is reached.
-
-However, in some embedded cases, such behavior does not suit well,
-as the board may be unattended in the field and rebooting may be a
-better approach.
-
-The bootloader may also benefit from this new property as it can check
-the SoC temperature and in case the temperature is above the critical
-point, it can trigger a shutdown or reboot accordingly.
+The motivation for doing this is to allow the thermal subystem
+to trigger a reboot when the temperature reaches the critical
+temperature.
 
 Signed-off-by: Fabio Estevam <festevam@denx.de>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
 Changes since v3:
-- Explain why this property is needed. (Krzysztof)
-- Added Krzysztof's Reviewed-by tag.
+- None
 
- .../devicetree/bindings/thermal/thermal-zones.yaml       | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ include/linux/reboot.h |  1 +
+ kernel/reboot.c        | 34 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 35 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-index 4f3acdc4dec0..c2e4d28f885b 100644
---- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-+++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-@@ -75,6 +75,15 @@ patternProperties:
-           framework and assumes that the thermal sensors in this zone
-           support interrupts.
+diff --git a/include/linux/reboot.h b/include/linux/reboot.h
+index 2b6bb593be5b..4a319bc24f6a 100644
+--- a/include/linux/reboot.h
++++ b/include/linux/reboot.h
+@@ -174,6 +174,7 @@ void ctrl_alt_del(void);
  
-+      critical-action:
-+        $ref: /schemas/types.yaml#/definitions/string
-+        description:
-+          The action the OS should perform after the critical temperature is reached.
+ extern void orderly_poweroff(bool force);
+ extern void orderly_reboot(void);
++void hw_protection_reboot(const char *reason, int ms_until_forced);
+ void hw_protection_shutdown(const char *reason, int ms_until_forced);
+ 
+ /*
+diff --git a/kernel/reboot.c b/kernel/reboot.c
+index 3bba88c7ffc6..05333ae8bc6b 100644
+--- a/kernel/reboot.c
++++ b/kernel/reboot.c
+@@ -952,6 +952,40 @@ static void hw_failure_emergency_poweroff(int poweroff_delay_ms)
+ 			      msecs_to_jiffies(poweroff_delay_ms));
+ }
+ 
++/**
++ * hw_protection_reboot - Trigger an emergency system reboot
++ *
++ * @reason:		Reason of emergency reboot to be printed.
++ * @ms_until_forced:	Time to wait for orderly reboot before tiggering a
++ *			forced reboot. Negative value disables the forced
++ *			reboot.
++ *
++ * Initiate an emergency system reboot in order to protect hardware from
++ * further damage. Usage examples include a thermal protection.
++ *
++ * NOTE: The request is ignored if protection reboot is already pending even
++ * if the previous request has given a large timeout for forced reboot.
++ * Can be called from any context.
++ */
++void hw_protection_reboot(const char *reason, int ms_until_forced)
++{
++	static atomic_t allow_proceed = ATOMIC_INIT(1);
 +
-+        enum:
-+          - shutdown
-+          - reboot
++	pr_emerg("HARDWARE PROTECTION reboot (%s)\n", reason);
 +
-       thermal-sensors:
-         $ref: /schemas/types.yaml#/definitions/phandle-array
-         maxItems: 1
++	/* Reboot should be initiated only once. */
++	if (!atomic_dec_and_test(&allow_proceed))
++		return;
++
++	/*
++	 * Queue a backup emergency reboot in the event of
++	 * orderly_reboot failure
++	 */
++	hw_failure_emergency_poweroff(ms_until_forced);
++	orderly_reboot();
++}
++EXPORT_SYMBOL_GPL(hw_protection_reboot);
++
+ /**
+  * hw_protection_shutdown - Trigger an emergency system poweroff
+  *
 -- 
 2.34.1
 
