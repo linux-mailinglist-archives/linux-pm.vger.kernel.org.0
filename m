@@ -2,138 +2,271 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC38B78C4DF
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 15:07:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D773678C4EA
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 15:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjH2NHI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Aug 2023 09:07:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37598 "EHLO
+        id S230082AbjH2NK1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Aug 2023 09:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235886AbjH2NGn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Aug 2023 09:06:43 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E0B61B7;
-        Tue, 29 Aug 2023 06:06:37 -0700 (PDT)
-Received: from loongson.cn (unknown [112.20.109.102])
-        by gateway (Coremail) with SMTP id _____8Ax1fBb7e1kGcQcAA--.58704S3;
-        Tue, 29 Aug 2023 21:06:35 +0800 (CST)
-Received: from localhost.localdomain (unknown [112.20.109.102])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_yNW7e1kXntmAA--.10656S2;
-        Tue, 29 Aug 2023 21:06:31 +0800 (CST)
-From:   Yanteng Si <siyanteng@loongson.cn>
-To:     bhelgaas@google.com, rafael.j.wysocki@intel.com
-Cc:     mika.westerberg@linux.intel.com, helgaas@kernel.org,
-        anders.roxell@linaro.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, guyinggang@loongson.cn,
-        siyanteng@loongson.cn, chenhuacai@loongson.cn,
-        loongson-kernel@lists.loongnix.cn, chris.chenfeiyang@gmail.com,
-        rafael@kernel.org, Feiyang Chen <chenfeiyang@loongson.cn>
-Subject: [PATCH v4] PCI/PM: Only read PCI_PM_CTRL register when available
-Date:   Tue, 29 Aug 2023 21:06:26 +0800
-Message-Id: <20230829130626.1978944-1-siyanteng@loongson.cn>
-X-Mailer: git-send-email 2.31.4
+        with ESMTP id S235928AbjH2NKI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Aug 2023 09:10:08 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F550F7
+        for <linux-pm@vger.kernel.org>; Tue, 29 Aug 2023 06:10:05 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fef56f7248so40650275e9.3
+        for <linux-pm@vger.kernel.org>; Tue, 29 Aug 2023 06:10:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1693314604; x=1693919404;
+        h=content-transfer-encoding:subject:to:cc:from:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ERuj0UbkYPRY1zcvks4D/L5Z2fWR5ufBdvUt8JJSxYQ=;
+        b=csP+/K27z6C6FIB+EUROM/Ma3nzoDchSlZ0rbfOWyhXBv+886u3v6jkdt+YUaQ/aDa
+         9iKAxt0r3JEA6BkVhIpX7xFgnHlQhBZB4lR0ilMsstDzFE7QMSdBudDi6wfMjYhf4Ztc
+         kYz9PEcF1CWKT2F0G9Sg6Rasp/zzbYPu/6YkND2ydHBtox+iNYZo6cq0Re9ZjYsFLc9c
+         MWRf1DaRGCa37DkoIekPrxfh/1piggWECp1Fm59yQF6UgDhIBzxCgXyB2mVI1XGQrlqp
+         NmyGTJ7B7qTUcOQdJ+s4roSEB1oXS1UkHEzQm6M7MMllJUlRZodNq1XS25KM1V/bcE4S
+         L5kQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693314604; x=1693919404;
+        h=content-transfer-encoding:subject:to:cc:from:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ERuj0UbkYPRY1zcvks4D/L5Z2fWR5ufBdvUt8JJSxYQ=;
+        b=JxS4FOe8DncyepiBzaDdm3aXg5o9sE2TzU6R56H/d4D2Hy8Z+RWUWiEbAyWZl+S3Tb
+         UhNC8Etk789JghYQQO1cgVJtugJ1b3/m5zHNC2uTBD3lYOc/vgm4rhA1Tk4TJwJmMVqx
+         N0GjJGB0WGOHcNOkzJNpq2vP4hvhWp+g7/9wpApWamxofBScYF502LaJIPTLza2ERs37
+         enY0OB+yz/5qA9boW3o03z2dckpjD46cpyBh+GqSXJiRJV+wNd3h8P1wyx3uXFjJDsPx
+         K+7PC2FbVVqPonHXl97KvcORKzX4LmkanMaW/JEIgz5QB+YDrN7fKkSWnEzcSur06uoB
+         6s6w==
+X-Gm-Message-State: AOJu0Yy1fCFWOIFgLI7Dr9HYKVSqVUbsD5pKrOnSlX/Zj49Fhxrqmf2c
+        HiGswPQZGUSPUuT0a2ituSOmAQ==
+X-Google-Smtp-Source: AGHT+IHdrIpdyyBci0sFobR3J2gXt6Jabk+oMOFOz9HtuxSaRFvfuxEykW2aMkXrvQr+QllaHkJH4Q==
+X-Received: by 2002:a7b:cc07:0:b0:3fb:a0fc:1ba1 with SMTP id f7-20020a7bcc07000000b003fba0fc1ba1mr22474856wmh.35.1693314603707;
+        Tue, 29 Aug 2023 06:10:03 -0700 (PDT)
+Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id a16-20020a056000101000b003179d5aee67sm13711190wrx.94.2023.08.29.06.09.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Aug 2023 06:10:03 -0700 (PDT)
+Message-ID: <153c9f98-8d8f-a933-dca4-c3ce19ee1f6b@linaro.org>
+Date:   Tue, 29 Aug 2023 15:09:57 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Mikko Perttunen <mperttunen@nvidia.com>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Li Zetao <lizetao1@huawei.com>,
+        Andrei Coardos <aboutphysycs@gmail.com>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        Krzysztof Kozlowski <k.kozlowski@samsung.com>,
+        Ruan Jinjie <ruanjinjie@huawei.com>,
+        Chen Jiahao <chenjiahao16@huawei.com>,
+        Mark Brown <broonie@kernel.org>,
+        Yangtao Li <frank.li@vivo.com>,
+        Min-Hua Chen <minhuadotchen@gmail.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Minjie Du <duminjie@vivo.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: [GIT PULL] thermal material for v6.6-rc1
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Dx_yNW7e1kXntmAA--.10656S2
-X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxZF13Wr43urW3Wr4UCrW7GFX_yoW5GFWkp3
-        95GF9rGF18JF18t3ZIqFsrZFn8ua92yrZ3ZFyI9w17u3W7W395tr1ftFyYqF1rZrZrXFy3
-        Xa9Fyr18Wa15GacCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6rxl6s0DM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
-        twAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
-        8JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
-        6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
-        AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
-        0xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
-        v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AK
-        xVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU4SoGDUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Feiyang Chen <chenfeiyang@loongson.cn>
 
-    For a device with no Power Management Capability, pci_power_up() previously
-    returned 0 (success) if the platform was able to put the device in D0,
-    which led to pci_set_full_power_state() trying to read PCI_PM_CTRL, even
-    though it doesn't exist.
+Hi Rafael,
 
-    Since dev->pm_cap == 0 in this case, pci_set_full_power_state() actually
-    read the wrong register, interpreted it as PCI_PM_CTRL, and corrupted
-    dev->current_state.  This led to messages like this in some cases:
+please consider this pull request for the thermal material
 
-    pci 0000:01:00.0: Refused to change power state from D3hot to D0
+Thanks
 
-    To prevent this, make pci_power_up() always return a negative failure code
-    if the device lacks a Power Management Capability, even if non-PCI platform
-    power management has been able to put the device in D0.  The failure will
-    prevent pci_set_full_power_state() from trying to access PCI_PM_CTRL.
+The following changes since commit f6a756e8fb12923f0e3996a575e935e94f3594eb:
 
-    Fixes: e200904b275c ("PCI/PM: Split pci_power_up()")
-    Link: https://lore.kernel.org/r/20230824013738.1894965-1-chenfeiyang@loongson.cn
-    Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-    Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-    Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
-    Reviewed-by: "Rafael J. Wysocki" <rafael@kernel.org>
-    Cc: stable@vger.kernel.org	# v5.19+
----
-v4:
-Modify commit messages.
+   thermal: Explicitly include correct DT includes (2023-07-31 20:03:42 
++0200)
 
-BTW, Feiyang went on vacation, I will continue this patch.
+are available in the Git repository at:
 
- drivers/pci/pci.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index f59f3c1c9869..59c01d68c6d5 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -1226,6 +1226,10 @@ static int pci_dev_wait(struct pci_dev *dev, char *reset_type, int timeout)
-  *
-  * On success, return 0 or 1, depending on whether or not it is necessary to
-  * restore the device's BARs subsequently (1 is returned in that case).
-+ *
-+ * On failure, return a negative error code.  Always return failure if @dev
-+ * lacks a Power Management Capability, even if the platform was able to
-+ * put the device in D0 via non-PCI means.
-  */
- int pci_power_up(struct pci_dev *dev)
- {
-@@ -1242,9 +1246,6 @@ int pci_power_up(struct pci_dev *dev)
- 		else
- 			dev->current_state = state;
  
--		if (state == PCI_D0)
--			return 0;
--
- 		return -EIO;
- 	}
- 
-@@ -1302,8 +1303,12 @@ static int pci_set_full_power_state(struct pci_dev *dev)
- 	int ret;
- 
- 	ret = pci_power_up(dev);
--	if (ret < 0)
-+	if (ret < 0) {
-+		if (dev->current_state == PCI_D0)
-+			return 0;
-+
- 		return ret;
-+	}
- 
- 	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
- 	dev->current_state = pmcsr & PCI_PM_CTRL_STATE_MASK;
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
+tags/thermal-v6.6-rc1
+
+for you to fetch changes up to 1ef5a9f61457b921158ef03f3a2b3e789b41be9f:
+
+   thermal/drivers/tegra-bpmp: Check if BPMP supports trip points 
+(2023-08-22 19:10:28 +0200)
+
+----------------------------------------------------------------
+- Check if the Tegra BPMP supports the trip points in order to set the
+   .set_trips callback (Mikko Perttunen)
+
+- Add the new Loongson-2 thermal sensor along with the DT bindings
+   (Yinbo Zhu)
+
+- Use IS_ERR_OR_NULL helper to replace a double test on the TI bandgap
+   sensor (Li Zetao)
+
+- Remove the call to platform_set_drvdata() as there is no call to
+   platform_get_drvdata() in a bunch of drivers where that happens
+   (Andrei Coardos)
+
+- Switch the Mediatek LVTS mode to filtered in order to enable the
+   interrupts (Nícolas F. R. A. Prado)
+
+- Fix Wvoid-pointer-to-enum-cast warning on the Exynos TMU (Krzysztof
+   Kozlowski)
+
+- Remove redundant usage of of_match_ptr() as the driver db8500
+   already depends on CONFIG_OF (Ruan Jinjie)
+
+- Remove redundant dev_err_probe() because the underlying function
+   already called it in the Mediatek sensor (Chen Jiahao)
+
+- Free calibration nvmem after reading it on sun8i (Mark Brown)
+
+- Remove useless comment in the code on sun8i (Yangtao Li)
+
+- Make tsens_xxxx_nvmem static to fix sparse warning on QCom tsens 
+(Min-Hua Chen)
+
+- Remove error message at probe deferral on imx8mm (Ahmad Fatoum)
+
+- Fix parameter check in lvts_debugfs_init with IS_ERR on Mediatek
+   LVTS (Minjie Du)
+
+- Fix the interrupt routine and configuratoin for the Mediatek LVTS
+   (Nícolas F. R. A. Prado)
+
+----------------------------------------------------------------
+Ahmad Fatoum (1):
+       thermal/drivers/imx8mm: Suppress log message on probe deferral
+
+Andrei Coardos (8):
+       thermal/drivers/broadcom/sr-thermal: Removed call to 
+platform_set_drvdata()
+       thermal/drivers/k3_j72xx_bandgap: Removed unneeded call to 
+platform_set_drvdata()
+       thermal/drivers/k3_bandgap: Remove unneeded call to 
+platform_set_drvdata()
+       thermal/drivers/broadcom/brcstb_thermal: Removed unneeded 
+platform_set_drvdata()
+       thermal/drivers/sun8i_thermal: Remove unneeded call to 
+platform_set_drvdata()
+       thermal/drivers/mediatek/auxadc_thermal: Removed call to 
+platform_set_drvdata()
+       thermal/drivers/max77620_thermal: Removed unneeded call to 
+platform_set_drvdata()
+       thermal/drivers/generic-adc: Removed unneeded call to 
+platform_set_drvdata()
+
+Chen Jiahao (1):
+       thermal/drivers/mediatek: Clean up redundant dev_err_probe()
+
+Krzysztof Kozlowski (1):
+       thermal/drivers/samsung: Fix Wvoid-pointer-to-enum-cast warning
+
+Li Zetao (1):
+       thermal/drivers/ti-soc-thermal: Use helper function IS_ERR_OR_NULL()
+
+Mark Brown (1):
+       thermal/drivers/sun8i: Free calibration nvmem after reading it
+
+Mikko Perttunen (1):
+       thermal/drivers/tegra-bpmp: Check if BPMP supports trip points
+
+Min-Hua Chen (1):
+       thermal/drivers/tsens: Make tsens_xxxx_nvmem static
+
+Minjie Du (1):
+       thermal/drivers/mediatek/lvts: Fix parameter check in 
+lvts_debugfs_init()
+
+Nícolas F. R. A. Prado (7):
+       thermal/drivers/mediatek/lvts_thermal: Handle IRQ on all controllers
+       thermal/drivers/mediatek/lvts_thermal: Honor sensors in immediate 
+mode
+       thermal/drivers/mediatek/lvts_thermal: Use offset threshold for IRQ
+       thermal/drivers/mediatek/lvts_thermal: Disable undesired interrupts
+       thermal/drivers/mediatek/lvts_thermal: Don't leave threshold zeroed
+       thermal/drivers/mediatek/lvts_thermal: Manage threshold between 
+sensors
+       thermal/drivers/mediatek/lvts_thermal: Make readings valid in 
+filtered mode
+
+Ruan Jinjie (1):
+       thermal/drivers/db8500: Remove redundant of_match_ptr()
+
+Yangtao Li (1):
+       thermal/drivers/sun8i: Remove unneeded comments
+
+Yinbo Zhu (2):
+       thermal/drivers/loongson-2: Add thermal management support
+       thermal: dt-bindings: add loongson-2 thermal
+
+  Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml | 
+  44 +++++++++++++
+  MAINTAINERS                                                          | 
+   8 +++
+  drivers/thermal/Kconfig                                              | 
+  12 ++++
+  drivers/thermal/Makefile                                             | 
+   1 +
+  drivers/thermal/broadcom/brcmstb_thermal.c                           | 
+   1 -
+  drivers/thermal/broadcom/sr-thermal.c                                | 
+   1 -
+  drivers/thermal/db8500_thermal.c                                     | 
+   2 +-
+  drivers/thermal/imx8mm_thermal.c                                     | 
+   6 +-
+  drivers/thermal/k3_bandgap.c                                         | 
+   1 -
+  drivers/thermal/k3_j72xx_bandgap.c                                   | 
+   2 -
+  drivers/thermal/loongson2_thermal.c                                  | 
+169 ++++++++++++++++++++++++++++++++++++++++++++++++
+  drivers/thermal/max77620_thermal.c                                   | 
+   2 -
+  drivers/thermal/mediatek/auxadc_thermal.c                            | 
+   2 -
+  drivers/thermal/mediatek/lvts_thermal.c                              | 
+175 +++++++++++++++++++++++++++++++++++++-------------
+  drivers/thermal/qcom/tsens-v0_1.c                                    | 
+   6 +-
+  drivers/thermal/qcom/tsens-v1.c                                      | 
+   2 +-
+  drivers/thermal/samsung/exynos_tmu.c                                 | 
+   2 +-
+  drivers/thermal/sun8i_thermal.c                                      | 
+   8 +--
+  drivers/thermal/tegra/tegra-bpmp-thermal.c                           | 
+  52 ++++++++++++++-
+  drivers/thermal/thermal-generic-adc.c                                | 
+   1 -
+  drivers/thermal/ti-soc-thermal/ti-bandgap.c                          | 
+   2 +-
+  21 files changed, 426 insertions(+), 73 deletions(-)
+  create mode 100644 
+Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
+  create mode 100644 drivers/thermal/loongson2_thermal.c
+
+
+
 -- 
-2.31.4
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
