@@ -2,202 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E213478C7AF
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 16:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9A278C800
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Aug 2023 16:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235795AbjH2OgA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Aug 2023 10:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53112 "EHLO
+        id S237024AbjH2OwC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Aug 2023 10:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232732AbjH2Ofd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Aug 2023 10:35:33 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E0DCC
-        for <linux-pm@vger.kernel.org>; Tue, 29 Aug 2023 07:35:29 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-54290603887so2186726a12.1
-        for <linux-pm@vger.kernel.org>; Tue, 29 Aug 2023 07:35:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693319729; x=1693924529;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=C8A+TZcdpH/rDhEh19aLmzCkwCiivExgomPzw9XBkLE=;
-        b=nGRBNwYbFByFviDSecfw0kZfkA38xibyaMxS1JR+QYceglp1t+0ecdlQBAPWKjEbOK
-         YTsdq66ZRsNhFR4krlUcrpUexmbINn55ds/dysWUP41kCpSmqSpIxz3dEoXDQuF10zqR
-         4sjsQuwUK+WQ1/ZXFnTkX8W5za+vCyuTLaikmGAI9pGGL92a7crJxn3Rl/4x7EeHipas
-         myv92H8XYenJXU0aaxqIRbamn89qi8Nuepqd+y6l0h/KXSNtflQC1fD8xOIz0n4hkPSl
-         srRDoMe1oky9y8rzS9hhvIYLBxFK0CK3c5g+wnmp3HT5ecEpHJsPqgz4DpY7ZMUqYv/0
-         cAyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693319729; x=1693924529;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=C8A+TZcdpH/rDhEh19aLmzCkwCiivExgomPzw9XBkLE=;
-        b=Km6xRRHfCUxSZIPj4JcVH8PdiBchAdmwu80p+K0alITkk3EH1ps7k+ZDpr1ajPkM62
-         vkmFhUUQ26pgJqAML6gvvNysvJ72YXu4R8tW6ysVDn/rItxXTgvuU6dGjK4WHVqKhNwD
-         9GlLoN2ZVOTZNY2sLRTUiuIotVo5/PctqSn5W2lfj9+XcozHxT2MuiaTLvyhRWx8Je0z
-         8Efi+j7dCXq4+/qwFdSXpFXcWGvxHidlCIObB+oEzH6odZwR13BonYmwb6Ot4rBP7XRt
-         rQ0HlGQKUpFz4/ZLEGEWYP1eUKLiQRq6GaJ95vnHDPfnz8pXkyDtpwTFBDsAUPNFmFvD
-         W8Lg==
-X-Gm-Message-State: AOJu0Yz6SQCmlr/8z3st86n3gBLiJtJXsvOV5uEFMZuW7AChHzNYfTHj
-        0urDJuoR0FuqRohOzQ+GWdVnNGyMD1BDIQDs79gvLw==
-X-Google-Smtp-Source: AGHT+IGql+8pGXmEXmxQKl+OTJ978JcG2Q+mwmJl0VS48/fUJTTkld59V7EeiLdAgAYG5l0RiRo4oyJqepQb4msqrv4=
-X-Received: by 2002:a17:90b:e84:b0:269:1abd:3ba6 with SMTP id
- fv4-20020a17090b0e8400b002691abd3ba6mr23446008pjb.28.1693319728803; Tue, 29
- Aug 2023 07:35:28 -0700 (PDT)
+        with ESMTP id S230355AbjH2Ov3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Aug 2023 10:51:29 -0400
+Received: from pandora.armlinux.org.uk (unknown [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E93B98;
+        Tue, 29 Aug 2023 07:51:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=zucveyWpJ8nh/whOJskv5u4rNtkAFo2YaIGg2aE8F/U=; b=Kqnb4BQFfO0OsxgTlaYOQmv61q
+        BA2O78Gnus/v9Srs9hKh7CEsc17CnatOWi++HAqvxYRGbahQQbcMtwkRrzadnFZabQr5j546KzTJi
+        V7bzhnxKiCLPU5LfBMF/+IXZgsQgto6iCN9q7a/pVpBde/tF4KoLNa+HgfSikcPYxiQpNZ+TgRkv4
+        GAKADTpU1WWdiUJKUzRDZpEpmmQdnz70FP4cQAm9z5NBUK7/JeY9aJl2ImKX0vSAggm4leNEa2G8r
+        6ib7/67QSYaMKJbmA57ryBR4ldDMNp2G8xJDm2YKGh+UzVTBPBIYdaV3zV1KdhH3RdpwZ66RJIyDZ
+        mVKIt9qw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58232)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1qb02f-0000cz-1o;
+        Tue, 29 Aug 2023 15:50:05 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1qb02K-0004jk-Oo; Tue, 29 Aug 2023 15:49:44 +0100
+Date:   Tue, 29 Aug 2023 15:49:44 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Mihai Carabas <mihai.carabas@oracle.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ankur Arora <ankur.a.arora@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvm@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 5/7] arm64: Select ARCH_HAS_CPU_RELAX
+Message-ID: <ZO4FiJpLSFISkK10@shell.armlinux.org.uk>
+References: <1691581193-8416-1-git-send-email-mihai.carabas@oracle.com>
+ <1691581193-8416-6-git-send-email-mihai.carabas@oracle.com>
+ <20230809134941.GN212435@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20230820210640.585311-1-qyousef@layalina.io> <20230820210640.585311-3-qyousef@layalina.io>
-In-Reply-To: <20230820210640.585311-3-qyousef@layalina.io>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Tue, 29 Aug 2023 16:35:17 +0200
-Message-ID: <CAKfTPtDY48jpO+b-2KXawzxh-ty+FMKX6YUXioNR7kpgO=ua6Q@mail.gmail.com>
-Subject: Re: [PATCH 2/4] sched: cpufreq: Fix apply_dvfs_headroom() escaping
- uclamp constraints
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230809134941.GN212435@hirez.programming.kicks-ass.net>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 20 Aug 2023 at 23:08, Qais Yousef <qyousef@layalina.io> wrote:
->
-> DVFS headroom is applied after we calculate the effective_cpu_util()
-> which is where we honour uclamp constraints. It makes more sense to
-> apply the headroom there once and let all users naturally get the right
-> thing without having to sprinkle the call around in various places.
+On Wed, Aug 09, 2023 at 03:49:41PM +0200, Peter Zijlstra wrote:
+> On Wed, Aug 09, 2023 at 02:39:39PM +0300, Mihai Carabas wrote:
+> > From: Joao Martins <joao.m.martins@oracle.com>
+> > 
+> > cpu_relax() is necessary to allow cpuidle poll-state to be used,
+> > so select it from ARM64 kconfig.
+> > 
+> > Signed-off-by: Joao Martins <joao.m.martins@oracle.com>
+> > Signed-off-by: Mihai Carabas <mihai.carabas@oracle.com>
+> > ---
+> >  arch/arm64/Kconfig | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> > index 87ade6549790..7c47617b5722 100644
+> > --- a/arch/arm64/Kconfig
+> > +++ b/arch/arm64/Kconfig
+> > @@ -105,6 +105,7 @@ config ARM64
+> >  	select ARCH_WANT_LD_ORPHAN_WARN
+> >  	select ARCH_WANTS_NO_INSTR
+> >  	select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
+> > +	select ARCH_HAS_CPU_RELAX
+> >  	select ARCH_HAS_UBSAN_SANITIZE_ALL
+> >  	select ARM_AMBA
+> >  	select ARM_ARCH_TIMER
+> 
+> Uh what ?! cpu_relax() is assumed present on all archs, no?
 
-You have to take care of not mixing scheduler and cpufreq constraint and policy.
+I think you have x86 to blame for that!
 
-uclamp is a scheduler feature to highlight that the utilization
-requirement of a task can't go above a level.
+That symbol is used in drivers/acpi/processor_idle.c to setup stuff
+for the cpuidle polling, and also by cpuidle's Makefile to build
+poll_state.o
 
-dvfs head room is a cpufreq decision to anticipate either hw
-limitation and responsiveness problem or performance hints.
+It isn't to do with the presence of cpu_relax() or not.
 
-they come from different sources and rational and this patch mixed
-them which i'm not sure is a correct thing to do
+It probably ought to be renamed to CPUIDLE_CPU_RELAX which would
+better describe its modern purpose.
 
->
-> Before this fix running
->
->         uclampset -M 800 cat /dev/zero > /dev/null
->
-> Will cause the test system to run at max freq of 2.8GHz. After the fix
-> it runs at 2.2GHz instead which is the correct value that matches the
-> capacity of 800.
-
-So a task with an utilization of 800 will run at higher freq than a
-task clamped to 800 by uclamp ? Why should they run at different freq
-for the same utilization ?
-
->
-> Note that similar problem exist for uclamp_min. If util was 50, and
-> uclamp_min is 100. Since we apply_dvfs_headroom() after apply uclamp
-> constraints, we'll end up with util of 125 instead of 100. IOW, we get
-> boosted twice, first time by uclamp_min, and second time by dvfs
-> headroom.
->
-> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
-> ---
->  include/linux/energy_model.h     |  1 -
->  kernel/sched/core.c              | 11 ++++++++---
->  kernel/sched/cpufreq_schedutil.c |  5 ++---
->  3 files changed, 10 insertions(+), 7 deletions(-)
->
-> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-> index 6ebde4e69e98..adec808b371a 100644
-> --- a/include/linux/energy_model.h
-> +++ b/include/linux/energy_model.h
-> @@ -243,7 +243,6 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
->         scale_cpu = arch_scale_cpu_capacity(cpu);
->         ps = &pd->table[pd->nr_perf_states - 1];
->
-> -       max_util = apply_dvfs_headroom(max_util);
->         max_util = min(max_util, allowed_cpu_cap);
->         freq = map_util_freq(max_util, ps->frequency, scale_cpu);
->
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index efe3848978a0..441d433c83cd 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -7439,8 +7439,10 @@ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
->          * frequency will be gracefully reduced with the utilization decay.
->          */
->         util = util_cfs + cpu_util_rt(rq);
-> -       if (type == FREQUENCY_UTIL)
-> +       if (type == FREQUENCY_UTIL) {
-> +               util = apply_dvfs_headroom(util);
-
-This is not the same as before because utilization has not being
-scaled by irq steal time yet
-
->                 util = uclamp_rq_util_with(rq, util, p);
-> +       }
->
->         dl_util = cpu_util_dl(rq);
->
-> @@ -7471,9 +7473,12 @@ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
->          *              max - irq
->          *   U' = irq + --------- * U
->          *                 max
-> +        *
-> +        * We only need to apply dvfs headroom to irq part since the util part
-> +        * already had it applied.
->          */
->         util = scale_irq_capacity(util, irq, max);
-> -       util += irq;
-> +       util += type ==  FREQUENCY_UTIL ? apply_dvfs_headroom(irq) : irq;
->
->         /*
->          * Bandwidth required by DEADLINE must always be granted while, for
-> @@ -7486,7 +7491,7 @@ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
->          * an interface. So, we only do the latter for now.
->          */
->         if (type == FREQUENCY_UTIL)
-> -               util += cpu_bw_dl(rq);
-> +               util += apply_dvfs_headroom(cpu_bw_dl(rq));
-
-If we follow your reasoning with uclamp on the dl bandwidth, should we
-not skip this as well ?
-
->
->         return min(max, util);
->  }
-> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> index 916c4d3d6192..0c7565ac31fb 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -143,7 +143,6 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
->         unsigned int freq = arch_scale_freq_invariant() ?
->                                 policy->cpuinfo.max_freq : policy->cur;
->
-> -       util = apply_dvfs_headroom(util);
->         freq = map_util_freq(util, freq, max);
->
->         if (freq == sg_policy->cached_raw_freq && !sg_policy->need_freq_update)
-> @@ -406,8 +405,8 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
->             sugov_cpu_is_busy(sg_cpu) && sg_cpu->util < prev_util)
->                 sg_cpu->util = prev_util;
->
-> -       cpufreq_driver_adjust_perf(sg_cpu->cpu, apply_dvfs_headroom(sg_cpu->bw_dl),
-> -                                  apply_dvfs_headroom(sg_cpu->util), max_cap);
-> +       cpufreq_driver_adjust_perf(sg_cpu->cpu, sg_cpu->bw_dl,
-> +                                  sg_cpu->util, max_cap);
->
->         sg_cpu->sg_policy->last_freq_update_time = time;
->  }
-> --
-> 2.34.1
->
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
