@@ -2,77 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBBD278D18F
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 03:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6EDB78D1A9
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 03:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241480AbjH3BLm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Aug 2023 21:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56178 "EHLO
+        id S241558AbjH3BU7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Aug 2023 21:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241488AbjH3BLQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Aug 2023 21:11:16 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AF783;
-        Tue, 29 Aug 2023 18:11:14 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-68bed286169so4309569b3a.1;
-        Tue, 29 Aug 2023 18:11:14 -0700 (PDT)
+        with ESMTP id S241595AbjH3BUZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Aug 2023 21:20:25 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17466CDC
+        for <linux-pm@vger.kernel.org>; Tue, 29 Aug 2023 18:20:16 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-99c1c66876aso648796266b.2
+        for <linux-pm@vger.kernel.org>; Tue, 29 Aug 2023 18:20:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693357873; x=1693962673; darn=vger.kernel.org;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=am71R2qky8a6PNSlnd6gAGC+SFc1FXxSFKR0Xr/vvSc=;
-        b=pMfInPpcsPSBTNiuG1N/vRUMWsymCo+7tQtn++J3pVRu0X1TfAkUX1ecjveCAtAz3I
-         yeQu8SUnRVye//iAcuLyL3WpahedEp9N9PnTR+WUlbMnv862bH3zXyRLBWFv4U5ocROg
-         AStz4vGCM2znOQri2lsASghhky3Mxi85BqZlwR6k0XrG/7vvEibVM5dCVIvCZE6HWRIA
-         BjB5KgVVqg8Ct6L4N9hvOIVbKRsGlSn/7bzKuklcXs2RgwbMdWLBSBKgGz2l6ZN8T897
-         TFWA+OtFRA/q/Jq641quLF/TVjrNw4mZBUTuqE+Ujp1o8tkXDfFd7/WxRfZzgyFfU0Nv
-         cgqA==
+        d=linux-foundation.org; s=google; t=1693358414; x=1693963214; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=61Qie5c2kDF2Zc0oY6tB5adEIVm20BboiMQ31ckJkUM=;
+        b=LNCgTtni8E06IO9kNM5gSm4Y7I3fEcwz4hbDBBdT16h3ncYPGw/rcsEI2Z8s9kroAA
+         ND5fcrAix5fBpPthCzQAjXf7u8DqtRdqeS4yhj3LwRPkWMS3M3ie9eLnFN+dcOXseZBk
+         UVUSb2ceSteuKNCrSnFFx9ll83cXRs3cnKuzY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693357873; x=1693962673;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1693358414; x=1693963214;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=am71R2qky8a6PNSlnd6gAGC+SFc1FXxSFKR0Xr/vvSc=;
-        b=Y9LTezBOQVwAOlKiErAxARNlr0t/NVbpa4xLasOt/iL2GYsPB79kbFX5nOkkxgU+8N
-         h4E/wOnV01N2Ec1B7kBrBB8fCsC8vRPtHWtbB8qJ1y7XXm6z/go3LjUGrbZhzONDJ7Ce
-         LRvxkZwlL97gkq3n643pXmnW/sJYN+Q8GQDn4k5zud/ItJfJ/1KP9RUDJPVNTkrlS+DZ
-         4ANr55C+LFcIgspyKgOrbgvY+Aa5dO0H1IyrqkFLeE8+idAeiu9Q9lrV0h9dcNW9f7H2
-         I5uyYd1Y40FPqlQ9RyAgJZ1ZHVX/LNCcokKW/r26zwq8+Pv4+x+caLH+ph5w/NA30pDU
-         lnzA==
-X-Gm-Message-State: AOJu0Yw9DQI2vGGdX1gdtnCFmu5/sVLxCq5aI6XnF05okCCPwWjARKFO
-        LDgztWS8w9eGBt8hxrWc7Yc=
-X-Google-Smtp-Source: AGHT+IGW6Mnz5eiZOzB0GyC2Mxdqc4toEBDK29wnYzzWWxk/0O8RTvhbGwKvv+gZCMgY+cnRZ51JeQ==
-X-Received: by 2002:a05:6a20:9497:b0:141:d640:794a with SMTP id hs23-20020a056a20949700b00141d640794amr889158pzb.39.1693357873498;
-        Tue, 29 Aug 2023 18:11:13 -0700 (PDT)
-Received: from [192.168.0.105] ([103.124.138.83])
-        by smtp.gmail.com with ESMTPSA id jc17-20020a17090325d100b001aaf2e8b1eesm10032834plb.248.2023.08.29.18.11.10
+        bh=61Qie5c2kDF2Zc0oY6tB5adEIVm20BboiMQ31ckJkUM=;
+        b=DhgHfOR4tBZkScy9zQleoQKfUaLARSBq64h9iXkxsHjFY6w2eSdfpg1nZxMZ39IDbd
+         Ik0967TlstXcr5kHR3wlFlKDLWSKSfKVRvR4meQZQzvd2a0JBW3HFsHo8pFdTYkgfvUG
+         vPHk/Sn/qGG0oo01FXyADSDx01uuqxhCe+eGC5u3IXjtjvhc1e3WVaPbwKYVcWrM841C
+         BALmx6ck2MgFJ1Iyye71zRo1a4TIKeKTt5D2WnKBuvvscAMw/Ut4W2sf0g4hF65dNYLQ
+         A9P9yDZn5WNCLEYoeEaVYQlOUQ6u2KaHNkcJkPyf712Z9Y0gR2Rq0ySkjmLLFx27dybg
+         9BhQ==
+X-Gm-Message-State: AOJu0YyPIDiBaJoMGM8LFx4ddP72AqNREdnKhLoaYEjRoWfnwOL6iY+6
+        C8emFKkhYEM3lcekL4yn2r49HC6Ogsxtx9/ertMiglIh
+X-Google-Smtp-Source: AGHT+IFvgD/xOvf/uQqr0Ip44Ddi9Maor6WLr6xar7l5Fw4Q63xt+qFWf6z8hxRosDzRKnYX4RJFsA==
+X-Received: by 2002:a17:906:2252:b0:9a2:28dc:4166 with SMTP id 18-20020a170906225200b009a228dc4166mr444141ejr.75.1693358414460;
+        Tue, 29 Aug 2023 18:20:14 -0700 (PDT)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com. [209.85.218.50])
+        by smtp.gmail.com with ESMTPSA id f17-20020a17090624d100b0099cb0a7098dsm6655190ejb.19.2023.08.29.18.20.13
+        for <linux-pm@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Aug 2023 18:11:12 -0700 (PDT)
-Content-Type: multipart/mixed; boundary="------------aBQJrJJmhb2JJibgl8bG5LWq"
-Message-ID: <88ffb216-96f9-f232-7fe5-48bf82e6aa70@gmail.com>
-Date:   Wed, 30 Aug 2023 08:11:06 +0700
+        Tue, 29 Aug 2023 18:20:13 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-99c1c66876aso648794066b.2
+        for <linux-pm@vger.kernel.org>; Tue, 29 Aug 2023 18:20:13 -0700 (PDT)
+X-Received: by 2002:a17:907:9687:b0:99c:85af:7aa6 with SMTP id
+ hd7-20020a170907968700b0099c85af7aa6mr547689ejc.28.1693358412962; Tue, 29 Aug
+ 2023 18:20:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Content-Language: en-US
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Ajay Agarwal <ajayagarwal@google.com>,
-        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Michael Bottini <michael.a.bottini@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brett Hassall <brett.hassall@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Power Management <linux-pm@vger.kernel.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Fwd: upstream linux cannot achieve package C8 power saving
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230829213441.310655-1-ulf.hansson@linaro.org>
+ <CAHk-=wg0gc4Cc90OL29Vr5gDtd4mnsKD+TxtoNtQbAryaWHkZQ@mail.gmail.com>
+ <CAHk-=wjLO=Jsdk2prq0piznMMCk+V0_fRaFRHEPuaALpF8J=hw@mail.gmail.com> <96bb0de0-06d9-46f8-b02f-dc924afff13c@app.fastmail.com>
+In-Reply-To: <96bb0de0-06d9-46f8-b02f-dc924afff13c@app.fastmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 29 Aug 2023 18:19:56 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
+Message-ID: <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
+Subject: Re: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,106 +78,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------aBQJrJJmhb2JJibgl8bG5LWq
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+On Tue, 29 Aug 2023 at 17:48, Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> How about moving it to drivers/power/domain/ instead?
 
-Hi,
+That sounds like a sensible name and would seem to fit logically with
+our existing tree structure quite well.
 
-I notice a bug report on Bugzilla [1]. Quoting from it:
+> I don't think we can easily rename the interfaces that have been
+> in use for the past 12 years
 
-> v6.5 (and at least v5.15, v5.19 and v6.4 as well) will not go to a higher power saving level than package C3.
-> 
-> With the inclusion of a patch that combines 3 Ubuntu commits related to VMD ASPM & LTR, package C8 is used.
+I actually think the interface names are much less of an issue, since
+anybody using them is presumably familiar with the naming.
 
-See Bugzilla for the full thread.
+It was only with the directory structure that I reacted to it, because
+that kind of exposes the naming to people who definitely are *not*
+familiar with it (ie me, but presumably anybody else who sees the
+diffstats etc fly past).
 
-FYI, the attached proposed fix is the same as Brett's another BZ report [2].
-I include it for upstreaming.
+And yes, we have a number of other pretty obscure driver names in our
+tree (I end up having to remind myself what "ntb" and "hsi" etc mean),
+and I don't tend to love them either, but at least they tend to be
+industry / vendor names.
 
-To Brett: Would you like to submit the proper, formal patch (see
-Documentation/process/submitting-patches.rst for details)?
-
-Thanks.
-
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217841
-[2]: https://bugzilla.kernel.org/show_bug.cgi?id=217828
-
--- 
-An old man doll... just what I always wanted! - Clara
---------------aBQJrJJmhb2JJibgl8bG5LWq
-Content-Type: text/x-patch; charset=UTF-8; name="proposed.patch"
-Content-Disposition: attachment; filename="proposed.patch"
-Content-Transfer-Encoding: base64
-
-Y29tbWl0IDk0OTFiZmEwYjFlNWY2NThlMDkxMzU3NTllN2ViYzM3M2Q5YTcyY2UKQXV0aG9y
-OiBicmV0dC5oYXNzYWxsIDxicmV0dC5oYXNzYWxsQGdtYWlsLmNvbT4KRGF0ZTogICBUaHUg
-QXVnIDI0IDE5OjI2OjM2IDIwMjMgKzEwMDAKCiAgICBjb21iaW5lZCBjb21taXQgb2Y6IDcx
-MzE1YjhlIC0gVUJVTlRVOiBTQVVDRTogUENJL0FTUE06IEVuYWJsZSBBU1BNIGZvciBsaW5r
-cyB1bmRlciBWTUQgZG9tYWluOyBkODNlNmY2ZSAtICBVQlVOVFU6IFNBVUNFOiBQQ0kvQVNQ
-TTogRW5hYmxlIExUUiBmb3IgZW5kcG9pbnRzIGJlaGluZCBWTUQ7IDA2OWQwNTIzIC0gVUJV
-TlRVOiBTQVVDRTogdm1kOiBmaXh1cCBicmlkZ2UgQVNQTSBieSBkcml2ZXIgbmFtZSBpbnN0
-ZWFkCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9wY2kvcGNpZS9hc3BtLmMgYi9kcml2ZXJzL3Bj
-aS9wY2llL2FzcG0uYwppbmRleCA2NmQ3NTE0Y2ExMTEuLjI5ZjJmNjJhYWVmYSAxMDA2NDQK
-LS0tIGEvZHJpdmVycy9wY2kvcGNpZS9hc3BtLmMKKysrIGIvZHJpdmVycy9wY2kvcGNpZS9h
-c3BtLmMKQEAgLTY4Miw3ICs2ODIsOCBAQCBzdGF0aWMgdm9pZCBwY2llX2FzcG1fY2FwX2lu
-aXQoc3RydWN0IHBjaWVfbGlua19zdGF0ZSAqbGluaywgaW50IGJsYWNrbGlzdCkKIAlhc3Bt
-X2wxc3NfaW5pdChsaW5rKTsKIAogCS8qIFNhdmUgZGVmYXVsdCBzdGF0ZSAqLwotCWxpbmst
-PmFzcG1fZGVmYXVsdCA9IGxpbmstPmFzcG1fZW5hYmxlZDsKKwlsaW5rLT5hc3BtX2RlZmF1
-bHQgPSBwYXJlbnQtPmRldl9mbGFncyAmIFBDSV9ERVZfRkxBR1NfRU5BQkxFX0FTUE0gPwor
-CQkJICAgICBBU1BNX1NUQVRFX0FMTCA6IGxpbmstPmFzcG1fZW5hYmxlZDsKIAogCS8qIFNl
-dHVwIGluaXRpYWwgY2FwYWJsZSBzdGF0ZS4gV2lsbCBiZSB1cGRhdGVkIGxhdGVyICovCiAJ
-bGluay0+YXNwbV9jYXBhYmxlID0gbGluay0+YXNwbV9zdXBwb3J0OwpkaWZmIC0tZ2l0IGEv
-ZHJpdmVycy9wY2kvcXVpcmtzLmMgYi9kcml2ZXJzL3BjaS9xdWlya3MuYwppbmRleCBjNTI1
-ODY3NzYwYmYuLmE3N2UyZTM4ZmE2YSAxMDA2NDQKLS0tIGEvZHJpdmVycy9wY2kvcXVpcmtz
-LmMKKysrIGIvZHJpdmVycy9wY2kvcXVpcmtzLmMKQEAgLTYwNDEsMyArNjA0MSw3MSBAQCBE
-RUNMQVJFX1BDSV9GSVhVUF9IRUFERVIoUENJX1ZFTkRPUl9JRF9JTlRFTCwgMHg5YTJkLCBk
-cGNfbG9nX3NpemUpOwogREVDTEFSRV9QQ0lfRklYVVBfSEVBREVSKFBDSV9WRU5ET1JfSURf
-SU5URUwsIDB4OWEyZiwgZHBjX2xvZ19zaXplKTsKIERFQ0xBUkVfUENJX0ZJWFVQX0hFQURF
-UihQQ0lfVkVORE9SX0lEX0lOVEVMLCAweDlhMzEsIGRwY19sb2dfc2l6ZSk7CiAjZW5kaWYK
-KworLyoKKyAqIEJJT1MgbWF5IG5vdCBiZSBhYmxlIHRvIGFjY2VzcyBjb25maWcgc3BhY2Ug
-b2YgZGV2aWNlcyB1bmRlciBWTUQgZG9tYWluLCBzbworICogaXQgcmVsaWVzIG9uIHNvZnR3
-YXJlIHRvIGVuYWJsZSBBU1BNIGZvciBsaW5rcyB1bmRlciBWTUQuCisgKi8KK3N0YXRpYyBi
-b29sIHBjaV9maXh1cF9pc192bWRfYnJpZGdlKHN0cnVjdCBwY2lfZGV2ICpwZGV2KQorewor
-CXN0cnVjdCBwY2lfYnVzICpidXMgPSBwZGV2LT5idXM7CisJc3RydWN0IGRldmljZSAqZGV2
-OworCXN0cnVjdCBwY2lfZHJpdmVyICpwZHJ2OworCisJaWYgKCFwY2lfaXNfcm9vdF9idXMo
-YnVzKSkKKwkJcmV0dXJuIGZhbHNlOworCisJZGV2ID0gYnVzLT5icmlkZ2UtPnBhcmVudDsK
-KwlpZiAoZGV2ID09IE5VTEwpCisJCXJldHVybiBmYWxzZTsKKworCXBkcnYgPSBwY2lfZGV2
-X2RyaXZlcih0b19wY2lfZGV2KGRldikpOworCWlmIChwZHJ2ID09IE5VTEwgfHwgc3RyY21w
-KCJ2bWQiLCBwZHJ2LT5uYW1lKSkKKwkJcmV0dXJuIGZhbHNlOworCisJcmV0dXJuIHRydWU7
-Cit9CisKK3N0YXRpYyB2b2lkIHBjaV9maXh1cF9lbmFibGVfYXNwbShzdHJ1Y3QgcGNpX2Rl
-diAqcGRldikKK3sKKwlpZiAoIXBjaV9maXh1cF9pc192bWRfYnJpZGdlKHBkZXYpKQorCQly
-ZXR1cm47CisKKwlwZGV2LT5kZXZfZmxhZ3MgfD0gUENJX0RFVl9GTEFHU19FTkFCTEVfQVNQ
-TTsKKwlwY2lfaW5mbyhwZGV2LCAiZW5hYmxlIEFTUE0gZm9yIHBjaSBicmlkZ2UgYmVoaW5k
-IHZtZCIpOworfQorREVDTEFSRV9QQ0lfRklYVVBfQ0xBU1NfSEVBREVSKFBDSV9WRU5ET1Jf
-SURfSU5URUwsIFBDSV9BTllfSUQsCisJCQkgICAgICAgUENJX0NMQVNTX0JSSURHRV9QQ0ks
-IDgsIHBjaV9maXh1cF9lbmFibGVfYXNwbSk7CisKK3N0YXRpYyB2b2lkIHBjaV9maXh1cF9l
-bmFibGVfdm1kX252bWVfbHRyKHN0cnVjdCBwY2lfZGV2ICpwZGV2KQoreworCXN0cnVjdCBw
-Y2lfZGV2ICpwYXJlbnQ7CisJaW50IHBvczsKKwl1MTYgdmFsOworCisJcGFyZW50ID0gcGNp
-X3Vwc3RyZWFtX2JyaWRnZShwZGV2KTsKKwlpZiAoIXBhcmVudCkKKwkJcmV0dXJuOworCisJ
-aWYgKCFwY2lfZml4dXBfaXNfdm1kX2JyaWRnZShwYXJlbnQpKQorCQlyZXR1cm47CisKKwlw
-b3MgPSBwY2lfZmluZF9leHRfY2FwYWJpbGl0eShwZGV2LCBQQ0lfRVhUX0NBUF9JRF9MVFIp
-OworCWlmICghcG9zKQorCQlyZXR1cm47CisKKwlwY2lfcmVhZF9jb25maWdfd29yZChwZGV2
-LCBwb3MgKyBQQ0lfTFRSX01BWF9TTk9PUF9MQVQsICZ2YWwpOworCWlmICh2YWwpCisJCXJl
-dHVybjsKKworCXBjaV9yZWFkX2NvbmZpZ193b3JkKHBkZXYsIHBvcyArIFBDSV9MVFJfTUFY
-X05PU05PT1BfTEFULCAmdmFsKTsKKwlpZiAodmFsKQorCQlyZXR1cm47CisKKwkvKiAzMTQ1
-NzI4bnMsIGkuZS4gMHgzMDAwMDBucyAqLworCXBjaV93cml0ZV9jb25maWdfd29yZChwZGV2
-LCBwb3MgKyBQQ0lfTFRSX01BWF9TTk9PUF9MQVQsIDB4MTAwMyk7CisJcGNpX3dyaXRlX2Nv
-bmZpZ193b3JkKHBkZXYsIHBvcyArIFBDSV9MVFJfTUFYX05PU05PT1BfTEFULCAweDEwMDMp
-OworCXBjaV9pbmZvKHBkZXYsICJlbmFibGUgTFRSIGZvciBudm1lIGJlaGluZCB2bWQiKTsK
-K30KK0RFQ0xBUkVfUENJX0ZJWFVQX0NMQVNTX0VBUkxZKFBDSV9BTllfSUQsIFBDSV9BTllf
-SUQsCisJCQkgICAgICBQQ0lfQ0xBU1NfU1RPUkFHRV9FWFBSRVNTLCAwLCBwY2lfZml4dXBf
-ZW5hYmxlX3ZtZF9udm1lX2x0cik7CmRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L3BjaS5o
-IGIvaW5jbHVkZS9saW51eC9wY2kuaAppbmRleCA2MGI4NzcyYjViZDQuLmQzZjk2ZDExMTI1
-MCAxMDA2NDQKLS0tIGEvaW5jbHVkZS9saW51eC9wY2kuaAorKysgYi9pbmNsdWRlL2xpbnV4
-L3BjaS5oCkBAIC0yNDUsNiArMjQ1LDggQEAgZW51bSBwY2lfZGV2X2ZsYWdzIHsKIAlQQ0lf
-REVWX0ZMQUdTX05PX1JFTEFYRURfT1JERVJJTkcgPSAoX19mb3JjZSBwY2lfZGV2X2ZsYWdz
-X3QpICgxIDw8IDExKSwKIAkvKiBEZXZpY2UgZG9lcyBob25vciBNU0kgbWFza2luZyBkZXNw
-aXRlIHNheWluZyBvdGhlcndpc2UgKi8KIAlQQ0lfREVWX0ZMQUdTX0hBU19NU0lfTUFTS0lO
-RyA9IChfX2ZvcmNlIHBjaV9kZXZfZmxhZ3NfdCkgKDEgPDwgMTIpLAorCS8qIEVuYWJsZSBB
-U1BNIHJlZ2FyZGxlc3Mgb2YgaG93IExua0N0bCBpcyBwcm9ncmFtbWVkICovCisJUENJX0RF
-Vl9GTEFHU19FTkFCTEVfQVNQTSA9IChfX2ZvcmNlIHBjaV9kZXZfZmxhZ3NfdCkgKDEgPDwg
-MTMpLAogfTsKIAogZW51bSBwY2lfaXJxX3Jlcm91dGVfdmFyaWFudCB7Cg==
-
---------------aBQJrJJmhb2JJibgl8bG5LWq--
+            Linus
