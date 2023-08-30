@@ -2,164 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F9678D03A
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 01:18:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B68F78D100
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 02:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238847AbjH2XSO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Aug 2023 19:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42402 "EHLO
+        id S240462AbjH3ATv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Aug 2023 20:19:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240035AbjH2XRu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Aug 2023 19:17:50 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D02B9C;
-        Tue, 29 Aug 2023 16:17:44 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37TMiv5g026041;
-        Tue, 29 Aug 2023 23:16:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=4ATyD/tEgZ/efDPx/mmt2wlb1CN5pBAvQLDrRXLw3ok=;
- b=XMhcQly4dK6o3auQzr5fit1xLKIjjSF9UyzNGSzuo6DvWoxWZV3jjWNwiqL9d+ec5ufD
- +UAMD3URsK9EnNZ3ugBTmO4I+EaOBjHFjJRfb5Gh1N5tj1QyJzSTBj1H7QJYdgjLWxGe
- EF66/3AMsPfRDCz8K1+SNOjuHd/ymi8j59ZP6aTj2r5zhdt6geJwxoCJdmvYhQNwhCjw
- 8G2/Z5trIJstAWDULDAeJomu+8SO54fO6B1hfncyDcvMCGf5Gf8yOHSIgSH88ehe9l7h
- mPdQDLaGyM3UbBlbNGJPBZf5qpIAUUdAkWhtiSXXUUPESrVrzpxRL5HDZfw/RG30pwcT bA== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ssmcv8q8a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Aug 2023 23:16:44 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37TNGh6H021191
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Aug 2023 23:16:43 GMT
-Received: from quicinc.com (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Tue, 29 Aug
- 2023 16:16:40 -0700
-Date:   Tue, 29 Aug 2023 16:16:39 -0700
-From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Mark Brown <broonie@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        "Konstantin Ryabitsev" <konstantin@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <quic_pkondeti@quicinc.com>, <linux-kernel@vger.kernel.org>,
-        <kernel@quicinc.com>, <workflows@vger.kernel.org>,
-        <tools@linux.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        "Guru Das Srinagesh" <quic_gurus@quicinc.com>
-Subject: Re: [PATCH v3 1/1] scripts: Add add-maintainer.py
-Message-ID: <20230829231638.GA27843@quicinc.com>
-Mail-Followup-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        quic_pkondeti@quicinc.com, linux-kernel@vger.kernel.org,
-        kernel@quicinc.com, workflows@vger.kernel.org,
-        tools@linux.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-References: <cover.1693037031.git.quic_gurus@quicinc.com>
- <141b9fcab2208ace3001df4fc10e3dfd42b9f5d9.1693037031.git.quic_gurus@quicinc.com>
- <2efba6b3-2399-9deb-d0ce-78f7b5e12f30@linaro.org>
- <20230828175629.GC23466@quicinc.com>
- <78aa33f9-ead8-b128-2a7a-40530a1a3ed0@linaro.org>
- <ZOz4XtX3DFRQpvQY@finisterre.sirena.org.uk>
- <670a87e9-2f0c-ec9e-ebb4-9041c8972ace@linaro.org>
+        with ESMTP id S236991AbjH3ATW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Aug 2023 20:19:22 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2B5CC4
+        for <linux-pm@vger.kernel.org>; Tue, 29 Aug 2023 17:19:19 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-99cce6f7de2so653979066b.3
+        for <linux-pm@vger.kernel.org>; Tue, 29 Aug 2023 17:19:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1693354758; x=1693959558; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0TRiwO9brInVsWGB1zNLCt57WQP0un85fvRaKypoTus=;
+        b=XV/KsXnumIaB1AQ76Ybub7Tk0NhcbGPuLX6m8phRIUz7ia2ehSkg7n0yp1vXydJm94
+         xlfQNE4zk0eDQjdXdFzuSjKjXMlw9SyRTe7I8ETHOmw4Gu+l6BsS8R+QmTdYpbRDPEkL
+         kPPwypBIOOKDwHdNDNymy8X3fyAv9M/moZph8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693354758; x=1693959558;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0TRiwO9brInVsWGB1zNLCt57WQP0un85fvRaKypoTus=;
+        b=GimIEZUo+cKq7a3yscamIMPXh8Yi6w68ypkCNTFyv13YpecdZ92H66gLbWiBGVDiwN
+         ZZHPi9RW2YsbbtunaBy6+AJ2bxckwyAvshdtm4hxKTkcQQXPtxptz87JP774Wp2lSpde
+         GUz0U6sd6BVsbPDI73ZeKXvT5KaAj6M1bdDoRifu3pVZ+FAEVszmEtiJHdtfGPMhd2d3
+         NQyuefl/xNUHzCzD+a+dpnV0Dq+RY9UukmBFW5+rmXX9GZ56HcXL1gtk8vVvEWsR2qnm
+         ICzx967y63MQwxBME/fEu2OT8OpJjcshtRW6PtqPwVWqPXpnOKOEczAVw5ubp53FYqeo
+         x+Vw==
+X-Gm-Message-State: AOJu0YwUBaTSAGbHuXNlCfQQjVzCxiR2z5klymgLwr20X1Gby83W53VY
+        +atshictUOkt2qHJJJ9HiBG92VxFgUmNX1ii9jorFbuW
+X-Google-Smtp-Source: AGHT+IELumBKT9uvDKlAssGX08146SzFBpQ7e8w0dZq/dYeIW/Px5dZP9Jy8HuP7wfIu4hgpfNHlbA==
+X-Received: by 2002:a17:906:1ba1:b0:9a5:81cf:57bb with SMTP id r1-20020a1709061ba100b009a581cf57bbmr406986ejg.41.1693354758175;
+        Tue, 29 Aug 2023 17:19:18 -0700 (PDT)
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com. [209.85.218.42])
+        by smtp.gmail.com with ESMTPSA id q4-20020a170906144400b00992eabc0ad8sm6476899ejc.42.2023.08.29.17.19.16
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Aug 2023 17:19:17 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-99cdb0fd093so657425366b.1
+        for <linux-pm@vger.kernel.org>; Tue, 29 Aug 2023 17:19:16 -0700 (PDT)
+X-Received: by 2002:a17:906:251:b0:994:4095:3abf with SMTP id
+ 17-20020a170906025100b0099440953abfmr439145ejl.14.1693354756312; Tue, 29 Aug
+ 2023 17:19:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <670a87e9-2f0c-ec9e-ebb4-9041c8972ace@linaro.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: BTfg8Gx4HnM4ASTi3r21PGrkzeCDsTD-
-X-Proofpoint-GUID: BTfg8Gx4HnM4ASTi3r21PGrkzeCDsTD-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-08-29_16,2023-08-29_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 phishscore=0 suspectscore=0 priorityscore=1501 clxscore=1015
- mlxlogscore=631 spamscore=0 malwarescore=0 mlxscore=0 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2308290202
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230829213441.310655-1-ulf.hansson@linaro.org>
+In-Reply-To: <20230829213441.310655-1-ulf.hansson@linaro.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 29 Aug 2023 17:18:59 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wg0gc4Cc90OL29Vr5gDtd4mnsKD+TxtoNtQbAryaWHkZQ@mail.gmail.com>
+Message-ID: <CAHk-=wg0gc4Cc90OL29Vr5gDtd4mnsKD+TxtoNtQbAryaWHkZQ@mail.gmail.com>
+Subject: Re: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Aug 28 2023 21:45, Krzysztof Kozlowski wrote:
-> On 28/08/2023 21:41, Mark Brown wrote:
-> > On Mon, Aug 28, 2023 at 07:59:54PM +0200, Krzysztof Kozlowski wrote:
-> >> On 28/08/2023 19:56, Guru Das Srinagesh wrote:
-> > 
-> >>> Your function adds mailing lists also in "To:" which is not ideal, in my view.
-> >>> You've mentioned before that To or Cc doesn't matter [1] which I disagree
-> >>> with: it doesn't matter, why does Cc exist as a concept at all?
-> > 
-> >> To/Cc does not matter when sending new patch, because maintainers know
-> >> they are maintainers of which parts. I know what I handle.
-> > 
-> > That might be true for you (and also is for me) but I know there are
-> > people who pay attention to if they're in the To: for various reasons, I
-> > gather it's mostly about triaging their emails and is especially likely
-> > in cases where trees have overlaps in the code they cover.
-> 
-> True, there can be cases where people pay attention to addresses of
-> emails. Just like there are cases where people pay attention to "To/Cc"
-> difference.
-> 
-> In my short experience with a few patches sent, no one complained to me
-> that I put him/her/they in "To" field of a patch instead of "Cc" (with
-> remark to not spamming to much, so imagine I send a patch for regulator
-> and DTS). Big, multi-subsystem patchsets are different case and this
-> script does not solve it either.
+On Tue, 29 Aug 2023 at 14:34, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> Here's a pull-request that introduces the genpd provider subsystem.
 
-Not sure what you mean by "does not solve it" - what is the problem being
-referred to here?
+I was starting to pull this, and then tried to figure out what the
+heck "genpd" is.
 
-In case of multi-subsystem patches in a series, the commit message of this
-patch explains exactly the actions taken.
+Absolutely nothing in the pull request explains what it might be.
 
-> Anyway, if it is not ideal for Guru, I wonder how his LKML maintainer
-> filters work that it is not ideal? What is exactly not ideal in
-> maintainer workflow?
+Even after actually pulling it, I couldn't really find anything useful.
 
-I am not a maintainer - only an individual contributor - and as such, even
-though I may get patches on files I've contributed to, I deeply appreciate the
-distinction between being Cc-ed in a patch vs To-ed in one. The distinction
-being that if I'm in "To:" I ascribe higher priority to it and lesser if I'm in
-"Cc:".
+The closest seems to be the MAINTAINERS file entry that says "GENERIC
+PM DOMAIN PROVIDERS", which doesn't actually clarify anything.
 
-If this script is accepted and gains adoption, maintainers like yourself will
-only be To-ed in patches that touch files that you're a direct "Maintainer" or
-"Reviewer" of. For all other patches in the series you'll be in "Cc:". I
-imagine that this can be very useful regardless of the specifics of your
-workflow.
+Ok, so we have a Kconfig option for PM_GENERIC_DOMAINS, so I looked at
+that. It has no help-text, as it is entirely an internal generated
+one.
 
-Also, lists should just be in "Cc:" - that's just my personal preference, but
-one that I'm sure others also share.
+End result: I decided that without any kind of explanation at all,
+"genpd" is a completely useless name, and that I don't want to
+randomly add a new directory with zero explanation for what the heck
+it is.
 
-Guru Das.
+So I ended up unpulling it, because if I had to google what it is, I
+wasn't going to pull it.
+
+Can we please agree that
+
+ (a) five random letters in a row does not documentation make
+
+ (b) if we have a new subsystem, it should damn well have some
+explanation for it
+
+And even if you send me a new pull request with an actual explanation
+for the term, do we really have to use such a horribly nasty name?
+
+This is not some kind of industry standard shorthand.
+
+Yes, google does find the term "genpd" having been used for a few
+years in Linux SoC-land, but are we really so short on diskspace that
+we can't use more descriptive names?
+
+Now I look at this disaster area with no documentation, and realize
+that it ends up also being part of Arnd's series of SoC pulls.
+
+What a horrible thing this is. Please don't use random letter
+combinations that have absolutely no meaning to anybody else, and that
+aren't even explained.
+
+               Linus
