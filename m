@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C5578DA90
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC3678DA5D
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237079AbjH3Sgf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Aug 2023 14:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44846 "EHLO
+        id S235099AbjH3SgJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Aug 2023 14:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243339AbjH3KpX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 06:45:23 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69ECACCB
-        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 03:45:19 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-500c37d479aso2583011e87.2
-        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 03:45:19 -0700 (PDT)
+        with ESMTP id S243355AbjH3Kpo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 06:45:44 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7F81BB
+        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 03:45:41 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-5009d4a4897so8445930e87.0
+        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 03:45:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693392317; x=1693997117; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1693392340; x=1693997140; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=yXrmFSc5DvtKQwplkdMyHW9pMnpsWmyWrqSLE5MlrIE=;
-        b=UXawE5igQfDnP9Kg2O1Y9MNow2oAyrd+dCUx+bDlftaExBOzl+mIoVzGsMTd+miBJ+
-         TCT8nkj//Xdk1TvwcHks1PpJFUMPoh9PakzV6CUjPkOjO3hF7zpkypMAa+ANLj45cp6e
-         jvXfovC0xuwD446pzBFtESyjQn/rvXS7Kd7M8Kr43nOwsM09b3N4jUpKJLeA/cIA8BUY
-         BksF/mvNADzsgeMK6V15/zc6T0Iahu+4JzSmpvdUhVjk4fiYjgMpiP2eHebE6HXwD8Et
-         VnpfkLGjP0l+2lzshc03rZyyvm7k9F8gU6mlt701W3XOgvxfPT9GR9hbpgf5jCi3sriv
-         FOUA==
+        bh=fT/ozBf9lp5RAcCZGbAfkxmq5EWCKLUOVIlRGJ+e7rE=;
+        b=JVs8lX1Su1ICcNnoB0jqqAS2B75Jh8bq/4tv0MnVldY2xbAt6SjbIHlgnNspOjcItz
+         LB5WrCtUIUj3d3zP7pNaD/SS3gSs/7rJEKOKO1YVoDYpbd73rHUP5UMtK3z/kQ94ZJ+/
+         lBUqMpFixMW1IrjFfH7cLIo/1XX+fhmZxWOF/yt9jnawQGgBRc39Iz5hvI7iOcB5oV9n
+         a6yt31gzYPhK7AdAt0DT76wBG/g87NU960OuOay19p8hvhWgdOLvEQoQ7PrTJB7Uy659
+         bew+O7lMyN+Ysu0A8NP374YH179eCDEFy49SrvuiEeghbC0nb/C6+YxiwOzjWetZCpZo
+         xDaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693392317; x=1693997117;
+        d=1e100.net; s=20221208; t=1693392340; x=1693997140;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yXrmFSc5DvtKQwplkdMyHW9pMnpsWmyWrqSLE5MlrIE=;
-        b=QdEXR/e48uZeHgMOjH4gISHAHB+Z3kVwoziYIz5E/Td3z98g/0aoDZAAXi3z4qpT3g
-         n4VNs8e1LLZa4dXODk0+A7cqF9lnoE9hEiSOvYmuay5VHtSpoPpYoiH5h1YNbNlBe+av
-         q12dOMFUi11t9AnoDWcTCJV1R3FCX7x0SJ03BmQp5LB7A7P8uCQtNUc3Csat5DnrPZUX
-         OPR0uOsZ4wPTz+QB3d71VAkRRELpsvgyctzDmQMHgMGegofKISsZeuY1x0gDo8J1EwMk
-         d1jJbbCU0vawKBz4l7B05sBy6FI5cfJ1RqGyIzn2dZ2kGUIOewSerIS+5aCIPx3slV3j
-         QqdA==
-X-Gm-Message-State: AOJu0YygT/ERqn8JkUFlRQJC/xR0g6PQIX1eR9tclp8qDl8HvOwV0cfv
-        3vVpi4Rs6m8ZvWh7dvv2dJkqGQ==
-X-Google-Smtp-Source: AGHT+IEIBTX67B4U3Kx8acXRvk5tJixSnsBIFI4vYjn84H8gWbTM8Nf/ZI8sQkkfwDxkK91FgFiYSA==
-X-Received: by 2002:a05:6512:ba4:b0:500:9031:bb1b with SMTP id b36-20020a0565120ba400b005009031bb1bmr1361380lfv.41.1693392317539;
-        Wed, 30 Aug 2023 03:45:17 -0700 (PDT)
+        bh=fT/ozBf9lp5RAcCZGbAfkxmq5EWCKLUOVIlRGJ+e7rE=;
+        b=TGf2WATBD5ZX9kSGvR8tZQMMeE2UH5bQKRbfQK97BWxixaJ5EEfrlbwKCEknrnaLWb
+         KcJMwle0KV5E1gnfgzyD9XrP1ubVoeG7mls0rh+H4v+tGg1wlcHqfhXA2pdvtbGC0rlr
+         fxLWV4RQmNY5gcyACVAHUimDMTMqbaGH1FoPJK/vPbaa1RpEm/bos9CvyrMNq13r5UIT
+         s3FwgpXlarGX5Q8Bffm88t3t5FQ4j/t+FLLFOVBEqRH354Tc0aA629Qr+uVc0mMscklV
+         2KVZEi9VmHhBvPtoPYZnkZgz8J6vshYHsCZeJw096uSq6YA8XGLHgzkDPkxkaM0SmbG7
+         ahUg==
+X-Gm-Message-State: AOJu0YxBk6X+ROKC0sa2mDaXCd6CrcuTwciArQ0maZs35zPmT1Iyr3Cq
+        ucpRcTfKnZxIqBjKHIqPTewiPQ==
+X-Google-Smtp-Source: AGHT+IF1Bzc5p983+o6I1vBO6KSa4P7wHAmsv8YtZghMA+otHk7k6+kPCCfKX9dMUQW5mXfLnzLENA==
+X-Received: by 2002:a05:6512:310a:b0:4ff:8f12:c4d7 with SMTP id n10-20020a056512310a00b004ff8f12c4d7mr1357921lfb.31.1693392339844;
+        Wed, 30 Aug 2023 03:45:39 -0700 (PDT)
 Received: from [192.168.1.101] (abyl195.neoplus.adsl.tpnet.pl. [83.9.31.195])
-        by smtp.gmail.com with ESMTPSA id j17-20020a19f511000000b004ff6fa3f038sm2316808lfb.144.2023.08.30.03.45.16
+        by smtp.gmail.com with ESMTPSA id j17-20020a19f511000000b004ff6fa3f038sm2316808lfb.144.2023.08.30.03.45.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Aug 2023 03:45:17 -0700 (PDT)
-Message-ID: <72c2fd33-613b-49be-b394-0663f459f0c5@linaro.org>
-Date:   Wed, 30 Aug 2023 12:45:15 +0200
+        Wed, 30 Aug 2023 03:45:39 -0700 (PDT)
+Message-ID: <1c95f61c-7460-43aa-9858-37e8799a1e5d@linaro.org>
+Date:   Wed, 30 Aug 2023 12:45:38 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 11/11] arm64: dts: qcom: qcm6490: Add device-tree for
- Fairphone 5
+Subject: Re: [PATCH 01/11] arm64: dts: qcom: sc7280: Mark some nodes as
+ 'reserved'
 Content-Language: en-US
 To:     Luca Weiss <luca.weiss@fairphone.com>,
         cros-qcom-dts-watchers@chromium.org,
@@ -72,7 +72,9 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-pm@vger.kernel.org
 References: <20230830-fp5-initial-v1-0-5a954519bbad@fairphone.com>
- <20230830-fp5-initial-v1-11-5a954519bbad@fairphone.com>
+ <20230830-fp5-initial-v1-1-5a954519bbad@fairphone.com>
+ <160d6151-914b-4f2f-9f7c-d14cbb901619@linaro.org>
+ <CV5T9FXMWOAT.2ZXS0CZ8S0EUM@otso>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
@@ -109,232 +111,32 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <20230830-fp5-initial-v1-11-5a954519bbad@fairphone.com>
+In-Reply-To: <CV5T9FXMWOAT.2ZXS0CZ8S0EUM@otso>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30.08.2023 11:58, Luca Weiss wrote:
-> Add device tree for the Fairphone 5 smartphone which is based on
-> the QCM6490 SoC.
+On 30.08.2023 12:35, Luca Weiss wrote:
+> On Wed Aug 30, 2023 at 12:08 PM CEST, Konrad Dybcio wrote:
+>> On 30.08.2023 11:58, Luca Weiss wrote:
+>>> With the standard Qualcomm TrustZone setup, components such as lpasscc,
+>>> pdc_reset and watchdog shouldn't be touched by Linux. Mark them with
+>>> the status 'reserved' and reeable them in the chrome-common dtsi.
+>>>
+>>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+>>> ---
+>> Could probably use /* Owned by ADSP firmware */ or /* Owned by Gunyah hyp */
 > 
-> Supported features are, as of now:
-> * Bluetooth
-> * Debug UART
-> * Display via simplefb
-> * Flash/torch LED
-> * Flip cover sensor
-> * Power & volume buttons
-> * RTC
-> * SD card
-> * USB
-> * Various plumbing like regulators, i2c, spi, etc
-> 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
->  arch/arm64/boot/dts/qcom/Makefile                  |   1 +
->  arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts | 659 +++++++++++++++++++++
->  2 files changed, 660 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index 2cca20563a1d..73c3be0f8872 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -81,6 +81,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-sony-xperia-yoshino-lilac.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-sony-xperia-yoshino-maple.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-sony-xperia-yoshino-poplar.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-xiaomi-sagit.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= qcm6490-fairphone-fp5.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-1000.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-4000.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= qdu1000-idp.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts b/arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts
-> new file mode 100644
-> index 000000000000..572b254d3af2
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts
-> @@ -0,0 +1,659 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +/*
-> + * Copyright (c) 2023, Luca Weiss <luca.weiss@fairphone.com>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +/* PM7250B is configured to use SID8/9 instead of SID2/3 */
-> +#define PM7250B_SID 8
-> +#define PM7250B_SID1 9
-> +
-> +#include <dt-bindings/arm/qcom,ids.h>
-> +#include <dt-bindings/leds/common.h>
-> +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
-> +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-> +#include "sc7280.dtsi"
-> +#include "pm7250b.dtsi"
-> +#include "pm7325.dtsi"
-> +#include "pm8350c.dtsi" /* PM7350C */
-> +#include "pmk8350.dtsi" /* PMK7325 */
-> +
-> +/ {
-> +	model = "Fairphone 5";
-> +	compatible = "fairphone,fp5", "qcom,qcm6490";
-> +	chassis-type = "handset";
-> +
-> +	/* required for bootloader to select correct board */
-> +	qcom,msm-id = <QCOM_ID_QCM6490 0x10000>;
-> +	qcom,board-id = <34 0>;
-Try [1], it worked for me on a picky device.
-
-> +
-> +	aliases {
-> +		serial0 = &uart5;
-> +		serial1 = &uart7;
-> +	};
-> +
-> +	chosen {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		framebuffer0: framebuffer@a000000 {
-> +			compatible = "simple-framebuffer";
-> +			reg = <0 0xe1000000 0 (2700 * 1224 * 4)>;
-0x0?
-
-> +			width = <1224>;
-> +			height = <2700>;
-> +			stride = <(1224 * 4)>;
-> +			format = "a8r8g8b8";
-> +			panel = <&panel>;
-> +			clocks = <&gcc GCC_DISP_HF_AXI_CLK>;
-> +		};
-> +	};
-> +
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +
-> +		pinctrl-0 = <&volume_down_default>, <&hall_sensor_default>;
-> +		pinctrl-names = "default";
-> +
-> +		key-volume-up {
-> +			label = "Volume up";
-> +			gpios = <&pm7325_gpios 6 GPIO_ACTIVE_LOW>;
-> +			linux,code = <KEY_VOLUMEUP>;
-> +		};
-> +
-> +		/* Hall sensor uses vreg_l8c as VDD, it's being enabled using
-> +		 * always-on on the regulator
-> +		 */
-/* Powered by the always-on vreg_l8c */ - fits in a single line
-
-> +		event-hall-sensor {
-> +			label = "Hall Effect Sensor";
-> +			gpios = <&tlmm 155 GPIO_ACTIVE_LOW>;
-> +			linux,input-type = <EV_SW>;
-> +			linux,code = <SW_LID>;
-> +			linux,can-disable;
-> +			wakeup-source;
-> +		};
-> +	};
-> +
-> +	panel: panel {
-> +		compatible = "boe,rm692e5";
-Undocumented compatbile
-
-> +
-> +		width-mm = <68>;
-> +		height-mm = <150>;
-> +	};
-> +
-> +	reserved-memory {
-> +		cont_splash_mem: cont-splash@e1000000 {
-> +			reg = <0 0xe1000000 0 0x2300000>;
-0x0
-
-[...]
-
-> +		vreg_s1b: smps1 {
-> +			regulator-min-microvolt = <1840000>;
-> +			regulator-max-microvolt = <2040000>;
-No regulator-initial-mode on this pmic?
-
-[...]
-
-> +
-> +	/* PM8008 PMIC @ 8 and 9 */
-> +	/* Pixelworks @ 26 */
-> +	/* FSA4480 USB audio switch @ 42 */
-There's a driver for the fsa4480, you may wanna include a node here
-
-> +	/* AW86927FCR haptics @ 5a */
-> +};
-[...]
-
-> +
-> +	led-0 {
-> +		function = LED_FUNCTION_FLASH;
-No dual-tone stuff?
-
-> +		color = <LED_COLOR_ID_WHITE>;
-> +		led-sources = <1>, <4>;
-> +		led-max-microamp = <500000>;
-> +		flash-max-microamp = <1500000>;
-> +		flash-max-timeout-us = <1280000>;
-> +	};
-> +};
-> +
-> +&pmk8350_rtc {
-> +	status = "okay";
-> +};
-> +
-> +&pon_pwrkey {
-> +	status = "okay";
-> +};
-> +
-> +&pon_resin {
-> +	status = "okay";
-> +	linux,code = <KEY_VOLUMEDOWN>;
-status last
-
-[...]
-
-> +&rmtfs_mem {
-> +	qcom,vmid = <QCOM_SCM_VMID_MSS_MSA>, <QCOM_SCM_VMID_NAV>;
-> +	reg = <0x0 0xf8500000 0x0 0x600000>;
-> +};
-/delete-node/ + redefinition would probably be cleaner-looking
-
-[...]
-
-> +&uart7 {
-> +	/delete-property/interrupts;
-> +	interrupts-extended = <&intc GIC_SPI 608 IRQ_TYPE_LEVEL_HIGH>,
-> +			      <&tlmm 31 IRQ_TYPE_EDGE_FALLING>;
-> +
-> +	pinctrl-names = "default", "sleep";
-> +	pinctrl-1 = <&qup_uart7_sleep_cts>, <&qup_uart7_sleep_rts>, <&qup_uart7_sleep_tx>, <&qup_uart7_sleep_rx>;
-property-n
-property-names
-
-> +
-> +	status = "okay";
-> +
-> +	bluetooth: bluetooth {
-> +		compatible = "qcom,wcn6750-bt";
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&bluetooth_enable_default>, <&sw_ctrl_default>;
-property-n
-property-names
+> Do you know which one is more fitting for these nodes? I don't really
+> have a reference to if the ADSP or Gunyah (is this even used here?) owns
+> this.
+ADSP owns the audio hw, Gunyah owns the wdog
 
 Konrad
-
-[1] https://lore.kernel.org/linux-arm-msm/9db02015-2c41-40d6-bf35-69ef277e9ce4@linaro.org/
