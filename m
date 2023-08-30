@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8A878DA6D
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF61C78DA99
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:37:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237465AbjH3SgR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Aug 2023 14:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48116 "EHLO
+        id S237770AbjH3Sgl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Aug 2023 14:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343617AbjH3QRC (ORCPT
+        with ESMTP id S1343619AbjH3QRC (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 12:17:02 -0400
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211E11A6;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E821A4;
         Wed, 30 Aug 2023 09:16:57 -0700 (PDT)
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id 8eb6230b9429bc7e; Wed, 30 Aug 2023 18:16:56 +0200
+ id c6d608aedefc88a6; Wed, 30 Aug 2023 18:16:55 +0200
 Authentication-Results: v370.home.net.pl; spf=softfail (domain owner 
    discourages use of this host) smtp.mailfrom=rjwysocki.net 
    (client-ip=195.136.19.94; helo=[195.136.19.94]; 
@@ -25,8 +25,8 @@ Received: from kreacher.localnet (unknown [195.136.19.94])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 1A54266316E;
-        Wed, 30 Aug 2023 18:16:56 +0200 (CEST)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 4D08866316E;
+        Wed, 30 Aug 2023 18:16:55 +0200 (CEST)
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux PM <linux-pm@vger.kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -36,17 +36,19 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Amit Kucheria <amitk@kernel.org>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Sebastian Reichel <sre@kernel.org>
-Subject: [PATCH v1 0/4] thermal: Eliminate thermal_zone_device_register()
-Date:   Wed, 30 Aug 2023 18:10:31 +0200
-Message-ID: <1870450.tdWV9SEqCh@kreacher>
+Subject: [PATCH v1 1/4] thermal: core: Clean up headers of thermal zone registration functions
+Date:   Wed, 30 Aug 2023 18:11:38 +0200
+Message-ID: <13345552.uLZWGnKmhe@kreacher>
+In-Reply-To: <1870450.tdWV9SEqCh@kreacher>
+References: <1870450.tdWV9SEqCh@kreacher>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrudefkedguddtudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeekpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghl
- rdgtohhmpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopegrmhhithhksehkvghrnhgvlhdrohhrgh
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrudefkedguddtudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeekpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhht
+ vghlrdgtohhmpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopegrmhhithhksehkvghrnhgvlhdrohhrgh
 X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -57,30 +59,93 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Everyone,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-After recently merged changes in the ACPI thermal and Intel DTS IOSF thermal
-drivers, the only callers of thermal_zone_device_register() are the ones
-using it for registering thermal zones without any trip points.  They all
-pass zeros as 4 (out of 8) function arguments, so retaining the full
-thermal_zone_device_register() just for this purpose seems a bit excessive.
+For consistency, add a missing thermal_zone_device_register_with_trips()
+stub for the CONFIG_THERMAL unset case, specify argument names in all of
+the thermal zone registration and unregistration function headers and
+make all of them use white space consistently.
 
-For this reason, the series adds a thermal_zone_device_register()
-replacement tailored to this specific use case and called
-thermal_tripless_zone_device_register() [2/4] and makes all of the
-existing callers of the former use the replacement [3/4].  This allows
-thermal_zone_device_register() to be dropped [4/4].
+No intentional functional impact.
 
-The first patch is just a clean up making function headers in thermal.h
-a bit more consistent.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ include/linux/thermal.h |   53 +++++++++++++++++++++++++++++++++---------------
+ 1 file changed, 37 insertions(+), 16 deletions(-)
 
-This series it not intended to make any functional impact, but if the
-changes are fine with everyone, I would like to introduce them during the
-ongoing merge window to prevent the obsolete interface from lingering.
-
-The series applies to the linux-next branch in linux-pm.git.
-
-Thanks!
+Index: linux-pm/include/linux/thermal.h
+===================================================================
+--- linux-pm.orig/include/linux/thermal.h
++++ linux-pm/include/linux/thermal.h
+@@ -300,16 +300,24 @@ int thermal_acpi_critical_trip_temp(stru
+ #endif
+ 
+ #ifdef CONFIG_THERMAL
+-struct thermal_zone_device *thermal_zone_device_register(const char *, int, int,
+-		void *, struct thermal_zone_device_ops *,
+-		const struct thermal_zone_params *, int, int);
+-
+-void thermal_zone_device_unregister(struct thermal_zone_device *);
+-
+-struct thermal_zone_device *
+-thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int, int,
+-					void *, struct thermal_zone_device_ops *,
+-					const struct thermal_zone_params *, int, int);
++struct thermal_zone_device *thermal_zone_device_register(
++					const char *type,
++					int num_trips, int mask,
++					void *devdata,
++					struct thermal_zone_device_ops *ops,
++					const struct thermal_zone_params *tzp,
++					int passive_delay, int polling_delay);
++
++struct thermal_zone_device *thermal_zone_device_register_with_trips(
++					const char *type,
++					struct thermal_trip *trips,
++					int num_trips, int mask,
++					void *devdata,
++					struct thermal_zone_device_ops *ops,
++					const struct thermal_zone_params *tzp,
++					int passive_delay, int polling_delay);
++
++void thermal_zone_device_unregister(struct thermal_zone_device *tz);
+ 
+ void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
+ const char *thermal_zone_device_type(struct thermal_zone_device *tzd);
+@@ -351,14 +359,27 @@ int thermal_zone_device_disable(struct t
+ void thermal_zone_device_critical(struct thermal_zone_device *tz);
+ #else
+ static inline struct thermal_zone_device *thermal_zone_device_register(
+-	const char *type, int trips, int mask, void *devdata,
+-	struct thermal_zone_device_ops *ops,
+-	const struct thermal_zone_params *tzp,
+-	int passive_delay, int polling_delay)
++					const char *type,
++					int num_trips, int mask,
++					void *devdata,
++					struct thermal_zone_device_ops *ops,
++					const struct thermal_zone_params *tzp,
++					int passive_delay, int polling_delay)
++{ return ERR_PTR(-ENODEV); }
++
++static inline struct thermal_zone_device *thermal_zone_device_register_with_trips(
++					const char *type,
++					struct thermal_trip *trips,
++					int num_trips, int mask,
++					void *devdata,
++					struct thermal_zone_device_ops *ops,
++					const struct thermal_zone_params *tzp,
++					int passive_delay, int polling_delay);
+ { return ERR_PTR(-ENODEV); }
+-static inline void thermal_zone_device_unregister(
+-	struct thermal_zone_device *tz)
++
++static inline void thermal_zone_device_unregister(struct thermal_zone_device *tz)
+ { }
++
+ static inline struct thermal_cooling_device *
+ thermal_cooling_device_register(const char *type, void *devdata,
+ 	const struct thermal_cooling_device_ops *ops)
 
 
 
