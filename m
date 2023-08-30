@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 164CA78DA34
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0489678DA84
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234434AbjH3Sfo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Aug 2023 14:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
+        id S233700AbjH3Sga (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Aug 2023 14:36:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343618AbjH3QRC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 12:17:02 -0400
+        with ESMTP id S1343616AbjH3QRB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 12:17:01 -0400
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8579E1A3;
-        Wed, 30 Aug 2023 09:16:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0CD1A1;
+        Wed, 30 Aug 2023 09:16:55 -0700 (PDT)
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id 8838a3f6621ea0da; Wed, 30 Aug 2023 18:16:55 +0200
+ id 09f20c2cacebe463; Wed, 30 Aug 2023 18:16:54 +0200
 Authentication-Results: v370.home.net.pl; spf=softfail (domain owner 
    discourages use of this host) smtp.mailfrom=rjwysocki.net 
    (client-ip=195.136.19.94; helo=[195.136.19.94]; 
@@ -25,8 +25,8 @@ Received: from kreacher.localnet (unknown [195.136.19.94])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 74E3966316E;
-        Wed, 30 Aug 2023 18:16:54 +0200 (CEST)
+        by v370.home.net.pl (Postfix) with ESMTPSA id A93FA66316E;
+        Wed, 30 Aug 2023 18:16:53 +0200 (CEST)
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux PM <linux-pm@vger.kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -36,9 +36,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Amit Kucheria <amitk@kernel.org>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Sebastian Reichel <sre@kernel.org>
-Subject: [PATCH v1 2/4] thermal: core: Add function for registering tripless thermal zones
-Date:   Wed, 30 Aug 2023 18:13:35 +0200
-Message-ID: <3255685.aeNJFYEL58@kreacher>
+Subject: [PATCH v1 3/4] thermal: Use thermal_tripless_zone_device_register()
+Date:   Wed, 30 Aug 2023 18:14:57 +0200
+Message-ID: <8272147.T7Z3S40VBb@kreacher>
 In-Reply-To: <1870450.tdWV9SEqCh@kreacher>
 References: <1870450.tdWV9SEqCh@kreacher>
 MIME-Version: 1.0
@@ -61,69 +61,115 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Multiple callers of thermal_zone_device_register() don't pass any trips
-to it and they might use a shortened argument list for that, so add
-a special function with fewer arguments for this purpose.
+All of the remaining callers of thermal_zone_device_register()
+can use thermal_tripless_zone_device_register(), so make them
+do so in order to allow the former to be dropped.
+
+No intentional functional impact.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/thermal/thermal_core.c |   11 +++++++++++
- include/linux/thermal.h        |   13 +++++++++++++
- 2 files changed, 24 insertions(+)
+ drivers/power/supply/power_supply_core.c                |    4 ++--
+ drivers/thermal/armada_thermal.c                        |    5 +++--
+ drivers/thermal/dove_thermal.c                          |    4 ++--
+ drivers/thermal/intel/int340x_thermal/int3400_thermal.c |    6 +++---
+ drivers/thermal/kirkwood_thermal.c                      |    4 ++--
+ drivers/thermal/spear_thermal.c                         |    4 ++--
+ 6 files changed, 14 insertions(+), 13 deletions(-)
 
-Index: linux-pm/drivers/thermal/thermal_core.c
+Index: linux-pm/drivers/power/supply/power_supply_core.c
 ===================================================================
---- linux-pm.orig/drivers/thermal/thermal_core.c
-+++ linux-pm/drivers/thermal/thermal_core.c
-@@ -1400,6 +1400,17 @@ struct thermal_zone_device *thermal_zone
- }
- EXPORT_SYMBOL_GPL(thermal_zone_device_register);
+--- linux-pm.orig/drivers/power/supply/power_supply_core.c
++++ linux-pm/drivers/power/supply/power_supply_core.c
+@@ -1305,8 +1305,8 @@ static int psy_register_thermal(struct p
  
-+struct thermal_zone_device *thermal_tripless_zone_device_register(
-+					const char *type,
-+					void *devdata,
-+					struct thermal_zone_device_ops *ops,
-+					const struct thermal_zone_params *tzp)
-+{
-+	return thermal_zone_device_register_with_trips(type, NULL, 0, 0, devdata,
-+						       ops, tzp, 0, 0);
-+}
-+EXPORT_SYMBOL_GPL(thermal_tripless_zone_device_register);
-+
- void *thermal_zone_device_priv(struct thermal_zone_device *tzd)
- {
- 	return tzd->devdata;
-Index: linux-pm/include/linux/thermal.h
+ 	/* Register battery zone device psy reports temperature */
+ 	if (psy_has_property(psy->desc, POWER_SUPPLY_PROP_TEMP)) {
+-		psy->tzd = thermal_zone_device_register(psy->desc->name,
+-				0, 0, psy, &psy_tzd_ops, NULL, 0, 0);
++		psy->tzd = thermal_tripless_zone_device_register(psy->desc->name,
++				psy, &psy_tzd_ops, NULL);
+ 		if (IS_ERR(psy->tzd))
+ 			return PTR_ERR(psy->tzd);
+ 		ret = thermal_zone_device_enable(psy->tzd);
+Index: linux-pm/drivers/thermal/armada_thermal.c
 ===================================================================
---- linux-pm.orig/include/linux/thermal.h
-+++ linux-pm/include/linux/thermal.h
-@@ -317,6 +317,12 @@ struct thermal_zone_device *thermal_zone
- 					const struct thermal_zone_params *tzp,
- 					int passive_delay, int polling_delay);
+--- linux-pm.orig/drivers/thermal/armada_thermal.c
++++ linux-pm/drivers/thermal/armada_thermal.c
+@@ -876,8 +876,9 @@ static int armada_thermal_probe(struct p
+ 		/* Wait the sensors to be valid */
+ 		armada_wait_sensor_validity(priv);
  
-+struct thermal_zone_device *thermal_tripless_zone_device_register(
-+					const char *type,
-+					void *devdata,
-+					struct thermal_zone_device_ops *ops,
-+					const struct thermal_zone_params *tzp);
-+
- void thermal_zone_device_unregister(struct thermal_zone_device *tz);
+-		tz = thermal_zone_device_register(priv->zone_name, 0, 0, priv,
+-						  &legacy_ops, NULL, 0, 0);
++		tz = thermal_tripless_zone_device_register(priv->zone_name,
++							   priv, &legacy_ops,
++							   NULL);
+ 		if (IS_ERR(tz)) {
+ 			dev_err(&pdev->dev,
+ 				"Failed to register thermal zone device\n");
+Index: linux-pm/drivers/thermal/dove_thermal.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/dove_thermal.c
++++ linux-pm/drivers/thermal/dove_thermal.c
+@@ -139,8 +139,8 @@ static int dove_thermal_probe(struct pla
+ 		return ret;
+ 	}
  
- void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
-@@ -377,6 +383,13 @@ static inline struct thermal_zone_device
- 					int passive_delay, int polling_delay);
- { return ERR_PTR(-ENODEV); }
+-	thermal = thermal_zone_device_register("dove_thermal", 0, 0,
+-					       priv, &ops, NULL, 0, 0);
++	thermal = thermal_tripless_zone_device_register("dove_thermal", priv,
++							&ops, NULL);
+ 	if (IS_ERR(thermal)) {
+ 		dev_err(&pdev->dev,
+ 			"Failed to register thermal zone device\n");
+Index: linux-pm/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
++++ linux-pm/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+@@ -609,9 +609,9 @@ static int int3400_thermal_probe(struct
  
-+static inline struct thermal_zone_device *thermal_tripless_zone_device_register(
-+					const char *type,
-+					void *devdata,
-+					struct thermal_zone_device_ops *ops,
-+					const struct thermal_zone_params *tzp)
-+{ return ERR_PTR(-ENODEV); }
-+
- static inline void thermal_zone_device_unregister(struct thermal_zone_device *tz)
- { }
+ 	evaluate_odvp(priv);
  
+-	priv->thermal = thermal_zone_device_register("INT3400 Thermal", 0, 0,
+-						priv, &int3400_thermal_ops,
+-						&int3400_thermal_params, 0, 0);
++	priv->thermal = thermal_tripless_zone_device_register("INT3400 Thermal", priv,
++							      &int3400_thermal_ops,
++							      &int3400_thermal_params);
+ 	if (IS_ERR(priv->thermal)) {
+ 		result = PTR_ERR(priv->thermal);
+ 		goto free_art_trt;
+Index: linux-pm/drivers/thermal/kirkwood_thermal.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/kirkwood_thermal.c
++++ linux-pm/drivers/thermal/kirkwood_thermal.c
+@@ -71,8 +71,8 @@ static int kirkwood_thermal_probe(struct
+ 	if (IS_ERR(priv->sensor))
+ 		return PTR_ERR(priv->sensor);
+ 
+-	thermal = thermal_zone_device_register("kirkwood_thermal", 0, 0,
+-					       priv, &ops, NULL, 0, 0);
++	thermal = thermal_tripless_zone_device_register("kirkwood_thermal",
++							priv, &ops, NULL);
+ 	if (IS_ERR(thermal)) {
+ 		dev_err(&pdev->dev,
+ 			"Failed to register thermal zone device\n");
+Index: linux-pm/drivers/thermal/spear_thermal.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/spear_thermal.c
++++ linux-pm/drivers/thermal/spear_thermal.c
+@@ -122,8 +122,8 @@ static int spear_thermal_probe(struct pl
+ 	stdev->flags = val;
+ 	writel_relaxed(stdev->flags, stdev->thermal_base);
+ 
+-	spear_thermal = thermal_zone_device_register("spear_thermal", 0, 0,
+-				stdev, &ops, NULL, 0, 0);
++	spear_thermal = thermal_tripless_zone_device_register("spear_thermal",
++							      stdev, &ops, NULL);
+ 	if (IS_ERR(spear_thermal)) {
+ 		dev_err(&pdev->dev, "thermal zone device is NULL\n");
+ 		ret = PTR_ERR(spear_thermal);
 
 
 
