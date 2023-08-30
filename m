@@ -2,164 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C81778D2E9
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 07:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A535A78DA3A
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjH3FI5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Aug 2023 01:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48468 "EHLO
+        id S234945AbjH3Sfw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Aug 2023 14:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233320AbjH3FIq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 01:08:46 -0400
-Received: from hall.aurel32.net (hall.aurel32.net [IPv6:2001:bc8:30d7:100::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD94E0;
-        Tue, 29 Aug 2023 22:08:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
-        ; s=202004.hall; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:Reply-To:
-        Subject:Content-ID:Content-Description:X-Debbugs-Cc;
-        bh=AZcsmheJ6eAkCj7UFk1uonPsLptIUrfHn6cPU4i6NqA=; b=YN5o3rdXKY96X4LAUZz6FmJuAH
-        wHghN5nazXF8DZ8RjRmuRp7DsDkPYgWDALjcIOpPgw+MkEQR9dCrN4abDttCXf38EwZfS2P/2lf+j
-        3D69fxONAp7CdzG4H6/iOzQSMvr+8T5vPzRc7gPGx01e2aMPkkpvtswYuDxYVRDRAESV/r6MdTq41
-        OftaDdLByl0sb62Byr4F5zlM+sPsITouMxeWl51IyE+zh2cbi72cjVQelJJ8zEzRpzQtT5VnGwNnO
-        +/MmSZtbha2MghtBarmxD0Kf1AptwsTeX1274AufzX0/nb/3E0o2UiYURO1oQGynG8kArHxkPbEd0
-        EAFh68DA==;
-Received: from [2a01:e34:ec5d:a741:9a7b:5831:531:65c9] (helo=ohm.rr44.fr)
-        by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <aurelien@aurel32.net>)
-        id 1qbDRU-00FoKi-Qc; Wed, 30 Aug 2023 07:08:36 +0200
-Received: from aurel32 by ohm.rr44.fr with local (Exim 4.96)
-        (envelope-from <aurelien@aurel32.net>)
-        id 1qbDRT-002YG0-37;
-        Wed, 30 Aug 2023 07:08:35 +0200
-Date:   Wed, 30 Aug 2023 07:08:35 +0200
-From:   Aurelien Jarno <aurelien@aurel32.net>
-To:     Zhipeng Wang <zhipeng.wang_1@nxp.com>
-Cc:     "rafael@kernel.org" <rafael@kernel.org>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [EXT] Re: [PATCH 2/2] cpufreq: dt-platdev: Support building
- cpufreq platdev driver as module
-Message-ID: <ZO7O056MxAnjvGxu@aurel32.net>
-Mail-Followup-To: Zhipeng Wang <zhipeng.wang_1@nxp.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230524153417.2738448-1-zhipeng.wang_1@nxp.com>
- <20230524153417.2738448-2-zhipeng.wang_1@nxp.com>
- <ZO4yTQAV9EYA4erZ@aurel32.net>
- <PAXPR04MB8304AA1D331B3DA5B548EE3EEBE6A@PAXPR04MB8304.eurprd04.prod.outlook.com>
+        with ESMTP id S241977AbjH3HL2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 03:11:28 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50221B1
+        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 00:11:23 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-52a4b62c2f5so6803388a12.1
+        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 00:11:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1693379482; x=1693984282; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4X810Sd+FAfinOuDeQjJFxdDeSuw3tPSc7gW/bUxxmc=;
+        b=a9Y5QTZNXXKs9nPMXo417JCz/QKAcQy1xgeBcXtqVuXe8uLKIF/yrOaNpEqX5Pf/io
+         qnuGi5UXluXpNgEWOMuiC4+Ggl2M0NZOjzcklz6pcZqj+UgvxAwRdDyqwSPJTKtQ8gCi
+         E6r3gXNYg6pZmJvhTzV41yfhyS6mfmHJfZug5MngAZFOj+hp5fdpWHyOdjUH1IiXNCv1
+         jalUgZPSNf/zajd4QppFkTKpi287wr+TGEa7xceG9zzvCugTzra0mSuN02GSSlhpIOtL
+         4YIlKRcCf3Rof4g2Z8+IuqizM6pf39m6nGuhIissvFGfQ12UQghjwZd5INmkAZngSYHK
+         5SgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693379482; x=1693984282;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4X810Sd+FAfinOuDeQjJFxdDeSuw3tPSc7gW/bUxxmc=;
+        b=G32NNRNRar5elyygii1jeOkgYa3CNkTSSDGCG5U74dxWOvTRnHVllWmYXM1VhSOJT7
+         MYlksVWMOYzBbnqDq+ElG606Ue+nb6/885WyWKKZMyYjnhp8ZTHStR31tHnT1EDU0k5a
+         D5sN4PpIwD1Wk8qCt8mZdDNa/YPsbn0HhBLy+Y/+Pv3NQo/t/2ofeNrg0qCpMp9v7hcE
+         zUvidn0uKuEcIGGz0w/X12TUDgZDaDtaCxiqr8Euw9+oAuiWHm7m6YdziDjmt9cgG5DP
+         58vP6A+f2dn57PHn7ypLLltlam8vEifsCdu6N1wwaVyFFfylXKN5Vtd3ntOdF8RsFxj6
+         0/EA==
+X-Gm-Message-State: AOJu0Yya+WtAE39oqoHwOCeUrfDOLGInjOZG+12qaDN4Y8pcby2sPwJP
+        wd1I3IFXqQ0Rlun2fwFWecpwkg==
+X-Google-Smtp-Source: AGHT+IEYCPnvQKeOC3qIczHiEZucOO/GNEh252whblJjg9K7h3SNi2mOr9jig7a/o2KtxMadPr1MLQ==
+X-Received: by 2002:a17:906:76c8:b0:9a1:d67c:b4eb with SMTP id q8-20020a17090676c800b009a1d67cb4ebmr913139ejn.48.1693379482411;
+        Wed, 30 Aug 2023 00:11:22 -0700 (PDT)
+Received: from [192.168.0.22] (77-252-46-238.static.ip.netia.com.pl. [77.252.46.238])
+        by smtp.gmail.com with ESMTPSA id n11-20020a17090625cb00b009934855d8f1sm6910043ejb.34.2023.08.30.00.11.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Aug 2023 00:11:21 -0700 (PDT)
+Message-ID: <db8d5123-19d7-50d0-935b-a25d235e6e2e@linaro.org>
+Date:   Wed, 30 Aug 2023 09:11:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <PAXPR04MB8304AA1D331B3DA5B548EE3EEBE6A@PAXPR04MB8304.eurprd04.prod.outlook.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH v3 1/1] scripts: Add add-maintainer.py
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        quic_pkondeti@quicinc.com, linux-kernel@vger.kernel.org,
+        kernel@quicinc.com, workflows@vger.kernel.org,
+        tools@linux.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+References: <cover.1693037031.git.quic_gurus@quicinc.com>
+ <141b9fcab2208ace3001df4fc10e3dfd42b9f5d9.1693037031.git.quic_gurus@quicinc.com>
+ <2efba6b3-2399-9deb-d0ce-78f7b5e12f30@linaro.org>
+ <20230828175629.GC23466@quicinc.com>
+ <78aa33f9-ead8-b128-2a7a-40530a1a3ed0@linaro.org>
+ <ZOz4XtX3DFRQpvQY@finisterre.sirena.org.uk>
+ <670a87e9-2f0c-ec9e-ebb4-9041c8972ace@linaro.org>
+ <20230829231638.GA27843@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230829231638.GA27843@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On 30/08/2023 01:16, Guru Das Srinagesh wrote:
+> On Aug 28 2023 21:45, Krzysztof Kozlowski wrote:
+>> On 28/08/2023 21:41, Mark Brown wrote:
+>>> On Mon, Aug 28, 2023 at 07:59:54PM +0200, Krzysztof Kozlowski wrote:
+>>>> On 28/08/2023 19:56, Guru Das Srinagesh wrote:
+>>>
+>>>>> Your function adds mailing lists also in "To:" which is not ideal, in my view.
+>>>>> You've mentioned before that To or Cc doesn't matter [1] which I disagree
+>>>>> with: it doesn't matter, why does Cc exist as a concept at all?
+>>>
+>>>> To/Cc does not matter when sending new patch, because maintainers know
+>>>> they are maintainers of which parts. I know what I handle.
+>>>
+>>> That might be true for you (and also is for me) but I know there are
+>>> people who pay attention to if they're in the To: for various reasons, I
+>>> gather it's mostly about triaging their emails and is especially likely
+>>> in cases where trees have overlaps in the code they cover.
+>>
+>> True, there can be cases where people pay attention to addresses of
+>> emails. Just like there are cases where people pay attention to "To/Cc"
+>> difference.
+>>
+>> In my short experience with a few patches sent, no one complained to me
+>> that I put him/her/they in "To" field of a patch instead of "Cc" (with
+>> remark to not spamming to much, so imagine I send a patch for regulator
+>> and DTS). Big, multi-subsystem patchsets are different case and this
+>> script does not solve it either.
+> 
+> Not sure what you mean by "does not solve it" - what is the problem being
+> referred to here?
 
-On 2023-08-30 03:09, Zhipeng Wang wrote:
-> Hi Aurelien,
->=20
-> I'm not sure why we need to make cpufreq-dt-platdev autoloading, does it =
-make sense? As I understand it we need to actively modprobe cpufreq-dt-plat=
-dev, why not?
+Exactly, no one even knows what problem you want to solve by swapping
+To-Cc between patches...
 
-This is needed to recover the old behavior, where if a CPU supports
-cpufreq-dt, it get loaded automatically. Now users has to modprobe
-cpufreq-dt-platdev explicitly to get cpufreq-dt to work. This seems like
-a regression to me.
+> 
+> In case of multi-subsystem patches in a series, the commit message of this
+> patch explains exactly the actions taken.
+> 
+>> Anyway, if it is not ideal for Guru, I wonder how his LKML maintainer
+>> filters work that it is not ideal? What is exactly not ideal in
+>> maintainer workflow?
+> 
+> I am not a maintainer - only an individual contributor - and as such, even
+> though I may get patches on files I've contributed to, I deeply appreciate the
+> distinction between being Cc-ed in a patch vs To-ed in one. The distinction
+> being that if I'm in "To:" I ascribe higher priority to it and lesser if I'm in
+> "Cc:".
 
-Of course one can explicitly make CPUFREQ_DT_PLATDEV=3Dy, but the default
-is to build cpufreq-dt-platdev as module when cpufreq-dt is built as
-module.
+That's your feeling, quite subjective. I understand it comes from
+corporate world, but again...
 
-Regards
-Aurelien
+> 
+> If this script is accepted and gains adoption, maintainers like yourself will
+> only be To-ed in patches that touch files that you're a direct "Maintainer" or
+> "Reviewer" of. 
 
-> > -----Original Message-----
-> > From: Aurelien Jarno <aurelien@aurel32.net>
-> > Sent: 2023=E5=B9=B48=E6=9C=8830=E6=97=A5 2:01
-> > To: Zhipeng Wang <zhipeng.wang_1@nxp.com>
-> > Cc: rafael@kernel.org; viresh.kumar@linaro.org; linux-pm@vger.kernel.or=
-g;
-> > linux-kernel@vger.kernel.org
-> > Subject: [EXT] Re: [PATCH 2/2] cpufreq: dt-platdev: Support building cp=
-ufreq
-> > platdev driver as module
-> >=20
-> > Caution: This is an external email. Please take care when clicking link=
-s or opening
-> > attachments. When in doubt, report the message using the 'Report this e=
-mail'
-> > button
-> >=20
-> >=20
-> > Hi,
-> >=20
-> > On 2023-05-24 15:34, Zhipeng Wang wrote:
-> > > Make the cpufreq platdev driver as tristate so that it can be built as
-> > > loadable module.
-> > >
-> > > Signed-off-by: Zhipeng Wang <zhipeng.wang_1@nxp.com>
-> > > ---
-> > >  drivers/cpufreq/Kconfig | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig index
-> > > 2c839bd2b051..dda3a78bfd5c 100644
-> > > --- a/drivers/cpufreq/Kconfig
-> > > +++ b/drivers/cpufreq/Kconfig
-> > > @@ -218,7 +218,7 @@ config CPUFREQ_DT
-> > >         If in doubt, say N.
-> > >
-> > >  config CPUFREQ_DT_PLATDEV
-> > > -     bool
-> > > +     tristate "Generic DT based cpufreq platdev driver"
-> > >       help
-> > >         This adds a generic DT based cpufreq platdev driver for frequ=
-ency
-> > >         management.  This creates a 'cpufreq-dt' platform device, on
-> > > the
-> >=20
-> > It seems that this new module is missing support for autoloading, causi=
-ng issues
-> > with CPUFREQ_DT=3Dm.
-> >=20
-> > Before that change, CPUFREQ_DT_PLATDEV ended up selected as =3Dy. Now,
-> > CPUFREQ_DT_PLATDEV ends up selected as =3Dm. As it is not autoloaded, i=
-t means
-> > that cpufreq-dt is not working anymore unless manually running "modprobe
-> > cpufreq-dt-platdev".
-> >=20
-> > Could you therefore please add support for autoloading?
-> >=20
-> > Thanks,
-> > Aurelien
-> >=20
-> > --
-> > Aurelien Jarno                          GPG: 4096R/1DDD8C9B
-> > aurelien@aurel32.net
-> > https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Faure=
-l32.
-> > net%2F&data=3D05%7C01%7Czhipeng.wang_1%40nxp.com%7C84e6deca09fb4
-> > e86857608dba8b9df5f%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0
-> > %7C638289288492430681%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLj
-> > AwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%
-> > 7C%7C&sdata=3D02iXE8HQXHNXRiA7SMtl%2B5ldGiVDF%2F7GtO%2F0DtAP0EQ
-> > %3D&reserved=3D0
+It will not get traction because:
+1. People should use b4, not this script.
+2. Remaining people will just use get_maintainers.pl.
+3. People cannot get right even basic commands, so we will never be able
+to rely on To or Cc distinction. I can give you example: my email
+address in get_maintainers.pl is a bit different. Does it matter? Often
+not. Entire bunch of folks were Ccing me on different address. Even
+though every tool told them not to...
 
---=20
-Aurelien Jarno                          GPG: 4096R/1DDD8C9B
-aurelien@aurel32.net                     http://aurel32.net
+> For all other patches in the series you'll be in "Cc:". I
+> imagine that this can be very useful regardless of the specifics of your
+> workflow.
+
+Zero usefulness for me.
+
+Best regards,
+Krzysztof
+
