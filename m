@@ -2,119 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1494878DA16
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6E278DA7E
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236073AbjH3Sf0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Aug 2023 14:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
+        id S237653AbjH3Sg0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Aug 2023 14:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244987AbjH3ORR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 10:17:17 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93F3122;
-        Wed, 30 Aug 2023 07:17:13 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37UDR0bn014094;
-        Wed, 30 Aug 2023 14:16:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=t+pa7pawiXHGZsyFpEhyJeURi1Iqk12oeRHuQvv8HfI=;
- b=JJuR33EIgP9wPpvFBDwqZfRoVVFoweXSPTpDpfOxkJiaqmgIfDs+b1jm9/xv/4H2BisG
- O4whebwnwqbjFnV+PvO2z2HHOKp2vo0aFn9y4JRxXq5pNt18BoCtREU3QYHeUS1bjy7P
- XH1gGt3H4fTaiBezGwGzzcf6Gdr1X0fFv+m4eCkatQLgyqNcTNGw2X/mWBDrSVPHXdHt
- WuUhdOdwpMX+jw5CwfiS1jT/+VBNG7GHV8mzd7m5aDG3EfRZ7HX177EOTnLq8691HJHU
- AHO+waUx2eVQBKOPeCoc/w/XrPrmtCAIeJv9NKoNUHIY+EKr5thKEtlJNn20Baa3ePmf Ig== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3st28a8kvx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Aug 2023 14:16:32 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37UEGVeB023380
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Aug 2023 14:16:31 GMT
-Received: from [10.111.178.80] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Wed, 30 Aug
- 2023 07:16:28 -0700
-Message-ID: <42177428-c85f-4fa8-af0a-0252dd4aef43@quicinc.com>
-Date:   Wed, 30 Aug 2023 07:16:28 -0700
+        with ESMTP id S245121AbjH3ObB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 10:31:01 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14037194
+        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 07:30:57 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-52713d2c606so7346539a12.2
+        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 07:30:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1693405854; x=1694010654; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5Z1Z9G4G/KVFZhr9R3sGbutXUCNsEgKocPQNRqGJxWY=;
+        b=InT2PRboit3mGRgrtDDf1DpFH+SIx7SEgZLaB5iTnd6aK/mAnN4nP45NYyu8i5Oshq
+         U6Gr93effQIrqRXwd7cf+mxvQDP8foxAflFjuPvsJwumXjmPJIrHBsknb4Q0lew+wMve
+         gBA2EEGvBVb0Sr0XT3bzEBoGj5xpMHaQ0VhTQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693405854; x=1694010654;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5Z1Z9G4G/KVFZhr9R3sGbutXUCNsEgKocPQNRqGJxWY=;
+        b=SnQGMP55tnAAEgCCKxlzVcl49bpYU19fStrlQtQqwfHx10HcmO90ECMJ4zsshZIXbh
+         hWwX6ibA3ODwnEkVY5KZqfquefu9QT2GmK4//Dou/+F2fUJZe5vH+XK/8BCfpq78pZm2
+         TL7fFYuMrCdCqhn0VMWeE9tRET698Rtt3wWb0mJhzbtSdn8yv6QmW9cpG7jRZdV/5tCc
+         PjoMWCtW9xhBYhVN7+0ac7QC3+XCTyOs6eyhXTalMWKtFI4WEwP3RS0iqBzE7qGJHb/O
+         hLs5IfNgYmT2tYuR0JwrCzE/Fwl9xUxXykVDYMkxE1x/7GlZIWQW2Xiuum2uYKvINKF1
+         hX1g==
+X-Gm-Message-State: AOJu0Yyw01FNRDJxWKhxBY0DvRogib07K8zVkyLCnfmuhWybRK6cXjqr
+        NmM5DR/Ap7LQUa1Uip961FUoZZwq8VM9g1S4v0xilAaJ
+X-Google-Smtp-Source: AGHT+IEfI12+qTs5/z+GDGkfXxogSbvBwBvgRnVp9uKV7WKUR56BmMCJtngDhGjzfRHyKeraSxVsdw==
+X-Received: by 2002:aa7:d80f:0:b0:52b:ce21:ad12 with SMTP id v15-20020aa7d80f000000b0052bce21ad12mr1745202edq.4.1693405854480;
+        Wed, 30 Aug 2023 07:30:54 -0700 (PDT)
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com. [209.85.128.50])
+        by smtp.gmail.com with ESMTPSA id r9-20020aa7da09000000b005236b47116asm6862435eds.70.2023.08.30.07.30.53
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Aug 2023 07:30:53 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4005f0a6c2bso74955e9.1
+        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 07:30:53 -0700 (PDT)
+X-Received: by 2002:a05:600c:4f93:b0:3f4:fb7:48d4 with SMTP id
+ n19-20020a05600c4f9300b003f40fb748d4mr325936wmq.3.1693405853267; Wed, 30 Aug
+ 2023 07:30:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/1] scripts: Add add-maintainer.py
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        "Konstantin Ryabitsev" <konstantin@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <quic_pkondeti@quicinc.com>, <linux-kernel@vger.kernel.org>,
-        <kernel@quicinc.com>, <workflows@vger.kernel.org>,
-        <tools@linux.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>
-References: <cover.1693037031.git.quic_gurus@quicinc.com>
- <141b9fcab2208ace3001df4fc10e3dfd42b9f5d9.1693037031.git.quic_gurus@quicinc.com>
- <2efba6b3-2399-9deb-d0ce-78f7b5e12f30@linaro.org>
- <20230828175629.GC23466@quicinc.com>
- <78aa33f9-ead8-b128-2a7a-40530a1a3ed0@linaro.org>
- <ZOz4XtX3DFRQpvQY@finisterre.sirena.org.uk>
- <670a87e9-2f0c-ec9e-ebb4-9041c8972ace@linaro.org>
- <20230829231638.GA27843@quicinc.com>
- <0f7b32e1-1b26-4543-bfec-471641a67416@sirena.org.uk>
-From:   Jeff Johnson <quic_jjohnson@quicinc.com>
-In-Reply-To: <0f7b32e1-1b26-4543-bfec-471641a67416@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Y99vl80-AQIBPhE1u991VngBk1l7j4Xp
-X-Proofpoint-GUID: Y99vl80-AQIBPhE1u991VngBk1l7j4Xp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-08-29_16,2023-08-29_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- lowpriorityscore=0 phishscore=0 malwarescore=0 impostorscore=0
- suspectscore=0 spamscore=0 adultscore=0 bulkscore=0 mlxlogscore=965
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2308300132
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230830-fp5-initial-v1-0-5a954519bbad@fairphone.com> <20230830-fp5-initial-v1-2-5a954519bbad@fairphone.com>
+In-Reply-To: <20230830-fp5-initial-v1-2-5a954519bbad@fairphone.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 30 Aug 2023 07:30:41 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WS2hgY=bQjLOs3Fdp8pbZyMsaS-0BpoxPq90Etfi+Xuw@mail.gmail.com>
+Message-ID: <CAD=FV=WS2hgY=bQjLOs3Fdp8pbZyMsaS-0BpoxPq90Etfi+Xuw@mail.gmail.com>
+Subject: Re: [PATCH 02/11] nvmem: qfprom: Mark core clk as optional
+To:     Luca Weiss <luca.weiss@fairphone.com>
+Cc:     cros-qcom-dts-watchers@chromium.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 8/30/2023 4:22 AM, Mark Brown wrote:
-> On Tue, Aug 29, 2023 at 04:16:39PM -0700, Guru Das Srinagesh wrote:
-> 
->> If this script is accepted and gains adoption, maintainers like yourself will
->> only be To-ed in patches that touch files that you're a direct "Maintainer" or
->> "Reviewer" of. For all other patches in the series you'll be in "Cc:". I
->> imagine that this can be very useful regardless of the specifics of your
->> workflow.
-> 
-> Given that b4 solves a lot more problems and is getting quite widely
-> adopted it's probably going to be more effective to look at trying to
-> get this implemented there.  That might still mean a separate script
-> that b4 can hook into, but it's probably important that whatever you do
-> can be used easily with b4.
+Hi,
 
-As someone who has recently moved to using b4 I second this comment.
-b4 makes it so much easier to maintain patch versioning and to add the 
-right folks to the review. And most folks aren't performing tree-wide 
-changes so the per-patch customization doesn't seem to be a big win.
+On Wed, Aug 30, 2023 at 2:58=E2=80=AFAM Luca Weiss <luca.weiss@fairphone.co=
+m> wrote:
+>
+> On some platforms like sc7280 on non-ChromeOS devices the core clock
+> cannot be touched by Linux so we cannot provide it. Mark it as optional
+> as accessing qfprom works without it.
+>
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
+>  drivers/nvmem/qfprom.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-/jeff
+Are you actually testing burning fuses from the OS, or are you just
+using the nvmem in "read-only" mode? From comments in the bindings, if
+you're trying to burn the fuses then the clock is required. If things
+are in read-only mode then the clock isn't required.
+
+When I compare to the driver, it seems like the driver assumes that if
+more than one memory region is provided then you must be supporting
+burning fuses. The bindings agree that having 4 memory regions
+specified means that the nvmem supports burning and 1 memory region
+specified means read-only. The extra 3 memory regions in the nvmem are
+all about fuse burning, I believe.
+
+So maybe the right fix here is to just change your dts to specify one
+memory region?
+
+-Doug
