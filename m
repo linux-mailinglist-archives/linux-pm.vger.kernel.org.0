@@ -2,188 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8C7E78DA49
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CDFA78DA46
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237290AbjH3Sf6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Aug 2023 14:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48856 "EHLO
+        id S236741AbjH3Sfz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Aug 2023 14:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243195AbjH3KRk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 06:17:40 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84061BE
-        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 03:17:36 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-5298e43bb67so1543716a12.1
-        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 03:17:36 -0700 (PDT)
+        with ESMTP id S243266AbjH3KfQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 06:35:16 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D791BB
+        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 03:35:12 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-997c4107d62so700545666b.0
+        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 03:35:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693390655; x=1693995455; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bR584vZGW9FaOIQWQ+XKrXzGeqeN359N18ISef2diZA=;
-        b=HNGF5Nb1Pp1wVN2xELCSsu+JG5Em2ZID0mYpaQ7dRMr5dO6L/k7OtkAyrLX0dq8NFN
-         j6nb4qeA3uH+3sJClnNDeeoarubmCy6bDjN1ZzMSgiIpP+kPXCOB2vsJGCoxRlCTJudq
-         nTWPjy0XAObdZjJFNKYGMGg7AgB1wW49H8TtoBhs1J0MDpghy1oV0TIDDV2IO3mTaUuF
-         0QfzO01PPXzvctalm6/BXpgzhNzr7K57xyge2ysQy9dDxY+W164mDfJM1VEuAWL5kvng
-         Lq1EZjFQgGQI5AzDWwF+zw/lorVrj4gSecFGVqZ1+v41c9Y2CaE0kDKsxhOZFBxzlrzt
-         Xe5g==
+        d=fairphone.com; s=fair; t=1693391710; x=1693996510; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PakJOWM3f2X2lU1WdNU5BXfvb8MoSegIjT2fCvwDw80=;
+        b=GixEsPqB2Th8dNC6y1A9NmVJ8DU68tCEFs3pbkeUL4NK6rr9DIqgUYW7J2xdZAeMD5
+         n2GLwwRWMo+pBNZDev8GBEq1BVhRmHssjQ86kPyVIsifDM24qP2hQooWK0Db2yXkkCWE
+         Uu8tCeqeOwFA0aW0j7DcTUHfpsqmZWg4zeLR7Rq/QUnw/Mv2hAcguwBpltqNt/ciknKd
+         6mB94S6VsuyKyzdkYwGIxW66fqxcnALruf20ueO/+n47nuepdTKY3gPg3QjNUlPKdrAi
+         ei1Aoab16YdrNxSuo0lNGAagk9+tx38EAPAcuL8yb/fewoei36LhKqorJqB5LJXyeqcB
+         GzvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693390655; x=1693995455;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bR584vZGW9FaOIQWQ+XKrXzGeqeN359N18ISef2diZA=;
-        b=TRt+1Sb64R2JumeijcwXdXcvHfrUKP4sKEsutIep1kZ6gbem3G5wCrgX0EXzx4/DSI
-         oUEJlQX0DOfahTNxYxy6OoJBAY7skJo0i1IZTREkVh85a2kVYKiOKlU5Tg+OcPu60rr2
-         VHZHcgW3TeHam4mpfGJkQ7Bm9CpJMC6qQJLYhQDJa27ewHGgY4/4gykjBroVECSkQSyQ
-         iYehdHQHmqyXsffBaWnFW6gVbAYm+64CNwRqKDyA52vBBCtfTcKUHCiPNw2YJ2oEVspN
-         y62ICwD+0AHwcblRbWpKAcgN+QSd/cTStk+Jd+Rg5kvKavIkvb0NwHxsJumjhhe2pcuT
-         zZFg==
-X-Gm-Message-State: AOJu0YzmVg7+s6xLVoHheTBo39/mlT/ZE6uH6rZAz3F1xxDkNHkxb9f5
-        snElUgagTA3dwjE8IW62d6G+3A==
-X-Google-Smtp-Source: AGHT+IGsSEQ6TsVj9ioIFZ01EjPzA/5K6fZ+jDcjoLBrxP8iGnn6aeLftGsqJWjeoVwfFBCT3KItuA==
-X-Received: by 2002:a05:6402:27d1:b0:51e:4218:b91b with SMTP id c17-20020a05640227d100b0051e4218b91bmr5539774ede.1.1693390655399;
-        Wed, 30 Aug 2023 03:17:35 -0700 (PDT)
-Received: from [192.168.0.22] (77-252-46-238.static.ip.netia.com.pl. [77.252.46.238])
-        by smtp.gmail.com with ESMTPSA id a26-20020aa7d91a000000b005256d4d58a6sm6620866edr.18.2023.08.30.03.17.33
+        d=1e100.net; s=20221208; t=1693391710; x=1693996510;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=PakJOWM3f2X2lU1WdNU5BXfvb8MoSegIjT2fCvwDw80=;
+        b=WTh6Hki3gc6l+BRCee6LDmF5Gun5ypB7zWxNYFChhvHnqobzjmnof/S04L0l33plsG
+         281T6P5YBJ+WPlz/1Y6eLhLZ6tQcTcU3t6KBWir+2crymztqH54uQSLx91YN2ev5VhKs
+         LCoz/0taK6kO67S9Px/Bmt7SUAvotEm0VIbqhHi+3m2tf+skEo+h9ytAWeq4AEyybSQh
+         JagkjzQFsx+rRL2gN2whpxFxHVB1S7YuLZIaQlf/yBmcVGW8vxOka8drATUV/OYQ6yzC
+         xXwLpK+UDaUZfZ6MQTeOF/S8p25w+vo61+FQFa5oF9lj/cEsxP5w50RUN/NwbrNvixxt
+         4sEA==
+X-Gm-Message-State: AOJu0Yy6YJb03d8OxrldHoLELSUh1biq2QdLkPZPvR5zocxI5aNRqDj9
+        8I0sfNR1wC8dkc68WYXk1hoy2A==
+X-Google-Smtp-Source: AGHT+IGXWivNh1ZlN/nqyhwxsykDuhrosQf2fDYTztx4ftyPi0mkO+YgqlM65aT3mHmdxazJFxUSiQ==
+X-Received: by 2002:a17:906:3152:b0:994:1844:c7d1 with SMTP id e18-20020a170906315200b009941844c7d1mr1175949eje.13.1693391710514;
+        Wed, 30 Aug 2023 03:35:10 -0700 (PDT)
+Received: from localhost (5073ED84.static.ziggozakelijk.nl. [80.115.237.132])
+        by smtp.gmail.com with ESMTPSA id gy25-20020a170906f25900b00985ed2f1584sm7066888ejb.187.2023.08.30.03.35.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Aug 2023 03:17:34 -0700 (PDT)
-Message-ID: <70372afc-9dad-813b-f69b-7278d3371053@linaro.org>
-Date:   Wed, 30 Aug 2023 12:17:33 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH 11/11] arm64: dts: qcom: qcm6490: Add device-tree for
- Fairphone 5
-Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        cros-qcom-dts-watchers@chromium.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20230830-fp5-initial-v1-0-5a954519bbad@fairphone.com>
- <20230830-fp5-initial-v1-11-5a954519bbad@fairphone.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230830-fp5-initial-v1-11-5a954519bbad@fairphone.com>
+        Wed, 30 Aug 2023 03:35:10 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Date:   Wed, 30 Aug 2023 12:35:09 +0200
+Message-Id: <CV5T9FXMWOAT.2ZXS0CZ8S0EUM@otso>
+To:     "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        <cros-qcom-dts-watchers@chromium.org>,
+        "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        "Srinivas Kandagatla" <srinivas.kandagatla@linaro.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Viresh Kumar" <viresh.kumar@linaro.org>
+Cc:     <~postmarketos/upstreaming@lists.sr.ht>,
+        <phone-devel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 01/11] arm64: dts: qcom: sc7280: Mark some nodes as
+ 'reserved'
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+X-Mailer: aerc 0.15.2
+References: <20230830-fp5-initial-v1-0-5a954519bbad@fairphone.com>
+ <20230830-fp5-initial-v1-1-5a954519bbad@fairphone.com>
+ <160d6151-914b-4f2f-9f7c-d14cbb901619@linaro.org>
+In-Reply-To: <160d6151-914b-4f2f-9f7c-d14cbb901619@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30/08/2023 11:58, Luca Weiss wrote:
-> Add device tree for the Fairphone 5 smartphone which is based on
-> the QCM6490 SoC.
-> 
+On Wed Aug 30, 2023 at 12:08 PM CEST, Konrad Dybcio wrote:
+> On 30.08.2023 11:58, Luca Weiss wrote:
+> > With the standard Qualcomm TrustZone setup, components such as lpasscc,
+> > pdc_reset and watchdog shouldn't be touched by Linux. Mark them with
+> > the status 'reserved' and reeable them in the chrome-common dtsi.
+> >=20
+> > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> > ---
+> Could probably use /* Owned by ADSP firmware */ or /* Owned by Gunyah hyp=
+ */
 
-...
+Do you know which one is more fitting for these nodes? I don't really
+have a reference to if the ADSP or Gunyah (is this even used here?) owns
+this.
 
-> +
-> +#include <dt-bindings/arm/qcom,ids.h>
-> +#include <dt-bindings/leds/common.h>
-> +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
-> +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-> +#include "sc7280.dtsi"
-> +#include "pm7250b.dtsi"
-> +#include "pm7325.dtsi"
-> +#include "pm8350c.dtsi" /* PM7350C */
-> +#include "pmk8350.dtsi" /* PMK7325 */
-> +
-> +/ {
-> +	model = "Fairphone 5";
-> +	compatible = "fairphone,fp5", "qcom,qcm6490";
-> +	chassis-type = "handset";
-> +
-> +	/* required for bootloader to select correct board */
-> +	qcom,msm-id = <QCOM_ID_QCM6490 0x10000>;
-> +	qcom,board-id = <34 0>;
+Regards
+Luca
 
-Sorry, not allowed. This is not an old, legacy platform.
-
-> +
-> +	aliases {
-> +		serial0 = &uart5;
-> +		serial1 = &uart7;
-> +	};
-> +
-> +	chosen {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		framebuffer0: framebuffer@a000000 {
-> +			compatible = "simple-framebuffer";
-> +			reg = <0 0xe1000000 0 (2700 * 1224 * 4)>;
-> +			width = <1224>;
-> +			height = <2700>;
-> +			stride = <(1224 * 4)>;
-> +			format = "a8r8g8b8";
-> +			panel = <&panel>;
-> +			clocks = <&gcc GCC_DISP_HF_AXI_CLK>;
-> +		};
-> +	};
-> +
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +
-> +		pinctrl-0 = <&volume_down_default>, <&hall_sensor_default>;
-> +		pinctrl-names = "default";
-> +
-> +		key-volume-up {
-> +			label = "Volume up";
-> +			gpios = <&pm7325_gpios 6 GPIO_ACTIVE_LOW>;
-> +			linux,code = <KEY_VOLUMEUP>;
-> +		};
-> +
-> +		/* Hall sensor uses vreg_l8c as VDD, it's being enabled using
-
-Use Linux style comments:
-/*
- * foo
- * bar...
-
-
-> +		 * always-on on the regulator
-> +		 */
-> +		event-hall-sensor {
-> +			label = "Hall Effect Sensor";
-> +			gpios = <&tlmm 155 GPIO_ACTIVE_LOW>;
-> +			linux,input-type = <EV_SW>;
-> +			linux,code = <SW_LID>;
-> +			linux,can-disable;
-> +			wakeup-source;
-> +		};
-> +	};
-> +
-> +	panel: panel {
-> +		compatible = "boe,rm692e5";
-
-Undocumented. You cannot add nodes with undocumented compatibles. Drop.
-
-> +
-> +		width-mm = <68>;
-> +		height-mm = <150>;
-> +	};
-
-
-Best regards,
-Krzysztof
+>
+> the change lgtm though
+>
+> Konrad
 
