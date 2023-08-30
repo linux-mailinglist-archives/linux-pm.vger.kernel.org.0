@@ -2,141 +2,206 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC3678DA5D
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D67678DA77
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235099AbjH3SgJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Aug 2023 14:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
+        id S237586AbjH3SgY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 30 Aug 2023 14:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243355AbjH3Kpo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 06:45:44 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7F81BB
-        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 03:45:41 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-5009d4a4897so8445930e87.0
-        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 03:45:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693392340; x=1693997140; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fT/ozBf9lp5RAcCZGbAfkxmq5EWCKLUOVIlRGJ+e7rE=;
-        b=JVs8lX1Su1ICcNnoB0jqqAS2B75Jh8bq/4tv0MnVldY2xbAt6SjbIHlgnNspOjcItz
-         LB5WrCtUIUj3d3zP7pNaD/SS3gSs/7rJEKOKO1YVoDYpbd73rHUP5UMtK3z/kQ94ZJ+/
-         lBUqMpFixMW1IrjFfH7cLIo/1XX+fhmZxWOF/yt9jnawQGgBRc39Iz5hvI7iOcB5oV9n
-         a6yt31gzYPhK7AdAt0DT76wBG/g87NU960OuOay19p8hvhWgdOLvEQoQ7PrTJB7Uy659
-         bew+O7lMyN+Ysu0A8NP374YH179eCDEFy49SrvuiEeghbC0nb/C6+YxiwOzjWetZCpZo
-         xDaQ==
+        with ESMTP id S243635AbjH3LSf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 07:18:35 -0400
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2245F122;
+        Wed, 30 Aug 2023 04:18:33 -0700 (PDT)
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-573128cd77dso791411eaf.0;
+        Wed, 30 Aug 2023 04:18:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693392340; x=1693997140;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fT/ozBf9lp5RAcCZGbAfkxmq5EWCKLUOVIlRGJ+e7rE=;
-        b=TGf2WATBD5ZX9kSGvR8tZQMMeE2UH5bQKRbfQK97BWxixaJ5EEfrlbwKCEknrnaLWb
-         KcJMwle0KV5E1gnfgzyD9XrP1ubVoeG7mls0rh+H4v+tGg1wlcHqfhXA2pdvtbGC0rlr
-         fxLWV4RQmNY5gcyACVAHUimDMTMqbaGH1FoPJK/vPbaa1RpEm/bos9CvyrMNq13r5UIT
-         s3FwgpXlarGX5Q8Bffm88t3t5FQ4j/t+FLLFOVBEqRH354Tc0aA629Qr+uVc0mMscklV
-         2KVZEi9VmHhBvPtoPYZnkZgz8J6vshYHsCZeJw096uSq6YA8XGLHgzkDPkxkaM0SmbG7
-         ahUg==
-X-Gm-Message-State: AOJu0YxBk6X+ROKC0sa2mDaXCd6CrcuTwciArQ0maZs35zPmT1Iyr3Cq
-        ucpRcTfKnZxIqBjKHIqPTewiPQ==
-X-Google-Smtp-Source: AGHT+IF1Bzc5p983+o6I1vBO6KSa4P7wHAmsv8YtZghMA+otHk7k6+kPCCfKX9dMUQW5mXfLnzLENA==
-X-Received: by 2002:a05:6512:310a:b0:4ff:8f12:c4d7 with SMTP id n10-20020a056512310a00b004ff8f12c4d7mr1357921lfb.31.1693392339844;
-        Wed, 30 Aug 2023 03:45:39 -0700 (PDT)
-Received: from [192.168.1.101] (abyl195.neoplus.adsl.tpnet.pl. [83.9.31.195])
-        by smtp.gmail.com with ESMTPSA id j17-20020a19f511000000b004ff6fa3f038sm2316808lfb.144.2023.08.30.03.45.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Aug 2023 03:45:39 -0700 (PDT)
-Message-ID: <1c95f61c-7460-43aa-9858-37e8799a1e5d@linaro.org>
-Date:   Wed, 30 Aug 2023 12:45:38 +0200
+        d=1e100.net; s=20221208; t=1693394312; x=1693999112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=949eSJ97UUP4EMRebkVt9sELnd9wzsIRRXBTrdPP/Vg=;
+        b=CmQ2Ea+0hvOBla48vcHUJ9P/yZXtJEIkC54+3sE+s+G1FVQp53jQ909oZpxxZINkja
+         SVDTE+hvcs0NLJRJMVLDk70GDDQBDFuBgcb3rzzQcDL+3Tu9zOnmb5Qfj0rIANoxGyT2
+         LnYrB4UC1UBqDazmaWn8DYCwBJ2Ja7a59eaQkvoLOso+9zZk/9laQJWeoKsXUVMR3vw4
+         eTQDAoV7g+ddcFjkCERZnw96ANPpAHz2d18UdF3AXiQdJrQre7fwE33YDR5Bq6dIMQ/p
+         Fna5p/xWuVsnSPsBPnAba0xF4pmRKHosZQzNzFXOuit+ixH8B5jWg0nu8aPRs7kLnHWR
+         cvKg==
+X-Gm-Message-State: AOJu0Yxu0Hhr/KnsTeoD/rkzZrTUzW+qi6Mpj+1ZXlxlOhKje1yMULlf
+        svUDY+F3u/1B7llu8y5AETf2EpUkvDz5fc6TuJo=
+X-Google-Smtp-Source: AGHT+IGjUB4/qLkUwQwSco0OrxTfj8TU6YnCPhpd7Ezyb2ZaEHPMJ8PMYVYYEhDbnkv8MkkTf++Cgn9x/3KVHXzh8b4=
+X-Received: by 2002:a05:6820:1b18:b0:56e:94ed:c098 with SMTP id
+ bv24-20020a0568201b1800b0056e94edc098mr1937909oob.0.1693394312326; Wed, 30
+ Aug 2023 04:18:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/11] arm64: dts: qcom: sc7280: Mark some nodes as
- 'reserved'
-Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        cros-qcom-dts-watchers@chromium.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20230830-fp5-initial-v1-0-5a954519bbad@fairphone.com>
- <20230830-fp5-initial-v1-1-5a954519bbad@fairphone.com>
- <160d6151-914b-4f2f-9f7c-d14cbb901619@linaro.org>
- <CV5T9FXMWOAT.2ZXS0CZ8S0EUM@otso>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <CV5T9FXMWOAT.2ZXS0CZ8S0EUM@otso>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230829194200.1901988-1-festevam@gmail.com> <20230829194200.1901988-3-festevam@gmail.com>
+In-Reply-To: <20230829194200.1901988-3-festevam@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 30 Aug 2023 13:18:19 +0200
+Message-ID: <CAJZ5v0jEmCnxGC5NXnxKo27k4QHib5-JoGnySE_QegRODg2=Rg@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] thermal: thermal_core: Allow rebooting after
+ critical temp
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
+        rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        conor+dt@kernel.org, devicetree@vger.kernel.org,
+        Fabio Estevam <festevam@denx.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30.08.2023 12:35, Luca Weiss wrote:
-> On Wed Aug 30, 2023 at 12:08 PM CEST, Konrad Dybcio wrote:
->> On 30.08.2023 11:58, Luca Weiss wrote:
->>> With the standard Qualcomm TrustZone setup, components such as lpasscc,
->>> pdc_reset and watchdog shouldn't be touched by Linux. Mark them with
->>> the status 'reserved' and reeable them in the chrome-common dtsi.
->>>
->>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
->>> ---
->> Could probably use /* Owned by ADSP firmware */ or /* Owned by Gunyah hyp */
-> 
-> Do you know which one is more fitting for these nodes? I don't really
-> have a reference to if the ADSP or Gunyah (is this even used here?) owns
-> this.
-ADSP owns the audio hw, Gunyah owns the wdog
+On Tue, Aug 29, 2023 at 9:42 PM Fabio Estevam <festevam@gmail.com> wrote:
+>
+> From: Fabio Estevam <festevam@denx.de>
+>
+> Currently, the default mechanism is to trigger a shutdown after the
+> critical temperature is reached.
+>
+> In some embedded cases, such behavior does not suit well, as the board may
+> be unattended in the field and rebooting may be a better approach.
+>
+> The bootloader may also check the temperature and only allow the boot to
+> proceed when the temperature is below a certain threshold.
+>
+> Introduce support for allowing a reboot to be triggered after the
+> critical temperature is reached.
+>
+> If the "critical-action" devicetree property is not found, fall back to
+> the shutdown action to preserve the existing default behavior.
+>
+> Tested on a i.MX8MM board with the following devicetree changes:
+>
+>         thermal-zones {
+>                 cpu-thermal {
+>                         critical-action = "reboot";
+>                 };
+>         };
+>
+> Signed-off-by: Fabio Estevam <festevam@denx.de>
+> ---
+> Changes since v4:
+> - Simplify the logic inside thermal_zone_device_critical(). (Rafael)
+> - Declare THERMAL_CRITICAL_ACTION_SHUTDOWN = 0 so it is clear what happens
+> on non-DT platforms. (Rafael)
+>
+>  drivers/thermal/thermal_core.c |  6 +++++-
+>  drivers/thermal/thermal_of.c   | 27 +++++++++++++++++++++++++++
+>  include/linux/thermal.h        |  6 ++++++
+>  3 files changed, 38 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index a59700593d32..062114608667 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -320,11 +320,15 @@ void thermal_zone_device_critical(struct thermal_zone_device *tz)
+>          * Its a must for forced_emergency_poweroff_work to be scheduled.
+>          */
+>         int poweroff_delay_ms = CONFIG_THERMAL_EMERGENCY_POWEROFF_DELAY_MS;
+> +       static const char *msg = "Temperature too high";
+>
+>         dev_emerg(&tz->device, "%s: critical temperature reached, "
+>                   "shutting down\n", tz->type);
+>
+> -       hw_protection_shutdown("Temperature too high", poweroff_delay_ms);
+> +       if (tz->action == THERMAL_CRITICAL_ACTION_REBOOT)
+> +               hw_protection_reboot(msg, poweroff_delay_ms);
+> +       else
+> +               hw_protection_shutdown(msg, poweroff_delay_ms);
+>  }
+>  EXPORT_SYMBOL(thermal_zone_device_critical);
+>
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index 4ca905723429..8bc28cba7406 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -218,6 +218,31 @@ static struct device_node *of_thermal_zone_find(struct device_node *sensor, int
+>         return tz;
+>  }
+>
+> +static const char * const critical_actions[] = {
+> +       [THERMAL_CRITICAL_ACTION_SHUTDOWN]      = "shutdown",
+> +       [THERMAL_CRITICAL_ACTION_REBOOT]        = "reboot",
+> +};
+> +
+> +static void thermal_of_get_critical_action(struct device_node *np,
+> +                                          enum thermal_action *action)
+> +{
+> +       const char *action_string;
+> +       int i, ret;
+> +
+> +       ret = of_property_read_string(np, "critical-action", &action_string);
+> +       if (ret < 0)
+> +               goto out_default_action;
+> +
+> +       for (i = 0; i < ARRAY_SIZE(critical_actions); i++)
+> +               if (!strcasecmp(action_string, critical_actions[i])) {
+> +                       *action = i;
+> +                       return;
+> +               }
 
-Konrad
+This looks somewhat artificial and is a bit questionable (the index
+variable should arguably start at THERMAL_CRITICAL_ACTION_SHUTDOWN,
+for instance, and the "shutdown" item is redundant).
+
+There are only two values and you want to carry out an emergency
+shutdown anyway if the value is not "reboot".
+
+I would just do
+
+    if (!strcasecmp(action_string, "reboot")) {
+            *action = THERMAL_CRITICAL_ACTION_REBOOT;
+            return;
+    }
+
+> +
+> +out_default_action:
+> +       *action = THERMAL_CRITICAL_ACTION_SHUTDOWN;
+> +}
+> +
+>  static int thermal_of_monitor_init(struct device_node *np, int *delay, int *pdelay)
+>  {
+>         int ret;
+> @@ -516,6 +541,8 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
+>                 goto out_kfree_trips;
+>         }
+>
+> +       thermal_of_get_critical_action(np, &tz->action);
+> +
+>         ret = thermal_zone_device_enable(tz);
+>         if (ret) {
+>                 pr_err("Failed to enabled thermal zone '%s', id=%d: %d\n",
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index b449a46766f5..b68e5734823d 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -34,6 +34,11 @@ struct thermal_cooling_device;
+>  struct thermal_instance;
+>  struct thermal_attr;
+>
+> +enum thermal_action {
+> +       THERMAL_CRITICAL_ACTION_SHUTDOWN = 0, /* shutdown when crit temperature is reached */
+> +       THERMAL_CRITICAL_ACTION_REBOOT, /* reboot when crit temperature is reached */
+> +};
+> +
+>  enum thermal_trend {
+>         THERMAL_TREND_STABLE, /* temperature is stable */
+>         THERMAL_TREND_RAISING, /* temperature is raising */
+> @@ -187,6 +192,7 @@ struct thermal_zone_device {
+>         struct list_head node;
+>         struct delayed_work poll_queue;
+>         enum thermal_notify_event notify_event;
+> +       enum thermal_action action;
+>  };
+>
+>  /**
+> --
