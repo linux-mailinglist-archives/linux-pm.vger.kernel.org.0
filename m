@@ -2,51 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B44978DA4D
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A82178DAA2
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbjH3SgB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 30 Aug 2023 14:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40352 "EHLO
+        id S237771AbjH3Sgp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 30 Aug 2023 14:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243706AbjH3LeO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 07:34:14 -0400
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663EA132;
-        Wed, 30 Aug 2023 04:34:11 -0700 (PDT)
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6bf106fb6a0so935305a34.0;
-        Wed, 30 Aug 2023 04:34:11 -0700 (PDT)
+        with ESMTP id S243729AbjH3Lha (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 07:37:30 -0400
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AB0132;
+        Wed, 30 Aug 2023 04:37:27 -0700 (PDT)
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-56e280cc606so1017378eaf.1;
+        Wed, 30 Aug 2023 04:37:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693395250; x=1694000050;
+        d=1e100.net; s=20221208; t=1693395446; x=1694000246;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wZk50f5qfIYptXHl3M1EoNb26pcF10CEZl+wjqQVJ9k=;
-        b=Co6987Ochgz0//q44pt7YNMLeQ5EBKmkWdNdJDoVHSaz+sTv3RscSlt/0UABX+ICOb
-         a13WiTC1ZLrrrN/z3BSHPKpJzIgQp8TKNxOUr3n6eqczLyWp71eTgHgpanW0povfmh3z
-         kPXaIRYxDDlgXIMZjgacnxVN+DpeTw0Jqu9JC7rPdFoe15sNfs9iWVbmJSKbnkRP8mx3
-         Dap01zCU5AmCZDe+6xZwEC8LOEZ283a5O0khwRR6tNfKtMOPa6BHIUW1NikHo1qqmTYk
-         Zjhrh+cm/5FBK+VEyu0Q5dB2SKCWd8tV6R7IJBmwEYAdhUd45e6El+Ije3J0KfVUi/hX
-         kxyg==
-X-Gm-Message-State: AOJu0Yyw+nzoXlATPljdYn4mtds1AFy99Lt/X984l/VJnpdSvUsBm8HR
-        yZo2fHfbjXNDCzn0l9JnFQ44lKLS1GYIXcGfQjM=
-X-Google-Smtp-Source: AGHT+IGeILT7TBoTXfEA1mKCiifAMVcywqeXlWLTMws3d5mrqGTEIxvClcbeBFHT0ktRYWMPqT9jwY+v2obL7A1LubA=
-X-Received: by 2002:a4a:de8f:0:b0:573:55af:777c with SMTP id
- v15-20020a4ade8f000000b0057355af777cmr1975827oou.0.1693395250501; Wed, 30 Aug
- 2023 04:34:10 -0700 (PDT)
+        bh=rTUTk3Lpl4gCYLJGqC5JIdp0R+/wUxfLNRvC3Bl9Oyk=;
+        b=jhSZsFHE1kFOc0j1/toHudDJb6A7vxAO3UejrRlgnexvSWNyXc5CbsOR6B5BAwggWP
+         2467VSyHgHfre3dHGAJ3TDQ2LEOZ+GURza/oF/7dGF/9dEtzyfjD8wAYWUBdJWhD3Ch1
+         z0FGTJOd7tt4GtbEMDMtPR/6FFS/PoNP4QAESV7rZPncaKTuBGgm+pqb+pCqAQ9jvC4/
+         tZlmv0GYRF+pauAl8A4ejl64tieRxn7cf3g203c444OS+OvSQaxuHsnlSfHznitEyfde
+         btHfZk7pD1MR6Xwt1SJR+Sa0z/8vCiA6eSLtDI/RMDJom/YJf9eBnTjiTK2rEvjLJskT
+         DIwg==
+X-Gm-Message-State: AOJu0Yxia1ABGbxpB8ayzaj45wclJYC3cc2MCrulsm+wf1JQajpIvV5f
+        +6OGfE9ixRCgjsY7YRFBq0knawv9T9otPMuf5Ec=
+X-Google-Smtp-Source: AGHT+IHlZDA3G7SJoNMRKYpaeAV/6Lb95d8hTyk9qyO1+USsAQrDYFoAiH1VHloRlIw4UEENBIq6t9KXXKo2c8zhXcU=
+X-Received: by 2002:a4a:a302:0:b0:573:764b:3b8d with SMTP id
+ q2-20020a4aa302000000b00573764b3b8dmr1759783ool.0.1693395446528; Wed, 30 Aug
+ 2023 04:37:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230829194200.1901988-1-festevam@gmail.com> <20230829194200.1901988-2-festevam@gmail.com>
-In-Reply-To: <20230829194200.1901988-2-festevam@gmail.com>
+References: <20230829194200.1901988-1-festevam@gmail.com>
+In-Reply-To: <20230829194200.1901988-1-festevam@gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 30 Aug 2023 13:33:59 +0200
-Message-ID: <CAJZ5v0hb-26qYZus97oJDOSga_1mE31ppk+ibK1JX42ZA5-hXw@mail.gmail.com>
-Subject: Re: [PATCH v5 2/3] reboot: Introduce hw_protection_reboot()
+Date:   Wed, 30 Aug 2023 13:37:15 +0200
+Message-ID: <CAJZ5v0hZR3WD+wMA6c-Gt86hM5oCRZDcSsYF4SrYTvT2HtQ=fQ@mail.gmail.com>
+Subject: Re: [PATCH v5 1/3] dt-bindings: thermal-zones: Document critical-action
 To:     Fabio Estevam <festevam@gmail.com>
 Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
         rui.zhang@intel.com, linux-pm@vger.kernel.org,
         krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
         conor+dt@kernel.org, devicetree@vger.kernel.org,
-        Fabio Estevam <festevam@denx.de>
+        Fabio Estevam <festevam@denx.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -63,99 +64,61 @@ On Tue, Aug 29, 2023 at 9:42 PM Fabio Estevam <festevam@gmail.com> wrote:
 >
 > From: Fabio Estevam <festevam@denx.de>
 >
-> Introduce hw_protection_reboot() to trigger an emergency reboot.
+> Document the critical-action property to describe the thermal action
+> the OS should perform after the critical temperature is reached.
 >
-> It is a counterpart of hw_protection_shutdown() with the difference
-> that it will force a reboot instead of shutdown.
+> The possible values are "shutdown" and "reboot".
 >
-> The motivation for doing this is to allow the thermal subystem
-> to trigger a reboot when the temperature reaches the critical
-> temperature.
+> The motivation for introducing the critical-action property is that
+> different systems may need different thermal actions when the critical
+> temperature is reached.
+>
+> For example, a desktop PC may want the OS to trigger a shutdown
+> when the critical temperature is reached.
+>
+> However, in some embedded cases, such behavior does not suit well,
+> as the board may be unattended in the field and rebooting may be a
+> better approach.
+>
+> The bootloader may also benefit from this new property as it can check
+> the SoC temperature and in case the temperature is above the critical
+> point, it can trigger a shutdown or reboot accordingly.
 >
 > Signed-off-by: Fabio Estevam <festevam@denx.de>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
 > Changes since v4:
-> - None
+> - None.
 >
->  include/linux/reboot.h |  1 +
->  kernel/reboot.c        | 34 ++++++++++++++++++++++++++++++++++
->  2 files changed, 35 insertions(+)
+>  .../devicetree/bindings/thermal/thermal-zones.yaml       | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 >
-> diff --git a/include/linux/reboot.h b/include/linux/reboot.h
-> index 2b6bb593be5b..4a319bc24f6a 100644
-> --- a/include/linux/reboot.h
-> +++ b/include/linux/reboot.h
-> @@ -174,6 +174,7 @@ void ctrl_alt_del(void);
+> diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+> index 4f3acdc4dec0..c2e4d28f885b 100644
+> --- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+> @@ -75,6 +75,15 @@ patternProperties:
+>            framework and assumes that the thermal sensors in this zone
+>            support interrupts.
 >
->  extern void orderly_poweroff(bool force);
->  extern void orderly_reboot(void);
-> +void hw_protection_reboot(const char *reason, int ms_until_forced);
->  void hw_protection_shutdown(const char *reason, int ms_until_forced);
->
->  /*
-> diff --git a/kernel/reboot.c b/kernel/reboot.c
-> index 3bba88c7ffc6..05333ae8bc6b 100644
-> --- a/kernel/reboot.c
-> +++ b/kernel/reboot.c
-> @@ -952,6 +952,40 @@ static void hw_failure_emergency_poweroff(int poweroff_delay_ms)
->                               msecs_to_jiffies(poweroff_delay_ms));
->  }
->
-> +/**
-> + * hw_protection_reboot - Trigger an emergency system reboot
-> + *
-> + * @reason:            Reason of emergency reboot to be printed.
-> + * @ms_until_forced:   Time to wait for orderly reboot before tiggering a
-> + *                     forced reboot. Negative value disables the forced
-> + *                     reboot.
-> + *
-> + * Initiate an emergency system reboot in order to protect hardware from
-> + * further damage. Usage examples include a thermal protection.
-> + *
-> + * NOTE: The request is ignored if protection reboot is already pending even
-> + * if the previous request has given a large timeout for forced reboot.
-> + * Can be called from any context.
-> + */
-> +void hw_protection_reboot(const char *reason, int ms_until_forced)
-
-Some code and kerneldoc comment duplication could be avoided by
-changing hw_protection_shutdown() definition to take an additional
-argument specifying the final action to carry out, so there would be
-
-void __hw_protection_shutdown(const char *reason, int ms_until_forced,
-bool reboot)
-{
-...
-   if (reboot)
-       orderly_reboot();
-   else
-      orderly_poweroff(true);
-}
-
-and both hw_protection_shutdown() and hw_protection_reboot() can be
-defined as static inline wrappers around this.
-
-> +{
-> +       static atomic_t allow_proceed = ATOMIC_INIT(1);
+> +      critical-action:
+> +        $ref: /schemas/types.yaml#/definitions/string
+> +        description:
+> +          The action the OS should perform after the critical temperature is reached.
 > +
-> +       pr_emerg("HARDWARE PROTECTION reboot (%s)\n", reason);
+> +        enum:
+> +          - shutdown
+> +          - reboot
 > +
-> +       /* Reboot should be initiated only once. */
-> +       if (!atomic_dec_and_test(&allow_proceed))
-> +               return;
-> +
-> +       /*
-> +        * Queue a backup emergency reboot in the event of
-> +        * orderly_reboot failure
-> +        */
-> +       hw_failure_emergency_poweroff(ms_until_forced);
-> +       orderly_reboot();
-> +}
-> +EXPORT_SYMBOL_GPL(hw_protection_reboot);
-> +
->  /**
->   * hw_protection_shutdown - Trigger an emergency system poweroff
->   *
+>        thermal-sensors:
+>          $ref: /schemas/types.yaml#/definitions/phandle-array
+>          maxItems: 1
 > --
-> 2.34.1
->
+
+I'm wondering if this should be a bool property called
+"critical-reboot", say, which when present would mean to carry out a
+reboot instead of a shutdown in an emergency.
+
+As defined above, the "shutdown" value is simply redundant, because
+the code will effectively convert any other value to "shutdown"
+anyway.
