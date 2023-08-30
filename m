@@ -2,111 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B40778E0EF
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 22:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B42578E3A0
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 02:00:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239521AbjH3Utn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Aug 2023 16:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
+        id S245217AbjHaAAd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Aug 2023 20:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239566AbjH3Utl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 16:49:41 -0400
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3691A2;
-        Wed, 30 Aug 2023 13:49:08 -0700 (PDT)
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-99bed101b70so5177366b.3;
-        Wed, 30 Aug 2023 13:49:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693428419; x=1694033219; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=H7+RNFydbYgwU33+rMvrroV0xhFvVbyEmKI0SQQ1IPc=;
-        b=HHFM+sl2xF5Cj6wCyYl68IGsUEtj+9hhhXHmkwL1xrPoWrSifRFSK6PXDgYJg9VK9q
-         gLDLodN3IyTugatel3QJlA4S7qBIJiJEmu8RwAbGqicqSMLI75pnTKhy9LKltifm/ntE
-         IXK4nkfhnQBwlxJMUrDX2ix9kWeLm5pksj42tZBFC+idKtmlsLVuB6IDqONjFxiRrbrV
-         QDrgu2XEJn+kg8afajmDT5jgAqe9+BfXN/iPlG1ntTH1QPLtPcFn08hwoPeE0xSj2leA
-         rf+QUfUu3UHOyBAo/h7Avbj/3BdsFAlZNwgE4xg1PZuudpTJnXx6yRZSsLmSD30XC+N0
-         NX1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693428419; x=1694033219;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H7+RNFydbYgwU33+rMvrroV0xhFvVbyEmKI0SQQ1IPc=;
-        b=ec2eX3QfZiUgUirpshgiZi1WuiQqs7TRnGxzj29lUOJvhIAq/kDFMGL9OSWAlKf32x
-         qb31cHir5i2YBtQSzTUidzzCkANzAQGjJoq+rIidTLEKbG8EIRyAkAtrPJisbcwG5qMA
-         N8qfAkEHQLS45E+x+ZrUDNFQ6YQT/PYsUhAauJTCtRQJUlLtYv60hxlqUzpuUta8GkE8
-         R4nJJa1tSXRNiXZpWIRwi+G4abWeDOlwc1RGlDrS2aZsV5fHGmDS83LMTvhSwM6pdDsw
-         6cFO55PM7cNxC8a7B4TY2ttE/smHiZS8TA5Nh15HdnDxr45fb4QoT9Qof89H+1EYLTlx
-         NjwQ==
-X-Gm-Message-State: AOJu0YzBzfIpLZuTT7puJ63vT5cWkZDfNN0uRDs5nvKOpM6NQ07zvJgs
-        5IxGRc9e5oSabw4bCSMULtQe31AToGe215Ftokw=
-X-Google-Smtp-Source: AGHT+IHiAZl/ZfM93EO73RMw6cC+cTC9r+ll2wJ6ots2bDFoCLwXyilxaxMGTvKxEz9IOIdQkqAjbZOzoFSbbp6GvN0=
-X-Received: by 2002:a17:906:cc:b0:99d:dc0b:a89a with SMTP id
- 12-20020a17090600cc00b0099ddc0ba89amr2747411eji.63.1693428419039; Wed, 30 Aug
- 2023 13:46:59 -0700 (PDT)
+        with ESMTP id S244290AbjHaAAd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 20:00:33 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15BF3CDA;
+        Wed, 30 Aug 2023 17:00:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693440029; x=1724976029;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wxwZZlb+EbAktrV9eW/BB6Z1DDRExWjc1tkBuUp5vHE=;
+  b=msrsD3aAItSt+hcBo/QkL8IaqmrTLRPI6KigMyf7cBfTTJMXyHqBD1Sq
+   qvIjNGFJ/JOCW/FJZpXXfriyUu+8CN/I5TTliORQ1yh48v/U97rhsQ+vf
+   9xJx/mMCN9Iut6YYfVZ8CywTWUa7M2CeZIOPIUqpbFRyo+B16VLhZtBnM
+   HHuiSDDdfFsdG7TG6Q49E7IAb9s7I4sQa4y2IKLxQk6XXKgEmEiyChgrW
+   6yoVMDBwXgyurtcC2i/nzZAh4tQZpI3Vl4mg79CRNgE6bFca46EngHq8g
+   Fp6l5+sX9/EjXrTHMvtFpZ0vn3wFXmqvzliK6SDaCs2x7GBh9vuuq1qwh
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="379526983"
+X-IronPort-AV: E=Sophos;i="6.02,215,1688454000"; 
+   d="scan'208";a="379526983"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 17:00:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="1070008382"
+X-IronPort-AV: E=Sophos;i="6.02,215,1688454000"; 
+   d="scan'208";a="1070008382"
+Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 30 Aug 2023 17:00:14 -0700
+Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qbV6Y-000ANV-1p;
+        Thu, 31 Aug 2023 00:00:10 +0000
+Date:   Thu, 31 Aug 2023 07:59:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Fabio Estevam <festevam@gmail.com>, rafael@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, daniel.lezcano@linaro.org,
+        amitk@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        conor+dt@kernel.org, devicetree@vger.kernel.org,
+        Fabio Estevam <festevam@denx.de>
+Subject: Re: [PATCH v6 3/3] thermal: thermal_core: Allow rebooting after
+ critical temp
+Message-ID: <202308310713.tQbEYXi1-lkp@intel.com>
+References: <20230830151908.2149847-3-festevam@gmail.com>
 MIME-Version: 1.0
-References: <88ffb216-96f9-f232-7fe5-48bf82e6aa70@gmail.com>
-In-Reply-To: <88ffb216-96f9-f232-7fe5-48bf82e6aa70@gmail.com>
-From:   brett hassall <brett.hassall@gmail.com>
-Date:   Thu, 31 Aug 2023 06:46:47 +1000
-Message-ID: <CANiJ1U_eysXU+i+7w6O7f7t5d4kfyT+yM=NbMH82YOLpaaDmJg@mail.gmail.com>
-Subject: Re: upstream linux cannot achieve package C8 power saving
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Ajay Agarwal <ajayagarwal@google.com>,
-        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Michael Bottini <michael.a.bottini@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Power Management <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230830151908.2149847-3-festevam@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi
+Hi Fabio,
 
-Ok, I will read into working up a formal patch.
+kernel test robot noticed the following build warnings:
 
-Thanks for the reply.
+[auto build test WARNING on rafael-pm/thermal]
+[also build test WARNING on linus/master v6.5 next-20230830]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Brett
+url:    https://github.com/intel-lab-lkp/linux/commits/Fabio-Estevam/reboot-Introduce-hw_protection_reboot/20230831-034226
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20230830151908.2149847-3-festevam%40gmail.com
+patch subject: [PATCH v6 3/3] thermal: thermal_core: Allow rebooting after critical temp
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230831/202308310713.tQbEYXi1-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230831/202308310713.tQbEYXi1-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308310713.tQbEYXi1-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/thermal/thermal_of.c:221:27: warning: 'critical_actions' defined but not used [-Wunused-const-variable=]
+     221 | static const char * const critical_actions[] = {
+         |                           ^~~~~~~~~~~~~~~~
 
 
-On Wed, 30 Aug 2023 at 11:11, Bagas Sanjaya <bagasdotme@gmail.com> wrote:
->
-> Hi,
->
-> I notice a bug report on Bugzilla [1]. Quoting from it:
->
-> > v6.5 (and at least v5.15, v5.19 and v6.4 as well) will not go to a higher power saving level than package C3.
-> >
-> > With the inclusion of a patch that combines 3 Ubuntu commits related to VMD ASPM & LTR, package C8 is used.
->
-> See Bugzilla for the full thread.
->
-> FYI, the attached proposed fix is the same as Brett's another BZ report [2].
-> I include it for upstreaming.
->
-> To Brett: Would you like to submit the proper, formal patch (see
-> Documentation/process/submitting-patches.rst for details)?
->
-> Thanks.
->
-> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=217841
-> [2]: https://bugzilla.kernel.org/show_bug.cgi?id=217828
->
-> --
-> An old man doll... just what I always wanted! - Clara
+vim +/critical_actions +221 drivers/thermal/thermal_of.c
+
+   220	
+ > 221	static const char * const critical_actions[] = {
+   222		[THERMAL_CRITICAL_ACTION_SHUTDOWN]	= "shutdown",
+   223		[THERMAL_CRITICAL_ACTION_REBOOT]	= "reboot",
+   224	};
+   225	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
