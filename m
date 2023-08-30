@@ -2,63 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0E678DA4C
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8C7E78DA49
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235078AbjH3Sf7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Aug 2023 14:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37720 "EHLO
+        id S237290AbjH3Sf6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Aug 2023 14:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243183AbjH3KQX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 06:16:23 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7951BB
-        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 03:16:20 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-500760b296aso849563e87.0
-        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 03:16:20 -0700 (PDT)
+        with ESMTP id S243195AbjH3KRk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 06:17:40 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84061BE
+        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 03:17:36 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-5298e43bb67so1543716a12.1
+        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 03:17:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693390578; x=1693995378; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1693390655; x=1693995455; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=SCycU/0xjFZ34GQd8Xc6zCT4MEY2pCO1qubommXUTPE=;
-        b=pEpE8id9TDvdx3zKJQ+lFGQ4c9z9vrMPjQgwhLbDvow8AXO6SqDzZvlsiEZ+0mn9ci
-         GmSZql/8Vk87tzYANL61dHD4xvx9xpfKQcD+97Uf9aYNSTsT+xKQ/qT8KWq7z30GDN+y
-         qBKaVsUojxD3tjjMGNCc8UPR/E7lOtEhJW87WSOxtDwFjVbWDYatcRf0NL9JZqs6hTq4
-         rqN4zpCb5SGU+oSnD+CEmR3u8o6+w9J6DGuJ90X9Y4VGwuBua2MtdoggEwbzjBPg9NKN
-         ZqFP/ZgjdTP9XPUfQIbhMdUp0LjoOp3lMVxRMU0xoxoOnO8p226dsbvxax+XF8TnoWYp
-         YdUg==
+        bh=bR584vZGW9FaOIQWQ+XKrXzGeqeN359N18ISef2diZA=;
+        b=HNGF5Nb1Pp1wVN2xELCSsu+JG5Em2ZID0mYpaQ7dRMr5dO6L/k7OtkAyrLX0dq8NFN
+         j6nb4qeA3uH+3sJClnNDeeoarubmCy6bDjN1ZzMSgiIpP+kPXCOB2vsJGCoxRlCTJudq
+         nTWPjy0XAObdZjJFNKYGMGg7AgB1wW49H8TtoBhs1J0MDpghy1oV0TIDDV2IO3mTaUuF
+         0QfzO01PPXzvctalm6/BXpgzhNzr7K57xyge2ysQy9dDxY+W164mDfJM1VEuAWL5kvng
+         Lq1EZjFQgGQI5AzDWwF+zw/lorVrj4gSecFGVqZ1+v41c9Y2CaE0kDKsxhOZFBxzlrzt
+         Xe5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693390578; x=1693995378;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1693390655; x=1693995455;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SCycU/0xjFZ34GQd8Xc6zCT4MEY2pCO1qubommXUTPE=;
-        b=FT/BWlIuCYJnPX/0WbJmaM274toB9HNwFaBB/ZRWdePCdoCEqYTVgaQ1CxW3BsEw43
-         OecC64iGo3Ql/Z7W5vVym2H6xmAxTkS2R7AO9n3/i2K5DwNW/2xwsonAEH+4FBs7hvc6
-         JYC+u2WjG3vq3nqnz3dJLSqzQVZXQ210jYf6vGhYeL9xBKqie6HL67UvS6Wq/KcGoeMb
-         0q0KZszQHABbXgActtKm/QJpZlEu8JEQwCgADI4ULxuXcIxIhEcfvR7GF0pOVUtEbmxW
-         Bae+x+bpnxDXWVf5jldFU7g0J8ZBXYHRm5fIf2cN1mle2WQ99A7l1MmLRYzRTaRIU29+
-         2+HA==
-X-Gm-Message-State: AOJu0YyCg/fwX0wCDTQjwTkQuSD48iVEW5max6YvW9L+RlE3R3EdgzQW
-        0yxaWVLwI7kcgnEharkFGxnKEg==
-X-Google-Smtp-Source: AGHT+IHmOlBEZ393iGobxhlTVe1wLheuMhJdQ2v68IlzVNE1xIOL7q0Ig5gu4MDPYErBrvDrobVahg==
-X-Received: by 2002:a05:6512:a95:b0:4fd:d254:edc6 with SMTP id m21-20020a0565120a9500b004fdd254edc6mr2120069lfu.26.1693390578587;
-        Wed, 30 Aug 2023 03:16:18 -0700 (PDT)
-Received: from [192.168.1.101] (abyl195.neoplus.adsl.tpnet.pl. [83.9.31.195])
-        by smtp.gmail.com with ESMTPSA id d20-20020ac24c94000000b00500a297ec4esm2298627lfl.102.2023.08.30.03.16.17
+        bh=bR584vZGW9FaOIQWQ+XKrXzGeqeN359N18ISef2diZA=;
+        b=TRt+1Sb64R2JumeijcwXdXcvHfrUKP4sKEsutIep1kZ6gbem3G5wCrgX0EXzx4/DSI
+         oUEJlQX0DOfahTNxYxy6OoJBAY7skJo0i1IZTREkVh85a2kVYKiOKlU5Tg+OcPu60rr2
+         VHZHcgW3TeHam4mpfGJkQ7Bm9CpJMC6qQJLYhQDJa27ewHGgY4/4gykjBroVECSkQSyQ
+         iYehdHQHmqyXsffBaWnFW6gVbAYm+64CNwRqKDyA52vBBCtfTcKUHCiPNw2YJ2oEVspN
+         y62ICwD+0AHwcblRbWpKAcgN+QSd/cTStk+Jd+Rg5kvKavIkvb0NwHxsJumjhhe2pcuT
+         zZFg==
+X-Gm-Message-State: AOJu0YzmVg7+s6xLVoHheTBo39/mlT/ZE6uH6rZAz3F1xxDkNHkxb9f5
+        snElUgagTA3dwjE8IW62d6G+3A==
+X-Google-Smtp-Source: AGHT+IGsSEQ6TsVj9ioIFZ01EjPzA/5K6fZ+jDcjoLBrxP8iGnn6aeLftGsqJWjeoVwfFBCT3KItuA==
+X-Received: by 2002:a05:6402:27d1:b0:51e:4218:b91b with SMTP id c17-20020a05640227d100b0051e4218b91bmr5539774ede.1.1693390655399;
+        Wed, 30 Aug 2023 03:17:35 -0700 (PDT)
+Received: from [192.168.0.22] (77-252-46-238.static.ip.netia.com.pl. [77.252.46.238])
+        by smtp.gmail.com with ESMTPSA id a26-20020aa7d91a000000b005256d4d58a6sm6620866edr.18.2023.08.30.03.17.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Aug 2023 03:16:18 -0700 (PDT)
-Message-ID: <db0c5ff6-fcf7-4b75-864a-1db620c2e1ef@linaro.org>
-Date:   Wed, 30 Aug 2023 12:16:16 +0200
+        Wed, 30 Aug 2023 03:17:34 -0700 (PDT)
+Message-ID: <70372afc-9dad-813b-f69b-7278d3371053@linaro.org>
+Date:   Wed, 30 Aug 2023 12:17:33 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 07/11] dt-bindings: arm: qcom,ids: Add SoC ID for QCM6490
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH 11/11] arm64: dts: qcom: qcm6490: Add device-tree for
+ Fairphone 5
 Content-Language: en-US
 To:     Luca Weiss <luca.weiss@fairphone.com>,
         cros-qcom-dts-watchers@chromium.org,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
@@ -71,61 +74,116 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-pm@vger.kernel.org
 References: <20230830-fp5-initial-v1-0-5a954519bbad@fairphone.com>
- <20230830-fp5-initial-v1-7-5a954519bbad@fairphone.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <20230830-fp5-initial-v1-7-5a954519bbad@fairphone.com>
+ <20230830-fp5-initial-v1-11-5a954519bbad@fairphone.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230830-fp5-initial-v1-11-5a954519bbad@fairphone.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30.08.2023 11:58, Luca Weiss wrote:
-> Add the ID for the Qualcomm QCM6490 SoC.
+On 30/08/2023 11:58, Luca Weiss wrote:
+> Add device tree for the Fairphone 5 smartphone which is based on
+> the QCM6490 SoC.
 > 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Konrad
+...
+
+> +
+> +#include <dt-bindings/arm/qcom,ids.h>
+> +#include <dt-bindings/leds/common.h>
+> +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+> +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+> +#include "sc7280.dtsi"
+> +#include "pm7250b.dtsi"
+> +#include "pm7325.dtsi"
+> +#include "pm8350c.dtsi" /* PM7350C */
+> +#include "pmk8350.dtsi" /* PMK7325 */
+> +
+> +/ {
+> +	model = "Fairphone 5";
+> +	compatible = "fairphone,fp5", "qcom,qcm6490";
+> +	chassis-type = "handset";
+> +
+> +	/* required for bootloader to select correct board */
+> +	qcom,msm-id = <QCOM_ID_QCM6490 0x10000>;
+> +	qcom,board-id = <34 0>;
+
+Sorry, not allowed. This is not an old, legacy platform.
+
+> +
+> +	aliases {
+> +		serial0 = &uart5;
+> +		serial1 = &uart7;
+> +	};
+> +
+> +	chosen {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+> +
+> +		framebuffer0: framebuffer@a000000 {
+> +			compatible = "simple-framebuffer";
+> +			reg = <0 0xe1000000 0 (2700 * 1224 * 4)>;
+> +			width = <1224>;
+> +			height = <2700>;
+> +			stride = <(1224 * 4)>;
+> +			format = "a8r8g8b8";
+> +			panel = <&panel>;
+> +			clocks = <&gcc GCC_DISP_HF_AXI_CLK>;
+> +		};
+> +	};
+> +
+> +	gpio-keys {
+> +		compatible = "gpio-keys";
+> +
+> +		pinctrl-0 = <&volume_down_default>, <&hall_sensor_default>;
+> +		pinctrl-names = "default";
+> +
+> +		key-volume-up {
+> +			label = "Volume up";
+> +			gpios = <&pm7325_gpios 6 GPIO_ACTIVE_LOW>;
+> +			linux,code = <KEY_VOLUMEUP>;
+> +		};
+> +
+> +		/* Hall sensor uses vreg_l8c as VDD, it's being enabled using
+
+Use Linux style comments:
+/*
+ * foo
+ * bar...
+
+
+> +		 * always-on on the regulator
+> +		 */
+> +		event-hall-sensor {
+> +			label = "Hall Effect Sensor";
+> +			gpios = <&tlmm 155 GPIO_ACTIVE_LOW>;
+> +			linux,input-type = <EV_SW>;
+> +			linux,code = <SW_LID>;
+> +			linux,can-disable;
+> +			wakeup-source;
+> +		};
+> +	};
+> +
+> +	panel: panel {
+> +		compatible = "boe,rm692e5";
+
+Undocumented. You cannot add nodes with undocumented compatibles. Drop.
+
+> +
+> +		width-mm = <68>;
+> +		height-mm = <150>;
+> +	};
+
+
+Best regards,
+Krzysztof
+
