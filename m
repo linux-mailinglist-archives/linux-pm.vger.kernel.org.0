@@ -2,138 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 950AC78E077
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 22:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B40778E0EF
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 22:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238455AbjH3UTB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Aug 2023 16:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41116 "EHLO
+        id S239521AbjH3Utn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Aug 2023 16:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235340AbjH3UTA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 16:19:00 -0400
-Received: from pandora.armlinux.org.uk (unknown [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25813C00;
-        Wed, 30 Aug 2023 13:18:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=tjJFXRrC0i86SOlwgDvPcsbn6f+wSEMk3Zmh190DkJ8=; b=xHP24Y/i/tnQDk79l2uTYI3JHj
-        lP0dtLRHCqayWm9bwkWjvNBtOs2R78CGLNGRim6gTaqJdL9BQbQbPYRb8WzQfWr/W1m+DqFTYAxnd
-        UgYr/Ps3inemlF6uvLKaDCx6hdvKtYA+rS+1e+8yq0sDlf272aPTceyNM6nFrDtIBAXi1lmKmdLGC
-        OVTtKny5z2AlHOVKvX8jRMy9wls2UDe9xMULQPdWgcRKBOF0EQ7r0K++CljbtmGhf33Q/DwK57Dwz
-        hhPbnLA8vITgdB8scOlAI9dQksSfLKbM1f3OwNJopUziqpurdNxtdUZeLhCfGFBXrpkZLtwlK0vTR
-        Ps3dkCoQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:52236)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1qbPyO-0001ww-2C;
-        Wed, 30 Aug 2023 19:31:24 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qbPyJ-0005vm-NG; Wed, 30 Aug 2023 19:31:19 +0100
-Date:   Wed, 30 Aug 2023 19:31:19 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     James Morse <james.morse@arm.com>
-Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Len Brown <lenb@kernel.org>,
-        Rafael Wysocki <rafael@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: Re: [RFC PATCH 02/32] ACPI: Move ACPI_HOTPLUG_CPU to be enabled per
- architecture
-Message-ID: <ZO+K9+C+RgNeZ7Nq@shell.armlinux.org.uk>
-References: <20230203135043.409192-1-james.morse@arm.com>
- <20230203135043.409192-3-james.morse@arm.com>
+        with ESMTP id S239566AbjH3Utl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 16:49:41 -0400
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3691A2;
+        Wed, 30 Aug 2023 13:49:08 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-99bed101b70so5177366b.3;
+        Wed, 30 Aug 2023 13:49:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693428419; x=1694033219; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=H7+RNFydbYgwU33+rMvrroV0xhFvVbyEmKI0SQQ1IPc=;
+        b=HHFM+sl2xF5Cj6wCyYl68IGsUEtj+9hhhXHmkwL1xrPoWrSifRFSK6PXDgYJg9VK9q
+         gLDLodN3IyTugatel3QJlA4S7qBIJiJEmu8RwAbGqicqSMLI75pnTKhy9LKltifm/ntE
+         IXK4nkfhnQBwlxJMUrDX2ix9kWeLm5pksj42tZBFC+idKtmlsLVuB6IDqONjFxiRrbrV
+         QDrgu2XEJn+kg8afajmDT5jgAqe9+BfXN/iPlG1ntTH1QPLtPcFn08hwoPeE0xSj2leA
+         rf+QUfUu3UHOyBAo/h7Avbj/3BdsFAlZNwgE4xg1PZuudpTJnXx6yRZSsLmSD30XC+N0
+         NX1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693428419; x=1694033219;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=H7+RNFydbYgwU33+rMvrroV0xhFvVbyEmKI0SQQ1IPc=;
+        b=ec2eX3QfZiUgUirpshgiZi1WuiQqs7TRnGxzj29lUOJvhIAq/kDFMGL9OSWAlKf32x
+         qb31cHir5i2YBtQSzTUidzzCkANzAQGjJoq+rIidTLEKbG8EIRyAkAtrPJisbcwG5qMA
+         N8qfAkEHQLS45E+x+ZrUDNFQ6YQT/PYsUhAauJTCtRQJUlLtYv60hxlqUzpuUta8GkE8
+         R4nJJa1tSXRNiXZpWIRwi+G4abWeDOlwc1RGlDrS2aZsV5fHGmDS83LMTvhSwM6pdDsw
+         6cFO55PM7cNxC8a7B4TY2ttE/smHiZS8TA5Nh15HdnDxr45fb4QoT9Qof89H+1EYLTlx
+         NjwQ==
+X-Gm-Message-State: AOJu0YzBzfIpLZuTT7puJ63vT5cWkZDfNN0uRDs5nvKOpM6NQ07zvJgs
+        5IxGRc9e5oSabw4bCSMULtQe31AToGe215Ftokw=
+X-Google-Smtp-Source: AGHT+IHiAZl/ZfM93EO73RMw6cC+cTC9r+ll2wJ6ots2bDFoCLwXyilxaxMGTvKxEz9IOIdQkqAjbZOzoFSbbp6GvN0=
+X-Received: by 2002:a17:906:cc:b0:99d:dc0b:a89a with SMTP id
+ 12-20020a17090600cc00b0099ddc0ba89amr2747411eji.63.1693428419039; Wed, 30 Aug
+ 2023 13:46:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230203135043.409192-3-james.morse@arm.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+References: <88ffb216-96f9-f232-7fe5-48bf82e6aa70@gmail.com>
+In-Reply-To: <88ffb216-96f9-f232-7fe5-48bf82e6aa70@gmail.com>
+From:   brett hassall <brett.hassall@gmail.com>
+Date:   Thu, 31 Aug 2023 06:46:47 +1000
+Message-ID: <CANiJ1U_eysXU+i+7w6O7f7t5d4kfyT+yM=NbMH82YOLpaaDmJg@mail.gmail.com>
+Subject: Re: upstream linux cannot achieve package C8 power saving
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Ajay Agarwal <ajayagarwal@google.com>,
+        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Michael Bottini <michael.a.bottini@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Power Management <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 01:50:13PM +0000, James Morse wrote:
-> --- a/arch/ia64/Kconfig
-> +++ b/arch/ia64/Kconfig
-> @@ -15,6 +15,7 @@ config IA64
->  	select ARCH_MIGHT_HAVE_PC_PARPORT
->  	select ARCH_MIGHT_HAVE_PC_SERIO
->  	select ACPI
-> +	select ACPI_HOTPLUG_CPU if ACPI
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -5,6 +5,7 @@ config LOONGARCH
->  	select ACPI
->  	select ACPI_GENERIC_GSI if ACPI
->  	select ACPI_MCFG if ACPI
-> +	select ACPI_HOTPLUG_CPU if ACPI
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -59,6 +59,7 @@ config X86
->  	#
->  	select ACPI_LEGACY_TABLES_LOOKUP	if ACPI
->  	select ACPI_SYSTEM_POWER_STATES_SUPPORT	if ACPI
-> +	select ACPI_HOTPLUG_CPU			if ACPI
-> --- a/drivers/acpi/Kconfig
-> +++ b/drivers/acpi/Kconfig
-> @@ -309,7 +309,6 @@ config ACPI_HOTPLUG_CPU
->  	bool
->  	depends on ACPI_PROCESSOR && HOTPLUG_CPU
->  	select ACPI_CONTAINER
-> -	default y
+Hi
 
-When selecting the symbol, it's a good idea to ensure that its
-dependencies are satisfied. So here, ACPI_HOTPLUG_CPU depends on
-ACPI_PROCESSOR and HOTPLUG_CPU.
+Ok, I will read into working up a formal patch.
 
-For x86, you're selecting ACPI_HOTPLUG_CPU if ACPI is enabled,
-and ACPI can be freely enabled. HOTPLUG_CPU depends on SMP,
-which is also a freely selectable option. Lastly,
-ACPI_PROCESSOR depends on X86 || IA64 || ARM64 || LOONGARCH,
-and is a user selectable, defaulting-y option if ACPI is
-enabled.
+Thanks for the reply.
 
-So, shouldn't the x86 select be:
+Brett
 
-	select ACPI_HOTPLUG_CPU if ACPI_PROCESSOR && HOTPLUG_CPU
 
-?
-
-I suspect similar issues exist for the other architecture Kconfig files
-modified above.
-
-This seems to also be in the latest rfc too, which is why I'm bringing
-it up.
-
-Thanks.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+On Wed, 30 Aug 2023 at 11:11, Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>
+> Hi,
+>
+> I notice a bug report on Bugzilla [1]. Quoting from it:
+>
+> > v6.5 (and at least v5.15, v5.19 and v6.4 as well) will not go to a higher power saving level than package C3.
+> >
+> > With the inclusion of a patch that combines 3 Ubuntu commits related to VMD ASPM & LTR, package C8 is used.
+>
+> See Bugzilla for the full thread.
+>
+> FYI, the attached proposed fix is the same as Brett's another BZ report [2].
+> I include it for upstreaming.
+>
+> To Brett: Would you like to submit the proper, formal patch (see
+> Documentation/process/submitting-patches.rst for details)?
+>
+> Thanks.
+>
+> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=217841
+> [2]: https://bugzilla.kernel.org/show_bug.cgi?id=217828
+>
+> --
+> An old man doll... just what I always wanted! - Clara
