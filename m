@@ -2,61 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6577678DA2B
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 818A778DA85
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232186AbjH3Sfi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Aug 2023 14:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45078 "EHLO
+        id S231414AbjH3Sgc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Aug 2023 14:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242922AbjH3J6x (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 05:58:53 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED43CC2
-        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 02:58:48 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-52a5c0d949eso4934168a12.0
-        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 02:58:48 -0700 (PDT)
+        with ESMTP id S242931AbjH3J6y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 05:58:54 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2999CEA
+        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 02:58:49 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-52889bc61b6so7077948a12.0
+        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 02:58:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1693389527; x=1693994327; darn=vger.kernel.org;
+        d=fairphone.com; s=fair; t=1693389528; x=1693994328; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=G8zevXRSNaiKUo9Os5nQfhkBpmvVMqAujkMCK+CVjDY=;
-        b=tZVG3LNBI9JP9Yakvkjv3Z78A6Q2LhTmRA5MbC76asj6/p745rYWXFcmDNWpENgxFK
-         2YhvVC58Nj5qrM0zsDzGSvulNJD9niv2/hgiaK274rZawvZ96PqfiyH5KhNke3jzXV0E
-         lIswS9hJNYtSfj11Z3jk3wqoFN9T4pU4CJ9px6ixcqpzXwmGnWDnyjk/N06UqSzU+/YM
-         8lJJ5xk6RjzMc5by5tGSPzBBbiLtl2Y+dwKlGPSkegWhElUkKHY69VVD9cGS8gXsOill
-         oi8uqqWh6z6+AEMIc6KXlpDsZLpEX1zRx18zzImvIpbrKbO4KtN0FDh4bTzr7PNUVUHj
-         CsrA==
+        bh=4SsQzTd0CcGfAzL3R0FFK9QV29mUojsRfNBPae88g8g=;
+        b=3ta6vgSsXwkmzI3uHIXBPxgvz+aQDqvKU/wSlAgyCa6Hue0ctHwgySamfODNyhogSz
+         C4mM4SXirs5yj/6Opt5MYnZEbNj5PqTMtIIs1v3QWWW6tVhfRsovsrGi7OcbA02O/jWS
+         OoJJX7bHw5TRXPubti2XPQP9WNsdF/anBGWHfAOowEENRyZse3hmkOBWxGjfz9qUw5n6
+         NoCBzMtMucjvMTBkQY+BLrkk6nP/y67WlHJC0egwyDocoZ2ONe7U3Cx7bDjLRIrJou9i
+         74qacRNoRjZTlU1SJ5HVltLe7+jFJQdQC8WlH5+U902bmH1U2SD1/ql5/KZg95cL0EOS
+         vy+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693389527; x=1693994327;
+        d=1e100.net; s=20221208; t=1693389528; x=1693994328;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=G8zevXRSNaiKUo9Os5nQfhkBpmvVMqAujkMCK+CVjDY=;
-        b=LSHmN6Yx81ploR8WI2NA+sBZr8WaB7/aBjkBuMlwz7M+ZyXv1uEJqqjcGKpV7fDlCs
-         yBTEdRMKm30uyen8rI6VtbryQ83IOKShTzdnpuo4iMxlL1XE3o8rM2T15MRPE601nm7E
-         1dD1y9QNLWmenoUwLrBgTA5a8cEYYTHczADl+v1WXUcEf2tWHQ+2aQcMkpkvEr//Xtvz
-         9nuSKW1AxX7S0JugbjaW4zdHxteX4wfR2jjQk6NKoe6xKY1kZ1wNChX0CL1LvM/G2UAU
-         3mNOJS8qMlkFolSpbIbkHHikrrA86sAMlwQaTJulRmuEwlTMXLM0Iml7Tl077mp6v7kR
-         qqtw==
-X-Gm-Message-State: AOJu0YxtQDwHM1wbuxEK/GMZ7OC3oguN+c6DgSmsH+a4GPZ3yQXcBTfC
-        c4fnmxKFtGOLj6htjyqpJODFrg==
-X-Google-Smtp-Source: AGHT+IGIItY/qwJX9U0CjB5BG63tTG4RhBnPNl0Zyu8WX4cT11uTgHliy+JPSD26Sm2+/I7M8qxJdQ==
-X-Received: by 2002:a17:907:a07c:b0:9a5:846d:d829 with SMTP id ia28-20020a170907a07c00b009a5846dd829mr1285814ejc.18.1693389527101;
-        Wed, 30 Aug 2023 02:58:47 -0700 (PDT)
+        bh=4SsQzTd0CcGfAzL3R0FFK9QV29mUojsRfNBPae88g8g=;
+        b=dPbfN7M4CZfHCv9+GOn0jJX1FZfV5rC/X9aTX2LsATODM9fzhjQmz5PDzKRojDk0/2
+         BiQfODhGs7tvlgcFUxg5SaEyT6MZKg080PvDp4AsLxzGqjysarhTFN1z+c1VHPGE/tPh
+         6BhHGHmRv8V3rzvHEDAoiK40DMbSzOecH6B00TPq+9rjjxeMOtqE+1cHulz8q2wVFKmq
+         lrjTC/HTJYMxm8J9tsoIxlybo64VR3Ygv6VsMU7BFhNVSaOntYhG161chLLMELrt65Ey
+         PV9xriqIJgJm1HhujDZrOrIn7iSnFWMerSBt2rnUGbHxeDjfJ0ZV/I4p85kt4e7W1ISy
+         BHmA==
+X-Gm-Message-State: AOJu0Yxgk9YchUI6vFXiAJpuRzYtj+uTVN9Ct0AGfpAlbP1FdHa9Vik6
+        gPbjZp87tNC4LWMniLqws/Tjyg==
+X-Google-Smtp-Source: AGHT+IHvz39PhmZIwcIdO4tR0KRRtnyNlpxtI0fCwMzAk3lT5hLYxMJ+5ixn1nlE8yBoNrh2IR3eKA==
+X-Received: by 2002:a17:906:ef8c:b0:9a1:b85d:c95a with SMTP id ze12-20020a170906ef8c00b009a1b85dc95amr1190547ejb.62.1693389528268;
+        Wed, 30 Aug 2023 02:58:48 -0700 (PDT)
 Received: from otso.luca.vpn.lucaweiss.eu (5073ED84.static.ziggozakelijk.nl. [80.115.237.132])
-        by smtp.gmail.com with ESMTPSA id i15-20020a1709064ecf00b009a2202bfce5sm6957130ejv.118.2023.08.30.02.58.45
+        by smtp.gmail.com with ESMTPSA id i15-20020a1709064ecf00b009a2202bfce5sm6957130ejv.118.2023.08.30.02.58.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Aug 2023 02:58:46 -0700 (PDT)
+        Wed, 30 Aug 2023 02:58:47 -0700 (PDT)
 From:   Luca Weiss <luca.weiss@fairphone.com>
-Date:   Wed, 30 Aug 2023 11:58:28 +0200
-Subject: [PATCH 03/11] arm64: dts: qcom: sc7280: Move qfprom clock to
- chrome-common
+Date:   Wed, 30 Aug 2023 11:58:29 +0200
+Subject: [PATCH 04/11] arm64: dts: qcom: pm7250b: make SID configurable
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230830-fp5-initial-v1-3-5a954519bbad@fairphone.com>
+Message-Id: <20230830-fp5-initial-v1-4-5a954519bbad@fairphone.com>
 References: <20230830-fp5-initial-v1-0-5a954519bbad@fairphone.com>
 In-Reply-To: <20230830-fp5-initial-v1-0-5a954519bbad@fairphone.com>
 To:     cros-qcom-dts-watchers@chromium.org,
@@ -85,44 +84,85 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On non-ChromeOS boards the clock cannot be touched, so move it in the
-chrome-common dtsi which is the only place where it's needed.
+Like other Qualcomm PMICs the PM7250B can be used on different addresses
+on the SPMI bus. Use similar defines like the PMK8350 to make this
+possible.
 
 Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 ---
- arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi | 5 +++++
- arch/arm64/boot/dts/qcom/sc7280.dtsi               | 2 --
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/qcom/pm7250b.dtsi | 23 ++++++++++++++++-------
+ 1 file changed, 16 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
-index 8eb30aa226a2..6cfcec1eabd9 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
-@@ -59,6 +59,11 @@ &pmk8350_pon {
- 	status = "disabled";
+diff --git a/arch/arm64/boot/dts/qcom/pm7250b.dtsi b/arch/arm64/boot/dts/qcom/pm7250b.dtsi
+index e8540c36bd99..3514de536baa 100644
+--- a/arch/arm64/boot/dts/qcom/pm7250b.dtsi
++++ b/arch/arm64/boot/dts/qcom/pm7250b.dtsi
+@@ -7,6 +7,15 @@
+ #include <dt-bindings/interrupt-controller/irq.h>
+ #include <dt-bindings/spmi/spmi.h>
+ 
++/* This PMIC can be configured to be at different SIDs */
++#ifndef PM7250B_SID
++	#define PM7250B_SID 2
++#endif
++
++#ifndef PM7250B_SID1
++	#define PM7250B_SID1 3
++#endif
++
+ / {
+ 	thermal-zones {
+ 		pm7250b-thermal {
+@@ -39,16 +48,16 @@ trip2 {
  };
  
-+&qfprom {
-+	clocks = <&gcc GCC_SEC_CTRL_CLK_SRC>;
-+	clock-names = "core";
-+};
-+
- /*
-  * Chrome designs always boot from SPI flash hooked up to the qspi.
-  *
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 98a8d627a348..5c78038369fd 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -897,8 +897,6 @@ qfprom: efuse@784000 {
- 			      <0 0x00780000 0 0xa20>,
- 			      <0 0x00782000 0 0x120>,
- 			      <0 0x00786000 0 0x1fff>;
--			clocks = <&gcc GCC_SEC_CTRL_CLK_SRC>;
--			clock-names = "core";
- 			power-domains = <&rpmhpd SC7280_MX>;
+ &spmi_bus {
+-	pmic@2 {
++	pmic@PM7250B_SID {
+ 		compatible = "qcom,pm7250b", "qcom,spmi-pmic";
+-		reg = <0x2 SPMI_USID>;
++		reg = <PM7250B_SID SPMI_USID>;
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+ 
+ 		pm7250b_temp: temp-alarm@2400 {
+ 			compatible = "qcom,spmi-temp-alarm";
+ 			reg = <0x2400>;
+-			interrupts = <0x2 0x24 0x0 IRQ_TYPE_EDGE_BOTH>;
++			interrupts = <PM7250B_SID 0x24 0x0 IRQ_TYPE_EDGE_BOTH>;
+ 			io-channels = <&pm7250b_adc ADC5_DIE_TEMP>;
+ 			io-channel-names = "thermal";
+ 			#thermal-sensor-cells = <0>;
+@@ -60,7 +69,7 @@ pm7250b_adc: adc@3100 {
  			#address-cells = <1>;
- 			#size-cells = <1>;
+ 			#size-cells = <0>;
+ 			#io-channel-cells = <1>;
+-			interrupts = <0x2 0x31 0x0 IRQ_TYPE_EDGE_RISING>;
++			interrupts = <PM7250B_SID 0x31 0x0 IRQ_TYPE_EDGE_RISING>;
+ 
+ 			channel@0 {
+ 				reg = <ADC5_REF_GND>;
+@@ -141,7 +150,7 @@ channel@99 {
+ 		pm7250b_adc_tm: adc-tm@3500 {
+ 			compatible = "qcom,spmi-adc-tm5";
+ 			reg = <0x3500>;
+-			interrupts = <0x2 0x35 0x0 IRQ_TYPE_EDGE_RISING>;
++			interrupts = <PM7250B_SID 0x35 0x0 IRQ_TYPE_EDGE_RISING>;
+ 			#thermal-sensor-cells = <1>;
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+@@ -159,9 +168,9 @@ pm7250b_gpios: pinctrl@c000 {
+ 		};
+ 	};
+ 
+-	pmic@3 {
++	pmic@PM7250B_SID1 {
+ 		compatible = "qcom,pm7250b", "qcom,spmi-pmic";
+-		reg = <0x3 SPMI_USID>;
++		reg = <PM7250B_SID1 SPMI_USID>;
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+ 	};
 
 -- 
 2.42.0
