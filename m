@@ -2,135 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6066278DA32
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C9778DA38
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233952AbjH3Sfo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Aug 2023 14:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34520 "EHLO
+        id S236921AbjH3Sfu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Aug 2023 14:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242452AbjH3IeR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 04:34:17 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2651B0
-        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 01:34:14 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-d7b8d2631fdso1055972276.3
-        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 01:34:14 -0700 (PDT)
+        with ESMTP id S242907AbjH3J6s (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 05:58:48 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 362441B7
+        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 02:58:44 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4ff09632194so8583435e87.2
+        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 02:58:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693384453; x=1693989253; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xtdiwzQL21GYKlHw5/D0J/VmrjrErWbcUTzSWFrSXes=;
-        b=E31HCfg4sYIGJhKfH+dTdWkW/as60UvLx0i9dXIXYGpR/9tE95609GhbwPXhSbQXxf
-         /oVIC4+BI9gX1NsnGcCMu7KIw0X1TT5fDFkvfPuhimQq3SorpDixiBch3zrsIvwey6Jz
-         7qvxtenDcFkAclg5Nqk6XIkzS2IBfQQEmqIMzs6P5nVDEvPOgSsqvmxs32H9XsB8qA/Q
-         6IM/i6/CmzSPdwE1CXEGC0CuDxf0yqLCgGmYx9Gt2Jln8LSaSCybfvNRAE4qYDRFh+wP
-         ZvWej/Kee/HP005BFtYfHuI5WuC5qxG1btSvzxLQuX8Cm9fNHM99qWskiZvFNhD+tG7M
-         GPEw==
+        d=fairphone.com; s=fair; t=1693389522; x=1693994322; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ImC06/+tS7Twj3eQRRUsuycUqqVXH052q1hemh/ikWU=;
+        b=r8GAC4lMHUa5I2T/ySPKd0cIPPQWidpqX97LzVX/TOy2IDuwivuTKw8Iqz6DA1VQa/
+         OhFvUiDvaCIz0TNirzmBBK15++Vh0P+RiGU2RZfYPIPTR3zqJCoL242WasZCd3Jf4ggt
+         fYi+QCfjcNwHIWoAvP48Fnl5foc1u4ZK0KJuTuHxxwiaipK+AFmotyUc3xkom+RpsL+V
+         njQA0ZTUlUhBDurGXIM8dqBq7pZfioWaNfD6VjN/QnbQOquX/9vlivBZ77/Bs7tHF7dc
+         1/vlbj454uSNwRyAIPqc3hRzyCrEiCoCKBXWVU+P4sYVqoAEeF4quaM1zoncUfiJREG6
+         GvhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693384453; x=1693989253;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1693389522; x=1693994322;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xtdiwzQL21GYKlHw5/D0J/VmrjrErWbcUTzSWFrSXes=;
-        b=Oz4IaWej7I/0Ul1M33XvSbXPmO2ehVTJ+JnRwvXN/VVyVnJraF8sgfWbyVrpYvQbY3
-         BeUi7I28GSTkqNK4hLczD/fF2XKOmXlansP4n6zdvk/ldXoDSzTRWXjEz5lU4m0Kjlqu
-         JOPYW/C/yp3JadLZ8WXPmZgPz1Ai/ekhurYqm4Hf2s3V/1J4FCnO2R0NkPkicg2Z/U4g
-         7Sh8yvsx0rG/b8xD/2ez6DFelCQ5v4fFJ1jwYWa+cT+B1qgn52x3/tBYM/szp9AqbT9r
-         hs7AGmejnH5g+lyNTetOtPkobbSHKZBxnYK5isHhYsBJ2CS9oUu5g5ms3gqS+SyENoUd
-         gXkg==
-X-Gm-Message-State: AOJu0YzErPC3IptlX1FvSjmNxRo+wvHyrFeSqAbBYcKy/4nRItfBoPKn
-        LfMb5t+ITEK1/vsd78fOqqnlOhQXewUenpSI/LHGFg==
-X-Google-Smtp-Source: AGHT+IGtJWftzWF4BAzABxuDQ6HGZfR/UnHG8Az6ZEx5vM7b+S86qvW3j5sh8nuhOsKgT8Zm9TWVIp5MYnP+H44iMh4=
-X-Received: by 2002:a25:6944:0:b0:d53:f98f:8018 with SMTP id
- e65-20020a256944000000b00d53f98f8018mr1490963ybc.65.1693384453468; Wed, 30
- Aug 2023 01:34:13 -0700 (PDT)
+        bh=ImC06/+tS7Twj3eQRRUsuycUqqVXH052q1hemh/ikWU=;
+        b=MaNLk9lA2qIekxw3qyXXdaYRadZ0LnHjQSknMjF1vdcwcwhnC5gaEYPcD1YetmXrW2
+         ocWoXW2KoeIc81H9UFZFXjpmfJqP8cU08u4btxkbyJ1u5+nDmkK/6vUGmsvWeAYL6Kst
+         mFhJe2LbdRW+pZZOqriK1pbYDYpycDE3F3E0jr65oam/Jn33UVHwlfVcIHp6J+P1/8XQ
+         zKyxP0nCeWED4acuPIdEZSjj4ngUq9MVjsjwu9mdfIFlEdxgNr6D5C3QlJ/U0eWXHTSd
+         D80p6cU52CjQZUXMaKF4tpfczD1fHe4QBY/MG7WB6YAMOwWJLFVXffFD6CstZz/5ApyC
+         xyqg==
+X-Gm-Message-State: AOJu0YyyyrI5BRdYm6LSA4ZFMrtmi05enenT4azIULqNuxgHLOu+dmAX
+        q+sc/WuqUNwZHWzR1ilnNcXLoQ==
+X-Google-Smtp-Source: AGHT+IHhkgd47WHbYn3fJiBbQlVzHfchnV6Zhz/9BP+uHBaTqzKkkSmXoZ5vGmgUP4lJA5UX0lAuqQ==
+X-Received: by 2002:a05:6512:224c:b0:4fe:cc2:247a with SMTP id i12-20020a056512224c00b004fe0cc2247amr1121093lfu.49.1693389522330;
+        Wed, 30 Aug 2023 02:58:42 -0700 (PDT)
+Received: from otso.luca.vpn.lucaweiss.eu (5073ED84.static.ziggozakelijk.nl. [80.115.237.132])
+        by smtp.gmail.com with ESMTPSA id i15-20020a1709064ecf00b009a2202bfce5sm6957130ejv.118.2023.08.30.02.58.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Aug 2023 02:58:41 -0700 (PDT)
+From:   Luca Weiss <luca.weiss@fairphone.com>
+Subject: [PATCH 00/11] Initial support for the Fairphone 5 smartphone
+Date:   Wed, 30 Aug 2023 11:58:25 +0200
+Message-Id: <20230830-fp5-initial-v1-0-5a954519bbad@fairphone.com>
 MIME-Version: 1.0
-References: <20230829213441.310655-1-ulf.hansson@linaro.org>
- <CAHk-=wg0gc4Cc90OL29Vr5gDtd4mnsKD+TxtoNtQbAryaWHkZQ@mail.gmail.com>
- <CAHk-=wjLO=Jsdk2prq0piznMMCk+V0_fRaFRHEPuaALpF8J=hw@mail.gmail.com>
- <96bb0de0-06d9-46f8-b02f-dc924afff13c@app.fastmail.com> <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
-In-Reply-To: <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 30 Aug 2023 10:33:37 +0200
-Message-ID: <CAPDyKFrJH-1uaPCwnWZDPi4MRtOm=N2CHSRyvjXRDbQ1y-oOrw@mail.gmail.com>
-Subject: Re: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMES72QC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI2MDC0ML3bQCU93MvMySzMQc3SSzZAsjQ4OkRMtkCyWgjoKi1LTMCrBp0bG
+ 1tQCNAZuXXQAAAA==
+To:     cros-qcom-dts-watchers@chromium.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-pm@vger.kernel.org, Luca Weiss <luca.weiss@fairphone.com>
+X-Mailer: b4 0.12.3
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 30 Aug 2023 at 03:20, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Tue, 29 Aug 2023 at 17:48, Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > How about moving it to drivers/power/domain/ instead?
->
-> That sounds like a sensible name and would seem to fit logically with
-> our existing tree structure quite well.
+Add support to boot up mainline kernel on the QCM6490-based Fairphone 5
+smartphone.
 
-I am sincerely sorry if I have annoyed you with picking the name
-"genpd" as the directory-name - and especially without further
-explanation. The genpd thing certainly deserves to be documented
-better, I will try to get some time to do this soon. Anyway, me and
-many others in the power/performance areas that have been working with
-the genpd interface, have simply gotten comfortable using the "genpd"
-acronym. Hence, the naming was a no-brainer to me.
+These patches only cover a part of the functionality brought up on
+mainline so far, with the rest needing larger dts and driver changes or
+depend on patches that are not yet merged. I will work on sending those
+once these base patches here have settled.
 
-That said, if you feel that the above directory-path/name is a better
-fit I can certainly move it over there, np! Although, before you make
-the final decision I want to point out a few things for you to
-consider.
+Since QCM6490, like SC7280 are 'yupik' in the vendor-provided kernel, we
+can base the dts on it and leverage existing support. Though current
+sc7280 support mostly assumes ChromeOS devices which have a different
+TrustZone setup, so we need to move some ChromeOS-specific bits to the
+sc7280-chrome-common.dtsi file to make it boot on a standard TZ board.
 
-*) The new subsystem is solely intended for the generic PM domain
-providers. Other PM domains providers, like the ACPI PM domains for
-example (drivers/acpi/*), don't really belong here, at least in my
-opinion. So, maybe "domain" isn't specific enough? Although, if not
-using "genpd", I have no better suggestion.
+Depends on (just for the #include in sc7280.dtsi):
+https://lore.kernel.org/linux-arm-msm/20230818-qcom-vmid-defines-v1-1-45b610c96b13@fairphone.com/
 
-**) Please keep in mind that we have several other power/performance
-related subsystems that don't live under drivers/power/*. Moving more
-things in there is not really going to help the people that work on
-these things. No matter where and what the name of the subsystem is,
-one simply needs to dive into the details anyway. Moreover, in this
-case, "genpd" isn't just about "power" (idle management) but
-performance management too.
+The pm7250b patch has been picked up from this series:
+https://lore.kernel.org/linux-arm-msm/20230407-pm7250b-sid-v1-2-fc648478cc25@fairphone.com/
 
->
-> > I don't think we can easily rename the interfaces that have been
-> > in use for the past 12 years
->
-> I actually think the interface names are much less of an issue, since
-> anybody using them is presumably familiar with the naming.
->
-> It was only with the directory structure that I reacted to it, because
-> that kind of exposes the naming to people who definitely are *not*
-> familiar with it (ie me, but presumably anybody else who sees the
-> diffstats etc fly past).
->
-> And yes, we have a number of other pretty obscure driver names in our
-> tree (I end up having to remind myself what "ntb" and "hsi" etc mean),
-> and I don't tend to love them either, but at least they tend to be
-> industry / vendor names.
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+---
+Luca Weiss (11):
+      arm64: dts: qcom: sc7280: Mark some nodes as 'reserved'
+      nvmem: qfprom: Mark core clk as optional
+      arm64: dts: qcom: sc7280: Move qfprom clock to chrome-common
+      arm64: dts: qcom: pm7250b: make SID configurable
+      arm64: dts: qcom: pm8350c: Add flash led node
+      dt-bindings: pinctrl: qcom,sc7280: Allow gpio-reserved-ranges
+      dt-bindings: arm: qcom,ids: Add SoC ID for QCM6490
+      soc: qcom: socinfo: Add SoC ID for QCM6490
+      cpufreq: Add QCM6490 to cpufreq-dt-platdev blocklist
+      dt-bindings: arm: qcom: Add QCM6490 Fairphone 5
+      arm64: dts: qcom: qcm6490: Add device-tree for Fairphone 5
 
-I get your point. I was indeed trying to obey the current naming
-strategy, but I think it's not entirely easy to understand what is
-prefered.
+ Documentation/devicetree/bindings/arm/qcom.yaml    |   6 +
+ .../bindings/pinctrl/qcom,sc7280-pinctrl.yaml      |   4 +
+ arch/arm64/boot/dts/qcom/Makefile                  |   1 +
+ arch/arm64/boot/dts/qcom/pm7250b.dtsi              |  23 +-
+ arch/arm64/boot/dts/qcom/pm8350c.dtsi              |   6 +
+ arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts | 659 +++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi |  17 +
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |   7 +-
+ drivers/cpufreq/cpufreq-dt-platdev.c               |   1 +
+ drivers/nvmem/qfprom.c                             |   2 +-
+ drivers/soc/qcom/socinfo.c                         |   1 +
+ include/dt-bindings/arm/qcom,ids.h                 |   1 +
+ 12 files changed, 717 insertions(+), 11 deletions(-)
+---
+base-commit: 0255bba921438ea1e45d3f0873c3e8c5a1e03876
+change-id: 20230818-fp5-initial-b6c8210ba9c8
 
-Please advise me on how to move forward.
+Best regards,
+-- 
+Luca Weiss <luca.weiss@fairphone.com>
 
-Kind regards
-Uffe
