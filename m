@@ -2,70 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B86378DA13
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0281378DA1A
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236645AbjH3SfZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Aug 2023 14:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59914 "EHLO
+        id S236782AbjH3Sf2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Aug 2023 14:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245490AbjH3PTd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 11:19:33 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4F31A2;
-        Wed, 30 Aug 2023 08:19:31 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id 46e09a7af769-6bf106fb6a0so984878a34.0;
-        Wed, 30 Aug 2023 08:19:31 -0700 (PDT)
+        with ESMTP id S245551AbjH3PdD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 11:33:03 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15771A4
+        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 08:32:57 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-52a5c0d949eso5375370a12.0
+        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 08:32:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693408770; x=1694013570; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zSPPfeRANMxNDziv72JSmTSauePb3uiAcgEWeqKDRLI=;
-        b=TQHrzt7dWsl5U91KODm3ThMyElEs/7BgGSL4kU96wiVMkj8gIu+u6at6t+d42WcPU9
-         9urfFEdlT9dSOgrhTuQ6I97cUKAsIGm097ty9jKfBMWoTUXQp/5YatVXdFS1sE6oKdbQ
-         3jdh0cPgS6KptKKZkIjpFxMG43QkS1UEEar36pGkAq3yZwEf4xjor8jMQFE6kHeGrOKu
-         l95mHwAlkvrMmSaek4PoqvYsT3ySXHn8ReBm7IQdIWg2u5teRfv6ILOOWsvA4U0fTDqQ
-         Fp2WfmlJfBr8k+rMzPDQ8LnMyH1WlGju6HJO+gP1tYMkYbbdj4+/zKWrSCNA6r19NmtL
-         i8wg==
+        d=linaro.org; s=google; t=1693409576; x=1694014376; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FOkMhQZaIwST9Tftkc4xHZGF2ejBRi9KztfbwPpap1g=;
+        b=s40XoOjir1wAK96uwJcWbx6714jbI8jGuoA9n01pj+422m+SUK3IYUeFmrYM32xxDq
+         LSG/kYjiGDVueCoYp/oA4sNx+Az1nRTuhBcytjrDefZTZydWMERd9yDOFWyHj9w0RcIF
+         nbvoG0/H6u7RQgL1XiSrn7MYBlKpcdGekAjMutP0MngGCeisi/LoH8AFD2Rv8ozceo6p
+         B/Y8V5OjVponr7gg1tb4viY7VFTA6kEypmfhn6e0iMGjDKjZwutmCYqvue5Pn2hWQVnb
+         /qt8fjMMnq1SjPqajHZ0xiBIjNPKrSPEXiHVQPbrLYyv3T5HteeEgkLamPt/OwkeYfTA
+         jQLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693408770; x=1694013570;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zSPPfeRANMxNDziv72JSmTSauePb3uiAcgEWeqKDRLI=;
-        b=Rt3Hli3TEiFY+cv4NC+T5H275s4hG6xZbQuwFqX6uUVANXPvBPxq+lLFJ5G6MVL9YI
-         Jp1Bfh1PTSUJbWI0WtxB12lm1p+flbckh8B7jRBEqb2x6sxvsAltGqOCI3JPRN9LaRLb
-         c47dIAIrSp+c2ptM4ZBOJygd1tqSMKZaW6/h6FHRcJofAYcOnwUDoXPONK2bqnoXNqTD
-         RPt2IJYmubIrfUYzceyvlvIFCL4A/9BnUqUQwX5JzbiVl4X8bKD4mGlKtZ7mwyqPV8E7
-         ZYJCdRpIKsafR5VULeVJL+ER/nDO+bN+9kM/1w4SMrwMU+DKaeBaNyQ7m/+rH+Siorvp
-         pO4Q==
-X-Gm-Message-State: AOJu0YyiXeGc3EUOncC/8GLc2Nc7p6fMe+ImrNagAuetOMdaABSjfUPi
-        OGBHwlfDim1L7A+D5L3lWQAni58T1Jk=
-X-Google-Smtp-Source: AGHT+IHlbwrt/wnoWeHfr/xmhmCu7oF7F7WEAyxfQTZAgDyYsorWIeGrnT6HVRR8EUozh9s2v9+pCw==
-X-Received: by 2002:a05:6830:6d16:b0:6bd:990:1a2 with SMTP id dz22-20020a0568306d1600b006bd099001a2mr3212380otb.0.1693408770469;
-        Wed, 30 Aug 2023 08:19:30 -0700 (PDT)
-Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:5158:34be:358c:6304])
-        by smtp.gmail.com with ESMTPSA id d24-20020a056830139800b006b884bbb4f3sm5672559otq.26.2023.08.30.08.19.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Aug 2023 08:19:29 -0700 (PDT)
-From:   Fabio Estevam <festevam@gmail.com>
-To:     rafael@kernel.org
-Cc:     daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>
-Subject: [PATCH v6 3/3] thermal: thermal_core: Allow rebooting after critical temp
-Date:   Wed, 30 Aug 2023 12:19:08 -0300
-Message-Id: <20230830151908.2149847-3-festevam@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230830151908.2149847-1-festevam@gmail.com>
-References: <20230830151908.2149847-1-festevam@gmail.com>
+        d=1e100.net; s=20221208; t=1693409576; x=1694014376;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FOkMhQZaIwST9Tftkc4xHZGF2ejBRi9KztfbwPpap1g=;
+        b=Q80A8jiRCDf7O9ArRVp3+qCtzX4S4cDjGMUgEnX0N3ufpbDgovwajP8W575Hrf1L3x
+         wdVLACvCDKQAEkNUphRh5y4Sz10T7Vj2pbZMMrlsrg7CL7TXm5w2r/Xmw4W75hjR+tTn
+         hehMS20qV0rYr1lTfw90nqhLhTH1ZtIiC7ZbZpZjOPYIwtupP2DPIm2aGLmXKClGerQ0
+         MSyej4duY1NSmRrilWhGkRqdUsIhQlPRn6/Xf/amOyLU7OfHMwb2BRny7UHp3EClYbc5
+         D3jQg5ELHDPkDcqet5ZJjxgLEBtREsH4oR+uEYD06Z3q4rLZGay2Vo+pKTiD2yEp9BgH
+         E3lg==
+X-Gm-Message-State: AOJu0YxiMXSaE0FR9OOXYkn0LjCSPuYq857P9naGy8riIkHUcyYnsv6m
+        jnVXgZdyAyPtJL/b2Uq6BWbjFA==
+X-Google-Smtp-Source: AGHT+IHvgqAAT2lDmKAAkG1+47jP15vPqePLQByCrpQX6yoApqzcX9TLeKVxU9mjQ9Ra1RY52Qw4ew==
+X-Received: by 2002:a17:906:51c2:b0:991:d2a8:658a with SMTP id v2-20020a17090651c200b00991d2a8658amr2084051ejk.34.1693409576047;
+        Wed, 30 Aug 2023 08:32:56 -0700 (PDT)
+Received: from [192.168.0.22] (77-252-46-238.static.ip.netia.com.pl. [77.252.46.238])
+        by smtp.gmail.com with ESMTPSA id qq21-20020a17090720d500b0099329b3ab67sm7353678ejb.71.2023.08.30.08.32.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Aug 2023 08:32:55 -0700 (PDT)
+Message-ID: <88f29c9a-3faf-1470-6865-27f88b135f87@linaro.org>
+Date:   Wed, 30 Aug 2023 17:32:54 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH v5 1/3] dt-bindings: thermal-zones: Document
+ critical-action
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Fabio Estevam <festevam@gmail.com>, daniel.lezcano@linaro.org,
+        amitk@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        conor+dt@kernel.org, devicetree@vger.kernel.org,
+        Fabio Estevam <festevam@denx.de>
+References: <20230829194200.1901988-1-festevam@gmail.com>
+ <CAJZ5v0hZR3WD+wMA6c-Gt86hM5oCRZDcSsYF4SrYTvT2HtQ=fQ@mail.gmail.com>
+ <c5d72559-4a97-c865-e51e-855d2bc1edee@linaro.org>
+ <CAJZ5v0gexPEV2M5kfgCEUti=EE+_oR+wUjRboo0Rh=fPfNeDew@mail.gmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAJZ5v0gexPEV2M5kfgCEUti=EE+_oR+wUjRboo0Rh=fPfNeDew@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,125 +81,96 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Fabio Estevam <festevam@denx.de>
+On 30/08/2023 15:54, Rafael J. Wysocki wrote:
+> On Wed, Aug 30, 2023 at 3:07 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 30/08/2023 13:37, Rafael J. Wysocki wrote:
+>>> On Tue, Aug 29, 2023 at 9:42 PM Fabio Estevam <festevam@gmail.com> wrote:
+>>>>
+>>>> From: Fabio Estevam <festevam@denx.de>
+>>>>
+>>>> Document the critical-action property to describe the thermal action
+>>>> the OS should perform after the critical temperature is reached.
+>>>>
+>>>> The possible values are "shutdown" and "reboot".
+>>>>
+>>>> The motivation for introducing the critical-action property is that
+>>>> different systems may need different thermal actions when the critical
+>>>> temperature is reached.
+>>>>
+>>>> For example, a desktop PC may want the OS to trigger a shutdown
+>>>> when the critical temperature is reached.
+>>>>
+>>>> However, in some embedded cases, such behavior does not suit well,
+>>>> as the board may be unattended in the field and rebooting may be a
+>>>> better approach.
+>>>>
+>>>> The bootloader may also benefit from this new property as it can check
+>>>> the SoC temperature and in case the temperature is above the critical
+>>>> point, it can trigger a shutdown or reboot accordingly.
+>>>>
+>>>> Signed-off-by: Fabio Estevam <festevam@denx.de>
+>>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>> ---
+>>>> Changes since v4:
+>>>> - None.
+>>>>
+>>>>  .../devicetree/bindings/thermal/thermal-zones.yaml       | 9 +++++++++
+>>>>  1 file changed, 9 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+>>>> index 4f3acdc4dec0..c2e4d28f885b 100644
+>>>> --- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+>>>> +++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+>>>> @@ -75,6 +75,15 @@ patternProperties:
+>>>>            framework and assumes that the thermal sensors in this zone
+>>>>            support interrupts.
+>>>>
+>>>> +      critical-action:
+>>>> +        $ref: /schemas/types.yaml#/definitions/string
+>>>> +        description:
+>>>> +          The action the OS should perform after the critical temperature is reached.
+>>>> +
+>>>> +        enum:
+>>>> +          - shutdown
+>>>> +          - reboot
+>>>> +
+>>>>        thermal-sensors:
+>>>>          $ref: /schemas/types.yaml#/definitions/phandle-array
+>>>>          maxItems: 1
+>>>> --
+>>>
+>>> I'm wondering if this should be a bool property called
+>>> "critical-reboot", say, which when present would mean to carry out a
+>>> reboot instead of a shutdown in an emergency.
+>>>
+>>> As defined above, the "shutdown" value is simply redundant, because
+>>> the code will effectively convert any other value to "shutdown"
+>>> anyway.
+>>
+>> We covered this at v1. Bool does not allow this property to change in
+>> the future, e.g. for a third mode. And how would you change the action
+>> to shutdown if default action in the system was reboot?
+> 
+> Well, as a matter of fact, it isn't, so I'm not sure where this is going.
 
-Currently, the default mechanism is to trigger a shutdown after the
-critical temperature is reached.
+It isn't in which system and firmware? Maybe most, but how can you know
+for sure. Bindings are independent of given OS implementation, thus
+relying on default OS choice is shortsighted.
 
-In some embedded cases, such behavior does not suit well, as the board may
-be unattended in the field and rebooting may be a better approach.
+> 
+> Bool definitely allows the property to be not present, which means
+> that the default behavior is intended and this is all about overriding
+> a known default behavior.
+> 
+> Anyway, if the maintainers of DT bindings are fine with the current
+> definition, I'm not going to block this.  I just wanted to make a note
+> that it wasn't looking particularly straightforward to me.
 
-The bootloader may also check the temperature and only allow the boot to
-proceed when the temperature is below a certain threshold.
+Sure. It has one DT's maintainer Ack (mine) and maybe also Rob will
+comment on it.
 
-Introduce support for allowing a reboot to be triggered after the
-critical temperature is reached.
-
-If the "critical-action" devicetree property is not found, fall back to
-the shutdown action to preserve the existing default behavior.
-
-Tested on a i.MX8MM board with the following devicetree changes:
-
-	thermal-zones {
-		cpu-thermal {
-			critical-action = "reboot";
-		};
-	};
-
-Signed-off-by: Fabio Estevam <festevam@denx.de>
----
-Changes since v5:
-- Simplify thermal_of_get_critical_action(). (Rafael)
-
- drivers/thermal/thermal_core.c |  6 +++++-
- drivers/thermal/thermal_of.c   | 21 +++++++++++++++++++++
- include/linux/thermal.h        |  6 ++++++
- 3 files changed, 32 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index a59700593d32..062114608667 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -320,11 +320,15 @@ void thermal_zone_device_critical(struct thermal_zone_device *tz)
- 	 * Its a must for forced_emergency_poweroff_work to be scheduled.
- 	 */
- 	int poweroff_delay_ms = CONFIG_THERMAL_EMERGENCY_POWEROFF_DELAY_MS;
-+	static const char *msg = "Temperature too high";
- 
- 	dev_emerg(&tz->device, "%s: critical temperature reached, "
- 		  "shutting down\n", tz->type);
- 
--	hw_protection_shutdown("Temperature too high", poweroff_delay_ms);
-+	if (tz->action == THERMAL_CRITICAL_ACTION_REBOOT)
-+		hw_protection_reboot(msg, poweroff_delay_ms);
-+	else
-+		hw_protection_shutdown(msg, poweroff_delay_ms);
- }
- EXPORT_SYMBOL(thermal_zone_device_critical);
- 
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index 4ca905723429..a644a896a617 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -218,6 +218,25 @@ static struct device_node *of_thermal_zone_find(struct device_node *sensor, int
- 	return tz;
- }
- 
-+static const char * const critical_actions[] = {
-+	[THERMAL_CRITICAL_ACTION_SHUTDOWN]	= "shutdown",
-+	[THERMAL_CRITICAL_ACTION_REBOOT]	= "reboot",
-+};
-+
-+static void thermal_of_get_critical_action(struct device_node *np,
-+					   enum thermal_action *action)
-+{
-+	const char *action_string;
-+	int ret;
-+
-+	ret = of_property_read_string(np, "critical-action", &action_string);
-+	if (ret < 0)
-+		*action = THERMAL_CRITICAL_ACTION_SHUTDOWN;
-+
-+	if (!strcasecmp(action_string, "reboot"))
-+		*action = THERMAL_CRITICAL_ACTION_REBOOT;
-+}
-+
- static int thermal_of_monitor_init(struct device_node *np, int *delay, int *pdelay)
- {
- 	int ret;
-@@ -516,6 +535,8 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
- 		goto out_kfree_trips;
- 	}
- 
-+	thermal_of_get_critical_action(np, &tz->action);
-+
- 	ret = thermal_zone_device_enable(tz);
- 	if (ret) {
- 		pr_err("Failed to enabled thermal zone '%s', id=%d: %d\n",
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index b449a46766f5..b68e5734823d 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -34,6 +34,11 @@ struct thermal_cooling_device;
- struct thermal_instance;
- struct thermal_attr;
- 
-+enum thermal_action {
-+	THERMAL_CRITICAL_ACTION_SHUTDOWN = 0, /* shutdown when crit temperature is reached */
-+	THERMAL_CRITICAL_ACTION_REBOOT, /* reboot when crit temperature is reached */
-+};
-+
- enum thermal_trend {
- 	THERMAL_TREND_STABLE, /* temperature is stable */
- 	THERMAL_TREND_RAISING, /* temperature is raising */
-@@ -187,6 +192,7 @@ struct thermal_zone_device {
- 	struct list_head node;
- 	struct delayed_work poll_queue;
- 	enum thermal_notify_event notify_event;
-+	enum thermal_action action;
- };
- 
- /**
--- 
-2.34.1
+Best regards,
+Krzysztof
 
