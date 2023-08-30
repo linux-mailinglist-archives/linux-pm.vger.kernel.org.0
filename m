@@ -2,168 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A535A78DA3A
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6066278DA32
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Aug 2023 20:36:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234945AbjH3Sfw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Aug 2023 14:35:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
+        id S233952AbjH3Sfo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Aug 2023 14:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241977AbjH3HL2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 03:11:28 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50221B1
-        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 00:11:23 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-52a4b62c2f5so6803388a12.1
-        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 00:11:23 -0700 (PDT)
+        with ESMTP id S242452AbjH3IeR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 04:34:17 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2651B0
+        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 01:34:14 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-d7b8d2631fdso1055972276.3
+        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 01:34:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693379482; x=1693984282; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4X810Sd+FAfinOuDeQjJFxdDeSuw3tPSc7gW/bUxxmc=;
-        b=a9Y5QTZNXXKs9nPMXo417JCz/QKAcQy1xgeBcXtqVuXe8uLKIF/yrOaNpEqX5Pf/io
-         qnuGi5UXluXpNgEWOMuiC4+Ggl2M0NZOjzcklz6pcZqj+UgvxAwRdDyqwSPJTKtQ8gCi
-         E6r3gXNYg6pZmJvhTzV41yfhyS6mfmHJfZug5MngAZFOj+hp5fdpWHyOdjUH1IiXNCv1
-         jalUgZPSNf/zajd4QppFkTKpi287wr+TGEa7xceG9zzvCugTzra0mSuN02GSSlhpIOtL
-         4YIlKRcCf3Rof4g2Z8+IuqizM6pf39m6nGuhIissvFGfQ12UQghjwZd5INmkAZngSYHK
-         5SgQ==
+        d=linaro.org; s=google; t=1693384453; x=1693989253; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xtdiwzQL21GYKlHw5/D0J/VmrjrErWbcUTzSWFrSXes=;
+        b=E31HCfg4sYIGJhKfH+dTdWkW/as60UvLx0i9dXIXYGpR/9tE95609GhbwPXhSbQXxf
+         /oVIC4+BI9gX1NsnGcCMu7KIw0X1TT5fDFkvfPuhimQq3SorpDixiBch3zrsIvwey6Jz
+         7qvxtenDcFkAclg5Nqk6XIkzS2IBfQQEmqIMzs6P5nVDEvPOgSsqvmxs32H9XsB8qA/Q
+         6IM/i6/CmzSPdwE1CXEGC0CuDxf0yqLCgGmYx9Gt2Jln8LSaSCybfvNRAE4qYDRFh+wP
+         ZvWej/Kee/HP005BFtYfHuI5WuC5qxG1btSvzxLQuX8Cm9fNHM99qWskiZvFNhD+tG7M
+         GPEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693379482; x=1693984282;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4X810Sd+FAfinOuDeQjJFxdDeSuw3tPSc7gW/bUxxmc=;
-        b=G32NNRNRar5elyygii1jeOkgYa3CNkTSSDGCG5U74dxWOvTRnHVllWmYXM1VhSOJT7
-         MYlksVWMOYzBbnqDq+ElG606Ue+nb6/885WyWKKZMyYjnhp8ZTHStR31tHnT1EDU0k5a
-         D5sN4PpIwD1Wk8qCt8mZdDNa/YPsbn0HhBLy+Y/+Pv3NQo/t/2ofeNrg0qCpMp9v7hcE
-         zUvidn0uKuEcIGGz0w/X12TUDgZDaDtaCxiqr8Euw9+oAuiWHm7m6YdziDjmt9cgG5DP
-         58vP6A+f2dn57PHn7ypLLltlam8vEifsCdu6N1wwaVyFFfylXKN5Vtd3ntOdF8RsFxj6
-         0/EA==
-X-Gm-Message-State: AOJu0Yya+WtAE39oqoHwOCeUrfDOLGInjOZG+12qaDN4Y8pcby2sPwJP
-        wd1I3IFXqQ0Rlun2fwFWecpwkg==
-X-Google-Smtp-Source: AGHT+IEYCPnvQKeOC3qIczHiEZucOO/GNEh252whblJjg9K7h3SNi2mOr9jig7a/o2KtxMadPr1MLQ==
-X-Received: by 2002:a17:906:76c8:b0:9a1:d67c:b4eb with SMTP id q8-20020a17090676c800b009a1d67cb4ebmr913139ejn.48.1693379482411;
-        Wed, 30 Aug 2023 00:11:22 -0700 (PDT)
-Received: from [192.168.0.22] (77-252-46-238.static.ip.netia.com.pl. [77.252.46.238])
-        by smtp.gmail.com with ESMTPSA id n11-20020a17090625cb00b009934855d8f1sm6910043ejb.34.2023.08.30.00.11.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Aug 2023 00:11:21 -0700 (PDT)
-Message-ID: <db8d5123-19d7-50d0-935b-a25d235e6e2e@linaro.org>
-Date:   Wed, 30 Aug 2023 09:11:20 +0200
+        d=1e100.net; s=20221208; t=1693384453; x=1693989253;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xtdiwzQL21GYKlHw5/D0J/VmrjrErWbcUTzSWFrSXes=;
+        b=Oz4IaWej7I/0Ul1M33XvSbXPmO2ehVTJ+JnRwvXN/VVyVnJraF8sgfWbyVrpYvQbY3
+         BeUi7I28GSTkqNK4hLczD/fF2XKOmXlansP4n6zdvk/ldXoDSzTRWXjEz5lU4m0Kjlqu
+         JOPYW/C/yp3JadLZ8WXPmZgPz1Ai/ekhurYqm4Hf2s3V/1J4FCnO2R0NkPkicg2Z/U4g
+         7Sh8yvsx0rG/b8xD/2ez6DFelCQ5v4fFJ1jwYWa+cT+B1qgn52x3/tBYM/szp9AqbT9r
+         hs7AGmejnH5g+lyNTetOtPkobbSHKZBxnYK5isHhYsBJ2CS9oUu5g5ms3gqS+SyENoUd
+         gXkg==
+X-Gm-Message-State: AOJu0YzErPC3IptlX1FvSjmNxRo+wvHyrFeSqAbBYcKy/4nRItfBoPKn
+        LfMb5t+ITEK1/vsd78fOqqnlOhQXewUenpSI/LHGFg==
+X-Google-Smtp-Source: AGHT+IGtJWftzWF4BAzABxuDQ6HGZfR/UnHG8Az6ZEx5vM7b+S86qvW3j5sh8nuhOsKgT8Zm9TWVIp5MYnP+H44iMh4=
+X-Received: by 2002:a25:6944:0:b0:d53:f98f:8018 with SMTP id
+ e65-20020a256944000000b00d53f98f8018mr1490963ybc.65.1693384453468; Wed, 30
+ Aug 2023 01:34:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v3 1/1] scripts: Add add-maintainer.py
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        quic_pkondeti@quicinc.com, linux-kernel@vger.kernel.org,
-        kernel@quicinc.com, workflows@vger.kernel.org,
-        tools@linux.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-References: <cover.1693037031.git.quic_gurus@quicinc.com>
- <141b9fcab2208ace3001df4fc10e3dfd42b9f5d9.1693037031.git.quic_gurus@quicinc.com>
- <2efba6b3-2399-9deb-d0ce-78f7b5e12f30@linaro.org>
- <20230828175629.GC23466@quicinc.com>
- <78aa33f9-ead8-b128-2a7a-40530a1a3ed0@linaro.org>
- <ZOz4XtX3DFRQpvQY@finisterre.sirena.org.uk>
- <670a87e9-2f0c-ec9e-ebb4-9041c8972ace@linaro.org>
- <20230829231638.GA27843@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230829231638.GA27843@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230829213441.310655-1-ulf.hansson@linaro.org>
+ <CAHk-=wg0gc4Cc90OL29Vr5gDtd4mnsKD+TxtoNtQbAryaWHkZQ@mail.gmail.com>
+ <CAHk-=wjLO=Jsdk2prq0piznMMCk+V0_fRaFRHEPuaALpF8J=hw@mail.gmail.com>
+ <96bb0de0-06d9-46f8-b02f-dc924afff13c@app.fastmail.com> <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
+In-Reply-To: <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 30 Aug 2023 10:33:37 +0200
+Message-ID: <CAPDyKFrJH-1uaPCwnWZDPi4MRtOm=N2CHSRyvjXRDbQ1y-oOrw@mail.gmail.com>
+Subject: Re: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30/08/2023 01:16, Guru Das Srinagesh wrote:
-> On Aug 28 2023 21:45, Krzysztof Kozlowski wrote:
->> On 28/08/2023 21:41, Mark Brown wrote:
->>> On Mon, Aug 28, 2023 at 07:59:54PM +0200, Krzysztof Kozlowski wrote:
->>>> On 28/08/2023 19:56, Guru Das Srinagesh wrote:
->>>
->>>>> Your function adds mailing lists also in "To:" which is not ideal, in my view.
->>>>> You've mentioned before that To or Cc doesn't matter [1] which I disagree
->>>>> with: it doesn't matter, why does Cc exist as a concept at all?
->>>
->>>> To/Cc does not matter when sending new patch, because maintainers know
->>>> they are maintainers of which parts. I know what I handle.
->>>
->>> That might be true for you (and also is for me) but I know there are
->>> people who pay attention to if they're in the To: for various reasons, I
->>> gather it's mostly about triaging their emails and is especially likely
->>> in cases where trees have overlaps in the code they cover.
->>
->> True, there can be cases where people pay attention to addresses of
->> emails. Just like there are cases where people pay attention to "To/Cc"
->> difference.
->>
->> In my short experience with a few patches sent, no one complained to me
->> that I put him/her/they in "To" field of a patch instead of "Cc" (with
->> remark to not spamming to much, so imagine I send a patch for regulator
->> and DTS). Big, multi-subsystem patchsets are different case and this
->> script does not solve it either.
-> 
-> Not sure what you mean by "does not solve it" - what is the problem being
-> referred to here?
+On Wed, 30 Aug 2023 at 03:20, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Tue, 29 Aug 2023 at 17:48, Arnd Bergmann <arnd@arndb.de> wrote:
+> >
+> > How about moving it to drivers/power/domain/ instead?
+>
+> That sounds like a sensible name and would seem to fit logically with
+> our existing tree structure quite well.
 
-Exactly, no one even knows what problem you want to solve by swapping
-To-Cc between patches...
+I am sincerely sorry if I have annoyed you with picking the name
+"genpd" as the directory-name - and especially without further
+explanation. The genpd thing certainly deserves to be documented
+better, I will try to get some time to do this soon. Anyway, me and
+many others in the power/performance areas that have been working with
+the genpd interface, have simply gotten comfortable using the "genpd"
+acronym. Hence, the naming was a no-brainer to me.
 
-> 
-> In case of multi-subsystem patches in a series, the commit message of this
-> patch explains exactly the actions taken.
-> 
->> Anyway, if it is not ideal for Guru, I wonder how his LKML maintainer
->> filters work that it is not ideal? What is exactly not ideal in
->> maintainer workflow?
-> 
-> I am not a maintainer - only an individual contributor - and as such, even
-> though I may get patches on files I've contributed to, I deeply appreciate the
-> distinction between being Cc-ed in a patch vs To-ed in one. The distinction
-> being that if I'm in "To:" I ascribe higher priority to it and lesser if I'm in
-> "Cc:".
+That said, if you feel that the above directory-path/name is a better
+fit I can certainly move it over there, np! Although, before you make
+the final decision I want to point out a few things for you to
+consider.
 
-That's your feeling, quite subjective. I understand it comes from
-corporate world, but again...
+*) The new subsystem is solely intended for the generic PM domain
+providers. Other PM domains providers, like the ACPI PM domains for
+example (drivers/acpi/*), don't really belong here, at least in my
+opinion. So, maybe "domain" isn't specific enough? Although, if not
+using "genpd", I have no better suggestion.
 
-> 
-> If this script is accepted and gains adoption, maintainers like yourself will
-> only be To-ed in patches that touch files that you're a direct "Maintainer" or
-> "Reviewer" of. 
+**) Please keep in mind that we have several other power/performance
+related subsystems that don't live under drivers/power/*. Moving more
+things in there is not really going to help the people that work on
+these things. No matter where and what the name of the subsystem is,
+one simply needs to dive into the details anyway. Moreover, in this
+case, "genpd" isn't just about "power" (idle management) but
+performance management too.
 
-It will not get traction because:
-1. People should use b4, not this script.
-2. Remaining people will just use get_maintainers.pl.
-3. People cannot get right even basic commands, so we will never be able
-to rely on To or Cc distinction. I can give you example: my email
-address in get_maintainers.pl is a bit different. Does it matter? Often
-not. Entire bunch of folks were Ccing me on different address. Even
-though every tool told them not to...
+>
+> > I don't think we can easily rename the interfaces that have been
+> > in use for the past 12 years
+>
+> I actually think the interface names are much less of an issue, since
+> anybody using them is presumably familiar with the naming.
+>
+> It was only with the directory structure that I reacted to it, because
+> that kind of exposes the naming to people who definitely are *not*
+> familiar with it (ie me, but presumably anybody else who sees the
+> diffstats etc fly past).
+>
+> And yes, we have a number of other pretty obscure driver names in our
+> tree (I end up having to remind myself what "ntb" and "hsi" etc mean),
+> and I don't tend to love them either, but at least they tend to be
+> industry / vendor names.
 
-> For all other patches in the series you'll be in "Cc:". I
-> imagine that this can be very useful regardless of the specifics of your
-> workflow.
+I get your point. I was indeed trying to obey the current naming
+strategy, but I think it's not entirely easy to understand what is
+prefered.
 
-Zero usefulness for me.
+Please advise me on how to move forward.
 
-Best regards,
-Krzysztof
-
+Kind regards
+Uffe
