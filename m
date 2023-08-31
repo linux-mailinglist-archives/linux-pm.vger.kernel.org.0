@@ -2,69 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB33178EA11
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 12:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D28678EB13
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 12:51:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242412AbjHaKTz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Aug 2023 06:19:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60948 "EHLO
+        id S240175AbjHaKvG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Aug 2023 06:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239967AbjHaKTy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 06:19:54 -0400
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442A9CED
-        for <linux-pm@vger.kernel.org>; Thu, 31 Aug 2023 03:19:51 -0700 (PDT)
-X-ASG-Debug-ID: 1693477188-1eb14e75120bc70001-MQbzy6
-Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx2.zhaoxin.com with ESMTP id J0PZCilp7tOSkaPO (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 31 Aug 2023 18:19:48 +0800 (CST)
-X-Barracuda-Envelope-From: TonyWWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX2.zhaoxin.com
- (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 31 Aug
- 2023 18:19:48 +0800
-Received: from [10.32.65.158] (10.32.65.158) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 31 Aug
- 2023 18:19:46 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
-Message-ID: <e9b4de96-624e-96a5-0a41-93de36719340@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.32.65.158
-Date:   Thu, 31 Aug 2023 18:19:18 +0800
+        with ESMTP id S236996AbjHaKvF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 06:51:05 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8C6E7B
+        for <linux-pm@vger.kernel.org>; Thu, 31 Aug 2023 03:50:36 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-56c2e882416so544077a12.3
+        for <linux-pm@vger.kernel.org>; Thu, 31 Aug 2023 03:50:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1693479022; x=1694083822; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kxR0j8Kpr/8+VWKozmTx/RUScUjID2WQQTbSpf6tvCU=;
+        b=Pq7f0LtDoVNGEP6cprzPC/82mqto1QaVoLhgSft9UT2fEYpxocjcJD+dUw1452OuSi
+         cNKjrn8umT4Fg8gOJpJnps9I8TH78kooisJzouWKsrPBUOvBuw16i5xafOvtKqbUWugl
+         DZPDhueQInJwz0zqRsRAS6M3LVdTov3LA2+WCzWAkYNKPbre70DMKjPvBgQo5IsRD1aJ
+         2+6MWZPaAcPvkBJs1uRvV0Ju5PAhX587eM2tJs7P2McYKedgvM5/PCxtoR82ElnraHTS
+         dvBqxhe5geDOoG/2Z7Klo4bRc/0h5pW1QdjAM8irA4X16tK7Smh8JVmeQPYx9weK7uk9
+         twnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693479022; x=1694083822;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kxR0j8Kpr/8+VWKozmTx/RUScUjID2WQQTbSpf6tvCU=;
+        b=Rb6Vx54oxLzWTnAomFPgs9BVC48SWqb8ZaxV+xHF+851zrrpq1tppAeXbxc3TmJhxm
+         FqOhasKA7RHtjiSZowpxGQnl7sang4T+Tbivm7cByRwlleUXzXn6+1l+YK2yibvIIIck
+         MLhbNY06DoMXaXVFPw7V+w96KB473gr7fFe9JsOwT5T+S8b9DssacRbYJQH7R9a3b07+
+         EauA03rvzbKGcQGANGiaxnTUeiaoSF4/Dn05ryAKd7Mr6PmwqmHanC/AORG2lpH/oqED
+         +2t0MUw2d68ydkN8pcA0sgboK8KLqsm6AVMOFUhafbDSEnJko1vIBRxDo2dI9rVni6L/
+         SvEQ==
+X-Gm-Message-State: AOJu0YzARYQfxYP1PdEuwBPPw7c3FI6maNsi/1rj3qiJgpOdhZ0P3XPr
+        nn9V5rH+P9z/3vku/lKmvtGujA==
+X-Google-Smtp-Source: AGHT+IF/N6kvZqqOlFL6EU1qe3a6zE5IoQRA1yx9c/gcAEiZDkMV1pDAP5Qq+1SEWJGBX9KnigX4pQ==
+X-Received: by 2002:a05:6a21:999a:b0:137:3c67:85d7 with SMTP id ve26-20020a056a21999a00b001373c6785d7mr6100214pzb.16.1693479022172;
+        Thu, 31 Aug 2023 03:50:22 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id k24-20020aa78218000000b0068bc461b68fsm1064814pfi.204.2023.08.31.03.50.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Aug 2023 03:50:21 -0700 (PDT)
+Date:   Thu, 31 Aug 2023 16:20:19 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Zhipeng Wang <zhipeng.wang_1@nxp.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [EXT] Re: [PATCH 2/2] cpufreq: dt-platdev: Support building
+ cpufreq platdev driver as module
+Message-ID: <20230831105019.tre5hgoad5tpiwwx@vireshk-i7>
+References: <20230524153417.2738448-1-zhipeng.wang_1@nxp.com>
+ <20230524153417.2738448-2-zhipeng.wang_1@nxp.com>
+ <ZO4yTQAV9EYA4erZ@aurel32.net>
+ <PAXPR04MB8304AA1D331B3DA5B548EE3EEBE6A@PAXPR04MB8304.eurprd04.prod.outlook.com>
+ <ZO7O056MxAnjvGxu@aurel32.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] cpufreq: ACPI: add ITMT support when CPPC enabled
-Content-Language: en-US
-X-ASG-Orig-Subj: Re: [PATCH v2] cpufreq: ACPI: add ITMT support when CPPC enabled
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     <viresh.kumar@linaro.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <CobeChen@zhaoxin.com>,
-        <TimGuo@zhaoxin.com>, <LeoLiu-oc@zhaoxin.com>,
-        <LindaChai@zhaoxin.com>
-References: <20230808111325.8600-1-TonyWWang-oc@zhaoxin.com>
- <CAJZ5v0h8M-hNJfRTSxtVmfmpF09h9zmNmG-e=iMemzPwsK50Zg@mail.gmail.com>
-From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
-In-Reply-To: <CAJZ5v0h8M-hNJfRTSxtVmfmpF09h9zmNmG-e=iMemzPwsK50Zg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.32.65.158]
-X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
-X-Barracuda-Start-Time: 1693477188
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 6215
-X-Barracuda-BRTS-Status: 0
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: -2.02
-X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.113472
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZO7O056MxAnjvGxu@aurel32.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,188 +75,24 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 30-08-23, 07:08, Aurelien Jarno wrote:
+> Hi,
+> 
+> On 2023-08-30 03:09, Zhipeng Wang wrote:
+> > Hi Aurelien,
+> > 
+> > I'm not sure why we need to make cpufreq-dt-platdev autoloading, does it make sense? As I understand it we need to actively modprobe cpufreq-dt-platdev, why not?
+> 
+> This is needed to recover the old behavior, where if a CPU supports
+> cpufreq-dt, it get loaded automatically. Now users has to modprobe
+> cpufreq-dt-platdev explicitly to get cpufreq-dt to work. This seems like
+> a regression to me.
+> 
+> Of course one can explicitly make CPUFREQ_DT_PLATDEV=y, but the default
+> is to build cpufreq-dt-platdev as module when cpufreq-dt is built as
+> module.
 
-On 8/23/23 04:01, Rafael J. Wysocki wrote:
-> On Tue, Aug 8, 2023 at 1:13 PM Tony W Wang-oc <TonyWWang-oc@zhaoxin.com> wrote:
->>
->> The _CPC method can get per-core highest frequency.
-> 
-> Well, not exactly.  A more precise way to say this would be "The
-> per-core highest frequency can be obtained via CPPC."
-> 
+Feel free to send me a patch to make this auto-load.
 
-Thanks for your reply, will rewrite the commit in next version.
-
->> The highest frequency may varies between cores which mean cores can
-> 
-> "may vary" and "which means"
-> 
->> running at different max frequency, so can use it as a core priority
-> 
-> "can run", but it would be better to say "may run".
-> 
->> and give a hint to scheduler in order to put critical task to the
->> higher priority core.
-> 
-> Well, roughly speaking ...
-> 
-> You should really talk about ITMT and how it can be hooked up to this.
-> 
-
-Ok, Got it.
-
->> Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
->> ---
->> v1->v2: Fix build errors reported by kernel test robot
->>
->>  arch/x86/kernel/itmt.c         |  2 ++
->>  drivers/cpufreq/acpi-cpufreq.c | 59 ++++++++++++++++++++++++++++++----
->>  2 files changed, 54 insertions(+), 7 deletions(-)
->>
->> diff --git a/arch/x86/kernel/itmt.c b/arch/x86/kernel/itmt.c
->> index ee4fe8cdb857..b49ac8ecbbd6 100644
->> --- a/arch/x86/kernel/itmt.c
->> +++ b/arch/x86/kernel/itmt.c
->> @@ -122,6 +122,7 @@ int sched_set_itmt_support(void)
->>
->>         return 0;
->>  }
->> +EXPORT_SYMBOL_GPL(sched_set_itmt_support);
-> 
-> This requires an ACK from the x86 maintainers.
-> 
->>
->>  /**
->>   * sched_clear_itmt_support() - Revoke platform's support of ITMT
->> @@ -181,3 +182,4 @@ void sched_set_itmt_core_prio(int prio, int cpu)
->>  {
->>         per_cpu(sched_core_priority, cpu) = prio;
->>  }
->> +EXPORT_SYMBOL_GPL(sched_set_itmt_core_prio);
-> 
-> And same here.
-> 
->> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
->> index b2f05d27167e..5733323e04ac 100644
->> --- a/drivers/cpufreq/acpi-cpufreq.c
->> +++ b/drivers/cpufreq/acpi-cpufreq.c
->> @@ -628,28 +628,35 @@ static int acpi_cpufreq_blacklist(struct cpuinfo_x86 *c)
->>  #endif
->>
->>  #ifdef CONFIG_ACPI_CPPC_LIB
->> -static u64 get_max_boost_ratio(unsigned int cpu)
->> +static void cpufreq_get_core_perf(int cpu, u64 *highest_perf, u64 *nominal_perf)
-> 
-> This is not a cpufreq core function, so please use a different prefix
-> in its name.
-> 
-
-Ok. Will remove the prefix of "cpufreq_".
-
->>  {
->>         struct cppc_perf_caps perf_caps;
->> -       u64 highest_perf, nominal_perf;
->>         int ret;
->>
->>         if (acpi_pstate_strict)
->> -               return 0;
->> +               return;
->>
->>         ret = cppc_get_perf_caps(cpu, &perf_caps);
->>         if (ret) {
->>                 pr_debug("CPU%d: Unable to get performance capabilities (%d)\n",
->>                          cpu, ret);
->> -               return 0;
->> +               return;
->>         }
->>
->>         if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD)
->> -               highest_perf = amd_get_highest_perf();
->> +               *highest_perf = amd_get_highest_perf();
->>         else
->> -               highest_perf = perf_caps.highest_perf;
->> +               *highest_perf = perf_caps.highest_perf;
->> +
->> +       *nominal_perf = perf_caps.nominal_perf;
->> +       return;
->> +}
->>
->> -       nominal_perf = perf_caps.nominal_perf;
->> +static u64 get_max_boost_ratio(unsigned int cpu)
->> +{
->> +       u64 highest_perf, nominal_perf;
->> +
->> +       cpufreq_get_core_perf(cpu, &highest_perf, &nominal_perf);
->>
->>         if (!highest_perf || !nominal_perf) {
->>                 pr_debug("CPU%d: highest or nominal performance missing\n", cpu);
->> @@ -663,8 +670,44 @@ static u64 get_max_boost_ratio(unsigned int cpu)
->>
->>         return div_u64(highest_perf << SCHED_CAPACITY_SHIFT, nominal_perf);
->>  }
->> +
->> +static void cpufreq_sched_itmt_work_fn(struct work_struct *work)
-> 
-> A similar comment applies here.
-> 
->> +{
->> +       sched_set_itmt_support();
->> +}
->> +
->> +static DECLARE_WORK(sched_itmt_work, cpufreq_sched_itmt_work_fn);
->> +
->> +static void cpufreq_set_itmt_prio(int cpu)
->> +{
->> +       u64 highest_perf, nominal_perf;
->> +       static u32 max_highest_perf = 0, min_highest_perf = U32_MAX;
->> +
->> +       cpufreq_get_core_perf(cpu, &highest_perf, &nominal_perf);
->> +
->> +       sched_set_itmt_core_prio(highest_perf, cpu);
->> +
->> +       if (max_highest_perf <= min_highest_perf) {
->> +               if (highest_perf > max_highest_perf)
->> +                       max_highest_perf = highest_perf;
->> +
->> +               if (highest_perf < min_highest_perf)
->> +                       min_highest_perf = highest_perf;
->> +
->> +               if (max_highest_perf > min_highest_perf) {
->> +                       /*
->> +                        * This code can be run during CPU online under the
->> +                        * CPU hotplug locks, so sched_set_itmt_support()
->> +                        * cannot be called from here.  Queue up a work item
->> +                        * to invoke it.
->> +                        */
->> +                       schedule_work(&sched_itmt_work);
->> +               }
-> 
-> This potentially runs before ITMT priorities are set for all CPUs.
-> Isn't it a problem?
-> 
-
-Yes, you are right.
-Will use schedule_delayed_work(&sched_itmt_work, msecs_to_jiffies(500))
-to fix this.
-
-Sincerely.
-TonyWWang-oc
-
->> +       }
->> +}
->>  #else
->>  static inline u64 get_max_boost_ratio(unsigned int cpu) { return 0; }
->> +static void cpufreq_set_itmt_prio(int cpu) { return; }
->>  #endif
->>
->>  static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
->> @@ -870,6 +913,8 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
->>         /* notify BIOS that we exist */
->>         acpi_processor_notify_smm(THIS_MODULE);
->>
->> +       cpufreq_set_itmt_prio(cpu);
->> +
->>         pr_debug("CPU%u - ACPI performance management activated.\n", cpu);
->>         for (i = 0; i < perf->state_count; i++)
->>                 pr_debug("     %cP%d: %d MHz, %d mW, %d uS\n",
->> --
+-- 
+viresh
