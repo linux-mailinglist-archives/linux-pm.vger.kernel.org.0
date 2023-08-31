@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B72478EC5F
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 13:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABB5B78EC62
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 13:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243434AbjHaLnf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Aug 2023 07:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
+        id S244565AbjHaLng (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Aug 2023 07:43:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233887AbjHaLne (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 07:43:34 -0400
+        with ESMTP id S233887AbjHaLng (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 07:43:36 -0400
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D5FACFF;
-        Thu, 31 Aug 2023 04:43:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 92550E43;
+        Thu, 31 Aug 2023 04:43:31 -0700 (PDT)
 Received: from loongson.cn (unknown [112.20.109.102])
-        by gateway (Coremail) with SMTP id _____8Bxd+jgfPBkWG8dAA--.24139S3;
-        Thu, 31 Aug 2023 19:43:28 +0800 (CST)
+        by gateway (Coremail) with SMTP id _____8Dxg_DhfPBkZW8dAA--.60560S3;
+        Thu, 31 Aug 2023 19:43:29 +0800 (CST)
 Received: from localhost.localdomain (unknown [112.20.109.102])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxTSPffPBkbxJoAA--.36689S2;
-        Thu, 31 Aug 2023 19:43:27 +0800 (CST)
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxTSPffPBkbxJoAA--.36689S3;
+        Thu, 31 Aug 2023 19:43:29 +0800 (CST)
 From:   Binbin Zhou <zhoubinbin@loongson.cn>
 To:     Binbin Zhou <zhoubb.aaron@gmail.com>,
         Huacai Chen <chenhuacai@loongson.cn>,
@@ -33,33 +33,33 @@ Cc:     Huacai Chen <chenhuacai@kernel.org>,
         devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
         Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
         Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: [PATCH v2 4/5] dt-bindings: soc: loongson,ls2k-pmc: Allow syscon-reboot/syscon-poweroff as child
-Date:   Thu, 31 Aug 2023 19:43:24 +0800
-Message-Id: <38e811816c37a2d52374fa04864654ff1e9b4dc8.1693474728.git.zhoubinbin@loongson.cn>
+Subject: [PATCH v2 5/5] soc: loongson: loongson_pm2: Populate children syscon nodes
+Date:   Thu, 31 Aug 2023 19:43:25 +0800
+Message-Id: <967f837de873706686438cdcf7c71ed8828de31c.1693474728.git.zhoubinbin@loongson.cn>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <cover.1693474728.git.zhoubinbin@loongson.cn>
 References: <cover.1693474728.git.zhoubinbin@loongson.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxTSPffPBkbxJoAA--.36689S2
+X-CM-TRANSID: AQAAf8AxTSPffPBkbxJoAA--.36689S3
 X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj93XoW7Kw1fXF1fJF13tw4fuw1UXFc_yoW8Ww17pr
-        ZrCwnxKwsrZF13Zwn5tFykCF4rJrWkCFsrWFZrJr1UCr9rX3WYqw43KF1qqa1UArW8XFyU
-        XFWIk395uFnFkrcCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUBab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-        wI0_Cr1j6rxdM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWr
-        XVW3AwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
-        AKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
-        6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-        xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
-        jxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcVCF04
-        k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7Cj
-        xVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j6rWOUUUUU=
+X-Coremail-Antispam: 1Uk129KBj9xXoW7XF13WFy3tryUXr43AFy3KFX_yoWkKwc_u3
+        W29r48Cr1UJFnIy398Zw13Ar9Fgrn5u3W8uF1Dtw1Iq3WUt3sxJFyUArnrGF17WF4Syrn8
+        Z3y0gw1Ikw1rCosvyTuYvTs0mTUanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvT
+        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+        cSsGvfJTRUUUbSkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+        vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVWxJr0_GcWln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26rWY
+        6Fy7McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+        Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
+        cI8IcVAFwI0_Ar0_tr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw2
+        0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x02
+        67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0_WrPUUUUU==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,59 +68,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The reboot and poweroff features are actually part of the Power
-Management Unit system controller, thus allow them as its children,
-instead of specifying as separate device nodes with syscon phandle.
+The syscon poweroff and reboot nodes logically belong to the Power
+Management Unit so populate possible children.
 
 Without it, the reboot/poweroff feature becomes unavailable.
 
 Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
 ---
- .../soc/loongson/loongson,ls2k-pmc.yaml       | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ drivers/soc/loongson/loongson2_pm.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
-index c45f5e7fc0e6..510f6cb0f084 100644
---- a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
-+++ b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
-@@ -37,6 +37,18 @@ properties:
-       addition, the PM need according to it to indicate that current
-       SoC whether support Suspend To RAM.
+diff --git a/drivers/soc/loongson/loongson2_pm.c b/drivers/soc/loongson/loongson2_pm.c
+index 5ffb77afd9eb..b8e5e1e3528a 100644
+--- a/drivers/soc/loongson/loongson2_pm.c
++++ b/drivers/soc/loongson/loongson2_pm.c
+@@ -11,6 +11,7 @@
+ #include <linux/input.h>
+ #include <linux/suspend.h>
+ #include <linux/interrupt.h>
++#include <linux/of_platform.h>
+ #include <linux/pm_wakeirq.h>
+ #include <linux/platform_device.h>
+ #include <asm/bootinfo.h>
+@@ -192,6 +193,11 @@ static int loongson2_pm_probe(struct platform_device *pdev)
+ 	if (loongson_sysconf.suspend_addr)
+ 		suspend_set_ops(&loongson2_suspend_ops);
  
-+  syscon-poweroff:
-+    $ref: /schemas/power/reset/syscon-poweroff.yaml#
-+    type: object
-+    description:
-+      Node for power off method
++	/* Populate children */
++	retval = devm_of_platform_populate(dev);
++	if (retval)
++		dev_err(dev, "Error populating children, reboot and poweroff might not work properly\n");
 +
-+  syscon-reboot:
-+    $ref: /schemas/power/reset/syscon-reboot.yaml#
-+    type: object
-+    description:
-+      Node for reboot method
-+
- required:
-   - compatible
-   - reg
-@@ -54,4 +66,18 @@ examples:
-         interrupt-parent = <&liointc1>;
-         interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
-         loongson,suspend-address = <0x0 0x1c000500>;
-+
-+        syscon-reboot {
-+            compatible = "syscon-reboot";
-+            offset = <0x30>;
-+            mask = <0x1>;
-+        };
-+
-+        syscon-poweroff {
-+            compatible = "syscon-poweroff";
-+            regmap = <&pmc>;
-+            offset = <0x14>;
-+            mask = <0x3c00>;
-+            value = <0x3c00>;
-+        };
-     };
+ 	return 0;
+ }
+ 
 -- 
 2.39.3
 
