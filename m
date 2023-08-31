@@ -2,142 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5EEF78EC19
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 13:33:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFFC878EC22
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 13:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236551AbjHaLd4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Aug 2023 07:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48560 "EHLO
+        id S232117AbjHaLho (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Aug 2023 07:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237581AbjHaLdz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 07:33:55 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F452CE4
-        for <linux-pm@vger.kernel.org>; Thu, 31 Aug 2023 04:33:52 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-58d40c2debeso8708507b3.2
-        for <linux-pm@vger.kernel.org>; Thu, 31 Aug 2023 04:33:52 -0700 (PDT)
+        with ESMTP id S231672AbjHaLhn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 07:37:43 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74CC491
+        for <linux-pm@vger.kernel.org>; Thu, 31 Aug 2023 04:37:40 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-d7ab8e1f27cso446321276.3
+        for <linux-pm@vger.kernel.org>; Thu, 31 Aug 2023 04:37:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693481631; x=1694086431; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ibzG3mVx4GFurVxbkoUFG27FCbRg5ZUj4tD8lzqeKtg=;
-        b=C4xhoFvG4nLN7VivM88cB7ikaRDgW++/+abHV4+cUxfpoloOBfF1B+T89Cn28V3Q3I
-         4t7EYiuW8hwfNZDv3AWIkk+/uxv9ezg3dc8s0dXl0ZUbp7zp0iknhnrhJcPfrZmwQ1Lp
-         RBikaZAUGrUuDWy6ZdcFjLKkbRdcGHPAl45Kmdr4SJyjKuphggz7zS/0hyy8u4BIxAH6
-         lXCpz7uqrY8D1uT3BeyeP/U28UIWqaODMbccSz1c76Y/EyxqLKAbspt7Y7a+X5xpcXsU
-         pxi2ky5piudDNwclyg3JNU5VQVxQv7vzas+BjamDc/VByzds9mKI+xs28isIU0RzoZsZ
-         Jk4Q==
+        d=linaro.org; s=google; t=1693481859; x=1694086659; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lypt1ExDbkEeEChHfWqa/VhxnyCI/TkoTn/TCNMR5X8=;
+        b=R2JGTmkbBgl3zqlkmLHoy2ank7534YpjhfaQs028wD55qijwQmFc2vDYtefr39KsrU
+         4olE/2Lp8pueYwXJK3Nsh/Pev7QqmbfKYvRWgkwMCgkBu2UJ4lERZAsZR+HBuFy93vLY
+         RQgAQi38Sd4QCviiZwyvgBc26ymGDnjm+nEoGOkYBgUGhyazg5PoGabxinPEtSaTjj8u
+         Vg7+NTX8b3EOM+oE0Kkf1er80WoLlXNkz1EIgLcEvsm4P6Akp82Z+PfdyrkFvTxNSW2M
+         CxfpnJ9hvmRF5KSC1BezYmVTmt/MSMxeKDOVifWQkiBxbdpwKSfMbBvmiNuSFrVf74Hz
+         3itw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693481631; x=1694086431;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ibzG3mVx4GFurVxbkoUFG27FCbRg5ZUj4tD8lzqeKtg=;
-        b=UljbRO3BewY/KcVF7WRyEV3ATHR6NnPF9tPjhNE2U/9FdG6oUXjzxQAjEuAuGSVepC
-         48bvQAf/1DPlbVzkZyXq7WfAj7Ul58IRgQnBqRGwWZayuFtoNZaomsCf74IfhDgUXfgl
-         1CD68dGiLTkoJbPe5wFLmlJpDAgvflb5hRYCjU31ITIBc0a1WpzHFNSTBoLRM32N03+c
-         1B8HmXU2+Egf+jTo6ZjxmYK9c6G6Fg3jvbqQSQP7Q+6O4hjGnSpyLXjiZCj6k+OWuVRV
-         DYXwZDp0tXHqdgMrQkenbu9qOTjks5jehZlQDLPb7iVK4LbVCQDJwHXTXjs3tYSvmxz8
-         VTwg==
-X-Gm-Message-State: AOJu0YzvOMfFzRaVK+KHOK+EYkzrB14xDUAFm1h9swk9gSmff+tn7vhw
-        IDpjYBfwyPCF/Sja0Uny4ZM/HRL38rA37l1fomLsZg==
-X-Google-Smtp-Source: AGHT+IHeKlJ2Cnt3SKF3aIUgqGGMgbJPVvaV8pDIkWX0azrFs3oQc15jhGlTDqlAxq2mojbE2e8cDhdUFN1nTd6fj8U=
-X-Received: by 2002:a25:b116:0:b0:d78:538:8017 with SMTP id
- g22-20020a25b116000000b00d7805388017mr4779117ybj.61.1693481631542; Thu, 31
- Aug 2023 04:33:51 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1693481859; x=1694086659;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lypt1ExDbkEeEChHfWqa/VhxnyCI/TkoTn/TCNMR5X8=;
+        b=iCQ2RV00iic1G4ZNFw4sduu7iFFaCsp/YeweyHE/zeq/2WEZD0f3b3f2c6SD7M6P+Y
+         WSRXezbsF8P+nx68gwzL6dD9wGM+ttrHwQtst8hBxO7hxh5kqq/4TLr4Czz+Dpj3zJou
+         jzT83jl+E4AnZY3RvFjcmUxmbBOzYabiWpYx7+FfjS3wgmVCnDB4MSx/Dxwd2oH7j6ZA
+         MMlEm46rpXsu88GTKCRqsWeSYJfYiZOjMI7A5Pz1BodwmuC6U3gCJZeOh3TiR99FwEUM
+         4LzB+s8UFTeoZUCMi8+v+/0LQkG8BJP4xpsqS1KwqaKBqeBPo1Rj9RQkWocIrRz2YVAd
+         5j4Q==
+X-Gm-Message-State: AOJu0Ywh5/b7/g1YDwnHzxoQOcGfgMPsMYoxqvJdpJhA45H37wKXwO7O
+        LCS9icVkObvIXxiBbmChdEkNxB14zmP11+SWlsvtFw==
+X-Google-Smtp-Source: AGHT+IGBvK3EVwNwH9rlAiV5YEc2n1O3boSOPFtTlRByjOV/DKA4yqbSCqz3ilp2WwhzpF6hM6wL2mYOd3TXCTemySw=
+X-Received: by 2002:a25:fc21:0:b0:d0e:99be:5da2 with SMTP id
+ v33-20020a25fc21000000b00d0e99be5da2mr4719634ybd.65.1693481859667; Thu, 31
+ Aug 2023 04:37:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230830-fp5-initial-v1-0-5a954519bbad@fairphone.com>
- <20230830-fp5-initial-v1-4-5a954519bbad@fairphone.com> <b82f4683-e8b5-b424-8f7a-6d2ba1cab61f@linaro.org>
- <CV6NF0466658.20DGU7QKF2UBR@otso>
-In-Reply-To: <CV6NF0466658.20DGU7QKF2UBR@otso>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 31 Aug 2023 14:33:39 +0300
-Message-ID: <CAA8EJpr1+W3f08X-FpiiVrJ98kg52HaMwbbKn=fG15Whm4C8aQ@mail.gmail.com>
-Subject: Re: [PATCH 04/11] arm64: dts: qcom: pm7250b: make SID configurable
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        cros-qcom-dts-watchers@chromium.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org
+References: <20230829213441.310655-1-ulf.hansson@linaro.org>
+ <CAHk-=wg0gc4Cc90OL29Vr5gDtd4mnsKD+TxtoNtQbAryaWHkZQ@mail.gmail.com>
+ <CAHk-=wjLO=Jsdk2prq0piznMMCk+V0_fRaFRHEPuaALpF8J=hw@mail.gmail.com>
+ <96bb0de0-06d9-46f8-b02f-dc924afff13c@app.fastmail.com> <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
+ <CAPDyKFrJH-1uaPCwnWZDPi4MRtOm=N2CHSRyvjXRDbQ1y-oOrw@mail.gmail.com> <CAJZ5v0hqWYnkNXVju3U3n-9i8eqtjs197tLLNWv8Qa_N9T=KEw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hqWYnkNXVju3U3n-9i8eqtjs197tLLNWv8Qa_N9T=KEw@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 31 Aug 2023 13:37:03 +0200
+Message-ID: <CAPDyKFpXLj_2HAgyV_VJf+GPQVmxb_iiDe77Q2MY17MDNqy9fA@mail.gmail.com>
+Subject: Re: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 31 Aug 2023 at 13:13, Luca Weiss <luca.weiss@fairphone.com> wrote:
+On Thu, 31 Aug 2023 at 11:33, Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> On Wed Aug 30, 2023 at 12:06 PM CEST, Krzysztof Kozlowski wrote:
-> > On 30/08/2023 11:58, Luca Weiss wrote:
-> > > Like other Qualcomm PMICs the PM7250B can be used on different addresses
-> > > on the SPMI bus. Use similar defines like the PMK8350 to make this
-> > > possible.
+> On Wed, Aug 30, 2023 at 10:34=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro.=
+org> wrote:
+> >
+> > On Wed, 30 Aug 2023 at 03:20, Linus Torvalds
+> > <torvalds@linux-foundation.org> wrote:
 > > >
-> > > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> > > ---
-> > >  arch/arm64/boot/dts/qcom/pm7250b.dtsi | 23 ++++++++++++++++-------
-> > >  1 file changed, 16 insertions(+), 7 deletions(-)
+> > > On Tue, 29 Aug 2023 at 17:48, Arnd Bergmann <arnd@arndb.de> wrote:
+> > > >
+> > > > How about moving it to drivers/power/domain/ instead?
 > > >
-> > > diff --git a/arch/arm64/boot/dts/qcom/pm7250b.dtsi b/arch/arm64/boot/dts/qcom/pm7250b.dtsi
-> > > index e8540c36bd99..3514de536baa 100644
-> > > --- a/arch/arm64/boot/dts/qcom/pm7250b.dtsi
-> > > +++ b/arch/arm64/boot/dts/qcom/pm7250b.dtsi
-> > > @@ -7,6 +7,15 @@
-> > >  #include <dt-bindings/interrupt-controller/irq.h>
-> > >  #include <dt-bindings/spmi/spmi.h>
+> > > That sounds like a sensible name and would seem to fit logically with
+> > > our existing tree structure quite well.
+> >
+> > I am sincerely sorry if I have annoyed you with picking the name
+> > "genpd" as the directory-name - and especially without further
+> > explanation. The genpd thing certainly deserves to be documented
+> > better, I will try to get some time to do this soon. Anyway, me and
+> > many others in the power/performance areas that have been working with
+> > the genpd interface, have simply gotten comfortable using the "genpd"
+> > acronym. Hence, the naming was a no-brainer to me.
+> >
+> > That said, if you feel that the above directory-path/name is a better
+> > fit I can certainly move it over there, np! Although, before you make
+> > the final decision I want to point out a few things for you to
+> > consider.
+> >
+> > *) The new subsystem is solely intended for the generic PM domain
+> > providers. Other PM domains providers, like the ACPI PM domains for
+> > example (drivers/acpi/*), don't really belong here, at least in my
+> > opinion. So, maybe "domain" isn't specific enough? Although, if not
+> > using "genpd", I have no better suggestion.
+> >
+> > **) Please keep in mind that we have several other power/performance
+> > related subsystems that don't live under drivers/power/*. Moving more
+> > things in there is not really going to help the people that work on
+> > these things. No matter where and what the name of the subsystem is,
+> > one simply needs to dive into the details anyway. Moreover, in this
+> > case, "genpd" isn't just about "power" (idle management) but
+> > performance management too.
+> >
 > > >
-> > > +/* This PMIC can be configured to be at different SIDs */
-> > > +#ifndef PM7250B_SID
-> > > +   #define PM7250B_SID 2
-> > > +#endif
+> > > > I don't think we can easily rename the interfaces that have been
+> > > > in use for the past 12 years
+> > >
+> > > I actually think the interface names are much less of an issue, since
+> > > anybody using them is presumably familiar with the naming.
+> > >
+> > > It was only with the directory structure that I reacted to it, becaus=
+e
+> > > that kind of exposes the naming to people who definitely are *not*
+> > > familiar with it (ie me, but presumably anybody else who sees the
+> > > diffstats etc fly past).
+> > >
+> > > And yes, we have a number of other pretty obscure driver names in our
+> > > tree (I end up having to remind myself what "ntb" and "hsi" etc mean)=
+,
+> > > and I don't tend to love them either, but at least they tend to be
+> > > industry / vendor names.
 > >
-> > Why do you send the same patch as v1, without any reference to previous
-> > discussions?
+> > I get your point. I was indeed trying to obey the current naming
+> > strategy, but I think it's not entirely easy to understand what is
+> > prefered.
 > >
-> > You got here feedback already.
-> >
-> > https://lore.kernel.org/linux-arm-msm/f52524da-719b-790f-ad2c-0c3f313d9fe9@linaro.org/
+> > Please advise me on how to move forward.
 >
-> Hi Krzysztof,
->
-> I did mention that original patch in the cover letter of this series.
-> I'm definitely aware of the discussion earlier this year there but also
-> tried to get an update lately if there's any update with no response.
+> If I may suggest something, I would call this "pmdomain" instead of
+> "genpd".  I don't think that /drivers/power/ is a particularly
+> suitable location for it, because it doesn't really have much to do
+> with power supplies and more to do with device PM.
 
-I think the overall consensus was that my proposal is too complicated
-for the DT files.
+"pmdomain" is probably giving a reasonable good hint of what goes on
+in this subsystem. This works fine for me, thanks!
 
 >
-> If you want to block this patch, I'll have to remove pm7250b from the
-> device dts, so we'll lose some functionality. Not sure what other
-> approaches there could be.
->
-> Regards
-> Luca
->
-> >
-> > Best regards,
-> > Krzysztof
->
+> Also, I would move drivers/base/power/domain.c to drivers/pmdomain/
+> (and rename it to something like core.c), because it would be a better
+> location for that fiile IMO.
 
+We could certainly do that, let's discuss it a bit more.
 
--- 
-With best wishes
-Dmitry
+Although, at this point I want to focus on the genpd providers, as to
+release some of the burden from arm-soc maintainers.
+
+>
+> I can also handle future pull requests for this if that's fine with every=
+one.
+
+Thanks a lot for your offer! However, if a re-route is preferred (I
+think not?), this is probably better suited via arm-soc, as most
+changes are going to be arm platform specific.
+
+Kind regards
+Uffe
