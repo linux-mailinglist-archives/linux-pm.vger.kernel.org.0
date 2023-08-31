@@ -2,81 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EDB378EBF3
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 13:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C564678EBFD
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 13:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238490AbjHaL2H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Aug 2023 07:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60804 "EHLO
+        id S240191AbjHaLaW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Aug 2023 07:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbjHaL2H (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 07:28:07 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531F8CE4
-        for <linux-pm@vger.kernel.org>; Thu, 31 Aug 2023 04:28:04 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-522bd411679so881206a12.0
-        for <linux-pm@vger.kernel.org>; Thu, 31 Aug 2023 04:28:04 -0700 (PDT)
+        with ESMTP id S229553AbjHaLaV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 07:30:21 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86583CE4
+        for <linux-pm@vger.kernel.org>; Thu, 31 Aug 2023 04:30:18 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-d7485d37283so456485276.1
+        for <linux-pm@vger.kernel.org>; Thu, 31 Aug 2023 04:30:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1693481283; x=1694086083; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9yvHyjPG7qUuINUCRplJZoEcbwB6qImIpL5RY/TwBK8=;
-        b=gJPowC5T5XnE2dRfmE1HYdTrXIJUiGjy10McutUK/lhG2Hl2hrLyYC2sp5NqioJr4v
-         aF5VY/zgu882zOxp2UY6NEGyBiVPXUXRa3rP+ZWNtKWn+e+b+hFtOgzziUNE4AG5wOTx
-         Qvw9OP58Y5qNHW39HdGvLzNBtzDrKh9xWVUtiv1tsKe45f8yIqrFPns17Cer45bskcwo
-         4xcWiy7Z6lz8OfaGc+inoTw34CxFSYyweK2WUKp1lI0qy8GPpbCiG4xFEsyuU5eAOn2C
-         LKJDMxe4ZdLjwoTvAQLXPDz6fgOLR+DLe4eJ4zjPc9+2VyexjSJuSHwj4qQgPdt3XNPe
-         dfew==
+        d=linaro.org; s=google; t=1693481418; x=1694086218; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=P69XUW20N8v7WEMjFdBLz18m8BcCG/JpWdxrnZjKH6E=;
+        b=fnN+VNeVUpKwQQt0k3Xnu27qeFcOSU9nH1noWjivYHbOohp/QG3cxNzA3QhRS8Pfm7
+         +MhmYcS6vePiOO6Vek6PxtFeSbxh6F/ZTF9yzwvyNl+qLPWH6AWIz5ghs1kk4BJbzw3m
+         d8dRrq6eY3u7ga9Z6IS3luxtLQUynjp69R3bQJBuZ8hbODLQl8K+z0kB+ckW2SNHnb+z
+         G5LqnqBztKHjvk/7V3jmcCaGrRIldTyk9kZh1f96+oyjHWs6sbYF3kfQicAxVZTwn4aN
+         ZUUic92eA4GIOXiULeiSejxxvSe2GktH4cZQAYg87Jx3Qkjya+btCp9Rdko30NSKOspW
+         +tOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693481283; x=1694086083;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=9yvHyjPG7qUuINUCRplJZoEcbwB6qImIpL5RY/TwBK8=;
-        b=YpqDzPU+RV6AMtVKOw0ZjL8bFG0cqyQmf/55uDnmxhcetnENXEh0VAKj6ZwnIdDqf2
-         5VJSc8ay85SPgEPL9quDalJDJoLc78gJuhNTTO6MVBzfl7nBiC2u/46IBsRbrI97Gw09
-         Z1H6zplZvnuiS8OWtuOcCxupxUDjTlHeTjyEcEEx3UlFfpeSHqy2UCeB1rPJmw0MuodB
-         s1QoPDYbmbkgQ6LQ70KM/T1Sfw4WdoUDEYpAPwKOyA2aMKCYnnc90VEcrRj2rDn6qMNQ
-         71ctagLvBeiMWsjAFjV4UW8qWd0u4TUsxVKSrM/wsdyfDFWgdKxeh7zo2Les/3U1BWHT
-         ncXg==
-X-Gm-Message-State: AOJu0YzIHJkuPzICMc8nBSeKr5lWVOclTc901LlYbHfbXXkj65FJiRs5
-        THaVbg8T+1IEux+jt6JERlqsdg==
-X-Google-Smtp-Source: AGHT+IG/hpDsEDtftxv8WRfScAb1QpBlf4Zc8+8cS6j6PB4BK2HHNwPv823nbljA1+JmHjuosy8iUw==
-X-Received: by 2002:a17:906:3195:b0:9a5:c49e:7145 with SMTP id 21-20020a170906319500b009a5c49e7145mr3734010ejy.69.1693481282782;
-        Thu, 31 Aug 2023 04:28:02 -0700 (PDT)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id r10-20020a170906c28a00b0099297782aa9sm655606ejz.49.2023.08.31.04.28.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Aug 2023 04:28:02 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 31 Aug 2023 13:28:01 +0200
-Message-Id: <CV6P0GSF8HWI.1I9L17HVQA7CJ@otso>
-Cc:     <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 03/11] arm64: dts: qcom: sc7280: Move qfprom clock to
- chrome-common
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        <cros-qcom-dts-watchers@chromium.org>,
-        "Andy Gross" <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Conor Dooley" <conor+dt@kernel.org>,
-        "Srinivas Kandagatla" <srinivas.kandagatla@linaro.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Viresh Kumar" <viresh.kumar@linaro.org>
-X-Mailer: aerc 0.15.2
-References: <20230830-fp5-initial-v1-0-5a954519bbad@fairphone.com>
- <20230830-fp5-initial-v1-3-5a954519bbad@fairphone.com>
- <0ab29903-9861-4736-b827-5dd45b504baa@linaro.org>
-In-Reply-To: <0ab29903-9861-4736-b827-5dd45b504baa@linaro.org>
+        d=1e100.net; s=20221208; t=1693481418; x=1694086218;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P69XUW20N8v7WEMjFdBLz18m8BcCG/JpWdxrnZjKH6E=;
+        b=E7Tr90IZWTjc9puwR9gdP5u3sE/jrnRp7YRSvAI/C8xk372QXsB/gziaJc9AzSFkLG
+         qcE7/3QiGw+LVuXLtFNdPhIdZbEBuD21Y55AMGrtl3badDVy9mkbj0Sz6JoK0Flk+KMX
+         yvmh726gDgWJdWPUTzJeZ9bIQjRUtUJyqegBhekxTuMKqjod/dTbQ9ajlkOYJn9NzoUe
+         mXr/ofMKz1x3QNCp/u0xSOSQZGffrTXkAV2Emoi4chCdpTqrCbYjXiZmNlzugzTpkhY+
+         1jHNHOwWtODPeGG/NSwAGpViJNZJKoLUAMUA2qt7DlhgxUVUaiyrKClqDeLVjEF/w6BS
+         g09A==
+X-Gm-Message-State: AOJu0Yxf8grYrDggn0hFH+ixmcNdokrIRX7x4mARhJpDF08ksJLJdc3N
+        VtRclAgSnmOg0kSZuKzPeWQxbeqAu2anFu6TYeuqCA==
+X-Google-Smtp-Source: AGHT+IG3wpX5o5TiwoJaSIAlQpooeho0BC4+cHA8fCogEyPi1wHFnguG8bxZPAZFD7dF/rKVCn4IqkeFKeyBGy0NZRo=
+X-Received: by 2002:a5b:889:0:b0:d78:5d61:ddee with SMTP id
+ e9-20020a5b0889000000b00d785d61ddeemr4745877ybq.30.1693481417767; Thu, 31 Aug
+ 2023 04:30:17 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230829213441.310655-1-ulf.hansson@linaro.org>
+ <CAHk-=wg0gc4Cc90OL29Vr5gDtd4mnsKD+TxtoNtQbAryaWHkZQ@mail.gmail.com>
+ <CAHk-=wjLO=Jsdk2prq0piznMMCk+V0_fRaFRHEPuaALpF8J=hw@mail.gmail.com>
+ <96bb0de0-06d9-46f8-b02f-dc924afff13c@app.fastmail.com> <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
+ <CAPDyKFrJH-1uaPCwnWZDPi4MRtOm=N2CHSRyvjXRDbQ1y-oOrw@mail.gmail.com>
+ <CAHk-=wj1j0HuNWKLEzi74zEr2rGnMLEFZjLvV=rzdqzQPqOzdQ@mail.gmail.com> <CAHk-=whpfnSqToqx9f7G4-QssDHW2TBPqiXc5q1=q7w9NKxiSg@mail.gmail.com>
+In-Reply-To: <CAHk-=whpfnSqToqx9f7G4-QssDHW2TBPqiXc5q1=q7w9NKxiSg@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 31 Aug 2023 13:29:41 +0200
+Message-ID: <CAPDyKFpeH5XV36NaaoWQw8tuXhi6jOtEAfWujC9An-tSzSStvQ@mail.gmail.com>
+Subject: Re: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -86,35 +73,31 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed Aug 30, 2023 at 12:09 PM CEST, Konrad Dybcio wrote:
-> On 30.08.2023 11:58, Luca Weiss wrote:
-> > On non-ChromeOS boards the clock cannot be touched, so move it in the
-> > chrome-common dtsi which is the only place where it's needed.
-> >=20
-> > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> > ---
-> If that clock is not registered (e.g. it's in protected-clocks =3D <>,
-> would the _optional handler not handle it just fine?
+On Thu, 31 Aug 2023 at 02:08, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Wed, 30 Aug 2023 at 08:07, Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > On Wed, 30 Aug 2023 at 01:34, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > >
+> > > Please advise me on how to move forward.
+> >
+> > Just to not cause pain during the merge window, I think I'll take the
+> > current trees (eventually - I still have other things pending first),
+>
+> I took the existing pull requests since they were next in my pile.
 
-Right, that appears to work!
-
-~ # ls -d /sys/bus/platform/drivers/qcom,qfprom/*.efuse
-/sys/bus/platform/drivers/qcom,qfprom/784000.efuse
-~ # cat /sys/firmware/devicetree/base/soc@0/efuse@784000/clock-names; echo
-core
-~ # hexdump -C /sys/firmware/devicetree/base/soc@0/efuse@784000/clocks
-00000000  00 00 00 03 00 00 00 b8                           |........|
-00000008
-
-Never tested this case before, but since it appears to work with the
-patched qfprom driver (other patch in this series) I think we can drop
-this patch.
-Will also have to adjust some other patches in my local tree then that
-do similar things ;)
-
-Regards
-Luca
+Thanks!
 
 >
-> Konrad
+> But I hope we can get the naming sorted out still during this merge
+> window and not leave it pending for some later time.
 
+No problem, I will take care of this. Allow me a few days to send you
+another pull-request for this.
+
+Would "drivers/pmdomain" be okay for you, as suggested by Rafael?
+
+Kind regards
+Uffe
