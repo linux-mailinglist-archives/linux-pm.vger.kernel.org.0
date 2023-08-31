@@ -2,138 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C22178E976
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 11:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9D778E996
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 11:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240594AbjHaJdO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 31 Aug 2023 05:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36388 "EHLO
+        id S231892AbjHaJgB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Aug 2023 05:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244669AbjHaJdN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 05:33:13 -0400
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5494CED;
-        Thu, 31 Aug 2023 02:33:10 -0700 (PDT)
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-6b9cd6876bbso224365a34.1;
-        Thu, 31 Aug 2023 02:33:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693474390; x=1694079190;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Nl1K4yYAIDgYQbgietNrYp754cjHjZdTyKlafeP/4n8=;
-        b=HMJWQLgKwr5OOt9/6z02fdCy/dX3XSWLgskoy248TVt+Q5LTFuB1Kgkh4s+4G1EcIc
-         9Eeyldl1uTotR81Bg+p08w7HpyRlrGsHHQS4QcDxuVQ2qh4SENWaTJ5C8scT+yZDNCQq
-         oSs+rYZjPZ0iSYAvdpZFEHaBtGTf2rhiyUQBn2gz/nLAwpVlV3Omm/5/UgUJvjbiP49S
-         DUgen+YJueSbzp+qvLIuyLzGvVEm+RVcJs7kMGKH56Zbuce6/EUTAlib862wBgwL7rbg
-         N9IryZ5NiHhS7O9NlObY/zmlulu4xfmVL069DvqWRoY0/M79LkNkgO7F2tRTVvGBpiuw
-         1ERA==
-X-Gm-Message-State: AOJu0YyDlWgp3VDy7x+n+H8Yo+0bSrzEejlmkLYibXuOqpHCW7drj2HM
-        jiVeI+6wbX/RsSSz200HNu4rowV5yaGCBOCMs5U=
-X-Google-Smtp-Source: AGHT+IGTX1BhrCY8B/1eA+vI1+888PczPza8yfMwZBebL/g+Y6xUSxGjKfo4zaOwCE0xXYnXdxYsp9+w7W2j7y4/gLE=
-X-Received: by 2002:a05:6820:1b18:b0:56e:94ed:c098 with SMTP id
- bv24-20020a0568201b1800b0056e94edc098mr4892136oob.0.1693474389861; Thu, 31
- Aug 2023 02:33:09 -0700 (PDT)
+        with ESMTP id S243816AbjHaJgB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 05:36:01 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D18ACEB;
+        Thu, 31 Aug 2023 02:35:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693474558; x=1725010558;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=D3KjoyegWgCFqbsvoAhvULbaH+lWNnUj86eE942AVgc=;
+  b=WxbpgxIBX4arNrs0N0yAhGKl0ob17ZUcchqxH6ermJa/JDxBQuW1/0II
+   ZtxYABxepBzKYAORe0Cst8TBVYCQjvFssQyTbz9ybTaI6+1fj82KpiAWx
+   955yecPR6qW6OHWY3bD/c7Gld1Wrg2IonT7v7uf3P6iMEy8UMvxGcJqt0
+   u3fnMhVPjy5ouE015doKy+P7nIdKsuuh9+434NhAU4OEJstZz5ow0cT3E
+   FU/YElhz4c1lby6jNGucmcdZkqlA8U8WAimvfIHLg77IcoHjKYFatT0Wq
+   8WllsIxxGZs1P4pCINP4Q8zDPnpQ/6gGbf/jlmrIDgILex98VtPJ/xF2b
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="360871343"
+X-IronPort-AV: E=Sophos;i="6.02,216,1688454000"; 
+   d="scan'208";a="360871343"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2023 02:35:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="986145667"
+X-IronPort-AV: E=Sophos;i="6.02,216,1688454000"; 
+   d="scan'208";a="986145667"
+Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 31 Aug 2023 02:35:54 -0700
+Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qbe5Y-000BBn-2G;
+        Thu, 31 Aug 2023 09:35:50 +0000
+Date:   Thu, 31 Aug 2023 17:35:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Fabio Estevam <festevam@gmail.com>, rafael@kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, conor+dt@kernel.org,
+        devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>
+Subject: Re: [PATCH v6 3/3] thermal: thermal_core: Allow rebooting after
+ critical temp
+Message-ID: <202308311705.C7t4Vtwu-lkp@intel.com>
+References: <20230830151908.2149847-3-festevam@gmail.com>
 MIME-Version: 1.0
-References: <20230829213441.310655-1-ulf.hansson@linaro.org>
- <CAHk-=wg0gc4Cc90OL29Vr5gDtd4mnsKD+TxtoNtQbAryaWHkZQ@mail.gmail.com>
- <CAHk-=wjLO=Jsdk2prq0piznMMCk+V0_fRaFRHEPuaALpF8J=hw@mail.gmail.com>
- <96bb0de0-06d9-46f8-b02f-dc924afff13c@app.fastmail.com> <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
- <CAPDyKFrJH-1uaPCwnWZDPi4MRtOm=N2CHSRyvjXRDbQ1y-oOrw@mail.gmail.com>
-In-Reply-To: <CAPDyKFrJH-1uaPCwnWZDPi4MRtOm=N2CHSRyvjXRDbQ1y-oOrw@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 31 Aug 2023 11:32:57 +0200
-Message-ID: <CAJZ5v0hqWYnkNXVju3U3n-9i8eqtjs197tLLNWv8Qa_N9T=KEw@mail.gmail.com>
-Subject: Re: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, linux-arm-kernel@lists.infradead.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230830151908.2149847-3-festevam@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 30, 2023 at 10:34 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> On Wed, 30 Aug 2023 at 03:20, Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > On Tue, 29 Aug 2023 at 17:48, Arnd Bergmann <arnd@arndb.de> wrote:
-> > >
-> > > How about moving it to drivers/power/domain/ instead?
-> >
-> > That sounds like a sensible name and would seem to fit logically with
-> > our existing tree structure quite well.
->
-> I am sincerely sorry if I have annoyed you with picking the name
-> "genpd" as the directory-name - and especially without further
-> explanation. The genpd thing certainly deserves to be documented
-> better, I will try to get some time to do this soon. Anyway, me and
-> many others in the power/performance areas that have been working with
-> the genpd interface, have simply gotten comfortable using the "genpd"
-> acronym. Hence, the naming was a no-brainer to me.
->
-> That said, if you feel that the above directory-path/name is a better
-> fit I can certainly move it over there, np! Although, before you make
-> the final decision I want to point out a few things for you to
-> consider.
->
-> *) The new subsystem is solely intended for the generic PM domain
-> providers. Other PM domains providers, like the ACPI PM domains for
-> example (drivers/acpi/*), don't really belong here, at least in my
-> opinion. So, maybe "domain" isn't specific enough? Although, if not
-> using "genpd", I have no better suggestion.
->
-> **) Please keep in mind that we have several other power/performance
-> related subsystems that don't live under drivers/power/*. Moving more
-> things in there is not really going to help the people that work on
-> these things. No matter where and what the name of the subsystem is,
-> one simply needs to dive into the details anyway. Moreover, in this
-> case, "genpd" isn't just about "power" (idle management) but
-> performance management too.
->
-> >
-> > > I don't think we can easily rename the interfaces that have been
-> > > in use for the past 12 years
-> >
-> > I actually think the interface names are much less of an issue, since
-> > anybody using them is presumably familiar with the naming.
-> >
-> > It was only with the directory structure that I reacted to it, because
-> > that kind of exposes the naming to people who definitely are *not*
-> > familiar with it (ie me, but presumably anybody else who sees the
-> > diffstats etc fly past).
-> >
-> > And yes, we have a number of other pretty obscure driver names in our
-> > tree (I end up having to remind myself what "ntb" and "hsi" etc mean),
-> > and I don't tend to love them either, but at least they tend to be
-> > industry / vendor names.
->
-> I get your point. I was indeed trying to obey the current naming
-> strategy, but I think it's not entirely easy to understand what is
-> prefered.
->
-> Please advise me on how to move forward.
+Hi Fabio,
 
-If I may suggest something, I would call this "pmdomain" instead of
-"genpd".  I don't think that /drivers/power/ is a particularly
-suitable location for it, because it doesn't really have much to do
-with power supplies and more to do with device PM.
+kernel test robot noticed the following build warnings:
 
-Also, I would move drivers/base/power/domain.c to drivers/pmdomain/
-(and rename it to something like core.c), because it would be a better
-location for that fiile IMO.
+[auto build test WARNING on rafael-pm/thermal]
+[also build test WARNING on linus/master v6.5 next-20230831]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I can also handle future pull requests for this if that's fine with everyone.
+url:    https://github.com/intel-lab-lkp/linux/commits/Fabio-Estevam/reboot-Introduce-hw_protection_reboot/20230831-034226
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20230830151908.2149847-3-festevam%40gmail.com
+patch subject: [PATCH v6 3/3] thermal: thermal_core: Allow rebooting after critical temp
+config: s390-randconfig-r025-20230831 (https://download.01.org/0day-ci/archive/20230831/202308311705.C7t4Vtwu-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230831/202308311705.C7t4Vtwu-lkp@intel.com/reproduce)
 
-Cheers!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308311705.C7t4Vtwu-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/thermal/thermal_of.c:221:27: warning: unused variable 'critical_actions' [-Wunused-const-variable]
+   static const char * const critical_actions[] = {
+                             ^
+   1 warning generated.
+
+
+vim +/critical_actions +221 drivers/thermal/thermal_of.c
+
+   220	
+ > 221	static const char * const critical_actions[] = {
+   222		[THERMAL_CRITICAL_ACTION_SHUTDOWN]	= "shutdown",
+   223		[THERMAL_CRITICAL_ACTION_REBOOT]	= "reboot",
+   224	};
+   225	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
