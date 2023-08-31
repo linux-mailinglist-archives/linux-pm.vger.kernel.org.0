@@ -2,112 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC9D778E996
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 11:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D6278E9F5
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 12:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231892AbjHaJgB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Aug 2023 05:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38266 "EHLO
+        id S1343791AbjHaKNN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Aug 2023 06:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243816AbjHaJgB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 05:36:01 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D18ACEB;
-        Thu, 31 Aug 2023 02:35:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693474558; x=1725010558;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=D3KjoyegWgCFqbsvoAhvULbaH+lWNnUj86eE942AVgc=;
-  b=WxbpgxIBX4arNrs0N0yAhGKl0ob17ZUcchqxH6ermJa/JDxBQuW1/0II
-   ZtxYABxepBzKYAORe0Cst8TBVYCQjvFssQyTbz9ybTaI6+1fj82KpiAWx
-   955yecPR6qW6OHWY3bD/c7Gld1Wrg2IonT7v7uf3P6iMEy8UMvxGcJqt0
-   u3fnMhVPjy5ouE015doKy+P7nIdKsuuh9+434NhAU4OEJstZz5ow0cT3E
-   FU/YElhz4c1lby6jNGucmcdZkqlA8U8WAimvfIHLg77IcoHjKYFatT0Wq
-   8WllsIxxGZs1P4pCINP4Q8zDPnpQ/6gGbf/jlmrIDgILex98VtPJ/xF2b
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="360871343"
-X-IronPort-AV: E=Sophos;i="6.02,216,1688454000"; 
-   d="scan'208";a="360871343"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2023 02:35:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="986145667"
-X-IronPort-AV: E=Sophos;i="6.02,216,1688454000"; 
-   d="scan'208";a="986145667"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 31 Aug 2023 02:35:54 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qbe5Y-000BBn-2G;
-        Thu, 31 Aug 2023 09:35:50 +0000
-Date:   Thu, 31 Aug 2023 17:35:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Fabio Estevam <festevam@gmail.com>, rafael@kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>
-Subject: Re: [PATCH v6 3/3] thermal: thermal_core: Allow rebooting after
- critical temp
-Message-ID: <202308311705.C7t4Vtwu-lkp@intel.com>
-References: <20230830151908.2149847-3-festevam@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230830151908.2149847-3-festevam@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S1343769AbjHaKNM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 06:13:12 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449F8E69
+        for <linux-pm@vger.kernel.org>; Thu, 31 Aug 2023 03:13:01 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-529fb2c6583so768872a12.1
+        for <linux-pm@vger.kernel.org>; Thu, 31 Aug 2023 03:13:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1693476780; x=1694081580; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e7v4YEHKe+eCw/TeGULI02ezKGrSX/6FZe8vszhKShU=;
+        b=GDZ07FpT+CNej/aZSh1Np170rhrgZlJvNr7rN2UfCQCEFdE+x0XoodqDWDnbK7AEaR
+         7vbJCYHNV9WoepvB26K4Na02Ai3SiwGPSONp7aPVTvCuko0DKAZxhGb5333X2dYucEco
+         3tgh+LSaeYPjOsC121NFuJAvWmdasM2Sw3YWwA76BOBV+bFDE1h7kssMqZDaX6hJ5zZh
+         t0Z85r0ZfgrBcxWXBsu5UcgVM4e4BLR0UjnTdMF6inOqmHqIBMsxmL1i7t4aBrirlRBv
+         LGa02fBEJxENZ575c6mrk1xDPeDNNdHwHp2FmxkwrLGheY6OAKxMI2I3Q63/eCX/f6mr
+         VRvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693476780; x=1694081580;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=e7v4YEHKe+eCw/TeGULI02ezKGrSX/6FZe8vszhKShU=;
+        b=TFaUXy425XSK8p8BgoaauqTDTpOlGSMvLGKCVmNmW1alIc0rXmlki5aVRQ4cLV2Suh
+         xEtL6HCI238vFxq3jzPVV9vSu+jqspV93MVbxx5XAHjlVup5s2EpvTQls7orzqIFiOFp
+         K5tTEYjLg6OsmoUzp8y/4mnCm+d2pnHih265zBVz6YzY/9q73doW5Ke0lNG7B6E8d1Tm
+         uwUbpqwt0mvyHSEpmnAX25emDL23tBDFvA8NZSWe1mazbNX5BXmsbjwQpDgHT0vb+xmy
+         mhl6RaCn28zzGpRTcqcDNNn5zc7aJV//uEvk0KJEI1kNGRJZlVo9PTWZ5SrgZ47aLY6L
+         3GsA==
+X-Gm-Message-State: AOJu0Ywkyc0VzFFzHWFun7T70gJ4iChEqOXX2FHzEU3V7InR3QtL40sf
+        jxIzopoJIe/BSJm9HrTlfb3tLA==
+X-Google-Smtp-Source: AGHT+IEuYVCopo/jdrk+kN9i1QSXZe6VfZ6G0pxlPUpl/QjLI2c9L+8wfjA/Ey3Yg4SWpToT5CAN9w==
+X-Received: by 2002:a50:fc05:0:b0:525:680a:6b89 with SMTP id i5-20020a50fc05000000b00525680a6b89mr3661319edr.12.1693476779584;
+        Thu, 31 Aug 2023 03:12:59 -0700 (PDT)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id x18-20020aa7d6d2000000b0052718577668sm608976edr.11.2023.08.31.03.12.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Aug 2023 03:12:59 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 31 Aug 2023 12:12:58 +0200
+Message-Id: <CV6NF0466658.20DGU7QKF2UBR@otso>
+Cc:     <~postmarketos/upstreaming@lists.sr.ht>,
+        <phone-devel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 04/11] arm64: dts: qcom: pm7250b: make SID configurable
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        <cros-qcom-dts-watchers@chromium.org>,
+        "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        "Srinivas Kandagatla" <srinivas.kandagatla@linaro.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Viresh Kumar" <viresh.kumar@linaro.org>
+X-Mailer: aerc 0.15.2
+References: <20230830-fp5-initial-v1-0-5a954519bbad@fairphone.com>
+ <20230830-fp5-initial-v1-4-5a954519bbad@fairphone.com>
+ <b82f4683-e8b5-b424-8f7a-6d2ba1cab61f@linaro.org>
+In-Reply-To: <b82f4683-e8b5-b424-8f7a-6d2ba1cab61f@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Fabio,
+On Wed Aug 30, 2023 at 12:06 PM CEST, Krzysztof Kozlowski wrote:
+> On 30/08/2023 11:58, Luca Weiss wrote:
+> > Like other Qualcomm PMICs the PM7250B can be used on different addresse=
+s
+> > on the SPMI bus. Use similar defines like the PMK8350 to make this
+> > possible.
+> >=20
+> > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> > ---
+> >  arch/arm64/boot/dts/qcom/pm7250b.dtsi | 23 ++++++++++++++++-------
+> >  1 file changed, 16 insertions(+), 7 deletions(-)
+> >=20
+> > diff --git a/arch/arm64/boot/dts/qcom/pm7250b.dtsi b/arch/arm64/boot/dt=
+s/qcom/pm7250b.dtsi
+> > index e8540c36bd99..3514de536baa 100644
+> > --- a/arch/arm64/boot/dts/qcom/pm7250b.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/pm7250b.dtsi
+> > @@ -7,6 +7,15 @@
+> >  #include <dt-bindings/interrupt-controller/irq.h>
+> >  #include <dt-bindings/spmi/spmi.h>
+> > =20
+> > +/* This PMIC can be configured to be at different SIDs */
+> > +#ifndef PM7250B_SID
+> > +	#define PM7250B_SID 2
+> > +#endif
+>
+> Why do you send the same patch as v1, without any reference to previous
+> discussions?
+>
+> You got here feedback already.
+>
+> https://lore.kernel.org/linux-arm-msm/f52524da-719b-790f-ad2c-0c3f313d9fe=
+9@linaro.org/
 
-kernel test robot noticed the following build warnings:
+Hi Krzysztof,
 
-[auto build test WARNING on rafael-pm/thermal]
-[also build test WARNING on linus/master v6.5 next-20230831]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I did mention that original patch in the cover letter of this series.
+I'm definitely aware of the discussion earlier this year there but also
+tried to get an update lately if there's any update with no response.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Fabio-Estevam/reboot-Introduce-hw_protection_reboot/20230831-034226
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-patch link:    https://lore.kernel.org/r/20230830151908.2149847-3-festevam%40gmail.com
-patch subject: [PATCH v6 3/3] thermal: thermal_core: Allow rebooting after critical temp
-config: s390-randconfig-r025-20230831 (https://download.01.org/0day-ci/archive/20230831/202308311705.C7t4Vtwu-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230831/202308311705.C7t4Vtwu-lkp@intel.com/reproduce)
+If you want to block this patch, I'll have to remove pm7250b from the
+device dts, so we'll lose some functionality. Not sure what other
+approaches there could be.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308311705.C7t4Vtwu-lkp@intel.com/
+Regards
+Luca
 
-All warnings (new ones prefixed by >>):
+>
+> Best regards,
+> Krzysztof
 
->> drivers/thermal/thermal_of.c:221:27: warning: unused variable 'critical_actions' [-Wunused-const-variable]
-   static const char * const critical_actions[] = {
-                             ^
-   1 warning generated.
-
-
-vim +/critical_actions +221 drivers/thermal/thermal_of.c
-
-   220	
- > 221	static const char * const critical_actions[] = {
-   222		[THERMAL_CRITICAL_ACTION_SHUTDOWN]	= "shutdown",
-   223		[THERMAL_CRITICAL_ACTION_REBOOT]	= "reboot",
-   224	};
-   225	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
