@@ -2,65 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B42578E3A0
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 02:00:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C2478E3BB
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 02:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245217AbjHaAAd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Aug 2023 20:00:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37282 "EHLO
+        id S1344795AbjHaAIY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Aug 2023 20:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244290AbjHaAAd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 20:00:33 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15BF3CDA;
-        Wed, 30 Aug 2023 17:00:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693440029; x=1724976029;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wxwZZlb+EbAktrV9eW/BB6Z1DDRExWjc1tkBuUp5vHE=;
-  b=msrsD3aAItSt+hcBo/QkL8IaqmrTLRPI6KigMyf7cBfTTJMXyHqBD1Sq
-   qvIjNGFJ/JOCW/FJZpXXfriyUu+8CN/I5TTliORQ1yh48v/U97rhsQ+vf
-   9xJx/mMCN9Iut6YYfVZ8CywTWUa7M2CeZIOPIUqpbFRyo+B16VLhZtBnM
-   HHuiSDDdfFsdG7TG6Q49E7IAb9s7I4sQa4y2IKLxQk6XXKgEmEiyChgrW
-   6yoVMDBwXgyurtcC2i/nzZAh4tQZpI3Vl4mg79CRNgE6bFca46EngHq8g
-   Fp6l5+sX9/EjXrTHMvtFpZ0vn3wFXmqvzliK6SDaCs2x7GBh9vuuq1qwh
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="379526983"
-X-IronPort-AV: E=Sophos;i="6.02,215,1688454000"; 
-   d="scan'208";a="379526983"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 17:00:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="1070008382"
-X-IronPort-AV: E=Sophos;i="6.02,215,1688454000"; 
-   d="scan'208";a="1070008382"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 30 Aug 2023 17:00:14 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qbV6Y-000ANV-1p;
-        Thu, 31 Aug 2023 00:00:10 +0000
-Date:   Thu, 31 Aug 2023 07:59:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Fabio Estevam <festevam@gmail.com>, rafael@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, daniel.lezcano@linaro.org,
-        amitk@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        conor+dt@kernel.org, devicetree@vger.kernel.org,
-        Fabio Estevam <festevam@denx.de>
-Subject: Re: [PATCH v6 3/3] thermal: thermal_core: Allow rebooting after
- critical temp
-Message-ID: <202308310713.tQbEYXi1-lkp@intel.com>
-References: <20230830151908.2149847-3-festevam@gmail.com>
+        with ESMTP id S1344790AbjHaAIY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Aug 2023 20:08:24 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A2CCD6
+        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 17:08:20 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9a1de3417acso316286066b.0
+        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 17:08:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1693440499; x=1694045299; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/HSUbvCmjvUYxW13fpTOiENotuRhulbUWAS63hgfbqw=;
+        b=O7akR2iWzN71ztsSjRz+GItTwV0EPBJIdyxpg+7BUM3P0hTWxrvJX6kIDwOVLicZxl
+         d4JqgKdGNf4v6nv1aCiV4YQpDq2fKhRCAwZ/x0bbsEqD8KlZRUN6o7fdvWkv2J8HFvll
+         3RBpSn93Ln7gVUe7w/LG3GZjW5lSyPpiMrhqU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693440499; x=1694045299;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/HSUbvCmjvUYxW13fpTOiENotuRhulbUWAS63hgfbqw=;
+        b=PVvGBaZS2xB++XaXM1BYs+ELPRnfrWpNmU7kMagr83kNTpNPNm7f55juOWqXkKSFGE
+         FL3ygAMnVYYJSte0mOaHBcLYKPyOZX1aJxYe1SzExI+3u5nEHXOQ6LKjj2nxZ2DMivNw
+         yUYjtETQ2rICphjpJAraB7erpjWzY0msbHKWr1VcTNTD2R4gpoJdvb0oXaq9FIktz/JT
+         YxFBdT9LTsepGg2YuHI/CXhSRkUBVADa7FjnnfZXPKFUdy8diqA/eXbK9UAOqsIoQnUC
+         6CHI9CumMCv/nwDuCeR+TWAMhEh5FZ5hTL0jvVciQiCvN3iMjt2ohH35XhwhxKR1wjbs
+         n5+A==
+X-Gm-Message-State: AOJu0YwnVe3Hj3H57UJgP5F1/x8SH95vaHT2zWV7Hv5trTDo/YKBe7rx
+        uErRbvUeM8cYwyJd/rrx/iNpwZFsmhjESpIsbD68oQ==
+X-Google-Smtp-Source: AGHT+IFtRrsD/0wUf1Ske6JRirICE3l7sErQYi8aTGUtZ7+nPIaLKV8+YK10R1WqNPQ5zpOU1PvXUg==
+X-Received: by 2002:a17:906:4715:b0:9a1:e0b1:e919 with SMTP id y21-20020a170906471500b009a1e0b1e919mr1128027ejq.4.1693440499074;
+        Wed, 30 Aug 2023 17:08:19 -0700 (PDT)
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com. [209.85.218.43])
+        by smtp.gmail.com with ESMTPSA id j20-20020a17090686d400b00992ca779f42sm117701ejy.97.2023.08.30.17.08.18
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Aug 2023 17:08:18 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-99bc9e3cbf1so46861566b.0
+        for <linux-pm@vger.kernel.org>; Wed, 30 Aug 2023 17:08:18 -0700 (PDT)
+X-Received: by 2002:a17:907:7799:b0:9a5:cc2b:50e5 with SMTP id
+ ky25-20020a170907779900b009a5cc2b50e5mr1382530ejc.32.1693440498078; Wed, 30
+ Aug 2023 17:08:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230830151908.2149847-3-festevam@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20230829213441.310655-1-ulf.hansson@linaro.org>
+ <CAHk-=wg0gc4Cc90OL29Vr5gDtd4mnsKD+TxtoNtQbAryaWHkZQ@mail.gmail.com>
+ <CAHk-=wjLO=Jsdk2prq0piznMMCk+V0_fRaFRHEPuaALpF8J=hw@mail.gmail.com>
+ <96bb0de0-06d9-46f8-b02f-dc924afff13c@app.fastmail.com> <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
+ <CAPDyKFrJH-1uaPCwnWZDPi4MRtOm=N2CHSRyvjXRDbQ1y-oOrw@mail.gmail.com> <CAHk-=wj1j0HuNWKLEzi74zEr2rGnMLEFZjLvV=rzdqzQPqOzdQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wj1j0HuNWKLEzi74zEr2rGnMLEFZjLvV=rzdqzQPqOzdQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 30 Aug 2023 17:08:00 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whpfnSqToqx9f7G4-QssDHW2TBPqiXc5q1=q7w9NKxiSg@mail.gmail.com>
+Message-ID: <CAHk-=whpfnSqToqx9f7G4-QssDHW2TBPqiXc5q1=q7w9NKxiSg@mail.gmail.com>
+Subject: Re: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,45 +80,19 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Fabio,
+On Wed, 30 Aug 2023 at 08:07, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Wed, 30 Aug 2023 at 01:34, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >
+> > Please advise me on how to move forward.
+>
+> Just to not cause pain during the merge window, I think I'll take the
+> current trees (eventually - I still have other things pending first),
 
-kernel test robot noticed the following build warnings:
+I took the existing pull requests since they were next in my pile.
 
-[auto build test WARNING on rafael-pm/thermal]
-[also build test WARNING on linus/master v6.5 next-20230830]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+But I hope we can get the naming sorted out still during this merge
+window and not leave it pending for some later time.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Fabio-Estevam/reboot-Introduce-hw_protection_reboot/20230831-034226
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-patch link:    https://lore.kernel.org/r/20230830151908.2149847-3-festevam%40gmail.com
-patch subject: [PATCH v6 3/3] thermal: thermal_core: Allow rebooting after critical temp
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230831/202308310713.tQbEYXi1-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230831/202308310713.tQbEYXi1-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308310713.tQbEYXi1-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/thermal/thermal_of.c:221:27: warning: 'critical_actions' defined but not used [-Wunused-const-variable=]
-     221 | static const char * const critical_actions[] = {
-         |                           ^~~~~~~~~~~~~~~~
-
-
-vim +/critical_actions +221 drivers/thermal/thermal_of.c
-
-   220	
- > 221	static const char * const critical_actions[] = {
-   222		[THERMAL_CRITICAL_ACTION_SHUTDOWN]	= "shutdown",
-   223		[THERMAL_CRITICAL_ACTION_REBOOT]	= "reboot",
-   224	};
-   225	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+               Linus
