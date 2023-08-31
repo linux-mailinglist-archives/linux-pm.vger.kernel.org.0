@@ -2,72 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E8378EEB7
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 15:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF83A78F146
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 18:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244903AbjHaNgX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Aug 2023 09:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40446 "EHLO
+        id S1346808AbjHaQ2v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Aug 2023 12:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231714AbjHaNgW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 09:36:22 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788311A2
-        for <linux-pm@vger.kernel.org>; Thu, 31 Aug 2023 06:36:19 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id 46e09a7af769-6bd0a0a675dso687447a34.2
-        for <linux-pm@vger.kernel.org>; Thu, 31 Aug 2023 06:36:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693488978; x=1694093778; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QqAw1vSdyf4KNpVgJMS6YvMCPUOYkqxMNfc27UX7Zy4=;
-        b=D6JVQgQFWPOgxp59+vNQU/Ugu6CTHatcUbg+YjMrxI26Huz3NJJk8K4QoQasGhVKbC
-         +LN85pIC1qjXrnWJcPvJXgTg7o/XX37ZjGKkfe5kXiBQacmdLoPWg0glMFreReBIieEc
-         W/a+fxxB0loro+ikzq1ttGf+kQivZuWgfsCNZXspxEUMUuox0+EqUzGqJVfQt36r+6d3
-         luEJ95aZbSXtz7+vNumTteUgiB3TmG+Hq8cn9LloLG0huUJ5zOA9FLW7d+py+amtU/vI
-         IQddvHqst+zzzh9MSuVHgDMovNH5aPRzZCs30r3wisqFdJtKfmc9nM/z3DhqRIslEl5F
-         BRww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693488978; x=1694093778;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QqAw1vSdyf4KNpVgJMS6YvMCPUOYkqxMNfc27UX7Zy4=;
-        b=j2T7JwW5jtRhIkMEuKrqrraJacMw3mrBQ7V8KkaBSdO6IFaBzgigoRGvtIv1NQQUI1
-         k786YwibqdaPGdo5/mBcXj0g09DhmJXpteDMt9DHSizppNYyTwTfkaeBhFssaBFIqBEa
-         uwcZ+Yd+z2zxkMhEfZgjzo+EVyBvHA+Ly+iOevVoBuMTUbZ1evLUo/Onmh0f+8LqaNQY
-         lKDYIwnfMcN95S9RntZkNfnziVC/Bzf/rSNDOBqJkiM//WdGO+M/+gN3AQlZoGapjw9T
-         Tg1GEXMHc5GRa0CUi+1GicUdGbxyFGQQSpKFYW2KbiQbgxGdRiBSPpu09zF7DashTkd6
-         ewsA==
-X-Gm-Message-State: AOJu0Yy6sXNCdu/rh2pD6VRLoS2wYr1HlhvSBCxfOF1BIakatkYkmlLi
-        F+hq2Ico/lbj9M7paHMFnTLkchBdyIUWzl7om4WvQA==
-X-Google-Smtp-Source: AGHT+IHLwKEwQ6Ij8GHHKwNHA115gxE5tfUPeMUXy+HCUY2RaudcNytalLP9wq/BdDRNIoBPy2RPFlUyH5wDcxh/f5Q=
-X-Received: by 2002:a9d:7d0b:0:b0:6b9:52cb:3adf with SMTP id
- v11-20020a9d7d0b000000b006b952cb3adfmr5581080otn.20.1693488978357; Thu, 31
- Aug 2023 06:36:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230824112741.201353-1-linkmauve@linkmauve.fr>
- <20230824112741.201353-2-linkmauve@linkmauve.fr> <46a562b5-6984-3b41-3c41-c346107b4c96@linaro.org>
- <ZOdUiFsAjQCvwp1A@desktop> <622faf2a-58ec-5ff4-1952-19c15d122642@linaro.org>
-In-Reply-To: <622faf2a-58ec-5ff4-1952-19c15d122642@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 31 Aug 2023 15:36:07 +0200
-Message-ID: <CACRpkdaw-sYVUPPrHNGGkdQ9_09CMHg11u2hGcUV-7L8MpLj+w@mail.gmail.com>
-Subject: Re: [PATCH 1/2] power: supply: bq24190: Support bq24193
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
-        Alexandre Courbot <acourbot@nvidia.com>,
-        azkali <a.ffcc7@gmail.com>, CTCaer <ctcaer@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S1346832AbjHaQ2t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 12:28:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C903110C8;
+        Thu, 31 Aug 2023 09:28:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E0296423E;
+        Thu, 31 Aug 2023 16:28:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9F3DC433BA;
+        Thu, 31 Aug 2023 16:28:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693499318;
+        bh=2Ww9Q0u01Ue+C8XQjrYkRHwNmgFGRGEhWZl6ghxXldA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YQ7DVYv1EQJjy14V0lYUk3VQ8WGwCK6l3oPzoE/loFFS/jMB6h9bpmbRLEiKwzGgw
+         QRXySJsQqdhXraaq1cuL4QnN7EapEqVNq3vcLLgUxJQhtxFiHK0lNYpbX8gavTHYWF
+         kMqv/uPNizTJBvLdOmr2g4pcp2tLBiFnJu9xzcxpzfSHMwkPYODJME9nwiEQ54Ctpa
+         KAEzzyPSR8eUemdjm2tFnl0fX26jzYr6FADPg+D5aSkSSv49ziZu+McTBvzwgfX5P4
+         iM2Fdl6/RZqqCJFiwH4lqIkzaxIzU1Piz/QKUldlPrpTZaXF5Cua47KJD7uhZ6TqId
+         HonvaYww0XrUA==
+Received: (nullmailer pid 2392965 invoked by uid 1000);
+        Thu, 31 Aug 2023 16:28:35 -0000
+Date:   Thu, 31 Aug 2023 11:28:35 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Niklas Cassel <nks@flawful.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robert Marko <robimarko@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Subject: Re: [PATCH v14 3/9] dt-bindings: soc: qcom: cpr3: Add bindings for
+ CPR3 driver
+Message-ID: <20230831162835.GA2390385-robh@kernel.org>
+References: <20230217-topic-cpr3h-v14-0-9fd23241493d@linaro.org>
+ <20230217-topic-cpr3h-v14-3-9fd23241493d@linaro.org>
+ <CAPDyKFrXT+2NEMUzVv-kWjXAhLinXq99GKq4_Ge2VjthtYxtaA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFrXT+2NEMUzVv-kWjXAhLinXq99GKq4_Ge2VjthtYxtaA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,43 +77,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 24, 2023 at 3:28=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> On 24/08/2023 15:00, Emmanuel Gil Peyrot wrote:
->
-> >>> @@ -2027,6 +2028,7 @@ MODULE_DEVICE_TABLE(i2c, bq24190_i2c_ids);
-> >>>  static const struct of_device_id bq24190_of_match[] =3D {
-> >>>     { .compatible =3D "ti,bq24190", },
-> >>>     { .compatible =3D "ti,bq24192", },
-> >>> +   { .compatible =3D "ti,bq24193", },
-> >>>     { .compatible =3D "ti,bq24192i", },
-> >>>     { .compatible =3D "ti,bq24196", },
-> >>
-> >> We should really stop doing this. All of them are compatible, aren't t=
-hey?
+On Tue, Aug 29, 2023 at 01:01:44PM +0200, Ulf Hansson wrote:
+> On Mon, 28 Aug 2023 at 13:42, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
 > >
-> > From what I gather from the different datasheets, the main difference
-> > between them is the maximum current they are able to provide, 1.5 A for
-> > the bq24190 and bq24192i, 3 A for bq24192 and 4.5 A for bq24193. The
-> > default current limit is also detected differently it seems.  But yeah,
-> > those are otherwise similar enough to not require anything different in
-> > the driver.
+> > From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 > >
-> > What would be a good way forward for that?  Adding a new ti,bq2419x
-> > compatible and switching all devices to this one, as long as they don=
-=E2=80=99t
-> > require anything specific?
->
-> Not a wildcard but any of existing ones, e.g. "ti,bq24196", "ti,bq24190".
+> > Add the bindings for the CPR3 driver to the documentation.
+> >
+> > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> > [Konrad: Make binding check pass; update AGdR's email]
+> > Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> > ---
+> >  .../devicetree/bindings/soc/qcom/qcom,cpr3.yaml    | 286 +++++++++++++++++++++
+> >  1 file changed, 286 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
+> > new file mode 100644
+> > index 000000000000..acf2e294866b
+> 
+> [...]
+> 
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/clock/qcom,gcc-msm8998.h>
+> > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > +
+> > +    cpus {
+> > +        #address-cells = <2>;
+> > +        #size-cells = <0>;
+> > +
+> > +        cpu@0 {
+> > +            compatible = "qcom,kryo280";
+> > +            device_type = "cpu";
+> > +            reg = <0x0 0x0>;
+> > +            operating-points-v2 = <&cpu0_opp_table>;
+> > +            power-domains = <&apc_cprh 0>;
+> > +            power-domain-names = "cprh";
+> 
+> Rather than using a Qcom specific power-domain-name, perhaps a common
+> power-domain-name for cpus, that can be used for "the performance
+> domain" would be a good idea here?
+> 
+> I have suggested using "perf" for the SCMI performance domain [1],
+> perhaps that description should be extended to cover this and other
+> performance domains too?
 
-We usually encourage people to over-specify the hardware number,
-because you never know when you need a quirk and then if you can't
-tell them apart you are in a bad place. (But there are exceptions, such
-as jedec-nor...)
+Better yet, nothing. There's no value to -names when there is only 1 
+entry.
 
-The differences pointed out (charge current limit etc) can very well
-result in different code paths at some point, especially if the charger
-interacts with some other component.
-
-Yours,
-Linus Walleij
+Rob
