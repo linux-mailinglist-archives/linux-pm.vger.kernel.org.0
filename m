@@ -2,69 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A2278F164
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 18:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54CBB78F168
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 18:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240698AbjHaQj2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Aug 2023 12:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38592 "EHLO
+        id S236892AbjHaQlA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Aug 2023 12:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjHaQj1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 12:39:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA943122;
-        Thu, 31 Aug 2023 09:39:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E8B1621D8;
-        Thu, 31 Aug 2023 16:39:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77650C433C7;
-        Thu, 31 Aug 2023 16:39:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693499963;
-        bh=g8xLY/dzEhuIK4x27Q6kJp7C/0Jbe5J3zYO8mO/3aC8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KIZpr6ENwLVYu0b/XguiTaTDDJHKPva0+/8B88VGItwawLNOyx4Hfl5896MEX7d6w
-         ReQR2sCItxRwB06NhAJFeHbW9n+Uy8CSNf57rq6HdWAAAGD82rCmQYCE8AI1Guh7Lo
-         ije1As5khU1WFEVFi3t5Gti36BhXnQB0GFnEwSTDtoT05nIEq2D26hzDYRlHaBRToS
-         VphFx+9si+yELUYmEnPffgBQa8P/LU7A4vbBocNLgwGKwDc2oIBg49RjOr/nvc89rK
-         sajQ6XHmb46wrCERHvzaz9xVRg6B46n7eyJ7dl/CWhB5XoYnH9eyJNElqdoQ1gcR2/
-         P2X9e7ntOo9qw==
-Received: (nullmailer pid 2406856 invoked by uid 1000);
-        Thu, 31 Aug 2023 16:39:21 -0000
-Date:   Thu, 31 Aug 2023 11:39:21 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Binbin Zhou <zhoubb.aaron@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Binbin Zhou <zhoubinbin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        loongson-kernel@lists.loongnix.cn, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, Xuerui Wang <kernel@xen0n.name>,
-        loongarch@lists.linux.dev
-Subject: Re: [PATCH 2/5] dt-bindings: soc: loongson,ls2k-pmc: Add missing
- compatible for Loongson-2K2000
-Message-ID: <20230831163921.GA2393252-robh@kernel.org>
-References: <cover.1693218539.git.zhoubinbin@loongson.cn>
- <54ee114c08f35ab8b5dc584fd76135ac9076f5a7.1693218539.git.zhoubinbin@loongson.cn>
- <20230828-shrewdly-payee-c5eb091a0417@spud>
- <CAMpQs4Jp0rb8sbrLrPnNziLph4Ym4LxBsFt-00G69ecd8bUHNg@mail.gmail.com>
- <3fd27e64-2221-ec38-1320-9ae966f998aa@linaro.org>
- <CAMpQs4+W1q0XziBVXr12xpFW=u2EkZx-_b-Mppx7cZukZLOBCQ@mail.gmail.com>
+        with ESMTP id S231937AbjHaQlA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 12:41:00 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59EE81B0
+        for <linux-pm@vger.kernel.org>; Thu, 31 Aug 2023 09:40:57 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2bcc187e0b5so19182641fa.1
+        for <linux-pm@vger.kernel.org>; Thu, 31 Aug 2023 09:40:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1693500055; x=1694104855; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=32VO4iE+9AUaoXKhjN8FGYng4VNGJNxRjuAGulwkX3A=;
+        b=D0/zGLLGmuydeo7/WdPm0BrabT8Evt0zrPhVdb41Jy2q6lUV3r5C66Zhuc4xnOfef9
+         sgDpb1PjOhmj2mZa8b9Wd3vK5WfYeyFCAbWT62ePCL4AikXNOnFD5lX1COE0RH50OR9D
+         8omciMzj2qtJ7dKvAh+SPAncTvaJ9VCcHvp6eJDI5GNb+niHEXVKHVMNw3Y9VzHhc+vc
+         LuqG3IrpYEbd9Vfu9bpXwcU4qd4slSU4K6BH9hEW92P8yYiCNBRSJUHFWvfmdzEYVQjt
+         BK5YIRUZdbnRkO7d1jxXzJ5J1+uexcFL/vIEl7BH6dM7KiH6oe+ol8I+VJCpTBlaTtgk
+         VShQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693500055; x=1694104855;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=32VO4iE+9AUaoXKhjN8FGYng4VNGJNxRjuAGulwkX3A=;
+        b=MYkAP+BB25Y3DoFrkhdBPh13hwn0CAddCjbnCly14gRo+LrdBdRyLJ1ku7iErPTfx4
+         /JwdwmnrvZ4SnjHVZhmieVMKsF1fcVXGEmE5mY1ZwMjpx+exnWV6tyfN3xE2z4Ndu9cp
+         1pUL5Qj/2dpIcAVdKema7nMqMUDaBM/+JoCsO5ix6gzVhEYj3OeTFanmqZjQLlUylk7h
+         bcVJ9JIoOdJE+QqR5AmI/V+2KcNPGr7zoZ/vWolpb/ZuHl5xbGxG/uRvriJuijAmgT/P
+         HBHGuFYeb/MPFn55nAtaFmP0uh5wILHXLsLH3ZIchwxLfEPlDUgT1vBdihF5x/BIPUze
+         hjTQ==
+X-Gm-Message-State: AOJu0YwUhHTbl2riGuiaxkM6eKdihc9Y0/B0ZeX/tLc3U99Cpwi4BueQ
+        AOlMvqggJegBX2hQIJdTVJ6THA==
+X-Google-Smtp-Source: AGHT+IHEKkqBMsrhr42Vv9weNDnAD6WdXqK5Onb+9zx4IfnsLu7lPJA5n4KeZI7uo9A9Og4Aq9qTcw==
+X-Received: by 2002:a2e:8e89:0:b0:2bc:fdb9:5bf4 with SMTP id z9-20020a2e8e89000000b002bcfdb95bf4mr4375910ljk.11.1693500055525;
+        Thu, 31 Aug 2023 09:40:55 -0700 (PDT)
+Received: from [192.168.1.101] (abyk13.neoplus.adsl.tpnet.pl. [83.9.30.13])
+        by smtp.gmail.com with ESMTPSA id c1-20020a2e9d81000000b002b9b9fd0f92sm378214ljj.105.2023.08.31.09.40.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Aug 2023 09:40:55 -0700 (PDT)
+Message-ID: <f1f60df1-7632-48a2-a211-dcd6c1fa419f@linaro.org>
+Date:   Thu, 31 Aug 2023 18:40:53 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMpQs4+W1q0XziBVXr12xpFW=u2EkZx-_b-Mppx7cZukZLOBCQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 3/9] dt-bindings: soc: qcom: cpr3: Add bindings for
+ CPR3 driver
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Niklas Cassel <nks@flawful.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robert Marko <robimarko@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+References: <20230217-topic-cpr3h-v14-0-9fd23241493d@linaro.org>
+ <20230217-topic-cpr3h-v14-3-9fd23241493d@linaro.org>
+ <CAPDyKFrXT+2NEMUzVv-kWjXAhLinXq99GKq4_Ge2VjthtYxtaA@mail.gmail.com>
+ <20230831162835.GA2390385-robh@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
+ BB/OmIWU6X+LZW6P88ZmHe+KeyABLMP5s1tJNK1j4ntT7mECcWZDzafPWF4F6m4WJOG27kTJ
+ HGWdmtO+RvadOVi6CoUDqALsmfS3MUG5Pj2Ne9+0jRg4hEnB92AyF9rW2G3qisFcwPgvatt7
+ TXD5E38mLyOPOUyXNj9XpDbt1hNwKQfiidmPh5e7VNAWRnW1iCMMoKqzM1Anzq7e5Afyeifz
+ zRcQPLaqrPjnKqZGL2BKQSZDh6NkI5ZLRhhHQf61fkWcUpTp1oDC6jWVfT7hwRVIQLrrNj9G
+ MpPzrlN4YuAqKeIer1FMt8cq64ifgTzxHzXsMcUdclzq2LTk2RXaPl6Jg/IXWqUClJHbamSk
+ t1bfif3SnmhA6TiNvEpDKPiT3IDs42THU6ygslrBxyROQPWLI9IL1y8S6RtEh8H+NZQWZNzm
+ UQ3imZirlPjxZtvz1BtnnBWS06e7x/UEAguj7VHCuymVgpl2Za17d1jj81YN5Rp5L9GXxkV1
+ aUEwONM3eCI3qcYm5JNc5X+JthZOWsbIPSC1Rhxz3JmWIwP1udr5E3oNRe9u2LIEq+wH/toH
+ kpPDhTeMkvt4KfE5m5ercid9+ZXAqoaYLUL4HCEw+HW0DXcKDwARAQABzShLb25yYWQgRHli
+ Y2lvIDxrb25yYWQuZHliY2lvQGxpbmFyby5vcmc+wsGOBBMBCAA4FiEEU24if9oCL2zdAAQV
+ R4cBcg5dfFgFAmQ5bqwCGwMFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AACgkQR4cBcg5dfFjO
+ BQ//YQV6fkbqQCceYebGg6TiisWCy8LG77zV7DB0VMIWJv7Km7Sz0QQrHQVzhEr3trNenZrf
+ yy+o2tQOF2biICzbLM8oyQPY8B///KJTWI2khoB8IJSJq3kNG68NjPg2vkP6CMltC/X3ohAo
+ xL2UgwN5vj74QnlNneOjc0vGbtA7zURNhTz5P/YuTudCqcAbxJkbqZM4WymjQhe0XgwHLkiH
+ 5LHSZ31MRKp/+4Kqs4DTXMctc7vFhtUdmatAExDKw8oEz5NbskKbW+qHjW1XUcUIrxRr667V
+ GWH6MkVceT9ZBrtLoSzMLYaQXvi3sSAup0qiJiBYszc/VOu3RbIpNLRcXN3KYuxdQAptacTE
+ mA+5+4Y4DfC3rUSun+hWLDeac9z9jjHm5rE998OqZnOU9aztbd6zQG5VL6EKgsVXAZD4D3RP
+ x1NaAjdA3MD06eyvbOWiA5NSzIcC8UIQvgx09xm7dThCuQYJR4Yxjd+9JPJHI6apzNZpDGvQ
+ BBZzvwxV6L1CojUEpnilmMG1ZOTstktWpNzw3G2Gis0XihDUef0MWVsQYJAl0wfiv/0By+XK
+ mm2zRR+l/dnzxnlbgJ5pO0imC2w0TVxLkAp0eo0LHw619finad2u6UPQAkZ4oj++iIGrJkt5
+ Lkn2XgB+IW8ESflz6nDY3b5KQRF8Z6XLP0+IEdLOOARkOW7yEgorBgEEAZdVAQUBAQdAwmUx
+ xrbSCx2ksDxz7rFFGX1KmTkdRtcgC6F3NfuNYkYDAQgHwsF2BBgBCAAgFiEEU24if9oCL2zd
+ AAQVR4cBcg5dfFgFAmQ5bvICGwwACgkQR4cBcg5dfFju1Q//Xta1ShwL0MLSC1KL1lXGXeRM
+ 8arzfyiB5wJ9tb9U/nZvhhdfilEDLe0jKJY0RJErbdRHsalwQCrtq/1ewQpMpsRxXzAjgfRN
+ jc4tgxRWmI+aVTzSRpywNahzZBT695hMz81cVZJoZzaV0KaMTlSnBkrviPz1nIGHYCHJxF9r
+ cIu0GSIyUjZ/7xslxdvjpLth16H27JCWDzDqIQMtg61063gNyEyWgt1qRSaK14JIH/DoYRfn
+ jfFQSC8bffFjat7BQGFz4ZpRavkMUFuDirn5Tf28oc5ebe2cIHp4/kajTx/7JOxWZ80U70mA
+ cBgEeYSrYYnX+UJsSxpzLc/0sT1eRJDEhI4XIQM4ClIzpsCIN5HnVF76UQXh3a9zpwh3dk8i
+ bhN/URmCOTH+LHNJYN/MxY8wuukq877DWB7k86pBs5IDLAXmW8v3gIDWyIcgYqb2v8QO2Mqx
+ YMqL7UZxVLul4/JbllsQB8F/fNI8AfttmAQL9cwo6C8yDTXKdho920W4WUR9k8NT/OBqWSyk
+ bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
+ nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
+ izWDgYvmBE8=
+In-Reply-To: <20230831162835.GA2390385-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,73 +129,58 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 29, 2023 at 02:52:48PM +0800, Binbin Zhou wrote:
-> On Tue, Aug 29, 2023 at 2:29 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
-> >
-> > On 29/08/2023 05:21, Binbin Zhou wrote:
-> > > HI Conor:
-> > >
-> > > Thanks for your reply.
-> > >
-> > > On Mon, Aug 28, 2023 at 11:49 PM Conor Dooley <conor@kernel.org> wrote:
-> > >>
-> > >> On Mon, Aug 28, 2023 at 08:38:32PM +0800, Binbin Zhou wrote:
-> > >>> Document the Power Management Unit system controller compatible for
-> > >>> Loongson-2K2000.
-> > >>>
-> > >>> This is a missing compatible, now we add it.
-> > >>>
-> > >>> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> > >>> ---
-> > >>>  .../devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml      | 1 +
-> > >>>  1 file changed, 1 insertion(+)
-> > >>>
-> > >>> diff --git a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
-> > >>> index da2dcfeebf12..7473c5659929 100644
-> > >>> --- a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
-> > >>> +++ b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
-> > >>> @@ -15,6 +15,7 @@ properties:
-> > >>>        - enum:
-> > >>>            - loongson,ls2k0500-pmc
-> > >>>            - loongson,ls2k1000-pmc
-> > >>> +          - loongson,ls2k2000-pmc
-> > >>
-> > >> Same thing here as the driver patch, the pmc on this newly added SoC
-> > >> appears to use the same codepaths as the existing ones. Does it share a
-> > >> programming model & should there be a fallback compatible here?
-> > >
-> > > I noticed the guideline about fallback compatible:
-> > >
-> > > "DO use fallback compatibles when devices are the same as or a subset
-> > > of prior implementations."
-> > >
-> > > But in fact, ls2k0500/ls2k1000/ls2k2000 are independent, there is no subset.
-> >
-> > We do not consider here ls2k0500/ls2k1000/ls2k2000, but PMC in each of
-> > them. If they are independent, why would they use the same interface?
+On 31.08.2023 18:28, Rob Herring wrote:
+> On Tue, Aug 29, 2023 at 01:01:44PM +0200, Ulf Hansson wrote:
+>> On Mon, 28 Aug 2023 at 13:42, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>>
+>>> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+>>>
+>>> Add the bindings for the CPR3 driver to the documentation.
+>>>
+>>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+>>> [Konrad: Make binding check pass; update AGdR's email]
+>>> Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>> ---
+>>>  .../devicetree/bindings/soc/qcom/qcom,cpr3.yaml    | 286 +++++++++++++++++++++
+>>>  1 file changed, 286 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
+>>> new file mode 100644
+>>> index 000000000000..acf2e294866b
+>>
+>> [...]
+>>
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    #include <dt-bindings/clock/qcom,gcc-msm8998.h>
+>>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>>> +
+>>> +    cpus {
+>>> +        #address-cells = <2>;
+>>> +        #size-cells = <0>;
+>>> +
+>>> +        cpu@0 {
+>>> +            compatible = "qcom,kryo280";
+>>> +            device_type = "cpu";
+>>> +            reg = <0x0 0x0>;
+>>> +            operating-points-v2 = <&cpu0_opp_table>;
+>>> +            power-domains = <&apc_cprh 0>;
+>>> +            power-domain-names = "cprh";
+>>
+>> Rather than using a Qcom specific power-domain-name, perhaps a common
+>> power-domain-name for cpus, that can be used for "the performance
+>> domain" would be a good idea here?
+>>
+>> I have suggested using "perf" for the SCMI performance domain [1],
+>> perhaps that description should be extended to cover this and other
+>> performance domains too?
 > 
-> Sorry. I may have misunderstood.
-> The "subset" in the above guideline, here we should be talking about
-> PMC, not SoC.
-> For PMC, ls2k0500/ls2k1000/ls2k2000 are the same.
-> 
-> Am I understanding correctly now?
+> Better yet, nothing. There's no value to -names when there is only 1 
+> entry.
+As of today, it's required for devm_pm_opp_attach_genpd()
 
-The test is can an OS/client which only understands the fallback 
-compatible (loongson,ls2k-pmc) use that h/w block (or some subset of 
-it)? If so, then a fallback is appropriate. If not, then don't use a 
-fallback. If the block in one SoC is a proper subset of another SoC, 
-then make the compatible that's a subset the fallback. However, that's 
-really only helpful if an OS/client already understands the fallback. 
+Ulf, is there a better way to do this that doesn't require names?
 
-
-> Also, when I said "independent" above, I meant they are three different SoCs.
-
-But those SoCs are probably not designed completely independently. An 
-existing SoC is the basis for the next SoC design.
-
-OTOH, things like pinmux, clocks, power mgt, etc. tend to change in 
-every chip.
-
-Rob
+Konrad
