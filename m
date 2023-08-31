@@ -2,57 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B1878E5EE
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 07:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC66378E6DA
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 08:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239743AbjHaFrN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Aug 2023 01:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50210 "EHLO
+        id S238154AbjHaGzZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Aug 2023 02:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbjHaFrK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 01:47:10 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D14E0;
-        Wed, 30 Aug 2023 22:47:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693460826; x=1724996826;
-  h=date:from:to:cc:subject:message-id;
-  bh=CnOsyx8oq1YnERBwL/fXRx02nGiEL6rQEC37SWQfvP4=;
-  b=GUXBbbA2Ra7aojangX0yulULUFxVWubBj1MxoNTPFsJViLc9z7nYHIOG
-   nDlCxFTmEgQuB+zK3tvTv0+ugknScYqelnpAlov2B1Z39I/TaxYmHXDQ7
-   VVsQgusUyPBl+vOCn7mlx3SU+zhziX7pO5sUcOjkHcvk2lbKhb4z724dL
-   AIztAD3UjaV05DN2Hk11EsFrPu0/gFnX0wAfc5uq7dx2kj2K5PUMzHp7G
-   4tzl2+PpQuTHdzPM9LgQavXpsPw2ngZriL+MRA+toZvgMaRZMG+sKg0R0
-   omI+tZasiZ8Dr09eD/oe3+/hOrxppjp6XFxT4Rn4ePhlUdWWQpoKC0Oh0
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="356136764"
-X-IronPort-AV: E=Sophos;i="6.02,215,1688454000"; 
-   d="scan'208";a="356136764"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 22:47:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="739346773"
-X-IronPort-AV: E=Sophos;i="6.02,215,1688454000"; 
-   d="scan'208";a="739346773"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 30 Aug 2023 22:47:04 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qbaWG-000AjM-0X;
-        Thu, 31 Aug 2023 05:47:04 +0000
-Date:   Thu, 31 Aug 2023 13:45:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 003894c19da3987667731ef1c6d4734b5632eeb6
-Message-ID: <202308311317.ywzYDoZC-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        with ESMTP id S242097AbjHaGzY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 02:55:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D097E0;
+        Wed, 30 Aug 2023 23:55:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17D3DB8214E;
+        Thu, 31 Aug 2023 06:55:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB377C433C7;
+        Thu, 31 Aug 2023 06:55:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693464913;
+        bh=grzKBzpetMZY5pdHGAMbnhEOjQCjw9xTNEpumNTXwc0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=sspU5rM1PBNw//1BbhEu4+mqq94+fmuemobfJp5WDzZsgguk+bGecuAatllWXvuGM
+         mVc9JlEnqfLb4Cxqu3SdIP4JA093SJsWiGy/83LDTIrXklcN6QewyDTpsCdl565QY9
+         zGyVuytze8UgNF9kbkYLkX2OYSmHenaNIaBB7/PF/Gz5sOLLdWSqFNtDxJPAsv1ku0
+         XTMJ3qEi6xIuwLVxqYumt1onQ/HwwqpIPoV7ysqquYsCR3RQBt5HJPas5wie21+MuB
+         nk0Om86w4MwsHy8wq6B8sYKCjSB+/UWjGbfReszLgPnTLcCFS2juv58SFOwcMsZ4kD
+         rhjvvyOVFVIBQ==
+Message-ID: <33be5c62-fd51-0485-ed4d-d9c79f26d85a@kernel.org>
+Date:   Thu, 31 Aug 2023 15:55:10 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] ata,scsi: do not issue START STOP UNIT on resume
+Content-Language: en-US
+To:     Rodrigo Vivi <rodrigo.vivi@kernel.org>
+Cc:     linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Paul Ausbeck <paula@soe.ucsc.edu>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        TW <dalzot@gmail.com>, regressions@lists.linux.dev,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Linux Power Management <linux-pm@vger.kernel.org>
+References: <20230731003956.572414-1-dlemoal@kernel.org>
+ <ZOehTysWO+U3mVvK@rdvivi-mobl4>
+ <40adc06d-0835-2786-0bfb-83239f546d92@kernel.org>
+ <ZOjgJl4nlieu3+kL@rdvivi-mobl4>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <ZOjgJl4nlieu3+kL@rdvivi-mobl4>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,246 +68,172 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 003894c19da3987667731ef1c6d4734b5632eeb6  Merge branch 'thermal-core' into linux-next
+On 8/26/23 02:09, Rodrigo Vivi wrote:
+> I have the CONFIG_PM_DEBUG here with no_console_suspend.
+> If you remember any other config or parameter that would help, please let
+> me know that I collect it again:
 
-elapsed time: 969m
+Coming back to this previous dmesg output as I am in fact seeing something very
+similar now. See below.
 
-configs tested: 227
-configs skipped: 2
+> [  104.571459] PM: suspend entry (deep)
+> [  104.585967] Filesystems sync: 0.010 seconds
+> [  104.618685] Freezing user space processes
+> [  104.625374] Freezing user space processes completed (elapsed 0.002 seconds)
+> [  104.632448] OOM killer disabled.
+> [  104.635712] Freezing remaining freezable tasks
+> [  104.641899] Freezing remaining freezable tasks completed (elapsed 0.001 seconds)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+suspend start and freezes the user tasks, as expected.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r023-20230831   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20230830   gcc  
-arc                   randconfig-001-20230831   gcc  
-arc                  randconfig-r001-20230831   gcc  
-arc                  randconfig-r006-20230830   gcc  
-arc                  randconfig-r026-20230831   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                   randconfig-001-20230830   clang
-arm                   randconfig-001-20230831   gcc  
-arm                  randconfig-r013-20230831   gcc  
-arm                  randconfig-r025-20230831   gcc  
-arm                  randconfig-r031-20230831   clang
-arm64                            allmodconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r012-20230830   gcc  
-arm64                randconfig-r033-20230831   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-hexagon               randconfig-001-20230830   clang
-hexagon               randconfig-001-20230831   clang
-hexagon               randconfig-002-20230830   clang
-hexagon               randconfig-002-20230831   clang
-hexagon              randconfig-r024-20230830   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20230830   clang
-i386         buildonly-randconfig-001-20230831   gcc  
-i386         buildonly-randconfig-002-20230830   clang
-i386         buildonly-randconfig-002-20230831   gcc  
-i386         buildonly-randconfig-003-20230830   clang
-i386         buildonly-randconfig-003-20230831   gcc  
-i386         buildonly-randconfig-004-20230830   clang
-i386         buildonly-randconfig-004-20230831   gcc  
-i386         buildonly-randconfig-005-20230830   clang
-i386         buildonly-randconfig-005-20230831   gcc  
-i386         buildonly-randconfig-006-20230830   clang
-i386         buildonly-randconfig-006-20230831   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20230830   clang
-i386                  randconfig-001-20230831   gcc  
-i386                  randconfig-002-20230830   clang
-i386                  randconfig-002-20230831   gcc  
-i386                  randconfig-003-20230830   clang
-i386                  randconfig-003-20230831   gcc  
-i386                  randconfig-004-20230830   clang
-i386                  randconfig-004-20230831   gcc  
-i386                  randconfig-005-20230830   clang
-i386                  randconfig-005-20230831   gcc  
-i386                  randconfig-006-20230830   clang
-i386                  randconfig-006-20230831   gcc  
-i386                  randconfig-011-20230830   gcc  
-i386                  randconfig-011-20230831   clang
-i386                  randconfig-012-20230830   gcc  
-i386                  randconfig-012-20230831   clang
-i386                  randconfig-013-20230830   gcc  
-i386                  randconfig-013-20230831   clang
-i386                  randconfig-014-20230830   gcc  
-i386                  randconfig-014-20230831   clang
-i386                  randconfig-015-20230830   gcc  
-i386                  randconfig-015-20230831   clang
-i386                  randconfig-016-20230830   gcc  
-i386                  randconfig-016-20230831   clang
-i386                 randconfig-r013-20230830   gcc  
-i386                 randconfig-r016-20230830   gcc  
-i386                 randconfig-r026-20230830   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20230830   gcc  
-loongarch            randconfig-r002-20230831   gcc  
-loongarch            randconfig-r011-20230831   gcc  
-loongarch            randconfig-r014-20230830   gcc  
-loongarch            randconfig-r036-20230830   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r011-20230830   gcc  
-m68k                 randconfig-r015-20230830   gcc  
-m68k                 randconfig-r035-20230830   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-microblaze           randconfig-r001-20230830   gcc  
-microblaze           randconfig-r023-20230830   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r032-20230831   clang
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r005-20230831   gcc  
-nios2                randconfig-r022-20230831   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-powerpc              randconfig-r036-20230831   gcc  
-powerpc64            randconfig-r003-20230830   clang
-powerpc64            randconfig-r006-20230831   gcc  
-powerpc64            randconfig-r012-20230831   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20230830   clang
-riscv                 randconfig-001-20230831   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20230830   gcc  
-s390                  randconfig-001-20230831   clang
-s390                 randconfig-r003-20230831   gcc  
-s390                 randconfig-r032-20230830   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                   randconfig-r021-20230831   gcc  
-sh                   randconfig-r034-20230830   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r004-20230830   gcc  
-sparc                randconfig-r004-20230831   gcc  
-sparc                randconfig-r005-20230830   gcc  
-sparc                randconfig-r031-20230830   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64              randconfig-r033-20230830   gcc  
-sparc64              randconfig-r035-20230831   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                   randconfig-r014-20230831   gcc  
-um                   randconfig-r015-20230831   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-001-20230830   clang
-x86_64       buildonly-randconfig-002-20230830   clang
-x86_64       buildonly-randconfig-003-20230830   clang
-x86_64       buildonly-randconfig-004-20230830   clang
-x86_64       buildonly-randconfig-005-20230830   clang
-x86_64       buildonly-randconfig-006-20230830   clang
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20230830   gcc  
-x86_64                randconfig-001-20230831   clang
-x86_64                randconfig-002-20230830   gcc  
-x86_64                randconfig-002-20230831   clang
-x86_64                randconfig-003-20230830   gcc  
-x86_64                randconfig-003-20230831   clang
-x86_64                randconfig-004-20230830   gcc  
-x86_64                randconfig-004-20230831   clang
-x86_64                randconfig-005-20230830   gcc  
-x86_64                randconfig-005-20230831   clang
-x86_64                randconfig-006-20230830   gcc  
-x86_64                randconfig-006-20230831   clang
-x86_64                randconfig-011-20230830   clang
-x86_64                randconfig-011-20230831   gcc  
-x86_64                randconfig-012-20230830   clang
-x86_64                randconfig-012-20230831   gcc  
-x86_64                randconfig-013-20230830   clang
-x86_64                randconfig-013-20230831   gcc  
-x86_64                randconfig-014-20230830   clang
-x86_64                randconfig-014-20230831   gcc  
-x86_64                randconfig-015-20230830   clang
-x86_64                randconfig-015-20230831   gcc  
-x86_64                randconfig-016-20230830   clang
-x86_64                randconfig-016-20230831   gcc  
-x86_64                randconfig-071-20230830   clang
-x86_64                randconfig-071-20230831   gcc  
-x86_64                randconfig-072-20230830   clang
-x86_64                randconfig-072-20230831   gcc  
-x86_64                randconfig-073-20230830   clang
-x86_64                randconfig-073-20230831   gcc  
-x86_64                randconfig-074-20230830   clang
-x86_64                randconfig-074-20230831   gcc  
-x86_64                randconfig-075-20230830   clang
-x86_64                randconfig-075-20230831   gcc  
-x86_64                randconfig-076-20230830   clang
-x86_64                randconfig-076-20230831   gcc  
-x86_64               randconfig-r016-20230831   clang
-x86_64               randconfig-r022-20230830   gcc  
-x86_64               randconfig-r024-20230831   clang
-x86_64               randconfig-r025-20230830   gcc  
-x86_64               randconfig-r034-20230831   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa               randconfig-r002-20230830   gcc  
-xtensa               randconfig-r021-20230830   gcc  
+> [  104.669767] wlp6s0: deauthenticating from 08:36:c9:85:df:ef by local choice (Reason: 3=DEAUTH_LEAVING)
+> [  104.679812] serial 00:01: disabled
+> [  104.683466] sd 7:0:0:0: [sdc] Synchronizing SCSI cache
+> [  104.688902] sd 7:0:0:0: [sdc] Stopping disk
+> [  104.693176] sd 5:0:0:0: [sdb] Synchronizing SCSI cache
+> [  104.698419] sd 4:0:0:0: [sda] Synchronizing SCSI cache
+> [  104.703730] sd 4:0:0:0: [sda] Stopping disk
+> [  104.885912] sd 5:0:0:0: [sdb] Stopping disk
+> [  106.163215] PM: suspend devices took 1.514 seconds
+
+All devices are suspended. No issues. Then resume starts...
+
+> [  107.003217] serial 00:01: activated
+> [  107.076779] nvme nvme0: 16/0/0 default/read/poll queues
+> [  107.123917] r8169 0000:07:00.0 enp7s0: Link is Down
+> [  107.208945] PM: resume devices took 0.241 seconds
+> [  107.214746] pcieport 0000:00:1c.0: PCI bridge to [bus 06]
+> [  107.220274] pcieport 0000:00:1c.0:   bridge window [mem 0x43700000-0x437fffff]
+> [  107.227538] OOM killer enabled.
+> [  107.230710] Restarting tasks ...
+
+... remember this one ...
+
+> [  107.231803] pcieport 0000:00:1c.2: PCI bridge to [bus 07]
+> [  107.236474] done.
+> [  107.240599] pcieport 0000:00:1c.2:   bridge window [io  0x4000-0x4fff]
+> [  107.242574] random: crng reseeded on system resumption
+> [  107.249119] pcieport 0000:00:1c.2:   bridge window [mem 0x43600000-0x436fffff]
+> [  107.249405] pcieport 0000:00:1c.6: PCI bridge to [bus 08]
+> [  107.259714] PM: suspend exit
+> [  107.261623] pcieport 0000:00:1c.6:   bridge window [io  0x3000-0x3fff]
+> [  107.276554] pcieport 0000:00:1c.6:   bridge window [mem 0x43500000-0x435fffff]
+> [  107.283849] pcieport 0000:00:1c.6:   bridge window [mem 0x70900000-0x709fffff 64bit pref]
+> [  107.293567] ata7: SATA link down (SStatus 4 SControl 300)
+> [  107.304150] ata5: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
+> [  107.310975] ata6: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
+> [  107.319173] ata5.00: configured for UDMA/133
+> [  107.324620] ata5.00: Enabling discard_zeroes_data
+> [  107.398370] ata6.00: configured for UDMA/133
+
+started bringing back up devices, but suspend comes back again.
+
+> [  108.563229] PM: suspend entry (deep)
+> [  108.573610] Filesystems sync: 0.006 seconds
+> [  108.580617] Freezing user space processes
+> [  108.586774] Freezing user space processes completed (elapsed 0.002 seconds)
+> [  108.593793] OOM killer disabled.
+> [  108.597055] Freezing remaining freezable tasks
+> [  108.603246] Freezing remaining freezable tasks completed (elapsed 0.001 seconds)
+
+which freezes the tasks, again.
+
+> [  108.621515] sd 7:0:0:0: [sdc] Synchronizing SCSI cache
+> [  108.621522] sd 5:0:0:0: [sdb] Synchronizing SCSI cache
+> [  108.622018] serial 00:01: disabled
+> [  108.635420] sd 4:0:0:0: [sda] Synchronizing SCSI cache
+> [  108.640747] sd 4:0:0:0: [sda] Stopping disk
+> [  108.644148] sd 5:0:0:0: [sdb] Stopping disk
+> [  108.983487] ata8: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
+> [  108.991923] ata8.00: configured for UDMA/133
+> [  108.996423] sd 7:0:0:0: [sdc] Stopping disk
+> [  109.973722] PM: suspend devices took 1.363 seconds
+
+And suspend finishes, followed by resume starting.
+
+> [  110.721600] serial 00:01: activated
+> [  110.802094] nvme nvme0: 16/0/0 default/read/poll queues
+> [  110.873036] r8169 0000:07:00.0 enp7s0: Link is Down
+> [  111.032278] ata5: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
+> [  111.038583] ata7: SATA link down (SStatus 4 SControl 300)
+> [  111.044065] ata6: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
+> [  111.051326] ata5.00: configured for UDMA/133
+> [  111.056118] ata5.00: Enabling discard_zeroes_data
+> [  111.131795] ata6.00: configured for UDMA/133
+> [  112.713764] ata8: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
+> [  112.724250] ata8.00: configured for UDMA/133
+
+Resume restarted the devices, but there is no "Restarting tasks" ! So the user
+tasks are frozen, hence the "hang". There are no user processes to run, so no
+coming back to the shell.
+
+So even without the libata patches fixing the resume mess, this issue does not
+look like a libata issue. I think your bisect hitting the no_start_on_resume
+patch is simply because that patch changes the timing of things and makes it
+easier to hit this issue.
+
+Adding PM folks because I am out of my depth on this one...
+
+PM folks,
+
+Rodrigo hit an issue doing suspend+resume cycles in a loop, with the resume
+triggered a very short time (wakealarm) after starting resume. This ends up
+with a hang. I could recreate the same in qemu. I cannot get wakealarm to work
+for some reason, but I have a virtio device not supporting suspend which
+triggers the resume in the middle of suspend. And repeating "systemctl suspend"
+again and again, I end up with a similar hang:
+
+[   98.455929] PM: suspend entry (s2idle)
+[   98.466622] Filesystems sync: 0.008 seconds
+[   98.473871] Freezing user space processes
+[   98.476372] Freezing user space processes completed (elapsed 0.001 seconds)
+[   98.478197] OOM killer disabled.
+[   98.479199] Freezing remaining freezable tasks
+[   98.481887] Freezing remaining freezable tasks completed (elapsed 0.001 seconds)
+
+suspend starts, freezineg the tasks.
+
+[   98.493890] virtio-fs: suspend/resume not yet supported
+[   98.493971] sd 2:0:0:0: [sdc] Synchronizing SCSI cache
+[   98.499658] virtio-pci 0000:00:05.0: PM: pci_pm_suspend():
+virtio_pci_freeze+0x0/0x50 returns -95
+[   98.504241] virtio-pci 0000:00:05.0: PM: dpm_run_callback():
+pci_pm_suspend+0x0/0x230 returns -95
+[   98.507762] virtio-pci 0000:00:05.0: PM: failed to suspend async: error -95
+
+Failure of the virtio device suspend which will trigger pm_recover+resume.
+
+[   98.509451] ata3.00: Entering standby power mode
+[   98.511197] sd 1:0:0:0: [sdb] Synchronizing SCSI cache
+[   98.512917] sd 0:0:0:0: [sda] Synchronizing SCSI cache
+
+Here, the scsi devices already suspended (asynchronously) do their thing.
+
+[   98.515562] PM: Some devices failed to suspend, or early wake event detected
+[   98.521098] virtio_blk virtio3: 4/0/0 default/read/poll queues
+[   98.548229] OOM killer enabled.
+[   98.549338] Restarting tasks ... done.
+
+The tasks are restarted due to the suspend error above.
+
+[   98.551734] random: crng reseeded on system resumption
+[   98.559697] PM: suspend exit
+[   98.561038] PM: suspend entry (s2idle)
+[   98.566692] Filesystems sync: 0.004 seconds
+[   98.574461] Freezing user space processes
+[   98.577265] Freezing user space processes completed (elapsed 0.001 seconds)
+[   98.579351] OOM killer disabled.
+[   98.580341] Freezing remaining freezable tasks
+[   98.583109] Freezing remaining freezable tasks completed (elapsed 0.001 seconds)
+
+but here, for whatever reason, the tasks are suspended again despite the fact
+that we should be resuming. After this, I only see the scsi&ata devices
+finishing suspend and then being resumed all normally. But no coming back to
+the shell. It is frozen...
+
+Any idea ?
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Damien Le Moal
+Western Digital Research
+
