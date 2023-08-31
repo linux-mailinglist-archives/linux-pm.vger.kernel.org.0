@@ -2,87 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8F378F1B6
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 19:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3953078F4CE
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 23:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233580AbjHaRMr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Aug 2023 13:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51214 "EHLO
+        id S1347615AbjHaVs0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Aug 2023 17:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231409AbjHaRMq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 13:12:46 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A568107;
-        Thu, 31 Aug 2023 10:12:41 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="6.02,217,1688396400"; 
-   d="scan'208";a="178331803"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 01 Sep 2023 02:12:40 +0900
-Received: from localhost.localdomain (unknown [10.226.92.179])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id D33ED400F2AE;
-        Fri,  1 Sep 2023 02:12:38 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v3] power: supply: sbs-battery: Make similar OF and ID table
-Date:   Thu, 31 Aug 2023 18:12:35 +0100
-Message-Id: <20230831171235.58477-1-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S1347612AbjHaVsZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 17:48:25 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBA9CD8
+        for <linux-pm@vger.kernel.org>; Thu, 31 Aug 2023 14:48:18 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-d7260fae148so1015849276.1
+        for <linux-pm@vger.kernel.org>; Thu, 31 Aug 2023 14:48:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1693518498; x=1694123298; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vYQm3HLTVW0PLSRJWbeaTbNjeFSBbaECmMIm+40Gbmk=;
+        b=yd/40IO2G+j0u0NQqPr0r5ze685Tm8YwWkrpW3hhdJ2pGzVxwAmB1isM0N74o3bB5x
+         WwbaCYOL/x1y2pcBYBhRJd6TqC2RPP2683Mq41sUamjSfroUelKphqBthsNN5YC9arFn
+         vHRjSWiCIRxA8fBXsDfk4nExZTt5u7l5Ug3dRc4MnWkpzMWjY7qVZp4xc2D1jtrfmTaj
+         XJouyoVcUzAN0nIooeE57yn5XYLMMWnRdv4M2Kd1OPV86vSSUwJypNojoNFnLsjc610l
+         PWr5KIpljhyf/6EN3C2PsRGeaOp6TE7643CJc/FxwJBZ6/e+9+Xb2Y27PCsKEdnxwvta
+         HADA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693518498; x=1694123298;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vYQm3HLTVW0PLSRJWbeaTbNjeFSBbaECmMIm+40Gbmk=;
+        b=F3Yky7AybDuw4AYvwVCVqqT8rycjtQ1zYp80N3M84gA8agzNA4y39ldshx/lZ8H90G
+         6ahqrCv+p8clUv+/NlXkL76ItyOVNvQmoSnHsE0U9kTRB3qVGFUBHcMhXO0ZssUKCW6x
+         k6Go+JFma2R3DArKXrSQgSHMdpJq8OYmvbaaeh3pB4MQJytkACMv4bddeU8co1JAn2TY
+         vlan3tNnOMj6HJSl1Ml1Lj25EmJ/loMtWV19kjeF8PEmyWgDUc2QPfJvyDo54WmY3L0e
+         BSyuje84jxXWcKP/NgMcKIS//gxWbioyf7ZR3WZgz8Am38wBGVOnhP/Ady3leam4GoN5
+         q4cg==
+X-Gm-Message-State: AOJu0YwTNuPYCxqARxu64B6i9ONvJ4FaLKdL45gj4Fdz6wKqZC6GOpjL
+        6XvJzZ9fYwLx4Z9MGkONy1/HH3qTG63hionWicUgSw==
+X-Google-Smtp-Source: AGHT+IGUdiOKQp2YoszPk/mqnRyLATy++xSQZaMCP71grCQFvhU122vT3LwQYefcUXv4RXe/FHdk3jTendYgMlkPz/o=
+X-Received: by 2002:a25:e082:0:b0:d7b:9f03:20c9 with SMTP id
+ x124-20020a25e082000000b00d7b9f0320c9mr1026573ybg.10.1693518498053; Thu, 31
+ Aug 2023 14:48:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230217-topic-cpr3h-v14-0-9fd23241493d@linaro.org>
+ <20230217-topic-cpr3h-v14-3-9fd23241493d@linaro.org> <CAPDyKFrXT+2NEMUzVv-kWjXAhLinXq99GKq4_Ge2VjthtYxtaA@mail.gmail.com>
+ <20230831162835.GA2390385-robh@kernel.org>
+In-Reply-To: <20230831162835.GA2390385-robh@kernel.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 31 Aug 2023 23:47:40 +0200
+Message-ID: <CAPDyKFrpumkD0fPwgu_0xr1q3XM3t+U5rT9nj0Cg78tF9CGZ0w@mail.gmail.com>
+Subject: Re: [PATCH v14 3/9] dt-bindings: soc: qcom: cpr3: Add bindings for
+ CPR3 driver
+To:     Rob Herring <robh@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Niklas Cassel <nks@flawful.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robert Marko <robimarko@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Make similar OF and ID table to extend support for ID match
-using i2c_match_data(). Currently it works only for OF match
-tables as the field is wrong for ID match.
+On Thu, 31 Aug 2023 at 18:28, Rob Herring <robh@kernel.org> wrote:
+>
+> On Tue, Aug 29, 2023 at 01:01:44PM +0200, Ulf Hansson wrote:
+> > On Mon, 28 Aug 2023 at 13:42, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+> > >
+> > > From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> > >
+> > > Add the bindings for the CPR3 driver to the documentation.
+> > >
+> > > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> > > [Konrad: Make binding check pass; update AGdR's email]
+> > > Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> > > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> > > ---
+> > >  .../devicetree/bindings/soc/qcom/qcom,cpr3.yaml    | 286 +++++++++++++++++++++
+> > >  1 file changed, 286 insertions(+)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
+> > > new file mode 100644
+> > > index 000000000000..acf2e294866b
+> >
+> > [...]
+> >
+> > > +
+> > > +examples:
+> > > +  - |
+> > > +    #include <dt-bindings/clock/qcom,gcc-msm8998.h>
+> > > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > > +
+> > > +    cpus {
+> > > +        #address-cells = <2>;
+> > > +        #size-cells = <0>;
+> > > +
+> > > +        cpu@0 {
+> > > +            compatible = "qcom,kryo280";
+> > > +            device_type = "cpu";
+> > > +            reg = <0x0 0x0>;
+> > > +            operating-points-v2 = <&cpu0_opp_table>;
+> > > +            power-domains = <&apc_cprh 0>;
+> > > +            power-domain-names = "cprh";
+> >
+> > Rather than using a Qcom specific power-domain-name, perhaps a common
+> > power-domain-name for cpus, that can be used for "the performance
+> > domain" would be a good idea here?
+> >
+> > I have suggested using "perf" for the SCMI performance domain [1],
+> > perhaps that description should be extended to cover this and other
+> > performance domains too?
+>
+> Better yet, nothing. There's no value to -names when there is only 1
+> entry.
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
-v2->v3:
- * Dropped unnecessary u32 casting.
-v1->v2:
- * Dropped patch#2 as  Zero is a expected match value for this driver
-   and the driver does not check for a NULL return value from
-   *_get_match_data() anyway.
----
- drivers/power/supply/sbs-battery.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+The above is just an example of a consumer node for a cpu. The
+bindings for cpus are in
+Documentation/devicetree/bindings/arm/cpus.yaml.
 
-diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-index cdfc8466d129..a6c204c08232 100644
---- a/drivers/power/supply/sbs-battery.c
-+++ b/drivers/power/supply/sbs-battery.c
-@@ -1135,7 +1135,7 @@ static int sbs_probe(struct i2c_client *client)
- 	if (!chip)
- 		return -ENOMEM;
- 
--	chip->flags = (u32)(uintptr_t)device_get_match_data(&client->dev);
-+	chip->flags = (uintptr_t)i2c_get_match_data(client);
- 	chip->client = client;
- 	psy_cfg.of_node = client->dev.of_node;
- 	psy_cfg.drv_data = chip;
-@@ -1253,9 +1253,9 @@ static SIMPLE_DEV_PM_OPS(sbs_pm_ops, sbs_suspend, NULL);
- #endif
- 
- static const struct i2c_device_id sbs_id[] = {
--	{ "bq20z65", 0 },
--	{ "bq20z75", 0 },
--	{ "sbs-battery", 1 },
-+	{ "bq20z65", SBS_FLAGS_TI_BQ20ZX5 },
-+	{ "bq20z75", SBS_FLAGS_TI_BQ20ZX5 },
-+	{ "sbs-battery", 0 },
- 	{}
- };
- MODULE_DEVICE_TABLE(i2c, sbs_id);
--- 
-2.25.1
+Please have a look there. We don't even have a maxItems specified for it.
 
+Kind regards
+Uffe
