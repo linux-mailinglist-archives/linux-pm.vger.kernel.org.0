@@ -2,191 +2,234 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E78278EE05
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 15:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8797A78EE08
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Aug 2023 15:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235268AbjHaNDC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Aug 2023 09:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
+        id S243863AbjHaNDQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 31 Aug 2023 09:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346312AbjHaNDB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 09:03:01 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1DAE42;
-        Thu, 31 Aug 2023 06:02:58 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-1c8cb3c9534so64615fac.1;
-        Thu, 31 Aug 2023 06:02:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693486978; x=1694091778; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HVVIEObE/vLlSMr5jQ6Wbaih9jLFe07U23pYaKd+KLE=;
-        b=kzUKmnY1znrc59nXPIT0QDgEouBKpvg0KQ5+pSmjPRQHvgg+rdRDAoKE6pi4ACC4K/
-         Vaz7OA/ojSP9M5CNlpOaHs4DO2iC2ONwPmpge6KT/jTDfMY7MYrgoRQvaEUeLEL4cvW7
-         dVhCJX+agQeI7r/exjA9EjXu8hE+/A4vrm10HcW6iT8/0p+5TGzR7KxGSKfPMrIW8hG8
-         fK/JTngcewdxZuGHYgdQyiE1pT6C3BGAdstQm4uCiuiuIg9RHjpvgfGkLNfOtK0K9vkz
-         gqJcbFIRVleXjMC2eolFRIyegmVOGCssOCC5i00ja2iH1VvsaW2uVplX1ps86HF5cbft
-         +syg==
+        with ESMTP id S232438AbjHaNDQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 09:03:16 -0400
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE20CFE;
+        Thu, 31 Aug 2023 06:03:13 -0700 (PDT)
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5711d5dac14so182600eaf.0;
+        Thu, 31 Aug 2023 06:03:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693486978; x=1694091778;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1693486992; x=1694091792;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HVVIEObE/vLlSMr5jQ6Wbaih9jLFe07U23pYaKd+KLE=;
-        b=V9fsSqBA4z6qUYAC07IeApfVEv1Ed38bxdg9uzbyCcXooDvGilc114vwxrwh0NwMoC
-         6IpUGIQIS6Q5WBi1TM4rh31tYCMCGyZU697lHs8fXlNqRl2MHNYSD+7r+EIFcMlylDC7
-         vwG+heoGCbP3k1DVoCV+ADj6br15H9otSY0UgSMGlqebEJMXarswhDhl3WzdSM8TScDE
-         X9rZVJn5q4QLIdWbB74qtZa+ScVlTXlqZEmfK1a4IQSau8ZVGY5WdIdei5dA1SEKpAdK
-         yH3r8TbA3LMKHqBJ6d6Wj/931gR2/7zEN/scLdNmRUINBk71YkQZKe28cQDbx91nvvOV
-         9dZA==
-X-Gm-Message-State: AOJu0Yym9x5ELbF8dw9RuF2xJef3I03aHMeBs9+CYWTUoJHgLX/uT9zv
-        musoDUiK1mHxy2rvwLyryMw=
-X-Google-Smtp-Source: AGHT+IHcFcU3HsaoqiFsprrJBO+xB45DxlK7vJKYdIivNWFebWGI/YMFaNDIa8gt9UhkyRY5jN1GlQ==
-X-Received: by 2002:a05:6870:738e:b0:1a7:f79c:2fbc with SMTP id z14-20020a056870738e00b001a7f79c2fbcmr6072072oam.0.1693486977799;
-        Thu, 31 Aug 2023 06:02:57 -0700 (PDT)
-Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:583a:68ca:f232:6448])
-        by smtp.gmail.com with ESMTPSA id zh26-20020a0568716b9a00b001bfd65998aesm802155oab.58.2023.08.31.06.02.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Aug 2023 06:02:57 -0700 (PDT)
-From:   Fabio Estevam <festevam@gmail.com>
-To:     rafael@kernel.org
-Cc:     daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>
-Subject: [PATCH v7 3/3] thermal: thermal_core: Allow rebooting after critical temp
-Date:   Thu, 31 Aug 2023 10:02:42 -0300
-Message-Id: <20230831130242.2290502-3-festevam@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230831130242.2290502-1-festevam@gmail.com>
-References: <20230831130242.2290502-1-festevam@gmail.com>
+        bh=Y9jm6k3mZ7DtL6C9l6hYtOCCTfhPR3psQJlw1t5U+L8=;
+        b=HqV91C8UZKr+2fcz8t3Ot1cXPuHmQoPeDMhP4uhkGUxqkYq+FAarJT/aLuQcug7A1h
+         hx1Ekw1lfUGOiQPs/YPbvmka1092Ct99kioXrIrJiWb2vIMMw4jxTaBgL/ZUiHyc92Xo
+         FXj4XWwRlmlyDk+YtR+TObUBijFYiXSHrQnW6U8q5670ftPGqiV1z2Xgre5VzMlrLkVv
+         BbVNOYgw8/8CN8RwlzzxYQmmUIBUs7l/BwK3Oj86CS9DdM60BFbQvNSkxqvf1rqaFdHy
+         yMXBnj/Z6hnlhsHDvv/7OLykdlKmt2Esy9lrbfd9SzMdciMFxACn98nCI8/3cjW0a9sp
+         kBPw==
+X-Gm-Message-State: AOJu0YyeuTzhhDd6GReFhJl27jRnZchhhLacLNPJZlvN/FvkdfGrMq6+
+        /HmqTEw0I8/JsptZ7uLuRQiM4uEGhtvalKc0GIM=
+X-Google-Smtp-Source: AGHT+IFnz0uQbTsxb2U4BE8XUd/FYbV05/gm2etOOQk9Yh8996UEbCDBlW6vWoZsK6H0LKC8ecHBuIgWwo8N2ML7M18=
+X-Received: by 2002:a4a:bd8f:0:b0:573:2a32:6567 with SMTP id
+ k15-20020a4abd8f000000b005732a326567mr4905484oop.0.1693486992644; Thu, 31 Aug
+ 2023 06:03:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230808111325.8600-1-TonyWWang-oc@zhaoxin.com>
+ <CAJZ5v0h8M-hNJfRTSxtVmfmpF09h9zmNmG-e=iMemzPwsK50Zg@mail.gmail.com> <e9b4de96-624e-96a5-0a41-93de36719340@zhaoxin.com>
+In-Reply-To: <e9b4de96-624e-96a5-0a41-93de36719340@zhaoxin.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 31 Aug 2023 15:03:01 +0200
+Message-ID: <CAJZ5v0j7c2aO7=AQrjnF9_DGLjdqibDdm72Y9BLzFxWEvQhnvw@mail.gmail.com>
+Subject: Re: [PATCH v2] cpufreq: ACPI: add ITMT support when CPPC enabled
+To:     Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, viresh.kumar@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        CobeChen@zhaoxin.com, TimGuo@zhaoxin.com, LeoLiu-oc@zhaoxin.com,
+        LindaChai@zhaoxin.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Fabio Estevam <festevam@denx.de>
+On Thu, Aug 31, 2023 at 12:19 PM Tony W Wang-oc
+<TonyWWang-oc@zhaoxin.com> wrote:
+>
+>
+> On 8/23/23 04:01, Rafael J. Wysocki wrote:
+> > On Tue, Aug 8, 2023 at 1:13 PM Tony W Wang-oc <TonyWWang-oc@zhaoxin.com> wrote:
+> >>
+> >> The _CPC method can get per-core highest frequency.
+> >
+> > Well, not exactly.  A more precise way to say this would be "The
+> > per-core highest frequency can be obtained via CPPC."
+> >
+>
+> Thanks for your reply, will rewrite the commit in next version.
+>
+> >> The highest frequency may varies between cores which mean cores can
+> >
+> > "may vary" and "which means"
+> >
+> >> running at different max frequency, so can use it as a core priority
+> >
+> > "can run", but it would be better to say "may run".
+> >
+> >> and give a hint to scheduler in order to put critical task to the
+> >> higher priority core.
+> >
+> > Well, roughly speaking ...
+> >
+> > You should really talk about ITMT and how it can be hooked up to this.
+> >
+>
+> Ok, Got it.
+>
+> >> Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+> >> ---
+> >> v1->v2: Fix build errors reported by kernel test robot
+> >>
+> >>  arch/x86/kernel/itmt.c         |  2 ++
+> >>  drivers/cpufreq/acpi-cpufreq.c | 59 ++++++++++++++++++++++++++++++----
+> >>  2 files changed, 54 insertions(+), 7 deletions(-)
+> >>
+> >> diff --git a/arch/x86/kernel/itmt.c b/arch/x86/kernel/itmt.c
+> >> index ee4fe8cdb857..b49ac8ecbbd6 100644
+> >> --- a/arch/x86/kernel/itmt.c
+> >> +++ b/arch/x86/kernel/itmt.c
+> >> @@ -122,6 +122,7 @@ int sched_set_itmt_support(void)
+> >>
+> >>         return 0;
+> >>  }
+> >> +EXPORT_SYMBOL_GPL(sched_set_itmt_support);
+> >
+> > This requires an ACK from the x86 maintainers.
+> >
+> >>
+> >>  /**
+> >>   * sched_clear_itmt_support() - Revoke platform's support of ITMT
+> >> @@ -181,3 +182,4 @@ void sched_set_itmt_core_prio(int prio, int cpu)
+> >>  {
+> >>         per_cpu(sched_core_priority, cpu) = prio;
+> >>  }
+> >> +EXPORT_SYMBOL_GPL(sched_set_itmt_core_prio);
+> >
+> > And same here.
+> >
+> >> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+> >> index b2f05d27167e..5733323e04ac 100644
+> >> --- a/drivers/cpufreq/acpi-cpufreq.c
+> >> +++ b/drivers/cpufreq/acpi-cpufreq.c
+> >> @@ -628,28 +628,35 @@ static int acpi_cpufreq_blacklist(struct cpuinfo_x86 *c)
+> >>  #endif
+> >>
+> >>  #ifdef CONFIG_ACPI_CPPC_LIB
+> >> -static u64 get_max_boost_ratio(unsigned int cpu)
+> >> +static void cpufreq_get_core_perf(int cpu, u64 *highest_perf, u64 *nominal_perf)
+> >
+> > This is not a cpufreq core function, so please use a different prefix
+> > in its name.
+> >
+>
+> Ok. Will remove the prefix of "cpufreq_".
+>
+> >>  {
+> >>         struct cppc_perf_caps perf_caps;
+> >> -       u64 highest_perf, nominal_perf;
+> >>         int ret;
+> >>
+> >>         if (acpi_pstate_strict)
+> >> -               return 0;
+> >> +               return;
+> >>
+> >>         ret = cppc_get_perf_caps(cpu, &perf_caps);
+> >>         if (ret) {
+> >>                 pr_debug("CPU%d: Unable to get performance capabilities (%d)\n",
+> >>                          cpu, ret);
+> >> -               return 0;
+> >> +               return;
+> >>         }
+> >>
+> >>         if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD)
+> >> -               highest_perf = amd_get_highest_perf();
+> >> +               *highest_perf = amd_get_highest_perf();
+> >>         else
+> >> -               highest_perf = perf_caps.highest_perf;
+> >> +               *highest_perf = perf_caps.highest_perf;
+> >> +
+> >> +       *nominal_perf = perf_caps.nominal_perf;
+> >> +       return;
+> >> +}
+> >>
+> >> -       nominal_perf = perf_caps.nominal_perf;
+> >> +static u64 get_max_boost_ratio(unsigned int cpu)
+> >> +{
+> >> +       u64 highest_perf, nominal_perf;
+> >> +
+> >> +       cpufreq_get_core_perf(cpu, &highest_perf, &nominal_perf);
+> >>
+> >>         if (!highest_perf || !nominal_perf) {
+> >>                 pr_debug("CPU%d: highest or nominal performance missing\n", cpu);
+> >> @@ -663,8 +670,44 @@ static u64 get_max_boost_ratio(unsigned int cpu)
+> >>
+> >>         return div_u64(highest_perf << SCHED_CAPACITY_SHIFT, nominal_perf);
+> >>  }
+> >> +
+> >> +static void cpufreq_sched_itmt_work_fn(struct work_struct *work)
+> >
+> > A similar comment applies here.
+> >
+> >> +{
+> >> +       sched_set_itmt_support();
+> >> +}
+> >> +
+> >> +static DECLARE_WORK(sched_itmt_work, cpufreq_sched_itmt_work_fn);
+> >> +
+> >> +static void cpufreq_set_itmt_prio(int cpu)
+> >> +{
+> >> +       u64 highest_perf, nominal_perf;
+> >> +       static u32 max_highest_perf = 0, min_highest_perf = U32_MAX;
+> >> +
+> >> +       cpufreq_get_core_perf(cpu, &highest_perf, &nominal_perf);
+> >> +
+> >> +       sched_set_itmt_core_prio(highest_perf, cpu);
+> >> +
+> >> +       if (max_highest_perf <= min_highest_perf) {
+> >> +               if (highest_perf > max_highest_perf)
+> >> +                       max_highest_perf = highest_perf;
+> >> +
+> >> +               if (highest_perf < min_highest_perf)
+> >> +                       min_highest_perf = highest_perf;
+> >> +
+> >> +               if (max_highest_perf > min_highest_perf) {
+> >> +                       /*
+> >> +                        * This code can be run during CPU online under the
+> >> +                        * CPU hotplug locks, so sched_set_itmt_support()
+> >> +                        * cannot be called from here.  Queue up a work item
+> >> +                        * to invoke it.
+> >> +                        */
+> >> +                       schedule_work(&sched_itmt_work);
+> >> +               }
+> >
+> > This potentially runs before ITMT priorities are set for all CPUs.
+> > Isn't it a problem?
+> >
+>
+> Yes, you are right.
+> Will use schedule_delayed_work(&sched_itmt_work, msecs_to_jiffies(500))
+> to fix this.
 
-Currently, the default mechanism is to trigger a shutdown after the
-critical temperature is reached.
+If the ordering matters, it is better to enforce it directly (through
+an explicit code dependency, for example) than to rely on the timing
+to do the right thing.
 
-In some embedded cases, such behavior does not suit well, as the board may
-be unattended in the field and rebooting may be a better approach.
-
-The bootloader may also check the temperature and only allow the boot to
-proceed when the temperature is below a certain threshold.
-
-Introduce support for allowing a reboot to be triggered after the
-critical temperature is reached.
-
-If the "critical-action" devicetree property is not found, fall back to
-the shutdown action to preserve the existing default behavior.
-
-Tested on a i.MX8MM board with the following devicetree changes:
-
-	thermal-zones {
-		cpu-thermal {
-			critical-action = "reboot";
-		};
-	};
-
-Signed-off-by: Fabio Estevam <festevam@denx.de>
----
-Changes since v6:
-- Removed unused variable.
-
- drivers/thermal/thermal_core.c |  6 +++++-
- drivers/thermal/thermal_of.c   | 16 ++++++++++++++++
- include/linux/thermal.h        |  6 ++++++
- 3 files changed, 27 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index a59700593d32..062114608667 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -320,11 +320,15 @@ void thermal_zone_device_critical(struct thermal_zone_device *tz)
- 	 * Its a must for forced_emergency_poweroff_work to be scheduled.
- 	 */
- 	int poweroff_delay_ms = CONFIG_THERMAL_EMERGENCY_POWEROFF_DELAY_MS;
-+	static const char *msg = "Temperature too high";
- 
- 	dev_emerg(&tz->device, "%s: critical temperature reached, "
- 		  "shutting down\n", tz->type);
- 
--	hw_protection_shutdown("Temperature too high", poweroff_delay_ms);
-+	if (tz->action == THERMAL_CRITICAL_ACTION_REBOOT)
-+		hw_protection_reboot(msg, poweroff_delay_ms);
-+	else
-+		hw_protection_shutdown(msg, poweroff_delay_ms);
- }
- EXPORT_SYMBOL(thermal_zone_device_critical);
- 
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index 4ca905723429..960bcc2a21bc 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -218,6 +218,20 @@ static struct device_node *of_thermal_zone_find(struct device_node *sensor, int
- 	return tz;
- }
- 
-+static void thermal_of_get_critical_action(struct device_node *np,
-+					   enum thermal_action *action)
-+{
-+	const char *action_string;
-+	int ret;
-+
-+	ret = of_property_read_string(np, "critical-action", &action_string);
-+	if (ret < 0)
-+		*action = THERMAL_CRITICAL_ACTION_SHUTDOWN;
-+
-+	if (!strcasecmp(action_string, "reboot"))
-+		*action = THERMAL_CRITICAL_ACTION_REBOOT;
-+}
-+
- static int thermal_of_monitor_init(struct device_node *np, int *delay, int *pdelay)
- {
- 	int ret;
-@@ -516,6 +530,8 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
- 		goto out_kfree_trips;
- 	}
- 
-+	thermal_of_get_critical_action(np, &tz->action);
-+
- 	ret = thermal_zone_device_enable(tz);
- 	if (ret) {
- 		pr_err("Failed to enabled thermal zone '%s', id=%d: %d\n",
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index b449a46766f5..b68e5734823d 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -34,6 +34,11 @@ struct thermal_cooling_device;
- struct thermal_instance;
- struct thermal_attr;
- 
-+enum thermal_action {
-+	THERMAL_CRITICAL_ACTION_SHUTDOWN = 0, /* shutdown when crit temperature is reached */
-+	THERMAL_CRITICAL_ACTION_REBOOT, /* reboot when crit temperature is reached */
-+};
-+
- enum thermal_trend {
- 	THERMAL_TREND_STABLE, /* temperature is stable */
- 	THERMAL_TREND_RAISING, /* temperature is raising */
-@@ -187,6 +192,7 @@ struct thermal_zone_device {
- 	struct list_head node;
- 	struct delayed_work poll_queue;
- 	enum thermal_notify_event notify_event;
-+	enum thermal_action action;
- };
- 
- /**
--- 
-2.34.1
-
+If you do the above, then it will not be clear why it is done (a
+comment may help to address that, though) and why the delay is 500 us
+in particular.
