@@ -2,149 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F8279003C
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Sep 2023 17:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA197900D3
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Sep 2023 18:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239246AbjIAP6k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Sep 2023 11:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
+        id S1346830AbjIAQli (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Sep 2023 12:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbjIAP6j (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Sep 2023 11:58:39 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2062.outbound.protection.outlook.com [40.107.100.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A40C10EB;
-        Fri,  1 Sep 2023 08:58:36 -0700 (PDT)
+        with ESMTP id S238320AbjIAQlh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Sep 2023 12:41:37 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on20622.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eab::622])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB99C10EB;
+        Fri,  1 Sep 2023 09:41:34 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gjaQG8QAyz7t7LoySZtUryqpEqdiOa3n/SqX4n/wuzS8h2kIGhRMWcG4K9KhDUm/XKStnGPzRfVrMYuNwdmvt/NVL/uQbB/7zJ5QMD1ifBTWKmAoUjuo2KvlBv+FKjpzmGlWnryzh1/LB8pC5CUcAikwhGDMtyCx1M73H4y3vT4H4cb1NMHWL9K0PTMhWUSPvcTFWhnxllKtMgSps8eqj5VsE5N1GOmz6vDCs0K/unuhvKwMJsCWxM2eYXmoO9/OQd9z6kVbszxkCp7B+04cfjhW2Ur4jK+N2OjLtUc2kQFcMTYd6vapUJtTRWHrXHAIJ1cvl2/fkdUhkt3VhPFVYA==
+ b=kb5cOQlTu0RaA0Q//VVVuyY2jo1HnDXasdujELJ+2PyCEFRc39FCKiKCX6nqijEm/nri2GMJoXQlNyh1zFtu5kcqPY5AFbY58Kg4fkvEv+qGpYvaKOx0ADvSnn5JwgVhBZZfbpTppVze56oReVXWlYWa5Irva3HPmKiyw4dTyscwkKQViYL8z33tRYLWoaINw9wFQNxX1smuhGoDLN81pr2h/aPwkd7SZjhcaXVmYgIcTR/vMQvfBT9YIXWFVJUPUDs5YSyJKVf+0Zv/CN5MoU0jqDhwUn4gu/F9ZP4iyc1dnpxijdv5O5I3lqVH4OfPPCXZiwc8ew39ybW6iNiK2w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=12wN1R2r6I+HqYuG1gQi4eO2cCkmw8CdZnkkGx81uc8=;
- b=Fvmj83ExtO/1PzDrLR28U6fiTRNQBi26WP2CxQu3pNEy3hpzoI9mapU6/2SO4usEUJXDvkV+j9rKLILwtvwv8JbeSFb5lNvEODKHZ+nepbuumesMTB8c3zfC12rjAVs/S6SgpWr1h9HyLpowUcxKKALg7FwzOKrRd4S+N+AfDIZXcIX4T95dDPwSXP+A2H8C9lgI509OdLCKlcLe5m2GdXL3BVPWdMiR2giFg4FRSLLu9IJlnot/VJCS7dOZGwI+9wjQ0HDGgeM/jfm1w3tW/XdUIUKfUz/A0/4O4s3d+wcLw040ceY+AyXr1zWUmDzOw4xLEe6Am+/jQjeSLfovPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
+ bh=WzM+607jMPN5yXKcn3Nu+imnsL5vsDssKjrwO7RYBKs=;
+ b=IDvzP9Sfxu5qY0Tqk08elW/ZnNxTGbo91v04rM1a1j45RsW92A3b9wcwo+7BVzmgTSr8DlLGO/xdaO7gcRZEFzuXqT/T36y7URFiDGpNPdwAkc4+Y9WKvHEGBcfzRwHvvEGxjMWXHtckzrE75GtjMRz8S71LKEkV0Lq/68UCYSad+CiEAJYwHtmFO15YqmEggS3ZtorbgDskEZoT/dfnvCFGYjy7bHaYUws154ylLUmUXa+76CHUMG9HTGqyjsAAqB1I814d0GRR7jSGndDWrjC8QJRxwGdoZcGFHVnfBXUTnaJcAxGwN2Qk5aI/PrORhzsd+wG9vzPb4pOtPfbkYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=12wN1R2r6I+HqYuG1gQi4eO2cCkmw8CdZnkkGx81uc8=;
- b=ok68auuGO7Y4aOO88KUZ+0lsAEveVop2JAzfyOHoZhzLt9HPTLG2W+romS6AxfTTSHhEUhUt+UBaPjxHgA0ON5918hkO8R6ZOSKJZe89GLJGjUxL66lrIPhV7E30dMFRCGBp0hmWxUYcphSfpBUJOZT+0/gyWwezy6lS267m3DN1pQEb7fsVbshK8yH7oKLa5fNnviB4b/XuvdXk0lguPMQtXhNARzBAMLsESNVal7pYDaho2ZUDf0jt2tEz+TNf6GbEJF9iHevpBzfH+/nVYgGe6cRv3PU9xznHM3TPBHhwCoIUiHAFhr9Z/dxcARCyqP7138kYNA2XjkDDyUEZbA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- DS7PR12MB5815.namprd12.prod.outlook.com (2603:10b6:8:77::13) with Microsoft
+ bh=WzM+607jMPN5yXKcn3Nu+imnsL5vsDssKjrwO7RYBKs=;
+ b=Z/dEIVXWOWqkTMpWiflOXC/tFtPDiZHQ7X2Kppei7fEwT/tkCKvUCxhz/OSllIKCHr2/0pmvrGb/bNpQFQwNl6QxQMamhGvl8s7IBk1J57CuQ8cq5Mnun9QAIVL8tX3RiqOIHk3FKY1+PpvTpc+x/483ngzvZRkhiCHPv1xko6fj4LdoY7+AOJYW3pG+0QWX/qABle4l3AAp2tnBXuZ8Rb5xQdwi2ieRKsLR5LnpWIE26Zb0KTo2MtJoVhRjQcKDnWMBYEU96w1pS/DYSmiJyCP9QSEDjB+MPatd3LFUpi7auKnQmA2Xtgp9fS6y45FoDftGFHu7TCQrOpnb1ZqbSw==
+Received: from CH0PR03CA0434.namprd03.prod.outlook.com (2603:10b6:610:10e::16)
+ by SJ2PR12MB9241.namprd12.prod.outlook.com (2603:10b6:a03:57b::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.34; Fri, 1 Sep
+ 2023 16:41:29 +0000
+Received: from DS2PEPF00003440.namprd02.prod.outlook.com
+ (2603:10b6:610:10e:cafe::41) by CH0PR03CA0434.outlook.office365.com
+ (2603:10b6:610:10e::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.27 via Frontend
+ Transport; Fri, 1 Sep 2023 16:41:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ DS2PEPF00003440.mail.protection.outlook.com (10.167.18.43) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6745.22; Fri, 1 Sep 2023 15:58:34 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::1d1b:2ca4:1600:a865]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::1d1b:2ca4:1600:a865%4]) with mapi id 15.20.6745.023; Fri, 1 Sep 2023
- 15:58:33 +0000
-Message-ID: <c2bc6447-d8de-4f0f-d735-df377ab40f1c@nvidia.com>
-Date:   Fri, 1 Sep 2023 16:58:27 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [Patch] driver: cpufreq: use refclk delta based loop instead of
- udelay
-Content-Language: en-US
-To:     Sumit Gupta <sumitg@nvidia.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     treding@nvidia.com, bbasu@nvidia.com
-References: <20230901152046.25662-1-sumitg@nvidia.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <20230901152046.25662-1-sumitg@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0639.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:296::6) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+ 15.20.6745.20 via Frontend Transport; Fri, 1 Sep 2023 16:41:29 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 1 Sep 2023
+ 09:41:28 -0700
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Fri, 1 Sep 2023 09:41:28 -0700
+Received: from sumitg-l4t.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server id 15.2.986.37 via Frontend
+ Transport; Fri, 1 Sep 2023 09:41:25 -0700
+From:   Sumit Gupta <sumitg@nvidia.com>
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <treding@nvidia.com>, <jonathanh@nvidia.com>, <bbasu@nvidia.com>,
+        <sumitg@nvidia.com>, <amiettinen@nvidia.com>
+Subject: [Patch v2 0/2] Improvements to the Tegra CPUFREQ driver
+Date:   Fri, 1 Sep 2023 22:11:11 +0530
+Message-ID: <20230901164113.29139-1-sumitg@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|DS7PR12MB5815:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9ef86c18-452d-4944-48ef-08dbab044b72
+X-MS-TrafficTypeDiagnostic: DS2PEPF00003440:EE_|SJ2PR12MB9241:EE_
+X-MS-Office365-Filtering-Correlation-Id: 69ebeaa2-6734-4fb6-a665-08dbab0a4aa6
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: f8G2MM6d0tt0CZPR6UP9B26Ltt4BOo9UsmXr1POLpYU8HBOyHACkhBNLN9J0/f96m8roUDFjvi5hmpUknlch2Q9YjsWJGrjDo+7y4IroKtlaV7KPhLF831mOxNE6+2C6mUgwdqckDwyXVLmHbcwX3zEzovyeNuI2MXalKDGb58XBsWjsQwfrCHSsvGb4Pb9UnyTtNZfHluM2fYMdRXw8FQMEDeOHLrU6TsKz/hKa2vfFxzv9JsKQCl5xiq0pt2XXAQdO952o/hFfmhBp2C2sAn/2CqzSz9esiT+g4x9BhWFzU5jpjt2BqVsz331GU5VPwwuB0jXMjr8rvTEke6GPK3OJJ2By+4rsjp8Y5TbT3LzZGBtCu85C5qQeV76enprxRZ+6IdG+kuSjWIXEMe9HhSbC1WFCjfHDx+QWu1WOexC08WsPXDg+EYRJqJ74tEjn8kopjVt1EJC+cRuXDkAuWrillY5kO7qYB1s4IHHl29c6J/fkcUnbC/qdNg1BEYx9XViay4ZmuQnCxnoGF0O8WWBSvLJ8N94QpoIwfMNuG2psvRjs0vLyrsIyqRcmgpTzpJbroECRyG4QqhnJiAPch0MULbbMWLwwOvkSQ66FL8AWFFsNcqiBwodtdN6eVA0GxVytwtdbCmo5k6ctL/a5XQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(396003)(376002)(346002)(366004)(136003)(451199024)(1800799009)(186009)(4744005)(2906002)(6666004)(5660300002)(86362001)(55236004)(53546011)(316002)(478600001)(6506007)(2616005)(107886003)(6486002)(4326008)(8676002)(31686004)(31696002)(6512007)(8936002)(26005)(38100700002)(41300700001)(36756003)(83380400001)(66946007)(66476007)(66556008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eEdqUHowbXh5NTNLVDhwTmFZOTI1N01NWTQweTdnbEFMYTNaekJGbHBnK3VK?=
- =?utf-8?B?eEpWeEF6bCsvb1lOb2w3Zk9OR0NGdVVRYnNtdCtnOFVtWncxVUgvWXhGQmxt?=
- =?utf-8?B?bENMeW1EeHgrenlNNEN5REVwM3hKN3NScENWc0Z3TE1ZODN2NmsyMlRzcnEz?=
- =?utf-8?B?MWF1TVFzbGFQajFaVkVEYUJRR0hwL0U0cjdEQjFlZlNMcm9WT3hZTWJNazNj?=
- =?utf-8?B?T3hVOTZMdHU4WVIvMkllMzhESnh1eUFqTDZYZmh6WGJNeVc5NFE2ZlNnTXRO?=
- =?utf-8?B?c21mR3FtZS8vMFQveXkrdzhNdVZGck5YVERUZ1hPWWZiRXBIamx4ay9HWGty?=
- =?utf-8?B?dEJNd3ZEam1Za3BtczBlcGpGem5NUHlpVkpzMlFSN2xEeTdSdzF2cHArcmd3?=
- =?utf-8?B?OEt3em1MVTI4QTgrdVdCYmRObUk0b2V6ZUVhWTBjRVM5YWlUVXJKS2d6aXZj?=
- =?utf-8?B?NlZSaEdId1hQN3BNSFlsZFMzeWoycjNBUXdPei83RFVVK1ppTjFhZHBiQ0ZV?=
- =?utf-8?B?eU12bi92RDN5TDRqR0NSNDVSSDl1MXRocStTblRZT0tUWWZpQVQ2bStmbDZk?=
- =?utf-8?B?WW9kQnkvdnJPR0Q0c252VDJQUncvd2l0TUs4Wlc0c0FQendLcFNQdTRaRDJL?=
- =?utf-8?B?Nm5Ncnh5bnRRWnFhL1huK1ZXY1lmZXNzY1AxdHpNUFFES0xBVjl6OFlqaFQ3?=
- =?utf-8?B?VmZKQXR0S0E2ZzBUQ0pzSFFZcDRrb2V5ZUpLVzFHc0hyM00yQzlPdU0xUzhs?=
- =?utf-8?B?bEpvaTg3UGkyck94SjI2a1FXT21BWjloTTBzcUlNV3B0Zit2ZjhjWE9WUHRP?=
- =?utf-8?B?SzNjekZQR2VOeEN5ZWtrNHVVNlJxRlRqclFlMmJqQWVoVUREZTJtVEpzbVVN?=
- =?utf-8?B?aExOMUphcWhVM0IydTNCRWR0OUdPdjR0RjlhM1hXTWFnd3NORktHQ0ZZQ3ZM?=
- =?utf-8?B?MG1md3Q0Y2dRbW1xbWk3Z05TWXphSzM4M01hMlFicjIrYXZmTFFLZ2VWWTk1?=
- =?utf-8?B?TlZKdGxoNksrOFVmQ1FPeCt6eGd0ZmtqcEVKcHZIaFpnZnpZWXFEd3FhdWlY?=
- =?utf-8?B?bG9YWVJueXZpSjBFZWdmMG1RQUpDZFJxTE5BK0JIN3FPeFJ5bURVN0tlN1gz?=
- =?utf-8?B?Y2ZxYUpqbGtWU3ZNZVViRmxTVDJlRkRSVlpHUnd4Ly83emRaYUs1L1NPMHhh?=
- =?utf-8?B?cVAwRTRRQzFqOStqS1YxenE4encrU1FXYmxEYVlpNmF3Z05BMDhia21NM2xE?=
- =?utf-8?B?UnEzKzlhbWNzeDYxQUFVbE5XU3hsbFNpV0pNaWxOTDJ0QlU3UHVYRDJkYVg0?=
- =?utf-8?B?aEk0WDNtSHRDc1VZdlNTK3Fpa2lQcTF3bm9PcG03QlN0NnU5R0E3aU5OVDNQ?=
- =?utf-8?B?VFhVNS9jYXJrall2RllEdU00T1QveTJLb1BJL3M4ME56RWRGZ1AzVDVtUFlE?=
- =?utf-8?B?MFZZaFlnSmJGSFBJcmhPUXJ1RHJqK3dZa2dtVjVGZmxSeFk4cXkraUFmMEZt?=
- =?utf-8?B?MXVnN1BxYjlSZmVHWHlLd1V2bTBWdVU4SWZRMzJWWDNFcyt5Nm1YNExhRFdY?=
- =?utf-8?B?QWwveGpYeWcyMnh1WFlwOVNWT3kvOE9PME5vcGdZemkwNExVaEVYTUJUNG1W?=
- =?utf-8?B?NEFuK2Z6OC9uakcxNFgyWU5SNFYxY3p6K25QN3BEdmtySVFlWEFTNDdhSGNW?=
- =?utf-8?B?UExhZlJRYUh4WUNPWGg1cnRxOTVRVFVlUWJOVjVYZGgvYkhXNGxLUllCdExD?=
- =?utf-8?B?QnhRaDd0bXdCWG5rNllqYWYrekUzZVRrTndmT0RKWWRrZ3FVMWdhUVhJUFdR?=
- =?utf-8?B?czkzVGJ6M2V5dkRUSTJtSDNiNUxRSnlPampYV282ZXBNbXJXem12cGZ2SHk0?=
- =?utf-8?B?N2YvMGJKM0cwcXFUY1VWZnpQbW5BOUNRL0xYNkFsTFhhMWdEOThlekh4T05V?=
- =?utf-8?B?VzVxZG5rNVdJV2dlWG4yK0lJTDdtcHRIMXhEWUdmcS9QbUZ2OVVTQnFvbGNq?=
- =?utf-8?B?aVQvcVNJZ3J3SXpqUlVTVnJ1bnUybjY0Yzlja2huS2R4bktnamgvYnNrdDFk?=
- =?utf-8?B?MGhOWnlBU0k2N2d1RFFUbnQ1ZFA1UU0xb1o3UjRPSmtLeHVWclVoVE9obnNL?=
- =?utf-8?Q?pHT+BOSyhZVbXii7gvSy9txnY?=
+X-Microsoft-Antispam-Message-Info: CmBDgRCp5soYcdJz+5hfla5utfAh58l4O6dYyWcwrVCuiTiI/hUAQbGbndmP4i2inVQMTDBZJ1QWOYz1uRxd9XhlZNvrUmmtOdKXEz9smRn/W61Q7SfRhjFmDPKUn0vb9oBrKzm4eRWjheDST6XYMAfXHAEjTxL/MBbdGjDErTj/lm5UhCMJYKxtM7jwQQelHDp04CX6N4Qzxdgt62EGrylF3/QY1g5tqSn5fhsm5uvwadnEd+L/b/9vnbXBgloARTLOHVL2cFJEteqCDO/gwlkzy6/49oUDhijYh4/yhhPFoFPrrselYmqL0j8SmVZxYg8x1Fj+lQhoBkApj+oiwjv62TVYYmBPVdVJ2C4WJ00Finquonuys4NnknL0qFQRCXfb6KiXojMLz4r/A0aMOFldlq8Yfwcu4m1rQn5E4rme30nbRBo+S71XHM+uFnUsIvm9PMkabKFzjXLk4XgeMjBzRvfkAZtuVSyEw8P0MOkknkQ9K/uwHYnhHJOLivu7Y1eCBSB4DlvvWtqzE77IDS5bJYiOv4TUznHmQIhiL1CSDDKjJAuvucozbxeO1rYtIGTB9GUFTYwh51Gmmi/XxnMM+5KU+ocR2oXqcvQ8xQZBx88xnSBaSo0jNs9nucENPBZgYBwXx8iYet1DbvfQGB/o9oXEwzVAqSlLutXgzRU7rddGAUZdpO3yFbnIZoIhoC0kBZbEOfbaFDVJLrMAcfYSh/kokvF/aFu9ioBWpG7AGJazq+di2J8FC84SKOZW
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(376002)(136003)(346002)(396003)(39860400002)(186009)(82310400011)(1800799009)(451199024)(40470700004)(36840700001)(46966006)(41300700001)(40460700003)(83380400001)(356005)(7636003)(86362001)(6666004)(478600001)(82740400003)(47076005)(426003)(7696005)(1076003)(36860700001)(2616005)(40480700001)(4744005)(336012)(26005)(107886003)(70206006)(110136005)(70586007)(36756003)(54906003)(5660300002)(316002)(2906002)(4326008)(8676002)(8936002);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9ef86c18-452d-4944-48ef-08dbab044b72
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2023 15:58:33.8375
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2023 16:41:29.2109
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Network-Message-Id: 69ebeaa2-6734-4fb6-a665-08dbab0a4aa6
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UJrP5lg5LdlbigsJdb0Wvo/TNw/fOo8N9ujqgibrElExpKI7fJZTUsv6igkdJcTH5gclOOkcEpydykTO/IHsww==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5815
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS2PEPF00003440.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9241
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+This patch set adds below improvements to the Tegra194 CPUFREQ driver.
+They are applicable to all the Tegra SoC's supported by the driver.
 
+1) Patch 1: Avoid making SMP call on every frequency request to reduce
+   the time for frequency set and get calls.
 
-On 01/09/2023 16:20, Sumit Gupta wrote:
-> Use reference clock count based loop instead of "udelay()" for
-> sampling of counters to improve the accuracy of re-generated CPU
-> frequency. "udelay()" internally calls "WFE" which stops the
-> counters and results in bigger delta between the last set freq
-> and the re-generated value from counters. The counter sampling
-> window used in loop is the minimum number of reference clock
-> cycles which is known to give a stable value of CPU frequency.
-> The change also helps to reduce the sampling window from "500us"
-> to "<50us".
-> 
-> Suggested-by: Antti Miettinen <amiettinen@nvidia.com>
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+2) Patch 2: Use reference clock count based loop instead of udelay()
+   to improve the accuracy of re-generated CPU frequency.
 
+The patches are not related but have minor conflict. So, need to be
+applied in order of patch numbers. If 'Patch 2' is to be applied first
+then will rebase that and send separately.
 
-Please can you correct the subject and drop the 'driver:'.
+Sumit Gupta (2):
+  cpufreq: tegra194: save CPU data to avoid repeated SMP calls
+  cpufreq: tegra194: use refclk delta based loop instead of udelay
 
-Jon
+ drivers/cpufreq/tegra194-cpufreq.c | 151 ++++++++++++++++++++---------
+ 1 file changed, 106 insertions(+), 45 deletions(-)
 
 -- 
-nvpublic
+2.17.1
+
