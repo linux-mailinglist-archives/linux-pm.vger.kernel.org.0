@@ -2,147 +2,366 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B0A278FDF8
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Sep 2023 15:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD8578FF2A
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Sep 2023 16:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349667AbjIANDc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Sep 2023 09:03:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
+        id S1348429AbjIAO2B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Sep 2023 10:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349642AbjIAND1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Sep 2023 09:03:27 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9875E7E
-        for <linux-pm@vger.kernel.org>; Fri,  1 Sep 2023 06:03:24 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-31c4d5bd69cso1659761f8f.3
-        for <linux-pm@vger.kernel.org>; Fri, 01 Sep 2023 06:03:24 -0700 (PDT)
+        with ESMTP id S245304AbjIAO2B (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Sep 2023 10:28:01 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF98EAC
+        for <linux-pm@vger.kernel.org>; Fri,  1 Sep 2023 07:27:55 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9a21b6d105cso245969666b.3
+        for <linux-pm@vger.kernel.org>; Fri, 01 Sep 2023 07:27:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693573403; x=1694178203; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=fairphone.com; s=fair; t=1693578474; x=1694183274; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=V5aYZdSdgznaVi+JliScjcxNZSCQD8Th20BQ7P8lBSs=;
-        b=hO6xfBmPKBgbuknFzUx9djhsOZtlMuq9HbhytH/CkX7n1a7K7Ppwgg3wSN8ElMwOn2
-         /FbUOQZdqcKdECl5sdrAJI50ai9l6fgV6X9+FiZXQyJ9rsO9k6M/q12SFwK/pS8XIg/I
-         GY84P/+ugAHDXz5ZaSIiIpSCw0QOVMAm53MtNAfq+M4RvOHwwBOmhHB7L/21qrLWvheL
-         ZqyCNDs+JcbhHxBeihuDCzU80XVQd74n5BJ1oblot4ZlKMW78OjjrsvGHwGMhixwGV5t
-         VaPNz6qJyPgUbWrPKTDhNdOt1QsHiTXPMVxU9Ks/PqAYsLhu/NHB4i9cpjEjULOMufsa
-         j2Gw==
+        bh=rEyh/swy7SSq80cvkD8Ou9qWCXNx2KRhHBoyBHAptPo=;
+        b=0R3e9ICKhKNJS/iJ9j7O52ReWKyd0kKZi3ClpctBmj3YKR6NdCqo/sWNJZgk/HLrjm
+         vVkObw5hJHuAGO8BirB6oWwg9VcDM4auE0TgSMbcMWSemvotcdgpqCf4j69cKVA4zouH
+         aQKsaYlcBR/EKGVKSfSsi7UxbCk++dLsVvPibqhnwmWSAqeuKXYHPSYf0KlkYWBTU/+G
+         hNDpPQPBQSsdC/JzNFUWYd8Ec/rFxzaI2UOhzwekFM5zB76sUQzzqy/7yu41ioqjMlEX
+         grCYLlZon22Qj1yhrkZ7P1C0+aq62AJwY/Fiy83BSTmxYnkLS085VRIODNx1Q44g9mXH
+         9WmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693573403; x=1694178203;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V5aYZdSdgznaVi+JliScjcxNZSCQD8Th20BQ7P8lBSs=;
-        b=J3fb2vHJkntPtnVOLrmBIg15NISVinYW1zMpEhIfUkuypBqmsFLrzD8Uzu/frpAJtC
-         1aE+XZCnlkss7wz4UcomucEQleCUDgjsRuhTNwOcDPjr1FFLsalwyIh2eQRm1CBKaC6m
-         9cbFv8OzJ86CvOlNaVnLFJbAoh0MdekTXl7dHW8VjQ/bFEtlfXV0TqOZkislM+K3s93P
-         Q3hNHug17CZ/Oawg9KK0TaxpNe7+I2d1bHg54d4bs14n0dhjbUdDOKxCbVatN6kQszwn
-         T4YHvQLdQOKQQVfdYvSMDsWtD/vEDF4BPlVfFBbDbqsw4rxxMayqOTbkp/lWWqEPP7vZ
-         xIMA==
-X-Gm-Message-State: AOJu0YzHotlET+fy+bjVP+2X9khtsZZOixJjos17IsCYCXjExiBDVzSQ
-        CrDwm4HIuZEd5UtYOjP7ZuTT8w==
-X-Google-Smtp-Source: AGHT+IHWuDsPZBVeKEf+XTy2vPIdFmCGwE/gsGA3pylPfmUXuPXSa8EeuGjxUHsZSClfbNuuKWlS8Q==
-X-Received: by 2002:adf:e544:0:b0:31d:db92:31ae with SMTP id z4-20020adfe544000000b0031ddb9231aemr1715345wrm.44.1693573403268;
-        Fri, 01 Sep 2023 06:03:23 -0700 (PDT)
-Received: from vingu-book.. ([2a01:e0a:f:6020:e9bd:add1:d9ac:7b3e])
-        by smtp.gmail.com with ESMTPSA id i14-20020adfdece000000b003142e438e8csm5167452wrn.26.2023.09.01.06.03.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Sep 2023 06:03:22 -0700 (PDT)
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-To:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
-        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Cc:     conor.dooley@microchip.com, suagrfillet@gmail.com,
-        ajones@ventanamicro.com, lftan@kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH 4/4] energy_model: use a fixed reference frequency
-Date:   Fri,  1 Sep 2023 15:03:12 +0200
-Message-Id: <20230901130312.247719-5-vincent.guittot@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230901130312.247719-1-vincent.guittot@linaro.org>
-References: <20230901130312.247719-1-vincent.guittot@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20221208; t=1693578474; x=1694183274;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=rEyh/swy7SSq80cvkD8Ou9qWCXNx2KRhHBoyBHAptPo=;
+        b=FOyxEZX2FYC+lXjK44V8C6C+n7e5rSMsh0n7nXGPn9pdCslKrqkuTSOmiQhN/CPHhO
+         NsvfuSxE2dhkz8CgyU7Twn5zZOVt3++VSRiLlZgXii6J9H3MwUXmfG61ijCchp3ikFO+
+         IUXhbXFw3LykrZiZ3pzJ05XvPUfMOjt80iinoQ8nuDG7f2xSuLf4jpyN4yjBp+PqvaTf
+         fG4AIWciH3bTlH9q7apW8b0U/o7hDJ85hh+sdbFE5xjpof8riiV56+GJthl0ChNgogh+
+         5FQtGlFAhCUd+LoIRfBSBxTiotO8REYFY2ScIhZWMnhDR30ccvBWjxLxY+h2jzhhBba4
+         B1ow==
+X-Gm-Message-State: AOJu0YwnaSpzTrGwvvDV0knwbF6qLIiYSK5TvH6HzREz2/sMTkSFFIv0
+        h0zHZAAM1vFvD10oIzpqBJ9hmg==
+X-Google-Smtp-Source: AGHT+IELTYphsKmoa8uElxOgpt0BvTXKmP3twY/vRn2bptNKZ/qbTpEogtbv4BH6+FLnvY95r/VDOA==
+X-Received: by 2002:a17:907:7847:b0:99d:101b:8403 with SMTP id lb7-20020a170907784700b0099d101b8403mr1928742ejc.36.1693578474415;
+        Fri, 01 Sep 2023 07:27:54 -0700 (PDT)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id mc24-20020a170906eb5800b00997e99a662bsm2033443ejb.20.2023.09.01.07.27.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Sep 2023 07:27:53 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 01 Sep 2023 16:27:53 +0200
+Message-Id: <CV7NGPVH4U0W.PN2NOIO19Z7U@otso>
+Cc:     <~postmarketos/upstreaming@lists.sr.ht>,
+        <phone-devel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 11/11] arm64: dts: qcom: qcm6490: Add device-tree for
+ Fairphone 5
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        <cros-qcom-dts-watchers@chromium.org>,
+        "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        "Srinivas Kandagatla" <srinivas.kandagatla@linaro.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Viresh Kumar" <viresh.kumar@linaro.org>
+X-Mailer: aerc 0.15.2
+References: <20230830-fp5-initial-v1-0-5a954519bbad@fairphone.com>
+ <20230830-fp5-initial-v1-11-5a954519bbad@fairphone.com>
+ <72c2fd33-613b-49be-b394-0663f459f0c5@linaro.org>
+In-Reply-To: <72c2fd33-613b-49be-b394-0663f459f0c5@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The last item of a performance domain is not always the performance point
-that has been used to compute CPU's capacity. This can lead to different
-target frequency compared with other part of the system like schedutil and
-would result in wrong energy estimation.
+On Wed Aug 30, 2023 at 12:45 PM CEST, Konrad Dybcio wrote:
+> On 30.08.2023 11:58, Luca Weiss wrote:
+> > Add device tree for the Fairphone 5 smartphone which is based on
+> > the QCM6490 SoC.
+> >=20
+> > Supported features are, as of now:
+> > * Bluetooth
+> > * Debug UART
+> > * Display via simplefb
+> > * Flash/torch LED
+> > * Flip cover sensor
+> > * Power & volume buttons
+> > * RTC
+> > * SD card
+> > * USB
+> > * Various plumbing like regulators, i2c, spi, etc
+> >=20
+> > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> > ---
+> >  arch/arm64/boot/dts/qcom/Makefile                  |   1 +
+> >  arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts | 659 +++++++++++++=
+++++++++
+> >  2 files changed, 660 insertions(+)
+> >=20
+> > diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qc=
+om/Makefile
+> > index 2cca20563a1d..73c3be0f8872 100644
+> > --- a/arch/arm64/boot/dts/qcom/Makefile
+> > +++ b/arch/arm64/boot/dts/qcom/Makefile
+> > @@ -81,6 +81,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+=3D msm8998-sony-xperia-yosh=
+ino-lilac.dtb
+> >  dtb-$(CONFIG_ARCH_QCOM)	+=3D msm8998-sony-xperia-yoshino-maple.dtb
+> >  dtb-$(CONFIG_ARCH_QCOM)	+=3D msm8998-sony-xperia-yoshino-poplar.dtb
+> >  dtb-$(CONFIG_ARCH_QCOM)	+=3D msm8998-xiaomi-sagit.dtb
+> > +dtb-$(CONFIG_ARCH_QCOM)	+=3D qcm6490-fairphone-fp5.dtb
+> >  dtb-$(CONFIG_ARCH_QCOM)	+=3D qcs404-evb-1000.dtb
+> >  dtb-$(CONFIG_ARCH_QCOM)	+=3D qcs404-evb-4000.dtb
+> >  dtb-$(CONFIG_ARCH_QCOM)	+=3D qdu1000-idp.dtb
+> > diff --git a/arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts b/arch/=
+arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts
+> > new file mode 100644
+> > index 000000000000..572b254d3af2
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts
+> > @@ -0,0 +1,659 @@
+> > +// SPDX-License-Identifier: BSD-3-Clause
+> > +/*
+> > + * Copyright (c) 2023, Luca Weiss <luca.weiss@fairphone.com>
+> > + */
+> > +
+> > +/dts-v1/;
+> > +
+> > +/* PM7250B is configured to use SID8/9 instead of SID2/3 */
+> > +#define PM7250B_SID 8
+> > +#define PM7250B_SID1 9
+> > +
+> > +#include <dt-bindings/arm/qcom,ids.h>
+> > +#include <dt-bindings/leds/common.h>
+> > +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+> > +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+> > +#include "sc7280.dtsi"
+> > +#include "pm7250b.dtsi"
+> > +#include "pm7325.dtsi"
+> > +#include "pm8350c.dtsi" /* PM7350C */
+> > +#include "pmk8350.dtsi" /* PMK7325 */
+> > +
+> > +/ {
+> > +	model =3D "Fairphone 5";
+> > +	compatible =3D "fairphone,fp5", "qcom,qcm6490";
+> > +	chassis-type =3D "handset";
+> > +
+> > +	/* required for bootloader to select correct board */
+> > +	qcom,msm-id =3D <QCOM_ID_QCM6490 0x10000>;
+> > +	qcom,board-id =3D <34 0>;
+> Try [1], it worked for me on a picky device.
 
-a new arch_scale_freq_ref() is available to return a fixed and coherent
-frequency reference that can be used when computing the CPU's frequency
-for an level of utilization. Use this function when available or fallback
-to the last performance domain item otherwise.
+Yes, that works! Thanks!
 
-Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
----
- include/linux/energy_model.h | 20 +++++++++++++++++---
- 1 file changed, 17 insertions(+), 3 deletions(-)
+>
+> > +
+> > +	aliases {
+> > +		serial0 =3D &uart5;
+> > +		serial1 =3D &uart7;
+> > +	};
+> > +
+> > +	chosen {
+> > +		#address-cells =3D <2>;
+> > +		#size-cells =3D <2>;
+> > +		ranges;
+> > +
+> > +		framebuffer0: framebuffer@a000000 {
+> > +			compatible =3D "simple-framebuffer";
+> > +			reg =3D <0 0xe1000000 0 (2700 * 1224 * 4)>;
+> 0x0?
 
-diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-index b9caa01dfac4..7ee07be6928e 100644
---- a/include/linux/energy_model.h
-+++ b/include/linux/energy_model.h
-@@ -204,6 +204,20 @@ struct em_perf_state *em_pd_get_efficient_state(struct em_perf_domain *pd,
- 	return ps;
- }
- 
-+#ifdef arch_scale_freq_ref
-+static __always_inline
-+unsigned long  arch_scale_freq_ref_em(int cpu, struct em_perf_domain *pd)
-+{
-+	return arch_scale_freq_ref(cpu);
-+}
-+#else
-+static __always_inline
-+unsigned long  arch_scale_freq_ref_em(int cpu, struct em_perf_domain *pd)
-+{
-+	return pd->table[pd->nr_perf_states - 1].frequency;
-+}
-+#endif
-+
- /**
-  * em_cpu_energy() - Estimates the energy consumed by the CPUs of a
-  *		performance domain
-@@ -224,7 +238,7 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
- 				unsigned long max_util, unsigned long sum_util,
- 				unsigned long allowed_cpu_cap)
- {
--	unsigned long freq, scale_cpu;
-+	unsigned long freq, ref_freq, scale_cpu;
- 	struct em_perf_state *ps;
- 	int cpu;
- 
-@@ -241,11 +255,11 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
- 	 */
- 	cpu = cpumask_first(to_cpumask(pd->cpus));
- 	scale_cpu = arch_scale_cpu_capacity(cpu);
--	ps = &pd->table[pd->nr_perf_states - 1];
-+	ref_freq = arch_scale_freq_ref_em(cpu, pd);
- 
- 	max_util = map_util_perf(max_util);
- 	max_util = min(max_util, allowed_cpu_cap);
--	freq = map_util_freq(max_util, ps->frequency, scale_cpu);
-+	freq = map_util_freq(max_util, ref_freq, scale_cpu);
- 
- 	/*
- 	 * Find the lowest performance state of the Energy Model above the
--- 
-2.34.1
+Ack
+
+>
+> > +			width =3D <1224>;
+> > +			height =3D <2700>;
+> > +			stride =3D <(1224 * 4)>;
+> > +			format =3D "a8r8g8b8";
+> > +			panel =3D <&panel>;
+> > +			clocks =3D <&gcc GCC_DISP_HF_AXI_CLK>;
+> > +		};
+> > +	};
+> > +
+> > +	gpio-keys {
+> > +		compatible =3D "gpio-keys";
+> > +
+> > +		pinctrl-0 =3D <&volume_down_default>, <&hall_sensor_default>;
+> > +		pinctrl-names =3D "default";
+> > +
+> > +		key-volume-up {
+> > +			label =3D "Volume up";
+> > +			gpios =3D <&pm7325_gpios 6 GPIO_ACTIVE_LOW>;
+> > +			linux,code =3D <KEY_VOLUMEUP>;
+> > +		};
+> > +
+> > +		/* Hall sensor uses vreg_l8c as VDD, it's being enabled using
+> > +		 * always-on on the regulator
+> > +		 */
+> /* Powered by the always-on vreg_l8c */ - fits in a single line
+
+Ack
+
+>
+> > +		event-hall-sensor {
+> > +			label =3D "Hall Effect Sensor";
+> > +			gpios =3D <&tlmm 155 GPIO_ACTIVE_LOW>;
+> > +			linux,input-type =3D <EV_SW>;
+> > +			linux,code =3D <SW_LID>;
+> > +			linux,can-disable;
+> > +			wakeup-source;
+> > +		};
+> > +	};
+> > +
+> > +	panel: panel {
+> > +		compatible =3D "boe,rm692e5";
+> Undocumented compatbile
+
+Not quite sure how to document this properly. This dummy panel node is
+used for the simplefb/simpledrm so that user space can get panel
+dimensions already.
+
+This approach of a separate panel node was apparently preferred when the
+functionality was upstreamed but of course as can be seen this panel
+node is very barebones where many properties are not present which would
+be needed with the full panel driver (once it's working).
+
+Also for example for the bindings I think width-mm and height-mm won't
+be needed anymore since that information will be provided by the driver
+then.
+
+Please let me know how/where to document this.
+
+>
+> > +
+> > +		width-mm =3D <68>;
+> > +		height-mm =3D <150>;
+> > +	};
+> > +
+> > +	reserved-memory {
+> > +		cont_splash_mem: cont-splash@e1000000 {
+> > +			reg =3D <0 0xe1000000 0 0x2300000>;
+> 0x0
+
+Ack
+
+>
+> [...]
+>
+> > +		vreg_s1b: smps1 {
+> > +			regulator-min-microvolt =3D <1840000>;
+> > +			regulator-max-microvolt =3D <2040000>;
+> No regulator-initial-mode on this pmic?
+
+This specific regulator doesn't have one downstream, but it seems other
+pm7325 regulators do have this downstream so I'll add it in v2.
+
+>
+> [...]
+>
+> > +
+> > +	/* PM8008 PMIC @ 8 and 9 */
+> > +	/* Pixelworks @ 26 */
+> > +	/* FSA4480 USB audio switch @ 42 */
+> There's a driver for the fsa4480, you may wanna include a node here
+
+I'm aware, but will work on this later since it's not useful without
+USB-C role switching and working audio.
+
+>
+> > +	/* AW86927FCR haptics @ 5a */
+> > +};
+> [...]
+>
+> > +
+> > +	led-0 {
+> > +		function =3D LED_FUNCTION_FLASH;
+> No dual-tone stuff?
+
+Nope.
+
+>
+> > +		color =3D <LED_COLOR_ID_WHITE>;
+> > +		led-sources =3D <1>, <4>;
+> > +		led-max-microamp =3D <500000>;
+> > +		flash-max-microamp =3D <1500000>;
+> > +		flash-max-timeout-us =3D <1280000>;
+> > +	};
+> > +};
+> > +
+> > +&pmk8350_rtc {
+> > +	status =3D "okay";
+> > +};
+> > +
+> > +&pon_pwrkey {
+> > +	status =3D "okay";
+> > +};
+> > +
+> > +&pon_resin {
+> > +	status =3D "okay";
+> > +	linux,code =3D <KEY_VOLUMEDOWN>;
+> status last
+
+Ack
+
+>
+> [...]
+>
+> > +&rmtfs_mem {
+> > +	qcom,vmid =3D <QCOM_SCM_VMID_MSS_MSA>, <QCOM_SCM_VMID_NAV>;
+> > +	reg =3D <0x0 0xf8500000 0x0 0x600000>;
+> > +};
+> /delete-node/ + redefinition would probably be cleaner-looking
+
+Ack, looks better.
+
+>
+> [...]
+>
+> > +&uart7 {
+> > +	/delete-property/interrupts;
+> > +	interrupts-extended =3D <&intc GIC_SPI 608 IRQ_TYPE_LEVEL_HIGH>,
+> > +			      <&tlmm 31 IRQ_TYPE_EDGE_FALLING>;
+> > +
+> > +	pinctrl-names =3D "default", "sleep";
+> > +	pinctrl-1 =3D <&qup_uart7_sleep_cts>, <&qup_uart7_sleep_rts>, <&qup_u=
+art7_sleep_tx>, <&qup_uart7_sleep_rx>;
+> property-n
+> property-names
+
+Ack
+
+>
+> > +
+> > +	status =3D "okay";
+> > +
+> > +	bluetooth: bluetooth {
+> > +		compatible =3D "qcom,wcn6750-bt";
+> > +
+> > +		pinctrl-names =3D "default";
+> > +		pinctrl-0 =3D <&bluetooth_enable_default>, <&sw_ctrl_default>;
+> property-n
+> property-names
+
+Ack
+
+Regards
+Luca
+
+>
+> Konrad
+>
+> [1] https://lore.kernel.org/linux-arm-msm/9db02015-2c41-40d6-bf35-69ef277=
+e9ce4@linaro.org/
 
