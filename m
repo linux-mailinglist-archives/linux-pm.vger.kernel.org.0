@@ -2,157 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E656478F540
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Sep 2023 00:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A76E78F75C
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Sep 2023 05:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347651AbjHaWDJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Aug 2023 18:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47956 "EHLO
+        id S242063AbjIADF3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Aug 2023 23:05:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjHaWDI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 18:03:08 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0DF61B0
-        for <linux-pm@vger.kernel.org>; Thu, 31 Aug 2023 15:03:05 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-d7485d37283so1014432276.1
-        for <linux-pm@vger.kernel.org>; Thu, 31 Aug 2023 15:03:05 -0700 (PDT)
+        with ESMTP id S234493AbjIADF2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Aug 2023 23:05:28 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19A3E7C;
+        Thu, 31 Aug 2023 20:05:24 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-58dce1f42d6so36932727b3.0;
+        Thu, 31 Aug 2023 20:05:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693519385; x=1694124185; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1Nhr+MlGU8motavYCyDqtqnGnLslEKTIGE/1NrcgH84=;
-        b=bpd7oDZrgtdqG/vB/0Os+UGsLIYH4L8obUQ/ULomra6c/J5qjp0k2SGWk8TFd3FQhQ
-         tTR0+wcZpp1hxau8hI9WMYuihlxKLwv96217DbG68+PaZe4h6Awk3PCUZD4w3jx4H+x+
-         fz564XJROYDayfgvjx+08wB6qXWfBstFIac+4mRBA6K+YnP3ko4z+7lpqQK/ReMagNhQ
-         dY+eNNeGYKOLrn+Cof51rU+yDsT7LVhqtJMOy0L4Bkp11Ue+OIicsUycNB1pOs57yVqm
-         w7Bbig+0U2nbr+D+bDsi3uzy8HQnPjx0s5HewHYYVLzMdhny6d5Tac0BuvN09akSd2/Z
-         d/vQ==
+        d=gmail.com; s=20221208; t=1693537524; x=1694142324; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CzzhdRRz+84nDeWWLMEXfVPuhXA1oo9sQKDIU2jXLKE=;
+        b=CRylxYQwCo1qajb4BmM8DvxCdKRc86kD74IFneentvisP6WQEsSeQuicJVxC0MW4nU
+         NzODzQWTTqnWQFTMZhgMSxnn5D2C6Fwa8UlDPRGlECUSe/nmB3WgzAMhecwWaQbBMttB
+         yT0mqSYOdTBmt5IDqXpVfeRj6CQE8+UVTocIuWB3awdELIdDYsgZLg/7all1it/2stqE
+         7M7c/4Kth+AdwGDsfk9X5m1q02o3pNOB7icjw/4l2LGO7+qv/MOIxTYFXb9Ss3xZvTrG
+         QqQTcDaODugrCn0+s0sub7uoZE8bBgbq2Ic7Heige+JNyfSCy/Ehu3MOtv2Np6nE3UdN
+         yajg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693519385; x=1694124185;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1Nhr+MlGU8motavYCyDqtqnGnLslEKTIGE/1NrcgH84=;
-        b=j1qTtl4ITMTK9XrJH562rtdjYiFg2HWG9WhTSly+tlxNdLGSCQ8xvihhb9AWpAfxJb
-         ak0AlrkYO3/mutIFm59hn6gxGjlqgjS+7EEeKGqoHHjT7Y2hrOsNOaa4F4HZ1O5ohDQI
-         AxGGso70B4aN4Ru/TfpXmwdczW6/UxxscZTGs63Gj/qBfk1OvgNP5C96p6YmBPCQjx2n
-         o6K0uRuwizOKJoC73zLgSd3PR2lcDveaxFwBlrYiGk+nV8USs0DR4cenkzWpUlqbMTjX
-         W8e00XFQJ86NInveKotObMZ7caT7KMiNH6QWEySl+XNvSTaN1xs8PAFXqX/LMWQ96sl0
-         IuFw==
-X-Gm-Message-State: AOJu0Yxw97OV6qMwN10ZHYxtJiNBrmhdsIt2aB3ogDC8n+Hq1UNQA8MJ
-        nEq+fg2armYjboB/L4SYhovqNF1miRbETVQ8966Nvw==
-X-Google-Smtp-Source: AGHT+IGu/8umP4ViODWJYwkjfphaRkMX0GAjallqMv7PlNEBVl3a9Cn1lw/JTW8EU9hrvomRWdeDj5CICMQ+IJSGZXE=
-X-Received: by 2002:a25:cb52:0:b0:d4d:b6de:69bd with SMTP id
- b79-20020a25cb52000000b00d4db6de69bdmr1210138ybg.23.1693519384881; Thu, 31
- Aug 2023 15:03:04 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1693537524; x=1694142324;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CzzhdRRz+84nDeWWLMEXfVPuhXA1oo9sQKDIU2jXLKE=;
+        b=TUQEKNxx8EOCDWHMRgTQQH8+Y8ndkC7NipqdDI/IYGVkz81LZY10pI6bT5Z70wNawr
+         GXbNGO3DxDu6jcvmLyWNL+/ferduzeEKL0G67+ptswuMDh2+e4UIOseUOL0KrGoUNJM8
+         C7UqNNJUqMVEs3H9A1kWJTLSoP+KrG3MNKXEx+6C3Sqo3GW4fmtBzgN+pPj5yhSf/KGI
+         CUBwGzWz1PioLj4HRAzjPV42kBMLfEDf3ns6AYaz35Gm6uHmagmVUjcbNN4yXew/XRVT
+         LzbhmnHxkp0Pr96WnOMgteaKowNEDQKiAa0fFkmooSStYL+1A8YkMicTlZNUjzSRws7E
+         8xXQ==
+X-Gm-Message-State: AOJu0YxGj4ASSs5ISCnJbUQIzZhXtQDvuazWQMH6t2CZS8HnYx44vQEG
+        pc2Eq71c1E/QbAPsdBQnzKvAzBqk1Zri9NXtKpDapDxSLLkH6/2cL3w=
+X-Google-Smtp-Source: AGHT+IEJQ/UnswWklefCzgEHvWHAJOerPe/H2CzyND+TNL/LPrnmDHwD+//eG8lI6MC/fhA9o6DMv8wR+lP5bYqvsro=
+X-Received: by 2002:a0d:d605:0:b0:56c:f0c7:7d72 with SMTP id
+ y5-20020a0dd605000000b0056cf0c77d72mr2225622ywd.4.1693537523953; Thu, 31 Aug
+ 2023 20:05:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230217-topic-cpr3h-v14-0-9fd23241493d@linaro.org>
- <20230217-topic-cpr3h-v14-3-9fd23241493d@linaro.org> <CAPDyKFrXT+2NEMUzVv-kWjXAhLinXq99GKq4_Ge2VjthtYxtaA@mail.gmail.com>
- <20230831162835.GA2390385-robh@kernel.org> <f1f60df1-7632-48a2-a211-dcd6c1fa419f@linaro.org>
-In-Reply-To: <f1f60df1-7632-48a2-a211-dcd6c1fa419f@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 1 Sep 2023 00:02:27 +0200
-Message-ID: <CAPDyKFokY6F3dxhR3d8PyUwTvLOrt6+W=_JbfvGW_4XHHPaTsg@mail.gmail.com>
-Subject: Re: [PATCH v14 3/9] dt-bindings: soc: qcom: cpr3: Add bindings for
- CPR3 driver
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>,
+References: <cover.1693474728.git.zhoubinbin@loongson.cn> <bf09b11ec6a0102f85dc2b3289d003271304e24d.1693474728.git.zhoubinbin@loongson.cn>
+ <20230831-ambition-refusing-08e63b345573@spud>
+In-Reply-To: <20230831-ambition-refusing-08e63b345573@spud>
+From:   Binbin Zhou <zhoubb.aaron@gmail.com>
+Date:   Fri, 1 Sep 2023 11:05:12 +0800
+Message-ID: <CAMpQs4JbUx9N4MmfM6vRsdQBHyUcU9UHGX23UewL5Matt6iXnQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] soc: loongson: loongson_pm2: Drop useless
+ of_device_id compatible
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Niklas Cassel <nks@flawful.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Robert Marko <robimarko@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Huacai Chen <chenhuacai@kernel.org>,
+        loongson-kernel@lists.loongnix.cn, soc@kernel.org,
         devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
+        Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 31 Aug 2023 at 18:40, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+Hi Conor:
+
+Thanks for your reply.
+
+On Thu, Aug 31, 2023 at 11:15=E2=80=AFPM Conor Dooley <conor@kernel.org> wr=
+ote:
 >
-> On 31.08.2023 18:28, Rob Herring wrote:
-> > On Tue, Aug 29, 2023 at 01:01:44PM +0200, Ulf Hansson wrote:
-> >> On Mon, 28 Aug 2023 at 13:42, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
-> >>>
-> >>> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> >>>
-> >>> Add the bindings for the CPR3 driver to the documentation.
-> >>>
-> >>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> >>> [Konrad: Make binding check pass; update AGdR's email]
-> >>> Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> >>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> >>> ---
-> >>>  .../devicetree/bindings/soc/qcom/qcom,cpr3.yaml    | 286 +++++++++++++++++++++
-> >>>  1 file changed, 286 insertions(+)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
-> >>> new file mode 100644
-> >>> index 000000000000..acf2e294866b
-> >>
-> >> [...]
-> >>
-> >>> +
-> >>> +examples:
-> >>> +  - |
-> >>> +    #include <dt-bindings/clock/qcom,gcc-msm8998.h>
-> >>> +    #include <dt-bindings/interrupt-controller/irq.h>
-> >>> +
-> >>> +    cpus {
-> >>> +        #address-cells = <2>;
-> >>> +        #size-cells = <0>;
-> >>> +
-> >>> +        cpu@0 {
-> >>> +            compatible = "qcom,kryo280";
-> >>> +            device_type = "cpu";
-> >>> +            reg = <0x0 0x0>;
-> >>> +            operating-points-v2 = <&cpu0_opp_table>;
-> >>> +            power-domains = <&apc_cprh 0>;
-> >>> +            power-domain-names = "cprh";
-> >>
-> >> Rather than using a Qcom specific power-domain-name, perhaps a common
-> >> power-domain-name for cpus, that can be used for "the performance
-> >> domain" would be a good idea here?
-> >>
-> >> I have suggested using "perf" for the SCMI performance domain [1],
-> >> perhaps that description should be extended to cover this and other
-> >> performance domains too?
+> On Thu, Aug 31, 2023 at 07:43:13PM +0800, Binbin Zhou wrote:
+> > Now, "loongson,ls2k0500-pmc" is used as fallback compatible, so the
+> > ls2k1000 compatible in the driver can be dropped directly.
 > >
-> > Better yet, nothing. There's no value to -names when there is only 1
-> > entry.
-> As of today, it's required for devm_pm_opp_attach_genpd()
+> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> > ---
+> >  drivers/soc/loongson/loongson2_pm.c | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/drivers/soc/loongson/loongson2_pm.c b/drivers/soc/loongson=
+/loongson2_pm.c
+> > index 796add6e8b63..5ffb77afd9eb 100644
+> > --- a/drivers/soc/loongson/loongson2_pm.c
+> > +++ b/drivers/soc/loongson/loongson2_pm.c
+> > @@ -197,7 +197,6 @@ static int loongson2_pm_probe(struct platform_devic=
+e *pdev)
+> >
+> >  static const struct of_device_id loongson2_pm_match[] =3D {
+> >       { .compatible =3D "loongson,ls2k0500-pmc", },
+> > -     { .compatible =3D "loongson,ls2k1000-pmc", },
 >
-> Ulf, is there a better way to do this that doesn't require names?
+> What about older devicetrees that do not have the fallback? Aren't you
+> going to remove support for those?
 
-In my opinion I think using names is valuable from a future and
-flexibility point of view. To pick the proper name is another
-question.
+This driver was just merged in during the v6.6 window, and no release
+will use it until now.
 
-Anyway, in this case I think you should consider the case of
-potentially having multiple power-domains for the cpu. Having both a
-cpr(h) (for performance-scaling) and a psci (for power) power-domain
-sounds like a combination that should already exist. Maybe not
-upstream wise, but at least this is what I have been told to exist
-several years ago by Qcom engineers.
+commit 67694c076bd7 soc: loongson2_pm: add power management support
+commit 6054a676e969 soc: dt-bindings: add loongson-2 pm
 
-Kind regards
-Uffe
+Of course, it was our mistake not to make better use of fallback
+compatible when submitting the driver, and we hope to fix this mistake
+soon.
+Also, this driver will only be used by the LoongArch architecture, no
+need to worry about other architectures.
+
+Thanks.
+Binbin
+>
+> >       {},
+> >  };
+> >
+> > --
+> > 2.39.3
+> >
