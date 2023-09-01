@@ -2,190 +2,291 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA7878FFA9
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Sep 2023 17:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A923078FFDD
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Sep 2023 17:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231419AbjIAPJA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Sep 2023 11:09:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46654 "EHLO
+        id S1350184AbjIAPVb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Sep 2023 11:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350114AbjIAPJA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Sep 2023 11:09:00 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F61610E5
-        for <linux-pm@vger.kernel.org>; Fri,  1 Sep 2023 08:08:57 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-98377c5d53eso244744666b.0
-        for <linux-pm@vger.kernel.org>; Fri, 01 Sep 2023 08:08:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1693580934; x=1694185734; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ir5d0LdfkLCgxj9RUuUc7L+7Tk1dgspXe4TSyCCKnNc=;
-        b=OrjALxhjcjO9OQoFxn5KZDSD4vm7r0lBFN26CuNBcCt4fU4JwKPYNZj36/hRtKuM00
-         CwfVu0u+RBMmb7S2++v4EP+B8eHGAqcRNVDdzlyqQimivNNoZ9Diu4yb85icU9qU6tdc
-         cfoANkEFP8La/Ch1xM/3pBQnO4a8Jz1EnqaUo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693580934; x=1694185734;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ir5d0LdfkLCgxj9RUuUc7L+7Tk1dgspXe4TSyCCKnNc=;
-        b=Vk2RGMipj4/i3T7g7aY7GZMHYQMoLYjO7HNZZtLShoZ/ugobye5P1gW6bZW/HHKKUI
-         Rx/DCnfzBZXsDSylsrLwwzxJMX9WQov6LeBBbu4cVt8Yn4gz7HyeCi3OMazklT8pcLtB
-         WZTqRXAHMeMx/3iErGyo7Apu4c3YQFLZDGsrjYLe2G1m7OTvZkuGppvf76XPKIu5tHBl
-         kkVISR7e+ecKPYAlVgclJ/oyGJMqOdtJlgnIl5NsLXpijTbs7qNHiTNT2fKVNytP8s/g
-         tpFKLsLUhXOqANCyhqPb09QEVdRTjK1tH973heztfDMoEdjE0t4+rxcmm3OgVkFPR29B
-         rApg==
-X-Gm-Message-State: AOJu0Yx2rrkg0m7kFQOPuuaSAKaL8B1abuwE7svsQworfYmetg/ubDTq
-        sWU1I8+Z7YI6x8SFVUCYDLkSQXnjqcbUlGn6vDUOzpL3
-X-Google-Smtp-Source: AGHT+IGd41BNAAM9KsgPem9cfW3j38Nk3c0Jka7Vq27UsURvZEUttajEAKQiu9YeECC4+BO3VdWcog==
-X-Received: by 2002:a17:906:196:b0:9a1:de81:ff7a with SMTP id 22-20020a170906019600b009a1de81ff7amr1947670ejb.30.1693580933555;
-        Fri, 01 Sep 2023 08:08:53 -0700 (PDT)
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com. [209.85.128.41])
-        by smtp.gmail.com with ESMTPSA id s23-20020a170906c31700b009934b1eb577sm2065100ejz.77.2023.09.01.08.08.52
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Sep 2023 08:08:52 -0700 (PDT)
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-402bec56ca6so4505e9.0
-        for <linux-pm@vger.kernel.org>; Fri, 01 Sep 2023 08:08:52 -0700 (PDT)
-X-Received: by 2002:a05:600c:282:b0:3fe:dd72:13ae with SMTP id
- 2-20020a05600c028200b003fedd7213aemr166371wmk.0.1693580932622; Fri, 01 Sep
- 2023 08:08:52 -0700 (PDT)
+        with ESMTP id S240195AbjIAPVa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Sep 2023 11:21:30 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2054.outbound.protection.outlook.com [40.107.220.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438DB1727;
+        Fri,  1 Sep 2023 08:21:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KOvU5bQrZepv8LbayPTcwaxNDabKWg0oihljoAzCB/Qc3D6cFJfik6Z/8iWjNmggZuN4XOWLXDtPK5DJDVCCGZQ92pBlNZzTVkVmpd8FANEMMFQpCIF9MACmqNoKVyJM+Jan7qX4f4ZeACSC1l2u0EqFI+hjFWmgNjHW084nX94Wudi/1YUOFhjv5oP71fEgidEe/RhbbqiC2eA7UeIJJl7NADHEpacnLFomCi3GC+J481jUZDBGE1q2pLb6dGJ1gVPCsJf9AQoYBJ+xWjLy9Q06pR3x8pWrjL+SIEZJQrMHBNqcWJnoHd8uj1c5WtxbH4gqDlsVg9crMmBiJ0KZgQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=V+PbgGhVq8ZSYsidXKIaDFsX5m5RlSOuGg6dPbm7lhQ=;
+ b=AfDsT1QUL6+7PxuBDyzzHnmCLtaBXTbBfWBO5fj2Li+G1thXyysUMg/YE6KFLZ5lwyqa/TeRLVAmKw88GxjYhNgonFUJ8bCRLeEV3jPeMlTsfgXKicsG6XSg7m8v0G+0goPIMBNaH7obFnrcyFrZUZcFWzkit0AsAv2UE59p0wplJSOUgThFo7CLG/4Fs4AlOAK0Qsekr30+V8LegDMthiS0pSWDAZ5c4QcdyZ/OmpP2qWxcr8/V5YgJvHkTfk1Pfl0jDWyaj6iQcfuACf1ypofHEezquFCMaopbrjY5Hb5rP/c8jTe0A63/amv7z7RFp+steeD7OSBSnpjoHUkRbA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=V+PbgGhVq8ZSYsidXKIaDFsX5m5RlSOuGg6dPbm7lhQ=;
+ b=GMSvwFr2WiZ9bDRJOPVceOttgpKwMXU9azGiN07Wkome8663HEFMAJYft0/cM+lLnY3q8IX1U3vJXhLSD2UzZaJov91uGLwIKlnKQZfXZ4DXBJ+6pCdhUdbxbYXC2+ypN6ATnmD6ikW5SZGnb8+x6ex+AxFNo30SUs2195vOR56q54CEj5D8qxWyhUEtHdmyxCJZGgj541trXcLwffTpPeEyjzmcD4hmxCzUwCZIVTxuTmv2OgVCVQHPHPUxtc57UmGjmjTHIEVnm7GXXuqiMi5c8lZqGRSWBcIZKqorRc4efN5YLcy5pErfcnxs711480GqRpSe42C4WhvAD3TDBg==
+Received: from DS7PR05CA0033.namprd05.prod.outlook.com (2603:10b6:8:2f::20) by
+ DS0PR12MB8455.namprd12.prod.outlook.com (2603:10b6:8:158::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6745.20; Fri, 1 Sep 2023 15:21:06 +0000
+Received: from CY4PEPF0000EE32.namprd05.prod.outlook.com
+ (2603:10b6:8:2f:cafe::e) by DS7PR05CA0033.outlook.office365.com
+ (2603:10b6:8:2f::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.17 via Frontend
+ Transport; Fri, 1 Sep 2023 15:21:06 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CY4PEPF0000EE32.mail.protection.outlook.com (10.167.242.38) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6745.16 via Frontend Transport; Fri, 1 Sep 2023 15:21:06 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 1 Sep 2023
+ 08:20:55 -0700
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 1 Sep 2023
+ 08:20:55 -0700
+Received: from sumitg-l4t.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server id 15.2.986.37 via Frontend
+ Transport; Fri, 1 Sep 2023 08:20:52 -0700
+From:   Sumit Gupta <sumitg@nvidia.com>
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <treding@nvidia.com>, <jonathanh@nvidia.com>, <bbasu@nvidia.com>,
+        <sumitg@nvidia.com>
+Subject: [Patch] driver: cpufreq: use refclk delta based loop instead of udelay
+Date:   Fri, 1 Sep 2023 20:50:46 +0530
+Message-ID: <20230901152046.25662-1-sumitg@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-References: <20230830-fp5-initial-v1-0-5a954519bbad@fairphone.com>
- <20230830-fp5-initial-v1-2-5a954519bbad@fairphone.com> <CAD=FV=WS2hgY=bQjLOs3Fdp8pbZyMsaS-0BpoxPq90Etfi+Xuw@mail.gmail.com>
- <CV5YJVXIL8OT.1ZWW3KVCHPTA5@otso> <CAD=FV=XhdORH=naTtoc+kCC4A7UdAJKwq=Te6B3qvXNGBwBieg@mail.gmail.com>
- <CV7O0TYYEFA8.1Q42JITFSW77Q@otso>
-In-Reply-To: <CV7O0TYYEFA8.1Q42JITFSW77Q@otso>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 1 Sep 2023 08:08:36 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UG-dFg7wZsn6n=pkejie0fr+G0q3CguNspGYxoC2ZBLw@mail.gmail.com>
-Message-ID: <CAD=FV=UG-dFg7wZsn6n=pkejie0fr+G0q3CguNspGYxoC2ZBLw@mail.gmail.com>
-Subject: Re: [PATCH 02/11] nvmem: qfprom: Mark core clk as optional
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     cros-qcom-dts-watchers@chromium.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE32:EE_|DS0PR12MB8455:EE_
+X-MS-Office365-Filtering-Correlation-Id: 39a6e85f-7759-45ac-f6e8-08dbaaff1017
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nWvnSyydadGxyLrxE+syXJ69QGAo0f+KvD0hAMZz+bv+0s+zvrDoHSGx0h3ze0ImeYXPahPdOyJsX4LxIvNayEYzX5GT7Vt2yycBOvt24HxqIwJFvh/jfkjIiSdEOHf28Mks4bOplfVTQpTeQxo9nYatSCwxNSDJoBLE8/aeLLFoQLse34Mjbx8yDvK0HuWdC4bGQJNwH6ADBtcDJDAhL0XMOQspvdSp4tkYxCfj14/caDu8mGEs9zbouYJT92Lh8IlwPvHBQQ6ah9D3+BkehZKqMVdScjuNB2addqsd6C5sUCnkA834DRugBDvVJjb1lrPitz3ZKRboatekgOvO8Gv7viVc05eHpl03hduKVTnYT1ToZCCk+lLBeHeIGxo3R1Bhr8jqS/PCz0uSHJ5BKcz7t2pxFQDDBZre/ablsIgodmPLT+bRrB00NNMOWQ5G1T2jxQMbmtp4idk8lP9uHRpesWkmYJ3yniH+IsVWEWwgVbs86j4dv+MvzCs/Pz245H7XRrZQZJaYXRQpLr9ytXFawp7UAFCyTSVbMFNI4MSONxHALhkfsSjKwpr/OeJMLWd3njrkft7KTvtVLyS3mAJ9aUbEGxSVIAl3D5/NGwS8AO3WVsRzHi2v2BmKksRzQ8XL7TSsq+4z2dQN/YhJB/1TUa0DaqW8tU7J6a+nj/yE8iVXagt4Gh2atyRg+q0IBnTuUU9a1D5TsFFSHlwV0xWMtYBboGRg2QQ3iYlFjBgyu1Begv9PGIbSMMBsm+V8
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(136003)(346002)(376002)(396003)(186009)(1800799009)(451199024)(82310400011)(40470700004)(36840700001)(46966006)(7636003)(40480700001)(40460700003)(82740400003)(2906002)(70586007)(70206006)(316002)(110136005)(54906003)(478600001)(356005)(41300700001)(86362001)(5660300002)(8936002)(4326008)(8676002)(47076005)(107886003)(83380400001)(2616005)(6666004)(36860700001)(1076003)(7696005)(336012)(426003)(26005)(36756003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2023 15:21:06.5039
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 39a6e85f-7759-45ac-f6e8-08dbaaff1017
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EE32.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8455
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Use reference clock count based loop instead of "udelay()" for
+sampling of counters to improve the accuracy of re-generated CPU
+frequency. "udelay()" internally calls "WFE" which stops the
+counters and results in bigger delta between the last set freq
+and the re-generated value from counters. The counter sampling
+window used in loop is the minimum number of reference clock
+cycles which is known to give a stable value of CPU frequency.
+The change also helps to reduce the sampling window from "500us"
+to "<50us".
 
-On Fri, Sep 1, 2023 at 7:54=E2=80=AFAM Luca Weiss <luca.weiss@fairphone.com=
-> wrote:
->
-> > > > So maybe the right fix here is to just change your dts to specify o=
-ne
-> > > > memory region?
-> > >
-> > > I got feedback from Konrad that this here would be the preferred
-> > > approach compared to having a different dts for ChromeOS vs non-Chrom=
-eOS
-> > > devices. I don't feel strongly to either, for me it's also okay to
-> > > remove the extra memory regions and only have the main one used on
-> > > regular qcom devices.
-> > >
-> > > Let me know what you think.
-> >
-> > I don't hate the idea of leaving the extra memory regions in the dts.
-> > They do describe the hardware, after all, even if the main OS can't
-> > actually access those memory regions. ...though the same could also be
-> > said about the clock you've removed. Said another way: if you want to
-> > fully describe the hardware then the dts should have the extra memory
-> > regions and the clock. If you are OK w/ just describing the hardware
-> > in the way that the OS has access to then the dts should not have the
-> > extra memory regions and not have the clock. Does that sound right?
->
-> Not sure which of those memory regions are actually accessible on this
-> board, but honestly I don't even want to try accessing it. Blowing fuses
-> is not my wish there ;)
->
-> On downstream the node is just described like the following:
->
->         qfprom: qfprom@780000 {
->                 compatible =3D "qcom,qfprom";
->                 reg =3D <0x780000 0x7000>;
->                 ...
->         };
->
-> So we have 0x780000 - 0x786fff here.
->
-> In sc7280.dtsi we have the following:
->
->         qfprom: efuse@784000 {
->                 compatible =3D "qcom,sc7280-qfprom", "qcom,qfprom";
->                 reg =3D <0 0x00784000 0 0xa20>,
->                           <0 0x00780000 0 0xa20>,
->                           <0 0x00782000 0 0x120>,
->                           <0 0x00786000 0 0x1fff>;
->                 ...
->         };
->
-> So I guess this:
-> * 0x780000 - 0x780a1f
-> * 0x782000 - 0x78211f
-> * 0x784000 - 0x784a1f
-> * 0x786000 - 0x787ffe
->
-> So at least the last memory region seems to be partially out of range
-> according to downstream.
+Suggested-by: Antti Miettinen <amiettinen@nvidia.com>
+Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+---
+ drivers/cpufreq/tegra194-cpufreq.c | 72 +++++++++++++++++++++++-------
+ 1 file changed, 55 insertions(+), 17 deletions(-)
 
-From the other discussion, it sounds as if you _can_ leave the clock
-in the device tree and then use "clk_get_optional" here. IMO then, the
-right answer is to use "clk_get_optional" but then also modify the
-check below so that instead of:
+diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
+index 386aed3637b4..b7161506b897 100644
+--- a/drivers/cpufreq/tegra194-cpufreq.c
++++ b/drivers/cpufreq/tegra194-cpufreq.c
+@@ -5,7 +5,6 @@
+ 
+ #include <linux/cpu.h>
+ #include <linux/cpufreq.h>
+-#include <linux/delay.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+@@ -21,10 +20,11 @@
+ 
+ #define KHZ                     1000
+ #define REF_CLK_MHZ             408 /* 408 MHz */
+-#define US_DELAY                500
+ #define CPUFREQ_TBL_STEP_HZ     (50 * KHZ * KHZ)
+ #define MAX_CNT                 ~0U
+ 
++#define MAX_DELTA_KHZ          115200
++
+ #define NDIV_MASK              0x1FF
+ 
+ #define CORE_OFFSET(cpu)			(cpu * 8)
+@@ -62,6 +62,7 @@ struct tegra_cpufreq_soc {
+ 	int maxcpus_per_cluster;
+ 	unsigned int num_clusters;
+ 	phys_addr_t actmon_cntr_base;
++	u32 refclk_delta_min;
+ };
+ 
+ struct tegra194_cpufreq_data {
+@@ -158,6 +159,8 @@ static void tegra234_read_counters(struct tegra_cpu_ctr *c)
+ 	struct tegra194_cpufreq_data *data = cpufreq_get_driver_data();
+ 	void __iomem *actmon_reg;
+ 	u32 cpuid, clusterid;
++	u32 delta_refcnt;
++	int cnt = 0;
+ 	u64 val;
+ 
+ 	data->soc->ops->get_cpu_cluster_id(c->cpu, &cpuid, &clusterid);
+@@ -166,10 +169,25 @@ static void tegra234_read_counters(struct tegra_cpu_ctr *c)
+ 	val = readq(actmon_reg);
+ 	c->last_refclk_cnt = upper_32_bits(val);
+ 	c->last_coreclk_cnt = lower_32_bits(val);
+-	udelay(US_DELAY);
+-	val = readq(actmon_reg);
+-	c->refclk_cnt = upper_32_bits(val);
+-	c->coreclk_cnt = lower_32_bits(val);
++
++	/*
++	 * The sampling window is based on the minimum number of reference
++	 * clock cycles which is known to give a stable value of CPU frequency.
++	 */
++	do {
++		val = readq(actmon_reg);
++		c->refclk_cnt = upper_32_bits(val);
++		c->coreclk_cnt = lower_32_bits(val);
++		if (c->refclk_cnt < c->last_refclk_cnt)
++			delta_refcnt = c->refclk_cnt + (MAX_CNT - c->last_refclk_cnt);
++		else
++			delta_refcnt = c->refclk_cnt - c->last_refclk_cnt;
++		if (++cnt >= 0xFFFF) {
++			pr_warn("cpufreq: problem with refclk on cpu:%d, delta_refcnt:%u, cnt:%d\n",
++				c->cpu, delta_refcnt, cnt);
++			break;
++		}
++	} while (delta_refcnt < data->soc->refclk_delta_min);
+ }
+ 
+ static struct tegra_cpufreq_ops tegra234_cpufreq_ops = {
+@@ -184,6 +202,7 @@ static const struct tegra_cpufreq_soc tegra234_cpufreq_soc = {
+ 	.actmon_cntr_base = 0x9000,
+ 	.maxcpus_per_cluster = 4,
+ 	.num_clusters = 3,
++	.refclk_delta_min = 16000,
+ };
+ 
+ static const struct tegra_cpufreq_soc tegra239_cpufreq_soc = {
+@@ -191,6 +210,7 @@ static const struct tegra_cpufreq_soc tegra239_cpufreq_soc = {
+ 	.actmon_cntr_base = 0x4000,
+ 	.maxcpus_per_cluster = 8,
+ 	.num_clusters = 1,
++	.refclk_delta_min = 16000,
+ };
+ 
+ static void tegra194_get_cpu_cluster_id(u32 cpu, u32 *cpuid, u32 *clusterid)
+@@ -231,15 +251,33 @@ static inline u32 map_ndiv_to_freq(struct mrq_cpu_ndiv_limits_response
+ 
+ static void tegra194_read_counters(struct tegra_cpu_ctr *c)
+ {
++	struct tegra194_cpufreq_data *data = cpufreq_get_driver_data();
++	u32 delta_refcnt;
++	int cnt = 0;
+ 	u64 val;
+ 
+ 	val = read_freq_feedback();
+ 	c->last_refclk_cnt = lower_32_bits(val);
+ 	c->last_coreclk_cnt = upper_32_bits(val);
+-	udelay(US_DELAY);
+-	val = read_freq_feedback();
+-	c->refclk_cnt = lower_32_bits(val);
+-	c->coreclk_cnt = upper_32_bits(val);
++
++	/*
++	 * The sampling window is based on the minimum number of reference
++	 * clock cycles which is known to give a stable value of CPU frequency.
++	 */
++	do {
++		val = read_freq_feedback();
++		c->refclk_cnt = lower_32_bits(val);
++		c->coreclk_cnt = upper_32_bits(val);
++		if (c->refclk_cnt < c->last_refclk_cnt)
++			delta_refcnt = c->refclk_cnt + (MAX_CNT - c->last_refclk_cnt);
++		else
++			delta_refcnt = c->refclk_cnt - c->last_refclk_cnt;
++		if (++cnt >= 0xFFFF) {
++			pr_warn("cpufreq: problem with refclk on cpu:%d, delta_refcnt:%u, cnt:%d\n",
++				c->cpu, delta_refcnt, cnt);
++			break;
++		}
++	} while (delta_refcnt < data->soc->refclk_delta_min);
+ }
+ 
+ static void tegra_read_counters(struct work_struct *work)
+@@ -297,9 +335,8 @@ static unsigned int tegra194_calculate_speed(u32 cpu)
+ 	u32 rate_mhz;
+ 
+ 	/*
+-	 * udelay() is required to reconstruct cpu frequency over an
+-	 * observation window. Using workqueue to call udelay() with
+-	 * interrupts enabled.
++	 * Reconstruct cpu frequency over an observation/sampling window.
++	 * Using workqueue to keep interrupts enabled during the interval.
+ 	 */
+ 	read_counters_work.c.cpu = cpu;
+ 	INIT_WORK_ONSTACK(&read_counters_work.work, tegra_read_counters);
+@@ -383,9 +420,9 @@ static unsigned int tegra194_get_speed(u32 cpu)
+ 		if (pos->driver_data != ndiv)
+ 			continue;
+ 
+-		if (abs(pos->frequency - rate) > 115200) {
+-			pr_warn("cpufreq: cpu%d,cur:%u,set:%u,set ndiv:%llu\n",
+-				cpu, rate, pos->frequency, ndiv);
++		if (abs(pos->frequency - rate) > MAX_DELTA_KHZ) {
++			pr_warn("cpufreq: cpu%d,cur:%u,set:%u,delta:%d,set ndiv:%llu\n",
++				cpu, rate, pos->frequency, abs(rate - pos->frequency), ndiv);
+ 		} else {
+ 			rate = pos->frequency;
+ 		}
+@@ -580,6 +617,7 @@ static const struct tegra_cpufreq_soc tegra194_cpufreq_soc = {
+ 	.ops = &tegra194_cpufreq_ops,
+ 	.maxcpus_per_cluster = 2,
+ 	.num_clusters = 4,
++	.refclk_delta_min = 16000,
+ };
+ 
+ static void tegra194_cpufreq_free_resources(void)
+@@ -673,7 +711,7 @@ static int tegra194_cpufreq_probe(struct platform_device *pdev)
+ 
+ 	soc = of_device_get_match_data(&pdev->dev);
+ 
+-	if (soc->ops && soc->maxcpus_per_cluster && soc->num_clusters) {
++	if (soc->ops && soc->maxcpus_per_cluster && soc->num_clusters && soc->refclk_delta_min) {
+ 		data->soc = soc;
+ 	} else {
+ 		dev_err(&pdev->dev, "soc data missing\n");
+-- 
+2.17.1
 
-/* Only enable writing if we have SoC data. */
-if (priv->soc_data)
-  econfig.reg_write =3D qfprom_reg_write;
-
-It is:
-
-/* Only enable writing if we have SoC data and a valid clock */
-if (priv->soc_data && priv->secclk)
-  econfig.reg_write =3D qfprom_reg_write;
-
-
-Does that work for you?
-
-
-> So after reading all of this I tried running this commmand on the phone
-> and the phone reboots into 900e mode.
->
->   $ cat /sys/devices/platform/soc@0/784000.efuse/qfprom0/nvmem
->
-> I guess normally this should work? So if I interpret this correctly, the
-> Linux driver thinks it can access more than it can/should. But also
-> should probably try this command on another chipset to see if it works
-> on any really?
-
-Presumably your firmware needs a different "sc7280_qfprom_keepout". If
-that's true then I guess you'll have to undergo negotiations with the
-DT bindings folks and the nvmem maintainer to figure out how to
-specify that your firmware protects different things than the ChromeOS
-firmware?
-
-
--Doug
