@@ -2,62 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF7C7907BC
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Sep 2023 13:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D041A7907BF
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Sep 2023 14:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351475AbjIBL7L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 2 Sep 2023 07:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
+        id S1346765AbjIBMDr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 2 Sep 2023 08:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352075AbjIBL7I (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 Sep 2023 07:59:08 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6393110F5
-        for <linux-pm@vger.kernel.org>; Sat,  2 Sep 2023 04:59:05 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-5007f3d3235so4956541e87.2
-        for <linux-pm@vger.kernel.org>; Sat, 02 Sep 2023 04:59:05 -0700 (PDT)
+        with ESMTP id S231278AbjIBMDr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 Sep 2023 08:03:47 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93B710F5
+        for <linux-pm@vger.kernel.org>; Sat,  2 Sep 2023 05:03:43 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2bbbda48904so47161221fa.2
+        for <linux-pm@vger.kernel.org>; Sat, 02 Sep 2023 05:03:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693655943; x=1694260743; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1693656222; x=1694261022; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=EmGPvjcKg1B9BeWMi9rX6ODuX0AVL+S6ScyjViR6nPY=;
-        b=NzNkTotv8Eb7EAVSwOtaSCpK+YaW1BrisrMKbtdA3rxm4VcnKeaTszWbbMzCOaluwH
-         5KrbPtTWKvt2SXaqZGSpIHcUEvVAzxzm+xdKJSG+lIEWtBsDWxXvI70ebmuzPZk1culJ
-         Evvs0I67Fee+E5r9VZC3JdZ2x7kSViFUflPw0P/u9kaYfPtds1HwKvDsFtEH7mIekv3w
-         crGn+VXme+aYG1bA2cPKzeY4m5alONtph51bMM6ZBfbRx1QRQVsu0pKruqMjSL8l9vpU
-         evG3oD5OXx6pKLWCO8M6+0XNHmTxfcyod6LVSYWz0ModIbfabU+Bz8/a3BtbXQMy5pfu
-         hT0A==
+        bh=4BZRTMHkYnC7287M6y0rXIQh3JyEG2rci4b+jc/XG6M=;
+        b=S0UMjDIcmlhaeeMZMiXoJFhiH93rGzJfsGeIT0WoRZOi4jATmXgSMAQWmHZeTJbC+T
+         o+Ldyzwkms/JxTSLeKaPQcNsNA9Hj+ejzts5DkyGQqEA6wuznuGIpu/DU2eudTd/lsfp
+         yeSzaTIJelc5WVysKS+GPA2Ej64Ly8An+agNl4wdUOqoWk17OW50puWigPcY8AcWXnLT
+         5FJ0JBQAMzv1wjQabSQpe87mofNcvsg4Ma1vDoC5k6CmF5UkZHvzYCH14YRrX0O+s87R
+         pszh4GJG68AuxG1adRzM4moA8mb4TfBeMvmyuSsBdma1twVqtmjTUj+5cPHZf2nMtHvZ
+         0gKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693655943; x=1694260743;
+        d=1e100.net; s=20221208; t=1693656222; x=1694261022;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EmGPvjcKg1B9BeWMi9rX6ODuX0AVL+S6ScyjViR6nPY=;
-        b=l40YtmcrLxJcqi8ct6pxek7TJYOosW7se85+tFGjj7hbhD0MNoc0a9zMqVeFkrul9J
-         cLGeQttthz/R97aZ17eeY6nSzp9EGk6OGOZGBXjC71EeH/CbEzJ5KpD8SlF3MdzKSM6E
-         TKVvVilbEAZi+xWAPIjiYmew5VoamuzXMyEMLdXpO5hVpNze74WQ9Z8Lszfytk32Pp+Y
-         y327qcbV1A5fH5EzanlnQVlx0drT82PchWe9+gDbeTYR++Qvi9h9Rc9lFa11HZfSuPLX
-         nBr35ZHAll2yO+Qpdn9NaBNAkMPxIiuk2OOFnpHnBQ7r/vk0JIddea0j181zPsGU72Sz
-         wWTQ==
-X-Gm-Message-State: AOJu0Yyvej/F/0MIM3iHfVg/ydkcvS2Qa1zOVl0DkLuhpq5fhGiuOVEn
-        GnP2jN/GyhW3MWq4fhBjOyQcdg==
-X-Google-Smtp-Source: AGHT+IFF3j27XIHbpiAI7J8N84m5ufbECGCjNzFkvdA/v842JHdu/neiK0+2KJJAF0EjWZA+3ad4nw==
-X-Received: by 2002:ac2:58dc:0:b0:500:bb99:69a9 with SMTP id u28-20020ac258dc000000b00500bb9969a9mr2641482lfo.64.1693655943559;
-        Sat, 02 Sep 2023 04:59:03 -0700 (PDT)
+        bh=4BZRTMHkYnC7287M6y0rXIQh3JyEG2rci4b+jc/XG6M=;
+        b=g/arMlKkCjpBG7OjS9qbm7AAnhEbHdCY5kMR2131erHPFsTtw39gLbm9Xi7qfxwBby
+         li+hZIkCnCSt6lz7vMAHbha/Nq88dSBNHg7UwB9WdH+Y/VQ92yDIbscyqc2VLKFqcZve
+         ecf1mt+ahqNFr0yLy5LSwB64SF/nOz6wUVSw22dLfqA6FW6+bGLw/BVvW/xCV5Z2AAbD
+         27xXczEGNLvfTNuE6+DyKgGYG9gIipaveeXJ+QJkO5QZAB2i24p79jBiBF7EZrNz7QOq
+         8rPvp6/AULu1bPHTj3OLeGgBHEbO93fTUxdMEFV1G+9Kg3qxiCv9uTUOZkQ0gwpzcAt9
+         fmgA==
+X-Gm-Message-State: AOJu0Ywdzsiqhd/g8ZZANqiQF/cNOdz5e6u2UW7vqDdz7XXldJ0FT57r
+        adJxtGKDSV1SQrdp6IlkJ6Qh7g==
+X-Google-Smtp-Source: AGHT+IFtDsgiqMRY9d3RxzQmCat8gXZsAoMc2U/DRmGn3ronZCFEDl6PjuMXxHogftDtjYRspyUOcA==
+X-Received: by 2002:ac2:5190:0:b0:4f9:51ac:41eb with SMTP id u16-20020ac25190000000b004f951ac41ebmr2652036lfi.16.1693656221487;
+        Sat, 02 Sep 2023 05:03:41 -0700 (PDT)
 Received: from [192.168.1.101] (abxi170.neoplus.adsl.tpnet.pl. [83.9.2.170])
-        by smtp.gmail.com with ESMTPSA id l26-20020ac2555a000000b00500998f63cdsm962839lfk.109.2023.09.02.04.59.02
+        by smtp.gmail.com with ESMTPSA id y8-20020ac255a8000000b004fe3512e26dsm960079lfg.291.2023.09.02.05.03.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Sep 2023 04:59:03 -0700 (PDT)
-Message-ID: <ecafa01d-f942-4418-a01f-885b431c67ee@linaro.org>
-Date:   Sat, 2 Sep 2023 13:59:02 +0200
+        Sat, 02 Sep 2023 05:03:41 -0700 (PDT)
+Message-ID: <8257f7b3-dfb8-4683-85de-600f3b1ed54b@linaro.org>
+Date:   Sat, 2 Sep 2023 14:03:38 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 4/6] clk: qcom: Use HW_CTRL_TRIGGER flag to switch
  video GDSC to HW mode
 Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        Jagadeesh Kona <quic_jkona@quicinc.com>
+To:     Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Abel Vesa <abel.vesa@linaro.org>
 Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Kevin Hilman <khilman@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
@@ -78,7 +78,6 @@ References: <20230816145741.1472721-1-abel.vesa@linaro.org>
  <ZOXiUzxfs1cj3SWT@linaro.org>
  <07e93a9d-69ac-41b7-aa21-b855b97bf801@linaro.org>
  <ef1439f8-4a9b-53b4-34be-1229b39d2310@quicinc.com>
- <ZOxNFPRZI/N3a7Kr@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
@@ -115,11 +114,11 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <ZOxNFPRZI/N3a7Kr@linaro.org>
+In-Reply-To: <ef1439f8-4a9b-53b4-34be-1229b39d2310@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -128,53 +127,42 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 28.08.2023 09:30, Abel Vesa wrote:
-> On 23-08-28 12:18:30, Jagadeesh Kona wrote:
->>
->>
->> On 8/26/2023 4:17 PM, Konrad Dybcio wrote:
->>> On 23.08.2023 12:41, Abel Vesa wrote:
->>>> On 23-08-16 19:56:46, Konrad Dybcio wrote:
->>>>> On 16.08.2023 16:57, Abel Vesa wrote:
->>>>>> From: Jagadeesh Kona <quic_jkona@quicinc.com>
->>>>>>
->>>>>> The current HW_CTRL flag switches the video GDSC to HW control mode as
->>>>>> part of GDSC enable itself, instead of that use HW_CTRL_TRIGGER flag to
->>>>>> give consumer drivers more control and switch the GDSC mode as and when
->>>>>> required.
->>>>>>
->>>>>> HW_CTRL_TRIGGER flag allows consumer drivers to switch the video GDSC to
->>>>>> HW/SW control modes at runtime using dev_pm_genpd_set_hwmode API.
->>>>>>
->>>>>> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
->>>>>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
->>>>>> ---
->>>>> Do we have any use for the HW_CTRL flag?
+On 28.08.2023 08:48, Jagadeesh Kona wrote:
+> 
+> 
+> On 8/26/2023 4:17 PM, Konrad Dybcio wrote:
+>> On 23.08.2023 12:41, Abel Vesa wrote:
+>>> On 23-08-16 19:56:46, Konrad Dybcio wrote:
+>>>> On 16.08.2023 16:57, Abel Vesa wrote:
+>>>>> From: Jagadeesh Kona <quic_jkona@quicinc.com>
 >>>>>
->>>>> Perhaps it should be renamed to HW_CTRL_ALWAYS?
+>>>>> The current HW_CTRL flag switches the video GDSC to HW control mode as
+>>>>> part of GDSC enable itself, instead of that use HW_CTRL_TRIGGER flag to
+>>>>> give consumer drivers more control and switch the GDSC mode as and when
+>>>>> required.
 >>>>>
->>>>> Or even better, *if and only if* that is necessary, add a common
->>>>> property like "always_hw_managed" to the genpd code?
+>>>>> HW_CTRL_TRIGGER flag allows consumer drivers to switch the video GDSC to
+>>>>> HW/SW control modes at runtime using dev_pm_genpd_set_hwmode API.
+>>>>>
+>>>>> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
+>>>>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+>>>>> ---
+>>>> Do we have any use for the HW_CTRL flag?
 >>>>
->>>> The HW_CTRL flag is still needed for the consumers that expect the GDSC
->>>> to be have the HW control bit set right after it gets enabled.
->>> Guess the correct question here would be.. Are there any?
+>>>> Perhaps it should be renamed to HW_CTRL_ALWAYS?
+>>>>
+>>>> Or even better, *if and only if* that is necessary, add a common
+>>>> property like "always_hw_managed" to the genpd code?
 >>>
->>
->> Yes, Display GDSC(mdss_gdsc) is required to be controlled always in HW
->> control mode when it is enabled.
+>>> The HW_CTRL flag is still needed for the consumers that expect the GDSC
+>>> to be have the HW control bit set right after it gets enabled.
+>> Guess the correct question here would be.. Are there any?
 >>
 > 
-> Actually, since all the GDSCs that support HW control are by default
-> switched to HW mode after they are enabled, we can't make any changes
-> with respect to that since we risk breaking consumers. Therefore, the
-> new flag makes perfect sense since we can switch GDSCs from HW_CTRL to
-> HW_CTRL_TRIGGER per platform/consumer.
-Ok, I can get behind this reasoning.
+> Yes, Display GDSC(mdss_gdsc) is required to be controlled always in HW control mode when it is enabled.
+Oh really?
 
-The flag name gives me a little 'eeh' feeling, but I can't
-think of anything much better either..
-
-Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Looking at msm-5.10 techpack, only the SDE RSC driver seems to
+trigger regulator fast mode (so, enabling gdsc hw_ctrl on downstream).
 
 Konrad
