@@ -2,107 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E1379067A
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Sep 2023 10:47:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F7C79077F
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Sep 2023 12:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351897AbjIBIrz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 2 Sep 2023 04:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44678 "EHLO
+        id S245678AbjIBK5r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 2 Sep 2023 06:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350459AbjIBIry (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 Sep 2023 04:47:54 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 099031702;
-        Sat,  2 Sep 2023 01:47:50 -0700 (PDT)
-Received: from loongson.cn (unknown [112.20.109.102])
-        by gateway (Coremail) with SMTP id _____8DxBfG19vJk8f4dAA--.61385S3;
-        Sat, 02 Sep 2023 16:47:49 +0800 (CST)
-Received: from localhost.localdomain (unknown [112.20.109.102])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxWM2z9vJkbI1pAA--.60477S3;
-        Sat, 02 Sep 2023 16:47:49 +0800 (CST)
-From:   Binbin Zhou <zhoubinbin@loongson.cn>
-To:     Binbin Zhou <zhoubb.aaron@gmail.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        loongson-kernel@lists.loongnix.cn, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: [PATCH v3 5/5] soc: loongson: loongson2_pm: Populate children syscon nodes
-Date:   Sat,  2 Sep 2023 16:47:45 +0800
-Message-Id: <da06ff3c2405f36c8cedddfd20f8b54f4448f619.1693623752.git.zhoubinbin@loongson.cn>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <cover.1693623752.git.zhoubinbin@loongson.cn>
-References: <cover.1693623752.git.zhoubinbin@loongson.cn>
+        with ESMTP id S238180AbjIBK5r (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 Sep 2023 06:57:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E2B12D;
+        Sat,  2 Sep 2023 03:57:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B201602E0;
+        Sat,  2 Sep 2023 10:57:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 679D7C433C8;
+        Sat,  2 Sep 2023 10:57:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693652262;
+        bh=bT880HRAHTg093m0k1X5BqXi6ae7927qarFE1Li5t5A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H1zpkGPZJlfWzBR4wRPRsxyVY9nodEIBmcgwz3iARi5Gu7fHg8PZhO5wrqSvRAdVt
+         1a0BzQgWyArN64ZyWPwFl2enpzrWkVwUTuk9VMRkfMTIfwp4wVo4qJWPEPD1yCmPaJ
+         qAr6qTKhEPlE1WmNm3yoRpRld96MWxWXHnrzwKL5DupCd8S5UDlbFL/dktEPhI2Ou5
+         kXFwFM/db6YEmoD22jP5t+6YVhz60B57OGItix1du61I7pu0PnXTrjyWw2rHDIXUoD
+         BhsAeqM0gX7nprsS1Z8RdpZZfwpsoY8YMAW70bI5CPT/mfWZDjYeF6yJ8GxRbDuDvM
+         xnp1BD4/4JmFQ==
+Date:   Sat, 2 Sep 2023 11:57:35 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
+        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-pm@vger.kernel.org, conor.dooley@microchip.com,
+        suagrfillet@gmail.com, ajones@ventanamicro.com, lftan@kernel.org
+Subject: Re: [PATCH 3/4] cpufreq/schedutil: use a fixed reference frequency
+Message-ID: <20230902-clip-shortly-c9af45460915@spud>
+References: <20230901130312.247719-1-vincent.guittot@linaro.org>
+ <20230901130312.247719-4-vincent.guittot@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxWM2z9vJkbI1pAA--.60477S3
-X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj9xXoW7XF13WFy3tryUXr43AFy3KFX_yoWkKwc_u3
-        W29r48Cr1UJFnIy398Zw13Ar9Fgrn5u3W8uF1Dtw1Iq3WUt3sxJFyUArnrGF17WF4Syrn8
-        Z3y0gw1Ikw1rCosvyTuYvTs0mTUanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvT
-        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-        cSsGvfJTRUUUbh8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-        vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWr
-        XVW3AwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x
-        0EwIxGrwCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkE
-        bVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVW7JVWDJwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF
-        7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUI0eHUUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="hbuDC/hObmFDzy3k"
+Content-Disposition: inline
+In-Reply-To: <20230901130312.247719-4-vincent.guittot@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The syscon poweroff and reboot nodes logically belong to the Power
-Management Unit so populate possible children.
 
-Without it, the reboot/poweroff feature becomes unavailable.
+--hbuDC/hObmFDzy3k
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
----
- drivers/soc/loongson/loongson2_pm.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+On Fri, Sep 01, 2023 at 03:03:11PM +0200, Vincent Guittot wrote:
 
-diff --git a/drivers/soc/loongson/loongson2_pm.c b/drivers/soc/loongson/loongson2_pm.c
-index 5ffb77afd9eb..b8e5e1e3528a 100644
---- a/drivers/soc/loongson/loongson2_pm.c
-+++ b/drivers/soc/loongson/loongson2_pm.c
-@@ -11,6 +11,7 @@
- #include <linux/input.h>
- #include <linux/suspend.h>
- #include <linux/interrupt.h>
-+#include <linux/of_platform.h>
- #include <linux/pm_wakeirq.h>
- #include <linux/platform_device.h>
- #include <asm/bootinfo.h>
-@@ -192,6 +193,11 @@ static int loongson2_pm_probe(struct platform_device *pdev)
- 	if (loongson_sysconf.suspend_addr)
- 		suspend_set_ops(&loongson2_suspend_ops);
- 
-+	/* Populate children */
-+	retval = devm_of_platform_populate(dev);
-+	if (retval)
-+		dev_err(dev, "Error populating children, reboot and poweroff might not work properly\n");
-+
- 	return 0;
- }
- 
--- 
-2.39.3
+> +#ifdef arch_scale_freq_ref
+> +/**
+> + * arch_scale_freq_ref_policy - get the reference frequency of a given CPU that
+> + * has been used to correlate frequency and compute capacity.
+> + * @cpu: the CPU in question.
 
+Copy-pasting fail? That's not what your parameter is called.
+
+> + *
+> + * Return: the reference CPU frequency.
+> + */
+> +static __always_inline
+> +unsigned long  arch_scale_freq_ref_policy(struct cpufreq_policy *policy)
+
+--hbuDC/hObmFDzy3k
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZPMVHgAKCRB4tDGHoIJi
+0s6XAP4jMpeTFFLjakOgVS/UBIHhbCJsiwI5gp2cw9MfBFMfYAD/ZhOUlbrUT4gF
+FxgcXOif8c9nBARo6fmstL6oTNc/3gk=
+=C74W
+-----END PGP SIGNATURE-----
+
+--hbuDC/hObmFDzy3k--
