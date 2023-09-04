@@ -2,65 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6299C791E1C
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Sep 2023 22:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E8F791E33
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Sep 2023 22:26:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235967AbjIDUGu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Sep 2023 16:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
+        id S234382AbjIDU0N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Sep 2023 16:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233583AbjIDUGu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Sep 2023 16:06:50 -0400
-Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [5.144.164.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AFC4180
-        for <linux-pm@vger.kernel.org>; Mon,  4 Sep 2023 13:06:46 -0700 (PDT)
-Received: from [192.168.2.144] (bband-dyn191.178-41-225.t-com.sk [178.41.225.191])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id C2BF03F261;
-        Mon,  4 Sep 2023 22:06:41 +0200 (CEST)
-Date:   Mon, 04 Sep 2023 22:06:35 +0200
-From:   Martin Botka <martin.botka@somainline.org>
-Subject: Re: [PATCH 3/6] dt-bindings: opp: Add compatible for H616
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        devicetree@vger.kernel.org,
-        Andre Przywara <andre.przywara@arm.com>,
-        Alan Ma <tech@biqu3d.com>,
-        Luke Harrison <bttuniversity@biqu3d.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rogerio Goncalves <rogerlz@gmail.com>,
-        Martin Botka <martin@biqu3d.com>
-Message-Id: <Z69H0S.FWOE3UYNRAYU3@somainline.org>
-In-Reply-To: <6e4cd0a1-43d0-e2e8-7281-e20ae653eae6@linaro.org>
-References: <20230904-cpufreq-h616-v1-0-b8842e525c43@somainline.org>
-        <20230904-cpufreq-h616-v1-3-b8842e525c43@somainline.org>
-        <f512f11a-6b66-5892-ad9e-cc45d4abc508@linaro.org>
-        <bda77747-aa97-0da9-fa73-cbb2dca48aeb@linaro.org>
-        <2C8H0S.90380B1U7TPP3@somainline.org>
-        <6e4cd0a1-43d0-e2e8-7281-e20ae653eae6@linaro.org>
-X-Mailer: geary/43.0
+        with ESMTP id S229942AbjIDU0M (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Sep 2023 16:26:12 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CFA2180;
+        Mon,  4 Sep 2023 13:26:08 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-52c88a03f99so2244889a12.2;
+        Mon, 04 Sep 2023 13:26:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693859167; x=1694463967; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lXnvIlMPp5u/cZPb67xk/RAZDHLqGyudVRdveB/ZbLY=;
+        b=Jigp5HdRo5+dvn+3nrGbwpV9iJemIs+qY9eznh8FztFQUQRCBWOkhguUSUVKyeLzpq
+         zlTV1SgTLi7vHpn+mVHvm/AUPCIf2YGJrl5522epfg9noakMNR/IlRP+KF0IYiscv/FG
+         sZ6U0UENtgfvnrFyD3ggg7WK3dll1+KYeDSJhEsr/yelWv4UUItmzyC0pmckrwKDT2VE
+         Yomq/dEGL4q6dFo+leG1tqSysRgoVS/SP9mUHP0ZzyO3GduhPUX6U429tAVLOH0osFS0
+         IuB7ElyV7t7DGMUbf45nFUWtMYSYUXLzy5bnTWHyNXbF6f2QwApbic8yW5EkLbAmcQYL
+         CZ6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693859167; x=1694463967;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lXnvIlMPp5u/cZPb67xk/RAZDHLqGyudVRdveB/ZbLY=;
+        b=KW2KKc/ADath6/N2qZZRwrFM2PLiJGJR0kKZHAqIHAfnhb7Mz73NrnwaUJvUStXHmc
+         6/HehYDhjGtk+DIrdnkBoXsPnYb77AZfs05wn5EwfqDj9/mKEvwXHo1iyxCeXSnEkeNs
+         ySSFADlqhDF5XHYSe4Zj0jw1Tua32wSFnsT+kS9H+0nuZlc7BM//0s2PXs5aW+jQuKA5
+         RGLy4fUpUVg+cTxlqh/WoQrcHfOVxtnedLEPOd6/ffQRdIrsLs9h13PNHBJ8j6L3Pbto
+         W9iaEo5bQNHzcEYyJVRmTeCrDtfEQvuTuUh+NKF0jfGaJXDLOrWi63AtQYjMghUJ58ZP
+         fNEw==
+X-Gm-Message-State: AOJu0Yxjd6sjHK951X448HgdkPAi0SMw22Bonj3Bu+0DpbixsIgjrLIm
+        POf0Qjm1j9J1AmbkTAwcwgoX931E29JvjWzK8TTQZEEtZEY=
+X-Google-Smtp-Source: AGHT+IG24dlXnnwhnhpbMLq5+johSI+3gKyPXR6QUWW8K2AHBtDt2PqcyJvBc46enRBKemtJkuc0SY2C/ykw4EP+1YE=
+X-Received: by 2002:a05:6402:5159:b0:52a:943:9ab5 with SMTP id
+ n25-20020a056402515900b0052a09439ab5mr8010894edd.31.1693859166815; Mon, 04
+ Sep 2023 13:26:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+References: <88ffb216-96f9-f232-7fe5-48bf82e6aa70@gmail.com>
+In-Reply-To: <88ffb216-96f9-f232-7fe5-48bf82e6aa70@gmail.com>
+From:   brett hassall <brett.hassall@gmail.com>
+Date:   Tue, 5 Sep 2023 06:25:55 +1000
+Message-ID: <CANiJ1U9-2zfc5aJJUaYnTBTg+2vMjcfgsuxcFFnn+CjVQ1fCoA@mail.gmail.com>
+Subject: Re: upstream linux cannot achieve package C8 power saving
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Ajay Agarwal <ajayagarwal@google.com>,
+        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Michael Bottini <michael.a.bottini@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Power Management <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,75 +76,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi
+
+I contacted the Ubuntu developers to see if they were ok with using
+their patches.
+
+They advised the patches were outdated and further development was
+under discussion.
+
+The current patches work and would benefit Linux users until something
+better comes along.
+
+Would you like me to proceed with the formal patch still ?
+
+Thanks
+Brett
 
 
-On Mon, Sep 4 2023 at 09:53:05 PM +02:00:00, Krzysztof Kozlowski 
-<krzysztof.kozlowski@linaro.org> wrote:
-> On 04/09/2023 21:48, Martin Botka wrote:
->> 
->> 
->>  On Mon, Sep 4 2023 at 09:32:44 PM +02:00:00, Krzysztof Kozlowski
->>  <krzysztof.kozlowski@linaro.org> wrote:
->>>  On 04/09/2023 21:31, Krzysztof Kozlowski wrote:
->>>>   On 04/09/2023 17:57, Martin Botka wrote:
->>>>>   We need to add compatible for H616 to H6 cpufreq driver 
->>>>> bindings.
->>>> 
->>>>   Please describe the hardware, not what is needed for drivers.
->>>> 
->>>>> 
->>>>>   Also enable opp_supported_hw property that will be needed for 
->>>>> H616.
->>>>> 
->>>>>   Signed-off-by: Martin Botka <martin.botka@somainline.org>
->>>>>   ---
->>>>>    .../bindings/opp/allwinner,sun50i-h6-operating-points.yaml
->>>>>    | 6 +++++-
->>>>>    1 file changed, 5 insertions(+), 1 deletion(-)
->>>>> 
->>>>>   diff --git
->>>>>  
->>>>> a/Documentation/devicetree/bindings/opp/allwinner,sun50i-h6-operating-points.yaml
->>>>>  
->>>>> b/Documentation/devicetree/bindings/opp/allwinner,sun50i-h6-operating-points.yaml
->>>>>   index 51f62c3ae194..2fa1199f2d23 100644
->>>>>   ---
->>>>>  
->>>>> a/Documentation/devicetree/bindings/opp/allwinner,sun50i-h6-operating-points.yaml
->>>>>   +++
->>>>>  
->>>>> b/Documentation/devicetree/bindings/opp/allwinner,sun50i-h6-operating-points.yaml
->>>>>   @@ -23,7 +23,10 @@ allOf:
->>>>> 
->>>>>    properties:
->>>>>      compatible:
->>>>>   -    const: allwinner,sun50i-h6-operating-points
->>>>>   +    contains:
->>>> 
->>>>   This does not look like part of allOf, so contains is no correct
->>>>  here.
->>>>   This must be specific, so drop contains.
->>> 
->>>  BTW, I also do no see it used by the driver at all.
->>  Function sun50i_cpufreq_get_efuse uses it. It checks for H6 
->> compatible
->>  and if that fails we check for H616 compatible.
-> 
-> Such code does no scale. It also does not look reasonable - you cannot
-> have different compatible there. Device binds to h6 or h616, so you
-> cannot have OPP table from other devices.
-> 
-Heya. I checked how qcom nvmem driver does it. And yea this indeed does 
-not scale. matchlist should have SoC compatible and driver needs to 
-have single compatible. Thus also dropping this patch :)
-
-Will do in V2. Thanks Krzystof for pointing me to the right way of 
-doing it :)
-
-Cheers,
-Martin
-> Best regards,
-> Krzysztof
-> 
-
-
+On Wed, 30 Aug 2023 at 11:11, Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>
+> Hi,
+>
+> I notice a bug report on Bugzilla [1]. Quoting from it:
+>
+> > v6.5 (and at least v5.15, v5.19 and v6.4 as well) will not go to a higher power saving level than package C3.
+> >
+> > With the inclusion of a patch that combines 3 Ubuntu commits related to VMD ASPM & LTR, package C8 is used.
+>
+> See Bugzilla for the full thread.
+>
+> FYI, the attached proposed fix is the same as Brett's another BZ report [2].
+> I include it for upstreaming.
+>
+> To Brett: Would you like to submit the proper, formal patch (see
+> Documentation/process/submitting-patches.rst for details)?
+>
+> Thanks.
+>
+> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=217841
+> [2]: https://bugzilla.kernel.org/show_bug.cgi?id=217828
+>
+> --
+> An old man doll... just what I always wanted! - Clara
