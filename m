@@ -2,119 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E8F791E33
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Sep 2023 22:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC58791E5E
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Sep 2023 22:41:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234382AbjIDU0N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Sep 2023 16:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36342 "EHLO
+        id S238728AbjIDUl1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Sep 2023 16:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjIDU0M (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Sep 2023 16:26:12 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CFA2180;
-        Mon,  4 Sep 2023 13:26:08 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-52c88a03f99so2244889a12.2;
-        Mon, 04 Sep 2023 13:26:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693859167; x=1694463967; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lXnvIlMPp5u/cZPb67xk/RAZDHLqGyudVRdveB/ZbLY=;
-        b=Jigp5HdRo5+dvn+3nrGbwpV9iJemIs+qY9eznh8FztFQUQRCBWOkhguUSUVKyeLzpq
-         zlTV1SgTLi7vHpn+mVHvm/AUPCIf2YGJrl5522epfg9noakMNR/IlRP+KF0IYiscv/FG
-         sZ6U0UENtgfvnrFyD3ggg7WK3dll1+KYeDSJhEsr/yelWv4UUItmzyC0pmckrwKDT2VE
-         Yomq/dEGL4q6dFo+leG1tqSysRgoVS/SP9mUHP0ZzyO3GduhPUX6U429tAVLOH0osFS0
-         IuB7ElyV7t7DGMUbf45nFUWtMYSYUXLzy5bnTWHyNXbF6f2QwApbic8yW5EkLbAmcQYL
-         CZ6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693859167; x=1694463967;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lXnvIlMPp5u/cZPb67xk/RAZDHLqGyudVRdveB/ZbLY=;
-        b=KW2KKc/ADath6/N2qZZRwrFM2PLiJGJR0kKZHAqIHAfnhb7Mz73NrnwaUJvUStXHmc
-         6/HehYDhjGtk+DIrdnkBoXsPnYb77AZfs05wn5EwfqDj9/mKEvwXHo1iyxCeXSnEkeNs
-         ySSFADlqhDF5XHYSe4Zj0jw1Tua32wSFnsT+kS9H+0nuZlc7BM//0s2PXs5aW+jQuKA5
-         RGLy4fUpUVg+cTxlqh/WoQrcHfOVxtnedLEPOd6/ffQRdIrsLs9h13PNHBJ8j6L3Pbto
-         W9iaEo5bQNHzcEYyJVRmTeCrDtfEQvuTuUh+NKF0jfGaJXDLOrWi63AtQYjMghUJ58ZP
-         fNEw==
-X-Gm-Message-State: AOJu0Yxjd6sjHK951X448HgdkPAi0SMw22Bonj3Bu+0DpbixsIgjrLIm
-        POf0Qjm1j9J1AmbkTAwcwgoX931E29JvjWzK8TTQZEEtZEY=
-X-Google-Smtp-Source: AGHT+IG24dlXnnwhnhpbMLq5+johSI+3gKyPXR6QUWW8K2AHBtDt2PqcyJvBc46enRBKemtJkuc0SY2C/ykw4EP+1YE=
-X-Received: by 2002:a05:6402:5159:b0:52a:943:9ab5 with SMTP id
- n25-20020a056402515900b0052a09439ab5mr8010894edd.31.1693859166815; Mon, 04
- Sep 2023 13:26:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <88ffb216-96f9-f232-7fe5-48bf82e6aa70@gmail.com>
-In-Reply-To: <88ffb216-96f9-f232-7fe5-48bf82e6aa70@gmail.com>
-From:   brett hassall <brett.hassall@gmail.com>
-Date:   Tue, 5 Sep 2023 06:25:55 +1000
-Message-ID: <CANiJ1U9-2zfc5aJJUaYnTBTg+2vMjcfgsuxcFFnn+CjVQ1fCoA@mail.gmail.com>
-Subject: Re: upstream linux cannot achieve package C8 power saving
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Ajay Agarwal <ajayagarwal@google.com>,
-        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Michael Bottini <michael.a.bottini@linux.intel.com>,
+        with ESMTP id S229685AbjIDUl1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Sep 2023 16:41:27 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 923E612A;
+        Mon,  4 Sep 2023 13:41:23 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1C0F6143D;
+        Mon,  4 Sep 2023 13:42:01 -0700 (PDT)
+Received: from slackpad.lan (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C52B33F793;
+        Mon,  4 Sep 2023 13:41:19 -0700 (PDT)
+Date:   Mon, 4 Sep 2023 21:40:18 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Martin Botka <martin.botka@somainline.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Power Management <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        devicetree@vger.kernel.org, Alan Ma <tech@biqu3d.com>,
+        Luke Harrison <bttuniversity@biqu3d.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rogerio Goncalves <rogerlz@gmail.com>,
+        Martin Botka <martin@biqu3d.com>
+Subject: Re: [PATCH 2/6] cpufreq: dt-platdev: Blocklist allwinner,h616 SoC
+Message-ID: <20230904214018.0a8f12e2@slackpad.lan>
+In-Reply-To: <20230904-cpufreq-h616-v1-2-b8842e525c43@somainline.org>
+References: <20230904-cpufreq-h616-v1-0-b8842e525c43@somainline.org>
+        <20230904-cpufreq-h616-v1-2-b8842e525c43@somainline.org>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.31; x86_64-slackware-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi
+On Mon, 04 Sep 2023 17:57:02 +0200
+Martin Botka <martin.botka@somainline.org> wrote:
 
-I contacted the Ubuntu developers to see if they were ok with using
-their patches.
+> The AllWinner H616 uses H6 cpufreq driver.
+> Add it to blocklist so its not created twice
 
-They advised the patches were outdated and further development was
-under discussion.
+That looks alright, but I think needs to be squashed into the patch
+that enables the H616 driver operation, to avoid regressions during
+bisecting.
 
-The current patches work and would benefit Linux users until something
-better comes along.
+Cheers,
+Andre
 
-Would you like me to proceed with the formal patch still ?
+> 
+> Signed-off-by: Martin Botka <martin.botka@somainline.org>
+> ---
+>  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+> index e2b20080de3a..51818cef8979 100644
+> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+> @@ -104,6 +104,7 @@ static const struct of_device_id allowlist[] __initconst = {
+>   */
+>  static const struct of_device_id blocklist[] __initconst = {
+>  	{ .compatible = "allwinner,sun50i-h6", },
+> +	{ .compatible = "allwinner,sun50i-h616", },
+>  
+>  	{ .compatible = "apple,arm-platform", },
+>  
+> 
 
-Thanks
-Brett
-
-
-On Wed, 30 Aug 2023 at 11:11, Bagas Sanjaya <bagasdotme@gmail.com> wrote:
->
-> Hi,
->
-> I notice a bug report on Bugzilla [1]. Quoting from it:
->
-> > v6.5 (and at least v5.15, v5.19 and v6.4 as well) will not go to a higher power saving level than package C3.
-> >
-> > With the inclusion of a patch that combines 3 Ubuntu commits related to VMD ASPM & LTR, package C8 is used.
->
-> See Bugzilla for the full thread.
->
-> FYI, the attached proposed fix is the same as Brett's another BZ report [2].
-> I include it for upstreaming.
->
-> To Brett: Would you like to submit the proper, formal patch (see
-> Documentation/process/submitting-patches.rst for details)?
->
-> Thanks.
->
-> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=217841
-> [2]: https://bugzilla.kernel.org/show_bug.cgi?id=217828
->
-> --
-> An old man doll... just what I always wanted! - Clara
