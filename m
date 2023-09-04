@@ -2,198 +2,259 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02855790BF3
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Sep 2023 14:44:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A68791032
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Sep 2023 04:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237174AbjICMoM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 3 Sep 2023 08:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
+        id S235893AbjIDCyl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 3 Sep 2023 22:54:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237166AbjICMoL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 Sep 2023 08:44:11 -0400
-Received: from sonic310-57.consmr.mail.ir2.yahoo.com (sonic310-57.consmr.mail.ir2.yahoo.com [77.238.177.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9606C123
-        for <linux-pm@vger.kernel.org>; Sun,  3 Sep 2023 05:44:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1693745044; bh=F2D1iE1yYlx04Zd2TcBuELMqwAZBbMB0N8BMx6gxJL0=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=M8Hx9/bTZX5u1AauSYZ/SD8ZX5tvsmpX1NOpxqodty7hV7g1ybKwoc6hCfadbv5JCfmlYR8iVmzNvAlG4wQIgp/wtIWc3Gu4FkkJG9vg9YlHsbfdFZsPaumyI58WaIePravoSWCB7nd9f/q4aLwu1V4JeC0eu5f2NecdRjciWkWB1KmW6gZ5fIFEadiOF3I2c89+791SDFCPYTmBc0Vawp4jQJQljEpAspiy5+Ou3O4WiKsHHCXWjO8YLHw5GYiGbGBTQ2zrJfugZwRd4zWZXbwgA/IA3IF2OWYybaqHQt3QWafwLLz4klI8F+5VxjUp9nb7xXjZeOfVCKlZDuYyIA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1693745044; bh=qVEqmZRmXAuwhr6UK2VDLfBdRsIDroCBcDyed+SXaXD=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=N5OkB/jcaMIPaBxcLq1AHsAdTxJOf93z6ZgD+gN+6CNKE9KX5JbuaSWLMaU1cU036hn7/5yd0ygD0B/dqbjvoEpPxB/L2E+llQfRb0xmC6L/92kO0wf4SqwDVZ/MbvFIDbB1HUvSRog7l+GpN8wms5EFmBSKg+EzEoTb5plWPpXdZEhhBdbRrVx/ZVUAg3nJ3qGGkgEotpeWhqetfgE/R9Wj45YgNM9RRnrlBgLklweh/IcS0gZeDqfYzft5BSt+C5hUvOtk9TFNoM2hYS33YTnfwQv38CBgZpBOKWGAGhJ04Nvht0dKIDr/SMNyJnGITznwbSHErRiMq57wsV03Jw==
-X-YMail-OSG: bhZiEwIVM1k2OeR9lebTfUeG2znd3iUZl9TQMHGJ8uGiEGkWC22tmpPcoHmnvOs
- Y7L5_XHpzQ.WBP8rUuHXIuph1_N0W5FRndFhJsZls2W_tLAJ36Tkx7To8o0afKhXyexDqpS4Ou.R
- aRAm_7TjiVp3zZxDtb1rfMiTT.wr0rUCruZUgT5n1wCwbU1qOx1Tv5PGvaZ3uD5VYmAkwWUQiq0t
- T9HOSQOvoWgpYDAbhN3UxnTcy41xB_Lg2eTdks6hWy_WPgpOIS3JtQ_0Av3N6nxbYHATjW5pdojv
- HAfgJa26TLnYxPnyfj.qlZuJRJUGCz2W0xf7UZ54fjjo5kCV.hBKyJjk7U6bK6P1pdPX0_J9IYrL
- j9kEEZoM3rFlg47qWWXAEPK6gt_2iWscG_E.C5si55l5c8ViO5zWeR_XTXZXGs.KrT_uS5_GEyh2
- xkCGqRk5Y.tGaJ63Im.an8OKSTGZYeRBLNs.syxP.dk0ZVG_Iz7u7nyIuv7WHu8pyyua5L72qw6O
- yDYAu0mh8aeSV5nPuHkogIg_bHjfSdWxsKukBcSV5Am2guVsDv3Eo6aUJLV_tTzk4DFCanHHdNR5
- cdlmn9qne2LyL_ucSXu6WH9ABL0AvWiNQKZtHRQrEbQbFHVb2MXCk7_jfzn5BDOWpGBuyLr9L.Fv
- T49Pt_7Fb.pnxKmHDWLkOKmqx51uozY2JNLVi5g.ZLyDMJ7.DxwrgEJBKMpkPnKqjOX_uboxgTo6
- p5ZXJVLvu3yr79cxI9jkh.52rtmN5BtOQcf1UEBE1Rsr_vdgQxTgDmBenIgw0WKwThAsJLQdOibF
- Yrm3UWmXSPZLg9_cXU1JhCfsYDzuU.0IdU.tUQ1Qmlf6zr3tvKRgK7FHV5k_a0NNWvkUitWzhz3p
- LkuDI1qo9yLU_EjZE7J05dt7yPUPjLXAqidvozjtArJCLLomcbCUHy3aDMY0RosWsfU_dLupJN9Y
- xn2URYZBxSEtWPb7wUagIhkfCkuMB4jnQhjle4K4NnYFYXuUVyKjEM3EDcgpUX591bop0AzsyD0j
- ZkXTI98H_NQgVoAPxSjn48TnHDrq2eP9DKOccyewF7KREdt044P6KJ.gF6Ftz1AblvJtkW.Huv_b
- lxVldPAcFWJtnowgUn_1N4iGejjke24QMTwKz3Guqx2A.6tB.Nfeu6XVVzX.EX.l0N4vpdCOfPv1
- 0xKuPPeklk_5GLVW9aTxFZgzmNJJA1vB.wRJg209mmKfrdFxmCOvWqmFFG7xahSnK5_ThTf.NY4Y
- Ig8YtBI_Y_Iip1PmAZ1u.wVZisp_ZW5qbbJkg4lQ.7CyUBLkp.bfFuXVMskyBKRFg_vx82AvZLE2
- AEXUgKPaTP10xmstiBlU9icn8IQw50sLK0UIIEdN5uNMAyo8UmT349uM7SKaa6lkLyJ585DXe0iO
- 3H0Y.zn6McotbdaGQKM1jzLG81w1fjU3QOrMISCeDzTXF9vbw4l2unP34YLUpA2v0ReEd01x_HFE
- bVirVYmJm5kAMICMlsbw4tyQebb3Wy3LKPLcXFFpxgN32KQllyBphB97pRDAVPwHsnVSrtUQU3ih
- EY2jstgwGDEDs2xgi798eSHpyFeTi5LUonOy8devwI4yX1bd_hnODPAI95X7XlAt8dAitvX_MEzD
- 6fxEYAFRLfv5iFZ4RFLldy0PbM1TD9pn7nQYH3qTuw63qiFyjTICf6nT5IMtUruwD5exnaaj0BOb
- evuxp1qln.iTcxz9SgokAgtNhAa43cUjpM0wjK.8fuv5lersHNDvmvH2i4_KzUsZorot1oqpYZoO
- tI_YQY5VtlmypW8We1_sBOy9pvCjWc6sc2vprN_6mDltycNqgqigZ.s7jIr8xHMt_9Ef8UNgjnX3
- m6n775UWwqxZ3bnXGD4CNVySxwqozXMSISfi0oKbL3UCqx0Q6BgX4FY8EXkebhKtcg5K49u_eSyk
- Xr2jjWhq6fuyQUU9ZJsXAAv4H7vTVCWov1Iq0qBOXOTDORAWdQzV1eg03cfp8J1ogFCN94BPY.gu
- NVJFV22ny8IAk3.RsqJ0Ur75QKaSm0.z6CL5j9I0bgPt.cAJrr5YuUdd4U2tNGKwE6CwctdvpvSe
- M8JKlO5CvRjGqVApyCU36WmQ5.w9cKcX40lPeXCsjgSoKFVMY6ejRGyqr9cOrA4VgUxKkUzMCAnE
- z.T1E4DYCR7vDoFOuKCwQTb9_U4MzsOGOSdtwW3C6.P9HY4qWFHkmTfi1WDumNrxtgUKeElO5YF9
- qJFzfZC7hU50LF0F8QzKAB9TNDDZh__XcdTbPTMAKfDrY8V_VQ29QtwlxKw0mKZdUoGNqZQ--
-X-Sonic-MF: <jahau@rocketmail.com>
-X-Sonic-ID: 4659669e-6d30-4d94-a68d-148d28952431
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ir2.yahoo.com with HTTP; Sun, 3 Sep 2023 12:44:04 +0000
-Received: by hermes--production-ir2-5cc57b9c45-xh7tc (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 8c183e8fdb0c60d40f9a5dd2022be53b;
-          Sun, 03 Sep 2023 12:43:58 +0000 (UTC)
-Message-ID: <96c08475-72e7-9ef4-2f16-e962f9338e78@rocketmail.com>
-Date:   Sun, 3 Sep 2023 14:43:56 +0200
+        with ESMTP id S231579AbjIDCyk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 Sep 2023 22:54:40 -0400
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4501F10F
+        for <linux-pm@vger.kernel.org>; Sun,  3 Sep 2023 19:54:36 -0700 (PDT)
+X-ASG-Debug-ID: 1693796073-1eb14e751210fa0001-MQbzy6
+Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx2.zhaoxin.com with ESMTP id Hq3BSYmG5uhRk7Ev (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 04 Sep 2023 10:54:33 +0800 (CST)
+X-Barracuda-Envelope-From: TonyWWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX3.zhaoxin.com
+ (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 4 Sep
+ 2023 10:54:32 +0800
+Received: from [10.32.65.158] (10.32.65.158) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 4 Sep
+ 2023 10:54:31 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Message-ID: <ee57634a-3e57-724d-857d-7486f6bc3fe8@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.32.65.158
+Date:   Mon, 4 Sep 2023 10:54:38 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: (subset) [PATCH v6 06/10 RESEND] power: supply: rt5033_charger:
- Add cable detection and USB OTG supply
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Henrik Grimler <henrik@grimler.se>,
-        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <cover.1684182964.git.jahau@rocketmail.com>
- <223b440ab6831f2e7302d2c49b2cfd7779d5effd.1684182964.git.jahau@rocketmail.com>
- <169226510772.947223.494995318945916008.b4-ty@kernel.org>
- <20230822070737.GP1380343@google.com>
- <20230822212909.mcnziqsuu523e4gk@mercury.elektranox.org>
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2] cpufreq: ACPI: add ITMT support when CPPC enabled
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+X-ASG-Orig-Subj: Re: [PATCH v2] cpufreq: ACPI: add ITMT support when CPPC enabled
+CC:     <viresh.kumar@linaro.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <CobeChen@zhaoxin.com>,
+        <TimGuo@zhaoxin.com>, <LeoLiu-oc@zhaoxin.com>,
+        <LindaChai@zhaoxin.com>
+References: <20230808111325.8600-1-TonyWWang-oc@zhaoxin.com>
+ <CAJZ5v0h8M-hNJfRTSxtVmfmpF09h9zmNmG-e=iMemzPwsK50Zg@mail.gmail.com>
+ <e9b4de96-624e-96a5-0a41-93de36719340@zhaoxin.com>
+ <CAJZ5v0j7c2aO7=AQrjnF9_DGLjdqibDdm72Y9BLzFxWEvQhnvw@mail.gmail.com>
 Content-Language: en-US
-From:   Jakob Hauser <jahau@rocketmail.com>
-In-Reply-To: <20230822212909.mcnziqsuu523e4gk@mercury.elektranox.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.21763 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+In-Reply-To: <CAJZ5v0j7c2aO7=AQrjnF9_DGLjdqibDdm72Y9BLzFxWEvQhnvw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.32.65.158]
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
+X-Barracuda-Start-Time: 1693796073
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 6420
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: -2.02
+X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.113635
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sebastian,
 
-On 22.08.23 23:29, Sebastian Reichel wrote:
-> Hi,
-> 
-> On Tue, Aug 22, 2023 at 08:07:37AM +0100, Lee Jones wrote:
->> On Thu, 17 Aug 2023, Lee Jones wrote:
+
+On 8/31/23 21:03, Rafael J. Wysocki wrote:
+> On Thu, Aug 31, 2023 at 12:19 PM Tony W Wang-oc
+> <TonyWWang-oc@zhaoxin.com> wrote:
 >>
->>> On Mon, 15 May 2023 22:57:15 +0200, Jakob Hauser wrote:
->>>> Implement cable detection by extcon and handle the driver according to the
->>>> connector type.
+>>
+>> On 8/23/23 04:01, Rafael J. Wysocki wrote:
+>>> On Tue, Aug 8, 2023 at 1:13 PM Tony W Wang-oc <TonyWWang-oc@zhaoxin.com> wrote:
 >>>>
->>>> There are basically three types of action: "set_charging", "set_otg" and
->>>> "set_disconnect".
->>>>
->>>> A forth helper function to "unset_otg" was added because this is used in both
->>>> "set_charging" and "set_disconnect". In the first case it covers the rather
->>>> rare event that someone changes from OTG to charging without disconnect. In
->>>> the second case, when disconnecting, the values are set back to the ones from
->>>> initialization to return into a defined state.
->>>>
->>>> [...]
+>>>> The _CPC method can get per-core highest frequency.
 >>>
->>> Applied, thanks!
+>>> Well, not exactly.  A more precise way to say this would be "The
+>>> per-core highest frequency can be obtained via CPPC."
 >>>
->>> [06/10] power: supply: rt5033_charger: Add cable detection and USB OTG supply
->>>          commit: c1af6bcc8583b0a1083338cd26c2090d0bcb0810
 >>
->> Multiple fixes now follow this patch, so I am unapplying it.
+>> Thanks for your reply, will rewrite the commit in next version.
 >>
->> Sebastian, would you mind collecting it up please?
+>>>> The highest frequency may varies between cores which mean cores can
+>>>
+>>> "may vary" and "which means"
+>>>
+>>>> running at different max frequency, so can use it as a core priority
+>>>
+>>> "can run", but it would be better to say "may run".
+>>>
+>>>> and give a hint to scheduler in order to put critical task to the
+>>>> higher priority core.
+>>>
+>>> Well, roughly speaking ...
+>>>
+>>> You should really talk about ITMT and how it can be hooked up to this.
+>>>
+>>
+>> Ok, Got it.
+>>
+>>>> Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+>>>> ---
+>>>> v1->v2: Fix build errors reported by kernel test robot
+>>>>
+>>>>  arch/x86/kernel/itmt.c         |  2 ++
+>>>>  drivers/cpufreq/acpi-cpufreq.c | 59 ++++++++++++++++++++++++++++++----
+>>>>  2 files changed, 54 insertions(+), 7 deletions(-)
+>>>>
+>>>> diff --git a/arch/x86/kernel/itmt.c b/arch/x86/kernel/itmt.c
+>>>> index ee4fe8cdb857..b49ac8ecbbd6 100644
+>>>> --- a/arch/x86/kernel/itmt.c
+>>>> +++ b/arch/x86/kernel/itmt.c
+>>>> @@ -122,6 +122,7 @@ int sched_set_itmt_support(void)
+>>>>
+>>>>         return 0;
+>>>>  }
+>>>> +EXPORT_SYMBOL_GPL(sched_set_itmt_support);
+>>>
+>>> This requires an ACK from the x86 maintainers.
+>>>
+>>>>
+>>>>  /**
+>>>>   * sched_clear_itmt_support() - Revoke platform's support of ITMT
+>>>> @@ -181,3 +182,4 @@ void sched_set_itmt_core_prio(int prio, int cpu)
+>>>>  {
+>>>>         per_cpu(sched_core_priority, cpu) = prio;
+>>>>  }
+>>>> +EXPORT_SYMBOL_GPL(sched_set_itmt_core_prio);
+>>>
+>>> And same here.
+>>>
+>>>> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+>>>> index b2f05d27167e..5733323e04ac 100644
+>>>> --- a/drivers/cpufreq/acpi-cpufreq.c
+>>>> +++ b/drivers/cpufreq/acpi-cpufreq.c
+>>>> @@ -628,28 +628,35 @@ static int acpi_cpufreq_blacklist(struct cpuinfo_x86 *c)
+>>>>  #endif
+>>>>
+>>>>  #ifdef CONFIG_ACPI_CPPC_LIB
+>>>> -static u64 get_max_boost_ratio(unsigned int cpu)
+>>>> +static void cpufreq_get_core_perf(int cpu, u64 *highest_perf, u64 *nominal_perf)
+>>>
+>>> This is not a cpufreq core function, so please use a different prefix
+>>> in its name.
+>>>
+>>
+>> Ok. Will remove the prefix of "cpufreq_".
+>>
+>>>>  {
+>>>>         struct cppc_perf_caps perf_caps;
+>>>> -       u64 highest_perf, nominal_perf;
+>>>>         int ret;
+>>>>
+>>>>         if (acpi_pstate_strict)
+>>>> -               return 0;
+>>>> +               return;
+>>>>
+>>>>         ret = cppc_get_perf_caps(cpu, &perf_caps);
+>>>>         if (ret) {
+>>>>                 pr_debug("CPU%d: Unable to get performance capabilities (%d)\n",
+>>>>                          cpu, ret);
+>>>> -               return 0;
+>>>> +               return;
+>>>>         }
+>>>>
+>>>>         if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD)
+>>>> -               highest_perf = amd_get_highest_perf();
+>>>> +               *highest_perf = amd_get_highest_perf();
+>>>>         else
+>>>> -               highest_perf = perf_caps.highest_perf;
+>>>> +               *highest_perf = perf_caps.highest_perf;
+>>>> +
+>>>> +       *nominal_perf = perf_caps.nominal_perf;
+>>>> +       return;
+>>>> +}
+>>>>
+>>>> -       nominal_perf = perf_caps.nominal_perf;
+>>>> +static u64 get_max_boost_ratio(unsigned int cpu)
+>>>> +{
+>>>> +       u64 highest_perf, nominal_perf;
+>>>> +
+>>>> +       cpufreq_get_core_perf(cpu, &highest_perf, &nominal_perf);
+>>>>
+>>>>         if (!highest_perf || !nominal_perf) {
+>>>>                 pr_debug("CPU%d: highest or nominal performance missing\n", cpu);
+>>>> @@ -663,8 +670,44 @@ static u64 get_max_boost_ratio(unsigned int cpu)
+>>>>
+>>>>         return div_u64(highest_perf << SCHED_CAPACITY_SHIFT, nominal_perf);
+>>>>  }
+>>>> +
+>>>> +static void cpufreq_sched_itmt_work_fn(struct work_struct *work)
+>>>
+>>> A similar comment applies here.
+>>>
+>>>> +{
+>>>> +       sched_set_itmt_support();
+>>>> +}
+>>>> +
+>>>> +static DECLARE_WORK(sched_itmt_work, cpufreq_sched_itmt_work_fn);
+>>>> +
+>>>> +static void cpufreq_set_itmt_prio(int cpu)
+>>>> +{
+>>>> +       u64 highest_perf, nominal_perf;
+>>>> +       static u32 max_highest_perf = 0, min_highest_perf = U32_MAX;
+>>>> +
+>>>> +       cpufreq_get_core_perf(cpu, &highest_perf, &nominal_perf);
+>>>> +
+>>>> +       sched_set_itmt_core_prio(highest_perf, cpu);
+>>>> +
+>>>> +       if (max_highest_perf <= min_highest_perf) {
+>>>> +               if (highest_perf > max_highest_perf)
+>>>> +                       max_highest_perf = highest_perf;
+>>>> +
+>>>> +               if (highest_perf < min_highest_perf)
+>>>> +                       min_highest_perf = highest_perf;
+>>>> +
+>>>> +               if (max_highest_perf > min_highest_perf) {
+>>>> +                       /*
+>>>> +                        * This code can be run during CPU online under the
+>>>> +                        * CPU hotplug locks, so sched_set_itmt_support()
+>>>> +                        * cannot be called from here.  Queue up a work item
+>>>> +                        * to invoke it.
+>>>> +                        */
+>>>> +                       schedule_work(&sched_itmt_work);
+>>>> +               }
+>>>
+>>> This potentially runs before ITMT priorities are set for all CPUs.
+>>> Isn't it a problem?
+>>>
+>>
+>> Yes, you are right.
+>> Will use schedule_delayed_work(&sched_itmt_work, msecs_to_jiffies(500))
+>> to fix this.
 > 
-> I'm leaving for a two week hiking trip (with basically no internet
-> access) in some hours. My planed return date is basically when Linus
-> is expected to tag 6.6-rc1, so I will not queue any more patches and
-> send my pull request early (within the next few hours).
+> If the ordering matters, it is better to enforce it directly (through
+> an explicit code dependency, for example) than to rely on the timing
+> to do the right thing.
 > 
-> I planned to catch up with the power-supply backlog last week during
-> Chaos Communication Camp, but it was too hot to do any sensible
-> review. Now I expect to process the power-supply backlog in the
-> week after the merge window.
+> If you do the above, then it will not be clear why it is done (a
+> comment may help to address that, though) and why the delay is 500 us
+> in particular.
 
-The patch 6 of the rt5033-charger series v6 gathered some issues. For 
-all of them a solution was provided. Thanks to everyone involved! 
-However, I don't know what's the best way to put them together.
+Yes, you are right. Rely on the timing is not exactly.
+Will find the other way to enforce the order.
 
-- As the patch 6 was forgotten to apply with the others of the
-   patchset, in the meantime another small patch by Rob sneaked in. The
-   patch 6 needs to be rebased on Rob's patch. It affects the includes.
-   Would be nice to order them alphabetically after rebase.
-
-- After patch 6 was added on top of Rob's patch in linux-next, there
-   was a build failure. This is because "linux/of.h" now explicitly
-   needs to be added to the rt5033-charger driver. Stephen Rothwell
-   provided a fix. I'm not sure on the order: Maybe that needs to be
-   added before adding patch 6 to avoid the build failure when the
-   kernel test bot checks each commit separately.
- 
-https://lore.kernel.org/linux-next/20230821125741.3a2474d7@canb.auug.org.au/T/#u
-
-- Beyond that, the kernel test bot also complained about undefined
-   reference related to extcon. I didn't understand why this happens
-   because the driver has "linux/extcon.h" included. Randy was attentive
-   and provided a fix. Here again I'm not sure about the order, I guess
-   this should be added before adding patch 6 to avoid build failures if
-   each commit is tested separately.
-   Kernel test bot complaints:
-     x86_64 clang 
-https://lore.kernel.org/oe-kbuild-all/202308220324.LsI8q3ML-lkp@intel.com/T/#u
-     x86_64 gcc 
-https://lore.kernel.org/oe-kbuild-all/202308240723.O2rW0InU-lkp@intel.com/T/#u
-     arm gcc 
-https://lore.kernel.org/oe-kbuild-all/202308250617.ue4uQxWa-lkp@intel.com/T/#u
-   Fix by Randy:
- 
-https://lore.kernel.org/linux-pm/20230828224201.26823-1-rdunlap@infradead.org/T/#u
-
-- Yang noticed that the mutex_unlock() is not handled correctly in
-   some error path and provided a fix:
- 
-https://lore.kernel.org/linux-pm/20230822030207.644738-1-yangyingliang@huawei.com/T/#u
-
-- There are two clean-up patches by me. They need to be rebased to the
-   patches mentioned above but there shouldn't be conflicts with them.
- 
-https://lore.kernel.org/linux-pm/cover.1686948074.git.jahau@rocketmail.com/T/#u
-
-Please also note that the commit hash in the linked fixes above refers 
-to linux-next, where the patch 6 had been applied. As the patch was 
-dropped later on, I don't know what this means for the commit hashes in 
-the fixes.
-
-What's the best way to proceed? Can you put these patches together? Or 
-do you want me something to do?
-
-Kind regards,
-Jakob
+Sincerely
+TonyWWang-oc
