@@ -2,31 +2,31 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5DE0791AED
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Sep 2023 17:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD24791AE6
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Sep 2023 17:57:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353250AbjIDP5Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Sep 2023 11:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35130 "EHLO
+        id S1348948AbjIDP5O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Sep 2023 11:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345270AbjIDP5O (ORCPT
+        with ESMTP id S233243AbjIDP5O (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Sep 2023 11:57:14 -0400
-Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83947CCC
-        for <linux-pm@vger.kernel.org>; Mon,  4 Sep 2023 08:57:09 -0700 (PDT)
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DC2CD7;
+        Mon,  4 Sep 2023 08:57:09 -0700 (PDT)
 Received: from v0.lan (bband-dyn191.178-41-225.t-com.sk [178.41.225.191])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 493011FAFE;
-        Mon,  4 Sep 2023 17:57:06 +0200 (CEST)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 0D0E21FBA5;
+        Mon,  4 Sep 2023 17:57:07 +0200 (CEST)
 From:   Martin Botka <martin.botka@somainline.org>
-Date:   Mon, 04 Sep 2023 17:57:02 +0200
-Subject: [PATCH 2/6] cpufreq: dt-platdev: Blocklist allwinner,h616 SoC
+Date:   Mon, 04 Sep 2023 17:57:03 +0200
+Subject: [PATCH 3/6] dt-bindings: opp: Add compatible for H616
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230904-cpufreq-h616-v1-2-b8842e525c43@somainline.org>
+Message-Id: <20230904-cpufreq-h616-v1-3-b8842e525c43@somainline.org>
 References: <20230904-cpufreq-h616-v1-0-b8842e525c43@somainline.org>
 In-Reply-To: <20230904-cpufreq-h616-v1-0-b8842e525c43@somainline.org>
 To:     Mark Rutland <mark.rutland@arm.com>,
@@ -55,15 +55,15 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Martin Botka <martin@biqu3d.com>,
         Martin Botka <martin.botka@somainline.org>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1693843024; l=763;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1693843024; l=1233;
  i=martin.botka@somainline.org; s=20230811; h=from:subject:message-id;
- bh=y6+Jp6XdKlMolFv5lUKbS3BMDgQUVTv9Ux9Y9Pn0TiI=;
- b=jYK1Ddg2mSPl2rn47FMupLfy4TQbq4y4Ff2LU45va19Z4Fmq+B+x7B57OviVOXwqZEwVGQpX+
- L7sv0XXIIk8D2MXSGs4p4If3SIc5J6qsYkfdvrBDMpnb7vKRS9UECKB
+ bh=vkpyJtpACo5loCh7uIWuezcAm00aYr/8qEBY1Y7a4p0=;
+ b=LsSyA8ltGbBj/87WeIZvhIIr7CW27Ba6QPMzBx6lX+DRdiVacfciJrzaKnjSiasT24rMfXkvF
+ kHkob6+ZQ/jBcRr0WKQr0aVbKXpqug9ql3yQNGreOaV45y6DciUQFZ/
 X-Developer-Key: i=martin.botka@somainline.org; a=ed25519;
  pk=aTCd3jmwU8GrJidWg3DSKLpdVMcpFzXzCSLXLR6NtWU=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,26 +71,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The AllWinner H616 uses H6 cpufreq driver.
-Add it to blocklist so its not created twice
+We need to add compatible for H616 to H6 cpufreq driver bindings.
+
+Also enable opp_supported_hw property that will be needed for H616.
 
 Signed-off-by: Martin Botka <martin.botka@somainline.org>
 ---
- drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
- 1 file changed, 1 insertion(+)
+ .../bindings/opp/allwinner,sun50i-h6-operating-points.yaml          | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-index e2b20080de3a..51818cef8979 100644
---- a/drivers/cpufreq/cpufreq-dt-platdev.c
-+++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-@@ -104,6 +104,7 @@ static const struct of_device_id allowlist[] __initconst = {
-  */
- static const struct of_device_id blocklist[] __initconst = {
- 	{ .compatible = "allwinner,sun50i-h6", },
-+	{ .compatible = "allwinner,sun50i-h616", },
+diff --git a/Documentation/devicetree/bindings/opp/allwinner,sun50i-h6-operating-points.yaml b/Documentation/devicetree/bindings/opp/allwinner,sun50i-h6-operating-points.yaml
+index 51f62c3ae194..2fa1199f2d23 100644
+--- a/Documentation/devicetree/bindings/opp/allwinner,sun50i-h6-operating-points.yaml
++++ b/Documentation/devicetree/bindings/opp/allwinner,sun50i-h6-operating-points.yaml
+@@ -23,7 +23,10 @@ allOf:
  
- 	{ .compatible = "apple,arm-platform", },
+ properties:
+   compatible:
+-    const: allwinner,sun50i-h6-operating-points
++    contains:
++      enum:
++        - allwinner,sun50i-h6-operating-points
++        - allwinner,sun50i-h616-operating-points
  
+   nvmem-cells:
+     description: |
+@@ -47,6 +50,7 @@ patternProperties:
+     properties:
+       opp-hz: true
+       clock-latency-ns: true
++      opp-supported-hw: true
+ 
+     patternProperties:
+       "^opp-microvolt-speed[0-9]$": true
 
 -- 
 2.42.0
