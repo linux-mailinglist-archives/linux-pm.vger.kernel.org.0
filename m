@@ -2,259 +2,206 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88A68791032
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Sep 2023 04:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A07BD79131B
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Sep 2023 10:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235893AbjIDCyl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 3 Sep 2023 22:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57892 "EHLO
+        id S1352528AbjIDIOu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Sep 2023 04:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231579AbjIDCyk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 Sep 2023 22:54:40 -0400
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4501F10F
-        for <linux-pm@vger.kernel.org>; Sun,  3 Sep 2023 19:54:36 -0700 (PDT)
-X-ASG-Debug-ID: 1693796073-1eb14e751210fa0001-MQbzy6
-Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx2.zhaoxin.com with ESMTP id Hq3BSYmG5uhRk7Ev (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 04 Sep 2023 10:54:33 +0800 (CST)
-X-Barracuda-Envelope-From: TonyWWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX3.zhaoxin.com
- (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 4 Sep
- 2023 10:54:32 +0800
-Received: from [10.32.65.158] (10.32.65.158) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 4 Sep
- 2023 10:54:31 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Message-ID: <ee57634a-3e57-724d-857d-7486f6bc3fe8@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.32.65.158
-Date:   Mon, 4 Sep 2023 10:54:38 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] cpufreq: ACPI: add ITMT support when CPPC enabled
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-X-ASG-Orig-Subj: Re: [PATCH v2] cpufreq: ACPI: add ITMT support when CPPC enabled
-CC:     <viresh.kumar@linaro.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <CobeChen@zhaoxin.com>,
-        <TimGuo@zhaoxin.com>, <LeoLiu-oc@zhaoxin.com>,
-        <LindaChai@zhaoxin.com>
-References: <20230808111325.8600-1-TonyWWang-oc@zhaoxin.com>
- <CAJZ5v0h8M-hNJfRTSxtVmfmpF09h9zmNmG-e=iMemzPwsK50Zg@mail.gmail.com>
- <e9b4de96-624e-96a5-0a41-93de36719340@zhaoxin.com>
- <CAJZ5v0j7c2aO7=AQrjnF9_DGLjdqibDdm72Y9BLzFxWEvQhnvw@mail.gmail.com>
-Content-Language: en-US
-From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
-In-Reply-To: <CAJZ5v0j7c2aO7=AQrjnF9_DGLjdqibDdm72Y9BLzFxWEvQhnvw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.32.65.158]
-X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
-X-Barracuda-Start-Time: 1693796073
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 6420
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: -2.02
-X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.113635
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S230494AbjIDIOt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Sep 2023 04:14:49 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F85FC
+        for <linux-pm@vger.kernel.org>; Mon,  4 Sep 2023 01:14:45 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9a2185bd83cso174170466b.0
+        for <linux-pm@vger.kernel.org>; Mon, 04 Sep 2023 01:14:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1693815284; x=1694420084; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MWMi9FtNgdsDW9Ls5zX1bxJmX9VcD9rhfLYu4eJXCwc=;
+        b=xd8Bcb7IDJ5lyj9B7pfTxOZfGpY5+VosjSWfwM9iVg1ZH4nq+N1FBGJUKc+5Vleecb
+         r7XZ8aMdUWoidP6SytEJNrO0A3dMsv04pHKMXr8V3IdbmDYhoy9wrMQo3jxH1FmNDsQI
+         gxyXnjxSMqPWUAFZU0V3BmbFe5JW0NugZhFPP6hkF+plKCrfJLZ9B0UK01VhH3au/pSu
+         wp4W6rlRgX2aCr4/KDPaqWtdizv1OFVvAIL5jAyEM3yyJuu+5A6LppDUy69Bf9RGbVJt
+         fNKKxPG6E6TLDXlQk7Mw1/TFd5MDdKC2/AouzGP/0UzBZvhme3GmP38ZQDWrOgDp+kEK
+         t8Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693815284; x=1694420084;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=MWMi9FtNgdsDW9Ls5zX1bxJmX9VcD9rhfLYu4eJXCwc=;
+        b=Tb3jfVoHI0wqz5yGC2YVAcl6gtYZlV6SqLUw34Rzu8lvMy50/a0iXW788pS1njKwmG
+         pBWh2RusCB10r/ReFCtmu14TZAQdqLkA3TgEMBQ/TMVEInc1iVheDP5h8al8FFKWZ64C
+         RQ+2opIEe5ycxz8BZjKtBST2pYBKsOUAwEgSHKt2+d9abTmrB3a8YGuzNe5Zarw/g6EB
+         0Lvs0gpvDjtWwgbWXJv1Jdrb1YJQD74eJpLw2MGUEtLj2xV7BxgBwniwKcpZpjpdJbSY
+         bEUzYrH/4WAjMUjU6G7zSn2W/hEweGW0XeQVZ5/jd7CXn9n8eYpzYX0nGw3mk549sgDl
+         Lr9A==
+X-Gm-Message-State: AOJu0YzChcp68Qmu7NZMaJH+OQAe7e00sopCCEuPjokuKCqnaHSrdfyl
+        4PvEmhQpIyFPeJfud0mghzxrPw==
+X-Google-Smtp-Source: AGHT+IHUaOSlrS5L3pk5vdj2p6HRN/GNfjoEP6nrYuWjZ/0Ux6QVQihqo46O6Ejh8hYfgT+s6QlW4w==
+X-Received: by 2002:a17:906:20dd:b0:9a1:eef2:a110 with SMTP id c29-20020a17090620dd00b009a1eef2a110mr7175962ejc.19.1693815284020;
+        Mon, 04 Sep 2023 01:14:44 -0700 (PDT)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id e7-20020a170906248700b009920a690cd9sm5787656ejb.59.2023.09.04.01.14.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Sep 2023 01:14:43 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 04 Sep 2023 10:14:42 +0200
+Message-Id: <CV9ZEMOTNO1D.378QGW3KMG4E8@otso>
+Cc:     <cros-qcom-dts-watchers@chromium.org>,
+        "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        "Srinivas Kandagatla" <srinivas.kandagatla@linaro.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Viresh Kumar" <viresh.kumar@linaro.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        <phone-devel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 02/11] nvmem: qfprom: Mark core clk as optional
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Doug Anderson" <dianders@chromium.org>
+X-Mailer: aerc 0.15.2
+References: <20230830-fp5-initial-v1-0-5a954519bbad@fairphone.com>
+ <20230830-fp5-initial-v1-2-5a954519bbad@fairphone.com>
+ <CAD=FV=WS2hgY=bQjLOs3Fdp8pbZyMsaS-0BpoxPq90Etfi+Xuw@mail.gmail.com>
+ <CV5YJVXIL8OT.1ZWW3KVCHPTA5@otso>
+ <CAD=FV=XhdORH=naTtoc+kCC4A7UdAJKwq=Te6B3qvXNGBwBieg@mail.gmail.com>
+ <CV7O0TYYEFA8.1Q42JITFSW77Q@otso>
+ <CAD=FV=UG-dFg7wZsn6n=pkejie0fr+G0q3CguNspGYxoC2ZBLw@mail.gmail.com>
+In-Reply-To: <CAD=FV=UG-dFg7wZsn6n=pkejie0fr+G0q3CguNspGYxoC2ZBLw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri Sep 1, 2023 at 5:08 PM CEST, Doug Anderson wrote:
+> Hi,
+>
+> On Fri, Sep 1, 2023 at 7:54=E2=80=AFAM Luca Weiss <luca.weiss@fairphone.c=
+om> wrote:
+> >
+> > > > > So maybe the right fix here is to just change your dts to specify=
+ one
+> > > > > memory region?
+> > > >
+> > > > I got feedback from Konrad that this here would be the preferred
+> > > > approach compared to having a different dts for ChromeOS vs non-Chr=
+omeOS
+> > > > devices. I don't feel strongly to either, for me it's also okay to
+> > > > remove the extra memory regions and only have the main one used on
+> > > > regular qcom devices.
+> > > >
+> > > > Let me know what you think.
+> > >
+> > > I don't hate the idea of leaving the extra memory regions in the dts.
+> > > They do describe the hardware, after all, even if the main OS can't
+> > > actually access those memory regions. ...though the same could also b=
+e
+> > > said about the clock you've removed. Said another way: if you want to
+> > > fully describe the hardware then the dts should have the extra memory
+> > > regions and the clock. If you are OK w/ just describing the hardware
+> > > in the way that the OS has access to then the dts should not have the
+> > > extra memory regions and not have the clock. Does that sound right?
+> >
+> > Not sure which of those memory regions are actually accessible on this
+> > board, but honestly I don't even want to try accessing it. Blowing fuse=
+s
+> > is not my wish there ;)
+> >
+> > On downstream the node is just described like the following:
+> >
+> >         qfprom: qfprom@780000 {
+> >                 compatible =3D "qcom,qfprom";
+> >                 reg =3D <0x780000 0x7000>;
+> >                 ...
+> >         };
+> >
+> > So we have 0x780000 - 0x786fff here.
+> >
+> > In sc7280.dtsi we have the following:
+> >
+> >         qfprom: efuse@784000 {
+> >                 compatible =3D "qcom,sc7280-qfprom", "qcom,qfprom";
+> >                 reg =3D <0 0x00784000 0 0xa20>,
+> >                           <0 0x00780000 0 0xa20>,
+> >                           <0 0x00782000 0 0x120>,
+> >                           <0 0x00786000 0 0x1fff>;
+> >                 ...
+> >         };
+> >
+> > So I guess this:
+> > * 0x780000 - 0x780a1f
+> > * 0x782000 - 0x78211f
+> > * 0x784000 - 0x784a1f
+> > * 0x786000 - 0x787ffe
+> >
+> > So at least the last memory region seems to be partially out of range
+> > according to downstream.
+>
+> From the other discussion, it sounds as if you _can_ leave the clock
+> in the device tree and then use "clk_get_optional" here. IMO then, the
+> right answer is to use "clk_get_optional" but then also modify the
+> check below so that instead of:
+>
+> /* Only enable writing if we have SoC data. */
+> if (priv->soc_data)
+>   econfig.reg_write =3D qfprom_reg_write;
+>
+> It is:
+>
+> /* Only enable writing if we have SoC data and a valid clock */
+> if (priv->soc_data && priv->secclk)
+>   econfig.reg_write =3D qfprom_reg_write;
+>
+>
+> Does that work for you?
+
+Thanks Doug, this feels like a good solution. I'll update v2 with that.
+
+>
+>
+> > So after reading all of this I tried running this commmand on the phone
+> > and the phone reboots into 900e mode.
+> >
+> >   $ cat /sys/devices/platform/soc@0/784000.efuse/qfprom0/nvmem
+> >
+> > I guess normally this should work? So if I interpret this correctly, th=
+e
+> > Linux driver thinks it can access more than it can/should. But also
+> > should probably try this command on another chipset to see if it works
+> > on any really?
+>
+> Presumably your firmware needs a different "sc7280_qfprom_keepout". If
+> that's true then I guess you'll have to undergo negotiations with the
+> DT bindings folks and the nvmem maintainer to figure out how to
+> specify that your firmware protects different things than the ChromeOS
+> firmware?
+
+Right. But based on Konrad's reply here, I think I'll skip this for now
+since generally qfprom seems to be fine with the current data, at least
+for the purposes it's used for on my device.
+
+Regards
+Luca
 
 
-On 8/31/23 21:03, Rafael J. Wysocki wrote:
-> On Thu, Aug 31, 2023 at 12:19 PM Tony W Wang-oc
-> <TonyWWang-oc@zhaoxin.com> wrote:
->>
->>
->> On 8/23/23 04:01, Rafael J. Wysocki wrote:
->>> On Tue, Aug 8, 2023 at 1:13 PM Tony W Wang-oc <TonyWWang-oc@zhaoxin.com> wrote:
->>>>
->>>> The _CPC method can get per-core highest frequency.
->>>
->>> Well, not exactly.  A more precise way to say this would be "The
->>> per-core highest frequency can be obtained via CPPC."
->>>
->>
->> Thanks for your reply, will rewrite the commit in next version.
->>
->>>> The highest frequency may varies between cores which mean cores can
->>>
->>> "may vary" and "which means"
->>>
->>>> running at different max frequency, so can use it as a core priority
->>>
->>> "can run", but it would be better to say "may run".
->>>
->>>> and give a hint to scheduler in order to put critical task to the
->>>> higher priority core.
->>>
->>> Well, roughly speaking ...
->>>
->>> You should really talk about ITMT and how it can be hooked up to this.
->>>
->>
->> Ok, Got it.
->>
->>>> Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
->>>> ---
->>>> v1->v2: Fix build errors reported by kernel test robot
->>>>
->>>>  arch/x86/kernel/itmt.c         |  2 ++
->>>>  drivers/cpufreq/acpi-cpufreq.c | 59 ++++++++++++++++++++++++++++++----
->>>>  2 files changed, 54 insertions(+), 7 deletions(-)
->>>>
->>>> diff --git a/arch/x86/kernel/itmt.c b/arch/x86/kernel/itmt.c
->>>> index ee4fe8cdb857..b49ac8ecbbd6 100644
->>>> --- a/arch/x86/kernel/itmt.c
->>>> +++ b/arch/x86/kernel/itmt.c
->>>> @@ -122,6 +122,7 @@ int sched_set_itmt_support(void)
->>>>
->>>>         return 0;
->>>>  }
->>>> +EXPORT_SYMBOL_GPL(sched_set_itmt_support);
->>>
->>> This requires an ACK from the x86 maintainers.
->>>
->>>>
->>>>  /**
->>>>   * sched_clear_itmt_support() - Revoke platform's support of ITMT
->>>> @@ -181,3 +182,4 @@ void sched_set_itmt_core_prio(int prio, int cpu)
->>>>  {
->>>>         per_cpu(sched_core_priority, cpu) = prio;
->>>>  }
->>>> +EXPORT_SYMBOL_GPL(sched_set_itmt_core_prio);
->>>
->>> And same here.
->>>
->>>> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
->>>> index b2f05d27167e..5733323e04ac 100644
->>>> --- a/drivers/cpufreq/acpi-cpufreq.c
->>>> +++ b/drivers/cpufreq/acpi-cpufreq.c
->>>> @@ -628,28 +628,35 @@ static int acpi_cpufreq_blacklist(struct cpuinfo_x86 *c)
->>>>  #endif
->>>>
->>>>  #ifdef CONFIG_ACPI_CPPC_LIB
->>>> -static u64 get_max_boost_ratio(unsigned int cpu)
->>>> +static void cpufreq_get_core_perf(int cpu, u64 *highest_perf, u64 *nominal_perf)
->>>
->>> This is not a cpufreq core function, so please use a different prefix
->>> in its name.
->>>
->>
->> Ok. Will remove the prefix of "cpufreq_".
->>
->>>>  {
->>>>         struct cppc_perf_caps perf_caps;
->>>> -       u64 highest_perf, nominal_perf;
->>>>         int ret;
->>>>
->>>>         if (acpi_pstate_strict)
->>>> -               return 0;
->>>> +               return;
->>>>
->>>>         ret = cppc_get_perf_caps(cpu, &perf_caps);
->>>>         if (ret) {
->>>>                 pr_debug("CPU%d: Unable to get performance capabilities (%d)\n",
->>>>                          cpu, ret);
->>>> -               return 0;
->>>> +               return;
->>>>         }
->>>>
->>>>         if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD)
->>>> -               highest_perf = amd_get_highest_perf();
->>>> +               *highest_perf = amd_get_highest_perf();
->>>>         else
->>>> -               highest_perf = perf_caps.highest_perf;
->>>> +               *highest_perf = perf_caps.highest_perf;
->>>> +
->>>> +       *nominal_perf = perf_caps.nominal_perf;
->>>> +       return;
->>>> +}
->>>>
->>>> -       nominal_perf = perf_caps.nominal_perf;
->>>> +static u64 get_max_boost_ratio(unsigned int cpu)
->>>> +{
->>>> +       u64 highest_perf, nominal_perf;
->>>> +
->>>> +       cpufreq_get_core_perf(cpu, &highest_perf, &nominal_perf);
->>>>
->>>>         if (!highest_perf || !nominal_perf) {
->>>>                 pr_debug("CPU%d: highest or nominal performance missing\n", cpu);
->>>> @@ -663,8 +670,44 @@ static u64 get_max_boost_ratio(unsigned int cpu)
->>>>
->>>>         return div_u64(highest_perf << SCHED_CAPACITY_SHIFT, nominal_perf);
->>>>  }
->>>> +
->>>> +static void cpufreq_sched_itmt_work_fn(struct work_struct *work)
->>>
->>> A similar comment applies here.
->>>
->>>> +{
->>>> +       sched_set_itmt_support();
->>>> +}
->>>> +
->>>> +static DECLARE_WORK(sched_itmt_work, cpufreq_sched_itmt_work_fn);
->>>> +
->>>> +static void cpufreq_set_itmt_prio(int cpu)
->>>> +{
->>>> +       u64 highest_perf, nominal_perf;
->>>> +       static u32 max_highest_perf = 0, min_highest_perf = U32_MAX;
->>>> +
->>>> +       cpufreq_get_core_perf(cpu, &highest_perf, &nominal_perf);
->>>> +
->>>> +       sched_set_itmt_core_prio(highest_perf, cpu);
->>>> +
->>>> +       if (max_highest_perf <= min_highest_perf) {
->>>> +               if (highest_perf > max_highest_perf)
->>>> +                       max_highest_perf = highest_perf;
->>>> +
->>>> +               if (highest_perf < min_highest_perf)
->>>> +                       min_highest_perf = highest_perf;
->>>> +
->>>> +               if (max_highest_perf > min_highest_perf) {
->>>> +                       /*
->>>> +                        * This code can be run during CPU online under the
->>>> +                        * CPU hotplug locks, so sched_set_itmt_support()
->>>> +                        * cannot be called from here.  Queue up a work item
->>>> +                        * to invoke it.
->>>> +                        */
->>>> +                       schedule_work(&sched_itmt_work);
->>>> +               }
->>>
->>> This potentially runs before ITMT priorities are set for all CPUs.
->>> Isn't it a problem?
->>>
->>
->> Yes, you are right.
->> Will use schedule_delayed_work(&sched_itmt_work, msecs_to_jiffies(500))
->> to fix this.
-> 
-> If the ordering matters, it is better to enforce it directly (through
-> an explicit code dependency, for example) than to rely on the timing
-> to do the right thing.
-> 
-> If you do the above, then it will not be clear why it is done (a
-> comment may help to address that, though) and why the delay is 500 us
-> in particular.
+>
+>
+> -Doug
 
-Yes, you are right. Rely on the timing is not exactly.
-Will find the other way to enforce the order.
-
-Sincerely
-TonyWWang-oc
