@@ -2,184 +2,191 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 015FE792661
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Sep 2023 18:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D6C7927CB
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Sep 2023 18:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239110AbjIEQHV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Sep 2023 12:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53902 "EHLO
+        id S239241AbjIEQHf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Sep 2023 12:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353701AbjIEHUq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Sep 2023 03:20:46 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3D3A8;
-        Tue,  5 Sep 2023 00:20:41 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3855Jlpu003707;
-        Tue, 5 Sep 2023 07:20:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=XixQLjt/a4hSSFcOZqSVyKlIfoT9lWBXUSxeDg07nNw=;
- b=fQbIi5IRRIAMjdglemaaQjXtPViSZWtU1ooiYhGv5jMYOFdF7nRTaLmVQb/KjaaNdeok
- 5FQl3Mm01VAf2eW7WS/OjIWprWPZT6a0WXSO6rYLEm8Gz7essMuovQU6TvXmfBMQIIJ/
- dP5iOXXRsowMsJr2K67py50xeEDQuYf3BsMT597RF1V11/6LW3U0HfvZX4HPXxtIPHpA
- 3VN5zbpWAeLLm38TZMFGlD2Vq4FqOXIg0ym/dOrF7AIWLHSVqWeB35V6jIqAlJhimgm9
- /EpYFLZcXIrD6/qYCtbC7F436y2jrZCmvZiGIQKe0HkqG/oxYifPBtnJc++9ksuN79Gw 2A== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3swvj60bwb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 Sep 2023 07:20:35 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3857KYgd026147
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 5 Sep 2023 07:20:34 GMT
-Received: from [10.216.59.199] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Tue, 5 Sep
- 2023 00:20:27 -0700
-Message-ID: <0e64f0f4-75ad-201b-452b-2cf2e7194df8@quicinc.com>
-Date:   Tue, 5 Sep 2023 12:50:24 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 2/2] interconnect: qcom: Add SDX75 interconnect provider
- driver
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <djakov@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        with ESMTP id S1353885AbjIEIaw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Sep 2023 04:30:52 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35BACCB
+        for <linux-pm@vger.kernel.org>; Tue,  5 Sep 2023 01:30:47 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4fe27849e6aso3469586e87.1
+        for <linux-pm@vger.kernel.org>; Tue, 05 Sep 2023 01:30:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1693902646; x=1694507446; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LWq30L/k6esO2m+8xJQ6plHCzdQIEU3cixCgpzG9F48=;
+        b=PXUS5OrCIr0hfIiE/RYFGI+eTfixlts42tgW5wCnRf0opXHzFIjtsXr6JyebIdn9tg
+         FBhI3Rqqee/Gl3C0da6tAxI6dCCXEQsjsVtuSr2n/p5xZGLu0vi5//ZskgqBM4Z53AdP
+         UBTfWJ35XhHIySddhkdM0qcNF8soWEqoGeFPw5Iak5/0zLUjsAMolwGVNsRdWCB6lpQY
+         p9RMVuACmnr0R14z8k1RuV8DV64dwrMxOQJtwxVyMP7nPkwp7feR04nkhRtKqX8gStDl
+         GALyse9Jh2L6M/GNvl34rZ5PAUGvFj0cIQx4fhKE/1joHr20rZDln+eGo2ZC8Slye1rm
+         1/iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693902646; x=1694507446;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=LWq30L/k6esO2m+8xJQ6plHCzdQIEU3cixCgpzG9F48=;
+        b=Fg/PQwBKpZQ6c62tJq7HleYYCNx6QqKwdFodgVZQ8D4d6TzA5eUvWrBKMlG9t9JtfA
+         Y/X9z5Sv+WS5Tu64Mw0q9+lbMTGQl3YyavLXmbwmXao55a1zQGZ6DXbuoj7hw7NxNT9d
+         oa7a9Z8Dpa/gm0n948wbMh1QVzBh2QmLsPm1XZVwcUCI/eT+InR7Nun/RokYs1bdxBNy
+         0GeZBUi9/BKyps8TikHb+ux4X7MHptFg9oLRC2etUUIhMjnChlTLGBPpB+CeLhihZTlS
+         jtewaPve2nqj6U9/rGvV1LeAEYqi44hFwG+0D05MHtuT7YHhvAsyc7izuHC47MUUB/Hy
+         iLPQ==
+X-Gm-Message-State: AOJu0YwI+IipwpA0/Z+JTxeWro8lDgStMh1gXmBwZXG+1nGwaHpwpvGm
+        p90iEr4TmvPY3PA4po4rF282HQ==
+X-Google-Smtp-Source: AGHT+IHnW0XedN1vSaHx1JHDD4mFf80P5Zlb6gBn9z9f8KVQh7bwaME+VxnDiJKWubHNVVg3SjkedQ==
+X-Received: by 2002:a05:6512:ea6:b0:4fe:e50:422d with SMTP id bi38-20020a0565120ea600b004fe0e50422dmr9421046lfb.25.1693902645843;
+        Tue, 05 Sep 2023 01:30:45 -0700 (PDT)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id fj22-20020a0564022b9600b005256aaa6e7asm667460edb.78.2023.09.05.01.30.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Sep 2023 01:30:45 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 05 Sep 2023 10:30:44 +0200
+Message-Id: <CVAUDGBO4S08.1F0O66ZE6I4IG@otso>
+To:     "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+Cc:     <cros-qcom-dts-watchers@chromium.org>,
+        "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        "Srinivas Kandagatla" <srinivas.kandagatla@linaro.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Viresh Kumar" <viresh.kumar@linaro.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        <phone-devel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@quicinc.com>
-References: <1693889975-19122-1-git-send-email-quic_rohiagar@quicinc.com>
- <1693889975-19122-3-git-send-email-quic_rohiagar@quicinc.com>
- <4388cb18-ada2-656b-ff1d-e75bf1e8b82d@linaro.org>
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-In-Reply-To: <4388cb18-ada2-656b-ff1d-e75bf1e8b82d@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: m3R1I7EysQ2RRiuuzk954oapPNTPaxUS
-X-Proofpoint-ORIG-GUID: m3R1I7EysQ2RRiuuzk954oapPNTPaxUS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-05_05,2023-08-31_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
- impostorscore=0 mlxlogscore=999 malwarescore=0 adultscore=0 bulkscore=0
- priorityscore=1501 mlxscore=0 spamscore=0 phishscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2308100000
- definitions=main-2309050065
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        <linux-gpio@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 04/11] arm64: dts: qcom: pm7250b: make SID configurable
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+X-Mailer: aerc 0.15.2
+References: <20230830-fp5-initial-v1-0-5a954519bbad@fairphone.com>
+ <20230830-fp5-initial-v1-4-5a954519bbad@fairphone.com>
+ <b82f4683-e8b5-b424-8f7a-6d2ba1cab61f@linaro.org>
+ <CV6NF0466658.20DGU7QKF2UBR@otso>
+ <CAA8EJpr1+W3f08X-FpiiVrJ98kg52HaMwbbKn=fG15Whm4C8aQ@mail.gmail.com>
+ <728003b9-db27-fdc0-e761-197a02a38c24@linaro.org>
+ <CAA8EJpoXreHpxZQ2G10n0OiQzUX4ffk=gvo87dAU4-r+Svqpeg@mail.gmail.com>
+In-Reply-To: <CAA8EJpoXreHpxZQ2G10n0OiQzUX4ffk=gvo87dAU4-r+Svqpeg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu Aug 31, 2023 at 2:27 PM CEST, Dmitry Baryshkov wrote:
+> On Thu, 31 Aug 2023 at 14:54, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+> >
+> > On 31/08/2023 13:33, Dmitry Baryshkov wrote:
+> > > On Thu, 31 Aug 2023 at 13:13, Luca Weiss <luca.weiss@fairphone.com> w=
+rote:
+> > >>
+> > >> On Wed Aug 30, 2023 at 12:06 PM CEST, Krzysztof Kozlowski wrote:
+> > >>> On 30/08/2023 11:58, Luca Weiss wrote:
+> > >>>> Like other Qualcomm PMICs the PM7250B can be used on different add=
+resses
+> > >>>> on the SPMI bus. Use similar defines like the PMK8350 to make this
+> > >>>> possible.
+> > >>>>
+> > >>>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> > >>>> ---
+> > >>>>  arch/arm64/boot/dts/qcom/pm7250b.dtsi | 23 ++++++++++++++++------=
+-
+> > >>>>  1 file changed, 16 insertions(+), 7 deletions(-)
+> > >>>>
+> > >>>> diff --git a/arch/arm64/boot/dts/qcom/pm7250b.dtsi b/arch/arm64/bo=
+ot/dts/qcom/pm7250b.dtsi
+> > >>>> index e8540c36bd99..3514de536baa 100644
+> > >>>> --- a/arch/arm64/boot/dts/qcom/pm7250b.dtsi
+> > >>>> +++ b/arch/arm64/boot/dts/qcom/pm7250b.dtsi
+> > >>>> @@ -7,6 +7,15 @@
+> > >>>>  #include <dt-bindings/interrupt-controller/irq.h>
+> > >>>>  #include <dt-bindings/spmi/spmi.h>
+> > >>>>
+> > >>>> +/* This PMIC can be configured to be at different SIDs */
+> > >>>> +#ifndef PM7250B_SID
+> > >>>> +   #define PM7250B_SID 2
+> > >>>> +#endif
+> > >>>
+> > >>> Why do you send the same patch as v1, without any reference to prev=
+ious
+> > >>> discussions?
+> > >>>
+> > >>> You got here feedback already.
+> > >>>
+> > >>> https://lore.kernel.org/linux-arm-msm/f52524da-719b-790f-ad2c-0c3f3=
+13d9fe9@linaro.org/
+> > >>
+> > >> Hi Krzysztof,
+> > >>
+> > >> I did mention that original patch in the cover letter of this series=
+.
+> > >> I'm definitely aware of the discussion earlier this year there but a=
+lso
+> > >> tried to get an update lately if there's any update with no response=
+.
+> > >
+> > > I think the overall consensus was that my proposal is too complicated
+> > > for the DT files.
+> >
+> > I proposed to duplicate the entries. Do you keep QUP nodes in DTSI and
+> > customize per address? No.
+>
+> At the same time, we do keep SoC files separate from the board files.
+> Yes, I'm slightly exaggerating here.
+>
+> I think that for PMIC files it makes sense to extract common parts if
+> that eases reuse of the common parts.
 
-On 9/5/2023 12:32 PM, Krzysztof Kozlowski wrote:
-> On 05/09/2023 06:59, Rohit Agarwal wrote:
->> Add driver for the Qualcomm interconnect buses found in SDX75.
->>
->> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
-> ...
->
->> +
->> +static struct qcom_icc_bcm *system_noc_bcms[] = {
-> Please do not copy your code from downstream, but work on upstream. We
-> changed this long time ago, so you clearly used some old or obsolete
-> file as template.
-Sure will check the sm8550 as template and work on it again.
-Thank you for your time.
+Hi all,
 
-Thanks,
-Rohit.
->> +	&bcm_ce0,
->> +	&bcm_cn0,
->> +	&bcm_sn0,
->> +	&bcm_sn1,
->> +	&bcm_sn2,
->> +};
->> +
->> +static struct qcom_icc_node *system_noc_nodes[] = {
->> +	[MASTER_AUDIO] = &qhm_audio,
->> +	[MASTER_GIC_AHB] = &qhm_gic,
->> +	[MASTER_PCIE_RSCC] = &qhm_pcie_rscc,
->> +	[MASTER_QDSS_BAM] = &qhm_qdss_bam,
->> +	[MASTER_QPIC] = &qhm_qpic,
->> +	[MASTER_QUP_0] = &qhm_qup0,
->> +	[MASTER_ANOC_SNOC] = &qnm_aggre_noc,
->> +	[MASTER_GEM_NOC_CNOC] = &qnm_gemnoc_cnoc,
->> +	[MASTER_GEM_NOC_PCIE_SNOC] = &qnm_gemnoc_pcie,
->> +	[MASTER_SNOC_CFG] = &qnm_system_noc_cfg,
->> +	[MASTER_PCIE_ANOC_CFG] = &qnm_system_noc_pcie_cfg,
->> +	[MASTER_CRYPTO] = &qxm_crypto,
->> +	[MASTER_IPA] = &qxm_ipa,
->> +	[MASTER_MVMSS] = &qxm_mvmss,
->> +	[MASTER_EMAC_0] = &xm_emac_0,
->> +	[MASTER_EMAC_1] = &xm_emac_1,
->> +	[MASTER_QDSS_ETR] = &xm_qdss_etr0,
->> +	[MASTER_QDSS_ETR_1] = &xm_qdss_etr1,
->> +	[MASTER_SDCC_1] = &xm_sdc1,
->> +	[MASTER_SDCC_4] = &xm_sdc4,
->> +	[MASTER_USB3_0] = &xm_usb3,
->> +	[SLAVE_ETH0_CFG] = &ps_eth0_cfg,
->> +	[SLAVE_ETH1_CFG] = &ps_eth1_cfg,
->> +	[SLAVE_AUDIO] = &qhs_audio,
->> +	[SLAVE_CLK_CTL] = &qhs_clk_ctl,
->> +	[SLAVE_CRYPTO_0_CFG] = &qhs_crypto_cfg,
->> +	[SLAVE_IMEM_CFG] = &qhs_imem_cfg,
->> +	[SLAVE_IPA_CFG] = &qhs_ipa,
->> +	[SLAVE_IPC_ROUTER_CFG] = &qhs_ipc_router,
->> +	[SLAVE_CNOC_MSS] = &qhs_mss_cfg,
->> +	[SLAVE_ICBDI_MVMSS_CFG] = &qhs_mvmss_cfg,
->> +	[SLAVE_PCIE_0_CFG] = &qhs_pcie0_cfg,
->> +	[SLAVE_PCIE_1_CFG] = &qhs_pcie1_cfg,
->> +	[SLAVE_PCIE_2_CFG] = &qhs_pcie2_cfg,
->> +	[SLAVE_PCIE_RSC_CFG] = &qhs_pcie_rscc,
->> +	[SLAVE_PDM] = &qhs_pdm,
->> +	[SLAVE_PRNG] = &qhs_prng,
->> +	[SLAVE_QDSS_CFG] = &qhs_qdss_cfg,
->> +	[SLAVE_QPIC] = &qhs_qpic,
->> +	[SLAVE_QUP_0] = &qhs_qup0,
->> +	[SLAVE_SDCC_1] = &qhs_sdc1,
->> +	[SLAVE_SDCC_4] = &qhs_sdc4,
->> +	[SLAVE_SPMI_VGI_COEX] = &qhs_spmi_vgi_coex,
->> +	[SLAVE_TCSR] = &qhs_tcsr,
->> +	[SLAVE_TLMM] = &qhs_tlmm,
->> +	[SLAVE_USB3] = &qhs_usb3,
->> +	[SLAVE_USB3_PHY_CFG] = &qhs_usb3_phy,
->> +	[SLAVE_A1NOC_CFG] = &qns_a1noc,
->> +	[SLAVE_DDRSS_CFG] = &qns_ddrss_cfg,
->> +	[SLAVE_SNOC_GEM_NOC_SF] = &qns_gemnoc_sf,
->> +	[SLAVE_SNOC_CFG] = &qns_system_noc_cfg,
->> +	[SLAVE_PCIE_ANOC_CFG] = &qns_system_noc_pcie_cfg,
->> +	[SLAVE_IMEM] = &qxs_imem,
->> +	[SLAVE_SERVICE_PCIE_ANOC] = &srvc_pcie_system_noc,
->> +	[SLAVE_SERVICE_SNOC] = &srvc_system_noc,
->> +	[SLAVE_PCIE_0] = &xs_pcie_0,
->> +	[SLAVE_PCIE_1] = &xs_pcie_1,
->> +	[SLAVE_PCIE_2] = &xs_pcie_2,
->> +	[SLAVE_QDSS_STM] = &xs_qdss_stm,
->> +	[SLAVE_TCU] = &xs_sys_tcu_cfg,
->> +};
->> +
->> +static struct qcom_icc_desc sdx75_system_noc = {
-> Come on... we fixed it.
+what can I do for v2 now?
+
+1. Keep this patch as-is, and keep pm7250b in device dts.
+
+2. Drop pm7250b patch and drop from device dts, until _someone_ figures
+out a solution talking to the PMIC on different SID.
+
+3. Something else like copy-pasting pm7250b.dtsi to pm7250-8.dtsi and
+changing the SID there, and using that in device dts.
+
+Please let me know what to do.
+
+Regards
+Luca
+
 >
-> There could be more issues because you used old file as template. Start
-> from scratch from new file.
->
-> Best regards,
-> Krzysztof
->
+> >
+> > I definitely do not agree to these ifndef->define. Maybe using just
+> > define would work (so drop ifndef->define), because this makes it
+> > obvious and fail-safe if included in wrong place... except that it is
+> > still not the define we expect. This is not the coding style present in
+> > other DTSes.
+> >
+> > The true problem how these SPMI bindings were created. Requiring SID
+> > address in every child is clearly redundant and I think we do not follo=
+w
+> > such approach anywhere else.
+> >
+> > Best regards,
+> > Krzysztof
+> >
+
