@@ -2,105 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A6047927AA
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Sep 2023 18:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A54027926BF
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Sep 2023 18:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239453AbjIEQH6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Sep 2023 12:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47904 "EHLO
+        id S239269AbjIEQHo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Sep 2023 12:07:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353059AbjIEGDz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Sep 2023 02:03:55 -0400
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32251B6
-        for <linux-pm@vger.kernel.org>; Mon,  4 Sep 2023 23:03:52 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1qdPA7-0004b9-NU; Tue, 05 Sep 2023 08:03:43 +0200
-Message-ID: <c552d202-4c1e-a561-aac6-1f4a257faff9@pengutronix.de>
-Date:   Tue, 5 Sep 2023 08:03:42 +0200
+        with ESMTP id S1353484AbjIEGWH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Sep 2023 02:22:07 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525FA191;
+        Mon,  4 Sep 2023 23:22:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693894922; x=1725430922;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=VEoIeRK2p8fuiPJCyGj4dLFE/iZ5NCsrzx+VLk9PNNE=;
+  b=dUvSJdiX7lhbKow5UpXMvHQzNxkKmFzV8b1Oky35l9ZnCDiSEuOw+xED
+   jyY3csQLwdjwFIIvlMGhP7GcZAdp+d/ygFf1pVyG7Ds8CwOanvOQGR0fm
+   Nk9pmwDaMEv4qIIvebld8EK5jHZx73YUeUHkCKTAV7ZnfyyCVJ5T9aufV
+   ft8fgale13WKcs6w0DnwLuV60HSRCBDi6FFYXytSGuJ8l5XhEMHMAedlc
+   Q+GKYuf7GbLvVrj07Xs5tj9vePLV4lKyF2WPY3eJF0MPaQo466fwTFLtR
+   lkl4YCLV2XLN9k0rASZaMcQY+u1TPdDNWn9wdWQ8cb3fTbwZkA+gA1aGl
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="380515106"
+X-IronPort-AV: E=Sophos;i="6.02,228,1688454000"; 
+   d="scan'208";a="380515106"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2023 23:22:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="806484363"
+X-IronPort-AV: E=Sophos;i="6.02,228,1688454000"; 
+   d="scan'208";a="806484363"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.153])
+  by fmsmga008.fm.intel.com with SMTP; 04 Sep 2023 23:21:58 -0700
+Received: by stinkbox (sSMTP sendmail emulation); Tue, 05 Sep 2023 09:21:57 +0300
+Date:   Tue, 5 Sep 2023 09:21:57 +0300
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
+        daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org,
+        srinivas.pandruvada@intel.com
+Subject: Re: [PATCH v2 09/15] powercap/intel_rapl: Cleanup Power Limits
+ support
+Message-ID: <ZPbJBanVmoMuOhMR@intel.com>
+References: <20230419024419.324436-1-rui.zhang@intel.com>
+ <20230419024419.324436-10-rui.zhang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH AUTOSEL 6.4 18/54] thermal: core: constify params in
- thermal_zone_device_register
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>, Pavel Machek <pavel@denx.de>
-Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        rafael@kernel.org, linux-pm@vger.kernel.org
-References: <20230813154934.1067569-1-sashal@kernel.org>
- <20230813154934.1067569-18-sashal@kernel.org> <ZOSRPJxpVfCiyUWb@duo.ucw.cz>
- <2023082232-anaerobic-smashing-42d3@gregkh>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <2023082232-anaerobic-smashing-42d3@gregkh>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230419024419.324436-10-rui.zhang@intel.com>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22.08.23 13:31, Greg KH wrote:
-> On Tue, Aug 22, 2023 at 12:43:08PM +0200, Pavel Machek wrote:
->> Hi!
->>
->>> [ Upstream commit 80ddce5f2dbd0e83eadc9f9d373439180d599fe5 ]
->>>
->>> Since commit 3d439b1a2ad3 ("thermal/core: Alloc-copy-free the thermal zone
->>> parameters structure"), thermal_zone_device_register() allocates a copy
->>> of the tzp argument and callers need not explicitly manage its lifetime.
->>>
->>> This means the function no longer cares about the parameter being
->>> mutable, so constify it.
->>>
->>> No functional change.
->>
->> Not a bugfix, should not be in stable.
->>
->> 3d439b1a2ad3 ("thermal/core: Alloc-copy-free the thermal zone
->> parameters structure") is not in 6.1, so this is not correct patch for
->> 6.1.
-
-[Sidenote: this is AUTOSEL for 6.4, where the patch is applicable, unlike 6.1]
-
-
->> Why was this selected for AUTOSEL? Can you make sure patches marked
->> "No functional change." are not selected in future?
+On Wed, Apr 19, 2023 at 10:44:13AM +0800, Zhang Rui wrote:
+> The same set of operations are shared by different Powert Limits,
+> including Power Limit get/set, Power Limit enable/disable, clamping
+> enable/disable, time window get/set, and max power get/set, etc.
 > 
-> No, because sometimes they are needed in later patches.  And marking
-> things const is good :)
-
-The patch used to have a Fixes: trailer[1], but Rafael disagreed that it
-constitutes a fix. In future, I'll insist on keeping the Fixes: tag to
-prevent such issues. But maybe AUTOSEL could also take lines like "Since
-commit $(some commit hash not existing in the stable kernel)" into consideration.
-
-[1]: https://lore.kernel.org/all/20230708112720.2897484-1-a.fatoum@pengutronix.de/
-
-Cheers,
-Ahmad
-
-
+> But the same operation for different Power Limit has different
+> primitives because they use different registers/register bits.
 > 
-> thanks,
+> A lot of dirty/duplicate code was introduced to handle this difference.
 > 
-> greg k-h
+> Introduce a universal way to issue Power Limit operations.
+> Instead of using hardcoded primitive name directly, use Power Limit id
+> + operation type, and hide all the Power Limit difference details in a
+> central place, get_pl_prim(). Two helpers, rapl_read_pl_data() and
+> rapl_write_pl_data(), are introduced at the same time to simplify the
+> code for issuing Power Limit operations.
 > 
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> Tested-by: Wang Wendy <wendy.wang@intel.com>
+> ---
+>  drivers/powercap/intel_rapl_common.c | 343 ++++++++++++---------------
+>  include/linux/intel_rapl.h           |   1 -
+>  2 files changed, 146 insertions(+), 198 deletions(-)
+> 
+> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+> index 8e77df42257a..7f80c35e5c86 100644
+> --- a/drivers/powercap/intel_rapl_common.c
+> +++ b/drivers/powercap/intel_rapl_common.c
+<snip>
+> @@ -818,6 +778,33 @@ static int rapl_write_data_raw(struct rapl_domain *rd,
+>  	return ret;
+>  }
+>  
+> +static int rapl_read_pl_data(struct rapl_domain *rd, int pl,
+> +			      enum pl_prims pl_prim, bool xlate, u64 *data)
+> +{
+> +	enum rapl_primitives prim = get_pl_prim(pl, pl_prim);
+> +
+> +	if (!is_pl_valid(rd, pl))
+> +		return -EINVAL;
+> +
+> +	return rapl_read_data_raw(rd, prim, xlate, data);
+> +}
+> +
+> +static int rapl_write_pl_data(struct rapl_domain *rd, int pl,
+> +			       enum pl_prims pl_prim,
+> +			       unsigned long long value)
+> +{
+> +	enum rapl_primitives prim = get_pl_prim(pl, pl_prim);
+> +
+> +	if (!is_pl_valid(rd, pl))
+> +		return -EINVAL;
+> +
+> +	if (rd->state & DOMAIN_STATE_BIOS_LOCKED) {
+> +		pr_warn("%s:%s:%s locked by BIOS\n", rd->rp->name, rd->name, pl_names[pl]);
+> +		return -EACCES;
+
+This seems to be causing a lot of WARN level dmesg spam [1] during
+suspend/resume on several machines. I suppose previously the
+warning was only printed when trying to change the limits explicitly,
+but now it gets printed in a lot more cases even if the user didn't
+try to change anything.
+
+[1] https://intel-gfx-ci.01.org/tree/drm-tip/CI_DRM_13594/fi-snb-2520m/igt@i915_suspend@basic-s2idle-without-i915.html
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
+Ville Syrjälä
+Intel
