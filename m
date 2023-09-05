@@ -2,177 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98C07931E8
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Sep 2023 00:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20FF77931FF
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Sep 2023 00:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234202AbjIEWXq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Sep 2023 18:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34782 "EHLO
+        id S241706AbjIEWcZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Sep 2023 18:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjIEWXp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Sep 2023 18:23:45 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB51D185;
-        Tue,  5 Sep 2023 15:23:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693952622; x=1725488622;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PZ8K/Y6fP2+GV/U6uh2DerdNLUjBinIKc22XgnQErp0=;
-  b=O08x02vUr3X9Igtack++7Rxn8Lv52jtfz/1mlIiONX/OgRSyie/rxbdi
-   XVtbcJm7PnlmdeybtsfBNgZOIluL8smG3T844lG1SqHSvvYvSZwntEmpb
-   459SFn0y+Sm8tYtybZc/WniH2l/uxxcAQ8wmYIU1EGKMa8tBRdcZm9YiI
-   x0D+hmHYxd7xzZswr8ztv/5bOuqpu+r9mMP2NnAFmDtLLR601glXmgW11
-   mront3sBeL2KRu9l12PGVzgQD03rUssEsmEn7U1dfzJg2I+T/g6x7/lid
-   HErD+62oplzKrTHQM4zbFeafX2D/Pm8wanusUdx1piiGUH2DhpeEA/Wly
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10824"; a="443306960"
-X-IronPort-AV: E=Sophos;i="6.02,230,1688454000"; 
-   d="scan'208";a="443306960"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2023 15:23:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10824"; a="734820249"
-X-IronPort-AV: E=Sophos;i="6.02,230,1688454000"; 
-   d="scan'208";a="734820249"
-Received: from yjie-desk1.jf.intel.com (HELO [10.24.100.126]) ([10.24.100.126])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2023 15:23:41 -0700
-Message-ID: <3b798806-d144-58a8-6fa3-e893299bc690@linux.intel.com>
-Date:   Tue, 5 Sep 2023 15:23:41 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH v2] cpufreq: intel_pstate: set stale CPU frequency to
- minimum
+        with ESMTP id S231249AbjIEWcY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Sep 2023 18:32:24 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2059.outbound.protection.outlook.com [40.107.223.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A0ECE7;
+        Tue,  5 Sep 2023 15:32:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MhDn6oaxE5Qix1jItZte6TlBP4HUWexRP9IWPteD3i5ywPwsdnOo6jGg10yvrtqFhfgyvD0FcZZFasSOCKiqrwAc8MbkuoJ2U1vciEqLFjIHfBHPQHTdSGapdgU91mfT5K2wf+WqTyt8mE8J8UZn965GlYvIDYXRaV3iQD+cNQol00kCdJm7zZWOGEbMqona72gZ+P0OOC+FQCuOaetH2Af+eKJEGWIp7BhjDBqiMFRmYERLsf/CYcEblI0kx1uI8AtX2GlpX7yYFSqnuLt3WaEirFQ/tLosD2XkqXKzUjpKQQthpP1HFB+nV5Mdf8qdJmP1qGoJqr+bRo0ES/QqDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qrBucp5j9d5P+Aa6ai22aVr5xSdGG617Xl+lF5okQig=;
+ b=eje8Ursct1D0W31dwoEfDdMW8PeH+hRDPpuBVCdXWPM7kEsWff1VfaF1j/Xruj/7cA+Yl/J5xa/o+aYS7iB8kL21AbH43gpRQKu8NJjrnVg5zwHDwbSCZAWajPA8c8cbX1e+AwxDhLGAE91x6o8qV+L2IQvWQOoxpdrt2VCrPDftqD4aV3qjP4ksXUBgAUFENbefj1mJp4cDvS918LgHdQ0kH3SAB07KLojRrqPpFRV+LqkTt0ZXgu078TcXUA3iK3GAj42CH2tfU+QD7gxJu4Qyl0qk09g94PyQr7wgdp02mK1R9QcU4nlK0f55romm5JjbO3Ko2wxPJSQLI2l9XQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qrBucp5j9d5P+Aa6ai22aVr5xSdGG617Xl+lF5okQig=;
+ b=QY9pTa+99aUYsSWb1/37U260ITcRzxrU4j952BZmdwiGTpoV//UwJxuGmDCbgOdRzW5cVNMi1B3v912XgGJzGEvLZpu7mjHJLmeu5/tk2g6N5Wnk89AwKNGfuisRrWCxd4pwORsTTPrIa4FHjlgu7VZlFAi1N3ilqVSC3AzrMCw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by PH7PR12MB7212.namprd12.prod.outlook.com (2603:10b6:510:207::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.32; Tue, 5 Sep
+ 2023 22:32:13 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::36f9:ffa7:c770:d146]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::36f9:ffa7:c770:d146%7]) with mapi id 15.20.6745.030; Tue, 5 Sep 2023
+ 22:32:13 +0000
+Message-ID: <2f1f0111-c9fb-472c-80b5-968267382e32@amd.com>
+Date:   Tue, 5 Sep 2023 17:32:08 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V5 1/7] x86: Drop CPU_SUP_INTEL from SCHED_MC_PRIO for the
+ expansion.
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Doug Smythies <dsmythies@telus.net>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <001d01d9d3a7$71736f50$545a4df0$@telus.net>
- <CAJZ5v0g=TEY0+dL9AGh1cYNnwQ=L6G8CRxXVD0AyWsaK5aDsdA@mail.gmail.com>
- <9665af79-d439-e05a-5333-62f71a2ac55c@linux.intel.com>
- <2023082901-moonscape-album-b7cc@gregkh>
- <02d8a574-a07a-f595-aee2-13908df74e68@linux.intel.com>
- <CAJZ5v0i4_PnCJGkkMzBMF9GX3N6LLNQdnuyX6nRzWHy_f9T=3A@mail.gmail.com>
-From:   Keyon Jie <yang.jie@linux.intel.com>
-In-Reply-To: <CAJZ5v0i4_PnCJGkkMzBMF9GX3N6LLNQdnuyX6nRzWHy_f9T=3A@mail.gmail.com>
+To:     Meng Li <li.meng@amd.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-acpi@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>
+References: <20230905015116.2268926-1-li.meng@amd.com>
+ <20230905015116.2268926-2-li.meng@amd.com>
+From:   Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <20230905015116.2268926-2-li.meng@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,LOTS_OF_MONEY,MONEY_NOHTML,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA1P222CA0194.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:806:3c4::19) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|PH7PR12MB7212:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6bb5408a-d65b-4b21-c1a8-08dbae5ff337
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DLl3vgO4e6KMmn+J38Mhw+DGqAO7n4Bs+QqkoIjyYtwrDSvEFhif25RbMS6elU3dlSPRrIavlRD3F5SQ0BzHdIIa5y1FwUyWnNVXteDMeFObQm6JFGwHd6nCkP/gn6i/pYxtCJqKrXzzGqbI+JAzc0EPW2oSpv6rZ4lAKMREtz3k9pnFIo8OsXq2wPuA2ccZUjTGIBca0eG29QFxvbyc54uq0M2eH6TfiEXkIP11usFdSefsdZ+vGDZXmIgK36OYuNG2JRdYoQ0VSpV8lxoxmSLTVqvR8y5GbzXHgOhRLEmB56VYEq8yGP1gAZ4HK/9EEpdwA1fcrRTaNzvPQIR6zcPXtA50QjoWkZ0eXpZLbyTBniCNw6idyIxQU8VscqaS1WETaETmL78gIuAe5L3kbfvw1sJIx9Tu8sTqq1UYQIGfsnQSxwZNww86qRpYEuMYYQI5BC0CBlKR3mbq6nFvWGbQn8OlxCPufWmhLDuMSgkcSRlMcdBhLpLZE7QuX0xETKW3U4ousxSHER3lLmeV5/+cw25Ji7qYVyiehJoczQ+Js9dwy3Qr8YzMicaUUvKiOWTzMsAIZZ6F0WjKHuknXgrMbkVgMw42r0wdgYdRRi4sYB+bE2Hpv7tdlbqtlXbLb2pJLo69WpmI0Jm+3ZP0FQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(136003)(346002)(376002)(366004)(39860400002)(451199024)(186009)(1800799009)(31686004)(53546011)(6486002)(6512007)(6506007)(6666004)(36756003)(38100700002)(86362001)(31696002)(2906002)(2616005)(4744005)(478600001)(26005)(83380400001)(66946007)(110136005)(4326008)(8936002)(8676002)(5660300002)(44832011)(316002)(54906003)(41300700001)(66476007)(6636002)(66556008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WFdOUWdPVE5VZ1NjbUZwU3JpZzdhN3kvSS9DVGNNZkJTYTkrRXJuaU9JVkhs?=
+ =?utf-8?B?TTBFSzBrbGRYQ1diYmhoY2tOQzVpQ2lmamE0QVpWbXNHMUhkcmJIRm9xZWFy?=
+ =?utf-8?B?YVQ4am4xUzFYTVptaFFZRXc5WDhjTnQ3dUs4WktNWVBmTVpJZlFHWFZIcHdG?=
+ =?utf-8?B?emNXeGxGbnNBUnNZTXlZL2dpQWdFQ3ZGRlBVd0hLY1JkMis2cEIwcjF5SlBt?=
+ =?utf-8?B?YUtibkNKSHFZbXg1bXNIbWxNZXVDRU8zTDlBNHlVVXdzV0FkMVdpcG5KWW9T?=
+ =?utf-8?B?MHRBcTR6VkJ6SFQ2VTBKZHlxMFN5enVnOU1zemxPRnJBZGp3dlVaNTU4N2lF?=
+ =?utf-8?B?ejVjdUdqQWdKekR3SkwycjNzRzBUQlh3RGw2TjBVUzZVRjlZTzlMQVMzbUF6?=
+ =?utf-8?B?bFBIbC9iOFlXbkdPeHVWZlZtenpwS2pQT2I1NjdTYzBmTlpBUVpCbDZMK1lu?=
+ =?utf-8?B?ZjV1d1d4VHJXR2J3ZFBWZ1l2TjN1aHlwTXlzTnhBZGFmOWhiZ1p2REZkOSt0?=
+ =?utf-8?B?OWFyY1ArUEpFNnJkdEJETWE2bEVVNUFvaGtLaHM0QVVzcU9uVlFuRm54bXl5?=
+ =?utf-8?B?dTZVT2c5T2RISVpwcVFSS0dHOUtpbmNUQVlzbXZpVGNCRmg0OHBid04rRzJj?=
+ =?utf-8?B?RVl1TUNmM1FUYTRxZW9sbmcvZnlQRWNYL0xJTzZyeWhDQklpZi80YzF2YkJD?=
+ =?utf-8?B?aXIzYmZXWTFIZldZMjhiUFRwWlE3cy9pT2RUMkpZOHZtSk9GOUQvdTJGNUo3?=
+ =?utf-8?B?eTBwTVNjS05HeFRPU0FJZUpmY2VmVWp1d25tV1lpaHFNVFFhUzhPWmU2M1Rz?=
+ =?utf-8?B?dENRcGVZaTFWaWFRcjBNVjg4S25odG00SWF0TkJzdkJKWk0rbFplOFNNUUgx?=
+ =?utf-8?B?aGFkYzUwTjFsTkdZZk9BSG9iN2lUSHUzb09DeFhGU1B2UTRJR1RRQmRyL0Zl?=
+ =?utf-8?B?WTQ0QzdOaEdFSENLSUJpNVVrNHVYbmF3ekY0YlM4cSsvMUxGT0xnYVcxVXJs?=
+ =?utf-8?B?Ny9KOTNVOS91aE5DWE5na1ZLY2d3UDFuWGpBdlZVYWd3bUk3cmV5OWFkMTRt?=
+ =?utf-8?B?S21aenVZU01YeG1BZndmUW9XVmtaUzBSQlNhR2RPM1N0Qy85cWNvaDM5cTJW?=
+ =?utf-8?B?VkV0YnRIUis0alVqemVoOVBXUnl5d2dwNzFMY3hFTWVFenl6ZEhmdTlwUnhR?=
+ =?utf-8?B?MmI3UlMxdTJ2SnQwdFFsQ3Z2bWVkOW9DWmRyRzY2YkZibXhsNGdQOW5NbnBB?=
+ =?utf-8?B?ZE9OK1BGT1dmL240bHRkcGcwREZ6SkpvdVJia3dlbHRzbG1WdWhPdWFLTlRF?=
+ =?utf-8?B?anpNK2Z2ZGo4U3pFQTd1b1kvMDFzT2hsVzh4VjV1dVh6YzRHRWJUUnpyY1dq?=
+ =?utf-8?B?QWZZTDR1OTNXVDlKYzdCWUFVdjJaWjNFYllGb1NQMzFGd1RYWGNyb2FMNENm?=
+ =?utf-8?B?RkYxYnBXQmRvenVPc0tHMElrRSs2UFpDUFlQc3BiQlZseHF4cmsyaW1rWFEz?=
+ =?utf-8?B?T3BXU3BOSGJqQjBJSG8rcDFUK3RJK3JTYkJEV2RHcVZ1eUpEbjQ4TVR6MlFD?=
+ =?utf-8?B?QjVaQVFYdzNWSzhDdmhDbndhc3NIVzN4bURDaW0vNkxiMkhFQU9DT1dHc1lZ?=
+ =?utf-8?B?V1daU2FOZmZpYlA4SEJkV0ZFMHNLc3huMUkwUGZxaStmdzlIT0JZZzYxS3BB?=
+ =?utf-8?B?WkVpdmJhQjNxSTFtbkwzWVY2NWQySUlObmJHNis4TkxLTjJsZklzd3ZFUXZN?=
+ =?utf-8?B?YTNlRXRCZ2Y5emJoY2wrOVo0dlZRb0RwRkkyNHFWQ3VlbHVHQVVjdTFUMzJm?=
+ =?utf-8?B?L1lIanRDNVFIcDRQeWp4SWQySmVjdHhWV3o2R0puam1jS2E3UG9sSUN2Vnhr?=
+ =?utf-8?B?b2ltQzg5cW8rb2FjQkhRV2xpQTcrL2k2YXU3WWo2cHJNaDhQOXVDdlR6alY4?=
+ =?utf-8?B?NVU5SUhMUkxnMFI0czZBNFNXY3lYcDlDUkk2ZVNGcVFFanhFZDZ4ODN2aFk0?=
+ =?utf-8?B?N0pVODN4ZWcwU0syQ2pxNWtYMHNUWllMVjI5dkNjSTU1Y3JUc1R1QjQ4a2kv?=
+ =?utf-8?B?cngwNU5zZjdWZDZHbTdySjgvbWZqWEJqa3J0NFRyV2xQcE5YazdLazRyRjBF?=
+ =?utf-8?Q?Ihi5JR7+GU2lnZFhaAnwyuf2U?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6bb5408a-d65b-4b21-c1a8-08dbae5ff337
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2023 22:32:13.0097
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +zVRM3f61ILCFZtidvXyYtqk/XDgBrxI589Pbcg1003eOg+jWnV1w9//VU2SBRthDfLPvZSjhhH4ZWd4KALNHg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7212
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 9/5/23 11:30, Rafael J. Wysocki wrote:
-> On Tue, Sep 5, 2023 at 8:17 PM Keyon Jie <yang.jie@linux.intel.com> wrote:
->>
->>
->>
->> On 8/29/23 01:57, Greg KH wrote:
->>> On Mon, Aug 28, 2023 at 04:35:13PM -0700, Keyon Jie wrote:
->>>>
->>>>
->>>> On 8/22/23 04:46, Rafael J. Wysocki wrote:
->>>>> On Sun, Aug 20, 2023 at 10:46 PM Doug Smythies <dsmythies@telus.net> wrote:
->>>>>>
->>>>>> The intel_pstate CPU frequency scaling driver does not
->>>>>> use policy->cur and it is 0.
->>>>>> When the CPU frequency is outdated arch_freq_get_on_cpu()
->>>>>> will default to the nominal clock frequency when its call to
->>>>>> cpufreq_quick_getpolicy_cur returns the never updated 0.
->>>>>> Thus, the listed frequency might be outside of currently
->>>>>> set limits. Some users are complaining about the high
->>>>>> reported frequency, albeit stale, when their system is
->>>>>> idle and/or it is above the reduced maximum they have set.
->>>>>>
->>>>>> This patch will maintain policy_cur for the intel_pstate
->>>>>> driver at the current minimum CPU frequency.
->>>>>>
->>>>>> Reported-by: Yang Jie <yang.jie@linux.intel.com>
->>>>>> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217597
->>>>>> Signed-off-by: Doug Smythies <dsmythies@telus.net>
->>>>>> ---
->>>>>>
->>>>>> v1 -> v2:
->>>>>>       * v1 was a completely different approach, programming around
->>>>>>         the issue rather than fixing it at the source.
->>>>>>         reference:
->>>>>>         https://patchwork.kernel.org/project/linux-pm/patch/006901d9be8c$f4439930$dccacb90$@telus.net/
->>>>>>       * v2 does not fix an issue with the intel_cpufreq CPU scaling
->>>>>>         driver (A.K.A. the intel_pstate driver in passive mode) and
->>>>>>         the schedutil CPU frequency scaling governor when HWP is enabled
->>>>>>         where limit changes are not reflected in the stale listed frequencies.
->>>>>>         A fix for that will be some future patch.
->>>>>>
->>>>>> ---
->>>>>>     drivers/cpufreq/intel_pstate.c | 5 +++++
->>>>>>     1 file changed, 5 insertions(+)
->>>>>>
->>>>>> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
->>>>>> index 8ca2bce4341a..08284dee583a 100644
->>>>>> --- a/drivers/cpufreq/intel_pstate.c
->>>>>> +++ b/drivers/cpufreq/intel_pstate.c
->>>>>> @@ -2609,6 +2609,11 @@ static int intel_pstate_set_policy(struct cpufreq_policy *policy)
->>>>>>                            intel_pstate_clear_update_util_hook(policy->cpu);
->>>>>>                    intel_pstate_hwp_set(policy->cpu);
->>>>>>            }
->>>>>> +       /* policy current is never updated with the intel_pstate driver
->>>>>> +        * but it is used as a stale frequency value. So, keep it within
->>>>>> +        * limits.
->>>>>> +        */
->>>>>> +       policy->cur = policy->min;
->>>>>>
->>>>>>            mutex_unlock(&intel_pstate_limits_lock);
->>>>>>
->>>>>> --
->>>>>
->>>>> Applied as 6.6 material, with some mailer-induced white space damage
->>>>> fixed and the new comment adjusted to the kernel coding style.
->>>>>
->>>>> Thanks!
->>>>
->>>> Hi Doug and Rafael,
->>>>
->>>> Thank you for making the fix happen.
->>>>
->>>> Hi Greg,
->>>>
->>>> Will this be picked to the stable linux-6.1.y and linux-6.4.y kernel, it
->>>> could benefit to users there.
->>>
->>> Sure, when it hits Linus's tree, please follow the instructions in:
->>>       https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
->>> for how to get it merged.
->>
->> Thank you Greg.
->>
->> Hi Rafael,
->>
->> As the issue happens from the 5.18 onward kernels, we need the fix to be
->> picked for stable kernels after that, could you please help to add "Cc:
->> stable@vger.kernel.org" in the sign-off area when you send it to the
->> mainline?
+On 9/4/2023 20:51, Meng Li wrote:
+> amd-pstate driver also uses SCHED_MC_PRIO, so decouple the requirement
+> of CPU_SUP_INTEL from the dependencies to allow compilation in kernels
+> without Intel CPU support.
 > 
-> It's already merged, as commit d51847acb018 ("cpufreq: intel_pstate:
-> set stale CPU frequency to minimum").
+> Signed-off-by: Meng Li <li.meng@amd.com>
+
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+
+> ---
+>   arch/x86/Kconfig | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> Please feel free to send an inclusion request for it to stable@vger.kernel.org
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 8d9e4b362572..887421b5ee8f 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -1052,8 +1052,9 @@ config SCHED_MC
+>   
+>   config SCHED_MC_PRIO
+>   	bool "CPU core priorities scheduler support"
+> -	depends on SCHED_MC && CPU_SUP_INTEL
+> -	select X86_INTEL_PSTATE
+> +	depends on SCHED_MC
+> +	select X86_INTEL_PSTATE if CPU_SUP_INTEL
+> +	select X86_AMD_PSTATE if CPU_SUP_AMD
+>   	select CPU_FREQ
+>   	default y
+>   	help
 
-Thank you Rafael, will do.
-
-Thanks,
-~Keyon
-
-> 
-> Thanks!
