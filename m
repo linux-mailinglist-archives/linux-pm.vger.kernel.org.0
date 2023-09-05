@@ -2,163 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255D17925EE
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Sep 2023 18:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15915792D51
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Sep 2023 20:20:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239429AbjIEQHz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Sep 2023 12:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
+        id S239176AbjIESUK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Sep 2023 14:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354720AbjIENuu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Sep 2023 09:50:50 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E06197
-        for <linux-pm@vger.kernel.org>; Tue,  5 Sep 2023 06:50:46 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-68a402c1fcdso1587144b3a.1
-        for <linux-pm@vger.kernel.org>; Tue, 05 Sep 2023 06:50:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693921846; x=1694526646; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8746KGEIMDYvZy66/CTNAkcgr/TmGj5aYpS8lwWYVY4=;
-        b=VdDtTqAhtNYocHoiJ9gVHQu/RRHFvUxUN0VLFX4b4PcaZGilpvNYsTb19CqYFX1wFx
-         XUAnubf9yBXcyRp8+GGmTZq7i8J3dtYOG3m1rmHnLl1itnPdZURPtVpF6kNYWyAdzprG
-         7wyonjqB8D0fR9WV+mVObsg0wZdwYSsygeUi+bOOmI26x5/skn0HBimEDnQnADeDO/Tu
-         oahms2UAjUCcE8F9aWfJ+tXRM7ebf9NJImAP/l0Q+inapHnPJ2uINpdNM8F/YW2XDm0T
-         b+O8qyhVjAf5jttGjKvJyhU5vOBNFaBB0WnKfLfZ3ci3GKMLPW6tukYHJDi0gyyw47iB
-         d5VQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693921846; x=1694526646;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8746KGEIMDYvZy66/CTNAkcgr/TmGj5aYpS8lwWYVY4=;
-        b=aS+vs6SwBXX5lwbQvRD8uBe2zWkiJc8sKu2djqQNBEPPwKDzeY4lKkBp1vSCeFePsU
-         hL6Wa73fc8VlYA4AaAoZvMrUoJ+n6oOMngKg3GHAXd7Ynn4PHFjRQQF7TfZoSnFKBthr
-         3De/0swPdaGeci+3OYHunBL76P2DR/ynyb5IXYUzCM+uBijmcnxpANm5vs0bA2nE8eJa
-         iTKxYmWhes7TcVpfGU627UCQc0xBf7lok4AOMBbjncC13n7am+Ws+8HEUeXqVvVcHmBu
-         3ifKctirktiMtoQ3P1EBjUdHQ2/eWe7wiVnc+1EwhAAGlEwjgQBXuKOL27ALtcPJqTAT
-         pA1w==
-X-Gm-Message-State: AOJu0YwxK/5LugsGhBNdaH1DVcZOxkElDfyUXCOxIYTjJEfXg6yWJFZ9
-        diygMw6XSRT3rExiQTdJMz8Cg2RBzk7SAs4tn6A1bw==
-X-Google-Smtp-Source: AGHT+IHyxlfWoLfe4fGuaYHNWVkerDWNPmsQOGwuwZTCoO+MCc5SzD8LdTfSRFNhOHbuXHxmu5RBbYiGz+ziPJEEFVE=
-X-Received: by 2002:a05:6a00:1705:b0:68c:33a9:e572 with SMTP id
- h5-20020a056a00170500b0068c33a9e572mr13265343pfc.29.1693921846035; Tue, 05
- Sep 2023 06:50:46 -0700 (PDT)
+        with ESMTP id S241005AbjIESTy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Sep 2023 14:19:54 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BACF9D;
+        Tue,  5 Sep 2023 11:19:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693937946; x=1725473946;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OJSFhDmct7oPXZQb2l3WGeV9v9ga9tNiVzoHRU4k9cg=;
+  b=mOOb4+FHtNblDOiLvctj+5dhs1b6fYT58hw+KafiqXEmE6gTMeSU5UJE
+   xs63Q6ArHCzMATMmyLPslrZS4k4jKsaxLZidEmoSnr1qN4ZS1UX9eFqNN
+   sw16KC/SPvCnRui49EGnrr9dFlb9zgdO4Rjh5r+Cvg+QY7saKRGk7rMTy
+   WyaelmEktCOBC0dg5O7S2HQpmmhMk9ASSF4ZD4w/0aLRPTtq8UZRFoSNE
+   xozbh2Yw+Wv1Lp5I9FyX7cLJyL4qfpvwR9zeAGoUDCoxT3Lhiqaz1WKro
+   Rke3s4e+0w45/m54YJlxSXzgolVFgrhqfApAkzIpqZ4x9G3WnLQKfIhfK
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10824"; a="361901615"
+X-IronPort-AV: E=Sophos;i="6.02,229,1688454000"; 
+   d="scan'208";a="361901615"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2023 11:17:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10824"; a="717963958"
+X-IronPort-AV: E=Sophos;i="6.02,229,1688454000"; 
+   d="scan'208";a="717963958"
+Received: from yjie-desk1.jf.intel.com (HELO [10.24.100.126]) ([10.24.100.126])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2023 11:17:56 -0700
+Message-ID: <02d8a574-a07a-f595-aee2-13908df74e68@linux.intel.com>
+Date:   Tue, 5 Sep 2023 11:17:42 -0700
 MIME-Version: 1.0
-References: <20230901130312.247719-1-vincent.guittot@linaro.org>
- <20230901130312.247719-4-vincent.guittot@linaro.org> <20230905112455.GD28319@noisy.programming.kicks-ass.net>
-In-Reply-To: <20230905112455.GD28319@noisy.programming.kicks-ass.net>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Tue, 5 Sep 2023 15:50:34 +0200
-Message-ID: <CAKfTPtCt7m5c0y1ttF3k3coZ34fbALpAToK5vUpgtZVTPwNrzg@mail.gmail.com>
-Subject: Re: [PATCH 3/4] cpufreq/schedutil: use a fixed reference frequency
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
-        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
-        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, viresh.kumar@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
-        conor.dooley@microchip.com, suagrfillet@gmail.com,
-        ajones@ventanamicro.com, lftan@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH v2] cpufreq: intel_pstate: set stale CPU frequency to
+ minimum
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Doug Smythies <dsmythies@telus.net>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <001d01d9d3a7$71736f50$545a4df0$@telus.net>
+ <CAJZ5v0g=TEY0+dL9AGh1cYNnwQ=L6G8CRxXVD0AyWsaK5aDsdA@mail.gmail.com>
+ <9665af79-d439-e05a-5333-62f71a2ac55c@linux.intel.com>
+ <2023082901-moonscape-album-b7cc@gregkh>
+Content-Language: en-US
+From:   Keyon Jie <yang.jie@linux.intel.com>
+In-Reply-To: <2023082901-moonscape-album-b7cc@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,LOTS_OF_MONEY,MONEY_NOHTML,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 5 Sept 2023 at 13:25, Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Fri, Sep 01, 2023 at 03:03:11PM +0200, Vincent Guittot wrote:
->
-> > +#ifdef arch_scale_freq_ref
-> > +/**
-> > + * arch_scale_freq_ref_policy - get the reference frequency of a given CPU that
-> > + * has been used to correlate frequency and compute capacity.
-> > + * @cpu: the CPU in question.
-> > + *
-> > + * Return: the reference CPU frequency.
-> > + */
-> > +static __always_inline
-> > +unsigned long  arch_scale_freq_ref_policy(struct cpufreq_policy *policy)
-> > +{
-> > +     return arch_scale_freq_ref(policy->cpu);
-> > +}
-> > +#else
-> > +static __always_inline
-> > +unsigned long  arch_scale_freq_ref_policy(struct cpufreq_policy *policy)
->
-> double space    ^^
 
-I was expecting checkpatch.pl to catch it
 
-will fix them
+On 8/29/23 01:57, Greg KH wrote:
+> On Mon, Aug 28, 2023 at 04:35:13PM -0700, Keyon Jie wrote:
+>>
+>>
+>> On 8/22/23 04:46, Rafael J. Wysocki wrote:
+>>> On Sun, Aug 20, 2023 at 10:46 PM Doug Smythies <dsmythies@telus.net> wrote:
+>>>>
+>>>> The intel_pstate CPU frequency scaling driver does not
+>>>> use policy->cur and it is 0.
+>>>> When the CPU frequency is outdated arch_freq_get_on_cpu()
+>>>> will default to the nominal clock frequency when its call to
+>>>> cpufreq_quick_getpolicy_cur returns the never updated 0.
+>>>> Thus, the listed frequency might be outside of currently
+>>>> set limits. Some users are complaining about the high
+>>>> reported frequency, albeit stale, when their system is
+>>>> idle and/or it is above the reduced maximum they have set.
+>>>>
+>>>> This patch will maintain policy_cur for the intel_pstate
+>>>> driver at the current minimum CPU frequency.
+>>>>
+>>>> Reported-by: Yang Jie <yang.jie@linux.intel.com>
+>>>> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217597
+>>>> Signed-off-by: Doug Smythies <dsmythies@telus.net>
+>>>> ---
+>>>>
+>>>> v1 -> v2:
+>>>>      * v1 was a completely different approach, programming around
+>>>>        the issue rather than fixing it at the source.
+>>>>        reference:
+>>>>        https://patchwork.kernel.org/project/linux-pm/patch/006901d9be8c$f4439930$dccacb90$@telus.net/
+>>>>      * v2 does not fix an issue with the intel_cpufreq CPU scaling
+>>>>        driver (A.K.A. the intel_pstate driver in passive mode) and
+>>>>        the schedutil CPU frequency scaling governor when HWP is enabled
+>>>>        where limit changes are not reflected in the stale listed frequencies.
+>>>>        A fix for that will be some future patch.
+>>>>
+>>>> ---
+>>>>    drivers/cpufreq/intel_pstate.c | 5 +++++
+>>>>    1 file changed, 5 insertions(+)
+>>>>
+>>>> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+>>>> index 8ca2bce4341a..08284dee583a 100644
+>>>> --- a/drivers/cpufreq/intel_pstate.c
+>>>> +++ b/drivers/cpufreq/intel_pstate.c
+>>>> @@ -2609,6 +2609,11 @@ static int intel_pstate_set_policy(struct cpufreq_policy *policy)
+>>>>                           intel_pstate_clear_update_util_hook(policy->cpu);
+>>>>                   intel_pstate_hwp_set(policy->cpu);
+>>>>           }
+>>>> +       /* policy current is never updated with the intel_pstate driver
+>>>> +        * but it is used as a stale frequency value. So, keep it within
+>>>> +        * limits.
+>>>> +        */
+>>>> +       policy->cur = policy->min;
+>>>>
+>>>>           mutex_unlock(&intel_pstate_limits_lock);
+>>>>
+>>>> --
+>>>
+>>> Applied as 6.6 material, with some mailer-induced white space damage
+>>> fixed and the new comment adjusted to the kernel coding style.
+>>>
+>>> Thanks!
+>>
+>> Hi Doug and Rafael,
+>>
+>> Thank you for making the fix happen.
+>>
+>> Hi Greg,
+>>
+>> Will this be picked to the stable linux-6.1.y and linux-6.4.y kernel, it
+>> could benefit to users there.
+> 
+> Sure, when it hits Linus's tree, please follow the instructions in:
+>      https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+> for how to get it merged.
 
->
-> > +{
-> > +     if (arch_scale_freq_invariant())
-> > +             return policy->cpuinfo.max_freq;
-> > +
-> > +
->
-> superfluous whitespace there.
->
-> > +     return policy->cur;
-> > +}
-> > +#endif
->
-> static __always_inline
-> unsigned long arch_scale_freq_ref_policy(struct cpufreq_policy *policy)
-> {
-> #ifdef arch_scale_freq_ref
->         return arch_scale_freq_ref(policy->cpu);
-> #endif
->
->         if (arch_scale_freq_invariant())
->                 return policy->cpuinfo.max_freq;
->
->         return policy->cur;
-> }
->
-> Would have the lot in a single function and possibly easier to read?
+Thank you Greg.
 
-yes
+Hi Rafael,
 
->
-> > +
-> >  /**
-> >   * get_next_freq - Compute a new frequency for a given cpufreq policy.
-> >   * @sg_policy: schedutil policy object to compute the new frequency for.
-> > @@ -139,11 +164,11 @@ static void sugov_deferred_update(struct sugov_policy *sg_policy)
-> >  static unsigned int get_next_freq(struct sugov_policy *sg_policy,
-> >                                 unsigned long util, unsigned long max)
-> >  {
-> > +     unsigned int freq;
-> >       struct cpufreq_policy *policy = sg_policy->policy;
-> > -     unsigned int freq = arch_scale_freq_invariant() ?
-> > -                             policy->cpuinfo.max_freq : policy->cur;
->
-> Leave the variable below per the inverse christmas thing.
->
-> >
-> >       util = map_util_perf(util);
-> > +     freq = arch_scale_freq_ref_policy(policy);
-> >       freq = map_util_freq(util, freq, max);
-> >
-> >       if (freq == sg_policy->cached_raw_freq && !sg_policy->need_freq_update)
-> > --
-> > 2.34.1
-> >
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+As the issue happens from the 5.18 onward kernels, we need the fix to be 
+picked for stable kernels after that, could you please help to add "Cc: 
+stable@vger.kernel.org" in the sign-off area when you send it to the 
+mainline?
+
+Thank you,
+~Keyon
+
+> 
+> thanks,
+> 
+> greg k-h
