@@ -2,199 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F3A793C65
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Sep 2023 14:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 097B4793C6E
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Sep 2023 14:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236607AbjIFMMy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Sep 2023 08:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
+        id S234734AbjIFMOX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Sep 2023 08:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240590AbjIFMMy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Sep 2023 08:12:54 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A17E71;
-        Wed,  6 Sep 2023 05:12:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694002368; x=1725538368;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IX8tqAU4qqO4xD68t3JJmbkfL8h79O8BisSE4UjrixU=;
-  b=JzwTu5jodsE1ARpc0Ff0D+XJ+W2av1zvk6PIkdrq6AghZTPlWjqRnf0F
-   ndgjiuefGR4AsccBGPaklesK/tioIqXgZrFNHOBbyMkJgglfzKyPvgSTQ
-   lpTL/Rhjq9k9fMEK/FBVwEhh0cH4m1HUfCzdHtZBhZAJn3eZN7zQblH9k
-   jE7Q8SgNPhl+gtLl57irBRWB4hwQEkvurpMcEA1YX8lo/Y0vVJTuBPcny
-   26y0TIB47ZaXYCyz0jNhSvDW/NgRB4SGlDwuRuvkDxS/fjLF04q7DuRO4
-   jsS9lACZhWverDpc6htDeYe8muNaSkEx5JFNEUIHAabUKDwnhUb0pbj+2
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="357362012"
-X-IronPort-AV: E=Sophos;i="6.02,231,1688454000"; 
-   d="scan'208";a="357362012"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2023 05:12:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="806982511"
-X-IronPort-AV: E=Sophos;i="6.02,231,1688454000"; 
-   d="scan'208";a="806982511"
-Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 06 Sep 2023 05:12:03 -0700
-Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qdrO4-0000Bh-2d;
-        Wed, 06 Sep 2023 12:12:00 +0000
-Date:   Wed, 6 Sep 2023 20:11:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Meng Li <li.meng@amd.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Shimmer Huang <shimmer.huang@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>
-Subject: Re: [PATCH V5 3/7] cpufreq: amd-pstate: Enable amd-pstate preferred
- core supporting.
-Message-ID: <202309061958.4wimkcbo-lkp@intel.com>
-References: <20230905015116.2268926-4-li.meng@amd.com>
+        with ESMTP id S229454AbjIFMOX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Sep 2023 08:14:23 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4926E1713
+        for <linux-pm@vger.kernel.org>; Wed,  6 Sep 2023 05:14:18 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-99bcfe28909so518659266b.3
+        for <linux-pm@vger.kernel.org>; Wed, 06 Sep 2023 05:14:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694002457; x=1694607257; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=I9Bg/dVDxo6+g7+rfRY3uAFK7nbPJavtKsvDCjgO83M=;
+        b=SWORc7IVDuFZ3ZAJTGAQxrFg4mRJ/KVbZEbqpVmBvHne+SJkBuEEnybAKLRsl254IY
+         U0OF2lquiYUpPrEbna05Px1KfsURKF5H5sF+WPd7jiCfNKqJ928R7UF72TtvDC9wWF7f
+         N6srf/GR1fe4GLMO6Jt1H9UvpBF2VsGNr9oBD9ArZUB7jHOol2Cs7zCyHWrojvulR1iy
+         FoNntshOix+cA0qKIWj5iBatAhUmemETiKqiv7JiXI7MdTlpUlVwz5hRTfDZRDabfUAW
+         iGIYGbeZ3JZ4K9j0s/Sn/TCzErZHUZHkON0//tDZWwCRwoZLIRDT8ICV3CEQ/xdMYKTg
+         qeuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1694002457; x=1694607257;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=I9Bg/dVDxo6+g7+rfRY3uAFK7nbPJavtKsvDCjgO83M=;
+        b=Ab5MEQ65ArP3zjvE2hvaw4/vOxyCwXlbDLssDjmNyI9Gn293aLVacCarJcZNLtv+oY
+         9dDdjqR1ZGgTAdVD8Z9hJferWzUmNydISRRXAuvB160G/rdl9Rr8Pd5j8gYZGYVVV6V/
+         7hK34Dh+9Hq+JYxH5rblgx0ZB/XpURKfozrIlpaD/sKcSONvzQFY341XX2+GMnYIfTjY
+         mJkh3OAdO7KJgDSsQC6IjylL9mX3lYA85h6SNk9d3rEqKkDwp1/RtdSXrUvDyYoR1OpB
+         1Z3GQht4rdYl4zaHUR8mYKnaxra65/eapep0+4pQu/YXjkQEXnPdJWZJxyB/Hfa3pBPS
+         5dhg==
+X-Gm-Message-State: AOJu0Yx0Me7p5HL0LFgifXv3xhhOFjEzpxtER7tj37+KCoTk7d+0oiyf
+        Dw7THBpc5BbyyzvDoChZc2sPxw==
+X-Google-Smtp-Source: AGHT+IH1I047qgp4y+1te3h85OCKarvoSoPFP7FaNdo0dTzZvZK0rxlW12L/JPkfB2o/sYR65Beq3A==
+X-Received: by 2002:a17:906:5dae:b0:9a1:c659:7c62 with SMTP id n14-20020a1709065dae00b009a1c6597c62mr2058303ejv.66.1694002456757;
+        Wed, 06 Sep 2023 05:14:16 -0700 (PDT)
+Received: from [192.168.37.154] (178235177204.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.204])
+        by smtp.gmail.com with ESMTPSA id rn5-20020a170906d92500b0099cc402d3ddsm8800515ejb.202.2023.09.06.05.14.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Sep 2023 05:14:16 -0700 (PDT)
+Message-ID: <10520827-dc01-475c-b09a-35cefc9e0a62@linaro.org>
+Date:   Wed, 6 Sep 2023 14:14:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230905015116.2268926-4-li.meng@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/53] icc-rpmh multi-RSC voting groundwork
+Content-Language: en-US
+To:     Mike Tipton <quic_mdtipton@quicinc.com>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230708-topic-rpmh_icc_rsc-v1-0-b223bd2ac8dd@linaro.org>
+ <c067a45f-9629-d516-9e56-36538e4ff6db@kernel.org>
+ <20230807215739.GA9621@hu-mdtipton-lv.qualcomm.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <20230807215739.GA9621@hu-mdtipton-lv.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Meng,
+On 7.08.2023 23:57, Mike Tipton wrote:
+> On Thu, Aug 03, 2023 at 07:48:08PM +0300, Georgi Djakov wrote:
+>> Hi Konrad,
+>>
+>> On 11.07.23 15:17, Konrad Dybcio wrote:
+>>> Many parts of Qualcomm SoCs are entirely independent of each other and can
+>>> run when the other parts are off. The RPMh system architecture embraces
+>>> this by giving each (loosely defined) subsystem its own connection (as in,
+>>> physical wires) to the AOSS, terminated by per-subsystem RSCs (Resource
+>>> State Coordinators) that barter for power, bandwidth etc.
+>>>
+>>> This series introduces the groundwork necessary for voting for resources
+>>> through non-APPS RSCs. It should allow for lower-latency vote adjustments
+>>> (e.g. for very high bandwidth / multiple displays) and could potentially
+>>> allow for full APSS collapse while keeping e.g. MDSS operating (say
+>>> refreshing an image from a RAM buffer).
+>>
+>> This is good stuff. Thanks for working on it! Actually the path tagging,
+>> that have been introduced some time ago could be used for supporting the
+>> multiple RSCs. Today we can get the tags from DT, and tag the path with
+>> some DISP_RSC flag (for example) and avoid the qcom,bcm-voter-idx property.
+>>
+>> Mike has been also looking into this, so maybe he can share his thoughts.
+>>
+> 
+> Yeah, the current way we've been supporting multiple voters (e.g. RSCs)
+> doesn't scale. We currently duplicate the topology for any path that
+> requires a secondary, non-APSS voter. Which means we have duplicates
+> nodes and bindings for each hop in those paths, even though there's only
+> a single logical path.
+> 
+> For example, in qcom/sm8550.c, each node and BCM ending with _disp,
+> _ife_0, _ife_1, or _ife_2 is a duplicate. The only reason they exist is
+> to allow clients to target their votes to the non-APPS voters. And to
+> provide separate, voter-specific buckets of aggregation. But everything
+> else about them is 100% identical to their default APPS counterparts.
+> For sm8550, this amounts to roughly 643 extra lines of code.
+> 
+> Initially there was only the one secondary display voter, so the scaling
+> problem wasn't a huge issue. But sm8550 has four voters. And future SOCs
+> will have even more.
+> 
+> We should only define the logical topology once. The ratio of NOC ports
+> to interconnect nodes should be 1:1, rather than 1:N where N is the
+> number of voters that care about them.
+> 
+> The general idea is that we could use tags for this. So, instead of...
+> 
+>   path = icc_get(dev, MASTER_MDP_DISP, SLAVE_EBI1_DISP);
+> 
+> it would be...
+> 
+>   path = icc_get(dev, MASTER_MDP, SLAVE_EBI1);
+>   icc_set_tag(path, QCOM_ICC_TAG_VOTER_DISP);
+> 
+> I have an early prototype with basic testing already. I can hopefully
+> clean it up and post for review in the next couple of weeks.
+I was initially not very happy with this approach (overloading tags
+with additional information), but it grew on me over time.
 
-kernel test robot noticed the following build warnings:
+My only concern is that if we reserve say bits 16-31 for path tags
+(remember, dt-bindings are ABI), we may eventually run out of them.
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on linus/master v6.5 next-20230906]
-[cannot apply to tip/x86/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Meng-Li/x86-Drop-CPU_SUP_INTEL-from-SCHED_MC_PRIO-for-the-expansion/20230906-003754
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20230905015116.2268926-4-li.meng%40amd.com
-patch subject: [PATCH V5 3/7] cpufreq: amd-pstate: Enable amd-pstate preferred core supporting.
-config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20230906/202309061958.4wimkcbo-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230906/202309061958.4wimkcbo-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309061958.4wimkcbo-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/node.h:18,
-                    from include/linux/cpu.h:17,
-                    from include/linux/cpufreq.h:12,
-                    from drivers/cpufreq/amd-pstate.c:30:
->> include/linux/device.h:198:33: warning: 'dev_attr_hw_prefcore' defined but not used [-Wunused-variable]
-     198 |         struct device_attribute dev_attr_##_name = __ATTR_RO(_name)
-         |                                 ^~~~~~~~~
-   drivers/cpufreq/amd-pstate.c:1131:8: note: in expansion of macro 'DEVICE_ATTR_RO'
-    1131 | static DEVICE_ATTR_RO(hw_prefcore);
-         |        ^~~~~~~~~~~~~~
-
-
-vim +/dev_attr_hw_prefcore +198 include/linux/device.h
-
-ca22e56debc57b4 Kay Sievers        2011-12-14  123  
-ca22e56debc57b4 Kay Sievers        2011-12-14  124  ssize_t device_show_ulong(struct device *dev, struct device_attribute *attr,
-ca22e56debc57b4 Kay Sievers        2011-12-14  125  			  char *buf);
-ca22e56debc57b4 Kay Sievers        2011-12-14  126  ssize_t device_store_ulong(struct device *dev, struct device_attribute *attr,
-ca22e56debc57b4 Kay Sievers        2011-12-14  127  			   const char *buf, size_t count);
-ca22e56debc57b4 Kay Sievers        2011-12-14  128  ssize_t device_show_int(struct device *dev, struct device_attribute *attr,
-ca22e56debc57b4 Kay Sievers        2011-12-14  129  			char *buf);
-ca22e56debc57b4 Kay Sievers        2011-12-14  130  ssize_t device_store_int(struct device *dev, struct device_attribute *attr,
-ca22e56debc57b4 Kay Sievers        2011-12-14  131  			 const char *buf, size_t count);
-91872392f08486f Borislav Petkov    2012-10-09  132  ssize_t device_show_bool(struct device *dev, struct device_attribute *attr,
-91872392f08486f Borislav Petkov    2012-10-09  133  			char *buf);
-91872392f08486f Borislav Petkov    2012-10-09  134  ssize_t device_store_bool(struct device *dev, struct device_attribute *attr,
-91872392f08486f Borislav Petkov    2012-10-09  135  			 const char *buf, size_t count);
-ca22e56debc57b4 Kay Sievers        2011-12-14  136  
-cd00bc2ca42705b James Seo          2023-05-08  137  /**
-cd00bc2ca42705b James Seo          2023-05-08  138   * DEVICE_ATTR - Define a device attribute.
-cd00bc2ca42705b James Seo          2023-05-08  139   * @_name: Attribute name.
-cd00bc2ca42705b James Seo          2023-05-08  140   * @_mode: File mode.
-cd00bc2ca42705b James Seo          2023-05-08  141   * @_show: Show handler. Optional, but mandatory if attribute is readable.
-cd00bc2ca42705b James Seo          2023-05-08  142   * @_store: Store handler. Optional, but mandatory if attribute is writable.
-cd00bc2ca42705b James Seo          2023-05-08  143   *
-cd00bc2ca42705b James Seo          2023-05-08  144   * Convenience macro for defining a struct device_attribute.
-cd00bc2ca42705b James Seo          2023-05-08  145   *
-cd00bc2ca42705b James Seo          2023-05-08  146   * For example, ``DEVICE_ATTR(foo, 0644, foo_show, foo_store);`` expands to:
-cd00bc2ca42705b James Seo          2023-05-08  147   *
-cd00bc2ca42705b James Seo          2023-05-08  148   * .. code-block:: c
-cd00bc2ca42705b James Seo          2023-05-08  149   *
-cd00bc2ca42705b James Seo          2023-05-08  150   *	struct device_attribute dev_attr_foo = {
-cd00bc2ca42705b James Seo          2023-05-08  151   *		.attr	= { .name = "foo", .mode = 0644 },
-cd00bc2ca42705b James Seo          2023-05-08  152   *		.show	= foo_show,
-cd00bc2ca42705b James Seo          2023-05-08  153   *		.store	= foo_store,
-cd00bc2ca42705b James Seo          2023-05-08  154   *	};
-cd00bc2ca42705b James Seo          2023-05-08  155   */
-a7fd67062efc5b0 Kay Sievers        2005-10-01  156  #define DEVICE_ATTR(_name, _mode, _show, _store) \
-a7fd67062efc5b0 Kay Sievers        2005-10-01  157  	struct device_attribute dev_attr_##_name = __ATTR(_name, _mode, _show, _store)
-cd00bc2ca42705b James Seo          2023-05-08  158  
-cd00bc2ca42705b James Seo          2023-05-08  159  /**
-cd00bc2ca42705b James Seo          2023-05-08  160   * DEVICE_ATTR_PREALLOC - Define a preallocated device attribute.
-cd00bc2ca42705b James Seo          2023-05-08  161   * @_name: Attribute name.
-cd00bc2ca42705b James Seo          2023-05-08  162   * @_mode: File mode.
-cd00bc2ca42705b James Seo          2023-05-08  163   * @_show: Show handler. Optional, but mandatory if attribute is readable.
-cd00bc2ca42705b James Seo          2023-05-08  164   * @_store: Store handler. Optional, but mandatory if attribute is writable.
-cd00bc2ca42705b James Seo          2023-05-08  165   *
-cd00bc2ca42705b James Seo          2023-05-08  166   * Like DEVICE_ATTR(), but ``SYSFS_PREALLOC`` is set on @_mode.
-cd00bc2ca42705b James Seo          2023-05-08  167   */
-7fda9100bb8258b Christophe Leroy   2017-12-18  168  #define DEVICE_ATTR_PREALLOC(_name, _mode, _show, _store) \
-7fda9100bb8258b Christophe Leroy   2017-12-18  169  	struct device_attribute dev_attr_##_name = \
-7fda9100bb8258b Christophe Leroy   2017-12-18  170  		__ATTR_PREALLOC(_name, _mode, _show, _store)
-cd00bc2ca42705b James Seo          2023-05-08  171  
-cd00bc2ca42705b James Seo          2023-05-08  172  /**
-cd00bc2ca42705b James Seo          2023-05-08  173   * DEVICE_ATTR_RW - Define a read-write device attribute.
-cd00bc2ca42705b James Seo          2023-05-08  174   * @_name: Attribute name.
-cd00bc2ca42705b James Seo          2023-05-08  175   *
-cd00bc2ca42705b James Seo          2023-05-08  176   * Like DEVICE_ATTR(), but @_mode is 0644, @_show is <_name>_show,
-cd00bc2ca42705b James Seo          2023-05-08  177   * and @_store is <_name>_store.
-cd00bc2ca42705b James Seo          2023-05-08  178   */
-ced321bf9151535 Greg Kroah-Hartman 2013-07-14  179  #define DEVICE_ATTR_RW(_name) \
-ced321bf9151535 Greg Kroah-Hartman 2013-07-14  180  	struct device_attribute dev_attr_##_name = __ATTR_RW(_name)
-cd00bc2ca42705b James Seo          2023-05-08  181  
-cd00bc2ca42705b James Seo          2023-05-08  182  /**
-cd00bc2ca42705b James Seo          2023-05-08  183   * DEVICE_ATTR_ADMIN_RW - Define an admin-only read-write device attribute.
-cd00bc2ca42705b James Seo          2023-05-08  184   * @_name: Attribute name.
-cd00bc2ca42705b James Seo          2023-05-08  185   *
-cd00bc2ca42705b James Seo          2023-05-08  186   * Like DEVICE_ATTR_RW(), but @_mode is 0600.
-cd00bc2ca42705b James Seo          2023-05-08  187   */
-3022c6a1b4b76c4 Dan Williams       2020-06-25  188  #define DEVICE_ATTR_ADMIN_RW(_name) \
-3022c6a1b4b76c4 Dan Williams       2020-06-25  189  	struct device_attribute dev_attr_##_name = __ATTR_RW_MODE(_name, 0600)
-cd00bc2ca42705b James Seo          2023-05-08  190  
-cd00bc2ca42705b James Seo          2023-05-08  191  /**
-cd00bc2ca42705b James Seo          2023-05-08  192   * DEVICE_ATTR_RO - Define a readable device attribute.
-cd00bc2ca42705b James Seo          2023-05-08  193   * @_name: Attribute name.
-cd00bc2ca42705b James Seo          2023-05-08  194   *
-cd00bc2ca42705b James Seo          2023-05-08  195   * Like DEVICE_ATTR(), but @_mode is 0444 and @_show is <_name>_show.
-cd00bc2ca42705b James Seo          2023-05-08  196   */
-ced321bf9151535 Greg Kroah-Hartman 2013-07-14  197  #define DEVICE_ATTR_RO(_name) \
-ced321bf9151535 Greg Kroah-Hartman 2013-07-14 @198  	struct device_attribute dev_attr_##_name = __ATTR_RO(_name)
-cd00bc2ca42705b James Seo          2023-05-08  199  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Konrad
