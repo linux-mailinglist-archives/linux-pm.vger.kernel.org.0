@@ -2,33 +2,32 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B54287944B1
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Sep 2023 22:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 796377944F5
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Sep 2023 23:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234886AbjIFUoZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Sep 2023 16:44:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32846 "EHLO
+        id S234826AbjIFVNN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Sep 2023 17:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231821AbjIFUoY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Sep 2023 16:44:24 -0400
+        with ESMTP id S232411AbjIFVNN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Sep 2023 17:13:13 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4893E9;
-        Wed,  6 Sep 2023 13:44:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B8D891724;
+        Wed,  6 Sep 2023 14:13:08 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7633F106F;
-        Wed,  6 Sep 2023 13:44:58 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 16ECFC15;
+        Wed,  6 Sep 2023 14:13:46 -0700 (PDT)
 Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 36CB13F67D;
-        Wed,  6 Sep 2023 13:44:19 -0700 (PDT)
-Message-ID: <16dcf2b6-6921-10c7-ae75-a9f8015a9c85@arm.com>
-Date:   Wed, 6 Sep 2023 22:44:14 +0200
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C77FB3F7B4;
+        Wed,  6 Sep 2023 14:13:06 -0700 (PDT)
+Message-ID: <60a21021-87c5-b93d-4312-d41fbcd4ec43@arm.com>
+Date:   Wed, 6 Sep 2023 23:13:01 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [RFC PATCH 2/7] sched/pelt: Add a new function to approximate
- runtime to reach given util
+Subject: Re: [RFC PATCH 5/7] sched/schedutil: Add a new tunable to dictate
+ response time
 Content-Language: en-US
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
 To:     Qais Yousef <qyousef@layalina.io>, Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -37,13 +36,13 @@ To:     Qais Yousef <qyousef@layalina.io>, Ingo Molnar <mingo@kernel.org>,
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Lukasz Luba <lukasz.luba@arm.com>
 References: <20230827233203.1315953-1-qyousef@layalina.io>
- <20230827233203.1315953-3-qyousef@layalina.io>
- <bad29fb0-c734-853b-492b-ce2d01a293c5@arm.com>
-In-Reply-To: <bad29fb0-c734-853b-492b-ce2d01a293c5@arm.com>
+ <20230827233203.1315953-6-qyousef@layalina.io>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20230827233203.1315953-6-qyousef@layalina.io>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,77 +50,57 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/09/2023 14:56, Dietmar Eggemann wrote:
-> On 28/08/2023 01:31, Qais Yousef wrote:
->> It is basically the ramp-up time from 0 to a given value. Will be used
->> later to implement new tunable to control response time  for schedutil.
->>
->> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
->> ---
->>  kernel/sched/pelt.c  | 21 +++++++++++++++++++++
->>  kernel/sched/sched.h |  1 +
->>  2 files changed, 22 insertions(+)
->>
->> diff --git a/kernel/sched/pelt.c b/kernel/sched/pelt.c
->> index 50322005a0ae..f673b9ab92dc 100644
->> --- a/kernel/sched/pelt.c
->> +++ b/kernel/sched/pelt.c
->> @@ -487,3 +487,24 @@ unsigned long approximate_util_avg(unsigned long util, u64 delta)
->>  
->>  	return sa.util_avg;
->>  }
->> +
->> +/*
->> + * Approximate the required amount of runtime in ms required to reach @util.
->> + */
->> +u64 approximate_runtime(unsigned long util)
->> +{
->> +	struct sched_avg sa = {};
->> +	u64 delta = 1024; // period = 1024 = ~1ms
->> +	u64 runtime = 0;
->> +
->> +	if (unlikely(!util))
->> +		return runtime;
->> +
->> +	while (sa.util_avg < util) {
->> +		accumulate_sum(delta, &sa, 0, 0, 1);
->> +		___update_load_avg(&sa, 0);
->> +		runtime++;
->> +	}
->> +
->> +	return runtime;
->> +}
-> 
-> S_n = S_inv * (1 - 0.5^(t/hl))
-> 
-> t = hl * ln(1 - Sn/S_inv)/ln(0.5)
-> 
-> (1) for a little CPU (capacity_orig = 446)
-> 
-> t = 32ms * ln(1 - 446/1024)/ln(0.5)
-> 
-> t = 26ms
-> 
-> (2) for a big CPU (capacity = 1023 (*instead of 1024 since ln(0) not
->     defined
-> 
-> t = 32ms * ln(1 - 1023/1024)/ln(0.5)
-> 
-> t = 320ms
+On 28/08/2023 01:32, Qais Yousef wrote:
 
-Forgot half of what I wanted to ask:
+[...]
 
-And you want to be able to have a schedutil interface:
+> @@ -427,6 +427,23 @@ This governor exposes only one tunable:
+>  	The purpose of this tunable is to reduce the scheduler context overhead
+>  	of the governor which might be excessive without it.
+>  
+> +``respone_time_ms``
+> +	Amount of time (in milliseconds) required to ramp the policy from
+> +	lowest to highest frequency. Can be decreased to speed up the
+> +	responsiveness of the system, or increased to slow the system down in
+> +	hope to save power. The best perf/watt will depend on the system
+> +	characteristics and the dominant workload you expect to run. For
+> +	userspace that has smart context on the type of workload running (like
+> +	in Android), one can tune this to suite the demand of that workload.
+> +
+> +	Note that when slowing the response down, you can end up effectively
+> +	chopping off the top frequencies for that policy as the util is capped
+> +	to 1024. On HMP systems where some CPUs have a capacity less than 1024,
 
-/sys/devices/system/cpu/cpufreq/policy*/schedutil/response_time_ms
+HMP isn't used in mainline AFAIK. IMHO, the term `asymmetric CPU
+capacity` systems is used.
 
-in which by default we have 26ms for a CPU with the capacity_orig of 446.
+[...]
 
-I.e. you want to have a time-based interface there? Which the user can
-overwrite, say with 52ms and this then will lower the return value of
-get_next_freq() so the system will respond slower?
+> @@ -59,6 +61,45 @@ static DEFINE_PER_CPU(struct sugov_cpu, sugov_cpu);
+>  
+>  /************************ Governor internals ***********************/
+>  
+> +static inline u64 sugov_calc_freq_response_ms(struct sugov_policy *sg_policy)
+> +{
+> +	int cpu = cpumask_first(sg_policy->policy->cpus);
+> +	unsigned long cap = capacity_orig_of(cpu);
+> +
+> +	return approximate_runtime(cap);
+> +}
 
-And the time based interface is more intuitive than staying in the
-capacity world of [0-1024]?
+I can see the potential issue of schedutil being earlier initialized
+than the `max frequency scaling of cpu_capacity_orig` happens in
+drivers/base/arch_topology.c.
 
+So the response_time_ms setup for a little CPU on Juno-r0 wouldn't
+happen on cpu_capacity_orig = 446 -> 26ms but on on the raw capacity
+value from dt:
 
+    capacity-dmips-mhz = <578>
+
+So I would expect to see t = 32ms * ln(1 - 578/1024)/ln(0.5) = 38ms instead.
+
+We have a similar dependency between `max frequency scaled
+cpu_capacity_orig` and the EM setup code.
+
+[...]
