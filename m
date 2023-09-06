@@ -2,43 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B636794245
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Sep 2023 19:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E20794330
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Sep 2023 20:37:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242682AbjIFRvi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Sep 2023 13:51:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33712 "EHLO
+        id S244033AbjIFSgz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Sep 2023 14:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjIFRvh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Sep 2023 13:51:37 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D19B1BEE;
-        Wed,  6 Sep 2023 10:50:58 -0700 (PDT)
+        with ESMTP id S244054AbjIFSgf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Sep 2023 14:36:35 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2049.outbound.protection.outlook.com [40.107.94.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155251FE2;
+        Wed,  6 Sep 2023 11:35:38 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aWjb14uW/zl5ZiJhpdMnMaAjHbew4N4XH+H5fI3tCxfRTpKjZ894E7Z/SVstm2lH0FnOlQXX3h4R83fbdjq/b+9vaN+7Pw5qnSSoqaf5ov4gbqLOOI3BaMKemXk0k7xhNkjXW7v5lATp0FIKkb6WUK7HnZOsRaisISBIbJvnHbVAFr+fn+V24i/HoYyuJHKxwQ7FtturfeAbharT0futjV979hKvjcAQXgScW3ILBvxywgHPR5vIf7UmfrnjPnHfAlPHHjNhzWL3pp3fpoAxKcvpkGD8zWFXUTAxLnKjcXwRUDBxuvgm4R2p9AZiJC9YmZ+c2aEUI5XMhkOD87t1Iw==
+ b=hr7zHyeSPBA6bet4XLsR7tt2kRtwDugOfDq8o47H7HGbF4p945qvgpSqzH5rsrs8VO6XAVHPNMtXRro01xg8qLzxMpbf4kUnxAHYha8Hti2Jr/ioK/t/DVeUpDNVRmyR3Msw6MDkYCZmBTnKzD63rM4XMJQetGFHIqc0hz/Iixvtu/nmH6ZchrRktm2XtTuHl1+bPy7ja29ob//4JlwUBbhKGt1b90xhNzeYQvHK2IX+3aIS7t0rxYppu5fpNjOcfBfYrm9lWyjvmaA3mUGVJJ4t98PmTsS82KvtsjxKkSrCP+XS+aH3TadMcrxizLK9Zb8TBFSO171qmPVrI8KXgg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lb2jArSeuzdmxvEH+b+WIrmOlEd0m/wFiraHHeF/a/c=;
- b=aGjxWNdFVE5YuAEvGjAEZbzlT8OwYyKmGciiVVJuuYKLppe9NX/nVjj4ji0VQEXoO6/UAcnDtaI9E6v2oUepsNmqP2cI9J9Q0D14fVIUCxqlH7QoxLOaiXMlDYrc/ynPDTRg3UQwBUCl7MKk81/cQiPtEPE+bPygD1jHOSY8f2P06ukIcJo8qDitQFJIZe17zka71H5jmDzIZ9J8DXFQwr3C2WPdQG8WxrKyo0k5vsbD4NnCTsaRL8HC8+h2JbuJZ1JTGqQhtgVRcTq1F2BRmm2TtNwZD2N5rE3abFH7UUXtGfC//li05mVCguMnqFfr/MSRkLZhZvuGh5g+HE690w==
+ bh=bjzXPG0cjcYPAN2UdRZgUYJ47HQ0yBh0e1uXu4DBXd4=;
+ b=etw74rEoIDFFIk6HwWJ/WZCeolRyRb/WsDf+NOs6X3XhOjAjsLo84NIGIqAsLtOVwHx0a4+gBH526JrF9XpC9jk5lYa6+aT7cTI24S5+5KID1aEHqnBJewP6o4jelkHsBf5yECyDF6yoYP1/oQ36y03oH8EFKjgjB9bM67/5tnNvG3ducahS3sGaUroH8Si5t8Sm6t3Zw1o/iBkUbodne+q1HyUfPjh28JOpIvRPuRTkxoTtkrWvqbNl0loOMorL+khkXocqD977sc0uSJsACdY6HUnw+heWKBTGvYIwujGAyp0vDiYkKQPSAAGfho2fjXDmGpxjiWR/69BwhDLStw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lb2jArSeuzdmxvEH+b+WIrmOlEd0m/wFiraHHeF/a/c=;
- b=tokGn4Yd2pBdn3GaKwGTVnqYqy0tTsT4n5D+u1DtOeBxtaWB6mSDMxHPnMUeOfeplRurVbSvozP/dQZSP+QNoYJcbt/xF3WwUexL6j+xL6etO0KpeHvxgNW2ddAOEY35AtqyhnqWV3BBxlNvIyzCqS0B58ji9jYzZpTTpnR8W7E=
-Received: from CY5PR15CA0188.namprd15.prod.outlook.com (2603:10b6:930:82::9)
- by MN2PR12MB4486.namprd12.prod.outlook.com (2603:10b6:208:263::23) with
+ bh=bjzXPG0cjcYPAN2UdRZgUYJ47HQ0yBh0e1uXu4DBXd4=;
+ b=3ReITXkTmpVJHVu/X/sAuDYx8ZnSJ6E195kCwqrLFSvEXOzds81FmgriR2MjXIesnVzVLK2/VBfiVI0LhHleyp6n835O8CAt/3EgKKotD1BSdVEEFBoaA3AYAeNVGGyHbFGAIWOIqvYZeJKSdLKge0LATpu7Ld9tXSLpHJhBmb0=
+Received: from SJ0PR03CA0231.namprd03.prod.outlook.com (2603:10b6:a03:39f::26)
+ by BN9PR12MB5177.namprd12.prod.outlook.com (2603:10b6:408:11a::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.34; Wed, 6 Sep
- 2023 17:50:22 +0000
-Received: from CY4PEPF0000E9D6.namprd05.prod.outlook.com
- (2603:10b6:930:82:cafe::8) by CY5PR15CA0188.outlook.office365.com
- (2603:10b6:930:82::9) with Microsoft SMTP Server (version=TLS1_2,
+ 2023 18:34:55 +0000
+Received: from DS2PEPF00003448.namprd04.prod.outlook.com
+ (2603:10b6:a03:39f:cafe::4d) by SJ0PR03CA0231.outlook.office365.com
+ (2603:10b6:a03:39f::26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.36 via Frontend
- Transport; Wed, 6 Sep 2023 17:50:22 +0000
+ Transport; Wed, 6 Sep 2023 18:34:55 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -46,13 +46,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000E9D6.mail.protection.outlook.com (10.167.241.80) with Microsoft
+ DS2PEPF00003448.mail.protection.outlook.com (10.167.17.75) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6768.25 via Frontend Transport; Wed, 6 Sep 2023 17:50:22 +0000
+ 15.20.6768.25 via Frontend Transport; Wed, 6 Sep 2023 18:34:54 +0000
 Received: from BLR-5CG13462PL.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 6 Sep
- 2023 12:50:16 -0500
+ 2023 13:34:48 -0500
 From:   Wyes Karny <wyes.karny@amd.com>
 To:     Meng Li <li.meng@amd.com>
 CC:     Wyes Karny <wyes.karny@amd.com>,
@@ -71,12 +71,12 @@ CC:     Wyes Karny <wyes.karny@amd.com>,
         Xiaojian Du <Xiaojian.Du@amd.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH V5 5/7] cpufreq: amd-pstate: Update amd-pstate preferred core ranking dynamically
-Date:   Wed, 6 Sep 2023 23:19:37 +0530
-Message-ID: <20230906174756.n7itmfrc37crp2uz@BLR-5CG13462PL.amd.com>
+Subject: Re: [PATCH V5 3/7] cpufreq: amd-pstate: Enable amd-pstate preferred core supporting.
+Date:   Thu, 7 Sep 2023 00:04:32 +0530
+Message-ID: <20230906183311.o4tqxlhszpnaxhcf@BLR-5CG13462PL.amd.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230905015116.2268926-6-li.meng@amd.com>
-References: <20230905015116.2268926-1-li.meng@amd.com> <20230905015116.2268926-6-li.meng@amd.com>
+In-Reply-To: <20230905015116.2268926-4-li.meng@amd.com>
+References: <20230905015116.2268926-1-li.meng@amd.com> <20230905015116.2268926-4-li.meng@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
@@ -86,23 +86,23 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D6:EE_|MN2PR12MB4486:EE_
-X-MS-Office365-Filtering-Correlation-Id: b2dc9e82-1f1c-49e5-09d7-08dbaf01be28
+X-MS-TrafficTypeDiagnostic: DS2PEPF00003448:EE_|BN9PR12MB5177:EE_
+X-MS-Office365-Filtering-Correlation-Id: d7293ca9-a89e-4a5b-e521-08dbaf07f713
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: O9wxqCUs6SkZG+Z3yfR0cRDKhB7BEgOnnTdcCjDuFH0e6oaZ88/gkopfhuNKyg0Deei5s6R+f7s/NHMtGK347QhQeXdjhtiYzKrNbaBTRfbStfBNYGPTafEsRwLvAsmYHmhqhFiMIL1QAbpAMK4BJBqaS36ZUrv57I/q6qJdlvP2zNMknms9WeA/3le58awwUW5Vu3OUOkWsOQsHnTDRSbVv6LWtkl/QcV1HgwWBFh3m//Fg/DH9cjUrqvBLuG8vRsI7CEB7sEXI0k1WrYeJxooEIyY7hbFPyTAgmy4RM0pY63yq0aKH8z+dQwlAvUPHNgIx9TGjog2lsHVQF9YKVIDfXwlxarkxV+FAPM9CJt/vbrhRs+TfnYs9wzFvbM2gh6dgQ313kM4JnHRSobd0Tg7X05kSCkwRUnsIw0yJI5VucigRGCUsieXDT4TGpU0VwBnbHGTCByULi4eVysNBaMXqT+nST0XDsrR3X/hoxZ7PnJCnJY9wsEh76AE2tqB04TR/Y6wLCEnpfoKs4MsjWRXlaGqUFLrJkciivrp+NW+2F+b2HiFzc6h6/BapDogjH0tZuuw2Dt7FY3whez1H8PVgHLjGfMU+bvkLfCpNaMj908fiwUftXtvHGBnup90RGuy2hvyFaD1oilM44lws4RGELFUdDLvy84lflqv5nOnftCu9VnYX4nB+NFw5SEFB3lzSRk3jD0PVs7Suj7gzHVbqMW5owgfaY53GQa/TdVv/InKHQ8KEWJJMZz6AldQK
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(82310400011)(186009)(1800799009)(451199024)(46966006)(36840700001)(40470700004)(40460700003)(55016003)(66899024)(70206006)(54906003)(6636002)(70586007)(316002)(508600001)(81166007)(2906002)(356005)(86362001)(4326008)(8936002)(6862004)(44832011)(8676002)(36860700001)(83380400001)(5660300002)(15650500001)(7696005)(26005)(47076005)(16526019)(6666004)(336012)(426003)(1076003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: mvAPWwfS7P3faMaqz1j53hPJxFUvf6TsVSYdnVrFOVMWOQM7gnNMeoeBz0OL56mUE6g96AH0wpA17isaVXASBdu52ga9evOt9/SXImupec+u1FHmjlHFhcc9qa5JWkEUb+yV/reHoCcgEr1XsRCK23ibH8cwwgU5dYafaD7FjEn6xXICZdtdMt/ksgYG+llOJwW7UoabgvP4ezONeFRDP36LdQassZY2ZT/QniBGEBS8Aq9F4N5X7zch7oDm7yifDXUIYDwWMCbmS4PUqxuCpFwSPWK5H+zUuBoX8ajgyJKW3keT5s54p9XiTEhoTGScSqiAiXdPLUUNqvpxFXrwQHfibkqmqc3d9q+ZUGkpvZoxcUjQ5i8GpjpC0y02pnM4sV/S108qF/TicPqZwUwjfsAIlXsVgNrppuX3wej3BTj+gZKpOIJNZhCw6z28mOK/L8CwcJqTn6qIn56NLpp7r9pbqeRivTkrHAENZOJH+3qzLtL3pISvuWR12bZtaNGDGo6OEo2lU6x1GTWBMXyib26df0sJZvq4epjMrz+ST+YVmET0zncrQ0SjZOtX18oOfYWhDXSUMkt78chSV49KhgFX1nuL4YR9WVCwEP4VzpIif78aBYhRsD7bouFLZ9Zk9e8SrzXOFoJVWfwj8wBl3Bon/UvvQuozZKcXzTOMrD1UkjQ2OKvOYzfQziCuvjlfbyVG6HsFhogU8R3lXH2Nr47eR/QqgeQ6RhOcCmYeu1GM7YE1kGoQC9hey8bQNGaAiyGsV1WgvJoDO2BqzzRP4A==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(346002)(396003)(376002)(136003)(82310400011)(186009)(1800799009)(451199024)(40470700004)(36840700001)(46966006)(82740400003)(40460700003)(26005)(81166007)(16526019)(356005)(1076003)(7696005)(47076005)(36860700001)(336012)(426003)(55016003)(40480700001)(83380400001)(478600001)(4326008)(6862004)(8676002)(8936002)(44832011)(70586007)(70206006)(5660300002)(54906003)(86362001)(6636002)(316002)(6666004)(2906002)(41300700001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2023 17:50:22.2242
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2023 18:34:54.7183
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b2dc9e82-1f1c-49e5-09d7-08dbaf01be28
+X-MS-Exchange-CrossTenant-Network-Message-Id: d7293ca9-a89e-4a5b-e521-08dbaf07f713
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000E9D6.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DS2PEPF00003448.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4486
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5177
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -113,161 +113,302 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Meng Li,
-
 On 05 Sep 09:51, Meng Li wrote:
-> Preferred core rankings can be changed dynamically by the
-> platform based on the workload and platform conditions and
-> accounting for thermals and aging.
-> When this occurs, cpu priority need to be set.
+> amd-pstate driver utilizes the functions and data structures
+> provided by the ITMT architecture to enable the scheduler to
+> favor scheduling on cores which can be get a higher frequency
+> with lower voltage. We call it amd-pstate preferrred core.
 > 
+> Here sched_set_itmt_core_prio() is called to set priorities and
+> sched_set_itmt_support() is called to enable ITMT feature.
+> amd-pstate driver uses the highest performance value to indicate
+> the priority of CPU. The higher value has a higher priority.
+> 
+> The initial core rankings are set up by amd-pstate when the
+> system boots.
+> 
+> Add device attribute for hardware preferred core. It will check
+> if the processor and power firmware support preferred core
+> feature.
+> 
+> Add device attribute for preferred core. Only when hardware
+> supports preferred core and user set `enabled` in early parameter,
+> it can be set to enabled.
+> 
+> Add one new early parameter `disable` to allow user to disable
+> the preferred core.
+> 
+> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+> Co-developed-by: Perry Yuan <Perry.Yuan@amd.com>
 > Signed-off-by: Meng Li <li.meng@amd.com>
-> Reviewed-by: Wyes Karny <wyes.karny@amd.com>
+> Co-developed-by: Meng Li <li.meng@amd.com>
+> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
->  drivers/cpufreq/amd-pstate.c | 36 ++++++++++++++++++++++++++++++++++--
->  include/linux/amd-pstate.h   | 11 +++++++++++
->  2 files changed, 45 insertions(+), 2 deletions(-)
+>  drivers/cpufreq/amd-pstate.c | 131 ++++++++++++++++++++++++++++++-----
+>  1 file changed, 115 insertions(+), 16 deletions(-)
 > 
 > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 454eb6e789e7..8c19e1d50d29 100644
+> index 9a1e194d5cf8..454eb6e789e7 100644
 > --- a/drivers/cpufreq/amd-pstate.c
 > +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -318,6 +318,7 @@ static int pstate_init_perf(struct amd_cpudata *cpudata)
+> @@ -37,6 +37,7 @@
+>  #include <linux/uaccess.h>
+>  #include <linux/static_call.h>
+>  #include <linux/amd-pstate.h>
+> +#include <linux/topology.h>
+>  
+>  #include <acpi/processor.h>
+>  #include <acpi/cppc_acpi.h>
+> @@ -49,6 +50,8 @@
+>  
+>  #define AMD_PSTATE_TRANSITION_LATENCY	20000
+>  #define AMD_PSTATE_TRANSITION_DELAY	1000
+> +#define AMD_PSTATE_PREFCORE_THRESHOLD	166
+> +#define AMD_PSTATE_MAX_CPPC_PERF	255
+>  
+>  /*
+>   * TODO: We need more time to fine tune processors with shared memory solution
+> @@ -65,6 +68,12 @@ static struct cpufreq_driver amd_pstate_epp_driver;
+>  static int cppc_state = AMD_PSTATE_UNDEFINED;
+>  static bool cppc_enabled;
+>  
+> +/*HW preferred Core featue is supported*/
+> +static bool hw_prefcore = true;
+> +
+> +/*Preferred Core featue is supported*/
+> +static bool prefcore = true;
+> +
+>  /*
+>   * AMD Energy Preference Performance (EPP)
+>   * The EPP is used in the CCLK DPM controller to drive
+> @@ -290,23 +299,21 @@ static inline int amd_pstate_enable(bool enable)
+>  static int pstate_init_perf(struct amd_cpudata *cpudata)
+>  {
+>  	u64 cap1;
+> -	u32 highest_perf;
+>  
+>  	int ret = rdmsrl_safe_on_cpu(cpudata->cpu, MSR_AMD_CPPC_CAP1,
+>  				     &cap1);
+>  	if (ret)
+>  		return ret;
+>  
+> -	/*
+> -	 * TODO: Introduce AMD specific power feature.
+> -	 *
+> -	 * CPPC entry doesn't indicate the highest performance in some ASICs.
+> +	/* For platforms that do not support the preferred core feature, the
+> +	 * highest_pef may be configured with 166 or 255, to avoid max frequency
+> +	 * calculated wrongly. we take the AMD_CPPC_HIGHEST_PERF(cap1) value as
+> +	 * the default max perf.
+>  	 */
+> -	highest_perf = amd_get_highest_perf();
+> -	if (highest_perf > AMD_CPPC_HIGHEST_PERF(cap1))
+> -		highest_perf = AMD_CPPC_HIGHEST_PERF(cap1);
+> -
+> -	WRITE_ONCE(cpudata->highest_perf, highest_perf);
+> +	if (prefcore)
+> +		WRITE_ONCE(cpudata->highest_perf, AMD_PSTATE_PREFCORE_THRESHOLD);
+> +	else
+> +		WRITE_ONCE(cpudata->highest_perf, AMD_CPPC_HIGHEST_PERF(cap1));
+
+As mentioned in the v3, this should be checking hw_prefcore.
+
+For example: Let's consider a cap1 value for a CPU is: e752380d and the
+system can go to freq 3.5 GHz. The system supports preferred core but
+user added prefcore=disable command line option.
+
+Therefore below will be the perf values after amd_pstate init:
+
+lowest_perf: 13
+lowest_nonlinear_perf: 56
+nominal_perf: 82
+highest_perf: 231
+
+Let's say user selected userspace governor and tries to set frequency
+2.8 Ghz. Then des_perf calculation would be as below:
+
+des_perf = 2800000 * 231 / 3500000 = 184
+
+Which is wrong. Because HW only allows des_perf upto 166 (because HW
+supports preferred core).
+
+If we restrict highest_perf to 166 in preferred core supported (by HW)
+system, even when we disable preferred core from SW, then the des_perf
+calculation stays correct.
+
+des_perf = 2800000 * 166 / 3500000 = 132
+
+Therefore when user disables preferred core with prefcore=disable
+command line in a preferred core supported system, the highest_perf
+should be AMD_PSTATE_PREFCORE_THRESHOLD (166).
+
+>  
 >  	WRITE_ONCE(cpudata->nominal_perf, AMD_CPPC_NOMINAL_PERF(cap1));
 >  	WRITE_ONCE(cpudata->lowest_nonlinear_perf, AMD_CPPC_LOWNONLIN_PERF(cap1));
->  	WRITE_ONCE(cpudata->lowest_perf, AMD_CPPC_LOWEST_PERF(cap1));
-> +	WRITE_ONCE(cpudata->cppc_highest_perf, AMD_CPPC_HIGHEST_PERF(cap1));
+> @@ -318,17 +325,15 @@ static int pstate_init_perf(struct amd_cpudata *cpudata)
+>  static int cppc_init_perf(struct amd_cpudata *cpudata)
+>  {
+>  	struct cppc_perf_caps cppc_perf;
+> -	u32 highest_perf;
+>  
+>  	int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
+>  	if (ret)
+>  		return ret;
+>  
+> -	highest_perf = amd_get_highest_perf();
+> -	if (highest_perf > cppc_perf.highest_perf)
+> -		highest_perf = cppc_perf.highest_perf;
+> -
+> -	WRITE_ONCE(cpudata->highest_perf, highest_perf);
+> +	if (prefcore)
+> +		WRITE_ONCE(cpudata->highest_perf, AMD_PSTATE_PREFCORE_THRESHOLD);
+> +	else
+> +		WRITE_ONCE(cpudata->highest_perf, cppc_perf.highest_perf);
 
-Is there any reason to change this variable name form
-`prefcore_highest_perf`(in v3)  to `cppc_highest_perf`?  I feel
-`cppc_highest_perf` is bit confusing as there is already `highest_perf`
-variable present. How about something like `prefcore_ranking` variable
-name?
+Same here.
 
 Thanks,
 Wyes
-
 >  
->  	return 0;
->  }
-> @@ -339,6 +340,7 @@ static int cppc_init_perf(struct amd_cpudata *cpudata)
+>  	WRITE_ONCE(cpudata->nominal_perf, cppc_perf.nominal_perf);
 >  	WRITE_ONCE(cpudata->lowest_nonlinear_perf,
->  		   cppc_perf.lowest_nonlinear_perf);
->  	WRITE_ONCE(cpudata->lowest_perf, cppc_perf.lowest_perf);
-> +	WRITE_ONCE(cpudata->cppc_highest_perf, cppc_perf.highest_perf);
->  
->  	if (cppc_state == AMD_PSTATE_ACTIVE)
->  		return 0;
-> @@ -545,7 +547,7 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
->  	if (target_perf < capacity)
->  		des_perf = DIV_ROUND_UP(cap_perf * target_perf, capacity);
->  
-> -	min_perf = READ_ONCE(cpudata->highest_perf);
-> +	min_perf = READ_ONCE(cpudata->lowest_perf);
->  	if (_min_perf < capacity)
->  		min_perf = DIV_ROUND_UP(cap_perf * _min_perf, capacity);
->  
-> @@ -748,6 +750,34 @@ static void amd_pstate_init_prefcore(void)
->  	schedule_work(&sched_prefcore_work);
+> @@ -676,6 +681,73 @@ static void amd_perf_ctl_reset(unsigned int cpu)
+>  	wrmsrl_on_cpu(cpu, MSR_AMD_PERF_CTL, 0);
 >  }
 >  
-> +static void amd_pstate_update_highest_perf(unsigned int cpu)
+> +/*
+> + * Set amd-pstate preferred core enable can't be done directly from cpufreq callbacks
+> + * due to locking, so queue the work for later.
+> + */
+> +static void amd_pstste_sched_prefcore_workfn(struct work_struct *work)
 > +{
-> +	struct cpufreq_policy *policy;
-> +	struct amd_cpudata *cpudata;
-> +	u32 prev_high = 0, cur_high = 0;
-> +	u64 highest_perf;
+> +	sched_set_itmt_support();
+> +}
+> +static DECLARE_WORK(sched_prefcore_work, amd_pstste_sched_prefcore_workfn);
+> +
+> +/*
+> + * Get the highest performance register value.
+> + * @cpu: CPU from which to get highest performance.
+> + * @highest_perf: Return address.
+> + *
+> + * Return: 0 for success, -EIO otherwise.
+> + */
+> +static int amd_pstate_get_highest_perf(int cpu, u64 *highest_perf)
+> +{
 > +	int ret;
+> +
+> +	if (boot_cpu_has(X86_FEATURE_CPPC)) {
+> +		u64 cap1;
+> +
+> +		ret = rdmsrl_safe_on_cpu(cpu, MSR_AMD_CPPC_CAP1, &cap1);
+> +		if (ret)
+> +			return ret;
+> +		WRITE_ONCE(*highest_perf, AMD_CPPC_HIGHEST_PERF(cap1));
+> +	} else {
+> +		ret = cppc_get_highest_perf(cpu, highest_perf);
+> +	}
+> +
+> +	return (ret);
+> +}
+> +
+> +static void amd_pstate_init_prefcore(void)
+> +{
+> +	int cpu, ret;
+> +	u64 highest_perf;
 > +
 > +	if (!prefcore)
 > +		return;
 > +
-> +	ret = amd_pstate_get_highest_perf(cpu, &highest_perf);
-> +	if (ret)
-> +		return;
+> +	for_each_online_cpu(cpu) {
+> +		ret = amd_pstate_get_highest_perf(cpu, &highest_perf);
+> +		if (ret)
+> +			break;
 > +
-> +	policy = cpufreq_cpu_get(cpu);
-> +	cpudata = policy->driver_data;
-> +	cur_high = highest_perf;
-> +	prev_high = READ_ONCE(cpudata->cppc_highest_perf);
+> +		sched_set_itmt_core_prio(highest_perf, cpu);
 > +
-> +	if (prev_high != cur_high) {
-> +		WRITE_ONCE(cpudata->cppc_highest_perf, cur_high);
-> +		sched_set_itmt_core_prio(cur_high, cpu);
+> +		/* check if CPPC preferred core feature is enabled*/
+> +		if (highest_perf == AMD_PSTATE_MAX_CPPC_PERF) {
+> +			hw_prefcore = false;
+> +			prefcore = false;
+> +			return;
+> +		}
 > +	}
 > +
-> +	cpufreq_cpu_put(policy);
+> +	/*
+> +	 * This code can be run during CPU online under the
+> +	 * CPU hotplug locks, so sched_set_amd_prefcore_support()
+> +	 * cannot be called from here.  Queue up a work item
+> +	 * to invoke it.
+> +	 */
+> +	schedule_work(&sched_prefcore_work);
 > +}
 > +
 >  static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
 >  {
 >  	int min_freq, max_freq, nominal_freq, lowest_nonlinear_freq, ret;
-> @@ -912,7 +942,7 @@ static ssize_t show_amd_pstate_highest_perf(struct cpufreq_policy *policy,
->  	u32 perf;
->  	struct amd_cpudata *cpudata = policy->driver_data;
->  
-> -	perf = READ_ONCE(cpudata->highest_perf);
-> +	perf = READ_ONCE(cpudata->cppc_highest_perf);
->  
->  	return sysfs_emit(buf, "%u\n", perf);
+> @@ -1037,6 +1109,18 @@ static ssize_t status_store(struct device *a, struct device_attribute *b,
+>  	return ret < 0 ? ret : count;
 >  }
-> @@ -1479,6 +1509,7 @@ static struct cpufreq_driver amd_pstate_driver = {
->  	.suspend	= amd_pstate_cpu_suspend,
->  	.resume		= amd_pstate_cpu_resume,
->  	.set_boost	= amd_pstate_set_boost,
-> +	.update_highest_perf	= amd_pstate_update_highest_perf,
->  	.name		= "amd-pstate",
->  	.attr		= amd_pstate_attr,
->  };
-> @@ -1493,6 +1524,7 @@ static struct cpufreq_driver amd_pstate_epp_driver = {
->  	.online		= amd_pstate_epp_cpu_online,
->  	.suspend	= amd_pstate_epp_suspend,
->  	.resume		= amd_pstate_epp_resume,
-> +	.update_highest_perf	= amd_pstate_update_highest_perf,
->  	.name		= "amd-pstate-epp",
->  	.attr		= amd_pstate_epp_attr,
->  };
-> diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h
-> index 446394f84606..2159fd5693fe 100644
-> --- a/include/linux/amd-pstate.h
-> +++ b/include/linux/amd-pstate.h
-> @@ -31,6 +31,11 @@ struct amd_aperf_mperf {
->  	u64 mperf;
->  	u64 tsc;
->  };
-> +	/* For platforms that do not support the preferred core feature, the
-> +	 * highest_pef may be configured with 166 or 255, to avoid max frequency
-> +	 * calculated wrongly. we take the AMD_CPPC_HIGHEST_PERF(cap1) value as
-> +	 * the default max perf.
-> +	 */
 >  
->  /**
->   * struct amd_cpudata - private CPU data for AMD P-State
-> @@ -39,11 +44,16 @@ struct amd_aperf_mperf {
->   * @cppc_req_cached: cached performance request hints
->   * @highest_perf: the maximum performance an individual processor may reach,
->   *		  assuming ideal conditions
-> + *		  For platforms that do not support the preferred core feature, the
-> + *		  highest_pef may be configured with 166 or 255, to avoid max frequency
-> + *		  calculated wrongly. we take the fixed value as the highest_perf.
->   * @nominal_perf: the maximum sustained performance level of the processor,
->   *		  assuming ideal operating conditions
->   * @lowest_nonlinear_perf: the lowest performance level at which nonlinear power
->   *			   savings are achieved
->   * @lowest_perf: the absolute lowest performance level of the processor
-> + * @cppc_highest_perf: the maximum performance an individual processor may reach,
-> + *		  assuming ideal conditions
->   * @max_freq: the frequency that mapped to highest_perf
->   * @min_freq: the frequency that mapped to lowest_perf
->   * @nominal_freq: the frequency that mapped to nominal_perf
-> @@ -70,6 +80,7 @@ struct amd_cpudata {
->  	u32	nominal_perf;
->  	u32	lowest_nonlinear_perf;
->  	u32	lowest_perf;
-> +	u32     cppc_highest_perf;
+> +static ssize_t hw_prefcore_show(struct device *dev,
+> +				struct device_attribute *attr, char *buf)
+> +{
+> +	return sysfs_emit(buf, "%s\n", hw_prefcore ? "supported" : "unsupported");
+> +}
+> +
+> +static ssize_t prefcore_show(struct device *dev,
+> +			     struct device_attribute *attr, char *buf)
+> +{
+> +	return sysfs_emit(buf, "%s\n", prefcore ? "enabled" : "disabled");
+> +}
+> +
+>  cpufreq_freq_attr_ro(amd_pstate_max_freq);
+>  cpufreq_freq_attr_ro(amd_pstate_lowest_nonlinear_freq);
 >  
->  	u32	max_freq;
->  	u32	min_freq;
+> @@ -1044,6 +1128,8 @@ cpufreq_freq_attr_ro(amd_pstate_highest_perf);
+>  cpufreq_freq_attr_rw(energy_performance_preference);
+>  cpufreq_freq_attr_ro(energy_performance_available_preferences);
+>  static DEVICE_ATTR_RW(status);
+> +static DEVICE_ATTR_RO(hw_prefcore);
+> +static DEVICE_ATTR_RO(prefcore);
+>  
+>  static struct freq_attr *amd_pstate_attr[] = {
+>  	&amd_pstate_max_freq,
+> @@ -1063,6 +1149,7 @@ static struct freq_attr *amd_pstate_epp_attr[] = {
+>  
+>  static struct attribute *pstate_global_attributes[] = {
+>  	&dev_attr_status.attr,
+> +	&dev_attr_prefcore.attr,
+>  	NULL
+>  };
+>  
+> @@ -1506,6 +1593,8 @@ static int __init amd_pstate_init(void)
+>  		}
+>  	}
+>  
+> +	amd_pstate_init_prefcore();
+> +
+>  	return ret;
+>  
+>  global_attr_free:
+> @@ -1527,7 +1616,17 @@ static int __init amd_pstate_param(char *str)
+>  
+>  	return amd_pstate_set_driver(mode_idx);
+>  }
+> +
+> +static int __init amd_prefcore_param(char *str)
+> +{
+> +	if (!strcmp(str, "disable"))
+> +		prefcore = false;
+> +
+> +	return 0;
+> +}
+> +
+>  early_param("amd_pstate", amd_pstate_param);
+> +early_param("amd_prefcore", amd_prefcore_param);
+>  
+>  MODULE_AUTHOR("Huang Rui <ray.huang@amd.com>");
+>  MODULE_DESCRIPTION("AMD Processor P-state Frequency Driver");
 > -- 
 > 2.34.1
 > 
