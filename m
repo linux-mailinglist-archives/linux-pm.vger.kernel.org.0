@@ -2,106 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D081793770
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Sep 2023 10:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF2F7937E2
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Sep 2023 11:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236034AbjIFItH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Sep 2023 04:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47494 "EHLO
+        id S236492AbjIFJRt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Sep 2023 05:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235881AbjIFItC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Sep 2023 04:49:02 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89012E76;
-        Wed,  6 Sep 2023 01:48:50 -0700 (PDT)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3868Z4nt021181;
-        Wed, 6 Sep 2023 08:48:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2023-03-30; bh=3ADrDgev14r5OWCL9x3U1yc8Xe/xKR0+iOVCoQWm1qA=;
- b=b3ZUkFvX7upMVYvjZr9V40lhB5DjoQW3kPPZQyoumhFWhiaPt0WCCcMgOXQjlfP22bM2
- Yq1GE8Xze9Qj67MjSao3ZczReztp+M1aZmFoG49fAKsTP7ZUYow34+qsEwUwIJ9iYv+B
- k9ovCYY4E8OJDF6WTVpfWE/aqxELEPzwiFEtWZZVH1LHm8Q3dE6bt9Oje9AktzdM2x/c
- NFxxQ93BqmYRJSOWQqdjSYRcxk12lw53xIyPLq9IM7f/YKDPeDVQmOoHYJCG63hs3BJb
- RywXhcRcdl1GIS01ngXx+2QuyrOtNNjPRzEvUe+6BtWvyvUzb37Benh0z+wkNv5HKne7 wg== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3sxp1mg1f6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 06 Sep 2023 08:48:25 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3867NFA1010355;
-        Wed, 6 Sep 2023 08:48:24 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3suugc67fd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 06 Sep 2023 08:48:24 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3868mNAh035692;
-        Wed, 6 Sep 2023 08:48:23 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3suugc67er-1;
-        Wed, 06 Sep 2023 08:48:23 +0000
-From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Cc:     dan.carpenter@linaro.org, kernel-janitors@vger.kernel.org,
-        error27@gmail.com, harshit.m.mogalapalli@oracle.com
-Subject: [PATCH] power: supply: mt6370: Fix missing error code in mt6370_chg_toggle_cfo()
-Date:   Wed,  6 Sep 2023 01:48:15 -0700
-Message-ID: <20230906084815.2827930-1-harshit.m.mogalapalli@oracle.com>
-X-Mailer: git-send-email 2.41.0
+        with ESMTP id S233935AbjIFJRo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Sep 2023 05:17:44 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E200ECE2;
+        Wed,  6 Sep 2023 02:17:40 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8E1A11063;
+        Wed,  6 Sep 2023 02:18:18 -0700 (PDT)
+Received: from [10.57.91.205] (unknown [10.57.91.205])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 685523F7C5;
+        Wed,  6 Sep 2023 02:17:38 -0700 (PDT)
+Message-ID: <a6365f63-4669-15e5-b843-f4bfb1bd5e68@arm.com>
+Date:   Wed, 6 Sep 2023 10:18:15 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-06_02,2023-09-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 bulkscore=0
- suspectscore=0 mlxlogscore=999 malwarescore=0 adultscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2308100000
- definitions=main-2309060073
-X-Proofpoint-GUID: mBA6BaxruvbDyQa6SZnY-Fl1TQfJqhVM
-X-Proofpoint-ORIG-GUID: mBA6BaxruvbDyQa6SZnY-Fl1TQfJqhVM
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [RFC PATCH 0/7] sched: cpufreq: Remove magic margins
+Content-Language: en-US
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20230827233203.1315953-1-qyousef@layalina.io>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20230827233203.1315953-1-qyousef@layalina.io>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When mt6370_chg_field_get() suceeds, ret is set to zero and returning
-zero when flash led is still in strobe mode looks incorrect.
+Hi Qais,
 
-Fixes: 233cb8a47d65 ("power: supply: mt6370: Add MediaTek MT6370 charger driver")
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
----
-This is based on static analysis with smatch, only compile tested.
----
- drivers/power/supply/mt6370-charger.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 8/28/23 00:31, Qais Yousef wrote:
+> Since the introduction of EAS and schedutil, we had two magic 0.8 and 1.25
+> margins applied in fits_capacity() and apply_dvfs_headroom().
+> 
+> As reported two years ago in
+> 
+> 	https://lore.kernel.org/lkml/1623855954-6970-1-git-send-email-yt.chang@mediatek.com/
+> 
+> these values are not good fit for all systems and people do feel the need to
+> modify them regularly out of tree.
 
-diff --git a/drivers/power/supply/mt6370-charger.c b/drivers/power/supply/mt6370-charger.c
-index f27dae5043f5..a9641bd3d8cf 100644
---- a/drivers/power/supply/mt6370-charger.c
-+++ b/drivers/power/supply/mt6370-charger.c
-@@ -324,7 +324,7 @@ static int mt6370_chg_toggle_cfo(struct mt6370_priv *priv)
- 
- 	if (fl_strobe) {
- 		dev_err(priv->dev, "Flash led is still in strobe mode\n");
--		return ret;
-+		return -EINVAL;
- 	}
- 
- 	/* cfo off */
--- 
-2.39.3
+That is true, in Android kernel those are known 'features'. Furthermore,
+in my game testing it looks like higher margins do help to shrink
+number of dropped frames, while on other types of workloads (e.g.
+those that you have in the link above) the 0% shows better energy.
+
+I remember also the results from MTK regarding the PELT HALF_LIFE
+
+https://lore.kernel.org/all/0f82011994be68502fd9833e499749866539c3df.camel@mediatek.com/
+
+The numbers for 8ms half_life where showing really nice improvement
+for the 'min fps' metric. I got similar with higher margin.
+
+IMO we can derive quite important information from those different
+experiments:
+More sustainable workloads like "Yahoo browser" don't need margin.
+More unpredictable workloads like "Fortnite" (shooter game with 'open
+world') need some decent margin.
+
+The problem is that the periodic task can be 'noisy'. The low-pass
+filter which is our exponentially weighted moving avg PELT will
+'smooth' the measured values. It will block sudden 'spikes' since
+they are high-frequency changes. Those sudden 'spikes' are
+the task activations where we need to compute a bit longer, e.g.
+there was explosion in the game. The 25% margin helps us to
+be ready for this 'noisy' task - the CPU frequency is higher
+(and capacity). So if a sudden need for longer computation
+is seen, then we have enough 'idle time' (~25% idle) to serve this
+properly and not loose the frame.
+
+The margin helps in two ways for 'noisy' workloads:
+1. in fits_capacity() to avoid a CPU which couldn't handle it
+    and prefers CPUs with higher capacity
+2. it asks for longer 'idle time' e.g. 25-40% (depends on margin) to
+    serve sudden computation need
+
+IIUC, your proposal is to:
+1. extend the low-pass filter to some higher frequency, so we
+    could see those 'spikes' - that's the PELT HALF_LIFE boot
+    parameter for 8ms
+1.1. You are likely to have a 'gift' from the Util_est
+      which picks the max util_avg values and maintains them
+      for a while. That's why the 8ms PELT information can last longer
+      and you can get higher frequency and longer idle time.
+2. Plumb in this new idea of dvfs_update_delay as the new
+    'margin' - this I don't understand
+
+For the 2. I don't see that the dvfs HW characteristics are best
+for this problem purpose. We can have a really fast DVFS HW,
+but we need some decent spare idle time in some workloads, which
+are two independent issues IMO. You might get the higher
+idle time thanks to 1.1. but this is a 'side effect'.
+
+Could you explain a bit more why this dvfs_update_delay is
+crucial here?
+
+Regards,
+Lukasz
 
