@@ -2,73 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 097B4793C6E
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Sep 2023 14:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E46793CE9
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Sep 2023 14:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234734AbjIFMOX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Sep 2023 08:14:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43504 "EHLO
+        id S232847AbjIFMoG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Sep 2023 08:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjIFMOX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Sep 2023 08:14:23 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4926E1713
-        for <linux-pm@vger.kernel.org>; Wed,  6 Sep 2023 05:14:18 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-99bcfe28909so518659266b.3
-        for <linux-pm@vger.kernel.org>; Wed, 06 Sep 2023 05:14:18 -0700 (PDT)
+        with ESMTP id S240243AbjIFMoE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Sep 2023 08:44:04 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A1A171F
+        for <linux-pm@vger.kernel.org>; Wed,  6 Sep 2023 05:43:59 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-5007616b756so6182328e87.3
+        for <linux-pm@vger.kernel.org>; Wed, 06 Sep 2023 05:43:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694002457; x=1694607257; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1694004238; x=1694609038; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=I9Bg/dVDxo6+g7+rfRY3uAFK7nbPJavtKsvDCjgO83M=;
-        b=SWORc7IVDuFZ3ZAJTGAQxrFg4mRJ/KVbZEbqpVmBvHne+SJkBuEEnybAKLRsl254IY
-         U0OF2lquiYUpPrEbna05Px1KfsURKF5H5sF+WPd7jiCfNKqJ928R7UF72TtvDC9wWF7f
-         N6srf/GR1fe4GLMO6Jt1H9UvpBF2VsGNr9oBD9ArZUB7jHOol2Cs7zCyHWrojvulR1iy
-         FoNntshOix+cA0qKIWj5iBatAhUmemETiKqiv7JiXI7MdTlpUlVwz5hRTfDZRDabfUAW
-         iGIYGbeZ3JZ4K9j0s/Sn/TCzErZHUZHkON0//tDZWwCRwoZLIRDT8ICV3CEQ/xdMYKTg
-         qeuA==
+        bh=SZjPlBqgnDQzIPB5KuAwzX6y/nfJycbmx8H+lJxBo78=;
+        b=ri/F0L/fo2e2r+1K7sP1+QtDiGO4oZbCfC0XH1I2fVXDoWmRDmIWZ8cykRfYgoBm5F
+         P36AzB2jAarNxNB1DSP85TtKgHdmfP0vLaBVRsDMOLeofGTqrNP41mTpdyZ+FpPfs73R
+         1f0mdJFfy5XafL7Rj9YzlT9qBi4bPIHRwqt4QiOYeJsqq4g4oLFbkG7RlV7C5j2rlfTf
+         1vCAMYZ5JaOuarF2/TDXptr5qEq3O4fmc41a12nRfsoAt/blmE8j3YwSxFqfCFmoKDyf
+         FuRZHgb8DnzRg75aUstdrYP6oR84WURHK08NqA/Y8fYCoGptOCCEaSRhvizFgcCvmXxo
+         jK9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694002457; x=1694607257;
+        d=1e100.net; s=20221208; t=1694004238; x=1694609038;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I9Bg/dVDxo6+g7+rfRY3uAFK7nbPJavtKsvDCjgO83M=;
-        b=Ab5MEQ65ArP3zjvE2hvaw4/vOxyCwXlbDLssDjmNyI9Gn293aLVacCarJcZNLtv+oY
-         9dDdjqR1ZGgTAdVD8Z9hJferWzUmNydISRRXAuvB160G/rdl9Rr8Pd5j8gYZGYVVV6V/
-         7hK34Dh+9Hq+JYxH5rblgx0ZB/XpURKfozrIlpaD/sKcSONvzQFY341XX2+GMnYIfTjY
-         mJkh3OAdO7KJgDSsQC6IjylL9mX3lYA85h6SNk9d3rEqKkDwp1/RtdSXrUvDyYoR1OpB
-         1Z3GQht4rdYl4zaHUR8mYKnaxra65/eapep0+4pQu/YXjkQEXnPdJWZJxyB/Hfa3pBPS
-         5dhg==
-X-Gm-Message-State: AOJu0Yx0Me7p5HL0LFgifXv3xhhOFjEzpxtER7tj37+KCoTk7d+0oiyf
-        Dw7THBpc5BbyyzvDoChZc2sPxw==
-X-Google-Smtp-Source: AGHT+IH1I047qgp4y+1te3h85OCKarvoSoPFP7FaNdo0dTzZvZK0rxlW12L/JPkfB2o/sYR65Beq3A==
-X-Received: by 2002:a17:906:5dae:b0:9a1:c659:7c62 with SMTP id n14-20020a1709065dae00b009a1c6597c62mr2058303ejv.66.1694002456757;
-        Wed, 06 Sep 2023 05:14:16 -0700 (PDT)
+        bh=SZjPlBqgnDQzIPB5KuAwzX6y/nfJycbmx8H+lJxBo78=;
+        b=b8hVotg//gR7L65pkkT3Yuaj5OmqAqIC+xwJkxImsIsYmvOuQlp2Hv5+SW8wYYEEU2
+         OOEdcph8wqiWnsX0OMYKtfRh2h8tqKQhZ4ShLgDPEzxlSwBQ6MN6Zz8ydMptyoUf05Jg
+         9N3zcJsmoBXAER/tNfR/IjZ/jzG2UyOy0sVbJ+0vQbOdKGlLLzwJj1KYUCarnmkEwGn9
+         gPA6GnnWj+RZ2Q6x1ToA5wFUoOtV/kwBz6iGZ8vtlxAODqWkngFsvaZCfLZIiLEP5iXK
+         qenXVmIrLd0arUdx+sGM7acR5hkrc/lnv5QZ9pfpdfrzMQ9fKlAGQwX+gzbdPqq8XeHI
+         ReoA==
+X-Gm-Message-State: AOJu0YxYFYfDgbFgEE5HoARxI/hD2st/84GEIECrkr4FoUmWKOYEaXQG
+        1SdvJDRq22TLKL5HpiXy1l7GbQ==
+X-Google-Smtp-Source: AGHT+IFRWlzlHNwcMzhjaCekHtz8y2GT5557IniLJLUxSqX4REkvEuvBZ/WhKLTSC9YTYVzWnzvPyQ==
+X-Received: by 2002:ac2:5457:0:b0:4fb:8948:2b8e with SMTP id d23-20020ac25457000000b004fb89482b8emr2271482lfn.8.1694004237744;
+        Wed, 06 Sep 2023 05:43:57 -0700 (PDT)
 Received: from [192.168.37.154] (178235177204.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.204])
-        by smtp.gmail.com with ESMTPSA id rn5-20020a170906d92500b0099cc402d3ddsm8800515ejb.202.2023.09.06.05.14.14
+        by smtp.gmail.com with ESMTPSA id ko18-20020a170907987200b0099de082442esm9022170ejc.70.2023.09.06.05.43.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Sep 2023 05:14:16 -0700 (PDT)
-Message-ID: <10520827-dc01-475c-b09a-35cefc9e0a62@linaro.org>
-Date:   Wed, 6 Sep 2023 14:14:14 +0200
+        Wed, 06 Sep 2023 05:43:57 -0700 (PDT)
+Message-ID: <77f3e252-5209-44e8-83ed-2a578c5a94d4@linaro.org>
+Date:   Wed, 6 Sep 2023 14:43:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/53] icc-rpmh multi-RSC voting groundwork
+Subject: Re: [PATCH 02/53] dt-bindings: interconnect: qcom,bcm-voter: Add
+ qcom,bcm-voter-idx
 Content-Language: en-US
-To:     Mike Tipton <quic_mdtipton@quicinc.com>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         cros-qcom-dts-watchers@chromium.org,
-        Marijn Suijten <marijn.suijten@somainline.org>,
+        Mike Tipton <quic_mdtipton@quicinc.com>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20230708-topic-rpmh_icc_rsc-v1-0-b223bd2ac8dd@linaro.org>
- <c067a45f-9629-d516-9e56-36538e4ff6db@kernel.org>
- <20230807215739.GA9621@hu-mdtipton-lv.qualcomm.com>
+ <20230708-topic-rpmh_icc_rsc-v1-2-b223bd2ac8dd@linaro.org>
+ <68fb8e22-dd23-d4bf-eda0-444039fd8e26@linaro.org>
+ <9201cb8d-845a-b5dc-02a5-9633572b5877@linaro.org>
+ <f393324f-c9ec-1572-fb15-1856cef9d846@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
@@ -105,7 +109,7 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <20230807215739.GA9621@hu-mdtipton-lv.qualcomm.com>
+In-Reply-To: <f393324f-c9ec-1572-fb15-1856cef9d846@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -118,67 +122,92 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7.08.2023 23:57, Mike Tipton wrote:
-> On Thu, Aug 03, 2023 at 07:48:08PM +0300, Georgi Djakov wrote:
->> Hi Konrad,
->>
->> On 11.07.23 15:17, Konrad Dybcio wrote:
->>> Many parts of Qualcomm SoCs are entirely independent of each other and can
->>> run when the other parts are off. The RPMh system architecture embraces
->>> this by giving each (loosely defined) subsystem its own connection (as in,
->>> physical wires) to the AOSS, terminated by per-subsystem RSCs (Resource
->>> State Coordinators) that barter for power, bandwidth etc.
+On 5.08.2023 23:21, Krzysztof Kozlowski wrote:
+> On 15/07/2023 17:09, Konrad Dybcio wrote:
+>> On 12.07.2023 22:43, Krzysztof Kozlowski wrote:
+>>> On 11/07/2023 14:18, Konrad Dybcio wrote:
+>>>> In order to (at least partially) untangle the global BCM voter lookup
+>>>> (as again, they are shared throughout the entire system and not bound to
+>>>> individual buses/providers), introduce a new required property to assign
+>>>> a unique identifier to each BCM voter.
+>>>>
+>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>> ---
+>>>>  .../devicetree/bindings/interconnect/qcom,bcm-voter.yaml       | 10 ++++++++++
+>>>>  1 file changed, 10 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml b/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
+>>>> index eec987640b37..09321c1918bf 100644
+>>>> --- a/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
+>>>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
+>>>> @@ -38,8 +38,14 @@ properties:
+>>>>  
+>>>>      $ref: /schemas/types.yaml#/definitions/uint32
+>>>>  
+>>>> +  qcom,bcm-voter-idx:
+>>>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>>>> +    description:
+>>>> +      A globally unique predefined discrimnator, identifying each BCM voter.
 >>>
->>> This series introduces the groundwork necessary for voting for resources
->>> through non-APPS RSCs. It should allow for lower-latency vote adjustments
->>> (e.g. for very high bandwidth / multiple displays) and could potentially
->>> allow for full APSS collapse while keeping e.g. MDSS operating (say
->>> refreshing an image from a RAM buffer).
+>>> s/each/this/ ?
+>> Right, this makes more sense
 >>
->> This is good stuff. Thanks for working on it! Actually the path tagging,
->> that have been introduced some time ago could be used for supporting the
->> multiple RSCs. Today we can get the tags from DT, and tag the path with
->> some DISP_RSC flag (for example) and avoid the qcom,bcm-voter-idx property.
+>>> If I understand correctly, there might be more than one instance. The
+>>> problem is that I cannot find such case in upstream sources.
+>> I don't think there can be more than one per RSC.
 >>
->> Mike has been also looking into this, so maybe he can share his thoughts.
+>> SM8550 splits some RSCs into "channels" and these channels have their
+>> individual voters, however they would still be attached to these
+>> channel subnodes/subdevices and no, we don't support that yet.
+> 
+> Then shouldn't this be one number, not an array?
+> 
 >>
+>>>
+>>>
+>>>> +
+>>>>  required:
+>>>>    - compatible
+>>>> +  - qcom,bcm-voter-idx
+>>>
+>>> This should not be really required, because it affects the ABI.
+>> Hm.. can I deprecate lack of it somehow?
 > 
-> Yeah, the current way we've been supporting multiple voters (e.g. RSCs)
-> doesn't scale. We currently duplicate the topology for any path that
-> requires a secondary, non-APSS voter. Which means we have duplicates
-> nodes and bindings for each hop in those paths, even though there's only
-> a single logical path.
-> 
-> For example, in qcom/sm8550.c, each node and BCM ending with _disp,
-> _ife_0, _ife_1, or _ife_2 is a duplicate. The only reason they exist is
-> to allow clients to target their votes to the non-APPS voters. And to
-> provide separate, voter-specific buckets of aggregation. But everything
-> else about them is 100% identical to their default APPS counterparts.
-> For sm8550, this amounts to roughly 643 extra lines of code.
-> 
-> Initially there was only the one secondary display voter, so the scaling
-> problem wasn't a huge issue. But sm8550 has four voters. And future SOCs
-> will have even more.
-> 
-> We should only define the logical topology once. The ratio of NOC ports
-> to interconnect nodes should be 1:1, rather than 1:N where N is the
-> number of voters that care about them.
-> 
-> The general idea is that we could use tags for this. So, instead of...
-> 
->   path = icc_get(dev, MASTER_MDP_DISP, SLAVE_EBI1_DISP);
-> 
-> it would be...
-> 
->   path = icc_get(dev, MASTER_MDP, SLAVE_EBI1);
->   icc_set_tag(path, QCOM_ICC_TAG_VOTER_DISP);
-> 
-> I have an early prototype with basic testing already. I can hopefully
-> clean it up and post for review in the next couple of weeks.
-I was initially not very happy with this approach (overloading tags
-with additional information), but it grew on me over time.
+> In general: no. Anyway, it depends how much you need it. Breaking ABI
+> might be justified, but I just did not get such need from the commit
+> msg. Your commit msg looks to me closer to a cleanup.
++ Mike
 
-My only concern is that if we reserve say bits 16-31 for path tags
-(remember, dt-bindings are ABI), we may eventually run out of them.
+Yes and no. But mostly yes.
+
+The current way of depicting the BCM voter as a child of the RSC
+is rather stupid. Think of the discussion that we had with
+Bartosz about adding child devices to SCM only to bind Linux
+drivers.
+
+The "voters" are totally a Linux software construct - there is a
+piece of hw called BCM (Bus Clock Manager) to which you send votes
+through the RSC (Resource State Coordinator). Each major subsystem
+has its own RSC (APPS, display, pcie on newer/compute, camera
+starting from 8550 etc.) that you submit these through.
+
+Currently the bcm-voter driver provides a structure where vote data
+is stored and everything is concluded with a pair of rpmh_write_batch
+(one for wake-only and one for sleep buckets).
+
+After reading what I just wrote, maybe we can just reference the RSC
+directly. Or in the aforementioned case of 8550 CAMSS RSC having
+multiple channels per RSC, its subchannel.
+
+Perhaps this cleanup should be extended to get rid of this subnode.
+Or maybe even the driver, or part of it.
+
+Actually, I need to think about this a bit more, as we also need to
+reuse half of BCM voter logic in the Adreno code (to shove the
+generated RPMh commands into the GPU Management Unit which pokes at
+RPMh on its own)...
+
+I think Mike should comment on this rather incoherent monologue of
+mine..
 
 Konrad
