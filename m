@@ -2,141 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D0E7932CD
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Sep 2023 02:07:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FF0E793331
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Sep 2023 03:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238152AbjIFAHI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Sep 2023 20:07:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41874 "EHLO
+        id S229982AbjIFBPO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Sep 2023 21:15:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232504AbjIFAHG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Sep 2023 20:07:06 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566431B4;
-        Tue,  5 Sep 2023 17:07:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693958822; x=1725494822;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=1x+98I6W75YklJUUnjenc5YlfMOD4nUpx0ccD0PvGnA=;
-  b=K/IZQYIaW/py1JY1alPDfCIZep4mn6zen52qawKPF78Xm9nNlYMTV1Z9
-   t7oTVkNoQvt/5CVCrZPQdUio3sMtY7Ea/iaYSvraG6VDe1zODUK/BSYgI
-   mG0feNjcGw0de9MsDkCBmHymibHe+QigiO2rdXMSKHjUtbWhT1w98q46D
-   elxrjzfj1+TrudCsgn2WIKzhOsgy1gSvsIRUXBmeZGGSt0FEpGM/c/5Lb
-   stU6rOWKTsVFKTI9DCSIDLwQrtiebdanhn1fnM/0TVbWeIQxRzCw4Ult4
-   YkKyIdhZJw4f7pfdUZVcPJwvrKI5xTcV3VblVAUyPJIe57/i3WqGolfK1
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10824"; a="374324904"
-X-IronPort-AV: E=Sophos;i="6.02,230,1688454000"; 
-   d="scan'208";a="374324904"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2023 17:06:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10824"; a="776374246"
-X-IronPort-AV: E=Sophos;i="6.02,230,1688454000"; 
-   d="scan'208";a="776374246"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.14])
-  by orsmga001.jf.intel.com with ESMTP; 05 Sep 2023 17:06:42 -0700
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org, rui.zhang@intel.com
-Cc:     linux-pm@vger.kernel.org, sumeet.r.pawnikar@intel.com,
-        linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] powercap: intel_rapl: Fix setting of Power Limit 4 to 0
-Date:   Tue,  5 Sep 2023 17:06:40 -0700
-Message-Id: <20230906000640.2919607-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.40.1
+        with ESMTP id S229898AbjIFBPO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Sep 2023 21:15:14 -0400
+X-Greylist: delayed 905 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Sep 2023 18:15:11 PDT
+Received: from sender3-op-o18.zoho.com (sender3-op-o18.zoho.com [136.143.184.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077E51AB;
+        Tue,  5 Sep 2023 18:15:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1693961972; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=PTsiRQmrah1gDkhUYWtB4ZVarVqK4rq+9vvpMqm0u6DUzUGR3DwCViasK1YLOQ+yJgWbV46xFVrOqE5ZbcUd3UBaFtjReUMRypetVcRt6NkygX7axQ4R9Mj8yFwoGYAY8JEuD/PRw2LJIon1SOqRxdi7X2GIpouy6fGBvfE+5p4=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1693961972; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+        bh=3Bb0HPghGP1Pis7m6aZLpfrMCwk6EyrDCWLxlIPlTSc=; 
+        b=M6tc5QYngmVRNXAfzgxDit4mCzmclJLTf/MjVHRQrqVffONw5qLeF1+5JBYi2CYNn2N0I9Qzk5V+249+/99WmZ66MFG+hpImH+COHbWl+7ZPakiZq5icMR3Y3WhsVGIWhnt+rOEW3q5Qb36RUXBrcWI53ZhYZ2xBugqDhAxE83A=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1693961972;
+        s=zmail2; d=icenowy.me; i=uwu@icenowy.me;
+        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
+        bh=3Bb0HPghGP1Pis7m6aZLpfrMCwk6EyrDCWLxlIPlTSc=;
+        b=fjfou6jMO/sh3ooxjTbSyoFPogvE2k05ANatt0ugI6yXQUysjTap69dcdK3dR/Sr
+        NCa6ZLQOHsa6cb9rp54ys5FbQzzV9nE+bvoiv0qK4lqRxER7rfozzmUqfbvnkjgjnLG
+        LmgzeIC0ubaSN9wYPwm21jGtjcjnWiJs8PS2LqKO2nTzSC99BeXLosm/PUOCq0UXk/c
+        dmQA5I8yzA44Nr6rA/i29ULwYRWKWPa1POSpv2wSKqiUgpwokcRFxWrx0uaMOFRwKv4
+        3T6M66eBtlKj+8R2XUFq0+PKyQ3EdJX9/CuYAZWbAESUUDEe4QpL85uwq+4fTe+/bm5
+        h7X4e7RqZg==
+Received: from edelgard.fodlan.icenowy.me (120.85.99.236 [120.85.99.236]) by mx.zohomail.com
+        with SMTPS id 1693961971610137.58133627753386; Tue, 5 Sep 2023 17:59:31 -0700 (PDT)
+Message-ID: <82d294b75cbb9cfb168ea276b2d587b5fc989572.camel@icenowy.me>
+Subject: Re: [PATCH 2/6] cpufreq: dt-platdev: Blocklist allwinner,h616 SoC
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Andre Przywara <andre.przywara@arm.com>,
+        Martin Botka <martin.botka@somainline.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        devicetree@vger.kernel.org, Alan Ma <tech@biqu3d.com>,
+        Luke Harrison <bttuniversity@biqu3d.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rogerio Goncalves <rogerlz@gmail.com>,
+        Martin Botka <martin@biqu3d.com>
+Date:   Wed, 06 Sep 2023 08:59:24 +0800
+In-Reply-To: <20230904214018.0a8f12e2@slackpad.lan>
+References: <20230904-cpufreq-h616-v1-0-b8842e525c43@somainline.org>
+         <20230904-cpufreq-h616-v1-2-b8842e525c43@somainline.org>
+         <20230904214018.0a8f12e2@slackpad.lan>
+Organization: Anthon Open-Source Community
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-System runs at minimum performance, once powercap RAPL package domain
-"enabled" flag is toggled.
+=E5=9C=A8 2023-09-04=E6=98=9F=E6=9C=9F=E4=B8=80=E7=9A=84 21:40 +0100=EF=BC=
+=8CAndre Przywara=E5=86=99=E9=81=93=EF=BC=9A
+> On Mon, 04 Sep 2023 17:57:02 +0200
+> Martin Botka <martin.botka@somainline.org> wrote:
+>=20
+> > The AllWinner H616 uses H6 cpufreq driver.
+> > Add it to blocklist so its not created twice
+>=20
+> That looks alright, but I think needs to be squashed into the patch
+> that enables the H616 driver operation, to avoid regressions during
+> bisecting.
 
-Setting RAPL package domain enabled flag to 0, results in setting of
-power limit 4 (PL4) MSR 0x601 to 0. This implies disabling PL4 limit.
-The PL4 limit controls the peak power. This can significantly change
-the performance. Even worse, when the enabled flag is set to 1 again.
-This will set PL4 MSR value to 0x01, which means reduce peak power to
-0.125W. This will force the system to run at the lowest possible
-performance.
+Well I think if it's before the H616 enablement, it could be just okay.
 
-This is caused by a change which assumes that there is an enable bit
-in the PL4 MSR like other power limits.
-
-In functions set_floor_freq_default() and rapl_remove_package(), call
-rapl_write_pl_data with PL_ENABLE and PL_CLAMP for only power limit 1
-and 2. Similarly don't read PL_ENABLE for PL4 to check the presence of
-power limit 4. Power limit 4 support is based on CPU model in this
-driver. No additional checks can be done.
-
-Fixes: 9050a9cd5e4c ("powercap: intel_rapl: Cleanup Power Limits support")
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: stable@vger.kernel.org # v6.5+
----
- drivers/powercap/intel_rapl_common.c | 14 ++++----------
- 1 file changed, 4 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-index 5c2e6d5eea2a..0afedf7ad872 100644
---- a/drivers/powercap/intel_rapl_common.c
-+++ b/drivers/powercap/intel_rapl_common.c
-@@ -184,8 +184,6 @@ static int get_pl_prim(struct rapl_domain *rd, int pl, enum pl_prims prim)
- 	case POWER_LIMIT4:
- 		if (prim == PL_LIMIT)
- 			return POWER_LIMIT4;
--		if (prim == PL_ENABLE)
--			return PL4_ENABLE;
- 		/* PL4 would be around two times PL2, use same prim as PL2. */
- 		if (prim == PL_MAX_POWER)
- 			return MAX_POWER;
-@@ -1033,17 +1031,13 @@ static void package_power_limit_irq_restore(struct rapl_package *rp)
- 
- static void set_floor_freq_default(struct rapl_domain *rd, bool mode)
- {
--	int i;
--
- 	/* always enable clamp such that p-state can go below OS requested
- 	 * range. power capping priority over guranteed frequency.
- 	 */
- 	rapl_write_pl_data(rd, POWER_LIMIT1, PL_CLAMP, mode);
- 
--	for (i = POWER_LIMIT2; i < NR_POWER_LIMITS; i++) {
--		rapl_write_pl_data(rd, i, PL_ENABLE, mode);
--		rapl_write_pl_data(rd, i, PL_CLAMP, mode);
--	}
-+	rapl_write_pl_data(rd, POWER_LIMIT2, PL_ENABLE, mode);
-+	rapl_write_pl_data(rd, POWER_LIMIT2, PL_CLAMP, mode);
- }
- 
- static void set_floor_freq_atom(struct rapl_domain *rd, bool enable)
-@@ -1458,7 +1452,7 @@ static void rapl_detect_powerlimit(struct rapl_domain *rd)
- 			}
- 		}
- 
--		if (rapl_read_pl_data(rd, i, PL_ENABLE, false, &val64))
-+		if (i != POWER_LIMIT4 && rapl_read_pl_data(rd, i, PL_ENABLE, false, &val64))
- 			rd->rpl[i].name = NULL;
- 	}
- }
-@@ -1510,7 +1504,7 @@ void rapl_remove_package(struct rapl_package *rp)
- 	for (rd = rp->domains; rd < rp->domains + rp->nr_domains; rd++) {
- 		int i;
- 
--		for (i = POWER_LIMIT1; i < NR_POWER_LIMITS; i++) {
-+		for (i = POWER_LIMIT1; i <= POWER_LIMIT2; i++) {
- 			rapl_write_pl_data(rd, i, PL_ENABLE, 0);
- 			rapl_write_pl_data(rd, i, PL_CLAMP, 0);
- 		}
--- 
-2.34.1
+>=20
+> Cheers,
+> Andre
+>=20
+> >=20
+> > Signed-off-by: Martin Botka <martin.botka@somainline.org>
+> > ---
+> > =C2=A0drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+> > =C2=A01 file changed, 1 insertion(+)
+> >=20
+> > diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c
+> > b/drivers/cpufreq/cpufreq-dt-platdev.c
+> > index e2b20080de3a..51818cef8979 100644
+> > --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+> > +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+> > @@ -104,6 +104,7 @@ static const struct of_device_id allowlist[]
+> > __initconst =3D {
+> > =C2=A0 */
+> > =C2=A0static const struct of_device_id blocklist[] __initconst =3D {
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ .compatible =3D "allw=
+inner,sun50i-h6", },
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ .compatible =3D "allwinner=
+,sun50i-h616", },
+> > =C2=A0
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ .compatible =3D "appl=
+e,arm-platform", },
+> > =C2=A0
+> >=20
+>=20
+>=20
 
