@@ -2,74 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B92879456F
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Sep 2023 23:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC207945D9
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 00:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240537AbjIFVw2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Sep 2023 17:52:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
+        id S244918AbjIFWCP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Sep 2023 18:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjIFVw1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Sep 2023 17:52:27 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CF0CFD
-        for <linux-pm@vger.kernel.org>; Wed,  6 Sep 2023 14:52:23 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fef56f7223so3168365e9.3
-        for <linux-pm@vger.kernel.org>; Wed, 06 Sep 2023 14:52:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1694037142; x=1694641942; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IaOpd7rKwkNWd/NacwCollMXoUTLMbCO6PfeyOGcxS0=;
-        b=J2WfZCB8dAuu/qUFuUfG66snP2s+l66CCRjrsfGsiALoLXyTlksc+DW/2kON3XzBiS
-         i3YO2Ww8ZfoOomMAadiYsDHokdnknl4xbGaw8MHl5s+VuSVuyFQWRrGrXSDggztD6zxr
-         MFRxtBqh686X0romGnWVe5dg70u0CzPxoFCwLliTx6OSdQFalVjDt2XmRlA4KaIw9in4
-         cHfEo89udhu+UAPORKWuHx6+mQSsl/Av/H9QvxncfkxiXR5gVpQN1zZBVdynhEg1Z0ki
-         Xin/luxOlyUlPuOWtyXYrtsCdyZGBgDknp4qQEpPyMJAUsrIwXpQkBdhlSCCT2UHL23Q
-         pXBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694037142; x=1694641942;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IaOpd7rKwkNWd/NacwCollMXoUTLMbCO6PfeyOGcxS0=;
-        b=jxd4OhJMgHOZjGqlglm7/uHU+C72Nx4wLxZIpeb+rvP9vMTwcDrd7mCYQIiqMNZW/5
-         RhduU62/3r+1EslJdi0cMyfx/zwR9MFh1z8/pu7NQcnDcA/QPLZo/Oyfk3Sm3mZ5L5MX
-         V3HURbM6dB5uux75cYL3aQKO54J8wVQ5yx2Tqp0kuVSRMW8kex4j4jgII8OO9VXkoQCi
-         zqjQ+RAy6GjeEMVINZtOfAwuBWS2AxyONqRahdich/EHmC05dVDspAdqL3C1JKXzi2N+
-         IR5+W6XCNfEGSloXfsVU5wTJTV3AAUwg+IULz8JMKvI6MDeubSh5zi3Ce0FvX2R34lNa
-         SGSg==
-X-Gm-Message-State: AOJu0YyX8vXhwBgjm8PhsokuCDIyvF5/4lrrEBmy0XhljYpGugXO8GAp
-        ftNeGiLzRi+6xHZFnTj+XHPwdw==
-X-Google-Smtp-Source: AGHT+IEwJpSWusxjZ/VtGbSCIGhpWnvlPBwm2Ot9wm7HAQvMUvQ2Pjj652nC190bRuijgqWi9GsXGQ==
-X-Received: by 2002:a7b:cd1a:0:b0:3f9:255e:ee3b with SMTP id f26-20020a7bcd1a000000b003f9255eee3bmr3031793wmj.30.1694037142295;
-        Wed, 06 Sep 2023 14:52:22 -0700 (PDT)
-Received: from airbuntu (host109-151-228-137.range109-151.btcentralplus.com. [109.151.228.137])
-        by smtp.gmail.com with ESMTPSA id s13-20020a7bc38d000000b003fe24441e23sm658599wmj.24.2023.09.06.14.52.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Sep 2023 14:52:21 -0700 (PDT)
-Date:   Wed, 6 Sep 2023 22:52:20 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+        with ESMTP id S230380AbjIFWCP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Sep 2023 18:02:15 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2979172E;
+        Wed,  6 Sep 2023 15:02:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694037731; x=1725573731;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CTCvrcu7YjmCiO9BUFROPsDi8XJkcyMLi88JXj4GLuA=;
+  b=PwSIC50qv/r4HWvoo76afxMww+TwsQTGrSkbKsWluAcAZhZtI+cJkbih
+   6KFilPwu1FPAj2qEpeSAulUck1sopFdC0KN25HzMmAzp5aJjnNcrtEVMC
+   3ODPT3bKYSFJjVm3U3PGIMELpeuLaVRQnkWKIOzS8QhQuLiRgLhwhJJfm
+   tVlyIWNS+neMTnPvsNuDTlz3Jsf8SSUWPlqvFXEsy9QSjayUo/OYXNMQD
+   8KcTI1PcKblfkmTPnFhCBRPIA/roIUQd5koeb0XTB0QbTCk77UEdwUA57
+   NEQKISTxRPFo2WyvUxbUhtzhQsqgWJ4n2UQNvhIG0uyFjPqAMjIS0Qwwn
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="357507866"
+X-IronPort-AV: E=Sophos;i="6.02,233,1688454000"; 
+   d="scan'208";a="357507866"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2023 15:02:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="718438522"
+X-IronPort-AV: E=Sophos;i="6.02,233,1688454000"; 
+   d="scan'208";a="718438522"
+Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 06 Sep 2023 15:02:06 -0700
+Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qe0b5-0000cx-33;
+        Wed, 06 Sep 2023 22:02:03 +0000
+Date:   Thu, 7 Sep 2023 06:01:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Meng Li <li.meng@amd.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Lukasz Luba <lukasz.luba@arm.com>
-Subject: Re: [RFC PATCH 5/7] sched/schedutil: Add a new tunable to dictate
- response time
-Message-ID: <20230906215220.65em2kgyr76s7sz2@airbuntu>
-References: <20230827233203.1315953-1-qyousef@layalina.io>
- <20230827233203.1315953-6-qyousef@layalina.io>
- <60a21021-87c5-b93d-4312-d41fbcd4ec43@arm.com>
+        Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>
+Subject: Re: [PATCH V5 6/7] Documentation: amd-pstate: introduce amd-pstate
+ preferred core
+Message-ID: <202309070502.YxzVpYTO-lkp@intel.com>
+References: <20230905015116.2268926-7-li.meng@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <60a21021-87c5-b93d-4312-d41fbcd4ec43@arm.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20230905015116.2268926-7-li.meng@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,72 +78,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/06/23 23:13, Dietmar Eggemann wrote:
-> On 28/08/2023 01:32, Qais Yousef wrote:
-> 
-> [...]
-> 
-> > @@ -427,6 +427,23 @@ This governor exposes only one tunable:
-> >  	The purpose of this tunable is to reduce the scheduler context overhead
-> >  	of the governor which might be excessive without it.
-> >  
-> > +``respone_time_ms``
-> > +	Amount of time (in milliseconds) required to ramp the policy from
-> > +	lowest to highest frequency. Can be decreased to speed up the
-> > +	responsiveness of the system, or increased to slow the system down in
-> > +	hope to save power. The best perf/watt will depend on the system
-> > +	characteristics and the dominant workload you expect to run. For
-> > +	userspace that has smart context on the type of workload running (like
-> > +	in Android), one can tune this to suite the demand of that workload.
-> > +
-> > +	Note that when slowing the response down, you can end up effectively
-> > +	chopping off the top frequencies for that policy as the util is capped
-> > +	to 1024. On HMP systems where some CPUs have a capacity less than 1024,
-> 
-> HMP isn't used in mainline AFAIK. IMHO, the term `asymmetric CPU
-> capacity` systems is used.
+Hi Meng,
 
-It's a shorter name and less mouthful and typeful; I think we should start to
-use it :)
+kernel test robot noticed the following build warnings:
 
-> 
-> [...]
-> 
-> > @@ -59,6 +61,45 @@ static DEFINE_PER_CPU(struct sugov_cpu, sugov_cpu);
-> >  
-> >  /************************ Governor internals ***********************/
-> >  
-> > +static inline u64 sugov_calc_freq_response_ms(struct sugov_policy *sg_policy)
-> > +{
-> > +	int cpu = cpumask_first(sg_policy->policy->cpus);
-> > +	unsigned long cap = capacity_orig_of(cpu);
-> > +
-> > +	return approximate_runtime(cap);
-> > +}
-> 
-> I can see the potential issue of schedutil being earlier initialized
-> than the `max frequency scaling of cpu_capacity_orig` happens in
-> drivers/base/arch_topology.c.
-> 
-> So the response_time_ms setup for a little CPU on Juno-r0 wouldn't
-> happen on cpu_capacity_orig = 446 -> 26ms but on on the raw capacity
-> value from dt:
-> 
->     capacity-dmips-mhz = <578>
-> 
-> So I would expect to see t = 32ms * ln(1 - 578/1024)/ln(0.5) = 38ms instead.
-> 
-> We have a similar dependency between `max frequency scaled
-> cpu_capacity_orig` and the EM setup code.
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on linus/master v6.5 next-20230906]
+[cannot apply to tip/x86/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Hmm thanks for the pointer! That might help explain why I see wrong values for
-the big core in my setup.
+url:    https://github.com/intel-lab-lkp/linux/commits/Meng-Li/x86-Drop-CPU_SUP_INTEL-from-SCHED_MC_PRIO-for-the-expansion/20230906-003754
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20230905015116.2268926-7-li.meng%40amd.com
+patch subject: [PATCH V5 6/7] Documentation: amd-pstate: introduce amd-pstate preferred core
+reproduce: (https://download.01.org/0day-ci/archive/20230907/202309070502.YxzVpYTO-lkp@intel.com/reproduce)
 
-Should using arch_scale_cpu_capacity() help instead? Or I need to find a way to
-plug the race instead?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309070502.YxzVpYTO-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
-Thanks!
+>> Documentation/admin-guide/pm/amd-pstate.rst:304: WARNING: Title underline too short.
 
---
-Qais Yousef
+vim +304 Documentation/admin-guide/pm/amd-pstate.rst
+
+c22760885fd6f7 Huang Rui  2021-12-24  301  
+92e6088427c5da Perry Yuan 2023-01-31  302  
+3a7b575560efa6 Meng Li    2023-09-05  303  ``amd-pstate`` Driver Operation Modes
+92e6088427c5da Perry Yuan 2023-01-31 @304  =================================
+92e6088427c5da Perry Yuan 2023-01-31  305  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
