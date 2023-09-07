@@ -2,324 +2,196 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 221EA797610
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 18:01:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA26797605
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 18:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233333AbjIGQBK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Sep 2023 12:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45788 "EHLO
+        id S234145AbjIGQBD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Sep 2023 12:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240802AbjIGP7F (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 11:59:05 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B05F284EA
-        for <linux-pm@vger.kernel.org>; Thu,  7 Sep 2023 08:47:47 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-410af8f75d9so7656651cf.0
-        for <linux-pm@vger.kernel.org>; Thu, 07 Sep 2023 08:47:47 -0700 (PDT)
+        with ESMTP id S234595AbjIGP5V (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 11:57:21 -0400
+Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444EF35A6
+        for <linux-pm@vger.kernel.org>; Thu,  7 Sep 2023 08:45:00 -0700 (PDT)
+Received: by mail-ua1-x929.google.com with SMTP id a1e0cc1a2514c-7870821d9a1so626810241.1
+        for <linux-pm@vger.kernel.org>; Thu, 07 Sep 2023 08:45:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694101567; x=1694706367; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1694101429; x=1694706229; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=leZnxQ3mc0Y64TrxYwQ1se3DBG/OZoqkOEKgPH9MpQQ=;
-        b=JqR3cm7zDl3c4f7S9XgB9ToAj/+BZ+QqB9CVyS7NXhXRCmYXyL7JjadVdFti1VJO8B
-         4O1u2sTzBdeo+wO2jHkMTIuxzsbcAG4auiJeR/mzB0pgc+bbth3PMw9PXi50FffsGmBt
-         WApPQ9zTSmi7XHghlevfV0Xe9GeuOKbgXIcVwR5rboxGeLKEnTI0golrcVx+riAqgCRy
-         Oh8OzpLU741BApLhBJiNYi50kkdQQiDAH8i3KtMAEYSqe+T/xNp5EsK4NyB+vphI3cXL
-         hSmGwcywyuabc+NRb50ZcwnzZnYJZk+Br0bm1s3eQs5QxcH7YDTRftB4NK/cwVTIXdNF
-         GZlw==
+        bh=40rylBcMTDXR7i4w8TksqV00SNZY2PfZiThjPzEVKjU=;
+        b=jW97+Ec8J4a5E2qdIbYjdlPukQG6jIiLDpVgYnsyhKPY/Vu5qhuetKt+DfsTz9tuTd
+         oZyQovu8rv3GlKcE6wbCAIhGD/1bwdFWS4OuM61/iUYKokwNkEbI0ETllgblAdXpXu8r
+         ENHmAoxCyS0dS7L0rJ2KQ3AdxvIGYMISeM3r8NpWFBtVKIEpAdWOijl1kg3PJ6xlMWp8
+         mrztKbhtdqkvGj9erogbwCcJvZ5OwmCLJMtWsf+MVYM+HAhvXUvAwBKxzva6Xe0NFe4G
+         y00pgWmHCTIuLVBqx9uV2oluNjPIEOV8FDHMWwLuzGOnErTXeAMl1m5ZK6kLl2/jc4R2
+         Vcvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694101567; x=1694706367;
+        d=1e100.net; s=20221208; t=1694101429; x=1694706229;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=leZnxQ3mc0Y64TrxYwQ1se3DBG/OZoqkOEKgPH9MpQQ=;
-        b=d/tu32cqEMp1K+5zKj5LSqVTTJ8yE/cdoSv+AvLEj35Wun6NiIQJnpyuYV6/pyTzYS
-         pRDOUL2InpkPgoNJVWOINHG9At7s+tuEMam9YH2jYv+jC55xBzsQxZFqTnW6MXdBGX9k
-         bO9w3VLU6Ohn0T5uybVwVWuRLgGJXt7XxfKljFb+31Aq8Ewbh4vjbagrpKjG/ADVJXGp
-         uczvYRF18gPY/JLMsGtW/f6yGSL5VbBeJm0+/kX+i3elUenIqYF6MFWsmsCutBL5hdu9
-         Sl8Bduu8R/eeJDzfoXUYLGt4duYdtf1M/P/Z01iB0778iZU/jdwre/DtCDT+HPc9i9I5
-         7eRw==
-X-Gm-Message-State: AOJu0YyaSZ4U7i3raun2uOgCJp14pXf8LZZcC3zSTTBhxiUfCeZ2rhN1
-        PmDLa/5pgYmE5GAy6hAJdRrKIDP9kw0b7HPHOyeUJcHHGQDnUEkickM=
-X-Google-Smtp-Source: AGHT+IEBVVh25I8axDv4eSe1s2AmtWC7nch4AjPksBX9fVwsSKmVvEAvIs4oH6u6oUQFPX4VBHAjoxwYg4YPHSHon98=
-X-Received: by 2002:a17:90a:408f:b0:26b:13b7:22f9 with SMTP id
- l15-20020a17090a408f00b0026b13b722f9mr14918323pjg.22.1694094457611; Thu, 07
- Sep 2023 06:47:37 -0700 (PDT)
+        bh=40rylBcMTDXR7i4w8TksqV00SNZY2PfZiThjPzEVKjU=;
+        b=GRktAQXizW+0raL7pMb4U1v2U4qc/p+GSzLfZSRvmKBYUo8MUSHZxq3L1sGeWQv2St
+         i45MUe8hmrp5H+k28PhUnewK5ffLNr8qRRJS+C0sxyMjwG1Pkociq8mZIrHZpC9jtIZ4
+         RtfjTsw6RvYOW5l1/Nx0x+mwas/+O2kLqKRT4oFDi6nh8xRRcwT1GZDF6ZgP4szoLCs6
+         jxKrXrCnthGo0ed2Dn3LHV6gOwdLq8904dVxBsZiw7HHCYXwy0NtCAaI/ggzcDvT1Psk
+         E7MH+peAYTSL8ditA2ePP+OQXETL3bVYCPyZoDxYIelNk1Bq68zR4KUcFgFhbXbcHOGH
+         aISw==
+X-Gm-Message-State: AOJu0Yw4prlT+cxex56S8LtoX6zKtEUXULZ6iopguwldkUKOQxFJKNXI
+        aWSjfhSEhVIBcmK2cf5rVa+de84HNOWfRDu54Xh+/xq2zIEUpLjX
+X-Google-Smtp-Source: AGHT+IETdhddPzANTZg932/q6SiIInI1A+ozTRz+mJHbAWbdsy/mtMdePXNFfT+4SqFLkAAkJW11kVd7upfsHv7Zxng=
+X-Received: by 2002:a25:1e0a:0:b0:d1c:876d:2c7d with SMTP id
+ e10-20020a251e0a000000b00d1c876d2c7dmr3250628ybe.13.1694094907900; Thu, 07
+ Sep 2023 06:55:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230820210640.585311-1-qyousef@layalina.io> <20230820210640.585311-3-qyousef@layalina.io>
- <CAKfTPtDY48jpO+b-2KXawzxh-ty+FMKX6YUXioNR7kpgO=ua6Q@mail.gmail.com> <20230829163740.uadhv2jfjuumqk3w@airbuntu>
-In-Reply-To: <20230829163740.uadhv2jfjuumqk3w@airbuntu>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Thu, 7 Sep 2023 15:47:26 +0200
-Message-ID: <CAKfTPtCP6uX79dOrzN4PxFTMBFrDAMOOrWyZrsVypUQ0RY7BAA@mail.gmail.com>
-Subject: Re: [PATCH 2/4] sched: cpufreq: Fix apply_dvfs_headroom() escaping
- uclamp constraints
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Lukasz Luba <lukasz.luba@arm.com>
+References: <cover.1693996662.git.quic_varada@quicinc.com> <5e3c29df2b42cceb8072b00546a78e1b99b2d374.1693996662.git.quic_varada@quicinc.com>
+In-Reply-To: <5e3c29df2b42cceb8072b00546a78e1b99b2d374.1693996662.git.quic_varada@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 7 Sep 2023 16:54:56 +0300
+Message-ID: <CAA8EJppXxiX7+6nhfKyJYDU0i2pkBzXL5J3EQUapLJXxx3b=HA@mail.gmail.com>
+Subject: Re: [PATCH v1 04/10] clk: qcom: apss-ipq6018: ipq5332: add safe
+ source switch for a53pll
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, rafael@kernel.org,
+        viresh.kumar@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        quic_kathirav@quicinc.com, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 29 Aug 2023 at 18:37, Qais Yousef <qyousef@layalina.io> wrote:
+On Thu, 7 Sept 2023 at 08:22, Varadarajan Narayanan
+<quic_varada@quicinc.com> wrote:
 >
-> On 08/29/23 16:35, Vincent Guittot wrote:
-> > On Sun, 20 Aug 2023 at 23:08, Qais Yousef <qyousef@layalina.io> wrote:
-> > >
-> > > DVFS headroom is applied after we calculate the effective_cpu_util()
-> > > which is where we honour uclamp constraints. It makes more sense to
-> > > apply the headroom there once and let all users naturally get the right
-> > > thing without having to sprinkle the call around in various places.
-> >
-> > You have to take care of not mixing scheduler and cpufreq constraint and policy.
-> >
-> > uclamp is a scheduler feature to highlight that the utilization
-> > requirement of a task can't go above a level.
+> Stromer Plus PLL found on IPQ53xx doesn't support dynamic
+> frequency scaling. To achieve the same, we need to park the APPS
+> PLL source to GPLL0, re configure the PLL and then switch the
+> source to APSS_PLL_EARLY.
 >
-> uclamp is a performance hint, which utilization is how we represent it
-> internally. A task with uclamp of 800 is not the same as util being actually
-> 800. In our previous discussions around util_fits_cpu() we had similar
-> discussion on how the two can't be treated the same.
->
-> Same with uclamp_min; if it is set to 1024 but there is a task with util say
-> 100, this task shouldn't cause overutilized as its actual utilization actually
-> fits, but it just asked to run at a higher performance point. The actual
-> utilization has to be in the over utilized range. Unless uclamp_max forces it
-> to fit of course.
->
-> So uclamp_max sets a cap to the performance that the task is allowed to reach.
-> And this translates into frequency selection and cpu selection (in case of HMP)
-> by design.
+> To support this, register a clock notifier to get the PRE_RATE
+> and POST_RATE notification. Change the APSS PLL source to GPLL0
+> when PRE_RATE notification is received, then configure the PLL
+> and then change back the source to APSS_PLL_EARLY.
 
-The dvfs head room is a sole property of cpufreq and the scheduler
-doesn't care about it. Scheduler should provide some cpu utilization
-hints. Then what cpufreq will do based on the utilization, the HW
-constraint and the policy is out of scheduler scope.
-
-This headroom is there only because energy model wants to forecast
-what will be the frequency that cpufreq will select later on but
-scheduler doesn't care
+This means that we are changing the parents behind the back of CCF,
+which is not great.
 
 >
-> I don't think we're mixing matters here. But the headroom should be applied to
-> actual utilization, not uclamp. If the rq is capped to a specific performance
-> level, we should honour this.
+> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
+>  drivers/clk/qcom/apss-ipq6018.c | 54 ++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 53 insertions(+), 1 deletion(-)
 >
-> We do the same with iowait boost where it is capped by uclamp_max. A task
-> capped by uclamp_max shouldn't be the trigger of running at a frequency higher
-> than this point. Otherwise we'd need to expose all these internal details to
-> the user, which I think we all agree isn't something to consider at all.
+> diff --git a/drivers/clk/qcom/apss-ipq6018.c b/drivers/clk/qcom/apss-ipq6018.c
+> index 4e13a08..ffb6ab5 100644
+> --- a/drivers/clk/qcom/apss-ipq6018.c
+> +++ b/drivers/clk/qcom/apss-ipq6018.c
+> @@ -9,8 +9,11 @@
+>  #include <linux/clk-provider.h>
+>  #include <linux/regmap.h>
+>  #include <linux/module.h>
+> +#include <linux/clk.h>
+> +#include <linux/soc/qcom/smem.h>
 >
-> >
-> > dvfs head room is a cpufreq decision to anticipate either hw
-> > limitation and responsiveness problem or performance hints.
-> >
-> > they come from different sources and rational and this patch mixed
-> > them which i'm not sure is a correct thing to do
+>  #include <dt-bindings/clock/qcom,apss-ipq.h>
+> +#include <dt-bindings/arm/qcom,ids.h>
 >
-> I don't think I'm mixing them up to be honest.
+>  #include "common.h"
+>  #include "clk-regmap.h"
+> @@ -84,15 +87,64 @@ static const struct qcom_cc_desc apss_ipq6018_desc = {
+>         .num_clks = ARRAY_SIZE(apss_ipq6018_clks),
+>  };
 >
-> The governor is driven by effective_cpu_util() to tell it what is the
-> effective_cpu_util() when making frequency selection. This function takes into
-> account all the factors that could impact frequency selection including all type
-> of rq pressures (except thermal). I think it is appropriate to take headroom
-> into account there and make sure we honour uclamp_max hint to cap the
-> performance appropriately based on the effective uclamp_max value of the rq.
->
-> For example if actually util was 640, then after the headroom it'd be 800. And
-> if uclamp_max is 800, then this task will still get the 1.25 headroom. We are
-> not changing this behavior.
->
-> But if the task goes beyond that, then it'll stop at 800 because this what the
-> request is all about. A headroom beyond this point is not required because the
-> task (or rq to be more precise) is capped to this performance point and
-> regardless how busy the cpu gets in terms of real utilization or headroom, it
-> shouldn't go beyond this point. ie: if a task is a 1024 but uclamp_max of is
-> 800 then it'll only get a performance equivalent to OPP@800 would give.
->
-> If we don't do that uclamp_max range effectively is from 0-819 (based on
-> current headroom setting of 1.25). Which is not what we want or what we're
-> telling userspace. Userspace sees the whole system performance levels
-> abstracted from 0 - 1024. As it should. The only effect they would observe and
-> there's no way around it is that OPPs are discrete points. So in reality our
-> 0-1024 is a staircase where a range of util values will map to the same OPP and
-> then we'll get a jump. So the user can end up requesting for example 700 and
-> 720 and not notice any difference because they both map to the same OPP.
-> I don't think we can fix that - but maybe I should add it to the uclamp doc as
-> a caveat when setting uclamp.
->
-> >
-> > >
-> > > Before this fix running
-> > >
-> > >         uclampset -M 800 cat /dev/zero > /dev/null
-> > >
-> > > Will cause the test system to run at max freq of 2.8GHz. After the fix
-> > > it runs at 2.2GHz instead which is the correct value that matches the
-> > > capacity of 800.
-> >
-> > So a task with an utilization of 800 will run at higher freq than a
-> > task clamped to 800 by uclamp ? Why should they run at different freq
-> > for the same utilization ?
->
-> Because uclamp sets an upper limit on the performance level the task should be
-> able to achieve. Imagine a task is 1024 and capped to 800, it should not run at
-> max frequency, right? What's the point of the uclamp_max hint if the headroom
+> +static int cpu_clk_notifier_fn(struct notifier_block *nb, unsigned long action,
+> +                               void *data)
+> +{
+> +       u8 index;
+> +       int err;
+> +
+> +       if (action == PRE_RATE_CHANGE)
+> +               index = P_GPLL0;
 
-Who knows ? Here we try to predict the coming utilization of the cpu
-and this prediction is only partial so cpufreq might want to keep some
-headroom even if uclamp max is applied to a cfs rq. Anticipate
-unpredictable irq stolen time
+I don't see P_GPLL0 being supported in the ipq6018 driver.
 
-IMO, dvfs_headroom should never be visible in scheduler code. This is
-the case now; it's only visible by cpufreq which is the "owner" and
-energy model which tries to predict cpufreq behavior
+> +       else if (action == POST_RATE_CHANGE)
+> +               index = P_APSS_PLL_EARLY;
 
-> will cause it to run at max anyway? We lost the meaning of the hint. And if
-> this headroom changes in the future, people will start observing different
-> behavior for existing uclamp_max settings on the same system because of this
-> this rightfully hidden and unaccounted for factor.
->
-> >
-> > >
-> > > Note that similar problem exist for uclamp_min. If util was 50, and
-> > > uclamp_min is 100. Since we apply_dvfs_headroom() after apply uclamp
-> > > constraints, we'll end up with util of 125 instead of 100. IOW, we get
-> > > boosted twice, first time by uclamp_min, and second time by dvfs
-> > > headroom.
-> > >
-> > > Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
-> > > ---
-> > >  include/linux/energy_model.h     |  1 -
-> > >  kernel/sched/core.c              | 11 ++++++++---
-> > >  kernel/sched/cpufreq_schedutil.c |  5 ++---
-> > >  3 files changed, 10 insertions(+), 7 deletions(-)
-> > >
-> > > diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-> > > index 6ebde4e69e98..adec808b371a 100644
-> > > --- a/include/linux/energy_model.h
-> > > +++ b/include/linux/energy_model.h
-> > > @@ -243,7 +243,6 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
-> > >         scale_cpu = arch_scale_cpu_capacity(cpu);
-> > >         ps = &pd->table[pd->nr_perf_states - 1];
-> > >
-> > > -       max_util = apply_dvfs_headroom(max_util);
-> > >         max_util = min(max_util, allowed_cpu_cap);
-> > >         freq = map_util_freq(max_util, ps->frequency, scale_cpu);
-> > >
-> > > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > > index efe3848978a0..441d433c83cd 100644
-> > > --- a/kernel/sched/core.c
-> > > +++ b/kernel/sched/core.c
-> > > @@ -7439,8 +7439,10 @@ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
-> > >          * frequency will be gracefully reduced with the utilization decay.
-> > >          */
-> > >         util = util_cfs + cpu_util_rt(rq);
-> > > -       if (type == FREQUENCY_UTIL)
-> > > +       if (type == FREQUENCY_UTIL) {
-> > > +               util = apply_dvfs_headroom(util);
-> >
-> > This is not the same as before because utilization has not being
-> > scaled by irq steal time yet
->
-> We do the scaling below, no?
->
-> AFAICS, we had:
->
->         (util_cfs + util_rt + irq + ((max-irq)*(util_cfs + util_rt)/max)+ dl_bw) * scale
+You also have to handle ABORT_RATE_CHANGE here.
 
-I think it's only :
-  ((util_cfs + util_rt) * (max -irq) / max + irq + dl_bw) * scale
-
-and it' s effectively similar
-
+> +       else
+> +               return 0;
+> +
+> +       err = clk_rcg2_mux_closest_ops.set_parent(&apcs_alias0_clk_src.clkr.hw,
+> +                                                 index);
+> +
+> +       return notifier_from_errno(err);
+> +}
+> +
+> +static struct notifier_block cpu_clk_notifier = {
+> +       .notifier_call = cpu_clk_notifier_fn,
+> +};
+> +
+>  static int apss_ipq6018_probe(struct platform_device *pdev)
+>  {
+>         struct regmap *regmap;
+> +       u32 soc_id;
+> +       int ret;
+> +
+> +       ret = qcom_smem_get_soc_id(&soc_id);
+> +       if (ret)
+> +               return ret;
 >
-> Using U = (util_cfs + util_rt) * scale
+>         regmap = dev_get_regmap(pdev->dev.parent, NULL);
+>         if (!regmap)
+>                 return -ENODEV;
 >
-> we can write this after the multiplication
+> -       return qcom_cc_really_probe(pdev, &apss_ipq6018_desc, regmap);
+> +       ret = qcom_cc_really_probe(pdev, &apss_ipq6018_desc, regmap);
+> +       if (ret)
+> +               return ret;
+> +
+> +       switch (soc_id) {
+> +       /*
+> +        * Only below variants of IPQ53xx support scaling
+> +        */
+> +       case QCOM_ID_IPQ5332:
+> +       case QCOM_ID_IPQ5322:
+> +       case QCOM_ID_IPQ5300:
+
+Please use compat strings instead of using the soc-id.
+
+> +               ret = clk_notifier_register(apcs_alias0_clk_src.clkr.hw.clk,
+> +                                               &cpu_clk_notifier);
+> +               if (ret)
+> +                       return ret;
+> +               break;
+> +       default:
+> +               break;
+> +       }
+> +
+> +       return 0;
+>  }
 >
->         U + irq * scale + ((max-irq)*U/max) + dl_bw * scale
->
-> >
-> > >                 util = uclamp_rq_util_with(rq, util, p);
-> > > +       }
-> > >
-> > >         dl_util = cpu_util_dl(rq);
-> > >
-> > > @@ -7471,9 +7473,12 @@ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
-> > >          *              max - irq
-> > >          *   U' = irq + --------- * U
-> > >          *                 max
-> > > +        *
-> > > +        * We only need to apply dvfs headroom to irq part since the util part
-> > > +        * already had it applied.
-> > >          */
-> > >         util = scale_irq_capacity(util, irq, max);
-> > > -       util += irq;
-> > > +       util += type ==  FREQUENCY_UTIL ? apply_dvfs_headroom(irq) : irq;
-> > >
-> > >         /*
-> > >          * Bandwidth required by DEADLINE must always be granted while, for
-> > > @@ -7486,7 +7491,7 @@ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
-> > >          * an interface. So, we only do the latter for now.
-> > >          */
-> > >         if (type == FREQUENCY_UTIL)
-> > > -               util += cpu_bw_dl(rq);
-> > > +               util += apply_dvfs_headroom(cpu_bw_dl(rq));
-> >
-> > If we follow your reasoning with uclamp on the dl bandwidth, should we
-> > not skip this as well ?
->
-> I do remove this in patch 4. Can fold that one into this one if you like.
-> I opted to keep the current behavior in this patch and remove these later in
-> patch 4.
->
-> I do think that both RT and DL shouldn't need DVFS headroom in general as they
-> both 'disable' it by default.
-
-and the scheduler in general doesn't care about DVFS headroom.
-
-I don't think it's the right way to fix your problem of selecting the
-right frequency on your platform. It would be better to get a proper
-interface between EM and cpufreq like
-cpufreq_give_me_freq_for_this_utilization_ctx.
-
-And  cpufreq needs 2 information:
-- the utilization of the cpu
-- the uclamp/performance/bandwidth hints on this cpu because the
-uclamp_max hints are screwed up by irq scaling anyway.
-
-For example:
-
-irq = 256
-util = 800 but uclamp=512
-
-If I follow your reasoning about the uclamp being a performance hint
-and uclamp=512 means that we should not go above 512 just for cfs+rt,
-we should stay at 512 in this case because irq only needs 256 which is
-below the 512 bandwidth. The utilization reported to cpufreq will be
-above 512 whatever the current (720)  formula or your proposal (608).
-In the case of uclamp, it should be applied after having been scaled
-by irq time.
-
-So we should have reported utilization of 720 with a bandwidth
-requirement of 512 and then cpufreq can applies its headroom if needed
-
->
->
-> Thanks!
->
+>  static struct platform_driver apss_ipq6018_driver = {
 > --
-> Qais Yousef
+> 2.7.4
+>
+
+
+--
+With best wishes
+
+Dmitry
