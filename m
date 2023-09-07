@@ -2,86 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44CA4797AE0
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 19:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93EDF797AE5
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 19:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231625AbjIGRx5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Sep 2023 13:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54584 "EHLO
+        id S243366AbjIGR4J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Sep 2023 13:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233822AbjIGRx4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 13:53:56 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A95171F
-        for <linux-pm@vger.kernel.org>; Thu,  7 Sep 2023 10:53:34 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2bf66a32f25so1170241fa.2
-        for <linux-pm@vger.kernel.org>; Thu, 07 Sep 2023 10:53:34 -0700 (PDT)
+        with ESMTP id S241981AbjIGR4I (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 13:56:08 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 863C21FFD
+        for <linux-pm@vger.kernel.org>; Thu,  7 Sep 2023 10:55:41 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2bd0d135ca3so22339731fa.3
+        for <linux-pm@vger.kernel.org>; Thu, 07 Sep 2023 10:55:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694109195; x=1694713995; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1694109338; x=1694714138; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xMSTYDQ50HhnANlql6muPVUl87KevIgXvVyLmlZvBH8=;
-        b=XVr8kD5ogJDW3pDQKQQn4wB7xMjzMSNi0vNmO9W3J7MeYgiKIxtxNIEbT5CbchIQRH
-         MbQKB18RM4JaA1Eixtf6TvOncmEfTEHE9pGm+klfkfg3BzRC/aLvlqtRITHRf/6XGjF6
-         xHkPdDdBs/MhgD0K+fE07ZTyZVwDThpXYuaB7J1ygH0bZeLwwcXSIc9JYyJXA/67UcSm
-         vCjblJM4/NMOfQWPq9rJ5PcZs+dTmhjwFkVY9rxt9LSKYEEVNtkvyE0trXECEAzyr8J2
-         8MtqkmZ6rWLDUCwR5byOum4h7TgBVevmRArGL6Ioxeoehwk+z6mClYgMBPAm0qVeXKzP
-         rOdg==
+        bh=Q2mDdOoUtMj+G7MqUHaJG2Oe4r73+j5wUSjZ+K/6r1M=;
+        b=kpLZ0Jx12Z/VBJlzV2NZj45Op5Zf4Q/axre6R/kkpt0xsSwM+V5Q10HZgE8ZTxO5uu
+         mZpfoNei/3gwFCUd1uP6akwU8S2he+TvHf1G3o/LXtGJqQe9qBBhngEwfgASw3QSXqqB
+         2QJlnl+nbFfe4Ody9+GOn6ivDO5pA3L28MrJ/udtf7vmb9uuZsN/LtYvi9nKhq4Ky9Br
+         ElsHZUPJBukMHd7RMPhqMVBis9weLeTD//ZXFoMsZS8OyHf+vbWwPwHbqqaQEjd1Z3Cz
+         uCv0p988cT+krnOsDBs49x7iu6wLkn02wiq0n00btw19q9Kl7nAomAifF7clib47Hjji
+         8X6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694109195; x=1694713995;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1694109338; x=1694714138;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xMSTYDQ50HhnANlql6muPVUl87KevIgXvVyLmlZvBH8=;
-        b=WQh7zaVyys6SKf/KBy59cdQivq+vLsd0vNuY1e6fz2j2Bq83E47o3c+x7Om2pCAxOt
-         5OE2zX1elflg0ZeN68USzeSs+svSPchTNilzqsEwbJwrF29T6EN8Qp7LfKuZrNr0Ch7a
-         ckKeFq8hoeot5OyXSfkpMigWxQj8ek5f8ti1SCmPu894kuDuzB5zXD5WXIUEROnJLff9
-         O4JtSwkmC6ZHzdTbVH3LQWfPL2H/dqvwdskSupPHlW6BdW86GDnyYiSm6FLD+ezgJyfK
-         TnhEp2feYm9+E972bQjoCukj3McXWIJ0tW3Sxn0p7v7J9KdMsY6CJdpPMGnRFcVccpcV
-         0Wow==
-X-Gm-Message-State: AOJu0YzE1PO3r62SVA4Fs8M3US/adR1fiVQDkPCvbqQNjxN358+Q0x0Z
-        kUIwh3ml/JfAMxQ5qKpCzWFCZzsgPKR01P/uNXFSTQ==
-X-Google-Smtp-Source: AGHT+IGIWoO+JsIl+btYwsTt/97hX2FK/iSzcrjvhPOXGc45tZqwZG3mqa/vhoooqTuBhr7B7l/JKg==
-X-Received: by 2002:a17:906:1db2:b0:9a5:d095:a8e1 with SMTP id u18-20020a1709061db200b009a5d095a8e1mr4006361ejh.11.1694072200050;
-        Thu, 07 Sep 2023 00:36:40 -0700 (PDT)
-Received: from [192.168.37.20] (178235177204.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.204])
-        by smtp.gmail.com with ESMTPSA id f25-20020a170906495900b0099d9dee8108sm10149024ejt.149.2023.09.07.00.36.37
+        bh=Q2mDdOoUtMj+G7MqUHaJG2Oe4r73+j5wUSjZ+K/6r1M=;
+        b=YRLbkqOL7RCOCEuxKaUx94SILfyl9769nmVWhMLScTJPXA9MPZsGvARE39SItlbMsW
+         JKYfsqhbVo+ukA0DBEYKLD5iBgtNtZ4yI+wNOrijxjRJTlOmrUMqFOkEQwmdxyNizbou
+         vmQFyEl6kOAV73y9BU2PFvi5GHMC80FaOTPpGfwvZeX8ft1EugSEDP+JSnfpAO2aN6ZI
+         slL4cTJxGgAFboo8rxcJDmpGKmioQlwkNj/C49OOC6+0iGod/38vrsclwhjAq46anha2
+         1MnusdhkbQssbBSwkdpmW9/xKcIJrkwVp7/3HFtM7geUJnVo561XAGidlbt+BFZLBMRy
+         7XCA==
+X-Gm-Message-State: AOJu0YxtoLRhSEiKamwOLrblw6W0s7PpzPtyGbMwL8lr7oxZ+YK91bsk
+        motnfdWaoZd2YMK9DIns3pJNQ0znBXd3Izc8Yd5SCw==
+X-Google-Smtp-Source: AGHT+IGL3X4jnE8aHxmeAy21FcPDQXKVfwcbk30P7hctEGcYhjE/lblNUGOm9FkXIpnKlicHb8htXQ==
+X-Received: by 2002:a17:907:b18:b0:9a1:e231:67ec with SMTP id h24-20020a1709070b1800b009a1e23167ecmr3903209ejl.61.1694075133580;
+        Thu, 07 Sep 2023 01:25:33 -0700 (PDT)
+Received: from [192.168.37.232] (178235177204.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.204])
+        by smtp.gmail.com with ESMTPSA id lu7-20020a170906fac700b00992e14af9b9sm9949024ejb.134.2023.09.07.01.25.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Sep 2023 00:36:39 -0700 (PDT)
-Message-ID: <5d4ba948-46e2-4b95-95a2-17775f4c9881@linaro.org>
-Date:   Thu, 7 Sep 2023 09:36:36 +0200
+        Thu, 07 Sep 2023 01:25:33 -0700 (PDT)
+Message-ID: <667b49cc-dc12-4cee-8865-6b098a9928e0@linaro.org>
+Date:   Thu, 7 Sep 2023 10:25:31 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/6] clk: qcom: Use HW_CTRL_TRIGGER flag to switch
- video GDSC to HW mode
+Subject: Re: [PATCH v1 03/10] clk: qcom: apss-ipq-pll: Fix 'l' value for
+ ipq5332_pll_config
 Content-Language: en-US
-To:     Jagadeesh Kona <quic_jkona@quicinc.com>,
-        Abel Vesa <abel.vesa@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@qti.qualcomm.com>, linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Ajit Pandey <quic_ajipan@quicinc.com>,
-        Imran Shaik <quic_imrashai@quicinc.com>
-References: <20230816145741.1472721-1-abel.vesa@linaro.org>
- <20230816145741.1472721-5-abel.vesa@linaro.org>
- <2fc0d771-cee2-4826-a62a-56ed4bfad3a2@linaro.org>
- <ZOXiUzxfs1cj3SWT@linaro.org>
- <07e93a9d-69ac-41b7-aa21-b855b97bf801@linaro.org>
- <ef1439f8-4a9b-53b4-34be-1229b39d2310@quicinc.com>
- <8257f7b3-dfb8-4683-85de-600f3b1ed54b@linaro.org>
- <f37d2dd8-d625-048e-9c21-bba710b40086@quicinc.com>
- <b5ae2ad9-f6c7-47d6-bab8-3f3fdb6b43e2@linaro.org>
- <8c88bca4-b562-0122-1451-ef9de7fd8737@quicinc.com>
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>,
+        ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
+        rafael@kernel.org, viresh.kumar@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        quic_kathirav@quicinc.com, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <cover.1693996662.git.quic_varada@quicinc.com>
+ <543183ecfba929683c1b8d7ff24d75df489ef0cf.1693996662.git.quic_varada@quicinc.com>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
@@ -118,7 +102,7 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <8c88bca4-b562-0122-1451-ef9de7fd8737@quicinc.com>
+In-Reply-To: <543183ecfba929683c1b8d7ff24d75df489ef0cf.1693996662.git.quic_varada@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -131,64 +115,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7.09.2023 07:55, Jagadeesh Kona wrote:
+On 7.09.2023 07:21, Varadarajan Narayanan wrote:
+> The earlier 'l' value of 0x3e is for 1.5GHz. Not all SKUs support
+> this frequency. Hence set it to 0x2d to get 1.1GHz which is
+> supported in all SKUs.
 > 
-> 
-> On 9/4/2023 9:32 PM, Konrad Dybcio wrote:
->> On 4.09.2023 11:27, Jagadeesh Kona wrote:
->>>
->>>
->>> On 9/2/2023 5:33 PM, Konrad Dybcio wrote:
->>>> On 28.08.2023 08:48, Jagadeesh Kona wrote:
->>>>>
->>>>>
->>>>> On 8/26/2023 4:17 PM, Konrad Dybcio wrote:
->>>>>> On 23.08.2023 12:41, Abel Vesa wrote:
->>>>>>> On 23-08-16 19:56:46, Konrad Dybcio wrote:
->>>>>>>> On 16.08.2023 16:57, Abel Vesa wrote:
->>>>>>>>> From: Jagadeesh Kona <quic_jkona@quicinc.com>
->>>>>>>>>
->>>>>>>>> The current HW_CTRL flag switches the video GDSC to HW control mode as
->>>>>>>>> part of GDSC enable itself, instead of that use HW_CTRL_TRIGGER flag to
->>>>>>>>> give consumer drivers more control and switch the GDSC mode as and when
->>>>>>>>> required.
->>>>>>>>>
->>>>>>>>> HW_CTRL_TRIGGER flag allows consumer drivers to switch the video GDSC to
->>>>>>>>> HW/SW control modes at runtime using dev_pm_genpd_set_hwmode API.
->>>>>>>>>
->>>>>>>>> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
->>>>>>>>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
->>>>>>>>> ---
->>>>>>>> Do we have any use for the HW_CTRL flag?
->>>>>>>>
->>>>>>>> Perhaps it should be renamed to HW_CTRL_ALWAYS?
->>>>>>>>
->>>>>>>> Or even better, *if and only if* that is necessary, add a common
->>>>>>>> property like "always_hw_managed" to the genpd code?
->>>>>>>
->>>>>>> The HW_CTRL flag is still needed for the consumers that expect the GDSC
->>>>>>> to be have the HW control bit set right after it gets enabled.
->>>>>> Guess the correct question here would be.. Are there any?
->>>>>>
->>>>>
->>>>> Yes, Display GDSC(mdss_gdsc) is required to be controlled always in HW control mode when it is enabled.
->>>> Oh really?
->>>>
->>>> Looking at msm-5.10 techpack, only the SDE RSC driver seems to
->>>> trigger regulator fast mode (so, enabling gdsc hw_ctrl on downstream).
->>>>
->>>
->>> Yes, on downstream, display GDSC has only one consumer(SDE RSC driver) and there are no other consumers. SDE RSC driver switches the GDSC to hw control mode once GDSC is enabled and leaves it in hw control mode. Thanks!
->> Sorry for pulling your tongue here a bit, but would it only concern
->> RPMh SoCs? Designs like SM6115 don't implement RSCs, should they not
->> have HW_CTRL enabled at all times?
->>
-> 
-> Yes, for RPMh SoCs which have display RSC block, GDSC is switched to HW control mode. For SoCs which doesn't have display RSC block, display driver controls the GDSC in SW mode on downstream. Thanks!
-Thanks for explaining!
-
-One last question, I promise.. Should we switch the MDSS GDSC to
-HW_CTRL mode only after we start controlling the DISP RSC from Linux,
-or should it be done regardless (because of the RPMh solving algos)?
+> Fixes: c7ef7fbb1ccf ("clk: qcom: apss-ipq-pll: add support for IPQ5332")
+> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
