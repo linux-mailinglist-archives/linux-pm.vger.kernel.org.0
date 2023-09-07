@@ -2,50 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B22467979A2
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 19:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C8079798A
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 19:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbjIGRRk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Sep 2023 13:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53930 "EHLO
+        id S240573AbjIGRQa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Sep 2023 13:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242721AbjIGRRj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 13:17:39 -0400
+        with ESMTP id S242220AbjIGRQ2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 13:16:28 -0400
+X-Greylist: delayed 118 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Sep 2023 10:16:01 PDT
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C53C1A8
-        for <linux-pm@vger.kernel.org>; Thu,  7 Sep 2023 10:17:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9DA10E9;
+        Thu,  7 Sep 2023 10:16:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=WtCoctKqrOuNL7YPM9mYObCf6Hdm7ApMb7s6UV96VRg=;
-  b=HPx166wijMpi0SuqjYCYznd1XBpiCUbrQLc/PO/UMyEq3ZEUYTobIRDo
-   3Rqqz8tTf3ziWlg9eiO0gtAOEfHBNxrgu+g1iTCYRdavySvFpyxmeL4HB
-   GFAsE9lOiSmMbIKRRI/H8INxUF7Ej0oMCIoW7c5cwML7MMfndJw9rsVW5
-   k=;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=yaKS76r33jDdN4YRfQ9rWXkWuhK5u7HSRxlycGPVIFs=;
+  b=btpK9sTraVPQp9hlYQYmLOZYuH4BemJfQO3Y6HfD7eMk6iciEM3G6gVp
+   gj/DRuzgUayvoqqq1TEMEU1F88NNsRqJhwhhrETcRNKUTBsvLlgnP+2wx
+   lmxSMbY4fUz+f98xZQTgpmAFpRGIQkc0iRe7rlU3MfCQyhTCBe4QtKCPv
+   g=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="6.02,234,1688421600"; 
-   d="scan'208";a="65324651"
+   d="scan'208";a="65324659"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 11:55:29 +0200
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 11:55:30 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     alsa-devel@alsa-project.org
-Cc:     kernel-janitors@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org, linux-mmc@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-media@vger.kernel.org
-Subject: [PATCH 00/11] add missing of_node_put
-Date:   Thu,  7 Sep 2023 11:55:10 +0200
-Message-Id: <20230907095521.14053-1-Julia.Lawall@inria.fr>
+To:     Nishanth Menon <nm@ti.com>
+Cc:     kernel-janitors@vger.kernel.org, Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 04/11] genpd: ti: add missing of_node_put
+Date:   Thu,  7 Sep 2023 11:55:14 +0200
+Message-Id: <20230907095521.14053-5-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20230907095521.14053-1-Julia.Lawall@inria.fr>
+References: <20230907095521.14053-1-Julia.Lawall@inria.fr>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -58,21 +54,41 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add of_node_put on a break out of an of_node loop.
+for_each_node_with_property performs an of_node_get on
+each iteration, so a break out of the loop requires an
+of_node_put.
+
+This was done using the Coccinelle semantic patch
+iterators/for_each_child.cocci
+
+Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
+ drivers/genpd/ti/ti_sci_pm_domains.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
- arch/powerpc/kexec/file_load_64.c                    |    8 ++++++--
- arch/powerpc/platforms/powermac/low_i2c.c            |    4 +++-
- arch/powerpc/platforms/powermac/smp.c                |    4 +++-
- drivers/bus/arm-cci.c                                |    4 +++-
- drivers/genpd/ti/ti_sci_pm_domains.c                 |    8 ++++++--
- drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c      |    4 +++-
- drivers/gpu/drm/mediatek/mtk_drm_drv.c               |    4 +++-
- drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c |    1 +
- drivers/mmc/host/atmel-mci.c                         |    8 ++++++--
- drivers/net/ethernet/broadcom/asp2/bcmasp.c          |    1 +
- drivers/soc/dove/pmu.c                               |    5 ++++-
- drivers/thermal/thermal_of.c                         |    8 ++++++--
- sound/soc/sh/rcar/core.c                             |    1 +
- 13 files changed, 46 insertions(+), 14 deletions(-)
+diff -u -p a/drivers/genpd/ti/ti_sci_pm_domains.c b/drivers/genpd/ti/ti_sci_pm_domains.c
+--- a/drivers/genpd/ti/ti_sci_pm_domains.c
++++ b/drivers/genpd/ti/ti_sci_pm_domains.c
+@@ -153,14 +153,18 @@ static int ti_sci_pm_domain_probe(struct
+ 					max_id = args.args[0];
+ 
+ 				pd = devm_kzalloc(dev, sizeof(*pd), GFP_KERNEL);
+-				if (!pd)
++				if (!pd) {
++					of_node_put(np);
+ 					return -ENOMEM;
++				}
+ 
+ 				pd->pd.name = devm_kasprintf(dev, GFP_KERNEL,
+ 							     "pd:%d",
+ 							     args.args[0]);
+-				if (!pd->pd.name)
++				if (!pd->pd.name) {
++					of_node_put(np);
+ 					return -ENOMEM;
++				}
+ 
+ 				pd->pd.power_off = ti_sci_pd_power_off;
+ 				pd->pd.power_on = ti_sci_pd_power_on;
+
