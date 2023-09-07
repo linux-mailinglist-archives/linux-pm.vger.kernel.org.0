@@ -2,126 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8391F7977DB
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 18:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C07D797B1A
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 20:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239006AbjIGQgN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 7 Sep 2023 12:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59946 "EHLO
+        id S245691AbjIGSDQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Sep 2023 14:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239538AbjIGQgJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 12:36:09 -0400
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6A8B315;
-        Thu,  7 Sep 2023 09:25:20 -0700 (PDT)
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-57328758a72so224402eaf.1;
-        Thu, 07 Sep 2023 09:25:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694103843; x=1694708643;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=djjxBZJvLFYuSGFHtqKHA0M2l/8DSOfAUO36E6IvzQc=;
-        b=b2bEdJlPUaBXxX0CsU7UWd90fm8+NgVB+XhTQLKQZIZGgfUFCxBA1Wd84FFfM76WMK
-         BpjEpZEgIuYe/Hd69saOcAytbOUBaEMoBF/KvECUX6mpoQ8OR360QsJ97Zu0+Fz53OUK
-         e46FUDluEqsszK8CQafr2C3h3/7W1Jbw4ocf1eRBDQoAMiHinVINweExh1EHkjY7vS7z
-         TBL5vQgezaRf0bq6mgSMIO+Dk80F3UfWdWJjMmZpOG/NTVXFYF3xlPTjPNTD9yXE7W6k
-         hlmyUXCCAw30DN55uuLxFRKIOsbYHR2djx5P6r9+TSIhqV95fgfokEVC+zARRHuDyYcS
-         8WeA==
-X-Gm-Message-State: AOJu0YzFqkRopEYnEGdwnPo4/AitnW00KflAzCmZcyPTJtenQPgoZoQZ
-        BnbupM41reMuE07OnKK79vqF2HXqT6MHK64BbF4EwVb3
-X-Google-Smtp-Source: AGHT+IHR09v57QqtLHy8GY8/Npb3e/xr1iqv9qut4yug6VWf84ldbAiGu6bbX0f9B2Tew6v/6BpdWhGHUy7ZIpnnlxc=
-X-Received: by 2002:a4a:a602:0:b0:573:2a32:6567 with SMTP id
- e2-20020a4aa602000000b005732a326567mr96043oom.0.1694103842804; Thu, 07 Sep
- 2023 09:24:02 -0700 (PDT)
+        with ESMTP id S245688AbjIGSDQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 14:03:16 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88AEF135;
+        Thu,  7 Sep 2023 11:02:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694109776; x=1725645776;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=u0dkGJgRvb007oo4gHle5cfoOoPHiOeV5c7Xd+Hdbcw=;
+  b=EqUi3tjYKQBYrFpQCCKcCpjyQq6cGu+vXDkhdB3tAiPe4eVPjXkh4yQO
+   63ycJ2TH/sFfLxO1dpQQkbJcgvPgxTAa/Y3V+zeDSJ98fvlQ3FBQAvlzI
+   uais1KXNVUfxhQW4LvwkUEDPoGSIdcCpM8/wMNLEhp6oNIcEHjl8PAaCX
+   fXVuB4Txg0IhOlrl1zN2AX8V0Htx3GqDTpdwoapEtj8mqC4JXGlixl5P2
+   ASzeFPgaT7Js6/DHa/ts6wBZNC0Yc/ZjwPccEdHu3IhoJiVUBKzUuJUBh
+   IPjViyWW2CfpQzIRKthyE7EZZkxYEuZTJeMDfrOgxEcYxWl319kSvj2gf
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="376340246"
+X-IronPort-AV: E=Sophos;i="6.02,235,1688454000"; 
+   d="scan'208";a="376340246"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 11:02:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="691883886"
+X-IronPort-AV: E=Sophos;i="6.02,235,1688454000"; 
+   d="scan'208";a="691883886"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.14])
+  by orsmga003.jf.intel.com with ESMTP; 07 Sep 2023 11:02:24 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, viresh.kumar@linaro.org, lenb@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] cpufreq: intel_pstate: Fix global turbo disable check
+Date:   Thu,  7 Sep 2023 11:02:07 -0700
+Message-Id: <20230907180207.3274207-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230831130242.2290502-1-festevam@gmail.com>
-In-Reply-To: <20230831130242.2290502-1-festevam@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 7 Sep 2023 18:23:51 +0200
-Message-ID: <CAJZ5v0jKmxxFMO5TkHujEtdSjeEqKqEOwRyXAXbaeRQUTythdg@mail.gmail.com>
-Subject: Re: [PATCH v7 1/3] dt-bindings: thermal-zones: Document critical-action
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        conor+dt@kernel.org, devicetree@vger.kernel.org,
-        Fabio Estevam <festevam@denx.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 31, 2023 at 3:02 PM Fabio Estevam <festevam@gmail.com> wrote:
->
-> From: Fabio Estevam <festevam@denx.de>
->
-> Document the critical-action property to describe the thermal action
-> the OS should perform after the critical temperature is reached.
->
-> The possible values are "shutdown" and "reboot".
->
-> The motivation for introducing the critical-action property is that
-> different systems may need different thermal actions when the critical
-> temperature is reached.
->
-> For example, a desktop PC may want the OS to trigger a shutdown
-> when the critical temperature is reached.
->
-> However, in some embedded cases, such behavior does not suit well,
-> as the board may be unattended in the field and rebooting may be a
-> better approach.
+Setting global turbo flag based on CPU 0 P-state limits is problematic
+as it limits max P-state request on every CPU on the system just based
+on its P-state limits.
 
-So one more question here: Why is this a property of a thermal zone
-and not the property of the whole system?
+There are two cases in which global.turbo_disabled flag is set:
+- When the MSR_IA32_MISC_ENABLE_TURBO_DISABLE bit is set to 1
+in the MSR MSR_IA32_MISC_ENABLE. This bit can be only changed by
+the system BIOS before power up.
+- When the max non turbo P-state is same as max turbo P-state for CPU 0.
 
-Presumably, on a system where the platform integrator prefers to
-reboot on critical temperature, it would be necessary to add this
-property to every thermal zone.
+The second check is not a valid to decide global turbo state based on
+the CPU 0. CPU 0 max turbo P-state can be same as max non turbo P-state,
+but for other CPUs this may not be true.
 
-Also, what if this property has different values for different thermal zones?
+There is no guarantee that max P-state limits are same for every CPU. This
+is possible that during fusing max P-state for a CPU is constrained. Also
+with the Intel Speed Select performance profile, CPU 0 may not be present
+in all profiles. In this case the max non turbo and turbo P-state can be
+set to the lowest possible P-state by the hardware when switched to
+such profile. Since max non turbo and turbo P-state is same,
+global.turbo_disabled flag will be set.
 
-> The bootloader may also benefit from this new property as it can check
-> the SoC temperature and in case the temperature is above the critical
-> point, it can trigger a shutdown or reboot accordingly.
->
-> Signed-off-by: Fabio Estevam <festevam@denx.de>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-> Changes since v6:
-> - None.
->
->  .../devicetree/bindings/thermal/thermal-zones.yaml       | 9 +++++++++
->  1 file changed, 9 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-> index 4f3acdc4dec0..c2e4d28f885b 100644
-> --- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-> @@ -75,6 +75,15 @@ patternProperties:
->            framework and assumes that the thermal sensors in this zone
->            support interrupts.
->
-> +      critical-action:
-> +        $ref: /schemas/types.yaml#/definitions/string
-> +        description:
-> +          The action the OS should perform after the critical temperature is reached.
-> +
-> +        enum:
-> +          - shutdown
-> +          - reboot
-> +
->        thermal-sensors:
->          $ref: /schemas/types.yaml#/definitions/phandle-array
->          maxItems: 1
-> --
-> 2.34.1
->
+Once global.turbo_disabled is set, any scaling max and min frequency
+update for any CPU will result in its max P-state constrained to the max
+non turbo P-state.
+
+Hence remove the check of max non turbo P-state equal to max turbo P-state
+of CPU 0 to set global turbo disabled flag.
+
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ drivers/cpufreq/intel_pstate.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index dc50c9fb488d..a534a1f7f1ee 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -571,13 +571,9 @@ static void intel_pstate_hybrid_hwp_adjust(struct cpudata *cpu)
+ static inline void update_turbo_state(void)
+ {
+ 	u64 misc_en;
+-	struct cpudata *cpu;
+ 
+-	cpu = all_cpu_data[0];
+ 	rdmsrl(MSR_IA32_MISC_ENABLE, misc_en);
+-	global.turbo_disabled =
+-		(misc_en & MSR_IA32_MISC_ENABLE_TURBO_DISABLE ||
+-		 cpu->pstate.max_pstate == cpu->pstate.turbo_pstate);
++	global.turbo_disabled = misc_en & MSR_IA32_MISC_ENABLE_TURBO_DISABLE;
+ }
+ 
+ static int min_perf_pct_min(void)
+-- 
+2.34.1
+
