@@ -2,84 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A67117974D3
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 17:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7121F7974D5
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 17:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbjIGPl3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Sep 2023 11:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
+        id S231676AbjIGPlg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Sep 2023 11:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236114AbjIGPXT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 11:23:19 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC19135;
-        Thu,  7 Sep 2023 08:23:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=OI476zBUwqc76nvniBbxYuu0lwS1B+BEzNEeiMb9prM=; b=YWBUFZDlCLXGhIHhep3kUss7WX
-        58SpxA+obyk9Yr50WkV8w6pYdrJcBO9nIVzcW1H9sUd8rqojPW6cAD75eRMtNw+zYwv3NGqsm0/7C
-        mQES2ZWgNpF+Vos54yYoMjqM2ZiJZQ2MNYxtd060vYxy9eTL5vgc2AxiXoIiwLXdk3o3TXZTUk+lz
-        3mdDX2kYgSAW/9gYFpgDgPF6B0I6VJYfuCWAmyg7Vb+t5jXk5FZiwSX0BdDtwAy9l3HiAt1FHTHla
-        Px+XUieyhSyG0q0UNnOWUrhkKMBRfAmGuYuCJoSv3et79OAFOpm8oMG2I5vMz0MB6noWPDi8Yo9mA
-        5nmk/Djg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qeDZL-00Aen9-SW; Thu, 07 Sep 2023 11:53:08 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 830C7300687; Thu,  7 Sep 2023 13:53:07 +0200 (CEST)
-Date:   Thu, 7 Sep 2023 13:53:07 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
+        with ESMTP id S244756AbjIGPdO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 11:33:14 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E75D7E47;
+        Thu,  7 Sep 2023 08:32:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 30655152B;
+        Thu,  7 Sep 2023 06:06:19 -0700 (PDT)
+Received: from [10.57.92.126] (unknown [10.57.92.126])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9DB333F7B4;
+        Thu,  7 Sep 2023 06:05:39 -0700 (PDT)
+Message-ID: <89067f71-9b83-e647-053e-07f7d55b6529@arm.com>
+Date:   Thu, 7 Sep 2023 14:06:15 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [RFC PATCH 0/7] sched: cpufreq: Remove magic margins
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     Qais Yousef <qyousef@layalina.io>, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
         Ingo Molnar <mingo@kernel.org>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Viresh Kumar <viresh.kumar@linaro.org>
-Subject: Re: [RFC PATCH 0/7] sched: cpufreq: Remove magic margins
-Message-ID: <20230907115307.GD10955@noisy.programming.kicks-ass.net>
 References: <20230827233203.1315953-1-qyousef@layalina.io>
  <a6365f63-4669-15e5-b843-f4bfb1bd5e68@arm.com>
  <20230906211850.zyvk6qtt6fvpxaf3@airbuntu>
  <6011d8bb-9a3b-1435-30b0-d75b39bf5efa@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6011d8bb-9a3b-1435-30b0-d75b39bf5efa@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+ <20230907115307.GD10955@noisy.programming.kicks-ass.net>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20230907115307.GD10955@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 07, 2023 at 08:48:08AM +0100, Lukasz Luba wrote:
 
-> > Hehe. That's because they're not really periodic ;-)
+
+On 9/7/23 12:53, Peter Zijlstra wrote:
+> On Thu, Sep 07, 2023 at 08:48:08AM +0100, Lukasz Luba wrote:
 > 
-> They are periodic in a sense, they wake up every 16ms, but sometimes
-> they have more work. It depends what is currently going in the game
-> and/or sometimes the data locality (might not be in cache).
+>>> Hehe. That's because they're not really periodic ;-)
+>>
+>> They are periodic in a sense, they wake up every 16ms, but sometimes
+>> they have more work. It depends what is currently going in the game
+>> and/or sometimes the data locality (might not be in cache).
+>>
+>> Although, that's for games, other workloads like youtube play or this
+>> one 'Yahoo browser' (from your example) are more 'predictable' (after
+>> the start up period). And I really like the potential energy saving
+>> there :)
 > 
-> Although, that's for games, other workloads like youtube play or this
-> one 'Yahoo browser' (from your example) are more 'predictable' (after
-> the start up period). And I really like the potential energy saving
-> there :)
+> So everything media is fundamentally periodic, you're hard tied to the
+> framerate / audio-buffer size etc..
 
-So everything media is fundamentally periodic, you're hard tied to the
-framerate / audio-buffer size etc..
+Agree
 
-Also note that the traditional periodic task model from the real-time
-community has the notion of WCET, which completely covers this
-fluctuation in frame-to-frame work, it only considers the absolute worst
-case.
+> 
+> Also note that the traditional periodic task model from the real-time
+> community has the notion of WCET, which completely covers this
+> fluctuation in frame-to-frame work, it only considers the absolute worst
+> case.
 
-Now, practically, that stinks, esp. when you care about batteries, but
-it does not mean these tasks are not periodic.
+That's good point, the WCET here. IMO shorter PELT e.g. 8ms allows us
+to 'see' a bit more that information: the worst case in fluctuation of
+a particular task. Then this 'seen' value is maintained in util_est
+for a while. That's why (probably) I see a better 95-, 99-percentile
+numbers for frames rendering time.
 
-Many extentions to the periodic task model are possible, including
-things like average runtime with bursts etc.. all have their trade-offs.
+> 
+> Now, practically, that stinks, esp. when you care about batteries, but
+> it does not mean these tasks are not periodic.
+
+Totally agree they are periodic.
+
+> 
+> Many extentions to the periodic task model are possible, including
+> things like average runtime with bursts etc.. all have their trade-offs.
+
+Was that maybe proposed somewhere on LKML (the other models)?
+
+I can recall one idea - WALT.
+IIRC ~2016/2017 the WALT proposal and some discussion/conferences, it
+didn't get positive feedback [2].
+
+I don't know if you remember those numbers back than, e.g. video 1080p
+playback was using ~10% less energy... Those 10%-15% are still important
+for us ;)
+
+Regards,
+Lukasz
+
+[1] 
+https://lore.kernel.org/all/1477638642-17428-1-git-send-email-markivx@codeaurora.org/
