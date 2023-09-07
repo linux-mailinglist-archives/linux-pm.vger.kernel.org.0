@@ -2,167 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5457974D7
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 17:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5550F7974D4
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 17:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbjIGPlk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Sep 2023 11:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59684 "EHLO
+        id S231517AbjIGPld (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Sep 2023 11:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245554AbjIGP3p (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 11:29:45 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECC41FE4;
-        Thu,  7 Sep 2023 08:29:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=30UDpD7H6mzYmx8jrLZsBdMp0E/iK+IE4ikawwxJ9Kw=; b=daUMIbD5H1kGLmZNJbo0BRV+Hk
-        x3CHasEN0NaoOrlckQh5evtcsD4LZFlymfiOjnTvHYLiKklebt+AkSUTNq5CRcLVjXvfTU4gZuia3
-        dZcazUXEHV4vpem8101/o5mhWVG2RNVKX5pDq0AEJ1TTlQPTmoiG1DmSCwHVCYx2Pu9YXLxGj15UE
-        yqRSGNkPrTV47a5cw8FG5tpHXA2JT3T2az+HBRNQxFJdsWahIhthVMPn7DWpBRzYvuwrKiq8ktbWB
-        ukq+nce/1o7uPKIXg5OlWeyukW07bTQqa0pycqvXhA62YhxwInoIXoNMATb070p9rjuvz2YF59pY4
-        nvD/9DKA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qeBb8-001jrG-0q;
-        Thu, 07 Sep 2023 09:46:51 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5D863300687; Thu,  7 Sep 2023 11:46:51 +0200 (CEST)
-Date:   Thu, 7 Sep 2023 11:46:51 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Elliot Berman <quic_eberman@quicinc.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>, kernel@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Prakash Viswalingam <quic_prakashv@quicinc.com>
-Subject: Re: [PATCH v2] freezer,sched: Use saved_state to reduce some
- spurious wakeups
-Message-ID: <20230907094651.GB16872@noisy.programming.kicks-ass.net>
-References: <20230830-avoid-spurious-freezer-wakeups-v2-1-8877245cdbdc@quicinc.com>
- <20230904212324.GA2568@noisy.programming.kicks-ass.net>
- <df61af06-a43e-05c5-66e8-5a68b08ff14b@quicinc.com>
+        with ESMTP id S240265AbjIGPaf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 11:30:35 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B26D1700;
+        Thu,  7 Sep 2023 08:30:09 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B2EEE66072BA;
+        Thu,  7 Sep 2023 11:43:14 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1694083395;
+        bh=AtNfCg0ORcDFoK5Walc1Hu3UGCme85N5dgstHaeabAc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NejBNi91GDBi0Au8P24t4H4LZjQGG9Ryf1BpDJdsXgET3EkPKMCZFUG7BCYuxsp0A
+         L5J666GBfK2HyOu6yTaz/Zdt9srJi+5RKfsPZV35jTt1DuIjOV5nERNjqPd61FOF9M
+         1HiviQkDD472ch4zIdW+FtQekf0Fqf3SaP8d0MbPWgZ0QpNRuBKobGhS7xydNgFhgX
+         uUE0F5MmxWTv8He1c0FXyZ6t8nMYMInIUVo0N72Mqo1KXMOA4MxZJJvh5lfKIFp7+p
+         X7z5G8hFmmvlxMnVt4LcbxoOqjM8OW9eDq+vbWzlIYRdMbQnJ7STxw4HIqlaHsKBtK
+         d2YAIXSKPE/tQ==
+Message-ID: <cd6eea67-df0f-08b1-61cd-57a3b4f9cf0d@collabora.com>
+Date:   Thu, 7 Sep 2023 12:43:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <df61af06-a43e-05c5-66e8-5a68b08ff14b@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH] power: supply: mt6370: Fix missing error code in
+ mt6370_chg_toggle_cfo()
+Content-Language: en-US
+To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Cc:     dan.carpenter@linaro.org, kernel-janitors@vger.kernel.org,
+        error27@gmail.com
+References: <20230906084815.2827930-1-harshit.m.mogalapalli@oracle.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230906084815.2827930-1-harshit.m.mogalapalli@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 04, 2023 at 08:59:03PM -0700, Elliot Berman wrote:
+Il 06/09/23 10:48, Harshit Mogalapalli ha scritto:
+> When mt6370_chg_field_get() suceeds, ret is set to zero and returning
+> zero when flash led is still in strobe mode looks incorrect.
 > 
+> Fixes: 233cb8a47d65 ("power: supply: mt6370: Add MediaTek MT6370 charger driver")
+> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+> ---
+> This is based on static analysis with smatch, only compile tested.
+> ---
+>   drivers/power/supply/mt6370-charger.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> On 9/4/2023 2:23 PM, Peter Zijlstra wrote:
-> > On Wed, Aug 30, 2023 at 10:42:39AM -0700, Elliot Berman wrote:
-> > 
-> > > Avoid the spurious wakeups by saving the state of TASK_FREEZABLE tasks.
-> > > If the task was running before entering TASK_FROZEN state
-> > > (__refrigerator()) or if the task received a wake up for the saved
-> > > state, then the task is woken on thaw. saved_state from PREEMPT_RT locks
-> > > can be re-used because freezer would not stomp on the rtlock wait flow:
-> > > TASK_RTLOCK_WAIT isn't considered freezable.
-> > 
-> > You don't actually assert that anywhere I think, so the moment someone
-> > makes that happen you crash and burn.
-> > 
-> 
-> I can certainly add an assertion on the freezer side.
+> diff --git a/drivers/power/supply/mt6370-charger.c b/drivers/power/supply/mt6370-charger.c
+> index f27dae5043f5..a9641bd3d8cf 100644
+> --- a/drivers/power/supply/mt6370-charger.c
+> +++ b/drivers/power/supply/mt6370-charger.c
+> @@ -324,7 +324,7 @@ static int mt6370_chg_toggle_cfo(struct mt6370_priv *priv)
+>   
+>   	if (fl_strobe) {
+>   		dev_err(priv->dev, "Flash led is still in strobe mode\n");
+> -		return ret;
+> +		return -EINVAL;
 
-I think the assertion we have in ttwu_state_match() might be sufficient.
+I think that returning 0 here was intentional, but I agree on a return ret
+here being both confusing and wrong.
 
-> > Also:
-> > 
-> > > -#ifdef CONFIG_PREEMPT_RT
-> > > +#if IS_ENABLED(CONFIG_PREEMPT_RT) || IS_ENABLED(CONFIG_FREEZER)
-> > 
-> > That makes wakeup more horrible for everyone :/
-> 
-> I don't think the hot wakeup path is significantly impacted because the
-> added checks come after the hot path is already not taken.
+That's how I get this logic:
 
-Perhaps we should start off by doing the below, instead of making it
-more complicated instead. I suppose you're right about the overhead, but
-run a hackbench just to make sure or something.
+The function is enabling strobe mode, but if the flash led is *already* in
+strobe mode, the function exits cleanly because there's nothing to do, as
+the enablement is already done.
+
+Hence.... I believe that the right fix is not to return -EINVAL, but rather
+to change that to `return 0` instead.
+
+ChiaEn, can you please confirm, or deny my statement?
+
+Regards,
+Angelo
+
+>   	}
+>   
+>   	/* cfo off */
 
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 77f01ac385f7..649ddb9adf0d 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -749,11 +749,7 @@ struct task_struct {
- 	struct thread_info		thread_info;
- #endif
- 	unsigned int			__state;
--
--#ifdef CONFIG_PREEMPT_RT
--	/* saved state for "spinlock sleepers" */
- 	unsigned int			saved_state;
--#endif
- 
- 	/*
- 	 * This begins the randomizable portion of task_struct. Only
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 2299a5cfbfb9..b566821614e1 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -2239,31 +2239,21 @@ int __task_state_match(struct task_struct *p, unsigned int state)
- 	if (READ_ONCE(p->__state) & state)
- 		return 1;
- 
--#ifdef CONFIG_PREEMPT_RT
- 	if (READ_ONCE(p->saved_state) & state)
- 		return -1;
--#endif
-+
- 	return 0;
- }
- 
- static __always_inline
- int task_state_match(struct task_struct *p, unsigned int state)
- {
--#ifdef CONFIG_PREEMPT_RT
--	int match;
--
- 	/*
- 	 * Serialize against current_save_and_set_rtlock_wait_state() and
- 	 * current_restore_rtlock_saved_state().
- 	 */
--	raw_spin_lock_irq(&p->pi_lock);
--	match = __task_state_match(p, state);
--	raw_spin_unlock_irq(&p->pi_lock);
--
--	return match;
--#else
-+	guard(spin_lock_irq)(&p->pi_lock);
- 	return __task_state_match(p, state);
--#endif
- }
- 
- /*
-@@ -4056,7 +4046,6 @@ bool ttwu_state_match(struct task_struct *p, unsigned int state, int *success)
- 
- 	*success = !!(match = __task_state_match(p, state));
- 
--#ifdef CONFIG_PREEMPT_RT
- 	/*
- 	 * Saved state preserves the task state across blocking on
- 	 * an RT lock.  If the state matches, set p::saved_state to
-@@ -4072,7 +4061,7 @@ bool ttwu_state_match(struct task_struct *p, unsigned int state, int *success)
- 	 */
- 	if (match < 0)
- 		p->saved_state = TASK_RUNNING;
--#endif
-+
- 	return match > 0;
- }
- 
