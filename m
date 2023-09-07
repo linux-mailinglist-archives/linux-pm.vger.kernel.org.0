@@ -2,70 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D310797B7A
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 20:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDA01797B8C
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 20:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232632AbjIGSSd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Sep 2023 14:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55068 "EHLO
+        id S234064AbjIGSVX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Sep 2023 14:21:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233937AbjIGSSc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 14:18:32 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390F71FFE
-        for <linux-pm@vger.kernel.org>; Thu,  7 Sep 2023 11:18:07 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fef56f7248so13450495e9.3
-        for <linux-pm@vger.kernel.org>; Thu, 07 Sep 2023 11:18:07 -0700 (PDT)
+        with ESMTP id S231728AbjIGSVW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 14:21:22 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56ECC90
+        for <linux-pm@vger.kernel.org>; Thu,  7 Sep 2023 11:21:18 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-317c3ac7339so1151639f8f.0
+        for <linux-pm@vger.kernel.org>; Thu, 07 Sep 2023 11:21:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694110685; x=1694715485; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1694110877; x=1694715677; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=9cqyTbMBftf/joQMRKfMkLzU0Opm2y7wHA3eqP28zpI=;
-        b=aZNBAqwF0lUpwV3Ip2R1XQEBmsx4Zs90/i45rvdD1iXzZUxlR384gmormJ1lDqd94E
-         BHPvGaraRN1ddvfORK4VhX+llMYI3xntW73CDLevZqpptsCqpRUHSpNQf4zKwU5GocS3
-         E09RLn1Bdd2eEF8k4vzcrV9uDhTvZN13pMywWjZ2i9Ff896smpQtJ4UihbTRcsH0X4OI
-         Bsw97s+w6Efw3UeI5APfshcr2cdct9CSkHjtiwcj32IyzXEETz9dr/7PK1KBwbfOAQG+
-         ig9GIstustALEIQCLb+9MnxG1uU/6+RJuKZP3P17dFGAipnGtOhunZSCt7W1lQbqNn8F
-         CBNg==
+        bh=rcotZ+hgpp+nJjrDi+TbpAmdclq7uqg53xwk2Tf+VDQ=;
+        b=YqjbV37wVA/iYWttNy6SGGcewNb8doR5R2W4AAIiHr/rLRhb66AYLOXo+QV61GNqi8
+         cnpfeU7lFYQzl8SFe7vB2h1Q1t63zW4pM9tEj2o1qhAL9fPvx3sVodcjAiakw/RpH75j
+         CVmuVKY1zqqNPhxLOkjctEd+FlwUEoqfdjbE1HYWNsjPgNwhXhl7XNAPJUbilnfVKQEp
+         gTlamGcLjDpOGtQVKrdaxQY1zfh6JXczSOyKaEpx1VJzdEC1Bm38YuE9Gw550AncAOZL
+         +V0Zx7uA6zTmObJaRWQmgsGMFGPM/V4hD8HG8koEKYSMWnEOUqxSdzMXPKyLWNABW8DJ
+         Zr+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694110685; x=1694715485;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1694110877; x=1694715677;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9cqyTbMBftf/joQMRKfMkLzU0Opm2y7wHA3eqP28zpI=;
-        b=R6K8fwyTCz4Cy2NTLoY7g+H2wI4jWVqAyRSsTlbkGebOb3lumb3uq4A9iYx43qXPZc
-         Luo5PfmKkmViHnBcprVM3jN6xfPAyJg/VsPl+cnkU7teOF30Ao+fuDDSEsUYFSyulPwv
-         +i9DaakMeR0Pqy63QJ6HIQbAwBFriDCElgccjQ7qOMZ8b1Zh4WG0/LAKa6VJnT2KpCNS
-         e0kIFrRZtPOwFU22FJsvEe7uULxobLDB4O6wR6+C3QGm48oisS1E6cTFQkmQuAAwAUcp
-         j8Q8mrCC7tehhTRtYDje5oVHgGip1izRW5TMFCmx6b15pE+HNuTzO4g4SXTCGPLhvXbe
-         cvrg==
-X-Gm-Message-State: AOJu0Ywx5uf13+7TlDs0QWI3z2hwSr++Xf2CgjGEPbzZ4g63KJrQzdBi
-        nlSrF6UFBif9QP2d0xCOWmIyDzoZerIt9UXHIp7D7Q==
-X-Google-Smtp-Source: AGHT+IElMhH6SZyz3Q6I00GiHi9+hHjfTot2J8HBhVaHsG4aeOjUaubp+sXD76/MBLaMZ8727VrnoQ==
-X-Received: by 2002:a17:906:73ce:b0:9a1:edb0:2a8c with SMTP id n14-20020a17090673ce00b009a1edb02a8cmr3878447ejl.39.1694075088243;
-        Thu, 07 Sep 2023 01:24:48 -0700 (PDT)
+        bh=rcotZ+hgpp+nJjrDi+TbpAmdclq7uqg53xwk2Tf+VDQ=;
+        b=iJYDYqs8CeYfFfDskQQr8lAbdSwWWt3E02M6cnjZToj18jzadBcm9t9xlMCz1d+PPP
+         JAABrAr6oLboVdx1K+Pp4+su3CzNjDUm8MO1S44DbUnVo/hzpR1+h8rGev8BOjnhF0i+
+         K9zPSx4MTDcARMdhU7s8v3+7ywWLe0Lca2ZdMlNA4C3nWGZbF/oZHydnouY+05o6EQSy
+         WWiw+XD7h+j4zf8ByaMbuWaocXqT1FvLTv6AwXZeML61pE5GsB7OhSOM9K2OqEVpHvYd
+         8X9hInQ91yGdTiuYfFNBBJUlbq6H5Wv1tK8s9SczbMaIZpZIbp03raqRl+A/rcVReb6u
+         pSHg==
+X-Gm-Message-State: AOJu0YxxXlI64lV6ivfnM9eVLiTOKWAayogqnmiM6R3OPJ1pcDnZPCtB
+        a88FOeS64rgPgmGtEu9u5ugZe9qJOuA99O2k6zrg3w==
+X-Google-Smtp-Source: AGHT+IEYdFV7oLh32TP8ca2WTxd7wx7Xnds+jA/Gd0dYkjQWZHyvzOW22/tp5BWYDJKXFOGQ72iT1g==
+X-Received: by 2002:a50:fb0f:0:b0:522:3d36:ff27 with SMTP id d15-20020a50fb0f000000b005223d36ff27mr4306806edq.31.1694077443110;
+        Thu, 07 Sep 2023 02:04:03 -0700 (PDT)
 Received: from [192.168.37.232] (178235177204.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.204])
-        by smtp.gmail.com with ESMTPSA id lu7-20020a170906fac700b00992e14af9b9sm9949024ejb.134.2023.09.07.01.24.45
+        by smtp.gmail.com with ESMTPSA id f2-20020a056402150200b0052a3b212157sm9384251edw.63.2023.09.07.02.04.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Sep 2023 01:24:47 -0700 (PDT)
-Message-ID: <4f51bd22-0f7d-4e94-8d84-98091fc2dd53@linaro.org>
-Date:   Thu, 7 Sep 2023 10:24:44 +0200
+        Thu, 07 Sep 2023 02:04:02 -0700 (PDT)
+Message-ID: <38f64349-5139-4207-91eb-cd39fabd4496@linaro.org>
+Date:   Thu, 7 Sep 2023 11:04:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 01/10] clk: qcom: clk-alpha-pll: introduce stromer plus
- ops
+Subject: Re: [PATCH v5 2/5] arm64: dts: qcom: sm8450: Add opp table support to
+ PCIe
 Content-Language: en-US
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>,
-        ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
-        rafael@kernel.org, viresh.kumar@linaro.org, robh+dt@kernel.org,
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        quic_kathirav@quicinc.com, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-References: <cover.1693996662.git.quic_varada@quicinc.com>
- <18a3bc0c5b371deec5c4bbe6ceacf8afcf0bc640.1693996662.git.quic_varada@quicinc.com>
+        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org, mani@kernel.org
+Cc:     lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, rafael@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_vbadigan@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, quic_parass@quicinc.com
+References: <1694066433-8677-1-git-send-email-quic_krichai@quicinc.com>
+ <1694066433-8677-3-git-send-email-quic_krichai@quicinc.com>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
@@ -102,7 +105,7 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <18a3bc0c5b371deec5c4bbe6ceacf8afcf0bc640.1693996662.git.quic_varada@quicinc.com>
+In-Reply-To: <1694066433-8677-3-git-send-email-quic_krichai@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -115,33 +118,37 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7.09.2023 07:21, Varadarajan Narayanan wrote:
-> Stromer plus APSS PLL does not support dynamic frequency scaling.
-> To switch between frequencies, we have to shut down the PLL,
-> configure the L and ALPHA values and turn on again. So introduce the
-> separate set of ops for Stromer Plus PLL.
+On 7.09.2023 08:00, Krishna chaitanya chundru wrote:
+> PCIe needs to choose the appropriate performance state of RPMH power
+> domain based up on the PCIe gen speed.
 > 
-> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> So let's add the OPP table support to specify RPMH performance states.
+> 
+> Use opp-level for the PCIe gen speed for easier use.
+> 
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
 > ---
 [...]
 
 > +
-> +	/* Wait five micro seconds or more */
-> +	udelay(5);
-> +	regmap_update_bits(pll->clkr.regmap, PLL_MODE(pll), PLL_RESET_N,
-> +			   PLL_RESET_N);
+> +			pcie1_opp_table: opp-table {
+> +				compatible = "operating-points-v2";
 > +
-> +	/* The lock time should be less than 50 micro seconds worst case */
-> +	udelay(50);
-https://www.kernel.org/doc/Documentation/timers/timers-howto.txt
+> +				opp-1 {
+> +					opp-level = <1>;
+> +					required-opps = <&rpmhpd_opp_low_svs>;
+> +				};
+> +
+> +				opp-2 {
+> +					opp-level = <2>;
+> +					required-opps = <&rpmhpd_opp_low_svs>;
+> +				};
+> +
+> +				opp-3 {
+> +					opp-level = <3>;
+> +					required-opps = <&rpmhpd_opp_low_svs>;
+Is gen3 not supposed to require nom like on pcie0?
 
-> +
-> +	ret = wait_for_pll_enable_lock(pll);
-> +	if (ret) {
-> +		pr_err("alpha pll running in 800 MHz with source GPLL0\n");
-> +		return ret;
-> +	}
-Would that not be SoC-specific information?
+Also, can all non-maximum OPPs run at just low_svs?
 
 Konrad
