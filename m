@@ -2,116 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC207945D9
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 00:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E449796FD7
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 07:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244918AbjIFWCP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Sep 2023 18:02:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56000 "EHLO
+        id S238544AbjIGFWO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Sep 2023 01:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbjIFWCP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Sep 2023 18:02:15 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2979172E;
-        Wed,  6 Sep 2023 15:02:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694037731; x=1725573731;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CTCvrcu7YjmCiO9BUFROPsDi8XJkcyMLi88JXj4GLuA=;
-  b=PwSIC50qv/r4HWvoo76afxMww+TwsQTGrSkbKsWluAcAZhZtI+cJkbih
-   6KFilPwu1FPAj2qEpeSAulUck1sopFdC0KN25HzMmAzp5aJjnNcrtEVMC
-   3ODPT3bKYSFJjVm3U3PGIMELpeuLaVRQnkWKIOzS8QhQuLiRgLhwhJJfm
-   tVlyIWNS+neMTnPvsNuDTlz3Jsf8SSUWPlqvFXEsy9QSjayUo/OYXNMQD
-   8KcTI1PcKblfkmTPnFhCBRPIA/roIUQd5koeb0XTB0QbTCk77UEdwUA57
-   NEQKISTxRPFo2WyvUxbUhtzhQsqgWJ4n2UQNvhIG0uyFjPqAMjIS0Qwwn
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="357507866"
-X-IronPort-AV: E=Sophos;i="6.02,233,1688454000"; 
-   d="scan'208";a="357507866"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2023 15:02:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="718438522"
-X-IronPort-AV: E=Sophos;i="6.02,233,1688454000"; 
-   d="scan'208";a="718438522"
-Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 06 Sep 2023 15:02:06 -0700
-Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qe0b5-0000cx-33;
-        Wed, 06 Sep 2023 22:02:03 +0000
-Date:   Thu, 7 Sep 2023 06:01:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Meng Li <li.meng@amd.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Shimmer Huang <shimmer.huang@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>
-Subject: Re: [PATCH V5 6/7] Documentation: amd-pstate: introduce amd-pstate
- preferred core
-Message-ID: <202309070502.YxzVpYTO-lkp@intel.com>
-References: <20230905015116.2268926-7-li.meng@amd.com>
+        with ESMTP id S232136AbjIGFWN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 01:22:13 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB7B1BC8;
+        Wed,  6 Sep 2023 22:22:09 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3874eYRM002090;
+        Thu, 7 Sep 2023 05:22:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=/glwYH93Y0K6Bek2UTnfUcSS7ubb+aHyiNYyfZDDVbY=;
+ b=d+0FiJMNwxaW1FVpixwiOJC3uLx36+XAw6S37BsmGepBKo8+IFyVbhHhqXheMXXs5BM1
+ dgeQlde4oJ8/sMPjE6u9OTjZ7d5gm3Nf/rr+06BovF9HfACqk6ibEC/yaUMc6bM7jWGE
+ WX5AIyI7q44WoazWAJyIk3yNGV5IsLAKaT3GZeS9ShcQdWFuSGIFDL1zF4iiCHoBLy8T
+ uidOgbwDIzsm4Cc13cHraO9CFY0b5ZxgrW7dvBYrBkRPjtvKbpfyD3OPSVU3BCMjgyBh
+ AjfaaANM/jo9QFLgEnxU/H3v+y7ysH8xJviauYjLDnUDBPwAF8u2jKgdHyEsGS3OiHyF Xg== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sy4bqgeb1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Sep 2023 05:22:01 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3875M0fS015535
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 7 Sep 2023 05:22:00 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.36; Wed, 6 Sep 2023 22:21:55 -0700
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     <ilia.lin@kernel.org>, <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <quic_kathirav@quicinc.com>, <linux-pm@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: [PATCH v1 00/10] Enable cpufreq for IPQ5332 & IPQ9574
+Date:   Thu, 7 Sep 2023 10:51:35 +0530
+Message-ID: <cover.1693996662.git.quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230905015116.2268926-7-li.meng@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: UzzUtKkr_1-zs2rg33FL-Vh9NvDlSW6u
+X-Proofpoint-ORIG-GUID: UzzUtKkr_1-zs2rg33FL-Vh9NvDlSW6u
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-06_12,2023-09-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1011
+ priorityscore=1501 lowpriorityscore=0 malwarescore=0 suspectscore=0
+ phishscore=0 spamscore=0 mlxlogscore=983 mlxscore=0 impostorscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309070045
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Meng,
+Depends On:
+https://lore.kernel.org/linux-arm-msm/1693474133-10467-1-git-send-email-quic_varada@quicinc.com/
+https://lore.kernel.org/linux-arm-msm/20230904-gpll_cleanup-v1-0-de2c448f1188@quicinc.com/
 
-kernel test robot noticed the following build warnings:
+This patch series aims to enable cpufreq for IPQ5332 and IPQ9574.
+For IPQ5332, a minor enhancement to Stromer Plus ops and a safe
+source switch is needed before cpu freq can be enabled.
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on linus/master v6.5 next-20230906]
-[cannot apply to tip/x86/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+These are also included in this series. Posting this as a single
+series. Please let me know if this is not correct, will split in
+the subsequent revisions.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Meng-Li/x86-Drop-CPU_SUP_INTEL-from-SCHED_MC_PRIO-for-the-expansion/20230906-003754
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20230905015116.2268926-7-li.meng%40amd.com
-patch subject: [PATCH V5 6/7] Documentation: amd-pstate: introduce amd-pstate preferred core
-reproduce: (https://download.01.org/0day-ci/archive/20230907/202309070502.YxzVpYTO-lkp@intel.com/reproduce)
+Passed the following DT related validations
+make W=1 ARCH=arm64 -j16 DT_CHECKER_FLAGS='-v -m' dt_binding_check DT_SCHEMA_FILES=qcom
+make W=1 ARCH=arm64 -j16 CHECK_DTBS=y DT_SCHEMA_FILES=qcom dtbs_check
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309070502.YxzVpYTO-lkp@intel.com/
+For IPQ5332:
+~~~~~~~~~~~
+	* This patch series introduces stromer plus ops which
+	  builds on stromer ops and implements a different
+	  set_rate and determine_rate.
 
-All warnings (new ones prefixed by >>):
+	  A different set_rate is needed since stromer plus PLLs
+	  do not support dynamic frequency scaling. To switch
+	  between frequencies, we have to shut down the PLL,
+	  configure the L and ALPHA values and turn on again. So
+	  introduce the separate set of ops for Stromer Plus PLL.
 
->> Documentation/admin-guide/pm/amd-pstate.rst:304: WARNING: Title underline too short.
+	* Update ipq_pll_stromer_plus to use clk_alpha_pll_stromer_plus_ops
+	  instead of clk_alpha_pll_stromer_ops.
 
-vim +304 Documentation/admin-guide/pm/amd-pstate.rst
+	* Set 'l' value to a value that is supported on all SKUs.
 
-c22760885fd6f7 Huang Rui  2021-12-24  301  
-92e6088427c5da Perry Yuan 2023-01-31  302  
-3a7b575560efa6 Meng Li    2023-09-05  303  ``amd-pstate`` Driver Operation Modes
-92e6088427c5da Perry Yuan 2023-01-31 @304  =================================
-92e6088427c5da Perry Yuan 2023-01-31  305  
+	* Provide safe source switch for a53pll
+
+	* Include IPQ5332 in cpufreq nvmem framework
+
+	* Add OPP details to device tree
+
+For IPQ9574:
+~~~~~~~~~~~
+	* Include IPQ9574 in cpufreq nvmem framework
+
+	* Add OPP details to device tree
+
+Varadarajan Narayanan (10):
+  clk: qcom: clk-alpha-pll: introduce stromer plus ops
+  clk: qcom: apss-ipq-pll: Use stromer plus ops for stromer plus pll
+  clk: qcom: apss-ipq-pll: Fix 'l' value for ipq5332_pll_config
+  clk: qcom: apss-ipq6018: ipq5332: add safe source switch for a53pll
+  dt-bindings: cpufreq: qcom-cpufreq-nvmem: document IPQ5332
+  cpufreq: qti: Enable cpufreq for ipq53xx
+  arm64: dts: qcom: ipq5332: populate the opp table based on the eFuse
+  dt-bindings: cpufreq: qcom-cpufreq-nvmem: document IPQ9574
+  cpufreq: qti: Introduce cpufreq for ipq95xx
+  arm64: dts: qcom: ipq9574: populate the opp table based on the eFuse
+
+ .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml       |  2 +
+ arch/arm64/boot/dts/qcom/ipq5332.dtsi              | 34 ++++++++++-
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi              | 38 +++++++++++-
+ drivers/clk/qcom/apss-ipq-pll.c                    |  4 +-
+ drivers/clk/qcom/apss-ipq6018.c                    | 54 ++++++++++++++++-
+ drivers/clk/qcom/clk-alpha-pll.c                   | 68 ++++++++++++++++++++++
+ drivers/clk/qcom/clk-alpha-pll.h                   |  1 +
+ drivers/cpufreq/cpufreq-dt-platdev.c               |  2 +
+ drivers/cpufreq/qcom-cpufreq-nvmem.c               | 35 +++++++++++
+ 9 files changed, 231 insertions(+), 7 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.7.4
+
