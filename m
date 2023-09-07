@@ -2,93 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C577974CA
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 17:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DBAE7974DB
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 17:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233635AbjIGPlI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Sep 2023 11:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37826 "EHLO
+        id S230427AbjIGPlp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Sep 2023 11:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345353AbjIGPfb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 11:35:31 -0400
-Received: from mxout1.routing.net (mxout1.routing.net [IPv6:2a03:2900:1:a::a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658B71FC9;
-        Thu,  7 Sep 2023 08:35:08 -0700 (PDT)
-Received: from mxbox3.masterlogin.de (unknown [192.168.10.78])
-        by mxout1.routing.net (Postfix) with ESMTP id 04FFB4081B;
-        Thu,  7 Sep 2023 11:20:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1694085635;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=bmzyT3vhoavJV5YD/9bjCpBgNAP4o0u/rneto0+CusE=;
-        b=w2FAf1f6NYSPYwdHbMqEXFMlOVdC4HmF1Q212UWEGrvaarckAZKkNtvCHUdLCSOkVipCza
-        Ooe2QjKtAInOu1Qw0vq5sGegkzD3DyUtuvitA1FJ0oYh0f41J0DtoO6oUXy+UblT8QEd0e
-        daPaIchb0Lp+CpS0c9Icp9+HxKt+47Y=
-Received: from frank-G5.. (fttx-pool-217.61.150.154.bambit.de [217.61.150.154])
-        by mxbox3.masterlogin.de (Postfix) with ESMTPSA id 0FBA2360465;
-        Thu,  7 Sep 2023 11:20:34 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        with ESMTP id S236386AbjIGPXW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 11:23:22 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DC0CC;
+        Thu,  7 Sep 2023 08:23:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+IHqfq8QIvXbyDFuHCBfvC02F8uZgk5ZBVn+a1FzJbA=; b=kTeqwUCyZj90g9YXmVoDNp5lBh
+        4XMHEhXWiEBXTBpskFUu7mNbCGQ+Et64o+4z6xxot8694zVDAwKxILWGab0FRCanudJh3yLFoPPEX
+        R4eKf2hSHYI0B9CQzA+/sSAih3lMquFm6N7aO/oWYEiKPbTOsQ27bAYO37WOqoIhqHvOU6m3O6lgw
+        QVIQWQlW97UYOOjTSOgAfDTU06f5YRFR1oG4X7qad1hY5HQSNOVaD6512pRNw8Fe0GhTmLKYcEzkL
+        7ktTX6SAo82f/CDAFN5pV3Y80aJT4zFurNvO5YxoZSPXWoKlfaznp6mWzYMFe4KXgsRK9546Imgg5
+        /yXX00Fg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qeDHh-00AYIp-Ml; Thu, 07 Sep 2023 11:34:54 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5ACD3300687; Thu,  7 Sep 2023 13:34:53 +0200 (CEST)
+Date:   Thu, 7 Sep 2023 13:34:53 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     Ingo Molnar <mingo@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Daniel Golle <daniel@makrotopia.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        stable@vger.kernel.org
-Subject: [PATCH] thermal/drivers/mediatek: Fix control buffer enablement on MT7896
-Date:   Thu,  7 Sep 2023 13:20:18 +0200
-Message-Id: <20230907112018.52811-1-linux@fw-web.de>
-X-Mailer: git-send-email 2.34.1
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Lukasz Luba <lukasz.luba@arm.com>
+Subject: Re: [RFC PATCH 4/7] sched: cpufreq: Remove magic 1.25 headroom from
+ apply_dvfs_headroom()
+Message-ID: <20230907113453.GB10955@noisy.programming.kicks-ass.net>
+References: <20230827233203.1315953-1-qyousef@layalina.io>
+ <20230827233203.1315953-5-qyousef@layalina.io>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Mail-ID: e7eeb8e1-00de-41f6-a5df-ce2e9164136e
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230827233203.1315953-5-qyousef@layalina.io>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+On Mon, Aug 28, 2023 at 12:32:00AM +0100, Qais Yousef wrote:
+> Instead of the magical 1.25 headroom, use the new approximate_util_avg()
+> to provide headroom based on the dvfs_update_delay; which is the period
+> at which the cpufreq governor will send DVFS updates to the hardware.
+> 
+> Add a new percpu dvfs_update_delay that can be cheaply accessed whenever
+> apply_dvfs_headroom() is called. We expect cpufreq governors that rely
+> on util to drive its DVFS logic/algorithm to populate these percpu
+> variables. schedutil is the only such governor at the moment.
+> 
+> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
+> ---
+>  kernel/sched/core.c              |  3 ++-
+>  kernel/sched/cpufreq_schedutil.c | 10 +++++++++-
+>  kernel/sched/sched.h             | 25 ++++++++++++++-----------
+>  3 files changed, 25 insertions(+), 13 deletions(-)
+> 
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 602e369753a3..f56eb44745a8 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -116,6 +116,7 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(sched_util_est_se_tp);
+>  EXPORT_TRACEPOINT_SYMBOL_GPL(sched_update_nr_running_tp);
+>  
+>  DEFINE_PER_CPU_SHARED_ALIGNED(struct rq, runqueues);
+> +DEFINE_PER_CPU_SHARED_ALIGNED(u64, dvfs_update_delay);
 
-Reading thermal sensor on mt7986 devices returns invalid temperature:
-
-bpi-r3 ~ # cat /sys/class/thermal/thermal_zone0/temp
- -274000
-
-Fix this by adding missing members in mtk_thermal_data struct which were
-used in mtk_thermal_turn_on_buffer after commit 33140e668b10.
-
-Cc: stable@vger.kernel.org
-Fixes: 33140e668b10 ("thermal/drivers/mediatek: Control buffer enablement tweaks")
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
----
- drivers/thermal/mediatek/auxadc_thermal.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
-index 843214d30bd8..967b9a1aead4 100644
---- a/drivers/thermal/mediatek/auxadc_thermal.c
-+++ b/drivers/thermal/mediatek/auxadc_thermal.c
-@@ -690,6 +690,9 @@ static const struct mtk_thermal_data mt7986_thermal_data = {
- 	.adcpnp = mt7986_adcpnp,
- 	.sensor_mux_values = mt7986_mux_values,
- 	.version = MTK_THERMAL_V3,
-+	.apmixed_buffer_ctl_reg = APMIXED_SYS_TS_CON1,
-+	.apmixed_buffer_ctl_mask = GENMASK(31, 6) | BIT(3),
-+	.apmixed_buffer_ctl_set = BIT(0),
- };
- 
- static bool mtk_thermal_temp_is_valid(int temp)
--- 
-2.34.1
-
+This makes no sense, why are you using SHARED_ALIGNED and thus wasting
+an entire cacheline for the one variable?
