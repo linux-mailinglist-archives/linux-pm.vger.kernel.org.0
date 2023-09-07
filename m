@@ -2,74 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5787974C8
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 17:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0D579760B
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 18:01:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233189AbjIGPlF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Sep 2023 11:41:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
+        id S236399AbjIGQBG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Sep 2023 12:01:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241882AbjIGPaz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 11:30:55 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4D51FC6;
-        Thu,  7 Sep 2023 08:30:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CmfnIP/qJkmApsvJ1mr5W1MC2O3k/lCNMHjccWhVsKw=; b=fRdYGkGqNR4pUJvPkojbJwWsMz
-        sZdrBUP2CCBXfu6cwHGF0sztUW3cyBK333/tARup1Ebp0/U8GpoIuMyekEWomOMjekm1eRODZ0PsN
-        27E4y1oQO+S+Y7TwUxHXpQdUCj2yT7rXLjg8ingocYVlPxnBk5BijEgzdNZnCDc7ybMs0HyCH59Bk
-        jOuhAOSPbsVVW2Wa7NFNeCsH5ysmaDxtqjhR6peKzFKCAMID/kRLCU0T6BCHxy+0ti4G4xgW4BkKj
-        I/m6geBKSAhNYIRMaaMoVtth8g9hhhugQ1e8Fz5ns4mzRMX275EpSrbniexf+SJEJgrN01WjtIYor
-        k42vqmdQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qeF4D-001opO-18;
-        Thu, 07 Sep 2023 13:29:07 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 730C8300687; Thu,  7 Sep 2023 15:29:06 +0200 (CEST)
-Date:   Thu, 7 Sep 2023 15:29:06 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Qais Yousef <qyousef@layalina.io>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Subject: Re: [RFC PATCH 0/7] sched: cpufreq: Remove magic margins
-Message-ID: <20230907132906.GG10955@noisy.programming.kicks-ass.net>
-References: <20230827233203.1315953-1-qyousef@layalina.io>
- <a6365f63-4669-15e5-b843-f4bfb1bd5e68@arm.com>
- <20230906211850.zyvk6qtt6fvpxaf3@airbuntu>
- <6011d8bb-9a3b-1435-30b0-d75b39bf5efa@arm.com>
- <20230907115307.GD10955@noisy.programming.kicks-ass.net>
- <89067f71-9b83-e647-053e-07f7d55b6529@arm.com>
+        with ESMTP id S238716AbjIGP6s (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 11:58:48 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A11220924
+        for <linux-pm@vger.kernel.org>; Thu,  7 Sep 2023 08:45:43 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-55b0e7efb1cso844414a12.1
+        for <linux-pm@vger.kernel.org>; Thu, 07 Sep 2023 08:45:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694101485; x=1694706285; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=yMRlMwN20QLTSRPs/jI5d8COnV1IkaL0AH6Bo1uSv5s=;
+        b=OhDiCMe97y2cq1i2Qx6QKrHS2O2BN0jv1hvZOHJx9kEShVTppH+ghtN5VrN1QgLF22
+         BHC8lnU9WuX6Q4lVLeP3ncnv/xiB9cu7sN2YSy4+r7UYVbEeGxv4weTx3BpXxGJWnrlf
+         A9t0yUCDgE0teg+af0o96lk6hs8550qiZGxGy4WiJzWxEC/9Hupi2lF8fYaHAwUBtJbI
+         hWYP2EPvBJC45SUR66GOex55icb8BuP4AmZhWICfMn9AHlG1p5nUJg3Rlxdm+BPmBWEe
+         KAEIsXzs5aWN8ive78rRN0x8fw4uDfEgVCK2p28uF08pBo4cYxjU5HOrSuqegvTk3grb
+         J+lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1694101485; x=1694706285;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yMRlMwN20QLTSRPs/jI5d8COnV1IkaL0AH6Bo1uSv5s=;
+        b=LvtfCdidHMi+z3gzNAoSdi58CW4WQPqJ/wNaoHvz4Q/XX1NecY7AYRpAvCxtP6fQV6
+         2+CTNSHy6k4M70qwQo3O8uodf2qD8bT2dtPQk3jeAwOwA56Gk4ZhbngCDM7LIthvx9/I
+         JYKC5jxWC6amY8eqxd+Ym0P5UNjRI2qo0OYAEMWPd/bI5R692kHuoiUP44lk6kTbPXHL
+         RMqs9d/tUcrzljuMhw9v1gV60ACRb5hQdFT4BAABuLXao7scfftR47jg/FgPx00YRpbh
+         Lw9k8dJ5jFoO1JRKTDetWTla5IIlyezz0e1J6FQSOZF0+ooB0mwQC9mEuvEFCNLFMFLW
+         xonA==
+X-Gm-Message-State: AOJu0YyFRcfIZTiDpyIGVGPyhcduO0X86k/SLh0kp1Zoxam6vTZBzs2S
+        WJVsiONdE3y8vZGYjD7k0dOLm/ht6FD+vWC4DLLc7Agl0RYt6crX
+X-Google-Smtp-Source: AGHT+IFUuNXZQLnUGxYZ4nwOIc/1ZCmT/RBxdiDK6aXiF/foDyogFPcREcWU6P3R5YT2nx0jFgg2XzMsNGlNNM2BlgA=
+X-Received: by 2002:a25:a1e9:0:b0:d78:35cd:7f5c with SMTP id
+ a96-20020a25a1e9000000b00d7835cd7f5cmr19661493ybi.46.1694093927719; Thu, 07
+ Sep 2023 06:38:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <89067f71-9b83-e647-053e-07f7d55b6529@arm.com>
+References: <cover.1693996662.git.quic_varada@quicinc.com> <00a5ca23101df1f8f20bdec03be20af9d39c64d1.1693996662.git.quic_varada@quicinc.com>
+In-Reply-To: <00a5ca23101df1f8f20bdec03be20af9d39c64d1.1693996662.git.quic_varada@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 7 Sep 2023 16:38:36 +0300
+Message-ID: <CAA8EJpqtXw1ukDZ1hXAc3G7LNDwjcduUdNaPHadfSqCuV3fxbg@mail.gmail.com>
+Subject: Re: [PATCH v1 02/10] clk: qcom: apss-ipq-pll: Use stromer plus ops
+ for stromer plus pll
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, rafael@kernel.org,
+        viresh.kumar@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        quic_kathirav@quicinc.com, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 07, 2023 at 02:06:15PM +0100, Lukasz Luba wrote:
+On Thu, 7 Sept 2023 at 08:22, Varadarajan Narayanan
+<quic_varada@quicinc.com> wrote:
+>
+> The set rate and determine rate operations are different between
+> Stromer and Stromer Plus PLLs. Hence, use stromer plus ops for
+> ipq_pll_stromer_plus.
+>
+> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 
-> > Many extentions to the periodic task model are possible, including
-> > things like average runtime with bursts etc.. all have their trade-offs.
-> 
-> Was that maybe proposed somewhere on LKML (the other models)?
+Fixes tag?
 
-RT literatur mostly methinks. Replacing WCET with a statistical model of
-sorts is not uncommon, the argument goes that not everybody will have
-their worst case at the same time and lows and highs can commonly cancel
-out and this way we can cram a little more on the system.
+> ---
+>  drivers/clk/qcom/apss-ipq-pll.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/clk/qcom/apss-ipq-pll.c b/drivers/clk/qcom/apss-ipq-pll.c
+> index e170331..18c4ffe 100644
+> --- a/drivers/clk/qcom/apss-ipq-pll.c
+> +++ b/drivers/clk/qcom/apss-ipq-pll.c
+> @@ -68,7 +68,7 @@ static struct clk_alpha_pll ipq_pll_stromer_plus = {
+>                                 .fw_name = "xo",
+>                         },
+>                         .num_parents = 1,
+> -                       .ops = &clk_alpha_pll_stromer_ops,
+> +                       .ops = &clk_alpha_pll_stromer_plus_ops,
+>                 },
+>         },
+>  };
+> --
+> 2.7.4
+>
 
-Typically this is proposed in the context of soft-realtime systems.
+
+-- 
+With best wishes
+Dmitry
