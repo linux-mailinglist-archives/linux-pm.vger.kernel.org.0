@@ -2,115 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F7C5797766
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 18:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B22467979A2
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 19:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238479AbjIGQZK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Sep 2023 12:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53410 "EHLO
+        id S231139AbjIGRRk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Sep 2023 13:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236211AbjIGQX5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 12:23:57 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEEE1FDD;
-        Thu,  7 Sep 2023 09:21:00 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6248466072F2;
-        Thu,  7 Sep 2023 10:12:31 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1694077952;
-        bh=txj28e2rFnpZ/La9QTIPO2i7dPQpL4MVK8cI2Wz9RV4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Z6KERubW6Sf7yxuxP8OS2Q8ygMnvH6e/8FLKTuDdX0hX3BxowDU7BeD+FbyysPmCX
-         mducm2u2B8Z5rJqGyXnoZejgKQK9tobFqO1C87HCrDoy87sGlJa0CItY6q+WbkMSLF
-         0QDN8Y8VHKMmX6fvXmfqVwCfKkqsZmgqB25pBGMp72frDopeR3+JHUWz4Pn7c4ToVC
-         bDJWPXk5mEo2chli0T3KFXj31UpsUwLknnBSy3DGtuFqHfHsfniHDSkJahxGUuCZH7
-         Aezx/lcYvT1OOV4BgIRHWto0fhNlHVN3hi7qXJDK6X3JgT/itoXzbj9wLAhNH5OeC0
-         Gw43YRFrU7unQ==
-Message-ID: <adc88393-da14-90ff-82c2-b00a9771856c@collabora.com>
-Date:   Thu, 7 Sep 2023 11:12:28 +0200
+        with ESMTP id S242721AbjIGRRj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 13:17:39 -0400
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C53C1A8
+        for <linux-pm@vger.kernel.org>; Thu,  7 Sep 2023 10:17:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=WtCoctKqrOuNL7YPM9mYObCf6Hdm7ApMb7s6UV96VRg=;
+  b=HPx166wijMpi0SuqjYCYznd1XBpiCUbrQLc/PO/UMyEq3ZEUYTobIRDo
+   3Rqqz8tTf3ziWlg9eiO0gtAOEfHBNxrgu+g1iTCYRdavySvFpyxmeL4HB
+   GFAsE9lOiSmMbIKRRI/H8INxUF7Ej0oMCIoW7c5cwML7MMfndJw9rsVW5
+   k=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="6.02,234,1688421600"; 
+   d="scan'208";a="65324651"
+Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 11:55:29 +0200
+From:   Julia Lawall <Julia.Lawall@inria.fr>
+To:     alsa-devel@alsa-project.org
+Cc:     kernel-janitors@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org, linux-mmc@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-media@vger.kernel.org
+Subject: [PATCH 00/11] add missing of_node_put
+Date:   Thu,  7 Sep 2023 11:55:10 +0200
+Message-Id: <20230907095521.14053-1-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [RFC] thermal/drivers/mediatek: fix temperature on mt7986
-Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Daniel Golle <daniel@makrotopia.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        stable@vger.kernel.org
-References: <20230901063730.7577-1-linux@fw-web.de>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230901063730.7577-1-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 01/09/23 08:37, Frank Wunderlich ha scritto:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> Reading thermal sensor on mt7986 devices returns invalid temperature:
-> 
-> bpi-r3 ~ # cat /sys/class/thermal/thermal_zone0/temp
->   -274000
-> 
-> Fix this by adding missing members in mtk_thermal_data struct which were
-> used in mtk_thermal_turn_on_buffer after commit 33140e668b10.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 33140e668b10 ("thermal/drivers/mediatek: Control buffer enablement tweaks")
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+Add of_node_put on a break out of an of_node loop.
 
-If you resend this commit without the RFC tag I can give you a R-b.
+---
 
-This is totally correct, as the buffer control is for version >= THERMAL_V2, and
-the others being V1 don't need it - the only one that was left out is effectively
-just mt7986 (probably because the commits landed around the same time).
-
-Though, since you have to anyway resend this, I would suggest to change the commit
-title to something more effective, like
-
-thermal/drivers/mediatek: Fix control buffer enablement on MT7896
-
-Cheers,
-Angelo
-
-> ---
->   drivers/thermal/mediatek/auxadc_thermal.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
-> index f59d36de20a0..ed08767eaa60 100644
-> --- a/drivers/thermal/mediatek/auxadc_thermal.c
-> +++ b/drivers/thermal/mediatek/auxadc_thermal.c
-> @@ -691,6 +691,9 @@ static const struct mtk_thermal_data mt7986_thermal_data = {
->   	.adcpnp = mt7986_adcpnp,
->   	.sensor_mux_values = mt7986_mux_values,
->   	.version = MTK_THERMAL_V3,
-> +	.apmixed_buffer_ctl_reg = APMIXED_SYS_TS_CON1,
-> +	.apmixed_buffer_ctl_mask = GENMASK(31, 6) | BIT(3),
-> +	.apmixed_buffer_ctl_set = BIT(0),
->   };
->   
->   static bool mtk_thermal_temp_is_valid(int temp)
-
-
+ arch/powerpc/kexec/file_load_64.c                    |    8 ++++++--
+ arch/powerpc/platforms/powermac/low_i2c.c            |    4 +++-
+ arch/powerpc/platforms/powermac/smp.c                |    4 +++-
+ drivers/bus/arm-cci.c                                |    4 +++-
+ drivers/genpd/ti/ti_sci_pm_domains.c                 |    8 ++++++--
+ drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c      |    4 +++-
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c               |    4 +++-
+ drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c |    1 +
+ drivers/mmc/host/atmel-mci.c                         |    8 ++++++--
+ drivers/net/ethernet/broadcom/asp2/bcmasp.c          |    1 +
+ drivers/soc/dove/pmu.c                               |    5 ++++-
+ drivers/thermal/thermal_of.c                         |    8 ++++++--
+ sound/soc/sh/rcar/core.c                             |    1 +
+ 13 files changed, 46 insertions(+), 14 deletions(-)
