@@ -2,153 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA01797B8C
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 20:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE69797B8F
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 20:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234064AbjIGSVX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Sep 2023 14:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58416 "EHLO
+        id S242596AbjIGSV6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Sep 2023 14:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231728AbjIGSVW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 14:21:22 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56ECC90
-        for <linux-pm@vger.kernel.org>; Thu,  7 Sep 2023 11:21:18 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-317c3ac7339so1151639f8f.0
-        for <linux-pm@vger.kernel.org>; Thu, 07 Sep 2023 11:21:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694110877; x=1694715677; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rcotZ+hgpp+nJjrDi+TbpAmdclq7uqg53xwk2Tf+VDQ=;
-        b=YqjbV37wVA/iYWttNy6SGGcewNb8doR5R2W4AAIiHr/rLRhb66AYLOXo+QV61GNqi8
-         cnpfeU7lFYQzl8SFe7vB2h1Q1t63zW4pM9tEj2o1qhAL9fPvx3sVodcjAiakw/RpH75j
-         CVmuVKY1zqqNPhxLOkjctEd+FlwUEoqfdjbE1HYWNsjPgNwhXhl7XNAPJUbilnfVKQEp
-         gTlamGcLjDpOGtQVKrdaxQY1zfh6JXczSOyKaEpx1VJzdEC1Bm38YuE9Gw550AncAOZL
-         +V0Zx7uA6zTmObJaRWQmgsGMFGPM/V4hD8HG8koEKYSMWnEOUqxSdzMXPKyLWNABW8DJ
-         Zr+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694110877; x=1694715677;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rcotZ+hgpp+nJjrDi+TbpAmdclq7uqg53xwk2Tf+VDQ=;
-        b=iJYDYqs8CeYfFfDskQQr8lAbdSwWWt3E02M6cnjZToj18jzadBcm9t9xlMCz1d+PPP
-         JAABrAr6oLboVdx1K+Pp4+su3CzNjDUm8MO1S44DbUnVo/hzpR1+h8rGev8BOjnhF0i+
-         K9zPSx4MTDcARMdhU7s8v3+7ywWLe0Lca2ZdMlNA4C3nWGZbF/oZHydnouY+05o6EQSy
-         WWiw+XD7h+j4zf8ByaMbuWaocXqT1FvLTv6AwXZeML61pE5GsB7OhSOM9K2OqEVpHvYd
-         8X9hInQ91yGdTiuYfFNBBJUlbq6H5Wv1tK8s9SczbMaIZpZIbp03raqRl+A/rcVReb6u
-         pSHg==
-X-Gm-Message-State: AOJu0YxxXlI64lV6ivfnM9eVLiTOKWAayogqnmiM6R3OPJ1pcDnZPCtB
-        a88FOeS64rgPgmGtEu9u5ugZe9qJOuA99O2k6zrg3w==
-X-Google-Smtp-Source: AGHT+IEYdFV7oLh32TP8ca2WTxd7wx7Xnds+jA/Gd0dYkjQWZHyvzOW22/tp5BWYDJKXFOGQ72iT1g==
-X-Received: by 2002:a50:fb0f:0:b0:522:3d36:ff27 with SMTP id d15-20020a50fb0f000000b005223d36ff27mr4306806edq.31.1694077443110;
-        Thu, 07 Sep 2023 02:04:03 -0700 (PDT)
-Received: from [192.168.37.232] (178235177204.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.204])
-        by smtp.gmail.com with ESMTPSA id f2-20020a056402150200b0052a3b212157sm9384251edw.63.2023.09.07.02.04.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Sep 2023 02:04:02 -0700 (PDT)
-Message-ID: <38f64349-5139-4207-91eb-cd39fabd4496@linaro.org>
-Date:   Thu, 7 Sep 2023 11:04:00 +0200
+        with ESMTP id S240090AbjIGSV5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 14:21:57 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A3A81A8;
+        Thu,  7 Sep 2023 11:21:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3AE0B16F3;
+        Thu,  7 Sep 2023 04:13:41 -0700 (PDT)
+Received: from [192.168.2.82] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8271B3F67D;
+        Thu,  7 Sep 2023 04:13:00 -0700 (PDT)
+Message-ID: <47a11e4e-d349-7d98-7006-4bf08a53c0cf@arm.com>
+Date:   Thu, 7 Sep 2023 13:12:47 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/5] arm64: dts: qcom: sm8450: Add opp table support to
- PCIe
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [RFC PATCH 1/7] sched/pelt: Add a new function to approximate the
+ future util_avg value
 Content-Language: en-US
-To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org, mani@kernel.org
-Cc:     lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com, rafael@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, quic_vbadigan@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, quic_parass@quicinc.com
-References: <1694066433-8677-1-git-send-email-quic_krichai@quicinc.com>
- <1694066433-8677-3-git-send-email-quic_krichai@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <1694066433-8677-3-git-send-email-quic_krichai@quicinc.com>
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Lukasz Luba <lukasz.luba@arm.com>
+References: <20230827233203.1315953-1-qyousef@layalina.io>
+ <20230827233203.1315953-2-qyousef@layalina.io>
+ <8f63efa6-f9d1-9b1c-7737-4094f6acfc62@arm.com>
+ <20230906211936.yqejc25czc6tddm6@airbuntu>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20230906211936.yqejc25czc6tddm6@airbuntu>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7.09.2023 08:00, Krishna chaitanya chundru wrote:
-> PCIe needs to choose the appropriate performance state of RPMH power
-> domain based up on the PCIe gen speed.
-> 
-> So let's add the OPP table support to specify RPMH performance states.
-> 
-> Use opp-level for the PCIe gen speed for easier use.
-> 
-> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> ---
+On 06/09/2023 23:19, Qais Yousef wrote:
+> On 09/06/23 14:56, Dietmar Eggemann wrote:
+>> On 28/08/2023 01:31, Qais Yousef wrote:
+
 [...]
 
-> +
-> +			pcie1_opp_table: opp-table {
-> +				compatible = "operating-points-v2";
-> +
-> +				opp-1 {
-> +					opp-level = <1>;
-> +					required-opps = <&rpmhpd_opp_low_svs>;
-> +				};
-> +
-> +				opp-2 {
-> +					opp-level = <2>;
-> +					required-opps = <&rpmhpd_opp_low_svs>;
-> +				};
-> +
-> +				opp-3 {
-> +					opp-level = <3>;
-> +					required-opps = <&rpmhpd_opp_low_svs>;
-Is gen3 not supposed to require nom like on pcie0?
+>>> +/*
+>>> + * Approximate the new util_avg value assuming an entity has continued to run
+>>> + * for @delta us.
+>>> + */
+>>> +unsigned long approximate_util_avg(unsigned long util, u64 delta)
+>>> +{
+>>> +	struct sched_avg sa = {
+>>> +		.util_sum = util * PELT_MIN_DIVIDER,
+>>> +		.util_avg = util,
+>>> +	};
+>>> +
+>>> +	if (unlikely(!delta))
+>>> +		return util;
+>>> +
+>>> +	accumulate_sum(delta, &sa, 0, 0, 1);
+>>
+>> IMHO, you miss the handling of `periods != 0`. load = 0 eclipses this
+>> code in accumulate_sum().
 
-Also, can all non-maximum OPPs run at just low_svs?
+You could call accumulate_sum(delta, &sa, 1, 0, 1);
 
-Konrad
+> 
+> Yes. For some reason I got blank registered when I saw if this codepath can
+> impact util_avg..
+
+Another thing ... I guess if you call accumulate_sum with delta the PELT
+machinery assumes `delta = now - sa->last_update_time` which means you
+would have to use `clock_pelt + TICK_USEC` as delta.
+>>
+>>> +	___update_load_avg(&sa, 0);
+>>> +
+>>> +	return sa.util_avg;
+>>> +}
+>>
+>> We already discussed something similar like this in Nov 22, the so
+>> called UTIL_EST_FASTER thing.
+>>
+>> https://lkml.kernel.org/r/Y2kLA8x40IiBEPYg@hirez.programming.kicks-ass.net
+>>
+>> +/*
+>> + * Compute a pelt util_avg assuming no history and @delta runtime.
+>> + */
+>> +unsigned long faster_est_approx(u64 delta)
+>> +{
+>> +	unsigned long contrib = (unsigned long)delta; /* p == 0 -> delta < 1024 */
+>> +	u64 periods = delta / 1024;
+>> +
+>> +	if (periods) {
+>> +		delta %= 1024;
+>> +		contrib = __accumulate_pelt_segments(periods, 1024, delta);
+>> +	}
+>> +
+>> +	return (contrib << SCHED_CAPACITY_SHIFT) / PELT_MIN_DIVIDER;
+>> +}
+>> +
+> 
+> I could look at using this version instead. This misses the decay part though?
+
+__accumulate_pelt_segments(periods, ...) decays the periods. But
+obviously not the util you pass into approximate_util_avg().
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
