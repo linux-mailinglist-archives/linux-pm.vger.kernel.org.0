@@ -2,34 +2,35 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBAE7974DB
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 17:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0F27974C5
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 17:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbjIGPlp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Sep 2023 11:41:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40214 "EHLO
+        id S230298AbjIGPk6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Sep 2023 11:40:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236386AbjIGPXW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 11:23:22 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DC0CC;
-        Thu,  7 Sep 2023 08:23:17 -0700 (PDT)
+        with ESMTP id S1345359AbjIGPfb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 11:35:31 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC32198E;
+        Thu,  7 Sep 2023 08:35:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+IHqfq8QIvXbyDFuHCBfvC02F8uZgk5ZBVn+a1FzJbA=; b=kTeqwUCyZj90g9YXmVoDNp5lBh
-        4XMHEhXWiEBXTBpskFUu7mNbCGQ+Et64o+4z6xxot8694zVDAwKxILWGab0FRCanudJh3yLFoPPEX
-        R4eKf2hSHYI0B9CQzA+/sSAih3lMquFm6N7aO/oWYEiKPbTOsQ27bAYO37WOqoIhqHvOU6m3O6lgw
-        QVIQWQlW97UYOOjTSOgAfDTU06f5YRFR1oG4X7qad1hY5HQSNOVaD6512pRNw8Fe0GhTmLKYcEzkL
-        7ktTX6SAo82f/CDAFN5pV3Y80aJT4zFurNvO5YxoZSPXWoKlfaznp6mWzYMFe4KXgsRK9546Imgg5
-        /yXX00Fg==;
+        bh=QUUh+RqON6fS6Crk84Dx/3Y/w64C4ZDBuS3vTrptbI8=; b=Z9228xSGlZxiFF7csV7I/eWRaJ
+        uFD4iyFnifMsxh/2+tqDJtloNh7/ZRAGxDeqLYOfl9hXHXV9//sQjwXo1zt7F6OVZEBa6wg+WatEm
+        5WWA5cDb/zTRTqfyA11ngZdy3JIPDqlOh8RH4NYlbo0qpj9CmN49bKBXd0oofklrQ4vi/Mze7aYgp
+        QUYt2TI1E0dq2S4Z1/QS1ul5TtbRWMDsQgSD9CPE8qOD7UKlfDReowzB/PYubPhUFPcGqjL+KqLse
+        V8vyUn6l1bsP6glS4gfziOl8A63JcPOEkZUMQAPkrmDR2ewGhnCr3zm9CLRGyL8JVtlzSdu0u3Rd2
+        i/IbDb4w==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qeDHh-00AYIp-Ml; Thu, 07 Sep 2023 11:34:54 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qeDQp-001mRG-2K;
+        Thu, 07 Sep 2023 11:44:21 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5ACD3300687; Thu,  7 Sep 2023 13:34:53 +0200 (CEST)
-Date:   Thu, 7 Sep 2023 13:34:53 +0200
+        id CF91A300687; Thu,  7 Sep 2023 13:44:20 +0200 (CEST)
+Date:   Thu, 7 Sep 2023 13:44:20 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Qais Yousef <qyousef@layalina.io>
 Cc:     Ingo Molnar <mingo@kernel.org>,
@@ -39,15 +40,15 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Lukasz Luba <lukasz.luba@arm.com>
-Subject: Re: [RFC PATCH 4/7] sched: cpufreq: Remove magic 1.25 headroom from
- apply_dvfs_headroom()
-Message-ID: <20230907113453.GB10955@noisy.programming.kicks-ass.net>
+Subject: Re: [RFC PATCH 5/7] sched/schedutil: Add a new tunable to dictate
+ response time
+Message-ID: <20230907114420.GC10955@noisy.programming.kicks-ass.net>
 References: <20230827233203.1315953-1-qyousef@layalina.io>
- <20230827233203.1315953-5-qyousef@layalina.io>
+ <20230827233203.1315953-6-qyousef@layalina.io>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230827233203.1315953-5-qyousef@layalina.io>
+In-Reply-To: <20230827233203.1315953-6-qyousef@layalina.io>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -57,32 +58,41 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 28, 2023 at 12:32:00AM +0100, Qais Yousef wrote:
-> Instead of the magical 1.25 headroom, use the new approximate_util_avg()
-> to provide headroom based on the dvfs_update_delay; which is the period
-> at which the cpufreq governor will send DVFS updates to the hardware.
-> 
-> Add a new percpu dvfs_update_delay that can be cheaply accessed whenever
-> apply_dvfs_headroom() is called. We expect cpufreq governors that rely
-> on util to drive its DVFS logic/algorithm to populate these percpu
-> variables. schedutil is the only such governor at the moment.
-> 
-> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
-> ---
->  kernel/sched/core.c              |  3 ++-
->  kernel/sched/cpufreq_schedutil.c | 10 +++++++++-
->  kernel/sched/sched.h             | 25 ++++++++++++++-----------
->  3 files changed, 25 insertions(+), 13 deletions(-)
-> 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 602e369753a3..f56eb44745a8 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -116,6 +116,7 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(sched_util_est_se_tp);
->  EXPORT_TRACEPOINT_SYMBOL_GPL(sched_update_nr_running_tp);
+On Mon, Aug 28, 2023 at 12:32:01AM +0100, Qais Yousef wrote:
+> +static inline unsigned long
+> +sugov_apply_response_time(struct sugov_policy *sg_policy, unsigned long util)
+> +{
+> +	unsigned long mult;
+> +
+> +	if (sg_policy->freq_response_time_ms == sg_policy->tunables->response_time_ms)
+> +		return util;
+> +
+> +	mult = sg_policy->freq_response_time_ms * SCHED_CAPACITY_SCALE;
+> +	mult /=	sg_policy->tunables->response_time_ms;
+> +	mult *= util;
+> +
+> +	return mult >> SCHED_CAPACITY_SHIFT;
+> +}
+> +
+>  static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
+>  {
+>  	s64 delta_ns;
+> @@ -143,6 +184,7 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
+>  	unsigned int freq = arch_scale_freq_invariant() ?
+>  				policy->cpuinfo.max_freq : policy->cur;
 >  
->  DEFINE_PER_CPU_SHARED_ALIGNED(struct rq, runqueues);
-> +DEFINE_PER_CPU_SHARED_ALIGNED(u64, dvfs_update_delay);
+> +	util = sugov_apply_response_time(sg_policy, util);
+>  	freq = map_util_freq(util, freq, max);
+>  
+>  	if (freq == sg_policy->cached_raw_freq && !sg_policy->need_freq_update)
 
-This makes no sense, why are you using SHARED_ALIGNED and thus wasting
-an entire cacheline for the one variable?
+Urgh, so instead of caching the multiplier you keep computing what is
+essentially a constant over and over and over and over again :/
+
+That is, compute the whole 'freq_response_time_ms * SCHED_CAPACITY_SCALE
+/ response_time_ms' thing *once*, when that file is written to, and then
+reduce the whole thing to:
+
+	return (freq_response_mult * util) >> SCHED_CAPACITY_SHIFT;
+
+No need for that special case, no need for divisions, just go.
