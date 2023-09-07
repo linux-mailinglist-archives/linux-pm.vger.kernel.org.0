@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D156B7974D2
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 17:41:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A32B97974CF
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 17:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237286AbjIGPl1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Sep 2023 11:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39448 "EHLO
+        id S234165AbjIGPlO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Sep 2023 11:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245375AbjIGP2o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 11:28:44 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106C0E49
-        for <linux-pm@vger.kernel.org>; Thu,  7 Sep 2023 08:28:21 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-402be83929eso12257535e9.3
-        for <linux-pm@vger.kernel.org>; Thu, 07 Sep 2023 08:28:20 -0700 (PDT)
+        with ESMTP id S245224AbjIGPcI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 11:32:08 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F18319C
+        for <linux-pm@vger.kernel.org>; Thu,  7 Sep 2023 08:31:42 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-31c5c06e8bbso1074324f8f.1
+        for <linux-pm@vger.kernel.org>; Thu, 07 Sep 2023 08:31:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694100444; x=1694705244; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1694100652; x=1694705452; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=y7Y6zFmhlb8oBiHulr6SNzDGIOTaQJEEOwxmUItsSBI=;
-        b=VQ+XCowXUqQuM1kSlALF8l7wqdNvh1V7afuFku6r+ZLlA4z9kSvQQwSqJlCtY7nHxo
-         brI6IrysFEEnG3LSOwIDSJh2z4Z7e4ibvhc5uoKOj2y1FSCaSN4KYhnJ+F44cxNQgxCT
-         5uZt6+9oevnBWY9ffuSu+qtYqqt5NGsiur878q1qd8yiuoa956D0sXmaL5J1R3nlwgky
-         Wm6UhDNAHLaiDDO1O2NkOlAtK1OQF61lxvH/vyjL4eBy4hiy7cm3sC+4IaIc8r3+JMxZ
-         1wxjz9abmlTyx2lHScUqnVXXYNJnKUgszS8mXte4Skdc3872W6vjJoHTq4cKU+2AE25j
-         28YA==
+        bh=KGhxv+wLkUlJTnXgtlH4J46AYd9o45ySTLmRTKlekWI=;
+        b=ThgKY/4PvULhrkYaFzlTxp+8aTc/JOpz36vJZr8pWZ38GeFO7GQWumwe930LNJ9YF4
+         44vsEwgPsATb7I8WeymexAmTKYrFERykuxNXo+4ENKHv3/nv7ektH2dxqGpwkaBeJQCQ
+         9k8UgpQ9cT/IAoHzAy6oivDs6kXrauMv0m2+DGjgQvKb1Q6Wsio0fVR/a4+MtsqOl71U
+         MUg4ixhx42HXzEBjurNwxp0FACO1u0LEH1MoPdVDzR42P8t5AAvWFoRQj3cOskjsB5vk
+         O6n9DKmhaTh7DSnp6eS6SpNRn9cO3mJMa7Kb7wPHQjncgvtU63bU2WVI/O9D/1rKIugy
+         mvhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694100444; x=1694705244;
+        d=1e100.net; s=20221208; t=1694100652; x=1694705452;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y7Y6zFmhlb8oBiHulr6SNzDGIOTaQJEEOwxmUItsSBI=;
-        b=QRlVl5Kjg+V9XrRnuDazDjBRv5AfBgBqnw/kh5wzKSOeS+Yf9yZR3/w8gNsE2Q6ojh
-         7lD3aKSuh/mBiSWBy2cVJmWi6jqxX2g+DymJFg7NDFmpnuM3myTE5ypTDPvsKJVPooE5
-         cHEe9SeLA1IEUly5yqEeqF46IUk56Ejsbu5fExk22+Lz/W2I3lWxseg1Ez9n/ABszUzC
-         J8rIywwMi5T9d/tCiT3j6tkGHpCbX1+McZWNpQ3uuuxg+EGiTL885db+GdEEyGgPH6dh
-         bsPmSpiHCgtyCtbuDGdT2scrVH2e+9qC1BTHddoOK0S6tM8anuQ4MhKUIyGcNFkPp/UV
-         TyCA==
-X-Gm-Message-State: AOJu0Yxa97EymKDfV4mFaj82ZmKW4TSJPEFyuvPCzW9I0UQkAjpIxvnb
-        qheWEec1wqnkjGT+Dral2J6l3ncA+Rd2IbvtZ2A=
-X-Google-Smtp-Source: AGHT+IEKmnSNSlUtiCWpMx5epfLO+Rm4w2bJrzAa6Be3omHD0KXp967h3WlCKIuq9OnSAsdvXE+3AA==
-X-Received: by 2002:a05:6402:3c2:b0:522:2dcc:afb6 with SMTP id t2-20020a05640203c200b005222dccafb6mr3798766edw.7.1694066597001;
-        Wed, 06 Sep 2023 23:03:17 -0700 (PDT)
+        bh=KGhxv+wLkUlJTnXgtlH4J46AYd9o45ySTLmRTKlekWI=;
+        b=OB1UqvTlbmHOYhE+hSVTMLQqYdAibpGPrwhjoxhNxJ+fbQ9JWMhCKsPD+uyxrE/Ymj
+         Y+vtXYx2hkVhJWsujgV5BPeq1Q6caU6/tqJvtc+50jh3OwmmqggFWFj1GA/cyBzLHA4H
+         UaebSDjXxmGOW+D0+fa4v0Iz9FVm8/rRGEvJExrZnLZhS+AlZ0wyyI4faNX6hZ57MggO
+         0Ak9fbFil8uUpqrNiM4aTbYYO1ymanmpm2cN+/fQLx8bSDFS/w+9ERfTijdSseF2K0Oc
+         tN5KOXDrNKr5efLgDBG7iEbhKTbkMDqm483lN1kF0PUAB5zICqPtuVH7OcmbHw1DBBl1
+         yfbQ==
+X-Gm-Message-State: AOJu0YzG59ThHH9xvREIAcxjzXLrW0o5IcscOAAAuntorJbUfjHGzHeE
+        zifH0qC9XlfkYplYGsHrYbHqQl/+lfYlVYZtB7Y=
+X-Google-Smtp-Source: AGHT+IHgZdZSiR//XinTA9Y8E8bS2xBu6CE90k9cVQP1rRMZIv9GSOKD+LJS0NcyLh090bkwtAQy+Q==
+X-Received: by 2002:a17:906:19:b0:9a1:ec3d:8ffe with SMTP id 25-20020a170906001900b009a1ec3d8ffemr4567309eja.18.1694066647510;
+        Wed, 06 Sep 2023 23:04:07 -0700 (PDT)
 Received: from [192.168.0.22] (77-252-46-238.static.ip.netia.com.pl. [77.252.46.238])
-        by smtp.gmail.com with ESMTPSA id t3-20020aa7d4c3000000b0051bed21a635sm9237337edr.74.2023.09.06.23.03.15
+        by smtp.gmail.com with ESMTPSA id qx12-20020a170906fccc00b0099bd86f9248sm9922585ejb.63.2023.09.06.23.04.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Sep 2023 23:03:16 -0700 (PDT)
-Message-ID: <3f68d3bf-3273-2339-ea41-3362ced3c91b@linaro.org>
-Date:   Thu, 7 Sep 2023 08:03:14 +0200
+        Wed, 06 Sep 2023 23:04:07 -0700 (PDT)
+Message-ID: <2de8953c-f1c5-3c17-5c95-973ef550bc32@linaro.org>
+Date:   Thu, 7 Sep 2023 08:04:05 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.0
-Subject: Re: [PATCH v1 05/10] dt-bindings: cpufreq: qcom-cpufreq-nvmem:
- document IPQ5332
+Subject: Re: [PATCH v1 08/10] dt-bindings: cpufreq: qcom-cpufreq-nvmem:
+ document IPQ9574
 Content-Language: en-US
 To:     Varadarajan Narayanan <quic_varada@quicinc.com>,
         ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
@@ -67,14 +67,14 @@ To:     Varadarajan Narayanan <quic_varada@quicinc.com>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
 References: <cover.1693996662.git.quic_varada@quicinc.com>
- <8fe23b5401362e214078648926a00f7ceefaa542.1693996662.git.quic_varada@quicinc.com>
+ <e0f54a4b249f24b10d3dc21a0224718e46ebd158.1693996662.git.quic_varada@quicinc.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <8fe23b5401362e214078648926a00f7ceefaa542.1693996662.git.quic_varada@quicinc.com>
+In-Reply-To: <e0f54a4b249f24b10d3dc21a0224718e46ebd158.1693996662.git.quic_varada@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,10 +83,13 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 07/09/2023 07:21, Varadarajan Narayanan wrote:
-> Document IPQ5332 compatible for Qcom NVMEM CPUFreq driver.
+> Document IPQ9574 compatible for Qcom NVMEM CPUFreq driver.
 > 
 > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 > ---
+>  Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
