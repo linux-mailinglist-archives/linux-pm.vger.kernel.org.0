@@ -2,47 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE69797B8F
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 20:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 749B4797B91
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 20:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242596AbjIGSV6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1343772AbjIGSV6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Thu, 7 Sep 2023 14:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48488 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240090AbjIGSV5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 14:21:57 -0400
+        with ESMTP id S241923AbjIGSV6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 14:21:58 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A3A81A8;
-        Thu,  7 Sep 2023 11:21:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E368B4;
+        Thu,  7 Sep 2023 11:21:54 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3AE0B16F3;
-        Thu,  7 Sep 2023 04:13:41 -0700 (PDT)
-Received: from [192.168.2.82] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8271B3F67D;
-        Thu,  7 Sep 2023 04:13:00 -0700 (PDT)
-Message-ID: <47a11e4e-d349-7d98-7006-4bf08a53c0cf@arm.com>
-Date:   Thu, 7 Sep 2023 13:12:47 +0200
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 897A4175A;
+        Thu,  7 Sep 2023 06:33:52 -0700 (PDT)
+Received: from [10.57.92.126] (unknown [10.57.92.126])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 00AE03F766;
+        Thu,  7 Sep 2023 06:33:12 -0700 (PDT)
+Message-ID: <5616e50d-b827-4547-5b16-9131ace98419@arm.com>
+Date:   Thu, 7 Sep 2023 14:33:49 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [RFC PATCH 1/7] sched/pelt: Add a new function to approximate the
- future util_avg value
+ Thunderbird/102.15.0
+Subject: Re: [RFC PATCH 0/7] sched: cpufreq: Remove magic margins
 Content-Language: en-US
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Qais Yousef <qyousef@layalina.io>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Lukasz Luba <lukasz.luba@arm.com>
+        Viresh Kumar <viresh.kumar@linaro.org>
 References: <20230827233203.1315953-1-qyousef@layalina.io>
- <20230827233203.1315953-2-qyousef@layalina.io>
- <8f63efa6-f9d1-9b1c-7737-4094f6acfc62@arm.com>
- <20230906211936.yqejc25czc6tddm6@airbuntu>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20230906211936.yqejc25czc6tddm6@airbuntu>
-Content-Type: text/plain; charset=UTF-8
+ <a6365f63-4669-15e5-b843-f4bfb1bd5e68@arm.com>
+ <20230906211850.zyvk6qtt6fvpxaf3@airbuntu>
+ <6011d8bb-9a3b-1435-30b0-d75b39bf5efa@arm.com>
+ <20230907115307.GD10955@noisy.programming.kicks-ass.net>
+ <89067f71-9b83-e647-053e-07f7d55b6529@arm.com>
+ <20230907132906.GG10955@noisy.programming.kicks-ass.net>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20230907132906.GG10955@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -53,84 +54,21 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/09/2023 23:19, Qais Yousef wrote:
-> On 09/06/23 14:56, Dietmar Eggemann wrote:
->> On 28/08/2023 01:31, Qais Yousef wrote:
 
-[...]
 
->>> +/*
->>> + * Approximate the new util_avg value assuming an entity has continued to run
->>> + * for @delta us.
->>> + */
->>> +unsigned long approximate_util_avg(unsigned long util, u64 delta)
->>> +{
->>> +	struct sched_avg sa = {
->>> +		.util_sum = util * PELT_MIN_DIVIDER,
->>> +		.util_avg = util,
->>> +	};
->>> +
->>> +	if (unlikely(!delta))
->>> +		return util;
->>> +
->>> +	accumulate_sum(delta, &sa, 0, 0, 1);
->>
->> IMHO, you miss the handling of `periods != 0`. load = 0 eclipses this
->> code in accumulate_sum().
-
-You could call accumulate_sum(delta, &sa, 1, 0, 1);
-
+On 9/7/23 14:29, Peter Zijlstra wrote:
+> On Thu, Sep 07, 2023 at 02:06:15PM +0100, Lukasz Luba wrote:
 > 
-> Yes. For some reason I got blank registered when I saw if this codepath can
-> impact util_avg..
-
-Another thing ... I guess if you call accumulate_sum with delta the PELT
-machinery assumes `delta = now - sa->last_update_time` which means you
-would have to use `clock_pelt + TICK_USEC` as delta.
+>>> Many extentions to the periodic task model are possible, including
+>>> things like average runtime with bursts etc.. all have their trade-offs.
 >>
->>> +	___update_load_avg(&sa, 0);
->>> +
->>> +	return sa.util_avg;
->>> +}
->>
->> We already discussed something similar like this in Nov 22, the so
->> called UTIL_EST_FASTER thing.
->>
->> https://lkml.kernel.org/r/Y2kLA8x40IiBEPYg@hirez.programming.kicks-ass.net
->>
->> +/*
->> + * Compute a pelt util_avg assuming no history and @delta runtime.
->> + */
->> +unsigned long faster_est_approx(u64 delta)
->> +{
->> +	unsigned long contrib = (unsigned long)delta; /* p == 0 -> delta < 1024 */
->> +	u64 periods = delta / 1024;
->> +
->> +	if (periods) {
->> +		delta %= 1024;
->> +		contrib = __accumulate_pelt_segments(periods, 1024, delta);
->> +	}
->> +
->> +	return (contrib << SCHED_CAPACITY_SHIFT) / PELT_MIN_DIVIDER;
->> +}
->> +
+>> Was that maybe proposed somewhere on LKML (the other models)?
 > 
-> I could look at using this version instead. This misses the decay part though?
+> RT literatur mostly methinks. Replacing WCET with a statistical model of
+> sorts is not uncommon, the argument goes that not everybody will have
+> their worst case at the same time and lows and highs can commonly cancel
+> out and this way we can cram a little more on the system.
+> 
+> Typically this is proposed in the context of soft-realtime systems.
 
-__accumulate_pelt_segments(periods, ...) decays the periods. But
-obviously not the util you pass into approximate_util_avg().
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Thanks Peter, I will dive into some books...
