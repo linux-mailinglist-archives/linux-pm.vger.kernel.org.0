@@ -2,110 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C065D79759E
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 17:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C577974CA
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 17:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236817AbjIGPwl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Sep 2023 11:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
+        id S233635AbjIGPlI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Sep 2023 11:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243215AbjIGPu1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 11:50:27 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5408059C8
-        for <linux-pm@vger.kernel.org>; Thu,  7 Sep 2023 08:40:50 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-52a40cf952dso1518445a12.2
-        for <linux-pm@vger.kernel.org>; Thu, 07 Sep 2023 08:40:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694101193; x=1694705993; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=G88lP2VW9W0ey1BM427zqcg+F+UpGhl5q2J3uTfo6Co=;
-        b=RYvAW12lvwz6uAP68SCj8UMmHJ89SRlK+6d122349mGXAdsbxvLjszlzUGIo2TvBVm
-         N0F+ZfRlcc2dRpJ6I1uZRd+dKy+92Zg6LudvV3RYvTWa+o4iBPozvQmzeC5mUQTn5XvD
-         l5//40QCM+ZcLWM7/3bwqsFpm4UxHflEySB9eLsV9W2yYvar2pKZYNKHlEttZoaiSCwf
-         ps+mlX3CQWfv00nyWXa3yeoJtKC7PU5VJCjCchTwIRj9cEb5W8MXwN6JugkT4akMdXbe
-         VCW5LEYEi69UWF39j4cC/+oV4DyfQmCqpbs+ZpOqO0uUvn0uD2nU5OUln6su6IVtnccH
-         z6QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694101193; x=1694705993;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G88lP2VW9W0ey1BM427zqcg+F+UpGhl5q2J3uTfo6Co=;
-        b=lawtjCxTNdmCuKmtIJJqKfxItmRXAp10d3zElxCPBsRWTAH9H+4wh1yjL+1XmuazaT
-         O/9j5A+/JMk4tbpyfADWmZTus99l8DON7TRmZeR8dUCA67vBV3mClK+uIzSM1PAyFtCD
-         CzneI6wO2+Aaqky1r3l7NNyKZJX93T9HpX0jZ0Tib9Hr2kerl8SKEYQJOz+0tUARz7ZN
-         0GBC2xsCcbXGzJtX5AtRwboGdRyaHX/1ZOTksdwekYKRzi4YW95Y6A5GhBUgkkOE+i+2
-         SVl2qNYiuqf00lY83HkhJ1KJZQ95emJh7yJ13CbLNnxtj/R8YY1sfcy0oCBkI/U87L/a
-         cvrw==
-X-Gm-Message-State: AOJu0YwEQKH6bj3JfQZ4xwl5TR3cRl/u23nrMit1tLaZSm8gWkVVPXDB
-        MBAqSK0AAJ3HtF2CQayXjR/qqQ5wQ4Uxp4ROO4o=
-X-Google-Smtp-Source: AGHT+IHGT591APG6CRNW4zuyJuEfxCr1FfGrojCK5qI1ehGXhuwAoMXIKQPf6+hAJXIGsQZ5/i+wTg==
-X-Received: by 2002:a1c:ed08:0:b0:3fe:2b60:b24e with SMTP id l8-20020a1ced08000000b003fe2b60b24emr4801517wmh.29.1694084900263;
-        Thu, 07 Sep 2023 04:08:20 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id ay30-20020a5d6f1e000000b0031f65cdd271sm3999677wrb.100.2023.09.07.04.08.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Sep 2023 04:08:19 -0700 (PDT)
-Date:   Thu, 7 Sep 2023 14:08:17 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        Sebastian Reichel <sre@kernel.org>,
+        with ESMTP id S1345353AbjIGPfb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 11:35:31 -0400
+Received: from mxout1.routing.net (mxout1.routing.net [IPv6:2a03:2900:1:a::a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658B71FC9;
+        Thu,  7 Sep 2023 08:35:08 -0700 (PDT)
+Received: from mxbox3.masterlogin.de (unknown [192.168.10.78])
+        by mxout1.routing.net (Postfix) with ESMTP id 04FFB4081B;
+        Thu,  7 Sep 2023 11:20:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1694085635;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=bmzyT3vhoavJV5YD/9bjCpBgNAP4o0u/rneto0+CusE=;
+        b=w2FAf1f6NYSPYwdHbMqEXFMlOVdC4HmF1Q212UWEGrvaarckAZKkNtvCHUdLCSOkVipCza
+        Ooe2QjKtAInOu1Qw0vq5sGegkzD3DyUtuvitA1FJ0oYh0f41J0DtoO6oUXy+UblT8QEd0e
+        daPaIchb0Lp+CpS0c9Icp9+HxKt+47Y=
+Received: from frank-G5.. (fttx-pool-217.61.150.154.bambit.de [217.61.150.154])
+        by mxbox3.masterlogin.de (Postfix) with ESMTPSA id 0FBA2360465;
+        Thu,  7 Sep 2023 11:20:34 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>, linux-pm@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Daniel Golle <daniel@makrotopia.org>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        kernel-janitors@vger.kernel.org, error27@gmail.com
-Subject: Re: [PATCH] power: supply: mt6370: Fix missing error code in
- mt6370_chg_toggle_cfo()
-Message-ID: <1092ffb3-0238-4dc0-baf3-344a653fca3f@kadam.mountain>
-References: <20230906084815.2827930-1-harshit.m.mogalapalli@oracle.com>
- <cd6eea67-df0f-08b1-61cd-57a3b4f9cf0d@collabora.com>
+        stable@vger.kernel.org
+Subject: [PATCH] thermal/drivers/mediatek: Fix control buffer enablement on MT7896
+Date:   Thu,  7 Sep 2023 13:20:18 +0200
+Message-Id: <20230907112018.52811-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cd6eea67-df0f-08b1-61cd-57a3b4f9cf0d@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Mail-ID: e7eeb8e1-00de-41f6-a5df-ce2e9164136e
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 07, 2023 at 12:43:12PM +0200, AngeloGioacchino Del Regno wrote:
-> Il 06/09/23 10:48, Harshit Mogalapalli ha scritto:
-> > When mt6370_chg_field_get() suceeds, ret is set to zero and returning
-> > zero when flash led is still in strobe mode looks incorrect.
-> > 
-> > Fixes: 233cb8a47d65 ("power: supply: mt6370: Add MediaTek MT6370 charger driver")
-> > Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-> > ---
-> > This is based on static analysis with smatch, only compile tested.
-> > ---
-> >   drivers/power/supply/mt6370-charger.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/power/supply/mt6370-charger.c b/drivers/power/supply/mt6370-charger.c
-> > index f27dae5043f5..a9641bd3d8cf 100644
-> > --- a/drivers/power/supply/mt6370-charger.c
-> > +++ b/drivers/power/supply/mt6370-charger.c
-> > @@ -324,7 +324,7 @@ static int mt6370_chg_toggle_cfo(struct mt6370_priv *priv)
-> >   	if (fl_strobe) {
-> >   		dev_err(priv->dev, "Flash led is still in strobe mode\n");
-> > -		return ret;
-> > +		return -EINVAL;
-> 
-> I think that returning 0 here was intentional, but I agree on a return ret
-> here being both confusing and wrong.
+From: Frank Wunderlich <frank-w@public-files.de>
 
-If it's a success path then probably we should remove the dev_err().
+Reading thermal sensor on mt7986 devices returns invalid temperature:
 
-regards,
-dan carpenter
+bpi-r3 ~ # cat /sys/class/thermal/thermal_zone0/temp
+ -274000
+
+Fix this by adding missing members in mtk_thermal_data struct which were
+used in mtk_thermal_turn_on_buffer after commit 33140e668b10.
+
+Cc: stable@vger.kernel.org
+Fixes: 33140e668b10 ("thermal/drivers/mediatek: Control buffer enablement tweaks")
+Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+---
+ drivers/thermal/mediatek/auxadc_thermal.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
+index 843214d30bd8..967b9a1aead4 100644
+--- a/drivers/thermal/mediatek/auxadc_thermal.c
++++ b/drivers/thermal/mediatek/auxadc_thermal.c
+@@ -690,6 +690,9 @@ static const struct mtk_thermal_data mt7986_thermal_data = {
+ 	.adcpnp = mt7986_adcpnp,
+ 	.sensor_mux_values = mt7986_mux_values,
+ 	.version = MTK_THERMAL_V3,
++	.apmixed_buffer_ctl_reg = APMIXED_SYS_TS_CON1,
++	.apmixed_buffer_ctl_mask = GENMASK(31, 6) | BIT(3),
++	.apmixed_buffer_ctl_set = BIT(0),
+ };
+ 
+ static bool mtk_thermal_temp_is_valid(int temp)
+-- 
+2.34.1
 
