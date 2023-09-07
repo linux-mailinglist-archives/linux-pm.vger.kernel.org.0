@@ -2,54 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CAAB797C25
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 20:42:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066D5797B80
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 20:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344238AbjIGSmC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Sep 2023 14:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50300 "EHLO
+        id S240832AbjIGSTP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Sep 2023 14:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344267AbjIGSmA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 14:42:00 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B11D1700;
-        Thu,  7 Sep 2023 11:41:55 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 838661762;
-        Thu,  7 Sep 2023 06:45:34 -0700 (PDT)
-Received: from [10.57.92.126] (unknown [10.57.92.126])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A0C7E3F766;
-        Thu,  7 Sep 2023 06:44:54 -0700 (PDT)
-Message-ID: <8657cc7c-169b-3479-5919-72bd39335b15@arm.com>
-Date:   Thu, 7 Sep 2023 14:45:30 +0100
+        with ESMTP id S232978AbjIGSTP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 14:19:15 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707EA1705;
+        Thu,  7 Sep 2023 11:18:59 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id 567bb54194be6a4c; Thu, 7 Sep 2023 20:18:57 +0200
+Authentication-Results: v370.home.net.pl; spf=softfail (domain owner 
+   discourages use of this host) smtp.mailfrom=rjwysocki.net 
+   (client-ip=195.136.19.94; helo=[195.136.19.94]; 
+   envelope-from=rjw@rjwysocki.net; receiver=<UNKNOWN>)
+Received: from kreacher.localnet (unknown [195.136.19.94])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id D03936636D6;
+        Thu,  7 Sep 2023 20:18:56 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>, linux-omap@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>, Keerthy <j-keerthy@ti.com>
+Subject: [PATCH v1] thermal: Constify the trip argument of the .get_trend() zone callback
+Date:   Thu, 07 Sep 2023 20:18:56 +0200
+Message-ID: <5709115.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [RFC PATCH 0/7] sched: cpufreq: Remove magic margins
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Qais Yousef <qyousef@layalina.io>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>, bristot@redhat.com,
-        juri.lelli@redhat.com
-References: <20230827233203.1315953-1-qyousef@layalina.io>
- <a6365f63-4669-15e5-b843-f4bfb1bd5e68@arm.com>
- <20230906211850.zyvk6qtt6fvpxaf3@airbuntu>
- <6011d8bb-9a3b-1435-30b0-d75b39bf5efa@arm.com>
- <20230907115307.GD10955@noisy.programming.kicks-ass.net>
- <89067f71-9b83-e647-053e-07f7d55b6529@arm.com>
- <20230907132906.GG10955@noisy.programming.kicks-ass.net>
- <5616e50d-b827-4547-5b16-9131ace98419@arm.com>
- <20230907133840.GH10955@noisy.programming.kicks-ass.net>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20230907133840.GH10955@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrudehhedguddvfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeelpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphht
+ thhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=9 Fuz1=9 Fuz2=9
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,30 +56,65 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+Add 'const' to the definition of the 'trip' argument of the
+.get_trend() thermal zone callback to indicate that the trip point
+passed to it should not be modified by it and adjust the
+callback functions implementing it, thermal_get_trend() in the
+ACPI thermal driver and __ti_thermal_get_trend(), accordingly.
+
+No intentional functional impact.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/acpi/thermal.c                             |    2 +-
+ drivers/thermal/ti-soc-thermal/ti-thermal-common.c |    3 ++-
+ include/linux/thermal.h                            |    4 ++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
+
+Index: linux-pm/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
++++ linux-pm/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+@@ -110,7 +110,8 @@ static inline int __ti_thermal_get_temp(
+ }
+ 
+ static int __ti_thermal_get_trend(struct thermal_zone_device *tz,
+-				  struct thermal_trip *trip, enum thermal_trend *trend)
++				  const struct thermal_trip *trip,
++				  enum thermal_trend *trend)
+ {
+ 	struct ti_thermal_data *data = thermal_zone_device_priv(tz);
+ 	struct ti_bandgap *bgp;
+Index: linux-pm/include/linux/thermal.h
+===================================================================
+--- linux-pm.orig/include/linux/thermal.h
++++ linux-pm/include/linux/thermal.h
+@@ -80,8 +80,8 @@ struct thermal_zone_device_ops {
+ 	int (*set_trip_hyst) (struct thermal_zone_device *, int, int);
+ 	int (*get_crit_temp) (struct thermal_zone_device *, int *);
+ 	int (*set_emul_temp) (struct thermal_zone_device *, int);
+-	int (*get_trend) (struct thermal_zone_device *, struct thermal_trip *,
+-			  enum thermal_trend *);
++	int (*get_trend) (struct thermal_zone_device *,
++			  const struct thermal_trip *, enum thermal_trend *);
+ 	void (*hot)(struct thermal_zone_device *);
+ 	void (*critical)(struct thermal_zone_device *);
+ };
+Index: linux-pm/drivers/acpi/thermal.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/thermal.c
++++ linux-pm/drivers/acpi/thermal.c
+@@ -531,7 +531,7 @@ static int thermal_get_temp(struct therm
+ }
+ 
+ static int thermal_get_trend(struct thermal_zone_device *thermal,
+-			     struct thermal_trip *trip,
++			     const struct thermal_trip *trip,
+ 			     enum thermal_trend *trend)
+ {
+ 	struct acpi_thermal *tz = thermal_zone_device_priv(thermal);
 
 
-On 9/7/23 14:38, Peter Zijlstra wrote:
-> On Thu, Sep 07, 2023 at 02:33:49PM +0100, Lukasz Luba wrote:
->>
->>
->> On 9/7/23 14:29, Peter Zijlstra wrote:
->>> On Thu, Sep 07, 2023 at 02:06:15PM +0100, Lukasz Luba wrote:
->>>
->>>>> Many extentions to the periodic task model are possible, including
->>>>> things like average runtime with bursts etc.. all have their trade-offs.
->>>>
->>>> Was that maybe proposed somewhere on LKML (the other models)?
->>>
->>> RT literatur mostly methinks. Replacing WCET with a statistical model of
->>> sorts is not uncommon, the argument goes that not everybody will have
->>> their worst case at the same time and lows and highs can commonly cancel
->>> out and this way we can cram a little more on the system.
->>>
->>> Typically this is proposed in the context of soft-realtime systems.
->>
->> Thanks Peter, I will dive into some books...
-> 
-> I would look at academic papers, not sure any of that ever made it to
-> books, Daniel would know I suppose.
 
-Good hint, thanks!
