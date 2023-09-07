@@ -2,82 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C52187974DA
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 17:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D156B7974D2
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Sep 2023 17:41:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbjIGPln (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Sep 2023 11:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46016 "EHLO
+        id S237286AbjIGPl1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Sep 2023 11:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345034AbjIGPe0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 11:34:26 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198A51B2;
-        Thu,  7 Sep 2023 08:34:07 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3875ROiQ032686;
-        Thu, 7 Sep 2023 06:01:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=KSARd/qNcU715jGJf6E1vkYmquFBHags1tvdcZIWVoE=;
- b=L5r6nGkbUP0yJEJfo5nJ1pwXpDJ/HzVBcqfH06ewrxfQAGmbJ6bAlN7qpkDNV0OYlrgY
- 0VG2TFTA87bhbVhtZF+bw0TiL1/lBSWSTsfSqofGd89UrRriPT+aJsXfv2dr4tUcWIlx
- E99d3Sal2FmmG7AMDBAebkZT1KcFJdii7A6yKvGX+ATMAzsKaD6ZMHPhaFV4S5q38+fo
- /CQaT2+JeH56sxvknAvLXZLcysVl9SHHwtlp9rEnTzhAWhwan0+2Wyq49SmvxQg4kiLL
- PnWVTMb/rebb5kefHT0VcOXw73CWYt9Mpfk/QLAeKYLdXhVdZMD9udG2BnrgnZro9twE Pg== 
-Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sxxbbh4ex-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Sep 2023 06:01:02 +0000
-Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 38760tH8011303;
-        Thu, 7 Sep 2023 06:00:58 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3sux4kjqux-1;
-        Thu, 07 Sep 2023 06:00:58 +0000
-Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38760wYJ011325;
-        Thu, 7 Sep 2023 06:00:58 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-krichai-hyd.qualcomm.com [10.213.110.112])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 38760wsW011322;
-        Thu, 07 Sep 2023 06:00:58 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 4058933)
-        id E10C213BA; Thu,  7 Sep 2023 11:30:57 +0530 (+0530)
-From:   Krishna chaitanya chundru <quic_krichai@quicinc.com>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        with ESMTP id S245375AbjIGP2o (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 11:28:44 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106C0E49
+        for <linux-pm@vger.kernel.org>; Thu,  7 Sep 2023 08:28:21 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-402be83929eso12257535e9.3
+        for <linux-pm@vger.kernel.org>; Thu, 07 Sep 2023 08:28:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694100444; x=1694705244; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=y7Y6zFmhlb8oBiHulr6SNzDGIOTaQJEEOwxmUItsSBI=;
+        b=VQ+XCowXUqQuM1kSlALF8l7wqdNvh1V7afuFku6r+ZLlA4z9kSvQQwSqJlCtY7nHxo
+         brI6IrysFEEnG3LSOwIDSJh2z4Z7e4ibvhc5uoKOj2y1FSCaSN4KYhnJ+F44cxNQgxCT
+         5uZt6+9oevnBWY9ffuSu+qtYqqt5NGsiur878q1qd8yiuoa956D0sXmaL5J1R3nlwgky
+         Wm6UhDNAHLaiDDO1O2NkOlAtK1OQF61lxvH/vyjL4eBy4hiy7cm3sC+4IaIc8r3+JMxZ
+         1wxjz9abmlTyx2lHScUqnVXXYNJnKUgszS8mXte4Skdc3872W6vjJoHTq4cKU+2AE25j
+         28YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1694100444; x=1694705244;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=y7Y6zFmhlb8oBiHulr6SNzDGIOTaQJEEOwxmUItsSBI=;
+        b=QRlVl5Kjg+V9XrRnuDazDjBRv5AfBgBqnw/kh5wzKSOeS+Yf9yZR3/w8gNsE2Q6ojh
+         7lD3aKSuh/mBiSWBy2cVJmWi6jqxX2g+DymJFg7NDFmpnuM3myTE5ypTDPvsKJVPooE5
+         cHEe9SeLA1IEUly5yqEeqF46IUk56Ejsbu5fExk22+Lz/W2I3lWxseg1Ez9n/ABszUzC
+         J8rIywwMi5T9d/tCiT3j6tkGHpCbX1+McZWNpQ3uuuxg+EGiTL885db+GdEEyGgPH6dh
+         bsPmSpiHCgtyCtbuDGdT2scrVH2e+9qC1BTHddoOK0S6tM8anuQ4MhKUIyGcNFkPp/UV
+         TyCA==
+X-Gm-Message-State: AOJu0Yxa97EymKDfV4mFaj82ZmKW4TSJPEFyuvPCzW9I0UQkAjpIxvnb
+        qheWEec1wqnkjGT+Dral2J6l3ncA+Rd2IbvtZ2A=
+X-Google-Smtp-Source: AGHT+IEKmnSNSlUtiCWpMx5epfLO+Rm4w2bJrzAa6Be3omHD0KXp967h3WlCKIuq9OnSAsdvXE+3AA==
+X-Received: by 2002:a05:6402:3c2:b0:522:2dcc:afb6 with SMTP id t2-20020a05640203c200b005222dccafb6mr3798766edw.7.1694066597001;
+        Wed, 06 Sep 2023 23:03:17 -0700 (PDT)
+Received: from [192.168.0.22] (77-252-46-238.static.ip.netia.com.pl. [77.252.46.238])
+        by smtp.gmail.com with ESMTPSA id t3-20020aa7d4c3000000b0051bed21a635sm9237337edr.74.2023.09.06.23.03.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Sep 2023 23:03:16 -0700 (PDT)
+Message-ID: <3f68d3bf-3273-2339-ea41-3362ced3c91b@linaro.org>
+Date:   Thu, 7 Sep 2023 08:03:14 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH v1 05/10] dt-bindings: cpufreq: qcom-cpufreq-nvmem:
+ document IPQ5332
+Content-Language: en-US
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>,
+        ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, rafael@kernel.org,
+        viresh.kumar@linaro.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org, mani@kernel.org
-Cc:     lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com, rafael@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, quic_vbadigan@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, quic_parass@quicinc.com,
-        Krishna chaitanya chundru <quic_krichai@quicinc.com>
-Subject: [PATCH v5 2/5] arm64: dts: qcom: sm8450: Add opp table support to PCIe
-Date:   Thu,  7 Sep 2023 11:30:30 +0530
-Message-Id: <1694066433-8677-3-git-send-email-quic_krichai@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1694066433-8677-1-git-send-email-quic_krichai@quicinc.com>
-References: <1694066433-8677-1-git-send-email-quic_krichai@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Iv7xJpj7QecdvITKG1jz78tc2f240a1H
-X-Proofpoint-GUID: Iv7xJpj7QecdvITKG1jz78tc2f240a1H
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-06_12,2023-09-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- priorityscore=1501 mlxlogscore=782 clxscore=1015 bulkscore=0
- suspectscore=0 spamscore=0 adultscore=0 mlxscore=0 phishscore=0
- lowpriorityscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2308100000 definitions=main-2309070052
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=no
+        mturquette@baylibre.com, sboyd@kernel.org,
+        quic_kathirav@quicinc.com, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <cover.1693996662.git.quic_varada@quicinc.com>
+ <8fe23b5401362e214078648926a00f7ceefaa542.1693996662.git.quic_varada@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <8fe23b5401362e214078648926a00f7ceefaa542.1693996662.git.quic_varada@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,85 +82,14 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-PCIe needs to choose the appropriate performance state of RPMH power
-domain based up on the PCIe gen speed.
+On 07/09/2023 07:21, Varadarajan Narayanan wrote:
+> Document IPQ5332 compatible for Qcom NVMEM CPUFreq driver.
+> 
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
 
-So let's add the OPP table support to specify RPMH performance states.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Use opp-level for the PCIe gen speed for easier use.
-
-Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 47 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 2a60cf8..a6264a5 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -1820,7 +1820,28 @@
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&pcie0_default_state>;
- 
-+			operating-points-v2 = <&pcie0_opp_table>;
-+
- 			status = "disabled";
-+
-+			pcie0_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-1 {
-+					opp-level = <1>;
-+					required-opps = <&rpmhpd_opp_low_svs>;
-+				};
-+
-+				opp-2 {
-+					opp-level = <2>;
-+					required-opps = <&rpmhpd_opp_low_svs>;
-+				};
-+
-+				opp-3 {
-+					opp-level = <3>;
-+					required-opps = <&rpmhpd_opp_nom>;
-+				};
-+			};
- 		};
- 
- 		pcie0_phy: phy@1c06000 {
-@@ -1932,7 +1953,33 @@
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&pcie1_default_state>;
- 
-+			operating-points-v2 = <&pcie1_opp_table>;
-+
- 			status = "disabled";
-+
-+			pcie1_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-1 {
-+					opp-level = <1>;
-+					required-opps = <&rpmhpd_opp_low_svs>;
-+				};
-+
-+				opp-2 {
-+					opp-level = <2>;
-+					required-opps = <&rpmhpd_opp_low_svs>;
-+				};
-+
-+				opp-3 {
-+					opp-level = <3>;
-+					required-opps = <&rpmhpd_opp_low_svs>;
-+				};
-+
-+				opp-4 {
-+					opp-level = <4>;
-+					required-opps = <&rpmhpd_opp_nom>;
-+				};
-+			};
- 		};
- 
- 		pcie1_phy: phy@1c0f000 {
--- 
-2.7.4
+Best regards,
+Krzysztof
 
