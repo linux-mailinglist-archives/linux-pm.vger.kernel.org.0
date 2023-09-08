@@ -2,55 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD8C7985D2
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Sep 2023 12:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 796137986F6
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Sep 2023 14:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233904AbjIHK0n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Sep 2023 06:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
+        id S231341AbjIHMXy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Sep 2023 08:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238350AbjIHK0j (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Sep 2023 06:26:39 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95DFF1FED;
-        Fri,  8 Sep 2023 03:26:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=N3+t8AC87+GXvBm9cdZpJKK3yOTv/78nWpJ6dlIfDa0=; b=Th5ZyKTKqzzqxstqwSNtJKoZr7
-        Y7TDoWvYSb+3NZjyYF/Kw2vGPYdd4TqEywZaQ/E1INYgIba7cGVtys7zIYXfSdpb5G2jQWztC3U7Y
-        yXA5RxIUA8KzhGg2D+NDBAD3Pj1cOSC1zOoIvYFfP2WNWRWammfPgqZDsYFHQQpSKVwaApeNuaz8Q
-        hRD8l2Zt58kp3tfxduXCfDrQkfly5l0tKIy3/ojK4ZhKeTZaiqAI90S+Loz4jjtwuoStgIAOO+tr+
-        mXo5ICn1LcnYzJdgKVFjWjYOOmCxqkZkn5vQUofKMCUU/lNELp1dKwwtKa/z8ETCUeOA/MACgCx24
-        MglYuTug==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qeYfm-002RO0-1h;
-        Fri, 08 Sep 2023 10:25:12 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9D90F30057E; Fri,  8 Sep 2023 12:25:11 +0200 (CEST)
-Date:   Fri, 8 Sep 2023 12:25:11 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Lukasz Luba <lukasz.luba@arm.com>
-Subject: Re: [RFC PATCH 0/7] sched: cpufreq: Remove magic margins
-Message-ID: <20230908102511.GA24372@noisy.programming.kicks-ass.net>
-References: <20230827233203.1315953-1-qyousef@layalina.io>
- <20230907130805.GE10955@noisy.programming.kicks-ass.net>
- <20230908001725.mtqbse3xwhzvo5qp@airbuntu>
+        with ESMTP id S229577AbjIHMXw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Sep 2023 08:23:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682AF1BEA
+        for <linux-pm@vger.kernel.org>; Fri,  8 Sep 2023 05:23:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1694175781;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BhPlFmfDjkoScE/z9HkGq4pyZVDlNbtxuDngmMfLCU4=;
+        b=dMbCZGTWXIJ9tbmM/t7DuixG6vSPCAHLwxNkxzcm7jlEDSTid8X76o8z2PQnpHPostgCh+
+        fA6CHGzLzxrmlalahEMt87OuN4lFNUcTrsCVuoXoXf7lMmK+pvco3maYMfl9i7XU7JwoRz
+        zGLx4aSH5tG5XmIIeqSU5u2iZuydq9I=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-474-QlRXFo6ZMOqrJmurEP34PQ-1; Fri, 08 Sep 2023 08:23:00 -0400
+X-MC-Unique: QlRXFo6ZMOqrJmurEP34PQ-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-9aa05c1934aso9936166b.1
+        for <linux-pm@vger.kernel.org>; Fri, 08 Sep 2023 05:22:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694175779; x=1694780579;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BhPlFmfDjkoScE/z9HkGq4pyZVDlNbtxuDngmMfLCU4=;
+        b=d4RYDcLQl3A3BI0JmW2Ugo9IYkW1mmqNUAsSyDSx22nzK2M/K9s2LYVe9oW8td/vrR
+         dVlg9Wa809JUsY7ZzsGAZzcvUOram8Xsn+oXBpmLSwngC85EvQRFH+dSahhlKeWU9HbF
+         JAuujtI3ZI+uUd78y3iaYiJDxOUf1NFWavLIfmXw4lIv/P2gl8vRbN/GoEBPbEnRzto5
+         DXXECFTjmG5heBTqeFLaNe7RMSDOwwoYizFmjWCPal8yJ+rmjoFU8j6FeWbiuRdqDuvM
+         3svu7KQP4aRl5kV44MlrXfJZFA6NBdv258fSjUEz7R2t/rb16PXJkBF0+hNmWU8oS/jM
+         IGKg==
+X-Gm-Message-State: AOJu0YzUvab+3Tb40W6IIQVZDB7D2yU34B6E+n0QImgsCwh4fIZcFHQi
+        2EpI0oHXQvuWgRxfwjmArPOMFYZXGpyb7wnIMH0skDDNBdCKAYdxF5aGpNCKj7x0LwK+pypYqqd
+        so2lYZI2GTef6KlsGdks=
+X-Received: by 2002:a17:906:9bdb:b0:9a9:f06d:9029 with SMTP id de27-20020a1709069bdb00b009a9f06d9029mr3022414ejc.32.1694175778867;
+        Fri, 08 Sep 2023 05:22:58 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHd/1NRhIs49SZXm3jKoUoVGtZpXWs07IbJqMUJVNj2/7BA/w2F4bIjrIpaXglqAXPkeeZHgA==
+X-Received: by 2002:a17:906:9bdb:b0:9a9:f06d:9029 with SMTP id de27-20020a1709069bdb00b009a9f06d9029mr3022393ejc.32.1694175778528;
+        Fri, 08 Sep 2023 05:22:58 -0700 (PDT)
+Received: from [192.168.0.224] (host-82-53-135-115.retail.telecomitalia.it. [82.53.135.115])
+        by smtp.gmail.com with ESMTPSA id lc18-20020a170906f91200b0099329b3ab67sm978419ejb.71.2023.09.08.05.22.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Sep 2023 05:22:57 -0700 (PDT)
+Message-ID: <6e095f34-d14a-d81b-5c23-9886b8c799cd@redhat.com>
+Date:   Fri, 8 Sep 2023 14:22:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230908001725.mtqbse3xwhzvo5qp@airbuntu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: Prevent RT-throttling for idle-injection threads
+To:     Atul Kumar Pant <quic_atulpant@quicinc.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_ashayj@quicinc.com, quic_rgottimu@quicinc.com,
+        quic_shashim@quicinc.com
+References: <20230808112523.2788452-1-quic_atulpant@quicinc.com>
+ <20230811111719.17f9965a@gandalf.local.home>
+ <20230908095527.GA2475625@hu-atulpant-hyd.qualcomm.com>
+Content-Language: en-US, pt-BR, it-IT
+From:   Daniel Bristot de Oliveira <bristot@redhat.com>
+In-Reply-To: <20230908095527.GA2475625@hu-atulpant-hyd.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,149 +88,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 08, 2023 at 01:17:25AM +0100, Qais Yousef wrote:
-
-> Just to be clear, my main issue here with the current hardcoded values of the
-> 'margins'. And the fact they go too fast is my main problem.
-
-So I stripped the whole margin thing from my reply because I didn't want
-to comment on that yet, but yes, I can see how those might be a problem,
-and you're changing them into something dynamic, not just removing them.
-
-The tunables is what I worry most about. The moment we expose knobs it
-becomes really hard to change things later.
-
-> UTIL_EST_FASTER moves in one direction. And it's a constant response too, no?
-
-The idea of UTIL_EST_FASTER was that we run a PELT sum on the current
-activation runtime, all runtime since wakeup and take the max of this
-extra sum and the regular thing.
-
-On top of that this extra PELT sum can/has a time multiplier and thus
-ramps up faster (this multiplies could be per task). Nb.:
-
-	util_est_fast = faster_est_approx(delta * 2);
-
-is a state-less expression -- by making
-
-	util_est_fast = faster_est_approx(delta * curr->se.faster_mult);
-
-only the current task is affected.
-
-> I didn't get the per-task configurability part. AFAIU we can't turn off these
-> sched-features if they end up causing power issues. That what makes me hesitant
-> about them. 
-
-See above, the extra sum is (fundamentally) per task, the multiplier
-could be per task, if you set the multiplier to <=1, you'll never gain on
-the existing sum and the max filter makes that the feature is
-effectively disabled for the one task.
-
-It of course gets us the problem of how to set the new multiplier... ;-)
-
-> There's a bias towards perf. But some systems prefer to save power
-> at the expense of perf. There's a lot of grey areas in between to what
-> perceived as a suitable trade-off for perf vs power. There are cases like above
-> where actually you can lower freqs without hit on perf. But most of the time
-> it's a trade-off; and some do decide to drop perf in favour of power. Keep in
-> mind battery capacity differs between systems with the same SoC even. Some ship
-> to enable more perf, others are more constrained and opt to be more efficient.
-
-It always depends on the workload too -- you want different trade-offs
-for different tasks.
-
-> > I'm *really* hesitant on adding all these mostly random knobs -- esp.
-> > without strong justification -- which you don't present. You mostly seem
-> > to justify things with: people do random hack, we should legitimize them
-> > hacks.
+On 9/8/23 11:55, Atul Kumar Pant wrote:
+> On Fri, Aug 11, 2023 at 11:17:19AM -0400, Steven Rostedt wrote:
+>> On Tue,  8 Aug 2023 16:55:23 +0530
+>> Atul Pant <quic_atulpant@quicinc.com> wrote:
+>>
+>>> Hi all,
+>>> We are trying to implement a solution for thermal mitigation by using
+>>> idle injection on CPUs. However we face some limitations with the current
+>>> idle-inject framework. As per our need, we want to start injecting idle
+>>> cycles on a CPU for indefinite time (until the temperature/power of the
+>>> CPU falls below a threshold). This will help to keep the hot CPUs in the
+>>> sleep state until we see improvement in temperature/power. If we set the
+>>> idle duration to a large value or have an idle-injection ratio of 100%,
+>>> then the idle-inject RT thread suffers from RT throttling. This results
+>>> in the CPU exiting from the sleep state and consuming some power.
+>>>
+>>> The above situation can be avoided, if we can prevent RT throttling on
+>>> the injected CPU. With the currently available sysctl parameters,
+>>> sched_rt_runtime_us and sched_rt_period_us, we can prevent RT throttling
+>>> by either setting sched_rt_runtime_us equal to sched_rt_period_us or,
+>>> setting sched_rt_runtime_us to -1. Since these parameters are system
+>>> wide, so it will affect the RT tasks on non idle-injected CPUs as well.
+>>> To overcome this, will it be feasible to have these two parameters on a
+>>> per CPU basis? This will allow to selectively disable RT throttling on
+>>> idle-injected CPUs.
+>> I wonder if the deadline scheduler that Daniel is working on would help in this case?
+> 		Are you referring to this thread regarding SCHED_DEADLINE server?
+> 		https://lore.kernel.org/all/cover.1686239016.git.bristot@kernel.org/T/#u
 > 
-> I share your sentiment and I am trying to find out what's the right thing to do
-> really. I am open to explore other territories. But from what I see there's
-> a real need to give users the power to tune how responsive their system needs
-> to be. I can't see how we can have one size that fits all here given the
-> different capabilities of the systems and the desired outcome (I want more perf
-> vs more efficiency).
 
-This is true; but we also cannot keep adding random knobs. Knobs that
-are very specific are hard constraints we've got to live with. Take for
-instance uclamp, that's not something we can ever get rid of I think
-(randomly picking on uclamp, not saying I'm hating on it).
+Yep, but the v4... this will replace rt throttling, and it already has per-cpu arguments.
 
-From an actual interface POV, the unit-less generic energy-vs-perf knob
-is of course ideal, one global and one per task and then we can fill out
-the details as we see fit.  System integrators (you say users, but
-really, not a single actual user will use any of this) can muck about
-and see what works for them.
+https://lore.kernel.org/lkml/20230906082952.GB38741@noisy.programming.kicks-ass.net/t/
 
-(even hardware has these things today, we get 0-255 values that do
-'something' uarch specific)
+-- Daniel
 
-> The problem is that those 0.8 and 1.25 margins forces unsuitable default. The
-> case I see the most is it is causing wasting power that tuning it down regains
-> this power at no perf cost or small one. Others actually do tune it for faster
-> response, but I can't cover this case in detail. All I know is lower end
-> systems do struggle as they don't have enough oomph. I also saw comparison on
-> phoronix where schedutil is not doing as good still - which tells me it seems
-> server systems do prefer to ramp up faster too. I think that PELT thread is
-> a variation of the same problem.
-> 
-> So one of the things I saw is a workload where it spends majority of the time
-> in 600-750 util_avg range. Rarely ramps up to max. But the workload under uses
-> the medium cores and runs at a lot higher freqs than it really needs on bigs.
-> We don't end up utilizing our resources properly.
-
-So that is actually a fairly solid argument for changing things up, if
-the margin causes us to neglect mid cores then that needs fixing. But I
-don't think that means we need a tunable. After all, the system knows it
-has 3 capacities, it just needs to be better at mapping workloads to
-them.
-
-It knows how much 'room' there is between a mid and a large. If 1.25*mid
-> large we in trouble etc..
-
-> There's a question that I'm struggling with if I may ask. Why is it perceived
-> our constant response time (practically ~200ms to go from 0 to max) as a good
-> fit for all use cases? Capability of systems differs widely in terms of what
-> performance you get at say a util of 512. Or in other words how much work is
-> done in a unit of time differs between system, but we still represent that work
-> in a constant way. A task ran for 10ms on powerful System A would have done
-> a lot more work than running on poor System B for the same 10ms. But util will
-> still rise the same for both cases. If someone wants to allow this task to be
-> able to do more on those 10ms, it seems natural to be able to control this
-> response time. It seems this thinking is flawed for some reason and I'd
-> appreciate a help to understand why. I think a lot of us perceive this problem
-> this way.
-
-I think part of the problem is that todays servers are tomorrow's
-smartphones. Back when we started all this PELT nonsense computers in
-general were less powerful than they are now, yet todays servers are no
-less busy than they were back then.
-
-Give us compute, we'll fill it.
-
-Now, smartphones in particular are media devices, but a large part of
-the server farms are indirectly interactive too, you don't want your
-search query to take too long, or your bookface page stuck loading, or
-you twatter message about your latest poop not being insta read by your
-mates.
-
-That is, much of what we do with the computers, ever more powerful or
-not, is eventually measured in human time perception.
-
-So yeah, 200ms.
-
-Remember, all this PELT nonsense was created for cgroups, to distribute
-shared between CPUs as load demanded. I think for that purpose it still
-sorta makes sense.
-
-Ofc we've added a few more users over time, because if you have this
-data, might as well use it etc. I'm not sure we really sat down and
-analyzed if the timing all made sense.
-
-And as I argued elsewhere, PELT is a running average, but DVFS might be
-better suited with a max filter.
-
-> Happy to go and try to dig more info if this is still not clear enough.
-
-So I'm not generally opposed to changing things -- but I much prefer to
-have an actual problem driving that change :-)
