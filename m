@@ -2,145 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DADDB79814B
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Sep 2023 06:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D741D79828B
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Sep 2023 08:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232972AbjIHElp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Sep 2023 00:41:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
+        id S239712AbjIHGpd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Sep 2023 02:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231879AbjIHElp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Sep 2023 00:41:45 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2040.outbound.protection.outlook.com [40.107.244.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058C21BD2;
-        Thu,  7 Sep 2023 21:41:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GZRviynFOnSvyO/u01XcAMtnSxk9sS9HTXZZIow+zr85L24D8kVmF559TS9EhtlBcyTpAF75yS7wSCa4awb0sZEkES1dJ5R0hDqQuoC2hRz3ghnOmf6lLmEq+4UjUwce0jxtXQXi5fmnvY+KdpfA6QmmFX5KLLiVYlN8DdUOlwa+EeEDXb4S0+mBOyO77NBNvFAY8tf+T57kYfcnenxxDDXnliX8V89mLF9kbxu7uUwG5NJhUnpGgNdRfuwogxhnrMdG2XP2ZKv+uHdgg3NbwDdIGmgmuML3xPW2SbkohQx7wNQCCKq9ooGqvzkYwMGkFxlCxEQmlLHWCp/syN+szQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vVUUZUBk0mn2jR4PSxiuGbL+IRpdjofzDqfHTWLSyxo=;
- b=O/n0d9IwbM6DhJJXGR66Y97pXbSiw0voGqWHq6e35BZvsICb3CeWoiX2uX/rYanoWU1k0Vr/XhiAoMKcCq27gkebI52lcuGvX62Yh/3cClt2wF24i3FnD/ehwiQKcXdixDxTA730YkPk7b+GlbeN+yIotpHrnY0o/Xnz2Jjko17PC9PuieN5XsRsQJ3z1WdPiPxu+7vHezH90QsGqznrP9Pe3umI7CtuNQDk1rbRAjIOiTJ1+B4RYX/U2q15DnR2ZNdBExjC0HLm2kgT1e2yVBvc9Ps1eJBidJOUBLwpcTXsfmqWwyJREMEyz7+Bs7t1GR9zzQoG676lm8HgdLMuHQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vVUUZUBk0mn2jR4PSxiuGbL+IRpdjofzDqfHTWLSyxo=;
- b=g8tCXFEFOGhHPEQ6BTDdM7NpqKdebNlih601qvaugA89gkhemt+U3kQ/9lEmFxij7EHpqYN6RI5p1pMpvDNuVgOXaB7wAbAehj/yOvzS3XkxkK3K8UOJohc2i34kh1q6ktmv9/n9TWE40QxlWJILwTZMl+kgosT8vn8KeC+y33o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SJ2PR12MB8690.namprd12.prod.outlook.com (2603:10b6:a03:540::10)
- by DM4PR12MB5795.namprd12.prod.outlook.com (2603:10b6:8:62::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6745.34; Fri, 8 Sep 2023 04:41:38 +0000
-Received: from SJ2PR12MB8690.namprd12.prod.outlook.com
- ([fe80::da13:5f6:45:fa40]) by SJ2PR12MB8690.namprd12.prod.outlook.com
- ([fe80::da13:5f6:45:fa40%4]) with mapi id 15.20.6768.029; Fri, 8 Sep 2023
- 04:41:38 +0000
-Date:   Fri, 8 Sep 2023 12:41:14 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>, Meng Li <li.meng@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Michele Della Guardia <micheledellaguardia@yahoo.it>,
-        Linux Power Management <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>
-Subject: Re: Fwd: Abnormal battery drain with kernel 6.5 (Ryzen 5500u)
-Message-ID: <ZPql6tqBCnXJh64J@amd.com>
-References: <bede02c1-ef90-8e30-aa8b-e6fae49a8ccf@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bede02c1-ef90-8e30-aa8b-e6fae49a8ccf@gmail.com>
-X-ClientProxiedBy: SG2PR02CA0001.apcprd02.prod.outlook.com
- (2603:1096:3:17::13) To SJ2PR12MB8690.namprd12.prod.outlook.com
- (2603:10b6:a03:540::10)
+        with ESMTP id S236880AbjIHGpc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Sep 2023 02:45:32 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8DC19AE;
+        Thu,  7 Sep 2023 23:45:28 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3885UGrZ022165;
+        Fri, 8 Sep 2023 06:45:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=/fFhtzW4qto1vQZSkEjy361sxkJUOu8O1BG3R9qSabQ=;
+ b=R9ckMP6z2DF+RU99s8M37yaldyRd5Z93ENB49OuRYTV7fzzGldsxfOx9shQHg3pzsc98
+ mjUrezTegwiA9gq0uTKxX91eqdQ8IUt23P0jX9B85dYfFAvRx6JYlLIyZb6FxhUEuSmV
+ ci1qX4GunDK4+yWdfbeXvmR2Z4sf89YiUc0gfhOSV5hwQKE85sxn+1Q0wEw/sG19oqz+
+ RdDDsB313R7q9/Gbg0bwWCR2/JudsfCD3aONRC6ny/W6MyNtg6yN5r7x1Yf9GIiiRCoL
+ avyHp+dErEMYMF2VuOO6Y3Ge5uDZQahSl9nV64jTAPLbKe2GovCWCN6LmRAD/ysvAjwH KA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sy50db3dr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 Sep 2023 06:45:04 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3886j3nk009380
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 8 Sep 2023 06:45:03 GMT
+Received: from tengfan2-gv.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.36; Thu, 7 Sep 2023 23:44:54 -0700
+From:   Tengfei Fan <quic_tengfan@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <djakov@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <catalin.marinas@arm.com>, <will@kernel.org>
+CC:     <arnd@arndb.de>, <geert+renesas@glider.be>,
+        <nfraprado@collabora.com>, <rafal@milecki.pl>, <peng.fan@nxp.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <quic_tsoni@quicinc.com>,
+        <quic_shashim@quicinc.com>, <quic_kaushalk@quicinc.com>,
+        <quic_tdas@quicinc.com>, <quic_tingweiz@quicinc.com>,
+        <quic_aiquny@quicinc.com>, <kernel@quicinc.com>,
+        Tengfei Fan <quic_tengfan@quicinc.com>
+Subject: [PATCH 0/3] interconnect: qcom: Add SM4450 interconnect driver 
+Date:   Fri, 8 Sep 2023 14:44:24 +0800
+Message-ID: <20230908064427.26999-1-quic_tengfan@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR12MB8690:EE_|DM4PR12MB5795:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7d648b4d-6ee3-40d6-0239-08dbb025e344
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fHob19sj/7cO56365udB/hsfDbaVVB4sh3vY1FqvLAL2YeWOOVE5aXxHOdaBdGdpWgimApNjvg/l3B1FjLHM1ZduUwEZxF0lmxO4t+20BCQ3dgUukHgfPrCpD5SIA5P1FtSCtYjeuJAUQu6X7Aha7L2xirD7N5Mip8UUA/AmSUUqrVDahlaFvYNW362/J/Hpq5dP7D6yKkirGFNN2Hg6TN4uZiPFfcBDpNiY58o4trzyVvBIPFmdM58yw/Tkvvt4gaqU5Tjh6ezMF2RpQ5cfSIe9GjZQQJ7JjlX2dTZx///ZzcLbC0JgsNMN1Kb6xgiotli1Roq9oaTmtv0ouy9i2GibTk01eLklEwrf+lji+aewixMnaTi9Nlx7zgSa4baB5p/Nm3O1gtesQZwoEzb7Q/68uwySpCPcKXXgC9OCO0X5SJ2KgeIuPtCwNNDi0/pzSQyEtMkhwDXd0x5btriwlFEB2reTvVd6OShtTQIWaiLC4lfW4IWlaDwFFtiPa+qLMUcPbdasvaKiysEd+bBA4EsMFWUe3NQ1B6xBil1j85s=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB8690.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(136003)(39860400002)(366004)(396003)(376002)(186009)(1800799009)(451199024)(2616005)(26005)(38100700002)(6486002)(6512007)(6506007)(36756003)(83380400001)(8676002)(478600001)(66476007)(4326008)(966005)(8936002)(66946007)(110136005)(66556008)(5660300002)(86362001)(54906003)(6636002)(316002)(2906002)(6666004)(41300700001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nMa9MDpsU09YtUvy/yZHUSguExt5OjKph4bBRBXLazQyxnxEesojtxsypd5S?=
- =?us-ascii?Q?Gr/TBx2uVlBMiG3B+GY8t93qTfBHhqCs7M28L4Ya3I94k3JXnw1Y4JlFkbAn?=
- =?us-ascii?Q?QIHShEhLKdq9aiwT+a8mtEU1wEiUf47ANUjQS4FMba+UqFolZf2n3rYQ/jwt?=
- =?us-ascii?Q?QhQ879K2yoOQE2ik/rpoZEN3KyTjlJMc43ZOb32ilLs5dxGX0xjHk+3Xjk5/?=
- =?us-ascii?Q?o7INM4558bTB+lKzYXHsZuczMPodhl2IbJRQKXyjbyp0aEPs69TLYQbguBs1?=
- =?us-ascii?Q?aU6dpR57qaUeqCshhBsJoYcXKOaIfhGYlKyZfrKPzlXr78k1DfmbN+AE2erg?=
- =?us-ascii?Q?qETOstogujVziDPaWx/dfSRIqSFgwpGqOW2f/CUH8ZpvNLk9MHFx1OTpwUPx?=
- =?us-ascii?Q?02LVrkrlYXBOQCCWURQnm+Met2ZKSiVLRX66lYg+wHGz625J+xB3xnpBN95Q?=
- =?us-ascii?Q?9HQoddB0crkds/lWS+MOA4gCO359jwzWHbSaO2swDFwrx6inveKu0BreNT7L?=
- =?us-ascii?Q?R+4cisfQ2bn8/rPVtWSqrjKcdS60FL0nPJ3Fl1pXHMLSzmCTQ11op0mdQLcV?=
- =?us-ascii?Q?fJlF8praBv7Ocv9eDvh+PfEfmkpdPVzow9fgQiGJaRhZXoHDEeRljEFaeRm8?=
- =?us-ascii?Q?EIfgYYHayKru1H0yS6Rd1SdCicZQ1t6MKOTq1rW15IeYB7PaMxntvoA+jiDN?=
- =?us-ascii?Q?IocSfRHG4v2AJmSrfRacViFHHWkNrGuFwDoVXp/ckr9KzOBFR4nZwP+BIkTG?=
- =?us-ascii?Q?+OT9kVfoslTKfEyFtdZez3RPvnVMp4QoftXVLP22e7BSOYXANcypMl+6z431?=
- =?us-ascii?Q?7vh2ubOh59YCVuEEhIchC/6+6vUkB0Zxj3SZ2KOUVQXf/mAdr24xr5Cw3b4q?=
- =?us-ascii?Q?HamTgFiQ+sl1PSY2oioiwfWb0SoGXfMc9wKOS+WbzHpFAS1nkuI0MGnPUpze?=
- =?us-ascii?Q?Yh5f6QUw+b9BE9KCq7k5kkZi4fx6IjPc9p6FSuKr6nY9/JcOl4/Cmmx4700y?=
- =?us-ascii?Q?Ftc92+Uj9YcLUJQz2fsWTtzRDb7gmm7VRegTQFV0lWsfP/kDENxo6HxKtwMm?=
- =?us-ascii?Q?U3KlQ2W0k8Phh7b617fpyid7mLllu76LDOZpogwNwiOIL2BPYSOmh/jNMJ6H?=
- =?us-ascii?Q?zqOB03FvOYi4tUaqfPeZ3ac6RnnLOIDV+QG0qtrJ6/k35n0sQVBw3TuVW0PJ?=
- =?us-ascii?Q?pfY8uM88Q43zLodJPMRMPr4+hZ8IMS+FECEEenikudFVLRGNnTHEAIUHUV0M?=
- =?us-ascii?Q?HsLX5qW+icfT9Z2KKEeZT+BAZduQBj2Hlvevm6rRURyhR1xj+EhsC79wszOa?=
- =?us-ascii?Q?WJ4uO3WtEP60mFvN1xu/FcOQV54JiuqOV0XbbneP8ZqXPASkPSwJqo9PBFtB?=
- =?us-ascii?Q?fRtUtf31yRrlV+Cr8X8Tc/PE1I6JY7I8gnz8lvK88Df0wiHcJFvKSbIU8mcT?=
- =?us-ascii?Q?YzSSxesfAK45mKt3dfhkWtZ8vFzrl4RoMke6lY2hKEvPiRHXxLyG6wKBdI65?=
- =?us-ascii?Q?RHXjIGtnPnBZRmNodU7IL+bkhBctM4NCW4BuEkJ7DwmA2y0uVSKPC+tp+0RL?=
- =?us-ascii?Q?A+3tJuD6yDbJ86oUdkiT/JIdYMtrTLOUfMBQDmMb?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7d648b4d-6ee3-40d6-0239-08dbb025e344
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR12MB8690.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2023 04:41:38.0992
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aGqT18U6SGFvCA9IGXq+raub9mY+eJ5LjUG1GBj70J9jy7fQpk2+69xv5wH5Wg4AvUJRAIdYmVLgD2YKCSFcYw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5795
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Rv1PIr9KGWnM_LwoDIkW__f2j0UDEEAj
+X-Proofpoint-GUID: Rv1PIr9KGWnM_LwoDIkW__f2j0UDEEAj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-08_03,2023-09-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ spamscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=688 adultscore=0
+ suspectscore=0 bulkscore=0 lowpriorityscore=0 impostorscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309080060
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 01, 2023 at 05:42:22PM +0800, Bagas Sanjaya wrote:
-> Hi,
-> 
-> I notice a regression report on Bugzilla [1] that have been already handled
-> there. Quoting from it:
-> 
-> > After switching from 6.4.x kernel to 6.5 I experienced an abnormal battery drain since my laptop is actually never idle.
-> > I accepted default CPUfreq to schedutil and AMD Processor P-State mode is 3 (active). 
-> > 
-> > I expected a different behaviour, but am I missing something?
-> > In my boot configuration I had "amd_pstate.shared_mem=1" and tried to remove this switch, but did not affect my power consuption.
-> > 
-> > Is there something changed from 6.4.x to 6.5 that requires a different configuration to get an optimal power consumption?
-> > 
-> > Thanks a lot for your attention
-> 
-> See Bugzilla for the full thread.
-> 
-> Anyway, I'm adding it to regzbot:
-> 
-> #regzbot introduced: v6.4..v6.5 https://bugzilla.kernel.org/show_bug.cgi?id=217853
-> 
+Add SM4450 interconnect provider driver for support enable uart console.
 
-+ Meng Li/Perry,
+Tengfei Fan (3):
+  dt-bindings: interconnect: Add Qualcomm SM4450
+  interconnect: qcom: Add SM4450 interconnect provider driver
+  arm64: defconfig: enable interconnect for SM4450
 
-May we know which CPU type are you using? Try "lscpu"?
+ .../interconnect/qcom,sm4450-rpmh.yaml        |  133 ++
+ arch/arm64/configs/defconfig                  |    1 +
+ drivers/interconnect/qcom/Kconfig             |    9 +
+ drivers/interconnect/qcom/Makefile            |    2 +
+ drivers/interconnect/qcom/sm4450.c            | 1848 +++++++++++++++++
+ drivers/interconnect/qcom/sm4450.h            |  152 ++
+ .../dt-bindings/interconnect/qcom,sm4450.h    |  163 ++
+ 7 files changed, 2308 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm4450-rpmh.yaml
+ create mode 100644 drivers/interconnect/qcom/sm4450.c
+ create mode 100644 drivers/interconnect/qcom/sm4450.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sm4450.h
 
-Thanks,
-Ray
+
+base-commit: a47fc304d2b678db1a5d760a7d644dac9b067752
+-- 
+2.17.1
+
