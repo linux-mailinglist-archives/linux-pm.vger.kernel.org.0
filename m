@@ -2,143 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D029B798387
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Sep 2023 09:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D397983DB
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Sep 2023 10:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235984AbjIHHtC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Sep 2023 03:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
+        id S233378AbjIHIRG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Sep 2023 04:17:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235651AbjIHHtC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Sep 2023 03:49:02 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2087.outbound.protection.outlook.com [40.107.93.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA241BEE;
-        Fri,  8 Sep 2023 00:48:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j4j3MFY4tU7S3cQy8jq5UPnQtM9p85IKe/mN130QzfE+OxP9oFj9LoNTWjBf2gqY4kc6p0KnoQzRfwhWjRDuI5mQvgsShroZQug1NidE4IpVkwFn6BZxrYWXyL7AeY3JCVv+Y3O11nRwjTgcHwd1f+BpTsELuNoLibammizgkDELg/pcXhG0/qwofJHZU57JOinbTtOyJePos0P+5AEZV8b5gmsJpGUY1sM56+5ymfkNEjqXdHh0Zx09vhwsy6R3TJFGy8lU1X41r/OvwdQplCwr+nsFXH6RTWmsTZJ+uXkHSHx4bNFHlS7VOd4vCUN0qxy8ts0AblRH+a3pQ89/VQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=g494rm/WucGNct/HgYJq9c6LXzNLWaO7uYjU96lfJiI=;
- b=RuaJ2UBJjsIFWG5fdD7kr6xO8c1/yJLIl4QoiLKi+t5JqmUq/1j+S0LG+37IxsWUEx2VwRiwG/2a0UsgNqMvKT0TCCoRn+wwa4YrI2ec9n4tyiXOlfhQ9/uL4u5GwD+jkzJ3JQhhN5MlyaSMbmRUI9KAOvWb6uKigE5t463woD06QS2x8N7AKf3KbIPPUhIwEhoeNvbJqb6oq32/qSrj4l48tV2cAcsnk+hJ8Mqhky9yPpUkSqoijinUa2sqX/DNtEdxk6bVpmgURJvddTYXsIbkH9AoijtJX5uiIaQG0NvD96Xh151iEsXzH6nq8nXUAhFGsNxgN/hc9iW4t5sOYQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=g494rm/WucGNct/HgYJq9c6LXzNLWaO7uYjU96lfJiI=;
- b=AqYwoHBTFLFEnBemvtiFlqaKnEtvqi2d8dmrKOOiylWswGpWTanWd11VwgZ28Zuzf01YXQfJ+5LExjOHmfj2NEBX8KPo6AmFsId6wV1I/VFwMFhQxeMxe8xM00cHSjf+zxmU7u8KXZPCY4RN+prP634FPPBK2IX0Fsa/06LlO2M=
-Received: from DS7PR03CA0226.namprd03.prod.outlook.com (2603:10b6:5:3ba::21)
- by PH0PR12MB5435.namprd12.prod.outlook.com (2603:10b6:510:ed::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.30; Fri, 8 Sep
- 2023 07:48:09 +0000
-Received: from CO1PEPF000044F6.namprd21.prod.outlook.com
- (2603:10b6:5:3ba:cafe::14) by DS7PR03CA0226.outlook.office365.com
- (2603:10b6:5:3ba::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.30 via Frontend
- Transport; Fri, 8 Sep 2023 07:48:09 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF000044F6.mail.protection.outlook.com (10.167.241.196) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6792.1 via Frontend Transport; Fri, 8 Sep 2023 07:48:09 +0000
-Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 8 Sep
- 2023 02:48:03 -0500
-From:   Meng Li <li.meng@amd.com>
-To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <x86@kernel.org>, <linux-acpi@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        <linux-kselftest@vger.kernel.org>,
-        "Nathan Fontenot" <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Shimmer Huang <shimmer.huang@amd.com>,
-        "Perry Yuan" <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>,
-        Wyes Karny <wyes.karny@amd.com>
-Subject: [PATCH V6 7/7] Documentation: introduce amd-pstate preferrd core mode kernel command line options
-Date:   Fri, 8 Sep 2023 15:46:53 +0800
-Message-ID: <20230908074653.2799055-8-li.meng@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230908074653.2799055-1-li.meng@amd.com>
-References: <20230908074653.2799055-1-li.meng@amd.com>
+        with ESMTP id S231934AbjIHIRC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Sep 2023 04:17:02 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552B51BEE
+        for <linux-pm@vger.kernel.org>; Fri,  8 Sep 2023 01:16:56 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-99c4923195dso220196566b.2
+        for <linux-pm@vger.kernel.org>; Fri, 08 Sep 2023 01:16:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694161015; x=1694765815; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hWnR3iTKLtNaSTGp3ycj3ykgtrH6ON5cNLA1Cxk2dCM=;
+        b=JM0oPDHbH3FuSauK2OeBJGX6i6szIvQgPTXcaoPpck9PZR2EdmDIHe6/EtWbLTi2Fq
+         BZNOq41ICVfifVmfW6eOQD7JQRXzIoqbMJaqWmJn/mmZMl+DEOJVu1ojZsimd6K1/uYX
+         Wi3rpHiRfjTR+YQxNUR/qMJh8I8psuNftc0IEVI0FIiRVMgj2BpsOTlCB7slrijihIUg
+         xclbmC34ZpjLrd0yfx3CaZTwUUHhJZDRorwhqJghG3j9cy1MMWudUyqpRjVY0jlg1JJ9
+         oTSg+B1Dkzw5cDmzKkhQuxE8/ZdqvGkjuOApTAYpW7o21jfYPRFZIihR0x0oE0/TqObf
+         XCnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694161015; x=1694765815;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hWnR3iTKLtNaSTGp3ycj3ykgtrH6ON5cNLA1Cxk2dCM=;
+        b=M94rhFjzRiVbuSFJazpwQpTOWu8EkhA3uGVdpjYrQbrngZar337XonkpT+P0ho8T0I
+         QTPUAxHHawXFvSxBO5mF3fWyHdImVSkI/hbhBpF+P6icWTvxGTbUW4gyKUJ3dtA0NEEO
+         nW67Cfk0IBlNJt9ndyh7Wu0pbDhQ5lHFhGp04bl+MseoVPrlpmZrEzjOI8KNkvrMOnyi
+         Y12HMrP690Txhb3xVvp9rE/OE3brJb4LbKOK3JGnDH+craB+bBiR1kqRwplWGSPm0PBW
+         LslE54Kw/VC0/x30EHqDUOJq48sJjHPoK4Juilo+qvHAqe8S1HhI9oK4TePhJlM8dLX8
+         38Bg==
+X-Gm-Message-State: AOJu0YzwEujirMXHXQdbu9v28cTHLZzpqDpim4u8CVXvNIGh5dzB3HCv
+        sLmnqwiE7zSOxC9Gr3TtI1ikyg==
+X-Google-Smtp-Source: AGHT+IHCW6sUCeMutdZ6gSGXFPFW8wjQS5S3jep7Zuf96HV7IXywECCKcudaC7jjdAublUt9FI5xQA==
+X-Received: by 2002:a17:906:300f:b0:9a1:b43b:73a0 with SMTP id 15-20020a170906300f00b009a1b43b73a0mr1232187ejz.20.1694161014787;
+        Fri, 08 Sep 2023 01:16:54 -0700 (PDT)
+Received: from [192.168.37.45] (178235177197.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.197])
+        by smtp.gmail.com with ESMTPSA id r20-20020a170906c29400b0099d798a6bb5sm692461ejz.67.2023.09.08.01.16.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Sep 2023 01:16:54 -0700 (PDT)
+Message-ID: <d78b19ef-0fb7-4fc3-bf01-58c10b4fd1cd@linaro.org>
+Date:   Fri, 8 Sep 2023 10:16:50 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000044F6:EE_|PH0PR12MB5435:EE_
-X-MS-Office365-Filtering-Correlation-Id: e04172fd-a9ab-4435-c1e4-08dbb03ff1fa
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: h0jVADhLQjqe90W9dnezUoOC6VMTq+KOUfnpuAPElrKWGkA8gtovtqj0Iv7HQz4CyXljwzy5wLuaM55Z2sPjm7Cq8p/6l9/pzo2Rm/WiVD/hQwHFzcX6aybkBAMw/03V+bOkThQTplkap6WjOATHCAVuTWBZYrnUSx4zni3EKHFMfqYrgryi7RaH5GJx6xGVgDjB3E3YxQWBbvB1oufxCGUmChLB+W84bGtqkzaqsOUdbhd7nZ1uGcbeDlOodTBYTuDIK5+A7AslL4+jT4ysCml1T4f7KsOT73hLATEGuGgzFUOwD46QQtclCj/0p4nnZpEk3NGMz01FEK8iFNokplqZvdonLpQodYPEsftiEzlrd1uBc5BN93OzS8AtbLaALW5jSUBuSsQNsAm65YMDQTGB4PTiWyusXohqo9CYopQ0yoKZUYb5D8OUBalDMI/I11Jf2c3/pHLBuNplnOA4QkdT4mXQkSh+PC8+6mdVQQqWncuIyzmw7g9QvJy3JE3T5NarAjM9LnnLya03+ulGerVj6rVCobGG8ZbXISC6eVwp51AoUEdEtlDEjjwXUJ0OYPi91Oik9xZ3KxbIf761meR3jSTQ9Ne8j+4i1t6KaBmbq+0y6QQuZB1KGPWarr4PC/iNqbemllKtJ4WM96mLJMVg9VR3xCShL2ZUpJXcwvRXQdi0w0hb3nUGKEYkbl69pmCCbOphX9vUVbjNhV4lmiwJmPdL1ARLHlcjezYxeFDNcrZnmJ/FHAV/+htZwmjP/M3gANR0lT1/rbhSRLl9WiPaf2ikciMj1P8qW2BQE6wz1REcKsigODwZOJuM6lXw
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(376002)(39860400002)(346002)(136003)(396003)(1800799009)(451199024)(186009)(82310400011)(40470700004)(46966006)(36840700001)(40460700003)(47076005)(36756003)(82740400003)(83380400001)(81166007)(356005)(2906002)(36860700001)(40480700001)(110136005)(54906003)(70586007)(70206006)(6636002)(316002)(6666004)(7696005)(86362001)(478600001)(2616005)(1076003)(16526019)(26005)(426003)(336012)(8936002)(4326008)(8676002)(5660300002)(41300700001)(36900700001)(14943795004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2023 07:48:09.0821
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e04172fd-a9ab-4435-c1e4-08dbb03ff1fa
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000044F6.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5435
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] interconnect: qcom: Add SM4450 interconnect provider
+ driver
+Content-Language: en-US
+To:     Tengfei Fan <quic_tengfan@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        catalin.marinas@arm.com, will@kernel.org
+Cc:     arnd@arndb.de, geert+renesas@glider.be, nfraprado@collabora.com,
+        rafal@milecki.pl, peng.fan@nxp.com, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        quic_tsoni@quicinc.com, quic_shashim@quicinc.com,
+        quic_kaushalk@quicinc.com, quic_tdas@quicinc.com,
+        quic_tingweiz@quicinc.com, quic_aiquny@quicinc.com,
+        kernel@quicinc.com
+References: <20230908064427.26999-1-quic_tengfan@quicinc.com>
+ <20230908064427.26999-3-quic_tengfan@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <20230908064427.26999-3-quic_tengfan@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-amd-pstate driver support enable/disable preferred core.
-Default enabled on platforms supporting amd-pstate preferred core.
-Disable amd-pstate preferred core with
-"amd_prefcore=disable" added to the kernel command line.
+On 8.09.2023 08:44, Tengfei Fan wrote:
+> Add driver for the Qualcomm interconnect buses found in SM4450 based
+> platforms. The topology consists of several NoCs that are controlled
+> by a remote processor that collects the aggregated bandwidth for each
+> master-slave pairs.
+> 
+> Signed-off-by: Tengfei Fan <quic_tengfan@quicinc.com>
+> ---
+[...]
 
-Signed-off-by: Meng Li <li.meng@amd.com>
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-Reviewed-by: Wyes Karny <wyes.karny@amd.com>
----
- Documentation/admin-guide/kernel-parameters.txt | 5 +++++
- 1 file changed, 5 insertions(+)
+> +++ b/drivers/interconnect/qcom/sm4450.c
+> @@ -0,0 +1,1848 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
+> + *
+Stray blank line
+> + */
+> +
+> +#include <linux/device.h>
+> +#include <linux/interconnect.h>
+> +#include <linux/interconnect-provider.h>
+> +#include <linux/io.h>
+Is this necessary?
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 0a1731a0f0ef..e35b795aa8aa 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -363,6 +363,11 @@
- 			  selects a performance level in this range and appropriate
- 			  to the current workload.
- 
-+	amd_prefcore=
-+			[X86]
-+			disable
-+			  Disable amd-pstate preferred core.
-+
- 	amijoy.map=	[HW,JOY] Amiga joystick support
- 			Map of devices attached to JOY0DAT and JOY1DAT
- 			Format: <a>,<b>
--- 
-2.34.1
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +#include <dt-bindings/interconnect/qcom,sm4450.h>
+> +
+[...]
 
+> +static struct qcom_icc_node * const mmss_noc_nodes[] = {
+> +	[MASTER_CAMNOC_HF] = &qnm_camnoc_hf,
+> +	[MASTER_CAMNOC_ICP] = &qnm_camnoc_icp,
+> +	[MASTER_CAMNOC_SF] = &qnm_camnoc_sf,
+> +	[MASTER_MDP] = &qnm_mdp,
+> +	[MASTER_CNOC_MNOC_CFG] = &qnm_mnoc_cfg,
+> +	[MASTER_VIDEO_P0_MMNOC] = &qnm_video0,
+> +	[MASTER_VIDEO_PROC_MMNOC] = &qnm_video_cpu,
+> +	[SLAVE_MNOC_HF_MEM_NOC] = &qns_mem_noc_hf,
+> +	[SLAVE_MNOC_SF_MEM_NOC] = &qns_mem_noc_sf,
+> +	[SLAVE_SERVICE_MNOC] = &srvc_mnoc,
+> +	[MASTER_MDP_DISP] = &qnm_mdp_disp,
+> +	[SLAVE_MNOC_HF_MEM_NOC_DISP] = &qns_mem_noc_hf_disp,
+Please drop the _DISP paths, upstream will handle these with icc
+tags.
+
+[...]
+
+> +
+> +static const struct of_device_id qnoc_of_match[] = {
+> +	{ .compatible = "qcom,sm4450-aggre1-noc",
+> +	  .data = &sm4450_aggre1_noc},
+Nit, but please:
+
+- make these one line, like this:
+{ .compatible = "qcom,sm4450-aggre1-noc", .data = &sm4450_aggre1_noc },
+
+- add the missing space before '}'
+
+Konrad
