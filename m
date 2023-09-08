@@ -2,240 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04842797F91
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Sep 2023 02:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA46798076
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Sep 2023 04:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232440AbjIHARe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Sep 2023 20:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48042 "EHLO
+        id S239194AbjIHCTo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Sep 2023 22:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjIHARe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 20:17:34 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7363B1BCD
-        for <linux-pm@vger.kernel.org>; Thu,  7 Sep 2023 17:17:29 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-401d6f6b2e0so17406355e9.1
-        for <linux-pm@vger.kernel.org>; Thu, 07 Sep 2023 17:17:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1694132248; x=1694737048; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vmx2nZAg7akpVBQYgNz9ZZPVxPTh8tFgVJob486R9+I=;
-        b=nsdQ0Ue64AJfAa8e0b8laOf+vZ8iq3KZkHwl9Xu/tt74w33EGxOct16A1Z+tDbka+7
-         Y5jeHKqBCeTkKneN6OyoWY3lLQsnqhp55DKENoWPx3hQiKEpy9wZVWtBSX7GfaGVymXZ
-         akTN8Uu+zxYdmeKicOwM8qkAlP/xrtcZY06yTpBbeLRkUG8Jk6wuiQlhTcWEtRhcHK69
-         GB1rsGRlKgxJTDQIkhS8J1cyPN8pCZM4qV/7P3I24//ZiCwyzg/3EDWpYgskMIAf/Gbl
-         gUKxyRbxy38qKsj1QcVK8oIvwQUUvChe46q6VuLaquNY/0sJ7bcKWc21274zPhRZ4vbC
-         LpFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694132248; x=1694737048;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vmx2nZAg7akpVBQYgNz9ZZPVxPTh8tFgVJob486R9+I=;
-        b=krp2OIR9hATs45YNLX7N1613w266pOB3qPYi3s2OgxeKLJD0qb3HTb+4YyqE7Y5ifp
-         Cs10zmaEvnRr3NSznpfHItWuwo+Q862EQkMtQk/fHLqOsQ0YjESx3zfjDKKH94l/Iipl
-         AvbTaCKkGuVB2uHS7KI8IJo/FVixANkW1jMkOC/pxIIXMSArkeb/pLcqHQACiVf6sZ1+
-         ekz2mwgo5h1hfuwfWL3whicBn5qibEv3gMgoHOKmfZhF46blIHyRQ5/aeHsOSW24qQYx
-         iCCOUnucLZWQ9wDdFyVULvcXk+fwTy6bF6eFd3jNUaBHreeUkE5xDOvnvw2Z25yUgOQ1
-         QmVA==
-X-Gm-Message-State: AOJu0Yx1StFY1W1OgM+dZVDuHXI3XxyYT+QNF4wJvnAZS8vJjCUdOYLA
-        0g8bQ8rIE3PCBV5Bx4k/RirzCg==
-X-Google-Smtp-Source: AGHT+IHZtn7wR+TcrUFja8bsT3+S5oQGyWjlJqtIJzpsWXmRe9/U1lD9gshpzoSOd2G9UOnNYdijnQ==
-X-Received: by 2002:a5d:6245:0:b0:314:2f3e:dca5 with SMTP id m5-20020a5d6245000000b003142f3edca5mr515542wrv.28.1694132247722;
-        Thu, 07 Sep 2023 17:17:27 -0700 (PDT)
-Received: from airbuntu (host109-151-228-137.range109-151.btcentralplus.com. [109.151.228.137])
-        by smtp.gmail.com with ESMTPSA id v5-20020a5d43c5000000b003180fdf5589sm616017wrr.6.2023.09.07.17.17.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Sep 2023 17:17:27 -0700 (PDT)
-Date:   Fri, 8 Sep 2023 01:17:25 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Lukasz Luba <lukasz.luba@arm.com>
-Subject: Re: [RFC PATCH 0/7] sched: cpufreq: Remove magic margins
-Message-ID: <20230908001725.mtqbse3xwhzvo5qp@airbuntu>
-References: <20230827233203.1315953-1-qyousef@layalina.io>
- <20230907130805.GE10955@noisy.programming.kicks-ass.net>
+        with ESMTP id S230380AbjIHCTm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 22:19:42 -0400
+Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78EFD1BD5;
+        Thu,  7 Sep 2023 19:19:35 -0700 (PDT)
+X-MailGates: (SIP:2,PASS,NONE)(compute_score:DELIVER,40,3)
+Received: from 192.168.10.47
+        by mg.richtek.com with MailGates ESMTPS Server V6.0(696440:0:AUTH_RELAY)
+        (envelope-from <chiaen_wu@richtek.com>)
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256/256); Fri, 08 Sep 2023 10:19:13 +0800 (CST)
+Received: from ex4.rt.l (192.168.10.47) by ex4.rt.l (192.168.10.47) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Fri, 8 Sep
+ 2023 10:19:13 +0800
+Received: from linuxcarl2.richtek.com (192.168.10.154) by ex4.rt.l
+ (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
+ Transport; Fri, 8 Sep 2023 10:19:13 +0800
+Date:   Fri, 8 Sep 2023 10:19:13 +0800
+From:   ChiaEn Wu <chiaen_wu@richtek.com>
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+CC:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <kernel-janitors@vger.kernel.org>, <error27@gmail.com>
+Subject: Re: [PATCH] power: supply: mt6370: Fix missing error code in
+ mt6370_chg_toggle_cfo()
+Message-ID: <20230908021913.GB3115@linuxcarl2.richtek.com>
+References: <20230906084815.2827930-1-harshit.m.mogalapalli@oracle.com>
+ <cd6eea67-df0f-08b1-61cd-57a3b4f9cf0d@collabora.com>
+ <1092ffb3-0238-4dc0-baf3-344a653fca3f@kadam.mountain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230907130805.GE10955@noisy.programming.kicks-ass.net>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1092ffb3-0238-4dc0-baf3-344a653fca3f@kadam.mountain>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/07/23 15:08, Peter Zijlstra wrote:
-> On Mon, Aug 28, 2023 at 12:31:56AM +0100, Qais Yousef wrote:
-> 
-> > Equally recent discussion in PELT HALFLIFE thread highlighted the need for
-> > a way to tune system response time to achieve better perf, power and thermal
-> > characteristic for a given system
+On Thu, Sep 07, 2023 at 02:08:17PM +0300, Dan Carpenter wrote:
+
+[...]
+
+> > > diff --git a/drivers/power/supply/mt6370-charger.c b/drivers/power/supply/mt6370-charger.c
+> > > index f27dae5043f5..a9641bd3d8cf 100644
+> > > --- a/drivers/power/supply/mt6370-charger.c
+> > > +++ b/drivers/power/supply/mt6370-charger.c
+> > > @@ -324,7 +324,7 @@ static int mt6370_chg_toggle_cfo(struct mt6370_priv *priv)
+> > >   	if (fl_strobe) {
+> > >   		dev_err(priv->dev, "Flash led is still in strobe mode\n");
+> > > -		return ret;
+> > > +		return -EINVAL;
 > > 
-> > 	https://lore.kernel.org/lkml/20220829055450.1703092-1-dietmar.eggemann@arm.com/
-> > 
+> > I think that returning 0 here was intentional, but I agree on a return ret
+> > here being both confusing and wrong.
 > 
-> > To further help tune the system, we introduce PELT HALFLIFE multiplier as
-> > a boot time parameter. This parameter has an impact on how fast we migrate, so
-> > should compensate for whoever needed to tune fits_capacity(); and it has great
-> > impact on default response_time_ms. Particularly it gives a natural faster rise
-> > time when the system gets busy, AND fall time when the system goes back to
-> > idle. It is coarse grain response control that can be coupled with finer grain
-> > control via schedutil's response_time_ms.
+> If it's a success path then probably we should remove the dev_err().
 > 
-> You're misrepresenting things... The outcome of that thread above was
 
-Sorry if I did. My PoV might have gotten skewed. I'm not intending to mislead
-for sure. I actually was hesitant about adding the PELT patch initially, but
-it did feel that the two topics are connected. Margins are causing problems
-because they end up wasting power. So there's a desire to slow current response
-down. But this PELT story wanted to speed things up. And this polar opposite is
-what I think the distilled problem.
+Hi all,
+Sorry for the late reply!
 
-> that PELT halftime was not the primary problem. Specifically:
-> 
->   https://lore.kernel.org/lkml/424e2c81-987d-f10e-106d-8b4c611768bc@arm.com/
-> 
-> mentions that the only thing that gaming nonsense cares about is DVFS
-> ramp-up.
-> 
-> None of the other PELT users mattered one bit.
+I agree with the first half of Angelo's statement, I did make the
+mistake on this 'return ret'.
+What I was trying to say is that you should not to toggle cfo function
+when the FLED of MT6370 is still in "strobe mode".
 
-I actually latched to Vincent response about a boot time parameter makes sense.
-
-Just to be clear, my main issue here with the current hardcoded values of the
-'margins'. And the fact they go too fast is my main problem.
-
-The way I saw PELT fits in this story is to help lower end systems who don't
-have a lot of oomph. For reasonably powerful system; I don't see a necessity to
-change this and DVFS is what matters, I agree.
-
-It was my attempt to draw a full picture and cover the full spectrum. I don't
-think PELT halfllife plays a role in powerful systems. But under-powered ones,
-I think it will help; and that's why I was depicting it as coarse grain
-control.
-
-I think I did try to present similar arguments on that thread.
-
-> 
-> Also, ISTR a fair amount of this was workload dependent. So a solution
-> that has per-task configurability -- like UTIL_EST_FASTER, seems more
-> suitable.
-
-But for the 0.8 and 1.25 margin problems, actually the problem is that 25% is
-too aggressive/fast and wastes power. I'm actually slowing things down as
-a result of this series. And I'm expecting some not to be happy about it on
-their systems. The response_time_ms was my way to give back control. I didn't
-see how I can make things faster and slower at the same time without making
-decisions on behalf of the user/sysadmin.
-
-So the connection I see between PELT and the margins or headrooms in
-fits_capacity() and map_util_perf()/dvfs_headroom is that they expose the need
-to manage the perf/power trade-off of the system.
-
-Particularly the default is not good for the modern systems, Cortex-X is too
-powerful but we still operate within the same power and thermal budgets.
-
-And what was a high end A78 is a mid core today. So if you look at today's
-mobile world topology we really have a tiy+big+huge combination of cores. The
-bigs are called mids, but they're very capable. Fits capacity forces migration
-to the 'huge' cores too soon with that 80% margin. While the 80% might be too
-small for the tiny ones as some workloads really struggle there if they hang on
-for too long. It doesn't help that these systems ship with 4ms tick. Something
-more to consider changing I guess.
-
-And the 25% headroom forces near max frequency to be used when the workload is
-happily hovering in the 750 region. I did force the frequency to be lower and
-the workload is happily running - we don't need the extra 25% headroom
-enforced unconditionally.
-
-UTIL_EST_FASTER moves in one direction. And it's a constant response too, no?
-I didn't get the per-task configurability part. AFAIU we can't turn off these
-sched-features if they end up causing power issues. That what makes me hesitant
-about them. There's a bias towards perf. But some systems prefer to save power
-at the expense of perf. There's a lot of grey areas in between to what
-perceived as a suitable trade-off for perf vs power. There are cases like above
-where actually you can lower freqs without hit on perf. But most of the time
-it's a trade-off; and some do decide to drop perf in favour of power. Keep in
-mind battery capacity differs between systems with the same SoC even. Some ship
-to enable more perf, others are more constrained and opt to be more efficient.
-
-Sorry I didn't explain things well in the cover letter.
-
-> I'm *really* hesitant on adding all these mostly random knobs -- esp.
-> without strong justification -- which you don't present. You mostly seem
-> to justify things with: people do random hack, we should legitimize them
-> hacks.
-
-I share your sentiment and I am trying to find out what's the right thing to do
-really. I am open to explore other territories. But from what I see there's
-a real need to give users the power to tune how responsive their system needs
-to be. I can't see how we can have one size that fits all here given the
-different capabilities of the systems and the desired outcome (I want more perf
-vs more efficiency).
-
-> Like the last time around, I want the actual problem explained. The
-> problem is not that random people on the internet do random things to
-> their kernel.
-
-The problem is that those 0.8 and 1.25 margins forces unsuitable default. The
-case I see the most is it is causing wasting power that tuning it down regains
-this power at no perf cost or small one. Others actually do tune it for faster
-response, but I can't cover this case in detail. All I know is lower end
-systems do struggle as they don't have enough oomph. I also saw comparison on
-phoronix where schedutil is not doing as good still - which tells me it seems
-server systems do prefer to ramp up faster too. I think that PELT thread is
-a variation of the same problem.
-
-So one of the things I saw is a workload where it spends majority of the time
-in 600-750 util_avg range. Rarely ramps up to max. But the workload under uses
-the medium cores and runs at a lot higher freqs than it really needs on bigs.
-We don't end up utilizing our resources properly.
-
-Happy to go and dig for more data/info if this is not good enough :)
-
-There's a question that I'm struggling with if I may ask. Why is it perceived
-our constant response time (practically ~200ms to go from 0 to max) as a good
-fit for all use cases? Capability of systems differs widely in terms of what
-performance you get at say a util of 512. Or in other words how much work is
-done in a unit of time differs between system, but we still represent that work
-in a constant way. A task ran for 10ms on powerful System A would have done
-a lot more work than running on poor System B for the same 10ms. But util will
-still rise the same for both cases. If someone wants to allow this task to be
-able to do more on those 10ms, it seems natural to be able to control this
-response time. It seems this thinking is flawed for some reason and I'd
-appreciate a help to understand why. I think a lot of us perceive this problem
-this way.
-
-Hopefully uclamp will help address these issues in a better way. ADPF gives
-apps a way to access it reasonably now. Unity announced support for ADPF, so
-hopefully games and other workloads can learn to be smarter overtime. But the
-spectrum of workloads to cover is still big, and adoption will take time. And
-there are still lessons to be learnt and improvements to make. I expect this
-effort to take time before it's the norm.  And thinking of desktop systems;
-distros like Debian for example still don't enable uclamp by default on their
-kernels. I sent asking to enable it and it got added to wishlist.. Actually
-even schedutil is not enabled by default on my Pine64 running Armbian nor on my
-Mac Mini with M1 chip running Asahi Linux Ubuntu.  You'd think big.LITTLE
-systems should have EAS written all over them, but not sure if this is
-accidental omission or ondemand is actually perceived as better. I think my
-intel systems also don't run schedutil by default still too.  They're not
-waking up on lan now to double check though (yep, saving power :D).
-
-Happy to go and try to dig more info if this is still not clear enough.
-
+Therefore, I think the change of Harshit's patch is correct.
+It should be 'return -EINVAL' or 'return -EPERM' here.
 
 Thanks!
 
---
-Qais Yousef
+
+Reviewed-by: ChiaEn Wu <chiaen_wu@richtek.com>
+
+
+Best regards,
+ChiaEn Wu
