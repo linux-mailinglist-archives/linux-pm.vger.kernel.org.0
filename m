@@ -2,98 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFA46798076
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Sep 2023 04:19:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7975D7980E6
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Sep 2023 05:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239194AbjIHCTo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Sep 2023 22:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47410 "EHLO
+        id S233705AbjIHDS2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Sep 2023 23:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbjIHCTm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 22:19:42 -0400
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78EFD1BD5;
-        Thu,  7 Sep 2023 19:19:35 -0700 (PDT)
-X-MailGates: (SIP:2,PASS,NONE)(compute_score:DELIVER,40,3)
-Received: from 192.168.10.47
-        by mg.richtek.com with MailGates ESMTPS Server V6.0(696440:0:AUTH_RELAY)
-        (envelope-from <chiaen_wu@richtek.com>)
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256/256); Fri, 08 Sep 2023 10:19:13 +0800 (CST)
-Received: from ex4.rt.l (192.168.10.47) by ex4.rt.l (192.168.10.47) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Fri, 8 Sep
- 2023 10:19:13 +0800
-Received: from linuxcarl2.richtek.com (192.168.10.154) by ex4.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
- Transport; Fri, 8 Sep 2023 10:19:13 +0800
-Date:   Fri, 8 Sep 2023 10:19:13 +0800
-From:   ChiaEn Wu <chiaen_wu@richtek.com>
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-CC:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <kernel-janitors@vger.kernel.org>, <error27@gmail.com>
-Subject: Re: [PATCH] power: supply: mt6370: Fix missing error code in
- mt6370_chg_toggle_cfo()
-Message-ID: <20230908021913.GB3115@linuxcarl2.richtek.com>
-References: <20230906084815.2827930-1-harshit.m.mogalapalli@oracle.com>
- <cd6eea67-df0f-08b1-61cd-57a3b4f9cf0d@collabora.com>
- <1092ffb3-0238-4dc0-baf3-344a653fca3f@kadam.mountain>
+        with ESMTP id S235397AbjIHDS2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Sep 2023 23:18:28 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB521BD9;
+        Thu,  7 Sep 2023 20:18:22 -0700 (PDT)
+Received: from kwepemd200002.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Rhh6f5jffzGprF;
+        Fri,  8 Sep 2023 11:14:34 +0800 (CST)
+Received: from huawei.com (10.67.174.28) by kwepemd200002.china.huawei.com
+ (7.221.188.186) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1258.23; Fri, 8 Sep
+ 2023 11:18:15 +0800
+From:   Liao Chang <liaochang1@huawei.com>
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>, <mingo@redhat.com>,
+        <peterz@infradead.org>, <juri.lelli@redhat.com>,
+        <vincent.guittot@linaro.org>, <dietmar.eggemann@arm.com>,
+        <rostedt@goodmis.org>, <bsegall@google.com>, <mgorman@suse.de>,
+        <bristot@redhat.com>, <vschneid@redhat.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] cpufreq: schedutil: Merge initialization code of sg_cpu in single loop
+Date:   Fri, 8 Sep 2023 03:16:04 +0000
+Message-ID: <20230908031604.2262422-1-liaochang1@huawei.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1092ffb3-0238-4dc0-baf3-344a653fca3f@kadam.mountain>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.28]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemd200002.china.huawei.com (7.221.188.186)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 07, 2023 at 02:08:17PM +0300, Dan Carpenter wrote:
+The initialization code of the per-cpu sg_cpu struct is currently split
+into two for-loop blocks. This can be simplified by merging the two
+blocks into a single loop. This will make the code more maintainable.
 
-[...]
+Signed-off-by: Liao Chang <liaochang1@huawei.com>
+---
+ kernel/sched/cpufreq_schedutil.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-> > > diff --git a/drivers/power/supply/mt6370-charger.c b/drivers/power/supply/mt6370-charger.c
-> > > index f27dae5043f5..a9641bd3d8cf 100644
-> > > --- a/drivers/power/supply/mt6370-charger.c
-> > > +++ b/drivers/power/supply/mt6370-charger.c
-> > > @@ -324,7 +324,7 @@ static int mt6370_chg_toggle_cfo(struct mt6370_priv *priv)
-> > >   	if (fl_strobe) {
-> > >   		dev_err(priv->dev, "Flash led is still in strobe mode\n");
-> > > -		return ret;
-> > > +		return -EINVAL;
-> > 
-> > I think that returning 0 here was intentional, but I agree on a return ret
-> > here being both confusing and wrong.
-> 
-> If it's a success path then probably we should remove the dev_err().
-> 
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index 4492608b7d7f..f3a95def49cc 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -767,14 +767,6 @@ static int sugov_start(struct cpufreq_policy *policy)
+ 
+ 	sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
+ 
+-	for_each_cpu(cpu, policy->cpus) {
+-		struct sugov_cpu *sg_cpu = &per_cpu(sugov_cpu, cpu);
+-
+-		memset(sg_cpu, 0, sizeof(*sg_cpu));
+-		sg_cpu->cpu			= cpu;
+-		sg_cpu->sg_policy		= sg_policy;
+-	}
+-
+ 	if (policy_is_shared(policy))
+ 		uu = sugov_update_shared;
+ 	else if (policy->fast_switch_enabled && cpufreq_driver_has_adjust_perf())
+@@ -785,6 +777,9 @@ static int sugov_start(struct cpufreq_policy *policy)
+ 	for_each_cpu(cpu, policy->cpus) {
+ 		struct sugov_cpu *sg_cpu = &per_cpu(sugov_cpu, cpu);
+ 
++		memset(sg_cpu, 0, sizeof(*sg_cpu));
++		sg_cpu->cpu = cpu;
++		sg_cpu->sg_policy = sg_policy;
+ 		cpufreq_add_update_util_hook(cpu, &sg_cpu->update_util, uu);
+ 	}
+ 	return 0;
+-- 
+2.34.1
 
-Hi all,
-Sorry for the late reply!
-
-I agree with the first half of Angelo's statement, I did make the
-mistake on this 'return ret'.
-What I was trying to say is that you should not to toggle cfo function
-when the FLED of MT6370 is still in "strobe mode".
-
-Therefore, I think the change of Harshit's patch is correct.
-It should be 'return -EINVAL' or 'return -EPERM' here.
-
-Thanks!
-
-
-Reviewed-by: ChiaEn Wu <chiaen_wu@richtek.com>
-
-
-Best regards,
-ChiaEn Wu
