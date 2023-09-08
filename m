@@ -2,183 +2,232 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D397983DB
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Sep 2023 10:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32A287983F4
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Sep 2023 10:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233378AbjIHIRG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Sep 2023 04:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39008 "EHLO
+        id S236761AbjIHIZi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Sep 2023 04:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231934AbjIHIRC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Sep 2023 04:17:02 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552B51BEE
-        for <linux-pm@vger.kernel.org>; Fri,  8 Sep 2023 01:16:56 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-99c4923195dso220196566b.2
-        for <linux-pm@vger.kernel.org>; Fri, 08 Sep 2023 01:16:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694161015; x=1694765815; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hWnR3iTKLtNaSTGp3ycj3ykgtrH6ON5cNLA1Cxk2dCM=;
-        b=JM0oPDHbH3FuSauK2OeBJGX6i6szIvQgPTXcaoPpck9PZR2EdmDIHe6/EtWbLTi2Fq
-         BZNOq41ICVfifVmfW6eOQD7JQRXzIoqbMJaqWmJn/mmZMl+DEOJVu1ojZsimd6K1/uYX
-         Wi3rpHiRfjTR+YQxNUR/qMJh8I8psuNftc0IEVI0FIiRVMgj2BpsOTlCB7slrijihIUg
-         xclbmC34ZpjLrd0yfx3CaZTwUUHhJZDRorwhqJghG3j9cy1MMWudUyqpRjVY0jlg1JJ9
-         oTSg+B1Dkzw5cDmzKkhQuxE8/ZdqvGkjuOApTAYpW7o21jfYPRFZIihR0x0oE0/TqObf
-         XCnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694161015; x=1694765815;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hWnR3iTKLtNaSTGp3ycj3ykgtrH6ON5cNLA1Cxk2dCM=;
-        b=M94rhFjzRiVbuSFJazpwQpTOWu8EkhA3uGVdpjYrQbrngZar337XonkpT+P0ho8T0I
-         QTPUAxHHawXFvSxBO5mF3fWyHdImVSkI/hbhBpF+P6icWTvxGTbUW4gyKUJ3dtA0NEEO
-         nW67Cfk0IBlNJt9ndyh7Wu0pbDhQ5lHFhGp04bl+MseoVPrlpmZrEzjOI8KNkvrMOnyi
-         Y12HMrP690Txhb3xVvp9rE/OE3brJb4LbKOK3JGnDH+craB+bBiR1kqRwplWGSPm0PBW
-         LslE54Kw/VC0/x30EHqDUOJq48sJjHPoK4Juilo+qvHAqe8S1HhI9oK4TePhJlM8dLX8
-         38Bg==
-X-Gm-Message-State: AOJu0YzwEujirMXHXQdbu9v28cTHLZzpqDpim4u8CVXvNIGh5dzB3HCv
-        sLmnqwiE7zSOxC9Gr3TtI1ikyg==
-X-Google-Smtp-Source: AGHT+IHCW6sUCeMutdZ6gSGXFPFW8wjQS5S3jep7Zuf96HV7IXywECCKcudaC7jjdAublUt9FI5xQA==
-X-Received: by 2002:a17:906:300f:b0:9a1:b43b:73a0 with SMTP id 15-20020a170906300f00b009a1b43b73a0mr1232187ejz.20.1694161014787;
-        Fri, 08 Sep 2023 01:16:54 -0700 (PDT)
-Received: from [192.168.37.45] (178235177197.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.197])
-        by smtp.gmail.com with ESMTPSA id r20-20020a170906c29400b0099d798a6bb5sm692461ejz.67.2023.09.08.01.16.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Sep 2023 01:16:54 -0700 (PDT)
-Message-ID: <d78b19ef-0fb7-4fc3-bf01-58c10b4fd1cd@linaro.org>
-Date:   Fri, 8 Sep 2023 10:16:50 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] interconnect: qcom: Add SM4450 interconnect provider
- driver
+        with ESMTP id S229861AbjIHIZh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Sep 2023 04:25:37 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB42B173B;
+        Fri,  8 Sep 2023 01:25:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694161534; x=1725697534;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=5iI1kUFr66H2Xl769bpHfJqoV0HHceK7olNWX6ByiNo=;
+  b=Z8qJdj53e4ypO56ieQoIQ1VhIj4IkQXHgsYHgfxZBQ1EDOwOpq/afhxB
+   xYjFbRO9SM/suxfI+CoNLLpMUZcHkfj6MhdyZbJFUMGRDFmmeTBBof5+w
+   +rIJ9BYEO0S3egxVDVQj5aacDwFoo0PFGmzWOrhdzTS8nKtBK8BTI5Oif
+   PcVtj4GvHtaa+FRBvGyyHC4n2Xlu4lKxaEbKefOCHwG3iSgrvnjMeHwan
+   +LgkB87qpoUpIVaoLYQ+Exqh5uQUWS63P3hpNygJqqbheRY6/hkx4jPqx
+   vH4DGtNDqHlEJlNdzcITvgJFPfRZKU0kKz2gk2dB8JfE75gDLqnkXDKRG
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="441613452"
+X-IronPort-AV: E=Sophos;i="6.02,236,1688454000"; 
+   d="scan'208";a="441613452"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2023 01:25:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="916090896"
+X-IronPort-AV: E=Sophos;i="6.02,236,1688454000"; 
+   d="scan'208";a="916090896"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga005.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 08 Sep 2023 01:25:29 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Fri, 8 Sep 2023 01:25:28 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Fri, 8 Sep 2023 01:25:28 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.102)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Fri, 8 Sep 2023 01:25:28 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bJ6WWrpyJeBs3FX6+1ZNprk68+OWVgbaM0ThqVqIWTex9iY9Of0ywpal+1FhSZT6e99sxYMCbvo0Y1NECZ2jKNbrdBoDf3sct7knyFTe3fR1ZJ9OhH7fWovIMaSpTbu7QYQprhKOcsiuu0bV8/XgY3nXFKh5+zbx4CJ172FQOTSLpbC0E1D0bVnRoEVRq48RgHBSK/KewFm3hPo19wAmj2yOKvMx2/qpV0g6HIGHjTOk+bg0tilgB74vuB3E36/w7ghNQRMy7c1QbPmEdb72gNVAS/iXO6t+HZoBu2dyQ8Ct/S5eZdS5ztLtyTcaFqQMrzfLsPWq4oOKhtwCFDLhkw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=10ShE00yDJQObaAtiIJYfzyHZAJEAlNw1ggtgpkIaQ8=;
+ b=k2Fjgq8C53eX9/fuh0SwEPwKmcQSsaoAUhxHQMA1/UmqTr+WHkuRXMefdK79hBW6M/Twkzw0ENznDK3gBIczbd5PSuI8g6WeWOfdXmlbzI+nrFmGuTWgDaEKiOfK2Wg+8eEzuNlUtOKHHgSVfP0qzunpL6mhIJmomL3HmKQGZVPVtcpFhrcsgGEwtuhiuYyCtTtxueFxPZRG9xfOxdB0OFJ5HVpMHgrdom0xhxsiWDAhiVh+qGlh1toModKmgsRd97LCJNM9zQXDNvHGmN8TPecN1NkEElg5BAiPLFaCxRz2J1FF46Up+al34XGBwQ455BE7O5Y7RRJGjNHs+3bQBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CO6PR11MB5603.namprd11.prod.outlook.com (2603:10b6:5:35c::12)
+ by IA1PR11MB8098.namprd11.prod.outlook.com (2603:10b6:208:44b::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.34; Fri, 8 Sep
+ 2023 08:25:26 +0000
+Received: from CO6PR11MB5603.namprd11.prod.outlook.com
+ ([fe80::dbe4:218c:1bdd:510]) by CO6PR11MB5603.namprd11.prod.outlook.com
+ ([fe80::dbe4:218c:1bdd:510%4]) with mapi id 15.20.6745.034; Fri, 8 Sep 2023
+ 08:25:26 +0000
+Message-ID: <542d0b86-eb5d-cca5-3c8c-857976ca5adb@intel.com>
+Date:   Fri, 8 Sep 2023 10:25:19 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH v1] thermal: Constify the trip argument of the
+ .get_trend() zone callback
 Content-Language: en-US
-To:     Tengfei Fan <quic_tengfan@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org
-Cc:     arnd@arndb.de, geert+renesas@glider.be, nfraprado@collabora.com,
-        rafal@milecki.pl, peng.fan@nxp.com, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        quic_tsoni@quicinc.com, quic_shashim@quicinc.com,
-        quic_kaushalk@quicinc.com, quic_tdas@quicinc.com,
-        quic_tingweiz@quicinc.com, quic_aiquny@quicinc.com,
-        kernel@quicinc.com
-References: <20230908064427.26999-1-quic_tengfan@quicinc.com>
- <20230908064427.26999-3-quic_tengfan@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <20230908064427.26999-3-quic_tengfan@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+CC:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>, <linux-omap@vger.kernel.org>,
+        Amit Kucheria <amitk@kernel.org>, Keerthy <j-keerthy@ti.com>
+References: <5709115.DvuYhMxLoT@kreacher>
+From:   "Wilczynski, Michal" <michal.wilczynski@intel.com>
+In-Reply-To: <5709115.DvuYhMxLoT@kreacher>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-ClientProxiedBy: BE1P281CA0069.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:26::10) To CO6PR11MB5603.namprd11.prod.outlook.com
+ (2603:10b6:5:35c::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR11MB5603:EE_|IA1PR11MB8098:EE_
+X-MS-Office365-Filtering-Correlation-Id: 54116634-80da-46db-a814-08dbb0452779
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iBEieutCL4YT+TYi78GYLuohT/VBMfqT4x/LkMZ+T8xLu/FYPMAQYqT1SFba13iKFOPrLN7r4G0SpScOhk2rS5g/WP64vozRiZQ05vviZpH28UvmIkdIiD9RE/YOazFuhznDGZHdqrCi7gsDIFnUzhoOCCE9/4mRJy7rHBc8V0IjyzxuCdsInouePk/tnqIh5apVcaWEGxJ3mlM19zJH0y//dnfGOP+hfWIOrO904/unsJdjiNjqxIwhXcMnbLyD+onEDyisPizz+7G8TKPzP+wH52A2hFac0Eew2OyMMbtT9r1sj4KHMabniQvBXVQox3WamFNw6ZPwc3otHuwzhxXAcmLNDyBNazhs3ea0oI9dY+Enpc1Busv97b1VPsUkEHVdCp5+/Apx03GCh3kgLit8YT5yLNSBg+8iFgZCKT5bZFY6axwi1N89lXHeVCR/z8kvlyCWKm9gxz5HqC+w2c1JVpl6gkE8E1CX0OdhT9Z43APfyMx/VFbbAl2+lXLbdbepfL7pbDfF4KeNGFlsspPJKoimUIZ3vebAAkBINEaXoSlWr/mS2c9d6lv2qOSRrnaZ9lj9BS4dBbV4F7UfA2naA8aym47vRFYXLUWWSvnXikuJvsKgIuzxOIbOUss8HOARy4ojyER/3xcV9PBrtUGD7utT+z+2HVaJEWaz+k96jYNEIipu2mjlDGrAdnyRaFBFTuZxT0/p4G/VuufLOQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR11MB5603.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(396003)(366004)(376002)(346002)(136003)(451199024)(1800799009)(186009)(53546011)(31696002)(6486002)(6506007)(6666004)(478600001)(6512007)(83380400001)(2616005)(26005)(2906002)(316002)(8676002)(54906003)(110136005)(66556008)(66946007)(66476007)(41300700001)(5660300002)(8936002)(4326008)(38100700002)(36756003)(86362001)(82960400001)(84970400001)(31686004)(142923001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VFllRDFIa1YyOGtkMUZGRnFuc0VZTldHUVUraUl2Z29rOXRzeTc1MHQraWgx?=
+ =?utf-8?B?cEhUMWRSaE12L2xod3k5aEFBT2l6YUdPWkN1ZEF1OEFDM3o5S2lzRWd4dnlN?=
+ =?utf-8?B?UUZZeDErVE5KaFBCUkdvQXlXOGltNUt4dmlzMndRdGc5aW9mYStEbXI4aXZY?=
+ =?utf-8?B?UjRjbm5vY2tnb2QwdjRHWDBDM0FEREFTUFI3cGNBWkRjR2FEQ0FiNHZoaVF4?=
+ =?utf-8?B?NEFubE1NcUFYZFhKZFRNdnB3clBLem93dmRwTG93dm1OeVp5NXlpc2V2dmVR?=
+ =?utf-8?B?M0MwOTJtcDhIYngvbGtmdEtGMExuc3ViQjZySDVrWDR3MmVuSkk1eFp6NUpL?=
+ =?utf-8?B?ejFoS1QyZE93N1BqZGEvTENGZGRNMXg1c2FXVUI1aDZLeHpFVDhtdHk5OVVE?=
+ =?utf-8?B?aTlpeklLUGR1RG5HbHdQa0Yza3FET0U1KzBlWjFlM1BDSFJDMDZqZGpLZUtX?=
+ =?utf-8?B?aGJsZEFaRTNFTVJvTEdMNGlENGYxdVdtcmdTNUcwRmJJUzc4Uk5lWEJReWl6?=
+ =?utf-8?B?Z0hDR0thaDlCMkQ2TDVRN0RodEI2eXowLzkvQVpFWG1ZUHk5b20wek5iZVIr?=
+ =?utf-8?B?RHMyVmZ0UUJRYnVpQXNvQzNDZ3M3N0FvdkdTYUI0OG5xTEF4TEE3dzNNYXhE?=
+ =?utf-8?B?UE5lK0JYeVliV2pPWVRrQ1Bvc0dMNlRCMkpJUEFCQkg3cjdNb1ZOVXF2NG5J?=
+ =?utf-8?B?dG9Ec3ZlT0E0QnZmZDZJaDNXMk9iZ2NTdWxUV0hCS0tTSGQwQnRsQUp4NW9U?=
+ =?utf-8?B?SjhiMStGM0tsd0d4S0RlejBGbjQ2UFlJVDZhTWtVdmg3ZFZNRFJaeTNVVlc1?=
+ =?utf-8?B?Q1FSSHZDRXh4Z3dBS2pHYUxuSmJXVzNWN25aYWI3NTcwbWppeHhaNEtsQkhy?=
+ =?utf-8?B?T3BPSkdvM1ZzNzNVN3RoeVJwZyt0eDNKaGxPUWVaSXdSSlJFdlZDREZHMTZo?=
+ =?utf-8?B?T1NGcW0rRjdVSDIzeFQ3WjNxd0RIeEV0NjU2Q2VMUWdkVkpYVE9yL3RkSlFl?=
+ =?utf-8?B?K3J0ME5ZSWdHRXVnRE1mQWNwRjNsdmpwS05CcUM1YmhmU0V3UThnczBNd2hN?=
+ =?utf-8?B?NnZGejhjd2dLMlF5d29DZE04Rm5vdUd0ZllyZHRaSlZXaDRWTmdYQ0xuZ2NE?=
+ =?utf-8?B?cDR4aXp5Q1d5VGxqb2doTFJ2bEZCNXFBbkl0emxVL0thNklLR0lxS0Ywam5R?=
+ =?utf-8?B?WmVsK1JrR0hrMkV5VDRLVk1KcWppcFNHeDRjQXVPUHhRb2U3T2RjM0l4eGYy?=
+ =?utf-8?B?YkhMMTN1aXFxMSs4amVXRE55TDlDUVpoNFpIL1JsaVoxcWI1WVpJbmw3MzBE?=
+ =?utf-8?B?LzhNQ0dsaUlxVTRmRFdWUGZSTVFuRUVoSnliSFpzNFJDRDc3MzRNTnZQMjhK?=
+ =?utf-8?B?TEd4RDVvamtkdnI2Vk80WWdjM3dWakRZbjk3WVFZSVB3L2hnSkdiOTJ1SjBN?=
+ =?utf-8?B?RjA4VUE3dCtsQ0J1NmdHdHRHYisyY0FrTWNaTlYzcFk3S3grd010VDY1VXdm?=
+ =?utf-8?B?ZEQxVzlETmx3eVpPT2FjNHB5NkwrS0Z4MkpCL1FqbVBXbVg0STdEYXV2LzQw?=
+ =?utf-8?B?QkhSb3hBaUdtL0VnSXlwYkYyLzdiTDQvL0hNOTlnV0IyaStGZUVvZzlhYWhE?=
+ =?utf-8?B?aVhrVTlPOGJOMTdkYWxVU0ZhUGxPNGJYM1BtczJnb29zMzlYQnVpWkZzcG5z?=
+ =?utf-8?B?T2NrcDQzalFhdHF5VlQ1NnJncWZ5aHBjNUMxRlBzOGxKbkRFb1dSRituVjFa?=
+ =?utf-8?B?OTFIL2FXZDcvQkVVdjdZamdnREVpUUEzT0VObktkWmNXWHBYSHlvMmJxRnpj?=
+ =?utf-8?B?K2xOUUNYZnBKM0h2M3J3b3IvZDZhQzAwbTlrKytubDdaMnI3bjFUMFQwbXFZ?=
+ =?utf-8?B?V1U3VUxBajdmdTNCSy9PWm5UL2JBNnFhMVpuREwrb2w0ZmdZSjUxTTRXeGpx?=
+ =?utf-8?B?TTZsYVZmcDJYSjFVU29MaUl4eWIrRzdSSjNRbTIwNFExRFAyM1AvQlRGWWl2?=
+ =?utf-8?B?UzYwMk5PcmJNVHVCZGRLbERQd0ZaeUlqemM3UUsrck80Rm1seHRDbzZXTXRr?=
+ =?utf-8?B?MXVoWGZFTVRRaUtCSkxOdW9pU1RBQ2pjR25EcjNjZGlEek1ZbytZMEtEV1lS?=
+ =?utf-8?B?SUx4UUV4MFNmVkxsanduRk9GSkN3ZEp2SGVhTzVTWUFoWEJjNmMyb0NVYTRs?=
+ =?utf-8?B?bGc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54116634-80da-46db-a814-08dbb0452779
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR11MB5603.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2023 08:25:26.7285
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iyfM7tvtI++CfeQ3lvPYxViQGZ5rW3DJshHvKoqJM5oPM9eUJf3w3ixfZ1Z42rzNEd8XChx1cuKNDLNBEuZ3C+1cMGC2u4uFylxOrHbpT8g=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB8098
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 8.09.2023 08:44, Tengfei Fan wrote:
-> Add driver for the Qualcomm interconnect buses found in SM4450 based
-> platforms. The topology consists of several NoCs that are controlled
-> by a remote processor that collects the aggregated bandwidth for each
-> master-slave pairs.
-> 
-> Signed-off-by: Tengfei Fan <quic_tengfan@quicinc.com>
+
+
+On 9/7/2023 8:18 PM, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Add 'const' to the definition of the 'trip' argument of the
+> .get_trend() thermal zone callback to indicate that the trip point
+> passed to it should not be modified by it and adjust the
+> callback functions implementing it, thermal_get_trend() in the
+> ACPI thermal driver and __ti_thermal_get_trend(), accordingly.
+>
+> No intentional functional impact.
+>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
-[...]
+>  drivers/acpi/thermal.c                             |    2 +-
+>  drivers/thermal/ti-soc-thermal/ti-thermal-common.c |    3 ++-
+>  include/linux/thermal.h                            |    4 ++--
+>  3 files changed, 5 insertions(+), 4 deletions(-)
+>
+> Index: linux-pm/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> +++ linux-pm/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> @@ -110,7 +110,8 @@ static inline int __ti_thermal_get_temp(
+>  }
+>  
+>  static int __ti_thermal_get_trend(struct thermal_zone_device *tz,
+> -				  struct thermal_trip *trip, enum thermal_trend *trend)
+> +				  const struct thermal_trip *trip,
+> +				  enum thermal_trend *trend)
+>  {
+>  	struct ti_thermal_data *data = thermal_zone_device_priv(tz);
+>  	struct ti_bandgap *bgp;
+> Index: linux-pm/include/linux/thermal.h
+> ===================================================================
+> --- linux-pm.orig/include/linux/thermal.h
+> +++ linux-pm/include/linux/thermal.h
+> @@ -80,8 +80,8 @@ struct thermal_zone_device_ops {
+>  	int (*set_trip_hyst) (struct thermal_zone_device *, int, int);
+>  	int (*get_crit_temp) (struct thermal_zone_device *, int *);
+>  	int (*set_emul_temp) (struct thermal_zone_device *, int);
+> -	int (*get_trend) (struct thermal_zone_device *, struct thermal_trip *,
+> -			  enum thermal_trend *);
+> +	int (*get_trend) (struct thermal_zone_device *,
+> +			  const struct thermal_trip *, enum thermal_trend *);
+>  	void (*hot)(struct thermal_zone_device *);
+>  	void (*critical)(struct thermal_zone_device *);
+>  };
+> Index: linux-pm/drivers/acpi/thermal.c
+> ===================================================================
+> --- linux-pm.orig/drivers/acpi/thermal.c
+> +++ linux-pm/drivers/acpi/thermal.c
+> @@ -531,7 +531,7 @@ static int thermal_get_temp(struct therm
+>  }
+>  
+>  static int thermal_get_trend(struct thermal_zone_device *thermal,
+> -			     struct thermal_trip *trip,
+> +			     const struct thermal_trip *trip,
+>  			     enum thermal_trend *trend)
+>  {
+>  	struct acpi_thermal *tz = thermal_zone_device_priv(thermal);
+>
 
-> +++ b/drivers/interconnect/qcom/sm4450.c
-> @@ -0,0 +1,1848 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
-> + *
-Stray blank line
-> + */
-> +
-> +#include <linux/device.h>
-> +#include <linux/interconnect.h>
-> +#include <linux/interconnect-provider.h>
-> +#include <linux/io.h>
-Is this necessary?
+Looks good to me,
+Reviewed-by: Michal Wilczynski <michal.wilczynski@intel.com>
 
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/platform_device.h>
-> +#include <dt-bindings/interconnect/qcom,sm4450.h>
-> +
-[...]
+>
 
-> +static struct qcom_icc_node * const mmss_noc_nodes[] = {
-> +	[MASTER_CAMNOC_HF] = &qnm_camnoc_hf,
-> +	[MASTER_CAMNOC_ICP] = &qnm_camnoc_icp,
-> +	[MASTER_CAMNOC_SF] = &qnm_camnoc_sf,
-> +	[MASTER_MDP] = &qnm_mdp,
-> +	[MASTER_CNOC_MNOC_CFG] = &qnm_mnoc_cfg,
-> +	[MASTER_VIDEO_P0_MMNOC] = &qnm_video0,
-> +	[MASTER_VIDEO_PROC_MMNOC] = &qnm_video_cpu,
-> +	[SLAVE_MNOC_HF_MEM_NOC] = &qns_mem_noc_hf,
-> +	[SLAVE_MNOC_SF_MEM_NOC] = &qns_mem_noc_sf,
-> +	[SLAVE_SERVICE_MNOC] = &srvc_mnoc,
-> +	[MASTER_MDP_DISP] = &qnm_mdp_disp,
-> +	[SLAVE_MNOC_HF_MEM_NOC_DISP] = &qns_mem_noc_hf_disp,
-Please drop the _DISP paths, upstream will handle these with icc
-tags.
-
-[...]
-
-> +
-> +static const struct of_device_id qnoc_of_match[] = {
-> +	{ .compatible = "qcom,sm4450-aggre1-noc",
-> +	  .data = &sm4450_aggre1_noc},
-Nit, but please:
-
-- make these one line, like this:
-{ .compatible = "qcom,sm4450-aggre1-noc", .data = &sm4450_aggre1_noc },
-
-- add the missing space before '}'
-
-Konrad
