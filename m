@@ -2,125 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 796137986F6
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Sep 2023 14:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7726279872F
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Sep 2023 14:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbjIHMXy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Sep 2023 08:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
+        id S241780AbjIHMkS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Sep 2023 08:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjIHMXw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Sep 2023 08:23:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682AF1BEA
-        for <linux-pm@vger.kernel.org>; Fri,  8 Sep 2023 05:23:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1694175781;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BhPlFmfDjkoScE/z9HkGq4pyZVDlNbtxuDngmMfLCU4=;
-        b=dMbCZGTWXIJ9tbmM/t7DuixG6vSPCAHLwxNkxzcm7jlEDSTid8X76o8z2PQnpHPostgCh+
-        fA6CHGzLzxrmlalahEMt87OuN4lFNUcTrsCVuoXoXf7lMmK+pvco3maYMfl9i7XU7JwoRz
-        zGLx4aSH5tG5XmIIeqSU5u2iZuydq9I=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-474-QlRXFo6ZMOqrJmurEP34PQ-1; Fri, 08 Sep 2023 08:23:00 -0400
-X-MC-Unique: QlRXFo6ZMOqrJmurEP34PQ-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-9aa05c1934aso9936166b.1
-        for <linux-pm@vger.kernel.org>; Fri, 08 Sep 2023 05:22:59 -0700 (PDT)
+        with ESMTP id S233034AbjIHMkS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Sep 2023 08:40:18 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDEE1BF1
+        for <linux-pm@vger.kernel.org>; Fri,  8 Sep 2023 05:40:13 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-401d6f6b2e0so20619015e9.1
+        for <linux-pm@vger.kernel.org>; Fri, 08 Sep 2023 05:40:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694176812; x=1694781612; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :references:cc:to:content-language:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AU2+QV4aODXtVs7q5YHeaRMbqDNd55USgbN27DWq/do=;
+        b=vD/tOaFEYAEvFksnWJlFuD7XEM7Wr5Cq1Y4UbrPDVKBr8gFWS1zssmRfJWZKrxV7BJ
+         1mxf3KbdkPhDFS4Sq2MauVhBeJhlcKs3GGWQADOGmYgGOggyrPWdZ6X4KBAgGhn+Wvla
+         BlsCr5MRVNpnWslVGSAWNw0bhm+Yb8vb2HNDlGCmXYSQ3pGoB3OSQyZaD2vbtHmymNPL
+         Ii2eBPrFWAQxBAy7QZj59vMrcU0yZm+P2nWb8i7CkKZMeTATGxzkVRGQL4VoVePajnRI
+         MXD+dqZ+Hx5AEXtIIK0q7Br5O0wzkzv5lnaBig5SuuaZ2pR+y/Qa/iWy7v0f4rqVoUvy
+         Q8FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694175779; x=1694780579;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BhPlFmfDjkoScE/z9HkGq4pyZVDlNbtxuDngmMfLCU4=;
-        b=d4RYDcLQl3A3BI0JmW2Ugo9IYkW1mmqNUAsSyDSx22nzK2M/K9s2LYVe9oW8td/vrR
-         dVlg9Wa809JUsY7ZzsGAZzcvUOram8Xsn+oXBpmLSwngC85EvQRFH+dSahhlKeWU9HbF
-         JAuujtI3ZI+uUd78y3iaYiJDxOUf1NFWavLIfmXw4lIv/P2gl8vRbN/GoEBPbEnRzto5
-         DXXECFTjmG5heBTqeFLaNe7RMSDOwwoYizFmjWCPal8yJ+rmjoFU8j6FeWbiuRdqDuvM
-         3svu7KQP4aRl5kV44MlrXfJZFA6NBdv258fSjUEz7R2t/rb16PXJkBF0+hNmWU8oS/jM
-         IGKg==
-X-Gm-Message-State: AOJu0YzUvab+3Tb40W6IIQVZDB7D2yU34B6E+n0QImgsCwh4fIZcFHQi
-        2EpI0oHXQvuWgRxfwjmArPOMFYZXGpyb7wnIMH0skDDNBdCKAYdxF5aGpNCKj7x0LwK+pypYqqd
-        so2lYZI2GTef6KlsGdks=
-X-Received: by 2002:a17:906:9bdb:b0:9a9:f06d:9029 with SMTP id de27-20020a1709069bdb00b009a9f06d9029mr3022414ejc.32.1694175778867;
-        Fri, 08 Sep 2023 05:22:58 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHd/1NRhIs49SZXm3jKoUoVGtZpXWs07IbJqMUJVNj2/7BA/w2F4bIjrIpaXglqAXPkeeZHgA==
-X-Received: by 2002:a17:906:9bdb:b0:9a9:f06d:9029 with SMTP id de27-20020a1709069bdb00b009a9f06d9029mr3022393ejc.32.1694175778528;
-        Fri, 08 Sep 2023 05:22:58 -0700 (PDT)
-Received: from [192.168.0.224] (host-82-53-135-115.retail.telecomitalia.it. [82.53.135.115])
-        by smtp.gmail.com with ESMTPSA id lc18-20020a170906f91200b0099329b3ab67sm978419ejb.71.2023.09.08.05.22.57
+        d=1e100.net; s=20230601; t=1694176812; x=1694781612;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :references:cc:to:content-language:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=AU2+QV4aODXtVs7q5YHeaRMbqDNd55USgbN27DWq/do=;
+        b=Pw2X6tjWyiCjpkaW/MYDCnubzivlzIzfHVcN4hX1fSXfOEFQU0tbWCrPKq8PiM7Hq8
+         w5qOR0zxNgFvfEYc/E5nCLrkLvD4KPRPVFVI1eajbp0+svwxqxgTsszVGPRkpu8l0UXE
+         +zb+Qz/MTaw1ZzJNol2h15By6qPCJv+kd8z0cUXZJ4s8+kJPk558N7azj+g2RcmI9ia5
+         R2lRWU7etAUNAugGuOBlEA+CPxoJ1V0epqDVm01z6rhfxT+40Ahj/XuM6i82XrNpKbl7
+         uGH+6kRHHmER7b2m4y03MSjMqYFZcNOHykhv6NSK7iNQv57C4tbABe+8gpYxJAlKdvVd
+         3sEA==
+X-Gm-Message-State: AOJu0YwojNDdMv2AeJWhk1qesxJUPTpM42+Uv/5mz5MJjNWgB+B6woNE
+        kXACd/eEdP5ZCgO+FyKcxnif7Q==
+X-Google-Smtp-Source: AGHT+IEn1A3t/Z31ElsOIiIsqnkGtN+Eg1q91yWkXBCHpOTFYwJBqaz03nsf2vXzeiEMpEAs1KYQ7A==
+X-Received: by 2002:adf:e54e:0:b0:31d:db2d:27c6 with SMTP id z14-20020adfe54e000000b0031ddb2d27c6mr4534802wrm.30.1694176811908;
+        Fri, 08 Sep 2023 05:40:11 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:5f1a:ed04:d131:cda4? ([2a01:e0a:982:cbb0:5f1a:ed04:d131:cda4])
+        by smtp.gmail.com with ESMTPSA id o3-20020a5d4083000000b0031c6581d55esm1988726wrp.91.2023.09.08.05.40.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Sep 2023 05:22:57 -0700 (PDT)
-Message-ID: <6e095f34-d14a-d81b-5c23-9886b8c799cd@redhat.com>
-Date:   Fri, 8 Sep 2023 14:22:56 +0200
+        Fri, 08 Sep 2023 05:40:11 -0700 (PDT)
+Message-ID: <82001107-3e72-4cc7-b7d4-8ca1a840b508@linaro.org>
+Date:   Fri, 8 Sep 2023 14:40:10 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: Prevent RT-throttling for idle-injection threads
-To:     Atul Kumar Pant <quic_atulpant@quicinc.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_ashayj@quicinc.com, quic_rgottimu@quicinc.com,
-        quic_shashim@quicinc.com
-References: <20230808112523.2788452-1-quic_atulpant@quicinc.com>
- <20230811111719.17f9965a@gandalf.local.home>
- <20230908095527.GA2475625@hu-atulpant-hyd.qualcomm.com>
-Content-Language: en-US, pt-BR, it-IT
-From:   Daniel Bristot de Oliveira <bristot@redhat.com>
-In-Reply-To: <20230908095527.GA2475625@hu-atulpant-hyd.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH V3 0/6] Power: T7: add power domain driver
+Content-Language: en-US, fr
+To:     Xianwei Zhao <xianwei.zhao@amlogic.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>, linux-pm@vger.kernel.org
+References: <20230829020404.4058677-1-xianwei.zhao@amlogic.com>
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro Developer Services
+In-Reply-To: <20230829020404.4058677-1-xianwei.zhao@amlogic.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 9/8/23 11:55, Atul Kumar Pant wrote:
-> On Fri, Aug 11, 2023 at 11:17:19AM -0400, Steven Rostedt wrote:
->> On Tue,  8 Aug 2023 16:55:23 +0530
->> Atul Pant <quic_atulpant@quicinc.com> wrote:
->>
->>> Hi all,
->>> We are trying to implement a solution for thermal mitigation by using
->>> idle injection on CPUs. However we face some limitations with the current
->>> idle-inject framework. As per our need, we want to start injecting idle
->>> cycles on a CPU for indefinite time (until the temperature/power of the
->>> CPU falls below a threshold). This will help to keep the hot CPUs in the
->>> sleep state until we see improvement in temperature/power. If we set the
->>> idle duration to a large value or have an idle-injection ratio of 100%,
->>> then the idle-inject RT thread suffers from RT throttling. This results
->>> in the CPU exiting from the sleep state and consuming some power.
->>>
->>> The above situation can be avoided, if we can prevent RT throttling on
->>> the injected CPU. With the currently available sysctl parameters,
->>> sched_rt_runtime_us and sched_rt_period_us, we can prevent RT throttling
->>> by either setting sched_rt_runtime_us equal to sched_rt_period_us or,
->>> setting sched_rt_runtime_us to -1. Since these parameters are system
->>> wide, so it will affect the RT tasks on non idle-injected CPUs as well.
->>> To overcome this, will it be feasible to have these two parameters on a
->>> per CPU basis? This will allow to selectively disable RT throttling on
->>> idle-injected CPUs.
->> I wonder if the deadline scheduler that Daniel is working on would help in this case?
-> 		Are you referring to this thread regarding SCHED_DEADLINE server?
-> 		https://lore.kernel.org/all/cover.1686239016.git.bristot@kernel.org/T/#u
+Hi,
+
+On 29/08/2023 04:03, Xianwei Zhao wrote:
+> First patch is that remove C3 some power domain ALWAYS_ON property.
+> Second patch is that add driver to support power parent node.
+> Third patch is that turn on power if initial power domain with
+> "AWAY_ON" property state is off.
 > 
+> Other patchs adds power controller driver support for Amlogic T7 SoC.
 
-Yep, but the v4... this will replace rt throttling, and it already has per-cpu arguments.
+Please re-send to Ulf Hansson <ulf.hansson@linaro.org> and
+linux-pm@vger.kernel.org since this driver has moved to the
+GENERIC PM DOMAIN PROVIDERS subsystem.
 
-https://lore.kernel.org/lkml/20230906082952.GB38741@noisy.programming.kicks-ass.net/t/
+I'll take the DT patch since bindings patch was reviewed.
 
--- Daniel
+Thanks,
+Neil
+
+> 
+> Changes Since v2:
+>   -Modify subject.
+>   -Define PWRC_NO_PARENT UINT_MAX
+>   -Remove modification that transform is_off into 1 or 0 using !!
+> 
+> Changes Since v1:
+>   -Fix license from "GPL-2.0-only OR .*" to "GPL-2.0-only OR MIT".
+>   -Modify T7_NIC flag  "ALWAYS_ON"
+> 
+> xianwei.zhao (6):
+>    genpd: amlogic: modify some power domains property
+>    genpd: amlogic: add driver to support power parent node
+>    genpd: amlogic: init power domain state
+>    dt-bindings: power: add Amlogic T7 power domains
+>    genpd: amlogic: Add support for T7 power domains controller
+>    arm64: dts: amlogic: t7: add power domain controller node
+> 
+>   .../power/amlogic,meson-sec-pwrc.yaml         |   3 +-
+>   arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi   |   6 +
+>   drivers/genpd/amlogic/meson-secure-pwrc.c     | 127 ++++++++++++++++--
+>   include/dt-bindings/power/amlogic,t7-pwrc.h   |  63 +++++++++
+>   4 files changed, 185 insertions(+), 14 deletions(-)
+>   create mode 100644 include/dt-bindings/power/amlogic,t7-pwrc.h
+> 
+> 
+> base-commit: 413f5c02929bb33042bbc4ee233166550a5fca70
 
