@@ -2,50 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF06799461
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Sep 2023 02:44:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1ED7995BE
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Sep 2023 03:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345225AbjIIAm1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Sep 2023 20:42:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55804 "EHLO
+        id S1345723AbjIIBhn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Sep 2023 21:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346065AbjIIAku (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Sep 2023 20:40:50 -0400
+        with ESMTP id S243168AbjIIBhV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Sep 2023 21:37:21 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829F81FEF;
-        Fri,  8 Sep 2023 17:39:40 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9966DC433B6;
-        Sat,  9 Sep 2023 00:39:39 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8115E1FE5;
+        Fri,  8 Sep 2023 18:37:15 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59965C433BD;
+        Sat,  9 Sep 2023 00:40:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694219980;
-        bh=w0vRB8AM41dA1fkqMLleoziX3QGXM1QiaW+wKKK/jQU=;
+        s=k20201202; t=1694220014;
+        bh=mR+drSSKE0Y38m8f78bf3Ed0bn2vLce6QEIF311fB2M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aT4c+62W/KyS932Y29/r7orQIQQrdmVUOWh6hTHs3dtjKwcPEZfM6bFCcHaYzNVn0
-         A3BNlC54I7pSE01bDh8x0j4YwawCrWocU1w0hjxBVtUJFvaFHrgOos/irbJW/Pnrzo
-         ASFCbAXvD+zrJJqtM0jCJWgSBkf21HzD6BEGCA6gWr1ycyMrKHThHgnZib+zqapPvE
-         c8RSzaqVo22/pVJyj6Hd3NMluyMwPSN8RWh9Z1QIDEm1fFWx2Kq1KRNpx7HExr2vpg
-         WHGGexS8L349chckmuYgRHg9/G/UqB6oOezmMgQ89G2taNruD/Oa8KsL4+nHWInuSs
-         lDXIiXV1qYRSQ==
+        b=IWNPgcKJ2p1bBGxGXUj05UQSY8z3pq97j5RcegnW3hFWz517nDdQc105swv3aPLnC
+         Re+daCH6PCOm1tV4ATyH4AiBuTb7IL+53EkRvOoDGV6Td9ISC3kKnhvQp2QySONKcM
+         KSDq4YWjbeTOkXKjZ9oIaYr5L5P0iw8m3Lhuz4zm24pG2tEmM4I0ipJGOHxsCcPHG1
+         RqDFQKQ3eSU2S71egKkjLKXFzjOV6sWGhbXv2+1HSsq/dxYkhHz+jFlQhacMsPn4z/
+         sKrxvpx3KR/UWBddwTAM+IohUJ24+Lf7Ptbt76TfxzVrt8lRgB5O8y4C9AtD6qioBo
+         vPPjGwa30N2tQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Rob Clark <robdclark@chromium.org>,
         Georgi Djakov <djakov@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 19/19] interconnect: Fix locking for runpm vs reclaim
-Date:   Fri,  8 Sep 2023 20:39:03 -0400
-Message-Id: <20230909003903.3580394-19-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 16/16] interconnect: Fix locking for runpm vs reclaim
+Date:   Fri,  8 Sep 2023 20:39:41 -0400
+Message-Id: <20230909003941.3580631-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230909003903.3580394-1-sashal@kernel.org>
-References: <20230909003903.3580394-1-sashal@kernel.org>
+In-Reply-To: <20230909003941.3580631-1-sashal@kernel.org>
+References: <20230909003941.3580631-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.131
+X-stable-base: Linux 5.10.194
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -240,7 +239,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index 14d785e5629e6..df88d9e9fb551 100644
+index 7db6d0fc6ec2e..64d8dcdc41fd8 100644
 --- a/drivers/interconnect/core.c
 +++ b/drivers/interconnect/core.c
 @@ -29,6 +29,7 @@ static LIST_HEAD(icc_providers);
@@ -269,15 +268,15 @@ index 14d785e5629e6..df88d9e9fb551 100644
  
  	trace_icc_set_bw_end(path, ret);
  
-@@ -967,6 +968,7 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
- 		return;
- 
+@@ -964,6 +965,7 @@ EXPORT_SYMBOL_GPL(icc_link_destroy);
+ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
+ {
  	mutex_lock(&icc_lock);
 +	mutex_lock(&icc_bw_lock);
  
  	node->provider = provider;
  	list_add_tail(&node->node_list, &provider->nodes);
-@@ -992,6 +994,7 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
+@@ -989,6 +991,7 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
  	node->avg_bw = 0;
  	node->peak_bw = 0;
  
@@ -285,7 +284,7 @@ index 14d785e5629e6..df88d9e9fb551 100644
  	mutex_unlock(&icc_lock);
  }
  EXPORT_SYMBOL_GPL(icc_node_add);
-@@ -1119,6 +1122,7 @@ void icc_sync_state(struct device *dev)
+@@ -1115,6 +1118,7 @@ void icc_sync_state(struct device *dev)
  		return;
  
  	mutex_lock(&icc_lock);
