@@ -2,78 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F92799F25
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Sep 2023 19:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0B91799F3D
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Sep 2023 20:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233492AbjIJRqs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 10 Sep 2023 13:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45164 "EHLO
+        id S235838AbjIJSA2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 10 Sep 2023 14:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjIJRqr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Sep 2023 13:46:47 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13AE180
-        for <linux-pm@vger.kernel.org>; Sun, 10 Sep 2023 10:46:41 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-401da71b83cso41987465e9.2
-        for <linux-pm@vger.kernel.org>; Sun, 10 Sep 2023 10:46:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1694368000; x=1694972800; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qh2kaLFowUOwQcBmNU98JavMmScgK3sBFtHoOQrdNuI=;
-        b=0qfUuPQHzx74XcBLJVNOK8JqMx0NOGkdtczvrQEQPbN52UPVkS7itbN2aKQwU775Jp
-         4Bw6FdwuYJQqpR9F9iyjWbh2/m4UcjUC7beLQ+DKEtxBZZfx9OlVZ8KuBmF1PImkB4+i
-         Kp7Hs/a5ovTBvulXAKexoyHICIf9f6QVRhnV+4qFgBdq6fZk2hfb9HlyAwY1LXe5siq9
-         IMSz4jAbCpvvwWQy+BU7pJVJ2g5snD/3Im5xhoapF1DOiIotPNtAnWTrLyl1626sQhCI
-         XYkTF5tOgOjN5A01tMNoARpjmoTAfn68QWhiGzcQ1vrLfnR4mvjPdcfrTvF4C2EsTPmF
-         /l6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694368000; x=1694972800;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qh2kaLFowUOwQcBmNU98JavMmScgK3sBFtHoOQrdNuI=;
-        b=KjL3fQMcNteHO15oOXExiQ0tzmYZhTbGXJ+Nua8O0LR54GSC5veyko+vadlDwY8C87
-         BubjM7RFl0LuzPx9dMYWg3rQHNMyWtchL58Lw4fLUxrKPEz1PtSQFsYvD3pn56CYmGLe
-         9JWh/haXhZiNEW7MThOgIA2LbnP7eyf6pjDJum5vyCpEJ3RmKLoztv6hWP+ULaU0xCgh
-         37VtQGgYJIX3/cgiEW4Jm3u3u1/kwQArl+tth908aZQbjc/3K5hm+eWqeFYjBgN2iFAK
-         8s+P/cZdVsnNblXvvrGBfvM3us940hxNsCQC+a0NYH8mDuBs3+Hl+39t5aXOGC2ysVrD
-         Be2g==
-X-Gm-Message-State: AOJu0YxdWhj352hue33LSo4Dl900TSP7QL22tYvu2WWc6wJ5T2VHBgJS
-        y4j6kyNc/xPOEVfDlAdlyU7t/Q==
-X-Google-Smtp-Source: AGHT+IGEZd9lskJ6SoICN6s8gmM/IKfahAD74b+G6TibQaVDV6r+O2GXki6EIExxVjomG7+oJ6qsow==
-X-Received: by 2002:a7b:c389:0:b0:401:d947:c8a9 with SMTP id s9-20020a7bc389000000b00401d947c8a9mr6322305wmj.19.1694368000195;
-        Sun, 10 Sep 2023 10:46:40 -0700 (PDT)
-Received: from airbuntu (host109-151-228-137.range109-151.btcentralplus.com. [109.151.228.137])
-        by smtp.gmail.com with ESMTPSA id y10-20020a05600c364a00b00401b242e2e6sm10936663wmq.47.2023.09.10.10.46.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Sep 2023 10:46:39 -0700 (PDT)
-Date:   Sun, 10 Sep 2023 18:46:38 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Subject: Re: [PATCH 2/4] sched: cpufreq: Fix apply_dvfs_headroom() escaping
- uclamp constraints
-Message-ID: <20230910174638.qe7jqq6mq36brh6o@airbuntu>
-References: <20230820210640.585311-1-qyousef@layalina.io>
- <20230820210640.585311-3-qyousef@layalina.io>
- <CAKfTPtDY48jpO+b-2KXawzxh-ty+FMKX6YUXioNR7kpgO=ua6Q@mail.gmail.com>
- <20230829163740.uadhv2jfjuumqk3w@airbuntu>
- <CAKfTPtCP6uX79dOrzN4PxFTMBFrDAMOOrWyZrsVypUQ0RY7BAA@mail.gmail.com>
- <20230907215555.exjxho34ntkjmn6r@airbuntu>
- <CAKfTPtA8Ljy4NBqjw8Wj4pEFc-OCR55QPuwh+5GgrHN6u+ugsg@mail.gmail.com>
+        with ESMTP id S235350AbjIJSA0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Sep 2023 14:00:26 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA24188;
+        Sun, 10 Sep 2023 11:00:22 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D277FC433C8;
+        Sun, 10 Sep 2023 18:00:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694368821;
+        bh=7pMVydPneVg3URKXwfaH+adzpHN2LLjVZsTSGuRN/Dc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=WNCcNX0j78tRLBxMWD5xHUNdVWsV4X1c4GJprcT9133xluNlViXTJ+y1MbbMmvw4S
+         9l6p0mwmq1ciXkoHmtsYyK8lFvb1p3EVodnEbrR25eIRn+6jRHWBjTxm2wzjyRS6Mh
+         /jvEouU2JwW8Gm/EnKA/L+ncaZS7ANxE1SqxSdP9VAlRZQQbAQGSZNr44Pfjzomk2O
+         YmugA3EJ+2/4ZTwGg7O1MhyTBgt+SEpxLAiqRaqU5NrZ9WSluxkkNsOvrlaLWdV7jR
+         voEyBX1vKb3bWRjPhlJDd4v26hqNBBRPVghPsTewXgHu/u+K2aUEWjjrhAgY/J0FrG
+         nZp7NWsEXqO2w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B8F74F1D6A8;
+        Sun, 10 Sep 2023 18:00:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtA8Ljy4NBqjw8Wj4pEFc-OCR55QPuwh+5GgrHN6u+ugsg@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 00/11] add missing of_node_put
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <169436882175.20878.16500068409286410519.git-patchwork-notify@kernel.org>
+Date:   Sun, 10 Sep 2023 18:00:21 +0000
+References: <20230907095521.14053-1-Julia.Lawall@inria.fr>
+In-Reply-To: <20230907095521.14053-1-Julia.Lawall@inria.fr>
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     alsa-devel@alsa-project.org, kernel-janitors@vger.kernel.org,
+        rui.zhang@intel.com, amitk@kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, linuxppc-dev@lists.ozlabs.org,
+        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        angelogioacchino.delregno@collabora.com,
+        linux-media@vger.kernel.org
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,134 +59,38 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/08/23 16:30, Vincent Guittot wrote:
+Hello:
 
-> > Hmm IIUC, no. irq pressure will be added on top as normal. It's just cfs+rt
-> > will be restricted by their uclamp settings _after_ the headroom is applied.
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu,  7 Sep 2023 11:55:10 +0200 you wrote:
+> Add of_node_put on a break out of an of_node loop.
 > 
-> But then you mixed some utilization level (irq pressure)  which is
-> time related with some performance/bandwidth limitation which is freq
-> related. And I think that part of the reason why we can't agree on
-> where to put headroom and how to take into account uclamp
-
-I did not change how this part works. We can drop patch 4 completely if this is
-what is causing the confusion.
-
-What I changed is the order of applying uclamp_rq_util_with() and
-apply_dvfs_headroom(). The rest is still the same as-is in the code today.
-
+> ---
 > 
-> >
-> > > above 512 whatever the current (720)  formula or your proposal (608).
-> > > In the case of uclamp, it should be applied after having been scaled
-> > > by irq time.
-> >
-> > I lost you a bit here. I'm not sure how you reached the 720 and 608 numbers.
-> 
-> My bad, I finally decided to use an irq pressure of 128 in my
-> calculation but forgot to change the value in my email
-> 
-> >
-> > So the way I'm proposing it here
-> >
-> >         util = cfs + rt + dvfs_headroom(cfs+rt) = 800 + 0.25 * 800 = 1000
-> >         util = uclamp_rq_util_with(rq, util, NULL) = 512
-> >         util = scale_rq_capacity(512, 256, 1024) = 0.75 * 512 = 384
-> >         util += dvfs_headroom(irq) = 384 + 256 + 0.25 * 256 = 704
-> >         util += dvfs_headroom(dl_bw) = 704
-> >
-> > >
-> > > So we should have reported utilization of 720 with a bandwidth
-> > > requirement of 512 and then cpufreq can applies its headroom if needed
-> >
-> > The key part I'm changing is this
-> >
-> >         util = cfs + rt + dvfs_headroom(cfs+rt) = 800 + 0.25 * 800 = 1000
-> >         util = uclamp_rq_util_with(rq, util, NULL) = 512
-> >
-> > Before we had (assume irq, rt and dl are 0 for simplicity and a single task is
-> > running)
-> >
-> >         util = cfs = 800
-> >         util = uclamp_rq_util_with(rq, util, NULL) = 512
-> >         util = dvfs_headroom(util) = 512 * 0.25 * 512 = 640
-> >
-> > So we are running higher than we are allowed to. So applying the headroom
-> > after taking uclamp constraints into account is the problem.
-> 
-> But I think it's not correct because you mixed some utilization level
-> with some performance requirement. IIRC, you said that the
-> uclamp/min/max must not be seen as an utilization level but a
-> performance hint. In such case, you can't add it to some other
-> utilization because it defeats its original purpose
+>  arch/powerpc/kexec/file_load_64.c                    |    8 ++++++--
+>  arch/powerpc/platforms/powermac/low_i2c.c            |    4 +++-
+>  arch/powerpc/platforms/powermac/smp.c                |    4 +++-
+>  drivers/bus/arm-cci.c                                |    4 +++-
+>  drivers/genpd/ti/ti_sci_pm_domains.c                 |    8 ++++++--
+>  drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c      |    4 +++-
+>  drivers/gpu/drm/mediatek/mtk_drm_drv.c               |    4 +++-
+>  drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c |    1 +
+>  drivers/mmc/host/atmel-mci.c                         |    8 ++++++--
+>  drivers/net/ethernet/broadcom/asp2/bcmasp.c          |    1 +
+>  drivers/soc/dove/pmu.c                               |    5 ++++-
+>  drivers/thermal/thermal_of.c                         |    8 ++++++--
+>  sound/soc/sh/rcar/core.c                             |    1 +
+>  13 files changed, 46 insertions(+), 14 deletions(-)
 
-But this is what we do today already. I didn't change this part. See below.
+Here is the summary with links:
+  - [02/11] net: bcmasp: add missing of_node_put
+    https://git.kernel.org/netdev/net/c/e73d1ab6cd7e
 
-> 
-> >
-> > IIUC and your concerns are about how scheduler and schedutil are interacting
-> > loses some abstraction, then yeah this makes sense and can refactor code to
-> > better abstract the two and keep them decoupled.
-> >
-> > But if you think the order the headroom is applied should be the way it is,
-> > then this doesn't fix the problem.
-> >
-> > A good use case to consider is a single task running at 1024. If I want to
-> > limit it to 80% using uclamp_max, how can this be enforced? With current code,
-> > the task will continue to run at 1024; which is the problem.
-> 
-> Single case is the easy part
-> 
-> >
-> > Running at 640 instead of 512 is still a problem too as this could be 1 or
-> > 2 OPP higher than what we want to allow; and there could be significant power
-> > difference between those OPPs.
-> 
-> That's my point.
-> 
-> Your proposal tries to fix the simple case of 1 task with a uclamp_max
-> but If we want to move in this direction, we should fix all cases.
-
-I think I am addressing all cases. I don't think I understand the problem
-you're trying to highlight. Is the RFC patch 4 is what is causing the
-confusion? That one is not related to fixing uclamp_max; it's just me
-questioning the status quo of which pressure signal requires the headroom.
-
-The main change being done here actually is to apply_dvfs_headroom() *before*
-doing uclamp_rq_util_with(). I am not sure how you see this mixing.
-
-Current code performs apply_dvfs_headroom() *after*; which what causes the CPU
-to run at a performance level higher than rq->uclamp[UCLAMP_MAX].
-
-It doesn't matter how many tasks on the rq, if rq->uclamp[UCLAMP_MAX] is set to
-800, then the CPU should not vote to max (assuminig all other pressures are 0).
-
-Handling of irq pressure etc is not changed.
-
-> I probably need to put my idea in real code to see what it means but
-> we should provide 2 value to cpufreq: an utilization level and a
-> performance hint which would max aggregate the various performance
-> hints that we have
-
-Hmm. This reads to me code structure change. From my perspective; the correct
-behavior is to apply the headroom before restricting the performance level.
-
-It seems you're seeing a better way to aggregate all the pressures when taking
-uclamp into account. Which I am starting to see your point if this is what
-you're saying.  Though I haven't changed the existing relationship. I did try
-to question some things in patch 4, my thoughts were specific to headroom, but
-it seems you have more generalized form.
-
-I do agree in general it seems scheduler and schedutil are getting tightly
-coupled code wise and it would be good to provide generic cpufreq interfaces to
-potentially allow other governors to hook in and benefit.
-
-Whether this is something desired or not, I don't know as I remember Peter and
-Rafael wanted schedutil to grow to become the de-facto governor. It seems the
-right thing anyway.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Thanks!
-
---
-Qais Yousef
