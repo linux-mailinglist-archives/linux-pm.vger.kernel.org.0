@@ -2,72 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98E8799E6A
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Sep 2023 14:57:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F92799F25
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Sep 2023 19:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346526AbjIJM5u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 10 Sep 2023 08:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36424 "EHLO
+        id S233492AbjIJRqs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 10 Sep 2023 13:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233336AbjIJM5t (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Sep 2023 08:57:49 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47DBCCD;
-        Sun, 10 Sep 2023 05:57:45 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-1a2dd615ddcso1126650fac.0;
-        Sun, 10 Sep 2023 05:57:45 -0700 (PDT)
+        with ESMTP id S229688AbjIJRqr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Sep 2023 13:46:47 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13AE180
+        for <linux-pm@vger.kernel.org>; Sun, 10 Sep 2023 10:46:41 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-401da71b83cso41987465e9.2
+        for <linux-pm@vger.kernel.org>; Sun, 10 Sep 2023 10:46:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694350665; x=1694955465; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sgwfLaYSJ5WLNmQQVlnmctv4wdhVxz6XAmlsUYvHCyU=;
-        b=kAs2YlizvrT7+AhqbtYHN8ypbGj0lHSRUjexb4OT4ollPzGGkQlOuLmeaHr7auZ/DA
-         w62zZqBW16TvhPo8QxplU/t3oXudROdQbeo4GAekAdKPFdR0WVOR2aCQm6CU7vPvTbvL
-         nu55DQj5qW7aXhXl9/zo6ufLcbeWwxRUwcL7L6GQsD2h/rz85G3zB1aIOWBXVuV4TvlL
-         mnapSlI/iBJNHPAqjdaSr6igCtm9bqj9V00l8P/9/yK1tI97foA0LFyo6mxpEg3F/N6g
-         ggoRUM7efQxAf/2Oll4+xCQ5bFnKohLsQLdFzS8FgwF4jukjHC7xDQCoEPAat7DcQ+xA
-         ALwg==
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1694368000; x=1694972800; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qh2kaLFowUOwQcBmNU98JavMmScgK3sBFtHoOQrdNuI=;
+        b=0qfUuPQHzx74XcBLJVNOK8JqMx0NOGkdtczvrQEQPbN52UPVkS7itbN2aKQwU775Jp
+         4Bw6FdwuYJQqpR9F9iyjWbh2/m4UcjUC7beLQ+DKEtxBZZfx9OlVZ8KuBmF1PImkB4+i
+         Kp7Hs/a5ovTBvulXAKexoyHICIf9f6QVRhnV+4qFgBdq6fZk2hfb9HlyAwY1LXe5siq9
+         IMSz4jAbCpvvwWQy+BU7pJVJ2g5snD/3Im5xhoapF1DOiIotPNtAnWTrLyl1626sQhCI
+         XYkTF5tOgOjN5A01tMNoARpjmoTAfn68QWhiGzcQ1vrLfnR4mvjPdcfrTvF4C2EsTPmF
+         /l6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694350665; x=1694955465;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sgwfLaYSJ5WLNmQQVlnmctv4wdhVxz6XAmlsUYvHCyU=;
-        b=ZLAbVB7dWdgpNNPu8XwXDR1DkfEHO+51Z8BIdXSvyhiyh7NWfhzNCQzBJe7wy/hlFm
-         6UyBobzlf166NfdCYD3SXcbfoA6ZilaqlsCWB8suqWtlh2siFb3uGMfinZ2SAaOPAukI
-         ZjemaJTYDMT7f/w+SJhigQbeSz+8ZdnWNUULZc1vAnjBs+afrAoHBNaMMilbe/O8xrd9
-         +wVd7JQ3221aG8u8WrjH6vcJem+ms8uy4nYE7dW2jutKd8k76hoHj/BhlomuvIGKBAuy
-         YFiUFIQKiY3squTXzXdMbD1YmVDs1TluL7nNEuBj69mSCBPr5JFUQSOcwzh+K+HpxikU
-         MoTw==
-X-Gm-Message-State: AOJu0Yx7BZ/BRkMX8zi9y2pqGFKS9YPToZKWbMo1ij+p6x9qk86LmFtk
-        Iw6rKuskT1+eFhMV1CvNBEU=
-X-Google-Smtp-Source: AGHT+IGQYCYevNYPYqdUE8fLe1mdOJ2joHXFt0x+hbNSkhZOhcio0Q1nFxqVJzMl5p0v01YSKVGXWQ==
-X-Received: by 2002:a05:6870:970f:b0:1bf:9fa2:bfa3 with SMTP id n15-20020a056870970f00b001bf9fa2bfa3mr7252379oaq.1.1694350664922;
-        Sun, 10 Sep 2023 05:57:44 -0700 (PDT)
-Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:8ae8:e729:67d1:f8d9])
-        by smtp.gmail.com with ESMTPSA id y2-20020a056870e3c200b001c4ede43955sm3003140oad.31.2023.09.10.05.57.41
+        d=1e100.net; s=20230601; t=1694368000; x=1694972800;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qh2kaLFowUOwQcBmNU98JavMmScgK3sBFtHoOQrdNuI=;
+        b=KjL3fQMcNteHO15oOXExiQ0tzmYZhTbGXJ+Nua8O0LR54GSC5veyko+vadlDwY8C87
+         BubjM7RFl0LuzPx9dMYWg3rQHNMyWtchL58Lw4fLUxrKPEz1PtSQFsYvD3pn56CYmGLe
+         9JWh/haXhZiNEW7MThOgIA2LbnP7eyf6pjDJum5vyCpEJ3RmKLoztv6hWP+ULaU0xCgh
+         37VtQGgYJIX3/cgiEW4Jm3u3u1/kwQArl+tth908aZQbjc/3K5hm+eWqeFYjBgN2iFAK
+         8s+P/cZdVsnNblXvvrGBfvM3us940hxNsCQC+a0NYH8mDuBs3+Hl+39t5aXOGC2ysVrD
+         Be2g==
+X-Gm-Message-State: AOJu0YxdWhj352hue33LSo4Dl900TSP7QL22tYvu2WWc6wJ5T2VHBgJS
+        y4j6kyNc/xPOEVfDlAdlyU7t/Q==
+X-Google-Smtp-Source: AGHT+IGEZd9lskJ6SoICN6s8gmM/IKfahAD74b+G6TibQaVDV6r+O2GXki6EIExxVjomG7+oJ6qsow==
+X-Received: by 2002:a7b:c389:0:b0:401:d947:c8a9 with SMTP id s9-20020a7bc389000000b00401d947c8a9mr6322305wmj.19.1694368000195;
+        Sun, 10 Sep 2023 10:46:40 -0700 (PDT)
+Received: from airbuntu (host109-151-228-137.range109-151.btcentralplus.com. [109.151.228.137])
+        by smtp.gmail.com with ESMTPSA id y10-20020a05600c364a00b00401b242e2e6sm10936663wmq.47.2023.09.10.10.46.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Sep 2023 05:57:44 -0700 (PDT)
-From:   Fabio Estevam <festevam@gmail.com>
-To:     shawnguo@kernel.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org,
-        linux-pm@vger.kernel.org, linux-imx@nxp.com,
-        Fabio Estevam <festevam@denx.de>
-Subject: [PATCH v2 2/2] dt-bindings: thermal: qoriq-thermal: Adjust fsl,tmu-range maxItems
-Date:   Sun, 10 Sep 2023 09:57:26 -0300
-Message-Id: <20230910125726.1243652-2-festevam@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230910125726.1243652-1-festevam@gmail.com>
-References: <20230910125726.1243652-1-festevam@gmail.com>
+        Sun, 10 Sep 2023 10:46:39 -0700 (PDT)
+Date:   Sun, 10 Sep 2023 18:46:38 +0100
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Subject: Re: [PATCH 2/4] sched: cpufreq: Fix apply_dvfs_headroom() escaping
+ uclamp constraints
+Message-ID: <20230910174638.qe7jqq6mq36brh6o@airbuntu>
+References: <20230820210640.585311-1-qyousef@layalina.io>
+ <20230820210640.585311-3-qyousef@layalina.io>
+ <CAKfTPtDY48jpO+b-2KXawzxh-ty+FMKX6YUXioNR7kpgO=ua6Q@mail.gmail.com>
+ <20230829163740.uadhv2jfjuumqk3w@airbuntu>
+ <CAKfTPtCP6uX79dOrzN4PxFTMBFrDAMOOrWyZrsVypUQ0RY7BAA@mail.gmail.com>
+ <20230907215555.exjxho34ntkjmn6r@airbuntu>
+ <CAKfTPtA8Ljy4NBqjw8Wj4pEFc-OCR55QPuwh+5GgrHN6u+ugsg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtA8Ljy4NBqjw8Wj4pEFc-OCR55QPuwh+5GgrHN6u+ugsg@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,39 +81,134 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Fabio Estevam <festevam@denx.de>
+On 09/08/23 16:30, Vincent Guittot wrote:
 
-imx93 has a maximum of seven entries for fsl,tmu-range.
+> > Hmm IIUC, no. irq pressure will be added on top as normal. It's just cfs+rt
+> > will be restricted by their uclamp settings _after_ the headroom is applied.
+> 
+> But then you mixed some utilization level (irq pressure)  which is
+> time related with some performance/bandwidth limitation which is freq
+> related. And I think that part of the reason why we can't agree on
+> where to put headroom and how to take into account uclamp
 
-Change it accordingly.
+I did not change how this part works. We can drop patch 4 completely if this is
+what is causing the confusion.
 
-This fixes the following schema warning:
+What I changed is the order of applying uclamp_rq_util_with() and
+apply_dvfs_headroom(). The rest is still the same as-is in the code today.
 
-imx93-11x11-evk.dtb: tmu@44482000: fsl,tmu-range: 'oneOf' conditional failed, one must be fixed:
-	[2147483866, 2147483881, 2147483906, 2147483946, 2147484006, 2147484071, 2147484086] is too long
+> 
+> >
+> > > above 512 whatever the current (720)  formula or your proposal (608).
+> > > In the case of uclamp, it should be applied after having been scaled
+> > > by irq time.
+> >
+> > I lost you a bit here. I'm not sure how you reached the 720 and 608 numbers.
+> 
+> My bad, I finally decided to use an irq pressure of 128 in my
+> calculation but forgot to change the value in my email
+> 
+> >
+> > So the way I'm proposing it here
+> >
+> >         util = cfs + rt + dvfs_headroom(cfs+rt) = 800 + 0.25 * 800 = 1000
+> >         util = uclamp_rq_util_with(rq, util, NULL) = 512
+> >         util = scale_rq_capacity(512, 256, 1024) = 0.75 * 512 = 384
+> >         util += dvfs_headroom(irq) = 384 + 256 + 0.25 * 256 = 704
+> >         util += dvfs_headroom(dl_bw) = 704
+> >
+> > >
+> > > So we should have reported utilization of 720 with a bandwidth
+> > > requirement of 512 and then cpufreq can applies its headroom if needed
+> >
+> > The key part I'm changing is this
+> >
+> >         util = cfs + rt + dvfs_headroom(cfs+rt) = 800 + 0.25 * 800 = 1000
+> >         util = uclamp_rq_util_with(rq, util, NULL) = 512
+> >
+> > Before we had (assume irq, rt and dl are 0 for simplicity and a single task is
+> > running)
+> >
+> >         util = cfs = 800
+> >         util = uclamp_rq_util_with(rq, util, NULL) = 512
+> >         util = dvfs_headroom(util) = 512 * 0.25 * 512 = 640
+> >
+> > So we are running higher than we are allowed to. So applying the headroom
+> > after taking uclamp constraints into account is the problem.
+> 
+> But I think it's not correct because you mixed some utilization level
+> with some performance requirement. IIRC, you said that the
+> uclamp/min/max must not be seen as an utilization level but a
+> performance hint. In such case, you can't add it to some other
+> utilization because it defeats its original purpose
 
-Signed-off-by: Fabio Estevam <festevam@denx.de>
----
-Changes since v1:
-- Reduce the context of the schema warning in the commit log.
+But this is what we do today already. I didn't change this part. See below.
 
- Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> >
+> > IIUC and your concerns are about how scheduler and schedutil are interacting
+> > loses some abstraction, then yeah this makes sense and can refactor code to
+> > better abstract the two and keep them decoupled.
+> >
+> > But if you think the order the headroom is applied should be the way it is,
+> > then this doesn't fix the problem.
+> >
+> > A good use case to consider is a single task running at 1024. If I want to
+> > limit it to 80% using uclamp_max, how can this be enforced? With current code,
+> > the task will continue to run at 1024; which is the problem.
+> 
+> Single case is the easy part
+> 
+> >
+> > Running at 640 instead of 512 is still a problem too as this could be 1 or
+> > 2 OPP higher than what we want to allow; and there could be significant power
+> > difference between those OPPs.
+> 
+> That's my point.
+> 
+> Your proposal tries to fix the simple case of 1 task with a uclamp_max
+> but If we want to move in this direction, we should fix all cases.
 
-diff --git a/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml b/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
-index 145744027234..d3734fc66f78 100644
---- a/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
-@@ -33,7 +33,8 @@ properties:
-     description: |
-       The values to be programmed into TTRnCR, as specified by the SoC
-       reference manual. The first cell is TTR0CR, the second is TTR1CR, etc.
--    maxItems: 4
-+    minItems: 4
-+    maxItems: 7
- 
-   fsl,tmu-calibration:
-     $ref: /schemas/types.yaml#/definitions/uint32-matrix
--- 
-2.34.1
+I think I am addressing all cases. I don't think I understand the problem
+you're trying to highlight. Is the RFC patch 4 is what is causing the
+confusion? That one is not related to fixing uclamp_max; it's just me
+questioning the status quo of which pressure signal requires the headroom.
 
+The main change being done here actually is to apply_dvfs_headroom() *before*
+doing uclamp_rq_util_with(). I am not sure how you see this mixing.
+
+Current code performs apply_dvfs_headroom() *after*; which what causes the CPU
+to run at a performance level higher than rq->uclamp[UCLAMP_MAX].
+
+It doesn't matter how many tasks on the rq, if rq->uclamp[UCLAMP_MAX] is set to
+800, then the CPU should not vote to max (assuminig all other pressures are 0).
+
+Handling of irq pressure etc is not changed.
+
+> I probably need to put my idea in real code to see what it means but
+> we should provide 2 value to cpufreq: an utilization level and a
+> performance hint which would max aggregate the various performance
+> hints that we have
+
+Hmm. This reads to me code structure change. From my perspective; the correct
+behavior is to apply the headroom before restricting the performance level.
+
+It seems you're seeing a better way to aggregate all the pressures when taking
+uclamp into account. Which I am starting to see your point if this is what
+you're saying.  Though I haven't changed the existing relationship. I did try
+to question some things in patch 4, my thoughts were specific to headroom, but
+it seems you have more generalized form.
+
+I do agree in general it seems scheduler and schedutil are getting tightly
+coupled code wise and it would be good to provide generic cpufreq interfaces to
+potentially allow other governors to hook in and benefit.
+
+Whether this is something desired or not, I don't know as I remember Peter and
+Rafael wanted schedutil to grow to become the de-facto governor. It seems the
+right thing anyway.
+
+
+Thanks!
+
+--
+Qais Yousef
