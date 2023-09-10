@@ -2,114 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59974799F5A
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Sep 2023 20:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB9B5799F68
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Sep 2023 21:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232601AbjIJSqS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 10 Sep 2023 14:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34718 "EHLO
+        id S233356AbjIJTG2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 10 Sep 2023 15:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231129AbjIJSqR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Sep 2023 14:46:17 -0400
+        with ESMTP id S230207AbjIJTGZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Sep 2023 15:06:25 -0400
 Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ABA719C
-        for <linux-pm@vger.kernel.org>; Sun, 10 Sep 2023 11:46:13 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-403012f27e1so15657035e9.1
-        for <linux-pm@vger.kernel.org>; Sun, 10 Sep 2023 11:46:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA1B6CDA
+        for <linux-pm@vger.kernel.org>; Sun, 10 Sep 2023 12:06:10 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-402c46c49f4so39762965e9.1
+        for <linux-pm@vger.kernel.org>; Sun, 10 Sep 2023 12:06:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1694371571; x=1694976371; darn=vger.kernel.org;
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1694372769; x=1694977569; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yb5NRWuYCShvv6L69CZpP7aXEX5iiSnBmt7oq/UO2CY=;
-        b=f5o86o0i4ISsi4J4HGtHNpUykioDjtUknvLNb1/7dJC+bZuT4xsKy06GuV7ftVI7DG
-         fJDSBsOChu21AlBDLMkdW2Ytpj89rbLPYEWryxQai0eI/iTntxHzz96vlIpnXD/lnDMv
-         +FW1JPIzaTg20+0zl6UeciTsaaYOxlrXZWmv3+Odsr3pWmVZcDe9f7oIo+MerYhpfPNs
-         mVI2FG1/KT0YAqF4ok51ylB8gXTMS2KBdgMCkXdbjTcqpYvwTNy/UhJ5K1DKxtuptRBC
-         /y2amtW/S36nZ0jr8vGeXj9WyJZ9izlJH3r0c5n45lxvJc7MdYve0Iy44jW92FaKPOe+
-         nyww==
+        bh=sdQssOCQrUsOB2Nfsez55dBWY7lSg5+WyRaDataAp9w=;
+        b=rFXj0RElHH6SMBa3O5LD0XWuk01egkfeWqVg1QAhCSAYuOiiWxvxyG3yZAI7zuVzEr
+         SR6lgq7O2eqBxgNoktLn7kcnUSreeePlo3pWSgcs39KzyOZohJsbGebnM6sAFDji2P35
+         j4hb7mclevWecrr7QnY3SSdLQ+hQm9nEV6Jlz6IQOI9lhOLih511ZpDBmy2j+bD+6QP7
+         F67tw9cf/sziGrH39a7aBe4hagHULkB440T8/arCwRJ0yXgA0q2DoTe14Xy+UeLiY3DP
+         HuRuHMUThekCyIToLaiLyMCd304k3Qe83fFsM2WkMVorV9l8gw79mOdc8JuIS+yP4xoa
+         VnRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694371571; x=1694976371;
+        d=1e100.net; s=20230601; t=1694372769; x=1694977569;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yb5NRWuYCShvv6L69CZpP7aXEX5iiSnBmt7oq/UO2CY=;
-        b=pF5DJzkU0Pl+3MvqHguIS9vRReg0P0FeBgRCd9vGgycOOsV2/u5eHfJQETGYz6BuJJ
-         j9B4ZaW9SyRFnmi4OVBamG1kcJzlhAiJaqemAwj1mVWrryl1/sc9UmtvZeT18RThlatt
-         IvnmAj5xhniLi+J1xSKFSvfJOhbbQEftOJDEXcZe0u97kFISV4MTE/5aluu3ABDow/hE
-         Fzi7KzQagrRFfLoTZldmhUIpgJ+oHlM9lwunU5k761UNGhUDUXUxUvKkgLZaQ7OB9Lz1
-         eyQliaevDZ75h5IlfVsj/PVawFZac+cubnN82CzLIHVa4t2USkKY/DG0Lp4EdsTZ+L7e
-         7w9g==
-X-Gm-Message-State: AOJu0YwZGAXL6+j07neeTkhPWsZwKAaC2MCVPSHdzovwHyB1BG2vURG/
-        IwNiyIVDJm8jAJWFMTvfimEbug==
-X-Google-Smtp-Source: AGHT+IEtFJiCetTqWbIx4ICoY39wgYxtOSgFymM9XU8u86i0xOdptEOrr5Aw1HwHbgDq4iSNUl4HPw==
-X-Received: by 2002:a7b:c389:0:b0:3fe:1af6:6542 with SMTP id s9-20020a7bc389000000b003fe1af66542mr6653575wmj.33.1694371571388;
-        Sun, 10 Sep 2023 11:46:11 -0700 (PDT)
+        bh=sdQssOCQrUsOB2Nfsez55dBWY7lSg5+WyRaDataAp9w=;
+        b=CR0L6hghp86KIJScgBQoVUQOX5m1lBckMSvujam6AEprTJtuyd83Yui9avYuglAn1c
+         UaSc/sSpXLZo0MsLPUsA0tJ8GoX2aYSqtgS9hjPoaYQeB0rRssFPHlq/9H4hOGTqq6OM
+         1Y/28JqeeKVwUXbyEHBHO+Cvf3dCxfmbVvv6FYTSHq9d600SYegZ3EK1yBHhw5hCUIHG
+         tUdMkkdV/UnnwOhxxayyF+XaB5nlNgDcBKD9LA9iv4zEuujiP25Y8pIaFJCAhA3WPmpf
+         aa6FJig4/sraHD+ezBeLkrla+VYXqaWx40oG7o5ujysfwO1s1K8eD1M1i7OpswE+cIBe
+         6SFw==
+X-Gm-Message-State: AOJu0Yw2SKLGQs+6asb2JuZxNw3Iz7iMbvG94fcJbSK+3p/zhod4tDDW
+        Wlintm2lXAc7w0uQWCPCu/Knlw==
+X-Google-Smtp-Source: AGHT+IGP9FSomXJNOjZ/vzk1cgJcDcVFky1kzGq+5M+D8aIljQgWA8Uo901CmNQs5ega9Qwweqj4/A==
+X-Received: by 2002:a5d:4309:0:b0:317:ef76:b773 with SMTP id h9-20020a5d4309000000b00317ef76b773mr5486595wrq.45.1694372768659;
+        Sun, 10 Sep 2023 12:06:08 -0700 (PDT)
 Received: from airbuntu (host109-151-228-137.range109-151.btcentralplus.com. [109.151.228.137])
-        by smtp.gmail.com with ESMTPSA id f14-20020a7bc8ce000000b00402dbe0bbdcsm11013075wml.28.2023.09.10.11.46.10
+        by smtp.gmail.com with ESMTPSA id h5-20020adfe985000000b0031ae8d86af4sm7893052wrm.103.2023.09.10.12.06.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Sep 2023 11:46:10 -0700 (PDT)
-Date:   Sun, 10 Sep 2023 19:46:09 +0100
+        Sun, 10 Sep 2023 12:06:08 -0700 (PDT)
+Date:   Sun, 10 Sep 2023 20:06:06 +0100
 From:   Qais Yousef <qyousef@layalina.io>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Ingo Molnar <mingo@kernel.org>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Viresh Kumar <viresh.kumar@linaro.org>
 Subject: Re: [RFC PATCH 0/7] sched: cpufreq: Remove magic margins
-Message-ID: <20230910184609.fiqsxu3gmhvz34jn@airbuntu>
+Message-ID: <20230910190606.6gpnnplix2ybqe3k@airbuntu>
 References: <20230827233203.1315953-1-qyousef@layalina.io>
  <a6365f63-4669-15e5-b843-f4bfb1bd5e68@arm.com>
  <20230906211850.zyvk6qtt6fvpxaf3@airbuntu>
  <20230907132631.GF10955@noisy.programming.kicks-ass.net>
+ <8919ed14-8d19-d964-2278-3303a5bda8ee@arm.com>
+ <20230907142923.GJ10955@noisy.programming.kicks-ass.net>
+ <cf5c628a-e047-b5e0-b2a0-f2b280015d02@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230907132631.GF10955@noisy.programming.kicks-ass.net>
+In-Reply-To: <cf5c628a-e047-b5e0-b2a0-f2b280015d02@arm.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/07/23 15:26, Peter Zijlstra wrote:
-> On Wed, Sep 06, 2023 at 10:18:50PM +0100, Qais Yousef wrote:
+On 09/07/23 15:42, Lukasz Luba wrote:
 > 
-> > This is probably controversial statement. But I am not in favour of util_est.
-> > I need to collect the data, but I think we're better with 16ms PELT HALFLIFE as
-> > default instead. But I will need to do a separate investigation on that.
 > 
-> I think util_est makes perfect sense, where PELT has to fundamentally
+> On 9/7/23 15:29, Peter Zijlstra wrote:
+> > On Thu, Sep 07, 2023 at 02:57:26PM +0100, Lukasz Luba wrote:
+> > > 
+> > > 
+> > > On 9/7/23 14:26, Peter Zijlstra wrote:
+> > > > On Wed, Sep 06, 2023 at 10:18:50PM +0100, Qais Yousef wrote:
+> > > > 
+> > > > > This is probably controversial statement. But I am not in favour of util_est.
+> > > > > I need to collect the data, but I think we're better with 16ms PELT HALFLIFE as
+> > > > > default instead. But I will need to do a separate investigation on that.
+> > > > 
+> > > > I think util_est makes perfect sense, where PELT has to fundamentally
+> > > > decay non-running / non-runnable tasks in order to provide a temporal
+> > > > average, DVFS might be best served with a termporal max filter.
+> > > > 
+> > > > 
+> > > 
+> > > Since we are here...
+> > > Would you allow to have a configuration for
+> > > the util_est shifter: UTIL_EST_WEIGHT_SHIFT ?
+> > > 
+> > > I've found other values than '2' better in some scenarios. That helps
+> > > to prevent a big task to 'down' migrate from a Big CPU (1024) to some
+> > > Mid CPU (~500-700 capacity) or even Little (~120-300).
+> > 
+> > Larger values, I'm thinking you're after? Those would cause the new
+> > contribution to weight less, making the function more smooth, right?
+> 
+> Yes, more smooth, because we only use the 'ewma' goodness for decaying
+> part (not the raising [1]).
+> 
+> > 
+> > What task characteristic is tied to this? That is, this seems trivial to
+> > modify per-task.
+> 
+> In particular Speedometer test and the main browser task, which reaches
+> ~900util, but sometimes vanish and waits for other background tasks
+> to do something. In the meantime it can decay and wake-up on
+> Mid/Little (which can cause a penalty to score up to 5-10% vs. if
+> we pin the task to big CPUs). So, a longer util_est helps to avoid
+> at least very bad down migration to Littles...
 
-My concern about it is that it has inherit bias towards PERF. In the soap of
-tasks running in the system, not all of which care about perf. The key tasks
-tend to be the minority, I'd say. Again, I need to do more investigations but
-my worry mainly comes from that and what impact it could have on power.
+Warning, this is not a global win! We do want tasks in general to downmigrate
+when they sleep. Would be great to avoid biasing towards perf first by default
+to fix these special cases.
 
-In an ideal world where userspace is fully uclamp aware, we shouldn't need it.
-The task can set uclamp_min to make sure it sees the right performance at wake
-up.
+As I mentioned in other reply, there's a perf/power/thermal impact of these
+decisions and it's not a global win. Some might want this to improve their
+scores, others might not want that and rather get the worse score but keep
+their power budget in check. And it will highly depend on the workload and the
+system. Which we can't test everyone of them :(
 
-And depends on the outcome of this discussion, we might need to introduce
-something to help speed up/slow down migration more selectively. So it could
-become redundant control.
+We did give the power to userspace via uclamp which should make this problem
+fixable. And this is readily available. We can't basically know in the kernel
+when one way is better than the other without being told explicitly IMHO.
 
-> decay non-running / non-runnable tasks in order to provide a temporal
-> average, DVFS might be best served with a termporal max filter.
-
-Ah, I certainly don't think DVFS need PELT HALFLIFE to be controlled. I only
-see it being useful on HMP systems, under-powered specifically, that really
-need faster *migration* times. Maybe we can find a better way to control this.
-I'll think about it.
-
-Not sure about the temporal max. Isn't this a bias towards perf first too?
+If you try to boot with faster PELT HALFLIFE, would this give you the same
+perf/power trade-off?
 
 
-Thanks!
+Thanks
 
 --
 Qais Yousef
+
+> 
+> [1] https://elixir.bootlin.com/linux/v6.5.1/source/kernel/sched/fair.c#L4442
