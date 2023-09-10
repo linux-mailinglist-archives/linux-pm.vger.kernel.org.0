@@ -2,72 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAEF4799F77
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Sep 2023 21:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D766E799F9E
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Sep 2023 21:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233281AbjIJTZJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 10 Sep 2023 15:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
+        id S231876AbjIJT6l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 10 Sep 2023 15:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjIJTZI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Sep 2023 15:25:08 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4385B13E
-        for <linux-pm@vger.kernel.org>; Sun, 10 Sep 2023 12:25:04 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-4013454fa93so43079425e9.0
-        for <linux-pm@vger.kernel.org>; Sun, 10 Sep 2023 12:25:04 -0700 (PDT)
+        with ESMTP id S229703AbjIJT6l (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Sep 2023 15:58:41 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5FB130
+        for <linux-pm@vger.kernel.org>; Sun, 10 Sep 2023 12:58:36 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-31f6ddb3047so3579821f8f.1
+        for <linux-pm@vger.kernel.org>; Sun, 10 Sep 2023 12:58:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1694373902; x=1694978702; darn=vger.kernel.org;
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1694375915; x=1694980715; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nxa0537b1RUooeMFgOQd/d+dCKp1o61lGhIEpATiYB0=;
-        b=Epw/k7kNBIkLDo8DGX2eyKiwiviezEkn3i4UbE7Pp3A9RYWfO2o11ExoWLmHczGKRz
-         H0cTUUIhRfc7QAZyt1wmMQ3e6MnMhpicGeWXHNdC9fQk1qJ/nNiMmVbG9q0Yo+/YfmBe
-         5carXTRyvnNmYXNErNxrkUzO5Mh4cB1GxORUrlTGElODSKfv9dJ/1ng9wVbFuljbvwCT
-         sy1IwGiaYNGvqZN3Q1R2d0LrU5KXHkwMNvODzAMMZU8agyOM8C0MQ74ByhoN/Wp0skgy
-         RKnfS+QO6EufBfyJP/FRqAnBGgU350DKO8n07oZJwTLaYk8V8Umf9z75Toxh47jlwiwt
-         c2xQ==
+        bh=U/mpJ4QxANMd1OUi0izes/wPE27BO8URpmrDEAd/e+A=;
+        b=Kjp1i//bLXWlW2wDeGwlX3Ybt46ejYSxUzDq7cLGvuOWev+4nHQytKW+rLCEUrG51t
+         XHwdOlc+5otnNX/6GyzgRSaoC+cb/ppPjxyIuEw8o1tcq7W/kRXdbahgeI+G364xj6uU
+         h2G/sDT8L7EKgzWUrSfh48AK+Ga2wHhlxlDgnmurmEulqbutH/aG0UPSymyVx2IVDYJZ
+         pAGsHh+9jAHraCZ8U5asjK7G+lgC5Aetl7nhIhParjz8qYSy3LO7pkaAduCJrfJfbYuJ
+         299JwZG35VZPfex7l1e8uyGcCliLeVMYSsbcfDbksivLlImEaXyes/XlMw+9QtcpBrP2
+         vuEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694373902; x=1694978702;
+        d=1e100.net; s=20230601; t=1694375915; x=1694980715;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nxa0537b1RUooeMFgOQd/d+dCKp1o61lGhIEpATiYB0=;
-        b=I57shNjJq6ZEK7MB0Uanol8CZqhKzOE1nuu9+D3stSaIsdUMZO3ETO/Wwzjm2fzZ44
-         17EcDgSMaAzjfAJemN7JZMc6m9ein7IFtNNWXyC99rxLl/DBNI8U9CBoN9ssBQwK5jnY
-         QsicrRbIwHWsVGWYs0Qdz33g/FRl2qPhn9L92fSUGNMMNx+3tPZFh8u3jwKUNorMe/Y8
-         5jTIRUGYyfEtmq83ZskYemQTs0Oa9k4SdOzaiDapqbPKQWJJBHJXA7dGIM2OiBG2MqDX
-         Xp56qDWmkTbzbMneTPprjMzb1WSqYnoKeNdoK5AwuQHd7WdQMJdz2zq1x3F6hC8Y4QJ3
-         6Trg==
-X-Gm-Message-State: AOJu0YwV1yxD+P9gQfkp9Bro6P5rkIGHhMLRzNlZQKr/aIODPEGKCcba
-        VpmIdPU004Q0uTO/gKE61IuKhacm8louOsq4dcE=
-X-Google-Smtp-Source: AGHT+IHN7QgXpILxQMdbz0wWQLDLZTmKAQaS/LrpT9Afx/CUNwd3Ed2RM4NGk86MSear5S1KNTKGdw==
-X-Received: by 2002:adf:b188:0:b0:31f:a79c:2120 with SMTP id q8-20020adfb188000000b0031fa79c2120mr660316wra.68.1694373902659;
-        Sun, 10 Sep 2023 12:25:02 -0700 (PDT)
+        bh=U/mpJ4QxANMd1OUi0izes/wPE27BO8URpmrDEAd/e+A=;
+        b=Jos/FhOIyzCQHMdotc2eB3cxZFcPuklwCzk23wCbI258KcZS2HHe67Abga9y6lOgoR
+         863r7AqV4HMOB825rhJMSMDSl1dqH5Qy37Up8a8Odb1xkLB8OurNshU889PEQcmqOcck
+         npmi+4cfjiUSLeqcls6kxEoRnrrfOxbaxbZ5FwiAFQG1i6gSL5UMa1s604wD+S8HYZ6b
+         XDsLNAD6y2fWiEb8kMUv9tFg9MgvyhYLq8jvbyEJ3JUfMw0+lGagMHCCdD8l3ORxy8hE
+         b3VNCKbIhsewMdN5UsXW1OgZpj0uhyxjVqZpcvXznVobpoQJfTRsJc1HM4haegQUIeyp
+         45DA==
+X-Gm-Message-State: AOJu0Yx86l7SdPWDHdWWC9cuuA89kExMjfR9RQNpfOShZ2Lf+Ois0VBd
+        RXxDcDEJKXD+VtEZKiJ72tAgAg==
+X-Google-Smtp-Source: AGHT+IEQDVbVhC1bXE9o/if6YM58KB28ZTDBO/FwCzX9X/u10FKNVul2ruxbQ3NG8SyOkN1iEvNlgA==
+X-Received: by 2002:a5d:5541:0:b0:317:6310:a616 with SMTP id g1-20020a5d5541000000b003176310a616mr6087460wrw.36.1694375914818;
+        Sun, 10 Sep 2023 12:58:34 -0700 (PDT)
 Received: from airbuntu (host109-151-228-137.range109-151.btcentralplus.com. [109.151.228.137])
-        by smtp.gmail.com with ESMTPSA id z7-20020adfe547000000b0031c71693449sm8026673wrm.1.2023.09.10.12.25.01
+        by smtp.gmail.com with ESMTPSA id a6-20020a5d5706000000b0031ad5a54bedsm8032679wrv.9.2023.09.10.12.58.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Sep 2023 12:25:02 -0700 (PDT)
-Date:   Sun, 10 Sep 2023 20:25:01 +0100
+        Sun, 10 Sep 2023 12:58:34 -0700 (PDT)
+Date:   Sun, 10 Sep 2023 20:58:32 +0100
 From:   Qais Yousef <qyousef@layalina.io>
-To:     Peter Zijlstra <peterz@infradead.org>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
 Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Lukasz Luba <lukasz.luba@arm.com>
-Subject: Re: [RFC PATCH 5/7] sched/schedutil: Add a new tunable to dictate
- response time
-Message-ID: <20230910192501.5gjytpiubiizu2uh@airbuntu>
+Subject: Re: [RFC PATCH 1/7] sched/pelt: Add a new function to approximate
+ the future util_avg value
+Message-ID: <20230910195832.pncjsqmkepichly6@airbuntu>
 References: <20230827233203.1315953-1-qyousef@layalina.io>
- <20230827233203.1315953-6-qyousef@layalina.io>
- <20230907114420.GC10955@noisy.programming.kicks-ass.net>
+ <20230827233203.1315953-2-qyousef@layalina.io>
+ <8f63efa6-f9d1-9b1c-7737-4094f6acfc62@arm.com>
+ <20230906211936.yqejc25czc6tddm6@airbuntu>
+ <47a11e4e-d349-7d98-7006-4bf08a53c0cf@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230907114420.GC10955@noisy.programming.kicks-ass.net>
+In-Reply-To: <47a11e4e-d349-7d98-7006-4bf08a53c0cf@arm.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
@@ -77,49 +79,82 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/07/23 13:44, Peter Zijlstra wrote:
-> On Mon, Aug 28, 2023 at 12:32:01AM +0100, Qais Yousef wrote:
-> > +static inline unsigned long
-> > +sugov_apply_response_time(struct sugov_policy *sg_policy, unsigned long util)
-> > +{
-> > +	unsigned long mult;
-> > +
-> > +	if (sg_policy->freq_response_time_ms == sg_policy->tunables->response_time_ms)
-> > +		return util;
-> > +
-> > +	mult = sg_policy->freq_response_time_ms * SCHED_CAPACITY_SCALE;
-> > +	mult /=	sg_policy->tunables->response_time_ms;
-> > +	mult *= util;
-> > +
-> > +	return mult >> SCHED_CAPACITY_SHIFT;
-> > +}
-> > +
-> >  static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
-> >  {
-> >  	s64 delta_ns;
-> > @@ -143,6 +184,7 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
-> >  	unsigned int freq = arch_scale_freq_invariant() ?
-> >  				policy->cpuinfo.max_freq : policy->cur;
-> >  
-> > +	util = sugov_apply_response_time(sg_policy, util);
-> >  	freq = map_util_freq(util, freq, max);
-> >  
-> >  	if (freq == sg_policy->cached_raw_freq && !sg_policy->need_freq_update)
+On 09/07/23 13:12, Dietmar Eggemann wrote:
+> On 06/09/2023 23:19, Qais Yousef wrote:
+> > On 09/06/23 14:56, Dietmar Eggemann wrote:
+> >> On 28/08/2023 01:31, Qais Yousef wrote:
 > 
-> Urgh, so instead of caching the multiplier you keep computing what is
-> essentially a constant over and over and over and over again :/
+> [...]
 > 
-> That is, compute the whole 'freq_response_time_ms * SCHED_CAPACITY_SCALE
-> / response_time_ms' thing *once*, when that file is written to, and then
-> reduce the whole thing to:
+> >>> +/*
+> >>> + * Approximate the new util_avg value assuming an entity has continued to run
+> >>> + * for @delta us.
+> >>> + */
+> >>> +unsigned long approximate_util_avg(unsigned long util, u64 delta)
+> >>> +{
+> >>> +	struct sched_avg sa = {
+> >>> +		.util_sum = util * PELT_MIN_DIVIDER,
+> >>> +		.util_avg = util,
+> >>> +	};
+> >>> +
+> >>> +	if (unlikely(!delta))
+> >>> +		return util;
+> >>> +
+> >>> +	accumulate_sum(delta, &sa, 0, 0, 1);
+> >>
+> >> IMHO, you miss the handling of `periods != 0`. load = 0 eclipses this
+> >> code in accumulate_sum().
 > 
-> 	return (freq_response_mult * util) >> SCHED_CAPACITY_SHIFT;
-> 
-> No need for that special case, no need for divisions, just go.
+> You could call accumulate_sum(delta, &sa, 1, 0, 1);
 
-Yes! I was too focused am I doing the right thing, I didn't stop to think this
-is actually a constant and can be done once too. I will fix it if this knobs
-ends up hanging around.
+Yes. I initially thought the load is not necessary, but good catch. I didn't
+get a chance to rerun to see the numbers, but hopefully this should fix the
+wrong numbers I was seeing. Thanks!
+
+> 
+> > 
+> > Yes. For some reason I got blank registered when I saw if this codepath can
+> > impact util_avg..
+> 
+> Another thing ... I guess if you call accumulate_sum with delta the PELT
+> machinery assumes `delta = now - sa->last_update_time` which means you
+> would have to use `clock_pelt + TICK_USEC` as delta.
+
+Right.
+
+The way I understood it is that at TICK we should do update_load_avg() which
+would call __update_load_sum() which uses
+
+	delta = now - sa->last_update_time
+
+which passes this delta to accumulate_sum()
+
+I can see we are not very accurate since there will be a small additional time
+besides TICK_USEC that we are not accounting for. But I can't see how this can
+cause a big error.
+
+	predicted (assumed) tick time/delta
+
+		sa->last_update_time = now
+		tick_time = TICK_USEC + now
+
+		delta = tick_time - sa->last_update_time
+		delta = TICK_USEC + now - now
+		delta = TICK_USEC
+
+	but actual tick time/delta
+
+		sa->last_update_time = now - x
+		tick_time = TICK_USEC + now
+
+		delta = tick_time - sa->last_update_time
+		delta = TICK_USEC + now - (now - x)
+		delta = TICK_USEC + x
+
+So the delta I am using might be slightly shorter than it should be.
+
+IIUC, what you're saying that the `x` in my equation above is clock_pelt,
+right?
 
 
 Thanks!
