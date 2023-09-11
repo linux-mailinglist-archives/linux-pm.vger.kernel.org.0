@@ -2,72 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B6779B98C
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 02:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44BD779BE0A
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 02:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243019AbjIKVHt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Sep 2023 17:07:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41848 "EHLO
+        id S238844AbjIKVGf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Sep 2023 17:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242740AbjIKQON (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Sep 2023 12:14:13 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178271B8;
-        Mon, 11 Sep 2023 09:14:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694448849; x=1725984849;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=PCK5N7MTX0TyDy4xAO7NmL2IUmc1Gi2m4JoFRYk5vSI=;
-  b=F7/AegDloF8uqJB+DF15yRougZ6Mf6QwoxwcraAk8E8OnviuTyEzdyyJ
-   wctg9KpZNpTIIuNt9VM3+BbHsSmxh81Z3qbwBNrSm7zf24LXM/4XK+W2u
-   ge2JFW1+OY9MWic0KTazlZBYQsy5yqvun7EWeZ4QjBe0jkgX3lk0JFgxr
-   k8CeBZrJGa53MY2fAda6s/JnIQnFBd7XIWjri1e9rSSeYiFmt3ASkvj+v
-   Zgmir4+9nUejsMtR6HdLjIsLK3pHeFdRVT0I3ISD2pTwfCjaa9h2k/FBj
-   QL+jYQ/IAmljfE/7efPIRTEPxhSN62dbbWI9Y0gj2vhWRR8MccX1K1K8z
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="409093577"
-X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
-   d="scan'208";a="409093577"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 09:14:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="858397637"
-X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
-   d="scan'208";a="858397637"
-Received: from spandruv-desk1.amr.corp.intel.com ([10.255.229.210])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 09:14:07 -0700
-Message-ID: <f35db90cd67adf4b0f48cd6f2a6ad8fbd0c1a679.camel@linux.intel.com>
-Subject: Re: [PATCH 00/10] Add PCIe Bandwidth Controller
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Krishna Chaitanya Chundru <quic_krichai@quicinc.com>,
+        with ESMTP id S243976AbjIKSeT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Sep 2023 14:34:19 -0400
+Received: from mxout2.routing.net (mxout2.routing.net [IPv6:2a03:2900:1:a::b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748281AD;
+        Mon, 11 Sep 2023 11:34:06 -0700 (PDT)
+Received: from mxbox3.masterlogin.de (unknown [192.168.10.78])
+        by mxout2.routing.net (Postfix) with ESMTP id BD9AE603FF;
+        Mon, 11 Sep 2023 18:34:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1694457244;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=djECvGsElrduzfDnjcKHITIRetD7ZdhsfC7SD2s1HLY=;
+        b=ITSEJaTrwiScKdYhKRjDhkzUrrWmEzTHf7X8fBaKQtsn97gob7SsOe9RUx4vgpfKcRrp8I
+        1KfbVWjKe/FB7rp3WHmGFv+uBI7u2bg6D6no7yhSCQGorMZl5TUCwcqirNXFUYsQ/9WwXe
+        0Tyuc9OxDlqmL2mGDRPkUoJGAXGu+V4=
+Received: from frank-G5.. (fttx-pool-217.61.151.158.bambit.de [217.61.151.158])
+        by mxbox3.masterlogin.de (Postfix) with ESMTPSA id D55A8360182;
+        Mon, 11 Sep 2023 18:34:03 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
-Cc:     linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?UTF-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Alexandru Gagniuc <mr.nuke.me@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 11 Sep 2023 09:14:07 -0700
-In-Reply-To: <25bf206e-864b-644-9b4-a0f461b4285@linux.intel.com>
-References: <20230817121708.53213-1-ilpo.jarvinen@linux.intel.com>
-         <fa5a20d0-77db-58bd-3956-ac664dffa587@quicinc.com>
-         <21b95d9-86a5-dcb0-9dda-3f1cdd426b9e@linux.intel.com>
-         <647e2b5e-6064-dbfa-bb56-f74358efd1fe@quicinc.com>
-         <25bf206e-864b-644-9b4-a0f461b4285@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Daniel Golle <daniel@makrotopia.org>
+Subject: [RFC v1 2/3] thermal/drivers/mediatek/lvts_thermal: make coeff configurable
+Date:   Mon, 11 Sep 2023 20:33:53 +0200
+Message-Id: <20230911183354.11487-3-linux@fw-web.de>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230911183354.11487-1-linux@fw-web.de>
+References: <20230911183354.11487-1-linux@fw-web.de>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Content-Transfer-Encoding: 8bit
+X-Mail-ID: 4f2cf530-f0bc-4d35-b51f-24c4f5922d50
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,T_SPF_TEMPERROR
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,52 +64,205 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2023-09-11 at 18:47 +0300, Ilpo J=C3=A4rvinen wrote:
-> + thermal people.
->=20
->=20
+From: Frank Wunderlich <frank-w@public-files.de>
 
-...
+The upcoming mt7988 has different temperature coefficients so we
+cannot use constants in the functions lvts_golden_temp_init,
+lvts_golden_temp_init and lvts_raw_to_temp anymore.
 
-> Hi,
->=20
-> Okay, thanks for the clarification. So the point is to plan for
-> adding=20
-> support for Link Width later and currently only support throttling
-> Link=20
-> Speed. In any case, the Link Width control seems to be controlled
-> using=20
-> a different approach (Link Width change does not require Link
-> Retraining).
->=20
-> I don't know either how such 2 dimensioned throttling (Link Speed and
-> Link Width) is supposed to be realized using the thermal/cooling
-> device=20
-> interface which only provides a single integer as the current state.
-> That=20
-> is, whether to provide a single cooling device (with a single integer
-> exposed to userspace) or separate cooling device for each dimension?
->=20
-> Perhaps thermal people could provide some insight on this? Is there
-> some=20
-> precedent I could take look at?
-Yes. The processor cooling device does similar. 1-3 are reserved for P-
-state and and 4-7 for T-states.
+Add a field in the lvts_ctrl pointing to the lvts_data which now
+contains the soc-specific temperature coefficents.
 
-But I don't suggest using such method. This causes confusion and
-difficult to change. For example if we increase range of P-state
-control, then there is no way to know what is the start point of T-
-states.
+Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+---
+ drivers/thermal/mediatek/lvts_thermal.c | 56 ++++++++++++++++++-------
+ 1 file changed, 41 insertions(+), 15 deletions(-)
 
-It is best to create to separate cooling devices for BW and link width.
-
-Also there is a requirement that anything you add to thermal sysfs, it
-should have some purpose for thermal control. I hope Link width control
-is targeted to similar use case BW control.
-
-Thanks,
-Srinivas
-
-
->=20
+diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+index effd9b00a424..c1004b4da3b6 100644
+--- a/drivers/thermal/mediatek/lvts_thermal.c
++++ b/drivers/thermal/mediatek/lvts_thermal.c
+@@ -80,8 +80,8 @@
+ #define LVTS_SENSOR_MAX				4
+ #define LVTS_GOLDEN_TEMP_MAX		62
+ #define LVTS_GOLDEN_TEMP_DEFAULT	50
+-#define LVTS_COEFF_A				-250460
+-#define LVTS_COEFF_B				250460
++#define LVTS_COEFF_A_MT8195			-250460
++#define LVTS_COEFF_B_MT8195			250460
+ 
+ #define LVTS_MSR_IMMEDIATE_MODE		0
+ #define LVTS_MSR_FILTERED_MODE		1
+@@ -94,7 +94,7 @@
+ #define LVTS_MINIMUM_THRESHOLD		20000
+ 
+ static int golden_temp = LVTS_GOLDEN_TEMP_DEFAULT;
+-static int coeff_b = LVTS_COEFF_B;
++static int coeff_b;
+ 
+ struct lvts_sensor_data {
+ 	int dt_id;
+@@ -109,9 +109,15 @@ struct lvts_ctrl_data {
+ 	int mode;
+ };
+ 
++struct formula_coeff {
++	int a;
++	int b;
++};
++
+ struct lvts_data {
+ 	const struct lvts_ctrl_data *lvts_ctrl;
+ 	int num_lvts_ctrl;
++	struct formula_coeff coeff;
+ };
+ 
+ struct lvts_sensor {
+@@ -126,6 +132,7 @@ struct lvts_sensor {
+ 
+ struct lvts_ctrl {
+ 	struct lvts_sensor sensors[LVTS_SENSOR_MAX];
++	const struct lvts_data *lvts_data;
+ 	u32 calibration[LVTS_SENSOR_MAX];
+ 	u32 hw_tshut_raw_temp;
+ 	int num_lvts_sensor;
+@@ -247,21 +254,21 @@ static void lvts_debugfs_exit(struct lvts_domain *lvts_td) { }
+ 
+ #endif
+ 
+-static int lvts_raw_to_temp(u32 raw_temp)
++static int lvts_raw_to_temp(u32 raw_temp, struct formula_coeff coeff)
+ {
+ 	int temperature;
+ 
+-	temperature = ((s64)(raw_temp & 0xFFFF) * LVTS_COEFF_A) >> 14;
++	temperature = ((s64)(raw_temp & 0xFFFF) * coeff.a) >> 14;
+ 	temperature += coeff_b;
+ 
+ 	return temperature;
+ }
+ 
+-static u32 lvts_temp_to_raw(int temperature)
++static u32 lvts_temp_to_raw(int temperature, struct formula_coeff coeff)
+ {
+ 	u32 raw_temp = ((s64)(coeff_b - temperature)) << 14;
+ 
+-	raw_temp = div_s64(raw_temp, -LVTS_COEFF_A);
++	raw_temp = div_s64(raw_temp, -coeff.a);
+ 
+ 	return raw_temp;
+ }
+@@ -269,6 +276,9 @@ static u32 lvts_temp_to_raw(int temperature)
+ static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
+ {
+ 	struct lvts_sensor *lvts_sensor = thermal_zone_device_priv(tz);
++	struct lvts_ctrl *lvts_ctrl = container_of(lvts_sensor, struct lvts_ctrl,
++						   sensors[lvts_sensor->id]);
++	const struct lvts_data *lvts_data = lvts_ctrl->lvts_data;
+ 	void __iomem *msr = lvts_sensor->msr;
+ 	u32 value;
+ 	int rc;
+@@ -301,7 +311,7 @@ static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
+ 	if (rc)
+ 		return -EAGAIN;
+ 
+-	*temp = lvts_raw_to_temp(value & 0xFFFF);
++	*temp = lvts_raw_to_temp(value & 0xFFFF, lvts_data->coeff);
+ 
+ 	return 0;
+ }
+@@ -348,10 +358,13 @@ static bool lvts_should_update_thresh(struct lvts_ctrl *lvts_ctrl, int high)
+ static int lvts_set_trips(struct thermal_zone_device *tz, int low, int high)
+ {
+ 	struct lvts_sensor *lvts_sensor = thermal_zone_device_priv(tz);
+-	struct lvts_ctrl *lvts_ctrl = container_of(lvts_sensor, struct lvts_ctrl, sensors[lvts_sensor->id]);
++	struct lvts_ctrl *lvts_ctrl = container_of(lvts_sensor, struct lvts_ctrl,
++						   sensors[lvts_sensor->id]);
++	const struct lvts_data *lvts_data = lvts_ctrl->lvts_data;
+ 	void __iomem *base = lvts_sensor->base;
+-	u32 raw_low = lvts_temp_to_raw(low != -INT_MAX ? low : LVTS_MINIMUM_THRESHOLD);
+-	u32 raw_high = lvts_temp_to_raw(high);
++	u32 raw_low = lvts_temp_to_raw(low != -INT_MAX ? low : LVTS_MINIMUM_THRESHOLD,
++				       lvts_data->coeff);
++	u32 raw_high = lvts_temp_to_raw(high, lvts_data->coeff);
+ 	bool should_update_thresh;
+ 
+ 	lvts_sensor->low_thresh = low;
+@@ -692,7 +705,7 @@ static int lvts_calibration_read(struct device *dev, struct lvts_domain *lvts_td
+ 	return 0;
+ }
+ 
+-static int lvts_golden_temp_init(struct device *dev, u32 *value)
++static int lvts_golden_temp_init(struct device *dev, u32 *value, struct formula_coeff coeff)
+ {
+ 	u32 gt;
+ 
+@@ -701,7 +714,7 @@ static int lvts_golden_temp_init(struct device *dev, u32 *value)
+ 	if (gt && gt < LVTS_GOLDEN_TEMP_MAX)
+ 		golden_temp = gt;
+ 
+-	coeff_b = golden_temp * 500 + LVTS_COEFF_B;
++	coeff_b = golden_temp * 500 + coeff.b;
+ 
+ 	return 0;
+ }
+@@ -724,7 +737,7 @@ static int lvts_ctrl_init(struct device *dev, struct lvts_domain *lvts_td,
+ 	 * The golden temp information is contained in the first chunk
+ 	 * of efuse data.
+ 	 */
+-	ret = lvts_golden_temp_init(dev, (u32 *)lvts_td->calib);
++	ret = lvts_golden_temp_init(dev, (u32 *)lvts_td->calib, lvts_data->coeff);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -735,6 +748,7 @@ static int lvts_ctrl_init(struct device *dev, struct lvts_domain *lvts_td,
+ 	for (i = 0; i < lvts_data->num_lvts_ctrl; i++) {
+ 
+ 		lvts_ctrl[i].base = lvts_td->base + lvts_data->lvts_ctrl[i].offset;
++		lvts_ctrl[i].lvts_data = lvts_data;
+ 
+ 		ret = lvts_sensor_init(dev, &lvts_ctrl[i],
+ 				       &lvts_data->lvts_ctrl[i]);
+@@ -758,7 +772,7 @@ static int lvts_ctrl_init(struct device *dev, struct lvts_domain *lvts_td,
+ 		 * after initializing the calibration.
+ 		 */
+ 		lvts_ctrl[i].hw_tshut_raw_temp =
+-			lvts_temp_to_raw(lvts_data->lvts_ctrl[i].hw_tshut_temp);
++			lvts_temp_to_raw(lvts_data->lvts_ctrl[i].hw_tshut_temp, lvts_data->coeff);
+ 
+ 		lvts_ctrl[i].low_thresh = INT_MIN;
+ 		lvts_ctrl[i].high_thresh = INT_MIN;
+@@ -1223,6 +1237,8 @@ static int lvts_probe(struct platform_device *pdev)
+ 	if (irq < 0)
+ 		return irq;
+ 
++	coeff_b = lvts_data->coeff.b;
++
+ 	ret = lvts_domain_init(dev, lvts_td, lvts_data);
+ 	if (ret)
+ 		return dev_err_probe(dev, ret, "Failed to initialize the lvts domain\n");
+@@ -1338,11 +1354,21 @@ static const struct lvts_ctrl_data mt8195_lvts_ap_data_ctrl[] = {
+ static const struct lvts_data mt8195_lvts_mcu_data = {
+ 	.lvts_ctrl	= mt8195_lvts_mcu_data_ctrl,
+ 	.num_lvts_ctrl	= ARRAY_SIZE(mt8195_lvts_mcu_data_ctrl),
++
++	.coeff = {
++		.a = LVTS_COEFF_A_MT8195,
++		.b = LVTS_COEFF_B_MT8195,
++	},
+ };
+ 
+ static const struct lvts_data mt8195_lvts_ap_data = {
+ 	.lvts_ctrl	= mt8195_lvts_ap_data_ctrl,
+ 	.num_lvts_ctrl	= ARRAY_SIZE(mt8195_lvts_ap_data_ctrl),
++
++	.coeff = {
++		.a = LVTS_COEFF_A_MT8195,
++		.b = LVTS_COEFF_B_MT8195,
++	},
+ };
+ 
+ static const struct of_device_id lvts_of_match[] = {
+-- 
+2.34.1
 
