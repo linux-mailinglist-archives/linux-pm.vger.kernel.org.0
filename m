@@ -2,126 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E8779BE4A
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 02:17:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8D879BADF
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 02:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236769AbjIKVF6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Sep 2023 17:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39078 "EHLO
+        id S235272AbjIKVFf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Sep 2023 17:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236770AbjIKLWn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Sep 2023 07:22:43 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49253CF0
-        for <linux-pm@vger.kernel.org>; Mon, 11 Sep 2023 04:22:36 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2bceb02fd2bso71146691fa.1
-        for <linux-pm@vger.kernel.org>; Mon, 11 Sep 2023 04:22:36 -0700 (PDT)
+        with ESMTP id S236818AbjIKL2u (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Sep 2023 07:28:50 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864DBCE5
+        for <linux-pm@vger.kernel.org>; Mon, 11 Sep 2023 04:28:45 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-59234aaca15so43886177b3.3
+        for <linux-pm@vger.kernel.org>; Mon, 11 Sep 2023 04:28:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694431354; x=1695036154; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JWYEp19+kxLH9ilfKCkarl8GOyU5SYDVfZv3MA5eqe4=;
-        b=mz1Oanf70aSQ1YkqlAtxjvUhIoGj7+/02AxiZlh+CkXaXVyhwjjVoq0buzAdb8gD92
-         oP1rx0YIOmKtVnl+A3Jy7mezxIHes54Mka7zPatQM8lrxgbj5Ere217D8JB0t+yiJ3K1
-         Q1Isztdrs7Y7egeh6PDW36XUwBqiABG0JBsg1btdYO5c+cHA2WTltZbNQ3pv1tgAVRzt
-         YElDcUnsJSNKiCCLklNE+2ugivTZ7QH4Wq02KYWJp4DXKB1nsQl7W8mf03urUM/85Jot
-         offUfgLJUn+VQiTDBAsUeygrsxYIAIwtH515oMEnhbfAsu51WXB6Wfp3vr3s0x3iid5b
-         GWKw==
+        d=linaro.org; s=google; t=1694431724; x=1695036524; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7aH+LgtXU/bZep1051Dmp3W7xLVGoC7LOjeeK6uQUB0=;
+        b=mfl1vtlAR0BVJni1RAdlYmCjR2EghvE6QIsVDjYjSw+z5uVpYMRm7tdZVjp0h17RB/
+         IuIEZJhVJfoAy/J7xTK0o47g/FS96KdRYCG7JtvqHAVrICneMVmcXg1wZhdbAN0un9J2
+         z9kry21+AIsonOz6J5xx1/hjhBapHIm8j67/BqUv1zU8wLePXtUffNrDkt8cgIE/rqrc
+         /ZcoUSvbUltrJn2ud3c1s13f4c9wuTPVHqQ0NpG2CmqEWVFMndLrbiLASJ8hgbxl9jRf
+         GCQ5nAHr1WmT/BSeG7rHqJnzR1VEhivnvIQKv5W8I72PCzoICtFd7rtYioRrb7zGYGyf
+         AlKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694431354; x=1695036154;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JWYEp19+kxLH9ilfKCkarl8GOyU5SYDVfZv3MA5eqe4=;
-        b=IATAU2OqMo7kK3w4jo7Q/cw9n8LQGHyG91LqG1GBACOXrZNvrPVMQ4bop2rSfH91U/
-         HqiNaJf2r79akRsn58JDTCJRVCOfj+3OtpLVDk3rMRyDyJZ6IqMwk7rT5rFhWpk2TXAc
-         73SXUbpX+kwrOcQPtclJmy857MH5Z0YlzOFCpcWO5eLIrImePe64lga8LiVnajpmlKdw
-         PHo2f+vP9Udef483NZsyhAevutiGtkk7nSmbCIB9MHT5maEug0aJ4++STmXHNe8zLeuz
-         w2JV+Ztv3EVVGQbha0GIh0YYU+8LigPD9W5jEhlGAMFjjBNpsIRHJv/YfAcBzD8uEdSb
-         9Y6g==
-X-Gm-Message-State: AOJu0YyWsXFXPrcRyPKwG0RwCeS1BVtEpQbCS3WB1AHipT6NhHyn81WT
-        o8QGsoCS65a3hzpx505r1SvKCw==
-X-Google-Smtp-Source: AGHT+IHRLMhGsK6RsT9iyCrETaJpm/vgcvBoo5IaCQ506Q9GN4EWNfwfYVLjJBE5Ml1DRyCm7I/IFA==
-X-Received: by 2002:a2e:9e45:0:b0:2bc:dba0:60f9 with SMTP id g5-20020a2e9e45000000b002bcdba060f9mr6734230ljk.44.1694431354467;
-        Mon, 11 Sep 2023 04:22:34 -0700 (PDT)
-Received: from [192.168.37.232] (178235177061.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.61])
-        by smtp.gmail.com with ESMTPSA id ov27-20020a170906fc1b00b00992c92af6f4sm5207739ejb.144.2023.09.11.04.22.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Sep 2023 04:22:33 -0700 (PDT)
-Message-ID: <924aa48f-5c23-4e17-8bc0-256887971ba9@linaro.org>
-Date:   Mon, 11 Sep 2023 13:22:30 +0200
+        d=1e100.net; s=20230601; t=1694431724; x=1695036524;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7aH+LgtXU/bZep1051Dmp3W7xLVGoC7LOjeeK6uQUB0=;
+        b=LPvxDIh4Cau+MJsY7ksI9laKuSZobxHbcThQQ/o+8sdJWq0hTvy0qPBnYMOh6KsgSV
+         JL+wEjPQQme7egEJ+2Kqlr0yN1YOUJ0S7l+GVkNrwDswD4sjbouBsLOb+jBUROSkpPrI
+         DgdWyWxqCwz3ZNUVZmlpz4ViWp2yEG4ELif/Q7a+jH9rA0k49ghKjPIq4k3z/9kaImvU
+         1Nfyw+CjMnezVAmDsRzklHMqXuBs6D9kROoGs0HGpFYXVai6RN9YMOEsS1PbzWAKRchW
+         VvG/OYjTPk4P0FsiEOa9Wk+NelG394LwHJpVzUPlAquUxxuGQdVjxfMSChznpFbuiLXQ
+         dj5Q==
+X-Gm-Message-State: AOJu0YzaKIxyG9IGeKIMWZz4+W6olhIjznwD+DDevUrgzXxfcyEBIzWB
+        T+RW4gyal6PODhkA8po3raNUEU9fjXJyHxmaQYOGdg==
+X-Google-Smtp-Source: AGHT+IEswWwSSaXU++NcaMiC0Ujkjj+Vn04CKhSZv7TtPGdjUYWT5Z8lgFE+X0lYJNg7DMjyqZlAFXqETyStZY8C9vo=
+X-Received: by 2002:a25:b16:0:b0:d7f:cdc8:e17c with SMTP id
+ 22-20020a250b16000000b00d7fcdc8e17cmr7889180ybl.51.1694431724711; Mon, 11 Sep
+ 2023 04:28:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 04/11] arm64: dts: qcom: pm7250b: make SID configurable
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     cros-qcom-dts-watchers@chromium.org,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20230830-fp5-initial-v1-0-5a954519bbad@fairphone.com>
- <20230830-fp5-initial-v1-4-5a954519bbad@fairphone.com>
- <b82f4683-e8b5-b424-8f7a-6d2ba1cab61f@linaro.org>
- <CV6NF0466658.20DGU7QKF2UBR@otso>
- <CAA8EJpr1+W3f08X-FpiiVrJ98kg52HaMwbbKn=fG15Whm4C8aQ@mail.gmail.com>
- <728003b9-db27-fdc0-e761-197a02a38c24@linaro.org>
- <CAA8EJpoXreHpxZQ2G10n0OiQzUX4ffk=gvo87dAU4-r+Svqpeg@mail.gmail.com>
- <CVAUDGBO4S08.1F0O66ZE6I4IG@otso> <CVFY7D7ND3WS.2B2EYB4ZO86P@otso>
- <cae7261a-6727-6163-1420-01039bfb8396@linaro.org>
- <CVFZZ0YSWQ6J.2AKRML6LWRMUH@otso>
- <bd418fae-accc-bd79-969a-b3b5791efd35@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <bd418fae-accc-bd79-969a-b3b5791efd35@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20230829213441.310655-1-ulf.hansson@linaro.org>
+ <CAHk-=wg0gc4Cc90OL29Vr5gDtd4mnsKD+TxtoNtQbAryaWHkZQ@mail.gmail.com>
+ <CAHk-=wjLO=Jsdk2prq0piznMMCk+V0_fRaFRHEPuaALpF8J=hw@mail.gmail.com>
+ <96bb0de0-06d9-46f8-b02f-dc924afff13c@app.fastmail.com> <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
+ <CAPDyKFrJH-1uaPCwnWZDPi4MRtOm=N2CHSRyvjXRDbQ1y-oOrw@mail.gmail.com>
+ <CAJZ5v0hqWYnkNXVju3U3n-9i8eqtjs197tLLNWv8Qa_N9T=KEw@mail.gmail.com>
+ <CAPDyKFpXLj_2HAgyV_VJf+GPQVmxb_iiDe77Q2MY17MDNqy9fA@mail.gmail.com> <CAMuHMdVxLkxN0bmSRXW74R_dGNDSRDB4Z=zE0DoiXDOuweSM0A@mail.gmail.com>
+In-Reply-To: <CAMuHMdVxLkxN0bmSRXW74R_dGNDSRDB4Z=zE0DoiXDOuweSM0A@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 11 Sep 2023 13:28:08 +0200
+Message-ID: <CAPDyKFpUUJeGD77GTYCk59cvW=SdGTkOEXH4dap1JQWekAa0Eg@mail.gmail.com>
+Subject: Re: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -132,92 +78,91 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11.09.2023 13:15, Krzysztof Kozlowski wrote:
-> On 11/09/2023 11:59, Luca Weiss wrote:
->> On Mon Sep 11, 2023 at 11:44 AM CEST, Krzysztof Kozlowski wrote:
->>> On 11/09/2023 10:34, Luca Weiss wrote:
->>>> On Tue Sep 5, 2023 at 10:30 AM CEST, Luca Weiss wrote:
->>>>> On Thu Aug 31, 2023 at 2:27 PM CEST, Dmitry Baryshkov wrote:
->>>>>> On Thu, 31 Aug 2023 at 14:54, Krzysztof Kozlowski
->>>>>> <krzysztof.kozlowski@linaro.org> wrote:
->>>>>>>
->>>>>>> On 31/08/2023 13:33, Dmitry Baryshkov wrote:
->>>>>>>> On Thu, 31 Aug 2023 at 13:13, Luca Weiss <luca.weiss@fairphone.com> wrote:
->>>>>>>>>
->>>>>>>>> On Wed Aug 30, 2023 at 12:06 PM CEST, Krzysztof Kozlowski wrote:
->>>>>>>>>> On 30/08/2023 11:58, Luca Weiss wrote:
->>>>>>>>>>> Like other Qualcomm PMICs the PM7250B can be used on different addresses
->>>>>>>>>>> on the SPMI bus. Use similar defines like the PMK8350 to make this
->>>>>>>>>>> possible.
->>>>>>>>>>>
->>>>>>>>>>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
->>>>>>>>>>> ---
->>>>>>>>>>>  arch/arm64/boot/dts/qcom/pm7250b.dtsi | 23 ++++++++++++++++-------
->>>>>>>>>>>  1 file changed, 16 insertions(+), 7 deletions(-)
->>>>>>>>>>>
->>>>>>>>>>> diff --git a/arch/arm64/boot/dts/qcom/pm7250b.dtsi b/arch/arm64/boot/dts/qcom/pm7250b.dtsi
->>>>>>>>>>> index e8540c36bd99..3514de536baa 100644
->>>>>>>>>>> --- a/arch/arm64/boot/dts/qcom/pm7250b.dtsi
->>>>>>>>>>> +++ b/arch/arm64/boot/dts/qcom/pm7250b.dtsi
->>>>>>>>>>> @@ -7,6 +7,15 @@
->>>>>>>>>>>  #include <dt-bindings/interrupt-controller/irq.h>
->>>>>>>>>>>  #include <dt-bindings/spmi/spmi.h>
->>>>>>>>>>>
->>>>>>>>>>> +/* This PMIC can be configured to be at different SIDs */
->>>>>>>>>>> +#ifndef PM7250B_SID
->>>>>>>>>>> +   #define PM7250B_SID 2
->>>>>>>>>>> +#endif
->>>>>>>>>>
->>>>>>>>>> Why do you send the same patch as v1, without any reference to previous
->>>>>>>>>> discussions?
->>>>>>>>>>
->>>>>>>>>> You got here feedback already.
->>>>>>>>>>
->>>>>>>>>> https://lore.kernel.org/linux-arm-msm/f52524da-719b-790f-ad2c-0c3f313d9fe9@linaro.org/
->>>>>>>>>
->>>>>>>>> Hi Krzysztof,
->>>>>>>>>
->>>>>>>>> I did mention that original patch in the cover letter of this series.
->>>>>>>>> I'm definitely aware of the discussion earlier this year there but also
->>>>>>>>> tried to get an update lately if there's any update with no response.
->>>>>>>>
->>>>>>>> I think the overall consensus was that my proposal is too complicated
->>>>>>>> for the DT files.
->>>>>>>
->>>>>>> I proposed to duplicate the entries. Do you keep QUP nodes in DTSI and
->>>>>>> customize per address? No.
->>>>>>
->>>>>> At the same time, we do keep SoC files separate from the board files.
->>>>>> Yes, I'm slightly exaggerating here.
->>>>>>
->>>>>> I think that for PMIC files it makes sense to extract common parts if
->>>>>> that eases reuse of the common parts.
->>>>>
->>>>> Hi all,
->>>>>
->>>>> what can I do for v2 now?
->>>>>
->>>>> 1. Keep this patch as-is, and keep pm7250b in device dts.
->>>
->>> This was NAKed by me. What Qualcomm SoC maintainers decide (or not
->>> decide) about other options, should not cause the wrong solution to be
->>> re-posted...
->>>
->>>>>
->>>>> 2. Drop pm7250b patch and drop from device dts, until _someone_ figures
->>>>> out a solution talking to the PMIC on different SID.
->>>>>
->>>>> 3. Something else like copy-pasting pm7250b.dtsi to pm7250-8.dtsi and
->>>>> changing the SID there, and using that in device dts.
->>
->> @Konrad, @Bjorn: Can you give any feedback here what's preferable?
->> Otherwise I'm just blocked on this series.
-I'm sure Krzysztof will disagree, but all of the solutions (which are
-either duplicate the dt, add ifdefs or skip adding this pmic) are
-equally band-aid-class.. A bright future where this PMIC thing is
-handled on the driver side that will hopefully come soon(tm) should
-resolve such problems..
+On Mon, 11 Sept 2023 at 09:52, Geert Uytterhoeven <geert@linux-m68k.org> wr=
+ote:
+>
+> Hi Ulf,
+>
+> On Thu, Aug 31, 2023 at 1:39=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.o=
+rg> wrote:
+> > On Thu, 31 Aug 2023 at 11:33, Rafael J. Wysocki <rafael@kernel.org> wro=
+te:
+> > > If I may suggest something, I would call this "pmdomain" instead of
+> > > "genpd".  I don't think that /drivers/power/ is a particularly
+> > > suitable location for it, because it doesn't really have much to do
+> > > with power supplies and more to do with device PM.
+> >
+> > "pmdomain" is probably giving a reasonable good hint of what goes on
+> > in this subsystem. This works fine for me, thanks!
+>
+> Sounds nice!
+> All of this lives in <linux/pm_domain.h> (with underscore?) anyway,
+> and "PM Domains" is the usual naming, as it covers both Power and
+> Clock Domains.
+>
+> However, although I am quite familiar with genpd, I am still wondering
+> what is the meaning of the "generic" part in the name? And what is a
+> non-generic PM Domain?
 
-From my side, ifdef is the least burdensome, even if ugly..
+I guess generic here means "works for most cases".
 
-Konrad
+There are certainly a bunch of other "non-generic", like the ACPI,
+pm_clk, OMAP2, etc.
+
+Maybe some of them could be converted to genpd, but that's another story.
+
+>
+> > > Also, I would move drivers/base/power/domain.c to drivers/pmdomain/
+> > > (and rename it to something like core.c), because it would be a bette=
+r
+> > > location for that fiile IMO.
+> >
+> > We could certainly do that, let's discuss it a bit more.
+> >
+> > Although, at this point I want to focus on the genpd providers, as to
+> > release some of the burden from arm-soc maintainers.
+> >
+> > > I can also handle future pull requests for this if that's fine with e=
+veryone.
+> >
+> > Thanks a lot for your offer! However, if a re-route is preferred (I
+> > think not?), this is probably better suited via arm-soc, as most
+> > changes are going to be arm platform specific.
+>
+> Which brings me to the final question: what is the upstream path
+> for changes to drivers/genpd/*/ (or whatever it's gonna be called)?
+> Before, we sent PRs to (arm-)soc.  Do you expect us to send them to
+> you? There's usually quite some interaction between drivers/soc/reneas/
+> and drivers/genpd/renesas (and there are DT binding definitions),
+> but not more than with e.g. drivers/clk/renesas/.
+
+I would be happy to pick this up and funnel this via my new genpd
+tree. As long as it's coupled with changes affecting "genpd
+providers", of course.
+
+I can certainly also collect patches directly from the
+mailing-list/patch-tracker too. Whatever works for you the best. Of
+course, in that case I need your acks before I pick up the relevant
+patches.
+
+If we need "immutable" branches, let's discuss that on a case by case basis=
+.
+
+>
+> And I just realized you moved the code and Makefiles to drivers/genpd/,
+> but not the Kconfig symbols and logic, which still lives under
+> drivers/soc/.  So resolving that (and the name) is something that
+> should be resolved sooner rather than later...
+
+In regards to the name, I am relying on input from Linus to make a
+final decision before I send a patch. In regards to this, I have also
+started working on a documentation patch for genpd. It needs some more
+polishing before I can send it though.
+
+When it comes to the Kconfig move, I will send out a series for it, this we=
+ek.
+
+[...]
+
+Kind regards
+Uffe
