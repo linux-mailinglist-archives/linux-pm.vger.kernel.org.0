@@ -2,91 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F2879B08F
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 01:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A37B79AFEE
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 01:48:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243090AbjIKVHu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Sep 2023 17:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
+        id S237789AbjIKVGH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Sep 2023 17:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237909AbjIKNUr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Sep 2023 09:20:47 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D330DEB;
-        Mon, 11 Sep 2023 06:20:42 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C4B6C433C7;
-        Mon, 11 Sep 2023 13:20:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694438442;
-        bh=seMOI04xQEN5HPAT6ZDe8j6wf/v6pSJLVXaemNCMKpw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c6CgCk98+gX+mNjA5/yzdOmfddIZBXvZOxW6AV+Ks9Si+CT9d6gCysPmZ2eBUSsJr
-         u6b77NmbTEHSjr8vKXluhcRO+JFWyoh4AiJQwTDnAfu0GEGpmKtJUlEie0QGhtYhl8
-         xlErWIkB2Wgi9YA4DeVfN4IbBS4NWiLeFBMWi/mvIlpksa8rj0NzhEq4Nxt3sHc2I1
-         4e+PhL+de+4voulGPW+vae+PDwQM+8qtU+yCK9BylqsrSw1JkxdbC9ZLPvOi0XiFSc
-         +pHzRca5IqO4ZiFhC/HWs9OV71AZxwax2LY413J9VN51BEnHPhy+sgQhLVe89y4zCz
-         91sjieKQNjJ1A==
-Received: (nullmailer pid 1144444 invoked by uid 1000);
-        Mon, 11 Sep 2023 13:20:40 -0000
-Date:   Mon, 11 Sep 2023 08:20:40 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Prasad Sodagudi <psodagud@quicinc.com>,
-        Nikunj Kela <nkela@quicinc.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-kernel@vger.kernel.org, Nishanth Menon <nm@ti.com>
-Subject: Re: [PATCH v3 09/13] dt-bindings: firmware: arm,scmi: Extend
- bindings for protocol@13
-Message-ID: <169443843853.1144377.15550246606474574952.robh@kernel.org>
-References: <20230825112633.236607-1-ulf.hansson@linaro.org>
- <20230825112633.236607-10-ulf.hansson@linaro.org>
+        with ESMTP id S238057AbjIKNgS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Sep 2023 09:36:18 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3DF106
+        for <linux-pm@vger.kernel.org>; Mon, 11 Sep 2023 06:36:13 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230911133612euoutp01b07dc9c084ca28d97d97c2c06d1b2a90~D26HDlUHN2488024880euoutp01M
+        for <linux-pm@vger.kernel.org>; Mon, 11 Sep 2023 13:36:12 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230911133612euoutp01b07dc9c084ca28d97d97c2c06d1b2a90~D26HDlUHN2488024880euoutp01M
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1694439372;
+        bh=KEJwLcfqNIjrIdBLofc1siG7b7b+QXBN4yDVWX5CT1s=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Y9DhIskjlHGa8Xxsb2MS9ZabecNECpC1cPimeb7GPz3MHStDP1pS5OdsvSUFoU2Fn
+         bzQm46NC05LF+oAHUZw691hahF2d2+ks+OHB1mDrsb6L+sf0FN1JysEDL1x8uJ+FOB
+         hHUH2MwqNd2KrjjdAgAlKWdnqqFwuRgrJx+vtn+A=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230911133612eucas1p2c831c1925d270486dcbf601a6eaff060~D26GvMDhT1199911999eucas1p2M;
+        Mon, 11 Sep 2023 13:36:12 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id D1.B1.42423.CC71FF46; Mon, 11
+        Sep 2023 14:36:12 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230911133611eucas1p286e43809a6ca785911c0bbdce15dc15d~D26GWN5KZ0493804938eucas1p25;
+        Mon, 11 Sep 2023 13:36:11 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230911133611eusmtrp2225c2df081edc27773ab5988e93838c9~D26GVhK9x0862108621eusmtrp2Y;
+        Mon, 11 Sep 2023 13:36:11 +0000 (GMT)
+X-AuditID: cbfec7f2-a51ff7000002a5b7-4e-64ff17cc51bb
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 1C.7A.14344.BC71FF46; Mon, 11
+        Sep 2023 14:36:11 +0100 (BST)
+Received: from AMDC4515.eu.corp.samsungelectronics.net (unknown
+        [106.120.51.28]) by eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230911133610eusmtip206ee8e112c4c553376e284fb923c64a7~D26FToWWL0267702677eusmtip2Q;
+        Mon, 11 Sep 2023 13:36:10 +0000 (GMT)
+From:   Mateusz Majewski <m.majewski2@samsung.com>
+To:     linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Mateusz Majewski <m.majewski2@samsung.com>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: [PATCH v2 1/7] thermal: exynos: remove an unnecessary field
+ description
+Date:   Mon, 11 Sep 2023 15:34:25 +0200
+Message-ID: <20230911133435.14061-2-m.majewski2@samsung.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230911133435.14061-1-m.majewski2@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230825112633.236607-10-ulf.hansson@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLKsWRmVeSWpSXmKPExsWy7djPc7pnxP+nGCzu5bZ4MG8bm8Xh+RUW
+        Ux8+YbP4vuU6k8W8z7IWe19vZbf4dqWDyWLT42usFpd3zWGz+Nx7hNFixvl9TBYTj01mtlh7
+        5C67xdwvU5ktnjzsY3Pg99g56y67x+I9L5k8Nq3qZPO4c20Pm8fmJfUefVtWMXp83iQXwB7F
+        ZZOSmpNZllqkb5fAlbGwZwNTwXO2ive//zE3MF5l7WLk5JAQMJG4O+kLcxcjF4eQwApGid0n
+        1rGDJIQEvjBKdG+Tg0h8ZpRofH2RBabjRPcCVoii5YwSe/frQhS1Mkkcf7EcrIhNwEDiwZtl
+        YJNEBFoZJWY2qYMUMQtcYpa4e3MtWJGwQJDEnq8L2UBsFgFViR9XtzGC2LwCNhK7T39nhNgm
+        L/H81h2wQZwCthJn105nh6gRlDg58wnYHGagmuats8F+kBBo5pToa1vDBtHsIvG++xMThC0s
+        8er4FnYIW0bi/875UPF8iRmb3wMN4gCyKyTuHvSCMK0lPp5hBjGZBTQl1u/Shyh2lPj9ZR4b
+        RAWfxI23ghAH8ElM2jadGSLMK9HRJgRRrSpxfM8kZghbWuJJy22olR4SK880sE5gVJyF5JVZ
+        SF6ZhbB3ASPzKkbx1NLi3PTUYsO81HK94sTc4tK8dL3k/NxNjMAUdvrf8U87GOe++qh3iJGJ
+        g/EQowQHs5IIb8mhvylCvCmJlVWpRfnxRaU5qcWHGKU5WJTEebVtTyYLCaQnlqRmp6YWpBbB
+        ZJk4OKUamJyT+O2ld+d21Pwsu75s0tHqm46al34xdS52P7B7qkd7MEuZbjZjRUWGtDLT//m3
+        FydLM258dCD+75cpwUG5E383TQ6aqRx47GxV46Gl9xNenuLr3ckZenSHc/6O26GlHxKlzz17
+        67jZ8ez3gOPN12MmFcl7+VdEq3RwNXUXJ8W7JNxN7U0vmZ8ygYsjrG5ZBevzruw65oUKf1bV
+        fvEve6By6ZV82h2uxvcv3p/acFKqULSuvV2rSc4t+JSZ11v2kr3285jzbngs8T/LO5P57QO1
+        SRXdGteUt9z8cq2m9+dy5fPcflxv5hWmT110O971BUuMw4cFK8VbLVeVfdHu+jjDaa5A3bpz
+        X6wOdk7WVGIpzkg01GIuKk4EAON6C/nQAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrPIsWRmVeSWpSXmKPExsVy+t/xe7qnxf+nGExoMrR4MG8bm8Xh+RUW
+        Ux8+YbP4vuU6k8W8z7IWe19vZbf4dqWDyWLT42usFpd3zWGz+Nx7hNFixvl9TBYTj01mtlh7
+        5C67xdwvU5ktnjzsY3Pg99g56y67x+I9L5k8Nq3qZPO4c20Pm8fmJfUefVtWMXp83iQXwB6l
+        Z1OUX1qSqpCRX1xiqxRtaGGkZ2hpoWdkYqlnaGwea2VkqqRvZ5OSmpNZllqkb5egl7GwZwNT
+        wXO2ive//zE3MF5l7WLk5JAQMJE40b0AyObiEBJYyihxdN9iNoiEtMThL1PYIWxhiT/Xutgg
+        ipqZJF79ng5WxCZgIPHgzTJ2kISIQCejRNfmc0wgCWaBW8wS919rgdjCAgESH/+cAIuzCKhK
+        /Li6jRHE5hWwkdh9+jsjxAZ5iee37oBt4xSwlTi7djqQzQG0zUai/4wORLmgxMmZT1ggxstL
+        NG+dzTyBUWAWktQsJKkFjEyrGEVSS4tz03OLjfSKE3OLS/PS9ZLzczcxAmNu27GfW3Ywrnz1
+        Ue8QIxMH4yFGCQ5mJRHekkN/U4R4UxIrq1KL8uOLSnNSiw8xmgKdPZFZSjQ5Hxj1eSXxhmYG
+        poYmZpYGppZmxkrivJ4FHYlCAumJJanZqakFqUUwfUwcnFINTPUv/z58stHox8RtZpb72ts+
+        7l9ysbVx0p/KyeLieX9v/8iN6FSZr+qR6faEYcaN0/EX1NLuZZ9bsG+agXDvxWPPFDh2Jl0v
+        mXGX07J2quzlywJJrLvuSy2/YryRpe/xIp1j66TcHZsNvX/2p5yZ2cz4tvLpj9uXdh2WXm98
+        T3o/84TZ066+XC22e9ayYib+7RUhThdXpLa+zlVKdNx1aedJTv6U36c+Wdzdq2d2yE1l9rGL
+        p71eG17fonugfPLJxM6z0/3j2eW6Lu+8ev5fQPmmML6olts2UtHfuZQja81+S1l/PNY4Xzb4
+        vRtH3VH2+40bb33lyywQDDgsoLXdzliEu5fRqftxZMea9mki34SUWIozEg21mIuKEwF+XEuT
+        QgMAAA==
+X-CMS-MailID: 20230911133611eucas1p286e43809a6ca785911c0bbdce15dc15d
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20230911133611eucas1p286e43809a6ca785911c0bbdce15dc15d
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230911133611eucas1p286e43809a6ca785911c0bbdce15dc15d
+References: <20230911133435.14061-1-m.majewski2@samsung.com>
+        <CGME20230911133611eucas1p286e43809a6ca785911c0bbdce15dc15d@eucas1p2.samsung.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+It seems that the field has been removed in one of the previous commits,
+but the description has been forgotten.
 
-On Fri, 25 Aug 2023 13:26:29 +0200, Ulf Hansson wrote:
-> The protocol@13 node is describing the performance scaling option for the
-> ARM SCMI interface, as a clock provider. This is unnecessary limiting, as
-> performance scaling is in many cases not limited to switching a clock's
-> frequency.
-> 
-> Therefore, let's extend the binding so the interface can be modelled as a
-> generic performance domain too. The common way to describe this, is to use
-> the power-domain DT bindings, so let's use that.
-> 
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Conor Dooley <conor+dt@kernel.org>
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
-> 
-> Changes in v3:
-> 	- None.
-> 
-> ---
->  .../devicetree/bindings/firmware/arm,scmi.yaml        | 11 +++++++++--
->  1 file changed, 9 insertions(+), 2 deletions(-)
-> 
+Signed-off-by: Mateusz Majewski <m.majewski2@samsung.com>
+---
+ drivers/thermal/samsung/exynos_tmu.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
+index e5bc2c82010f..2c1cfb8c4b33 100644
+--- a/drivers/thermal/samsung/exynos_tmu.c
++++ b/drivers/thermal/samsung/exynos_tmu.c
+@@ -160,7 +160,6 @@ enum soc_type {
+  *	in the positive-TC generator block
+  *	0 < reference_voltage <= 31
+  * @regulator: pointer to the TMU regulator structure.
+- * @reg_conf: pointer to structure to register with core thermal.
+  * @tzd: pointer to thermal_zone_device structure
+  * @ntrip: number of supported trip points.
+  * @enabled: current status of TMU device
+-- 
+2.41.0
 
