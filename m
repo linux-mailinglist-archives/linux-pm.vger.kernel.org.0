@@ -2,160 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 718BE79ADFE
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 01:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DEDD79B10F
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 01:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240726AbjIKVGv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Sep 2023 17:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48054 "EHLO
+        id S242761AbjIKVHj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Sep 2023 17:07:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237161AbjIKMHe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Sep 2023 08:07:34 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3E1CEB
-        for <linux-pm@vger.kernel.org>; Mon, 11 Sep 2023 05:07:29 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-d80211e8df8so2712532276.3
-        for <linux-pm@vger.kernel.org>; Mon, 11 Sep 2023 05:07:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694434049; x=1695038849; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XX4v8HhseDUrg4nK4GOlhuMrgfux3e3KYPTg4pZxyPI=;
-        b=BdFRwJ4Eg3aN53gbQ6qSgp8es3maaymTIYga1gqnYtFQijJ2WCgbzFJBTWOywvuYar
-         4ucoffX8eMDsJgjtsClWXZFYTvaeSwz3JePDh+7fAupOJnTsYL1XHK13CvZV8chVjJ3j
-         SfBnCwLXCw9sedL0k6j02v9MNdtl5l1lO0JoedafXq3RvSDq00uxdES+bgnN1vdpF/M7
-         Suv7YIVTYaXGInAwjcFfcJghNhVnhkfkFkhMnioHlS96b8m7Ldife6bCMgano4X1O5VR
-         wf2BQ+Vg2eftcQKO8rhZBVvIMmhhuxw21CZLNMKEYHT2PWPno3SMsfbzyVr4eeV1TXh5
-         xQZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694434049; x=1695038849;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XX4v8HhseDUrg4nK4GOlhuMrgfux3e3KYPTg4pZxyPI=;
-        b=DIKr31OWsZTM8bPRkg0NqTnVgU1AR6f+o7eTKk0IYDuC9FD6gefmzi2mQdo+0AHEXK
-         mAtw8LB04m6N4Yk0ug0BC4rK3jDZs5oASROTrth6yyFh6paWSTGYz4rI+G+ZdG57Jiql
-         WAA+IjBS5ZlD2SL259QGhuiiHSXqgEMmjTLUllBT+dwQm83JKXPnBiXGDfuwwxShxPqs
-         nT4DjBvUew8PGobzgk6TfAsizuqWNfCOTUTkRwgKeQsz+07403oQ77n6BC8YY5h+m3dC
-         gslXt9qmK2nVBXzdb6X6FrnMYjLjL2lCkUxM7+K2ujdColj2K/+mNr8Ukd0OjxT8FZs8
-         xCFw==
-X-Gm-Message-State: AOJu0YzsiuOq/Zv34v0u95wWEV8b+zKAHptjgbN/0kFeWyslZQv5vzGh
-        CeXmAFRcEx2qr0o8b56M/mLkNUVU9W4n9lCAs4U1Dg==
-X-Google-Smtp-Source: AGHT+IES24EorS8GUJRuowcjC8+FAzezIUBouFFfC1NtKEb/nqAMSCkSw+Lyxw6KKpapAaBFc8ChmLvFJE9CTPGxwwE=
-X-Received: by 2002:a5b:709:0:b0:d80:68d1:b826 with SMTP id
- g9-20020a5b0709000000b00d8068d1b826mr4839146ybq.6.1694434048864; Mon, 11 Sep
- 2023 05:07:28 -0700 (PDT)
+        with ESMTP id S237406AbjIKMsZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Sep 2023 08:48:25 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E73EE4B;
+        Mon, 11 Sep 2023 05:48:19 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38BC35Gh013880;
+        Mon, 11 Sep 2023 12:48:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=+Cl05E6P52wxr9Cy98s8F10fhtxfqzhVr2uRA7Nhc/s=;
+ b=nyJermdAWslYkHg0zyXyXmT3/sJF5CeoSzmq9gMP0h0aNeg9ufW4KeGzue7oX8jaOkbP
+ qxzIv8LTCaYm7zhacaIPSeDXlcRT0w2h5p4thDffX/XjhonyJODPWIVAPDUNHuOOSA2G
+ V1v/l6AiZZu/HrOeuDfFW8KVZ4jbz642MEA4kZnFQ+pfmGUXpafLhkyVncYT9MYCjJ2a
+ OIp/vGs7N7yrut2hCv0mskIDzhmgAS9Q9DEJSueELS0j29oWKFi8jqL8C83UvlNrlmB0
+ I/7rcX3k/b5lg5pub3jrJChaVyDuubu9SOpuhiH67lQQOj1+dZIiuxXYmuRM7rY/7D/M 9g== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t22hyg2ce-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Sep 2023 12:48:03 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38BCm2ij006149
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Sep 2023 12:48:02 GMT
+Received: from [10.218.5.19] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Mon, 11 Sep
+ 2023 05:47:55 -0700
+Message-ID: <63d72a6f-ec05-1515-cd32-269d35d9a66c@quicinc.com>
+Date:   Mon, 11 Sep 2023 18:17:51 +0530
 MIME-Version: 1.0
-References: <20230829213441.310655-1-ulf.hansson@linaro.org>
- <CAHk-=wg0gc4Cc90OL29Vr5gDtd4mnsKD+TxtoNtQbAryaWHkZQ@mail.gmail.com>
- <CAHk-=wjLO=Jsdk2prq0piznMMCk+V0_fRaFRHEPuaALpF8J=hw@mail.gmail.com>
- <96bb0de0-06d9-46f8-b02f-dc924afff13c@app.fastmail.com> <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
- <CAPDyKFrJH-1uaPCwnWZDPi4MRtOm=N2CHSRyvjXRDbQ1y-oOrw@mail.gmail.com>
- <CAJZ5v0hqWYnkNXVju3U3n-9i8eqtjs197tLLNWv8Qa_N9T=KEw@mail.gmail.com>
- <CAPDyKFpXLj_2HAgyV_VJf+GPQVmxb_iiDe77Q2MY17MDNqy9fA@mail.gmail.com>
- <CAMuHMdVxLkxN0bmSRXW74R_dGNDSRDB4Z=zE0DoiXDOuweSM0A@mail.gmail.com>
- <CAPDyKFpUUJeGD77GTYCk59cvW=SdGTkOEXH4dap1JQWekAa0Eg@mail.gmail.com> <CAMuHMdUZcrtHZz7daKjL7Oz2MEmCrjJ_ovO3ttTnZ7xuRWgiRA@mail.gmail.com>
-In-Reply-To: <CAMuHMdUZcrtHZz7daKjL7Oz2MEmCrjJ_ovO3ttTnZ7xuRWgiRA@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 11 Sep 2023 14:06:52 +0200
-Message-ID: <CAPDyKFpctt6AQBpu+vBQ0ymW3PQGB8dt8-QEhgbz0Uo5T-1Wxw@mail.gmail.com>
-Subject: Re: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, linux-arm-kernel@lists.infradead.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 4/6] clk: qcom: Use HW_CTRL_TRIGGER flag to switch
+ video GDSC to HW mode
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>
+CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Andy Gross" <agross@kernel.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        Taniya Das <tdas@qti.qualcomm.com>, <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        Ajit Pandey <quic_ajipan@quicinc.com>,
+        Imran Shaik <quic_imrashai@quicinc.com>
+References: <20230816145741.1472721-1-abel.vesa@linaro.org>
+ <20230816145741.1472721-5-abel.vesa@linaro.org>
+ <2fc0d771-cee2-4826-a62a-56ed4bfad3a2@linaro.org>
+ <ZOXiUzxfs1cj3SWT@linaro.org>
+ <07e93a9d-69ac-41b7-aa21-b855b97bf801@linaro.org>
+ <ef1439f8-4a9b-53b4-34be-1229b39d2310@quicinc.com>
+ <8257f7b3-dfb8-4683-85de-600f3b1ed54b@linaro.org>
+ <f37d2dd8-d625-048e-9c21-bba710b40086@quicinc.com>
+ <b5ae2ad9-f6c7-47d6-bab8-3f3fdb6b43e2@linaro.org>
+ <8c88bca4-b562-0122-1451-ef9de7fd8737@quicinc.com>
+ <5d4ba948-46e2-4b95-95a2-17775f4c9881@linaro.org>
+From:   Jagadeesh Kona <quic_jkona@quicinc.com>
+In-Reply-To: <5d4ba948-46e2-4b95-95a2-17775f4c9881@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Dpknb6oYYLPnAOcRwvFm5IQVmwnanzp3
+X-Proofpoint-GUID: Dpknb6oYYLPnAOcRwvFm5IQVmwnanzp3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-11_07,2023-09-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 mlxlogscore=820 phishscore=0 spamscore=0
+ impostorscore=0 mlxscore=0 adultscore=0 suspectscore=0 malwarescore=0
+ bulkscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2308100000 definitions=main-2309110116
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 11 Sept 2023 at 13:48, Geert Uytterhoeven <geert@linux-m68k.org> wr=
-ote:
->
-> Hi Ulf,
->
-> On Mon, Sep 11, 2023 at 1:28=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.o=
-rg> wrote:
-> > On Mon, 11 Sept 2023 at 09:52, Geert Uytterhoeven <geert@linux-m68k.org=
-> wrote:
-> > > On Thu, Aug 31, 2023 at 1:39=E2=80=AFPM Ulf Hansson <ulf.hansson@lina=
-ro.org> wrote:
-> > > > On Thu, 31 Aug 2023 at 11:33, Rafael J. Wysocki <rafael@kernel.org>=
- wrote:
-> > > > > If I may suggest something, I would call this "pmdomain" instead =
-of
-> > > > > "genpd".  I don't think that /drivers/power/ is a particularly
-> > > > > suitable location for it, because it doesn't really have much to =
-do
-> > > > > with power supplies and more to do with device PM.
-> > > >
-> > > > "pmdomain" is probably giving a reasonable good hint of what goes o=
-n
-> > > > in this subsystem. This works fine for me, thanks!
-> > >
-> > > > > Also, I would move drivers/base/power/domain.c to drivers/pmdomai=
-n/
-> > > > > (and rename it to something like core.c), because it would be a b=
-etter
-> > > > > location for that fiile IMO.
-> > > >
-> > > > We could certainly do that, let's discuss it a bit more.
-> > > >
-> > > > Although, at this point I want to focus on the genpd providers, as =
-to
-> > > > release some of the burden from arm-soc maintainers.
-> > > >
-> > > > > I can also handle future pull requests for this if that's fine wi=
-th everyone.
-> > > >
-> > > > Thanks a lot for your offer! However, if a re-route is preferred (I
-> > > > think not?), this is probably better suited via arm-soc, as most
-> > > > changes are going to be arm platform specific.
-> > >
-> > > Which brings me to the final question: what is the upstream path
-> > > for changes to drivers/genpd/*/ (or whatever it's gonna be called)?
-> > > Before, we sent PRs to (arm-)soc.  Do you expect us to send them to
-> > > you? There's usually quite some interaction between drivers/soc/renea=
-s/
-> > > and drivers/genpd/renesas (and there are DT binding definitions),
-> > > but not more than with e.g. drivers/clk/renesas/.
-> >
-> > I would be happy to pick this up and funnel this via my new genpd
-> > tree. As long as it's coupled with changes affecting "genpd
-> > providers", of course.
-> >
-> > I can certainly also collect patches directly from the
-> > mailing-list/patch-tracker too. Whatever works for you the best. Of
-> > course, in that case I need your acks before I pick up the relevant
-> > patches.
-> >
-> > If we need "immutable" branches, let's discuss that on a case by case b=
-asis.
->
-> At least for Renesas SoCs, every new SoC comes with a DT binding
-> definitions file under include/dt-bindings/power/, to be shared by genpd
-> driver and DTS (the same is true for clocks).  So PRs will work best.
 
-Good point! And Neil pointed out this too [1].
 
-I am going to host an immutable branch for the dt bindings that you
-can pull in. Would that be a better option for you?
+On 9/7/2023 1:06 PM, Konrad Dybcio wrote:
+> On 7.09.2023 07:55, Jagadeesh Kona wrote:
+>>
+>>
+>> On 9/4/2023 9:32 PM, Konrad Dybcio wrote:
+>>> On 4.09.2023 11:27, Jagadeesh Kona wrote:
+>>>>
+>>>>
+>>>> On 9/2/2023 5:33 PM, Konrad Dybcio wrote:
+>>>>> On 28.08.2023 08:48, Jagadeesh Kona wrote:
+>>>>>>
+>>>>>>
+>>>>>> On 8/26/2023 4:17 PM, Konrad Dybcio wrote:
+>>>>>>> On 23.08.2023 12:41, Abel Vesa wrote:
+>>>>>>>> On 23-08-16 19:56:46, Konrad Dybcio wrote:
+>>>>>>>>> On 16.08.2023 16:57, Abel Vesa wrote:
+>>>>>>>>>> From: Jagadeesh Kona <quic_jkona@quicinc.com>
+>>>>>>>>>>
+>>>>>>>>>> The current HW_CTRL flag switches the video GDSC to HW control mode as
+>>>>>>>>>> part of GDSC enable itself, instead of that use HW_CTRL_TRIGGER flag to
+>>>>>>>>>> give consumer drivers more control and switch the GDSC mode as and when
+>>>>>>>>>> required.
+>>>>>>>>>>
+>>>>>>>>>> HW_CTRL_TRIGGER flag allows consumer drivers to switch the video GDSC to
+>>>>>>>>>> HW/SW control modes at runtime using dev_pm_genpd_set_hwmode API.
+>>>>>>>>>>
+>>>>>>>>>> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
+>>>>>>>>>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+>>>>>>>>>> ---
+>>>>>>>>> Do we have any use for the HW_CTRL flag?
+>>>>>>>>>
+>>>>>>>>> Perhaps it should be renamed to HW_CTRL_ALWAYS?
+>>>>>>>>>
+>>>>>>>>> Or even better, *if and only if* that is necessary, add a common
+>>>>>>>>> property like "always_hw_managed" to the genpd code?
+>>>>>>>>
+>>>>>>>> The HW_CTRL flag is still needed for the consumers that expect the GDSC
+>>>>>>>> to be have the HW control bit set right after it gets enabled.
+>>>>>>> Guess the correct question here would be.. Are there any?
+>>>>>>>
+>>>>>>
+>>>>>> Yes, Display GDSC(mdss_gdsc) is required to be controlled always in HW control mode when it is enabled.
+>>>>> Oh really?
+>>>>>
+>>>>> Looking at msm-5.10 techpack, only the SDE RSC driver seems to
+>>>>> trigger regulator fast mode (so, enabling gdsc hw_ctrl on downstream).
+>>>>>
+>>>>
+>>>> Yes, on downstream, display GDSC has only one consumer(SDE RSC driver) and there are no other consumers. SDE RSC driver switches the GDSC to hw control mode once GDSC is enabled and leaves it in hw control mode. Thanks!
+>>> Sorry for pulling your tongue here a bit, but would it only concern
+>>> RPMh SoCs? Designs like SM6115 don't implement RSCs, should they not
+>>> have HW_CTRL enabled at all times?
+>>>
+>>
+>> Yes, for RPMh SoCs which have display RSC block, GDSC is switched to HW control mode. For SoCs which doesn't have display RSC block, display driver controls the GDSC in SW mode on downstream. Thanks!
+> Thanks for explaining!
+> 
+> One last question, I promise.. Should we switch the MDSS GDSC to
+> HW_CTRL mode only after we start controlling the DISP RSC from Linux,
+> or should it be done regardless (because of the RPMh solving algos)?
+> 
 
-[...]
+ From GDSC driver, MDSS GDSC can be switched to HW_CTRL mode regardless. 
+Thanks!
 
-Kind regards
-Uffe
+Regards,
+Jagadeesh
 
-[1]
-https://lore.kernel.org/lkml/4303c141-30df-4a2b-aba7-f11a98db9941@linaro.or=
-g/
+> Konrad
