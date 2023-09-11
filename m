@@ -2,116 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A70A79B48B
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 02:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 183B879B1E6
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 01:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235500AbjIKVFl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 11 Sep 2023 17:05:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
+        id S235224AbjIKVF2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Sep 2023 17:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243919AbjIKSUT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Sep 2023 14:20:19 -0400
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2565B110;
-        Mon, 11 Sep 2023 11:20:14 -0700 (PDT)
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-56cae50792fso360977eaf.1;
-        Mon, 11 Sep 2023 11:20:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694456413; x=1695061213;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aevlgErgu6FzdtarTR4nASHCQw9tTbRMLCKzIvm0UPo=;
-        b=EzI7xfdZ098cEH9SKpkItWnG1OsPvrDpJF5tA4hHyzSLuono3ZgQKwxTaIwSHnVO8x
-         ZXNoxgjbn9QBGs+CeUvayleP01h9H+lwyuQOyUo79yv2D8//aC0FAju+ZznmVdNQk3Me
-         m36k9cdhDEEQC1rVdgfCEo9+xiLealfowIlAAUinCNnan86nAZwE6naLSOc81OBVt6iZ
-         u07Pbr1VzVeYnknZZr2mJX5DYcsiZrtdbaKNJF9eCntdimtGk3yKNrpQlKr+NbGwKofj
-         xzOXtjf69Xky2EZK+L03pluxcRbIGuYGG7isGnyDp+1yZNw/jORUKoE5LdfQGiD6/AyN
-         m5IQ==
-X-Gm-Message-State: AOJu0Yz6BvASBoakrmvlneY+nZXa8ssc8MxL+I7EtONO5ves1isiecd3
-        f3LUn67IphtPLoZDsGxphhbrgbXzYLU0/iX8uJg=
-X-Google-Smtp-Source: AGHT+IGE2PHWPFPgDhP65oUUA8UCMPLu8awoRWAcKlrrqlu+Dp4ZWFkuPM/QouFfqpSHwDeHxo6hsjo77wGBQzNCx0Y=
-X-Received: by 2002:a05:6870:70a6:b0:1bb:724f:2bca with SMTP id
- v38-20020a05687070a600b001bb724f2bcamr10790127oae.1.1694456413283; Mon, 11
- Sep 2023 11:20:13 -0700 (PDT)
+        with ESMTP id S243970AbjIKSeQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Sep 2023 14:34:16 -0400
+Received: from mxout1.routing.net (mxout1.routing.net [IPv6:2a03:2900:1:a::a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748F01A2;
+        Mon, 11 Sep 2023 11:34:05 -0700 (PDT)
+Received: from mxbox3.masterlogin.de (unknown [192.168.10.78])
+        by mxout1.routing.net (Postfix) with ESMTP id 215124007F;
+        Mon, 11 Sep 2023 18:34:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1694457243;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=qfTMyu7w9EdB+2oY2ut2KdGVFrARYqqHBDzpkPEqJG0=;
+        b=X2VjIad8wgPnA1JFGNCGEj5JtB6knClj7qJrjJc+4x+ogd/eUolZzWJ4Rp8WOjsBODMdyc
+        dACn1zOf9jd+D6VRVMrIxlxZvZIEwimFTZ0bPSCHPK4fMVZt7mEG1H4Za1gM/OdpEBCp+R
+        y+002/BqsQh9s6pBUtfFcMW1x+z6E8I=
+Received: from frank-G5.. (fttx-pool-217.61.151.158.bambit.de [217.61.151.158])
+        by mxbox3.masterlogin.de (Postfix) with ESMTPSA id DBD3936055D;
+        Mon, 11 Sep 2023 18:34:01 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Daniel Golle <daniel@makrotopia.org>
+Subject: [RFC v1 0/3] add LVTS support for mt7988
+Date:   Mon, 11 Sep 2023 20:33:51 +0200
+Message-Id: <20230911183354.11487-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230907180207.3274207-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20230907180207.3274207-1-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 11 Sep 2023 20:20:02 +0200
-Message-ID: <CAJZ5v0jDXrhpQi1496Hspj3-_-EhT8dDcnG5vx1bJn+4FugUWw@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Fix global turbo disable check
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     rafael@kernel.org, viresh.kumar@linaro.org, lenb@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Mail-ID: 361255a0-031d-4400-a9e2-6c671889ea48
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,T_SPF_TEMPERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 7, 2023 at 8:02 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> Setting global turbo flag based on CPU 0 P-state limits is problematic
-> as it limits max P-state request on every CPU on the system just based
-> on its P-state limits.
->
-> There are two cases in which global.turbo_disabled flag is set:
-> - When the MSR_IA32_MISC_ENABLE_TURBO_DISABLE bit is set to 1
-> in the MSR MSR_IA32_MISC_ENABLE. This bit can be only changed by
-> the system BIOS before power up.
-> - When the max non turbo P-state is same as max turbo P-state for CPU 0.
->
-> The second check is not a valid to decide global turbo state based on
-> the CPU 0. CPU 0 max turbo P-state can be same as max non turbo P-state,
-> but for other CPUs this may not be true.
->
-> There is no guarantee that max P-state limits are same for every CPU. This
-> is possible that during fusing max P-state for a CPU is constrained. Also
-> with the Intel Speed Select performance profile, CPU 0 may not be present
-> in all profiles. In this case the max non turbo and turbo P-state can be
-> set to the lowest possible P-state by the hardware when switched to
-> such profile. Since max non turbo and turbo P-state is same,
-> global.turbo_disabled flag will be set.
->
-> Once global.turbo_disabled is set, any scaling max and min frequency
-> update for any CPU will result in its max P-state constrained to the max
-> non turbo P-state.
->
-> Hence remove the check of max non turbo P-state equal to max turbo P-state
-> of CPU 0 to set global turbo disabled flag.
->
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
->  drivers/cpufreq/intel_pstate.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
->
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index dc50c9fb488d..a534a1f7f1ee 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -571,13 +571,9 @@ static void intel_pstate_hybrid_hwp_adjust(struct cpudata *cpu)
->  static inline void update_turbo_state(void)
->  {
->         u64 misc_en;
-> -       struct cpudata *cpu;
->
-> -       cpu = all_cpu_data[0];
->         rdmsrl(MSR_IA32_MISC_ENABLE, misc_en);
-> -       global.turbo_disabled =
-> -               (misc_en & MSR_IA32_MISC_ENABLE_TURBO_DISABLE ||
-> -                cpu->pstate.max_pstate == cpu->pstate.turbo_pstate);
-> +       global.turbo_disabled = misc_en & MSR_IA32_MISC_ENABLE_TURBO_DISABLE;
->  }
->
->  static int min_perf_pct_min(void)
-> --
+From: Frank Wunderlich <frank-w@public-files.de>
 
-Applied as 6.7 material (under a slightly modified subject), thanks!
+This series makes allows soc specific temperature coefficient
+and adds support for mt7988 which has a different one.
+
+Frank Wunderlich (3):
+  dt-bindings: thermal: mediatek: add mt7988 compatible
+  thermal/drivers/mediatek/lvts_thermal: make coeff configurable
+  thermal/drivers/mediatek/lvts_thermal: add mt7988 support
+
+ .../thermal/mediatek,lvts-thermal.yaml        |   1 +
+ drivers/thermal/mediatek/lvts_thermal.c       | 129 ++++++++++++++++--
+ 2 files changed, 115 insertions(+), 15 deletions(-)
+
+-- 
+2.34.1
+
