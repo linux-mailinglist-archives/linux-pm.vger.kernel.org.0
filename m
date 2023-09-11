@@ -2,125 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC50279ADB6
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 01:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A70A79B48B
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 02:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242366AbjIKVHZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Sep 2023 17:07:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46916 "EHLO
+        id S235500AbjIKVFl convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 11 Sep 2023 17:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242679AbjIKQFp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Sep 2023 12:05:45 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3DFCCA
-        for <linux-pm@vger.kernel.org>; Mon, 11 Sep 2023 09:05:40 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3ff1c397405so54237575e9.3
-        for <linux-pm@vger.kernel.org>; Mon, 11 Sep 2023 09:05:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694448339; x=1695053139; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VBVJ2wHJ2/UKLMCz0YHp9T+QNyQaVPOEmzHr3wHgHAg=;
-        b=iirHIJlj/Q1ROqFAMDiIEBdBoauZRMnmRnc0msgGDaO9EZZmBmn7Cn8dQiejSkxgkl
-         SZ9JPgsKdOXkTdAAs2S7UEldKGnXJ9/ZkaRMc+wWG1VvhrY6I/AoZc5AG3h/P6jjDkew
-         J5WewO4CHKoEHL1E9jttRTqwo877Qj6S7BLSguonSMvbhto+YRaAs/foKBq5Bh+v7RrS
-         wuqoQot43wlKYK9H+9s9GUIBdER6EJVcd4rp0oiR/w+IeYwn73/SLAaiWOUGVzHVMv11
-         i4Zlmy6lA5S/gOOaT8GgxefdUKiyAQPc/wOQVILBKLVfPQlfGN2O1B4vo8OfuAsabtE1
-         J9LQ==
+        with ESMTP id S243919AbjIKSUT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Sep 2023 14:20:19 -0400
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2565B110;
+        Mon, 11 Sep 2023 11:20:14 -0700 (PDT)
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-56cae50792fso360977eaf.1;
+        Mon, 11 Sep 2023 11:20:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694448339; x=1695053139;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VBVJ2wHJ2/UKLMCz0YHp9T+QNyQaVPOEmzHr3wHgHAg=;
-        b=sSLN/IObrVc9KlGcPvbZLJWc6rM6fR5AZ5yCkCPRTxbuhti+/th3222vwVdIn4wcNE
-         0MOgWYm9qc9SPkDTDBeAO3gWwo+pXc5K4Fmb87VslMaN/n7cbjOu94uV1C6vqxTotXxF
-         D3/8B9aT/SJRTN8V6FA/cGDjQ0NYth1w74A+O4fHq0pqRlxUeY67bOlghTofZ0akN+mC
-         kO6ZLnqasfEncJJwolT3FfKi+yqD8YCC+Cilzvg+y6XyIPqjyyDC2Qd1hWBjJuICIRF8
-         FXRhAUr5TbCqLwdguUvL2ObhITjPO8j2i4pMhB0B+c1HYpd/qmLDGjtAu5bo9PwTa2be
-         0r3g==
-X-Gm-Message-State: AOJu0YwcYWAJprsfgoCTnhGSn521WUHOhiNtjI+MpFNB7jkwa9nfzAFo
-        /y+C4eaIqwqDSnbyqf5FNP3StQ==
-X-Google-Smtp-Source: AGHT+IGyuy2+dN6nVi/A8nEkH5DvEYQPGPUixpXjx1K6xC3tj2xMB32WaeVax7THWg5xlQU35kx7hg==
-X-Received: by 2002:a05:600c:2116:b0:401:c8b9:4b8a with SMTP id u22-20020a05600c211600b00401c8b94b8amr9091672wml.29.1694448339176;
-        Mon, 11 Sep 2023 09:05:39 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.214.188])
-        by smtp.gmail.com with ESMTPSA id 12-20020a05600c028c00b003fee6e170f9sm10490902wmk.45.2023.09.11.09.05.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Sep 2023 09:05:38 -0700 (PDT)
-Message-ID: <5f1791b4-78d8-9895-e639-238411b60f00@linaro.org>
-Date:   Mon, 11 Sep 2023 18:05:35 +0200
+        d=1e100.net; s=20230601; t=1694456413; x=1695061213;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aevlgErgu6FzdtarTR4nASHCQw9tTbRMLCKzIvm0UPo=;
+        b=EzI7xfdZ098cEH9SKpkItWnG1OsPvrDpJF5tA4hHyzSLuono3ZgQKwxTaIwSHnVO8x
+         ZXNoxgjbn9QBGs+CeUvayleP01h9H+lwyuQOyUo79yv2D8//aC0FAju+ZznmVdNQk3Me
+         m36k9cdhDEEQC1rVdgfCEo9+xiLealfowIlAAUinCNnan86nAZwE6naLSOc81OBVt6iZ
+         u07Pbr1VzVeYnknZZr2mJX5DYcsiZrtdbaKNJF9eCntdimtGk3yKNrpQlKr+NbGwKofj
+         xzOXtjf69Xky2EZK+L03pluxcRbIGuYGG7isGnyDp+1yZNw/jORUKoE5LdfQGiD6/AyN
+         m5IQ==
+X-Gm-Message-State: AOJu0Yz6BvASBoakrmvlneY+nZXa8ssc8MxL+I7EtONO5ves1isiecd3
+        f3LUn67IphtPLoZDsGxphhbrgbXzYLU0/iX8uJg=
+X-Google-Smtp-Source: AGHT+IGE2PHWPFPgDhP65oUUA8UCMPLu8awoRWAcKlrrqlu+Dp4ZWFkuPM/QouFfqpSHwDeHxo6hsjo77wGBQzNCx0Y=
+X-Received: by 2002:a05:6870:70a6:b0:1bb:724f:2bca with SMTP id
+ v38-20020a05687070a600b001bb724f2bcamr10790127oae.1.1694456413283; Mon, 11
+ Sep 2023 11:20:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH 04/11] thermal: exynos: remove fine-grained clk management
-Content-Language: en-US
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mateusz Majewski <m.majewski2@samsung.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-References: <20230829091853.626011-1-m.majewski2@samsung.com>
- <CGME20230829092412eucas1p2b79a6f90b9077a3a5486845b7e68bbc6@eucas1p2.samsung.com>
- <20230829091853.626011-5-m.majewski2@samsung.com>
- <a3b9ff0f-fff9-9439-5ec9-95a4de9bdfaa@linaro.org>
- <afbdce92-beb9-cb7f-305f-968c71dde838@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <afbdce92-beb9-cb7f-305f-968c71dde838@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230907180207.3274207-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20230907180207.3274207-1-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 11 Sep 2023 20:20:02 +0200
+Message-ID: <CAJZ5v0jDXrhpQi1496Hspj3-_-EhT8dDcnG5vx1bJn+4FugUWw@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Fix global turbo disable check
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, viresh.kumar@linaro.org, lenb@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/09/2023 10:40, Marek Szyprowski wrote:
-> On 29.08.2023 11:56, Krzysztof Kozlowski wrote:
->> On 29/08/2023 11:18, Mateusz Majewski wrote:
->>> This clock only controls the register operations. The gain in power
->>> efficiency is therefore quite dubious, while there is price of added
->>> complexity that is important to get right (as a register operation might
->>> outright hang the CPU if the clock is not enabled).
->> So once it is done right, this stops being argument. The benefit is to
->> keep this clock disabled most of the time, which now we lost.
->>
->> I don't find this patch correct approach.
-> 
-> I've suggested this change while playing with this driver.
-> 
-> For me turning AHB clock on/off during normal driver operation seems to 
-> be over-engineering and really gives no real power saving benefits, 
-> especially if thermal driver is the only one that does such fine-grained 
-> clock management (none of the Exynos supported in mainline does that). 
-> Removing it simplifies code and makes it easier to understand or read, 
-> as the current code already was somehow problematic to understand and 
-> unintuitive:
-> 
-> https://lore.kernel.org/all/c3258cb2-9a56-d048-5738-1132331a157d@linaro.org/
-> 
-> Taking into account that the driver is not really maintained, making it 
-> simpler without noticeable feature loss counts as a benefit for me.
+On Thu, Sep 7, 2023 at 8:02 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> Setting global turbo flag based on CPU 0 P-state limits is problematic
+> as it limits max P-state request on every CPU on the system just based
+> on its P-state limits.
+>
+> There are two cases in which global.turbo_disabled flag is set:
+> - When the MSR_IA32_MISC_ENABLE_TURBO_DISABLE bit is set to 1
+> in the MSR MSR_IA32_MISC_ENABLE. This bit can be only changed by
+> the system BIOS before power up.
+> - When the max non turbo P-state is same as max turbo P-state for CPU 0.
+>
+> The second check is not a valid to decide global turbo state based on
+> the CPU 0. CPU 0 max turbo P-state can be same as max non turbo P-state,
+> but for other CPUs this may not be true.
+>
+> There is no guarantee that max P-state limits are same for every CPU. This
+> is possible that during fusing max P-state for a CPU is constrained. Also
+> with the Intel Speed Select performance profile, CPU 0 may not be present
+> in all profiles. In this case the max non turbo and turbo P-state can be
+> set to the lowest possible P-state by the hardware when switched to
+> such profile. Since max non turbo and turbo P-state is same,
+> global.turbo_disabled flag will be set.
+>
+> Once global.turbo_disabled is set, any scaling max and min frequency
+> update for any CPU will result in its max P-state constrained to the max
+> non turbo P-state.
+>
+> Hence remove the check of max non turbo P-state equal to max turbo P-state
+> of CPU 0 to set global turbo disabled flag.
+>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> ---
+>  drivers/cpufreq/intel_pstate.c | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
+>
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index dc50c9fb488d..a534a1f7f1ee 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -571,13 +571,9 @@ static void intel_pstate_hybrid_hwp_adjust(struct cpudata *cpu)
+>  static inline void update_turbo_state(void)
+>  {
+>         u64 misc_en;
+> -       struct cpudata *cpu;
+>
+> -       cpu = all_cpu_data[0];
+>         rdmsrl(MSR_IA32_MISC_ENABLE, misc_en);
+> -       global.turbo_disabled =
+> -               (misc_en & MSR_IA32_MISC_ENABLE_TURBO_DISABLE ||
+> -                cpu->pstate.max_pstate == cpu->pstate.turbo_pstate);
+> +       global.turbo_disabled = misc_en & MSR_IA32_MISC_ENABLE_TURBO_DISABLE;
+>  }
+>
+>  static int min_perf_pct_min(void)
+> --
 
-Hm, ok, let it be, although I bet once someone will come and start
-adding runtime PM for clock handling...
-
-Best regards,
-Krzysztof
-
+Applied as 6.7 material (under a slightly modified subject), thanks!
