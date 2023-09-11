@@ -2,102 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F030E79B02B
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 01:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB3179AFD0
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 01:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241139AbjIKVG6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Sep 2023 17:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37446 "EHLO
+        id S236000AbjIKVFt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Sep 2023 17:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236317AbjIKKPS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Sep 2023 06:15:18 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4256E5F;
-        Mon, 11 Sep 2023 03:15:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694427314; x=1725963314;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MVY1RCA+Y6jHOKSik1rPFvNz857POHLvrx8p+7Ur7ao=;
-  b=AVlReW0MCpg9k0qw3TN/c+YAABjy4ysXKq1plWxaK6VfjZM34rW4vfiJ
-   VG9I6qAr/KBY5YagdMff/ES05p1DPNe6PqFAVxeXOb7xVhPpqDao1uG00
-   3fMc7xmVoY1W/CmtSy2ch8TtnUugvjlfpFXLk77GNiJbyfla1+FTm7A/n
-   DZboe8njupLW6YOdWVMpb3Q5FuJalnEzDItT+BVx+4rXSv2NGUpUn96wp
-   GoHtE6N6fDeN1Cmw0CgcUv7L3QimSu8DWl7y3HLVfxS+GHSpJphQiBtzE
-   FBkIUHSIZiYOMXGjB89x2EZctkwdFAzluDKBZEq3liB6wMU+3MV9krB/q
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="376958369"
-X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
-   d="scan'208";a="376958369"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 03:15:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="886466175"
-X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
-   d="scan'208";a="886466175"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 03:14:48 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qfdwk-008Hv0-0D;
-        Mon, 11 Sep 2023 13:15:10 +0300
-Date:   Mon, 11 Sep 2023 13:15:09 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.au@gmail.com>
-Subject: Re: [PATCH 1/2] power: supply: bq24257_charger: Make chip type and
- name in sync
-Message-ID: <ZP7ored2UfXcFUvz@smile.fi.intel.com>
-References: <20230902193331.83672-1-biju.das.jz@bp.renesas.com>
- <20230902193331.83672-2-biju.das.jz@bp.renesas.com>
- <ZPWsdjlFvUzeFy45@smile.fi.intel.com>
- <OS0PR01MB592285B86C29C3C1A992C09986F3A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+        with ESMTP id S236899AbjIKLjf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Sep 2023 07:39:35 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7BA12E
+        for <linux-pm@vger.kernel.org>; Mon, 11 Sep 2023 04:39:31 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-52a23227567so5561364a12.0
+        for <linux-pm@vger.kernel.org>; Mon, 11 Sep 2023 04:39:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694432370; x=1695037170; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2dV5clfovnvmxfWoJFf0sjpcB0l370f7re2S1ptWY3k=;
+        b=gjcGtZtfJeuIYBrMoka+HMEqAGi61AK8GZ0Q+7ve3z+4N+2KzckYZkUr7fLtqchcXq
+         +BfCJjqVZELY6TaCkVgfBc2I6+X71+djSLfV0p85GOhf5+3FY4W6vRT1DqXkmmIQ7Syb
+         DG6Dh0Kj5OexJ12LONNNY5Vn6c8DJLImeESNwfpV3grqpS+5yi+bEQW9+kO/blypMBra
+         /si0+WXaka/JRRjtRZj75lPR2s0rucVxr6uNz2qcaG0rgFTppwxIGhJeYDA0TYSUm9hg
+         amef01Xl8EY53oRyHNjsvqmuWhb9QkAnR0ifDIZzjy2pNLngbhUodLd7tpklP4JMc6Qi
+         5nmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694432370; x=1695037170;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2dV5clfovnvmxfWoJFf0sjpcB0l370f7re2S1ptWY3k=;
+        b=T1ncgdmpjmX5zQu0byvT2abj0c7haS4xCMe4tkthPvSee4+TGA2ECN/YSEy7XAOf2a
+         cav5iDMNxKIAzjGHQfe9FtIfDiXSIGKj+20tAKsgxEYYGxxubXtJG/pchTeGMvhTh3w3
+         z6d9Iegu/MoZeywyQzazo6x5Afsd8xKpYZUDggTSFJT0V5qn/DwunjfLKTOKJiOszoOM
+         J7FLuMo5lhz62OV4/17BgOZEySsb+FKnKfpLbgWn/7PNgoTWV8HQXhocbLmiRTSyNqsP
+         3NZZJOT1y/bXaaofuJRZ5GGHFHA2tmfsyLv9pApn/qo2sGGyhBky4xVWDHq8g2ivqtv6
+         fP2g==
+X-Gm-Message-State: AOJu0YyQdxyQa6M7z9fYT01wIhlx381MMT0WS1q3j5Kp2tRFpHMnxUHU
+        6fO/KDDqI50KP1imqCp477rYOQ==
+X-Google-Smtp-Source: AGHT+IGfjOHabCCpFu22I/Ln+ydizv7TNX3FoPbSfKcuPyvjsLJt+HPWHDyz9PVtvK2J6K5QstCFgQ==
+X-Received: by 2002:aa7:d40b:0:b0:523:a45f:419a with SMTP id z11-20020aa7d40b000000b00523a45f419amr7454009edq.41.1694432369717;
+        Mon, 11 Sep 2023 04:39:29 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.214.188])
+        by smtp.gmail.com with ESMTPSA id g15-20020a056402180f00b00523b1335618sm4431003edy.97.2023.09.11.04.39.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Sep 2023 04:39:28 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Iskren Chernev <me@iskren.info>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Matheus Castello <matheus@castello.eng.br>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Stefan Hansson <newbie13xd@gmail.com>,
+        Svyatoslav Ryhel <clamor95@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: (subset) [PATCH v3 4/4] ARM: configs: s5pv210_defconfig: enable IIO required by MAX17040
+Date:   Mon, 11 Sep 2023 13:39:22 +0200
+Message-Id: <169443234710.34398.14080097652916975038.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230731073613.10394-5-clamor95@gmail.com>
+References: <20230731073613.10394-1-clamor95@gmail.com> <20230731073613.10394-5-clamor95@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <OS0PR01MB592285B86C29C3C1A992C09986F3A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Sep 10, 2023 at 07:10:06AM +0000, Biju Das wrote:
-> Hi Andy Shevchenko,
-> > On Sat, Sep 02, 2023 at 08:33:30PM +0100, Biju Das wrote:
 
-...
-
-> > > -	if (ACPI_HANDLE(dev)) {
-> > > -		acpi_id = acpi_match_device(dev->driver->acpi_match_table,
-> > > -					    &client->dev);
-> > > -		if (!acpi_id) {
-> > > -			dev_err(dev, "Failed to match ACPI device\n");
-> > > -			return -ENODEV;
-> > > -		}
-> > > -		bq->chip = (enum bq2425x_chip)acpi_id->driver_data;
-> > > -	} else {
-> > > -		bq->chip = (enum bq2425x_chip)id->driver_data;
-> > > -	}
-> > 
-> > Do we still need acpi.h after this change?
+On Mon, 31 Jul 2023 10:36:13 +0300, Svyatoslav Ryhel wrote:
+> After adding support for passing temperature data from thermal sensor
+> to MAX17040 it got dependency on CONFIG_IIO. From all defconfigs
+> using MAX17040 only s5pv210_defconfig did not have IIO already enabled
+> so let's enable it to avoid regression.
 > 
-> Yes, it is still needed as it is using 
-> ACPI_PTR.
+> 
 
-Can we, please, drop ACPI_PTR() as it's more harmful than useful (same way as
-you dropped the ifdeffery for OF cases in other patches)?
+Applied, thanks!
 
+[4/4] ARM: configs: s5pv210_defconfig: enable IIO required by MAX17040
+      https://git.kernel.org/krzk/linux/c/dc836afd2be7618d8c849fd93bd3e15513289b70
+
+Best regards,
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
