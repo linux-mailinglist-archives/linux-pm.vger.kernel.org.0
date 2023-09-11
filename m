@@ -2,135 +2,208 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CAC379A50D
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Sep 2023 09:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE50279AEA2
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 01:45:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234318AbjIKHxC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 11 Sep 2023 03:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52314 "EHLO
+        id S242415AbjIKVH2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Sep 2023 17:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234731AbjIKHwu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Sep 2023 03:52:50 -0400
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F17CCA;
-        Mon, 11 Sep 2023 00:52:45 -0700 (PDT)
-Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-49032a0ff13so1366618e0c.0;
-        Mon, 11 Sep 2023 00:52:45 -0700 (PDT)
+        with ESMTP id S235408AbjIKIeW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Sep 2023 04:34:22 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DEF5110
+        for <linux-pm@vger.kernel.org>; Mon, 11 Sep 2023 01:34:15 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9a6190af24aso517619466b.0
+        for <linux-pm@vger.kernel.org>; Mon, 11 Sep 2023 01:34:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1694421254; x=1695026054; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XJm1KaNRweMkGVAymSAxQbFYuR9Q/QDHdaAfSIOtOtY=;
+        b=snoiVXErePqPv15Ov6YYqDsErLkyeRomEvttbFZlvfsaKz8W7DEzqzhqqOv4JPO58e
+         hueYhhGy4d//Ns30AaauvV6CiM8JrDN6bbz8/7uEHD9m8zqSaSxpk93orUy4uiROjT2A
+         XnDn+Du8jSzlH9TgsKmSwU0ka4kqIW5aw59TV5n7r3R7RHi5LwnIWBbCyt2gWT1g3VMW
+         CzE/MaW7BbgLmmQF4oTS3INXAQZflcmS/mn67R029HtPhkcZfrh4M5QCNNrlfV+LtRL4
+         eBjJlx2KAnMpzzNQnA/13u0L9gBRZ7puIXew2OogC76rmA12X/JOUCmIJkYuQgx9v3mS
+         fbaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694418764; x=1695023564;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2PXs1GyVYmXtrD+FjszOVfgr8/0imMmquv9X/owM18E=;
-        b=gHkAsnQmst2FEwIcMYZ2yUrp50AEYj012p5BlKuP1KNBOH65YG1uFU//rBouUKAzhx
-         pQF5pHSs50/M5MFX7IKqrg7NEQm06Yobzxg2CUanNsRctISCU6fZsB8FIV9SW0Ioz4I9
-         iwsFl29dgoCIWOKNfYZa8pOrrS20R9kKa3kRK4c6fW/0vqhuTcxY9vKwV0Tuq806YM9v
-         E2achvO/0pCVOAaPAVpnv2/kJBstq4o3i01EM/YBwWmlNxUltv0VxG2cnGsxs58ASdrt
-         8o5dTBenSB/pb0F9DxDDW5ctVacWg0LrLx8NlN0Kr+TjDa7ccwNYatsI/WqktZ9qLe9m
-         8AQQ==
-X-Gm-Message-State: AOJu0YzjJgsQbbEu07E0OZ1A9SfkRmi5K1ew1vawmDN+eM06WikjIAsa
-        1BlMZ/URihwLax1xhrULhcv9k7lMFwzhhg==
-X-Google-Smtp-Source: AGHT+IF69ZiVX2vore5hd3Ds/sTi23jlUmQh9pYmLxAifSHFlChMiURo/ZmzG9WjGjXkdk2tuQwJDw==
-X-Received: by 2002:a1f:c742:0:b0:48d:d09:abb6 with SMTP id x63-20020a1fc742000000b0048d0d09abb6mr5915236vkf.6.1694418764487;
-        Mon, 11 Sep 2023 00:52:44 -0700 (PDT)
-Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com. [209.85.217.47])
-        by smtp.gmail.com with ESMTPSA id f4-20020ac5c5a4000000b0048d2293695csm1378248vkl.38.2023.09.11.00.52.42
+        d=1e100.net; s=20230601; t=1694421254; x=1695026054;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=XJm1KaNRweMkGVAymSAxQbFYuR9Q/QDHdaAfSIOtOtY=;
+        b=N5acwQzgZd30yU3o933+VnOIjnJa7jQSiPKuVQm4VLZuoW3LxBhlNGjP5adScjNz5h
+         o7GFVcYxtY+am76s1BdFvUNUwZD2APYfUGCC3sMJ3dtNtpZGwjkSYjOZmibCcmmG4pUa
+         4jJ95NfbYUd0x6bAJGVqF1fg4fkzYFnfGneopFhzCGqjJd2YBpC9gvyM6DUYBdpHDYQ7
+         G2NTaQHjyVxptO/4aMGv8uptJm98hKFAuG0Feg/bFxMb0h0nsuNNCPIz9nfNxO7vTIJX
+         fjfyuMPYrMYQT4x5NSYR+aJgLdnyoJEdYDr9SE/M1VLx7xQj+EybxKMZoVkEXuhFygGS
+         OBKQ==
+X-Gm-Message-State: AOJu0YzxIbgEDcGyDf9MzdUMPkczpppvh/Kkx3blVaqSHjoB8kxp/H4h
+        VlfW+0UnZIGfnOTDChBm1l54PA==
+X-Google-Smtp-Source: AGHT+IFj11zWwg4l2ZYoi5wwOlV3+q/kHSKszsCHlHHWLxUQKUTp28BwxRBudKWY2XQcGgljf2DGcg==
+X-Received: by 2002:a17:906:5a49:b0:9a2:24f9:fabe with SMTP id my9-20020a1709065a4900b009a224f9fabemr7402648ejc.66.1694421253741;
+        Mon, 11 Sep 2023 01:34:13 -0700 (PDT)
+Received: from localhost (k10064.upc-k.chello.nl. [62.108.10.64])
+        by smtp.gmail.com with ESMTPSA id w20-20020a1709064a1400b00991faf3810esm5046605eju.146.2023.09.11.01.34.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Sep 2023 00:52:43 -0700 (PDT)
-Received: by mail-vs1-f47.google.com with SMTP id ada2fe7eead31-45088c95591so1923883137.3;
-        Mon, 11 Sep 2023 00:52:42 -0700 (PDT)
-X-Received: by 2002:a67:fdd9:0:b0:44d:40b1:926e with SMTP id
- l25-20020a67fdd9000000b0044d40b1926emr7493009vsq.18.1694418762613; Mon, 11
- Sep 2023 00:52:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230829213441.310655-1-ulf.hansson@linaro.org>
- <CAHk-=wg0gc4Cc90OL29Vr5gDtd4mnsKD+TxtoNtQbAryaWHkZQ@mail.gmail.com>
- <CAHk-=wjLO=Jsdk2prq0piznMMCk+V0_fRaFRHEPuaALpF8J=hw@mail.gmail.com>
- <96bb0de0-06d9-46f8-b02f-dc924afff13c@app.fastmail.com> <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
- <CAPDyKFrJH-1uaPCwnWZDPi4MRtOm=N2CHSRyvjXRDbQ1y-oOrw@mail.gmail.com>
- <CAJZ5v0hqWYnkNXVju3U3n-9i8eqtjs197tLLNWv8Qa_N9T=KEw@mail.gmail.com> <CAPDyKFpXLj_2HAgyV_VJf+GPQVmxb_iiDe77Q2MY17MDNqy9fA@mail.gmail.com>
-In-Reply-To: <CAPDyKFpXLj_2HAgyV_VJf+GPQVmxb_iiDe77Q2MY17MDNqy9fA@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 11 Sep 2023 09:52:30 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVxLkxN0bmSRXW74R_dGNDSRDB4Z=zE0DoiXDOuweSM0A@mail.gmail.com>
-Message-ID: <CAMuHMdVxLkxN0bmSRXW74R_dGNDSRDB4Z=zE0DoiXDOuweSM0A@mail.gmail.com>
-Subject: Re: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, linux-arm-kernel@lists.infradead.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 11 Sep 2023 01:34:13 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 11 Sep 2023 10:34:12 +0200
+Message-Id: <CVFY7D7ND3WS.2B2EYB4ZO86P@otso>
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Luca Weiss" <luca.weiss@fairphone.com>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+Cc:     <cros-qcom-dts-watchers@chromium.org>,
+        "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        "Srinivas Kandagatla" <srinivas.kandagatla@linaro.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Viresh Kumar" <viresh.kumar@linaro.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        <phone-devel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 04/11] arm64: dts: qcom: pm7250b: make SID configurable
+X-Mailer: aerc 0.15.2
+References: <20230830-fp5-initial-v1-0-5a954519bbad@fairphone.com>
+ <20230830-fp5-initial-v1-4-5a954519bbad@fairphone.com>
+ <b82f4683-e8b5-b424-8f7a-6d2ba1cab61f@linaro.org>
+ <CV6NF0466658.20DGU7QKF2UBR@otso>
+ <CAA8EJpr1+W3f08X-FpiiVrJ98kg52HaMwbbKn=fG15Whm4C8aQ@mail.gmail.com>
+ <728003b9-db27-fdc0-e761-197a02a38c24@linaro.org>
+ <CAA8EJpoXreHpxZQ2G10n0OiQzUX4ffk=gvo87dAU4-r+Svqpeg@mail.gmail.com>
+ <CVAUDGBO4S08.1F0O66ZE6I4IG@otso>
+In-Reply-To: <CVAUDGBO4S08.1F0O66ZE6I4IG@otso>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Ulf,
-
-On Thu, Aug 31, 2023 at 1:39 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> On Thu, 31 Aug 2023 at 11:33, Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > If I may suggest something, I would call this "pmdomain" instead of
-> > "genpd".  I don't think that /drivers/power/ is a particularly
-> > suitable location for it, because it doesn't really have much to do
-> > with power supplies and more to do with device PM.
+On Tue Sep 5, 2023 at 10:30 AM CEST, Luca Weiss wrote:
+> On Thu Aug 31, 2023 at 2:27 PM CEST, Dmitry Baryshkov wrote:
+> > On Thu, 31 Aug 2023 at 14:54, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> > >
+> > > On 31/08/2023 13:33, Dmitry Baryshkov wrote:
+> > > > On Thu, 31 Aug 2023 at 13:13, Luca Weiss <luca.weiss@fairphone.com>=
+ wrote:
+> > > >>
+> > > >> On Wed Aug 30, 2023 at 12:06 PM CEST, Krzysztof Kozlowski wrote:
+> > > >>> On 30/08/2023 11:58, Luca Weiss wrote:
+> > > >>>> Like other Qualcomm PMICs the PM7250B can be used on different a=
+ddresses
+> > > >>>> on the SPMI bus. Use similar defines like the PMK8350 to make th=
+is
+> > > >>>> possible.
+> > > >>>>
+> > > >>>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> > > >>>> ---
+> > > >>>>  arch/arm64/boot/dts/qcom/pm7250b.dtsi | 23 ++++++++++++++++----=
+---
+> > > >>>>  1 file changed, 16 insertions(+), 7 deletions(-)
+> > > >>>>
+> > > >>>> diff --git a/arch/arm64/boot/dts/qcom/pm7250b.dtsi b/arch/arm64/=
+boot/dts/qcom/pm7250b.dtsi
+> > > >>>> index e8540c36bd99..3514de536baa 100644
+> > > >>>> --- a/arch/arm64/boot/dts/qcom/pm7250b.dtsi
+> > > >>>> +++ b/arch/arm64/boot/dts/qcom/pm7250b.dtsi
+> > > >>>> @@ -7,6 +7,15 @@
+> > > >>>>  #include <dt-bindings/interrupt-controller/irq.h>
+> > > >>>>  #include <dt-bindings/spmi/spmi.h>
+> > > >>>>
+> > > >>>> +/* This PMIC can be configured to be at different SIDs */
+> > > >>>> +#ifndef PM7250B_SID
+> > > >>>> +   #define PM7250B_SID 2
+> > > >>>> +#endif
+> > > >>>
+> > > >>> Why do you send the same patch as v1, without any reference to pr=
+evious
+> > > >>> discussions?
+> > > >>>
+> > > >>> You got here feedback already.
+> > > >>>
+> > > >>> https://lore.kernel.org/linux-arm-msm/f52524da-719b-790f-ad2c-0c3=
+f313d9fe9@linaro.org/
+> > > >>
+> > > >> Hi Krzysztof,
+> > > >>
+> > > >> I did mention that original patch in the cover letter of this seri=
+es.
+> > > >> I'm definitely aware of the discussion earlier this year there but=
+ also
+> > > >> tried to get an update lately if there's any update with no respon=
+se.
+> > > >
+> > > > I think the overall consensus was that my proposal is too complicat=
+ed
+> > > > for the DT files.
+> > >
+> > > I proposed to duplicate the entries. Do you keep QUP nodes in DTSI an=
+d
+> > > customize per address? No.
+> >
+> > At the same time, we do keep SoC files separate from the board files.
+> > Yes, I'm slightly exaggerating here.
+> >
+> > I think that for PMIC files it makes sense to extract common parts if
+> > that eases reuse of the common parts.
 >
-> "pmdomain" is probably giving a reasonable good hint of what goes on
-> in this subsystem. This works fine for me, thanks!
-
-Sounds nice!
-All of this lives in <linux/pm_domain.h> (with underscore?) anyway,
-and "PM Domains" is the usual naming, as it covers both Power and
-Clock Domains.
-
-However, although I am quite familiar with genpd, I am still wondering
-what is the meaning of the "generic" part in the name? And what is a
-non-generic PM Domain?
-
-> > Also, I would move drivers/base/power/domain.c to drivers/pmdomain/
-> > (and rename it to something like core.c), because it would be a better
-> > location for that fiile IMO.
+> Hi all,
 >
-> We could certainly do that, let's discuss it a bit more.
+> what can I do for v2 now?
 >
-> Although, at this point I want to focus on the genpd providers, as to
-> release some of the burden from arm-soc maintainers.
+> 1. Keep this patch as-is, and keep pm7250b in device dts.
 >
-> > I can also handle future pull requests for this if that's fine with everyone.
+> 2. Drop pm7250b patch and drop from device dts, until _someone_ figures
+> out a solution talking to the PMIC on different SID.
 >
-> Thanks a lot for your offer! However, if a re-route is preferred (I
-> think not?), this is probably better suited via arm-soc, as most
-> changes are going to be arm platform specific.
+> 3. Something else like copy-pasting pm7250b.dtsi to pm7250-8.dtsi and
+> changing the SID there, and using that in device dts.
+>
+> Please let me know what to do.
+>
+> Regards
+> Luca
 
-Which brings me to the final question: what is the upstream path
-for changes to drivers/genpd/*/ (or whatever it's gonna be called)?
-Before, we sent PRs to (arm-)soc.  Do you expect us to send them to
-you? There's usually quite some interaction between drivers/soc/reneas/
-and drivers/genpd/renesas (and there are DT binding definitions),
-but not more than with e.g. drivers/clk/renesas/.
+Hi,
 
-And I just realized you moved the code and Makefiles to drivers/genpd/,
-but not the Kconfig symbols and logic, which still lives under
-drivers/soc/.  So resolving that (and the name) is something that
-should be resolved sooner rather than later...
+if there's no feedback I'll keep this patch in v2 of this series and we
+can continue to discuss there (if necessary).
 
-Thanks!
+Regards
+Luca
 
-Gr{oetje,eeting}s,
+>
+> >
+> > >
+> > > I definitely do not agree to these ifndef->define. Maybe using just
+> > > define would work (so drop ifndef->define), because this makes it
+> > > obvious and fail-safe if included in wrong place... except that it is
+> > > still not the define we expect. This is not the coding style present =
+in
+> > > other DTSes.
+> > >
+> > > The true problem how these SPMI bindings were created. Requiring SID
+> > > address in every child is clearly redundant and I think we do not fol=
+low
+> > > such approach anywhere else.
+> > >
+> > > Best regards,
+> > > Krzysztof
+> > >
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
