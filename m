@@ -2,76 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C96779B0F4
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 01:50:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A3E79AD44
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 01:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240948AbjIKVGy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Sep 2023 17:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42522 "EHLO
+        id S243225AbjIKVHw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Sep 2023 17:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238520AbjIKN6X (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Sep 2023 09:58:23 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EC4CE5
-        for <linux-pm@vger.kernel.org>; Mon, 11 Sep 2023 06:58:19 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-d77ad095e5cso4157153276.0
-        for <linux-pm@vger.kernel.org>; Mon, 11 Sep 2023 06:58:19 -0700 (PDT)
+        with ESMTP id S241211AbjIKPEW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Sep 2023 11:04:22 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D57D125
+        for <linux-pm@vger.kernel.org>; Mon, 11 Sep 2023 08:04:17 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-307d58b3efbso4163518f8f.0
+        for <linux-pm@vger.kernel.org>; Mon, 11 Sep 2023 08:04:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694440698; x=1695045498; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nACYby6xXH6p7S8DvIzSIkOm0WQtOoj9eojm3GigSa0=;
-        b=aaIZxIzPoCItBRcrNXiZfTiDpO75zLUbn7XX4fn35LgyUzFXePdOi68HUvzt43mSAV
-         8zFJWEKZsL0ejPbj3yeYARMFUho8Rxg+b5ot5i15zE24YmzBKwHnIX88BLOxhXT6vNEM
-         pqbE5yyvFfEFtBRrPvllSyCq8jEs9KXSlFuv2/EEZcYM441029x2ntrNCG7jPSXt9Vo+
-         NBMmKLSzLnhsbOZ/f+mF9QJQaZsbhjisee4dCIF1enp8QBIna0v5GO8MU5lf7OjypNFR
-         NykMddOn5JQsqUNiTqBKbMnwuxZW3Bi1TQpk6YSfU/DYYc3e2E8jp2AfcAvBSbCbQvBq
-         4x7g==
+        d=linaro.org; s=google; t=1694444656; x=1695049456; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :references:cc:to:content-language:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CBeRh4UL/KjS7sOnQvt2RLKcnJLFWHs8He3ceHHUyU0=;
+        b=X6YKUbz9eShgTaUdXkXLxjjcPO3m11GYoXrOpfx+18wE2JsTQ2m13hQ0HTA3VeGJxN
+         2k03hcCUOpgODK9KkqeV4Ol9NR//An0J/rvNrR7OcEDB8PgxV9x6Jg5ZAs0ZeWYkJIZF
+         ZozmBOm8KU1+H9Vy5FCDYpO/Cor8EskhlDTH2UEq5usFvQk5QyPvvWGt/2i8e0AVlzsu
+         TUWsGc9oyS/I5achrCiI24CD0KTgd+5aygm83blZBU+3P1Kvdyd/8p5BCOfeFWanqewQ
+         XEnwJT/Lf2V/gELmLrribLLBmj4oW2tbYeLUoKLmZ9ow6lTpCzl2b7XfOXBrn5NB4LUD
+         25UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694440698; x=1695045498;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nACYby6xXH6p7S8DvIzSIkOm0WQtOoj9eojm3GigSa0=;
-        b=ux5d6CbFrFcc4dZGMXT/5P6GDJP2Gut6i0NGrUb8EYVUGqb3j688npvgEs6tBpb0M1
-         MJpt9fu6eqSZoHrYPHmZ/QAUG8IRfcngPgoN/UTlsDn0U+B5CnbKgzUDS910IcE8OsyM
-         3ZnjMKQrzX/5N4VBNFD0eiG2S7vuAsda02FdK87nrzEC8RIG+/8Q4AmA8j5ExYvkp/pz
-         g61dm3rwiH96lK9G9HECxqPRwvrytjDI7TDNfnbGd43X5EzuuXmlY7PIto8JkDfJZ3v7
-         gwivOolaQb0B4VfXtqPr/YsWq6wf693cxoWrQdjKIoYN4b/0pEnOH7riCBgw5UUrdrVK
-         tR1w==
-X-Gm-Message-State: AOJu0Yzt6pyIj0HaXKf4Z7L9S72SHyN7pJ7tpT4YoB5rUgnPwicXrPKw
-        fpBGOovBCbGS29dBGGmcnrBDu6cFFg7d1tLL/skgBQ==
-X-Google-Smtp-Source: AGHT+IH8D6O/aZm8DWZWsCsterhrJnASynNQFNSyb8/dl7IOKv39YklR9FBqcQfAiqQ8Ef585oqLrbBNQ5h4aEb5TXo=
-X-Received: by 2002:a25:698f:0:b0:d7b:9d44:76dc with SMTP id
- e137-20020a25698f000000b00d7b9d4476dcmr9304485ybc.38.1694440698473; Mon, 11
- Sep 2023 06:58:18 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1694444656; x=1695049456;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :references:cc:to:content-language:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CBeRh4UL/KjS7sOnQvt2RLKcnJLFWHs8He3ceHHUyU0=;
+        b=gkqKsquc8Pu+S3Ibvm+ciL4sYxmIIj77YhbWM6HTNmRN6dr69Ic8/Q+G6fiPB6Rmol
+         Ol5c6wF/lN3NxKHVh3mM/SDN/EJG4jHqA1IO8Zv/jXA2LL7f0yknm9An4QJ52u2pcCZY
+         KdyhJpHdVizG2A6xD7iaFzuuYUlsKMZTRwT+8klBFdnjmA8RjQm1sRno9YLoedsQO3np
+         DJjoaagCye9sISo9dsSQswJmC1yzQDbN1xNBHqj2hPvR+CiSpGo+HeHLuXaJ7eqL7hrM
+         nclpok4RwvpHH4GsnXP0uSVBe81uHh6qkxQNW2oVDWZgeUScN9PjKmpATMhruuc9QLyn
+         oavw==
+X-Gm-Message-State: AOJu0Yy1AnoC+sSq/JSNFFrnbo3Dg5KNyPP0e0Ak2CkapTXpF8GAHJzn
+        uFWSRjv0T55iDDS08/9zSIh3Pw==
+X-Google-Smtp-Source: AGHT+IGzf5knanit7yknaBtEN0yONkhWmeBMadtWqyiRi3ZNLweDWoCrSEkgQfEZQMEz4SIdHEfD0w==
+X-Received: by 2002:adf:ce0b:0:b0:319:68ce:2c53 with SMTP id p11-20020adfce0b000000b0031968ce2c53mr9380153wrn.25.1694444655591;
+        Mon, 11 Sep 2023 08:04:15 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:daaa:8bc3:eeb7:ce8? ([2a01:e0a:982:cbb0:daaa:8bc3:eeb7:ce8])
+        by smtp.gmail.com with ESMTPSA id l9-20020a5d4809000000b0031c6e1ea4c7sm10249933wrq.90.2023.09.11.08.04.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Sep 2023 08:04:14 -0700 (PDT)
+Message-ID: <d4db98ca-85b7-4e3a-a40c-43c37e1de6e0@linaro.org>
+Date:   Mon, 11 Sep 2023 17:04:13 +0200
 MIME-Version: 1.0
-References: <20230829213441.310655-1-ulf.hansson@linaro.org>
- <CAHk-=wg0gc4Cc90OL29Vr5gDtd4mnsKD+TxtoNtQbAryaWHkZQ@mail.gmail.com>
- <CAHk-=wjLO=Jsdk2prq0piznMMCk+V0_fRaFRHEPuaALpF8J=hw@mail.gmail.com>
- <96bb0de0-06d9-46f8-b02f-dc924afff13c@app.fastmail.com> <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
- <CAPDyKFrJH-1uaPCwnWZDPi4MRtOm=N2CHSRyvjXRDbQ1y-oOrw@mail.gmail.com>
- <CAJZ5v0hqWYnkNXVju3U3n-9i8eqtjs197tLLNWv8Qa_N9T=KEw@mail.gmail.com>
- <CAPDyKFpXLj_2HAgyV_VJf+GPQVmxb_iiDe77Q2MY17MDNqy9fA@mail.gmail.com>
- <CAMuHMdVxLkxN0bmSRXW74R_dGNDSRDB4Z=zE0DoiXDOuweSM0A@mail.gmail.com>
- <CAPDyKFpUUJeGD77GTYCk59cvW=SdGTkOEXH4dap1JQWekAa0Eg@mail.gmail.com>
- <CAMuHMdUZcrtHZz7daKjL7Oz2MEmCrjJ_ovO3ttTnZ7xuRWgiRA@mail.gmail.com>
- <CAPDyKFpctt6AQBpu+vBQ0ymW3PQGB8dt8-QEhgbz0Uo5T-1Wxw@mail.gmail.com> <CAMuHMdWK0Y7CAGMVyr-_RyZ31WiKMaJHL5XaZjOrFkO8od7Nfw@mail.gmail.com>
-In-Reply-To: <CAMuHMdWK0Y7CAGMVyr-_RyZ31WiKMaJHL5XaZjOrFkO8od7Nfw@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 11 Sep 2023 15:57:41 +0200
-Message-ID: <CAPDyKFq9E29XPD6AYjapJDhr=ML_Sdk8FnNtiAduP=p=gJcX5A@mail.gmail.com>
-Subject: Re: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, linux-arm-kernel@lists.infradead.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH V3 RESEND 0/6] Power: T7: add power domain driver
+Content-Language: en-US, fr
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Xianwei Zhao <xianwei.zhao@amlogic.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>
+References: <20230911025223.3433776-1-xianwei.zhao@amlogic.com>
+ <CAPDyKFqTs=mRnBRREbT+WFj_4qTLd8LTKigY_1TAZOqGGUKk3A@mail.gmail.com>
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro Developer Services
+In-Reply-To: <CAPDyKFqTs=mRnBRREbT+WFj_4qTLd8LTKigY_1TAZOqGGUKk3A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -81,93 +106,59 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 11 Sept 2023 at 15:06, Geert Uytterhoeven <geert@linux-m68k.org> wr=
-ote:
->
-> Hi Ulf,
->
-> On Mon, Sep 11, 2023 at 2:07=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.o=
-rg> wrote:
-> > On Mon, 11 Sept 2023 at 13:48, Geert Uytterhoeven <geert@linux-m68k.org=
-> wrote:
-> > > On Mon, Sep 11, 2023 at 1:28=E2=80=AFPM Ulf Hansson <ulf.hansson@lina=
-ro.org> wrote:
-> > > > On Mon, 11 Sept 2023 at 09:52, Geert Uytterhoeven <geert@linux-m68k=
-.org> wrote:
-> > > > > On Thu, Aug 31, 2023 at 1:39=E2=80=AFPM Ulf Hansson <ulf.hansson@=
-linaro.org> wrote:
-> > > > > > On Thu, 31 Aug 2023 at 11:33, Rafael J. Wysocki <rafael@kernel.=
-org> wrote:
-> > > > > > > If I may suggest something, I would call this "pmdomain" inst=
-ead of
-> > > > > > > "genpd".  I don't think that /drivers/power/ is a particularl=
-y
-> > > > > > > suitable location for it, because it doesn't really have much=
- to do
-> > > > > > > with power supplies and more to do with device PM.
-> > > > > >
-> > > > > > "pmdomain" is probably giving a reasonable good hint of what go=
-es on
-> > > > > > in this subsystem. This works fine for me, thanks!
-> > > > >
-> > > > > > > Also, I would move drivers/base/power/domain.c to drivers/pmd=
-omain/
-> > > > > > > (and rename it to something like core.c), because it would be=
- a better
-> > > > > > > location for that fiile IMO.
-> > > > > >
-> > > > > > We could certainly do that, let's discuss it a bit more.
-> > > > > >
-> > > > > > Although, at this point I want to focus on the genpd providers,=
- as to
-> > > > > > release some of the burden from arm-soc maintainers.
-> > > > > >
-> > > > > > > I can also handle future pull requests for this if that's fin=
-e with everyone.
-> > > > > >
-> > > > > > Thanks a lot for your offer! However, if a re-route is preferre=
-d (I
-> > > > > > think not?), this is probably better suited via arm-soc, as mos=
-t
-> > > > > > changes are going to be arm platform specific.
-> > > > >
-> > > > > Which brings me to the final question: what is the upstream path
-> > > > > for changes to drivers/genpd/*/ (or whatever it's gonna be called=
-)?
-> > > > > Before, we sent PRs to (arm-)soc.  Do you expect us to send them =
-to
-> > > > > you? There's usually quite some interaction between drivers/soc/r=
-eneas/
-> > > > > and drivers/genpd/renesas (and there are DT binding definitions),
-> > > > > but not more than with e.g. drivers/clk/renesas/.
-> > > >
-> > > > I would be happy to pick this up and funnel this via my new genpd
-> > > > tree. As long as it's coupled with changes affecting "genpd
-> > > > providers", of course.
-> > > >
-> > > > I can certainly also collect patches directly from the
-> > > > mailing-list/patch-tracker too. Whatever works for you the best. Of
-> > > > course, in that case I need your acks before I pick up the relevant
-> > > > patches.
-> > > >
-> > > > If we need "immutable" branches, let's discuss that on a case by ca=
-se basis.
-> > >
-> > > At least for Renesas SoCs, every new SoC comes with a DT binding
-> > > definitions file under include/dt-bindings/power/, to be shared by ge=
-npd
-> > > driver and DTS (the same is true for clocks).  So PRs will work best.
-> >
-> > Good point! And Neil pointed out this too [1].
-> >
-> > I am going to host an immutable branch for the dt bindings that you
-> > can pull in. Would that be a better option for you?
->
-> Yes, that would work for me, too.
-> Can I conclude you prefer to take patches over PRs?
+On 11/09/2023 16:30, Ulf Hansson wrote:
+> On Mon, 11 Sept 2023 at 04:52, Xianwei Zhao <xianwei.zhao@amlogic.com> wrote:
+>>
+>> First patch is that remove C3 some power domain ALWAYS_ON property.
+>> Second patch is that add driver to support power parent node.
+>> Third patch is that turn on power if initial power domain with
+>> "AWAY_ON" property state is off.
+>>
+>> Other patchs adds power controller driver support for Amlogic T7 SoC.
+>>
+>> Changes Since v2:
+>>   -Modify subject.
+>>   -Define PWRC_NO_PARENT UINT_MAX
+>>   -Remove modification that transform is_off into 1 or 0 using !!
+>>
+>> Changes Since v1:
+>>   -Fix license from "GPL-2.0-only OR .*" to "GPL-2.0-only OR MIT".
+>>   -Modify T7_NIC flag  "ALWAYS_ON"
+>>
+>> xianwei.zhao (6):
+>>    genpd: amlogic: modify some power domains property
+>>    genpd: amlogic: add driver to support power parent node
+>>    genpd: amlogic: init power domain state
+>>    dt-bindings: power: add Amlogic T7 power domains
+>>    genpd: amlogic: Add support for T7 power domains controller
+>>    arm64: dts: amlogic: t7: add power domain controller node
+>>
+>>   .../power/amlogic,meson-sec-pwrc.yaml         |   3 +-
+>>   arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi   |   6 +
+>>   drivers/genpd/amlogic/meson-secure-pwrc.c     | 127 ++++++++++++++++--
+>>   include/dt-bindings/power/amlogic,t7-pwrc.h   |  63 +++++++++
+>>   4 files changed, 185 insertions(+), 14 deletions(-)
+>>   create mode 100644 include/dt-bindings/power/amlogic,t7-pwrc.h
+>>
+>>
+>> base-commit: 413f5c02929bb33042bbc4ee233166550a5fca70
+>> --
+>> 2.37.1
+>>
+> 
+> Patch 1 to 5, applied for next!
+> 
+> The DT patch (patch4), is available on an immutable branch "genpd_dt" too.
+> 
+>  From now on, I will continue to put changes for genpd DT bindings on
+> the above branch, to allow SoC maintainers to pull it in to manage
+> potential dependent updates to DTS files.
 
-In general, yes. But, I am fine with both options, as long as it works
-for you too!
+Thanks, let's see how it works :-)
 
-Kind regards
-Uffe
+Neil
+
+> 
+> Kind regards
+> Uffe
+
