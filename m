@@ -2,87 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7B279DA80
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 23:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 968F579DB17
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 23:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237362AbjILVDl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 17:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
+        id S231775AbjILVpe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 17:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232814AbjILVDk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 17:03:40 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31F6199;
-        Tue, 12 Sep 2023 14:03:36 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::e2d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229754AbjILVpe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 17:45:34 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2E910CC;
+        Tue, 12 Sep 2023 14:45:30 -0700 (PDT)
+Received: from mercury (unknown [185.254.75.45])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 1C6A835F;
-        Tue, 12 Sep 2023 21:03:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 1C6A835F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1694552616; bh=SSAzwh1tnDrXl1M/+o/bZ/L2hYeqt2O/VVxB3bIyHmg=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=TuO+4D0PzRhG+DW7unB1FLksenos5iftQBkayTrzYKNCCz871oCH98Wc992FRYPtj
-         jaauzWR6a/pyjQMM5rU8bxnl2sgqDgB3ydTZ/ylwVNDWXnbpdaRukPb4Fw8hYtro5n
-         p+HjkQhaVXOtbKHRK3GvZPjsGK7IOEYz40atzKN/2b2twKQESEKmf6jpl+Akk8rEXX
-         TgknuAxOjXCHnjPaQwtF7xzuy8pToOd/vXDxJv+hCCtUeH0lETgL2RdtybQCi6szNb
-         UWmPZfW+/9jxgLTZPCaaz2myM9zL2O+8WcSvqwCdJPP5WfFnuF4QncBZULW9EwRcvD
-         jJnTmWQq6YAVw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Benjamin Gray <bgray@linux.ibm.com>, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        llvm@lists.linux.dev, linux-pm@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Ian Abbott <abbotti@mev.co.uk>,
-        H Hartley Sweeten <hsweeten@visionengravers.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Jan Kiszka <jan.kiszka@siemens.com>,
-        Kieran Bingham <kbingham@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        Todd E Brandt <todd.e.brandt@linux.intel.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Benjamin Gray <bgray@linux.ibm.com>
-Subject: Re: [PATCH v2 2/7] Documentation/sphinx: fix Python string escapes
-In-Reply-To: <20230912060801.95533-3-bgray@linux.ibm.com>
-References: <20230912060801.95533-1-bgray@linux.ibm.com>
- <20230912060801.95533-3-bgray@linux.ibm.com>
-Date:   Tue, 12 Sep 2023 15:03:35 -0600
-Message-ID: <874jjzhzo8.fsf@meer.lwn.net>
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2DD8B660731A;
+        Tue, 12 Sep 2023 22:45:28 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1694555128;
+        bh=3Y0Jvwq+cg/aK1R2TKVahHhA5BmB04GIQk37IYZYKYU=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=do8M4cjsKczj60yxWoOJ2PfJs85vDSHfQ4bI1huvcuvWTgY9939U6N7cJzxYfJk+z
+         KHd6SzsCPJ6Rp5usdBsNgwavhTkSN0U+3veT1gyC/HV0elRbUi2WjgJ4AvnVB49K0h
+         2yGXnaESDp6OiJ3n3vLNFfY60F1Bk3NApnB3kn437O3GPYCLfNIXGY5pNS6T4MHPC0
+         2BXq93/CWL4PG+OGRRq7fscLdF+06oPI7xexGHB1iybJohaDsnPcqIFf+7ksgIIm+j
+         XX6ywF9/qqODlfKxlD/DAvXOiX/TC38VrYuea1ZFeIBkYEH1Si0K478ZF0yhPffBIv
+         3z2EH1q3/sWbw==
+Received: by mercury (Postfix, from userid 1000)
+        id 25AE1106098A; Tue, 12 Sep 2023 23:45:25 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.au@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230902200518.91585-1-biju.das.jz@bp.renesas.com>
+References: <20230902200518.91585-1-biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH 0/2] Match data improvements for bq2515x driver
+Message-Id: <169455512513.524623.9779930015685182260.b4-ty@collabora.com>
+Date:   Tue, 12 Sep 2023 23:45:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.3
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Benjamin Gray <bgray@linux.ibm.com> writes:
 
-> Python 3.6 introduced a DeprecationWarning for invalid escape sequences.
-> This is upgraded to a SyntaxWarning in Python 3.12, and will eventually
-> be a syntax error.
->
-> Fix these now to get ahead of it before it's an error.
->
-> Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
-> ---
->  Documentation/sphinx/cdomain.py             | 2 +-
->  Documentation/sphinx/kernel_abi.py          | 2 +-
->  Documentation/sphinx/kernel_feat.py         | 2 +-
->  Documentation/sphinx/kerneldoc.py           | 2 +-
->  Documentation/sphinx/maintainers_include.py | 8 ++++----
->  5 files changed, 8 insertions(+), 8 deletions(-)
+On Sat, 02 Sep 2023 21:05:16 +0100, Biju Das wrote:
+> This patch series aims to add match data improvements for bq2515x driver.
+> 
+> This patch series is only compile tested.
+> 
+> Biju Das (2):
+>   power: supply: bq2515x: Simpilfy bq2515x_read_properties() and probe()
+>   power: supply: bq2515x: Some cleanups
+> 
+> [...]
 
-I've applied this one to the docs tree, thanks.
+Applied, thanks!
 
-jon
+[1/2] power: supply: bq2515x: Simpilfy bq2515x_read_properties() and probe()
+      commit: ef2730fb8122ff90747ee79261c2a9fd35032e17
+[2/2] power: supply: bq2515x: Some cleanups
+      commit: ab907d99d5d4e40ba638b6a27940d59fcb2ad24d
+
+Best regards,
+-- 
+Sebastian Reichel <sebastian.reichel@collabora.com>
+
