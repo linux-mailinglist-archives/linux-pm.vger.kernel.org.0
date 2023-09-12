@@ -2,92 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA5E79CB30
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 11:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D8E79CB3D
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 11:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233125AbjILJKi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 05:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56320 "EHLO
+        id S233114AbjILJML convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 12 Sep 2023 05:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232755AbjILJKf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 05:10:35 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C431FC0
-        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 02:10:29 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-59b90c199f5so16902437b3.2
-        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 02:10:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694509828; x=1695114628; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4wS5QgdUOCC9VaeBKhtLVMz+PTz3QdvRlZVKaTgTJWE=;
-        b=VzAu1pNcB38JZBb5qj75ZEdFMzTVzfzgUSWDQGyqj7OOuqKb7zalrhq9tAAG8MVCRf
-         B1paD6RDA63uoVovHiaL4mdGSk5yw741Hs7fTgjEtWC/c8rVs3aTYaLJaKZpnijhcEyz
-         dRshRi/fydVnBJ4iHbdy9lt0tgUecP1NDBwQxq1ZdHUeiyN6pebg4HXMC0I669qv/vhK
-         bdjNttZR9LVw7T7SvyhbTTCIK8NKPqSCvXYL6D4RQa6HUCaD1rJKZnr1ICN4/3T/3Yo1
-         RtvatGStEdc883xG1gptrtIMD7rhbV230gq2adeBy/wpp6pk3CDtRslTyuHXR/m4bKBx
-         taSw==
+        with ESMTP id S229504AbjILJMK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 05:12:10 -0400
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BED2170D;
+        Tue, 12 Sep 2023 02:12:07 -0700 (PDT)
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5733d11894dso1155639eaf.0;
+        Tue, 12 Sep 2023 02:12:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694509828; x=1695114628;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4wS5QgdUOCC9VaeBKhtLVMz+PTz3QdvRlZVKaTgTJWE=;
-        b=F1OWPSb/7U7q6007KHYrZGPxYI9NkTeUOGrSzg+QNxScHuC1NLycjFcdKRXpJsP2S5
-         CXqX9CjheIZRV7vrVEAkNdGJAafZ1UR9D/j99Da5Kr64C/K7SPEN61gfGCrqeItj1QZ2
-         y8ekHaKFrFjJZYqPrK9X5cN2PQNfY2tbRZAAocxdgbxcmk9/sEXEz2uE7uQ2wjoSY0R6
-         jumhal46A7PghMds+bHpj2yYiNgOyOo9OhdQC1OJyF3tlL1cnS1b5X424mCo3TxXiNKB
-         GKV5/lrj8OZP9MW2sCxDJFxqm6d8O1PjZG0DEzEmHXX9K3IxMtaU8v4QMfeteS2ppC6W
-         9OpA==
-X-Gm-Message-State: AOJu0Yw2LuShNYozs8dPJOXjtKMzaG3bVfFYP5RbqW2rAdRwyPL17o+w
-        1BIgaRTKP/Twnz5LiY0pi2qyPPfkbnDuYvu2ni8UV68AIcfsBiESMMI=
-X-Google-Smtp-Source: AGHT+IHaJe8TVI8OD48JzqiIz2fgcaPOPkTxwV3k9ta7dUaBVJiSwzwwTaqTlLeLEY/v/DqmQCJAEEnkVBsSvzdrZo0=
-X-Received: by 2002:a25:2409:0:b0:d71:8729:23b8 with SMTP id
- k9-20020a252409000000b00d71872923b8mr11479439ybk.13.1694509828307; Tue, 12
- Sep 2023 02:10:28 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1694509926; x=1695114726;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LnBKGyRSUKcxckQc3XRY6QVkUrcVLqMdIRsgoISjA1s=;
+        b=a6ic7U1j9GLMmGRYt62JbaGNpnUNS/cM4y5wgI6HAO806sZtwcwCLi/bDsa3aUzOrj
+         D3M6uYKNOXkUhcO9/LWgTIlWP5xMBgW8EgRDq6nBwkYKX2dgyAPtgUTm4ImvJMxxRgCZ
+         4Qofg/3HK5GwsRQSpWc8MFpv7VJLYovmAfPQFfoY9W8ENW61bRLMhrkWlm3nMJyQo2mH
+         Ha+vr1PHCkJ3EUsEtCx4TJ0U9jz4jhHMcUI9xRpIGFFGeAWEsHjjtR/ZeD7XEWInZs4z
+         s6VysjLLr33xT64VnxM+mng6Go6oxHGqTnzd+/p5x0ibn35HEh0cL8enWFFp7/4Xop3H
+         vRRA==
+X-Gm-Message-State: AOJu0YyzoL4MEGP84Cox9OxH0yKXLc1Hk+w8hi3D0QDO3MML2lCkXm/p
+        oBJKjOdZ9CsR3wMGSuYVT1fCtzrTHNmMKXLaEBE3bkAtj1M=
+X-Google-Smtp-Source: AGHT+IGGZJyReIDgrMZtiubQRbMwIKbiT4QSpHxhHeKHsqnI25JjR/27HBwLNz1LdOK9tuR5yIy/TSHHfrPL+PDzg7Q=
+X-Received: by 2002:a05:6820:81f:b0:573:3a3b:594b with SMTP id
+ bg31-20020a056820081f00b005733a3b594bmr13187897oob.1.1694509926275; Tue, 12
+ Sep 2023 02:12:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230911-scouring-squash-3ef2cc8b1ee2@spud>
-In-Reply-To: <20230911-scouring-squash-3ef2cc8b1ee2@spud>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 12 Sep 2023 11:09:51 +0200
-Message-ID: <CAPDyKFqB_2KiqYy1Li1sGkXPiEAnc2GOUO7SdqCxy5G+YkeLcA@mail.gmail.com>
-Subject: Re: Missed soc/genpd PR for 6.6 mw
-To:     Conor Dooley <conor@kernel.org>
-Cc:     arnd@arndb.de,
-        Changhuang Liang <changhuang.liang@starfivetech.com>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        linux-riscv@lists.infradead.org, Rob Herring <robh@kernel.org>,
-        Jia Jie Ho <jiajie.ho@starfivetech.com>,
+References: <20230906184354.45846-1-mario.limonciello@amd.com>
+ <20230906184354.45846-3-mario.limonciello@amd.com> <CAJZ5v0jgGOPcFMfRObAM1St1KLjZS0tEki4f32Rbr3ZXwFyFzA@mail.gmail.com>
+ <0cd6648d-21f1-445d-95f6-20f580bbcfd1@amd.com>
+In-Reply-To: <0cd6648d-21f1-445d-95f6-20f580bbcfd1@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 12 Sep 2023 11:11:55 +0200
+Message-ID: <CAJZ5v0h0LN1W5Q6Wp-jSJA4QE4ZGurf8Ye26ST5j6W2P+xHCFg@mail.gmail.com>
+Subject: Re: [PATCH v17 2/4] PCI: Add support for drivers to register optin or
+ veto of D3
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        "open list:X86 PLATFORM DRIVERS" 
+        <platform-driver-x86@vger.kernel.org>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
         linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 12 Sept 2023 at 00:11, Conor Dooley <conor@kernel.org> wrote:
+On Mon, Sep 11, 2023 at 10:23 PM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
 >
-> Hey all,
->
-> So I've been informed that I made a hames of things and forgot to send
-> my soc driver PR for the 6.6 merge window. There's not too much in my
-> branch
-> https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/log/?h=riscv-soc-for-next
-> so I would've kicked the can to 6.7, but the majority of changes there were
-> made to the starfive pmu driver that has since moved to the new genpd
-> subsystem.
->
-> Sending a PR to Arnd for 6.7 with the pmu bits & based on v6.5-rc1 doesn't
-> seem to make all that much sense to me, since that stuff is no longer in
-> drivers/soc, but rebasing on top of v6.6-rc1 would make these genpd changes,
-> with a different path to Linus.
->
-> What's the best way to rectify me screwing this up? Should I split out
-> the non genpd patch and send a PR for that for the genpd tree for 6.7?
+> On 9/11/2023 13:34, Rafael J. Wysocki wrote:
+> > On Wed, Sep 6, 2023 at 9:16 PM Mario Limonciello
+> > <mario.limonciello@amd.com> wrote:
+> >>
 
-Yep, that seems like the best option.
+[cut]
 
-If you think it's better to re-post the re-based genpd patches, I can
-certainly pick them up from the mailing lists too.
+> >
+> > IMV, the underlying issue all boils down to the platform firmware
+> > inadequately describing the behavior of the system to the OS.
+> > Specifically, had it provided a _S0W returning 0 for the Root Port(s)
+> > in question, wakeup signaling would have worked (or else there would
+> > have been a defect in the kernel code to be addressed).
+>
+> I think you're right.  I'll try and get BIOS guys to provide a test BIOS
+> to prove this direction is correct.
+>
+> It wouldn't help all the machines already in the field but if it can be
+> done without harm to Windows maybe future SoCs could use it.
+>
+> > Instead, it
+> > decided to kind-of guide Windows in the "right" direction through PEP
+> > constraints which doesn't have the same effect on Linux and honestly
+> > I'm not even sure if it is a good idea to adjust Linux to that.
+> >
+>
+> What is the worry with bringing Linux in this direction (using constraints)?
 
-Kind regards
-Uffe
+First off, ostensibly the purpose of the constraints is to indicate to
+Windows when it can attempt to put the system into the deepest power
+state.  Specifically, AFAICS, Windows is not expected to do so when
+the current power state of a given device is shallower than the
+relevant constraint.  Consequently, a constraint of D0 means that
+effectively Windows is expected to ignore the given device as far as
+Modern Standby goes.
+
+In any case, this has no bearing on the behavior of suspend-to-idle in Linux.
+
+Now, there may be other undocumented side-effects of setting a
+constraint of D0 in Windows, but it is generally risky to rely on such
+things.
+
+Second, it is not entirely clear to me whether or not the future
+versions of Windows will continue to use the constraints in the same
+way.
+
+> My main hope is that by generalizing this fundamental difference in how
+> Windows and Linux handle Modern Standby / suspend-to-idle we can avoid
+> other future bugs.
+
+There is a fundamental difference between Modern Standby and
+suspend-to-idle already, as the former is opportunistic and the latter
+is on-demand.  They can both follow the exact same set of rules.
