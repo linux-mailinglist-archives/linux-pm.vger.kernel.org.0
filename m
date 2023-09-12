@@ -2,164 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2CF79D1ED
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 15:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA5479D282
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 15:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235383AbjILNTF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 09:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
+        id S233935AbjILNkQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 09:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235320AbjILNTD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 09:19:03 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810B010D1
-        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 06:18:59 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1c1ff5b741cso50769975ad.2
-        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 06:18:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1694524739; x=1695129539; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZgUWoG/UzVQo6IZW/jhIiZuxYcRuzB8HaZLWXl+S99A=;
-        b=kl8mM6XImC4GAllEx6Ry3M/bufaNHprmGcgMvoAG/l+OWwTx8VN+Sk62JpR4y6QZta
-         Skt9WSE5TWnZW1cgyjLc0wrC/R1X4Q7pJkOeYTwu+qMrJQESQJZ48aeZsqvqienK4oIQ
-         OVeu2N1gpLLX4SmjlD1RGhhElYl5Adn3vqko7HTS9swnNqzHsH0DUux0joStxPUi19uA
-         3rshUpIFQ3DvnXdBWzRWuZh7itmun0ftvRNW4HrFndUfGCSsHZxhj/TLn2r50rQy3zIx
-         FNjSwcwkjd1w3pDtst3x6AXbU4b/0I4KLiCjhoyWjaiMXDMpjkRlGt46tzY5xosoAcIv
-         g/jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694524739; x=1695129539;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZgUWoG/UzVQo6IZW/jhIiZuxYcRuzB8HaZLWXl+S99A=;
-        b=QnYvGYq0pHcq2Q2ItWqbUY2Mu//i90UXJ5SfSxruomtTMxdMgxU4cA6yJ0JjQhSwH6
-         9GB5ljOFyoy8hjYtT6X5zY3eXFBfGpecku2xpQ+rQLtujyR7BsiRjxKRrdpF6sxy1kDt
-         ZFk23Vnhyy5esoPh+H7i/1NU/kQvMIMMcMbh5BhuKmofn+5ejs+c8XZQulVC3p0/s1tk
-         13PdyXlCwPCn5h2bhhtXNAUGozgo9x26li5aE36osxsv9xXeGzgdEFPNfEIqXn64J2Ib
-         l1BKGN2ou1R0u8oJf9xt65oRBcuD6/zuaGqboWC5RP6NKsxcAB+4xOW7Las+FtCIF2LU
-         HWow==
-X-Gm-Message-State: AOJu0YwixJsFUj2kNOLPvC2LavWMBX7eQ02xVN+H1lZfKiMQI45Yoflm
-        c6OZdhRSf+s4UjEaSSKTx/RRyQ==
-X-Google-Smtp-Source: AGHT+IHuPCCifllZLVVhG1RS0SEov7F7CiO6GUAGJmrDjdteB7eJTakpdW7XNZ7cub5ACw1SoYZCiQ==
-X-Received: by 2002:a17:902:9a4b:b0:1c0:bf62:c921 with SMTP id x11-20020a1709029a4b00b001c0bf62c921mr12982236plv.18.1694524738958;
-        Tue, 12 Sep 2023 06:18:58 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id o3-20020a170902bcc300b001b801044466sm8389329pls.114.2023.09.12.06.18.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Sep 2023 06:18:58 -0700 (PDT)
-Message-ID: <65006542.170a0220.87b6c.594b@mx.google.com>
-Date:   Tue, 12 Sep 2023 06:18:58 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232977AbjILNkP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 09:40:15 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E6E310CE;
+        Tue, 12 Sep 2023 06:40:11 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD0F0C15;
+        Tue, 12 Sep 2023 06:40:47 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 42D103F5A1;
+        Tue, 12 Sep 2023 06:40:09 -0700 (PDT)
+Message-ID: <979a9e2f-06a8-1936-b5cd-2949eca99b21@arm.com>
+Date:   Tue, 12 Sep 2023 15:40:00 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v6.6-rc1-5-gb5eda4c9c923
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.6-rc1-5-gb5eda4c9c923)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 2/4] sched: cpufreq: Fix apply_dvfs_headroom() escaping
+ uclamp constraints
+Content-Language: en-US
+To:     Qais Yousef <qyousef@layalina.io>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Lukasz Luba <lukasz.luba@arm.com>
+References: <20230820210640.585311-1-qyousef@layalina.io>
+ <20230820210640.585311-3-qyousef@layalina.io>
+ <CAKfTPtDY48jpO+b-2KXawzxh-ty+FMKX6YUXioNR7kpgO=ua6Q@mail.gmail.com>
+ <20230829163740.uadhv2jfjuumqk3w@airbuntu>
+ <CAKfTPtCP6uX79dOrzN4PxFTMBFrDAMOOrWyZrsVypUQ0RY7BAA@mail.gmail.com>
+ <20230907215555.exjxho34ntkjmn6r@airbuntu>
+ <CAKfTPtA8Ljy4NBqjw8Wj4pEFc-OCR55QPuwh+5GgrHN6u+ugsg@mail.gmail.com>
+ <20230910174638.qe7jqq6mq36brh6o@airbuntu>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20230910174638.qe7jqq6mq36brh6o@airbuntu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.6-rc1-5-gb5e=
-da4c9c923)
+On 10/09/2023 19:46, Qais Yousef wrote:
+> On 09/08/23 16:30, Vincent Guittot wrote:
+> 
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-6-rc1-5-gb5eda4c9c923/
+[...]
 
-Tree: pm
-Branch: testing
-Git Describe: v6.6-rc1-5-gb5eda4c9c923
-Git Commit: b5eda4c9c923df3ee79181406652733b3faf2994
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+>>>> above 512 whatever the current (720)  formula or your proposal (608).
+>>>> In the case of uclamp, it should be applied after having been scaled
+>>>> by irq time.
+>>>
+>>> I lost you a bit here. I'm not sure how you reached the 720 and 608 numbers.
+>>
+>> My bad, I finally decided to use an irq pressure of 128 in my
+>> calculation but forgot to change the value in my email
+>>
+>>>
+>>> So the way I'm proposing it here
+>>>
+>>>         util = cfs + rt + dvfs_headroom(cfs+rt) = 800 + 0.25 * 800 = 1000
+>>>         util = uclamp_rq_util_with(rq, util, NULL) = 512
+>>>         util = scale_rq_capacity(512, 256, 1024) = 0.75 * 512 = 384
+>>>         util += dvfs_headroom(irq) = 384 + 256 + 0.25 * 256 = 704
+>>>         util += dvfs_headroom(dl_bw) = 704
+>>>
+>>>>
+>>>> So we should have reported utilization of 720 with a bandwidth
+>>>> requirement of 512 and then cpufreq can applies its headroom if needed
+>>>
+>>> The key part I'm changing is this
+>>>
+>>>         util = cfs + rt + dvfs_headroom(cfs+rt) = 800 + 0.25 * 800 = 1000
+>>>         util = uclamp_rq_util_with(rq, util, NULL) = 512
+>>>
+>>> Before we had (assume irq, rt and dl are 0 for simplicity and a single task is
+>>> running)
+>>>
+>>>         util = cfs = 800
+>>>         util = uclamp_rq_util_with(rq, util, NULL) = 512
+>>>         util = dvfs_headroom(util) = 512 * 0.25 * 512 = 640
+>>>
+>>> So we are running higher than we are allowed to. So applying the headroom
+>>> after taking uclamp constraints into account is the problem.
 
-Warnings Detected:
+I'm not sure I understood all the example math in this thread correctly:
 
-arc:
+Examples:
 
-arm64:
+irq = 128 or 256
 
-arm:
-
-i386:
-
-mips:
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
+util = 800 uclamp = 512
 
 
-Warnings summary:
+--- current code:
 
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
+((util_cfs + util_rt) * ((max - irq) / max) + irq + dl_bw) * scale
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+<- uclamped(cfs+rt) ->
 
-Detailed per-defconfig build reports:
+<--               scale_irq_capacity()                  -->|<-- map_util_perf() 
+                                                               / (headroom())  
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
+irq = 128: (512 * (1024 - 128) / 1024 + 128 + 0) * 1.25 = 576 * 1.25 = 720
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+irq = 256: (512 * (1024 - 256) / 1024 + 256 + 0) * 1.25 = 640 * 1.25 = 800
 
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
 
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
+--- new approach:
 
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
+irq = 128: (512 * (1024 - 128) / 1024 + 128 + 0.25 * 128)            = 608
 
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
+irq = 256: (512 * (1024 - 256) / 1024 + 256 + 0.25 * 256)            = 704
 
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
+            <->
+            uclamped(cfs+rt+headroom(cfs+rt))
 
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
+            <- scale_irq_capacity() ->
 
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
+            <--               headroom(irq) ?        -->
 
----
-For more info write to <info@kernelci.org>
+
+Is the correct?
+
+[...]
