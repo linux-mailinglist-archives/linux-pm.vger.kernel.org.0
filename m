@@ -2,172 +2,195 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F37B79C76C
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 09:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A485179C8BD
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 09:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbjILHBI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 03:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52284 "EHLO
+        id S231840AbjILH4W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 03:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230396AbjILHBI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 03:01:08 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A04E75
-        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 00:01:04 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9aa2c6f0806so222005666b.3
-        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 00:01:04 -0700 (PDT)
+        with ESMTP id S231186AbjILH4O (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 03:56:14 -0400
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E463E7C
+        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 00:56:10 -0700 (PDT)
+Received: by mail-ua1-x931.google.com with SMTP id a1e0cc1a2514c-7a02252eb5dso1545731241.1
+        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 00:56:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694502063; x=1695106863; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ctIV/w4BG99+4Nc0GESnPYJu8NhdJz0/fF4LjMpIMlA=;
-        b=Z6hDaRKhfdclWbzLJfUc9sVZVHbytO1S/hxTfCHqEEnm/MHQ+nNV2jR7nIhxYAJshP
-         oPfUi9XagXr2z3gdFMGUHdjYu22ypxw+RdBUBTqYE5oIlO9jDEsVXEdj2QHatbn/rrJ7
-         B5dAK7bHEBtt0nG8tKF7gjUMDuAXZ3i0q8stozVsTpZfFur8YgoXGfBQKVtpCidxiuqd
-         af1DVNYeNzQowWC926RhbG2UnymwBDUiu+E9uD8x7Fr+0wE69pQa2V8bqNW8xlbmYIgi
-         75n8fPqdbKikIhh4ngv2/jX9hMmcD0/u3sJ7gFaO+PIKAgN6uw5IAnDs82cfnzlXvDlK
-         Jbew==
+        d=linaro.org; s=google; t=1694505369; x=1695110169; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=KHya+7F1DBe8l/ePdcCte4Kk0bJRNucDG9gM+2FXrkk=;
+        b=fR+DUewDqNkVYoyR5gduIF5UlpoPrlUnZcNfCxTcK5AOUDVJXfcEfYEnq6q2Qrc3wS
+         s0/8GbVQnalKnK37kE2ifUgfMvwnA2eD3niGh0yxyRhhfY3ZPLZi2AY/y2aphSEPsUvc
+         KNxmgj7G1CNaga1XreEHNNT7+yrL57EIcLF9LSiGPf7mQdlGz26Kaie4wmLGuFrVYiM1
+         tOyu742LPdgxscIL90Vjvuij21Am3lutJkj/V/gS/tnuRHs7p6ze+u+udey7Ccni/8RY
+         BH3dirlbMR2DlUWZsAB1aLz5XpZBqGyLodmpJK3T0Ttz9ecqPgCSi6Z4iV/EAR2h2ObI
+         MJCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694502063; x=1695106863;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ctIV/w4BG99+4Nc0GESnPYJu8NhdJz0/fF4LjMpIMlA=;
-        b=Q4oQtYfC5rC+NwxPfIkMH9dp+vozQR7gvLZWIluzca96onEzrdpE+k90/8zyr/r7Sh
-         hqc2HsA4qzP7HeyPKMH9/006DCpXTmwylUcD94kNDNwWY8LGFz31hQfR08WJo7gG1Qzj
-         jEN/OJ1Wo/fsy6xhRCG1JgvZ1a14Mkrp2LPoyHRecLKbPtcfIk7hLuNW1fbPoLg1MwCr
-         QQR2SBNWB2eNgcG17dWfRzIlzmp6YFAUhNugPJT7yvDHeZGGwgF0WT/PfDej6uAJHO7X
-         mMfEeQb9MJV0AuU6xqor8xhIDf1et+jdXemYUZoxyXqrVXQkcsleUnhhEiWlXec6Ao5w
-         EZfw==
-X-Gm-Message-State: AOJu0YwAO4qg95zMype3nRHAWWJTk92H5ghwGVegi77JKle23d905GBh
-        vn0mGFP0IQkLQpjyNGSM6evsQQ==
-X-Google-Smtp-Source: AGHT+IE4NxTfAMRkF8WeMqfzV5pOhN4h5BXKsp26cOVN4IsTNWN1bc4jzc9tBEBAYrudVHhvYAzzyQ==
-X-Received: by 2002:a17:906:10c9:b0:9a9:fc74:8d50 with SMTP id v9-20020a17090610c900b009a9fc748d50mr9504187ejv.66.1694502062742;
-        Tue, 12 Sep 2023 00:01:02 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.214.188])
-        by smtp.gmail.com with ESMTPSA id r16-20020a170906351000b0099bd86f9248sm6369287eja.63.2023.09.12.00.01.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Sep 2023 00:01:02 -0700 (PDT)
-Message-ID: <9ea20b20-43f8-7619-40a9-710340ea7acf@linaro.org>
-Date:   Tue, 12 Sep 2023 09:01:00 +0200
+        d=1e100.net; s=20230601; t=1694505369; x=1695110169;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KHya+7F1DBe8l/ePdcCte4Kk0bJRNucDG9gM+2FXrkk=;
+        b=JrXOTvu1+9tg+AbFkxVCUiZg3Z99QuC/i8ZrWJTfrONLAJBmQloelchgUzzU/F/HGP
+         +Ahcqa3sZh9BaZ2UkvHBvbzWTdArXcuK+LQLVQlBGO3rZNzeQWtE7sT7ue99uZhO4sEc
+         Yruhl+tBjMIucH0AU3wXyI8CpvRlVXegMqD+qK1u25XqUcN191cd+ofnDFjgamiiYski
+         WknFoG7EFSwDLD65+yyJHV326SLfzmtwx5CiI6BpHIIaOT72sc/9jX7FSIO8CcvoaZ37
+         dt1u9I6tdk0phAlL0G83Z9pnzY4aZukc1p8F4IoYMHef8AoCoadjG2Xc0UTeV+qOgz4H
+         JcQg==
+X-Gm-Message-State: AOJu0YwGUyJDJuEVklRcNJjZFx1vpJcfDE7SM36ZPoQQ48sMZNiCQIb0
+        PZ2XNJ6ZyGsQ+pO06OmeWrNo5qi8Z7UIo7UehAAHUw==
+X-Google-Smtp-Source: AGHT+IEU7lzE/Dy3/8fiDPb3paZeKjpSwC6m9TQvo4Eme28XUib49W5/g7bAteipV+pRQMe7GryFitoR15vuGrj30Lg=
+X-Received: by 2002:a1f:c487:0:b0:48d:1359:4dcd with SMTP id
+ u129-20020a1fc487000000b0048d13594dcdmr6428193vkf.7.1694505369434; Tue, 12
+ Sep 2023 00:56:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: power: rpmpd: Add MSM8917, MSM8937
- and QM215
-Content-Language: en-US
-To:     =?UTF-8?Q?Otto_Pfl=c3=bcger?= <otto.pflueger@abscue.de>,
-        linux-arm-msm@vger.kernel.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230912050028.4804-1-otto.pflueger@abscue.de>
- <20230912050028.4804-2-otto.pflueger@abscue.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230912050028.4804-2-otto.pflueger@abscue.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 12 Sep 2023 13:25:58 +0530
+Message-ID: <CA+G9fYvHhiiGKhNd=L9+xYFVwv0Q8k6gUBeFQGWCWw1cWhb50Q@mail.gmail.com>
+Subject: Qemu-arm64: LTP: cfs_bandwidth01: Unable to handle kernel NULL
+ pointer dereference at virtual address 0000000000000038
+To:     open list <linux-kernel@vger.kernel.org>,
+        LTP List <ltp@lists.linux.it>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     =?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Wei Gao <wegao@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Martin Doucha <mdoucha@suse.cz>, Cyril Hrubis <chrubis@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/09/2023 07:00, Otto Pflüger wrote:
-> The MSM8917, MSM8937 and QM215 SoCs have VDDCX and VDDMX power domains
-> controlled in voltage level mode. Define the MSM8937 and QM215 power
-> domains as aliases because these SoCs are similar to MSM8917 and may
-> share some parts of the device tree.
-> 
-> Also add the compatibles for these SoCs to the documentation, with
-> qcom,msm8937-rpmpd using qcom,msm8917-rpmpd as a fallback compatible
-> because there are no known differences. QM215 is not compatible with
-> these because it uses different regulators.
-> 
-> Signed-off-by: Otto Pflüger <otto.pflueger@abscue.de>
-> ---
->  .../devicetree/bindings/power/qcom,rpmpd.yaml | 79 ++++++++++---------
->  include/dt-bindings/power/qcom-rpmpd.h        | 21 +++++
->  2 files changed, 64 insertions(+), 36 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
-> index 9b03c41d3604..d4dac8b54045 100644
-> --- a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
-> +++ b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
-> @@ -15,42 +15,49 @@ description:
->  
->  properties:
->    compatible:
-> -    enum:
-> -      - qcom,mdm9607-rpmpd
-> -      - qcom,msm8226-rpmpd
-> -      - qcom,msm8909-rpmpd
-> -      - qcom,msm8916-rpmpd
-> -      - qcom,msm8939-rpmpd
-> -      - qcom,msm8953-rpmpd
-> -      - qcom,msm8976-rpmpd
-> -      - qcom,msm8994-rpmpd
-> -      - qcom,msm8996-rpmpd
-> -      - qcom,msm8998-rpmpd
-> -      - qcom,qcm2290-rpmpd
-> -      - qcom,qcs404-rpmpd
-> -      - qcom,qdu1000-rpmhpd
-> -      - qcom,sa8155p-rpmhpd
-> -      - qcom,sa8540p-rpmhpd
-> -      - qcom,sa8775p-rpmhpd
-> -      - qcom,sdm660-rpmpd
-> -      - qcom,sc7180-rpmhpd
-> -      - qcom,sc7280-rpmhpd
-> -      - qcom,sc8180x-rpmhpd
-> -      - qcom,sc8280xp-rpmhpd
-> -      - qcom,sdm670-rpmhpd
-> -      - qcom,sdm845-rpmhpd
-> -      - qcom,sdx55-rpmhpd
-> -      - qcom,sdx65-rpmhpd
-> -      - qcom,sdx75-rpmhpd
-> -      - qcom,sm6115-rpmpd
-> -      - qcom,sm6125-rpmpd
-> -      - qcom,sm6350-rpmhpd
-> -      - qcom,sm6375-rpmpd
-> -      - qcom,sm8150-rpmhpd
-> -      - qcom,sm8250-rpmhpd
-> -      - qcom,sm8350-rpmhpd
-> -      - qcom,sm8450-rpmhpd
-> -      - qcom,sm8550-rpmhpd
-> +    oneOf:
-> +      - enum:
-> +          - qcom,mdm9607-rpmpd
-> +          - qcom,msm8226-rpmpd
-> +          - qcom,msm8909-rpmpd
-> +          - qcom,msm8916-rpmpd
-> +          - qcom,msm8917-rpmpd
-> +          - qcom,msm8939-rpmpd
-> +          - qcom,msm8953-rpmpd
-> +          - qcom,msm8976-rpmpd
-> +          - qcom,msm8994-rpmpd
-> +          - qcom,msm8996-rpmpd
-> +          - qcom,msm8998-rpmpd
-> +          - qcom,qcm2290-rpmpd
-> +          - qcom,qcs404-rpmpd
-> +          - qcom,qdu1000-rpmhpd
-> +          - qcom,qm215-rpmpd
-> +          - qcom,sa8155p-rpmhpd
-> +          - qcom,sa8540p-rpmhpd
-> +          - qcom,sa8775p-rpmhpd
-> +          - qcom,sdm660-rpmpd
+Following kernel crash noticed on Linux stable-rc 6.5.3-rc1 on qemu-arm64 while
+running LTP sched tests cases.
 
-Move it down to sort, while you are changing it.
+This is not always reproducible.
+
+Anyone have noticed LTP cfs_bandwidth01 causing a kernel crash on any of the
+devices or qemu-* ?
+
+I need to check similar crashes on other Linux trees and branches.
+
+Boot log and test log:
+---------------------
+[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x000f0510]
+[    0.000000] Linux version 6.5.3-rc1 (tuxmake@tuxmake) (Debian clang
+version 18.0.0 (++20230910112057+710b5a12324e-1~exp1~20230910112229.889),
+Debian LLD 18.0.0) #1 SMP PREEMPT @1694441978
+[    0.000000] KASLR enabled
+[    0.000000] random: crng init done
+[    0.000000] Machine model: linux,dummy-virt
+...
+running LTP sched tests
+...
+cfs_bandwidth01.c:129: TPASS: Workers exited
+cfs_bandwidth01.c:117: TPASS: Scheduled bandwidth constrained workers
+cfs_bandwidth01.c:54: TINFO: Set 'level2/cpu.max' = '5000 10000'
+<1>[   74.455327] Unable to handle kernel NULL pointer dereference at
+virtual address 0000000000000038
+<1>[   74.456395] Mem abort info:
+<1>[   74.456639]   ESR = 0x0000000097880004
+<1>[   74.458273]   EC = 0x25: DABT (current EL), IL = 32 bits
+<1>[   74.458859]   SET = 0, FnV = 0
+<1>[   74.459495]   EA = 0, S1PTW = 0
+<1>[   74.460171]   FSC = 0x04: level 0 translation fault
+<1>[   74.460799] Data abort info:
+<1>[   74.461388]   Access size = 4 byte(s)
+<1>[   74.462068]   SSE = 0, SRT = 8
+<1>[   74.462713]   SF = 0, AR = 0
+<1>[   74.463257]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+<1>[   74.463996]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+<1>[   74.465120] user pgtable: 4k pages, 48-bit VAs, pgdp=00000001029d6000
+<1>[   74.465818] [0000000000000038] pgd=0000000000000000, p4d=0000000000000000
+<0>[   74.468416] Internal error: Oops: 0000000097880004 [#1] PREEMPT SMP
+<4>[   74.469489] Modules linked in: fuse drm dm_mod ip_tables x_tables
+<4>[   74.470964] CPU: 0 PID: 435 Comm: cfs_bandwidth01 Not tainted 6.5.3-rc1 #1
+<4>[   74.471789] Hardware name: linux,dummy-virt (DT)
+<4>[   74.473045] pstate: 634000c9 (nZCv daIF +PAN -UAO +TCO +DIT
+-SSBS BTYPE=--)
+<4>[   74.473785] pc : set_next_entity+0xc0/0x1f8
+<4>[   74.475461] lr : pick_next_task_fair+0x204/0x3b8
+<4>[   74.476989] sp : ffff8000807eb870
+<4>[   74.477346] x29: ffff8000807eb870 x28: ffff0000c4e3b750 x27:
+ffffcb93e8e19008
+<4>[   74.478392] x26: ffff0000c4e3b0c0 x25: ffffcb93e8ab4828 x24:
+ffff0000c0354a00
+<4>[   74.479263] x23: ffff8000807eb900 x22: 0000000000000000 x21:
+ffff0000ff5b1300
+<4>[   74.480401] x20: ffff0000ff5b1300 x19: 0000000000000000 x18:
+0000000000000000
+<4>[   74.481417] x17: 000000000000ba7e x16: 0000000000000606 x15:
+000000000117d17a
+<4>[   74.482733] x14: 0000000000000000 x13: 0000000f0f4bc800 x12:
+00000000000002b0
+<4>[   74.484181] x11: 0000000f0f4bc800 x10: 0000000cf6ad6bd1 x9 :
+ffffcb93e6af8e4c
+<4>[   74.485229] x8 : 0000000000000000 x7 : ffffcb93e8a3ccac x6 :
+0000000000000003
+<4>[   74.486131] x5 : 000000008040002b x4 : 0000ffffbef0c000 x3 :
+ffff0000ff5b1200
+<4>[   74.487012] x2 : ffff0000c39efc00 x1 : 0000000000000000 x0 :
+ffff0000ff5b1300
+<4>[   74.488236] Call trace:
+<4>[   74.488608]  set_next_entity+0xc0/0x1f8
+<4>[   74.489280]  pick_next_task_fair+0x204/0x3b8
+<4>[   74.489987]  __schedule+0x1e0/0x9c8
+<4>[   74.490903]  schedule+0x134/0x1b8
+<4>[   74.491632]  schedule_preempt_disabled+0x90/0x108
+<4>[   74.492392]  rwsem_down_write_slowpath+0x288/0x6f0
+<4>[   74.493056]  down_write+0x48/0xb0
+<4>[   74.493606]  unlink_anon_vmas+0x148/0x1b0
+<4>[   74.494222]  free_pgtables+0x10c/0x200
+<4>[   74.494800]  exit_mmap+0x174/0x3c0
+<4>[   74.495177]  __mmput+0x48/0x150
+<4>[   74.495761]  mmput+0x34/0x70
+<4>[   74.496058]  exit_mm+0xbc/0x148
+<4>[   74.497651]  do_exit+0x22c/0x910
+<4>[   74.498212]  do_group_exit+0xa4/0xb0
+<4>[   74.498870]  __arm64_sys_exit_group+0x24/0x30
+<4>[   74.499484]  invoke_syscall+0x4c/0x120
+<4>[   74.499834]  el0_svc_common+0xd0/0x110
+<4>[   74.500196]  do_el0_svc+0x3c/0xb8
+<4>[   74.500475]  el0_svc+0x30/0x90
+<4>[   74.500746]  el0t_64_sync_handler+0x84/0x100
+<4>[   74.501309]  el0t_64_sync+0x190/0x198
+<0>[   74.502156] Code: f900293f f9403908 b5ffff48 17ffffde (b9403a68)
+<4>[   74.503735] ---[ end trace 0000000000000000 ]---
+<6>[   74.504727] note: cfs_bandwidth01[435] exited with irqs disabled
+
+Links:
+-----
+  - https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2VFpDOMEgzroNyiP9SSlxRxHsMH
+  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.5.y/build/v6.5.2-740-g7bfd1316ceae/testrun/19901770/suite/log-parser-test/tests/
+  - https://storage.tuxsuite.com/public/linaro/lkft/builds/2VFpB1ieNZSp5zh0joVGtoMn7RG/
+
+Steps to reproduce:
+----------------
+# To install tuxrun to your home directory at ~/.local/bin:
+# pip3 install -U --user tuxrun==0.49.2
+#
+# Or install a deb/rpm depending on the running distribution
+# See https://tuxmake.org/install-deb/ or
+# https://tuxmake.org/install-rpm/
+#
+# See https://tuxrun.org/ for complete documentation.
+#
+
+tuxrun --runtime podman --device qemu-arm64 --boot-args rw --kernel
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2VFpB1ieNZSp5zh0joVGtoMn7RG/Image.gz
+--modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2VFpB1ieNZSp5zh0joVGtoMn7RG/modules.tar.xz
+--rootfs https://storage.tuxboot.com/debian/bookworm/arm64/rootfs.ext4.xz
+--parameters SKIPFILE=skipfile-lkft.yaml --parameters SHARD_NUMBER=4
+--parameters SHARD_INDEX=2 --image
+docker.io/linaro/tuxrun-dispatcher:v0.49.2 --tests ltp-sched
+--timeouts boot=30 ltp-sched=30 --overlay
+https://storage.tuxboot.com/overlays/debian/bookworm/arm64/ltp/20230516/ltp.tar.xz
 
 
-With above (and assumption if you ever need to rebase the patch you will
-be extra careful and re-check all entries):
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+--
+Linaro LKFT
+https://lkft.linaro.org
