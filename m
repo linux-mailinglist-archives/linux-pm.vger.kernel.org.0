@@ -2,110 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5960179D9B7
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 21:44:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B14079DA36
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 22:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232259AbjILToQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 15:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
+        id S229695AbjILUpW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 16:45:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjILToQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 15:44:16 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438BF115;
-        Tue, 12 Sep 2023 12:44:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694547852; x=1726083852;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=+iTvmA7SKg2BWLnibSpTO7nLR6MbvDS5waDLBgWXs9E=;
-  b=cyyWbQilj2SPiM8fYlbrHmCJzVwmQEWN6wriEpgxG83XrYZFmIHIR1hQ
-   IPs1/Dc4OpLOpvxhtTrgzxpkNsu/6XBRUqp6QYzGPsHEKptCfxeJp7yAA
-   375ggtxLvoZnQuKoM7miX09FB9N5ks42uq5P7DI6QY/NqkGH39bkulD8v
-   B3LJefayaaWBHcGRYh0Bu0G9o+w6iMvzAD3Po5JHHGe4OpnX0m4LY48N4
-   RNMsssL1CA6nJRI+6Dj6jCPdtDS7Jpd9c2cFqksWTh/rRG/P6tziK+Hq2
-   nmi2HyVUY+jXVvv6ZREhuCZmIzIvFXdhtEPIBKTjnTFA1tJV2xc4KbA+h
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="409425017"
-X-IronPort-AV: E=Sophos;i="6.02,141,1688454000"; 
-   d="scan'208";a="409425017"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 12:44:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="809396182"
-X-IronPort-AV: E=Sophos;i="6.02,141,1688454000"; 
-   d="scan'208";a="809396182"
-Received: from spandruv-desk1.amr.corp.intel.com ([10.209.66.7])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 12:44:11 -0700
-Message-ID: <275e34c2e67a85c087ff983354bf74b5257b2fc4.camel@linux.intel.com>
-Subject: Re: [PATCH v3 0/7] thermal: processor_thermal: Suport workload hint
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 12 Sep 2023 12:44:10 -0700
-In-Reply-To: <CAJZ5v0jrKSUOGG72w-EdzhQqC==CA7zYUofNSEW1wV-58TOnLw@mail.gmail.com>
-References: <20230829002346.2104251-1-srinivas.pandruvada@linux.intel.com>
-         <CAJZ5v0jrKSUOGG72w-EdzhQqC==CA7zYUofNSEW1wV-58TOnLw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+        with ESMTP id S229683AbjILUpU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 16:45:20 -0400
+X-Greylist: delayed 450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Sep 2023 13:45:16 PDT
+Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D884F1BE
+        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 13:45:16 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id gA8gqd7Tg4d7DgA8gqXZ6T; Tue, 12 Sep 2023 22:37:39 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1694551059;
+        bh=lMcb8WrFX7B6OJqoOfSUz/GFKwhDlyO9IScBhzlH2nY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=NUYtJ1+M46Jm22jKLcunMpM+YLbndMczChoBGBxX6qMcUWkn2FF+NjlONpdrrhyJv
+         fm5z3kbVUblgnZe1UGlSADIi6wPS1NuiSa/R3YqXFGi9Qz8AT0jKVedzc2XccgdYgj
+         irV/jNn+uBmbH7MX1EzHxFmPArp7EYMhgZPN3cMbXx/VNnqcUTTuvvYHPWiSjtigYA
+         iPxmhOXGeWPVRePF1sY1tZGrUq9/THDVmGBfVJ3n9bVLy/PXNpi9FCuKsTUBTyPYZk
+         O2JvRGDc5P5HYHRFWhcrPOzsVa4Sdt+TukSgtaKGDDxf69tQyCHQ77rhyt54hdQHce
+         ymx2867p8gGMA==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 12 Sep 2023 22:37:39 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <eab4324a-9e46-fa07-b849-792eba613ac8@wanadoo.fr>
+Date:   Tue, 12 Sep 2023 22:37:38 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH v2 3/3] power: supply: bq24190_charger: Export current
+ regulator
+Content-Language: fr, en-US
+To:     Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
+Cc:     Alexandre Courbot <acourbot@nvidia.com>,
+        azkali <a.ffcc7@gmail.com>, CTCaer <ctcaer@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230824112741.201353-1-linkmauve@linkmauve.fr>
+ <20230824131342.206784-1-linkmauve@linkmauve.fr>
+ <20230824131342.206784-4-linkmauve@linkmauve.fr>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20230824131342.206784-4-linkmauve@linkmauve.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+Le 24/08/2023 à 15:13, Emmanuel Gil Peyrot a écrit :
+> From: Alexandre Courbot <acourbot@nvidia.com>
+> 
+> This prevents the charger from ever going over the current limit.
+> 
+> Signed-off-by: Alexandre Courbot <acourbot@nvidia.com>
+> Signed-off-by: Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
+> ---
+>   drivers/power/supply/bq24190_charger.c | 82 ++++++++++++++++++++++++++
+>   1 file changed, 82 insertions(+)
+> 
+> diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
+> index a56122b39687..cc1bd87f4982 100644
+> --- a/drivers/power/supply/bq24190_charger.c
+> +++ b/drivers/power/supply/bq24190_charger.c
+> @@ -530,6 +530,79 @@ static int bq24190_set_otg_vbus(struct bq24190_dev_info *bdi, bool enable)
+>   }
+>   
+>   #ifdef CONFIG_REGULATOR
+> +static int bq24190_set_charging_current(struct regulator_dev *dev,
+> +			int min_uA, int max_uA)
+> +{
+> +	struct bq24190_dev_info *bdi = rdev_get_drvdata(dev);
+> +	u8 ss_reg;
+> +	int in_current_limit;
+> +	int ret = 0;
 
-On Tue, 2023-09-12 at 16:09 +0200, Rafael J. Wysocki wrote:
-> On Tue, Aug 29, 2023 at 2:23=E2=80=AFAM Srinivas Pandruvada
-> <srinivas.pandruvada@linux.intel.com> wrote:
-> >=20
-> >=20
+Nit: Un-needed init.
 
-[...]
+> +
+> +	ret = bq24190_read(bdi, BQ24190_REG_SS, &ss_reg);
+> +	if (ret < 0)
+> +		goto error;
+> +
+> +	if (max_uA == 0 && ss_reg != 0)
+> +		return ret;
 
-> > --
->=20
-> There is a slight issue with the patch ordering in this series,
-> because the interface to enable the interrupt should only be provided
-> after implementing the interrupt handlers.=C2=A0 I don't think that anyon=
-e
-> will apply the series partially and try to enable the feature,
-> though.
-Thanks!
+ret is known to be 0 here. If it is the intension, return 0 would be 
+more explicit. Otherwise a ret = -<error_code> is missing.
 
->=20
-> Also, I'm not actually sure if proc_thermal_wt_intr_callback() can
-> run
-> safely against the work item scheduled in proc_thermal_irq_handler()
-> in case the workload hint one triggers along with a thermal threshold
-> one.=C2=A0 I think that the access to MMIO is cached, so what if they bot=
-h
-> try to update the same cache line at the same time?=C2=A0 Or are they
-> guaranteed to be different cache lines?
-These two registers are 90 cache lines apart. Looking at all the
-registers on this bar for status offsets, they are several cache lines
-apart. Also this bar is non prefetchable, so continuous data can't be
-fetched ahead.
+Just my 2c,
 
+CJ
 
->=20
-> Anyway, tentatively applied as 6.7 material, but I've changed the
-> second patch somewhat, because I couldn't convince myself that the
-> implicit type conversions in
-> processor_thermal_mbox_interrupt_config()
-> would always do the right thing regardless of the numbers involved,
-> so
-> please check the result in my bleeding-edge branch.
->=20
-If I diff, there is only one change in processor_thermal_mbox.c. Tested
-that change and works fine.
+> +
+> +	if (!(ss_reg & BQ24190_REG_SS_VBUS_STAT_MASK))
+> +		in_current_limit = 500;
+> +	else
+> +		in_current_limit = max_uA / 1000;
+> +
+> +	return bq24190_set_field_val(bdi, BQ24190_REG_ISC,
+> +			BQ24190_REG_ISC_IINLIM_MASK,
+> +			BQ24190_REG_ISC_IINLIM_SHIFT,
+> +			bq24190_isc_iinlim_values,
+> +			ARRAY_SIZE(bq24190_isc_iinlim_values),
+> +			in_current_limit);
+> +error:
+> +	dev_err(bdi->dev, "Charger enable failed, err = %d\n", ret);
+> +	return ret;
+> +}
 
-Thanks,
-Srinivas
-
-
-> Thanks!
+...
 
