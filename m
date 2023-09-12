@@ -2,120 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18EDF79DB1F
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 23:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B71479DB29
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 23:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231455AbjILVtd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 17:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
+        id S232018AbjILVxH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 17:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjILVtd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 17:49:33 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E74410CC;
-        Tue, 12 Sep 2023 14:49:29 -0700 (PDT)
-Received: from mercury (unknown [185.254.75.28])
+        with ESMTP id S230453AbjILVxG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 17:53:06 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCC110CC;
+        Tue, 12 Sep 2023 14:53:02 -0700 (PDT)
+Received: from mercury (unknown [185.254.75.45])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 20291660731A;
-        Tue, 12 Sep 2023 22:49:28 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3530D660731A;
+        Tue, 12 Sep 2023 22:53:01 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1694555368;
-        bh=KzHUhPgIk9l5Uaueu48b3+uaUVOCUBluWUvrQPBJO5M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V/FhKTWNlzQtct5IgtDQhMjOFgcsXU7oFvaJdLnEbVO1aQtUmI7FUtophTh29Hpqa
-         7SIaJSKPRVf2mC+Q69heL4YdEpZgAPyGKqvOqZYHeTgHEl+fmqJPU1h8fwhf4c3kQX
-         E/m/KgVPBiR1jwdzv3ol4ZF99eBRasMG2GB5FfZccJ3K3HN7TNKmdLK/qPq19yYI8e
-         ubI+LMmy2PNcy3FaQLnI7qXOTwsr11cFFTJA8tyuBqae7PZv/Fz5/WZQUvBuamgpq4
-         IbqKbLKZDnyOzAKOyMTmnzTgr5v9E9uRgpkG6V2nBdqSk2QvUT/W/7OpSJMEoKBXG4
-         GUO8ONFqmOFjg==
+        s=mail; t=1694555581;
+        bh=HNrzzFTWzQ4cDQWYcCwAmqtp8qqc0ZCAEHrFYUaaL9k=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=bBI9i7VpNkzfjAChktw4w6dPFuuV9X5fqnfEILMtY97XVCunNZGUjCwhW94r5RW/X
+         ShQarwWN4hwiEb/0o7Q599zX5cS4kitm0gdasEzKlQWw68U4aLyY/7P1OoimVTQq9y
+         AvDDk8ZKjGcS7Az7YGfcPwGlIa0oSyaW6K5WNl3A24L4tH6JJ3/Upsn68K/8j62KXG
+         ScpjY35KGVHqgYDaZFQAwV3p9vcBmrD3D3vGITArzf3OkDXtiluC/MHo81WmgMqgL7
+         iQaPu6Ic2N3CPlpIxwBxwiE1FjH+CDveEgZx3LAyRk2pzfOdpjH1GlL94aDKdIKowv
+         9+LqsTtjLSqwg==
 Received: by mercury (Postfix, from userid 1000)
-        id BED16106098A; Tue, 12 Sep 2023 23:49:25 +0200 (CEST)
-Date:   Tue, 12 Sep 2023 23:49:25 +0200
+        id 96231106098A; Tue, 12 Sep 2023 23:52:58 +0200 (CEST)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.au@gmail.com>
-Subject: Re: [PATCH 1/2] power: supply: bq24257_charger: Make chip type and
- name in sync
-Message-ID: <20230912214925.uukw4lxnopzswqz2@mercury.elektranox.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.au@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230902193331.83672-1-biju.das.jz@bp.renesas.com>
 References: <20230902193331.83672-1-biju.das.jz@bp.renesas.com>
- <20230902193331.83672-2-biju.das.jz@bp.renesas.com>
- <ZPWsdjlFvUzeFy45@smile.fi.intel.com>
- <OS0PR01MB592285B86C29C3C1A992C09986F3A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <ZP7ored2UfXcFUvz@smile.fi.intel.com>
+Subject: Re: [PATCH 0/2] Match data improvements for bq24257_charger driver
+Message-Id: <169455557856.528406.9378433904622873998.b4-ty@collabora.com>
+Date:   Tue, 12 Sep 2023 23:52:58 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zewfeowjhf25xdtg"
-Content-Disposition: inline
-In-Reply-To: <ZP7ored2UfXcFUvz@smile.fi.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.3
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---zewfeowjhf25xdtg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Sat, 02 Sep 2023 20:33:29 +0100, Biju Das wrote:
+> This patch series aims to add match data improvements for bq24257_charger
+> driver.
+> 
+> This patch series is only compile tested.
+> 
+> Biju Das (2):
+>   power: supply: bq24257_charger: Make chip type and name in sync
+>   power: supply: bq24257_charger: Some cleanups
+> 
+> [...]
 
-Hi,
+Applied, thanks!
 
-On Mon, Sep 11, 2023 at 01:15:09PM +0300, Andy Shevchenko wrote:
-> On Sun, Sep 10, 2023 at 07:10:06AM +0000, Biju Das wrote:
-> > Hi Andy Shevchenko,
-> > > On Sat, Sep 02, 2023 at 08:33:30PM +0100, Biju Das wrote:
->=20
-> ...
->=20
-> > > > -	if (ACPI_HANDLE(dev)) {
-> > > > -		acpi_id =3D acpi_match_device(dev->driver->acpi_match_table,
-> > > > -					    &client->dev);
-> > > > -		if (!acpi_id) {
-> > > > -			dev_err(dev, "Failed to match ACPI device\n");
-> > > > -			return -ENODEV;
-> > > > -		}
-> > > > -		bq->chip =3D (enum bq2425x_chip)acpi_id->driver_data;
-> > > > -	} else {
-> > > > -		bq->chip =3D (enum bq2425x_chip)id->driver_data;
-> > > > -	}
-> > >=20
-> > > Do we still need acpi.h after this change?
-> >=20
-> > Yes, it is still needed as it is using=20
-> > ACPI_PTR.
->=20
-> Can we, please, drop ACPI_PTR() as it's more harmful than useful (same wa=
-y as
-> you dropped the ifdeffery for OF cases in other patches)?
+[1/2] power: supply: bq24257_charger: Make chip type and name in sync
+      commit: 3dc4a291a1b156d3ee9a78672ec950601bd68c1c
+[2/2] power: supply: bq24257_charger: Some cleanups
+      commit: b92f5e4fccc2ca96241904bb1a4e96547b69163d
 
-I will go ahead and merge this series, ACPI_PTR() and
-of_match_ptr() should be removed in a separate cleanup patch.
+Best regards,
+-- 
+Sebastian Reichel <sebastian.reichel@collabora.com>
 
--- Sebastian
-
---zewfeowjhf25xdtg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmUA3OIACgkQ2O7X88g7
-+pr71w/+IgYWrC5fD6PTKqgYLZgjLziNKJmHrPKWUaJ8O7JmK/lffOU0ZsFJCW48
-EvhmhZDm5Ta447qDYHrNIattg1pGYixLxkExXsFYoy1bb4CDzrDuXtEyBL/DvGK4
-U3GQmnHyeSbFWJaEGkDaDaBiJuuJYpTfpLUvTbW45dhlzGNXRoNTaWfm8cvWuc04
-W2AYdeUSNrirEXqP/R5XiRXEICmQ3oyRS7YUt+wqi0dnXu2JWQplMiGQgOP23veQ
-Om+LykWszUbgJ2CQ181mSshp8dxJqgE3IlSeDqfyTYLQsXuzOb7uiv1mK6tW20Ja
-6CuY01qC7CobNWkqMRZfjtt949bQlXKW7clYUm6V4yXwASh9N/WRMS1Oa8qGlqn3
-6EvhmOM4yGH8VkOd5P1DpLgjQ2P9QFLbWUyIqswt1do3az/b87LdDm8EAg4JpFTJ
-yXo2PJ0DDNXzkCTDQeO/Bw8gdQK9NYiyZpf+2EaVeHLla160TvI+SVB08QMdeoM4
-aLYhXlO6dqb2CeriYEoWXAXf4oo/HEKMINiNQqjTv6IzXf92vruKeI7/un2r9s7L
-uxCWMNMu7spmsWtLarzxb18Ly8HGVNc0uFrGMcQ5p2onG1NjBfk8LTzzsFTR87dN
-aMdvbOYSgncrG1MHzuxyuSRf69nSYhEMFKv2wqNWci01ls3AFZ8=
-=djlU
------END PGP SIGNATURE-----
-
---zewfeowjhf25xdtg--
