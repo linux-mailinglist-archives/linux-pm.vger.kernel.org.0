@@ -2,188 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2037D79C754
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 08:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F37B79C76C
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 09:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbjILG7l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 02:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59450 "EHLO
+        id S230515AbjILHBI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 03:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231229AbjILG7i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 02:59:38 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBFB10E0
-        for <linux-pm@vger.kernel.org>; Mon, 11 Sep 2023 23:59:34 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-57790939a2bso780193a12.3
-        for <linux-pm@vger.kernel.org>; Mon, 11 Sep 2023 23:59:33 -0700 (PDT)
+        with ESMTP id S230396AbjILHBI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 03:01:08 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A04E75
+        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 00:01:04 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9aa2c6f0806so222005666b.3
+        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 00:01:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694501973; x=1695106773; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=LlO3N7pqp4fi5xGA4ZVrbbV2rUdgOmvkPdAdAMdS/98=;
-        b=Gk7dvV+JXskLV+T9xokIsdQckwrxM+BEs2NeEq6aRJiz8a18TCLfL+XgPQOMa9J3gC
-         IpWt1MghMIN5VgYSSxpJ1x913Poq7yOTdi9s59YM0J9FiJ3XhhF7CmJoI6SZ/bvtxwG0
-         YCgoA6DLCKYPF+l1yP8Jd1/hWt9plcXWJ/kxV4HHmfFisVyCTd5jrihVJM60NP52QNFv
-         N5cdt4nojDUoxgudn5hBg8nJnbE+g8kk08kmHFhNT3qsRO86NEHOaD5l6PqTD1LZRSrA
-         VRBAAyE9W97ejIpkZ53WzhEM7ne6QoPNABWFyzg2ltAr7QFYCHrBTWOsxjCHxhCUIvDw
-         dN9Q==
+        d=linaro.org; s=google; t=1694502063; x=1695106863; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ctIV/w4BG99+4Nc0GESnPYJu8NhdJz0/fF4LjMpIMlA=;
+        b=Z6hDaRKhfdclWbzLJfUc9sVZVHbytO1S/hxTfCHqEEnm/MHQ+nNV2jR7nIhxYAJshP
+         oPfUi9XagXr2z3gdFMGUHdjYu22ypxw+RdBUBTqYE5oIlO9jDEsVXEdj2QHatbn/rrJ7
+         B5dAK7bHEBtt0nG8tKF7gjUMDuAXZ3i0q8stozVsTpZfFur8YgoXGfBQKVtpCidxiuqd
+         af1DVNYeNzQowWC926RhbG2UnymwBDUiu+E9uD8x7Fr+0wE69pQa2V8bqNW8xlbmYIgi
+         75n8fPqdbKikIhh4ngv2/jX9hMmcD0/u3sJ7gFaO+PIKAgN6uw5IAnDs82cfnzlXvDlK
+         Jbew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694501973; x=1695106773;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1694502063; x=1695106863;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LlO3N7pqp4fi5xGA4ZVrbbV2rUdgOmvkPdAdAMdS/98=;
-        b=O+hYvJA8WuOtY5VoTGWb6ycj1wQwizUie1BOWsZesS7+iLyl1vYjOX516xn9Yj6U5r
-         kCNuMs+ZfhWFFpIojJs+8K+TnNKgSFNEXWl4Bn3rvPuCszHL05u8R3A8NiZqcRNQQqid
-         DFfg74gDZIRdd0gU2hPlYBHjA9y0M5/wKho5zbzo7tyhJT/j7C+y3uEOAuoU3CnqppBF
-         SVIr2qqdeHBVCkTe/JQlZYgB7PscHttUczIZGMIv7LLjV3QMFySdc3bHFunWMrNoNOxr
-         Dshd/dAgZTsxzKZVsaOvc9mesvmENcWbt3J50F4yYsfeil3Cborx+aHclZMlS/vw+X/I
-         VEEQ==
-X-Gm-Message-State: AOJu0YwoySkKYqbdbaksIyTsmpeEVVP8gHRhJKS8sUAbPAM1BAsPxRtL
-        qA4qirKY3f6Uh1ZS7prqhp6s
-X-Google-Smtp-Source: AGHT+IHiiSfJhGC0JZK1XwVhpgMz9qY8FvoEghC/BG98cbA6Z+dik3F1LlzN6wd5MSvhL0wQSV6MRw==
-X-Received: by 2002:a05:6a20:9706:b0:14b:ecab:a6ba with SMTP id hr6-20020a056a20970600b0014becaba6bamr9283969pzc.28.1694501973237;
-        Mon, 11 Sep 2023 23:59:33 -0700 (PDT)
-Received: from thinkpad ([117.206.119.163])
-        by smtp.gmail.com with ESMTPSA id fu8-20020a17090ad18800b00262e485156esm8406071pjb.57.2023.09.11.23.59.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 23:59:32 -0700 (PDT)
-Date:   Tue, 12 Sep 2023 12:29:18 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, andersson@kernel.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
-        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
-        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
-        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 5/6] arm64: dts: qcom: sdm845: Add OPP table support
- to UFSHC
-Message-ID: <20230912065918.GB6404@thinkpad>
-References: <20230731163357.49045-1-manivannan.sadhasivam@linaro.org>
- <20230731163357.49045-6-manivannan.sadhasivam@linaro.org>
- <04eb9f71-78f0-41f2-96a6-fc759ba296fa@linaro.org>
+        bh=ctIV/w4BG99+4Nc0GESnPYJu8NhdJz0/fF4LjMpIMlA=;
+        b=Q4oQtYfC5rC+NwxPfIkMH9dp+vozQR7gvLZWIluzca96onEzrdpE+k90/8zyr/r7Sh
+         hqc2HsA4qzP7HeyPKMH9/006DCpXTmwylUcD94kNDNwWY8LGFz31hQfR08WJo7gG1Qzj
+         jEN/OJ1Wo/fsy6xhRCG1JgvZ1a14Mkrp2LPoyHRecLKbPtcfIk7hLuNW1fbPoLg1MwCr
+         QQR2SBNWB2eNgcG17dWfRzIlzmp6YFAUhNugPJT7yvDHeZGGwgF0WT/PfDej6uAJHO7X
+         mMfEeQb9MJV0AuU6xqor8xhIDf1et+jdXemYUZoxyXqrVXQkcsleUnhhEiWlXec6Ao5w
+         EZfw==
+X-Gm-Message-State: AOJu0YwAO4qg95zMype3nRHAWWJTk92H5ghwGVegi77JKle23d905GBh
+        vn0mGFP0IQkLQpjyNGSM6evsQQ==
+X-Google-Smtp-Source: AGHT+IE4NxTfAMRkF8WeMqfzV5pOhN4h5BXKsp26cOVN4IsTNWN1bc4jzc9tBEBAYrudVHhvYAzzyQ==
+X-Received: by 2002:a17:906:10c9:b0:9a9:fc74:8d50 with SMTP id v9-20020a17090610c900b009a9fc748d50mr9504187ejv.66.1694502062742;
+        Tue, 12 Sep 2023 00:01:02 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.214.188])
+        by smtp.gmail.com with ESMTPSA id r16-20020a170906351000b0099bd86f9248sm6369287eja.63.2023.09.12.00.01.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Sep 2023 00:01:02 -0700 (PDT)
+Message-ID: <9ea20b20-43f8-7619-40a9-710340ea7acf@linaro.org>
+Date:   Tue, 12 Sep 2023 09:01:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: power: rpmpd: Add MSM8917, MSM8937
+ and QM215
+Content-Language: en-US
+To:     =?UTF-8?Q?Otto_Pfl=c3=bcger?= <otto.pflueger@abscue.de>,
+        linux-arm-msm@vger.kernel.org
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20230912050028.4804-1-otto.pflueger@abscue.de>
+ <20230912050028.4804-2-otto.pflueger@abscue.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230912050028.4804-2-otto.pflueger@abscue.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <04eb9f71-78f0-41f2-96a6-fc759ba296fa@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 11, 2023 at 04:15:10PM +0300, Dmitry Baryshkov wrote:
-> On 31/07/2023 19:33, Manivannan Sadhasivam wrote:
-> > From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > 
-> > UFS host controller, when scaling gears, should choose appropriate
-> > performance state of RPMh power domain controller along with clock
-> > frequency. So let's add the OPP table support to specify both clock
-> > frequency and RPMh performance states replacing the old "freq-table-hz"
-> > property.
-> > 
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > [mani: Splitted pd change and used rpmhpd_opp_low_svs]
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >   arch/arm64/boot/dts/qcom/sdm845.dtsi | 42 +++++++++++++++++++++-------
-> >   1 file changed, 32 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > index 055ca80c0075..2ea6eb44953e 100644
-> > --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > @@ -2605,22 +2605,44 @@ ufs_mem_hc: ufshc@1d84000 {
-> >   				<&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
-> >   				<&gcc GCC_UFS_PHY_RX_SYMBOL_1_CLK>,
-> >   				<&gcc GCC_UFS_PHY_ICE_CORE_CLK>;
-> > -			freq-table-hz =
-> > -				<50000000 200000000>,
-> > -				<0 0>,
-> > -				<0 0>,
-> > -				<37500000 150000000>,
-> > -				<0 0>,
-> > -				<0 0>,
-> > -				<0 0>,
-> > -				<0 0>,
-> > -				<75000000 300000000>;
-> > +
-> > +			operating-points-v2 = <&ufs_opp_table>;
-> >   			interconnects = <&aggre1_noc MASTER_UFS_MEM 0 &mem_noc SLAVE_EBI1 0>,
-> >   					<&gladiator_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_UFS_MEM_CFG 0>;
-> >   			interconnect-names = "ufs-ddr", "cpu-ufs";
-> >   			status = "disabled";
-> > +
-> > +			ufs_opp_table: opp-table {
-> > +				compatible = "operating-points-v2";
-> > +
-> > +				opp-50000000 {
-> > +					opp-hz = /bits/ 64 <50000000>,
-> > +						 /bits/ 64 <0>,
-> > +						 /bits/ 64 <0>,
-> > +						 /bits/ 64 <37500000>,
-> > +						 /bits/ 64 <0>,
-> > +						 /bits/ 64 <0>,
-> > +						 /bits/ 64 <0>,
-> > +						 /bits/ 64 <0>,
-> > +						 /bits/ 64 <75000000>;
-> > +					required-opps = <&rpmhpd_opp_low_svs>;
-> > +				};
+On 12/09/2023 07:00, Otto Pflüger wrote:
+> The MSM8917, MSM8937 and QM215 SoCs have VDDCX and VDDMX power domains
+> controlled in voltage level mode. Define the MSM8937 and QM215 power
+> domains as aliases because these SoCs are similar to MSM8917 and may
+> share some parts of the device tree.
 > 
-> I'd say, I'm still slightly unhappy about the 0 clock rates here.
-
-Neither do I. But it is the only viable option I could found.
-
-> We need only three clocks here: core, core_clk_unipro and optional
-> ice_core_clk. Can we modify ufshcd_parse_operating_points() to pass only
-> these two or three clock names to devm_pm_opp_set_config() ? The OPP core
-> doesn't need to know about all the rest of the clocks.
+> Also add the compatibles for these SoCs to the documentation, with
+> qcom,msm8937-rpmpd using qcom,msm8917-rpmpd as a fallback compatible
+> because there are no known differences. QM215 is not compatible with
+> these because it uses different regulators.
 > 
-
-We need to enable/disable all of the clocks, but only need to control the rate
-for these 3 clocks. So we cannot just use 3 clocks.
-
-If the OPP table has only 3 entries (omitting the gate-only clocks), then we
-need some hack in the driver to match the rates against the clock entries. Doing
-so will result in hardcoding the clock info in the driver which I do not want to
-do.
-
-If we have something like "opp-hz-names" to relate the rates to clock-names, it
-might do the job. But it needs some input from Viresh.
-
-- Mani
-
-> > +
-> > +				opp-200000000 {
-> > +					opp-hz = /bits/ 64 <200000000>,
-> > +						 /bits/ 64 <0>,
-> > +						 /bits/ 64 <0>,
-> > +						 /bits/ 64 <150000000>,
-> > +						 /bits/ 64 <0>,
-> > +						 /bits/ 64 <0>,
-> > +						 /bits/ 64 <0>,
-> > +						 /bits/ 64 <0>,
-> > +						 /bits/ 64 <300000000>;
-> > +					required-opps = <&rpmhpd_opp_nom>;
-> > +				};
-> > +			};
-> >   		};
-> >   		ufs_mem_phy: phy@1d87000 {
+> Signed-off-by: Otto Pflüger <otto.pflueger@abscue.de>
+> ---
+>  .../devicetree/bindings/power/qcom,rpmpd.yaml | 79 ++++++++++---------
+>  include/dt-bindings/power/qcom-rpmpd.h        | 21 +++++
+>  2 files changed, 64 insertions(+), 36 deletions(-)
 > 
-> -- 
-> With best wishes
-> Dmitry
-> 
+> diff --git a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
+> index 9b03c41d3604..d4dac8b54045 100644
+> --- a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
+> +++ b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
+> @@ -15,42 +15,49 @@ description:
+>  
+>  properties:
+>    compatible:
+> -    enum:
+> -      - qcom,mdm9607-rpmpd
+> -      - qcom,msm8226-rpmpd
+> -      - qcom,msm8909-rpmpd
+> -      - qcom,msm8916-rpmpd
+> -      - qcom,msm8939-rpmpd
+> -      - qcom,msm8953-rpmpd
+> -      - qcom,msm8976-rpmpd
+> -      - qcom,msm8994-rpmpd
+> -      - qcom,msm8996-rpmpd
+> -      - qcom,msm8998-rpmpd
+> -      - qcom,qcm2290-rpmpd
+> -      - qcom,qcs404-rpmpd
+> -      - qcom,qdu1000-rpmhpd
+> -      - qcom,sa8155p-rpmhpd
+> -      - qcom,sa8540p-rpmhpd
+> -      - qcom,sa8775p-rpmhpd
+> -      - qcom,sdm660-rpmpd
+> -      - qcom,sc7180-rpmhpd
+> -      - qcom,sc7280-rpmhpd
+> -      - qcom,sc8180x-rpmhpd
+> -      - qcom,sc8280xp-rpmhpd
+> -      - qcom,sdm670-rpmhpd
+> -      - qcom,sdm845-rpmhpd
+> -      - qcom,sdx55-rpmhpd
+> -      - qcom,sdx65-rpmhpd
+> -      - qcom,sdx75-rpmhpd
+> -      - qcom,sm6115-rpmpd
+> -      - qcom,sm6125-rpmpd
+> -      - qcom,sm6350-rpmhpd
+> -      - qcom,sm6375-rpmpd
+> -      - qcom,sm8150-rpmhpd
+> -      - qcom,sm8250-rpmhpd
+> -      - qcom,sm8350-rpmhpd
+> -      - qcom,sm8450-rpmhpd
+> -      - qcom,sm8550-rpmhpd
+> +    oneOf:
+> +      - enum:
+> +          - qcom,mdm9607-rpmpd
+> +          - qcom,msm8226-rpmpd
+> +          - qcom,msm8909-rpmpd
+> +          - qcom,msm8916-rpmpd
+> +          - qcom,msm8917-rpmpd
+> +          - qcom,msm8939-rpmpd
+> +          - qcom,msm8953-rpmpd
+> +          - qcom,msm8976-rpmpd
+> +          - qcom,msm8994-rpmpd
+> +          - qcom,msm8996-rpmpd
+> +          - qcom,msm8998-rpmpd
+> +          - qcom,qcm2290-rpmpd
+> +          - qcom,qcs404-rpmpd
+> +          - qcom,qdu1000-rpmhpd
+> +          - qcom,qm215-rpmpd
+> +          - qcom,sa8155p-rpmhpd
+> +          - qcom,sa8540p-rpmhpd
+> +          - qcom,sa8775p-rpmhpd
+> +          - qcom,sdm660-rpmpd
 
--- 
-மணிவண்ணன் சதாசிவம்
+Move it down to sort, while you are changing it.
+
+
+With above (and assumption if you ever need to rebase the patch you will
+be extra careful and re-check all entries):
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
