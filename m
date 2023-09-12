@@ -2,140 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F1979CCA7
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 12:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F68879CC77
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 11:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233387AbjILKAP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 06:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48958 "EHLO
+        id S233065AbjILJxy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 05:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233343AbjILKAN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 06:00:13 -0400
-Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67A0E64;
-        Tue, 12 Sep 2023 03:00:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kernkonzept.com; s=mx1; h=Cc:To:In-Reply-To:References:Message-Id:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:
-        Reply-To:Content-ID:Content-Description;
-        bh=BxXw2lPBlPXmQ8F4w0fefRPMnE8WnMJ9NcWQp72L7OE=; b=WMMOE1JdxyWmMDacjV73+JJ8Ec
-        iBcnvhReNiQMfRVKMTDiS6FOo4trT2yvmbWboWzIDZHe7kevkONS8v3KLV2UTiDAF4Qw8B9ZGjeMa
-        0f1YN50EXx2kE+QYmTu5Jt+MVpTcuzPAjsYtIAuJU4u5SBa1HeHkwBEUQUB4iIPsc4IgbIEk64YeG
-        v6T10qZ9anMbbTKwgx6Pp0rgI8tPPRTCKC0ECJpr0PT5C/6vVfvG76aAC7LM39BOB1+rgnLGTtCd9
-        dAFeOawFHAXelKSqwD5VNkL73SjSiSp+amqdMfC39XckjhUmUYidZ2zyj8c1yeuyE/uw/ZZUOmhIK
-        HIMDzNkw==;
-Received: from [10.22.3.24] (helo=serv1.dd1.int.kernkonzept.com)
-        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.96)
-        id 1qfzsr-0030Ws-0o;
-        Tue, 12 Sep 2023 11:40:37 +0200
-From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Date:   Tue, 12 Sep 2023 11:40:18 +0200
-Subject: [PATCH 4/4] cpufreq: qcom-nvmem: Add MSM8909
+        with ESMTP id S232917AbjILJxy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 05:53:54 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72C31BE
+        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 02:53:49 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-52a39a1c4d5so7039508a12.3
+        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 02:53:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694512428; x=1695117228; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SfDSerRFa61yu+/rsV9oiMAv0/IyQd6/vmr5YFqcfiA=;
+        b=JLj/EgGD0m9Xd9+fur/xdXFjYa4wsRE0SqGLr2DAbl4tE8o6pZxYFBgQteg5MAahMj
+         WZUoo7uj+F/PAwS+skRTXaYH2Dzb3uXOF4vHXUq9OVOKbkgaI3E4NQIqJKqk4I9JIcN2
+         xsCbBmZ/4WSLBOHPiWpYZ9z4zHzcKmPmWnU5PaY95pr30D0vRnADfD2NDPPCSuqaP/01
+         R0If/QevDrBGhPZhXg35OB3fr/CQ6tL5dRQIbktbQKBTos7vSaa0Vowacls+g2y0OhHy
+         UIKImMYrxkqOWUmiRPXBP1q043TCN+1EMDLuz/1GcHbFQKwyTLHqalXI0OohxQp6qnSd
+         24gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694512428; x=1695117228;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SfDSerRFa61yu+/rsV9oiMAv0/IyQd6/vmr5YFqcfiA=;
+        b=d/o+Vpl57xMDC7ezR1DC8xCJK64N32KVhJtT790jtOUoEdB5QAVdr/2LZQEQqd/1yF
+         YSWbwurBNehZjqyUfpCbhuDtrowD7hYabIzXx8cQVttJwIGWGd0IlXUuVwsbr7XrSmkK
+         rRYhKtkZkT7krocC5TD9r4WlMYJFeQrHTspuaEylbZV/4d5bSHQHqRW7+pArMxWJixrp
+         x0FzpPn6ib9x93fKoaww5Vb7bEj0aGyxwlXBxR5zviO7pgjcleX2llioHkqlNaBf8CdW
+         YOrtBLb88aHZg61g+/1h62XgRrV6GVQfSSB4uPrmCJQXj6CmUhY32o5u6q8VLDkvkArM
+         TI8w==
+X-Gm-Message-State: AOJu0YyswVIZ1l6udInQEXDFuwalAOD7hGFBjbJfer1r4yvVp7MkLp6G
+        tx7I0Zvpm5NLSrFRa7ipzhEtBg==
+X-Google-Smtp-Source: AGHT+IGC2Jfv2kukYlPCDVcxiRFUcsO8+lVSNevhxfNPazTOHsAhYtrKJx0HYQyriLyy+cS6jzHRNA==
+X-Received: by 2002:a05:6402:153:b0:52c:164:efe5 with SMTP id s19-20020a056402015300b0052c0164efe5mr10037835edu.39.1694512428169;
+        Tue, 12 Sep 2023 02:53:48 -0700 (PDT)
+Received: from [192.168.37.85] (178235177248.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.248])
+        by smtp.gmail.com with ESMTPSA id j8-20020aa7c0c8000000b00525503fac84sm5698287edp.25.2023.09.12.02.53.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Sep 2023 02:53:47 -0700 (PDT)
+Message-ID: <1c8e9831-e654-4ec9-b742-a68e729e6962@linaro.org>
+Date:   Tue, 12 Sep 2023 11:53:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230912-msm8909-cpufreq-v1-4-767ce66b544b@kernkonzept.com>
-References: <20230912-msm8909-cpufreq-v1-0-767ce66b544b@kernkonzept.com>
-In-Reply-To: <20230912-msm8909-cpufreq-v1-0-767ce66b544b@kernkonzept.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/4] cpufreq: dt: platdev: Add MSM8909 to blocklist
+Content-Language: en-US
+To:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Ilia Lin <ilia.lin@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-X-Mailer: b4 0.12.3
+        devicetree@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
+References: <20230912-msm8909-cpufreq-v1-0-767ce66b544b@kernkonzept.com>
+ <20230912-msm8909-cpufreq-v1-2-767ce66b544b@kernkonzept.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <20230912-msm8909-cpufreq-v1-2-767ce66b544b@kernkonzept.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When the MSM8909 SoC is used together with the PM8909 PMIC the primary
-power supply for the CPU (VDD_APC) is shared with other components to
-the SoC, namely the VDD_CX power domain typically supplied by the PM8909
-S1 regulator. This means that all votes for necessary performance states
-go via the RPM firmware which collects the requirements from all the
-processors in the SoC. The RPM firmware then chooses the actual voltage
-based on the performance states ("corners"), depending on calibration
-values in the NVMEM and other factors.
+On 12.09.2023 11:40, Stephan Gerhold wrote:
+> MSM8909 uses qcom-cpufreq-nvmem to attach power domains and to parse the
+> speedbin from NVMEM (for opp-supported-hw).
+> 
+> Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-The MSM8909 SoC is also sometimes used with the PM8916 or PM660 PMIC.
-In that case there is a dedicated regulator connected to VDD_APC and
-Linux is responsible to do adaptive voltage scaling using CPR (similar
-to the existing code for QCS404).
-
-This difference can be described in the device tree, by either assigning
-the CPU a power domain from RPMPD or from the CPR driver.
-
-To describe this in a more generic way, use "apc" as power domain name
-instead of "cpr". From the Linux point of view there is no CPR involved
-when MSM8909 is used together with PM8909.
-
-Also add a simple function that reads the speedbin from a NVMEM cell
-and sets it as-is for opp-supported-hw. The actual bit position can be
-described in the device tree without additional driver changes.
-
-Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
----
- drivers/cpufreq/qcom-cpufreq-nvmem.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
-
-diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-index 17d6ab14c909..2ea5e5ee9f1c 100644
---- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-+++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-@@ -49,6 +49,24 @@ struct qcom_cpufreq_drv {
- 
- static struct platform_device *cpufreq_dt_pdev, *cpufreq_pdev;
- 
-+static int qcom_cpufreq_simple_get_version(struct device *cpu_dev,
-+					   struct nvmem_cell *speedbin_nvmem,
-+					   char **pvs_name,
-+					   struct qcom_cpufreq_drv *drv)
-+{
-+	u8 *speedbin;
-+
-+	*pvs_name = NULL;
-+	speedbin = nvmem_cell_read(speedbin_nvmem, NULL);
-+	if (IS_ERR(speedbin))
-+		return PTR_ERR(speedbin);
-+
-+	dev_dbg(cpu_dev, "speedbin: %d\n", *speedbin);
-+	drv->versions = 1 << *speedbin;
-+	kfree(speedbin);
-+	return 0;
-+}
-+
- static void get_krait_bin_format_a(struct device *cpu_dev,
- 					  int *speed, int *pvs, int *pvs_ver,
- 					  u8 *buf)
-@@ -212,6 +230,13 @@ static const struct qcom_cpufreq_match_data match_data_krait = {
- 	.get_version = qcom_cpufreq_krait_name_version,
- };
- 
-+static const char *msm8909_genpd_names[] = { "apc", NULL };
-+
-+static const struct qcom_cpufreq_match_data match_data_msm8909 = {
-+	.get_version = qcom_cpufreq_simple_get_version,
-+	.genpd_names = msm8909_genpd_names,
-+};
-+
- static const char *qcs404_genpd_names[] = { "cpr", NULL };
- 
- static const struct qcom_cpufreq_match_data match_data_qcs404 = {
-@@ -375,6 +400,7 @@ static struct platform_driver qcom_cpufreq_driver = {
- };
- 
- static const struct of_device_id qcom_cpufreq_match_list[] __initconst = {
-+	{ .compatible = "qcom,msm8909", .data = &match_data_msm8909 },
- 	{ .compatible = "qcom,apq8096", .data = &match_data_kryo },
- 	{ .compatible = "qcom,msm8996", .data = &match_data_kryo },
- 	{ .compatible = "qcom,qcs404", .data = &match_data_qcs404 },
-
--- 
-2.39.2
-
+Konrad
