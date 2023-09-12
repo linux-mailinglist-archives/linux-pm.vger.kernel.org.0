@@ -2,143 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BDCB79D48C
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 17:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ABF079D500
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 17:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236178AbjILPOa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 11:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58652 "EHLO
+        id S236495AbjILPeI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 11:34:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235748AbjILPOa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 11:14:30 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5145C12E;
-        Tue, 12 Sep 2023 08:14:26 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-51f64817809so678445a12.1;
-        Tue, 12 Sep 2023 08:14:26 -0700 (PDT)
+        with ESMTP id S236368AbjILPeB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 11:34:01 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795A310EC
+        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 08:33:57 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id 6a1803df08f44-649edb3a3d6so25973816d6.0
+        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 08:33:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694531666; x=1695136466; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1694532836; x=1695137636; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EmhnU1mUBTvGooJ8RY5P2rzvLlRqBBo52eULg86WrB4=;
-        b=LucxwN6EDigLSwLeCQjYJRaf9zRo6v/qRDFE3rvQmSaFldJ30ljv0fNqU6zebOSGP/
-         8L5b1PQoDvGbID/BHBut5JwZOutlGBqwDJsNZrMEImDW6yz1r7UJGqColJ2gDL0bacCX
-         LdRbawDEJkK9vc/rA0tM8oPvWqozACmePev2YfNJBAd/geyNMSnn5PFyrB5mJdARFXQd
-         HktG5BNJ0+Ax4NcEQDKblH5qYDTWubzM00P9YcYaHQwaid0hBa8DeY2CK5QLghfuBr2m
-         etmgOyH8tvpkhFhfFWkx7u8y7dHa8iSSWFfIhzJUqPdcRaTJQB5dsZ2cAJTL3QM1aSvH
-         AfYA==
+        bh=jn3gYV6z0mHJzWuz6G6eyUwdrkRbzHbTqw/XH7fEH4s=;
+        b=jXSW4sr0/V0TjTygldTr884ibK6jtHHyYxRV6nM1uAsrYMhRGlPYT5IV8wxSASiQt3
+         etjGNSVMhu9OE3YJ6Taca3oX5YOEBO8AH1muDseBgwvJBZPgGW7wvFhhovPvA2VVvYvi
+         7cIYUxtFUbsyGMxzcfNUGm8QCKQfdVFW8dIzAKgcEcy3bStwurtLo3txAKaYJWHG2/Ds
+         jDpI9FyiEYuT9LF5bnbNrhBt4GdREQlewD7YDtkaJEYJ0Fmaw3Owsb0Y09JGEnu1fZqU
+         mkx7I0agpaYsSJFNrXWo8vL7ZONfceEepwrEp7sAQ5mlMZZf6vJC1p+akXVskBatrkUx
+         IFZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694531666; x=1695136466;
+        d=1e100.net; s=20230601; t=1694532836; x=1695137636;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EmhnU1mUBTvGooJ8RY5P2rzvLlRqBBo52eULg86WrB4=;
-        b=HjJUQwrB/PONLnqvm2FKEnor1XSOct/q6DvSdmcE2hgau68qZpIjOcEHmyrZzygvY1
-         2cTT87rHQc+yi3KeFC6xW4x4GFOhmxDkXsSgCWOibwWS89/M2xsRbsHw7oxiGujCOvsb
-         slPqpY24cI/l1UVwIVj9u+56Z66mGdS34IVyv7RtTyMcRksPH5CWfM5yJZBUee4X9s6t
-         WtvKfS5VHS1ETCnPtKiicgZJYl3I6B6bwypMRns1UOWGNw1Bu6+WMiIviYT5xucKOnF5
-         VCe/k2zPG6Soh2S6ApXXHBL+5K8HfMUL/lXcYlphcLHXdKv8A6D9XcFU6IBPltaBHEO8
-         gK+g==
-X-Gm-Message-State: AOJu0Yzi5g1fLaUtd5By3/VrQMNk48G4ECVFr7L9bgoFMSUu4u8VuGMg
-        GnlhuP6QINa/jkkEqqeOi89hvgWmZ4yvKz6YnQw=
-X-Google-Smtp-Source: AGHT+IEDx0Xvd6FTrq5LXjrHvQW9X9/hVgAwJQ2qx5fukPQYXdAbKJmbOIMNh2wpMGXCeJrZHwzePfCPFLzb1jBlTFQ=
-X-Received: by 2002:a17:90a:1210:b0:263:f36e:d610 with SMTP id
- f16-20020a17090a121000b00263f36ed610mr11612777pja.0.1694531665742; Tue, 12
- Sep 2023 08:14:25 -0700 (PDT)
+        bh=jn3gYV6z0mHJzWuz6G6eyUwdrkRbzHbTqw/XH7fEH4s=;
+        b=I3II99SQHHUohwCDW+EH4yhwt139McqK6jcXqxf6w2tImI56Ancwgw/zT/cqzrEVJ1
+         KAJZ00HR5SbyRDrlRm0O3JpaoX3uwCbeeleC57p7i6vpeLi/PcDG/1Gh50EKYX6+JKrn
+         Wty8oO8sFgvskLF7LffkMJk8ibT0ikAMop1Y5RKc8jACbeecKtaiqRZrsD7qPGFDJL+x
+         aS2gO8ChRP44IePAN/vs76FZ0lblrTEAOTL+R7PUbVZFmd03VYoNz+w8upUcjNc39ORE
+         qRhh41mW1dSUs7I+5nJEU/NudvDgmAdeYXuQS5fzPXBvJXPiOX1DvQrOPUCnNg3Hu+Vi
+         vI1g==
+X-Gm-Message-State: AOJu0YysX+tVuRGdZlzLEKCxmSdkXzXAEol4b8HXKwHwJd7WA1D8D5C9
+        9RAvPwEj8rzfWrReTwXHnrBYeZ6thOhKVs23ZK3TMQ==
+X-Google-Smtp-Source: AGHT+IE0Ca2qfQkE6enrGukSoNDCb1OXtuL9IDZszmjiWUcu3f+9cYN/mXNgIzl2i4wDmR90/hv9yYRTETUzcz21Ipg=
+X-Received: by 2002:ad4:5d4b:0:b0:635:da80:e53a with SMTP id
+ jk11-20020ad45d4b000000b00635da80e53amr4483115qvb.12.1694532836379; Tue, 12
+ Sep 2023 08:33:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230831130242.2290502-1-festevam@gmail.com> <CAJZ5v0jKmxxFMO5TkHujEtdSjeEqKqEOwRyXAXbaeRQUTythdg@mail.gmail.com>
- <18b23d536827559f113ebae99c859cfc@denx.de> <CAJZ5v0iROqUP+HGM9djazVCYnRP_QOikgPAH1kympaC2qy_hcg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iROqUP+HGM9djazVCYnRP_QOikgPAH1kympaC2qy_hcg@mail.gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Tue, 12 Sep 2023 12:14:14 -0300
-Message-ID: <CAOMZO5AHGr9A2RFQ89SzLnzkwOFez3vO2BH3Lh4yZOL-aSn9cA@mail.gmail.com>
-Subject: Re: [PATCH v7 1/3] dt-bindings: thermal-zones: Document critical-action
-To:     "Rafael J. Wysocki" <rafael@kernel.org>, amitk@kernel.org,
-        daniel.lezcano@linaro.org
-Cc:     Fabio Estevam <festevam@denx.de>, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20230912060801.95533-1-bgray@linux.ibm.com> <20230912060801.95533-2-bgray@linux.ibm.com>
+In-Reply-To: <20230912060801.95533-2-bgray@linux.ibm.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 12 Sep 2023 08:33:42 -0700
+Message-ID: <CAKwvOdkP1uwU0Cq9541zf309tudfFdbu-10Xo3h+g07-k=Fg4A@mail.gmail.com>
+Subject: Re: [PATCH v2 1/7] ia64: fix Python string escapes
+To:     Benjamin Gray <bgray@linux.ibm.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, llvm@lists.linux.dev,
+        linux-pm@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Ian Abbott <abbotti@mev.co.uk>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, Jan Kiszka <jan.kiszka@siemens.com>,
+        Kieran Bingham <kbingham@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Todd E Brandt <todd.e.brandt@linux.intel.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Amit and Daniel,
-
-On Fri, Sep 8, 2023 at 3:02=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.org=
+On Mon, Sep 11, 2023 at 11:08=E2=80=AFPM Benjamin Gray <bgray@linux.ibm.com=
 > wrote:
 >
-> On Fri, Sep 8, 2023 at 7:37=E2=80=AFPM Fabio Estevam <festevam@denx.de> w=
-rote:
-> >
-> > Hi Rafael,
-> >
-> > On 07/09/2023 13:23, Rafael J. Wysocki wrote:
-> >
-> > > So one more question here: Why is this a property of a thermal zone
-> > > and not the property of the whole system?
-> > >
-> > > Presumably, on a system where the platform integrator prefers to
-> > > reboot on critical temperature, it would be necessary to add this
-> > > property to every thermal zone.
-> > >
-> > > Also, what if this property has different values for different therma=
-l
-> > > zones?
-> >
-> > I got your point and I can make the 'critical-action' property to be
-> > valid
-> > for the whole thermal system.
-> >
-> > Originally, I have been doing like this:
-> >
-> >         thermal-zones {
-> >                 cpu-thermal {
-> >                         critical-action =3D "reboot";
-> >                         polling-delay-passive =3D <250>;
-> >                         polling-delay =3D <2000>;
-> >                         thermal-sensors =3D <&tmu>;
-> >
-> >                         trips {
-> >                                 cpu_alert0: trip0 {
-> >                                         temperature =3D <85000>;
-> >                                         hysteresis =3D <2000>;
-> >                                         type =3D "passive";
-> >                                 };
-> >
-> > I can change it to be:
-> >
-> >
-> >         thermal-zones {
-> >                 critical-action =3D "reboot";
-> >
-> >                 cpu-thermal {
-> >                         polling-delay-passive =3D <250>;
-> >                         polling-delay =3D <2000>;
-> >                         thermal-sensors =3D <&tmu>;
-> >
-> >                         trips {
-> >                                 cpu_alert0: trip0 {
-> >                                         temperature =3D <85000>;
-> >                                         hysteresis =3D <2000>;
-> >                                         type =3D "passive";
-> >                                 };
-> >
+> Python 3.6 introduced a DeprecationWarning for invalid escape sequences.
+> This is upgraded to a SyntaxWarning in Python 3.12, and will eventually
+> be a syntax error.
 >
-> I think that this would match the use case better.
+> Fix these now to get ahead of it before it's an error.
 >
-> I still would love to hear about it from the people who take care of
-> the DT-based thermal control (mostly Daniel and Amit, who BTW is
-> listed as the maintainer of the file being updated by this patch),
-> though.
+> Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
+> ---
+>  arch/ia64/scripts/unwcheck.py | 2 +-
 
-Please let us know what you think.
+Ard is proposing removing this script, along with the rest of the architect=
+ure:
+https://lore.kernel.org/linux-arch/20230911163129.3777603-2-ardb@google.com=
+/
 
-I can send v8 which places the 'critical-action' property to be valid
-for the whole thermal system, as suggested by Rafael.
+So this change can be dropped.
 
-Thanks
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/ia64/scripts/unwcheck.py b/arch/ia64/scripts/unwcheck.p=
+y
+> index 9581742f0db2..adc24152d3b9 100644
+> --- a/arch/ia64/scripts/unwcheck.py
+> +++ b/arch/ia64/scripts/unwcheck.py
+> @@ -21,7 +21,7 @@ if len(sys.argv) !=3D 2:
+>
+>  readelf =3D os.getenv("READELF", "readelf")
+>
+> -start_pattern =3D re.compile("<([^>]*)>: \[0x([0-9a-f]+)-0x([0-9a-f]+)\]=
+")
+> +start_pattern =3D re.compile(r"<([^>]*)>: \[0x([0-9a-f]+)-0x([0-9a-f]+)\=
+]")
+>  rlen_pattern  =3D re.compile(".*rlen=3D([0-9]+)")
+>
+>  def check_func (func, slots, rlen_sum):
+> --
+> 2.41.0
+>
+
+
+--=20
+Thanks,
+~Nick Desaulniers
