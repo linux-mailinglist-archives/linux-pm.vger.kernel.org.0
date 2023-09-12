@@ -2,136 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA5479D282
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 15:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 423FF79D303
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 15:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233935AbjILNkQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 09:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55236 "EHLO
+        id S235089AbjILN6S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 09:58:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232977AbjILNkP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 09:40:15 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E6E310CE;
-        Tue, 12 Sep 2023 06:40:11 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD0F0C15;
-        Tue, 12 Sep 2023 06:40:47 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 42D103F5A1;
-        Tue, 12 Sep 2023 06:40:09 -0700 (PDT)
-Message-ID: <979a9e2f-06a8-1936-b5cd-2949eca99b21@arm.com>
-Date:   Tue, 12 Sep 2023 15:40:00 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 2/4] sched: cpufreq: Fix apply_dvfs_headroom() escaping
- uclamp constraints
-Content-Language: en-US
-To:     Qais Yousef <qyousef@layalina.io>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Lukasz Luba <lukasz.luba@arm.com>
-References: <20230820210640.585311-1-qyousef@layalina.io>
- <20230820210640.585311-3-qyousef@layalina.io>
- <CAKfTPtDY48jpO+b-2KXawzxh-ty+FMKX6YUXioNR7kpgO=ua6Q@mail.gmail.com>
- <20230829163740.uadhv2jfjuumqk3w@airbuntu>
- <CAKfTPtCP6uX79dOrzN4PxFTMBFrDAMOOrWyZrsVypUQ0RY7BAA@mail.gmail.com>
- <20230907215555.exjxho34ntkjmn6r@airbuntu>
- <CAKfTPtA8Ljy4NBqjw8Wj4pEFc-OCR55QPuwh+5GgrHN6u+ugsg@mail.gmail.com>
- <20230910174638.qe7jqq6mq36brh6o@airbuntu>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20230910174638.qe7jqq6mq36brh6o@airbuntu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        with ESMTP id S234939AbjILN6R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 09:58:17 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2FC10CE;
+        Tue, 12 Sep 2023 06:58:13 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id E6A0D32009C5;
+        Tue, 12 Sep 2023 09:58:11 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 12 Sep 2023 09:58:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1694527091; x=1694613491; bh=u0
+        LOjV4/r68tFCzvM24Co/ozHIjAyz4zQfSkl0FLEBg=; b=d+mGQw1Ly9T9uLz2Vk
+        hZEOBfxMOs77+4b2CmBmbQu9P7hkvg7dNcuSTWa7THLIQwmzuUDiG5T2xIJk15Cv
+        +ohb3UfGpf2HPMTIMx+/WhxsQwln4CRft+Ggwu9LpcKVmJzzTJj9mQfjMGRrfF2X
+        k7YIXe5IOBuyfhNa7wH/Vko3QPPgXlhfJZlDW49mSEtfJHLyjXGIR9QeD/sxqvqB
+        GzQc9mfTGEIv4nvO+j8tsT1K4kWWHQfQEyxEAs2jx4Q82M4LBJcgDqR57FwrhaAX
+        BXv+GQMCxcNRcs0+x5aw5BnpRvtZqRX6abppA8w7ms5Ax9ww+LyH3IRxA8tnpPxF
+        NX9A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1694527091; x=1694613491; bh=u0LOjV4/r68tF
+        CzvM24Co/ozHIjAyz4zQfSkl0FLEBg=; b=lbstYHqx8k/ON7HV0MEVFi6KSOd4/
+        FAELQBdu55FiiEfsWpJJNUXE4Sp1CjQZnO9lH6c+pPH7DR4dz9vPhfULva2p7QEM
+        F/KPwPrdCbyGvVFrKg46rcSIPt2m3T+wWCZT2bJkZUw0PLX0g664EuWtLAJgnFAE
+        b0VxvpnjwNAIrEKf7Cj24cqFFOvN4la6HfZVQI9MDhDK2qTKdtiFXNTog7i/mDjs
+        Bbj4ZnF/kaQykI5NDn0jpjyfC7aW0j60OkftrIu7KvHm+j8WscezB9EIPpa3chAZ
+        ZD+emIkUnGG9f8LcjXYdY9knmw9gbQkdr6t8tNj5akmhKeQFarZxM77xw==
+X-ME-Sender: <xms:cm4AZXNcNZxGdLemgdGCkpdXaAH55WiFlYiGwhTXPDVGOjqTHcN4PQ>
+    <xme:cm4AZR_Lwa8tcLAPUUOp-zb6sabtqN4985a6igUKRu0AnRPGPTSiGxoWRSXm2h01-
+    FCnT81pnevg-b3pNbU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudeiiedgjedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:cm4AZWSu9QuNfjfEalDzd50gXloFGHZ6ZWgmRK_HbxqUhG0NdlfR_w>
+    <xmx:cm4AZbuEXJM_plfWeLiZ5CzCzj8uUqero9SyOfcVflHJ2oGLHXjMHQ>
+    <xmx:cm4AZfdJTKAfkIEuCLk3BawiFSLtRpc-rhMIcJEDVd9Km_PhDuZoyA>
+    <xmx:c24AZRtbQMCxqZAR51QznL-ueGVQmCgn9ihaA-r8Bzn9S9g893o26g>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 55F2EB60089; Tue, 12 Sep 2023 09:58:10 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-745-g95dd7bea33-fm-20230905.001-g95dd7bea
+Mime-Version: 1.0
+Message-Id: <d1d6b2a2-8be1-4269-a504-5762b94df77a@app.fastmail.com>
+In-Reply-To: <CAPDyKFpUUJeGD77GTYCk59cvW=SdGTkOEXH4dap1JQWekAa0Eg@mail.gmail.com>
+References: <20230829213441.310655-1-ulf.hansson@linaro.org>
+ <CAHk-=wg0gc4Cc90OL29Vr5gDtd4mnsKD+TxtoNtQbAryaWHkZQ@mail.gmail.com>
+ <CAHk-=wjLO=Jsdk2prq0piznMMCk+V0_fRaFRHEPuaALpF8J=hw@mail.gmail.com>
+ <96bb0de0-06d9-46f8-b02f-dc924afff13c@app.fastmail.com>
+ <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
+ <CAPDyKFrJH-1uaPCwnWZDPi4MRtOm=N2CHSRyvjXRDbQ1y-oOrw@mail.gmail.com>
+ <CAJZ5v0hqWYnkNXVju3U3n-9i8eqtjs197tLLNWv8Qa_N9T=KEw@mail.gmail.com>
+ <CAPDyKFpXLj_2HAgyV_VJf+GPQVmxb_iiDe77Q2MY17MDNqy9fA@mail.gmail.com>
+ <CAMuHMdVxLkxN0bmSRXW74R_dGNDSRDB4Z=zE0DoiXDOuweSM0A@mail.gmail.com>
+ <CAPDyKFpUUJeGD77GTYCk59cvW=SdGTkOEXH4dap1JQWekAa0Eg@mail.gmail.com>
+Date:   Tue, 12 Sep 2023 15:57:49 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Ulf Hansson" <ulf.hansson@linaro.org>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Olof Johansson" <olof@lixom.net>, soc@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        "Sebastian Reichel" <sebastian.reichel@collabora.com>
+Subject: Re: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/09/2023 19:46, Qais Yousef wrote:
-> On 09/08/23 16:30, Vincent Guittot wrote:
-> 
-
-[...]
-
->>>> above 512 whatever the current (720)  formula or your proposal (608).
->>>> In the case of uclamp, it should be applied after having been scaled
->>>> by irq time.
->>>
->>> I lost you a bit here. I'm not sure how you reached the 720 and 608 numbers.
+On Mon, Sep 11, 2023, at 13:28, Ulf Hansson wrote:
+> On Mon, 11 Sept 2023 at 09:52, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 >>
->> My bad, I finally decided to use an irq pressure of 128 in my
->> calculation but forgot to change the value in my email
->>
->>>
->>> So the way I'm proposing it here
->>>
->>>         util = cfs + rt + dvfs_headroom(cfs+rt) = 800 + 0.25 * 800 = 1000
->>>         util = uclamp_rq_util_with(rq, util, NULL) = 512
->>>         util = scale_rq_capacity(512, 256, 1024) = 0.75 * 512 = 384
->>>         util += dvfs_headroom(irq) = 384 + 256 + 0.25 * 256 = 704
->>>         util += dvfs_headroom(dl_bw) = 704
->>>
->>>>
->>>> So we should have reported utilization of 720 with a bandwidth
->>>> requirement of 512 and then cpufreq can applies its headroom if needed
->>>
->>> The key part I'm changing is this
->>>
->>>         util = cfs + rt + dvfs_headroom(cfs+rt) = 800 + 0.25 * 800 = 1000
->>>         util = uclamp_rq_util_with(rq, util, NULL) = 512
->>>
->>> Before we had (assume irq, rt and dl are 0 for simplicity and a single task is
->>> running)
->>>
->>>         util = cfs = 800
->>>         util = uclamp_rq_util_with(rq, util, NULL) = 512
->>>         util = dvfs_headroom(util) = 512 * 0.25 * 512 = 640
->>>
->>> So we are running higher than we are allowed to. So applying the headroom
->>> after taking uclamp constraints into account is the problem.
+>> And I just realized you moved the code and Makefiles to drivers/genpd/,
+>> but not the Kconfig symbols and logic, which still lives under
+>> drivers/soc/.  So resolving that (and the name) is something that
+>> should be resolved sooner rather than later...
+>
+> In regards to the name, I am relying on input from Linus to make a
+> final decision before I send a patch. In regards to this, I have also
+> started working on a documentation patch for genpd. It needs some more
+> polishing before I can send it though.
 
-I'm not sure I understood all the example math in this thread correctly:
+I'm fairly sure that Linus was instead waiting for you to send
+a patch or pull request for the rename. Please just pick a name
+that you like and that Linus hasn't already objected to and send
+it so the rename makes it into -rc2 for others to base on.
 
-Examples:
+If anyone has objections to the new name, you'll find out about
+it then, but I think we trust your judgement here.
 
-irq = 128 or 256
-
-util = 800 uclamp = 512
-
-
---- current code:
-
-((util_cfs + util_rt) * ((max - irq) / max) + irq + dl_bw) * scale
-
-<- uclamped(cfs+rt) ->
-
-<--               scale_irq_capacity()                  -->|<-- map_util_perf() 
-                                                               / (headroom())  
-
-irq = 128: (512 * (1024 - 128) / 1024 + 128 + 0) * 1.25 = 576 * 1.25 = 720
-
-irq = 256: (512 * (1024 - 256) / 1024 + 256 + 0) * 1.25 = 640 * 1.25 = 800
-
-
---- new approach:
-
-irq = 128: (512 * (1024 - 128) / 1024 + 128 + 0.25 * 128)            = 608
-
-irq = 256: (512 * (1024 - 256) / 1024 + 256 + 0.25 * 256)            = 704
-
-            <->
-            uclamped(cfs+rt+headroom(cfs+rt))
-
-            <- scale_irq_capacity() ->
-
-            <--               headroom(irq) ?        -->
-
-
-Is the correct?
-
-[...]
+     Arnd
