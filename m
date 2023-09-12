@@ -2,114 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 423FF79D303
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 15:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D0B79D310
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 16:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235089AbjILN6S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 09:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
+        id S235089AbjILOBm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 10:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234939AbjILN6R (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 09:58:17 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2FC10CE;
-        Tue, 12 Sep 2023 06:58:13 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id E6A0D32009C5;
-        Tue, 12 Sep 2023 09:58:11 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 12 Sep 2023 09:58:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1694527091; x=1694613491; bh=u0
-        LOjV4/r68tFCzvM24Co/ozHIjAyz4zQfSkl0FLEBg=; b=d+mGQw1Ly9T9uLz2Vk
-        hZEOBfxMOs77+4b2CmBmbQu9P7hkvg7dNcuSTWa7THLIQwmzuUDiG5T2xIJk15Cv
-        +ohb3UfGpf2HPMTIMx+/WhxsQwln4CRft+Ggwu9LpcKVmJzzTJj9mQfjMGRrfF2X
-        k7YIXe5IOBuyfhNa7wH/Vko3QPPgXlhfJZlDW49mSEtfJHLyjXGIR9QeD/sxqvqB
-        GzQc9mfTGEIv4nvO+j8tsT1K4kWWHQfQEyxEAs2jx4Q82M4LBJcgDqR57FwrhaAX
-        BXv+GQMCxcNRcs0+x5aw5BnpRvtZqRX6abppA8w7ms5Ax9ww+LyH3IRxA8tnpPxF
-        NX9A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1694527091; x=1694613491; bh=u0LOjV4/r68tF
-        CzvM24Co/ozHIjAyz4zQfSkl0FLEBg=; b=lbstYHqx8k/ON7HV0MEVFi6KSOd4/
-        FAELQBdu55FiiEfsWpJJNUXE4Sp1CjQZnO9lH6c+pPH7DR4dz9vPhfULva2p7QEM
-        F/KPwPrdCbyGvVFrKg46rcSIPt2m3T+wWCZT2bJkZUw0PLX0g664EuWtLAJgnFAE
-        b0VxvpnjwNAIrEKf7Cj24cqFFOvN4la6HfZVQI9MDhDK2qTKdtiFXNTog7i/mDjs
-        Bbj4ZnF/kaQykI5NDn0jpjyfC7aW0j60OkftrIu7KvHm+j8WscezB9EIPpa3chAZ
-        ZD+emIkUnGG9f8LcjXYdY9knmw9gbQkdr6t8tNj5akmhKeQFarZxM77xw==
-X-ME-Sender: <xms:cm4AZXNcNZxGdLemgdGCkpdXaAH55WiFlYiGwhTXPDVGOjqTHcN4PQ>
-    <xme:cm4AZR_Lwa8tcLAPUUOp-zb6sabtqN4985a6igUKRu0AnRPGPTSiGxoWRSXm2h01-
-    FCnT81pnevg-b3pNbU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudeiiedgjedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:cm4AZWSu9QuNfjfEalDzd50gXloFGHZ6ZWgmRK_HbxqUhG0NdlfR_w>
-    <xmx:cm4AZbuEXJM_plfWeLiZ5CzCzj8uUqero9SyOfcVflHJ2oGLHXjMHQ>
-    <xmx:cm4AZfdJTKAfkIEuCLk3BawiFSLtRpc-rhMIcJEDVd9Km_PhDuZoyA>
-    <xmx:c24AZRtbQMCxqZAR51QznL-ueGVQmCgn9ihaA-r8Bzn9S9g893o26g>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 55F2EB60089; Tue, 12 Sep 2023 09:58:10 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-745-g95dd7bea33-fm-20230905.001-g95dd7bea
-Mime-Version: 1.0
-Message-Id: <d1d6b2a2-8be1-4269-a504-5762b94df77a@app.fastmail.com>
-In-Reply-To: <CAPDyKFpUUJeGD77GTYCk59cvW=SdGTkOEXH4dap1JQWekAa0Eg@mail.gmail.com>
-References: <20230829213441.310655-1-ulf.hansson@linaro.org>
- <CAHk-=wg0gc4Cc90OL29Vr5gDtd4mnsKD+TxtoNtQbAryaWHkZQ@mail.gmail.com>
- <CAHk-=wjLO=Jsdk2prq0piznMMCk+V0_fRaFRHEPuaALpF8J=hw@mail.gmail.com>
- <96bb0de0-06d9-46f8-b02f-dc924afff13c@app.fastmail.com>
- <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
- <CAPDyKFrJH-1uaPCwnWZDPi4MRtOm=N2CHSRyvjXRDbQ1y-oOrw@mail.gmail.com>
- <CAJZ5v0hqWYnkNXVju3U3n-9i8eqtjs197tLLNWv8Qa_N9T=KEw@mail.gmail.com>
- <CAPDyKFpXLj_2HAgyV_VJf+GPQVmxb_iiDe77Q2MY17MDNqy9fA@mail.gmail.com>
- <CAMuHMdVxLkxN0bmSRXW74R_dGNDSRDB4Z=zE0DoiXDOuweSM0A@mail.gmail.com>
- <CAPDyKFpUUJeGD77GTYCk59cvW=SdGTkOEXH4dap1JQWekAa0Eg@mail.gmail.com>
-Date:   Tue, 12 Sep 2023 15:57:49 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Ulf Hansson" <ulf.hansson@linaro.org>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        "Linus Torvalds" <torvalds@linux-foundation.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Olof Johansson" <olof@lixom.net>, soc@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        "Sebastian Reichel" <sebastian.reichel@collabora.com>
-Subject: Re: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
-Content-Type: text/plain
+        with ESMTP id S232399AbjILOBk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 10:01:40 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7389810D0
+        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 07:01:36 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-271d9823cacso4634131a91.1
+        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 07:01:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694527296; x=1695132096; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZJSOLzlJ3uaAmgqgSlNPgliDIBP335CffCep/lv3ykg=;
+        b=I/+gSz9Y6W6FH26dDpCnW2YAwBil5V5QUDyNlMQ6+JWSPC6IdFvi7Dy4Yh9jVPR7v2
+         1RyVmzNCH/9Wfd5hkla8zhHW0d4LnlOBlEZ+3UKzvWXAUt1DfAcSHhL+4gRD+US4h/ui
+         mdXM8b45WqnKn/SeEXyLbOsgFw8/U95DLrJWxCO4zq1umdiPiCe72wRuEmY6fkuSSIPR
+         1YyjLGfsF3HKUOwwFleu/TnmcnJ91wbM1YEnL8jxEex8wx6jKUXqd8fcZpFs4ohvBJJN
+         WRWH8yZRd9iW0caY9y4T7WiVLO1B3kxaVeW17OKiOkGx4qs6Egmpy13LDyvh4bVaSOy+
+         dJdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694527296; x=1695132096;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZJSOLzlJ3uaAmgqgSlNPgliDIBP335CffCep/lv3ykg=;
+        b=lPBgW+C6JAuEZNTSbOwfznfHAyHSZJ1/MYuUqWnxaxiI7s3jjPFSfljyPJFyDYdkOq
+         zwByBfEAUNSvGgZyB8V/ze7F/aKOOCF9PGXwE7VD6J9MPt0XBGNxhYqAFVZ0meYJX7sT
+         hI3TsP6y/ofogjw0Pzw2yKGL3/dESmGZSaYKm8WDGFfmLO32kwLERLigbNVtlnk4QGiq
+         3pvlJ73D6WfO0QmhcPTKt9veyj+K1mPA6QIaPWirfajkIzHc+7LdPGDduPDBjL5ErJ7x
+         ZOY8oU8OEwV+BrGM/CXmMX0uSaYxkXy9+kjFW+ClfYhRzb6d9UaCjX8bHXjZY+MK3hXn
+         YGsw==
+X-Gm-Message-State: AOJu0YyaUmKKKuv8h5q8hkNRJuffO5A38mV+PIx5bvrq+pYqgyngvoeY
+        2IloQR+y/WcMfUcfw/yw9Gq25ZRxBj8fpGAG6R6jnQ==
+X-Google-Smtp-Source: AGHT+IHlls2qoouUQ/250g/ONr3QazZ7LQ9FyYt2at/sxQIjLHPmpoltPEGjzad8DZSVOaaKTMbIqt7wfFymqXQikiI=
+X-Received: by 2002:a17:90a:c28b:b0:25c:8b5e:814 with SMTP id
+ f11-20020a17090ac28b00b0025c8b5e0814mr12036397pjt.44.1694527295703; Tue, 12
+ Sep 2023 07:01:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230827233203.1315953-1-qyousef@layalina.io> <a6365f63-4669-15e5-b843-f4bfb1bd5e68@arm.com>
+ <20230906211850.zyvk6qtt6fvpxaf3@airbuntu> <20230907132631.GF10955@noisy.programming.kicks-ass.net>
+ <8919ed14-8d19-d964-2278-3303a5bda8ee@arm.com> <20230907142923.GJ10955@noisy.programming.kicks-ass.net>
+ <cf5c628a-e047-b5e0-b2a0-f2b280015d02@arm.com> <20230907201609.GC14243@noisy.programming.kicks-ass.net>
+ <f1b1b663-3a12-9e5d-932b-b3ffb5f02e14@arm.com>
+In-Reply-To: <f1b1b663-3a12-9e5d-932b-b3ffb5f02e14@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Tue, 12 Sep 2023 16:01:23 +0200
+Message-ID: <CAKfTPtDd-HhF-YiNTtL9i5k0PfJbF819Yxu4YquzfXgwi7voyw@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/7] sched: cpufreq: Remove magic margins
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Qais Yousef <qyousef@layalina.io>,
+        Chris Redpath <Chris.Redpath@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 11, 2023, at 13:28, Ulf Hansson wrote:
-> On Mon, 11 Sept 2023 at 09:52, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->>
->> And I just realized you moved the code and Makefiles to drivers/genpd/,
->> but not the Kconfig symbols and logic, which still lives under
->> drivers/soc/.  So resolving that (and the name) is something that
->> should be resolved sooner rather than later...
+Hi Lukasz,
+
+On Tue, 12 Sept 2023 at 13:51, Lukasz Luba <lukasz.luba@arm.com> wrote:
 >
-> In regards to the name, I am relying on input from Linus to make a
-> final decision before I send a patch. In regards to this, I have also
-> started working on a documentation patch for genpd. It needs some more
-> polishing before I can send it though.
+> Hi Peter,
+>
+> On 9/7/23 21:16, Peter Zijlstra wrote:
+> > On Thu, Sep 07, 2023 at 03:42:13PM +0100, Lukasz Luba wrote:
+> >
+> >>> What task characteristic is tied to this? That is, this seems trivial to
+> >>> modify per-task.
+> >>
+> >> In particular Speedometer test and the main browser task, which reaches
+> >> ~900util, but sometimes vanish and waits for other background tasks
+> >> to do something. In the meantime it can decay and wake-up on
+> >> Mid/Little (which can cause a penalty to score up to 5-10% vs. if
+> >> we pin the task to big CPUs). So, a longer util_est helps to avoid
+> >> at least very bad down migration to Littles...
+> >
+> > Do they do a few short activations (wakeup/sleeps) while waiting? That
+> > would indeed completely ruin things since the EWMA thing is activation
+> > based.
+> >
+> > I wonder if there's anything sane we can do here...
+>
+> My apologies for a delay, I have tried to push the graphs for you.
+>
+> The experiment is on pixel7*. It's running the browser on the phone
+> with the test 'Speedometer 2.0'. It's a web test (you can also run on
+> your phone) available here, no need to install anything:
+> https://browserbench.org/Speedometer2.0/
+>
+> Here is the Jupiter notebook [1], with plots of the signals:
+> - top 20 tasks' (based on runtime) utilization
+> - Util EST signals for the top 20 tasks, with the longer decaying ewma
+>    filter (which is the 'red' plot called 'ewma')
+> - the main task (comm=CrRendererMain) Util, Util EST and task residency
+>    (which tires to stick to CPUs 6,7* )
+> - the test score was 144.6 (while with fast decay ewma is ~134), so
+>    staying at big cpus (helps the score in this case)
+>
+> (the plots are interactive, you can zoom in with the icon 'Box Zoom')
+> (e.g. you can zoom in the task activation plot which is also linked
+> with the 'Util EST' on top, for this main task)
+>
+> You can see the util signal of that 'CrRendererMain' task and those
+> utilization drops in time, which I was referring to. When the util
+> drops below some threshold, the task might 'fit' into smaller CPU,
+> which could be prevented automatically byt maintaining the util est
+> for longer (but not for all).
 
-I'm fairly sure that Linus was instead waiting for you to send
-a patch or pull request for the rename. Please just pick a name
-that you like and that Linus hasn't already objected to and send
-it so the rename makes it into -rc2 for others to base on.
+I was looking at your nice chart and I wonder if you could also add
+the runnable _avg of the tasks ?
 
-If anyone has objections to the new name, you'll find out about
-it then, but I think we trust your judgement here.
+My 1st impression is that the decrease happens when your task starts
+to share the CPU with some other tasks and this ends up with a
+decrease of its utilization because util_avg doesn't take into account
+the waiting time so typically task with an utilization of 1024, will
+see its utilization decrease because of other tasks running on the
+same cpu. This would explain the drop that you can see.
 
-     Arnd
+ I wonder if we should not take into account the runnable_avg when
+applying the ewm on util_est ? so the util_est will not decrease
+because of time sharing with other
+
+>
+> I do like your idea that Util EST might be per-task. I'm going to
+> check this, because that might help to get rid of the overutilized state
+> which is probably because small tasks are also 'bigger' for longer.
+>
+> If this util est have chance to fly upstream, I could send an RFC if
+> you don't mind.
+>
+> Regards,
+> Lukasz
+>
+> *CPUs 6,7 - big (1024 capacity), CPUs 4,5 Mid (768 capacity), CPUs 0-3
+> Littles (~150 capacity)
+>
+> [1]
+> https://nbviewer.org/github/lukaszluba-arm/lisa/blob/public_tests/p7_wa_speedometer2_small_size.ipynb
