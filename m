@@ -2,86 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3E679D8E2
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 20:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D523C79D901
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 20:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjILSoW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 14:44:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54736 "EHLO
+        id S237473AbjILSrm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 14:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjILSoV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 14:44:21 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06AD10D3
-        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 11:44:17 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.239])
+        with ESMTP id S237337AbjILSrl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 14:47:41 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642CB10D3;
+        Tue, 12 Sep 2023 11:47:37 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id e4066c49c5a5a305; Tue, 12 Sep 2023 20:47:35 +0200
+Authentication-Results: v370.home.net.pl; spf=softfail (domain owner 
+   discourages use of this host) smtp.mailfrom=rjwysocki.net 
+   (client-ip=195.136.19.94; helo=[195.136.19.94]; 
+   envelope-from=rjw@rjwysocki.net; receiver=<UNKNOWN>)
+Received: from kreacher.localnet (unknown [195.136.19.94])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 813CF66072F9;
-        Tue, 12 Sep 2023 19:44:16 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1694544256;
-        bh=amGMocaM6JTPSRmhEjakxJbtMoSQe+qtzDOR9wcNXKE=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=hIR3LifOqR8iiqGIj4knrmQn0IklksmSUMk6w8Ws0odWlnpVRnHpUCR0qYiG4z3Zr
-         Ayv4ulxr9J6aYYPR7CK1iTSUKt7oCkmvLZJehXoHh2BXdZEGTv4qFftMC6GR7Q9ojD
-         iFo4guJ85kAZu2Zm0TtenDwVs8O0vlwck8uV628dyasV6J5f9RLqs4mA46HnO18WAx
-         cT5j6ILK7Dj36Hgvn196xu79Ii6EqXz8rR4aqd6Vh8us0qOnRzK3+DLfjDXNgunu9+
-         W2uBz/UfcdIP9fEBHlK36gtt5p2XJM9yNsP1LFVNPdqZWgsgZNuUaa3nmZkPBQr9+S
-         ZA6q6vgMw/9vg==
-Received: by mercury (Postfix, from userid 1000)
-        id D1B65106098A; Tue, 12 Sep 2023 20:44:13 +0200 (CEST)
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     linux-pm@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>
-Cc:     sre@kernel.org
-In-Reply-To: <20230807131951.3443880-1-yangyingliang@huawei.com>
-References: <20230807131951.3443880-1-yangyingliang@huawei.com>
-Subject: Re: [PATCH -next 0/5] power: reset: use builtin_platform_driver()
- to simplify code
-Message-Id: <169454425383.496807.10808633873031554477.b4-ty@collabora.com>
-Date:   Tue, 12 Sep 2023 20:44:13 +0200
+        by v370.home.net.pl (Postfix) with ESMTPSA id D70DE663BE5;
+        Tue, 12 Sep 2023 20:47:34 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [PATCH v1 8/9] ACPI: thermal: Drop redundant trip point flags
+Date:   Tue, 12 Sep 2023 20:46:02 +0200
+Message-ID: <3760530.kQq0lBPeGt@kreacher>
+In-Reply-To: <5708760.DvuYhMxLoT@kreacher>
+References: <5708760.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.3
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrudeiiedgudeftdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehs
+ rhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-On Mon, 07 Aug 2023 21:19:46 +0800, Yang Yingliang wrote:
-> The driver init function doesn't do anything special, so it can use the
-> builtin_platform_driver() macro to eliminate boilerplate code.
-> 
-> Yang Yingliang (5):
->   power: reset: st-poweroff: use builtin_platform_driver() to simplify
->     code
->   power: reset: msm: use builtin_platform_driver() to simplify code
->   power: reset: xgene-reboot: use builtin_platform_driver() to simplify
->     code
->   power: reset: axxia-reset: use builtin_platform_driver() to simplify
->     code
->   power: reset: syscon-poweroff: use builtin_platform_driver() to
->     simplify code
-> 
-> [...]
+Trip point flags previously used by the driver need not be used any more
+after the preceding changes, so drop them and adjust the code accordingly.
 
-Applied, thanks!
+No intentional functional impact.
 
-[1/5] power: reset: st-poweroff: use builtin_platform_driver() to simplify code
-      commit: 70c81c37cf252798bef5fe047a57129ff6a2b31b
-[2/5] power: reset: msm: use builtin_platform_driver() to simplify code
-      commit: 4e579a5c68d88b340776c2270659de111f8923f6
-[3/5] power: reset: xgene-reboot: use builtin_platform_driver() to simplify code
-      commit: 764db16149ec6128da548aac54a16b651461fbc8
-[4/5] power: reset: axxia-reset: use builtin_platform_driver() to simplify code
-      commit: 6a7f7f27e2c766f36c6bd948a5de91ca2703c2a4
-[5/5] power: reset: syscon-poweroff: use builtin_platform_driver() to simplify code
-      commit: 5b69b5f209b7a6d21329b14b533b390fff6895d5
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/acpi/thermal.c |   29 ++++++++++-------------------
+ 1 file changed, 10 insertions(+), 19 deletions(-)
 
-Best regards,
--- 
-Sebastian Reichel <sebastian.reichel@collabora.com>
+Index: linux-pm/drivers/acpi/thermal.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/thermal.c
++++ linux-pm/drivers/acpi/thermal.c
+@@ -43,14 +43,6 @@
+ #define ACPI_THERMAL_MAX_ACTIVE		10
+ #define ACPI_THERMAL_MAX_LIMIT_STR_LEN	65
+ 
+-#define ACPI_TRIPS_PASSIVE	BIT(0)
+-#define ACPI_TRIPS_ACTIVE	BIT(1)
+-#define ACPI_TRIPS_DEVICES	BIT(2)
+-
+-#define ACPI_TRIPS_THRESHOLDS	(ACPI_TRIPS_PASSIVE | ACPI_TRIPS_ACTIVE)
+-
+-#define ACPI_TRIPS_INIT		(ACPI_TRIPS_THRESHOLDS | ACPI_TRIPS_DEVICES)
+-
+ /*
+  * This exception is thrown out in two cases:
+  * 1.An invalid trip point becomes invalid or a valid trip point becomes invalid
+@@ -58,12 +50,11 @@
+  * 2.TODO: Devices listed in _PSL, _ALx, _TZD may change.
+  *   We need to re-bind the cooling devices of a thermal zone when this occurs.
+  */
+-#define ACPI_THERMAL_TRIPS_EXCEPTION(flags, tz, str) \
++#define ACPI_THERMAL_TRIPS_EXCEPTION(tz, str) \
+ do { \
+-	if (flags != ACPI_TRIPS_INIT) \
+-		acpi_handle_info(tz->device->handle, \
+-			"ACPI thermal trip point %s changed\n" \
+-			"Please report to linux-acpi@vger.kernel.org\n", str); \
++	acpi_handle_info(tz->device->handle, \
++			 "ACPI thermal trip point %s changed\n" \
++			 "Please report to linux-acpi@vger.kernel.org\n", str); \
+ } while (0)
+ 
+ static int act;
+@@ -212,7 +203,7 @@ static void acpi_thermal_update_passive_
+ 
+ 	update_acpi_thermal_trip_temp(acpi_trip, get_passive_temp(tz));
+ 	if (!acpi_trip->valid)
+-		ACPI_THERMAL_TRIPS_EXCEPTION(ACPI_TRIPS_PASSIVE, tz, "state");
++		ACPI_THERMAL_TRIPS_EXCEPTION(tz, "state");
+ }
+ 
+ static bool update_passive_devices(struct acpi_thermal *tz, bool compare)
+@@ -230,7 +221,7 @@ static bool update_passive_devices(struc
+ 	}
+ 
+ 	if (compare && memcmp(&tz->trips.passive.devices, &devices, sizeof(devices)))
+-		ACPI_THERMAL_TRIPS_EXCEPTION(ACPI_TRIPS_PASSIVE, tz, "device");
++		ACPI_THERMAL_TRIPS_EXCEPTION(tz, "device");
+ 
+ 	memcpy(&tz->trips.passive.devices, &devices, sizeof(devices));
+ 	return true;
+@@ -247,7 +238,7 @@ static void acpi_thermal_update_passive_
+ 		return;
+ 
+ 	update_acpi_thermal_trip_temp(acpi_trip, THERMAL_TEMP_INVALID);
+-	ACPI_THERMAL_TRIPS_EXCEPTION(ACPI_TRIPS_PASSIVE, tz, "state");
++	ACPI_THERMAL_TRIPS_EXCEPTION(tz, "state");
+ }
+ 
+ static long get_active_temp(struct acpi_thermal *tz, int index)
+@@ -282,7 +273,7 @@ static void acpi_thermal_update_active_t
+ 
+ 	update_acpi_thermal_trip_temp(acpi_trip, get_active_temp(tz, index));
+ 	if (!acpi_trip->valid)
+-		ACPI_THERMAL_TRIPS_EXCEPTION(ACPI_TRIPS_ACTIVE, tz, "state");
++		ACPI_THERMAL_TRIPS_EXCEPTION(tz, "state");
+ }
+ 
+ static bool update_active_devices(struct acpi_thermal *tz, int index, bool compare)
+@@ -302,7 +293,7 @@ static bool update_active_devices(struct
+ 	}
+ 
+ 	if (compare && memcmp(&tz->trips.active[index].devices, &devices, sizeof(devices)))
+-		ACPI_THERMAL_TRIPS_EXCEPTION(ACPI_TRIPS_ACTIVE, tz, "device");
++		ACPI_THERMAL_TRIPS_EXCEPTION(tz, "device");
+ 
+ 	memcpy(&tz->trips.active[index].devices, &devices, sizeof(devices));
+ 	return true;
+@@ -319,7 +310,7 @@ static void acpi_thermal_update_active_d
+ 		return;
+ 
+ 	update_acpi_thermal_trip_temp(acpi_trip, THERMAL_TEMP_INVALID);
+-	ACPI_THERMAL_TRIPS_EXCEPTION(ACPI_TRIPS_ACTIVE, tz, "state");
++	ACPI_THERMAL_TRIPS_EXCEPTION(tz, "state");
+ }
+ 
+ static int acpi_thermal_adjust_trip(struct thermal_trip *trip, void *data)
+
+
 
