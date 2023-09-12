@@ -2,116 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A35AC79CF7E
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 13:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4EE79D060
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 13:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234427AbjILLJg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 07:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
+        id S232345AbjILLvX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 07:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234493AbjILLIs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 07:08:48 -0400
-Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C386173C;
-        Tue, 12 Sep 2023 04:08:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kernkonzept.com; s=mx1; h=In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:Reply-To:
-        Content-ID:Content-Description;
-        bh=ldrgnEH7Sx0aTIOcIuD/sp3SmK2aaFJCluGyd6JiYSU=; b=kJPnynMAZu2R1JSqRZhaGZdz3j
-        Vv0VyHVTpJSM5F2zadHn9/KKuECG7EPmPDEvjwNoclnp/vdI9F6l5DYHg0oNGipGk7/5pxIfTOJhj
-        rhf/dgVar2VhPSZ4xmAelyPxZJxEszqphCUE8WC4jvNhwgpFAuGXHrOv85ofWpvpn+HEE1u6LnKoS
-        M4MPGhoBo/FvDqNm+91KDFN1pRFff7V+3lckmTla0uetkOy7E8TqLrLDleIw+8/lgKO7t0xfDwuLo
-        2UYVmUI16XbLWsC+7+dvh5NdihdmxbTv5WLXR5dbuwEJAVlJCbsbyYFLySNWqm1wyqs+L3V6TwAOD
-        mBa8OaAQ==;
-Received: from [10.22.3.24] (helo=kernkonzept.com)
-        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.96)
-        id 1qg1Fv-0031jw-23;
-        Tue, 12 Sep 2023 13:08:31 +0200
-Date:   Tue, 12 Sep 2023 13:08:25 +0200
-From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: [PATCH 4/4] cpufreq: qcom-nvmem: Add MSM8909
-Message-ID: <ZQBGqYWEm4eq9dNX@kernkonzept.com>
-References: <20230912-msm8909-cpufreq-v1-0-767ce66b544b@kernkonzept.com>
- <20230912-msm8909-cpufreq-v1-4-767ce66b544b@kernkonzept.com>
- <5336dac4-af3f-46f7-bcf9-40314f744c8c@linaro.org>
+        with ESMTP id S234858AbjILLvV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 07:51:21 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B108910CE;
+        Tue, 12 Sep 2023 04:51:16 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 521FAC15;
+        Tue, 12 Sep 2023 04:51:53 -0700 (PDT)
+Received: from [10.57.93.149] (unknown [10.57.93.149])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 57CB43F67D;
+        Tue, 12 Sep 2023 04:51:14 -0700 (PDT)
+Message-ID: <f1b1b663-3a12-9e5d-932b-b3ffb5f02e14@arm.com>
+Date:   Tue, 12 Sep 2023 12:51:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5336dac4-af3f-46f7-bcf9-40314f744c8c@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [RFC PATCH 0/7] sched: cpufreq: Remove magic margins
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Qais Yousef <qyousef@layalina.io>,
+        Chris Redpath <Chris.Redpath@arm.com>
+References: <20230827233203.1315953-1-qyousef@layalina.io>
+ <a6365f63-4669-15e5-b843-f4bfb1bd5e68@arm.com>
+ <20230906211850.zyvk6qtt6fvpxaf3@airbuntu>
+ <20230907132631.GF10955@noisy.programming.kicks-ass.net>
+ <8919ed14-8d19-d964-2278-3303a5bda8ee@arm.com>
+ <20230907142923.GJ10955@noisy.programming.kicks-ass.net>
+ <cf5c628a-e047-b5e0-b2a0-f2b280015d02@arm.com>
+ <20230907201609.GC14243@noisy.programming.kicks-ass.net>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20230907201609.GC14243@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 12, 2023 at 11:59:47AM +0200, Konrad Dybcio wrote:
-> On 12.09.2023 11:40, Stephan Gerhold wrote:
-> > When the MSM8909 SoC is used together with the PM8909 PMIC the primary
-> > power supply for the CPU (VDD_APC) is shared with other components to
-> > the SoC, namely the VDD_CX power domain typically supplied by the PM8909
-> > S1 regulator. This means that all votes for necessary performance states
-> > go via the RPM firmware which collects the requirements from all the
-> > processors in the SoC. The RPM firmware then chooses the actual voltage
-> > based on the performance states ("corners"), depending on calibration
-> > values in the NVMEM and other factors.
-> > 
-> > The MSM8909 SoC is also sometimes used with the PM8916 or PM660 PMIC.
-> > In that case there is a dedicated regulator connected to VDD_APC and
-> > Linux is responsible to do adaptive voltage scaling using CPR (similar
-> > to the existing code for QCS404).
-> > 
-> > This difference can be described in the device tree, by either assigning
-> > the CPU a power domain from RPMPD or from the CPR driver.
-> > 
-> > To describe this in a more generic way, use "apc" as power domain name
-> > instead of "cpr". From the Linux point of view there is no CPR involved
-> > when MSM8909 is used together with PM8909.
-> Without checking, I have a vague recollection of CPR output also
-> being called VDD_APCx, so it's a-ok
-> 
+Hi Peter,
 
-FWIW: I would say there isn't really something like a "CPR output" in
-the hardware. The power supply pin on the SoC for the cores is called
-"VDD_APC" and you just have some regulator hooked up there. CPR then
-monitors the environment and gives suggestions to adjust the voltage of
-the regulator to optimize power and stability. But it doesn't provide
-any power itself. You can use it or not. It's just an "add-in" basically.
-
-> > 
-> > Also add a simple function that reads the speedbin from a NVMEM cell
-> > and sets it as-is for opp-supported-hw. The actual bit position can be
-> > described in the device tree without additional driver changes.
-> > 
-> > Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-> > ---
-> Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+On 9/7/23 21:16, Peter Zijlstra wrote:
+> On Thu, Sep 07, 2023 at 03:42:13PM +0100, Lukasz Luba wrote:
 > 
-> One nit below:
+>>> What task characteristic is tied to this? That is, this seems trivial to
+>>> modify per-task.
+>>
+>> In particular Speedometer test and the main browser task, which reaches
+>> ~900util, but sometimes vanish and waits for other background tasks
+>> to do something. In the meantime it can decay and wake-up on
+>> Mid/Little (which can cause a penalty to score up to 5-10% vs. if
+>> we pin the task to big CPUs). So, a longer util_est helps to avoid
+>> at least very bad down migration to Littles...
 > 
-> [...]
+> Do they do a few short activations (wakeup/sleeps) while waiting? That
+> would indeed completely ruin things since the EWMA thing is activation
+> based.
 > 
-> >  static const struct of_device_id qcom_cpufreq_match_list[] __initconst = {
-> > +	{ .compatible = "qcom,msm8909", .data = &match_data_msm8909 },
-> >  	{ .compatible = "qcom,apq8096", .data = &match_data_kryo },
-> msm8909 should come after apq8096 (even if adding apq and not msm was
-> a mistake)
-> 
+> I wonder if there's anything sane we can do here...
 
-Right, the list is currently totally out of order. I can prepend a patch
-in v2 to sort it first. Will wait some more for more comments though.
+My apologies for a delay, I have tried to push the graphs for you.
 
-Thanks!
+The experiment is on pixel7*. It's running the browser on the phone
+with the test 'Speedometer 2.0'. It's a web test (you can also run on
+your phone) available here, no need to install anything:
+https://browserbench.org/Speedometer2.0/
 
--- 
-Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Kernkonzept GmbH at Dresden, Germany, HRB 31129, CEO Dr.-Ing. Michael Hohmuth
+Here is the Jupiter notebook [1], with plots of the signals:
+- top 20 tasks' (based on runtime) utilization
+- Util EST signals for the top 20 tasks, with the longer decaying ewma
+   filter (which is the 'red' plot called 'ewma')
+- the main task (comm=CrRendererMain) Util, Util EST and task residency
+   (which tires to stick to CPUs 6,7* )
+- the test score was 144.6 (while with fast decay ewma is ~134), so
+   staying at big cpus (helps the score in this case)
+
+(the plots are interactive, you can zoom in with the icon 'Box Zoom')
+(e.g. you can zoom in the task activation plot which is also linked
+with the 'Util EST' on top, for this main task)
+
+You can see the util signal of that 'CrRendererMain' task and those
+utilization drops in time, which I was referring to. When the util
+drops below some threshold, the task might 'fit' into smaller CPU,
+which could be prevented automatically byt maintaining the util est
+for longer (but not for all).
+
+I do like your idea that Util EST might be per-task. I'm going to
+check this, because that might help to get rid of the overutilized state
+which is probably because small tasks are also 'bigger' for longer.
+
+If this util est have chance to fly upstream, I could send an RFC if
+you don't mind.
+
+Regards,
+Lukasz
+
+*CPUs 6,7 - big (1024 capacity), CPUs 4,5 Mid (768 capacity), CPUs 0-3
+Littles (~150 capacity)
+
+[1] 
+https://nbviewer.org/github/lukaszluba-arm/lisa/blob/public_tests/p7_wa_speedometer2_small_size.ipynb
