@@ -2,79 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 382A579D889
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 20:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7031C79D8A9
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 20:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231197AbjILSTk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 14:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44330 "EHLO
+        id S237240AbjILS3P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 14:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbjILSTj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 14:19:39 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECEA115;
-        Tue, 12 Sep 2023 11:19:35 -0700 (PDT)
-Received: from mercury (unknown [185.254.75.45])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id EE3316607314;
-        Tue, 12 Sep 2023 19:19:33 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1694542774;
-        bh=ZdPR4Xrn7HpWKcmeBN6s0Y6xOv+P4P1mAUlJC6Z4XHM=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=nyTjCpaizKcPfZZ+E0suixOKFmzweY1NAGmbC4xjaGEEksRjh2C2wjCcKn1Q/mFZV
-         P0BSC50j8cXnn+UdyY8SAzQJXeAPWkIuk24OzoK0+b8cQZLiYghgg6C/YECjCVVreh
-         PstsP8yCsnVV/5z2MRMX8RWxZqjRso2wV999zF1abqrVCpVzNmEY/IGZnuSkaPzJh1
-         rq4w6jmf9I3DpJuxWllauiKgOfwblMohz/ibLmvqsslz0gxhbYulN9s107tBUlfzqV
-         1SMv3/wsuSFomT5rt4ZIKA5uA19Pz+hdD5pGbGRytuLMLRsgeoso7bHKRDqcpO6cTw
-         uxY2SM6s3kkSw==
-Received: by mercury (Postfix, from userid 1000)
-        id 4740F106098A; Tue, 12 Sep 2023 20:19:31 +0200 (CEST)
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Justin Stitt <justinstitt@google.com>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-In-Reply-To: <20230814-void-drivers-power-reset-vexpress-poweroff-v1-1-c3d9b0107e5d@google.com>
-References: <20230814-void-drivers-power-reset-vexpress-poweroff-v1-1-c3d9b0107e5d@google.com>
-Subject: Re: [PATCH] power: vexpress: fix -Wvoid-pointer-to-enum-cast
- warning
-Message-Id: <169454277126.489158.9426280067711996461.b4-ty@collabora.com>
-Date:   Tue, 12 Sep 2023 20:19:31 +0200
+        with ESMTP id S232721AbjILS3O (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 14:29:14 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C6D10D8;
+        Tue, 12 Sep 2023 11:29:10 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9D3BC433C7;
+        Tue, 12 Sep 2023 18:29:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694543350;
+        bh=PCBBmd2rNXdYvalQ81EoedbVyQS1gg/YJ45YkQpk9R8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h5lWbuDsz8fsbsQ9zdj4m+uoU7PwBXm5e9Vbhs+KCiZg6X060w5uyM3lUpJS7Z3vT
+         ko7rp60/iuf1Y1CrxT+IUXY3qSg+06DByf+LUjgENAD2oggPkJYKZIdt7Q1swUW04h
+         83y/GD1bothIes7zkBF7Izce/wFGMb6GJmFodUgiMf7zk+iP4y/gDLVbO6Ixfi5o27
+         7wC/9zqDd2ytNDQtS0g1cP5OEcsiMSYR6wHw1zK6CC3E6JiktWd26ynEoHpRrMLuiz
+         5cM+1C+ql85JTa1pyNPyMdXDIjx6LKY/yziHe/tkt9Zn/qNsnxEuIODMfGdThtRR6b
+         uxffXapQ+rb7Q==
+Received: (nullmailer pid 1164193 invoked by uid 1000);
+        Tue, 12 Sep 2023 18:29:07 -0000
+Date:   Tue, 12 Sep 2023 13:29:07 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Ilia Lin <ilia.lin@kernel.org>, devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        Conor Dooley <conor+dt@kernel.org>
+Subject: Re: [PATCH 3/4] dt-bindings: cpufreq: qcom-nvmem: Document MSM8909
+Message-ID: <169454334732.1164153.5118228878567772612.robh@kernel.org>
+References: <20230912-msm8909-cpufreq-v1-0-767ce66b544b@kernkonzept.com>
+ <20230912-msm8909-cpufreq-v1-3-767ce66b544b@kernkonzept.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230912-msm8909-cpufreq-v1-3-767ce66b544b@kernkonzept.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-On Mon, 14 Aug 2023 22:21:51 +0000, Justin Stitt wrote:
-> When building with clang 18 I see the following warning:
-> |       drivers/power/reset/vexpress-poweroff.c:124:10: warning: cast to smaller integer type 'enum vexpress_reset_func' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-> |         124 |         switch ((enum vexpress_reset_func)match->data) {
+On Tue, 12 Sep 2023 11:40:17 +0200, Stephan Gerhold wrote:
+> Document that MSM8909 is used with qcom-cpufreq-nvmem for voltage
+> scaling and to restrict the maximum frequency based on the speedbin
+> encoded in the nvmem cells.
 > 
-> This is due to the fact that `match->data` is a void* while `enum vexpress_reset_func`
-> has the size of an int. This leads to truncation and possible data loss.
+> Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+> ---
+>  Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> [...]
 
-Applied, thanks!
-
-[1/1] power: vexpress: fix -Wvoid-pointer-to-enum-cast warning
-      commit: 4ec7b666fb4247bc6b9cdc84fa753d8dc2994d25
-
-Best regards,
--- 
-Sebastian Reichel <sebastian.reichel@collabora.com>
+Acked-by: Rob Herring <robh@kernel.org>
 
