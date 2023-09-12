@@ -2,99 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40C0979D5C1
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 18:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D1079D612
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 18:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjILQGI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 12:06:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
+        id S232338AbjILQTs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 12:19:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232010AbjILQGH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 12:06:07 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBF610EB
-        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 09:06:03 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EA50C433C8;
-        Tue, 12 Sep 2023 16:06:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694534762;
-        bh=Q/TEkMWLXQKDzVgkahRn+n43VpZCdu0lgRVofBA7+Q8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JpDQ5mpok4kTlzsx+0W8ao1sDPfIZK7GybvEEX/87ZRQSoz6ufqt0O629BFP0gQfW
-         JXrGpqPM921dMCTs5Jb1Df87osNZhr5BaoeZI4wbBmipnKSJtiWPl/ttr+gdGobpb1
-         AJyo8+zH60kbFZFfWoGgM3mNdCApQETLq5RxG8g8/tsnFT6OECEInSXKbdu3nZrugj
-         O7UJSTAb5LWhHD8SCDamfH58UFh75LbaenlPmw/HDzoBJDd6cvdUdCftj3NUXGNdJL
-         1YpZZ2plXX9+L/dU/YREAUYHzMQHsodMn++icX7y+dNAEYE332+gcjDfHAJ+Zoh2C4
-         kg+zz/7Owl1rQ==
-Date:   Tue, 12 Sep 2023 17:05:58 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     arnd@arndb.de,
-        Changhuang Liang <changhuang.liang@starfivetech.com>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        linux-riscv@lists.infradead.org, Rob Herring <robh@kernel.org>,
-        Jia Jie Ho <jiajie.ho@starfivetech.com>,
-        linux-pm@vger.kernel.org
-Subject: Re: Missed soc/genpd PR for 6.6 mw
-Message-ID: <20230912-postal-succulent-d83861d769ad@spud>
-References: <20230911-scouring-squash-3ef2cc8b1ee2@spud>
- <CAPDyKFqB_2KiqYy1Li1sGkXPiEAnc2GOUO7SdqCxy5G+YkeLcA@mail.gmail.com>
+        with ESMTP id S230017AbjILQTs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 12:19:48 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52AFF10D;
+        Tue, 12 Sep 2023 09:19:44 -0700 (PDT)
+Received: from mercury (dyndsl-091-248-213-163.ewe-ip-backbone.de [91.248.213.163])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A3594660731A;
+        Tue, 12 Sep 2023 17:19:41 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1694535581;
+        bh=L0D5W/tgadC/RkHf5dBNuFZWPw8wxQBuzbrUiyXCefM=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=RVXvd6MkEZiUZ8hGn21O5oH/vG6u9CTXU5k8cbhj9Lpf2ncOcevocrriWjt3XHKzF
+         nQ2PnaOTFOdIeL78aPL+9wpSGfZ89tmA4bHx0+HNNDmjU5bn6yLMUDZy/okC80AXSN
+         uUI6METp/DtuckEhlIM/hFO4WO9Funxvp2zvZNHGalvYY0uRAiYxykMKo899qn7zsI
+         R/6y6dbw/3Sluy79w+wkMt4avst0jhireTVtHRoziD6AJTVKvtMAj3pkHknzykRjZ4
+         1qf7BPIJ+BEf+CIEmXtXydVTH4VjK8xlDbU8+9tiPMCwbfNbXngQRS9DEdBt5A8Oup
+         pp6cvnwXgsjxw==
+Received: by mercury (Postfix, from userid 1000)
+        id A8C93106098A; Tue, 12 Sep 2023 18:19:39 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.au@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230902202505.97609-1-biju.das.jz@bp.renesas.com>
+References: <20230902202505.97609-1-biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH 0/2] Match data improvements for bq256xx driver
+Message-Id: <169453557966.461789.15641633963969004909.b4-ty@collabora.com>
+Date:   Tue, 12 Sep 2023 18:19:39 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="gdsE8Rlaoyspx0wO"
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFqB_2KiqYy1Li1sGkXPiEAnc2GOUO7SdqCxy5G+YkeLcA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.3
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---gdsE8Rlaoyspx0wO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Sat, 02 Sep 2023 21:25:03 +0100, Biju Das wrote:
+> This patch series aims to add match data improvements for bq256xx driver.
+> 
+> This patch series is only compile tested.
+> 
+> Biju Das (2):
+>   power: supply: bq256xx: Use i2c_get_match_data()
+>   power: supply: bq256xx: Some cleanups
+> 
+> [...]
 
-On Tue, Sep 12, 2023 at 11:09:51AM +0200, Ulf Hansson wrote:
-> On Tue, 12 Sept 2023 at 00:11, Conor Dooley <conor@kernel.org> wrote:
-> >
-> > Hey all,
-> >
-> > So I've been informed that I made a hames of things and forgot to send
-> > my soc driver PR for the 6.6 merge window. There's not too much in my
-> > branch
-> > https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/log/?h=
-=3Driscv-soc-for-next
-> > so I would've kicked the can to 6.7, but the majority of changes there =
-were
-> > made to the starfive pmu driver that has since moved to the new genpd
-> > subsystem.
-> >
-> > Sending a PR to Arnd for 6.7 with the pmu bits & based on v6.5-rc1 does=
-n't
-> > seem to make all that much sense to me, since that stuff is no longer in
-> > drivers/soc, but rebasing on top of v6.6-rc1 would make these genpd cha=
-nges,
-> > with a different path to Linus.
-> >
-> > What's the best way to rectify me screwing this up? Should I split out
-> > the non genpd patch and send a PR for that for the genpd tree for 6.7?
->=20
-> Yep, that seems like the best option.
->=20
-> If you think it's better to re-post the re-based genpd patches, I can
-> certainly pick them up from the mailing lists too.
+Applied, thanks!
 
-Cool, I'll try to do one of the above tomorrow. Thanks!
+[1/2] power: supply: bq256xx: Use i2c_get_match_data()
+      commit: f28992902b17245af042913d6cfd6a1cc100bcaf
+[2/2] power: supply: bq256xx: Some cleanups
+      commit: 02e673e59c3d374924422f74fb229ae4ee6715fc
 
---gdsE8Rlaoyspx0wO
-Content-Type: application/pgp-signature; name="signature.asc"
+Best regards,
+-- 
+Sebastian Reichel <sebastian.reichel@collabora.com>
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZQCMZgAKCRB4tDGHoIJi
-0k/RAP0ZqY8mLJi3PfQkOA/0RkMdz91zRn/e7yBskW8Y/TgEQwEA50GlQEqMfL00
-22snh32/SkoUK7nbNCGoVBF2nmqBKgY=
-=FxtK
------END PGP SIGNATURE-----
-
---gdsE8Rlaoyspx0wO--
