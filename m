@@ -2,98 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 698AC79D071
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 13:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C712879D169
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 14:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234656AbjILL5H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 07:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53246 "EHLO
+        id S232646AbjILMxH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 08:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234910AbjILL5E (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 07:57:04 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D9ED9170B;
-        Tue, 12 Sep 2023 04:56:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC342C15;
-        Tue, 12 Sep 2023 04:57:33 -0700 (PDT)
-Received: from [10.57.93.149] (unknown [10.57.93.149])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 957213F67D;
-        Tue, 12 Sep 2023 04:56:54 -0700 (PDT)
-Message-ID: <83b8c8d7-d53f-bea7-4ca3-5730d5c80b30@arm.com>
-Date:   Tue, 12 Sep 2023 12:57:32 +0100
+        with ESMTP id S235302AbjILMxH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 08:53:07 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E78BC4;
+        Tue, 12 Sep 2023 05:53:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694523183; x=1726059183;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=/qKLUiqSeY+lsbMsVjaPVYKIqR7Sz69ai5lJ4YtASLU=;
+  b=GsGK8qoyHsfVLxYrWNkdk9ys4KIsXvOOIPCyLtnkWysV0dVsMdgTl9cR
+   9Vh57Y1iI/Q2pvGlCH7MsS6HrykC+Hvnx63c5iwcpZrpFwwMGhTieYRK0
+   dv9F34sjRGO3cQlWvu+UKfyX4lQZSkbycJPwoKYnh3BM3ogQPcFpLAdEl
+   e3HccEvGCvBgu2JBuOqeZedgQalz/SwG4nC1QctE9JFwgiXG+hTZFMcUS
+   maAP+hiNrM3Qwi93NZoJmdZOmQQgcxIGgxjxTAucJkOiqxnlnM57NwRPw
+   0u6svNzA4mMYDcX+dLfjDLfjrJrte6/ZvzeqlNaPPI+kDqwcUIK6RAOyM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="377278389"
+X-IronPort-AV: E=Sophos;i="6.02,139,1688454000"; 
+   d="scan'208";a="377278389"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 05:53:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="778784295"
+X-IronPort-AV: E=Sophos;i="6.02,139,1688454000"; 
+   d="scan'208";a="778784295"
+Received: from npejicx-mobl.ger.corp.intel.com ([10.251.217.90])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 05:52:57 -0700
+Date:   Tue, 12 Sep 2023 15:52:54 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+cc:     Krishna Chaitanya Chundru <quic_krichai@quicinc.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?ISO-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Alexandru Gagniuc <mr.nuke.me@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alex Deucher <alexdeucher@gmail.com>
+Subject: Re: [PATCH 00/10] Add PCIe Bandwidth Controller
+In-Reply-To: <f35db90cd67adf4b0f48cd6f2a6ad8fbd0c1a679.camel@linux.intel.com>
+Message-ID: <8c5b7c51-12c2-602c-b70-f819ae8610ee@linux.intel.com>
+References: <20230817121708.53213-1-ilpo.jarvinen@linux.intel.com>  <fa5a20d0-77db-58bd-3956-ac664dffa587@quicinc.com>  <21b95d9-86a5-dcb0-9dda-3f1cdd426b9e@linux.intel.com>  <647e2b5e-6064-dbfa-bb56-f74358efd1fe@quicinc.com>  <25bf206e-864b-644-9b4-a0f461b4285@linux.intel.com>
+ <f35db90cd67adf4b0f48cd6f2a6ad8fbd0c1a679.camel@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [RFC PATCH 0/7] sched: cpufreq: Remove magic margins
-Content-Language: en-US
-To:     Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc:     Qais Yousef <qyousef@layalina.io>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>, juri.lelli@redhat.com
-References: <20230827233203.1315953-1-qyousef@layalina.io>
- <a6365f63-4669-15e5-b843-f4bfb1bd5e68@arm.com>
- <20230906211850.zyvk6qtt6fvpxaf3@airbuntu>
- <6011d8bb-9a3b-1435-30b0-d75b39bf5efa@arm.com>
- <20230907115307.GD10955@noisy.programming.kicks-ass.net>
- <89067f71-9b83-e647-053e-07f7d55b6529@arm.com>
- <20230907132906.GG10955@noisy.programming.kicks-ass.net>
- <5616e50d-b827-4547-5b16-9131ace98419@arm.com>
- <20230907133840.GH10955@noisy.programming.kicks-ass.net>
- <8657cc7c-169b-3479-5919-72bd39335b15@arm.com>
- <7c1cedb5-6342-1bf9-d1a6-3a87f63801fc@redhat.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <7c1cedb5-6342-1bf9-d1a6-3a87f63801fc@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="8323329-160313703-1694523182=:2125"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On 9/8/23 13:51, Daniel Bristot de Oliveira wrote:
-> On 9/7/23 15:45, Lukasz Luba wrote:
->>>>> RT literatur mostly methinks. Replacing WCET with a statistical model of
->>>>> sorts is not uncommon, the argument goes that not everybody will have
->>>>> their worst case at the same time and lows and highs can commonly cancel
->>>>> out and this way we can cram a little more on the system.
->>>>>
->>>>> Typically this is proposed in the context of soft-realtime systems.
->>>>
->>>> Thanks Peter, I will dive into some books...
->>>
->>> I would look at academic papers, not sure any of that ever made it to
->>> books, Daniel would know I suppose.
->>
->> Good hint, thanks!
-> 
-> The key-words that came to my mind are:
-> 
-> 	- mk-firm, where you accept m tasks will make their deadline
-> 	           every k execution - like, because you run too long.
-> 	- mixed criticality with pWCET (probabilistic execution time) or
-> 		  average execution time + an sporadic tail execution time for
-> 		  the low criticality part.
-> 
-> mk-firm smells like 2005's.. mixed criticality as 2015's..present.
-> 
-> You will probably find more papers than books. Read the papers
-> as a source for inspiration... not necessarily as a definitive
-> solution. They generally proposed too restrictive task models.
-> 
-> -- Daniel
-> 
+--8323329-160313703-1694523182=:2125
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-Thanks for describing this context! That would save my time and avoid
-maybe sinking in this unknown water. As you said I might tread that
-as inspiration, since I don't fight with life-critical system,
-but a phone which needs 'nice user experience' (hopefully there are
-no people who disagree) ;)
+On Mon, 11 Sep 2023, srinivas pandruvada wrote:
+> On Mon, 2023-09-11 at 18:47 +0300, Ilpo Järvinen wrote:
+> > 
+> > Okay, thanks for the clarification. So the point is to plan for
+> > adding 
+> > support for Link Width later and currently only support throttling
+> > Link 
+> > Speed. In any case, the Link Width control seems to be controlled
+> > using 
+> > a different approach (Link Width change does not require Link
+> > Retraining).
+> > 
+> > I don't know either how such 2 dimensioned throttling (Link Speed and
+> > Link Width) is supposed to be realized using the thermal/cooling
+> > device 
+> > interface which only provides a single integer as the current state.
+> > That 
+> > is, whether to provide a single cooling device (with a single integer
+> > exposed to userspace) or separate cooling device for each dimension?
+> > 
+> > Perhaps thermal people could provide some insight on this? Is there
+> > some 
+> > precedent I could take look at?
+>
+> Yes. The processor cooling device does similar. 1-3 are reserved for P-
+> state and and 4-7 for T-states.
+> 
+> But I don't suggest using such method. This causes confusion and
+> difficult to change. For example if we increase range of P-state
+> control, then there is no way to know what is the start point of T-
+> states.
 
-Regards,
-Lukasz
+Yes. I understand it would be confusing.
+
+> It is best to create to separate cooling devices for BW and link width.
+
+Okay. If that's the case, then I see no reason to add the Link Width 
+cooling device now as it could do nothing besides reporting the current 
+link width.
+
+The only question that then remains is how to take this into account in 
+the naming of the cooling devices, currently PCIe_Port_<pci_name()> is 
+used but perhaps it would be better to change that to 
+PCIe_Port_Link_Speed_... to allow PCI_Port_Link_Width_... to be added 
+later beside it?
+
+> Also there is a requirement that anything you add to thermal sysfs, it
+> should have some purpose for thermal control. I hope Link width control
+> is targeted to similar use case BW control.
+
+Ability to control Link Width seems to be part of PCIe 6.0 L0p. AFAICT, 
+the reasons are to lower/control power consumption so it seems to be 
+within scope.
+
+
+-- 
+ i.
+
+--8323329-160313703-1694523182=:2125--
