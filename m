@@ -2,79 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A33B79CB29
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 11:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA5E79CB30
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 11:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232179AbjILJIL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 05:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
+        id S233125AbjILJKi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 05:10:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233333AbjILJIC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 05:08:02 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737F219A1
-        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 02:07:58 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-271c700efb2so3560347a91.0
-        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 02:07:58 -0700 (PDT)
+        with ESMTP id S232755AbjILJKf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 05:10:35 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C431FC0
+        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 02:10:29 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-59b90c199f5so16902437b3.2
+        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 02:10:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694509678; x=1695114478; darn=vger.kernel.org;
-        h=user-agent:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q4A6fM5ly+otGKA8MWVxPXIy9mabpqxQXrWrt6zRDXo=;
-        b=OlEDaf1IPpbu7Assi50BzedxIIpNofQ8H5KYQf+0diMAMONw3mlL+T4fXRSP6u38k+
-         wa1/7J4nMLWzP0n7hU137tYrZgT3cKd1wxfWrD3YiLoAwmJq0B+9YZXG8I6rWTWrA3bq
-         6z0QTp8nkoTPJS5GguqyI0OexmsI6d996X5//WX2U8jB0aKwGYtOzTwaaBZQzh3aeJVZ
-         HYhpKCI+3SfQ/aa8wyoUU7iv6/PRW4dmve55B0KUoVmPDKthELJR8axBb3/eokMS5ZR5
-         3gwwxVxG4Rxg20sZlOpRttRMPOx0MavPBsQCZAquR0bPF6NpokQ9X7qo0m1ofldTEqJN
-         S3YA==
+        d=linaro.org; s=google; t=1694509828; x=1695114628; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4wS5QgdUOCC9VaeBKhtLVMz+PTz3QdvRlZVKaTgTJWE=;
+        b=VzAu1pNcB38JZBb5qj75ZEdFMzTVzfzgUSWDQGyqj7OOuqKb7zalrhq9tAAG8MVCRf
+         B1paD6RDA63uoVovHiaL4mdGSk5yw741Hs7fTgjEtWC/c8rVs3aTYaLJaKZpnijhcEyz
+         dRshRi/fydVnBJ4iHbdy9lt0tgUecP1NDBwQxq1ZdHUeiyN6pebg4HXMC0I669qv/vhK
+         bdjNttZR9LVw7T7SvyhbTTCIK8NKPqSCvXYL6D4RQa6HUCaD1rJKZnr1ICN4/3T/3Yo1
+         RtvatGStEdc883xG1gptrtIMD7rhbV230gq2adeBy/wpp6pk3CDtRslTyuHXR/m4bKBx
+         taSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694509678; x=1695114478;
-        h=user-agent:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1694509828; x=1695114628;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Q4A6fM5ly+otGKA8MWVxPXIy9mabpqxQXrWrt6zRDXo=;
-        b=fWiSIMmPzKZsXrd9eyn/4GIL1naFg7VCvgfDSyedwKil+ZJFuBR60Jicn1mYSHsoDS
-         y7HLY8a8P9FjJhixWXNEUmECFj49q+gQOW0UkOEotJiy6eQDeToNMivHu5KJ0LVL60yL
-         NzhFaziMxEYSxb/P1xIO7L2YN+nwijhBAYFDY/AqJ9fmOZ2d0tGMsj1Nsf0R5Y19TpO9
-         TEQCiRkx/aNNMMgjMeDxLU2yC5sfhGgWBbAE2aHDIvXIwGoSVWvpZSF/LbEggOpw+rux
-         gPLpR1QNmm79H6E8GutAHHzvKx0unb3LcOHwIphByhy4zAThW7MtraQ5GIfcxmQq3AZ9
-         Wl/g==
-X-Gm-Message-State: AOJu0YzixOHcH5iBJ4vhT7OrifMGzdg4Vqg3bugP02jQ9eZwYdDDWjJS
-        iuhDi274j5LkqTUGZ0LsyKDXqskTz8w=
-X-Google-Smtp-Source: AGHT+IEHCq/1jQkYRPSppagkbllFusA4A4UfA2luu2g0/SUmetnUlDUkfOjtUe71BaNN2XE3acnAEw==
-X-Received: by 2002:a17:90a:d509:b0:26b:1269:d801 with SMTP id t9-20020a17090ad50900b0026b1269d801mr8833361pju.14.1694509677724;
-        Tue, 12 Sep 2023 02:07:57 -0700 (PDT)
-Received: from localhost ([103.40.76.4])
-        by smtp.gmail.com with ESMTPSA id n62-20020a17090a2cc400b0026b0b4ed7b1sm9485858pjd.15.2023.09.12.02.07.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 12 Sep 2023 02:07:57 -0700 (PDT)
-Date:   Tue, 12 Sep 2023 17:07:53 +0800
-From:   "Jiazi.Li" <jqqlijiazi@gmail.com>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     linux-pm@vger.kernel.org
-Subject: Overflow issue in trans_stat_show
-Message-ID: <20230912090753.GA14603@Jiazi.Li>
+        bh=4wS5QgdUOCC9VaeBKhtLVMz+PTz3QdvRlZVKaTgTJWE=;
+        b=F1OWPSb/7U7q6007KHYrZGPxYI9NkTeUOGrSzg+QNxScHuC1NLycjFcdKRXpJsP2S5
+         CXqX9CjheIZRV7vrVEAkNdGJAafZ1UR9D/j99Da5Kr64C/K7SPEN61gfGCrqeItj1QZ2
+         y8ekHaKFrFjJZYqPrK9X5cN2PQNfY2tbRZAAocxdgbxcmk9/sEXEz2uE7uQ2wjoSY0R6
+         jumhal46A7PghMds+bHpj2yYiNgOyOo9OhdQC1OJyF3tlL1cnS1b5X424mCo3TxXiNKB
+         GKV5/lrj8OZP9MW2sCxDJFxqm6d8O1PjZG0DEzEmHXX9K3IxMtaU8v4QMfeteS2ppC6W
+         9OpA==
+X-Gm-Message-State: AOJu0Yw2LuShNYozs8dPJOXjtKMzaG3bVfFYP5RbqW2rAdRwyPL17o+w
+        1BIgaRTKP/Twnz5LiY0pi2qyPPfkbnDuYvu2ni8UV68AIcfsBiESMMI=
+X-Google-Smtp-Source: AGHT+IHaJe8TVI8OD48JzqiIz2fgcaPOPkTxwV3k9ta7dUaBVJiSwzwwTaqTlLeLEY/v/DqmQCJAEEnkVBsSvzdrZo0=
+X-Received: by 2002:a25:2409:0:b0:d71:8729:23b8 with SMTP id
+ k9-20020a252409000000b00d71872923b8mr11479439ybk.13.1694509828307; Tue, 12
+ Sep 2023 02:10:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20230911-scouring-squash-3ef2cc8b1ee2@spud>
+In-Reply-To: <20230911-scouring-squash-3ef2cc8b1ee2@spud>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 12 Sep 2023 11:09:51 +0200
+Message-ID: <CAPDyKFqB_2KiqYy1Li1sGkXPiEAnc2GOUO7SdqCxy5G+YkeLcA@mail.gmail.com>
+Subject: Re: Missed soc/genpd PR for 6.6 mw
+To:     Conor Dooley <conor@kernel.org>
+Cc:     arnd@arndb.de,
+        Changhuang Liang <changhuang.liang@starfivetech.com>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        linux-riscv@lists.infradead.org, Rob Herring <robh@kernel.org>,
+        Jia Jie Ho <jiajie.ho@starfivetech.com>,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Tue, 12 Sept 2023 at 00:11, Conor Dooley <conor@kernel.org> wrote:
+>
+> Hey all,
+>
+> So I've been informed that I made a hames of things and forgot to send
+> my soc driver PR for the 6.6 merge window. There's not too much in my
+> branch
+> https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/log/?h=riscv-soc-for-next
+> so I would've kicked the can to 6.7, but the majority of changes there were
+> made to the starfive pmu driver that has since moved to the new genpd
+> subsystem.
+>
+> Sending a PR to Arnd for 6.7 with the pmu bits & based on v6.5-rc1 doesn't
+> seem to make all that much sense to me, since that stuff is no longer in
+> drivers/soc, but rebasing on top of v6.6-rc1 would make these genpd changes,
+> with a different path to Linus.
+>
+> What's the best way to rectify me screwing this up? Should I split out
+> the non genpd patch and send a PR for that for the genpd tree for 6.7?
 
-In trans_stat_show, if there are more than 19 states, len will be
-greater than 4096, causing overflow write issue:
-[  702.286732] cat: dev_attr_show: trans_stat_show.cfi_jt+0x0/0x8 returned bad count
-[  702.287867] cat: fill_read_buffer: dev_attr_show.cfi_jt+0x0/0x8 returned bad count
-And then system oops due to memory corruption.
+Yep, that seems like the best option.
 
-It seems difficult to read more than PAGE_SIZE bytes through sysfs,
-could we move trans_stat to debugfs?
-For example, in the following dir:
-debugfs_root/devfreq/device_name/trans_stat
+If you think it's better to re-post the re-based genpd patches, I can
+certainly pick them up from the mailing lists too.
 
-Best regards
+Kind regards
+Uffe
