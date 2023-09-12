@@ -2,47 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28C2979D881
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 20:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 382A579D889
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 20:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbjILSQq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 14:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40722 "EHLO
+        id S231197AbjILSTk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 14:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237204AbjILSQn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 14:16:43 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302A4115;
-        Tue, 12 Sep 2023 11:16:39 -0700 (PDT)
+        with ESMTP id S229982AbjILSTj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 14:19:39 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECEA115;
+        Tue, 12 Sep 2023 11:19:35 -0700 (PDT)
 Received: from mercury (unknown [185.254.75.45])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E803D66072BA;
-        Tue, 12 Sep 2023 19:16:37 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id EE3316607314;
+        Tue, 12 Sep 2023 19:19:33 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1694542598;
-        bh=T4CTnt3171lkEG7tjYGi/cg2CuSvBVr1yDODyvXjNSg=;
+        s=mail; t=1694542774;
+        bh=ZdPR4Xrn7HpWKcmeBN6s0Y6xOv+P4P1mAUlJC6Z4XHM=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=jBbrMzWXfqW9mhE1VCw30jKHg0Sbl4nFivnCXyMBAJ3JYsb75qdQBXOcwns0O7XBY
-         vz5RiTZrIiE+Q6R2AanpGx9PPvpIgE97eS0jWbfyiTWkmoCWrTfLCn6EuSB3CiBoXj
-         8YRaegFE5h+6WfwZjLCnm470iCS5JmH76YN9MeRJ9s4JjE4RTtHAoxEvoZ3eHueolc
-         R8smmoddGXin0Y8mMcAR91XZ1j1UibDRQFGQNK5e43wpHiGg1ZCJU+D1P6XLHFa6yA
-         M9i9LOE/xHQH6c/Wv/qjC70Q7rKjXGq5noS4EwtYcrkW3Vge6RBuAHIMYOnky4cbPh
-         gXjn0mmR9PZjg==
+        b=nyTjCpaizKcPfZZ+E0suixOKFmzweY1NAGmbC4xjaGEEksRjh2C2wjCcKn1Q/mFZV
+         P0BSC50j8cXnn+UdyY8SAzQJXeAPWkIuk24OzoK0+b8cQZLiYghgg6C/YECjCVVreh
+         PstsP8yCsnVV/5z2MRMX8RWxZqjRso2wV999zF1abqrVCpVzNmEY/IGZnuSkaPzJh1
+         rq4w6jmf9I3DpJuxWllauiKgOfwblMohz/ibLmvqsslz0gxhbYulN9s107tBUlfzqV
+         1SMv3/wsuSFomT5rt4ZIKA5uA19Pz+hdD5pGbGRytuLMLRsgeoso7bHKRDqcpO6cTw
+         uxY2SM6s3kkSw==
 Received: by mercury (Postfix, from userid 1000)
-        id 90B5C106098A; Tue, 12 Sep 2023 20:16:34 +0200 (CEST)
+        id 4740F106098A; Tue, 12 Sep 2023 20:19:31 +0200 (CEST)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     sre@kernel.org, Andrew Halaney <ahalaney@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        bmasney@redhat.com
-In-Reply-To: <20230817214218.638846-1-ahalaney@redhat.com>
-References: <20230817214218.638846-1-ahalaney@redhat.com>
-Subject: Re: [PATCH] power: reset: nvmem-reboot-mode: quiet some device
- deferrals
-Message-Id: <169454259457.484856.798048052041147110.b4-ty@collabora.com>
-Date:   Tue, 12 Sep 2023 20:16:34 +0200
+To:     Sebastian Reichel <sre@kernel.org>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Justin Stitt <justinstitt@google.com>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+In-Reply-To: <20230814-void-drivers-power-reset-vexpress-poweroff-v1-1-c3d9b0107e5d@google.com>
+References: <20230814-void-drivers-power-reset-vexpress-poweroff-v1-1-c3d9b0107e5d@google.com>
+Subject: Re: [PATCH] power: vexpress: fix -Wvoid-pointer-to-enum-cast
+ warning
+Message-Id: <169454277126.489158.9426280067711996461.b4-ty@collabora.com>
+Date:   Tue, 12 Sep 2023 20:19:31 +0200
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -52,18 +59,20 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-On Thu, 17 Aug 2023 16:41:57 -0500, Andrew Halaney wrote:
-> Some errors are being logged that are really due to deferrals,
-> which is confusing to users. Use dev_err_probe() to handle when to log
-> at error level versus debug. This also has the added bonuses of logging
-> to devices_deferred and printing the error value.
+On Mon, 14 Aug 2023 22:21:51 +0000, Justin Stitt wrote:
+> When building with clang 18 I see the following warning:
+> |       drivers/power/reset/vexpress-poweroff.c:124:10: warning: cast to smaller integer type 'enum vexpress_reset_func' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+> |         124 |         switch ((enum vexpress_reset_func)match->data) {
 > 
+> This is due to the fact that `match->data` is a void* while `enum vexpress_reset_func`
+> has the size of an int. This leads to truncation and possible data loss.
 > 
+> [...]
 
 Applied, thanks!
 
-[1/1] power: reset: nvmem-reboot-mode: quiet some device deferrals
-      commit: 8e511f42ac9cdab84c692bcd0f9e0c55c75b1856
+[1/1] power: vexpress: fix -Wvoid-pointer-to-enum-cast warning
+      commit: 4ec7b666fb4247bc6b9cdc84fa753d8dc2994d25
 
 Best regards,
 -- 
