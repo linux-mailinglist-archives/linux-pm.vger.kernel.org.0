@@ -2,120 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0886579D34E
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 16:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04AB179D390
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 16:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235913AbjILOJc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 12 Sep 2023 10:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45910 "EHLO
+        id S233444AbjILO2b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 10:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235888AbjILOJ0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 10:09:26 -0400
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A272BCA;
-        Tue, 12 Sep 2023 07:09:22 -0700 (PDT)
-Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-3a9e89fa553so710105b6e.1;
-        Tue, 12 Sep 2023 07:09:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694527762; x=1695132562;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3t4Qi/o4fIqQV76oFp3RHORSTaJ6qjKQG0ecc7mN3So=;
-        b=IKzTwe0EXtGwO4ZQeL/1rkVHm9HqWlUXueMxb9/blNrriCv+slGxSg8IMQqLDsTWrT
-         fVRB9JdXMrpTzpG5rrbW9+9xEfOaHjJfO8Y/ZzdM9yIXFenTxPpkh/8C5dFHy00o3pYv
-         5dB+2q0By9dBqxXeqnkK9YJdzA2DoJLbseGPZWnqYZubl9hZgOmQh7haWd65JpzK7fk+
-         4Cw55HTws7fj0h7PBLtoddWpAGsmiOih10lISoics14RsieswxbVnfaW+xJ8heazxyfY
-         GyOf+HkxuMe6f2Lgpjfq6ltxrzFXQjGpZ1WCrxB8dZULAehze6k0nU1Fh+eTi35l+CIu
-         WPZg==
-X-Gm-Message-State: AOJu0Yx/kphaXVPywCb0OWMyRw7BZpkF1aawAYBwHORvRJXZHx2bQoRL
-        fIyAOC1KYNQh7mkrRvQrUaIj/L/Ijpj3EjByYAcN/MqcOMM=
-X-Google-Smtp-Source: AGHT+IH3mrS7MlQfUNPGMEXfgKOtemdlIQtD3fvex6yDSsAozupccUersckBLSDXQRrpTIToVNxn/wydbIGhiDNZRzA=
-X-Received: by 2002:a05:6808:20a5:b0:3a8:8b74:fd59 with SMTP id
- s37-20020a05680820a500b003a88b74fd59mr14216058oiw.0.1694527761846; Tue, 12
- Sep 2023 07:09:21 -0700 (PDT)
+        with ESMTP id S231629AbjILO2b (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 10:28:31 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CE7110;
+        Tue, 12 Sep 2023 07:28:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gk/9rYB7/an+iLUFV0aLbLxXVYBQ+i5HvJgnM5j31Ck=; b=Fyh3eDhp+bMke+9/vqft1ssk0u
+        K26AKRckbeIkVO6fwlvCUaguX+jW9DTHl9KN5PvnMoIW9yRNl/+OK2496aleokV1T5ZtsU5fmOD0B
+        Zr2J0fVLnb+oRoid8vba39T9Xl8js/gtSTQeRLLb0gP8wJD1PaLIem9aVMy6WsjczwtvzH1XOwkBh
+        HaiXrQeJU9uJ23G1TlqWDBj7Oby5rpqQa88e6Xky/nossK7i99FUhKhypBj6Y6rHinDvXThtPGEDM
+        Z6I0/uG8zv54kLWPtxSnWM90o2+NxHtkqvkwY4mXAy99Jp+6c3T3Z95JkirS6H8FidEmfn7y8LLpr
+        mLiMrZuQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qg4NJ-00843H-Ki; Tue, 12 Sep 2023 14:28:21 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 47E57300348; Tue, 12 Sep 2023 16:28:21 +0200 (CEST)
+Date:   Tue, 12 Sep 2023 16:28:21 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Qais Yousef <qyousef@layalina.io>,
+        Chris Redpath <Chris.Redpath@arm.com>
+Subject: Re: [RFC PATCH 0/7] sched: cpufreq: Remove magic margins
+Message-ID: <20230912142821.GA22166@noisy.programming.kicks-ass.net>
+References: <20230827233203.1315953-1-qyousef@layalina.io>
+ <a6365f63-4669-15e5-b843-f4bfb1bd5e68@arm.com>
+ <20230906211850.zyvk6qtt6fvpxaf3@airbuntu>
+ <20230907132631.GF10955@noisy.programming.kicks-ass.net>
+ <8919ed14-8d19-d964-2278-3303a5bda8ee@arm.com>
+ <20230907142923.GJ10955@noisy.programming.kicks-ass.net>
+ <cf5c628a-e047-b5e0-b2a0-f2b280015d02@arm.com>
+ <20230907201609.GC14243@noisy.programming.kicks-ass.net>
+ <f1b1b663-3a12-9e5d-932b-b3ffb5f02e14@arm.com>
 MIME-Version: 1.0
-References: <20230829002346.2104251-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20230829002346.2104251-1-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 12 Sep 2023 16:09:10 +0200
-Message-ID: <CAJZ5v0jrKSUOGG72w-EdzhQqC==CA7zYUofNSEW1wV-58TOnLw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/7] thermal: processor_thermal: Suport workload hint
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f1b1b663-3a12-9e5d-932b-b3ffb5f02e14@arm.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 29, 2023 at 2:23 AM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> Add support for Meteor Lake workload hints. Before adding this support,
-> some reorganization and clean up is required.
-> First four changes are for clean up and to reorganize code to add
-> support for workload hint. The last patch adds a test program as part
-> of self tests.
->
-> v3:
-> Changes in the commit log
-> Rename of files for using WT instead of WLT
-> Address comments from Rafael on v2
->
-> v2:
-> Changes in comments and commit log
-> Self test program is improved to disable workloadtype notification
-> on exit
->
-> Srinivas Pandruvada (7):
->   thermal: int340x: processor_thermal: Move mailbox code to common
->     module
->   thermal: int340x: processor_thermal: Add interrupt configuration
->   thermal: int340x: processor_thermal: Use non MSI interrupts by default
->   thermal/drivers/int340x: Remove PROC_THERMAL_FEATURE_WLT_REQ for
->     Meteor Lake
->   thermal: int340x: processor_thermal: Add workload type hint interface
->   thermal/drivers/int340x: Support workload hint interrupts
->   selftests/thermel/intel: Add test to read workload hint
->
->  .../driver-api/thermal/intel_dptf.rst         |  51 ++++
->  .../thermal/intel/int340x_thermal/Makefile    |   2 +
->  .../processor_thermal_device.c                |  17 +-
->  .../processor_thermal_device.h                |  21 +-
->  .../processor_thermal_device_pci.c            |  79 ++++--
->  .../processor_thermal_device_pci_legacy.c     |   3 +-
->  .../int340x_thermal/processor_thermal_mbox.c  | 179 ++++---------
->  .../processor_thermal_wt_hint.c               | 252 ++++++++++++++++++
->  .../processor_thermal_wt_req.c                | 136 ++++++++++
->  tools/testing/selftests/Makefile              |   1 +
->  .../thermal/intel/workload_hint/Makefile      |  12 +
->  .../intel/workload_hint/workload_hint_test.c  | 157 +++++++++++
->  12 files changed, 752 insertions(+), 158 deletions(-)
->  create mode 100644 drivers/thermal/intel/int340x_thermal/processor_thermal_wt_hint.c
->  create mode 100644 drivers/thermal/intel/int340x_thermal/processor_thermal_wt_req.c
->  create mode 100644 tools/testing/selftests/thermal/intel/workload_hint/Makefile
->  create mode 100644 tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
->
-> --
+On Tue, Sep 12, 2023 at 12:51:52PM +0100, Lukasz Luba wrote:
 
-There is a slight issue with the patch ordering in this series,
-because the interface to enable the interrupt should only be provided
-after implementing the interrupt handlers.  I don't think that anyone
-will apply the series partially and try to enable the feature, though.
+> You can see the util signal of that 'CrRendererMain' task and those
+> utilization drops in time, which I was referring to. When the util
+> drops below some threshold, the task might 'fit' into smaller CPU,
+> which could be prevented automatically byt maintaining the util est
+> for longer (but not for all).
 
-Also, I'm not actually sure if proc_thermal_wt_intr_callback() can run
-safely against the work item scheduled in proc_thermal_irq_handler()
-in case the workload hint one triggers along with a thermal threshold
-one.  I think that the access to MMIO is cached, so what if they both
-try to update the same cache line at the same time?  Or are they
-guaranteed to be different cache lines?
+Right, so right at those util_est dips it has some small activations.
+It's like a poll loop or something instead of a full block waiting for
+things to happen.
 
-Anyway, tentatively applied as 6.7 material, but I've changed the
-second patch somewhat, because I couldn't convince myself that the
-implicit type conversions in processor_thermal_mbox_interrupt_config()
-would always do the right thing regardless of the numbers involved, so
-please check the result in my bleeding-edge branch.
+And yeah, that'll destroy util_est in a hurry :/
 
-Thanks!
+> I do like your idea that Util EST might be per-task. I'm going to
+> check this, because that might help to get rid of the overutilized state
+> which is probably because small tasks are also 'bigger' for longer.
+> 
+> If this util est have chance to fly upstream, I could send an RFC if
+> you don't mind.
+
+The biggest stumbling block I see is the user interface; some generic
+QoS hints based thing that allows us to do random things -- like tune
+the above might do, dunno.
+
