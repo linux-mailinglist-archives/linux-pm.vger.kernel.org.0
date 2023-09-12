@@ -2,107 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0253C79DBC4
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 00:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 884FF79DBF4
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 00:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234427AbjILWTy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 18:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44886 "EHLO
+        id S237786AbjILWj6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 18:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234111AbjILWTy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 18:19:54 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D3C10C7
-        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 15:19:50 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-59b4ec8d9c1so53816857b3.0
-        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 15:19:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694557189; x=1695161989; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1tKmGVB6Mvfy9DEZwN7tyTLoBZ0QSjfmL2YVCLgau6c=;
-        b=LUfeTiNMnc7PJGXCK5qChR17Fi6UjXAQEbTj0Z98/oaPbxC8Dc05qs5WoAIKFwjVbA
-         EHeE7lOjeTi4z3cEoAFQAwhEH1LRhMDJ+nRmmsfRVdqO0YBXOVOTSzChpLUUnka4Mgwg
-         tu34u9GyFkaUzAf/DFnyEJ1EpyrS9XvONZ8irbu6tIrReUx22hGHQ7VcqJrZB02nJmgt
-         LN4DQ7Hyi+OKqz603MdnEjOgf2XT/4nho7uqgZkJ+IdomHruu3bJcDD4DMZRmiFmSm4c
-         I4jUU/ACHErmJQsQMJXO4fk8V2Zw6NF8rloHOl6nQkSSTZ4LpiIuPB59nMispJf6QORr
-         zbIg==
+        with ESMTP id S231491AbjILWj5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 18:39:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3AD1612E
+        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 15:39:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1694558347;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Hw4dz052UmhVfzEQW7+Uflu1VFGZC1UKKB7LwcrU6Xs=;
+        b=P86c/NEmdqlRXNvidILtx+bZU6CFOpQbGv07TuPVpdIL5kQkr+ah8N9o4FOFNnSjIN63eD
+        GtadjLZl/7sSMppMuTSwjY+XYtHxt+Cv2Z+xtT19WGqpqVbV18PQwsXS4qvbpALQSwHQPF
+        R+g71Tuvr/FuWWbp5lVKjZqvTMbZwxE=
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
+ [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-314-72RFMBhzOcGBsu-kD6ShNA-1; Tue, 12 Sep 2023 18:39:06 -0400
+X-MC-Unique: 72RFMBhzOcGBsu-kD6ShNA-1
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1bf703dd21fso81587805ad.3
+        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 15:39:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694557189; x=1695161989;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1tKmGVB6Mvfy9DEZwN7tyTLoBZ0QSjfmL2YVCLgau6c=;
-        b=bSZgkbIVXSLUDLaLP/EnNCbd8mNuopmW5fwsKerkWyXkowI6aN2WvT4Th86cF6VZPP
-         MKxEi4fB7SLIuMgLl3UQWGL80V5VkNGTip7sNhJ44Utj1I5XYHlvNrr4jt06i7krvMDa
-         2tQqZg/UmjFPCIhZ7jqMxBSg9i0rrr3T7C3AYTtAfASBzTraRGJR7FXaO49NvKUrQ4em
-         MtvRzARpm+jW/KrIA/zAinZAJB51Q5oL6xkQ1jf7UkgRX63zhNuXlop5lalHQY5UhdRN
-         WKofOv8Nx8WwufRUx5gohLdIKs+TSVZebik+MEatHKQlfA2EKWERt2YhyYWV6tSCC9Jy
-         2H8w==
-X-Gm-Message-State: AOJu0YzwPUkKs6gfJV72mkghi1AN0WSJybc6uavCY/3WPcqOE6npBeKG
-        mAI50Y/ZyUHtNgDdTjTXR5sBHI6g+YwCuojzQjuXbg==
-X-Google-Smtp-Source: AGHT+IFiLeNSnjgZpmmgdTv96jm6J2pT52BayzOGIvFNAoKpcvCnfMU0seLr8MHIhNzj8YZ96QniefWRD+waffsjE+c=
-X-Received: by 2002:a25:ed08:0:b0:d1c:bb1d:238a with SMTP id
- k8-20020a25ed08000000b00d1cbb1d238amr586222ybh.52.1694557189538; Tue, 12 Sep
- 2023 15:19:49 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1694558345; x=1695163145;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hw4dz052UmhVfzEQW7+Uflu1VFGZC1UKKB7LwcrU6Xs=;
+        b=Xikagajd3MkwQrdbcMp3PThD3jOS8tbo7mXto64gVAFtvk90TaVzpwHGqu9f1birKM
+         ruuAR8Smn8VjjjTalqE64I9lTcLQsgEJk+fX+4Iz0fy3GqPnmL1vOylExtKYdqwGIwFr
+         vRkrMJnKvRxgLqWj1dFYa3DWWxVUKQuCabWQLeJkJxW4i4wS1107i++3s2TkYdSxKShw
+         +DP8y8pvYdJ4CisRwICbIHZN1SgiStuIdiUuh+6MuIugaAWg9UXLyIPorxyi/wmRZjVf
+         qvG4IzGVS5Nzv6mRAdw7+U/OcrJ2dilbs40ZKRUQhasfZsGx+Bq3wbQ4ySVWbxd71j8K
+         nR1g==
+X-Gm-Message-State: AOJu0YyOSffZ+TJ9x5Ox5sSXwUPRo6fWSLtmtdLatFcceTG881qsTid0
+        AXjMYa8naliXAgoAhXIl/k0aU4vPJSmQtNv62edvemADaX1RtdmPzdhLcEXB3ovoJe2AtQudH/r
+        kF70igJMkKB0mL2HTc3E=
+X-Received: by 2002:a17:903:41c4:b0:1c3:3cde:7b44 with SMTP id u4-20020a17090341c400b001c33cde7b44mr1269633ple.12.1694558344871;
+        Tue, 12 Sep 2023 15:39:04 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHJXfeCtpozu/i9MX/Nb9C9D8rRf3TwAOO4AoonFr0CYCLCqxvZy3HNtrsprY+cWVaejgiLRA==
+X-Received: by 2002:a17:903:41c4:b0:1c3:3cde:7b44 with SMTP id u4-20020a17090341c400b001c33cde7b44mr1269621ple.12.1694558344560;
+        Tue, 12 Sep 2023 15:39:04 -0700 (PDT)
+Received: from ?IPV6:2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5? ([2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5])
+        by smtp.gmail.com with ESMTPSA id c10-20020a170902aa4a00b001c0af36dd64sm8964168plr.162.2023.09.12.15.38.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Sep 2023 15:39:03 -0700 (PDT)
+Message-ID: <5a5fb237-c28b-d6b5-0425-8f8f0fe1ac79@redhat.com>
+Date:   Wed, 13 Sep 2023 08:38:51 +1000
 MIME-Version: 1.0
-References: <20230829213441.310655-1-ulf.hansson@linaro.org>
- <CAHk-=wg0gc4Cc90OL29Vr5gDtd4mnsKD+TxtoNtQbAryaWHkZQ@mail.gmail.com>
- <CAHk-=wjLO=Jsdk2prq0piznMMCk+V0_fRaFRHEPuaALpF8J=hw@mail.gmail.com>
- <96bb0de0-06d9-46f8-b02f-dc924afff13c@app.fastmail.com> <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
- <CAPDyKFrJH-1uaPCwnWZDPi4MRtOm=N2CHSRyvjXRDbQ1y-oOrw@mail.gmail.com>
- <CAJZ5v0hqWYnkNXVju3U3n-9i8eqtjs197tLLNWv8Qa_N9T=KEw@mail.gmail.com>
- <CAPDyKFpXLj_2HAgyV_VJf+GPQVmxb_iiDe77Q2MY17MDNqy9fA@mail.gmail.com>
- <CAMuHMdVxLkxN0bmSRXW74R_dGNDSRDB4Z=zE0DoiXDOuweSM0A@mail.gmail.com>
- <CAPDyKFpUUJeGD77GTYCk59cvW=SdGTkOEXH4dap1JQWekAa0Eg@mail.gmail.com> <d1d6b2a2-8be1-4269-a504-5762b94df77a@app.fastmail.com>
-In-Reply-To: <d1d6b2a2-8be1-4269-a504-5762b94df77a@app.fastmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 13 Sep 2023 00:19:13 +0200
-Message-ID: <CAPDyKFqt7UWHoiTGsg_PCdU92iFgh7p25FtCkhf5bU_0sDuD=Q@mail.gmail.com>
-Subject: Re: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RFC PATCH 00/32] ACPI/arm64: add support for virtual cpuhotplug
+Content-Language: en-US
+To:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
+        loongarch@lists.linux.dev, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Len Brown <lenb@kernel.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+References: <20230203135043.409192-1-james.morse@arm.com>
+ <41dd71ab-a6a7-fd93-73ec-64a6b0ca468e@redhat.com>
+ <1ca1fb8f-1dec-74a3-ee44-94609f6aba2c@arm.com>
+From:   Gavin Shan <gshan@redhat.com>
+In-Reply-To: <1ca1fb8f-1dec-74a3-ee44-94609f6aba2c@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 12 Sept 2023 at 15:58, Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Mon, Sep 11, 2023, at 13:28, Ulf Hansson wrote:
-> > On Mon, 11 Sept 2023 at 09:52, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> >>
-> >> And I just realized you moved the code and Makefiles to drivers/genpd/,
-> >> but not the Kconfig symbols and logic, which still lives under
-> >> drivers/soc/.  So resolving that (and the name) is something that
-> >> should be resolved sooner rather than later...
-> >
-> > In regards to the name, I am relying on input from Linus to make a
-> > final decision before I send a patch. In regards to this, I have also
-> > started working on a documentation patch for genpd. It needs some more
-> > polishing before I can send it though.
->
-> I'm fairly sure that Linus was instead waiting for you to send
-> a patch or pull request for the rename. Please just pick a name
-> that you like and that Linus hasn't already objected to and send
-> it so the rename makes it into -rc2 for others to base on.
->
-> If anyone has objections to the new name, you'll find out about
-> it then, but I think we trust your judgement here.
->
->      Arnd
 
-Alright. One can interpret silence differently. :-)
+Hi James,
 
-Anyway, I have followed your advice and submitted a patch. I have
-queued up a couple of patches for "genpd" already, but it's still easy
-to rebase them after a rename, so not a big deal for me at the moment.
+On 9/13/23 03:01, James Morse wrote:
+> On 29/03/2023 03:35, Gavin Shan wrote:
+>> On 2/3/23 9:50 PM, James Morse wrote:
+> 
+>>> If folk want to play along at home, you'll need a copy of Qemu that supports this.
+>>> https://github.com/salil-mehta/qemu.git
+>>> salil/virt-cpuhp-armv8/rfc-v1-port29092022.psci.present
+>>>
+>>> You'll need to fix the numbers of KVM_CAP_ARM_HVC_TO_USER and KVM_CAP_ARM_PSCI_TO_USER
+>>> to match your host kernel. Replace your '-smp' argument with something like:
+>>> | -smp cpus=1,maxcpus=3,cores=3,threads=1,sockets=1
+>>>
+>>> then feed the following to the Qemu montior;
+>>> | (qemu) device_add driver=host-arm-cpu,core-id=1,id=cpu1
+>>> | (qemu) device_del cpu1
+>>>
+>>>
+>>> This series is based on v6.2-rc3, and can be retrieved from:
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/ virtual_cpu_hotplug/rfc/v1
+> 
+>> I give it a try, but the hot-added CPU needs to be put into online
+>> state manually. I'm not sure if it's expected or not.
+> 
+> This is expected. If you want the CPUs to be brought online automatically, you can add
+> udev rules to do that.
+> 
 
-Kind regards
-Uffe
+Yeah, I usually execute the following command to bring the CPU into online state,
+after the vCPU is hot added by QMP command.
+
+(qemu) device_add driver=host-arm-cpu,core-id=1,id=cpu1
+guest# echo 1 > /sys/devices/system/cpu/cpux/online
+
+James, the series was posted a while ago and do you have plan to respin
+and post RFCv2 in near future? :)
+
+Thanks,
+Gavin
+
