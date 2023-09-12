@@ -2,130 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ABF079D500
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 17:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E7D79D530
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 17:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236495AbjILPeI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 11:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36340 "EHLO
+        id S230072AbjILPms (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 11:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236368AbjILPeB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 11:34:01 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795A310EC
-        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 08:33:57 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id 6a1803df08f44-649edb3a3d6so25973816d6.0
-        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 08:33:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694532836; x=1695137636; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jn3gYV6z0mHJzWuz6G6eyUwdrkRbzHbTqw/XH7fEH4s=;
-        b=jXSW4sr0/V0TjTygldTr884ibK6jtHHyYxRV6nM1uAsrYMhRGlPYT5IV8wxSASiQt3
-         etjGNSVMhu9OE3YJ6Taca3oX5YOEBO8AH1muDseBgwvJBZPgGW7wvFhhovPvA2VVvYvi
-         7cIYUxtFUbsyGMxzcfNUGm8QCKQfdVFW8dIzAKgcEcy3bStwurtLo3txAKaYJWHG2/Ds
-         jDpI9FyiEYuT9LF5bnbNrhBt4GdREQlewD7YDtkaJEYJ0Fmaw3Owsb0Y09JGEnu1fZqU
-         mkx7I0agpaYsSJFNrXWo8vL7ZONfceEepwrEp7sAQ5mlMZZf6vJC1p+akXVskBatrkUx
-         IFZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694532836; x=1695137636;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jn3gYV6z0mHJzWuz6G6eyUwdrkRbzHbTqw/XH7fEH4s=;
-        b=I3II99SQHHUohwCDW+EH4yhwt139McqK6jcXqxf6w2tImI56Ancwgw/zT/cqzrEVJ1
-         KAJZ00HR5SbyRDrlRm0O3JpaoX3uwCbeeleC57p7i6vpeLi/PcDG/1Gh50EKYX6+JKrn
-         Wty8oO8sFgvskLF7LffkMJk8ibT0ikAMop1Y5RKc8jACbeecKtaiqRZrsD7qPGFDJL+x
-         aS2gO8ChRP44IePAN/vs76FZ0lblrTEAOTL+R7PUbVZFmd03VYoNz+w8upUcjNc39ORE
-         qRhh41mW1dSUs7I+5nJEU/NudvDgmAdeYXuQS5fzPXBvJXPiOX1DvQrOPUCnNg3Hu+Vi
-         vI1g==
-X-Gm-Message-State: AOJu0YysX+tVuRGdZlzLEKCxmSdkXzXAEol4b8HXKwHwJd7WA1D8D5C9
-        9RAvPwEj8rzfWrReTwXHnrBYeZ6thOhKVs23ZK3TMQ==
-X-Google-Smtp-Source: AGHT+IE0Ca2qfQkE6enrGukSoNDCb1OXtuL9IDZszmjiWUcu3f+9cYN/mXNgIzl2i4wDmR90/hv9yYRTETUzcz21Ipg=
-X-Received: by 2002:ad4:5d4b:0:b0:635:da80:e53a with SMTP id
- jk11-20020ad45d4b000000b00635da80e53amr4483115qvb.12.1694532836379; Tue, 12
- Sep 2023 08:33:56 -0700 (PDT)
+        with ESMTP id S229661AbjILPmr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 11:42:47 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA50710DE;
+        Tue, 12 Sep 2023 08:42:43 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 134D2C433C7;
+        Tue, 12 Sep 2023 15:42:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694533363;
+        bh=A9IHpP6N316XfcpL5X56A92IaXw42P2If+Z8SUyUWI4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k3BrWE/7RbfM1QWdm8ZFo2E/rhhf/ftEQCSvzgrUU15e4Ly0NWaWQRogxrkeiGicS
+         CqhUOYHptTl+2V28epsDtyRwDLuLQ3I5bIxofPXOh376f6lWenJmazIEHdwZn2XRoq
+         C+614udDKn5KhmW96reganCO7bT++uvdkjKU/no24EUNsfc8yX+juJCFZ1RigXQOuy
+         ieSZ/PfKWmkMt/39ne26y7JonMfxcv+oJDemareMcSugualICdMOf4f/6S45dfdKFZ
+         qN9hHMTx78zki2XczUY8Zj4deB6p8rC13WBXGDVGCmK54nbCQT8M49vQ+01FMZxfJY
+         wFk5Q499efOng==
+Received: (nullmailer pid 842293 invoked by uid 1000);
+        Tue, 12 Sep 2023 15:42:39 -0000
+Date:   Tue, 12 Sep 2023 10:42:39 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Robert Marko <robimarko@gmail.com>
+Cc:     ilia.lin@kernel.org, vireshk@kernel.org, nm@ti.com,
+        sboyd@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, rafael@kernel.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dmitry.baryshkov@linaro.org,
+        Christian Marangi <ansuelsmth@gmail.com>
+Subject: Re: [PATCH v3 2/3] dt-bindings: opp: opp-v2-kryo-cpu: Document named
+ opp-microvolt property
+Message-ID: <20230912154239.GA833216-robh@kernel.org>
+References: <20230909165739.1036263-1-robimarko@gmail.com>
+ <20230909165739.1036263-2-robimarko@gmail.com>
 MIME-Version: 1.0
-References: <20230912060801.95533-1-bgray@linux.ibm.com> <20230912060801.95533-2-bgray@linux.ibm.com>
-In-Reply-To: <20230912060801.95533-2-bgray@linux.ibm.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 12 Sep 2023 08:33:42 -0700
-Message-ID: <CAKwvOdkP1uwU0Cq9541zf309tudfFdbu-10Xo3h+g07-k=Fg4A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/7] ia64: fix Python string escapes
-To:     Benjamin Gray <bgray@linux.ibm.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, llvm@lists.linux.dev,
-        linux-pm@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Ian Abbott <abbotti@mev.co.uk>,
-        H Hartley Sweeten <hsweeten@visionengravers.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, Jan Kiszka <jan.kiszka@siemens.com>,
-        Kieran Bingham <kbingham@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        Todd E Brandt <todd.e.brandt@linux.intel.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230909165739.1036263-2-robimarko@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 11, 2023 at 11:08=E2=80=AFPM Benjamin Gray <bgray@linux.ibm.com=
-> wrote:
->
-> Python 3.6 introduced a DeprecationWarning for invalid escape sequences.
-> This is upgraded to a SyntaxWarning in Python 3.12, and will eventually
-> be a syntax error.
->
-> Fix these now to get ahead of it before it's an error.
->
-> Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
+On Sat, Sep 09, 2023 at 06:56:01PM +0200, Robert Marko wrote:
+> From: Christian Marangi <ansuelsmth@gmail.com>
+> 
+> Document named opp-microvolt property for opp-v2-kryo-cpu schema.
+> This property is used to declare multiple voltage ranges selected on the
+> different values read from efuses. The selection is done based on the
+> speed pvs values and the named opp-microvolt property is selected by the
+> qcom-cpufreq-nvmem driver.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
 > ---
->  arch/ia64/scripts/unwcheck.py | 2 +-
+>  .../bindings/opp/opp-v2-kryo-cpu.yaml         | 40 +++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
+> index bbbad31ae4ca..6f216306a7eb 100644
+> --- a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
+> +++ b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
+> @@ -63,6 +63,12 @@ patternProperties:
+>            5:  MSM8996SG, speedbin 1
+>            6:  MSM8996SG, speedbin 2
+>            7-31:  unused
+> +
+> +          Bitmap for IPQ806X SoC:
+> +          0:  IPQ8062
+> +          1:  IPQ8064/IPQ8066/IPQ8068
+> +          2:  IPQ8065/IPQ8069
+> +          3-31:  unused
+>          enum: [0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7,
+>                 0x9, 0xd, 0xe, 0xf,
+>                 0x10, 0x20, 0x30, 0x70]
+> @@ -71,6 +77,24 @@ patternProperties:
+>  
+>        required-opps: true
+>  
+> +    patternProperties:
+> +      '^opp-microvolt-speed[0-9]+-pvs[0-9]+$':
+> +        description: |
+> +          Named opp-microvolt property following the same generic
+> +          binding for named opp-microvolt.
+> +
+> +          The correct voltage range is selected based on the values
+> +          in the efuse for the speed and the pvs.
 
-Ard is proposing removing this script, along with the rest of the architect=
-ure:
-https://lore.kernel.org/linux-arch/20230911163129.3777603-2-ardb@google.com=
-/
+What is "pvs"?
 
-So this change can be dropped.
+> +
+> +          The qcom-cpufreq-nvmem driver will read all these values
+> +          and assign the correct named property.
 
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/ia64/scripts/unwcheck.py b/arch/ia64/scripts/unwcheck.p=
-y
-> index 9581742f0db2..adc24152d3b9 100644
-> --- a/arch/ia64/scripts/unwcheck.py
-> +++ b/arch/ia64/scripts/unwcheck.py
-> @@ -21,7 +21,7 @@ if len(sys.argv) !=3D 2:
->
->  readelf =3D os.getenv("READELF", "readelf")
->
-> -start_pattern =3D re.compile("<([^>]*)>: \[0x([0-9a-f]+)-0x([0-9a-f]+)\]=
-")
-> +start_pattern =3D re.compile(r"<([^>]*)>: \[0x([0-9a-f]+)-0x([0-9a-f]+)\=
-]")
->  rlen_pattern  =3D re.compile(".*rlen=3D([0-9]+)")
->
->  def check_func (func, slots, rlen_sum):
-> --
-> 2.41.0
->
+Specific driver details don't belong in binding. If there's some detail 
+or requirement of all consumers, then that is fine here.
 
+> +        $ref: /schemas/types.yaml#/definitions/uint32-matrix
 
---=20
-Thanks,
-~Nick Desaulniers
+The common binding already defines the type. Drop.
+
+> +        minItems: 1
+> +        maxItems: 8   # Should be enough regulators
+
+Does this really vary from 1 to 8 entries? Looks like copy-n-paste.
+
+> +        items:
+> +          minItems: 1
+> +          maxItems: 3
+
+Do you really need to support both single voltage and <nom min max> 
+forms?
+
+Rob
