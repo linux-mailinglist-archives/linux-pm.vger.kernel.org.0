@@ -2,195 +2,250 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A485179C8BD
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 09:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F9A79C94E
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 10:08:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231840AbjILH4W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 03:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41530 "EHLO
+        id S232198AbjILIIZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 04:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbjILH4O (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 03:56:14 -0400
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E463E7C
-        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 00:56:10 -0700 (PDT)
-Received: by mail-ua1-x931.google.com with SMTP id a1e0cc1a2514c-7a02252eb5dso1545731241.1
-        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 00:56:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694505369; x=1695110169; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=KHya+7F1DBe8l/ePdcCte4Kk0bJRNucDG9gM+2FXrkk=;
-        b=fR+DUewDqNkVYoyR5gduIF5UlpoPrlUnZcNfCxTcK5AOUDVJXfcEfYEnq6q2Qrc3wS
-         s0/8GbVQnalKnK37kE2ifUgfMvwnA2eD3niGh0yxyRhhfY3ZPLZi2AY/y2aphSEPsUvc
-         KNxmgj7G1CNaga1XreEHNNT7+yrL57EIcLF9LSiGPf7mQdlGz26Kaie4wmLGuFrVYiM1
-         tOyu742LPdgxscIL90Vjvuij21Am3lutJkj/V/gS/tnuRHs7p6ze+u+udey7Ccni/8RY
-         BH3dirlbMR2DlUWZsAB1aLz5XpZBqGyLodmpJK3T0Ttz9ecqPgCSi6Z4iV/EAR2h2ObI
-         MJCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694505369; x=1695110169;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KHya+7F1DBe8l/ePdcCte4Kk0bJRNucDG9gM+2FXrkk=;
-        b=JrXOTvu1+9tg+AbFkxVCUiZg3Z99QuC/i8ZrWJTfrONLAJBmQloelchgUzzU/F/HGP
-         +Ahcqa3sZh9BaZ2UkvHBvbzWTdArXcuK+LQLVQlBGO3rZNzeQWtE7sT7ue99uZhO4sEc
-         Yruhl+tBjMIucH0AU3wXyI8CpvRlVXegMqD+qK1u25XqUcN191cd+ofnDFjgamiiYski
-         WknFoG7EFSwDLD65+yyJHV326SLfzmtwx5CiI6BpHIIaOT72sc/9jX7FSIO8CcvoaZ37
-         dt1u9I6tdk0phAlL0G83Z9pnzY4aZukc1p8F4IoYMHef8AoCoadjG2Xc0UTeV+qOgz4H
-         JcQg==
-X-Gm-Message-State: AOJu0YwGUyJDJuEVklRcNJjZFx1vpJcfDE7SM36ZPoQQ48sMZNiCQIb0
-        PZ2XNJ6ZyGsQ+pO06OmeWrNo5qi8Z7UIo7UehAAHUw==
-X-Google-Smtp-Source: AGHT+IEU7lzE/Dy3/8fiDPb3paZeKjpSwC6m9TQvo4Eme28XUib49W5/g7bAteipV+pRQMe7GryFitoR15vuGrj30Lg=
-X-Received: by 2002:a1f:c487:0:b0:48d:1359:4dcd with SMTP id
- u129-20020a1fc487000000b0048d13594dcdmr6428193vkf.7.1694505369434; Tue, 12
- Sep 2023 00:56:09 -0700 (PDT)
-MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 12 Sep 2023 13:25:58 +0530
-Message-ID: <CA+G9fYvHhiiGKhNd=L9+xYFVwv0Q8k6gUBeFQGWCWw1cWhb50Q@mail.gmail.com>
-Subject: Qemu-arm64: LTP: cfs_bandwidth01: Unable to handle kernel NULL
- pointer dereference at virtual address 0000000000000038
-To:     open list <linux-kernel@vger.kernel.org>,
-        LTP List <ltp@lists.linux.it>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     =?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Gao <wegao@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Martin Doucha <mdoucha@suse.cz>, Cyril Hrubis <chrubis@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S232193AbjILIIE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 04:08:04 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E69C172A;
+        Tue, 12 Sep 2023 01:07:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694506079; x=1726042079;
+  h=date:from:to:cc:subject:message-id;
+  bh=jG3PpLBPTAWqpTuT3aBMOW+mKhxB1zyZHCjv7BmU9xw=;
+  b=PHKY1FmazynKjtC7J31iBSmv9Jef7x5uKreFrpEQfxNR/siUTrJ6QHtu
+   DSY5Go/tN1A7KybXSThdadMmQMiRAjBYGbKd7an+naaal1guIERJbkTSz
+   mxRlhCgsTOu3aYDHlu6g1kRCcRPFpFZlxzXZsF4+6cbXO0VKQteuEQopS
+   SrFZTe1aBzYs+uxc6ewgNRZ2dtBfyOptR8ugLuZNWlMWTXCVwVw9vwKX0
+   vGvRgx8y0Z89BKeSiCCLqJ6oow7c8qVdngM+Y6lorysCoi9h8SFJ6jWh5
+   ofMiyOgtXMQQTYAGirEjeAYpa3onSvVaJXxM6evWDZp3bqMuuPnMcfRHk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="378219130"
+X-IronPort-AV: E=Sophos;i="6.02,245,1688454000"; 
+   d="scan'208";a="378219130"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 01:07:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="743638975"
+X-IronPort-AV: E=Sophos;i="6.02,245,1688454000"; 
+   d="scan'208";a="743638975"
+Received: from lkp-server02.sh.intel.com (HELO 1e56c5165d33) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 12 Sep 2023 01:07:57 -0700
+Received: from kbuild by 1e56c5165d33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qfyR9-00007F-1N;
+        Tue, 12 Sep 2023 08:07:55 +0000
+Date:   Tue, 12 Sep 2023 16:07:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ eb9b927bbb5841d2ff0f92548a5d7c724d2692ee
+Message-ID: <202309121626.XYCTSB71-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Following kernel crash noticed on Linux stable-rc 6.5.3-rc1 on qemu-arm64 while
-running LTP sched tests cases.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: eb9b927bbb5841d2ff0f92548a5d7c724d2692ee  Merge branch 'pm-cpufreq' into bleeding-edge
 
-This is not always reproducible.
+elapsed time: 739m
 
-Anyone have noticed LTP cfs_bandwidth01 causing a kernel crash on any of the
-devices or qemu-* ?
+configs tested: 179
+configs skipped: 2
 
-I need to check similar crashes on other Linux trees and branches.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Boot log and test log:
----------------------
-[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x000f0510]
-[    0.000000] Linux version 6.5.3-rc1 (tuxmake@tuxmake) (Debian clang
-version 18.0.0 (++20230910112057+710b5a12324e-1~exp1~20230910112229.889),
-Debian LLD 18.0.0) #1 SMP PREEMPT @1694441978
-[    0.000000] KASLR enabled
-[    0.000000] random: crng init done
-[    0.000000] Machine model: linux,dummy-virt
-...
-running LTP sched tests
-...
-cfs_bandwidth01.c:129: TPASS: Workers exited
-cfs_bandwidth01.c:117: TPASS: Scheduled bandwidth constrained workers
-cfs_bandwidth01.c:54: TINFO: Set 'level2/cpu.max' = '5000 10000'
-<1>[   74.455327] Unable to handle kernel NULL pointer dereference at
-virtual address 0000000000000038
-<1>[   74.456395] Mem abort info:
-<1>[   74.456639]   ESR = 0x0000000097880004
-<1>[   74.458273]   EC = 0x25: DABT (current EL), IL = 32 bits
-<1>[   74.458859]   SET = 0, FnV = 0
-<1>[   74.459495]   EA = 0, S1PTW = 0
-<1>[   74.460171]   FSC = 0x04: level 0 translation fault
-<1>[   74.460799] Data abort info:
-<1>[   74.461388]   Access size = 4 byte(s)
-<1>[   74.462068]   SSE = 0, SRT = 8
-<1>[   74.462713]   SF = 0, AR = 0
-<1>[   74.463257]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-<1>[   74.463996]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-<1>[   74.465120] user pgtable: 4k pages, 48-bit VAs, pgdp=00000001029d6000
-<1>[   74.465818] [0000000000000038] pgd=0000000000000000, p4d=0000000000000000
-<0>[   74.468416] Internal error: Oops: 0000000097880004 [#1] PREEMPT SMP
-<4>[   74.469489] Modules linked in: fuse drm dm_mod ip_tables x_tables
-<4>[   74.470964] CPU: 0 PID: 435 Comm: cfs_bandwidth01 Not tainted 6.5.3-rc1 #1
-<4>[   74.471789] Hardware name: linux,dummy-virt (DT)
-<4>[   74.473045] pstate: 634000c9 (nZCv daIF +PAN -UAO +TCO +DIT
--SSBS BTYPE=--)
-<4>[   74.473785] pc : set_next_entity+0xc0/0x1f8
-<4>[   74.475461] lr : pick_next_task_fair+0x204/0x3b8
-<4>[   74.476989] sp : ffff8000807eb870
-<4>[   74.477346] x29: ffff8000807eb870 x28: ffff0000c4e3b750 x27:
-ffffcb93e8e19008
-<4>[   74.478392] x26: ffff0000c4e3b0c0 x25: ffffcb93e8ab4828 x24:
-ffff0000c0354a00
-<4>[   74.479263] x23: ffff8000807eb900 x22: 0000000000000000 x21:
-ffff0000ff5b1300
-<4>[   74.480401] x20: ffff0000ff5b1300 x19: 0000000000000000 x18:
-0000000000000000
-<4>[   74.481417] x17: 000000000000ba7e x16: 0000000000000606 x15:
-000000000117d17a
-<4>[   74.482733] x14: 0000000000000000 x13: 0000000f0f4bc800 x12:
-00000000000002b0
-<4>[   74.484181] x11: 0000000f0f4bc800 x10: 0000000cf6ad6bd1 x9 :
-ffffcb93e6af8e4c
-<4>[   74.485229] x8 : 0000000000000000 x7 : ffffcb93e8a3ccac x6 :
-0000000000000003
-<4>[   74.486131] x5 : 000000008040002b x4 : 0000ffffbef0c000 x3 :
-ffff0000ff5b1200
-<4>[   74.487012] x2 : ffff0000c39efc00 x1 : 0000000000000000 x0 :
-ffff0000ff5b1300
-<4>[   74.488236] Call trace:
-<4>[   74.488608]  set_next_entity+0xc0/0x1f8
-<4>[   74.489280]  pick_next_task_fair+0x204/0x3b8
-<4>[   74.489987]  __schedule+0x1e0/0x9c8
-<4>[   74.490903]  schedule+0x134/0x1b8
-<4>[   74.491632]  schedule_preempt_disabled+0x90/0x108
-<4>[   74.492392]  rwsem_down_write_slowpath+0x288/0x6f0
-<4>[   74.493056]  down_write+0x48/0xb0
-<4>[   74.493606]  unlink_anon_vmas+0x148/0x1b0
-<4>[   74.494222]  free_pgtables+0x10c/0x200
-<4>[   74.494800]  exit_mmap+0x174/0x3c0
-<4>[   74.495177]  __mmput+0x48/0x150
-<4>[   74.495761]  mmput+0x34/0x70
-<4>[   74.496058]  exit_mm+0xbc/0x148
-<4>[   74.497651]  do_exit+0x22c/0x910
-<4>[   74.498212]  do_group_exit+0xa4/0xb0
-<4>[   74.498870]  __arm64_sys_exit_group+0x24/0x30
-<4>[   74.499484]  invoke_syscall+0x4c/0x120
-<4>[   74.499834]  el0_svc_common+0xd0/0x110
-<4>[   74.500196]  do_el0_svc+0x3c/0xb8
-<4>[   74.500475]  el0_svc+0x30/0x90
-<4>[   74.500746]  el0t_64_sync_handler+0x84/0x100
-<4>[   74.501309]  el0t_64_sync+0x190/0x198
-<0>[   74.502156] Code: f900293f f9403908 b5ffff48 17ffffde (b9403a68)
-<4>[   74.503735] ---[ end trace 0000000000000000 ]---
-<6>[   74.504727] note: cfs_bandwidth01[435] exited with irqs disabled
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r015-20230912   gcc  
+alpha                randconfig-r016-20230912   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20230912   gcc  
+arc                  randconfig-r034-20230912   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                         assabet_defconfig   gcc  
+arm                                 defconfig   gcc  
+arm                   milbeaut_m10v_defconfig   clang
+arm                   randconfig-001-20230912   clang
+arm                         s5pv210_defconfig   clang
+arm64                            allmodconfig   gcc  
+arm64                             allnoconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r002-20230912   clang
+arm64                randconfig-r006-20230912   clang
+arm64                randconfig-r026-20230912   gcc  
+arm64                randconfig-r033-20230912   clang
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r035-20230912   gcc  
+hexagon               randconfig-001-20230912   clang
+hexagon               randconfig-002-20230912   clang
+hexagon              randconfig-r004-20230912   clang
+hexagon              randconfig-r013-20230912   clang
+hexagon              randconfig-r036-20230912   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20230912   clang
+i386         buildonly-randconfig-002-20230912   clang
+i386         buildonly-randconfig-003-20230912   clang
+i386         buildonly-randconfig-004-20230912   clang
+i386         buildonly-randconfig-005-20230912   clang
+i386         buildonly-randconfig-006-20230912   clang
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                  randconfig-001-20230912   clang
+i386                  randconfig-002-20230912   clang
+i386                  randconfig-003-20230912   clang
+i386                  randconfig-004-20230912   clang
+i386                  randconfig-005-20230912   clang
+i386                  randconfig-006-20230912   clang
+i386                  randconfig-011-20230912   gcc  
+i386                  randconfig-012-20230912   gcc  
+i386                  randconfig-013-20230912   gcc  
+i386                  randconfig-014-20230912   gcc  
+i386                  randconfig-015-20230912   gcc  
+i386                  randconfig-016-20230912   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20230912   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                          atari_defconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                        m5407c3_defconfig   gcc  
+m68k                            mac_defconfig   gcc  
+m68k                 randconfig-r022-20230912   gcc  
+m68k                 randconfig-r032-20230912   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                         cobalt_defconfig   gcc  
+mips                           gcw0_defconfig   gcc  
+mips                 randconfig-r011-20230912   clang
+mips                 randconfig-r023-20230912   clang
+mips                 randconfig-r024-20230912   clang
+mips                        vocore2_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+openrisc             randconfig-r003-20230912   gcc  
+openrisc             randconfig-r014-20230912   gcc  
+openrisc                       virt_defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   gcc  
+powerpc                        icon_defconfig   clang
+powerpc                 linkstation_defconfig   gcc  
+powerpc              randconfig-r001-20230912   clang
+powerpc                     redwood_defconfig   gcc  
+powerpc                     tqm8541_defconfig   gcc  
+powerpc                     tqm8555_defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                 randconfig-001-20230912   clang
+riscv                randconfig-r005-20230912   clang
+riscv                randconfig-r025-20230912   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                  randconfig-001-20230912   gcc  
+s390                 randconfig-r031-20230912   clang
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                        edosk7760_defconfig   gcc  
+sh                          lboxre2_defconfig   gcc  
+sh                          r7785rp_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r021-20230912   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                   randconfig-r012-20230912   clang
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-001-20230912   clang
+x86_64       buildonly-randconfig-002-20230912   clang
+x86_64       buildonly-randconfig-003-20230912   clang
+x86_64       buildonly-randconfig-004-20230912   clang
+x86_64       buildonly-randconfig-005-20230912   clang
+x86_64       buildonly-randconfig-006-20230912   clang
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20230912   gcc  
+x86_64                randconfig-002-20230912   gcc  
+x86_64                randconfig-003-20230912   gcc  
+x86_64                randconfig-004-20230912   gcc  
+x86_64                randconfig-005-20230912   gcc  
+x86_64                randconfig-006-20230912   gcc  
+x86_64                randconfig-011-20230912   clang
+x86_64                randconfig-012-20230912   clang
+x86_64                randconfig-013-20230912   clang
+x86_64                randconfig-014-20230912   clang
+x86_64                randconfig-015-20230912   clang
+x86_64                randconfig-016-20230912   clang
+x86_64                randconfig-071-20230912   clang
+x86_64                randconfig-072-20230912   clang
+x86_64                randconfig-073-20230912   clang
+x86_64                randconfig-074-20230912   clang
+x86_64                randconfig-075-20230912   clang
+x86_64                randconfig-076-20230912   clang
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                            allnoconfig   gcc  
+xtensa                           allyesconfig   gcc  
 
-Links:
------
-  - https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2VFpDOMEgzroNyiP9SSlxRxHsMH
-  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.5.y/build/v6.5.2-740-g7bfd1316ceae/testrun/19901770/suite/log-parser-test/tests/
-  - https://storage.tuxsuite.com/public/linaro/lkft/builds/2VFpB1ieNZSp5zh0joVGtoMn7RG/
-
-Steps to reproduce:
-----------------
-# To install tuxrun to your home directory at ~/.local/bin:
-# pip3 install -U --user tuxrun==0.49.2
-#
-# Or install a deb/rpm depending on the running distribution
-# See https://tuxmake.org/install-deb/ or
-# https://tuxmake.org/install-rpm/
-#
-# See https://tuxrun.org/ for complete documentation.
-#
-
-tuxrun --runtime podman --device qemu-arm64 --boot-args rw --kernel
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2VFpB1ieNZSp5zh0joVGtoMn7RG/Image.gz
---modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2VFpB1ieNZSp5zh0joVGtoMn7RG/modules.tar.xz
---rootfs https://storage.tuxboot.com/debian/bookworm/arm64/rootfs.ext4.xz
---parameters SKIPFILE=skipfile-lkft.yaml --parameters SHARD_NUMBER=4
---parameters SHARD_INDEX=2 --image
-docker.io/linaro/tuxrun-dispatcher:v0.49.2 --tests ltp-sched
---timeouts boot=30 ltp-sched=30 --overlay
-https://storage.tuxboot.com/overlays/debian/bookworm/arm64/ltp/20230516/ltp.tar.xz
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
