@@ -2,123 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B14079DA36
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 22:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7B279DA80
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 23:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjILUpW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 16:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39712 "EHLO
+        id S237362AbjILVDl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 17:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjILUpU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 16:45:20 -0400
-X-Greylist: delayed 450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Sep 2023 13:45:16 PDT
-Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D884F1BE
-        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 13:45:16 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id gA8gqd7Tg4d7DgA8gqXZ6T; Tue, 12 Sep 2023 22:37:39 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1694551059;
-        bh=lMcb8WrFX7B6OJqoOfSUz/GFKwhDlyO9IScBhzlH2nY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=NUYtJ1+M46Jm22jKLcunMpM+YLbndMczChoBGBxX6qMcUWkn2FF+NjlONpdrrhyJv
-         fm5z3kbVUblgnZe1UGlSADIi6wPS1NuiSa/R3YqXFGi9Qz8AT0jKVedzc2XccgdYgj
-         irV/jNn+uBmbH7MX1EzHxFmPArp7EYMhgZPN3cMbXx/VNnqcUTTuvvYHPWiSjtigYA
-         iPxmhOXGeWPVRePF1sY1tZGrUq9/THDVmGBfVJ3n9bVLy/PXNpi9FCuKsTUBTyPYZk
-         O2JvRGDc5P5HYHRFWhcrPOzsVa4Sdt+TukSgtaKGDDxf69tQyCHQ77rhyt54hdQHce
-         ymx2867p8gGMA==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 12 Sep 2023 22:37:39 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <eab4324a-9e46-fa07-b849-792eba613ac8@wanadoo.fr>
-Date:   Tue, 12 Sep 2023 22:37:38 +0200
+        with ESMTP id S232814AbjILVDk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 17:03:40 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31F6199;
+        Tue, 12 Sep 2023 14:03:36 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::e2d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 1C6A835F;
+        Tue, 12 Sep 2023 21:03:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 1C6A835F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1694552616; bh=SSAzwh1tnDrXl1M/+o/bZ/L2hYeqt2O/VVxB3bIyHmg=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=TuO+4D0PzRhG+DW7unB1FLksenos5iftQBkayTrzYKNCCz871oCH98Wc992FRYPtj
+         jaauzWR6a/pyjQMM5rU8bxnl2sgqDgB3ydTZ/ylwVNDWXnbpdaRukPb4Fw8hYtro5n
+         p+HjkQhaVXOtbKHRK3GvZPjsGK7IOEYz40atzKN/2b2twKQESEKmf6jpl+Akk8rEXX
+         TgknuAxOjXCHnjPaQwtF7xzuy8pToOd/vXDxJv+hCCtUeH0lETgL2RdtybQCi6szNb
+         UWmPZfW+/9jxgLTZPCaaz2myM9zL2O+8WcSvqwCdJPP5WfFnuF4QncBZULW9EwRcvD
+         jJnTmWQq6YAVw==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Benjamin Gray <bgray@linux.ibm.com>, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        llvm@lists.linux.dev, linux-pm@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Ian Abbott <abbotti@mev.co.uk>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Jan Kiszka <jan.kiszka@siemens.com>,
+        Kieran Bingham <kbingham@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Todd E Brandt <todd.e.brandt@linux.intel.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Benjamin Gray <bgray@linux.ibm.com>
+Subject: Re: [PATCH v2 2/7] Documentation/sphinx: fix Python string escapes
+In-Reply-To: <20230912060801.95533-3-bgray@linux.ibm.com>
+References: <20230912060801.95533-1-bgray@linux.ibm.com>
+ <20230912060801.95533-3-bgray@linux.ibm.com>
+Date:   Tue, 12 Sep 2023 15:03:35 -0600
+Message-ID: <874jjzhzo8.fsf@meer.lwn.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH v2 3/3] power: supply: bq24190_charger: Export current
- regulator
-Content-Language: fr, en-US
-To:     Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
-Cc:     Alexandre Courbot <acourbot@nvidia.com>,
-        azkali <a.ffcc7@gmail.com>, CTCaer <ctcaer@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230824112741.201353-1-linkmauve@linkmauve.fr>
- <20230824131342.206784-1-linkmauve@linkmauve.fr>
- <20230824131342.206784-4-linkmauve@linkmauve.fr>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20230824131342.206784-4-linkmauve@linkmauve.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Le 24/08/2023 à 15:13, Emmanuel Gil Peyrot a écrit :
-> From: Alexandre Courbot <acourbot@nvidia.com>
-> 
-> This prevents the charger from ever going over the current limit.
-> 
-> Signed-off-by: Alexandre Courbot <acourbot@nvidia.com>
-> Signed-off-by: Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
+Benjamin Gray <bgray@linux.ibm.com> writes:
+
+> Python 3.6 introduced a DeprecationWarning for invalid escape sequences.
+> This is upgraded to a SyntaxWarning in Python 3.12, and will eventually
+> be a syntax error.
+>
+> Fix these now to get ahead of it before it's an error.
+>
+> Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
 > ---
->   drivers/power/supply/bq24190_charger.c | 82 ++++++++++++++++++++++++++
->   1 file changed, 82 insertions(+)
-> 
-> diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
-> index a56122b39687..cc1bd87f4982 100644
-> --- a/drivers/power/supply/bq24190_charger.c
-> +++ b/drivers/power/supply/bq24190_charger.c
-> @@ -530,6 +530,79 @@ static int bq24190_set_otg_vbus(struct bq24190_dev_info *bdi, bool enable)
->   }
->   
->   #ifdef CONFIG_REGULATOR
-> +static int bq24190_set_charging_current(struct regulator_dev *dev,
-> +			int min_uA, int max_uA)
-> +{
-> +	struct bq24190_dev_info *bdi = rdev_get_drvdata(dev);
-> +	u8 ss_reg;
-> +	int in_current_limit;
-> +	int ret = 0;
+>  Documentation/sphinx/cdomain.py             | 2 +-
+>  Documentation/sphinx/kernel_abi.py          | 2 +-
+>  Documentation/sphinx/kernel_feat.py         | 2 +-
+>  Documentation/sphinx/kerneldoc.py           | 2 +-
+>  Documentation/sphinx/maintainers_include.py | 8 ++++----
+>  5 files changed, 8 insertions(+), 8 deletions(-)
 
-Nit: Un-needed init.
+I've applied this one to the docs tree, thanks.
 
-> +
-> +	ret = bq24190_read(bdi, BQ24190_REG_SS, &ss_reg);
-> +	if (ret < 0)
-> +		goto error;
-> +
-> +	if (max_uA == 0 && ss_reg != 0)
-> +		return ret;
-
-ret is known to be 0 here. If it is the intension, return 0 would be 
-more explicit. Otherwise a ret = -<error_code> is missing.
-
-Just my 2c,
-
-CJ
-
-> +
-> +	if (!(ss_reg & BQ24190_REG_SS_VBUS_STAT_MASK))
-> +		in_current_limit = 500;
-> +	else
-> +		in_current_limit = max_uA / 1000;
-> +
-> +	return bq24190_set_field_val(bdi, BQ24190_REG_ISC,
-> +			BQ24190_REG_ISC_IINLIM_MASK,
-> +			BQ24190_REG_ISC_IINLIM_SHIFT,
-> +			bq24190_isc_iinlim_values,
-> +			ARRAY_SIZE(bq24190_isc_iinlim_values),
-> +			in_current_limit);
-> +error:
-> +	dev_err(bdi->dev, "Charger enable failed, err = %d\n", ret);
-> +	return ret;
-> +}
-
-...
-
+jon
