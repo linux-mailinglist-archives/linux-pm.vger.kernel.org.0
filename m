@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F68879CC77
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 11:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF4B79CC96
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Sep 2023 11:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233065AbjILJxy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 05:53:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
+        id S233281AbjILJ76 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 05:59:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232917AbjILJxy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 05:53:54 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72C31BE
-        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 02:53:49 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-52a39a1c4d5so7039508a12.3
-        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 02:53:49 -0700 (PDT)
+        with ESMTP id S233074AbjILJ74 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 05:59:56 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3AEE6A
+        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 02:59:52 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-52a3ff5f0abso6939808a12.1
+        for <linux-pm@vger.kernel.org>; Tue, 12 Sep 2023 02:59:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694512428; x=1695117228; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1694512791; x=1695117591; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=SfDSerRFa61yu+/rsV9oiMAv0/IyQd6/vmr5YFqcfiA=;
-        b=JLj/EgGD0m9Xd9+fur/xdXFjYa4wsRE0SqGLr2DAbl4tE8o6pZxYFBgQteg5MAahMj
-         WZUoo7uj+F/PAwS+skRTXaYH2Dzb3uXOF4vHXUq9OVOKbkgaI3E4NQIqJKqk4I9JIcN2
-         xsCbBmZ/4WSLBOHPiWpYZ9z4zHzcKmPmWnU5PaY95pr30D0vRnADfD2NDPPCSuqaP/01
-         R0If/QevDrBGhPZhXg35OB3fr/CQ6tL5dRQIbktbQKBTos7vSaa0Vowacls+g2y0OhHy
-         UIKImMYrxkqOWUmiRPXBP1q043TCN+1EMDLuz/1GcHbFQKwyTLHqalXI0OohxQp6qnSd
-         24gg==
+        bh=/9db736AwIc3y5X7aRFDi4+AudPpdl9kT0DNyx9Wiwg=;
+        b=A6ModrhEWfafo5DnMczP2FII0DhFw2MR32t3ya4igDZ/KiZzro5Kh5DVxaybESMSy5
+         78bk8rFv8RnQZNVpS+767mztVi1AUVQC55AAuThYd96MXxElzUhTXUi/Dd2tHH3oBe6X
+         PHHOuFqbCRWjzRRvZC9O2oB4tSQauidh5OmmYOt1+VrR0B/qGzly06L6ftraFfObwPqv
+         9YzNgm/O9OnQi7yvcxwF9+VKBIOIqMsOQOglB1WAbyNXN1x0hyGXqJCUWgpj6siCN0Sc
+         A1oWU6g0PQsTnXnuhZo4GbGp84bXzyN/HJD4tJd7KB/Kk/L/3QlSzfKgDXdIM32rIOKK
+         cy0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694512428; x=1695117228;
+        d=1e100.net; s=20230601; t=1694512791; x=1695117591;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SfDSerRFa61yu+/rsV9oiMAv0/IyQd6/vmr5YFqcfiA=;
-        b=d/o+Vpl57xMDC7ezR1DC8xCJK64N32KVhJtT790jtOUoEdB5QAVdr/2LZQEQqd/1yF
-         YSWbwurBNehZjqyUfpCbhuDtrowD7hYabIzXx8cQVttJwIGWGd0IlXUuVwsbr7XrSmkK
-         rRYhKtkZkT7krocC5TD9r4WlMYJFeQrHTspuaEylbZV/4d5bSHQHqRW7+pArMxWJixrp
-         x0FzpPn6ib9x93fKoaww5Vb7bEj0aGyxwlXBxR5zviO7pgjcleX2llioHkqlNaBf8CdW
-         YOrtBLb88aHZg61g+/1h62XgRrV6GVQfSSB4uPrmCJQXj6CmUhY32o5u6q8VLDkvkArM
-         TI8w==
-X-Gm-Message-State: AOJu0YyswVIZ1l6udInQEXDFuwalAOD7hGFBjbJfer1r4yvVp7MkLp6G
-        tx7I0Zvpm5NLSrFRa7ipzhEtBg==
-X-Google-Smtp-Source: AGHT+IGC2Jfv2kukYlPCDVcxiRFUcsO8+lVSNevhxfNPazTOHsAhYtrKJx0HYQyriLyy+cS6jzHRNA==
-X-Received: by 2002:a05:6402:153:b0:52c:164:efe5 with SMTP id s19-20020a056402015300b0052c0164efe5mr10037835edu.39.1694512428169;
-        Tue, 12 Sep 2023 02:53:48 -0700 (PDT)
+        bh=/9db736AwIc3y5X7aRFDi4+AudPpdl9kT0DNyx9Wiwg=;
+        b=UQedM65QpnqFliGKHjJzMva6F9BZ5Xc0DIXtZhXPRdguRfoeBeUDy/JK1+MPEw5D8f
+         U/EstBEoLnKoLXxwNE7cSKQJhngQMUR5MdgNmGnz+gK0jytFlG72NuJvFfAhpPwYMJan
+         Vsu2ms+g+XGdx4rb3o7RJDRSUDZvvur/2vDCcYtGB987XX8XF9+ntyeUlLBjpuysfASD
+         2Drv4XFTUfBv678cBoL/wlW8zKY1K3zep/NnS27NRtCyd1xfW0/JUJ46Y7dx8JcL5UlO
+         MOMGmS4QBkz/SAit3xBVD3vO/cteexWjOQZKbSFyL31qvunjntGxa70Q6sYUvOWr0fFj
+         oznA==
+X-Gm-Message-State: AOJu0YzjGtmflX3mYbpR7L+zNRscbOFC30KuW2eoXzSV93pPrAsDruUZ
+        5dD2flp9U4rYwffR/2jRwh4yaQ==
+X-Google-Smtp-Source: AGHT+IF1W1mCbeEdB/+oIAsQVpIU5kfWK9oL9G463Pg4CGhj38vxyHBcc5tm+FG6RDVWRKQ+DuRINA==
+X-Received: by 2002:a05:6402:2cb:b0:52e:5f85:b692 with SMTP id b11-20020a05640202cb00b0052e5f85b692mr7948124edx.42.1694512790724;
+        Tue, 12 Sep 2023 02:59:50 -0700 (PDT)
 Received: from [192.168.37.85] (178235177248.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.248])
-        by smtp.gmail.com with ESMTPSA id j8-20020aa7c0c8000000b00525503fac84sm5698287edp.25.2023.09.12.02.53.46
+        by smtp.gmail.com with ESMTPSA id w15-20020a50fa8f000000b005272523b162sm5680498edr.69.2023.09.12.02.59.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Sep 2023 02:53:47 -0700 (PDT)
-Message-ID: <1c8e9831-e654-4ec9-b742-a68e729e6962@linaro.org>
-Date:   Tue, 12 Sep 2023 11:53:45 +0200
+        Tue, 12 Sep 2023 02:59:50 -0700 (PDT)
+Message-ID: <5336dac4-af3f-46f7-bcf9-40314f744c8c@linaro.org>
+Date:   Tue, 12 Sep 2023 11:59:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] cpufreq: dt: platdev: Add MSM8909 to blocklist
+Subject: Re: [PATCH 4/4] cpufreq: qcom-nvmem: Add MSM8909
 Content-Language: en-US
 To:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
         Viresh Kumar <viresh.kumar@linaro.org>
@@ -67,7 +67,7 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
 References: <20230912-msm8909-cpufreq-v1-0-767ce66b544b@kernkonzept.com>
- <20230912-msm8909-cpufreq-v1-2-767ce66b544b@kernkonzept.com>
+ <20230912-msm8909-cpufreq-v1-4-767ce66b544b@kernkonzept.com>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
@@ -104,7 +104,7 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <20230912-msm8909-cpufreq-v1-2-767ce66b544b@kernkonzept.com>
+In-Reply-To: <20230912-msm8909-cpufreq-v1-4-767ce66b544b@kernkonzept.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -112,11 +112,46 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 12.09.2023 11:40, Stephan Gerhold wrote:
-> MSM8909 uses qcom-cpufreq-nvmem to attach power domains and to parse the
-> speedbin from NVMEM (for opp-supported-hw).
+> When the MSM8909 SoC is used together with the PM8909 PMIC the primary
+> power supply for the CPU (VDD_APC) is shared with other components to
+> the SoC, namely the VDD_CX power domain typically supplied by the PM8909
+> S1 regulator. This means that all votes for necessary performance states
+> go via the RPM firmware which collects the requirements from all the
+> processors in the SoC. The RPM firmware then chooses the actual voltage
+> based on the performance states ("corners"), depending on calibration
+> values in the NVMEM and other factors.
+> 
+> The MSM8909 SoC is also sometimes used with the PM8916 or PM660 PMIC.
+> In that case there is a dedicated regulator connected to VDD_APC and
+> Linux is responsible to do adaptive voltage scaling using CPR (similar
+> to the existing code for QCS404).
+> 
+> This difference can be described in the device tree, by either assigning
+> the CPU a power domain from RPMPD or from the CPR driver.
+> 
+> To describe this in a more generic way, use "apc" as power domain name
+> instead of "cpr". From the Linux point of view there is no CPR involved
+> when MSM8909 is used together with PM8909.
+Without checking, I have a vague recollection of CPR output also
+being called VDD_APCx, so it's a-ok
+
+> 
+> Also add a simple function that reads the speedbin from a NVMEM cell
+> and sets it as-is for opp-supported-hw. The actual bit position can be
+> described in the device tree without additional driver changes.
 > 
 > Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+One nit below:
+
+[...]
+
+>  static const struct of_device_id qcom_cpufreq_match_list[] __initconst = {
+> +	{ .compatible = "qcom,msm8909", .data = &match_data_msm8909 },
+>  	{ .compatible = "qcom,apq8096", .data = &match_data_kryo },
+msm8909 should come after apq8096 (even if adding apq and not msm was
+a mistake)
 
 Konrad
