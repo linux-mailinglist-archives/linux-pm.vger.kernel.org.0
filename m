@@ -2,204 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B33179F07F
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 19:40:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D169A79F086
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 19:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbjIMRkf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Sep 2023 13:40:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43318 "EHLO
+        id S230311AbjIMRmV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 13 Sep 2023 13:42:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjIMRke (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 13:40:34 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF581981;
-        Wed, 13 Sep 2023 10:40:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
- s=s31663417; t=1694626814; x=1695231614; i=frank-w@public-files.de;
- bh=zlxr35DekYYPKmID3fS8P77AnLWSssDEYIMXwOZms20=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=Q0PeXcRWOySREMcb/6Z+gZ8FgvAwd0hC2cV41KZ5t/g5rTnEqTg5N5GIwNozsEwzQJtIKvSvmMv
- YbSd9dazCc4jq+Wbf3KFtpqlXAshQhWlJ+wj7RsFD7hrVUCiQFZcTrhiNQKMcgS81Ng/Rna00Lc+X
- Kgu+fe438+94siO+NOZ76LLlmrmWvga3hhsex19E/LymD6adecaFqhEbO7cHkjkKGA37VLtOJij4r
- 2J6UEv3fjcpYMMzPfvNBNukC+PykreWjJXgcEBM+9oHZkqtO6CRP3h/0Yhjc0VrNbBPviVzTLn9dA
- oiB0PNZLDyWg6rFYXLg2roUS1PbPdv3qWKqg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [80.245.75.211] ([80.245.75.211]) by web-mail.gmx.net
- (3c-app-gmx-bs38.server.lan [172.19.170.90]) (via HTTP); Wed, 13 Sep 2023
- 19:40:14 +0200
+        with ESMTP id S230301AbjIMRmV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 13:42:21 -0400
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BCD1986;
+        Wed, 13 Sep 2023 10:42:16 -0700 (PDT)
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-6b9cd6876bbso3726a34.1;
+        Wed, 13 Sep 2023 10:42:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694626936; x=1695231736;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eglByz1BRArlf6Op7aiS6b20Xu4w3YO3B+8nUnzdnhI=;
+        b=dFG+Rc5aO2HGG53viYGPhh1vq73QGfhooS2UYfpopepuganlmUaKXQlHRug+JziaG0
+         ++iDRnu9WJn8y9oDfeFjBOEoSm0amPZowg5XE2rlgRY0a1II6Esx1VZjrGcOLR2oQW2D
+         Tqn1aH17W2T3K/MzfWhWkc085vV0qXI0Pl0ODCdXjhzdmJ9FOhZzRQzSC9P/VNG8pIRe
+         Fr8b8eS5BI4bupIbb7bzK0JaktyMtEGpeIF7qlGsrQ+B47Ea3QTVuvh9paT6k/cAhWwy
+         3JX3eN4jqsKacb0A/M6ZpPHfhoySq/Fx+f1onasXhSdMjWHGHX3IVc0uVb4dKSmNIeuT
+         yNvg==
+X-Gm-Message-State: AOJu0YyGEr5mBu1nF413nenLaBMkVSt6CXuAwqugo9aUN63AV91GYlhq
+        tJB2w29uMgGjOXAHAjIuMh/AfE3MTuggzjYASi7FIyi3
+X-Google-Smtp-Source: AGHT+IGYGqRV1580/wSaJf1sNtkXqBowLvnO2+FeCJVMyhKA6jE/7lKya7uKnQ9tI3efx2Kjqgpmdx2gS8cnEAvBch8=
+X-Received: by 2002:a05:6870:14d6:b0:1bb:724f:2bca with SMTP id
+ l22-20020a05687014d600b001bb724f2bcamr3705529oab.1.1694626936155; Wed, 13 Sep
+ 2023 10:42:16 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <trinity-fc45afb4-bb5a-42f0-aa8d-94a5189cd1f2-1694626814181@3c-app-gmx-bs38>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Daniel Golle <daniel@makrotopia.org>
-Subject: Aw: Re: [RFC v1 2/3] thermal/drivers/mediatek/lvts_thermal: make
- coeff configurable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 13 Sep 2023 19:40:14 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <99ef1b62-0676-a912-20fb-c04c427c4d01@collabora.com>
-References: <20230911183354.11487-1-linux@fw-web.de>
- <20230911183354.11487-3-linux@fw-web.de>
- <99ef1b62-0676-a912-20fb-c04c427c4d01@collabora.com>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:3/YlO/7vNs/7eVdt8xMtZurWYj2SOKr4oZqwwIOQcEwolVs53E0xbvvW53R7JXikSl5qB
- zgDI8nMnUunmMp1fL6QEosnxadKTzFB9eZGdTUsBCEloTTF3a6TTRcWGSPlfF9KdjH+O4/JZ/ULX
- Sh4BtDEOwLKP5qp+muZZh/24KQc7USQ22B4VocnqoYZd2K2wEIl717lt714weBGGbIKW2ShYN8mP
- at4xmILYUDHseyeI/d0XbnU5PKkMwF+qtq0sc9i/4jBhw9sRDZn9PHkBZf13/SWSrw1Dis8Ybovr
- xw=
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:tIYAfuq7yh4=;kca3ih3XJyHLM3ljjH9RlY19OHp
- tWJG3tBhSmB4WnIzzIlreZs4zIPHFjN7wRRwwOyyCO1c9848ccpNHpKyz3DZVIOIIg0Gu87tK
- tOxGu24DkyYbpUgnoR+oKljcXo7de0f5hBVXVo3+HIaYsMsU3Fw8VGh5vnFeDcJEWnlBCTMwz
- V7uP+/5XdTZSTkvq+aIH9BqjMrFotb8bBh2YucI09cX5QKlAMWfzgoipm/6qwzT8ksIAIZEkz
- U9svAnE/jFBPhgYi5+Hy21+QgIBJPykGY5xghRUIql8SC0Xf97sUzlwU2bM+mBQwCEMxMJpe4
- FJX8M1Fu1RnsnMFEaY2gZwhC46VfMW9GHzqvnZzIjI3yONSOs5OX8/2i1DMBukim8UIKSTxMC
- 7ObGnONrLF4IIZ3tnOsGUDdTgN3dpM+1/tYSsUsCf1DS3Ww3Eqcyv0GhIeLV/uU7aGZstpIKy
- kmimgRgGOVeAI38az1Sb2wHo6tEue4yPz08Al2yuB/23ausSYul4EcM08AC6cRQwrSxjGsoUk
- 5ltWfGWqPiQo8uU32aW6k0NevGjxNbzzAonXF9UEEQmkmZLgE9B62FQ9hHutgyWrILPEOcFaH
- IpBgfW3u2+AqUucOXGe9L0KGewH6msxxTs4gzC3Fb0ghKWmWaWp5ZvhOh+CTUfSE2IgPhx+Aw
- YXpR4zMDvUdpyORwSv+41q7YuJ1H1UmBjP+oQDtODl+veNKdL+nqV4HC85LIrQ+8q0xyFMWLa
- Ewa40XuA3JUDmzgMOT83ziAhnyjkvY1P8SQOWNY9UFpTBDBpLDxfCzgqPI6buXeykmpCk5SkP
- MJBOu+QcBARHc2PCE2fn1pKjyC5lEbZY3EvKGVIRStY5o=
-Content-Transfer-Encoding: quoted-printable
+References: <20230913154036.GA433234@bhelgaas> <8cd30700-d084-4a55-ab46-6e8db6706aa4@amd.com>
+In-Reply-To: <8cd30700-d084-4a55-ab46-6e8db6706aa4@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 13 Sep 2023 19:42:05 +0200
+Message-ID: <CAJZ5v0hzdNYOLeOoM-4PZMQtr5J93kGA6Gidn_DVbFweMLb8vw@mail.gmail.com>
+Subject: Re: [PATCH v18 2/2] PCI: Add a quirk for AMD PCIe root ports w/ USB4 controllers
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        "open list:X86 PLATFORM DRIVERS" 
+        <platform-driver-x86@vger.kernel.org>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        linux-pm@vger.kernel.org,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        iain@orangesquash.org.uk
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi
+On Wed, Sep 13, 2023 at 6:35 PM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
+>
+> On 9/13/2023 10:40, Bjorn Helgaas wrote:
+> > On Wed, Sep 13, 2023 at 12:20:14PM +0200, Rafael J. Wysocki wrote:
+> >> On Wed, Sep 13, 2023 at 6:11 AM Mario Limonciello
+> >> <mario.limonciello@amd.com> wrote:
 
-> Gesendet: Mittwoch, 13. September 2023 um 10:03 Uhr
-> Von: "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.c=
-om>
-> Il 11/09/23 20:33, Frank Wunderlich ha scritto:
-> > From: Frank Wunderlich <frank-w@public-files.de>
-> >
-> > The upcoming mt7988 has different temperature coefficients so we
-> > cannot use constants in the functions lvts_golden_temp_init,
-> > lvts_golden_temp_init and lvts_raw_to_temp anymore.
-> >
-> > Add a field in the lvts_ctrl pointing to the lvts_data which now
-> > contains the soc-specific temperature coefficents.
-> >
-> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> > ---
-> >   drivers/thermal/mediatek/lvts_thermal.c | 56 ++++++++++++++++++-----=
---
-> >   1 file changed, 41 insertions(+), 15 deletions(-)
-> >
-> > diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal=
-/mediatek/lvts_thermal.c
-> > index effd9b00a424..c1004b4da3b6 100644
-> > --- a/drivers/thermal/mediatek/lvts_thermal.c
-> > +++ b/drivers/thermal/mediatek/lvts_thermal.c
-> > @@ -80,8 +80,8 @@
-> >   #define LVTS_SENSOR_MAX				4
-> >   #define LVTS_GOLDEN_TEMP_MAX		62
-> >   #define LVTS_GOLDEN_TEMP_DEFAULT	50
-> > -#define LVTS_COEFF_A				-250460
-> > -#define LVTS_COEFF_B				250460
-> > +#define LVTS_COEFF_A_MT8195			-250460
-> > +#define LVTS_COEFF_B_MT8195			250460
-> >
-> >   #define LVTS_MSR_IMMEDIATE_MODE		0
-> >   #define LVTS_MSR_FILTERED_MODE		1
-> > @@ -94,7 +94,7 @@
-> >   #define LVTS_MINIMUM_THRESHOLD		20000
-> >
-> >   static int golden_temp =3D LVTS_GOLDEN_TEMP_DEFAULT;
-> > -static int coeff_b =3D LVTS_COEFF_B;
-> > +static int coeff_b;
->
-> This could be renamed to `golden_temp_offset`
->
-> >
-> >   struct lvts_sensor_data {
-> >   	int dt_id;
-> > @@ -109,9 +109,15 @@ struct lvts_ctrl_data {
-> >   	int mode;
-> >   };
-> >
-> > +struct formula_coeff {
-> > +	int a;
-> > +	int b;
-> > +};
-> > +
-> >   struct lvts_data {
-> >   	const struct lvts_ctrl_data *lvts_ctrl;
-> >   	int num_lvts_ctrl;
-> > +	struct formula_coeff coeff;
->
-> You can just add the coefficients here directly... and while at it you c=
-an
-> also make it self explanatory, because the "A" coefficient is a factor w=
-hile
-> the "B" coefficient is just an offset.
->
-> 	int temp_factor; <--- coeff_a
-> 	int temp_offset; <--- coeff_b
+[cut]
 
-makes sense...imho very good idea.
-originally i took the naming based on the Constants which maybe should be =
-changed too?
+> >
+> > Also, do we have some indication that this is specific to Ryzen?  If
+> > not, I assume this is an ongoing issue, and matching on Device IDs
+> > just means we'll have to debug the same problem again and add more
+> > IDs.
+>
+> This is why my earlier attempts (v16 and v17) tried to tie it to
+> constraints.  These are what the uPEP driver in Windows uses to make the
+> decision of what power state to put integrated devices like the root
+> port into.
+>
+> In Windows if no uPEP driver is installed "Windows internal policy"
+> dictates what happens.  If the uPEP driver is installed then it
+> influences the policy based upon the constraints.
+>
+> Rafael had feedback against constraints in v17, which is why I'm back to
+> a quirk for v18.
+>
+> This issue as I've described it is specific to AMD Ryzen.
 
-> >   };
-> >
-> >   struct lvts_sensor {
-> > @@ -126,6 +132,7 @@ struct lvts_sensor {
-> >
-> >   struct lvts_ctrl {
-> >   	struct lvts_sensor sensors[LVTS_SENSOR_MAX];
-> > +	const struct lvts_data *lvts_data;
-> >   	u32 calibration[LVTS_SENSOR_MAX];
-> >   	u32 hw_tshut_raw_temp;
-> >   	int num_lvts_sensor;
-> > @@ -247,21 +254,21 @@ static void lvts_debugfs_exit(struct lvts_domain=
- *lvts_td) { }
-> >
-> >   #endif
-> >
-> > -static int lvts_raw_to_temp(u32 raw_temp)
-> > +static int lvts_raw_to_temp(u32 raw_temp, struct formula_coeff coeff)
-> >   {
-> >   	int temperature;
-> >
-> > -	temperature =3D ((s64)(raw_temp & 0xFFFF) * LVTS_COEFF_A) >> 14;
-> > +	temperature =3D ((s64)(raw_temp & 0xFFFF) * coeff.a) >> 14;
->
-> so that this also becomes more readable:
->
-> static int lvts_raw_to_temp(u32 raw_temp, int temp_factor)
-> {
-> 	int temperature;
->
-> 	temperature =3D ((s64)(raw_temp & 0xFFFF) * temp_factor) >> 14;
-> 	temperature +=3D golden_temp_offset;
->
-> 	return temperature;
-> }
->
-> where temp_factor is lvts_data.temp_factor, and golden_temp_offset is a
-> rename of `static int coeff_b`.
+OK, so a quirk is the way to go IMO, because starting to rely on LPI
+constraints in general retroactively is almost guaranteed to regress
+things this way or another.
 
-right and passing an int (instead of struct) is easier and more readable t=
-oo.
+Whatever is done, it needs to be Ryzen-specific, unless there is
+evidence that other (and in particular non-AMD) platforms are
+affected.
 
-> Cheers,
-> Angelo
->
->
+> I expect it to be an ongoing issue.  I also expect unless we use
+> constraints or convince the firmware team to add a _S0W object with a
+> value of "0" for the sake of Linux that we will be adding IDs every year
+> to wherever this lands as we reproduce it on newer SoCs.
+
+So maybe the way to go is to make the AMD PMC driver set a flag for
+Root Ports on suspend or similar.
+
+In any case, I think that it would be good to agree on the approach at
+the general level before posting any new patches, because we seem to
+be going back and forth here.
