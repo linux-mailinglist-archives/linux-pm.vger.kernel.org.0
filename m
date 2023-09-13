@@ -2,180 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43BE779E575
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 12:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 492C379E580
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 12:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239910AbjIMK46 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Sep 2023 06:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
+        id S239845AbjIMK63 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Sep 2023 06:58:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239893AbjIMK45 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 06:56:57 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DCC19BE
-        for <linux-pm@vger.kernel.org>; Wed, 13 Sep 2023 03:56:53 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-d77ad095e5cso6269852276.0
-        for <linux-pm@vger.kernel.org>; Wed, 13 Sep 2023 03:56:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694602612; x=1695207412; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SwE1tmf8tdsVndAPixE3ADwa0SejCshFVF56S6gRoMI=;
-        b=WCQXmB1hdPdLx5jg0szCrHGf6etQvVp/GH6OiQhVKWDk2f9gOXz59D4+IX4d0uNBIq
-         JJcWt6f/NKBJViDo66x2f6P8Sank123ToXsHQqw6uztKyDy67lfpHqqnMp2DZLs3VVUc
-         iCZoUR2N/NS7dOvWZfpOreZFTqPuodaZoyG2YbZF34CrXAseZE670N1hvjca/Wu0GhZO
-         hU2xKL1Z5JgW0PqVxJyIh6n0h2xDyi5jzuZaRf5M0b4l/hqJU860bLmmNmHIKbqp2QbE
-         fdUNEL0bR9xTX5+O9f9mdlyWGjPEVa38O+y9nAG9pmZQa81LaIzxaYdzAP0lrRJf8+LK
-         hlNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694602612; x=1695207412;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SwE1tmf8tdsVndAPixE3ADwa0SejCshFVF56S6gRoMI=;
-        b=KGfynWMrE81bbyON9t4CE2MnlG43DPXofVvOVgvS/LuBW42dLOvBwZ3O0jXAKUMTDs
-         t7iQBZVp52ZlPfjloqHP2a+YdTOKUzYys5Kfq92vYuCH5CahcEQrZ1kJ/eFxpBV2m93g
-         sHfqTpP2150WH+G69lo3rJogq9ilI256X9MO6Dq3s+6Tr4ZtTZsYDpwO4TP2OXcR6W5i
-         XHIcJ1mcb7QgDaodwuPgc1Ehxb2XCnG7VeAd+BfN+E3PrPrgFmjYy2tB6QNypQC73miI
-         zyoNFjsaTFpox0ZUpZvk61SsLsxxOkfX1u768k8RzK0StJtfRkj+E94GO3XJsimr5Yi/
-         0WUA==
-X-Gm-Message-State: AOJu0Yx/F7mZXB+CPT9WSzC0YEvfIUDXX8QCRvO4df0RzFS6IgR5/lrA
-        insX8gSx4HeZZIfpCIAgFbTz4HMAP6UEexBXx5sngw==
-X-Google-Smtp-Source: AGHT+IHMAuFyyQ4cRNYR0B8xdSCeM68K8IjuOrh8tk9MNlECb4FiuI3ryuFikGYu8jUtCFCGET9Y3RPflWwbyZQSia0=
-X-Received: by 2002:a5b:308:0:b0:d7f:f5e:a2bd with SMTP id j8-20020a5b0308000000b00d7f0f5ea2bdmr1911637ybp.10.1694602612496;
- Wed, 13 Sep 2023 03:56:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230912-msm8909-cpufreq-v1-0-767ce66b544b@kernkonzept.com> <20230912-msm8909-cpufreq-v1-1-767ce66b544b@kernkonzept.com>
-In-Reply-To: <20230912-msm8909-cpufreq-v1-1-767ce66b544b@kernkonzept.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 13 Sep 2023 12:56:16 +0200
-Message-ID: <CAPDyKFq6U-MR4Bd+GmixYseRECDh142RhydtKbiPd3NHV2g6aw@mail.gmail.com>
-Subject: Re: [PATCH 1/4] cpufreq: qcom-nvmem: Enable virtual power domain devices
-To:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+        with ESMTP id S239850AbjIMK62 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 06:58:28 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A5119B7;
+        Wed, 13 Sep 2023 03:58:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+ s=s31663417; t=1694602670; x=1695207470; i=frank-w@public-files.de;
+ bh=bSRWYaYQ0khyb6xbfkDColhDf9wdyfkxTjFUBDhB3C4=;
+ h=X-UI-Sender-Class:Date:From:To:CC:Subject:Reply-to:In-Reply-To:References;
+ b=kMj0WG93os91VqkJU2ZgN71rmrw+I+EN7OBB1AxApdXbwalZ3gj4GbrwkC5/hVKAQpBamSBPwud
+ NqxPr5a/ChM0hruGyfPyGplRjzlOfj3Bn80fT78fA+TUR5k5sr9ket+416S2Qlr9bGStxRatk1fwO
+ eGiRYwmGNtEJfSyRj3RrMz1twKPhIagzfddkFGLm8hF30vaF1zDvmbQS9DjwwOeeT9zqxfUhCvdmv
+ 8TWqhGmuEIZ30Y4YLwoAol+4QAwuXxuUr/rRD04vUWo+i3lHSSjUEQinsWRKhoka/c3f5EeuxYPtM
+ vcWnSK81qvaotXaxFyqVSYwus5KdIpoyr7aQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [IPv6:::1] ([80.187.70.211]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MeU4y-1rGXCE0hSG-00aYwA; Wed, 13
+ Sep 2023 12:57:50 +0200
+Date:   Wed, 13 Sep 2023 12:57:47 +0200
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org
+CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Daniel Golle <daniel@makrotopia.org>
+Subject: =?US-ASCII?Q?Re=3A_=5BRFC_v1_1/3=5D_dt-bindings=3A_therm?= =?US-ASCII?Q?al=3A_mediatek=3A_add_mt7988_compatible?=
+User-Agent: K-9 Mail for Android
+Reply-to: frank-w@public-files.de
+In-Reply-To: <e93aa8a6-e088-2864-6ffa-050b211be21f@collabora.com>
+References: <20230911183354.11487-1-linux@fw-web.de> <20230911183354.11487-2-linux@fw-web.de> <e93aa8a6-e088-2864-6ffa-050b211be21f@collabora.com>
+Message-ID: <DEAA91BC-C55C-4AAC-BA35-0060A01D289E@public-files.de>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:P3Bh59IR0CZ+4cakEyrw+P8/vHsqffl806aZ4VhOX0cOdTGRGJ8
+ spofiiLodYt/JAblmpTgCBDGE+BwcmzqlODYe9Y2276ak1tbsORhJ7kfWrnMfb6lZRRDbJO
+ 8dD/Vk37X354hAjlgKpa677prg7duYc5YHnbLKNVSn+NnjhW16qcwNdf7s6MDuFu+yZLM2I
+ PHdFri8VrzomudolhiWMg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:aEbIlY82UE8=;NjT7OolnkBBpoK4W44sx0TBsn0U
+ V6fZPe6XnhR4SxuCxft1CP1vLnyhcJ08n9zHnyVtaWhrUHWrguG2IRj1Y3GfEcbtx88lFvMAO
+ Jmgz19HYbXY6xTSvnjlodxoTD4aDjr1moe0jj6x2pBfpzgKkn7tt59icsdivwx7QivGSC/94J
+ cG6dS8py6W9E4tNWcs+ZHsZnB6N3b6wwdI6LEscRGmGqweiDdVNZx/KiL8jC3N6EFxNCYz25h
+ gFl89/Hn7v/Yd/c2lWyI/z0k6DuQ2GUwPD3LiFMSbSLou6hi9bFp3iw8L9qBz3xIM/o+qL52S
+ ciF8XkenfUK86MeMKyNomVIdd86twS0tg4xZAXvzLyJ2rB2jZI62pRej8galWPSWVDvNvtEsK
+ e5jByNS9KTsss1FYUy+q7/vUPfne8qcYwtRhCqJQj1eMxG/t5dSNfIw2CSBpi1YgPfeUq9eD9
+ YwSZY2rX4GF2+X0WNh5NrwfA1MtE1nLBBv+myUf6ywqZgcji8LEALioureEEwwgjPZ6J11SEA
+ iN736wEBhJy7ikN8+iyEDswW5zUAAacwA6vGaXW74lCYQEdu+XQD5pj4/dKy8gDqDQiIxoGDy
+ meNgg1ZIGzxwSroSDhpqS1AW6NCXdgB6u0AtSGeGrk0aT5dMFn2cmjx2jQq94cPlnH/fbhTuH
+ y1eNztntFcEO0FE+VG3tVtb+QssuMR8LLy3SLv4BgrcnzWqSiflxuIutrkND0TdqhHuZPh8gM
+ XslhVpOsjdXUw937zuQcxQf3jXBSRK1XWA33cgtGMHvdCIoSK7NS6G0mVCoiPyG+l2HE11thr
+ WPwT6qvGyIid2cjdYFdxff5bCRr1D8D5JKcD7v3/T9MnnDOC2XCB+UGg4yMJvsgxQx1id3UHO
+ m6heoQzrAINKGtA4WbekOqTctmCDLijoLRDmj1X3NqAFVMaYsLVL8kN2veEOvTFMl4K0mcX+k
+ kv7dbnS+AiFLvgv8xyWrvgVxcAM=
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 12 Sept 2023 at 11:40, Stephan Gerhold
-<stephan.gerhold@kernkonzept.com> wrote:
+Am 13=2E September 2023 09:49:08 MESZ schrieb AngeloGioacchino Del Regno <a=
+ngelogioacchino=2Edelregno@collabora=2Ecom>:
+>Il 11/09/23 20:33, Frank Wunderlich ha scritto:
+>> From: Frank Wunderlich <frank-w@public-files=2Ede>
+>>=20
+>> Add compatible string for mt7988=2E
+>>=20
+>> Signed-off-by: Frank Wunderlich <frank-w@public-files=2Ede>
+>> ---
+>>   =2E=2E=2E/devicetree/bindings/thermal/mediatek,lvts-thermal=2Eyaml   =
+    | 1 +
+>>   1 file changed, 1 insertion(+)
+>>=20
+>> diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-th=
+ermal=2Eyaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-ther=
+mal=2Eyaml
+>> index fe9ae4c425c0=2E=2E49effe561963 100644
+>> --- a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal=
+=2Eyaml
+>> +++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal=
+=2Eyaml
+>> @@ -18,6 +18,7 @@ description: |
+>>   properties:
+>>     compatible:
+>>       enum:
+>> +      - mediatek,mt7988-lvts
 >
-> The genpd core ignores performance state votes from devices that are
-> runtime suspended as of commit 5937c3ce2122 ("PM: domains: Drop/restore
-> performance state votes for devices at runtime PM").
+>Are you sure that MT7988 has only one LVTS controller, and that it is glo=
+bal?
 
-I think you are referring to the wrong commit above. Please have a
-look at commit 3c5a272202c2 ("PM: domains: Improve runtime PM
-performance state handling"), instead.
+Based on the information i have it is only 1 lvts device (dts node) with 2=
+ internal controllers=2E Do i need to define it in different way?
 
-I also suggest rephrasing the above into saying that the performance
-state vote for a device is cached rather than carried out, if
-pm_runtime_suspended() returns true for it.
-
-Another relevant information in the commit message would be to add
-that during device-attach (genpd_dev_pm_attach_by_id()), calls
-pm_runtime_enable() the device.
-
-> However, at the
-> moment nothing ever enables the virtual devices created in
-> qcom-cpufreq-nvmem for the cpufreq power domain scaling, so they are
-> permanently runtime-suspended.
->
-> Fix this by enabling the devices after attaching them and use
-> dev_pm_syscore_device() to ensure the power domain also stays on when
-> going to suspend. Since it supplies the CPU we can never turn it off
-> from Linux. There are other mechanisms to turn it off when needed,
-> usually in the RPM firmware or the cpuidle path.
->
-> Without this fix performance states votes are silently ignored, and the
-> CPU/CPR voltage is never adjusted. This has been broken since 5.14 but
-> for some reason no one noticed this on QCS404 so far.
->
-> Cc: stable@vger.kernel.org
-> Fixes: 1cb8339ca225 ("cpufreq: qcom: Add support for qcs404 on nvmem driver")
-> Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-> ---
->  drivers/cpufreq/qcom-cpufreq-nvmem.c | 21 ++++++++++++++++++++-
->  1 file changed, 20 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> index 84d7033e5efe..17d6ab14c909 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> @@ -25,6 +25,7 @@
->  #include <linux/platform_device.h>
->  #include <linux/pm_domain.h>
->  #include <linux/pm_opp.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/slab.h>
->  #include <linux/soc/qcom/smem.h>
->
-> @@ -280,6 +281,7 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
->         }
->
->         for_each_possible_cpu(cpu) {
-> +               struct device **virt_devs = NULL;
->                 struct dev_pm_opp_config config = {
->                         .supported_hw = NULL,
->                 };
-> @@ -300,7 +302,7 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
->
->                 if (drv->data->genpd_names) {
->                         config.genpd_names = drv->data->genpd_names;
-> -                       config.virt_devs = NULL;
-> +                       config.virt_devs = &virt_devs;
->                 }
->
->                 if (config.supported_hw || config.genpd_names) {
-> @@ -311,6 +313,23 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
->                                 goto free_opp;
->                         }
->                 }
-> +
-> +               if (virt_devs) {
-> +                       const char * const *name = config.genpd_names;
-> +                       int i;
-> +
-> +                       for (i = 0; *name; i++, name++) {
-> +                               ret = pm_runtime_resume_and_get(virt_devs[i]);
-> +                               if (ret) {
-> +                                       dev_err(cpu_dev, "failed to resume %s: %d\n",
-> +                                               *name, ret);
-> +                                       goto free_opp;
-> +                               }
-
-Shouldn't we restore the usage count at ->remove() too?
-
-> +
-> +                               /* Keep CPU power domain always-on */
-> +                               dev_pm_syscore_device(virt_devs[i], true);
-
-Is this really correct? cpufreq is suspended/resumed by the PM core
-during system wide suspend/resume. See dpm_suspend|resume(). Isn't
-that sufficient?
-
-Moreover, it looks like the cpr genpd provider supports genpd's
-->power_on|off() callbacks. Is there something wrong with this, that I
-am missing?
-
-
-> +                       }
-> +               }
->         }
->
->         cpufreq_dt_pdev = platform_device_register_simple("cpufreq-dt", -1,
+>>         - mediatek,mt8192-lvts-ap
+>>         - mediatek,mt8192-lvts-mcu
+>>         - mediatek,mt8195-lvts-ap
 >
 
-Kind regards
-Uffe
+
+regards Frank
