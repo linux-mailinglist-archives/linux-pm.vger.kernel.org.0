@@ -2,44 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D581079E1CC
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 10:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0659E79E1DD
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 10:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238822AbjIMIRL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 13 Sep 2023 04:17:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40290 "EHLO
+        id S233957AbjIMIUC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 13 Sep 2023 04:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238851AbjIMIRK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 04:17:10 -0400
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6442F199B;
-        Wed, 13 Sep 2023 01:17:06 -0700 (PDT)
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-6c09f50ae00so429365a34.0;
-        Wed, 13 Sep 2023 01:17:06 -0700 (PDT)
+        with ESMTP id S231936AbjIMIUC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 04:20:02 -0400
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC2E93;
+        Wed, 13 Sep 2023 01:19:57 -0700 (PDT)
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-576918d0a42so2095756eaf.3;
+        Wed, 13 Sep 2023 01:19:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694593025; x=1695197825;
+        d=1e100.net; s=20230601; t=1694593197; x=1695197997;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rHZpqLy827LESxc7IBeYVjYSitXmlD9sAnk/3FbDcmA=;
-        b=rhgNdn2f49VI2kon7/Crp1dTe2sY3Jb+QRLf6RkoGYv2R/4a92S+J0d642+kvZ5M/I
-         orb4A81U9o2E6ye66HWqrEVhTTYSuQ4sZUP/+kGsmDGzW/hfLvmZIkFkBS2f7f87SZzC
-         KWK9uxXhdX1zAhy4F74w86aCLKqByCqy3kbaWBZIkPR/A5j/39aoRQb2efSLyjfvoqPR
-         twpu0DaFCavvYK65jstE5lcuMdaKS3rjzPiFE/+hws2aIGSoHJCt3bUkqWt2upycl+6P
-         9x6O2wnWZ+URM8+Uz4vqbg8zPwbJkjBiLckIAFic/O2jZQhOzLhtuDAudGIwI0oIr7Bt
-         Hlhg==
-X-Gm-Message-State: AOJu0Yw7vQihSEtwV1QiyzzMgqaWhLw9aIw7m679pJmgTGm85NeMOtlo
-        UfIP7uBZCLwOgSYedmruUocoNAvP1xbProNWZD8=
-X-Google-Smtp-Source: AGHT+IHcy8s2kY6WDCRRzhkN2W10260CctEFaH0ZQKuuSrdyXttZ4iiWMZ/1gKkocSGb6YinbGjMmBo6O5GWpb4Vqw4=
-X-Received: by 2002:a4a:e1a2:0:b0:573:3a3b:594b with SMTP id
- 2-20020a4ae1a2000000b005733a3b594bmr2221401ooy.1.1694593025496; Wed, 13 Sep
- 2023 01:17:05 -0700 (PDT)
+        bh=qHwUPsbjTsV+d55BpTzeXRt9rHHTquV5VO6+Kicxk+4=;
+        b=A/TS0/p5T9mrgfmktGbp1E6aFsKTVz1yMoQmO2zkYR4zs3v+W/BWlYu0bI0dF93J8v
+         diip6Vi4zyM6fC5gwNbyVpjxbZDuNx7bOrDVkjTMGHIJDEetmUeNPEvE/UrWiZ6cKCqD
+         j9Hyxd0gkyR4KUOEVPUAzg0YvoW4zpy0VFYBgqQ39W2wK9dlQySI7d2nzOCU7yi2ZPJL
+         h/1OC6ZQhKAXG3NoWUIQ41BtiDts7u38iYIRuWpv1t2lUUjKp+svekM+y3CXyaa8543W
+         pyeDmMfOSK4u9rTXtW3JRlx8i+8qAGofzCJlttpRiVC95/MteDW/SKGVT8ifsVG1ZoFb
+         SAPA==
+X-Gm-Message-State: AOJu0Yw2HpUwxLqhEwV4yO1UHXDvfO1fbjVKjfi+QvUDv3X0SE1tAE+Q
+        wkmtOIcqyDf5RU1ODHiltcCzO3pcU5H9Gw==
+X-Google-Smtp-Source: AGHT+IHGmnTA0ep2vh+BATUI83Nvl4di8jaw7l63htXCSmQ9O2zw5VGxKdejTVPYNX7UFd/3chT3lg==
+X-Received: by 2002:a4a:2a12:0:b0:56e:4bb5:3095 with SMTP id k18-20020a4a2a12000000b0056e4bb53095mr1995906oof.5.1694593197106;
+        Wed, 13 Sep 2023 01:19:57 -0700 (PDT)
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com. [209.85.167.182])
+        by smtp.gmail.com with ESMTPSA id q198-20020a4a33cf000000b0056e90dc1ef0sm5165648ooq.9.2023.09.13.01.19.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Sep 2023 01:19:56 -0700 (PDT)
+Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3a9b41ffe12so4925179b6e.3;
+        Wed, 13 Sep 2023 01:19:56 -0700 (PDT)
+X-Received: by 2002:a5b:70b:0:b0:d80:c80:af18 with SMTP id g11-20020a5b070b000000b00d800c80af18mr1635228ybq.52.1694593175901;
+ Wed, 13 Sep 2023 01:19:35 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230912221127.487327-1-ulf.hansson@linaro.org>
 In-Reply-To: <20230912221127.487327-1-ulf.hansson@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 13 Sep 2023 10:16:53 +0200
-Message-ID: <CAJZ5v0j4dzo8Sd3dtvY2U+Ds7RDUykidqnrvgr-oAQ5+O_iD7A@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 13 Sep 2023 10:19:24 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUW3PF_d+pHkDeB_iwX0uUYn6g2WvvXXw=GLJ2+fvHKOQ@mail.gmail.com>
+Message-ID: <CAMuHMdUW3PF_d+pHkDeB_iwX0uUYn6g2WvvXXw=GLJ2+fvHKOQ@mail.gmail.com>
 Subject: Re: [PATCH] pmdomain: Rename the genpd subsystem to pmdomain
 To:     Ulf Hansson <ulf.hansson@linaro.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -94,10 +102,16 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Ulf,
+
+Thanks for your patch!
+
 On Wed, Sep 13, 2023 at 12:11 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
 > It has been pointed out that naming a subsystem "genpd" isn't very
 > self-explanatory and the acronym itself that means Generic Power Domain, is
+
+Generic PM Domain?
+
 > known only by a limited group of people.
 >
 > In a way to improve the situation, let's rename the subsystem to pmdomain,
@@ -107,52 +121,6 @@ On Wed, Sep 13, 2023 at 12:11 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
 > Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
 > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Looks good.
-
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
-
-> ---
->  MAINTAINERS                                   | 22 +++++++++----------
->  drivers/Makefile                              |  2 +-
->  drivers/{genpd => pmdomain}/Makefile          |  0
->  drivers/{genpd => pmdomain}/actions/Makefile  |  0
->  .../actions/owl-sps-helper.c                  |  0
->  drivers/{genpd => pmdomain}/actions/owl-sps.c |  0
->  drivers/{genpd => pmdomain}/amlogic/Makefile  |  0
->  .../amlogic/meson-ee-pwrc.c                   |  0
->  .../amlogic/meson-gx-pwrc-vpu.c               |  0
->  .../amlogic/meson-secure-pwrc.c               |  0
->  drivers/{genpd => pmdomain}/apple/Makefile    |  0
->  .../{genpd => pmdomain}/apple/pmgr-pwrstate.c |  0
->  drivers/{genpd => pmdomain}/bcm/Makefile      |  0
->  drivers/{genpd => pmdomain}/bcm/bcm-pmb.c     |  0
->  .../{genpd => pmdomain}/bcm/bcm2835-power.c   |  0
->  .../{genpd => pmdomain}/bcm/bcm63xx-power.c   |  0
->  .../bcm/raspberrypi-power.c                   |  0
->  drivers/{genpd => pmdomain}/imx/Makefile      |  0
->  drivers/{genpd => pmdomain}/imx/gpc.c         |  0
->  drivers/{genpd => pmdomain}/imx/gpcv2.c       |  0
->  .../{genpd => pmdomain}/imx/imx8m-blk-ctrl.c  |  0
->  .../{genpd => pmdomain}/imx/imx8mp-blk-ctrl.c |  0
->  .../{genpd => pmdomain}/imx/imx93-blk-ctrl.c  |  0
->  drivers/{genpd => pmdomain}/imx/imx93-pd.c    |  0
->  drivers/{genpd => pmdomain}/imx/scu-pd.c      |  0
->  drivers/{genpd => pmdomain}/mediatek/Makefile |  0
->  .../mediatek/mt6795-pm-domains.h              |  0
->  .../mediatek/mt8167-pm-domains.h              |  0
->  .../mediatek/mt8173-pm-domains.h              |  0
->  .../mediatek/mt8183-pm-domains.h              |  0
->  .../mediatek/mt8186-pm-domains.h              |  0
->  .../mediatek/mt8188-pm-domains.h              |  0
->  .../mediatek/mt8192-pm-domains.h              |  0
->  .../mediatek/mt8195-pm-domains.h              |  0
->  .../mediatek/mtk-pm-domains.c                 |  0
->  .../mediatek/mtk-pm-domains.h                 |  0
->  .../{genpd => pmdomain}/mediatek/mtk-scpsys.c |  0
->  drivers/{genpd => pmdomain}/qcom/Makefile     |  0
->  drivers/{genpd => pmdomain}/qcom/cpr.c        |  0
->  drivers/{genpd => pmdomain}/qcom/rpmhpd.c     |  0
->  drivers/{genpd => pmdomain}/qcom/rpmpd.c      |  0
 >  drivers/{genpd => pmdomain}/renesas/Makefile  |  0
 >  .../renesas/r8a7742-sysc.c                    |  0
 >  .../renesas/r8a7743-sysc.c                    |  0
@@ -182,141 +150,10 @@ Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 >  .../{genpd => pmdomain}/renesas/rcar-sysc.c   |  0
 >  .../{genpd => pmdomain}/renesas/rcar-sysc.h   |  0
 >  .../renesas/rmobile-sysc.c                    |  0
->  drivers/{genpd => pmdomain}/rockchip/Makefile |  0
->  .../{genpd => pmdomain}/rockchip/pm-domains.c |  0
->  drivers/{genpd => pmdomain}/samsung/Makefile  |  0
->  .../samsung/exynos-pm-domains.c               |  0
->  drivers/{genpd => pmdomain}/st/Makefile       |  0
->  .../st/ste-ux500-pm-domain.c                  |  0
->  drivers/{genpd => pmdomain}/starfive/Makefile |  0
->  .../{genpd => pmdomain}/starfive/jh71xx-pmu.c |  0
->  drivers/{genpd => pmdomain}/sunxi/Makefile    |  0
->  .../{genpd => pmdomain}/sunxi/sun20i-ppu.c    |  0
->  drivers/{genpd => pmdomain}/tegra/Makefile    |  0
->  .../tegra/powergate-bpmp.c                    |  0
->  drivers/{genpd => pmdomain}/ti/Makefile       |  0
->  drivers/{genpd => pmdomain}/ti/omap_prm.c     |  0
->  .../ti/ti_sci_pm_domains.c                    |  0
->  drivers/{genpd => pmdomain}/xilinx/Makefile   |  0
->  .../xilinx/zynqmp-pm-domains.c                |  0
->  87 files changed, 12 insertions(+), 12 deletions(-)
->  rename drivers/{genpd => pmdomain}/Makefile (100%)
->  rename drivers/{genpd => pmdomain}/actions/Makefile (100%)
->  rename drivers/{genpd => pmdomain}/actions/owl-sps-helper.c (100%)
->  rename drivers/{genpd => pmdomain}/actions/owl-sps.c (100%)
->  rename drivers/{genpd => pmdomain}/amlogic/Makefile (100%)
->  rename drivers/{genpd => pmdomain}/amlogic/meson-ee-pwrc.c (100%)
->  rename drivers/{genpd => pmdomain}/amlogic/meson-gx-pwrc-vpu.c (100%)
->  rename drivers/{genpd => pmdomain}/amlogic/meson-secure-pwrc.c (100%)
->  rename drivers/{genpd => pmdomain}/apple/Makefile (100%)
->  rename drivers/{genpd => pmdomain}/apple/pmgr-pwrstate.c (100%)
->  rename drivers/{genpd => pmdomain}/bcm/Makefile (100%)
->  rename drivers/{genpd => pmdomain}/bcm/bcm-pmb.c (100%)
->  rename drivers/{genpd => pmdomain}/bcm/bcm2835-power.c (100%)
->  rename drivers/{genpd => pmdomain}/bcm/bcm63xx-power.c (100%)
->  rename drivers/{genpd => pmdomain}/bcm/raspberrypi-power.c (100%)
->  rename drivers/{genpd => pmdomain}/imx/Makefile (100%)
->  rename drivers/{genpd => pmdomain}/imx/gpc.c (100%)
->  rename drivers/{genpd => pmdomain}/imx/gpcv2.c (100%)
->  rename drivers/{genpd => pmdomain}/imx/imx8m-blk-ctrl.c (100%)
->  rename drivers/{genpd => pmdomain}/imx/imx8mp-blk-ctrl.c (100%)
->  rename drivers/{genpd => pmdomain}/imx/imx93-blk-ctrl.c (100%)
->  rename drivers/{genpd => pmdomain}/imx/imx93-pd.c (100%)
->  rename drivers/{genpd => pmdomain}/imx/scu-pd.c (100%)
->  rename drivers/{genpd => pmdomain}/mediatek/Makefile (100%)
->  rename drivers/{genpd => pmdomain}/mediatek/mt6795-pm-domains.h (100%)
->  rename drivers/{genpd => pmdomain}/mediatek/mt8167-pm-domains.h (100%)
->  rename drivers/{genpd => pmdomain}/mediatek/mt8173-pm-domains.h (100%)
->  rename drivers/{genpd => pmdomain}/mediatek/mt8183-pm-domains.h (100%)
->  rename drivers/{genpd => pmdomain}/mediatek/mt8186-pm-domains.h (100%)
->  rename drivers/{genpd => pmdomain}/mediatek/mt8188-pm-domains.h (100%)
->  rename drivers/{genpd => pmdomain}/mediatek/mt8192-pm-domains.h (100%)
->  rename drivers/{genpd => pmdomain}/mediatek/mt8195-pm-domains.h (100%)
->  rename drivers/{genpd => pmdomain}/mediatek/mtk-pm-domains.c (100%)
->  rename drivers/{genpd => pmdomain}/mediatek/mtk-pm-domains.h (100%)
->  rename drivers/{genpd => pmdomain}/mediatek/mtk-scpsys.c (100%)
->  rename drivers/{genpd => pmdomain}/qcom/Makefile (100%)
->  rename drivers/{genpd => pmdomain}/qcom/cpr.c (100%)
->  rename drivers/{genpd => pmdomain}/qcom/rpmhpd.c (100%)
->  rename drivers/{genpd => pmdomain}/qcom/rpmpd.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/Makefile (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a7742-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a7743-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a7745-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a77470-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a774a1-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a774b1-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a774c0-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a774e1-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a7779-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a7790-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a7791-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a7792-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a7794-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a7795-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a7796-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a77965-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a77970-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a77980-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a77990-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a77995-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a779a0-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a779f0-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/r8a779g0-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/rcar-gen4-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/rcar-gen4-sysc.h (100%)
->  rename drivers/{genpd => pmdomain}/renesas/rcar-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/renesas/rcar-sysc.h (100%)
->  rename drivers/{genpd => pmdomain}/renesas/rmobile-sysc.c (100%)
->  rename drivers/{genpd => pmdomain}/rockchip/Makefile (100%)
->  rename drivers/{genpd => pmdomain}/rockchip/pm-domains.c (100%)
->  rename drivers/{genpd => pmdomain}/samsung/Makefile (100%)
->  rename drivers/{genpd => pmdomain}/samsung/exynos-pm-domains.c (100%)
->  rename drivers/{genpd => pmdomain}/st/Makefile (100%)
->  rename drivers/{genpd => pmdomain}/st/ste-ux500-pm-domain.c (100%)
->  rename drivers/{genpd => pmdomain}/starfive/Makefile (100%)
->  rename drivers/{genpd => pmdomain}/starfive/jh71xx-pmu.c (100%)
->  rename drivers/{genpd => pmdomain}/sunxi/Makefile (100%)
->  rename drivers/{genpd => pmdomain}/sunxi/sun20i-ppu.c (100%)
->  rename drivers/{genpd => pmdomain}/tegra/Makefile (100%)
->  rename drivers/{genpd => pmdomain}/tegra/powergate-bpmp.c (100%)
->  rename drivers/{genpd => pmdomain}/ti/Makefile (100%)
->  rename drivers/{genpd => pmdomain}/ti/omap_prm.c (100%)
->  rename drivers/{genpd => pmdomain}/ti/ti_sci_pm_domains.c (100%)
->  rename drivers/{genpd => pmdomain}/xilinx/Makefile (100%)
->  rename drivers/{genpd => pmdomain}/xilinx/zynqmp-pm-domains.c (100%)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 90f13281d297..4d9e7d42412f 100644
+
 > --- a/MAINTAINERS
 > +++ b/MAINTAINERS
-> @@ -1855,7 +1855,7 @@ F:        Documentation/devicetree/bindings/phy/amlogic*
->  F:     arch/arm/boot/dts/amlogic/
->  F:     arch/arm/mach-meson/
->  F:     arch/arm64/boot/dts/amlogic/
-> -F:     drivers/genpd/amlogic/
-> +F:     drivers/pmdomain/amlogic/
->  F:     drivers/mmc/host/meson*
->  F:     drivers/phy/amlogic/
->  F:     drivers/pinctrl/meson/
-> @@ -1918,7 +1918,7 @@ F:        drivers/bluetooth/hci_bcm4377.c
->  F:     drivers/clk/clk-apple-nco.c
->  F:     drivers/cpufreq/apple-soc-cpufreq.c
->  F:     drivers/dma/apple-admac.c
-> -F:     drivers/genpd/apple/
-> +F:     drivers/pmdomain/apple/
->  F:     drivers/i2c/busses/i2c-pasemi-core.c
->  F:     drivers/i2c/busses/i2c-pasemi-platform.c
->  F:     drivers/iommu/apple-dart.c
-> @@ -2435,7 +2435,7 @@ F:        arch/arm/mach-ux500/
->  F:     drivers/clk/clk-nomadik.c
->  F:     drivers/clocksource/clksrc-dbx500-prcmu.c
->  F:     drivers/dma/ste_dma40*
-> -F:     drivers/genpd/st/ste-ux500-pm-domain.c
-> +F:     drivers/pmdomain/st/ste-ux500-pm-domain.c
->  F:     drivers/hwspinlock/u8500_hsem.c
->  F:     drivers/i2c/busses/i2c-nomadik.c
->  F:     drivers/iio/adc/ab8500-gpadc.c
+
 > @@ -2598,7 +2598,7 @@ F:        arch/arm/include/debug/renesas-scif.S
 >  F:     arch/arm/mach-shmobile/
 >  F:     arch/arm64/boot/dts/renesas/
@@ -326,422 +163,16 @@ Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 >  F:     drivers/soc/renesas/
 >  F:     include/linux/soc/renesas/
 >  K:     \brenesas,
-> @@ -4026,7 +4026,7 @@ F:        arch/mips/kernel/*bmips*
->  F:     drivers/irqchip/irq-bcm63*
->  F:     drivers/irqchip/irq-bcm7*
->  F:     drivers/irqchip/irq-brcmstb*
-> -F:     drivers/genpd/bcm/bcm63xx-power.c
-> +F:     drivers/pmdomain/bcm/bcm63xx-power.c
->  F:     include/linux/bcm963xx_nvram.h
->  F:     include/linux/bcm963xx_tag.h
->
-> @@ -4248,7 +4248,7 @@ R:        Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
->  L:     linux-pm@vger.kernel.org
->  S:     Maintained
->  T:     git https://github.com/broadcom/stblinux.git
-> -F:     drivers/genpd/bcm/bcm-pmb.c
-> +F:     drivers/pmdomain/bcm/bcm-pmb.c
->  F:     include/dt-bindings/soc/bcm-pmb.h
->
->  BROADCOM SPECIFIC AMBA DRIVER (BCMA)
-> @@ -8729,7 +8729,7 @@ M:        Ulf Hansson <ulf.hansson@linaro.org>
->  L:     linux-pm@vger.kernel.org
->  S:     Supported
->  T:     git git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git
-> -F:     drivers/genpd/
-> +F:     drivers/pmdomain/
->
->  GENERIC RESISTIVE TOUCHSCREEN ADC DRIVER
->  M:     Eugen Hristev <eugen.hristev@microchip.com>
-> @@ -17680,7 +17680,7 @@ L:      linux-pm@vger.kernel.org
->  L:     linux-arm-msm@vger.kernel.org
->  S:     Maintained
->  F:     Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml
-> -F:     drivers/genpd/qcom/cpr.c
-> +F:     drivers/pmdomain/qcom/cpr.c
->
->  QUALCOMM CPUFREQ DRIVER MSM8996/APQ8096
->  M:     Ilia Lin <ilia.lin@kernel.org>
-> @@ -20514,7 +20514,7 @@ STARFIVE JH71XX PMU CONTROLLER DRIVER
->  M:     Walker Chen <walker.chen@starfivetech.com>
->  S:     Supported
->  F:     Documentation/devicetree/bindings/power/starfive*
-> -F:     drivers/genpd/starfive/jh71xx-pmu.c
-> +F:     drivers/pmdomain/starfive/jh71xx-pmu.c
->  F:     include/dt-bindings/power/starfive,jh7110-pmu.h
->
->  STARFIVE SOC DRIVERS
-> @@ -21339,7 +21339,7 @@ F:      drivers/irqchip/irq-ti-sci-inta.c
->  F:     drivers/irqchip/irq-ti-sci-intr.c
->  F:     drivers/reset/reset-ti-sci.c
->  F:     drivers/soc/ti/ti_sci_inta_msi.c
-> -F:     drivers/genpd/ti/ti_sci_pm_domains.c
-> +F:     drivers/pmdomain/ti/ti_sci_pm_domains.c
->  F:     include/dt-bindings/soc/ti,sci_pm_domain.h
->  F:     include/linux/soc/ti/ti_sci_inta_msi.h
->  F:     include/linux/soc/ti/ti_sci_protocol.h
-> @@ -21581,7 +21581,7 @@ L:      linux-kernel@vger.kernel.org
->  L:     linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->  S:     Maintained
->  T:     git git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
-> -F:     drivers/genpd/ti/omap_prm.c
-> +F:     drivers/pmdomain/ti/omap_prm.c
->  F:     drivers/soc/ti/*
->
->  TI LM49xxx FAMILY ASoC CODEC DRIVERS
-> diff --git a/drivers/Makefile b/drivers/Makefile
-> index cb0afca2e4a0..1bec7819a837 100644
-> --- a/drivers/Makefile
-> +++ b/drivers/Makefile
-> @@ -46,7 +46,7 @@ obj-$(CONFIG_DMADEVICES)      += dma/
->
->  # SOC specific infrastructure drivers.
->  obj-y                          += soc/
-> -obj-$(CONFIG_PM_GENERIC_DOMAINS)       += genpd/
-> +obj-$(CONFIG_PM_GENERIC_DOMAINS)       += pmdomain/
->
->  obj-y                          += virtio/
->  obj-$(CONFIG_VDPA)             += vdpa/
-> diff --git a/drivers/genpd/Makefile b/drivers/pmdomain/Makefile
-> similarity index 100%
-> rename from drivers/genpd/Makefile
-> rename to drivers/pmdomain/Makefile
-> diff --git a/drivers/genpd/actions/Makefile b/drivers/pmdomain/actions/Makefile
-> similarity index 100%
-> rename from drivers/genpd/actions/Makefile
-> rename to drivers/pmdomain/actions/Makefile
-> diff --git a/drivers/genpd/actions/owl-sps-helper.c b/drivers/pmdomain/actions/owl-sps-helper.c
-> similarity index 100%
-> rename from drivers/genpd/actions/owl-sps-helper.c
-> rename to drivers/pmdomain/actions/owl-sps-helper.c
-> diff --git a/drivers/genpd/actions/owl-sps.c b/drivers/pmdomain/actions/owl-sps.c
-> similarity index 100%
-> rename from drivers/genpd/actions/owl-sps.c
-> rename to drivers/pmdomain/actions/owl-sps.c
-> diff --git a/drivers/genpd/amlogic/Makefile b/drivers/pmdomain/amlogic/Makefile
-> similarity index 100%
-> rename from drivers/genpd/amlogic/Makefile
-> rename to drivers/pmdomain/amlogic/Makefile
-> diff --git a/drivers/genpd/amlogic/meson-ee-pwrc.c b/drivers/pmdomain/amlogic/meson-ee-pwrc.c
-> similarity index 100%
-> rename from drivers/genpd/amlogic/meson-ee-pwrc.c
-> rename to drivers/pmdomain/amlogic/meson-ee-pwrc.c
-> diff --git a/drivers/genpd/amlogic/meson-gx-pwrc-vpu.c b/drivers/pmdomain/amlogic/meson-gx-pwrc-vpu.c
-> similarity index 100%
-> rename from drivers/genpd/amlogic/meson-gx-pwrc-vpu.c
-> rename to drivers/pmdomain/amlogic/meson-gx-pwrc-vpu.c
-> diff --git a/drivers/genpd/amlogic/meson-secure-pwrc.c b/drivers/pmdomain/amlogic/meson-secure-pwrc.c
-> similarity index 100%
-> rename from drivers/genpd/amlogic/meson-secure-pwrc.c
-> rename to drivers/pmdomain/amlogic/meson-secure-pwrc.c
-> diff --git a/drivers/genpd/apple/Makefile b/drivers/pmdomain/apple/Makefile
-> similarity index 100%
-> rename from drivers/genpd/apple/Makefile
-> rename to drivers/pmdomain/apple/Makefile
-> diff --git a/drivers/genpd/apple/pmgr-pwrstate.c b/drivers/pmdomain/apple/pmgr-pwrstate.c
-> similarity index 100%
-> rename from drivers/genpd/apple/pmgr-pwrstate.c
-> rename to drivers/pmdomain/apple/pmgr-pwrstate.c
-> diff --git a/drivers/genpd/bcm/Makefile b/drivers/pmdomain/bcm/Makefile
-> similarity index 100%
-> rename from drivers/genpd/bcm/Makefile
-> rename to drivers/pmdomain/bcm/Makefile
-> diff --git a/drivers/genpd/bcm/bcm-pmb.c b/drivers/pmdomain/bcm/bcm-pmb.c
-> similarity index 100%
-> rename from drivers/genpd/bcm/bcm-pmb.c
-> rename to drivers/pmdomain/bcm/bcm-pmb.c
-> diff --git a/drivers/genpd/bcm/bcm2835-power.c b/drivers/pmdomain/bcm/bcm2835-power.c
-> similarity index 100%
-> rename from drivers/genpd/bcm/bcm2835-power.c
-> rename to drivers/pmdomain/bcm/bcm2835-power.c
-> diff --git a/drivers/genpd/bcm/bcm63xx-power.c b/drivers/pmdomain/bcm/bcm63xx-power.c
-> similarity index 100%
-> rename from drivers/genpd/bcm/bcm63xx-power.c
-> rename to drivers/pmdomain/bcm/bcm63xx-power.c
-> diff --git a/drivers/genpd/bcm/raspberrypi-power.c b/drivers/pmdomain/bcm/raspberrypi-power.c
-> similarity index 100%
-> rename from drivers/genpd/bcm/raspberrypi-power.c
-> rename to drivers/pmdomain/bcm/raspberrypi-power.c
-> diff --git a/drivers/genpd/imx/Makefile b/drivers/pmdomain/imx/Makefile
-> similarity index 100%
-> rename from drivers/genpd/imx/Makefile
-> rename to drivers/pmdomain/imx/Makefile
-> diff --git a/drivers/genpd/imx/gpc.c b/drivers/pmdomain/imx/gpc.c
-> similarity index 100%
-> rename from drivers/genpd/imx/gpc.c
-> rename to drivers/pmdomain/imx/gpc.c
-> diff --git a/drivers/genpd/imx/gpcv2.c b/drivers/pmdomain/imx/gpcv2.c
-> similarity index 100%
-> rename from drivers/genpd/imx/gpcv2.c
-> rename to drivers/pmdomain/imx/gpcv2.c
-> diff --git a/drivers/genpd/imx/imx8m-blk-ctrl.c b/drivers/pmdomain/imx/imx8m-blk-ctrl.c
-> similarity index 100%
-> rename from drivers/genpd/imx/imx8m-blk-ctrl.c
-> rename to drivers/pmdomain/imx/imx8m-blk-ctrl.c
-> diff --git a/drivers/genpd/imx/imx8mp-blk-ctrl.c b/drivers/pmdomain/imx/imx8mp-blk-ctrl.c
-> similarity index 100%
-> rename from drivers/genpd/imx/imx8mp-blk-ctrl.c
-> rename to drivers/pmdomain/imx/imx8mp-blk-ctrl.c
-> diff --git a/drivers/genpd/imx/imx93-blk-ctrl.c b/drivers/pmdomain/imx/imx93-blk-ctrl.c
-> similarity index 100%
-> rename from drivers/genpd/imx/imx93-blk-ctrl.c
-> rename to drivers/pmdomain/imx/imx93-blk-ctrl.c
-> diff --git a/drivers/genpd/imx/imx93-pd.c b/drivers/pmdomain/imx/imx93-pd.c
-> similarity index 100%
-> rename from drivers/genpd/imx/imx93-pd.c
-> rename to drivers/pmdomain/imx/imx93-pd.c
-> diff --git a/drivers/genpd/imx/scu-pd.c b/drivers/pmdomain/imx/scu-pd.c
-> similarity index 100%
-> rename from drivers/genpd/imx/scu-pd.c
-> rename to drivers/pmdomain/imx/scu-pd.c
-> diff --git a/drivers/genpd/mediatek/Makefile b/drivers/pmdomain/mediatek/Makefile
-> similarity index 100%
-> rename from drivers/genpd/mediatek/Makefile
-> rename to drivers/pmdomain/mediatek/Makefile
-> diff --git a/drivers/genpd/mediatek/mt6795-pm-domains.h b/drivers/pmdomain/mediatek/mt6795-pm-domains.h
-> similarity index 100%
-> rename from drivers/genpd/mediatek/mt6795-pm-domains.h
-> rename to drivers/pmdomain/mediatek/mt6795-pm-domains.h
-> diff --git a/drivers/genpd/mediatek/mt8167-pm-domains.h b/drivers/pmdomain/mediatek/mt8167-pm-domains.h
-> similarity index 100%
-> rename from drivers/genpd/mediatek/mt8167-pm-domains.h
-> rename to drivers/pmdomain/mediatek/mt8167-pm-domains.h
-> diff --git a/drivers/genpd/mediatek/mt8173-pm-domains.h b/drivers/pmdomain/mediatek/mt8173-pm-domains.h
-> similarity index 100%
-> rename from drivers/genpd/mediatek/mt8173-pm-domains.h
-> rename to drivers/pmdomain/mediatek/mt8173-pm-domains.h
-> diff --git a/drivers/genpd/mediatek/mt8183-pm-domains.h b/drivers/pmdomain/mediatek/mt8183-pm-domains.h
-> similarity index 100%
-> rename from drivers/genpd/mediatek/mt8183-pm-domains.h
-> rename to drivers/pmdomain/mediatek/mt8183-pm-domains.h
-> diff --git a/drivers/genpd/mediatek/mt8186-pm-domains.h b/drivers/pmdomain/mediatek/mt8186-pm-domains.h
-> similarity index 100%
-> rename from drivers/genpd/mediatek/mt8186-pm-domains.h
-> rename to drivers/pmdomain/mediatek/mt8186-pm-domains.h
-> diff --git a/drivers/genpd/mediatek/mt8188-pm-domains.h b/drivers/pmdomain/mediatek/mt8188-pm-domains.h
-> similarity index 100%
-> rename from drivers/genpd/mediatek/mt8188-pm-domains.h
-> rename to drivers/pmdomain/mediatek/mt8188-pm-domains.h
-> diff --git a/drivers/genpd/mediatek/mt8192-pm-domains.h b/drivers/pmdomain/mediatek/mt8192-pm-domains.h
-> similarity index 100%
-> rename from drivers/genpd/mediatek/mt8192-pm-domains.h
-> rename to drivers/pmdomain/mediatek/mt8192-pm-domains.h
-> diff --git a/drivers/genpd/mediatek/mt8195-pm-domains.h b/drivers/pmdomain/mediatek/mt8195-pm-domains.h
-> similarity index 100%
-> rename from drivers/genpd/mediatek/mt8195-pm-domains.h
-> rename to drivers/pmdomain/mediatek/mt8195-pm-domains.h
-> diff --git a/drivers/genpd/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> similarity index 100%
-> rename from drivers/genpd/mediatek/mtk-pm-domains.c
-> rename to drivers/pmdomain/mediatek/mtk-pm-domains.c
-> diff --git a/drivers/genpd/mediatek/mtk-pm-domains.h b/drivers/pmdomain/mediatek/mtk-pm-domains.h
-> similarity index 100%
-> rename from drivers/genpd/mediatek/mtk-pm-domains.h
-> rename to drivers/pmdomain/mediatek/mtk-pm-domains.h
-> diff --git a/drivers/genpd/mediatek/mtk-scpsys.c b/drivers/pmdomain/mediatek/mtk-scpsys.c
-> similarity index 100%
-> rename from drivers/genpd/mediatek/mtk-scpsys.c
-> rename to drivers/pmdomain/mediatek/mtk-scpsys.c
-> diff --git a/drivers/genpd/qcom/Makefile b/drivers/pmdomain/qcom/Makefile
-> similarity index 100%
-> rename from drivers/genpd/qcom/Makefile
-> rename to drivers/pmdomain/qcom/Makefile
-> diff --git a/drivers/genpd/qcom/cpr.c b/drivers/pmdomain/qcom/cpr.c
-> similarity index 100%
-> rename from drivers/genpd/qcom/cpr.c
-> rename to drivers/pmdomain/qcom/cpr.c
-> diff --git a/drivers/genpd/qcom/rpmhpd.c b/drivers/pmdomain/qcom/rpmhpd.c
-> similarity index 100%
-> rename from drivers/genpd/qcom/rpmhpd.c
-> rename to drivers/pmdomain/qcom/rpmhpd.c
-> diff --git a/drivers/genpd/qcom/rpmpd.c b/drivers/pmdomain/qcom/rpmpd.c
-> similarity index 100%
-> rename from drivers/genpd/qcom/rpmpd.c
-> rename to drivers/pmdomain/qcom/rpmpd.c
-> diff --git a/drivers/genpd/renesas/Makefile b/drivers/pmdomain/renesas/Makefile
-> similarity index 100%
-> rename from drivers/genpd/renesas/Makefile
-> rename to drivers/pmdomain/renesas/Makefile
-> diff --git a/drivers/genpd/renesas/r8a7742-sysc.c b/drivers/pmdomain/renesas/r8a7742-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a7742-sysc.c
-> rename to drivers/pmdomain/renesas/r8a7742-sysc.c
-> diff --git a/drivers/genpd/renesas/r8a7743-sysc.c b/drivers/pmdomain/renesas/r8a7743-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a7743-sysc.c
-> rename to drivers/pmdomain/renesas/r8a7743-sysc.c
-> diff --git a/drivers/genpd/renesas/r8a7745-sysc.c b/drivers/pmdomain/renesas/r8a7745-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a7745-sysc.c
-> rename to drivers/pmdomain/renesas/r8a7745-sysc.c
-> diff --git a/drivers/genpd/renesas/r8a77470-sysc.c b/drivers/pmdomain/renesas/r8a77470-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a77470-sysc.c
-> rename to drivers/pmdomain/renesas/r8a77470-sysc.c
-> diff --git a/drivers/genpd/renesas/r8a774a1-sysc.c b/drivers/pmdomain/renesas/r8a774a1-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a774a1-sysc.c
-> rename to drivers/pmdomain/renesas/r8a774a1-sysc.c
-> diff --git a/drivers/genpd/renesas/r8a774b1-sysc.c b/drivers/pmdomain/renesas/r8a774b1-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a774b1-sysc.c
-> rename to drivers/pmdomain/renesas/r8a774b1-sysc.c
-> diff --git a/drivers/genpd/renesas/r8a774c0-sysc.c b/drivers/pmdomain/renesas/r8a774c0-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a774c0-sysc.c
-> rename to drivers/pmdomain/renesas/r8a774c0-sysc.c
-> diff --git a/drivers/genpd/renesas/r8a774e1-sysc.c b/drivers/pmdomain/renesas/r8a774e1-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a774e1-sysc.c
-> rename to drivers/pmdomain/renesas/r8a774e1-sysc.c
-> diff --git a/drivers/genpd/renesas/r8a7779-sysc.c b/drivers/pmdomain/renesas/r8a7779-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a7779-sysc.c
-> rename to drivers/pmdomain/renesas/r8a7779-sysc.c
-> diff --git a/drivers/genpd/renesas/r8a7790-sysc.c b/drivers/pmdomain/renesas/r8a7790-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a7790-sysc.c
-> rename to drivers/pmdomain/renesas/r8a7790-sysc.c
-> diff --git a/drivers/genpd/renesas/r8a7791-sysc.c b/drivers/pmdomain/renesas/r8a7791-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a7791-sysc.c
-> rename to drivers/pmdomain/renesas/r8a7791-sysc.c
-> diff --git a/drivers/genpd/renesas/r8a7792-sysc.c b/drivers/pmdomain/renesas/r8a7792-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a7792-sysc.c
-> rename to drivers/pmdomain/renesas/r8a7792-sysc.c
-> diff --git a/drivers/genpd/renesas/r8a7794-sysc.c b/drivers/pmdomain/renesas/r8a7794-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a7794-sysc.c
-> rename to drivers/pmdomain/renesas/r8a7794-sysc.c
-> diff --git a/drivers/genpd/renesas/r8a7795-sysc.c b/drivers/pmdomain/renesas/r8a7795-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a7795-sysc.c
-> rename to drivers/pmdomain/renesas/r8a7795-sysc.c
-> diff --git a/drivers/genpd/renesas/r8a7796-sysc.c b/drivers/pmdomain/renesas/r8a7796-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a7796-sysc.c
-> rename to drivers/pmdomain/renesas/r8a7796-sysc.c
-> diff --git a/drivers/genpd/renesas/r8a77965-sysc.c b/drivers/pmdomain/renesas/r8a77965-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a77965-sysc.c
-> rename to drivers/pmdomain/renesas/r8a77965-sysc.c
-> diff --git a/drivers/genpd/renesas/r8a77970-sysc.c b/drivers/pmdomain/renesas/r8a77970-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a77970-sysc.c
-> rename to drivers/pmdomain/renesas/r8a77970-sysc.c
-> diff --git a/drivers/genpd/renesas/r8a77980-sysc.c b/drivers/pmdomain/renesas/r8a77980-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a77980-sysc.c
-> rename to drivers/pmdomain/renesas/r8a77980-sysc.c
-> diff --git a/drivers/genpd/renesas/r8a77990-sysc.c b/drivers/pmdomain/renesas/r8a77990-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a77990-sysc.c
-> rename to drivers/pmdomain/renesas/r8a77990-sysc.c
-> diff --git a/drivers/genpd/renesas/r8a77995-sysc.c b/drivers/pmdomain/renesas/r8a77995-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a77995-sysc.c
-> rename to drivers/pmdomain/renesas/r8a77995-sysc.c
-> diff --git a/drivers/genpd/renesas/r8a779a0-sysc.c b/drivers/pmdomain/renesas/r8a779a0-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a779a0-sysc.c
-> rename to drivers/pmdomain/renesas/r8a779a0-sysc.c
-> diff --git a/drivers/genpd/renesas/r8a779f0-sysc.c b/drivers/pmdomain/renesas/r8a779f0-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a779f0-sysc.c
-> rename to drivers/pmdomain/renesas/r8a779f0-sysc.c
-> diff --git a/drivers/genpd/renesas/r8a779g0-sysc.c b/drivers/pmdomain/renesas/r8a779g0-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/r8a779g0-sysc.c
-> rename to drivers/pmdomain/renesas/r8a779g0-sysc.c
-> diff --git a/drivers/genpd/renesas/rcar-gen4-sysc.c b/drivers/pmdomain/renesas/rcar-gen4-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/rcar-gen4-sysc.c
-> rename to drivers/pmdomain/renesas/rcar-gen4-sysc.c
-> diff --git a/drivers/genpd/renesas/rcar-gen4-sysc.h b/drivers/pmdomain/renesas/rcar-gen4-sysc.h
-> similarity index 100%
-> rename from drivers/genpd/renesas/rcar-gen4-sysc.h
-> rename to drivers/pmdomain/renesas/rcar-gen4-sysc.h
-> diff --git a/drivers/genpd/renesas/rcar-sysc.c b/drivers/pmdomain/renesas/rcar-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/rcar-sysc.c
-> rename to drivers/pmdomain/renesas/rcar-sysc.c
-> diff --git a/drivers/genpd/renesas/rcar-sysc.h b/drivers/pmdomain/renesas/rcar-sysc.h
-> similarity index 100%
-> rename from drivers/genpd/renesas/rcar-sysc.h
-> rename to drivers/pmdomain/renesas/rcar-sysc.h
-> diff --git a/drivers/genpd/renesas/rmobile-sysc.c b/drivers/pmdomain/renesas/rmobile-sysc.c
-> similarity index 100%
-> rename from drivers/genpd/renesas/rmobile-sysc.c
-> rename to drivers/pmdomain/renesas/rmobile-sysc.c
-> diff --git a/drivers/genpd/rockchip/Makefile b/drivers/pmdomain/rockchip/Makefile
-> similarity index 100%
-> rename from drivers/genpd/rockchip/Makefile
-> rename to drivers/pmdomain/rockchip/Makefile
-> diff --git a/drivers/genpd/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
-> similarity index 100%
-> rename from drivers/genpd/rockchip/pm-domains.c
-> rename to drivers/pmdomain/rockchip/pm-domains.c
-> diff --git a/drivers/genpd/samsung/Makefile b/drivers/pmdomain/samsung/Makefile
-> similarity index 100%
-> rename from drivers/genpd/samsung/Makefile
-> rename to drivers/pmdomain/samsung/Makefile
-> diff --git a/drivers/genpd/samsung/exynos-pm-domains.c b/drivers/pmdomain/samsung/exynos-pm-domains.c
-> similarity index 100%
-> rename from drivers/genpd/samsung/exynos-pm-domains.c
-> rename to drivers/pmdomain/samsung/exynos-pm-domains.c
-> diff --git a/drivers/genpd/st/Makefile b/drivers/pmdomain/st/Makefile
-> similarity index 100%
-> rename from drivers/genpd/st/Makefile
-> rename to drivers/pmdomain/st/Makefile
-> diff --git a/drivers/genpd/st/ste-ux500-pm-domain.c b/drivers/pmdomain/st/ste-ux500-pm-domain.c
-> similarity index 100%
-> rename from drivers/genpd/st/ste-ux500-pm-domain.c
-> rename to drivers/pmdomain/st/ste-ux500-pm-domain.c
-> diff --git a/drivers/genpd/starfive/Makefile b/drivers/pmdomain/starfive/Makefile
-> similarity index 100%
-> rename from drivers/genpd/starfive/Makefile
-> rename to drivers/pmdomain/starfive/Makefile
-> diff --git a/drivers/genpd/starfive/jh71xx-pmu.c b/drivers/pmdomain/starfive/jh71xx-pmu.c
-> similarity index 100%
-> rename from drivers/genpd/starfive/jh71xx-pmu.c
-> rename to drivers/pmdomain/starfive/jh71xx-pmu.c
-> diff --git a/drivers/genpd/sunxi/Makefile b/drivers/pmdomain/sunxi/Makefile
-> similarity index 100%
-> rename from drivers/genpd/sunxi/Makefile
-> rename to drivers/pmdomain/sunxi/Makefile
-> diff --git a/drivers/genpd/sunxi/sun20i-ppu.c b/drivers/pmdomain/sunxi/sun20i-ppu.c
-> similarity index 100%
-> rename from drivers/genpd/sunxi/sun20i-ppu.c
-> rename to drivers/pmdomain/sunxi/sun20i-ppu.c
-> diff --git a/drivers/genpd/tegra/Makefile b/drivers/pmdomain/tegra/Makefile
-> similarity index 100%
-> rename from drivers/genpd/tegra/Makefile
-> rename to drivers/pmdomain/tegra/Makefile
-> diff --git a/drivers/genpd/tegra/powergate-bpmp.c b/drivers/pmdomain/tegra/powergate-bpmp.c
-> similarity index 100%
-> rename from drivers/genpd/tegra/powergate-bpmp.c
-> rename to drivers/pmdomain/tegra/powergate-bpmp.c
-> diff --git a/drivers/genpd/ti/Makefile b/drivers/pmdomain/ti/Makefile
-> similarity index 100%
-> rename from drivers/genpd/ti/Makefile
-> rename to drivers/pmdomain/ti/Makefile
-> diff --git a/drivers/genpd/ti/omap_prm.c b/drivers/pmdomain/ti/omap_prm.c
-> similarity index 100%
-> rename from drivers/genpd/ti/omap_prm.c
-> rename to drivers/pmdomain/ti/omap_prm.c
-> diff --git a/drivers/genpd/ti/ti_sci_pm_domains.c b/drivers/pmdomain/ti/ti_sci_pm_domains.c
-> similarity index 100%
-> rename from drivers/genpd/ti/ti_sci_pm_domains.c
-> rename to drivers/pmdomain/ti/ti_sci_pm_domains.c
-> diff --git a/drivers/genpd/xilinx/Makefile b/drivers/pmdomain/xilinx/Makefile
-> similarity index 100%
-> rename from drivers/genpd/xilinx/Makefile
-> rename to drivers/pmdomain/xilinx/Makefile
-> diff --git a/drivers/genpd/xilinx/zynqmp-pm-domains.c b/drivers/pmdomain/xilinx/zynqmp-pm-domains.c
-> similarity index 100%
-> rename from drivers/genpd/xilinx/zynqmp-pm-domains.c
-> rename to drivers/pmdomain/xilinx/zynqmp-pm-domains.c
-> --
-> 2.34.1
->
+
+Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
