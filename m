@@ -2,123 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 560CE79DD8E
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 03:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C2B79DD9C
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 03:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231414AbjIMBaL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 21:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51768 "EHLO
+        id S238027AbjIMBek (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Sep 2023 21:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbjIMBaL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 21:30:11 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB29810E6;
-        Tue, 12 Sep 2023 18:30:07 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38D0t6Bq007935;
-        Wed, 13 Sep 2023 01:29:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=uRBI9opgeNWKU7JkoyaAlhvxGF4XiO7Ki7rjehaRTZU=;
- b=pjOOSuAU9aTnVEgfUTdMRgnBQrFewmT2g+zv+800iSsgB8C7JSoMZYfcTk/Wc3uiIXGg
- c8Hn2mQMibDAvgElDSBgQd4xuFq2YrWqoWoJZ2qxEbDqNip5tCyQV1bZv4y7PYIW557y
- 1ttOAdQbO1wQPVAsAa6/zIvUE6vDy8UcrYYnkZ1Y5Eos23i8DhLzYEv6xcqb35Qgv6uI
- i5fkyZ5ep0v3EockGXX6C6Z95EPh/lRMVGGSInx17Cu8X93A4L3wb1uWxCvlex22tCwT
- USi6/2iXDbpFXkZlkOqGUsjHUTYZom8cH0U8o3/xRu4OkiYdpszV4hhP643etWACyuAR oA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t2ygr8dd6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Sep 2023 01:29:53 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38D1Tr1i027648
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Sep 2023 01:29:53 GMT
-Received: from hu-mdtipton-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Tue, 12 Sep 2023 18:29:52 -0700
-Date:   Tue, 12 Sep 2023 18:29:51 -0700
-From:   Mike Tipton <quic_mdtipton@quicinc.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-CC:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <cros-qcom-dts-watchers@chromium.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 00/53] icc-rpmh multi-RSC voting groundwork
-Message-ID: <20230913012951.GA19284@hu-mdtipton-lv.qualcomm.com>
-References: <20230708-topic-rpmh_icc_rsc-v1-0-b223bd2ac8dd@linaro.org>
- <c067a45f-9629-d516-9e56-36538e4ff6db@kernel.org>
- <20230807215739.GA9621@hu-mdtipton-lv.qualcomm.com>
- <10520827-dc01-475c-b09a-35cefc9e0a62@linaro.org>
+        with ESMTP id S231414AbjIMBej (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 21:34:39 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D929D10FE;
+        Tue, 12 Sep 2023 18:34:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694568875; x=1726104875;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BWOxUPW3HtPNFgEFOHoQhbd+ni/5DnSj2ZCuh3rTtAc=;
+  b=gc2/i1+a6Ggyong+Hyi3NBuVgxJoss5mBmJyoxlsxTOHqcqxLK3JD2mU
+   zdNdExS27EO+uNynKx9dGD8/peBB1E/YQQ9k8QCLIjqAod3+qrvdUV4SW
+   7cxnD6vzBjcnpDtBePMb2wt+sbOf71KF2Lvku4OFEHVPUjBIDvfo60HtE
+   xgeG84dvIf0RYnGzD5tdMJIpW1/2Lz2yrbNdvHAOtGAG62F8N3Lf+s0BY
+   Kj2+CnC+7cMbHI2tTpdTVEl9AV9nGa8FS3bTzOA0pUkilRjV4wGfFYUBA
+   ukaN5PTrx19/KFX4a+3roCuq0vWMo0sshLhUeCW5oBY/C2hTlrsu3R/aL
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="375868416"
+X-IronPort-AV: E=Sophos;i="6.02,141,1688454000"; 
+   d="scan'208";a="375868416"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 18:34:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="867581317"
+X-IronPort-AV: E=Sophos;i="6.02,141,1688454000"; 
+   d="scan'208";a="867581317"
+Received: from lkp-server02.sh.intel.com (HELO 47e905db7d2b) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 12 Sep 2023 18:34:29 -0700
+Received: from kbuild by 47e905db7d2b with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qgElv-0000Zb-2H;
+        Wed, 13 Sep 2023 01:34:27 +0000
+Date:   Wed, 13 Sep 2023 09:34:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Meng Li <li.meng@amd.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>
+Subject: Re: [PATCH V6 1/7] x86: Drop CPU_SUP_INTEL from SCHED_MC_PRIO for
+ the expansion.
+Message-ID: <202309130938.dmI2pWUB-lkp@intel.com>
+References: <20230908074653.2799055-2-li.meng@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <10520827-dc01-475c-b09a-35cefc9e0a62@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Jx15JH6gwGlVH_vgYd4PLRPyD2M4TQi1
-X-Proofpoint-ORIG-GUID: Jx15JH6gwGlVH_vgYd4PLRPyD2M4TQi1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-12_24,2023-09-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1011 impostorscore=0 bulkscore=0 phishscore=0 mlxscore=0
- adultscore=0 mlxlogscore=999 malwarescore=0 lowpriorityscore=0 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309130011
+In-Reply-To: <20230908074653.2799055-2-li.meng@amd.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 06, 2023 at 02:14:14PM +0200, Konrad Dybcio wrote:
-> > The general idea is that we could use tags for this. So, instead of...
-> > 
-> >   path = icc_get(dev, MASTER_MDP_DISP, SLAVE_EBI1_DISP);
-> > 
-> > it would be...
-> > 
-> >   path = icc_get(dev, MASTER_MDP, SLAVE_EBI1);
-> >   icc_set_tag(path, QCOM_ICC_TAG_VOTER_DISP);
-> > 
-> > I have an early prototype with basic testing already. I can hopefully
-> > clean it up and post for review in the next couple of weeks.
-> I was initially not very happy with this approach (overloading tags
-> with additional information), but it grew on me over time.
-> 
-> My only concern is that if we reserve say bits 16-31 for path tags
-> (remember, dt-bindings are ABI), we may eventually run out of them.
+Hi Meng,
 
-The voter tags wouldn't require bitmasks like the bucket tags do. We'd
-just need an integer for each voter shifted into the proper position in
-the tag value. Thus, reserving N bits for the voters would give us 2**N
-voters, which should be plenty. For example:
+kernel test robot noticed the following build errors:
 
-  #define QCOM_ICC_VOTERS_START           16
-  #define QCOM_ICC_VOTERS_END             23
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on tip/x86/core linus/master v6.6-rc1 next-20230912]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-  #define QCOM_ICC_TAG_VOTER_HLOS         (0 << QCOM_ICC_VOTERS_START)
-  #define QCOM_ICC_TAG_VOTER_DISP         (1 << QCOM_ICC_VOTERS_START)
-  #define QCOM_ICC_TAG_VOTER_CAM_IFE_0    (2 << QCOM_ICC_VOTERS_START)
-  #define QCOM_ICC_TAG_VOTER_CAM_IFE_1    (3 << QCOM_ICC_VOTERS_START)
-  #define QCOM_ICC_TAG_VOTER_CAM_IFE_2    (4 << QCOM_ICC_VOTERS_START)
+url:    https://github.com/intel-lab-lkp/linux/commits/Meng-Li/x86-Drop-CPU_SUP_INTEL-from-SCHED_MC_PRIO-for-the-expansion/20230908-154939
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20230908074653.2799055-2-li.meng%40amd.com
+patch subject: [PATCH V6 1/7] x86: Drop CPU_SUP_INTEL from SCHED_MC_PRIO for the expansion.
+config: i386-buildonly-randconfig-004-20230913 (https://download.01.org/0day-ci/archive/20230913/202309130938.dmI2pWUB-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230913/202309130938.dmI2pWUB-lkp@intel.com/reproduce)
 
-The applicable voters should likely be defined in the target-specific
-headers, rather than the common qcom,icc.h. The bit range used for them
-could be common, but each target may only support a small subset of the
-total set of possible voters across all targets.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309130938.dmI2pWUB-lkp@intel.com/
 
-Clients requiring multiple voters for the same logical path should be
-rare. On the off-chance they require that, they could just request the
-same path multiple times with different voter tags applied and call
-icc_set_bw() for each of them separately.
+All errors (new ones prefixed by >>):
 
-I'm back from travel and vacation and plan to pick this up again soon.
+   In file included from drivers/cpufreq/amd-pstate.c:41:
+>> include/acpi/processor.h:226:9: error: unknown type name 'phys_cpuid_t'
+     226 |         phys_cpuid_t phys_id;   /* CPU hardware ID such as APIC ID for x86 */
+         |         ^~~~~~~~~~~~
+   include/acpi/processor.h:355:1: error: unknown type name 'phys_cpuid_t'
+     355 | phys_cpuid_t acpi_get_phys_id(acpi_handle, int type, u32 acpi_id);
+         | ^~~~~~~~~~~~
+   include/acpi/processor.h:356:1: error: unknown type name 'phys_cpuid_t'
+     356 | phys_cpuid_t acpi_map_madt_entry(u32 acpi_id);
+         | ^~~~~~~~~~~~
+   include/acpi/processor.h:357:20: error: unknown type name 'phys_cpuid_t'
+     357 | int acpi_map_cpuid(phys_cpuid_t phys_id, u32 acpi_id);
+         |                    ^~~~~~~~~~~~
+   drivers/cpufreq/amd-pstate.c: In function 'amd_pstate_acpi_pm_profile_server':
+   drivers/cpufreq/amd-pstate.c:1076:17: error: 'acpi_gbl_FADT' undeclared (first use in this function); did you mean 'acpi_table_fadt'?
+    1076 |         switch (acpi_gbl_FADT.preferred_profile) {
+         |                 ^~~~~~~~~~~~~
+         |                 acpi_table_fadt
+   drivers/cpufreq/amd-pstate.c:1076:17: note: each undeclared identifier is reported only once for each function it appears in
+   drivers/cpufreq/amd-pstate.c: In function 'amd_pstate_acpi_pm_profile_undefined':
+   drivers/cpufreq/amd-pstate.c:1087:13: error: 'acpi_gbl_FADT' undeclared (first use in this function); did you mean 'acpi_table_fadt'?
+    1087 |         if (acpi_gbl_FADT.preferred_profile == PM_UNSPECIFIED)
+         |             ^~~~~~~~~~~~~
+         |             acpi_table_fadt
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for X86_AMD_PSTATE
+   Depends on [n]: CPU_FREQ [=y] && X86 [=y] && ACPI [=n]
+   Selected by [y]:
+   - SCHED_MC_PRIO [=y] && SCHED_MC [=y] && CPU_SUP_AMD [=y]
+   WARNING: unmet direct dependencies detected for VIDEO_OV7640
+   Depends on [n]: MEDIA_SUPPORT [=y] && VIDEO_DEV [=y] && VIDEO_CAMERA_SENSOR [=n]
+   Selected by [y]:
+   - VIDEO_GO7007 [=y] && MEDIA_SUPPORT [=y] && MEDIA_USB_SUPPORT [=y] && MEDIA_ANALOG_TV_SUPPORT [=y] && VIDEO_DEV [=y] && I2C [=y] && SND [=y] && USB [=y] && MEDIA_SUBDRV_AUTOSELECT [=y] && MEDIA_CAMERA_SUPPORT [=y]
+
+
+vim +/phys_cpuid_t +226 include/acpi/processor.h
+
+^1da177e4c3f41 Linus Torvalds    2005-04-16  222  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  223  struct acpi_processor {
+^1da177e4c3f41 Linus Torvalds    2005-04-16  224  	acpi_handle handle;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  225  	u32 acpi_id;
+828aef376d7a12 Catalin Marinas   2015-03-24 @226  	phys_cpuid_t phys_id;	/* CPU hardware ID such as APIC ID for x86 */
+af8f3f514d193e Hanjun Guo        2015-01-04  227  	u32 id;		/* CPU logical ID allocated by OS */
+^1da177e4c3f41 Linus Torvalds    2005-04-16  228  	u32 pblk;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  229  	int performance_platform_limit;
+01854e697a77a4 Luming Yu         2007-05-26  230  	int throttling_platform_limit;
+ff55a9cebab024 Len Brown         2007-06-02  231  	/* 0 - states 0..n-th state available */
+01854e697a77a4 Luming Yu         2007-05-26  232  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  233  	struct acpi_processor_flags flags;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  234  	struct acpi_processor_power power;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  235  	struct acpi_processor_performance *performance;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  236  	struct acpi_processor_throttling throttling;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  237  	struct acpi_processor_limit limit;
+d9460fd227ed2c Zhang Rui         2008-01-17  238  	struct thermal_cooling_device *cdev;
+ac212b6980d8d5 Rafael J. Wysocki 2013-05-03  239  	struct device *dev; /* Processor device. */
+3000ce3c52f8b8 Rafael J. Wysocki 2019-10-16  240  	struct freq_qos_request perflib_req;
+3000ce3c52f8b8 Rafael J. Wysocki 2019-10-16  241  	struct freq_qos_request thermal_req;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  242  };
+^1da177e4c3f41 Linus Torvalds    2005-04-16  243  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
