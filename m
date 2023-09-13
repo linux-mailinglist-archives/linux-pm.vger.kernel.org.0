@@ -2,30 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7E179EA26
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 15:56:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4CE879EA27
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 15:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233574AbjIMN4M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Sep 2023 09:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58630 "EHLO
+        id S234305AbjIMN4U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Sep 2023 09:56:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232734AbjIMN4L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 09:56:11 -0400
+        with ESMTP id S236933AbjIMN4O (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 09:56:14 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC30E19B1
-        for <linux-pm@vger.kernel.org>; Wed, 13 Sep 2023 06:56:07 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BA1DC433C7;
-        Wed, 13 Sep 2023 13:56:05 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544BE19B6
+        for <linux-pm@vger.kernel.org>; Wed, 13 Sep 2023 06:56:10 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7120C433CB;
+        Wed, 13 Sep 2023 13:56:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694613367;
-        bh=cPW3ngQcLFNVapX0q9aS5nmb5CE6JzKHtu3Dbmcap1M=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KKMvp/l1Rq1L9185vo8pIgTFQuMzeAq6JuWHg+TWaOmaNUXrYeUjRM+tKOOvDFDuQ
-         zNZfsAEdV+e95VXY/g58J4djh6Ax8xrkc7e2qeDOsw6Z0j53jaHAu7KIpYJVD30wrl
-         G3qHY0TCu19q3QO6/LvVTvjqkWZxp6BqSRhhr/rVVZpZAP+bEL03S1YNgkNAsTbBeJ
-         LXtkcjwyhtzTsd25tV1cN7k4+EF6aSkgk9GkF+rwtnWt+DJGEH3LreOWSM6h7Qu4HG
-         +BofmIevmezasMvQjD/fTbMTaX32VroLZVA8egkHzWGuTGpW8zlfMKJDjzxW72ZzG6
-         IdV0Z863yOSbQ==
+        s=k20201202; t=1694613370;
+        bh=9eSoQKn81k97ZS3dPFMO8j6znDqsfS9i9/EwB0IgH0M=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=HXIDbRgaTvRE9wOoUV1pRzrzmyXKk5c4VzDGUqW17nHjTjv3EmCm1IDZ0+E8Sjd8G
+         S9LTCpOl8wkvxyeIVQJrl6aM0b/fALVuTbtBhVXVBm69apSCwbJcpfIyzu1DfUT313
+         2I44VdkZPk1/HXYdmWuQ7kP7Dvf8TqeHq5Ntk5yujhU4pJarqvxuNXG/eJxUW8LfC6
+         E3uSkuoi8YW3ljbluieEdqqDhAgaN/Io3px4U2XsoYAqYibKxKF5o+rAA+5haE754r
+         zdhE7Rjj/J651MbD6eCKWfpuMwDzNW1oxA3C+ossSFgGuA4SXu/Q95Z9IG4p/mi052
+         ryQUDGc8nhidQ==
 From:   Conor Dooley <conor@kernel.org>
 To:     ulf.hansson@linaro.org
 Cc:     conor@kernel.org, Conor Dooley <conor.dooley@microchip.com>,
@@ -33,57 +33,49 @@ Cc:     conor@kernel.org, Conor Dooley <conor.dooley@microchip.com>,
         jiajie.ho@starfivetech.com, linux-pm@vger.kernel.org,
         linux-riscv@lists.infradead.org, robh@kernel.org,
         walker.chen@starfivetech.com
-Subject: [GIT PULL 0/5] Missed starfive pmdomain changes for v6.6, now for v6.7
-Date:   Wed, 13 Sep 2023 14:54:23 +0100
-Message-Id: <20230913-bloomers-scorebook-fb45e0a2aa19@spud>
+Subject: [GIT PULL 1/5] pmdomain: starfive: Explicitly include correct DT includes
+Date:   Wed, 13 Sep 2023 14:54:24 +0100
+Message-Id: <20230913-swooned-ecosphere-aff4a05c1556@spud>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230913-bloomers-scorebook-fb45e0a2aa19@spud>
+References: <20230913-bloomers-scorebook-fb45e0a2aa19@spud>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1129; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=EKO/JXotiZvRjrciydNKo5TqXwavOcF+4xIEn9RLlOY=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDKmM+/nPGSu+vpKQG/txu+X0tv7YgENZZ4+tUpep27iQ/ WNU+zXujlIWBjEOBlkxRZbE230tUuv/uOxw7nkLM4eVCWQIAxenAEyk6Cojw/I1Mxe/6xXT4k1w zXMsnDc5dtvas2KG0/dscDM97sCxtJqR4czvOEmOtnXxGjxRE9+HZIu2lLBssONaEtEoc1DyZq4 VGwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1216; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=i5+EOM4kxuguOQSjSgCFjQq+qj0s7s7Br7dC6PPPcmY=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDKmM+/ljbe0VzzMoZG1WemA2Z9vaAyvvPzZYVjppw9Xrv ur1zue3dJSyMIhxMMiKKbIk3u5rkVr/x2WHc89bmDmsTCBDGLg4BWAiyZIM/6Pe562TLPp+WELm vnCNyM/0uYXRZ64ZinVHscw4ut1t62GG/xGZe7Qubue2cdLKqW7/5lv8l/tQH9uO2VsOMBXNmK1 7mwUA
 X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+From: Rob Herring <robh@kernel.org>
 
-Hey Uffe,
+The DT of_device.h and of_platform.h date back to the separate
+of_platform_bus_type before it as merged into the regular platform bus.
+As part of that merge prepping Arm DT support 13 years ago, they
+"temporarily" include each other. They also include platform_device.h
+and of.h. As a result, there's a pretty much random mix of those include
+files used throughout the tree. In order to detangle these headers and
+replace the implicit includes with struct declarations, users need to
+explicitly include the correct includes.
 
-Here's those missed changes in patch form. I figured it might be a bit
-easier this way given the name of the subsystem is in flux, doubly so if
-you'd like to put the header change of Rob's on fixes.
+Signed-off-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+ drivers/pmdomain/starfive/jh71xx-pmu.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-I had this out for LKP last night, seemed to get a clean bill of health,
-before I rebased it on top of the new name this afternoon, and ofc it was
-in linux-next on top of v6.5 for quite a while...
-
-Thanks,
-Conor.
-
-CC: arnd@arndb.de
-CC: changhuang.liang@starfivetech.com
-CC: jiajie.ho@starfivetech.com
-CC: linux-pm@vger.kernel.org
-CC: linux-riscv@lists.infradead.org
-CC: robh@kernel.org
-CC: ulf.hansson@linaro.org
-CC: walker.chen@starfivetech.com
-
-Changhuang Liang (4):
-  dt-bindings: power: Add power-domain header for JH7110
-  pmdomain: starfive: Replace SOC_STARFIVE with ARCH_STARFIVE
-  pmdomain: starfive: Extract JH7110 pmu private operations
-  pmdomain: starfive: Add JH7110 AON PMU support
-
-Rob Herring (1):
-  pmdomain: starfive: Explicitly include correct DT includes
-
- MAINTAINERS                                   |   1 +
- drivers/pmdomain/starfive/jh71xx-pmu.c        | 139 ++++++++++++++----
- drivers/soc/starfive/Kconfig                  |   4 +-
- .../dt-bindings/power/starfive,jh7110-pmu.h   |   5 +-
- 4 files changed, 117 insertions(+), 32 deletions(-)
-
+diff --git a/drivers/pmdomain/starfive/jh71xx-pmu.c b/drivers/pmdomain/starfive/jh71xx-pmu.c
+index 7d5f50d71c0d..d3b78a619d40 100644
+--- a/drivers/pmdomain/starfive/jh71xx-pmu.c
++++ b/drivers/pmdomain/starfive/jh71xx-pmu.c
+@@ -10,7 +10,6 @@
+ #include <linux/iopoll.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_domain.h>
+ #include <dt-bindings/power/starfive,jh7110-pmu.h>
 -- 
 2.39.2
 
