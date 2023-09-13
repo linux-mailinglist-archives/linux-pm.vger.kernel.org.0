@@ -2,181 +2,180 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBBD79E554
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 12:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BE779E575
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 12:56:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239798AbjIMKxC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Sep 2023 06:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53252 "EHLO
+        id S239910AbjIMK46 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Sep 2023 06:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239774AbjIMKxA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 06:53:00 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C3DCA;
-        Wed, 13 Sep 2023 03:52:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
- s=s31663417; t=1694602352; x=1695207152; i=frank-w@public-files.de;
- bh=Ww1mJyzDjTYs1kiuvu9JwKCRtrZkVm5UBxhogIXBc+M=;
- h=X-UI-Sender-Class:Date:From:To:CC:Subject:Reply-to:In-Reply-To:References;
- b=WzdF8yJrs/LmwLwvwWapUB5NaH2xWmUy1M52B/iNsaeD2q5zcV6zNOmfnWhsVA1ZA9RlAlZ3JYQ
- z3F8QKOdLg7+i2Oo/Lk+sINpLPdCr4uCUGyyOR+n3cY18+of9adykfchPn5yfUSf+NJHvLZOmjIiU
- Z0TACC3mfNYUleKdA6GKZYjG46WWGdRC8j1DZC82jiQZmB45PUvxwx8DgXFixqsGziK/te8UdiDqC
- VMU+5dnr7TAX+/9mobCR5+c3b7idtGiLKkqQB17AySXSyIxayUfwaHAFjwQZA+qoeF9IJMzbdH9ID
- M3I+7TKUWVfdBbiHkiEDyGBXfAyVW2aNe/MQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [IPv6:::1] ([80.187.70.211]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MTRMs-1rABOd48E8-00ThSc; Wed, 13
- Sep 2023 12:52:32 +0200
-Date:   Wed, 13 Sep 2023 12:52:29 +0200
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
+        with ESMTP id S239893AbjIMK45 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 06:56:57 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DCC19BE
+        for <linux-pm@vger.kernel.org>; Wed, 13 Sep 2023 03:56:53 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-d77ad095e5cso6269852276.0
+        for <linux-pm@vger.kernel.org>; Wed, 13 Sep 2023 03:56:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694602612; x=1695207412; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SwE1tmf8tdsVndAPixE3ADwa0SejCshFVF56S6gRoMI=;
+        b=WCQXmB1hdPdLx5jg0szCrHGf6etQvVp/GH6OiQhVKWDk2f9gOXz59D4+IX4d0uNBIq
+         JJcWt6f/NKBJViDo66x2f6P8Sank123ToXsHQqw6uztKyDy67lfpHqqnMp2DZLs3VVUc
+         iCZoUR2N/NS7dOvWZfpOreZFTqPuodaZoyG2YbZF34CrXAseZE670N1hvjca/Wu0GhZO
+         hU2xKL1Z5JgW0PqVxJyIh6n0h2xDyi5jzuZaRf5M0b4l/hqJU860bLmmNmHIKbqp2QbE
+         fdUNEL0bR9xTX5+O9f9mdlyWGjPEVa38O+y9nAG9pmZQa81LaIzxaYdzAP0lrRJf8+LK
+         hlNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694602612; x=1695207412;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SwE1tmf8tdsVndAPixE3ADwa0SejCshFVF56S6gRoMI=;
+        b=KGfynWMrE81bbyON9t4CE2MnlG43DPXofVvOVgvS/LuBW42dLOvBwZ3O0jXAKUMTDs
+         t7iQBZVp52ZlPfjloqHP2a+YdTOKUzYys5Kfq92vYuCH5CahcEQrZ1kJ/eFxpBV2m93g
+         sHfqTpP2150WH+G69lo3rJogq9ilI256X9MO6Dq3s+6Tr4ZtTZsYDpwO4TP2OXcR6W5i
+         XHIcJ1mcb7QgDaodwuPgc1Ehxb2XCnG7VeAd+BfN+E3PrPrgFmjYy2tB6QNypQC73miI
+         zyoNFjsaTFpox0ZUpZvk61SsLsxxOkfX1u768k8RzK0StJtfRkj+E94GO3XJsimr5Yi/
+         0WUA==
+X-Gm-Message-State: AOJu0Yx/F7mZXB+CPT9WSzC0YEvfIUDXX8QCRvO4df0RzFS6IgR5/lrA
+        insX8gSx4HeZZIfpCIAgFbTz4HMAP6UEexBXx5sngw==
+X-Google-Smtp-Source: AGHT+IHMAuFyyQ4cRNYR0B8xdSCeM68K8IjuOrh8tk9MNlECb4FiuI3ryuFikGYu8jUtCFCGET9Y3RPflWwbyZQSia0=
+X-Received: by 2002:a5b:308:0:b0:d7f:f5e:a2bd with SMTP id j8-20020a5b0308000000b00d7f0f5ea2bdmr1911637ybp.10.1694602612496;
+ Wed, 13 Sep 2023 03:56:52 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230912-msm8909-cpufreq-v1-0-767ce66b544b@kernkonzept.com> <20230912-msm8909-cpufreq-v1-1-767ce66b544b@kernkonzept.com>
+In-Reply-To: <20230912-msm8909-cpufreq-v1-1-767ce66b544b@kernkonzept.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 13 Sep 2023 12:56:16 +0200
+Message-ID: <CAPDyKFq6U-MR4Bd+GmixYseRECDh142RhydtKbiPd3NHV2g6aw@mail.gmail.com>
+Subject: Re: [PATCH 1/4] cpufreq: qcom-nvmem: Enable virtual power domain devices
+To:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Daniel Golle <daniel@makrotopia.org>
-Subject: =?US-ASCII?Q?Re=3A_=5BRFC_v1_3/3=5D_thermal/drivers/medi?= =?US-ASCII?Q?atek/lvts=5Fthermal=3A_add_mt7988_support?=
-User-Agent: K-9 Mail for Android
-Reply-to: frank-w@public-files.de
-In-Reply-To: <8949cbfa-acae-d6ac-e5fb-f238a29630bc@collabora.com>
-References: <20230911183354.11487-1-linux@fw-web.de> <20230911183354.11487-4-linux@fw-web.de> <8949cbfa-acae-d6ac-e5fb-f238a29630bc@collabora.com>
-Message-ID: <465DDC1C-D687-47A7-966C-73FB42CFC5DD@public-files.de>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:L7b7/3vlJqiK9clXTp9802DVzVqAZMwttJN+9iGUAhZZHaV6OSy
- 7BUGp6yda4GZj2iMqEKvvkANIvXYPg/3GXzBV4HlsNsolYPL9Rt+Oj6QpV34eHcokVbGPVR
- WkdkNpi4XJqLdEg1Ji4nt5Usejxyel6vID/utZYR07ZfN46yVCcudjvckPDbrHrclPP7OMh
- 0q7BYXIqsNYn1T8+ATojg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:j6FRPAxwTHg=;WJHkeOXGVVFss1sYZOexXfgn3f5
- bo9Opg/eegbc+RzJsn5Bx1hdWmURIo/tgZ2w6It2i9uY8xP3iBOdcAOMnb0nU02Jpa3z07FQ2
- WeuZ1w7JTNLPOrT9CN0nwxB+EtwFPrOEUjp6/OQLpSzXKDf5E0bZOYTIKidz4/lSmrFXjfzrF
- dqUTFnN/QeXAftgepoPE8fOZ1A3B8CsFeRcqkNSoJLR9mj7dmM78fWJJeuui2L1lZaCZn7Hb+
- LMYg7kr9n0KI2vRAQarI55AoP3RK2ESXg63sJz5369S/H0wUfG64/MwK+XoYOMYH82k1IohtL
- EPvVR/PdmWR5oHk5H2lvCTFaFRwHmHUse7CxvPPvrng3qTi+hkTiCa7HXibsJaffQ/SM61E0g
- rkl6Bao9Rvc1V3EKX0fNRixJ3BdgIkQ5GyTDKDua+WC49Rd4HKf452DrEfnpVqQU/yGzHQGuX
- qo2RiYyqj6F+2m/avrVmCBhJTPhFpz2ifFIIqH4sgkJdSzEAmG2RFzylDXM0D/u9eu7aOpB9d
- 1RkNE2tkrQlLpmLOwSc48B++qgbsyK/otMXVFSS+GH9Ne2Cj8MIuV8l2ESCrt0o37AJagjemr
- iVzfeEjoTu+ivR6fC6rC/S2AV6VU9gP5DP3zn/iIgPfwo7UjjOi2Y80fg2V/62dYkQCKDTArL
- VQL2c59QDvJX3j+euvbk5cYzYs9TPMaWNI2wCkpWkjLQLTJPVsutO+GoslLf+EC1Zg6ed06vc
- 0KJ5/91BKp2yfsFSDkFfxSS2fodeTuuvtJ9t0EY9+MzIqC++K2LtLFtgAb0xQfNum/Irf+qED
- kWt0lMBnzGRWZR3MmPK5/jBFFWVXcNYNdUhL0dU+3EKJRh+NoyAFN31OTQnmZbEPow8m7sgVF
- j+Vu+qMdSAapjxtMfdnoLevEfA51qh40yzN30iOKo0Oz918eRi1KlXdyrNeNHQM0/pu4wvb+m
- K/TaaQ==
+        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Am 13=2E September 2023 10:16:51 MESZ schrieb AngeloGioacchino Del Regno <a=
-ngelogioacchino=2Edelregno@collabora=2Ecom>:
-Hi angelo,
-
-thanks for first look
-
->Il 11/09/23 20:33, Frank Wunderlich ha scritto:
->> From: Frank Wunderlich <frank-w@public-files=2Ede>
->>=20
->> Add Support for mediatek fologic 880/MT7988=2E
->>=20
->> Signed-off-by: Frank Wunderlich <frank-w@public-files=2Ede>
->> ---
->>   drivers/thermal/mediatek/lvts_thermal=2Ec | 73 ++++++++++++++++++++++=
-+++
->>   1 file changed, 73 insertions(+)
->>=20
->> diff --git a/drivers/thermal/mediatek/lvts_thermal=2Ec b/drivers/therma=
-l/mediatek/lvts_thermal=2Ec
->> index c1004b4da3b6=2E=2E48b257a3c80e 100644
->> --- a/drivers/thermal/mediatek/lvts_thermal=2Ec
->> +++ b/drivers/thermal/mediatek/lvts_thermal=2Ec
->> @@ -82,6 +82,8 @@
->>   #define LVTS_GOLDEN_TEMP_DEFAULT	50
->>   #define LVTS_COEFF_A_MT8195			-250460
->>   #define LVTS_COEFF_B_MT8195			250460
->> +#define LVTS_COEFF_A_MT7988			-204650
->> +#define LVTS_COEFF_B_MT7988			204650
->>     #define LVTS_MSR_IMMEDIATE_MODE		0
->>   #define LVTS_MSR_FILTERED_MODE		1
->> @@ -1272,6 +1274,67 @@ static int lvts_remove(struct platform_device *p=
-dev)
->>   	return 0;
->>   }
->>   +/*
->> + * LVTS MT7988
->> + */
->> +#define LVTS_HW_SHUTDOWN_MT7988	117000
+On Tue, 12 Sept 2023 at 11:40, Stephan Gerhold
+<stephan.gerhold@kernkonzept.com> wrote:
 >
->Are you sure that this chip's Tj is >117=C2=B0C ?!
+> The genpd core ignores performance state votes from devices that are
+> runtime suspended as of commit 5937c3ce2122 ("PM: domains: Drop/restore
+> performance state votes for devices at runtime PM").
+
+I think you are referring to the wrong commit above. Please have a
+look at commit 3c5a272202c2 ("PM: domains: Improve runtime PM
+performance state handling"), instead.
+
+I also suggest rephrasing the above into saying that the performance
+state vote for a device is cached rather than carried out, if
+pm_runtime_suspended() returns true for it.
+
+Another relevant information in the commit message would be to add
+that during device-attach (genpd_dev_pm_attach_by_id()), calls
+pm_runtime_enable() the device.
+
+> However, at the
+> moment nothing ever enables the virtual devices created in
+> qcom-cpufreq-nvmem for the cpufreq power domain scaling, so they are
+> permanently runtime-suspended.
 >
->Looks a bit high=2E=2E=2E if it is exactly 117=C2=B0C, I would suggest cu=
-tting earlier,
->either at 110 (safe side) or 115: after all, this is a life-saver feature=
- and
->the chip is actually never meant to *constantly* work at 110=C2=B0C (as i=
-t would
->degrade fast and say goodbye earlier than "planned")=2E
-
-I took values from SDK
-
-https://git01=2Emediatek=2Ecom/plugins/gitiles/openwrt/feeds/mtk-openwrt-f=
-eeds/+/refs/heads/master/target/linux/mediatek/files-5=2E4/drivers/thermal/=
-mediatek/soc_temp_lvts=2Ec#1483
-
->> +//enum mt7988_lvts_domain { MT7988_AP_DOMAIN, MT7988_NUM_DOMAIN };
->> +
->> +enum mt7988_lvts_sensor_enum {
->> +	MT7988_TS3_0,
->> +	MT7988_TS3_1,
->> +	MT7988_TS3_2,
->> +	MT7988_TS3_3,
->> +	MT7988_TS4_0,
->> +	MT7988_TS4_1,
->> +	MT7988_TS4_2,
->> +	MT7988_TS4_3,
->> +	MT7988_NUM_TS
->> +};
-
->This enumeration should be definitions in bindings (mediatek,lvts-thermal=
-=2Eh)=2E
+> Fix this by enabling the devices after attaching them and use
+> dev_pm_syscore_device() to ensure the power domain also stays on when
+> going to suspend. Since it supplies the CPU we can never turn it off
+> from Linux. There are other mechanisms to turn it off when needed,
+> usually in the RPM firmware or the cpuidle path.
 >
->Besides, the LVTS is about internal temperatures, so those TS3_x and 4_x =
-can
->be renamed like what was done for MT8192 and MT8195: this is because you =
-will
->never see TS3_2 being CPU2 on a board and CPU4 on another, being those - =
-again -
->internal to the SoC, hence unchangeable=2E
+> Without this fix performance states votes are silently ignored, and the
+> CPU/CPR voltage is never adjusted. This has been broken since 5.14 but
+> for some reason no one noticed this on QCS404 so far.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 1cb8339ca225 ("cpufreq: qcom: Add support for qcs404 on nvmem driver")
+> Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+> ---
+>  drivers/cpufreq/qcom-cpufreq-nvmem.c | 21 ++++++++++++++++++++-
+>  1 file changed, 20 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> index 84d7033e5efe..17d6ab14c909 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> @@ -25,6 +25,7 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_domain.h>
+>  #include <linux/pm_opp.h>
+> +#include <linux/pm_runtime.h>
+>  #include <linux/slab.h>
+>  #include <linux/soc/qcom/smem.h>
+>
+> @@ -280,6 +281,7 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
+>         }
+>
+>         for_each_possible_cpu(cpu) {
+> +               struct device **virt_devs = NULL;
+>                 struct dev_pm_opp_config config = {
+>                         .supported_hw = NULL,
+>                 };
+> @@ -300,7 +302,7 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
+>
+>                 if (drv->data->genpd_names) {
+>                         config.genpd_names = drv->data->genpd_names;
+> -                       config.virt_devs = NULL;
+> +                       config.virt_devs = &virt_devs;
+>                 }
+>
+>                 if (config.supported_hw || config.genpd_names) {
+> @@ -311,6 +313,23 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
+>                                 goto free_opp;
+>                         }
+>                 }
+> +
+> +               if (virt_devs) {
+> +                       const char * const *name = config.genpd_names;
+> +                       int i;
+> +
+> +                       for (i = 0; *name; i++, name++) {
+> +                               ret = pm_runtime_resume_and_get(virt_devs[i]);
+> +                               if (ret) {
+> +                                       dev_err(cpu_dev, "failed to resume %s: %d\n",
+> +                                               *name, ret);
+> +                                       goto free_opp;
+> +                               }
 
-Right these sensors are internally only and i took naming from sdk to avoi=
-d confusion=2E And i have not more information about these internal sensors=
- (special meaning),but their values are packed together to get the resultin=
-g (average) temperature=2E
+Shouldn't we restore the usage count at ->remove() too?
 
->Another reason is that you'll anyway have to refer to those sensors in th=
-e
->devicetree to configure thermal trips and such, so=2E=2E=2E :-)
+> +
+> +                               /* Keep CPU power domain always-on */
+> +                               dev_pm_syscore_device(virt_devs[i], true);
 
-In device tree it will look like this:
+Is this really correct? cpufreq is suspended/resumed by the PM core
+during system wide suspend/resume. See dpm_suspend|resume(). Isn't
+that sufficient?
 
-https://github=2Ecom/frank-w/BPI-Router-Linux/blob/6=2E5-lvts/arch/arm64/b=
-oot/dts/mediatek/mt7988a=2Edtsi#L771
+Moreover, it looks like the cpr genpd provider supports genpd's
+->power_on|off() callbacks. Is there something wrong with this, that I
+am missing?
 
-Daniel has also defined thermal trips there,but these are untested atm=2E =
-I only verified temperature itself i get from sysfs as far as i can (start =
-at ~40=C2=B0C and reaching ~70 while running)=2E
 
->Regards,
->Angelo
+> +                       }
+> +               }
+>         }
+>
+>         cpufreq_dt_pdev = platform_device_register_simple("cpufreq-dt", -1,
+>
 
-regards Frank
+Kind regards
+Uffe
