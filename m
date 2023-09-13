@@ -2,182 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EAF879EA2B
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 15:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A74679EAD9
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 16:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237959AbjIMN4Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Sep 2023 09:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
+        id S241292AbjIMOTN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Sep 2023 10:19:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239563AbjIMN4Y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 09:56:24 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A1219BF
-        for <linux-pm@vger.kernel.org>; Wed, 13 Sep 2023 06:56:20 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C03D6C433CA;
-        Wed, 13 Sep 2023 13:56:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694613379;
-        bh=Q6WalZ8TpU7f6rAirYPjnlGFBA7Iavog/gfu/KD0rr4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I1ppQjTJo3S4b7S3L8DWA+RTwdkl4GgYwdRn2Wz7xSpS94DTcYJ0aueQoj25rWcnW
-         RvxkdcF3S4m4fR542BA5h4YjMBec/nE0SkdYwORpEbWQZZqF2/FhDk3jeUWi9+ceh6
-         jLZFUGpHIdl+970u+3SDTM/47ZV9gWaItYHKnMMDkx+9i+681QvACFkVV+kJ4hAsZg
-         VEodejJjhDMsm1vvWYLLYJfWbHy1wWGu/A4U2EwZpIoWap4qYDz/EV6chOINuS8iTL
-         ZXNARkfn/WYZT/hMY6ZorRbcDKS7IyorXtM+CGel6pBCoqnaUcyhR6ED63Oy0eA7kH
-         fSKwdh6YUIE1g==
-From:   Conor Dooley <conor@kernel.org>
-To:     ulf.hansson@linaro.org
-Cc:     conor@kernel.org, Conor Dooley <conor.dooley@microchip.com>,
-        arnd@arndb.de, changhuang.liang@starfivetech.com,
-        jiajie.ho@starfivetech.com, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, robh@kernel.org,
-        walker.chen@starfivetech.com
-Subject: [GIT PULL 5/5] pmdomain: starfive: Add JH7110 AON PMU support
-Date:   Wed, 13 Sep 2023 14:54:28 +0100
-Message-Id: <20230913-dude-imprecise-fc32622bc947@spud>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230913-bloomers-scorebook-fb45e0a2aa19@spud>
-References: <20230913-bloomers-scorebook-fb45e0a2aa19@spud>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4052; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=5Q3tk4+W6UmElYB6O/7FZbKQ8pSZfsYJMQxdffVIkaw=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDKmM+wW3FNppPxbr5vN92fxrQt807ne8/19t8l82e66pz +bCrOOGHaUsDGIcDLJiiiyJt/tapNb/cdnh3PMWZg4rE8gQBi5OAZhI3FVGhvOpse7Z846eTPN8 K1zNk1n764R3dNSNir33zQt+X/2cosjwv0LnqazhhosOOj3XXCte7Jg0WWWxw1/tsP2xcS8qNhj lcAAA
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S241297AbjIMOTJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 10:19:09 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF4E5BA3;
+        Wed, 13 Sep 2023 07:11:07 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38DBe3Cl017669;
+        Wed, 13 Sep 2023 14:11:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=2Vvyz3kaBR5K9Mp05wf4x59Bwusl+MEdOtqRu7dB39g=;
+ b=ovFsknzEC/G1nM8AGwgRFO3ZzNkt7GFbTG+o1w1sV6XX0BOMTYddjDI0/L7Y8mtLasp4
+ Jflpq4rwnN67+M0cqkagWqQjcYwc0Pxf1BjetgE2bMVXf/Rdo5Gmq4PoV7nqnY0yvMhA
+ o5xbNENw4j47UioVeIwD6i3zB+yA3GvoHuYsXZ405AltrTJxYuQejsA/zaafGHqmGY40
+ wPiWq8UW5Re7WHgEogqkpu8zPc/C0QafJR0lTqktWOyJLzqbRDDgWbAQCIDjXdEMhL2L
+ cO8eCbBm7k+TR52PKrj95L4RSpMTJOnzBd9mETzwCRjukXHJjDpxMQFKxobdU4H1VXgO /A== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t314chhh6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Sep 2023 14:11:02 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 38DEAwSN007638;
+        Wed, 13 Sep 2023 14:10:58 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3t0hskt7mn-1;
+        Wed, 13 Sep 2023 14:10:58 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38DEAwR4007624;
+        Wed, 13 Sep 2023 14:10:58 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-rohiagar-hyd.qualcomm.com [10.213.106.138])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 38DEAwFb007620;
+        Wed, 13 Sep 2023 14:10:58 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3970568)
+        id 71BED1D52; Wed, 13 Sep 2023 19:40:57 +0530 (+0530)
+From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@quicinc.com, Rohit Agarwal <quic_rohiagar@quicinc.com>
+Subject: [PATCH v3 0/2] Add interconnect driver for SDX75
+Date:   Wed, 13 Sep 2023 19:40:54 +0530
+Message-Id: <1694614256-24109-1-git-send-email-quic_rohiagar@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: KDkr9WnQBeOnhZtwmHZfYZk9z3KoZ3Pm
+X-Proofpoint-ORIG-GUID: KDkr9WnQBeOnhZtwmHZfYZk9z3KoZ3Pm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-13_07,2023-09-13_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ clxscore=1015 phishscore=0 spamscore=0 mlxscore=0 bulkscore=0
+ lowpriorityscore=0 priorityscore=1501 mlxlogscore=727 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309130115
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Changhuang Liang <changhuang.liang@starfivetech.com>
+Hi,
 
-Add AON PMU for StarFive JH7110 SoC. It can be used to turn on/off the
-dphy rx/tx power switch.
+Changes in v3:
+ - Removed the unnecessary declaration of a struct from patch 2/2
+ - Collected the reviewed by tag
 
-Reviewed-by: Walker Chen <walker.chen@starfivetech.com>
-Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- MAINTAINERS                            |  1 +
- drivers/pmdomain/starfive/jh71xx-pmu.c | 57 +++++++++++++++++++++++---
- 2 files changed, 53 insertions(+), 5 deletions(-)
+Changes in v2:
+ - Updated the bindings to merge the if clauses and updated the maintainer.
+ - Updated the drivers file to a latest template to add the missing const
+   keyword.
+ - Rebased on v6.6-rc1
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4d9e7d42412f..f1c34484c9b2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20512,6 +20512,7 @@ F:	drivers/usb/cdns3/cdns3-starfive.c
- 
- STARFIVE JH71XX PMU CONTROLLER DRIVER
- M:	Walker Chen <walker.chen@starfivetech.com>
-+M:	Changhuang Liang <changhuang.liang@starfivetech.com>
- S:	Supported
- F:	Documentation/devicetree/bindings/power/starfive*
- F:	drivers/pmdomain/starfive/jh71xx-pmu.c
-diff --git a/drivers/pmdomain/starfive/jh71xx-pmu.c b/drivers/pmdomain/starfive/jh71xx-pmu.c
-index 547cd3b9df11..2724bee7e85f 100644
---- a/drivers/pmdomain/starfive/jh71xx-pmu.c
-+++ b/drivers/pmdomain/starfive/jh71xx-pmu.c
-@@ -2,7 +2,7 @@
- /*
-  * StarFive JH71XX PMU (Power Management Unit) Controller Driver
-  *
-- * Copyright (C) 2022 StarFive Technology Co., Ltd.
-+ * Copyright (C) 2022-2023 StarFive Technology Co., Ltd.
-  */
- 
- #include <linux/interrupt.h>
-@@ -23,6 +23,9 @@
- #define JH71XX_PMU_EVENT_STATUS		0x88
- #define JH71XX_PMU_INT_STATUS		0x8C
- 
-+/* aon pmu register offset */
-+#define JH71XX_AON_PMU_SWITCH		0x00
-+
- /* sw encourage cfg */
- #define JH71XX_PMU_SW_ENCOURAGE_EN_LO	0x05
- #define JH71XX_PMU_SW_ENCOURAGE_EN_HI	0x50
-@@ -159,6 +162,26 @@ static int jh7110_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
- 	return 0;
- }
- 
-+static int jh7110_aon_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
-+{
-+	struct jh71xx_pmu *pmu = pmd->pmu;
-+	unsigned long flags;
-+	u32 val;
-+
-+	spin_lock_irqsave(&pmu->lock, flags);
-+	val = readl(pmu->base + JH71XX_AON_PMU_SWITCH);
-+
-+	if (on)
-+		val |= mask;
-+	else
-+		val &= ~mask;
-+
-+	writel(val, pmu->base + JH71XX_AON_PMU_SWITCH);
-+	spin_unlock_irqrestore(&pmu->lock, flags);
-+
-+	return 0;
-+}
-+
- static int jh71xx_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
- {
- 	struct jh71xx_pmu *pmu = pmd->pmu;
-@@ -316,10 +339,12 @@ static int jh71xx_pmu_probe(struct platform_device *pdev)
- 	if (!match_data)
- 		return -EINVAL;
- 
--	ret = match_data->pmu_parse_irq(pdev, pmu);
--	if (ret) {
--		dev_err(dev, "failed to parse irq\n");
--		return ret;
-+	if (match_data->pmu_parse_irq) {
-+		ret = match_data->pmu_parse_irq(pdev, pmu);
-+		if (ret) {
-+			dev_err(dev, "failed to parse irq\n");
-+			return ret;
-+		}
- 	}
- 
- 	pmu->genpd = devm_kcalloc(dev, match_data->num_domains,
-@@ -393,10 +418,31 @@ static const struct jh71xx_pmu_match_data jh7110_pmu = {
- 	.pmu_set_state = jh7110_pmu_set_state,
- };
- 
-+static const struct jh71xx_domain_info jh7110_aon_power_domains[] = {
-+	[JH7110_PD_DPHY_TX] = {
-+		.name = "DPHY-TX",
-+		.bit = 30,
-+	},
-+	[JH7110_PD_DPHY_RX] = {
-+		.name = "DPHY-RX",
-+		.bit = 31,
-+	},
-+};
-+
-+static const struct jh71xx_pmu_match_data jh7110_aon_pmu = {
-+	.num_domains = ARRAY_SIZE(jh7110_aon_power_domains),
-+	.domain_info = jh7110_aon_power_domains,
-+	.pmu_status = JH71XX_AON_PMU_SWITCH,
-+	.pmu_set_state = jh7110_aon_pmu_set_state,
-+};
-+
- static const struct of_device_id jh71xx_pmu_of_match[] = {
- 	{
- 		.compatible = "starfive,jh7110-pmu",
- 		.data = (void *)&jh7110_pmu,
-+	}, {
-+		.compatible = "starfive,jh7110-aon-syscon",
-+		.data = (void *)&jh7110_aon_pmu,
- 	}, {
- 		/* sentinel */
- 	}
-@@ -413,5 +459,6 @@ static struct platform_driver jh71xx_pmu_driver = {
- builtin_platform_driver(jh71xx_pmu_driver);
- 
- MODULE_AUTHOR("Walker Chen <walker.chen@starfivetech.com>");
-+MODULE_AUTHOR("Changhuang Liang <changhuang.liang@starfivetech.com>");
- MODULE_DESCRIPTION("StarFive JH71XX PMU Driver");
- MODULE_LICENSE("GPL");
+This series adds interconnect driver support for SDX75 platform.
+
+Thanks,
+Rohit.
+
+Rohit Agarwal (2):
+  dt-bindings: interconnect: Add compatibles for SDX75
+  interconnect: qcom: Add SDX75 interconnect provider driver
+
+ .../bindings/interconnect/qcom,sdx75-rpmh.yaml     |   92 ++
+ drivers/interconnect/qcom/Kconfig                  |    9 +
+ drivers/interconnect/qcom/Makefile                 |    2 +
+ drivers/interconnect/qcom/sdx75.c                  | 1107 ++++++++++++++++++++
+ drivers/interconnect/qcom/sdx75.h                  |   97 ++
+ include/dt-bindings/interconnect/qcom,sdx75.h      |  102 ++
+ 6 files changed, 1409 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdx75-rpmh.yaml
+ create mode 100644 drivers/interconnect/qcom/sdx75.c
+ create mode 100644 drivers/interconnect/qcom/sdx75.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sdx75.h
+
 -- 
-2.39.2
+2.7.4
 
