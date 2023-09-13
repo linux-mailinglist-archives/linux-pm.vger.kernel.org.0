@@ -2,128 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 313D779E3AE
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 11:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E8C79E438
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 11:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238527AbjIMJ32 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Sep 2023 05:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
+        id S239652AbjIMJx5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Sep 2023 05:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237229AbjIMJ31 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 05:29:27 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DAF4EC;
-        Wed, 13 Sep 2023 02:29:23 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 15779218E8;
-        Wed, 13 Sep 2023 09:29:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1694597362; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3zkN0jprRlNgAWBNnwR9+n4RWOVj4MMw+4ONI9DbmTg=;
-        b=sy/7mX2iw7iKv8P9spaqJzKhuvhMTMG7zNwc5tSfPCX0r8mq5sC5YkIUe+u9AxXK4XSUqs
-        cR6JPoEcWTiAwdkObk2E+nbLNrdNFostv0/2Cn4Az6qCOMdUEl8g1Et3jILR0xBH8KbkpP
-        Ci0yCSTsutSN0D9fjp49FPxHDkzu0ck=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1694597362;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3zkN0jprRlNgAWBNnwR9+n4RWOVj4MMw+4ONI9DbmTg=;
-        b=CNYrhCga/C9N/KHhBo2n4aWMUeeYw4VKE6KPB/ijC8ftosBsahMcvFujh2F7XJFh61XT6b
-        jBGdb8BTnnSy0jAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 05FCC13582;
-        Wed, 13 Sep 2023 09:29:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id j0s1APKAAWUvRAAAMHmgww
-        (envelope-from <chrubis@suse.cz>); Wed, 13 Sep 2023 09:29:22 +0000
-Date:   Wed, 13 Sep 2023 11:30:08 +0200
-From:   Cyril Hrubis <chrubis@suse.cz>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        LTP List <ltp@lists.linux.it>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Gao <wegao@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Martin Doucha <mdoucha@suse.cz>
-Subject: Re: Qemu-arm64: LTP: cfs_bandwidth01: Unable to handle kernel NULL
- pointer dereference at virtual address 0000000000000038
-Message-ID: <ZQGBINUoRuEhTFwQ@yuki>
-References: <CA+G9fYvHhiiGKhNd=L9+xYFVwv0Q8k6gUBeFQGWCWw1cWhb50Q@mail.gmail.com>
+        with ESMTP id S233406AbjIMJxo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 05:53:44 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7586D270C;
+        Wed, 13 Sep 2023 02:53:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D61CD1FB;
+        Wed, 13 Sep 2023 02:53:39 -0700 (PDT)
+Received: from [10.57.94.11] (unknown [10.57.94.11])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DB1AC3F5A1;
+        Wed, 13 Sep 2023 02:53:00 -0700 (PDT)
+Message-ID: <74c48141-55c4-c09b-250f-c1d71f031a8c@arm.com>
+Date:   Wed, 13 Sep 2023 10:53:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYvHhiiGKhNd=L9+xYFVwv0Q8k6gUBeFQGWCWw1cWhb50Q@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [RFC PATCH 0/7] sched: cpufreq: Remove magic margins
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Qais Yousef <qyousef@layalina.io>,
+        Chris Redpath <Chris.Redpath@arm.com>
+References: <20230827233203.1315953-1-qyousef@layalina.io>
+ <a6365f63-4669-15e5-b843-f4bfb1bd5e68@arm.com>
+ <20230906211850.zyvk6qtt6fvpxaf3@airbuntu>
+ <20230907132631.GF10955@noisy.programming.kicks-ass.net>
+ <8919ed14-8d19-d964-2278-3303a5bda8ee@arm.com>
+ <20230907142923.GJ10955@noisy.programming.kicks-ass.net>
+ <cf5c628a-e047-b5e0-b2a0-f2b280015d02@arm.com>
+ <20230907201609.GC14243@noisy.programming.kicks-ass.net>
+ <f1b1b663-3a12-9e5d-932b-b3ffb5f02e14@arm.com>
+ <CAKfTPtDd-HhF-YiNTtL9i5k0PfJbF819Yxu4YquzfXgwi7voyw@mail.gmail.com>
+Content-Language: en-US
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAKfTPtDd-HhF-YiNTtL9i5k0PfJbF819Yxu4YquzfXgwi7voyw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi!
-> Following kernel crash noticed on Linux stable-rc 6.5.3-rc1 on qemu-arm64 while
-> running LTP sched tests cases.
+Hi Vincent,
+
+On 9/12/23 15:01, Vincent Guittot wrote:
+> Hi Lukasz,
 > 
-> This is not always reproducible.
+> On Tue, 12 Sept 2023 at 13:51, Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>> Hi Peter,
+>>
+>> On 9/7/23 21:16, Peter Zijlstra wrote:
+>>> On Thu, Sep 07, 2023 at 03:42:13PM +0100, Lukasz Luba wrote:
+>>>
+>>>>> What task characteristic is tied to this? That is, this seems trivial to
+>>>>> modify per-task.
+>>>>
+>>>> In particular Speedometer test and the main browser task, which reaches
+>>>> ~900util, but sometimes vanish and waits for other background tasks
+>>>> to do something. In the meantime it can decay and wake-up on
+>>>> Mid/Little (which can cause a penalty to score up to 5-10% vs. if
+>>>> we pin the task to big CPUs). So, a longer util_est helps to avoid
+>>>> at least very bad down migration to Littles...
+>>>
+>>> Do they do a few short activations (wakeup/sleeps) while waiting? That
+>>> would indeed completely ruin things since the EWMA thing is activation
+>>> based.
+>>>
+>>> I wonder if there's anything sane we can do here...
+>>
+>> My apologies for a delay, I have tried to push the graphs for you.
+>>
+>> The experiment is on pixel7*. It's running the browser on the phone
+>> with the test 'Speedometer 2.0'. It's a web test (you can also run on
+>> your phone) available here, no need to install anything:
+>> https://browserbench.org/Speedometer2.0/
+>>
+>> Here is the Jupiter notebook [1], with plots of the signals:
+>> - top 20 tasks' (based on runtime) utilization
+>> - Util EST signals for the top 20 tasks, with the longer decaying ewma
+>>     filter (which is the 'red' plot called 'ewma')
+>> - the main task (comm=CrRendererMain) Util, Util EST and task residency
+>>     (which tires to stick to CPUs 6,7* )
+>> - the test score was 144.6 (while with fast decay ewma is ~134), so
+>>     staying at big cpus (helps the score in this case)
+>>
+>> (the plots are interactive, you can zoom in with the icon 'Box Zoom')
+>> (e.g. you can zoom in the task activation plot which is also linked
+>> with the 'Util EST' on top, for this main task)
+>>
+>> You can see the util signal of that 'CrRendererMain' task and those
+>> utilization drops in time, which I was referring to. When the util
+>> drops below some threshold, the task might 'fit' into smaller CPU,
+>> which could be prevented automatically byt maintaining the util est
+>> for longer (but not for all).
+> 
+> I was looking at your nice chart and I wonder if you could also add
+> the runnable _avg of the tasks ?
 
-What the test does is to create three levels of cgroups, sets CPU
-quotas for them, runs bussy loop proceses in the groups and changes the
-quotas during the time the bussy processes runs.
+Yes, I will try today or tomorrow to add such plots as well.
 
-And the test is regression test for quite a few commits:
+> 
+> My 1st impression is that the decrease happens when your task starts
+> to share the CPU with some other tasks and this ends up with a
+> decrease of its utilization because util_avg doesn't take into account
+> the waiting time so typically task with an utilization of 1024, will
+> see its utilization decrease because of other tasks running on the
+> same cpu. This would explain the drop that you can see.
+> 
+>   I wonder if we should not take into account the runnable_avg when
+> applying the ewm on util_est ? so the util_est will not decrease
+> because of time sharing with other
 
-commit 39f23ce07b9355d05a64ae303ce20d1c4b92b957
-Author: Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed May 13 15:55:28 2020 +0200
-
-    sched/fair: Fix unthrottle_cfs_rq() for leaf_cfs_rq list
-
-
-commit b34cb07dde7c2346dec73d053ce926aeaa087303
-Author: Phil Auld <pauld@redhat.com>
-Date:   Tue May 12 09:52:22 2020 -0400
-
-    sched/fair: Fix enqueue_task_fair() warning some more
-
-commit fe61468b2cbc2b7ce5f8d3bf32ae5001d4c434e9
-Author: Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Fri Mar 6 14:52:57 2020 +0100
-
-    sched/fair: Fix enqueue_task_fair warning
-
-commit 5ab297bab984310267734dfbcc8104566658ebef
-Author: Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Fri Mar 6 09:42:08 2020 +0100
-
-    sched/fair: Fix reordering of enqueue/dequeue_task_fair()
-
-commit 6d4d22468dae3d8757af9f8b81b848a76ef4409d
-Author: Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon Feb 24 09:52:14 2020 +0000
-
-    sched/fair: Reorder enqueue/dequeue_task_fair path
-
-commit fdaba61ef8a268d4136d0a113d153f7a89eb9984
-Author: Rik van Riel <riel@surriel.com>
-Date:   Mon Jun 21 19:43:30 2021 +0200
-
-    sched/fair: Ensure that the CFS parent is added after unthrottling
+Yes, that sounds a good idea. Let me provide those plots so we could
+go further with the analysis. I will try to capture if that happens
+to that particular task on CPU (if there are some others as well).
 
 
-Unless this is a random corruption we should look closer at scheduller
-changes.
+Thanks for jumping in to the discussion!
 
--- 
-Cyril Hrubis
-chrubis@suse.cz
+Lukasz
