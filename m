@@ -2,91 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5704779E11F
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 09:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7033479E153
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 10:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234727AbjIMHtQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Sep 2023 03:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35246 "EHLO
+        id S238695AbjIMIAc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Sep 2023 04:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233874AbjIMHtP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 03:49:15 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDE2173E;
-        Wed, 13 Sep 2023 00:49:12 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 31DC26607319;
-        Wed, 13 Sep 2023 08:49:10 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1694591350;
-        bh=O9CO6wpscQ25gSXId4JSpQF3dW+cZrAGglKuHmq0w8k=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DUxO7fNLz9nzGjZFSrbleJZ3aZ1M9wGDs5FruQWelZUIqm9QzVtGjOrsS3aKb1Kys
-         OU+mz5kS52QwTZ7H4ykQRNqn5WZFhPS1xuNHgMnYKaO+as4K6eKUjWr3PZVdk2pRsi
-         6XKF35tyWHerWlJcW27H0QgbbP8CBd9rQG+JNcBL27zqwOpWiiUC0YWn3pZ9jtQd/p
-         hbCSfrTj9EfX7HvFaKcbvvpSj0+eJQod+cWjXEv3uZvyjf2jk+I0oWu++4QSuWVjjK
-         ZTGipyXoQjHxWG/zV8HBI+5q45rRdI+a4TlwWFrpWVJOAvsSCbPRO+vJzaZGqqaDp8
-         PQD9+1o/iWk1w==
-Message-ID: <e93aa8a6-e088-2864-6ffa-050b211be21f@collabora.com>
-Date:   Wed, 13 Sep 2023 09:49:08 +0200
+        with ESMTP id S238679AbjIMIAb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 04:00:31 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA72F1993
+        for <linux-pm@vger.kernel.org>; Wed, 13 Sep 2023 01:00:26 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-401d67434daso70452525e9.2
+        for <linux-pm@vger.kernel.org>; Wed, 13 Sep 2023 01:00:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694592025; x=1695196825; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/Kj5eZKkF+ZVKGS6KdoZl544DimPgkEdMytOlJF/XNw=;
+        b=jjriZRu+9ElAwdOZk8N2A7MfC0TaNfj5EdDxq67AsX9IC+NytY4i5FV8mscfRdBVTd
+         UMSL0BkHp603GqEZZKJ8qjTFx44fiUwZyQh7v3daAdHXfXlBCsjB7Y7ciRyx0nV1PqKT
+         eo8iUyDd29NE2V30KNi9jsSo1Y2+mbADJt5XVOq1uhDZpUp72GjFjoLBqxQdXZqFMkTq
+         EhQH0vSnXTZMC/1Do6np0avLqGjvnvnt0glEKxIDx/Swjx4Qdqg9EroOSgaSOqhLAY7n
+         ISxfClCYkteWxUbx86gS8VHO2HuTUZqum1Lg12wdm7YY4hhPOc7kGxLEdSqt3/f7jroZ
+         JybA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694592025; x=1695196825;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/Kj5eZKkF+ZVKGS6KdoZl544DimPgkEdMytOlJF/XNw=;
+        b=aA3gQSF7EOI1Pih15V9sXsuoGa8y6Pj7EPVZ6DPaRfHT7KdZXifw5uALslucNbsC+P
+         sYLvDCa+RE3Cg53QeQ98pvwoDg4euiNji5UOeHJm+6o4w+IcFfI0W+UDSg6lMx2Po+Jp
+         /3cSXzBEbnMxO1JHYNSroar+b3apsxPwY7pyfHXLzaz+oBgduGFl+5bwq8n0gRHygfS3
+         o9qO8iYS1S/tYXEM/sn2ea0BqJWnxvjSUBSXeFbvGKYSFuasLDIrcih7hXPEuetqf97z
+         CGZlGoFnSi7IzC/T+nVYKsEl2++SWQY9MXhfV0OvK/04Lbu8pjEY96nW9t1OxicYHphc
+         Wawg==
+X-Gm-Message-State: AOJu0YyR6jl5AjyLQCh0MU6jzZOCT8OZku19c6ldBqem25M6c2V2yWkh
+        IsFsWJOcuPSB6T8YVt/x2K07+g==
+X-Google-Smtp-Source: AGHT+IE4VAS+PKlGYPxo0qX4pXbrIRoc2X7YSFpIGuvpDfjts/D15qYoJwuunsFw7qPuhPOJuMJvVQ==
+X-Received: by 2002:a5d:4bca:0:b0:319:755c:3c1e with SMTP id l10-20020a5d4bca000000b00319755c3c1emr1502886wrt.11.1694592025323;
+        Wed, 13 Sep 2023 01:00:25 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.214.188])
+        by smtp.gmail.com with ESMTPSA id l16-20020adfa390000000b0031c5e9c2ed7sm4108785wrb.92.2023.09.13.01.00.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Sep 2023 01:00:24 -0700 (PDT)
+Message-ID: <667b6a4f-1d61-2788-6eeb-229a1b85141b@linaro.org>
+Date:   Wed, 13 Sep 2023 10:00:21 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.0
-Subject: Re: [RFC v1 1/3] dt-bindings: thermal: mediatek: add mt7988
- compatible
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
+Subject: Re: [PATCH v2 1/7] thermal: exynos: remove an unnecessary field
+ description
+Content-Language: en-US
+To:     Mateusz Majewski <m.majewski2@samsung.com>,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Daniel Golle <daniel@makrotopia.org>
-References: <20230911183354.11487-1-linux@fw-web.de>
- <20230911183354.11487-2-linux@fw-web.de>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230911183354.11487-2-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+References: <20230911133435.14061-1-m.majewski2@samsung.com>
+ <CGME20230911133611eucas1p286e43809a6ca785911c0bbdce15dc15d@eucas1p2.samsung.com>
+ <20230911133435.14061-2-m.majewski2@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230911133435.14061-2-m.majewski2@samsung.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 11/09/23 20:33, Frank Wunderlich ha scritto:
-> From: Frank Wunderlich <frank-w@public-files.de>
+On 11/09/2023 15:34, Mateusz Majewski wrote:
+> It seems that the field has been removed in one of the previous commits,
+> but the description has been forgotten.
 > 
-> Add compatible string for mt7988.
-> 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> Signed-off-by: Mateusz Majewski <m.majewski2@samsung.com>
 > ---
->   .../devicetree/bindings/thermal/mediatek,lvts-thermal.yaml       | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> index fe9ae4c425c0..49effe561963 100644
-> --- a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> @@ -18,6 +18,7 @@ description: |
->   properties:
->     compatible:
->       enum:
-> +      - mediatek,mt7988-lvts
 
-Are you sure that MT7988 has only one LVTS controller, and that it is global?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
->         - mediatek,mt8192-lvts-ap
->         - mediatek,mt8192-lvts-mcu
->         - mediatek,mt8195-lvts-ap
+Best regards,
+Krzysztof
 
