@@ -2,128 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7433C79E104
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 09:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5704779E11F
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 09:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233816AbjIMHmA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Sep 2023 03:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51454 "EHLO
+        id S234727AbjIMHtQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Sep 2023 03:49:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238634AbjIMHmA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 03:42:00 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA9C198A;
-        Wed, 13 Sep 2023 00:41:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694590916; x=1726126916;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=YEdJDHGJGKROfULQ3CMNlWxFjjk89LxF/g8t9X9uSQs=;
-  b=icekDOCw/avPzmbwsCWTvjE9sZSedS7WJtGwbXyDHfNKGgZOa18HrrbU
-   qCxwAGNCfB+zwVoRaYKhTC5iiu57uJGq2pBiWfN1Lf/K+b6UvHyo//15j
-   0eikmUwhsZRuGCm3JgU2DcQG1yryUSFF5ikiG1XRPkj+SuHR+mofQzkEd
-   FKr5P+TROVo8C+rWn9BWtux0uRXKPpVXClRqqYMlQJyxYDLUOUNAiD/DQ
-   Lde/tWDXaoubgEmqE4ApXrKPT1N5az65I7a3UkOvEOKjIEkV701v1Spf8
-   dKqUsOMeIUHYM1xJK/JAg/6NV20DhJDQYMfPWrHVV1b0u0ViZFhyH5lda
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="368859139"
-X-IronPort-AV: E=Sophos;i="6.02,142,1688454000"; 
-   d="scan'208";a="368859139"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 00:41:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="747208937"
-X-IronPort-AV: E=Sophos;i="6.02,142,1688454000"; 
-   d="scan'208";a="747208937"
-Received: from inlubt0316.iind.intel.com ([10.191.20.213])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Sep 2023 00:41:47 -0700
-From:   Raag Jadav <raag.jadav@intel.com>
-To:     rafael.j.wysocki@intel.com, len.brown@intel.com, pavel@ucw.cz,
-        Jonathan.Cameron@huawei.com, paul@crapouillou.net,
-        andriy.shevchenko@linux.intel.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mallikarjunappa.sangannavar@intel.com, bala.senthil@intel.com,
-        Raag Jadav <raag.jadav@intel.com>
-Subject: [RFC v1 2/2] PM: Update EXPORT_*_DEV_PM_OPS() to EXPORT_*_RUNTIME_PM_OPS()
-Date:   Wed, 13 Sep 2023 13:10:32 +0530
-Message-Id: <20230913074032.27927-3-raag.jadav@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230913074032.27927-1-raag.jadav@intel.com>
-References: <20230913074032.27927-1-raag.jadav@intel.com>
+        with ESMTP id S233874AbjIMHtP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 03:49:15 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDE2173E;
+        Wed, 13 Sep 2023 00:49:12 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 31DC26607319;
+        Wed, 13 Sep 2023 08:49:10 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1694591350;
+        bh=O9CO6wpscQ25gSXId4JSpQF3dW+cZrAGglKuHmq0w8k=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DUxO7fNLz9nzGjZFSrbleJZ3aZ1M9wGDs5FruQWelZUIqm9QzVtGjOrsS3aKb1Kys
+         OU+mz5kS52QwTZ7H4ykQRNqn5WZFhPS1xuNHgMnYKaO+as4K6eKUjWr3PZVdk2pRsi
+         6XKF35tyWHerWlJcW27H0QgbbP8CBd9rQG+JNcBL27zqwOpWiiUC0YWn3pZ9jtQd/p
+         hbCSfrTj9EfX7HvFaKcbvvpSj0+eJQod+cWjXEv3uZvyjf2jk+I0oWu++4QSuWVjjK
+         ZTGipyXoQjHxWG/zV8HBI+5q45rRdI+a4TlwWFrpWVJOAvsSCbPRO+vJzaZGqqaDp8
+         PQD9+1o/iWk1w==
+Message-ID: <e93aa8a6-e088-2864-6ffa-050b211be21f@collabora.com>
+Date:   Wed, 13 Sep 2023 09:49:08 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [RFC v1 1/3] dt-bindings: thermal: mediatek: add mt7988
+ compatible
+To:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Daniel Golle <daniel@makrotopia.org>
+References: <20230911183354.11487-1-linux@fw-web.de>
+ <20230911183354.11487-2-linux@fw-web.de>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230911183354.11487-2-linux@fw-web.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Rename EXPORT_*_DEV_PM_OPS() macros to EXPORT_*_RUNTIME_PM_OPS()
-and while at it, move them to pm_runtime.h.
-This is done in conjunction with the introduction of
-EXPORT_*_SIMPLE_PM_OPS() set of macros, to make things less confusing.
-This makes both _RUNTIME_ and _SIMPLE_ variants of export macros more
-distinguishable and self explanatory.
+Il 11/09/23 20:33, Frank Wunderlich ha scritto:
+> From: Frank Wunderlich <frank-w@public-files.de>
+> 
+> Add compatible string for mt7988.
+> 
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+>   .../devicetree/bindings/thermal/mediatek,lvts-thermal.yaml       | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+> index fe9ae4c425c0..49effe561963 100644
+> --- a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+> @@ -18,6 +18,7 @@ description: |
+>   properties:
+>     compatible:
+>       enum:
+> +      - mediatek,mt7988-lvts
 
-Signed-off-by: Raag Jadav <raag.jadav@intel.com>
----
- include/linux/pm.h         |  5 -----
- include/linux/pm_runtime.h | 13 +++++++++----
- 2 files changed, 9 insertions(+), 9 deletions(-)
+Are you sure that MT7988 has only one LVTS controller, and that it is global?
 
-diff --git a/include/linux/pm.h b/include/linux/pm.h
-index ae9b4f26d56a..9c6c2322ae5f 100644
---- a/include/linux/pm.h
-+++ b/include/linux/pm.h
-@@ -398,11 +398,6 @@ const struct dev_pm_ops name = { \
- #define _EXPORT_SIMPLE_PM_OPS(name, license, ns)	_PM_OPS(name, license, ns)
- #endif
- 
--#define EXPORT_DEV_PM_OPS(name)				_EXPORT_RUNTIME_PM_OPS(name, "", "")
--#define EXPORT_GPL_DEV_PM_OPS(name)			_EXPORT_RUNTIME_PM_OPS(name, "GPL", "")
--#define EXPORT_NS_DEV_PM_OPS(name, ns)			_EXPORT_RUNTIME_PM_OPS(name, "", #ns)
--#define EXPORT_NS_GPL_DEV_PM_OPS(name, ns)		_EXPORT_RUNTIME_PM_OPS(name, "GPL", #ns)
--
- #define EXPORT_SIMPLE_PM_OPS(name)			_EXPORT_SIMPLE_PM_OPS(name, "", "")
- #define EXPORT_GPL_SIMPLE_PM_OPS(name)			_EXPORT_SIMPLE_PM_OPS(name, "GPL", "")
- #define EXPORT_NS_DEV_SIMPLE_OPS(name, ns)		_EXPORT_SIMPLE_PM_OPS(name, "", #ns)
-diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-index 7c9b35448563..0b73b00bd59f 100644
---- a/include/linux/pm_runtime.h
-+++ b/include/linux/pm_runtime.h
-@@ -22,6 +22,11 @@
- 					    usage_count */
- #define RPM_AUTO		0x08	/* Use autosuspend_delay */
- 
-+#define EXPORT_RUNTIME_PM_OPS(name)			_EXPORT_RUNTIME_PM_OPS(name, "", "")
-+#define EXPORT_GPL_RUNTIME_PM_OPS(name)			_EXPORT_RUNTIME_PM_OPS(name, "GPL", "")
-+#define EXPORT_NS_RUNTIME_PM_OPS(name, ns)		_EXPORT_RUNTIME_PM_OPS(name, "", #ns)
-+#define EXPORT_NS_GPL_RUNTIME_PM_OPS(name, ns)		_EXPORT_RUNTIME_PM_OPS(name, "GPL", #ns)
-+
- /*
-  * Use this for defining a set of PM operations to be used in all situations
-  * (system suspend, hibernation or runtime PM).
-@@ -40,19 +45,19 @@
- 			   resume_fn, idle_fn)
- 
- #define EXPORT_RUNTIME_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
--	EXPORT_DEV_PM_OPS(name) = { \
-+	EXPORT_RUNTIME_PM_OPS(name) = { \
- 		RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
- 	}
- #define EXPORT_GPL_RUNTIME_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
--	EXPORT_GPL_DEV_PM_OPS(name) = { \
-+	EXPORT_GPL_RUNTIME_PM_OPS(name) = { \
- 		RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
- 	}
- #define EXPORT_NS_RUNTIME_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn, ns) \
--	EXPORT_NS_DEV_PM_OPS(name, ns) = { \
-+	EXPORT_NS_RUNTIME_PM_OPS(name, ns) = { \
- 		RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
- 	}
- #define EXPORT_NS_GPL_RUNTIME_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn, ns) \
--	EXPORT_NS_GPL_DEV_PM_OPS(name, ns) = { \
-+	EXPORT_NS_GPL_RUNTIME_PM_OPS(name, ns) = { \
- 		RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
- 	}
- 
--- 
-2.17.1
+>         - mediatek,mt8192-lvts-ap
+>         - mediatek,mt8192-lvts-mcu
+>         - mediatek,mt8195-lvts-ap
 
