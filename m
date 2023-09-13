@@ -2,160 +2,245 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E7279EE60
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 18:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB0B79EE68
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 18:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229472AbjIMQhA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Sep 2023 12:37:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51994 "EHLO
+        id S229518AbjIMQiq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Sep 2023 12:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjIMQg7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 12:36:59 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2045.outbound.protection.outlook.com [40.107.244.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432A3198B;
-        Wed, 13 Sep 2023 09:36:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e0DAi/fvriDpV4SuJVh0h/PU/VMxGgNgoDFyZzXtX34WQi6RuN4btaNYrd3sUkNjYf/mYcyoAfghkFlyjBRCNkdygFpHvvXPzxlRKkxqHvciOFXBtQNQRPxd0MLOdomLL1X1cuXD8trIrROYUMn2NqZ3k1hWG4HVJWqU1VqZsvSt0vt5YaB0M6l1zCPAvCiS/0FRmPg8xfc+0kXhO/MyzjQvjgoJWzcg1PnIqde1m6SbLKnkT5evO8cvIuWMB8/q0ZkQkJ9IvX2nsB9eP3Nmnjisg+wRyfYTTpWOJ7OGJbho355+XfjhTGV5L1qPHbO8mWrS+6Vseuhf8fFjmJyCJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hywa7xHlVikW9i+OB0PO6UJ6zcSXPrueDuDL8IE6hG8=;
- b=hLr+gLo9iyaZMJ1a8PIaxhON4l7lJslV7WL+MCAXEZJp2oSWIPLqRbj52st1ybLlvCjd6HaZXjs9Nrwi2j56xyYP/d0GAO3TnQq1zinl6nGQ1SNoxy4H0nWUrq3y/xmimNzy2KIQSFew9rdmA1Ulgpp6V/ZuDbBOOhahwPQ+aOzxtpy/Z9diVFqR1PLqT8T/QjXtCmIOI+rf1muglQSCSBZwFoq/Ka6hSkMeyKDvv9tEwzGKxuXWTCRHmKboS5zE3eaUVH9QFbQIsBXpc0y8r7xxa0IUK1lzDWQLAu0A9ZCLz9vmHfqLe5yHrJAlWshjRjJePsUTsAlKdE9RDhxGTA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hywa7xHlVikW9i+OB0PO6UJ6zcSXPrueDuDL8IE6hG8=;
- b=XUL6euHVQsHL0wI6pgMwUcsTI2w5WBc0GvzwWMvo7vlIfOqUT3n9N1MsQUkcTVcvVPfIHHfc2vo+2YdFr3Msodm2pLMacyMmtfxTfxTZpIshNG0ZB2r7Oz9/CJbFO/+9RIcL9HoR6QBk8G3IG854Oi7pgsvJtX7Nzx6xz9iPFf8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by PH8PR12MB7277.namprd12.prod.outlook.com (2603:10b6:510:223::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.33; Wed, 13 Sep
- 2023 16:36:50 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::36f9:ffa7:c770:d146]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::36f9:ffa7:c770:d146%7]) with mapi id 15.20.6768.029; Wed, 13 Sep 2023
- 16:36:50 +0000
-Message-ID: <76dfea89-e386-45e9-851c-8e87f9470c4f@amd.com>
-Date:   Wed, 13 Sep 2023 11:36:49 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v18 2/2] PCI: Add a quirk for AMD PCIe root ports w/ USB4
- controllers
-Content-Language: en-US
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        "open list:X86 PLATFORM DRIVERS" 
-        <platform-driver-x86@vger.kernel.org>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        linux-pm@vger.kernel.org,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        iain@orangesquash.org.uk
-References: <20230913040832.114610-1-mario.limonciello@amd.com>
- <20230913040832.114610-3-mario.limonciello@amd.com>
- <20230913042522.GB1359@wunner.de>
- <fd981219-d864-4c46-a348-61f73a9df596@amd.com>
- <20230913143128.GA29059@wunner.de>
-From:   Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <20230913143128.GA29059@wunner.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA9P223CA0010.NAMP223.PROD.OUTLOOK.COM
- (2603:10b6:806:26::15) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        with ESMTP id S229437AbjIMQip (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 12:38:45 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4BD5019B1;
+        Wed, 13 Sep 2023 09:38:41 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 042891FB;
+        Wed, 13 Sep 2023 09:39:18 -0700 (PDT)
+Received: from merodach.members.linode.com (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D8CB83F7C5;
+        Wed, 13 Sep 2023 09:38:38 -0700 (PDT)
+From:   James Morse <james.morse@arm.com>
+To:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev
+Cc:     x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        jianyong.wu@arm.com, justin.he@arm.com
+Subject: [RFC PATCH v2 00/35] ACPI/arm64: add support for virtual cpuhotplug
+Date:   Wed, 13 Sep 2023 16:37:48 +0000
+Message-Id: <20230913163823.7880-1-james.morse@arm.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|PH8PR12MB7277:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7bde4f6f-a128-46ce-9ac4-08dbb477a15f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dgShTSQ8sSri5DeYLozp7AnaAcnN0a5r2j2W5gODCPvC7pjyZuCWE0Wkoi4+yT/9VYSqASZnEVq02mM/V2C2JKVjT9PZvgX29p8QhSX5DZh28ucvOOaw6yaQOCZm2p3lCA7KgWIbke49wHgXKsMvzk4uwKSlB1c1tQwxAkhfq4qkJAjgiwrpeq7NoSCgElrNYVaW0GlJIO4Kmw2WXJZ1XL+aKrYIwfo9KxUU6g9Hkhuww1xGzV7jBi4p9ptXrmH6l/qeuSHizRsjqBv7pf+R/vg9bChuXfVBlSU6lwpqd0vOfL+spKtCL3ifaPFZ/Bnd2Zr2Wo9o6nlAd1neUHHhi7TEB1gifFma5hHeJH4iU+FEkI44EQZF9uW06p/vzqLeRvP2icPZ/6zNBaCrwoMmE/UOaP3vJcZV8pLL8L2skGFnzubxpjWO8HCDLi+3aw5E3L/1jMD/SpIzXe94kprS2y1JJyJM8+cyWeMxu72UAPA0eqioNCH7sf4idDhAGmh+zUX4LXkXqV45E5mAs/W54JhqUjvieBnKc42EyRHxcgQqe7TK1qFG7q8Uk6uOm0RMJZcVgFcTbGE9jmuLD+6ixHFpeL0i3S24dSyNZUwq9DzlmfiXU5GqqETEiYbmSmFzyQ0lT4kaEcaGY9DMcWjeNw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(39860400002)(396003)(366004)(136003)(376002)(451199024)(1800799009)(186009)(2616005)(31686004)(44832011)(5660300002)(8936002)(8676002)(4326008)(83380400001)(6486002)(6512007)(26005)(6506007)(53546011)(478600001)(66476007)(316002)(66946007)(6916009)(41300700001)(54906003)(66556008)(86362001)(31696002)(36756003)(2906002)(38100700002)(7416002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OE1mRk0rK2xLUGk2WmhEUEJ6bzBlYTBTMnhMcU5USVAya0xtWkhCb0dMY2g1?=
- =?utf-8?B?aElMVy96aWtUSDh5aGx1TC90TWszVnpEU2Z4SjFLbTZDaTVVYnJFcFR4YWdO?=
- =?utf-8?B?TUtSZG5ZMThtd0l5RXVkSUlVdmQyV1ZXcWp5Y3lQWGt0ejJ2WE4xVENsRGVX?=
- =?utf-8?B?TlU2TmlGVys2VEdYRjY1c1NlWkhSQUsrNWRkaXJRdnZFekJpbWFTeXl6NW1E?=
- =?utf-8?B?Nzc4dDJlQmJXS016dTZBejNhOFg2b3Rza2pmYUxMZmo4cmsxMmhXdWVvYUxP?=
- =?utf-8?B?ZzBCSWZBcUptSmJENTZlNitaOGJsMGJ0c3N2WmhJNTh1ZCtRZGh6ZHFrdFky?=
- =?utf-8?B?S0pIekxndm5ETHV6N0g4ektibFYzQytCZUdiOXZVeHVjRnZONkdZcUxQdXVo?=
- =?utf-8?B?dUN6S0V0Slc4REJxUWQrcGxPZEorQjJJVkVjeVl3VThJTVRRR1l5NzU1YlBs?=
- =?utf-8?B?eUI5Sm51VmoxZ1lkdUFzVHJLaXpnMEVIM20xU2JXbXJrKzJ6UC8xQThOLzZG?=
- =?utf-8?B?Wm1qc0UyZC9zaHlIcTI4bnZpQm9mNHA4emtPRGxGK251c0ZNc3V1MEpiSVB5?=
- =?utf-8?B?elhzRnJOUHNBODVjUU4vYlpPVEo1MW5FNWxLQ0JJRS9xMzdTK1F1Wkxqa2V1?=
- =?utf-8?B?TWRrd3hYQ0xsbjBKZDI3VWxWbG41QXRKa2ZuQlUzeFlhM2w0cWVNNEFrTjRY?=
- =?utf-8?B?dUFGMGFrQXVGSU9BeW5xZFhEeWhPM29Qb0psRzZMTTNpMlNIbnBaN1l3ZkFH?=
- =?utf-8?B?WjVVcDk4QVZNK08vTWJHS3dEUjlYVWh1NnZFWVB4K0lya3l0by9Xakcva3o3?=
- =?utf-8?B?cjZ4ekdYZm1sOHp6dStSMEpvSGZrS01oNzhNd0dMZ0EwMWdsRW9pM1piY2tZ?=
- =?utf-8?B?RjM0cHFaRXNuRDJIYzJhemlWbTByNDZpNHlBUlFkNk43d1hHMFd5Q2JLV2ZD?=
- =?utf-8?B?MGowSURDSEhoOHAvOUVOMzFwYTlCNU0ySXFIRUFsZU1JU1VVZkFNU25TbnZP?=
- =?utf-8?B?aHczdzVGejk0WDhGclpidDNYdGx3VGxsTldpd1dSeDFCZyt3blkzZUYyVGZS?=
- =?utf-8?B?Yk5MODlrQlVkVVhsZk9KWHRodWhuNG10SzZjQTZHa0l3Y2xpaHZtVU9zdDJt?=
- =?utf-8?B?RHZ4ZDJKejlMN0dNMjIwTmxlYlgyeVJrWk0wQWxyOEI3MjI4cElVZTlPZjJw?=
- =?utf-8?B?ZyticEtXUm1KaktGZFU0YzBDNXdLNmFYNWJ1TDZTbkxDWXozYnJSalE1WUEr?=
- =?utf-8?B?MzdPdXBHT0lSQWk5dWZMYm1mdzhsU2RwQkhBYzZZd2d3QnZHSkVvUENXSUQ1?=
- =?utf-8?B?eUNiQjlybFpDUG4vajhxZld0aUpLQkVhek9TRWZZRVhqOVQ0N2xTbGdNRTl6?=
- =?utf-8?B?WXNHVlBBTTk2cE9kN3BVWjZmUW1tRTlQeVZoTXp1all2dzFnSXFFOGVYeTB6?=
- =?utf-8?B?elZtdjdnaUpVY09NSE9qeVpQSWhrOSsreForWnAvdjUvV2RsMFZQQXhFTTJa?=
- =?utf-8?B?ckd2WjNIUDE5c01QdDFSZFJYeFdQaHB2Z0hjcTBFd3ZpY1R3Q3R5OFhGeUhT?=
- =?utf-8?B?VHVucEJ3MkVCQkxnZGJ5czZKTTV6blA0S20vaTYzdWcyRVl4MFVYMUVqZGFE?=
- =?utf-8?B?UFRCUERxdXAwbi9rMTgvMXhlWklDUEN2ZXcza0V1QW93clJjRVRXLzUvdmlF?=
- =?utf-8?B?ckxTUnlMeEN5bnF1RU5EMUpjOXhjMytyd1gwdW5yUjdidzdnMWdicW1LRVJa?=
- =?utf-8?B?TUt6VlBoZWFjMW5la0szTUFiQWs3YU1WWmY3T1N0Q3YrcnpDZ3o2Y0d0eTdi?=
- =?utf-8?B?US9MU0R2UENHclhvUHJKRGU3aElMZWRIeHJya2xrTVIxcmpiMHc4WUxUVXZG?=
- =?utf-8?B?K09RazR0cnVzeWVYWnMvekNCdVJGKzN2TGNCVEVqY1BKc2hadlN4citiNDZs?=
- =?utf-8?B?bjRvMm8yVnFJMU4vNFhqNlR0cCtiNUxaekR2Y21TVHVuREI4T1M1M3dMMlhH?=
- =?utf-8?B?eUYwMElWWHFrV3p6OEF3R3NRK1daNHpURTdyMGRUVkhycmE5RWp5MVltUDAz?=
- =?utf-8?B?Q0l6MHA1aGhWOWh3d3liZjRoRUV0cUdmOGovUHBZYXd2ZjJCdVlwbjFDczlS?=
- =?utf-8?Q?qATraCguSlgzaaEz5PPkDxKJS?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7bde4f6f-a128-46ce-9ac4-08dbb477a15f
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2023 16:36:50.6423
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zy7mo1ca6SIBbg4di8Y30opLBIncgZ5fKVUkrObCu79KcrHL/gjM9DhL7joXZcojq8IkYPp5SX5D1pb1hncVCw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7277
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 9/13/2023 09:31, Lukas Wunner wrote:
-> On Tue, Sep 12, 2023 at 11:43:53PM -0500, Mario Limonciello wrote:
->> On 9/12/2023 23:25, Lukas Wunner wrote:
->>> There's already PCI_DEV_FLAGS_NO_D3, would it be possible to just
->>> reuse that instead of adding another codepath for D3 quirks?
->>>
->>
->> The root port can handle D3 (including wakeup) at runtime fine.
->> Issue occurs only during s2idle w/ hardware sleep.
-> 
-> I see.
-> 
-> If this only affects system sleep, not runtime PM, what you can do is
-> define a DECLARE_PCI_FIXUP_SUSPEND_LATE() which calls pci_d3cold_disable()
-> and also define a DECLARE_PCI_FIXUP_CLASS_RESUME_EARLY() which calls
-> pci_d3cold_enable().
-> 
-> And I think you can make those calls conditional on pm_suspend_no_platform()
-> to constrain to s2idle.
-> 
-> User space should still be able to influence runtime PM via the
-> d3cold_allowed flag (unless I'm missing something).
-> 
-> Thanks,
-> 
-> Lukas
+Hello!
 
-The part you're missing is that D3hot is affected by this issue too, 
-otherwise it would be a good proposal.
+Changes since RFC-v1:
+ * riscv is new, ia64 is gone
+ * The KVM support is different, and upstream - no need to patch the host.
+
+---
+
+This series adds what looks like cpuhotplug support to arm64 for use in
+virtual machines. It does this by moving the cpu_register() calls for
+architectures that support ACPI out of the arch code by using
+GENERIC_CPU_DEVICES, then into the ACPI processor driver.
+
+The kubernetes folk really want to be able to add CPUs to an existing VM,
+in exactly the same way they do on x86. The use-case is pre-booting guests
+with one CPU, then adding the number that were actually needed when the
+workload is provisioned.
+
+Wait? Doesn't arm64 support cpuhotplug already!?
+In the arm world, cpuhotplug gets used to mean removing the power from a CPU.
+The CPU is offline, and remains present. For x86, and ACPI, cpuhotplug
+has the additional step of physically removing the CPU, so that it isn't
+present anymore.
+
+Arm64 doesn't support this, and can't support it: CPUs are really a slice
+of the SoC, and there is not enough information in the existing ACPI tables
+to describe which bits of the slice also got removed. Without a reference
+machine: adding this support to the spec is a wild goose chase.
+
+Critically: everything described in the firmware tables must remain present.
+
+For a virtual machine this is easy as all the other bits of 'virtual SoC'
+are emulated, so they can (and do) remain present when a vCPU is 'removed'.
+
+On a system that supports cpuhotplug the MADT has to describe every possible
+CPU at boot. Under KVM, the vGIC needs to know about every possible vCPU before
+the guest is started.
+With these constraints, virtual-cpuhotplug is really just a hypervisor/firmware
+policy about which CPUs can be brought online.
+
+This series adds support for virtual-cpuhotplug as exactly that: firmware
+policy. This may even work on a physical machine too; for a guest the part of
+firmware is played by the VMM. (typically Qemu).
+
+PSCI support is modified to return 'DENIED' if the CPU can't be brought
+online/enabled yet. The CPU object's _STA method's enabled bit is used to
+indicate firmware's current disposition. If the CPU has its enabled bit clear,
+it will not be registered with sysfs, and attempts to bring it online will
+fail. The notifications that _STA has changed its value then work in the same
+way as physical hotplug, and firmware can cause the CPU to be registered some
+time later, allowing it to be brought online.
+
+This creates something that looks like cpuhotplug to user-space, as the sysfs
+files appear and disappear, and the udev notifications look the same.
+
+One notable difference is the CPU present mask, which is exposed via sysfs.
+Because the CPUs remain present throughout, they can still be seen in that mask.
+This value does get used by webbrowsers to estimate the number of CPUs
+as the CPU online mask is constantly changed on mobile phones.
+
+Linux is tolerant of PSCI returning errors, as its always been allowed to do
+that. To avoid confusing OS that can't tolerate this, we needed an additional
+bit in the MADT GICC flags. This series copies ACPI_MADT_ONLINE_CAPABLE, which
+appears to be for this purpose, but calls it ACPI_MADT_GICC_CPU_CAPABLE as it
+has a different bit position in the GICC.
+
+This code is unconditionally enabled for all ACPI architectures.
+If there are problems with firmware tables on some devices, the CPUs will
+already be online by the time the acpi_processor_make_enabled() is called.
+A mismatch here causes a firmware-bug message and kernel taint. This should
+only affect people with broken firmware who also boot with maxcpus=1, and
+bring CPUs online later.
+
+I had a go at switching the remaining architectures over to GENERIC_CPU_DEVICES,
+so that the Kconfig symbol can be removed, but I got stuck with powerpc
+and s390.
+
+I've only build tested Loongarch and riscv. I've removed the ia64 specific
+patches, but left the changes in other patches to make git-grep review of
+renames easier.
+
+If folk want to play along at home, you'll need a copy of Qemu that supports this.
+https://github.com/salil-mehta/qemu.git salil/virt-cpuhp-armv8/rfc-v2-rc6
+
+Replace your '-smp' argument with something like:
+| -smp cpus=1,maxcpus=3,cores=3,threads=1,sockets=1
+
+then feed the following to the Qemu montior;
+| (qemu) device_add driver=host-arm-cpu,core-id=1,id=cpu1
+| (qemu) device_del cpu1
+
+
+Why is this still an RFC? I'm still looking for confirmation from the
+kubernetes/kata folk that this works for them. Because of this I've culled
+the CC list...
+
+
+This series is based on v6.6-rc1, and can be retrieved from:
+https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/ virtual_cpu_hotplug/rfc/v2
+
+
+Thanks,
+
+James Morse (34):
+  ACPI: Move ACPI_HOTPLUG_CPU to be disabled on arm64 and riscv
+  drivers: base: Use present CPUs in GENERIC_CPU_DEVICES
+  drivers: base: Allow parts of GENERIC_CPU_DEVICES to be overridden
+  drivers: base: Move cpu_dev_init() after node_dev_init()
+  drivers: base: Print a warning instead of panic() when register_cpu()
+    fails
+  arm64: setup: Switch over to GENERIC_CPU_DEVICES using
+    arch_register_cpu()
+  x86: intel_epb: Don't rely on link order
+  x86/topology: Switch over to GENERIC_CPU_DEVICES
+  LoongArch: Switch over to GENERIC_CPU_DEVICES
+  riscv: Switch over to GENERIC_CPU_DEVICES
+  arch_topology: Make register_cpu_capacity_sysctl() tolerant to late
+    CPUs
+  ACPI: Use the acpi_device_is_present() helper in more places
+  ACPI: Rename acpi_scan_device_not_present() to be about enumeration
+  ACPI: Only enumerate enabled (or functional) devices
+  ACPI: processor: Add support for processors described as container
+    packages
+  ACPI: processor: Register CPUs that are online, but not described in
+    the DSDT
+  ACPI: processor: Register all CPUs from acpi_processor_get_info()
+  ACPI: Rename ACPI_HOTPLUG_CPU to include 'present'
+  ACPI: Move acpi_bus_trim_one() before acpi_scan_hot_remove()
+  ACPI: Rename acpi_processor_hotadd_init and remove pre-processor
+    guards
+  ACPI: Add post_eject to struct acpi_scan_handler for cpu hotplug
+  ACPI: Check _STA present bit before making CPUs not present
+  ACPI: Warn when the present bit changes but the feature is not enabled
+  drivers: base: Implement weak arch_unregister_cpu()
+  LoongArch: Use the __weak version of arch_unregister_cpu()
+  arm64: acpi: Move get_cpu_for_acpi_id() to a header
+  ACPICA: Add new MADT GICC flags fields [code first?]
+  arm64, irqchip/gic-v3, ACPI: Move MADT GICC enabled check into a
+    helper
+  irqchip/gic-v3: Don't return errors from gic_acpi_match_gicc()
+  irqchip/gic-v3: Add support for ACPI's disabled but 'online capable'
+    CPUs
+  ACPI: add support to register CPUs based on the _STA enabled bit
+  arm64: document virtual CPU hotplug's expectations
+  ACPI: Add _OSC bits to advertise OS support for toggling CPU
+    present/enabled
+  cpumask: Add enabled cpumask for present CPUs that can be brought
+    online
+
+Jean-Philippe Brucker (1):
+  arm64: psci: Ignore DENIED CPUs
+
+ Documentation/arch/arm64/cpu-hotplug.rst   |  79 ++++++++++
+ Documentation/arch/arm64/index.rst         |   1 +
+ arch/arm64/Kconfig                         |   1 +
+ arch/arm64/include/asm/acpi.h              |  11 ++
+ arch/arm64/include/asm/cpu.h               |   1 -
+ arch/arm64/kernel/acpi_numa.c              |  11 --
+ arch/arm64/kernel/psci.c                   |   2 +-
+ arch/arm64/kernel/setup.c                  |  13 +-
+ arch/arm64/kernel/smp.c                    |   5 +-
+ arch/ia64/Kconfig                          |   2 +
+ arch/ia64/include/asm/acpi.h               |   2 +-
+ arch/ia64/include/asm/cpu.h                |   5 -
+ arch/ia64/kernel/acpi.c                    |   6 +-
+ arch/ia64/kernel/setup.c                   |   2 +-
+ arch/ia64/kernel/topology.c                |   2 +-
+ arch/loongarch/Kconfig                     |   2 +
+ arch/loongarch/configs/loongson3_defconfig |   2 +-
+ arch/loongarch/kernel/acpi.c               |   4 +-
+ arch/loongarch/kernel/topology.c           |  38 +----
+ arch/riscv/Kconfig                         |   1 +
+ arch/riscv/kernel/setup.c                  |  19 +--
+ arch/x86/Kconfig                           |   3 +
+ arch/x86/include/asm/cpu.h                 |   6 -
+ arch/x86/kernel/acpi/boot.c                |   4 +-
+ arch/x86/kernel/cpu/intel_epb.c            |   2 +-
+ arch/x86/kernel/topology.c                 |  25 +---
+ drivers/acpi/Kconfig                       |  14 +-
+ drivers/acpi/acpi_processor.c              | 160 ++++++++++++++++-----
+ drivers/acpi/bus.c                         |  16 +++
+ drivers/acpi/device_pm.c                   |   2 +-
+ drivers/acpi/device_sysfs.c                |   2 +-
+ drivers/acpi/internal.h                    |   1 -
+ drivers/acpi/processor_core.c              |   2 +-
+ drivers/acpi/property.c                    |   2 +-
+ drivers/acpi/scan.c                        | 147 ++++++++++++-------
+ drivers/base/arch_topology.c               |  38 +++--
+ drivers/base/cpu.c                         |  40 ++++--
+ drivers/base/init.c                        |   2 +-
+ drivers/firmware/psci/psci.c               |   2 +
+ drivers/irqchip/irq-gic-v3.c               |  38 ++---
+ include/acpi/acpi_bus.h                    |   1 +
+ include/acpi/actbl2.h                      |   1 +
+ include/acpi/processor.h                   |   2 +-
+ include/linux/acpi.h                       |  14 +-
+ include/linux/cpu.h                        |   6 +
+ include/linux/cpumask.h                    |  25 ++++
+ kernel/cpu.c                               |   3 +
+ 47 files changed, 516 insertions(+), 251 deletions(-)
+ create mode 100644 Documentation/arch/arm64/cpu-hotplug.rst
+
+-- 
+2.39.2
+
