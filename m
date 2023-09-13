@@ -2,87 +2,177 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA46F79E1F8
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 10:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F3479E22D
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 10:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238766AbjIMIYh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Sep 2023 04:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60156 "EHLO
+        id S238930AbjIMIb6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Sep 2023 04:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238694AbjIMIYh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 04:24:37 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00947198E
-        for <linux-pm@vger.kernel.org>; Wed, 13 Sep 2023 01:24:32 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-31c7912416bso6939150f8f.1
-        for <linux-pm@vger.kernel.org>; Wed, 13 Sep 2023 01:24:32 -0700 (PDT)
+        with ESMTP id S238913AbjIMIb5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 04:31:57 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0850199B
+        for <linux-pm@vger.kernel.org>; Wed, 13 Sep 2023 01:31:53 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2bfb1167277so15193091fa.2
+        for <linux-pm@vger.kernel.org>; Wed, 13 Sep 2023 01:31:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694593471; x=1695198271; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ggBtgbLm5SRuIxjEQCR6fuKEBJ2k5vc95TNuMoN5/ZQ=;
-        b=DDaOo+qw7hHbp4PDorXm6rDfWBnPLe9yv8JtiqRd0/wmNz0sA2YMq8xcsRog8qalC3
-         PsF6U3EBmt5RPXDOGLiYmNmDMiZUKEau0BNorIJZaBnXDzNPDpo2xuXyLdnu8wywxu+E
-         pNo10dXTbvsi/e3yKeBV5IfD8M9r3kVHA9QsmA7Fg2Nr6ELTZO1O7UKSPTp8UtEtgYE8
-         pilvmSKP0uEsdl+ILmtT+SgTlhEOvj4YFRam8nuu7ilQZupT7U1/AeiNFevRFlKmAv7J
-         T1d2kZSLXnHNzXL9M8jxAWHwnaEmMBRlZkg7GUeiT/vc9//HIJRqmrJNa8u/j6jOtJMG
-         /Y3Q==
+        d=linaro.org; s=google; t=1694593912; x=1695198712; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=/fV9qh2c8oVm1pKivt47UMLiB1/YyxBVKUII8eUOWbE=;
+        b=oZQMjOTGqOiBks4v46AUoi6NDa1KrIlUpCq/hPTT1MmlvtvTLUvaQBJ0wsaaMwbi5n
+         hq0jzP5gBJWhuqbswlf1YbfgSyZMvk9zXJYAms+llXrFP4ZJovhpS3nPICfzBmXe6mXT
+         EvW9dsz270aRSpcAU53vRvaOBSo78Vsf43L3Lf6PeJU+VlBl54jYdDnffa9rZ6PnWWSv
+         XMo3FEy964WFINxXqVFuIpmsSCzj382TSQnqCdkrauU6PlHV+UA4B65iUg4lB1RD1Hy7
+         mbQ+v3StxZGfqQLy2fo7/AkSiPH0RCLGVHZOFDqvWZRK9J9ltS0uBUhkpMXJ7+05OL5S
+         2BqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694593471; x=1695198271;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ggBtgbLm5SRuIxjEQCR6fuKEBJ2k5vc95TNuMoN5/ZQ=;
-        b=hdYh74QVkennnPaRgwra4mTVtcPlrtZC+/Qb9Bm2oMcfeJd2R8uw2XC9k/WUJ9v4Zx
-         JWrWkEo5zVqpawGd4+N5hUPpVTrKh6k/1Hh0hk55Noy/Dzw5XJibdc8TYlb+odOYWJpv
-         3SlXt+cK4r7oHu3A3nsbvxO8O6W/X9uNm01PBkmcBqb2pbShqj1izJad1npuk2jDrFJt
-         5BBJO58m7ZGo3e8QTZXTiAIBVjr4HLUK5r/5ZAiEUL7SsxKbgOuyls0XIazmEaAZwyum
-         V+OAIEJVDOoHiYU4sTIgJkUJCgGrbv1EVhzEEU46KTJGj3duelcAzcKCpw7c6V45zkvP
-         UbOA==
-X-Gm-Message-State: AOJu0YyNpmsKBY/VhuV+eTEfn2x4Cz1/eQVJJmy3ULatGQEOVycIxD7+
-        FoqKTMcQDMPfCHN5X0ITlGs8j94vbNWLtWOuTo0=
-X-Google-Smtp-Source: AGHT+IFXabWAiPieo98hnbDGr9uxhTqkqa82VC7vCktG6bVMPMlapg+rIO/G/+Q7tHCURas6Bl2+Lg==
-X-Received: by 2002:a05:6000:1a54:b0:317:6470:3271 with SMTP id t20-20020a0560001a5400b0031764703271mr1425384wry.45.1694593471335;
-        Wed, 13 Sep 2023 01:24:31 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.214.188])
-        by smtp.gmail.com with ESMTPSA id z12-20020a1c4c0c000000b003fee6e170f9sm1274208wmf.45.2023.09.13.01.24.29
+        d=1e100.net; s=20230601; t=1694593912; x=1695198712;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/fV9qh2c8oVm1pKivt47UMLiB1/YyxBVKUII8eUOWbE=;
+        b=pFfoe3aYUAQ9CuRdVplbHFhPLvNgQabd81q5SqTjesCP+OgFaoGJA4CCnaMp2OqyH/
+         +PJMnVK8oWah9PvEdWYcNv+OwKXR8oJ6/oGtDdk1CkAADuR3gW7NJIEMdEchBZet3L2b
+         kvNY4y47DX31+hz60QKndsralkQsgSNiV8zZpN4KwI+ydPmQBpVYNPiS7vTcvbh8Zdxb
+         Mw66DdyChRF/KDjb9Ty83+TNKDbQp0WdsbMOEdEi8c0KTS9/yTLtmDbK5e0ijs6bgsyi
+         LfX6BH8F9RN2qBWvIYiGc2tnfRHGuztxXInzuWaGfOsWc6cwfCQCxqImBIFGsX8MAwcF
+         FRtA==
+X-Gm-Message-State: AOJu0Ywq76CBAhIpNK2jAjZzO/P0aYdeRh/nt8885bafT7RNVN5s1RpE
+        WRNGO90JepLtJXr5lQB80mTxDw==
+X-Google-Smtp-Source: AGHT+IHETiP36DYc5WwbiejX2cRFqqVKi2cd44OEfzhFjfmB6ZRMSIqwBkzJiyYFJQFQ3IkHzKKR+w==
+X-Received: by 2002:a2e:8696:0:b0:2b9:f13b:613c with SMTP id l22-20020a2e8696000000b002b9f13b613cmr1844262lji.2.1694593911936;
+        Wed, 13 Sep 2023 01:31:51 -0700 (PDT)
+Received: from [192.168.37.232] (178235177106.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.106])
+        by smtp.gmail.com with ESMTPSA id h10-20020a1709063b4a00b009737b8d47b6sm7920036ejf.203.2023.09.13.01.31.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Sep 2023 01:24:30 -0700 (PDT)
-Message-ID: <793f87d4-129c-33bc-38dd-b4b2c93dd241@linaro.org>
-Date:   Wed, 13 Sep 2023 10:24:28 +0200
+        Wed, 13 Sep 2023 01:31:51 -0700 (PDT)
+Message-ID: <ffc58838-c306-49f3-a90a-95b2cf02ae3d@linaro.org>
+Date:   Wed, 13 Sep 2023 10:31:49 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: interconnect: Add compatibles for
- SDX75
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/53] icc-rpmh multi-RSC voting groundwork
+To:     Mike Tipton <quic_mdtipton@quicinc.com>
+Cc:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230708-topic-rpmh_icc_rsc-v1-0-b223bd2ac8dd@linaro.org>
+ <c067a45f-9629-d516-9e56-36538e4ff6db@kernel.org>
+ <20230807215739.GA9621@hu-mdtipton-lv.qualcomm.com>
+ <10520827-dc01-475c-b09a-35cefc9e0a62@linaro.org>
+ <20230913012951.GA19284@hu-mdtipton-lv.qualcomm.com>
 Content-Language: en-US
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, djakov@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@quicinc.com
-References: <1694513046-24064-1-git-send-email-quic_rohiagar@quicinc.com>
- <1694513046-24064-2-git-send-email-quic_rohiagar@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1694513046-24064-2-git-send-email-quic_rohiagar@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <20230913012951.GA19284@hu-mdtipton-lv.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/09/2023 12:04, Rohit Agarwal wrote:
-> Add dt-bindings compatibles and interconnect IDs for
-> Qualcomm SDX75 platform.
+On 13.09.2023 03:29, Mike Tipton wrote:
+> On Wed, Sep 06, 2023 at 02:14:14PM +0200, Konrad Dybcio wrote:
+>>> The general idea is that we could use tags for this. So, instead of...
+>>>
+>>>   path = icc_get(dev, MASTER_MDP_DISP, SLAVE_EBI1_DISP);
+>>>
+>>> it would be...
+>>>
+>>>   path = icc_get(dev, MASTER_MDP, SLAVE_EBI1);
+>>>   icc_set_tag(path, QCOM_ICC_TAG_VOTER_DISP);
+>>>
+>>> I have an early prototype with basic testing already. I can hopefully
+>>> clean it up and post for review in the next couple of weeks.
+>> I was initially not very happy with this approach (overloading tags
+>> with additional information), but it grew on me over time.
+>>
+>> My only concern is that if we reserve say bits 16-31 for path tags
+>> (remember, dt-bindings are ABI), we may eventually run out of them.
 > 
-> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
-> ---
+> The voter tags wouldn't require bitmasks like the bucket tags do. We'd
+> just need an integer for each voter shifted into the proper position in
+> the tag value. Thus, reserving N bits for the voters would give us 2**N
+> voters, which should be plenty. For example:
+> 
+>   #define QCOM_ICC_VOTERS_START           16
+>   #define QCOM_ICC_VOTERS_END             23
+> 
+>   #define QCOM_ICC_TAG_VOTER_HLOS         (0 << QCOM_ICC_VOTERS_START)
+>   #define QCOM_ICC_TAG_VOTER_DISP         (1 << QCOM_ICC_VOTERS_START)
+>   #define QCOM_ICC_TAG_VOTER_CAM_IFE_0    (2 << QCOM_ICC_VOTERS_START)
+>   #define QCOM_ICC_TAG_VOTER_CAM_IFE_1    (3 << QCOM_ICC_VOTERS_START)
+>   #define QCOM_ICC_TAG_VOTER_CAM_IFE_2    (4 << QCOM_ICC_VOTERS_START)
+> 
+> The applicable voters should likely be defined in the target-specific
+> headers, rather than the common qcom,icc.h. The bit range used for them
+> could be common, but each target may only support a small subset of the
+> total set of possible voters across all targets.
+I'm not sure how client drivers would then choose the
+correct path other than
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+switch (soc) {
+case 8450:
+	tag = QCOM_ICC_TAG_VOTER_8450_HLOS;
+	break;
+case 8550:
+	tag = QCOM_ICC_TAG_VOTER_8550_HLOS;
+	break;
+...
+}
 
-Best regards,
-Krzysztof
+which would be unacceptable.
 
+ 
+> Clients requiring multiple voters for the same logical path should be
+> rare. On the off-chance they require that, they could just request the
+> same path multiple times with different voter tags applied and call
+> icc_set_bw() for each of them separately.
+> 
+> I'm back from travel and vacation and plan to pick this up again soon.
+Happy to hear that!
+
+Konrad
