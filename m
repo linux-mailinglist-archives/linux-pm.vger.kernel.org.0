@@ -2,248 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD96079DEAD
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 05:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2B579DF0C
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 06:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235335AbjIMDfI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Sep 2023 23:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57512 "EHLO
+        id S238517AbjIMEKG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Sep 2023 00:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238239AbjIMDfH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Sep 2023 23:35:07 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EBE4125;
-        Tue, 12 Sep 2023 20:35:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694576103; x=1726112103;
-  h=date:from:to:cc:subject:message-id;
-  bh=90FmCyi1Q2PovpibgXlT6qJXNlkGDtokH1mRWc4hC5A=;
-  b=c2gyJR0ziTMpcE1ge0Lv/PzYsnuUDg8N69eXphtbqG00rjxiAsvwAmVJ
-   YVqtAckENJqS4y2OfS7ljA8FhcfMVL8jFyPZKXd3sBKSXNQ6XIabLaNfq
-   TxL644sDqd2ahr5Gq1e1oM4ExAbUDe/tCWXGcT/YCfrA3KaqUU1Zkjxmc
-   bfwTavjByB5Uc2gZ+xjJsP94sSjNPCDDl4rXnqCE3BP1FYBem5UyBpv++
-   orgyYJbfEGpIVGr4TNfnAUFaAHMmH/n1d2oRUi01F1tmqUpQpAKReLpGL
-   kX42G/pgus4hHwZtA9DGTN7YT86QExWqi6XRZz7ObHs5km7DJxPLwAkes
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="381254822"
-X-IronPort-AV: E=Sophos;i="6.02,142,1688454000"; 
-   d="scan'208";a="381254822"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 20:35:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="917677140"
-X-IronPort-AV: E=Sophos;i="6.02,142,1688454000"; 
-   d="scan'208";a="917677140"
-Received: from lkp-server02.sh.intel.com (HELO e6439d5ea182) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 12 Sep 2023 20:35:01 -0700
-Received: from kbuild by e6439d5ea182 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qgGeZ-000022-0K;
-        Wed, 13 Sep 2023 03:34:59 +0000
-Date:   Wed, 13 Sep 2023 11:34:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- e7c8ca758515814f08cd2e1cbb718d16264f99a1
-Message-ID: <202309131110.7GkOIGw6-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+        with ESMTP id S238355AbjIMEJO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 00:09:14 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2041.outbound.protection.outlook.com [40.107.92.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7E2A8;
+        Tue, 12 Sep 2023 21:09:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=A1NfeAg5xYeUGvzyZMhG27pJShUeJrxbXEoYUS0xMpeyasF0WPNxjRapzqSnkmVthtRkT5ifa7XYXAxkI9veT30bAglma64QO5IB/ZgKZlE9gcrUYw+9aB1N958a+ecv5azROpMj1+2S4ia/yGhCWFozUFWrbV3HHuCXEs7SOeKx01qEzYxkzJcOTZvNiiRwOqyACqPpmdRy6USesrZG9H/02ABFEAgcv5ZF5Xtf7aOWk9LDTYH6PwAUPdKYowisEtOwD46tqYQ9pur/oAdt96f3czerL8zmu2Y4OJVX8cBFN29qHkfekuTYOYN5aU+vpYoCytqtJK7edlimQUlcYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=co05OyDJ5rrh0aNDPlIvWZjbDGN87E+41XO3D6jAviI=;
+ b=OvpiaI3R2pUjmUVMVE37cBIYRlJ31RLNJ/eSRFMQKs/pWRG0jLA8wuiyPxh9+95A5lcsDpHaZ0Udb0b/tKQAsCqOjGDIMws2eyfdem84DuQNEI5GS8DJIvb4XCLV62bEUdmTY7MEWrgy2nimkt9Z5mkszLUCdJOnogUckWueCv30TNA2zxU1AFRDdvVJfZ2QFirNtVGCZTlUn3z243xSoMpKJj+46EoHjj3wL74dCRxvJnj6FE/Y3Kkcxc9nx2hu65u6k0Fqzv32UeVnknxJTm74eloTAjv1cAqFkKpvEs/RpcmqoPEVJoQFPX68wn64iRn02CIux7uGqxr7eOPhmQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=temperror (sender ip
+ is 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com;
+ dmarc=temperror action=none header.from=amd.com; dkim=none (message not
+ signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=co05OyDJ5rrh0aNDPlIvWZjbDGN87E+41XO3D6jAviI=;
+ b=FMy0tV/bfaCofx5mU0WGS3ClzJG7YFTCFmWRB0gGozzSVM8vu14i4v/IrsOTc81mwfwJl8f00GOvaSJW6lIRMPRF4zpJzONSBOqTqVt7WI+1VdAWOjGurirCKVMIaGPgfeZ9LvSQrl8/2wlXCtYh1uM32P20WXLN5PUErFJsWKg=
+Received: from BL1PR13CA0141.namprd13.prod.outlook.com (2603:10b6:208:2bb::26)
+ by BY5PR12MB5016.namprd12.prod.outlook.com (2603:10b6:a03:1c5::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.19; Wed, 13 Sep
+ 2023 04:08:59 +0000
+Received: from BL02EPF0001A107.namprd05.prod.outlook.com
+ (2603:10b6:208:2bb:cafe::b6) by BL1PR13CA0141.outlook.office365.com
+ (2603:10b6:208:2bb::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.17 via Frontend
+ Transport; Wed, 13 Sep 2023 04:08:58 +0000
+X-MS-Exchange-Authentication-Results: spf=temperror (sender IP is
+ 165.204.84.17) smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=temperror action=none header.from=amd.com;
+Received-SPF: TempError (protection.outlook.com: error in processing during
+ lookup of amd.com: DNS Timeout)
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF0001A107.mail.protection.outlook.com (10.167.241.136) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6792.19 via Frontend Transport; Wed, 13 Sep 2023 04:08:57 +0000
+Received: from AUS-P9-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 12 Sep
+ 2023 23:08:55 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+CC:     Hans de Goede <hdegoede@redhat.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        "open list:X86 PLATFORM DRIVERS" 
+        <platform-driver-x86@vger.kernel.org>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        <iain@orangesquash.org.uk>,
+        "Mario Limonciello" <mario.limonciello@amd.com>
+Subject: [PATCH v18 0/2] Add quirk for PCIe root port on AMD systems
+Date:   Tue, 12 Sep 2023 23:08:30 -0500
+Message-ID: <20230913040832.114610-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0001A107:EE_|BY5PR12MB5016:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7a4b815d-b4e1-462a-8508-08dbb40f26e1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CyZcAsEbGzdU9OIcE8aifkjwbKzCGPYnErJAh9KNw93VwSyosMODZZSGDe+6aG4lK4P+THVqY7nksSjM7v1MvkLGxt/eQA1aJDGOgwDyoUvcYuMen9ySzFJjNb6T1kPi/o1JhOCo5LKzQIT3vFEuT/wjfLp9wCfQxVx2puwyvsgEiX/+V1y+TbmoEyrNG6APCZ2AoUTxEAQ0IJxVqoffS5oMKLjOsEsjdLaKGKt+SNb1NnlOebg1W/iDQz72NE6dp/mK/I6lwsxuwiVfOsY1UIyXWhkIlWXxrElyzgr4fUNmJsBrJPZoOduJKiu+0mOp0bmX9youY7xktGYEA9IBiGut4CLLB505ikbVGIotuQRHThYcXOkobBulOG6hruXMqVO3/ru96HuSrb4pYUp6XnIg56QjfNybim7HRo1YoXoRRhjm3PBvDdljVWckkfBtk5qb1gsNVnc+k+o8JCarVyVNZ0+KlZbVIaSmLrYsIhtmr04sB/syr+u4m3Rvnla8Au2IXZkswp/no4KsJmnF0G6J8x9tq613DrsQ+V4iP2zZPKurxcBIGoRZJaGwoyY0oameGY7Hr5SxCAKWqlVTjbXQvvVoXE3JZvn6AUxlqP3JV6p+bR88pKWSWedAxGs9hHMB6fGW/Tm9wvWOx2gdINrmXycU4yPWHwCPGCfeJa0SNDEn6mi1hlCWWjw97lfwh3tcLnJA8trYaGdA/nU5eMM0hvdBSCVLBRz0SAZ0/6o5bZrNLmSZt4A0nGcpyC82IewD7QnMFQfrm27fJp+XYMSHPE4WRTfjHJEp2//Ajhc=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(396003)(136003)(376002)(39860400002)(346002)(82310400011)(186009)(451199024)(1800799009)(40470700004)(36840700001)(46966006)(40460700003)(2906002)(63370400001)(63350400001)(316002)(54906003)(36756003)(4326008)(41300700001)(8676002)(8936002)(40480700001)(44832011)(5660300002)(110136005)(70206006)(70586007)(6666004)(7696005)(2616005)(1076003)(426003)(336012)(36860700001)(82740400003)(356005)(16526019)(26005)(81166007)(478600001)(966005)(86362001)(47076005)(83380400001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2023 04:08:57.2567
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7a4b815d-b4e1-462a-8508-08dbb40f26e1
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0001A107.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB5016
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: e7c8ca758515814f08cd2e1cbb718d16264f99a1  Merge branch 'thermal-intel' into bleeding-edge
+Iain reports that USB devices can't be used to wake a Lenovo Z13
+from suspend. This is because the PCIe root port has been put
+into D3hot and AMD's platform can't handle USB devices waking the
+platform from a hardware sleep state in this case.
 
-elapsed time: 736m
+The firmware doesn't express this limitation in a way that Linux
+recognizes so this series introduces a quirk for this problem.
 
-configs tested: 177
-configs skipped: 2
+Previous submissions:
+* v17 
+  https://lore.kernel.org/platform-driver-x86/20230906184354.45846-1-mario.limonciello@amd.com/
+  This version implemented constraints for the amd-pmc driver and introduced
+  a veto/optin system for the PCI core as suggested by Hans.
+  Rafael suggested not to use the veto/optin system and instead use a quirk.
+* v16
+  https://lore.kernel.org/platform-driver-x86/20230829171212.156688-1-mario.limonciello@amd.com/
+  This version implemented constraints for the amd-pmc driver.
+* v15
+  https://lore.kernel.org/platform-driver-x86/20230828042819.47013-1-mario.limonciello@amd.com/#t
+  This version hardcoded the quirk into amd-pmc driver as part of suspend
+  callback.
+* v14
+  https://lore.kernel.org/linux-pci/20230818193932.27187-1-mario.limonciello@amd.com/
+  https://lore.kernel.org/linux-pci/20230818194007.27410-1-mario.limonciello@amd.com/
+  https://lore.kernel.org/linux-pci/20230818194027.27559-1-mario.limonciello@amd.com/
+  This version implemented constraints exporting and limited the policy for
+  >= 2015 to Intel only. It also added support for constraints optin.
+  V13 was split into multiple parts to make it easier to land. 14.b was
+  merged.
+* v13
+  https://lore.kernel.org/linux-pci/20230818051319.551-1-mario.limonciello@amd.com/
+* v12
+  https://lore.kernel.org/linux-pci/20230816204143.66281-1-mario.limonciello@amd.com/
+* v11
+  https://lore.kernel.org/linux-pci/20230809185453.40916-1-mario.limonciello@amd.com/
+* v10
+  https://lore.kernel.org/linux-pci/20230804210129.5356-1-mario.limonciello@amd.com/
+* v9
+  https://lore.kernel.org/linux-pci/20230804010229.3664-1-mario.limonciello@amd.com/
+* v8
+  https://lore.kernel.org/linux-pci/20230802201013.910-1-mario.limonciello@amd.com/
+* v7
+  https://lore.kernel.org/linux-pci/20230711005325.1499-1-mario.limonciello@amd.com/
+* v6
+  https://lore.kernel.org/linux-pci/20230708214457.1229-1-mario.limonciello@amd.com/
+* v5
+  https://lore.kernel.org/linux-pci/20230530163947.230418-1-mario.limonciello@amd.com/
+* v4
+  https://lore.kernel.org/linux-pci/20230524190726.17012-1-mario.limonciello@amd.com/
+* v3
+  https://lore.kernel.org/linux-pci/20230524152136.1033-1-mario.limonciello@amd.com/
+* v2
+  https://lore.kernel.org/linux-pci/20230517150827.89819-1-mario.limonciello@amd.com/
+* v1
+  https://lore.kernel.org/linux-pci/20230515231515.1440-1-mario.limonciello@amd.com/
+Mario Limonciello (2):
+  PCI: Move the `PCI_CLASS_SERIAL_USB_USB4` definition to common header
+  PCI: Add a quirk for AMD PCIe root ports w/ USB4 controllers
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+ drivers/pci/pci.c         |  5 +++++
+ drivers/pci/quirks.c      | 28 ++++++++++++++++++++++++++++
+ drivers/thunderbolt/nhi.h |  2 --
+ include/linux/pci.h       |  2 ++
+ include/linux/pci_ids.h   |  1 +
+ 5 files changed, 36 insertions(+), 2 deletions(-)
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r002-20230913   gcc  
-alpha                randconfig-r005-20230913   gcc  
-alpha                randconfig-r015-20230913   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                     haps_hs_smp_defconfig   gcc  
-arc                   randconfig-001-20230913   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                       imx_v6_v7_defconfig   gcc  
-arm                        mvebu_v5_defconfig   clang
-arm                           omap1_defconfig   clang
-arm                            qcom_defconfig   gcc  
-arm                   randconfig-001-20230913   gcc  
-arm                  randconfig-r021-20230913   gcc  
-arm                        spear6xx_defconfig   gcc  
-arm                           spitz_defconfig   clang
-arm                         vf610m4_defconfig   gcc  
-arm64                            allmodconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r025-20230913   clang
-arm64                randconfig-r026-20230913   clang
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r011-20230913   gcc  
-hexagon               randconfig-001-20230913   clang
-hexagon               randconfig-002-20230913   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20230913   gcc  
-i386         buildonly-randconfig-002-20230913   gcc  
-i386         buildonly-randconfig-003-20230913   gcc  
-i386         buildonly-randconfig-004-20230913   gcc  
-i386         buildonly-randconfig-005-20230913   gcc  
-i386         buildonly-randconfig-006-20230913   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20230913   gcc  
-i386                  randconfig-002-20230913   gcc  
-i386                  randconfig-003-20230913   gcc  
-i386                  randconfig-004-20230913   gcc  
-i386                  randconfig-005-20230913   gcc  
-i386                  randconfig-006-20230913   gcc  
-i386                  randconfig-016-20230913   clang
-i386                 randconfig-r003-20230913   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20230913   gcc  
-m68k                             alldefconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r024-20230913   gcc  
-m68k                           virt_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-microblaze           randconfig-r013-20230913   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                       bmips_be_defconfig   gcc  
-mips                      fuloong2e_defconfig   gcc  
-mips                           ip22_defconfig   clang
-mips                 randconfig-r033-20230913   clang
-mips                         rt305x_defconfig   gcc  
-mips                   sb1250_swarm_defconfig   clang
-nios2                            alldefconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r022-20230913   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc             randconfig-r016-20230913   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r006-20230913   gcc  
-parisc               randconfig-r031-20230913   gcc  
-parisc               randconfig-r035-20230913   gcc  
-parisc               randconfig-r036-20230913   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-powerpc                       ebony_defconfig   clang
-powerpc                      mgcoge_defconfig   gcc  
-powerpc              randconfig-r001-20230913   gcc  
-powerpc64            randconfig-r032-20230913   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20230913   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20230913   clang
-s390                 randconfig-r014-20230913   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                        apsh4ad0a_defconfig   gcc  
-sh                                  defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r023-20230913   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64              randconfig-r012-20230913   gcc  
-sparc64              randconfig-r034-20230913   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                   randconfig-r004-20230913   clang
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-001-20230913   gcc  
-x86_64       buildonly-randconfig-002-20230913   gcc  
-x86_64       buildonly-randconfig-003-20230913   gcc  
-x86_64       buildonly-randconfig-004-20230913   gcc  
-x86_64       buildonly-randconfig-005-20230913   gcc  
-x86_64       buildonly-randconfig-006-20230913   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20230913   clang
-x86_64                randconfig-002-20230913   clang
-x86_64                randconfig-003-20230913   clang
-x86_64                randconfig-004-20230913   clang
-x86_64                randconfig-005-20230913   clang
-x86_64                randconfig-006-20230913   clang
-x86_64                randconfig-011-20230913   gcc  
-x86_64                randconfig-012-20230913   gcc  
-x86_64                randconfig-013-20230913   gcc  
-x86_64                randconfig-014-20230913   gcc  
-x86_64                randconfig-015-20230913   gcc  
-x86_64                randconfig-016-20230913   gcc  
-x86_64                randconfig-071-20230913   gcc  
-x86_64                randconfig-072-20230913   gcc  
-x86_64                randconfig-073-20230913   gcc  
-x86_64                randconfig-074-20230913   gcc  
-x86_64                randconfig-075-20230913   gcc  
-x86_64                randconfig-076-20230913   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa                              defconfig   gcc  
-xtensa                  nommu_kc705_defconfig   gcc  
 
+base-commit: 0bb80ecc33a8fb5a682236443c1e740d5c917d1d
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
