@@ -2,112 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9772779E1BB
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 10:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E4679E1C0
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 10:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238745AbjIMIOS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 13 Sep 2023 04:14:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
+        id S234389AbjIMIPo convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 13 Sep 2023 04:15:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235808AbjIMIOR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 04:14:17 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B36A1729;
-        Wed, 13 Sep 2023 01:14:13 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3a9e49495ddso643179b6e.1;
-        Wed, 13 Sep 2023 01:14:13 -0700 (PDT)
+        with ESMTP id S230404AbjIMIPn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 04:15:43 -0400
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B80D0DA;
+        Wed, 13 Sep 2023 01:15:39 -0700 (PDT)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1a2dd615ddcso1883282fac.0;
+        Wed, 13 Sep 2023 01:15:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694592852; x=1695197652;
+        d=1e100.net; s=20230601; t=1694592939; x=1695197739;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QnSAOSHIBJbqxMtsOgmwPFLCipyOoc3+qm5hsWXanew=;
-        b=BLWYHPxY7YGi2ySxx70vkHHA4nhpO0Ty9z2tRPXYZoTHUkK66hufM2LkIMSDqKi1Jc
-         g76BEDGveeK+aFi73k/zbzeHBgPDsdbULbAveiQMxRtGxxz+HyzdwgjcnIN+ecA7VPlf
-         E/vfR63xbnu5czcK40+YYK6jTpGCqSwAYJrfTgnhR1fAhsr1/qf5eZqp8i/mK1Mb7Ucs
-         cLm5ACx5WRpG8zvZsIepcJl3JXcYTLw3v6t3oelDXbaEOErJosMo5W3T1tSqz2WKwGKZ
-         o0bz0yPBcCgTQ1R40FLM/9+k8IqscBywHpE0wUOfBvOfXvBVShea8SXpzHb6dat01D3O
-         19pQ==
-X-Gm-Message-State: AOJu0YwF2R2WfwgdSabWg7rfBHGitB0LmqKtB0vGypOLqlrt7CZvD/8H
-        8XWneA48ullBTHP7tkrn7X17yJGF5fo708qkUko=
-X-Google-Smtp-Source: AGHT+IHC87tUXlU8UTe5IOrC3jQqtG+BAepY8MyKyNF/xGAPiqwCbHrLA9RUsVvoBqrpJNiLHtjmG0jv8ctPlDrx9go=
-X-Received: by 2002:a05:6808:4492:b0:3a9:e85d:b689 with SMTP id
- eq18-20020a056808449200b003a9e85db689mr2216268oib.0.1694592852656; Wed, 13
- Sep 2023 01:14:12 -0700 (PDT)
+        bh=sPRE4yk+prnW+5k5MNZC6JcZxfgppCicb6DWP07tpq0=;
+        b=xHwgU9x0uTqV2qSEMJbutSA5mX2kwOBe8DzOPY/I40jsK+1BN7izsHOXJxrLEWKJhs
+         rJrByaDi3zGwJ6WxiW/Tm28gKKUonSiUaWnorJB14CeZan7M1x1KQWQEIs+ruUqM7SvC
+         sWnhDdBnyVxxl+JyitnFey2BW7d3+3TFMZ/sxuOOB9we84M2WGT18OuF/aVXDuN05aZw
+         L6CQq+DJp+LoXloqcXho5Ca2VgW7F1tiZkmZ0k/K2KNoLhypgc3OHRL27y0lkTjgTl1c
+         JeKhK6dZW38/CK3MeD2wiWLoAyPNPHzXqFUvEMJgYrSfjYmhsLZtwxQ24ncwGiyl2LYk
+         9R3Q==
+X-Gm-Message-State: AOJu0YyVUBHiCcoIgmUTDRVZZcVOMREzQ1k2xMomLWkqapyiVZ0Y/z4G
+        Z+Z/uDoUg7d0CfJ9j5UvorRDhkm7BC0ShlQ5E6o=
+X-Google-Smtp-Source: AGHT+IG5Q2z6Sv8LLbImvaAeMv6mk0zCwM4ngapHNGNv4KRlhkAnqotHMsa36/nAJ1PGhXROO8P4kUDlp6lWu8TXiyk=
+X-Received: by 2002:a05:6870:1493:b0:1d5:f814:56a3 with SMTP id
+ k19-20020a056870149300b001d5f81456a3mr2131916oab.2.1694592938219; Wed, 13 Sep
+ 2023 01:15:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230913040832.114610-1-mario.limonciello@amd.com>
- <20230913040832.114610-3-mario.limonciello@amd.com> <20230913042522.GB1359@wunner.de>
- <fd981219-d864-4c46-a348-61f73a9df596@amd.com>
-In-Reply-To: <fd981219-d864-4c46-a348-61f73a9df596@amd.com>
+References: <20230829002346.2104251-1-srinivas.pandruvada@linux.intel.com>
+ <CAJZ5v0jrKSUOGG72w-EdzhQqC==CA7zYUofNSEW1wV-58TOnLw@mail.gmail.com> <275e34c2e67a85c087ff983354bf74b5257b2fc4.camel@linux.intel.com>
+In-Reply-To: <275e34c2e67a85c087ff983354bf74b5257b2fc4.camel@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 13 Sep 2023 10:14:00 +0200
-Message-ID: <CAJZ5v0jkw9W-DtyKvHjtYwP8rBkg1gT_Dcugp9Nt4hpSK5DE4w@mail.gmail.com>
-Subject: Re: [PATCH v18 2/2] PCI: Add a quirk for AMD PCIe root ports w/ USB4 controllers
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Lukas Wunner <lukas@wunner.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        "open list:X86 PLATFORM DRIVERS" 
-        <platform-driver-x86@vger.kernel.org>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        linux-pm@vger.kernel.org,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        iain@orangesquash.org.uk
+Date:   Wed, 13 Sep 2023 10:15:26 +0200
+Message-ID: <CAJZ5v0j7hBxprVN0vamaF74Ns3+hZk0qSQfPJqEROBbk1K4g-g@mail.gmail.com>
+Subject: Re: [PATCH v3 0/7] thermal: processor_thermal: Suport workload hint
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, daniel.lezcano@linaro.org,
+        rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 13, 2023 at 6:44 AM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
+On Tue, Sep 12, 2023 at 9:44 PM srinivas pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
 >
-> On 9/12/2023 23:25, Lukas Wunner wrote:
-> > On Tue, Sep 12, 2023 at 11:08:32PM -0500, Mario Limonciello wrote:
-> >> --- a/drivers/pci/pci.c
-> >> +++ b/drivers/pci/pci.c
-> >> @@ -2752,6 +2752,11 @@ int pci_prepare_to_sleep(struct pci_dev *dev)
-> >>      if (target_state == PCI_POWER_ERROR)
-> >>              return -EIO;
-> >>
-> >> +    /* quirk to avoid setting D3 */
-> >> +    if (wakeup && dev->dev_flags & PCI_DEV_FLAGS_NO_WAKE_D3 &&
-> >> +       (target_state == PCI_D3hot || target_state == PCI_D3cold))
-> >> +            target_state = PCI_D0;
-> >> +
-> >>      pci_enable_wake(dev, target_state, wakeup);
-> >>
-> >>      error = pci_set_power_state(dev, target_state);
+> Hi Rafael,
+>
+> On Tue, 2023-09-12 at 16:09 +0200, Rafael J. Wysocki wrote:
+> > On Tue, Aug 29, 2023 at 2:23 AM Srinivas Pandruvada
+> > <srinivas.pandruvada@linux.intel.com> wrote:
+> > >
+> > >
+>
+> [...]
+>
+> > > --
 > >
-> > Would it be possible to just add the affected system to
-> > bridge_d3_blacklist[]?
->
-> It's initially reported on Lenovo Z13, but it affects all Rembrandt and
-> Phoenix machines that have USB4 controller enabled.
->
-> It's reproduced on every OEM system I have access to.
+> > There is a slight issue with the patch ordering in this series,
+> > because the interface to enable the interrupt should only be provided
+> > after implementing the interrupt handlers.  I don't think that anyone
+> > will apply the series partially and try to enable the feature,
+> > though.
+> Thanks!
 >
 > >
-> > Or would that defeat power management of other (non-affected)
-> > Root Ports in the same machine?
-> >
-> > There's already PCI_DEV_FLAGS_NO_D3, would it be possible to just
-> > reuse that instead of adding another codepath for D3 quirks?
-> >
->
-> The root port can handle D3 (including wakeup) at runtime fine.
-> Issue occurs only during s2idle w/ hardware sleep.
->
-> In v16/v17 (see cover letter for links) Rafael suggested to tie this
-> specifically to suspend behavior and when wakeup flag is set.
+> > Also, I'm not actually sure if proc_thermal_wt_intr_callback() can
+> > run
+> > safely against the work item scheduled in proc_thermal_irq_handler()
+> > in case the workload hint one triggers along with a thermal threshold
+> > one.  I think that the access to MMIO is cached, so what if they both
+> > try to update the same cache line at the same time?  Or are they
+> > guaranteed to be different cache lines?
+> These two registers are 90 cache lines apart. Looking at all the
+> registers on this bar for status offsets, they are several cache lines
+> apart. Also this bar is non prefetchable, so continuous data can't be
+> fetched ahead.
 
-Right, it is not necessary to avoid D3 on those ports for PM-runtime
-and when there are no system wakeup devices underneath.
+OK
 
-> I didn't think it was appropriate to overload the existing flag because
-> of this difference.
+> >
+> > Anyway, tentatively applied as 6.7 material, but I've changed the
+> > second patch somewhat, because I couldn't convince myself that the
+> > implicit type conversions in
+> > processor_thermal_mbox_interrupt_config()
+> > would always do the right thing regardless of the numbers involved,
+> > so
+> > please check the result in my bleeding-edge branch.
+> >
+> If I diff, there is only one change in processor_thermal_mbox.c. Tested
+> that change and works fine.
 
-I agree.
+Good, thanks!
