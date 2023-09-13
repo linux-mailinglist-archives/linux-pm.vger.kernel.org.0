@@ -2,134 +2,320 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E8C79E438
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 11:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A48E579E450
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 11:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239652AbjIMJx5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Sep 2023 05:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
+        id S239571AbjIMJzG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Sep 2023 05:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233406AbjIMJxo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 05:53:44 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7586D270C;
-        Wed, 13 Sep 2023 02:53:04 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D61CD1FB;
-        Wed, 13 Sep 2023 02:53:39 -0700 (PDT)
-Received: from [10.57.94.11] (unknown [10.57.94.11])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DB1AC3F5A1;
-        Wed, 13 Sep 2023 02:53:00 -0700 (PDT)
-Message-ID: <74c48141-55c4-c09b-250f-c1d71f031a8c@arm.com>
-Date:   Wed, 13 Sep 2023 10:53:38 +0100
+        with ESMTP id S239689AbjIMJyx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 05:54:53 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD8F1BD5
+        for <linux-pm@vger.kernel.org>; Wed, 13 Sep 2023 02:54:45 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2bfb0a2682fso17886771fa.2
+        for <linux-pm@vger.kernel.org>; Wed, 13 Sep 2023 02:54:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694598884; x=1695203684; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LDbjl8V8942DBH9vHu9kycouHiWPdzm6gV+T3L4Gzxk=;
+        b=MFvHT+hXCQbBkHpK4kwOvWUI3XoNVwXI4ANWAwQj7lY74YSMpXXC499riel5z9q+WY
+         94dO8L08j+HCjbG+YSgSubpO50JK0w/Nl+QLtdcdKq59t2F5SyqI63TOYFow8o0vPce2
+         zOujEhXraq/r8x2Ds2xkZAdftnyczZ+sVBBgyMRLlPD/8WFWb4+XfJl0ceMMVFXNghqj
+         sjIGVAKFbs5yHeyDViRqbwM9EeCj0PpxQohcCBNIpbY4Aw8BANs5Qt1xVKjrgCK1xozP
+         cMrbfsVvj3/BC9FsmQB0YAHizJERT8o9QK5PgTYGwNfOJRFzEnOg8DQ0K2Zt1fBLUbWn
+         qk2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694598884; x=1695203684;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LDbjl8V8942DBH9vHu9kycouHiWPdzm6gV+T3L4Gzxk=;
+        b=Yma1uaHRyGtVUUJyY9rMY3vsiMQXvEgk4vtBeysMpJuBl6b49nhayHwl4CKUZmP7bo
+         uav7/7i2KEi9UoL2nfjFUNHhTQC1k6VeJoArbv+pIQG695+ZVCmQuSIVhXjdOspavGh0
+         ZUh+6Hyq89tPjfxPpsEys5x+b1Qp2rE0Jgl06JpLFYq+NhVPKsTobfn/hMyQD4AQseTx
+         iOzW4thIdJXANZuUFh+BEwJRVZfjr6XR6yGnyHMJWOozOP/PuPOLTqsjsVtCzYD0w/Ql
+         eSqYQGjiPNIv38sokephYDvu8tRAWNjWXI/HTuc4e0/3Dv9NbbYbFXZVyzhJu+0QDWqj
+         QDbw==
+X-Gm-Message-State: AOJu0YxZBYye/U0f4vDqO2Le0wTe90YCSS+kRcKYakr0Va/kvCTG57xm
+        qY24laPolZRYHuSy/NCgoPK2sA==
+X-Google-Smtp-Source: AGHT+IH2nRC+2JfOVz070MXQwDyRlu+ueL/ZxHMDNksSKQUsRtO1qO5yqtSEQ2mpyDye2bbxPWTOxw==
+X-Received: by 2002:a2e:a1d0:0:b0:2bc:db5a:9546 with SMTP id c16-20020a2ea1d0000000b002bcdb5a9546mr1637206ljm.7.1694598883855;
+        Wed, 13 Sep 2023 02:54:43 -0700 (PDT)
+Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
+        by smtp.gmail.com with ESMTPSA id t16-20020a2e9c50000000b002b6ad323248sm2321196ljj.10.2023.09.13.02.54.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Sep 2023 02:54:43 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Michal Simek <michal.simek@amd.com>,
+        Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        Conor Dooley <conor@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andreas Farber <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] pmdomain (was genpd) updates for v6.6-rc2
+Date:   Wed, 13 Sep 2023 11:54:41 +0200
+Message-Id: <20230913095441.535328-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [RFC PATCH 0/7] sched: cpufreq: Remove magic margins
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Qais Yousef <qyousef@layalina.io>,
-        Chris Redpath <Chris.Redpath@arm.com>
-References: <20230827233203.1315953-1-qyousef@layalina.io>
- <a6365f63-4669-15e5-b843-f4bfb1bd5e68@arm.com>
- <20230906211850.zyvk6qtt6fvpxaf3@airbuntu>
- <20230907132631.GF10955@noisy.programming.kicks-ass.net>
- <8919ed14-8d19-d964-2278-3303a5bda8ee@arm.com>
- <20230907142923.GJ10955@noisy.programming.kicks-ass.net>
- <cf5c628a-e047-b5e0-b2a0-f2b280015d02@arm.com>
- <20230907201609.GC14243@noisy.programming.kicks-ass.net>
- <f1b1b663-3a12-9e5d-932b-b3ffb5f02e14@arm.com>
- <CAKfTPtDd-HhF-YiNTtL9i5k0PfJbF819Yxu4YquzfXgwi7voyw@mail.gmail.com>
-Content-Language: en-US
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAKfTPtDd-HhF-YiNTtL9i5k0PfJbF819Yxu4YquzfXgwi7voyw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Vincent,
+Hi Linus,
 
-On 9/12/23 15:01, Vincent Guittot wrote:
-> Hi Lukasz,
-> 
-> On Tue, 12 Sept 2023 at 13:51, Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> Hi Peter,
->>
->> On 9/7/23 21:16, Peter Zijlstra wrote:
->>> On Thu, Sep 07, 2023 at 03:42:13PM +0100, Lukasz Luba wrote:
->>>
->>>>> What task characteristic is tied to this? That is, this seems trivial to
->>>>> modify per-task.
->>>>
->>>> In particular Speedometer test and the main browser task, which reaches
->>>> ~900util, but sometimes vanish and waits for other background tasks
->>>> to do something. In the meantime it can decay and wake-up on
->>>> Mid/Little (which can cause a penalty to score up to 5-10% vs. if
->>>> we pin the task to big CPUs). So, a longer util_est helps to avoid
->>>> at least very bad down migration to Littles...
->>>
->>> Do they do a few short activations (wakeup/sleeps) while waiting? That
->>> would indeed completely ruin things since the EWMA thing is activation
->>> based.
->>>
->>> I wonder if there's anything sane we can do here...
->>
->> My apologies for a delay, I have tried to push the graphs for you.
->>
->> The experiment is on pixel7*. It's running the browser on the phone
->> with the test 'Speedometer 2.0'. It's a web test (you can also run on
->> your phone) available here, no need to install anything:
->> https://browserbench.org/Speedometer2.0/
->>
->> Here is the Jupiter notebook [1], with plots of the signals:
->> - top 20 tasks' (based on runtime) utilization
->> - Util EST signals for the top 20 tasks, with the longer decaying ewma
->>     filter (which is the 'red' plot called 'ewma')
->> - the main task (comm=CrRendererMain) Util, Util EST and task residency
->>     (which tires to stick to CPUs 6,7* )
->> - the test score was 144.6 (while with fast decay ewma is ~134), so
->>     staying at big cpus (helps the score in this case)
->>
->> (the plots are interactive, you can zoom in with the icon 'Box Zoom')
->> (e.g. you can zoom in the task activation plot which is also linked
->> with the 'Util EST' on top, for this main task)
->>
->> You can see the util signal of that 'CrRendererMain' task and those
->> utilization drops in time, which I was referring to. When the util
->> drops below some threshold, the task might 'fit' into smaller CPU,
->> which could be prevented automatically byt maintaining the util est
->> for longer (but not for all).
-> 
-> I was looking at your nice chart and I wonder if you could also add
-> the runnable _avg of the tasks ?
+As discussed on LKML, using "genpd" as the name of a subsystem isn't very
+self-explanatory and the acronym itself that means Generic PM Domain, is known
+only by a limited group of people.
 
-Yes, I will try today or tomorrow to add such plots as well.
+The suggestion to improve the situation is to rename the subsystem to
+"pmdomain", which there seems to be a good consensus around using too. Ideally
+it should indicate that its purpose is to manage Power Domains or "PM domains"
+as we often also use within the Linux Kernel terminology.
 
-> 
-> My 1st impression is that the decrease happens when your task starts
-> to share the CPU with some other tasks and this ends up with a
-> decrease of its utilization because util_avg doesn't take into account
-> the waiting time so typically task with an utilization of 1024, will
-> see its utilization decrease because of other tasks running on the
-> same cpu. This would explain the drop that you can see.
-> 
->   I wonder if we should not take into account the runnable_avg when
-> applying the ewm on util_est ? so the util_est will not decrease
-> because of time sharing with other
+The pull request contains only one commit, for the above.
 
-Yes, that sounds a good idea. Let me provide those plots so we could
-go further with the analysis. I will try to capture if that happens
-to that particular task on CPU (if there are some others as well).
+Please pull this in!
+
+Kind regards
+Ulf Hansson
 
 
-Thanks for jumping in to the discussion!
+The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
-Lukasz
+  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.6-rc1
+
+for you to fetch changes up to e2ad626f8f409899baf1bf192d0533a851128b19:
+
+  pmdomain: Rename the genpd subsystem to pmdomain (2023-09-13 11:09:21 +0200)
+
+----------------------------------------------------------------
+This pull-request renames the genpd subsystem to pmdomain.
+
+Ideally "pmdomain" should give a better hint of the purpose of the
+subsystem.
+
+----------------------------------------------------------------
+Ulf Hansson (1):
+      pmdomain: Rename the genpd subsystem to pmdomain
+
+ MAINTAINERS                                        | 22 +++++++++++-----------
+ drivers/Makefile                                   |  2 +-
+ drivers/{genpd => pmdomain}/Makefile               |  0
+ drivers/{genpd => pmdomain}/actions/Makefile       |  0
+ .../{genpd => pmdomain}/actions/owl-sps-helper.c   |  0
+ drivers/{genpd => pmdomain}/actions/owl-sps.c      |  0
+ drivers/{genpd => pmdomain}/amlogic/Makefile       |  0
+ .../{genpd => pmdomain}/amlogic/meson-ee-pwrc.c    |  0
+ .../amlogic/meson-gx-pwrc-vpu.c                    |  0
+ .../amlogic/meson-secure-pwrc.c                    |  0
+ drivers/{genpd => pmdomain}/apple/Makefile         |  0
+ drivers/{genpd => pmdomain}/apple/pmgr-pwrstate.c  |  0
+ drivers/{genpd => pmdomain}/bcm/Makefile           |  0
+ drivers/{genpd => pmdomain}/bcm/bcm-pmb.c          |  0
+ drivers/{genpd => pmdomain}/bcm/bcm2835-power.c    |  0
+ drivers/{genpd => pmdomain}/bcm/bcm63xx-power.c    |  0
+ .../{genpd => pmdomain}/bcm/raspberrypi-power.c    |  0
+ drivers/{genpd => pmdomain}/imx/Makefile           |  0
+ drivers/{genpd => pmdomain}/imx/gpc.c              |  0
+ drivers/{genpd => pmdomain}/imx/gpcv2.c            |  0
+ drivers/{genpd => pmdomain}/imx/imx8m-blk-ctrl.c   |  0
+ drivers/{genpd => pmdomain}/imx/imx8mp-blk-ctrl.c  |  0
+ drivers/{genpd => pmdomain}/imx/imx93-blk-ctrl.c   |  0
+ drivers/{genpd => pmdomain}/imx/imx93-pd.c         |  0
+ drivers/{genpd => pmdomain}/imx/scu-pd.c           |  0
+ drivers/{genpd => pmdomain}/mediatek/Makefile      |  0
+ .../mediatek/mt6795-pm-domains.h                   |  0
+ .../mediatek/mt8167-pm-domains.h                   |  0
+ .../mediatek/mt8173-pm-domains.h                   |  0
+ .../mediatek/mt8183-pm-domains.h                   |  0
+ .../mediatek/mt8186-pm-domains.h                   |  0
+ .../mediatek/mt8188-pm-domains.h                   |  0
+ .../mediatek/mt8192-pm-domains.h                   |  0
+ .../mediatek/mt8195-pm-domains.h                   |  0
+ .../{genpd => pmdomain}/mediatek/mtk-pm-domains.c  |  0
+ .../{genpd => pmdomain}/mediatek/mtk-pm-domains.h  |  0
+ drivers/{genpd => pmdomain}/mediatek/mtk-scpsys.c  |  0
+ drivers/{genpd => pmdomain}/qcom/Makefile          |  0
+ drivers/{genpd => pmdomain}/qcom/cpr.c             |  0
+ drivers/{genpd => pmdomain}/qcom/rpmhpd.c          |  0
+ drivers/{genpd => pmdomain}/qcom/rpmpd.c           |  0
+ drivers/{genpd => pmdomain}/renesas/Makefile       |  0
+ drivers/{genpd => pmdomain}/renesas/r8a7742-sysc.c |  0
+ drivers/{genpd => pmdomain}/renesas/r8a7743-sysc.c |  0
+ drivers/{genpd => pmdomain}/renesas/r8a7745-sysc.c |  0
+ .../{genpd => pmdomain}/renesas/r8a77470-sysc.c    |  0
+ .../{genpd => pmdomain}/renesas/r8a774a1-sysc.c    |  0
+ .../{genpd => pmdomain}/renesas/r8a774b1-sysc.c    |  0
+ .../{genpd => pmdomain}/renesas/r8a774c0-sysc.c    |  0
+ .../{genpd => pmdomain}/renesas/r8a774e1-sysc.c    |  0
+ drivers/{genpd => pmdomain}/renesas/r8a7779-sysc.c |  0
+ drivers/{genpd => pmdomain}/renesas/r8a7790-sysc.c |  0
+ drivers/{genpd => pmdomain}/renesas/r8a7791-sysc.c |  0
+ drivers/{genpd => pmdomain}/renesas/r8a7792-sysc.c |  0
+ drivers/{genpd => pmdomain}/renesas/r8a7794-sysc.c |  0
+ drivers/{genpd => pmdomain}/renesas/r8a7795-sysc.c |  0
+ drivers/{genpd => pmdomain}/renesas/r8a7796-sysc.c |  0
+ .../{genpd => pmdomain}/renesas/r8a77965-sysc.c    |  0
+ .../{genpd => pmdomain}/renesas/r8a77970-sysc.c    |  0
+ .../{genpd => pmdomain}/renesas/r8a77980-sysc.c    |  0
+ .../{genpd => pmdomain}/renesas/r8a77990-sysc.c    |  0
+ .../{genpd => pmdomain}/renesas/r8a77995-sysc.c    |  0
+ .../{genpd => pmdomain}/renesas/r8a779a0-sysc.c    |  0
+ .../{genpd => pmdomain}/renesas/r8a779f0-sysc.c    |  0
+ .../{genpd => pmdomain}/renesas/r8a779g0-sysc.c    |  0
+ .../{genpd => pmdomain}/renesas/rcar-gen4-sysc.c   |  0
+ .../{genpd => pmdomain}/renesas/rcar-gen4-sysc.h   |  0
+ drivers/{genpd => pmdomain}/renesas/rcar-sysc.c    |  0
+ drivers/{genpd => pmdomain}/renesas/rcar-sysc.h    |  0
+ drivers/{genpd => pmdomain}/renesas/rmobile-sysc.c |  0
+ drivers/{genpd => pmdomain}/rockchip/Makefile      |  0
+ drivers/{genpd => pmdomain}/rockchip/pm-domains.c  |  0
+ drivers/{genpd => pmdomain}/samsung/Makefile       |  0
+ .../samsung/exynos-pm-domains.c                    |  0
+ drivers/{genpd => pmdomain}/st/Makefile            |  0
+ .../{genpd => pmdomain}/st/ste-ux500-pm-domain.c   |  0
+ drivers/{genpd => pmdomain}/starfive/Makefile      |  0
+ drivers/{genpd => pmdomain}/starfive/jh71xx-pmu.c  |  0
+ drivers/{genpd => pmdomain}/sunxi/Makefile         |  0
+ drivers/{genpd => pmdomain}/sunxi/sun20i-ppu.c     |  0
+ drivers/{genpd => pmdomain}/tegra/Makefile         |  0
+ drivers/{genpd => pmdomain}/tegra/powergate-bpmp.c |  0
+ drivers/{genpd => pmdomain}/ti/Makefile            |  0
+ drivers/{genpd => pmdomain}/ti/omap_prm.c          |  0
+ drivers/{genpd => pmdomain}/ti/ti_sci_pm_domains.c |  0
+ drivers/{genpd => pmdomain}/xilinx/Makefile        |  0
+ .../{genpd => pmdomain}/xilinx/zynqmp-pm-domains.c |  0
+ 87 files changed, 12 insertions(+), 12 deletions(-)
+ rename drivers/{genpd => pmdomain}/Makefile (100%)
+ rename drivers/{genpd => pmdomain}/actions/Makefile (100%)
+ rename drivers/{genpd => pmdomain}/actions/owl-sps-helper.c (100%)
+ rename drivers/{genpd => pmdomain}/actions/owl-sps.c (100%)
+ rename drivers/{genpd => pmdomain}/amlogic/Makefile (100%)
+ rename drivers/{genpd => pmdomain}/amlogic/meson-ee-pwrc.c (100%)
+ rename drivers/{genpd => pmdomain}/amlogic/meson-gx-pwrc-vpu.c (100%)
+ rename drivers/{genpd => pmdomain}/amlogic/meson-secure-pwrc.c (100%)
+ rename drivers/{genpd => pmdomain}/apple/Makefile (100%)
+ rename drivers/{genpd => pmdomain}/apple/pmgr-pwrstate.c (100%)
+ rename drivers/{genpd => pmdomain}/bcm/Makefile (100%)
+ rename drivers/{genpd => pmdomain}/bcm/bcm-pmb.c (100%)
+ rename drivers/{genpd => pmdomain}/bcm/bcm2835-power.c (100%)
+ rename drivers/{genpd => pmdomain}/bcm/bcm63xx-power.c (100%)
+ rename drivers/{genpd => pmdomain}/bcm/raspberrypi-power.c (100%)
+ rename drivers/{genpd => pmdomain}/imx/Makefile (100%)
+ rename drivers/{genpd => pmdomain}/imx/gpc.c (100%)
+ rename drivers/{genpd => pmdomain}/imx/gpcv2.c (100%)
+ rename drivers/{genpd => pmdomain}/imx/imx8m-blk-ctrl.c (100%)
+ rename drivers/{genpd => pmdomain}/imx/imx8mp-blk-ctrl.c (100%)
+ rename drivers/{genpd => pmdomain}/imx/imx93-blk-ctrl.c (100%)
+ rename drivers/{genpd => pmdomain}/imx/imx93-pd.c (100%)
+ rename drivers/{genpd => pmdomain}/imx/scu-pd.c (100%)
+ rename drivers/{genpd => pmdomain}/mediatek/Makefile (100%)
+ rename drivers/{genpd => pmdomain}/mediatek/mt6795-pm-domains.h (100%)
+ rename drivers/{genpd => pmdomain}/mediatek/mt8167-pm-domains.h (100%)
+ rename drivers/{genpd => pmdomain}/mediatek/mt8173-pm-domains.h (100%)
+ rename drivers/{genpd => pmdomain}/mediatek/mt8183-pm-domains.h (100%)
+ rename drivers/{genpd => pmdomain}/mediatek/mt8186-pm-domains.h (100%)
+ rename drivers/{genpd => pmdomain}/mediatek/mt8188-pm-domains.h (100%)
+ rename drivers/{genpd => pmdomain}/mediatek/mt8192-pm-domains.h (100%)
+ rename drivers/{genpd => pmdomain}/mediatek/mt8195-pm-domains.h (100%)
+ rename drivers/{genpd => pmdomain}/mediatek/mtk-pm-domains.c (100%)
+ rename drivers/{genpd => pmdomain}/mediatek/mtk-pm-domains.h (100%)
+ rename drivers/{genpd => pmdomain}/mediatek/mtk-scpsys.c (100%)
+ rename drivers/{genpd => pmdomain}/qcom/Makefile (100%)
+ rename drivers/{genpd => pmdomain}/qcom/cpr.c (100%)
+ rename drivers/{genpd => pmdomain}/qcom/rpmhpd.c (100%)
+ rename drivers/{genpd => pmdomain}/qcom/rpmpd.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/Makefile (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a7742-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a7743-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a7745-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a77470-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a774a1-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a774b1-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a774c0-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a774e1-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a7779-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a7790-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a7791-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a7792-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a7794-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a7795-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a7796-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a77965-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a77970-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a77980-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a77990-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a77995-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a779a0-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a779f0-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/r8a779g0-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/rcar-gen4-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/rcar-gen4-sysc.h (100%)
+ rename drivers/{genpd => pmdomain}/renesas/rcar-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/renesas/rcar-sysc.h (100%)
+ rename drivers/{genpd => pmdomain}/renesas/rmobile-sysc.c (100%)
+ rename drivers/{genpd => pmdomain}/rockchip/Makefile (100%)
+ rename drivers/{genpd => pmdomain}/rockchip/pm-domains.c (100%)
+ rename drivers/{genpd => pmdomain}/samsung/Makefile (100%)
+ rename drivers/{genpd => pmdomain}/samsung/exynos-pm-domains.c (100%)
+ rename drivers/{genpd => pmdomain}/st/Makefile (100%)
+ rename drivers/{genpd => pmdomain}/st/ste-ux500-pm-domain.c (100%)
+ rename drivers/{genpd => pmdomain}/starfive/Makefile (100%)
+ rename drivers/{genpd => pmdomain}/starfive/jh71xx-pmu.c (100%)
+ rename drivers/{genpd => pmdomain}/sunxi/Makefile (100%)
+ rename drivers/{genpd => pmdomain}/sunxi/sun20i-ppu.c (100%)
+ rename drivers/{genpd => pmdomain}/tegra/Makefile (100%)
+ rename drivers/{genpd => pmdomain}/tegra/powergate-bpmp.c (100%)
+ rename drivers/{genpd => pmdomain}/ti/Makefile (100%)
+ rename drivers/{genpd => pmdomain}/ti/omap_prm.c (100%)
+ rename drivers/{genpd => pmdomain}/ti/ti_sci_pm_domains.c (100%)
+ rename drivers/{genpd => pmdomain}/xilinx/Makefile (100%)
+ rename drivers/{genpd => pmdomain}/xilinx/zynqmp-pm-domains.c (100%)
