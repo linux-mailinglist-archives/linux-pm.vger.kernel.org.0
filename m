@@ -2,122 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DFA779F055
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 19:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A26D79F070
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 19:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbjIMRW0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Sep 2023 13:22:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
+        id S229698AbjIMRfl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Sep 2023 13:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjIMRWZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 13:22:25 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 370309B;
-        Wed, 13 Sep 2023 10:22:21 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2EF9C1FB;
-        Wed, 13 Sep 2023 10:22:58 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9B50B3F5A1;
-        Wed, 13 Sep 2023 10:22:19 -0700 (PDT)
-Message-ID: <45548b21-280e-7f94-0b53-f2dcab6ccb5e@arm.com>
-Date:   Wed, 13 Sep 2023 19:22:10 +0200
+        with ESMTP id S229451AbjIMRfk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 13:35:40 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25F8A8;
+        Wed, 13 Sep 2023 10:35:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694626536; x=1726162536;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3/kfAqbdJ1Jw40JpAhtowZlrzIpwtchpP4+yODy4jDQ=;
+  b=SWQvjKzSG3eVvW4+1ddUcmc2w8Vq2dF1+Kr3B0Qi15zQbWNNEwYCTZWo
+   c5xxe0A5aG3xoBe4xue7SJbaRpglef+H0JcY+xqhsuoL6r27B5SuJtNVf
+   doHvxqx+ffW3QE24TqUgF1t3Sfp9mGxDy7ehjiAl36bycBWOYhb2XV6/+
+   L/UoH2aohvL7y/zcO1tH+A2RCwXkI0G/M752xKc7bQe8GIGb9pjjQ9aTW
+   NBFcRHtdNCbdGJwGBlmq3sQYsC7L45ULkYIlc8R9kRJtxuVijW0tV6Odp
+   G1d/zQX6zmq/I0WOxxWdWviX+w0k7tj7pA7+4J0hCE+aTsEll2JKG39Ts
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="445168516"
+X-IronPort-AV: E=Sophos;i="6.02,143,1688454000"; 
+   d="scan'208";a="445168516"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 10:35:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="737603953"
+X-IronPort-AV: E=Sophos;i="6.02,143,1688454000"; 
+   d="scan'208";a="737603953"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.14])
+  by orsmga007.jf.intel.com with ESMTP; 13 Sep 2023 10:35:36 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] thermal: int340x: Add ArrowLake-S PCI ID
+Date:   Wed, 13 Sep 2023 10:35:10 -0700
+Message-Id: <20230913173510.3963561-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [RFC PATCH 1/7] sched/pelt: Add a new function to approximate the
- future util_avg value
-Content-Language: en-US
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Lukasz Luba <lukasz.luba@arm.com>
-References: <20230827233203.1315953-1-qyousef@layalina.io>
- <20230827233203.1315953-2-qyousef@layalina.io>
- <8f63efa6-f9d1-9b1c-7737-4094f6acfc62@arm.com>
- <20230906211936.yqejc25czc6tddm6@airbuntu>
- <47a11e4e-d349-7d98-7006-4bf08a53c0cf@arm.com>
- <20230910195832.pncjsqmkepichly6@airbuntu>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20230910195832.pncjsqmkepichly6@airbuntu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/09/2023 21:58, Qais Yousef wrote:
-> On 09/07/23 13:12, Dietmar Eggemann wrote:
->> On 06/09/2023 23:19, Qais Yousef wrote:
->>> On 09/06/23 14:56, Dietmar Eggemann wrote:
->>>> On 28/08/2023 01:31, Qais Yousef wrote:
+Add ArrowLake-S PCI ID for processor thermal device.
 
-[...]
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ .../thermal/intel/int340x_thermal/processor_thermal_device.h    | 1 +
+ .../intel/int340x_thermal/processor_thermal_device_pci.c        | 2 ++
+ 2 files changed, 3 insertions(+)
 
->> Another thing ... I guess if you call accumulate_sum with delta the PELT
->> machinery assumes `delta = now - sa->last_update_time` which means you
->> would have to use `clock_pelt + TICK_USEC` as delta.
-> 
-> Right.
-> 
-> The way I understood it is that at TICK we should do update_load_avg() which
-> would call __update_load_sum() which uses
-> 
-> 	delta = now - sa->last_update_time
-> 
-> which passes this delta to accumulate_sum()
-> 
-> I can see we are not very accurate since there will be a small additional time
-> besides TICK_USEC that we are not accounting for. But I can't see how this can
-> cause a big error.
-> 
-> 	predicted (assumed) tick time/delta
-> 
-> 		sa->last_update_time = now
-> 		tick_time = TICK_USEC + now
-> 
-> 		delta = tick_time - sa->last_update_time
-> 		delta = TICK_USEC + now - now
-> 		delta = TICK_USEC
-> 
-> 	but actual tick time/delta
-> 
-> 		sa->last_update_time = now - x
-> 		tick_time = TICK_USEC + now
-> 
-> 		delta = tick_time - sa->last_update_time
-> 		delta = TICK_USEC + now - (now - x)
-> 		delta = TICK_USEC + x
-> 
-> So the delta I am using might be slightly shorter than it should be.
-> 
-> IIUC, what you're saying that the `x` in my equation above is clock_pelt,
-> right?
-
-No, I was wrong here. Calling accumulate_sum with `delta = TICK_USEC` is
-fine.
-
-accumulate_sum() will accrue `sa->util.sum` and ___update_load_avg()
-will then adjust `sa->util_avg` accordingly.
-
-delta should be 4000 on Arm64 boards so you will cross period
-boundaries. In case `delta < 1024` you might want to not call
-___update_load_avg() to be in pair with __update_load_avg_cfs_rq().
-
-
-
-
-
-
-
-
-
-
-
-
-
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+index b974583c5c11..dd025c8c2bac 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+@@ -10,6 +10,7 @@
+ #include <linux/intel_rapl.h>
+ 
+ #define PCI_DEVICE_ID_INTEL_ADL_THERMAL	0x461d
++#define PCI_DEVICE_ID_INTEL_ARL_S_THERMAL 0xAD03
+ #define PCI_DEVICE_ID_INTEL_BDW_THERMAL	0x1603
+ #define PCI_DEVICE_ID_INTEL_BSW_THERMAL	0x22DC
+ 
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+index 7253277e476a..44b179ce9bc9 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+@@ -390,6 +390,8 @@ static const struct pci_device_id proc_thermal_pci_ids[] = {
+ 	{ PCI_DEVICE_DATA(INTEL, MTLP_THERMAL, PROC_THERMAL_FEATURE_RAPL |
+ 	  PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_DLVR |
+ 	  PROC_THERMAL_FEATURE_WT_HINT) },
++	{ PCI_DEVICE_DATA(INTEL, ARL_S_THERMAL, PROC_THERMAL_FEATURE_RAPL |
++	  PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_DLVR | PROC_THERMAL_FEATURE_WT_HINT) },
+ 	{ PCI_DEVICE_DATA(INTEL, RPL_THERMAL, PROC_THERMAL_FEATURE_RAPL |
+ 	  PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_WT_REQ) },
+ 	{ },
+-- 
+2.40.1
 
