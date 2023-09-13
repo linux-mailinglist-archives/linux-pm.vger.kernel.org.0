@@ -2,63 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C066879ECE7
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 17:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17C8379ECE8
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 17:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbjIMP3L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Sep 2023 11:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39544 "EHLO
+        id S229540AbjIMP3O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Sep 2023 11:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbjIMP2w (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 11:28:52 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E151A1BD4
-        for <linux-pm@vger.kernel.org>; Wed, 13 Sep 2023 08:28:47 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-31fa666000dso3456396f8f.2
-        for <linux-pm@vger.kernel.org>; Wed, 13 Sep 2023 08:28:47 -0700 (PDT)
+        with ESMTP id S229646AbjIMP2x (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 11:28:53 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994E51FF1
+        for <linux-pm@vger.kernel.org>; Wed, 13 Sep 2023 08:28:49 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-31c73c21113so6569774f8f.1
+        for <linux-pm@vger.kernel.org>; Wed, 13 Sep 2023 08:28:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694618926; x=1695223726; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/d3xKANM1+Tg4h0nwb5Z/K20lY+AlE+zGQheDE2qGpc=;
-        b=AhqfG2+5FcuejNIvuv5zMQkFaApwcEyt8Dk1eYhKBhfll3VnwmP5KRRn8Jc1hnIeqC
-         i16rrqZr7JA0PL88gUXYuuE6xqsQyZN6MK0oYAxYKGb6ICZda80o6Qqt0GAWIK5iVHEk
-         SirrUjSVAsEajCPIqxqwAyyLbVb+JYmVsECM4Asfn3RXi+Rx6XAR/pshdEYwSHs/PEus
-         XMQ3MwURHew9Nb3UViSyidNtpEqE4czUeZ7ttYoZWxe9MLEqxmBsC2kWtgfgLmPIu6RV
-         8yRfo3llOduJOhp44QP1oRhoZv+UzdkBU8GPTwUC7DHtYgHqUbhRmPzcOJy0BRONXoST
-         gTmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694618926; x=1695223726;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1694618928; x=1695223728; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/d3xKANM1+Tg4h0nwb5Z/K20lY+AlE+zGQheDE2qGpc=;
-        b=J2mGc3Dsx1PcXMA6glfGkpc0TD94+TrRtgGjqjqHLXGDi317xHdle7Ep5rAuXwSaou
-         vTAje3RxjUDNnyQTHNl0m2ioiR6ALKHQADVLKH3kwBB19pce8e8ol/NYxl7aPnkkJkR+
-         z4Pa4lv+k+sdaPcvh/lMefPrc0W0r1wDq/ttJnO1n4/iaX9MAae4vKtfqUe9E1Un8ovR
-         FVUEZdy4mP4QM3MSorUbJIMsJQHISad06FhVW1Hfj6PUWPzjYlfe/viaNQRrgTA4PI1w
-         MHuUOMDrRIDNwXq4k1wcTaeAjCVkdy9oEykafObDCcbz5carPvsdcoWUCwjfpzxByq6V
-         nzpw==
-X-Gm-Message-State: AOJu0Yy0xuKnJrxS23aVl4mk2F6UCXN2PZvxmsYxBjl3cdrZawHdNnMn
-        pOitybgVz2GMK+lR8RjQQ4lWRfJ4zOBlEFo4hv2Eiw==
-X-Google-Smtp-Source: AGHT+IFPKfpKr7JxfwV7TtSFzjcqi3rNuz/mPAOK8wwns9KWtPA/nP9F/6atME34EMEXX6TndxWazA==
-X-Received: by 2002:adf:b306:0:b0:317:df4f:4b97 with SMTP id j6-20020adfb306000000b00317df4f4b97mr2330649wrd.7.1694618926324;
-        Wed, 13 Sep 2023 08:28:46 -0700 (PDT)
+        bh=XWXo5chhD5Q8zfXo4/pVSr8fA6rgWTQ7OZCsmmyvZ+U=;
+        b=beZoMnKS0MSopOSGjY5SkpDxz/1aMOYtMP8TIqV8c8uhmPazmJWgs7/EDlNcDP9ZDx
+         dNUpNfQ6kLQSkieErjLj8ph6H8rzYqwxshxA8idDLhuTc7TCaXZTwWPGAxUCOJfnh3LT
+         Ksim/krJodXEE2Ao8BydKvOJEP+Nhz8SV1H7/oYvOXEcdJSduaTo9yqE0ziEiyhTob/g
+         QrYYeJfMb/fBnNR1CmPKUfVo9Usc7ceGmtlfBgIwQuZ/9j5WABQmBoHLgp8GfKWNkyoj
+         QGr5PuauNjSFd7MQxqkoJxTRP7eiw/gItlHwiDv3ZW/AumYVIn32TxsmjIlD4yhRjctL
+         a89Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694618928; x=1695223728;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XWXo5chhD5Q8zfXo4/pVSr8fA6rgWTQ7OZCsmmyvZ+U=;
+        b=fsSA9l7H0mQfeqRYScF3bn/7d0Ha2fx2uHkqHIwonVTVPxxS2GqexrNgsL/yMovq4G
+         Ab4rFibCpZc/I6w3JHMglS/sVK4k7E2aNh5YxdHh3uiaOu01wmvgaJvJE/PuhB0UlJ74
+         WhB417JDuZkKKpgWmiXEwRJi4Qik/PNm2V77phpV+cbHCEwy7ZKAeSsQrg0310MFaBMH
+         PM4HeS4kdFDwy+bk9O84z1nGYQ3aarWgL2q9AzsR7U1pY3dmjMRFefJ7j66Q6wrpKjtA
+         R9EfEuCh0ZQ/JuVM7k0RgxgHfkxJNJiBsCsRYBrvwHQ3UDkfebMoJ0noGlheDXGd3QtK
+         mXhw==
+X-Gm-Message-State: AOJu0YyjzHe1MYn3RkgVTxgCSfv9cNtwwAGVPAQjJgYgKHeEMrjHrvgH
+        jjavZjRi3zuZ55XX1R3HksuNkMvyhyUy2VvQTcttEw==
+X-Google-Smtp-Source: AGHT+IEl11EKMfk5wSAmJ6oOzj+vGlYX5Osa7YOjrMlFE/PamB93QQH5/Vm/y33QO0yOFWOVhVzI0A==
+X-Received: by 2002:a05:6000:12d2:b0:31f:bdfd:5d30 with SMTP id l18-20020a05600012d200b0031fbdfd5d30mr2476573wrx.57.1694618928027;
+        Wed, 13 Sep 2023 08:28:48 -0700 (PDT)
 Received: from [10.167.154.1] (178235177106.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.106])
-        by smtp.gmail.com with ESMTPSA id a11-20020aa7d74b000000b0052a404e5929sm7391979eds.66.2023.09.13.08.28.44
+        by smtp.gmail.com with ESMTPSA id a11-20020aa7d74b000000b0052a404e5929sm7391979eds.66.2023.09.13.08.28.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Sep 2023 08:28:45 -0700 (PDT)
+        Wed, 13 Sep 2023 08:28:47 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: [PATCH v3 0/3] MM8013 fg driver
-Date:   Wed, 13 Sep 2023 17:28:42 +0200
-Message-Id: <20230621-topic-mm8013-v3-0-781da361ec60@linaro.org>
+Date:   Wed, 13 Sep 2023 17:28:43 +0200
+Subject: [PATCH v3 1/3] dt-bindings: vendor-prefixes: Add Mitsumi Electric
+ Co., Ltd.
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIACrVAWUC/32NQQ6DIBQFr2JYSwMfRe2q92i6AEQlUTBgSRvj3
- Yuu2kVdzkvmzYqC9kYHdM1W5HU0wTibgOUZUoOwvcamTYyAACMcKF7cbBSepppQhlnFq7LRTS2
- hRkmRImgsvbBqSJJ9jmMaZ6878zoa90fiwYTF+feRjHRf/7xHigkuClIpDpyQkt1GY4V3F+d7t
- D9FOLNht6XmAKysK9F+23l2ZjUdlQXtCqkI/2lu2/YBIZYv6TIBAAA=
+Message-Id: <20230621-topic-mm8013-v3-1-781da361ec60@linaro.org>
+References: <20230621-topic-mm8013-v3-0-781da361ec60@linaro.org>
+In-Reply-To: <20230621-topic-mm8013-v3-0-781da361ec60@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
@@ -70,50 +70,45 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694618924; l=1329;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1694618924; l=1125;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=O8IJxCgW8NJAZR11B6cnppK2RlWuoaoVovJyUjtSzjc=;
- b=Xvlu7u7xd3EMxyhDH4IZnXF98FyEd04pkOaHT6okLEyrsrCnqxomnnMeq3/9QD+TtcvueT/qW
- PTpashvKGNUBjcq3mpBhpMwM8ejZ6eWtn+1pI7Sa8HxCqlmF+HnUEfH
+ bh=A4edAPC9JkBqokj8iLNvPGCrxmBfeXMUhLTyoYd19k8=;
+ b=MZZTMWp/pnsC9RA4uTSiS1T0IUZR1TpSBUDNNCUmPeUI6H5w6C5cNgBUVRXJ4pU1lcLSfsIto
+ Z3ye7OWXVQODysPmLFA45rchPF7iT0WsBI92FZxSYXNlcIoY/vYh/Vz
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This series brings support for the Mitsumi MM8013 Li-Ion fuel gauge.
+Mitsumi was [1] a Japanese company making various electronics devices
+and components. They've merged into a new entity, MinebeaMitsumi in 2017.
 
+Their current main page is available at [2]
+
+[1] https://en.wikipedia.org/wiki/Mitsumi_Electric
+[2] https://product.minebeamitsumi.com/en/
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
-Changes in v3:
-- Reference power-supply.yaml in bindings
-- Link to v2: https://lore.kernel.org/r/20230621-topic-mm8013-v2-0-9f1b41f4bc06@linaro.org
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Changes in v2:
-- Fix typo in patch 2 commit message
-- Drop driver.owner in patch 3
-- Add PRESENT psy property
-- Pick up tags
-- Link to v1: https://lore.kernel.org/r/20230621-topic-mm8013-v1-0-4407c6260053@linaro.org
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 573578db9509..565b13fb429d 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -871,6 +871,8 @@ patternProperties:
+     description: MiraMEMS Sensing Technology Co., Ltd.
+   "^mitsubishi,.*":
+     description: Mitsubishi Electric Corporation
++  "^mitsumi,.*":
++    description: Mitsumi Electric Co., Ltd.
+   "^mixel,.*":
+     description: Mixel, Inc.
+   "^miyoo,.*":
 
----
-Konrad Dybcio (3):
-      dt-bindings: vendor-prefixes: Add Mitsumi Electric Co., Ltd.
-      dt-bindings: power: supply: Document Mitsumi MM8013 fuel gauge
-      power: supply: Introduce MM8013 fuel gauge driver
-
- .../bindings/power/supply/mitsumi,mm8013.yaml      |  38 +++
- .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
- MAINTAINERS                                        |   5 +
- drivers/power/supply/Kconfig                       |   9 +
- drivers/power/supply/Makefile                      |   1 +
- drivers/power/supply/mm8013.c                      | 283 +++++++++++++++++++++
- 6 files changed, 338 insertions(+)
----
-base-commit: e143016b56ecb0fcda5bb6026b0a25fe55274f56
-change-id: 20230621-topic-mm8013-376759e98b28
-
-Best regards,
 -- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
+2.42.0
 
