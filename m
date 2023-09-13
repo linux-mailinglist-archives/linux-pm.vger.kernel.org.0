@@ -2,97 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25AA779E16A
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 10:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE94179E1B4
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Sep 2023 10:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235651AbjIMIEV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Sep 2023 04:04:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37992 "EHLO
+        id S232468AbjIMIM2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Sep 2023 04:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238722AbjIMIEU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 04:04:20 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0D21729;
-        Wed, 13 Sep 2023 01:04:16 -0700 (PDT)
-Received: from [185.243.126.183] (helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1qgKqA-0001sl-W5; Wed, 13 Sep 2023 10:03:15 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Olof Johansson <olof@lixom.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Michal Simek <michal.simek@amd.com>,
-        Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Tero Kristo <kristo@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        Conor Dooley <conor@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Andreas Farber <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pmdomain: Rename the genpd subsystem to pmdomain
-Date:   Wed, 13 Sep 2023 10:03:10 +0200
-Message-ID: <5708840.DvuYhMxLoT@phil>
-In-Reply-To: <20230912221127.487327-1-ulf.hansson@linaro.org>
-References: <20230912221127.487327-1-ulf.hansson@linaro.org>
+        with ESMTP id S238879AbjIMIMO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 04:12:14 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA0E199E
+        for <linux-pm@vger.kernel.org>; Wed, 13 Sep 2023 01:12:01 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4ff8f2630e3so11180625e87.1
+        for <linux-pm@vger.kernel.org>; Wed, 13 Sep 2023 01:12:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694592719; x=1695197519; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Eia8zDzv+HtcosL0sFP1xVfmwcdZSEW7E/46TEr37W0=;
+        b=aPG7MYuphs06h2MiTJoIP3w48iXxygjRv9Wpg3RbzNSW88KW0dDZ/duMIsBR4eDWOY
+         q58R68pCXif+VM1LZCGpgo5Tf8dTUEFLdIKNkc7NSUwQZ8Sy4vPOFPFcjN5Mm9Q89vYH
+         IyaGKkuDz6J65ipA/W016TopVjK8q6XN98QXf8BHnYKn1m5+ZYJEbUuLi/BH45+vIrvj
+         WLyNP+G8kfZe/3MtEkHAbnVM3JpiysEnYjuo9kGdVBto2mzDkOPU2tEfa4w7Z5VRkB+6
+         ePUHT6OFormAetsQsFd/VMoMEPkMYXsR/xTP0DybdjMdLaCK9avO3wFIsjt5RsYB/7Wy
+         zY4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694592719; x=1695197519;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Eia8zDzv+HtcosL0sFP1xVfmwcdZSEW7E/46TEr37W0=;
+        b=QUJer/sq2FOCIMyqZoobBBv5H0W4bcPVekgQDd4VCuld9ik98rn08Yqf508LaQXGbM
+         yrMRuaocrb/wWsx8xp0HMadaJ73GsTtssfpCjN/Erd26HOYyqLKXThDuEMw9SQ75gXzf
+         zdbv1cbYWqrgfgWIHWZyM4IgaQcRmbf0ZC4qDkPxEw+sC+ybR4i979wjuWRkd/IRjkTz
+         KltnXLkx+kDp+Uqt14xgvAlRGE8xxug4unu4V7gj2zBJMbaKTs4f8f8zVDvQrjECrABX
+         tLtLYv/ArC32RfBGByZyICNlfR+37peu44AyycjljejyuIvpSzuMAu05CxhkhGLL2eH4
+         rmiw==
+X-Gm-Message-State: AOJu0YzXcrMBKTxvYUPYcOqUuzglUHqO3c4z1yAtx/ws6AXUpMWhFZjH
+        w1kxXqeTchS8tNXRmUhp2j7dpw==
+X-Google-Smtp-Source: AGHT+IHp5o0wXS0xcvX2jwn9i5O9G2Ix9P6EWjUc3OAKHKI6CAMbJiUEbTX5kD1YW/2b/KBnTbb5rA==
+X-Received: by 2002:a05:6512:551:b0:4fb:8435:3efc with SMTP id h17-20020a056512055100b004fb84353efcmr1283002lfl.16.1694592719163;
+        Wed, 13 Sep 2023 01:11:59 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.214.188])
+        by smtp.gmail.com with ESMTPSA id v1-20020a5d6b01000000b0031f300a4c26sm14741521wrw.93.2023.09.13.01.11.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Sep 2023 01:11:58 -0700 (PDT)
+Message-ID: <bf9a07ff-5628-05ab-2362-a917d3d38313@linaro.org>
+Date:   Wed, 13 Sep 2023 10:11:56 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH v2 4/7] thermal: exynos: simplify regulator
+ (de)initialization
+Content-Language: en-US
+To:     Mateusz Majewski <m.majewski2@samsung.com>,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+References: <20230911133435.14061-1-m.majewski2@samsung.com>
+ <CGME20230911133616eucas1p10c5eeb0f0240dde975ccc5935cb5c311@eucas1p1.samsung.com>
+ <20230911133435.14061-5-m.majewski2@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230911133435.14061-5-m.majewski2@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Am Mittwoch, 13. September 2023, 00:11:27 CEST schrieb Ulf Hansson:
-> It has been pointed out that naming a subsystem "genpd" isn't very
-> self-explanatory and the acronym itself that means Generic Power Domain, is
-> known only by a limited group of people.
+On 11/09/2023 15:34, Mateusz Majewski wrote:
+> This does reduce the error granularity a bit, but the code
+> simplification seems to be worth it.
 > 
-> In a way to improve the situation, let's rename the subsystem to pmdomain,
-> which ideally should indicate that this is about so called Power Domains or
-> "PM domains" as we often also use within the Linux Kernel terminology.
+> Signed-off-by: Mateusz Majewski <m.majewski2@samsung.com>
+> ---
+>  drivers/thermal/samsung/exynos_tmu.c | 33 +++++++---------------------
+>  1 file changed, 8 insertions(+), 25 deletions(-)
 > 
-> Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
+> index ba9414b419ef..8451deb65f43 100644
+> --- a/drivers/thermal/samsung/exynos_tmu.c
+> +++ b/drivers/thermal/samsung/exynos_tmu.c
+> @@ -157,7 +157,6 @@ enum soc_type {
+>   * @reference_voltage: reference voltage of amplifier
+>   *	in the positive-TC generator block
+>   *	0 < reference_voltage <= 31
+> - * @regulator: pointer to the TMU regulator structure.
+>   * @tzd: pointer to thermal_zone_device structure
+>   * @ntrip: number of supported trip points.
+>   * @enabled: current status of TMU device
+> @@ -183,7 +182,6 @@ struct exynos_tmu_data {
+>  	u16 temp_error1, temp_error2;
+>  	u8 gain;
+>  	u8 reference_voltage;
+> -	struct regulator *regulator;
+>  	struct thermal_zone_device *tzd;
+>  	unsigned int ntrip;
+>  	bool enabled;
+> @@ -994,42 +992,34 @@ static int exynos_tmu_probe(struct platform_device *pdev)
+>  	 * TODO: Add regulator as an SOC feature, so that regulator enable
+>  	 * is a compulsory call.
+>  	 */
+> -	data->regulator = devm_regulator_get_optional(&pdev->dev, "vtmu");
+> -	if (!IS_ERR(data->regulator)) {
+> -		ret = regulator_enable(data->regulator);
+> -		if (ret) {
+> -			dev_err(&pdev->dev, "failed to enable vtmu\n");
+> -			return ret;
+> -		}
+> -	} else {
+> -		if (PTR_ERR(data->regulator) == -EPROBE_DEFER)
+> +	ret = devm_regulator_get_enable_optional(&pdev->dev, "vtmu");
+> +	if (ret) {
+> +		if (ret == -EPROBE_DEFER)
+>  			return -EPROBE_DEFER;
+> -		dev_info(&pdev->dev, "Regulator node (vtmu) not found\n");
+> +		dev_info(&pdev->dev, "Failed to get regulator node (vtmu)\n");
 
-yeah the new name sounds better and also doing it now is probably
-way nicer than later:
+This is not equivalent. If regulator is provided and enable fails, the
+old code is nicely returning error. Now, it will print misleading
+message - failed to get regulator - and continue.
 
-Acked-by: Heiko Stuebner <heiko@sntech.de>
+While this simplifies the code, it ignores important running condition -
+having regulator enabled.
 
+Best regards,
+Krzysztof
 
