@@ -2,129 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 233297A110E
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 00:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F7B7A1138
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 00:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbjINWfz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 18:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40968 "EHLO
+        id S229836AbjINWpn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Sep 2023 18:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjINWfy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 18:35:54 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C82D26B7
-        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 15:35:50 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-d7ba4c5f581so1508356276.0
-        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 15:35:50 -0700 (PDT)
+        with ESMTP id S229499AbjINWpn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 18:45:43 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB7D26B7
+        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 15:45:38 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-d801c83325fso1536566276.0
+        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 15:45:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694730949; x=1695335749; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gOfdC8wV94SdkfFI9yJK6AfQ92EIW46yyM5znknoWWA=;
-        b=iWH+Zes1PAabuUYOOF7KN3cIeAJDVESbkX+fLMH1TTVRQCBquV7+C0LnCruNis8flt
-         Hx1i/+thRTd7ipBzxh8YO7aa/n4L5QdsB/kQu22agkujyxigaAexpB1RWG+o37v0W7Oc
-         JObHLyCrwB29Vwnb0FyrFskfIdLmlQ6GXBGAFdWkG7BS+JfYIvtW87yyLLdcgZhA26tp
-         SNRaaOWdX1uvcP2SUUKZprjvncEuQ3b0MfRkYZZLi4EW6fz9RPZewWoBcW8XSUT3TgBE
-         C9F8qVq8mGTQ0mnFjXR1Mvd5yhwUiwk4gVMGJcCe9WYNHJDhE0UPGyGcu9Qmzzik6s8m
-         a+sw==
+        d=linaro.org; s=google; t=1694731538; x=1695336338; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=A5vZJNq08TeNOWQ034lbMsaCbZ2JIeyPBNL9fz/Gkc4=;
+        b=DLYbSu9SAMpArJVnnKtemuBH4UG2pc2baYzf+ISWDdtsmQF3CFpBD/HERwEWZOxUgW
+         LbtyBAdTEh2bPaRDeOAt+dJZ+6YFT2VqK4jJerYJOcw6phi1ngQIndLLgL4w2HoEU11h
+         rrwvxJIYoY04y2rR1FE8RvHoQPxw8bJREFZO41u8/NJQMyvDtHazY6c/fzEzCKGQzfex
+         DTJDpn8GEYRDg13CvDv+gYfpZckXJ62WpuWSOzm9SvxgTKBTmPRKC/h6WzpJRMVN1Qbv
+         NKFe7oli+D0DI2C3pMiz3cduP3DpGcrBN5hCuG+jtC9kkirvKVaOTU2Uh15DxUg8bndy
+         pmhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694730949; x=1695335749;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gOfdC8wV94SdkfFI9yJK6AfQ92EIW46yyM5znknoWWA=;
-        b=mWp3Ki1miaVO2CAJnfTwoedworhYYd+ee1IYDsTD3UFfxp4J9bv8xWvgtgZkx3nq8I
-         8Fgq7olLt76BZYnJveyf9WbZYjGO0IexpAkIqFPjuVYlaKnRMrcNAe/7RRSWT2VU0xna
-         oC6fiVJnGy8VZ5jMoLIDCfDlMN2AmzAF1+7rw3HgWSlo1BzUe4Bl8643aiK1HzYnNhIG
-         +b/pu8bH2nyQqVDW+YISr1w9y7y7/i6M1UrwhMTWhuM85OgFiO0qY7tWx7VCAX/l/b4Y
-         uaAePk7gpAnaDTF9CRL8hofJdSSzVgc0KgKnHNFAV5zFsenVuZgcRH8KDpM4mSF5kLD/
-         7zpg==
-X-Gm-Message-State: AOJu0YyKzGDczQoI5FoHUEfg1OX3MuCBSiXt9cknfVdtGzqorXICiBlF
-        0Ked1MKFFfmSvwVP4KBFVVqlCCTLr2mEG8Hcc1ioUw==
-X-Google-Smtp-Source: AGHT+IFYYORUkay7OZUUV8hpvmKd3CBWn2xqwSr3h1Kz//lCK1gQvRLf0XfrZGWylaGKptPcvtoPFQRDMQ/QIjwaU9w=
-X-Received: by 2002:a25:4293:0:b0:d7e:8175:4fa9 with SMTP id
- p141-20020a254293000000b00d7e81754fa9mr6560203yba.4.1694730949424; Thu, 14
- Sep 2023 15:35:49 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1694731538; x=1695336338;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=A5vZJNq08TeNOWQ034lbMsaCbZ2JIeyPBNL9fz/Gkc4=;
+        b=h0EzYSU05aGYEkAEpjFEJ5ck/RVJVLTM821liXpC5k1ytiHKnwapVozY4i6eP6la9p
+         mYnb5Nmcd/Npq/BsQfzjJGOxZN6OQFsRQ2dB8oazWyHCVfemtNKKYyfv825P63Mac3O8
+         PdjCj7gK2BLgDdQu4rw6STn5FIZkYgq1MD/aPDpGvVbS3F0Icir8fASM+UdA1Oh5Cc9y
+         p/NAmK1MXKmjy7twtz/u/sCq6OkIsZ+UCVWxdgMBshlT6mSYdJkRp6Akn4k44kbDZjaO
+         4NsJsnWlnk310tQxthIH4Wm28tF7PI8TdmViZjbGX2iAqt/fPL9Ks6iD/MxOB1/GJrrR
+         vM0A==
+X-Gm-Message-State: AOJu0Yxi+YS0UD1Mq8Y8UlHB38ptAZLaXY38uE292jKw0PGf3dthn8D5
+        oZTDaFRb/oURKEpWR8ccqwuyGCAaDyu7qEu6cE3hAA==
+X-Google-Smtp-Source: AGHT+IG0nZGJyegDk1SVCFp9hbtZsoKEbrZagRFwA2Y6awLjCs8leER4f/EZsvN3tkI84VDbuUVkEQe54i6cmxY4hrM=
+X-Received: by 2002:a25:4d0:0:b0:d7f:374b:638f with SMTP id
+ 199-20020a2504d0000000b00d7f374b638fmr6486200ybe.23.1694731537714; Thu, 14
+ Sep 2023 15:45:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230914111554.586438-1-ulf.hansson@linaro.org> <CAMuHMdU-0i34XiQTkjkzJrG7kFX8kdSQjG57WS+sW+OLTLH4eg@mail.gmail.com>
-In-Reply-To: <CAMuHMdU-0i34XiQTkjkzJrG7kFX8kdSQjG57WS+sW+OLTLH4eg@mail.gmail.com>
+References: <20230825112633.236607-1-ulf.hansson@linaro.org>
+In-Reply-To: <20230825112633.236607-1-ulf.hansson@linaro.org>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 15 Sep 2023 00:35:13 +0200
-Message-ID: <CAPDyKFoRYn0G0W2g4HhiVE3osmGuZHox=79J8o9bOfUe0Aq_oA@mail.gmail.com>
-Subject: Re: [PATCH 01/17] pmdomain: Prepare to move Kconfig files into the
- pmdomain subsystem
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+Date:   Fri, 15 Sep 2023 00:45:02 +0200
+Message-ID: <CAPDyKFpn93YU78fRg02Avb3g=W2=+Cn=HD4tUbzTYq9WKGVOKw@mail.gmail.com>
+Subject: Re: [PATCH v3 00/13] arm_scmi/cpufreq: Add generic performance
+ scaling support
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>
+Cc:     Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
         linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
+        linux-kernel@vger.kernel.org, Viresh Kumar <vireshk@kernel.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 14 Sept 2023 at 13:59, Geert Uytterhoeven <geert@linux-m68k.org> wr=
-ote:
->
-> Hi Ulf,
->
-> On Thu, Sep 14, 2023 at 1:17=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.o=
-rg> wrote:
-> > Rather than having the various Kconfig files for the genpd providers
-> > sprinkled across subsystems, let's prepare to move them into the pmdoma=
-in
-> > subsystem along with the implementations.
-> >
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
->
-> Thanks for your patch!
->
-> > --- a/drivers/Kconfig
-> > +++ b/drivers/Kconfig
-> > @@ -175,6 +175,8 @@ source "drivers/soundwire/Kconfig"
-> >
-> >  source "drivers/soc/Kconfig"
-> >
-> > +source "drivers/genpd/Kconfig"
->
-> drivers/pmdomain/Kconfig
+Sudeep, Christian,
 
-Ohh, thanks for spotting this! I certainly failed in my internal re-base. :=
--(
-
+On Fri, 25 Aug 2023 at 13:26, Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
-> > +
-> >  source "drivers/devfreq/Kconfig"
-> >
-> >  source "drivers/extcon/Kconfig"
-> > diff --git a/drivers/pmdomain/Kconfig b/drivers/pmdomain/Kconfig
-> > new file mode 100644
-> > index 000000000000..c32a76b51840
-> > --- /dev/null
-> > +++ b/drivers/pmdomain/Kconfig
-> > @@ -0,0 +1,4 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only
-> > +menu "Power Domains Support"
+> Changes in v3:
+>         - Re-based upon the for-next/scmi/updates branch.
+>         - Re-ordered some of the patches in the series, to eas review.
+>         - Added some new DT doc patches in the series, according to comments.
+>         - Fixed other comments, see version history for each patch.
 >
-> PM Domains
-
-Yep, that is better as it has a wider meaning (it can incorporate
-clock-domains and performance-domains, for example). Let me change
-that, thanks!
-
-I will follow this pattern for each of the submenus too.
-
+> Changes in v2:
+>         - Split up the series, to get the basic support in place as the first
+>         step. The part that remains is the integration with the OPP library, to
+>         allow consumer drivers to change performance level using the OPP lib.
+>         - Re-based on top v6.5-rc1.
+>         - Other changes will be described for each patch.
 >
-> > +
-> > +endmenu
+> The current SCMI performance scaling support is limited to cpufreq. This series
+> extends the support, so it can be used for all kind of devices and not only for
+> CPUs.
 >
-> "b4 am" cannot download the full series at once.
-> It looks like you didn't send it as a series, but as individual patches?
+> The changes are spread over a couple of different subsystems, although the
+> changes that affects the other subsystems than the arm_scmi directory are
+> mostly smaller, except for last patch which is in the new genpd directory.
+>
+> The series is based upon the for-next/scmi/updates branch, but to enable the
+> genpd provider in patch 13 (the actual scmi performance domain driver) to be
+> placed in the new genpd directory, I have also merged an immutable branch [1],
+> which is queued for v6.6.
+>
+> Note that, I am runing this on the Qemu virt platform with Optee running an SCMI
+> server. If you want some more details about my test setup, I can share this with
+> you, just let me know.
+>
+> Looking forward to your feedback!
+>
+> Kind regards
+> Ulf Hansson
+>
+> [1]
+> git.kernel.org/pub/scm/linux/kernel/git/people/ulf.hansson/linux-pm.git genpd_create_dir
+>
+>
+> Ulf Hansson (13):
+>   firmware: arm_scmi: Extend perf protocol ops to get number of domains
+>   firmware: arm_scmi: Extend perf protocol ops to get information of a
+>     domain
+>   cpufreq: scmi: Prepare to move OF parsing of domain-id to cpufreq
+>   firmware: arm_scmi: Align perf ops to use domain-id as in-parameter
+>   firmware: arm_scmi: Drop redundant ->device_domain_id() from perf ops
+>   cpufreq: scmi: Avoid one OF parsing in scmi_get_sharing_cpus()
+>   cpufreq: scmi: Drop redundant ifdef in scmi_cpufreq_probe()
+>   dt-bindings: arm: cpus: Add a power-domain-name for a
+>     performance-domain
+>   dt-bindings: firmware: arm,scmi: Extend bindings for protocol@13
+>   dt-bindings: power: Clarify performance capabilities of power-domains
+>   cpufreq: scmi: Add support to parse domain-id using
+>     #power-domain-cells
+>   PM: domains: Allow genpd providers to manage OPP tables directly by
+>     its FW
+>   genpd: arm: Add the SCMI performance domain
+>
+>  .../devicetree/bindings/arm/cpus.yaml         |   4 +-
+>  .../bindings/firmware/arm,scmi.yaml           |  11 +-
+>  .../bindings/power/power-domain.yaml          |  17 +-
+>  MAINTAINERS                                   |   1 +
+>  drivers/base/power/domain.c                   |  11 +-
+>  drivers/cpufreq/scmi-cpufreq.c                |  55 +++++--
+>  drivers/firmware/arm_scmi/Kconfig             |  12 ++
+>  drivers/firmware/arm_scmi/perf.c              |  90 +++++------
+>  drivers/genpd/Makefile                        |   1 +
+>  drivers/genpd/arm/Makefile                    |   3 +
+>  drivers/genpd/arm/scmi_perf_domain.c          | 150 ++++++++++++++++++
+>  include/linux/pm_domain.h                     |   5 +
+>  include/linux/scmi_protocol.h                 |  18 ++-
+>  13 files changed, 293 insertions(+), 85 deletions(-)
+>  create mode 100644 drivers/genpd/arm/Makefile
+>  create mode 100644 drivers/genpd/arm/scmi_perf_domain.c
+>
 
-I screwed up when sending. Sorry. I will submit a new version!
+Unless you have some additional comments, I think patch 1 -> 12 should
+be ready to be applied to your scmi tree, as is. I tried to apply it
+today and did not encounter any problem.
 
-Thanks for reviewing!
+Patch 13 needs a rebase so I will submit a new version of it. For you
+to apply it to your tree, you need to move your scmi branch to
+v6.6-rc2 (on Monday), would that be okay for you to manage?
 
 Kind regards
 Uffe
