@@ -2,30 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8943779FC60
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 08:55:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 718D579FD27
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 09:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233682AbjINGz1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 02:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60450 "EHLO
+        id S233924AbjINHVA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Sep 2023 03:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232878AbjINGz0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 02:55:26 -0400
-Received: from srv01.abscue.de (abscue.de [IPv6:2a03:4000:63:bf5:4817:8eff:feeb:8ac7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A535CCE5;
-        Wed, 13 Sep 2023 23:55:21 -0700 (PDT)
-Received: from srv01.abscue.de (localhost [127.0.0.1])
-        by spamfilter.srv.local (Postfix) with ESMTP id C34391C3D98;
-        Thu, 14 Sep 2023 08:55:19 +0200 (CEST)
-X-Spam-Checker-Version: SpamAssassin 4.0.0 (2022-12-13) on abscue.de
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=5.0 tests=ALL_TRUSTED autolearn=ham
-        autolearn_force=no version=4.0.0
-Received: from fluffy-mammal.fritz.box (dslb-092-072-000-199.092.072.pools.vodafone-ip.de [92.72.0.199])
-        by srv01.abscue.de (Postfix) with ESMTPSA id 614391C3D99;
-        Thu, 14 Sep 2023 08:55:19 +0200 (CEST)
-From:   =?UTF-8?q?Otto=20Pfl=C3=BCger?= <otto.pflueger@abscue.de>
-To:     linux-arm-msm@vger.kernel.org
+        with ESMTP id S232274AbjINHU7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 03:20:59 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0B7CE5
+        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 00:20:55 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-31aeef88a55so508487f8f.2
+        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 00:20:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694676054; x=1695280854; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=taIxm6eL4Mx2J2zzMyGsdIis7l49d87TRLXgpFhjd5k=;
+        b=k7uXVF9bXvTEZqHpb0toZYrxewmbq9qjFB2nAFYooZ0sHeGFvfJQdIT0b8EhS8tHfz
+         FShvk3WuvMElqYQ7/5uOdO4kqFcRHXeSR7FudL4XUYlqDKGLxRvj+WV4zafWyZ+iHyhx
+         ZgLbPF68BjcKV6Swxo5Mt4ozDlIvgOV64+xopXTIglCSmzkGiDRkZJusTIzPTf0pfpPj
+         RKFEwyadLRLTaLcK5eNSQt1qtL8eIaYf3wf15w5kzKdNt0GzdcdZzCu6ZL5p7L29yUN5
+         jvoYnZDySzcyMu+vYP5A11bwSsjwigG6NuI2yWiqkh890JGdHMKd0cS/E6w6rZjR+NS3
+         W+oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694676054; x=1695280854;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=taIxm6eL4Mx2J2zzMyGsdIis7l49d87TRLXgpFhjd5k=;
+        b=rZbuj+LgNhhZLJE1XJYjg8Wf22K/J/X7cmN9018/BqzDPF0oBAxjpbXzBHfIU+9dwd
+         mCf0p/tfZbkSrTWfqkH1O9XARLP41vlyCP2Aus8ICde9ENptVNpa3skI1xnRAX6Wg7Am
+         C7yTfl6NKEU61OAqemA346fAj2edmgsM6v2lHQmB5Ym9zMRwlpznt4ETE+A33DidBXVQ
+         x5eTiwSYBVundEyniA1wsFaSw/gxTJhsGjgUNlCsyqalQyWBZvZIAVk8ZjtoQwl3me84
+         uP2veKbvocLCFni7EmBPx9mb3WqjMn+UERzMUiSZHPXAq0+aEcgd0FJwMqOB9tjUv4ju
+         MIZQ==
+X-Gm-Message-State: AOJu0Yy1cWGJpZR8r0fS1nNT20CnmQ08qrfmdluOwj+BqTuiTqs1AJN1
+        8pR9pzV+/J7ue1zxob3PLsDJLg==
+X-Google-Smtp-Source: AGHT+IFOtrDzFl+9oDW4vU8GYnttUJKqkzHOZyb0l5f+lzpVsekbk/NNZ4ppoXmbhdEUUFCdfgos3w==
+X-Received: by 2002:adf:f112:0:b0:31f:8547:2a59 with SMTP id r18-20020adff112000000b0031f85472a59mr4283144wro.69.1694676053680;
+        Thu, 14 Sep 2023 00:20:53 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.214.188])
+        by smtp.gmail.com with ESMTPSA id h16-20020a5d5490000000b0031773a8e5c4sm930114wrv.37.2023.09.14.00.20.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Sep 2023 00:20:53 -0700 (PDT)
+Message-ID: <8af594db-3f8b-617e-b558-21120e11122b@linaro.org>
+Date:   Thu, 14 Sep 2023 09:20:51 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH v3 1/3] dt-bindings: power: rpmpd: Add MSM8917, MSM8937
+ and QM215
+Content-Language: en-US
+To:     =?UTF-8?Q?Otto_Pfl=c3=bcger?= <otto.pflueger@abscue.de>,
+        linux-arm-msm@vger.kernel.org
 Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
@@ -33,125 +66,46 @@ Cc:     Andy Gross <agross@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        =?UTF-8?q?Otto=20Pfl=C3=BCger?= <otto.pflueger@abscue.de>
-Subject: [PATCH v3 3/3] pmdomain: qcom: rpmpd: Add QM215 power domains
-Date:   Thu, 14 Sep 2023 08:54:23 +0200
-Message-Id: <20230914065422.5452-4-otto.pflueger@abscue.de>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230914065422.5452-1-otto.pflueger@abscue.de>
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
 References: <20230914065422.5452-1-otto.pflueger@abscue.de>
-MIME-Version: 1.0
+ <20230914065422.5452-2-otto.pflueger@abscue.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230914065422.5452-2-otto.pflueger@abscue.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-QM215 is typically paired with a PM8916 PMIC and uses its SMPA1 and
-LDOA2 regulators in voltage level mode for VDDCX and VDDMX, respectively.
+On 14/09/2023 08:54, Otto Pflüger wrote:
+> The MSM8917, MSM8937 and QM215 SoCs have VDDCX and VDDMX power domains
+> controlled in voltage level mode. Define the MSM8937 and QM215 power
+> domains as aliases because these SoCs are similar to MSM8917 and may
+> share some parts of the device tree.
+> 
+> Also add the compatibles for these SoCs to the documentation, with
+> qcom,msm8937-rpmpd using qcom,msm8917-rpmpd as a fallback compatible
+> because there are no known differences. QM215 is not compatible with
+> these because it uses different regulators.
+> 
+> Signed-off-by: Otto Pflüger <otto.pflueger@abscue.de>
 
-Signed-off-by: Otto Pflüger <otto.pflueger@abscue.de>
----
- drivers/pmdomain/qcom/rpmpd.c | 58 +++++++++++++++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+This is a friendly reminder during the review process.
 
-diff --git a/drivers/pmdomain/qcom/rpmpd.c b/drivers/pmdomain/qcom/rpmpd.c
-index 2980ebd6ed8c..d793cf2f3af8 100644
---- a/drivers/pmdomain/qcom/rpmpd.c
-+++ b/drivers/pmdomain/qcom/rpmpd.c
-@@ -105,6 +105,24 @@ static struct rpmpd cx_s1a_corner_ao = {
- 	.key = KEY_CORNER,
- };
- 
-+static struct rpmpd cx_s1a_lvl_ao;
-+static struct rpmpd cx_s1a_lvl = {
-+	.pd = { .name = "cx", },
-+	.peer = &cx_s1a_lvl_ao,
-+	.res_type = RPMPD_SMPA,
-+	.res_id = 1,
-+	.key = KEY_LEVEL,
-+};
-+
-+static struct rpmpd cx_s1a_lvl_ao = {
-+	.pd = { .name = "cx_ao", },
-+	.peer = &cx_s1a_lvl,
-+	.active_only = true,
-+	.res_type = RPMPD_SMPA,
-+	.res_id = 1,
-+	.key = KEY_LEVEL,
-+};
-+
- static struct rpmpd cx_s2a_corner_ao;
- static struct rpmpd cx_s2a_corner = {
- 	.pd = { .name = "cx", },
-@@ -180,6 +198,13 @@ static struct rpmpd cx_s1a_vfc = {
- 	.key = KEY_FLOOR_CORNER,
- };
- 
-+static struct rpmpd cx_s1a_vfl = {
-+	.pd = { .name = "cx_vfl", },
-+	.res_type = RPMPD_SMPA,
-+	.res_id = 1,
-+	.key = KEY_FLOOR_LEVEL,
-+};
-+
- static struct rpmpd cx_s2a_vfc = {
- 	.pd = { .name = "cx_vfc", },
- 	.res_type = RPMPD_SMPA,
-@@ -239,6 +264,24 @@ static struct rpmpd gx_rwgx0_lvl_ao = {
- };
- 
- /* MX */
-+static struct rpmpd mx_l2a_lvl_ao;
-+static struct rpmpd mx_l2a_lvl = {
-+	.pd = { .name = "mx", },
-+	.peer = &mx_l2a_lvl_ao,
-+	.res_type = RPMPD_LDOA,
-+	.res_id = 2,
-+	.key = KEY_LEVEL,
-+};
-+
-+static struct rpmpd mx_l2a_lvl_ao = {
-+	.pd = { .name = "mx_ao", },
-+	.peer = &mx_l2a_lvl,
-+	.active_only = true,
-+	.res_type = RPMPD_LDOA,
-+	.res_id = 2,
-+	.key = KEY_LEVEL,
-+};
-+
- static struct rpmpd mx_l3a_corner_ao;
- static struct rpmpd mx_l3a_corner = {
- 	.pd = { .name = "mx", },
-@@ -704,6 +747,20 @@ static const struct rpmpd_desc qcs404_desc = {
- 	.max_state = RPM_SMD_LEVEL_BINNING,
- };
- 
-+static struct rpmpd *qm215_rpmpds[] = {
-+	[QM215_VDDCX] =		&cx_s1a_lvl,
-+	[QM215_VDDCX_AO] =	&cx_s1a_lvl_ao,
-+	[QM215_VDDCX_VFL] =	&cx_s1a_vfl,
-+	[QM215_VDDMX] =		&mx_l2a_lvl,
-+	[QM215_VDDMX_AO] =	&mx_l2a_lvl_ao,
-+};
-+
-+static const struct rpmpd_desc qm215_desc = {
-+	.rpmpds = qm215_rpmpds,
-+	.num_pds = ARRAY_SIZE(qm215_rpmpds),
-+	.max_state = RPM_SMD_LEVEL_TURBO,
-+};
-+
- static struct rpmpd *sdm660_rpmpds[] = {
- 	[SDM660_VDDCX] =	&cx_rwcx0_lvl,
- 	[SDM660_VDDCX_AO] =	&cx_rwcx0_lvl_ao,
-@@ -805,6 +862,7 @@ static const struct of_device_id rpmpd_match_table[] = {
- 	{ .compatible = "qcom,msm8998-rpmpd", .data = &msm8998_desc },
- 	{ .compatible = "qcom,qcm2290-rpmpd", .data = &qcm2290_desc },
- 	{ .compatible = "qcom,qcs404-rpmpd", .data = &qcs404_desc },
-+	{ .compatible = "qcom,qm215-rpmpd", .data = &qm215_desc },
- 	{ .compatible = "qcom,sdm660-rpmpd", .data = &sdm660_desc },
- 	{ .compatible = "qcom,sm6115-rpmpd", .data = &sm6115_desc },
- 	{ .compatible = "qcom,sm6125-rpmpd", .data = &sm6125_desc },
--- 
-2.39.1
+It looks like you received a tag and forgot to add it.
+
+If you do not know the process, here is a short explanation:
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions, under or above your Signed-off-by tag. Tag is "received", when
+provided in a message replied to you on the mailing list. Tools like b4
+can help here. However, there's no need to repost patches *only* to add
+the tags. The upstream maintainer will do that for tags received on the
+version they apply.
+
+https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
+
+If a tag was not added on purpose, please state why and what changed.
+
+Best regards,
+Krzysztof
+
