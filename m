@@ -2,158 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D03A97A07E7
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 16:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D65E97A07F2
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 16:53:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240347AbjINOvw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 10:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41674 "EHLO
+        id S240356AbjINOxl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Sep 2023 10:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234000AbjINOvv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 10:51:51 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE62FF9;
-        Thu, 14 Sep 2023 07:51:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
-        Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:Reply-To:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=N+daY3W8c0wPiaII8cnXdFIF6V6hVhPTLJNCrw2Vgv4=; b=lTy+WfbtTrNsAPu+3qW9e1TZOW
-        CDIl+c93vTZApkIFJbMn5QS4hQ/SzWBu/fVYukEWW5qvQurPtPo0Whn64CsvOxWOokOI7bhfftzMQ
-        8ePyUoCNTS4sjn7HeeqE7dmptpXYcg9PUVIFdzulgU44EVY/upAn/x40eFn7neGD0LpbAXEzUXRPi
-        zFiM5NhXRinhTNIDrSv185pfr1xt23fsRaa9vOXhWAahOqY9icnMcXs8suMZcvGqIC6NUG32623sG
-        nDcRFKy/JgUxyBwrAoFms3ZZSdc/0TcgA47Td5IvpqS2D4G3q3qo06rrCB6Q2LTfwXD8F8xSj2GMA
-        lRpnOYwQ==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:34884 helo=rmk-PC.armlinux.org.uk)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <rmk@armlinux.org.uk>)
-        id 1qgnh2-0004Ol-0n;
-        Thu, 14 Sep 2023 15:51:44 +0100
-Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-        id 1qgnh2-007ZRZ-WD; Thu, 14 Sep 2023 15:51:45 +0100
-From:   "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-To:     linux-acpi@vger.kernel.org, James Morse <james.morse@arm.com>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        jianyong.wu@arm.com, justin.he@arm.com,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Salil Mehta <salil.mehta@huawei.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-ia64@vger.kernel.org
-Subject: [PATCH RFC v2] cpu-hotplug: provide prototypes for arch CPU registration
+        with ESMTP id S240354AbjINOxl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 10:53:41 -0400
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B6F1FC4;
+        Thu, 14 Sep 2023 07:53:37 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id BC31C30008F0D;
+        Thu, 14 Sep 2023 16:53:32 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id B157250FA4E; Thu, 14 Sep 2023 16:53:32 +0200 (CEST)
+Date:   Thu, 14 Sep 2023 16:53:32 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        "open list:X86 PLATFORM DRIVERS" 
+        <platform-driver-x86@vger.kernel.org>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        linux-pm@vger.kernel.org,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        iain@orangesquash.org.uk
+Subject: Re: [PATCH v18 2/2] PCI: Add a quirk for AMD PCIe root ports w/ USB4
+ controllers
+Message-ID: <20230914145332.GA5261@wunner.de>
+References: <20230913040832.114610-1-mario.limonciello@amd.com>
+ <20230913040832.114610-3-mario.limonciello@amd.com>
+ <20230913042522.GB1359@wunner.de>
+ <fd981219-d864-4c46-a348-61f73a9df596@amd.com>
+ <20230913143128.GA29059@wunner.de>
+ <76dfea89-e386-45e9-851c-8e87f9470c4f@amd.com>
+ <20230914141705.GA27051@wunner.de>
+ <1db16da9-568d-4492-8b2c-cdabf7a18f3b@amd.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1qgnh2-007ZRZ-WD@rmk-PC.armlinux.org.uk>
-Sender: Russell King <rmk@armlinux.org.uk>
-Date:   Thu, 14 Sep 2023 15:51:44 +0100
+In-Reply-To: <1db16da9-568d-4492-8b2c-cdabf7a18f3b@amd.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Provide common prototypes for arch_register_cpu() and
-arch_unregister_cpu(). These are called by acpi_processor.c, with
-weak versions, so the prototype for this is already set. It is
-generally not necessary for function prototypes to be conditional
-on preprocessor macros.
+On Thu, Sep 14, 2023 at 09:31:38AM -0500, Mario Limonciello wrote:
+> On 9/14/2023 09:17, Lukas Wunner wrote:
+> > On Wed, Sep 13, 2023 at 11:36:49AM -0500, Mario Limonciello wrote:
+> > > On 9/13/2023 09:31, Lukas Wunner wrote:
+> > > > If this only affects system sleep, not runtime PM, what you can do is
+> > > > define a DECLARE_PCI_FIXUP_SUSPEND_LATE() which calls pci_d3cold_disable()
+> > > > and also define a DECLARE_PCI_FIXUP_CLASS_RESUME_EARLY() which calls
+> > > > pci_d3cold_enable().
+> > > > 
+> > > > And I think you can make those calls conditional on pm_suspend_no_platform()
+> > > > to constrain to s2idle.
+> > > > 
+> > > > User space should still be able to influence runtime PM via the
+> > > > d3cold_allowed flag (unless I'm missing something).
+> > > 
+> > > The part you're missing is that D3hot is affected by this issue too,
+> > > otherwise it would be a good proposal.
+> > 
+> > I recall that in an earlier version of the patch, you solved the issue
+> > by amending pci_bridge_d3_possible().
+> > 
+> > Changing the dev->no_d3cold flag indirectly influences the bridge_d3
+> > flag (through pci_dev_check_d3cold() and pci_bridge_d3_update()).
+> > 
+> > If dev->no_d3cold is set on a device below a port, that port is
+> > prevented from entring D3hot because it would result in the
+> > device effectively being in D3cold.
+> > 
+> > So you might want to take a closer look at this approach despite
+> > the flag suggesting that it only influences D3cold.
+> > 
+> 
+> Ah; I hadn't considered setting it on a device below the port. In this
+> particular situation the only devices below the root port are USB
+> controllers.
+> 
+> If those devices don't go into D3 the system can't enter hardware sleep.
 
-Some architectures (e.g. Loongarch) are missing the prototype for this,
-and rather than add it to Loongarch's asm/cpu.h, lets do the job once
-for everyone.
+If you set dev->no_d3cold on the USB controllers, they should still
+be able to go to D3hot, but not D3cold, which perhaps might be sufficient.
+It should prevent D3cold *and* D3hot on the Root Port above.  And if you
+set that on system sleep in a quirk and clear it on resume, runtime PM
+shouldn't be affected.
 
-Since this covers everyone, remove the now unnecessary prototypes in
-asm/cpu.h, and we also need to remove the 'static' from one of ia64's
-arch_register_cpu() definitions.
+Thanks,
 
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
----
-Spotted during the review of James Morse's patches, I think rather than
-adding prototypes for loongarch to its asm/cpu.h, it would make more
-sense to provide the prototypes in a non-arch specific header file so
-everyone can benefit, rather than having each architecture do its own
-thing.
-
-I'm sending this as RFC as James has yet to comment on my proposal, and
-also to a wider audience, and although it makes a little more work for
-James (to respin his series) it does mean that his series should get a
-little smaller.
-
-See:
- https://lore.kernel.org/r/20230913163823.7880-2-james.morse@arm.com
- https://lore.kernel.org/r/20230913163823.7880-4-james.morse@arm.com
- https://lore.kernel.org/r/20230913163823.7880-23-james.morse@arm.com
-
-v2: lets try not fat-fingering vim.
-
- arch/ia64/include/asm/cpu.h | 5 -----
- arch/ia64/kernel/topology.c | 2 +-
- arch/x86/include/asm/cpu.h  | 2 --
- include/linux/cpu.h         | 2 ++
- 4 files changed, 3 insertions(+), 8 deletions(-)
-
-diff --git a/arch/ia64/include/asm/cpu.h b/arch/ia64/include/asm/cpu.h
-index db125df9e088..642d71675ddb 100644
---- a/arch/ia64/include/asm/cpu.h
-+++ b/arch/ia64/include/asm/cpu.h
-@@ -15,9 +15,4 @@ DECLARE_PER_CPU(struct ia64_cpu, cpu_devices);
- 
- DECLARE_PER_CPU(int, cpu_state);
- 
--#ifdef CONFIG_HOTPLUG_CPU
--extern int arch_register_cpu(int num);
--extern void arch_unregister_cpu(int);
--#endif
--
- #endif /* _ASM_IA64_CPU_H_ */
-diff --git a/arch/ia64/kernel/topology.c b/arch/ia64/kernel/topology.c
-index 94a848b06f15..741863a187a6 100644
---- a/arch/ia64/kernel/topology.c
-+++ b/arch/ia64/kernel/topology.c
-@@ -59,7 +59,7 @@ void __ref arch_unregister_cpu(int num)
- }
- EXPORT_SYMBOL(arch_unregister_cpu);
- #else
--static int __init arch_register_cpu(int num)
-+int __init arch_register_cpu(int num)
- {
- 	return register_cpu(&sysfs_cpus[num].cpu, num);
- }
-diff --git a/arch/x86/include/asm/cpu.h b/arch/x86/include/asm/cpu.h
-index 3a233ebff712..25050d953eee 100644
---- a/arch/x86/include/asm/cpu.h
-+++ b/arch/x86/include/asm/cpu.h
-@@ -28,8 +28,6 @@ struct x86_cpu {
- };
- 
- #ifdef CONFIG_HOTPLUG_CPU
--extern int arch_register_cpu(int num);
--extern void arch_unregister_cpu(int);
- extern void soft_restart_cpu(void);
- #endif
- 
-diff --git a/include/linux/cpu.h b/include/linux/cpu.h
-index 0abd60a7987b..eb768a866fe3 100644
---- a/include/linux/cpu.h
-+++ b/include/linux/cpu.h
-@@ -80,6 +80,8 @@ extern __printf(4, 5)
- struct device *cpu_device_create(struct device *parent, void *drvdata,
- 				 const struct attribute_group **groups,
- 				 const char *fmt, ...);
-+extern int arch_register_cpu(int cpu);
-+extern void arch_unregister_cpu(int cpu);
- #ifdef CONFIG_HOTPLUG_CPU
- extern void unregister_cpu(struct cpu *cpu);
- extern ssize_t arch_cpu_probe(const char *, size_t);
--- 
-2.30.2
-
+Lukas
