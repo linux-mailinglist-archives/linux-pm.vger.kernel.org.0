@@ -2,95 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E70907A06EF
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 16:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DADC77A06F5
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 16:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239711AbjINOJz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 10:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43352 "EHLO
+        id S239816AbjINOKe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Sep 2023 10:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239679AbjINOJy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 10:09:54 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3C4DF
-        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 07:09:50 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-d7830c5b20aso1470858276.0
-        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 07:09:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694700590; x=1695305390; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J9IGYP5VQdwee25nV5jOO+j3P/uh5L2lbtVFrt/kEhY=;
-        b=s0LMxQAlq9b2S0ajyPyx0nG5jUtvOPFlOp8NcK0rHZkq/rYDhOrI4dLAQhtKgKo0uM
-         rNf5p1V2JzOkF68J/bXvLmAsJlnDiXmxPnMXMTHOEUnyIBeeuV2eIH9oemLR0LkpgzXh
-         l3oYP3d6/Rii7MhBMCuPVbR5xzFsjjncL/LWsc/lBSityhRenRMJGOLNR5c0rTjK+h99
-         riaw/5LzOBvwcjhoydeMNVfg1TgPohCt7LLDlwM+9HsnzlxYh4hwkGhgT/HDeQgM0NYJ
-         jkLkygkY5qFmUJILhR1swIS4mNchu5a+6KNzQiuaa+5z35QXbSxr0pF8e2KkQ1J6a76j
-         kv6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694700590; x=1695305390;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=J9IGYP5VQdwee25nV5jOO+j3P/uh5L2lbtVFrt/kEhY=;
-        b=CbGQ4/kNF69LFIx8n1+96q4a/yG683RtwCZbT7PwEnOyJE4RLyT/XvauiNTakwNRAx
-         Aw/tiWXNj+esSEfALLwQI+8fouByLGfVeDTMvfEeT+Gm/bJ8wPyDo290XQqUuMKJkFHR
-         27hWPfkEWX10m54cvJCqLnoko7obwfoEcC7iXLDNtJ47V1jBI+7/vuNoUUziVYOuxQ0n
-         rQjsElSDB7hRWJEmGzrfRx+Zf8tgkGuRuk5RFuTPt/ed6Mn5ZJowFA6XTM5/N8hGNRM4
-         CEVplrnfl4pKqxFEe6ZL/kVBQjr9b426vr8R6JRyvk4199cgK6qr+mjWfYe0HpQQtjo3
-         BlRQ==
-X-Gm-Message-State: AOJu0YzRg6vNORzlmfwTVqql40JCtZnuicr+tzS2bsNtRkUtMpxDuzLo
-        osocKBGLdGhOUjHx/ZiZwSWzKeyLRQ4ahJn4eQIzrnAPvavByvLcnTY=
-X-Google-Smtp-Source: AGHT+IEyLK5w2EfQvefblMOe1KUYzBa/9AVnRDeL+Ut6bf+JBgWjwLbElfH0D8BGNdeScufwUK1hsKQJF+zOJRBa99Y=
-X-Received: by 2002:a25:7714:0:b0:d07:b677:3349 with SMTP id
- s20-20020a257714000000b00d07b6773349mr1369288ybc.25.1694700590048; Thu, 14
- Sep 2023 07:09:50 -0700 (PDT)
+        with ESMTP id S239724AbjINOKd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 10:10:33 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D571FD5;
+        Thu, 14 Sep 2023 07:10:29 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4RmfMy0jWJz67Q1Y;
+        Thu, 14 Sep 2023 22:09:50 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 14 Sep
+ 2023 15:10:26 +0100
+Date:   Thu, 14 Sep 2023 15:10:25 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     James Morse <james.morse@arm.com>
+CC:     <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
+        <linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+        <x86@kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        <jianyong.wu@arm.com>, <justin.he@arm.com>
+Subject: Re: [RFC PATCH v2 19/35] ACPI: Move acpi_bus_trim_one() before
+ acpi_scan_hot_remove()
+Message-ID: <20230914151025.00003cef@Huawei.com>
+In-Reply-To: <20230913163823.7880-20-james.morse@arm.com>
+References: <20230913163823.7880-1-james.morse@arm.com>
+        <20230913163823.7880-20-james.morse@arm.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-References: <20230913-bloomers-scorebook-fb45e0a2aa19@spud>
- <CAPDyKFoENVp7+VjKkPpJWDecowxYD=QM6TSa6HjyzOZ=z7r81w@mail.gmail.com> <CAL_JsqLxxmdPTLhZ6MTfuAcM0V7pmfRLiK8L3AZhhQKcvy_PCw@mail.gmail.com>
-In-Reply-To: <CAL_JsqLxxmdPTLhZ6MTfuAcM0V7pmfRLiK8L3AZhhQKcvy_PCw@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 14 Sep 2023 16:09:14 +0200
-Message-ID: <CAPDyKFo-KXK37iRwXZ631MH6L5_RbaezGUz5GAn8cVt4OzOApQ@mail.gmail.com>
-Subject: Re: [GIT PULL 0/5] Missed starfive pmdomain changes for v6.6, now for v6.7
-To:     Rob Herring <robh@kernel.org>
-Cc:     Conor Dooley <conor@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>, arnd@arndb.de,
-        changhuang.liang@starfivetech.com, jiajie.ho@starfivetech.com,
-        linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        walker.chen@starfivetech.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 14 Sept 2023 at 15:57, Rob Herring <robh@kernel.org> wrote:
->
-> On Wed, Sep 13, 2023 at 5:31=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.o=
-rg> wrote:
-> >
-> > On Wed, 13 Sept 2023 at 15:56, Conor Dooley <conor@kernel.org> wrote:
-> > >
-> > > From: Conor Dooley <conor.dooley@microchip.com>
-> > >
-> > > Hey Uffe,
-> > >
-> > > Here's those missed changes in patch form. I figured it might be a bi=
-t
-> > > easier this way given the name of the subsystem is in flux, doubly so=
- if
-> > > you'd like to put the header change of Rob's on fixes.
-> >
-> > Not sure we really need to queue up patch 1 for fixes - or is it
-> > fixing a real problem for us?
->
-> It's a dependency to remove some implicit includes, but I still have
-> more fixes for 6.6 so either is fine.
+On Wed, 13 Sep 2023 16:38:07 +0000
+James Morse <james.morse@arm.com> wrote:
 
-Okay, I keep it for v6.7 then. Just let me know if things change then
-I can move it to v6.6-rcs
+> A subsequent patch will change acpi_scan_hot_remove() to call
+> acpi_bus_trim_one() instead of acpi_bus_trim(), meaning it can no longer
+> rely on the prototype in the header file.
+> 
+> Move these functions further up the file.
+> No change in behaviour.
+> 
+> Signed-off-by: James Morse <james.morse@arm.com>
+FWIW
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Kind regards
-Uffe
+> ---
+>  drivers/acpi/scan.c | 76 ++++++++++++++++++++++-----------------------
+>  1 file changed, 38 insertions(+), 38 deletions(-)
+> 
+> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+> index f898591ce05f..a675333618ae 100644
+> --- a/drivers/acpi/scan.c
+> +++ b/drivers/acpi/scan.c
+> @@ -244,6 +244,44 @@ static int acpi_scan_try_to_offline(struct acpi_device *device)
+>  	return 0;
+>  }
+>  
+> +static int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
+> +{
+> +	struct acpi_scan_handler *handler = adev->handler;
+> +
+> +	acpi_dev_for_each_child_reverse(adev, acpi_bus_trim_one, NULL);
+> +
+> +	adev->flags.match_driver = false;
+> +	if (handler) {
+> +		if (handler->detach)
+> +			handler->detach(adev);
+> +
+> +		adev->handler = NULL;
+> +	} else {
+> +		device_release_driver(&adev->dev);
+> +	}
+> +	/*
+> +	 * Most likely, the device is going away, so put it into D3cold before
+> +	 * that.
+> +	 */
+> +	acpi_device_set_power(adev, ACPI_STATE_D3_COLD);
+> +	adev->flags.initialized = false;
+> +	acpi_device_clear_enumerated(adev);
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * acpi_bus_trim - Detach scan handlers and drivers from ACPI device objects.
+> + * @adev: Root of the ACPI namespace scope to walk.
+> + *
+> + * Must be called under acpi_scan_lock.
+> + */
+> +void acpi_bus_trim(struct acpi_device *adev)
+> +{
+> +	acpi_bus_trim_one(adev, NULL);
+> +}
+> +EXPORT_SYMBOL_GPL(acpi_bus_trim);
+> +
+>  static int acpi_scan_hot_remove(struct acpi_device *device)
+>  {
+>  	acpi_handle handle = device->handle;
+> @@ -2506,44 +2544,6 @@ int acpi_bus_scan(acpi_handle handle)
+>  }
+>  EXPORT_SYMBOL(acpi_bus_scan);
+>  
+> -static int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
+> -{
+> -	struct acpi_scan_handler *handler = adev->handler;
+> -
+> -	acpi_dev_for_each_child_reverse(adev, acpi_bus_trim_one, NULL);
+> -
+> -	adev->flags.match_driver = false;
+> -	if (handler) {
+> -		if (handler->detach)
+> -			handler->detach(adev);
+> -
+> -		adev->handler = NULL;
+> -	} else {
+> -		device_release_driver(&adev->dev);
+> -	}
+> -	/*
+> -	 * Most likely, the device is going away, so put it into D3cold before
+> -	 * that.
+> -	 */
+> -	acpi_device_set_power(adev, ACPI_STATE_D3_COLD);
+> -	adev->flags.initialized = false;
+> -	acpi_device_clear_enumerated(adev);
+> -
+> -	return 0;
+> -}
+> -
+> -/**
+> - * acpi_bus_trim - Detach scan handlers and drivers from ACPI device objects.
+> - * @adev: Root of the ACPI namespace scope to walk.
+> - *
+> - * Must be called under acpi_scan_lock.
+> - */
+> -void acpi_bus_trim(struct acpi_device *adev)
+> -{
+> -	acpi_bus_trim_one(adev, NULL);
+> -}
+> -EXPORT_SYMBOL_GPL(acpi_bus_trim);
+> -
+>  int acpi_bus_register_early_device(int type)
+>  {
+>  	struct acpi_device *device = NULL;
+
