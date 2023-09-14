@@ -2,143 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972187A0894
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 17:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F527A08E9
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 17:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240774AbjINPHt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 11:07:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33450 "EHLO
+        id S240735AbjINPUE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Sep 2023 11:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240750AbjINPHs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 11:07:48 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCDCA8;
-        Thu, 14 Sep 2023 08:07:44 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9a9cd066db5so154461066b.0;
-        Thu, 14 Sep 2023 08:07:44 -0700 (PDT)
+        with ESMTP id S239524AbjINPUD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 11:20:03 -0400
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C591FC9;
+        Thu, 14 Sep 2023 08:19:59 -0700 (PDT)
+Received: by mail-ua1-x930.google.com with SMTP id a1e0cc1a2514c-7a512434bc9so1423558241.0;
+        Thu, 14 Sep 2023 08:19:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694704063; x=1695308863; darn=vger.kernel.org;
+        d=gmail.com; s=20221208; t=1694704798; x=1695309598; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zP69ASklQ06fWDPpKcoFyGEzOk0jQ6Af8rMe5+oydWg=;
-        b=FNJeRbjpDliBBDgRSiMzFFYlWhM5A0ycHnsD5KmeimjX8KVAhUTrjeAUSv7SWtz871
-         zsO00MdLwMb5kx5xvYEx18fHyc+akbdvOmavki87V7F4O3Gef/zzDg1IQh6VmcLDOzTB
-         Hj+cz521+TcZ+FX43Q6Hy7T9f3DxKFnVnhEIGcnckpJGHyoQxSdeh1tEpqwGsHFxofL/
-         OpxMzG8gYb+qyWNu+JkbQhAlXrxWR0VK3RtW35zBuYjXSwJ66tT4riQhAAKeoM2cBv4n
-         6P4MwTXlt/v7N2zUhmtlHfy6zO5GEXTPeAt3GUcBLPYBtvSLkuiG8/Tnd8lnh13zhCtO
-         xdlg==
+        bh=pgA7PcwmgwXejCiJKRlHdUH5uK+0JkyppZjxMRcSh+s=;
+        b=MORUfFws6H5jSyFsJZWnF/WilprBqaM7RUhcSoqrROLLodgt4c6JY+7xa4jxPA3wzg
+         CYytMTlsgOxw34PlAVFryt52EKtTzA3L2GQG0kZSu8QywhQvN6scrzuy6+y9qYFm/3G5
+         p5obuJ9TS33ukoq2WeA8ESu9l0snaLSIlEESr0P9GWm/7eZLPhTkqAkJxfyOpHeNOfR5
+         UKJFf/RHMezDHFTt12vKtseo7aTzk71+SQ+Qq6GPj1DX3qobUEJyZyX4dKE2hUbjQ4W0
+         qgExNl+lMVjBsnjXX6gfzB35U+FWOElmrMtY7Y5kyi5GhK9b6g4LAIiwRX/rDbyisW2y
+         dX6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694704063; x=1695308863;
+        d=1e100.net; s=20230601; t=1694704798; x=1695309598;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zP69ASklQ06fWDPpKcoFyGEzOk0jQ6Af8rMe5+oydWg=;
-        b=DhgbNpHQi8VaPcFLrx3MvSlOi0PX/BOC9MMn6f5MpFEaXliDsm9UQFpCgQ/PP3gyzy
-         VtmmTxnREl3dCUYZtPYWoZwUwlPyvVdvCem3fygCVVtqJ/LF5M2xWNHucr02NjeEAr3h
-         ezNbvExIP37qqafmO40NNFAElaItMX9jIAF+L9/iJ6y7sQm4o6dh5ly1hKFGNB6m2dfN
-         lY80XGZo7ghxqjFnlDnOxYmdHoDxu7IaElUbMZpNqKO4TIWYDayZeGPqodXAdFbQ5P+/
-         EmkI/BLUsjqAQcpGD9EVCGlp5IptLo5ypFYQdLxeuQ612VX9K+RDMzeK580rEftBAd6F
-         CevA==
-X-Gm-Message-State: AOJu0YweSY8mJv3xJN+Gh2iXDKUlg/O564UV0iRN26qEWD2l86yvot2g
-        UzvLQkykY2+R6JyhpRrrVAA=
-X-Google-Smtp-Source: AGHT+IG8KP3B9bjG4pI05wOHvPQCGugo4l8D48ar7CYi3L5ylg3/8JmO5GnaECy6z/Cpdjkqmo6/yw==
-X-Received: by 2002:a17:906:2102:b0:99d:ed5e:cc79 with SMTP id 2-20020a170906210200b0099ded5ecc79mr4916268ejt.31.1694704062506;
-        Thu, 14 Sep 2023 08:07:42 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-12-148.dynamic.telemach.net. [82.149.12.148])
-        by smtp.gmail.com with ESMTPSA id i13-20020a170906114d00b00992afee724bsm1117405eja.76.2023.09.14.08.07.41
+        bh=pgA7PcwmgwXejCiJKRlHdUH5uK+0JkyppZjxMRcSh+s=;
+        b=XvT6qNEILMJko4iEPtW3ocUGLrg8zd48kDwLLNEXEN2qUx2vkJyaOnR5oeVObDiti3
+         C9dBwkl42W/5SeftSXtKIynNcBsTgsMlvY7o0I67yv68z91SZrx8TezZtFfawwbAVJji
+         xk6VoaX98ysppzlJvi/X7KFDeAcOT82ca+VcFkU/Johny7XemtmUv/Hn4knqbeggPnsz
+         Y/UDkckp5TLbUiZmjmqy5dvtvmukniPDOHQyc442ltkuaHbEIgeb0S8Ba6RVukFkvOPc
+         MPv18bZI0BaXxrUuDIPjEGsbhet+F3VQcaBq6FCghA6s1AtFfLfK2SbdSB28iw4yDynN
+         V0vw==
+X-Gm-Message-State: AOJu0YzKRcHswQXGxuG6VNL5+KxBHM0Fetuajp956wzUtpSwosvDG2LA
+        h8St8LXl1ODtTlIzsdlwLJxtxmU4oRUPin17
+X-Google-Smtp-Source: AGHT+IGSlm6UqcoGzTxdPnKwkOkMH2W7gTDRm/2Fmh7Lspov7kgxMbOYMHyDV8LJCq8qMOfoh9EVsw==
+X-Received: by 2002:a67:ee50:0:b0:44e:837a:25e with SMTP id g16-20020a67ee50000000b0044e837a025emr1010521vsp.11.1694704798503;
+        Thu, 14 Sep 2023 08:19:58 -0700 (PDT)
+Received: from localhost.localdomain (vps-035beda1.vps.ovh.us. [51.81.85.161])
+        by smtp.gmail.com with ESMTPSA id g2-20020ab016c2000000b0079b44af2af8sm193838uaf.30.2023.09.14.08.19.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Sep 2023 08:07:42 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 14/17] pmdomain: sunxi: Move Kconfig option to the pmdomain
- subsystem
-Date:   Thu, 14 Sep 2023 17:07:39 +0200
-Message-ID: <2696832.mvXUDI8C0e@jernej-laptop>
-In-Reply-To: <20230914111912.586764-1-ulf.hansson@linaro.org>
-References: <20230914111912.586764-1-ulf.hansson@linaro.org>
+        Thu, 14 Sep 2023 08:19:57 -0700 (PDT)
+From:   Yong Wang <yongw.pur@gmail.com>
+X-Google-Original-From: Yong Wang <wang.yong12@zte.com.cn>
+To:     chrubis@suse.cz, naresh.kamboju@linaro.org
+Cc:     alex.bennee@linaro.org, anders.roxell@linaro.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        ltp@lists.linux.it, mdoucha@suse.cz, peterz@infradead.org,
+        vincent.guittot@linaro.org, wegao@suse.com, wang.yong12@zte.com.cn,
+        yang.yang29@zte.com.cn, ran.xiaokai@zte.com.cn
+Subject: LTP: cfs_bandwidth01: Unable to handle kernel NULL pointer dereference
+Date:   Thu, 14 Sep 2023 23:18:39 +0800
+Message-Id: <20230914151839.3635-1-wang.yong12@zte.com.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <CA+G9fYvHhiiGKhNd=L9+xYFVwv0Q8k6gUBeFQGWCWw1cWhb50Q@mail.gmail.com>
+References: <CA+G9fYvHhiiGKhNd=L9+xYFVwv0Q8k6gUBeFQGWCWw1cWhb50Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dne =C4=8Detrtek, 14. september 2023 ob 13:19:12 CEST je Ulf Hansson napisa=
-l(a):
-> The Kconfig option belongs closer to the corresponding implementation,
-> hence let's move it from the soc subsystem to the pmdomain subsystem.
->=20
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Cc: Samuel Holland <samuel@sholland.org>
-> Cc: <linux-sunxi@lists.linux.dev>
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Hello!
+>Following kernel crash noticed on Linux stable-rc 6.5.3-rc1 on qemu-arm64 while
+>running LTP sched tests cases.
+>
+>This is not always reproducible.
+I also encountered this problem on linux 5.10 on arm64 environment.
+The prompt information is as follows:
+[ 2893.003795] ================================================================== 
+[ 2893.003822] BUG: KASAN: null-ptr-deref in pick_next_task_fair+0x130/0x4e0 
+[ 2893.003880] Read of size 8 at addr 0000000000000080 by task ksoftirqd/0/12 
+[ 2893.003901]  
+[ 2893.003914] CPU: 0 PID: 12 Comm: ksoftirqd/0 Tainted: P           O      5.10.59-rt52#1 
+[ 2893.003959] Call trace: 
+[ 2893.003968]  dump_backtrace+0x0/0x2e8 
+[ 2893.004009]  show_stack+0x18/0x28 
+[ 2893.004032]  dump_stack+0x104/0x174 
+[ 2893.004067]  kasan_report+0x1d0/0x258 
+[ 2893.004098]  __asan_load8+0x94/0xd0 
+[ 2893.004126]  pick_next_task_fair+0x130/0x4e0 
+[ 2893.004164]  __schedule+0x220/0xbd0 
+[ 2893.004192]  schedule+0xec/0x1a0 
+[ 2893.004216]  smpboot_thread_fn+0x124/0x548 
+[ 2893.004246]  kthread+0x24c/0x278 
+[ 2893.004277]  ret_from_fork+0x10/0x34 
+[ 2893.004306] ================================================================== 
+[ 2893.004325] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000080 
+[ 2893.152267] Mem abort info: 
+[ 2893.152639]   ESR = 0x96000004 
+[ 2893.153045]   EC = 0x25: DABT (current EL), IL = 32 bits 
+[ 2893.153739]   SET = 0, FnV = 0 
+[ 2893.154143]   EA = 0, S1PTW = 0 
+[ 2893.154560] Data abort info: 
+[ 2893.154940]   ISV = 0, ISS = 0x00000004 
+[ 2893.155443]   CM = 0, WnR = 0 
+[ 2893.155838] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000188edb000 
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+The source code where the problem occurs corresponds to:
+  se = pick_next_entity(cfs_rq, curr);		
+  cfs_rq = group_cfs_rq(se); //se is NULL!
 
-Best regards,
-Jernej
+It is found that pick_next_entity returns null, so null-ptr-dere appears when accessing the members of se later.
+But it is not clear under what circumstances pick_next_entity returns null.
 
-> ---
->  drivers/pmdomain/Kconfig       |  1 +
->  drivers/pmdomain/sunxi/Kconfig | 10 ++++++++++
->  drivers/soc/sunxi/Kconfig      |  9 ---------
->  3 files changed, 11 insertions(+), 9 deletions(-)
->  create mode 100644 drivers/pmdomain/sunxi/Kconfig
->=20
-> diff --git a/drivers/pmdomain/Kconfig b/drivers/pmdomain/Kconfig
-> index 67049ebf7265..39f358f27f2e 100644
-> --- a/drivers/pmdomain/Kconfig
-> +++ b/drivers/pmdomain/Kconfig
-> @@ -13,5 +13,6 @@ source "drivers/pmdomain/rockchip/Kconfig"
->  source "drivers/pmdomain/samsung/Kconfig"
->  source "drivers/pmdomain/st/Kconfig"
->  source "drivers/pmdomain/starfive/Kconfig"
-> +source "drivers/pmdomain/sunxi/Kconfig"
->=20
->  endmenu
-> diff --git a/drivers/pmdomain/sunxi/Kconfig b/drivers/pmdomain/sunxi/Kcon=
-fig
-> new file mode 100644
-> index 000000000000..17781bf8d86d
-> --- /dev/null
-> +++ b/drivers/pmdomain/sunxi/Kconfig
-> @@ -0,0 +1,10 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +
-> +config SUN20I_PPU
-> +	bool "Allwinner D1 PPU power domain driver"
-> +	depends on ARCH_SUNXI || COMPILE_TEST
-> +	depends on PM
-> +	select PM_GENERIC_DOMAINS
-> +	help
-> +	  Say y to enable the PPU power domain driver. This saves power
-> +	  when certain peripherals, such as the video engine, are idle.
-> diff --git a/drivers/soc/sunxi/Kconfig b/drivers/soc/sunxi/Kconfig
-> index c5070914fc6a..8aecbc9b1976 100644
-> --- a/drivers/soc/sunxi/Kconfig
-> +++ b/drivers/soc/sunxi/Kconfig
-> @@ -19,12 +19,3 @@ config SUNXI_SRAM
->  	  Say y here to enable the SRAM controller support. This
->  	  device is responsible on mapping the SRAM in the sunXi SoCs
->  	  whether to the CPU/DMA, or to the devices.
-> -
-> -config SUN20I_PPU
-> -	bool "Allwinner D1 PPU power domain driver"
-> -	depends on ARCH_SUNXI || COMPILE_TEST
-> -	depends on PM
-> -	select PM_GENERIC_DOMAINS
-> -	help
-> -	  Say y to enable the PPU power domain driver. This saves power
-> -	  when certain peripherals, such as the video engine, are idle.
+In addition, in my environment, the following operations often recur:
+  stress-ng -c 8 --cpu-load 100 --sched fifo --sched-prio 1 --cpu-method pi -t 900 &
+  runltp -s cfs_bandwidth01
 
-
-
-
+Hope it helps to solve the problem.
+Thanks.
