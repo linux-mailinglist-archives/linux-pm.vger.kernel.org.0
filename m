@@ -2,187 +2,194 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C24787A0DB6
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 21:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37FDF7A0D7D
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 20:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231586AbjINTBZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 15:01:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
+        id S234957AbjINSvg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Sep 2023 14:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241331AbjINTBL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 15:01:11 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF4F2D5E;
-        Thu, 14 Sep 2023 11:42:51 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E16EBC433B9;
-        Thu, 14 Sep 2023 18:42:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694716971;
-        bh=08e3rjzF0krBhajpQnyBqQbdi7QA3Cyqf3TN7meiMuc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=e5jxyRyHOP/DjRJuPsyiFh1vt7vtwAZuZ7nmLxwXXZ34KlomrBCw1HjQvcicHQcfu
-         563tqna9nWQLTE2sPMxhAwDxEUICpNfyRjBWooir/u1+ZkTcm6MyRneNkG6dnqpFwf
-         VZAVbzNE6C+n+VKMXiEbLTf8bjiWU/BSlqQ6lYcU7M1I03H6BpP8xCxoZ8eA+SRBwm
-         7qsXxLr34whdGlGLz1JGQSmoG5k1x5Jibze8tNsk+LGU2/MAsQnjpmXbLmxvy5PmXb
-         RzIawaUEnSOV1IbQuFIH9E/VEd7Qd81olGd87UmFmLGkZf0nzkvdGHpxjWVMVz/ONk
-         HcY4lK9El8IgA==
-Date:   Thu, 14 Sep 2023 13:42:49 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     srinivas.pandruvada@linux.intel.com, jikos@kernel.org,
-        benjamin.tissoires@redhat.com, linux-pm@vger.kernel.org,
-        linux-pci@vger.kernel.org,
-        Jian Hui Lee <jianhui.lee@canonical.com>,
-        Even Xu <even.xu@intel.com>, Zhang Lixu <lixu.zhang@intel.com>,
-        Najumon Ba <najumon.ba@intel.com>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] HID: intel-ish-hid: ipc: Rework EHL OOB wakeup
-Message-ID: <20230914184249.GA74069@bhelgaas>
+        with ESMTP id S241926AbjINSvP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 14:51:15 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A0E55BE
+        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 11:46:25 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-402d0eda361so14529845e9.0
+        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 11:46:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694717184; x=1695321984; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kIZovquInIL74DbQjfgBZgPlunuh9zGf95Z8S/ooNDg=;
+        b=QYHZqaNpezYBGk6OGK3K6m4VbH7SfnULqezfHtDvf7PB91oxxo1l2DDfY+/WWYqK8n
+         6mfLwZ3sOx29Y5ezx//R3tocP9wvcDGk6+fT11e2PcHepox1cw3ZJGaguRpIUs+8GUfO
+         7PeugPV3kwrp3TbmObDXlQN/98f3KQaKPFNKRAzsXqJNEGCmUJ1av0wr4aFLMDeXhjCf
+         G6HloF/jhuocXimEvYWhPg5TfuNMLK7dZMyF6HMqno9nDLwY29BA7vGHC4UKP7qaZIN6
+         3GQKhRvY1OHG+tZRrlsGdE0jeWEgrGDqG6TWGQqzu35znyYBWb+cRXf5H7IwBGJSa462
+         WBlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694717184; x=1695321984;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kIZovquInIL74DbQjfgBZgPlunuh9zGf95Z8S/ooNDg=;
+        b=EjZT4/3fsSBU2011QeCsw2fwnJHcFW/1o75G3obRC2Re21BFcOvQ99Kds/wR9SHckV
+         n9baSC+rjeDRLw75t3m/i1D5GjK2xzt/gN4su0oOqO42x4WKUTk8yykDmy3Xg/Ki98Cf
+         HccxjL2ir8cbdGgcZbHiQnCPPl773nK599Q8FEiC5jw9La+rN3WSpVVOVKK8Qp/8U94S
+         qB5zJW1sTmFMDskdQyRP09z9Dib24UAZPsGjNYI4rY0wPCne6Vc9khnIo3GIAoNFFYK0
+         xGnGLFWSTRF8ToLSs3s30vvGm+K8hn2vZ/Pzq93WwdeMZWto8FyUzok9uEHS0HgkzUBR
+         ni/A==
+X-Gm-Message-State: AOJu0YxaHhWnqwMEm/W8tTCcspfMU4zqJjN2UBo5L01mLupNhA5aO9gl
+        mFkQyWKlRWkxPKcO1kLUzbKFYA==
+X-Google-Smtp-Source: AGHT+IHepuPWdsuiYR2oi1IwB/1DPQW73hMmiXEXagum6xwLJRh7Tnno1d2aZCEgN4NgYG4HRn/k/w==
+X-Received: by 2002:adf:f981:0:b0:319:8430:f80f with SMTP id f1-20020adff981000000b003198430f80fmr5343316wrr.49.1694717183627;
+        Thu, 14 Sep 2023 11:46:23 -0700 (PDT)
+Received: from [192.168.37.232] (178235177003.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.3])
+        by smtp.gmail.com with ESMTPSA id g8-20020a50ee08000000b00521d2f7459fsm1232748eds.49.2023.09.14.11.46.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Sep 2023 11:46:23 -0700 (PDT)
+Message-ID: <36287e2f-ddff-4323-bbc2-e7a07a9283e7@linaro.org>
+Date:   Thu, 14 Sep 2023 20:46:21 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230914041806.816741-1-kai.heng.feng@canonical.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND v2 3/3] power: supply: Introduce MM8013 fuel gauge
+ driver
+Content-Language: en-US
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20230621-topic-mm8013-v2-0-9f1b41f4bc06@linaro.org>
+ <20230621-topic-mm8013-v2-3-9f1b41f4bc06@linaro.org>
+ <20230913154552.okinfq6gdxf2d7ab@mercury.elektranox.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <20230913154552.okinfq6gdxf2d7ab@mercury.elektranox.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 14, 2023 at 12:18:05PM +0800, Kai-Heng Feng wrote:
-> System cannot suspend more than 255 times because the driver doesn't
-> have corresponding acpi_disable_gpe() for acpi_enable_gpe(), so the GPE
-> refcount overflows.
-
-How can a user know they are seeing this problem?  Is there a public
-bug report for it?
-
-> Since PCI core and ACPI core already handles PCI PME wake and GPE wake
-> when the device has wakeup capability, use device_init_wakeup() to let
-> them do the wakeup setting work.
+On 13.09.2023 17:45, Sebastian Reichel wrote:
+> Hi,
 > 
-> Also add a shutdown callback which uses pci_prepare_to_sleep() to let
-> PCI and ACPI set OOB wakeup for S5.
+> On Wed, Aug 23, 2023 at 04:36:15PM +0200, Konrad Dybcio wrote:
+>> Add a driver for the Mitsumi MM8013 fuel gauge. The driver is a vastly
+>> cleaned up and improved version of the one that shipped in some obscure
+>> Lenovo downstream kernel [1], with some register definitions borrowed from
+>> ChromeOS EC platform code [2].
+>>
+>> [1] https://github.com/adazem009/kernel_lenovo_bengal/commit/b6b346427a871715709bd22aae449b9383f3b66b
+>> [2] https://chromium.googlesource.com/chromiumos/platform/ec/+/master/driver/battery/mm8013.h
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+[...]
 
-Is this logically required to be part of this patch, or could it be a
-separate patch?
-
-> Fixes: 2e23a70edabe ("HID: intel-ish-hid: ipc: finish power flow for EHL OOB")
-> Cc: Jian Hui Lee <jianhui.lee@canonical.com>
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
->  drivers/hid/intel-ish-hid/ipc/pci-ish.c | 59 +++++++------------------
->  1 file changed, 15 insertions(+), 44 deletions(-)
 > 
-> diff --git a/drivers/hid/intel-ish-hid/ipc/pci-ish.c b/drivers/hid/intel-ish-hid/ipc/pci-ish.c
-> index 55cb25038e63..65e7eeb2fa64 100644
-> --- a/drivers/hid/intel-ish-hid/ipc/pci-ish.c
-> +++ b/drivers/hid/intel-ish-hid/ipc/pci-ish.c
-> @@ -119,42 +119,6 @@ static inline bool ish_should_leave_d0i3(struct pci_dev *pdev)
->  	return !pm_resume_via_firmware() || pdev->device == CHV_DEVICE_ID;
->  }
->  
-> -static int enable_gpe(struct device *dev)
-> -{
-> -#ifdef CONFIG_ACPI
-> -	acpi_status acpi_sts;
-> -	struct acpi_device *adev;
-> -	struct acpi_device_wakeup *wakeup;
-> -
-> -	adev = ACPI_COMPANION(dev);
-> -	if (!adev) {
-> -		dev_err(dev, "get acpi handle failed\n");
-> -		return -ENODEV;
-> -	}
-> -	wakeup = &adev->wakeup;
-> -
-> -	acpi_sts = acpi_enable_gpe(wakeup->gpe_device, wakeup->gpe_number);
-> -	if (ACPI_FAILURE(acpi_sts)) {
-> -		dev_err(dev, "enable ose_gpe failed\n");
-> -		return -EIO;
-> -	}
-> -
-> -	return 0;
-> -#else
-> -	return -ENODEV;
-> -#endif
-> -}
-> -
-> -static void enable_pme_wake(struct pci_dev *pdev)
-> -{
-> -	if ((pci_pme_capable(pdev, PCI_D0) ||
-> -	     pci_pme_capable(pdev, PCI_D3hot) ||
-> -	     pci_pme_capable(pdev, PCI_D3cold)) && !enable_gpe(&pdev->dev)) {
-> -		pci_pme_active(pdev, true);
-> -		dev_dbg(&pdev->dev, "ish ipc driver pme wake enabled\n");
-> -	}
-> -}
+> Please use regmap.
+Ack
 
-I LOVE the removal of all this code.  Thanks for doing it!
+[...]
 
->  /**
->   * ish_probe() - PCI driver probe callback
->   * @pdev:	pci device
-> @@ -225,7 +189,7 @@ static int ish_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
->  
->  	/* Enable PME for EHL */
->  	if (pdev->device == EHL_Ax_DEVICE_ID)
-> -		enable_pme_wake(pdev);
-> +		device_init_wakeup(dev, true);
->  
->  	ret = ish_init(ishtp);
->  	if (ret)
-> @@ -248,6 +212,19 @@ static void ish_remove(struct pci_dev *pdev)
->  	ish_device_disable(ishtp_dev);
->  }
->  
-> +
-> +/**
-> + * ish_shutdown() - PCI driver shutdown callback
-> + * @pdev:	pci device
-> + *
-> + * This function sets up wakeup for S5
-> + */
-> +static void ish_shutdown(struct pci_dev *pdev)
-> +{
-> +	if (pdev->device == EHL_Ax_DEVICE_ID)
-> +		pci_prepare_to_sleep(pdev);
-
-There are only five drivers that use pci_prepare_to_sleep(), so I have
-to ask what is special about this device that makes it necessary here?
-
-It doesn't seem to match any of the scenarios mentioned in
-Documentation/power/pci.rst for using pci_prepare_to_sleep().
-
-Previously EHL_Ax_DEVICE_ID was used only in ish_probe(),
-ish_resume(), and _dma_no_cache_snooping().  None of those look like
-this, so this *looks* like new functionality that could/should be in a
-separate patch.
-
-> +}
-> +
->  static struct device __maybe_unused *ish_resume_device;
->  
->  /* 50ms to get resume response */
-> @@ -370,13 +347,6 @@ static int __maybe_unused ish_resume(struct device *device)
->  	struct pci_dev *pdev = to_pci_dev(device);
->  	struct ishtp_device *dev = pci_get_drvdata(pdev);
->  
-> -	/* add this to finish power flow for EHL */
-> -	if (dev->pdev->device == EHL_Ax_DEVICE_ID) {
-> -		pci_set_power_state(pdev, PCI_D0);
-> -		enable_pme_wake(pdev);
-> -		dev_dbg(dev->devc, "set power state to D0 for ehl\n");
-> -	}
-> -
->  	ish_resume_device = device;
->  	dev->resume_flag = 1;
->  
-> @@ -392,6 +362,7 @@ static struct pci_driver ish_driver = {
->  	.id_table = ish_pci_tbl,
->  	.probe = ish_probe,
->  	.remove = ish_remove,
-> +	.shutdown = ish_shutdown,
->  	.driver.pm = &ish_pm_ops,
->  };
->  
-> -- 
-> 2.34.1
+>> +	switch (psp) {
+>> +	case POWER_SUPPLY_PROP_CAPACITY:
 > 
+> this is in %, while the next two are in uAh. So the fuel gauge does
+> not provide the current capacity in uAh
+> (POWER_SUPPLY_PROP_CHARGE_NOW)?
+Yes. Doesn't seem like raw values are supported.
+
+[...]
+
+> 
+> this is just 'val->intval = (s16) ret;'.
+> 
+>> +		val->intval *= -1000;
+Ack
+
+> 
+> and this seems to be the only property, that properly scales its
+> values, assuming the hardware reports data in mA.
+> 
+
+[...]
+
+> 
+> that's in **micro** volts
+Oh, I didn't read enough docs..
+
+> 
+>> +		ret = mm8013_read_reg(client, REG_VOLTAGE);
+> 
+> this effectively does i2c_smbus_read_word_data() and thus the
+> maximum is is 65536. 65536uV = 65mV. I have serious doubts, that
+> this code does what you want. The same is true for a couple of
+> the other properties.
+Ack
+
+[...]
+
+> With the next submission please include a dump of the uevent
+> in sysfs in the cover letter or below the fold, so that its
+> easy to validty check if the reported values look sensible.
+State of what-will-be-sent in v(n+1), with additional fixups:
+
+POWER_SUPPLY_NAME=mm8013
+POWER_SUPPLY_TYPE=Battery
+POWER_SUPPLY_CAPACITY=100
+POWER_SUPPLY_CHARGE_FULL=7124
+POWER_SUPPLY_CHARGE_FULL_DESIGN=7500
+POWER_SUPPLY_CURRENT_NOW=-122000
+POWER_SUPPLY_CYCLE_COUNT=27
+POWER_SUPPLY_HEALTH=Good
+POWER_SUPPLY_PRESENT=1
+POWER_SUPPLY_STATUS=Full
+POWER_SUPPLY_TEMP=324
+POWER_SUPPLY_VOLTAGE_NOW=4407000
+
+
+> 
+> Thanks and sorry for the slow processing,
+No worries
+
+Konrad
