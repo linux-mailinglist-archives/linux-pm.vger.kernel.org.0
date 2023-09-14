@@ -2,89 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E250C7A070B
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 16:17:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40A897A0710
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 16:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239857AbjINORM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 10:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39940 "EHLO
+        id S239870AbjINOR2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Sep 2023 10:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239833AbjINORL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 10:17:11 -0400
-X-Greylist: delayed 121901 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 14 Sep 2023 07:17:07 PDT
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C87DD;
-        Thu, 14 Sep 2023 07:17:07 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id EE0382800BC11;
-        Thu, 14 Sep 2023 16:17:05 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id E051950E35C; Thu, 14 Sep 2023 16:17:05 +0200 (CEST)
-Date:   Thu, 14 Sep 2023 16:17:05 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        "open list:X86 PLATFORM DRIVERS" 
-        <platform-driver-x86@vger.kernel.org>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        linux-pm@vger.kernel.org,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        iain@orangesquash.org.uk
-Subject: Re: [PATCH v18 2/2] PCI: Add a quirk for AMD PCIe root ports w/ USB4
- controllers
-Message-ID: <20230914141705.GA27051@wunner.de>
-References: <20230913040832.114610-1-mario.limonciello@amd.com>
- <20230913040832.114610-3-mario.limonciello@amd.com>
- <20230913042522.GB1359@wunner.de>
- <fd981219-d864-4c46-a348-61f73a9df596@amd.com>
- <20230913143128.GA29059@wunner.de>
- <76dfea89-e386-45e9-851c-8e87f9470c4f@amd.com>
+        with ESMTP id S239493AbjINOR2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 10:17:28 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA923DD;
+        Thu, 14 Sep 2023 07:17:23 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4RmfRD5nVkz6D8gq;
+        Thu, 14 Sep 2023 22:12:40 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 14 Sep
+ 2023 15:17:21 +0100
+Date:   Thu, 14 Sep 2023 15:17:20 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     James Morse <james.morse@arm.com>
+CC:     <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
+        <linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+        <x86@kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        <jianyong.wu@arm.com>, <justin.he@arm.com>
+Subject: Re: [RFC PATCH v2 20/35] ACPI: Rename acpi_processor_hotadd_init
+ and remove pre-processor guards
+Message-ID: <20230914151720.00007105@Huawei.com>
+In-Reply-To: <20230913163823.7880-21-james.morse@arm.com>
+References: <20230913163823.7880-1-james.morse@arm.com>
+        <20230913163823.7880-21-james.morse@arm.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <76dfea89-e386-45e9-851c-8e87f9470c4f@amd.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 13, 2023 at 11:36:49AM -0500, Mario Limonciello wrote:
-> On 9/13/2023 09:31, Lukas Wunner wrote:
-> > If this only affects system sleep, not runtime PM, what you can do is
-> > define a DECLARE_PCI_FIXUP_SUSPEND_LATE() which calls pci_d3cold_disable()
-> > and also define a DECLARE_PCI_FIXUP_CLASS_RESUME_EARLY() which calls
-> > pci_d3cold_enable().
-> > 
-> > And I think you can make those calls conditional on pm_suspend_no_platform()
-> > to constrain to s2idle.
-> > 
-> > User space should still be able to influence runtime PM via the
-> > d3cold_allowed flag (unless I'm missing something).
+On Wed, 13 Sep 2023 16:38:08 +0000
+James Morse <james.morse@arm.com> wrote:
+
+> acpi_processor_hotadd_init() will make a CPU present by mapping it
+> based on its hardware id.
 > 
-> The part you're missing is that D3hot is affected by this issue too,
-> otherwise it would be a good proposal.
+> 'hotadd_init' is ambiguous once there are two different behaviours
+> for cpu hotplug. This is for toggling the _STA present bit. Subsequent
+> patches will add support for toggling the _STA enabled bit, named
+> acpi_processor_make_enabled().
+> 
+> Rename it acpi_processor_make_present() to make it clear this is
+> for CPUs that were not previously present.
+> 
+> Expose the function prototypes it uses to allow the preprocessor
+> guards to be removed. The IS_ENABLED() check will let the compiler
+> dead-code elimination pass remove this if it isn't going to be
+> used.
+> 
+> Signed-off-by: James Morse <james.morse@arm.com>
+> ---
+>  drivers/acpi/acpi_processor.c | 14 +++++---------
+>  include/linux/acpi.h          |  2 --
+>  2 files changed, 5 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
+> index 75257fae10e7..22a15a614f95 100644
+> --- a/drivers/acpi/acpi_processor.c
+> +++ b/drivers/acpi/acpi_processor.c
+> @@ -182,13 +182,15 @@ static void __init acpi_pcc_cpufreq_init(void) {}
+>  #endif /* CONFIG_X86 */
+>  
+>  /* Initialization */
+> -#ifdef CONFIG_ACPI_HOTPLUG_PRESENT_CPU
+> -static int acpi_processor_hotadd_init(struct acpi_processor *pr)
+> +static int acpi_processor_make_present(struct acpi_processor *pr)
+>  {
+>  	unsigned long long sta;
+>  	acpi_status status;
+>  	int ret;
+>  
+> +	if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU))
+> +		return -ENODEV;
+> +
+>  	if (invalid_phys_cpuid(pr->phys_id))
+>  		return -ENODEV;
+>  
+> @@ -222,12 +224,6 @@ static int acpi_processor_hotadd_init(struct acpi_processor *pr)
+>  	cpu_maps_update_done();
+>  	return ret;
+>  }
+> -#else
+> -static inline int acpi_processor_hotadd_init(struct acpi_processor *pr)
+> -{
+> -	return -ENODEV;
+> -}
+> -#endif /* CONFIG_ACPI_HOTPLUG_PRESENT_CPU */
+>  
+>  static int acpi_processor_get_info(struct acpi_device *device)
+>  {
+> @@ -335,7 +331,7 @@ static int acpi_processor_get_info(struct acpi_device *device)
+>  	 *  because cpuid <-> apicid mapping is persistent now.
+>  	 */
+>  	if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
+> -		int ret = acpi_processor_hotadd_init(pr);
+> +		int ret = acpi_processor_make_present(pr);
+>  
+>  		if (ret)
+>  			return ret;
+> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+> index 651dd43976a9..b7ab85857bb7 100644
+> --- a/include/linux/acpi.h
+> +++ b/include/linux/acpi.h
+> @@ -316,12 +316,10 @@ static inline int acpi_processor_evaluate_cst(acpi_handle handle, u32 cpu,
+>  }
+>  #endif
+>  
+> -#ifdef CONFIG_ACPI_HOTPLUG_PRESENT_CPU
+>  /* Arch dependent functions for cpu hotplug support */
+>  int acpi_map_cpu(acpi_handle handle, phys_cpuid_t physid, u32 acpi_id,
+>  		 int *pcpu);
+>  int acpi_unmap_cpu(int cpu);
 
-I recall that in an earlier version of the patch, you solved the issue
-by amending pci_bridge_d3_possible().
+I've lost track somewhat but I think the definitions of these are still under ifdefs
+which is messy if nothing else and might cause build issues.
 
-Changing the dev->no_d3cold flag indirectly influences the bridge_d3
-flag (through pci_dev_check_d3cold() and pci_bridge_d3_update()).
+> -#endif /* CONFIG_ACPI_HOTPLUG_PRESENT_CPU */
+>  
+>  #ifdef CONFIG_ACPI_HOTPLUG_IOAPIC
+>  int acpi_get_ioapic_id(acpi_handle handle, u32 gsi_base, u64 *phys_addr);
 
-If dev->no_d3cold is set on a device below a port, that port is
-prevented from entring D3hot because it would result in the
-device effectively being in D3cold.
-
-So you might want to take a closer look at this approach despite
-the flag suggesting that it only influences D3cold.
-
-Thanks,
-
-Lukas
