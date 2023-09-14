@@ -2,119 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 643337A03EA
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 14:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BA5B7A04E0
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 15:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237745AbjINMcH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 08:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52708 "EHLO
+        id S238534AbjINNEh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Sep 2023 09:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbjINMcG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 08:32:06 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FAE71FC8;
-        Thu, 14 Sep 2023 05:32:02 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05E30C433C8;
-        Thu, 14 Sep 2023 12:32:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694694722;
-        bh=CTjVxEOmb9/avVAmKzfes/nYuDn39qximLrhdUqj2Cw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=ifQstyEOJn6D8AC7SkOULZ/nSJw25eKBJnxTAfVvMyWXPxrqr8KVucPrKV3qE3koW
-         54ML4xqdXKhcTJRz5wdJgHPaSorxCyxI0CPvWdwVvbOnYiW/nNl/e09OqZFpoAyFy2
-         1HO3Q01RSZgnSdEEcIn0Byf3V1UH3q312Mi0nHzCyYGuuzUcTYEskYHi4YcrOAbGVK
-         LHddJZQJzI+omi7DBv6GEugcGXKkOMDr09b+mLPUptMwoXGtdVfqIz8AD+3IUvCS2Z
-         Ih1XcY+vLUBWPohgNfRn4+kB1Dt88SzuqEHlJ4VeTtJEXou6xOLn7UZwOUItgxn/QV
-         I7lnoBhfeSxBw==
-Date:   Thu, 14 Sep 2023 07:32:00 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        "open list:X86 PLATFORM DRIVERS" 
-        <platform-driver-x86@vger.kernel.org>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        linux-pm@vger.kernel.org,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        iain@orangesquash.org.uk
-Subject: Re: [PATCH v18 2/2] PCI: Add a quirk for AMD PCIe root ports w/ USB4
- controllers
-Message-ID: <20230914123200.GA25154@bhelgaas>
+        with ESMTP id S238525AbjINNEg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 09:04:36 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1E61FD5;
+        Thu, 14 Sep 2023 06:04:32 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 672F724E1D4;
+        Thu, 14 Sep 2023 21:04:17 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 14 Sep
+ 2023 21:04:17 +0800
+Received: from [192.168.125.113] (113.72.145.181) by EXMBX168.cuchost.com
+ (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 14 Sep
+ 2023 21:04:16 +0800
+Message-ID: <1a9d2905-b0e8-1775-e44f-39d3693a1dad@starfivetech.com>
+Date:   Thu, 14 Sep 2023 21:04:16 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <75e5175e-406e-41dd-90c7-3dc30741897e@amd.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH 13/17] pmdomain: starfive: Move Kconfig file to the
+ pmdomain subsystem
+To:     Conor Dooley <conor.dooley@microchip.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+CC:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Conor Dooley <conor@kernel.org>
+References: <20230914111904.586744-1-ulf.hansson@linaro.org>
+ <20230914-delegator-dimple-51b9414caa28@wendy>
+Content-Language: en-US
+From:   Walker Chen <walker.chen@starfivetech.com>
+In-Reply-To: <20230914-delegator-dimple-51b9414caa28@wendy>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.145.181]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 13, 2023 at 11:59:00PM -0500, Mario Limonciello wrote:
-> On 9/13/2023 16:16, Mario Limonciello wrote:
-> > On 9/13/2023 16:05, Bjorn Helgaas wrote:
-> > [cut]
-> > > > > I expect it to be an ongoing issue.  I also expect unless we use
-> > > > > constraints or convince the firmware team to add a _S0W object with a
-> > > > > value of "0" for the sake of Linux that we will be adding
-> > > > > IDs every year
-> > > > > to wherever this lands as we reproduce it on newer SoCs.
-> > > > 
-> > > > So maybe the way to go is to make the AMD PMC driver set a flag for
-> > > > Root Ports on suspend or similar.
-> > > 
-> > > I like the quirk approach.  When PMC is involved, the device behavior
-> > > doesn't conform to what it advertised via PME_Support.
-> > > 
-> > > The v18 quirk isn't connected to PMC at all, so IIUC it avoids
-> > > D3hot/D3cold unnecessarily when amd/pmc is not loaded.
-> > 
-> > Technically someone could; but realistically no one will be using these
-> > machines without amd-pmc.
-> > 
-> > The battery life over suspend would be abhorrent.
-> > 
-> > > I don't object to avoiding D3hot/D3cold unconditionally.  Presumably
-> > > we *could* save a little power by using them when amd/pci isn't
-> > > loaded, but amd/pci would have to iterate through all PCI devices when
-> > > it loads, save previous state, do the quirk, and then restore the
-> > > previous state on module unload.  And it would have to use notifiers
-> > > or assume no Root Port hotplug.  All sounds kind of complicated.
-> > 
-> > Yeah this does sound needlessly complicated.
-> > 
-> > > Maybe it would even be enough to just clear dev->pme_support so we
-> > > know wakeups don't work.  It would be a pretty big benefit if we
-> > > didn't have to add another bit and complicate pci_prepare_to_sleep()
-> > > or pci_target_state().
-> > 
-> > I don't think clearing PME support entirely is going to help.  The
-> > reason is that pci_target_state() will fall back to PCI_D3hot when
-> > dev->pme_support is fully cleared.
-> > 
-> > I think that clearing *just the bits* for D3hot and D3cold in PME
-> > support should work though.  I'll test this.
-> 
-> I did confirm this works properly.
-> 
-> > Assuming it works how about if we put the quirk to clear the
-> > D3hot/D3cold PME support bit in
-> > drivers/platform/x86/amd/pmc/pmc-quirks.c?
-> > 
-> > It's still a quirk file and it makes it very clear that this behavior is
-> > caused by what amd-pmc does.
-> 
-> I've got it coded up like this and working, so please let me know if this
-> approach is amenable and I'll drop an updated version.
-> 
-> If you would prefer it to be in pci/quirks.c I believe I can do either.
 
-If the quirk is in a loadable module, as opposed to being built-in,
-does it get applied to the relevant Root Ports when the module is
-loaded?  I didn't look exhaustively, but I don't see a reference to
-pci_fixup_device() in the module load path.
+On 2023/9/14 19:59, Conor Dooley wrote:
+> Hey,
+> 
+> 
+> On Thu, Sep 14, 2023 at 01:19:04PM +0200, Ulf Hansson wrote:
+>> The Kconfig belongs closer to the corresponding implementation, hence let's
+>> move it from the soc subsystem to the pmdomain subsystem.
+>> 
+>> Cc: Walker Chen <walker.chen@starfivetech.com>
+>> Cc: Conor Dooley <conor@kernel.org>
+>> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> 
+> Thanks for doing this, saved me having to!
+> The series appears to have broken threading though, which can be seen
+> pretty easily on lore:
+> https://lore.kernel.org/all/20230914111904.586744-1-ulf.hansson@linaro.org/
+> Dunno if something is borked with your process while sending patches to
+> only a subset of the total recipient list.
+> 
+>> ---
+>>  MAINTAINERS                                | 2 +-
+>>  drivers/pmdomain/Kconfig                   | 1 +
+>>  drivers/{soc => pmdomain}/starfive/Kconfig | 0
+>>  drivers/soc/Kconfig                        | 1 -
+>>  4 files changed, 2 insertions(+), 2 deletions(-)
+>>  rename drivers/{soc => pmdomain}/starfive/Kconfig (100%)
+>> 
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 6b491ebcf790..b8eae18f0fb1 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -20523,7 +20523,7 @@ M:	Conor Dooley <conor@kernel.org>
+>>  S:	Maintained
+>>  T:	git https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/
+>>  F:	Documentation/devicetree/bindings/soc/starfive/
+>> -F:	drivers/soc/starfive/
+>> +F:	drivers/pmdomain/starfive/
+> 
+> This isn't the correct change, just remove the drivers/soc/starfive
+> bit entirely from this entry. 
+> I've just been doing some review & sending PRs to Arnd for this stuff
+> (or failing to send the PRs as you saw), I don't have particular
+> interest in this driver other than helping out the starfive people with
+> actually getting the code merged.
+> Instead I think you should generalise the existing entry for the driver
+> to cover the whole directory, so that it includes the Kconfig bits too:
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index fa7487b7729b..22c1a5e5b130 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -20564,7 +20564,7 @@ M:      Walker Chen <walker.chen@starfivetech.com>
+>  M:     Changhuang Liang <changhuang.liang@starfivetech.com>
+>  S:     Supported
+>  F:     Documentation/devicetree/bindings/power/starfive*
+> -F:     drivers/pmdomain/starfive/jh71xx-pmu.c
+> +F:     drivers/pmdomain/starfive/
+>  F:     include/dt-bindings/power/starfive,jh7110-pmu.h
+>  
+>  STARFIVE SOC DRIVERS
+> 
 
-Bjorn
+Hi Conor,
+
+Anyway, thank you for helping maintain this driver as starfive people lack of experience in this area. 
+You have indeed helped us a lot during this period.
+
+Best regards,
+Walker
+
+> Thanks,
+> Conor.
+> 
+>>  
+>>  STARFIVE TRNG DRIVER
+>>  M:	Jia Jie Ho <jiajie.ho@starfivetech.com>
+>> diff --git a/drivers/pmdomain/Kconfig b/drivers/pmdomain/Kconfig
+>> index cfe9ea754062..67049ebf7265 100644
+>> --- a/drivers/pmdomain/Kconfig
+>> +++ b/drivers/pmdomain/Kconfig
+>> @@ -12,5 +12,6 @@ source "drivers/pmdomain/renesas/Kconfig"
+>>  source "drivers/pmdomain/rockchip/Kconfig"
+>>  source "drivers/pmdomain/samsung/Kconfig"
+>>  source "drivers/pmdomain/st/Kconfig"
+>> +source "drivers/pmdomain/starfive/Kconfig"
+>>  
+>>  endmenu
+>> diff --git a/drivers/soc/starfive/Kconfig b/drivers/pmdomain/starfive/Kconfig
+>> similarity index 100%
+>> rename from drivers/soc/starfive/Kconfig
+>> rename to drivers/pmdomain/starfive/Kconfig
+>> diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+>> index 8b46da40f107..10a9ff84ff41 100644
+>> --- a/drivers/soc/Kconfig
+>> +++ b/drivers/soc/Kconfig
+>> @@ -23,7 +23,6 @@ source "drivers/soc/renesas/Kconfig"
+>>  source "drivers/soc/rockchip/Kconfig"
+>>  source "drivers/soc/samsung/Kconfig"
+>>  source "drivers/soc/sifive/Kconfig"
+>> -source "drivers/soc/starfive/Kconfig"
+>>  source "drivers/soc/sunxi/Kconfig"
+>>  source "drivers/soc/tegra/Kconfig"
+>>  source "drivers/soc/ti/Kconfig"
+>> -- 
+>> 2.34.1
+>> 
