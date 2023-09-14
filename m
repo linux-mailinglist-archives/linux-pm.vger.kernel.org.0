@@ -2,182 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF6B77A032E
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 14:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C07197A0338
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 14:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238119AbjINMAL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 08:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35038 "EHLO
+        id S238278AbjINMBf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Sep 2023 08:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233897AbjINMAL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 08:00:11 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C1CCF3;
-        Thu, 14 Sep 2023 05:00:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1694692807; x=1726228807;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uG+F151bn68ScYDGWITqHNnwQWlUdsnNin/8aUVHZQI=;
-  b=GimvMVz2wD0+XgspDfRNe1NJxUCCAEnGKtzBYLmPlSL8eWJlTM9Fzue2
-   V94SE2gGua5R4qj/pjl7J8KVCJvl5lGSv1a853u28l8c+3Fe1atz1gle5
-   PO7kM0sXFxCy091NB4wCbwT4a3O3tiIkHt9huYyzQdLwQryHzcQ1DafZK
-   f/eExfbUQ2+PLzFc9U/YkyNS5npaWlX6tQtqVgx0kjQiolOOlvfwIcONn
-   mLD5oc/EArOcKoo07udJNU7v0zzOb4fLxb/6/EiKgOVP9TWG2Zq8ewFlY
-   3gAGJMxiISXuhl0PpEbSq0ZkTGiquujlS2Z5YGCPXxPws5LOSVWHyIA1e
-   g==;
-X-CSE-ConnectionGUID: ws0ewmwgSamnGX1tUsKhPQ==
-X-CSE-MsgGUID: /eszNVWGQ2CCv9ifskaUFA==
-X-ThreatScanner-Verdict: Negative
-X-IronPort-AV: E=Sophos;i="6.02,146,1688454000"; 
-   d="asc'?scan'208";a="4651647"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Sep 2023 05:00:07 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 14 Sep 2023 04:59:56 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex03.mchp-main.com (10.10.85.151)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 14 Sep 2023 04:59:54 -0700
-Date:   Thu, 14 Sep 2023 12:59:38 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-CC:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        with ESMTP id S237316AbjINMBf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 08:01:35 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5301BE8;
+        Thu, 14 Sep 2023 05:01:30 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4RmbQR00lDz68944;
+        Thu, 14 Sep 2023 19:56:46 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 14 Sep
+ 2023 13:01:27 +0100
+Date:   Thu, 14 Sep 2023 13:01:26 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     James Morse <james.morse@arm.com>
+CC:     <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
+        <linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        Conor Dooley <conor@kernel.org>
-Subject: Re: [PATCH 13/17] pmdomain: starfive: Move Kconfig file to the
- pmdomain subsystem
-Message-ID: <20230914-delegator-dimple-51b9414caa28@wendy>
-References: <20230914111904.586744-1-ulf.hansson@linaro.org>
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+        <x86@kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        <jianyong.wu@arm.com>, <justin.he@arm.com>,
+        <gregkh@linuxfoundation.org>
+Subject: Re: [RFC PATCH v2 11/35] arch_topology: Make
+ register_cpu_capacity_sysctl() tolerant to late CPUs
+Message-ID: <20230914130126.000069db@Huawei.com>
+In-Reply-To: <20230913163823.7880-12-james.morse@arm.com>
+References: <20230913163823.7880-1-james.morse@arm.com>
+        <20230913163823.7880-12-james.morse@arm.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="2kgF3gAKLh1ZoVxp"
-Content-Disposition: inline
-In-Reply-To: <20230914111904.586744-1-ulf.hansson@linaro.org>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---2kgF3gAKLh1ZoVxp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, 13 Sep 2023 16:37:59 +0000
+James Morse <james.morse@arm.com> wrote:
 
-Hey,
+> register_cpu_capacity_sysctl() adds a property to sysfs that describes
+> the CPUs capacity. This is done from a subsys_initcall() that assumes
+> all possible CPUs are registered.
+> 
+> With CPU hotplug, possible CPUs aren't registered until they become
+> present, (or for arm64 enabled). This leads to messages during boot:
+> | register_cpu_capacity_sysctl: too early to get CPU1 device!
+> and once these CPUs are added to the system, the file is missing.
+> 
+> Move this to a cpuhp callback, so that the file is created once
+> CPUs are brought online. This covers CPUs that are added late by
+> mechanisms like hotplug.
+> One observable difference is the file is now missing for offline CPUs.
+> 
+> Signed-off-by: James Morse <james.morse@arm.com>
+> ---
+> If the offline CPUs thing is a problem for the tools that consume
+> this value, we'd need to move cpu_capacity to be part of cpu.c's
+> common_cpu_attr_groups.
+
+I think we should do that anyway and then use an is_visible() if we want to
+change whether it is visible in offline cpus.
+
+Dynamic sysfs file creation is horrible - particularly when done
+from an totally different file from where the rest of the attributes
+are registered.  I'm curious what the history behind that is.
+
+Whilst here, why is there a common_cpu_attr_groups which is
+identical to the hotpluggable_cpu_attr_groups in base/cpu.c?
 
 
-On Thu, Sep 14, 2023 at 01:19:04PM +0200, Ulf Hansson wrote:
-> The Kconfig belongs closer to the corresponding implementation, hence let=
-'s
-> move it from the soc subsystem to the pmdomain subsystem.
->=20
-> Cc: Walker Chen <walker.chen@starfivetech.com>
-> Cc: Conor Dooley <conor@kernel.org>
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-Thanks for doing this, saved me having to!
-The series appears to have broken threading though, which can be seen
-pretty easily on lore:
-https://lore.kernel.org/all/20230914111904.586744-1-ulf.hansson@linaro.org/
-Dunno if something is borked with your process while sending patches to
-only a subset of the total recipient list.
++CC GregKH
+Given changes in drivers/base/
 
 > ---
->  MAINTAINERS                                | 2 +-
->  drivers/pmdomain/Kconfig                   | 1 +
->  drivers/{soc =3D> pmdomain}/starfive/Kconfig | 0
->  drivers/soc/Kconfig                        | 1 -
->  4 files changed, 2 insertions(+), 2 deletions(-)
->  rename drivers/{soc =3D> pmdomain}/starfive/Kconfig (100%)
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 6b491ebcf790..b8eae18f0fb1 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -20523,7 +20523,7 @@ M:	Conor Dooley <conor@kernel.org>
->  S:	Maintained
->  T:	git https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/
->  F:	Documentation/devicetree/bindings/soc/starfive/
-> -F:	drivers/soc/starfive/
-> +F:	drivers/pmdomain/starfive/
+>  drivers/base/arch_topology.c | 38 ++++++++++++++++++++++++------------
+>  1 file changed, 26 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> index b741b5ba82bd..9ccb7daee78e 100644
+> --- a/drivers/base/arch_topology.c
+> +++ b/drivers/base/arch_topology.c
+> @@ -220,20 +220,34 @@ static DECLARE_WORK(update_topology_flags_work, update_topology_flags_workfn);
+>  
+>  static DEVICE_ATTR_RO(cpu_capacity);
+>  
+> +static int cpu_capacity_sysctl_add(unsigned int cpu)
+> +{
+> +	struct device *cpu_dev = get_cpu_device(cpu);
+> +
+> +	if (!cpu_dev)
+> +		return -ENOENT;
+> +
+> +	device_create_file(cpu_dev, &dev_attr_cpu_capacity);
+> +
+> +	return 0;
+> +}
+> +
+> +static int cpu_capacity_sysctl_remove(unsigned int cpu)
+> +{
+> +	struct device *cpu_dev = get_cpu_device(cpu);
+> +
+> +	if (!cpu_dev)
+> +		return -ENOENT;
+> +
+> +	device_remove_file(cpu_dev, &dev_attr_cpu_capacity);
+> +
+> +	return 0;
+> +}
+> +
+>  static int register_cpu_capacity_sysctl(void)
+>  {
+> -	int i;
+> -	struct device *cpu;
+> -
+> -	for_each_possible_cpu(i) {
+> -		cpu = get_cpu_device(i);
+> -		if (!cpu) {
+> -			pr_err("%s: too early to get CPU%d device!\n",
+> -			       __func__, i);
+> -			continue;
+> -		}
+> -		device_create_file(cpu, &dev_attr_cpu_capacity);
+> -	}
+> +	cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "topology/cpu-capacity",
+> +			  cpu_capacity_sysctl_add, cpu_capacity_sysctl_remove);
+>  
+>  	return 0;
+>  }
 
-This isn't the correct change, just remove the drivers/soc/starfive
-bit entirely from this entry.=20
-I've just been doing some review & sending PRs to Arnd for this stuff
-(or failing to send the PRs as you saw), I don't have particular
-interest in this driver other than helping out the starfive people with
-actually getting the code merged.
-Instead I think you should generalise the existing entry for the driver
-to cover the whole directory, so that it includes the Kconfig bits too:
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fa7487b7729b..22c1a5e5b130 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20564,7 +20564,7 @@ M:      Walker Chen <walker.chen@starfivetech.com>
- M:     Changhuang Liang <changhuang.liang@starfivetech.com>
- S:     Supported
- F:     Documentation/devicetree/bindings/power/starfive*
--F:     drivers/pmdomain/starfive/jh71xx-pmu.c
-+F:     drivers/pmdomain/starfive/
- F:     include/dt-bindings/power/starfive,jh7110-pmu.h
-=20
- STARFIVE SOC DRIVERS
-
-Thanks,
-Conor.
-
-> =20
->  STARFIVE TRNG DRIVER
->  M:	Jia Jie Ho <jiajie.ho@starfivetech.com>
-> diff --git a/drivers/pmdomain/Kconfig b/drivers/pmdomain/Kconfig
-> index cfe9ea754062..67049ebf7265 100644
-> --- a/drivers/pmdomain/Kconfig
-> +++ b/drivers/pmdomain/Kconfig
-> @@ -12,5 +12,6 @@ source "drivers/pmdomain/renesas/Kconfig"
->  source "drivers/pmdomain/rockchip/Kconfig"
->  source "drivers/pmdomain/samsung/Kconfig"
->  source "drivers/pmdomain/st/Kconfig"
-> +source "drivers/pmdomain/starfive/Kconfig"
-> =20
->  endmenu
-> diff --git a/drivers/soc/starfive/Kconfig b/drivers/pmdomain/starfive/Kco=
-nfig
-> similarity index 100%
-> rename from drivers/soc/starfive/Kconfig
-> rename to drivers/pmdomain/starfive/Kconfig
-> diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
-> index 8b46da40f107..10a9ff84ff41 100644
-> --- a/drivers/soc/Kconfig
-> +++ b/drivers/soc/Kconfig
-> @@ -23,7 +23,6 @@ source "drivers/soc/renesas/Kconfig"
->  source "drivers/soc/rockchip/Kconfig"
->  source "drivers/soc/samsung/Kconfig"
->  source "drivers/soc/sifive/Kconfig"
-> -source "drivers/soc/starfive/Kconfig"
->  source "drivers/soc/sunxi/Kconfig"
->  source "drivers/soc/tegra/Kconfig"
->  source "drivers/soc/ti/Kconfig"
-> --=20
-> 2.34.1
->=20
-
---2kgF3gAKLh1ZoVxp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZQL1qgAKCRB4tDGHoIJi
-0rVzAP9FY/ohd7on51vpfRecEpZAePbMsVUzl1EtVecCPOByggD/QiEkAxaXSUc9
-B0yAQH4pjtfwzPASaPXW/nVoCDWDSQk=
-=22dE
------END PGP SIGNATURE-----
-
---2kgF3gAKLh1ZoVxp--
