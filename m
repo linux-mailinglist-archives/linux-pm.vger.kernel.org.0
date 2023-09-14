@@ -2,150 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D247A0298
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 13:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 177AE7A02C1
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 13:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237851AbjINL12 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 07:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34650 "EHLO
+        id S230222AbjINLfB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Sep 2023 07:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237872AbjINL1X (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 07:27:23 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7661FC9;
-        Thu, 14 Sep 2023 04:27:18 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4RmZkL5jfYz6HJbR;
-        Thu, 14 Sep 2023 19:25:30 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 14 Sep
- 2023 12:27:16 +0100
-Date:   Thu, 14 Sep 2023 12:27:15 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     James Morse <james.morse@arm.com>
-CC:     <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
-        <linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-        <x86@kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        <jianyong.wu@arm.com>, <justin.he@arm.com>
-Subject: Re: [RFC PATCH v2 06/35] arm64: setup: Switch over to
- GENERIC_CPU_DEVICES using arch_register_cpu()
-Message-ID: <20230914122715.000076be@Huawei.com>
-In-Reply-To: <20230913163823.7880-7-james.morse@arm.com>
-References: <20230913163823.7880-1-james.morse@arm.com>
-        <20230913163823.7880-7-james.morse@arm.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        with ESMTP id S231270AbjINLfA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 07:35:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54B7E1BE8
+        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 04:34:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1694691255;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zyZTrDy0/hTH0K9EatTkNwN6H8aU89mHjN3C7EMRwqQ=;
+        b=iQN9Fe6nfprTZ5syMdH/7BClWd+9TynWg8aPH+ty4DvwbfTuVa+/xVZBI708oS/S8/NrAa
+        I4DcTFs72qNNZnKg1Z0hwPxnDRaqIP+jvOjRGSjnMvdY3gznFMv/d/OQB9B0WfITyB15Ek
+        YKKr1vI2JTSpwfcQ690cMd4UGCzsdnM=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-199--qndlhkBP-eKhPyiSFza5A-1; Thu, 14 Sep 2023 07:34:14 -0400
+X-MC-Unique: -qndlhkBP-eKhPyiSFza5A-1
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-26fb3f2edc9so714454a91.3
+        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 04:34:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694691253; x=1695296053;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zyZTrDy0/hTH0K9EatTkNwN6H8aU89mHjN3C7EMRwqQ=;
+        b=M8WsCNHiMTQnOUY9VZR8hCj4AFWmf0hzPNxqCawtgCwbuD5LsIM9ZIc7nM+/x6VPAZ
+         KkR/uwJcvoiE59/eLpqF9q57AaHdgfeQA34Ru4njOhvZ/5JZbJoLX3yc1RibpIUnyWdD
+         Od3Td82FCrtFzNLOOs3aMxFQUYTWo1rsrRB2s3AkVnAyB+O+/6HTXfftUu457x2nvhDJ
+         BdJR71SiPcOaxWgu+2YBJ/QyJ0b3PoeW/JXds/KEO0f1XK0n2BANUtn2x1//BQfVUo6N
+         PTO6n4ktNu/tMyVD26kvPOBwVvfSt7aLqpVU7uyYqz3XaCWf3AYwLU8A0Z8WlR6dIRqw
+         6DBQ==
+X-Gm-Message-State: AOJu0YxgpudopgdWaJxXiO9kwqyDS29FqZIRq8E1+SiXu6WT9AeohKh2
+        SJpAP6yyC2q9nqei3VM0kw+8FJxW3yp/lUvjMy8NkwiEM94EZBCNbtepbmhGAGgr+fKYM3XeveQ
+        qBx2eWPG+amXzFZjkZX2M1TWqOgvQGbFuDcs=
+X-Received: by 2002:a17:90b:1953:b0:271:8195:8 with SMTP id nk19-20020a17090b195300b0027181950008mr4962722pjb.36.1694691253243;
+        Thu, 14 Sep 2023 04:34:13 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH+T3eZarPZ9nZ1kl+VZnwP2bzJmj2nhQcmZkbug8WrUbmTzW0SE3NyLmlL8SFSEAVUSs75vseHQzI79kWaPnA=
+X-Received: by 2002:a17:90b:1953:b0:271:8195:8 with SMTP id
+ nk19-20020a17090b195300b0027181950008mr4962702pjb.36.1694691252955; Thu, 14
+ Sep 2023 04:34:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
+References: <20230914111712.586522-1-ulf.hansson@linaro.org>
+In-Reply-To: <20230914111712.586522-1-ulf.hansson@linaro.org>
+From:   Eric Curtin <ecurtin@redhat.com>
+Date:   Thu, 14 Sep 2023 12:33:36 +0100
+Message-ID: <CAOgh=FykP9LLpkg4WLhYaKYv8Myofu7KSYc2=_3ea=4paPfMCQ@mail.gmail.com>
+Subject: Re: [PATCH 04/17] pmdomain: apple: Move Kconfig option to the
+ pmdomain subsystem
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>, asahi@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 13 Sep 2023 16:37:54 +0000
-James Morse <james.morse@arm.com> wrote:
+On Thu, 14 Sept 2023 at 12:24, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> The Kconfig option belongs closer to the corresponding implementation,
+> hence let's move it from the soc subsystem to the pmdomain subsystem.
+>
+> Cc: Hector Martin <marcan@marcan.st>
+> Cc: Sven Peter <sven@svenpeter.dev>
+> Cc: Alyssa Rosenzweig <alyssa@rosenzweig.io>
+> Cc: <asahi@lists.linux.dev>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-> To allow ACPI's _STA value to hide CPUs that are present, but not
-> available to online right now due to VMM or firmware policy, the
-> register_cpu() call needs to be made by the ACPI machinery when ACPI
-> is in use. This allows it to hide CPUs that are unavailable from sysfs.
-> 
-> Switching to GENERIC_CPU_DEVICES is an intermediate step to allow all
-> five ACPI architectures to be modified at once.
-> 
-> Switch over to GENERIC_CPU_DEVICES, and provide an arch_register_cpu()
-> that populates the hotpluggable flag. arch_register_cpu() is also the
-> interface the ACPI machinery expects.
-> 
-> The struct cpu in struct cpuinfo_arm64 is never used directly, remove
-> it to use the one GENERIC_CPU_DEVICES provides.
-> 
-> This changes the CPUs visible in sysfs from possible to present, but
-> on arm64 smp_prepare_cpus() ensures these are the same.
-> 
-> Signed-off-by: James Morse <james.morse@arm.com>
+Makes sense, since the C code and Makefile is there now.
 
-After this the earlier question about ordering of cpu_dev_init()
-and node_dev_init() is relevant.   
+Reviewed-by: Eric Curtin <ecurtin@redhat.com>
 
-Why won't node_dev_init() call
-get_cpu_devce() which queries per_cpu(cpu_sys_devices)
-and get NULL as we haven't yet filled that in?
+Is mise le meas/Regards,
 
-Or does it do so but that doesn't matter as well create the
-relevant links later?
-
-I've not had enough coffee yet today so might be missing the
-obvious!
-
-Jonathan
+Eric Curtin
 
 > ---
->  arch/arm64/Kconfig           |  1 +
->  arch/arm64/include/asm/cpu.h |  1 -
->  arch/arm64/kernel/setup.c    | 13 ++++---------
->  3 files changed, 5 insertions(+), 10 deletions(-)
-> 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index b10515c0200b..7b3990abf87a 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -132,6 +132,7 @@ config ARM64
->  	select GENERIC_ARCH_TOPOLOGY
->  	select GENERIC_CLOCKEVENTS_BROADCAST
->  	select GENERIC_CPU_AUTOPROBE
-> +	select GENERIC_CPU_DEVICES
->  	select GENERIC_CPU_VULNERABILITIES
->  	select GENERIC_EARLY_IOREMAP
->  	select GENERIC_IDLE_POLL_SETUP
-> diff --git a/arch/arm64/include/asm/cpu.h b/arch/arm64/include/asm/cpu.h
-> index e749838b9c5d..887bd0d992bb 100644
-> --- a/arch/arm64/include/asm/cpu.h
-> +++ b/arch/arm64/include/asm/cpu.h
-> @@ -38,7 +38,6 @@ struct cpuinfo_32bit {
->  };
->  
->  struct cpuinfo_arm64 {
-> -	struct cpu	cpu;
->  	struct kobject	kobj;
->  	u64		reg_ctr;
->  	u64		reg_cntfrq;
-> diff --git a/arch/arm64/kernel/setup.c b/arch/arm64/kernel/setup.c
-> index 417a8a86b2db..165bd2c0dd5a 100644
-> --- a/arch/arm64/kernel/setup.c
-> +++ b/arch/arm64/kernel/setup.c
-> @@ -402,19 +402,14 @@ static inline bool cpu_can_disable(unsigned int cpu)
->  	return false;
->  }
->  
-> -static int __init topology_init(void)
-> +int arch_register_cpu(int num)
->  {
-> -	int i;
-> +	struct cpu *cpu = &per_cpu(cpu_devices, num);
->  
-> -	for_each_possible_cpu(i) {
-> -		struct cpu *cpu = &per_cpu(cpu_data.cpu, i);
-> -		cpu->hotpluggable = cpu_can_disable(i);
-> -		register_cpu(cpu, i);
-> -	}
-> +	cpu->hotpluggable = cpu_can_disable(num);
->  
-> -	return 0;
-> +	return register_cpu(cpu, num);
->  }
-> -subsys_initcall(topology_init);
->  
->  static void dump_kernel_offset(void)
->  {
+>  drivers/pmdomain/Kconfig       |  1 +
+>  drivers/pmdomain/apple/Kconfig | 18 ++++++++++++++++++
+>  drivers/soc/apple/Kconfig      | 13 -------------
+>  3 files changed, 19 insertions(+), 13 deletions(-)
+>  create mode 100644 drivers/pmdomain/apple/Kconfig
+>
+> diff --git a/drivers/pmdomain/Kconfig b/drivers/pmdomain/Kconfig
+> index 07d2f8165abe..55a9ca191849 100644
+> --- a/drivers/pmdomain/Kconfig
+> +++ b/drivers/pmdomain/Kconfig
+> @@ -3,5 +3,6 @@ menu "Power Domains Support"
+>
+>  source "drivers/pmdomain/actions/Kconfig"
+>  source "drivers/pmdomain/amlogic/Kconfig"
+> +source "drivers/pmdomain/apple/Kconfig"
+>
+>  endmenu
+> diff --git a/drivers/pmdomain/apple/Kconfig b/drivers/pmdomain/apple/Kconfig
+> new file mode 100644
+> index 000000000000..12237cbcfaa9
+> --- /dev/null
+> +++ b/drivers/pmdomain/apple/Kconfig
+> @@ -0,0 +1,18 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +if ARCH_APPLE || COMPILE_TEST
+> +
+> +config APPLE_PMGR_PWRSTATE
+> +       bool "Apple SoC PMGR power state control"
+> +       depends on PM
+> +       select REGMAP
+> +       select MFD_SYSCON
+> +       select PM_GENERIC_DOMAINS
+> +       select RESET_CONTROLLER
+> +       default ARCH_APPLE
+> +       help
+> +         The PMGR block in Apple SoCs provides high-level power state
+> +         controls for SoC devices. This driver manages them through the
+> +         generic power domain framework, and also provides reset support.
+> +
+> +endif
+> diff --git a/drivers/soc/apple/Kconfig b/drivers/soc/apple/Kconfig
+> index a1596fefacff..eff486a77337 100644
+> --- a/drivers/soc/apple/Kconfig
+> +++ b/drivers/soc/apple/Kconfig
+> @@ -4,19 +4,6 @@ if ARCH_APPLE || COMPILE_TEST
+>
+>  menu "Apple SoC drivers"
+>
+> -config APPLE_PMGR_PWRSTATE
+> -       bool "Apple SoC PMGR power state control"
+> -       depends on PM
+> -       select REGMAP
+> -       select MFD_SYSCON
+> -       select PM_GENERIC_DOMAINS
+> -       select RESET_CONTROLLER
+> -       default ARCH_APPLE
+> -       help
+> -         The PMGR block in Apple SoCs provides high-level power state
+> -         controls for SoC devices. This driver manages them through the
+> -         generic power domain framework, and also provides reset support.
+> -
+>  config APPLE_RTKIT
+>         tristate "Apple RTKit co-processor IPC protocol"
+>         depends on MAILBOX
+> --
+> 2.34.1
+>
+>
 
