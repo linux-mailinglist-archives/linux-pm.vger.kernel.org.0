@@ -2,230 +2,187 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7689A7A0B0B
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 18:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C24787A0DB6
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 21:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237340AbjINQyw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 12:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
+        id S231586AbjINTBZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Sep 2023 15:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbjINQyv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 12:54:51 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3381BCB;
-        Thu, 14 Sep 2023 09:54:47 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Rmk1X02Syz6K66F;
-        Fri, 15 Sep 2023 00:54:07 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 14 Sep
- 2023 17:54:44 +0100
-Date:   Thu, 14 Sep 2023 17:54:43 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     James Morse <james.morse@arm.com>
-CC:     <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
-        <linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-        <x86@kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        <jianyong.wu@arm.com>, <justin.he@arm.com>
-Subject: Re: [RFC PATCH v2 35/35] cpumask: Add enabled cpumask for present
- CPUs that can be brought online
-Message-ID: <20230914175443.000038f6@Huawei.com>
-In-Reply-To: <20230913163823.7880-36-james.morse@arm.com>
-References: <20230913163823.7880-1-james.morse@arm.com>
-        <20230913163823.7880-36-james.morse@arm.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        with ESMTP id S241331AbjINTBL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 15:01:11 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF4F2D5E;
+        Thu, 14 Sep 2023 11:42:51 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E16EBC433B9;
+        Thu, 14 Sep 2023 18:42:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694716971;
+        bh=08e3rjzF0krBhajpQnyBqQbdi7QA3Cyqf3TN7meiMuc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=e5jxyRyHOP/DjRJuPsyiFh1vt7vtwAZuZ7nmLxwXXZ34KlomrBCw1HjQvcicHQcfu
+         563tqna9nWQLTE2sPMxhAwDxEUICpNfyRjBWooir/u1+ZkTcm6MyRneNkG6dnqpFwf
+         VZAVbzNE6C+n+VKMXiEbLTf8bjiWU/BSlqQ6lYcU7M1I03H6BpP8xCxoZ8eA+SRBwm
+         7qsXxLr34whdGlGLz1JGQSmoG5k1x5Jibze8tNsk+LGU2/MAsQnjpmXbLmxvy5PmXb
+         RzIawaUEnSOV1IbQuFIH9E/VEd7Qd81olGd87UmFmLGkZf0nzkvdGHpxjWVMVz/ONk
+         HcY4lK9El8IgA==
+Date:   Thu, 14 Sep 2023 13:42:49 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     srinivas.pandruvada@linux.intel.com, jikos@kernel.org,
+        benjamin.tissoires@redhat.com, linux-pm@vger.kernel.org,
+        linux-pci@vger.kernel.org,
+        Jian Hui Lee <jianhui.lee@canonical.com>,
+        Even Xu <even.xu@intel.com>, Zhang Lixu <lixu.zhang@intel.com>,
+        Najumon Ba <najumon.ba@intel.com>, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HID: intel-ish-hid: ipc: Rework EHL OOB wakeup
+Message-ID: <20230914184249.GA74069@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230914041806.816741-1-kai.heng.feng@canonical.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 13 Sep 2023 16:38:23 +0000
-James Morse <james.morse@arm.com> wrote:
+On Thu, Sep 14, 2023 at 12:18:05PM +0800, Kai-Heng Feng wrote:
+> System cannot suspend more than 255 times because the driver doesn't
+> have corresponding acpi_disable_gpe() for acpi_enable_gpe(), so the GPE
+> refcount overflows.
 
-> The 'offline' file in sysfs shows all offline CPUs, including those
-> that aren't present. User-space is expected to remove not-present CPUs
-> from this list to learn which CPUs could be brought online.
+How can a user know they are seeing this problem?  Is there a public
+bug report for it?
+
+> Since PCI core and ACPI core already handles PCI PME wake and GPE wake
+> when the device has wakeup capability, use device_init_wakeup() to let
+> them do the wakeup setting work.
 > 
-> CPUs can be present but not-enabled. These CPUs can't be brought online
-> until the firmware policy changes, which comes with an ACPI notification
-> that will register the CPUs.
-> 
-> With only the offline and present files, user-space is unable to
-> determine which CPUs it can try to bring online. Add a new CPU mask
-> that shows this based on all the registered CPUs.
+> Also add a shutdown callback which uses pci_prepare_to_sleep() to let
+> PCI and ACPI set OOB wakeup for S5.
 
-Bikeshed should be blue.
+Is this logically required to be part of this patch, or could it be a
+separate patch?
 
-Enabled is a really confusing name for this - to the extent that I'm not sure
-what it means.  Assuming I have the sense right, how about the horrible
-onlineable or online_capable?
-
-
-> 
-> Signed-off-by: James Morse <james.morse@arm.com>
+> Fixes: 2e23a70edabe ("HID: intel-ish-hid: ipc: finish power flow for EHL OOB")
+> Cc: Jian Hui Lee <jianhui.lee@canonical.com>
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 > ---
->  drivers/base/cpu.c      | 10 ++++++++++
->  include/linux/cpumask.h | 25 +++++++++++++++++++++++++
->  kernel/cpu.c            |  3 +++
->  3 files changed, 38 insertions(+)
+>  drivers/hid/intel-ish-hid/ipc/pci-ish.c | 59 +++++++------------------
+>  1 file changed, 15 insertions(+), 44 deletions(-)
 > 
-> diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-> index c709747c4a18..a19a8be93102 100644
-> --- a/drivers/base/cpu.c
-> +++ b/drivers/base/cpu.c
-> @@ -95,6 +95,7 @@ void unregister_cpu(struct cpu *cpu)
->  {
->  	int logical_cpu = cpu->dev.id;
->  
-> +	set_cpu_enabled(logical_cpu, false);
->  	unregister_cpu_under_node(logical_cpu, cpu_to_node(logical_cpu));
->  
->  	device_unregister(&cpu->dev);
-> @@ -273,6 +274,13 @@ static ssize_t print_cpus_offline(struct device *dev,
->  }
->  static DEVICE_ATTR(offline, 0444, print_cpus_offline, NULL);
->  
-> +static ssize_t print_cpus_enabled(struct device *dev,
-> +				  struct device_attribute *attr, char *buf)
-> +{
-> +	return sysfs_emit(buf, "%*pbl\n", cpumask_pr_args(cpu_enabled_mask));
-> +}
-> +static DEVICE_ATTR(enabled, 0444, print_cpus_enabled, NULL);
-> +
->  static ssize_t print_cpus_isolated(struct device *dev,
->  				  struct device_attribute *attr, char *buf)
->  {
-> @@ -413,6 +421,7 @@ int register_cpu(struct cpu *cpu, int num)
->  	register_cpu_under_node(num, cpu_to_node(num));
->  	dev_pm_qos_expose_latency_limit(&cpu->dev,
->  					PM_QOS_RESUME_LATENCY_NO_CONSTRAINT);
-> +	set_cpu_enabled(num, true);
->  
->  	return 0;
->  }
-> @@ -494,6 +503,7 @@ static struct attribute *cpu_root_attrs[] = {
->  	&cpu_attrs[2].attr.attr,
->  	&dev_attr_kernel_max.attr,
->  	&dev_attr_offline.attr,
-> +	&dev_attr_enabled.attr,
->  	&dev_attr_isolated.attr,
->  #ifdef CONFIG_NO_HZ_FULL
->  	&dev_attr_nohz_full.attr,
-> diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-> index f10fb87d49db..a29ee03f13ff 100644
-> --- a/include/linux/cpumask.h
-> +++ b/include/linux/cpumask.h
-> @@ -92,6 +92,7 @@ static inline void set_nr_cpu_ids(unsigned int nr)
->   *
->   *     cpu_possible_mask- has bit 'cpu' set iff cpu is populatable
->   *     cpu_present_mask - has bit 'cpu' set iff cpu is populated
-> + *     cpu_enabled_mask  - has bit 'cpu' set iff cpu can be brought online
->   *     cpu_online_mask  - has bit 'cpu' set iff cpu available to scheduler
->   *     cpu_active_mask  - has bit 'cpu' set iff cpu available to migration
->   *
-> @@ -124,11 +125,13 @@ static inline void set_nr_cpu_ids(unsigned int nr)
->  
->  extern struct cpumask __cpu_possible_mask;
->  extern struct cpumask __cpu_online_mask;
-> +extern struct cpumask __cpu_enabled_mask;
->  extern struct cpumask __cpu_present_mask;
->  extern struct cpumask __cpu_active_mask;
->  extern struct cpumask __cpu_dying_mask;
->  #define cpu_possible_mask ((const struct cpumask *)&__cpu_possible_mask)
->  #define cpu_online_mask   ((const struct cpumask *)&__cpu_online_mask)
-> +#define cpu_enabled_mask   ((const struct cpumask *)&__cpu_enabled_mask)
->  #define cpu_present_mask  ((const struct cpumask *)&__cpu_present_mask)
->  #define cpu_active_mask   ((const struct cpumask *)&__cpu_active_mask)
->  #define cpu_dying_mask    ((const struct cpumask *)&__cpu_dying_mask)
-> @@ -973,6 +976,7 @@ extern const DECLARE_BITMAP(cpu_all_bits, NR_CPUS);
->  #else
->  #define for_each_possible_cpu(cpu) for_each_cpu((cpu), cpu_possible_mask)
->  #define for_each_online_cpu(cpu)   for_each_cpu((cpu), cpu_online_mask)
-> +#define for_each_enabled_cpu(cpu)   for_each_cpu((cpu), cpu_enabled_mask)
->  #define for_each_present_cpu(cpu)  for_each_cpu((cpu), cpu_present_mask)
->  #endif
->  
-> @@ -995,6 +999,15 @@ set_cpu_possible(unsigned int cpu, bool possible)
->  		cpumask_clear_cpu(cpu, &__cpu_possible_mask);
+> diff --git a/drivers/hid/intel-ish-hid/ipc/pci-ish.c b/drivers/hid/intel-ish-hid/ipc/pci-ish.c
+> index 55cb25038e63..65e7eeb2fa64 100644
+> --- a/drivers/hid/intel-ish-hid/ipc/pci-ish.c
+> +++ b/drivers/hid/intel-ish-hid/ipc/pci-ish.c
+> @@ -119,42 +119,6 @@ static inline bool ish_should_leave_d0i3(struct pci_dev *pdev)
+>  	return !pm_resume_via_firmware() || pdev->device == CHV_DEVICE_ID;
 >  }
 >  
-> +static inline void
-> +set_cpu_enabled(unsigned int cpu, bool can_be_onlined)
-> +{
-> +	if (can_be_onlined)
-> +		cpumask_set_cpu(cpu, &__cpu_enabled_mask);
-> +	else
-> +		cpumask_clear_cpu(cpu, &__cpu_enabled_mask);
-> +}
-> +
->  static inline void
->  set_cpu_present(unsigned int cpu, bool present)
->  {
-> @@ -1074,6 +1087,7 @@ static __always_inline unsigned int num_online_cpus(void)
->  	return raw_atomic_read(&__num_online_cpus);
->  }
->  #define num_possible_cpus()	cpumask_weight(cpu_possible_mask)
-> +#define num_enabled_cpus()	cpumask_weight(cpu_enabled_mask)
->  #define num_present_cpus()	cpumask_weight(cpu_present_mask)
->  #define num_active_cpus()	cpumask_weight(cpu_active_mask)
->  
-> @@ -1082,6 +1096,11 @@ static inline bool cpu_online(unsigned int cpu)
->  	return cpumask_test_cpu(cpu, cpu_online_mask);
->  }
->  
-> +static inline bool cpu_enabled(unsigned int cpu)
-> +{
-> +	return cpumask_test_cpu(cpu, cpu_enabled_mask);
-> +}
-> +
->  static inline bool cpu_possible(unsigned int cpu)
->  {
->  	return cpumask_test_cpu(cpu, cpu_possible_mask);
-> @@ -1106,6 +1125,7 @@ static inline bool cpu_dying(unsigned int cpu)
->  
->  #define num_online_cpus()	1U
->  #define num_possible_cpus()	1U
-> +#define num_enabled_cpus()	1U
->  #define num_present_cpus()	1U
->  #define num_active_cpus()	1U
->  
-> @@ -1119,6 +1139,11 @@ static inline bool cpu_possible(unsigned int cpu)
->  	return cpu == 0;
->  }
->  
-> +static inline bool cpu_enabled(unsigned int cpu)
-> +{
-> +	return cpu == 0;
-> +}
-> +
->  static inline bool cpu_present(unsigned int cpu)
->  {
->  	return cpu == 0;
-> diff --git a/kernel/cpu.c b/kernel/cpu.c
-> index 6de7c6bb74ee..2201a6a449b5 100644
-> --- a/kernel/cpu.c
-> +++ b/kernel/cpu.c
-> @@ -3101,6 +3101,9 @@ EXPORT_SYMBOL(__cpu_possible_mask);
->  struct cpumask __cpu_online_mask __read_mostly;
->  EXPORT_SYMBOL(__cpu_online_mask);
->  
-> +struct cpumask __cpu_enabled_mask __read_mostly;
-> +EXPORT_SYMBOL(__cpu_enabled_mask);
-> +
->  struct cpumask __cpu_present_mask __read_mostly;
->  EXPORT_SYMBOL(__cpu_present_mask);
->  
+> -static int enable_gpe(struct device *dev)
+> -{
+> -#ifdef CONFIG_ACPI
+> -	acpi_status acpi_sts;
+> -	struct acpi_device *adev;
+> -	struct acpi_device_wakeup *wakeup;
+> -
+> -	adev = ACPI_COMPANION(dev);
+> -	if (!adev) {
+> -		dev_err(dev, "get acpi handle failed\n");
+> -		return -ENODEV;
+> -	}
+> -	wakeup = &adev->wakeup;
+> -
+> -	acpi_sts = acpi_enable_gpe(wakeup->gpe_device, wakeup->gpe_number);
+> -	if (ACPI_FAILURE(acpi_sts)) {
+> -		dev_err(dev, "enable ose_gpe failed\n");
+> -		return -EIO;
+> -	}
+> -
+> -	return 0;
+> -#else
+> -	return -ENODEV;
+> -#endif
+> -}
+> -
+> -static void enable_pme_wake(struct pci_dev *pdev)
+> -{
+> -	if ((pci_pme_capable(pdev, PCI_D0) ||
+> -	     pci_pme_capable(pdev, PCI_D3hot) ||
+> -	     pci_pme_capable(pdev, PCI_D3cold)) && !enable_gpe(&pdev->dev)) {
+> -		pci_pme_active(pdev, true);
+> -		dev_dbg(&pdev->dev, "ish ipc driver pme wake enabled\n");
+> -	}
+> -}
 
+I LOVE the removal of all this code.  Thanks for doing it!
+
+>  /**
+>   * ish_probe() - PCI driver probe callback
+>   * @pdev:	pci device
+> @@ -225,7 +189,7 @@ static int ish_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+>  
+>  	/* Enable PME for EHL */
+>  	if (pdev->device == EHL_Ax_DEVICE_ID)
+> -		enable_pme_wake(pdev);
+> +		device_init_wakeup(dev, true);
+>  
+>  	ret = ish_init(ishtp);
+>  	if (ret)
+> @@ -248,6 +212,19 @@ static void ish_remove(struct pci_dev *pdev)
+>  	ish_device_disable(ishtp_dev);
+>  }
+>  
+> +
+> +/**
+> + * ish_shutdown() - PCI driver shutdown callback
+> + * @pdev:	pci device
+> + *
+> + * This function sets up wakeup for S5
+> + */
+> +static void ish_shutdown(struct pci_dev *pdev)
+> +{
+> +	if (pdev->device == EHL_Ax_DEVICE_ID)
+> +		pci_prepare_to_sleep(pdev);
+
+There are only five drivers that use pci_prepare_to_sleep(), so I have
+to ask what is special about this device that makes it necessary here?
+
+It doesn't seem to match any of the scenarios mentioned in
+Documentation/power/pci.rst for using pci_prepare_to_sleep().
+
+Previously EHL_Ax_DEVICE_ID was used only in ish_probe(),
+ish_resume(), and _dma_no_cache_snooping().  None of those look like
+this, so this *looks* like new functionality that could/should be in a
+separate patch.
+
+> +}
+> +
+>  static struct device __maybe_unused *ish_resume_device;
+>  
+>  /* 50ms to get resume response */
+> @@ -370,13 +347,6 @@ static int __maybe_unused ish_resume(struct device *device)
+>  	struct pci_dev *pdev = to_pci_dev(device);
+>  	struct ishtp_device *dev = pci_get_drvdata(pdev);
+>  
+> -	/* add this to finish power flow for EHL */
+> -	if (dev->pdev->device == EHL_Ax_DEVICE_ID) {
+> -		pci_set_power_state(pdev, PCI_D0);
+> -		enable_pme_wake(pdev);
+> -		dev_dbg(dev->devc, "set power state to D0 for ehl\n");
+> -	}
+> -
+>  	ish_resume_device = device;
+>  	dev->resume_flag = 1;
+>  
+> @@ -392,6 +362,7 @@ static struct pci_driver ish_driver = {
+>  	.id_table = ish_pci_tbl,
+>  	.probe = ish_probe,
+>  	.remove = ish_remove,
+> +	.shutdown = ish_shutdown,
+>  	.driver.pm = &ish_pm_ops,
+>  };
+>  
+> -- 
+> 2.34.1
+> 
