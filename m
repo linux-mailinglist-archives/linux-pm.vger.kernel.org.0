@@ -2,91 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40B147A023C
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 13:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2669E7A023D
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 13:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234334AbjINLQY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 07:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54592 "EHLO
+        id S233550AbjINLRC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Sep 2023 07:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237403AbjINLQV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 07:16:21 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175071A5;
-        Thu, 14 Sep 2023 04:16:17 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4RmZTc4Qg3z6HJdP;
-        Thu, 14 Sep 2023 19:14:28 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 14 Sep
- 2023 12:16:13 +0100
-Date:   Thu, 14 Sep 2023 12:16:12 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     James Morse <james.morse@arm.com>
-CC:     <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
-        <linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-        <x86@kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        <jianyong.wu@arm.com>, <justin.he@arm.com>
-Subject: Re: [RFC PATCH v2 04/35] drivers: base: Move cpu_dev_init() after
- node_dev_init()
-Message-ID: <20230914121612.00006ac7@Huawei.com>
-In-Reply-To: <20230913163823.7880-5-james.morse@arm.com>
-References: <20230913163823.7880-1-james.morse@arm.com>
-        <20230913163823.7880-5-james.morse@arm.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        with ESMTP id S233502AbjINLRB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 07:17:01 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1E91FC9
+        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 04:16:57 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2bf5bf33bcdso13365891fa.0
+        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 04:16:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694690215; x=1695295015; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/G1B8RoYbQaDFpfisBrFB3z+4poKkBaELSKoZJGIn6w=;
+        b=kDPjxEbUjfBYNY+SmO94i+Teo8670DzQFrQm8VVDAzyYEYuG49ZNt2ws4wn8+X3KaC
+         /qQhlTtVGzdTnCpSZCgIXBzldv8cszJAnODIalYsxdBNMwJQoNGgJaG+xxNOcoafBap1
+         P4TOBgI/kR9uRzmmu0XDsp/oogRXFMnc6/gAydh3W3AFl8IskJAB8SC1UpQg5qQbs3Kr
+         PuoJOScm6IXlEVyLDdOAvkMqxEzusP9HoNaBK8/1MO2aVGR3NgCYLt74xHCp0A3mqqOt
+         3qsHnUCfBDHXeSXYOPmr9yFPDuBYCk2PnPlsszt6F25nIIXdXjwnAywgd/waj+lg+zwK
+         fISQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694690215; x=1695295015;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/G1B8RoYbQaDFpfisBrFB3z+4poKkBaELSKoZJGIn6w=;
+        b=Rq1gWzRK/8xSwgXC3q9kVIGmIbpCWgvZEgghAhImgiPaid3PoGC+WIxmsdIq10KVzW
+         Me+jFOC3kQPr6YAdqFfTZ5g+IKUBTGOAP8UVMZp/n7e97dvSAnckWWCDXI3CP8oEOTam
+         Z9eMTwpe3zqD6Qu9Q0AU2jmXEI+wcg37zaMmuTCVDEK/kmmEosU4JQ39oOblJfD3Vpfl
+         QK/WL7teasj+bzFjhGutcitI3TJqAK6P1nRYWqV8im+XAJDs0qYTcWcVpUNkh0T6mmDO
+         SKZjeyAXXpzYsLhKr32Zh01L6hMm9Ou/P9Vqad6lWw3zk19ih6aCdQ0GtcqUYu96vzDb
+         o0ag==
+X-Gm-Message-State: AOJu0YwcTNDzBTqQZ+o56cVzrhL7WeCKJMmstFowAqOV4cDBVzbjhxnk
+        IJG8EmGC3tEzbKiAIAnO9mfqLQ==
+X-Google-Smtp-Source: AGHT+IHxEMstyuzhFSypoWAtvEF01jbwfbhJStwXMTx9dgfqeYevn8iU1RhTH/B+foBI07WzfihwHw==
+X-Received: by 2002:a05:6512:70f:b0:500:b96a:6f59 with SMTP id b15-20020a056512070f00b00500b96a6f59mr3746522lfs.56.1694690215249;
+        Thu, 14 Sep 2023 04:16:55 -0700 (PDT)
+Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
+        by smtp.gmail.com with ESMTPSA id g15-20020a19ee0f000000b004ff7250fa02sm234277lfb.179.2023.09.14.04.16.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Sep 2023 04:16:54 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-actions@lists.infradead.org
+Subject: [PATCH 02/17] pmdomain: actions: Move Kconfig file to the pmdomain subsystem
+Date:   Thu, 14 Sep 2023 13:16:50 +0200
+Message-Id: <20230914111650.586477-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 13 Sep 2023 16:37:52 +0000
-James Morse <james.morse@arm.com> wrote:
+The Kconfig belongs closer to the corresponding implementation, hence let's
+move it from the soc subsystem to the pmdomain subsystem.
 
-> NUMA systems require the node descriptions to be ready before CPUs are
-> registered. This is so that the node symlinks can be created in sysfs.
-> 
-> Currently no NUMA platform uses GENERIC_CPU_DEVICES, meaning that CPUs
-> are registered by arch code, instead of cpu_dev_init().
+Cc: "Andreas Färber" <afaerber@suse.de>
+Cc: Manivannan Sadhasivam <mani@kernel.org>
+Cc: <linux-actions@lists.infradead.org>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+ MAINTAINERS                               | 2 +-
+ drivers/pmdomain/Kconfig                  | 2 ++
+ drivers/{soc => pmdomain}/actions/Kconfig | 0
+ drivers/soc/Kconfig                       | 1 -
+ 4 files changed, 3 insertions(+), 2 deletions(-)
+ rename drivers/{soc => pmdomain}/actions/Kconfig (100%)
 
-Worth saying why this matters I think.  I wrote a nice note on that being a possible
-problem path as node_dev_init() uses the results of cpu_dev_init() if
-CONFIG_GENERIC_CPU_DEVICES before seeing this comment and realizing you
-had it covered (sort of anyway).
-
-> 
-> Move cpu_dev_init() after node_dev_init() so that NUMA architectures
-> can use GENERIC_CPU_DEVICES.
-> 
-> Signed-off-by: James Morse <james.morse@arm.com>
-> ---
->  drivers/base/init.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/init.c b/drivers/base/init.c
-> index 397eb9880cec..c4954835128c 100644
-> --- a/drivers/base/init.c
-> +++ b/drivers/base/init.c
-> @@ -35,8 +35,8 @@ void __init driver_init(void)
->  	of_core_init();
->  	platform_bus_init();
->  	auxiliary_bus_init();
-> -	cpu_dev_init();
->  	memory_dev_init();
->  	node_dev_init();
-> +	cpu_dev_init();
->  	container_dev_init();
->  }
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f1c34484c9b2..6b491ebcf790 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1788,7 +1788,7 @@ F:	drivers/irqchip/irq-owl-sirq.c
+ F:	drivers/mmc/host/owl-mmc.c
+ F:	drivers/net/ethernet/actions/
+ F:	drivers/pinctrl/actions/*
+-F:	drivers/soc/actions/
++F:	drivers/pmdomain/actions/
+ F:	include/dt-bindings/power/owl-*
+ F:	include/dt-bindings/reset/actions,*
+ F:	include/linux/soc/actions/
+diff --git a/drivers/pmdomain/Kconfig b/drivers/pmdomain/Kconfig
+index c32a76b51840..8acb10bcdec9 100644
+--- a/drivers/pmdomain/Kconfig
++++ b/drivers/pmdomain/Kconfig
+@@ -1,4 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ menu "Power Domains Support"
+ 
++source "drivers/pmdomain/actions/Kconfig"
++
+ endmenu
+diff --git a/drivers/soc/actions/Kconfig b/drivers/pmdomain/actions/Kconfig
+similarity index 100%
+rename from drivers/soc/actions/Kconfig
+rename to drivers/pmdomain/actions/Kconfig
+diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+index d21e75d69294..8b46da40f107 100644
+--- a/drivers/soc/Kconfig
++++ b/drivers/soc/Kconfig
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ menu "SOC (System On Chip) specific Drivers"
+ 
+-source "drivers/soc/actions/Kconfig"
+ source "drivers/soc/amlogic/Kconfig"
+ source "drivers/soc/apple/Kconfig"
+ source "drivers/soc/aspeed/Kconfig"
+-- 
+2.34.1
 
