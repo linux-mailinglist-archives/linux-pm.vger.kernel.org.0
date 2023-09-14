@@ -2,52 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4792D7A0A07
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 18:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42E0B7A0A13
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 18:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241438AbjINQAq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 12:00:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51596 "EHLO
+        id S241479AbjINQBD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Sep 2023 12:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241443AbjINQAo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 12:00:44 -0400
+        with ESMTP id S241426AbjINQA5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 12:00:57 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A17A1FD5;
-        Thu, 14 Sep 2023 09:00:40 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DE8EC433CB;
-        Thu, 14 Sep 2023 16:00:38 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690881FDD;
+        Thu, 14 Sep 2023 09:00:44 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE769C433B6;
+        Thu, 14 Sep 2023 16:00:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694707239;
-        bh=z65jDiJhYXiqCrF+31TXNYpOkgLv4DTepLv6il1TdHw=;
+        s=k20201202; t=1694707243;
+        bh=f2D1KJ3G20fQHFUTIyD1SsNidi043orZ//0JAIezb+k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dkoXbS/9OdtDzucDaW3k1ZSAITVrqG9S2VNfizgl9rIwddQ8a6Y02/j81kyVsPTCv
-         pgE5jYBvdbyWOrrATe4JSdxjpIYWJ+r8nf6kSrEKBCLp49zXcEuaSwTi4aG4u/l3Ke
-         kZLRjxxsLV+3SfenXJ71RiTeeJkD1gbfywSCIvonWEhVYPrFAarqAfcytQ3PQduTwH
-         GLYa6w0dunqfoWk5gwCWsfigvaqVXWKavFZOsSgxSSbTsl3Iz5PuLDy4cTVwbqd10s
-         Sp8ma8Y5Ogoej+Fdrwi7Xg4ri96C3fI/YO1H1lFINehSy5QrS/1ZXP5mt51hdwCB/v
-         FdNGqrVKlxSkg==
+        b=XOkiMmyFXU5u+UgP7/kW6xApq5eB3donlHM+Eve8nWIVnGjWj6CXCtisbB80QooXn
+         /VysJwh8d3FwooQ1Gn55LroUq6egGXmFmXe3RKEJKGPSAiQ2Ue+7/FnC69tsqxCMMR
+         sju9KBmz1avdOZrIES+ecuFug69VNXhdk3b0p+7LYFxve+Vcn14/MJ3rSABVm4mp1C
+         tPW3Dd5VLUxNt8zmbNg3Lz9l0+y6ixRyq7PhKMHEO6D0Oza958pnkX0RGRiFVaul+t
+         4tcSVPIekcp6KTksYSV9QRqnJWVqZXUDUwpXMn1F7TrNrEDWM3wq7IkR0d91A+ZcYa
+         bFzNydZ12c97w==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     cros-qcom-dts-watchers@chromium.org,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Luca Weiss <luca.weiss@fairphone.com>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: (subset) [PATCH 00/11] Initial support for the Fairphone 5 smartphone
-Date:   Thu, 14 Sep 2023 09:04:27 -0700
-Message-ID: <169470744878.681825.1089291695542666982.b4-ty@kernel.org>
+To:     ulf.hansson@linaro.org, dianders@chromium.org, swboyd@chromium.org,
+        wingers@google.com, daniel.lezcano@linaro.org, rafael@kernel.org,
+        Maulik Shah <quic_mkshah@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, sudeep.holla@arm.com,
+        jwerner@chromium.org, quic_lsrao@quicinc.com,
+        quic_rjendra@quicinc.com
+Subject: Re: (subset) [RESEND v4 0/3] Use PSCI OS initiated mode for sc7280
+Date:   Thu, 14 Sep 2023 09:04:31 -0700
+Message-ID: <169470744889.681825.1107443833473958545.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230830-fp5-initial-v1-0-5a954519bbad@fairphone.com>
-References: <20230830-fp5-initial-v1-0-5a954519bbad@fairphone.com>
+In-Reply-To: <20230703085555.30285-1-quic_mkshah@quicinc.com>
+References: <20230703085555.30285-1-quic_mkshah@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,23 +48,24 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-On Wed, 30 Aug 2023 11:58:25 +0200, Luca Weiss wrote:
-> Add support to boot up mainline kernel on the QCM6490-based Fairphone 5
-> smartphone.
+On Mon, 03 Jul 2023 14:25:52 +0530, Maulik Shah wrote:
+> This is resend of v4 with patch1 and patch2 Cced to stable kernel.
 > 
-> These patches only cover a part of the functionality brought up on
-> mainline so far, with the rest needing larger dts and driver changes or
-> depend on patches that are not yet merged. I will work on sending those
-> once these base patches here have settled.
+> Changes in v4:
+> - Add missing s-o-b line and reviewed by in patch 1
+> - Address ulf's comments for error handling in patch 2
+> 
+> Changes in v3:
+> - Add new change to provide helper function dt_idle_pd_remove_topology()
+> - Address ulf's comments for error handling
+> - Add reviewed by ulf for devicetree change
 > 
 > [...]
 
 Applied, thanks!
 
-[07/11] dt-bindings: arm: qcom,ids: Add SoC ID for QCM6490
-        commit: ccfb4d8b606302d857a03ea29039e21029311335
-[08/11] soc: qcom: socinfo: Add SoC ID for QCM6490
-        commit: 59872d59d164ec67f295d6f96fe818b92973ee40
+[3/3] arm64: dts: qcom: sc7280: Add power-domains for cpuidle states
+      commit: 7925ca85e956191a6a522e0a31a877b98cb5096c
 
 Best regards,
 -- 
