@@ -2,143 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8037A0934
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 17:28:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1117A0950
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 17:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240810AbjINP2Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 11:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44184 "EHLO
+        id S240961AbjINPdL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Sep 2023 11:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234523AbjINP2X (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 11:28:23 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE6B1FCC;
-        Thu, 14 Sep 2023 08:28:19 -0700 (PDT)
-Received: from mercury (dyndsl-091-248-132-131.ewe-ip-backbone.de [91.248.132.131])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 41464660734A;
-        Thu, 14 Sep 2023 16:28:17 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1694705297;
-        bh=scTdHYUG3vlS8gakKlEwrcrCH5h02xxYjz9XR2kOUbA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HNN97fIGOsZXFOAxfItgx7XGN1wZEvWnbDV24dmlW8E5O0Ehv7q7uSDG5PSFGS9rF
-         pPpu4qGy+2dcYtcVvvjBENdESMpUqPttEKisnJMbypehHsYBh/0nz9edh6Jt7nD2pC
-         wqAnfIbyUo/S644/flMUPfuet0c5tvJNnLLy8HX9C2Y7GXQNAWo5LWcbALcY/NGmXm
-         /YBSU4+Ybz58Wtx3OfNDQ20MZK8ojSzoXMnbZB+jyTPKx397gvz8RRZAjUXc0adspP
-         KEcz/plnvUpNlUoAgxeR7bmWCw3JlJI5+9b1Fgu/N4j3eNJ6KZudKBegQJ/npyTTIG
-         ukUMWQqAojSuA==
-Received: by mercury (Postfix, from userid 1000)
-        id 3E039106098B; Thu, 14 Sep 2023 17:22:07 +0200 (CEST)
-Date:   Thu, 14 Sep 2023 17:22:07 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@axis.com
-Subject: Re: [PATCH] power: supply: Propagate of_node to child device
-Message-ID: <20230914152207.ezerlzxrizmcie4e@mercury.elektranox.org>
-References: <20230704-power-of-v1-1-cc82d2eda65b@axis.com>
+        with ESMTP id S240810AbjINPdK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 11:33:10 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59A5CE;
+        Thu, 14 Sep 2023 08:33:06 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6658C433C8;
+        Thu, 14 Sep 2023 15:33:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694705586;
+        bh=8FABy4QEHgIh/D0+D8dBsiY5dWtOqxQIKA/BQugluDE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Lx6a4XE5GVqm8ZNhPC/4n/oIWpFVOS0nu2r1Y+KfrdcJXi0bM9FPb+ta7f11LCZ7E
+         EEj9Tgz8D0SbR0WYDrmo/fEumU7wRuwD0qObs/ZFztLMh1JWmIWpjgt/HMK0mYUi93
+         pzx6p1fsAlJ8fYxLGMNEj/H8J7nJJn/NmaC5vtvHMfh2Q+KJdV+Z0ynW4mKiSkd73g
+         pZqbEDI9E98Idx5YrvtMrirWx38pNP6Y7txya1+m/jresTlkprw9cw3eTffLLQB8qY
+         aa2R1gknGNsoX7jSflDVKiQVtoW8a7oqGQtGe9df9pnd6oHD15OXGWCJNCuMiWX6KY
+         NY7F9aNFFzCqA==
+Date:   Thu, 14 Sep 2023 10:33:03 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        iain@orangesquash.org.uk
+Subject: Re: [PATCH v18 2/2] PCI: Add a quirk for AMD PCIe root ports w/ USB4
+ controllers
+Message-ID: <20230914153303.GA30424@bhelgaas>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="f5wbotyrng53giaf"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230704-power-of-v1-1-cc82d2eda65b@axis.com>
+In-Reply-To: <20230914145332.GA5261@wunner.de>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, Sep 14, 2023 at 04:53:32PM +0200, Lukas Wunner wrote:
+> On Thu, Sep 14, 2023 at 09:31:38AM -0500, Mario Limonciello wrote:
+> > On 9/14/2023 09:17, Lukas Wunner wrote:
+> > > On Wed, Sep 13, 2023 at 11:36:49AM -0500, Mario Limonciello wrote:
+> > > > On 9/13/2023 09:31, Lukas Wunner wrote:
+> > > > > If this only affects system sleep, not runtime PM, what you can do is
+> > > > > define a DECLARE_PCI_FIXUP_SUSPEND_LATE() which calls pci_d3cold_disable()
+> > > > > and also define a DECLARE_PCI_FIXUP_CLASS_RESUME_EARLY() which calls
+> > > > > pci_d3cold_enable().
+> > > > > 
+> > > > > And I think you can make those calls conditional on pm_suspend_no_platform()
+> > > > > to constrain to s2idle.
+> > > > > 
+> > > > > User space should still be able to influence runtime PM via the
+> > > > > d3cold_allowed flag (unless I'm missing something).
+> > > > 
+> > > > The part you're missing is that D3hot is affected by this issue too,
+> > > > otherwise it would be a good proposal.
+> > > 
+> > > I recall that in an earlier version of the patch, you solved the issue
+> > > by amending pci_bridge_d3_possible().
+> > > 
+> > > Changing the dev->no_d3cold flag indirectly influences the bridge_d3
+> > > flag (through pci_dev_check_d3cold() and pci_bridge_d3_update()).
+> > > 
+> > > If dev->no_d3cold is set on a device below a port, that port is
+> > > prevented from entring D3hot because it would result in the
+> > > device effectively being in D3cold.
+> > > 
+> > > So you might want to take a closer look at this approach despite
+> > > the flag suggesting that it only influences D3cold.
+> > 
+> > Ah; I hadn't considered setting it on a device below the port. In this
+> > particular situation the only devices below the root port are USB
+> > controllers.
+> > 
+> > If those devices don't go into D3 the system can't enter hardware sleep.
+> 
+> If you set dev->no_d3cold on the USB controllers, they should still
+> be able to go to D3hot, but not D3cold, which perhaps might be sufficient.
+> It should prevent D3cold *and* D3hot on the Root Port above.  And if you
+> set that on system sleep in a quirk and clear it on resume, runtime PM
+> shouldn't be affected.
 
---f5wbotyrng53giaf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+dev->no_d3cold appears to be mainly an administrative policy knob
+twidded via sysfs.
 
-Hi,
+There *are* a few cases where drivers (i915, nouveau, xhci) update it
+via pci_d3cold_enable() or pci_d3cold_disable(), but they all look
+vulnerable to issues if people use the sysfs knob, and I'm a little
+dubious that they're legit in the first place.
 
-On Tue, Jul 04, 2023 at 09:43:29AM +0200, Vincent Whitchurch wrote:
-> Ensure that the dynamically created power supply device sets its
-> ->of_node if the parent device has one.  This brings it in line with
-> several other subsystems (see git grep 'of_node =3D.*parent.*of_node') and
-> allows easier identification of the device from udev rules and similar.
->=20
-> Before this patch:
->=20
->  /sys/class/power_supply# ls -l bq256xx-battery/of_node
->  ls: cannot access 'bq256xx-battery/of_node': No such file or directory
->  # ls -l bq256xx-battery/hwmon1/of_node
->  ls: cannot access 'bq256xx-battery/hwmon1/of_node': No such file or dire=
-ctory
->=20
-> After:
->=20
->  /sys/class/power_supply# ls -l bq256xx-battery/of_node
->  lrwxrwxrwx 1 root root 0 May 17 09:14 bq256xx-battery/of_node ->
->  ../../../../../../../../firmware/devicetree/base/virtio@1/i2c/bq25619@09
->  # ls -l bq256xx-battery/hwmon1/of_node
->  lrwxrwxrwx 1 root root 0 May 17 09:14 bq256xx-battery/hwmon1/of_node ->
->  ../../../../../../../../../firmware/devicetree/base/virtio@1/i2c/bq25619=
-@09
->=20
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> ---
+This AMD Root Port issue is not an administrative choice; it's purely
+a functional problem of the device advertising that it supports PME#
+but not actually being able to do it.  So if we can do this by fixing
+dev->pme_support (i.e., the copy of what it advertised), I'd rather do
+that.
 
-This should use the same value as psy->of_node (so cfg->of_node),
-which can be different from the parent of_node in some corner cases.
-
-(also psy->of_node can be dropped in favour of always using
-psy->dev->of_node, but that's a separate patch)
-
-P.S.: Sorry for slow review
-
--- Sebastian
-
->  drivers/power/supply/power_supply_core.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/sup=
-ply/power_supply_core.c
-> index 3791aec69ddc6..8769d82dd9c3d 100644
-> --- a/drivers/power/supply/power_supply_core.c
-> +++ b/drivers/power/supply/power_supply_core.c
-> @@ -1368,6 +1368,7 @@ __power_supply_register(struct device *parent,
->  	dev->class =3D power_supply_class;
->  	dev->type =3D &power_supply_dev_type;
->  	dev->parent =3D parent;
-> +	dev->of_node =3D parent->of_node;
->  	dev->release =3D power_supply_dev_release;
->  	dev_set_drvdata(dev, psy);
->  	psy->desc =3D desc;
->=20
-> ---
-> base-commit: 6995e2de6891c724bfeb2db33d7b87775f913ad1
-> change-id: 20230704-power-of-4e2ab0bbe48d
->=20
-> Best regards,
-> --=20
-> Vincent Whitchurch <vincent.whitchurch@axis.com>
->=20
-
---f5wbotyrng53giaf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmUDJRYACgkQ2O7X88g7
-+pqO4A//XUfFDxCE7Nm0TUL1FR7gvKcrM/041CU3HqGCA35PGpOK+l9EdNVfNVV4
-dsfi3xvqLN3mVJ1BCO44twaB5o8UvT3CkfLdxOM/IDMJk8JCwib2hXZ1g9GR+KGO
-ADwTwSITQSxwVsf/SuRMZBFVpsWksQOOepzm1GphQWtciVpL6UOBEPtkRjBtuxxB
-PgzjQ6LHAmZ5aSTEtmRwQSAvXSSVxjt77IsBB+xZcsic4Sw/PTMawjobWz5lSVXz
-bzNqwy4TcltTKbHxVXpCqDWQ3oXE19HjlCT3ODXI9GA4RWV34DAelxriljmmfHYV
-ERmmWyyeY6hDBdESoPMTD+wSM/VwrJgkjMi1zURnYMrJBkNsQZ64y35g0sOzVcq1
-Dh3r8lVO9pZM8jvO+lS5DQ5lTnwAYvV0rM8H9vedXVCGV9EiMbAzTYJMDDcpazkz
-WAXPqfjUOeQR+lqdmfSazLXP/TdkOsa+cB7JENlEP5/NSBtE8aRnuEm35K8bXM1C
-EbcJMe4aP/UWDaw2UIOQ4lrVXY6sAwalNWfQgCMy/9BdNgiQ12mXWrfV+rolf3/K
-+EW22409TFsfzgvYFXt+udZhfbzg4wLjCwL5ZnAB2x3RQ8K357PjWdGjsj9/5+F0
-T92GNhA2xjPXsWFFgB27oKTyZzI7lPwZvodO/Yl4w1ZTtyuCMn8=
-=uvBR
------END PGP SIGNATURE-----
-
---f5wbotyrng53giaf--
+Bjorn
