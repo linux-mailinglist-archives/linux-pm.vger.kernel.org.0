@@ -2,123 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F267079F821
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 04:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0321679F980
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 06:19:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233190AbjINCc7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Sep 2023 22:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58130 "EHLO
+        id S231972AbjINETI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Sep 2023 00:19:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbjINCc6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Sep 2023 22:32:58 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEEC1AD;
-        Wed, 13 Sep 2023 19:32:54 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38E0uCgg019721;
-        Thu, 14 Sep 2023 02:32:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=IgO3mqpLSWVJHvkh+qBggAdQouLFnxNzFgwRRXD33KE=;
- b=g2o3bZy4O+PkbvDLTSF4huJnpfmXwCcxOG+jE6ayjwIAYikwYOPrlN+qwsnsXOwoDeow
- uTc6+dhK4uwlguBVMfGjrjSgCy7cYPi1SIaqBEoRXSzMKmaPZ1zPyTUY7CXAIJuY8yZK
- +8KcQiQ2G+y4ZurHlK4nnfo0F1D8ilXjCG+r3VvThetFp5F/F7sJkUvCjc2HFqNkTPRt
- +AItnt1y4nx71rSc/C7yC/of8xXoqynz2UGHBZA+rwHZizVg9ZfU0wYYPjJG73Jc7NAV
- FCqwz4i1+p8imApttBUdA9HaZv5ZjAV1V5P3CaPcJBC65ZBkm8Z3nPfyFGSh+F/zxVA7 Lw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t2y7qbg9p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 Sep 2023 02:32:41 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38E2WetV031475
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 Sep 2023 02:32:40 GMT
-Received: from hu-mdtipton-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Wed, 13 Sep 2023 19:32:40 -0700
-Date:   Wed, 13 Sep 2023 19:32:39 -0700
-From:   Mike Tipton <quic_mdtipton@quicinc.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-CC:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <cros-qcom-dts-watchers@chromium.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 00/53] icc-rpmh multi-RSC voting groundwork
-Message-ID: <20230914023239.GA25147@hu-mdtipton-lv.qualcomm.com>
-References: <20230708-topic-rpmh_icc_rsc-v1-0-b223bd2ac8dd@linaro.org>
- <c067a45f-9629-d516-9e56-36538e4ff6db@kernel.org>
- <20230807215739.GA9621@hu-mdtipton-lv.qualcomm.com>
- <10520827-dc01-475c-b09a-35cefc9e0a62@linaro.org>
- <20230913012951.GA19284@hu-mdtipton-lv.qualcomm.com>
- <ffc58838-c306-49f3-a90a-95b2cf02ae3d@linaro.org>
+        with ESMTP id S231181AbjINETH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 00:19:07 -0400
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C86E59;
+        Wed, 13 Sep 2023 21:19:03 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.101.196.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 7A0373F6F2;
+        Thu, 14 Sep 2023 04:18:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1694665138;
+        bh=Lho36GEnh8mwb5BIYDn31SsZ6Q3vPfyCON6SNIWmCYQ=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=dBRTykUioqWAd85z8o+AfXFmSNSD0l75GzfeUEVBQWs1w2O+Yo/dIRTF5SZsgm7zB
+         6s4g4sFkQfEcLqZvKVhSczCOaRtvpr708jyct1V1IPYdOekNlQRYRklhTWsOAVmg4t
+         aC49r0WowkziorTkwEMfPZmWIVQnDqJ41EutUAydsyd/ucooUTGLd1BwICjQ9iO+Pu
+         C7HKha4R5vhK0aeoE98/tfPo9M0Y3nliQRTHYAWs4d6N/FyPJhrPuTW/ww3GpmzeGC
+         Oa9t9x+YuX1L00yCccnoekXd2KnrmnPfxoQ88bRCgG5QFT+YH0nX9exbjdGv2ypAd2
+         4zW9CIOH1DYrQ==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     srinivas.pandruvada@linux.intel.com, jikos@kernel.org,
+        benjamin.tissoires@redhat.com
+Cc:     linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Jian Hui Lee <jianhui.lee@canonical.com>,
+        Even Xu <even.xu@intel.com>, Zhang Lixu <lixu.zhang@intel.com>,
+        Najumon Ba <najumon.ba@intel.com>, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] HID: intel-ish-hid: ipc: Rework EHL OOB wakeup
+Date:   Thu, 14 Sep 2023 12:18:05 +0800
+Message-Id: <20230914041806.816741-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ffc58838-c306-49f3-a90a-95b2cf02ae3d@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 0dFrF8mWXndu0a5H5z8d_erqmvHIcWJ5
-X-Proofpoint-ORIG-GUID: 0dFrF8mWXndu0a5H5z8d_erqmvHIcWJ5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-13_19,2023-09-13_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- malwarescore=0 clxscore=1015 spamscore=0 priorityscore=1501
- mlxlogscore=999 phishscore=0 bulkscore=0 suspectscore=0 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309140020
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 13, 2023 at 10:31:49AM +0200, Konrad Dybcio wrote:
-> > The applicable voters should likely be defined in the target-specific
-> > headers, rather than the common qcom,icc.h. The bit range used for them
-> > could be common, but each target may only support a small subset of the
-> > total set of possible voters across all targets.
-> I'm not sure how client drivers would then choose the
-> correct path other than
-> 
-> switch (soc) {
-> case 8450:
-> 	tag = QCOM_ICC_TAG_VOTER_8450_HLOS;
-> 	break;
-> case 8550:
-> 	tag = QCOM_ICC_TAG_VOTER_8550_HLOS;
-> 	break;
-> ...
-> }
-> 
-> which would be unacceptable.
+System cannot suspend more than 255 times because the driver doesn't
+have corresponding acpi_disable_gpe() for acpi_enable_gpe(), so the GPE
+refcount overflows.
 
-The same general way it's handled for the endpoint bindings, which are
-already target-specific. 
+Since PCI core and ACPI core already handles PCI PME wake and GPE wake
+when the device has wakeup capability, use device_init_wakeup() to let
+them do the wakeup setting work.
 
-Any client drivers hardcoding the endpoint bindings in their driver
-would have to include the appropriate, target-specific binding header
-(e.g. qcom,sm8550-rpmh.h). That would only be possible if their driver
-file is itself target-specific. Otherwise, it would have to pull the
-endpoint bindings from devicetree. Or just use the recommended
-of_icc_get() and let devicetree do everything for them. Same for the
-target-specific voter tag bindings.
+Also add a shutdown callback which uses pci_prepare_to_sleep() to let
+PCI and ACPI set OOB wakeup for S5.
 
-Clients can also specify their tags in devicetree. They don't actually
-have to call icc_set_tag() directly. For example:
+Fixes: 2e23a70edabe ("HID: intel-ish-hid: ipc: finish power flow for EHL OOB")
+Cc: Jian Hui Lee <jianhui.lee@canonical.com>
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+ drivers/hid/intel-ish-hid/ipc/pci-ish.c | 59 +++++++------------------
+ 1 file changed, 15 insertions(+), 44 deletions(-)
 
-    #include <dt-bindings/interconnect/qcom,sm8450.h>
+diff --git a/drivers/hid/intel-ish-hid/ipc/pci-ish.c b/drivers/hid/intel-ish-hid/ipc/pci-ish.c
+index 55cb25038e63..65e7eeb2fa64 100644
+--- a/drivers/hid/intel-ish-hid/ipc/pci-ish.c
++++ b/drivers/hid/intel-ish-hid/ipc/pci-ish.c
+@@ -119,42 +119,6 @@ static inline bool ish_should_leave_d0i3(struct pci_dev *pdev)
+ 	return !pm_resume_via_firmware() || pdev->device == CHV_DEVICE_ID;
+ }
+ 
+-static int enable_gpe(struct device *dev)
+-{
+-#ifdef CONFIG_ACPI
+-	acpi_status acpi_sts;
+-	struct acpi_device *adev;
+-	struct acpi_device_wakeup *wakeup;
+-
+-	adev = ACPI_COMPANION(dev);
+-	if (!adev) {
+-		dev_err(dev, "get acpi handle failed\n");
+-		return -ENODEV;
+-	}
+-	wakeup = &adev->wakeup;
+-
+-	acpi_sts = acpi_enable_gpe(wakeup->gpe_device, wakeup->gpe_number);
+-	if (ACPI_FAILURE(acpi_sts)) {
+-		dev_err(dev, "enable ose_gpe failed\n");
+-		return -EIO;
+-	}
+-
+-	return 0;
+-#else
+-	return -ENODEV;
+-#endif
+-}
+-
+-static void enable_pme_wake(struct pci_dev *pdev)
+-{
+-	if ((pci_pme_capable(pdev, PCI_D0) ||
+-	     pci_pme_capable(pdev, PCI_D3hot) ||
+-	     pci_pme_capable(pdev, PCI_D3cold)) && !enable_gpe(&pdev->dev)) {
+-		pci_pme_active(pdev, true);
+-		dev_dbg(&pdev->dev, "ish ipc driver pme wake enabled\n");
+-	}
+-}
+-
+ /**
+  * ish_probe() - PCI driver probe callback
+  * @pdev:	pci device
+@@ -225,7 +189,7 @@ static int ish_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 
+ 	/* Enable PME for EHL */
+ 	if (pdev->device == EHL_Ax_DEVICE_ID)
+-		enable_pme_wake(pdev);
++		device_init_wakeup(dev, true);
+ 
+ 	ret = ish_init(ishtp);
+ 	if (ret)
+@@ -248,6 +212,19 @@ static void ish_remove(struct pci_dev *pdev)
+ 	ish_device_disable(ishtp_dev);
+ }
+ 
++
++/**
++ * ish_shutdown() - PCI driver shutdown callback
++ * @pdev:	pci device
++ *
++ * This function sets up wakeup for S5
++ */
++static void ish_shutdown(struct pci_dev *pdev)
++{
++	if (pdev->device == EHL_Ax_DEVICE_ID)
++		pci_prepare_to_sleep(pdev);
++}
++
+ static struct device __maybe_unused *ish_resume_device;
+ 
+ /* 50ms to get resume response */
+@@ -370,13 +347,6 @@ static int __maybe_unused ish_resume(struct device *device)
+ 	struct pci_dev *pdev = to_pci_dev(device);
+ 	struct ishtp_device *dev = pci_get_drvdata(pdev);
+ 
+-	/* add this to finish power flow for EHL */
+-	if (dev->pdev->device == EHL_Ax_DEVICE_ID) {
+-		pci_set_power_state(pdev, PCI_D0);
+-		enable_pme_wake(pdev);
+-		dev_dbg(dev->devc, "set power state to D0 for ehl\n");
+-	}
+-
+ 	ish_resume_device = device;
+ 	dev->resume_flag = 1;
+ 
+@@ -392,6 +362,7 @@ static struct pci_driver ish_driver = {
+ 	.id_table = ish_pci_tbl,
+ 	.probe = ish_probe,
+ 	.remove = ish_remove,
++	.shutdown = ish_shutdown,
+ 	.driver.pm = &ish_pm_ops,
+ };
+ 
+-- 
+2.34.1
 
-    interconnects = <&mmss_noc MASTER_MDP QCOM_ICC_TAG_VOTER_DISP
-                     &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_VOTER_DISP>;
-
-Then when they call of_icc_get() for this path it'll automatically have
-QCOM_ICC_TAG_VOTER_DISP set for them.
