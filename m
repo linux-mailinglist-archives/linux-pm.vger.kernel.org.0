@@ -2,60 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC4B7A0984
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 17:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AECA87A099B
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 17:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240974AbjINPmT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 11:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
+        id S241161AbjINPrZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Sep 2023 11:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240961AbjINPmS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 11:42:18 -0400
+        with ESMTP id S241065AbjINPrY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 11:47:24 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A5D99;
-        Thu, 14 Sep 2023 08:42:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D4ED7;
+        Thu, 14 Sep 2023 08:47:20 -0700 (PDT)
 Received: from mercury (dyndsl-091-248-132-131.ewe-ip-backbone.de [91.248.132.131])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E7DCB660727E;
-        Thu, 14 Sep 2023 16:42:12 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0751A660727E;
+        Thu, 14 Sep 2023 16:47:19 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1694706133;
-        bh=b3WOb1uGDFt0IdxghELoF5bLCGKcPAe4bvnXM/jp+U0=;
+        s=mail; t=1694706439;
+        bh=BFXg+eiGm56PIuoHY4sJWN6imZT6VBrEHcdIVjqZMV8=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=AnVdVV8c/DNZKuwHpmVv/IlLfRbeoXn0jdKN3Nx9cIHwKcuznyBC7jKjG/1bDQFsx
-         OkfsWn2Zr/w3NxcxCcYGdnexKaV+vg/z3Ci3K17Cj16NTGr0LAHsQJNCPE+DzTNcBl
-         u37D/ehG67JV8Szz8lLzJcBgBZyX5abn4Isb4GbppNZ6CGCzRMoszYfJ8UEGuYnGVW
-         0le7WeBXio9FOxL1a9JxVf23FFiguDQqwQya4ebAWQ0Z7rpUVRNdfiw7tj084++Xt8
-         trXvhwCggdpv9rj6S7vLFwk0W1J6Wv138qPQ9bLowRHkqLHmC30FkScOEQIi1PuPz/
-         xtZbiXFbVmnJA==
+        b=fMjGX392d+eycmU1JptKG5B6QxJoOfylTA4Minb45ZgdSn5XxyC86vUQatfMAvhx8
+         QTmxuiF70gxHDetoTOWv0C3CQGizkLJ/xFNv9nD5aY8Vc5zUBK4QqbxDL7LlhcT5yR
+         eHScGpGQo9F/g5mKA2nXseVddd8szH0AQXIQH8hJBNoyJiShmC/Qp1LH+59lrTtZo5
+         k+NJJSctEfis1fvXwyEnlgwzZt6NVWGI71ld6SpJK0rGGf4ppPVrXfAcaBWnbVL2od
+         7X/ZTCseZs08RlAxcSb8BQWt8A+jJwr7hroCqzG6SWJL4kryQfYwaZW/iCZSIwJ+8m
+         1TQlc6FA6njMw==
 Received: by mercury (Postfix, from userid 1000)
-        id 0D6DE106098B; Thu, 14 Sep 2023 17:42:11 +0200 (CEST)
+        id AB7E8106098B; Thu, 14 Sep 2023 17:47:16 +0200 (CEST)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Iskren Chernev <me@iskren.info>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matheus Castello <matheus@castello.eng.br>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Stefan Hansson <newbie13xd@gmail.com>,
-        Svyatoslav Ryhel <clamor95@gmail.com>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-In-Reply-To: <20230731073613.10394-1-clamor95@gmail.com>
-References: <20230731073613.10394-1-clamor95@gmail.com>
-Subject: Re: (subset) [PATCH v3 0/4] Add optional properties to MAX17040
-Message-Id: <169470613104.705505.7085807512019934835.b4-ty@collabora.com>
-Date:   Thu, 14 Sep 2023 17:42:11 +0200
+To:     Sebastian Reichel <sre@kernel.org>,
+        Maximilian Weigand <mweigand2017@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        Maximilian Weigand <mweigand@mweigand.net>
+In-Reply-To: <20230601-rk817_query_at_resume-v1-1-630b0adefbd9@mweigand.net>
+References: <20230601-rk817_query_at_resume-v1-1-630b0adefbd9@mweigand.net>
+Subject: Re: [PATCH] power: supply: rk817: query battery properties right
+ after resume
+Message-Id: <169470643667.728745.9541919851740286656.b4-ty@collabora.com>
+Date:   Thu, 14 Sep 2023 17:47:16 +0200
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -65,22 +54,18 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-On Mon, 31 Jul 2023 10:36:09 +0300, Svyatoslav Ryhel wrote:
-> Extend properties supported by max17040 fuel gauge if it is accompanied
-> by different devices.
+On Wed, 14 Jun 2023 20:10:43 +0200, Maximilian Weigand wrote:
+> The driver reads battery properties every 8 seconds. In order to prevent
+> problems with wrong property values right after resume, trigger an
+> update of those properties on resuming the system and restart the
+> 8-second interval from there.
 > 
-> If max17040 is coupled with a charger, pass charger status since it should
-> match and max17040 has no dedicated status detection ability.
 > 
-> max17040_get_online can be reused for PRESENT property since if it is
-> online it must be present.
-> 
-> [...]
 
 Applied, thanks!
 
-[3/4] power: max17040: get thermal data from adc if available
-      commit: 814755c48f8b2c3e83b3c11535c48ab416128978
+[1/1] power: supply: rk817: query battery properties right after resume
+      commit: 1769142a14c34a8acd67657bc3e637f22f75e026
 
 Best regards,
 -- 
