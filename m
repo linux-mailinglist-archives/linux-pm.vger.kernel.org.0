@@ -2,158 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D55307A0585
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 15:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1353A7A0635
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 15:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238934AbjINNZa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 09:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
+        id S240101AbjINNgu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 14 Sep 2023 09:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235397AbjINNZa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 09:25:30 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EA01BEB
-        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 06:25:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694697926; x=1726233926;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uMETyqtbGd0+2yZ6vcmk8p1UWyK4xWyn8bFDmPW9z1k=;
-  b=IJD28pYjs+y7bYnTOrO8s2sptpXSf1RkUqScH5VJXuYAWE/IlT1ETm7L
-   waURxWd810NvL8/I4olv/8mr4i+HToxPZIRyFefnfYuWPs6cFr6uEc+ib
-   NVhRIOyoxZ+uAwaSrZ5OHTRZMDyiYqfSot54NC0dXgwJseks+5mce9m/e
-   4fOBWbMQTBdTfSdwqqKS//kuSOjqW1rHTHql0iE8egfIv2tW1urF7/72+
-   S83iAGIxj3PtF2YRLULUR5XGGQaLCpOPOaNkOcNGDMkeOMBUm+swO+6KF
-   EtQ0VmysKwdoPTeOIaMn559CGaq68UkBu6t5+ZUxw4OOQk3XC8U8PJU1N
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="377856370"
-X-IronPort-AV: E=Sophos;i="6.02,146,1688454000"; 
-   d="scan'208";a="377856370"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2023 06:25:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="779625823"
-X-IronPort-AV: E=Sophos;i="6.02,146,1688454000"; 
-   d="scan'208";a="779625823"
-Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 14 Sep 2023 06:25:03 -0700
-Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qgmL7-0001cf-2f;
-        Thu, 14 Sep 2023 13:25:01 +0000
-Date:   Thu, 14 Sep 2023 21:24:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiazi Li <jqqlijiazi@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     oe-kbuild-all@lists.linux.dev, Jiazi Li <jiazi.li@transsion.com>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] PM / devfreq: Show trans_stat info via debugfs
-Message-ID: <202309142101.hL5Buk6G-lkp@intel.com>
-References: <20230914102317.29302-1-jiazi.li@transsion.com>
+        with ESMTP id S240126AbjINNgh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 09:36:37 -0400
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8353C2D;
+        Thu, 14 Sep 2023 06:34:34 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-52bd9ddb741so1192498a12.0;
+        Thu, 14 Sep 2023 06:34:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694698472; x=1695303272;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RpUIdnK9U7Z8dFu+3u/h7aGjExjlf4tG3qsuv5njPLM=;
+        b=TR1x7jsDmqdxi0XwQF54fUixXaMuNUjTQvpjE+RF3FRuAe7jqKAhRaTNO1cnEV9evm
+         wbGZ+/djqqClD9U0F5AGRwoTtyHX4/FIR6tvm+g8JX1rcGQmZvSPl5rVOIxDCUbCrvgJ
+         m9jz+UuKC5S+r9s/PBBKKcljewvMNJJtyM6SeNAIwRSowMgf6d07dvuVUzTh0yMoNQSp
+         HYsxs70w/AFs1q0u+H2Iv3y0ADBJigZYZvTx2R4COPEexRxgrFB+nySxNMi6tSn0vMlw
+         ICXxw6S7tm1dYMr8+Zs/v/pVi7ZRROhh0c2iDRrErCKYRk4SzkkYrnHQq+4YjQuBTZCQ
+         VQLQ==
+X-Gm-Message-State: AOJu0Yzyelauh5Q7Tpp51w5h8qrnu1UrBZb/TGtDPoNxCOajmQb/8xQG
+        nz3LNdNxXkMVAXEFla0UzCQAR0GjqikXPr+J
+X-Google-Smtp-Source: AGHT+IHoSHhBHzdoVOZoVSlVzWh5mQfZXtJugX/ClqLHOgwOtBJL9kyIMToqjtkpdfJMnigafX/SEg==
+X-Received: by 2002:a17:906:3195:b0:9a1:be5b:f499 with SMTP id 21-20020a170906319500b009a1be5bf499mr4092592ejy.24.1694698472201;
+        Thu, 14 Sep 2023 06:34:32 -0700 (PDT)
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com. [209.85.218.53])
+        by smtp.gmail.com with ESMTPSA id q21-20020a1709066b1500b0098921e1b064sm1019750ejr.181.2023.09.14.06.34.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Sep 2023 06:34:32 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-9ad8d47ef2fso127015066b.1;
+        Thu, 14 Sep 2023 06:34:32 -0700 (PDT)
+X-Received: by 2002:a17:906:2182:b0:9a5:c79f:bed5 with SMTP id
+ 2-20020a170906218200b009a5c79fbed5mr4416706eju.16.1694698471866; Thu, 14 Sep
+ 2023 06:34:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230914102317.29302-1-jiazi.li@transsion.com>
+References: <20230914111712.586522-1-ulf.hansson@linaro.org>
+In-Reply-To: <20230914111712.586522-1-ulf.hansson@linaro.org>
+From:   Neal Gompa <neal@gompa.dev>
+Date:   Thu, 14 Sep 2023 09:33:55 -0400
+X-Gmail-Original-Message-ID: <CAEg-Je_Goo+8NVXzF3m4zocNwCpE0kGty2aDpMj+zKoy616vbA@mail.gmail.com>
+Message-ID: <CAEg-Je_Goo+8NVXzF3m4zocNwCpE0kGty2aDpMj+zKoy616vbA@mail.gmail.com>
+Subject: Re: [PATCH 04/17] pmdomain: apple: Move Kconfig option to the
+ pmdomain subsystem
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>, asahi@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Jiazi,
+On Thu, Sep 14, 2023 at 7:17 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> The Kconfig option belongs closer to the corresponding implementation,
+> hence let's move it from the soc subsystem to the pmdomain subsystem.
+>
+> Cc: Hector Martin <marcan@marcan.st>
+> Cc: Sven Peter <sven@svenpeter.dev>
+> Cc: Alyssa Rosenzweig <alyssa@rosenzweig.io>
+> Cc: <asahi@lists.linux.dev>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+>  drivers/pmdomain/Kconfig       |  1 +
+>  drivers/pmdomain/apple/Kconfig | 18 ++++++++++++++++++
+>  drivers/soc/apple/Kconfig      | 13 -------------
+>  3 files changed, 19 insertions(+), 13 deletions(-)
+>  create mode 100644 drivers/pmdomain/apple/Kconfig
+>
+> diff --git a/drivers/pmdomain/Kconfig b/drivers/pmdomain/Kconfig
+> index 07d2f8165abe..55a9ca191849 100644
+> --- a/drivers/pmdomain/Kconfig
+> +++ b/drivers/pmdomain/Kconfig
+> @@ -3,5 +3,6 @@ menu "Power Domains Support"
+>
+>  source "drivers/pmdomain/actions/Kconfig"
+>  source "drivers/pmdomain/amlogic/Kconfig"
+> +source "drivers/pmdomain/apple/Kconfig"
+>
+>  endmenu
+> diff --git a/drivers/pmdomain/apple/Kconfig b/drivers/pmdomain/apple/Kconfig
+> new file mode 100644
+> index 000000000000..12237cbcfaa9
+> --- /dev/null
+> +++ b/drivers/pmdomain/apple/Kconfig
+> @@ -0,0 +1,18 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +if ARCH_APPLE || COMPILE_TEST
+> +
+> +config APPLE_PMGR_PWRSTATE
+> +       bool "Apple SoC PMGR power state control"
+> +       depends on PM
+> +       select REGMAP
+> +       select MFD_SYSCON
+> +       select PM_GENERIC_DOMAINS
+> +       select RESET_CONTROLLER
+> +       default ARCH_APPLE
+> +       help
+> +         The PMGR block in Apple SoCs provides high-level power state
+> +         controls for SoC devices. This driver manages them through the
+> +         generic power domain framework, and also provides reset support.
+> +
+> +endif
+> diff --git a/drivers/soc/apple/Kconfig b/drivers/soc/apple/Kconfig
+> index a1596fefacff..eff486a77337 100644
+> --- a/drivers/soc/apple/Kconfig
+> +++ b/drivers/soc/apple/Kconfig
+> @@ -4,19 +4,6 @@ if ARCH_APPLE || COMPILE_TEST
+>
+>  menu "Apple SoC drivers"
+>
+> -config APPLE_PMGR_PWRSTATE
+> -       bool "Apple SoC PMGR power state control"
+> -       depends on PM
+> -       select REGMAP
+> -       select MFD_SYSCON
+> -       select PM_GENERIC_DOMAINS
+> -       select RESET_CONTROLLER
+> -       default ARCH_APPLE
+> -       help
+> -         The PMGR block in Apple SoCs provides high-level power state
+> -         controls for SoC devices. This driver manages them through the
+> -         generic power domain framework, and also provides reset support.
+> -
+>  config APPLE_RTKIT
+>         tristate "Apple RTKit co-processor IPC protocol"
+>         depends on MAILBOX
+> --
+> 2.34.1
+>
 
-kernel test robot noticed the following build warnings:
+Makes sense to me.
 
-[auto build test WARNING on chanwoo/devfreq-testing]
-[also build test WARNING on linus/master v6.6-rc1 next-20230914]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Reviewed-by: Neal Gompa <neal@gompa.dev>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiazi-Li/PM-devfreq-Show-trans_stat-info-via-debugfs/20230914-182515
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git devfreq-testing
-patch link:    https://lore.kernel.org/r/20230914102317.29302-1-jiazi.li%40transsion.com
-patch subject: [PATCH] PM / devfreq: Show trans_stat info via debugfs
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230914/202309142101.hL5Buk6G-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230914/202309142101.hL5Buk6G-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309142101.hL5Buk6G-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/devfreq/devfreq.c:1699: warning: Function parameter or member 'unused' not described in 'devfreq_trans_stat_show'
->> drivers/devfreq/devfreq.c:1699: warning: Excess function parameter 'data' description in 'devfreq_trans_stat_show'
-
-
-vim +1699 drivers/devfreq/devfreq.c
-
-  1689	
-  1690	/**
-  1691	 * devfreq_trans_stat_show() - show trans stat info through debugfs
-  1692	 * @s:		seq_file instance to show trans_stat info of devfreq devices
-  1693	 * @data:	not used
-  1694	 *
-  1695	 * Show detailed information for some device which has more than PAGE_SIZE
-  1696	 * bytes of trans stat info.
-  1697	 */
-  1698	static int devfreq_trans_stat_show(struct seq_file *s, void *unused)
-> 1699	{
-  1700		struct devfreq *df = s->private;
-  1701		unsigned int max_state;
-  1702		int i, j;
-  1703	
-  1704		if (!df->profile)
-  1705			return -EINVAL;
-  1706		max_state = df->max_state;
-  1707	
-  1708		if (max_state == 0) {
-  1709			seq_puts(s, "Not Supported.\n");
-  1710			return 0;
-  1711		}
-  1712	
-  1713		mutex_lock(&df->lock);
-  1714		if (!df->stop_polling &&
-  1715				devfreq_update_status(df, df->previous_freq)) {
-  1716			mutex_unlock(&df->lock);
-  1717			return 0;
-  1718		}
-  1719		mutex_unlock(&df->lock);
-  1720	
-  1721		seq_puts(s, "     From  :   To\n");
-  1722		seq_puts(s, "           :");
-  1723		for (i = 0; i < max_state; i++)
-  1724			seq_printf(s, "%10lu", df->freq_table[i]);
-  1725	
-  1726		seq_puts(s, "   time(ms)\n");
-  1727	
-  1728		for (i = 0; i < max_state; i++) {
-  1729			if (df->freq_table[i] == df->previous_freq)
-  1730				seq_puts(s, "*");
-  1731			else
-  1732				seq_puts(s, " ");
-  1733	
-  1734			seq_printf(s, "%10lu:", df->freq_table[i]);
-  1735	
-  1736			for (j = 0; j < max_state; j++)
-  1737				seq_printf(s, "%10u",
-  1738					df->stats.trans_table[(i * max_state) + j]);
-  1739	
-  1740			seq_printf(s, "%10llu\n", (u64)
-  1741				jiffies64_to_msecs(df->stats.time_in_state[i]));
-  1742		}
-  1743	
-  1744		seq_printf(s, "Total transition : %u\n", df->stats.total_trans);
-  1745	
-  1746		return 0;
-  1747	}
-  1748	DEFINE_SHOW_ATTRIBUTE(devfreq_trans_stat);
-  1749	
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+真実はいつも一つ！/ Always, there's only one truth!
