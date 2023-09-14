@@ -2,161 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 177AE7A02C1
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 13:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C17747A02CA
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 13:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbjINLfB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 07:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
+        id S230367AbjINLiA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Sep 2023 07:38:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231270AbjINLfA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 07:35:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54B7E1BE8
-        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 04:34:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1694691255;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zyZTrDy0/hTH0K9EatTkNwN6H8aU89mHjN3C7EMRwqQ=;
-        b=iQN9Fe6nfprTZ5syMdH/7BClWd+9TynWg8aPH+ty4DvwbfTuVa+/xVZBI708oS/S8/NrAa
-        I4DcTFs72qNNZnKg1Z0hwPxnDRaqIP+jvOjRGSjnMvdY3gznFMv/d/OQB9B0WfITyB15Ek
-        YKKr1vI2JTSpwfcQ690cMd4UGCzsdnM=
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
- [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-199--qndlhkBP-eKhPyiSFza5A-1; Thu, 14 Sep 2023 07:34:14 -0400
-X-MC-Unique: -qndlhkBP-eKhPyiSFza5A-1
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-26fb3f2edc9so714454a91.3
-        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 04:34:14 -0700 (PDT)
+        with ESMTP id S230165AbjINLh7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 07:37:59 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792001FC4
+        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 04:37:55 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-52a1ce52ef4so997410a12.2
+        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 04:37:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694691474; x=1695296274; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WzwnWQaCHzBNH4v5E5Ke/WgGPb/4HugJ4oItdNzqjvk=;
+        b=v0pBHutV/yJHoQnVE/SclR+kd/lAyTaDfztyvl3Nd2FVd3fE+cetAfgKp2GuuiOT7K
+         yed+waClmOoiGJq6dUD3rKjPKFdj5YW82eupVh67ZcLOahQDRHCHRtxlWQkrJ5OC4Ggo
+         Avc5GFgDLkY3UuGug2YDKXTfXIWd6NNv0kduVtiH3kPoLY9LKnlj99Zau7doj5K8rRP8
+         su9uGdZ55JkBGBiGivC+79NkdXnzJdnCQC3EOvkigVBvKwNa1ToxqGJPpO1ojN5cLfHI
+         6nsVA9qqmcPHxKt5KMGjcAIYoAGMwrgZBhfg3QqDeJkbIqQNA57yBlorOMziLLw6vdCk
+         4tHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694691253; x=1695296053;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zyZTrDy0/hTH0K9EatTkNwN6H8aU89mHjN3C7EMRwqQ=;
-        b=M8WsCNHiMTQnOUY9VZR8hCj4AFWmf0hzPNxqCawtgCwbuD5LsIM9ZIc7nM+/x6VPAZ
-         KkR/uwJcvoiE59/eLpqF9q57AaHdgfeQA34Ru4njOhvZ/5JZbJoLX3yc1RibpIUnyWdD
-         Od3Td82FCrtFzNLOOs3aMxFQUYTWo1rsrRB2s3AkVnAyB+O+/6HTXfftUu457x2nvhDJ
-         BdJR71SiPcOaxWgu+2YBJ/QyJ0b3PoeW/JXds/KEO0f1XK0n2BANUtn2x1//BQfVUo6N
-         PTO6n4ktNu/tMyVD26kvPOBwVvfSt7aLqpVU7uyYqz3XaCWf3AYwLU8A0Z8WlR6dIRqw
-         6DBQ==
-X-Gm-Message-State: AOJu0YxgpudopgdWaJxXiO9kwqyDS29FqZIRq8E1+SiXu6WT9AeohKh2
-        SJpAP6yyC2q9nqei3VM0kw+8FJxW3yp/lUvjMy8NkwiEM94EZBCNbtepbmhGAGgr+fKYM3XeveQ
-        qBx2eWPG+amXzFZjkZX2M1TWqOgvQGbFuDcs=
-X-Received: by 2002:a17:90b:1953:b0:271:8195:8 with SMTP id nk19-20020a17090b195300b0027181950008mr4962722pjb.36.1694691253243;
-        Thu, 14 Sep 2023 04:34:13 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH+T3eZarPZ9nZ1kl+VZnwP2bzJmj2nhQcmZkbug8WrUbmTzW0SE3NyLmlL8SFSEAVUSs75vseHQzI79kWaPnA=
-X-Received: by 2002:a17:90b:1953:b0:271:8195:8 with SMTP id
- nk19-20020a17090b195300b0027181950008mr4962702pjb.36.1694691252955; Thu, 14
- Sep 2023 04:34:12 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1694691474; x=1695296274;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WzwnWQaCHzBNH4v5E5Ke/WgGPb/4HugJ4oItdNzqjvk=;
+        b=io2aMRSEkkfUMzuA+pFcnJTXkuYEwtcpCnaSk33XSOWWvbfkONbbRV6JwICOO1ucbW
+         0KJBBcFhuTAPZ1La0GbUX4MGAnE9GSjhy4t4y9zbBoV6TEpQS8mMF8JSj/vLQiNuD20G
+         oEsjm0G0dR4nFdHNBfraQR8Uaa/LEGLOYwZOvsX1O8HeaTbJc+kBZhoBXDF74Sp1+fVD
+         xQPWtdayjSX8AVk+S3SK9W6lfsBBdKlRiCtRC7e263G34DwpIC60OxMUnTRWUVMPsQWK
+         MhLPp8qugYp5UrOjLGJoNxRITnXY3bujW9x8eOvHWKOM9OUE0D5cuI9kmqLayuVqtCUr
+         TlLw==
+X-Gm-Message-State: AOJu0Yw11Gezv5JeHgj97n3g6qw7/Ss1jGE7vN29YHvfcVu33JfYzJSR
+        Jt6l0jpoHilsxjxacFyASp3NlA==
+X-Google-Smtp-Source: AGHT+IHcLGAnJsuW8PiNRY0KSZ5FpORn6oFuuYSmN3nEiEkcyNdroRMVB3j+Olo1VO+5Z9DPv5hraQ==
+X-Received: by 2002:aa7:c904:0:b0:525:69ec:e1c8 with SMTP id b4-20020aa7c904000000b0052569ece1c8mr4000556edt.40.1694691473953;
+        Thu, 14 Sep 2023 04:37:53 -0700 (PDT)
+Received: from [192.168.37.232] (178235177003.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.3])
+        by smtp.gmail.com with ESMTPSA id i3-20020aa7c703000000b0051dfa2e30b2sm815967edq.9.2023.09.14.04.37.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Sep 2023 04:37:53 -0700 (PDT)
+Message-ID: <adef5503-39f2-4fc5-a445-3c173d86c57e@linaro.org>
+Date:   Thu, 14 Sep 2023 13:37:52 +0200
 MIME-Version: 1.0
-References: <20230914111712.586522-1-ulf.hansson@linaro.org>
-In-Reply-To: <20230914111712.586522-1-ulf.hansson@linaro.org>
-From:   Eric Curtin <ecurtin@redhat.com>
-Date:   Thu, 14 Sep 2023 12:33:36 +0100
-Message-ID: <CAOgh=FykP9LLpkg4WLhYaKYv8Myofu7KSYc2=_3ea=4paPfMCQ@mail.gmail.com>
-Subject: Re: [PATCH 04/17] pmdomain: apple: Move Kconfig option to the
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 08/17] pmdomain: qcom: Move Kconfig options to the
  pmdomain subsystem
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>, asahi@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Language: en-US
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org
+References: <20230914111753.586627-1-ulf.hansson@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <20230914111753.586627-1-ulf.hansson@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 14 Sept 2023 at 12:24, Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> The Kconfig option belongs closer to the corresponding implementation,
-> hence let's move it from the soc subsystem to the pmdomain subsystem.
->
-> Cc: Hector Martin <marcan@marcan.st>
-> Cc: Sven Peter <sven@svenpeter.dev>
-> Cc: Alyssa Rosenzweig <alyssa@rosenzweig.io>
-> Cc: <asahi@lists.linux.dev>
+On 14.09.2023 13:17, Ulf Hansson wrote:
+> The Kconfig options belongs closer to the corresponding implementations,
+> hence let's move them from the soc subsystem to the pmdomain subsystem.
+> 
+> Cc: Bjorn Andersson <andersson@kernel.org>
+> Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Cc: Andy Gross <agross@kernel.org>
+> Cc: <linux-arm-msm@vger.kernel.org>
 > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-Makes sense, since the C code and Makefile is there now.
-
-Reviewed-by: Eric Curtin <ecurtin@redhat.com>
-
-Is mise le meas/Regards,
-
-Eric Curtin
-
 > ---
->  drivers/pmdomain/Kconfig       |  1 +
->  drivers/pmdomain/apple/Kconfig | 18 ++++++++++++++++++
->  drivers/soc/apple/Kconfig      | 13 -------------
->  3 files changed, 19 insertions(+), 13 deletions(-)
->  create mode 100644 drivers/pmdomain/apple/Kconfig
->
-> diff --git a/drivers/pmdomain/Kconfig b/drivers/pmdomain/Kconfig
-> index 07d2f8165abe..55a9ca191849 100644
-> --- a/drivers/pmdomain/Kconfig
-> +++ b/drivers/pmdomain/Kconfig
-> @@ -3,5 +3,6 @@ menu "Power Domains Support"
->
->  source "drivers/pmdomain/actions/Kconfig"
->  source "drivers/pmdomain/amlogic/Kconfig"
-> +source "drivers/pmdomain/apple/Kconfig"
->
->  endmenu
-> diff --git a/drivers/pmdomain/apple/Kconfig b/drivers/pmdomain/apple/Kconfig
-> new file mode 100644
-> index 000000000000..12237cbcfaa9
-> --- /dev/null
-> +++ b/drivers/pmdomain/apple/Kconfig
-> @@ -0,0 +1,18 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +
-> +if ARCH_APPLE || COMPILE_TEST
-> +
-> +config APPLE_PMGR_PWRSTATE
-> +       bool "Apple SoC PMGR power state control"
-> +       depends on PM
-> +       select REGMAP
-> +       select MFD_SYSCON
-> +       select PM_GENERIC_DOMAINS
-> +       select RESET_CONTROLLER
-> +       default ARCH_APPLE
-> +       help
-> +         The PMGR block in Apple SoCs provides high-level power state
-> +         controls for SoC devices. This driver manages them through the
-> +         generic power domain framework, and also provides reset support.
-> +
-> +endif
-> diff --git a/drivers/soc/apple/Kconfig b/drivers/soc/apple/Kconfig
-> index a1596fefacff..eff486a77337 100644
-> --- a/drivers/soc/apple/Kconfig
-> +++ b/drivers/soc/apple/Kconfig
-> @@ -4,19 +4,6 @@ if ARCH_APPLE || COMPILE_TEST
->
->  menu "Apple SoC drivers"
->
-> -config APPLE_PMGR_PWRSTATE
-> -       bool "Apple SoC PMGR power state control"
-> -       depends on PM
-> -       select REGMAP
-> -       select MFD_SYSCON
-> -       select PM_GENERIC_DOMAINS
-> -       select RESET_CONTROLLER
-> -       default ARCH_APPLE
-> -       help
-> -         The PMGR block in Apple SoCs provides high-level power state
-> -         controls for SoC devices. This driver manages them through the
-> -         generic power domain framework, and also provides reset support.
-> -
->  config APPLE_RTKIT
->         tristate "Apple RTKit co-processor IPC protocol"
->         depends on MAILBOX
-> --
-> 2.34.1
->
->
+Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
+Konrad
