@@ -2,160 +2,247 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA5B7A04E0
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 15:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 544367A050B
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 15:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238534AbjINNEh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 09:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59376 "EHLO
+        id S238606AbjINNJs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Sep 2023 09:09:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238525AbjINNEg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 09:04:36 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1E61FD5;
-        Thu, 14 Sep 2023 06:04:32 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 672F724E1D4;
-        Thu, 14 Sep 2023 21:04:17 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 14 Sep
- 2023 21:04:17 +0800
-Received: from [192.168.125.113] (113.72.145.181) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 14 Sep
- 2023 21:04:16 +0800
-Message-ID: <1a9d2905-b0e8-1775-e44f-39d3693a1dad@starfivetech.com>
-Date:   Thu, 14 Sep 2023 21:04:16 +0800
+        with ESMTP id S238471AbjINNJs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 09:09:48 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D901A5;
+        Thu, 14 Sep 2023 06:09:44 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Rmd0X0KkPz6HJdv;
+        Thu, 14 Sep 2023 21:07:56 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 14 Sep
+ 2023 14:09:41 +0100
+Date:   Thu, 14 Sep 2023 14:09:40 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     James Morse <james.morse@arm.com>
+CC:     <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
+        <linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+        <x86@kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        <jianyong.wu@arm.com>, <justin.he@arm.com>
+Subject: Re: [RFC PATCH v2 14/35] ACPI: Only enumerate enabled (or
+ functional) devices
+Message-ID: <20230914140940.00001417@Huawei.com>
+In-Reply-To: <20230914132732.00006908@Huawei.com>
+References: <20230913163823.7880-1-james.morse@arm.com>
+        <20230913163823.7880-15-james.morse@arm.com>
+        <20230914132732.00006908@Huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH 13/17] pmdomain: starfive: Move Kconfig file to the
- pmdomain subsystem
-To:     Conor Dooley <conor.dooley@microchip.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-CC:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Conor Dooley <conor@kernel.org>
-References: <20230914111904.586744-1-ulf.hansson@linaro.org>
- <20230914-delegator-dimple-51b9414caa28@wendy>
-Content-Language: en-US
-From:   Walker Chen <walker.chen@starfivetech.com>
-In-Reply-To: <20230914-delegator-dimple-51b9414caa28@wendy>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.145.181]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, 14 Sep 2023 13:27:32 +0100
+Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
 
-On 2023/9/14 19:59, Conor Dooley wrote:
-> Hey,
+> On Wed, 13 Sep 2023 16:38:02 +0000
+> James Morse <james.morse@arm.com> wrote:
 > 
+> > Today the ACPI enumeration code 'visits' all devices that are present.
+> > 
+> > This is a problem for arm64, where CPUs are always present, but not
+> > always enabled. When a device-check occurs because the firmware-policy
+> > has changed and a CPU is now enabled, the following error occurs:
+> > | acpi ACPI0007:48: Enumeration failure
+> > 
+> > This is ultimately because acpi_dev_ready_for_enumeration() returns
+> > true for a device that is not enabled. The ACPI Processor driver
+> > will not register such CPUs as they are not 'decoding their resources'.
+> > 
+> > Change acpi_dev_ready_for_enumeration() to also check the enabled bit.
+> > ACPI allows a device to be functional instead of maintaining the
+> > present and enabled bit. Make this behaviour an explicit check with
+> > a reference to the spec, and then check the present and enabled bits.  
 > 
-> On Thu, Sep 14, 2023 at 01:19:04PM +0200, Ulf Hansson wrote:
->> The Kconfig belongs closer to the corresponding implementation, hence let's
->> move it from the soc subsystem to the pmdomain subsystem.
->> 
->> Cc: Walker Chen <walker.chen@starfivetech.com>
->> Cc: Conor Dooley <conor@kernel.org>
->> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> "and the" only applies if the functional route hasn't been followed
+> "if not this case check the present and enabled bits."
 > 
-> Thanks for doing this, saved me having to!
-> The series appears to have broken threading though, which can be seen
-> pretty easily on lore:
-> https://lore.kernel.org/all/20230914111904.586744-1-ulf.hansson@linaro.org/
-> Dunno if something is borked with your process while sending patches to
-> only a subset of the total recipient list.
+> > This is needed to avoid enumerating present && functional devices that
+> > are not enabled.
+> > 
+> > Signed-off-by: James Morse <james.morse@arm.com>
+> > ---
+> > If this change causes problems on deployed hardware, I suggest an
+> > arch opt-in: ACPI_IGNORE_STA_ENABLED, that causes
+> > acpi_dev_ready_for_enumeration() to only check the present bit.
+> > ---
+> >  drivers/acpi/device_pm.c    |  2 +-
+> >  drivers/acpi/device_sysfs.c |  2 +-
+> >  drivers/acpi/internal.h     |  1 -
+> >  drivers/acpi/property.c     |  2 +-
+> >  drivers/acpi/scan.c         | 23 +++++++++++++----------
+> >  5 files changed, 16 insertions(+), 14 deletions(-)
+> > 
+> > diff --git a/drivers/acpi/device_pm.c b/drivers/acpi/device_pm.c
+> > index f007116a8427..76c38478a502 100644
+> > --- a/drivers/acpi/device_pm.c
+> > +++ b/drivers/acpi/device_pm.c
+> > @@ -313,7 +313,7 @@ int acpi_bus_init_power(struct acpi_device *device)
+> >  		return -EINVAL;
+> >  
+> >  	device->power.state = ACPI_STATE_UNKNOWN;
+> > -	if (!acpi_device_is_present(device)) {
+> > +	if (!acpi_dev_ready_for_enumeration(device)) {
+> >  		device->flags.initialized = false;
+> >  		return -ENXIO;
+> >  	}
+> > diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
+> > index b9bbf0746199..16e586d74aa2 100644
+> > --- a/drivers/acpi/device_sysfs.c
+> > +++ b/drivers/acpi/device_sysfs.c
+> > @@ -141,7 +141,7 @@ static int create_pnp_modalias(const struct acpi_device *acpi_dev, char *modalia
+> >  	struct acpi_hardware_id *id;
+> >  
+> >  	/* Avoid unnecessarily loading modules for non present devices. */
+> > -	if (!acpi_device_is_present(acpi_dev))
+> > +	if (!acpi_dev_ready_for_enumeration(acpi_dev))
+> >  		return 0;
+> >  
+> >  	/*
+> > diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
+> > index 866c7c4ed233..a1b45e345bcc 100644
+> > --- a/drivers/acpi/internal.h
+> > +++ b/drivers/acpi/internal.h
+> > @@ -107,7 +107,6 @@ int acpi_device_setup_files(struct acpi_device *dev);
+> >  void acpi_device_remove_files(struct acpi_device *dev);
+> >  void acpi_device_add_finalize(struct acpi_device *device);
+> >  void acpi_free_pnp_ids(struct acpi_device_pnp *pnp);
+> > -bool acpi_device_is_present(const struct acpi_device *adev);
+> >  bool acpi_device_is_battery(struct acpi_device *adev);
+> >  bool acpi_device_is_first_physical_node(struct acpi_device *adev,
+> >  					const struct device *dev);
+> > diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
+> > index 413e4fcadcaf..e03f00b98701 100644
+> > --- a/drivers/acpi/property.c
+> > +++ b/drivers/acpi/property.c
+> > @@ -1418,7 +1418,7 @@ static bool acpi_fwnode_device_is_available(const struct fwnode_handle *fwnode)
+> >  	if (!is_acpi_device_node(fwnode))
+> >  		return false;
+> >  
+> > -	return acpi_device_is_present(to_acpi_device_node(fwnode));
+> > +	return acpi_dev_ready_for_enumeration(to_acpi_device_node(fwnode));
+> >  }
+> >  
+> >  static const void *
+> > diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+> > index 17ab875a7d4e..f898591ce05f 100644
+> > --- a/drivers/acpi/scan.c
+> > +++ b/drivers/acpi/scan.c
+> > @@ -304,7 +304,7 @@ static int acpi_scan_device_check(struct acpi_device *adev)
+> >  	int error;
+> >  
+> >  	acpi_bus_get_status(adev);
+> > -	if (acpi_device_is_present(adev)) {
+> > +	if (acpi_dev_ready_for_enumeration(adev)) {
+> >  		/*
+> >  		 * This function is only called for device objects for which
+> >  		 * matching scan handlers exist.  The only situation in which
+> > @@ -338,7 +338,7 @@ static int acpi_scan_bus_check(struct acpi_device *adev, void *not_used)
+> >  	int error;
+> >  
+> >  	acpi_bus_get_status(adev);
+> > -	if (!acpi_device_is_present(adev)) {
+> > +	if (!acpi_dev_ready_for_enumeration(adev)) {
+> >  		acpi_scan_device_not_enumerated(adev);
+> >  		return 0;
+> >  	}
+> > @@ -1908,11 +1908,6 @@ static bool acpi_device_should_be_hidden(acpi_handle handle)
+> >  	return true;
+> >  }
+> >  
+> > -bool acpi_device_is_present(const struct acpi_device *adev)
+> > -{
+> > -	return adev->status.present || adev->status.functional;
+> > -}
+> > -
+> >  static bool acpi_scan_handler_matching(struct acpi_scan_handler *handler,
+> >  				       const char *idstr,
+> >  				       const struct acpi_device_id **matchid)
+> > @@ -2375,16 +2370,24 @@ EXPORT_SYMBOL_GPL(acpi_dev_clear_dependencies);
+> >   * acpi_dev_ready_for_enumeration - Check if the ACPI device is ready for enumeration
+> >   * @device: Pointer to the &struct acpi_device to check
+> >   *
+> > - * Check if the device is present and has no unmet dependencies.
+> > + * Check if the device is functional or enabled and has no unmet dependencies.
+> >   *
+> > - * Return true if the device is ready for enumeratino. Otherwise, return false.
+> > + * Return true if the device is ready for enumeration. Otherwise, return false.
+> >   */
+> >  bool acpi_dev_ready_for_enumeration(const struct acpi_device *device)
+> >  {
+> >  	if (device->flags.honor_deps && device->dep_unmet)
+> >  		return false;
+> >  
+> > -	return acpi_device_is_present(device);
+> > +	/*
+> > +	 * ACPI 6.5's 6.3.7 "_STA (Device Status)" allows firmware to return
+> > +	 * (!present && functional) for certain types of devices that should be
+> > +	 * enumerated.  
 > 
->> ---
->>  MAINTAINERS                                | 2 +-
->>  drivers/pmdomain/Kconfig                   | 1 +
->>  drivers/{soc => pmdomain}/starfive/Kconfig | 0
->>  drivers/soc/Kconfig                        | 1 -
->>  4 files changed, 2 insertions(+), 2 deletions(-)
->>  rename drivers/{soc => pmdomain}/starfive/Kconfig (100%)
->> 
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 6b491ebcf790..b8eae18f0fb1 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -20523,7 +20523,7 @@ M:	Conor Dooley <conor@kernel.org>
->>  S:	Maintained
->>  T:	git https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/
->>  F:	Documentation/devicetree/bindings/soc/starfive/
->> -F:	drivers/soc/starfive/
->> +F:	drivers/pmdomain/starfive/
+> I'd call out the fact that enumeration isn't same as "device driver should be loaded"
+> which is the thing that functional is supposed to indicate should not happen.
 > 
-> This isn't the correct change, just remove the drivers/soc/starfive
-> bit entirely from this entry. 
-> I've just been doing some review & sending PRs to Arnd for this stuff
-> (or failing to send the PRs as you saw), I don't have particular
-> interest in this driver other than helping out the starfive people with
-> actually getting the code merged.
-> Instead I think you should generalise the existing entry for the driver
-> to cover the whole directory, so that it includes the Kconfig bits too:
+> > +	 */
+> > +	if (!device->status.present && !device->status.enabled)  
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index fa7487b7729b..22c1a5e5b130 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -20564,7 +20564,7 @@ M:      Walker Chen <walker.chen@starfivetech.com>
->  M:     Changhuang Liang <changhuang.liang@starfivetech.com>
->  S:     Supported
->  F:     Documentation/devicetree/bindings/power/starfive*
-> -F:     drivers/pmdomain/starfive/jh71xx-pmu.c
-> +F:     drivers/pmdomain/starfive/
->  F:     include/dt-bindings/power/starfive,jh7110-pmu.h
->  
->  STARFIVE SOC DRIVERS
+> In theory no need to check !enabled if !present
+> "If bit [0] is cleared, then bit 1 must also be cleared (in other words, a device that is not present cannot be enabled)."
+> We could report an ACPI bug if that's seen.  If that bug case is ignored this code can
+> become the simpler.
 > 
+> 	if (device->status.present)
+> 		return device->status_enabled;
+> 	else
+> 		return device->status.functional;
+> 
+> Or the following also valid here (as functional should be set for enabled present devices
+> unless they failed diagnostics).
+> 
+> 	if (dev->status.functional)
+> 		return true;
+> 	return device->status.present && device->status.enabled;
+> 
+> On assumption we want to enumerate dead devices for debug purposes...
+Actually ignore this.  Could have weird race with present, functional true,
+but enabled not quite set - despite the device being there and self
+tests having passed.
 
-Hi Conor,
 
-Anyway, thank you for helping maintain this driver as starfive people lack of experience in this area. 
-You have indeed helped us a lot during this period.
-
-Best regards,
-Walker
-
-> Thanks,
-> Conor.
 > 
->>  
->>  STARFIVE TRNG DRIVER
->>  M:	Jia Jie Ho <jiajie.ho@starfivetech.com>
->> diff --git a/drivers/pmdomain/Kconfig b/drivers/pmdomain/Kconfig
->> index cfe9ea754062..67049ebf7265 100644
->> --- a/drivers/pmdomain/Kconfig
->> +++ b/drivers/pmdomain/Kconfig
->> @@ -12,5 +12,6 @@ source "drivers/pmdomain/renesas/Kconfig"
->>  source "drivers/pmdomain/rockchip/Kconfig"
->>  source "drivers/pmdomain/samsung/Kconfig"
->>  source "drivers/pmdomain/st/Kconfig"
->> +source "drivers/pmdomain/starfive/Kconfig"
->>  
->>  endmenu
->> diff --git a/drivers/soc/starfive/Kconfig b/drivers/pmdomain/starfive/Kconfig
->> similarity index 100%
->> rename from drivers/soc/starfive/Kconfig
->> rename to drivers/pmdomain/starfive/Kconfig
->> diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
->> index 8b46da40f107..10a9ff84ff41 100644
->> --- a/drivers/soc/Kconfig
->> +++ b/drivers/soc/Kconfig
->> @@ -23,7 +23,6 @@ source "drivers/soc/renesas/Kconfig"
->>  source "drivers/soc/rockchip/Kconfig"
->>  source "drivers/soc/samsung/Kconfig"
->>  source "drivers/soc/sifive/Kconfig"
->> -source "drivers/soc/starfive/Kconfig"
->>  source "drivers/soc/sunxi/Kconfig"
->>  source "drivers/soc/tegra/Kconfig"
->>  source "drivers/soc/ti/Kconfig"
->> -- 
->> 2.34.1
->> 
+> 
+> > +		return device->status.functional;
+> > +
+> > +	return device->status.present && device->status.enabled;  
+> 
+> 
+> >  }
+> >  EXPORT_SYMBOL_GPL(acpi_dev_ready_for_enumeration);
+> >    
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
