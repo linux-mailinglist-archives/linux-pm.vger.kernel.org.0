@@ -2,112 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9842E79FC49
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 08:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4897A79FC5C
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 08:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232856AbjINGrV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 02:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
+        id S229589AbjINGz1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Sep 2023 02:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232171AbjINGrU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 02:47:20 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220AACCD
-        for <linux-pm@vger.kernel.org>; Wed, 13 Sep 2023 23:47:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1694674036; x=1726210036;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MiNTIYzOJN1wrtxFN5lQC/gqZO2j2q+e6nLCMiBsuN0=;
-  b=LXGy6+9arqaDbWxWSLePJ4PzgJIwKo2NmTPLm3jGZr7YxzZs68CsuKEW
-   AeTKeA36ZyGvw5h6wMcT1UCsusq2Dxx2Ga+6tkU+b1UYn7cjyld+qs7OU
-   NXyoAW+NWJo5QJUWBavCYWPwlLwo0I/Z4dosWIBI17aMEQTFmBOFnnnxn
-   43380Nzs31oi25T8N+5Xxz9wCxQW3OCV79Ehg3Ku0iDj5Jx2AKiD9cwJE
-   zwIRnPs5wJtSuttrzdidR8FDyw0EPyND2YKir2lOv5GXYDEzNyptgHacC
-   aJJAj0ZcBIMJgrCPZfBiL0MUm5tYLvG8FLIVs0jyvHl86vzLbnRjGwyW4
-   w==;
-X-CSE-ConnectionGUID: vfMOlH7yTwexRPP1GuH5GQ==
-X-CSE-MsgGUID: xoTsubcES+2nTFm4PMX80A==
-X-ThreatScanner-Verdict: Negative
-X-IronPort-AV: E=Sophos;i="6.02,145,1688454000"; 
-   d="asc'?scan'208";a="4463721"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Sep 2023 23:47:14 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 13 Sep 2023 23:46:45 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex01.mchp-main.com (10.10.85.143)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 13 Sep 2023 23:46:43 -0700
-Date:   Thu, 14 Sep 2023 07:46:27 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-CC:     Conor Dooley <conor@kernel.org>, <arnd@arndb.de>,
-        <changhuang.liang@starfivetech.com>, <jiajie.ho@starfivetech.com>,
-        <linux-pm@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <robh@kernel.org>, <walker.chen@starfivetech.com>
-Subject: Re: [GIT PULL 0/5] Missed starfive pmdomain changes for v6.6, now
- for v6.7
-Message-ID: <20230914-appliance-vastness-989ded32323a@wendy>
-References: <20230913-bloomers-scorebook-fb45e0a2aa19@spud>
- <CAPDyKFoENVp7+VjKkPpJWDecowxYD=QM6TSa6HjyzOZ=z7r81w@mail.gmail.com>
+        with ESMTP id S233682AbjINGz0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 02:55:26 -0400
+Received: from srv01.abscue.de (abscue.de [89.58.28.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684DCCCD;
+        Wed, 13 Sep 2023 23:55:21 -0700 (PDT)
+Received: from srv01.abscue.de (localhost [127.0.0.1])
+        by spamfilter.srv.local (Postfix) with ESMTP id 676831C3D96;
+        Thu, 14 Sep 2023 08:55:18 +0200 (CEST)
+X-Spam-Checker-Version: SpamAssassin 4.0.0 (2022-12-13) on abscue.de
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=5.0 tests=ALL_TRUSTED autolearn=ham
+        autolearn_force=no version=4.0.0
+Received: from fluffy-mammal.fritz.box (dslb-092-072-000-199.092.072.pools.vodafone-ip.de [92.72.0.199])
+        by srv01.abscue.de (Postfix) with ESMTPSA id 044411C0119;
+        Thu, 14 Sep 2023 08:55:17 +0200 (CEST)
+From:   =?UTF-8?q?Otto=20Pfl=C3=BCger?= <otto.pflueger@abscue.de>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        =?UTF-8?q?Otto=20Pfl=C3=BCger?= <otto.pflueger@abscue.de>
+Subject: [PATCH v3 0/3] pmdomain: qcom: rpmpd: Add MSM8917 and similar SoCs
+Date:   Thu, 14 Sep 2023 08:54:20 +0200
+Message-Id: <20230914065422.5452-1-otto.pflueger@abscue.de>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="JiM0GHmFjKEmdcha"
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFoENVp7+VjKkPpJWDecowxYD=QM6TSa6HjyzOZ=z7r81w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---JiM0GHmFjKEmdcha
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Add RPM power domain definitions for the Qualcomm MSM8917, MSM8937 and
+QM215 SoCs. These SoCs all have the same power domains (VDDCX and VDDMX
+in voltage level mode), but different regulators are needed for QM215
+because it is used with a PM8916 PMIC instead of a PM8937 PMIC.
 
-Yo,
+---
+Changes in v3:
+- Sort compatibles in device tree binding documentation (suggested by
+  Krzysztof)
+- Rebase on latest next with genpd subsystem renamed to pmdomain
+Changes in v2:
+- Fix typo in patch description: VDDMD -> VDDMX
+- Split MSM8917 and QM215 changes (suggested by Konrad)
+- Remove redundant qcom,msm8937-rpmpd entry from rpmpd_match_table
+  and use a fallback compatible instead (suggested by Konrad)
 
-I tried to reply a few hours ago from k9, but it appears to not have
-landed on lore, so here goes attempt #2. Apologies if you got a mail
-twice.
+Otto Pflüger (3):
+  dt-bindings: power: rpmpd: Add MSM8917, MSM8937 and QM215
+  pmdomain: qcom: rpmpd: Add MSM8917 power domains
+  pmdomain: qcom: rpmpd: Add QM215 power domains
 
-On Thu, Sep 14, 2023 at 12:30:20AM +0200, Ulf Hansson wrote:
-> On Wed, 13 Sept 2023 at 15:56, Conor Dooley <conor@kernel.org> wrote:
-> >
-> > From: Conor Dooley <conor.dooley@microchip.com>
-> >
-> > Hey Uffe,
-> >
-> > Here's those missed changes in patch form. I figured it might be a bit
-> > easier this way given the name of the subsystem is in flux, doubly so if
-> > you'd like to put the header change of Rob's on fixes.
->=20
-> Not sure we really need to queue up patch 1 for fixes - or is it
-> fixing a real problem for us?
+ .../devicetree/bindings/power/qcom,rpmpd.yaml | 79 ++++++++--------
+ drivers/pmdomain/qcom/rpmpd.c                 | 91 +++++++++++++++++++
+ include/dt-bindings/power/qcom-rpmpd.h        | 21 +++++
+ 3 files changed, 155 insertions(+), 36 deletions(-)
 
-It was just in case you felt that taking that header cleanup as a fix
-was worthwhile. I think I saw some people doing that last cycle & I
-think Rob was trying to clean that up for v6.6 which I obviously haven't
-helped him with.
 
-> The series applied for next, thanks!
-
-Great, thanks.
-
---JiM0GHmFjKEmdcha
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZQKsQwAKCRB4tDGHoIJi
-0r7TAQD81jDl7jfypoYEMa4xfg+xgWZ18aAlvf6l47iUh9yGkwD+IhMwZjeNG32K
-QFrjpiM4Bsm9g1HAcfAtmsBVqtwaXwQ=
-=YHCd
------END PGP SIGNATURE-----
-
---JiM0GHmFjKEmdcha--
+base-commit: 98897dc735cf6635f0966f76eb0108354168fb15
+-- 
+2.39.1
