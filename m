@@ -2,71 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E0B7A0A13
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 18:01:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7243E7A0A39
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 18:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241479AbjINQBD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 12:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36786 "EHLO
+        id S241735AbjINQDs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Sep 2023 12:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241426AbjINQA5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 12:00:57 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690881FDD;
-        Thu, 14 Sep 2023 09:00:44 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE769C433B6;
-        Thu, 14 Sep 2023 16:00:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694707243;
-        bh=f2D1KJ3G20fQHFUTIyD1SsNidi043orZ//0JAIezb+k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XOkiMmyFXU5u+UgP7/kW6xApq5eB3donlHM+Eve8nWIVnGjWj6CXCtisbB80QooXn
-         /VysJwh8d3FwooQ1Gn55LroUq6egGXmFmXe3RKEJKGPSAiQ2Ue+7/FnC69tsqxCMMR
-         sju9KBmz1avdOZrIES+ecuFug69VNXhdk3b0p+7LYFxve+Vcn14/MJ3rSABVm4mp1C
-         tPW3Dd5VLUxNt8zmbNg3Lz9l0+y6ixRyq7PhKMHEO6D0Oza958pnkX0RGRiFVaul+t
-         4tcSVPIekcp6KTksYSV9QRqnJWVqZXUDUwpXMn1F7TrNrEDWM3wq7IkR0d91A+ZcYa
-         bFzNydZ12c97w==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     ulf.hansson@linaro.org, dianders@chromium.org, swboyd@chromium.org,
-        wingers@google.com, daniel.lezcano@linaro.org, rafael@kernel.org,
-        Maulik Shah <quic_mkshah@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, sudeep.holla@arm.com,
-        jwerner@chromium.org, quic_lsrao@quicinc.com,
-        quic_rjendra@quicinc.com
-Subject: Re: (subset) [RESEND v4 0/3] Use PSCI OS initiated mode for sc7280
-Date:   Thu, 14 Sep 2023 09:04:31 -0700
-Message-ID: <169470744889.681825.1107443833473958545.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230703085555.30285-1-quic_mkshah@quicinc.com>
-References: <20230703085555.30285-1-quic_mkshah@quicinc.com>
+        with ESMTP id S241718AbjINQDg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 12:03:36 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6D51BDD;
+        Thu, 14 Sep 2023 09:03:12 -0700 (PDT)
+Received: from mercury (dyndsl-091-248-132-131.ewe-ip-backbone.de [91.248.132.131])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 246C0660734C;
+        Thu, 14 Sep 2023 17:03:11 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1694707391;
+        bh=Lpo0D5uC86cqxCrdA6YYcvZKX2y1l4IotVy9sVD5T/I=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=fD6F73IQ9Q7/RyvDWXsECQ4MTFg4+R1Gp7rA5B8bfbOfTsrATd53jT7h99w4VXRGA
+         wXthMaAOQ8M6NwD64yiK5g/o4nJeZZwnv8AuUqPaHBhLJ0UBfujxOX1kiJHnBjs1sK
+         loLXb24hpyHy1Cn9T/Q7UYB69K6RmSH0ZrG+iaxSE8UeWhF58o4y3+HFvSiKb9FcPM
+         gvKaWojS6OXvR+s9UMOexS4E4RkGzDYl6Ur1VOjthX9ATXTkDOE/Lg9DXI1ZPwm7QX
+         Yqf3VVNZZXlDL1E/H2QiVH9Tj8bafsMly0M+EZEbg5wiwMy1TMzYK3uhQ5Pr+EGRbq
+         9SxbUvjF+w9Ug==
+Received: by mercury (Postfix, from userid 1000)
+        id 920D6106098B; Thu, 14 Sep 2023 18:03:08 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Cc:     linux-rockchip@lists.infradead.org, stable@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230612143651.959646-2-frattaroli.nicolas@gmail.com>
+References: <20230612143651.959646-2-frattaroli.nicolas@gmail.com>
+Subject: Re: [PATCH] power: supply: rk817: Add missing module alias
+Message-Id: <169470738858.752995.6010965090137450989.b4-ty@collabora.com>
+Date:   Thu, 14 Sep 2023 18:03:08 +0200
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.3
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-On Mon, 03 Jul 2023 14:25:52 +0530, Maulik Shah wrote:
-> This is resend of v4 with patch1 and patch2 Cced to stable kernel.
+On Mon, 12 Jun 2023 16:36:52 +0200, Nicolas Frattaroli wrote:
+> Similar to the rk817 codec alias that was missing, the rk817 charger
+> driver is missing a module alias as well. This absence prevents the
+> driver from autoprobing on OF systems when it is built as a module.
 > 
-> Changes in v4:
-> - Add missing s-o-b line and reviewed by in patch 1
-> - Address ulf's comments for error handling in patch 2
+> Add the right MODULE_ALIAS to fix this.
 > 
-> Changes in v3:
-> - Add new change to provide helper function dt_idle_pd_remove_topology()
-> - Address ulf's comments for error handling
-> - Add reviewed by ulf for devicetree change
 > 
 > [...]
 
 Applied, thanks!
 
-[3/3] arm64: dts: qcom: sc7280: Add power-domains for cpuidle states
-      commit: 7925ca85e956191a6a522e0a31a877b98cb5096c
+[1/1] power: supply: rk817: Add missing module alias
+      commit: cbcdfbf5a6cd66e47e5ee5d49c4c5a27a07ba082
 
 Best regards,
 -- 
-Bjorn Andersson <andersson@kernel.org>
+Sebastian Reichel <sebastian.reichel@collabora.com>
+
