@@ -2,117 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ABCA7A06E2
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 16:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E70907A06EF
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 16:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239652AbjINOHc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 10:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59422 "EHLO
+        id S239711AbjINOJz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Sep 2023 10:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234873AbjINOHc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 10:07:32 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DDD1BF8;
-        Thu, 14 Sep 2023 07:07:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=GIdT/cJmFA2qx50pgPlJRNzy/bheI4vUqGYQu+a7PMI=; b=raixHrVeNVHHMS+SmMW0fsVxI+
-        rZLO2b1FApnkXyJLVlkjBZUzsfFxmDi2JMVVu/R8wleWSzTAHzOFKzQL/zWb/JJhTJQkeyGGl2H3d
-        1EsUw8fAPKHCZzu4CyyEqx+rG9yuFwm7T+vos+z7VLqGttytZaDieHznwmb3696A6aPLvSAslWr7a
-        thmdyxIrHQUHf4/fW3Cr1tTqOrfips0KHORhG+5wXWbJd9QGypzhjjzPeg+uOfhgIbBdTkF3z9ckY
-        NUhze25dfC5TxiZv0q43BsedV3/l/zOQC9B/nOQb7gFNThJ/nZ0J8fzai0g8EC7sBDROC7wVMPZBJ
-        p/hgjtbQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:37510)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1qgn08-0004Jo-2O;
-        Thu, 14 Sep 2023 15:07:24 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qgn06-0004ol-Vs; Thu, 14 Sep 2023 15:07:22 +0100
-Date:   Thu, 14 Sep 2023 15:07:22 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-        x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        jianyong.wu@arm.com, justin.he@arm.com
-Subject: Re: [RFC PATCH v2 06/35] arm64: setup: Switch over to
- GENERIC_CPU_DEVICES using arch_register_cpu()
-Message-ID: <ZQMTmi7blj/4FpbI@shell.armlinux.org.uk>
-References: <20230913163823.7880-1-james.morse@arm.com>
- <20230913163823.7880-7-james.morse@arm.com>
- <20230914122715.000076be@Huawei.com>
+        with ESMTP id S239679AbjINOJy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 10:09:54 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3C4DF
+        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 07:09:50 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-d7830c5b20aso1470858276.0
+        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 07:09:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694700590; x=1695305390; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J9IGYP5VQdwee25nV5jOO+j3P/uh5L2lbtVFrt/kEhY=;
+        b=s0LMxQAlq9b2S0ajyPyx0nG5jUtvOPFlOp8NcK0rHZkq/rYDhOrI4dLAQhtKgKo0uM
+         rNf5p1V2JzOkF68J/bXvLmAsJlnDiXmxPnMXMTHOEUnyIBeeuV2eIH9oemLR0LkpgzXh
+         l3oYP3d6/Rii7MhBMCuPVbR5xzFsjjncL/LWsc/lBSityhRenRMJGOLNR5c0rTjK+h99
+         riaw/5LzOBvwcjhoydeMNVfg1TgPohCt7LLDlwM+9HsnzlxYh4hwkGhgT/HDeQgM0NYJ
+         jkLkygkY5qFmUJILhR1swIS4mNchu5a+6KNzQiuaa+5z35QXbSxr0pF8e2KkQ1J6a76j
+         kv6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694700590; x=1695305390;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J9IGYP5VQdwee25nV5jOO+j3P/uh5L2lbtVFrt/kEhY=;
+        b=CbGQ4/kNF69LFIx8n1+96q4a/yG683RtwCZbT7PwEnOyJE4RLyT/XvauiNTakwNRAx
+         Aw/tiWXNj+esSEfALLwQI+8fouByLGfVeDTMvfEeT+Gm/bJ8wPyDo290XQqUuMKJkFHR
+         27hWPfkEWX10m54cvJCqLnoko7obwfoEcC7iXLDNtJ47V1jBI+7/vuNoUUziVYOuxQ0n
+         rQjsElSDB7hRWJEmGzrfRx+Zf8tgkGuRuk5RFuTPt/ed6Mn5ZJowFA6XTM5/N8hGNRM4
+         CEVplrnfl4pKqxFEe6ZL/kVBQjr9b426vr8R6JRyvk4199cgK6qr+mjWfYe0HpQQtjo3
+         BlRQ==
+X-Gm-Message-State: AOJu0YzRg6vNORzlmfwTVqql40JCtZnuicr+tzS2bsNtRkUtMpxDuzLo
+        osocKBGLdGhOUjHx/ZiZwSWzKeyLRQ4ahJn4eQIzrnAPvavByvLcnTY=
+X-Google-Smtp-Source: AGHT+IEyLK5w2EfQvefblMOe1KUYzBa/9AVnRDeL+Ut6bf+JBgWjwLbElfH0D8BGNdeScufwUK1hsKQJF+zOJRBa99Y=
+X-Received: by 2002:a25:7714:0:b0:d07:b677:3349 with SMTP id
+ s20-20020a257714000000b00d07b6773349mr1369288ybc.25.1694700590048; Thu, 14
+ Sep 2023 07:09:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230914122715.000076be@Huawei.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+References: <20230913-bloomers-scorebook-fb45e0a2aa19@spud>
+ <CAPDyKFoENVp7+VjKkPpJWDecowxYD=QM6TSa6HjyzOZ=z7r81w@mail.gmail.com> <CAL_JsqLxxmdPTLhZ6MTfuAcM0V7pmfRLiK8L3AZhhQKcvy_PCw@mail.gmail.com>
+In-Reply-To: <CAL_JsqLxxmdPTLhZ6MTfuAcM0V7pmfRLiK8L3AZhhQKcvy_PCw@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 14 Sep 2023 16:09:14 +0200
+Message-ID: <CAPDyKFo-KXK37iRwXZ631MH6L5_RbaezGUz5GAn8cVt4OzOApQ@mail.gmail.com>
+Subject: Re: [GIT PULL 0/5] Missed starfive pmdomain changes for v6.6, now for v6.7
+To:     Rob Herring <robh@kernel.org>
+Cc:     Conor Dooley <conor@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>, arnd@arndb.de,
+        changhuang.liang@starfivetech.com, jiajie.ho@starfivetech.com,
+        linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        walker.chen@starfivetech.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 14, 2023 at 12:27:15PM +0100, Jonathan Cameron wrote:
-> On Wed, 13 Sep 2023 16:37:54 +0000
-> James Morse <james.morse@arm.com> wrote:
-> 
-> > To allow ACPI's _STA value to hide CPUs that are present, but not
-> > available to online right now due to VMM or firmware policy, the
-> > register_cpu() call needs to be made by the ACPI machinery when ACPI
-> > is in use. This allows it to hide CPUs that are unavailable from sysfs.
-> > 
-> > Switching to GENERIC_CPU_DEVICES is an intermediate step to allow all
-> > five ACPI architectures to be modified at once.
-> > 
-> > Switch over to GENERIC_CPU_DEVICES, and provide an arch_register_cpu()
-> > that populates the hotpluggable flag. arch_register_cpu() is also the
-> > interface the ACPI machinery expects.
-> > 
-> > The struct cpu in struct cpuinfo_arm64 is never used directly, remove
-> > it to use the one GENERIC_CPU_DEVICES provides.
-> > 
-> > This changes the CPUs visible in sysfs from possible to present, but
-> > on arm64 smp_prepare_cpus() ensures these are the same.
-> > 
-> > Signed-off-by: James Morse <james.morse@arm.com>
-> 
-> After this the earlier question about ordering of cpu_dev_init()
-> and node_dev_init() is relevant.   
-> 
-> Why won't node_dev_init() call
-> get_cpu_devce() which queries per_cpu(cpu_sys_devices)
-> and get NULL as we haven't yet filled that in?
-> 
-> Or does it do so but that doesn't matter as well create the
-> relevant links later?
+On Thu, 14 Sept 2023 at 15:57, Rob Herring <robh@kernel.org> wrote:
+>
+> On Wed, Sep 13, 2023 at 5:31=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.o=
+rg> wrote:
+> >
+> > On Wed, 13 Sept 2023 at 15:56, Conor Dooley <conor@kernel.org> wrote:
+> > >
+> > > From: Conor Dooley <conor.dooley@microchip.com>
+> > >
+> > > Hey Uffe,
+> > >
+> > > Here's those missed changes in patch form. I figured it might be a bi=
+t
+> > > easier this way given the name of the subsystem is in flux, doubly so=
+ if
+> > > you'd like to put the header change of Rob's on fixes.
+> >
+> > Not sure we really need to queue up patch 1 for fixes - or is it
+> > fixing a real problem for us?
+>
+> It's a dependency to remove some implicit includes, but I still have
+> more fixes for 6.6 so either is fine.
 
-node_dev_init() will walk through the nodes calling register_one_node()
-on each. This will trickle down to __register_one_node() which walks
-all present CPUs, calling register_cpu_under_node() on each.
+Okay, I keep it for v6.7 then. Just let me know if things change then
+I can move it to v6.6-rcs
 
-register_cpu_under_node() will call get_cpu_device(cpu) for each and
-will return NULL until the CPU is registered using register_cpu(),
-which will now happen _after_ node_dev_init().
-
-So, at this point, CPUs won't get registered, and initially one might
-think that's a problem.
-
-However, register_cpu() will itself call register_cpu_under_node(),
-where get_cpu_device() will return the now populated entry, and the
-sysfs links will be created.
-
-So, I think what you've spotted is a potential chunk of code that
-isn't necessary when using GENERIC_CPU_DEVICES after this change!
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Kind regards
+Uffe
