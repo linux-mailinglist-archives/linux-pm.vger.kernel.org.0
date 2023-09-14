@@ -2,147 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C07197A0338
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 14:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F8D7A0348
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 14:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238278AbjINMBf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 08:01:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
+        id S238315AbjINMDv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 14 Sep 2023 08:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237316AbjINMBf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 08:01:35 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5301BE8;
-        Thu, 14 Sep 2023 05:01:30 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4RmbQR00lDz68944;
-        Thu, 14 Sep 2023 19:56:46 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 14 Sep
- 2023 13:01:27 +0100
-Date:   Thu, 14 Sep 2023 13:01:26 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     James Morse <james.morse@arm.com>
-CC:     <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
-        <linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-        <x86@kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        <jianyong.wu@arm.com>, <justin.he@arm.com>,
-        <gregkh@linuxfoundation.org>
-Subject: Re: [RFC PATCH v2 11/35] arch_topology: Make
- register_cpu_capacity_sysctl() tolerant to late CPUs
-Message-ID: <20230914130126.000069db@Huawei.com>
-In-Reply-To: <20230913163823.7880-12-james.morse@arm.com>
-References: <20230913163823.7880-1-james.morse@arm.com>
-        <20230913163823.7880-12-james.morse@arm.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        with ESMTP id S236843AbjINMDu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 08:03:50 -0400
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F54FCF3;
+        Thu, 14 Sep 2023 05:03:46 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-58dfe2d5b9aso12660707b3.1;
+        Thu, 14 Sep 2023 05:03:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694693025; x=1695297825;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5GF1PWLezaV5cS/gfIcso5BSf2fmLOe110VZS1fv5p0=;
+        b=NIUXfVIumMR3bu6Ocn85CUDEajho32k9QgKuKsfPLg8JVuARxq6ZgIkQGIu/GLn2dn
+         i9ttVR0SpExv2AfrzM7xDxu9R7b9hDeergfwFm53ClpspEo+IMoyDDMXxYwwWBBNasy7
+         vC71AK4RVnsODMaXMSRFkEcDOwDgWzDtGWSBKO0MIaDu4yDYsl+iUB+I9zxSC/goowCj
+         +CONWZYSTxuwVrpsFjomVnxwi7bjFpfO8KRBO7Xj0uRiBWt2h62M61qE+dAw8KcHbxiy
+         Pwkhy+4uR9whTnLPxkJuUrngSyzcwm/xtUuXvtStM8La2F03Ad4LaOVIMOp1sbk5OCwG
+         nowA==
+X-Gm-Message-State: AOJu0Yxny1074aJsAAiMw3DC8v3kNA6Eg5P3dkhh4A+trajjVTt2naeV
+        EFjBm4bk0+KAxF6vrAo52QG1xmzBbqQzsA==
+X-Google-Smtp-Source: AGHT+IFofKJvvJUeW1AjzM2TvLH82KxkXdQFhqIOe+T+sULFQzmzIfWz7gDl+6UzVabOLUH73cmpHw==
+X-Received: by 2002:a81:a04b:0:b0:56f:fd0a:588d with SMTP id x72-20020a81a04b000000b0056ffd0a588dmr1167104ywg.8.1694693025633;
+        Thu, 14 Sep 2023 05:03:45 -0700 (PDT)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id p188-20020a0dcdc5000000b005777a2c356asm281378ywd.65.2023.09.14.05.03.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Sep 2023 05:03:44 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-d8165e3b209so2075333276.1;
+        Thu, 14 Sep 2023 05:03:44 -0700 (PDT)
+X-Received: by 2002:a25:ab47:0:b0:d80:ff8:d45f with SMTP id
+ u65-20020a25ab47000000b00d800ff8d45fmr1229473ybi.14.1694693024243; Thu, 14
+ Sep 2023 05:03:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
+References: <20230914111801.586648-1-ulf.hansson@linaro.org>
+In-Reply-To: <20230914111801.586648-1-ulf.hansson@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 14 Sep 2023 14:03:31 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWpYuk93eQn_pW=D3iBKFvv66LHBmPu3xdL0DfNRU+d_g@mail.gmail.com>
+Message-ID: <CAMuHMdWpYuk93eQn_pW=D3iBKFvv66LHBmPu3xdL0DfNRU+d_g@mail.gmail.com>
+Subject: Re: [PATCH 09/17] pmdomain: renesas: Move Kconfig options to the
+ pmdomain subsystem
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 13 Sep 2023 16:37:59 +0000
-James Morse <james.morse@arm.com> wrote:
+On Thu, Sep 14, 2023 at 1:18 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> The Kconfig options belongs closer to the corresponding implementations,
+> hence let's move them from the soc subsystem to the pmdomain subsystem.
+>
+> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+> Cc: Magnus Damm <magnus.damm@gmail.com>
+> Cc: <linux-renesas-soc@vger.kernel.org>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-> register_cpu_capacity_sysctl() adds a property to sysfs that describes
-> the CPUs capacity. This is done from a subsys_initcall() that assumes
-> all possible CPUs are registered.
-> 
-> With CPU hotplug, possible CPUs aren't registered until they become
-> present, (or for arm64 enabled). This leads to messages during boot:
-> | register_cpu_capacity_sysctl: too early to get CPU1 device!
-> and once these CPUs are added to the system, the file is missing.
-> 
-> Move this to a cpuhp callback, so that the file is created once
-> CPUs are brought online. This covers CPUs that are added late by
-> mechanisms like hotplug.
-> One observable difference is the file is now missing for offline CPUs.
-> 
-> Signed-off-by: James Morse <james.morse@arm.com>
-> ---
-> If the offline CPUs thing is a problem for the tools that consume
-> this value, we'd need to move cpu_capacity to be part of cpu.c's
-> common_cpu_attr_groups.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-I think we should do that anyway and then use an is_visible() if we want to
-change whether it is visible in offline cpus.
+Gr{oetje,eeting}s,
 
-Dynamic sysfs file creation is horrible - particularly when done
-from an totally different file from where the rest of the attributes
-are registered.  I'm curious what the history behind that is.
+                        Geert
 
-Whilst here, why is there a common_cpu_attr_groups which is
-identical to the hotpluggable_cpu_attr_groups in base/cpu.c?
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
-+CC GregKH
-Given changes in drivers/base/
-
-> ---
->  drivers/base/arch_topology.c | 38 ++++++++++++++++++++++++------------
->  1 file changed, 26 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> index b741b5ba82bd..9ccb7daee78e 100644
-> --- a/drivers/base/arch_topology.c
-> +++ b/drivers/base/arch_topology.c
-> @@ -220,20 +220,34 @@ static DECLARE_WORK(update_topology_flags_work, update_topology_flags_workfn);
->  
->  static DEVICE_ATTR_RO(cpu_capacity);
->  
-> +static int cpu_capacity_sysctl_add(unsigned int cpu)
-> +{
-> +	struct device *cpu_dev = get_cpu_device(cpu);
-> +
-> +	if (!cpu_dev)
-> +		return -ENOENT;
-> +
-> +	device_create_file(cpu_dev, &dev_attr_cpu_capacity);
-> +
-> +	return 0;
-> +}
-> +
-> +static int cpu_capacity_sysctl_remove(unsigned int cpu)
-> +{
-> +	struct device *cpu_dev = get_cpu_device(cpu);
-> +
-> +	if (!cpu_dev)
-> +		return -ENOENT;
-> +
-> +	device_remove_file(cpu_dev, &dev_attr_cpu_capacity);
-> +
-> +	return 0;
-> +}
-> +
->  static int register_cpu_capacity_sysctl(void)
->  {
-> -	int i;
-> -	struct device *cpu;
-> -
-> -	for_each_possible_cpu(i) {
-> -		cpu = get_cpu_device(i);
-> -		if (!cpu) {
-> -			pr_err("%s: too early to get CPU%d device!\n",
-> -			       __func__, i);
-> -			continue;
-> -		}
-> -		device_create_file(cpu, &dev_attr_cpu_capacity);
-> -	}
-> +	cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "topology/cpu-capacity",
-> +			  cpu_capacity_sysctl_add, cpu_capacity_sysctl_remove);
->  
->  	return 0;
->  }
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
