@@ -2,247 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 544367A050B
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 15:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D55307A0585
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Sep 2023 15:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238606AbjINNJs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 09:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
+        id S238934AbjINNZa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Sep 2023 09:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238471AbjINNJs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 09:09:48 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D901A5;
-        Thu, 14 Sep 2023 06:09:44 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Rmd0X0KkPz6HJdv;
-        Thu, 14 Sep 2023 21:07:56 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 14 Sep
- 2023 14:09:41 +0100
-Date:   Thu, 14 Sep 2023 14:09:40 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     James Morse <james.morse@arm.com>
-CC:     <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
-        <linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-        <x86@kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        <jianyong.wu@arm.com>, <justin.he@arm.com>
-Subject: Re: [RFC PATCH v2 14/35] ACPI: Only enumerate enabled (or
- functional) devices
-Message-ID: <20230914140940.00001417@Huawei.com>
-In-Reply-To: <20230914132732.00006908@Huawei.com>
-References: <20230913163823.7880-1-james.morse@arm.com>
-        <20230913163823.7880-15-james.morse@arm.com>
-        <20230914132732.00006908@Huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        with ESMTP id S235397AbjINNZa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 09:25:30 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EA01BEB
+        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 06:25:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694697926; x=1726233926;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uMETyqtbGd0+2yZ6vcmk8p1UWyK4xWyn8bFDmPW9z1k=;
+  b=IJD28pYjs+y7bYnTOrO8s2sptpXSf1RkUqScH5VJXuYAWE/IlT1ETm7L
+   waURxWd810NvL8/I4olv/8mr4i+HToxPZIRyFefnfYuWPs6cFr6uEc+ib
+   NVhRIOyoxZ+uAwaSrZ5OHTRZMDyiYqfSot54NC0dXgwJseks+5mce9m/e
+   4fOBWbMQTBdTfSdwqqKS//kuSOjqW1rHTHql0iE8egfIv2tW1urF7/72+
+   S83iAGIxj3PtF2YRLULUR5XGGQaLCpOPOaNkOcNGDMkeOMBUm+swO+6KF
+   EtQ0VmysKwdoPTeOIaMn559CGaq68UkBu6t5+ZUxw4OOQk3XC8U8PJU1N
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="377856370"
+X-IronPort-AV: E=Sophos;i="6.02,146,1688454000"; 
+   d="scan'208";a="377856370"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2023 06:25:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="779625823"
+X-IronPort-AV: E=Sophos;i="6.02,146,1688454000"; 
+   d="scan'208";a="779625823"
+Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 14 Sep 2023 06:25:03 -0700
+Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qgmL7-0001cf-2f;
+        Thu, 14 Sep 2023 13:25:01 +0000
+Date:   Thu, 14 Sep 2023 21:24:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiazi Li <jqqlijiazi@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     oe-kbuild-all@lists.linux.dev, Jiazi Li <jiazi.li@transsion.com>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] PM / devfreq: Show trans_stat info via debugfs
+Message-ID: <202309142101.hL5Buk6G-lkp@intel.com>
+References: <20230914102317.29302-1-jiazi.li@transsion.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230914102317.29302-1-jiazi.li@transsion.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 14 Sep 2023 13:27:32 +0100
-Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+Hi Jiazi,
 
-> On Wed, 13 Sep 2023 16:38:02 +0000
-> James Morse <james.morse@arm.com> wrote:
-> 
-> > Today the ACPI enumeration code 'visits' all devices that are present.
-> > 
-> > This is a problem for arm64, where CPUs are always present, but not
-> > always enabled. When a device-check occurs because the firmware-policy
-> > has changed and a CPU is now enabled, the following error occurs:
-> > | acpi ACPI0007:48: Enumeration failure
-> > 
-> > This is ultimately because acpi_dev_ready_for_enumeration() returns
-> > true for a device that is not enabled. The ACPI Processor driver
-> > will not register such CPUs as they are not 'decoding their resources'.
-> > 
-> > Change acpi_dev_ready_for_enumeration() to also check the enabled bit.
-> > ACPI allows a device to be functional instead of maintaining the
-> > present and enabled bit. Make this behaviour an explicit check with
-> > a reference to the spec, and then check the present and enabled bits.  
-> 
-> "and the" only applies if the functional route hasn't been followed
-> "if not this case check the present and enabled bits."
-> 
-> > This is needed to avoid enumerating present && functional devices that
-> > are not enabled.
-> > 
-> > Signed-off-by: James Morse <james.morse@arm.com>
-> > ---
-> > If this change causes problems on deployed hardware, I suggest an
-> > arch opt-in: ACPI_IGNORE_STA_ENABLED, that causes
-> > acpi_dev_ready_for_enumeration() to only check the present bit.
-> > ---
-> >  drivers/acpi/device_pm.c    |  2 +-
-> >  drivers/acpi/device_sysfs.c |  2 +-
-> >  drivers/acpi/internal.h     |  1 -
-> >  drivers/acpi/property.c     |  2 +-
-> >  drivers/acpi/scan.c         | 23 +++++++++++++----------
-> >  5 files changed, 16 insertions(+), 14 deletions(-)
-> > 
-> > diff --git a/drivers/acpi/device_pm.c b/drivers/acpi/device_pm.c
-> > index f007116a8427..76c38478a502 100644
-> > --- a/drivers/acpi/device_pm.c
-> > +++ b/drivers/acpi/device_pm.c
-> > @@ -313,7 +313,7 @@ int acpi_bus_init_power(struct acpi_device *device)
-> >  		return -EINVAL;
-> >  
-> >  	device->power.state = ACPI_STATE_UNKNOWN;
-> > -	if (!acpi_device_is_present(device)) {
-> > +	if (!acpi_dev_ready_for_enumeration(device)) {
-> >  		device->flags.initialized = false;
-> >  		return -ENXIO;
-> >  	}
-> > diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
-> > index b9bbf0746199..16e586d74aa2 100644
-> > --- a/drivers/acpi/device_sysfs.c
-> > +++ b/drivers/acpi/device_sysfs.c
-> > @@ -141,7 +141,7 @@ static int create_pnp_modalias(const struct acpi_device *acpi_dev, char *modalia
-> >  	struct acpi_hardware_id *id;
-> >  
-> >  	/* Avoid unnecessarily loading modules for non present devices. */
-> > -	if (!acpi_device_is_present(acpi_dev))
-> > +	if (!acpi_dev_ready_for_enumeration(acpi_dev))
-> >  		return 0;
-> >  
-> >  	/*
-> > diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
-> > index 866c7c4ed233..a1b45e345bcc 100644
-> > --- a/drivers/acpi/internal.h
-> > +++ b/drivers/acpi/internal.h
-> > @@ -107,7 +107,6 @@ int acpi_device_setup_files(struct acpi_device *dev);
-> >  void acpi_device_remove_files(struct acpi_device *dev);
-> >  void acpi_device_add_finalize(struct acpi_device *device);
-> >  void acpi_free_pnp_ids(struct acpi_device_pnp *pnp);
-> > -bool acpi_device_is_present(const struct acpi_device *adev);
-> >  bool acpi_device_is_battery(struct acpi_device *adev);
-> >  bool acpi_device_is_first_physical_node(struct acpi_device *adev,
-> >  					const struct device *dev);
-> > diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
-> > index 413e4fcadcaf..e03f00b98701 100644
-> > --- a/drivers/acpi/property.c
-> > +++ b/drivers/acpi/property.c
-> > @@ -1418,7 +1418,7 @@ static bool acpi_fwnode_device_is_available(const struct fwnode_handle *fwnode)
-> >  	if (!is_acpi_device_node(fwnode))
-> >  		return false;
-> >  
-> > -	return acpi_device_is_present(to_acpi_device_node(fwnode));
-> > +	return acpi_dev_ready_for_enumeration(to_acpi_device_node(fwnode));
-> >  }
-> >  
-> >  static const void *
-> > diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> > index 17ab875a7d4e..f898591ce05f 100644
-> > --- a/drivers/acpi/scan.c
-> > +++ b/drivers/acpi/scan.c
-> > @@ -304,7 +304,7 @@ static int acpi_scan_device_check(struct acpi_device *adev)
-> >  	int error;
-> >  
-> >  	acpi_bus_get_status(adev);
-> > -	if (acpi_device_is_present(adev)) {
-> > +	if (acpi_dev_ready_for_enumeration(adev)) {
-> >  		/*
-> >  		 * This function is only called for device objects for which
-> >  		 * matching scan handlers exist.  The only situation in which
-> > @@ -338,7 +338,7 @@ static int acpi_scan_bus_check(struct acpi_device *adev, void *not_used)
-> >  	int error;
-> >  
-> >  	acpi_bus_get_status(adev);
-> > -	if (!acpi_device_is_present(adev)) {
-> > +	if (!acpi_dev_ready_for_enumeration(adev)) {
-> >  		acpi_scan_device_not_enumerated(adev);
-> >  		return 0;
-> >  	}
-> > @@ -1908,11 +1908,6 @@ static bool acpi_device_should_be_hidden(acpi_handle handle)
-> >  	return true;
-> >  }
-> >  
-> > -bool acpi_device_is_present(const struct acpi_device *adev)
-> > -{
-> > -	return adev->status.present || adev->status.functional;
-> > -}
-> > -
-> >  static bool acpi_scan_handler_matching(struct acpi_scan_handler *handler,
-> >  				       const char *idstr,
-> >  				       const struct acpi_device_id **matchid)
-> > @@ -2375,16 +2370,24 @@ EXPORT_SYMBOL_GPL(acpi_dev_clear_dependencies);
-> >   * acpi_dev_ready_for_enumeration - Check if the ACPI device is ready for enumeration
-> >   * @device: Pointer to the &struct acpi_device to check
-> >   *
-> > - * Check if the device is present and has no unmet dependencies.
-> > + * Check if the device is functional or enabled and has no unmet dependencies.
-> >   *
-> > - * Return true if the device is ready for enumeratino. Otherwise, return false.
-> > + * Return true if the device is ready for enumeration. Otherwise, return false.
-> >   */
-> >  bool acpi_dev_ready_for_enumeration(const struct acpi_device *device)
-> >  {
-> >  	if (device->flags.honor_deps && device->dep_unmet)
-> >  		return false;
-> >  
-> > -	return acpi_device_is_present(device);
-> > +	/*
-> > +	 * ACPI 6.5's 6.3.7 "_STA (Device Status)" allows firmware to return
-> > +	 * (!present && functional) for certain types of devices that should be
-> > +	 * enumerated.  
-> 
-> I'd call out the fact that enumeration isn't same as "device driver should be loaded"
-> which is the thing that functional is supposed to indicate should not happen.
-> 
-> > +	 */
-> > +	if (!device->status.present && !device->status.enabled)  
-> 
-> In theory no need to check !enabled if !present
-> "If bit [0] is cleared, then bit 1 must also be cleared (in other words, a device that is not present cannot be enabled)."
-> We could report an ACPI bug if that's seen.  If that bug case is ignored this code can
-> become the simpler.
-> 
-> 	if (device->status.present)
-> 		return device->status_enabled;
-> 	else
-> 		return device->status.functional;
-> 
-> Or the following also valid here (as functional should be set for enabled present devices
-> unless they failed diagnostics).
-> 
-> 	if (dev->status.functional)
-> 		return true;
-> 	return device->status.present && device->status.enabled;
-> 
-> On assumption we want to enumerate dead devices for debug purposes...
-Actually ignore this.  Could have weird race with present, functional true,
-but enabled not quite set - despite the device being there and self
-tests having passed.
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on chanwoo/devfreq-testing]
+[also build test WARNING on linus/master v6.6-rc1 next-20230914]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiazi-Li/PM-devfreq-Show-trans_stat-info-via-debugfs/20230914-182515
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git devfreq-testing
+patch link:    https://lore.kernel.org/r/20230914102317.29302-1-jiazi.li%40transsion.com
+patch subject: [PATCH] PM / devfreq: Show trans_stat info via debugfs
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230914/202309142101.hL5Buk6G-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230914/202309142101.hL5Buk6G-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309142101.hL5Buk6G-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/devfreq/devfreq.c:1699: warning: Function parameter or member 'unused' not described in 'devfreq_trans_stat_show'
+>> drivers/devfreq/devfreq.c:1699: warning: Excess function parameter 'data' description in 'devfreq_trans_stat_show'
 
 
-> 
-> 
-> > +		return device->status.functional;
-> > +
-> > +	return device->status.present && device->status.enabled;  
-> 
-> 
-> >  }
-> >  EXPORT_SYMBOL_GPL(acpi_dev_ready_for_enumeration);
-> >    
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+vim +1699 drivers/devfreq/devfreq.c
 
+  1689	
+  1690	/**
+  1691	 * devfreq_trans_stat_show() - show trans stat info through debugfs
+  1692	 * @s:		seq_file instance to show trans_stat info of devfreq devices
+  1693	 * @data:	not used
+  1694	 *
+  1695	 * Show detailed information for some device which has more than PAGE_SIZE
+  1696	 * bytes of trans stat info.
+  1697	 */
+  1698	static int devfreq_trans_stat_show(struct seq_file *s, void *unused)
+> 1699	{
+  1700		struct devfreq *df = s->private;
+  1701		unsigned int max_state;
+  1702		int i, j;
+  1703	
+  1704		if (!df->profile)
+  1705			return -EINVAL;
+  1706		max_state = df->max_state;
+  1707	
+  1708		if (max_state == 0) {
+  1709			seq_puts(s, "Not Supported.\n");
+  1710			return 0;
+  1711		}
+  1712	
+  1713		mutex_lock(&df->lock);
+  1714		if (!df->stop_polling &&
+  1715				devfreq_update_status(df, df->previous_freq)) {
+  1716			mutex_unlock(&df->lock);
+  1717			return 0;
+  1718		}
+  1719		mutex_unlock(&df->lock);
+  1720	
+  1721		seq_puts(s, "     From  :   To\n");
+  1722		seq_puts(s, "           :");
+  1723		for (i = 0; i < max_state; i++)
+  1724			seq_printf(s, "%10lu", df->freq_table[i]);
+  1725	
+  1726		seq_puts(s, "   time(ms)\n");
+  1727	
+  1728		for (i = 0; i < max_state; i++) {
+  1729			if (df->freq_table[i] == df->previous_freq)
+  1730				seq_puts(s, "*");
+  1731			else
+  1732				seq_puts(s, " ");
+  1733	
+  1734			seq_printf(s, "%10lu:", df->freq_table[i]);
+  1735	
+  1736			for (j = 0; j < max_state; j++)
+  1737				seq_printf(s, "%10u",
+  1738					df->stats.trans_table[(i * max_state) + j]);
+  1739	
+  1740			seq_printf(s, "%10llu\n", (u64)
+  1741				jiffies64_to_msecs(df->stats.time_in_state[i]));
+  1742		}
+  1743	
+  1744		seq_printf(s, "Total transition : %u\n", df->stats.total_trans);
+  1745	
+  1746		return 0;
+  1747	}
+  1748	DEFINE_SHOW_ATTRIBUTE(devfreq_trans_stat);
+  1749	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
