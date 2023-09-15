@@ -2,165 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BED797A1EFA
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 14:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C1C27A1F08
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 14:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234979AbjIOMoE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 08:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60128 "EHLO
+        id S234970AbjIOMpZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 08:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234983AbjIOMoB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 08:44:01 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B3E1AE
-        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 05:43:55 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-502a4f33440so3395014e87.1
-        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 05:43:55 -0700 (PDT)
+        with ESMTP id S234981AbjIOMpY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 08:45:24 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BAC195
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 05:45:18 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-404773f2501so13155205e9.0
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 05:45:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694781834; x=1695386634; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1694781917; x=1695386717; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:references:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=AFljp9E8gsOJ/1p6IiKTImrdTZUSwDHU/eK5zLOImj4=;
-        b=UHgBhviFEdgNddmEN7dnJIThVlvYYB1hOl50g5DOZzSSRG/wBcbuthyOb9/ZMTEeUu
-         b7V9a5SVaBAAuxYYnqRhTcYJSgdJdxl3RIyIGvvwF8iDPxkggdAh+4E+146lDMsjM0wP
-         DgvwVCg4ZxNaG7VSIsb03V/EYg1iENYe1WlODKg2K2xD1xSh7sDCV+RTYy05531eutiP
-         r5/FK9oMqEm1jAgoGFjGCXfWW8iRCJ3QAxJQf+Y3OjugGb9CRy/MHg7okhPbhFm8f8qC
-         K1NtejFfxlAygt6aUibMj1hLnt01AGlLquAoeuL7iUCijD9ZQqTUTBQQtvVyQIeUQ3b+
-         9k9w==
+        bh=H+2OXea/ftSG4Gd1agwTiwOgex+CgxldQL9L1lT6oBA=;
+        b=zzLPSsLwDzULOsbEHmeMIVzGojEyQCrSztPdfatZ9XPJvLPnKsC6+C84IuQXkl+hpI
+         SYH4Kr1vNYmT1OotX5dPw6kGpY/x0fjgai/OZEvTeqv91wNsY1QK3gJT30K1sBjvVgOp
+         ZQmvIRGSu1IDFDvNvggpXzeQu8bTlMkmcX3RQFKMHb9FcxIBaOIKCfqbFk8l4QGyD5vE
+         F3z/qV56yGIplskbdAb7LZ3kJ9GI9bau4iyKH4OJQV3zOZ3MCBsb5ZqEcfLG/qPT5MTW
+         cyxuD23qBj2k6d33FffsMZHOsIjvm22SIyJPHz615rPlBHFLJgHvAeEpUCyj6SmPDruM
+         P/Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694781834; x=1695386634;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1694781917; x=1695386717;
+        h=content-transfer-encoding:in-reply-to:references:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AFljp9E8gsOJ/1p6IiKTImrdTZUSwDHU/eK5zLOImj4=;
-        b=Da//q1DR+ZXUeIi7J7E6ziqtGxV5Ut5HR1OYzmC26y+PWOejb/rjX3SUFTLIlh5ynH
-         z8fD+DibUWwQrnGpyLFNtu+vfsXrGgHKGVM4Ef5ip3aEIgB3gEcWE2Wz6APhl6NKbxcE
-         8w5FNkEswakj8yThFg1xMG9Ures/MJgV1qcNAvj+O8r6ufB8ZSxUIZ82C7JCZJLbZGWx
-         i5ud+y8BLGEpNsaUFsTMR+YbBtQ1amqOIYyievVFKmZZtTRwyzqjLN/A/XQ8Ob8Ua/vT
-         qLaLIJgg84tbYATxZuEHA80dqqXqNe/cRP6QVkqo8IfZ0gkD4J93RGDrF+YmUapMsLDc
-         SSrg==
-X-Gm-Message-State: AOJu0YxoMsLpEC+pPGPMVhVmiSSX7By982Fxk4XmN3b1gOl6KxBxGMou
-        PqfnmQDZM1LBx/E+zvtf35KlbA==
-X-Google-Smtp-Source: AGHT+IGwlUdYQGRipw08GY0WtxSkYDl6R15YdguhB/awRKjc+aS5WFLY0Mno/es7gzGOxAnPhLbxmw==
-X-Received: by 2002:a05:6512:eaa:b0:500:99e8:573e with SMTP id bi42-20020a0565120eaa00b0050099e8573emr1618758lfb.7.1694781833829;
-        Fri, 15 Sep 2023 05:43:53 -0700 (PDT)
-Received: from ?IPV6:2a00:f41:cbe:bc7d:62a6:5d09:5ba7:be5b? ([2a00:f41:cbe:bc7d:62a6:5d09:5ba7:be5b])
-        by smtp.gmail.com with ESMTPSA id o8-20020a056512050800b004fb757bd429sm633300lfb.96.2023.09.15.05.43.52
+        bh=H+2OXea/ftSG4Gd1agwTiwOgex+CgxldQL9L1lT6oBA=;
+        b=tt+mFW7Qnng3f/uPbq/p/EF/7DBOz/naFwCpCfT6r8RW0MTMHXWkfCAfykCBO9SMBp
+         Kf/i9onFcuRUZXK62mweiZ7HexO5kHyAUDnpCDBInARFqTrQNgihZu4j5k4gXg4EGdrT
+         e9lE6BVWxEnKCOTW3nmrYyodUevvaryYpySCzCp+S7RJ0Xds53R4Pk1jWlw4LcCuKf+X
+         nCTakY07jhB5YfVTntiz0+e3x8KY+u36zsGbXjmHiYQ+RUb3bun6AipMJbeQgTdqd10f
+         wlPBaVUfc7tK7VYgpM5cdMCahPQm1Rx+hbh/IXnEZIo+LEFB2faztjoMXOCv+o4WM39c
+         JCOw==
+X-Gm-Message-State: AOJu0YwK68S19j1csCb2Lxubr+g9rvWE0sRuaVf42CLr48T4JrfZy/aA
+        fHv4d4us1zFWFMz0kuqzFkVkgg==
+X-Google-Smtp-Source: AGHT+IEoXgSbsXVbsxNSLj/Bhx0V4eqZsaCxLqI84tEVnJ4LzNaQIMK9DwnYzzQaRkCCMm5dO+YlvA==
+X-Received: by 2002:a5d:4152:0:b0:31c:7ada:5e05 with SMTP id c18-20020a5d4152000000b0031c7ada5e05mr1395517wrq.51.1694781917052;
+        Fri, 15 Sep 2023 05:45:17 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.214.188])
+        by smtp.gmail.com with ESMTPSA id z6-20020a05600c220600b00402dbe0bbdcsm7369991wml.28.2023.09.15.05.45.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Sep 2023 05:43:53 -0700 (PDT)
-Message-ID: <dc209ac7-7a06-449b-a198-ce6fb3ba7ff7@linaro.org>
-Date:   Fri, 15 Sep 2023 14:43:51 +0200
+        Fri, 15 Sep 2023 05:45:16 -0700 (PDT)
+Message-ID: <f5aee51d-0345-1294-a85b-ea96ed937685@linaro.org>
+Date:   Fri, 15 Sep 2023 14:45:14 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] interconnect: qcom: Add SM4450 interconnect
- provider driver
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH V2 1/4] dt-bindings: thermal: qcom-tsens: Add ipq5018
+ compatible
 Content-Language: en-US
-To:     Tengfei Fan <quic_tengfan@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_tsoni@quicinc.com, quic_shashim@quicinc.com,
-        quic_kaushalk@quicinc.com, quic_tdas@quicinc.com,
-        quic_tingweiz@quicinc.com, quic_aiquny@quicinc.com,
-        kernel@quicinc.com
-References: <20230915020129.19611-1-quic_tengfan@quicinc.com>
- <20230915020129.19611-3-quic_tengfan@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <20230915020129.19611-3-quic_tengfan@quicinc.com>
+        linux-pm@vger.kernel.org, dmitry.baryshkov@linaro.org
+References: <20230915121504.806672-1-quic_srichara@quicinc.com>
+ <20230915121504.806672-2-quic_srichara@quicinc.com>
+ <03b0cafa-49c7-8838-b116-927c9649cbd3@linaro.org>
+In-Reply-To: <03b0cafa-49c7-8838-b116-927c9649cbd3@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15.09.2023 04:01, Tengfei Fan wrote:
-> Add driver for the Qualcomm interconnect buses found in SM4450 based
-> platforms. The topology consists of several NoCs that are controlled
-> by a remote processor that collects the aggregated bandwidth for each
-> master-slave pairs.
+On 15/09/2023 14:43, Krzysztof Kozlowski wrote:
+> On 15/09/2023 14:15, Sricharan Ramabadhran wrote:
+>> IPQ5018 has tsens v1.0 block with 4 sensors and 1 interrupt.
+>>
+>> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+>> ---
+>>  [v2] Sorted the compatible and removed example
+>>
 > 
-> Signed-off-by: Tengfei Fan <quic_tengfan@quicinc.com>
-> ---
-[...]
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> +static struct qcom_icc_bcm bcm_acv_disp = {
-> +	.name = "ACV",
-> +	.num_nodes = 1,
-> +	.nodes = { &ebi_disp },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_mc0_disp = {
-> +	.name = "MC0",
-> +	.num_nodes = 1,
-> +	.nodes = { &ebi_disp },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_mm0_disp = {
-> +	.name = "MM0",
-> +	.num_nodes = 1,
-> +	.nodes = { &qns_mem_noc_hf_disp },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_sh0_disp = {
-> +	.name = "SH0",
-> +	.num_nodes = 1,
-> +	.nodes = { &qns_llcc_disp },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_sh1_disp = {
-> +	.name = "SH1",
-> +	.num_nodes = 1,
-> +	.nodes = { &qnm_pcie_disp },
-> +};
-"""
-v1 -> v2:
-  - remove DISP related paths
-"""
+No, unreviewed. Your driver says it is not compatible with
+qcom,tsens-v1. This does not look right :/
 
-you sure?
+Best regards,
+Krzysztof
 
-+ I still see _disp nodes..
-
-Konrad
