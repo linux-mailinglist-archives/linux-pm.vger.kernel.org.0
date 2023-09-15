@@ -2,55 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6D97A2853
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 22:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DFF47A289E
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 22:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235229AbjIOUoD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 16:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37388 "EHLO
+        id S237418AbjIOUt4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 16:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233313AbjIOUne (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 16:43:34 -0400
+        with ESMTP id S237765AbjIOUtr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 16:49:47 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EF418D;
-        Fri, 15 Sep 2023 13:43:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1132D48;
+        Fri, 15 Sep 2023 13:49:18 -0700 (PDT)
 Received: from mercury (unknown [185.254.75.45])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B6DA766072BE;
-        Fri, 15 Sep 2023 21:43:27 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 324126600B9D;
+        Fri, 15 Sep 2023 21:49:17 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1694810607;
-        bh=kDX5Yws24juaWMmgBhmpCp9TZ/myYfWBHnXaef5fOzw=;
+        s=mail; t=1694810957;
+        bh=vLgY8rCiM5Qt+aHqvAkM8PPmsp9niBHALfFONENovW0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BcQZmvB+w08zKhoo4FheZE8owlX0OKnJvSQ0LbZemQ16N8hSod/HTg5oNF4aCPm4L
-         buZB4IaIefT5RKPyEuUxX0TtUx5ul7l8zHmAvl1pdQl55g4nUN/dBjqEs09FbjiweM
-         elDm88eSf7ksoxdDV9qlS7q84AV9w9mRvH3Ldxw4Ozka+eeX5lnLN8h29/X9K5l8Ri
-         uPmaLwLj6Gjx3n8lelEmnUXNekpZlN0L55eoX8yzRzs9G2l0WRoSYLRzE88lN3SWqb
-         sbA61++Msiocxf+orUrE6MwGIa/WsrtO7K4mAVsDsld5AEP5LtSO+WPmdfYJipM6CD
-         dGyS7fS5kXysg==
+        b=L1wGH56Z0WS8OhEY8S0k8nySdlcbENukcNliDWh8ttwcqWmEaVn/UZpzQrt9TOFMB
+         xgXzt2cnBNSf3pt2Ud+3nl7eGK0RUka5UroNLHx5ph8Bxw4fJM6DugVx+pcLV5Ktdv
+         bdwqrBpLd0UmMTGWvmcW+yo25U+uc5Vwgtftgba5bRN3eyHDkLNyZ/kXzIXobP6cvZ
+         2GtZTCDq3UfWsBVgakQbxy+hGirAjBuguuqxjtEfbQShqZ8RCKRMTKYPwPEGp6cbfW
+         44P7hs8Yyns3MUP70SCqK/rPF/53qeGKjowW60z2g35szc+VRlCtVNLVkrmm7+vPsg
+         tGqRYPkHOxsZA==
 Received: by mercury (Postfix, from userid 1000)
-        id 16726106044B; Fri, 15 Sep 2023 22:43:25 +0200 (CEST)
-Date:   Fri, 15 Sep 2023 22:43:25 +0200
+        id 5B719106044B; Fri, 15 Sep 2023 22:49:14 +0200 (CEST)
+Date:   Fri, 15 Sep 2023 22:49:14 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Grant B Adams <nemith592@gmail.com>
-Cc:     linux-omap@vger.kernel.org, tony@atomide.com,
-        Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] power: supply: Fix tps65217-charger vs vbus irq
- conflict
-Message-ID: <20230915204325.mokj2nmdwjdekxfo@mercury.elektranox.org>
-References: <20230823085430.6610-1-nemith592@gmail.com>
- <20230823085430.6610-2-nemith592@gmail.com>
+To:     Varshini Rajendran <varshini.rajendran@microchip.com>
+Cc:     claudiu.beznea@microchip.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 07/50] dt-bindings: power: reset: atmel,sama5d2-shdwc:
+ add sam9x7
+Message-ID: <20230915204914.5ydicuwkiwmsuop4@mercury.elektranox.org>
+References: <20230728102407.265617-1-varshini.rajendran@microchip.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="flopxljazsb4eo7e"
+        protocol="application/pgp-signature"; boundary="4rmbok64xucswjqi"
 Content-Disposition: inline
-In-Reply-To: <20230823085430.6610-2-nemith592@gmail.com>
+In-Reply-To: <20230728102407.265617-1-varshini.rajendran@microchip.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,67 +60,66 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---flopxljazsb4eo7e
+--4rmbok64xucswjqi
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Wed, Aug 23, 2023 at 10:54:29AM +0200, Grant B Adams wrote:
-> Enabling the tps65217-charger driver/module causes an interrupt conflict
-> with the vbus driver resulting in a probe failure.
-> The conflict is resolved by changing both driver's threaded interrupt
-> request function from IRQF_ONESHOT to IRQF_SHARED.
+On Fri, Jul 28, 2023 at 03:54:07PM +0530, Varshini Rajendran wrote:
+> Add shutdown controller DT bindings.
 >=20
-> Signed-off-by: Grant B Adams <nemith592@gmail.com>
+> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 > ---
 
-Your commit message does not explain why IRQF_ONESHOT is dropped;
-IRQF_ONESHOT and IRQF_SHARED are not mutually exclusive.
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
 -- Sebastian
 
->  drivers/power/supply/tps65217_charger.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml   | 3 +++
+>  1 file changed, 3 insertions(+)
 >=20
-> diff --git a/drivers/power/supply/tps65217_charger.c b/drivers/power/supp=
-ly/tps65217_charger.c
-> index a4bc9f2a10bc..6f68becdbfd0 100644
-> --- a/drivers/power/supply/tps65217_charger.c
-> +++ b/drivers/power/supply/tps65217_charger.c
-> @@ -238,7 +238,7 @@ static int tps65217_charger_probe(struct platform_dev=
-ice *pdev)
->  	for (i =3D 0; i < NUM_CHARGER_IRQS; i++) {
->  		ret =3D devm_request_threaded_irq(&pdev->dev, irq[i], NULL,
->  						tps65217_charger_irq,
-> -						IRQF_ONESHOT, "tps65217-charger",
-> +						IRQF_SHARED, "tps65217-charger",
->  						charger);
->  		if (ret) {
->  			dev_err(charger->dev,
+> diff --git a/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-=
+shdwc.yaml b/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-sh=
+dwc.yaml
+> index 8c58e12cdb60..0735ceb7c103 100644
+> --- a/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.y=
+aml
+> +++ b/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.y=
+aml
+> @@ -22,6 +22,9 @@ properties:
+>        - enum:
+>            - atmel,sama5d2-shdwc
+>            - microchip,sam9x60-shdwc
+> +      - items:
+> +          - const: microchip,sam9x7-shdwc
+> +          - const: microchip,sam9x60-shdwc
+> =20
+>    reg:
+>      maxItems: 1
 > --=20
-> 2.34.1
+> 2.25.1
 >=20
 
---flopxljazsb4eo7e
+--4rmbok64xucswjqi
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmUEweIACgkQ2O7X88g7
-+pqBFg//TKpyJrIWxj3CQDqbQlO4Ws8EmT0gAZP8DVzjXF7KZn+RDJ1tCu4QarWl
-iOJR72KDBckp2eMwJ3sFdm9MVclv+Z6SvQ9mCv21pCcsZR5I4lClaVHK+FxO23en
-vapSg22m8mMtPV7EJsr5UXj4uvRGvBtvZy6VyFc+Afk+u/EmHj8ZUxX27w2oEL/f
-xyFBYrXDGkf7hEdzaY9nU9dHjD9qQef9sDE8RlC6GAi4iahW8SysrGhEtPB8yYUR
-/HYVAg5S8FEmB+tt5arQO2lkn7Fxz1RKVZlPUaRxx/3HQ2vTqmWBvpG5JkNwezVS
-hcD1L0jvBByGxLI/oLNxLW6t56QM6Pz4YkxWdqLJbM+vQiTFaULcKpqxNiNhPBzX
-UagvMg8uvGLxZ0rUMg3+EQ1JrkKUAJikZaeoYxUealnAa53i6ozKKG5Y92PeLYyK
-yhRtX8FgxKeOT5GyBAn8xT6EUFexigdZ+CZYmsB7B/aWz3S9+rXPNJ5Fxo29g+Bh
-H36olrsqE8hqkD1uWrr0dqoIQ0MoWvZxczeiIuMQqtn8yDe24ntxYSAyq62EwPp8
-fEVjJwtCsJfqQOiACXtbipOjg0BFY4cwHHJOGy2f9mzL9pJAOTxJq7vWCcZJZaSl
-EoPuk2/NG2C6UPB2paj19j/WJAWlgWeKZX1KDP/B/FRCqTMnAZg=
-=fRtN
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmUEw0oACgkQ2O7X88g7
++pqMaQ//fRpW3IAmANjZp1vqMTaLUVucVuRl9o6bRdbKxWdE52Vb11f44Q27IkdK
+eBECNresd47jrMxzMc5I2GrUmQP31aAfr1gtAWO2tmIoctf1gEvoFWOPnLmrBN7U
+tlnHfAGkgKd9fZocN5J9r3QBGrb+y9wWDnjgdxMcU6pg0UnVZS6cbx765W1jjbTi
+exjLlh4k7BvIaqIrQg19gbbofVbsn0PeFCW7nFXiO5Fqux8Z2xxHTNTD9x+Jjnzw
+ISOHEy/2F1PvOk5Ih/Zr3mRr7FQBHAVTqj9BLriMTUc0xiJeycClc5olw5+hn7Aa
+MD/F2orU9U1lEUdAJrXfPBw3kxqjjUupDfP1+/866W0+/5JrnTCDNN15HSaCmfHV
+wjsSOtf3o0UTdjQbWlycomzGsh95DVUPfhy1J81dOlgPbX2newx8PeyXqPuDfB5/
+aVlllGqUi71J/FJnYNm3lkbvg2o5sz67fmvimj3T8vYQ27+rCiG+t6RTKyROrJx0
+9FrmxpybxpWkY4MIfuqsg+DAoZXn+ECa+t3+ScwClG0HY+61dk08XRA+ySe0mmk2
+XxV8ZI6VWlsratzwlcHJJQFNEgkEbWdh3gYTAx5EspcXd/EP7hApWTGeEavL1OIV
+vYqSNJAvPyV7+jBfW0xim6YsUjp+qM0XtbkpOxL7G9ePlImSb34=
+=deto
 -----END PGP SIGNATURE-----
 
---flopxljazsb4eo7e--
+--4rmbok64xucswjqi--
