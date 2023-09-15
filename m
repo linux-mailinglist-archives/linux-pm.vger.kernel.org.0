@@ -2,64 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D897A1A5F
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 11:22:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4D47A1A68
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 11:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232830AbjIOJWE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 05:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38216 "EHLO
+        id S233633AbjIOJW2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 05:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233706AbjIOJVy (ORCPT
+        with ESMTP id S233529AbjIOJVy (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 05:21:54 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB572729
-        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 02:21:32 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b9c907bc68so31614221fa.2
-        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 02:21:32 -0700 (PDT)
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2B52735
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 02:21:33 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-5029ace4a28so3618110e87.1
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 02:21:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694769690; x=1695374490; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1694769691; x=1695374491; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0gMxgrLH8hAqI78TYEwxUv2pVCfDSw58e/K0s6X8qpQ=;
-        b=m9EHb03qwFkHFRxKPPTBlJC1GPblNh5KWKwqCWZWhUQJbXARoxmIhEC+XHs0gbdMUM
-         FjVH9pV5FO4nm/eINjHGt3vMwAry3dsA8RpFnNLRs7PfedJ+ltmoqbEuWYi0T+bPboWu
-         UCNqQF52/gzPm0KnNfN7JiH4icKqEOOs93xU+pSr7UhAb7LqcTuCA+Q61z69BCFv8lrn
-         7Q5HKTSZAyAaRszXMjUolVIZzPMYY3IvoDJdOVwI5yIslSrTmdE053TGemztbzKyhdZG
-         O+lBcIw+OuoO8mk/adF1vdjt631M9Xg31xwFl5u/4Y4r26uDrb5lt+ggvheP0afYie1m
-         MAFw==
+        bh=rSDTY9PIBZaWnuB156Z6IV6vLXbcGWaKRrqSpGIqxY0=;
+        b=hyTxnyJK24Ib1GIRwQExbeJx+HPV2gvn/s1DV5Us+0a4VnsSwC/Peqm6bKqQFpp5Jm
+         uDDFPAs215WbAdA1BkujQqA5Mj1+ehg/gbpkGrXp5/22NB5TlzygAZco5VbK4fHHG3Ce
+         pObLWXqAI+4EQp5dscMzEfe1B5HMDX980kkTadmsX46Juj3G6c7K2sOGsEyIrqA6V+RG
+         to4HzSf7Mt2i3/tMbWu1lLR1XbDhP3ReMYLnsqyaYHXV5zOq0j5GO6EYCxH2FrGxqJJK
+         XdNh6M5BnwVi2b6zia5KFvsk1lca4w2eny12DCObBBDPiHH/8ncT4W5v1x/Uwom41pNQ
+         idZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694769690; x=1695374490;
+        d=1e100.net; s=20230601; t=1694769691; x=1695374491;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0gMxgrLH8hAqI78TYEwxUv2pVCfDSw58e/K0s6X8qpQ=;
-        b=C2JryhxTfhbENrpOmh8D1G1VbUdaxzzbcn6CnlPveQIJDMoEsEiXAlX51cZhJrj1YU
-         sD/oxlDNmcjYhx4cAhBPrOI4bk/VjbVtyrdrafdX8ZsREcgoxNnWx2PRrIJQ8fps6auo
-         SVuI8VTvH+KSZaDMLDTzqTL6RsXb0sJ4U0qCmElEEWphYwt96NXaNvU2nrEf7zkJAQcP
-         zLLsNLpLvIHVhpvQHvvQXQRQiammxA5M3YACv+lWYoVFTeirii7ND9aqo4yWO6FndUaZ
-         IBCaUOWxtFdDxB6MwtvCLleq5GqoZN/H14oUCq4vJP28Lupwi0z5oykUMGZFj+sxGX2n
-         HxIg==
-X-Gm-Message-State: AOJu0Yy5xePdFLr3vxN9c92p7vuVAsoO2s4zUDRbh8MNAbAFnhJzliy0
-        qfsQFiD3cVXUX0zDty/Ep3TLtKExSGZlFJF6egIcHg==
-X-Google-Smtp-Source: AGHT+IEW7ELR0BC0aaaD7PdqOlQ9YNfd9KQIzAAoLD8DzPpKbNrDvmiROuNK6D31n0onkDPudHUjUg==
-X-Received: by 2002:a2e:9409:0:b0:2bd:1bca:ebee with SMTP id i9-20020a2e9409000000b002bd1bcaebeemr874287ljh.19.1694769690056;
-        Fri, 15 Sep 2023 02:21:30 -0700 (PDT)
+        bh=rSDTY9PIBZaWnuB156Z6IV6vLXbcGWaKRrqSpGIqxY0=;
+        b=IjMfb5f1jSqcGuy8R+RZdPjobwljLp6aR9HRWRToSZIFWkKfxPL9ZVw1MuawiZAdhi
+         nwsT2iL90l8T+8qAnnxak/gIpdB82NhrCXLQ5tA2ydoGggF+8U6trljng4woYOoKM0b0
+         a5My6pnG4g+JZtBN+f0x1DQOIkg+R7ZZyAvqf1qkLpwia601iDqHeBJOSzdydSv4/dsI
+         tjhAEmXlPaJ3pmH6TvhzMB8pSpBVRej1rx8UIjZDKzvJOFo0t/tsWQlJhMDuPJs+GrMg
+         n6cQPCZZRZYACfJi/+WuesX2Ab6bDVeCRFfoqvd8tL81tzX0GVLpqZKI91p/IePvB5s0
+         j1Cw==
+X-Gm-Message-State: AOJu0YylyO6ZZ0G8laQJie3phE9bx1jBeNxopjyKEWjQ/E9K0gSy6Zjx
+        2eABd4OPW233lpKdLHij/UcBeQ==
+X-Google-Smtp-Source: AGHT+IE8ou11tW8HL58ljba8dxgaBkkR87BS3tgnZFYHGFtichyS2uz30CZsvntAaczYxD65pJiO/g==
+X-Received: by 2002:a05:6512:39cc:b0:4fd:d254:edc6 with SMTP id k12-20020a05651239cc00b004fdd254edc6mr1290975lfu.26.1694769691466;
+        Fri, 15 Sep 2023 02:21:31 -0700 (PDT)
 Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id p8-20020a2e7408000000b002b9ec22d9fasm639376ljc.29.2023.09.15.02.21.29
+        by smtp.gmail.com with ESMTPSA id p8-20020a2e7408000000b002b9ec22d9fasm639376ljc.29.2023.09.15.02.21.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Sep 2023 02:21:29 -0700 (PDT)
+        Fri, 15 Sep 2023 02:21:30 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
 Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH v2 15/17] pmdomain: tegra: Move Kconfig option to the pmdomain subsystem
-Date:   Fri, 15 Sep 2023 11:20:01 +0200
-Message-Id: <20230915092003.658361-16-ulf.hansson@linaro.org>
+        Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Tony Lindgren <tony@atomide.com>
+Subject: [PATCH v2 16/17] pmdomain: ti: Move and add Kconfig options to the pmdomain subsystem
+Date:   Fri, 15 Sep 2023 11:20:02 +0200
+Message-Id: <20230915092003.658361-17-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230915092003.658361-1-ulf.hansson@linaro.org>
 References: <20230915092003.658361-1-ulf.hansson@linaro.org>
@@ -67,67 +67,105 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The Kconfig option belongs closer to the corresponding implementation,
-hence let's move it from the soc subsystem to the pmdomain subsystem.
+The TI_SCI_PM_DOMAINS Kconfig option belongs closer to its corresponding
+implementation, hence let's move it from the soc subsystem to the pmdomain
+subsystem.
 
-Cc: Thierry Reding <thierry.reding@gmail.com>
-Cc: Jonathan Hunter <jonathanh@nvidia.com>
-Cc: Mikko Perttunen <mperttunen@nvidia.com>
-Cc: <linux-tegra@vger.kernel.org>
+While at it, let's also add a Kconfig option the omap_prm driver, rather
+than using ARCH_OMAP2PLUS directly.
+
+Cc: Nishanth Menon <nm@ti.com>
+Cc: Santosh Shilimkar <ssantosh@kernel.org>
+Cc: Tero Kristo <kristo@kernel.org>
+Cc: Tony Lindgren <tony@atomide.com>
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- drivers/pmdomain/Kconfig       | 1 +
- drivers/pmdomain/tegra/Kconfig | 6 ++++++
- drivers/soc/tegra/Kconfig      | 5 -----
- 3 files changed, 7 insertions(+), 5 deletions(-)
- create mode 100644 drivers/pmdomain/tegra/Kconfig
+ drivers/pmdomain/Kconfig     |  1 +
+ drivers/pmdomain/ti/Kconfig  | 22 ++++++++++++++++++++++
+ drivers/pmdomain/ti/Makefile |  2 +-
+ drivers/soc/ti/Kconfig       | 12 ------------
+ 4 files changed, 24 insertions(+), 13 deletions(-)
+ create mode 100644 drivers/pmdomain/ti/Kconfig
 
 diff --git a/drivers/pmdomain/Kconfig b/drivers/pmdomain/Kconfig
-index 10c3bc2e2444..98e04589bef4 100644
+index 98e04589bef4..33bfec9c4f7a 100644
 --- a/drivers/pmdomain/Kconfig
 +++ b/drivers/pmdomain/Kconfig
-@@ -14,5 +14,6 @@ source "drivers/pmdomain/samsung/Kconfig"
- source "drivers/pmdomain/st/Kconfig"
+@@ -15,5 +15,6 @@ source "drivers/pmdomain/st/Kconfig"
  source "drivers/pmdomain/starfive/Kconfig"
  source "drivers/pmdomain/sunxi/Kconfig"
-+source "drivers/pmdomain/tegra/Kconfig"
+ source "drivers/pmdomain/tegra/Kconfig"
++source "drivers/pmdomain/ti/Kconfig"
  
  endmenu
-diff --git a/drivers/pmdomain/tegra/Kconfig b/drivers/pmdomain/tegra/Kconfig
+diff --git a/drivers/pmdomain/ti/Kconfig b/drivers/pmdomain/ti/Kconfig
 new file mode 100644
-index 000000000000..13ade6d84696
+index 000000000000..67c608bf7ed0
 --- /dev/null
-+++ b/drivers/pmdomain/tegra/Kconfig
-@@ -0,0 +1,6 @@
++++ b/drivers/pmdomain/ti/Kconfig
+@@ -0,0 +1,22 @@
 +# SPDX-License-Identifier: GPL-2.0-only
 +
-+config SOC_TEGRA_POWERGATE_BPMP
-+	def_bool y
++config OMAP2PLUS_PRM
++	bool
++	depends on ARCH_OMAP2PLUS
++	default ARCH_OMAP2PLUS
++
++if SOC_TI
++
++config TI_SCI_PM_DOMAINS
++	tristate "TI SCI PM Domains Driver"
++	depends on TI_SCI_PROTOCOL
 +	depends on PM_GENERIC_DOMAINS
-+	depends on TEGRA_BPMP
-diff --git a/drivers/soc/tegra/Kconfig b/drivers/soc/tegra/Kconfig
-index 6f3098822969..f16beeabaa92 100644
---- a/drivers/soc/tegra/Kconfig
-+++ b/drivers/soc/tegra/Kconfig
-@@ -152,11 +152,6 @@ config SOC_TEGRA_PMC
- 	select PM_GENERIC_DOMAINS
- 	select REGMAP
++	help
++	  Generic power domain implementation for TI device implementing
++	  the TI SCI protocol.
++
++	  To compile this as a module, choose M here. The module will be
++	  called ti_sci_pm_domains. Note this is needed early in boot before
++	  rootfs may be available.
++
++endif
+diff --git a/drivers/pmdomain/ti/Makefile b/drivers/pmdomain/ti/Makefile
+index 69580afbb436..af6cd056c158 100644
+--- a/drivers/pmdomain/ti/Makefile
++++ b/drivers/pmdomain/ti/Makefile
+@@ -1,3 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0
+-obj-$(CONFIG_ARCH_OMAP2PLUS)		+= omap_prm.o
++obj-$(CONFIG_OMAP2PLUS_PRM)		+= omap_prm.o
+ obj-$(CONFIG_TI_SCI_PM_DOMAINS)		+= ti_sci_pm_domains.o
+diff --git a/drivers/soc/ti/Kconfig b/drivers/soc/ti/Kconfig
+index 2cae17b65fd9..1a93001c9e36 100644
+--- a/drivers/soc/ti/Kconfig
++++ b/drivers/soc/ti/Kconfig
+@@ -50,18 +50,6 @@ config WKUP_M3_IPC
+ 	  to communicate and use the Wakeup M3 for PM features like suspend
+ 	  resume and boots it using wkup_m3_rproc driver.
  
--config SOC_TEGRA_POWERGATE_BPMP
--	def_bool y
+-config TI_SCI_PM_DOMAINS
+-	tristate "TI SCI PM Domains Driver"
+-	depends on TI_SCI_PROTOCOL
 -	depends on PM_GENERIC_DOMAINS
--	depends on TEGRA_BPMP
+-	help
+-	  Generic power domain implementation for TI device implementing
+-	  the TI SCI protocol.
 -
- config SOC_TEGRA20_VOLTAGE_COUPLER
- 	bool "Voltage scaling support for Tegra20 SoCs"
- 	depends on ARCH_TEGRA_2x_SOC || COMPILE_TEST
+-	  To compile this as a module, choose M here. The module will be
+-	  called ti_sci_pm_domains. Note this is needed early in boot before
+-	  rootfs may be available.
+-
+ config TI_K3_RINGACC
+ 	tristate "K3 Ring accelerator Sub System"
+ 	depends on ARCH_K3 || COMPILE_TEST
 -- 
 2.34.1
 
