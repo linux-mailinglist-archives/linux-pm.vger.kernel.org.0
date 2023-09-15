@@ -2,101 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBBBA7A1F99
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 15:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D4F87A1FB2
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 15:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235214AbjIONPk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 09:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34620 "EHLO
+        id S235230AbjIONUn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 09:20:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233739AbjIONPj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 09:15:39 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAEE171C
-        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 06:15:34 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2bcbfb3705dso33549691fa.1
-        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 06:15:34 -0700 (PDT)
+        with ESMTP id S233006AbjIONUm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 09:20:42 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564431713
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 06:20:37 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-2746af1b835so1464315a91.2
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 06:20:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694783732; x=1695388532; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2YTcLJQwSswCsEHlsNnjpEpmfVQ1cqhA1Es4JBakSFY=;
-        b=Y+RW2L6LaQ/oMzReRpbt51RwdVDhxgNJTAPKwx87sJVW3wrT7bT05ucCiLXnY3z7RX
-         KkzQtIbVmers550bECCbyQfz7fUIkWGv0RCNS0kWt1k26pqYWyfwEyiE1a4oxr+MMOrR
-         LqQNALgpWCcqiR5FmgeePerrbIWawlQcdHmzqMRGvCdVtts7Y78eVYq2pIN4xKlT5o8J
-         dVB7cnmv2rhDxzi+ZJuoj+vKwzSeok5zpL19uqR9FC+Yr5mUP8eFULev/dTezT42Svr8
-         1tJuhs38cBZpwKsGffA/vI/VUPc3KMsNNowJf9e6OdcMbagQpwxgd7sbAKc3e6X09ldl
-         jZng==
+        d=linaro.org; s=google; t=1694784037; x=1695388837; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BaoDBq4J2WQTMoM6JUbluW9HfoAxhmWc40Mme5H8iVo=;
+        b=qLTmk4z/j8Rgs/Y/z2xJvzcsFsNxWeJOcBgx6EzfgdXtYFhjvYc1hOll2SgfQju6hx
+         FgDryovX7syL8CribAbv0S9MDeEy5/kMtIkSu1dRg9pt4dwkMcVkf6KIj/VWGPzM5bpJ
+         0BK/jhU5uTp93B1++arpeX59XGctwvJ6I6/dlLn8Ent9zZwW7gytH1wZp6XHIcH8yKyC
+         FM4LxqHYYdJw9449tkRjM3yJErElZzQkvm13U6QCkBJArI5ELvATd/dYX4WBjg17acJy
+         Xz4kBWrLZ9d1FglMgTJ/wlFKAle8p6m9sdCf5a8cZ7USlke3nAo1QvlxNgicV7o1uDWy
+         Ejeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694783732; x=1695388532;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2YTcLJQwSswCsEHlsNnjpEpmfVQ1cqhA1Es4JBakSFY=;
-        b=B24GJ5dDexUXLm7AyPEitCi4NSqMGxFRPchT3JXyngaj/ZM2yPNd3uH5O9+F+Pvb3s
-         ROBS1U46Za2Be2utWwsVWxGrKL4cwJa5sCwHvApFNwA6M+Oe17aD+phR5vgvWPqdQdhW
-         jnzUN3a2kIFpwKk6tZFNGlaCteBY8vet2zpBdDaJzoNeanqT9qJlFrIWzqJLjuEawhHB
-         krGDn/xIlYAunKJbTVAGKdARbDxx5FiwT0Jb/RdDzaFEWZUuGy7rTWHXdMTbFKanvfHq
-         00rG9E/9RdJxLicNclgUqeXionW9VHklDUqhFEdWb3C7DIvf3Ge8gQq0c7gRlEVjWp9D
-         VVMw==
-X-Gm-Message-State: AOJu0YxEMpsHtku4CgnG/g0Drdj77b0wZIVjomb3WM/LUGaFBK7aR6ec
-        8Q5URLSnDePKHs/oVnruCnaIgQ==
-X-Google-Smtp-Source: AGHT+IH9HHhAAiakkwGcb0nc6A/BR1ro4tRIpIJUd3BkPy0wX1M6KcFTvJlfvmgHfIQfhqyIgcdVgA==
-X-Received: by 2002:a2e:9246:0:b0:2bc:c51d:daa1 with SMTP id v6-20020a2e9246000000b002bcc51ddaa1mr1661473ljg.39.1694783732549;
-        Fri, 15 Sep 2023 06:15:32 -0700 (PDT)
-Received: from [192.168.69.115] (6lp61-h01-176-171-209-234.dsl.sta.abo.bbox.fr. [176.171.209.234])
-        by smtp.gmail.com with ESMTPSA id wj18-20020a170907051200b009adc5802d30sm1507895ejb.21.2023.09.15.06.15.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Sep 2023 06:15:32 -0700 (PDT)
-Message-ID: <759af455-312c-745f-8532-bae30b64df02@linaro.org>
-Date:   Fri, 15 Sep 2023 15:15:29 +0200
+        d=1e100.net; s=20230601; t=1694784037; x=1695388837;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BaoDBq4J2WQTMoM6JUbluW9HfoAxhmWc40Mme5H8iVo=;
+        b=tv0vGMeC6fts/ydHJroAIxmZTpCG0dIZN1h4Hffxqx8ESnPJWnGppsX0A0cK3TUaFq
+         4OAlngRI1KuVpllw0/wOVXaQcCftE/Hu434+QEq0z+/jqG6u6UtFV1mFwftMCuRCsWkj
+         Roocs1PD5FQnQ9vnJ7mIFhLYiVMu38XULKbcRdeYniyVm5N7s9szRhHdNlHducMhnnT2
+         lbYGMHkCTeqxIWaUThex1eIDkAfzGS6Rw5GBl6WIX9MPgtXqcq9YhED8vvWGuGykoSy0
+         Zpu4bZqSL2rRvprcqGfzgcciL253iCjedbxbG/ICJoNflrV79a0azlxWjZYv4l8NWsvS
+         Iv/g==
+X-Gm-Message-State: AOJu0YypXG/XsKzCyaJv2V9N2DUbG43rIwR4Dg8HFG1xAgVMQcFSCdgu
+        7I9DS+3dzz6yY7GYaY3/n6+fW3FvmAB3LYpn1qeLjw==
+X-Google-Smtp-Source: AGHT+IEvUA9BR5BcrVOwtToL5WSZnMVL5hq1LhRR/C2UP2bV5CCmF6GnSfYb0YjLTzwW2flky6W/bE61lpkBlQ/Gnuc=
+X-Received: by 2002:a17:90a:4b06:b0:26f:2c5a:bbb3 with SMTP id
+ g6-20020a17090a4b0600b0026f2c5abbb3mr1316852pjh.40.1694784036728; Fri, 15 Sep
+ 2023 06:20:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.15.1
-Subject: Re: [PATCH v2 05/17] pmdomain: bcm: Move Kconfig options to the
- pmdomain subsystem
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        linux-mips@vger.kernel.org, linux-rpi-kernel@lists.infradead.org
-References: <20230915092003.658361-1-ulf.hansson@linaro.org>
- <20230915092003.658361-6-ulf.hansson@linaro.org>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230915092003.658361-6-ulf.hansson@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230901130312.247719-1-vincent.guittot@linaro.org>
+ <20230901130312.247719-2-vincent.guittot@linaro.org> <be527eb1-d253-b9fe-ecc9-4c7b04da9efd@arm.com>
+In-Reply-To: <be527eb1-d253-b9fe-ecc9-4c7b04da9efd@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Fri, 15 Sep 2023 15:20:25 +0200
+Message-ID: <CAKfTPtANMnLAdw9y86zsx_HdjpWxQPA+Gnaa=qvXC+4xWwNa=A@mail.gmail.com>
+Subject: Re: [PATCH 1/4] sched: consolidate and cleanup access to CPU's max
+ compute capacity
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
+        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com, rostedt@goodmis.org,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, viresh.kumar@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
+        conor.dooley@microchip.com, suagrfillet@gmail.com,
+        ajones@ventanamicro.com, lftan@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15/9/23 11:19, Ulf Hansson wrote:
-> The Kconfig options belongs closer to the corresponding implementations,
-> hence let's move them from the soc subsystem to the pmdomain subsystem.
-> 
-> Cc: Florian Fainelli <florian.fainelli@broadcom.com>
-> Cc: Ray Jui <rjui@broadcom.com>
-> Cc: Scott Branden <sbranden@broadcom.com>
-> Cc: <linux-mips@vger.kernel.org>
-> Cc: <linux-rpi-kernel@lists.infradead.org>
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
->   drivers/pmdomain/Kconfig     |  1 +
->   drivers/pmdomain/bcm/Kconfig | 46 ++++++++++++++++++++++++++++++++++++
->   drivers/soc/bcm/Kconfig      | 42 --------------------------------
->   3 files changed, 47 insertions(+), 42 deletions(-)
->   create mode 100644 drivers/pmdomain/bcm/Kconfig
+On Thu, 14 Sept 2023 at 22:46, Dietmar Eggemann
+<dietmar.eggemann@arm.com> wrote:
+>
+> On 01/09/2023 15:03, Vincent Guittot wrote:
+> > Remove struct rq cpu_capacity_orig field and use arch_scale_cpu_capacity()
+> > instead.
+> >
+> > Scheduler uses 3 methods to get access to the CPU's max compute capacity:
+> > - arch_scale_cpu_capacity(cpu) which is the default way to get CPU's capacity.
+> > - cpu_capacity_orig field which is periodically updated with
+> >   arch_scale_cpu_capacity().
+> > - capacity_orig_of(cpu) which encapsulates rq->cpu_capacity_orig
+> >
+> > There is no real need to save the value returned by arch_scale_cpu_capacity()
+> > in struct rq. arch_scale_cpu_capacity() returns:
+> > - either a per_cpu variable.
+> > - or a const value for systems which have only one capacity.
+> >
+> > Remove cpu_capacity_orig and use arch_scale_cpu_capacity() everywhere.
+> >
+> > No functional changes.
+> >
+> > some tests of Arm64:
+> > small SMP device (hikey): no noticeable changes
+> > HMP device (RB5): hackbench shows minor improvement (1-2%)
+> > large smp (thx2): hackbench and tbench shows minor improvement (1%)
+> >
+> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+>
+> Next to util_fits_cpu() which uses capacity_orig as a local variable
+> (which is fine) there is sis() referring to capacity_orig in a comment.
+>
+> Documentation/scheduler/sched-capacity.rst uses the term `capacity_orig`
+> in chapter 1.2 to explain the difference between CPU's maximum
+> (attainable) capacity and capacity as the former reduced by pressure.
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+ok, I will have a look at those references to capacity_orig
 
+>
+> Not sure if you want to change those refs as well with this patch?
+> People might get confused about the term `capacity_orig` pretty soon.
+>
+> Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+
+Thanks
