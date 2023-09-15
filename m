@@ -2,515 +2,272 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 240BF7A1509
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 07:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE727A1570
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 07:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232021AbjIOFCG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 01:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42730 "EHLO
+        id S232066AbjIOFbm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 01:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232027AbjIOFCD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 01:02:03 -0400
-Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DF02720;
-        Thu, 14 Sep 2023 22:01:55 -0700 (PDT)
-Received: from authenticated-user (box.trvn.ru [194.87.146.52])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by box.trvn.ru (Postfix) with ESMTPSA id 8C56A424B0;
-        Fri, 15 Sep 2023 10:01:51 +0500 (+05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-        t=1694754112; bh=49MaGxNQqyAPhOgveIuAGVdV6GmbhsB4KycALCG40Ns=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=iDiDsx1m068luOVjQClVdWY2bJdlgk4nUzBHYhT71OHfXnef7REhdtdLRm0G90THh
-         QdfLb8AVZLxT6k+tdkTRHQzp6FcJU5Q6oE51nGKLyjtVdU/Jt45PqdWjOzEkFHSbip
-         mudzeH4zUGo/e334iXB3lOWryIvfPnerIwaUfAqVOVTxLiDMEawk2e63kTb1aHwW7x
-         6h9Yrs6ItEP3gmxXVN3xnIsxirKDbCrhvTGOdsH1AZZTA19twVpMX9b/mdvgeQlprx
-         eHtSOtFYBfTEjy8TTc7hPuVPS6/DtkR/NGgAESYcbADkEoisOGPqfrkVouzbZgC7Np
-         sfiaDA5fFo7tg==
-From:   Nikita Travkin <nikita@trvn.ru>
-Date:   Fri, 15 Sep 2023 10:01:21 +0500
-Subject: [PATCH v3 4/4] power: supply: Add driver for pm8916 lbc
-MIME-Version: 1.0
+        with ESMTP id S232062AbjIOFbl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 01:31:41 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F5D2735;
+        Thu, 14 Sep 2023 22:31:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694755890; x=1726291890;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=hWybNn996JYGGDqKakgZQ4iTOleTab3rqVyJUetSH6s=;
+  b=Muqbwdf4OBHT9qS6YE5PT8gOmD121kZnGwOH7n22RiwciKw4u09xkNZb
+   BhQ3LB40tNTJE/f7POJQe+5CRaJltsTaSlKJ9GJETaiM1jjcu+Fr7stk6
+   czftXqI7r+6E7crCn2gU9xzDnjOMdQIaiTMPmJRiGufOn/2v4fP2ZD7cu
+   k7DkhS7O/NOlTgllRqeM5t8xZEv0QAQJL5bmWzaIZe2Fkoxa9Uyonz2H6
+   7jqRk4YhM+eiC16yD5hmtp8WMu5/5krE4eLVrkMqEcEKUg+RSwlgNl5LB
+   cqkGBhuiuXCDgUJ6U6foTRJ3NfSpgLxMSmLYueIGnQrfyfXbMdXSmNewW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="359418843"
+X-IronPort-AV: E=Sophos;i="6.02,148,1688454000"; 
+   d="scan'208";a="359418843"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2023 22:31:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="888090463"
+X-IronPort-AV: E=Sophos;i="6.02,148,1688454000"; 
+   d="scan'208";a="888090463"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmsmga001.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 14 Sep 2023 22:30:55 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Thu, 14 Sep 2023 22:31:29 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Thu, 14 Sep 2023 22:31:28 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Thu, 14 Sep 2023 22:31:28 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.176)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.32; Thu, 14 Sep 2023 22:31:28 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=F9gy1n9UtkDAC56HuKfSOC3XnWBG4bQu7GFEp9OQ6MEu43tyuu3FPdkvKlZbOEdbI3w7Fv1xWVK7YTYDgEuYdDabgvquZ9Iq7LgW7d392mnQc23BzPP0zY8C4Yn2Z3MiqErvWICPSCd+KeCDhJze2rY3RVY1bYmk7LZlpdAGuf6r25ru1XRYYyF3xzOZzbtVqzWTKICoXPaZZvNmji3GrfZmzzIHI3tNvEeBRMsqNMfOyA5scDdzS4M/jmyKvpErN8/rDH5kV5G8vR2oorB4+5g93N7GNDHZzXCU5ohum2NLn4TVKvDm6Yp+no/Ctz3Ou4KR8UTSo3VIUJc5R6ssng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hWybNn996JYGGDqKakgZQ4iTOleTab3rqVyJUetSH6s=;
+ b=bTbk3S2pRB7TeNiYS65TjlmJcfL8P5uJh24Fsq4PTBlXMbXakc5rQXW7TSaYmya6X7kP6NxqYhtu2llPbFVeYqEwH6Ibyaj4jYnCc9nDr4xDC+vEXZZ5S3/XpN2yOa+5oTxRCTWTDxeVVcOGBlSRzfG44wgiXdVUt8qAVmiM0rATAhC5YCb5SZAWVipStvAl2mB3EWqqNaEQAqfShtLDq8xKivmdJyb/MuEO8qq2ikc3fnJxbG/1SHSjT1LA6zwlsFKK5MOOv5VNtC4EM9IludnEgFxu/6+UZCGOl6S778rNg7o8czd8J90AhFjrb86+02y5imNDBkz2JIX4A8ieCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SN6PR11MB2624.namprd11.prod.outlook.com (2603:10b6:805:64::14)
+ by SN7PR11MB6560.namprd11.prod.outlook.com (2603:10b6:806:26c::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.41; Fri, 15 Sep
+ 2023 05:31:26 +0000
+Received: from SN6PR11MB2624.namprd11.prod.outlook.com
+ ([fe80::ab1a:364e:5c0:430b]) by SN6PR11MB2624.namprd11.prod.outlook.com
+ ([fe80::ab1a:364e:5c0:430b%7]) with mapi id 15.20.6792.020; Fri, 15 Sep 2023
+ 05:31:26 +0000
+From:   "Xu, Even" <even.xu@intel.com>
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        "jikos@kernel.org" <jikos@kernel.org>,
+        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>
+CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "Lee, Jian Hui" <jianhui.lee@canonical.com>,
+        "Zhang, Lixu" <lixu.zhang@intel.com>,
+        "Ba, Najumon" <najumon.ba@intel.com>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] HID: intel-ish-hid: ipc: Rework EHL OOB wakeup
+Thread-Topic: [PATCH] HID: intel-ish-hid: ipc: Rework EHL OOB wakeup
+Thread-Index: AQHZ5sKmjsJQWHkOtEGLHUKsvcaerrAafreAgAC8T9A=
+Date:   Fri, 15 Sep 2023 05:31:25 +0000
+Message-ID: <SN6PR11MB26245C44E84C37C1B551260EF4F6A@SN6PR11MB2624.namprd11.prod.outlook.com>
+References: <20230914041806.816741-1-kai.heng.feng@canonical.com>
+ <7b45ac2ed091497b4e21a6a5c19956161175ba16.camel@linux.intel.com>
+In-Reply-To: <7b45ac2ed091497b4e21a6a5c19956161175ba16.camel@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SN6PR11MB2624:EE_|SN7PR11MB6560:EE_
+x-ms-office365-filtering-correlation-id: be3d923a-db8f-4f41-b1a9-08dbb5ad014e
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: eNXE3NwCBm6PEuAOiA28I1LXLpyDmkYawNU6yriyULqf5hshyn2XW5xI+ruwSeEunBhdjJ6xyrEg016yzONca3BpaQoY7Bg10NkF4yewqStqdylkJvhz8ajCzZ87poHXu23wAj/nHUGF8tfISKJdvTINks1af96tpO9nf9b+a8w4UTA+wOJ0GeVhbqiCQeKAXbo8RKSJb9sRdYV1WErEm6tfr+dWu3BlWGrZXKnASURHtREtTSUMlzdkTL8qBWZxPS6ViXJhJ6Y4cP4MipkGTaBq04pICdFDcLl4SY/oOcTXX4BL2LH25shfIjWN4BAQzf7j3tpKbK9ZERPiP9/PMNUAEJsEWBxXbGXa3jFZGlyOfKhGdfp0pbip/4MTIm8rDJqPYGOf3GPjSFl9B1/sl4J3htAhSK7I/JguTgfYGylYgLXpOYgyDUPwc2tretHsyn0JQqlyuV685gb1pUqNVAleSQAPdAaNEdfO3rX4CvbITleGct4Xouz8wGtWpLQ+iWMJsWrNRLb0hk0MKQ5l9Kosk8W1rcmT90z3bRALAOuVcy7dwKG1FUGpiOlDGFUuAS1Xh7xbMrVUJMNofbVMSBeYv9n/0aZg+xXHEdAASL9mMcUk1V3JWWDJSa8Vkq8F
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB2624.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(39860400002)(136003)(396003)(346002)(376002)(186009)(451199024)(1800799009)(26005)(6506007)(71200400001)(53546011)(7696005)(9686003)(2906002)(478600001)(4326008)(52536014)(8936002)(8676002)(76116006)(66476007)(66946007)(66446008)(66556008)(64756008)(5660300002)(110136005)(54906003)(316002)(41300700001)(83380400001)(55016003)(86362001)(82960400001)(33656002)(122000001)(38070700005)(38100700002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ajM0RzhOWTBJaktFQnpwWEdnMTdzS3hqMmVsS3JxVmVmbmtqTjVkYXI0VENC?=
+ =?utf-8?B?U3Jaak80MWp0QkhwamY3ODI1OWx5RDFreERUUE03eVJ5N2NGYkU5OTZpakEr?=
+ =?utf-8?B?RnpUTDFpTTFqRkpDalN4aTVDWDZDbXN0TC9uQi9POWthSDVmbWVYUVRDT2c0?=
+ =?utf-8?B?NXpzaVRhVGlvbkdBNFFleldIVTJBVTZjK3plOWdhZmJWRXlIeWFmNE43dHlS?=
+ =?utf-8?B?cHRWR0hnYjJ4MWgyanNoNTN4a01vMExVTm1DYVhsZjBJcCs0dG9xbzdjaUVq?=
+ =?utf-8?B?NjJhN0pvKzlmMnZsdlRCVk5WTDV6Ykt6VkQ0Wm9Bb0JuZXpMamtBb2lsWUpa?=
+ =?utf-8?B?cmkvM3NJQ1dSRGJDLzV2SjlZSDVMcGRoRjg4aG50azJRN0hWc1RaL2dXbEtG?=
+ =?utf-8?B?cDJPY2tidFl3N2U5a0R3bklzM25SejBjYWRCcVdHaVJJUG01Q05DUjgwMGdq?=
+ =?utf-8?B?QldtWFhjb1cxYXVwalVEcW00Uk0zUGtvQUp2OGIrMVhlWU45M1NDTE9TOUdP?=
+ =?utf-8?B?OGtKdE1taytSWXBLRnY4LzZiR1E5L2pxdGlPUzVqK2FxWDFpQnhHbFg5cjlX?=
+ =?utf-8?B?aEpkOGc4QXE3eUc0MWlTUGJ5bFVrMnBDeXdUVW16elI3NEM5TDJpendzS1FT?=
+ =?utf-8?B?QTJpYlA5RHlIWDRYeURhQlJkelRMN3VFQkd0NTQyNU0vaXpRK21JWSs0QjMv?=
+ =?utf-8?B?NjBJTmhMSlFVV1Q5Q215eThmZFltcG4vMGFuaUV2UVNQY2dxUlVhLzFadk1a?=
+ =?utf-8?B?bXYzeFF2aGhDMGg0K29WR1JhOTBSaTZENGJKMGl3UHZNbWZBU2VpVC9WZmtm?=
+ =?utf-8?B?UUVZeVNhREQvUnJLdlF3c0pLbXBzM2lKOGlHRVRTWVpIZktPUXpBSTlWbkIy?=
+ =?utf-8?B?VjN3MGNWMi93SEVBQUkveEZaTEw2UC9UVk1HUDkzbWFubWRrVXZiWStmR1FI?=
+ =?utf-8?B?eC9WVHRsRS9yaTg4cEJoRmhxVU5WVStUWWk2cDhZQUNhUTREMDlqa0FYYnYx?=
+ =?utf-8?B?amFQT1F1ZnpWSXZUU0J3eWtpd3NpNHp2S1A0N0lLNldoR082YWN0VWRpcW56?=
+ =?utf-8?B?citjMVhjU2F4cjhtY3RnRHZJRlZPRE02R2IycWQ0VG4rZXpPdTcwZUVaMnZF?=
+ =?utf-8?B?R0NMdjRDU3A2QTVjYktobTRoeDlRRFI4QWI1S3hsSzR2OWZmMlExajBSWGFG?=
+ =?utf-8?B?TzV4cEpDSTMraTJQWWdDK3dCTzFuUkg0blB3RjI1V2pTUXpVU0pFS1JrbWtX?=
+ =?utf-8?B?djJ1L1dXYzVBYUNmc2tFaHhBSjJsT1lqVm1aN3h0Y1YxNEkrZWFFYjRONzVl?=
+ =?utf-8?B?ZjNCNk1WcDVGL204akdNTm1VVWlPTGMrd2V0Tms1dkhPRG51VERIM1Evb3M5?=
+ =?utf-8?B?RlpNcXVUanJsaVFPYzUxNXpJUGZxTzhkbnJrby9pV2d6M1YxdWVlV2hxZ3Z5?=
+ =?utf-8?B?T1Ewa0NVTFBmUWkwNEZTQWErZ0tYQTRUNUZTUXI0ckdIUzFtQlJZMHRBYUJS?=
+ =?utf-8?B?MEdnaXpFa2ZEYUVUajh1TEJEVHFJdDludENndjJ0YnZHOHFZTzlKRWIxYTNj?=
+ =?utf-8?B?MUowd3ZKQVl1dWo4MWVZQy9Yc1JHbFBVS0pVSVV5ZTFUUnF4YkJkd240MUhn?=
+ =?utf-8?B?b3JIRUlRQXYxeDdUZHppQXNacnl4WW5CMmhuUDhCQVJYV1hIUjZCamRtUXVn?=
+ =?utf-8?B?WG1WMHJwTWtBUmhLQkhNZ0puN1ZjbXFGUTVXa1lDZHk0Nk5Ua3c1V3ZIb0s3?=
+ =?utf-8?B?MGxCTEd5Ni8rY1EzUXhKZzFCSDliMWZxcWFNZW5sakZuL2VlNnRRb1pRK0dE?=
+ =?utf-8?B?ZlZFdkZqK09VOEc2N3YxdkpGblRRd29UaEZkN1dPTFg1TTNIY05UZm9vaWdD?=
+ =?utf-8?B?ay95SGt0R0ZNd1JodlhLdGYwaVJXMTA3c2VIOUlZbFFPR0tkSldpVE1IVVcx?=
+ =?utf-8?B?SzBNVmY3ckY0KzloTGw2Vm92SlZ1Y0NFbWJPQjVxVHN2QUlTLytQY2pyeUtZ?=
+ =?utf-8?B?aFpubmxOcC9oM3QwY2VFbWRta2tDWDdqcXhkaXQ4SkNaeXd1Y0NjaUlZZ2hN?=
+ =?utf-8?B?OU00SGJHOUI0RFdQUHh0SWJLN0FRaW4rTGlpbU5lRGorYklwcTdlaGxNS2o2?=
+ =?utf-8?Q?YpEs=3D?=
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230915-pm8916-bms-lbc-v3-4-f30881e951a0@trvn.ru>
-References: <20230915-pm8916-bms-lbc-v3-0-f30881e951a0@trvn.ru>
-In-Reply-To: <20230915-pm8916-bms-lbc-v3-0-f30881e951a0@trvn.ru>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Nikita Travkin <nikita@trvn.ru>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=13852; i=nikita@trvn.ru;
- h=from:subject:message-id; bh=49MaGxNQqyAPhOgveIuAGVdV6GmbhsB4KycALCG40Ns=;
- b=owEBbQKS/ZANAwAIAUMc7O4oGb91AcsmYgBlA+U7xqFwtrvgnaPf9znUOoIED+nLJnMDFVlni
- wrnoh/H61uJAjMEAAEIAB0WIQTAhK9UUj+qg34uxUdDHOzuKBm/dQUCZQPlOwAKCRBDHOzuKBm/
- dVKmEACStgqDq6p2UvOMcGb5V8AhZUAsrUqApHzvDgIqZaxXvkv7Z0MMMFuR1wfC6mOHmCSJz9L
- no9VR8fZaZ3VH0jUu5TYvxV/GHuTqyfI0pgFiAaVEQedNjTWG+FB1sWg9QOo0UdxoMdsrqlOCI/
- JsH792mxSpF6FjDjAD0GuVBLI8zDOn+Zad8VDoTQ1B01/Hsn1aH7P1IEFLHcEwmhKH7TMcDOPvM
- 1GNOWcLbs29gzeJeuMoNrnO65t87Yee/ImroFoKwepnhr5xZQ5TxN6sUEYhBmhqCx99gNOLMook
- 3LvR1OWYf1VQ7wMOnIlWRCp/lEo8/aXAXURhOgPC/V6Tqx5Ln7R5q+zK14PG9czMI3yRMtcc1Yx
- L8e+iu9whjKs8gI6eWLFGEge38xkDtaxwOSBr5GJUi4uhBLLKICZcZ8E6ObtD8RKjus+p1jEDl7
- pMVmkcZUL15l+tPbj9V8CI2KNbg3hxbVphVzfcDXKN5YO7k1++mp5lsfPN26cQhSv2S0/CXT0BC
- SU+EOb1rAhBSGTQDud/f8bjO2l+OziJfC5xkP6xw3QqejVLJP/MGhXroaAAlHnoARxjGs1bPwV6
- Sf8XlM+hYCHiuuHPbupeWuGRdZ/54cZkLlZXcSmMV7xOPzc3ip9iScWFuKlnhGpz/IJ7C6cJhys
- s589nn4l1J5auvg==
-X-Developer-Key: i=nikita@trvn.ru; a=openpgp;
- fpr=C084AF54523FAA837E2EC547431CECEE2819BF75
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR11MB2624.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: be3d923a-db8f-4f41-b1a9-08dbb5ad014e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Sep 2023 05:31:25.8412
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ZaJun4lf7QNuPc7t6atEJ03fA6u5UVolKIwN3CVNopOb7q6fmkfSvB/fGKX516O46wIucmGoC7jeZsFJVyUfQg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6560
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm8916 LBC is a Linear Battery Charger hardware block in pm8916 PMIC.
-
-This block implements simple CC/CV charging for Li-Po batteries.
-The hardware has internal state machine to switch between modes and
-works mostly autonomously, only needing the limits and targets to be
-set to operate.
-
-This driver allows setting limits and enabling the LBC block, monitoring
-it's state.
-
-Signed-off-by: Nikita Travkin <nikita@trvn.ru>
----
-v2: Fix missed warnings, get irq by name
-v3: INPUT_CURRENT_LIMIT -> CONSTANT_CHARGE_CURRENT, use device_property_*
----
- drivers/power/supply/Kconfig      |  11 ++
- drivers/power/supply/Makefile     |   1 +
- drivers/power/supply/pm8916_lbc.c | 381 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 393 insertions(+)
-
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index c6375c03e5ce..95e296b80550 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -640,6 +640,17 @@ config BATTERY_PM8916_BMS_VM
- 	  To compile this driver as module, choose M here: the
- 	  module will be called pm8916_bms_vm.
- 
-+config CHARGER_PM8916_LBC
-+	tristate "Qualcomm PM8916 Linear Battery Charger support"
-+	depends on MFD_SPMI_PMIC || COMPILE_TEST
-+	help
-+	  Say Y here to add support for Linear Battery Charger block
-+	  found in some Qualcomm PMICs such as PM8916. This hardware
-+	  blokc provides simple CC/CV battery charger.
-+
-+	  To compile this driver as module, choose M here: the
-+	  module will be called pm8916_lbc.
-+
- config CHARGER_BQ2415X
- 	tristate "TI BQ2415x battery charger driver"
- 	depends on I2C
-diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-index fdf7916f80ed..e4bd9eb1261b 100644
---- a/drivers/power/supply/Makefile
-+++ b/drivers/power/supply/Makefile
-@@ -85,6 +85,7 @@ obj-$(CONFIG_CHARGER_MT6360)	+= mt6360_charger.o
- obj-$(CONFIG_CHARGER_MT6370)	+= mt6370-charger.o
- obj-$(CONFIG_CHARGER_QCOM_SMBB)	+= qcom_smbb.o
- obj-$(CONFIG_BATTERY_PM8916_BMS_VM)	+= pm8916_bms_vm.o
-+obj-$(CONFIG_CHARGER_PM8916_LBC)	+= pm8916_lbc.o
- obj-$(CONFIG_CHARGER_BQ2415X)	+= bq2415x_charger.o
- obj-$(CONFIG_CHARGER_BQ24190)	+= bq24190_charger.o
- obj-$(CONFIG_CHARGER_BQ24257)	+= bq24257_charger.o
-diff --git a/drivers/power/supply/pm8916_lbc.c b/drivers/power/supply/pm8916_lbc.c
-new file mode 100644
-index 000000000000..6d92e98cbecc
---- /dev/null
-+++ b/drivers/power/supply/pm8916_lbc.c
-@@ -0,0 +1,381 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2023, Nikita Travkin <nikita@trvn.ru>
-+ */
-+
-+#include <linux/errno.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/power_supply.h>
-+#include <linux/property.h>
-+#include <linux/regmap.h>
-+#include <linux/slab.h>
-+#include <linux/delay.h>
-+#include <linux/interrupt.h>
-+#include <linux/extcon-provider.h>
-+#include <linux/mod_devicetable.h>
-+
-+/* Two bytes: type + subtype */
-+#define PM8916_PERPH_TYPE 0x04
-+#define PM8916_LBC_CHGR_TYPE 0x1502
-+#define PM8916_LBC_BAT_IF_TYPE 0x1602
-+#define PM8916_LBC_USB_TYPE 0x1702
-+#define PM8916_LBC_MISC_TYPE 0x1802
-+
-+#define PM8916_LBC_CHGR_CHG_OPTION 0x08
-+#define PM8916_LBC_CHGR_PMIC_CHARGER BIT(7)
-+
-+#define PM8916_LBC_CHGR_CHG_STATUS 0x09
-+
-+#define PM8916_INT_RT_STS 0x10
-+
-+#define PM8916_LBC_USB_USBIN_VALID BIT(1)
-+
-+#define PM8916_LBC_CHGR_VDD_MAX 0x40
-+#define PM8916_LBC_CHGR_VDD_SAFE 0x41
-+#define PM8916_LBC_CHGR_IBAT_MAX 0x44
-+#define PM8916_LBC_CHGR_IBAT_SAFE 0x45
-+
-+#define PM8916_LBC_CHGR_TCHG_MAX_EN 0x60
-+#define PM8916_LBC_CHGR_TCHG_MAX_ENABLED BIT(7)
-+#define PM8916_LBC_CHGR_TCHG_MAX 0x61
-+
-+#define PM8916_LBC_CHGR_CHG_CTRL 0x49
-+#define PM8916_LBC_CHGR_CHG_EN BIT(7)
-+#define PM8916_LBC_CHGR_PSTG_EN BIT(5)
-+
-+#define PM8916_LBC_CHGR_MIN_CURRENT 90000
-+#define PM8916_LBC_CHGR_MAX_CURRENT 1440000
-+
-+#define PM8916_LBC_CHGR_MIN_VOLTAGE 4000000
-+#define PM8916_LBC_CHGR_MAX_VOLTAGE 4775000
-+#define PM8916_LBC_CHGR_VOLTAGE_STEP 25000
-+
-+#define PM8916_LBC_CHGR_MIN_TIME 4
-+#define PM8916_LBC_CHGR_MAX_TIME 256
-+
-+struct pm8916_lbc_charger {
-+	struct device *dev;
-+	struct extcon_dev *edev;
-+	struct power_supply *charger;
-+	struct power_supply_battery_info *info;
-+	struct regmap *regmap;
-+	unsigned int reg[4];
-+	bool online;
-+	unsigned int charge_voltage_max;
-+	unsigned int charge_voltage_safe;
-+	unsigned int charge_current_max;
-+	unsigned int charge_current_safe;
-+};
-+
-+static const unsigned int pm8916_lbc_charger_cable[] = {
-+	EXTCON_USB,
-+	EXTCON_NONE,
-+};
-+
-+enum {
-+	LBC_CHGR = 0,
-+	LBC_BAT_IF,
-+	LBC_USB,
-+	LBC_MISC,
-+};
-+
-+static int pm8916_lbc_charger_configure(struct pm8916_lbc_charger *chg)
-+{
-+	int ret = 0;
-+	unsigned int tmp;
-+
-+	chg->charge_voltage_max = clamp_t(u32, chg->charge_voltage_max,
-+					  PM8916_LBC_CHGR_MIN_VOLTAGE, chg->charge_voltage_safe);
-+
-+	tmp = chg->charge_voltage_max - PM8916_LBC_CHGR_MIN_VOLTAGE;
-+	tmp /= PM8916_LBC_CHGR_VOLTAGE_STEP;
-+	chg->charge_voltage_max = PM8916_LBC_CHGR_MIN_VOLTAGE + tmp * PM8916_LBC_CHGR_VOLTAGE_STEP;
-+
-+	ret = regmap_write(chg->regmap, chg->reg[LBC_CHGR] + PM8916_LBC_CHGR_VDD_MAX, tmp);
-+	if (ret)
-+		goto error;
-+
-+	chg->charge_current_max = min(chg->charge_current_max, chg->charge_current_safe);
-+
-+	tmp = clamp_t(u32, chg->charge_current_max,
-+		      PM8916_LBC_CHGR_MIN_CURRENT, PM8916_LBC_CHGR_MAX_CURRENT);
-+
-+	tmp = chg->charge_current_max / PM8916_LBC_CHGR_MIN_CURRENT - 1;
-+	chg->charge_current_max = (tmp + 1) * PM8916_LBC_CHGR_MIN_CURRENT;
-+
-+	ret = regmap_write(chg->regmap, chg->reg[LBC_CHGR] + PM8916_LBC_CHGR_IBAT_MAX, tmp);
-+	if (ret)
-+		goto error;
-+
-+	ret = regmap_write(chg->regmap, chg->reg[LBC_CHGR] + PM8916_LBC_CHGR_CHG_CTRL,
-+			   PM8916_LBC_CHGR_CHG_EN | PM8916_LBC_CHGR_PSTG_EN);
-+	if (ret)
-+		goto error;
-+
-+	return ret;
-+
-+error:
-+	dev_err(chg->dev, "Failed to configure charging: %pe\n", ERR_PTR(ret));
-+	return ret;
-+}
-+
-+static int pm8916_lbc_charger_get_property(struct power_supply *psy,
-+					   enum power_supply_property psp,
-+					   union power_supply_propval *val)
-+{
-+	struct pm8916_lbc_charger *chg = power_supply_get_drvdata(psy);
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_ONLINE:
-+		val->intval = chg->online;
-+		return 0;
-+
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
-+		val->intval = chg->charge_voltage_max;
-+		return 0;
-+
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
-+		val->intval = chg->charge_current_max;
-+		return 0;
-+
-+	default:
-+		return -EINVAL;
-+	};
-+}
-+
-+static int pm8916_lbc_charger_set_property(struct power_supply *psy,
-+					   enum power_supply_property prop,
-+					   const union power_supply_propval *val)
-+{
-+	struct pm8916_lbc_charger *chg = power_supply_get_drvdata(psy);
-+
-+	switch (prop) {
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
-+		chg->charge_current_max = val->intval;
-+		return pm8916_lbc_charger_configure(chg);
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int pm8916_lbc_charger_property_is_writeable(struct power_supply *psy,
-+						    enum power_supply_property psp)
-+{
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
-+static enum power_supply_property pm8916_lbc_charger_properties[] = {
-+	POWER_SUPPLY_PROP_ONLINE,
-+	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX,
-+	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT,
-+};
-+
-+static irqreturn_t pm8916_lbc_charger_state_changed_irq(int irq, void *data)
-+{
-+	struct pm8916_lbc_charger *chg = data;
-+	unsigned int tmp;
-+	int ret;
-+
-+	ret = regmap_read(chg->regmap, chg->reg[LBC_USB] + PM8916_INT_RT_STS, &tmp);
-+	if (ret)
-+		return IRQ_HANDLED;
-+
-+	chg->online = !!(tmp & PM8916_LBC_USB_USBIN_VALID);
-+	extcon_set_state_sync(chg->edev, EXTCON_USB, chg->online);
-+
-+	power_supply_changed(chg->charger);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int pm8916_lbc_charger_probe_dt(struct pm8916_lbc_charger *chg)
-+{
-+	struct device *dev = chg->dev;
-+	int ret = 0;
-+	unsigned int tmp;
-+
-+	ret = device_property_read_u32(dev, "qcom,fast-charge-safe-voltage", &chg->charge_voltage_safe);
-+	if (ret)
-+		return ret;
-+	if (chg->charge_voltage_safe < PM8916_LBC_CHGR_MIN_VOLTAGE)
-+		return -EINVAL;
-+
-+	chg->charge_voltage_safe = clamp_t(u32, chg->charge_voltage_safe,
-+					PM8916_LBC_CHGR_MIN_VOLTAGE, PM8916_LBC_CHGR_MAX_VOLTAGE);
-+
-+	tmp = chg->charge_voltage_safe - PM8916_LBC_CHGR_MIN_VOLTAGE;
-+	tmp /= PM8916_LBC_CHGR_VOLTAGE_STEP;
-+	ret = regmap_write(chg->regmap, chg->reg[LBC_CHGR] + PM8916_LBC_CHGR_VDD_SAFE, tmp);
-+	if (ret)
-+		return ret;
-+
-+	ret = device_property_read_u32(dev, "qcom,fast-charge-safe-current", &chg->charge_current_safe);
-+	if (ret)
-+		return ret;
-+	if (chg->charge_current_safe < PM8916_LBC_CHGR_MIN_CURRENT)
-+		return -EINVAL;
-+
-+	chg->charge_current_safe = clamp_t(u32, chg->charge_current_safe,
-+					PM8916_LBC_CHGR_MIN_CURRENT, PM8916_LBC_CHGR_MAX_CURRENT);
-+
-+	chg->charge_current_max = chg->charge_current_safe;
-+
-+	tmp = chg->charge_current_safe / PM8916_LBC_CHGR_MIN_CURRENT - 1;
-+	ret = regmap_write(chg->regmap, chg->reg[LBC_CHGR] + PM8916_LBC_CHGR_IBAT_SAFE, tmp);
-+	if (ret)
-+		return ret;
-+
-+	/* Disable charger timeout. */
-+	ret = regmap_write(chg->regmap, chg->reg[LBC_CHGR] + PM8916_LBC_CHGR_TCHG_MAX_EN, 0x00);
-+	if (ret)
-+		return ret;
-+
-+	return ret;
-+}
-+
-+static const struct power_supply_desc pm8916_lbc_charger_psy_desc = {
-+	.name = "pm8916-lbc-chgr",
-+	.type = POWER_SUPPLY_TYPE_USB,
-+	.properties = pm8916_lbc_charger_properties,
-+	.num_properties = ARRAY_SIZE(pm8916_lbc_charger_properties),
-+	.get_property = pm8916_lbc_charger_get_property,
-+	.set_property = pm8916_lbc_charger_set_property,
-+	.property_is_writeable = pm8916_lbc_charger_property_is_writeable,
-+};
-+
-+static int pm8916_lbc_charger_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct pm8916_lbc_charger *chg;
-+	struct power_supply_config psy_cfg = {};
-+	int ret, len, irq;
-+	unsigned int tmp;
-+
-+	chg = devm_kzalloc(dev, sizeof(*chg), GFP_KERNEL);
-+	if (!chg)
-+		return -ENOMEM;
-+
-+	chg->dev = dev;
-+
-+	chg->regmap = dev_get_regmap(pdev->dev.parent, NULL);
-+	if (!chg->regmap)
-+		return -ENODEV;
-+
-+	len = device_property_count_u32(dev, "reg");
-+	if (len < 0)
-+		return len;
-+	if (len != 4)
-+		return dev_err_probe(dev, -EINVAL,
-+				     "Wrong amount of reg values: %d (4 expected)\n", len);
-+
-+	irq = platform_get_irq_byname(pdev, "usb_vbus");
-+	if (irq < 0)
-+		return irq;
-+
-+	ret = devm_request_threaded_irq(dev, irq, NULL, pm8916_lbc_charger_state_changed_irq,
-+					IRQF_ONESHOT, "pm8916_lbc", chg);
-+	if (ret)
-+		return ret;
-+
-+	ret = device_property_read_u32_array(dev, "reg", chg->reg, len);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_bulk_read(chg->regmap, chg->reg[LBC_CHGR] + PM8916_PERPH_TYPE, &tmp, 2);
-+	if (ret)
-+		goto comm_error;
-+	if (tmp != PM8916_LBC_CHGR_TYPE)
-+		goto type_error;
-+
-+	ret = regmap_bulk_read(chg->regmap, chg->reg[LBC_BAT_IF] + PM8916_PERPH_TYPE, &tmp, 2);
-+	if (ret)
-+		goto comm_error;
-+	if (tmp != PM8916_LBC_BAT_IF_TYPE)
-+		goto type_error;
-+
-+	ret = regmap_bulk_read(chg->regmap, chg->reg[LBC_USB] + PM8916_PERPH_TYPE, &tmp, 2);
-+	if (ret)
-+		goto comm_error;
-+	if (tmp != PM8916_LBC_USB_TYPE)
-+		goto type_error;
-+
-+	ret = regmap_bulk_read(chg->regmap, chg->reg[LBC_MISC] + PM8916_PERPH_TYPE, &tmp, 2);
-+	if (ret)
-+		goto comm_error;
-+	if (tmp != PM8916_LBC_MISC_TYPE)
-+		goto type_error;
-+
-+	ret = regmap_read(chg->regmap, chg->reg[LBC_CHGR] + PM8916_LBC_CHGR_CHG_OPTION, &tmp);
-+	if (ret)
-+		goto comm_error;
-+	if (tmp != PM8916_LBC_CHGR_PMIC_CHARGER)
-+		dev_err_probe(dev, -ENODEV, "The system is using an external charger\n");
-+
-+	ret = pm8916_lbc_charger_probe_dt(chg);
-+	if (ret)
-+		dev_err_probe(dev, ret, "Error while parsing device tree\n");
-+
-+	psy_cfg.drv_data = chg;
-+	psy_cfg.of_node = dev->of_node;
-+
-+	chg->charger = devm_power_supply_register(dev, &pm8916_lbc_charger_psy_desc, &psy_cfg);
-+	if (IS_ERR(chg->charger))
-+		return dev_err_probe(dev, PTR_ERR(chg->charger), "Unable to register charger\n");
-+
-+	ret = power_supply_get_battery_info(chg->charger, &chg->info);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Unable to get battery info\n");
-+
-+	chg->edev = devm_extcon_dev_allocate(dev, pm8916_lbc_charger_cable);
-+	if (IS_ERR(chg->edev))
-+		return PTR_ERR(chg->edev);
-+
-+	ret = devm_extcon_dev_register(dev, chg->edev);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "failed to register extcon device\n");
-+
-+	ret = regmap_read(chg->regmap, chg->reg[LBC_USB] + PM8916_INT_RT_STS, &tmp);
-+	if (ret)
-+		goto comm_error;
-+
-+	chg->online = !!(tmp & PM8916_LBC_USB_USBIN_VALID);
-+	extcon_set_state_sync(chg->edev, EXTCON_USB, chg->online);
-+
-+	chg->charge_voltage_max = chg->info->voltage_max_design_uv;
-+	ret = pm8916_lbc_charger_configure(chg);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+
-+comm_error:
-+	return dev_err_probe(dev, ret, "Unable to communicate with device\n");
-+
-+type_error:
-+	return dev_err_probe(dev, -ENODEV, "Device reported wrong type: 0x%X\n", tmp);
-+}
-+
-+static const struct of_device_id pm8916_lbc_charger_of_match[] = {
-+	{ .compatible = "qcom,pm8916-lbc", },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, pm8916_lbc_charger_of_match);
-+
-+static struct platform_driver pm8916_lbc_charger_driver = {
-+	.driver = {
-+		.name = "pm8916-lbc",
-+		.of_match_table = pm8916_lbc_charger_of_match,
-+	},
-+	.probe = pm8916_lbc_charger_probe,
-+};
-+module_platform_driver(pm8916_lbc_charger_driver);
-+
-+MODULE_DESCRIPTION("pm8916 LBC driver");
-+MODULE_AUTHOR("Nikita Travkin <nikita@trvn.ru>");
-+MODULE_LICENSE("GPL");
-
--- 
-2.41.0
-
+SGksIFNyaW5pdmFzLA0KDQpTdXJlLCBJIHdpbGwgdGVzdCBpdC4NCkFzIGxvbmcgdGVybSBub3Qg
+d29ya2luZyBvbiBFSEwsIEkgZG9lc24ndCBoYXZlIEVITCBib2FyZCBvbiBoYW5kIHJpZ2h0IG5v
+dywgSSBjYW4gdGVzdCB0aGlzIHBhdGNoIG9uIG90aGVyIElTSCByZWxhdGVkIHBsYXRmb3Jtcy4N
+CkZyb20gdGhlIHBhdGNoLCBpdCdzIGZvY3VzIG9uIEVITCBwbGF0Zm9ybSwgSSBhc3N1bWUgS2Fp
+LUhlbmcgYWxyZWFkeSB2ZXJpZmllZCB0aGUgZnVuY3Rpb24gb24gRUhMIGJvYXJkLg0KSSBkb24n
+dCB0aGluayBpdCB3aWxsIHRha2UgZWZmZWN0IG9uIG90aGVyIHBsYXRmb3JtcywgYW55d2F5LCBJ
+IHdpbGwgdGVzdCBpdCBvbiB0aGUgcGxhdGZvcm1zIEkgaGF2ZSB0byBwcm92aWRlIGNyb3NzIHBs
+YXRmb3JtIHZlcmlmaWNhdGlvbi4NCg0KVGhhbmtzIQ0KDQpCZXN0IFJlZ2FyZHMsDQpFdmVuIFh1
+DQoNCi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQpGcm9tOiBzcmluaXZhcyBwYW5kcnV2YWRh
+IDxzcmluaXZhcy5wYW5kcnV2YWRhQGxpbnV4LmludGVsLmNvbT4gDQpTZW50OiBGcmlkYXksIFNl
+cHRlbWJlciAxNSwgMjAyMyAxMjoxMSBBTQ0KVG86IEthaS1IZW5nIEZlbmcgPGthaS5oZW5nLmZl
+bmdAY2Fub25pY2FsLmNvbT47IGppa29zQGtlcm5lbC5vcmc7IGJlbmphbWluLnRpc3NvaXJlc0By
+ZWRoYXQuY29tDQpDYzogbGludXgtcG1Admdlci5rZXJuZWwub3JnOyBsaW51eC1wY2lAdmdlci5r
+ZXJuZWwub3JnOyBMZWUsIEppYW4gSHVpIDxqaWFuaHVpLmxlZUBjYW5vbmljYWwuY29tPjsgWHUs
+IEV2ZW4gPGV2ZW4ueHVAaW50ZWwuY29tPjsgWmhhbmcsIExpeHUgPGxpeHUuemhhbmdAaW50ZWwu
+Y29tPjsgQmEsIE5hanVtb24gPG5hanVtb24uYmFAaW50ZWwuY29tPjsgbGludXgtaW5wdXRAdmdl
+ci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQpTdWJqZWN0OiBSZTog
+W1BBVENIXSBISUQ6IGludGVsLWlzaC1oaWQ6IGlwYzogUmV3b3JrIEVITCBPT0Igd2FrZXVwDQoN
+CkhpIEV2ZW4sDQoNCk9uIFRodSwgMjAyMy0wOS0xNCBhdCAxMjoxOCArMDgwMCwgS2FpLUhlbmcg
+RmVuZyB3cm90ZToNCj4gU3lzdGVtIGNhbm5vdCBzdXNwZW5kIG1vcmUgdGhhbiAyNTUgdGltZXMg
+YmVjYXVzZSB0aGUgZHJpdmVyIGRvZXNuJ3QgDQo+IGhhdmUgY29ycmVzcG9uZGluZyBhY3BpX2Rp
+c2FibGVfZ3BlKCkgZm9yIGFjcGlfZW5hYmxlX2dwZSgpLCBzbyB0aGUgDQo+IEdQRSByZWZjb3Vu
+dCBvdmVyZmxvd3MuDQo+IA0KPiBTaW5jZSBQQ0kgY29yZSBhbmQgQUNQSSBjb3JlIGFscmVhZHkg
+aGFuZGxlcyBQQ0kgUE1FIHdha2UgYW5kIEdQRSB3YWtlIA0KPiB3aGVuIHRoZSBkZXZpY2UgaGFz
+IHdha2V1cCBjYXBhYmlsaXR5LCB1c2UgZGV2aWNlX2luaXRfd2FrZXVwKCkgdG8gbGV0IA0KPiB0
+aGVtIGRvIHRoZSB3YWtldXAgc2V0dGluZyB3b3JrLg0KPiANCj4gQWxzbyBhZGQgYSBzaHV0ZG93
+biBjYWxsYmFjayB3aGljaCB1c2VzIHBjaV9wcmVwYXJlX3RvX3NsZWVwKCkgdG8gbGV0IA0KPiBQ
+Q0kgYW5kIEFDUEkgc2V0IE9PQiB3YWtldXAgZm9yIFM1Lg0KPiANClBsZWFzZSB0ZXN0IHRoaXMg
+Y2hhbmdlLg0KDQpUaGFua3MsDQpTcmluaXZhcw0KDQo+IEZpeGVzOiAyZTIzYTcwZWRhYmUgKCJI
+SUQ6IGludGVsLWlzaC1oaWQ6IGlwYzogZmluaXNoIHBvd2VyIGZsb3cgZm9yIA0KPiBFSEwgT09C
+IikNCj4gQ2M6IEppYW4gSHVpIExlZSA8amlhbmh1aS5sZWVAY2Fub25pY2FsLmNvbT4NCj4gU2ln
+bmVkLW9mZi1ieTogS2FpLUhlbmcgRmVuZyA8a2FpLmhlbmcuZmVuZ0BjYW5vbmljYWwuY29tPg0K
+PiAtLS0NCj4gwqBkcml2ZXJzL2hpZC9pbnRlbC1pc2gtaGlkL2lwYy9wY2ktaXNoLmMgfCA1OSAr
+KysrKysrLS0tLS0tLS0tLS0tLS0tLQ0KPiAtLQ0KPiDCoDEgZmlsZSBjaGFuZ2VkLCAxNSBpbnNl
+cnRpb25zKCspLCA0NCBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2hp
+ZC9pbnRlbC1pc2gtaGlkL2lwYy9wY2ktaXNoLmMNCj4gYi9kcml2ZXJzL2hpZC9pbnRlbC1pc2gt
+aGlkL2lwYy9wY2ktaXNoLmMNCj4gaW5kZXggNTVjYjI1MDM4ZTYzLi42NWU3ZWViMmZhNjQgMTAw
+NjQ0DQo+IC0tLSBhL2RyaXZlcnMvaGlkL2ludGVsLWlzaC1oaWQvaXBjL3BjaS1pc2guYw0KPiAr
+KysgYi9kcml2ZXJzL2hpZC9pbnRlbC1pc2gtaGlkL2lwYy9wY2ktaXNoLmMNCj4gQEAgLTExOSw0
+MiArMTE5LDYgQEAgc3RhdGljIGlubGluZSBib29sIGlzaF9zaG91bGRfbGVhdmVfZDBpMyhzdHJ1
+Y3QgDQo+IHBjaV9kZXYgKnBkZXYpDQo+IMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gIXBtX3Jlc3Vt
+ZV92aWFfZmlybXdhcmUoKSB8fCBwZGV2LT5kZXZpY2UgPT0gDQo+IENIVl9ERVZJQ0VfSUQ7DQo+
+IMKgfQ0KPiDCoA0KPiAtc3RhdGljIGludCBlbmFibGVfZ3BlKHN0cnVjdCBkZXZpY2UgKmRldikg
+LXsgLSNpZmRlZiBDT05GSUdfQUNQSQ0KPiAtwqDCoMKgwqDCoMKgwqBhY3BpX3N0YXR1cyBhY3Bp
+X3N0czsNCj4gLcKgwqDCoMKgwqDCoMKgc3RydWN0IGFjcGlfZGV2aWNlICphZGV2Ow0KPiAtwqDC
+oMKgwqDCoMKgwqBzdHJ1Y3QgYWNwaV9kZXZpY2Vfd2FrZXVwICp3YWtldXA7DQo+IC0NCj4gLcKg
+wqDCoMKgwqDCoMKgYWRldiA9IEFDUElfQ09NUEFOSU9OKGRldik7DQo+IC3CoMKgwqDCoMKgwqDC
+oGlmICghYWRldikgew0KPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGV2X2Vycihk
+ZXYsICJnZXQgYWNwaSBoYW5kbGUgZmFpbGVkXG4iKTsNCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoHJldHVybiAtRU5PREVWOw0KPiAtwqDCoMKgwqDCoMKgwqB9DQo+IC3CoMKgwqDC
+oMKgwqDCoHdha2V1cCA9ICZhZGV2LT53YWtldXA7DQo+IC0NCj4gLcKgwqDCoMKgwqDCoMKgYWNw
+aV9zdHMgPSBhY3BpX2VuYWJsZV9ncGUod2FrZXVwLT5ncGVfZGV2aWNlLCB3YWtldXAtDQo+ID5n
+cGVfbnVtYmVyKTsNCj4gLcKgwqDCoMKgwqDCoMKgaWYgKEFDUElfRkFJTFVSRShhY3BpX3N0cykp
+IHsNCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRldl9lcnIoZGV2LCAiZW5hYmxl
+IG9zZV9ncGUgZmFpbGVkXG4iKTsNCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJl
+dHVybiAtRUlPOw0KPiAtwqDCoMKgwqDCoMKgwqB9DQo+IC0NCj4gLcKgwqDCoMKgwqDCoMKgcmV0
+dXJuIDA7DQo+IC0jZWxzZQ0KPiAtwqDCoMKgwqDCoMKgwqByZXR1cm4gLUVOT0RFVjsNCj4gLSNl
+bmRpZg0KPiAtfQ0KPiAtDQo+IC1zdGF0aWMgdm9pZCBlbmFibGVfcG1lX3dha2Uoc3RydWN0IHBj
+aV9kZXYgKnBkZXYpIC17DQo+IC3CoMKgwqDCoMKgwqDCoGlmICgocGNpX3BtZV9jYXBhYmxlKHBk
+ZXYsIFBDSV9EMCkgfHwNCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcGNpX3BtZV9jYXBhYmxl
+KHBkZXYsIFBDSV9EM2hvdCkgfHwNCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcGNpX3BtZV9j
+YXBhYmxlKHBkZXYsIFBDSV9EM2NvbGQpKSAmJiAhZW5hYmxlX2dwZSgmcGRldi0NCj4gPmRldikp
+IHsNCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHBjaV9wbWVfYWN0aXZlKHBkZXYs
+IHRydWUpOw0KPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGV2X2RiZygmcGRldi0+
+ZGV2LCAiaXNoIGlwYyBkcml2ZXIgcG1lIHdha2UgDQo+IGVuYWJsZWRcbiIpOw0KPiAtwqDCoMKg
+wqDCoMKgwqB9DQo+IC19DQo+IC0NCj4gwqAvKioNCj4gwqAgKiBpc2hfcHJvYmUoKSAtIFBDSSBk
+cml2ZXIgcHJvYmUgY2FsbGJhY2sNCj4gwqAgKiBAcGRldjrCoMKgwqDCoMKgwqBwY2kgZGV2aWNl
+DQo+IEBAIC0yMjUsNyArMTg5LDcgQEAgc3RhdGljIGludCBpc2hfcHJvYmUoc3RydWN0IHBjaV9k
+ZXYgKnBkZXYsIGNvbnN0IA0KPiBzdHJ1Y3QgcGNpX2RldmljZV9pZCAqZW50KQ0KPiDCoA0KPiDC
+oMKgwqDCoMKgwqDCoMKgLyogRW5hYmxlIFBNRSBmb3IgRUhMICovDQo+IMKgwqDCoMKgwqDCoMKg
+wqBpZiAocGRldi0+ZGV2aWNlID09IEVITF9BeF9ERVZJQ0VfSUQpDQo+IC3CoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqBlbmFibGVfcG1lX3dha2UocGRldik7DQo+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqBkZXZpY2VfaW5pdF93YWtldXAoZGV2LCB0cnVlKTsNCj4gwqANCj4g
+wqDCoMKgwqDCoMKgwqDCoHJldCA9IGlzaF9pbml0KGlzaHRwKTsNCj4gwqDCoMKgwqDCoMKgwqDC
+oGlmIChyZXQpDQo+IEBAIC0yNDgsNiArMjEyLDE5IEBAIHN0YXRpYyB2b2lkIGlzaF9yZW1vdmUo
+c3RydWN0IHBjaV9kZXYgKnBkZXYpDQo+IMKgwqDCoMKgwqDCoMKgwqBpc2hfZGV2aWNlX2Rpc2Fi
+bGUoaXNodHBfZGV2KTsNCj4gwqB9DQo+IMKgDQo+ICsNCj4gKy8qKg0KPiArICogaXNoX3NodXRk
+b3duKCkgLSBQQ0kgZHJpdmVyIHNodXRkb3duIGNhbGxiYWNrDQo+ICsgKiBAcGRldjrCoMKgwqDC
+oMKgwqBwY2kgZGV2aWNlDQo+ICsgKg0KPiArICogVGhpcyBmdW5jdGlvbiBzZXRzIHVwIHdha2V1
+cCBmb3IgUzUgICovIHN0YXRpYyB2b2lkIA0KPiAraXNoX3NodXRkb3duKHN0cnVjdCBwY2lfZGV2
+ICpwZGV2KSB7DQo+ICvCoMKgwqDCoMKgwqDCoGlmIChwZGV2LT5kZXZpY2UgPT0gRUhMX0F4X0RF
+VklDRV9JRCkNCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHBjaV9wcmVwYXJlX3Rv
+X3NsZWVwKHBkZXYpOyB9DQo+ICsNCj4gwqBzdGF0aWMgc3RydWN0IGRldmljZSBfX21heWJlX3Vu
+dXNlZCAqaXNoX3Jlc3VtZV9kZXZpY2U7DQo+IMKgDQo+IMKgLyogNTBtcyB0byBnZXQgcmVzdW1l
+IHJlc3BvbnNlICovDQo+IEBAIC0zNzAsMTMgKzM0Nyw2IEBAIHN0YXRpYyBpbnQgX19tYXliZV91
+bnVzZWQgaXNoX3Jlc3VtZShzdHJ1Y3QgDQo+IGRldmljZSAqZGV2aWNlKQ0KPiDCoMKgwqDCoMKg
+wqDCoMKgc3RydWN0IHBjaV9kZXYgKnBkZXYgPSB0b19wY2lfZGV2KGRldmljZSk7DQo+IMKgwqDC
+oMKgwqDCoMKgwqBzdHJ1Y3QgaXNodHBfZGV2aWNlICpkZXYgPSBwY2lfZ2V0X2RydmRhdGEocGRl
+dik7DQo+IMKgDQo+IC3CoMKgwqDCoMKgwqDCoC8qIGFkZCB0aGlzIHRvIGZpbmlzaCBwb3dlciBm
+bG93IGZvciBFSEwgKi8NCj4gLcKgwqDCoMKgwqDCoMKgaWYgKGRldi0+cGRldi0+ZGV2aWNlID09
+IEVITF9BeF9ERVZJQ0VfSUQpIHsNCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHBj
+aV9zZXRfcG93ZXJfc3RhdGUocGRldiwgUENJX0QwKTsNCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoGVuYWJsZV9wbWVfd2FrZShwZGV2KTsNCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoGRldl9kYmcoZGV2LT5kZXZjLCAic2V0IHBvd2VyIHN0YXRlIHRvIEQwIGZvciBl
+aGxcbiIpOw0KPiAtwqDCoMKgwqDCoMKgwqB9DQo+IC0NCj4gwqDCoMKgwqDCoMKgwqDCoGlzaF9y
+ZXN1bWVfZGV2aWNlID0gZGV2aWNlOw0KPiDCoMKgwqDCoMKgwqDCoMKgZGV2LT5yZXN1bWVfZmxh
+ZyA9IDE7DQo+IMKgDQo+IEBAIC0zOTIsNiArMzYyLDcgQEAgc3RhdGljIHN0cnVjdCBwY2lfZHJp
+dmVyIGlzaF9kcml2ZXIgPSB7DQo+IMKgwqDCoMKgwqDCoMKgwqAuaWRfdGFibGUgPSBpc2hfcGNp
+X3RibCwNCj4gwqDCoMKgwqDCoMKgwqDCoC5wcm9iZSA9IGlzaF9wcm9iZSwNCj4gwqDCoMKgwqDC
+oMKgwqDCoC5yZW1vdmUgPSBpc2hfcmVtb3ZlLA0KPiArwqDCoMKgwqDCoMKgwqAuc2h1dGRvd24g
+PSBpc2hfc2h1dGRvd24sDQo+IMKgwqDCoMKgwqDCoMKgwqAuZHJpdmVyLnBtID0gJmlzaF9wbV9v
+cHMsDQo+IMKgfTsNCj4gwqANCg0K
