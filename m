@@ -2,112 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E85477A26EF
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 21:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B1F7A273C
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 21:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236916AbjIOTJW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 15:09:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46338 "EHLO
+        id S236963AbjIOTdW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 15:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236950AbjIOTJS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 15:09:18 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C9498;
-        Fri, 15 Sep 2023 12:09:13 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1694804951;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FDeIVKTICKDFwpeyMiKeUyQnaEhJj8v8RkRSMefmd/k=;
-        b=AHhoxWCpLqkPmcYu/FFKkCMeN1qFRbSQa9NH06THW5izeby06dvSy8CbZpcnjAln4Y9CZW
-        +YnMsh53yrTYClYKQ2Hlrn0ZSNZRO03YSPFHP9egzWgUldP072yO8kSidxwSx881SkmpUI
-        WXQSiF4ghsDsnDK3I+JS2f6PtOSfiYMNOm2uhITtE8MThM7nvkwzC72foLGnqIHtnlRGbd
-        0LvoKP1quv4a9z6mNqyUp6kuXEDr8HOCl8BHHDMHIoBBrZmVE1EOziz2MKhGUvMTAAAxtA
-        mKU2tks1Qp9J0F0oeB2aYYINw4fyoXMVhmUb4I0Hv6P2deRKSnEoNGyHY9QjaA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1694804951;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FDeIVKTICKDFwpeyMiKeUyQnaEhJj8v8RkRSMefmd/k=;
-        b=ijQ0D6WzikBWYrorxKopMvxIQLmVdcyirOD2bgrPoV6JiJG3+BsxpPmKRUZIYx+Nm78qDP
-        WLkEpJeyJvydd7Bg==
-To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        linux-acpi@vger.kernel.org, James Morse <james.morse@arm.com>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        jianyong.wu@arm.com, justin.he@arm.com,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Salil Mehta <salil.mehta@huawei.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-ia64@vger.kernel.org
-Subject: Re: [PATCH RFC v2] cpu-hotplug: provide prototypes for arch CPU
- registration
-In-Reply-To: <E1qgnh2-007ZRZ-WD@rmk-PC.armlinux.org.uk>
-References: <E1qgnh2-007ZRZ-WD@rmk-PC.armlinux.org.uk>
-Date:   Fri, 15 Sep 2023 21:09:10 +0200
-Message-ID: <871qez1cfd.ffs@tglx>
+        with ESMTP id S237003AbjIOTdI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 15:33:08 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1A419A9;
+        Fri, 15 Sep 2023 12:33:03 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.239])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7B32766072F6;
+        Fri, 15 Sep 2023 20:33:02 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1694806382;
+        bh=iSR+RPv5YIiANQT6etKaNwwRPfS7OeKIt4Bk3q/IhlI=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=ChOBdnPEl8HNmTPu8KQr9oU4ckmynn4JcyidoZQIg7xPCOPjnPxnIRLSUzXzNTpya
+         elxEYjIcKyn+vzDREtMTS1ggvHz8hCjOz2GGtpO8mrBwU28E66VpZ0xRw3Fh0zjgu4
+         rktn7g893TtbPJb8cFxMBN8cDMfajMKEOkP3kg4gxUvGIs4mT311+iYQuOTfCIE8RW
+         OlGvPj3dPBB39nn/bN4pfWvj1LKOhT8PbefZz6AUHgcSV7Vi7FeNkvvC25/yFhyuG+
+         UAnPgWtp9w5aGPQKnV/AkS64Gqx48e8Nhae1nklvSM8bz7t1+EVqxUKRKJZh5L+0Km
+         C0JIZYEQ9UWkw==
+Received: by mercury (Postfix, from userid 1000)
+        id EF5A5106044B; Fri, 15 Sep 2023 21:32:59 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230621-topic-mm8013-v4-0-975aecd173ed@linaro.org>
+References: <20230621-topic-mm8013-v4-0-975aecd173ed@linaro.org>
+Subject: Re: [PATCH v4 0/3] MM8013 fg driver
+Message-Id: <169480637995.562542.1597166089132918555.b4-ty@collabora.com>
+Date:   Fri, 15 Sep 2023 21:32:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 14 2023 at 15:51, Russell King wrote:
-> Provide common prototypes for arch_register_cpu() and
-> arch_unregister_cpu(). These are called by acpi_processor.c, with
-> weak versions, so the prototype for this is already set. It is
-> generally not necessary for function prototypes to be conditional
-> on preprocessor macros.
->
-> Some architectures (e.g. Loongarch) are missing the prototype for this,
-> and rather than add it to Loongarch's asm/cpu.h, lets do the job once
-> for everyone.
->
-> Since this covers everyone, remove the now unnecessary prototypes in
-> asm/cpu.h, and we also need to remove the 'static' from one of ia64's
-> arch_register_cpu() definitions.
->
-> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> ---
-> Spotted during the review of James Morse's patches, I think rather than
-> adding prototypes for loongarch to its asm/cpu.h, it would make more
-> sense to provide the prototypes in a non-arch specific header file so
-> everyone can benefit, rather than having each architecture do its own
-> thing.
->
-> I'm sending this as RFC as James has yet to comment on my proposal, and
-> also to a wider audience, and although it makes a little more work for
-> James (to respin his series) it does mean that his series should get a
-> little smaller.
 
-And it makes tons of sense.
+On Fri, 15 Sep 2023 14:45:14 +0200, Konrad Dybcio wrote:
+> This series brings support for the Mitsumi MM8013 Li-Ion fuel gauge.
+> 
+> 
 
-> See:
->  https://lore.kernel.org/r/20230913163823.7880-2-james.morse@arm.com
->  https://lore.kernel.org/r/20230913163823.7880-4-james.morse@arm.com
->  https://lore.kernel.org/r/20230913163823.7880-23-james.morse@arm.com
->
-> v2: lets try not fat-fingering vim.
+Applied, thanks!
 
-Yeah. I wondered how you managed to mangle that :)
+[1/3] dt-bindings: vendor-prefixes: Add Mitsumi Electric Co., Ltd.
+      commit: dc2dc941730438250a5c6567b8685f065ce1dd0f
+[2/3] dt-bindings: power: supply: Document Mitsumi MM8013 fuel gauge
+      commit: 9d15ff53398b4b21198ee6dec4f65a251de881dc
+[3/3] power: supply: Introduce MM8013 fuel gauge driver
+      commit: c75f4bf6800bde67df22ac95139279ec8764118a
 
->  arch/ia64/include/asm/cpu.h | 5 -----
->  arch/ia64/kernel/topology.c | 2 +-
+Best regards,
+-- 
+Sebastian Reichel <sebastian.reichel@collabora.com>
 
-That's moot as ia64 is queued for removal :)
-
-Thanks,
-
-        tglx
