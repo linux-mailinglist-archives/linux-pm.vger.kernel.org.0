@@ -2,85 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 416D17A1476
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 05:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6F17A1500
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 07:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbjIODhu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Sep 2023 23:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56346 "EHLO
+        id S232005AbjIOFCC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 01:02:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231718AbjIODht (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Sep 2023 23:37:49 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D34E2715
-        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 20:37:45 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-68fbd5cd0ceso1437691b3a.1
-        for <linux-pm@vger.kernel.org>; Thu, 14 Sep 2023 20:37:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1694749065; x=1695353865; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KrkAHIjQDGiDP5wEakotxifTSwpH8QMLY2bspVz+a84=;
-        b=VacDg1G4fPqQLceZaZVGmHlkMY1eJ5CbVieHp0oF4+iurLvzRyAMmqqlA+nWn6jARx
-         DvPLfzS3QYOwJ7s4NPpRK+cAFxjM6UTM2fx+wNU8ukTPXAwMBQ36RMeQakzkWxIhFX4y
-         Si0/1B3QuM7M1KkL2lUNt5k02JlJc/1ObmYHM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694749065; x=1695353865;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KrkAHIjQDGiDP5wEakotxifTSwpH8QMLY2bspVz+a84=;
-        b=WHbRSrasjdRUyIIIoECrFHqLWm1WMpDZWHG9yjTbrHkL33c/Zqs8vZE+7qpNe2+yO1
-         4sCtXJQqQ9OrkDJsUTma5aOgGH0j5j7z6r1qh56/zEidAlkvjZuufafWf14LGz559X9N
-         XYsxrRPkstXgsXNGSQFlzU/v/Y5BYHBGWMEo5rX/mI+ENfwrj4DTLmcttilfYKTpokHd
-         CAb7eR1o2f3D/lqyj0z6FYCr/VhIlntJFeakd6BDfxSK+P1Jcq15ECXocwtWXBHv6G+y
-         PQUE0qrGs8bWL+8jb9pUdZ/Q3bIx7wmy9EF2eK9VAvNerY7hy5Meex1R+cPiwnz29TkU
-         xJ6Q==
-X-Gm-Message-State: AOJu0YwKspGmbueq06dkV6gK2kREAM4aBPzaJxIBYUlMFOJUXBw2Yuh8
-        vLjSv8BBkv6Cx5pZT73EZWXGZiqlV6qIa3oVSbs=
-X-Google-Smtp-Source: AGHT+IFKL9tpOx2ny4+YwCrHk5FiqrcmS6CBKI/hcxifOw5XLZvj2VUumvEZKpC3o2Q57QcevfaOvg==
-X-Received: by 2002:a05:6a00:189a:b0:68a:6d1a:b812 with SMTP id x26-20020a056a00189a00b0068a6d1ab812mr674679pfh.9.1694749065065;
-        Thu, 14 Sep 2023 20:37:45 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id f10-20020aa782ca000000b0068fe7e07190sm2011222pfn.3.2023.09.14.20.37.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Sep 2023 20:37:44 -0700 (PDT)
-Date:   Thu, 14 Sep 2023 20:37:44 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] cpuidle: dt: refactor deprecated strncpy
-Message-ID: <202309142037.5D689164B@keescook>
-References: <20230913-strncpy-drivers-cpuidle-dt_idle_states-c-v1-1-d16a0dbe5658@google.com>
+        with ESMTP id S231956AbjIOFB7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 01:01:59 -0400
+Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9CB270C;
+        Thu, 14 Sep 2023 22:01:54 -0700 (PDT)
+Received: from authenticated-user (box.trvn.ru [194.87.146.52])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by box.trvn.ru (Postfix) with ESMTPSA id D7F9A408F4;
+        Fri, 15 Sep 2023 10:01:48 +0500 (+05)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
+        t=1694754109; bh=bRTOlIXs0GaJZ3RdCo/eBGeEP3W8/vAikoVbTc2AJ34=;
+        h=From:Subject:Date:To:Cc:From;
+        b=oVdFy9tzVKsWmjw/D5RS62s1npOBflbrpxeFd6/xNgCsqUQPxcradeRENl0Su+lqL
+         iOXLjMAUwPYTFerjma0g188SCF2AQZ46j8uV8x8PbXVxjBu2s2f+OthCj7Yi1Qr55p
+         Fa4tP4YA/8QBiVm8yGgvV/JNRZQHKA61ApGaTwAAN6HmndzNxnKrxD4uA02Lw02Fw1
+         IPAOGpU9LCv1r3Np0wyyy77SzSn0IMI3ojCWf2UsP1aH8TZQqAhP+RPDtxG95ZuOLv
+         aeuXxI2Np8aHBqcawDr/+WXc73q3hxVMUigrjwh1G4hecMLp/fhVRDDBjLhVmCRRE+
+         JyO/fl+9OTkqQ==
+From:   Nikita Travkin <nikita@trvn.ru>
+Subject: [PATCH v3 0/4] Add pm8916 VM-BMS and LBC
+Date:   Fri, 15 Sep 2023 10:01:17 +0500
+Message-Id: <20230915-pm8916-bms-lbc-v3-0-f30881e951a0@trvn.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230913-strncpy-drivers-cpuidle-dt_idle_states-c-v1-1-d16a0dbe5658@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAB7lA2UC/2XM3QrCIBjG8VsZHmfo+27qdtR9RAe6uSa0D3RJM
+ XbvuUEUdfg88P8tJFjvbCBVthBvowtuHNLAQ0bqTg9XS12TNgEGyCRIOvWq5IKaPtCbqSm2iiE
+ rEIQGkqLJ29Y9dvB8SbtzYR79c/cj3943pX6pyCmjhWg0Qi5kruRp9nE4+jvZoAhfMfK/GFKsQ
+ OfWGCxrLj7xuq4vbXCo+ucAAAA=
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Nikita Travkin <nikita@trvn.ru>, Rob Herring <robh@kernel.org>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1756; i=nikita@trvn.ru;
+ h=from:subject:message-id; bh=bRTOlIXs0GaJZ3RdCo/eBGeEP3W8/vAikoVbTc2AJ34=;
+ b=owEBbQKS/ZANAwAIAUMc7O4oGb91AcsmYgBlA+U7c8u3J61As8/aSeeKHxFN6Dr5shE4jHCda
+ YprJj5ecgeJAjMEAAEIAB0WIQTAhK9UUj+qg34uxUdDHOzuKBm/dQUCZQPlOwAKCRBDHOzuKBm/
+ ddwuD/9qgJWtTdoAV0ZffCSEmCCyWVW6jiIuo3bErhaIJSV45ffEK4kSwpDmZSbb1XOx4lOia8S
+ 7GqkNF5dUZ06L3L8tZnes43jFFItc0FbHA/FqfmhNT0QTo4ZgGXkGv6mwa155QEk0uwHfdre/xG
+ CeLFtJ/p1GSus2YDZdYht0UVf0GvJ5dzZljcMxduo8UVGwfsV4Gu2wYZJytSa+Th2dnzOpR3Y/m
+ 8pfEKbM30KlIvhDmKRh6VJ4QrdDEVR88B/iOse8OuHnjnj39F/kCsDqaDOiEHGHm8dgaTiKYPkZ
+ y1GjRGV3mROURWe1rnuYn8GTkP4dfD50L6LxN+ibogJDhkRDLxte60a0kTW2M727X+q941Tsnnn
+ zz5xa0NKa3Qx36W1J7jz9yheBtgkw0hF1o9dSvB6OqOagVtabclBxc4O2bJV055LHe63LAE4nIj
+ nX2EvYRgv1hzP1gB5UpiscJ3YlVwwQ99fzjgMvwMkESz/mFZ607314xx9AR7qcx8E7fx1rTUaD9
+ 1Go3ADTfcw97Y4FiX+TeKfmBtnnk9XfGRqq8RFRjpqO6Ym4rJvSG7TJg2LgdEp/Kf1wtb008mOg
+ hOJ+b95zPziCkdLiJVbNM4lKmQXEq1Qdb+h23s1WF+HlfzUTG7XdvehGdXAIBnKVOt9W47Ad57S
+ 2MS1sgBy/LxekGA==
+X-Developer-Key: i=nikita@trvn.ru; a=openpgp;
+ fpr=C084AF54523FAA837E2EC547431CECEE2819BF75
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 13, 2023 at 12:23:19AM +0000, Justin Stitt wrote:
-> `strncpy` is deprecated for use on NUL-terminated destination strings [1].
-> 
-> We should prefer more robust and less ambiguous string interfaces.
-> 
-> A suitable replacement is `strscpy` [2] due to the fact that it guarantees
-> NUL-termination on the destination buffer. With this, we can also drop
-> the now unnecessary `CPUIDLE_(NAME|DESC)_LEN - 1` pieces.
-> 
-> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
-> Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
-> Link: https://github.com/KSPP/linux/issues/90
-> Cc: linux-hardening@vger.kernel.org
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+This series adds charger and "fuel-gauge" found in Qualcomm pm8916 PMIC.
 
-A very regular strncpy/strscpy conversion. :)
+The LBC - Linear Battery Charger is a simple CC/CV charger, that works
+autonomously after the current and voltage limits are set.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+The VM-BMS - Voltage Mode BMS is a simple hardware block that provides
+average voltage on the battery terminals.
 
+These two hardware blocks are used as the battery charging and
+management solution in some old Qualcomm devices.
+
+Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+---
+Changes in v3:
+- Use device_property_* instead of of_*
+- PROP_INPUT_CURRENT_LIMIT -> PROP_CONSTANT_CHARGE_CURRENT in lbc
+- Report OCV with timeout in vm-bms
+- Link to v2: https://lore.kernel.org/r/20230731-pm8916-bms-lbc-v2-0-82a4ebb39c16@trvn.ru
+
+Changes in v2:
+- Add full interrupt list in the DT bindings. (Conor)
+- Link to v1: https://lore.kernel.org/r/20230728-pm8916-bms-lbc-v1-0-56da32467487@trvn.ru
+
+---
+Nikita Travkin (4):
+      dt-bindings: power: supply: Add pm8916 VM-BMS
+      dt-bindings: power: supply: Add pm8916 LBC
+      power: supply: Add pm8916 VM-BMS support
+      power: supply: Add driver for pm8916 lbc
+
+ .../bindings/power/supply/qcom,pm8916-bms-vm.yaml  |  83 +++++
+ .../bindings/power/supply/qcom,pm8916-lbc.yaml     | 128 +++++++
+ drivers/power/supply/Kconfig                       |  22 ++
+ drivers/power/supply/Makefile                      |   2 +
+ drivers/power/supply/pm8916_bms_vm.c               | 305 +++++++++++++++++
+ drivers/power/supply/pm8916_lbc.c                  | 381 +++++++++++++++++++++
+ 6 files changed, 921 insertions(+)
+---
+base-commit: dfa449a58323de195773cf928d99db4130702bf7
+change-id: 20230727-pm8916-bms-lbc-3f80305326a2
+
+Best regards,
 -- 
-Kees Cook
+Nikita Travkin <nikita@trvn.ru>
+
