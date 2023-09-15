@@ -2,247 +2,292 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8217A2964
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 23:31:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 121F67A2A41
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Sep 2023 00:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237390AbjIOVbT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 17:31:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36890 "EHLO
+        id S231819AbjIOWNE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 18:13:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237601AbjIOVbN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 17:31:13 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2049.outbound.protection.outlook.com [40.107.92.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE28B8;
-        Fri, 15 Sep 2023 14:31:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ig8jVCPnvNpYlQJDPANaXGqg6oJXsDhztkk26aFzWhEQzJJl5Z9H9UrKQi5NQIskCeC9N93z40zaY8ly5dooTEnUO3Kj/MZbF5eel8kJBxxQb8oQu6IItpNffvXuBPJM5hK2SV5ZyByCvtm9rUjE1wECmKhCBn2uwXjrYQf64EM5h7HgkaL4p2J6xkP3Va8MZrqtbvwM8k5VdQ5c3QFbpgFU/oaTxDpfgAfYPy3mZe/u0kJF5WGOoCqH1w/lwXL72eMT8nl/8HzpoxeeqE9BAT05B5RqhF1YV6cVZUXF6H1DN3pVhzlXbHt3DpmTlLf/rVYxVeRqvr+u+2EuotISPg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JoJuQTSLhyk51WMh4HDMA46YL23+jXLLlr4lbeC+UPc=;
- b=aCUsODOjd4R5BRturLkBC9kmM4U/SAqFtRxPuXmD4SJmFUxZvx/YEgCDIXrwIkaVaAN2kSho4nHmkJiQTSAtoCx0Dl9Cu39Mk2VbEpP8zVJbYft4EZk6SnkLEjlJdTvCNE6ROwj5Fzr9u86PR6bM+0SdEVkAOa31CbMcdoz8YiDebbGzd+U/5tt1QwoYnnapHe7qSfWZE7EleRrc3JzO9BhBdScjO/dXspmI32P7swIQaKP8+vCocu2Mb/vLTOToAWp7baat4BzZKSkoevuOda/1inPKm6aZXMkkZe73oRNFn1/mmiUgHjwBygWcbxnav1cdaWDw/ZA56p/6WWNzuQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JoJuQTSLhyk51WMh4HDMA46YL23+jXLLlr4lbeC+UPc=;
- b=mXeyZ9f7iH2g8o9OoDjd4hx8n+ij03+PWT79BsccqyEXkFHSQ5yTZDHN6+StlNRNW0uq16ZlJXfYC5F8P0lh17U1vB2T8djddAehZzG2tGCm6hOxWJ+KarsM0S6fHIYyv4HJzy03r+8YvubqK6e0CLYYPsvJa9S+289RKEno9xg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by PH7PR12MB6858.namprd12.prod.outlook.com (2603:10b6:510:1b4::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.34; Fri, 15 Sep
- 2023 21:31:04 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::36f9:ffa7:c770:d146]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::36f9:ffa7:c770:d146%7]) with mapi id 15.20.6768.029; Fri, 15 Sep 2023
- 21:31:04 +0000
-Message-ID: <2fd025a9-52f3-4922-99cf-82355b0e35fe@amd.com>
-Date:   Fri, 15 Sep 2023 16:31:00 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] tools/power/x86/intel_pstate_tracer: Use pygnuplot
- package for Gnuplot
-Content-Language: en-US
-To:     Doug Smythies <dsmythies@telus.net>,
-        'Swapnil Sapkal' <swapnil.sapkal@amd.com>,
-        rafael.j.wysocki@intel.com, Ray.Huang@amd.com, li.meng@amd.com,
-        shuah@kernel.org
-Cc:     sukrut.bellary@gmail.com, gautham.shenoy@amd.com,
-        wyes.karny@amd.com, Perry.Yuan@amd.com, zwisler@chromium.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        'Srinivas Pandruvada' <srinivas.pandruvada@linux.intel.com>
-References: <20230915104057.132210-1-swapnil.sapkal@amd.com>
- <20230915104057.132210-3-swapnil.sapkal@amd.com>
- <00b201d9e819$b2447e80$16cd7b80$@telus.net>
-From:   Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <00b201d9e819$b2447e80$16cd7b80$@telus.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA1PR04CA0002.namprd04.prod.outlook.com
- (2603:10b6:806:2ce::10) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        with ESMTP id S237418AbjIOWMr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 18:12:47 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADF31FDE
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 15:12:40 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.239])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BEEDB66072BE;
+        Fri, 15 Sep 2023 23:12:38 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1694815958;
+        bh=7+YUopNvephDvcm26CDJT1sI52MuUqcLhOLapSZJeH8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PLFmWWxxo4yj6gNDj4NdqFLkSRjASlGAHIRcF0ypcwM2+86mbe4xTrbK4/asbzy/c
+         os5aweD6PxtknKHjL3wDdVMCw4fmpOao/ZXZ1FS6TZGOjug06C2m9iDp0iP8S0vwfo
+         Nic3ubcjQG1FNsH5J7QlBzTerGn7VJ9R5o4yYW55MNAh/GzHHMbpHE/FxrzkICjfUB
+         XPjPV9FTuAB4aFtz/GbzwCNggAGfb/Z5jzrFZt66S6CmCKwd5dirgq9WZe6iLcvNAz
+         /jhKcDZdusjNjs18beh+Yh7v/YW+0NADS0myIsF6M61u+Q0q0FvvmLi8xb8IlUWZQr
+         ATt36qXpwe3LA==
+Received: by mercury (Postfix, from userid 1000)
+        id 537B510603FB; Sat, 16 Sep 2023 00:12:36 +0200 (CEST)
+Date:   Sat, 16 Sep 2023 00:12:36 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Chris Morgan <macroalpha82@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linqiheng@huawei.com,
+        macromorgan@hotmail.com, Dan Carpenter <dan.carpenter@oracle.com>
+Subject: Re: [PATCH] power: supply: Fix additional refcount leak in
+ rk817_charger_probe
+Message-ID: <20230915221236.l2xaxkqofkqrfnuy@mercury.elektranox.org>
+References: <20230518153230.1584962-1-macroalpha82@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|PH7PR12MB6858:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1f7ed44b-2664-48cf-c309-08dbb63310a1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vAz45FISJ3lQVuD4hvDbymDbg80107MVLRL5G1UVoWwH8jVN/tULo3OtDrawn0VTwUp0Fi0/AEO6W3GOQvQMt91ghtqrBR1QurZNkv+QlUU8rwIGEl+MMhZPlDGulJPkG5D0y873VlQOmLwWaMMbdP9iSAGKUI03QmHFu739T0Nsh/Yf5xd0H3QEdvb3cw7jDGndKaUwxEwSIXCRQ1zl3hEreIveXrN0vFFgheg9qb+rmOHq8r0j/WmOgkHy3u1hbEGf09/HKfRlSG8zibZoU5u5DMZUV1wz3922eWS/5sar/HnQONbog/ttw13+N4ybSkUNidrTm0afxgvfnN5HdxrGd8mo5T6yuEp+31ii2efDso3OOsWki8ES3nYYubG0AWaRAwdTlIeAsWd6+cu2j/raeahSZJ7O8frYohed1+fxpLF8YdxTL+4lbmv7eckBUneQR9e4YDiHOwN4OM0T5+bffDCx1N4lMGXbA0rLDRtB9aSqY/QHoiiLilLHWHzYBzn76PtAZvjyN4qlYF3H+RzUEGiu/kZwcJEeJV1D3H+jmtLxeVKNpQtklEOj/LimVsmfDPvsL3a+4sKZakibIbf3cswxk4+jkJBJ9jRiSZgTAwDfU66/s9oCA9rO+GKNoJQ5qbXmrsccEMKEjjhqIw9egTaJeW+88EHIe+DuwSc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(136003)(366004)(376002)(39860400002)(346002)(1800799009)(186009)(451199024)(66556008)(41300700001)(6506007)(316002)(966005)(110136005)(6666004)(6486002)(26005)(2616005)(66946007)(6512007)(53546011)(66476007)(478600001)(36756003)(8936002)(8676002)(2906002)(4326008)(86362001)(38100700002)(83380400001)(5660300002)(44832011)(31696002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q20xajJTbklUSVovSCs2WW5waE91K0tzNFl0U0xRU2t0US9lUjlmaDJJMkZ2?=
- =?utf-8?B?enZOYis4Z0prQ0NZSGxnNGtMTTU0c1B3RHZKS1lESzM1UWRDN1JWajdJdVI1?=
- =?utf-8?B?eEh0dVhFTmpyNG9nUWdSLzVlV1RWL3FuWDR1M3AvTml0aktNTnpLNmJpVzRC?=
- =?utf-8?B?KzNlWVZQU3YvVEZoN2VGUTh0dTBvSzFDUTBHOGFhRkhHSUhFU3Y0K0MzQktT?=
- =?utf-8?B?b05ZSjVPUGpJRTQvOE5JRTJvcjk1YUtMUThQbmR0REIrMEY4a2VWQ2ozK1ht?=
- =?utf-8?B?OUYvdWExR3F5LzRVRWYrSFlCSWJmbmdyQlpZTlRwTXNoS0E2eit4bWJBeDN5?=
- =?utf-8?B?NWVUYzVrN3JGSzZLaDFCRzk0QlVkaVJqcllIVDNxaVlybVAxWjNycnQ0VDI5?=
- =?utf-8?B?YXNJOGNOQXJUYkpFbmxGbU9lVkg5aldXL1dzak8wZDdRRitNdXozaGNsTUpV?=
- =?utf-8?B?N0V5eVdZQ21sRGFWbmdwL1Q1WUMyMHhUN00ySDUyOW9FZnNHZS8yamozNG4v?=
- =?utf-8?B?N01jbUo5VmRndFgvS1U4RmhMTWQ4MERVT0VlTnZ2bWRFcEtTMXo2Tm9KUzNS?=
- =?utf-8?B?bjdUdmwwZFBWejlxZ0JvME9icU4wMEpaUDA2eGJKbW1XZEpmSTBoSXFUWmF4?=
- =?utf-8?B?eTJ6Y3YzdWtOYVhEcWs3WTJacWNud04vV0tEWVZ5ei8yQUdJL0ViNTdHbHdo?=
- =?utf-8?B?b3d3WjRxU1NpY0NBamRPMDMxMXVVVjBZM0hXWGhIeFRYWDBOcjN5eUV3M3dz?=
- =?utf-8?B?Z1g2SWlzZVpndzZJckpCaHBXU2tZSnRyYnU4ZGN5OGxiUmY5UEw0SDFFTEpR?=
- =?utf-8?B?djZzb3N6VnZFaUZEODNwL2JyVzRXd1U4OWE0OUt0d2dkMkJpOWZmQ1haMjV1?=
- =?utf-8?B?NXE3aFhtZmhRZVVCZlFTQXAyODI4NXlWcWt5SXI3azBGL25jZGxGVzllTGhQ?=
- =?utf-8?B?SUJmSVUybE15RVd2RmlhU3lUcVpRZmloZ3RvNmVVeEVuR1UxWnc0c1JpUDFH?=
- =?utf-8?B?UFA3a0ZQU1ZpM0hybVdYdHJnUmF0ZzhMcVA0eGFFUG02ZGtDVTlpVkVzVE5M?=
- =?utf-8?B?bjV6U3d6cCthRGk5OHd2YjFadEEybXJMbkd3QWpmbGRxdHU1dHJEeEw5QjhV?=
- =?utf-8?B?akxPNFlhRnpFMzlsQUpoeFlwU1hQYWNQK0NSRFN5TTJqQ1BETndWWkJPbDJZ?=
- =?utf-8?B?K3ExTWJ3WnFCVVRXTXMxankwNTZ2UXByK0UzZTRzOGhHODU0OVNXQW5SdWtJ?=
- =?utf-8?B?ZnNQa3IrR1d4OW5POWFiQnlxWEthLzhGWlV5QzlDWDFXRkxjcER4cDQyUERK?=
- =?utf-8?B?YVE3NHlXVlhLNGF3RkhYZ09WSWg2MWs1U2U5eWoxVjl1Q2l0VHlyRTlqQmF1?=
- =?utf-8?B?eTQ2RHB6NGxKRXhraTdzUHl5czZaejZ6VFp1WnRaM2g5SE1GZXJNbWo1MU0y?=
- =?utf-8?B?V0g0MlFQMVowRFEyZ2JROUZ3Z3d5L0YyQmFwaDIyckxObXJrdDBhQkFyZ1RK?=
- =?utf-8?B?eXU0cVQ0Z1hHS1N0dS9EeUJDQTYzcGdmcWtVSjRucEthaWozNmQ5TTRVSkRs?=
- =?utf-8?B?UU9Hb3B0WVFEVXUvUHplS3dOaVg1Y1BzeEN5UXpWZWhSeVZXTTJRZlVNejBn?=
- =?utf-8?B?YVVUZFJDMGJVeFpnNituNmdvN0wvb2pPdnl2MTJSNnh0R1ZWMC90TXEzSDF3?=
- =?utf-8?B?d0oxVDkzQWF0NUdwYWJLZCtoTmthOVdDeXJMWHc5M0R3alpkUnpRNW9vSTh1?=
- =?utf-8?B?alJ3a2s4RXRyVU4rYkVRK3hlQmc1ekZzTEd4YVlFVnEveEtmNk9OMThjQXdh?=
- =?utf-8?B?aFNnbHF5ZjZpejlqeC8wRjNESG5zOVcra3F2aUU3ZXgxdy8yL1RrMXhJRjk3?=
- =?utf-8?B?TEhDWFJaTExtc3JxQURwMEEwcHc0NnNLVXJrUmtpU2pQNS85eFNEYWF6Lytv?=
- =?utf-8?B?VUhpVmhGcGoreHhkRTJJUDJPZWp4eU1IK1ljZStJVFJVazdGclNxOGQ4WHNy?=
- =?utf-8?B?eFFWUmhMbXB6dFFDcGIvODN6cHduNzB4aXlQd1Y2ZjhNUUxUMUEvc2w4Z2t6?=
- =?utf-8?B?eHI2R3hQcjNPZTR6bkVwTnJackxtV1BnbGw1L0xIUDV2OUJuTzFzcVd5azhK?=
- =?utf-8?Q?d0j31kyjqq+xmysaNDBD8EMdV?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1f7ed44b-2664-48cf-c309-08dbb63310a1
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2023 21:31:04.3585
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HGie57ro5j7gz+UTRUEQGjftupi2+8wjQ/ZN7SaMj5YXYR2bBJKdtwx3+DaAd9LYOG+m+rcsWk9iB5p72Ca+NA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6858
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="z6l6kzw7qg5gcrrd"
+Content-Disposition: inline
+In-Reply-To: <20230518153230.1584962-1-macroalpha82@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 9/15/2023 16:15, Doug Smythies wrote:
-> On 2023.09.15 03:41 Swapnil Sapkal wrote:
-> 
->> In intel_pstate_tracer.py, Gnuplot is used to generate 2D plots.
->> In current implementation this tracer gives error while importing
->> the module because Gnuplot is imported from package Gnuplot-py which
->> does not support python 3.x. Fix this by using pygnuplot package to
->> import this module.
-> 
-> As described in the prerequisites section, the package name is distribution dependant.
-> On my distribution the original package name is phython3-gnuplot,
-> and it is working fine.
-> 
-> sys.version_info(major=3, minor=8, micro=10, releaselevel='final', serial=0)
-> 
-> I don't currently have python3-pygnuplot installed, and so this patch breaks
-> the  intel_pstate_tracer for me.
-> 
-> So, I installed the python3-pygnuplot package, and it still didn't work, as there
-> still wasn't a pygnuplot module to import.
-> So, I found something called PyGnuplot.py and so changed to that and got further.
-> But then it got upset with:
-> 
->    File "./intel_pstate_tracer.py.amd", line 298, in common_gnuplot_settings
->      g_plot = gnuplot.Gnuplot(persist=1)
-> NameError: name 'gnuplot' is not defined
-> 
-> I gave up and returned to the unpatched
-> intel_pstate_tracer.py
-> And checked that is still worked fine. It did.
-> 
-> So, I do not accept this proposed patch.
-> 
-> Not really related, but for a few years now I have been meaning to
-> change the minimum python version prerequisite to >= 3.0 and
-> to change the shebang line from this:
-> 
-> #!/usr/bin/env python
-> 
-> To this:
-> 
-> #!/usr/bin/env python3
-> 
-> I have to use the latter version on my distro.
-> Back when I looked into it, things were inconsistent,
-> so I didn't know what to do. The kernel tree has 52 .py files
-> of the latter shebang and 11 of the former.
-> 
-> ... Doug
 
-Presumably this is the one that Swapnil intended:
+--z6l6kzw7qg5gcrrd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-https://pypi.org/project/py-gnuplot/
+Hi,
 
-It requires python3, so I think if upgrading to this one the script does 
-need to be switched to python3.  Besides the shebang, you should also 
-use a helper like 2to3 to look for any other changes.
+On Thu, May 18, 2023 at 10:32:30AM -0500, Chris Morgan wrote:
+> From: Chris Morgan <macromorgan@hotmail.com>
+>=20
+> Dan Carpenter reports that the Smatch static checker warning has found
+> that there is another refcount leak in the probe function. While
+> of_node_put() was added in one of the return paths, it should in
+> fact be added for ALL return paths that return an error.
+>=20
+> Fixes: 54c03bfd094f ("power: supply: Fix refcount leak in rk817_charger_p=
+robe")
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Closes: https://lore.kernel.org/linux-pm/dc0bb0f8-212d-4be7-be69-becd2a3f=
+9a80@kili.mountain/
+> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+> ---
 
-There were 97 hits for 'gnuplot' at pypi.  2 stood out but at least in 
-the case of gnuplot based stuff, I think it's worth dropping
-a comment that links back to pypi page for the intended package.
+This kind of fell through the cracks, sorry. Looking at it now it's
+incomplete: Even after this patch there is still a leak on module
+removal. You should use devm_add_action_or_reset() to register a
+handler doing of_node_put(). That also results in a much smaller
+diff :)
 
-Another alternative is to include a 'requirements.txt' file that pip can 
-pick up.
+Greetings,
 
-https://pip.pypa.io/en/stable/reference/requirements-file-format/
+-- Sebastian
 
+>  drivers/power/supply/rk817_charger.c | 76 ++++++++++++++++++----------
+>  1 file changed, 48 insertions(+), 28 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/rk817_charger.c b/drivers/power/supply/=
+rk817_charger.c
+> index 1a2143641e66..bd4f530910a5 100644
+> --- a/drivers/power/supply/rk817_charger.c
+> +++ b/drivers/power/supply/rk817_charger.c
+> @@ -1063,8 +1063,8 @@ static int rk817_charger_probe(struct platform_devi=
+ce *pdev)
+> =20
+>  	charger =3D devm_kzalloc(&pdev->dev, sizeof(*charger), GFP_KERNEL);
+>  	if (!charger) {
+> -		of_node_put(node);
+> -		return -ENOMEM;
+> +		ret =3D -ENOMEM;
+> +		goto out_node_put;
+>  	}
+> =20
+>  	charger->rk808 =3D rk808;
+> @@ -1085,8 +1085,9 @@ static int rk817_charger_probe(struct platform_devi=
+ce *pdev)
+>  	ret =3D of_property_read_u32(node, "rockchip,resistor-sense-micro-ohms",
+>  				   &of_value);
+>  	if (ret < 0) {
+> -		return dev_err_probe(dev, ret,
+> -				     "Error reading sample resistor value\n");
+> +		dev_err_probe(dev, ret,
+> +			      "Error reading sample resistor value\n");
+> +		goto out_node_put;
+>  	}
+>  	/*
+>  	 * Store as a 1 or a 2, since all we really use the value for is as a
+> @@ -1102,8 +1103,9 @@ static int rk817_charger_probe(struct platform_devi=
+ce *pdev)
+>  				   "rockchip,sleep-enter-current-microamp",
+>  				   &of_value);
+>  	if (ret < 0) {
+> -		return dev_err_probe(dev, ret,
+> -				     "Error reading sleep enter cur value\n");
+> +		dev_err_probe(dev, ret,
+> +			      "Error reading sleep enter cur value\n");
+> +		goto out_node_put;
+>  	}
+>  	charger->sleep_enter_current_ua =3D of_value;
+> =20
+> @@ -1112,29 +1114,35 @@ static int rk817_charger_probe(struct platform_de=
+vice *pdev)
+>  				   "rockchip,sleep-filter-current-microamp",
+>  				   &of_value);
+>  	if (ret < 0) {
+> -		return dev_err_probe(dev, ret,
+> -				     "Error reading sleep filter cur value\n");
+> +		dev_err_probe(dev, ret,
+> +			      "Error reading sleep filter cur value\n");
+> +		goto out_node_put;
+>  	}
+> =20
+>  	charger->sleep_filter_current_ua =3D of_value;
+> =20
+>  	charger->bat_ps =3D devm_power_supply_register(&pdev->dev,
+>  						     &rk817_bat_desc, &pscfg);
+> -	if (IS_ERR(charger->bat_ps))
+> -		return dev_err_probe(dev, -EINVAL,
+> -				     "Battery failed to probe\n");
+> +	if (IS_ERR(charger->bat_ps)) {
+> +		dev_err_probe(dev, -EINVAL,
+> +			      "Battery failed to probe\n");
+> +		goto out_node_put;
+> +	}
+> =20
+>  	charger->chg_ps =3D devm_power_supply_register(&pdev->dev,
+>  						     &rk817_chg_desc, &pscfg);
+> -	if (IS_ERR(charger->chg_ps))
+> -		return dev_err_probe(dev, -EINVAL,
+> -				     "Charger failed to probe\n");
+> +	if (IS_ERR(charger->chg_ps)) {
+> +		dev_err_probe(dev, -EINVAL,
+> +			      "Charger failed to probe\n");
+> +		goto out_node_put;
+> +	}
+> =20
+>  	ret =3D power_supply_get_battery_info(charger->bat_ps,
+>  					    &bat_info);
+>  	if (ret) {
+> -		return dev_err_probe(dev, ret,
+> -				     "Unable to get battery info: %d\n", ret);
+> +		dev_err_probe(dev, ret,
+> +			      "Unable to get battery info: %d\n", ret);
+> +		goto out_node_put;
+>  	}
+> =20
+>  	if ((bat_info->charge_full_design_uah <=3D 0) ||
+> @@ -1143,8 +1151,10 @@ static int rk817_charger_probe(struct platform_dev=
+ice *pdev)
+>  	    (bat_info->constant_charge_voltage_max_uv <=3D 0) ||
+>  	    (bat_info->constant_charge_current_max_ua <=3D 0) ||
+>  	    (bat_info->charge_term_current_ua <=3D 0)) {
+> -		return dev_err_probe(dev, -EINVAL,
+> -				     "Required bat info missing or invalid\n");
+> +		ret =3D -EINVAL;
+> +		dev_err_probe(dev, ret,
+> +			      "Required bat info missing or invalid\n");
+> +		goto out_node_put;
+>  	}
+> =20
+>  	charger->bat_charge_full_design_uah =3D bat_info->charge_full_design_ua=
+h;
+> @@ -1157,25 +1167,30 @@ static int rk817_charger_probe(struct platform_de=
+vice *pdev)
+>  	 */
+>  	ret =3D rk817_battery_init(charger, bat_info);
+>  	if (ret)
+> -		return ret;
+> +		goto out_node_put;
+> =20
+>  	power_supply_put_battery_info(charger->bat_ps, bat_info);
+> =20
+>  	plugin_irq =3D platform_get_irq(pdev, 0);
+> -	if (plugin_irq < 0)
+> -		return plugin_irq;
+> +	if (plugin_irq < 0) {
+> +		ret =3D plugin_irq;
+> +		goto out_node_put;
+> +	}
+> =20
+>  	plugout_irq =3D platform_get_irq(pdev, 1);
+> -	if (plugout_irq < 0)
+> -		return plugout_irq;
+> +	if (plugout_irq < 0) {
+> +		ret =3D plugout_irq;
+> +		goto out_node_put;
+> +	}
+> =20
+>  	ret =3D devm_request_threaded_irq(charger->dev, plugin_irq, NULL,
+>  					rk817_plug_in_isr,
+>  					IRQF_TRIGGER_RISING | IRQF_ONESHOT,
+>  					"rk817_plug_in", charger);
+>  	if (ret) {
+> -		return dev_err_probe(&pdev->dev, ret,
+> -				      "plug_in_irq request failed!\n");
+> +		dev_err_probe(&pdev->dev, ret,
+> +			      "plug_in_irq request failed!\n");
+> +		goto out_node_put;
+>  	}
+> =20
+>  	ret =3D devm_request_threaded_irq(charger->dev, plugout_irq, NULL,
+> @@ -1183,19 +1198,24 @@ static int rk817_charger_probe(struct platform_de=
+vice *pdev)
+>  					IRQF_TRIGGER_RISING | IRQF_ONESHOT,
+>  					"rk817_plug_out", charger);
+>  	if (ret) {
+> -		return dev_err_probe(&pdev->dev, ret,
+> -				     "plug_out_irq request failed!\n");
+> +		dev_err_probe(&pdev->dev, ret,
+> +			      "plug_out_irq request failed!\n");
+> +		goto out_node_put;
+>  	}
+> =20
+>  	ret =3D devm_delayed_work_autocancel(&pdev->dev, &charger->work,
+>  					   rk817_charging_monitor);
+>  	if (ret)
+> -		return ret;
+> +		goto out_node_put;
+> =20
+>  	/* Force the first update immediately. */
+>  	mod_delayed_work(system_wq, &charger->work, 0);
+> =20
+>  	return 0;
+> +
+> +out_node_put:
+> +	of_node_put(node);
+> +	return ret;
+>  }
+> =20
+> =20
+> --=20
+> 2.34.1
+>=20
 
-> 
->> Signed-off-by: Swapnil Sapkal <swapnil.sapkal@amd.com>
->> ---
->> tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py      | 1 -
->> tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py | 4 ++--
->> 2 files changed, 2 insertions(+), 3 deletions(-)
->>
->> diff --git a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
->> index 2448bb07973f..14f8d81f91de 100755
->> --- a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
->> +++ b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
->> @@ -27,7 +27,6 @@ import re
->>   import signal
->>   import sys
->>   import getopt
->> -import Gnuplot
->>   from numpy import *
->>   from decimal import *
->>   sys.path.append(os.path.join(os.path.dirname(__file__), '../intel_pstate_tracer'))
->> diff --git a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-> b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
->> index ec3323100e1a..68412abdd7d4 100755
->> --- a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
->> +++ b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
->> @@ -32,7 +32,7 @@ import re
->>   import signal
->>   import sys
->> import getopt
->> -import Gnuplot
->> +from pygnuplot import gnuplot
->>   from numpy import *
->>   from decimal import *
->>
->> @@ -295,7 +295,7 @@ def common_all_gnuplot_settings(output_png):
->> def common_gnuplot_settings():
->>       """ common gnuplot settings. """
->>
->> -    g_plot = Gnuplot.Gnuplot(persist=1)
->> +    g_plot = gnuplot.Gnuplot(persist=1)
->> #   The following line is for rigor only. It seems to be assumed for .csv files
->>       g_plot('set datafile separator \",\"')
->>       g_plot('set ytics nomirror')
->> -- 
->> 2.34.1
-> 
-> 
+--z6l6kzw7qg5gcrrd
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmUE1skACgkQ2O7X88g7
++ppMTw/8CW6dUxenXeT54jGcpBlNTSF6vIYVW5ZfuWHIDlekaoBys8OevHXJnbZ0
+oJxqijxavkN3i/huScQbjr/pQrglAa3zp0eJfAh6sdzbvIcv4u7LrTb1CXab/xNg
+H24X9FRmWVR9QGYomLI6CUTVtucOTnEj6b8G4BAre8jvV9Xsw89uaenJIRIOniYB
+0TfrRA2OxVbUvJbPKaTBpwkzcfZ5KxdlttnqCbApkfUffToUvszIKVzTc4Ck0zik
+z607PrEAvUyhBqFsWXoeCVB8fYPy0plhVy0RFCb3FcJmDwfjcL70Wg+2tlvDd4BX
+kAyyRgSsrimMOOY+G+dv97YyU7+Nl20B38gsr2bNC9rJQ3kPa+8MZn2KRqFm9B36
+f8zxwSUOQ7NwmAao1PA+cq8m8R+CUql3rsZ2eoO1KgSq6rj33B/yu1aZWgME8L33
+y9yxZpjrTMyn0o5FbCZN5NGZNx1HU37Jol5sKANvu6JXZZbqYl8q5zwOk3Z46XWo
+M8J1SQC1fzrI+o9ZPczgjrcbueMSGZ0MhGbMQp2O0YqrzD8z0Ic6cOmwsy1wR1++
+Oc7wqig6DJM90V6NG7L0it4kdnayHDYB+L4ac7XknsI9BngdrPQAwU+pADecWNiX
+/r6jqQelZFM6IcVgRXt4hMFM365J2zpgv1ViwoqePEk7eJtNBLI=
+=+Fq4
+-----END PGP SIGNATURE-----
+
+--z6l6kzw7qg5gcrrd--
