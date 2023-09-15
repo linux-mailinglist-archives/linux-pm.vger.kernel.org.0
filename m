@@ -2,77 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBDB87A1F20
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 14:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBBBA7A1F99
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 15:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235020AbjIOMqs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 08:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36056 "EHLO
+        id S235214AbjIONPk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 09:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235046AbjIOMqr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 08:46:47 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2AD2D60
-        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 05:46:08 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-401187f8071so14297485e9.0
-        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 05:46:07 -0700 (PDT)
+        with ESMTP id S233739AbjIONPj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 09:15:39 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAEE171C
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 06:15:34 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2bcbfb3705dso33549691fa.1
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 06:15:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694781966; x=1695386766; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        d=linaro.org; s=google; t=1694783732; x=1695388532; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=nLYJMC+6NP26nnWPC1ohFPbvAKuqIM7PzgDWSXVur78=;
-        b=nHYg+WgDiLGz9pMXUYiXF6r7W3OIUiAYf6xq6HwADYsk+tW7OwrrPJst6zKs6+WqlD
-         7Y07nn7i+QhZutpVdohUEZ0Hz61JscML9MyS9FYqZWg4hCo7e4vlro3U77lLyA6RBSY8
-         Poy9ne6xIzmPRNcqIICs/fB/QNXYYdlFJLgx6HQCFgjpNotFwMI62Ro7WR2Wjw8+yW4w
-         x7QHdJ7gR9cYeszAMw6zBSuVR0nm9NaaVnnu9w3bNQ4MjdnGkvdIyi//sPVj/t47bNR9
-         VHW4LaCm3G6uAGDXtsnEOSlZjH6llsShQQONA4RQc8iWT/xAzEhOlZk/UNRPcazd5AZC
-         LRmQ==
+        bh=2YTcLJQwSswCsEHlsNnjpEpmfVQ1cqhA1Es4JBakSFY=;
+        b=Y+RW2L6LaQ/oMzReRpbt51RwdVDhxgNJTAPKwx87sJVW3wrT7bT05ucCiLXnY3z7RX
+         KkzQtIbVmers550bECCbyQfz7fUIkWGv0RCNS0kWt1k26pqYWyfwEyiE1a4oxr+MMOrR
+         LqQNALgpWCcqiR5FmgeePerrbIWawlQcdHmzqMRGvCdVtts7Y78eVYq2pIN4xKlT5o8J
+         dVB7cnmv2rhDxzi+ZJuoj+vKwzSeok5zpL19uqR9FC+Yr5mUP8eFULev/dTezT42Svr8
+         1tJuhs38cBZpwKsGffA/vI/VUPc3KMsNNowJf9e6OdcMbagQpwxgd7sbAKc3e6X09ldl
+         jZng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694781966; x=1695386766;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        d=1e100.net; s=20230601; t=1694783732; x=1695388532;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nLYJMC+6NP26nnWPC1ohFPbvAKuqIM7PzgDWSXVur78=;
-        b=CRZxdz5YtTrgLwZsBDf0eWhnvlAjlRcKDVZOK1cUpbKM+yFIPEG2XUuxLrVbTyc84Z
-         2okfB5OUBMdfphUe3NC+UZz4m01bHZCTLpepnqGLh+4bS3ndA0NJYhFQ62/05YC6XHIc
-         QwY8ffzkRq/F2i/t0f/b/aSTp3ZrQA1fONmSK61W18TZOipx+XnQa6ci1GphZU5fhm+r
-         jTScs06I68/lMCPzMUOGpbIFAsgIRuzWjjzILzV7R/pbBJHU25NWs0ozV+MfNlLhWcLE
-         Ynbq0sSw6lSc0WNKZJKGXQi1IUXghJnKUhQcZYyhlJrWbTDK8TNbwh5SHDP6Ren8ouNE
-         Pyug==
-X-Gm-Message-State: AOJu0YxN27tVh/t1R5kZDoY9NQK7lGEkN6xpxXYVTAkwf5s7vT1vm5Sj
-        4DrJeguRS/Np7FmrFNQ0uA0pSg==
-X-Google-Smtp-Source: AGHT+IFrtQWRed5woEiP7OHw9z2/OjVdZwkPgM3Bm79oOPXqJYAs50d5rSrShOp61RLzy6A4eE0qdQ==
-X-Received: by 2002:a05:600c:248b:b0:401:b0f2:88d3 with SMTP id 11-20020a05600c248b00b00401b0f288d3mr1255513wms.19.1694781966308;
-        Fri, 15 Sep 2023 05:46:06 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.214.188])
-        by smtp.gmail.com with ESMTPSA id x12-20020adfdd8c000000b0031912c0ffebsm4366463wrl.23.2023.09.15.05.46.04
+        bh=2YTcLJQwSswCsEHlsNnjpEpmfVQ1cqhA1Es4JBakSFY=;
+        b=B24GJ5dDexUXLm7AyPEitCi4NSqMGxFRPchT3JXyngaj/ZM2yPNd3uH5O9+F+Pvb3s
+         ROBS1U46Za2Be2utWwsVWxGrKL4cwJa5sCwHvApFNwA6M+Oe17aD+phR5vgvWPqdQdhW
+         jnzUN3a2kIFpwKk6tZFNGlaCteBY8vet2zpBdDaJzoNeanqT9qJlFrIWzqJLjuEawhHB
+         krGDn/xIlYAunKJbTVAGKdARbDxx5FiwT0Jb/RdDzaFEWZUuGy7rTWHXdMTbFKanvfHq
+         00rG9E/9RdJxLicNclgUqeXionW9VHklDUqhFEdWb3C7DIvf3Ge8gQq0c7gRlEVjWp9D
+         VVMw==
+X-Gm-Message-State: AOJu0YxEMpsHtku4CgnG/g0Drdj77b0wZIVjomb3WM/LUGaFBK7aR6ec
+        8Q5URLSnDePKHs/oVnruCnaIgQ==
+X-Google-Smtp-Source: AGHT+IH9HHhAAiakkwGcb0nc6A/BR1ro4tRIpIJUd3BkPy0wX1M6KcFTvJlfvmgHfIQfhqyIgcdVgA==
+X-Received: by 2002:a2e:9246:0:b0:2bc:c51d:daa1 with SMTP id v6-20020a2e9246000000b002bcc51ddaa1mr1661473ljg.39.1694783732549;
+        Fri, 15 Sep 2023 06:15:32 -0700 (PDT)
+Received: from [192.168.69.115] (6lp61-h01-176-171-209-234.dsl.sta.abo.bbox.fr. [176.171.209.234])
+        by smtp.gmail.com with ESMTPSA id wj18-20020a170907051200b009adc5802d30sm1507895ejb.21.2023.09.15.06.15.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Sep 2023 05:46:05 -0700 (PDT)
-Message-ID: <b0fe17e4-e4d8-02af-4e09-06b3930b38fe@linaro.org>
-Date:   Fri, 15 Sep 2023 14:46:03 +0200
+        Fri, 15 Sep 2023 06:15:32 -0700 (PDT)
+Message-ID: <759af455-312c-745f-8532-bae30b64df02@linaro.org>
+Date:   Fri, 15 Sep 2023 15:15:29 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH V2 4/4] arm64: dts: qcom: ipq5018: Add tsens node
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.15.1
+Subject: Re: [PATCH v2 05/17] pmdomain: bcm: Move Kconfig options to the
+ pmdomain subsystem
 Content-Language: en-US
-To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        thara.gopinath@gmail.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dmitry.baryshkov@linaro.org
-References: <20230915121504.806672-1-quic_srichara@quicinc.com>
- <20230915121504.806672-5-quic_srichara@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230915121504.806672-5-quic_srichara@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-mips@vger.kernel.org, linux-rpi-kernel@lists.infradead.org
+References: <20230915092003.658361-1-ulf.hansson@linaro.org>
+ <20230915092003.658361-6-ulf.hansson@linaro.org>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20230915092003.658361-6-ulf.hansson@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,44 +81,22 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15/09/2023 14:15, Sricharan Ramabadhran wrote:
-> IPQ5018 has tsens V1.0 IP with 4 sensors.
-> There is no RPM, so tsens has to be manually enabled. Adding the tsens
-> and nvmem node and IPQ5018 has 4 thermal sensors (zones). With the
-> critical temperature being 120'C and action is to reboot. Adding all
-> the 4 zones here. 
+On 15/9/23 11:19, Ulf Hansson wrote:
+> The Kconfig options belongs closer to the corresponding implementations,
+> hence let's move them from the soc subsystem to the pmdomain subsystem.
 > 
-> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> Cc: Florian Fainelli <florian.fainelli@broadcom.com>
+> Cc: Ray Jui <rjui@broadcom.com>
+> Cc: Scott Branden <sbranden@broadcom.com>
+> Cc: <linux-mips@vger.kernel.org>
+> Cc: <linux-rpi-kernel@lists.infradead.org>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 > ---
->  [v2] Fixed node names, order and added qfprom cells for points
->       seperately to use the calibrate_common and squashed thermal_zone
->       nodes here
-> 
->  arch/arm64/boot/dts/qcom/ipq5018.dtsi | 169 ++++++++++++++++++++++++++
->  1 file changed, 169 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq5018.dtsi b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-> index 9f13d2dcdfd5..d53aea5342e2 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-> @@ -93,6 +93,117 @@ soc: soc@0 {
->  		#size-cells = <1>;
->  		ranges = <0 0 0 0xffffffff>;
->  
-> +		qfprom: qfprom@a0000 {
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			compatible = "qcom,ipq5018-qfprom", "qcom,qfprom";
+>   drivers/pmdomain/Kconfig     |  1 +
+>   drivers/pmdomain/bcm/Kconfig | 46 ++++++++++++++++++++++++++++++++++++
+>   drivers/soc/bcm/Kconfig      | 42 --------------------------------
+>   3 files changed, 47 insertions(+), 42 deletions(-)
+>   create mode 100644 drivers/pmdomain/bcm/Kconfig
 
-This is a friendly reminder during the review process.
-
-It seems my previous comments were not fully addressed. Maybe my
-feedback got lost between the quotes, maybe you just forgot to apply it.
-Please go back to the previous discussion and either implement all
-requested changes or keep discussing them.
-
-Thank you.
-
-Best regards,
-Krzysztof
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
