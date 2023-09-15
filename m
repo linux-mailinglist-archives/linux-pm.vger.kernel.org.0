@@ -2,334 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3607E7A1E03
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 14:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A2F7A1E4A
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 14:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234432AbjIOMEe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 08:04:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
+        id S234664AbjIOMPz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 08:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234444AbjIOMEd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 08:04:33 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8433A87;
-        Fri, 15 Sep 2023 05:03:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694779422; x=1726315422;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=0aSOAVXV3pig4axO9+jHlML+tu/afJdMdghU/1L+h8Q=;
-  b=LYnF/WXkwsqXg5q3WVKYknZVhocc3RVjBdRDL2kcRSDtNX4/da+tX257
-   pAt6W13pGA8bdxdffCQTURqXVd4JJ/uPSZwEAS5R/IpubkuyDrpypBs8t
-   m4x97iMWHSzJS9EFQsJNw6PUXXnnTMfK+0KohRKcL/+BDpWXZx74nEALM
-   U2qWIlyp3e5EZOfKvcOafDJKDjEwFLTyiW+IrliP3acuIJtjegk+FkRKo
-   jACKJ2dcQFeyqKnHeS8sjXwMlakvhl6ubBu/52m99VrpSD+/vHes8qqtO
-   eSP6+WpUj7KBZ6qttBxwuY36wm1WdrySehQMsgfirnq/ND7KxChX3rHr5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="378146139"
-X-IronPort-AV: E=Sophos;i="6.02,149,1688454000"; 
-   d="scan'208";a="378146139"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 05:02:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="774293067"
-X-IronPort-AV: E=Sophos;i="6.02,149,1688454000"; 
-   d="scan'208";a="774293067"
-Received: from srdoo-mobl1.ger.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.252.38.99])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 05:02:51 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Alexandru Gagniuc <mr.nuke.me@gmail.com>,
-        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Alex Deucher <alexdeucher@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH v2 10/10] selftests/pcie_bwctrl: Create selftests
-Date:   Fri, 15 Sep 2023 15:01:42 +0300
-Message-Id: <20230915120142.32987-11-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230915120142.32987-1-ilpo.jarvinen@linux.intel.com>
-References: <20230915120142.32987-1-ilpo.jarvinen@linux.intel.com>
+        with ESMTP id S234652AbjIOMPy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 08:15:54 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6630F268E;
+        Fri, 15 Sep 2023 05:15:43 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38FAA7Pj030278;
+        Fri, 15 Sep 2023 12:15:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=GygQ/u2fnwhNWv//DRS3iWa9bJQ4jyMvttmcZQRrUJg=;
+ b=DdtCcGLs8TKoe/KOIvsB1ZfgOgVOOBAdBOAep0EsPgU21Yf5Pja5owrONHSiA5qrxxsj
+ vllQSYAAXQ5NZ/xgQtJyXrriIi38alYxp3H9S/k8ZfwEghIz1RAAuCp8ulMaTHuC3EPT
+ bA2x6f5CiFDO0XR1BlvtiAnLus/jswrMZIXVwysBHUPnUUYnHgdNTTpdRb12AHpleQeZ
+ 2t6cDr/yi0ph3D/SlPPMXyT+PyDI0zvted6m4H5j/UEa2czDRcPqacJ+BTwwvK1Cc0FZ
+ /9432VfgopUICnqQvKz3KGYwMDU7LIZ5Ep5aQC/3dPI00u6zXiKGiXna9Ejv5NwsGPvr sg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t4g5tgvw0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Sep 2023 12:15:37 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38FCFZTV004488
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Sep 2023 12:15:35 GMT
+Received: from win-platform-upstream01.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Fri, 15 Sep 2023 05:15:31 -0700
+From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
+To:     <krzysztof.kozlowski@linaro.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <srinivas.kandagatla@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <quic_srichara@quicinc.com>
+Subject: [PATCH V2 0/4] Add support for IPQ5018 tsens
+Date:   Fri, 15 Sep 2023 17:45:00 +0530
+Message-ID: <20230915121504.806672-1-quic_srichara@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 05c275zDFas4SN5Locq7WA02D42AB1JN
+X-Proofpoint-GUID: 05c275zDFas4SN5Locq7WA02D42AB1JN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-15_08,2023-09-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
+ suspectscore=0 lowpriorityscore=0 impostorscore=0 phishscore=0
+ mlxlogscore=644 priorityscore=1501 adultscore=0 mlxscore=0 spamscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309150108
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Create selftests for PCIe BW control through the PCIe cooling device
-sysfs interface.
+IPQ5018 has tsens V1.0 IP with 4 sensors and 1 interrupt.
+There is no RPM present in the soc to do tsens early enable.
+Adding support for the same here.
 
-First, the BW control selftest finds the PCIe port to test with. By
-default, the PCIe port with the highest bus speed is selected but
-another PCIe port can be provided with -d parameter.
+[v2]
+	*) Sorted the compatible and removed example
+	*) Fixed the name for new tsens_feature
+	*) Used tsend_calibrate_common instead of legacy
+	   and addressed comments from Dmitry.
+	*) Squashed patch 3 & 4
+	*) Fixed node names, order and added qfprom cells
+            for points seprately
+	*) Squashed patch 6 & 7 
 
-The actual test steps the cur_state of the cooling device one-by-one
-from max_state to what the cur_state was initially. The speed change
-is confirmed by observing the current_link_speed for the corresponding
-PCIe port.
+Sricharan Ramabadhran (4):
+  dt-bindings: thermal: qcom-tsens: Add ipq5018 compatible
+  thermal/drivers/qcom: Add new feat for soc without rpm
+  thermal/drivers/tsens: Add support for IPQ5018 tsens
+  arm64: dts: qcom: ipq5018: Add tsens node
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/pcie_bwctrl/Makefile  |   2 +
- .../pcie_bwctrl/set_pcie_cooling_state.sh     | 122 ++++++++++++++++++
- .../selftests/pcie_bwctrl/set_pcie_speed.sh   |  67 ++++++++++
- 5 files changed, 193 insertions(+)
- create mode 100644 tools/testing/selftests/pcie_bwctrl/Makefile
- create mode 100755 tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
- create mode 100755 tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
+ .../bindings/nvmem/qcom,qfprom.yaml           |   1 +
+ .../bindings/thermal/qcom-tsens.yaml          |   1 +
+ arch/arm64/boot/dts/qcom/ipq5018.dtsi         | 169 ++++++++++++++++++
+ drivers/thermal/qcom/tsens-v1.c               |  58 ++++++
+ drivers/thermal/qcom/tsens.c                  |   5 +-
+ drivers/thermal/qcom/tsens.h                  |   5 +-
+ 6 files changed, 237 insertions(+), 2 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 32974417ad52..84e6687a646b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16575,6 +16575,7 @@ S:	Supported
- F:	drivers/pci/pcie/bwctrl.c
- F:	drivers/thermal/pcie_cooling.c
- F:	include/linux/pci-bwctrl.h
-+F:	tools/testing/selftests/pcie_bwctrl/
- 
- PCIE DRIVER FOR AMAZON ANNAPURNA LABS
- M:	Jonathan Chocron <jonnyc@amazon.com>
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 42806add0114..18ad9acd440a 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -59,6 +59,7 @@ TARGETS += net/mptcp
- TARGETS += net/openvswitch
- TARGETS += netfilter
- TARGETS += nsfs
-+TARGETS += pcie_bwctrl
- TARGETS += perf_events
- TARGETS += pidfd
- TARGETS += pid_namespace
-diff --git a/tools/testing/selftests/pcie_bwctrl/Makefile b/tools/testing/selftests/pcie_bwctrl/Makefile
-new file mode 100644
-index 000000000000..3e84e26341d1
---- /dev/null
-+++ b/tools/testing/selftests/pcie_bwctrl/Makefile
-@@ -0,0 +1,2 @@
-+TEST_PROGS = set_pcie_cooling_state.sh
-+include ../lib.mk
-diff --git a/tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh b/tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
-new file mode 100755
-index 000000000000..3a8f91f0309e
---- /dev/null
-+++ b/tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
-@@ -0,0 +1,122 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+
-+SYSFS=
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+retval=0
-+skipmsg="skip all tests:"
-+
-+PCIEPORTTYPE="PCIe_Port_Link_Speed"
-+
-+prerequisite()
-+{
-+	local ports
-+
-+	if [ $UID != 0 ]; then
-+		echo $skipmsg must be run as root >&2
-+		exit $ksft_skip
-+	fi
-+
-+	SYSFS=`mount -t sysfs | head -1 | awk '{ print $3 }'`
-+
-+	if [ ! -d "$SYSFS" ]; then
-+		echo $skipmsg sysfs is not mounted >&2
-+		exit $ksft_skip
-+	fi
-+
-+	if ! ls $SYSFS/class/thermal/cooling_device* > /dev/null 2>&1; then
-+		echo $skipmsg thermal cooling devices missing >&2
-+		exit $ksft_skip
-+        fi
-+
-+	ports=`grep -e "^$PCIEPORTTYPE" $SYSFS/class/thermal/cooling_device*/type | wc -l`
-+	if [ $ports -eq 0 ]; then
-+		echo $skipmsg pcie cooling devices missing >&2
-+		exit $ksft_skip
-+	fi
-+}
-+
-+testport=
-+find_pcie_port()
-+{
-+	local patt="$1"
-+	local pcieports
-+	local max
-+	local cur
-+	local delta
-+	local bestdelta=-1
-+
-+	pcieports=`grep -l -F -e "$patt" /sys/class/thermal/cooling_device*/type`
-+	if [ -z "$pcieports" ]; then
-+		return
-+	fi
-+	pcieports=${pcieports//\/type/}
-+	# Find the port with the highest PCIe Link Speed
-+	for port in $pcieports; do
-+		max=`cat $port/max_state`
-+		cur=`cat $port/cur_state`
-+		delta=$((max-cur))
-+		if [ $delta -gt $bestdelta ]; then
-+			testport="$port"
-+			bestdelta=$delta
-+		fi
-+	done
-+}
-+
-+sysfspcidev=
-+find_sysfs_pci_dev()
-+{
-+	local typefile="$1/type"
-+	local pcidir
-+
-+	pcidir="$SYSFS/bus/pci/devices/`sed -e "s|^${PCIEPORTTYPE}_||g" $typefile`"
-+
-+	if [ -r "$pcidir/current_link_speed" ]; then
-+		sysfspcidev="$pcidir/current_link_speed"
-+	fi
-+}
-+
-+usage()
-+{
-+	echo "Usage $0 [ -d dev ]"
-+	echo -e "\t-d: PCIe port BDF string (e.g., 0000:00:04.0)"
-+}
-+
-+pattern="$PCIEPORTTYPE"
-+parse_arguments()
-+{
-+	while getopts d:h opt; do
-+		case $opt in
-+			h)
-+				usage "$0"
-+				exit 0
-+				;;
-+			d)
-+				pattern="$PCIEPORTTYPE_$OPTARG"
-+				;;
-+			*)
-+				usage "$0"
-+				exit 0
-+				;;
-+		esac
-+	done
-+}
-+
-+parse_arguments "$@"
-+prerequisite
-+find_pcie_port "$pattern"
-+if [ -z "$testport" ]; then
-+	echo $skipmsg "pcie cooling device not found from sysfs" >&2
-+	exit $ksft_skip
-+fi
-+find_sysfs_pci_dev "$testport"
-+if [ -z "$sysfspcidev" ]; then
-+	echo $skipmsg "PCIe port device not found from sysfs" >&2
-+	exit $ksft_skip
-+fi
-+
-+./set_pcie_speed.sh "$testport" "$sysfspcidev"
-+retval=$?
-+
-+exit $retval
-diff --git a/tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh b/tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
-new file mode 100755
-index 000000000000..584596949312
---- /dev/null
-+++ b/tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
-@@ -0,0 +1,67 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+
-+set -e
-+
-+TESTNAME=set_pcie_speed
-+
-+declare -a PCIELINKSPEED=(
-+	"2.5 GT/s PCIe"
-+	"5.0 GT/s PCIe"
-+	"8.0 GT/s PCIe"
-+	"16.0 GT/s PCIe"
-+	"32.0 GT/s PCIe"
-+	"64.0 GT/s PCIe"
-+)
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+retval=0
-+
-+coolingdev="$1"
-+statefile="$coolingdev/cur_state"
-+maxfile="$coolingdev/max_state"
-+linkspeedfile="$2"
-+
-+oldstate=`cat $statefile`
-+maxstate=`cat $maxfile`
-+
-+set_state()
-+{
-+	local state=$1
-+	local linkspeed
-+	local expected_linkspeed
-+
-+	echo $state > $statefile
-+
-+	sleep 1
-+
-+	linkspeed="`cat $linkspeedfile`"
-+	expected_linkspeed=$((maxstate-state))
-+	expected_str="${PCIELINKSPEED[$expected_linkspeed]}"
-+	if [ ! "${expected_str}" = "${linkspeed}" ]; then
-+		echo "$TESTNAME failed: expected: ${expected_str}; got ${linkspeed}"
-+		retval=1
-+	fi
-+}
-+
-+cleanup_skip ()
-+{
-+	set_state $oldstate
-+	exit $ksft_skip
-+}
-+
-+trap cleanup_skip EXIT
-+
-+echo "$TESTNAME: testing states $maxstate .. $oldstate with $coolingdev"
-+for i in $(seq $maxstate -1 $oldstate); do
-+	set_state "$i"
-+done
-+
-+trap EXIT
-+if [ $retval -eq 0 ]; then
-+	echo "$TESTNAME [PASS]"
-+else
-+	echo "$TESTNAME [FAIL]"
-+fi
-+exit $retval
 -- 
-2.30.2
+2.34.1
 
