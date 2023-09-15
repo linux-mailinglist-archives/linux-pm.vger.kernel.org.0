@@ -2,78 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1889F7A1E5D
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 14:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B06FF7A1EF3
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 14:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234702AbjIOMQk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 08:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
+        id S234970AbjIOMni (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 08:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234778AbjIOMQj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 08:16:39 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B13F271D;
-        Fri, 15 Sep 2023 05:16:07 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38F4G2Hr017789;
-        Fri, 15 Sep 2023 12:15:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=kXBJMB7bcEXDJM+JIcHmj9M9N9IZAo83EHKFYXq4ZfY=;
- b=PedBfwnBwbQmaZCb0MGBlBg0nx3MAs3Vzsq+Ejv2o36dpBfrSI2OoPNWc5IpfO6uRlPx
- ti0cDNlBwsjj/489mrCONy5aNcERz9/QtyfeOxbneczeOB5g4g4eydQhKmZmMH26pxb+
- 0Zjbz7CCERme9xuf3dWxcZySLbnIDz52ukbIqjolEmqxbACJq8tx0+4zlZDn70BzJuuW
- gSrc+0lWNg3fzBlVEG0U3MRUyongXawdXmsGR62pelPC2kASQAtNOIiFs4kDOWfgj76o
- MFS2SrwUqJcIIB2nVHAE3YeslpwlwVZeM6D1SMJbRMiTAKyuWBOrdnvtED/Q5c7bUwRo Mw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t4g2xgyxa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Sep 2023 12:15:57 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38FCFuKO004584
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Sep 2023 12:15:56 GMT
-Received: from win-platform-upstream01.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Fri, 15 Sep 2023 05:15:51 -0700
-From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
-To:     <krzysztof.kozlowski@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <srinivas.kandagatla@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
-        <daniel.lezcano@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <quic_srichara@quicinc.com>
-Subject: [PATCH V2 4/4] arm64: dts: qcom: ipq5018: Add tsens node
-Date:   Fri, 15 Sep 2023 17:45:04 +0530
-Message-ID: <20230915121504.806672-5-quic_srichara@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230915121504.806672-1-quic_srichara@quicinc.com>
-References: <20230915121504.806672-1-quic_srichara@quicinc.com>
+        with ESMTP id S234967AbjIOMni (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 08:43:38 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6F3195
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 05:43:32 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-403004a96a4so23322245e9.3
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 05:43:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694781811; x=1695386611; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aSaEjuQP3bJaj+tuqC0EES7njvk708CPwg4r5YZVC90=;
+        b=RJtSTweIDYCcI4lrfEC0/wQlBeRJ3Bg17nVesialsmzNF70TzocO/KqcoHBaQPx3H6
+         U6zGs1N5g3QDI0Tcx3sJJ7L/rYrhY1GLo0AZWB8Hd1sUbyXR5/9posONW1hE6U5jbaGE
+         TACB0ATgmzzypbbC1XXyzXjsn8Wky5F+p9FXo+KPhqq98SVABlhQK1pXDaQgaLLzuLjk
+         0yVB9S/Auu8pkrMYUyhuhGv/93gZgY6j3BXRaKE0q7n/D93Hup+Z5tz0w0zpj6xQsb74
+         XGOk9NK4P43rkZJcsp0Cjdp0MSl8y3dXN7XMYteO0CFMeoe2JcSG4LwsyQvBU1AwxVJX
+         dWpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694781811; x=1695386611;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aSaEjuQP3bJaj+tuqC0EES7njvk708CPwg4r5YZVC90=;
+        b=wKfwJVMGa5hOiknCl4K3cvsMpIQoMSm6RW6+QxH10cbJFWrCLUB4a6SARufqc3N9cd
+         L+orLbZGDKtHAUo7gDGf7Mztgqc5pZ30nywYsvPms1iExh3SBNwC7OM+5KEWW3CRj2m7
+         GpCUzFVmU2sk5Yrko1j8xcCs+H+S9nl13jMM31zW1XYkPHheVhFk/zju3SfZyM0syM5q
+         W8jIkQT8Ef5j7uOOslxnA9BS6XdQ8bbos8KtcNkGsts/6hi5Kh9rlP0lx1Pj8hP84BJ6
+         Dp2pxTZ6xVDXlHWUCYlYMNOSxLkAyuB7Q2VGLfBLZNWnOwDMQUIDaEsfuORiwfwPd71m
+         VXhg==
+X-Gm-Message-State: AOJu0YzZipgAlan7+SxaSKa9iSUDJwy1Eh7QqfFlYjOE1ufA9Cb9qMhg
+        CgyNj2tPBeGVFFGpwy2V8nkVuA==
+X-Google-Smtp-Source: AGHT+IF2jyol6SrjEHegYj3kBq8qaNmHDS6ISO3rBYrj3clB5oMirv1vXA9GlH77lXUYqUG8NobeRw==
+X-Received: by 2002:a05:600c:b5a:b0:401:1066:53e4 with SMTP id k26-20020a05600c0b5a00b00401106653e4mr1470885wmr.38.1694781810769;
+        Fri, 15 Sep 2023 05:43:30 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.214.188])
+        by smtp.gmail.com with ESMTPSA id k16-20020a05600c1c9000b004047f3b73f9sm997698wms.21.2023.09.15.05.43.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Sep 2023 05:43:30 -0700 (PDT)
+Message-ID: <03b0cafa-49c7-8838-b116-927c9649cbd3@linaro.org>
+Date:   Fri, 15 Sep 2023 14:43:28 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: BBPFcswH7OTAcstoA94LwHU1NzcJtGMy
-X-Proofpoint-ORIG-GUID: BBPFcswH7OTAcstoA94LwHU1NzcJtGMy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-15_08,2023-09-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
- phishscore=0 impostorscore=0 adultscore=0 mlxlogscore=843 bulkscore=0
- mlxscore=0 lowpriorityscore=0 priorityscore=1501 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309150109
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH V2 1/4] dt-bindings: thermal: qcom-tsens: Add ipq5018
+ compatible
+Content-Language: en-US
+To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dmitry.baryshkov@linaro.org
+References: <20230915121504.806672-1-quic_srichara@quicinc.com>
+ <20230915121504.806672-2-quic_srichara@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230915121504.806672-2-quic_srichara@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,208 +80,16 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-IPQ5018 has tsens V1.0 IP with 4 sensors.
-There is no RPM, so tsens has to be manually enabled. Adding the tsens
-and nvmem node and IPQ5018 has 4 thermal sensors (zones). With the
-critical temperature being 120'C and action is to reboot. Adding all
-the 4 zones here. 
+On 15/09/2023 14:15, Sricharan Ramabadhran wrote:
+> IPQ5018 has tsens v1.0 block with 4 sensors and 1 interrupt.
+> 
+> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> ---
+>  [v2] Sorted the compatible and removed example
+> 
 
-Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
----
- [v2] Fixed node names, order and added qfprom cells for points
-      seperately to use the calibrate_common and squashed thermal_zone
-      nodes here
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
- arch/arm64/boot/dts/qcom/ipq5018.dtsi | 169 ++++++++++++++++++++++++++
- 1 file changed, 169 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/ipq5018.dtsi b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-index 9f13d2dcdfd5..d53aea5342e2 100644
---- a/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-@@ -93,6 +93,117 @@ soc: soc@0 {
- 		#size-cells = <1>;
- 		ranges = <0 0 0 0xffffffff>;
- 
-+		qfprom: qfprom@a0000 {
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			compatible = "qcom,ipq5018-qfprom", "qcom,qfprom";
-+			reg = <0xa0000 0x1000>;
-+
-+			tsens_base1: base1@249 {
-+				reg = <0x249 2>;
-+				bits = <3 8>;
-+			};
-+
-+			tsens_base2: base2@24a {
-+				reg = <0x24a 2>;
-+				bits = <3 8>;
-+			};
-+
-+			tsens_mode: mode@249 {
-+				reg = <0x249 1>;
-+				bits = <0 3>;
-+			};
-+
-+			tsens_s0_p1: s0-p1@24b {
-+				reg = <0x24b 0x2>;
-+				bits = <2 6>;
-+			};
-+
-+			tsens_s0_p2: s0-p2@24c {
-+				reg = <0x24c 0x1>;
-+				bits = <1 6>;
-+			};
-+
-+			tsens_s1_p1: s1-p1@24c {
-+				reg = <0x24c 0x2>;
-+				bits = <7 6>;
-+			};
-+
-+			tsens_s1_p2: s1-p2@24d {
-+				reg = <0x24d 0x2>;
-+				bits = <5 6>;
-+			};
-+
-+			tsens_s2_p1: s2-p1@24e {
-+				reg = <0x24e 0x2>;
-+				bits = <3 6>;
-+			};
-+
-+			tsens_s2_p2: s2-p2@24f {
-+				reg = <0x24f 0x1>;
-+				bits = <1 6>;
-+			};
-+
-+			tsens_s3_p1: s3-p1@24f {
-+				reg = <0x24f 0x2>;
-+				bits = <7 6>;
-+			};
-+
-+			tsens_s3_p2: s3-p2@250 {
-+				reg = <0x250 0x2>;
-+				bits = <5 6>;
-+			};
-+
-+			tsens_s4_p1: s4-p1@251 {
-+				reg = <0x251 0x2>;
-+				bits = <3 6>;
-+			};
-+
-+			tsens_s4_p2: s4-p2@254 {
-+				reg = <0x254 0x1>;
-+				bits = <0 6>;
-+			};
-+		};
-+
-+		tsens: thermal-sensor@4a9000 {
-+			compatible = "qcom,ipq5018-tsens", "qcom,tsens-v1";
-+			reg = <0x4a9000 0x1000>, /* TM */
-+			      <0x4a8000 0x1000>; /* SORT */
-+
-+			nvmem-cells = <&tsens_mode>,
-+				      <&tsens_base1>,
-+				      <&tsens_base2>,
-+				      <&tsens_s0_p1>,
-+				      <&tsens_s0_p2>,
-+				      <&tsens_s1_p1>,
-+				      <&tsens_s1_p2>,
-+				      <&tsens_s2_p1>,
-+				      <&tsens_s2_p2>,
-+				      <&tsens_s3_p1>,
-+				      <&tsens_s3_p2>,
-+				      <&tsens_s4_p1>,
-+				      <&tsens_s4_p2>;
-+
-+			nvmem-cell-names = "mode",
-+					   "base1",
-+					   "base2",
-+					   "s0_p1",
-+					   "s0_p2",
-+					   "s1_p1",
-+					   "s1_p2",
-+					   "s2_p1",
-+					   "s2_p2",
-+					   "s3_p1",
-+					   "s3_p2",
-+					   "s4_p1",
-+					   "s4_p2";
-+
-+			interrupts = <GIC_SPI 184 IRQ_TYPE_EDGE_RISING>;
-+			interrupt-names = "uplow";
-+			#qcom,sensors = <5>;
-+			#thermal-sensor-cells = <1>;
-+		};
-+
- 		tlmm: pinctrl@1000000 {
- 			compatible = "qcom,ipq5018-tlmm";
- 			reg = <0x01000000 0x300000>;
-@@ -240,6 +351,64 @@ frame@b128000 {
- 		};
- 	};
- 
-+	thermal-zones {
-+		ubi32-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 1>;
-+
-+			trips {
-+				ubi32-critical {
-+					temperature = <120000>;
-+					hysteresis = <2>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cpu-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 2>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <120000>;
-+					hysteresis = <2>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		top-glue-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 3>;
-+
-+			trips {
-+				top_glue-critical {
-+					temperature = <120000>;
-+					hysteresis = <2>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		gephy-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 4>;
-+
-+			trips {
-+				gephy-critical {
-+					temperature = <120000>;
-+					hysteresis = <2>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+	};
-+
- 	timer {
- 		compatible = "arm,armv8-timer";
- 		interrupts = <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
--- 
-2.34.1
+Best regards,
+Krzysztof
 
