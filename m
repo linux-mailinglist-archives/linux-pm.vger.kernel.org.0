@@ -2,173 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4EC7A1DA8
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 13:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E72027A1DD7
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 14:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234349AbjIOLr0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 07:47:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40922 "EHLO
+        id S234470AbjIOMCA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 08:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232836AbjIOLrZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 07:47:25 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB29CD8
-        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 04:47:20 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-d7e904674aeso2015838276.3
-        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 04:47:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694778440; x=1695383240; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pKvJMFgrnKfiKIEIwaAMBoyLZ9Folrq2rV1ccO7Uz70=;
-        b=E4udoxGd2oPMSCWzUWqg08GKQu2dzsuSkKtJlPUHqO8KS9fM4aZjsJSXketKK7rUJT
-         k/BN+cLb9vhkcWS8IwsWApLnP1LrGrP07ePtRNvePT8s1PV/ZsG+g1in5DJ7e7ypqYh1
-         OxEdXjqNkqsfM4rRuOswTnXWFHzBWBC0CErZhjQwa4PNGzrE/dCWPUvnlVsE2hltj8Yz
-         I6wOZgbdCTUO54ovRFMaTme5IPiVYGADiJAF0UqyipVXqpzDqAEzABjscwVVPSU9+CUq
-         Z2R2M6L/PvHpVWP69ae5HIdCHHAzjSMFWCWiGsTLBV9yvJO3qO0Uc0ADqnVyG7XVO5lz
-         QZyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694778440; x=1695383240;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pKvJMFgrnKfiKIEIwaAMBoyLZ9Folrq2rV1ccO7Uz70=;
-        b=I2o1/okPCrcpcmZM13rV4sAhj+bADNjIiu+3ScenbvWFM3ZLmG9TZQaIgEfHZ2AHiQ
-         SNtVjKTaTiqk26NeGs+w1ozoAFgBrUKE3IlJqK3O845kI5Tv1ob/SsyllNKSbrtKawFf
-         wNRPf24rR+I5zBSMuribXVNuB6FQwxlMn3QajwJEi6WB//RHv7Q0FMmxdsiADuoTLt0R
-         zpO02aJjHwMMpb3ZL4hpFPCO7EBnJy9zctrpgLqieRCbkjv2IWUtv3+be7njYMh2lF8y
-         j3G25+4/uK9kMw4Z9lPV9TaN818KCfiul3lFfG/8UBkCNcMIRwSgs02Ow+5bZiyuaBdz
-         HNpQ==
-X-Gm-Message-State: AOJu0YwUwFTq4/NvALM4ABtChyJIS3gVKSrEm4cI5egF/ELv77Nq5g/r
-        dOZi8NLzcIaU7cOCKxfnT/2c8zDzsAMTvRYvgAHTug==
-X-Google-Smtp-Source: AGHT+IHNjbPocfOapzruHHkOSM0gBYdeN9YzEb9OGi/a0yQ9a+TId3ZzRP/xtB5m5r4YaOhU3X77DPcN8RZinfnXLMw=
-X-Received: by 2002:a25:d450:0:b0:d81:61fd:ef5d with SMTP id
- m77-20020a25d450000000b00d8161fdef5dmr1350219ybf.27.1694778440112; Fri, 15
- Sep 2023 04:47:20 -0700 (PDT)
+        with ESMTP id S232836AbjIOMCA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 08:02:00 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2164E1FF1;
+        Fri, 15 Sep 2023 05:01:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694779315; x=1726315315;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Ge0rc2WPYKSx8MYcdUbDDS1gOtJoE56w9sC9a+IVtOI=;
+  b=cKo8F8WfnP++cJzvCn4A6YMhijkQjv9zpog32B/S5QzXAkaPi40yNfsY
+   N8i9Be0MSdKrXQ8MZN6ntXIhXJmGmEYM3k4sUnXL7soqgE+dTdkkeoajk
+   bZ+cf7JG83Tz6MHA/6bhOb6ps9clzfQeocYs7AlSEyIk90rH39t5ZgPcj
+   ZrLpRVEDtlFPf44Qt6VhnYv/j6o+WMqjvWNCuoKZYfotaWRx4eUO8eHJD
+   2mJNMHdlxp4sh8FlW+i6iQetZxhSfmrdls1pLRGNTzgdmaCELXBkN19Kq
+   jv4/7fr/OPm2sPma6XYAgvVwQ7J0Tdh053Vigr+zm7+5gjb/zj7NYV6Q2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="378145904"
+X-IronPort-AV: E=Sophos;i="6.02,149,1688454000"; 
+   d="scan'208";a="378145904"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 05:01:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="774292728"
+X-IronPort-AV: E=Sophos;i="6.02,149,1688454000"; 
+   d="scan'208";a="774292728"
+Received: from srdoo-mobl1.ger.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.252.38.99])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 05:01:50 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Alexandru Gagniuc <mr.nuke.me@gmail.com>,
+        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Alex Deucher <alexdeucher@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 00/10] Add PCIe Bandwidth Controller
+Date:   Fri, 15 Sep 2023 15:01:32 +0300
+Message-Id: <20230915120142.32987-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20230915092003.658361-1-ulf.hansson@linaro.org>
- <20230915092003.658361-5-ulf.hansson@linaro.org> <CAOgh=FzNordx=_YMiQs2Uj6JQ7Ctqqi=XZbbRAY9cS-F8v68RA@mail.gmail.com>
-In-Reply-To: <CAOgh=FzNordx=_YMiQs2Uj6JQ7Ctqqi=XZbbRAY9cS-F8v68RA@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 15 Sep 2023 13:46:44 +0200
-Message-ID: <CAPDyKFpYRwDGbYajVK8MMDjf=0ab-ZpMH2QXKUsVAFy0kh-iYA@mail.gmail.com>
-Subject: Re: [PATCH v2 04/17] pmdomain: apple: Move Kconfig option to the
- pmdomain subsystem
-To:     Eric Curtin <ecurtin@redhat.com>, Neal Gompa <neal@gompa.dev>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>, asahi@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-+ Neal
+Hi all,
 
-On Fri, 15 Sept 2023 at 11:45, Eric Curtin <ecurtin@redhat.com> wrote:
->
-> On Fri, 15 Sept 2023 at 10:29, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> >
-> > The Kconfig option belongs closer to the corresponding implementation,
-> > hence let's move it from the soc subsystem to the pmdomain subsystem.
-> >
-> > Cc: Hector Martin <marcan@marcan.st>
-> > Cc: Sven Peter <sven@svenpeter.dev>
-> > Cc: Alyssa Rosenzweig <alyssa@rosenzweig.io>
-> > Cc: <asahi@lists.linux.dev>
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
->
-> This patch in the patchset looks the same as yesterday, so...
->
-> Reviewed-by: Eric Curtin <ecurtin@redhat.com>
+This series adds PCIe bandwidth controller (bwctrl) and associated PCIe
+cooling driver to the thermal core side for limiting PCIe Link Speed
+due to thermal reasons. PCIe bandwidth controller is a PCI express bus
+port service driver. A cooling device is created for each port the
+service driver finds if they support changing speeds.
 
-Yes my bad, again. I forgot to add yours and Neal's tags, sorry.
+This series only adds support for controlling PCIe Link Speed.
+Controlling PCIe Link Width might also be useful but AFAIK, there is no
+mechanism for that until PCIe 6.0 (L0p). Based on feedback for v1, the
+thermal/cooling device side prefers Link Speed and Link Width to be
+separate cooling devices [1] which is taken into account in naming the
+cooling device for Link Speed but the Link Width one is not added yet
+as it would not be able to control anything at the moment.
 
-Thanks!
+bwctrl is built on top of BW notifications revert. I'm just not sure
+what is the best practice when re-adding some old functionality in a
+modified form so please let me know if I need to somehow alter that
+patch.
 
-Kind regards
-Uffe
+[1] https://lore.kernel.org/linux-pci/f35db90cd67adf4b0f48cd6f2a6ad8fbd0c1a679.camel@linux.intel.com/
 
->
-> Is mise le meas/Regards,
->
-> Eric Curtin
->
-> > ---
-> >  drivers/pmdomain/Kconfig       |  1 +
-> >  drivers/pmdomain/apple/Kconfig | 18 ++++++++++++++++++
-> >  drivers/soc/apple/Kconfig      | 13 -------------
-> >  3 files changed, 19 insertions(+), 13 deletions(-)
-> >  create mode 100644 drivers/pmdomain/apple/Kconfig
-> >
-> > diff --git a/drivers/pmdomain/Kconfig b/drivers/pmdomain/Kconfig
-> > index 03c8991ad0fd..482d9e970e14 100644
-> > --- a/drivers/pmdomain/Kconfig
-> > +++ b/drivers/pmdomain/Kconfig
-> > @@ -3,5 +3,6 @@ menu "PM Domains"
-> >
-> >  source "drivers/pmdomain/actions/Kconfig"
-> >  source "drivers/pmdomain/amlogic/Kconfig"
-> > +source "drivers/pmdomain/apple/Kconfig"
-> >
-> >  endmenu
-> > diff --git a/drivers/pmdomain/apple/Kconfig b/drivers/pmdomain/apple/Kconfig
-> > new file mode 100644
-> > index 000000000000..12237cbcfaa9
-> > --- /dev/null
-> > +++ b/drivers/pmdomain/apple/Kconfig
-> > @@ -0,0 +1,18 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only
-> > +
-> > +if ARCH_APPLE || COMPILE_TEST
-> > +
-> > +config APPLE_PMGR_PWRSTATE
-> > +       bool "Apple SoC PMGR power state control"
-> > +       depends on PM
-> > +       select REGMAP
-> > +       select MFD_SYSCON
-> > +       select PM_GENERIC_DOMAINS
-> > +       select RESET_CONTROLLER
-> > +       default ARCH_APPLE
-> > +       help
-> > +         The PMGR block in Apple SoCs provides high-level power state
-> > +         controls for SoC devices. This driver manages them through the
-> > +         generic power domain framework, and also provides reset support.
-> > +
-> > +endif
-> > diff --git a/drivers/soc/apple/Kconfig b/drivers/soc/apple/Kconfig
-> > index a1596fefacff..eff486a77337 100644
-> > --- a/drivers/soc/apple/Kconfig
-> > +++ b/drivers/soc/apple/Kconfig
-> > @@ -4,19 +4,6 @@ if ARCH_APPLE || COMPILE_TEST
-> >
-> >  menu "Apple SoC drivers"
-> >
-> > -config APPLE_PMGR_PWRSTATE
-> > -       bool "Apple SoC PMGR power state control"
-> > -       depends on PM
-> > -       select REGMAP
-> > -       select MFD_SYSCON
-> > -       select PM_GENERIC_DOMAINS
-> > -       select RESET_CONTROLLER
-> > -       default ARCH_APPLE
-> > -       help
-> > -         The PMGR block in Apple SoCs provides high-level power state
-> > -         controls for SoC devices. This driver manages them through the
-> > -         generic power domain framework, and also provides reset support.
-> > -
-> >  config APPLE_RTKIT
-> >         tristate "Apple RTKit co-processor IPC protocol"
-> >         depends on MAILBOX
-> > --
-> > 2.34.1
-> >
-> >
->
+v2:
+- Adds LNKCTL2 to RMW safe list in Documentation/PCI/pciebus-howto.rst
+- Renamed cooling devices from PCIe_Port_* to PCIe_Port_Link_Speed_* in
+  order to plan for possibility of adding Link Width cooling devices
+  later on
+- Moved struct thermal_cooling_device declaration to the correct patch
+- Small tweaks to Kconfig texts
+- Series rebased to resolve conflict (in the selftest list)
+
+Ilpo Järvinen (10):
+  PCI: Protect Link Control 2 Register with RMW locking
+  drm/radeon: Use RMW accessors for changing LNKCTL2
+  drm/amdgpu: Use RMW accessors for changing LNKCTL2
+  drm/IB/hfi1: Use RMW accessors for changing LNKCTL2
+  PCI: Store all PCIe Supported Link Speeds
+  PCI: Cache PCIe device's Supported Speed Vector
+  PCI/LINK: Re-add BW notification portdrv as PCIe BW controller
+  PCI/bwctrl: Add "controller" part into PCIe bwctrl
+  thermal: Add PCIe cooling driver
+  selftests/pcie_bwctrl: Create selftests
+
+ Documentation/PCI/pciebus-howto.rst           |   8 +-
+ MAINTAINERS                                   |   8 +
+ drivers/gpu/drm/amd/amdgpu/cik.c              |  41 +--
+ drivers/gpu/drm/amd/amdgpu/si.c               |  41 +--
+ drivers/gpu/drm/radeon/cik.c                  |  40 +--
+ drivers/gpu/drm/radeon/si.c                   |  40 +--
+ drivers/infiniband/hw/hfi1/pcie.c             |  30 +-
+ drivers/pci/pcie/Kconfig                      |   9 +
+ drivers/pci/pcie/Makefile                     |   1 +
+ drivers/pci/pcie/bwctrl.c                     | 309 ++++++++++++++++++
+ drivers/pci/pcie/portdrv.c                    |   9 +-
+ drivers/pci/pcie/portdrv.h                    |  10 +-
+ drivers/pci/probe.c                           |  38 ++-
+ drivers/pci/remove.c                          |   2 +
+ drivers/thermal/Kconfig                       |  10 +
+ drivers/thermal/Makefile                      |   2 +
+ drivers/thermal/pcie_cooling.c                | 107 ++++++
+ include/linux/pci-bwctrl.h                    |  33 ++
+ include/linux/pci.h                           |   3 +
+ include/uapi/linux/pci_regs.h                 |   1 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/pcie_bwctrl/Makefile  |   2 +
+ .../pcie_bwctrl/set_pcie_cooling_state.sh     | 122 +++++++
+ .../selftests/pcie_bwctrl/set_pcie_speed.sh   |  67 ++++
+ 24 files changed, 799 insertions(+), 135 deletions(-)
+ create mode 100644 drivers/pci/pcie/bwctrl.c
+ create mode 100644 drivers/thermal/pcie_cooling.c
+ create mode 100644 include/linux/pci-bwctrl.h
+ create mode 100644 tools/testing/selftests/pcie_bwctrl/Makefile
+ create mode 100755 tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
+ create mode 100755 tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
+
+-- 
+2.30.2
+
