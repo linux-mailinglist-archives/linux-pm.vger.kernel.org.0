@@ -2,55 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D15077A277D
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 21:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6D97A2853
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 22:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236592AbjIOTzU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 15:55:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
+        id S235229AbjIOUoD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 16:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbjIOTyv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 15:54:51 -0400
+        with ESMTP id S233313AbjIOUne (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 16:43:34 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336C51BC7;
-        Fri, 15 Sep 2023 12:54:46 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EF418D;
+        Fri, 15 Sep 2023 13:43:29 -0700 (PDT)
+Received: from mercury (unknown [185.254.75.45])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E218B66072AC;
-        Fri, 15 Sep 2023 20:54:44 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B6DA766072BE;
+        Fri, 15 Sep 2023 21:43:27 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1694807685;
-        bh=KXDEIfF2h/JPA5Xg+mwsO9FHN1x+fFSbZ+mH1Wt3GDU=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=XngkUsuCOqC8X8AbOfNIwq2iQjS9LbQ8DW1kA1m2B4eFVEUAqiU1lTQ0gF7c6Bh63
-         fqiQDjm0mhthV6dN2vGXbdfDyUly9BxsXsXbiOSg7xQrvnYJCoomaBDOy0jMR6ICyI
-         qLbR97h6tZfrPvIT6dh7OI1zmxP6Dg1rOfJ7lI1ph+HhXlYlUvIaNLYCwo+onMcLed
-         DJbQO265qFIvZ2OVEIb9f1KUnbKV1qn9/UFQ2VxSsd4YOfw+dB92iyT5Rac+F/JSZY
-         MDKBMKKlKhiZO8vI27h0IM3kB2HsrlXi8hF870ZKGRWfgLUed8IsImzON1i0mT21P3
-         hKSWTxdYoIhhw==
+        s=mail; t=1694810607;
+        bh=kDX5Yws24juaWMmgBhmpCp9TZ/myYfWBHnXaef5fOzw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BcQZmvB+w08zKhoo4FheZE8owlX0OKnJvSQ0LbZemQ16N8hSod/HTg5oNF4aCPm4L
+         buZB4IaIefT5RKPyEuUxX0TtUx5ul7l8zHmAvl1pdQl55g4nUN/dBjqEs09FbjiweM
+         elDm88eSf7ksoxdDV9qlS7q84AV9w9mRvH3Ldxw4Ozka+eeX5lnLN8h29/X9K5l8Ri
+         uPmaLwLj6Gjx3n8lelEmnUXNekpZlN0L55eoX8yzRzs9G2l0WRoSYLRzE88lN3SWqb
+         sbA61++Msiocxf+orUrE6MwGIa/WsrtO7K4mAVsDsld5AEP5LtSO+WPmdfYJipM6CD
+         dGyS7fS5kXysg==
 Received: by mercury (Postfix, from userid 1000)
-        id 58452106044B; Fri, 15 Sep 2023 21:54:42 +0200 (CEST)
+        id 16726106044B; Fri, 15 Sep 2023 22:43:25 +0200 (CEST)
+Date:   Fri, 15 Sep 2023 22:43:25 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Nikita Travkin <nikita@trvn.ru>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-In-Reply-To: <20230915-pm8916-bms-lbc-v3-0-f30881e951a0@trvn.ru>
-References: <20230915-pm8916-bms-lbc-v3-0-f30881e951a0@trvn.ru>
-Subject: Re: [PATCH v3 0/4] Add pm8916 VM-BMS and LBC
-Message-Id: <169480768234.570806.17797021749505145491.b4-ty@collabora.com>
-Date:   Fri, 15 Sep 2023 21:54:42 +0200
+To:     Grant B Adams <nemith592@gmail.com>
+Cc:     linux-omap@vger.kernel.org, tony@atomide.com,
+        Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] power: supply: Fix tps65217-charger vs vbus irq
+ conflict
+Message-ID: <20230915204325.mokj2nmdwjdekxfo@mercury.elektranox.org>
+References: <20230823085430.6610-1-nemith592@gmail.com>
+ <20230823085430.6610-2-nemith592@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.3
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="flopxljazsb4eo7e"
+Content-Disposition: inline
+In-Reply-To: <20230823085430.6610-2-nemith592@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,29 +61,67 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-On Fri, 15 Sep 2023 10:01:17 +0500, Nikita Travkin wrote:
-> This series adds charger and "fuel-gauge" found in Qualcomm pm8916 PMIC.
-> 
-> The LBC - Linear Battery Charger is a simple CC/CV charger, that works
-> autonomously after the current and voltage limits are set.
-> 
-> The VM-BMS - Voltage Mode BMS is a simple hardware block that provides
-> average voltage on the battery terminals.
-> 
-> [...]
+--flopxljazsb4eo7e
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Applied, thanks!
+Hi,
 
-[1/4] dt-bindings: power: supply: Add pm8916 VM-BMS
-      commit: 7f590e38317657123fed828d267372a3d6f93260
-[2/4] dt-bindings: power: supply: Add pm8916 LBC
-      commit: 5cee843d56072135c0d4be4a2d8a20df05155009
-[3/4] power: supply: Add pm8916 VM-BMS support
-      commit: 098bce1838e0549228c8d426e5de72ec5594b5c4
-[4/4] power: supply: Add driver for pm8916 lbc
-      commit: f8d7a3d21160a0cab4d15b81231f2a76b0fcee13
+On Wed, Aug 23, 2023 at 10:54:29AM +0200, Grant B Adams wrote:
+> Enabling the tps65217-charger driver/module causes an interrupt conflict
+> with the vbus driver resulting in a probe failure.
+> The conflict is resolved by changing both driver's threaded interrupt
+> request function from IRQF_ONESHOT to IRQF_SHARED.
+>=20
+> Signed-off-by: Grant B Adams <nemith592@gmail.com>
+> ---
 
-Best regards,
--- 
-Sebastian Reichel <sebastian.reichel@collabora.com>
+Your commit message does not explain why IRQF_ONESHOT is dropped;
+IRQF_ONESHOT and IRQF_SHARED are not mutually exclusive.
 
+-- Sebastian
+
+>  drivers/power/supply/tps65217_charger.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/tps65217_charger.c b/drivers/power/supp=
+ly/tps65217_charger.c
+> index a4bc9f2a10bc..6f68becdbfd0 100644
+> --- a/drivers/power/supply/tps65217_charger.c
+> +++ b/drivers/power/supply/tps65217_charger.c
+> @@ -238,7 +238,7 @@ static int tps65217_charger_probe(struct platform_dev=
+ice *pdev)
+>  	for (i =3D 0; i < NUM_CHARGER_IRQS; i++) {
+>  		ret =3D devm_request_threaded_irq(&pdev->dev, irq[i], NULL,
+>  						tps65217_charger_irq,
+> -						IRQF_ONESHOT, "tps65217-charger",
+> +						IRQF_SHARED, "tps65217-charger",
+>  						charger);
+>  		if (ret) {
+>  			dev_err(charger->dev,
+> --=20
+> 2.34.1
+>=20
+
+--flopxljazsb4eo7e
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmUEweIACgkQ2O7X88g7
++pqBFg//TKpyJrIWxj3CQDqbQlO4Ws8EmT0gAZP8DVzjXF7KZn+RDJ1tCu4QarWl
+iOJR72KDBckp2eMwJ3sFdm9MVclv+Z6SvQ9mCv21pCcsZR5I4lClaVHK+FxO23en
+vapSg22m8mMtPV7EJsr5UXj4uvRGvBtvZy6VyFc+Afk+u/EmHj8ZUxX27w2oEL/f
+xyFBYrXDGkf7hEdzaY9nU9dHjD9qQef9sDE8RlC6GAi4iahW8SysrGhEtPB8yYUR
+/HYVAg5S8FEmB+tt5arQO2lkn7Fxz1RKVZlPUaRxx/3HQ2vTqmWBvpG5JkNwezVS
+hcD1L0jvBByGxLI/oLNxLW6t56QM6Pz4YkxWdqLJbM+vQiTFaULcKpqxNiNhPBzX
+UagvMg8uvGLxZ0rUMg3+EQ1JrkKUAJikZaeoYxUealnAa53i6ozKKG5Y92PeLYyK
+yhRtX8FgxKeOT5GyBAn8xT6EUFexigdZ+CZYmsB7B/aWz3S9+rXPNJ5Fxo29g+Bh
+H36olrsqE8hqkD1uWrr0dqoIQ0MoWvZxczeiIuMQqtn8yDe24ntxYSAyq62EwPp8
+fEVjJwtCsJfqQOiACXtbipOjg0BFY4cwHHJOGy2f9mzL9pJAOTxJq7vWCcZJZaSl
+EoPuk2/NG2C6UPB2paj19j/WJAWlgWeKZX1KDP/B/FRCqTMnAZg=
+=fRtN
+-----END PGP SIGNATURE-----
+
+--flopxljazsb4eo7e--
