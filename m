@@ -2,62 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEAC47A1A57
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 11:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 507627A1A59
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 11:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233656AbjIOJVy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 05:21:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57866 "EHLO
+        id S233680AbjIOJV4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 05:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233655AbjIOJVw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 05:21:52 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A5E2121
-        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 02:21:26 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2bfbd7d49e7so30482991fa.1
-        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 02:21:26 -0700 (PDT)
+        with ESMTP id S233673AbjIOJVx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 05:21:53 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AD8271D
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 02:21:27 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b962535808so30852661fa.0
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 02:21:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694769685; x=1695374485; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1694769686; x=1695374486; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VKisBqk8Z2ap1nSKbct53Lj3iZDRshdX+0gS7XeCa7I=;
-        b=cBAxrWMImUdlcroirPosqGC/rKOEGd/g+yMgI1Y7OYLmZzy+8JkKHF8i3OrT9fBPBd
-         AX8bHqdoFEkrhiwgIF8PqRVVnJf2+YjQ2kGVBdMsJJIm/b3muUx1PX1QyWZGouIdkWGx
-         z/1nFXZJ/v7QLq3Do7yR5vABMhqNwSSAmE7RMx44gaI0FW8r2CT5ujAqK555O2uyIufH
-         q8iaqQTnraBEbfZI8EgS/a/Ng/bNXRXnjN60JrPMvrkr2Dbu+TZbPDF6Pg8mLd1ZGrvU
-         16QX6LGraVKvprjmMihEMoJ9GAyBY+hvxMbAprcydthgRkZNljEehDRgIR0R0OKCmy32
-         jtxA==
+        bh=lxVrkiCAkoIq59ofHyv2OHqXSOCmWARXvwgAt/o802g=;
+        b=Gx6kcamkcQfFh1/lEF6b1MwtdgJcqz8lXI/AqDOhLDIiJD1AT+0J/OsgIQ9sZf03zq
+         quD8mjm0tQUGg8PgzsiwzRg0dTPRV0uOT8jaqAtxE+iGMagMfVZBLcHJeml5MzZO0eUP
+         LhAIu7viUH8YIWEch5EE0yjo0sx8HlTkgpKJwf0ciJE0ylUP+Uw+RDV6g0XgYqjy6Uyi
+         Cllf+UAqm3+veHcqVm/nY2KFkyK+7KXYKyloG/G/wWZofJveOXGjW9FP6PbKcmwYkHZr
+         wLKV+OfHsEupWjzhx45w4PBkd5V3nEm1pS99Q7iURKYmcmGO3OH9vYbn9Be+o7tKu6jP
+         LEDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694769685; x=1695374485;
+        d=1e100.net; s=20230601; t=1694769686; x=1695374486;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VKisBqk8Z2ap1nSKbct53Lj3iZDRshdX+0gS7XeCa7I=;
-        b=w5VgXLMnlxLH+uV2nJt0j6fcQontgPNdC849s+1H/t5al2C1gy8Jh4r/hh7VvagkrK
-         jYBV4X5nQmV1wggtSzO3HCrdysjkhGYJG7xUvfJZyaRBUR40DtsT08BcsihS1TUEsZYe
-         FtogSlS3EAxKTw4U7RPrHjTpIfmV/37KzzGV1+a0hvLkd9Eh0i0FmzeOwO4BYcul+wrx
-         x9XGR3ryFkwNN132rl2OVSZqVnjnJCB803T4DcWYQxp4kAWRtrqpM+szSBUz7rhUQgQo
-         CMvd6L8j7Vj+HqNdHZTZYLV98WMyEKB1icPdLmR46klBmyLPJw/VIPm0ySCsQh78PenR
-         ZMHA==
-X-Gm-Message-State: AOJu0Yw1Gu+m4egnS+yoWV0M3sWrfDbPV14mAGySb7TDPqQWl9SdCTkf
-        1I07RF3KBl8aF9HbQr1WAkjNyA==
-X-Google-Smtp-Source: AGHT+IGwwqHwyBASzYObjimxH00Ydcl+lAjOoi91ePvVUL0yYYiPtovN11NZd4EAB/QxxEpm7+DHfg==
-X-Received: by 2002:a2e:8055:0:b0:2bc:39f5:ecb4 with SMTP id p21-20020a2e8055000000b002bc39f5ecb4mr1074596ljg.25.1694769685101;
-        Fri, 15 Sep 2023 02:21:25 -0700 (PDT)
+        bh=lxVrkiCAkoIq59ofHyv2OHqXSOCmWARXvwgAt/o802g=;
+        b=D82TK/3hFkXczw57DWjMLyNC6eJ3k3qCEIrtpt8+oadNl/9SUWJ8m+dXnEASb+0gjQ
+         c5RSVxRxQpXU4nbD49JxOqbWdxc2fKQ/oGDwTNWxynCCZAHJ/aBy9PJaQA8oAs7VLtxF
+         mutnf5f43mgzvG+WUtFfahwi3WaTE6XtWz9fig6b5fEARYLqQqvO7w3rTiV2+TFbFgTV
+         0kINfPNHOGjACYEBaFmNitejqu5hektvFoXG1kAyNFj+cpfcyYSFXQ3EFuQOVUbsf0A/
+         hcNvFsXtJGIuNakp4fxjIENSDEyR90rqjxzJSYzrxk3lLV+w1AvYvvuJqlOObBKvIR69
+         bVZQ==
+X-Gm-Message-State: AOJu0YyzvE0Pas1ytyE+b3lDmsK5Fpj1ahc+dBN5Tt0QPWZ8EBKx0NOK
+        am/nZy79hMmoCK/mxFOFNbXUwA==
+X-Google-Smtp-Source: AGHT+IELGUxnnw8NcjpWERdHd/HFBh9WJ0OdjTLN86Kk7Wo+a3UlN/uFXOriKAm42ZCQmu0toMURCQ==
+X-Received: by 2002:a05:651c:1033:b0:2bc:d7d6:258f with SMTP id w19-20020a05651c103300b002bcd7d6258fmr907223ljm.35.1694769686215;
+        Fri, 15 Sep 2023 02:21:26 -0700 (PDT)
 Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id p8-20020a2e7408000000b002b9ec22d9fasm639376ljc.29.2023.09.15.02.21.24
+        by smtp.gmail.com with ESMTPSA id p8-20020a2e7408000000b002b9ec22d9fasm639376ljc.29.2023.09.15.02.21.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Sep 2023 02:21:24 -0700 (PDT)
+        Fri, 15 Sep 2023 02:21:25 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
 Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-rockchip@lists.infradead.org
-Subject: [PATCH v2 10/17] pmdomain: rockchip: Move Kconfig option to the pmdomain subsystem
-Date:   Fri, 15 Sep 2023 11:19:56 +0200
-Message-Id: <20230915092003.658361-11-ulf.hansson@linaro.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH v2 11/17] pmdomain: samsung: Move Kconfig option to the pmdomain subsystem
+Date:   Fri, 15 Sep 2023 11:19:57 +0200
+Message-Id: <20230915092003.658361-12-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230915092003.658361-1-ulf.hansson@linaro.org>
 References: <20230915092003.658361-1-ulf.hansson@linaro.org>
@@ -65,7 +66,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,72 +77,57 @@ X-Mailing-List: linux-pm@vger.kernel.org
 The Kconfig option belongs closer to the corresponding implementation,
 hence let's move it from the soc subsystem to the pmdomain subsystem.
 
-Cc: Heiko Stuebner <heiko@sntech.de>
-Cc: <linux-rockchip@lists.infradead.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Alim Akhtar <alim.akhtar@samsung.com>
+Cc: <linux-samsung-soc@vger.kernel.org>
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- drivers/pmdomain/Kconfig          |  1 +
- drivers/pmdomain/rockchip/Kconfig | 16 ++++++++++++++++
- drivers/soc/rockchip/Kconfig      | 12 ------------
- 3 files changed, 17 insertions(+), 12 deletions(-)
- create mode 100644 drivers/pmdomain/rockchip/Kconfig
+ drivers/pmdomain/Kconfig         | 1 +
+ drivers/pmdomain/samsung/Kconfig | 8 ++++++++
+ drivers/soc/samsung/Kconfig      | 4 ----
+ 3 files changed, 9 insertions(+), 4 deletions(-)
+ create mode 100644 drivers/pmdomain/samsung/Kconfig
 
 diff --git a/drivers/pmdomain/Kconfig b/drivers/pmdomain/Kconfig
-index 0a75a17f2f3a..8afe69251dd2 100644
+index 8afe69251dd2..4a411e0985c3 100644
 --- a/drivers/pmdomain/Kconfig
 +++ b/drivers/pmdomain/Kconfig
-@@ -9,5 +9,6 @@ source "drivers/pmdomain/imx/Kconfig"
- source "drivers/pmdomain/mediatek/Kconfig"
+@@ -10,5 +10,6 @@ source "drivers/pmdomain/mediatek/Kconfig"
  source "drivers/pmdomain/qcom/Kconfig"
  source "drivers/pmdomain/renesas/Kconfig"
-+source "drivers/pmdomain/rockchip/Kconfig"
+ source "drivers/pmdomain/rockchip/Kconfig"
++source "drivers/pmdomain/samsung/Kconfig"
  
  endmenu
-diff --git a/drivers/pmdomain/rockchip/Kconfig b/drivers/pmdomain/rockchip/Kconfig
+diff --git a/drivers/pmdomain/samsung/Kconfig b/drivers/pmdomain/samsung/Kconfig
 new file mode 100644
-index 000000000000..b0d70f1a8439
+index 000000000000..0debfe36b00a
 --- /dev/null
-+++ b/drivers/pmdomain/rockchip/Kconfig
-@@ -0,0 +1,16 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+if ARCH_ROCKCHIP || COMPILE_TEST
++++ b/drivers/pmdomain/samsung/Kconfig
+@@ -0,0 +1,8 @@
++# SPDX-License-Identifier: GPL-2.0
++if SOC_SAMSUNG
 +
-+config ROCKCHIP_PM_DOMAINS
-+	bool "Rockchip generic power domain"
-+	depends on PM
-+	select PM_GENERIC_DOMAINS
-+	help
-+	  Say y here to enable power domain support.
-+	  In order to meet high performance and low power requirements, a power
-+	  management unit is designed or saving power when RK3288 in low power
-+	  mode. The RK3288 PMU is dedicated for managing the power of the whole chip.
-+
-+	  If unsure, say N.
++config EXYNOS_PM_DOMAINS
++	bool "Exynos PM domains" if COMPILE_TEST
++	depends on (ARCH_EXYNOS && PM_GENERIC_DOMAINS) || COMPILE_TEST
 +
 +endif
-diff --git a/drivers/soc/rockchip/Kconfig b/drivers/soc/rockchip/Kconfig
-index aff2f7e95237..785f60c6f3ad 100644
---- a/drivers/soc/rockchip/Kconfig
-+++ b/drivers/soc/rockchip/Kconfig
-@@ -22,18 +22,6 @@ config ROCKCHIP_IODOMAIN
- 	  necessary for the io domain setting of the SoC to match the
- 	  voltage supplied by the regulators.
+diff --git a/drivers/soc/samsung/Kconfig b/drivers/soc/samsung/Kconfig
+index 7a8f291e7704..27ec99af77e3 100644
+--- a/drivers/soc/samsung/Kconfig
++++ b/drivers/soc/samsung/Kconfig
+@@ -48,10 +48,6 @@ config EXYNOS_PMU_ARM_DRIVERS
+ 	bool "Exynos PMU ARMv7-specific driver extensions" if COMPILE_TEST
+ 	depends on EXYNOS_PMU
  
--config ROCKCHIP_PM_DOMAINS
--	bool "Rockchip generic power domain"
--	depends on PM
--	select PM_GENERIC_DOMAINS
--	help
--	  Say y here to enable power domain support.
--	  In order to meet high performance and low power requirements, a power
--	  management unit is designed or saving power when RK3288 in low power
--	  mode. The RK3288 PMU is dedicated for managing the power of the whole chip.
+-config EXYNOS_PM_DOMAINS
+-	bool "Exynos PM domains" if COMPILE_TEST
+-	depends on (ARCH_EXYNOS && PM_GENERIC_DOMAINS) || COMPILE_TEST
 -
--	  If unsure, say N.
--
- config ROCKCHIP_DTPM
- 	tristate "Rockchip DTPM hierarchy"
- 	depends on DTPM && m
+ config SAMSUNG_PM_CHECK
+ 	bool "S3C2410 PM Suspend Memory CRC"
+ 	depends on PM && (ARCH_S3C64XX || ARCH_S5PV210)
 -- 
 2.34.1
 
