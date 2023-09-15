@@ -2,115 +2,177 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B83D7A28F6
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 23:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5FAB7A2933
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 23:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237721AbjIOVGL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 17:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44668 "EHLO
+        id S237428AbjIOVQY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 17:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237735AbjIOUvN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 16:51:13 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B2730DE;
-        Fri, 15 Sep 2023 13:50:32 -0700 (PDT)
-Received: from mercury (unknown [185.254.75.45])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7A7C56600B9D;
-        Fri, 15 Sep 2023 21:50:31 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1694811031;
-        bh=tMa5KHMI9xyhHbWkapaVXRddMW+G7/fhHz/CbsZZBio=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kh2wYcPCHxtajuqaVKLwqA2qOglTymKGRPLHHJnfaZUq35xr3RoRvxln+3fo+ijR6
-         t86ziJUB/OU7KZZvg7kD40CLWNiWkBNNb0EUJKsiyFJ+jgWYtCtHxHvMggsVaGOX9O
-         Yc9Zl9fDmbgePgxp2O2M03LydMQPqLYyMVemKwooFkmeMo/joHkJJAQ+504yoj/ufM
-         JhqkQznY6XU22OO+nm8aiZ2TKnUsk+Fw6ci3/diXyMUgCu0KaJztWIxUmTDE/shJWS
-         svc41FxO07izU/zCw8ugtVtZdE0WLND9l4kIltMuJQjHZcWK1tmdCSxGC9GBQsxMup
-         4J6aVgaGWhvkg==
-Received: by mercury (Postfix, from userid 1000)
-        id 6CA0D106044B; Fri, 15 Sep 2023 22:50:29 +0200 (CEST)
-Date:   Fri, 15 Sep 2023 22:50:29 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Varshini Rajendran <varshini.rajendran@microchip.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 45/50] power: reset: at91-reset: add sdhwc support for
- sam9x7 SoC
-Message-ID: <20230915205029.mqtb2jew5xob65l2@mercury.elektranox.org>
-References: <20230728103032.267597-1-varshini.rajendran@microchip.com>
+        with ESMTP id S237734AbjIOVPw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 17:15:52 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E48E78
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 14:15:03 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1c43b4b02c1so7934115ad.3
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 14:15:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google; t=1694812502; x=1695417302; darn=vger.kernel.org;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7teTS75eyEcS4dZgXo+EcQywzkucHFzMxSjJFBdTG8Y=;
+        b=gQFM8VApOidWK0tDq0dRoHGzmCkfDoMbNV8gns2ba5RfW/7ZRoB3EquxOCaI7mBvsb
+         Ux2wCnc1eXaIeLe3O6HH/GVq3xIwewSTNpTJRmMwd1HIDWm8UMfqq/m1zHBcXNT2Xu6g
+         9y1ZugZuykwcnH2MAz36QkBqxlv38SmbxMIq3u44DYlWhyKIBy2yjokC2Kuzi9N5wpyk
+         baBPSAVjQBfqFad3c663Yc1itkgf3S97BKToEhcGq19bSnLeccFMarPQ9oRglVqZ0I4p
+         TqsgNILa/uJ3SUzaNmpQITFeFB61MfZ9Zf46mEX1PpyiPJX8c8vwNaMcCuNM5gxQAl3m
+         od+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694812502; x=1695417302;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7teTS75eyEcS4dZgXo+EcQywzkucHFzMxSjJFBdTG8Y=;
+        b=W0QgWgmvdIY+a4OR855sdFOMjxwS9ryzNrUaQspkB8rc9LGoKzMJU7+w/je3KzivXM
+         +cE1npHALpOpivetXwEjI24k3+3mNzKc8biGpQHd9xqlp52ImieflAcu7qvmrPyIkjNy
+         F6cNG477pB6yt8x3zL6RQz2LcusRYy4ZrW7Gl/DN2WqQUesYnco22y1NIxcD9ukEebMp
+         cU9Bkfjxilh7dHg91Ml3Xst9lMEMqgBr1+uHEIi53LVPxsXq8kcP/Bx+k4UMjYZfifJz
+         KvTht3PeDEcSXSIo7ave80mCsAB4xmJsQ458/+LoK+n1FmE5Lat5zdD0JsSvCWBoXXQo
+         l0Kg==
+X-Gm-Message-State: AOJu0Yx35PidPoNNeyGmfR2pIjLv/3x0WUwNM7HJvDU3xHp3af3VAi/M
+        aVVJvEHjPYtfOKBUfPGqFJJnGA==
+X-Google-Smtp-Source: AGHT+IG+M7M64WtxGxEzGQ+nMIdywrrCr5EkuN09OBfh+ct5EkdMstf4ZBHrJuQ7SW4gopMdT0gz/Q==
+X-Received: by 2002:a17:902:ea0f:b0:1bf:557c:5a2c with SMTP id s15-20020a170902ea0f00b001bf557c5a2cmr3127053plg.44.1694812502564;
+        Fri, 15 Sep 2023 14:15:02 -0700 (PDT)
+Received: from DougS18 (s66-183-142-209.bc.hsia.telus.net. [66.183.142.209])
+        by smtp.gmail.com with ESMTPSA id jk15-20020a170903330f00b001b9fef7f454sm1478417plb.73.2023.09.15.14.15.01
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 15 Sep 2023 14:15:01 -0700 (PDT)
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Swapnil Sapkal'" <swapnil.sapkal@amd.com>,
+        <rafael.j.wysocki@intel.com>, <Ray.Huang@amd.com>,
+        <li.meng@amd.com>, <shuah@kernel.org>
+Cc:     <sukrut.bellary@gmail.com>, <gautham.shenoy@amd.com>,
+        <wyes.karny@amd.com>, <Perry.Yuan@amd.com>,
+        <Mario.Limonciello@amd.com>, <zwisler@chromium.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
+        "Doug Smythies" <dsmythies@telus.net>
+References: <20230915104057.132210-1-swapnil.sapkal@amd.com> <20230915104057.132210-3-swapnil.sapkal@amd.com>
+In-Reply-To: <20230915104057.132210-3-swapnil.sapkal@amd.com>
+Subject: RE: [PATCH 2/2] tools/power/x86/intel_pstate_tracer: Use pygnuplot package for Gnuplot
+Date:   Fri, 15 Sep 2023 14:15:03 -0700
+Message-ID: <00b201d9e819$b2447e80$16cd7b80$@telus.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fcwhesnxamk2gg2p"
-Content-Disposition: inline
-In-Reply-To: <20230728103032.267597-1-varshini.rajendran@microchip.com>
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-ca
+Thread-Index: AQKwVkrK5CGttHhKf0ienv16Lobu0QKE+b5trlszgRA=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 2023.09.15 03:41 Swapnil Sapkal wrote:
 
---fcwhesnxamk2gg2p
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> In intel_pstate_tracer.py, Gnuplot is used to generate 2D plots.
+> In current implementation this tracer gives error while importing
+> the module because Gnuplot is imported from package Gnuplot-py which
+> does not support python 3.x. Fix this by using pygnuplot package to
+> import this module.
 
-Hi,
+As described in the prerequisites section, the package name is distribution dependant.
+On my distribution the original package name is phython3-gnuplot,
+and it is working fine.
 
-On Fri, Jul 28, 2023 at 04:00:32PM +0530, Varshini Rajendran wrote:
-> Add shutdown controller support for SAM9X7 SoC.
->=20
-> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
+sys.version_info(major=3, minor=8, micro=10, releaselevel='final', serial=0)
+
+I don't currently have python3-pygnuplot installed, and so this patch breaks
+the  intel_pstate_tracer for me.
+
+So, I installed the python3-pygnuplot package, and it still didn't work, as there
+still wasn't a pygnuplot module to import.
+So, I found something called PyGnuplot.py and so changed to that and got further.
+But then it got upset with:
+
+  File "./intel_pstate_tracer.py.amd", line 298, in common_gnuplot_settings
+    g_plot = gnuplot.Gnuplot(persist=1)
+NameError: name 'gnuplot' is not defined
+
+I gave up and returned to the unpatched
+intel_pstate_tracer.py
+And checked that is still worked fine. It did.
+
+So, I do not accept this proposed patch.
+
+Not really related, but for a few years now I have been meaning to
+change the minimum python version prerequisite to >= 3.0 and
+to change the shebang line from this:
+
+#!/usr/bin/env python
+
+To this:
+
+#!/usr/bin/env python3
+
+I have to use the latter version on my distro.
+Back when I looked into it, things were inconsistent,
+so I didn't know what to do. The kernel tree has 52 .py files
+of the latter shebang and 11 of the former.
+
+... Doug
+
+> Signed-off-by: Swapnil Sapkal <swapnil.sapkal@amd.com>
 > ---
+> tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py      | 1 -
+> tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py | 4 ++--
+> 2 files changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
+> index 2448bb07973f..14f8d81f91de 100755
+> --- a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
+> +++ b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
+> @@ -27,7 +27,6 @@ import re
+>  import signal
+>  import sys
+>  import getopt
+> -import Gnuplot
+>  from numpy import *
+>  from decimal import *
+>  sys.path.append(os.path.join(os.path.dirname(__file__), '../intel_pstate_tracer'))
+> diff --git a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+> index ec3323100e1a..68412abdd7d4 100755
+> --- a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+> +++ b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+> @@ -32,7 +32,7 @@ import re
+>  import signal
+>  import sys
+> import getopt
+> -import Gnuplot
+> +from pygnuplot import gnuplot
+>  from numpy import *
+>  from decimal import *
+> 
+> @@ -295,7 +295,7 @@ def common_all_gnuplot_settings(output_png):
+> def common_gnuplot_settings():
+>      """ common gnuplot settings. """
+> 
+> -    g_plot = Gnuplot.Gnuplot(persist=1)
+> +    g_plot = gnuplot.Gnuplot(persist=1)
+> #   The following line is for rigor only. It seems to be assumed for .csv files
+>      g_plot('set datafile separator \",\"')
+>      g_plot('set ytics nomirror')
+> -- 
+> 2.34.1
 
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
--- Sebastian
-
->  drivers/power/reset/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> index 518b232bfd3d..8571b592f257 100644
-> --- a/drivers/power/reset/Kconfig
-> +++ b/drivers/power/reset/Kconfig
-> @@ -34,7 +34,7 @@ config POWER_RESET_AT91_RESET
->  config POWER_RESET_AT91_SAMA5D2_SHDWC
->  	tristate "Atmel AT91 SAMA5D2-Compatible shutdown controller driver"
->  	depends on ARCH_AT91
-> -	default SOC_SAM9X60 || SOC_SAMA5
-> +	default SOC_SAM9X60 || SOC_SAM9X7 || SOC_SAMA5
->  	help
->  	  This driver supports the alternate shutdown controller for some Atmel
->  	  SAMA5 SoCs. It is present for example on SAMA5D2 SoC.
-> --=20
-> 2.25.1
->=20
-
---fcwhesnxamk2gg2p
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmUEw5UACgkQ2O7X88g7
-+pqJOw/+MLLYmGm7IgO4W+jIsY0MrFOqCu63PeTrmYhU9lcDC6ln5wmiQY2Sl340
-wxEwLJfGxQZ2IJq3OWqvrAg1WUjMHa+TnxGCMGrIk7OzugP+vTeTlvDc7n1741z6
-Tp012hb1Y4flgoR+R13c5EkFws8EjpNSZIVa1ldQJxuFljJddNCjyuMGSiRo4XYV
-FnbJJDjW0tD7i39lDSI+nqv/+LDlT9USv7klbNHCfcD24uF8QX5Qj8lBcrryHqiX
-+DGBdlvFHf56/I7O9Xioxy5lHcx+EM75pnriPb7fkCI81lsIZ2wYJdydB2j7j0vL
-a96wIV5Dd8X6RXnBnOBLbww/qQAjyMn0ifIiQD7TYREpOVU6jV+URi6li4tlvDqj
-OLwCzDOn4FO2Utj/3LEyNvDMc5dvuyxhWG7OyRCKadVDIXWLka6AVf0w71gz3zg1
-XcoMcbM+0i4urNWzmksZDMBgVd7V9Yfb6SLth3iBH0lDYYuNR9thaUA7ReG3AWOL
-pEaRPBcKJZ5WfEmz8jWzDHF4xeXWEoPKdwGWk6vnGFNX3lVoRl5AWFxvymWgt79h
-Ac0DRW1igRwDV830dKVJY1kZ/kzCI2UfipeIOQbda/fVFax99At1ug8chJXEuLok
-8wK9TFNcHD5W2brPvJd4O3OFvM8oL9cAwojTNGFaG2HWlTxFTrk=
-=PShN
------END PGP SIGNATURE-----
-
---fcwhesnxamk2gg2p--
