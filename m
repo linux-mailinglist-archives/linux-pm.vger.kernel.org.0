@@ -2,207 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD807A181C
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 10:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B357A1917
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 10:45:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232900AbjIOIMS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 04:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34058 "EHLO
+        id S232676AbjIOIpZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 15 Sep 2023 04:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232874AbjIOIMQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 04:12:16 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F26B2710;
-        Fri, 15 Sep 2023 01:12:10 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 84035C43142;
-        Fri, 15 Sep 2023 08:12:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694765528;
-        bh=K1YlojQUwHVfz3jXgeY8tQ+lVYD/z+pvlMhS9gIfTKU=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-        b=ryKp9X5Si17D/iCiaKaMWYtQs/ozudwz7m9PTugDajpBsU+5FjK+vtgUMh09lJqMK
-         5tPyKwQ6KtO0oJLoSBn5wXpJbyFLFTlA/LP0xMuVzUmkYoTWg0s5933xLlUjNEXZhM
-         fm7mS/l0Ik4sN0kWMcDxm4g8keVmXuO5NZfWmfpoiTQAnZl29+4NfKfO7WjXjLytQ1
-         e0uQXa4qS4a1RcfWuw1NXLdnE9ZtQDuV6wfnIFo/Cg78BjOr0bVTGXTQQ9f/cnXYEH
-         DOLNJGGOk8uz9OrbSNvESScVQRzmLBVFtdHsfFjh9nOSOBxQbsMh9Me6w3Yc+bKmvV
-         US34by7A/tFhA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.lore.kernel.org (Postfix) with ESMTP id 73ABEEE643D;
-        Fri, 15 Sep 2023 08:12:08 +0000 (UTC)
-From:   Nikita Shubin via B4 Relay 
-        <devnull+nikita.shubin.maquefel.me@kernel.org>
-Date:   Fri, 15 Sep 2023 11:10:50 +0300
-Subject: [PATCH v4 08/42] power: reset: Add a driver for the ep93xx reset
+        with ESMTP id S232242AbjIOIpY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 04:45:24 -0400
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E42919A0;
+        Fri, 15 Sep 2023 01:45:19 -0700 (PDT)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1d542f05b9aso139488fac.1;
+        Fri, 15 Sep 2023 01:45:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694767519; x=1695372319;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bL0AhYUxrdUzQj4Hs45z84nA3TJ4ToZSnUkbGf3bwUM=;
+        b=vNcy9zJuxNcn8O8AkCBd/lX9x/tGf7b01oo8U3r1CbAhtvYE8HmX/y6lvZ6cHFpdAx
+         +Ml+zF/jlFIFT29h3Sg/G2kdJNsYJrZXVPZywAy/crwGxfvZCzJeeSTCtymEaQmWCwC+
+         Szj0T68CMaaV+BAa5eFuR5OwJSBfHLeEuGnyC4VMWBE3FcG48skc56r5Vf5fMa92JRzF
+         RQss0Waj7e2isN6/gdYiLoyRPBhobUt3YgA/tliq9zrO6q0wMhNVhM2JLA6MfLD1I/Kw
+         CDGTqqjdEz7lEq9jhCnb5D7DbavkxXLZYICnZsroEl4Gwe8qXPRoImWTKzbhMaEzZhg2
+         Ht5w==
+X-Gm-Message-State: AOJu0YzZSQpSbMqrXs1Pnk36i4SK969dxsTBU+OTDPQfQ4VabXvNFuEV
+        oe8WLUY041RzNkKG3z75Ch3Y8IJP6UpC7rbMYsw=
+X-Google-Smtp-Source: AGHT+IHl9PRzfbA8hGPGrt3+1ROWaBoHTLPlXkbCHBgq/t81poRMRxjJx/fiwhN8rIFqovs63lEpZzfcdrUxgqBUZyU=
+X-Received: by 2002:a05:6870:4250:b0:1d5:8faf:2935 with SMTP id
+ v16-20020a056870425000b001d58faf2935mr1048882oac.4.1694767518748; Fri, 15 Sep
+ 2023 01:45:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230915-ep93xx-v4-8-a1d779dcec10@maquefel.me>
-References: <20230915-ep93xx-v4-0-a1d779dcec10@maquefel.me>
-In-Reply-To: <20230915-ep93xx-v4-0-a1d779dcec10@maquefel.me>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>
-X-Mailer: b4 0.13-dev-e3e53
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694765525; l=4419;
- i=nikita.shubin@maquefel.me; s=20230718; h=from:subject:message-id;
- bh=ue19S7x0buqeac3S+9Rq3Mq9gtPiw4CWJl2XJVARssk=; =?utf-8?q?b=3DQJUbM+uVMMUI?=
- =?utf-8?q?DyTOR2gHpk1dTPaI19Z9JgWjVkfgVTwuDp8zFwUglkPCvmNdTvzZW+UcRfUfEDn6?=
- 8/9/rx6rDDPJpd0DRjoWl0RoDqkgnNP+sHmmVds2+qYRwhV7HYXc
-X-Developer-Key: i=nikita.shubin@maquefel.me; a=ed25519;
- pk=vqf5YIUJ7BJv3EJFaNNxWZgGuMgDH6rwufTLflwU9ac=
-X-Endpoint-Received: by B4 Relay for nikita.shubin@maquefel.me/20230718 with auth_id=65
-X-Original-From: Nikita Shubin <nikita.shubin@maquefel.me>
-Reply-To: <nikita.shubin@maquefel.me>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230913163823.7880-1-james.morse@arm.com> <20230913163823.7880-28-james.morse@arm.com>
+ <CAMj1kXHRAt7ecB9p_dm3MjDL5wZkAsVh30hMY2SV_XUe=bm6Vg@mail.gmail.com>
+ <20230914155459.00002dba@Huawei.com> <CAMj1kXFquiLGCMow3iujHUU4GBZx2t9KfKy1R9iqjBFjY+acaA@mail.gmail.com>
+ <f5d9beea95e149ab89364dcdb0f8bf69@huawei.com> <ZQQDJT6MOaIOPmq5@shell.armlinux.org.uk>
+In-Reply-To: <ZQQDJT6MOaIOPmq5@shell.armlinux.org.uk>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 15 Sep 2023 10:45:07 +0200
+Message-ID: <CAJZ5v0jUQ+4G5ArYAtu1gvYF4356CK_QVTO4oWn0ukwdOiZaHA@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 27/35] ACPICA: Add new MADT GICC flags fields [code first?]
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Salil Mehta <salil.mehta@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        James Morse <james.morse@arm.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        "jianyong.wu@arm.com" <jianyong.wu@arm.com>,
+        "justin.he@arm.com" <justin.he@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Nikita Shubin <nikita.shubin@maquefel.me>
+On Fri, Sep 15, 2023 at 9:09 AM Russell King (Oracle)
+<linux@armlinux.org.uk> wrote:
+>
+> On Fri, Sep 15, 2023 at 02:29:13AM +0000, Salil Mehta wrote:
+> > On x86, during init, if the MADT entry for LAPIC is found to be
+> > online-capable and is enabled as well then possible and present
+>
+> Note that the ACPI spec says enabled + online-capable isn't defined.
+>
+> "The information conveyed by this bit depends on the value of the
+> Enabled bit. If the Enabled bit is set, this bit is reserved and
+> must be zero."
+>
+> So, if x86 is doing something with the enabled && online-capable
+> state (other than ignoring the online-capable) then technically it
+> is doing something that the spec doesn't define
 
-Implement the reset behaviour of the various EP93xx SoCS in drivers/power/reset.
+And so it is wrong.
 
-It used to be located in arch/arm/mach-ep93xx.
+> - and it's
+> completely fine if aarch64 does something else (maybe treating it
+> strictly as per the spec and ignoring online-capable.)
 
-Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
-Acked-by: Sebastian Reichel <sre@kernel.org>
----
- drivers/power/reset/Kconfig          | 10 +++++
- drivers/power/reset/Makefile         |  1 +
- drivers/power/reset/ep93xx-restart.c | 85 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 96 insertions(+)
+That actually is the only compliant thing that can be done.
 
-diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-index fff07b2bd77b..9c2aa9218841 100644
---- a/drivers/power/reset/Kconfig
-+++ b/drivers/power/reset/Kconfig
-@@ -75,6 +75,16 @@ config POWER_RESET_BRCMSTB
- 	  Say Y here if you have a Broadcom STB board and you wish
- 	  to have restart support.
- 
-+config POWER_RESET_EP93XX
-+	bool "Cirrus EP93XX reset driver" if COMPILE_TEST
-+	depends on MFD_SYSCON
-+	default ARCH_EP93XX
-+	help
-+	  This driver provides restart support for Cirrus EP93XX SoC.
-+
-+	  Say Y here if you have a Cirrus EP93XX SoC and you wish
-+	  to have restart support.
-+
- config POWER_RESET_GEMINI_POWEROFF
- 	bool "Cortina Gemini power-off driver"
- 	depends on ARCH_GEMINI || COMPILE_TEST
-diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-index d763e6735ee3..61f4e11619b2 100644
---- a/drivers/power/reset/Makefile
-+++ b/drivers/power/reset/Makefile
-@@ -7,6 +7,7 @@ obj-$(CONFIG_POWER_RESET_ATC260X) += atc260x-poweroff.o
- obj-$(CONFIG_POWER_RESET_AXXIA) += axxia-reset.o
- obj-$(CONFIG_POWER_RESET_BRCMKONA) += brcm-kona-reset.o
- obj-$(CONFIG_POWER_RESET_BRCMSTB) += brcmstb-reboot.o
-+obj-$(CONFIG_POWER_RESET_EP93XX) += ep93xx-restart.o
- obj-$(CONFIG_POWER_RESET_GEMINI_POWEROFF) += gemini-poweroff.o
- obj-$(CONFIG_POWER_RESET_GPIO) += gpio-poweroff.o
- obj-$(CONFIG_POWER_RESET_GPIO_RESTART) += gpio-restart.o
-diff --git a/drivers/power/reset/ep93xx-restart.c b/drivers/power/reset/ep93xx-restart.c
-new file mode 100644
-index 000000000000..4da456d45d29
---- /dev/null
-+++ b/drivers/power/reset/ep93xx-restart.c
-@@ -0,0 +1,85 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Cirrus EP93xx SoC reset driver
-+ *
-+ * Copyright (C) 2021 Nikita Shubin <nikita.shubin@maquefel.me>
-+ */
-+
-+#include <linux/bits.h>
-+#include <linux/delay.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/notifier.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/reboot.h>
-+
-+#include <linux/soc/cirrus/ep93xx.h>
-+
-+#define EP93XX_SYSCON_DEVCFG		0x80
-+#define EP93XX_SYSCON_DEVCFG_SWRST	BIT(31)
-+
-+struct ep93xx_restart {
-+	struct regmap *map;
-+	struct notifier_block restart_handler;
-+};
-+
-+static int ep93xx_restart_handle(struct notifier_block *this,
-+				 unsigned long mode, void *cmd)
-+{
-+	struct ep93xx_restart *priv =
-+		container_of(this, struct ep93xx_restart, restart_handler);
-+
-+	/* Issue the reboot */
-+	ep93xx_regmap_update_bits(priv->map, EP93XX_SYSCON_DEVCFG,
-+				  EP93XX_SYSCON_DEVCFG_SWRST, EP93XX_SYSCON_DEVCFG_SWRST);
-+	ep93xx_regmap_update_bits(priv->map, EP93XX_SYSCON_DEVCFG,
-+				  EP93XX_SYSCON_DEVCFG_SWRST, 0);
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static int ep93xx_reboot_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct ep93xx_restart *priv;
-+	struct device_node *parent;
-+	int err;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	parent = of_get_parent(dev->of_node);
-+	if (!parent)
-+		return dev_err_probe(dev, -EINVAL, "no syscon parent for reboot node\n");
-+
-+	priv->map = syscon_node_to_regmap(parent);
-+	of_node_put(parent);
-+	if (IS_ERR(priv->map))
-+		return dev_err_probe(dev, -EINVAL, "no syscon regmap\n");
-+
-+	priv->restart_handler.notifier_call = ep93xx_restart_handle;
-+	priv->restart_handler.priority = 128;
-+
-+	err = register_restart_handler(&priv->restart_handler);
-+	if (err)
-+		return dev_err_probe(dev, err, "can't register restart notifier\n");
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id ep93xx_reboot_of_match[] = {
-+	{
-+		.compatible = "cirrus,ep9301-reboot",
-+	},
-+	{ /* sentinel */ }
-+};
-+
-+static struct platform_driver ep93xx_reboot_driver = {
-+	.probe = ep93xx_reboot_probe,
-+	.driver = {
-+		.name = "ep9301-reboot",
-+		.of_match_table = ep93xx_reboot_of_match,
-+	},
-+};
-+builtin_platform_driver(ep93xx_reboot_driver);
+As per the spec (quoted above), a platform firmware setting
+online-capable to 1 when Enabled is set is not compliant and it is
+invalid to treat this as meaningful data.
 
--- 
-2.39.2
+As currently defined, online-capable is only applicable to CPUs that
+are not enabled to start with and its role is to make it clear whether
+or not they can be enabled later AFAICS.
 
+If there is a need to represent the case in which a CPI that is
+enabled to start with can be disabled, but cannot be enabled again,
+the spec needs to be updated.
