@@ -2,149 +2,249 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7367A233A
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 18:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA107A239F
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 18:31:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234348AbjIOQGJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 12:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57332 "EHLO
+        id S232007AbjIOQbW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 12:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235725AbjIOQFq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 12:05:46 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0795101;
-        Fri, 15 Sep 2023 09:05:40 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38FD4qp8030120;
-        Fri, 15 Sep 2023 16:05:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=hZOSoryLz/oMKtxYiMHTGbPDAmJb4iqKx9FAwvaOf7c=;
- b=Q0Wc1UutUxoIDs5I8uunYXHNwMbqJuoq/hGJi2RLLki22wUzOBysRiJry/WR/90hWk9R
- pq32oRkMaGMoOOzyFFsQ3MfMpdwYgf31DzwQ/SEuYHjgujH5tHYZfst6C3sYiIAV/T98
- 15pWZLmLC0by28BfB7ZJ3c88rdjeXcukI6l9+u2ejIwiXfTgzFkCo5CLSahEHok1Vbc4
- AxEggKkGu0MBugLhPNYNfb8xLXTF46stULU9ImHpG5iqDRv2LG45qGgem7v0CimFAMWa
- yv+0uL+SzLnYXcopOrlP62d1SauFmTvLFFm2HSg13rujm/6CSAbIhWh1M9YU93hPj0zE /A== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t4g2ssmrd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Sep 2023 16:05:28 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38FG5R24008298
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Sep 2023 16:05:27 GMT
-Received: from hu-mdtipton-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Fri, 15 Sep 2023 09:05:27 -0700
-Date:   Fri, 15 Sep 2023 09:05:25 -0700
-From:   Mike Tipton <quic_mdtipton@quicinc.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-CC:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <cros-qcom-dts-watchers@chromium.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 00/53] icc-rpmh multi-RSC voting groundwork
-Message-ID: <20230915160525.GA14240@hu-mdtipton-lv.qualcomm.com>
-References: <20230708-topic-rpmh_icc_rsc-v1-0-b223bd2ac8dd@linaro.org>
- <c067a45f-9629-d516-9e56-36538e4ff6db@kernel.org>
- <20230807215739.GA9621@hu-mdtipton-lv.qualcomm.com>
- <10520827-dc01-475c-b09a-35cefc9e0a62@linaro.org>
- <20230913012951.GA19284@hu-mdtipton-lv.qualcomm.com>
- <ffc58838-c306-49f3-a90a-95b2cf02ae3d@linaro.org>
- <20230914023239.GA25147@hu-mdtipton-lv.qualcomm.com>
- <978fd46d-8142-41e6-9c62-df678018d6c2@linaro.org>
+        with ESMTP id S234958AbjIOQbK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 12:31:10 -0400
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A03199
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 09:31:01 -0700 (PDT)
+Received: by mail-oo1-xc30.google.com with SMTP id 006d021491bc7-57358a689d2so1382443eaf.2
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 09:31:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1694795461; x=1695400261; darn=vger.kernel.org;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=7RrS7L56YKaYEXpfYIXKbqdRe6j0lTDSimSq1dezNhs=;
+        b=XJCZHdjDBRrqdL1d1htUR7xXkZQ438uDaSUoJSpqlBGDbAQR4h81RWE1m8vUnvByl/
+         eE86yM6TgmmIE3hBZ+zbXQ3ZnL/Q1GijNsaY0o+CYxboAWKevkhtMLb8nvLVroVTZqJM
+         jJl0WNvqFCIffxQ6aS8E+Ogb48d7drdaUutQk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694795461; x=1695400261;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7RrS7L56YKaYEXpfYIXKbqdRe6j0lTDSimSq1dezNhs=;
+        b=w0UTx1oTignjhpwle3jlzjpmyqf0tAa6nImH8Opg8LGZE4SSKIhMrqZvlVgoYOo4j9
+         jAaUkOMQ4Xy5B+TIkwZ9ldBAOPlogdW6xN0h7TlVrbI6hOltdI9w0OSMjyV7hww5l7ZV
+         BfWM8VmsjWiB2xNtNGZcQQWBTL/D2aybwCrT+QBeZLqtWDXl2CuSOWZarWb5dtfe+nBV
+         YaecQGqARvDojo7C4LwlB7NGvwSS7ilnn50pIfhYkb8Y6D0+GxZ0BpXVoyA67mNjiyft
+         /g/1FYhZSATaazKgp5JyKfFqI3jpgPyJqK4da73q382y2QGz3/GrUI1PKPx9pX33c3Fp
+         rMgw==
+X-Gm-Message-State: AOJu0Yz3/zfHiwy5YW1CmI1oFrFP564i0OVucf9++SdFisMQYRL/FywX
+        yWit0Sb1KVB/8BUO+kuMTSWYFg==
+X-Google-Smtp-Source: AGHT+IH9f3ADCI/59RSTEiUOC9HhCU2jhg8ihwpIk9gmIuGtau7zFuA8Rg58crVle/qE5I9DWWauhw==
+X-Received: by 2002:a05:6358:7249:b0:134:f28f:aa47 with SMTP id i9-20020a056358724900b00134f28faa47mr2905530rwa.23.1694795461046;
+        Fri, 15 Sep 2023 09:31:01 -0700 (PDT)
+Received: from [10.67.51.148] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id y9-20020a0cd989000000b0063d2a70dff5sm1387579qvj.72.2023.09.15.09.30.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Sep 2023 09:31:00 -0700 (PDT)
+Message-ID: <71ab660c-bee3-038f-665c-cda04f18cf6d@broadcom.com>
+Date:   Fri, 15 Sep 2023 09:30:58 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <978fd46d-8142-41e6-9c62-df678018d6c2@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: FdqQz3_f9hM-uonH0jWnPsjr7s9Yizxs
-X-Proofpoint-ORIG-GUID: FdqQz3_f9hM-uonH0jWnPsjr7s9Yizxs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-15_12,2023-09-15_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 impostorscore=0 priorityscore=1501 malwarescore=0
- mlxlogscore=999 clxscore=1015 adultscore=0 mlxscore=0 spamscore=0
- phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309150143
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH v2 05/17] pmdomain: bcm: Move Kconfig options to the
+ pmdomain subsystem
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-mips@vger.kernel.org, linux-rpi-kernel@lists.infradead.org
+References: <20230915092003.658361-1-ulf.hansson@linaro.org>
+ <20230915092003.658361-6-ulf.hansson@linaro.org>
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+In-Reply-To: <20230915092003.658361-6-ulf.hansson@linaro.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000007165a906056851d2"
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 15, 2023 at 03:43:27PM +0200, Konrad Dybcio wrote:
-> On 14.09.2023 04:32, Mike Tipton wrote:
-> > On Wed, Sep 13, 2023 at 10:31:49AM +0200, Konrad Dybcio wrote:
-> >>> The applicable voters should likely be defined in the target-specific
-> >>> headers, rather than the common qcom,icc.h. The bit range used for them
-> >>> could be common, but each target may only support a small subset of the
-> >>> total set of possible voters across all targets.
-> >> I'm not sure how client drivers would then choose the
-> >> correct path other than
-> >>
-> >> switch (soc) {
-> >> case 8450:
-> >> 	tag = QCOM_ICC_TAG_VOTER_8450_HLOS;
-> >> 	break;
-> >> case 8550:
-> >> 	tag = QCOM_ICC_TAG_VOTER_8550_HLOS;
-> >> 	break;
-> >> ...
-> >> }
-> >>
-> >> which would be unacceptable.
-> > 
-> > The same general way it's handled for the endpoint bindings, which are
-> > already target-specific. 
-> > 
-> > Any client drivers hardcoding the endpoint bindings in their driver
-> > would have to include the appropriate, target-specific binding header
-> > (e.g. qcom,sm8550-rpmh.h). That would only be possible if their driver
-> > file is itself target-specific. Otherwise, it would have to pull the
-> > endpoint bindings from devicetree. Or just use the recommended
-> > of_icc_get() and let devicetree do everything for them. Same for the
-> > target-specific voter tag bindings.
-> > 
-> > Clients can also specify their tags in devicetree. They don't actually
-> > have to call icc_set_tag() directly. For example:
-> > 
-> >     #include <dt-bindings/interconnect/qcom,sm8450.h>
-> > 
-> >     interconnects = <&mmss_noc MASTER_MDP QCOM_ICC_TAG_VOTER_DISP
-> >                      &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_VOTER_DISP>;
-> > 
-> > Then when they call of_icc_get() for this path it'll automatically have
-> > QCOM_ICC_TAG_VOTER_DISP set for them.
-> I think I'd skew towards the "define everything in the DT" approach.
+--0000000000007165a906056851d2
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+On 9/15/23 02:19, Ulf Hansson wrote:
+> The Kconfig options belongs closer to the corresponding implementations,
+> hence let's move them from the soc subsystem to the pmdomain subsystem.
 > 
-> One thing that makes me uneasy to go on with this approach is the
-> question whether there is a case in which we would want to switch
-> from e.g. voting through DISP to voting through APPS (or similar)
-> from within a single device.
+> Cc: Florian Fainelli <florian.fainelli@broadcom.com>
+> Cc: Ray Jui <rjui@broadcom.com>
+> Cc: Scott Branden <sbranden@broadcom.com>
+> Cc: <linux-mips@vger.kernel.org>
+> Cc: <linux-rpi-kernel@lists.infradead.org>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+>   drivers/pmdomain/Kconfig     |  1 +
+>   drivers/pmdomain/bcm/Kconfig | 46 ++++++++++++++++++++++++++++++++++++
+>   drivers/soc/bcm/Kconfig      | 42 --------------------------------
+>   3 files changed, 47 insertions(+), 42 deletions(-)
+>   create mode 100644 drivers/pmdomain/bcm/Kconfig
+> 
+> diff --git a/drivers/pmdomain/Kconfig b/drivers/pmdomain/Kconfig
+> index 482d9e970e14..ddc05d6af100 100644
+> --- a/drivers/pmdomain/Kconfig
+> +++ b/drivers/pmdomain/Kconfig
+> @@ -4,5 +4,6 @@ menu "PM Domains"
+>   source "drivers/pmdomain/actions/Kconfig"
+>   source "drivers/pmdomain/amlogic/Kconfig"
+>   source "drivers/pmdomain/apple/Kconfig"
+> +source "drivers/pmdomain/bcm/Kconfig"
+>   
+>   endmenu
+> diff --git a/drivers/pmdomain/bcm/Kconfig b/drivers/pmdomain/bcm/Kconfig
+> new file mode 100644
+> index 000000000000..9311e90b7707
+> --- /dev/null
+> +++ b/drivers/pmdomain/bcm/Kconfig
+> @@ -0,0 +1,46 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +menu "Broadcom PM Domains"
+> +
+> +config BCM2835_POWER
+> +	bool "BCM2835 power domain driver"
+> +	depends on ARCH_BCM2835 || (COMPILE_TEST && OF)
+> +	default y if ARCH_BCM2835
+> +	select PM_GENERIC_DOMAINS if PM
+> +	select RESET_CONTROLLER
+> +	help
+> +	  This enables support for the BCM2835 power domains and reset
+> +	  controller.  Any usage of power domains by the Raspberry Pi
+> +	  firmware means that Linux usage of the same power domain
+> +	  must be accessed using the RASPBERRYPI_POWER driver
+> +
+> +config RASPBERRYPI_POWER
+> +	bool "Raspberry Pi power domain driver"
+> +	depends on ARCH_BCM2835 || (COMPILE_TEST && OF)
+> +	depends on RASPBERRYPI_FIRMWARE=y
+> +	select PM_GENERIC_DOMAINS if PM
+> +	help
+> +	  This enables support for the RPi power domains which can be enabled
+> +	  or disabled via the RPi firmware.
+> +
+> +config BCM_PMB
+> +	bool "Broadcom PMB (Power Management Bus) driver"
+> +	depends on ARCH_BCMBCA || (COMPILE_TEST && OF)
+> +	default ARCH_BCMBCA
+> +	select PM_GENERIC_DOMAINS if PM
+> +	help
+> +	  This enables support for the Broadcom's PMB (Power Management Bus) that
+> +	  is used for disabling and enabling SoC devices.
+> +
+> +if SOC_BCM63XX
+> +
+> +config BCM63XX_POWER
+> +	bool "BCM63xx power domain driver"
+> +	depends on BMIPS_GENERIC || (COMPILE_TEST && OF)
+> +	select PM_GENERIC_DOMAINS if PM
+> +	help
+> +	  This enables support for the BCM63xx power domains controller on
+> +	  BCM6318, BCM6328, BCM6362 and BCM63268 SoCs.
+> +
+> +endif # SOC_BCM63XX
 
-It shouldn't be common. But it could be done fairly simply by listing
-paths for each different voter in the dt properties. 
+That is confusing, SOC_BCM63XX remains defined in 
+drivers/soc/bcm/Kconfig, but we now made BCM63XX_POWER's visibility 
+conditional upon a Kconfig symbol defined elsewhere, I would just drop 
+the "if" condition completely.
+-- 
+Florian
 
-    interconnects = <&mmss_noc MASTER_MDP QCOM_ICC_TAG_VOTER_APPS
-                     &mc_virt SLAVE_EBI1  QCOM_ICC_TAG_VOTER_APPS>,
-                    <&mmss_noc MASTER_MDP QCOM_ICC_TAG_VOTER_DISP
-                     &mc_virt SLAVE_EBI1  QCOM_ICC_TAG_VOTER_DISP>,
-    interconnect-names = "path-apps-voter",
-                         "path-disp-voter";
 
+--0000000000007165a906056851d2
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIHMjXR1Mb7tkrghY
+ifSmy9W60ovmR8CAnz8OdMRHYVlDMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDkxNTE2MzEwMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQDyWA17HJtEb5UqEon5RPKcLAmXcpGwUXDK
+Y7AMPYwTdFy9U4bZjFNIYNQrViUKd4+JM8tWMcOA82I0bC6/TwQonm5keBC17RA54r86lXSdmGG0
+vOZSMVH5KflygqfyTwn0Zj+Zp2U8aUZkq21GZ8tLokxUzXsqDEPYp9qvctXCsBN5Rnse8lZPRWZ6
+i4e9FvqONeyebeeyQEByHAUdDrgu/x0Y3ne+rgGZP5F+fPXGkTnvpp3vuByjs38BHyhNRJsSebhy
+uTOa4yVtKqTgRznhOYLVUElWzX9qZEq7PlOkeyasI2FywC6+8W6D+NYh7rBcgexdY05AKAL0wUoL
+BATO
+--0000000000007165a906056851d2--
