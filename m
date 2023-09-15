@@ -2,170 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D02C7A1A94
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 11:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0537A1AA0
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 11:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233117AbjIOJab (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 05:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
+        id S233440AbjIOJez (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 05:34:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232633AbjIOJaa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 05:30:30 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749C8CED;
-        Fri, 15 Sep 2023 02:30:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1694770225; x=1726306225;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZxrVsRDpUNvxd12RQOucpkAkUdoy3mk3RtU+h+psW7c=;
-  b=Kb+e7OstiirIj/RxcOOEhdNaf4//q0WxA8Jc2R0ZeODLIG9cslCy8I9E
-   9LSnmURFd3gEMIDPovlVL59qYiUL8AC7OzMxzWHgEmJBGpVORv9hZOY4V
-   hNc2USO9NVs4aqoUWhWidRht15WQE9CPwB45SilEfKZ15c8JkLxcQUQLe
-   EWYgnFsTgSKcWGXwMlu7FaPSAeZynHenS2nfUHQBrITx/4ayHGuNxmZ9e
-   NzN1iGtkOeR2PnsVu21MfAt53aj/mOG4lSIym3FEdqC5UXmj1zbUHAJWn
-   6HdlvahzYw1Ln7QCIJBo+Jv3bifZzH7qSSd3YCAbGttMkvb9y2wwsOPM6
-   A==;
-X-CSE-ConnectionGUID: G+JhttbMRHS/WWWcCiUIww==
-X-CSE-MsgGUID: XyI0AJRFQVq2neUO9r88Pw==
-X-ThreatScanner-Verdict: Negative
-X-IronPort-AV: E=Sophos;i="6.02,148,1688454000"; 
-   d="asc'?scan'208";a="4701469"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Sep 2023 02:30:24 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+        with ESMTP id S233371AbjIOJey (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 05:34:54 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE6E1FDE;
+        Fri, 15 Sep 2023 02:34:49 -0700 (PDT)
+Received: from lhrpeml100004.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Rn86g6pjjz6D9DT;
+        Fri, 15 Sep 2023 17:30:03 +0800 (CST)
+Received: from lhrpeml500001.china.huawei.com (7.191.163.213) by
+ lhrpeml100004.china.huawei.com (7.191.162.219) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 15 Sep 2023 02:29:28 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex04.mchp-main.com (10.10.85.152)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Fri, 15 Sep 2023 02:29:26 -0700
-Date:   Fri, 15 Sep 2023 10:29:10 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-CC:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        Conor Dooley <conor@kernel.org>
-Subject: Re: [PATCH v2 13/17] pmdomain: starfive: Move Kconfig file to the
- pmdomain subsystem
-Message-ID: <20230915-lark-gangrene-b7cbd445b511@wendy>
-References: <20230915092003.658361-1-ulf.hansson@linaro.org>
- <20230915092003.658361-14-ulf.hansson@linaro.org>
+ 15.1.2507.31; Fri, 15 Sep 2023 10:34:46 +0100
+Received: from lhrpeml500001.china.huawei.com ([7.191.163.213]) by
+ lhrpeml500001.china.huawei.com ([7.191.163.213]) with mapi id 15.01.2507.031;
+ Fri, 15 Sep 2023 10:34:46 +0100
+From:   Salil Mehta <salil.mehta@huawei.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>
+CC:     Ard Biesheuvel <ardb@kernel.org>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        James Morse <james.morse@arm.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Jean-Philippe Brucker" <jean-philippe@linaro.org>,
+        "jianyong.wu@arm.com" <jianyong.wu@arm.com>,
+        "justin.he@arm.com" <justin.he@arm.com>
+Subject: RE: [RFC PATCH v2 27/35] ACPICA: Add new MADT GICC flags fields [code
+ first?]
+Thread-Topic: [RFC PATCH v2 27/35] ACPICA: Add new MADT GICC flags fields
+ [code first?]
+Thread-Index: AQHZ5mDqpYLh+nkhC0mj9mPBt3XEBLAZ5MMAgAB0lICAAAsFgIAAEfIQgADzSoCAABq9gIAAG4DQ
+Date:   Fri, 15 Sep 2023 09:34:46 +0000
+Message-ID: <80e36ff513504a0382a1cbce83e42295@huawei.com>
+References: <20230913163823.7880-1-james.morse@arm.com>
+        <20230913163823.7880-28-james.morse@arm.com>
+        <CAMj1kXHRAt7ecB9p_dm3MjDL5wZkAsVh30hMY2SV_XUe=bm6Vg@mail.gmail.com>
+        <20230914155459.00002dba@Huawei.com>
+        <CAMj1kXFquiLGCMow3iujHUU4GBZx2t9KfKy1R9iqjBFjY+acaA@mail.gmail.com>
+        <f5d9beea95e149ab89364dcdb0f8bf69@huawei.com>
+        <ZQQDJT6MOaIOPmq5@shell.armlinux.org.uk>
+ <CAJZ5v0jUQ+4G5ArYAtu1gvYF4356CK_QVTO4oWn0ukwdOiZaHA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jUQ+4G5ArYAtu1gvYF4356CK_QVTO4oWn0ukwdOiZaHA@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.126.174.239]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="1ZlFlc8C7bX0329f"
-Content-Disposition: inline
-In-Reply-To: <20230915092003.658361-14-ulf.hansson@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---1ZlFlc8C7bX0329f
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Sep 15, 2023 at 11:19:59AM +0200, Ulf Hansson wrote:
-> The Kconfig belongs closer to the corresponding implementation, hence let=
-'s
-> move it from the soc subsystem to the pmdomain subsystem.
-
-Thanks for updating the MAINTAINERS bits.
-
-> Cc: Walker Chen <walker.chen@starfivetech.com>
-> Cc: Conor Dooley <conor@kernel.org>
-> Acked-by: Conor Dooley <conor@kernel.org>
-
-Unless my macro changed without me noticing, I don't think that's
-the email address I used for the ack. Just to be sure:
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-
-Thanks,
-Conor.
-
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
->  MAINTAINERS                                | 3 +--
->  drivers/pmdomain/Kconfig                   | 1 +
->  drivers/{soc =3D> pmdomain}/starfive/Kconfig | 0
->  drivers/soc/Kconfig                        | 1 -
->  4 files changed, 2 insertions(+), 3 deletions(-)
->  rename drivers/{soc =3D> pmdomain}/starfive/Kconfig (100%)
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 6b491ebcf790..40744fefed3d 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -20515,7 +20515,7 @@ M:	Walker Chen <walker.chen@starfivetech.com>
->  M:	Changhuang Liang <changhuang.liang@starfivetech.com>
->  S:	Supported
->  F:	Documentation/devicetree/bindings/power/starfive*
-> -F:	drivers/pmdomain/starfive/jh71xx-pmu.c
-> +F:	drivers/pmdomain/starfive/
->  F:	include/dt-bindings/power/starfive,jh7110-pmu.h
-> =20
->  STARFIVE SOC DRIVERS
-> @@ -20523,7 +20523,6 @@ M:	Conor Dooley <conor@kernel.org>
->  S:	Maintained
->  T:	git https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/
->  F:	Documentation/devicetree/bindings/soc/starfive/
-> -F:	drivers/soc/starfive/
-> =20
->  STARFIVE TRNG DRIVER
->  M:	Jia Jie Ho <jiajie.ho@starfivetech.com>
-> diff --git a/drivers/pmdomain/Kconfig b/drivers/pmdomain/Kconfig
-> index 08f8a3aa9805..2286c36076db 100644
-> --- a/drivers/pmdomain/Kconfig
-> +++ b/drivers/pmdomain/Kconfig
-> @@ -12,5 +12,6 @@ source "drivers/pmdomain/renesas/Kconfig"
->  source "drivers/pmdomain/rockchip/Kconfig"
->  source "drivers/pmdomain/samsung/Kconfig"
->  source "drivers/pmdomain/st/Kconfig"
-> +source "drivers/pmdomain/starfive/Kconfig"
-> =20
->  endmenu
-> diff --git a/drivers/soc/starfive/Kconfig b/drivers/pmdomain/starfive/Kco=
-nfig
-> similarity index 100%
-> rename from drivers/soc/starfive/Kconfig
-> rename to drivers/pmdomain/starfive/Kconfig
-> diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
-> index 8b46da40f107..10a9ff84ff41 100644
-> --- a/drivers/soc/Kconfig
-> +++ b/drivers/soc/Kconfig
-> @@ -23,7 +23,6 @@ source "drivers/soc/renesas/Kconfig"
->  source "drivers/soc/rockchip/Kconfig"
->  source "drivers/soc/samsung/Kconfig"
->  source "drivers/soc/sifive/Kconfig"
-> -source "drivers/soc/starfive/Kconfig"
->  source "drivers/soc/sunxi/Kconfig"
->  source "drivers/soc/tegra/Kconfig"
->  source "drivers/soc/ti/Kconfig"
-> --=20
-> 2.34.1
->=20
-
---1ZlFlc8C7bX0329f
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZQQj5gAKCRB4tDGHoIJi
-0ni0APwKcNwJSKsOPvp2+jVoNLd8F/Qp3atCKUuE1/sjfqR/dwEA88V4E7km/zn5
-cyWfek8D2WHLjgQjfvInsrZjiWvA7Ac=
-=9J6Y
------END PGP SIGNATURE-----
-
---1ZlFlc8C7bX0329f--
+DQo+IEZyb206IFJhZmFlbCBKLiBXeXNvY2tpIDxyYWZhZWxAa2VybmVsLm9yZz4NCj4gU2VudDog
+RnJpZGF5LCBTZXB0ZW1iZXIgMTUsIDIwMjMgOTo0NSBBTQ0KPiBUbzogUnVzc2VsbCBLaW5nIChP
+cmFjbGUpIDxsaW51eEBhcm1saW51eC5vcmcudWs+DQo+IENjOiBTYWxpbCBNZWh0YSA8c2FsaWwu
+bWVodGFAaHVhd2VpLmNvbT47IEFyZCBCaWVzaGV1dmVsIDxhcmRiQGtlcm5lbC5vcmc+Ow0KPiBK
+b25hdGhhbiBDYW1lcm9uIDxqb25hdGhhbi5jYW1lcm9uQGh1YXdlaS5jb20+OyBKYW1lcyBNb3Jz
+ZQ0KPiA8amFtZXMubW9yc2VAYXJtLmNvbT47IGxpbnV4LXBtQHZnZXIua2VybmVsLm9yZzsgbG9v
+bmdhcmNoQGxpc3RzLmxpbnV4LmRldjsNCj4gbGludXgtYWNwaUB2Z2VyLmtlcm5lbC5vcmc7IGxp
+bnV4LWFyY2hAdmdlci5rZXJuZWwub3JnOyBsaW51eC0NCj4ga2VybmVsQHZnZXIua2VybmVsLm9y
+ZzsgbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnOyBsaW51eC0NCj4gcmlzY3ZA
+bGlzdHMuaW5mcmFkZWFkLm9yZzsga3ZtYXJtQGxpc3RzLmxpbnV4LmRldjsgeDg2QGtlcm5lbC5v
+cmc7IEplYW4tDQo+IFBoaWxpcHBlIEJydWNrZXIgPGplYW4tcGhpbGlwcGVAbGluYXJvLm9yZz47
+IGppYW55b25nLnd1QGFybS5jb207DQo+IGp1c3Rpbi5oZUBhcm0uY29tDQo+IFN1YmplY3Q6IFJl
+OiBbUkZDIFBBVENIIHYyIDI3LzM1XSBBQ1BJQ0E6IEFkZCBuZXcgTUFEVCBHSUNDIGZsYWdzIGZp
+ZWxkcw0KPiBbY29kZSBmaXJzdD9dDQo+IA0KPiBPbiBGcmksIFNlcCAxNSwgMjAyMyBhdCA5OjA5
+4oCvQU0gUnVzc2VsbCBLaW5nIChPcmFjbGUpDQo+IDxsaW51eEBhcm1saW51eC5vcmcudWs+IHdy
+b3RlOg0KPiA+DQo+ID4gT24gRnJpLCBTZXAgMTUsIDIwMjMgYXQgMDI6Mjk6MTNBTSArMDAwMCwg
+U2FsaWwgTWVodGEgd3JvdGU6DQo+ID4gPiBPbiB4ODYsIGR1cmluZyBpbml0LCBpZiB0aGUgTUFE
+VCBlbnRyeSBmb3IgTEFQSUMgaXMgZm91bmQgdG8gYmUNCj4gPiA+IG9ubGluZS1jYXBhYmxlIGFu
+ZCBpcyBlbmFibGVkIGFzIHdlbGwgdGhlbiBwb3NzaWJsZSBhbmQgcHJlc2VudA0KPiA+DQo+ID4g
+Tm90ZSB0aGF0IHRoZSBBQ1BJIHNwZWMgc2F5cyBlbmFibGVkICsgb25saW5lLWNhcGFibGUgaXNu
+J3QgZGVmaW5lZC4NCj4gPg0KPiA+ICJUaGUgaW5mb3JtYXRpb24gY29udmV5ZWQgYnkgdGhpcyBi
+aXQgZGVwZW5kcyBvbiB0aGUgdmFsdWUgb2YgdGhlDQo+ID4gRW5hYmxlZCBiaXQuIElmIHRoZSBF
+bmFibGVkIGJpdCBpcyBzZXQsIHRoaXMgYml0IGlzIHJlc2VydmVkIGFuZA0KPiA+IG11c3QgYmUg
+emVyby4iDQo+ID4NCj4gPiBTbywgaWYgeDg2IGlzIGRvaW5nIHNvbWV0aGluZyB3aXRoIHRoZSBl
+bmFibGVkICYmIG9ubGluZS1jYXBhYmxlDQo+ID4gc3RhdGUgKG90aGVyIHRoYW4gaWdub3Jpbmcg
+dGhlIG9ubGluZS1jYXBhYmxlKSB0aGVuIHRlY2huaWNhbGx5IGl0DQo+ID4gaXMgZG9pbmcgc29t
+ZXRoaW5nIHRoYXQgdGhlIHNwZWMgZG9lc24ndCBkZWZpbmUNCj4gDQo+IEFuZCBzbyBpdCBpcyB3
+cm9uZy4NCg0KDQpPciBtYXliZSwgc3BlY2lmaWNhdGlvbiBoYXMgbm90IGJlZW4gdXBkYXRlZCB5
+ZXQuIGNvZGUtZmlyc3Q/DQoNCg0KPiANCj4gPiAtIGFuZCBpdCdzDQo+ID4gY29tcGxldGVseSBm
+aW5lIGlmIGFhcmNoNjQgZG9lcyBzb21ldGhpbmcgZWxzZSAobWF5YmUgdHJlYXRpbmcgaXQNCj4g
+PiBzdHJpY3RseSBhcyBwZXIgdGhlIHNwZWMgYW5kIGlnbm9yaW5nIG9ubGluZS1jYXBhYmxlLikN
+Cj4gDQo+IFRoYXQgYWN0dWFsbHkgaXMgdGhlIG9ubHkgY29tcGxpYW50IHRoaW5nIHRoYXQgY2Fu
+IGJlIGRvbmUuDQoNClllcywgYnV0IHRoZSBxdWVzdGlvbiBpcyBpdCB3aGF0IGlzIHJlcXVpcmVk
+IGFuZCBkb2VzIGl0IHNvbHZlcw0KdGhlIHByb2JsZW0gb2YgSG90cGx1Zy4gSSB0aGluayBuby4g
+DQoNCkJ5IGNvbXBseWluZyB3aXRoIHdoYXQgaXMgdGhlcmUgaW4gdGhlIHNwZWMgbWVhbnMgd2Ug
+aGF2ZSB0bw0KZG8gdGhlIHRyYWRlb2ZmIGJldHdlZW4gaGF2aW5nIG5vdCB0byBzdXBwb3J0IGhv
+dCh1bilwbHVnZ2luZw0Kb2YgdGhlIGNvbGQtcGx1Z2dlZCBDUFVzIFZzIHJpc2sgb2YgYnJlYWtp
+bmcgdGhlIGxlZ2FjeSBPUw0KYXR0ZW1wdGluZyB0byB1c2UgbmV3ZXIgcGxhdGZvcm1zIHdpdGgg
+SG90cGx1ZyBzdXBwb3J0LiBMYXRlcg0KaXMgbW9yZSBvZiBhIEFSTSBwcm9ibGVtIGFzIHdlIGFy
+ZSBub3QgYWxsb3dlZCB0byB0d2VhayB0aGUNCkFDUEkgdGFibGVzIG9uY2UgdGhlIHN5c3RlbSBo
+YXMgYm9vdGVkLg0KDQoNCj4gDQo+IEFzIHBlciB0aGUgc3BlYyAocXVvdGVkIGFib3ZlKSwgYSBw
+bGF0Zm9ybSBmaXJtd2FyZSBzZXR0aW5nDQo+IG9ubGluZS1jYXBhYmxlIHRvIDEgd2hlbiBFbmFi
+bGVkIGlzIHNldCBpcyBub3QgY29tcGxpYW50IGFuZCBpdCBpcw0KPiBpbnZhbGlkIHRvIHRyZWF0
+IHRoaXMgYXMgbWVhbmluZ2Z1bCBkYXRhLg0KDQpDb3JyZWN0LiBidXQgaXMgaXQgcmVhbGx5IHdo
+YXQgd2UgbmVlZD8gV2UgbmVlZCBib3RoIG9mIHRoZQ0KQml0cyB0byBiZSBzZXQgZm9yIHN1cHBv
+cnRpbmcgaG90KHVuKXBsdWdnaW5nIG9mIGNvbGQgYm9vdGVkDQpDUFVzLg0KDQoNCj4gDQo+IEFz
+IGN1cnJlbnRseSBkZWZpbmVkLCBvbmxpbmUtY2FwYWJsZSBpcyBvbmx5IGFwcGxpY2FibGUgdG8g
+Q1BVcyB0aGF0DQo+IGFyZSBub3QgZW5hYmxlZCB0byBzdGFydCB3aXRoIGFuZCBpdHMgcm9sZSBp
+cyB0byBtYWtlIGl0IGNsZWFyIHdoZXRoZXINCj4gb3Igbm90IHRoZXkgY2FuIGJlIGVuYWJsZWQg
+bGF0ZXIgQUZBSUNTLg0KDQpDb3JyZWN0Lg0KDQo+IA0KPiBJZiB0aGVyZSBpcyBhIG5lZWQgdG8g
+cmVwcmVzZW50IHRoZSBjYXNlIGluIHdoaWNoIGEgQ1BJIHRoYXQgaXMNCj4gZW5hYmxlZCB0byBz
+dGFydCB3aXRoIGNhbiBiZSBkaXNhYmxlZCwgYnV0IGNhbm5vdCBiZSBlbmFibGVkIGFnYWluLA0K
+PiB0aGUgc3BlYyBuZWVkcyB0byBiZSB1cGRhdGVkLg0KDQpBYnNvbHV0ZWx5LiBBbmQgdGhhdOKA
+mXMgd2hhdCBteSBodW1ibGUgc3VnZ2VzdGlvbiBpcyBhcyB3ZWxsLg0KDQoNClRoYW5rcw0KU2Fs
+aWwuDQoNCg==
