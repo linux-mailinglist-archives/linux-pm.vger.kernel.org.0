@@ -2,63 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A650C7A1A53
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 11:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC897A1A56
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 11:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233678AbjIOJVx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 05:21:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
+        id S233713AbjIOJVy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 05:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233592AbjIOJVi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 05:21:38 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEACD1FFE
-        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 02:21:24 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2bfb1167277so30826751fa.2
-        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 02:21:24 -0700 (PDT)
+        with ESMTP id S233529AbjIOJVk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 05:21:40 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A391FDE
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 02:21:25 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2bb9a063f26so30565731fa.2
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 02:21:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694769683; x=1695374483; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1694769684; x=1695374484; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ya9Nj5WT/J10Cs78iLoaa7AD4/TmGlT+hGtAjhqtW2Y=;
-        b=mICIbkTQZWTjUM/ueObufJQd1Xd0gFyMCkTk+ZKxm3T/v2ijmfM0ci3IScsMa/hbfW
-         Mu5Dt+ZLCkU60EmB0h8/toUu/VHNAI/9u4Xv6m4I1NVfo9PRNPgarUPpcTiPQSJbS+tH
-         xRPdfAQI819gCxR1Ms0pYnCPllJ8muVNXrqWpND5mThk8LrBZPSLj9q6JVJul/XF7ZJZ
-         ugocWdNS8XemIZyFOJ1gVriyUspzObx6BiFW2QVK1gMzxQ4Z4cDLdlP2hSmHFf+kKLJ0
-         bE8jyCLDdyR4Lhol3nW2ARcin55CfGxj4HBamvbxAO69DmOno059DSVkr3P4Cs34Jxot
-         zNzQ==
+        bh=RlllPeCqZBCeZ/HSi6m8sJuTceIVvHBkX9Te06oKtDw=;
+        b=wsIBXIGSWuwnQa3fFTkkwGYg2dbywjSU+DsmLut7effsEwCJKg2uVKBfaC910Rth+O
+         U1RPzFUcltyYbmEPlj89Qytv9cUOnP0EGnFT6f/wHixqhh/cWKXj2kuHKdpeLYVE82YS
+         DKs8IeamrDry0TUMIIVqlwf21Ex+HrOGEKo5z1S0KvG7hyOGZApDvZeE4U7OyY0Mn0hH
+         e26Ab8rSshKFq/kf286KtXylnT6GdkfYhbM6Zi3odgWUnEOA1DsoeixnNQPG18xvPZ6H
+         7uZ0E1S8M+bGZXXfN78YIhxc9v+vws3+C0wagv3n6yQ01Nk3C3hWBb8hXsSCzXTwFyCD
+         nx0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694769683; x=1695374483;
+        d=1e100.net; s=20230601; t=1694769684; x=1695374484;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ya9Nj5WT/J10Cs78iLoaa7AD4/TmGlT+hGtAjhqtW2Y=;
-        b=Aes8JV7G130DBFngwXp1alGaUzfl3NKQ9akBXW8fLWzx0QpycFvZKPC1c2OWolx8Os
-         BMiVMEcmC33iX11AXG48d9QtFvbMVY234lAG45uwiAF+hY3g6zCg2BcUyYRHDHNa/QL/
-         WRMsPCeEOGmKtSdoJyhU8vrGmznB4FR1/K3qbl4Xo+54EwqYoQwAmf2xbqFRhH6gWwZT
-         8Zr/8wgZ3s2ILZspG8acKlEF3pVIplSPFsEJtFC5C+JJFnYd5fP7mRRPo15rpyACvrQA
-         E9jKp+N0WQ+kYz7Z+34r2Go9kLj3HGo/kcI4OHBDW9ZkOBaA9XlHI/NB0kgykLlNSgWf
-         TGKA==
-X-Gm-Message-State: AOJu0YxF5HHnKT7bAvK1O5Winba1LYiiC79LU13FS+jzvHS2nT6HZzFf
-        PKgk3IB84IUWQVuLtmuskrHhUw==
-X-Google-Smtp-Source: AGHT+IFSHJRoQx1Ctyhwv1uESkr0oLROtRLqXN8zd1BUs3GoaoZqPq2EXshY166uThtfcvsIXkDBgA==
-X-Received: by 2002:a2e:8019:0:b0:2bf:b142:bd13 with SMTP id j25-20020a2e8019000000b002bfb142bd13mr1075017ljg.4.1694769683203;
-        Fri, 15 Sep 2023 02:21:23 -0700 (PDT)
+        bh=RlllPeCqZBCeZ/HSi6m8sJuTceIVvHBkX9Te06oKtDw=;
+        b=vpmaIceXLRZyCXxLQuZPJppK0csB+ekNMugkKWn441drjDCjr82WYI2JsuzYKBsfbP
+         JWf9cPUAB5d84zqIzB13hiXD0Dv/QLbVA2ftSAevnKadlj66mqVmjeKwcfhD0ZQecUBq
+         TzaZHGPsthoa0AJdoe57jPpniRf50oWPqFH5EG8MTbu0OHFJchGUgTfJ9NxZiVFSzWfL
+         FqHa4+QB3DxEBHNqIAXonpC6QQWpz1A0K1yQv72uaYIA9PwQeUFkl3pEt2sNNhepN/mU
+         kJzHN7bpGlnaH6frzLMl+J8Zleri5FleCyHWHNW2DBMtS3h5SH5tdttKXFXtywcAaAr2
+         Ge9w==
+X-Gm-Message-State: AOJu0Yyro67g2Setj76USjk9Pzpggi/noEQS1DNVAi9BVUTZ9mG4RyNh
+        RN6oqr1d4obHDfWmH3m4h9Sd1A==
+X-Google-Smtp-Source: AGHT+IFJOzBhngeSqkEhAWTE2XBVBalsWjDoXj+N6Sl+ZI+MtDDE8yKWXfVhjl23K2P9yiLEg9+MBQ==
+X-Received: by 2002:a2e:8784:0:b0:2bc:d993:bdaa with SMTP id n4-20020a2e8784000000b002bcd993bdaamr1084334lji.18.1694769684153;
+        Fri, 15 Sep 2023 02:21:24 -0700 (PDT)
 Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id p8-20020a2e7408000000b002b9ec22d9fasm639376ljc.29.2023.09.15.02.21.22
+        by smtp.gmail.com with ESMTPSA id p8-20020a2e7408000000b002b9ec22d9fasm639376ljc.29.2023.09.15.02.21.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Sep 2023 02:21:22 -0700 (PDT)
+        Fri, 15 Sep 2023 02:21:23 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
 Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org
-Subject: [PATCH v2 08/17] pmdomain: qcom: Move Kconfig options to the pmdomain subsystem
-Date:   Fri, 15 Sep 2023 11:19:54 +0200
-Message-Id: <20230915092003.658361-9-ulf.hansson@linaro.org>
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v2 09/17] pmdomain: renesas: Move Kconfig options to the pmdomain subsystem
+Date:   Fri, 15 Sep 2023 11:19:55 +0200
+Message-Id: <20230915092003.658361-10-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230915092003.658361-1-ulf.hansson@linaro.org>
 References: <20230915092003.658361-1-ulf.hansson@linaro.org>
@@ -76,133 +76,259 @@ X-Mailing-List: linux-pm@vger.kernel.org
 The Kconfig options belongs closer to the corresponding implementations,
 hence let's move them from the soc subsystem to the pmdomain subsystem.
 
-Cc: Bjorn Andersson <andersson@kernel.org>
-Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: Andy Gross <agross@kernel.org>
-Cc: <linux-arm-msm@vger.kernel.org>
-Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Magnus Damm <magnus.damm@gmail.com>
+Cc: <linux-renesas-soc@vger.kernel.org>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- drivers/pmdomain/Kconfig      |  1 +
- drivers/pmdomain/qcom/Kconfig | 41 +++++++++++++++++++++++++++++++++++
- drivers/soc/qcom/Kconfig      | 37 -------------------------------
- 3 files changed, 42 insertions(+), 37 deletions(-)
- create mode 100644 drivers/pmdomain/qcom/Kconfig
+ drivers/pmdomain/Kconfig         |   1 +
+ drivers/pmdomain/renesas/Kconfig | 109 +++++++++++++++++++++++++++++++
+ drivers/soc/renesas/Kconfig      | 105 -----------------------------
+ 3 files changed, 110 insertions(+), 105 deletions(-)
+ create mode 100644 drivers/pmdomain/renesas/Kconfig
 
 diff --git a/drivers/pmdomain/Kconfig b/drivers/pmdomain/Kconfig
-index b1d9dc7d71e3..c91fdd40163a 100644
+index c91fdd40163a..0a75a17f2f3a 100644
 --- a/drivers/pmdomain/Kconfig
 +++ b/drivers/pmdomain/Kconfig
-@@ -7,5 +7,6 @@ source "drivers/pmdomain/apple/Kconfig"
- source "drivers/pmdomain/bcm/Kconfig"
+@@ -8,5 +8,6 @@ source "drivers/pmdomain/bcm/Kconfig"
  source "drivers/pmdomain/imx/Kconfig"
  source "drivers/pmdomain/mediatek/Kconfig"
-+source "drivers/pmdomain/qcom/Kconfig"
+ source "drivers/pmdomain/qcom/Kconfig"
++source "drivers/pmdomain/renesas/Kconfig"
  
  endmenu
-diff --git a/drivers/pmdomain/qcom/Kconfig b/drivers/pmdomain/qcom/Kconfig
+diff --git a/drivers/pmdomain/renesas/Kconfig b/drivers/pmdomain/renesas/Kconfig
 new file mode 100644
-index 000000000000..3d3948eabef0
+index 000000000000..80bf2cf8b60e
 --- /dev/null
-+++ b/drivers/pmdomain/qcom/Kconfig
-@@ -0,0 +1,41 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+menu "Qualcomm PM Domains"
++++ b/drivers/pmdomain/renesas/Kconfig
+@@ -0,0 +1,109 @@
++# SPDX-License-Identifier: GPL-2.0
++if SOC_RENESAS
 +
-+config QCOM_CPR
-+	tristate "QCOM Core Power Reduction (CPR) support"
-+	depends on ARCH_QCOM && HAS_IOMEM
-+	select PM_OPP
-+	select REGMAP
-+	help
-+	  Say Y here to enable support for the CPR hardware found on Qualcomm
-+	  SoCs like QCS404.
++config SYSC_RCAR
++	bool "System Controller support for R-Car" if COMPILE_TEST
 +
-+	  This driver populates CPU OPPs tables and makes adjustments to the
-+	  tables based on feedback from the CPR hardware. If you want to do
-+	  CPUfrequency scaling say Y here.
++config SYSC_RCAR_GEN4
++	bool "System Controller support for R-Car Gen4" if COMPILE_TEST
 +
-+	  To compile this driver as a module, choose M here: the module will
-+	  be called qcom-cpr
++config SYSC_R8A77995
++	bool "System Controller support for R-Car D3" if COMPILE_TEST
++	select SYSC_RCAR
 +
-+config QCOM_RPMHPD
-+	tristate "Qualcomm RPMh Power domain driver"
-+	depends on QCOM_RPMH && QCOM_COMMAND_DB
-+	help
-+	  QCOM RPMh Power domain driver to support power-domains with
-+	  performance states. The driver communicates a performance state
-+	  value to RPMh which then translates it into corresponding voltage
-+	  for the voltage rail.
++config SYSC_R8A7794
++	bool "System Controller support for R-Car E2" if COMPILE_TEST
++	select SYSC_RCAR
 +
-+config QCOM_RPMPD
-+	tristate "Qualcomm RPM Power domain driver"
-+	depends on PM && OF
-+	depends on QCOM_SMD_RPM
-+	select PM_GENERIC_DOMAINS
-+	select PM_GENERIC_DOMAINS_OF
-+	help
-+	  QCOM RPM Power domain driver to support power-domains with
-+	  performance states. The driver communicates a performance state
-+	  value to RPM which then translates it into corresponding voltage
-+	  for the voltage rail.
++config SYSC_R8A77990
++	bool "System Controller support for R-Car E3" if COMPILE_TEST
++	select SYSC_RCAR
 +
-+endmenu
-diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-index 715348869d04..b3634e10f6f5 100644
---- a/drivers/soc/qcom/Kconfig
-+++ b/drivers/soc/qcom/Kconfig
-@@ -26,22 +26,6 @@ config QCOM_COMMAND_DB
- 	  resource on a RPM-hardened platform must use this database to get
- 	  SoC specific identifier and information for the shared resources.
++config SYSC_R8A7779
++	bool "System Controller support for R-Car H1" if COMPILE_TEST
++	select SYSC_RCAR
++
++config SYSC_R8A7790
++	bool "System Controller support for R-Car H2" if COMPILE_TEST
++	select SYSC_RCAR
++
++config SYSC_R8A7795
++	bool "System Controller support for R-Car H3" if COMPILE_TEST
++	select SYSC_RCAR
++
++config SYSC_R8A7791
++	bool "System Controller support for R-Car M2-W/N" if COMPILE_TEST
++	select SYSC_RCAR
++
++config SYSC_R8A77965
++	bool "System Controller support for R-Car M3-N" if COMPILE_TEST
++	select SYSC_RCAR
++
++config SYSC_R8A77960
++	bool "System Controller support for R-Car M3-W" if COMPILE_TEST
++	select SYSC_RCAR
++
++config SYSC_R8A77961
++	bool "System Controller support for R-Car M3-W+" if COMPILE_TEST
++	select SYSC_RCAR
++
++config SYSC_R8A779F0
++	bool "System Controller support for R-Car S4-8" if COMPILE_TEST
++	select SYSC_RCAR_GEN4
++
++config SYSC_R8A7792
++	bool "System Controller support for R-Car V2H" if COMPILE_TEST
++	select SYSC_RCAR
++
++config SYSC_R8A77980
++	bool "System Controller support for R-Car V3H" if COMPILE_TEST
++	select SYSC_RCAR
++
++config SYSC_R8A77970
++	bool "System Controller support for R-Car V3M" if COMPILE_TEST
++	select SYSC_RCAR
++
++config SYSC_R8A779A0
++	bool "System Controller support for R-Car V3U" if COMPILE_TEST
++	select SYSC_RCAR_GEN4
++
++config SYSC_R8A779G0
++	bool "System Controller support for R-Car V4H" if COMPILE_TEST
++	select SYSC_RCAR_GEN4
++
++config SYSC_RMOBILE
++	bool "System Controller support for R-Mobile" if COMPILE_TEST
++
++config SYSC_R8A77470
++	bool "System Controller support for RZ/G1C" if COMPILE_TEST
++	select SYSC_RCAR
++
++config SYSC_R8A7745
++	bool "System Controller support for RZ/G1E" if COMPILE_TEST
++	select SYSC_RCAR
++
++config SYSC_R8A7742
++	bool "System Controller support for RZ/G1H" if COMPILE_TEST
++	select SYSC_RCAR
++
++config SYSC_R8A7743
++	bool "System Controller support for RZ/G1M" if COMPILE_TEST
++	select SYSC_RCAR
++
++config SYSC_R8A774C0
++	bool "System Controller support for RZ/G2E" if COMPILE_TEST
++	select SYSC_RCAR
++
++config SYSC_R8A774E1
++	bool "System Controller support for RZ/G2H" if COMPILE_TEST
++	select SYSC_RCAR
++
++config SYSC_R8A774A1
++	bool "System Controller support for RZ/G2M" if COMPILE_TEST
++	select SYSC_RCAR
++
++config SYSC_R8A774B1
++	bool "System Controller support for RZ/G2N" if COMPILE_TEST
++	select SYSC_RCAR
++
++endif
+diff --git a/drivers/soc/renesas/Kconfig b/drivers/soc/renesas/Kconfig
+index 5a75ab64d1ed..650f4dd96dec 100644
+--- a/drivers/soc/renesas/Kconfig
++++ b/drivers/soc/renesas/Kconfig
+@@ -350,109 +350,4 @@ config PWC_RZV2M
+ config RST_RCAR
+ 	bool "Reset Controller support for R-Car" if COMPILE_TEST
  
--config QCOM_CPR
--	tristate "QCOM Core Power Reduction (CPR) support"
--	depends on ARCH_QCOM && HAS_IOMEM
--	select PM_OPP
--	select REGMAP
--	help
--	  Say Y here to enable support for the CPR hardware found on Qualcomm
--	  SoCs like QCS404.
+-config SYSC_RCAR
+-	bool "System Controller support for R-Car" if COMPILE_TEST
 -
--	  This driver populates CPU OPPs tables and makes adjustments to the
--	  tables based on feedback from the CPR hardware. If you want to do
--	  CPUfrequency scaling say Y here.
+-config SYSC_RCAR_GEN4
+-	bool "System Controller support for R-Car Gen4" if COMPILE_TEST
 -
--	  To compile this driver as a module, choose M here: the module will
--	  be called qcom-cpr
+-config SYSC_R8A77995
+-	bool "System Controller support for R-Car D3" if COMPILE_TEST
+-	select SYSC_RCAR
 -
- config QCOM_GENI_SE
- 	tristate "QCOM GENI Serial Engine Driver"
- 	depends on ARCH_QCOM || COMPILE_TEST
-@@ -157,27 +141,6 @@ config QCOM_RPMH
- 	  of hardware components aggregate requests for these resources and
- 	  help apply the aggregated state on the resource.
- 
--config QCOM_RPMHPD
--	tristate "Qualcomm RPMh Power domain driver"
--	depends on QCOM_RPMH && QCOM_COMMAND_DB
--	help
--	  QCOM RPMh Power domain driver to support power-domains with
--	  performance states. The driver communicates a performance state
--	  value to RPMh which then translates it into corresponding voltage
--	  for the voltage rail.
+-config SYSC_R8A7794
+-	bool "System Controller support for R-Car E2" if COMPILE_TEST
+-	select SYSC_RCAR
 -
--config QCOM_RPMPD
--	tristate "Qualcomm RPM Power domain driver"
--	depends on PM && OF
--	depends on QCOM_SMD_RPM
--	select PM_GENERIC_DOMAINS
--	select PM_GENERIC_DOMAINS_OF
--	help
--	  QCOM RPM Power domain driver to support power-domains with
--	  performance states. The driver communicates a performance state
--	  value to RPM which then translates it into corresponding voltage
--	  for the voltage rail.
+-config SYSC_R8A77990
+-	bool "System Controller support for R-Car E3" if COMPILE_TEST
+-	select SYSC_RCAR
 -
- config QCOM_SMEM
- 	tristate "Qualcomm Shared Memory Manager (SMEM)"
- 	depends on ARCH_QCOM || COMPILE_TEST
+-config SYSC_R8A7779
+-	bool "System Controller support for R-Car H1" if COMPILE_TEST
+-	select SYSC_RCAR
+-
+-config SYSC_R8A7790
+-	bool "System Controller support for R-Car H2" if COMPILE_TEST
+-	select SYSC_RCAR
+-
+-config SYSC_R8A7795
+-	bool "System Controller support for R-Car H3" if COMPILE_TEST
+-	select SYSC_RCAR
+-
+-config SYSC_R8A7791
+-	bool "System Controller support for R-Car M2-W/N" if COMPILE_TEST
+-	select SYSC_RCAR
+-
+-config SYSC_R8A77965
+-	bool "System Controller support for R-Car M3-N" if COMPILE_TEST
+-	select SYSC_RCAR
+-
+-config SYSC_R8A77960
+-	bool "System Controller support for R-Car M3-W" if COMPILE_TEST
+-	select SYSC_RCAR
+-
+-config SYSC_R8A77961
+-	bool "System Controller support for R-Car M3-W+" if COMPILE_TEST
+-	select SYSC_RCAR
+-
+-config SYSC_R8A779F0
+-	bool "System Controller support for R-Car S4-8" if COMPILE_TEST
+-	select SYSC_RCAR_GEN4
+-
+-config SYSC_R8A7792
+-	bool "System Controller support for R-Car V2H" if COMPILE_TEST
+-	select SYSC_RCAR
+-
+-config SYSC_R8A77980
+-	bool "System Controller support for R-Car V3H" if COMPILE_TEST
+-	select SYSC_RCAR
+-
+-config SYSC_R8A77970
+-	bool "System Controller support for R-Car V3M" if COMPILE_TEST
+-	select SYSC_RCAR
+-
+-config SYSC_R8A779A0
+-	bool "System Controller support for R-Car V3U" if COMPILE_TEST
+-	select SYSC_RCAR_GEN4
+-
+-config SYSC_R8A779G0
+-	bool "System Controller support for R-Car V4H" if COMPILE_TEST
+-	select SYSC_RCAR_GEN4
+-
+-config SYSC_RMOBILE
+-	bool "System Controller support for R-Mobile" if COMPILE_TEST
+-
+-config SYSC_R8A77470
+-	bool "System Controller support for RZ/G1C" if COMPILE_TEST
+-	select SYSC_RCAR
+-
+-config SYSC_R8A7745
+-	bool "System Controller support for RZ/G1E" if COMPILE_TEST
+-	select SYSC_RCAR
+-
+-config SYSC_R8A7742
+-	bool "System Controller support for RZ/G1H" if COMPILE_TEST
+-	select SYSC_RCAR
+-
+-config SYSC_R8A7743
+-	bool "System Controller support for RZ/G1M" if COMPILE_TEST
+-	select SYSC_RCAR
+-
+-config SYSC_R8A774C0
+-	bool "System Controller support for RZ/G2E" if COMPILE_TEST
+-	select SYSC_RCAR
+-
+-config SYSC_R8A774E1
+-	bool "System Controller support for RZ/G2H" if COMPILE_TEST
+-	select SYSC_RCAR
+-
+-config SYSC_R8A774A1
+-	bool "System Controller support for RZ/G2M" if COMPILE_TEST
+-	select SYSC_RCAR
+-
+-config SYSC_R8A774B1
+-	bool "System Controller support for RZ/G2N" if COMPILE_TEST
+-	select SYSC_RCAR
+-
+ endif # SOC_RENESAS
 -- 
 2.34.1
 
