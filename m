@@ -2,98 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3FA7A171F
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 09:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 881FC7A1753
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 09:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232263AbjIOHRo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 03:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
+        id S232585AbjIOH0f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 03:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232640AbjIOHRo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 03:17:44 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E671F3
-        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 00:17:38 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-401d6f6b2e0so18435615e9.1
-        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 00:17:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694762257; x=1695367057; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nKlXZwcMYS0nRM5520Aq9RRDReEviWQWXfnNE3DisAk=;
-        b=zQUPEQ4TLLMfBDHiiOH9g+n5mpOaR37gNSRRzTXRpMH8KE+0VXzWplCuEgG4t3RUxq
-         thzUqs+ZvUievRu+WPmN8jz6LLhBmtj3MPKrF6EENYvztlLTmqgSfPCEGdio5ARh21GI
-         YW93WzFV+Bv/v2NFCTMm/DmhdOj2gb/UqiBDJ00+sUmmOP+iNbyp1JM2YDCwHQYjSAu0
-         4h7es5Zal1MxtWOPePo9k31PPghZ9QbWm3uDY3lSf6p3BKek3E6r40cBZdctNMLp2TEs
-         HKgYObh1/VlPP3g+dNl/VI4PeWOLPYFUkqNH4sO8oFUBZZKlBQ3yNKHYo0Uhnjfapgh7
-         JDaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694762257; x=1695367057;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nKlXZwcMYS0nRM5520Aq9RRDReEviWQWXfnNE3DisAk=;
-        b=RLca4JaUVajKorcEniMPXi8ctTAb18/PnDdUnhwFHQlYXVxWgCVOVGs2CTco8HdCuG
-         NQsVIq44fexImZkXfIcsUqhuOKEeMjiuJE6Eu/3ZZykUfFNShpKPQ9Qn1V701um7T1VU
-         Q8TrKkLjnscnqm0EvughsUVNgjvG9mcCM8g38Wu5M/q6GRGtOhwVh/FOpog2jwYBf3lH
-         rSBl0k+HGhQ4z+Gj4LLO+dAUi5RSXhJDjrTUops4EKzOwPn7yKJnII/8V++YXoPnBwF3
-         InYR2NunzyUEeeq+WMsy1l2oHPJ3Th30DLFQMK3EbhYdiTBHRamYqgbcMUCpiTnQgzaR
-         9EjA==
-X-Gm-Message-State: AOJu0Yz1xzC+3Le22AotcPsc+/eLWN8B0SLziiMavyXoYahV2FUjNKa5
-        yG4Lwb2F1gPLqdc9nosqTnk5F4kb32BeDziHPA8=
-X-Google-Smtp-Source: AGHT+IFLPQoHUaGnhgNK8hVifo28q8Mg3P4hJPyPf8HjItYYBfnS1qR1isuRtxNCFzzz2hmRHqOfxw==
-X-Received: by 2002:a05:600c:28f:b0:402:e68f:8a4f with SMTP id 15-20020a05600c028f00b00402e68f8a4fmr557370wmk.0.1694762256675;
-        Fri, 15 Sep 2023 00:17:36 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.214.188])
-        by smtp.gmail.com with ESMTPSA id x7-20020a05600c2d0700b00404719b05b5sm3392964wmf.27.2023.09.15.00.17.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Sep 2023 00:17:36 -0700 (PDT)
-Message-ID: <a48d1d09-e967-3226-7173-4e2a58ffae1d@linaro.org>
-Date:   Fri, 15 Sep 2023 09:17:34 +0200
+        with ESMTP id S232476AbjIOH0b (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 03:26:31 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB04170E;
+        Fri, 15 Sep 2023 00:26:26 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38F5m0pM022659;
+        Fri, 15 Sep 2023 07:26:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Q2y1vB9/nEJ316+CPedZ4jQOttq3EObW8nIvIUnXxs0=;
+ b=k5yS6RKtnsdZx4k2aqlMEouwwsEUA5x26pvYy2GD2iydkFt5RQBe5o4ihhOWNZA95sIZ
+ 7ZqXfig6l6GDSycnGgWKurgzQtSGicll+ML7mnsCJJmMOW8iGbc9Cg2xIWC+W2SzXSIP
+ zn9VF5sDgrCE14hHI5RmVOlzn6ImG/ikOx/mZ1AiKTggfhGIXwcnfNjPSVMChxoQx9RK
+ PrxU87sQNgH0rzy6SlByfhmrIfMV76+SmgSriV+8T8pJHnMZqRjLjI9+2QhTucC9B8JV
+ S5HZSTx7PmNUZV1VPjrPuOnLRj+cis2DN2ZBDgP5+bqHjcHA6bDUx9U0TgCAHgnBgjMs Sw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t4fwn0cu8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Sep 2023 07:26:21 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38F7QAh5012377
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Sep 2023 07:26:10 GMT
+Received: from [10.239.132.204] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Fri, 15 Sep
+ 2023 00:26:03 -0700
+Message-ID: <f683eb4a-f48e-4214-a700-92c171d512fa@quicinc.com>
+Date:   Fri, 15 Sep 2023 15:26:00 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 1/2] dt-bindings: interconnect: Add Qualcomm SM4450
-Content-Language: en-US
-To:     Tengfei Fan <quic_tengfan@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, djakov@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_tsoni@quicinc.com, quic_shashim@quicinc.com,
-        quic_kaushalk@quicinc.com, quic_tdas@quicinc.com,
-        quic_tingweiz@quicinc.com, quic_aiquny@quicinc.com,
-        kernel@quicinc.com
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <djakov@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_tsoni@quicinc.com>, <quic_shashim@quicinc.com>,
+        <quic_kaushalk@quicinc.com>, <quic_tdas@quicinc.com>,
+        <quic_tingweiz@quicinc.com>, <quic_aiquny@quicinc.com>,
+        <kernel@quicinc.com>
 References: <20230915020129.19611-1-quic_tengfan@quicinc.com>
  <20230915020129.19611-2-quic_tengfan@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230915020129.19611-2-quic_tengfan@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+ <a48d1d09-e967-3226-7173-4e2a58ffae1d@linaro.org>
+From:   Tengfei Fan <quic_tengfan@quicinc.com>
+In-Reply-To: <a48d1d09-e967-3226-7173-4e2a58ffae1d@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: jDhv8GE9QwzX6iEM8o6qSepsIfAF8g8d
+X-Proofpoint-ORIG-GUID: jDhv8GE9QwzX6iEM8o6qSepsIfAF8g8d
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-15_05,2023-09-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
+ mlxscore=0 phishscore=0 malwarescore=0 priorityscore=1501 impostorscore=0
+ spamscore=0 mlxlogscore=758 bulkscore=0 suspectscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2308100000
+ definitions=main-2309150064
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15/09/2023 04:01, Tengfei Fan wrote:
-> The Qualcomm SM4450 SoC has several bus fabrics that could be controlled
-> and tuned dynamically according to the bandwidth demand.
+
+
+在 9/15/2023 3:17 PM, Krzysztof Kozlowski 写道:
+> On 15/09/2023 04:01, Tengfei Fan wrote:
+>> The Qualcomm SM4450 SoC has several bus fabrics that could be controlled
+>> and tuned dynamically according to the bandwidth demand.
+>>
+>> Signed-off-by: Tengfei Fan <quic_tengfan@quicinc.com>
+>> ---
 > 
-> Signed-off-by: Tengfei Fan <quic_tengfan@quicinc.com>
-> ---
+> qcom,sm4450-rpmh.example.dtb: interconnect@1700000: reg: [[0, 24117248],
+> [0, 200832]] is too long
+> 
+> Did you test it before sending? No, you did not. Eh :(
+> 
+> Best regards,
+> Krzysztof
+> 
+I did test, maybe miss this warning, will test again and update.
 
-qcom,sm4450-rpmh.example.dtb: interconnect@1700000: reg: [[0, 24117248],
-[0, 200832]] is too long
-
-Did you test it before sending? No, you did not. Eh :(
-
-Best regards,
-Krzysztof
-
+-- 
+Thx and BRs,
+Tengfei Fan
