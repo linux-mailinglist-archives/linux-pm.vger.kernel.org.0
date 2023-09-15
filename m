@@ -2,122 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F91B7A26ED
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 21:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 665267A25CF
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 20:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234465AbjIOTJV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 15:09:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54592 "EHLO
+        id S236447AbjIOSby (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 14:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236905AbjIOTJM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 15:09:12 -0400
-X-Greylist: delayed 2871 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 15 Sep 2023 12:09:05 PDT
-Received: from fallback3.i.mail.ru (fallback3.i.mail.ru [79.137.243.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA21B2
-        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 12:09:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jiaxyga.com; s=mailru;
-        h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=yubnssaxfD0lbd6TG0d2P0qQq9sFqXjqlCWV5TqICCE=;
-        t=1694804945;x=1694894945; 
-        b=jvNfAccvRLYOiFh6tt2LV/TlMi48TpD6JlJ/yD/2decsMyzvL6ZiRlWNRHMTxlW63GT7dh853KyYrxZLbOpl5k8sH1VJHzTzsI6Hh/Pe4nPyDl+OZ2sadf7wtiX453LAGMXAkFSYID15OrAtMU1v0fBeiLbF466pz3AeqkhrosY=;
-Received: from [10.12.4.13] (port=55444 helo=smtp38.i.mail.ru)
-        by fallback3.i.mail.ru with esmtp (envelope-from <danila@jiaxyga.com>)
-        id 1qhDRH-008PVv-T6
-        for linux-pm@vger.kernel.org; Fri, 15 Sep 2023 21:21:12 +0300
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jiaxyga.com
-        ; s=mailru; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-ID:Date:Subject:Cc:To:From:From:Sender:Reply-To:To:Cc:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive:
-        X-Cloud-Ids:Disposition-Notification-To;
-        bh=yubnssaxfD0lbd6TG0d2P0qQq9sFqXjqlCWV5TqICCE=; t=1694802071; x=1694892071; 
-        b=ZivWbr9QpFZeUNb7gZX+5FrNqJl3vOAI7L2BK71ayZcJbHulyvOl2vPbzuIDv5lXN6AVtLSw2J1
-        Mu2rAZFwp4ZbQfKXGcJ71arX0rkRPHBX387Ws+rvqNV9f5qFTKHcxoyyZAZsbHENV814n2c49sT+Y
-        h7L/BZ2uDW/3e/zWd7Y=;
-Received: by smtp38.i.mail.ru with esmtpa (envelope-from <danila@jiaxyga.com>)
-        id 1qhDRA-00G5R8-2I; Fri, 15 Sep 2023 21:21:05 +0300
-From:   Danila Tikhonov <danila@jiaxyga.com>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, ulf.hansson@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Danila Tikhonov <danila@jiaxyga.com>
-Subject: [PATCH 2/2] pmdomain: qcom: rpmhpd: Add support for SM7150 rpmh clocks
-Date:   Fri, 15 Sep 2023 21:20:54 +0300
-Message-ID: <20230915182054.113839-3-danila@jiaxyga.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230915182054.113839-1-danila@jiaxyga.com>
-References: <20230915182054.113839-1-danila@jiaxyga.com>
+        with ESMTP id S236547AbjIOSbi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 14:31:38 -0400
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80246210A;
+        Fri, 15 Sep 2023 11:31:33 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-1a2dd615ddcso378761fac.0;
+        Fri, 15 Sep 2023 11:31:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694802693; x=1695407493;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+RgYCzFpl6DzKu9Fze9sl7wbETYZX6GdWsejgca91oM=;
+        b=abn/NDPM7ucaLRj5kSjyVq3w2Z7nO6Hg0QNtae6KmJpINEA5MhAW8Vc8YsFAL6UrJk
+         V17DPN7aG9xR9DWAwjpVng3EPwP9F/rQtwiLTvWYp2JO+oj0opyf2Pz8+loGwadrfjE5
+         ZKW6hcmLHVAt4I60zfR0KWkyWyhMdF8AUwwxlL5SN50BZj8drEjpAydLMJEiDV0d/6rD
+         JlF7hIvVyRa/6Dg0H6UzzXNpgmyT0jwks2BvlmGd9nhoebulsJyeadwMldDOTjfQ1aza
+         aoEHDG1S6i4qLEP4Awim/IqoPIViQjO3q35RheEZqGVm7hL3JZ53+2/IfGrkJuOncTFK
+         YBCw==
+X-Gm-Message-State: AOJu0YxEoVZhTiLcschkgu0owquex1CTnkbBJulC2h6p4ujBGpDBg6pP
+        0WZRlbTO+nzU70zog0lhNMfX0+cT61WcRv1/JfI=
+X-Google-Smtp-Source: AGHT+IH0z5TeQlSLJyYiHcsKw5LugzfwbV7Mem0ZGYRa6hbzNsCnfaaIkdZb6q3zjat9j3l+CU1Fnmm84htOZKgTcx0=
+X-Received: by 2002:a05:6871:686:b0:1d5:f814:56a3 with SMTP id
+ l6-20020a056871068600b001d5f81456a3mr2676714oao.2.1694802692675; Fri, 15 Sep
+ 2023 11:31:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Mailru-Src: smtp
-X-7564579A: B8F34718100C35BD
-X-77F55803: 4F1203BC0FB41BD9FD052C19707CBA10F74D70DBBC233CD7A016A66332CED23000894C459B0CD1B9E4554F032648D9D1018503546C2E8704F642992ABAB832B17078263AA6E0921D
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE71288D18ACA28B428EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006371AB0416A4896C0B38638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D8A34ED66D089961930177D5E1E9EB4410117882F4460429724CE54428C33FAD305F5C1EE8F4F765FC3A703B70628EAD7BA471835C12D1D9774AD6D5ED66289B52BA9C0B312567BB23117882F446042972877693876707352033AC447995A7AD186FD1C55BDD38FC3FD2E47CDBA5A96583BA9C0B312567BB2376E601842F6C81A19E625A9149C048EE140C956E756FBB7A985B8ACC81218E19D8FC6C240DEA76429C9F4D5AE37F343AA9539A8B242431040A6AB1C7CE11FEE36A1CB4668A9CA5FA040F9FF01DFDA4A8C4224003CC836476E2F48590F00D11D6E2021AF6380DFAD1A18204E546F3947CB11811A4A51E3B096D1867E19FE1407959CC434672EE6371089D37D7C0E48F6C8AA50765F7900637A8A59EE88DA1D479EFF80C71ABB335746BA297DBC24807EABDAD6C7F3747799A
-X-C1DE0DAB: 0D63561A33F958A5B3F8D1FD892A32236981EF852F3FB5769CA7FDC079330CF9F87CCE6106E1FC07E67D4AC08A07B9B0B355ED1E20F5346A9C5DF10A05D560A950611B66E3DA6D700B0A020F03D25A0997E3FB2386030E77
-X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF70D518CF6A9128C5C78D694F9CFB33F76FE01FB940F35304C33B8F024D1ADD11ABDA6BB679979B95B3573C328C294A3D3F86EB742601633B5426C164EAD7B9E921BEC6C0C71ED4F84C41F94D744909CE4BCAC77546666B612CC0CD5AA9A1B9887EE09F5AAA95A50543082AE146A756F3
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojwfkaTmrWlaxp7GRpC+hDSA==
-X-Mailru-Sender: 9EB879F2C80682A09F26F806C73949812E816679BFB18EEAC71EAD0F915E2FD0DF76B9B9158B2F3E643683D8C0F3ED1CA3C71A376745D86BBE86167304C7680C3980CE5AAA35C7CD60F22E8815EDE5EAEAB4BC95F72C04283CDA0F3B3F5B9367
-X-Mras: Ok
-X-7564579A: B8F34718100C35BD
-X-77F55803: 6242723A09DB00B44C707F29C0362ABF9EEA92AF22DBF0930BBA80BAB91D2917049FFFDB7839CE9E5434182FDB816D04266C1BBCA6381244BFD33B86A780A084FAE5F190D37F12B6
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5xhPKz0ZEsZ5k6NOOPWz5QAiZSCXKGQRq3/7KxbCLSB2ESzQkaOXqCBFZPLWFrEGlV1shfWe2EVcxl5toh0c/aCGOghz/frdRhzMe95NxDFdaloFI76w+pK+PrK8jl8HrA==
-X-Mailru-MI: C000000000000800
-X-Mras: Ok
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 15 Sep 2023 20:31:21 +0200
+Message-ID: <CAJZ5v0i4qvW-4=erNtMn=awuzHZM9YhUmuEuCiD9OOqNrA3Y4w@mail.gmail.com>
+Subject: [GIT PULL] Thermal control updates for v6.6-rc2
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This adds the RPMH clocks present in SM7150 SoC.
+Hi Linus,
 
-Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
----
- drivers/pmdomain/qcom/rpmhpd.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+Please pull from the tag
 
-diff --git a/drivers/pmdomain/qcom/rpmhpd.c b/drivers/pmdomain/qcom/rpmhpd.c
-index a87e336d5e33..d48235aa024c 100644
---- a/drivers/pmdomain/qcom/rpmhpd.c
-+++ b/drivers/pmdomain/qcom/rpmhpd.c
-@@ -337,6 +337,23 @@ static const struct rpmhpd_desc sm6350_desc = {
- 	.num_pds = ARRAY_SIZE(sm6350_rpmhpds),
- };
- 
-+/* SM7150 RPMH powerdomains */
-+static struct rpmhpd *sm7150_rpmhpds[] = {
-+	[SM7150_CX] = &cx_w_mx_parent,
-+	[SM7150_CX_AO] = &cx_ao_w_mx_parent,
-+	[SM7150_GFX] = &gfx,
-+	[SM7150_LCX] = &lcx,
-+	[SM7150_LMX] = &lmx,
-+	[SM7150_MSS] = &mss,
-+	[SM7150_MX] = &mx,
-+	[SM7150_MX_AO] = &mx_ao,
-+};
-+
-+static const struct rpmhpd_desc sm7150_desc = {
-+	.rpmhpds = sm7150_rpmhpds,
-+	.num_pds = ARRAY_SIZE(sm7150_rpmhpds),
-+};
-+
- /* SM8150 RPMH powerdomains */
- static struct rpmhpd *sm8150_rpmhpds[] = {
- 	[SM8150_CX] = &cx_w_mx_parent,
-@@ -562,6 +579,7 @@ static const struct of_device_id rpmhpd_match_table[] = {
- 	{ .compatible = "qcom,sdx65-rpmhpd", .data = &sdx65_desc},
- 	{ .compatible = "qcom,sdx75-rpmhpd", .data = &sdx75_desc},
- 	{ .compatible = "qcom,sm6350-rpmhpd", .data = &sm6350_desc },
-+	{ .compatible = "qcom,sm7150-rpmhpd", .data = &sm7150_desc },
- 	{ .compatible = "qcom,sm8150-rpmhpd", .data = &sm8150_desc },
- 	{ .compatible = "qcom,sm8250-rpmhpd", .data = &sm8250_desc },
- 	{ .compatible = "qcom,sm8350-rpmhpd", .data = &sm8350_desc },
--- 
-2.41.0
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ thermal-6.6-rc2
 
+with top-most commit fb2c10245f201278804a6f28e196e95436059d6d
+
+ thermal: core: Fix disabled trip point check in handle_thermal_trip()
+
+on top of commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d
+
+ Linux 6.6-rc1
+
+to receive thermal control updates for 6.6-rc2.
+
+These fix a thermal core breakage introduced by one of the recent
+changes, amend those changes by adding 'const' to a new callback
+argument and fix 2 memory leaks.
+
+Specifics:
+
+ - Unbreak disabled trip point check in handle_thermal_trip() that may
+   cause it to skip enabled trip points (Rafael Wysocki).
+
+ - Add missing of_node_put() to of_find_trip_id() and
+   thermal_of_for_each_cooling_maps() that each break out of a
+   for_each_child_of_node() loop without dropping the reference to
+   the child object (Julia Lawall).
+
+ - Constify the recently added trip argument of the .get_trend() thermal
+   zone callback (Rafael Wysocki).
+
+Thanks!
+
+
+---------------
+
+Julia Lawall (1):
+      thermal/of: add missing of_node_put()
+
+Rafael J. Wysocki (2):
+      thermal: Constify the trip argument of the .get_trend() zone callback
+      thermal: core: Fix disabled trip point check in handle_thermal_trip()
+
+---------------
+
+ drivers/acpi/thermal.c                             | 2 +-
+ drivers/thermal/thermal_core.c                     | 6 ++++--
+ drivers/thermal/thermal_of.c                       | 8 ++++++--
+ drivers/thermal/ti-soc-thermal/ti-thermal-common.c | 3 ++-
+ include/linux/thermal.h                            | 4 ++--
+ 5 files changed, 15 insertions(+), 8 deletions(-)
