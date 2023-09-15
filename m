@@ -2,47 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 281377A2756
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 21:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D15077A277D
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Sep 2023 21:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236527AbjIOToj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 15:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
+        id S236592AbjIOTzU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 15:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237116AbjIOToY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 15:44:24 -0400
+        with ESMTP id S231650AbjIOTyv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 15:54:51 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01DED1FC9;
-        Fri, 15 Sep 2023 12:44:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336C51BC7;
+        Fri, 15 Sep 2023 12:54:46 -0700 (PDT)
 Received: from mercury (unknown [185.209.196.239])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BE421660297B;
-        Fri, 15 Sep 2023 20:44:16 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E218B66072AC;
+        Fri, 15 Sep 2023 20:54:44 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1694807056;
-        bh=UfM/WY+yZp82kwRj0FLayuIAOI8JPsZwqB6MaXzG7lM=;
+        s=mail; t=1694807685;
+        bh=KXDEIfF2h/JPA5Xg+mwsO9FHN1x+fFSbZ+mH1Wt3GDU=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=boot5EGykAUi+bHQCndXM29YiNOme+TkKVg9opL1ziJiIcD217+cxxdSBX4RmfEzs
-         gZkDqW0UVJ7B2UQ6ntqtpb5l8NemESngzepR9K+8kzM7aeNkzVOXebtE3ZUT04yaiz
-         vgF9I8qQE1W+PqTwux7FsZ8o20F86kzmfdGYLmH4yeYNiIx3FOcx5b+YcrEAYC+FIu
-         f6KSNLB40GiiSo4yf4TY7a2TvWIW7/Yrqy+v9XdI8xQSWNew8vxX3FV4BiphVSMg+v
-         WC4N/xs35xdD/5EJTHIaFLidYtP3VT9S5vWJSuUTif9tvgpcIzolrTOANhcPdUNvek
-         X/9V61/Wi/lgg==
+        b=XngkUsuCOqC8X8AbOfNIwq2iQjS9LbQ8DW1kA1m2B4eFVEUAqiU1lTQ0gF7c6Bh63
+         fqiQDjm0mhthV6dN2vGXbdfDyUly9BxsXsXbiOSg7xQrvnYJCoomaBDOy0jMR6ICyI
+         qLbR97h6tZfrPvIT6dh7OI1zmxP6Dg1rOfJ7lI1ph+HhXlYlUvIaNLYCwo+onMcLed
+         DJbQO265qFIvZ2OVEIb9f1KUnbKV1qn9/UFQ2VxSsd4YOfw+dB92iyT5Rac+F/JSZY
+         MDKBMKKlKhiZO8vI27h0IM3kB2HsrlXi8hF870ZKGRWfgLUed8IsImzON1i0mT21P3
+         hKSWTxdYoIhhw==
 Received: by mercury (Postfix, from userid 1000)
-        id 7437E106044B; Fri, 15 Sep 2023 21:44:14 +0200 (CEST)
+        id 58452106044B; Fri, 15 Sep 2023 21:54:42 +0200 (CEST)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Sebastian Reichel <sre@kernel.org>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@axis.com
-In-Reply-To: <20230915-power-of-v2-1-ca54c441867e@axis.com>
-References: <20230915-power-of-v2-1-ca54c441867e@axis.com>
-Subject: Re: [PATCH v2] power: supply: Propagate of_node to child device
-Message-Id: <169480705445.566362.8727206650054420020.b4-ty@collabora.com>
-Date:   Fri, 15 Sep 2023 21:44:14 +0200
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Nikita Travkin <nikita@trvn.ru>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+In-Reply-To: <20230915-pm8916-bms-lbc-v3-0-f30881e951a0@trvn.ru>
+References: <20230915-pm8916-bms-lbc-v3-0-f30881e951a0@trvn.ru>
+Subject: Re: [PATCH v3 0/4] Add pm8916 VM-BMS and LBC
+Message-Id: <169480768234.570806.17797021749505145491.b4-ty@collabora.com>
+Date:   Fri, 15 Sep 2023 21:54:42 +0200
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -57,20 +61,27 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-On Fri, 15 Sep 2023 09:02:14 +0200, Vincent Whitchurch wrote:
-> Ensure that the dynamically created power supply device sets its
-> ->of_node if the driver supplies one.  This brings it in line with
-> several other subsystems (see git grep 'of_node =.*parent.*of_node') and
-> allows easier identification of the device from udev rules and similar.
+On Fri, 15 Sep 2023 10:01:17 +0500, Nikita Travkin wrote:
+> This series adds charger and "fuel-gauge" found in Qualcomm pm8916 PMIC.
 > 
-> Before this patch:
+> The LBC - Linear Battery Charger is a simple CC/CV charger, that works
+> autonomously after the current and voltage limits are set.
+> 
+> The VM-BMS - Voltage Mode BMS is a simple hardware block that provides
+> average voltage on the battery terminals.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] power: supply: Propagate of_node to child device
-      commit: 58e4aacb746321d8692996f40a1dcfb9e8b34c23
+[1/4] dt-bindings: power: supply: Add pm8916 VM-BMS
+      commit: 7f590e38317657123fed828d267372a3d6f93260
+[2/4] dt-bindings: power: supply: Add pm8916 LBC
+      commit: 5cee843d56072135c0d4be4a2d8a20df05155009
+[3/4] power: supply: Add pm8916 VM-BMS support
+      commit: 098bce1838e0549228c8d426e5de72ec5594b5c4
+[4/4] power: supply: Add driver for pm8916 lbc
+      commit: f8d7a3d21160a0cab4d15b81231f2a76b0fcee13
 
 Best regards,
 -- 
