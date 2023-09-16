@@ -2,48 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B16D7A3344
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Sep 2023 00:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81BE07A334D
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Sep 2023 00:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbjIPWnP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 Sep 2023 18:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42044 "EHLO
+        id S229713AbjIPWzk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 16 Sep 2023 18:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231673AbjIPWm7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Sep 2023 18:42:59 -0400
+        with ESMTP id S231461AbjIPWz0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Sep 2023 18:55:26 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3E9CD1;
-        Sat, 16 Sep 2023 15:42:54 -0700 (PDT)
-Received: from mercury (unknown [185.254.75.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92791180;
+        Sat, 16 Sep 2023 15:55:21 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.239])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1330666072F0;
-        Sat, 16 Sep 2023 23:42:53 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5D4EA66072F0;
+        Sat, 16 Sep 2023 23:55:20 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1694904173;
-        bh=WXk/aZaoMVg5RvFmSYCLfLhSZ+wNpAQpcnkQpMiVggE=;
+        s=mail; t=1694904920;
+        bh=rym7i+/bnLUNecF557f+naHud8wV85aJyNjDGIFeFn8=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=PhNX2dsAzbV+NOKAxX+fXov0jISr1GPbkTm60cryzZ0gvldwkZnlMRek4+Y3m1k2P
-         Qs04CJ+mtN5y5a/XXoOPEg1HGvMVLWOM9AG0Bz+aCbi+JTqFoFtIqmoEolpDhYr8mD
-         bxu8OlsmhBBcRYpt+OzGjSg8LWKHWvwm8MW2jvoTC/g/UsVdAOoq1bfdUeRLkqb2ng
-         n6aPWcdTVENRoaa6UE9FuOj8WVDI3HYA+9xpfFBC0v3wRAOMsqjKANtz22N/eUMFAZ
-         N1c+Kgu46b9UbL7tI2hb12hxsn/Ukn9kPYjbTutScYOBBYUZTHhxXwWKRe6P7dQCCZ
-         2vvl7ryr7ieRw==
+        b=RBAEVvv0Xq41xuc/xCrQvZ0mLaogEc3VjcFEXPwA7fXU7z4OaDz371ESoi+CdDlWI
+         3J/6U63EaIgHZSkd0pKu3BZfdnhkYo2pY9W0k11NhEMQ4Az8t8/eNgUwAxytxfK7Tg
+         ajBaUXtbcfQxAhTHewL9bvekvivh8gGV29ZrDkO6KLInd//pA1Oqv5ZBx678Rd2Pcn
+         gR6szFcv58QjHVwn8K/CU6+ViStyFrc09OTpsB358+urzDQQhv6YGm3UlJPQ+xy0Ux
+         EnCOKWj8XUiaZQc/QnvF2vk4pRFCN7cTaF72dMA5BXFkppTJphn+Z7fGYNmMeOeESV
+         EZm4kC6jOkjng==
 Received: by mercury (Postfix, from userid 1000)
-        id 45A111060450; Sun, 17 Sep 2023 00:42:49 +0200 (CEST)
+        id DA6541060450; Sun, 17 Sep 2023 00:55:17 +0200 (CEST)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Konrad Dybcio <konradybcio@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230916-topic-mm8013_2-v1-1-02495e07fca0@linaro.org>
-References: <20230916-topic-mm8013_2-v1-1-02495e07fca0@linaro.org>
-Subject: Re: [PATCH] psy: mm8013: Add more properties
-Message-Id: <169490416926.888543.10300420943338889530.b4-ty@collabora.com>
-Date:   Sun, 17 Sep 2023 00:42:49 +0200
+To:     Sebastian Reichel <sre@kernel.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230913133900.591637-1-sebastian.reichel@collabora.com>
+References: <20230913133900.591637-1-sebastian.reichel@collabora.com>
+Subject: Re: [PATCH] power: supply: core: Don't export
+ power_supply_notifier
+Message-Id: <169490491787.915550.2039949073405607589.b4-ty@collabora.com>
+Date:   Sun, 17 Sep 2023 00:55:17 +0200
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -59,23 +58,16 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-On Sat, 16 Sep 2023 02:31:59 +0200, Konrad Dybcio wrote:
-> While scanning the internet for MM8013 PDFs, I found one for a different
-> IC from Mitsumi, MM8118 at [1]. It turned out however, that when you
-> search through the PDF, the MM8118 text has an invsible text layer
-> containing "MM8013" underneath..
+On Wed, 13 Sep 2023 15:39:00 +0200, Sebastian Reichel wrote:
+> power_supply_notifier can be internal, since all users are going
+> through power_supply_reg_notifier()/power_supply_unreg_notifier().
 > 
-> With some elbow grease, I was able to confirm that most of the registers
-> match between the two ICs. Based on that finding, introduce live battery
-> voltage readout, hw-decided charge behavior readout and max current
-> readout. Also, expand the existing POWER_SUPPLY_HEALTH reporting.
 > 
-> [...]
 
 Applied, thanks!
 
-[1/1] psy: mm8013: Add more properties
-      commit: e39257cde7e8ceec6165f54b6e20c72e2862a0b1
+[1/1] power: supply: core: Don't export power_supply_notifier
+      commit: 12e94aee074ce1c5ffdb8f2246a8c4a095b6aa8a
 
 Best regards,
 -- 
