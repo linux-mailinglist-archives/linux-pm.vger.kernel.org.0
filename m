@@ -2,75 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D737A2C39
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Sep 2023 02:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66CC07A2CC6
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Sep 2023 02:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238339AbjIPAc6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 20:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60650 "EHLO
+        id S238451AbjIPAzr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 20:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238758AbjIPAcm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 20:32:42 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606D8CF0
-        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 17:32:05 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-5008d16cc36so4512051e87.2
-        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 17:32:05 -0700 (PDT)
+        with ESMTP id S238742AbjIPAzf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 20:55:35 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCE52738
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 17:54:18 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2b9c907bc68so44906901fa.2
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 17:54:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694824323; x=1695429123; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eFejzb7aN7MekbjpnaQzLFApoAUU++VrN/USYsgbcQw=;
-        b=rlFnGVmC5xdzXveC2Dfu9JWethVf4ut4rEGvzKVeRY4XzlcJjOR2Qforbf6ZWyjtOS
-         OmxZRD2nb55wOOUPNtgFNT475BHRZnCanyzqsz1DFoO0pMVVRayhHE2lhykS9suAf3Hb
-         sz/uCBRCwvmkBNnqDx4PQyCkaMv3lKMb7Y0ofFgxpVeIKVIHDcytdnzFQuLAlIPnjgix
-         qmQUC/9DVw507A4otzbjrtmEJ/xfKI4iZ4IF1jnRVYBCGDsBY/SrpU4u+7sOnSJPeb47
-         Qdq07r9T69XQ0I5NZoAUti3UGQozrE6oWI0bxopMD233Ek+fSZodw20J8Hry4qAfdVqO
-         Q1eA==
+        d=linaro.org; s=google; t=1694825657; x=1695430457; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YouDa+ERRcXfsKD05SHv7uq2HbLul8fzNckpEFgl+38=;
+        b=A/rXRJ+5hj8kZa4RuChDDkIJtcazBhGC0MaUBkPsdLogNF5KaF8LJJ07/6fvpnJRi6
+         Jc072txH1x7ImV90wUQBnfsGU0rhB0gfb8RFRQ9o3PFxA1nHm661EX9L18pUUjsV3bvm
+         gKTVBsmURcasuyxnH/7V/TEVlEIhXnbE9h7cCO5b4MFL17N9qKnUq+hgw0jPTyoLmXDb
+         OgEsoUGl723pYIBipj4arNIINORb1Ud10xn/3IwD4ouUGORWVFCi817alll4cnHCxoi0
+         vP9+GXkR7AVa0QH7xq15RgExKOzwNlEqytzvWfECLmejltwg9XiBmJLrfYeSm7aT+VXk
+         EL6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694824323; x=1695429123;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eFejzb7aN7MekbjpnaQzLFApoAUU++VrN/USYsgbcQw=;
-        b=v1Bkgihd1WMsG+FsS2oNSnTMP3/leor+qvGLftQJPC0TwyfUQhDuWjn546b09B8sFw
-         Alr0ywpqJKZq4V1NbbV3PDwlVJmAL+ovb0JNIjqDOhM9IQyErxwWCbZ8MGseOhyNR67A
-         k7bDzg0GP4QUrfOy9zSiRplBNlYcjCp97Kqww8B4RgA9blp9InvuZ5DGXb8P+wFUAsJ7
-         6362G4atRxfvktQIj94mx2ZqEPZTGFIBa/v777McHC3Ii7WxNZKDmucm4Bns1ovpi8qi
-         qe5/f4ksrwL+2K8b1mOtZmbsRGo3hAVWan2ZsEix2kB87fPmBSvTxfQ9v6nYvkOJQL9C
-         jngg==
-X-Gm-Message-State: AOJu0YyK/6/UJ4LzWDoeMSJMBsCkghvz+Z3rthHxFIQem+c4jf6+UYvu
-        HD34y3C/8zcyj4ouVX66eMFUOw==
-X-Google-Smtp-Source: AGHT+IFKywQ0QSSHnMIVPF9QpyEA4OIklMp5NJfilO47p2pVro3VF9gq5S41Ly7S1t2cKgDKHbr5eQ==
-X-Received: by 2002:a05:6512:3053:b0:502:fe0a:af23 with SMTP id b19-20020a056512305300b00502fe0aaf23mr871303lfb.56.1694824322909;
-        Fri, 15 Sep 2023 17:32:02 -0700 (PDT)
-Received: from [10.167.154.1] (178235177186.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.186])
-        by smtp.gmail.com with ESMTPSA id lw28-20020a170906bcdc00b00992f309cfe8sm3083735ejb.178.2023.09.15.17.32.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Sep 2023 17:32:02 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Sat, 16 Sep 2023 02:31:59 +0200
-Subject: [PATCH] psy: mm8013: Add more properties
+        d=1e100.net; s=20230601; t=1694825657; x=1695430457;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YouDa+ERRcXfsKD05SHv7uq2HbLul8fzNckpEFgl+38=;
+        b=jooYf+WuBPfne+kitm8GmrZZf0pxVAmO10jTeUVzZuidzs/aScFGogv7l6MIdP2RvQ
+         LKSJX4qCY/B2+iCjMGbCTR6cKt0AYfEyZegVUIS0s/iOwTPKR4RbLtl8FNmXP+X0+quL
+         C+tKpG3yIEtAqs0jUyPKP0ynokc6WENFbGwMaQAbbFIbfFcXNF/Yq2IC4dyYcq9Hcan9
+         UQ7HpPWbuNWhmCHjf+cUQ5ICISWvF2j8xkzyR9ztgq4DuGF4KY0Z8E0g2xuq4eCCc+lP
+         24SzfLo39UkuzpiPG1vAualHAAw2sJL+qSyX6VAN8N2J5QcsqNBhy8UWNrZCx9PHiLNf
+         emIQ==
+X-Gm-Message-State: AOJu0YxthwiWfWtjuBQZp0WmNC7yYAdw32hOxsPNgjHy09yG17hHBU4J
+        39IdQmGAOdh5tXOxbd9iE5cQ8A==
+X-Google-Smtp-Source: AGHT+IHUdnhlfTeK4MtrE3fpZApJQcwswA5kVYL+eRCHSesSPAIVMBTUHObYeXXNmyeSYbM6adsOHQ==
+X-Received: by 2002:a2e:3505:0:b0:2bd:10b7:4610 with SMTP id z5-20020a2e3505000000b002bd10b74610mr2594910ljz.25.1694825656782;
+        Fri, 15 Sep 2023 17:54:16 -0700 (PDT)
+Received: from [192.168.37.154] (178235177186.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.186])
+        by smtp.gmail.com with ESMTPSA id e10-20020a170906248a00b00993928e4d1bsm3046483ejb.24.2023.09.15.17.54.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Sep 2023 17:54:16 -0700 (PDT)
+Message-ID: <49687bc6-7121-422c-99fd-e68dd46aae95@linaro.org>
+Date:   Sat, 16 Sep 2023 02:54:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/53] icc-rpmh multi-RSC voting groundwork
+Content-Language: en-US
+To:     Mike Tipton <quic_mdtipton@quicinc.com>
+Cc:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230708-topic-rpmh_icc_rsc-v1-0-b223bd2ac8dd@linaro.org>
+ <c067a45f-9629-d516-9e56-36538e4ff6db@kernel.org>
+ <20230807215739.GA9621@hu-mdtipton-lv.qualcomm.com>
+ <10520827-dc01-475c-b09a-35cefc9e0a62@linaro.org>
+ <20230913012951.GA19284@hu-mdtipton-lv.qualcomm.com>
+ <ffc58838-c306-49f3-a90a-95b2cf02ae3d@linaro.org>
+ <20230914023239.GA25147@hu-mdtipton-lv.qualcomm.com>
+ <978fd46d-8142-41e6-9c62-df678018d6c2@linaro.org>
+ <20230915160525.GA14240@hu-mdtipton-lv.qualcomm.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
+ BB/OmIWU6X+LZW6P88ZmHe+KeyABLMP5s1tJNK1j4ntT7mECcWZDzafPWF4F6m4WJOG27kTJ
+ HGWdmtO+RvadOVi6CoUDqALsmfS3MUG5Pj2Ne9+0jRg4hEnB92AyF9rW2G3qisFcwPgvatt7
+ TXD5E38mLyOPOUyXNj9XpDbt1hNwKQfiidmPh5e7VNAWRnW1iCMMoKqzM1Anzq7e5Afyeifz
+ zRcQPLaqrPjnKqZGL2BKQSZDh6NkI5ZLRhhHQf61fkWcUpTp1oDC6jWVfT7hwRVIQLrrNj9G
+ MpPzrlN4YuAqKeIer1FMt8cq64ifgTzxHzXsMcUdclzq2LTk2RXaPl6Jg/IXWqUClJHbamSk
+ t1bfif3SnmhA6TiNvEpDKPiT3IDs42THU6ygslrBxyROQPWLI9IL1y8S6RtEh8H+NZQWZNzm
+ UQ3imZirlPjxZtvz1BtnnBWS06e7x/UEAguj7VHCuymVgpl2Za17d1jj81YN5Rp5L9GXxkV1
+ aUEwONM3eCI3qcYm5JNc5X+JthZOWsbIPSC1Rhxz3JmWIwP1udr5E3oNRe9u2LIEq+wH/toH
+ kpPDhTeMkvt4KfE5m5ercid9+ZXAqoaYLUL4HCEw+HW0DXcKDwARAQABzShLb25yYWQgRHli
+ Y2lvIDxrb25yYWQuZHliY2lvQGxpbmFyby5vcmc+wsGOBBMBCAA4FiEEU24if9oCL2zdAAQV
+ R4cBcg5dfFgFAmQ5bqwCGwMFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AACgkQR4cBcg5dfFjO
+ BQ//YQV6fkbqQCceYebGg6TiisWCy8LG77zV7DB0VMIWJv7Km7Sz0QQrHQVzhEr3trNenZrf
+ yy+o2tQOF2biICzbLM8oyQPY8B///KJTWI2khoB8IJSJq3kNG68NjPg2vkP6CMltC/X3ohAo
+ xL2UgwN5vj74QnlNneOjc0vGbtA7zURNhTz5P/YuTudCqcAbxJkbqZM4WymjQhe0XgwHLkiH
+ 5LHSZ31MRKp/+4Kqs4DTXMctc7vFhtUdmatAExDKw8oEz5NbskKbW+qHjW1XUcUIrxRr667V
+ GWH6MkVceT9ZBrtLoSzMLYaQXvi3sSAup0qiJiBYszc/VOu3RbIpNLRcXN3KYuxdQAptacTE
+ mA+5+4Y4DfC3rUSun+hWLDeac9z9jjHm5rE998OqZnOU9aztbd6zQG5VL6EKgsVXAZD4D3RP
+ x1NaAjdA3MD06eyvbOWiA5NSzIcC8UIQvgx09xm7dThCuQYJR4Yxjd+9JPJHI6apzNZpDGvQ
+ BBZzvwxV6L1CojUEpnilmMG1ZOTstktWpNzw3G2Gis0XihDUef0MWVsQYJAl0wfiv/0By+XK
+ mm2zRR+l/dnzxnlbgJ5pO0imC2w0TVxLkAp0eo0LHw619finad2u6UPQAkZ4oj++iIGrJkt5
+ Lkn2XgB+IW8ESflz6nDY3b5KQRF8Z6XLP0+IEdLOOARkOW7yEgorBgEEAZdVAQUBAQdAwmUx
+ xrbSCx2ksDxz7rFFGX1KmTkdRtcgC6F3NfuNYkYDAQgHwsF2BBgBCAAgFiEEU24if9oCL2zd
+ AAQVR4cBcg5dfFgFAmQ5bvICGwwACgkQR4cBcg5dfFju1Q//Xta1ShwL0MLSC1KL1lXGXeRM
+ 8arzfyiB5wJ9tb9U/nZvhhdfilEDLe0jKJY0RJErbdRHsalwQCrtq/1ewQpMpsRxXzAjgfRN
+ jc4tgxRWmI+aVTzSRpywNahzZBT695hMz81cVZJoZzaV0KaMTlSnBkrviPz1nIGHYCHJxF9r
+ cIu0GSIyUjZ/7xslxdvjpLth16H27JCWDzDqIQMtg61063gNyEyWgt1qRSaK14JIH/DoYRfn
+ jfFQSC8bffFjat7BQGFz4ZpRavkMUFuDirn5Tf28oc5ebe2cIHp4/kajTx/7JOxWZ80U70mA
+ cBgEeYSrYYnX+UJsSxpzLc/0sT1eRJDEhI4XIQM4ClIzpsCIN5HnVF76UQXh3a9zpwh3dk8i
+ bhN/URmCOTH+LHNJYN/MxY8wuukq877DWB7k86pBs5IDLAXmW8v3gIDWyIcgYqb2v8QO2Mqx
+ YMqL7UZxVLul4/JbllsQB8F/fNI8AfttmAQL9cwo6C8yDTXKdho920W4WUR9k8NT/OBqWSyk
+ bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
+ nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
+ izWDgYvmBE8=
+In-Reply-To: <20230915160525.GA14240@hu-mdtipton-lv.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230916-topic-mm8013_2-v1-1-02495e07fca0@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAH73BGUC/x2NWwqDMBAAryL77UIe2EavIiJJutYFjZK0Ioh37
- 9LPGRjmgkKZqUBXXZDp4MJbEtB1BXH26U3IL2EwyljV6gd+tp0jrqtT2o4Gmxgs6eDUc3IgUfC
- FMGSf4ixZ+i6LyD3TxOf/0g/3/QOxFKx3dQAAAA==
-To:     Konrad Dybcio <konradybcio@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694824321; l=4622;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=JOfv0hbEyN+O/H2UYL7rdGfPUfoOoGKiXPXc/AHKu+Q=;
- b=FZlrDfsne6K8LYmo2iIsa7Un63cjDU+SbJlN3HemBbk73ocqTfmv0BP/h5oW7KxAQ/Wq1Bm2t
- kjoAH/mKJ61CjkWdckHOgZCe5QWrbwZMitGXi46MFCjnc3PV8jCjbCW
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
@@ -81,130 +123,82 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-While scanning the internet for MM8013 PDFs, I found one for a different
-IC from Mitsumi, MM8118 at [1]. It turned out however, that when you
-search through the PDF, the MM8118 text has an invsible text layer
-containing "MM8013" underneath..
+On 15.09.2023 18:05, Mike Tipton wrote:
+> On Fri, Sep 15, 2023 at 03:43:27PM +0200, Konrad Dybcio wrote:
+>> On 14.09.2023 04:32, Mike Tipton wrote:
+>>> On Wed, Sep 13, 2023 at 10:31:49AM +0200, Konrad Dybcio wrote:
+>>>>> The applicable voters should likely be defined in the target-specific
+>>>>> headers, rather than the common qcom,icc.h. The bit range used for them
+>>>>> could be common, but each target may only support a small subset of the
+>>>>> total set of possible voters across all targets.
+>>>> I'm not sure how client drivers would then choose the
+>>>> correct path other than
+>>>>
+>>>> switch (soc) {
+>>>> case 8450:
+>>>> 	tag = QCOM_ICC_TAG_VOTER_8450_HLOS;
+>>>> 	break;
+>>>> case 8550:
+>>>> 	tag = QCOM_ICC_TAG_VOTER_8550_HLOS;
+>>>> 	break;
+>>>> ...
+>>>> }
+>>>>
+>>>> which would be unacceptable.
+>>>
+>>> The same general way it's handled for the endpoint bindings, which are
+>>> already target-specific. 
+>>>
+>>> Any client drivers hardcoding the endpoint bindings in their driver
+>>> would have to include the appropriate, target-specific binding header
+>>> (e.g. qcom,sm8550-rpmh.h). That would only be possible if their driver
+>>> file is itself target-specific. Otherwise, it would have to pull the
+>>> endpoint bindings from devicetree. Or just use the recommended
+>>> of_icc_get() and let devicetree do everything for them. Same for the
+>>> target-specific voter tag bindings.
+>>>
+>>> Clients can also specify their tags in devicetree. They don't actually
+>>> have to call icc_set_tag() directly. For example:
+>>>
+>>>     #include <dt-bindings/interconnect/qcom,sm8450.h>
+>>>
+>>>     interconnects = <&mmss_noc MASTER_MDP QCOM_ICC_TAG_VOTER_DISP
+>>>                      &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_VOTER_DISP>;
+>>>
+>>> Then when they call of_icc_get() for this path it'll automatically have
+>>> QCOM_ICC_TAG_VOTER_DISP set for them.
+>> I think I'd skew towards the "define everything in the DT" approach.
+>>
+>> One thing that makes me uneasy to go on with this approach is the
+>> question whether there is a case in which we would want to switch
+>> from e.g. voting through DISP to voting through APPS (or similar)
+>> from within a single device.
+> 
+> It shouldn't be common. But it could be done fairly simply by listing
+> paths for each different voter in the dt properties. 
+> 
+>     interconnects = <&mmss_noc MASTER_MDP QCOM_ICC_TAG_VOTER_APPS
+>                      &mc_virt SLAVE_EBI1  QCOM_ICC_TAG_VOTER_APPS>,
+>                     <&mmss_noc MASTER_MDP QCOM_ICC_TAG_VOTER_DISP
+>                      &mc_virt SLAVE_EBI1  QCOM_ICC_TAG_VOTER_DISP>,
+>     interconnect-names = "path-apps-voter",
+>                          "path-disp-voter";
+Eeeeeh, I don't know.. this almost sounds like a patch-up solution
+to a problem that doesn't quite yet exist.
 
-With some elbow grease, I was able to confirm that most of the registers
-match between the two ICs. Based on that finding, introduce live battery
-voltage readout, hw-decided charge behavior readout and max current
-readout. Also, expand the existing POWER_SUPPLY_HEALTH reporting.
+I debated introducing a third interconnect cell for this, but I am
+not sure the added complexity is worth it.
 
-[1] https://product.minebeamitsumi.com/en/product/category/ics/battery/fuel_gauge/parts/download/__icsFiles/afieldfile/2023/07/12/1_download_01_12.pdf
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
-foobar
-uevent reports from the new props:
+Having a global set of RSC-bound tags would be a "nice" and tidy
+solution.. Maybe we could even allocate like 24 bits to these, as
+I don't think you'll be introducing new buckets (or at least I hope
+you won't!).
 
-POWER_SUPPLY_CHARGE_BEHAVIOUR=auto
-POWER_SUPPLY_CHARGE_NOW=7302000
-POWER_SUPPLY_CURRENT_MAX=1898000
----
- drivers/power/supply/mm8013.c | 45 +++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 43 insertions(+), 2 deletions(-)
+24 is an obscene amount of RSCs to have, even counting virtual
+channels, so unless you folks have some dark plans to make all
+pieces of hardware powered completely separately from each other,
+I suppose I could ask for a pinky-promise to not exceed that
+number, ever :D
 
-diff --git a/drivers/power/supply/mm8013.c b/drivers/power/supply/mm8013.c
-index bd8d54d6597f..ddac40ef9ae5 100644
---- a/drivers/power/supply/mm8013.c
-+++ b/drivers/power/supply/mm8013.c
-@@ -17,13 +17,21 @@
-  #define MM8013_FLAG_OTC		BIT(15)
-  #define MM8013_FLAG_OTD		BIT(14)
-  #define MM8013_FLAG_BATHI		BIT(13)
-+ #define MM8013_FLAG_BATLOW		BIT(12)
-+ #define MM8013_FLAG_CHG_INH		BIT(11)
-  #define MM8013_FLAG_FC			BIT(9)
-  #define MM8013_FLAG_CHG		BIT(8)
-+ #define MM8013_FLAG_OCC		BIT(6)
-+ #define MM8013_FLAG_ODC		BIT(5)
-+ #define MM8013_FLAG_OT			BIT(4)
-+ #define MM8013_FLAG_UT			BIT(3)
-  #define MM8013_FLAG_DSG		BIT(0)
- #define REG_FULL_CHARGE_CAPACITY	0x0e
-+#define REG_NOMINAL_CHARGE_CAPACITY	0x0c
- #define REG_AVERAGE_CURRENT		0x14
- #define REG_AVERAGE_TIME_TO_EMPTY	0x16
- #define REG_AVERAGE_TIME_TO_FULL	0x18
-+#define REG_MAX_LOAD_CURRENT		0x1e
- #define REG_CYCLE_COUNT			0x2a
- #define REG_STATE_OF_CHARGE		0x2c
- #define REG_DESIGN_CAPACITY		0x3c
-@@ -63,8 +71,11 @@ static int mm8013_checkdevice(struct mm8013_chip *chip)
- 
- static enum power_supply_property mm8013_battery_props[] = {
- 	POWER_SUPPLY_PROP_CAPACITY,
-+	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
- 	POWER_SUPPLY_PROP_CHARGE_FULL,
- 	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
-+	POWER_SUPPLY_PROP_CHARGE_NOW,
-+	POWER_SUPPLY_PROP_CURRENT_MAX,
- 	POWER_SUPPLY_PROP_CURRENT_NOW,
- 	POWER_SUPPLY_PROP_CYCLE_COUNT,
- 	POWER_SUPPLY_PROP_HEALTH,
-@@ -92,6 +103,16 @@ static int mm8013_get_property(struct power_supply *psy,
- 
- 		val->intval = regval;
- 		break;
-+	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
-+		ret = regmap_read(chip->regmap, REG_FLAGS, &regval);
-+		if (ret < 0)
-+			return ret;
-+
-+		if (regval & MM8013_FLAG_CHG_INH)
-+			val->intval = POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE;
-+		else
-+			val->intval = POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO;
-+		break;
- 	case POWER_SUPPLY_PROP_CHARGE_FULL:
- 		ret = regmap_read(chip->regmap, REG_FULL_CHARGE_CAPACITY, &regval);
- 		if (ret < 0)
-@@ -106,6 +127,20 @@ static int mm8013_get_property(struct power_supply *psy,
- 
- 		val->intval = 1000 * regval;
- 		break;
-+	case POWER_SUPPLY_PROP_CHARGE_NOW:
-+		ret = regmap_read(chip->regmap, REG_NOMINAL_CHARGE_CAPACITY, &regval);
-+		if (ret < 0)
-+			return ret;
-+
-+		val->intval = 1000 * regval;
-+		break;
-+	case POWER_SUPPLY_PROP_CURRENT_MAX:
-+		ret = regmap_read(chip->regmap, REG_MAX_LOAD_CURRENT, &regval);
-+		if (ret < 0)
-+			return ret;
-+
-+		val->intval = -1000 * (s16)regval;
-+		break;
- 	case POWER_SUPPLY_PROP_CURRENT_NOW:
- 		ret = regmap_read(chip->regmap, REG_AVERAGE_CURRENT, &regval);
- 		if (ret < 0)
-@@ -125,9 +160,15 @@ static int mm8013_get_property(struct power_supply *psy,
- 		if (ret < 0)
- 			return ret;
- 
--		if (regval & MM8013_FLAG_BATHI)
-+		if (regval & MM8013_FLAG_UT)
-+			val->intval = POWER_SUPPLY_HEALTH_COLD;
-+		else if (regval & (MM8013_FLAG_ODC | MM8013_FLAG_OCC))
-+			val->intval = POWER_SUPPLY_HEALTH_OVERCURRENT;
-+		else if (regval & (MM8013_FLAG_BATLOW))
-+			val->intval = POWER_SUPPLY_HEALTH_UNSPEC_FAILURE;
-+		else if (regval & MM8013_FLAG_BATHI)
- 			val->intval = POWER_SUPPLY_HEALTH_OVERVOLTAGE;
--		else if (regval & (MM8013_FLAG_OTD | MM8013_FLAG_OTC))
-+		else if (regval & (MM8013_FLAG_OT | MM8013_FLAG_OTD | MM8013_FLAG_OTC))
- 			val->intval = POWER_SUPPLY_HEALTH_OVERHEAT;
- 		else
- 			val->intval = POWER_SUPPLY_HEALTH_GOOD;
-
----
-base-commit: 566750b17f1ee43350ba2c85a3bb2d9e28ba9c04
-change-id: 20230916-topic-mm8013_2-5cb3e1b807f8
-
-Best regards,
--- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
-
+Konrad
