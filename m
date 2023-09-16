@@ -2,110 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94DA47A31BF
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Sep 2023 20:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D70927A322F
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Sep 2023 21:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236701AbjIPSAY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 Sep 2023 14:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57358 "EHLO
+        id S237820AbjIPTZh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 16 Sep 2023 15:25:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233267AbjIPSAF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Sep 2023 14:00:05 -0400
-Received: from smtp40.i.mail.ru (smtp40.i.mail.ru [95.163.41.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CFECE6;
-        Sat, 16 Sep 2023 11:00:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jiaxyga.com
-        ; s=mailru; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-ID:Date:Subject:Cc:To:From:From:Sender:Reply-To:To:Cc:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive:
-        X-Cloud-Ids:Disposition-Notification-To;
-        bh=+lCM8qubLARYTvfEHuxj/geOniNoi7kjimOOnYNhXZY=; t=1694887200; x=1694977200; 
-        b=QEv4qL0UOf0sj1fTf8kdhsBqCRz2G6jPUlUdWpVAENLMkiNp+nhUY3P0byHaNw7fh4IaZmzFZpW
-        w+ESrFEKD66b2eIzF+A/GiK3YXqTRyaoi4KOL6tDFNhHBi1jeis5M3K8p06SgOYNuQcysyaC2wgO5
-        Attudf34y5/amjLE6Js=;
-Received: by smtp40.i.mail.ru with esmtpa (envelope-from <danila@jiaxyga.com>)
-        id 1qhZaI-006d7F-1h; Sat, 16 Sep 2023 20:59:58 +0300
-From:   Danila Tikhonov <danila@jiaxyga.com>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, ulf.hansson@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        with ESMTP id S236512AbjIPTZT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Sep 2023 15:25:19 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAEBF186
+        for <linux-pm@vger.kernel.org>; Sat, 16 Sep 2023 12:25:13 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-31c5c06e8bbso3057881f8f.1
+        for <linux-pm@vger.kernel.org>; Sat, 16 Sep 2023 12:25:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1694892311; x=1695497111; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YemuLAkzZ3mwS+fKbYUx0+x9FMVINu37w9byNNYEGG4=;
+        b=SZmRlQSw8lHgDamtJo31qQUNjwJXNnvvu+2ZwlyXUo1fneAwRHsaxxjuxAKvnZez1P
+         IEGyDIpZD6MuzAXN75Xrxthk14Y/Y7MSvVGonhWOEtQtgyL4L07WuWJh0oLcPGNIuyCV
+         PdosSY5owA4lo7lL7gS+OOuyrS3fv7ZyssPcVD9Dh6RVPb3YgeF4P7CpXhXjL219BK6L
+         t587mm6XKGaY+xk8VE+/HvsJo1L4QRPSZg84pbK9PSLD+jtkoV3SXZapNdFULK8CZU4e
+         X1V6ycKYscQ+gYMY50OZzlXFj0gAPxh3KV2n8lM0jF1phRMmOOS6V7tnlW+oNzH22ejo
+         IRPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694892311; x=1695497111;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YemuLAkzZ3mwS+fKbYUx0+x9FMVINu37w9byNNYEGG4=;
+        b=v9aXqYpRPPPGKe4mZPMHIorETHZ+VRtYasE5OuMl3K+VxqeJK+qgWYMKSfGUcBwsf/
+         xaf/4VtDzj6qMt405LPcvmumGQ+MDMuH0UjJDR/4DJO1Mhp8VBg6u5n9CcqvBb1Pz2BR
+         Uez9z1/fVlpn8rudfGv+1d4p8jvoFf8y035zBjVP/yXH7uEYgUOrRyju9QdGJIgy2Fle
+         nK5ERH0/ro9BuVJb8fBeaW4hQ50X+0lBUTk+Hdu9jbtHzIFuRMOeD3HrUxqS4ysjBwse
+         CLSaDza5kkKzRj3vyKLB2tDXpAUjTpUvY4SIUdXaFeEVNlICEa1lK5eEaBZt5FoCfjcr
+         Si/A==
+X-Gm-Message-State: AOJu0Yxp65fxhidPcfgI6Y2R81X1/NWLHWWZyZajL5BUGc4ULmfCYUYW
+        9dMSi8L59dzxVAcUWiiem4t7JM49QcXqhPp1eiU=
+X-Google-Smtp-Source: AGHT+IEADZZw7fcsDZqrMKnoBmJ/kcuGy+M7Cc95Kv1zTWEp0tRpiLumIFPEG3KXk41Wctm0QnIXoA==
+X-Received: by 2002:a05:6000:1549:b0:320:a4e:acf8 with SMTP id 9-20020a056000154900b003200a4eacf8mr303880wry.48.1694892311265;
+        Sat, 16 Sep 2023 12:25:11 -0700 (PDT)
+Received: from airbuntu (host109-151-228-137.range109-151.btcentralplus.com. [109.151.228.137])
+        by smtp.gmail.com with ESMTPSA id n9-20020adfe789000000b003180fdf5589sm3500322wrm.6.2023.09.16.12.25.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 Sep 2023 12:25:10 -0700 (PDT)
+Date:   Sat, 16 Sep 2023 20:25:09 +0100
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Danila Tikhonov <danila@jiaxyga.com>
-Subject: [PATCH v2 2/2] pmdomain: qcom: rpmhpd: Add support for SM7150 rpmh clocks
-Date:   Sat, 16 Sep 2023 20:59:52 +0300
-Message-ID: <20230916175952.178611-3-danila@jiaxyga.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230916175952.178611-1-danila@jiaxyga.com>
-References: <20230916175952.178611-1-danila@jiaxyga.com>
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Subject: Re: [PATCH 2/4] sched: cpufreq: Fix apply_dvfs_headroom() escaping
+ uclamp constraints
+Message-ID: <20230916192509.bportepj7dbgp6ro@airbuntu>
+References: <20230820210640.585311-1-qyousef@layalina.io>
+ <20230820210640.585311-3-qyousef@layalina.io>
+ <CAKfTPtDY48jpO+b-2KXawzxh-ty+FMKX6YUXioNR7kpgO=ua6Q@mail.gmail.com>
+ <20230829163740.uadhv2jfjuumqk3w@airbuntu>
+ <CAKfTPtCP6uX79dOrzN4PxFTMBFrDAMOOrWyZrsVypUQ0RY7BAA@mail.gmail.com>
+ <20230907215555.exjxho34ntkjmn6r@airbuntu>
+ <CAKfTPtA8Ljy4NBqjw8Wj4pEFc-OCR55QPuwh+5GgrHN6u+ugsg@mail.gmail.com>
+ <20230910174638.qe7jqq6mq36brh6o@airbuntu>
+ <CAKfTPtBFAXO=CgqSJ1+y=2ppb5t4oErCtvV336fS6J2nSjBCkQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Authentication-Results: smtp40.i.mail.ru; auth=pass smtp.auth=danila@jiaxyga.com smtp.mailfrom=danila@jiaxyga.com
-X-Mailru-Src: smtp
-X-7564579A: B8F34718100C35BD
-X-77F55803: 4F1203BC0FB41BD9FD052C19707CBA108F1E255DB0CE4ADF810AD9F6ADB4530800894C459B0CD1B9C6127204C78C72662695CD013C20067C31D7BEF43F7B604A37AD88C62730AFDD
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE74286BEFC80AC600CEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637AC20F58FBAB79054EA1F7E6F0F101C6723150C8DA25C47586E58E00D9D99D84E1BDDB23E98D2D38BE5CCB53A13BC8DBAA605E978BE5FA9121FCD0C5B8183BF1ECC7F00164DA146DAFE8445B8C89999728AA50765F7900637CAEE156C82D3D7D9389733CBF5DBD5E9C8A9BA7A39EFB766F5D81C698A659EA7CC7F00164DA146DA9985D098DBDEAEC8B861051D4BA689FCF6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA73AA81AA40904B5D9A18204E546F3947C1DAA61796BF5227BBA3038C0950A5D36C8A9BA7A39EFB766D91E3A1F190DE8FDBA3038C0950A5D36D5E8D9A59859A8B615519F706774CB6A3AA81AA40904B5D99C9F4D5AE37F343AD1F44FA8B9022EA23BBE47FD9DD3FB595F5C1EE8F4F765FC72CEEB2601E22B093A03B725D353964B0B7D0EA88DDEDAC722CA9DD8327EE4931B544F03EFBC4D57C8D5298E42E60C1FC4224003CC83647689D4C264860C145E
-X-B7AD71C0: 6FEFE4C63DFE2D85718F43753FD9AD21390936EE2A242988633761F9DFDC81E9C79EB1DA2EBAF7A81C6805ECDC0957F8
-X-C1DE0DAB: 0D63561A33F958A5C77FAC5310941106147C0D302D6FBB8366D32F0EC6D2A0F4F87CCE6106E1FC07E67D4AC08A07B9B0CE135D2742255B359C5DF10A05D560A950611B66E3DA6D700B0A020F03D25A0997E3FB2386030E77
-X-C8649E89: 1C3962B70DF3F0AD75DCE07D45A7499577DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF922733AE475BDCF693BFE7357B281D8A4006E8518DDC067B17B326EC56491F8EF93E7F6CC6F26229B3573C328C294A3D4469FED4482D0DF876B5B102148F81E921BEC6C0C71ED4F84C41F94D744909CE4BCAC77546666B612CC0CD5AA9A1B9887EE09F5AAA95A50543082AE146A756F3
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojwfkaTmrWlaxwu9hpjvK0Qg==
-X-Mailru-Sender: 9EB879F2C80682A09F26F806C739498126E16CB1D4F8C9A0C58471F59312CD37D586A72D9E53DC1D643683D8C0F3ED1CA3C71A376745D86BBE86167304C7680C3980CE5AAA35C7CD60F22E8815EDE5EAEAB4BC95F72C04283CDA0F3B3F5B9367
-X-Mras: Ok
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtBFAXO=CgqSJ1+y=2ppb5t4oErCtvV336fS6J2nSjBCkQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This adds the RPMH clocks present in SM7150 SoC.
+On 09/12/23 18:03, Vincent Guittot wrote:
 
-Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
----
- drivers/pmdomain/qcom/rpmhpd.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+> And it seems that what is done today doesn't work correctly for you.
+> Your proposal to include cpufreq headroom into the scheduler is not
+> correct IMO and it only applies for some cases. Then, the cpufreq
+> driver can have some really good reason to apply some headroom even
+> with an uclamp value but it can't make any decision.
+> 
+> I think that we should use another way to fix your problem with how
+> uclamp than reordering how headroom is applied by cpufreq. Mixing
+> utilization and performance in one signal hide some differences that
+> cpufreq can make a good use of.
+> 
+> As an example:
+> 
+> cfs util = 650
+> cfs uclamp = 800
+> irq = 128
+> 
+> cfs with headroom 650*1.25=812 is clamped to 800
+> 
+> Final utilization will be : 800(1024-128)/1024+128*1.25=860 which is
+> above the target of 800.
+> 
+> When we look at the detail, we have:
+> 
+> cfs util once scaled to the full range is only 650(1024-128)/1024= 568
+> 
+> After applying irq (even with some headroom) 568+128*1.25 = 728 which
+> is below the uclamp of 800 so shouldn't we stay at 800 in this case ?
 
-diff --git a/drivers/pmdomain/qcom/rpmhpd.c b/drivers/pmdomain/qcom/rpmhpd.c
-index a87e336d5e33..ec2582f7225c 100644
---- a/drivers/pmdomain/qcom/rpmhpd.c
-+++ b/drivers/pmdomain/qcom/rpmhpd.c
-@@ -337,6 +337,23 @@ static const struct rpmhpd_desc sm6350_desc = {
- 	.num_pds = ARRAY_SIZE(sm6350_rpmhpds),
- };
- 
-+/* SM7150 RPMH powerdomains */
-+static struct rpmhpd *sm7150_rpmhpds[] = {
-+	[RPMHPD_CX] = &cx_w_mx_parent,
-+	[RPMHPD_CX_AO] = &cx_ao_w_mx_parent,
-+	[RPMHPD_GFX] = &gfx,
-+	[RPMHPD_LCX] = &lcx,
-+	[RPMHPD_LMX] = &lmx,
-+	[RPMHPD_MX] = &mx,
-+	[RPMHPD_MX_AO] = &mx_ao,
-+	[RPMHPD_MSS] = &mss,
-+};
-+
-+static const struct rpmhpd_desc sm7150_desc = {
-+	.rpmhpds = sm7150_rpmhpds,
-+	.num_pds = ARRAY_SIZE(sm7150_rpmhpds),
-+};
-+
- /* SM8150 RPMH powerdomains */
- static struct rpmhpd *sm8150_rpmhpds[] = {
- 	[SM8150_CX] = &cx_w_mx_parent,
-@@ -562,6 +579,7 @@ static const struct of_device_id rpmhpd_match_table[] = {
- 	{ .compatible = "qcom,sdx65-rpmhpd", .data = &sdx65_desc},
- 	{ .compatible = "qcom,sdx75-rpmhpd", .data = &sdx75_desc},
- 	{ .compatible = "qcom,sm6350-rpmhpd", .data = &sm6350_desc },
-+	{ .compatible = "qcom,sm7150-rpmhpd", .data = &sm7150_desc },
- 	{ .compatible = "qcom,sm8150-rpmhpd", .data = &sm8150_desc },
- 	{ .compatible = "qcom,sm8250-rpmhpd", .data = &sm8250_desc },
- 	{ .compatible = "qcom,sm8350-rpmhpd", .data = &sm8350_desc },
--- 
-2.41.0
+Shouldn't it be (568+128)*1.25 = 870? Which is almost the 860 above. We calmped
+the 812 to 800, with rounding errors that almost accounts for the 10 points
+difference between 870 and 860..
 
+I might have gotten the math wrong. But what I saw is that we have
+
+	util = (X + Y + Z) * A
+
+and what I did
+
+	util = AX + AY + AZ
+
+so maybe I missed something up, but I just did the multiplication with the
+headroom to each element individually rather than after the sum.
+
+So yeah, if I messed that part up, then that wasn't intentional and should be
+done differently. But I still can't see it.
+
+> >
+> > The main change being done here actually is to apply_dvfs_headroom() *before*
+> > doing uclamp_rq_util_with(). I am not sure how you see this mixing.
+> 
+> Because dvfs_headroom is a cpufreq hints and you want to apply it
+> somewhere else.
+
+I am still not sure if you mean we are mixing up the code and we need better
+abstraction or something else.
+
+Beside the abstraction problem, which I agree with, I can't see what I am
+mixing up yet :( Sorry I think I need more helping hand to see it.
+
+> > Current code performs apply_dvfs_headroom() *after*; which what causes the CPU
+> > to run at a performance level higher than rq->uclamp[UCLAMP_MAX].
+> >
+> > It doesn't matter how many tasks on the rq, if rq->uclamp[UCLAMP_MAX] is set to
+> > 800, then the CPU should not vote to max (assuminig all other pressures are 0).
+> 
+> You can't remove the irq pressure from the picture. If
+> rq->uclamp[UCLAMP_MAX] is set to 800 means that cpu must not go above
+> 800, it should apply also after taking into account other inputs. At
+> least up to some level as described in my example above
+
+I was trying to simplify to understand what you mean as I don't think I see the
+problem you're highlighting still.
+
+
+Thanks!
+
+--
+Qais Yousef
