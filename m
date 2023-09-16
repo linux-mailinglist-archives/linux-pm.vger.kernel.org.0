@@ -2,78 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 914BC7A3244
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Sep 2023 21:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2F97A3251
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Sep 2023 21:50:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjIPTjA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 Sep 2023 15:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41922 "EHLO
+        id S229767AbjIPTtk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 16 Sep 2023 15:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236073AbjIPTiz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Sep 2023 15:38:55 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CD5199
-        for <linux-pm@vger.kernel.org>; Sat, 16 Sep 2023 12:38:49 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-403012f27e1so34246085e9.1
-        for <linux-pm@vger.kernel.org>; Sat, 16 Sep 2023 12:38:49 -0700 (PDT)
+        with ESMTP id S231325AbjIPTtb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Sep 2023 15:49:31 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50501B5
+        for <linux-pm@vger.kernel.org>; Sat, 16 Sep 2023 12:49:26 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-317c3ac7339so2837442f8f.0
+        for <linux-pm@vger.kernel.org>; Sat, 16 Sep 2023 12:49:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1694893128; x=1695497928; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=BeZ0NIpOmzeTyZCjOgYbHI0Gt5u0onUOD1oUG1cRlok=;
-        b=HRoQL5RIDFZ0He+o4INrsz2v6P2E6zZMLk1t/L+zL0GyqEJlsDpQkPzg53sU5AdDHp
-         nqp5nilF6Ko5EgCG++Wrj+DMjtdo+0Hq7HBqBGF3B214J2mFWmKLNHQB+X5M1qDal8oD
-         SbmCEJPrg5VyS/kDw7peSPRErcgtLL4SKdh9otgE2L/UnZOUEW1vgVNQmIrcftLm5aKX
-         o6ENd3UMYq1JnMOZPqAw5FGStpaZ08Im6hqZBCWAPDz8/nKdyFRb3n6X410Q+xEDzVeT
-         3MO3FuAMQn2FlfA8BOGpZc+4v9FgJAkNjHe0ymYtp20PEI7EgTXe4aVw6atnHL1rMBR4
-         hPsg==
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1694893765; x=1695498565; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DhEgwhsS2gNdFaESm/g7+1RLgNynh4jZ4Z0rYWK9ouc=;
+        b=D8yEuTZeDd/DRi1DEHjMHIHCkP+wGslQAPm7PBJVBlqCk3xOQDFQBv4Hj5YSsen0m4
+         hNoZshFABw6xUs+A+E82IfMOjbQGDXlVWY9PUh0xo07u+dZ2yDn18U1PNIXxDYQbWWiv
+         cWvSjFKC1pCJtcgTEM6qL0yGnV3s4mA+I2O98ayBUn8w23WZJlLR+zu02VIXMuCg/zKB
+         SWj1AqvyrB5kScuk3s+5lDLJa78Y9OVqtecyKe+5ImLRZ5SOyP4MBYhNKDgXjBOHbIwl
+         +dsVx24e6JgQAhiV70wLiKSZgm7BQWJkWu33ncW2s0f2vHoTm7WdFM7t8wuosc5Zklnu
+         CYow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694893128; x=1695497928;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BeZ0NIpOmzeTyZCjOgYbHI0Gt5u0onUOD1oUG1cRlok=;
-        b=XoO1NqPQrtEJGPaW6ELqsIPK7m8mENUnC5M+n+zrNdjnmJpbi018sPN/EUFaDy4MzB
-         BLoSKi58kdXtxCdyAmiJq8e/2oSxvgXoov8dTFqmXQQM8x8jwsb61cOeT2Tl/+uXMijS
-         csOxFzp1FNlfQOQ/M+eu0zKbEWHCMHT5pF/pebyVgVYnELVSowWvKVkQvXFxR38Ob1yS
-         Z9J0khBMSUHdoFDZcPgg0qU406YSiwbwVj0BRRPXX1/39b/aBF0gURVt/kSTtyUfC7mi
-         ek6t5qYCq7EQ57MUZ73S+SRpky4HhwSiADFM2ds/vqcxPu2q/4I5iN8ikMyhltg5+N8F
-         1+4w==
-X-Gm-Message-State: AOJu0YwgI5rzGhPSUebcNB+0ipg6iU0Q4fpEYWnEA3Y4mbYmV769AOwi
-        zNTGaQbMhEX997UmiCiabZcnhA==
-X-Google-Smtp-Source: AGHT+IHJwXa3gfND3C/MWf5h9JP4AjQysFATf6P0IvfVvrmYiaaYJq8kFBqOMOKKH6gsoSO4VuJjMg==
-X-Received: by 2002:a5d:46cf:0:b0:31f:918a:ca9d with SMTP id g15-20020a5d46cf000000b0031f918aca9dmr3830791wrs.13.1694893128243;
-        Sat, 16 Sep 2023 12:38:48 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1694893765; x=1695498565;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DhEgwhsS2gNdFaESm/g7+1RLgNynh4jZ4Z0rYWK9ouc=;
+        b=OLFcTCCT7Mnf/e2HGky+XDsv4wjFMeHLgobMnlSyyE6M2Ul57ig/oRuAR0GFb6UBDY
+         X7D/RwdwF8/JtflGNARPvv9rNHjC0f2DAQToSVvfJcCYPHbPWI/EtOgNccP1Uk9+4Bum
+         n/nhYymXg1+bAUoWo8/LVQZTeerI4BY+i5qrtUD0dhPDxJhfrS11ODkIo4SKT6Y1IhJY
+         9HoFBnrnj14E+98m7l227xTTMhtk5qw9A+dNFQJHzwUbp1jiad3CO9KmqN3xzEHzn2ag
+         gfnta9MCfHdQ8zNRt4VS93Fhzbf5P7fjiP62anhKCe6ttmiWmsXbBmkSiKlpoxIPQhal
+         2VKg==
+X-Gm-Message-State: AOJu0YwV0dXYfXVwgNELSQuiweLTckvsN7Tv1haSTHWpJa7tOIO1K09/
+        /NfSgnLX0+tAfqFdSsD1JLLs+r54LRhh1opdck4=
+X-Google-Smtp-Source: AGHT+IFeNHKsPSgw0ay0079kNC39zggVssFTaXBoTIdk27U/Oa7c9349jg+h0hfBrmpjkQyLbdVgfQ==
+X-Received: by 2002:adf:f742:0:b0:319:7c0f:d920 with SMTP id z2-20020adff742000000b003197c0fd920mr3617679wrp.57.1694893765210;
+        Sat, 16 Sep 2023 12:49:25 -0700 (PDT)
 Received: from airbuntu (host109-151-228-137.range109-151.btcentralplus.com. [109.151.228.137])
-        by smtp.gmail.com with ESMTPSA id l12-20020a5d674c000000b0030ae53550f5sm7845395wrw.51.2023.09.16.12.38.47
+        by smtp.gmail.com with ESMTPSA id y15-20020a5d470f000000b0031981c500aasm7885231wrq.25.2023.09.16.12.49.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Sep 2023 12:38:47 -0700 (PDT)
-Date:   Sat, 16 Sep 2023 20:38:46 +0100
+        Sat, 16 Sep 2023 12:49:24 -0700 (PDT)
+Date:   Sat, 16 Sep 2023 20:49:23 +0100
 From:   Qais Yousef <qyousef@layalina.io>
 To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Lukasz Luba <lukasz.luba@arm.com>
-Subject: Re: [RFC PATCH 0/7] sched: cpufreq: Remove magic margins
-Message-ID: <20230916193846.ewjie23c4vtf4edn@airbuntu>
+Subject: Re: [RFC PATCH 1/7] sched/pelt: Add a new function to approximate
+ the future util_avg value
+Message-ID: <20230916194923.4sijts6a56jxbava@airbuntu>
 References: <20230827233203.1315953-1-qyousef@layalina.io>
- <20230907130805.GE10955@noisy.programming.kicks-ass.net>
- <20230908001725.mtqbse3xwhzvo5qp@airbuntu>
- <44fc6d03-c663-53de-e4f7-e56687c5718d@arm.com>
- <20230908140757.haewcuwsumphcv7p@airbuntu>
- <356ec193-5c89-4f7e-5e43-d600dff68cf9@arm.com>
+ <20230827233203.1315953-2-qyousef@layalina.io>
+ <8f63efa6-f9d1-9b1c-7737-4094f6acfc62@arm.com>
+ <20230906211936.yqejc25czc6tddm6@airbuntu>
+ <47a11e4e-d349-7d98-7006-4bf08a53c0cf@arm.com>
+ <20230910195832.pncjsqmkepichly6@airbuntu>
+ <45548b21-280e-7f94-0b53-f2dcab6ccb5e@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <356ec193-5c89-4f7e-5e43-d600dff68cf9@arm.com>
+In-Reply-To: <45548b21-280e-7f94-0b53-f2dcab6ccb5e@arm.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,86 +81,74 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/12/23 19:18, Dietmar Eggemann wrote:
-> On 08/09/2023 16:07, Qais Yousef wrote:
-> > On 09/08/23 09:40, Dietmar Eggemann wrote:
-> >> On 08/09/2023 02:17, Qais Yousef wrote:
-> >>> On 09/07/23 15:08, Peter Zijlstra wrote:
-> >>>> On Mon, Aug 28, 2023 at 12:31:56AM +0100, Qais Yousef wrote:
+On 09/13/23 19:22, Dietmar Eggemann wrote:
+> On 10/09/2023 21:58, Qais Yousef wrote:
+> > On 09/07/23 13:12, Dietmar Eggemann wrote:
+> >> On 06/09/2023 23:19, Qais Yousef wrote:
+> >>> On 09/06/23 14:56, Dietmar Eggemann wrote:
+> >>>> On 28/08/2023 01:31, Qais Yousef wrote:
 > 
 > [...]
 > 
-> >>> And what was a high end A78 is a mid core today. So if you look at today's
-> >>> mobile world topology we really have a tiy+big+huge combination of cores. The
-> >>> bigs are called mids, but they're very capable. Fits capacity forces migration
-> >>> to the 'huge' cores too soon with that 80% margin. While the 80% might be too
-> >>> small for the tiny ones as some workloads really struggle there if they hang on
-> >>> for too long. It doesn't help that these systems ship with 4ms tick. Something
-> >>> more to consider changing I guess.
-> >>
-> >> If this is the problem then you could simply make the margin (headroom)
-> >> a function of cpu_capacity_orig?
+> >> Another thing ... I guess if you call accumulate_sum with delta the PELT
+> >> machinery assumes `delta = now - sa->last_update_time` which means you
+> >> would have to use `clock_pelt + TICK_USEC` as delta.
 > > 
-> > I don't see what you mean. instead of capacity_of() but keep the 80%?
+> > Right.
 > > 
-> > Again, I could be delusional and misunderstanding everything, but what I really
-> > see fits_capacity() is about is misfit detection. But a task is not really
-> > misfit until it actually has a util above the capacity of the CPU. Now due to
-> > implementation details there can be a delay between the task crossing this
-> > capacity and being able to move it. Which what I believe this headroom is
-> > trying to achieve.
+> > The way I understood it is that at TICK we should do update_load_avg() which
+> > would call __update_load_sum() which uses
 > > 
-> > I think we can better define this by tying this headroom to the worst case
-> > scenario it takes to actually move this misfit task to the right CPU. If it can
-> > continue to run without being impacted with this delay and crossing the
-> > capacity of the CPU it is on, then we should not trigger misfit IMO.
+> > 	delta = now - sa->last_update_time
+> > 
+> > which passes this delta to accumulate_sum()
+> > 
+> > I can see we are not very accurate since there will be a small additional time
+> > besides TICK_USEC that we are not accounting for. But I can't see how this can
+> > cause a big error.
+> > 
+> > 	predicted (assumed) tick time/delta
+> > 
+> > 		sa->last_update_time = now
+> > 		tick_time = TICK_USEC + now
+> > 
+> > 		delta = tick_time - sa->last_update_time
+> > 		delta = TICK_USEC + now - now
+> > 		delta = TICK_USEC
+> > 
+> > 	but actual tick time/delta
+> > 
+> > 		sa->last_update_time = now - x
+> > 		tick_time = TICK_USEC + now
+> > 
+> > 		delta = tick_time - sa->last_update_time
+> > 		delta = TICK_USEC + now - (now - x)
+> > 		delta = TICK_USEC + x
+> > 
+> > So the delta I am using might be slightly shorter than it should be.
+> > 
+> > IIUC, what you're saying that the `x` in my equation above is clock_pelt,
+> > right?
 > 
+> No, I was wrong here. Calling accumulate_sum with `delta = TICK_USEC` is
+> fine.
 > 
-> Instead of:
+> accumulate_sum() will accrue `sa->util.sum` and ___update_load_avg()
+> will then adjust `sa->util_avg` accordingly.
 > 
->   fits_capacity(unsigned long util, unsigned long capacity)
-> 
->       return approximate_util_avg(util, TICK_USEC) < capacity;
-> 
-> just make 1280 in:
-> 
->   #define fits_capacity(cap, max) ((cap) * 1280 < (max) * 1024)
-> 
-> dependent on cpu's capacity_orig or the capacity diff to the next higher
-> capacity_orig.
-> 
-> Typical example today: {little-medium-big capacity_orig} = {128, 896, 1024}
-> 
-> 896÷128 = 7
-> 
-> 1024/896 = 1.14
-> 
-> to achieve higher margin on little and lower margin on medium.
+> delta should be 4000 on Arm64 boards so you will cross period
+> boundaries. In case `delta < 1024` you might want to not call
+> ___update_load_avg() to be in pair with __update_load_avg_cfs_rq().
 
-I am not keen on this personally. I think these numbers are random to me and
-why they help (or not help) is not clear to me at least.
+You mean *not* call, or actually *do* call ___update_load_avg() if delta
+< 1024? I am certainly not calling it now and I think you're suggesting to
+actually call it when period is less than 1024.
 
-I do believe that the only reason why we want to move before a task util
-crosses the capacity of the CPU is tied down to the misfit load balance to be
-able to move the task. Because until the task crosses the capacity, it is
-getting its computational demand per our PELT representation. But since load
-balance is not an immediate action (especially on our platforms where it is
-4ms, something I hope we can change); we need to preemptively exclude the CPU
-as a misfit when we know the task will get 'stuck' on this CPU and not get its
-computational demand (as per our representation of course).
-
-I think this removes all guess work and provides a very meaningful decision
-making process that I think will scale transparently so we utilize our
-resources the best we can.
-
-We can probably optimize the code to avoid the call to approximate_util_avg()
-if this is a problem.
-
-Why do you think the ratio of cpu capacities gives more meaningful method to
-judge misfit?
+This area is not my strength, so I do sure appreciate any suggestion to make it
+better! :-) I will look into that for next version.
 
 
-Thanks!
+Many thanks!
 
 --
 Qais Yousef
