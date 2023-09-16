@@ -2,211 +2,209 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B25787A2A55
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Sep 2023 00:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D737A2C39
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Sep 2023 02:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237579AbjIOWRW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Sep 2023 18:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50472 "EHLO
+        id S238339AbjIPAc6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Sep 2023 20:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237798AbjIOWQz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 18:16:55 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C072120
-        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 15:16:47 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-403004a96a4so29380465e9.3
-        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 15:16:47 -0700 (PDT)
+        with ESMTP id S238758AbjIPAcm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Sep 2023 20:32:42 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606D8CF0
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 17:32:05 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-5008d16cc36so4512051e87.2
+        for <linux-pm@vger.kernel.org>; Fri, 15 Sep 2023 17:32:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google; t=1694816206; x=1695421006; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Hx79jYqQlletaTAU2xU1OGCLoHI/owAdHUz3GOVb0BY=;
-        b=Gtjg1rBqw7HUDM1z9gyB0QjEaNvMlSXmppTj/cKqP4Rgp497Agqa+lDFKFVnENXEOC
-         TWMv3rpShflNhkEs52FqF02oWSrkDNeKP0K4FHSabGSat0pNB+iXXcEzGu/DM1U3E3xR
-         QSaOtgmiJgGN3I0JT7Oqiq0SOMD+l9yNFRpI9L8fGkQ9++SNw5qnyT8imkGYuATC8LIg
-         Nahk214LxCgj6JKUoRCguszo906Kzayke3wGUNtUxDObm7mKFlQ0L/U8Dl+iHfTC4+Oy
-         lh06B8JCFqnMGm2eMak6ZocuJjPBAXnSAAuDTSI4m9mw2jHWAguSr8ugQxxCWY5yBgR8
-         RL9w==
+        d=linaro.org; s=google; t=1694824323; x=1695429123; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eFejzb7aN7MekbjpnaQzLFApoAUU++VrN/USYsgbcQw=;
+        b=rlFnGVmC5xdzXveC2Dfu9JWethVf4ut4rEGvzKVeRY4XzlcJjOR2Qforbf6ZWyjtOS
+         OmxZRD2nb55wOOUPNtgFNT475BHRZnCanyzqsz1DFoO0pMVVRayhHE2lhykS9suAf3Hb
+         sz/uCBRCwvmkBNnqDx4PQyCkaMv3lKMb7Y0ofFgxpVeIKVIHDcytdnzFQuLAlIPnjgix
+         qmQUC/9DVw507A4otzbjrtmEJ/xfKI4iZ4IF1jnRVYBCGDsBY/SrpU4u+7sOnSJPeb47
+         Qdq07r9T69XQ0I5NZoAUti3UGQozrE6oWI0bxopMD233Ek+fSZodw20J8Hry4qAfdVqO
+         Q1eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694816206; x=1695421006;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Hx79jYqQlletaTAU2xU1OGCLoHI/owAdHUz3GOVb0BY=;
-        b=H07Vgkozb48vvQu49q8C1uGRa+k2H0kHXDxUq4PlE/cW7uIKaYandq//ntcBNzWRPa
-         grGou2BXrLxBe/rn5G1fau7UySBa+s9IBGEStmQ9zsl9LSfZchB5WZXGfWSXZ5/OUv7B
-         nuAfBuY9aEMlIt3osKo/bLy2d7LPz8xjHQjzAXacR9LM2ScmIDm30WBiCn3Y22cJVB6X
-         St4yN7epjJUj3K53vxARpJfQ+1m2kkhbaufn5ooZaQoe25wfGto+MTna+b50Xq4usgq7
-         dox304gQrGyFDa9TmjqwyULfWy5wNYp8EwDp1OKN/0HLMEmE4WZv+XMIv9Carc0VQGUV
-         pCSA==
-X-Gm-Message-State: AOJu0YzqKJRJA6x3S3CW4WCKfW7aPaELZUJ/ZT5SXFbL0uhT5QkrAcTq
-        R1H/E9Xca0QGehwvkz6fB5k+e9zX+7CkUJvbBqhX1Q==
-X-Google-Smtp-Source: AGHT+IGDU8Ph5l9pRDGaOWN67P4arFu4uLsx88HR4DrUBMmxtv4+qgesE2QUUwC/mduyZtqoi9sUjLginqkP4oLMqCw=
-X-Received: by 2002:a05:600c:ac3:b0:401:519:c9 with SMTP id
- c3-20020a05600c0ac300b00401051900c9mr2699220wmr.13.1694816205688; Fri, 15 Sep
- 2023 15:16:45 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1694824323; x=1695429123;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eFejzb7aN7MekbjpnaQzLFApoAUU++VrN/USYsgbcQw=;
+        b=v1Bkgihd1WMsG+FsS2oNSnTMP3/leor+qvGLftQJPC0TwyfUQhDuWjn546b09B8sFw
+         Alr0ywpqJKZq4V1NbbV3PDwlVJmAL+ovb0JNIjqDOhM9IQyErxwWCbZ8MGseOhyNR67A
+         k7bDzg0GP4QUrfOy9zSiRplBNlYcjCp97Kqww8B4RgA9blp9InvuZ5DGXb8P+wFUAsJ7
+         6362G4atRxfvktQIj94mx2ZqEPZTGFIBa/v777McHC3Ii7WxNZKDmucm4Bns1ovpi8qi
+         qe5/f4ksrwL+2K8b1mOtZmbsRGo3hAVWan2ZsEix2kB87fPmBSvTxfQ9v6nYvkOJQL9C
+         jngg==
+X-Gm-Message-State: AOJu0YyK/6/UJ4LzWDoeMSJMBsCkghvz+Z3rthHxFIQem+c4jf6+UYvu
+        HD34y3C/8zcyj4ouVX66eMFUOw==
+X-Google-Smtp-Source: AGHT+IFKywQ0QSSHnMIVPF9QpyEA4OIklMp5NJfilO47p2pVro3VF9gq5S41Ly7S1t2cKgDKHbr5eQ==
+X-Received: by 2002:a05:6512:3053:b0:502:fe0a:af23 with SMTP id b19-20020a056512305300b00502fe0aaf23mr871303lfb.56.1694824322909;
+        Fri, 15 Sep 2023 17:32:02 -0700 (PDT)
+Received: from [10.167.154.1] (178235177186.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.186])
+        by smtp.gmail.com with ESMTPSA id lw28-20020a170906bcdc00b00992f309cfe8sm3083735ejb.178.2023.09.15.17.32.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Sep 2023 17:32:02 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Date:   Sat, 16 Sep 2023 02:31:59 +0200
+Subject: [PATCH] psy: mm8013: Add more properties
 MIME-Version: 1.0
-References: <20230915104057.132210-1-swapnil.sapkal@amd.com>
- <20230915104057.132210-3-swapnil.sapkal@amd.com> <00b201d9e819$b2447e80$16cd7b80$@telus.net>
- <2fd025a9-52f3-4922-99cf-82355b0e35fe@amd.com>
-In-Reply-To: <2fd025a9-52f3-4922-99cf-82355b0e35fe@amd.com>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Fri, 15 Sep 2023 15:16:37 -0700
-Message-ID: <CAAYoRsUhusVzOnaGHjPoMWYy2_iPFAjFLoCrj6vSX26EHNWGiw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] tools/power/x86/intel_pstate_tracer: Use pygnuplot
- package for Gnuplot
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Swapnil Sapkal <swapnil.sapkal@amd.com>
-Cc:     rafael.j.wysocki@intel.com, Ray.Huang@amd.com, li.meng@amd.com,
-        shuah@kernel.org, sukrut.bellary@gmail.com, gautham.shenoy@amd.com,
-        wyes.karny@amd.com, Perry.Yuan@amd.com, zwisler@chromium.org,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230916-topic-mm8013_2-v1-1-02495e07fca0@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAH73BGUC/x2NWwqDMBAAryL77UIe2EavIiJJutYFjZK0Ioh37
+ 9LPGRjmgkKZqUBXXZDp4MJbEtB1BXH26U3IL2EwyljV6gd+tp0jrqtT2o4Gmxgs6eDUc3IgUfC
+ FMGSf4ixZ+i6LyD3TxOf/0g/3/QOxFKx3dQAAAA==
+To:     Konrad Dybcio <konradybcio@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Doug Smythies <dsmythies@telus.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1694824321; l=4622;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=JOfv0hbEyN+O/H2UYL7rdGfPUfoOoGKiXPXc/AHKu+Q=;
+ b=FZlrDfsne6K8LYmo2iIsa7Un63cjDU+SbJlN3HemBbk73ocqTfmv0BP/h5oW7KxAQ/Wq1Bm2t
+ kjoAH/mKJ61CjkWdckHOgZCe5QWrbwZMitGXi46MFCjnc3PV8jCjbCW
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 15, 2023 at 2:31=E2=80=AFPM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
-> On 9/15/2023 16:15, Doug Smythies wrote:
-> > On 2023.09.15 03:41 Swapnil Sapkal wrote:
-> >
-> >> In intel_pstate_tracer.py, Gnuplot is used to generate 2D plots.
-> >> In current implementation this tracer gives error while importing
-> >> the module because Gnuplot is imported from package Gnuplot-py which
-> >> does not support python 3.x. Fix this by using pygnuplot package to
-> >> import this module.
-> >
-> > As described in the prerequisites section, the package name is distribu=
-tion dependant.
-> > On my distribution the original package name is phython3-gnuplot,
-> > and it is working fine.
-> >
-> > sys.version_info(major=3D3, minor=3D8, micro=3D10, releaselevel=3D'fina=
-l', serial=3D0)
-> >
-> > I don't currently have python3-pygnuplot installed, and so this patch b=
-reaks
-> > the  intel_pstate_tracer for me.
-> >
-> > So, I installed the python3-pygnuplot package, and it still didn't work=
-, as there
-> > still wasn't a pygnuplot module to import.
-> > So, I found something called PyGnuplot.py and so changed to that and go=
-t further.
-> > But then it got upset with:
-> >
-> >    File "./intel_pstate_tracer.py.amd", line 298, in common_gnuplot_set=
-tings
-> >      g_plot =3D gnuplot.Gnuplot(persist=3D1)
-> > NameError: name 'gnuplot' is not defined
-> >
-> > I gave up and returned to the unpatched
-> > intel_pstate_tracer.py
-> > And checked that is still worked fine. It did.
-> >
-> > So, I do not accept this proposed patch.
-> >
-> > Not really related, but for a few years now I have been meaning to
-> > change the minimum python version prerequisite to >=3D 3.0 and
-> > to change the shebang line from this:
-> >
-> > #!/usr/bin/env python
-> >
-> > To this:
-> >
-> > #!/usr/bin/env python3
-> >
-> > I have to use the latter version on my distro.
-> > Back when I looked into it, things were inconsistent,
-> > so I didn't know what to do. The kernel tree has 52 .py files
-> > of the latter shebang and 11 of the former.
-> >
-> > ... Doug
->
-> Presumably this is the one that Swapnil intended:
->
-> https://pypi.org/project/py-gnuplot/
+While scanning the internet for MM8013 PDFs, I found one for a different
+IC from Mitsumi, MM8118 at [1]. It turned out however, that when you
+search through the PDF, the MM8118 text has an invsible text layer
+containing "MM8013" underneath..
 
-Yes, I found that earlier.
-For my part of it, I do not want to use any out-of-distro package.
+With some elbow grease, I was able to confirm that most of the registers
+match between the two ICs. Based on that finding, introduce live battery
+voltage readout, hw-decided charge behavior readout and max current
+readout. Also, expand the existing POWER_SUPPLY_HEALTH reporting.
 
-> It requires python3, so I think if upgrading to this one the script does
-> need to be switched to python3.  Besides the shebang, you should also
-> use a helper like 2to3 to look for any other changes.
+[1] https://product.minebeamitsumi.com/en/product/category/ics/battery/fuel_gauge/parts/download/__icsFiles/afieldfile/2023/07/12/1_download_01_12.pdf
 
-I already did the python 3 patch in January, 2020:
-commit e749e09db30c38f1a275945814b0109e530a07b0
-tools/power/x86/intel_pstate_tracer: changes for python 3 compatibility
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+foobar
+uevent reports from the new props:
 
-I haven't had any issues since, shebang aside.
+POWER_SUPPLY_CHARGE_BEHAVIOUR=auto
+POWER_SUPPLY_CHARGE_NOW=7302000
+POWER_SUPPLY_CURRENT_MAX=1898000
+---
+ drivers/power/supply/mm8013.c | 45 +++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 43 insertions(+), 2 deletions(-)
 
-... Doug
+diff --git a/drivers/power/supply/mm8013.c b/drivers/power/supply/mm8013.c
+index bd8d54d6597f..ddac40ef9ae5 100644
+--- a/drivers/power/supply/mm8013.c
++++ b/drivers/power/supply/mm8013.c
+@@ -17,13 +17,21 @@
+  #define MM8013_FLAG_OTC		BIT(15)
+  #define MM8013_FLAG_OTD		BIT(14)
+  #define MM8013_FLAG_BATHI		BIT(13)
++ #define MM8013_FLAG_BATLOW		BIT(12)
++ #define MM8013_FLAG_CHG_INH		BIT(11)
+  #define MM8013_FLAG_FC			BIT(9)
+  #define MM8013_FLAG_CHG		BIT(8)
++ #define MM8013_FLAG_OCC		BIT(6)
++ #define MM8013_FLAG_ODC		BIT(5)
++ #define MM8013_FLAG_OT			BIT(4)
++ #define MM8013_FLAG_UT			BIT(3)
+  #define MM8013_FLAG_DSG		BIT(0)
+ #define REG_FULL_CHARGE_CAPACITY	0x0e
++#define REG_NOMINAL_CHARGE_CAPACITY	0x0c
+ #define REG_AVERAGE_CURRENT		0x14
+ #define REG_AVERAGE_TIME_TO_EMPTY	0x16
+ #define REG_AVERAGE_TIME_TO_FULL	0x18
++#define REG_MAX_LOAD_CURRENT		0x1e
+ #define REG_CYCLE_COUNT			0x2a
+ #define REG_STATE_OF_CHARGE		0x2c
+ #define REG_DESIGN_CAPACITY		0x3c
+@@ -63,8 +71,11 @@ static int mm8013_checkdevice(struct mm8013_chip *chip)
+ 
+ static enum power_supply_property mm8013_battery_props[] = {
+ 	POWER_SUPPLY_PROP_CAPACITY,
++	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
+ 	POWER_SUPPLY_PROP_CHARGE_FULL,
+ 	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
++	POWER_SUPPLY_PROP_CHARGE_NOW,
++	POWER_SUPPLY_PROP_CURRENT_MAX,
+ 	POWER_SUPPLY_PROP_CURRENT_NOW,
+ 	POWER_SUPPLY_PROP_CYCLE_COUNT,
+ 	POWER_SUPPLY_PROP_HEALTH,
+@@ -92,6 +103,16 @@ static int mm8013_get_property(struct power_supply *psy,
+ 
+ 		val->intval = regval;
+ 		break;
++	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
++		ret = regmap_read(chip->regmap, REG_FLAGS, &regval);
++		if (ret < 0)
++			return ret;
++
++		if (regval & MM8013_FLAG_CHG_INH)
++			val->intval = POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE;
++		else
++			val->intval = POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO;
++		break;
+ 	case POWER_SUPPLY_PROP_CHARGE_FULL:
+ 		ret = regmap_read(chip->regmap, REG_FULL_CHARGE_CAPACITY, &regval);
+ 		if (ret < 0)
+@@ -106,6 +127,20 @@ static int mm8013_get_property(struct power_supply *psy,
+ 
+ 		val->intval = 1000 * regval;
+ 		break;
++	case POWER_SUPPLY_PROP_CHARGE_NOW:
++		ret = regmap_read(chip->regmap, REG_NOMINAL_CHARGE_CAPACITY, &regval);
++		if (ret < 0)
++			return ret;
++
++		val->intval = 1000 * regval;
++		break;
++	case POWER_SUPPLY_PROP_CURRENT_MAX:
++		ret = regmap_read(chip->regmap, REG_MAX_LOAD_CURRENT, &regval);
++		if (ret < 0)
++			return ret;
++
++		val->intval = -1000 * (s16)regval;
++		break;
+ 	case POWER_SUPPLY_PROP_CURRENT_NOW:
+ 		ret = regmap_read(chip->regmap, REG_AVERAGE_CURRENT, &regval);
+ 		if (ret < 0)
+@@ -125,9 +160,15 @@ static int mm8013_get_property(struct power_supply *psy,
+ 		if (ret < 0)
+ 			return ret;
+ 
+-		if (regval & MM8013_FLAG_BATHI)
++		if (regval & MM8013_FLAG_UT)
++			val->intval = POWER_SUPPLY_HEALTH_COLD;
++		else if (regval & (MM8013_FLAG_ODC | MM8013_FLAG_OCC))
++			val->intval = POWER_SUPPLY_HEALTH_OVERCURRENT;
++		else if (regval & (MM8013_FLAG_BATLOW))
++			val->intval = POWER_SUPPLY_HEALTH_UNSPEC_FAILURE;
++		else if (regval & MM8013_FLAG_BATHI)
+ 			val->intval = POWER_SUPPLY_HEALTH_OVERVOLTAGE;
+-		else if (regval & (MM8013_FLAG_OTD | MM8013_FLAG_OTC))
++		else if (regval & (MM8013_FLAG_OT | MM8013_FLAG_OTD | MM8013_FLAG_OTC))
+ 			val->intval = POWER_SUPPLY_HEALTH_OVERHEAT;
+ 		else
+ 			val->intval = POWER_SUPPLY_HEALTH_GOOD;
 
-> There were 97 hits for 'gnuplot' at pypi.  2 stood out but at least in
-> the case of gnuplot based stuff, I think it's worth dropping
-> a comment that links back to pypi page for the intended package.
->
-> Another alternative is to include a 'requirements.txt' file that pip can
-> pick up.
->
-> https://pip.pypa.io/en/stable/reference/requirements-file-format/
->
-> >> Signed-off-by: Swapnil Sapkal <swapnil.sapkal@amd.com>
-> >> ---
-> >> tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py      | 1 -
-> >> tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py | 4 ++--
-> >> 2 files changed, 2 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py b/t=
-ools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
-> >> index 2448bb07973f..14f8d81f91de 100755
-> >> --- a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
-> >> +++ b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
-> >> @@ -27,7 +27,6 @@ import re
-> >>   import signal
-> >>   import sys
-> >>   import getopt
-> >> -import Gnuplot
-> >>   from numpy import *
-> >>   from decimal import *
-> >>   sys.path.append(os.path.join(os.path.dirname(__file__), '../intel_ps=
-tate_tracer'))
-> >> diff --git a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.p=
-y
-> > b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-> >> index ec3323100e1a..68412abdd7d4 100755
-> >> --- a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-> >> +++ b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-> >> @@ -32,7 +32,7 @@ import re
-> >>   import signal
-> >>   import sys
-> >> import getopt
-> >> -import Gnuplot
-> >> +from pygnuplot import gnuplot
-> >>   from numpy import *
-> >>   from decimal import *
-> >>
-> >> @@ -295,7 +295,7 @@ def common_all_gnuplot_settings(output_png):
-> >> def common_gnuplot_settings():
-> >>       """ common gnuplot settings. """
-> >>
-> >> -    g_plot =3D Gnuplot.Gnuplot(persist=3D1)
-> >> +    g_plot =3D gnuplot.Gnuplot(persist=3D1)
-> >> #   The following line is for rigor only. It seems to be assumed for .=
-csv files
-> >>       g_plot('set datafile separator \",\"')
-> >>       g_plot('set ytics nomirror')
-> >> --
-> >> 2.34.1
+---
+base-commit: 566750b17f1ee43350ba2c85a3bb2d9e28ba9c04
+change-id: 20230916-topic-mm8013_2-5cb3e1b807f8
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
