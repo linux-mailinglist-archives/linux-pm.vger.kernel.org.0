@@ -2,194 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 247D47A326F
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Sep 2023 22:31:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B16D7A3344
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Sep 2023 00:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232283AbjIPUab (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 Sep 2023 16:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
+        id S230476AbjIPWnP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 16 Sep 2023 18:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjIPUaL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Sep 2023 16:30:11 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C44CE5
-        for <linux-pm@vger.kernel.org>; Sat, 16 Sep 2023 13:30:05 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-31dd10c2b8bso2994061f8f.3
-        for <linux-pm@vger.kernel.org>; Sat, 16 Sep 2023 13:30:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1694896203; x=1695501003; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6Mv4crFclQdEkZGsP8km6uD1B/Et729oV33YEvfH1Us=;
-        b=mmbyU89odPstwynsAjdTzeZ0rxhsX9aWML8hUKhYx4mZT+r3eYHjBtmsRtIyrTZ5RN
-         6KjHOFrt9Lc6C3aglTOSNEHwOP2miysik6VBUqppJLIKigHxRRDh2eUnlVWqDhZ+dbhi
-         1uNiPEQVH7Nw9T4RoxY215JHbPUK1U388j1aaqEi35bkx5iP/Bm3br5hni+q4pBukBau
-         ASRbpQmAOnhatcmng7lIA06or+0yU+VdNjU4zVkE60IWywzjWgNbI8sdRxggM6s/pppj
-         rXhhaXRiJVMMD6x8Ggqm6BW1AWLnNDKwzaiCuImZhlQQo9c+WURATGT1wl/iypDtOzos
-         3BKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694896203; x=1695501003;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6Mv4crFclQdEkZGsP8km6uD1B/Et729oV33YEvfH1Us=;
-        b=gMyoY5c3BrSseZOc/vsStvO9kGyuSLg7glu4ufID7t6AzQvPuOOO3cRdXo32R9HzhN
-         PPRiuLDNi1UoJCa1JkSmV8ofr3l9wYg7LvBIFpYHfbsTEU1Rn/DmikBVozMgXoKuJJbd
-         sj1YmbLnrlt3qzI6WowxiYxiwwXxCdsZzJgkX+PonTNa9QHZzd8dCCNpXYX9pf2hmxOG
-         AeluHAAkUuxqYMMK+slE4YUS6xLntrEhg6FCQGVX4kZg9xpbVyJBr+PhWnWswBWIJSvM
-         dLp/N9zRELGY6ECDtu6YbxQM/z2nTcRaaChJUJsMyYjDIXnAEB/cmEUE3xiWZnFn3V89
-         +G3Q==
-X-Gm-Message-State: AOJu0YwgGn120opcemX43Jrb8E52vF0EiEEi8bR80khK9rS6nkjGGrWf
-        egVQ70qq9Ioz1RWgqNbbqY91gg==
-X-Google-Smtp-Source: AGHT+IFhZjAVFGkFjpwnV99v5Q1I2ryBCXVW3gFbSyjtkwV3ZkbK8w+QJzpwIdshXWfKVm7OG77/yQ==
-X-Received: by 2002:a5d:484a:0:b0:319:f9d6:a769 with SMTP id n10-20020a5d484a000000b00319f9d6a769mr4118351wrs.45.1694896202693;
-        Sat, 16 Sep 2023 13:30:02 -0700 (PDT)
-Received: from airbuntu (host109-151-228-137.range109-151.btcentralplus.com. [109.151.228.137])
-        by smtp.gmail.com with ESMTPSA id q2-20020adff782000000b00317f70240afsm7940655wrp.27.2023.09.16.13.30.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Sep 2023 13:30:02 -0700 (PDT)
-Date:   Sat, 16 Sep 2023 21:30:00 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Subject: Re: [PATCH 2/4] sched: cpufreq: Fix apply_dvfs_headroom() escaping
- uclamp constraints
-Message-ID: <20230916203000.ulngn5huefndb2cq@airbuntu>
-References: <20230820210640.585311-1-qyousef@layalina.io>
- <20230820210640.585311-3-qyousef@layalina.io>
- <7839dd5f-e7fd-7065-934d-436d012ac9d6@arm.com>
- <20230826200829.gnha7xcrjbyipjr2@airbuntu>
- <ecbd165e-4213-8dd4-d5b5-309256cc64a9@arm.com>
+        with ESMTP id S231673AbjIPWm7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Sep 2023 18:42:59 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3E9CD1;
+        Sat, 16 Sep 2023 15:42:54 -0700 (PDT)
+Received: from mercury (unknown [185.254.75.45])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1330666072F0;
+        Sat, 16 Sep 2023 23:42:53 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1694904173;
+        bh=WXk/aZaoMVg5RvFmSYCLfLhSZ+wNpAQpcnkQpMiVggE=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=PhNX2dsAzbV+NOKAxX+fXov0jISr1GPbkTm60cryzZ0gvldwkZnlMRek4+Y3m1k2P
+         Qs04CJ+mtN5y5a/XXoOPEg1HGvMVLWOM9AG0Bz+aCbi+JTqFoFtIqmoEolpDhYr8mD
+         bxu8OlsmhBBcRYpt+OzGjSg8LWKHWvwm8MW2jvoTC/g/UsVdAOoq1bfdUeRLkqb2ng
+         n6aPWcdTVENRoaa6UE9FuOj8WVDI3HYA+9xpfFBC0v3wRAOMsqjKANtz22N/eUMFAZ
+         N1c+Kgu46b9UbL7tI2hb12hxsn/Ukn9kPYjbTutScYOBBYUZTHhxXwWKRe6P7dQCCZ
+         2vvl7ryr7ieRw==
+Received: by mercury (Postfix, from userid 1000)
+        id 45A111060450; Sun, 17 Sep 2023 00:42:49 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Konrad Dybcio <konradybcio@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230916-topic-mm8013_2-v1-1-02495e07fca0@linaro.org>
+References: <20230916-topic-mm8013_2-v1-1-02495e07fca0@linaro.org>
+Subject: Re: [PATCH] psy: mm8013: Add more properties
+Message-Id: <169490416926.888543.10300420943338889530.b4-ty@collabora.com>
+Date:   Sun, 17 Sep 2023 00:42:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ecbd165e-4213-8dd4-d5b5-309256cc64a9@arm.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/12/23 16:34, Dietmar Eggemann wrote:
 
-> No that's not what I wanted to say here.
+On Sat, 16 Sep 2023 02:31:59 +0200, Konrad Dybcio wrote:
+> While scanning the internet for MM8013 PDFs, I found one for a different
+> IC from Mitsumi, MM8118 at [1]. It turned out however, that when you
+> search through the PDF, the MM8118 text has an invsible text layer
+> containing "MM8013" underneath..
 > 
-> I wanted to highlight the different treatment of `(1) a task with
-> (natural) util = 800` and `(2) a task with uclamp_max = 800`.
+> With some elbow grease, I was able to confirm that most of the registers
+> match between the two ICs. Based on that finding, introduce live battery
+> voltage readout, hw-decided charge behavior readout and max current
+> readout. Also, expand the existing POWER_SUPPLY_HEALTH reporting.
 > 
-> (1) util = 800
-> 
-> util = (1.25 * 800 * (1024 - irq) / 1024 + ...
-> 
->         <-      ->
->         uclamped(cfs+rt+headroom(cfs+rt))
-> 
-> 
-> (2) uclamp_max = 800
-> 
-> util = (800 * (1024 - irq) / 1024 + ...
-> 
->         <->
->         uclamped(cfs+rt+headroom(cfs+rt))
-> 
-> So for (1) the scheduler would ask for more than in (2).
+> [...]
 
-Yes, which is the intention IMHO. If they behave the same, then uclamp_max is
-not doing anything. And really this is the critical region in the system as
-this is where the expensive OPPs lie.
+Applied, thanks!
 
-> 
-> That's essentially the same question which was raised here:
-> 
-> https://lkml.kernel.org/r/CAKfTPtDY48jpO+b-2KXawzxh-ty+FMKX6YUXioNR7kpgO=ua6Q@mail.gmail.com
-> 
-> >>> Note that similar problem exist for uclamp_min. If util was 50, and
-> >>> uclamp_min is 100. Since we apply_dvfs_headroom() after apply uclamp
-> >>> constraints, we'll end up with util of 125 instead of 100. IOW, we get
-> >>> boosted twice, first time by uclamp_min, and second time by dvfs
-> >>> headroom.
-> >>
-> >> I see what you want to change here but:
-> >>
-> >> So far we have `util -> uclamp -> map_util_to_perf()`
-> > 
-> > :-O
-> > 
-> > So when I set the system uclamp_max to 800 it will still run at max; and this
-> > is normal?!!
-> 
-> No that's an issue (A) as well. But the diff between (1) and (2) is IMHO a
-> new issue introduced by this patch-set.
+[1/1] psy: mm8013: Add more properties
+      commit: e39257cde7e8ceec6165f54b6e20c72e2862a0b1
 
-It is also the problem to fix :-)
+Best regards,
+-- 
+Sebastian Reichel <sebastian.reichel@collabora.com>
 
-> 
-> >> which is fine when we see uclamp as an entity which constrains util, not
-> >> the util after being mapped to a capacity constraint.
-> > 
-> > -ENOPARSE.
-> 
-> What I meant is 'clamping the util' before scheduler hands over to
-> 'cpufreq' is fine:
-> 
->     util -> uclamp -> map_util_to_perf()
->                
->     scheduler    -->|<-- cpufreq
-> 
-> I do understand that you guys are already discussing a new
-> cpufreq_give_me_freq_for_this_utilization_ctx() between EM and CPUfreq
-> in the other thread of this patch to maybe sort out (A).
-
-This will help with abstraction. But behavior wise, I still think that if
-a task (or a cgroup, the system) has uclamp_max to 800, then we should not run
-faster than this because of dvfs headroom.
-
-If we don't do this then max performance is effectively mapped at anything at
-800 and above. And likely less than that.
-
-For example if
-
-	util@OPP[Fmax-1] = 950
-
-then any util value at
-
-	util = 950 * 0.8 = 760
-
-will saturate the system and run at Fmax, because all values from above 950
-will map to Fmax, and because of the headroom this becomes all values at 760 or
-above.
-
-This mean from user's perspective uclamp_min and uclamp_max is from 0-760 on
-that system. But the abstraction we're providing is that the performance range
-is from 0-1024.
-
-If uclamp_min is set to 512 and the task has a util of 100, why should we run
-at 512*1.25?
-
-Similarly if uclamp_max wants to cap the task/cgroup/system from consuming the
-top resources, why it needs the 1.25 headroom? If there are two tasks running
-on the CPU and one of them is not capped, then yeah the headroom will be
-applied. But if the rq->uclamp[UCLAMP_MAX] = 800, then the vote from freq from
-this CPU should not exceed this. I don't see what the headroom is for in this
-case.
-
-As another example, do you expect a task that has a util of 1024 but uclamp_max
-= 800 to run at max or at an OPP equivalent to 800 which would be 2 or 3 below
-Fmax usually? The latter is the expectation from the interface. Users shouldn't
-need to know there's a dvfs headroom and cater for that when they set
-uclamp_max or uclamp_min.
-
-
-Thanks!
-
---
-Qais Yousef
