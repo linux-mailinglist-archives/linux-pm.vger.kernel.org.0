@@ -2,77 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B73C97A3255
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Sep 2023 21:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B8BD7A325B
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Sep 2023 21:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237149AbjIPTww (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 Sep 2023 15:52:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38744 "EHLO
+        id S232530AbjIPT4g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 16 Sep 2023 15:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235328AbjIPTwc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Sep 2023 15:52:32 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3EEA0
-        for <linux-pm@vger.kernel.org>; Sat, 16 Sep 2023 12:52:26 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-404573e6c8fso31701425e9.1
-        for <linux-pm@vger.kernel.org>; Sat, 16 Sep 2023 12:52:26 -0700 (PDT)
+        with ESMTP id S239298AbjIPT4V (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Sep 2023 15:56:21 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8FF1AB
+        for <linux-pm@vger.kernel.org>; Sat, 16 Sep 2023 12:56:15 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-40434d284f7so33302795e9.3
+        for <linux-pm@vger.kernel.org>; Sat, 16 Sep 2023 12:56:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1694893945; x=1695498745; darn=vger.kernel.org;
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1694894174; x=1695498974; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IhNW/yAMRmrajZxMDdyBHgnGcZcH1b5AIBqQBBveog8=;
-        b=EhnYTsEmVqVwCDknpMfvS1vZLsp85/guPMXpKHB8+c27aENqAlxbexqqfTIUiU9rvQ
-         BUk4yVLtIejPjsSxgl1Oft5lLNQ8La7P9SBikKa0na+oTgaFl89Qi5L7FYuRRorLvaz4
-         iHMNMYb6NPGQ3c/rHokcOyTK+JDSlJcLe69iYpLXI9XzvuE2Vdnq63Mrwr43nw/bmN8j
-         3smgW8zFQU2iDUB1WhMpUss9rSRwPHrNsTYVEL5O/uK9p+5omSGvNmYyP8lUwamdYzzf
-         kVTIrREeBwaFwAI3TPR1albof/RQYhGfgJySIThWhl9uaKm50R3vyeEr63kWs2HRa1XV
-         ALVg==
+        bh=aSRNOnwEQsZZMI8EIIn71RrWo2EfMJ2ZTlOi8DC8epM=;
+        b=sWzvC+xkAN09tmwdn6sxPM0OVO0vljZhyxtomJn1osWFSKmzTJuqgxBT2TBHcpQRw9
+         hW2RvbnCSD1YM1B8k7trfhP/FbB2aZrD2jn8b28VgIVaSrgiM2IkUNny5OxZ6adq2F/y
+         Cj3Om6daiJmYS2k3MepSPdr6ZzTAO6mBeSP/qQ5JOF9fZRsFaYsVwvCWd1mXh9lOI/GX
+         18tklEl9/cp5rmDh6YdxMK7l5SR1Bx1M8ZA53q9qETC2YilPOfLdME1fQBk35hEV8HbZ
+         uR2YKwSpoVfB1v2Yv45bcXCU2jYB31mrBBs/EbEyXglPkSnIioNJkJXyeP1yE/uNdX+l
+         SBiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694893945; x=1695498745;
+        d=1e100.net; s=20230601; t=1694894174; x=1695498974;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IhNW/yAMRmrajZxMDdyBHgnGcZcH1b5AIBqQBBveog8=;
-        b=vMYN9kCqPCIYha6leMC4Fw1qmWnZz2MDyBMuYUIpxSTI6jv57tWWLplQ4KSijPGBuD
-         3r5Okmp3lGFepNWBxvIpZbcV7/ccl+ATTUsYxLv4/D5joR0imSd49O4j6qMzuX9FoOx7
-         cgM4ysuah/8+6JeyiRiJDCfbPPtx7WW9jYpilIbjQKMAjj6RRlecPJYBAfWNyqyBQfv4
-         uNOO+nKd5Rlc/fhJhMf2fqisGHg3SujiRpqFXHBj74KwjtzBCaafgs2ATuJ6EMoP1tsU
-         iywV4URtIyXOhBn3PxD4u7v1sBktfTbnBCB/KTZmwGw/Eo8P8MJT/0AmczwwK6GQXlP7
-         eC2A==
-X-Gm-Message-State: AOJu0YyGUzWvDz5LX/zist16wTIMh7W1lhBQRUv55ftFd4WQ04LBbAXH
-        J8E3ViKDDzQNT6EJiHZacDqy/Q==
-X-Google-Smtp-Source: AGHT+IEPl7zpsrxRzqGUH6rPlbUPIm6K6592kKKgJabpdNB67Jb359IWfTlEiw6otS8taVCsGaOFnw==
-X-Received: by 2002:a05:600c:152:b0:401:bcb4:f119 with SMTP id w18-20020a05600c015200b00401bcb4f119mr5215423wmm.3.1694893945217;
-        Sat, 16 Sep 2023 12:52:25 -0700 (PDT)
+        bh=aSRNOnwEQsZZMI8EIIn71RrWo2EfMJ2ZTlOi8DC8epM=;
+        b=txieg9aUI7GU6ptfi+6Hkelr2HUDGOMizFXhjq69dwydC8n1mGHRwLULzapIkrF7fe
+         u99tIdZl/osCdlJZGFDmQI3PJGn/cujp1OfP9DvSHlOUibNBj87nM9ryntt7uBJgn5xh
+         e6Rk8Jzihxbwz9VQHtVht1nnBQ2A0Fa8JqanpVCQM5w0g3agvVWgIdcU+dgvj2QhnFd9
+         Kc2zc3UH0Cx9iMJ0Tx9nbY+/0TSToZVtN8gfpGyYInHCUYb6Es6pqVZWNF/gmnXZkSVy
+         R937m7OcCznTG4MQYXwu/RKoAkJr9PmmDlPSCxVmAhh6T99RIVvf4qE9/MRiXLt6iANz
+         rD/w==
+X-Gm-Message-State: AOJu0YxcL3nVIIlqMplrzqaQdW025HdKFMyfwVnQrr02QOWKGFf3zL5H
+        +iH6TeXum7V1DBw0QAKAn3/rmw==
+X-Google-Smtp-Source: AGHT+IHgp1hQiDf9gp1gYjKMJGj/hOQySUq6hZIOAS8Yr9MgEmNAohUdVy/Yuq7EBhnq10tLrd8GMw==
+X-Received: by 2002:a7b:c4cb:0:b0:401:b53e:6c56 with SMTP id g11-20020a7bc4cb000000b00401b53e6c56mr5131086wmk.3.1694894174399;
+        Sat, 16 Sep 2023 12:56:14 -0700 (PDT)
 Received: from airbuntu (host109-151-228-137.range109-151.btcentralplus.com. [109.151.228.137])
-        by smtp.gmail.com with ESMTPSA id h16-20020a5d5490000000b0031773a8e5c4sm7811865wrv.37.2023.09.16.12.52.24
+        by smtp.gmail.com with ESMTPSA id w4-20020a5d6804000000b003197efd1e7bsm7990039wru.114.2023.09.16.12.56.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Sep 2023 12:52:24 -0700 (PDT)
-Date:   Sat, 16 Sep 2023 20:52:23 +0100
+        Sat, 16 Sep 2023 12:56:13 -0700 (PDT)
+Date:   Sat, 16 Sep 2023 20:56:12 +0100
 From:   Qais Yousef <qyousef@layalina.io>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+To:     Hongyan Xia <hongyan.xia2@arm.com>
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Lukasz Luba <lukasz.luba@arm.com>
-Subject: Re: [RFC PATCH 1/7] sched/pelt: Add a new function to approximate
- the future util_avg value
-Message-ID: <20230916195223.mbio65o5aioscd5l@airbuntu>
+Subject: Re: [RFC PATCH 2/7] sched/pelt: Add a new function to approximate
+ runtime to reach given util
+Message-ID: <20230916195612.n7iukjkdjl3dzyxt@airbuntu>
 References: <20230827233203.1315953-1-qyousef@layalina.io>
- <20230827233203.1315953-2-qyousef@layalina.io>
- <8f63efa6-f9d1-9b1c-7737-4094f6acfc62@arm.com>
- <20230906211936.yqejc25czc6tddm6@airbuntu>
- <47a11e4e-d349-7d98-7006-4bf08a53c0cf@arm.com>
- <20230910195832.pncjsqmkepichly6@airbuntu>
- <45548b21-280e-7f94-0b53-f2dcab6ccb5e@arm.com>
- <20230916194923.4sijts6a56jxbava@airbuntu>
+ <20230827233203.1315953-3-qyousef@layalina.io>
+ <3fc888d4-fc18-7947-0541-9dc42892c071@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230916194923.4sijts6a56jxbava@airbuntu>
+In-Reply-To: <3fc888d4-fc18-7947-0541-9dc42892c071@arm.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -82,74 +78,59 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/16/23 20:49, Qais Yousef wrote:
-> On 09/13/23 19:22, Dietmar Eggemann wrote:
-> > On 10/09/2023 21:58, Qais Yousef wrote:
-> > > On 09/07/23 13:12, Dietmar Eggemann wrote:
-> > >> On 06/09/2023 23:19, Qais Yousef wrote:
-> > >>> On 09/06/23 14:56, Dietmar Eggemann wrote:
-> > >>>> On 28/08/2023 01:31, Qais Yousef wrote:
+On 09/15/23 10:15, Hongyan Xia wrote:
+> On 28/08/2023 00:31, Qais Yousef wrote:
+> > It is basically the ramp-up time from 0 to a given value. Will be used
+> > later to implement new tunable to control response time  for schedutil.
 > > 
-> > [...]
+> > Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
+> > ---
+> >   kernel/sched/pelt.c  | 21 +++++++++++++++++++++
+> >   kernel/sched/sched.h |  1 +
+> >   2 files changed, 22 insertions(+)
 > > 
-> > >> Another thing ... I guess if you call accumulate_sum with delta the PELT
-> > >> machinery assumes `delta = now - sa->last_update_time` which means you
-> > >> would have to use `clock_pelt + TICK_USEC` as delta.
-> > > 
-> > > Right.
-> > > 
-> > > The way I understood it is that at TICK we should do update_load_avg() which
-> > > would call __update_load_sum() which uses
-> > > 
-> > > 	delta = now - sa->last_update_time
-> > > 
-> > > which passes this delta to accumulate_sum()
-> > > 
-> > > I can see we are not very accurate since there will be a small additional time
-> > > besides TICK_USEC that we are not accounting for. But I can't see how this can
-> > > cause a big error.
-> > > 
-> > > 	predicted (assumed) tick time/delta
-> > > 
-> > > 		sa->last_update_time = now
-> > > 		tick_time = TICK_USEC + now
-> > > 
-> > > 		delta = tick_time - sa->last_update_time
-> > > 		delta = TICK_USEC + now - now
-> > > 		delta = TICK_USEC
-> > > 
-> > > 	but actual tick time/delta
-> > > 
-> > > 		sa->last_update_time = now - x
-> > > 		tick_time = TICK_USEC + now
-> > > 
-> > > 		delta = tick_time - sa->last_update_time
-> > > 		delta = TICK_USEC + now - (now - x)
-> > > 		delta = TICK_USEC + x
-> > > 
-> > > So the delta I am using might be slightly shorter than it should be.
-> > > 
-> > > IIUC, what you're saying that the `x` in my equation above is clock_pelt,
-> > > right?
-> > 
-> > No, I was wrong here. Calling accumulate_sum with `delta = TICK_USEC` is
-> > fine.
-> > 
-> > accumulate_sum() will accrue `sa->util.sum` and ___update_load_avg()
-> > will then adjust `sa->util_avg` accordingly.
-> > 
-> > delta should be 4000 on Arm64 boards so you will cross period
-> > boundaries. In case `delta < 1024` you might want to not call
-> > ___update_load_avg() to be in pair with __update_load_avg_cfs_rq().
+> > diff --git a/kernel/sched/pelt.c b/kernel/sched/pelt.c
+> > index 50322005a0ae..f673b9ab92dc 100644
+> > --- a/kernel/sched/pelt.c
+> > +++ b/kernel/sched/pelt.c
+> > @@ -487,3 +487,24 @@ unsigned long approximate_util_avg(unsigned long util, u64 delta)
+> >   	return sa.util_avg;
+> >   }
+> > +
+> > +/*
+> > + * Approximate the required amount of runtime in ms required to reach @util.
+> > + */
+> > +u64 approximate_runtime(unsigned long util)
+> > +{
+> > +	struct sched_avg sa = {};
+> > +	u64 delta = 1024; // period = 1024 = ~1ms
+> > +	u64 runtime = 0;
+> > +
+> > +	if (unlikely(!util))
+> > +		return runtime;
+> > +
+> > +	while (sa.util_avg < util) {
+> > +		accumulate_sum(delta, &sa, 0, 0, 1);
 > 
-> You mean *not* call, or actually *do* call ___update_load_avg() if delta
-> < 1024? I am certainly not calling it now and I think you're suggesting to
-> actually call it when period is less than 1024.
+> This looks a bit uncomfortable as the existing comment says that we assume:
+> 
+> 	if (!load)
+> 		runnable = running = 0;
+> 
+> I haven't looked at the math in detail, but if this is okay, maybe a comment
+> saying why this is okay despite the existing comment says otherwise?
 
-Oops my bad, I got confused. I am calling it. Ignore me!
+Yeah as Dietmar highlighted I should pass 1 for load and it was my bad
+misreading the code.
+
+So it should be
+
+	accumulate_sum(delta, &sa, 1, 0, 1);
+
+If that's what you meant, yes.
 
 
-Cheers
+Thanks!
 
 --
 Qais Yousef
