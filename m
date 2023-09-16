@@ -2,132 +2,191 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8BD7A325B
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Sep 2023 21:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 247D47A326F
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Sep 2023 22:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232530AbjIPT4g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 Sep 2023 15:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
+        id S232283AbjIPUab (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 16 Sep 2023 16:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239298AbjIPT4V (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Sep 2023 15:56:21 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8FF1AB
-        for <linux-pm@vger.kernel.org>; Sat, 16 Sep 2023 12:56:15 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-40434d284f7so33302795e9.3
-        for <linux-pm@vger.kernel.org>; Sat, 16 Sep 2023 12:56:15 -0700 (PDT)
+        with ESMTP id S230420AbjIPUaL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Sep 2023 16:30:11 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C44CE5
+        for <linux-pm@vger.kernel.org>; Sat, 16 Sep 2023 13:30:05 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-31dd10c2b8bso2994061f8f.3
+        for <linux-pm@vger.kernel.org>; Sat, 16 Sep 2023 13:30:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1694894174; x=1695498974; darn=vger.kernel.org;
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1694896203; x=1695501003; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aSRNOnwEQsZZMI8EIIn71RrWo2EfMJ2ZTlOi8DC8epM=;
-        b=sWzvC+xkAN09tmwdn6sxPM0OVO0vljZhyxtomJn1osWFSKmzTJuqgxBT2TBHcpQRw9
-         hW2RvbnCSD1YM1B8k7trfhP/FbB2aZrD2jn8b28VgIVaSrgiM2IkUNny5OxZ6adq2F/y
-         Cj3Om6daiJmYS2k3MepSPdr6ZzTAO6mBeSP/qQ5JOF9fZRsFaYsVwvCWd1mXh9lOI/GX
-         18tklEl9/cp5rmDh6YdxMK7l5SR1Bx1M8ZA53q9qETC2YilPOfLdME1fQBk35hEV8HbZ
-         uR2YKwSpoVfB1v2Yv45bcXCU2jYB31mrBBs/EbEyXglPkSnIioNJkJXyeP1yE/uNdX+l
-         SBiA==
+        bh=6Mv4crFclQdEkZGsP8km6uD1B/Et729oV33YEvfH1Us=;
+        b=mmbyU89odPstwynsAjdTzeZ0rxhsX9aWML8hUKhYx4mZT+r3eYHjBtmsRtIyrTZ5RN
+         6KjHOFrt9Lc6C3aglTOSNEHwOP2miysik6VBUqppJLIKigHxRRDh2eUnlVWqDhZ+dbhi
+         1uNiPEQVH7Nw9T4RoxY215JHbPUK1U388j1aaqEi35bkx5iP/Bm3br5hni+q4pBukBau
+         ASRbpQmAOnhatcmng7lIA06or+0yU+VdNjU4zVkE60IWywzjWgNbI8sdRxggM6s/pppj
+         rXhhaXRiJVMMD6x8Ggqm6BW1AWLnNDKwzaiCuImZhlQQo9c+WURATGT1wl/iypDtOzos
+         3BKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694894174; x=1695498974;
+        d=1e100.net; s=20230601; t=1694896203; x=1695501003;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aSRNOnwEQsZZMI8EIIn71RrWo2EfMJ2ZTlOi8DC8epM=;
-        b=txieg9aUI7GU6ptfi+6Hkelr2HUDGOMizFXhjq69dwydC8n1mGHRwLULzapIkrF7fe
-         u99tIdZl/osCdlJZGFDmQI3PJGn/cujp1OfP9DvSHlOUibNBj87nM9ryntt7uBJgn5xh
-         e6Rk8Jzihxbwz9VQHtVht1nnBQ2A0Fa8JqanpVCQM5w0g3agvVWgIdcU+dgvj2QhnFd9
-         Kc2zc3UH0Cx9iMJ0Tx9nbY+/0TSToZVtN8gfpGyYInHCUYb6Es6pqVZWNF/gmnXZkSVy
-         R937m7OcCznTG4MQYXwu/RKoAkJr9PmmDlPSCxVmAhh6T99RIVvf4qE9/MRiXLt6iANz
-         rD/w==
-X-Gm-Message-State: AOJu0YxcL3nVIIlqMplrzqaQdW025HdKFMyfwVnQrr02QOWKGFf3zL5H
-        +iH6TeXum7V1DBw0QAKAn3/rmw==
-X-Google-Smtp-Source: AGHT+IHgp1hQiDf9gp1gYjKMJGj/hOQySUq6hZIOAS8Yr9MgEmNAohUdVy/Yuq7EBhnq10tLrd8GMw==
-X-Received: by 2002:a7b:c4cb:0:b0:401:b53e:6c56 with SMTP id g11-20020a7bc4cb000000b00401b53e6c56mr5131086wmk.3.1694894174399;
-        Sat, 16 Sep 2023 12:56:14 -0700 (PDT)
+        bh=6Mv4crFclQdEkZGsP8km6uD1B/Et729oV33YEvfH1Us=;
+        b=gMyoY5c3BrSseZOc/vsStvO9kGyuSLg7glu4ufID7t6AzQvPuOOO3cRdXo32R9HzhN
+         PPRiuLDNi1UoJCa1JkSmV8ofr3l9wYg7LvBIFpYHfbsTEU1Rn/DmikBVozMgXoKuJJbd
+         sj1YmbLnrlt3qzI6WowxiYxiwwXxCdsZzJgkX+PonTNa9QHZzd8dCCNpXYX9pf2hmxOG
+         AeluHAAkUuxqYMMK+slE4YUS6xLntrEhg6FCQGVX4kZg9xpbVyJBr+PhWnWswBWIJSvM
+         dLp/N9zRELGY6ECDtu6YbxQM/z2nTcRaaChJUJsMyYjDIXnAEB/cmEUE3xiWZnFn3V89
+         +G3Q==
+X-Gm-Message-State: AOJu0YwgGn120opcemX43Jrb8E52vF0EiEEi8bR80khK9rS6nkjGGrWf
+        egVQ70qq9Ioz1RWgqNbbqY91gg==
+X-Google-Smtp-Source: AGHT+IFhZjAVFGkFjpwnV99v5Q1I2ryBCXVW3gFbSyjtkwV3ZkbK8w+QJzpwIdshXWfKVm7OG77/yQ==
+X-Received: by 2002:a5d:484a:0:b0:319:f9d6:a769 with SMTP id n10-20020a5d484a000000b00319f9d6a769mr4118351wrs.45.1694896202693;
+        Sat, 16 Sep 2023 13:30:02 -0700 (PDT)
 Received: from airbuntu (host109-151-228-137.range109-151.btcentralplus.com. [109.151.228.137])
-        by smtp.gmail.com with ESMTPSA id w4-20020a5d6804000000b003197efd1e7bsm7990039wru.114.2023.09.16.12.56.13
+        by smtp.gmail.com with ESMTPSA id q2-20020adff782000000b00317f70240afsm7940655wrp.27.2023.09.16.13.30.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Sep 2023 12:56:13 -0700 (PDT)
-Date:   Sat, 16 Sep 2023 20:56:12 +0100
+        Sat, 16 Sep 2023 13:30:02 -0700 (PDT)
+Date:   Sat, 16 Sep 2023 21:30:00 +0100
 From:   Qais Yousef <qyousef@layalina.io>
-To:     Hongyan Xia <hongyan.xia2@arm.com>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
         Lukasz Luba <lukasz.luba@arm.com>
-Subject: Re: [RFC PATCH 2/7] sched/pelt: Add a new function to approximate
- runtime to reach given util
-Message-ID: <20230916195612.n7iukjkdjl3dzyxt@airbuntu>
-References: <20230827233203.1315953-1-qyousef@layalina.io>
- <20230827233203.1315953-3-qyousef@layalina.io>
- <3fc888d4-fc18-7947-0541-9dc42892c071@arm.com>
+Subject: Re: [PATCH 2/4] sched: cpufreq: Fix apply_dvfs_headroom() escaping
+ uclamp constraints
+Message-ID: <20230916203000.ulngn5huefndb2cq@airbuntu>
+References: <20230820210640.585311-1-qyousef@layalina.io>
+ <20230820210640.585311-3-qyousef@layalina.io>
+ <7839dd5f-e7fd-7065-934d-436d012ac9d6@arm.com>
+ <20230826200829.gnha7xcrjbyipjr2@airbuntu>
+ <ecbd165e-4213-8dd4-d5b5-309256cc64a9@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <3fc888d4-fc18-7947-0541-9dc42892c071@arm.com>
+In-Reply-To: <ecbd165e-4213-8dd4-d5b5-309256cc64a9@arm.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/15/23 10:15, Hongyan Xia wrote:
-> On 28/08/2023 00:31, Qais Yousef wrote:
-> > It is basically the ramp-up time from 0 to a given value. Will be used
-> > later to implement new tunable to control response time  for schedutil.
+On 09/12/23 16:34, Dietmar Eggemann wrote:
+
+> No that's not what I wanted to say here.
+> 
+> I wanted to highlight the different treatment of `(1) a task with
+> (natural) util = 800` and `(2) a task with uclamp_max = 800`.
+> 
+> (1) util = 800
+> 
+> util = (1.25 * 800 * (1024 - irq) / 1024 + ...
+> 
+>         <-      ->
+>         uclamped(cfs+rt+headroom(cfs+rt))
+> 
+> 
+> (2) uclamp_max = 800
+> 
+> util = (800 * (1024 - irq) / 1024 + ...
+> 
+>         <->
+>         uclamped(cfs+rt+headroom(cfs+rt))
+> 
+> So for (1) the scheduler would ask for more than in (2).
+
+Yes, which is the intention IMHO. If they behave the same, then uclamp_max is
+not doing anything. And really this is the critical region in the system as
+this is where the expensive OPPs lie.
+
+> 
+> That's essentially the same question which was raised here:
+> 
+> https://lkml.kernel.org/r/CAKfTPtDY48jpO+b-2KXawzxh-ty+FMKX6YUXioNR7kpgO=ua6Q@mail.gmail.com
+> 
+> >>> Note that similar problem exist for uclamp_min. If util was 50, and
+> >>> uclamp_min is 100. Since we apply_dvfs_headroom() after apply uclamp
+> >>> constraints, we'll end up with util of 125 instead of 100. IOW, we get
+> >>> boosted twice, first time by uclamp_min, and second time by dvfs
+> >>> headroom.
+> >>
+> >> I see what you want to change here but:
+> >>
+> >> So far we have `util -> uclamp -> map_util_to_perf()`
 > > 
-> > Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
-> > ---
-> >   kernel/sched/pelt.c  | 21 +++++++++++++++++++++
-> >   kernel/sched/sched.h |  1 +
-> >   2 files changed, 22 insertions(+)
+> > :-O
 > > 
-> > diff --git a/kernel/sched/pelt.c b/kernel/sched/pelt.c
-> > index 50322005a0ae..f673b9ab92dc 100644
-> > --- a/kernel/sched/pelt.c
-> > +++ b/kernel/sched/pelt.c
-> > @@ -487,3 +487,24 @@ unsigned long approximate_util_avg(unsigned long util, u64 delta)
-> >   	return sa.util_avg;
-> >   }
-> > +
-> > +/*
-> > + * Approximate the required amount of runtime in ms required to reach @util.
-> > + */
-> > +u64 approximate_runtime(unsigned long util)
-> > +{
-> > +	struct sched_avg sa = {};
-> > +	u64 delta = 1024; // period = 1024 = ~1ms
-> > +	u64 runtime = 0;
-> > +
-> > +	if (unlikely(!util))
-> > +		return runtime;
-> > +
-> > +	while (sa.util_avg < util) {
-> > +		accumulate_sum(delta, &sa, 0, 0, 1);
+> > So when I set the system uclamp_max to 800 it will still run at max; and this
+> > is normal?!!
 > 
-> This looks a bit uncomfortable as the existing comment says that we assume:
+> No that's an issue (A) as well. But the diff between (1) and (2) is IMHO a
+> new issue introduced by this patch-set.
+
+It is also the problem to fix :-)
+
 > 
-> 	if (!load)
-> 		runnable = running = 0;
+> >> which is fine when we see uclamp as an entity which constrains util, not
+> >> the util after being mapped to a capacity constraint.
+> > 
+> > -ENOPARSE.
 > 
-> I haven't looked at the math in detail, but if this is okay, maybe a comment
-> saying why this is okay despite the existing comment says otherwise?
+> What I meant is 'clamping the util' before scheduler hands over to
+> 'cpufreq' is fine:
+> 
+>     util -> uclamp -> map_util_to_perf()
+>                
+>     scheduler    -->|<-- cpufreq
+> 
+> I do understand that you guys are already discussing a new
+> cpufreq_give_me_freq_for_this_utilization_ctx() between EM and CPUfreq
+> in the other thread of this patch to maybe sort out (A).
 
-Yeah as Dietmar highlighted I should pass 1 for load and it was my bad
-misreading the code.
+This will help with abstraction. But behavior wise, I still think that if
+a task (or a cgroup, the system) has uclamp_max to 800, then we should not run
+faster than this because of dvfs headroom.
 
-So it should be
+If we don't do this then max performance is effectively mapped at anything at
+800 and above. And likely less than that.
 
-	accumulate_sum(delta, &sa, 1, 0, 1);
+For example if
 
-If that's what you meant, yes.
+	util@OPP[Fmax-1] = 950
+
+then any util value at
+
+	util = 950 * 0.8 = 760
+
+will saturate the system and run at Fmax, because all values from above 950
+will map to Fmax, and because of the headroom this becomes all values at 760 or
+above.
+
+This mean from user's perspective uclamp_min and uclamp_max is from 0-760 on
+that system. But the abstraction we're providing is that the performance range
+is from 0-1024.
+
+If uclamp_min is set to 512 and the task has a util of 100, why should we run
+at 512*1.25?
+
+Similarly if uclamp_max wants to cap the task/cgroup/system from consuming the
+top resources, why it needs the 1.25 headroom? If there are two tasks running
+on the CPU and one of them is not capped, then yeah the headroom will be
+applied. But if the rq->uclamp[UCLAMP_MAX] = 800, then the vote from freq from
+this CPU should not exceed this. I don't see what the headroom is for in this
+case.
+
+As another example, do you expect a task that has a util of 1024 but uclamp_max
+= 800 to run at max or at an OPP equivalent to 800 which would be 2 or 3 below
+Fmax usually? The latter is the expectation from the interface. Users shouldn't
+need to know there's a dvfs headroom and cater for that when they set
+uclamp_max or uclamp_min.
 
 
 Thanks!
