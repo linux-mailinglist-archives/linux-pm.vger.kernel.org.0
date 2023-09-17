@@ -2,83 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 783C77A3571
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Sep 2023 14:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52FBD7A373C
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Sep 2023 21:09:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233276AbjIQMET (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 17 Sep 2023 08:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
+        id S233512AbjIQTJS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 17 Sep 2023 15:09:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjIQMER (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Sep 2023 08:04:17 -0400
-Received: from shiva.jussieu.fr (shiva.jussieu.fr [134.157.0.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EFA8112B;
-        Sun, 17 Sep 2023 05:04:11 -0700 (PDT)
-Received: from mailix1.insp.jussieu.fr (mailix1.insp.jussieu.fr [134.157.37.11])
-          by shiva.jussieu.fr (8.15.2/jtpda-5.4) with ESMTP id 38HC40nk026906
-          ; Sun, 17 Sep 2023 14:04:05 +0200 (CEST)
-X-Ids:  168
-Received: from hordix.insp.jussieu.fr (hordix.insp.jussieu.fr [134.157.37.9])
-        by mailix1.insp.jussieu.fr (Postfix-INSP-2.10.1) with ESMTPSA id 78A06C062BC0;
-        Sun, 17 Sep 2023 13:58:50 +0200 (CEST)
-Received: from [105.112.96.211] ([105.112.96.211]) by
- webmail.insp.jussieu.fr (Horde Framework) with HTTPS; Sun, 17 Sep 2023
- 11:58:50 +0000
-Date:   Sun, 17 Sep 2023 11:58:50 +0000
-Message-ID: <20230917115850.Horde.nDVhVuZCMbI1tdSrz7hexww@webmail.insp.jussieu.fr>
-From:   Victoria Cleland <wajdi.chaabani@insp.upmc.fr>
-Subject: Hallo
-Reply-to: v.cleland10@aol.com
-User-Agent: Horde Application Framework 5
-Organization: Institut des NanoSciences de Paris
-X-InspUpmcSession: CHAABANI
-Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
+        with ESMTP id S238011AbjIQTIy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Sep 2023 15:08:54 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23DCA10D;
+        Sun, 17 Sep 2023 12:08:49 -0700 (PDT)
+Received: from mercury (unknown [185.254.75.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 58B14660721F;
+        Sun, 17 Sep 2023 20:08:47 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1694977727;
+        bh=MhUT4ZgnWZIvqh1JKIu10f1szECnNwOZIDOW8HonKBc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TrqPdfKzJqDG9xMsqEC1xY+ba/jCjD+czKGJ8mpI4Tuih83nSieN+5ih0xl7IfRb+
+         lU8AcYyQcCWgYdt72h3n4G3j31hdzoePHA9L+KvmNHyItfm1J6Ch4XEi9pchXRf8Sj
+         iDdU7q0Atl57/VTJpE0lmu5V7goPnuP3kAiLTWWXos7DOT8CxapxLnf9413aSw+ysU
+         CdVtmShMhfyPRQxakJJ/wiyx03k47P3jYCbDtCDR1Zt3HI/Mq4/GiICx3q58AOqCYy
+         azpIE9dT2aGOlK/Ov2ay0H367G+IJ8CDZsDvb6L9Qq/iWQIHNogxiPYLeX+nfL8mB9
+         yhCe4a0X1C8ug==
+Received: by mercury (Postfix, from userid 1000)
+        id 394D710604B6; Sun, 17 Sep 2023 21:01:31 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: [PATCH] dt-bindings: power: supply: Drop deprecated ab8500-battery
+Date:   Sun, 17 Sep 2023 21:01:24 +0200
+Message-Id: <20230917190124.1012316-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Miltered: at jchkmail2.reseau.jussieu.fr with ID 6506EB30.005 by Joe's j-chkmail (http : // j-chkmail dot ensmp dot fr)!
-X-j-chkmail-Enveloppe: 6506EB30.005 from mailix1.insp.jussieu.fr/mailix1.insp.jussieu.fr/134.157.37.11/mailix1.insp.jussieu.fr/<wajdi.chaabani@insp.upmc.fr>
-X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,MISSING_HEADERS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query to
-        *      DNSWL was blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [134.157.0.129 listed in list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 RCVD_IN_MSPIKE_H3 RBL: Good reputation (+3)
-        *      [134.157.0.129 listed in wl.mailspike.net]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [v.cleland10[at]aol.com]
-        *  1.0 MISSING_HEADERS Missing To: header
-        *  0.0 RCVD_IN_MSPIKE_WL Mailspike good senders
-        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Linus Walleij modified AB8500 to use the generic simple-battery
+and samsung,battery bindings. This is an unused leftover that
+can be removed.
 
-17. September 2023.
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+---
+ .../supply/stericsson,ab8500-battery.txt      | 34 -------------------
+ 1 file changed, 34 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/power/supply/stericsson,ab8500-battery.txt
 
-Hallo,
-
-Ich möchte Ihnen einen Geschäftsvorschlag mitteilen. Für weitere  
-Details antworten Sie auf Englisch.
-
-Grüße
-Frau Victoria Cleland
-_________________________
-Sekretär: Wajdi Chaabani
+diff --git a/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-battery.txt b/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-battery.txt
+deleted file mode 100644
+index ee125cb0e46d..000000000000
+--- a/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-battery.txt
++++ /dev/null
+@@ -1,34 +0,0 @@
+-AB85000 PMIC contains a node, which contains shared
+-information about the battery connected to the PMIC.
+-The node has no compatible property.
+-
+-Properties of this node are:
+-
+-thermistor-on-batctrl:
+-	A boolean value indicating thermistor interface	to battery
+-
+-	Note:
+-	'btemp' and 'batctrl' are the pins interfaced for battery temperature
+-	measurement, 'btemp' signal is used when NTC(negative temperature
+-	coefficient) resister is interfaced external to battery whereas
+-	'batctrl' pin is used when NTC resister is internal to battery.
+-
+-	Example:
+-	ab8500_battery: ab8500_battery {
+-		thermistor-on-batctrl;
+-	};
+-	indicates: NTC resister is internal to battery, 'batctrl' is used
+-		for thermal measurement.
+-
+-	The absence of property 'thermal-on-batctrl' indicates
+-	NTC resister is external to battery and  'btemp' signal is used
+-	for thermal measurement.
+-
+-battery-type:
+-	This shall be the battery manufacturing technology type,
+-	allowed types are:
+-		"UNKNOWN" "NiMH" "LION" "LIPO" "LiFe" "NiCd" "LiMn"
+-	Example:
+-	ab8500_battery: ab8500_battery {
+-		stericsson,battery-type = "LIPO";
+-	}
+-- 
+2.40.1
 
