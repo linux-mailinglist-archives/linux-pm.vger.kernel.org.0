@@ -2,147 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 638E37A338A
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Sep 2023 03:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52EA67A341C
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Sep 2023 09:39:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbjIQBF3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 Sep 2023 21:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41414 "EHLO
+        id S232398AbjIQHhz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 17 Sep 2023 03:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbjIQBF2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Sep 2023 21:05:28 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73D81AC
-        for <linux-pm@vger.kernel.org>; Sat, 16 Sep 2023 18:05:20 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-404571cbb8dso34866545e9.3
-        for <linux-pm@vger.kernel.org>; Sat, 16 Sep 2023 18:05:20 -0700 (PDT)
+        with ESMTP id S233820AbjIQHhW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Sep 2023 03:37:22 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DB518E
+        for <linux-pm@vger.kernel.org>; Sun, 17 Sep 2023 00:37:16 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2bcb89b4767so54592391fa.3
+        for <linux-pm@vger.kernel.org>; Sun, 17 Sep 2023 00:37:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1694912719; x=1695517519; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/pQuCGgxzF9AsCBKNkJ7L4cEdQKndjj38XlHX9F4meo=;
-        b=rH83utkwXJqM9RpbaM4ywrHty1wIbfrZ3hRadDA8H1zAmorsePeVyyysFc5KiddbKN
-         uqFVnrCPs0BV8seEhep4pt8PrsyZKGWxD529ubb7C9irmFhuqrKSpiCy7hiemdlvxwbq
-         ByNWXNOKWO15swLAQ4qxz/3LgAm7ZqlzqXy/0kVMGgI/9bnszr+IsHzsqSRmAls4FjiC
-         nDEYTFK5Rskxb2oH44WQ4jLMcmz75PBIMJ0nfOugfX2NnuHGa6a8nAxi6jZkdOegQfUG
-         olNjIlVy7AI30hiRLZ9jbL/LPKjXPLsjs1cUeG+4CMo2CZoFXr0+a1v+OZuQWY5gG0zT
-         saVA==
+        d=linaro.org; s=google; t=1694936234; x=1695541034; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RvMkdgtkNGNiDefVNDejUYjyLoLcBedhxBbnbsWuV2o=;
+        b=EdgNhkm2/OWh4eFVILZIOYcI4tTe76U7RLvW2g92A2GSGPxugLoWVmxHGdpAycljam
+         fq5MdFWedy/dktk23hfw2K9ACk7LwQe7JpEQF9L4/Iv5f3E1hFDtioCAtAaJAvqpyBaJ
+         G2D++qYjC9RkEfc51/aHN3dua0gL2Lo264sopwHFpKE9sbd+ZoMviY/m0n2wloSRLQy8
+         n1Sjgf+AgDhI6Xvvyh24WxH8x5kt8vR10fDlkM+jMFjLCqU6y1FR7cP0/vRjiyYpIA/a
+         DwDvCGT2iCPdGJKdFncI9yCemqv2KEiOfv3Tvc6GTPxxZPKnpgKifCmYmsGX3ukriy4+
+         prcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694912719; x=1695517519;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/pQuCGgxzF9AsCBKNkJ7L4cEdQKndjj38XlHX9F4meo=;
-        b=YPQ4FjoowucqzOIATb9OSmCkxIs2TF3dJz338E5LMuTzUxPJhEZpPZKDZ6M2wlJhYZ
-         4RWuBIDSuf1Ha/mbJU/acbyzexAHc1X0M+CfnU6p9MhhWy47ggOHWgVUzVbdpt62C7PL
-         +rQs7ievuUF4BeAjXHYtIxw2GTZHOqSUZT15rjyWNOfenm1Q+a7mYD6SH+M9jPcZxoAR
-         pxusIp3U30mrZ/Z5gxqofN8n0soUbML/X58Y9Uz1US2e/YAZZv4wdJ3px3Gu9miTFKOx
-         J9PLsgzceF1AI7RLOWrIbjix2vls+q7VZpdntUufRrTqBWH/Ny9O6rvEdbiszboVE6kC
-         KZ4Q==
-X-Gm-Message-State: AOJu0Yx/ZkUa8tUo8tJ75ByBQ1DtXvVKES9bnIvF2nm2aYPsFwfAJPjy
-        7KgorHCWZIVxU8qo/x8KM+bV1Q==
-X-Google-Smtp-Source: AGHT+IEkP8tCGIgme+/MmmbYafSgpi51x2fL2+vu0U+kM/pXGUYe4j/cp6sUgeiddgWUWF0/rVlvXA==
-X-Received: by 2002:a05:600c:ac8:b0:402:f54d:745 with SMTP id c8-20020a05600c0ac800b00402f54d0745mr4594745wmr.17.1694912718966;
-        Sat, 16 Sep 2023 18:05:18 -0700 (PDT)
-Received: from airbuntu (host109-151-228-137.range109-151.btcentralplus.com. [109.151.228.137])
-        by smtp.gmail.com with ESMTPSA id z7-20020a05600c220700b00403038d7652sm8506706wml.39.2023.09.16.18.05.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Sep 2023 18:05:18 -0700 (PDT)
-Date:   Sun, 17 Sep 2023 02:05:16 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com,
-        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
-        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v6 2/2] cpuidle: teo: Introduce util-awareness
-Message-ID: <20230917010516.54dgcmms44wyfrvx@airbuntu>
-References: <20230105145159.1089531-1-kajetan.puchalski@arm.com>
- <20230105145159.1089531-3-kajetan.puchalski@arm.com>
- <20230711175814.zfavcn7xn3ia5va4@airbuntu>
- <ZLZ/btJw5LNVxVy8@e126311.manchester.arm.com>
- <20230718132432.w5xoxbqm54jmu6n5@airbuntu>
+        d=1e100.net; s=20230601; t=1694936234; x=1695541034;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RvMkdgtkNGNiDefVNDejUYjyLoLcBedhxBbnbsWuV2o=;
+        b=kglOwkLL09zzS2D5h+k6pcycVZkHMUrCYWtBm1CXRzLDNUX8BFnq64ft3duE4BZjPj
+         VH0D9E0ULfNKiXLK0PcykugaWs3ABGuG50cW4mbH8bDY1l1jBsDZ7Vww5EHajN8ehYQx
+         fvsLZRXvSKxwg4TlLxQIC1UcPWK9ImvzYPwIYFf2wxGC8uYK9lknGYk6uALzr5myPRjV
+         y0S5qC4HHMXzCBaqhyiQJekPAZ/HDl0lEmSOkD/05b8ag06tx1/rdPyCk0o8UIz6g6jO
+         JsiHn3PwRJYn59RXMG+AWZwYK21SFL5lcnMRnTPoI44z7BwvyInF9WnibvSO2K5d6lFw
+         ChYg==
+X-Gm-Message-State: AOJu0YwTl5EV2TiVGGTOnCOqe6a+eJtmjHymx+u9arNcJWzyBJXkkWCJ
+        G5kCxJuO6zaIWyWWh1ejSXxppQ==
+X-Google-Smtp-Source: AGHT+IEL8NbLQzIyJwWj3iyNixBkp1V6UkVgGtcWAffqfVPS4lYuBlbxvc3fLnB6Mt/CSDQri1aZ8g==
+X-Received: by 2002:a2e:9791:0:b0:2bd:1cd0:603f with SMTP id y17-20020a2e9791000000b002bd1cd0603fmr4929585lji.45.1694936233810;
+        Sun, 17 Sep 2023 00:37:13 -0700 (PDT)
+Received: from [192.168.1.77] (150-140-187-31.ftth.glasoperator.nl. [31.187.140.150])
+        by smtp.gmail.com with ESMTPSA id s22-20020a1709066c9600b00993a9a951fasm4739819ejr.11.2023.09.17.00.37.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 17 Sep 2023 00:37:13 -0700 (PDT)
+Message-ID: <bbf576d9-ec2c-e243-fddf-9f74ae44e0fd@linaro.org>
+Date:   Sun, 17 Sep 2023 09:37:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230718132432.w5xoxbqm54jmu6n5@airbuntu>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: power: qcom,rpmpd: Add SM7150
+Content-Language: en-US
+To:     Danila Tikhonov <danila@jiaxyga.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        ulf.hansson@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20230916175952.178611-1-danila@jiaxyga.com>
+ <20230916175952.178611-2-danila@jiaxyga.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230916175952.178611-2-danila@jiaxyga.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Kajetan
-
-On 07/18/23 14:24, Qais Yousef wrote:
-
-> These patches are in GKI. So we'll if there are uncaught problems I guess :)
+On 16/09/2023 19:59, Danila Tikhonov wrote:
+> Add a compatible for SM7150 platforms.
 > 
-> No appetite for a knob, but the very low value for littles did strike me and
-> thought I better ask at least. Today's littles are too tiny for their own good
-> and it seemed the threshold could end up being too aggressive especially in low
-> activity state. You effectively are saying that if we have few 100us of
-> activity, normal TEO predictions based on timers are no good and better to stay
-> shallower anyway.
-> 
-> Note that due to NOHZ, if we go to idle for an extended period the util value
-> might not decay for a while and miss some opportunities. Especially that when
-> it next wakes up, it's enough for this wake up to run for few 100s us to block
-> a deeper state before going back to sleep for extended period of time.
-> 
-> But we shall see. I got the answer I was looking for for now.
-
-Unfortunately not too long after the patches got merged I got regression report
-of worse power. As you know on Android things are not as mainline, so I need to
-untangle this to make sure it's not a red herring. But if you want to take my
-word for it, I think the chances of it being a true regression is high. I had
-to introduce knobs to allow controlling the thresholds for now, so the good
-news they do help and it's not a total revert. I don't have a lot of info to
-share, but it's the low activity use cases that seem to got impacted. Like
-video playback for instance.
-
-Generally, I'm trying to remove some hardcoded values from the scheduler that
-enforces a behavior that is not universally desired on all systems/workloads.
-And I think the way the util awareness threshold are done today fall into the
-same category.
-
-As I tried to highlight before, it is easy to trick the threshold by a task
-that runs for a short time then goes back to sleep for a long time.
-
-And when the system runs full throttle for a while, it'll take around 150+ms
-for the util to decay to the threshold value. That's a long time to block
-entering deeper idle states for. I'm not sure how NOHZ and blocked averaged
-updates can make this potentially worse.
-
-In my view, the absolute comparison against util can be misleading. Even when
-util is 512 for example, we still have 50% of idle time. How this time is
-distributed can't be known from util alone. It could be one task waking up and
-sleeping. It could be multiple tasks at many combination of patterns all
-leading to the same outcome of CPU util being 512.
-
-IIUC the idea is that if we have even small activity, then erring on the
-shallow side is better. But given that target-residency is usually in few ms
-range, do we really need to be that quite? With a target-residency of 3ms for
-example, even at util of 900 there can be opportunities to enter it.
-
-Can't we instead sample util at entry to idle loop and see if it is on a rising
-or falling trend? When rising it makes sense to say there's demand, let's block
-deeper idle state. But if it is falling, then if the decay time is longer than
-target-residency we can say it's okay to permit the deeper idle states?
-
-I need to think more about this; but I think it's worth trying to make these
-thresholds more deterministic and quantifiable. There are too many workloads
-and system variations. I'm not sure if a knob to control these thresholds is
-good for anything but a workaround like I had to do. These hardcoded values
-can be improved IMHO. Happy to help to find alternatives.
+> Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
 
 
-Cheers
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
---
-Qais Yousef
+Best regards,
+Krzysztof
+
