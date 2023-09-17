@@ -2,73 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB5A7A3352
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Sep 2023 01:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 638E37A338A
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Sep 2023 03:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233202AbjIPXFu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 Sep 2023 19:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39464 "EHLO
+        id S229713AbjIQBF3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 16 Sep 2023 21:05:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231316AbjIPXFr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Sep 2023 19:05:47 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11062CD1;
-        Sat, 16 Sep 2023 16:05:41 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-50300cb4776so1409157e87.3;
-        Sat, 16 Sep 2023 16:05:40 -0700 (PDT)
+        with ESMTP id S229805AbjIQBF2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Sep 2023 21:05:28 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73D81AC
+        for <linux-pm@vger.kernel.org>; Sat, 16 Sep 2023 18:05:20 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-404571cbb8dso34866545e9.3
+        for <linux-pm@vger.kernel.org>; Sat, 16 Sep 2023 18:05:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1694905539; x=1695510339; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8qmry3f1dKS9XSay+/EcqKiwhJ290GuK83cA4dSJTow=;
-        b=Z2Ah3o8j0PFJcpOXlPobPQmry97fkq6aKbnN9ZpGBrzW9LDfJAF8A7gzj4v2BnM731
-         m50IDM4u//4agiSZmcft5bhZJRdGceuB3Y4CfY9rOZi5VEB1+Qo0mgIvytFnOrrh29Yp
-         h7FAi4lyNwKslS4Vb0CnXjNYviM7EirOybynrpfZUK4Ix82hSAHIri1k8Hl9HLWpypd2
-         8twyVWWM5+q8yQ03pOMIwdbcW1FBEAAXl21aMrMGI7DroKrK/zsIH/5r+t2AkokP7iyj
-         i1RPHwcarcaOnSbZnFlxwdm0bL6Axe3DJlgAN3kLs0+nfTQ8595fOKYH+R3gqK/M/CTI
-         v9SA==
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1694912719; x=1695517519; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/pQuCGgxzF9AsCBKNkJ7L4cEdQKndjj38XlHX9F4meo=;
+        b=rH83utkwXJqM9RpbaM4ywrHty1wIbfrZ3hRadDA8H1zAmorsePeVyyysFc5KiddbKN
+         uqFVnrCPs0BV8seEhep4pt8PrsyZKGWxD529ubb7C9irmFhuqrKSpiCy7hiemdlvxwbq
+         ByNWXNOKWO15swLAQ4qxz/3LgAm7ZqlzqXy/0kVMGgI/9bnszr+IsHzsqSRmAls4FjiC
+         nDEYTFK5Rskxb2oH44WQ4jLMcmz75PBIMJ0nfOugfX2NnuHGa6a8nAxi6jZkdOegQfUG
+         olNjIlVy7AI30hiRLZ9jbL/LPKjXPLsjs1cUeG+4CMo2CZoFXr0+a1v+OZuQWY5gG0zT
+         saVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694905539; x=1695510339;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8qmry3f1dKS9XSay+/EcqKiwhJ290GuK83cA4dSJTow=;
-        b=lv0NZyAjvtUXS7dRCS3nvX4ctXbTY1O/jLB6Abfg9UxAWNBaQRel8WG9doANodPdK5
-         tRFbzbOXVzFd5PkY95/b/3vICaHUrPmtAfFHfuDXSy3zg9k4n/bjjWgZmruocOzME3Jf
-         9SAaSFDIY6uKmEYLOBBaVyJRFd8R9EaT/ZX/51lfSGCz5GuzIICH/XDrRFOgrAk8xiP3
-         DTTgaZeclFypVVez5qxzf9v8jER/257WcbNOEll4405MFI+EePTakmcdW7FevYUP5qV+
-         ayF4wVgts80S4A9VX0sQZPRgY53XfKJhple85bL2wFIyf3maNerRxqb2iaTTnowopVg0
-         IC0Q==
-X-Gm-Message-State: AOJu0YyEBAc/1l1BNvte1TwuMDjO06OK2H5PlDsDgypYmSD3xHE+7dQD
-        JY8o5Gc4eYCZU/TUisxJllUmihNGEFV9KiSKilE=
-X-Google-Smtp-Source: AGHT+IEVVgRoyN4fUdQy321FNnju/vPTuIiGoc4HDyEWId4+9iEJEh17spLil47FB9PdGig5vTI7bQicgK2TNBUKxlE=
-X-Received: by 2002:a05:6512:28c:b0:500:daf6:3898 with SMTP id
- j12-20020a056512028c00b00500daf63898mr4364733lfp.26.1694905539036; Sat, 16
- Sep 2023 16:05:39 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1694912719; x=1695517519;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/pQuCGgxzF9AsCBKNkJ7L4cEdQKndjj38XlHX9F4meo=;
+        b=YPQ4FjoowucqzOIATb9OSmCkxIs2TF3dJz338E5LMuTzUxPJhEZpPZKDZ6M2wlJhYZ
+         4RWuBIDSuf1Ha/mbJU/acbyzexAHc1X0M+CfnU6p9MhhWy47ggOHWgVUzVbdpt62C7PL
+         +rQs7ievuUF4BeAjXHYtIxw2GTZHOqSUZT15rjyWNOfenm1Q+a7mYD6SH+M9jPcZxoAR
+         pxusIp3U30mrZ/Z5gxqofN8n0soUbML/X58Y9Uz1US2e/YAZZv4wdJ3px3Gu9miTFKOx
+         J9PLsgzceF1AI7RLOWrIbjix2vls+q7VZpdntUufRrTqBWH/Ny9O6rvEdbiszboVE6kC
+         KZ4Q==
+X-Gm-Message-State: AOJu0Yx/ZkUa8tUo8tJ75ByBQ1DtXvVKES9bnIvF2nm2aYPsFwfAJPjy
+        7KgorHCWZIVxU8qo/x8KM+bV1Q==
+X-Google-Smtp-Source: AGHT+IEkP8tCGIgme+/MmmbYafSgpi51x2fL2+vu0U+kM/pXGUYe4j/cp6sUgeiddgWUWF0/rVlvXA==
+X-Received: by 2002:a05:600c:ac8:b0:402:f54d:745 with SMTP id c8-20020a05600c0ac800b00402f54d0745mr4594745wmr.17.1694912718966;
+        Sat, 16 Sep 2023 18:05:18 -0700 (PDT)
+Received: from airbuntu (host109-151-228-137.range109-151.btcentralplus.com. [109.151.228.137])
+        by smtp.gmail.com with ESMTPSA id z7-20020a05600c220700b00403038d7652sm8506706wml.39.2023.09.16.18.05.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 Sep 2023 18:05:18 -0700 (PDT)
+Date:   Sun, 17 Sep 2023 02:05:16 +0100
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com,
+        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
+        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v6 2/2] cpuidle: teo: Introduce util-awareness
+Message-ID: <20230917010516.54dgcmms44wyfrvx@airbuntu>
+References: <20230105145159.1089531-1-kajetan.puchalski@arm.com>
+ <20230105145159.1089531-3-kajetan.puchalski@arm.com>
+ <20230711175814.zfavcn7xn3ia5va4@airbuntu>
+ <ZLZ/btJw5LNVxVy8@e126311.manchester.arm.com>
+ <20230718132432.w5xoxbqm54jmu6n5@airbuntu>
 MIME-Version: 1.0
-References: <88ffb216-96f9-f232-7fe5-48bf82e6aa70@gmail.com> <CANiJ1U9-2zfc5aJJUaYnTBTg+2vMjcfgsuxcFFnn+CjVQ1fCoA@mail.gmail.com>
-In-Reply-To: <CANiJ1U9-2zfc5aJJUaYnTBTg+2vMjcfgsuxcFFnn+CjVQ1fCoA@mail.gmail.com>
-From:   brett hassall <brett.hassall@gmail.com>
-Date:   Sun, 17 Sep 2023 09:05:27 +1000
-Message-ID: <CANiJ1U9renpjKDfSbFVTvt-G+P6iP3n4iN3_gzuVk_3DTWfJdg@mail.gmail.com>
-Subject: Re: upstream linux cannot achieve package C8 power saving
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Ajay Agarwal <ajayagarwal@google.com>,
-        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Michael Bottini <michael.a.bottini@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Power Management <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230718132432.w5xoxbqm54jmu6n5@airbuntu>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,59 +77,72 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi
+Hi Kajetan
 
-The Ubuntu devs have reverted their 3 patches and replaced them with 2
-new patches.
+On 07/18/23 14:24, Qais Yousef wrote:
 
-Given this happened in the last week, I'll hold off submitting a patch
-for now and see what Ubuntu does
+> These patches are in GKI. So we'll if there are uncaught problems I guess :)
+> 
+> No appetite for a knob, but the very low value for littles did strike me and
+> thought I better ask at least. Today's littles are too tiny for their own good
+> and it seemed the threshold could end up being too aggressive especially in low
+> activity state. You effectively are saying that if we have few 100us of
+> activity, normal TEO predictions based on timers are no good and better to stay
+> shallower anyway.
+> 
+> Note that due to NOHZ, if we go to idle for an extended period the util value
+> might not decay for a while and miss some opportunities. Especially that when
+> it next wakes up, it's enough for this wake up to run for few 100s us to block
+> a deeper state before going back to sleep for extended period of time.
+> 
+> But we shall see. I got the answer I was looking for for now.
 
-Thanks
-Brett
+Unfortunately not too long after the patches got merged I got regression report
+of worse power. As you know on Android things are not as mainline, so I need to
+untangle this to make sure it's not a red herring. But if you want to take my
+word for it, I think the chances of it being a true regression is high. I had
+to introduce knobs to allow controlling the thresholds for now, so the good
+news they do help and it's not a total revert. I don't have a lot of info to
+share, but it's the low activity use cases that seem to got impacted. Like
+video playback for instance.
+
+Generally, I'm trying to remove some hardcoded values from the scheduler that
+enforces a behavior that is not universally desired on all systems/workloads.
+And I think the way the util awareness threshold are done today fall into the
+same category.
+
+As I tried to highlight before, it is easy to trick the threshold by a task
+that runs for a short time then goes back to sleep for a long time.
+
+And when the system runs full throttle for a while, it'll take around 150+ms
+for the util to decay to the threshold value. That's a long time to block
+entering deeper idle states for. I'm not sure how NOHZ and blocked averaged
+updates can make this potentially worse.
+
+In my view, the absolute comparison against util can be misleading. Even when
+util is 512 for example, we still have 50% of idle time. How this time is
+distributed can't be known from util alone. It could be one task waking up and
+sleeping. It could be multiple tasks at many combination of patterns all
+leading to the same outcome of CPU util being 512.
+
+IIUC the idea is that if we have even small activity, then erring on the
+shallow side is better. But given that target-residency is usually in few ms
+range, do we really need to be that quite? With a target-residency of 3ms for
+example, even at util of 900 there can be opportunities to enter it.
+
+Can't we instead sample util at entry to idle loop and see if it is on a rising
+or falling trend? When rising it makes sense to say there's demand, let's block
+deeper idle state. But if it is falling, then if the decay time is longer than
+target-residency we can say it's okay to permit the deeper idle states?
+
+I need to think more about this; but I think it's worth trying to make these
+thresholds more deterministic and quantifiable. There are too many workloads
+and system variations. I'm not sure if a knob to control these thresholds is
+good for anything but a workaround like I had to do. These hardcoded values
+can be improved IMHO. Happy to help to find alternatives.
 
 
-On Tue, 5 Sept 2023 at 06:25, brett hassall <brett.hassall@gmail.com> wrote:
->
-> Hi
->
-> I contacted the Ubuntu developers to see if they were ok with using
-> their patches.
->
-> They advised the patches were outdated and further development was
-> under discussion.
->
-> The current patches work and would benefit Linux users until something
-> better comes along.
->
-> Would you like me to proceed with the formal patch still ?
->
-> Thanks
-> Brett
->
->
-> On Wed, 30 Aug 2023 at 11:11, Bagas Sanjaya <bagasdotme@gmail.com> wrote:
-> >
-> > Hi,
-> >
-> > I notice a bug report on Bugzilla [1]. Quoting from it:
-> >
-> > > v6.5 (and at least v5.15, v5.19 and v6.4 as well) will not go to a higher power saving level than package C3.
-> > >
-> > > With the inclusion of a patch that combines 3 Ubuntu commits related to VMD ASPM & LTR, package C8 is used.
-> >
-> > See Bugzilla for the full thread.
-> >
-> > FYI, the attached proposed fix is the same as Brett's another BZ report [2].
-> > I include it for upstreaming.
-> >
-> > To Brett: Would you like to submit the proper, formal patch (see
-> > Documentation/process/submitting-patches.rst for details)?
-> >
-> > Thanks.
-> >
-> > [1]: https://bugzilla.kernel.org/show_bug.cgi?id=217841
-> > [2]: https://bugzilla.kernel.org/show_bug.cgi?id=217828
-> >
-> > --
-> > An old man doll... just what I always wanted! - Clara
+Cheers
+
+--
+Qais Yousef
