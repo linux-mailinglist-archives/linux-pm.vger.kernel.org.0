@@ -2,110 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FBD7A373C
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Sep 2023 21:09:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5169C7A3DDB
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Sep 2023 23:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233512AbjIQTJS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 17 Sep 2023 15:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
+        id S231953AbjIQV3s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 17 Sep 2023 17:29:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238011AbjIQTIy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Sep 2023 15:08:54 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23DCA10D;
-        Sun, 17 Sep 2023 12:08:49 -0700 (PDT)
-Received: from mercury (unknown [185.254.75.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 58B14660721F;
-        Sun, 17 Sep 2023 20:08:47 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1694977727;
-        bh=MhUT4ZgnWZIvqh1JKIu10f1szECnNwOZIDOW8HonKBc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=TrqPdfKzJqDG9xMsqEC1xY+ba/jCjD+czKGJ8mpI4Tuih83nSieN+5ih0xl7IfRb+
-         lU8AcYyQcCWgYdt72h3n4G3j31hdzoePHA9L+KvmNHyItfm1J6Ch4XEi9pchXRf8Sj
-         iDdU7q0Atl57/VTJpE0lmu5V7goPnuP3kAiLTWWXos7DOT8CxapxLnf9413aSw+ysU
-         CdVtmShMhfyPRQxakJJ/wiyx03k47P3jYCbDtCDR1Zt3HI/Mq4/GiICx3q58AOqCYy
-         azpIE9dT2aGOlK/Ov2ay0H367G+IJ8CDZsDvb6L9Qq/iWQIHNogxiPYLeX+nfL8mB9
-         yhCe4a0X1C8ug==
-Received: by mercury (Postfix, from userid 1000)
-        id 394D710604B6; Sun, 17 Sep 2023 21:01:31 +0200 (CEST)
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [PATCH] dt-bindings: power: supply: Drop deprecated ab8500-battery
-Date:   Sun, 17 Sep 2023 21:01:24 +0200
-Message-Id: <20230917190124.1012316-1-sebastian.reichel@collabora.com>
-X-Mailer: git-send-email 2.40.1
+        with ESMTP id S230167AbjIQV3T (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Sep 2023 17:29:19 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE32130
+        for <linux-pm@vger.kernel.org>; Sun, 17 Sep 2023 14:29:13 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1c39a4f14bcso36473295ad.3
+        for <linux-pm@vger.kernel.org>; Sun, 17 Sep 2023 14:29:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google; t=1694986153; x=1695590953; darn=vger.kernel.org;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=sVQbPyFdM4luF2DrdTikPfdxX3rv9lXgDVF92WzKQBA=;
+        b=M/jizT2mrDYD8Eb526wI5dfx4sb/d+cj11kY7Gvt8Y8p247CdoG8Mp8WoI9YL3n/6q
+         pYAHEtSuNRl69cyPwnPgqHEcOll+bKLsVm6S8Y783hVXx/ZUsw8REcnbQpoZ01TO6ozd
+         lco0zxbnAuNYp4+w+hJ3M9xrGxB5Z2CTfyxuQJoZRhvrcj4KjPibJuRixkfs4mf+oVj3
+         R4Noyq9hPVWTW4lor+ljAIbo+mfFB0XJYMc3FrzesOlWQIM7OlDObZ/Yz6MEuQNchemh
+         bN9BB7PwmKSVSlVZVaxbaYeGWSdqnAeQXuUNiSVPHANUP4SROWy7gcKAUtmqB01lWM31
+         yHdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694986153; x=1695590953;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sVQbPyFdM4luF2DrdTikPfdxX3rv9lXgDVF92WzKQBA=;
+        b=O4wxy8DFwR9cKpI6s3nl2kBKP5n9TbsP7VWbZkUkuo45bLC5ZE2TxIKdnIBmKCvFd4
+         Bv+2HOuWR6kss8/CquUC20h9TfI6iJK4ojpHUP6YY5bcG1gVDbI5heMJh/NPX8uQDxDn
+         SaUKl83jKCYibH/q15sxVWZFPbyQz3EEVR3ab+r3RXqTJQTEf+qzlaj0o41cy80zNJZj
+         xasOeBL0d8irLnfAPpgFsZTRCPUkJaCN6QlpwLOisettxbCux509y1IKU+qCu55fM//3
+         myDO4BZg1hfpz55HopyLCUiXNIW3eSqJII2xYNbOJ2QC4OhvF42jYDlNdikPKQIv+iOQ
+         kHgQ==
+X-Gm-Message-State: AOJu0Yx305jCaJBmHYp0quVepjguLvFjsxu8TT+bIOts2aKUqDI9g1o7
+        Mamsg4Wa4hz8mM5fs67n+1+jRN+rAUP3lxwPruo=
+X-Google-Smtp-Source: AGHT+IHJCZYt25NQWNl3KplF0hoF1Mc2Oxzl8kxQCjWQd5Ydn36vmPLYIf6TM+sd4aBU5grh0mKLzQ==
+X-Received: by 2002:a17:902:c94f:b0:1c3:3dae:5869 with SMTP id i15-20020a170902c94f00b001c33dae5869mr9757433pla.63.1694986152952;
+        Sun, 17 Sep 2023 14:29:12 -0700 (PDT)
+Received: from DougS18 (s66-183-142-209.bc.hsia.telus.net. [66.183.142.209])
+        by smtp.gmail.com with ESMTPSA id ck11-20020a17090afe0b00b0025c1cfdb93esm5984287pjb.13.2023.09.17.14.29.12
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 17 Sep 2023 14:29:12 -0700 (PDT)
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
+        <rafael.j.wysocki@intel.com>
+Cc:     "Doug Smythies" <dsmythies@telus.net>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <Mario.Limonciello@amd.com>,
+        "'Swapnil Sapkal'" <swapnil.sapkal@amd.com>, <Ray.Huang@amd.com>
+Subject: [PATCH] tools/power/x86/intel_pstate_tracer: python minimum version
+Date:   Sun, 17 Sep 2023 14:29:15 -0700
+Message-ID: <001701d9e9ae$02438120$06ca8360$@telus.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-ca
+Thread-Index: AdnprML0/P/rI+TGQ42r3UCRGpjUpQ==
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Linus Walleij modified AB8500 to use the generic simple-battery
-and samsung,battery bindings. This is an unused leftover that
-can be removed.
+From: Doug Smythies <dsmythies@telus.net>
 
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Change the minimum python version from 2.7 to 3.6.
+Remove a 2.X backwards compatibility line.
+
+Signed-off-by: Doug Smythies <dsmythies@telus.net>
 ---
- .../supply/stericsson,ab8500-battery.txt      | 34 -------------------
- 1 file changed, 34 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/power/supply/stericsson,ab8500-battery.txt
+ .../x86/intel_pstate_tracer/intel_pstate_tracer.py     | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-battery.txt b/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-battery.txt
-deleted file mode 100644
-index ee125cb0e46d..000000000000
---- a/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-battery.txt
-+++ /dev/null
-@@ -1,34 +0,0 @@
--AB85000 PMIC contains a node, which contains shared
--information about the battery connected to the PMIC.
--The node has no compatible property.
--
--Properties of this node are:
--
--thermistor-on-batctrl:
--	A boolean value indicating thermistor interface	to battery
--
--	Note:
--	'btemp' and 'batctrl' are the pins interfaced for battery temperature
--	measurement, 'btemp' signal is used when NTC(negative temperature
--	coefficient) resister is interfaced external to battery whereas
--	'batctrl' pin is used when NTC resister is internal to battery.
--
--	Example:
--	ab8500_battery: ab8500_battery {
--		thermistor-on-batctrl;
--	};
--	indicates: NTC resister is internal to battery, 'batctrl' is used
--		for thermal measurement.
--
--	The absence of property 'thermal-on-batctrl' indicates
--	NTC resister is external to battery and  'btemp' signal is used
--	for thermal measurement.
--
--battery-type:
--	This shall be the battery manufacturing technology type,
--	allowed types are:
--		"UNKNOWN" "NiMH" "LION" "LIPO" "LiFe" "NiCd" "LiMn"
--	Example:
--	ab8500_battery: ab8500_battery {
--		stericsson,battery-type = "LIPO";
--	}
--- 
-2.40.1
+diff --git a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+index ec3323100e1a..6b0790e6465a 100755
+--- a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
++++ b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ # SPDX-License-Identifier: GPL-2.0-only
+ # -*- coding: utf-8 -*-
+ #
+@@ -11,9 +11,9 @@ then this utility enables and collects trace data for a user specified interval
+ and generates performance plots.
+
+ Prerequisites:
+-    Python version 2.7.x or higher
++    Python version 3.6.x or higher
+     gnuplot 5.0 or higher
+-    gnuplot-py 1.8 or higher
++    phython3-gnuplot 1.8 or higher
+     (Most of the distributions have these required packages. They may be called
+      gnuplot-py, phython-gnuplot or phython3-gnuplot, gnuplot-nox, ... )
+
+@@ -23,7 +23,7 @@ Prerequisites:
+     see print_help(): for Usage and Output details
+
+ """
+-from __future__ import print_function
++
+ from datetime import datetime
+ import subprocess
+ import os
+@@ -562,7 +562,7 @@ if __name__ == "__main__":
+
+     # Temporary (or perhaps not)
+     cur_version = sys.version_info
+-    print('python version (should be >= 2.7):')
++    print('python version (should be >= 3.6):')
+     print(cur_version)
+
+     # Left as "cleanup" for potential future re-run ability.
+--
+2.25.1
+
 
