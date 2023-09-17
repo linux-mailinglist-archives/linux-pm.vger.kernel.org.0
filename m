@@ -2,71 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5169C7A3DDB
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Sep 2023 23:30:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0C127A3E04
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Sep 2023 23:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231953AbjIQV3s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 17 Sep 2023 17:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58852 "EHLO
+        id S238594AbjIQVoQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 17 Sep 2023 17:44:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbjIQV3T (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Sep 2023 17:29:19 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE32130
-        for <linux-pm@vger.kernel.org>; Sun, 17 Sep 2023 14:29:13 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1c39a4f14bcso36473295ad.3
-        for <linux-pm@vger.kernel.org>; Sun, 17 Sep 2023 14:29:13 -0700 (PDT)
+        with ESMTP id S239153AbjIQVnq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Sep 2023 17:43:46 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EA6A8
+        for <linux-pm@vger.kernel.org>; Sun, 17 Sep 2023 14:43:40 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1c43b4b02c1so13002975ad.3
+        for <linux-pm@vger.kernel.org>; Sun, 17 Sep 2023 14:43:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google; t=1694986153; x=1695590953; darn=vger.kernel.org;
+        d=telus.net; s=google; t=1694987020; x=1695591820; darn=vger.kernel.org;
         h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=sVQbPyFdM4luF2DrdTikPfdxX3rv9lXgDVF92WzKQBA=;
-        b=M/jizT2mrDYD8Eb526wI5dfx4sb/d+cj11kY7Gvt8Y8p247CdoG8Mp8WoI9YL3n/6q
-         pYAHEtSuNRl69cyPwnPgqHEcOll+bKLsVm6S8Y783hVXx/ZUsw8REcnbQpoZ01TO6ozd
-         lco0zxbnAuNYp4+w+hJ3M9xrGxB5Z2CTfyxuQJoZRhvrcj4KjPibJuRixkfs4mf+oVj3
-         R4Noyq9hPVWTW4lor+ljAIbo+mfFB0XJYMc3FrzesOlWQIM7OlDObZ/Yz6MEuQNchemh
-         bN9BB7PwmKSVSlVZVaxbaYeGWSdqnAeQXuUNiSVPHANUP4SROWy7gcKAUtmqB01lWM31
-         yHdA==
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EjYEVDeyXWGRfU5iV7LvJBf6c7N982G1lGvpbIPmcJ8=;
+        b=KX8FblGrPINTGWJ+F+2OsLf/gAyXu98qR4yxI8s4WMVP0eTwMSfN6urkULb+FAZHtd
+         rxzE+RJAhk50qj6AOC0t/OjpLK0vLxPsruIpQMsdUd0B5RfFHJTZ1NfRtGW2GNiwwAmX
+         IQoHt9NRjqo7K0Yp7DjoEcV1TkJ9bGCmHIy49f9WKA8octbvKA/t1MtXI2yp6ZSVxCta
+         IWXLEZewwro8H7U0M0RTvddQQjcFbDpSM6KTad4o/86uHXJazghPsvMQ/xXX8r6e1XTs
+         c3J4COS3Wg46b4qkzZa6C2nxw7P/ZSrlehVzVRaYPFL6yaG7lBnDr4hdpFW+jN2Iyygf
+         nOTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694986153; x=1695590953;
+        d=1e100.net; s=20230601; t=1694987020; x=1695591820;
         h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sVQbPyFdM4luF2DrdTikPfdxX3rv9lXgDVF92WzKQBA=;
-        b=O4wxy8DFwR9cKpI6s3nl2kBKP5n9TbsP7VWbZkUkuo45bLC5ZE2TxIKdnIBmKCvFd4
-         Bv+2HOuWR6kss8/CquUC20h9TfI6iJK4ojpHUP6YY5bcG1gVDbI5heMJh/NPX8uQDxDn
-         SaUKl83jKCYibH/q15sxVWZFPbyQz3EEVR3ab+r3RXqTJQTEf+qzlaj0o41cy80zNJZj
-         xasOeBL0d8irLnfAPpgFsZTRCPUkJaCN6QlpwLOisettxbCux509y1IKU+qCu55fM//3
-         myDO4BZg1hfpz55HopyLCUiXNIW3eSqJII2xYNbOJ2QC4OhvF42jYDlNdikPKQIv+iOQ
-         kHgQ==
-X-Gm-Message-State: AOJu0Yx305jCaJBmHYp0quVepjguLvFjsxu8TT+bIOts2aKUqDI9g1o7
-        Mamsg4Wa4hz8mM5fs67n+1+jRN+rAUP3lxwPruo=
-X-Google-Smtp-Source: AGHT+IHJCZYt25NQWNl3KplF0hoF1Mc2Oxzl8kxQCjWQd5Ydn36vmPLYIf6TM+sd4aBU5grh0mKLzQ==
-X-Received: by 2002:a17:902:c94f:b0:1c3:3dae:5869 with SMTP id i15-20020a170902c94f00b001c33dae5869mr9757433pla.63.1694986152952;
-        Sun, 17 Sep 2023 14:29:12 -0700 (PDT)
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EjYEVDeyXWGRfU5iV7LvJBf6c7N982G1lGvpbIPmcJ8=;
+        b=fLoMbnoUV8lP0xXRVkSN19NFjP7vC6eJoxPBxlpP0u4+622NBeTh9JtQRYfPV/x9gV
+         aDzHZN6uKvj0UsCbVLnV8TaVaQwHu8zUXd1a4dRqhSFpD/1tg3pzgKfZJk1sOguMgfP7
+         2HTj3VJe/ah2nOpc5gYQ4wcV6GCaABcJQ3JvpxUM/dp64MLMoGoLSmyG+9bHcrdns8G+
+         b6ZnmKb1yl06/KnRvE5YZPUbGVzYjy5QSGqJw1B4HGdPUmZK8V5Z7XV81exfSbjOJHfq
+         PiqhAWMoJ65jqVL2qIapAK7FybabeB7qC7W3BfkPGMYh2ZnBKJ8HAQzglEFGHpwTO7Pn
+         Z6Dg==
+X-Gm-Message-State: AOJu0Yyr5xk6gL2qFrM92EOO33eDdlZ6fCXvYPpUs64MbHHYpxZGohjm
+        /OK/KS2vPxc/ideGskmGQ0n5vg==
+X-Google-Smtp-Source: AGHT+IFfMGfQ5zQmDSFheljxqnHWoOfv4bT82d7KBJ5y1wKvmf3MnOTX9NMedjj7EKPWak+DvfqHCA==
+X-Received: by 2002:a17:903:25ca:b0:1c4:48c4:969b with SMTP id jc10-20020a17090325ca00b001c448c4969bmr4358364plb.52.1694987020400;
+        Sun, 17 Sep 2023 14:43:40 -0700 (PDT)
 Received: from DougS18 (s66-183-142-209.bc.hsia.telus.net. [66.183.142.209])
-        by smtp.gmail.com with ESMTPSA id ck11-20020a17090afe0b00b0025c1cfdb93esm5984287pjb.13.2023.09.17.14.29.12
+        by smtp.gmail.com with ESMTPSA id h21-20020a170902f7d500b001ae0a4b1d3fsm7047393plw.153.2023.09.17.14.43.39
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 17 Sep 2023 14:29:12 -0700 (PDT)
+        Sun, 17 Sep 2023 14:43:39 -0700 (PDT)
 From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
-        <rafael.j.wysocki@intel.com>
-Cc:     "Doug Smythies" <dsmythies@telus.net>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <Mario.Limonciello@amd.com>,
-        "'Swapnil Sapkal'" <swapnil.sapkal@amd.com>, <Ray.Huang@amd.com>
-Subject: [PATCH] tools/power/x86/intel_pstate_tracer: python minimum version
-Date:   Sun, 17 Sep 2023 14:29:15 -0700
-Message-ID: <001701d9e9ae$02438120$06ca8360$@telus.net>
+To:     "'Mario Limonciello'" <mario.limonciello@amd.com>,
+        "'Swapnil Sapkal'" <swapnil.sapkal@amd.com>
+Cc:     <rafael.j.wysocki@intel.com>, <Ray.Huang@amd.com>,
+        <li.meng@amd.com>, <shuah@kernel.org>, <sukrut.bellary@gmail.com>,
+        <gautham.shenoy@amd.com>, <wyes.karny@amd.com>,
+        <Perry.Yuan@amd.com>, <zwisler@chromium.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
+        "Doug Smythies" <dsmythies@telus.net>
+References: <20230915104057.132210-1-swapnil.sapkal@amd.com>    <20230915104057.132210-3-swapnil.sapkal@amd.com>        <00b201d9e819$b2447e80$16cd7b80$@telus.net>     <2fd025a9-52f3-4922-99cf-82355b0e35fe@amd.com> <CAAYoRsUhusVzOnaGHjPoMWYy2_iPFAjFLoCrj6vSX26EHNWGiw@mail.gmail.com>
+In-Reply-To: <CAAYoRsUhusVzOnaGHjPoMWYy2_iPFAjFLoCrj6vSX26EHNWGiw@mail.gmail.com>
+Subject: RE: [PATCH 2/2] tools/power/x86/intel_pstate_tracer: Use pygnuplot package for Gnuplot
+Date:   Sun, 17 Sep 2023 14:43:42 -0700
+Message-ID: <001c01d9e9b0$073fadf0$15bf09d0$@telus.net>
 MIME-Version: 1.0
 Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 X-Mailer: Microsoft Outlook 16.0
 Content-Language: en-ca
-Thread-Index: AdnprML0/P/rI+TGQ42r3UCRGpjUpQ==
+Thread-Index: AQKwVkrK5CGttHhKf0ienv16Lobu0QKE+b5tAruzzQ4BoCijAABix5Z4rjiS0sA=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,57 +81,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Doug Smythies <dsmythies@telus.net>
+On 2023.09.17 15:17 Doug wrote:
+> On Fri, Sep 15, 2023 at 2:31=E2=80=AFPM Mario Limonciello
+>> On 9/15/2023 16:15, Doug Smythies wrote:
+>>> On 2023.09.15 03:41 Swapnil Sapkal wrote:
+...
+>>> Not really related, but for a few years now I have been meaning to
+>>> change the minimum python version prerequisite to >=3D 3.0 and
+>>> to change the shebang line.
+...
+>>  Besides the shebang, you should also
+>> use a helper like 2to3 to look for any other changes.
 
-Change the minimum python version from 2.7 to 3.6.
-Remove a 2.X backwards compatibility line.
+Hi Mario,
 
-Signed-off-by: Doug Smythies <dsmythies@telus.net>
----
- .../x86/intel_pstate_tracer/intel_pstate_tracer.py     | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+I was not aware of the 2to3 helper.
+Thank you mentioning it.
+The 2to3 helper only changed one line,
+which I included in the minimum python version
+patch I just submitted.
 
-diff --git a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-index ec3323100e1a..6b0790e6465a 100755
---- a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-+++ b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-@@ -1,4 +1,4 @@
--#!/usr/bin/env python
-+#!/usr/bin/env python3
- # SPDX-License-Identifier: GPL-2.0-only
- # -*- coding: utf-8 -*-
- #
-@@ -11,9 +11,9 @@ then this utility enables and collects trace data for a user specified interval
- and generates performance plots.
+> I already did the python 3 patch in January, 2020:
+> commit e749e09db30c38f1a275945814b0109e530a07b0
+> tools/power/x86/intel_pstate_tracer: changes for python 3 =
+compatibility
+>=20
+> I haven't had any issues since, shebang aside.
 
- Prerequisites:
--    Python version 2.7.x or higher
-+    Python version 3.6.x or higher
-     gnuplot 5.0 or higher
--    gnuplot-py 1.8 or higher
-+    phython3-gnuplot 1.8 or higher
-     (Most of the distributions have these required packages. They may be called
-      gnuplot-py, phython-gnuplot or phython3-gnuplot, gnuplot-nox, ... )
-
-@@ -23,7 +23,7 @@ Prerequisites:
-     see print_help(): for Usage and Output details
-
- """
--from __future__ import print_function
-+
- from datetime import datetime
- import subprocess
- import os
-@@ -562,7 +562,7 @@ if __name__ == "__main__":
-
-     # Temporary (or perhaps not)
-     cur_version = sys.version_info
--    print('python version (should be >= 2.7):')
-+    print('python version (should be >= 3.6):')
-     print(cur_version)
-
-     # Left as "cleanup" for potential future re-run ability.
---
-2.25.1
+... Doug
 
 
