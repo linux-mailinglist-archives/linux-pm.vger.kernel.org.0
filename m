@@ -2,45 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40CCC7A4F30
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Sep 2023 18:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2872F7A4F12
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Sep 2023 18:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbjIRQfc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Sep 2023 12:35:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59166 "EHLO
+        id S230004AbjIRQdx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Sep 2023 12:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbjIRQfU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 12:35:20 -0400
+        with ESMTP id S229485AbjIRQda (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 12:33:30 -0400
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03D0216E5
-        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 09:14:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2939EDF
+        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 09:13:38 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qiER5-00028K-Py; Mon, 18 Sep 2023 15:37:11 +0200
+        id 1qiER6-0002Ar-01; Mon, 18 Sep 2023 15:37:12 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qiER5-007EZS-Bu; Mon, 18 Sep 2023 15:37:11 +0200
+        id 1qiER5-007EZW-Id; Mon, 18 Sep 2023 15:37:11 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qiER5-002fXK-2y; Mon, 18 Sep 2023 15:37:11 +0200
+        id 1qiER5-002fXO-9V; Mon, 18 Sep 2023 15:37:11 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Sebastian Reichel <sre@kernel.org>
-Cc:     =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        linux-pm@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 23/32] power: supply: rx51_battery: Convert to platform remove callback returning void
-Date:   Mon, 18 Sep 2023 15:36:51 +0200
-Message-Id: <20230918133700.1254499-24-u.kleine-koenig@pengutronix.de>
+Cc:     Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH 24/32] power: supply: sc2731_charger: Convert to platform remove callback returning void
+Date:   Mon, 18 Sep 2023 15:36:52 +0200
+Message-Id: <20230918133700.1254499-25-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230918133700.1254499-1-u.kleine-koenig@pengutronix.de>
 References: <20230918133700.1254499-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1953; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=kt4IFqfKKkCG5RhT/CM6kvvOCQQyrT7zf+d5hrLijmw=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlCFJqMwDYLrXWTugpf/tNx+vdtgXDeM1yHvCS2 PH++h7AMEyJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZQhSagAKCRCPgPtYfRL+ TqVYCAC1xm4u7aMk163A4dmFDRJuTpoFSquxZKBJXGjZndYVyaF9iA5DVyMcGUqmYBbmUQwGf5k z2vLZddHZHHDUkpi1cLDDBKRaFDwA9PtWsx6y5ZS+aOntudfKR4sw28Ozn+7MtBFlPNfm0dloI7 Oc1W562vgDEGJE6rOxk6HXY6hh4V5yBabqjr8Qg8eR3puVoqgYz4rpVwTIiMie4OWx+3wsRaq2D /cWAGRcR6iV9WiJaUW/SOHtt6PaFFCbVdVh3npDB0FM309IPLx8H9m7nYl/EiKfbAKHL9rQEJfp Fa590jCLg830fzp5Dica5RSklHMO4IKqbvBSBk1jJ1WnGtMI
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1838; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=JOFB5KtMSpNaNpp0ew+p4vz8n3NR6mr5udfy08IINEg=; b=owGbwMvMwMXY3/A7olbonx/jabUkhlSOoOwbgU4f/3W6ONotEUz43FftbHBBrmInx8Qq5V8bO mKElUw7GY1ZGBi5GGTFFFnsG9dkWlXJRXau/XcZZhArE8gUBi5OAZjI1escDIv3Twy2/rSQTzY0 V9S1ulx515nGr46qJh17r/xj5VjxstE/uPAT802Np99MbVtnHOrVXuYqkJvHIr+2dfWaN0ubvr1 VPxSzq+3PtFiLKQLsXIkzDjCxxC05GeK2+QLzK1PRGhFux4/uBXueKKX1svknrQy7UdCwP4Hl6A yTlQ57Ao9Hq7u/Y1zmvv5Hd/i0azNiHT1LL3qm1cm01i2QdXq8vTVZPKb6yHeZiwkvzxvbZ78/c q0uT7nFPEwyaP2DU29StvzP/+wyr9xPt0iLtaEnP3GXf47wpGh7pbUtHbL2Yq5N21pfnjNvFOff l9k0d6nPO6mM5PzytOUdmz1YN73sUvCzkndcu3Oy60cA
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -70,40 +72,37 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/power/supply/rx51_battery.c | 6 ++----
+ drivers/power/supply/sc2731_charger.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/power/supply/rx51_battery.c b/drivers/power/supply/rx51_battery.c
-index 6e488ecf4dcb..e2bfc81f0fd9 100644
---- a/drivers/power/supply/rx51_battery.c
-+++ b/drivers/power/supply/rx51_battery.c
-@@ -246,7 +246,7 @@ static int rx51_battery_probe(struct platform_device *pdev)
- 	return ret;
+diff --git a/drivers/power/supply/sc2731_charger.c b/drivers/power/supply/sc2731_charger.c
+index 9ac17cf7a126..b3d8b1ca97da 100644
+--- a/drivers/power/supply/sc2731_charger.c
++++ b/drivers/power/supply/sc2731_charger.c
+@@ -511,13 +511,11 @@ static int sc2731_charger_probe(struct platform_device *pdev)
+ 	return 0;
  }
  
--static int rx51_battery_remove(struct platform_device *pdev)
-+static void rx51_battery_remove(struct platform_device *pdev)
+-static int sc2731_charger_remove(struct platform_device *pdev)
++static void sc2731_charger_remove(struct platform_device *pdev)
  {
- 	struct rx51_device_info *di = platform_get_drvdata(pdev);
+ 	struct sc2731_charger_info *info = platform_get_drvdata(pdev);
  
-@@ -255,8 +255,6 @@ static int rx51_battery_remove(struct platform_device *pdev)
- 	iio_channel_release(di->channel_vbat);
- 	iio_channel_release(di->channel_bsi);
- 	iio_channel_release(di->channel_temp);
+ 	usb_unregister_notifier(info->usb_phy, &info->usb_notify);
 -
 -	return 0;
  }
  
- #ifdef CONFIG_OF
-@@ -269,7 +267,7 @@ MODULE_DEVICE_TABLE(of, n900_battery_of_match);
+ static const struct of_device_id sc2731_charger_of_match[] = {
+@@ -532,7 +530,7 @@ static struct platform_driver sc2731_charger_driver = {
+ 		.of_match_table = sc2731_charger_of_match,
+ 	},
+ 	.probe = sc2731_charger_probe,
+-	.remove = sc2731_charger_remove,
++	.remove_new = sc2731_charger_remove,
+ };
  
- static struct platform_driver rx51_battery_driver = {
- 	.probe = rx51_battery_probe,
--	.remove = rx51_battery_remove,
-+	.remove_new = rx51_battery_remove,
- 	.driver = {
- 		.name = "rx51-battery",
- 		.of_match_table = of_match_ptr(n900_battery_of_match),
+ module_platform_driver(sc2731_charger_driver);
 -- 
 2.40.1
 
