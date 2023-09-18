@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC2F7A461C
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Sep 2023 11:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C52B37A461F
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Sep 2023 11:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238765AbjIRJio (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Sep 2023 05:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
+        id S239715AbjIRJir (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Sep 2023 05:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240942AbjIRJi3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 05:38:29 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F9F121
-        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 02:38:21 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-9adca291f99so355859066b.2
-        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 02:38:21 -0700 (PDT)
+        with ESMTP id S240950AbjIRJia (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 05:38:30 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F14128
+        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 02:38:23 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9ad8d47ef2fso529063266b.1
+        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 02:38:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1695029900; x=1695634700; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1695029901; x=1695634701; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ntIS/xJA3nmS8C+qHhhmXutBf4D7O4ovO2luXjJAhFI=;
-        b=qWngDVTQZc1Rx2elTHHNXPxz89AfvfLDF33NxG+GxYCbk+S/9J5fB3qf2an/iUtsrZ
-         Ww1KU1sixh1uYR7h8nassEuUjfbAoXpJEGkekBQ3axhAwFOlok/izYSRPSYtcVwynodp
-         qCMWQ9b2nre1SMG3wz1Jbd5SCKQslESkdxKZvgrpUju4TwMKMgNmoJZ+QL4o1BPBTeth
-         52G07n9gKy/f0b37SJYmnyenJc8mV+pA5H1cbiT7Vay1lFqWj1hqsZVh85dSg2/NSoMr
-         mEkcw37hJqQjKy/EElVYnwmTxEnQGxKtghle6OZoVsNf/hr2ge9yKM8vJhYHK+7k1gd9
-         YMnQ==
+        bh=KPkAO3LL0QvdQ7w2MdKUYOEVc2znuVAY79aOTVN0dCo=;
+        b=LJ+cfd0l/jPunwhRwkKj7zmyWOFU8E3d3bpl8OBgAyh4Smf80S6FZnUwsQnjkg8xJN
+         GP2W3KrUb5nC2WdeZ+lF0XOEv/dSYOdJ9sZrLj+gUXKalrL/D+38YwTjRMU6qh+rG2e6
+         s627R1v530HvN0Rp2/PgqbGUs4/Bxwjczk2MFCgq4YXmYrejhHbxOCZsDiq+wptbOCpf
+         +nzb3XFBDJE8bfQsQpeU1GOt5bcF9Xn8pDf1I5YmugAXoNDzug76rm7J2md7rBBdvn4T
+         LJxqEz88SLaWoNpf2FsTKcHeA4l1a4Ul02s8bThH/JI6kJ0qs7egAkXK/P/7/d2uMFE7
+         Lb7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695029900; x=1695634700;
+        d=1e100.net; s=20230601; t=1695029901; x=1695634701;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ntIS/xJA3nmS8C+qHhhmXutBf4D7O4ovO2luXjJAhFI=;
-        b=iPH5Z64VhwtB3safP3jlNq/MXUbqUMjNnwJ31dMyiAA/5bzBApAbO5YNDjriqVELth
-         E/DgA5Dv3Lmo7wFm3NFp7/PkeeiLelXtgxaoZtSyVRsbRQL7w3AA9ZUxVNV13DcFun2v
-         DGxoKLTq1ZB6+bwmRPRhQQbt+PDdJPI9kWbqpCVAJ2NiK9CXX5D8eSoYSw9sXcoQdyRP
-         f0RQ2x8qX9Z8p+AKRdfvQ3dCTyR6D4i5n0mxlnEmsHBL8KfA5SAbtwCrAgUbaVapOE8p
-         H8okcfU+PZzJupx5MJLD3lFoZf1/5b3Mcjr/em1Z7TZEHVp9/aqg28Xod9PD92avAhzE
-         QohA==
-X-Gm-Message-State: AOJu0Yy/Ep5TKXW7Zg9pFj7l8r7yd4meGThDyiCD+jBLX7Qa/5rtX4GE
-        CfQNo16dCA2N2DM1hnrRWCz6KqUCuWkb4wwJIomKvA==
-X-Google-Smtp-Source: AGHT+IE+bQwSHx8xiX+tCm83783tfR+MfKxNjh0NiXnB9zvWHYKlTNvUyJdeI4mN4nlSyQOaB6DwFQ==
-X-Received: by 2002:a17:907:a053:b0:9a1:f96c:4baf with SMTP id gz19-20020a170907a05300b009a1f96c4bafmr7437464ejc.5.1695029900372;
-        Mon, 18 Sep 2023 02:38:20 -0700 (PDT)
+        bh=KPkAO3LL0QvdQ7w2MdKUYOEVc2znuVAY79aOTVN0dCo=;
+        b=QMQRVmsYerRsbEG8kPVtVrae/BTU1W0dvISvn1r4eZ2LKR17DV/AZoRwIOnNlhuVBK
+         53IIKGxp7c6m+ljZQ3epbDWJexn2uA6IcrZnHZzRoutKygTMgjWx66cEWL6ELgUCZADw
+         FJ+UWpchpWmdCYrPv7o26rUg6f9T5o0Y/op7N2r9Xvw3DVbc6pNx7gA7ea20woiGRPYL
+         BncLh6kFl9nkQ1q6bYhN5dDZSwJjWLKa+7XLfWSMUynN0ZXCZp0TleOzlvpy5TcIT5WL
+         jYkBsf87lb8rkBjqj0InPFQaYkaNj637A7olVuAl/c7kich4yYSIvSjX3tXr3Xs+8tcf
+         qYvQ==
+X-Gm-Message-State: AOJu0YyPWzSatIggsXgeXwBnKhzY2b/WXzRixmtE8Jwh0yVRROfv3AJ/
+        ZZlllceJu/JWPDobehFiK6YtyQ==
+X-Google-Smtp-Source: AGHT+IHs7Cnv3jg5GzRKlzpQ9IDZ3feX0H8AC8mFOZw7p6rbCJmOXZ1Kq/GmBfj0dKmJX4KbWT9GYw==
+X-Received: by 2002:a17:907:2ccb:b0:9a9:e4ce:c9a2 with SMTP id hg11-20020a1709072ccb00b009a9e4cec9a2mr7340397ejc.53.1695029901406;
+        Mon, 18 Sep 2023 02:38:21 -0700 (PDT)
 Received: from blmsp.fritz.box ([2001:4091:a246:8222:872:4a5b:b69c:1318])
-        by smtp.gmail.com with ESMTPSA id o10-20020a1709061d4a00b0099293cdbc98sm6251164ejh.145.2023.09.18.02.38.19
+        by smtp.gmail.com with ESMTPSA id o10-20020a1709061d4a00b0099293cdbc98sm6251164ejh.145.2023.09.18.02.38.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Sep 2023 02:38:19 -0700 (PDT)
+        Mon, 18 Sep 2023 02:38:21 -0700 (PDT)
 From:   Markus Schneider-Pargmann <msp@baylibre.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -65,111 +65,140 @@ Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org,
         Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH v8 2/8] soc: mediatek: pm-domains: Move bools to a flags field
-Date:   Mon, 18 Sep 2023 11:37:46 +0200
-Message-Id: <20230918093751.1188668-3-msp@baylibre.com>
+Subject: [PATCH v8 3/8] soc: mediatek: pm-domains: Split bus_prot_mask
+Date:   Mon, 18 Sep 2023 11:37:47 +0200
+Message-Id: <20230918093751.1188668-4-msp@baylibre.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230918093751.1188668-1-msp@baylibre.com>
 References: <20230918093751.1188668-1-msp@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-To simplify the macros, use a flags field for simple bools. This is in
-preparation for more flags.
+bus_prot_mask is used for all operations, set clear and acknowledge. In
+preparation of m8365 power domain support split this one mask into two,
+one mask for set and clear, another one for acknowledge.
 
 Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
 Tested-by: Alexandre Mergnat <amergnat@baylibre.com>
 ---
- drivers/pmdomain/mediatek/mtk-pm-domains.c |  6 +++---
- drivers/pmdomain/mediatek/mtk-pm-domains.h | 19 +++++++++++--------
- 2 files changed, 14 insertions(+), 11 deletions(-)
+ drivers/pmdomain/mediatek/mtk-pm-domains.c | 24 +++++++++++++---------
+ drivers/pmdomain/mediatek/mtk-pm-domains.h | 14 +++++++------
+ 2 files changed, 22 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-index ee962804b830..da675a33bdf5 100644
+index da675a33bdf5..dbb268e96310 100644
 --- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
 +++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-@@ -128,7 +128,7 @@ static int _scpsys_bus_protect_enable(const struct scpsys_bus_prot_data *bpd, st
- 		if (!mask)
+@@ -123,18 +123,20 @@ static int _scpsys_bus_protect_enable(const struct scpsys_bus_prot_data *bpd, st
+ 	int i, ret;
+ 
+ 	for (i = 0; i < SPM_MAX_BUS_PROT_DATA; i++) {
+-		u32 val, mask = bpd[i].bus_prot_mask;
++		u32 set_clr_mask = bpd[i].bus_prot_set_clr_mask;
++		u32 sta_mask = bpd[i].bus_prot_sta_mask;
++		u32 val;
+ 
+-		if (!mask)
++		if (!set_clr_mask)
  			break;
  
--		if (bpd[i].bus_prot_reg_update)
-+		if (bpd[i].flags & BUS_PROT_REG_UPDATE)
- 			regmap_set_bits(regmap, bpd[i].bus_prot_set, mask);
+ 		if (bpd[i].flags & BUS_PROT_REG_UPDATE)
+-			regmap_set_bits(regmap, bpd[i].bus_prot_set, mask);
++			regmap_set_bits(regmap, bpd[i].bus_prot_set, set_clr_mask);
  		else
- 			regmap_write(regmap, bpd[i].bus_prot_set, mask);
-@@ -165,12 +165,12 @@ static int _scpsys_bus_protect_disable(const struct scpsys_bus_prot_data *bpd,
- 		if (!mask)
+-			regmap_write(regmap, bpd[i].bus_prot_set, mask);
++			regmap_write(regmap, bpd[i].bus_prot_set, set_clr_mask);
+ 
+ 		ret = regmap_read_poll_timeout(regmap, bpd[i].bus_prot_sta,
+-					       val, (val & mask) == mask,
++					       val, (val & sta_mask) == sta_mask,
+ 					       MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
+ 		if (ret)
+ 			return ret;
+@@ -160,21 +162,23 @@ static int _scpsys_bus_protect_disable(const struct scpsys_bus_prot_data *bpd,
+ 	int i, ret;
+ 
+ 	for (i = SPM_MAX_BUS_PROT_DATA - 1; i >= 0; i--) {
+-		u32 val, mask = bpd[i].bus_prot_mask;
++		u32 set_clr_mask = bpd[i].bus_prot_set_clr_mask;
++		u32 sta_mask = bpd[i].bus_prot_sta_mask;
++		u32 val;
+ 
+-		if (!mask)
++		if (!set_clr_mask)
  			continue;
  
--		if (bpd[i].bus_prot_reg_update)
-+		if (bpd[i].flags & BUS_PROT_REG_UPDATE)
- 			regmap_clear_bits(regmap, bpd[i].bus_prot_clr, mask);
+ 		if (bpd[i].flags & BUS_PROT_REG_UPDATE)
+-			regmap_clear_bits(regmap, bpd[i].bus_prot_clr, mask);
++			regmap_clear_bits(regmap, bpd[i].bus_prot_clr, set_clr_mask);
  		else
- 			regmap_write(regmap, bpd[i].bus_prot_clr, mask);
+-			regmap_write(regmap, bpd[i].bus_prot_clr, mask);
++			regmap_write(regmap, bpd[i].bus_prot_clr, set_clr_mask);
  
--		if (bpd[i].ignore_clr_ack)
-+		if (bpd[i].flags & BUS_PROT_IGNORE_CLR_ACK)
+ 		if (bpd[i].flags & BUS_PROT_IGNORE_CLR_ACK)
  			continue;
  
  		ret = regmap_read_poll_timeout(regmap, bpd[i].bus_prot_sta,
+-					       val, !(val & mask),
++					       val, !(val & sta_mask),
+ 					       MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
+ 		if (ret)
+ 			return ret;
 diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.h b/drivers/pmdomain/mediatek/mtk-pm-domains.h
-index 5ec53ee073c4..d8c0c299dd45 100644
+index d8c0c299dd45..4c3ab72a907b 100644
 --- a/drivers/pmdomain/mediatek/mtk-pm-domains.h
 +++ b/drivers/pmdomain/mediatek/mtk-pm-domains.h
-@@ -42,23 +42,27 @@
+@@ -47,22 +47,23 @@ enum scpsys_bus_prot_flags {
+ 	BUS_PROT_IGNORE_CLR_ACK = BIT(2),
+ };
  
- #define SPM_MAX_BUS_PROT_DATA		6
- 
--#define _BUS_PROT(_mask, _set, _clr, _sta, _update, _ignore) {	\
-+enum scpsys_bus_prot_flags {
-+	BUS_PROT_REG_UPDATE = BIT(1),
-+	BUS_PROT_IGNORE_CLR_ACK = BIT(2),
-+};
-+
-+#define _BUS_PROT(_mask, _set, _clr, _sta, _flags) {		\
- 		.bus_prot_mask = (_mask),			\
+-#define _BUS_PROT(_mask, _set, _clr, _sta, _flags) {		\
+-		.bus_prot_mask = (_mask),			\
++#define _BUS_PROT(_set_clr_mask, _set, _clr, _sta_mask, _sta, _flags) {	\
++		.bus_prot_set_clr_mask = (_set_clr_mask),	\
  		.bus_prot_set = _set,				\
  		.bus_prot_clr = _clr,				\
++		.bus_prot_sta_mask = (_sta_mask),		\
  		.bus_prot_sta = _sta,				\
--		.bus_prot_reg_update = _update,			\
--		.ignore_clr_ack = _ignore,			\
-+		.flags = _flags					\
+ 		.flags = _flags					\
  	}
  
  #define BUS_PROT_WR(_mask, _set, _clr, _sta)			\
--		_BUS_PROT(_mask, _set, _clr, _sta, false, false)
-+		_BUS_PROT(_mask, _set, _clr, _sta, 0)
+-		_BUS_PROT(_mask, _set, _clr, _sta, 0)
++		_BUS_PROT(_mask, _set, _clr, _mask, _sta, 0)
  
  #define BUS_PROT_WR_IGN(_mask, _set, _clr, _sta)		\
--		_BUS_PROT(_mask, _set, _clr, _sta, false, true)
-+		_BUS_PROT(_mask, _set, _clr, _sta, BUS_PROT_IGNORE_CLR_ACK)
+-		_BUS_PROT(_mask, _set, _clr, _sta, BUS_PROT_IGNORE_CLR_ACK)
++		_BUS_PROT(_mask, _set, _clr, _mask, _sta, BUS_PROT_IGNORE_CLR_ACK)
  
  #define BUS_PROT_UPDATE(_mask, _set, _clr, _sta)		\
--		_BUS_PROT(_mask, _set, _clr, _sta, true, false)
-+		_BUS_PROT(_mask, _set, _clr, _sta, BUS_PROT_REG_UPDATE)
+-		_BUS_PROT(_mask, _set, _clr, _sta, BUS_PROT_REG_UPDATE)
++		_BUS_PROT(_mask, _set, _clr, _mask, _sta, BUS_PROT_REG_UPDATE)
  
  #define BUS_PROT_UPDATE_TOPAXI(_mask)				\
  		BUS_PROT_UPDATE(_mask,				\
-@@ -71,8 +75,7 @@ struct scpsys_bus_prot_data {
+@@ -71,9 +72,10 @@ enum scpsys_bus_prot_flags {
+ 				INFRA_TOPAXI_PROTECTSTA1)
+ 
+ struct scpsys_bus_prot_data {
+-	u32 bus_prot_mask;
++	u32 bus_prot_set_clr_mask;
  	u32 bus_prot_set;
  	u32 bus_prot_clr;
++	u32 bus_prot_sta_mask;
  	u32 bus_prot_sta;
--	bool bus_prot_reg_update;
--	bool ignore_clr_ack;
-+	u8 flags;
+ 	u8 flags;
  };
- 
- /**
 -- 
 2.40.1
 
