@@ -2,78 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CD827A46EC
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Sep 2023 12:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 274057A4832
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Sep 2023 13:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241013AbjIRK2D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Sep 2023 06:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34096 "EHLO
+        id S233722AbjIRLSm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 18 Sep 2023 07:18:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241189AbjIRK16 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 06:27:58 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F65121;
-        Mon, 18 Sep 2023 03:27:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=JpmACuKzLEySkiefvR4XEzLq2l/GD0gp2bnZ8kEBIFI=; b=kVzQ7/vwTnpP+CIOcOrHaveVQL
-        sLK/dUbflp5AVZCi1NjTN4vGf0n8ODQ7+WX0qtIA+7Sj8W67e4mukT7UakvHTeQdXmkgGSHuD5qlA
-        hrSjKimLBut7aaQ14th62KlJ7yiOPuQc4rl7JsKxe0s/9reJwnUuY01QSW/vr6EANjJKVBe++3mpj
-        ePhEwkrYE2JyWBt0U0Utguc04Ew3fBOT2gmdqMGE/JseHq70NaEbGE7t+Yc6zjLSOXMHhyz8rkrp3
-        qCRkwR9dMkY8mB4getceyrmE3pKMTQIEtRvNZUG1hYZEd24ULHMIsy0/3v3OM9HvXiG2d2pib11lA
-        dMSc1aMg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34502)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1qiBTj-000059-36;
-        Mon, 18 Sep 2023 11:27:43 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qiBTi-0000Oe-EM; Mon, 18 Sep 2023 11:27:42 +0100
-Date:   Mon, 18 Sep 2023 11:27:42 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     James Morse <james.morse@arm.com>
-Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-        x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        jianyong.wu@arm.com, justin.he@arm.com
-Subject: Re: [RFC PATCH v2 00/35] ACPI/arm64: add support for virtual
- cpuhotplug
-Message-ID: <ZQgmHtG10n+XyZYR@shell.armlinux.org.uk>
-References: <20230913163823.7880-1-james.morse@arm.com>
+        with ESMTP id S239979AbjIRLS2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 07:18:28 -0400
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED9D94;
+        Mon, 18 Sep 2023 04:18:23 -0700 (PDT)
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5711d5dac14so1122642eaf.0;
+        Mon, 18 Sep 2023 04:18:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695035902; x=1695640702;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7R+q9QTbDGEN3i7eAllm79g5AlXcMaeqG2tb9H1j3lo=;
+        b=oBI+uJAOZGLWGI5g8kJgLHPTeN2fdhTmEhhQTeohckJFxnKj8gE4HIFrfFIZoggWTw
+         fE7M494Op3oS/cx00jEOpNTtvnkphadwsBUgp0UdsMNtYtMJS6UxPLduWjCgQ3pkaTkb
+         k5OnKtLYz6o2gY0n6ZHiyj3NmmUJ8XE4jYNqvaXOJ+cyOSR5elEI14HPMMzRRaMh61mw
+         2biqfLdQN+Mq/BJpIVydUuHRfg6YBPQPAqRkFV3DMQKaTlhtmm+Z2LXWkdiOjEqI8P3m
+         WDTaAMnMmihq7+ZJIgYAgTlN+dgdftGixFjiq9C5LXrqFKSWi7BCn74972we7VLv5Q4o
+         6zTA==
+X-Gm-Message-State: AOJu0YyEbjDEEXgALcHltPbRfVgzc4fYRdt13oDEJMLuGL7/CM+JFGs2
+        tfA4IxBNBXNCcTWzR15RVwqWjPs1F0XbRAxT68k=
+X-Google-Smtp-Source: AGHT+IF74HBff7jMfxR3E+y0OWzgyEbaCy8QIeP6AGUieIHiEqOxz3vk1M5j+FOiojg9a5/pQaPqZi3iQJ9X/JiR298=
+X-Received: by 2002:a4a:d88d:0:b0:573:2a32:6567 with SMTP id
+ b13-20020a4ad88d000000b005732a326567mr7997421oov.0.1695035902417; Mon, 18 Sep
+ 2023 04:18:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230913163823.7880-1-james.morse@arm.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230913173510.3963561-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20230913173510.3963561-1-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 18 Sep 2023 13:18:11 +0200
+Message-ID: <CAJZ5v0g3J3J-nHYTMiWARiKO_xaW0r9yxxGxyo3te-EQ0d1+fQ@mail.gmail.com>
+Subject: Re: [PATCH] thermal: int340x: Add ArrowLake-S PCI ID
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 13, 2023 at 04:37:48PM +0000, James Morse wrote:
-> This series is based on v6.6-rc1, and can be retrieved from:
-> https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/ virtual_cpu_hotplug/rfc/v2
+On Wed, Sep 13, 2023 at 7:35 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> Add ArrowLake-S PCI ID for processor thermal device.
+>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> ---
+>  .../thermal/intel/int340x_thermal/processor_thermal_device.h    | 1 +
+>  .../intel/int340x_thermal/processor_thermal_device_pci.c        | 2 ++
+>  2 files changed, 3 insertions(+)
+>
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> index b974583c5c11..dd025c8c2bac 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> @@ -10,6 +10,7 @@
+>  #include <linux/intel_rapl.h>
+>
+>  #define PCI_DEVICE_ID_INTEL_ADL_THERMAL        0x461d
+> +#define PCI_DEVICE_ID_INTEL_ARL_S_THERMAL 0xAD03
+>  #define PCI_DEVICE_ID_INTEL_BDW_THERMAL        0x1603
+>  #define PCI_DEVICE_ID_INTEL_BSW_THERMAL        0x22DC
+>
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> index 7253277e476a..44b179ce9bc9 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> @@ -390,6 +390,8 @@ static const struct pci_device_id proc_thermal_pci_ids[] = {
+>         { PCI_DEVICE_DATA(INTEL, MTLP_THERMAL, PROC_THERMAL_FEATURE_RAPL |
+>           PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_DLVR |
+>           PROC_THERMAL_FEATURE_WT_HINT) },
+> +       { PCI_DEVICE_DATA(INTEL, ARL_S_THERMAL, PROC_THERMAL_FEATURE_RAPL |
+> +         PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_DLVR | PROC_THERMAL_FEATURE_WT_HINT) },
+>         { PCI_DEVICE_DATA(INTEL, RPL_THERMAL, PROC_THERMAL_FEATURE_RAPL |
+>           PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_WT_REQ) },
+>         { },
+> --
 
-Hi James,
-
-FYI, this doesn't seem to be based upon v6.6-rc1, but v6.4-rc5.
-virtual_cpu_hotplug/rfc/v2 seems to have a hash of 505859b05e15.
-
-Thanks.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Applied as 6.7 material, thanks!
