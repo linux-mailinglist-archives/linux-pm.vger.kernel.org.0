@@ -2,44 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BA417A4E87
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Sep 2023 18:18:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB487A4EA1
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Sep 2023 18:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbjIRQSv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Sep 2023 12:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32806 "EHLO
+        id S230267AbjIRQUe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Sep 2023 12:20:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbjIRQSi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 12:18:38 -0400
+        with ESMTP id S230123AbjIRQUW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 12:20:22 -0400
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2622828C
-        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 09:15:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558A82446C
+        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 09:15:07 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qiER1-0001pK-O6; Mon, 18 Sep 2023 15:37:07 +0200
+        id 1qiER1-0001pX-Vc; Mon, 18 Sep 2023 15:37:07 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qiER1-007EYF-BT; Mon, 18 Sep 2023 15:37:07 +0200
+        id 1qiER1-007EYL-Ix; Mon, 18 Sep 2023 15:37:07 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qiER1-002fWA-2F; Mon, 18 Sep 2023 15:37:07 +0200
+        id 1qiER1-002fWE-9O; Mon, 18 Sep 2023 15:37:07 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Sebastian Reichel <sre@kernel.org>
 Cc:     linux-pm@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 05/32] power: supply: acer_a500_battery: Convert to platform remove callback returning void
-Date:   Mon, 18 Sep 2023 15:36:33 +0200
-Message-Id: <20230918133700.1254499-6-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 06/32] power: supply: act8945a_charger: Convert to platform remove callback returning void
+Date:   Mon, 18 Sep 2023 15:36:34 +0200
+Message-Id: <20230918133700.1254499-7-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230918133700.1254499-1-u.kleine-koenig@pengutronix.de>
 References: <20230918133700.1254499-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1803; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=RVvqO+ymhWgSeh8g6agtGal0Qe2LXfVnXpY96cOmFRI=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlCFJVUc6mQe3t+89eg4IqcIjIBtrUxbpMmQ4M2 59hAGAKxMqJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZQhSVQAKCRCPgPtYfRL+ Tki6CACt+jpHoZ3YsldR2QCv6sUau6bIX1BpKpysro0cnAEV48PkSjPd3D5CVrHhCtJ2VBp8t0y k+mKibkestjGQQeTMJevfquT6N+HEXgkHONO4aj2rPXUFYv1RvkJIteMv5IbSc0808rO1j597DF j4IEd7N2W5oCRKjH43/BE0WxGSIAZy8G82cc0OE/Wo8Lup/G9nTGNF31NnKkLcq6cTqcm9TCw52 bnqv6mAVsowx9FDKLJmtUHJJBUoXwTsDw+cxXeb0FtyFNYqSvcISmVA85TPb+qrz4TLTEcjAAxc Y7jR2YVMDZ4/32Tk99Qvz0nSsHCpk0HonlPt+8dmnn3YrlR+
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1850; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=PrM3ABfp3OcWBml0epzzHjGdmmv7wwl3Zc85DMdKIpc=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlCFJWxtNSwtYwdobrM3XIrpAeDDxEqYexugNfu iGvXzGvxi6JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZQhSVgAKCRCPgPtYfRL+ Tl9zB/4/lqL9QMmgjMasb+FpyhfmnwVA0UjmpCuuVfnlLM8/gMiyAsvyXhwuxrrGFDxYfOBqujM OrVUugNwoM7CcUVFrUErZc0RdeNBucej22qbYOXQ/pqghAyKhD1D+Ne57HKSV2pMrHsaAoLckuB ktje5bEkXspNq9bapixcZKvr4VjqKafjVAORef2xuoO8m/FpcC7bxsxdwtYtIVpyNuh1zsxeM3G gL2BNF57igd5N/s6hpC8+dDfQrPeMgD9IiZowHwWshO/Gosy+tnhfL68fLng/mhRGr9uwyl/Mxi VGfLoHMwy9g7ZMoJE3SP7s4OXWJXzryBGlDMyfaypYlvcKVO
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -69,36 +69,37 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/power/supply/acer_a500_battery.c | 6 ++----
+ drivers/power/supply/act8945a_charger.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/power/supply/acer_a500_battery.c b/drivers/power/supply/acer_a500_battery.c
-index 32a0bfcac08f..ef5c419b1b7f 100644
---- a/drivers/power/supply/acer_a500_battery.c
-+++ b/drivers/power/supply/acer_a500_battery.c
-@@ -251,13 +251,11 @@ static int a500_battery_probe(struct platform_device *pdev)
+diff --git a/drivers/power/supply/act8945a_charger.c b/drivers/power/supply/act8945a_charger.c
+index e9b5f4283772..51122bfbf196 100644
+--- a/drivers/power/supply/act8945a_charger.c
++++ b/drivers/power/supply/act8945a_charger.c
+@@ -638,14 +638,12 @@ static int act8945a_charger_probe(struct platform_device *pdev)
  	return 0;
  }
  
--static int a500_battery_remove(struct platform_device *pdev)
-+static void a500_battery_remove(struct platform_device *pdev)
+-static int act8945a_charger_remove(struct platform_device *pdev)
++static void act8945a_charger_remove(struct platform_device *pdev)
  {
- 	struct a500_battery *bat = dev_get_drvdata(&pdev->dev);
+ 	struct act8945a_charger *charger = platform_get_drvdata(pdev);
  
- 	cancel_delayed_work_sync(&bat->poll_work);
+ 	charger->init_done = false;
+ 	cancel_work_sync(&charger->work);
 -
 -	return 0;
  }
  
- static int __maybe_unused a500_battery_suspend(struct device *dev)
-@@ -287,7 +285,7 @@ static struct platform_driver a500_battery_driver = {
- 		.pm = &a500_battery_pm_ops,
+ static struct platform_driver act8945a_charger_driver = {
+@@ -653,7 +651,7 @@ static struct platform_driver act8945a_charger_driver = {
+ 		.name = "act8945a-charger",
  	},
- 	.probe = a500_battery_probe,
--	.remove = a500_battery_remove,
-+	.remove_new = a500_battery_remove,
+ 	.probe	= act8945a_charger_probe,
+-	.remove = act8945a_charger_remove,
++	.remove_new = act8945a_charger_remove,
  };
- module_platform_driver(a500_battery_driver);
+ module_platform_driver(act8945a_charger_driver);
  
 -- 
 2.40.1
