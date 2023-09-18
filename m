@@ -2,139 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD6C7A3FBA
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Sep 2023 05:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 817BA7A3FBB
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Sep 2023 05:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjIRDev (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 17 Sep 2023 23:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47956 "EHLO
+        id S230456AbjIRDmY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 17 Sep 2023 23:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbjIRDeg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Sep 2023 23:34:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C70A113
-        for <linux-pm@vger.kernel.org>; Sun, 17 Sep 2023 20:33:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1695008030;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gHzH+a1yYhJkfNUv/Dy9j8VaViRqaOEkd87Y+pYRKHg=;
-        b=Z62n5vaekOxsxE++HL43oPSSH4HWvpUxkKhWQOecIxcWF9DvMkSD4lzDyv/jxY4K4koo9X
-        qtmIt05Smpg2rAbmP0DZQXoGlJYVkz0r5K8lJEfcEK3mj0UIjJ7tID+oPMjqjxArHATCtJ
-        LFuyXWFg0BuipXka9kJ+c1QDgVN7X0g=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-249-kXqAX-fRNmCBFcYt0Ld3dQ-1; Sun, 17 Sep 2023 23:33:48 -0400
-X-MC-Unique: kXqAX-fRNmCBFcYt0Ld3dQ-1
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-2748d60c072so2822985a91.1
-        for <linux-pm@vger.kernel.org>; Sun, 17 Sep 2023 20:33:47 -0700 (PDT)
+        with ESMTP id S238080AbjIRDlw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Sep 2023 23:41:52 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3CE11C
+        for <linux-pm@vger.kernel.org>; Sun, 17 Sep 2023 20:41:46 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-577fff1cae6so2344322a12.1
+        for <linux-pm@vger.kernel.org>; Sun, 17 Sep 2023 20:41:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google; t=1695008506; x=1695613306; darn=vger.kernel.org;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/LChi52F8W125oBVQox7w/tsu4dA5p1CWPdYepEsEMA=;
+        b=HeEhc5cj6uTCEweUUrxkp38SGf0W7FprBeZqJe342Avdd3+p4+eGyT5xM8PXvlUcNZ
+         JwYhr7pyeceRXcPJlMzz4/X8WMT3aBN07xSreSh5OkpjfeG6WA30KpDuF8MXQyRy6eSt
+         bNcC6S9wxmdk0hjuGO37yPENLvcnSyVSMTQ5fHN5KNexRtcvli5R253BkjGFfDQ2w6+g
+         tKincdCyD5IEj0fUPMKob3N9dmnPDtIaci/TDYvGXkNujHX+VYlGL54um0DrhSUy5Y2B
+         UMNzm3ifEsawCmUCqXBhvAdwyYpdowxti2xh6J0trnGoyBBH1Vp2dZbghzORWe13XVVJ
+         T0aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695008027; x=1695612827;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gHzH+a1yYhJkfNUv/Dy9j8VaViRqaOEkd87Y+pYRKHg=;
-        b=iqYnvRZHgJlLPu9zLCs+5xLTmrgFzgSH+SEYZ+NheBadeQt2Ti69w8sKy5trLCO3jI
-         I4kOlLDX6WbsU3FjMIt3/TtvXzaE2ZPi9kp/ik45+hL62cpqZQbcID/X4xSxKoTobBXq
-         9a1uyFi6+6S9z74jM5wPrZjW+mwzHLuJ71Fw4U1WPTd9GRRD9jHXoA9piz22bCfJ2p4e
-         28T+i4v2pUQEEQuDVdsYuCS4SAjcBjlAlteX0UwCrJcuJWbFopl52CQFmz2UVUL1GV3x
-         hTPPcH5cAazfSOBZ47S9O8uk/xtxnykVPKuSz+IPWKhHbEw+HOP63dHv1KlNatuwB5N0
-         4ogg==
-X-Gm-Message-State: AOJu0Yzvm1DTb/jaUT8hRXuUrPOIUEfccNdqgFigvXo8CflghUBElZjt
-        +32kAlgZzrEY3ULK4JqDjmsquasXYjvgWg5o+78UBrsUVy8W8KcY68Q3PLg4XiXzSLmhhVqZmE6
-        FAAXqW95XSKezQrpsJEo=
-X-Received: by 2002:a17:90b:890:b0:274:7de7:d6fa with SMTP id bj16-20020a17090b089000b002747de7d6famr7131232pjb.9.1695008027065;
-        Sun, 17 Sep 2023 20:33:47 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGdFVHnxmGek3zqSMDKaRzCcHQAQEv2cIpV7L2yNs7LNSqm4GiEBUNxLVrj5jEdjCAv9J4IOA==
-X-Received: by 2002:a17:90b:890:b0:274:7de7:d6fa with SMTP id bj16-20020a17090b089000b002747de7d6famr7131213pjb.9.1695008026727;
-        Sun, 17 Sep 2023 20:33:46 -0700 (PDT)
-Received: from ?IPV6:2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5? ([2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5])
-        by smtp.gmail.com with ESMTPSA id 8-20020a17090a004800b0026b420ae167sm8825822pjb.17.2023.09.17.20.33.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Sep 2023 20:33:45 -0700 (PDT)
-Message-ID: <2c23ab17-7516-e310-8b79-b8c5fc02984a@redhat.com>
-Date:   Mon, 18 Sep 2023 13:33:37 +1000
+        d=1e100.net; s=20230601; t=1695008506; x=1695613306;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/LChi52F8W125oBVQox7w/tsu4dA5p1CWPdYepEsEMA=;
+        b=tELPiGr3doEn7WC/WpdF/YjHBmLcbXnoTuOrwrbnnbeA78ydIyqRfthvjLTHBPgseu
+         FASyNgGedoWBGmdQL4BoQ1UbVc9YCnHHfjRzQmle1CcsjciU1dUlW3nSw6cwRgT+nSKb
+         ethibLhOpIESVxPpQpNxwiA3uQA7ZRWJkNd2sQt8uPMkxC8o7zUgdzNSJUr64XXufY+O
+         hHYPwQUvBddFk71ZZQ8lPS1AfciQEml/draJNOIQUXUTcz7fcROgIn7amceVegdEnvI1
+         VqRbKsZDNgByLZRT/I40tMW77fB+poGblYLXg2ZjSa+gpigMpdOFSmMoo2+k5xR++SIT
+         8RNw==
+X-Gm-Message-State: AOJu0Yw+5m1DHBLCm2ZrsZO/IH3jfBMMIMbAHDSW69Cu0UtlSnLvw166
+        NoNQdy11DSq+PFzjcJz7UVigBw==
+X-Google-Smtp-Source: AGHT+IGn4FTGbH1QQhmBd7k+Pa26rEKOe+zz97KcSNNTL00qwRvLl5Krgy9F/0sHC6c9u6hycUN4ig==
+X-Received: by 2002:a17:90a:5d92:b0:26b:374f:97c2 with SMTP id t18-20020a17090a5d9200b0026b374f97c2mr10633316pji.6.1695008506328;
+        Sun, 17 Sep 2023 20:41:46 -0700 (PDT)
+Received: from DougS18 (s66-183-142-209.bc.hsia.telus.net. [66.183.142.209])
+        by smtp.gmail.com with ESMTPSA id 10-20020a17090a08ca00b00262e604724dsm7900314pjn.50.2023.09.17.20.41.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 17 Sep 2023 20:41:45 -0700 (PDT)
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Mario Limonciello'" <mario.limonciello@amd.com>
+Cc:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "'Swapnil Sapkal'" <swapnil.sapkal@amd.com>, <Ray.Huang@amd.com>,
+        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
+        <rafael.j.wysocki@intel.com>, "Doug Smythies" <dsmythies@telus.net>
+References: <001701d9e9ae$02438120$06ca8360$@telus.net> <e8a05f05-deec-4784-9627-354939ad30f6@amd.com>
+In-Reply-To: <e8a05f05-deec-4784-9627-354939ad30f6@amd.com>
+Subject: RE: [PATCH] tools/power/x86/intel_pstate_tracer: python minimum version
+Date:   Sun, 17 Sep 2023 20:41:49 -0700
+Message-ID: <002201d9e9e2$0ea11a20$2be34e60$@telus.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RFC PATCH v2 05/35] drivers: base: Print a warning instead of
- panic() when register_cpu() fails
-Content-Language: en-US
-To:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev
-Cc:     x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        jianyong.wu@arm.com, justin.he@arm.com
-References: <20230913163823.7880-1-james.morse@arm.com>
- <20230913163823.7880-6-james.morse@arm.com>
-From:   Gavin Shan <gshan@redhat.com>
-In-Reply-To: <20230913163823.7880-6-james.morse@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-ca
+Thread-Index: AQHZ2qIP8m8g/xv1WN/ewv41PaKNWAIKXfLusA+3S2A=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 2023.09.17 17:57 Mario wrote:
+> On 9/17/2023 16:29, Doug Smythies wrote:
+>> From: Doug Smythies <dsmythies@telus.net>
+>>=20
+>> Change the minimum python version from 2.7 to 3.6.
+>> Remove a 2.X backwards compatibility line.
+>>=20
+>> Signed-off-by: Doug Smythies <dsmythies@telus.net>
+>> ---
+>>   .../x86/intel_pstate_tracer/intel_pstate_tracer.py     | 10 =
++++++-----
+>>   1 file changed, 5 insertions(+), 5 deletions(-)
+>>=20
+>> diff --git =
+a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py =
+b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+>> index ec3323100e1a..6b0790e6465a 100755
+>> --- a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+>> +++ b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+>> @@ -1,4 +1,4 @@
+>> -#!/usr/bin/env python
+>> +#!/usr/bin/env python3
+>>   # SPDX-License-Identifier: GPL-2.0-only
+>>   # -*- coding: utf-8 -*-
+>>   #
+>> @@ -11,9 +11,9 @@ then this utility enables and collects trace data =
+for a user specified interval
+>>   and generates performance plots.
+>>=20
+>>   Prerequisites:
+>> -    Python version 2.7.x or higher
+>> +    Python version 3.6.x or higher
+>>       gnuplot 5.0 or higher
+>> -    gnuplot-py 1.8 or higher
+>> +    phython3-gnuplot 1.8 or higher
+>
+> Presumably you mean 'python3-gnuplot'.
 
+Oh Darn. Yes. I'll send a V2.
 
-On 9/14/23 02:37, James Morse wrote:
-> loongarch, mips, parisc, riscv and sh all print a warning if
-> register_cpu() returns an error. Architectures that use
-> GENERIC_CPU_DEVICES call panic() instead.
-> 
-> Errors in this path indicate something is wrong with the firmware
-> description of the platform, but the kernel is able to keep running.
-> 
-> Downgrade this to a warning to make it easier to debug this issue.
-> 
-> This will allow architectures that switching over to GENERIC_CPU_DEVICES
-> to drop their warning, but keep the existing behaviour.
-> 
-> Signed-off-by: James Morse <james.morse@arm.com>
-> ---
->   drivers/base/cpu.c | 7 ++++---
->   1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-> index 579064fda97b..d31c936f0955 100644
-> --- a/drivers/base/cpu.c
-> +++ b/drivers/base/cpu.c
-> @@ -535,14 +535,15 @@ int __weak arch_register_cpu(int cpu)
->   
->   static void __init cpu_dev_register_generic(void)
->   {
-> -	int i;
-> +	int i, ret;
->   
->   	if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES))
->   		return;
->   
->   	for_each_present_cpu(i) {
-> -		if (arch_register_cpu(i))
-> -			panic("Failed to register CPU device");
-> +		ret = arch_register_cpu(i);
-> +		if (ret)
-> +			pr_warn("register_cpu %d failed (%d)\n", i, ret);
->   	}
->   }
->   
+>>       (Most of the distributions have these required packages. They =
+may be called
+>>        gnuplot-py, phython-gnuplot or phython3-gnuplot, gnuplot-nox, =
+... )
+>>=20
+>
+> Likewise here too.
+>
+>> @@ -23,7 +23,7 @@ Prerequisites:
+>>       see print_help(): for Usage and Output details
+>>=20
+>>   """
+>> -from __future__ import print_function
+>> +
+>>   from datetime import datetime
+>>   import subprocess
+>>   import os
+>> @@ -562,7 +562,7 @@ if __name__ =3D=3D "__main__":
+>>=20
+>>       # Temporary (or perhaps not)
+>>       cur_version =3D sys.version_info
+>> -    print('python version (should be >=3D 2.7):')
+>> +    print('python version (should be >=3D 3.6):')
+>>       print(cur_version)
+>
+> Is this block printing the version really needed at all?
+> I don't see 'cur_version' used anywhere else in the file.
 
-The same warning message has been printed by arch/loongarch/kernel/topology.c::arch_register_cpu().
-In order to avoid the duplication, I think the warning message in arch/loongarch needs to be dropped?
+Well, it is there to make it easy to know what the
+requirements are and what the actual version is.
+The minimum version is not enforced.
 
-Thanks,
-Gavin
+>>       # Left as "cleanup" for potential future re-run ability.
+>> --
+>> 2.25.1
+
 
