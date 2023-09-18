@@ -2,110 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C213C7A463C
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Sep 2023 11:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6440F7A46A5
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Sep 2023 12:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241035AbjIRJnL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Sep 2023 05:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57504 "EHLO
+        id S232286AbjIRKHg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Sep 2023 06:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241175AbjIRJnC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 05:43:02 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20DB71B1;
-        Mon, 18 Sep 2023 02:41:36 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 38I8v258029351;
-        Mon, 18 Sep 2023 04:40:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
-        message-id:date:mime-version:subject:to:cc:references:from
-        :in-reply-to:content-type:content-transfer-encoding; s=
-        PODMain02222019; bh=tDYDrUE8KUp7GB4gAn7w0+RcJkFc+kAlLQPGRSM5MI0=; b=
-        AmiVsjgACewQFGYadXqbHRvJlbelXRFxRlVmvCNRsb2YGLS8SQEqrv+wQCfGK7Tv
-        3Tpjwxj+XQsOQs+mkJIKEyagA63dWvvHjSFRmpfmi0eth4QR3mzMeh/AJ7IaOcAc
-        amNQhrQIiu8UpbS5kYsKTIl/PVXV2QNJ4RUt7dS2mo4BsIVCAUurwNOR+nGlRLYq
-        SPIuwSJ/hm2QQBtYEyNfvVvo/lX5kEV+l5l38g8XK9dz6Nt9TqXyGs8zuiNMNfdw
-        IL27KCxM2wYnZjFLYLCBQ2MW880uCtLN98UwVYAPIMKH6Ib5QocSahCJaWNqhzoP
-        Uld65Kj81kskNCrla4aggQ==
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3t58shsmpt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Sep 2023 04:40:53 -0500 (CDT)
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.37; Mon, 18 Sep
- 2023 10:40:52 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.37 via Frontend
- Transport; Mon, 18 Sep 2023 10:40:52 +0100
-Received: from [198.90.238.137] (EDIN4L06LR3.ad.cirrus.com [198.90.238.137])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 1215B11AA;
-        Mon, 18 Sep 2023 09:40:51 +0000 (UTC)
-Message-ID: <b67c7c31-9d20-4e62-adf6-0ab0c678bed2@opensource.cirrus.com>
-Date:   Mon, 18 Sep 2023 10:40:49 +0100
+        with ESMTP id S241244AbjIRKH3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 06:07:29 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C23E9B
+        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 03:07:20 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-530ab2d9e89so2758221a12.2
+        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 03:07:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1695031638; x=1695636438; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3CIzAQBDBRAbXi6odnAuwsq+At6oBbxMnuT61WOfur8=;
+        b=Gh/Ts+Axe0ftgk653P1e2h0uLTcgF41Q6cvPbxwrQVAXECl1OtdliVPm86cmvNo30z
+         y0sOHaMQ1TDUfyIRT0uhLxeCif5Ew1F1UCoOGqaynDc01KicnMXvBmDKl/XSOi4hJ6CX
+         X+b9MXfSF+uxFVN2yP3uG1oLQgdW6t5yjH4wbWWMMeYSt6i2g+8Gzx09sNtkwQcWoVYr
+         KFbYeztQfyMfU/k8oV4OzQ5hVr1ps4bPDf7ALOp8S02oG+sQcqP30s2zwT98EogeneSl
+         mowzI3hrpgaZgg/qUA3MccDGpx+BNfeZ9ycKI5LpSoPMBwgxvEI92mr5swVqnu8DNj8L
+         CY6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695031638; x=1695636438;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3CIzAQBDBRAbXi6odnAuwsq+At6oBbxMnuT61WOfur8=;
+        b=aKapEz1i8GiwwNe4gl9trFZMpbJID0CcFVsw6N8tiVEFV35KnNM4/QEHV2t/NVYE/T
+         p9M+6jkxFIB4Wbtp5etHWYcHs3Q00NBdrAS6HXxws7zKKYZVqL5ljzM8syAuMg7wibwR
+         CN4pAzlyHwnHu9WOWfH+D2/zL7M5DL1fTIv/+PNUajzEB2MCsJ3w0pTMN/TX4B/7TDwm
+         hNvoi1A38PJaAodaImNddqsYOWfNvYUJmxmKQ6GHIYFp4ON8vg+Z9TwqqYUhLpk/Yza1
+         h4itQwKSzPCj2x5/JLEsGzr1lOoCR6sWaf4fR6vNtZn7berQ5yAv5sg/sqENpGSP2IPK
+         hlGw==
+X-Gm-Message-State: AOJu0Yzsk0tQ2BCpHP8TsSp6Ngp8Gtb9mHJK+/lycm8my333W1iQcbMt
+        mpSAEA7hdGXN9jU9g3HzsFmiynsdSFabYM3KUnjmYA==
+X-Google-Smtp-Source: AGHT+IGidGqFde6MO6aKF0/Be311hyX6HKkzV2FNPU58Qptc75KDLExfyXA/sohTN+Ue1NGSHZDpCA==
+X-Received: by 2002:a05:6402:3494:b0:531:28fd:ad10 with SMTP id v20-20020a056402349400b0053128fdad10mr1459070edc.38.1695031638376;
+        Mon, 18 Sep 2023 03:07:18 -0700 (PDT)
+Received: from blmsp.fritz.box ([2001:4091:a246:8222:872:4a5b:b69c:1318])
+        by smtp.gmail.com with ESMTPSA id p21-20020aa7d315000000b00522828d438csm5824096edq.7.2023.09.18.03.07.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Sep 2023 03:07:17 -0700 (PDT)
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Frank Wunderlich <linux@fw-web.de>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        Frank Wunderlich <frank-w@public-files.de>
+Subject: [PATCH] thermal/drivers/mediatek: Fix probe for THERMAL_V2
+Date:   Mon, 18 Sep 2023 12:07:06 +0200
+Message-Id: <20230918100706.1229239-1-msp@baylibre.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH for-next v2 03/10] iio: accel: fxls8962af: convert to
- EXPORT_NS_GPL_RUNTIME_PM_OPS()
-To:     Raag Jadav <raag.jadav@intel.com>, <rafael@kernel.org>,
-        <len.brown@intel.com>, <pavel@ucw.cz>,
-        <Jonathan.Cameron@huawei.com>, <paul@crapouillou.net>,
-        <andriy.shevchenko@linux.intel.com>, <lars@metafoo.de>,
-        <rmfrfs@gmail.com>, <jean-baptiste.maneyrol@tdk.com>,
-        <lee@kernel.org>, <laurentiu.palcu@oss.nxp.com>,
-        <l.stach@pengutronix.de>, <james.schulman@cirrus.com>,
-        <david.rhodes@cirrus.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-iio@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <patches@opensource.cirrus.com>,
-        <mallikarjunappa.sangannavar@intel.com>, <bala.senthil@intel.com>
-References: <20230918080951.3615-1-raag.jadav@intel.com>
- <20230918080951.3615-4-raag.jadav@intel.com>
-Content-Language: en-US
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-In-Reply-To: <20230918080951.3615-4-raag.jadav@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: pCPaWPCaYvDXkhq71Lq1IqHI-dv8mtpT
-X-Proofpoint-ORIG-GUID: pCPaWPCaYvDXkhq71Lq1IqHI-dv8mtpT
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18/9/23 09:09, Raag Jadav wrote:
-> With original macro being renamed to EXPORT_NS_GPL_RUNTIME_PM_OPS(),
-> use the new macro.
-> 
-> Signed-off-by: Raag Jadav <raag.jadav@intel.com>
-> ---
->   drivers/iio/accel/fxls8962af-core.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iio/accel/fxls8962af-core.c b/drivers/iio/accel/fxls8962af-core.c
-> index be8a15cb945f..69e73c54047e 100644
-> --- a/drivers/iio/accel/fxls8962af-core.c
-> +++ b/drivers/iio/accel/fxls8962af-core.c
-> @@ -1282,7 +1282,7 @@ static int fxls8962af_resume(struct device *dev)
->   	return 0;
->   }
->   
-> -EXPORT_NS_GPL_DEV_PM_OPS(fxls8962af_pm_ops, IIO_FXLS8962AF) = {
-> +EXPORT_NS_GPL_RUNTIME_PM_OPS(fxls8962af_pm_ops, IIO_FXLS8962AF) = {
->   	SYSTEM_SLEEP_PM_OPS(fxls8962af_suspend, fxls8962af_resume)
->   	RUNTIME_PM_OPS(fxls8962af_runtime_suspend, fxls8962af_runtime_resume, NULL)
->   };
-This change doesn't make sense. It changes the struct definition to use
-a EXPORT_*_RUNTIME_PM_OPS() macro, which leads me to expect this is
-exporting runtime pm ops. But then the struct has both SYSTEM and
-RUNTIME functions.
+Fix the probe function to call mtk_thermal_release_periodic_ts for
+everything != MTK_THERMAL_V1. This was accidentally changed from V1
+to V2 in the original patch.
 
-Maybe the underlying implementations of the macros result in "doing the
-right thing", but the source reads like it must be a mistake.
+Reported-by: Frank Wunderlich <frank-w@public-files.de>
+Closes: https://lore.kernel.org/lkml/B0B3775B-B8D1-4284-814F-4F41EC22F532@public-files.de/
+Reported-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Closes: https://lore.kernel.org/lkml/07a569b9-e691-64ea-dd65-3b49842af33d@linaro.org/
+Fixes: 33140e668b10 ("thermal/drivers/mediatek: Control buffer enablement tweaks")
+Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+---
+ drivers/thermal/mediatek/auxadc_thermal.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
+index 843214d30bd8..8b0edb204844 100644
+--- a/drivers/thermal/mediatek/auxadc_thermal.c
++++ b/drivers/thermal/mediatek/auxadc_thermal.c
+@@ -1267,7 +1267,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+ 
+ 	mtk_thermal_turn_on_buffer(mt, apmixed_base);
+ 
+-	if (mt->conf->version != MTK_THERMAL_V2)
++	if (mt->conf->version != MTK_THERMAL_V1)
+ 		mtk_thermal_release_periodic_ts(mt, auxadc_base);
+ 
+ 	if (mt->conf->version == MTK_THERMAL_V1)
+-- 
+2.40.1
 
