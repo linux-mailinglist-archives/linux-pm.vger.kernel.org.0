@@ -2,44 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 376687A4E84
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Sep 2023 18:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 302567A4E94
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Sep 2023 18:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbjIRQSu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Sep 2023 12:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
+        id S230221AbjIRQTh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Sep 2023 12:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbjIRQSi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 12:18:38 -0400
+        with ESMTP id S230205AbjIRQTX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 12:19:23 -0400
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28806274AA
-        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 09:15:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4349659FE
+        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 09:09:37 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qiER5-00021q-DE; Mon, 18 Sep 2023 15:37:11 +0200
+        id 1qiER5-00024w-JQ; Mon, 18 Sep 2023 15:37:11 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qiER4-007EZJ-UG; Mon, 18 Sep 2023 15:37:10 +0200
+        id 1qiER5-007EZO-5Y; Mon, 18 Sep 2023 15:37:11 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qiER4-002fXC-LC; Mon, 18 Sep 2023 15:37:10 +0200
+        id 1qiER4-002fXG-Sa; Mon, 18 Sep 2023 15:37:10 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 21/32] power: supply: pcf50633-charger: Convert to platform remove callback returning void
-Date:   Mon, 18 Sep 2023 15:36:49 +0200
-Message-Id: <20230918133700.1254499-22-u.kleine-koenig@pengutronix.de>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH 22/32] power: supply: qcom_smbb: Convert to platform remove callback returning void
+Date:   Mon, 18 Sep 2023 15:36:50 +0200
+Message-Id: <20230918133700.1254499-23-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230918133700.1254499-1-u.kleine-koenig@pengutronix.de>
 References: <20230918133700.1254499-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1938; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=YYvLO9P69QKCjKr7Gs/6YSWBHBfCqXLTkFvH9WwQtIw=; b=owGbwMvMwMXY3/A7olbonx/jabUkhlSOoAwh67Loh20nJ78VvH3nRrP4BI9N4W++qBmvZvFYE fkk4ntUJ6MxCwMjF4OsmCKLfeOaTKsqucjOtf8uwwxiZQKZwsDFKQATMeTkYNjioipzx69dd/YW 2fueAXLTJydLF3w7rSZaucF/1V6n64dlsuJzWgp5J8yvECjRSMqXCdsvyz37Xlpnd3bEucv5qkw 7dH8dDf5Rc73czTNtirBl1obCtYuKiuf84pbPd4pqfHV03QP/pqsR5ssu2aavMqrkZxfS8bye0l 7zdPPOSwc3LLXxusF27O9B47SuutUStuJirmceautO32Czs0w1RWOLPfv6qx6fVvmKqfzp1dI8f t7FdOIaiaXyr098PcC7skTdpl+EU8Ao5B6X33L10EOi23nWh3TEGc/7Kq5grevheyn/hu3PaUWv Iqtez7EPP+YeKr1rVYb2760/s3xkjHTmn9JvmbnZuuYeAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1852; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=4twwal5CxO05aJdYGCbLEbuMJZAYxeRM+s8fOAENmkE=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlCFJpl1W9dWhwlKYrUlRNCGkMmYKxzkyXXwa2c Rr+map4pUWJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZQhSaQAKCRCPgPtYfRL+ TtNYCACt0BLDIBGVZ16APWEjpvAppn36ltBpvcueMFQUST8wu0scA9Uog2gi/Z2bX12n+CVmQC+ 7WOTEoMO0BH9T/RkWUvNtsQUv7thWg6mCnv3FiN/Fsc+tiUHpYqqKzsSPj0CYkeQRqzTwtMiqVF UJeN9NqG+cCqb8jQ1GtbOLOACmHlRjVs900JWOdY5xv0VGrUKFcs4i+OT3WQRqjNaqvoTDVHq/x mzHTSF+0yegOczp/9wjWHco6dUZdb8W8AWCDsQFtEHFqscNi6fOL4zpi8mSWeAa31rsmFdKvE34 j/TnLb8Z0Og74Ht/22i2FO940CUFF8jNQdKMj2CPw+TU2/r6
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -69,40 +73,39 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/power/supply/pcf50633-charger.c | 6 ++----
+ drivers/power/supply/qcom_smbb.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/power/supply/pcf50633-charger.c b/drivers/power/supply/pcf50633-charger.c
-index fd44cb8ac0e2..950e30917c63 100644
---- a/drivers/power/supply/pcf50633-charger.c
-+++ b/drivers/power/supply/pcf50633-charger.c
-@@ -441,7 +441,7 @@ static int pcf50633_mbc_probe(struct platform_device *pdev)
+diff --git a/drivers/power/supply/qcom_smbb.c b/drivers/power/supply/qcom_smbb.c
+index bd50124eef9f..4e57762e27ba 100644
+--- a/drivers/power/supply/qcom_smbb.c
++++ b/drivers/power/supply/qcom_smbb.c
+@@ -1000,15 +1000,13 @@ static int smbb_charger_probe(struct platform_device *pdev)
  	return 0;
  }
  
--static int pcf50633_mbc_remove(struct platform_device *pdev)
-+static void pcf50633_mbc_remove(struct platform_device *pdev)
+-static int smbb_charger_remove(struct platform_device *pdev)
++static void smbb_charger_remove(struct platform_device *pdev)
  {
- 	struct pcf50633_mbc *mbc = platform_get_drvdata(pdev);
- 	int i;
-@@ -453,8 +453,6 @@ static int pcf50633_mbc_remove(struct platform_device *pdev)
- 	power_supply_unregister(mbc->usb);
- 	power_supply_unregister(mbc->adapter);
- 	power_supply_unregister(mbc->ac);
+ 	struct smbb_charger *chg;
+ 
+ 	chg = platform_get_drvdata(pdev);
+ 
+ 	regmap_update_bits(chg->regmap, chg->addr + SMBB_CHG_CTRL, CTRL_EN, 0);
 -
 -	return 0;
  }
  
- static struct platform_driver pcf50633_mbc_driver = {
-@@ -462,7 +460,7 @@ static struct platform_driver pcf50633_mbc_driver = {
- 		.name = "pcf50633-mbc",
- 	},
- 	.probe = pcf50633_mbc_probe,
--	.remove = pcf50633_mbc_remove,
-+	.remove_new = pcf50633_mbc_remove,
- };
+ static const struct of_device_id smbb_charger_id_table[] = {
+@@ -1020,7 +1018,7 @@ MODULE_DEVICE_TABLE(of, smbb_charger_id_table);
  
- module_platform_driver(pcf50633_mbc_driver);
+ static struct platform_driver smbb_charger_driver = {
+ 	.probe	  = smbb_charger_probe,
+-	.remove	 = smbb_charger_remove,
++	.remove_new	 = smbb_charger_remove,
+ 	.driver	 = {
+ 		.name   = "qcom-smbb",
+ 		.of_match_table = smbb_charger_id_table,
 -- 
 2.40.1
 
