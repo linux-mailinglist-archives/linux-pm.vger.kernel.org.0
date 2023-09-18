@@ -2,96 +2,212 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274057A4832
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Sep 2023 13:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7AC57A485F
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Sep 2023 13:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233722AbjIRLSm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 18 Sep 2023 07:18:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60820 "EHLO
+        id S233421AbjIRL2D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Sep 2023 07:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239979AbjIRLS2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 07:18:28 -0400
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED9D94;
-        Mon, 18 Sep 2023 04:18:23 -0700 (PDT)
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5711d5dac14so1122642eaf.0;
-        Mon, 18 Sep 2023 04:18:23 -0700 (PDT)
+        with ESMTP id S241745AbjIRL2A (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 07:28:00 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C081B9
+        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 04:24:14 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-274dd099cb8so1104091a91.2
+        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 04:24:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1695036252; x=1695641052; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+JIoagGbUxbJdnZ/11AR40I+FsTVn6KCyqjzpGRwohg=;
+        b=XE1jOQZNuHHy/0ooQJ3QWkpVrr4ChGYzGTZ4/puq+qR+XuRDB7uIrJANXmFcO6tYY1
+         ucK33oKCgfCwm8jH4FJqdwm4dbNOos1FPg0+rg1nzgCJa0JNLpGSbd71NS+ZQF/PvJ3H
+         iVZ3HYHtfG9HPrHpM67Vst1/l4GhYmPoBg1uZiQX8LjIO1Bs7Kmy97iPJaLLAbsTy+m1
+         dBdrirNljM1Y4kB4ofTl80MOOgnk+ewhiyQV+P4etQ1xDpbT4bPWnYeVlETnl9vlxNhx
+         tx2XY/XfklzPYlG8aNWvaGeNc/gvacfD08DpXsdmzywYGSZMRCDAsUV3txWQ9W234SXE
+         te3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695035902; x=1695640702;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7R+q9QTbDGEN3i7eAllm79g5AlXcMaeqG2tb9H1j3lo=;
-        b=oBI+uJAOZGLWGI5g8kJgLHPTeN2fdhTmEhhQTeohckJFxnKj8gE4HIFrfFIZoggWTw
-         fE7M494Op3oS/cx00jEOpNTtvnkphadwsBUgp0UdsMNtYtMJS6UxPLduWjCgQ3pkaTkb
-         k5OnKtLYz6o2gY0n6ZHiyj3NmmUJ8XE4jYNqvaXOJ+cyOSR5elEI14HPMMzRRaMh61mw
-         2biqfLdQN+Mq/BJpIVydUuHRfg6YBPQPAqRkFV3DMQKaTlhtmm+Z2LXWkdiOjEqI8P3m
-         WDTaAMnMmihq7+ZJIgYAgTlN+dgdftGixFjiq9C5LXrqFKSWi7BCn74972we7VLv5Q4o
-         6zTA==
-X-Gm-Message-State: AOJu0YyEbjDEEXgALcHltPbRfVgzc4fYRdt13oDEJMLuGL7/CM+JFGs2
-        tfA4IxBNBXNCcTWzR15RVwqWjPs1F0XbRAxT68k=
-X-Google-Smtp-Source: AGHT+IF74HBff7jMfxR3E+y0OWzgyEbaCy8QIeP6AGUieIHiEqOxz3vk1M5j+FOiojg9a5/pQaPqZi3iQJ9X/JiR298=
-X-Received: by 2002:a4a:d88d:0:b0:573:2a32:6567 with SMTP id
- b13-20020a4ad88d000000b005732a326567mr7997421oov.0.1695035902417; Mon, 18 Sep
- 2023 04:18:22 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1695036252; x=1695641052;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+JIoagGbUxbJdnZ/11AR40I+FsTVn6KCyqjzpGRwohg=;
+        b=f+UHX24rUSsIR2wVrE/IHzZeKdM8tu3MCxI1F8xDWQvTwjAk7DYyF+jxlIwO7gjWD8
+         x8GBaws9zteV7UGm1PrVGXdBqk881zbet7j+WV5uqYG+n0+sx897gsViYJOVNx7Pk/aW
+         6S5E4yG1BicQBRVRsSOFsM58rlT/0xYtUmgCmccrUl2nLUqzzPhYLakP0uAfvqL9A0gY
+         Ety0qYFayyBq/KLeZji18/8aUFPCU6ffdQGwxL6YzMKQI0rUs1jUEeqyQ30mhQTQT22h
+         0t2bWx5XpJ7OjuJGynTQxJma64aR1/SAqX+c/7DD4ma83ygliKs+yCRJTcRHGdulzQBI
+         Rc6Q==
+X-Gm-Message-State: AOJu0YxPUNd8yDQ/+pyD878Kznm1F4qcM62HS4Uu20OM4Akz6lsdLm80
+        dPq80oMAl2n/8vAUDvfSwC2co6H/2C6n8ktRAK1gXw==
+X-Google-Smtp-Source: AGHT+IEYnp5mNbH0vm2kgMzPq48KRD0OiUzdkJ9b2tXtBZlshoSaZMZ7r/copZVbT9J2mDht277Rf/2gg2PDi+Zaj9E=
+X-Received: by 2002:a17:90a:8a15:b0:274:6d4e:e0d9 with SMTP id
+ w21-20020a17090a8a1500b002746d4ee0d9mr7943000pjn.45.1695036251982; Mon, 18
+ Sep 2023 04:24:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230913173510.3963561-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20230913173510.3963561-1-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 18 Sep 2023 13:18:11 +0200
-Message-ID: <CAJZ5v0g3J3J-nHYTMiWARiKO_xaW0r9yxxGxyo3te-EQ0d1+fQ@mail.gmail.com>
-Subject: Re: [PATCH] thermal: int340x: Add ArrowLake-S PCI ID
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230901130312.247719-1-vincent.guittot@linaro.org>
+ <20230901130312.247719-3-vincent.guittot@linaro.org> <840cb103-8ffb-9798-05a3-a557f78f7f7a@arm.com>
+In-Reply-To: <840cb103-8ffb-9798-05a3-a557f78f7f7a@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Mon, 18 Sep 2023 13:23:59 +0200
+Message-ID: <CAKfTPtDahUNatFpy+cQgbadhON_kwEaBVuDpUfW2kQHJUvecHg@mail.gmail.com>
+Subject: Re: [PATCH 2/4] topology: add a new arch_scale_freq_reference
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     conor.dooley@microchip.com, linux-arm-kernel@lists.infradead.org,
+        suagrfillet@gmail.com, juri.lelli@redhat.com, sudeep.holla@arm.com,
+        palmer@dabbelt.com, linux-riscv@lists.infradead.org,
+        ajones@ventanamicro.com, lftan@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux@armlinux.org.uk, bristot@redhat.com, catalin.marinas@arm.com,
+        bsegall@google.com, will@kernel.org, vschneid@redhat.com,
+        rostedt@goodmis.org, rafael@kernel.org, dietmar.eggemann@arm.com,
+        aou@eecs.berkeley.edu, mingo@redhat.com, paul.walmsley@sifive.com,
+        mgorman@suse.de, gregkh@linuxfoundation.org, peterz@infradead.org,
+        viresh.kumar@linaro.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 13, 2023 at 7:35 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
+On Mon, 4 Sept 2023 at 14:34, Lukasz Luba <lukasz.luba@arm.com> wrote:
 >
-> Add ArrowLake-S PCI ID for processor thermal device.
+> Hi Vincent,
 >
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
->  .../thermal/intel/int340x_thermal/processor_thermal_device.h    | 1 +
->  .../intel/int340x_thermal/processor_thermal_device_pci.c        | 2 ++
->  2 files changed, 3 insertions(+)
 >
-> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-> index b974583c5c11..dd025c8c2bac 100644
-> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-> @@ -10,6 +10,7 @@
->  #include <linux/intel_rapl.h>
+> On 9/1/23 14:03, Vincent Guittot wrote:
+> > Create a new method to get a unique and fixed max frequency. Currently
+> > cpuinfo.max_freq or last item of performance domain are used as the max
+> > frequency when computing the frequency for a level of utilization but:
+> > - cpuinfo_max_freq can change at runtime. boost is one example of
+> >    such change.
+> > - cpuinfo.max_freq and last item of the PD can be different leading to
+> >    different results betwen cpufreq and energy model.
+> >
+> > We need to save the max frequency that has been used when computing the
+> > CPUs capacity and use this fixed and coherent value to convert between
+> > frequency and CPU's capacity.
+> >
+> > In fact, we already save the frequency that has been used when computing
+> > the capacity of each CPU. We extend the precision to save khZ instead of
+> > Mhz currently and we modify the type to be aligned with other variables
+> > used when converting frequency to capacity and the other way.
 >
->  #define PCI_DEVICE_ID_INTEL_ADL_THERMAL        0x461d
-> +#define PCI_DEVICE_ID_INTEL_ARL_S_THERMAL 0xAD03
->  #define PCI_DEVICE_ID_INTEL_BDW_THERMAL        0x1603
->  #define PCI_DEVICE_ID_INTEL_BSW_THERMAL        0x22DC
+> I do like this 'kHz' change. We also use kHz in the EM, so better
+> aligned now.
 >
-> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> index 7253277e476a..44b179ce9bc9 100644
-> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> @@ -390,6 +390,8 @@ static const struct pci_device_id proc_thermal_pci_ids[] = {
->         { PCI_DEVICE_DATA(INTEL, MTLP_THERMAL, PROC_THERMAL_FEATURE_RAPL |
->           PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_DLVR |
->           PROC_THERMAL_FEATURE_WT_HINT) },
-> +       { PCI_DEVICE_DATA(INTEL, ARL_S_THERMAL, PROC_THERMAL_FEATURE_RAPL |
-> +         PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_DLVR | PROC_THERMAL_FEATURE_WT_HINT) },
->         { PCI_DEVICE_DATA(INTEL, RPL_THERMAL, PROC_THERMAL_FEATURE_RAPL |
->           PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_WT_REQ) },
->         { },
-> --
+> >
+> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> > ---
+> >   arch/arm/include/asm/topology.h   | 1 +
+> >   arch/arm64/include/asm/topology.h | 1 +
+> >   arch/riscv/include/asm/topology.h | 1 +
+> >   drivers/base/arch_topology.c      | 9 +++------
+> >   include/linux/arch_topology.h     | 7 +++++++
+> >   5 files changed, 13 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/arch/arm/include/asm/topology.h b/arch/arm/include/asm/topology.h
+> > index c7d2510e5a78..853c4f81ba4a 100644
+> > --- a/arch/arm/include/asm/topology.h
+> > +++ b/arch/arm/include/asm/topology.h
+> > @@ -13,6 +13,7 @@
+> >   #define arch_set_freq_scale topology_set_freq_scale
+> >   #define arch_scale_freq_capacity topology_get_freq_scale
+> >   #define arch_scale_freq_invariant topology_scale_freq_invariant
+> > +#define arch_scale_freq_ref topology_get_freq_ref
+> >   #endif
+> >
+> >   /* Replace task scheduler's default cpu-invariant accounting */
+> > diff --git a/arch/arm64/include/asm/topology.h b/arch/arm64/include/asm/topology.h
+> > index 9fab663dd2de..a323b109b9c4 100644
+> > --- a/arch/arm64/include/asm/topology.h
+> > +++ b/arch/arm64/include/asm/topology.h
+> > @@ -23,6 +23,7 @@ void update_freq_counters_refs(void);
+> >   #define arch_set_freq_scale topology_set_freq_scale
+> >   #define arch_scale_freq_capacity topology_get_freq_scale
+> >   #define arch_scale_freq_invariant topology_scale_freq_invariant
+> > +#define arch_scale_freq_ref topology_get_freq_ref
+> >
+> >   #ifdef CONFIG_ACPI_CPPC_LIB
+> >   #define arch_init_invariance_cppc topology_init_cpu_capacity_cppc
+> > diff --git a/arch/riscv/include/asm/topology.h b/arch/riscv/include/asm/topology.h
+> > index e316ab3b77f3..61183688bdd5 100644
+> > --- a/arch/riscv/include/asm/topology.h
+> > +++ b/arch/riscv/include/asm/topology.h
+> > @@ -9,6 +9,7 @@
+> >   #define arch_set_freq_scale         topology_set_freq_scale
+> >   #define arch_scale_freq_capacity    topology_get_freq_scale
+> >   #define arch_scale_freq_invariant   topology_scale_freq_invariant
+> > +#define arch_scale_freq_ref          topology_get_freq_ref
+> >
+> >   /* Replace task scheduler's default cpu-invariant accounting */
+> >   #define arch_scale_cpu_capacity     topology_get_cpu_scale
+> > diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> > index b741b5ba82bd..75fa67477a9d 100644
+> > --- a/drivers/base/arch_topology.c
+> > +++ b/drivers/base/arch_topology.c
+> > @@ -26,7 +26,7 @@
+> >   static DEFINE_PER_CPU(struct scale_freq_data __rcu *, sft_data);
+> >   static struct cpumask scale_freq_counters_mask;
+> >   static bool scale_freq_invariant;
+> > -static DEFINE_PER_CPU(u32, freq_factor) = 1;
+> > +DEFINE_PER_CPU(unsigned long, freq_factor) = 1;
+>
+> Why it's not static now?
 
-Applied as 6.7 material, thanks!
+it can be accessed outside with inline function like cpu_scale and
+arch_freq_scale
+
+>
+> >
+> >   static bool supports_scale_freq_counters(const struct cpumask *cpus)
+> >   {
+> > @@ -183,10 +183,7 @@ void topology_update_thermal_pressure(const struct cpumask *cpus,
+> >
+> >       cpu = cpumask_first(cpus);
+> >       max_capacity = arch_scale_cpu_capacity(cpu);
+> > -     max_freq = per_cpu(freq_factor, cpu);
+> > -
+> > -     /* Convert to MHz scale which is used in 'freq_factor' */
+> > -     capped_freq /= 1000;
+> > +     max_freq = arch_scale_freq_ref(cpu);
+> >
+> >       /*
+> >        * Handle properly the boost frequencies, which should simply clean
+> > @@ -411,7 +408,7 @@ init_cpu_capacity_callback(struct notifier_block *nb,
+> >       cpumask_andnot(cpus_to_visit, cpus_to_visit, policy->related_cpus);
+> >
+> >       for_each_cpu(cpu, policy->related_cpus)
+> > -             per_cpu(freq_factor, cpu) = policy->cpuinfo.max_freq / 1000;
+> > +             per_cpu(freq_factor, cpu) = policy->cpuinfo.max_freq;
+> >
+> >       if (cpumask_empty(cpus_to_visit)) {
+> >               topology_normalize_cpu_scale();
+> > diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
+> > index a07b510e7dc5..7a2dba9c3dc0 100644
+> > --- a/include/linux/arch_topology.h
+> > +++ b/include/linux/arch_topology.h
+> > @@ -27,6 +27,13 @@ static inline unsigned long topology_get_cpu_scale(int cpu)
+> >
+> >   void topology_set_cpu_scale(unsigned int cpu, unsigned long capacity);
+> >
+> > +DECLARE_PER_CPU(unsigned long, freq_factor);
+> > +
+> > +static inline unsigned long topology_get_freq_ref(int cpu)
+> > +{
+> > +     return per_cpu(freq_factor, cpu);
+> > +}
+> > +
+> >   DECLARE_PER_CPU(unsigned long, arch_freq_scale);
+> >
+> >   static inline unsigned long topology_get_freq_scale(int cpu)
+>
+> Apart from that 'static' missing, that looks good.
+>
+> Regards,
+> Lukasz
