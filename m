@@ -2,80 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A197A4082
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Sep 2023 07:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5FF57A40A4
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Sep 2023 07:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239569AbjIRFiO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Sep 2023 01:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44626 "EHLO
+        id S239697AbjIRFvi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Sep 2023 01:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239770AbjIRFiC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 01:38:02 -0400
+        with ESMTP id S239732AbjIRFvP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 01:51:15 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9DBD2
-        for <linux-pm@vger.kernel.org>; Sun, 17 Sep 2023 22:37:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD73129
+        for <linux-pm@vger.kernel.org>; Sun, 17 Sep 2023 22:50:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1695015431;
+        s=mimecast20190719; t=1695016219;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Y6uwQw2TQzRDCyynk3SluHNCszt0yuiUGbPEkJxyENg=;
-        b=inS5QGW24ViX/b7wG4uom/FSlFBMRileZ+h1ImFkN47PAzAWkkS2pT2vyAvBHsUkdiTcYz
-        mfD4IOBZKKOW/+e47w8EXvq2+GnPAwUFhLXm8Zkqbm00ld4yX0omDje5QgLlRhtD5prNrF
-        /bH+01AlOZp72ll+0BwnWRqYdCtXwIc=
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
- [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=w7TSEWyUXJCeqtg0Djyj65qrS0+HnzgNG2tRE6DrFAI=;
+        b=KoL7XRM2KcAlpQyM59Wye13rrklU471dEWJ6RhC7FQWGIW58b+Q9YHx1Kx2WEvRavwyPCH
+        hrYIJH5i/qjtljwtTv8FzckWa6LA1wYjN4RZkDwp6Kq8RSUEOOkGZ2BWZD9WWq4v+rQszj
+        mzlpAMKFP7YXT4/h/whbnEGzeFuzaPY=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-642-_lPUbKi5OUmOP_8rgJNyPQ-1; Mon, 18 Sep 2023 01:37:07 -0400
-X-MC-Unique: _lPUbKi5OUmOP_8rgJNyPQ-1
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-1c3257c8971so42669675ad.0
-        for <linux-pm@vger.kernel.org>; Sun, 17 Sep 2023 22:37:07 -0700 (PDT)
+ us-mta-568-qinKkQDTMaSgLzACPmfvpQ-1; Mon, 18 Sep 2023 01:50:18 -0400
+X-MC-Unique: qinKkQDTMaSgLzACPmfvpQ-1
+Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-3ab7fb11711so6631466b6e.2
+        for <linux-pm@vger.kernel.org>; Sun, 17 Sep 2023 22:50:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695015426; x=1695620226;
+        d=1e100.net; s=20230601; t=1695016217; x=1695621017;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y6uwQw2TQzRDCyynk3SluHNCszt0yuiUGbPEkJxyENg=;
-        b=AXN9uep/GH2+PyKrai4pN8oFJ8Efz7ZA6yiaFK2lqEKs6i4XqAA9X/R/VZsiUTx8ux
-         K9AbGVl/ZYiwXHdKDPvFyhhupfJ0Oain6KdXU9HHyrEZrd3rj0W/8JFXkeGR6eCHHjLY
-         tgFlraKP/6RAyAh3femmQvFfgYZGKZ+o3lEzzsHNnGmShvSP0nEug4GGxlnwh6ZzGzHs
-         +zSQCXNF2BmcQIyrBWQtMnGJnQrxloF0cCCpEXn/7sIG1cmWlVuLQWNBP8TrVndw3oI9
-         VO+/zGJAGhr1Wg7NGNfR/Dwivcl/bPvNWVbMpmlQsEXWyKTec8nSPNhHrumCs6Zkhudq
-         DBMA==
-X-Gm-Message-State: AOJu0YxEEO5xiPFLkF9G93KcSf7HcKvmocts4xTU1aR0tj6QchlowGDi
-        VCqYuSXxSR/EAHakcR/4jkKKCn872EdRwtRbsJ9AqwterUhzrGf5y028mymu9zQnd7wo5B4sxfn
-        XhNviarifjYB1OzzuEos=
-X-Received: by 2002:a17:902:ab12:b0:1c3:df77:3159 with SMTP id ik18-20020a170902ab1200b001c3df773159mr7962012plb.50.1695015426136;
-        Sun, 17 Sep 2023 22:37:06 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG4LA6vy59tdBGF7Ljgoach/YoGNT9CDJsVEh22V2F8alWKcyjdRZQRbNbCFRoo5eBTb6guIw==
-X-Received: by 2002:a17:902:ab12:b0:1c3:df77:3159 with SMTP id ik18-20020a170902ab1200b001c3df773159mr7962003plb.50.1695015425836;
-        Sun, 17 Sep 2023 22:37:05 -0700 (PDT)
+        bh=w7TSEWyUXJCeqtg0Djyj65qrS0+HnzgNG2tRE6DrFAI=;
+        b=J55CIMQArF/cGw36v7n2GeFlH18RkMJZ/eeavY/2W6uQTxqjwidiTVJubv+DNbsIjh
+         ZWumxx5hw/6Rf5rVuRMRHFxaLcEUgRRMoMPe1x07Vo7G4DvOftVtjOpbrSkh2lNc//+6
+         CRqs0ojeL49sGHjt5DZWzMClS99fXFehwnnXPInwyw5mn80CupA2IfFVCXFFr+SdcvNi
+         h/8ph7t1kMyY2G8kwkwKfY5VhmYDrEkQS6YlFGQ4E7/2LmiPgjQMEcUaB0k7tdvZ7AF+
+         dfr90fgxfhAc0eZvbjiIoNQ/X540TpQdJH76A+waVPFrYiFT6jTleE99jCJtrygmm5Qu
+         KsVg==
+X-Gm-Message-State: AOJu0YwWiDxV/fRDDeeykHAPBgIcheri+TEP63C82zzBR3zVlMBIMUQf
+        W9oD9ErflQ3VrTUDQ+qq3v7qalnse5PwcWDZFCMgHi5M5qMYGg4cvfDI4U4qmIOxQF4DIN8Mti4
+        MC/eqdxgkJu7pYmoEmEg=
+X-Received: by 2002:aca:121a:0:b0:3a7:8fcd:3325 with SMTP id 26-20020aca121a000000b003a78fcd3325mr10015620ois.17.1695016217166;
+        Sun, 17 Sep 2023 22:50:17 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFoCM/tkJCT1jU0h2UbpaP8HBCFgV19s7sjBE5RVSp8/LXycbN7Ov8MEcZYxO77VSRowm8tHQ==
+X-Received: by 2002:aca:121a:0:b0:3a7:8fcd:3325 with SMTP id 26-20020aca121a000000b003a78fcd3325mr10015608ois.17.1695016216974;
+        Sun, 17 Sep 2023 22:50:16 -0700 (PDT)
 Received: from ?IPV6:2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5? ([2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5])
-        by smtp.gmail.com with ESMTPSA id n5-20020a170902e54500b001b9d95945afsm7488399plf.155.2023.09.17.22.37.00
+        by smtp.gmail.com with ESMTPSA id m12-20020a17090a71cc00b00262d079720bsm8127581pjs.29.2023.09.17.22.50.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Sep 2023 22:37:05 -0700 (PDT)
-Message-ID: <add60819-1d36-9b96-7bfa-148907dc44ce@redhat.com>
-Date:   Mon, 18 Sep 2023 15:36:58 +1000
+        Sun, 17 Sep 2023 22:50:16 -0700 (PDT)
+Message-ID: <b8f430c1-c30f-191f-18c6-f750fa6ba476@redhat.com>
+Date:   Mon, 18 Sep 2023 15:50:09 +1000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [RFC PATCH v2 19/35] ACPI: Move acpi_bus_trim_one() before
- acpi_scan_hot_remove()
+Subject: Re: [RFC PATCH v2 20/35] ACPI: Rename acpi_processor_hotadd_init and
+ remove pre-processor guards
 Content-Language: en-US
-To:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev
-Cc:     x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        James Morse <james.morse@arm.com>
+Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+        x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
         Russell King <linux@armlinux.org.uk>,
         Jean-Philippe Brucker <jean-philippe@linaro.org>,
         jianyong.wu@arm.com, justin.he@arm.com
 References: <20230913163823.7880-1-james.morse@arm.com>
- <20230913163823.7880-20-james.morse@arm.com>
+ <20230913163823.7880-21-james.morse@arm.com>
+ <20230914151720.00007105@Huawei.com>
 From:   Gavin Shan <gshan@redhat.com>
-In-Reply-To: <20230913163823.7880-20-james.morse@arm.com>
+In-Reply-To: <20230914151720.00007105@Huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -90,116 +92,102 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-On 9/14/23 02:38, James Morse wrote:
-> A subsequent patch will change acpi_scan_hot_remove() to call
-> acpi_bus_trim_one() instead of acpi_bus_trim(), meaning it can no longer
-> rely on the prototype in the header file.
+On 9/15/23 00:17, Jonathan Cameron wrote:
+> On Wed, 13 Sep 2023 16:38:08 +0000
+> James Morse <james.morse@arm.com> wrote:
 > 
-> Move these functions further up the file.
-> No change in behaviour.
+>> acpi_processor_hotadd_init() will make a CPU present by mapping it
+>> based on its hardware id.
+>>
+>> 'hotadd_init' is ambiguous once there are two different behaviours
+>> for cpu hotplug. This is for toggling the _STA present bit. Subsequent
+>> patches will add support for toggling the _STA enabled bit, named
+>> acpi_processor_make_enabled().
+>>
+>> Rename it acpi_processor_make_present() to make it clear this is
+>> for CPUs that were not previously present.
+>>
+>> Expose the function prototypes it uses to allow the preprocessor
+>> guards to be removed. The IS_ENABLED() check will let the compiler
+>> dead-code elimination pass remove this if it isn't going to be
+>> used.
+>>
+>> Signed-off-by: James Morse <james.morse@arm.com>
+>> ---
+>>   drivers/acpi/acpi_processor.c | 14 +++++---------
+>>   include/linux/acpi.h          |  2 --
+>>   2 files changed, 5 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
+>> index 75257fae10e7..22a15a614f95 100644
+>> --- a/drivers/acpi/acpi_processor.c
+>> +++ b/drivers/acpi/acpi_processor.c
+>> @@ -182,13 +182,15 @@ static void __init acpi_pcc_cpufreq_init(void) {}
+>>   #endif /* CONFIG_X86 */
+>>   
+>>   /* Initialization */
+>> -#ifdef CONFIG_ACPI_HOTPLUG_PRESENT_CPU
+>> -static int acpi_processor_hotadd_init(struct acpi_processor *pr)
+>> +static int acpi_processor_make_present(struct acpi_processor *pr)
+>>   {
+>>   	unsigned long long sta;
+>>   	acpi_status status;
+>>   	int ret;
+>>   
+>> +	if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU))
+>> +		return -ENODEV;
+>> +
+>>   	if (invalid_phys_cpuid(pr->phys_id))
+>>   		return -ENODEV;
+>>   
+>> @@ -222,12 +224,6 @@ static int acpi_processor_hotadd_init(struct acpi_processor *pr)
+>>   	cpu_maps_update_done();
+>>   	return ret;
+>>   }
+>> -#else
+>> -static inline int acpi_processor_hotadd_init(struct acpi_processor *pr)
+>> -{
+>> -	return -ENODEV;
+>> -}
+>> -#endif /* CONFIG_ACPI_HOTPLUG_PRESENT_CPU */
+>>   
+>>   static int acpi_processor_get_info(struct acpi_device *device)
+>>   {
+>> @@ -335,7 +331,7 @@ static int acpi_processor_get_info(struct acpi_device *device)
+>>   	 *  because cpuid <-> apicid mapping is persistent now.
+>>   	 */
+>>   	if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
+>> -		int ret = acpi_processor_hotadd_init(pr);
+>> +		int ret = acpi_processor_make_present(pr);
+>>   
+>>   		if (ret)
+>>   			return ret;
+>> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+>> index 651dd43976a9..b7ab85857bb7 100644
+>> --- a/include/linux/acpi.h
+>> +++ b/include/linux/acpi.h
+>> @@ -316,12 +316,10 @@ static inline int acpi_processor_evaluate_cst(acpi_handle handle, u32 cpu,
+>>   }
+>>   #endif
+>>   
+>> -#ifdef CONFIG_ACPI_HOTPLUG_PRESENT_CPU
+>>   /* Arch dependent functions for cpu hotplug support */
+>>   int acpi_map_cpu(acpi_handle handle, phys_cpuid_t physid, u32 acpi_id,
+>>   		 int *pcpu);
+>>   int acpi_unmap_cpu(int cpu);
 > 
-> Signed-off-by: James Morse <james.morse@arm.com>
-> ---
->   drivers/acpi/scan.c | 76 ++++++++++++++++++++++-----------------------
->   1 file changed, 38 insertions(+), 38 deletions(-)
+> I've lost track somewhat but I think the definitions of these are still under ifdefs
+> which is messy if nothing else and might cause build issues.
 > 
 
-Reviewed-by: Gavin Shan <gshan@redhat.com>
+Yup, it's not safe to use 'if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU))' in
+acpi_processor_make_present() until the ifdefs are removed for those two functions
+in individual architectures.
 
-> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> index f898591ce05f..a675333618ae 100644
-> --- a/drivers/acpi/scan.c
-> +++ b/drivers/acpi/scan.c
-> @@ -244,6 +244,44 @@ static int acpi_scan_try_to_offline(struct acpi_device *device)
->   	return 0;
->   }
->   
-> +static int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
-> +{
-> +	struct acpi_scan_handler *handler = adev->handler;
-> +
-> +	acpi_dev_for_each_child_reverse(adev, acpi_bus_trim_one, NULL);
-> +
-> +	adev->flags.match_driver = false;
-> +	if (handler) {
-> +		if (handler->detach)
-> +			handler->detach(adev);
-> +
-> +		adev->handler = NULL;
-> +	} else {
-> +		device_release_driver(&adev->dev);
-> +	}
-> +	/*
-> +	 * Most likely, the device is going away, so put it into D3cold before
-> +	 * that.
-> +	 */
-> +	acpi_device_set_power(adev, ACPI_STATE_D3_COLD);
-> +	adev->flags.initialized = false;
-> +	acpi_device_clear_enumerated(adev);
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * acpi_bus_trim - Detach scan handlers and drivers from ACPI device objects.
-> + * @adev: Root of the ACPI namespace scope to walk.
-> + *
-> + * Must be called under acpi_scan_lock.
-> + */
-> +void acpi_bus_trim(struct acpi_device *adev)
-> +{
-> +	acpi_bus_trim_one(adev, NULL);
-> +}
-> +EXPORT_SYMBOL_GPL(acpi_bus_trim);
-> +
->   static int acpi_scan_hot_remove(struct acpi_device *device)
->   {
->   	acpi_handle handle = device->handle;
-> @@ -2506,44 +2544,6 @@ int acpi_bus_scan(acpi_handle handle)
->   }
->   EXPORT_SYMBOL(acpi_bus_scan);
->   
-> -static int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
-> -{
-> -	struct acpi_scan_handler *handler = adev->handler;
-> -
-> -	acpi_dev_for_each_child_reverse(adev, acpi_bus_trim_one, NULL);
-> -
-> -	adev->flags.match_driver = false;
-> -	if (handler) {
-> -		if (handler->detach)
-> -			handler->detach(adev);
-> -
-> -		adev->handler = NULL;
-> -	} else {
-> -		device_release_driver(&adev->dev);
-> -	}
-> -	/*
-> -	 * Most likely, the device is going away, so put it into D3cold before
-> -	 * that.
-> -	 */
-> -	acpi_device_set_power(adev, ACPI_STATE_D3_COLD);
-> -	adev->flags.initialized = false;
-> -	acpi_device_clear_enumerated(adev);
-> -
-> -	return 0;
-> -}
-> -
-> -/**
-> - * acpi_bus_trim - Detach scan handlers and drivers from ACPI device objects.
-> - * @adev: Root of the ACPI namespace scope to walk.
-> - *
-> - * Must be called under acpi_scan_lock.
-> - */
-> -void acpi_bus_trim(struct acpi_device *adev)
-> -{
-> -	acpi_bus_trim_one(adev, NULL);
-> -}
-> -EXPORT_SYMBOL_GPL(acpi_bus_trim);
-> -
->   int acpi_bus_register_early_device(int type)
->   {
->   	struct acpi_device *device = NULL;
+>> -#endif /* CONFIG_ACPI_HOTPLUG_PRESENT_CPU */
+>>   
+>>   #ifdef CONFIG_ACPI_HOTPLUG_IOAPIC
+>>   int acpi_get_ioapic_id(acpi_handle handle, u32 gsi_base, u64 *phys_addr);
 
 Thanks,
 Gavin
