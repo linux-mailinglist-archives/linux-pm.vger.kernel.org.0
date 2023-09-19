@@ -2,334 +2,251 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08087A6268
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 14:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF1C7A62C2
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 14:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231864AbjISMQb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Sep 2023 08:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59138 "EHLO
+        id S229988AbjISMXN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Sep 2023 08:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbjISMQW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Sep 2023 08:16:22 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F49F11A
-        for <linux-pm@vger.kernel.org>; Tue, 19 Sep 2023 05:16:15 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51e28cac164so14296183a12.1
-        for <linux-pm@vger.kernel.org>; Tue, 19 Sep 2023 05:16:15 -0700 (PDT)
+        with ESMTP id S231501AbjISMXN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Sep 2023 08:23:13 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2DFF4
+        for <linux-pm@vger.kernel.org>; Tue, 19 Sep 2023 05:23:06 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1c09673b006so41153895ad.1
+        for <linux-pm@vger.kernel.org>; Tue, 19 Sep 2023 05:23:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695125773; x=1695730573; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OJ8Nt8LYUz2Xuy84Q3mL3OhNCwDhR0bArvJ9TQ6lw8Q=;
-        b=FxbDw2DpvhXQ2FIFNmuhpVr3/o60h52ptQyvXJUKUmZyJvtGJ2hpVzhlXsWlCRsLl/
-         QwpWbdS4V2yv8qDWaXxnS2+UdGiZbO/ZO1TlSlvaN8VRC5NOBSBN1TgxcM8ikfY5j5YG
-         iGbRrnr02Ow0Z5kth8rQHY5gFMBQNM66b0AzL83TbHm2egNzrJt7C/DFWrfrB0t4dEs0
-         2gQtzk4rkIYmoGK7ZmtL5KV/8v4vsQjBUZDLXcIticAKCbi0AJeQbXo1dwJ8F+fzhiou
-         +A9hXQaKU0+rWKS515nKOi454TEJ32/O9bEcZdb8XYonzvC1EfpPR2W6f1fDq+xOKV1Y
-         B5aw==
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1695126186; x=1695730986; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=OEnHedXqF71k0DnzKMfj8JX+rAIeY+7p1wBprmZ10sk=;
+        b=thraN59P+Je1Lhb4KXy0iUwbpHtyW+A3qA9OT34aEJyDJN2xabOqSuS4bwvoSPNYvf
+         i1LmmVvV0q/aXMT9XUXESdTENE+py6bY9NGvvOATBw0Bup2RNEoCAyWEgRa7lqdp0j6v
+         f6p/Gcz9U+cXWUhgOMQHA/g0a+TqOicCPEpuDzXY5C1cwUAqnVy27NbWhYiZABbhhy2w
+         9yviATjrcMIVVk9tSklQ1dtvSmC9Bnur1FRmBPhh67p2GBrkL557vfwer5Jl4RAsZI6P
+         MzG2mqnaSCUrV7+8QbH3peW7I4110PpIyP5ROKwSD4oJ/Ncl+yJdg6v7X69NUoAI3b1T
+         NnIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695125773; x=1695730573;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1695126186; x=1695730986;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=OJ8Nt8LYUz2Xuy84Q3mL3OhNCwDhR0bArvJ9TQ6lw8Q=;
-        b=eLDVBzuz9kddrlqMWpinOqdU5NPQuhHAQc6qjRHpdhdw2uNrkA91+xlgzrUCR8y0i3
-         ZWg3Vr+wGeByucgWwaRC/2iAHDpiU1gHckWM/2YE7HLs0TUyBXZEXmAYCebouojPmfJk
-         lMkARbBEAaQ6gj//Z+7h3IFp4wW54T7mHmj0Q4qloHa/EMXwg6YbuUxtVHBcnA7Vdtcr
-         y8MKc+DlD3JPdyMGfIJ6h5I5k7WcMzhFGsqNE6KDKV7lVlPdOWd+osX6zY6N3/zA/M+L
-         XCDPKvtUxgCE2VvQhsMzzNR68/h/0uW8iyf8rAFAXQSNmAymYDJ7tuga2+QruMko2uiD
-         OQFQ==
-X-Gm-Message-State: AOJu0YzTSOrFG1HzfOrEC6onscF5Kv+qeN/dQQbiuWvVeHb71LKCPxVP
-        x9LnP/jh7xvRZl/CLZLyCVdQ8g==
-X-Google-Smtp-Source: AGHT+IF3/7yaArwwOo6EOIsX0xO/v8txgTATSqlBUG+snZCpfFKHtTAYiYqpo3h1f199YzNO5T2P8w==
-X-Received: by 2002:a17:907:3e15:b0:9ad:e3fd:d46c with SMTP id hp21-20020a1709073e1500b009ade3fdd46cmr3085405ejc.10.1695125773449;
-        Tue, 19 Sep 2023 05:16:13 -0700 (PDT)
-Received: from uffe-tuxpro14.. (static-212-193-78-212.thenetworkfactory.nl. [212.78.193.212])
-        by smtp.gmail.com with ESMTPSA id p25-20020a1709060e9900b00992b50fbbe9sm7781469ejf.90.2023.09.19.05.16.12
+        bh=OEnHedXqF71k0DnzKMfj8JX+rAIeY+7p1wBprmZ10sk=;
+        b=SiOQncBVFKnRXzipIM+jj1bQlElzo2G3nz4816jk9d4DMMSpAYhFoBN7miNSxARfXl
+         IK9983NFRuvELxP/xw01I0PNsZHf6jin3tlySuyh6ImvZVBocNjUAgybG0SPVMXMmTbK
+         YWORGGcklzu3xMH72hiTJoYdsfIU8xN1ICE9OdbM+Jw43Cz5MGBgjt+c5xugshOuE52v
+         k9YzM2XQEDP7PYmsQ0UrUud2FBIfJopzM8rKLHbh2909tBW80FYUuc6roaM0ojfSFzah
+         A9fJ+4hmIpTnJq72cG25hokCSiJtolqFWhqsDJMHyZaix7XhapSiPyUJwWLZ9PTTgPqL
+         /V+A==
+X-Gm-Message-State: AOJu0YxWb7CyGt7hGA0ErI7xHIaF9BiqBQUI/Ss2rH0O7buTkd99vsRO
+        ggKaYYD8qUCUtpRuCCUmRCEIfRXm0AfSe3Rt3IEzYg==
+X-Google-Smtp-Source: AGHT+IGRg6wmPGgyDraeVaV2wxvH+IXcua8Bwfj/MCmC52y8riGNMQPDa36pyjDhS1Kkg6R1hcV+Qw==
+X-Received: by 2002:a17:902:e552:b0:1c4:32da:2037 with SMTP id n18-20020a170902e55200b001c432da2037mr12397954plf.64.1695126186374;
+        Tue, 19 Sep 2023 05:23:06 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id m2-20020a1709026bc200b001bc0f974117sm5688076plt.57.2023.09.19.05.23.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Sep 2023 05:16:13 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Nikunj Kela <nkela@quicinc.com>,
-        Prasad Sodagudi <psodagud@quicinc.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 13/13] pmdomain: arm: Add the SCMI performance domain
-Date:   Tue, 19 Sep 2023 14:16:05 +0200
-Message-Id: <20230919121605.7304-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 19 Sep 2023 05:23:05 -0700 (PDT)
+Message-ID: <650992a9.170a0220.2c41d.ff75@mx.google.com>
+Date:   Tue, 19 Sep 2023 05:23:05 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v6.6-rc2-21-g23aa512f7cfb
+X-Kernelci-Report-Type: test
+Subject: pm/testing baseline: 47 runs,
+ 3 regressions (v6.6-rc2-21-g23aa512f7cfb)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-To enable support for performance scaling (DVFS) for generic devices with
-the SCMI performance protocol, let's add an SCMI performance domain. This
-is being modelled as a genpd provider, with support for performance scaling
-through genpd's ->set_performance_state() callback.
+pm/testing baseline: 47 runs, 3 regressions (v6.6-rc2-21-g23aa512f7cfb)
 
-Note that, this adds the initial support that allows consumer drivers for
-attached devices, to vote for a new performance state via calling the
-dev_pm_genpd_set_performance_state(). However, this should be avoided as
-it's in most cases preferred to use the OPP library to vote for a new OPP
-instead. The support using the OPP library isn't part of this change, but
-needs to be implemented from subsequent changes.
+Regressions Summary
+-------------------
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
+platform                 | arch  | lab             | compiler | defconfig |=
+ regressions
+-------------------------+-------+-----------------+----------+-----------+=
+------------
+imx8mm-innocomm-wb15-evk | arm64 | lab-pengutronix | gcc-10   | defconfig |=
+ 1          =
 
-Sudeep, Cristian,
+imx8mp-evk               | arm64 | lab-broonie     | gcc-10   | defconfig |=
+ 1          =
 
-I decided to just send this a single patch, rather than a new version of the
-complete series. If you prefer a new version of the series, please let me know.
+r8a779m1-ulcb            | arm64 | lab-collabora   | gcc-10   | defconfig |=
+ 1          =
 
-Kind regards
-Uffe
 
-Changes in v4:
-	- Rebased on v6.6-rc2 to be able to put the files in the new pmdomain
-	subsystem (was genpd in v6.6-rc1).
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.6-rc2=
+-21-g23aa512f7cfb/plan/baseline/
 
-Changes in v3:
-	- Move files to drivers/genpd/arm/ and update MAINTAINERS.
-	- Updated the commit msg header.
-	- Prevent setting performance level 0.
-	- Initialize the genpd as always-on.
-	- Note, the corresponding Kconfigs should be placed in the genpd dir
-	too, but that's better suited on top or through a later-version.
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v6.6-rc2-21-g23aa512f7cfb
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      23aa512f7cfb35df3681128dba3b9bef597fcd6c =
 
----
- MAINTAINERS                             |   1 +
- drivers/firmware/arm_scmi/Kconfig       |  12 ++
- drivers/pmdomain/Makefile               |   1 +
- drivers/pmdomain/arm/Makefile           |   3 +
- drivers/pmdomain/arm/scmi_perf_domain.c | 150 ++++++++++++++++++++++++
- 5 files changed, 167 insertions(+)
- create mode 100644 drivers/pmdomain/arm/Makefile
- create mode 100644 drivers/pmdomain/arm/scmi_perf_domain.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index bf0f54c24f81..aa8c58b16416 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20902,6 +20902,7 @@ F:	drivers/clk/clk-sc[mp]i.c
- F:	drivers/cpufreq/sc[mp]i-cpufreq.c
- F:	drivers/firmware/arm_scmi/
- F:	drivers/firmware/arm_scpi.c
-+F:	drivers/pmdomain/arm/
- F:	drivers/powercap/arm_scmi_powercap.c
- F:	drivers/regulator/scmi-regulator.c
- F:	drivers/reset/reset-scmi.c
-diff --git a/drivers/firmware/arm_scmi/Kconfig b/drivers/firmware/arm_scmi/Kconfig
-index ea0f5083ac47..706d1264d038 100644
---- a/drivers/firmware/arm_scmi/Kconfig
-+++ b/drivers/firmware/arm_scmi/Kconfig
-@@ -181,6 +181,18 @@ config ARM_SCMI_POWER_DOMAIN
- 	  will be called scmi_pm_domain. Note this may needed early in boot
- 	  before rootfs may be available.
- 
-+config ARM_SCMI_PERF_DOMAIN
-+	tristate "SCMI performance domain driver"
-+	depends on ARM_SCMI_PROTOCOL || (COMPILE_TEST && OF)
-+	default y
-+	select PM_GENERIC_DOMAINS if PM
-+	help
-+	  This enables support for the SCMI performance domains which can be
-+	  enabled or disabled via the SCP firmware.
-+
-+	  This driver can also be built as a module. If so, the module will be
-+	  called scmi_perf_domain.
-+
- config ARM_SCMI_POWER_CONTROL
- 	tristate "SCMI system power control driver"
- 	depends on ARM_SCMI_PROTOCOL || (COMPILE_TEST && OF)
-diff --git a/drivers/pmdomain/Makefile b/drivers/pmdomain/Makefile
-index 666753676e5c..f0326b27b30b 100644
---- a/drivers/pmdomain/Makefile
-+++ b/drivers/pmdomain/Makefile
-@@ -2,6 +2,7 @@
- obj-y					+= actions/
- obj-y					+= amlogic/
- obj-y					+= apple/
-+obj-y					+= arm/
- obj-y					+= bcm/
- obj-y					+= imx/
- obj-y					+= mediatek/
-diff --git a/drivers/pmdomain/arm/Makefile b/drivers/pmdomain/arm/Makefile
-new file mode 100644
-index 000000000000..7128db96deac
---- /dev/null
-+++ b/drivers/pmdomain/arm/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+obj-$(CONFIG_ARM_SCMI_PERF_DOMAIN) += scmi_perf_domain.o
-diff --git a/drivers/pmdomain/arm/scmi_perf_domain.c b/drivers/pmdomain/arm/scmi_perf_domain.c
-new file mode 100644
-index 000000000000..aa100270500f
---- /dev/null
-+++ b/drivers/pmdomain/arm/scmi_perf_domain.c
-@@ -0,0 +1,150 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * SCMI performance domain support.
-+ *
-+ * Copyright (C) 2023 Linaro Ltd.
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/device.h>
-+#include <linux/module.h>
-+#include <linux/pm_domain.h>
-+#include <linux/scmi_protocol.h>
-+#include <linux/slab.h>
-+
-+struct scmi_perf_domain {
-+	struct generic_pm_domain genpd;
-+	const struct scmi_perf_proto_ops *perf_ops;
-+	const struct scmi_protocol_handle *ph;
-+	const struct scmi_perf_domain_info *info;
-+	u32 domain_id;
-+};
-+
-+#define to_scmi_pd(pd) container_of(pd, struct scmi_perf_domain, genpd)
-+
-+static int
-+scmi_pd_set_perf_state(struct generic_pm_domain *genpd, unsigned int state)
-+{
-+	struct scmi_perf_domain *pd = to_scmi_pd(genpd);
-+	int ret;
-+
-+	if (!pd->info->set_perf)
-+		return 0;
-+
-+	if (!state)
-+		return -EINVAL;
-+
-+	ret = pd->perf_ops->level_set(pd->ph, pd->domain_id, state, true);
-+	if (ret)
-+		dev_warn(&genpd->dev, "Failed with %d when trying to set %d perf level",
-+			 ret, state);
-+
-+	return ret;
-+}
-+
-+static int scmi_perf_domain_probe(struct scmi_device *sdev)
-+{
-+	struct device *dev = &sdev->dev;
-+	const struct scmi_handle *handle = sdev->handle;
-+	const struct scmi_perf_proto_ops *perf_ops;
-+	struct scmi_protocol_handle *ph;
-+	struct scmi_perf_domain *scmi_pd;
-+	struct genpd_onecell_data *scmi_pd_data;
-+	struct generic_pm_domain **domains;
-+	int num_domains, i, ret = 0;
-+
-+	if (!handle)
-+		return -ENODEV;
-+
-+	/* The OF node must specify us as a power-domain provider. */
-+	if (!of_find_property(dev->of_node, "#power-domain-cells", NULL))
-+		return 0;
-+
-+	perf_ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_PERF, &ph);
-+	if (IS_ERR(perf_ops))
-+		return PTR_ERR(perf_ops);
-+
-+	num_domains = perf_ops->num_domains_get(ph);
-+	if (num_domains < 0) {
-+		dev_warn(dev, "Failed with %d when getting num perf domains\n",
-+			 num_domains);
-+		return num_domains;
-+	} else if (!num_domains) {
-+		return 0;
-+	}
-+
-+	scmi_pd = devm_kcalloc(dev, num_domains, sizeof(*scmi_pd), GFP_KERNEL);
-+	if (!scmi_pd)
-+		return -ENOMEM;
-+
-+	scmi_pd_data = devm_kzalloc(dev, sizeof(*scmi_pd_data), GFP_KERNEL);
-+	if (!scmi_pd_data)
-+		return -ENOMEM;
-+
-+	domains = devm_kcalloc(dev, num_domains, sizeof(*domains), GFP_KERNEL);
-+	if (!domains)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < num_domains; i++, scmi_pd++) {
-+		scmi_pd->info = perf_ops->info_get(ph, i);
-+
-+		scmi_pd->domain_id = i;
-+		scmi_pd->perf_ops = perf_ops;
-+		scmi_pd->ph = ph;
-+		scmi_pd->genpd.name = scmi_pd->info->name;
-+		scmi_pd->genpd.flags = GENPD_FLAG_ALWAYS_ON |
-+				       GENPD_FLAG_OPP_TABLE_FW;
-+		scmi_pd->genpd.set_performance_state = scmi_pd_set_perf_state;
-+
-+		ret = pm_genpd_init(&scmi_pd->genpd, NULL, false);
-+		if (ret)
-+			goto err;
-+
-+		domains[i] = &scmi_pd->genpd;
-+	}
-+
-+	scmi_pd_data->domains = domains;
-+	scmi_pd_data->num_domains = num_domains;
-+
-+	ret = of_genpd_add_provider_onecell(dev->of_node, scmi_pd_data);
-+	if (ret)
-+		goto err;
-+
-+	dev_set_drvdata(dev, scmi_pd_data);
-+	dev_info(dev, "Initialized %d performance domains", num_domains);
-+	return 0;
-+err:
-+	for (i--; i >= 0; i--)
-+		pm_genpd_remove(domains[i]);
-+	return ret;
-+}
-+
-+static void scmi_perf_domain_remove(struct scmi_device *sdev)
-+{
-+	struct device *dev = &sdev->dev;
-+	struct genpd_onecell_data *scmi_pd_data = dev_get_drvdata(dev);
-+	int i;
-+
-+	of_genpd_del_provider(dev->of_node);
-+
-+	for (i = 0; i < scmi_pd_data->num_domains; i++)
-+		pm_genpd_remove(scmi_pd_data->domains[i]);
-+}
-+
-+static const struct scmi_device_id scmi_id_table[] = {
-+	{ SCMI_PROTOCOL_PERF, "perf" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(scmi, scmi_id_table);
-+
-+static struct scmi_driver scmi_perf_domain_driver = {
-+	.name		= "scmi-perf-domain",
-+	.probe		= scmi_perf_domain_probe,
-+	.remove		= scmi_perf_domain_remove,
-+	.id_table	= scmi_id_table,
-+};
-+module_scmi_driver(scmi_perf_domain_driver);
-+
-+MODULE_AUTHOR("Ulf Hansson <ulf.hansson@linaro.org>");
-+MODULE_DESCRIPTION("ARM SCMI perf domain driver");
-+MODULE_LICENSE("GPL v2");
--- 
-2.34.1
 
+Test Regressions
+---------------- =
+
+
+
+platform                 | arch  | lab             | compiler | defconfig |=
+ regressions
+-------------------------+-------+-----------------+----------+-----------+=
+------------
+imx8mm-innocomm-wb15-evk | arm64 | lab-pengutronix | gcc-10   | defconfig |=
+ 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6509888e41867d55e08a0a5a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.6-rc2-21-g23aa51=
+2f7cfb/arm64/defconfig/gcc-10/lab-pengutronix/baseline-imx8mm-innocomm-wb15=
+-evk.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.6-rc2-21-g23aa51=
+2f7cfb/arm64/defconfig/gcc-10/lab-pengutronix/baseline-imx8mm-innocomm-wb15=
+-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6509888e41867d55e08a0=
+a5b
+        new failure (last pass: v6.6-rc2-10-gb34108fa27bd) =
+
+ =
+
+
+
+platform                 | arch  | lab             | compiler | defconfig |=
+ regressions
+-------------------------+-------+-----------------+----------+-----------+=
+------------
+imx8mp-evk               | arm64 | lab-broonie     | gcc-10   | defconfig |=
+ 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65098b494f1139108e8a0a50
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.6-rc2-21-g23aa51=
+2f7cfb/arm64/defconfig/gcc-10/lab-broonie/baseline-imx8mp-evk.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.6-rc2-21-g23aa51=
+2f7cfb/arm64/defconfig/gcc-10/lab-broonie/baseline-imx8mp-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/65098b494f1139108e8a0a59
+        failing since 6 days (last pass: pm-6.6-rc1-122-g07b618ec9d7a, firs=
+t fail: v6.6-rc1-5-gb5eda4c9c923)
+
+    2023-09-19T11:51:16.559480  + set<8>[   28.261682] <LAVA_SIGNAL_ENDRUN =
+0_dmesg 117126_1.5.2.4.1>
+    2023-09-19T11:51:16.560074   +x
+    2023-09-19T11:51:16.668826  / # #
+    2023-09-19T11:51:17.834766  export SHELL=3D/bin/sh
+    2023-09-19T11:51:17.840955  #
+    2023-09-19T11:51:19.339962  / # export SHELL=3D/bin/sh. /lava-117126/en=
+vironment
+    2023-09-19T11:51:19.346007  =
+
+    2023-09-19T11:51:22.069636  / # . /lava-117126/environment/lava-117126/=
+bin/lava-test-runner /lava-117126/1
+    2023-09-19T11:51:22.076391  =
+
+    2023-09-19T11:51:22.078964  / # /lava-117126/bin/lava-test-runner /lava=
+-117126/1 =
+
+    ... (12 line(s) more)  =
+
+ =
+
+
+
+platform                 | arch  | lab             | compiler | defconfig |=
+ regressions
+-------------------------+-------+-----------------+----------+-----------+=
+------------
+r8a779m1-ulcb            | arm64 | lab-collabora   | gcc-10   | defconfig |=
+ 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6509889f960f3a6a648a0a7e
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.6-rc2-21-g23aa51=
+2f7cfb/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a779m1-ulcb.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.6-rc2-21-g23aa51=
+2f7cfb/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a779m1-ulcb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/6509889f960f3a6a648a0a87
+        failing since 61 days (last pass: pm-6.5-rc2-210-ga648a2d354da, fir=
+st fail: v6.5-rc2-44-g6384f300e9f3)
+
+    2023-09-19T11:41:55.211655  / # #
+
+    2023-09-19T11:41:56.291769  export SHELL=3D/bin/sh
+
+    2023-09-19T11:41:56.293527  #
+
+    2023-09-19T11:41:57.784797  / # export SHELL=3D/bin/sh. /lava-11570434/=
+environment
+
+    2023-09-19T11:41:57.786724  =
+
+
+    2023-09-19T11:42:00.512783  / # . /lava-11570434/environment/lava-11570=
+434/bin/lava-test-runner /lava-11570434/1
+
+    2023-09-19T11:42:00.515149  =
+
+
+    2023-09-19T11:42:00.520043  / # /lava-11570434/bin/lava-test-runner /la=
+va-11570434/1
+
+    2023-09-19T11:42:00.583957  + export 'TESTRUN_ID=3D1_bootrr'
+
+    2023-09-19T11:42:00.584449  + cd /lav<8>[   28.573578] <LAVA_SIGNAL_STA=
+RTRUN 1_bootrr 11570434_1.5.2.4.5>
+ =
+
+    ... (39 line(s) more)  =
+
+ =20
