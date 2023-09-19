@@ -2,144 +2,265 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 470717A5732
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 04:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 435A97A5764
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 04:26:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjISCAX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Sep 2023 22:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36058 "EHLO
+        id S230437AbjISC0D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Sep 2023 22:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjISCAW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 22:00:22 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53187114;
-        Mon, 18 Sep 2023 19:00:12 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38J1WVQY019731;
-        Tue, 19 Sep 2023 02:00:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=zsCirX1ttDWrfi/3MDW7a7BIKkKlRpavbxSBZngcSA8=;
- b=M4xgUugSEFAYbKzEc/oFw5QmfXbGcTO54Q3aAdezvQexmEI0rx1F0ksfj7hilsoMlwDl
- d9sdAmbG+SB485qRqX484ZEkFCWtuZRsZHC10X1vAMd47o7zaV1Zb4ElMRP7YjTvGj73
- HfHAjogk80GR0k0FnCXeq5/KKYwGuY5DwO8KaRRBFJJdStjnlsUERA/Viz38zzz+jGX5
- KJ98j7LQ2cUo5tuj0CGogKZXFCpyWpUlpcXbCl37FifsAfSha0fc8PkD6jhY08hY41zb
- G+pWyeDifXkHnq3d1yn8Ks+1WBE+LCGbP3wE0+UGOR05sZXgsAVTx2P5muGO4A+pOFHe XQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t54f14fa2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Sep 2023 02:00:05 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38J2035u005706
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Sep 2023 02:00:03 GMT
-Received: from [10.239.132.204] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Mon, 18 Sep
- 2023 18:59:57 -0700
-Message-ID: <73a90202-1127-4469-a46d-7986343c51b1@quicinc.com>
-Date:   Tue, 19 Sep 2023 09:59:54 +0800
+        with ESMTP id S230424AbjISC0C (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 22:26:02 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E7F10D
+        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 19:25:56 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1c3d6d88231so41427915ad.0
+        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 19:25:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1695090356; x=1695695156; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=vtJ/1GbiYgSKhLymlpWYrMBHchv6N8MwzO2XFDqGDvI=;
+        b=Vgx7rMuzafCJZ42kPUP/esJA+gc1fMn2EKnNXhvfcsGC4BWOD4aM6MEfj6jXq87qyw
+         d8ZR2wkbPSr1BHn4eudI/YlnxLo7TJJz2W071AKVxhJDGwPtHzCMB2o9Xk95hLmWjT0R
+         KsHJF6AwJ2iIqhVdGNLhcCX/5SqT3uh5GHgh23KqHDUJ7TI+u9VVmLX3C2cPqpkCHTiy
+         ejLPtd0Z4yP1iR/U4Krw8RFSENQ96RqkaEjsHQ3BkoVn8nbaaEjFUSQZl44uyx0KQkAK
+         bORnJYoYeuda3WdaiEnK2VOFxxVjo4PlYrEpeUP9j4lBBS7kyt6U6xPn9CM952kr+DXQ
+         AOjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695090356; x=1695695156;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vtJ/1GbiYgSKhLymlpWYrMBHchv6N8MwzO2XFDqGDvI=;
+        b=jCxs5kl2BtHQ/n3KF/dUToHF74hTpXjj3SLyyBGv0DkRKNDVte7ruqE95uVJS6M6Gq
+         teg1tYkLVAsSK5gAcpoW/BIztVsp6LcdCMhkeYoZSb3d2bw4EsEKhZF1s5OPj681viA4
+         j15IzzOdJvfcoSu3AfOledwSyJ1XSWfn4YRxJltMHIrXJU1m5ORAEDiFzkEgRXUztT7F
+         Q1Oi5eiB0c0crpGG8ZsSknWruRD/pz2pzsQmH60J8RJcucKyc/zetX2AiAuNA/mCJJsu
+         MmsHb4HWd9ULtSID6n8laacyAaNVViap0P5Pezx/3rFqv0DnyLtLJvgXevUQ1qNtTQRM
+         Uh3A==
+X-Gm-Message-State: AOJu0YySXwdSxkTJihi1ivV9Xp7GZi4uHp26uvgHzzLxh6Er5USDtcU9
+        LqNiJvaPW4WLMt/33wDEXz54+gPJJ4rrClls/feYfw==
+X-Google-Smtp-Source: AGHT+IHY7pJLyv1nm7oUMEa5YyLbo3j6HUXKus+V8tBa4MWkvXk9nzo1m8rLwPPkzn+B5BGuITedfA==
+X-Received: by 2002:a17:903:246:b0:1bf:6ad7:2286 with SMTP id j6-20020a170903024600b001bf6ad72286mr10261419plh.43.1695090356294;
+        Mon, 18 Sep 2023 19:25:56 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id c2-20020a170902d90200b001c3267ae31bsm3183040plz.301.2023.09.18.19.25.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Sep 2023 19:25:55 -0700 (PDT)
+Message-ID: <650906b3.170a0220.c9447.b084@mx.google.com>
+Date:   Mon, 18 Sep 2023 19:25:55 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] interconnect: qcom: Add SM4450 interconnect
- provider driver
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <djakov@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_tsoni@quicinc.com>, <quic_shashim@quicinc.com>,
-        <quic_kaushalk@quicinc.com>, <quic_tdas@quicinc.com>,
-        <quic_tingweiz@quicinc.com>, <quic_aiquny@quicinc.com>,
-        <kernel@quicinc.com>
-References: <20230915020129.19611-1-quic_tengfan@quicinc.com>
- <20230915020129.19611-3-quic_tengfan@quicinc.com>
- <dc209ac7-7a06-449b-a198-ce6fb3ba7ff7@linaro.org>
-From:   Tengfei Fan <quic_tengfan@quicinc.com>
-In-Reply-To: <dc209ac7-7a06-449b-a198-ce6fb3ba7ff7@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: ZarM56oypwTRNjIaGPWSafD1tdQdkzSN
-X-Proofpoint-GUID: ZarM56oypwTRNjIaGPWSafD1tdQdkzSN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-18_11,2023-09-18_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- adultscore=0 lowpriorityscore=0 clxscore=1015 spamscore=0 mlxscore=0
- priorityscore=1501 mlxlogscore=821 suspectscore=0 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309190015
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v6.6-rc2-10-gb34108fa27bd
+X-Kernelci-Report-Type: test
+Subject: pm/testing baseline: 48 runs,
+ 3 regressions (v6.6-rc2-10-gb34108fa27bd)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+pm/testing baseline: 48 runs, 3 regressions (v6.6-rc2-10-gb34108fa27bd)
+
+Regressions Summary
+-------------------
+
+platform      | arch  | lab           | compiler | defconfig | regressions
+--------------+-------+---------------+----------+-----------+------------
+imx8mp-evk    | arm64 | lab-broonie   | gcc-10   | defconfig | 1          =
+
+r8a77960-ulcb | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
+
+r8a779m1-ulcb | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
 
 
-在 9/15/2023 8:43 PM, Konrad Dybcio 写道:
-> On 15.09.2023 04:01, Tengfei Fan wrote:
->> Add driver for the Qualcomm interconnect buses found in SM4450 based
->> platforms. The topology consists of several NoCs that are controlled
->> by a remote processor that collects the aggregated bandwidth for each
->> master-slave pairs.
->>
->> Signed-off-by: Tengfei Fan <quic_tengfan@quicinc.com>
->> ---
-> [...]
-> 
->> +static struct qcom_icc_bcm bcm_acv_disp = {
->> +	.name = "ACV",
->> +	.num_nodes = 1,
->> +	.nodes = { &ebi_disp },
->> +};
->> +
->> +static struct qcom_icc_bcm bcm_mc0_disp = {
->> +	.name = "MC0",
->> +	.num_nodes = 1,
->> +	.nodes = { &ebi_disp },
->> +};
->> +
->> +static struct qcom_icc_bcm bcm_mm0_disp = {
->> +	.name = "MM0",
->> +	.num_nodes = 1,
->> +	.nodes = { &qns_mem_noc_hf_disp },
->> +};
->> +
->> +static struct qcom_icc_bcm bcm_sh0_disp = {
->> +	.name = "SH0",
->> +	.num_nodes = 1,
->> +	.nodes = { &qns_llcc_disp },
->> +};
->> +
->> +static struct qcom_icc_bcm bcm_sh1_disp = {
->> +	.name = "SH1",
->> +	.num_nodes = 1,
->> +	.nodes = { &qnm_pcie_disp },
->> +};
-> """
-> v1 -> v2:
->    - remove DISP related paths
-> """
-> 
-> you sure?
-> 
-> + I still see _disp nodes..
-> 
-> Konrad
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.6-rc2=
+-10-gb34108fa27bd/plan/baseline/
 
-Hi Konrad,
-only removed SLAVE_MNOC_HF_MEM_NOC_DISP related code actually as V1 comment.
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v6.6-rc2-10-gb34108fa27bd
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      b34108fa27bd31c2e82b5f41c55066d83822c7b3 =
 
--- 
-Thx and BRs,
-Tengfei Fan
+
+
+Test Regressions
+---------------- =
+
+
+
+platform      | arch  | lab           | compiler | defconfig | regressions
+--------------+-------+---------------+----------+-----------+------------
+imx8mp-evk    | arm64 | lab-broonie   | gcc-10   | defconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6508f9a45f4febea678a0a87
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.6-rc2-10-gb34108=
+fa27bd/arm64/defconfig/gcc-10/lab-broonie/baseline-imx8mp-evk.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.6-rc2-10-gb34108=
+fa27bd/arm64/defconfig/gcc-10/lab-broonie/baseline-imx8mp-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/6508f9a45f4febea678a0a90
+        failing since 6 days (last pass: pm-6.6-rc1-122-g07b618ec9d7a, firs=
+t fail: v6.6-rc1-5-gb5eda4c9c923)
+
+    2023-09-19T01:29:59.945848  + set<8>[   29.007720] <LAVA_SIGNAL_ENDRUN =
+0_dmesg 116195_1.5.2.4.1>
+    2023-09-19T01:29:59.946531   +x
+    2023-09-19T01:30:00.057438  / # #
+    2023-09-19T01:30:01.219880  export SHELL=3D/bin/sh
+    2023-09-19T01:30:01.225951  #
+    2023-09-19T01:30:02.721562  / # export SHELL=3D/bin/sh. /lava-116195/en=
+vironment
+    2023-09-19T01:30:02.727761  =
+
+    2023-09-19T01:30:05.444430  / # . /lava-116195/environment/lava-116195/=
+bin/lava-test-runner /lava-116195/1
+    2023-09-19T01:30:05.451041  =
+
+    2023-09-19T01:30:05.467992  / # /lava-116195/bin/lava-test-runner /lava=
+-116195/1 =
+
+    ... (12 line(s) more)  =
+
+ =
+
+
+
+platform      | arch  | lab           | compiler | defconfig | regressions
+--------------+-------+---------------+----------+-----------+------------
+r8a77960-ulcb | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6508fc2c30a1a6432c8a0a74
+
+  Results:     4 PASS, 2 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.6-rc2-10-gb34108=
+fa27bd/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a77960-ulcb.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.6-rc2-10-gb34108=
+fa27bd/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a77960-ulcb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/6508fc2c30a1a6432c8a0a7d
+        failing since 61 days (last pass: pm-6.5-rc2-210-ga648a2d354da, fir=
+st fail: v6.5-rc2-44-g6384f300e9f3)
+
+    2023-09-19T01:45:02.918206  / # #
+
+    2023-09-19T01:45:03.020395  export SHELL=3D/bin/sh
+
+    2023-09-19T01:45:03.021106  #
+
+    2023-09-19T01:45:03.122493  / # export SHELL=3D/bin/sh. /lava-11566571/=
+environment
+
+    2023-09-19T01:45:03.123269  =
+
+
+    2023-09-19T01:45:03.224782  / # . /lava-11566571/environment/lava-11566=
+571/bin/lava-test-runner /lava-11566571/1
+
+    2023-09-19T01:45:03.225928  =
+
+
+    2023-09-19T01:45:03.241945  / # /lava-11566571/bin/lava-test-runner /la=
+va-11566571/1
+
+    2023-09-19T01:45:03.292463  + export 'TESTRUN_ID=3D1_bootrr'
+
+    2023-09-19T01:45:03.292982  + cd /lav<8>[   20.551736] <LAVA_SIGNAL_STA=
+RTRUN 1_bootrr 11566571_1.5.2.4.5>
+ =
+
+    ... (28 line(s) more)  =
+
+ =
+
+
+
+platform      | arch  | lab           | compiler | defconfig | regressions
+--------------+-------+---------------+----------+-----------+------------
+r8a779m1-ulcb | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6508f9a25f4febea678a0a7c
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.6-rc2-10-gb34108=
+fa27bd/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a779m1-ulcb.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.6-rc2-10-gb34108=
+fa27bd/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a779m1-ulcb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/6508f9a25f4febea678a0a85
+        failing since 61 days (last pass: pm-6.5-rc2-210-ga648a2d354da, fir=
+st fail: v6.5-rc2-44-g6384f300e9f3)
+
+    2023-09-19T01:31:53.834176  / # #
+
+    2023-09-19T01:31:54.914175  export SHELL=3D/bin/sh
+
+    2023-09-19T01:31:54.916036  #
+
+    2023-09-19T01:31:56.406846  / # export SHELL=3D/bin/sh. /lava-11566566/=
+environment
+
+    2023-09-19T01:31:56.408597  =
+
+
+    2023-09-19T01:31:59.133275  / # . /lava-11566566/environment/lava-11566=
+566/bin/lava-test-runner /lava-11566566/1
+
+    2023-09-19T01:31:59.135371  =
+
+
+    2023-09-19T01:31:59.143562  / # /lava-11566566/bin/lava-test-runner /la=
+va-11566566/1
+
+    2023-09-19T01:31:59.204684  + export 'TESTRUN_ID=3D1_bootrr'
+
+    2023-09-19T01:31:59.205213  + cd /lav<8>[   29.545860] <LAVA_SIGNAL_STA=
+RTRUN 1_bootrr 11566566_1.5.2.4.5>
+ =
+
+    ... (39 line(s) more)  =
+
+ =20
