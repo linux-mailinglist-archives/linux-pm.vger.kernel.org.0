@@ -2,66 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ACEE7A56B1
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 02:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9BF47A56C2
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 02:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjISAqt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Sep 2023 20:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42766 "EHLO
+        id S230321AbjISA6F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Sep 2023 20:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjISAqs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 20:46:48 -0400
+        with ESMTP id S229508AbjISA6E (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 20:58:04 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C34107
-        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 17:45:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC83107
+        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 17:57:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1695084349;
+        s=mimecast20190719; t=1695085035;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=LM15K8pzy7YjRbxMXPWyKscBPIcWYYmbRagei3+odA0=;
-        b=F/uVhAHZb+iTTpsxz8SamxrZFImdRaBT0aHhKqzqkxpSBQA9SMKqmzgBe8rG5HLJ8HxGgd
-        gu4K9u97WMhHDd9v8lNQdi1QwgbfsnGazNwx9+3Z37RbtALFoKGKo92U0zDZubg/tdUqSQ
-        y1V6khnD+x5L2VMCugM3wgKHZJqBBcc=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=bIURaVhU/G5DJJinyquD0ptYbPAZ38yx5KNcjiMal4E=;
+        b=gC3jNUheufzzhpYHMirHAPAI7iG2RUsIou7U4YVu9DNdTw/I25q6xjs6TXyV9ZoJHxKjfR
+        GcZr6ao7enfrFh++gaJwy0DxaYHusKD/EDKMjT10oDFnOq2A7TWDzt8lh77O4Ee9ToQY4O
+        cnP3qF3vLJdbGX81j9xZwh/mF/WN6jI=
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
+ [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-641-rORO4GtUMLqqeYhTDqRgNw-1; Mon, 18 Sep 2023 20:45:48 -0400
-X-MC-Unique: rORO4GtUMLqqeYhTDqRgNw-1
-Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-577f9ae1295so2887171a12.1
-        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 17:45:47 -0700 (PDT)
+ us-mta-83-wfnpTGx5Pi2s9EmhVxJl9Q-1; Mon, 18 Sep 2023 20:49:41 -0400
+X-MC-Unique: wfnpTGx5Pi2s9EmhVxJl9Q-1
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-690a0eedb24so868863b3a.1
+        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 17:49:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695084347; x=1695689147;
+        d=1e100.net; s=20230601; t=1695084581; x=1695689381;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LM15K8pzy7YjRbxMXPWyKscBPIcWYYmbRagei3+odA0=;
-        b=FcNRGiQc8wdOoLUWOMkO5Xiy9v/Evr2kicCGEnY9IXwtZHRCBMklBRFCNOi5uXlmZo
-         hfGQFOoek7tJS7NDocBcPXI3E8ed2XV7D4YSD+r1/6c5+n1iYLhCEABPtajNXjrZwX04
-         dNpLcJ/XYICcbLIMlB7vE9X1IzuAqag4QVcx7XRKCdHz+RtvFDblyL1lryYOhz5bIUQP
-         HT0K2wnw0D329fs/EN27gGRc4DEs8X9ZSHyl8rm86Bf+b4CID2dp0L4ob7LDGtWzN8Aw
-         GoPznfDO5MEzqlQTQVw/hQ1zKlZQQQS1QzO+oTPgSsveY+11og1uedtF5emgl7qbecJs
-         MYEQ==
-X-Gm-Message-State: AOJu0YzPfdsZY024HG7iTmJ2v1xKuCa963wZAceF/sCBf9kZjjx3wVuz
-        z2kt4n2xh5XBGaOy8JcZYvFhLzmy6kqZmrDy5yT97rEyiO/NbwNncI5c0XuT0r7uE/LCtJo8E97
-        QpMYrU0v2MCJvlIuhOFM=
-X-Received: by 2002:a05:6a20:e126:b0:12e:98a3:77b7 with SMTP id kr38-20020a056a20e12600b0012e98a377b7mr11802961pzb.59.1695084347006;
-        Mon, 18 Sep 2023 17:45:47 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEbRMohfrQfu8U6nIU99dVCswPBycZA0RmEkJtJ+RPQwK7z3RIdFfhgC8+/M21E5Fme0WVGHQ==
-X-Received: by 2002:a05:6a20:e126:b0:12e:98a3:77b7 with SMTP id kr38-20020a056a20e12600b0012e98a377b7mr11802939pzb.59.1695084346690;
-        Mon, 18 Sep 2023 17:45:46 -0700 (PDT)
+        bh=bIURaVhU/G5DJJinyquD0ptYbPAZ38yx5KNcjiMal4E=;
+        b=QDT8fl7XpM2ZyNRiJ+Q3Z7S8amcrfq4LdXpyuZ8ecpgGUihZHau6OAfearO0tzi8p8
+         AeXOFAUuodnPHxFTQ4RtpC6rPefMhEcHkqjnXsHdvJKEl4UAiXeGxEdHMktghMknfWuQ
+         1RzD//ih/vkio/2iIIpsHaeYdBzZXWQClpjeNTfi/cvm+ZxFHqZYCksTitCvdevu/Rdr
+         ALrAWzxRGoiwdhdOKXqfwvXvUXtbDpvpR5WPdePjrYc26+61pqG3o8TUuUcIan1iDex8
+         2ALXlrb/2sl4K5R1MZqIFXwlc6jJzchGBkQo83//JCCfMicP3q21Gqb+Q8txZAOyCfgu
+         wTEg==
+X-Gm-Message-State: AOJu0YwlYp5j7yfCLQczOYiJQ3mAocWv9/cWCr85kBybdSeuua7GSsjP
+        sJxkodwIKb0Trq1a/DxWq8odc8mGsN1FSN7LsBLKaLHin/tHHJkb/kFdPu5furIrgGvNfJVxs+x
+        +87G4rvu7cHbqL+F36m0=
+X-Received: by 2002:a05:6a00:13a9:b0:68a:6173:295b with SMTP id t41-20020a056a0013a900b0068a6173295bmr11687170pfg.2.1695084580786;
+        Mon, 18 Sep 2023 17:49:40 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF3oVg5VMiqyNQpSBftI/mkgS1m694rJEONxMKwBMkdMp9Ry/rErZrzBJO2CPP2aN+mnlKKqg==
+X-Received: by 2002:a05:6a00:13a9:b0:68a:6173:295b with SMTP id t41-20020a056a0013a900b0068a6173295bmr11687156pfg.2.1695084580437;
+        Mon, 18 Sep 2023 17:49:40 -0700 (PDT)
 Received: from ?IPV6:2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5? ([2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5])
-        by smtp.gmail.com with ESMTPSA id i7-20020a17090332c700b001b06c106844sm8833025plr.151.2023.09.18.17.45.40
+        by smtp.gmail.com with ESMTPSA id i13-20020aa787cd000000b0068fe76cdc62sm70310pfo.93.2023.09.18.17.49.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Sep 2023 17:45:45 -0700 (PDT)
-Message-ID: <518859b1-64a9-d723-963c-56c7f6fc2da1@redhat.com>
-Date:   Tue, 19 Sep 2023 10:45:39 +1000
+        Mon, 18 Sep 2023 17:49:39 -0700 (PDT)
+Message-ID: <54c91de8-f0d2-787f-5710-2da1dfc80937@redhat.com>
+Date:   Tue, 19 Sep 2023 10:49:32 +1000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [RFC PATCH v2 22/35] ACPI: Check _STA present bit before making
- CPUs not present
+Subject: Re: [RFC PATCH v2 23/35] ACPI: Warn when the present bit changes but
+ the feature is not enabled
 Content-Language: en-US
 To:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
         loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
@@ -73,131 +73,74 @@ Cc:     x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
         Jean-Philippe Brucker <jean-philippe@linaro.org>,
         jianyong.wu@arm.com, justin.he@arm.com
 References: <20230913163823.7880-1-james.morse@arm.com>
- <20230913163823.7880-23-james.morse@arm.com>
+ <20230913163823.7880-24-james.morse@arm.com>
 From:   Gavin Shan <gshan@redhat.com>
-In-Reply-To: <20230913163823.7880-23-james.morse@arm.com>
+In-Reply-To: <20230913163823.7880-24-james.morse@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+
+
 On 9/14/23 02:38, James Morse wrote:
-> When called acpi_processor_post_eject() unconditionally make a CPU
-> not-present and unregisters it.
+> ACPI firmware can trigger the events to add and remove CPUs, but the
+> OS may not support this.
 > 
-> To add support for AML events where the CPU has become disabled, but
-> remains present, the _STA method should be checked before calling
-> acpi_processor_remove().
+> Print a warning when this happens.
+           ^^^^^^^
+           error message
 > 
-> Rename acpi_processor_post_eject() acpi_processor_remove_possible(), and
-> check the _STA before calling.
-> 
-> Adding the function prototype for arch_unregister_cpu() allows the
-> preprocessor guards to be removed.
-> 
-> After this change CPUs will remain registered and visible to
-> user-space as offline if buggy firmware triggers an eject-request,
-> but doesn't clear the corresponding _STA bits after _EJ0 has been
-> called.
+> This gives early warning on arm64 systems that don't support
+> CONFIG_ACPI_HOTPLUG_PRESENT_CPU, as making CPUs not present has
+> side effects for other parts of the system.
 > 
 > Signed-off-by: James Morse <james.morse@arm.com>
 > ---
->   drivers/acpi/acpi_processor.c | 31 +++++++++++++++++++++++++------
->   include/linux/cpu.h           |  1 +
->   2 files changed, 26 insertions(+), 6 deletions(-)
+>   drivers/acpi/acpi_processor.c | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
 > 
+
+Maybe a warning message is enough, but a error message
+is also fine, I think.
+
+Reviewed-by: Gavin Shan <gshan@redhat.com>
+
 > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-> index 00dcc23d49a8..2cafea1edc24 100644
+> index 2cafea1edc24..b67616079751 100644
 > --- a/drivers/acpi/acpi_processor.c
 > +++ b/drivers/acpi/acpi_processor.c
-> @@ -457,13 +457,12 @@ static int acpi_processor_add(struct acpi_device *device,
->   	return result;
->   }
+> @@ -188,8 +188,10 @@ static int acpi_processor_make_present(struct acpi_processor *pr)
+>   	acpi_status status;
+>   	int ret;
 >   
-> -#ifdef CONFIG_ACPI_HOTPLUG_PRESENT_CPU
->   /* Removal */
-> -static void acpi_processor_post_eject(struct acpi_device *device)
-> +static void acpi_processor_make_not_present(struct acpi_device *device)
+> -	if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU))
+> +	if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU)) {
+> +		pr_err_once("Changing CPU present bit is not supported\n");
+>   		return -ENODEV;
+> +	}
+>   
+>   	if (invalid_phys_cpuid(pr->phys_id))
+>   		return -ENODEV;
+> @@ -462,8 +464,10 @@ static void acpi_processor_make_not_present(struct acpi_device *device)
 >   {
 >   	struct acpi_processor *pr;
 >   
-> -	if (!device || !acpi_driver_data(device))
-> +	if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU))
+> -	if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU))
+> +	if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU)) {
+> +		pr_err_once("Changing CPU present bit is not supported");
 >   		return;
->   
-
-In order to use IS_ENABLED(),
-
->   	pr = acpi_driver_data(device);
-> @@ -501,7 +500,29 @@ static void acpi_processor_post_eject(struct acpi_device *device)
->   	free_cpumask_var(pr->throttling.shared_cpu_map);
->   	kfree(pr);
->   }
-> -#endif /* CONFIG_ACPI_HOTPLUG_PRESENT_CPU */
-> +
-> +static void acpi_processor_post_eject(struct acpi_device *device)
-> +{
-> +	struct acpi_processor *pr;
-> +	unsigned long long sta;
-> +	acpi_status status;
-> +
-> +	if (!device)
-> +		return;
-> +
-> +	pr = acpi_driver_data(device);
-> +	if (!pr || pr->id >= nr_cpu_ids || invalid_phys_cpuid(pr->phys_id))
-> +		return;
-> +
-
-Do we really need to validate the logic and hardware CPU IDs here? I think
-the ACPI processor device can't be added successfully if one of them is
-invalid.
-
-> +	status = acpi_evaluate_integer(pr->handle, "_STA", NULL, &sta);
-> +	if (ACPI_FAILURE(status))
-> +		return;
-> +
-> +	if (cpu_present(pr->id) && !(sta & ACPI_STA_DEVICE_PRESENT)) {
-> +		acpi_processor_make_not_present(device);
-> +		return;
 > +	}
-> +}
 >   
->   #ifdef CONFIG_ARCH_MIGHT_HAVE_ACPI_PDC
->   bool __init processor_physically_present(acpi_handle handle)
-> @@ -626,9 +647,7 @@ static const struct acpi_device_id processor_device_ids[] = {
->   static struct acpi_scan_handler processor_handler = {
->   	.ids = processor_device_ids,
->   	.attach = acpi_processor_add,
-> -#ifdef CONFIG_ACPI_HOTPLUG_PRESENT_CPU
->   	.post_eject = acpi_processor_post_eject,
-> -#endif
->   	.hotplug = {
->   		.enabled = true,
->   	},
-> diff --git a/include/linux/cpu.h b/include/linux/cpu.h
-> index a71691d7c2ca..e117c06e0c6b 100644
-> --- a/include/linux/cpu.h
-> +++ b/include/linux/cpu.h
-> @@ -81,6 +81,7 @@ struct device *cpu_device_create(struct device *parent, void *drvdata,
->   				 const struct attribute_group **groups,
->   				 const char *fmt, ...);
->   extern int arch_register_cpu(int cpu);
-> +extern void arch_unregister_cpu(int cpu);
-
-arch_unregister_cpu() is protected by CONFIG_HOTPLUG_CPU in the individual architectures,
-for example arch/ia64/kernel/topology.c
-
->   #ifdef CONFIG_HOTPLUG_CPU
->   extern void unregister_cpu(struct cpu *cpu);
->   extern ssize_t arch_cpu_probe(const char *, size_t);
+>   	pr = acpi_driver_data(device);
+>   	if (pr->id >= nr_cpu_ids)
 
 Thanks,
 Gavin
