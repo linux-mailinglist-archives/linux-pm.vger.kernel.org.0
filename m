@@ -2,265 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 435A97A5764
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 04:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06EC87A57F0
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 05:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbjISC0D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Sep 2023 22:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58982 "EHLO
+        id S231279AbjISDkI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Sep 2023 23:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230424AbjISC0C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 22:26:02 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E7F10D
-        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 19:25:56 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1c3d6d88231so41427915ad.0
-        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 19:25:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1695090356; x=1695695156; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=vtJ/1GbiYgSKhLymlpWYrMBHchv6N8MwzO2XFDqGDvI=;
-        b=Vgx7rMuzafCJZ42kPUP/esJA+gc1fMn2EKnNXhvfcsGC4BWOD4aM6MEfj6jXq87qyw
-         d8ZR2wkbPSr1BHn4eudI/YlnxLo7TJJz2W071AKVxhJDGwPtHzCMB2o9Xk95hLmWjT0R
-         KsHJF6AwJ2iIqhVdGNLhcCX/5SqT3uh5GHgh23KqHDUJ7TI+u9VVmLX3C2cPqpkCHTiy
-         ejLPtd0Z4yP1iR/U4Krw8RFSENQ96RqkaEjsHQ3BkoVn8nbaaEjFUSQZl44uyx0KQkAK
-         bORnJYoYeuda3WdaiEnK2VOFxxVjo4PlYrEpeUP9j4lBBS7kyt6U6xPn9CM952kr+DXQ
-         AOjQ==
+        with ESMTP id S231190AbjISDkH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 23:40:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C572F95
+        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 20:39:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1695094760;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CBvJUlyaw2bkgeQrcu2quBogD5BtM2KTe/dcbAYZ1+c=;
+        b=XRsOHo1xemZzdKUrTyBuUPUnVtHNLfi4LMok9ICS4ohNDi1j9iK8PErL35SMfmGdcQmhPM
+        hta60y5U2Lu+UhpZC8kvzN6lWhJqp55szRXb/OF0t/TR0HRnJdw6L7Hocb3E4Z5yCKzkbw
+        5QgbInSjNgxblMEkPnr9eVcnCxd14ZQ=
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
+ [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-592-Yo_rRsbaPmGj-ntkeqWSnw-1; Mon, 18 Sep 2023 23:39:18 -0400
+X-MC-Unique: Yo_rRsbaPmGj-ntkeqWSnw-1
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-1c3d8bd4aa5so38958245ad.1
+        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 20:39:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695090356; x=1695695156;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vtJ/1GbiYgSKhLymlpWYrMBHchv6N8MwzO2XFDqGDvI=;
-        b=jCxs5kl2BtHQ/n3KF/dUToHF74hTpXjj3SLyyBGv0DkRKNDVte7ruqE95uVJS6M6Gq
-         teg1tYkLVAsSK5gAcpoW/BIztVsp6LcdCMhkeYoZSb3d2bw4EsEKhZF1s5OPj681viA4
-         j15IzzOdJvfcoSu3AfOledwSyJ1XSWfn4YRxJltMHIrXJU1m5ORAEDiFzkEgRXUztT7F
-         Q1Oi5eiB0c0crpGG8ZsSknWruRD/pz2pzsQmH60J8RJcucKyc/zetX2AiAuNA/mCJJsu
-         MmsHb4HWd9ULtSID6n8laacyAaNVViap0P5Pezx/3rFqv0DnyLtLJvgXevUQ1qNtTQRM
-         Uh3A==
-X-Gm-Message-State: AOJu0YySXwdSxkTJihi1ivV9Xp7GZi4uHp26uvgHzzLxh6Er5USDtcU9
-        LqNiJvaPW4WLMt/33wDEXz54+gPJJ4rrClls/feYfw==
-X-Google-Smtp-Source: AGHT+IHY7pJLyv1nm7oUMEa5YyLbo3j6HUXKus+V8tBa4MWkvXk9nzo1m8rLwPPkzn+B5BGuITedfA==
-X-Received: by 2002:a17:903:246:b0:1bf:6ad7:2286 with SMTP id j6-20020a170903024600b001bf6ad72286mr10261419plh.43.1695090356294;
-        Mon, 18 Sep 2023 19:25:56 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id c2-20020a170902d90200b001c3267ae31bsm3183040plz.301.2023.09.18.19.25.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Sep 2023 19:25:55 -0700 (PDT)
-Message-ID: <650906b3.170a0220.c9447.b084@mx.google.com>
-Date:   Mon, 18 Sep 2023 19:25:55 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20230601; t=1695094758; x=1695699558;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CBvJUlyaw2bkgeQrcu2quBogD5BtM2KTe/dcbAYZ1+c=;
+        b=K/l1eFUnZL3njmOe6YwvV+tNnGQAQ/9wNVOaGArGv+HLa4Nqu75ge/3pTSOabilcLa
+         xtYxTucBTGZH8IyHu3XTd0wp16l5EoeNxyE5hPfMh0fWcYKLFU/Hfj6r5wlm6fhlS07l
+         Xb0YrhUF/jW0QavnauuqCMentB8pj27XIGDEvFdYmtCv+utWPPevgZ9g4UrVSPfMIuPY
+         32BplP66GEYiwjJ+LumAyPoViJXeSfRomPiS90waOyfsEUufI3iM8b3+lrjwbdQhi4iV
+         iU9TOkCDZe9T/nmIrzUiS1DVAN1mmylOpNFYU85J5ys5t9SlyouwI8jJHO8o/EwsrIgv
+         KkWQ==
+X-Gm-Message-State: AOJu0YyWTOVzD+o//ouIPXX7d5fKBT3dlN2sSikgpQRKgQ0HDggCNSM+
+        hK1qG3kPihXgiJTjKmIsJcJLFr28Py9r0SYGeSoReIrUdkfxb2LxI1cXdALBY6yV3jko+snVjvY
+        CpZQfaqu91EwSjMtZUo4=
+X-Received: by 2002:a17:902:ecca:b0:1c3:432f:9f69 with SMTP id a10-20020a170902ecca00b001c3432f9f69mr2008947plh.23.1695094757876;
+        Mon, 18 Sep 2023 20:39:17 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEaoSZiSFZ7Dx5QmHpQ853bVS36OFRusCjmGB2jt3hklfrALFF9t8rRDnMvZC9r997ICNVz6g==
+X-Received: by 2002:a17:902:ecca:b0:1c3:432f:9f69 with SMTP id a10-20020a170902ecca00b001c3432f9f69mr2008930plh.23.1695094757591;
+        Mon, 18 Sep 2023 20:39:17 -0700 (PDT)
+Received: from ?IPV6:2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5? ([2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5])
+        by smtp.gmail.com with ESMTPSA id 20-20020a170902e9d400b001c567dcf22dsm2846570plk.281.2023.09.18.20.39.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Sep 2023 20:39:16 -0700 (PDT)
+Message-ID: <31fa3aa7-c12c-3eb7-e9d2-5967a735ac78@redhat.com>
+Date:   Tue, 19 Sep 2023 13:39:09 +1000
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v6.6-rc2-10-gb34108fa27bd
-X-Kernelci-Report-Type: test
-Subject: pm/testing baseline: 48 runs,
- 3 regressions (v6.6-rc2-10-gb34108fa27bd)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RFC PATCH v2 29/35] irqchip/gic-v3: Don't return errors from
+ gic_acpi_match_gicc()
+Content-Language: en-US
+To:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev
+Cc:     x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        jianyong.wu@arm.com, justin.he@arm.com
+References: <20230913163823.7880-1-james.morse@arm.com>
+ <20230913163823.7880-30-james.morse@arm.com>
+From:   Gavin Shan <gshan@redhat.com>
+In-Reply-To: <20230913163823.7880-30-james.morse@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 48 runs, 3 regressions (v6.6-rc2-10-gb34108fa27bd)
 
-Regressions Summary
--------------------
+On 9/14/23 02:38, James Morse wrote:
+> gic_acpi_match_gicc() is only called via gic_acpi_count_gicr_regions().
+> It should only count the number of enabled redistributors, but it
+> also tries to sanity check the GICC entry, currently returning an
+> error if the Enabled bit is set, but the gicr_base_address is zero.
+> 
+> Adding support for the online-capable bit to the sanity check
+> complicates it, for no benefit. The existing check implicitly
+> depends on gic_acpi_count_gicr_regions() previous failing to find
+> any GICR regions (as it is valid to have gicr_base_address of zero if
+> the redistributors are described via a GICR entry).
+> 
+> Instead of complicating the check, remove it. Failures that happen
+> at this point cause the irqchip not to register, meaning no irqs
+> can be requested. The kernel grinds to a panic() pretty quickly.
+> 
+> Without the check, MADT tables that exhibit this problem are still
+> caught by gic_populate_rdist(), which helpfully also prints what
+> went wrong:
+> | CPU4: mpidr 100 has no re-distributor!
+> 
+> Signed-off-by: James Morse <james.morse@arm.com>
+> ---
+>   drivers/irqchip/irq-gic-v3.c | 18 ++++++------------
+>   1 file changed, 6 insertions(+), 12 deletions(-)
+> 
+
+With below nits resolved:
+
+Reviewed-by: Gavin Shan <gshan@redhat.com>
+
+> diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+> index 72d3cdebdad1..0f54811262eb 100644
+> --- a/drivers/irqchip/irq-gic-v3.c
+> +++ b/drivers/irqchip/irq-gic-v3.c
+> @@ -2415,21 +2415,15 @@ static int __init gic_acpi_match_gicc(union acpi_subtable_headers *header,
+>   
+>   	/*
+>   	 * If GICC is enabled and has valid gicr base address, then it means
+> -	 * GICR base is presented via GICC
+> +	 * GICR base is presented via GICC. The redistributor is only known to
+> +	 * be accessible if the GICC is marked as enabled. If this bit is not
+> +	 * set, we'd need to add the redistributor at runtime, which isn't
+> +	 * supported.
+>   	 */
+> -	if (acpi_gicc_is_usable(gicc) && gicc->gicr_base_address) {
+> +	if (gicc->flags & ACPI_MADT_ENABLED && gicc->gicr_base_address)
+>   		acpi_data.enabled_rdists++;
+> -		return 0;
+> -	}
+>   
+
+	if (acpi_gicc_is_usable(gicc) && gicc->gicr_base_address) {
+	
+
+> -	/*
+> -	 * It's perfectly valid firmware can pass disabled GICC entry, driver
+> -	 * should not treat as errors, skip the entry instead of probe fail.
+> -	 */
+> -	if (!acpi_gicc_is_usable(gicc))
+> -		return 0;
+> -
+> -	return -ENODEV;
+> +	return 0;
+>   }
+>   
+>   static int __init gic_acpi_count_gicr_regions(void)
+
+Thanks,
+Gavin
 
-platform      | arch  | lab           | compiler | defconfig | regressions
---------------+-------+---------------+----------+-----------+------------
-imx8mp-evk    | arm64 | lab-broonie   | gcc-10   | defconfig | 1          =
-
-r8a77960-ulcb | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
-
-r8a779m1-ulcb | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.6-rc2=
--10-gb34108fa27bd/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.6-rc2-10-gb34108fa27bd
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      b34108fa27bd31c2e82b5f41c55066d83822c7b3 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform      | arch  | lab           | compiler | defconfig | regressions
---------------+-------+---------------+----------+-----------+------------
-imx8mp-evk    | arm64 | lab-broonie   | gcc-10   | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6508f9a45f4febea678a0a87
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.6-rc2-10-gb34108=
-fa27bd/arm64/defconfig/gcc-10/lab-broonie/baseline-imx8mp-evk.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.6-rc2-10-gb34108=
-fa27bd/arm64/defconfig/gcc-10/lab-broonie/baseline-imx8mp-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/6508f9a45f4febea678a0a90
-        failing since 6 days (last pass: pm-6.6-rc1-122-g07b618ec9d7a, firs=
-t fail: v6.6-rc1-5-gb5eda4c9c923)
-
-    2023-09-19T01:29:59.945848  + set<8>[   29.007720] <LAVA_SIGNAL_ENDRUN =
-0_dmesg 116195_1.5.2.4.1>
-    2023-09-19T01:29:59.946531   +x
-    2023-09-19T01:30:00.057438  / # #
-    2023-09-19T01:30:01.219880  export SHELL=3D/bin/sh
-    2023-09-19T01:30:01.225951  #
-    2023-09-19T01:30:02.721562  / # export SHELL=3D/bin/sh. /lava-116195/en=
-vironment
-    2023-09-19T01:30:02.727761  =
-
-    2023-09-19T01:30:05.444430  / # . /lava-116195/environment/lava-116195/=
-bin/lava-test-runner /lava-116195/1
-    2023-09-19T01:30:05.451041  =
-
-    2023-09-19T01:30:05.467992  / # /lava-116195/bin/lava-test-runner /lava=
--116195/1 =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform      | arch  | lab           | compiler | defconfig | regressions
---------------+-------+---------------+----------+-----------+------------
-r8a77960-ulcb | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6508fc2c30a1a6432c8a0a74
-
-  Results:     4 PASS, 2 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.6-rc2-10-gb34108=
-fa27bd/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a77960-ulcb.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.6-rc2-10-gb34108=
-fa27bd/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a77960-ulcb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/6508fc2c30a1a6432c8a0a7d
-        failing since 61 days (last pass: pm-6.5-rc2-210-ga648a2d354da, fir=
-st fail: v6.5-rc2-44-g6384f300e9f3)
-
-    2023-09-19T01:45:02.918206  / # #
-
-    2023-09-19T01:45:03.020395  export SHELL=3D/bin/sh
-
-    2023-09-19T01:45:03.021106  #
-
-    2023-09-19T01:45:03.122493  / # export SHELL=3D/bin/sh. /lava-11566571/=
-environment
-
-    2023-09-19T01:45:03.123269  =
-
-
-    2023-09-19T01:45:03.224782  / # . /lava-11566571/environment/lava-11566=
-571/bin/lava-test-runner /lava-11566571/1
-
-    2023-09-19T01:45:03.225928  =
-
-
-    2023-09-19T01:45:03.241945  / # /lava-11566571/bin/lava-test-runner /la=
-va-11566571/1
-
-    2023-09-19T01:45:03.292463  + export 'TESTRUN_ID=3D1_bootrr'
-
-    2023-09-19T01:45:03.292982  + cd /lav<8>[   20.551736] <LAVA_SIGNAL_STA=
-RTRUN 1_bootrr 11566571_1.5.2.4.5>
- =
-
-    ... (28 line(s) more)  =
-
- =
-
-
-
-platform      | arch  | lab           | compiler | defconfig | regressions
---------------+-------+---------------+----------+-----------+------------
-r8a779m1-ulcb | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6508f9a25f4febea678a0a7c
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.6-rc2-10-gb34108=
-fa27bd/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a779m1-ulcb.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.6-rc2-10-gb34108=
-fa27bd/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a779m1-ulcb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/6508f9a25f4febea678a0a85
-        failing since 61 days (last pass: pm-6.5-rc2-210-ga648a2d354da, fir=
-st fail: v6.5-rc2-44-g6384f300e9f3)
-
-    2023-09-19T01:31:53.834176  / # #
-
-    2023-09-19T01:31:54.914175  export SHELL=3D/bin/sh
-
-    2023-09-19T01:31:54.916036  #
-
-    2023-09-19T01:31:56.406846  / # export SHELL=3D/bin/sh. /lava-11566566/=
-environment
-
-    2023-09-19T01:31:56.408597  =
-
-
-    2023-09-19T01:31:59.133275  / # . /lava-11566566/environment/lava-11566=
-566/bin/lava-test-runner /lava-11566566/1
-
-    2023-09-19T01:31:59.135371  =
-
-
-    2023-09-19T01:31:59.143562  / # /lava-11566566/bin/lava-test-runner /la=
-va-11566566/1
-
-    2023-09-19T01:31:59.204684  + export 'TESTRUN_ID=3D1_bootrr'
-
-    2023-09-19T01:31:59.205213  + cd /lav<8>[   29.545860] <LAVA_SIGNAL_STA=
-RTRUN 1_bootrr 11566566_1.5.2.4.5>
- =
-
-    ... (39 line(s) more)  =
-
- =20
