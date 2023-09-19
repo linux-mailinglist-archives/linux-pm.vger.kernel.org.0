@@ -2,133 +2,268 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4E97A5671
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 02:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1107A5694
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 02:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbjISAEv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Sep 2023 20:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47860 "EHLO
+        id S230187AbjISAcR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Sep 2023 20:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbjISAEu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 20:04:50 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0683297
-        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 17:04:44 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-401d80f4ef8so56249715e9.1
-        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 17:04:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1695081882; x=1695686682; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lKmKB9vKf9hesrksaYYza5X75bJdTltwCKlh53iy6pA=;
-        b=VJTGOIhWTC+utVlvWwChb3XnHhljXNxCtg/Fs4DE19GxRyeSE3lVfXQhhGIpe6L/88
-         +MUywgwIpePapZJngHhPkwM2M9JT1oVD54T2CoPdNtURDuB4DK1WOy0kAr4Ebkvk5zHD
-         TILNbuFhe4SoKh/MOT/98Xio8ZyZMu8IJozakR8n1QOFLCEEZaYPUZMsX9UGwDf6biI7
-         ZzE0A7gPBu7DaskGEe3+zD1c2V/T8NGLK4SJZhT6JhTUtzwWPvyuaXRQQ0H6f6m3NZJE
-         pl0HD1FDL3qvxWTTgVQkenBQREHs2iB7SFzgApxEDqtMuySWviuwECAEvOguKu8Ys74W
-         bdsA==
+        with ESMTP id S229750AbjISAcQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Sep 2023 20:32:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DD48E
+        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 17:31:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1695083489;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yt0ViDpjZ+25N6JQm0qkxgqk3PInKbbOQPzyPguJLGE=;
+        b=XSeKs3Zbp5UBCx90WTU87kAfeNMO9bhfOkoLCFe3UCNq/PYUfctSkFN4kzg4RStOEPfHow
+        +6ytqrWesu42fsKAUmumt2Zw3C7otdtjxMpjqTF496kK1AKm/5m/LqJZrI8pfaegRLhIMe
+        yF0srjSFMSq2vU4tIOgcpA7/JDc1a/8=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-449-ZzJRHXbuM8SSD_GXJTcY-w-1; Mon, 18 Sep 2023 20:31:27 -0400
+X-MC-Unique: ZzJRHXbuM8SSD_GXJTcY-w-1
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-2748327f37dso3038562a91.0
+        for <linux-pm@vger.kernel.org>; Mon, 18 Sep 2023 17:31:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695081882; x=1695686682;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lKmKB9vKf9hesrksaYYza5X75bJdTltwCKlh53iy6pA=;
-        b=ceDOobJfKyeaaE0j8EqRMMu9YzzcIs/C1R14UoHOio+pxcMVyxTkV9RELYiiRJ5oif
-         qGRrsw6s90wbm8o0k7SY4FFMTDV4NRpNVP+XmC95zAcpg5YImLwTVnJOLz+4PFcuzLXW
-         cSlMR7BbybzeerVQmyIgfcYA6RnuT67WAFQgQsUI/hfHlZnSmNlHZttSf0tuuTGcxHpr
-         yNsNGw+S7DzlZamXcslJyo1KRrmQMpdB3RD0em1XV1G0jc0ktku/ZdEu2WkcafsunqKu
-         DdOqeFZ2Z22Wb9FqTTDuFw1+SAMXUwL/LPeeRBMZ6BspwrDNP8rNmSra6V1Hz03x5NOY
-         mSgw==
-X-Gm-Message-State: AOJu0YwlS0bK56+7kNNLs5oKyLSmTQ3LKyOyoa1Y/jCeqkzHNKxc8e69
-        UyK64a3pVvkjExDCtNapHIfFVQ==
-X-Google-Smtp-Source: AGHT+IFFNKYAqa2w2v6F9Nsoh+8X0Rmm4dO2+giDMVqp6b0lA5AFGb6pjPhsq9KnLzYuiV/4dGOdfA==
-X-Received: by 2002:a5d:4591:0:b0:31f:e418:223d with SMTP id p17-20020a5d4591000000b0031fe418223dmr7716962wrq.7.1695081881961;
-        Mon, 18 Sep 2023 17:04:41 -0700 (PDT)
-Received: from airbuntu (host109-151-228-137.range109-151.btcentralplus.com. [109.151.228.137])
-        by smtp.gmail.com with ESMTPSA id r2-20020adfe682000000b0031fe0576460sm4223971wrm.11.2023.09.18.17.04.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Sep 2023 17:04:41 -0700 (PDT)
-Date:   Tue, 19 Sep 2023 01:04:40 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com,
-        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
-        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v6 2/2] cpuidle: teo: Introduce util-awareness
-Message-ID: <20230919000440.fq5nyttc4mgpou7x@airbuntu>
-References: <20230105145159.1089531-1-kajetan.puchalski@arm.com>
- <20230105145159.1089531-3-kajetan.puchalski@arm.com>
- <20230711175814.zfavcn7xn3ia5va4@airbuntu>
- <ZLZ/btJw5LNVxVy8@e126311.manchester.arm.com>
- <20230718132432.w5xoxbqm54jmu6n5@airbuntu>
- <20230917010516.54dgcmms44wyfrvx@airbuntu>
- <ZQg3eKYNe7hjFTds@e126311.manchester.arm.com>
+        d=1e100.net; s=20230601; t=1695083486; x=1695688286;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yt0ViDpjZ+25N6JQm0qkxgqk3PInKbbOQPzyPguJLGE=;
+        b=GJiFRR0cKdaS/c5lP9gjTY+ZYE3woz28vWVqcrKkEFtbPzcQzQMqL71BH6nil/aFCI
+         jU/rvCRxh1NUaXEFGxaJT6jU5jws7KjSp90lTX2t5A2N5bddmdZNs0vtgCLvTHOliqrS
+         884HU99ck4zJsIE7CyFdbvhhRzdz8XiJREd0LJiASSg0HhYpkADSEsvOSDsXNOuVOdxh
+         pt6EsjsMCH250uxrkhRt6B+tNLy56gscZRLvnIYm7PpHPw1/gG8AiHeilmAnRRPgzvCO
+         1GZBcwgWUOYCzuMSUXUeI9WGUT4U7xfsYdzp2+C8AmBSZZYtI4BZ6SYQivRuOvAr21WF
+         izIw==
+X-Gm-Message-State: AOJu0Yz4wU8RLYQP/rRchWq6pbwqlsFizMY/kMeATjFv4P/CCSbf6jMA
+        ETKqL3DwXJ/Uf7egQG+80n2GnuDf2Q47LUu0ML2O7mTS+SZCSa7/4i5IDnvYMBwiJoRVEBAhxzk
+        lcrnBIn/uo7h4erlG15c=
+X-Received: by 2002:a17:90a:f3d4:b0:274:6cd3:a533 with SMTP id ha20-20020a17090af3d400b002746cd3a533mr7710090pjb.20.1695083486653;
+        Mon, 18 Sep 2023 17:31:26 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEuRHNEswx8Y3CK9vB5Y6rtmqv1Vi3ahJ5e3s63VHLKH86N5qFHbQvQv+6fmLjVPhUNR76WEw==
+X-Received: by 2002:a17:90a:f3d4:b0:274:6cd3:a533 with SMTP id ha20-20020a17090af3d400b002746cd3a533mr7710080pjb.20.1695083486322;
+        Mon, 18 Sep 2023 17:31:26 -0700 (PDT)
+Received: from ?IPV6:2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5? ([2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5])
+        by smtp.gmail.com with ESMTPSA id f93-20020a17090a706600b0026fa1931f66sm8310527pjk.9.2023.09.18.17.31.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Sep 2023 17:31:25 -0700 (PDT)
+Message-ID: <c3ef8123-1fcc-7289-c475-c753de44d564@redhat.com>
+Date:   Tue, 19 Sep 2023 10:31:17 +1000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZQg3eKYNe7hjFTds@e126311.manchester.arm.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RFC PATCH v2 21/35] ACPI: Add post_eject to struct
+ acpi_scan_handler for cpu hotplug
+Content-Language: en-US
+To:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev
+Cc:     x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        jianyong.wu@arm.com, justin.he@arm.com
+References: <20230913163823.7880-1-james.morse@arm.com>
+ <20230913163823.7880-22-james.morse@arm.com>
+From:   Gavin Shan <gshan@redhat.com>
+In-Reply-To: <20230913163823.7880-22-james.morse@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/18/23 12:41, Kajetan Puchalski wrote:
-
-> Yes very much agreed on this part, they definitely can be improved. I'm
-> currently exploring some other approaches to this issue as well but
-> that's more of a long-term thing so it'll likely take a couple of months
-> to see whether they're workable or not.
-
-Sounds good :)
-
-> The role I think the util bits are supposed to play here is mainly to
-> give us a view from a bit higher up than the metrics themselves do
-> because of how quickly those decay. Another way to do it would be some
-> way to make the threshold self-adjusting in the same way the metrics
-> are, e.g. increase the threshold if we're suddenly hitting too many too
-> shallow sleeps and decrease when we're hitting too many deep sleeps as a
-> result of the util checks. This would take care of the edge cases
-> currently falling through the cracks of their util being right around the
-> threshold, the mechanism would adjust within a few seconds of a workload
-> like video playback running. Could be a step in the right direction at least.
-
-I'm not keen on the 'too many' part personally. It does feel finger in the air
-to me. But maybe it can work.
-
-Beside timers, tasks wake up on synchronization mechanisms and IPC, we can
-potentially gather more info from there. For example, if a task is blocked on
-a kernel lock, then chances its in kernel contention and it supposed to wake up
-soon for the kernel to finish servicing the operation (ie: finish the syscall
-and return to user mode).
-
-Android has the notion of cpus being in deeper idle states in EAS. I think we
-could benefit from such thing in upstream too. Not all idle cpus are equal when
-idle states are taken into account, for both power and latency reasons. So
-there's room to improve on the wake up side to help keep CPUs in deeper idle
-states too.
-
-Load balancer state can give indications too. It'll try to spread to idle CPUs
-first. Its activity is a good indication on the demand for an idle CPU to be
-ready to run something soon.
-
-Generally maybe scheduler and idle governor can coordinate better to
-provide/request some low latency idle CPUs, but allow the rest to go into
-deeper idle states, per TEO's rule of course.
-
-On HMP systems this will be trickier for us as not all CPUs are equal. And
-cluster idle can complicate things further. So the nomination of a low latency
-CPU needs to consider more things into account compared to other systems
-(except NUMA maybe) where any idle CPU is as good as any other.
 
 
-Thanks!
+On 9/14/23 02:38, James Morse wrote:
+> struct acpi_scan_handler has a detach callback that is used to remove
+> a driver when a bus is changed. When interacting with an eject-request,
+> the detach callback is called before _EJ0.
+> 
+> This means the ACPI processor driver can't use _STA to determine if a
+> CPU has been made not-present, or some of the other _STA bits have been
+> changed. acpi_processor_remove() needs to know the value of _STA after
+> _EJ0 has been called.
+> 
 
---
-Qais Yousef
+It's helpful to mention which ACPI processor driver needs to use _STA
+to determine the status here. I guess the ACPI processor driver will
+behave differently depending on the status.
+
+> Add a post_eject callback to struct acpi_scan_handler. This is called
+> after acpi_scan_hot_remove() has successfully called _EJ0. Because
+> acpi_bus_trim_one() also clears the handler pointer, it needs to be
+> told if the caller will go on to call acpi_bus_post_eject(), so
+> that acpi_device_clear_enumerated() and clearing the handler pointer
+> can be deferred. The existing not-used pointer is used for this.
+> 
+> Signed-off-by: James Morse <james.morse@arm.com>
+> ---
+>   drivers/acpi/acpi_processor.c |  4 +--
+>   drivers/acpi/scan.c           | 52 ++++++++++++++++++++++++++++++-----
+>   include/acpi/acpi_bus.h       |  1 +
+>   3 files changed, 48 insertions(+), 9 deletions(-)
+> 
+
+Reviewed-by: Gavin Shan <gshan@redhat.com>
+
+> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
+> index 22a15a614f95..00dcc23d49a8 100644
+> --- a/drivers/acpi/acpi_processor.c
+> +++ b/drivers/acpi/acpi_processor.c
+> @@ -459,7 +459,7 @@ static int acpi_processor_add(struct acpi_device *device,
+>   
+>   #ifdef CONFIG_ACPI_HOTPLUG_PRESENT_CPU
+>   /* Removal */
+> -static void acpi_processor_remove(struct acpi_device *device)
+> +static void acpi_processor_post_eject(struct acpi_device *device)
+>   {
+>   	struct acpi_processor *pr;
+>   
+> @@ -627,7 +627,7 @@ static struct acpi_scan_handler processor_handler = {
+>   	.ids = processor_device_ids,
+>   	.attach = acpi_processor_add,
+>   #ifdef CONFIG_ACPI_HOTPLUG_PRESENT_CPU
+> -	.detach = acpi_processor_remove,
+> +	.post_eject = acpi_processor_post_eject,
+>   #endif
+>   	.hotplug = {
+>   		.enabled = true,
+> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+> index a675333618ae..b6d2f01640a9 100644
+> --- a/drivers/acpi/scan.c
+> +++ b/drivers/acpi/scan.c
+> @@ -244,18 +244,28 @@ static int acpi_scan_try_to_offline(struct acpi_device *device)
+>   	return 0;
+>   }
+>   
+> -static int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
+> +/**
+> + * acpi_bus_trim_one() - Detach scan handlers and drivers from ACPI device
+> + *                       objects.
+> + * @adev:       Root of the ACPI namespace scope to walk.
+> + * @eject:      Pointer to a bool that indicates if this was due to an
+> + *              eject-request.
+> + *
+> + * Must be called under acpi_scan_lock.
+> + * If @eject points to true, clearing the device enumeration is deferred until
+> + * acpi_bus_post_eject() is called.
+> + */
+> +static int acpi_bus_trim_one(struct acpi_device *adev, void *eject)
+>   {
+>   	struct acpi_scan_handler *handler = adev->handler;
+> +	bool is_eject = *(bool *)eject;
+>   
+> -	acpi_dev_for_each_child_reverse(adev, acpi_bus_trim_one, NULL);
+> +	acpi_dev_for_each_child_reverse(adev, acpi_bus_trim_one, eject);
+>   
+>   	adev->flags.match_driver = false;
+>   	if (handler) {
+>   		if (handler->detach)
+>   			handler->detach(adev);
+> -
+> -		adev->handler = NULL;
+>   	} else {
+>   		device_release_driver(&adev->dev);
+>   	}
+> @@ -265,7 +275,12 @@ static int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
+>   	 */
+>   	acpi_device_set_power(adev, ACPI_STATE_D3_COLD);
+>   	adev->flags.initialized = false;
+> -	acpi_device_clear_enumerated(adev);
+> +
+> +	/* For eject this is deferred to acpi_bus_post_eject() */
+> +	if (!is_eject) {
+> +		adev->handler = NULL;
+> +		acpi_device_clear_enumerated(adev);
+> +	}
+>   
+>   	return 0;
+>   }
+> @@ -278,15 +293,36 @@ static int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
+>    */
+>   void acpi_bus_trim(struct acpi_device *adev)
+>   {
+> -	acpi_bus_trim_one(adev, NULL);
+> +	bool eject = false;
+> +
+> +	acpi_bus_trim_one(adev, &eject);
+>   }
+>   EXPORT_SYMBOL_GPL(acpi_bus_trim);
+>   
+> +static int acpi_bus_post_eject(struct acpi_device *adev, void *not_used)
+> +{
+> +	struct acpi_scan_handler *handler = adev->handler;
+> +
+> +	acpi_dev_for_each_child_reverse(adev, acpi_bus_post_eject, NULL);
+> +
+> +	if (handler) {
+> +		if (handler->post_eject)
+> +			handler->post_eject(adev);
+> +
+> +		adev->handler = NULL;
+> +	}
+> +
+> +	acpi_device_clear_enumerated(adev);
+> +
+> +	return 0;
+> +}
+> +
+>   static int acpi_scan_hot_remove(struct acpi_device *device)
+>   {
+>   	acpi_handle handle = device->handle;
+>   	unsigned long long sta;
+>   	acpi_status status;
+> +	bool eject = true;
+>   
+>   	if (device->handler && device->handler->hotplug.demand_offline) {
+>   		if (!acpi_scan_is_offline(device, true))
+> @@ -299,7 +335,7 @@ static int acpi_scan_hot_remove(struct acpi_device *device)
+>   
+>   	acpi_handle_debug(handle, "Ejecting\n");
+>   
+> -	acpi_bus_trim(device);
+> +	acpi_bus_trim_one(device, &eject);
+>   
+>   	acpi_evaluate_lck(handle, 0);
+>   	/*
+> @@ -322,6 +358,8 @@ static int acpi_scan_hot_remove(struct acpi_device *device)
+>   	} else if (sta & ACPI_STA_DEVICE_ENABLED) {
+>   		acpi_handle_warn(handle,
+>   			"Eject incomplete - status 0x%llx\n", sta);
+> +	} else {
+> +		acpi_bus_post_eject(device, NULL);
+>   	}
+>   
+>   	return 0;
+> diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
+> index 254685085c82..1b7e1acf925b 100644
+> --- a/include/acpi/acpi_bus.h
+> +++ b/include/acpi/acpi_bus.h
+> @@ -127,6 +127,7 @@ struct acpi_scan_handler {
+>   	bool (*match)(const char *idstr, const struct acpi_device_id **matchid);
+>   	int (*attach)(struct acpi_device *dev, const struct acpi_device_id *id);
+>   	void (*detach)(struct acpi_device *dev);
+> +	void (*post_eject)(struct acpi_device *dev);
+>   	void (*bind)(struct device *phys_dev);
+>   	void (*unbind)(struct device *phys_dev);
+>   	struct acpi_hotplug_profile hotplug;
+
+Thanks,
+Gavin
+
