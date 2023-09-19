@@ -2,124 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2CC7A6A5B
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 20:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B3A7A6AF0
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 20:54:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232690AbjISSAT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 19 Sep 2023 14:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45596 "EHLO
+        id S232362AbjISSyt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Sep 2023 14:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231991AbjISSAS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Sep 2023 14:00:18 -0400
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2A999;
-        Tue, 19 Sep 2023 11:00:11 -0700 (PDT)
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-57acd4917f6so228676eaf.1;
-        Tue, 19 Sep 2023 11:00:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695146411; x=1695751211;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FGnhbq+R2EZAb/x6yu0RGRdXqfvoA34iDXx6GRhUp24=;
-        b=YdmJAnR6aAuzzF7ni0X2/2vxilkJrGscxdwyyCEVwo3iXrGsSH3YmP+5AWERSanicb
-         IN50UvEQYetcZMN/ew24PHGDN5roEHgg7GJL2d4cstV5I61OCNCB82CGJCCzSf7WD8lR
-         AJKmU0uTCkVm25ne5+DXZ0E0+bqhauHnjqqrxMLNJLq7K1sGDCdPAsUxL6Dflh5XsCvl
-         BP8aRXUMuB0DsMjNBgMYhdlwgUDlWeqWexYd0PIZh7aF3kvx3RMA9zSX7kK89utmIxQk
-         io1clZ6NQk3PJmJy2wXMjX73IvrDWK4UuedH1RLzncURa5xE306GcDSRN5gpDr54Tj17
-         VT9g==
-X-Gm-Message-State: AOJu0YxskWkvBL98bxY8Bo4nIvN3+IX+1HeTvVUX8MrQiLo9vfd23Lo/
-        j9w6VaBFLrVjN9DhTmBzTiQRny94oNbkLQFqp0Y=
-X-Google-Smtp-Source: AGHT+IFMu+Ev1F4fMXIPDMXQslgr0uGqZG7w8cxROaroYaD5SopHBj6Rj8C8Kxj3VjEthq3euI44tC5lnqRRzM4n0ew=
-X-Received: by 2002:a4a:d103:0:b0:573:4a72:6ec with SMTP id
- k3-20020a4ad103000000b005734a7206ecmr284831oor.1.1695146410955; Tue, 19 Sep
- 2023 11:00:10 -0700 (PDT)
+        with ESMTP id S232565AbjISSys (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Sep 2023 14:54:48 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434C6C9;
+        Tue, 19 Sep 2023 11:54:41 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id a2509b7e76b7d4b3; Tue, 19 Sep 2023 20:54:38 +0200
+Authentication-Results: v370.home.net.pl; spf=softfail (domain owner 
+   discourages use of this host) smtp.mailfrom=rjwysocki.net 
+   (client-ip=195.136.19.94; helo=[195.136.19.94]; 
+   envelope-from=rjw@rjwysocki.net; receiver=<UNKNOWN>)
+Received: from kreacher.localnet (unknown [195.136.19.94])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id F1CD06646D4;
+        Tue, 19 Sep 2023 20:54:37 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ido Schimmel <idosch@nvidia.com>
+Subject: [PATCH v1] thermal: core: Drop trips_disabled bitmask
+Date:   Tue, 19 Sep 2023 20:54:37 +0200
+Message-ID: <12296181.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-References: <20230914041806.816741-1-kai.heng.feng@canonical.com>
- <7b45ac2ed091497b4e21a6a5c19956161175ba16.camel@linux.intel.com>
- <SN6PR11MB26245C44E84C37C1B551260EF4F6A@SN6PR11MB2624.namprd11.prod.outlook.com>
- <CAAd53p5ywMVKWzhn0nYzvBnW_Bc=sntgBttJdcVUuf_a4AnX5w@mail.gmail.com>
- <SN6PR11MB262473E2BF4057F4D285A613F4F6A@SN6PR11MB2624.namprd11.prod.outlook.com>
- <DM6PR11MB26184A8A3F955589F5FC6836F4FBA@DM6PR11MB2618.namprd11.prod.outlook.com>
- <CAAd53p4o1pB-yzpvUCYsvuYEvQQK0my=u-ogrByRCx_Lvns=hw@mail.gmail.com>
- <bbbf36724d63f7532696a960a9d56d7ccd5a5bee.camel@linux.intel.com>
- <CAAd53p6MA9YLbcXxpC8=YEtbO6frFJk1LQ1BNUgPk=r1_uR8iw@mail.gmail.com> <67c85f083201ed2cda2cab198b40141ad21912a2.camel@linux.intel.com>
-In-Reply-To: <67c85f083201ed2cda2cab198b40141ad21912a2.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 19 Sep 2023 19:59:59 +0200
-Message-ID: <CAJZ5v0iFLxpWHW=sDZ7=Wne3Yt=8_EwhW9SeCmRP6REpVqo8rA@mail.gmail.com>
-Subject: Re: [PATCH] HID: intel-ish-hid: ipc: Rework EHL OOB wakeup
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     "Xu, Even" <even.xu@intel.com>,
-        "jikos@kernel.org" <jikos@kernel.org>,
-        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "Lee, Jian Hui" <jianhui.lee@canonical.com>,
-        "Zhang, Lixu" <lixu.zhang@intel.com>,
-        "Ba, Najumon" <najumon.ba@intel.com>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrudekuddguddttdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhr
+ tghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehiughoshgthhesnhhvihguihgrrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 19, 2023 at 6:54 PM srinivas pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> On Tue, 2023-09-19 at 15:36 +0800, Kai-Heng Feng wrote:
-> > On Mon, Sep 18, 2023 at 11:57 PM srinivas pandruvada
-> > <srinivas.pandruvada@linux.intel.com> wrote:
-> > >
-> > > Hi Kai-Heng,
-> > > On Mon, 2023-09-18 at 09:17 +0800, Kai-Heng Feng wrote:
-> > > > Hi Even,
-> > > >
-> > > > On Mon, Sep 18, 2023 at 8:33 AM Xu, Even <even.xu@intel.com>
-> > > > wrote:
-> > > > >
-> > > > > Hi, Kai-Heng,
-> > > > >
-> > > > > I just got feedback, for testing EHL S5 wakeup feature, you
-> > > > > need
-> > > > > several steps to setup and access
-> > > > > "https://portal.devicewise.com/things/browse" to trigger wake.
-> > > > > But currently, our test account of this website are all out of
-> > > > > data.
-> > > > > So maybe you need double check with the team who required you
-> > > > > preparing the patch for the verification.
-> > > >
-> > > > The patch is to solve the GPE refcount overflow, while
-> > > > maintaining S5
-> > > > wakeup. I don't have any mean to test S5 wake.
-> > > >
-> > > The issue is not calling acpi_disable_gpe(). To reduce the scope of
-> > > change can we just add that instead of a adding new callbacks. This
-> > > way
-> > > scope is reduced.
-> >
-> > This patch does exactly the same thing by letting PCI and ACPI handle
-> > the PME and GPE.
-> > Though the change seems to be bigger, it actually reduces the duped
-> > code, while keep the S5 wakeup ability intact.
-> It may be doing the same. But with long chain of calls without
-> verification, I am not comfortable.
-> This can be another patch by itself to use the framework.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I agree.
+After recent changes, thermal_zone_get_trip() cannot fail, as invoked
+from thermal_zone_device_register_with_trips(), so the only role of
+the trips_disabled bitmask is struct thermal_zone_device is to make
+handle_thermal_trip() skip trip points whose temperature was initially
+zero.  However, since the unit of temperature in the thermal core is
+millicelsius, zero may very well be a valid temperature value at least
+in some usage scenarios and the trip temperature may as well change
+later.  Thus there is no reason to permanently disable trip points
+with initial temperature equal to zero.
 
-Let's change one thing at a time.
+Accordingly, drop the trips_disabled bitmask along with the code
+related to it.
 
-> But you are targeting a fix for overflow issue, which is separate from
-> the use of PCI/ACPI framework.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/thermal/thermal_core.c |   13 -------------
+ include/linux/thermal.h        |    2 --
+ 2 files changed, 15 deletions(-)
 
-Yes, let's fix the bug first and make things look nicer separately.
+Index: linux-pm/drivers/thermal/thermal_core.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_core.c
++++ linux-pm/drivers/thermal/thermal_core.c
+@@ -347,10 +347,6 @@ static void handle_thermal_trip(struct t
+ {
+ 	struct thermal_trip trip;
+ 
+-	/* Ignore disabled trip points */
+-	if (test_bit(trip_id, &tz->trips_disabled))
+-		return;
+-
+ 	__thermal_zone_get_trip(tz, trip_id, &trip);
+ 
+ 	if (trip.temperature == THERMAL_TEMP_INVALID)
+@@ -1231,7 +1227,6 @@ thermal_zone_device_register_with_trips(
+ 	struct thermal_zone_device *tz;
+ 	int id;
+ 	int result;
+-	int count;
+ 	struct thermal_governor *governor;
+ 
+ 	if (!type || strlen(type) == 0) {
+@@ -1328,14 +1323,6 @@ thermal_zone_device_register_with_trips(
+ 	if (result)
+ 		goto release_device;
+ 
+-	for (count = 0; count < num_trips; count++) {
+-		struct thermal_trip trip;
+-
+-		result = thermal_zone_get_trip(tz, count, &trip);
+-		if (result || !trip.temperature)
+-			set_bit(count, &tz->trips_disabled);
+-	}
+-
+ 	/* Update 'this' zone's governor information */
+ 	mutex_lock(&thermal_governor_lock);
+ 
+Index: linux-pm/include/linux/thermal.h
+===================================================================
+--- linux-pm.orig/include/linux/thermal.h
++++ linux-pm/include/linux/thermal.h
+@@ -122,7 +122,6 @@ struct thermal_cooling_device {
+  * @devdata:	private pointer for device private data
+  * @trips:	an array of struct thermal_trip
+  * @num_trips:	number of trip points the thermal zone supports
+- * @trips_disabled;	bitmap for disabled trips
+  * @passive_delay_jiffies: number of jiffies to wait between polls when
+  *			performing passive cooling.
+  * @polling_delay_jiffies: number of jiffies to wait between polls when
+@@ -163,7 +162,6 @@ struct thermal_zone_device {
+ 	void *devdata;
+ 	struct thermal_trip *trips;
+ 	int num_trips;
+-	unsigned long trips_disabled;	/* bitmap for disabled trips */
+ 	unsigned long passive_delay_jiffies;
+ 	unsigned long polling_delay_jiffies;
+ 	int temperature;
+
+
+
