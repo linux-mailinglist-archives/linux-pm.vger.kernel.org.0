@@ -2,68 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1F9A7A617B
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 13:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3587A61F4
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 14:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230466AbjISLj7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Sep 2023 07:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55216 "EHLO
+        id S229552AbjISMCz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Sep 2023 08:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbjISLj7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Sep 2023 07:39:59 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD669ED
-        for <linux-pm@vger.kernel.org>; Tue, 19 Sep 2023 04:39:53 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id 5614622812f47-3adc3d94f66so2012277b6e.1
-        for <linux-pm@vger.kernel.org>; Tue, 19 Sep 2023 04:39:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1695123593; x=1695728393; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=6B+lv2o6Nr3Z6QPJl9hlNW0XPVLDd+ZZqLQCCjrPUbQ=;
-        b=G8Y0GpaNCdWbtBDJMz4UsUhjx61VgYuVSSEiKJjbGMbwxCnzSwOnqRuKwN5esv1LFK
-         dZ86CmioWw7RPsHU8ORttGjguV9fIISlJTDfWEbZa5ZQgBYp/w1wO4zAa/eXAwYxBI8o
-         7518p+ME9S53crV6FBnLD2ayEPE+AHxyulrbYmH5UI3z3agSR750uUqNuONyIbf8m+2I
-         WVPgslGXgVwlgCxelHQVKFcA5eymPeoC4aRy5xltsPlstYY2c1LHsC/7vY5QxM2GOPFI
-         yLR4v9wj6vQsYEnVE8uv7LjpjiwR98+ZYgF5+Zozhq7rKcmkFYD78HrgMrYgD6cpBOjY
-         a/AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695123593; x=1695728393;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6B+lv2o6Nr3Z6QPJl9hlNW0XPVLDd+ZZqLQCCjrPUbQ=;
-        b=Nr+cBEDTunbtV/k2at5kdp+q8WIUgc4YiDLfVAggfQACSpyeg1zbd1zXcQ8WIYUg3R
-         iZrvR46ROiuQpZOjlYOZvE+4MLUHc3v+hwo4hq0mrlAtavCPYg8BOL09KTmbVu5kbldJ
-         icFM6uVXUfu/qwcz6aruG5DfwGrzjwYBKD/30DA3nzX8CThoOHJ1xfYYK02e4MTkL64C
-         d7cZ6INCO3pDbohzYZ0sxYkZSD3VE0NAQ7GbBA9XABP9pqWUJIF1Qoydp5XUsxINGsE8
-         ySXj/mnOU40ZqcBl2KPFxJqHCbP+60WxfAVt3ZMgPaJvzX9xu8HCwe8K4McCt7bAOxj3
-         ZIhg==
-X-Gm-Message-State: AOJu0YwVm/7M0I5QdudSbTqmJ8YQ1HJhY4aSoYz7zyHP+0n/ZpOglpjM
-        pYvBK2oMYq8rE73afAYNz2YIWAP2a+OQFXFr5XDA7A==
-X-Google-Smtp-Source: AGHT+IHUq33ifb/JNxZXQ95rwdayorDl2r1XsWilaq4zPzugOdttRkNJ0OT0eUeZZHoCfklqEV9kOQ==
-X-Received: by 2002:a05:6358:8812:b0:141:bfc:b11d with SMTP id hv18-20020a056358881200b001410bfcb11dmr13498803rwb.16.1695123592862;
-        Tue, 19 Sep 2023 04:39:52 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id n17-20020a639711000000b0057412d84d25sm7993612pge.4.2023.09.19.04.39.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Sep 2023 04:39:52 -0700 (PDT)
-Message-ID: <65098888.630a0220.6ae75.b047@mx.google.com>
-Date:   Tue, 19 Sep 2023 04:39:52 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229497AbjISMCz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Sep 2023 08:02:55 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6612FA9;
+        Tue, 19 Sep 2023 05:02:49 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1F20B66003AF;
+        Tue, 19 Sep 2023 13:02:47 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1695124967;
+        bh=WqbMfAO//Ooj16UaG3MjBLlfRdTE5RHHSY9kCbs4IbU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dletyGywwkOCWcnz/FvfvmrEVZFb5ZT8J17MakCWaK93yTFNc+HJtCiMeiQ3Z0uUM
+         VDNNvcdcmbLGiYyFTDnkQRv+KO8TauLXAks7f+/CySkg/XWVXiB/P93U1XeuHprr36
+         hw6Ct0Ua0lJuMCZ+2MXGQ933g9ZDGDr57s4J+znkms65vGPLuY8zWTEt9KlyuuLhG+
+         ohWJXgqV6ejRZzYNaJwbNHf/6ANbjgOxmNMOZVgMsqY2YhP/+DiOgrZEKU91NFSLEy
+         0lOyrnH7Pw5hVL4WVaMDimemLDm1jn1MokHdQqV5YcC8qUMdaEMxFZGYyyT6PBs41V
+         8M7Ur0osWQBag==
+Message-ID: <c79766f1-5830-556e-45d5-b45f867bda1c@collabora.com>
+Date:   Tue, 19 Sep 2023 14:02:44 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v6.6-rc2-21-g23aa512f7cfb
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.6-rc2-21-g23aa512f7cfb)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH] thermal/drivers/mediatek: Fix probe for THERMAL_V2
+Content-Language: en-US
+To:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Frank Wunderlich <linux@fw-web.de>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Frank Wunderlich <frank-w@public-files.de>
+References: <20230918100706.1229239-1-msp@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230918100706.1229239-1-msp@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,100 +64,20 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.6-rc2-21-g23=
-aa512f7cfb)
+Il 18/09/23 12:07, Markus Schneider-Pargmann ha scritto:
+> Fix the probe function to call mtk_thermal_release_periodic_ts for
+> everything != MTK_THERMAL_V1. This was accidentally changed from V1
+> to V2 in the original patch.
+> 
+> Reported-by: Frank Wunderlich <frank-w@public-files.de>
+> Closes: https://lore.kernel.org/lkml/B0B3775B-B8D1-4284-814F-4F41EC22F532@public-files.de/
+> Reported-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Closes: https://lore.kernel.org/lkml/07a569b9-e691-64ea-dd65-3b49842af33d@linaro.org/
+> Fixes: 33140e668b10 ("thermal/drivers/mediatek: Control buffer enablement tweaks")
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-6-rc2-21-g23aa512f7cfb/
+I have no idea how it happened that I didn't notice that mistake.
 
-Tree: pm
-Branch: testing
-Git Describe: v6.6-rc2-21-g23aa512f7cfb
-Git Commit: 23aa512f7cfb35df3681128dba3b9bef597fcd6c
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
 
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
