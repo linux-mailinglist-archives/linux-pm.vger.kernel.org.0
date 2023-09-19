@@ -2,125 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32C117A6832
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 17:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A95017A68B4
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 18:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232469AbjISPhL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Sep 2023 11:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34126 "EHLO
+        id S229772AbjISQQW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Sep 2023 12:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232459AbjISPhK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Sep 2023 11:37:10 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E2893;
-        Tue, 19 Sep 2023 08:37:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=EkcxN4mrbXMsLJAdxtwy2oz0sxfaSLg8LzPbTnf3zFY=; b=TKCfAHHBTyWO6i9uVdTVGjl/vG
-        TRawhS42WqVqO9/EHxjVJqRbac7xfR16bAwkoZQMyoYCO9/TUJc7TQ8bQEcz70UkRVVPlSL5ORXgZ
-        gnPmxAuBOtb/Y6eTmgTCC3WQFcXox8mvke9JavA4wjj440A/hstNLx7GnrVqJuVgs/1jEKWrEHWgq
-        Y/oIZEnUkILeiP48yAfQWCvbLVZVBNdhz5z11ogs1lxhZuMaewL5CMAi9VTv4X4OFqwbA6g8QZNYp
-        E/r3aEtLVq2p9xLL8wQq7JKIf0mP+foHdFuGPSMDTZBX/petlohpJ0s+TkRIb18OQI1hkdw5CV+Hj
-        t/2fr9Og==;
-Received: from [2601:1c2:980:9ec0::9fed]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qicmS-000m50-2W;
-        Tue, 19 Sep 2023 15:36:52 +0000
-Message-ID: <c7604f6c-4da7-47c4-abe9-e626b3efc665@infradead.org>
-Date:   Tue, 19 Sep 2023 08:36:50 -0700
+        with ESMTP id S231255AbjISQQP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Sep 2023 12:16:15 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEA5AB;
+        Tue, 19 Sep 2023 09:16:10 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38JAphEU023378;
+        Tue, 19 Sep 2023 16:15:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=PHUbtJEzjbMFZuHtcDHBZZbSPs5viejV11pTdFjLUTQ=;
+ b=R4IE6g13ZSkfxduyBMWw4rbjl9O/CZTx/K13ki1x7EDG3c1YJR6gMtNzSPWWCJXNeGou
+ sD9Kp8Hovrh6fugJJshW8+V5+9yATZfufybr1Tvvh3Y3KJ8FOU46XUueLwzyThu7j+D7
+ 6gqib4rP/NuukIEJOmZYyVfLg3dDQgJLsxyf/Ky8guOetYAkx8t0JrjgAZh8SxF78zIv
+ 1d3TGRx64DrTc9k87Ib+LrEKvuHPXtpNV49XGy6ltje4D9khGSDcFGRbBBPp7Tqp/lD9
+ u1LsYtu/E4goye7ox4LC9jvhvLNsYg+evXDBOehy1wSsR73EZ3kx06vT5VAmVoOORm7M Zw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t6mtsbexe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 19 Sep 2023 16:15:59 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38JGFwDf002121
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 19 Sep 2023 16:15:58 GMT
+Received: from [10.216.36.122] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 19 Sep
+ 2023 09:15:53 -0700
+Message-ID: <62147eab-aa1b-34c2-b6d2-7e5700a46cb6@quicinc.com>
+Date:   Tue, 19 Sep 2023 21:45:50 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/5] soc: loongson: loongson2_pm: Add dependency for
- INPUT
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH V2 4/4] arm64: dts: qcom: ipq5018: Add tsens node
 Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Binbin Zhou <zhoubb.aaron@gmail.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        loongson-kernel@lists.loongnix.cn, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev
-References: <cover.1693623752.git.zhoubinbin@loongson.cn>
- <16a37f6ad3cc9417b6638c2cd532d88c79468eb1.1693623752.git.zhoubinbin@loongson.cn>
- <885eab85-2c11-cf20-9187-55cd647fbe9f@infradead.org>
-In-Reply-To: <885eab85-2c11-cf20-9187-55cd647fbe9f@infradead.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <srinivas.kandagatla@linaro.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <thara.gopinath@gmail.com>,
+        <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <dmitry.baryshkov@linaro.org>
+References: <20230915121504.806672-1-quic_srichara@quicinc.com>
+ <20230915121504.806672-5-quic_srichara@quicinc.com>
+ <b0fe17e4-e4d8-02af-4e09-06b3930b38fe@linaro.org>
+ <b40c6439-ab73-d796-589e-ffee21cedfc9@quicinc.com>
+ <463923fe-7938-ad1b-fd79-6491329289af@linaro.org>
+From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
+In-Reply-To: <463923fe-7938-ad1b-fd79-6491329289af@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ywFUsbtpKLShfYHjl9BIzYo50TACc1QU
+X-Proofpoint-ORIG-GUID: ywFUsbtpKLShfYHjl9BIzYo50TACc1QU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-19_07,2023-09-19_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 bulkscore=0 suspectscore=0 adultscore=0 mlxlogscore=999
+ malwarescore=0 mlxscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309190140
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi--
 
-On 9/2/23 08:43, Randy Dunlap wrote:
-> 
-> 
-> On 9/2/23 01:47, Binbin Zhou wrote:
->> Since commit 67694c076bd7 ("soc: loongson2_pm: add power management
->> support"), the Loongson-2K PM driver was added, but it didn't update the
->> Kconfig entry for the INPUT dependency, leading to build errors:
+
+On 9/19/2023 6:07 PM, Krzysztof Kozlowski wrote:
+> On 19/09/2023 09:28, Sricharan Ramabadhran wrote:
 >>
->> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
->> drivers/soc/loongson/loongson2_pm.o: in function `loongson2_power_button_init':
->> /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:101:(.text+0x350): undefined reference to `input_allocate_device'
->> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
->> /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:109:(.text+0x3dc): undefined reference to `input_set_capability'
->> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
->> /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:111:(.text+0x3e4): undefined reference to `input_register_device'
->> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
->> /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:125:(.text+0x3fc): undefined reference to `input_free_device'
->> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: drivers/soc/loongson/loongson2_pm.o: in function `input_report_key':
->> /work/lnx/next/linux-next-20230825/LOONG64/../include/linux/input.h:425:(.text+0x58c): undefined reference to `input_event'
 >>
->> Also, since this driver can only be built-in, it fails to link when the
->> INPUT is in a loadable module, so we should update the Kconfig entry to
->> depend on INPUT=y.
+>> On 9/15/2023 6:16 PM, Krzysztof Kozlowski wrote:
+>>> On 15/09/2023 14:15, Sricharan Ramabadhran wrote:
+>>>> IPQ5018 has tsens V1.0 IP with 4 sensors.
+>>>> There is no RPM, so tsens has to be manually enabled. Adding the tsens
+>>>> and nvmem node and IPQ5018 has 4 thermal sensors (zones). With the
+>>>> critical temperature being 120'C and action is to reboot. Adding all
+>>>> the 4 zones here.
+>>>>
+>>>> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+>>>> ---
+>>>>    [v2] Fixed node names, order and added qfprom cells for points
+>>>>         seperately to use the calibrate_common and squashed thermal_zone
+>>>>         nodes here
+>>>>
+>>>>    arch/arm64/boot/dts/qcom/ipq5018.dtsi | 169 ++++++++++++++++++++++++++
+>>>>    1 file changed, 169 insertions(+)
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/qcom/ipq5018.dtsi b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
+>>>> index 9f13d2dcdfd5..d53aea5342e2 100644
+>>>> --- a/arch/arm64/boot/dts/qcom/ipq5018.dtsi
+>>>> +++ b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
+>>>> @@ -93,6 +93,117 @@ soc: soc@0 {
+>>>>    		#size-cells = <1>;
+>>>>    		ranges = <0 0 0 0xffffffff>;
+>>>>    
+>>>> +		qfprom: qfprom@a0000 {
+>>>> +			#address-cells = <1>;
+>>>> +			#size-cells = <1>;
+>>>> +			compatible = "qcom,ipq5018-qfprom", "qcom,qfprom";
+>>>
+>>> This is a friendly reminder during the review process.
+>>>
+>>> It seems my previous comments were not fully addressed. Maybe my
+>>> feedback got lost between the quotes, maybe you just forgot to apply it.
+>>> Please go back to the previous discussion and either implement all
+>>> requested changes or keep discussing them.
+>>>
 >>
->> Fixes: 67694c076bd7 ("soc: loongson2_pm: add power management support")
->> Reported-by: Randy Dunlap <rdunlap@infradead.org>
->> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+>>    oops, moved the compatible to first, but missed it on posting version.
+>>    Will fix it in V3.
 > 
-> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-> Tested-by: Randy Dunlap <rdunlap@infradead.org>
+> What do you mean by "posting version"? If it is not the same as your Git
+> version, then your process is buggy. You must work on mainline tree and
+> send patches from that tree. Not edit patches and edit Git separately...
 > 
-> Thanks.
+   Working on mainline tree only, just that i had 2 different build
+   servers (one build machine and other local machine). Usually develop
+   all on build server, copy/apply patches to local machine (mainline)
+   and send. This time missed copying to local finally.
 
-What's the status of this patch?
-linux-next builds are still failing without this patch.
+Regards,
+  Sricharan
 
-Thanks.
-
-> 
->> ---
->>  drivers/soc/loongson/Kconfig | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/soc/loongson/Kconfig b/drivers/soc/loongson/Kconfig
->> index 314e13bb3e01..368344943a93 100644
->> --- a/drivers/soc/loongson/Kconfig
->> +++ b/drivers/soc/loongson/Kconfig
->> @@ -20,6 +20,7 @@ config LOONGSON2_GUTS
->>  config LOONGSON2_PM
->>  	bool "Loongson-2 SoC Power Management Controller Driver"
->>  	depends on LOONGARCH && OF
->> +	depends on INPUT=y
->>  	help
->>  	  The Loongson-2's power management controller was ACPI, supports ACPI
->>  	  S2Idle (Suspend To Idle), ACPI S3 (Suspend To RAM), ACPI S4 (Suspend To
-> 
-
--- 
-~Randy
+   one for
