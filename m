@@ -2,105 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 059667A6647
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 16:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32C117A6832
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 17:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232660AbjISOPa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Sep 2023 10:15:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
+        id S232469AbjISPhL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Sep 2023 11:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232653AbjISOPa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Sep 2023 10:15:30 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5D0114
-        for <linux-pm@vger.kernel.org>; Tue, 19 Sep 2023 07:15:24 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-52f3ba561d9so12467941a12.1
-        for <linux-pm@vger.kernel.org>; Tue, 19 Sep 2023 07:15:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695132922; x=1695737722; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7/FEvYyM2EeHOdSQPD/GJAyv/Ms6P3+0S37WW9XjZPo=;
-        b=QbuUhioLqJZVSDd0vPnu4Iug5dPe74scweC1i2KIz5LTW3DH75VcZU3AjpIzp8JAVp
-         7wgYfU16VvvwovMkySO5NQxvjwczbIhCloObfaGcQsiYDK9aXIAqcGAQSZGWhHvvINtz
-         XcNOGbkEb0HRwInIYcHhvEgz4BBnbTlUNnVyc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695132922; x=1695737722;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7/FEvYyM2EeHOdSQPD/GJAyv/Ms6P3+0S37WW9XjZPo=;
-        b=V6z+z7i5HOwuMGWHFzxworn62uMgtgJ1JgwFPr4u5QcTAg5FwWaP24z03Ng8dJ0TBj
-         MjWT3r3tBohoa879JZs2lukUTf0mzvXSMWyfMMeSCtTUzU2ChzlTdtEQt4lawWnmDkkH
-         Iy1MuWXrxIesBKvH8bRxGZTpyHGj4dS53osAMr+b9pDxGQ9HnbA0IrWuWHN9+pJSjCVB
-         2rXMCmQz2cTGowGKtUXmDGunkmt04U4W7UO5hBOSael8YYu/09y3Q9xQ/Qe/XdcLmmX3
-         ZAM78JXZB1XsoqbJgEOSZLDrZc0lH+x6Arl/OWVWs/dwDKUqOJyAm1Fse9aQXrKo1JS4
-         MzTg==
-X-Gm-Message-State: AOJu0YyZlL6zjZ1mOQ909GqApgNulviYjwkXSSkYLXapspwMDRUVYfDx
-        8Zf6DMZzgrgKDo5Igj42qu0WNrptepQnPMRZiEZKT6ec
-X-Google-Smtp-Source: AGHT+IGFL6z65ZDV1n9RuPjp+sBcadAZz4zjB9ZIfPalc0e3mrmSIHdn3S3hTLfcD6xGUf0xW8owHg==
-X-Received: by 2002:a05:6402:f0a:b0:523:c36e:ec8b with SMTP id i10-20020a0564020f0a00b00523c36eec8bmr4112857eda.9.1695132921552;
-        Tue, 19 Sep 2023 07:15:21 -0700 (PDT)
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
-        by smtp.gmail.com with ESMTPSA id q18-20020a056402519200b00530a0ceb4a0sm5719986edd.37.2023.09.19.07.15.20
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Sep 2023 07:15:20 -0700 (PDT)
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4009fdc224dso68765e9.1
-        for <linux-pm@vger.kernel.org>; Tue, 19 Sep 2023 07:15:20 -0700 (PDT)
-X-Received: by 2002:a05:600c:3d0b:b0:3fe:f32f:c57f with SMTP id
- bh11-20020a05600c3d0b00b003fef32fc57fmr110023wmb.0.1695132919977; Tue, 19 Sep
- 2023 07:15:19 -0700 (PDT)
+        with ESMTP id S232459AbjISPhK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Sep 2023 11:37:10 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E2893;
+        Tue, 19 Sep 2023 08:37:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=EkcxN4mrbXMsLJAdxtwy2oz0sxfaSLg8LzPbTnf3zFY=; b=TKCfAHHBTyWO6i9uVdTVGjl/vG
+        TRawhS42WqVqO9/EHxjVJqRbac7xfR16bAwkoZQMyoYCO9/TUJc7TQ8bQEcz70UkRVVPlSL5ORXgZ
+        gnPmxAuBOtb/Y6eTmgTCC3WQFcXox8mvke9JavA4wjj440A/hstNLx7GnrVqJuVgs/1jEKWrEHWgq
+        Y/oIZEnUkILeiP48yAfQWCvbLVZVBNdhz5z11ogs1lxhZuMaewL5CMAi9VTv4X4OFqwbA6g8QZNYp
+        E/r3aEtLVq2p9xLL8wQq7JKIf0mP+foHdFuGPSMDTZBX/petlohpJ0s+TkRIb18OQI1hkdw5CV+Hj
+        t/2fr9Og==;
+Received: from [2601:1c2:980:9ec0::9fed]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qicmS-000m50-2W;
+        Tue, 19 Sep 2023 15:36:52 +0000
+Message-ID: <c7604f6c-4da7-47c4-abe9-e626b3efc665@infradead.org>
+Date:   Tue, 19 Sep 2023 08:36:50 -0700
 MIME-Version: 1.0
-References: <20230919-fp5-initial-v2-0-14bb7cedadf5@fairphone.com> <20230919-fp5-initial-v2-2-14bb7cedadf5@fairphone.com>
-In-Reply-To: <20230919-fp5-initial-v2-2-14bb7cedadf5@fairphone.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 19 Sep 2023 07:15:02 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UmW8QwcT=YN8VSffuds2ib5zYPr6O2oQ=kUJkKa=5Bmw@mail.gmail.com>
-Message-ID: <CAD=FV=UmW8QwcT=YN8VSffuds2ib5zYPr6O2oQ=kUJkKa=5Bmw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] nvmem: qfprom: Mark core clk as optional
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     cros-qcom-dts-watchers@chromium.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/5] soc: loongson: loongson2_pm: Add dependency for
+ INPUT
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        Binbin Zhou <zhoubb.aaron@gmail.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        loongson-kernel@lists.loongnix.cn, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev
+References: <cover.1693623752.git.zhoubinbin@loongson.cn>
+ <16a37f6ad3cc9417b6638c2cd532d88c79468eb1.1693623752.git.zhoubinbin@loongson.cn>
+ <885eab85-2c11-cf20-9187-55cd647fbe9f@infradead.org>
+In-Reply-To: <885eab85-2c11-cf20-9187-55cd647fbe9f@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Hi--
 
-On Tue, Sep 19, 2023 at 5:46=E2=80=AFAM Luca Weiss <luca.weiss@fairphone.co=
-m> wrote:
->
-> On some platforms like sc7280 on non-ChromeOS devices the core clock
-> cannot be touched by Linux so we cannot provide it. Mark it as optional
-> as accessing qfprom for reading works without it but we still prohibit
-> writing if we cannot provide the clock.
->
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
->  drivers/nvmem/qfprom.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+On 9/2/23 08:43, Randy Dunlap wrote:
+> 
+> 
+> On 9/2/23 01:47, Binbin Zhou wrote:
+>> Since commit 67694c076bd7 ("soc: loongson2_pm: add power management
+>> support"), the Loongson-2K PM driver was added, but it didn't update the
+>> Kconfig entry for the INPUT dependency, leading to build errors:
+>>
+>> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
+>> drivers/soc/loongson/loongson2_pm.o: in function `loongson2_power_button_init':
+>> /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:101:(.text+0x350): undefined reference to `input_allocate_device'
+>> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
+>> /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:109:(.text+0x3dc): undefined reference to `input_set_capability'
+>> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
+>> /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:111:(.text+0x3e4): undefined reference to `input_register_device'
+>> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
+>> /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:125:(.text+0x3fc): undefined reference to `input_free_device'
+>> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: drivers/soc/loongson/loongson2_pm.o: in function `input_report_key':
+>> /work/lnx/next/linux-next-20230825/LOONG64/../include/linux/input.h:425:(.text+0x58c): undefined reference to `input_event'
+>>
+>> Also, since this driver can only be built-in, it fails to link when the
+>> INPUT is in a loadable module, so we should update the Kconfig entry to
+>> depend on INPUT=y.
+>>
+>> Fixes: 67694c076bd7 ("soc: loongson2_pm: add power management support")
+>> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+>> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> 
+> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+> Tested-by: Randy Dunlap <rdunlap@infradead.org>
+> 
+> Thanks.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+What's the status of this patch?
+linux-next builds are still failing without this patch.
+
+Thanks.
+
+> 
+>> ---
+>>  drivers/soc/loongson/Kconfig | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/soc/loongson/Kconfig b/drivers/soc/loongson/Kconfig
+>> index 314e13bb3e01..368344943a93 100644
+>> --- a/drivers/soc/loongson/Kconfig
+>> +++ b/drivers/soc/loongson/Kconfig
+>> @@ -20,6 +20,7 @@ config LOONGSON2_GUTS
+>>  config LOONGSON2_PM
+>>  	bool "Loongson-2 SoC Power Management Controller Driver"
+>>  	depends on LOONGARCH && OF
+>> +	depends on INPUT=y
+>>  	help
+>>  	  The Loongson-2's power management controller was ACPI, supports ACPI
+>>  	  S2Idle (Suspend To Idle), ACPI S3 (Suspend To RAM), ACPI S4 (Suspend To
+> 
+
+-- 
+~Randy
