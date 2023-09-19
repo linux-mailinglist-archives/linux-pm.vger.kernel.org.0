@@ -2,259 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B42387A5FB3
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 12:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BFB77A6128
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 13:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231722AbjISKeX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Sep 2023 06:34:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60176 "EHLO
+        id S229699AbjISL2i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Sep 2023 07:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjISKeW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Sep 2023 06:34:22 -0400
+        with ESMTP id S229658AbjISL2h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Sep 2023 07:28:37 -0400
 Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2087.outbound.protection.outlook.com [40.107.92.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189C1F3;
-        Tue, 19 Sep 2023 03:34:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FC1F5;
+        Tue, 19 Sep 2023 04:28:31 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N/+p4SpHwMzGOenirB6mxUBiVlg8P3pOXPH2DBme6iSkJqbuNSKufkz4bNgzTny6yMCsLf9O+Mpwwz3J9/SX9vSX4UZxzATYbMXOSUTALnUFVVqQNxi4UtUgIkJnIQ3PqdwvHPr6p4Wtqe4iCaCP7zIM6/5iu0WfIP12HSzPWxb7i8uNvVN3T84cvy2umwyvMVhlJapFq7EpDtLVozPPcmrwznu1h/AI9hRpdMS5xvJKyErEaJo7/oaw3EZ+QSXs+7POOP7uA1jsWzW+CnGozYcT6HG2brqfEjtHv2MMWXpNy6g50YPmzPAxEZFCCkRWdo0PXZRESVOO292xkTD62w==
+ b=TCUataMwejxprwjD5ektB+4r5xdsYSrnO8tCwSMz/F4CzKRa5eoHP3uU3gLvabvle7bBN5C/nIX9dxRmiJCVaw9fnTNwjK+kOamU7CuDdaXtLs1OMTZPjgfXjriTx+QQ5TGX+oM+JNTMntqBdWoD89ytnGY/UfS4fFe10Q+Wa7+7+E6J+1VTaWgmSMJ5aRkU0OX7D4qJ+/ikugEKq/83nJbABVicWLg3LEQtD+Jye2T0B3iZGvBS9C6PBrAyq17JNC/kC/KpFTzBfuZlNUXKR8N5aRNLex+Lw/7FlvSpsiGlUzoGESJ3YCV8cPk+IA3PwQR6gIcHB3F03lXdLyEt7Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=64FcbRcrXNerMZTZqvliAuI+D0U18OuyO2Dusc3iYGw=;
- b=kUxbefKvcplejxQeuAbBsySz8/DSbr7IQt1zMtU6k7HSdchQOqKeqIgsYRg21nwc8d/H1QieVJh8zqn03cDxEvYBrZsZ2v/SkullBc3aXpSgLOYZv6hJYwqLdtEM+mpxZdfkyx1DsckcUj3HVf7Bs5LYF0sCTK13YY1pJXbSopufGBu+Pny3hkumUisthTMlsOVmGJH93dMWxVNX7wpeK3pUdITUx4zW9n5bQ2Ulw1ErjhPUa7H/l7U7Lwen2AQGAG2LzS8shDdOhcTKLZqBYElMCRZG57Bc4zPMNGSB0fTlcIFsubbX/j9DH6W0A2d83kDXS71wwf+uC09/Anuk+w==
+ bh=J7R75y0ASBsxBBnlVAMLkLmxf4yRqBy6611LtS4QAl0=;
+ b=koeg+ZyceR4jgwnhSLxZcqknJgQijz1SEvIrUifqn3b8NUKmQtBRUZfram4HCXE7NPCrrviDGPICHwJj5F7shksT5T2/lXeAAvfqgQZGqMmNIc9eIYzN09w+8wHiyXf6V7iLGCAKx4kGhv+qYP6060Aw9kcK5yQPwC/8bWBCV8nJe+oKDRz+8TXUtcmeC1kKCQ2HGQSv1ti7T/X9k592cWX9isGpTwakODGc3wxzZ9tceoUfBWe9HvGYHgqB+C9HtROJae2zNhgOhbxk45mlEudq54DTy27rg1fSYO8tS/1eNVAMLZJBm5EcWMSvDwajdcIvL6q//ZxEI5fI/4HpFw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=64FcbRcrXNerMZTZqvliAuI+D0U18OuyO2Dusc3iYGw=;
- b=4e8bDlPrLT5aI7MCOnq6CFPsotpaqOqNqnZudscQSRvHsBWJ5KN/0GM9awfjfoRuq0WMNFVPiKhadhRvdy7AbwAierYZ0g4ybIVjJKAWVHFhxEUa1UKBkEyqORSeBziiEiqfM1yBGfL2nJCNCJO2Vu7Ubz2qjgpO+9u7+AKgbsc=
-Received: from MN2PR17CA0021.namprd17.prod.outlook.com (2603:10b6:208:15e::34)
- by SA3PR12MB8763.namprd12.prod.outlook.com (2603:10b6:806:312::21) with
+ bh=J7R75y0ASBsxBBnlVAMLkLmxf4yRqBy6611LtS4QAl0=;
+ b=LLhcrE1XCO6MpbN5+eaStDcQ79Q2OeFxiECyfuUnmMOPoxi8XCCFiI+4vEyTrirsS3uLJdP6IBLqcmVsAdGhd0x4DNZ0LkQiVELuwpfCig2NVPUsz30Y+pIfPh4NFS+ATz8p28qJswJUrsnG4a1U6J3xhvp4AuMmMICIj2Na1sK0w/cw1UuDP2/NnQ2LNe7Adkq0gzqO+vye8op63xVz/lRcEdBKjvkP1hF1qxYTvYEIH6Vs/UiHM8sDG8MdpGaCpxsxxpSzUNPMAlJP6aWKUH8xZQUmhoUotqBh3dRhDbVdRJK+vxJyZki5v9HVWEI1/kk9dcpr5xcq5ANQUfQ7bg==
+Received: from MW4PR04CA0375.namprd04.prod.outlook.com (2603:10b6:303:81::20)
+ by BL3PR12MB6644.namprd12.prod.outlook.com (2603:10b6:208:3b1::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.28; Tue, 19 Sep
- 2023 10:34:09 +0000
-Received: from BL6PEPF0001AB4F.namprd04.prod.outlook.com
- (2603:10b6:208:15e:cafe::7c) by MN2PR17CA0021.outlook.office365.com
- (2603:10b6:208:15e::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.27; Tue, 19 Sep
+ 2023 11:28:29 +0000
+Received: from CO1PEPF000042A7.namprd03.prod.outlook.com
+ (2603:10b6:303:81:cafe::b3) by MW4PR04CA0375.outlook.office365.com
+ (2603:10b6:303:81::20) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.27 via Frontend
- Transport; Tue, 19 Sep 2023 10:34:09 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL6PEPF0001AB4F.mail.protection.outlook.com (10.167.242.73) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6792.19 via Frontend Transport; Tue, 19 Sep 2023 10:34:09 +0000
-Received: from ethanolxb491host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 19 Sep
- 2023 05:34:08 -0500
-From:   Swapnil Sapkal <swapnil.sapkal@amd.com>
-To:     <ray.huang@amd.com>, <shuah@kernel.org>
-CC:     <sukrut.bellary@gmail.com>, <li.meng@amd.com>,
-        <gautham.shenoy@amd.com>, <wyes.karny@amd.com>,
-        <Perry.Yuan@amd.com>, <Mario.Limonciello@amd.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Swapnil Sapkal <swapnil.sapkal@amd.com>
-Subject: [PATCH v2] selftests/amd-pstate: Fix broken paths to run workloads in amd-pstate-ut
-Date:   Tue, 19 Sep 2023 10:33:51 +0000
-Message-ID: <20230919103351.48681-1-swapnil.sapkal@amd.com>
-X-Mailer: git-send-email 2.34.1
+ Transport; Tue, 19 Sep 2023 11:28:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CO1PEPF000042A7.mail.protection.outlook.com (10.167.243.36) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.20 via Frontend Transport; Tue, 19 Sep 2023 11:28:28 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 19 Sep
+ 2023 04:28:15 -0700
+Received: from [10.41.21.79] (10.126.230.35) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 19 Sep
+ 2023 04:28:10 -0700
+Message-ID: <961ffcb4-a9c6-2916-7b90-4a38b0ad465c@nvidia.com>
+Date:   Tue, 19 Sep 2023 16:58:07 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Patch v2 0/2] Improvements to the Tegra CPUFREQ driver
+Content-Language: en-US
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <treding@nvidia.com>, <jonathanh@nvidia.com>, <bbasu@nvidia.com>,
+        <amiettinen@nvidia.com>, Sumit Gupta <sumitg@nvidia.com>
+References: <20230901164113.29139-1-sumitg@nvidia.com>
+From:   Sumit Gupta <sumitg@nvidia.com>
+In-Reply-To: <20230901164113.29139-1-sumitg@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail202.nvidia.com (10.129.68.7)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB4F:EE_|SA3PR12MB8763:EE_
-X-MS-Office365-Filtering-Correlation-Id: cb118fbb-4c44-433a-231d-08dbb8fbf545
+X-MS-TrafficTypeDiagnostic: CO1PEPF000042A7:EE_|BL3PR12MB6644:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9e490d4a-c5f3-4df5-8505-08dbb9038bf5
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QTnZLji9Vw17P/MJiNG5YK89E6Mrd3CJanRi4Z+lGIaSRcWRcnS+1GUpQHodxJdzFQcO9QPOqwc1WknMp02Ny0zFmPFSlWUR2tXB5EJqxmUpB9Y/qR0t+8NkTWhXPhQaMJNAhxe4txpKTbytoywSM+qrBIEBlWjW4onkF88S4omlstrc7UwcCbp+p/bigFVg1KowR8kOjc5pEdhUXe3Q4S3Y6CBzMRq8QU7Y/4edKNTdkcZZJSJ8tpvdvOXF++RBhzJpijYn6sTiNijnam9qfn22u1E6kDj+SwvVvYZEO+9eQMMV76jRm0xR/xUEDVKKn+n3K23nuWGH/B8djs83j/20g4scz3tN2WLV8x+DXftSHZ6WLi+6SVHyOZHI70Hg3lkmZLwI1K9OvrdALif+OWKGwLynuTw4r/kjSbMjYiC/3kCBjsGG97NDdFSF1lw6ObujWQRDmdPbTzpNS3ax8F2KR2nR5iKxme3OK8YsrCyAH4GdhxBfMMt7PaE6x/aLKt5XnBH+jDOQ49wwaln6wAEgCAF6OARmrDS0n9HZF0SoNI0NEpNstjK69xpY4D+fT4Q6+FBeA1OrivUPe5uI9nSCr8reIZQSKa79QBhgVKa+ak3n8bzZuv8QO8C/MYJhcfOhqiKfDrsq6SJVY0slt08GE6hFYLBOjgLtlDRE1HUxQPAT24r5Eil+FummErrgs9ILyTp6OR6dagI5ttJIyj2Ni9uUOzjEVoBW8uE8PudT8H76TtWfocyXKcFDKH8L5h5fHOcNwwSCdMD526OIgQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(376002)(136003)(346002)(396003)(1800799009)(186009)(451199024)(82310400011)(36840700001)(46966006)(40470700004)(6666004)(7696005)(40460700003)(36756003)(81166007)(86362001)(356005)(82740400003)(40480700001)(36860700001)(2616005)(16526019)(1076003)(26005)(2906002)(47076005)(336012)(426003)(478600001)(83380400001)(44832011)(8676002)(5660300002)(110136005)(4326008)(41300700001)(8936002)(70586007)(70206006)(54906003)(316002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2023 10:34:09.3839
+X-Microsoft-Antispam-Message-Info: ubIxyKRk9GjHCs4PJBitRBhxBBlCO8KeY+mNa/90YXrCv81VAVBjE0H6/2J7gk6PMqzZvfyOTxSQGHs3bvvdolWIMHkt64BrFmqEkYi5/scmjzIi+STFORO4qoypu1l0kWUpzFGq/uedN8SVNu/HzrUM+4ixJpavp95zDnfBZyTCoLJDOjdRhSs171IIa9+fzhmGQ+oaUx2RAeW3IE2A7LBKmtqsNbaDTjUkz6COouYax06Hm0lTKT8S5CR0lw9vQuoP0zHmUh/0W5qgWPoAoRjlYAt9fmEPK68a6yqwe0/OWAaT/SS+VEOqZYP3SaHn3B9FaQQaYKDk6qVY3Egf77iROfaHB0hUutqlW2x6UyxkbuNDKUSIasK2nYb2+zUPP83dnDSctaQ+FdsNOIW1QaS+23gtoXPR9UpP4beHgkuED9u3l8FryY++AASAW+TR9GiG3+TzhHTsOUNST4z6pcHYhGJAKxn7YxpOQXwTDP7cEkU7snpK3oaKDxicrO+qoINifxoa+ZC9Tw5+gu5O2VjI5p+RHBy7fIrGSHcxn1SRgO2YTRns/+T3Q6cAImsCIImbrOjKVqJI7/Uvp3M/qRdKkKcumssUTpUJFDmkV2M3cJNxK6zcu8GqYh4387nDDsgqKVGQ5++vSKuoLw4KXyTNsgEF+/Ilc6srkwB83WcJUe0FGGpUaGsoiRn0Ypyl06KsSsQsIvrPSdeMiPnRNy10rKNBYCCZGgml9ZU1vH9pxHdMQ9dHVz7P3VGXagla+6wmjKqEzDVxcfen957aQg==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(346002)(396003)(39860400002)(136003)(376002)(186009)(82310400011)(1800799009)(451199024)(40470700004)(36840700001)(46966006)(40460700003)(16526019)(2616005)(26005)(107886003)(53546011)(36860700001)(47076005)(356005)(82740400003)(86362001)(7636003)(36756003)(31696002)(426003)(336012)(40480700001)(83380400001)(5660300002)(478600001)(4744005)(41300700001)(31686004)(16576012)(70206006)(110136005)(54906003)(4326008)(70586007)(316002)(8676002)(8936002)(6666004)(2906002)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2023 11:28:28.6283
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cb118fbb-4c44-433a-231d-08dbb8fbf545
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL6PEPF0001AB4F.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9e490d4a-c5f3-4df5-8505-08dbb9038bf5
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000042A7.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB8763
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6644
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In selftests/amd-pstate, tbench and gitsource microbenchmarks are used to
-compare the performance with different governors. In Current
-implementation relative path to run `amd_pstate_tracer.py`
-broken. Fixed this by using absolute paths.
-Also selftests/amd-pstate uses distro `perf` to capture stats while running
-these microbenchmarks. Distro `perf` is not working with upstream
-kernel. Fixed this by providing an option to give the perf binary path.
+Gentle Ping.
 
-Signed-off-by: Swapnil Sapkal <swapnil.sapkal@amd.com>
----
- .../x86/amd_pstate_tracer/amd_pstate_trace.py |  2 +-
- .../testing/selftests/amd-pstate/gitsource.sh | 14 +++++++-----
- tools/testing/selftests/amd-pstate/run.sh     | 22 +++++++++++++------
- tools/testing/selftests/amd-pstate/tbench.sh  |  4 ++--
- 4 files changed, 27 insertions(+), 15 deletions(-)
+Thank you,
+Sumit Gupta
 
-diff --git a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
-index 904df0ea0a1e..2448bb07973f 100755
---- a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
-+++ b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
-@@ -30,7 +30,7 @@ import getopt
- import Gnuplot
- from numpy import *
- from decimal import *
--sys.path.append('../intel_pstate_tracer')
-+sys.path.append(os.path.join(os.path.dirname(__file__), '../intel_pstate_tracer'))
- #import intel_pstate_tracer
- import intel_pstate_tracer as ipt
- 
-diff --git a/tools/testing/selftests/amd-pstate/gitsource.sh b/tools/testing/selftests/amd-pstate/gitsource.sh
-index 5f2171f0116d..c327444d3506 100755
---- a/tools/testing/selftests/amd-pstate/gitsource.sh
-+++ b/tools/testing/selftests/amd-pstate/gitsource.sh
-@@ -66,12 +66,15 @@ post_clear_gitsource()
- 
- install_gitsource()
- {
--	if [ ! -d $git_name ]; then
-+	if [ ! -d $SCRIPTDIR/$git_name ]; then
-+		BACKUP_DIR=$(pwd)
-+		cd $SCRIPTDIR
- 		printf "Download gitsource, please wait a moment ...\n\n"
- 		wget -O $git_tar $gitsource_url > /dev/null 2>&1
- 
- 		printf "Tar gitsource ...\n\n"
- 		tar -xzf $git_tar
-+		cd $BACKUP_DIR
- 	fi
- }
- 
-@@ -79,12 +82,13 @@ install_gitsource()
- run_gitsource()
- {
- 	echo "Launching amd pstate tracer for $1 #$2 tracer_interval: $TRACER_INTERVAL"
--	./amd_pstate_trace.py -n tracer-gitsource-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1 &
-+	$SCRIPTDIR/../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py -n tracer-gitsource-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1 &
- 
- 	printf "Make and test gitsource for $1 #$2 make_cpus: $MAKE_CPUS\n"
--	cd $git_name
--	perf stat -a --per-socket -I 1000 -e power/energy-pkg/ /usr/bin/time -o ../$OUTFILE_GIT.time-gitsource-$1-$2.log make test -j$MAKE_CPUS > ../$OUTFILE_GIT-perf-$1-$2.log 2>&1
--	cd ..
-+	BACKUP_DIR=$(pwd)
-+	cd $SCRIPTDIR/$git_name
-+	$PERF stat -a --per-socket -I 1000 -e power/energy-pkg/ /usr/bin/time -o $BACKUP_DIR/$OUTFILE_GIT.time-gitsource-$1-$2.log make test -j$MAKE_CPUS > $BACKUP_DIR/$OUTFILE_GIT-perf-$1-$2.log 2>&1
-+	cd $BACKUP_DIR
- 
- 	for job in `jobs -p`
- 	do
-diff --git a/tools/testing/selftests/amd-pstate/run.sh b/tools/testing/selftests/amd-pstate/run.sh
-index de4d8e9c9565..0803e70b04da 100755
---- a/tools/testing/selftests/amd-pstate/run.sh
-+++ b/tools/testing/selftests/amd-pstate/run.sh
-@@ -8,9 +8,11 @@ else
- 	FILE_MAIN=DONE
- fi
- 
--source basic.sh
--source tbench.sh
--source gitsource.sh
-+SCRIPTDIR=`dirname "$0"`
-+
-+source $SCRIPTDIR/basic.sh
-+source $SCRIPTDIR/tbench.sh
-+source $SCRIPTDIR/gitsource.sh
- 
- # amd-pstate-ut only run on x86/x86_64 AMD systems.
- ARCH=$(uname -m 2>/dev/null | sed -e 's/i.86/x86/' -e 's/x86_64/x86/')
-@@ -22,6 +24,7 @@ OUTFILE=selftest
- OUTFILE_TBENCH="$OUTFILE.tbench"
- OUTFILE_GIT="$OUTFILE.gitsource"
- 
-+PERF=/usr/bin/perf
- SYSFS=
- CPUROOT=
- CPUFREQROOT=
-@@ -149,8 +152,9 @@ help()
- 	     gitsource: Gitsource testing.>]
- 	[-t <tbench time limit>]
- 	[-p <tbench process number>]
--	[-l <loop times for tbench>]
-+	[-l <loop times for tbench/gitsource>]
- 	[-i <amd tracer interval>]
-+	[-b <perf binary>]
- 	[-m <comparative test: acpi-cpufreq>]
- 	\n"
- 	exit 2
-@@ -158,7 +162,7 @@ help()
- 
- parse_arguments()
- {
--	while getopts ho:c:t:p:l:i:m: arg
-+	while getopts ho:c:t:p:l:i:b:m: arg
- 	do
- 		case $arg in
- 			h) # --help
-@@ -189,6 +193,10 @@ parse_arguments()
- 				TRACER_INTERVAL=$OPTARG
- 				;;
- 
-+			b) # --perf-binary
-+				PERF=`realpath $OPTARG`
-+				;;
-+
- 			m) # --comparative-test
- 				COMPARATIVE_TEST=$OPTARG
- 				;;
-@@ -202,8 +210,8 @@ parse_arguments()
- 
- command_perf()
- {
--	if ! command -v perf > /dev/null; then
--		echo $msg please install perf. >&2
-+	if ! $PERF -v; then
-+		echo $msg please install perf or provide perf binary path as argument >&2
- 		exit $ksft_skip
- 	fi
- }
-diff --git a/tools/testing/selftests/amd-pstate/tbench.sh b/tools/testing/selftests/amd-pstate/tbench.sh
-index 49c9850341f6..70e5863e74ea 100755
---- a/tools/testing/selftests/amd-pstate/tbench.sh
-+++ b/tools/testing/selftests/amd-pstate/tbench.sh
-@@ -64,11 +64,11 @@ post_clear_tbench()
- run_tbench()
- {
- 	echo "Launching amd pstate tracer for $1 #$2 tracer_interval: $TRACER_INTERVAL"
--	./amd_pstate_trace.py -n tracer-tbench-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1 &
-+	$SCRIPTDIR/../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py -n tracer-tbench-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1 &
- 
- 	printf "Test tbench for $1 #$2 time_limit: $TIME_LIMIT procs_num: $PROCESS_NUM\n"
- 	tbench_srv > /dev/null 2>&1 &
--	perf stat -a --per-socket -I 1000 -e power/energy-pkg/ tbench -t $TIME_LIMIT $PROCESS_NUM > $OUTFILE_TBENCH-perf-$1-$2.log 2>&1
-+	$PERF stat -a --per-socket -I 1000 -e power/energy-pkg/ tbench -t $TIME_LIMIT $PROCESS_NUM > $OUTFILE_TBENCH-perf-$1-$2.log 2>&1
- 
- 	pid=`pidof tbench_srv`
- 	kill $pid
--- 
-2.34.1
 
+On 01/09/23 22:11, Sumit Gupta wrote:
+> This patch set adds below improvements to the Tegra194 CPUFREQ driver.
+> They are applicable to all the Tegra SoC's supported by the driver.
+> 
+> 1) Patch 1: Avoid making SMP call on every frequency request to reduce
+>     the time for frequency set and get calls.
+> 
+> 2) Patch 2: Use reference clock count based loop instead of udelay()
+>     to improve the accuracy of re-generated CPU frequency.
+> 
+> The patches are not related but have minor conflict. So, need to be
+> applied in order of patch numbers. If 'Patch 2' is to be applied first
+> then will rebase that and send separately.
+> 
+> Sumit Gupta (2):
+>    cpufreq: tegra194: save CPU data to avoid repeated SMP calls
+>    cpufreq: tegra194: use refclk delta based loop instead of udelay
+> 
+>   drivers/cpufreq/tegra194-cpufreq.c | 151 ++++++++++++++++++++---------
+>   1 file changed, 106 insertions(+), 45 deletions(-)
+> 
