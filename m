@@ -2,82 +2,334 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3587A61F4
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 14:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C08087A6268
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 14:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbjISMCz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Sep 2023 08:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
+        id S231864AbjISMQb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Sep 2023 08:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjISMCz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Sep 2023 08:02:55 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6612FA9;
-        Tue, 19 Sep 2023 05:02:49 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1F20B66003AF;
-        Tue, 19 Sep 2023 13:02:47 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1695124967;
-        bh=WqbMfAO//Ooj16UaG3MjBLlfRdTE5RHHSY9kCbs4IbU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=dletyGywwkOCWcnz/FvfvmrEVZFb5ZT8J17MakCWaK93yTFNc+HJtCiMeiQ3Z0uUM
-         VDNNvcdcmbLGiYyFTDnkQRv+KO8TauLXAks7f+/CySkg/XWVXiB/P93U1XeuHprr36
-         hw6Ct0Ua0lJuMCZ+2MXGQ933g9ZDGDr57s4J+znkms65vGPLuY8zWTEt9KlyuuLhG+
-         ohWJXgqV6ejRZzYNaJwbNHf/6ANbjgOxmNMOZVgMsqY2YhP/+DiOgrZEKU91NFSLEy
-         0lOyrnH7Pw5hVL4WVaMDimemLDm1jn1MokHdQqV5YcC8qUMdaEMxFZGYyyT6PBs41V
-         8M7Ur0osWQBag==
-Message-ID: <c79766f1-5830-556e-45d5-b45f867bda1c@collabora.com>
-Date:   Tue, 19 Sep 2023 14:02:44 +0200
+        with ESMTP id S231743AbjISMQW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Sep 2023 08:16:22 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F49F11A
+        for <linux-pm@vger.kernel.org>; Tue, 19 Sep 2023 05:16:15 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51e28cac164so14296183a12.1
+        for <linux-pm@vger.kernel.org>; Tue, 19 Sep 2023 05:16:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1695125773; x=1695730573; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OJ8Nt8LYUz2Xuy84Q3mL3OhNCwDhR0bArvJ9TQ6lw8Q=;
+        b=FxbDw2DpvhXQ2FIFNmuhpVr3/o60h52ptQyvXJUKUmZyJvtGJ2hpVzhlXsWlCRsLl/
+         QwpWbdS4V2yv8qDWaXxnS2+UdGiZbO/ZO1TlSlvaN8VRC5NOBSBN1TgxcM8ikfY5j5YG
+         iGbRrnr02Ow0Z5kth8rQHY5gFMBQNM66b0AzL83TbHm2egNzrJt7C/DFWrfrB0t4dEs0
+         2gQtzk4rkIYmoGK7ZmtL5KV/8v4vsQjBUZDLXcIticAKCbi0AJeQbXo1dwJ8F+fzhiou
+         +A9hXQaKU0+rWKS515nKOi454TEJ32/O9bEcZdb8XYonzvC1EfpPR2W6f1fDq+xOKV1Y
+         B5aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695125773; x=1695730573;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OJ8Nt8LYUz2Xuy84Q3mL3OhNCwDhR0bArvJ9TQ6lw8Q=;
+        b=eLDVBzuz9kddrlqMWpinOqdU5NPQuhHAQc6qjRHpdhdw2uNrkA91+xlgzrUCR8y0i3
+         ZWg3Vr+wGeByucgWwaRC/2iAHDpiU1gHckWM/2YE7HLs0TUyBXZEXmAYCebouojPmfJk
+         lMkARbBEAaQ6gj//Z+7h3IFp4wW54T7mHmj0Q4qloHa/EMXwg6YbuUxtVHBcnA7Vdtcr
+         y8MKc+DlD3JPdyMGfIJ6h5I5k7WcMzhFGsqNE6KDKV7lVlPdOWd+osX6zY6N3/zA/M+L
+         XCDPKvtUxgCE2VvQhsMzzNR68/h/0uW8iyf8rAFAXQSNmAymYDJ7tuga2+QruMko2uiD
+         OQFQ==
+X-Gm-Message-State: AOJu0YzTSOrFG1HzfOrEC6onscF5Kv+qeN/dQQbiuWvVeHb71LKCPxVP
+        x9LnP/jh7xvRZl/CLZLyCVdQ8g==
+X-Google-Smtp-Source: AGHT+IF3/7yaArwwOo6EOIsX0xO/v8txgTATSqlBUG+snZCpfFKHtTAYiYqpo3h1f199YzNO5T2P8w==
+X-Received: by 2002:a17:907:3e15:b0:9ad:e3fd:d46c with SMTP id hp21-20020a1709073e1500b009ade3fdd46cmr3085405ejc.10.1695125773449;
+        Tue, 19 Sep 2023 05:16:13 -0700 (PDT)
+Received: from uffe-tuxpro14.. (static-212-193-78-212.thenetworkfactory.nl. [212.78.193.212])
+        by smtp.gmail.com with ESMTPSA id p25-20020a1709060e9900b00992b50fbbe9sm7781469ejf.90.2023.09.19.05.16.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Sep 2023 05:16:13 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 13/13] pmdomain: arm: Add the SCMI performance domain
+Date:   Tue, 19 Sep 2023 14:16:05 +0200
+Message-Id: <20230919121605.7304-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH] thermal/drivers/mediatek: Fix probe for THERMAL_V2
-Content-Language: en-US
-To:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Frank Wunderlich <linux@fw-web.de>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>
-References: <20230918100706.1229239-1-msp@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230918100706.1229239-1-msp@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 18/09/23 12:07, Markus Schneider-Pargmann ha scritto:
-> Fix the probe function to call mtk_thermal_release_periodic_ts for
-> everything != MTK_THERMAL_V1. This was accidentally changed from V1
-> to V2 in the original patch.
-> 
-> Reported-by: Frank Wunderlich <frank-w@public-files.de>
-> Closes: https://lore.kernel.org/lkml/B0B3775B-B8D1-4284-814F-4F41EC22F532@public-files.de/
-> Reported-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Closes: https://lore.kernel.org/lkml/07a569b9-e691-64ea-dd65-3b49842af33d@linaro.org/
-> Fixes: 33140e668b10 ("thermal/drivers/mediatek: Control buffer enablement tweaks")
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+To enable support for performance scaling (DVFS) for generic devices with
+the SCMI performance protocol, let's add an SCMI performance domain. This
+is being modelled as a genpd provider, with support for performance scaling
+through genpd's ->set_performance_state() callback.
 
-I have no idea how it happened that I didn't notice that mistake.
+Note that, this adds the initial support that allows consumer drivers for
+attached devices, to vote for a new performance state via calling the
+dev_pm_genpd_set_performance_state(). However, this should be avoided as
+it's in most cases preferred to use the OPP library to vote for a new OPP
+instead. The support using the OPP library isn't part of this change, but
+needs to be implemented from subsequent changes.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
 
+Sudeep, Cristian,
+
+I decided to just send this a single patch, rather than a new version of the
+complete series. If you prefer a new version of the series, please let me know.
+
+Kind regards
+Uffe
+
+Changes in v4:
+	- Rebased on v6.6-rc2 to be able to put the files in the new pmdomain
+	subsystem (was genpd in v6.6-rc1).
+
+Changes in v3:
+	- Move files to drivers/genpd/arm/ and update MAINTAINERS.
+	- Updated the commit msg header.
+	- Prevent setting performance level 0.
+	- Initialize the genpd as always-on.
+	- Note, the corresponding Kconfigs should be placed in the genpd dir
+	too, but that's better suited on top or through a later-version.
+
+---
+ MAINTAINERS                             |   1 +
+ drivers/firmware/arm_scmi/Kconfig       |  12 ++
+ drivers/pmdomain/Makefile               |   1 +
+ drivers/pmdomain/arm/Makefile           |   3 +
+ drivers/pmdomain/arm/scmi_perf_domain.c | 150 ++++++++++++++++++++++++
+ 5 files changed, 167 insertions(+)
+ create mode 100644 drivers/pmdomain/arm/Makefile
+ create mode 100644 drivers/pmdomain/arm/scmi_perf_domain.c
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index bf0f54c24f81..aa8c58b16416 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -20902,6 +20902,7 @@ F:	drivers/clk/clk-sc[mp]i.c
+ F:	drivers/cpufreq/sc[mp]i-cpufreq.c
+ F:	drivers/firmware/arm_scmi/
+ F:	drivers/firmware/arm_scpi.c
++F:	drivers/pmdomain/arm/
+ F:	drivers/powercap/arm_scmi_powercap.c
+ F:	drivers/regulator/scmi-regulator.c
+ F:	drivers/reset/reset-scmi.c
+diff --git a/drivers/firmware/arm_scmi/Kconfig b/drivers/firmware/arm_scmi/Kconfig
+index ea0f5083ac47..706d1264d038 100644
+--- a/drivers/firmware/arm_scmi/Kconfig
++++ b/drivers/firmware/arm_scmi/Kconfig
+@@ -181,6 +181,18 @@ config ARM_SCMI_POWER_DOMAIN
+ 	  will be called scmi_pm_domain. Note this may needed early in boot
+ 	  before rootfs may be available.
+ 
++config ARM_SCMI_PERF_DOMAIN
++	tristate "SCMI performance domain driver"
++	depends on ARM_SCMI_PROTOCOL || (COMPILE_TEST && OF)
++	default y
++	select PM_GENERIC_DOMAINS if PM
++	help
++	  This enables support for the SCMI performance domains which can be
++	  enabled or disabled via the SCP firmware.
++
++	  This driver can also be built as a module. If so, the module will be
++	  called scmi_perf_domain.
++
+ config ARM_SCMI_POWER_CONTROL
+ 	tristate "SCMI system power control driver"
+ 	depends on ARM_SCMI_PROTOCOL || (COMPILE_TEST && OF)
+diff --git a/drivers/pmdomain/Makefile b/drivers/pmdomain/Makefile
+index 666753676e5c..f0326b27b30b 100644
+--- a/drivers/pmdomain/Makefile
++++ b/drivers/pmdomain/Makefile
+@@ -2,6 +2,7 @@
+ obj-y					+= actions/
+ obj-y					+= amlogic/
+ obj-y					+= apple/
++obj-y					+= arm/
+ obj-y					+= bcm/
+ obj-y					+= imx/
+ obj-y					+= mediatek/
+diff --git a/drivers/pmdomain/arm/Makefile b/drivers/pmdomain/arm/Makefile
+new file mode 100644
+index 000000000000..7128db96deac
+--- /dev/null
++++ b/drivers/pmdomain/arm/Makefile
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++obj-$(CONFIG_ARM_SCMI_PERF_DOMAIN) += scmi_perf_domain.o
+diff --git a/drivers/pmdomain/arm/scmi_perf_domain.c b/drivers/pmdomain/arm/scmi_perf_domain.c
+new file mode 100644
+index 000000000000..aa100270500f
+--- /dev/null
++++ b/drivers/pmdomain/arm/scmi_perf_domain.c
+@@ -0,0 +1,150 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * SCMI performance domain support.
++ *
++ * Copyright (C) 2023 Linaro Ltd.
++ */
++
++#include <linux/err.h>
++#include <linux/device.h>
++#include <linux/module.h>
++#include <linux/pm_domain.h>
++#include <linux/scmi_protocol.h>
++#include <linux/slab.h>
++
++struct scmi_perf_domain {
++	struct generic_pm_domain genpd;
++	const struct scmi_perf_proto_ops *perf_ops;
++	const struct scmi_protocol_handle *ph;
++	const struct scmi_perf_domain_info *info;
++	u32 domain_id;
++};
++
++#define to_scmi_pd(pd) container_of(pd, struct scmi_perf_domain, genpd)
++
++static int
++scmi_pd_set_perf_state(struct generic_pm_domain *genpd, unsigned int state)
++{
++	struct scmi_perf_domain *pd = to_scmi_pd(genpd);
++	int ret;
++
++	if (!pd->info->set_perf)
++		return 0;
++
++	if (!state)
++		return -EINVAL;
++
++	ret = pd->perf_ops->level_set(pd->ph, pd->domain_id, state, true);
++	if (ret)
++		dev_warn(&genpd->dev, "Failed with %d when trying to set %d perf level",
++			 ret, state);
++
++	return ret;
++}
++
++static int scmi_perf_domain_probe(struct scmi_device *sdev)
++{
++	struct device *dev = &sdev->dev;
++	const struct scmi_handle *handle = sdev->handle;
++	const struct scmi_perf_proto_ops *perf_ops;
++	struct scmi_protocol_handle *ph;
++	struct scmi_perf_domain *scmi_pd;
++	struct genpd_onecell_data *scmi_pd_data;
++	struct generic_pm_domain **domains;
++	int num_domains, i, ret = 0;
++
++	if (!handle)
++		return -ENODEV;
++
++	/* The OF node must specify us as a power-domain provider. */
++	if (!of_find_property(dev->of_node, "#power-domain-cells", NULL))
++		return 0;
++
++	perf_ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_PERF, &ph);
++	if (IS_ERR(perf_ops))
++		return PTR_ERR(perf_ops);
++
++	num_domains = perf_ops->num_domains_get(ph);
++	if (num_domains < 0) {
++		dev_warn(dev, "Failed with %d when getting num perf domains\n",
++			 num_domains);
++		return num_domains;
++	} else if (!num_domains) {
++		return 0;
++	}
++
++	scmi_pd = devm_kcalloc(dev, num_domains, sizeof(*scmi_pd), GFP_KERNEL);
++	if (!scmi_pd)
++		return -ENOMEM;
++
++	scmi_pd_data = devm_kzalloc(dev, sizeof(*scmi_pd_data), GFP_KERNEL);
++	if (!scmi_pd_data)
++		return -ENOMEM;
++
++	domains = devm_kcalloc(dev, num_domains, sizeof(*domains), GFP_KERNEL);
++	if (!domains)
++		return -ENOMEM;
++
++	for (i = 0; i < num_domains; i++, scmi_pd++) {
++		scmi_pd->info = perf_ops->info_get(ph, i);
++
++		scmi_pd->domain_id = i;
++		scmi_pd->perf_ops = perf_ops;
++		scmi_pd->ph = ph;
++		scmi_pd->genpd.name = scmi_pd->info->name;
++		scmi_pd->genpd.flags = GENPD_FLAG_ALWAYS_ON |
++				       GENPD_FLAG_OPP_TABLE_FW;
++		scmi_pd->genpd.set_performance_state = scmi_pd_set_perf_state;
++
++		ret = pm_genpd_init(&scmi_pd->genpd, NULL, false);
++		if (ret)
++			goto err;
++
++		domains[i] = &scmi_pd->genpd;
++	}
++
++	scmi_pd_data->domains = domains;
++	scmi_pd_data->num_domains = num_domains;
++
++	ret = of_genpd_add_provider_onecell(dev->of_node, scmi_pd_data);
++	if (ret)
++		goto err;
++
++	dev_set_drvdata(dev, scmi_pd_data);
++	dev_info(dev, "Initialized %d performance domains", num_domains);
++	return 0;
++err:
++	for (i--; i >= 0; i--)
++		pm_genpd_remove(domains[i]);
++	return ret;
++}
++
++static void scmi_perf_domain_remove(struct scmi_device *sdev)
++{
++	struct device *dev = &sdev->dev;
++	struct genpd_onecell_data *scmi_pd_data = dev_get_drvdata(dev);
++	int i;
++
++	of_genpd_del_provider(dev->of_node);
++
++	for (i = 0; i < scmi_pd_data->num_domains; i++)
++		pm_genpd_remove(scmi_pd_data->domains[i]);
++}
++
++static const struct scmi_device_id scmi_id_table[] = {
++	{ SCMI_PROTOCOL_PERF, "perf" },
++	{ },
++};
++MODULE_DEVICE_TABLE(scmi, scmi_id_table);
++
++static struct scmi_driver scmi_perf_domain_driver = {
++	.name		= "scmi-perf-domain",
++	.probe		= scmi_perf_domain_probe,
++	.remove		= scmi_perf_domain_remove,
++	.id_table	= scmi_id_table,
++};
++module_scmi_driver(scmi_perf_domain_driver);
++
++MODULE_AUTHOR("Ulf Hansson <ulf.hansson@linaro.org>");
++MODULE_DESCRIPTION("ARM SCMI perf domain driver");
++MODULE_LICENSE("GPL v2");
+-- 
+2.34.1
 
