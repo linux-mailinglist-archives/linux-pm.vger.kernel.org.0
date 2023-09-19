@@ -2,85 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E00D7A6351
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 14:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C947A6364
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 14:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232112AbjISMmk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Sep 2023 08:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54186 "EHLO
+        id S232056AbjISMqP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Sep 2023 08:46:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbjISMmh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Sep 2023 08:42:37 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4A799;
-        Tue, 19 Sep 2023 05:42:31 -0700 (PDT)
-Received: from mercury (dyndsl-091-248-212-118.ewe-ip-backbone.de [91.248.212.118])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1585F66030BF;
-        Tue, 19 Sep 2023 13:42:30 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1695127350;
-        bh=w2VcAcMkxLks9jiD73Z3mgV3/9YOXxzVvLTa256WXS0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=k5FzJThkM+6CtrIb0jRFjbILwmasCZsobdDhD/p4pP7MsSUtEOIDpxGELPapUvq12
-         iVtaJ3BYgdUCiRacVbAQLK/u+yRjHvnMp3Uv95/Y3PTWf58pOgFFw6myN8mKuLqXxm
-         ioIQo9m7T1X3GU1Iw3VqtMv5rugI53fXAosVZAgrvGU3TrIzbpD3ITbULZlRNSjVyL
-         skFUsgd2mJB0UDb4kJz//l5FSAeYep3sCDOdukAz4fEuYTMQDJ4g43Q9lXbj56KaIu
-         lXEjFPw1wDX5aZS3OPU187de0L4Z+/tP4Xbey5zfpxrUoE3Pw7GZsXsVgWr9eFCSYy
-         bDIO8Tii/V9nQ==
-Received: by mercury (Postfix, from userid 1000)
-        id 7AF8E10604FC; Tue, 19 Sep 2023 14:42:27 +0200 (CEST)
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Sebastian Reichel <sre@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] power: supply: qcom_battmgr: fix battery_id type
-Date:   Tue, 19 Sep 2023 14:42:22 +0200
-Message-Id: <20230919124222.1155894-1-sebastian.reichel@collabora.com>
-X-Mailer: git-send-email 2.40.1
+        with ESMTP id S231174AbjISMqP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Sep 2023 08:46:15 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610A3F3
+        for <linux-pm@vger.kernel.org>; Tue, 19 Sep 2023 05:46:06 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-503056c8195so5038584e87.1
+        for <linux-pm@vger.kernel.org>; Tue, 19 Sep 2023 05:46:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1695127564; x=1695732364; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9z07Us7rZb6gq2/8xqzCrZiW902N6IA0/Qa57rZImpc=;
+        b=afOu+bj3bvS5xpftK+GPwcqggMusHDEaHeGy93P8OqtScfCzupWEzT5pfz3KZSSTLt
+         yKadZHNZlm4I6mXafKBFTqMynlDBFjrT24YJgVej0OUbndcG1EX9+V+1ZTC2BQqg4YMG
+         ZyXpK5wRnzEol/MNuTLyvPNHppHJMTuz99AnicM/pZFL0ZkqbOzK6CA1UKV1fSXPOG7e
+         7N0lB3g/2M6WgKPZevqu/3YspW7SXPf9EgC7T44uc4LRZ+gjkP2UCdTThcZsrSnVYSwa
+         MZqz2lYYruq036l1JvloBeSinaGuEA/DzHTpQ9bi0LRe290uax0PBNenXgQD0aUz0n0C
+         9OeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695127564; x=1695732364;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9z07Us7rZb6gq2/8xqzCrZiW902N6IA0/Qa57rZImpc=;
+        b=kawDJNTeimcrU2ccEul2lKqzmW7HKY+i/lH+RpQrsUGBIzCwybRPZFaTRSwO6KR1jv
+         cgu4oSbQucKLA9oXzzE2J1gBFGm75lNxKo3bUycgw/DqD4YnzJBTPt1HgrOVGbVhoasw
+         eXrnbbnGPasR9XH6erl4CkdL8cn5saDdsMPufiJdkcNWDZW9LgNval1/Jdl7m7eIMQLd
+         +cfZVfXpAKRoGHBlBJzbm9ExPTvBIBjiREUFH5nfyv0Y1Q/a1lrHNIDJyuVR1Q8pnoWa
+         nF6leeIeGIYbWT07wJjx1DKVZKSX1GRELG8nKMFIMcAAqtZfh1scaJxyonFO+bzi6ldy
+         0Trg==
+X-Gm-Message-State: AOJu0YwGCtpSxVbJJ1TKXOz05mVEKL0XsJmOrM2UP/XHpXUOQhwRinT+
+        rZi+uIJ079jU6PGTiOgzcZdr3w==
+X-Google-Smtp-Source: AGHT+IHNhIbT5BUwfUlNuBFu/j2zIN14WtAoppACWN5FjNtYRlzDPYwsw3kpRqLU5mmUrubIPzBMPQ==
+X-Received: by 2002:a05:6512:b10:b0:503:2555:d1e7 with SMTP id w16-20020a0565120b1000b005032555d1e7mr4227843lfu.45.1695127564047;
+        Tue, 19 Sep 2023 05:46:04 -0700 (PDT)
+Received: from otso.luca.vpn.lucaweiss.eu (static-212-193-78-212.thenetworkfactory.nl. [212.78.193.212])
+        by smtp.gmail.com with ESMTPSA id dn22-20020a05640222f600b00532c1dfe8ecsm635878edb.66.2023.09.19.05.46.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Sep 2023 05:46:03 -0700 (PDT)
+From:   Luca Weiss <luca.weiss@fairphone.com>
+Subject: [PATCH v2 0/7] Initial support for the Fairphone 5 smartphone
+Date:   Tue, 19 Sep 2023 14:45:54 +0200
+Message-Id: <20230919-fp5-initial-v2-0-14bb7cedadf5@fairphone.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAKYCWUC/1XMwQoCIRSF4VcZ7jpDnQynVe8Rs1BH80Kp6CDF4
+ LtnQ5uW/4HzbVBsRlvgMmyQbcWCMfTghwGMV+FuCS69gVM+UskkcUkQDLiiehB9NpIzqtVkJPR
+ Hytbha9duc2+PZY35veOVfdefM9I/pzJCiVCTOAk2aa2Wq1OYk4/BHk18wtxa+wCZ7WMEqgAAA
+ A==
+To:     cros-qcom-dts-watchers@chromium.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-pm@vger.kernel.org, Luca Weiss <luca.weiss@fairphone.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.3
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-qcom_battmgr_update_request.battery_id is written to using cpu_to_le32()
-and should be of type __le32, just like all other 32bit integer requests
-for qcom_battmgr.
+Add support to boot up mainline kernel on the QCM6490-based Fairphone 5
+smartphone.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202309162149.4owm9iXc-lkp@intel.com/
-Fixes: 29e8142b5623 ("power: supply: Introduce Qualcomm PMIC GLINK power supply")
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+These patches only cover a part of the functionality brought up on
+mainline so far, with the rest needing larger dts and driver changes or
+depend on patches that are not yet merged. I will work on sending those
+once these base patches here have settled.
+
+Since QCM6490, like SC7280 are 'yupik' in the vendor-provided kernel, we
+can base the dts on it and leverage existing support. Though current
+sc7280 support mostly assumes ChromeOS devices which have a different
+TrustZone setup, so we need to move some ChromeOS-specific bits to the
+sc7280-chrome-common.dtsi file to make it boot on a standard TZ board.
+
+Depends on (just for the #include in sc7280.dtsi):
+https://lore.kernel.org/linux-arm-msm/20230818-qcom-vmid-defines-v1-1-45b610c96b13@fairphone.com/
+
+The pm7250b patch has been picked up from this series:
+https://lore.kernel.org/linux-arm-msm/20230407-pm7250b-sid-v1-2-fc648478cc25@fairphone.com/
+
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 ---
- drivers/power/supply/qcom_battmgr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v2:
+- Add comments why nodes in sc7280.dtsi get disabled (Konrad)
+- Mark more nodes in sc7280.dtsi as reserved
+- Don't allow writing qfprom when (optional) clock isn't found
+- Device dts changes:
+  - Stylistic changes in device dts
+  - Remove qcom,msm-id & qcom,board-id properties
+  - Add regulator-initial-mode
+- Pick up tags
+- Drop patch 03 "arm64: dts: qcom: sc7280: Move qfprom clock to
+  chrome-common", it's actually not needed with qfprom-clock-optional
+  patch
+- Drop patch 07 "dt-bindings: arm: qcom,ids: Add SoC ID for QCM6490",
+  patch 08 "soc: qcom: socinfo: Add SoC ID for QCM6490" and patch 09
+  "cpufreq: Add QCM6490 to cpufreq-dt-platdev blocklist", all applied.
+- Link to v1: https://lore.kernel.org/r/20230830-fp5-initial-v1-0-5a954519bbad@fairphone.com
 
-diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
-index de77df97b3a4..a05fd00711f6 100644
---- a/drivers/power/supply/qcom_battmgr.c
-+++ b/drivers/power/supply/qcom_battmgr.c
-@@ -105,7 +105,7 @@ struct qcom_battmgr_property_request {
- 
- struct qcom_battmgr_update_request {
- 	struct pmic_glink_hdr hdr;
--	u32 battery_id;
-+	__le32 battery_id;
- };
- 
- struct qcom_battmgr_charge_time_request {
+---
+Luca Weiss (7):
+      arm64: dts: qcom: sc7280: Mark some nodes as 'reserved'
+      nvmem: qfprom: Mark core clk as optional
+      arm64: dts: qcom: pm7250b: make SID configurable
+      arm64: dts: qcom: pm8350c: Add flash led node
+      dt-bindings: pinctrl: qcom,sc7280: Allow gpio-reserved-ranges
+      dt-bindings: arm: qcom: Add QCM6490 Fairphone 5
+      arm64: dts: qcom: qcm6490: Add device-tree for Fairphone 5
+
+ Documentation/devicetree/bindings/arm/qcom.yaml    |   6 +
+ .../bindings/pinctrl/qcom,sc7280-pinctrl.yaml      |   4 +
+ arch/arm64/boot/dts/qcom/Makefile                  |   1 +
+ arch/arm64/boot/dts/qcom/pm7250b.dtsi              |  14 +-
+ arch/arm64/boot/dts/qcom/pm8350c.dtsi              |   6 +
+ arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts | 667 +++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi |  24 +
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |   8 +-
+ arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts  |   4 +
+ drivers/nvmem/qfprom.c                             |   6 +-
+ 10 files changed, 729 insertions(+), 11 deletions(-)
+---
+base-commit: b3b1378016952541463ef2369da780d4f9bf02b3
+change-id: 20230818-fp5-initial-b6c8210ba9c8
+
+Best regards,
 -- 
-2.40.1
+Luca Weiss <luca.weiss@fairphone.com>
 
