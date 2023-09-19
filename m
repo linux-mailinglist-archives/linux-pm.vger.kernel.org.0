@@ -2,109 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 601967A695B
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 19:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2CC7A6A5B
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 20:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbjISRFD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Sep 2023 13:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44132 "EHLO
+        id S232690AbjISSAT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 19 Sep 2023 14:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbjISRFC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Sep 2023 13:05:02 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FC5D7;
-        Tue, 19 Sep 2023 10:04:56 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1c44c0f9138so28082775ad.2;
-        Tue, 19 Sep 2023 10:04:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695143096; x=1695747896; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ymB1vpWDIEsj0dISNOGxOvNmoKKYpCcM0k00MCmJgzM=;
-        b=dCxnxDrH6n2tkJE0u8n5Zd27nN9k31pLyFhzgZng2n/R93MN6bCCMbgoG0P2TDwcij
-         Zpp2Ne4b4ESx5W6vRTJFnznQyH9j5xmrA3BGeaullmP52Aek1NTltotppZ5X/UhyE0UU
-         sI+T6TsEoBKL9drmJPIek6I76jp/wh2KJcuPNESWR92e5Z/qUaQkvPTyLji3fuHreM2u
-         fUSeDm8tqKcJ0P3w6S8bLXfQBSYGd0oTOloWO06yXm+Mey8vL39lGnp7N4pK7tqcBAEp
-         mQ3dtYN8jtgLZ3xfoKRq08WVAAABWFKiDB/cB0eqKhwtz8B8lNMABj/dMqNAWOdfdJ/z
-         g7kA==
+        with ESMTP id S231991AbjISSAS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Sep 2023 14:00:18 -0400
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2A999;
+        Tue, 19 Sep 2023 11:00:11 -0700 (PDT)
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-57acd4917f6so228676eaf.1;
+        Tue, 19 Sep 2023 11:00:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695143096; x=1695747896;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ymB1vpWDIEsj0dISNOGxOvNmoKKYpCcM0k00MCmJgzM=;
-        b=k+Uiykiuz8MU0cOuOdiiCgK/hmVWRDQDO+c3NLR2x2a7KA3zki4nv6dAOV0JmaiZMj
-         O1/nOvm7jIY7S6SdrVKcrAaN+egQ7AGLBBKKkHRLMdR9YqdpS7+YY+VkZ102AJWHboF3
-         eM4KYxDTqLyZMpLMztfG9YAknnqULYFk+FC52p2IpwK5ZS2rzrGjRd4f79iK3GoMAjc8
-         Y4d22JfkGal59sR88RGRPnFEElLu6x+caPsbI7l1M73iCedx1d3GKGvya6vRAkh7T1fk
-         qeSU/NGeI626AyXI6PmgcM1kq+kAufWz7B0GecDFU0EX0ucjCeiEFaO+FudjyGM0MSMs
-         S/Fw==
-X-Gm-Message-State: AOJu0YybMPD/8hnft4inBFP8h9qvbpR0RRXjwrYSkMg3xHCO9KrCD7gl
-        HzuopIUqjLN+Rxo4J0Hlna8=
-X-Google-Smtp-Source: AGHT+IHvVdsCWwBld0YImAyIG1jut3CJ0vsAnZ/1jRvl0OSzvomhpR4Gs4MANc0ZASe8EDWaNgDPJQ==
-X-Received: by 2002:a17:902:6ac7:b0:1c0:aca0:8c44 with SMTP id i7-20020a1709026ac700b001c0aca08c44mr27484plt.19.1695143095954;
-        Tue, 19 Sep 2023 10:04:55 -0700 (PDT)
-Received: from [192.168.31.134] ([117.243.68.251])
-        by smtp.gmail.com with ESMTPSA id h7-20020a170902ac8700b001bc59cd718asm5324045plr.278.2023.09.19.10.04.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Sep 2023 10:04:55 -0700 (PDT)
-Message-ID: <83bcc70f-2265-0d89-5865-1dc7bdd69be5@gmail.com>
-Date:   Tue, 19 Sep 2023 22:34:47 +0530
+        d=1e100.net; s=20230601; t=1695146411; x=1695751211;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FGnhbq+R2EZAb/x6yu0RGRdXqfvoA34iDXx6GRhUp24=;
+        b=YdmJAnR6aAuzzF7ni0X2/2vxilkJrGscxdwyyCEVwo3iXrGsSH3YmP+5AWERSanicb
+         IN50UvEQYetcZMN/ew24PHGDN5roEHgg7GJL2d4cstV5I61OCNCB82CGJCCzSf7WD8lR
+         AJKmU0uTCkVm25ne5+DXZ0E0+bqhauHnjqqrxMLNJLq7K1sGDCdPAsUxL6Dflh5XsCvl
+         BP8aRXUMuB0DsMjNBgMYhdlwgUDlWeqWexYd0PIZh7aF3kvx3RMA9zSX7kK89utmIxQk
+         io1clZ6NQk3PJmJy2wXMjX73IvrDWK4UuedH1RLzncURa5xE306GcDSRN5gpDr54Tj17
+         VT9g==
+X-Gm-Message-State: AOJu0YxskWkvBL98bxY8Bo4nIvN3+IX+1HeTvVUX8MrQiLo9vfd23Lo/
+        j9w6VaBFLrVjN9DhTmBzTiQRny94oNbkLQFqp0Y=
+X-Google-Smtp-Source: AGHT+IFMu+Ev1F4fMXIPDMXQslgr0uGqZG7w8cxROaroYaD5SopHBj6Rj8C8Kxj3VjEthq3euI44tC5lnqRRzM4n0ew=
+X-Received: by 2002:a4a:d103:0:b0:573:4a72:6ec with SMTP id
+ k3-20020a4ad103000000b005734a7206ecmr284831oor.1.1695146410955; Tue, 19 Sep
+ 2023 11:00:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH] thermal: imx8mm_thermal: Fix function pointer declaration
- by adding identifier name
-Content-Language: en-US
-To:     rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        amitk@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com
-Cc:     linux-imx@nxp.com, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230917083443.3220-1-bragathemanick0908@gmail.com>
-From:   Bragatheswaran Manickavel <bragathemanick0908@gmail.com>
-In-Reply-To: <20230917083443.3220-1-bragathemanick0908@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230914041806.816741-1-kai.heng.feng@canonical.com>
+ <7b45ac2ed091497b4e21a6a5c19956161175ba16.camel@linux.intel.com>
+ <SN6PR11MB26245C44E84C37C1B551260EF4F6A@SN6PR11MB2624.namprd11.prod.outlook.com>
+ <CAAd53p5ywMVKWzhn0nYzvBnW_Bc=sntgBttJdcVUuf_a4AnX5w@mail.gmail.com>
+ <SN6PR11MB262473E2BF4057F4D285A613F4F6A@SN6PR11MB2624.namprd11.prod.outlook.com>
+ <DM6PR11MB26184A8A3F955589F5FC6836F4FBA@DM6PR11MB2618.namprd11.prod.outlook.com>
+ <CAAd53p4o1pB-yzpvUCYsvuYEvQQK0my=u-ogrByRCx_Lvns=hw@mail.gmail.com>
+ <bbbf36724d63f7532696a960a9d56d7ccd5a5bee.camel@linux.intel.com>
+ <CAAd53p6MA9YLbcXxpC8=YEtbO6frFJk1LQ1BNUgPk=r1_uR8iw@mail.gmail.com> <67c85f083201ed2cda2cab198b40141ad21912a2.camel@linux.intel.com>
+In-Reply-To: <67c85f083201ed2cda2cab198b40141ad21912a2.camel@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 19 Sep 2023 19:59:59 +0200
+Message-ID: <CAJZ5v0iFLxpWHW=sDZ7=Wne3Yt=8_EwhW9SeCmRP6REpVqo8rA@mail.gmail.com>
+Subject: Re: [PATCH] HID: intel-ish-hid: ipc: Rework EHL OOB wakeup
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     "Xu, Even" <even.xu@intel.com>,
+        "jikos@kernel.org" <jikos@kernel.org>,
+        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "Lee, Jian Hui" <jianhui.lee@canonical.com>,
+        "Zhang, Lixu" <lixu.zhang@intel.com>,
+        "Ba, Najumon" <najumon.ba@intel.com>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, Sep 19, 2023 at 6:54 PM srinivas pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> On Tue, 2023-09-19 at 15:36 +0800, Kai-Heng Feng wrote:
+> > On Mon, Sep 18, 2023 at 11:57 PM srinivas pandruvada
+> > <srinivas.pandruvada@linux.intel.com> wrote:
+> > >
+> > > Hi Kai-Heng,
+> > > On Mon, 2023-09-18 at 09:17 +0800, Kai-Heng Feng wrote:
+> > > > Hi Even,
+> > > >
+> > > > On Mon, Sep 18, 2023 at 8:33 AM Xu, Even <even.xu@intel.com>
+> > > > wrote:
+> > > > >
+> > > > > Hi, Kai-Heng,
+> > > > >
+> > > > > I just got feedback, for testing EHL S5 wakeup feature, you
+> > > > > need
+> > > > > several steps to setup and access
+> > > > > "https://portal.devicewise.com/things/browse" to trigger wake.
+> > > > > But currently, our test account of this website are all out of
+> > > > > data.
+> > > > > So maybe you need double check with the team who required you
+> > > > > preparing the patch for the verification.
+> > > >
+> > > > The patch is to solve the GPE refcount overflow, while
+> > > > maintaining S5
+> > > > wakeup. I don't have any mean to test S5 wake.
+> > > >
+> > > The issue is not calling acpi_disable_gpe(). To reduce the scope of
+> > > change can we just add that instead of a adding new callbacks. This
+> > > way
+> > > scope is reduced.
+> >
+> > This patch does exactly the same thing by letting PCI and ACPI handle
+> > the PME and GPE.
+> > Though the change seems to be bigger, it actually reduces the duped
+> > code, while keep the S5 wakeup ability intact.
+> It may be doing the same. But with long chain of calls without
+> verification, I am not comfortable.
+> This can be another patch by itself to use the framework.
 
-On 17/09/23 14:04, Bragatheswaran Manickavel wrote:
+I agree.
 
- >Added identifier names to respective definitions for fix
- >warnings reported by checkpatch.pl
- >
- >WARNING: function definition argument 'void *' should also have an 
-identifier name
- >WARNING: function definition argument 'int *' should also have an 
-identifier name
- >Signed-off-by: Bragatheswaran Manickavel <bragathemanick0908@gmail.com>
- >---
- > drivers/thermal/imx8mm_thermal.c | 2 +-
- > 1 file changed, 1 insertion(+), 1 deletion(-)
- >
- >diff --git a/drivers/thermal/imx8mm_thermal.c 
-b/drivers/thermal/imx8mm_thermal.c
- >index 14111ccf6e4c..5dc6c18f12df 100644
- >--- a/drivers/thermal/imx8mm_thermal.c
- >+++ b/drivers/thermal/imx8mm_thermal.c
- >@@ -78,7 +78,7 @@
- > struct thermal_soc_data {
- >     u32 num_sensors;
- >     u32 version;
- >-    int (*get_temp)(void *, int *);
- >+    int (*get_temp)(void *data, int *temp);
- > };
- >
- > struct tmu_sensor {
+Let's change one thing at a time.
 
-Gentle remainder
+> But you are targeting a fix for overflow issue, which is separate from
+> the use of PCI/ACPI framework.
+
+Yes, let's fix the bug first and make things look nicer separately.
