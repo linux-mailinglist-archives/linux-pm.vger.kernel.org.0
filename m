@@ -2,139 +2,432 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C847A68D1
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 18:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E4F7A6937
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Sep 2023 18:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbjISQ0i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Sep 2023 12:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
+        id S229690AbjISQyv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Sep 2023 12:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjISQ0h (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Sep 2023 12:26:37 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39BEA9;
-        Tue, 19 Sep 2023 09:26:31 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38JBu2AU004360;
-        Tue, 19 Sep 2023 16:26:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=gCIY04ta2zwSB0oAu5savGSfd8+mF+dsGqBagg5pEfA=;
- b=YXb6RtvWq4pWLNeeALgralSOvLNoXDIHhn1gG7h6XedHjids4/mxFTouVGh1UmbVu7q9
- FyP52dC05vtrEUoKOanu2dpcN/OuoVfaBmeIyEOvdjN0s7dtG7Vzy4ZhLBS+yzYBzxS3
- QxqejNUaiEwjXEfVg6gZuBskE//5QSm5PZUQVNGbuyKsMUePqpGH3KdS6m6iWa+n6VjA
- 5EJ7CmcfXE/Lmjt2av1vR/8vbv2BoU0VFXrYGiMUSBY8afR2hs+SHFC/7afFGTRLjjS5
- RHhDKrCY2Zs662QgV/4QoJaC/aB5I+oOMh1oEfyAJq60vJrueTSyW6yEuCwuiI+Dl6UE cg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t79180ya5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Sep 2023 16:26:22 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38JGQLG6015333
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Sep 2023 16:26:21 GMT
-Received: from [10.216.36.122] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 19 Sep
- 2023 09:26:16 -0700
-Message-ID: <9c3d1857-5053-cd8f-75d5-d2691139dfc9@quicinc.com>
-Date:   Tue, 19 Sep 2023 21:56:12 +0530
+        with ESMTP id S229552AbjISQyu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Sep 2023 12:54:50 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73315AD;
+        Tue, 19 Sep 2023 09:54:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695142484; x=1726678484;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=+6xtP9UUM0huUnkoQoVqG+rtYNumzsl1UjCqCjUrlDk=;
+  b=MYEYx/bAwOPS0pvhWRje1uy5/l6tUvbYMqNq0GPxAfoLS7n7kfibEWkL
+   o+QKiW7tZB+k0Z42xlunrKrbhd2DPnGJ3coq3LvlyxbYX0x3/i5TokElJ
+   pbUthDIHoJ4ab0Gtqx6ULckAqUFZvBXkdH/Kz68yF6+OaPz8YqVDOEINY
+   aa/9bTbiKhnDo0F55qPtFGFss9i3+qgBhnzGHZLxL6VsjvIOD2hD6D5IN
+   Uk3ubDj6d/VBYeKgPfflOBlEtuiuPSsVBeZd8xWbWCKHHw+YqCFaBdZR9
+   dVU6XJuLrPRNQAuGBZBTN03DmSStnVLgIhhCW3d6oUmM+/7ZQ4wOfcZaU
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10838"; a="382752435"
+X-IronPort-AV: E=Sophos;i="6.02,160,1688454000"; 
+   d="scan'208";a="382752435"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2023 09:54:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10838"; a="816516422"
+X-IronPort-AV: E=Sophos;i="6.02,160,1688454000"; 
+   d="scan'208";a="816516422"
+Received: from spandruv-desk1.amr.corp.intel.com ([10.209.80.116])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2023 09:54:42 -0700
+Message-ID: <67c85f083201ed2cda2cab198b40141ad21912a2.camel@linux.intel.com>
+Subject: Re: [PATCH] HID: intel-ish-hid: ipc: Rework EHL OOB wakeup
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     "Xu, Even" <even.xu@intel.com>,
+        "jikos@kernel.org" <jikos@kernel.org>,
+        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "Lee, Jian Hui" <jianhui.lee@canonical.com>,
+        "Zhang, Lixu" <lixu.zhang@intel.com>,
+        "Ba, Najumon" <najumon.ba@intel.com>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Tue, 19 Sep 2023 09:54:41 -0700
+In-Reply-To: <CAAd53p6MA9YLbcXxpC8=YEtbO6frFJk1LQ1BNUgPk=r1_uR8iw@mail.gmail.com>
+References: <20230914041806.816741-1-kai.heng.feng@canonical.com>
+         <7b45ac2ed091497b4e21a6a5c19956161175ba16.camel@linux.intel.com>
+         <SN6PR11MB26245C44E84C37C1B551260EF4F6A@SN6PR11MB2624.namprd11.prod.outlook.com>
+         <CAAd53p5ywMVKWzhn0nYzvBnW_Bc=sntgBttJdcVUuf_a4AnX5w@mail.gmail.com>
+         <SN6PR11MB262473E2BF4057F4D285A613F4F6A@SN6PR11MB2624.namprd11.prod.outlook.com>
+         <DM6PR11MB26184A8A3F955589F5FC6836F4FBA@DM6PR11MB2618.namprd11.prod.outlook.com>
+         <CAAd53p4o1pB-yzpvUCYsvuYEvQQK0my=u-ogrByRCx_Lvns=hw@mail.gmail.com>
+         <bbbf36724d63f7532696a960a9d56d7ccd5a5bee.camel@linux.intel.com>
+         <CAAd53p6MA9YLbcXxpC8=YEtbO6frFJk1LQ1BNUgPk=r1_uR8iw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH V2 1/4] dt-bindings: thermal: qcom-tsens: Add ipq5018
- compatible
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <srinivas.kandagatla@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <thara.gopinath@gmail.com>,
-        <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <dmitry.baryshkov@linaro.org>
-References: <20230915121504.806672-1-quic_srichara@quicinc.com>
- <20230915121504.806672-2-quic_srichara@quicinc.com>
- <03b0cafa-49c7-8838-b116-927c9649cbd3@linaro.org>
- <f5aee51d-0345-1294-a85b-ea96ed937685@linaro.org>
- <1f09339e-b3b5-874c-4874-199e8c7ae890@quicinc.com>
- <ee19e076-8f9c-c5b2-3e25-2832dbdab25b@linaro.org>
- <affb1f63-c1ed-f0cc-ea79-887ae61b9b90@quicinc.com>
- <156f4705-ca1a-f82e-9282-534a22183f37@linaro.org>
-From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
-In-Reply-To: <156f4705-ca1a-f82e-9282-534a22183f37@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: w5D_J84Rb0vKzZ_2XoTkvdS3B7OxDg_5
-X-Proofpoint-GUID: w5D_J84Rb0vKzZ_2XoTkvdS3B7OxDg_5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-19_07,2023-09-19_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 adultscore=0 clxscore=1015 lowpriorityscore=0
- spamscore=0 bulkscore=0 impostorscore=0 suspectscore=0 malwarescore=0
- mlxscore=0 mlxlogscore=645 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309190142
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, 2023-09-19 at 15:36 +0800, Kai-Heng Feng wrote:
+> On Mon, Sep 18, 2023 at 11:57=E2=80=AFPM srinivas pandruvada
+> <srinivas.pandruvada@linux.intel.com> wrote:
+> >=20
+> > Hi Kai-Heng,
+> > On Mon, 2023-09-18 at 09:17 +0800, Kai-Heng Feng wrote:
+> > > Hi Even,
+> > >=20
+> > > On Mon, Sep 18, 2023 at 8:33=E2=80=AFAM Xu, Even <even.xu@intel.com>
+> > > wrote:
+> > > >=20
+> > > > Hi, Kai-Heng,
+> > > >=20
+> > > > I just got feedback, for testing EHL S5 wakeup feature, you
+> > > > need
+> > > > several steps to setup and access
+> > > > "https://portal.devicewise.com/things/browse" to trigger wake.
+> > > > But currently, our test account of this website are all out of
+> > > > data.
+> > > > So maybe you need double check with the team who required you
+> > > > preparing the patch for the verification.
+> > >=20
+> > > The patch is to solve the GPE refcount overflow, while
+> > > maintaining S5
+> > > wakeup. I don't have any mean to test S5 wake.
+> > >=20
+> > The issue is not calling acpi_disable_gpe(). To reduce the scope of
+> > change can we just add that instead of a adding new callbacks. This
+> > way
+> > scope is reduced.
+>=20
+> This patch does exactly the same thing by letting PCI and ACPI handle
+> the PME and GPE.
+> Though the change seems to be bigger, it actually reduces the duped
+> code, while keep the S5 wakeup ability intact.
+It may be doing the same. But with long chain of calls without
+verification, I am not comfortable.
+This can be another patch by itself to use the framework.=20
 
+But you are targeting a fix for overflow issue, which is separate from
+the use of PCI/ACPI framework.
 
-On 9/19/2023 6:26 PM, Krzysztof Kozlowski wrote:
-> On 19/09/2023 14:48, Sricharan Ramabadhran wrote:
->>
->>
->> On 9/19/2023 6:02 PM, Krzysztof Kozlowski wrote:
->>> On 19/09/2023 09:22, Sricharan Ramabadhran wrote:
->>>>
->>>>
->>>> On 9/15/2023 6:15 PM, Krzysztof Kozlowski wrote:
->>>>> On 15/09/2023 14:43, Krzysztof Kozlowski wrote:
->>>>>> On 15/09/2023 14:15, Sricharan Ramabadhran wrote:
->>>>>>> IPQ5018 has tsens v1.0 block with 4 sensors and 1 interrupt.
->>>>>>>
->>>>>>> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
->>>>>>> ---
->>>>>>>     [v2] Sorted the compatible and removed example
->>>>>>>
->>>>>>
->>>>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>>>
->>>>> No, unreviewed. Your driver says it is not compatible with
->>>>> qcom,tsens-v1. This does not look right :/
->>>>>
->>>>
->>>>     Yes it is V1 IP, but since there is no RPM, to enable the IP/SENSORS
->>>>     have to do those steps after calling init_common. Similar reason
->>>>     added a new feat as well in patch #2 as well. Hence for this,
->>>>     new compatible was required.
->>>
->>> I dud not write about new or old compatible ("compatible" as noun). I
->>> wrote that it is not compatible ("compatible" as adjective) with v1.
->>>
->>
->>    Ho, in that case, yes it is not compatible with V1 init and features
->>    because of 'no rpm'. So in that case, should this be documented
->>    as a separate version of 'V1 without rpm' ?
-> 
-> It should not be mixed with regular v1, just as new entry there. I don't
-> think fallback is needed - just use SoC specific compatible.
-> 
-  ok, sure, will add in V3.
+Thanks,
+Srinivas
 
-Regards,
-  Sricharan
+>=20
+> Kai-Heng
+>=20
+> >=20
+> > Something like the attached
+> >=20
+> > Thanks,
+> > Srinivas
+> >=20
+> >=20
+> >=20
+> >=20
+> >=20
+> >=20
+> > > So if you also don't have ways to verify S5 wake functionality,
+> > > maybe
+> > > we can simply revert 2e23a70edabe=C2=A0 ("HID: intel-ish-hid: ipc:
+> > > finish
+> > > power flow for EHL OOB") as alternative?
+> > >=20
+> > > Kai-Heng
+> > >=20
+> > > > Thanks!
+> > > >=20
+> > > > Best Regards,
+> > > > Even Xu
+> > > >=20
+> > > > -----Original Message-----
+> > > > From: Xu, Even
+> > > > Sent: Friday, September 15, 2023 3:27 PM
+> > > > To: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > > > Cc: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>;
+> > > > jikos@kernel.org; benjamin.tissoires@redhat.com;
+> > > > linux-pm@vger.kernel.org; linux-pci@vger.kernel.org; Lee, Jian
+> > > > Hui
+> > > > <jianhui.lee@canonical.com>; Zhang, Lixu
+> > > > <Lixu.Zhang@intel.com>;
+> > > > Ba, Najumon <najumon.ba@intel.com>;
+> > > > linux-input@vger.kernel.org;
+> > > > linux-kernel@vger.kernel.org
+> > > > Subject: RE: [PATCH] HID: intel-ish-hid: ipc: Rework EHL OOB
+> > > > wakeup
+> > > >=20
+> > > > Hi, Kai-Heng,
+> > > >=20
+> > > > I am also not familiar with this S5 wakeup test case.
+> > > > I already sent out mails to ask for help on it.
+> > > > Will come back to you once I get feedback.
+> > > > Thanks!
+> > > >=20
+> > > > Best Regards,
+> > > > Even Xu
+> > > >=20
+> > > > -----Original Message-----
+> > > > From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > > > Sent: Friday, September 15, 2023 2:01 PM
+> > > > To: Xu, Even <even.xu@intel.com>
+> > > > Cc: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>;
+> > > > jikos@kernel.org; benjamin.tissoires@redhat.com;
+> > > > linux-pm@vger.kernel.org; linux-pci@vger.kernel.org; Lee, Jian
+> > > > Hui
+> > > > <jianhui.lee@canonical.com>; Zhang, Lixu
+> > > > <lixu.zhang@intel.com>;
+> > > > Ba, Najumon <najumon.ba@intel.com>;
+> > > > linux-input@vger.kernel.org;
+> > > > linux-kernel@vger.kernel.org
+> > > > Subject: Re: [PATCH] HID: intel-ish-hid: ipc: Rework EHL OOB
+> > > > wakeup
+> > > >=20
+> > > > Hi Even,
+> > > >=20
+> > > > On Fri, Sep 15, 2023 at 1:31=E2=80=AFPM Xu, Even <even.xu@intel.com=
+>
+> > > > wrote:
+> > > > >=20
+> > > > > Hi, Srinivas,
+> > > > >=20
+> > > > > Sure, I will test it.
+> > > > > As long term not working on EHL, I doesn't have EHL board on
+> > > > > hand
+> > > > > right now, I can test this patch on other ISH related
+> > > > > platforms.
+> > > > > From the patch, it's focus on EHL platform, I assume Kai-Heng
+> > > > > already verified the function on EHL board.
+> > > >=20
+> > > > I only made sure the GPE overflow issue is fixed by the patch,
+> > > > but
+> > > > I didn't test the S5 wakeup.
+> > > > That's because I don't know how to test it on the EHL system I
+> > > > have.
+> > > > I'll test it if you can let me know how to test the S5 wakeup.
+> > > >=20
+> > > > Kai-Heng
+> > > >=20
+> > > > > I don't think it will take effect on other platforms, anyway,
+> > > > > I
+> > > > > will test it on the platforms I have to provide cross
+> > > > > platform
+> > > > > verification.
+> > > > >=20
+> > > > > Thanks!
+> > > > >=20
+> > > > > Best Regards,
+> > > > > Even Xu
+> > > > >=20
+> > > > > -----Original Message-----
+> > > > > From: srinivas pandruvada
+> > > > > <srinivas.pandruvada@linux.intel.com>
+> > > > > Sent: Friday, September 15, 2023 12:11 AM
+> > > > > To: Kai-Heng Feng <kai.heng.feng@canonical.com>;
+> > > > > jikos@kernel.org;
+> > > > > benjamin.tissoires@redhat.com
+> > > > > Cc: linux-pm@vger.kernel.org; linux-pci@vger.kernel.org; Lee,
+> > > > > Jian Hui
+> > > > > <jianhui.lee@canonical.com>; Xu, Even <even.xu@intel.com>;
+> > > > > Zhang,
+> > > > > Lixu
+> > > > > <lixu.zhang@intel.com>; Ba, Najumon <najumon.ba@intel.com>;
+> > > > > linux-input@vger.kernel.org; linux-kernel@vger.kernel.org
+> > > > > Subject: Re: [PATCH] HID: intel-ish-hid: ipc: Rework EHL OOB
+> > > > > wakeup
+> > > > >=20
+> > > > > Hi Even,
+> > > > >=20
+> > > > > On Thu, 2023-09-14 at 12:18 +0800, Kai-Heng Feng wrote:
+> > > > > > System cannot suspend more than 255 times because the
+> > > > > > driver
+> > > > > > doesn't
+> > > > > > have corresponding acpi_disable_gpe() for
+> > > > > > acpi_enable_gpe(), so
+> > > > > > the
+> > > > > > GPE refcount overflows.
+> > > > > >=20
+> > > > > > Since PCI core and ACPI core already handles PCI PME wake
+> > > > > > and
+> > > > > > GPE
+> > > > > > wake when the device has wakeup capability, use
+> > > > > > device_init_wakeup()
+> > > > > > to let them do the wakeup setting work.
+> > > > > >=20
+> > > > > > Also add a shutdown callback which uses
+> > > > > > pci_prepare_to_sleep()
+> > > > > > to
+> > > > > > let PCI and ACPI set OOB wakeup for S5.
+> > > > > >=20
+> > > > > Please test this change.
+> > > > >=20
+> > > > > Thanks,
+> > > > > Srinivas
+> > > > >=20
+> > > > > > Fixes: 2e23a70edabe ("HID: intel-ish-hid: ipc: finish power
+> > > > > > flow for
+> > > > > > EHL OOB")
+> > > > > > Cc: Jian Hui Lee <jianhui.lee@canonical.com>
+> > > > > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > > > > > ---
+> > > > > > =C2=A0drivers/hid/intel-ish-hid/ipc/pci-ish.c | 59
+> > > > > > +++++++----------------
+> > > > > > --
+> > > > > > =C2=A01 file changed, 15 insertions(+), 44 deletions(-)
+> > > > > >=20
+> > > > > > diff --git a/drivers/hid/intel-ish-hid/ipc/pci-ish.c
+> > > > > > b/drivers/hid/intel-ish-hid/ipc/pci-ish.c
+> > > > > > index 55cb25038e63..65e7eeb2fa64 100644
+> > > > > > --- a/drivers/hid/intel-ish-hid/ipc/pci-ish.c
+> > > > > > +++ b/drivers/hid/intel-ish-hid/ipc/pci-ish.c
+> > > > > > @@ -119,42 +119,6 @@ static inline bool
+> > > > > > ish_should_leave_d0i3(struct
+> > > > > > pci_dev *pdev)
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return !pm_resume_vi=
+a_firmware() || pdev->device =3D=3D
+> > > > > > CHV_DEVICE_ID;=C2=A0 }
+> > > > > >=20
+> > > > > > -static int enable_gpe(struct device *dev) -{ -#ifdef
+> > > > > > CONFIG_ACPI
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 acpi_status acpi_sts;
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct acpi_device *adev;
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct acpi_device_wakeup=
+ *wakeup;
+> > > > > > -
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adev =3D ACPI_COMPANION(d=
+ev);
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!adev) {
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 dev_err(dev, "get acpi handle failed\n");
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 return -ENODEV;
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 wakeup =3D &adev->wakeup;
+> > > > > > -
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 acpi_sts =3D acpi_enable_=
+gpe(wakeup->gpe_device,
+> > > > > > wakeup-
+> > > > > > > gpe_number);
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (ACPI_FAILURE(acpi_sts=
+)) {
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 dev_err(dev, "enable ose_gpe failed\n");
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 return -EIO;
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> > > > > > -
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
+> > > > > > -#else
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -ENODEV;
+> > > > > > -#endif
+> > > > > > -}
+> > > > > > -
+> > > > > > -static void enable_pme_wake(struct pci_dev *pdev) -{
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if ((pci_pme_capable(pdev=
+, PCI_D0) ||
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 pci_pme_capable(pdev, PCI_D3hot) ||
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 pci_pme_capable(pdev, PCI_D3cold)) &&
+> > > > > > !enable_gpe(&pdev-
+> > > > > > > dev)) {
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 pci_pme_active(pdev, true);
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 dev_dbg(&pdev->dev, "ish ipc driver pme
+> > > > > > wake
+> > > > > > enabled\n");
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> > > > > > -}
+> > > > > > -
+> > > > > > =C2=A0/**
+> > > > > > =C2=A0 * ish_probe() - PCI driver probe callback
+> > > > > > =C2=A0 * @pdev:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pci device
+> > > > > > @@ -225,7 +189,7 @@ static int ish_probe(struct pci_dev
+> > > > > > *pdev,
+> > > > > > const
+> > > > > > struct pci_device_id *ent)
+> > > > > >=20
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Enable PME for EH=
+L */
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (pdev->device =3D=
+=3D EHL_Ax_DEVICE_ID)
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 enable_pme_wake(pdev);
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 device_init_wakeup(dev, true);
+> > > > > >=20
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D ish_init(ish=
+tp);
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (ret)
+> > > > > > @@ -248,6 +212,19 @@ static void ish_remove(struct pci_dev
+> > > > > > *pdev)
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ish_device_disable(i=
+shtp_dev);=C2=A0 }
+> > > > > >=20
+> > > > > > +
+> > > > > > +/**
+> > > > > > + * ish_shutdown() - PCI driver shutdown callback
+> > > > > > + * @pdev:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pci device
+> > > > > > + *
+> > > > > > + * This function sets up wakeup for S5=C2=A0 */ static void
+> > > > > > +ish_shutdown(struct pci_dev *pdev) {
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (pdev->device =3D=3D E=
+HL_Ax_DEVICE_ID)
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 pci_prepare_to_sleep(pdev); }
+> > > > > > +
+> > > > > > =C2=A0static struct device __maybe_unused *ish_resume_device;
+> > > > > >=20
+> > > > > > =C2=A0/* 50ms to get resume response */
+> > > > > > @@ -370,13 +347,6 @@ static int __maybe_unused
+> > > > > > ish_resume(struct
+> > > > > > device *device)
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct pci_dev *pdev=
+ =3D to_pci_dev(device);
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct ishtp_device =
+*dev =3D pci_get_drvdata(pdev);
+> > > > > >=20
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* add this to finish pow=
+er flow for EHL */
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (dev->pdev->device =3D=
+=3D EHL_Ax_DEVICE_ID) {
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 pci_set_power_state(pdev, PCI_D0);
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 enable_pme_wake(pdev);
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 dev_dbg(dev->devc, "set power state to D0
+> > > > > > for
+> > > > > > ehl\n");
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> > > > > > -
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ish_resume_device =
+=3D device;
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev->resume_flag =3D=
+ 1;
+> > > > > >=20
+> > > > > > @@ -392,6 +362,7 @@ static struct pci_driver ish_driver =3D {
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .id_table =3D ish_pc=
+i_tbl,
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .probe =3D ish_probe=
+,
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .remove =3D ish_remo=
+ve,
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .shutdown =3D ish_shutdow=
+n,
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .driver.pm =3D &ish_=
+pm_ops,
+> > > > > > =C2=A0};
+> > > > > >=20
+> > > > >=20
+> >=20
+
