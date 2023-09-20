@@ -2,330 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6CB7A82E4
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Sep 2023 15:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD89D7A8306
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Sep 2023 15:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236574AbjITNHD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 20 Sep 2023 09:07:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
+        id S234638AbjITNPi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Sep 2023 09:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236578AbjITNGh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Sep 2023 09:06:37 -0400
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6072E119;
-        Wed, 20 Sep 2023 06:06:30 -0700 (PDT)
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-57b3e03afa7so61708eaf.1;
-        Wed, 20 Sep 2023 06:06:30 -0700 (PDT)
+        with ESMTP id S234789AbjITNPg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Sep 2023 09:15:36 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC1AC2
+        for <linux-pm@vger.kernel.org>; Wed, 20 Sep 2023 06:15:29 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-68fbd31d9deso6281116b3a.3
+        for <linux-pm@vger.kernel.org>; Wed, 20 Sep 2023 06:15:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695215729; x=1695820529; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oIDhHctYr7JKAXv2kL+yKQqGU8Rh2f5Gc2X+kLC/F3U=;
+        b=eqTtU7bzVJZFoRFjuSsC7qzjDymm3k3b4qenK9hSuLz9pW/U+9AGpYkwHJVNJXO/Ji
+         2wnGZeq3IuDd4EsgHdevxd3bGhXOlqONr7VOzpLpOOtuljqg1YeP01NAWRFvTozN2t3A
+         k12jiONrdMiibzYvt4MZI/KUF0EXVY34VhpVrBvQLVhr+BhtUe1mQlrMpaUoRLoXQW6A
+         fXeX8fm9/prqSPgMSWOFkrWZ7rXtMr15o3Pp1C6doe/L+CFxaOQavr4EHeJr8WqpGDvh
+         NaSR3lTf7KpWxKWf4BkK8SvnZ2jnebtmVFjB2QqvXzIgW1tmgoipVRSNl4SZEwoMgMho
+         ZdxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695215189; x=1695819989;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n+pSJMMIxWoPf9Ez4RY8fPdFg8lZuFnc7YIxoUqbklQ=;
-        b=EnvDP3N0gNkH1G2gI5AidOI4DCW2rAJP53W10Z4ksG6ftCcXBNwdKVmX6NQZ/NyUml
-         uldxi/QNlQaMMEQiaNwo+IqYR/Y1VK3B9a5TOsnw42uoM1Gdm957xwh08znKoiBVWWd5
-         Ry+rUwo74ECYDMwNVVKBSK+CgANHzVGEQfuyzZxFCJNPNYuU8Lf6XqYfXK3Ns34Wv3qJ
-         Vj5Pk4hVUNMOUel8lYnP7cuWSeTbEY/CxHB01u4JFpSpOXuXGodmMb6qKBAEau5Sb3p8
-         g8hhNXTZfLyyW7FcbWXHB2XFVJ51cdYeXLDLvG6+rB5lA+Kg7BAQiIxxRaa4qbNfPHCg
-         B3zg==
-X-Gm-Message-State: AOJu0Yy0oZFY82UcXriIYzO1YkZiAIGWGO+DnLMZtwR0g7TOr5Dq3jHf
-        rqpMiDyFLClSUZMHI5vyWBgf7gLCmnHClvekh5g8CcGw8yk=
-X-Google-Smtp-Source: AGHT+IEVZPg5Hs7mfyDIpauU/1JDC6TVrCRVHBrnRYNuVjkUooYPGuxoPJueQom/ARY5zgWwVdxqCkiZMHN4ybrVVuk=
-X-Received: by 2002:a4a:2a4e:0:b0:573:3a3b:594b with SMTP id
- x14-20020a4a2a4e000000b005733a3b594bmr2221958oox.1.1695215189281; Wed, 20 Sep
- 2023 06:06:29 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1695215729; x=1695820529;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oIDhHctYr7JKAXv2kL+yKQqGU8Rh2f5Gc2X+kLC/F3U=;
+        b=QHAEcK5kk6rOPj5ni4337drYXoJ5jZHGzyd0k7WD68F7tdaRzyQ6Czhmlt1GPTpOE+
+         3soaxv4obNgHs6Y+Vj/VsTX5n/CDExJgYkL5A4sddcjlKT6cte1qXCEvyID0rhwl94cW
+         DaqSw8w/4175PS91RZQxm6lzl5m66Zl/StGguj9nThjCTPbeSYf3i56f7TkRX7MjCUQI
+         W/ZPKyW0S27HS+NYVhVfihymYuOeZb2gQWHZE1odephH4rA18OhJRw9TaCOFexxkzwHW
+         nv4KsjI8eSO4Ie3QDfqf6R9Rg8d9UFZDoA2glEx5ehdyfbPsJtB2ykFQMxQg4jm+SCFq
+         gh9Q==
+X-Gm-Message-State: AOJu0YzabBp1qw8GIcOL3zns1AtJ9DJx1s0yk2l7G8I93hp0IU5pA9rC
+        9sPaGm5d5Ta58sfeh2wDEr0=
+X-Google-Smtp-Source: AGHT+IHlxoeeyosTFXOFW39S4sXpnEvECWYUsOjIuA06yZPOZyJHERzgye+h4krvAKzG5EuxM17Y1w==
+X-Received: by 2002:a05:6a00:2ea2:b0:68e:36b1:3d7f with SMTP id fd34-20020a056a002ea200b0068e36b13d7fmr2800436pfb.18.1695215729349;
+        Wed, 20 Sep 2023 06:15:29 -0700 (PDT)
+Received: from debian.me ([103.124.138.83])
+        by smtp.gmail.com with ESMTPSA id i15-20020aa787cf000000b00682d79199e7sm842560pfo.200.2023.09.20.06.15.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Sep 2023 06:15:28 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 8A73A81A3119; Wed, 20 Sep 2023 20:15:25 +0700 (WIB)
+Date:   Wed, 20 Sep 2023 20:15:25 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     bugzilla-daemon@kernel.org,
+        Linux Power Management <linux-pm@vger.kernel.org>
+Cc:     Huang Rui <ray.huang@amd.com>
+Subject: Re: [Bug 217931] New: amd-pstate lacks crucial features: CPU
+ frequency and boost control
+Message-ID: <ZQrwbYJIh4vSzoGT@debian.me>
+References: <bug-217931-137361@https.bugzilla.kernel.org/>
 MIME-Version: 1.0
-References: <5708760.DvuYhMxLoT@kreacher> <22010294.EfDdHjke4D@kreacher>
-In-Reply-To: <22010294.EfDdHjke4D@kreacher>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 20 Sep 2023 15:06:18 +0200
-Message-ID: <CAJZ5v0gjWhY8AnipzMEgLOp1hsKT6c0PKKKtE+OYSsp0OMxT6w@mail.gmail.com>
-Subject: Re: [PATCH v1 7/9] ACPI: thermal: Untangle initialization and updates
- of active trips
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="DTbjpoFRF6cZRe3A"
+Content-Disposition: inline
+In-Reply-To: <bug-217931-137361@https.bugzilla.kernel.org/>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 12, 2023 at 8:47 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> Separate the code needed to update active trips (in a response to a
-> notification from the platform firmware) as well as to initialize them
-> from the code that is only necessary for their initialization and
-> cleanly divide it into functions that each carry out a specific action.
->
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/acpi/thermal.c |  197 ++++++++++++++++++++++++-------------------------
->  1 file changed, 100 insertions(+), 97 deletions(-)
->
-> Index: linux-pm/drivers/acpi/thermal.c
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/thermal.c
-> +++ linux-pm/drivers/acpi/thermal.c
-> @@ -184,94 +184,6 @@ static int acpi_thermal_temp(struct acpi
->                                                        tz->kelvin_offset);
->  }
->
-> -static void __acpi_thermal_trips_update(struct acpi_thermal *tz, int flag)
-> -{
-> -       acpi_status status;
-> -       unsigned long long tmp;
-> -       struct acpi_handle_list devices;
-> -       bool valid = false;
-> -       int i;
-> -
-> -       /* Active (optional) */
-> -       for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE; i++) {
-> -               char name[5] = { '_', 'A', 'C', ('0' + i), '\0' };
-> -               valid = tz->trips.active[i].trip.valid;
-> -
-> -               if (act == -1)
-> -                       break; /* disable all active trip points */
-> -
-> -               if (flag == ACPI_TRIPS_INIT || ((flag & ACPI_TRIPS_ACTIVE) &&
-> -                   tz->trips.active[i].trip.valid)) {
-> -                       status = acpi_evaluate_integer(tz->device->handle,
-> -                                                      name, NULL, &tmp);
-> -                       if (ACPI_FAILURE(status)) {
-> -                               tz->trips.active[i].trip.valid = false;
-> -                               if (i == 0)
-> -                                       break;
-> -
-> -                               if (act <= 0)
-> -                                       break;
-> -
-> -                               if (i == 1)
-> -                                       tz->trips.active[0].trip.temperature =
-> -                                                       celsius_to_deci_kelvin(act);
-> -                               else
-> -                                       /*
-> -                                        * Don't allow override higher than
-> -                                        * the next higher trip point
-> -                                        */
-> -                                       tz->trips.active[i-1].trip.temperature =
-> -                                               min_t(unsigned long,
-> -                                                     tz->trips.active[i-2].trip.temperature,
-> -                                                     celsius_to_deci_kelvin(act));
-> -
-> -                               break;
-> -                       } else {
-> -                               tz->trips.active[i].trip.temperature = tmp;
-> -                               tz->trips.active[i].trip.valid = true;
-> -                       }
-> -               }
-> -
-> -               name[2] = 'L';
-> -               if ((flag & ACPI_TRIPS_DEVICES) && tz->trips.active[i].trip.valid) {
-> -                       memset(&devices, 0, sizeof(struct acpi_handle_list));
-> -                       status = acpi_evaluate_reference(tz->device->handle,
-> -                                                        name, NULL, &devices);
-> -                       if (ACPI_FAILURE(status)) {
-> -                               acpi_handle_info(tz->device->handle,
-> -                                                "Invalid active%d threshold\n", i);
-> -                               tz->trips.active[i].trip.valid = false;
-> -                       } else {
-> -                               tz->trips.active[i].trip.valid = true;
-> -                       }
-> -
-> -                       if (memcmp(&tz->trips.active[i].devices, &devices,
-> -                                  sizeof(struct acpi_handle_list))) {
-> -                               memcpy(&tz->trips.active[i].devices, &devices,
-> -                                      sizeof(struct acpi_handle_list));
-> -                               ACPI_THERMAL_TRIPS_EXCEPTION(flag, tz, "device");
-> -                       }
-> -               }
-> -               if ((flag & ACPI_TRIPS_ACTIVE) || (flag & ACPI_TRIPS_DEVICES))
-> -                       if (valid != tz->trips.active[i].trip.valid)
-> -                               ACPI_THERMAL_TRIPS_EXCEPTION(flag, tz, "state");
-> -
-> -               if (!tz->trips.active[i].trip.valid)
-> -                       break;
-> -       }
-> -
-> -       if (flag & ACPI_TRIPS_DEVICES) {
-> -               memset(&devices, 0, sizeof(devices));
-> -               status = acpi_evaluate_reference(tz->device->handle, "_TZD",
-> -                                                NULL, &devices);
-> -               if (ACPI_SUCCESS(status) &&
-> -                   memcmp(&tz->devices, &devices, sizeof(devices))) {
-> -                       tz->devices = devices;
-> -                       ACPI_THERMAL_TRIPS_EXCEPTION(flag, tz, "device");
-> -               }
-> -       }
-> -}
-> -
->  static void update_acpi_thermal_trip_temp(struct acpi_thermal_trip *acpi_trip,
->                                           int temp)
->  {
-> @@ -338,6 +250,78 @@ static void acpi_thermal_update_passive_
->         ACPI_THERMAL_TRIPS_EXCEPTION(ACPI_TRIPS_PASSIVE, tz, "state");
->  }
->
-> +static long get_active_temp(struct acpi_thermal *tz, int index)
-> +{
-> +       char method[] = { '_', 'A', 'C', '0' + index, '\0' };
-> +       unsigned long long tmp;
-> +       acpi_status status;
-> +
-> +       status = acpi_evaluate_integer(tz->device->handle, method, NULL, &tmp);
-> +       if (ACPI_FAILURE(status))
-> +               return THERMAL_TEMP_INVALID;
-> +
-> +       /*
-> +        * If an override has been provided, apply it so there are no active
-> +        * trips with thresholds greater than the override.
-> +        */
-> +       if (act > 0) {
-> +               unsigned long long override = celsius_to_deci_kelvin(act);
-> +
-> +               if (tmp > override)
-> +                       tmp = override;
-> +       }
-> +       return tmp;
-> +}
-> +
-> +static void acpi_thermal_update_active_trip(struct acpi_thermal *tz, int index)
-> +{
-> +       struct acpi_thermal_trip *acpi_trip = &tz->trips.active[index].trip;
-> +
-> +       if (!acpi_trip->valid)
-> +               return;
-> +
-> +       update_acpi_thermal_trip_temp(acpi_trip, get_active_temp(tz, index));
-> +       if (!acpi_trip->valid)
-> +               ACPI_THERMAL_TRIPS_EXCEPTION(ACPI_TRIPS_ACTIVE, tz, "state");
-> +}
-> +
-> +static bool update_active_devices(struct acpi_thermal *tz, int index, bool compare)
-> +{
-> +       char method[] = { '_', 'A', 'L', '0' + index, '\0' };
-> +       struct acpi_handle_list devices;
-> +       acpi_status status;
-> +
-> +       memset(&devices, 0, sizeof(devices));
-> +
-> +       status = acpi_evaluate_reference(tz->device->handle, method, NULL, &devices);
-> +       if (ACPI_FAILURE(status)) {
-> +               acpi_handle_info(tz->device->handle,
-> +                                "Missing device list for active threshold %d\n",
-> +                                index);
-> +               return false;
-> +       }
-> +
-> +       if (compare && memcmp(&tz->trips.active[index].devices, &devices, sizeof(devices)))
-> +               ACPI_THERMAL_TRIPS_EXCEPTION(ACPI_TRIPS_ACTIVE, tz, "device");
-> +
-> +       memcpy(&tz->trips.active[index].devices, &devices, sizeof(devices));
-> +       return true;
-> +}
-> +
-> +static void acpi_thermal_update_active_devices(struct acpi_thermal *tz, int index)
-> +{
-> +       struct acpi_thermal_trip *acpi_trip = &tz->trips.active[index].trip;
-> +
-> +       if (!acpi_trip->valid)
-> +               return;
-> +
-> +       if (update_active_devices(tz, index, true))
-> +               return;
-> +
-> +       update_acpi_thermal_trip_temp(acpi_trip, THERMAL_TEMP_INVALID);
-> +       ACPI_THERMAL_TRIPS_EXCEPTION(ACPI_TRIPS_ACTIVE, tz, "state");
-> +}
-> +
->  static int acpi_thermal_adjust_trip(struct thermal_trip *trip, void *data)
->  {
->         struct acpi_thermal_trip *acpi_trip = trip->priv;
-> @@ -358,18 +342,18 @@ static void acpi_thermal_adjust_thermal_
->                                              unsigned long data)
->  {
->         struct acpi_thermal *tz = thermal_zone_device_priv(thermal);
-> -       int flag;
-> +       int i;
->
->         if (data == ACPI_THERMAL_NOTIFY_THRESHOLDS) {
->                 acpi_thermal_update_passive_trip(tz);
-> -               flag = ACPI_TRIPS_THRESHOLDS;
-> +               for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE; i++)
-> +                       acpi_thermal_update_active_trip(tz, i);
->         } else {
->                 acpi_thermal_update_passive_devices(tz);
-> -               flag = ACPI_TRIPS_DEVICES;
-> +               for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE; i++)
-> +                       acpi_thermal_update_active_devices(tz, i);
->         }
->
-> -       __acpi_thermal_trips_update(tz, flag);
-> -
->         for_each_thermal_trip(tz->thermal_zone, acpi_thermal_adjust_trip, tz);
->  }
->
-> @@ -498,6 +482,28 @@ fail:
->         return false;
->  }
->
-> +static bool acpi_thermal_init_active_trip(struct acpi_thermal *tz, int index)
-> +{
-> +       long temp;
-> +
-> +       if (act == -1)
-> +               goto fail;
-> +
-> +       temp = get_active_temp(tz, index);
-> +       if (temp == THERMAL_TEMP_INVALID)
-> +               goto fail;
-> +
-> +       if (!update_active_devices(tz, false, index))
 
-This should be
+--DTbjpoFRF6cZRe3A
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-      if (!update_active_devices(tz, index, false))
+On Wed, Sep 20, 2023 at 11:06:51AM +0000, bugzilla-daemon@kernel.org wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=3D217931
+>=20
+>             Bug ID: 217931
+>            Summary: amd-pstate lacks crucial features: CPU frequency and
+>                     boost control
+>            Product: Power Management
+>            Version: 2.5
+>           Hardware: AMD
+>                 OS: Linux
+>             Status: NEW
+>           Severity: high
+>           Priority: P3
+>          Component: cpufreq
+>           Assignee: linux-pm@vger.kernel.org
+>           Reporter: aros@gmx.com
+>         Regression: No
+>=20
+> Created attachment 305131
+>   --> https://bugzilla.kernel.org/attachment.cgi?id=3D305131&action=3Dedit
+> Power Options: Processor Power Management in Windows
+>=20
+> It would be really great if amd-pstate had a feature parity with acpi-cpu=
+freq,
+> namely
+>=20
+> 1) Being able to set operating frequencies (maximum, minimum and user-def=
+ined)
 
-and I've already fixed it in the tree.
+ondemand, conservative, performance?
 
-> +               goto fail;
-> +
-> +       update_acpi_thermal_trip_temp(&tz->trips.active[index].trip, temp);
-> +       return true;
-> +
-> +fail:
-> +       update_acpi_thermal_trip_temp(&tz->trips.active[index].trip, THERMAL_TEMP_INVALID);
-> +       return false;
-> +}
-> +
->  static int acpi_thermal_get_trip_points(struct acpi_thermal *tz)
->  {
->         unsigned int count = 0;
-> @@ -506,11 +512,8 @@ static int acpi_thermal_get_trip_points(
->         if (acpi_thermal_init_passive_trip(tz))
->                 count++;
->
-> -       /* Active trip points (optional). */
-> -       __acpi_thermal_trips_update(tz, ACPI_TRIPS_INIT);
-> -
->         for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE; i++) {
-> -               if (tz->trips.active[i].trip.valid)
-> +               if (acpi_thermal_init_active_trip(tz, i))
->                         count++;
->                 else
->                         break;
->
->
->
+>=20
+> 2) Being able to enable/disable boost
+
+What is boost?
+
+>=20
+> Currently both features are not available and frequency control is simply
+> ignored (bug 215800).
+>=20
+> Rationale:
+>=20
+> 1) This is required for benchmarking and proper temperature control. Boost
+> frequencies are subject to multiple limitations (power in watts, amperage,
+> voltage, temperature, BIOS limitations) and can change depending on the
+> workload. Setting a low enough frequency allows to run benchmarks in the
+> controlled environment and get proper data.
+>=20
+> Windows allows to do that easily, see the attached screenshot.
+>=20
+> 2) Disabling boost is an easy option to subdue operating temperatures tho=
+ugh if
+> the previous issue is tackled, it's not really needed.
+
+For example, after compiling the kernel one needs to cool down system,
+right?
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--DTbjpoFRF6cZRe3A
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZQrwaAAKCRD2uYlJVVFO
+oxVMAPwKg2C7JklgsJJFRt93nsjdqh40sJ9K2YhB1bRU0PcsXQD8CluOsiobJocu
+XhIL//4C7Wxf8bOmZaT4dfENRKwDVgo=
+=tI8Q
+-----END PGP SIGNATURE-----
+
+--DTbjpoFRF6cZRe3A--
