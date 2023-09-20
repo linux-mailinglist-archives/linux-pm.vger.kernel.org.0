@@ -2,177 +2,228 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8C27A7866
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Sep 2023 12:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC0F7A791A
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Sep 2023 12:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234364AbjITKAU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Sep 2023 06:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60712 "EHLO
+        id S234234AbjITKXY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Sep 2023 06:23:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234370AbjITKAS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Sep 2023 06:00:18 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1931A9;
-        Wed, 20 Sep 2023 03:00:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1695204007;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HDgBkqd7CGwUFR4E4j39QdMs+mSsvXlDvmJsLeLhHLs=;
-        b=oBuPzZNyJyn2WqpUcwM4yY0CbL+6sASmYva4EkuAJKej+9dHR3XMuqIwW8wVXOpJIJhrod
-        nnKSf78q2YvMmretbr5VHtunUSO5Ry+82tPpw5o98iAJsIM3gVjymEkGivly8k2VgLg4JB
-        iMctt2UAMOuViPWBAMaXkCVnMpEkryA=
-Message-ID: <46a28af1045211edd6c44f7b6aa4c23e7b3a208d.camel@crapouillou.net>
-Subject: Re: [PATCH v3] PM: Fix symbol export for _SIMPLE_ variants of
- _PM_OPS()
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Raag Jadav <raag.jadav@intel.com>
-Cc:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        Jonathan.Cameron@huawei.com, andriy.shevchenko@linux.intel.com,
-        rf@opensource.cirrus.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        mallikarjunappa.sangannavar@intel.com, bala.senthil@intel.com
-Date:   Wed, 20 Sep 2023 12:00:05 +0200
-In-Reply-To: <ZQq8V5D06CaMxWqQ@black.fi.intel.com>
-References: <20230920084121.14131-1-raag.jadav@intel.com>
-         <790fac97ce79534733fe0bbd93cc0c9eaa835bf2.camel@crapouillou.net>
-         <ZQq8V5D06CaMxWqQ@black.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S233785AbjITKXX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Sep 2023 06:23:23 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194D1B6
+        for <linux-pm@vger.kernel.org>; Wed, 20 Sep 2023 03:23:16 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9ad8d47ef2fso845883366b.1
+        for <linux-pm@vger.kernel.org>; Wed, 20 Sep 2023 03:23:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1695205394; x=1695810194; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RBlFPN4rTkvNkIwWrvWpLVOcnwv+R23CbwzJnrGYB5Q=;
+        b=vl7v/rHUnxVgRjBExA2/rBghzGOU38LmkRZ4TENkUu1g+eUHFyL0qHMzFLf2EJtmQW
+         zSYvkAw7uG2DH/8waB8Ha3s3ob2bGiw+B+08VLoLSRfI39BmKOakZ9mSp7m2Nuhd3TjX
+         cHo9xNu75S3sokRMALw1IfcYNnvTGdcEZTP6wz17vk7ZBH+mwVYKBcA3FwhH3qzgrmvK
+         OjqtiqijTajMZ11UJRri2ELeVlcQTZCX7QZQQmEIirqFOSwP7Fl0XdXtdcuKUnc10Wlp
+         zFiufk91rGHDrWmeGBkZRXGlZQmV9Iz+LdX/+RJ1RRYeFHq58ZndaZByTSa8I27VcRCX
+         TIkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695205394; x=1695810194;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RBlFPN4rTkvNkIwWrvWpLVOcnwv+R23CbwzJnrGYB5Q=;
+        b=gGPyVypkurF0XsUrv0PIl1Axs/fYup+TEcKQbvjgV3rPfB06bDxX38eMkn+yV+XekD
+         pjC7jtuoScIL7qki8YtL+ASsoYk1Tl+BMcTDyexUZuOfPJJKLo7NZBVDKUnbHXAtbxOM
+         wOS+ww2s/uWoiYkxSNdfnFLwaWHhZHbA7lwrKlLkREf8YF26pPrR0rT1LKYzvG/80JFR
+         BrzUjpiX2IV++VEnzhbWbO2Lw+tt5Z0c631hbiDbRvsiB8I5pQmg21GAq3HtQiAVOlgu
+         rv7qA8BedOUBW9Rbbt8bs3nSG1KF+esC7M51Wnyf4QCv2lUbw8phGQOjbgiqZIdlyppD
+         No1w==
+X-Gm-Message-State: AOJu0YyBxL3JH/zbRF91pXr+MwSGTd8ktshP3F4LEnrfWamJusH2OtUe
+        HNcFe2GJyW7/l8ArFsUusj6IiQ==
+X-Google-Smtp-Source: AGHT+IFQ9N7cmG2hrJt3k0vQuqNuVRpWI/r0U6RCPWb3X6phrFE4fTmuSKXBdG5HqOkgH191zMBCWg==
+X-Received: by 2002:a17:906:1015:b0:9a9:d651:68f5 with SMTP id 21-20020a170906101500b009a9d65168f5mr1642291ejm.3.1695205394405;
+        Wed, 20 Sep 2023 03:23:14 -0700 (PDT)
+Received: from uffe-tuxpro14.. (static-212-193-78-212.thenetworkfactory.nl. [212.78.193.212])
+        by smtp.gmail.com with ESMTPSA id cf21-20020a170906b2d500b009ad8d444be4sm9061397ejb.43.2023.09.20.03.23.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Sep 2023 03:23:13 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-mips@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+Subject: [PATCH v3 05/17] pmdomain: bcm: Move Kconfig options to the pmdomain subsystem
+Date:   Wed, 20 Sep 2023 12:22:22 +0200
+Message-Id: <20230920102222.39831-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Le mercredi 20 septembre 2023 =C3=A0 12:33 +0300, Raag Jadav a =C3=A9crit=
-=C2=A0:
-> On Wed, Sep 20, 2023 at 10:53:23AM +0200, Paul Cercueil wrote:
-> > Le mercredi 20 septembre 2023 =C3=A0 14:11 +0530, Raag Jadav a =C3=A9cr=
-it=C2=A0:
-> > > Currently EXPORT_*_SIMPLE_DEV_PM_OPS() use EXPORT_*_DEV_PM_OPS()
-> > > set
-> > > of macros to export dev_pm_ops symbol, which export the symbol in
-> > > case
-> > > CONFIG_PM=3Dy but don't take CONFIG_PM_SLEEP into consideration.
-> > >=20
-> > > Since _SIMPLE_ variants of _PM_OPS() do not include runtime PM
-> > > handles
-> > > and are only used in case CONFIG_PM_SLEEP=3Dy, we should not be
-> > > exporting
-> > > their dev_pm_ops symbol in case CONFIG_PM_SLEEP=3Dn.
-> > >=20
-> > > This can be fixed by having two distinct set of export macros for
-> > > both
-> > > _RUNTIME_ and _SIMPLE_ variants of _PM_OPS(), such that the
-> > > export of
-> > > dev_pm_ops symbol used in each variant depends on CONFIG_PM and
-> > > CONFIG_PM_SLEEP respectively.
-> > >=20
-> > > Introduce _DEV_SLEEP_PM_OPS() set of export macros for _SIMPLE_
-> > > variants
-> > > of _PM_OPS(), which export dev_pm_ops symbol only in case
-> > > CONFIG_PM_SLEEP=3Dy
-> > > and discard it otherwise.
-> > >=20
-> > > Fixes: 34e1ed189fab ("PM: Improve EXPORT_*_DEV_PM_OPS macros")
-> > > Signed-off-by: Raag Jadav <raag.jadav@intel.com>
-> > > ---
-> > > PS: This is a standalone fix and works without updating any
-> > > drivers.
-> >=20
-> > I had to double-check that, to make sure that none of the drivers
-> > using
-> > these macros also use pm_ptr() instead of pm_sleep_ptr() to access
-> > the
-> > exported dev_pm_ops.
-> >=20
-> > I did not check extensively but everything seems to use
-> > pm_sleep_ptr(),
-> > so it looks safe enough.
->=20
-> I have tested it against -rc2 without any problems.
+The Kconfig options belongs closer to the corresponding implementations,
+hence let's move them from the soc subsystem to the pmdomain subsystem.
 
-You'd need to test an "allyesconfig" with CONFIG_PM=3Dy, and
-CONFIG_PM_SLEEP disabled. Is that what you tested?
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: Ray Jui <rjui@broadcom.com>
+Cc: Scott Branden <sbranden@broadcom.com>
+Cc: <linux-mips@vger.kernel.org>
+Cc: <linux-rpi-kernel@lists.infradead.org>
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
 
->=20
-> > > Changes since v2:
-> > > - Drop redundant patches
-> > >=20
-> > > Changes since v1:
-> > > - Update drivers to new set of macros
-> > >=20
-> > > =C2=A0include/linux/pm.h | 43 +++++++++++++++++++++++++++++----------=
+Changes in v3:
+	- Dropped the SOC_BCM63XX config altogether.
+
+---
+ drivers/pmdomain/Kconfig     |  1 +
+ drivers/pmdomain/bcm/Kconfig | 42 +++++++++++++++++++++++++++++
+ drivers/soc/bcm/Kconfig      | 51 ------------------------------------
+ 3 files changed, 43 insertions(+), 51 deletions(-)
+ create mode 100644 drivers/pmdomain/bcm/Kconfig
+
+diff --git a/drivers/pmdomain/Kconfig b/drivers/pmdomain/Kconfig
+index 482d9e970e14..ddc05d6af100 100644
+--- a/drivers/pmdomain/Kconfig
++++ b/drivers/pmdomain/Kconfig
+@@ -4,5 +4,6 @@ menu "PM Domains"
+ source "drivers/pmdomain/actions/Kconfig"
+ source "drivers/pmdomain/amlogic/Kconfig"
+ source "drivers/pmdomain/apple/Kconfig"
++source "drivers/pmdomain/bcm/Kconfig"
+ 
+ endmenu
+diff --git a/drivers/pmdomain/bcm/Kconfig b/drivers/pmdomain/bcm/Kconfig
+new file mode 100644
+index 000000000000..b28c9f6d256b
+--- /dev/null
++++ b/drivers/pmdomain/bcm/Kconfig
+@@ -0,0 +1,42 @@
++# SPDX-License-Identifier: GPL-2.0-only
++menu "Broadcom PM Domains"
++
++config BCM2835_POWER
++	bool "BCM2835 power domain driver"
++	depends on ARCH_BCM2835 || (COMPILE_TEST && OF)
++	default y if ARCH_BCM2835
++	select PM_GENERIC_DOMAINS if PM
++	select RESET_CONTROLLER
++	help
++	  This enables support for the BCM2835 power domains and reset
++	  controller.  Any usage of power domains by the Raspberry Pi
++	  firmware means that Linux usage of the same power domain
++	  must be accessed using the RASPBERRYPI_POWER driver
++
++config RASPBERRYPI_POWER
++	bool "Raspberry Pi power domain driver"
++	depends on ARCH_BCM2835 || (COMPILE_TEST && OF)
++	depends on RASPBERRYPI_FIRMWARE=y
++	select PM_GENERIC_DOMAINS if PM
++	help
++	  This enables support for the RPi power domains which can be enabled
++	  or disabled via the RPi firmware.
++
++config BCM_PMB
++	bool "Broadcom PMB (Power Management Bus) driver"
++	depends on ARCH_BCMBCA || (COMPILE_TEST && OF)
++	default ARCH_BCMBCA
++	select PM_GENERIC_DOMAINS if PM
++	help
++	  This enables support for the Broadcom's PMB (Power Management Bus) that
++	  is used for disabling and enabling SoC devices.
++
++config BCM63XX_POWER
++	bool "BCM63xx power domain driver"
++	depends on BMIPS_GENERIC || (COMPILE_TEST && OF)
++	select PM_GENERIC_DOMAINS if PM
++	help
++	  This enables support for the BCM63xx power domains controller on
++	  BCM6318, BCM6328, BCM6362 and BCM63268 SoCs.
++
++endmenu
+diff --git a/drivers/soc/bcm/Kconfig b/drivers/soc/bcm/Kconfig
+index f96906795fa6..1f5577cfd68c 100644
+--- a/drivers/soc/bcm/Kconfig
++++ b/drivers/soc/bcm/Kconfig
+@@ -1,36 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ menu "Broadcom SoC drivers"
+ 
+-config BCM2835_POWER
+-	bool "BCM2835 power domain driver"
+-	depends on ARCH_BCM2835 || (COMPILE_TEST && OF)
+-	default y if ARCH_BCM2835
+-	select PM_GENERIC_DOMAINS if PM
+-	select RESET_CONTROLLER
+-	help
+-	  This enables support for the BCM2835 power domains and reset
+-	  controller.  Any usage of power domains by the Raspberry Pi
+-	  firmware means that Linux usage of the same power domain
+-	  must be accessed using the RASPBERRYPI_POWER driver
 -
-> > > ---
-> > > =C2=A01 file changed, 29 insertions(+), 14 deletions(-)
-> > >=20
-> > > diff --git a/include/linux/pm.h b/include/linux/pm.h
-> > > index 1400c37b29c7..99a8146fa479 100644
-> > > --- a/include/linux/pm.h
-> > > +++ b/include/linux/pm.h
-> > > @@ -374,24 +374,39 @@ const struct dev_pm_ops name =3D { \
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0RUNTIME_PM_OPS(runtim=
-e_suspend_fn, runtime_resume_fn,
-> > > idle_fn) \
-> > > =C2=A0}
-> > > =C2=A0
-> > > -#ifdef CONFIG_PM
-> > > -#define _EXPORT_DEV_PM_OPS(name, license,
-> > > ns)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0\
-> > > +#define _EXPORT_PM_OPS(name, license,
-> > > ns)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0\
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const struct dev_pm_o=
-ps
-> > > name;=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0\
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0__EXPORT_SYMBOL(name,=
- license,
-> > > ns);=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0\
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const struct dev_pm_o=
-ps name
-> > > -#define EXPORT_PM_FN_GPL(name)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0EXPORT_SYMBOL_GPL(name)
-> > > -#define EXPORT_PM_FN_NS_GPL(name,
-> > > ns)=C2=A0=C2=A0EXPORT_SYMBOL_NS_GPL(name,
-> > > ns)
-> > > -#else
-> > > -#define _EXPORT_DEV_PM_OPS(name, license,
-> > > ns)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0\
-> > > +
-> > > +#define _PM_OPS(name, license,
-> >=20
-> > This macro creates a dev_pm_ops that's meant to be garbage-
-> > collected by
-> > the compiler; so maybe name it _USELESS_PM_OPS() or something like
-> > that.
->=20
-> _USELESS_PM_OPS() sounds a bit heavy handed ;)
-> Gives the impression that the macro itelf is not used anywhere in
-> code.
->=20
-> Something like _DISCARD_PM_OPS() makes more sense.
+-config RASPBERRYPI_POWER
+-	bool "Raspberry Pi power domain driver"
+-	depends on ARCH_BCM2835 || (COMPILE_TEST && OF)
+-	depends on RASPBERRYPI_FIRMWARE=y
+-	select PM_GENERIC_DOMAINS if PM
+-	help
+-	  This enables support for the RPi power domains which can be enabled
+-	  or disabled via the RPi firmware.
+-
+-config SOC_BCM63XX
+-	bool "Broadcom 63xx SoC drivers"
+-	depends on BMIPS_GENERIC || COMPILE_TEST
+-	help
+-	  Enables drivers for the Broadcom 63xx series of chips.
+-	  Drivers can be enabled individually within this menu.
+-
+-	  If unsure, say N.
+-
+ config SOC_BRCMSTB
+ 	bool "Broadcom STB SoC drivers"
+ 	depends on ARM || ARM64 || BMIPS_GENERIC || COMPILE_TEST
+@@ -42,27 +12,6 @@ config SOC_BRCMSTB
+ 
+ 	  If unsure, say N.
+ 
+-config BCM_PMB
+-	bool "Broadcom PMB (Power Management Bus) driver"
+-	depends on ARCH_BCMBCA || (COMPILE_TEST && OF)
+-	default ARCH_BCMBCA
+-	select PM_GENERIC_DOMAINS if PM
+-	help
+-	  This enables support for the Broadcom's PMB (Power Management Bus) that
+-	  is used for disabling and enabling SoC devices.
+-
+-if SOC_BCM63XX
+-
+-config BCM63XX_POWER
+-	bool "BCM63xx power domain driver"
+-	depends on BMIPS_GENERIC || (COMPILE_TEST && OF)
+-	select PM_GENERIC_DOMAINS if PM
+-	help
+-	  This enables support for the BCM63xx power domains controller on
+-	  BCM6318, BCM6328, BCM6362 and BCM63268 SoCs.
+-
+-endif # SOC_BCM63XX
+-
+ source "drivers/soc/bcm/brcmstb/Kconfig"
+ 
+ endmenu
+-- 
+2.34.1
 
-Works for me.
-
->=20
-> Raag
-
-Cheers,
--Paul
