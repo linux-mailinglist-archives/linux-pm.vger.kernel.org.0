@@ -2,95 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B23317A7A75
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Sep 2023 13:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B30D77A7D42
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Sep 2023 14:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233125AbjITLbg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Sep 2023 07:31:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
+        id S235241AbjITMH6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Sep 2023 08:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233727AbjITLbf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Sep 2023 07:31:35 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A6BB4
-        for <linux-pm@vger.kernel.org>; Wed, 20 Sep 2023 04:31:28 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-523100882f2so8607377a12.2
-        for <linux-pm@vger.kernel.org>; Wed, 20 Sep 2023 04:31:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695209487; x=1695814287; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sISPinFUDL5u/bpoyx1Ij7HAjgfiATRW0k6PVgeAEsw=;
-        b=Gau0z9A3Gdm/I+ZRLP/nM/zUAaLnyCCd9eWOhNEHXEjAx6uI2Rw6/BdH9a9soPI5eE
-         cGTuHQt4jCSVbk3G4Z7Ow84psJiYVk/7uXiJbPYsN5srjWh4cnGmPw2I1+ehnDrRm+1e
-         I41z70tJ7Ok/huzpLqf6xrWnee81cxGOk3g+uitX+ECmHscCiwrkCAv5CMQsHIaRfCQx
-         1t0n5Q4H8OYoi8kvi25ThpZ61JgxrqVYrd0HA6OG+FDbbRpCTMp+1HnDH/vtOfwWLg05
-         OW9RUNiDvxUWbL09Rm2p9OnxVQNiCRot/7y19vnH4Nw8FQ7u6PEIGswlMO97TmikOJ+m
-         SOJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695209487; x=1695814287;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sISPinFUDL5u/bpoyx1Ij7HAjgfiATRW0k6PVgeAEsw=;
-        b=NdbHgjPHD0rXhEafYUYa4+hqc621BxEXxoc9Ew8OVPXlGuvBBc8fBQu4C+Cio77j7/
-         969akGffR3n1UD5GDig5IqnsNuW8QkpmFW1KTatjSokD06nCHjClp8neVKadjB2FWRYa
-         QldVCF9Y0C7PsQTReulQbg3WtWsHjUExEH8JXGymyYZnf9q0ddBckNv11M5kIe8Ao207
-         poT4oA76acHxyZ0RF4arqb1i3GGJkMUCFNW/JQhjZ5x40+HkvGj693NTY8iHelT61Ix5
-         XQY4DeoqaAZvOvUjjMe2Be/ugRG5wy63aJGN73JQJ6AS8JVAL8OrwTDnhmObymBEVXJi
-         7XrQ==
-X-Gm-Message-State: AOJu0Yy2wKZ6y1hHASjHhNoPuwYhFwaOGfZYKOXznXIONkUGWozcR8LI
-        f6KE1IFY/ELvmYAja/OJ+4tJeQ==
-X-Google-Smtp-Source: AGHT+IHvJqMLFU0/0VeoTulP60Slvf5E2yjtSP8/g6btQDvx/25B9cI7c5ufzI5k4+V+RhB2J3IRkg==
-X-Received: by 2002:a17:906:220f:b0:9a9:f09d:7c10 with SMTP id s15-20020a170906220f00b009a9f09d7c10mr1849511ejs.11.1695209486889;
-        Wed, 20 Sep 2023 04:31:26 -0700 (PDT)
-Received: from [172.20.24.238] (static-212-193-78-212.thenetworkfactory.nl. [212.78.193.212])
-        by smtp.gmail.com with ESMTPSA id rh1-20020a17090720e100b009ad8ba6976bsm9277668ejb.9.2023.09.20.04.31.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Sep 2023 04:31:26 -0700 (PDT)
-Message-ID: <2529838c-501f-45d6-d886-558bccac98b9@linaro.org>
-Date:   Wed, 20 Sep 2023 13:31:25 +0200
+        with ESMTP id S235224AbjITMH5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Sep 2023 08:07:57 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B86CD3;
+        Wed, 20 Sep 2023 05:07:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695211670; x=1726747670;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Eich1diZa61bm9DUbVFnbrlfWTqnw80BheWaNkb4YQE=;
+  b=nIJHmRAhm9D/UMXDh0WrS2kY/lt4p/qW1G8xhFjz+7TOjFSbJmnbg/Sz
+   qfbvWsXYeAyzMFE1cZdIlv9SxFFlO59+7UKj/1oHd9aWi8yIYN9G77pMy
+   hDNmlIN+JOpttFhY7eSN4N1/HbI3gnGd0JYw2ffjbR69gmHwBfkdeB+Ec
+   saXLXJwpOsjwSsbs9MSLdDQZwIEn/NzGsuc7vr0Qoi5B6OlcBJ/iP76RM
+   hzC0R0WTeBmVn0Kbi99ojT35guCAZknTJXyHChEVx14poMgLuArv6avD5
+   xTV+WP9ZHZLVwKDVE21A80uAPQwTHmylLwR+quaGFAKXMLo2l+NN/hvar
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="360460136"
+X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
+   d="scan'208";a="360460136"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 05:07:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="746624821"
+X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
+   d="scan'208";a="746624821"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 05:07:45 -0700
+Date:   Wed, 20 Sep 2023 15:07:42 +0300
+From:   Raag Jadav <raag.jadav@intel.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
+        Jonathan.Cameron@huawei.com, andriy.shevchenko@linux.intel.com,
+        rf@opensource.cirrus.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        mallikarjunappa.sangannavar@intel.com, bala.senthil@intel.com
+Subject: Re: [PATCH v3] PM: Fix symbol export for _SIMPLE_ variants of
+ _PM_OPS()
+Message-ID: <ZQrgjn6uY+B6ZL2j@black.fi.intel.com>
+References: <20230920084121.14131-1-raag.jadav@intel.com>
+ <790fac97ce79534733fe0bbd93cc0c9eaa835bf2.camel@crapouillou.net>
+ <ZQq8V5D06CaMxWqQ@black.fi.intel.com>
+ <46a28af1045211edd6c44f7b6aa4c23e7b3a208d.camel@crapouillou.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v4 1/2] dt-bindings: pinctrl: qcom: Add SM4450 pinctrl
-Content-Language: en-US
-To:     Tengfei Fan <quic_tengfan@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, djakov@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_tsoni@quicinc.com, quic_shashim@quicinc.com,
-        quic_kaushalk@quicinc.com, quic_tdas@quicinc.com,
-        quic_tingweiz@quicinc.com, quic_aiquny@quicinc.com,
-        kernel@quicinc.com
-References: <20230920082102.5744-1-quic_tengfan@quicinc.com>
- <20230920082102.5744-2-quic_tengfan@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230920082102.5744-2-quic_tengfan@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <46a28af1045211edd6c44f7b6aa4c23e7b3a208d.camel@crapouillou.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20/09/2023 10:21, Tengfei Fan wrote:
-> Add device tree binding Documentation details for Qualcomm SM4450
-> TLMM device.
+On Wed, Sep 20, 2023 at 12:00:05PM +0200, Paul Cercueil wrote:
+> Le mercredi 20 septembre 2023 à 12:33 +0300, Raag Jadav a écrit :
+> > On Wed, Sep 20, 2023 at 10:53:23AM +0200, Paul Cercueil wrote:
+> > > Le mercredi 20 septembre 2023 à 14:11 +0530, Raag Jadav a écrit :
+> > > > Currently EXPORT_*_SIMPLE_DEV_PM_OPS() use EXPORT_*_DEV_PM_OPS()
+> > > > set
+> > > > of macros to export dev_pm_ops symbol, which export the symbol in
+> > > > case
+> > > > CONFIG_PM=y but don't take CONFIG_PM_SLEEP into consideration.
+> > > > 
+> > > > Since _SIMPLE_ variants of _PM_OPS() do not include runtime PM
+> > > > handles
+> > > > and are only used in case CONFIG_PM_SLEEP=y, we should not be
+> > > > exporting
+> > > > their dev_pm_ops symbol in case CONFIG_PM_SLEEP=n.
+> > > > 
+> > > > This can be fixed by having two distinct set of export macros for
+> > > > both
+> > > > _RUNTIME_ and _SIMPLE_ variants of _PM_OPS(), such that the
+> > > > export of
+> > > > dev_pm_ops symbol used in each variant depends on CONFIG_PM and
+> > > > CONFIG_PM_SLEEP respectively.
+> > > > 
+> > > > Introduce _DEV_SLEEP_PM_OPS() set of export macros for _SIMPLE_
+> > > > variants
+> > > > of _PM_OPS(), which export dev_pm_ops symbol only in case
+> > > > CONFIG_PM_SLEEP=y
+> > > > and discard it otherwise.
+> > > > 
+> > > > Fixes: 34e1ed189fab ("PM: Improve EXPORT_*_DEV_PM_OPS macros")
+> > > > Signed-off-by: Raag Jadav <raag.jadav@intel.com>
+> > > > ---
+> > > > PS: This is a standalone fix and works without updating any
+> > > > drivers.
+> > > 
+> > > I had to double-check that, to make sure that none of the drivers
+> > > using
+> > > these macros also use pm_ptr() instead of pm_sleep_ptr() to access
+> > > the
+> > > exported dev_pm_ops.
+> > > 
+> > > I did not check extensively but everything seems to use
+> > > pm_sleep_ptr(),
+> > > so it looks safe enough.
+> > 
+> > I have tested it against -rc2 without any problems.
 > 
-> Signed-off-by: Tengfei Fan <quic_tengfan@quicinc.com>
+> You'd need to test an "allyesconfig" with CONFIG_PM=y, and
+> CONFIG_PM_SLEEP disabled. Is that what you tested?
 
+Yes, and also validated *.symvers if dev_pm_ops symbol is really discarded.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Seems to work as expected.
 
-Best regards,
-Krzysztof
-
+Raag
