@@ -2,155 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C30D47A720C
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Sep 2023 07:29:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7547A7233
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Sep 2023 07:38:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbjITF3h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Sep 2023 01:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36784 "EHLO
+        id S232854AbjITFip (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Sep 2023 01:38:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjITF3g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Sep 2023 01:29:36 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B538CA3;
-        Tue, 19 Sep 2023 22:29:30 -0700 (PDT)
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38K58bSj017764;
-        Wed, 20 Sep 2023 05:29:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=HgPVRe2GPXoADfxLn/c6DVH3ZFGuhOF64AX0q4GrC2M=;
- b=ebG9ek12U9bpNAzcMxzqDTo+tbszQc8AvX3YRhDC05AhVjBaf4anViTC0Uz0d8wd+RQR
- dAlOJJORX2okzP+6GfA/qFNS+y9lStTDbpAIGegbgmm8hwEgcRGukAUC0psud6WqGxAZ
- 3m3koqR71+CQ65te/gacBjcD486VAz4KTBeW61lgkYlNlUbygOy2TzEt/lYufjUIjXPP
- /URCJc1uV/BVKj1J/JxcPol8REbfRWEpd9eF2YBIFItzKyaPu5m5sjDJ2gbTkVe9jKgI
- r+7OYtP9cFWtzEuANv2Zk5O27Vx7NdmfhMGdRZhlYycA7zQrNitvxcOcDhnaYRPMOeXN SQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t7spegyvt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Sep 2023 05:29:21 +0000
-Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38K5IFtU015394;
-        Wed, 20 Sep 2023 05:29:20 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t7spegyv2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Sep 2023 05:29:20 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-        by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38K3FDUe016841;
-        Wed, 20 Sep 2023 05:29:18 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
-        by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3t5sd22a4n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Sep 2023 05:29:18 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38K5THMi459480
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 20 Sep 2023 05:29:18 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B47A258057;
-        Wed, 20 Sep 2023 05:29:17 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2B45A58062;
-        Wed, 20 Sep 2023 05:29:15 +0000 (GMT)
-Received: from [9.171.25.30] (unknown [9.171.25.30])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 20 Sep 2023 05:29:14 +0000 (GMT)
-Message-ID: <0b3c7c1b-9905-cded-dc86-17296a10152a@linux.vnet.ibm.com>
-Date:   Wed, 20 Sep 2023 10:59:13 +0530
+        with ESMTP id S232946AbjITFil (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Sep 2023 01:38:41 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0B11F3;
+        Tue, 19 Sep 2023 22:38:31 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id DCA9B80A0;
+        Wed, 20 Sep 2023 05:38:29 +0000 (UTC)
+Date:   Wed, 20 Sep 2023 08:38:28 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Thomas Richard <thomas.richard@bootlin.com>
+Cc:     linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Kumar Udit <u-kumar1@ti.com>, Dhruva Gole <d-gole@ti.com>
+Subject: Re: serial: 8250_omap: suspend issue with console_suspend disabled
+Message-ID: <20230920053828.GD5282@atomide.com>
+References: <59b13c93-6637-3050-c145-31be0d6c12c9@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH] cpufreq: Rebuild sched-domains when removing cpufreq
- driver
-Content-Language: en-US
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     vschneid@redhat.com, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-References: <20230918112937.493352-1-pierre.gondois@arm.com>
- <ebc8f4cd-1ac6-e7c8-8e20-53bca964ce56@arm.com>
- <e25d912a-906d-82da-5b09-f2256ebfbfe3@arm.com>
-From:   Shrikanth Hegde <sshegde@linux.vnet.ibm.com>
-In-Reply-To: <e25d912a-906d-82da-5b09-f2256ebfbfe3@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: xd1hSlDH74JGbVn8BZynAQALHnvcps2V
-X-Proofpoint-GUID: HY9JJPsCDFM0STLyGMsu3SpWgINIqaio
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-20_02,2023-09-19_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 impostorscore=0 clxscore=1011 mlxscore=0
- mlxlogscore=528 adultscore=0 malwarescore=0 suspectscore=0 bulkscore=0
- spamscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2308100000 definitions=main-2309200041
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <59b13c93-6637-3050-c145-31be0d6c12c9@bootlin.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi,
 
+* Thomas Richard <thomas.richard@bootlin.com> [230915 09:57]:
+> The regression was introduced in commit 20a41a62618d "serial: 8250_omap:
+> Use force_suspend and resume for system suspend"
+...
 
-On 9/19/23 1:19 PM, Pierre Gondois wrote:
+> --- a/drivers/tty/serial/8250/8250_omap.c
+> +++ b/drivers/tty/serial/8250/8250_omap.c
+> @@ -1630,7 +1630,7 @@ static int omap8250_suspend(struct device *dev)
+>         err = pm_runtime_force_suspend(dev);
+>         flush_work(&priv->qos_work);
 > 
-> 
-> On 9/19/23 01:03, Dietmar Eggemann wrote:
->> On 18/09/2023 13:29, Pierre Gondois wrote:
->>> The Energy Aware Scheduler (EAS) relies on the schedutil governor.
->>> When moving to/from the schedutil governor, sched domains must be
->>> rebuilt to allow re-evaluating the enablement conditions of EAS.
->>> This is done through sched_cpufreq_governor_change().
->>>
+> -       return err;
+> +       return 0;
+>  }
 
-Hi Pierre. It looks correct to update when removing the 
-cpufreq governer. 
+Maybe we can now just simplify things a bit here with the patch below.
+Care to give it a try, it's compile tested only so far.
 
+> Once the omap8250_suspend doesn't return an error, the suspend sequence
+> can continue, but I get an other issue.
+> This issue is not related to commit 20a41a62618d, it has already been
+> present.
+> The power domain of the console is powered-off, so no more messages are
+> printed, and the SoC is stucked.
+> As the uart port is used as console, we don't want to power-off it.
+> My workaround is to set the corresponding power domain to
+> GENPD_FLAG_ALWAYS_ON, so the uart port is not powered-off.
 
->>> Having a cpufreq governor assumes having a cpufreq driver running.
->>> Inserting/removing a cpufreq driver should trigger a re-evaluation
->>> of EAS enablement conditions, avoiding to see EAS enabled when
->>> removing a running cpufreq driver.
->>>
->>> Add a sched_cpufreq_governor_change() call in cpufreq driver removal
->>> path.
->>
->> Rebuilding SDs when inserting the driver is already covered by
->>
->>    cpufreq_online()
->>      cpufreq_set_policy()
->>        sched_cpufreq_governor_change()
->>          if (old or new gov eq. schedutil)
->>            schedule_work(&rebuild_sd_work)
->>
->> So what's missing is only a sched_cpufreq_governor_change() call when
->> removing the driver, right?
-> 
-> Yes exact, removing a cpufreq driver (e.g. `rmmod cppc_cpufreq.ko`) goes
-> through:
-> cpufreq_remove_dev()
-> \-__cpufreq_offline()
-> 
-> so the path you mentioned is not used in this case.
-> 
+The runtime PM usage count should keep the related power domain on though,
+sounds like this issue somewhere else if the power domains get force
+suspended with runtime PM usage count?
 
-One Doubt, while looking through code. Not well versed with this area. 
+Regards,
 
-cpuhp_cpufreq_offline is being registered with CPU hotplug. That ends up 
-calling cpufreq_offline. This may cause non desired issues.
-1. rebuild of sched domains twice instead, once by CPU hotplug and once by this.
-2. offline/online of CPU (non-SMT) may not disabling EAS. 
+Tony
 
-
-
-
-> Regards,
-> Pierre
+8< ------------------------------
+diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+--- a/drivers/tty/serial/8250/8250_omap.c
++++ b/drivers/tty/serial/8250/8250_omap.c
+@@ -1617,7 +1617,7 @@ static int omap8250_suspend(struct device *dev)
+ {
+ 	struct omap8250_priv *priv = dev_get_drvdata(dev);
+ 	struct uart_8250_port *up = serial8250_get_port(priv->line);
+-	int err;
++	int err = 0;
+ 
+ 	serial8250_suspend_port(priv->line);
+ 
+@@ -1627,7 +1627,8 @@ static int omap8250_suspend(struct device *dev)
+ 	if (!device_may_wakeup(dev))
+ 		priv->wer = 0;
+ 	serial_out(up, UART_OMAP_WER, priv->wer);
+-	err = pm_runtime_force_suspend(dev);
++	if (uart_console(&up->port) && console_suspend_enabled)
++		err = pm_runtime_force_suspend(dev);
+ 	flush_work(&priv->qos_work);
+ 
+ 	return err;
+@@ -1636,11 +1637,15 @@ static int omap8250_suspend(struct device *dev)
+ static int omap8250_resume(struct device *dev)
+ {
+ 	struct omap8250_priv *priv = dev_get_drvdata(dev);
++	struct uart_8250_port *up = serial8250_get_port(priv->line);
+ 	int err;
+ 
+-	err = pm_runtime_force_resume(dev);
+-	if (err)
+-		return err;
++	if (uart_console(&up->port) && console_suspend_enabled) {
++		err = pm_runtime_force_resume(dev);
++		if (err)
++			return err;
++	}
++
+ 	serial8250_resume_port(priv->line);
+ 	/* Paired with pm_runtime_resume_and_get() in omap8250_suspend() */
+ 	pm_runtime_mark_last_busy(dev);
+@@ -1717,16 +1722,6 @@ static int omap8250_runtime_suspend(struct device *dev)
+ 
+ 	if (priv->line >= 0)
+ 		up = serial8250_get_port(priv->line);
+-	/*
+-	 * When using 'no_console_suspend', the console UART must not be
+-	 * suspended. Since driver suspend is managed by runtime suspend,
+-	 * preventing runtime suspend (by returning error) will keep device
+-	 * active during suspend.
+-	 */
+-	if (priv->is_suspending && !console_suspend_enabled) {
+-		if (up && uart_console(&up->port))
+-			return -EBUSY;
+-	}
+ 
+ 	if (priv->habit & UART_ERRATA_CLOCK_DISABLE) {
+ 		int ret;
+-- 
+2.42.0
