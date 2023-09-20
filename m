@@ -2,55 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D24667A762F
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Sep 2023 10:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81FEE7A7668
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Sep 2023 10:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233798AbjITImk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Sep 2023 04:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
+        id S233744AbjITIxf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Sep 2023 04:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232338AbjITImd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Sep 2023 04:42:33 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79BF4B0;
-        Wed, 20 Sep 2023 01:42:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695199347; x=1726735347;
-  h=from:to:cc:subject:date:message-id;
-  bh=ZhLtFgkrfa1vb3NSe7b1Jh3EGEctt9IYI0cq0czH4IY=;
-  b=i0D60fYdipemgNChU/nDhKlFcfj7moXDGv5VdMYgX+EPaXsH4cfeR1Si
-   pG17JbeIRqJCc5ta+zxAc1JP/N1ig82+pXSsxPScCzubwnbJCGh4iC9Ug
-   htaPMRMha8+Z+VbDMvftPUrsvVnelChjHoE/n3Q1SdLwsFZkr0B1wrGeV
-   oaJHLXuZLpP2pwyYeBOhn354aguWsPnqQ5AvFX5/ykMamC7atd5uVzHyx
-   OX+/WUY0KONcmpbdNxX4w85A74y3b7a01GQAk7RDAIlrPa+p28u7vWqNu
-   D508il6GAx/serAwL3ti6xl88ergkjemOf/7REkMby5Tg/K9pmDyn9c/r
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10838"; a="370479833"
-X-IronPort-AV: E=Sophos;i="6.02,161,1688454000"; 
-   d="scan'208";a="370479833"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 01:42:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10838"; a="746564616"
-X-IronPort-AV: E=Sophos;i="6.02,161,1688454000"; 
-   d="scan'208";a="746564616"
-Received: from inlubt0316.iind.intel.com ([10.191.20.213])
-  by orsmga002.jf.intel.com with ESMTP; 20 Sep 2023 01:42:23 -0700
-From:   Raag Jadav <raag.jadav@intel.com>
-To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        Jonathan.Cameron@huawei.com, paul@crapouillou.net,
+        with ESMTP id S233486AbjITIxe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Sep 2023 04:53:34 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC509E;
+        Wed, 20 Sep 2023 01:53:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1695200005;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gJizfhMff7LAMmmuJXtFdbae/v/TJx7lLWUoiIv03oU=;
+        b=FILoFzJTbWaDrvv5BbWfWRbeEsH1VHN95xp0L+WuVlnyL6mgegwqmBPbUO8oFAt2RymcpU
+        ejJ0WzfmM9FummFyBNwSNIA3NhYtsI+HcmxgwPNxEWHlOnjS8TNxdi9qzNLLku+L853U1i
+        NlNHA1fDRcFY3rtxTcs3w0eYaAEE0+I=
+Message-ID: <790fac97ce79534733fe0bbd93cc0c9eaa835bf2.camel@crapouillou.net>
+Subject: Re: [PATCH v3] PM: Fix symbol export for _SIMPLE_ variants of
+ _PM_OPS()
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Raag Jadav <raag.jadav@intel.com>, rafael@kernel.org,
+        len.brown@intel.com, pavel@ucw.cz, Jonathan.Cameron@huawei.com,
         andriy.shevchenko@linux.intel.com, rf@opensource.cirrus.com
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mallikarjunappa.sangannavar@intel.com, bala.senthil@intel.com,
-        Raag Jadav <raag.jadav@intel.com>
-Subject: [PATCH v3] PM: Fix symbol export for _SIMPLE_ variants of _PM_OPS()
-Date:   Wed, 20 Sep 2023 14:11:21 +0530
-Message-Id: <20230920084121.14131-1-raag.jadav@intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        mallikarjunappa.sangannavar@intel.com, bala.senthil@intel.com
+Date:   Wed, 20 Sep 2023 10:53:23 +0200
+In-Reply-To: <20230920084121.14131-1-raag.jadav@intel.com>
+References: <20230920084121.14131-1-raag.jadav@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,115 +48,120 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently EXPORT_*_SIMPLE_DEV_PM_OPS() use EXPORT_*_DEV_PM_OPS() set
-of macros to export dev_pm_ops symbol, which export the symbol in case
-CONFIG_PM=y but don't take CONFIG_PM_SLEEP into consideration.
-
-Since _SIMPLE_ variants of _PM_OPS() do not include runtime PM handles
-and are only used in case CONFIG_PM_SLEEP=y, we should not be exporting
-their dev_pm_ops symbol in case CONFIG_PM_SLEEP=n.
-
-This can be fixed by having two distinct set of export macros for both
-_RUNTIME_ and _SIMPLE_ variants of _PM_OPS(), such that the export of
-dev_pm_ops symbol used in each variant depends on CONFIG_PM and
-CONFIG_PM_SLEEP respectively.
-
-Introduce _DEV_SLEEP_PM_OPS() set of export macros for _SIMPLE_ variants
-of _PM_OPS(), which export dev_pm_ops symbol only in case CONFIG_PM_SLEEP=y
-and discard it otherwise.
-
-Fixes: 34e1ed189fab ("PM: Improve EXPORT_*_DEV_PM_OPS macros")
-Signed-off-by: Raag Jadav <raag.jadav@intel.com>
----
-PS: This is a standalone fix and works without updating any drivers.
-
-Changes since v2:
-- Drop redundant patches
-
-Changes since v1:
-- Update drivers to new set of macros
-
- include/linux/pm.h | 43 +++++++++++++++++++++++++++++--------------
- 1 file changed, 29 insertions(+), 14 deletions(-)
-
-diff --git a/include/linux/pm.h b/include/linux/pm.h
-index 1400c37b29c7..99a8146fa479 100644
---- a/include/linux/pm.h
-+++ b/include/linux/pm.h
-@@ -374,24 +374,39 @@ const struct dev_pm_ops name = { \
- 	RUNTIME_PM_OPS(runtime_suspend_fn, runtime_resume_fn, idle_fn) \
- }
- 
--#ifdef CONFIG_PM
--#define _EXPORT_DEV_PM_OPS(name, license, ns)				\
-+#define _EXPORT_PM_OPS(name, license, ns)				\
- 	const struct dev_pm_ops name;					\
- 	__EXPORT_SYMBOL(name, license, ns);				\
- 	const struct dev_pm_ops name
--#define EXPORT_PM_FN_GPL(name)		EXPORT_SYMBOL_GPL(name)
--#define EXPORT_PM_FN_NS_GPL(name, ns)	EXPORT_SYMBOL_NS_GPL(name, ns)
--#else
--#define _EXPORT_DEV_PM_OPS(name, license, ns)				\
-+
-+#define _PM_OPS(name, license, ns)					\
- 	static __maybe_unused const struct dev_pm_ops __static_##name
-+
-+#ifdef CONFIG_PM
-+#define _EXPORT_DEV_PM_OPS(name, license, ns)		_EXPORT_PM_OPS(name, license, ns)
-+#define EXPORT_PM_FN_GPL(name)				EXPORT_SYMBOL_GPL(name)
-+#define EXPORT_PM_FN_NS_GPL(name, ns)			EXPORT_SYMBOL_NS_GPL(name, ns)
-+#else
-+#define _EXPORT_DEV_PM_OPS(name, license, ns)		_PM_OPS(name, license, ns)
- #define EXPORT_PM_FN_GPL(name)
- #define EXPORT_PM_FN_NS_GPL(name, ns)
- #endif
- 
--#define EXPORT_DEV_PM_OPS(name) _EXPORT_DEV_PM_OPS(name, "", "")
--#define EXPORT_GPL_DEV_PM_OPS(name) _EXPORT_DEV_PM_OPS(name, "GPL", "")
--#define EXPORT_NS_DEV_PM_OPS(name, ns) _EXPORT_DEV_PM_OPS(name, "", #ns)
--#define EXPORT_NS_GPL_DEV_PM_OPS(name, ns) _EXPORT_DEV_PM_OPS(name, "GPL", #ns)
-+#ifdef CONFIG_PM_SLEEP
-+#define _EXPORT_DEV_SLEEP_PM_OPS(name, license, ns)	_EXPORT_PM_OPS(name, license, ns)
-+#else
-+#define _EXPORT_DEV_SLEEP_PM_OPS(name, license, ns)	_PM_OPS(name, license, ns)
-+#endif
-+
-+#define EXPORT_DEV_PM_OPS(name)				_EXPORT_DEV_PM_OPS(name, "", "")
-+#define EXPORT_GPL_DEV_PM_OPS(name)			_EXPORT_DEV_PM_OPS(name, "GPL", "")
-+#define EXPORT_NS_DEV_PM_OPS(name, ns)			_EXPORT_DEV_PM_OPS(name, "", #ns)
-+#define EXPORT_NS_GPL_DEV_PM_OPS(name, ns)		_EXPORT_DEV_PM_OPS(name, "GPL", #ns)
-+
-+#define EXPORT_DEV_SLEEP_PM_OPS(name)			_EXPORT_DEV_SLEEP_PM_OPS(name, "", "")
-+#define EXPORT_GPL_DEV_SLEEP_PM_OPS(name)		_EXPORT_DEV_SLEEP_PM_OPS(name, "GPL", "")
-+#define EXPORT_NS_DEV_SLEEP_PM_OPS(name, ns)		_EXPORT_DEV_SLEEP_PM_OPS(name, "", #ns)
-+#define EXPORT_NS_GPL_DEV_SLEEP_PM_OPS(name, ns)	_EXPORT_DEV_SLEEP_PM_OPS(name, "GPL", #ns)
- 
- /*
-  * Use this if you want to use the same suspend and resume callbacks for suspend
-@@ -404,19 +419,19 @@ const struct dev_pm_ops name = { \
- 	_DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL)
- 
- #define EXPORT_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
--	EXPORT_DEV_PM_OPS(name) = { \
-+	EXPORT_DEV_SLEEP_PM_OPS(name) = { \
- 		SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
- 	}
- #define EXPORT_GPL_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
--	EXPORT_GPL_DEV_PM_OPS(name) = { \
-+	EXPORT_GPL_DEV_SLEEP_PM_OPS(name) = { \
- 		SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
- 	}
- #define EXPORT_NS_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn, ns)	\
--	EXPORT_NS_DEV_PM_OPS(name, ns) = { \
-+	EXPORT_NS_DEV_SLEEP_PM_OPS(name, ns) = { \
- 		SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
- 	}
- #define EXPORT_NS_GPL_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn, ns)	\
--	EXPORT_NS_GPL_DEV_PM_OPS(name, ns) = { \
-+	EXPORT_NS_GPL_DEV_SLEEP_PM_OPS(name, ns) = { \
- 		SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
- 	}
- 
--- 
-2.17.1
+SGksCgpMZSBtZXJjcmVkaSAyMCBzZXB0ZW1icmUgMjAyMyDDoCAxNDoxMSArMDUzMCwgUmFhZyBK
+YWRhdiBhIMOpY3JpdMKgOgo+IEN1cnJlbnRseSBFWFBPUlRfKl9TSU1QTEVfREVWX1BNX09QUygp
+IHVzZSBFWFBPUlRfKl9ERVZfUE1fT1BTKCkgc2V0Cj4gb2YgbWFjcm9zIHRvIGV4cG9ydCBkZXZf
+cG1fb3BzIHN5bWJvbCwgd2hpY2ggZXhwb3J0IHRoZSBzeW1ib2wgaW4KPiBjYXNlCj4gQ09ORklH
+X1BNPXkgYnV0IGRvbid0IHRha2UgQ09ORklHX1BNX1NMRUVQIGludG8gY29uc2lkZXJhdGlvbi4K
+PiAKPiBTaW5jZSBfU0lNUExFXyB2YXJpYW50cyBvZiBfUE1fT1BTKCkgZG8gbm90IGluY2x1ZGUg
+cnVudGltZSBQTQo+IGhhbmRsZXMKPiBhbmQgYXJlIG9ubHkgdXNlZCBpbiBjYXNlIENPTkZJR19Q
+TV9TTEVFUD15LCB3ZSBzaG91bGQgbm90IGJlCj4gZXhwb3J0aW5nCj4gdGhlaXIgZGV2X3BtX29w
+cyBzeW1ib2wgaW4gY2FzZSBDT05GSUdfUE1fU0xFRVA9bi4KPiAKPiBUaGlzIGNhbiBiZSBmaXhl
+ZCBieSBoYXZpbmcgdHdvIGRpc3RpbmN0IHNldCBvZiBleHBvcnQgbWFjcm9zIGZvcgo+IGJvdGgK
+PiBfUlVOVElNRV8gYW5kIF9TSU1QTEVfIHZhcmlhbnRzIG9mIF9QTV9PUFMoKSwgc3VjaCB0aGF0
+IHRoZSBleHBvcnQgb2YKPiBkZXZfcG1fb3BzIHN5bWJvbCB1c2VkIGluIGVhY2ggdmFyaWFudCBk
+ZXBlbmRzIG9uIENPTkZJR19QTSBhbmQKPiBDT05GSUdfUE1fU0xFRVAgcmVzcGVjdGl2ZWx5Lgo+
+IAo+IEludHJvZHVjZSBfREVWX1NMRUVQX1BNX09QUygpIHNldCBvZiBleHBvcnQgbWFjcm9zIGZv
+ciBfU0lNUExFXwo+IHZhcmlhbnRzCj4gb2YgX1BNX09QUygpLCB3aGljaCBleHBvcnQgZGV2X3Bt
+X29wcyBzeW1ib2wgb25seSBpbiBjYXNlCj4gQ09ORklHX1BNX1NMRUVQPXkKPiBhbmQgZGlzY2Fy
+ZCBpdCBvdGhlcndpc2UuCj4gCj4gRml4ZXM6IDM0ZTFlZDE4OWZhYiAoIlBNOiBJbXByb3ZlIEVY
+UE9SVF8qX0RFVl9QTV9PUFMgbWFjcm9zIikKPiBTaWduZWQtb2ZmLWJ5OiBSYWFnIEphZGF2IDxy
+YWFnLmphZGF2QGludGVsLmNvbT4KPiAtLS0KPiBQUzogVGhpcyBpcyBhIHN0YW5kYWxvbmUgZml4
+IGFuZCB3b3JrcyB3aXRob3V0IHVwZGF0aW5nIGFueSBkcml2ZXJzLgoKSSBoYWQgdG8gZG91Ymxl
+LWNoZWNrIHRoYXQsIHRvIG1ha2Ugc3VyZSB0aGF0IG5vbmUgb2YgdGhlIGRyaXZlcnMgdXNpbmcK
+dGhlc2UgbWFjcm9zIGFsc28gdXNlIHBtX3B0cigpIGluc3RlYWQgb2YgcG1fc2xlZXBfcHRyKCkg
+dG8gYWNjZXNzIHRoZQpleHBvcnRlZCBkZXZfcG1fb3BzLgoKSSBkaWQgbm90IGNoZWNrIGV4dGVu
+c2l2ZWx5IGJ1dCBldmVyeXRoaW5nIHNlZW1zIHRvIHVzZSBwbV9zbGVlcF9wdHIoKSwKc28gaXQg
+bG9va3Mgc2FmZSBlbm91Z2guCgo+IAo+IENoYW5nZXMgc2luY2UgdjI6Cj4gLSBEcm9wIHJlZHVu
+ZGFudCBwYXRjaGVzCj4gCj4gQ2hhbmdlcyBzaW5jZSB2MToKPiAtIFVwZGF0ZSBkcml2ZXJzIHRv
+IG5ldyBzZXQgb2YgbWFjcm9zCj4gCj4gwqBpbmNsdWRlL2xpbnV4L3BtLmggfCA0MyArKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tLS0tCj4gwqAxIGZpbGUgY2hhbmdlZCwg
+MjkgaW5zZXJ0aW9ucygrKSwgMTQgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL2luY2x1
+ZGUvbGludXgvcG0uaCBiL2luY2x1ZGUvbGludXgvcG0uaAo+IGluZGV4IDE0MDBjMzdiMjljNy4u
+OTlhODE0NmZhNDc5IDEwMDY0NAo+IC0tLSBhL2luY2x1ZGUvbGludXgvcG0uaAo+ICsrKyBiL2lu
+Y2x1ZGUvbGludXgvcG0uaAo+IEBAIC0zNzQsMjQgKzM3NCwzOSBAQCBjb25zdCBzdHJ1Y3QgZGV2
+X3BtX29wcyBuYW1lID0geyBcCj4gwqDCoMKgwqDCoMKgwqDCoFJVTlRJTUVfUE1fT1BTKHJ1bnRp
+bWVfc3VzcGVuZF9mbiwgcnVudGltZV9yZXN1bWVfZm4sCj4gaWRsZV9mbikgXAo+IMKgfQo+IMKg
+Cj4gLSNpZmRlZiBDT05GSUdfUE0KPiAtI2RlZmluZSBfRVhQT1JUX0RFVl9QTV9PUFMobmFtZSwg
+bGljZW5zZSwKPiBucynCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgXAo+ICsjZGVmaW5lIF9FWFBPUlRfUE1fT1BTKG5hbWUsIGxpY2Vuc2UsCj4gbnMp
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgXAo+IMKgwqDCoMKgwqDCoMKgwqBjb25zdCBzdHJ1Y3QgZGV2X3BtX29wcwo+IG5hbWU7wqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoFwKPiDCoMKgwqDCoMKgwqDCoMKgX19FWFBPUlRfU1lNQk9MKG5hbWUsIGxpY2Vu
+c2UsCj4gbnMpO8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqBcCj4gwqDCoMKgwqDCoMKgwqDCoGNvbnN0IHN0cnVjdCBkZXZfcG1fb3BzIG5h
+bWUKPiAtI2RlZmluZSBFWFBPUlRfUE1fRk5fR1BMKG5hbWUpwqDCoMKgwqDCoMKgwqDCoMKgRVhQ
+T1JUX1NZTUJPTF9HUEwobmFtZSkKPiAtI2RlZmluZSBFWFBPUlRfUE1fRk5fTlNfR1BMKG5hbWUs
+IG5zKcKgwqBFWFBPUlRfU1lNQk9MX05TX0dQTChuYW1lLAo+IG5zKQo+IC0jZWxzZQo+IC0jZGVm
+aW5lIF9FWFBPUlRfREVWX1BNX09QUyhuYW1lLCBsaWNlbnNlLAo+IG5zKcKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBcCj4gKwo+ICsjZGVmaW5lIF9Q
+TV9PUFMobmFtZSwgbGljZW5zZSwKClRoaXMgbWFjcm8gY3JlYXRlcyBhIGRldl9wbV9vcHMgdGhh
+dCdzIG1lYW50IHRvIGJlIGdhcmJhZ2UtY29sbGVjdGVkIGJ5CnRoZSBjb21waWxlcjsgc28gbWF5
+YmUgbmFtZSBpdCBfVVNFTEVTU19QTV9PUFMoKSBvciBzb21ldGhpbmcgbGlrZQp0aGF0LgoKKEkg
+Y291bGQgaGF2ZSBzYWlkIHRoYXQgaW4geW91ciB2MiBwYXRjaCwgc29ycnkpCgpDaGVlcnMsCi1Q
+YXVsCgo+IG5zKcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgXAo+IMKgwqDCoMKgwqDCoMKgwqBzdGF0aWMgX19t
+YXliZV91bnVzZWQgY29uc3Qgc3RydWN0IGRldl9wbV9vcHMgX19zdGF0aWNfIyNuYW1lCj4gKwo+
+ICsjaWZkZWYgQ09ORklHX1BNCj4gKyNkZWZpbmUgX0VYUE9SVF9ERVZfUE1fT1BTKG5hbWUsIGxp
+Y2Vuc2UsCj4gbnMpwqDCoMKgwqDCoMKgwqDCoMKgwqBfRVhQT1JUX1BNX09QUyhuYW1lLCBsaWNl
+bnNlLCBucykKPiArI2RlZmluZQo+IEVYUE9SVF9QTV9GTl9HUEwobmFtZSnCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoEVYUE9SVF9TWU1CT0xfR1BMKG5h
+bWUKPiApCj4gKyNkZWZpbmUgRVhQT1JUX1BNX0ZOX05TX0dQTChuYW1lLAo+IG5zKcKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoEVYUE9SVF9TWU1CT0xfTlNfR1BMKG5hbWUsIG5z
+KQo+ICsjZWxzZQo+ICsjZGVmaW5lIF9FWFBPUlRfREVWX1BNX09QUyhuYW1lLCBsaWNlbnNlLCBu
+cynCoMKgwqDCoMKgwqDCoMKgwqDCoF9QTV9PUFMobmFtZSwKPiBsaWNlbnNlLCBucykKPiDCoCNk
+ZWZpbmUgRVhQT1JUX1BNX0ZOX0dQTChuYW1lKQo+IMKgI2RlZmluZSBFWFBPUlRfUE1fRk5fTlNf
+R1BMKG5hbWUsIG5zKQo+IMKgI2VuZGlmCj4gwqAKPiAtI2RlZmluZSBFWFBPUlRfREVWX1BNX09Q
+UyhuYW1lKSBfRVhQT1JUX0RFVl9QTV9PUFMobmFtZSwgIiIsICIiKQo+IC0jZGVmaW5lIEVYUE9S
+VF9HUExfREVWX1BNX09QUyhuYW1lKSBfRVhQT1JUX0RFVl9QTV9PUFMobmFtZSwgIkdQTCIsCj4g
+IiIpCj4gLSNkZWZpbmUgRVhQT1JUX05TX0RFVl9QTV9PUFMobmFtZSwgbnMpIF9FWFBPUlRfREVW
+X1BNX09QUyhuYW1lLCAiIiwKPiAjbnMpCj4gLSNkZWZpbmUgRVhQT1JUX05TX0dQTF9ERVZfUE1f
+T1BTKG5hbWUsIG5zKSBfRVhQT1JUX0RFVl9QTV9PUFMobmFtZSwKPiAiR1BMIiwgI25zKQo+ICsj
+aWZkZWYgQ09ORklHX1BNX1NMRUVQCj4gKyNkZWZpbmUgX0VYUE9SVF9ERVZfU0xFRVBfUE1fT1BT
+KG5hbWUsIGxpY2Vuc2UsCj4gbnMpwqDCoMKgwqBfRVhQT1JUX1BNX09QUyhuYW1lLCBsaWNlbnNl
+LCBucykKPiArI2Vsc2UKPiArI2RlZmluZSBfRVhQT1JUX0RFVl9TTEVFUF9QTV9PUFMobmFtZSwg
+bGljZW5zZSwgbnMpwqDCoMKgwqBfUE1fT1BTKG5hbWUsCj4gbGljZW5zZSwgbnMpCj4gKyNlbmRp
+Zgo+ICsKPiArI2RlZmluZQo+IEVYUE9SVF9ERVZfUE1fT1BTKG5hbWUpwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoF9FWFBPUlRf
+REVWX1BNCj4gX09QUyhuYW1lLCAiIiwgIiIpCj4gKyNkZWZpbmUKPiBFWFBPUlRfR1BMX0RFVl9Q
+TV9PUFMobmFtZSnCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgX0VYUE9S
+VF9ERVZfUE1fT1BTKG5hbQo+IGUsICJHUEwiLCAiIikKPiArI2RlZmluZSBFWFBPUlRfTlNfREVW
+X1BNX09QUyhuYW1lLAo+IG5zKcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBfRVhQ
+T1JUX0RFVl9QTV9PUFMobmFtZSwgIiIsICNucykKPiArI2RlZmluZSBFWFBPUlRfTlNfR1BMX0RF
+Vl9QTV9PUFMobmFtZSwKPiBucynCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoF9FWFBPUlRfREVW
+X1BNX09QUyhuYW1lLCAiR1BMIiwgI25zKQo+ICsKPiArI2RlZmluZQo+IEVYUE9SVF9ERVZfU0xF
+RVBfUE1fT1BTKG5hbWUpwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgX0VYUE9S
+VF9ERVZfU0xFRVBfUE1fTwo+IFBTKG5hbWUsICIiLCAiIikKPiArI2RlZmluZQo+IEVYUE9SVF9H
+UExfREVWX1NMRUVQX1BNX09QUyhuYW1lKcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBfRVhQ
+T1JUX0RFVl9TTEVFUF9QTV9PCj4gUFMobmFtZSwgIkdQTCIsICIiKQo+ICsjZGVmaW5lIEVYUE9S
+VF9OU19ERVZfU0xFRVBfUE1fT1BTKG5hbWUsCj4gbnMpwqDCoMKgwqDCoMKgwqDCoMKgwqDCoF9F
+WFBPUlRfREVWX1NMRUVQX1BNX09QUyhuYW1lLCAiIiwgI25zKQo+ICsjZGVmaW5lIEVYUE9SVF9O
+U19HUExfREVWX1NMRUVQX1BNX09QUyhuYW1lLAo+IG5zKcKgwqDCoMKgwqDCoMKgX0VYUE9SVF9E
+RVZfU0xFRVBfUE1fT1BTKG5hbWUsICJHUEwiLCAjbnMpCj4gwqAKPiDCoC8qCj4gwqAgKiBVc2Ug
+dGhpcyBpZiB5b3Ugd2FudCB0byB1c2UgdGhlIHNhbWUgc3VzcGVuZCBhbmQgcmVzdW1lIGNhbGxi
+YWNrcwo+IGZvciBzdXNwZW5kCj4gQEAgLTQwNCwxOSArNDE5LDE5IEBAIGNvbnN0IHN0cnVjdCBk
+ZXZfcG1fb3BzIG5hbWUgPSB7IFwKPiDCoMKgwqDCoMKgwqDCoMKgX0RFRklORV9ERVZfUE1fT1BT
+KG5hbWUsIHN1c3BlbmRfZm4sIHJlc3VtZV9mbiwgTlVMTCwgTlVMTCwKPiBOVUxMKQo+IMKgCj4g
+wqAjZGVmaW5lIEVYUE9SVF9TSU1QTEVfREVWX1BNX09QUyhuYW1lLCBzdXNwZW5kX2ZuLCByZXN1
+bWVfZm4pIFwKPiAtwqDCoMKgwqDCoMKgwqBFWFBPUlRfREVWX1BNX09QUyhuYW1lKSA9IHsgXAo+
+ICvCoMKgwqDCoMKgwqDCoEVYUE9SVF9ERVZfU0xFRVBfUE1fT1BTKG5hbWUpID0geyBcCj4gwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBTWVNURU1fU0xFRVBfUE1fT1BTKHN1c3BlbmRf
+Zm4sIHJlc3VtZV9mbikgXAo+IMKgwqDCoMKgwqDCoMKgwqB9Cj4gwqAjZGVmaW5lIEVYUE9SVF9H
+UExfU0lNUExFX0RFVl9QTV9PUFMobmFtZSwgc3VzcGVuZF9mbiwgcmVzdW1lX2ZuKSBcCj4gLcKg
+wqDCoMKgwqDCoMKgRVhQT1JUX0dQTF9ERVZfUE1fT1BTKG5hbWUpID0geyBcCj4gK8KgwqDCoMKg
+wqDCoMKgRVhQT1JUX0dQTF9ERVZfU0xFRVBfUE1fT1BTKG5hbWUpID0geyBcCj4gwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBTWVNURU1fU0xFRVBfUE1fT1BTKHN1c3BlbmRfZm4sIHJl
+c3VtZV9mbikgXAo+IMKgwqDCoMKgwqDCoMKgwqB9Cj4gwqAjZGVmaW5lIEVYUE9SVF9OU19TSU1Q
+TEVfREVWX1BNX09QUyhuYW1lLCBzdXNwZW5kX2ZuLCByZXN1bWVfZm4sCj4gbnMpwqDCoMKgXAo+
+IC3CoMKgwqDCoMKgwqDCoEVYUE9SVF9OU19ERVZfUE1fT1BTKG5hbWUsIG5zKSA9IHsgXAo+ICvC
+oMKgwqDCoMKgwqDCoEVYUE9SVF9OU19ERVZfU0xFRVBfUE1fT1BTKG5hbWUsIG5zKSA9IHsgXAo+
+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgU1lTVEVNX1NMRUVQX1BNX09QUyhzdXNw
+ZW5kX2ZuLCByZXN1bWVfZm4pIFwKPiDCoMKgwqDCoMKgwqDCoMKgfQo+IMKgI2RlZmluZSBFWFBP
+UlRfTlNfR1BMX1NJTVBMRV9ERVZfUE1fT1BTKG5hbWUsIHN1c3BlbmRfZm4sIHJlc3VtZV9mbiwK
+PiBucynCoMKgwqDCoMKgwqDCoFwKPiAtwqDCoMKgwqDCoMKgwqBFWFBPUlRfTlNfR1BMX0RFVl9Q
+TV9PUFMobmFtZSwgbnMpID0geyBcCj4gK8KgwqDCoMKgwqDCoMKgRVhQT1JUX05TX0dQTF9ERVZf
+U0xFRVBfUE1fT1BTKG5hbWUsIG5zKSA9IHsgXAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgU1lTVEVNX1NMRUVQX1BNX09QUyhzdXNwZW5kX2ZuLCByZXN1bWVfZm4pIFwKPiDCoMKg
+wqDCoMKgwqDCoMKgfQo+IMKgCgo=
 
