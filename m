@@ -2,136 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EA157A8CE6
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Sep 2023 21:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B5CE7A8CF3
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Sep 2023 21:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjITTaK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Sep 2023 15:30:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47864 "EHLO
+        id S230144AbjITTes (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Sep 2023 15:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbjITT37 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Sep 2023 15:29:59 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48819CD4;
-        Wed, 20 Sep 2023 12:29:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695238177; x=1726774177;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=aiq472JWLWXdIz5Cjfz8QekXdY4FBzRQ9k7JBMwVEVs=;
-  b=ja6QT85wuCUisPI4pXmiTi4nMaTc1pVdPtI7ZqPEJ2njbxqvgargovy4
-   uvU7+6mglj0J1zu8B3dQ8iZ6pdx5Vw2oZQfFXVGtTDbQHmI0igOOFGzhX
-   RIrmuzdhBwhfa/ue0tcDnYeYPGzayGUMY26C7G9C/JyQ8zG7MWm9SFzPb
-   nnY1sUIVr1lfzariIpoJFXYauB8mq/JS5E67HNo5TFAzRIYPxnBwLmWmT
-   JmG/ly1fA2HFrSotxgBxn9IEA3QbrRJurBlt2EZoL5sHXm1IbHoFPEebU
-   mP4XZ9LV+YF3My2ex7j4HfYs0GCdaM7XvEesa1HZ8YV+FkuxxPoGrY0+i
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="360568671"
-X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
-   d="scan'208";a="360568671"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 12:29:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="817041802"
-X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
-   d="scan'208";a="817041802"
-Received: from spandruv-desk1.amr.corp.intel.com ([10.212.142.24])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 12:29:32 -0700
-Message-ID: <51b3a2f115b2392557331442460c2a52432f399d.camel@linux.intel.com>
-Subject: Re: [PATCH linux-next] thermal: int340x: processor_thermal: Ack all
- PCI interrupts
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 20 Sep 2023 12:29:31 -0700
-In-Reply-To: <CAJZ5v0jLms5iUM8CXDWNCPcXSQgLv9_XJzqx9RwReqGGUKFL_Q@mail.gmail.com>
-References: <20230920185153.613706-1-srinivas.pandruvada@linux.intel.com>
-         <CAJZ5v0jLms5iUM8CXDWNCPcXSQgLv9_XJzqx9RwReqGGUKFL_Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+        with ESMTP id S229441AbjITTej (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Sep 2023 15:34:39 -0400
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [104.207.131.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D3B9F;
+        Wed, 20 Sep 2023 12:34:31 -0700 (PDT)
+Received: from spock.localnet (unknown [94.142.239.106])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 74E58150A22B;
+        Wed, 20 Sep 2023 21:34:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1695238468;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ieFwOXSMXwW5Z1TbA7klO5guFnw5DamdxsZ5CsxGlt0=;
+        b=Wpkll7Je8Gck2iZpd4BOW50eRsftKl4A3iDUArvIOYyke7t3nm5Fli7jg4q5J3dJGqEEVy
+        kEYUkhw7PIY+Cd/WggeAxoELj3T7EBZ741uOX07yatvrGaYUBgLLLU9TUsowp1OuVGQMWj
+        n+h5ufMLaU9YYHTGfcKYISaR6KJC4oc=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     Huang Rui <ray.huang@amd.com>, Meng Li <li.meng@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-acpi@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH V7 0/7] amd-pstate preferred core
+Date:   Wed, 20 Sep 2023 21:34:17 +0200
+Message-ID: <12290212.O9o76ZdvQC@natalenko.name>
+In-Reply-To: <ce377dda-e1ce-4553-b9b8-125620b8b2d7@amd.com>
+References: <20230918081407.756858-1-li.meng@amd.com> <5973628.lOV4Wx5bFT@natalenko.name>
+ <ce377dda-e1ce-4553-b9b8-125620b8b2d7@amd.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="nextPart5713749.DvuYhMxLoT";
+ micalg="pgp-sha256"; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2023-09-20 at 21:21 +0200, Rafael J. Wysocki wrote:
-> On Wed, Sep 20, 2023 at 8:52=E2=80=AFPM Srinivas Pandruvada
-> <srinivas.pandruvada@linux.intel.com> wrote:
+--nextPart5713749.DvuYhMxLoT
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"; protected-headers="v1"
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: Re: [PATCH V7 0/7] amd-pstate preferred core
+Date: Wed, 20 Sep 2023 21:34:17 +0200
+Message-ID: <12290212.O9o76ZdvQC@natalenko.name>
+In-Reply-To: <ce377dda-e1ce-4553-b9b8-125620b8b2d7@amd.com>
+MIME-Version: 1.0
+
+Hello.
+
+On st=C5=99eda 20. z=C3=A1=C5=99=C3=AD 2023 18:56:09 CEST Mario Limonciello=
+ wrote:
+> > When applied on top of v6.5.3 this breaks turbo on my 5950X after suspe=
+nd/resume cycle. Please see the scenario description below.
 > >=20
-> > All interrupts from the processor thermal PCI device requires ACK.
-> > This
-> > is done by writing 0x01 at offset 0xDC in the config space. This is
-> > already done for the thereshold interrupt. Extend this for the
-> > workload
-> > hint interrupt.
+> > If I boot v6.5.3 + this patchset, then `turbostat` reports ~4.9 GHz on =
+core 0 where `taskset -c 0 dd if=3D/dev/zero of=3D/dev/null` is being run.
 > >=20
-> > Signed-off-by: Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com>
+> > After I suspend the machine and then resume it, and run `dd` again, `tu=
+rbostat` reports the core to be capped to a stock frequency of ~3.4 GHz. Re=
+booting the machine fixes this, and the CPU can boost again.
+> >=20
+> > If this patchset is reverted, then the CPU can turbo after suspend/resu=
+me cycle just fine.
+> >=20
+> > I'm using `amd_pstate=3Dguided`.
+> >=20
+> > Is this behaviour expected?
 >=20
-> Is this a fix for one of the commits in linux-next?=C2=A0 If so, which
-> one?
-This is on top of workload hints patches.  I marked linux-next as they
-are not in mainline kernel.
-
-This can alternatively merged to=20
-e682b86211a1 thermal: int340x: Handle workload hint interrupts
-
-But not sure how to mark the commit id as they will change.
-Whatever you prefer.
-
-Thanks,
-Srinivas
-
-
-
+> To help confirm where the issue is, can I ask you to do three=20
+> experiments with the patch series applied:
 >=20
-> > ---
-> > =C2=A0.../intel/int340x_thermal/processor_thermal_device_pci.c=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 3
-> > ++-
-> > =C2=A01 file changed, 2 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git
-> > a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pc
-> > i.c
-> > b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pc
-> > i.c
-> > index 44b179ce9bc9..3c5ced79ead0 100644
-> > ---
-> > a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pc
-> > i.c
-> > +++
-> > b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pc
-> > i.c
-> > @@ -154,10 +154,11 @@ static irqreturn_t
-> > proc_thermal_irq_handler(int irq, void *devid)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (status) {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 /* Disable enable interrupt flag */
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 proc_thermal_mmio_write(pci_info,
-> > PROC_THERMAL_MMIO_INT_ENABLE_0, 0);
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 pci_write_config_byte(pci_info->pdev, 0xdc, 0x01);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 pkg_thermal_schedule_work(&pci_info->work);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> >=20
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pci_write_config_byte(pci_info->p=
-dev, 0xdc, 0x01);
-> > +
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return ret;
-> > =C2=A0}
-> >=20
-> > --
-> > 2.40.1
-> >=20
+> 1) 'amd_pstate=3Dactive' on your kernel command line.
+
+The issue is reproducible. If I toggle the governor in cpupower to `powersa=
+ve` and back to `performance`, boost is restored.
+
+> 2) 'amd_pstate=3Dactive amd_prefcore=3Ddisable' on your kernel command li=
+ne.
+
+The issue is not reproducible.
+
+> 3) 'amd_pstate=3Dguided amd_prefcore=3Ddisable' on your kernel command li=
+ne.
+
+The issue is not reproducible.
+
+I should also mention that in my initial configuration I use `amd_pstate=3D=
+guided` and `schedutil`. If I switch to `performance` after suspend-resume =
+cycle, the boost is restored. However, if I switch back to `schedutil`, the=
+ freq is capped.
+
+Does this info help?
+
+> Looking through the code, I anticipate from your report that it=20
+> reproduces on "1" but not "2" and "3".
+>=20
+> Meng,
+>=20
+> Can you try to repro?
+>=20
+> I think that it's probably a call to amd_pstate_init_prefcore() missing
+> from amd_pstate_cpu_resume() and also amd_pstate_epp_resume().
+
+=2D-=20
+Oleksandr Natalenko (post-factum)
+--nextPart5713749.DvuYhMxLoT
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEZUOOw5ESFLHZZtOKil/iNcg8M0sFAmULSTkACgkQil/iNcg8
+M0sqsA//eFdiuY7Cxaer5l0lBux1QhGyN0q30uy+zbybTXSfN4BGYulhA/nihp5k
+TRvwAYlSQf1Zhoi40S2xQlpblgLkiSl+a9UtdVju7RKfButrbNhFmQSygIHYQnmc
+kKYu+2079+3GvpFYPxtMJBR5UNbbNZ+dFTmj8SYnQ7Zm0cizbzi+WtIphnNuhubE
+fLs8Dc1XtvrqukGjffefSDjzQ7pd/LIcD1zG4nPbdyUIki52P/Y4TewqqJ8ZePg5
+qw/a/pRHePddz4rnEjCuSswZ98PXfipz7C1R49b1I6E7UlFAPqWnMQbioKYPUsWW
+Eszd8omTV4ejEwZ6kX22zynoCHNRg8O37SMBHxhNbIzIOVXTyGtD+9c4wd6AjAvy
+/+VRk9JJGHoZfh9YOB8tHNvmxzKUEQSW93KKlD8Var5hsqzWHsUxkCn3U74hB7Px
+dWmKRtau/qrarrS068QtM8QOIgfegUzvu0s6DyVFleI9Sx0zjfV1cfzgv02OYY75
+9Zk+/qfNe6opvZMtGLTMUueQGMy1KGYhN55PPMxy5S1LeZPgfXZDHWdBMqQYpz3X
+RyNLvfoUYHGSQJJBKvhuloW0sauhFtVnBG7CF3A8e6t3dvzqBrwem+vdFBZw4uwt
+xuw0b6tGpTkmeRCtz23xGHpH9qE6uIo4Bo2FxenUm3jZHnNbALY=
+=EcDU
+-----END PGP SIGNATURE-----
+
+--nextPart5713749.DvuYhMxLoT--
+
+
 
