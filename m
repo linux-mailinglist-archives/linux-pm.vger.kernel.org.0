@@ -2,90 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83867A8C13
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Sep 2023 20:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0864B7A8CAE
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Sep 2023 21:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjITSyU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Sep 2023 14:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54048 "EHLO
+        id S229832AbjITTVq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 20 Sep 2023 15:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjITSyU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Sep 2023 14:54:20 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF62C6;
-        Wed, 20 Sep 2023 11:54:14 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26676C433C9;
-        Wed, 20 Sep 2023 18:54:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695236054;
-        bh=otb5DM/4dhf30T5dFnYMnw7MyuNEWEkpWHoB3snPXyU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MhubmkO7L0v45tnu09+stzCUT/fNV/OtFtzPV8j8YSjueRocNpa4Y3ESgPVAOXvOb
-         1XOf05kQpaHXhFl35oTfA4t7OSxaZbp1AoFT9CdbISs4nE7qFCOe2egbldrJATe6aA
-         WODXdTYMuURkoptVMo/Wz32NwkD0woOBrjK4V5uV8INwzP572JZ5b6fbkfyCnZqByb
-         YJqe01YJbHtGa1IE2uCsWmtnsaCCYPXm6D4r4BmDklrmvyVjl5G3nRsX3+gAxMSyIp
-         XSZj2zQLjSq8mPfS5ADNfbP7DkEEVL1N65qkwvM94O83yU6uvv+wcDW/hOBW6a/Cbn
-         zvZ6c8BAuqPHQ==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     cros-qcom-dts-watchers@chromium.org,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Luca Weiss <luca.weiss@fairphone.com>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: (subset) [PATCH v2 0/7] Initial support for the Fairphone 5 smartphone
-Date:   Wed, 20 Sep 2023 11:58:20 -0700
-Message-ID: <169523629862.3360741.11240206637939402551.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230919-fp5-initial-v2-0-14bb7cedadf5@fairphone.com>
-References: <20230919-fp5-initial-v2-0-14bb7cedadf5@fairphone.com>
+        with ESMTP id S229563AbjITTVo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Sep 2023 15:21:44 -0400
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C648F;
+        Wed, 20 Sep 2023 12:21:39 -0700 (PDT)
+Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3a707bc2397so17413b6e.0;
+        Wed, 20 Sep 2023 12:21:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695237698; x=1695842498;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+QnwindRPyDSzR2SN+sH5xPh30Omc5eoxXIdaiaP7AU=;
+        b=Z4r6sgNngFyhrdrYwoZHvNvxjoS2cX+h1eTG4XBnb6jJKxR+agL//z7qqVoYfKq+Y9
+         lYYEvQuYV34Cj5A9LnLtihwSzHfIGx+QkYc/AQRBXTWY2UV26Lsmy5BnXdaCqoxOdWud
+         SVKHgCUXYLbbAkxqJBgfy38ZrE78F/UIrI5eTzfFN0g/jCxVVooRWmRBPiFOIMyqQKWL
+         brDVIWQW07Dc8f7qZy2xNKibaOtcef1zMLV0MZyTdwiI3UUSXyh8njSpgbHpW2VpcYXc
+         KRmc+zK3KK+rWwVDBuNlYRgJGCURQecyn/bJbAtUcMWwK5K/dSgx43jdhL1X5SvbKEZZ
+         iL8Q==
+X-Gm-Message-State: AOJu0Yxkz/W9ReSW2BkMBGSlGPlKNXNJoINA2Lil0AYx5BKB7ReStsHe
+        ZbYSW6o5GyHTk7tBIl0tjE3AlXOS5DnNiE/YJss=
+X-Google-Smtp-Source: AGHT+IEWokomSBcfOokE6pDpUVh17f+4H1Vtb1rCulI7Jq5BJaC8N/5TPJriFvBOsW7qFxEyc6pTm909t5Nku8Bvt5s=
+X-Received: by 2002:a05:6808:1496:b0:3ab:8ae5:e7c6 with SMTP id
+ e22-20020a056808149600b003ab8ae5e7c6mr3781056oiw.1.1695237698046; Wed, 20 Sep
+ 2023 12:21:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230920185153.613706-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20230920185153.613706-1-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 20 Sep 2023 21:21:27 +0200
+Message-ID: <CAJZ5v0jLms5iUM8CXDWNCPcXSQgLv9_XJzqx9RwReqGGUKFL_Q@mail.gmail.com>
+Subject: Re: [PATCH linux-next] thermal: int340x: processor_thermal: Ack all
+ PCI interrupts
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, Sep 20, 2023 at 8:52 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> All interrupts from the processor thermal PCI device requires ACK. This
+> is done by writing 0x01 at offset 0xDC in the config space. This is
+> already done for the thereshold interrupt. Extend this for the workload
+> hint interrupt.
+>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-On Tue, 19 Sep 2023 14:45:54 +0200, Luca Weiss wrote:
-> Add support to boot up mainline kernel on the QCM6490-based Fairphone 5
-> smartphone.
-> 
-> These patches only cover a part of the functionality brought up on
-> mainline so far, with the rest needing larger dts and driver changes or
-> depend on patches that are not yet merged. I will work on sending those
-> once these base patches here have settled.
-> 
-> [...]
+Is this a fix for one of the commits in linux-next?  If so, which one?
 
-Applied, thanks!
-
-[1/7] arm64: dts: qcom: sc7280: Mark some nodes as 'reserved'
-      commit: 6da24ba932082bae110feb917a64bb54637fa7c0
-[3/7] arm64: dts: qcom: pm7250b: make SID configurable
-      commit: 8e2d56f64572e0432c355093a7601bde29677490
-[4/7] arm64: dts: qcom: pm8350c: Add flash led node
-      commit: bfd4412a023b2a3a2f858f2ffc13705aaeef5737
-[6/7] dt-bindings: arm: qcom: Add QCM6490 Fairphone 5
-      commit: 4b1a16d776b474345b12f834de1fd42bca226d90
-[7/7] arm64: dts: qcom: qcm6490: Add device-tree for Fairphone 5
-      commit: eee9602ad6498eee9ddab1b7eb6aede288f0b934
-
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+> ---
+>  .../intel/int340x_thermal/processor_thermal_device_pci.c       | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> index 44b179ce9bc9..3c5ced79ead0 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> @@ -154,10 +154,11 @@ static irqreturn_t proc_thermal_irq_handler(int irq, void *devid)
+>         if (status) {
+>                 /* Disable enable interrupt flag */
+>                 proc_thermal_mmio_write(pci_info, PROC_THERMAL_MMIO_INT_ENABLE_0, 0);
+> -               pci_write_config_byte(pci_info->pdev, 0xdc, 0x01);
+>                 pkg_thermal_schedule_work(&pci_info->work);
+>         }
+>
+> +       pci_write_config_byte(pci_info->pdev, 0xdc, 0x01);
+> +
+>         return ret;
+>  }
+>
+> --
+> 2.40.1
+>
