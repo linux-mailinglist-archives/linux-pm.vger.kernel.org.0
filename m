@@ -2,88 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E29737A8C0B
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Sep 2023 20:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B83867A8C13
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Sep 2023 20:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229473AbjITSwI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Sep 2023 14:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
+        id S229746AbjITSyU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Sep 2023 14:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjITSwH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Sep 2023 14:52:07 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17606AF;
-        Wed, 20 Sep 2023 11:52:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695235922; x=1726771922;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=M54V96/a5JNvmtpGTO55S8B6KkQoazOnDcAbzhvWxAs=;
-  b=lXkQnLPgYbiov/uheohU1+/fwSuuVVarDva+dUQsgBWtmG8XlznFwwzn
-   XMGO6247NbPGMlrrJlJu2HDLUa5vgyGeFML2IMY2IeJ9UhywT5TfyhF9F
-   zWK6R78CXGXg3AI5SO0FPtdNs/T8bjO8thXla0ZT6NKsDaMYbf0X9f2gM
-   fWxePK+4L4N8l350JLthwCGW50RfXH/Ex2Oe+IfNUcXSK9QGfUsEkINo7
-   0mhsQJSACzDZfM8i5Y2vmK5e2NJebcBsq5QDAZPnvvEwov0yEqPWZG196
-   q2y9Z7ePzxLR0P+USCka240nIYtnMYqUktGVZm5R8K66h05R4HbFNbIxu
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="377611672"
-X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
-   d="scan'208";a="377611672"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 11:52:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="812280570"
-X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
-   d="scan'208";a="812280570"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.14])
-  by fmsmga008.fm.intel.com with ESMTP; 20 Sep 2023 11:52:01 -0700
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH linux-next] thermal: int340x: processor_thermal: Ack all PCI interrupts
-Date:   Wed, 20 Sep 2023 11:51:53 -0700
-Message-Id: <20230920185153.613706-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.40.1
+        with ESMTP id S229518AbjITSyU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Sep 2023 14:54:20 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF62C6;
+        Wed, 20 Sep 2023 11:54:14 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26676C433C9;
+        Wed, 20 Sep 2023 18:54:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695236054;
+        bh=otb5DM/4dhf30T5dFnYMnw7MyuNEWEkpWHoB3snPXyU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=MhubmkO7L0v45tnu09+stzCUT/fNV/OtFtzPV8j8YSjueRocNpa4Y3ESgPVAOXvOb
+         1XOf05kQpaHXhFl35oTfA4t7OSxaZbp1AoFT9CdbISs4nE7qFCOe2egbldrJATe6aA
+         WODXdTYMuURkoptVMo/Wz32NwkD0woOBrjK4V5uV8INwzP572JZ5b6fbkfyCnZqByb
+         YJqe01YJbHtGa1IE2uCsWmtnsaCCYPXm6D4r4BmDklrmvyVjl5G3nRsX3+gAxMSyIp
+         XSZj2zQLjSq8mPfS5ADNfbP7DkEEVL1N65qkwvM94O83yU6uvv+wcDW/hOBW6a/Cbn
+         zvZ6c8BAuqPHQ==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     cros-qcom-dts-watchers@chromium.org,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Luca Weiss <luca.weiss@fairphone.com>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: (subset) [PATCH v2 0/7] Initial support for the Fairphone 5 smartphone
+Date:   Wed, 20 Sep 2023 11:58:20 -0700
+Message-ID: <169523629862.3360741.11240206637939402551.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20230919-fp5-initial-v2-0-14bb7cedadf5@fairphone.com>
+References: <20230919-fp5-initial-v2-0-14bb7cedadf5@fairphone.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-All interrupts from the processor thermal PCI device requires ACK. This
-is done by writing 0x01 at offset 0xDC in the config space. This is
-already done for the thereshold interrupt. Extend this for the workload
-hint interrupt.
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- .../intel/int340x_thermal/processor_thermal_device_pci.c       | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On Tue, 19 Sep 2023 14:45:54 +0200, Luca Weiss wrote:
+> Add support to boot up mainline kernel on the QCM6490-based Fairphone 5
+> smartphone.
+> 
+> These patches only cover a part of the functionality brought up on
+> mainline so far, with the rest needing larger dts and driver changes or
+> depend on patches that are not yet merged. I will work on sending those
+> once these base patches here have settled.
+> 
+> [...]
 
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-index 44b179ce9bc9..3c5ced79ead0 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-@@ -154,10 +154,11 @@ static irqreturn_t proc_thermal_irq_handler(int irq, void *devid)
- 	if (status) {
- 		/* Disable enable interrupt flag */
- 		proc_thermal_mmio_write(pci_info, PROC_THERMAL_MMIO_INT_ENABLE_0, 0);
--		pci_write_config_byte(pci_info->pdev, 0xdc, 0x01);
- 		pkg_thermal_schedule_work(&pci_info->work);
- 	}
- 
-+	pci_write_config_byte(pci_info->pdev, 0xdc, 0x01);
-+
- 	return ret;
- }
- 
+Applied, thanks!
+
+[1/7] arm64: dts: qcom: sc7280: Mark some nodes as 'reserved'
+      commit: 6da24ba932082bae110feb917a64bb54637fa7c0
+[3/7] arm64: dts: qcom: pm7250b: make SID configurable
+      commit: 8e2d56f64572e0432c355093a7601bde29677490
+[4/7] arm64: dts: qcom: pm8350c: Add flash led node
+      commit: bfd4412a023b2a3a2f858f2ffc13705aaeef5737
+[6/7] dt-bindings: arm: qcom: Add QCM6490 Fairphone 5
+      commit: 4b1a16d776b474345b12f834de1fd42bca226d90
+[7/7] arm64: dts: qcom: qcm6490: Add device-tree for Fairphone 5
+      commit: eee9602ad6498eee9ddab1b7eb6aede288f0b934
+
+Best regards,
 -- 
-2.40.1
-
+Bjorn Andersson <andersson@kernel.org>
