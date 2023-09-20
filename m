@@ -2,71 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD89D7A8306
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Sep 2023 15:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C01897A8307
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Sep 2023 15:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234638AbjITNPi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Sep 2023 09:15:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52536 "EHLO
+        id S234789AbjITNPn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Sep 2023 09:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234789AbjITNPg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Sep 2023 09:15:36 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC1AC2
-        for <linux-pm@vger.kernel.org>; Wed, 20 Sep 2023 06:15:29 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-68fbd31d9deso6281116b3a.3
-        for <linux-pm@vger.kernel.org>; Wed, 20 Sep 2023 06:15:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695215729; x=1695820529; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oIDhHctYr7JKAXv2kL+yKQqGU8Rh2f5Gc2X+kLC/F3U=;
-        b=eqTtU7bzVJZFoRFjuSsC7qzjDymm3k3b4qenK9hSuLz9pW/U+9AGpYkwHJVNJXO/Ji
-         2wnGZeq3IuDd4EsgHdevxd3bGhXOlqONr7VOzpLpOOtuljqg1YeP01NAWRFvTozN2t3A
-         k12jiONrdMiibzYvt4MZI/KUF0EXVY34VhpVrBvQLVhr+BhtUe1mQlrMpaUoRLoXQW6A
-         fXeX8fm9/prqSPgMSWOFkrWZ7rXtMr15o3Pp1C6doe/L+CFxaOQavr4EHeJr8WqpGDvh
-         NaSR3lTf7KpWxKWf4BkK8SvnZ2jnebtmVFjB2QqvXzIgW1tmgoipVRSNl4SZEwoMgMho
-         ZdxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695215729; x=1695820529;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oIDhHctYr7JKAXv2kL+yKQqGU8Rh2f5Gc2X+kLC/F3U=;
-        b=QHAEcK5kk6rOPj5ni4337drYXoJ5jZHGzyd0k7WD68F7tdaRzyQ6Czhmlt1GPTpOE+
-         3soaxv4obNgHs6Y+Vj/VsTX5n/CDExJgYkL5A4sddcjlKT6cte1qXCEvyID0rhwl94cW
-         DaqSw8w/4175PS91RZQxm6lzl5m66Zl/StGguj9nThjCTPbeSYf3i56f7TkRX7MjCUQI
-         W/ZPKyW0S27HS+NYVhVfihymYuOeZb2gQWHZE1odephH4rA18OhJRw9TaCOFexxkzwHW
-         nv4KsjI8eSO4Ie3QDfqf6R9Rg8d9UFZDoA2glEx5ehdyfbPsJtB2ykFQMxQg4jm+SCFq
-         gh9Q==
-X-Gm-Message-State: AOJu0YzabBp1qw8GIcOL3zns1AtJ9DJx1s0yk2l7G8I93hp0IU5pA9rC
-        9sPaGm5d5Ta58sfeh2wDEr0=
-X-Google-Smtp-Source: AGHT+IHlxoeeyosTFXOFW39S4sXpnEvECWYUsOjIuA06yZPOZyJHERzgye+h4krvAKzG5EuxM17Y1w==
-X-Received: by 2002:a05:6a00:2ea2:b0:68e:36b1:3d7f with SMTP id fd34-20020a056a002ea200b0068e36b13d7fmr2800436pfb.18.1695215729349;
-        Wed, 20 Sep 2023 06:15:29 -0700 (PDT)
-Received: from debian.me ([103.124.138.83])
-        by smtp.gmail.com with ESMTPSA id i15-20020aa787cf000000b00682d79199e7sm842560pfo.200.2023.09.20.06.15.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Sep 2023 06:15:28 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 8A73A81A3119; Wed, 20 Sep 2023 20:15:25 +0700 (WIB)
-Date:   Wed, 20 Sep 2023 20:15:25 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     bugzilla-daemon@kernel.org,
-        Linux Power Management <linux-pm@vger.kernel.org>
-Cc:     Huang Rui <ray.huang@amd.com>
-Subject: Re: [Bug 217931] New: amd-pstate lacks crucial features: CPU
- frequency and boost control
-Message-ID: <ZQrwbYJIh4vSzoGT@debian.me>
-References: <bug-217931-137361@https.bugzilla.kernel.org/>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DTbjpoFRF6cZRe3A"
-Content-Disposition: inline
+        with ESMTP id S234731AbjITNPl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Sep 2023 09:15:41 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E73AB9
+        for <linux-pm@vger.kernel.org>; Wed, 20 Sep 2023 06:15:32 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 05F97C433C9
+        for <linux-pm@vger.kernel.org>; Wed, 20 Sep 2023 13:15:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695215732;
+        bh=naD1jth9r9VNN4nZsjIDudZxZ9w7U7o7xfY9yO9sWKo=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=sSVyGAm2WPIefkWcgzb4tfSOc4McHHYotO7og3rE+elsBL6tOPhxYCxGttW06fWkh
+         yVqQymHo3GlqGsRORKqr0VEifhAbfNf0wMnJm/c9VUerRD6yHjNWtHmWKALhzmT7nl
+         NiJ16EbcgQt4qNJ6E+/urzJKd7/0xDla/+BXnztzXgTqbABghPzthfd8jErGB6C3dB
+         BkJA6TMqmOYONOWMBprRT1RuQUJN61VS/7uEB4pwpQ/cCJAC7QSMFEqTGt38nkzWGR
+         SFfT1kpik2kOVPqif8w+ddc2TgmrNVP6rt7LaFMTM5jzwEwyym0+3s+pB93aKUYT8u
+         wJsnC2HCLWYdQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id E0749C53BC6; Wed, 20 Sep 2023 13:15:31 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 217931] amd-pstate lacks crucial features: CPU frequency and
+ boost control
+Date:   Wed, 20 Sep 2023 13:15:31 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: bagasdotme@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217931-137361-FM1ho6aZUB@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-217931-137361@https.bugzilla.kernel.org/>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <bug-217931-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,12 +66,9 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217931
 
---DTbjpoFRF6cZRe3A
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
+--- Comment #2 from Bagas Sanjaya (bagasdotme@gmail.com) ---
 On Wed, Sep 20, 2023 at 11:06:51AM +0000, bugzilla-daemon@kernel.org wrote:
 > https://bugzilla.kernel.org/show_bug.cgi?id=3D217931
 >=20
@@ -102,12 +91,12 @@ On Wed, Sep 20, 2023 at 11:06:51AM +0000, bugzilla-daemon@kernel.org wrote:
 >   --> https://bugzilla.kernel.org/attachment.cgi?id=3D305131&action=3Dedit
 > Power Options: Processor Power Management in Windows
 >=20
-> It would be really great if amd-pstate had a feature parity with acpi-cpu=
-freq,
+> It would be really great if amd-pstate had a feature parity with
+> acpi-cpufreq,
 > namely
 >=20
-> 1) Being able to set operating frequencies (maximum, minimum and user-def=
-ined)
+> 1) Being able to set operating frequencies (maximum, minimum and
+> user-defined)
 
 ondemand, conservative, performance?
 
@@ -131,24 +120,15 @@ What is boost?
 > Windows allows to do that easily, see the attached screenshot.
 >=20
 > 2) Disabling boost is an easy option to subdue operating temperatures tho=
-ugh if
+ugh
+> if
 > the previous issue is tackled, it's not really needed.
 
 For example, after compiling the kernel one needs to cool down system,
 right?
 
 --=20
-An old man doll... just what I always wanted! - Clara
+You may reply to this email to add a comment.
 
---DTbjpoFRF6cZRe3A
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZQrwaAAKCRD2uYlJVVFO
-oxVMAPwKg2C7JklgsJJFRt93nsjdqh40sJ9K2YhB1bRU0PcsXQD8CluOsiobJocu
-XhIL//4C7Wxf8bOmZaT4dfENRKwDVgo=
-=tI8Q
------END PGP SIGNATURE-----
-
---DTbjpoFRF6cZRe3A--
+You are receiving this mail because:
+You are the assignee for the bug.=
