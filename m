@@ -2,170 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6A77A8AD6
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Sep 2023 19:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E29737A8C0B
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Sep 2023 20:52:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbjITRuU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Sep 2023 13:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33918 "EHLO
+        id S229473AbjITSwI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Sep 2023 14:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjITRuS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Sep 2023 13:50:18 -0400
-Received: from mxout3.routing.net (mxout3.routing.net [IPv6:2a03:2900:1:a::8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB29FC6;
-        Wed, 20 Sep 2023 10:50:12 -0700 (PDT)
-Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
-        by mxout3.routing.net (Postfix) with ESMTP id 61A2462615;
-        Wed, 20 Sep 2023 17:50:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1695232211;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yPGaIcaBpYIsL+K5fU/g5XcubHkm1r3TP41OLpcHHUU=;
-        b=GFMXvfg9d/BnAHtYhKhiU8HFWdvHDME9Kkq9jXrc4St8oh4WGMX6qjBy7htYFri4oY6Ywd
-        FzRkIuGF5Ck+VL6ggxHrghuu0+FbpJWQh10bnYEosuL556EtNBN+Cs7zbZ9AMPD1YprvgQ
-        BqCDdPAxxEekoKME8GvQ9g8iWNO7/Zo=
-Received: from frank-G5.. (fttx-pool-217.61.152.105.bambit.de [217.61.152.105])
-        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 967111006BE;
-        Wed, 20 Sep 2023 17:50:10 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 4/4] thermal/drivers/mediatek/lvts_thermal: add mt7988 support
-Date:   Wed, 20 Sep 2023 19:50:01 +0200
-Message-Id: <20230920175001.47563-5-linux@fw-web.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230920175001.47563-1-linux@fw-web.de>
-References: <20230920175001.47563-1-linux@fw-web.de>
+        with ESMTP id S229461AbjITSwH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Sep 2023 14:52:07 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17606AF;
+        Wed, 20 Sep 2023 11:52:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695235922; x=1726771922;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=M54V96/a5JNvmtpGTO55S8B6KkQoazOnDcAbzhvWxAs=;
+  b=lXkQnLPgYbiov/uheohU1+/fwSuuVVarDva+dUQsgBWtmG8XlznFwwzn
+   XMGO6247NbPGMlrrJlJu2HDLUa5vgyGeFML2IMY2IeJ9UhywT5TfyhF9F
+   zWK6R78CXGXg3AI5SO0FPtdNs/T8bjO8thXla0ZT6NKsDaMYbf0X9f2gM
+   fWxePK+4L4N8l350JLthwCGW50RfXH/Ex2Oe+IfNUcXSK9QGfUsEkINo7
+   0mhsQJSACzDZfM8i5Y2vmK5e2NJebcBsq5QDAZPnvvEwov0yEqPWZG196
+   q2y9Z7ePzxLR0P+USCka240nIYtnMYqUktGVZm5R8K66h05R4HbFNbIxu
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="377611672"
+X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
+   d="scan'208";a="377611672"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 11:52:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="812280570"
+X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
+   d="scan'208";a="812280570"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.14])
+  by fmsmga008.fm.intel.com with ESMTP; 20 Sep 2023 11:52:01 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH linux-next] thermal: int340x: processor_thermal: Ack all PCI interrupts
+Date:   Wed, 20 Sep 2023 11:51:53 -0700
+Message-Id: <20230920185153.613706-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Mail-ID: 28533bc3-42fd-4ddc-a511-be8c45e8489c
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+All interrupts from the processor thermal PCI device requires ACK. This
+is done by writing 0x01 at offset 0xDC in the config space. This is
+already done for the thereshold interrupt. Extend this for the workload
+hint interrupt.
 
-Add Support for Mediatek Filogic 880/MT7988 LVTS.
-
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 ---
-v2:
-- use 105°C for hw shutdown
-- move constants to binding file
-- change coeff.a to temp_factor and coeff.b to temp_offset
-- change to lvts to lvts-ap (Application Processor)
-- drop comments about efuse offsets
-- change comment of mt8195 to be similar to mt7988
----
- drivers/thermal/mediatek/lvts_thermal.c | 46 +++++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+ .../intel/int340x_thermal/processor_thermal_device_pci.c       | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-index c2669f405a94..8fd1dc5adb16 100644
---- a/drivers/thermal/mediatek/lvts_thermal.c
-+++ b/drivers/thermal/mediatek/lvts_thermal.c
-@@ -82,6 +82,8 @@
- #define LVTS_GOLDEN_TEMP_DEFAULT	50
- #define LVTS_COEFF_A_MT8195			-250460
- #define LVTS_COEFF_B_MT8195			250460
-+#define LVTS_COEFF_A_MT7988			-204650
-+#define LVTS_COEFF_B_MT7988			204650
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+index 44b179ce9bc9..3c5ced79ead0 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+@@ -154,10 +154,11 @@ static irqreturn_t proc_thermal_irq_handler(int irq, void *devid)
+ 	if (status) {
+ 		/* Disable enable interrupt flag */
+ 		proc_thermal_mmio_write(pci_info, PROC_THERMAL_MMIO_INT_ENABLE_0, 0);
+-		pci_write_config_byte(pci_info->pdev, 0xdc, 0x01);
+ 		pkg_thermal_schedule_work(&pci_info->work);
+ 	}
  
- #define LVTS_MSR_IMMEDIATE_MODE		0
- #define LVTS_MSR_FILTERED_MODE		1
-@@ -89,6 +91,7 @@
- #define LVTS_MSR_READ_TIMEOUT_US	400
- #define LVTS_MSR_READ_WAIT_US		(LVTS_MSR_READ_TIMEOUT_US / 2)
- 
-+#define LVTS_HW_SHUTDOWN_MT7988		105000
- #define LVTS_HW_SHUTDOWN_MT8195		105000
- 
- #define LVTS_MINIMUM_THRESHOLD		20000
-@@ -1269,6 +1272,41 @@ static int lvts_remove(struct platform_device *pdev)
- 	return 0;
++	pci_write_config_byte(pci_info->pdev, 0xdc, 0x01);
++
+ 	return ret;
  }
  
-+/*
-+ * LVTS MT7988
-+ */
-+
-+static const struct lvts_ctrl_data mt7988_lvts_ap_data_ctrl[] = {
-+	{
-+		.cal_offset = { 0x00, 0x04, 0x08, 0x0c }, //918,91C,920,924
-+		.lvts_sensor = {
-+			{ .dt_id = MT7988_CPU_0 }, // CPU 0,1
-+			{ .dt_id = MT7988_CPU_1 }, // CPU 2,3
-+			{ .dt_id = MT7988_ETH2P5G_0 }, // internal 2.5G Phy 1
-+			{ .dt_id = MT7988_ETH2P5G_1 }  // internal 2.5G Phy 2
-+		},
-+		.num_lvts_sensor = 4,
-+		.offset = 0x0,
-+		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT7988,
-+	},
-+	{
-+		.cal_offset = { 0x14, 0x18, 0x1c, 0x20 }, //92C,930,934,938
-+		.lvts_sensor = {
-+			{ .dt_id = MT7988_TOPS_0}, // TOPS
-+			{ .dt_id = MT7988_TOPS_1}, // TOPS
-+			{ .dt_id = MT7988_ETHWARP_0}, // WED 1
-+			{ .dt_id = MT7988_ETHWARP_1}  // WED 2
-+		},
-+		.num_lvts_sensor = 4,
-+		.offset = 0x100,
-+		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT7988,
-+	}
-+};
-+
-+/*
-+ * LVTS MT8195
-+ */
-+
- static const struct lvts_ctrl_data mt8195_lvts_mcu_data_ctrl[] = {
- 	{
- 		.cal_offset = { 0x04, 0x07 },
-@@ -1348,6 +1386,13 @@ static const struct lvts_ctrl_data mt8195_lvts_ap_data_ctrl[] = {
- 	}
- };
- 
-+static const struct lvts_data mt7988_lvts_ap_data = {
-+	.lvts_ctrl	= mt7988_lvts_ap_data_ctrl,
-+	.num_lvts_ctrl	= ARRAY_SIZE(mt7988_lvts_ap_data_ctrl),
-+	.temp_factor	= LVTS_COEFF_A_MT7988,
-+	.temp_offset	= LVTS_COEFF_B_MT7988,
-+};
-+
- static const struct lvts_data mt8195_lvts_mcu_data = {
- 	.lvts_ctrl	= mt8195_lvts_mcu_data_ctrl,
- 	.num_lvts_ctrl	= ARRAY_SIZE(mt8195_lvts_mcu_data_ctrl),
-@@ -1363,6 +1408,7 @@ static const struct lvts_data mt8195_lvts_ap_data = {
- };
- 
- static const struct of_device_id lvts_of_match[] = {
-+	{ .compatible = "mediatek,mt7988-lvts-ap", .data = &mt7988_lvts_ap_data },
- 	{ .compatible = "mediatek,mt8195-lvts-mcu", .data = &mt8195_lvts_mcu_data },
- 	{ .compatible = "mediatek,mt8195-lvts-ap", .data = &mt8195_lvts_ap_data },
- 	{},
 -- 
-2.34.1
+2.40.1
 
