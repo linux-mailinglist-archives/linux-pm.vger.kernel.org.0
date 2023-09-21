@@ -2,93 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 854287A9FF0
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Sep 2023 22:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B617A9F55
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Sep 2023 22:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbjIUU3U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Sep 2023 16:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37860 "EHLO
+        id S231582AbjIUUVU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Sep 2023 16:21:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232080AbjIUU3H (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Sep 2023 16:29:07 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA65663E0
-        for <linux-pm@vger.kernel.org>; Thu, 21 Sep 2023 10:34:22 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 09A8FC433CA
-        for <linux-pm@vger.kernel.org>; Thu, 21 Sep 2023 05:40:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695274821;
-        bh=NHrZa2Xp4nWp7oGu4wOjfMWqFY4XW0m+inMbaHLJUOk=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=gOZ+gly8kCX+LrxfeBGAF8rDR/4DUj/OlVc+YwuYhJCsBxjNDs8Dck8CANk8/H6JW
-         WRZjFv8wNBKLF70mmQEtGoSHQHHtbSdWQoDbze+yV4tijyn5SfuyrLo8uudS/xX/s7
-         SoyeSgCPCAKfM8Lb701ZEOHrQ/y5dqMdQEmSKCGPmSethOMfXfUrUXpghr6Cwdn/HD
-         H2ne0dvDA5tF6PkdCMhTooyQzUVuTuJvL046Jfgzj1M/oRHtYu8aMwuKPOgiAnTKnb
-         i5ZDGRMsReUpkk0gz6AxT+I7vGcWWzt7BS4iUK9j4VRwbv2uAP4DEZXR/mUUFovEAq
-         kkaHuXsoAX6JA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id DBFE4C53BCD; Thu, 21 Sep 2023 05:40:20 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 215801] Rmmod'ing amd-pstate doesn't restore acpi-cpufreq
-Date:   Thu, 21 Sep 2023 05:40:20 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: Perry.Yuan@amd.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-215801-137361-Aba1zfLXqv@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215801-137361@https.bugzilla.kernel.org/>
-References: <bug-215801-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229764AbjIUUUw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Sep 2023 16:20:52 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B857DB3;
+        Thu, 21 Sep 2023 10:23:15 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BDBA366072B6;
+        Thu, 21 Sep 2023 08:54:47 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1695282888;
+        bh=XKfV63HWdKQ6s7HPBY3YhVeOhdzebvODVX7qw3XgXyM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jD9+CmGQSfz4ZX3d2CGSp6+EHhCrCCk4YGT3vBykBF3wqdTzGOXIZCz7QCGMCAUKF
+         yY9nfpT49e8hOI1gUgZME++aIhmRLRNoXiPOyREKIUygnK3mfFMj4/yqGQ79JBK/mr
+         2c6w7osgDp6Z1woUp6qf6pWKsJk8nqB7RtNZhooW/urn9l2MQMxso2S32xIGx4PVwi
+         CINeOwpiW8/6UskufZ3bdJ3kAYbq/ODd2ko3UGc+loP4zAp6OTqiN46HwjTw09C1+8
+         1dolr6haDdAjRiWHIrog91ziBrjkseUViVBdgUSUVaJ/e/VlGg/3b+yyLlvNE0fam4
+         4tT3XHFAZeA9g==
+Message-ID: <7420791d-a424-2db9-eb68-9f583735d4d7@collabora.com>
+Date:   Thu, 21 Sep 2023 09:54:45 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH v2 3/4] thermal/drivers/mediatek/lvts_thermal: make coeff
+ configurable
+Content-Language: en-US
+To:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230920175001.47563-1-linux@fw-web.de>
+ <20230920175001.47563-4-linux@fw-web.de>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230920175001.47563-4-linux@fw-web.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215801
+Il 20/09/23 19:50, Frank Wunderlich ha scritto:
+> From: Frank Wunderlich <frank-w@public-files.de>
+> 
+> The upcoming mt7988 has different temperature coefficients so we
+> cannot use constants in the functions lvts_golden_temp_init,
+> lvts_golden_temp_init and lvts_raw_to_temp anymore.
+> 
+> Add a field in the lvts_ctrl pointing to the lvts_data which now
+> contains the soc-specific temperature coefficents.
+> 
+> To make the code better readable, rename static int coeff_b to
+> golden_temp_offset, COEFF_A to temp_factor and COEFF_B to temp_offset.
+> 
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> 
 
-Perry Yuan(AMD) (Perry.Yuan@amd.com) changed:
+Now, that's good!
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |Perry.Yuan@amd.com
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
---- Comment #3 from Perry Yuan(AMD) (Perry.Yuan@amd.com) ---
-(In reply to Artem S. Tashkinov from comment #2)
-> This is still relevant as of Linux 6.6.
->=20
-> Would be great if removing amd-pstate enabled acpi-cpufreq.
 
-Normally the system hardware needs to reinitialize CPPC and low-level power
-management firmware when CPPC driver loading, so it better to change grub
-parameters and reboot again.
-dynamically removing amd-pstate and load acpi_cpufreq probably cause some
-potential issues.=20
-
-Perry.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
