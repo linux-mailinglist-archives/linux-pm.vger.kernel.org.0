@@ -2,151 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E8DF7A9990
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Sep 2023 20:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B797A9AF8
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Sep 2023 20:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbjIUSQA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Sep 2023 14:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
+        id S230013AbjIUSwf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Sep 2023 14:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbjIUSPa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Sep 2023 14:15:30 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33AE885D05;
-        Thu, 21 Sep 2023 10:37:47 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1AC3114BF;
-        Thu, 21 Sep 2023 02:20:19 -0700 (PDT)
-Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.78.69])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8E5C33F59C;
-        Thu, 21 Sep 2023 02:19:41 -0700 (PDT)
-Date:   Thu, 21 Sep 2023 10:19:40 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
-        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-pm@vger.kernel.org, conor.dooley@microchip.com,
-        suagrfillet@gmail.com, ajones@ventanamicro.com, lftan@kernel.org
-Subject: Re: [PATCH 3/4] cpufreq/schedutil: use a fixed reference frequency
-Message-ID: <ZQwKnnXbjLOYUSjO@arm.com>
-References: <20230901130312.247719-1-vincent.guittot@linaro.org>
- <20230901130312.247719-4-vincent.guittot@linaro.org>
+        with ESMTP id S229737AbjIUSwY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Sep 2023 14:52:24 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4404AE0AD;
+        Thu, 21 Sep 2023 10:49:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695318588; x=1726854588;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oVlN2+/cyaF/i5mxS6OVm7z+2a2Ml5WF4NI8+LaWPmM=;
+  b=igdcw0PYIBKAiQysV/LQHu48HcyUCYKlkde0PHHX7UG+PRYXpTevJwt4
+   nWwuN8pExB9WSUVemmQCLJIgODt1dokEZUDPUX4DgbxSIiIbrWyQtRIn1
+   kr7wq1XI+gxT7Ic7jXGekWnVlc2TVajjNCHpHoTMIewtRlt+5K2GecH/p
+   KM01Y0MivumQI89ZkHMZjENMXxLv28X2hZzp+Zhj0SO/uZalPxH8JIuKS
+   k3k2kXtRizPVHh0wdfX799YGITYSPUKK/9RRQ2oSdsDhm6PENxbo/FwhA
+   7VsACeaFD5WcX8M7Ziy4xwm8HAHlQwVwVDDYm76VfeLzfDp9NP4N78npG
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="446943550"
+X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
+   d="scan'208";a="446943550"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 02:40:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="817308136"
+X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
+   d="scan'208";a="817308136"
+Received: from unknown (HELO rzhang1-mobl7.ccr.corp.intel.com) ([10.254.213.176])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 02:40:03 -0700
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     dwmw2@infradead.org, baolu.lu@linux.intel.com, joro@8bytes.org,
+        will@kernel.org
+Cc:     rafael.j.wysocki@intel.com, christophe.jaillet@wanadoo.fr,
+        chin.hao.ooi@intel.com, iommu@lists.linux.dev,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iommu/vt-d: Avoid memory allocation in iommu_suspend()
+Date:   Thu, 21 Sep 2023 17:39:56 +0800
+Message-Id: <20230921093956.234692-1-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230901130312.247719-4-vincent.guittot@linaro.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday 01 Sep 2023 at 15:03:11 (+0200), Vincent Guittot wrote:
-> cpuinfo_max_freq can change at runtime because of boost as example. This
-> implies that the value could not be the same than the one that has been
-> used when computing the capacity of a CPU.
-> 
-> The new arch_scale_freq_ref() returns a fixed and coherent frequency
-> reference that can be used when computing a frequency based on utilization.
-> 
-> Use this arch_scale_freq_ref() when available and fallback to
-> cpuinfo.max_freq otherwise.
-> 
-> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> ---
->  kernel/sched/cpufreq_schedutil.c | 29 +++++++++++++++++++++++++++--
->  1 file changed, 27 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> index 4492608b7d7f..9996ef429e2b 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -114,6 +114,31 @@ static void sugov_deferred_update(struct sugov_policy *sg_policy)
->  	}
->  }
->  
-> +#ifdef arch_scale_freq_ref
-> +/**
-> + * arch_scale_freq_ref_policy - get the reference frequency of a given CPU that
-> + * has been used to correlate frequency and compute capacity.
-> + * @cpu: the CPU in question.
-> + *
-> + * Return: the reference CPU frequency.
-> + */
-> +static __always_inline
-> +unsigned long  arch_scale_freq_ref_policy(struct cpufreq_policy *policy)
+The iommu_suspend() syscore suspend callback is invoked with IRQ disabled.
+Allocating memory with the GFP_KERNEL flag may re-enable IRQs during
+the suspend callback, which can cause intermittent suspend/hibernation
+problems with the following kernel traces:
 
-This should not be an arch_ function as it's only a wrapper over an
-arch_ function and not a function that different architectures might
-implement differently usually in architecture specific code.
+Calling iommu_suspend+0x0/0x1d0
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 15 at kernel/time/timekeeping.c:868 ktime_get+0x9b/0xb0
+...
+CPU: 0 PID: 15 Comm: rcu_preempt Tainted: G     U      E      6.3-intel #r1
+RIP: 0010:ktime_get+0x9b/0xb0
+...
+Call Trace:
+ <IRQ>
+ tick_sched_timer+0x22/0x90
+ ? __pfx_tick_sched_timer+0x10/0x10
+ __hrtimer_run_queues+0x111/0x2b0
+ hrtimer_interrupt+0xfa/0x230
+ __sysvec_apic_timer_interrupt+0x63/0x140
+ sysvec_apic_timer_interrupt+0x7b/0xa0
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1f/0x30
+...
+------------[ cut here ]------------
+Interrupts enabled after iommu_suspend+0x0/0x1d0
+WARNING: CPU: 0 PID: 27420 at drivers/base/syscore.c:68 syscore_suspend+0x147/0x270
+CPU: 0 PID: 27420 Comm: rtcwake Tainted: G     U  W   E      6.3-intel #r1
+RIP: 0010:syscore_suspend+0x147/0x270
+...
+Call Trace:
+ <TASK>
+ hibernation_snapshot+0x25b/0x670
+ hibernate+0xcd/0x390
+ state_store+0xcf/0xe0
+ kobj_attr_store+0x13/0x30
+ sysfs_kf_write+0x3f/0x50
+ kernfs_fop_write_iter+0x128/0x200
+ vfs_write+0x1fd/0x3c0
+ ksys_write+0x6f/0xf0
+ __x64_sys_write+0x1d/0x30
+ do_syscall_64+0x3b/0x90
+ entry_SYSCALL_64_after_hwframe+0x72/0xdc
 
-> +{
-> +	return arch_scale_freq_ref(policy->cpu);
+Given that only 4 words memory is needed, avoid the memory allocation in
+iommu_suspend().
 
-It might make it easier to read if arch_scale_freq_ref() had a default
-implementation that returned 0.
+CC: stable@kernel.org
+Fixes: 33e07157105e ("iommu/vt-d: Avoid GFP_ATOMIC where it is not needed")
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+Tested-by: Ooi, Chin Hao <chin.hao.ooi@intel.com>
+---
+ drivers/iommu/intel/iommu.c | 16 ----------------
+ drivers/iommu/intel/iommu.h |  2 +-
+ 2 files changed, 1 insertion(+), 17 deletions(-)
 
-Then this code would simply become:
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index 5db283c17e0d..3685ba90ec88 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -2998,13 +2998,6 @@ static int iommu_suspend(void)
+ 	struct intel_iommu *iommu = NULL;
+ 	unsigned long flag;
+ 
+-	for_each_active_iommu(iommu, drhd) {
+-		iommu->iommu_state = kcalloc(MAX_SR_DMAR_REGS, sizeof(u32),
+-					     GFP_KERNEL);
+-		if (!iommu->iommu_state)
+-			goto nomem;
+-	}
+-
+ 	iommu_flush_all();
+ 
+ 	for_each_active_iommu(iommu, drhd) {
+@@ -3024,12 +3017,6 @@ static int iommu_suspend(void)
+ 		raw_spin_unlock_irqrestore(&iommu->register_lock, flag);
+ 	}
+ 	return 0;
+-
+-nomem:
+-	for_each_active_iommu(iommu, drhd)
+-		kfree(iommu->iommu_state);
+-
+-	return -ENOMEM;
+ }
+ 
+ static void iommu_resume(void)
+@@ -3061,9 +3048,6 @@ static void iommu_resume(void)
+ 
+ 		raw_spin_unlock_irqrestore(&iommu->register_lock, flag);
+ 	}
+-
+-	for_each_active_iommu(iommu, drhd)
+-		kfree(iommu->iommu_state);
+ }
+ 
+ static struct syscore_ops iommu_syscore_ops = {
+diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
+index c18fb699c87a..7dac94f62b4e 100644
+--- a/drivers/iommu/intel/iommu.h
++++ b/drivers/iommu/intel/iommu.h
+@@ -681,7 +681,7 @@ struct intel_iommu {
+ 	struct iopf_queue *iopf_queue;
+ 	unsigned char iopfq_name[16];
+ 	struct q_inval  *qi;            /* Queued invalidation info */
+-	u32 *iommu_state; /* Store iommu states between suspend and resume.*/
++	u32 iommu_state[MAX_SR_DMAR_REGS]; /* Store iommu states between suspend and resume.*/
+ 
+ #ifdef CONFIG_IRQ_REMAP
+ 	struct ir_table *ir_table;	/* Interrupt remapping info */
+-- 
+2.34.1
 
-freq = arch_scale_freq_ref(policy->cpu);
-if (freq)
-	return freq;
-else if (arch_scale_freq_invariant())
-	return ..
-..
-
-This approach is similar to the use of arch_freq_get_on_cpu() in
-cpufreq.c, and, as there, having a chosen maximum frequency of 0 would
-not be a valid value.
-
-> +}
-> +#else
-> +static __always_inline
-> +unsigned long  arch_scale_freq_ref_policy(struct cpufreq_policy *policy)
-> +{
-> +	if (arch_scale_freq_invariant())
-> +		return policy->cpuinfo.max_freq;
-> +
-> +
-> +	return policy->cur;
-> +}
-> +#endif
-> +
->  /**
->   * get_next_freq - Compute a new frequency for a given cpufreq policy.
->   * @sg_policy: schedutil policy object to compute the new frequency for.
-> @@ -139,11 +164,11 @@ static void sugov_deferred_update(struct sugov_policy *sg_policy)
->  static unsigned int get_next_freq(struct sugov_policy *sg_policy,
->  				  unsigned long util, unsigned long max)
->  {
-> +	unsigned int freq;
->  	struct cpufreq_policy *policy = sg_policy->policy;
-> -	unsigned int freq = arch_scale_freq_invariant() ?
-> -				policy->cpuinfo.max_freq : policy->cur;
->  
->  	util = map_util_perf(util);
-> +	freq = arch_scale_freq_ref_policy(policy);
-
-Given its single use here, it would likely be better to place the code
-above directly here, rather than create a wrapper over a few lines of
-code.
-
-Hope it helps,
-Ionela.
-
->  	freq = map_util_freq(util, freq, max);
->  
->  	if (freq == sg_policy->cached_raw_freq && !sg_policy->need_freq_update)
-> -- 
-> 2.34.1
-> 
-> 
