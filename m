@@ -2,169 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C51037AA302
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Sep 2023 23:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A9B87AA568
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Sep 2023 01:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232161AbjIUVp6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Sep 2023 17:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
+        id S231370AbjIUXBA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Sep 2023 19:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231717AbjIUVpj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Sep 2023 17:45:39 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E258A64
-        for <linux-pm@vger.kernel.org>; Thu, 21 Sep 2023 14:27:00 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-690d2441b95so1091079b3a.1
-        for <linux-pm@vger.kernel.org>; Thu, 21 Sep 2023 14:27:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1695331620; x=1695936420; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=PWFT1Rjfog1YLOcYzu6UZ0PRxfnlSYROTbim2Vy/sfU=;
-        b=ck4rjRB22WLq2/vBvWAS4M4uURO2hxzon6UYPvZ31IMdSLUdiHUEiJmbogQCqJtZfL
-         6q+YKDNM4HnQUCKTOWwB5VWkWVEDCDtt8qdeMqIWNJ/v8JuT4+9EbuZxC5tAkJadYcR4
-         HDAeJMw79b7XPYukAbdeJiVUshQTUXQmCosgiP3OIe5PUBnHSRjh3eMJbyNcJegAcwYZ
-         piaBryWdhiFLwcrUusznVU4uKTurP8IszhwXVk3BigLOHpEw6blsUPDRmqaIk+XbGudZ
-         vaLCgwXPtEfV6i1PyAkGTOjcx6umOnAmtVEceSaC40Q+pduQcBnQsiK20xH1pBOv5VPV
-         bQlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695331620; x=1695936420;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PWFT1Rjfog1YLOcYzu6UZ0PRxfnlSYROTbim2Vy/sfU=;
-        b=BKfwIVuxMg4DdGJjrqiVq/RJEuKhdrNr6ycAkgftzz6twTPfROq+Y9j3fbZAnO7O6/
-         nxGB7Wcc/A7azpLmX7955U6GbkBdXzqdAtFtflnhM+noccT44ZlKMb7RiEjp46AbRGQU
-         wwDma5Yg9EPfyNFNUuKyVPzcj9rq8PV5YXEetx2SeKDbNiwTe94DTTGXVB6is/rdhVia
-         JbiP4LOSp1ETYj93fsa9KUZ1Wds4ye+Pum5qvbJl9NXEj+iv4djhMzWQHUn0CWtC6ESc
-         +IaYKMX8+/I9lhdvx9VBL1ulfxa2ktWrOcqWEIukHRHxJ431u85hcrn17gsxZGwNPu+c
-         1Eow==
-X-Gm-Message-State: AOJu0YwSJclToKDfRWAqcod4W3D2xjeKmSdZDnEIUhW0wWAILoo1rQt2
-        SuoOxj9NyP8XZQGsJu4GrjtVGoMOlTyiQ4GRbqydhQ==
-X-Google-Smtp-Source: AGHT+IGHl+k0BZvTc61Uxv8LowxVdMvaIYGNFLdlKVFONwLHo7OygstbDX6rrkEEmCdy1DVN22bu3Q==
-X-Received: by 2002:a05:6a00:d73:b0:68f:cc67:e709 with SMTP id n51-20020a056a000d7300b0068fcc67e709mr1059165pfv.16.1695331620112;
-        Thu, 21 Sep 2023 14:27:00 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id h1-20020a62b401000000b0068fde95aa93sm1831977pfn.135.2023.09.21.14.26.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Sep 2023 14:26:59 -0700 (PDT)
-Message-ID: <650cb523.620a0220.95565.8ea6@mx.google.com>
-Date:   Thu, 21 Sep 2023 14:26:59 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
+        with ESMTP id S231406AbjIUXAk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Sep 2023 19:00:40 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE5A83306
+        for <linux-pm@vger.kernel.org>; Thu, 21 Sep 2023 10:37:23 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 59EA3C4160E
+        for <linux-pm@vger.kernel.org>; Thu, 21 Sep 2023 08:21:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695284510;
+        bh=tQYneJVAH5RUqoeoh3OUB5PFLJ9q7Ixv6O6Y0CNVBvk=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=akRacofKDKu2a4pKoRHlbvpECyHgHTXmXtYP9zxvA8kgA9XO8BuL6w8AqK2SHvZnE
+         u05ke/j7J1Rw1fIGHpbfkAtPv5Mav4NOZjJhEyNGRyDdgzUBLnxirag+Te2M+dg3ay
+         6L8C2TbiEf4esStPWn0J1OfyPYAoyi4M5ZOoZkLvCMwv5M5BBP1NNgeD3hBcZGVqtA
+         cjyNoZ8kMZ/tN68vD/SzKvaqhYNMclgZXJ6lInOECh72Xw2L6n3gDPubCWW74wD1K+
+         ev8jZyar8rVneWPIr3qEGANIruJeRVTxxjsd5/oRKv0wqHh7nWklwVcumJuney2h25
+         3hYNJ3jXpxO/w==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 47E48C53BD0; Thu, 21 Sep 2023 08:21:50 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 217931] amd-pstate lacks crucial features: CPU frequency and
+ boost control
+Date:   Thu, 21 Sep 2023 08:21:50 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: aros@gmx.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217931-137361-EJg0qPjUqT@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217931-137361@https.bugzilla.kernel.org/>
+References: <bug-217931-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v6.6-rc2-36-g57594c77e5b2
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.6-rc2-36-g57594c77e5b2)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.6-rc2-36-g57=
-594c77e5b2)
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217931
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-6-rc2-36-g57594c77e5b2/
+--- Comment #5 from Artem S. Tashkinov (aros@gmx.com) ---
+(In reply to Perry Yuan(AMD) from comment #4)
+> (In reply to Artem S. Tashkinov from comment #0)
+> > Created attachment 305131 [details]
+> > Power Options: Processor Power Management in Windows
+> >=20
+> > It would be really great if amd-pstate had a feature parity with
+> > acpi-cpufreq, namely
+> >=20
+> > 1) Being able to set operating frequencies (maximum, minimum and
+> > user-defined)
+> >=20
+> > 2) Being able to enable/disable boost
+> >=20
+> > Currently both features are not available and frequency control is simp=
+ly
+> > ignored (bug 215800).
+> >=20
+> > Rationale:
+> >=20
+> > 1) This is required for benchmarking and proper temperature control. Bo=
+ost
+> > frequencies are subject to multiple limitations (power in watts, ampera=
+ge,
+> > voltage, temperature, BIOS limitations) and can change depending on the
+> > workload. Setting a low enough frequency allows to run benchmarks in the
+> > controlled environment and get proper data.
+> >=20
+> > Windows allows to do that easily, see the attached screenshot.
+> >=20
+> > 2) Disabling boost is an easy option to subdue operating temperatures
+> though
+> > if the previous issue is tackled, it's not really needed.
+>=20
+> Thanks for the suggestion.
+> There are two modes for amd pstate driver, one passive, and another active
+> mode,  the passive mode already has the boost control feature.
+>=20
+> # cat /sys/devices/system/cpu/cpufreq/boost
+> 1
+>=20
+> I have raised this requestion and will get active mode supported with a n=
+ew
+> patch.
+>=20
 
-Tree: pm
-Branch: testing
-Git Describe: v6.6-rc2-36-g57594c77e5b2
-Git Commit: 57594c77e5b24fac60e3171dd6fe1199c18323fd
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+Thank you for chiming in, Perry!
 
-Warnings Detected:
+I'm looking forward to being able to control min/max frequency which kinda
+negates the need for boost control. I know this can be done since the Windo=
+ws
+CPPC driver allows that perfectly.
 
-arc:
+--=20
+You may reply to this email to add a comment.
 
-arm64:
-
-arm:
-
-i386:
-
-mips:
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+You are receiving this mail because:
+You are the assignee for the bug.=
