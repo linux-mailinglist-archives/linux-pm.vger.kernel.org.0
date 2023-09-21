@@ -2,101 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14C3F7A9820
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Sep 2023 19:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 153D17A97A4
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Sep 2023 19:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbjIURbi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Sep 2023 13:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
+        id S229580AbjIUR0h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Sep 2023 13:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230351AbjIURbX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Sep 2023 13:31:23 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DE049D7;
-        Thu, 21 Sep 2023 10:23:14 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C194366072E0;
-        Thu, 21 Sep 2023 08:55:23 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1695282924;
-        bh=UTUCsGCHXv7lHkH0YxbJh4wFHSzf3govSJtRhJkJ4i0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oIqhwiP/FxM4BSY9QC2j4qMKeDZQY+sAzkVmipX2oA0lRP3n7UK5XNXzFd+/bGfPC
-         tIBm3izSADw1ImIQYIpwGQJm5WEssrGxSbgU1i/EXnUOhpfHn56lUWBhNPjNNdHs4k
-         vKk59lgzHlErrbDrmXPP56vS3b91reNXFV3pcMWS6AMmnLL7YJgkimqG5yrLCLRDcX
-         mvw3K3GRcSD6M8j9toGzPtrHnSYg7U+SJQGVgyngSk9yrceU9lIpcfpv012HrwpPRL
-         wzR6F+wfvje8mvlVScZg8dih1P6Mze3JcoyNUPUZ7jYXHcZCIBzdBpJowgEbyB405e
-         2vOxbngwyz4KQ==
-Message-ID: <78e8860a-07e6-60cc-52d3-d5ef762f7ee2@collabora.com>
-Date:   Thu, 21 Sep 2023 09:55:20 +0200
+        with ESMTP id S229586AbjIUR0f (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Sep 2023 13:26:35 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278CFCD3
+        for <linux-pm@vger.kernel.org>; Thu, 21 Sep 2023 10:03:05 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 58F57C116C9
+        for <linux-pm@vger.kernel.org>; Thu, 21 Sep 2023 08:18:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695284285;
+        bh=D8V+TQFZG9rU+mIOSaehx4C3OFiPh/LaJ48LHYRyM74=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=nt/tvg9F4UuR79pRiBA3aksqEbPs7/wuL1bAoDgWKBRZyUXW6LADjG4rD1kgtkPGa
+         X18uljDf2xnFRneYtbi6PjKj7cm+WovEMznDJxBvbDMZR031PyGO8xYLlrd/txfpwL
+         lyGBBqlhocbcjkJ6AwEjg6yt0fQW3128bXTBcZYftMn5a8oAYA+pl9GuQTDJ7RyRZb
+         D7yYU14N6N07iBUMSAlmQaEe06ofuRGcfIS7WXjPKb+TMUTXRXWZKF2l680OlDMIBo
+         8azftFTxPUYrqS4Y6MqfwRCXDSb35LiTRl0wQziSubKmPv4q4+pDL+WFoBcCDL3t+9
+         NfYVoaaGJLWEw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 3FE5AC53BD0; Thu, 21 Sep 2023 08:18:05 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 215801] Rmmod'ing amd-pstate doesn't restore acpi-cpufreq
+Date:   Thu, 21 Sep 2023 08:18:05 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: aros@gmx.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215801-137361-WGuteNqqJi@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215801-137361@https.bugzilla.kernel.org/>
+References: <bug-215801-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH v2 1/4] dt-bindings: thermal: mediatek: add mt7988 lvts
- compatible
-Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230920175001.47563-1-linux@fw-web.de>
- <20230920175001.47563-2-linux@fw-web.de>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230920175001.47563-2-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 20/09/23 19:49, Frank Wunderlich ha scritto:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> Add compatible string for mt7988 lvts application processor.
-> 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215801
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+--- Comment #4 from Artem S. Tashkinov (aros@gmx.com) ---
+(In reply to Perry Yuan(AMD) from comment #3)
+> (In reply to Artem S. Tashkinov from comment #2)
+> > This is still relevant as of Linux 6.6.
+> >=20
+> > Would be great if removing amd-pstate enabled acpi-cpufreq.
+>=20
+> Normally the system hardware needs to reinitialize CPPC and low-level pow=
+er
+> management firmware when CPPC driver loading, so it better to change grub
+> parameters and reboot again.
+> dynamically removing amd-pstate and load acpi_cpufreq probably cause some
+> potential issues.=20
+>=20
+> Perry.
 
-> ---
-> v2:
-> - change mt7988-lvts to mt7988-lvts-ap (Application Processor)
-> - not added Ack from Rob because of this change
-> ---
->   .../devicetree/bindings/thermal/mediatek,lvts-thermal.yaml       | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> index fe9ae4c425c0..e6665af52ee6 100644
-> --- a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> @@ -18,6 +18,7 @@ description: |
->   properties:
->     compatible:
->       enum:
-> +      - mediatek,mt7988-lvts-ap
->         - mediatek,mt8192-lvts-ap
->         - mediatek,mt8192-lvts-mcu
->         - mediatek,mt8195-lvts-ap
+Could you add this as a note to the amd pstate driver documentation?
 
+Documentation/admin-guide/pm/amd-pstate.rst
 
+Thank you!
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
