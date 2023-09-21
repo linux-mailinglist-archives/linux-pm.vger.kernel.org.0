@@ -2,100 +2,208 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E01F17A9A57
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Sep 2023 20:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 029D27A995F
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Sep 2023 20:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbjIUSib (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Sep 2023 14:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53388 "EHLO
+        id S229540AbjIUSOD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Sep 2023 14:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjIUSiB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Sep 2023 14:38:01 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A2CD9D0F
-        for <linux-pm@vger.kernel.org>; Thu, 21 Sep 2023 11:30:44 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-321530de76eso1194167f8f.0
-        for <linux-pm@vger.kernel.org>; Thu, 21 Sep 2023 11:30:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695321043; x=1695925843; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=b/lesyyYEsnt9FdfxR9CoxFmQAH4gicQBv/bIfqhS7o=;
-        b=B3OiWa+IBhaNah5i0n0YBIg3vlcUuwp/vZ09TFMMATjPQnUeVbGGOPQAZ3ahDpiPj6
-         qVMAhawdzPUVegYDRmkXIACfDBnrqMEvqXBqbE0yiZkDsmtlo0UqgASkWBvCHyAw9S1/
-         BWUtcF+iI4qGaCsqYsEc8/03yzPjh10WTAJBkZ5az01tnuRbuq19d2WGPiTKf+KDGN6z
-         VYQSIBbk7KUKJXkpV8ewYiB5g9IisTErUD2l3sMcDUferGKA/9/RtIdTdjsBMNKmNTBM
-         htIF6Tb5mckFt/X+P3SAMMorx6yK40pwiTMoRul30+45k0v0IfxR6SMeWGk/nKDrJJBq
-         oGAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695321043; x=1695925843;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b/lesyyYEsnt9FdfxR9CoxFmQAH4gicQBv/bIfqhS7o=;
-        b=avzD8PegXs9anI+7lBwn6otX77R22xDvoM4bFKmLphX+9EoUEJXMUVxFvzcHE/a2CL
-         LHd9GYGy6gpzuPhrawDJUvIAlI263abSwR2KjDLlj9DcUsV9hs25joUOLdZxpSNBJ8rN
-         rjjeqiTFBdcGRmhoHXj3j++VKkAShBTwdSHW/wFTcxTQ88VFd07g5qOIGT4LSy0aHpyU
-         F2AOhswU4kvp9+e/Z7l285W5VPUqCn5JrDwvEna4/5/lQjSbhE2Ze8dSFctzZFgtygST
-         Bp8JsP+94a9Bgkn2MqZIVcP3DR62Wf0/lWSztZwAMwxymEymaQmD6UpyqLEMEzbqf80d
-         YrPg==
-X-Gm-Message-State: AOJu0Yw/c197QfmKA0EXpDTYtt94CcelzbYvohpwoq4UQ895SHiF5NxJ
-        C/+AUG/FrOncySK94h/jvZ1ogVf2dqvTX+ebF26WKg==
-X-Google-Smtp-Source: AGHT+IGJfbg273QOiGyWJV30e+vCp/gVKXDpLIBgIJKJV1ZLq7zoYeLh1EwUM6sczbGm0RhUCMN7/g==
-X-Received: by 2002:a05:6402:64c:b0:523:100b:462b with SMTP id u12-20020a056402064c00b00523100b462bmr4294427edx.5.1695281801541;
-        Thu, 21 Sep 2023 00:36:41 -0700 (PDT)
-Received: from linaro.org (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id x13-20020aa7d38d000000b0052fe12a864esm440591edq.57.2023.09.21.00.36.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Sep 2023 00:36:40 -0700 (PDT)
-Date:   Thu, 21 Sep 2023 09:36:37 +0200
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: Re: [PATCH v1 9/9] ACPI: thermal: Drop valid flag from struct
- acpi_thermal_trip
-Message-ID: <20230921073637.GA3346@linaro.org>
-References: <5708760.DvuYhMxLoT@kreacher>
- <9162925.CDJkKcVGEf@kreacher>
+        with ESMTP id S230150AbjIUSNg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Sep 2023 14:13:36 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84B483E6;
+        Thu, 21 Sep 2023 10:23:15 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B2AC466072B4;
+        Thu, 21 Sep 2023 08:54:38 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1695282879;
+        bh=mxa+TQ9McxKXTWkBAdGpIkOnbJ9KXBTRLFoX7g4x3U4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aOx3li4jlzpntW7uZPRu6InVLWX1CEWeAd6xYNw5Cu5ySnF3GxElIKu/WXg6KjDcF
+         SpIv2sTg+zYMgzBZADkIltCPzyj40Z42PGN+SI6+iQ0rpbvTjH5vJ5cuRS63vGk3Xp
+         jis6cjJteeDzGPYtOGuSNWvAn8Dc0O4ED2WlXBRcM5US63j09hwqiWLSmr13atHZI2
+         hWnvBochrfDGcR3KhXDJku8+GR8uaPGigvxWIVES9sMIU3F7KyQ9PJMvX0xNhd6CPy
+         IhWVhKQd26cnucXe/AtKomFmpxc7ubr7kgVpAzJiqVCzHJkmyVSyURn6FA3LXK9rrw
+         leS8AqnHoNEAQ==
+Message-ID: <eb6cc1dd-1df9-3b68-1f72-d536189c7b4d@collabora.com>
+Date:   Thu, 21 Sep 2023 09:54:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH v2 4/4] thermal/drivers/mediatek/lvts_thermal: add mt7988
+ support
+Content-Language: en-US
+To:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230920175001.47563-1-linux@fw-web.de>
+ <20230920175001.47563-5-linux@fw-web.de>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230920175001.47563-5-linux@fw-web.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <9162925.CDJkKcVGEf@kreacher>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 12, 2023 at 08:47:23PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Il 20/09/23 19:50, Frank Wunderlich ha scritto:
+> From: Frank Wunderlich <frank-w@public-files.de>
 > 
-> Notice that the valid flag in struct acpi_thermal_trip is in fact
-> redundant, because the temperature field of invalid trips is always
-> equal to THERMAL_TEMP_INVALID, so drop it from there and adjust the
-> code accordingly.
+> Add Support for Mediatek Filogic 880/MT7988 LVTS.
 > 
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 > ---
+> v2:
+> - use 105°C for hw shutdown
+> - move constants to binding file
+> - change coeff.a to temp_factor and coeff.b to temp_offset
+> - change to lvts to lvts-ap (Application Processor)
+> - drop comments about efuse offsets
+> - change comment of mt8195 to be similar to mt7988
+> ---
+>   drivers/thermal/mediatek/lvts_thermal.c | 46 +++++++++++++++++++++++++
+>   1 file changed, 46 insertions(+)
+> 
+> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+> index c2669f405a94..8fd1dc5adb16 100644
+> --- a/drivers/thermal/mediatek/lvts_thermal.c
+> +++ b/drivers/thermal/mediatek/lvts_thermal.c
+> @@ -82,6 +82,8 @@
+>   #define LVTS_GOLDEN_TEMP_DEFAULT	50
+>   #define LVTS_COEFF_A_MT8195			-250460
+>   #define LVTS_COEFF_B_MT8195			250460
+> +#define LVTS_COEFF_A_MT7988			-204650
+> +#define LVTS_COEFF_B_MT7988			204650
+>   
+>   #define LVTS_MSR_IMMEDIATE_MODE		0
+>   #define LVTS_MSR_FILTERED_MODE		1
+> @@ -89,6 +91,7 @@
+>   #define LVTS_MSR_READ_TIMEOUT_US	400
+>   #define LVTS_MSR_READ_WAIT_US		(LVTS_MSR_READ_TIMEOUT_US / 2)
+>   
+> +#define LVTS_HW_SHUTDOWN_MT7988		105000
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+I would simply reuse the definition of LVTS_HW_SHUTDOWN_MT8195....
 
--- 
+>   #define LVTS_HW_SHUTDOWN_MT8195		105000
+>   
+>   #define LVTS_MINIMUM_THRESHOLD		20000
+> @@ -1269,6 +1272,41 @@ static int lvts_remove(struct platform_device *pdev)
+>   	return 0;
+>   }
+>   
+> +/*
+> + * LVTS MT7988
+> + */
+> +
 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Please remove this big comment block, that's not needed.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> +static const struct lvts_ctrl_data mt7988_lvts_ap_data_ctrl[] = {
+> +	{
+> +		.cal_offset = { 0x00, 0x04, 0x08, 0x0c }, //918,91C,920,924
+
+This 918,91c,etc comment is not necessary
+
+> +		.lvts_sensor = {
+> +			{ .dt_id = MT7988_CPU_0 }, // CPU 0,1
+
+If you want to retain those comments, you shall use the right style.
+
+{ .dt_id = MT7988_CPU_0 }, /* CPU 0,1 */
+{ .. } /* CPU 2,3 */
+{ .. } /* Internal 2.5G PHY 1 */
+
+etc
+
+> +			{ .dt_id = MT7988_CPU_1 }, // CPU 2,3
+> +			{ .dt_id = MT7988_ETH2P5G_0 }, // internal 2.5G Phy 1
+> +			{ .dt_id = MT7988_ETH2P5G_1 }  // internal 2.5G Phy 2
+> +		},
+> +		.num_lvts_sensor = 4,
+> +		.offset = 0x0,
+> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT7988,
+> +	},
+> +	{
+> +		.cal_offset = { 0x14, 0x18, 0x1c, 0x20 }, //92C,930,934,938
+
+comment not needed
+
+> +		.lvts_sensor = {
+> +			{ .dt_id = MT7988_TOPS_0}, // TOPS > +			{ .dt_id = MT7988_TOPS_1}, // TOPS
+
+The dt_id definition already says "TOPS", this comment is not needed.
+
+> +			{ .dt_id = MT7988_ETHWARP_0}, // WED 1
+> +			{ .dt_id = MT7988_ETHWARP_1}  // WED 2
+
+Same comment about the format; /* WED 1 */
+
+> +		},
+> +		.num_lvts_sensor = 4,
+> +		.offset = 0x100,
+> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT7988,
+> +	}
+> +};
+> +
+> +/*
+> + * LVTS MT8195
+> + */
+
+Please also remove this big comment block, it's not needed.
+
+Apart from that, this patch looks good; v3 will be the golden one :-)
+
+Cheers,
+Angelo
+
+> +
+>   static const struct lvts_ctrl_data mt8195_lvts_mcu_data_ctrl[] = {
+>   	{
+>   		.cal_offset = { 0x04, 0x07 },
+> @@ -1348,6 +1386,13 @@ static const struct lvts_ctrl_data mt8195_lvts_ap_data_ctrl[] = {
+>   	}
+>   };
+>   
+> +static const struct lvts_data mt7988_lvts_ap_data = {
+> +	.lvts_ctrl	= mt7988_lvts_ap_data_ctrl,
+> +	.num_lvts_ctrl	= ARRAY_SIZE(mt7988_lvts_ap_data_ctrl),
+> +	.temp_factor	= LVTS_COEFF_A_MT7988,
+> +	.temp_offset	= LVTS_COEFF_B_MT7988,
+> +};
+> +
+>   static const struct lvts_data mt8195_lvts_mcu_data = {
+>   	.lvts_ctrl	= mt8195_lvts_mcu_data_ctrl,
+>   	.num_lvts_ctrl	= ARRAY_SIZE(mt8195_lvts_mcu_data_ctrl),
+> @@ -1363,6 +1408,7 @@ static const struct lvts_data mt8195_lvts_ap_data = {
+>   };
+>   
+>   static const struct of_device_id lvts_of_match[] = {
+> +	{ .compatible = "mediatek,mt7988-lvts-ap", .data = &mt7988_lvts_ap_data },
+>   	{ .compatible = "mediatek,mt8195-lvts-mcu", .data = &mt8195_lvts_mcu_data },
+>   	{ .compatible = "mediatek,mt8195-lvts-ap", .data = &mt8195_lvts_ap_data },
+>   	{},
+
