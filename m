@@ -2,100 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3167AA4FE
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Sep 2023 00:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 283E07AA451
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Sep 2023 00:06:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233026AbjIUW1T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Sep 2023 18:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59802 "EHLO
+        id S231437AbjIUWGf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Sep 2023 18:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233089AbjIUW1C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Sep 2023 18:27:02 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1BFD36D5B
-        for <linux-pm@vger.kernel.org>; Thu, 21 Sep 2023 10:06:52 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id 6a1803df08f44-6515d44b562so6444546d6.3
-        for <linux-pm@vger.kernel.org>; Thu, 21 Sep 2023 10:06:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695316012; x=1695920812; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=C3AGJ5YqreaKjGqVvvBcJoqmWbVP9NW6r7+ZQpOUS+4=;
-        b=WyNC1w4jVTj1bZMEFXt13FgWzHxeqU9qMM7KZAVq0bihoKlZxYMTtFlIkNUOiUTlPH
-         wNnVAR0DwLGT6oz3qIW31RiwicTilyrTlUjum3qL9MocjpRNIydJuAyhLVbaXEOsINMT
-         kPasyIcyZ3A4oSr2aYNSgf+7oiCThoWpTNU0Lke5q9fELltcJrwlR6Vj8AY+bccRUeAK
-         86nENJii1wLVGb8GMm9hJzWQXj6/bSM6RHRyokGEpIliT+UekUiHO2J9EbO2mvqCk8ke
-         et/btoOlr2FUZOEl3pKQLM//1t7+JZ+mDYcl0IBvpjHcpU03u2nhPu9XGkKDVIJQgnbY
-         d1IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695316012; x=1695920812;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=C3AGJ5YqreaKjGqVvvBcJoqmWbVP9NW6r7+ZQpOUS+4=;
-        b=HaemnAaQuERmHQT4j/vCvusmjefTB8T2HAJ7IxWycSrvtv270BlOpnHlFPRpF4k5Rz
-         p3XiYQd+V7oCPrxuD9ZQkH96c92L7EMCHfY8OhtoxnNgNOKmWmhhAtb4KA2nxznQsXeR
-         NqN58KQTaY7Pp9DcmOUOx1+PtNzx8p8UDiRztV0aOzulpdZodz+taczv/EkmDf+ypqq5
-         E/rTtO3KVyDYUku/E9R26JOxP9Lg5VfNxRFiGE2v5uLNVxhiKxI2Op021rM0HKGbl5o/
-         1AOTe6pKXRnv7coMZJzcZrVNnKRuxyFJRgyvjM/jy3s6kqjl1p69Dtq8Qcnx556rPD6x
-         bM+Q==
-X-Gm-Message-State: AOJu0YzK7KyhqsweMAXyQKye+w2EhdsiKyk79RPA7kzOItYbQZPulVWG
-        mngJgdkOymId+i+iRh55zKh1vP0rTvi3neEC04EmrSK6lGiE6URpoW8=
-X-Google-Smtp-Source: AGHT+IGxEP7M4RGeRIoS5MoOfdR/G92y7IkWBKiScp+pN2700H3k/FEmydtbEwKJZ/XQkDiYo3ii4LoHbD1J2F0GMzI=
-X-Received: by 2002:a05:6902:100c:b0:d80:68d1:b826 with SMTP id
- w12-20020a056902100c00b00d8068d1b826mr6552250ybt.6.1695301553511; Thu, 21 Sep
- 2023 06:05:53 -0700 (PDT)
+        with ESMTP id S231734AbjIUWGV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Sep 2023 18:06:21 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A345AF941;
+        Thu, 21 Sep 2023 11:07:29 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id 27ba5ac5cc524f47; Thu, 21 Sep 2023 20:07:27 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 3400F664EC0;
+        Thu, 21 Sep 2023 20:07:27 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCH v1 06/13] thermal: gov_fair_share: Rearrange get_trip_level()
+Date:   Thu, 21 Sep 2023 19:54:02 +0200
+Message-ID: <1882755.CQOukoFCf9@kreacher>
+In-Reply-To: <1957441.PYKUYFuaPT@kreacher>
+References: <1957441.PYKUYFuaPT@kreacher>
 MIME-Version: 1.0
-References: <20230825112633.236607-1-ulf.hansson@linaro.org>
- <20230825112633.236607-13-ulf.hansson@linaro.org> <20230921112019.gftlr5ys3yw2nwgw@bogus>
-In-Reply-To: <20230921112019.gftlr5ys3yw2nwgw@bogus>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 21 Sep 2023 15:05:17 +0200
-Message-ID: <CAPDyKFpkjOFhjKMY=4dDgngi7PftE_4c+4dHE2KcGAGYnjk6-Q@mail.gmail.com>
-Subject: Re: [PATCH v3 12/13] PM: domains: Allow genpd providers to manage OPP
- tables directly by its FW
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Cristian Marussi <cristian.marussi@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nikunj Kela <nkela@quicinc.com>,
-        Prasad Sodagudi <psodagud@quicinc.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrudekiedguddulecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeekpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhn
+ thgvlhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 21 Sept 2023 at 13:20, Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Fri, Aug 25, 2023 at 01:26:32PM +0200, Ulf Hansson wrote:
-> > In some cases the OPP tables aren't specified in device tree, but rather
-> > encoded in the FW. To allow a genpd provider to specify them dynamically
-> > instead, let's add a new genpd flag, GENPD_FLAG_OPP_TABLE_FW.
-> >
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > ---
-> >
-> > Changes in v3:
-> >       - None.
-> >
->
-> Just checking if I need Rafael's ack here or that is OK as you are
-> co-maintainer ? Again asking explicitly to ensure arm-soc is happy when
-> I send PR.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-This should be fine for you to pick up. Rafael would have objected if
-this was something that he didn't like. Moreover, there's no other
-patches being queued for genpd at this moment so no worries of
-conflicts.
+Make get_trip_level() access the thermal zone's trip table directly
+instead of using __thermal_zone_get_trip() which adds overhead related
+to the unnecessary bounds checking and copying the trip point data.
 
-Kind regards
-Uffe
+Also rearrange the code in it to make it somewhat easier to follow.
+
+The general functionality is not expected to be changed.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/thermal/gov_fair_share.c |   22 ++++++++++------------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
+
+Index: linux-pm/drivers/thermal/gov_fair_share.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/gov_fair_share.c
++++ linux-pm/drivers/thermal/gov_fair_share.c
+@@ -21,23 +21,21 @@
+  */
+ static int get_trip_level(struct thermal_zone_device *tz)
+ {
+-	struct thermal_trip trip;
+-	int count;
++	const struct thermal_trip *trip = tz->trips;
++	int i;
+ 
+-	for (count = 0; count < tz->num_trips; count++) {
+-		__thermal_zone_get_trip(tz, count, &trip);
+-		if (tz->temperature < trip.temperature)
++	if (tz->temperature < trip->temperature)
++		return 0;
++
++	for (i = 0; i < tz->num_trips - 1; i++) {
++		trip++;
++		if (tz->temperature < trip->temperature)
+ 			break;
+ 	}
+ 
+-	/*
+-	 * count > 0 only if temperature is greater than first trip
+-	 * point, in which case, trip_point = count - 1
+-	 */
+-	if (count > 0)
+-		trace_thermal_zone_trip(tz, count - 1, trip.type);
++	trace_thermal_zone_trip(tz, i, tz->trips[i].type);
+ 
+-	return count;
++	return i;
+ }
+ 
+ static long get_target_state(struct thermal_zone_device *tz,
+
+
+
