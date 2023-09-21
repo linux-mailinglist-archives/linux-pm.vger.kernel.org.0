@@ -2,71 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9396D7A991D
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Sep 2023 20:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4664A7A9B05
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Sep 2023 20:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjIUSLd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Sep 2023 14:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48180 "EHLO
+        id S229503AbjIUSxA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Sep 2023 14:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjIUSLJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Sep 2023 14:11:09 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF05E35A3;
-        Thu, 21 Sep 2023 10:28:16 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D3FFE66072E9;
-        Thu, 21 Sep 2023 08:59:58 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1695283199;
-        bh=ey5W+Sdk5cYFx0SpuDyLNMLly9gNgQcl9KZF+Hs7Q3c=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DUp4O18ORCwaBC4JEDWvmA28I6oVL5oekiq2Gl2O/Of+Cl4OjfquAG9qsVYC5qoMr
-         BYIQ9lPFIJEqOCnZO68P99AhTNdyanMSD6IMixj7eydBklxRuiRiLCR6qUTMR1ZMgx
-         9G8c+51+k9VVFf6+ue7kh6EMgkpemHseCPwtYP3PgrZdNutDY/ujy9wiUIA45GcUi4
-         btnRRTEUAtZwDv/xfhVERmXmp3/MCwqzIslni4swqZq60BqIf0x8V/cp2RQZ1cLuVN
-         iOgvFicl15QZCvkPzDAEO936AWvM98dKEz/JjNzn+NMYoPN0O1z5JGTzD5VbgtghmG
-         6ZDmYXuD5Zlzg==
-Message-ID: <83993f62-76d7-78ec-4711-b65e95e3aed9@collabora.com>
-Date:   Thu, 21 Sep 2023 09:59:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH v1] thermal/drivers/mediatek/lvts_thermal: remove extra
- error check in lvts_debugfs_init()
-Content-Language: en-US
-To:     Minjie Du <duminjie@vivo.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Cc:     opensource.kernel@vivo.com
-References: <20230921075518.3016-1-duminjie@vivo.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230921075518.3016-1-duminjie@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        with ESMTP id S230379AbjIUSws (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Sep 2023 14:52:48 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE3E905F6;
+        Thu, 21 Sep 2023 10:55:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695318908; x=1726854908;
+  h=date:from:to:cc:subject:message-id;
+  bh=dv9DiM3Y/8yTZaRNHd4AzyAoDS2umMSUsE0xQDoqtOM=;
+  b=I2vLrNfEI32xbffEazvrLmvJo6E7alg3UpDtfmn4lYYxOq+YFgC9zFHy
+   KKKD23EbYN/2Eo+1/ivd7jAIpu0H9pazHjuPkvs1QhWFQylmdNaG5fGiU
+   02Zqqnz9qcnlYoSKwIcFpbwbZEudHDRyd/pz6TRxniFxAGmDJ12Lm3D9t
+   tWNqYnwQDrQkhn+o+vhXDLvWPHO94bQjbcrFz/ETO3aQScLVTYmSwRWnQ
+   IUpupQouoXBfu2Gg8v+/E97ZAy1zYALU6r/6ZhDG/m7EdphJVEqcxml8z
+   FflXZj+qy9kp6Z504ZICMW1HJmN0rIt5TqnXTaaUNU/+YBi3SA50fzcda
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="365515469"
+X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
+   d="scan'208";a="365515469"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 01:38:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="812554125"
+X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
+   d="scan'208";a="812554125"
+Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 21 Sep 2023 01:38:35 -0700
+Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qjFCB-0009n0-1V;
+        Thu, 21 Sep 2023 08:38:07 +0000
+Date:   Thu, 21 Sep 2023 16:36:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ c2e684e12cb78b7509bbd71b9bf9d842e7ffb31a
+Message-ID: <202309211620.fpBC0tSZ-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,37 +60,154 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 21/09/23 09:55, Minjie Du ha scritto:
-> As per the comment above debugfs_create_dir(), it is not expected to
-> return an error, so an extra error check is not needed.
-> Drop the return check of debugfs_create_dir() in
-> lvts_debugfs_init()
-> 
-> Signed-off-by: Minjie Du <duminjie@vivo.com>
-> ---
->   drivers/thermal/mediatek/lvts_thermal.c | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-> index effd9b00a424..171ce25fddf5 100644
-> --- a/drivers/thermal/mediatek/lvts_thermal.c
-> +++ b/drivers/thermal/mediatek/lvts_thermal.c
-> @@ -213,8 +213,6 @@ static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
->   
->   		sprintf(name, "controller%d", i);
->   		dentry = debugfs_create_dir(name, lvts_td->dom_dentry);
-> -		if (!dentry)
-> -			continue;
->   
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: c2e684e12cb78b7509bbd71b9bf9d842e7ffb31a  Merge branch 'acpi-thermal' into bleeding-edge
 
-This is fine as it is: the `continue` is here in order to avoid allocating regset
-if the debugfs dir couldn't be created.
-NACK.
+elapsed time: 1147m
 
-Regards,
-Angelo
+configs tested: 134
+configs skipped: 3
 
->   		regset = devm_kzalloc(dev, sizeof(*regset), GFP_KERNEL);
->   		if (!regset)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20230920   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                       aspeed_g5_defconfig   gcc  
+arm                                 defconfig   gcc  
+arm                   randconfig-001-20230921   gcc  
+arm                        shmobile_defconfig   gcc  
+arm64                            allmodconfig   gcc  
+arm64                             allnoconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20230920   gcc  
+i386         buildonly-randconfig-002-20230920   gcc  
+i386         buildonly-randconfig-003-20230920   gcc  
+i386         buildonly-randconfig-004-20230920   gcc  
+i386         buildonly-randconfig-005-20230920   gcc  
+i386         buildonly-randconfig-006-20230920   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                  randconfig-006-20230920   gcc  
+i386                  randconfig-011-20230920   gcc  
+i386                  randconfig-012-20230920   gcc  
+i386                  randconfig-013-20230920   gcc  
+i386                  randconfig-014-20230920   gcc  
+i386                  randconfig-015-20230920   gcc  
+i386                  randconfig-016-20230920   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20230920   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                      bmips_stb_defconfig   clang
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                 randconfig-001-20230920   gcc  
+riscv                          rv32_defconfig   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                  randconfig-001-20230920   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                 randconfig-001-20230920   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-001-20230920   gcc  
+x86_64       buildonly-randconfig-002-20230920   gcc  
+x86_64       buildonly-randconfig-003-20230920   gcc  
+x86_64       buildonly-randconfig-004-20230920   gcc  
+x86_64       buildonly-randconfig-005-20230920   gcc  
+x86_64       buildonly-randconfig-006-20230920   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20230920   gcc  
+x86_64                randconfig-002-20230920   gcc  
+x86_64                randconfig-003-20230920   gcc  
+x86_64                randconfig-004-20230920   gcc  
+x86_64                randconfig-005-20230920   gcc  
+x86_64                randconfig-006-20230920   gcc  
+x86_64                randconfig-011-20230920   gcc  
+x86_64                randconfig-012-20230920   gcc  
+x86_64                randconfig-013-20230920   gcc  
+x86_64                randconfig-014-20230920   gcc  
+x86_64                randconfig-015-20230920   gcc  
+x86_64                randconfig-016-20230920   gcc  
+x86_64                randconfig-071-20230920   gcc  
+x86_64                randconfig-072-20230920   gcc  
+x86_64                randconfig-073-20230920   gcc  
+x86_64                randconfig-074-20230920   gcc  
+x86_64                randconfig-075-20230920   gcc  
+x86_64                randconfig-076-20230920   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                            allnoconfig   gcc  
+xtensa                           allyesconfig   gcc  
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
