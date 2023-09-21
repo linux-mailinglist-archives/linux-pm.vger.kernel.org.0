@@ -2,56 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA0367AA452
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Sep 2023 00:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3167AA4FE
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Sep 2023 00:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232948AbjIUWGj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 21 Sep 2023 18:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49774 "EHLO
+        id S233026AbjIUW1T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Sep 2023 18:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232297AbjIUWGX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Sep 2023 18:06:23 -0400
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDACBEFC9;
-        Thu, 21 Sep 2023 11:15:33 -0700 (PDT)
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3a9e89fa553so80787b6e.1;
-        Thu, 21 Sep 2023 11:15:33 -0700 (PDT)
+        with ESMTP id S233089AbjIUW1C (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Sep 2023 18:27:02 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1BFD36D5B
+        for <linux-pm@vger.kernel.org>; Thu, 21 Sep 2023 10:06:52 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id 6a1803df08f44-6515d44b562so6444546d6.3
+        for <linux-pm@vger.kernel.org>; Thu, 21 Sep 2023 10:06:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1695316012; x=1695920812; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=C3AGJ5YqreaKjGqVvvBcJoqmWbVP9NW6r7+ZQpOUS+4=;
+        b=WyNC1w4jVTj1bZMEFXt13FgWzHxeqU9qMM7KZAVq0bihoKlZxYMTtFlIkNUOiUTlPH
+         wNnVAR0DwLGT6oz3qIW31RiwicTilyrTlUjum3qL9MocjpRNIydJuAyhLVbaXEOsINMT
+         kPasyIcyZ3A4oSr2aYNSgf+7oiCThoWpTNU0Lke5q9fELltcJrwlR6Vj8AY+bccRUeAK
+         86nENJii1wLVGb8GMm9hJzWQXj6/bSM6RHRyokGEpIliT+UekUiHO2J9EbO2mvqCk8ke
+         et/btoOlr2FUZOEl3pKQLM//1t7+JZ+mDYcl0IBvpjHcpU03u2nhPu9XGkKDVIJQgnbY
+         d1IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695320071; x=1695924871;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=i+whoeEGg+5oxemZIerh1uHW1xW1HG0aWiiwA9/Cfc8=;
-        b=Ix+6LaZzkACc40ptgkr2bZa3uM2VClSBxZUx6AOmwuv6drzD1JyX4Q9U52NX6Pn80G
-         bi5QYqFpPd0dD1kQizWdwbkFkk8+EmS4h1+1p81Wn298sgqyWfVTWW8Wdvbf8/ag64E6
-         I7IhsvWUOzuCaYYieyUEXDgLyr0U8+YyfnE6cN79IXE/QVChCyLsSl2SYojheV/42Ksu
-         8gjiQ0JjcNYImuvEk9ABZwGx/LYbq+7QKoomLXq+dnFna+vPzjALs6GiCnzdFqnZkcYP
-         7+MX29RW5P1CUrBVX2pbMeWLTZc6bdZfNJuqbtfrQneOHnrxvqubjla43EaiGcvk2edO
-         KGmQ==
-X-Gm-Message-State: AOJu0Yza36dsFgsD7OaWj47NnBXckK27jyYQLeOq83J8uc57GZuah+Og
-        WDbWmmR2PK+G5fOSJZOAnbtvXuNg/VoaQ2V0ny8V1Mog
-X-Google-Smtp-Source: AGHT+IEsPvHniz+pyj39xbdxilNtva4bYOPahCcIyYvCqPdiDYDI6h+YOcOn/CICy+Wj9/GzLdL85HgrwEurKX7yP/c=
-X-Received: by 2002:a05:6820:12e:b0:56e:94ed:c098 with SMTP id
- i14-20020a056820012e00b0056e94edc098mr5102215ood.0.1695289015606; Thu, 21 Sep
- 2023 02:36:55 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1695316012; x=1695920812;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C3AGJ5YqreaKjGqVvvBcJoqmWbVP9NW6r7+ZQpOUS+4=;
+        b=HaemnAaQuERmHQT4j/vCvusmjefTB8T2HAJ7IxWycSrvtv270BlOpnHlFPRpF4k5Rz
+         p3XiYQd+V7oCPrxuD9ZQkH96c92L7EMCHfY8OhtoxnNgNOKmWmhhAtb4KA2nxznQsXeR
+         NqN58KQTaY7Pp9DcmOUOx1+PtNzx8p8UDiRztV0aOzulpdZodz+taczv/EkmDf+ypqq5
+         E/rTtO3KVyDYUku/E9R26JOxP9Lg5VfNxRFiGE2v5uLNVxhiKxI2Op021rM0HKGbl5o/
+         1AOTe6pKXRnv7coMZJzcZrVNnKRuxyFJRgyvjM/jy3s6kqjl1p69Dtq8Qcnx556rPD6x
+         bM+Q==
+X-Gm-Message-State: AOJu0YzK7KyhqsweMAXyQKye+w2EhdsiKyk79RPA7kzOItYbQZPulVWG
+        mngJgdkOymId+i+iRh55zKh1vP0rTvi3neEC04EmrSK6lGiE6URpoW8=
+X-Google-Smtp-Source: AGHT+IGxEP7M4RGeRIoS5MoOfdR/G92y7IkWBKiScp+pN2700H3k/FEmydtbEwKJZ/XQkDiYo3ii4LoHbD1J2F0GMzI=
+X-Received: by 2002:a05:6902:100c:b0:d80:68d1:b826 with SMTP id
+ w12-20020a056902100c00b00d8068d1b826mr6552250ybt.6.1695301553511; Thu, 21 Sep
+ 2023 06:05:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230920185153.613706-1-srinivas.pandruvada@linux.intel.com>
- <CAJZ5v0jLms5iUM8CXDWNCPcXSQgLv9_XJzqx9RwReqGGUKFL_Q@mail.gmail.com> <51b3a2f115b2392557331442460c2a52432f399d.camel@linux.intel.com>
-In-Reply-To: <51b3a2f115b2392557331442460c2a52432f399d.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 21 Sep 2023 11:36:43 +0200
-Message-ID: <CAJZ5v0hjYnsD=uiMVT5q_ausqOoqoFTpWN2cdrwdofdXgCd78Q@mail.gmail.com>
-Subject: Re: [PATCH linux-next] thermal: int340x: processor_thermal: Ack all
- PCI interrupts
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, daniel.lezcano@linaro.org,
-        rui.zhang@intel.com, linux-pm@vger.kernel.org,
+References: <20230825112633.236607-1-ulf.hansson@linaro.org>
+ <20230825112633.236607-13-ulf.hansson@linaro.org> <20230921112019.gftlr5ys3yw2nwgw@bogus>
+In-Reply-To: <20230921112019.gftlr5ys3yw2nwgw@bogus>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 21 Sep 2023 15:05:17 +0200
+Message-ID: <CAPDyKFpkjOFhjKMY=4dDgngi7PftE_4c+4dHE2KcGAGYnjk6-Q@mail.gmail.com>
+Subject: Re: [PATCH v3 12/13] PM: domains: Allow genpd providers to manage OPP
+ tables directly by its FW
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Cristian Marussi <cristian.marussi@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,37 +74,28 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 20, 2023 at 9:29 PM srinivas pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
+On Thu, 21 Sept 2023 at 13:20, Sudeep Holla <sudeep.holla@arm.com> wrote:
 >
-> On Wed, 2023-09-20 at 21:21 +0200, Rafael J. Wysocki wrote:
-> > On Wed, Sep 20, 2023 at 8:52 PM Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com> wrote:
-> > >
-> > > All interrupts from the processor thermal PCI device requires ACK.
-> > > This
-> > > is done by writing 0x01 at offset 0xDC in the config space. This is
-> > > already done for the thereshold interrupt. Extend this for the
-> > > workload
-> > > hint interrupt.
-> > >
-> > > Signed-off-by: Srinivas Pandruvada
-> > > <srinivas.pandruvada@linux.intel.com>
+> On Fri, Aug 25, 2023 at 01:26:32PM +0200, Ulf Hansson wrote:
+> > In some cases the OPP tables aren't specified in device tree, but rather
+> > encoded in the FW. To allow a genpd provider to specify them dynamically
+> > instead, let's add a new genpd flag, GENPD_FLAG_OPP_TABLE_FW.
 > >
-> > Is this a fix for one of the commits in linux-next?  If so, which
-> > one?
-> This is on top of workload hints patches.  I marked linux-next as they
-> are not in mainline kernel.
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
+> >
+> > Changes in v3:
+> >       - None.
+> >
 >
-> This can alternatively merged to
-> e682b86211a1 thermal: int340x: Handle workload hint interrupts
->
-> But not sure how to mark the commit id as they will change.
+> Just checking if I need Rafael's ack here or that is OK as you are
+> co-maintainer ? Again asking explicitly to ensure arm-soc is happy when
+> I send PR.
 
-As a rule, commits in my linux-next branch don't change (they
-sometimes change, but that is not a common case), so you can use the
-current one.  If it changes, I'll update the tag accordingly.
+This should be fine for you to pick up. Rafael would have objected if
+this was something that he didn't like. Moreover, there's no other
+patches being queued for genpd at this moment so no worries of
+conflicts.
 
-I'm going to add a Fixes: tag pointing to the above commit to it.
-
-Thanks!
+Kind regards
+Uffe
