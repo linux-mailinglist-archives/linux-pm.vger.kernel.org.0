@@ -2,102 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ADEC7A9FC1
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Sep 2023 22:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4DE7A9F4C
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Sep 2023 22:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231720AbjIUU1m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Sep 2023 16:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
+        id S231447AbjIUUUq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Sep 2023 16:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231927AbjIUU11 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Sep 2023 16:27:27 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57BB8FB38
-        for <linux-pm@vger.kernel.org>; Thu, 21 Sep 2023 10:46:09 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-77410032cedso38728585a.1
-        for <linux-pm@vger.kernel.org>; Thu, 21 Sep 2023 10:46:09 -0700 (PDT)
+        with ESMTP id S231941AbjIUUUH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Sep 2023 16:20:07 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9FF3B7AF
+        for <linux-pm@vger.kernel.org>; Thu, 21 Sep 2023 10:12:24 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-404314388ceso13648825e9.2
+        for <linux-pm@vger.kernel.org>; Thu, 21 Sep 2023 10:12:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695318368; x=1695923168; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1695316342; x=1695921142; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=F2iVUKRDazi3scGbQVKzP0TAbm4bJPvzK2OVT1wMEJk=;
-        b=CWBMteytZxG5ibA+LGBIww7keVy1IntHzP8nxuUfB93E86L6V/hmUU1wsB5XXzPAEP
-         qJccT3g/oJuwmPG5RB3GiOcm8uIz36OC1I8MA+L65qV5hb5io2kE4DaQt3GzSwof3kKN
-         ST+anebU3ehbnHvFX+3fo/Me+L4O3rQ4dWENxwS5IKStU17OaFSvUjXcqKV7CrnOxs/T
-         FfMt+vKcCXFnqjnmnnXJwt5x/+CysBNuMc5IuS/ys38AN3zFw6/ydwjxRf0oW6uJYesp
-         D/ur8UIBr/AttBRGpALiAfbrkIkU8lfRyPGovj5FHo7AcCnatkMfjSAvzCmXABpYgptC
-         qJKA==
+        bh=vhrSVaekmaaS857MYrgyAKM4+ElTs9bb8AF7UO+hWSw=;
+        b=p1tYkfwORdaKNDzfwpckKVflBnE+HEwodQbwFoluStv2nYwXVJG7RiLs6f44pvSDVQ
+         ZxOKv9LIui2sVXsSBmQIalp2dqfaXa6lxSJWKwN5UkiwBssPOW01o7n2F5ZlzqWko7MZ
+         VLWuefnE2/n8Xlq7EE62l5GBgUrMzRcKP1b2+8NrPBvBgurGLvNwnIVttUDyV3W2L9b+
+         6PCd5EXof5H/T+86JUbqg3pyubE4JhNDboH03qp6qdJyokVrqb7UovLHA9q8uTfn20d2
+         cKObaT6A8IKt217K16G3bGufvLoyk8CUo0Pl4bhAXXqDC7qruDqFlmz9/GoMEMmRQsZe
+         1Q+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695318368; x=1695923168;
+        d=1e100.net; s=20230601; t=1695316342; x=1695921142;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=F2iVUKRDazi3scGbQVKzP0TAbm4bJPvzK2OVT1wMEJk=;
-        b=cCmk3iYF8jZnrZbwJYvmj0KpJaVpS/6U+KsdTm8hMTfeejTaENbhFhszxKyfcU35ao
-         eAlatniqocxjbYQ+ICmme85zJ5IYtUa9T6FQvdXfqine/DL76JANj0SwDsnrRIWqRwYV
-         Qkvj69B+Ei1RtaYHJCylkApGfv+K+trQt60WCYrwIC2OlDD5eOP3/5EHraidRTgerl2o
-         KaWE69xbDfRiOvN1rbiyhKyqaLBFi48psJowKQ42MEs9KUSsvaKXw/0uNqMeLqNKldmm
-         +4N+bGmWcjlFwoD/zLWD3XuJMctbQ3ePoHqnU4oJ8ZVl8OR1R8Iuiz9bGUp4nIxHmf/A
-         knOw==
-X-Gm-Message-State: AOJu0YwTaHgdPS1chmoR8NK7TK8nBwoFIxOnBW6lY75OrxlaK5qDQR7T
-        alFpTsqH+KnbeAWu2OfjxTYQhAKnp1H7izvUCLkAaJNIWMgC+FehU5Q=
-X-Google-Smtp-Source: AGHT+IGBGzSSuWFuR2CMHZuIrQTlTZeWSJ2mzK6C15pX7OZvwpMOeVL7zOjvauq3dqsE+276vjD7PnFCpmTJ4T71ZBo=
-X-Received: by 2002:a5b:f91:0:b0:cf8:1070:82d3 with SMTP id
- q17-20020a5b0f91000000b00cf8107082d3mr5445675ybh.32.1695303482171; Thu, 21
- Sep 2023 06:38:02 -0700 (PDT)
+        bh=vhrSVaekmaaS857MYrgyAKM4+ElTs9bb8AF7UO+hWSw=;
+        b=Wi+j4U1ZxsGJmi62BwK00gg2ZUWczqSihY4bB3m/PQzjzlQEHIQMSGmm4T6RK1nMc5
+         nxTT4j4q47QwnGTrUcchOk9vzsZBf4N0MmfXsOUHp7ci6e8mYRFeTY08a6INjiyIRdWL
+         MXAMw+P798TqHrW5+viaArldW9PtrdduluAHLOI9/JJ6N2pS1xd1gbrldym+lTWeh6Zg
+         ImwRFzE08Gq3u3NudjlXFgKMLh0KgPcpCiS/SBZhldfz+yzuykEPDpSzTHmMbM4CC+/0
+         bQqnPh5lO/0G9dGfAJmo8hS3tc3RxuA8gjcxk040Ds8DWXpQoT7WcYB47gF+5e1QiDQa
+         ZQyA==
+X-Gm-Message-State: AOJu0YzdP+vJl833+DpXAiZHffKF8FCl4Sp9lAdcas2bKXYCiMKRqOxq
+        DMksnSCildngrBRzRG+Rl4l5Th7nIY/Bmif3lnxCA01OXqky1rQ1IZvh1w==
+X-Google-Smtp-Source: AGHT+IH/oHbQjIKY1hc68OC0HLda5ssIJG+10LaW+f2EeRjP96QRrNJkfgWAiwt9yxSXP5uqPOv7A04wkNF+ihcnhUM=
+X-Received: by 2002:aa7:c3c3:0:b0:532:deae:9c1f with SMTP id
+ l3-20020aa7c3c3000000b00532deae9c1fmr4961974edr.18.1695306572624; Thu, 21 Sep
+ 2023 07:29:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230919121605.7304-1-ulf.hansson@linaro.org> <20230921113328.3208651-1-sudeep.holla@arm.com>
- <CAPDyKFrGDZzyp4G1fS5PGCE95b3_w4kJyZfnDs=BEuYLzJ7uXA@mail.gmail.com> <20230921133343.h3chbszl2iuf2b55@bogus>
-In-Reply-To: <20230921133343.h3chbszl2iuf2b55@bogus>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 21 Sep 2023 15:37:25 +0200
-Message-ID: <CAPDyKFrQAKhofKikc4xV5o=oqAoGOfD9XLiqHNUSBmeCmWE5-w@mail.gmail.com>
-Subject: Re: [PATCH] firmware: arm_scmi: Move power-domain driver to the
- pmdomain dir
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Cristian Marussi <cristian.marussi@arm.com>
+References: <20230825112633.236607-1-ulf.hansson@linaro.org> <20230825112633.236607-5-ulf.hansson@linaro.org>
+In-Reply-To: <20230825112633.236607-5-ulf.hansson@linaro.org>
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+Date:   Thu, 21 Sep 2023 16:29:15 +0200
+Message-ID: <CAKohpoma56EGs=gTTQGyQ5jw8f1bZvd2tJYZjYTTnkAf4A58tA@mail.gmail.com>
+Subject: Re: [PATCH v3 04/13] firmware: arm_scmi: Align perf ops to use
+ domain-id as in-parameter
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 21 Sept 2023 at 15:33, Sudeep Holla <sudeep.holla@arm.com> wrote:
+On Fri, 25 Aug 2023 at 13:27, Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
-> On Thu, Sep 21, 2023 at 03:10:56PM +0200, Ulf Hansson wrote:
-> > On Thu, 21 Sept 2023 at 13:33, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > >
-> > > To simplify with maintenance let's move the Arm SCMI power-domain driver
-> > > to the new pmdomain directory.
-> > >
-> > > Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> > > Cc: Cristian Marussi <cristian.marussi@arm.com>
-> > > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> >
-> > Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> >
-> > Feel free to take it through your scmi tree!
-> >
-> > Note that, we should move the Kconfig options too, but that requires
-> > changes that I am carrying in my pmdomain tree. We can either wait
-> > until the next cycle or you could send your pull-request to me this
-> > time (instead of through arm-soc), then we can fix this as a late
-> > minute change. The decision is yours.
-> >
+> Most scmi_perf_proto_ops are already using an "u32 domain" as an
+> in-parameter to indicate what performance domain we shall operate upon.
+> However, some of the ops are using a "struct device *dev", which means that
+> an additional OF parsing is needed each time the perf ops gets called, to
+> find the corresponding domain-id.
 >
-> OK. Lets us just delay SCMI Kconfig changes for the next cycle then. I assume
-> you would have other changes merged by then. Or may be as a fix as it would
-> be hardlt 10-15 line with 2 Kconfig options. Let me know if you disagree or
-> have other ideas.
+> To avoid the above, but also to make the code more consistent, let's
+> replace the in-parameter "struct device *dev" with an "u32 domain". Note
+> that, this requires us to make some corresponding changes to the scmi
+> cpufreq driver, so let's do that too.
+>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+>
+> Changes in v3:
+>         - Re-based.
+>
+> ---
+>  drivers/cpufreq/scmi-cpufreq.c   | 14 +++++++++-----
 
-Let's delay, it's probably easier. Maybe a fix for rc1 would be best.
-
-Kind regards
-Uffe
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
