@@ -2,66 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97297A9F96
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Sep 2023 22:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BE3D7AA273
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Sep 2023 23:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbjIUUYY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Sep 2023 16:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55796 "EHLO
+        id S232719AbjIUVRR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Sep 2023 17:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231833AbjIUUYG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Sep 2023 16:24:06 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8886A199D;
-        Thu, 21 Sep 2023 10:23:15 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D52BE66072BD;
-        Thu, 21 Sep 2023 08:55:48 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1695282949;
-        bh=WiT2aa8Rhk3aS7e7dZ1mtGJrKI4vTo0qji3osRdEPc4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Zhmj7ZlENxigYQSiBMNrhhDc3znNJb6e3KXnfU9zYJCvR6zs4dSBACc7Ck1CvAzbi
-         6hQx5bcxvlG4do+a2qAwpSzXiNcQT5ZJGHgGDCPaCasLDRqMVVSXU8CUybcobIsyCJ
-         2YlAo+iObbdEFviGeos7ADDrGmcuzZi5h5c6TLc8ZLdX0b/tmfuu+0mee7gIMv+7IW
-         x6A7Kvc+NnFHqigaVBGfAFbQy5SEFsHdcQF0NCbJ+9w6pt3KXfwgrvg7y2bY8xSnQ+
-         VHG6xP02c5eBfzU4n8qoi7LViqLAmfNcN7fhP09ASdjF7eCv2B+FZrzg1CTPTgryG4
-         8wiGhfzQ8wxTQ==
-Message-ID: <31fbdae8-d41c-358b-c8ea-6ee31b158dfd@collabora.com>
-Date:   Thu, 21 Sep 2023 09:55:46 +0200
+        with ESMTP id S232453AbjIUVQO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Sep 2023 17:16:14 -0400
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7955A9C7;
+        Thu, 21 Sep 2023 10:07:11 -0700 (PDT)
+Received: from relay3-d.mail.gandi.net (unknown [217.70.183.195])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 55B3DCF277;
+        Thu, 21 Sep 2023 07:59:00 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 29C1560006;
+        Thu, 21 Sep 2023 07:58:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1695283116;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yLvHllXACN1zA5CMjFMhPYxtctKNWOEMglwvg9CAAd4=;
+        b=MCoTOXubAjcszgcr8Z1eKA3CjCCAjns8nCwCZRMm87VzMzY9OIneKFRDQZm+OuQ7Mz/sOg
+        gkQAu/cYR4cKx6KEXeUuPw+1qXHyUxKzkRu01LcWujXOJ9K4hN49u04K+NQd5fRs8iet01
+        lx5fbZwDi0ELe5u6knJySARn/hSM3aNy1ANYdnOumj66kkdxrRrzi65GNOdxlRX/3+sku4
+        A/d0Sjta67pqepvC/gAxOp9ip1miqMG5k41mtUjYAEO/1tVTJ2uALgrtDYxEndHnfQPxDe
+        DYTrhDTxuOtMRllc9Iff74S12+nlUEEAF+pbZDXYCEzfwMfvCDhUlrmaoWXu6w==
+Message-ID: <332111c2-f3f5-3d7f-09ef-f3ebb3f48eb0@bootlin.com>
+Date:   Thu, 21 Sep 2023 09:58:35 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.0
-Subject: Re: [PATCH v2 2/4] dt-bindings: thermal: mediatek: Add LVTS thermal
- sensors for mt7988
+Subject: Re: serial: 8250_omap: suspend issue with console_suspend disabled
 Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230920175001.47563-1-linux@fw-web.de>
- <20230920175001.47563-3-linux@fw-web.de>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230920175001.47563-3-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Kumar Udit <u-kumar1@ti.com>, Dhruva Gole <d-gole@ti.com>
+References: <59b13c93-6637-3050-c145-31be0d6c12c9@bootlin.com>
+ <20230920053828.GD5282@atomide.com>
+From:   Thomas Richard <thomas.richard@bootlin.com>
+In-Reply-To: <20230920053828.GD5282@atomide.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-GND-Sasl: thomas.richard@bootlin.com
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,41 +59,106 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 20/09/23 19:49, Frank Wunderlich ha scritto:
-> From: Frank Wunderlich <frank-w@public-files.de>
+On 9/20/23 07:38, Tony Lindgren wrote:
+> Hi,
 > 
-> Add sensor constants for MT7988.
+> * Thomas Richard <thomas.richard@bootlin.com> [230915 09:57]:
+>> The regression was introduced in commit 20a41a62618d "serial: 8250_omap:
+>> Use force_suspend and resume for system suspend"
+> ...
 > 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+>> --- a/drivers/tty/serial/8250/8250_omap.c
+>> +++ b/drivers/tty/serial/8250/8250_omap.c
+>> @@ -1630,7 +1630,7 @@ static int omap8250_suspend(struct device *dev)
+>>         err = pm_runtime_force_suspend(dev);
+>>         flush_work(&priv->qos_work);
+>>
+>> -       return err;
+>> +       return 0;
+>>  }
+> 
+> Maybe we can now just simplify things a bit here with the patch below.
+> Care to give it a try, it's compile tested only so far.
+> 
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+I tested it, it works for me.
 
-> ---
-> v2:
-> - new patch (moved from driver code to binding header)
-> - give sensors more meaningful names
-> ---
->   include/dt-bindings/thermal/mediatek,lvts-thermal.h | 9 +++++++++
->   1 file changed, 9 insertions(+)
+>> Once the omap8250_suspend doesn't return an error, the suspend sequence
+>> can continue, but I get an other issue.
+>> This issue is not related to commit 20a41a62618d, it has already been
+>> present.
+>> The power domain of the console is powered-off, so no more messages are
+>> printed, and the SoC is stucked.
+>> As the uart port is used as console, we don't want to power-off it.
+>> My workaround is to set the corresponding power domain to
+>> GENPD_FLAG_ALWAYS_ON, so the uart port is not powered-off.
 > 
-> diff --git a/include/dt-bindings/thermal/mediatek,lvts-thermal.h b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
-> index 8fa5a46675c4..8c1fdc18cf34 100644
-> --- a/include/dt-bindings/thermal/mediatek,lvts-thermal.h
-> +++ b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
-> @@ -7,6 +7,15 @@
->   #ifndef __MEDIATEK_LVTS_DT_H
->   #define __MEDIATEK_LVTS_DT_H
->   
-> +#define MT7988_CPU_0		0
-> +#define MT7988_CPU_1		1
-> +#define MT7988_ETH2P5G_0	2
-> +#define MT7988_ETH2P5G_1	3
-> +#define MT7988_TOPS_0		4
-> +#define MT7988_TOPS_1		5
-> +#define MT7988_ETHWARP_0	6
-> +#define MT7988_ETHWARP_1	7
+> The runtime PM usage count should keep the related power domain on though,
+> sounds like this issue somewhere else if the power domains get force
+> suspended with runtime PM usage count?
+> 
+> Regards,
+> 
+> Tony
+> 
+> 8< ------------------------------
+> diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+> --- a/drivers/tty/serial/8250/8250_omap.c
+> +++ b/drivers/tty/serial/8250/8250_omap.c
+> @@ -1617,7 +1617,7 @@ static int omap8250_suspend(struct device *dev)
+>  {
+>  	struct omap8250_priv *priv = dev_get_drvdata(dev);
+>  	struct uart_8250_port *up = serial8250_get_port(priv->line);
+> -	int err;
+> +	int err = 0;
+>  
+>  	serial8250_suspend_port(priv->line);
+>  
+> @@ -1627,7 +1627,8 @@ static int omap8250_suspend(struct device *dev)
+>  	if (!device_may_wakeup(dev))
+>  		priv->wer = 0;
+>  	serial_out(up, UART_OMAP_WER, priv->wer);
+> -	err = pm_runtime_force_suspend(dev);
+> +	if (uart_console(&up->port) && console_suspend_enabled)
+> +		err = pm_runtime_force_suspend(dev);
+>  	flush_work(&priv->qos_work);
+>  
+>  	return err;
+> @@ -1636,11 +1637,15 @@ static int omap8250_suspend(struct device *dev)
+>  static int omap8250_resume(struct device *dev)
+>  {
+>  	struct omap8250_priv *priv = dev_get_drvdata(dev);
+> +	struct uart_8250_port *up = serial8250_get_port(priv->line);
+>  	int err;
+>  
+> -	err = pm_runtime_force_resume(dev);
+> -	if (err)
+> -		return err;
+> +	if (uart_console(&up->port) && console_suspend_enabled) {
+> +		err = pm_runtime_force_resume(dev);
+> +		if (err)
+> +			return err;
+> +	}
 > +
->   #define MT8195_MCU_BIG_CPU0     0
->   #define MT8195_MCU_BIG_CPU1     1
->   #define MT8195_MCU_BIG_CPU2     2
+>  	serial8250_resume_port(priv->line);
+>  	/* Paired with pm_runtime_resume_and_get() in omap8250_suspend() */
+>  	pm_runtime_mark_last_busy(dev);
+> @@ -1717,16 +1722,6 @@ static int omap8250_runtime_suspend(struct device *dev)
+>  
+>  	if (priv->line >= 0)
+>  		up = serial8250_get_port(priv->line);
+> -	/*
+> -	 * When using 'no_console_suspend', the console UART must not be
+> -	 * suspended. Since driver suspend is managed by runtime suspend,
+> -	 * preventing runtime suspend (by returning error) will keep device
+> -	 * active during suspend.
+> -	 */
+> -	if (priv->is_suspending && !console_suspend_enabled) {
+> -		if (up && uart_console(&up->port))
+> -			return -EBUSY;
+> -	}
+>  
+>  	if (priv->habit & UART_ERRATA_CLOCK_DISABLE) {
+>  		int ret;
+
 
