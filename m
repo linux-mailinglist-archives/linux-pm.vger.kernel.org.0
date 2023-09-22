@@ -2,213 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A9587AACE8
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Sep 2023 10:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6730F7AADDD
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Sep 2023 11:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231814AbjIVIlq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Sep 2023 04:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35888 "EHLO
+        id S232753AbjIVJ2r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Sep 2023 05:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232481AbjIVIln (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Sep 2023 04:41:43 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB5AE8;
-        Fri, 22 Sep 2023 01:41:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695372095; x=1726908095;
-  h=date:from:to:cc:subject:message-id;
-  bh=sJWLQLh2FPCq3ZXbKOIjHJGyKcDbTKq1znkVP6NMVU4=;
-  b=h+7aTtTAPABkTMJxARz+rAZWoCiXpcKHc7u2dEKBFs6NKCh0AI28OZH9
-   4LJLKUy7shMSpvzUsc/6UDsP6dTX5jVrg+0/98f21unvHzuDzcPPB0c9R
-   OEE9N4hNgvCukOIDN0acCbPW9vn0SX3OAiUoDqfwpGSsg3hoBr52nDuT5
-   8HgVhMUqUcAHLLUBKWsN28WqhNYYb7NTQ5tSGh/tr/ZEeBvG7T9Dr1c05
-   JzV7vcL0BHZFeKKUQEKHYlv6l4pnftlgqEAfPPHc5ewKP9QA+gkqJLR2g
-   DjRMOmHG5KpuIKP/AgVRD5ARUvqPl0lVv6kZK/CONOdQTwd9UkD0jlO1s
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10840"; a="467079316"
-X-IronPort-AV: E=Sophos;i="6.03,167,1694761200"; 
-   d="scan'208";a="467079316"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 01:41:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10840"; a="724106901"
-X-IronPort-AV: E=Sophos;i="6.03,167,1694761200"; 
-   d="scan'208";a="724106901"
-Received: from lkp-server02.sh.intel.com (HELO 493f6c7fed5d) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 22 Sep 2023 01:41:33 -0700
-Received: from kbuild by 493f6c7fed5d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qjbj9-0000Ov-0u;
-        Fri, 22 Sep 2023 08:41:31 +0000
-Date:   Fri, 22 Sep 2023 16:40:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 30c38047562cc1ee0ba3440e4a4ff9df136be7e1
-Message-ID: <202309221655.YFCNBrjt-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231157AbjIVJ2r (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Sep 2023 05:28:47 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2050.outbound.protection.outlook.com [40.107.223.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB06197;
+        Fri, 22 Sep 2023 02:28:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Og7FCtTDN4qn8rG9qOAzhATAIhS+HbH19dMr+E5+eEGIwpbB2oc5qZ1ryPfAN29bJao5HXKgjERQqe8wY4MlRfDw55OF6M1p5GMfBMgrX41X5XliOYJB68UmV8bkaJ7lp/D/4VGaU0zVqopKytm775MMmrHibXuwKou1Ab3QXK39klssMs7ife8rDA39DPT7dvIWhQdNduM17NItPLodH2DrTVeR16QVpgvYtpN1o23ORHDJpTyNNZAiUm9s6ewsF5yeIhOm5mwvBZndxxBCuRsgCOxvduTCpqVozPNF3sLyaalWHF63AmlWvJDBhdNr3ucQoMceolWfDTGnpBd00w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6HXVE6751pthjZl8sjFlGMm8tVlHrgSQ9/x3gpD5sOQ=;
+ b=K5WWJVaD6A0dI9PTAoxJHRNypUqW2EYOvFo4coHbPSJVu/2R0gxkk+kHQYSlFuYWmTIvWL9VcMJi48lt8XdaiRTecUZCVdmTK0fW9M+/3mJkw+iS8yPsXhmCa4hwZZevL+Ycxx6hmbJ/NJOC9QfLRsP9GPrzJloNbEVXb1KIGFPXnxbh6FAtFVIjm5uJ2JNHTkdbQSe39T6hNYbfs49SHBg61iYefneSgrGHgx5G7bzuoMiU+wcmdegjZN1Wf2QqxXkljGlnSvdHT2BRu0/O1K5CjpxUvcH0LUdrAuW2T4KH8L7WUxL1lrzRusd8Cu9DXty04a8Z4d3rAItq6KA7EQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6HXVE6751pthjZl8sjFlGMm8tVlHrgSQ9/x3gpD5sOQ=;
+ b=G2iEq7llvevR8fDJf1VvpwAMTI+AiwxqqAkDKe/r3M1MC78pZ1AYpo4p3SWqcuROfYRkot9tgaCZt04r0vE9KDQE9eJ8a6q3pczbFEEzC+RmKedwB0DBOFB3wo7P4/6bPX0ljGbl7IMEK7lnQOyCzzBR4cgJla0qHrKPz4viSAs=
+Received: from MN2PR04CA0014.namprd04.prod.outlook.com (2603:10b6:208:d4::27)
+ by DS7PR12MB6119.namprd12.prod.outlook.com (2603:10b6:8:99::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.28; Fri, 22 Sep 2023 09:28:39 +0000
+Received: from BL02EPF0001A0FD.namprd03.prod.outlook.com
+ (2603:10b6:208:d4:cafe::a9) by MN2PR04CA0014.outlook.office365.com
+ (2603:10b6:208:d4::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.32 via Frontend
+ Transport; Fri, 22 Sep 2023 09:28:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF0001A0FD.mail.protection.outlook.com (10.167.242.104) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6792.20 via Frontend Transport; Fri, 22 Sep 2023 09:28:38 +0000
+Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 22 Sep
+ 2023 04:28:36 -0500
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     <lenb@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Wyes Karny <wyes.karny@amd.com>
+Subject: [PATCH] tools/power turbostat: Increase the limit for fd opened
+Date:   Fri, 22 Sep 2023 09:28:23 +0000
+Message-ID: <20230922092823.478042-1-wyes.karny@amd.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0001A0FD:EE_|DS7PR12MB6119:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4fc895ab-dde7-454e-ad0e-08dbbb4e4da6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rdvDzuSF0D/q8i0ZFUfjMbx+S2WPmyCv2RrdLuhCmi3AcQP0e/CrTtn6IYkmURm/s6K4GeYGf6Ho3QpF4EX3eUI4aGBouutd5Rmff56xbsAe4S6/II7nMBVwLoGQuzdQHm97FMpd5aw/1JJdIKDRtJTpQCxnaAoAniX/U41h0HTbR22cP0gWdvP8CAvAKeVRiPsnqGmkvZJDLMoVD4N1Fwsue3TCXvH8dZJR+aO+WVSrswvgQhrZGvNWBDjh3mm+WD6RBUFS90mLweY+tdYNxNZZ476FdZUuzyPaq6xT0ykAcY0AwNmlcqMRqseMedRHX0baKdbOL7u1OlKR91Q+crihguygvIHBTVL/14CaUTO+DIMM0CnUGvGBLEVY8zT2nqo6doAPvqCsf91yq9NbhGHBwXuN452ubF27lGYs/PUm3eEIFLHFmTFaI3m4BrByBUvrEw0sa6DCKwB5SFlm+0/rPvZQrlnl51EYMgZw2DSLrBc57VbYyNIieUSC2eveqnFDBYy9dQtEj5S4szKKlL0S54LLRHdsEHKRgaZcQnWr0Jwq0JFZMSXPyRPsVm6W5ZC8kVO+7NuH4sKlbyXA8wi0lRJh8jgHPk1aUsNWQN0PfjJSiJjkF+5uJwS3L5OgWqMBk444inOSHN80WwU0erpLiHkoLdg+lr4Ks6XIOLLi+eF5hDG/PJAONbFCNCtmo6ZzXNZBu5lfaMQ52jCJH6vAx5Z330jI4mdYlCwPB8/9QFqTsUgFQbDtaGrHy36yvukEdRPFI/1ZWFolVBb6DbZWkYzeQL1Lr5qLIgrr/LHdsyet95eINYb2iLGJd5EW
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(396003)(346002)(136003)(376002)(39860400002)(451199024)(1800799009)(186009)(230921699003)(82310400011)(36840700001)(40470700004)(46966006)(6666004)(7696005)(426003)(40480700001)(40460700003)(36756003)(356005)(82740400003)(26005)(36860700001)(86362001)(40140700001)(2906002)(478600001)(83380400001)(47076005)(41300700001)(70206006)(6916009)(70586007)(16526019)(4326008)(8936002)(5660300002)(2616005)(1076003)(316002)(8676002)(54906003)(81166007)(44832011)(336012)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2023 09:28:38.7200
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4fc895ab-dde7-454e-ad0e-08dbbb4e4da6
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0001A0FD.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6119
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 30c38047562cc1ee0ba3440e4a4ff9df136be7e1  Merge branch 'acpi-ec' into bleeding-edge
+When running turbostat, a system with 512 cpus reaches the limit for
+maximum number of file descriptors that can be opened. To solve this
+problem, the limit is raised to 2^15, which is a large enough number.
 
-elapsed time: 744m
+Below data is collected from AMD server systems while running turbostat:
 
-configs tested: 136
-configs skipped: 2
+|-----------+-------------------------------|
+| # of cpus | # of opened fds for turbostat |
+|-----------+-------------------------------|
+| 128       | 260                           |
+|-----------+-------------------------------|
+| 192       | 388                           |
+|-----------+-------------------------------|
+| 512       | 1028                          |
+|-----------+-------------------------------|
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+So, the new max limit would be sufficient up to 2^14 cpus.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20230922   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                   randconfig-001-20230922   gcc  
-arm64                            allmodconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20230922   gcc  
-i386         buildonly-randconfig-002-20230922   gcc  
-i386         buildonly-randconfig-003-20230922   gcc  
-i386         buildonly-randconfig-004-20230922   gcc  
-i386         buildonly-randconfig-005-20230922   gcc  
-i386         buildonly-randconfig-006-20230922   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20230922   gcc  
-i386                  randconfig-002-20230922   gcc  
-i386                  randconfig-003-20230922   gcc  
-i386                  randconfig-004-20230922   gcc  
-i386                  randconfig-005-20230922   gcc  
-i386                  randconfig-006-20230922   gcc  
-i386                  randconfig-011-20230922   gcc  
-i386                  randconfig-012-20230922   gcc  
-i386                  randconfig-013-20230922   gcc  
-i386                  randconfig-014-20230922   gcc  
-i386                  randconfig-015-20230922   gcc  
-i386                  randconfig-016-20230922   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20230922   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20230922   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20230922   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                 randconfig-001-20230922   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-001-20230922   gcc  
-x86_64       buildonly-randconfig-002-20230922   gcc  
-x86_64       buildonly-randconfig-003-20230922   gcc  
-x86_64       buildonly-randconfig-004-20230922   gcc  
-x86_64       buildonly-randconfig-005-20230922   gcc  
-x86_64       buildonly-randconfig-006-20230922   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20230922   gcc  
-x86_64                randconfig-002-20230922   gcc  
-x86_64                randconfig-003-20230922   gcc  
-x86_64                randconfig-004-20230922   gcc  
-x86_64                randconfig-005-20230922   gcc  
-x86_64                randconfig-006-20230922   gcc  
-x86_64                randconfig-011-20230922   gcc  
-x86_64                randconfig-012-20230922   gcc  
-x86_64                randconfig-013-20230922   gcc  
-x86_64                randconfig-014-20230922   gcc  
-x86_64                randconfig-015-20230922   gcc  
-x86_64                randconfig-016-20230922   gcc  
-x86_64                randconfig-071-20230922   gcc  
-x86_64                randconfig-072-20230922   gcc  
-x86_64                randconfig-073-20230922   gcc  
-x86_64                randconfig-074-20230922   gcc  
-x86_64                randconfig-075-20230922   gcc  
-x86_64                randconfig-076-20230922   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
+Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+---
+ tools/power/x86/turbostat/turbostat.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index 9a10512e3407..23f1fe58289a 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -6717,6 +6717,18 @@ void cmdline(int argc, char **argv)
+ 	}
+ }
+ 
++void set_rlimit(void)
++{
++	struct rlimit limit;
++
++	limit.rlim_cur = 0x8000;
++	limit.rlim_max = 0x8000;
++
++	if (setrlimit(RLIMIT_NOFILE, &limit) < 0) {
++		err(1, "Failed to set rlimit");
++	}
++}
++
+ int main(int argc, char **argv)
+ {
+ 	outf = stderr;
+@@ -6729,6 +6741,9 @@ int main(int argc, char **argv)
+ 
+ 	probe_sysfs();
+ 
++	if (!getuid())
++		set_rlimit();
++
+ 	turbostat_init();
+ 
+ 	msr_sum_record();
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
