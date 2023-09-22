@@ -2,52 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10EA47AB980
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Sep 2023 20:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9FE7ABA05
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Sep 2023 21:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233950AbjIVSow (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Sep 2023 14:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
+        id S233837AbjIVT1i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Sep 2023 15:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233461AbjIVSoi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Sep 2023 14:44:38 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D46C2;
-        Fri, 22 Sep 2023 11:44:32 -0700 (PDT)
+        with ESMTP id S229590AbjIVT1h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Sep 2023 15:27:37 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707CFB9;
+        Fri, 22 Sep 2023 12:27:31 -0700 (PDT)
 Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C49C666072E9;
-        Fri, 22 Sep 2023 19:44:28 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7B85266072E7;
+        Fri, 22 Sep 2023 20:27:28 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1695408270;
-        bh=3n4jZx8rWNTvoWzvdcn6UDWRLf/S8lzW7Qhfkk1sxfE=;
+        s=mail; t=1695410850;
+        bh=8fJ99vinwBbNMB5vLrS3phKoWaPj8xZQRk/04iAxlp4=;
         h=From:To:Cc:Subject:Date:From;
-        b=PyH3SZnJtonfpiSRdW2RdW/BcP92fbatG3x6sNpjEBhgYfn2hBrQRx+Q2wNrnvqHS
-         tqL4eJeD9Xum2D9a2cpeF03/nYHfcbPYn+gb4AldQbvNBU7hd9WpmQrAAuP3l89zoD
-         VKfP1vvDkxnH52yi+WJ5ailShIYDtQFocW2e8dhjIrvU/nlrHX1MK0UofN+QROGJw3
-         zeEQ2aRi9mbh5ckrvPVP4VhaUpfJXO2EWl1ETWheiS4h04G29E8fPTvNEHkWHF5nzo
-         eJqztx+H/oWOvzuQYiMn/JHPXX85AmkBhbAwUGQa260g48jvTlCSJRsC47ZF9ewm3Y
-         wk5+D1jGsGufQ==
+        b=BPMLsU9twchJaE3d7Ibqqx6sffOiNGT3NtYP8/dNH/bGOQzjmP2UE8nj1rL2V1tGt
+         uv37haffS2nQb3Wzt/ksDAQ3N9EmRF1RvJkXgBb5Umro+xq+JtPJ//aVwpuN1jBgYT
+         s45Xuc6v0ofSrJRi22dMN2kl9xi2ah7QnPBBmcIMNQ9TPKX3tZNkM8xvQ13osV5VdF
+         v/p5qrjjI0cwjxwJPZBHJyXqY/2ixy6UJmC3GO/RCKNmRWVaurMus5wtYYZf4AqG8g
+         ZRuXUDezBbC+7gvznJnAxFAlqTLsc42huaAJxNWTtwM3o2IAWHA4suHfns1QW9qZRh
+         xQKiRH+ZmBHRg==
 From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>
 To:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+Cc:     kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
         =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>, Amit Kucheria <amitk@kernel.org>,
-        Caesar Wang <wxt@rock-chips.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Javi Merino <javi.merino@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
         Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH v2] thermal/core: Don't update trip points inside the hysteresis range
-Date:   Fri, 22 Sep 2023 14:44:03 -0400
-Message-ID: <20230922184425.290894-1-nfraprado@collabora.com>
+Subject: [PATCH] thermal: core: Check correct temperature for thermal trip notification
+Date:   Fri, 22 Sep 2023 15:27:18 -0400
+Message-ID: <20230922192724.295129-1-nfraprado@collabora.com>
 X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,120 +58,37 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When searching for the trip points that need to be set, the nearest
-higher trip point's temperature is used for the high trip, while the
-nearest lower trip point's temperature minus the hysteresis is used for
-the low trip. The issue with this logic is that when the current
-temperature is inside a trip point's hysteresis range, both high and low
-trips will come from the same trip point. As a consequence instability
-can still occur like this:
-* the temperature rises slightly and enters the hysteresis range of a
-  trip point
-* polling happens and updates the trip points to the hysteresis range
-* the temperature falls slightly, exiting the hysteresis range, crossing
-  the trip point and triggering an IRQ, the trip points are updated
-* repeat
+The thermal trip down notification should be triggered when the
+temperature goes below the trip temperature minus the hysteresis. But
+while the temperature is correctly checked against that, the last
+temperature is instead compared against the trip point temperature. The
+end result is that the notification won't always be triggered, only when
+the temperature happens to drop quick enough so that the last
+temperature was still above the trip point temperature.
 
-So even though the current hysteresis implementation prevents
-instability from happening due to IRQs triggering on the same
-temperature value, both ways, it doesn't prevent it from happening due
-to an IRQ on one way and polling on the other.
+Fix the incorrect check.
 
-To properly implement a hysteresis behavior, when inside the hysteresis
-range, don't update the trip points. This way, the previously set trip
-points will stay in effect, which will in a way remember the previous
-state (if the temperature signal came from above or below the range) and
-therefore have the right trip point already set. The exception is if
-there was no previous trip point set, in which case a previous state
-doesn't exist, and so it's sensible to allow the hysteresis range as
-trip points.
-
-The following logs show the current behavior when running on a real
-machine:
-
-[  202.524658] thermal thermal_zone0: new temperature boundaries: -2147483647 < x < 40000
-   203.562817: thermal_temperature: thermal_zone=vpu0-thermal id=0 temp_prev=36986 temp=37979
-[  203.562845] thermal thermal_zone0: new temperature boundaries: 37000 < x < 40000
-   204.176059: thermal_temperature: thermal_zone=vpu0-thermal id=0 temp_prev=37979 temp=40028
-[  204.176089] thermal thermal_zone0: new temperature boundaries: 37000 < x < 100000
-   205.226813: thermal_temperature: thermal_zone=vpu0-thermal id=0 temp_prev=40028 temp=38652
-[  205.226842] thermal thermal_zone0: new temperature boundaries: 37000 < x < 40000
-
-And with this patch applied:
-
-[  184.933415] thermal thermal_zone0: new temperature boundaries: -2147483647 < x < 40000
-   185.981182: thermal_temperature: thermal_zone=vpu0-thermal id=0 temp_prev=36986 temp=37872
-   186.744685: thermal_temperature: thermal_zone=vpu0-thermal id=0 temp_prev=37872 temp=40058
-[  186.744716] thermal thermal_zone0: new temperature boundaries: 37000 < x < 100000
-   187.773284: thermal_temperature: thermal_zone=vpu0-thermal id=0 temp_prev=40058 temp=38698
-
-Fixes: 060c034a9741 ("thermal: Add support for hardware-tracked trip points")
+Fixes: 55cdf0a283b8 ("thermal: core: Add notifications call in the framework")
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
 ---
 
-Changes in v2:
-- Changed logic as suggested by Rafael
-- Added log example to commit message
-- Added fixes tag
+ drivers/thermal/thermal_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- drivers/thermal/thermal_trip.c | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
-index 024e2e365a26..597ac4144e33 100644
---- a/drivers/thermal/thermal_trip.c
-+++ b/drivers/thermal/thermal_trip.c
-@@ -55,6 +55,7 @@ void __thermal_zone_set_trips(struct thermal_zone_device *tz)
- {
- 	struct thermal_trip trip;
- 	int low = -INT_MAX, high = INT_MAX;
-+	bool same_trip = false;
- 	int i, ret;
- 
- 	lockdep_assert_held(&tz->lock);
-@@ -63,6 +64,7 @@ void __thermal_zone_set_trips(struct thermal_zone_device *tz)
- 		return;
- 
- 	for (i = 0; i < tz->num_trips; i++) {
-+		bool low_set = false;
- 		int trip_low;
- 
- 		ret = __thermal_zone_get_trip(tz, i , &trip);
-@@ -71,18 +73,31 @@ void __thermal_zone_set_trips(struct thermal_zone_device *tz)
- 
- 		trip_low = trip.temperature - trip.hysteresis;
- 
--		if (trip_low < tz->temperature && trip_low > low)
-+		if (trip_low < tz->temperature && trip_low > low) {
- 			low = trip_low;
-+			low_set = true;
-+			same_trip = false;
-+		}
- 
- 		if (trip.temperature > tz->temperature &&
--		    trip.temperature < high)
-+		    trip.temperature < high) {
- 			high = trip.temperature;
-+			same_trip = low_set;
-+		}
- 	}
- 
- 	/* No need to change trip points */
- 	if (tz->prev_low_trip == low && tz->prev_high_trip == high)
- 		return;
- 
-+	/*
-+	 * If "high" and "low" are the same, skip the change unless this is the
-+	 * first time.
-+	 */
-+	if (same_trip && (tz->prev_low_trip != -INT_MAX ||
-+	    tz->prev_high_trip != INT_MAX))
-+		return;
-+
- 	tz->prev_low_trip = low;
- 	tz->prev_high_trip = high;
- 
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 58533ea75cd9..120fcf23b8e5 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -361,7 +361,7 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip_id)
+ 		    tz->temperature >= trip.temperature)
+ 			thermal_notify_tz_trip_up(tz->id, trip_id,
+ 						  tz->temperature);
+-		if (tz->last_temperature >= trip.temperature &&
++		if (tz->last_temperature >= (trip.temperature - trip.hysteresis) &&
+ 		    tz->temperature < (trip.temperature - trip.hysteresis))
+ 			thermal_notify_tz_trip_down(tz->id, trip_id,
+ 						    tz->temperature);
 -- 
 2.42.0
 
