@@ -2,127 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3F77AB3F9
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Sep 2023 16:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5474D7AB54C
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Sep 2023 17:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbjIVOnY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Sep 2023 10:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54768 "EHLO
+        id S231462AbjIVPxt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Sep 2023 11:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbjIVOnX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Sep 2023 10:43:23 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F96197;
-        Fri, 22 Sep 2023 07:43:16 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 67BD85C01A8;
-        Fri, 22 Sep 2023 10:43:14 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 22 Sep 2023 10:43:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1695393794; x=1695480194; bh=cX3BFEpcSwAI2RdCFAWOh+RUcIcSLZQQw+L
-        ux7UIf5E=; b=byVnIw0riDP04n+Z8z/RKs8pC9p7MfrSAwZuzyK46OTg2vYywMC
-        LckrWBrRWrN7DcJrLn/kJslgl59T+X/O2gubjWaov4OBG1L20byPOAXry6H5Gg1c
-        msiJMw5AqV1TzmDf4uNENqnrbN4eoP90hnWFYq5OPtQZCBcgb1QQ1Z0VQ4SyH9dT
-        ZO/GhMFAIL57iljL8UmtNM9vTKGXx53iNfAqpQO38w0/xZbx9/dJTJeqqe89FZTF
-        oy/FcLL7fV1Gfdp6fGnRt2HId563GMip9XgDtSzHSSYH0WgW4nsKjkCFLxSF3DxS
-        ZUw1b/7w8dTtdR/SrFwoOlzCCKlYD77ASpA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1695393794; x=1695480194; bh=cX3BFEpcSwAI2RdCFAWOh+RUcIcSLZQQw+L
-        ux7UIf5E=; b=anUc5YEGEsbPQOjR6H0SbIN+3S+WwzQhj8B2WuwNKGntAArp4q9
-        f13HbRek4d+QV9bWqHq/lxH3UnP581s0QHQSj6M0HUYdzNBRpFZ2LISDIPLYvw/0
-        JhFInQNt2xyukBUbbTT7hUanvvfos6DcQd7PkGpH1aOj2rWhgr4h9LPCk3V09dqg
-        NoFCVkZUHiflLWlVHfWUADJbGEXI8Ujy5+eKbzERP4BjiqJzLZxcgh5EDjhI28+w
-        tTesag4GeQF771BCKVEEr21DiNsoGtjorF8Z7SNqvlPxvb3dnbUobZW6WmlvPEFy
-        t0rspIHcmRk3OKmmrIVSD3wGxkO8XHAmbow==
-X-ME-Sender: <xms:AKgNZZY6RHRwuWC2y8pkz1-CRypBt8bojZXgsVALd2swGQeGiXmYtg>
-    <xme:AKgNZQbS7Su86Jlv4dX87tAoQ9pyimlOV1vhU7ZkQ0U2DnZHUVgRMz9xV7bemNhEr
-    blajbTDOfR-mBkBl68>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudekkedgiedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpefgkeeuleegieeghfduudeltdekfeffjeeuleehleefudettddtgfevueef
-    feeigeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:AKgNZb8o3CcQxKVCcRK_Rp3Xs0nd8JPIpwNLwvPjRL0YJWpJxOKiBw>
-    <xmx:AKgNZXpfUDyvsH_GXBRUjW7EqrsWFts73MM-cNleiI1Nt9WrVVauIw>
-    <xmx:AKgNZUoHvPDmZBhUSsw7yfkqr-zFl-vpZLMwG6Enwtu3I-89hzKmQA>
-    <xmx:AqgNZR5XzzbiNWX3fYcKTkSSxS6wDcyiBMw8FGsaxiYYlNBSBqkPpg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 62A8CB60089; Fri, 22 Sep 2023 10:43:12 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-761-gece9e40c48-fm-20230913.001-gece9e40c
-MIME-Version: 1.0
-Message-Id: <ea9ee2dd-b71a-4c97-a347-20536d7ad424@app.fastmail.com>
-In-Reply-To: <CAAhV-H73kp8zWJD7AKUvknmxow=f_cPBw9jctpmced6o_QCF6w@mail.gmail.com>
-References: <cover.1693623752.git.zhoubinbin@loongson.cn>
- <16a37f6ad3cc9417b6638c2cd532d88c79468eb1.1693623752.git.zhoubinbin@loongson.cn>
- <885eab85-2c11-cf20-9187-55cd647fbe9f@infradead.org>
- <c7604f6c-4da7-47c4-abe9-e626b3efc665@infradead.org>
- <20230919-9ce82588fccdd641574b468c@fedora>
- <CAAhV-H73kp8zWJD7AKUvknmxow=f_cPBw9jctpmced6o_QCF6w@mail.gmail.com>
-Date:   Fri, 22 Sep 2023 10:42:51 -0400
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Huacai Chen" <chenhuacai@kernel.org>,
-        "Conor Dooley" <conor@kernel.org>
-Cc:     "Randy Dunlap" <rdunlap@infradead.org>,
-        "Binbin Zhou" <zhoubinbin@loongson.cn>,
-        "Binbin Zhou" <zhoubb.aaron@gmail.com>,
-        "Huacai Chen" <chenhuacai@loongson.cn>,
-        "Yinbo Zhu" <zhuyinbo@loongson.cn>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Conor Dooley" <conor+dt@kernel.org>,
-        loongson-kernel@lists.loongnix.cn, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        "WANG Xuerui" <kernel@xen0n.name>, loongarch@lists.linux.dev
-Subject: Re: [PATCH v3 1/5] soc: loongson: loongson2_pm: Add dependency for INPUT
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230228AbjIVPxs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Sep 2023 11:53:48 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7437B122
+        for <linux-pm@vger.kernel.org>; Fri, 22 Sep 2023 08:53:42 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-d859ac9ea15so3301993276.2
+        for <linux-pm@vger.kernel.org>; Fri, 22 Sep 2023 08:53:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1695398021; x=1696002821; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=P7bK6hAXjxwm2ijcRkbUrk4xLVSp4X3nArYEjpbBtYs=;
+        b=DAXFv3e5pUF9pzB10KB8TtxXzK2gSyPdF7EAw/GwB5nE1zmwi8f0hApHd3bZIxa2BD
+         3Q8OxKq1c8+kOJfjArMAWN5qJEeWnqLv3xUA1k+HhTHSElaCC5GiDP5qg9g9eeyZDFir
+         ytiq6/4irTp71UeD7lP4m8KIixKTKKoOl6WQdp08L9bYOeBwtFOifjwJH8U5a1l5rSE9
+         +VH2UogrMDjq9KPx4u+1Ye77DHcg76ye7SiIKnZpQ4B39TJq6X1/TP/LKo1VgbDIslU7
+         z98hZftyDIQJVdpZJrw+O/ZzcNk5JvHkzoBCy1t+TrbNdRFpfSpKD/jhMk2MSqsyVcqW
+         KPWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695398021; x=1696002821;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P7bK6hAXjxwm2ijcRkbUrk4xLVSp4X3nArYEjpbBtYs=;
+        b=ijVljklLvs5qodj+MUrq1putE1YIQvEwsKrnr5QjmP8iN9LXAMiVQpUyaerI7Mph8+
+         TrhOxEcCHw/3FsjtfqdJuq16cnn96p0pwfa5eWd5U6fly37Y26t4RuIwh/Zm8WCfUZrS
+         DJnwiWEWjAkh9uk2HGNdfMNwcG4NuB2Eh8lDsFbqFH1wOlbhq5n6fKiJ64O+hzm+vlvR
+         Tt8Wvj7/EtB0PBMIjkCCTK3MKmqS28/d5MC/wrK6/A0FScmpWNEocVQ3SUwb2xB9CaI+
+         gHR6F3UpTIdO7/aWEjIXRjcs9ARpWnniU2sW/xC6r+Bmxc+CuOAIjKxVj++VrDuNsQkX
+         81cg==
+X-Gm-Message-State: AOJu0YwnUolfvB2nBLAMfQNq/6MQ7B3gd+EI4GSZnZKivFkogf/8jCza
+        MJRxVlXUNqLkkynEDN35/5SCtGDrhHim
+X-Google-Smtp-Source: AGHT+IHDDnP0ZSOPgk0DlTlo+bvkM6ULCHtAWJPl4dAhWDlxfr7ZOa9+PCIY6cT541j4sLdcJgiVygLsLTa1
+X-Received: from bjg.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:415])
+ (user=bgeffon job=sendgmr) by 2002:a25:ae66:0:b0:d7e:79c3:cd0b with SMTP id
+ g38-20020a25ae66000000b00d7e79c3cd0bmr114598ybe.3.1695398021726; Fri, 22 Sep
+ 2023 08:53:41 -0700 (PDT)
+Date:   Fri, 22 Sep 2023 11:53:36 -0400
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.42.0.515.g380fc7ccd1-goog
+Message-ID: <20230922155336.507220-1-bgeffon@google.com>
+Subject: [PATCH] PM: hibernate: clean up sync_read handling in snapshot_write_next
+From:   Brian Geffon <bgeffon@google.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Brian Geffon <bgeffon@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 19, 2023, at 12:15, Huacai Chen wrote:
-> On Tue, Sep 19, 2023 at 11:48=E2=80=AFPM Conor Dooley <conor@kernel.or=
-g> wrote:
->> On Tue, Sep 19, 2023 at 08:36:50AM -0700, Randy Dunlap wrote:
->>
->> Seemingly this was sent again in isolation 2 weeks ago, but neither t=
-he
->> maintainer (Huacai) nor soc@kernel.org were on cc:
->>
->> https://lore.kernel.org/all/20230905123629.4510-1-zhuyinbo@loongson.c=
-n/
-> v3 indeed cc-ed soc@kernel.org. :)
->
-> Arnd, could you please take this series to the soc tree? And also this=20
-> series:
-> https://lore.kernel.org/loongarch/cover.1693534134.git.zhoubinbin@loon=
-gson.cn/T/#t
+In snapshot_write_next sync_read is set and unset in three different
+spots unnecessiarly. As a result there is a subtle bug where the first
+page after the meta data has been loaded unconditionally sets sync_read
+to 0. If this first pfn was actually a highmem page then the returned
+buffer will be the global "buffer," and the page needs to be loaded
+synchronously.
 
-Sorry, I have been traveling and not pushed out the tree yet.
+That is, I'm not sure we can always assume the following to be safe:
+		handle->buffer = get_buffer(&orig_bm, &ca);
+		handle->sync_read = 0;
 
-Can you confirm that the input dependency is required for 6.6
-and the other series can wait until 6.7? When you send patches
-to soc@kernel.org, please always mention which tree you intend
-them for. I might disagree, but it's better than having to guess.
+Because get_buffer can call get_highmem_page_buffer which can
+return 'buffer'
 
-     Arnd
+The easiest way to address this is just set sync_read before
+snapshot_write_next returns if handle->buffer == buffer.
+
+Signed-off-by: Brian Geffon <bgeffon@google.com>
+Cc: stable@vger.kernel.org
+---
+ kernel/power/snapshot.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+index 190ed707ddcc..362e6bae5891 100644
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -2780,8 +2780,6 @@ int snapshot_write_next(struct snapshot_handle *handle)
+ 	if (handle->cur > 1 && handle->cur > nr_meta_pages + nr_copy_pages + nr_zero_pages)
+ 		return 0;
+ 
+-	handle->sync_read = 1;
+-
+ 	if (!handle->cur) {
+ 		if (!buffer)
+ 			/* This makes the buffer be freed by swsusp_free() */
+@@ -2824,7 +2822,6 @@ int snapshot_write_next(struct snapshot_handle *handle)
+ 			memory_bm_position_reset(&zero_bm);
+ 			restore_pblist = NULL;
+ 			handle->buffer = get_buffer(&orig_bm, &ca);
+-			handle->sync_read = 0;
+ 			if (IS_ERR(handle->buffer))
+ 				return PTR_ERR(handle->buffer);
+ 		}
+@@ -2834,9 +2831,8 @@ int snapshot_write_next(struct snapshot_handle *handle)
+ 		handle->buffer = get_buffer(&orig_bm, &ca);
+ 		if (IS_ERR(handle->buffer))
+ 			return PTR_ERR(handle->buffer);
+-		if (handle->buffer != buffer)
+-			handle->sync_read = 0;
+ 	}
++	handle->sync_read = (handle->buffer == buffer);
+ 	handle->cur++;
+ 
+ 	/* Zero pages were not included in the image, memset it and move on. */
+-- 
+2.42.0.515.g380fc7ccd1-goog
+
