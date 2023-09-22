@@ -2,88 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D53F7AB8A7
+	by mail.lfdr.de (Postfix) with ESMTP id E31767AB8A8
 	for <lists+linux-pm@lfdr.de>; Fri, 22 Sep 2023 19:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233711AbjIVR4C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Sep 2023 13:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59174 "EHLO
+        id S233647AbjIVR4D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Sep 2023 13:56:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233961AbjIVRzn (ORCPT
+        with ESMTP id S233966AbjIVRzn (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Sep 2023 13:55:43 -0400
 Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11E6E74
-        for <linux-pm@vger.kernel.org>; Fri, 22 Sep 2023 10:53:43 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1c09673b006so21092585ad.1
-        for <linux-pm@vger.kernel.org>; Fri, 22 Sep 2023 10:53:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20534173D
+        for <linux-pm@vger.kernel.org>; Fri, 22 Sep 2023 10:53:58 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1c1ff5b741cso23200795ad.2
+        for <linux-pm@vger.kernel.org>; Fri, 22 Sep 2023 10:53:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695405223; x=1696010023; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1695405237; x=1696010037; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=F/L92X22dJhyhtQ8lDKApFNV7vkLUEgyD7DW61AIGrg=;
-        b=R9xyZN9cQTzCHh1zGdoKQao8yI/eVpTF6uJsDtWMYY9GWDxthUzvTpDgsXfpkWgh/V
-         /YdrSM1hp+eLqX2UPVgWaL9dStDGnatO9ahE+XSJD1OT50KM+lT5TJGelJE5MTBTX30t
-         wdulrdqgzfVkdLnMjJs0YdPshpQ7OKZseb+YY=
+        bh=WLImW1IzePGbN+/EKPq+ioMvgiAmC6mEu6v1g8YfVEg=;
+        b=CHQAliV2GLtAhRmw3Y9M6mVpiwxNovQ431EasJv73jASKw0ywvHAvVrJ/ZsZ8sAACA
+         xtM1xORYY6eaEf1OHoCWY2TNUlEQcxlRXNx9cHcpaiNKh5BFj8n/tuUiZBrneFrhXWLC
+         IDnHSPOLChGXvPlXRq4AlJJ5YgRWLoNpLSxck=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695405223; x=1696010023;
+        d=1e100.net; s=20230601; t=1695405237; x=1696010037;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=F/L92X22dJhyhtQ8lDKApFNV7vkLUEgyD7DW61AIGrg=;
-        b=gigT0dzO/+QIwHToM5277D+uxfkb0SvJq5zne28WDtKQbbpGR+NhmU0VFmOwYlPP8N
-         pnUTQNN59R2/OPF4fR+T6feswGtgbf3d4bHVMZdIo7veuTVHQzxs5JpY/06vHxjjzF5E
-         pdT1w7J8f7Ql50OyGACJlXyeJ1Gug5L5kmrgPtQvrmo3bXN8pTaHtdvWssNTvb5nkLVb
-         6eCSxH69A5GWFWrCWhDsEBR8q1DwDKsD6VfzdeozxQbeu/kmpw8woGVLFV3H1JfNS2yN
-         o8HN9FqCMYLJ0+kFLL7l9kuZDqJxKTCXL2p6EytbPrixzxJs2yfYOnFdh9k5tV/x2fnP
-         QMrA==
-X-Gm-Message-State: AOJu0Yy7cPLrS7pOTaWpukgLbYiqE23l9wFhm3FYOUUt+rkFse3BlFrL
-        KHiZaKMtfoTbxla8BUlkkAI/Lw==
-X-Google-Smtp-Source: AGHT+IHGWszC9sNGNLlYcYJz1tQiG2EBYKJI1eKGKzyA7OlbgEJ46OgR6p2V4Nmm7b7vzpvejaUosA==
-X-Received: by 2002:a17:903:110d:b0:1bb:d280:5e0b with SMTP id n13-20020a170903110d00b001bbd2805e0bmr246508plh.18.1695405223181;
-        Fri, 22 Sep 2023 10:53:43 -0700 (PDT)
+        bh=WLImW1IzePGbN+/EKPq+ioMvgiAmC6mEu6v1g8YfVEg=;
+        b=cBi/1jq0krm9cObjSyjfMcp42pgNfngNcKqZDMqauMpLLFGyx+EyyV2+tAqEkXQ8e7
+         UrqwtkPBM9pDMQej3QUc7OUYjx80plA4MKFB4gI/lL6RoF0OWn/ReHjI5WD8TXX8U/AD
+         C6aN0iSZpas0YyGOUvzguqyeDEEBGsQ8aMVy1cQDrrI7FQQiHn30PBc2tfdjpr7xy+S8
+         xn6nroXv/F6rNhgpZ+FQJLNzz41eJElcQJVgZg5XJe2jcNH3df2jm7yDt0HlnMYwg1Zz
+         yMIUJjOD5QAAg+gIEqk1Kh1Fg1NDCs0R8WgioSRRUZncEPhjpuo3JVQFWp+9lfvcg2L6
+         uBhw==
+X-Gm-Message-State: AOJu0Yz4P0yXebbiRyYZPSLh7c7RsDKxheQGSsKKk3py2RgRqxVDlJUl
+        fdydfF1P6YDhX/dZf5OLSrMTTw==
+X-Google-Smtp-Source: AGHT+IGF3fNGmUjC4okiXR6Ev3mOPUrKRgaxVlLdi8Plb8MDgj/4DVzkWP898nuYl3TJbEm6TJyfFw==
+X-Received: by 2002:a17:902:f687:b0:1c5:f4c7:b4de with SMTP id l7-20020a170902f68700b001c5f4c7b4demr167642plg.2.1695405236901;
+        Fri, 22 Sep 2023 10:53:56 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id ji18-20020a170903325200b001bdbe6c86a9sm3779903plb.225.2023.09.22.10.53.42
+        by smtp.gmail.com with ESMTPSA id s18-20020a17090330d200b001ba066c589dsm3759352plc.137.2023.09.22.10.53.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Sep 2023 10:53:42 -0700 (PDT)
+        Fri, 22 Sep 2023 10:53:56 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
-To:     Andy Gross <agross@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>, Chen-Yu Tsai <wens@csie.org>,
         linux-pm@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
         llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: [PATCH] drivers: thermal: tsens: Annotate struct tsens_priv with __counted_by
-Date:   Fri, 22 Sep 2023 10:53:41 -0700
-Message-Id: <20230922175341.work.919-kees@kernel.org>
+Subject: [PATCH] power: supply: axp20x_ac_power: Annotate struct axp20x_ac_power with __counted_by
+Date:   Fri, 22 Sep 2023 10:53:55 -0700
+Message-Id: <20230922175355.work.006-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1437; i=keescook@chromium.org;
- h=from:subject:message-id; bh=yU2HdTIvaMKiOikp0zqOQXXfFgKhOPJCGAbuECY4jOI=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdSlvezRdvtVZduY7QM2bmTOaemd9ierWA9Ag
- 6m2g04zvqaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3UpQAKCRCJcvTf3G3A
- Jj+VD/9XA5O7ImEBS5lp7pFupDLhl0qpeveeJl1/ws9XB4+qfWGwP+u+B/yGl1V1if8pWYaZHlS
- gsqmwyDwotCQkne3cBhWOEhu34q/vFTAAFYkmFsBxgqdEmAvCgw6E93LPtr32936+3M036VPvAF
- 69Kn+xQ++3aBnlnaUnGWexWUQtZ1BS1/3Qk1BZX9wiZcM2AppV+v03THCd2OnaV7GiuE8rZLidJ
- IKwzISZpU7HmiLVADRtiQRxDQYY7udzm1EYCbIKeB16siRiRX/wJ8B0rmqgucSPZNQOor4PZM4l
- vgNXz3L3qYnqgZa8ZT96/zA8GcZu7v8wB3rYxEfOqmYw43FXc0J0geWreIJRzsL9HEFlKGt1dSQ
- rOFKd0sHwKcpv9uSOSDoYV7pbxj7ZQ24AKv7OeLykWg9uOpGPezAYIKNyHMbgHpRqmgHihP1Tmj
- 4otwf/3z+CJgIl0XIVW0W1B6YF4lUaRB5hyf71QQggSR4OB0ReLaLvDMAtIslb+edPFvWeTzTHs
- YSmoWaWdM3Mh1xXVaa4/UzuDRz1J8T3rY1YXU0VoYQZAsZIknGkKW3jUm/ZVnO4Gk0P7rHrxkSA
- udeto6Sq0lS20NGkgL1YMg62eSI2ZRseFlf3zhvVz6ax5crha3+IWjhindVoZ+Xh3fMVbQllLbX
- FqtV4/g FbpWcylQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1249; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=xHCdB+Bm90QD3l3umM0GSzvzHSQIr+R2KIoMY7RnKys=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdSze1eY/sp2o8MEriIqwEc63bQLWGuZ7Mxjn
+ XsSXzjxXROJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3UswAKCRCJcvTf3G3A
+ JkmYD/0S5o/H/m1efZ3VLfgKqfWqJMlk1UnalQCznqLB523UsBWOyBFnCxJpx5xAQd2EAH91j5a
+ gBDwJWO155sAMdKYBg421/d0lTM+zYXSDZpyICyA1G2Opkka9dhfzlrpNYhCFam98UFxOO9O49t
+ djX5PdSHYcJ1C95HbfPuiC1JdN8pDwl7McJKCDJgDQCAqxcVdrRWht/CoTG5zNPGwko91JVvOxE
+ K49WJK+FSKVOEG9SKA4ODQDXPrnsr/KXWm19/7Kwtt3/Jt8NOE1k9nY20k90czIRxVH6yn40dw9
+ XwA32R13GtGujQRdKcKtYiXvrS3LX9CBP/QL7jK8WW4SSWLrf9AOKgrdpCMOiQybtrE5TFZKxUD
+ c01ygdxfBJM+Z9T2vzaWMkVQhSmDloymBckp6Aw4+QxTX2XIpx7Mx6gByTBv/z29kKQTkhctofD
+ RjuvWxEJXSBIVdGYVxHEVnejxUNCCPKXMAwYqN41lz81sUypVwcjk0xUl0lL8YdKf7IEP1XHsAq
+ cDbRHp3BuasSrnfhdQc4jdnagoA0jZG7RV/C4cA3Lzkcgl4ewRvm5SZvBR5ZrphbGBWdROQqsBu
+ cddUfhNcPlDhPH5xrMR4f0qDMI6HV3aebr04+HBX8WrelhuleyrQfVXsc8068m2IVu6OqB5CbUp
+ xb8XFZi TX0C2BjQ==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -96,38 +89,31 @@ their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
 (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
 functions).
 
-As found with Coccinelle[1], add __counted_by for struct tsens_priv.
+As found with Coccinelle[1], add __counted_by for struct axp20x_ac_power.
 
 [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
-Cc: Andy Gross <agross@kernel.org>
-Cc: Bjorn Andersson <andersson@kernel.org>
-Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: Amit Kucheria <amitk@kernel.org>
-Cc: Thara Gopinath <thara.gopinath@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Zhang Rui <rui.zhang@intel.com>
-Cc: linux-arm-msm@vger.kernel.org
+Cc: Sebastian Reichel <sre@kernel.org>
+Cc: Chen-Yu Tsai <wens@csie.org>
 Cc: linux-pm@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/thermal/qcom/tsens.h | 2 +-
+ drivers/power/supply/axp20x_ac_power.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
-index 2805de1c6827..cb637fa289ca 100644
---- a/drivers/thermal/qcom/tsens.h
-+++ b/drivers/thermal/qcom/tsens.h
-@@ -585,7 +585,7 @@ struct tsens_priv {
- 	struct dentry			*debug_root;
- 	struct dentry			*debug;
- 
--	struct tsens_sensor		sensor[];
-+	struct tsens_sensor		sensor[] __counted_by(num_sensors);
+diff --git a/drivers/power/supply/axp20x_ac_power.c b/drivers/power/supply/axp20x_ac_power.c
+index 19a118633115..e5733cb9e19e 100644
+--- a/drivers/power/supply/axp20x_ac_power.c
++++ b/drivers/power/supply/axp20x_ac_power.c
+@@ -45,7 +45,7 @@ struct axp20x_ac_power {
+ 	struct iio_channel *acin_i;
+ 	bool has_acin_path_sel;
+ 	unsigned int num_irqs;
+-	unsigned int irqs[];
++	unsigned int irqs[] __counted_by(num_irqs);
  };
  
- /**
+ static irqreturn_t axp20x_ac_power_irq(int irq, void *devid)
 -- 
 2.34.1
 
