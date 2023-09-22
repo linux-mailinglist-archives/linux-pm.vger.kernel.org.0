@@ -2,174 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2C5C7AB057
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Sep 2023 13:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0BB7AB147
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Sep 2023 13:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233534AbjIVLPe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Sep 2023 07:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52794 "EHLO
+        id S233881AbjIVLvh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Sep 2023 07:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233512AbjIVLPd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Sep 2023 07:15:33 -0400
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2045.outbound.protection.outlook.com [40.107.15.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64D1AC
-        for <linux-pm@vger.kernel.org>; Fri, 22 Sep 2023 04:15:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EgnRvoEZX42VqjshyYepm7B12WFY9X8P6rZHd5thprGrteVvHGodKM89eNDRC5m5p2MaZafR2GD1FxBk22caTd1HU67KzmAmR+fgYI/NRNxScZn/SXqjvnKgs3RcoFvzIfQYGz3PpEA8XOrAa1rOCXWn5csA4p7jSZXOiU6OEjFkF+Y5Ht1SX/S3eY5ImBu58pShnDvXp14F9K6RvxiPOd4UQxALoyQ+fxcNZdWFHphpmSiKEcGkeeSOgrAq/0+MK3ODr+MpuxECi2SHLlWDvM4dgjartQQtRLGlMWHh82Bjwm96v4DfO0eV9+nUYnYnfZmUIIrEXDtEVgo7iASviw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Q3cJKR9z8Gd63OIsUV2CRINBIR6e3JQQ2n57AxmXKMM=;
- b=Xi78lWrBpbN/kCNtAjBU33kdLfoGgyx27Dxlke7E5xnTG0xVFnBG/ZHFgJmqKDjYkgbBiEuLoYHs91pxtxSLmTaN3e6RgwGsVZSKytjZFtOQbOZMrNYKYtl6x6syhyHHJJkDWrM5odmtlnxkYleOV93qJLybHeLQZrRcbCppIQQQ1pA4sl+gQ7ycfInnXsvYN1xQOYhcf0EAbY2OLHMXnKL6apUi3ZYAVMVb1G5DaVaQCilLgp8/zbQ624ayP4apDk35GJkNEhjwH1SdT2dkN/HbB6IdVxKhxsQTCZwhc55Z+Jf6qnSFs8eMK5PsOZjWcLSZEfCRw/9zPQ9g70sZcw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Q3cJKR9z8Gd63OIsUV2CRINBIR6e3JQQ2n57AxmXKMM=;
- b=sTAFIuK4GmO7qANwpXd95cMXHCxYDnWA3yHmPlknK6sLBaFSalgA7JLzOB29VgXwCaYvjZpeIMEcbvu6tEmraJ8txqhJsiC888hIItAPw3U0Kj07C7zH+36g48FqXUhk4F2R9ZAVlJ4Imln0YpSoe7L//5U449Nm6FFVGPHXIauzg88RL+T7K8RUq8HILfr0kv+8eG0/oIJpCu7JcEC/iZYcV3c1KtTJFJ5oJW//2RXp4sThTSJMwxF6ZOFTLhPg7K8e4eLF/2GHPQW8ACrXszrmFRZ5u9e55kOEYwLRaFZe8gFx423BUJyp+5l8S1J8Efm1tvFUR0wMmI5LY8Gjqw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from AS8PR04MB8835.eurprd04.prod.outlook.com (2603:10a6:20b:42e::21)
- by DB9PR04MB9476.eurprd04.prod.outlook.com (2603:10a6:10:366::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.19; Fri, 22 Sep
- 2023 11:15:24 +0000
-Received: from AS8PR04MB8835.eurprd04.prod.outlook.com
- ([fe80::25df:77c1:a4b:d21]) by AS8PR04MB8835.eurprd04.prod.outlook.com
- ([fe80::25df:77c1:a4b:d21%4]) with mapi id 15.20.6813.018; Fri, 22 Sep 2023
- 11:15:24 +0000
-Message-ID: <eaf4ab5f-2ce1-4e87-a31c-f2b5ebd15c19@suse.com>
-Date:   Fri, 22 Sep 2023 13:15:21 +0200
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-From:   Vasilis Liaskovitis <vliaskovitis@suse.com>
-Subject: [RFC] docs: thermal/drivers/intel: Reading trip point previously set
- to 0
-To:     linux-pm@vger.kernel.org, rjw@rjwysocki.net
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR06CA0123.eurprd06.prod.outlook.com
- (2603:10a6:803:a0::16) To AS8PR04MB8835.eurprd04.prod.outlook.com
- (2603:10a6:20b:42e::21)
+        with ESMTP id S233846AbjIVLvg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Sep 2023 07:51:36 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6021100;
+        Fri, 22 Sep 2023 04:51:30 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38M9DiEE017906;
+        Fri, 22 Sep 2023 11:51:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=from : to : subject
+ : date : message-id : mime-version : content-transfer-encoding;
+ s=qcppdkim1; bh=1+AKX+rqRYizEhUeZUvPc6CNQXUhdtnOWFBRpuI8OZM=;
+ b=ghZrDaZ2ruvFt+0CMaz94xiCTPMGMhXfcRF9b8QueZhWwHQ7GqGxtE33ITg7ayFv/AlR
+ yhi+ASwyj/GnhwQWSDk6tCyqJmNlY1RjTqiPHdlOXi0vH5n6bM/zcBP1kAimy2knwpD3
+ D7dnQWPCQAabUcLigsdh0q5qMkuwSA0esWnfBITOC1tzpFoNkNGBggrbX5X51nMk3JWx
+ 62IGzf/SI4qZWTFtN1G9WNEpnhF288izVR6xNMrq5/8M6Znq+6Vsb1nK8EehzRhAV26G
+ 4v78CVi90dJScuztyMX97aOQx1yqREcIK1tQOqG5P9aWF3nVgpke50W9ZicAeQvWX1w0 HA== 
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t8um1sq5a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Sep 2023 11:51:21 +0000
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 38MBobHF027221;
+        Fri, 22 Sep 2023 11:51:18 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 3t55emanca-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Sep 2023 11:51:18 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38MBpHEZ027858;
+        Fri, 22 Sep 2023 11:51:17 GMT
+Received: from win-platform-upstream01.qualcomm.com (win-platform-upstream01.qualcomm.com [10.242.182.84])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 38MBpHTN027852
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Sep 2023 11:51:17 +0000
+Received: by win-platform-upstream01.qualcomm.com (Postfix, from userid 330701)
+        id 8488A984; Fri, 22 Sep 2023 17:21:16 +0530 (IST)
+From:   Sricharan R <srichara@win-platform-upstream01.qualcomm.com>
+To:     krzysztof.kozlowski@linaro.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dmitry.baryshkov@linaro.org,
+        quic_srichara@quicinc.com
+Subject: [PATCH V3 0/4] Add support for IPQ5018 tsens
+Date:   Fri, 22 Sep 2023 17:21:12 +0530
+Message-Id: <20230922115116.2748804-1-srichara@win-platform-upstream01.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR04MB8835:EE_|DB9PR04MB9476:EE_
-X-MS-Office365-Filtering-Correlation-Id: cb47a10f-bd20-4149-1a39-08dbbb5d3785
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: m68BBauj6FMdGzeNqnocbtbMt/Og9L+UPZZlOpQ9Z38jzOCCiN43O6ZUGGHCUg4JnCFHlY35FMFHCu7pbia8KPNQDC6qxIaTInoM4DXayVFNpgAoO1HiOcIxZrBdaebSb8Q1Sw29ExH7eos+NrpJnFSHwouaCSm9vwDLldwAVrnJoEBebvqcJNWSzOO2VtormYYD10ispahnhZ+aNNXciJOyCfNNnLLYBdihYam5yltC7IOxEmnHTBy0Jb2NwHwR+Z5WQ3D+6fVKa1uUHnhKFw/CJ6RL570AXDsW9ajXoJAbhYt3PVYb7QA1SOdaaSoZ+WvLMiGfwCmpNRiQLvVIjGAmeh8rUQVUTMVlbkBEOhsGMSkisWYQuo1OOJxU38FO+9nRBPR52rKcVvSuu6U0pWj4ZdvggyYCEshLBHIHCvPQMz2Sdj+g8qHirqhD741e9du9u2I4gpzuDwZLEcT8p8TF2rbhD9hq9pyoUk6CGjZEGDafnzWDFQMtEawOPNbo1PEpBH9l9yuWj/BO4wUoPKJLxX+F/qS9YXmEqQiV/0E2oDEmi4FON4hze/JI87VFIfCziwTUDvikH/S1zZypKjkxBEZgJxjYnI/216Ml1RmjHW6Ha9Fl/eca0A5Tkcu53fL9kWcEhmwIIxb24jBvTQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8835.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(366004)(39860400002)(396003)(136003)(376002)(1800799009)(451199024)(186009)(26005)(83380400001)(8676002)(2616005)(5660300002)(8936002)(6512007)(6506007)(6486002)(6666004)(31686004)(41300700001)(478600001)(66946007)(66476007)(66556008)(31696002)(36756003)(2906002)(38100700002)(316002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WkJ5ZkhlN1RSS0FCL2lFTHVYaEg0Z3NXKzd1bW9BYUZOSTFoQURCbFdDU3hz?=
- =?utf-8?B?Mmd1R0lmeXpnYXJZNVlyVkw0MU41TmtKV0tqVitQTHhrdzlkVWZxV0R4YmxJ?=
- =?utf-8?B?NlU0aEJDTVhYY1NXUWErUFhUNlQ3elgyellwbnRmUDhZdU40anltdVMwU2lB?=
- =?utf-8?B?TTA1dEMrYkJvLzZxRWtNb2h2RmRlZWtDRVhTZEdQRWhTMDM0L2NycmFUUjFS?=
- =?utf-8?B?UDRlejc3UEV3Yjh0N2U0b3U4VTdVSnVFbzI0Sm1KWGRSS0xoQ1lWRnVzZ29x?=
- =?utf-8?B?eEZCUWE4bzNhdXl0VU8zMVFjU0M5Q1QvZ3E3TW1BSjF2RjdFNXFLUmQvTWZU?=
- =?utf-8?B?SlZpS2NIYkYrclF0cFJOYnoyRHFvSW5TSlo5aWpzWW5LbkdCdXRhMThsVmhn?=
- =?utf-8?B?VUFxMk9MQVZUS1lMemluUm1NQmZORitLQi9JYjBZQ29KWlQrdVA2VGpQay9D?=
- =?utf-8?B?bGFxa005Sk45YWNIUUpXb2FXTHN1OFlTbnU5L083TUdLVFdKVjJDTkdkYk5W?=
- =?utf-8?B?bG5zOEUrNkF0VGo5QjFjeHV0eklGNmJLM0hwNjlPZ2ROb0ZPU0M5dVZNN2JT?=
- =?utf-8?B?dE9WV1EwQmw0bUlZS3lDQ09pVGRXUTQ3cE1Sc0hTeTNqb3QzVVdrSTd1MThJ?=
- =?utf-8?B?Z2ZJTWlkMkRabDhXQmZBVUxWZ0VRSmg0QlZ5a3BQK3drbTJBcTcyTTlyS2Jx?=
- =?utf-8?B?OUZ5SGVFdWZjL3BpaTlwNGJIMjdFYUNoWUIvRFRTc25wWDcwcGVjVkRSZkwz?=
- =?utf-8?B?ZEQrQmFRR002L1dybi9nUXY2R2Z5L2xYOW15N1ZrRTFXb2xwbjN0N0E0c0Fn?=
- =?utf-8?B?bnBqWWtEOU50ZW85T0tPVXh6SWlIT1BLN1VXcy9uZThTNHkvVGtYb0F1UG1Z?=
- =?utf-8?B?bkJSakc2SzFBNTFQbVFIc25XSG85dFZhSC9aM0xaOE5zeGs0Rk9adUFCSmhL?=
- =?utf-8?B?K3F1RlJQcnBKQWk2KzVPdSsyenpBaXBZRmM3ZFVCeWxmaTVIMjI5cjNxdHQ0?=
- =?utf-8?B?by9jWDNJQzc1THJoZ0JEQzU1ZVd5Q0g4emJjdnRHVE1WR0xxVm56WGg4SDlL?=
- =?utf-8?B?Y3BNa2FhZFJnWTNTM2w0SkR4bjdnUHpOaHdTWVI4a1Q0TDRoQjVmMmZ5Y0RW?=
- =?utf-8?B?RHdZd3BCNHcrYXpvNXpkMlg1UjdtQ3pOREZPaFFYRGY0TjFnWWw2ejE3SFho?=
- =?utf-8?B?bmo2cnZpaFM4Z28wZnBrdmlrZTRmMG9ZOWJpUWtxTTRzOU1oaTlJQ3RSU08w?=
- =?utf-8?B?L2RpL1dkaUZLUzZCdkJsOWNvSEozZlYyRmhsdjV5cWZ5ZklTVjVxbVdwRUJ1?=
- =?utf-8?B?azNETVlWdHFiSDBoejNjcHRvcFc2NkdNYUo0ZnVYYnA2cjR0RTN1MHdxVEZT?=
- =?utf-8?B?RnQ5RVlacy92YW12cTF4NkR3SGljZmQ5dmh6Q00yN0JLa0NDM09KeUhJZERY?=
- =?utf-8?B?K21pcXRWWGc0eU1uL2xyS3NTQ2d1VS9XMnh6OGxjSGZjblFrL0lhc0wrZkRE?=
- =?utf-8?B?a1FPTEg3bW9GcnpPNFBsWEJXMVlsT3Fsc0pzZUhzUzBEVWY1MEVDcXh5RzVQ?=
- =?utf-8?B?ejl6VXRjLy8yTGVwZWMya1F6MlA2VDNiMFRIVHJhN3dwZVZoaWhEV3FJZllC?=
- =?utf-8?B?THJZSW4zcmxxM0JNdXJObmNuc1dxRFdZYVhHeUtlRzB5dVdsREdlNng0MXJM?=
- =?utf-8?B?SmcyWWM2S0s1aGE2VTQxRzZEei9aYzNLdTQyUm1uTFpHNnNncmxmUWg3Rkwv?=
- =?utf-8?B?UXIyNGI0Ky9HR000akRzQjhDUzZOdUszUG9wYS8vbnRaSDAvcG5UMnNyZWFF?=
- =?utf-8?B?SUVaUnJRK2w3UWNvQUYyVWJXdGRYeVBqOTdIN0RMQjE1bHNrdnE1WkFNbnZw?=
- =?utf-8?B?cS96SUZQZmdQMFN6dDBNSGZTOHVNM0lBWjRYenRLQ2d5R3NMV0Q2V2h3a0U4?=
- =?utf-8?B?cWZHVHhrNGo3L0F5d1V0OFpEMUFueG9hbVBtZVByVVhHcGNDa1RiR3JZenJz?=
- =?utf-8?B?Tmd5UStHUU5oZC9CYnBsTTR1S3cyallVSmhOOE96R0sxUVpES1piZWJZZkxm?=
- =?utf-8?B?NWNBMEpvREJaek0vSXhFN3ZCWVBCQ21WN2IzWWlnbHpVZ2dTZllZanZDYTR2?=
- =?utf-8?Q?ecjwoknGoiVXT/10zXkBSGDG0?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cb47a10f-bd20-4149-1a39-08dbbb5d3785
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8835.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2023 11:15:24.2562
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dDpu2VXZqjIzfxdDyfb25CT2ftiFd7D8BTUT5+hPMK+So7OlRObzWG4FNT4T60IWuK75KHSLy1/aGyXcuZPKmg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9476
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Dv-dBlnYdfCKT3Gd0qqovlnjX-_4v_rr
+X-Proofpoint-GUID: Dv-dBlnYdfCKT3Gd0qqovlnjX-_4v_rr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-09-22_09,2023-09-21_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ mlxlogscore=772 spamscore=0 priorityscore=1501 bulkscore=0 phishscore=0
+ impostorscore=0 lowpriorityscore=0 clxscore=1034 adultscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
+ definitions=main-2309220100
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_ADSP_NXDOMAIN,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+IPQ5018 has tsens V1.0 IP with 4 sensors and 1 interrupt.
+There is no RPM present in the soc to do tsens early enable.
+Adding support for the same here.
 
-Since commit:
-eb8500b8 "thermal/drivers/intel: Initialize RW trip to THERMAL_TEMP_INVALID"
+[v3]
+	*) Added the tsens-ipq5018 as  new binding without rpm
+        *) Added Dmitry's Reviewed tag
+        *) Fixed Dmitry's comments for error checks in init_ipq5018
+        *) Ordered the qfprom device node properties
 
-writing 0 into thermal trip point temp sysfs files cannot be read back:
-~ # echo 0  > /sys/devices/virtual/thermal/thermal_zone1/trip_point_0_temp
-~ # cat /sys/devices/virtual/thermal/thermal_zone1/trip_point_0_temp 
+[v2]
+	*) Sorted the compatible and removed example
+	*) Fixed the name for new tsens_feature
+	*) Used tsend_calibrate_common instead of legacy
+	   and addressed comments from Dmitry.
+	*) Squashed patch 3 & 4
+	*) Fixed node names, order and added qfprom cells
+            for points seprately
+	*) Squashed patch 6 & 7 
 
--274000
+Sricharan Ramabadhran (4):
+  dt-bindings: thermal: qcom-tsens: Add ipq5018 compatible
+  thermal/drivers/qcom: Add new feat for soc without rpm
+  thermal/drivers/tsens: Add support for IPQ5018 tsens
+  arm64: dts: qcom: ipq5018: Add tsens node
 
-Prior to this change, the value 0 could be "read". Afaict only because 0 
-was always returned for uninitialized trip points, and not only when 0 
-was actually written into the trip_point_*_temp by userspace.
+ .../bindings/thermal/qcom-tsens.yaml          |   4 +
+ arch/arm64/boot/dts/qcom/ipq5018.dtsi         | 169 ++++++++++++++++++
+ drivers/thermal/qcom/tsens-v1.c               |  60 +++++++
+ drivers/thermal/qcom/tsens.c                  |   5 +-
+ drivers/thermal/qcom/tsens.h                  |   5 +-
+ 5 files changed, 241 insertions(+), 2 deletions(-)
 
-A customer uses scripts to set the trip_point_*_temp value to 0, and 
-then checks that the value is indeed 0. Their userspace test suite 
-breaks because of this change.
-
-Should userspace still be able to read the set value of 0 (meaning the 
-thermal subsystem confirms no notifications will be sent)? I understand 
-this is a corner case (maybe it's even non-sensical to check a value of 
-0 is returned, after setting it), but I wanted to ask since the sysfs 
-value read by userspace is now THERMAL_TEMP_INVALID.
-
-Or should we instead update documentation to reflect the fact that 
-uninitialized trip points and trip points set to 0 return an invalid 
-value THERMAL_TEMP_INVALID? E.g.:
-
-
-diff --git 
-a/Documentation/driver-api/thermal/x86_pkg_temperature_thermal.rst 
-b/Documentation/driver-api/thermal/x86_pkg_temperature_thermal.rst
-index 2ac42ccd236f6..2e6f2728b5b94 100644
---- a/Documentation/driver-api/thermal/x86_pkg_temperature_thermal.rst
-+++ b/Documentation/driver-api/thermal/x86_pkg_temperature_thermal.rst
-@@ -43,8 +43,10 @@ User can set any temperature between 0 to TJ-Max 
-temperature. Temperature units
-  are in milli-degree Celsius. Refer to 
-"Documentation/driver-api/thermal/sysfs-api.rst" for
-  thermal sys-fs details.
-
-+An uninitialized trip_point_*_temp returns an invalid value 
-(THERMAL_TEMP_INVALID).
-  Any value other than 0 in these trip points, can trigger thermal 
-notifications.
--Setting 0, stops sending thermal notifications.
-+Setting 0, stops sending thermal notifications. Having set 0, the value 
-returned by the
-+trip point remains invalid (THERMAL_TEMP_INVALID).
-
-  Thermal notifications:
-  To get kobject-uevent notifications, set the thermal zone
+-- 
+2.34.1
 
