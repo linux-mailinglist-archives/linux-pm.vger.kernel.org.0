@@ -2,93 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9FE7ABA05
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Sep 2023 21:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 390937ABA7C
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Sep 2023 22:29:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233837AbjIVT1i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Sep 2023 15:27:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34416 "EHLO
+        id S229561AbjIVU2Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Sep 2023 16:28:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjIVT1h (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Sep 2023 15:27:37 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707CFB9;
-        Fri, 22 Sep 2023 12:27:31 -0700 (PDT)
-Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7B85266072E7;
-        Fri, 22 Sep 2023 20:27:28 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1695410850;
-        bh=8fJ99vinwBbNMB5vLrS3phKoWaPj8xZQRk/04iAxlp4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=BPMLsU9twchJaE3d7Ibqqx6sffOiNGT3NtYP8/dNH/bGOQzjmP2UE8nj1rL2V1tGt
-         uv37haffS2nQb3Wzt/ksDAQ3N9EmRF1RvJkXgBb5Umro+xq+JtPJ//aVwpuN1jBgYT
-         s45Xuc6v0ofSrJRi22dMN2kl9xi2ah7QnPBBmcIMNQ9TPKX3tZNkM8xvQ13osV5VdF
-         v/p5qrjjI0cwjxwJPZBHJyXqY/2ixy6UJmC3GO/RCKNmRWVaurMus5wtYYZf4AqG8g
-         ZRuXUDezBbC+7gvznJnAxFAlqTLsc42huaAJxNWTtwM3o2IAWHA4suHfns1QW9qZRh
-         xQKiRH+ZmBHRg==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        with ESMTP id S229558AbjIVU2P (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Sep 2023 16:28:15 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47308CE;
+        Fri, 22 Sep 2023 13:28:10 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E17E5C433C8;
+        Fri, 22 Sep 2023 20:28:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695414489;
+        bh=gO4/CLli2zp7Egw4YEK7oD2RggSvd4Mmdsf+A2BWeYU=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=hXSCyJR5xYQD5mTEbjhFarIrlbQuojC5iFhjy4t8sqZ1YDQZNVdc9wrFnYjSGVmM6
+         8yQxhyT2ZJCsn4wXwmdJ1OAQGy9f+BjjkrOiOGlC/7UlhXKFXBBRRk2FSH6bcjN5Wp
+         SXxpNEsmcwgUDkUMj/vigslVrBeI2yyabxP5nWIQ4veDkF4nEZlbeMwMKXK82U4gqB
+         Mm0RiGvXD9ht0Dypu/g+bpox9AAluTe8SwAufOsDVHkhUkaYIgTcrl/RB1y5ohk/Ua
+         4gyQutoV4jCJZTWqpHACMizI8gJ2xXR+5d86+ixkWO46v36Eqk2UwrNh1wGQ25VkNV
+         JXt3ezqn2xGZQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CE1A8C04DD9;
+        Fri, 22 Sep 2023 20:28:09 +0000 (UTC)
+Subject: Re: [GIT PULL] Thermal control fix for v6.6-rc3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0iV2vMCF9xJ+ZyCBoMcREsrw+1EuFdV-1Byr-96L4Ws=g@mail.gmail.com>
+References: <CAJZ5v0iV2vMCF9xJ+ZyCBoMcREsrw+1EuFdV-1Byr-96L4Ws=g@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0iV2vMCF9xJ+ZyCBoMcREsrw+1EuFdV-1Byr-96L4Ws=g@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-6.6-rc3
+X-PR-Tracked-Commit-Id: ea3105672c68a5b6d7368504067220682ee6c65c
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 8018e02a87031a5e8afcbd9d35133edd520076bb
+Message-Id: <169541448983.12920.14243080572833654533.pr-tracker-bot@kernel.org>
+Date:   Fri, 22 Sep 2023 20:28:09 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH] thermal: core: Check correct temperature for thermal trip notification
-Date:   Fri, 22 Sep 2023 15:27:18 -0400
-Message-ID: <20230922192724.295129-1-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.42.0
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The thermal trip down notification should be triggered when the
-temperature goes below the trip temperature minus the hysteresis. But
-while the temperature is correctly checked against that, the last
-temperature is instead compared against the trip point temperature. The
-end result is that the notification won't always be triggered, only when
-the temperature happens to drop quick enough so that the last
-temperature was still above the trip point temperature.
+The pull request you sent on Fri, 22 Sep 2023 20:20:20 +0200:
 
-Fix the incorrect check.
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-6.6-rc3
 
-Fixes: 55cdf0a283b8 ("thermal: core: Add notifications call in the framework")
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/8018e02a87031a5e8afcbd9d35133edd520076bb
 
----
+Thank you!
 
- drivers/thermal/thermal_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 58533ea75cd9..120fcf23b8e5 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -361,7 +361,7 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip_id)
- 		    tz->temperature >= trip.temperature)
- 			thermal_notify_tz_trip_up(tz->id, trip_id,
- 						  tz->temperature);
--		if (tz->last_temperature >= trip.temperature &&
-+		if (tz->last_temperature >= (trip.temperature - trip.hysteresis) &&
- 		    tz->temperature < (trip.temperature - trip.hysteresis))
- 			thermal_notify_tz_trip_down(tz->id, trip_id,
- 						    tz->temperature);
 -- 
-2.42.0
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
