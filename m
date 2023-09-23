@@ -2,115 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2923C7AC151
-	for <lists+linux-pm@lfdr.de>; Sat, 23 Sep 2023 13:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 921697AC15D
+	for <lists+linux-pm@lfdr.de>; Sat, 23 Sep 2023 13:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbjIWLoM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 23 Sep 2023 07:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34694 "EHLO
+        id S230500AbjIWLsb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 23 Sep 2023 07:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbjIWLoM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 23 Sep 2023 07:44:12 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C34199
-        for <linux-pm@vger.kernel.org>; Sat, 23 Sep 2023 04:44:05 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-533c4d20b33so1390861a12.0
-        for <linux-pm@vger.kernel.org>; Sat, 23 Sep 2023 04:44:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695469444; x=1696074244; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vla4OZsvqD5RmSyqkNtWVp3bfdJ5jFtYYQ5MrELcXSM=;
-        b=nDbEAVteD7aGdLtChPEt/+FkeMGFRMhA1Nd/qCP6CxF202JZWaq+YPyIYDUT0GzGFW
-         HLB3R5r/nn6/j/FJi7p6T9ALwPRXEeJOrYRywbYT8RKeO9prvdHu/7QcwPd+ZmqSYwTt
-         huVEP4SFaDkhQPZtyqFlsTfJx4qENLp1XbNhFxj5ChEEclciuqR56QcKzRP1i9hISX+h
-         3uRJx1VqodiWx+C+Yc3cN//klaJ+7mZDXvIX9hH8ZMaukf/clQue/1KVjo9ecFKdNYSF
-         DLZoNiiGaqTjfHDxqTiKOw+QXkjkEG1OGgk4aL63DfnSIT5k1zaOH+hLqiUa/Da0hKH7
-         1DfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695469444; x=1696074244;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vla4OZsvqD5RmSyqkNtWVp3bfdJ5jFtYYQ5MrELcXSM=;
-        b=dr97Tz2Zd+MiHgG75hWRL5O6IY/WFBb5uZ8d41gCCKeKoJpqlZLbRRXU2AP/xNyr75
-         dRmhtyQh4/EBdO6PPCNd+Cm3ukjD54EHAm212xLOt37SawMszd0Sj+nSO9RBeLXq1VLF
-         d3tyTDUEUQz4/Iez/6OjQl9YhwouiepBVtqle1qPAaal4MTLnS34ETpabBirP+D1K1nX
-         2YIjGdA80HbUho4/RaG9nxvbZOwE23U8KIe25ie3s+DytaSskknn6kbZqY3RRXZe3G9N
-         Jp2cEwcD+Y6a1TrZsY1Cc8msofhDlDkg8C3CvyBHJMnFW84qS+TnNZVGvp6ZJTfYh6D7
-         9XJw==
-X-Gm-Message-State: AOJu0YyzjKQYu6lrazaI2VDTi/bVcVGjraxSkP/8HTYVmlLkQVyLVyEE
-        vxQbe7TKa6FU8n9gl5qQRgEMrQ==
-X-Google-Smtp-Source: AGHT+IH6goftz+deG7oSTeTuzwqyw9P8c6mgIH9qR63I1IV/ch6sI7RIzn2uujDg7rQtq/HyjVsX6g==
-X-Received: by 2002:aa7:c158:0:b0:52a:38c3:1b4b with SMTP id r24-20020aa7c158000000b0052a38c31b4bmr3444238edp.15.1695469444353;
-        Sat, 23 Sep 2023 04:44:04 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.100])
-        by smtp.gmail.com with ESMTPSA id s3-20020aa7d783000000b0053116e45317sm3274449edq.44.2023.09.23.04.44.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Sep 2023 04:44:03 -0700 (PDT)
-Message-ID: <f4fa94ab-78fb-d01b-7188-c498ec3053ff@linaro.org>
-Date:   Sat, 23 Sep 2023 13:44:01 +0200
+        with ESMTP id S230426AbjIWLsa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 23 Sep 2023 07:48:30 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F499F;
+        Sat, 23 Sep 2023 04:48:23 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38NBlxAS028604;
+        Sat, 23 Sep 2023 11:48:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2023-03-30; bh=MbbdfnIprRaXRgZX4bukDl9QS5PDJbFVxm3H6/bcw+8=;
+ b=N89AaHg/TdfpR/vPiFjH5I5JjBk2L+lVaI8b8DxPe8eQRm/1ReV+lzAsKEMK5ys+HzLk
+ 6LKkMHb4AvSEhTFW70z+o/b5gJJ39pVYWCah+sSYEymv0k8Equ0qegn4Qmz8ZgphaHlX
+ ax5/jB1VbxeG7JLKD6If2G9r2bIimwwzZw7eu+fAhgkLJLnlPd3VGBhIWtseTTBKEMha
+ HDDnk+zlLOJG9HjoVMQf0MrzXFSChLIQmdmA8MePiArjCLjzj0hIsbSAi0QAHGGnwmsv
+ P9lub+Og3taeU3rNW/BA7P5PzP/NBsUbBsyBx5cf8LMjpFi6JMEalLd0hU4A06mZbl3J 0A== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3t9qwb8yn5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 23 Sep 2023 11:48:12 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 38NBLoUr017972;
+        Sat, 23 Sep 2023 11:48:11 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3t9pf8n6wd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 23 Sep 2023 11:48:11 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38NBmAY5021486;
+        Sat, 23 Sep 2023 11:48:10 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3t9pf8n6w1-1;
+        Sat, 23 Sep 2023 11:48:10 +0000
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+To:     Konrad Dybcio <konradybcio@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     dan.carpenter@linaro.org, kernel-janitors@vger.kernel.org,
+        error27@gmail.com, harshit.m.mogalapalli@oracle.com,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH next] power: supply: mm8013: Fix error code in mm8013_probe()
+Date:   Sat, 23 Sep 2023 04:48:06 -0700
+Message-ID: <20230923114807.2829188-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH V3 1/4] dt-bindings: thermal: qcom-tsens: Add ipq5018
- compatible
-Content-Language: en-US
-To:     Sricharan R <srichara@win-platform-upstream01.qualcomm.com>,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        thara.gopinath@gmail.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dmitry.baryshkov@linaro.org,
-        quic_srichara@quicinc.com
-References: <20230922115116.2748804-1-srichara@win-platform-upstream01.qualcomm.com>
- <20230922115116.2748804-2-srichara@win-platform-upstream01.qualcomm.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230922115116.2748804-2-srichara@win-platform-upstream01.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-09-23_09,2023-09-21_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 mlxscore=0
+ spamscore=0 mlxlogscore=999 bulkscore=0 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
+ definitions=main-2309230097
+X-Proofpoint-GUID: Ys6HgNCpVyI69ggK3IvPX8U7Wih9dzuo
+X-Proofpoint-ORIG-GUID: Ys6HgNCpVyI69ggK3IvPX8U7Wih9dzuo
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22/09/2023 13:51, Sricharan R wrote:
-> From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> 
-> IPQ5018 has tsens v1.0 block with 4 sensors and 1 interrupt.
+The value of ret is zero when passed to dev_error_probe(), we are passing
+zero to dev_err_probe() is a success which is incorrect.
 
-Then why do you allow two interrupts?
+Fix this by getting the error code using PTR_ERR().
 
-> 
-> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> ---
->  [v3] Added the tsens-ipq5018 as  new binding without rpm
-> 
->  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> index 27e9e16e6455..a02829deeb24 100644
-> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> @@ -44,6 +44,10 @@ properties:
->                - qcom,qcs404-tsens
->            - const: qcom,tsens-v1
->  
-> +      - description: v1 of TSENS without rpm
-> +        enum:
-> +          - qcom,ipq5018-tsens
+Fixes: c75f4bf6800b ("power: supply: Introduce MM8013 fuel gauge driver")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <error27@gmail.com>
+Closes: https://lore.kernel.org/r/202309190838.eu8WS6sz-lkp@intel.com/
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+---
+This is based on static analysis with smatch, only compile tested.
+---
+ drivers/power/supply/mm8013.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-You miss now description of interrupts, like the other variants have.
-
-Best regards,
-Krzysztof
+diff --git a/drivers/power/supply/mm8013.c b/drivers/power/supply/mm8013.c
+index ddac40ef9ae5..29fd65fe6545 100644
+--- a/drivers/power/supply/mm8013.c
++++ b/drivers/power/supply/mm8013.c
+@@ -273,8 +273,10 @@ static int mm8013_probe(struct i2c_client *client)
+ 	chip->client = client;
+ 
+ 	chip->regmap = devm_regmap_init_i2c(client, &mm8013_regmap_config);
+-	if (IS_ERR(chip->regmap))
++	if (IS_ERR(chip->regmap)) {
++		ret = PTR_ERR(chip->regmap);
+ 		return dev_err_probe(dev, ret, "Couldn't initialize regmap\n");
++	}
+ 
+ 	ret = mm8013_checkdevice(chip);
+ 	if (ret)
+-- 
+2.39.3
 
