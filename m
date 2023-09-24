@@ -2,201 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 280F97ACB02
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Sep 2023 19:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD987ACBEF
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Sep 2023 22:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjIXRXO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 24 Sep 2023 13:23:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
+        id S229480AbjIXU60 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 24 Sep 2023 16:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbjIXRXN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Sep 2023 13:23:13 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FC5FC
-        for <linux-pm@vger.kernel.org>; Sun, 24 Sep 2023 10:23:06 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-3231df68584so1220503f8f.1
-        for <linux-pm@vger.kernel.org>; Sun, 24 Sep 2023 10:23:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1695576184; x=1696180984; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wz9hAphZ4hbgq5LD/NlJ0pJY551maKJPXOl5M0PmVhc=;
-        b=TJoFcbX4gS9pGljVHj+CXzKVIya+ZWavbGkjBFYLg/sER7Aa+oGBvf6I3FUtQeaCeP
-         4vR7w6oKawaeP7AGmZlMMtKF2zLOGoGnleoaQKqTCLeBGGtYpcd7N/D2a/Bmi/Ypwmax
-         TSjKpMIALqiOqSJaHydJfI2RcpVKTtlgtfIqqfxpkLvGCiXXel/XiCmLP8jVSFPdpR8C
-         XWLWhpuOgeMn9UgC26r1RRRdSr8hwpZ8G139v6z7+6Uc9vhZ8vfPt27//eJ0tUX6EQ34
-         c70qw1NZ/Y28/NDUhImuJhJj3rzmhI48dCMGDNyOCMGf6YZwuRZGae7FR9Eup/ibHw/M
-         uO5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695576184; x=1696180984;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Wz9hAphZ4hbgq5LD/NlJ0pJY551maKJPXOl5M0PmVhc=;
-        b=HMViS+o989Z8jM8zv0TZqdTXzS6mt8CIiJIK3GMLDXcgi8a9g97hUGKa2DctZ8/q8Z
-         wNk5RwhrA91JYXnD9QcoRVzMZjE+r660bSL7i7K2RScKle8t99abwnN38xto2E8NXI7K
-         JHTNloaqE4IhjIxgVNiuTRUeREGWlpJVxEtgw2HfPDmiGLMQvi+fll3oMBof50fpGmys
-         tTeudlfaT4Xyymd1X/FMMF9f5B1ttmTPnQqY4eyvNU3cSVsBluXq/mFvn3pWiVCyYTvl
-         CFtZrssfaEQce59wAQ5ZexHHp2hvgS7lzKSmdbYsgn6PtycxupanZ4LtVnJ9qEy1An1K
-         TXog==
-X-Gm-Message-State: AOJu0Yy9annf/Xo5KCoWeCALvpWmqOQqXAvxLsPyIISLSQkDCVLJNxq7
-        vtUAAA6lv9uTukluYPuLHa+PmY7HorHy7Y6dwosiaw==
-X-Google-Smtp-Source: AGHT+IEgUK7ZrjO62XF+D4yff/sfL3h4WFmedhMgyH4sHz9AmsE6mLEDH3/51GE7kpEZutZK1lyJFQ==
-X-Received: by 2002:a05:6000:12ca:b0:31f:f94e:d276 with SMTP id l10-20020a05600012ca00b0031ff94ed276mr4912977wrx.51.1695576184210;
-        Sun, 24 Sep 2023 10:23:04 -0700 (PDT)
-Received: from airbuntu (host109-151-228-137.range109-151.btcentralplus.com. [109.151.228.137])
-        by smtp.gmail.com with ESMTPSA id n11-20020a5d4c4b000000b0031fbbe347ebsm9645933wrt.22.2023.09.24.10.23.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Sep 2023 10:23:03 -0700 (PDT)
-Date:   Sun, 24 Sep 2023 18:23:01 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Subject: Re: [PATCH 2/4] sched: cpufreq: Fix apply_dvfs_headroom() escaping
- uclamp constraints
-Message-ID: <20230924172301.7lqdcsnpqk7trtno@airbuntu>
-References: <20230820210640.585311-3-qyousef@layalina.io>
- <CAKfTPtDY48jpO+b-2KXawzxh-ty+FMKX6YUXioNR7kpgO=ua6Q@mail.gmail.com>
- <20230829163740.uadhv2jfjuumqk3w@airbuntu>
- <CAKfTPtCP6uX79dOrzN4PxFTMBFrDAMOOrWyZrsVypUQ0RY7BAA@mail.gmail.com>
- <20230907215555.exjxho34ntkjmn6r@airbuntu>
- <CAKfTPtA8Ljy4NBqjw8Wj4pEFc-OCR55QPuwh+5GgrHN6u+ugsg@mail.gmail.com>
- <20230910174638.qe7jqq6mq36brh6o@airbuntu>
- <CAKfTPtBFAXO=CgqSJ1+y=2ppb5t4oErCtvV336fS6J2nSjBCkQ@mail.gmail.com>
- <20230916192509.bportepj7dbgp6ro@airbuntu>
- <CAKfTPtA5JqNCauG-rP3wGfq+p8EEVx9Tvwj6ksM3SYCwRmfCTg@mail.gmail.com>
+        with ESMTP id S229437AbjIXU60 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Sep 2023 16:58:26 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E27EE;
+        Sun, 24 Sep 2023 13:58:20 -0700 (PDT)
+Received: from mercury (cust-west-par-46-193-56-210.cust.wifirst.net [46.193.56.210])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2C93366072E9;
+        Sun, 24 Sep 2023 21:58:18 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1695589098;
+        bh=h8S0AVpoW3F2EytvwOGglewnFQNIvkNAQbE34WlVL0E=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=XeUq47K7GoNnjFu0Z/Xl6fZURJ+CNaPsMYNqh2EYtwcf88C/4ahy2EBGI/7ioASQm
+         SyngW67glqcbQX/gvOCwXWxW9wpfS2KLxQrKoxzk6eMw5+1CVl6o++Ttk2uVgqA7uI
+         TU8qq9SAqEuA7rOzh2LeIgY6EyytQwHAyxZiGsolgYiLE4IhznVXzsdZTYw1k6dLZR
+         CRnxjy4mX1yUXxO5XY/5oLAzCcXpZxEPi7XMkkEIs5KB2CDe5B9HuI8c8ODhA1IoMs
+         BlOKefBWl5QLOEMFHpUBylE5j7g4KAwJLYE/vtM3UKWUQvz2YUJeDFVnNKG867Cglw
+         3JpD8g7/fG+vQ==
+Received: by mercury (Postfix, from userid 1000)
+        id A0C3D10611D9; Sun, 24 Sep 2023 22:58:15 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Konrad Dybcio <konradybcio@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     dan.carpenter@linaro.org, kernel-janitors@vger.kernel.org,
+        error27@gmail.com, kernel test robot <lkp@intel.com>
+In-Reply-To: <20230923114807.2829188-1-harshit.m.mogalapalli@oracle.com>
+References: <20230923114807.2829188-1-harshit.m.mogalapalli@oracle.com>
+Subject: Re: [PATCH next] power: supply: mm8013: Fix error code in
+ mm8013_probe()
+Message-Id: <169558909561.1797612.1920151492515517327.b4-ty@collabora.com>
+Date:   Sun, 24 Sep 2023 22:58:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtA5JqNCauG-rP3wGfq+p8EEVx9Tvwj6ksM3SYCwRmfCTg@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/24/23 09:58, Vincent Guittot wrote:
 
-> > Shouldn't it be (568+128)*1.25 = 870? Which is almost the 860 above. We calmped
-> > the 812 to 800, with rounding errors that almost accounts for the 10 points
-> > difference between 870 and 860..
+On Sat, 23 Sep 2023 04:48:06 -0700, Harshit Mogalapalli wrote:
+> The value of ret is zero when passed to dev_error_probe(), we are passing
+> zero to dev_err_probe() is a success which is incorrect.
 > 
-> no I voluntarily use 568 + 128*1.25. I added dvfs headroom for irq
-> just to ensure that you will not raise that I removed the headroom for
-> irq and focus on the use case but it might have created more
-> confusion.
+> Fix this by getting the error code using PTR_ERR().
 > 
-> My example above demonstrate that only taking care of cases with null
-> irq pressure is not enough and you can still ends up above 800
 > 
-> IIUC you point with uclamp_max. It is a performance limit that you
-> don't want to cross because of CFS.This means that we should not go
-> above 800 in my example because of cfs utilization: Irq needs between
-> 128 and CFS asks 568 so the system needs 696 which is below the 800
-> uclamp. Even if you add the dvfs headroom on irq, the system is still
-> below 800. Only when you add dfvs headroom to cfs then you go above
-> 800 but it's not needed because uclamp say that you should not go
 
-Yep, absolutely. It seems we agree that CFS shouldn't go above 800 if it is
-capped even if there's headroom, but the question you have on the way it is
-being applied. As long as we agree on this part which is a fundamental behavior
-question that I thought is the pain point, the implementation details are
-certainly something that I can improve on.
+Applied, thanks!
 
-> above 800 because of CFS so we should stay at 800 whereas both current
-> formula and your new formula return a value above 800
+[1/1] power: supply: mm8013: Fix error code in mm8013_probe()
+      commit: 43ee22422db545800b8bf2c24ef53d040372fc7a
 
-I'm not sure how to handle irq, rt and dl here to be honest. They seem to have
-been taken as an 'additional' demand on top of CFS. So yes, we'll go above but
-irq, and dl don't have knowledge about ucalmp_max. RT does and will be equally
-capped like CFS. I kept current behavior the same, but I did wonder about them
-too in patch 4.
+Best regards,
+-- 
+Sebastian Reichel <sebastian.reichel@collabora.com>
 
-So in a system where there are active CFS, RT, DL and IRQ and both CFS and RT
-had a cap of 800, then they won't ask for me. But once we add IRQ and DL on
-top, then we'll go above.
-
-You think we shouldn't? See below for a suggestion.
-
-> > I am still not sure if you mean we are mixing up the code and we need better
-> > abstraction or something else.
-> >
-> > Beside the abstraction problem, which I agree with, I can't see what I am
-> > mixing up yet :( Sorry I think I need more helping hand to see it.
-> 
-> There is a mix between actual utilization and performance limit and
-> when we add both we then lose important information as highlighted by
-> my example. If the current formula is not correct because we can go
-> above uclamp_max value, your proposal is not better. And the root
-> cause is mainly coming from adding utilization with performance limit
-> (i.e. uclamp)
-> 
-> That's why I said that we need a new interface to enable cpufreq to
-> not blindly apply its headroom but to make smarter decision at cpufreq
-> level
-
-Okay I see. I tend to agree here too. The question is should cpufreq take each
-util (cfs, rt, dl, irq) as input and do the decision on its own. Or should the
-scheduler add them and pass the aggregated value? If the latter, how can
-cpufreq know how to apply the limit? From what I see all these decisions has to
-happen in the same function but not split.
-
-It seems the sticking point is how we interpret irq pressure with uclamp. It
-seems you think we should apply any uclamp capping to this, which I think would
-make sense.
-
-And DL bandwidth we need to max() with the aggregated value.
-
-So I think the formula could be
-
-	util = cfs + rt pressure + irq pressure
-
-	unsigned long cpufreq_convert_util_to_freq(rq, util, dl_bw)
-	{
-		eff_util = apply_dvfs_headroom(util);
-		eff_util = uclamp_rq_util_with(rq, util, NULL);
-
-		eff_util = max(eff_util, dl_bw);
-	}
-
-so we add the utilization of cfs, rt and irq (as per current formula). And then
-let cpufreq do the headroom and limit management.
-
-I changed the way we handle dl_bw as it is actually requesting to run at
-a specific level and not really a pressure. So we max() it with eff_util.
-
-If there's a DL task on the rq then it'd be running and the frequency it
-needs is defined by its bandwidth.
-
-We could also keep it as it is with
-
-	unsigned long cpufreq_convert_util_to_freq(rq, util, dl_bw)
-	{
-		eff_util = apply_dvfs_headroom(util);
-		eff_util = uclamp_rq_util_with(rq, util, NULL);
-
-		eff_util += dl_bw;
-	}
-
-RT has uclamp knowledge so it'll either run at max or whatever value it might
-have requested via uclamp_min. But DL doesn't set any uclamp_min and must be
-either added or max()ed. I'm not sure which is more correct yet, but maybe
-adding actually is better to ensure the CPU runs higher to handle all the tasks
-on the rq.
-
-What do you think?
-
-
-Thanks!
-
---
-Qais Yousef
