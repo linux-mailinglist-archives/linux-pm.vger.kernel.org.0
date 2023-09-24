@@ -2,193 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 759337AC715
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Sep 2023 09:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E2E7AC7F3
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Sep 2023 14:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbjIXH6V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 24 Sep 2023 03:58:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
+        id S229498AbjIXMVW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 24 Sep 2023 08:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjIXH6U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Sep 2023 03:58:20 -0400
-Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C658C6
-        for <linux-pm@vger.kernel.org>; Sun, 24 Sep 2023 00:58:14 -0700 (PDT)
-Received: by mail-oo1-xc35.google.com with SMTP id 006d021491bc7-57b5ef5b947so2614009eaf.0
-        for <linux-pm@vger.kernel.org>; Sun, 24 Sep 2023 00:58:14 -0700 (PDT)
+        with ESMTP id S229449AbjIXMVU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Sep 2023 08:21:20 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4EF101;
+        Sun, 24 Sep 2023 05:21:14 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-d8181087dc9so5185133276.3;
+        Sun, 24 Sep 2023 05:21:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695542293; x=1696147093; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mTo7f1CgCZkEUanJg3zmzN0/UjYYMcy+TzrKDm8eNg8=;
-        b=AcHEf1orQNrQUEcslQgJE6CusKoh/VSAK9TKr209PtpgBHl+TgAE3Z5iiimxwK1bJF
-         tfuNYE45vzIJrnbFO1OeJKa/u6braJSnIPXKrKTdPAcDAZ1iM7XPpDpO0x1CkUKJQ6Oh
-         EDL8Z/8nLkbg8rY1VRhFkxxqxsAlRLc2Uc0ZZrqzHNg7nZHJUsxMIYM2E/TA7iMOrXwr
-         OP7MlpQ7m8FDTu/wkRai3Fx4z8L7sza/HCHszfmpR3PfOlZIuqCSg8joEKwsmfQIN1S2
-         /wNcZuoyp+uIJt0/mzMy0mOlW1LWL5/4wb7mm+iVBhMPRNk0Z/55VY3dSojQgihsaMML
-         rx4g==
+        d=gmail.com; s=20230601; t=1695558073; x=1696162873; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MTfZjqjMpvXRZj3b3a+JLvwqBqzdhBKsQPxsSKfm4jQ=;
+        b=JmnRMdRUYmERcLwPlPVvJCbnxV/XbvmE+AMvSZTGztlVi2xyVEI4UKW7A6A9RLAYpU
+         VHz4T8KFsIBDqUy0uSZ9nXZBZLJSyFyt7DvjgQuk5s4wnSFND1b38I4P4gEh+G+DQMtK
+         bBcztbYiJZL4AES7RCXNRwCl4BzVS0a5YAWO566JJsINiLGTeJbUwiFWN0Kg6FhkdEG5
+         ncjJLsx2cvxj54ueD0jEqcv1yGsdApj5W9+bkVhNwlUkYBrMLapxZl0VhL2fsWVOLkQg
+         DilRj3XATDG8xPIfA/lFlBYhKdGwMjamLkR5rW1vR4SFNbAOFoj7JT/dvqKwOzzxA1QY
+         WLfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695542293; x=1696147093;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mTo7f1CgCZkEUanJg3zmzN0/UjYYMcy+TzrKDm8eNg8=;
-        b=d9YLLBWaXIGNE/5XjTRV5UedNQ6jc5B4tqG/tvNkCAXAp4j3gXWToIzhny/TxYaqr0
-         1RdHJCq8Hz5zMUj+dagKbvgi6pW1NcxX0pUE8b/fg7zOOjbjVM8Lknvp1oLI7gWBmsJH
-         /hEjgeP58Td2roYnM1F+TwxD/PATa3k+oWK4ipibbfEgi+8Mi/OZlat4cQupkPvuGbvu
-         uaBLV9esMzTKL4tQdD1jvkihkSP4uaLr7BOViGKTDV8E3XusvUWXjyISz7Ww2mWzAyw5
-         jEiTiFWAjvEsDAwSm9tMUXyCbYxE7KL7/G/wwhXQTfyIdhdw8gVZ1i7mQPL6UAjTKFev
-         C3dw==
-X-Gm-Message-State: AOJu0YyxpQClkh2FOFrxZnW3pnN3OIBadK+N3GX1RpF4WjSIpAKoltKG
-        9QQB1iUYwb6Gmblzdd6XT4w87Z1PNntFRTA9rJRdUA==
-X-Google-Smtp-Source: AGHT+IEH5NKnQPK0DsnFu7JqpJsmcimqSaaxI7U3Ei495dDre5bN+1pgHkJqkVLyIdzLMY8qp6EAxixVcWSuIryTnjk=
-X-Received: by 2002:a05:6358:41a1:b0:143:8574:4311 with SMTP id
- w33-20020a05635841a100b0014385744311mr5247958rwc.12.1695542293162; Sun, 24
- Sep 2023 00:58:13 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1695558073; x=1696162873;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MTfZjqjMpvXRZj3b3a+JLvwqBqzdhBKsQPxsSKfm4jQ=;
+        b=B8CRQvCrAbD/VNKMpx/zQJ7Q0f0QyBeXxyWV/Xfs3aSd8a1or+I9IXJI3wnNg6smnt
+         2o5E9NkMetE8Gr7g1uyt/LStQaxjTlKENrdOZEw694gzahMaI9mSCrVaVM4hkO4QHdAx
+         gXNXTr/Y0vtVrcrtZmtH9rh4x69hyHIjy3Rhti0pksxFbut0Msn26Avcdy5BGn+OqqZ4
+         3SfAbfNOha90wH+Y2Uemy0La+xByTpE89lcopte7VpY+7ZctxDiDzTBtacYq64RMnAcg
+         Ez8xZwGqKzx8GswPWJAufQ/wJyWc73Nlpv2JULpEv+dUe1uKrwjuK51pNdiBUOkO4mVU
+         yIFg==
+X-Gm-Message-State: AOJu0YxRpsdfiSombxCZIEKH2JQrKGnPguOXOH49fMtj4oA25N5fzF//
+        lPVQqfmAlfro//a+wTDS6q0LqpLrgSW0hVVFXG0=
+X-Google-Smtp-Source: AGHT+IF2jNaWBk87Cb4LztG+3BYADZk5wQU4zwUp4/XjFmSp0zIWGQD+y5IecCnZhP1NNVheMxVGBydqfLx6BDN44Oo=
+X-Received: by 2002:a25:a048:0:b0:d43:a84f:a6aa with SMTP id
+ x66-20020a25a048000000b00d43a84fa6aamr3813704ybh.39.1695558073705; Sun, 24
+ Sep 2023 05:21:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230820210640.585311-1-qyousef@layalina.io> <20230820210640.585311-3-qyousef@layalina.io>
- <CAKfTPtDY48jpO+b-2KXawzxh-ty+FMKX6YUXioNR7kpgO=ua6Q@mail.gmail.com>
- <20230829163740.uadhv2jfjuumqk3w@airbuntu> <CAKfTPtCP6uX79dOrzN4PxFTMBFrDAMOOrWyZrsVypUQ0RY7BAA@mail.gmail.com>
- <20230907215555.exjxho34ntkjmn6r@airbuntu> <CAKfTPtA8Ljy4NBqjw8Wj4pEFc-OCR55QPuwh+5GgrHN6u+ugsg@mail.gmail.com>
- <20230910174638.qe7jqq6mq36brh6o@airbuntu> <CAKfTPtBFAXO=CgqSJ1+y=2ppb5t4oErCtvV336fS6J2nSjBCkQ@mail.gmail.com>
- <20230916192509.bportepj7dbgp6ro@airbuntu>
-In-Reply-To: <20230916192509.bportepj7dbgp6ro@airbuntu>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Sun, 24 Sep 2023 09:58:01 +0200
-Message-ID: <CAKfTPtA5JqNCauG-rP3wGfq+p8EEVx9Tvwj6ksM3SYCwRmfCTg@mail.gmail.com>
-Subject: Re: [PATCH 2/4] sched: cpufreq: Fix apply_dvfs_headroom() escaping
- uclamp constraints
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Lukasz Luba <lukasz.luba@arm.com>
+References: <cover.1693623752.git.zhoubinbin@loongson.cn> <16a37f6ad3cc9417b6638c2cd532d88c79468eb1.1693623752.git.zhoubinbin@loongson.cn>
+ <885eab85-2c11-cf20-9187-55cd647fbe9f@infradead.org> <c7604f6c-4da7-47c4-abe9-e626b3efc665@infradead.org>
+ <20230919-9ce82588fccdd641574b468c@fedora> <CAAhV-H73kp8zWJD7AKUvknmxow=f_cPBw9jctpmced6o_QCF6w@mail.gmail.com>
+ <ea9ee2dd-b71a-4c97-a347-20536d7ad424@app.fastmail.com>
+In-Reply-To: <ea9ee2dd-b71a-4c97-a347-20536d7ad424@app.fastmail.com>
+From:   Binbin Zhou <zhoubb.aaron@gmail.com>
+Date:   Sun, 24 Sep 2023 20:21:02 +0800
+Message-ID: <CAMpQs4Lp1y1=hp_Z7zRV7W0WCB047yDD5eqnuLHjdqHYZpchRQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/5] soc: loongson: loongson2_pm: Add dependency for INPUT
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Binbin Zhou <zhoubinbin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        loongson-kernel@lists.loongnix.cn, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 16 Sept 2023 at 21:25, Qais Yousef <qyousef@layalina.io> wrote:
+On Fri, Sep 22, 2023 at 10:43=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrot=
+e:
 >
-> On 09/12/23 18:03, Vincent Guittot wrote:
+> On Tue, Sep 19, 2023, at 12:15, Huacai Chen wrote:
+> > On Tue, Sep 19, 2023 at 11:48=E2=80=AFPM Conor Dooley <conor@kernel.org=
+> wrote:
+> >> On Tue, Sep 19, 2023 at 08:36:50AM -0700, Randy Dunlap wrote:
+> >>
+> >> Seemingly this was sent again in isolation 2 weeks ago, but neither th=
+e
+> >> maintainer (Huacai) nor soc@kernel.org were on cc:
+> >>
+> >> https://lore.kernel.org/all/20230905123629.4510-1-zhuyinbo@loongson.cn=
+/
+> > v3 indeed cc-ed soc@kernel.org. :)
+> >
+> > Arnd, could you please take this series to the soc tree? And also this
+> > series:
+> > https://lore.kernel.org/loongarch/cover.1693534134.git.zhoubinbin@loong=
+son.cn/T/#t
 >
-> > And it seems that what is done today doesn't work correctly for you.
-> > Your proposal to include cpufreq headroom into the scheduler is not
-> > correct IMO and it only applies for some cases. Then, the cpufreq
-> > driver can have some really good reason to apply some headroom even
-> > with an uclamp value but it can't make any decision.
-> >
-> > I think that we should use another way to fix your problem with how
-> > uclamp than reordering how headroom is applied by cpufreq. Mixing
-> > utilization and performance in one signal hide some differences that
-> > cpufreq can make a good use of.
-> >
-> > As an example:
-> >
-> > cfs util = 650
-> > cfs uclamp = 800
-> > irq = 128
-> >
-> > cfs with headroom 650*1.25=812 is clamped to 800
-> >
-> > Final utilization will be : 800(1024-128)/1024+128*1.25=860 which is
-> > above the target of 800.
-> >
-> > When we look at the detail, we have:
-> >
-> > cfs util once scaled to the full range is only 650(1024-128)/1024= 568
-> >
-> > After applying irq (even with some headroom) 568+128*1.25 = 728 which
-> > is below the uclamp of 800 so shouldn't we stay at 800 in this case ?
+> Sorry, I have been traveling and not pushed out the tree yet.
 >
-> Shouldn't it be (568+128)*1.25 = 870? Which is almost the 860 above. We calmped
-> the 812 to 800, with rounding errors that almost accounts for the 10 points
-> difference between 870 and 860..
+> Can you confirm that the input dependency is required for 6.6
+> and the other series can wait until 6.7? When you send patches
+> to soc@kernel.org, please always mention which tree you intend
+> them for. I might disagree, but it's better than having to guess.
+>
+Hi Arnd:
 
-no I voluntarily use 568 + 128*1.25. I added dvfs headroom for irq
-just to ensure that you will not raise that I removed the headroom for
-irq and focus on the use case but it might have created more
-confusion.
+Thanks for your reply.
 
-My example above demonstrate that only taking care of cases with null
-irq pressure is not enough and you can still ends up above 800
+As we know, this driver was just merged in during the v6.6 window, and
+no release will use it until now:
 
-IIUC you point with uclamp_max. It is a performance limit that you
-don't want to cross because of CFS.This means that we should not go
-above 800 in my example because of cfs utilization: Irq needs between
-128 and CFS asks 568 so the system needs 696 which is below the 800
-uclamp. Even if you add the dvfs headroom on irq, the system is still
-below 800. Only when you add dfvs headroom to cfs then you go above
-800 but it's not needed because uclamp say that you should not go
-above 800 because of CFS so we should stay at 800 whereas both current
-formula and your new formula return a value above 800
+commit 67694c076bd7 soc: loongson2_pm: add power management support
+commit 6054a676e969 soc: dt-bindings: add loongson-2 pm
 
->
-> I might have gotten the math wrong. But what I saw is that we have
->
->         util = (X + Y + Z) * A
->
-> and what I did
->
->         util = AX + AY + AZ
->
-> so maybe I missed something up, but I just did the multiplication with the
-> headroom to each element individually rather than after the sum.
->
-> So yeah, if I messed that part up, then that wasn't intentional and should be
-> done differently. But I still can't see it.
->
-> > >
-> > > The main change being done here actually is to apply_dvfs_headroom() *before*
-> > > doing uclamp_rq_util_with(). I am not sure how you see this mixing.
-> >
-> > Because dvfs_headroom is a cpufreq hints and you want to apply it
-> > somewhere else.
->
-> I am still not sure if you mean we are mixing up the code and we need better
-> abstraction or something else.
->
-> Beside the abstraction problem, which I agree with, I can't see what I am
-> mixing up yet :( Sorry I think I need more helping hand to see it.
+Now, since the Loongson-2K series SoCs are indifferent at the driver
+level, we used fallback compatible and added
+syscon-reboot/syscon-poweroff subnodes for power on/off functionality.
+These somewhat break the original devicetree rules.
+So, I think these patches need to be merged in before the v6.6 release
+to avoid unnecessary compatibility issues.
+Of course, I added the "Fixes:" tag in the corresponding patch.
 
-There is a mix between actual utilization and performance limit and
-when we add both we then lose important information as highlighted by
-my example. If the current formula is not correct because we can go
-above uclamp_max value, your proposal is not better. And the root
-cause is mainly coming from adding utilization with performance limit
-(i.e. uclamp)
+Thanks.
+Binbin
 
-That's why I said that we need a new interface to enable cpufreq to
-not blindly apply its headroom but to make smarter decision at cpufreq
-level
-
-
->
-> > > Current code performs apply_dvfs_headroom() *after*; which what causes the CPU
-> > > to run at a performance level higher than rq->uclamp[UCLAMP_MAX].
-> > >
-> > > It doesn't matter how many tasks on the rq, if rq->uclamp[UCLAMP_MAX] is set to
-> > > 800, then the CPU should not vote to max (assuminig all other pressures are 0).
-> >
-> > You can't remove the irq pressure from the picture. If
-> > rq->uclamp[UCLAMP_MAX] is set to 800 means that cpu must not go above
-> > 800, it should apply also after taking into account other inputs. At
-> > least up to some level as described in my example above
->
-> I was trying to simplify to understand what you mean as I don't think I see the
-> problem you're highlighting still.
->
->
-> Thanks!
->
-> --
-> Qais Yousef
+>      Arnd
