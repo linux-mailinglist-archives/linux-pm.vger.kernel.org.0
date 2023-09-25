@@ -2,164 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3B77ADCF3
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 18:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 163487ADD0D
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 18:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233033AbjIYQUy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Sep 2023 12:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47854 "EHLO
+        id S230049AbjIYQ24 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Sep 2023 12:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231689AbjIYQUx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 12:20:53 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222BECE;
-        Mon, 25 Sep 2023 09:20:47 -0700 (PDT)
-Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8AA086607083;
-        Mon, 25 Sep 2023 17:20:44 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1695658845;
-        bh=hLrIxPnIrH+CavuOWQVjMQm2fM6kCBplHnPFlCTy1Fs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i9hHKlbf+AxbsU9Vfk8qvmq56+Cd8O1+RlbISjcVCQ4M+mAbPiUF7L+/E1dtIYXz6
-         zBWeW/7XUOOnnx7hlIJ7Y/zCIsYxyh1MlSGprZLj2bxkI+0wScsuFw3nCY3Il2jYIE
-         VDVBpLsDIVu1fAxpbuxmTnSuNJpS+7NiOTpjo91hsDEheYJlarbisBIIGrxJ1pMhnc
-         ezfxL/DybGO3ZEziv44mB17mQVtJEgoAoiNOR/w4Uixuxkl+nb6H0iCbAKxKVrWKEO
-         tnOXU25RBIWzHqBVXHA4irjsQPeKlLd8EjUPOd1TAXAVyDnkXfynqJvzP9i3ztOuOB
-         b6Q46VZn5t6mA==
-Date:   Mon, 25 Sep 2023 12:20:40 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] thermal: core: Check correct temperature for thermal
- trip notification
-Message-ID: <4b38b84a-7427-45b1-b8e6-c68c5dbce676@notapiano>
-References: <20230922192724.295129-1-nfraprado@collabora.com>
- <7558dd96-0d96-9463-9a97-7ea8bac2046e@linaro.org>
+        with ESMTP id S229522AbjIYQ2z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 12:28:55 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79557FB;
+        Mon, 25 Sep 2023 09:28:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=jROqAEkQNpkWnS8v1ykP5/ZLrZmkwHf52pIZ146JzkU=; b=OPsoFGfj8SogLijb61TbCQuFSt
+        r4U1AjausZZbDS27ervs0UVLeeq/WXWif6Bh/olU2Qkd/m88ZC7i50Q4IEiaSyOcgayZOj/gokqDf
+        9UjOInzdI3xWKacekNqsVxKIqdAhb7mCb+oe1nLzUtlxb+POA2R7L2yk1SUexyVkAICS06SwQu5Gx
+        iurZp+pFY53XFqRieu4DkNjH1s6wiGpzRRAENsy4JQUVQtgWfhktUAeLli2UJKJrWmE5iZN7MaaRa
+        RePP8EhvmHKz5NFOQjXgzyLWPE/f3Lmp9d+DJTdFija9ojwlpSnrC/R/Klx/ZYDf1TIyExMKpNErb
+        cpI4VWNA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:48484)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1qkoRs-0001Kh-2U;
+        Mon, 25 Sep 2023 17:28:40 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1qkoRo-0007xJ-Iu; Mon, 25 Sep 2023 17:28:36 +0100
+Date:   Mon, 25 Sep 2023 17:28:36 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-acpi@vger.kernel.org, James Morse <james.morse@arm.com>,
+        loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        jianyong.wu@arm.com, justin.he@arm.com,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Salil Mehta <salil.mehta@huawei.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-ia64@vger.kernel.org
+Subject: Re: [PATCH RFC v2] cpu-hotplug: provide prototypes for arch CPU
+ registration
+Message-ID: <ZRG1NBNbljy2/LEy@shell.armlinux.org.uk>
+References: <E1qgnh2-007ZRZ-WD@rmk-PC.armlinux.org.uk>
+ <871qez1cfd.ffs@tglx>
+ <ZQgHUvW8qgyj5Puv@shell.armlinux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7558dd96-0d96-9463-9a97-7ea8bac2046e@linaro.org>
+In-Reply-To: <ZQgHUvW8qgyj5Puv@shell.armlinux.org.uk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 25, 2023 at 12:19:18PM +0200, Daniel Lezcano wrote:
-> 
-> Hi Nicolas,
-> 
-> On 22/09/2023 21:27, Nícolas F. R. A. Prado wrote:
-> > The thermal trip down notification should be triggered when the
-> > temperature goes below the trip temperature minus the hysteresis. But
-> > while the temperature is correctly checked against that, the last
-> > temperature is instead compared against the trip point temperature. The
-> > end result is that the notification won't always be triggered, only when
-> > the temperature happens to drop quick enough so that the last
-> > temperature was still above the trip point temperature.
+On Mon, Sep 18, 2023 at 09:16:18AM +0100, Russell King (Oracle) wrote:
+> On Fri, Sep 15, 2023 at 09:09:10PM +0200, Thomas Gleixner wrote:
+> > On Thu, Sep 14 2023 at 15:51, Russell King wrote:
+> > > Provide common prototypes for arch_register_cpu() and
+> > > arch_unregister_cpu(). These are called by acpi_processor.c, with
+> > > weak versions, so the prototype for this is already set. It is
+> > > generally not necessary for function prototypes to be conditional
+> > > on preprocessor macros.
+> > >
+> > > Some architectures (e.g. Loongarch) are missing the prototype for this,
+> > > and rather than add it to Loongarch's asm/cpu.h, lets do the job once
+> > > for everyone.
+> > >
+> > > Since this covers everyone, remove the now unnecessary prototypes in
+> > > asm/cpu.h, and we also need to remove the 'static' from one of ia64's
+> > > arch_register_cpu() definitions.
+> > >
+> > > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> > > ---
+> > > Spotted during the review of James Morse's patches, I think rather than
+> > > adding prototypes for loongarch to its asm/cpu.h, it would make more
+> > > sense to provide the prototypes in a non-arch specific header file so
+> > > everyone can benefit, rather than having each architecture do its own
+> > > thing.
+> > >
+> > > I'm sending this as RFC as James has yet to comment on my proposal, and
+> > > also to a wider audience, and although it makes a little more work for
+> > > James (to respin his series) it does mean that his series should get a
+> > > little smaller.
 > > 
-> > Fix the incorrect check.
+> > And it makes tons of sense.
 > > 
-> > Fixes: 55cdf0a283b8 ("thermal: core: Add notifications call in the framework")
-> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > > See:
+> > >  https://lore.kernel.org/r/20230913163823.7880-2-james.morse@arm.com
+> > >  https://lore.kernel.org/r/20230913163823.7880-4-james.morse@arm.com
+> > >  https://lore.kernel.org/r/20230913163823.7880-23-james.morse@arm.com
+> > >
+> > > v2: lets try not fat-fingering vim.
 > > 
-> > ---
+> > Yeah. I wondered how you managed to mangle that :)
 > > 
-> >   drivers/thermal/thermal_core.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > >  arch/ia64/include/asm/cpu.h | 5 -----
+> > >  arch/ia64/kernel/topology.c | 2 +-
 > > 
-> > diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> > index 58533ea75cd9..120fcf23b8e5 100644
-> > --- a/drivers/thermal/thermal_core.c
-> > +++ b/drivers/thermal/thermal_core.c
-> > @@ -361,7 +361,7 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip_id)
-> >   		    tz->temperature >= trip.temperature)
-> >   			thermal_notify_tz_trip_up(tz->id, trip_id,
-> >   						  tz->temperature);
-> > -		if (tz->last_temperature >= trip.temperature &&
-> > +		if (tz->last_temperature >= (trip.temperature - trip.hysteresis) &&
-> >   		    tz->temperature < (trip.temperature - trip.hysteresis))
-> >   			thermal_notify_tz_trip_down(tz->id, trip_id,
-> >   						    tz->temperature);
+> > That's moot as ia64 is queued for removal :)
 > 
-> We already did a try to fix the thermal trip cross notification but this is
-> not sufficient for a full fix.
+> Okay, one less thing to worry about. Tomorrow, I'll re-spin without the
+> ia64 bits included.
 > 
-> We are receiving multiple notifications from the same event, all this due to
-> the hysteresis.
-> 
-> Let's say, we have a trip point T and a hysteresis H.
-> 
-> There is a trip point crossed the way up when:
-> 
-> 	last_temperature < T and temperature >= T
-> 
-> At this point, we send a notification
-> 
-> Now, the temperature decreases but it stays in the hysteresis:
-> 
-> 	last_temperature >= T and temperature > (T - H)
-> 
-> And then, the temperature increases again and is greater than T.
-> 
-> 	last_temperature > (T - H) and temperature >= T
-> 
-> We send a second notification.
+> I would really like to hear from James before we think about merging
+> this, as it will impact James' patch set and would add a dependency
+> for that. I wouldn't want this patch to become a reason to delay
+> James' patch set for another kernel cycle.
 
-Right, I've observed this issue in the logic that updates the trip points, and
-just sent the v2 fix for it:
+It's been totally quiet for a week both from James and from Thomas,
+I'll send the patch with the ia64 bits dropped.
 
-https://lore.kernel.org/all/20230922184425.290894-1-nfraprado@collabora.com
-
-I wasn't aware of the cleanups you pointed to below, but at least in their
-current form it doesn't seem they would take care of fixing the trip point
-update logic like I did in that patch. So please do take a look.
-
-It was while testing that patch that I stumbled upon this code for the
-notification and just quickly fixed it. But indeed this patch is not a full fix
-as the one you pointed to, so let's wait for that one.
-
-Thanks,
-Nícolas
-
-> 
-> With the mitigation kicking in at temp >= T, we end up with multiple events
-> 'temperature crossed the trip point the way up"'. That forces the receiver
-> of the events to detect duplicate events in order to ignore them.
-> 
-> More info:
-> 
-> 	https://lore.kernel.org/all/20220718145038.1114379-4-daniel.lezcano@linaro.org/
-> 	
-> We have done a lot of cleanups to use the 'generic trip points' and remove
-> those get_trip_* ops. So the trip point structure is a core component being
-> reused by the drivers and registered as an array.
-> 
-> Next step is to make sure the trip points are ordered in the array, so we
-> can implement the correct trip point crossing detection.
-> 
-> 
-> 
-> 
-> -- 
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-> 
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
-> 
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
