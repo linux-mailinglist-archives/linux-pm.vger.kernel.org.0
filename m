@@ -2,187 +2,177 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3C37AD7AE
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 14:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C637AD885
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 15:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231650AbjIYMHq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Sep 2023 08:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40342 "EHLO
+        id S229884AbjIYNDc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Sep 2023 09:03:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231740AbjIYMHb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 08:07:31 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AEDCFC
-        for <linux-pm@vger.kernel.org>; Mon, 25 Sep 2023 05:06:45 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1c451541f23so44759425ad.2
-        for <linux-pm@vger.kernel.org>; Mon, 25 Sep 2023 05:06:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695643604; x=1696248404; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FVUt6ZlZlt1P8Ceh/hubtNxz/DIJsD3wgxBUc0MmUI4=;
-        b=w4saT8oIzQkG+JYGgqyG+F32lUbbWI9jtiblAasfHRhPIHkfG0ew4wOIatOi0CL9cD
-         8zMYm+Nohxgk3/iynUo9+ZOjXT8p/Lxfmzge8bdHbDbhi3B2lppxsFlru0JZUnF5j8HF
-         jYnPAlDB7mX+fuJPEEGv5BP0p0P2y4AyOgFSCIhMghbMOr9MqJmgx/eLDOLhMbxmLROB
-         jwo6thYC7J1soJJDAyaROGbWR3ByE/O0qPk7OthI3RMKpig1VLnTOY8iafy9cAdbTF/t
-         LFWQXZ1xu17ZVGFKOM2EqD8OdrNKrRbjvdPys2GVeB1qwnRofpSxABH7V4m19pARb4LF
-         HgKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695643604; x=1696248404;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FVUt6ZlZlt1P8Ceh/hubtNxz/DIJsD3wgxBUc0MmUI4=;
-        b=jU36jc8KQ3Pk0WeyoZCYYZdmCX8tjzitscwUtbQf/mp2/piAo5u+6GpUedntE/BHbl
-         JMXsW7MjlC+krAnpVBO8LbcVJKNtk/DjOCo7njoPUn0B2kByobTetfg9O/hMtXHeXTvt
-         TgTFz2Ro2sAYJmMFUIF/6lhvRfPouRu5cxivQRvO6ioFNJO5fiPGlkC0qeaKHqtBYADN
-         bXDxb8kCU7AFEBuPyvi6dGO/Wl0VpShF4I17G4SrG3+WfwGrTp/KY1sh38AuPFbet1Sb
-         0HwG2yWZyuF4GOMP+msydK0BmKhzuvRj0MLNRgaOgUoSiXEixBAG2qNYcgvP3ra8hQVa
-         Gvuw==
-X-Gm-Message-State: AOJu0Yy9UjXP/WJ8EJkRKiB+B/DUVfOPrPsusC4x9+26TruxSWrze6OO
-        G2LLdYDqqREO94429aTosTl+DY5HHzaBfT16JZsJjA==
-X-Google-Smtp-Source: AGHT+IHTZAYH6v2yVOscns05lwBAjB14afRWd6clMBTAdvhJtdZPNbdfJYyNaZhnqQS2GA/pbd76KDTydWoU80lawxU=
-X-Received: by 2002:a17:90a:5a81:b0:268:b0b:a084 with SMTP id
- n1-20020a17090a5a8100b002680b0ba084mr4015345pji.46.1695643604484; Mon, 25 Sep
- 2023 05:06:44 -0700 (PDT)
+        with ESMTP id S229450AbjIYNDb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 09:03:31 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB239F;
+        Mon, 25 Sep 2023 06:03:23 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7E11CE000E;
+        Mon, 25 Sep 2023 13:03:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1695647002;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rTHQHG6X4jp4I4sSqhlYQOZSd9VR60SbfX/6KiSXcQc=;
+        b=cPr5PgddZAU3NimVKrbpIxS5r043+LHtbKBOUFuwWiyIhUNqpA/D/cIcuGXgViv1bqG5aw
+        NsqN9iSF7Uvoq68FncBaq253bY6S+1MMYPKZcV1BrImfxgfJVa/LJ/tuoWJha4XB3E75Sc
+        aKjHf6aL4qqM7B3vPhDDvy7UpsHmoRgk/VGkJ1n/lcvcJmfWr9WVAdBl1iKT2yWEtA1bsK
+        Ek9knigV3HVJ9shULTpL3/y8G4ZyNLNuEFuUIF7PE65IXSHd2GwzQPujrQf9PvMcGr3EoN
+        UwWtahEw2IurMq2PLC27r4CavaTmH3OTTuLQpFF/3JDi8l78KdLpf9Uo1LeZ6g==
+Message-ID: <0ab0dc61-aa9b-1f3f-f889-9c6e10dc62f7@bootlin.com>
+Date:   Mon, 25 Sep 2023 15:03:20 +0200
 MIME-Version: 1.0
-References: <20230901130312.247719-1-vincent.guittot@linaro.org>
- <20230901130312.247719-4-vincent.guittot@linaro.org> <ZQwKnnXbjLOYUSjO@arm.com>
-In-Reply-To: <ZQwKnnXbjLOYUSjO@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 25 Sep 2023 14:06:32 +0200
-Message-ID: <CAKfTPtCM_dsWcD6qru_nLYpDH9_OoziMy5d3zAofXNsXzG94xQ@mail.gmail.com>
-Subject: Re: [PATCH 3/4] cpufreq/schedutil: use a fixed reference frequency
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
-        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-pm@vger.kernel.org, conor.dooley@microchip.com,
-        suagrfillet@gmail.com, ajones@ventanamicro.com, lftan@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: serial: 8250_omap: suspend issue with console_suspend disabled
+Content-Language: en-US
+From:   Thomas Richard <thomas.richard@bootlin.com>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Kumar Udit <u-kumar1@ti.com>, Dhruva Gole <d-gole@ti.com>
+References: <59b13c93-6637-3050-c145-31be0d6c12c9@bootlin.com>
+ <20230920053828.GD5282@atomide.com>
+ <332111c2-f3f5-3d7f-09ef-f3ebb3f48eb0@bootlin.com>
+In-Reply-To: <332111c2-f3f5-3d7f-09ef-f3ebb3f48eb0@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: thomas.richard@bootlin.com
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 21 Sept 2023 at 11:19, Ionela Voinescu <ionela.voinescu@arm.com> wrote:
->
-> On Friday 01 Sep 2023 at 15:03:11 (+0200), Vincent Guittot wrote:
-> > cpuinfo_max_freq can change at runtime because of boost as example. This
-> > implies that the value could not be the same than the one that has been
-> > used when computing the capacity of a CPU.
-> >
-> > The new arch_scale_freq_ref() returns a fixed and coherent frequency
-> > reference that can be used when computing a frequency based on utilization.
-> >
-> > Use this arch_scale_freq_ref() when available and fallback to
-> > cpuinfo.max_freq otherwise.
-> >
-> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> > ---
-> >  kernel/sched/cpufreq_schedutil.c | 29 +++++++++++++++++++++++++++--
-> >  1 file changed, 27 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> > index 4492608b7d7f..9996ef429e2b 100644
-> > --- a/kernel/sched/cpufreq_schedutil.c
-> > +++ b/kernel/sched/cpufreq_schedutil.c
-> > @@ -114,6 +114,31 @@ static void sugov_deferred_update(struct sugov_policy *sg_policy)
-> >       }
-> >  }
-> >
-> > +#ifdef arch_scale_freq_ref
-> > +/**
-> > + * arch_scale_freq_ref_policy - get the reference frequency of a given CPU that
-> > + * has been used to correlate frequency and compute capacity.
-> > + * @cpu: the CPU in question.
-> > + *
-> > + * Return: the reference CPU frequency.
-> > + */
-> > +static __always_inline
-> > +unsigned long  arch_scale_freq_ref_policy(struct cpufreq_policy *policy)
->
-> This should not be an arch_ function as it's only a wrapper over an
-> arch_ function and not a function that different architectures might
-> implement differently usually in architecture specific code.
+On 9/21/23 09:58, Thomas Richard wrote:
+> On 9/20/23 07:38, Tony Lindgren wrote:
+>> Hi,
+>>
+>> * Thomas Richard <thomas.richard@bootlin.com> [230915 09:57]:
+>>> The regression was introduced in commit 20a41a62618d "serial: 8250_omap:
+>>> Use force_suspend and resume for system suspend"
+>> ...
+>>
+>>> --- a/drivers/tty/serial/8250/8250_omap.c
+>>> +++ b/drivers/tty/serial/8250/8250_omap.c
+>>> @@ -1630,7 +1630,7 @@ static int omap8250_suspend(struct device *dev)
+>>>         err = pm_runtime_force_suspend(dev);
+>>>         flush_work(&priv->qos_work);
+>>>
+>>> -       return err;
+>>> +       return 0;
+>>>  }
+>>
+>> Maybe we can now just simplify things a bit here with the patch below.
+>> Care to give it a try, it's compile tested only so far.
+>>
+> 
+> I tested it, it works for me.
 
-I expect this function to disappear at some point once all arch will
-use it that why I named it arch_* but I can rename it
+Tony,
 
->
-> > +{
-> > +     return arch_scale_freq_ref(policy->cpu);
->
-> It might make it easier to read if arch_scale_freq_ref() had a default
-> implementation that returned 0.
+As your proposal works well, do you plan to send a patch ?
+Or would you prefer me to send it ?
 
-I will use the suggestion made by Peter to have only one function
+Regards,
 
+Thomas
 
->
-> Then this code would simply become:
->
-> freq = arch_scale_freq_ref(policy->cpu);
-> if (freq)
->         return freq;
-> else if (arch_scale_freq_invariant())
->         return ..
-> ..
->
-> This approach is similar to the use of arch_freq_get_on_cpu() in
-> cpufreq.c, and, as there, having a chosen maximum frequency of 0 would
-> not be a valid value.
->
-> > +}
-> > +#else
-> > +static __always_inline
-> > +unsigned long  arch_scale_freq_ref_policy(struct cpufreq_policy *policy)
-> > +{
-> > +     if (arch_scale_freq_invariant())
-> > +             return policy->cpuinfo.max_freq;
-> > +
-> > +
-> > +     return policy->cur;
-> > +}
-> > +#endif
-> > +
-> >  /**
-> >   * get_next_freq - Compute a new frequency for a given cpufreq policy.
-> >   * @sg_policy: schedutil policy object to compute the new frequency for.
-> > @@ -139,11 +164,11 @@ static void sugov_deferred_update(struct sugov_policy *sg_policy)
-> >  static unsigned int get_next_freq(struct sugov_policy *sg_policy,
-> >                                 unsigned long util, unsigned long max)
-> >  {
-> > +     unsigned int freq;
-> >       struct cpufreq_policy *policy = sg_policy->policy;
-> > -     unsigned int freq = arch_scale_freq_invariant() ?
-> > -                             policy->cpuinfo.max_freq : policy->cur;
-> >
-> >       util = map_util_perf(util);
-> > +     freq = arch_scale_freq_ref_policy(policy);
->
-> Given its single use here, it would likely be better to place the code
-> above directly here, rather than create a wrapper over a few lines of
-> code.
->
-> Hope it helps,
-> Ionela.
->
-> >       freq = map_util_freq(util, freq, max);
-> >
-> >       if (freq == sg_policy->cached_raw_freq && !sg_policy->need_freq_update)
-> > --
-> > 2.34.1
-> >
-> >
+> 
+>>> Once the omap8250_suspend doesn't return an error, the suspend sequence
+>>> can continue, but I get an other issue.
+>>> This issue is not related to commit 20a41a62618d, it has already been
+>>> present.
+>>> The power domain of the console is powered-off, so no more messages are
+>>> printed, and the SoC is stucked.
+>>> As the uart port is used as console, we don't want to power-off it.
+>>> My workaround is to set the corresponding power domain to
+>>> GENPD_FLAG_ALWAYS_ON, so the uart port is not powered-off.
+>>
+>> The runtime PM usage count should keep the related power domain on though,
+>> sounds like this issue somewhere else if the power domains get force
+>> suspended with runtime PM usage count?
+>>
+>> Regards,
+>>
+>> Tony
+>>
+>> 8< ------------------------------
+>> diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+>> --- a/drivers/tty/serial/8250/8250_omap.c
+>> +++ b/drivers/tty/serial/8250/8250_omap.c
+>> @@ -1617,7 +1617,7 @@ static int omap8250_suspend(struct device *dev)
+>>  {
+>>  	struct omap8250_priv *priv = dev_get_drvdata(dev);
+>>  	struct uart_8250_port *up = serial8250_get_port(priv->line);
+>> -	int err;
+>> +	int err = 0;
+>>  
+>>  	serial8250_suspend_port(priv->line);
+>>  
+>> @@ -1627,7 +1627,8 @@ static int omap8250_suspend(struct device *dev)
+>>  	if (!device_may_wakeup(dev))
+>>  		priv->wer = 0;
+>>  	serial_out(up, UART_OMAP_WER, priv->wer);
+>> -	err = pm_runtime_force_suspend(dev);
+>> +	if (uart_console(&up->port) && console_suspend_enabled)
+>> +		err = pm_runtime_force_suspend(dev);
+>>  	flush_work(&priv->qos_work);
+>>  
+>>  	return err;
+>> @@ -1636,11 +1637,15 @@ static int omap8250_suspend(struct device *dev)
+>>  static int omap8250_resume(struct device *dev)
+>>  {
+>>  	struct omap8250_priv *priv = dev_get_drvdata(dev);
+>> +	struct uart_8250_port *up = serial8250_get_port(priv->line);
+>>  	int err;
+>>  
+>> -	err = pm_runtime_force_resume(dev);
+>> -	if (err)
+>> -		return err;
+>> +	if (uart_console(&up->port) && console_suspend_enabled) {
+>> +		err = pm_runtime_force_resume(dev);
+>> +		if (err)
+>> +			return err;
+>> +	}
+>> +
+>>  	serial8250_resume_port(priv->line);
+>>  	/* Paired with pm_runtime_resume_and_get() in omap8250_suspend() */
+>>  	pm_runtime_mark_last_busy(dev);
+>> @@ -1717,16 +1722,6 @@ static int omap8250_runtime_suspend(struct device *dev)
+>>  
+>>  	if (priv->line >= 0)
+>>  		up = serial8250_get_port(priv->line);
+>> -	/*
+>> -	 * When using 'no_console_suspend', the console UART must not be
+>> -	 * suspended. Since driver suspend is managed by runtime suspend,
+>> -	 * preventing runtime suspend (by returning error) will keep device
+>> -	 * active during suspend.
+>> -	 */
+>> -	if (priv->is_suspending && !console_suspend_enabled) {
+>> -		if (up && uart_console(&up->port))
+>> -			return -EBUSY;
+>> -	}
+>>  
+>>  	if (priv->habit & UART_ERRATA_CLOCK_DISABLE) {
+>>  		int ret;
+> 
+> 
+-- 
+Thomas Richard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
