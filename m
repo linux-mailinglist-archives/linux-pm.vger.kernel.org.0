@@ -2,177 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5C637AD885
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 15:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D4C87AD8C9
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 15:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbjIYNDc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Sep 2023 09:03:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47616 "EHLO
+        id S231235AbjIYNSE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Sep 2023 09:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjIYNDb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 09:03:31 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB239F;
-        Mon, 25 Sep 2023 06:03:23 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7E11CE000E;
-        Mon, 25 Sep 2023 13:03:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1695647002;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rTHQHG6X4jp4I4sSqhlYQOZSd9VR60SbfX/6KiSXcQc=;
-        b=cPr5PgddZAU3NimVKrbpIxS5r043+LHtbKBOUFuwWiyIhUNqpA/D/cIcuGXgViv1bqG5aw
-        NsqN9iSF7Uvoq68FncBaq253bY6S+1MMYPKZcV1BrImfxgfJVa/LJ/tuoWJha4XB3E75Sc
-        aKjHf6aL4qqM7B3vPhDDvy7UpsHmoRgk/VGkJ1n/lcvcJmfWr9WVAdBl1iKT2yWEtA1bsK
-        Ek9knigV3HVJ9shULTpL3/y8G4ZyNLNuEFuUIF7PE65IXSHd2GwzQPujrQf9PvMcGr3EoN
-        UwWtahEw2IurMq2PLC27r4CavaTmH3OTTuLQpFF/3JDi8l78KdLpf9Uo1LeZ6g==
-Message-ID: <0ab0dc61-aa9b-1f3f-f889-9c6e10dc62f7@bootlin.com>
-Date:   Mon, 25 Sep 2023 15:03:20 +0200
+        with ESMTP id S230208AbjIYNSD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 09:18:03 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C7AFE
+        for <linux-pm@vger.kernel.org>; Mon, 25 Sep 2023 06:17:56 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-504427aae4fso5150727e87.1
+        for <linux-pm@vger.kernel.org>; Mon, 25 Sep 2023 06:17:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1695647874; x=1696252674; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7auSkgezWSL6mQoHeXRixUmeJiJBcJSiSQX0s+bC+Hg=;
+        b=xueCLe+A0tVPe8iQ5lGUtoyuyK8ZJTWH566c0cnvMlEHWS5l6BKCCBV3LGcmaluj+k
+         hxk919XMzNi9uwetRyVCnpCkbaCmoqenIck2naKgi/3WkaHjb5RseUAm58+taVvXed5v
+         DowfNvF0cvUDv99XOTBoIPf1CwRQWllYtmTVNI374kNm0WJheKwDljKcd/ufeJ7xBr+8
+         BxiKeurnsInolZ6jpuCRAUZOaaTbThdUNDNL3TvrbA+Upe2fz+3m1Qtp5MyGMEzLJaWi
+         6+GvV7XshZQhRWaODrFIXCKAVIHwUjgJdxZ1xmeixkOI+HYev4LLUSgD4ootsVb3VMLG
+         qOBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695647874; x=1696252674;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7auSkgezWSL6mQoHeXRixUmeJiJBcJSiSQX0s+bC+Hg=;
+        b=MtJ/3bod+GzNmapvOjugPmQLmkqPKQr8D0E+Y/aLiFtTSmzNJN+uq3bxa4krB+FZA8
+         N+UpwUC/j3rQEPF6NsbpWf1hEHC/8vd2Wklu0mtXMole25Djv2447ub0w9x03iUGoATF
+         EvC/SzQmd/ns1Wu2s6etGpJrpG81j8FUGjTygEi1KFxCrQYvvrTUr0N00A7O2XYJuCe5
+         oSK6a7avw1gGJb7UE5+2xaxtA2w09fjfaZeKmZpHvp7gAu20PCFCQT1MdMH/T6kyJ3Qk
+         cXCy5KhCw9N7OYmldBMjoPJmvudEB4iRMxnXGyeFIJUGlyO+ZqwVA7U8lyEiwjz8FdQ7
+         TpwQ==
+X-Gm-Message-State: AOJu0YzBbeopIowYAY/jKcLbvSqWAZ9govqcBnqC/TENUtfEKUkVcOkS
+        MN6vrMdyEu6+WqgSd2YeMnBs2w==
+X-Google-Smtp-Source: AGHT+IEXoUei5lKEdPsc7LZJvh36BS9Wc/8t36M9yrgUxODOFj9Q1mO85xDzs/ts7iRE7KQ08A6DmQ==
+X-Received: by 2002:a05:6512:239d:b0:500:a93d:fc78 with SMTP id c29-20020a056512239d00b00500a93dfc78mr2876540lfv.31.1695647874370;
+        Mon, 25 Sep 2023 06:17:54 -0700 (PDT)
+Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
+        by smtp.gmail.com with ESMTPSA id m29-20020a056512015d00b004fe10276bbfsm1823583lfo.296.2023.09.25.06.17.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Sep 2023 06:17:53 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/9] PM: domains/opp/arm_scmi: Extend performance scaling support
+Date:   Mon, 25 Sep 2023 15:17:06 +0200
+Message-Id: <20230925131715.138411-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: serial: 8250_omap: suspend issue with console_suspend disabled
-Content-Language: en-US
-From:   Thomas Richard <thomas.richard@bootlin.com>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Kumar Udit <u-kumar1@ti.com>, Dhruva Gole <d-gole@ti.com>
-References: <59b13c93-6637-3050-c145-31be0d6c12c9@bootlin.com>
- <20230920053828.GD5282@atomide.com>
- <332111c2-f3f5-3d7f-09ef-f3ebb3f48eb0@bootlin.com>
-In-Reply-To: <332111c2-f3f5-3d7f-09ef-f3ebb3f48eb0@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: thomas.richard@bootlin.com
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 9/21/23 09:58, Thomas Richard wrote:
-> On 9/20/23 07:38, Tony Lindgren wrote:
->> Hi,
->>
->> * Thomas Richard <thomas.richard@bootlin.com> [230915 09:57]:
->>> The regression was introduced in commit 20a41a62618d "serial: 8250_omap:
->>> Use force_suspend and resume for system suspend"
->> ...
->>
->>> --- a/drivers/tty/serial/8250/8250_omap.c
->>> +++ b/drivers/tty/serial/8250/8250_omap.c
->>> @@ -1630,7 +1630,7 @@ static int omap8250_suspend(struct device *dev)
->>>         err = pm_runtime_force_suspend(dev);
->>>         flush_work(&priv->qos_work);
->>>
->>> -       return err;
->>> +       return 0;
->>>  }
->>
->> Maybe we can now just simplify things a bit here with the patch below.
->> Care to give it a try, it's compile tested only so far.
->>
-> 
-> I tested it, it works for me.
+Consumer drivers for devices that are attached to the SCMI performance domain,
+are currently not able to use the OPP library to scale performance. This series
+is enabling the support for this.
 
-Tony,
+The OPPs for SCMI performance domain are encoded in the FW, rather than being
+described through DT. To better support this, some changes have also been done
+to the OPP library and for PM domains in general. More details are available in
+the commit messages.
 
-As your proposal works well, do you plan to send a patch ?
-Or would you prefer me to send it ?
+I have based the series on the scmi tree and the for-next/scmi/updates branch,
+so the OPP and PM domain changes would require acks from Viresh and Rafael to
+be allow to be picked up and funneled through the scmi tree. Or, let's just
+discuss what works best for us in this regards.
 
-Regards,
+Note that, I am running this on the Qemu virt platform with Optee running an
+SCMI server. If you want some more details about my test setup, I can certainly
+share this with you, just let me know.
 
-Thomas
+Looking forward to your feedback!
 
-> 
->>> Once the omap8250_suspend doesn't return an error, the suspend sequence
->>> can continue, but I get an other issue.
->>> This issue is not related to commit 20a41a62618d, it has already been
->>> present.
->>> The power domain of the console is powered-off, so no more messages are
->>> printed, and the SoC is stucked.
->>> As the uart port is used as console, we don't want to power-off it.
->>> My workaround is to set the corresponding power domain to
->>> GENPD_FLAG_ALWAYS_ON, so the uart port is not powered-off.
->>
->> The runtime PM usage count should keep the related power domain on though,
->> sounds like this issue somewhere else if the power domains get force
->> suspended with runtime PM usage count?
->>
->> Regards,
->>
->> Tony
->>
->> 8< ------------------------------
->> diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
->> --- a/drivers/tty/serial/8250/8250_omap.c
->> +++ b/drivers/tty/serial/8250/8250_omap.c
->> @@ -1617,7 +1617,7 @@ static int omap8250_suspend(struct device *dev)
->>  {
->>  	struct omap8250_priv *priv = dev_get_drvdata(dev);
->>  	struct uart_8250_port *up = serial8250_get_port(priv->line);
->> -	int err;
->> +	int err = 0;
->>  
->>  	serial8250_suspend_port(priv->line);
->>  
->> @@ -1627,7 +1627,8 @@ static int omap8250_suspend(struct device *dev)
->>  	if (!device_may_wakeup(dev))
->>  		priv->wer = 0;
->>  	serial_out(up, UART_OMAP_WER, priv->wer);
->> -	err = pm_runtime_force_suspend(dev);
->> +	if (uart_console(&up->port) && console_suspend_enabled)
->> +		err = pm_runtime_force_suspend(dev);
->>  	flush_work(&priv->qos_work);
->>  
->>  	return err;
->> @@ -1636,11 +1637,15 @@ static int omap8250_suspend(struct device *dev)
->>  static int omap8250_resume(struct device *dev)
->>  {
->>  	struct omap8250_priv *priv = dev_get_drvdata(dev);
->> +	struct uart_8250_port *up = serial8250_get_port(priv->line);
->>  	int err;
->>  
->> -	err = pm_runtime_force_resume(dev);
->> -	if (err)
->> -		return err;
->> +	if (uart_console(&up->port) && console_suspend_enabled) {
->> +		err = pm_runtime_force_resume(dev);
->> +		if (err)
->> +			return err;
->> +	}
->> +
->>  	serial8250_resume_port(priv->line);
->>  	/* Paired with pm_runtime_resume_and_get() in omap8250_suspend() */
->>  	pm_runtime_mark_last_busy(dev);
->> @@ -1717,16 +1722,6 @@ static int omap8250_runtime_suspend(struct device *dev)
->>  
->>  	if (priv->line >= 0)
->>  		up = serial8250_get_port(priv->line);
->> -	/*
->> -	 * When using 'no_console_suspend', the console UART must not be
->> -	 * suspended. Since driver suspend is managed by runtime suspend,
->> -	 * preventing runtime suspend (by returning error) will keep device
->> -	 * active during suspend.
->> -	 */
->> -	if (priv->is_suspending && !console_suspend_enabled) {
->> -		if (up && uart_console(&up->port))
->> -			return -EBUSY;
->> -	}
->>  
->>  	if (priv->habit & UART_ERRATA_CLOCK_DISABLE) {
->>  		int ret;
-> 
-> 
+Kind regards
+Ulf Hansson
+
+
+Ulf Hansson (9):
+  PM: domains: Introduce dev_pm_domain_set_performance_state()
+  PM: domains: Implement the ->set_performance_state() callback for
+    genpd
+  OPP: Add dev_pm_opp_add_dynamic() to allow more flexibility
+  OPP: Extend dev_pm_opp_data with a level
+  OPP: Switch to use dev_pm_domain_set_performance_state()
+  OPP: Extend support for the opp-level beyond required-opps
+  firmware: arm_scmi: Simplify error path in scmi_dvfs_device_opps_add()
+  firmware: arm_scmi: Specify the performance level when adding an OPP
+  firmware: arm_scmi: Add generic OPP support to the SCMI performance
+    domain
+
+ drivers/base/power/common.c             | 21 ++++++++++
+ drivers/base/power/domain.c             | 33 +++++++++------
+ drivers/firmware/arm_scmi/perf.c        | 22 +++++-----
+ drivers/opp/core.c                      | 54 +++++++++++++++++++------
+ drivers/opp/of.c                        | 10 +++--
+ drivers/opp/opp.h                       |  2 +-
+ drivers/pmdomain/arm/scmi_perf_domain.c | 34 ++++++++++++++++
+ include/linux/pm.h                      |  2 +
+ include/linux/pm_domain.h               |  6 +++
+ include/linux/pm_opp.h                  | 31 ++++++++++++--
+ 10 files changed, 168 insertions(+), 47 deletions(-)
+
 -- 
-Thomas Richard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.34.1
 
