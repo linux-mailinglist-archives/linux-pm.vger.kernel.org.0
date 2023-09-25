@@ -2,42 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 856427AD4D0
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 11:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8FE7AD4DC
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 11:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229473AbjIYJut (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Sep 2023 05:50:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39968 "EHLO
+        id S229579AbjIYJx6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Sep 2023 05:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjIYJut (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 05:50:49 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E710A3;
-        Mon, 25 Sep 2023 02:50:43 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 322F1DA7;
-        Mon, 25 Sep 2023 02:51:21 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 272E33F59C;
-        Mon, 25 Sep 2023 02:50:42 -0700 (PDT)
-Date:   Mon, 25 Sep 2023 10:50:39 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>
-Subject: Re: [PATCH] firmware: arm_scmi: Move power-domain driver to the
- pmdomain dir
-Message-ID: <20230925095039.b4abieokjgxmobhs@bogus>
-References: <20230919121605.7304-1-ulf.hansson@linaro.org>
- <20230921113328.3208651-1-sudeep.holla@arm.com>
+        with ESMTP id S229437AbjIYJx5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 05:53:57 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3ADAC2;
+        Mon, 25 Sep 2023 02:53:51 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BED5866072FC;
+        Mon, 25 Sep 2023 10:53:49 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1695635630;
+        bh=9wVVMeW0iA/EuwP7KjcnyVlsmaFHBI4yGmfpP4XGrqQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ekA3onxVHDOjI6teW7l8DaE4DjKhVBGp5ZrZX12NiDJnolL1QPg2FTgfcLh4Mz093
+         8/lHOJbMCjyOSTsLhO9J1nov9S4XvxxkC4q6Rsjx4LPOIQ/o/kykwJDM2rpmFEPLlH
+         3n3jnH42Gtq4JziLqIftQCqGM+QYWt/RJ5hTpbLLFf+kq4y0i1JRCdyeY5x3J4a+B0
+         1roPFVMO3DMZtIIe+FUsAd6R0hssXtuQ0Jzbd4fzk8e0nZUOKQh0mGGoiyyd1p8j1z
+         IIPec14m4/WOFNmBKwIAZv/LvG/ijI423E175z7Hg9pLlKewOZO+1y/l0Tp6ZpwQdm
+         SZPr1dL/axotA==
+Message-ID: <9fd97bac-d180-14bc-09ce-878575f0cef7@collabora.com>
+Date:   Mon, 25 Sep 2023 11:53:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230921113328.3208651-1-sudeep.holla@arm.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH] thermal: core: Check correct temperature for thermal trip
+ notification
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     kernel@collabora.com, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20230922192724.295129-1-nfraprado@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230922192724.295129-1-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,35 +62,20 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 21, 2023 at 12:33:28PM +0100, Sudeep Holla wrote:
-> To simplify with maintenance let's move the Arm SCMI power-domain driver
-> to the new pmdomain directory.
+Il 22/09/23 21:27, Nícolas F. R. A. Prado ha scritto:
+> The thermal trip down notification should be triggered when the
+> temperature goes below the trip temperature minus the hysteresis. But
+> while the temperature is correctly checked against that, the last
+> temperature is instead compared against the trip point temperature. The
+> end result is that the notification won't always be triggered, only when
+> the temperature happens to drop quick enough so that the last
+> temperature was still above the trip point temperature.
 > 
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Cristian Marussi <cristian.marussi@arm.com>
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> ---
+> Fix the incorrect check.
 > 
-> Hi Ulf,
+> Fixes: 55cdf0a283b8 ("thermal: core: Add notifications call in the framework")
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 > 
-> If you are happy with this, please cck. I would like to take this along
-> with your scmi_perf_domain change as part of you series.
-> 
-> Regards,
-> Sudeep
-> 
->  drivers/firmware/arm_scmi/Makefile                           | 1 -
->  drivers/pmdomain/arm/Makefile                                | 1 +
->  drivers/{firmware/arm_scmi => pmdomain/arm}/scmi_pm_domain.c | 0
->  3 files changed, 1 insertion(+), 1 deletion(-)
->  rename drivers/{firmware/arm_scmi => pmdomain/arm}/scmi_pm_domain.c (100%)
->
 
-Applied to sudeep.holla/linux (for-next/scmi/updates), thanks!
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-[1/1] firmware: arm_scmi: firmware: arm_scmi: Move power-domain driver to thepmdomain dir
-      https://git.kernel.org/sudeep.holla/c/af78e5c309c4
-
--- 
-Regards,
-Sudeep
