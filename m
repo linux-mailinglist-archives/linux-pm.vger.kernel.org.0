@@ -2,45 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2A657AD1E8
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 09:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 882CD7AD245
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 09:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232280AbjIYHlU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Sep 2023 03:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46960 "EHLO
+        id S232434AbjIYHrd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Sep 2023 03:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232251AbjIYHlS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 03:41:18 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70850EE
-        for <linux-pm@vger.kernel.org>; Mon, 25 Sep 2023 00:41:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=NWBk5b0dW5WKTXzL0sgz+ZHsJKEjA7PFiYwSgbCsBbk=; b=1oXq8xzlAGq4vvPP5NmOn+vf6i
-        SYt7cuId/p3EAOZt4tWEgZ+RyIoQrobAxGTgOfYQs9irI8YiQr3UNwD5ZVI547YVMkeWMpamZxtnL
-        AE8Or8/OPK1KBXsrTsDgubkSak+kdJFnTaUUKPi4jA0gUzLrCRjwl7dcXbg6JLRYUEXnTil6jgFjC
-        1FFjme7dI0ukSXUv2yukL7YzT7Lfsu4asVhh+wlcw1cRXFLM2o1JtFCOv1SQlSD+yvf4kWuQBZ/Nn
-        elwMhlyV9RrtBKuAAaSrsxkLu8fzUSDXN0nQNvG7sOaw1ur2tijxX+ttrqrpSL8TcA+cEr1cgCPXG
-        mGseERkw==;
-Received: from [2001:4bb8:180:ac72:5d00:ec60:acf5:548c] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qkgDI-00Ddar-0e;
-        Mon, 25 Sep 2023 07:41:05 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com
-Cc:     linux-pm@vger.kernel.org
-Subject: [PATCH] PM: hibernate: fix the kerneldoc comment for swsusp_check and swsusp_close
-Date:   Mon, 25 Sep 2023 09:40:58 +0200
-Message-Id: <20230925074058.149779-1-hch@lst.de>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S232395AbjIYHrb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 03:47:31 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05865DA
+        for <linux-pm@vger.kernel.org>; Mon, 25 Sep 2023 00:47:23 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-401187f8071so39516355e9.0
+        for <linux-pm@vger.kernel.org>; Mon, 25 Sep 2023 00:47:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1695628042; x=1696232842; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DF70GKTjx6OLz0gFCNQLYyT2r+1t8lkHa2HhGDhuGTc=;
+        b=hH8gFqZOWsojPUw1Tjmrk6tsefZj7JMeYJJIH0rK5JkNn0N4LBht/rIJBU5IFwT7Vr
+         QQ8fPBFK59pYfKyRxNXuenXx0+7wsMeQcJgzXRZJ1hSgC6Cdj/Bw79oBtpOVG9Kli4F/
+         JAvq7Ki+SDrqQFMUn5hIwyTz6wfpJHs2tljWED2R2LZ8C02tDda+GrM5TQ5f2nPSwoZK
+         5yeMxD6h3Cg1Z0GQ4E6INB0n1KXX2QiGv6fS+DJSvVMKIbCvaIDf5J5LV+6Q8IogWUNO
+         F2T+VkgitHPf/HWraqb+Ai2rKarFudGPvIDYeFW4BeDUVP1pwNXvZugShmIZq3VtVlJ/
+         HVNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695628042; x=1696232842;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DF70GKTjx6OLz0gFCNQLYyT2r+1t8lkHa2HhGDhuGTc=;
+        b=ASpK5LtUneknEI+q03DEyQp0aQlybI6dRNCkBoo7ncuT6lbRBMpOQX5YLX+/SZhyxo
+         ObldTqVmaad4m4H1Vimi3RRIn7ElINvJsDEwL5ARvkUAPOGRnEW+n45a+5Wo2LNuUcnb
+         cPkBmuU4w2BD17hrkpY8qlTYIIfrgCzuEwByCpyaAurHeAInn8jnKVE7TpObkDD6kJkn
+         jtRfsNaDw/lZgZVXpiCBbv5pONtFcAXbnnO/AqZR8s9N6QF3xeIE9dpxg0hpFqV53Jgu
+         W7cwCh8CEGrTY9h4Sjf+DvxGVDST3Hq0goqc5zKaHGNWKexzPngCQPVS8OBOntwNiWIQ
+         VFdA==
+X-Gm-Message-State: AOJu0Yw5/vyolotFQUfJH5kbPqv1MwrIIKWWrL7PR+qqP9fz3EqdphIQ
+        i2AH1MHHUfoYPYt1LNyQKVXs4Q==
+X-Google-Smtp-Source: AGHT+IFFYN1bv/ZG/uHXr8B5tLK175aKWONDiwgbeX6drpT5TaaaoFZ8hUkT0yfaRVtHZrnkUY4RpQ==
+X-Received: by 2002:a1c:6a1a:0:b0:403:c70b:b688 with SMTP id f26-20020a1c6a1a000000b00403c70bb688mr4857963wmc.6.1695628042233;
+        Mon, 25 Sep 2023 00:47:22 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:a927:1e5c:85b4:9da1? ([2a05:6e02:1041:c10:a927:1e5c:85b4:9da1])
+        by smtp.googlemail.com with ESMTPSA id iw7-20020a05600c54c700b003fc16ee2864sm9882636wmb.48.2023.09.25.00.47.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Sep 2023 00:47:21 -0700 (PDT)
+Message-ID: <883b0780-1f89-40a4-fbd0-a3d4845c2826@linaro.org>
+Date:   Mon, 25 Sep 2023 09:47:21 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] thermal: imx8mm_thermal: Fix function pointer declaration
+ by adding identifier name
+Content-Language: en-US
+To:     Bragatheswaran Manickavel <bragathemanick0908@gmail.com>,
+        rafael@kernel.org, rui.zhang@intel.com, amitk@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com
+Cc:     linux-imx@nxp.com, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230917083443.3220-1-bragathemanick0908@gmail.com>
+ <786d197a-a2b5-2507-f5d7-24e8224a3922@gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <786d197a-a2b5-2507-f5d7-24e8224a3922@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,40 +79,53 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The comments for both swsusp_check and swsusp_close don't actually
-describe what they are doing.
+On 22/09/2023 11:31, Bragatheswaran Manickavel wrote:
+> 
+> On 17/09/23 14:04, Bragatheswaran Manickavel wrote:
+>> Added identifier names to respective definitions for fix
+>> warnings reported by checkpatch.pl
+>>
+>> WARNING: function definition argument 'void *' should also have an 
+>> identifier name
+>> WARNING: function definition argument 'int *' should also have an 
+>> identifier name
+>> Signed-off-by: Bragatheswaran Manickavel <bragathemanick0908@gmail.com>
+>> ---
+>>   drivers/thermal/imx8mm_thermal.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/thermal/imx8mm_thermal.c 
+>> b/drivers/thermal/imx8mm_thermal.c
+>> index 14111ccf6e4c..5dc6c18f12df 100644
+>> --- a/drivers/thermal/imx8mm_thermal.c
+>> +++ b/drivers/thermal/imx8mm_thermal.c
+>> @@ -78,7 +78,7 @@
+>>   struct thermal_soc_data {
+>>       u32 num_sensors;
+>>       u32 version;
+>> -    int (*get_temp)(void *, int *);
+>> +    int (*get_temp)(void *data, int *temp);
+>>   };
+>>   struct tmu_sensor {
+> 
+> Hi Team, Could someone help in reviewing it.
 
-Just removing the comments would probably better, but as the file is
-full of useless kerneldoc comments for non-exported symbols this fits
-in better with the style.
+Please no more "gentle reminder"
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- kernel/power/swap.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Read:
 
-diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index 48ec6a8ef9c445..b9763f2f632b8a 100644
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -1513,7 +1513,7 @@ int swsusp_read(unsigned int *flags_p)
- static void *swsusp_holder;
- 
- /**
-- * swsusp_check - Check for swsusp signature in the resume device
-+ * swsusp_check - Open the resume device and check for the swsusp signature.
-  * @exclusive: Open the resume device exclusively.
-  */
- 
-@@ -1567,7 +1567,7 @@ int swsusp_check(bool exclusive)
- }
- 
- /**
-- * swsusp_close - close swap device.
-+ * swsusp_close - close resume device.
-  * @exclusive: Close the resume device which is exclusively opened.
-  */
- 
+https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/Documentation/process/submitting-patches.rst
+
+Especially, the section _9_
+
+Thanks
+
+    -- Daniel
+
 -- 
-2.39.2
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
