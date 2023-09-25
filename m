@@ -2,114 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4616C7AD975
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 15:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A2A7ADAA4
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 16:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbjIYNp7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Sep 2023 09:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54354 "EHLO
+        id S232203AbjIYOxT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Sep 2023 10:53:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231358AbjIYNp6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 09:45:58 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64266116;
-        Mon, 25 Sep 2023 06:45:50 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qkluH-0001kB-8Q; Mon, 25 Sep 2023 15:45:49 +0200
-Message-ID: <e049aa41-b136-4071-850f-d06b47fe67a1@leemhuis.info>
-Date:   Mon, 25 Sep 2023 15:45:48 +0200
+        with ESMTP id S232364AbjIYOxM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 10:53:12 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E8A193
+        for <linux-pm@vger.kernel.org>; Mon, 25 Sep 2023 07:53:00 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2c16757987fso22003251fa.3
+        for <linux-pm@vger.kernel.org>; Mon, 25 Sep 2023 07:53:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1695653578; x=1696258378; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=12lvvZVko7HwcFd7BVr7FRaCYZcG3/6yf/N02oFBsK8=;
+        b=znnFwVGn+zck2eznawy53HuyrlhwhEcgK90aK6K8nOemWEjHO5lc1uOQYuVTiZaTwf
+         shGOESxGUXmzoqCzqUkLzDn5KjK/kGSnjqkLWxL/rrgzkK7axQq9kJT62xROgrazZV8L
+         Er9u6sq3F1fGoca3K4gY33FCwvRvS2VO3gsjnyOX90CiRsCfrQkRbHgXeXP6tzQFH7Ic
+         x48he8NVvebbENIMVc2Bjkgu3WOkf/3YSW5jR4CaJkI4uxu0tsktnlNbIuqq8ZSO/8Ac
+         22Xwd0Mlnot3pcqemqLyIbSQfGHee6RYyUB1DJbYhIDvseBqgQtMD+SX4pPm65govz9u
+         /06g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695653578; x=1696258378;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=12lvvZVko7HwcFd7BVr7FRaCYZcG3/6yf/N02oFBsK8=;
+        b=DG9yUZ5Dy/185w2JeJlIgbs59umvMkurcxmvArGUuQGPABujVLH4Pk3L8F+rYLaZ9g
+         KkNOK7ETm+Rf4G9pyodd/ZspVKlG/WuX0GVuqk3vb/GBlQwcl9JGNhCE2fC2wKApdSny
+         DsatJ7Y3o9eFUbXB6P9tl4CLUe3b6mDTD46Kp0GjkrYwQjA5AaBfJJuZT/x0n6tAK0VA
+         jYgI6WrXdj0BJG77sBo94Jm/FC40b3LYSBdyB/wOqmBieTJm2oWZAXrdqlX+K1cyLi9o
+         XdrEWNqvEB4ksOrByGTgVlb4qF3OKl70rfuj8D3FvWHDMSI2BwlxP9cwq86dl58RUpbJ
+         l/Dw==
+X-Gm-Message-State: AOJu0YyJcEajWzQif69KTTJUguGaHspedlMnlwgNcik8dzUEZWqhUFMy
+        I613Yr1Gb1omIrlbKTSRK8Yjs1//WzupNmFFm2c=
+X-Google-Smtp-Source: AGHT+IFDQpUk2VXmAw55MR/ZBzMc5xEwHe1FQv75sipuCMabU5D0JcaGYP7gRdWeBjtjiRNoVPTmdA==
+X-Received: by 2002:a2e:984e:0:b0:2bc:eceb:6a4b with SMTP id e14-20020a2e984e000000b002bceceb6a4bmr5683898ljj.28.1695653578381;
+        Mon, 25 Sep 2023 07:52:58 -0700 (PDT)
+Received: from [192.168.1.172] ([93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id md1-20020a170906ae8100b009a1be9c29d7sm6455357ejb.179.2023.09.25.07.52.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Sep 2023 07:52:57 -0700 (PDT)
+Message-ID: <a16e1b9e-06b7-0dce-124e-f13c672d779d@baylibre.com>
+Date:   Mon, 25 Sep 2023 16:52:56 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: s2idle stopped working with 6.6-rc on Thinkpad T14 G1 (AMD)
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-References: <0d84fb59-4628-4c7f-ab1a-f58889ef2c9b@leemhuis.info>
- <e556ae63-0539-4b34-b33f-5f5beb4183d1@amd.com>
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Autocrypt: addr=linux@leemhuis.info; keydata=
- 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 n7RI
-In-Reply-To: <e556ae63-0539-4b34-b33f-5f5beb4183d1@amd.com>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v4 2/5] thermal/drivers/mediatek/lvts_thermal: Add suspend
+ and resume
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        wenst@chromium.org, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com, nfraprado@collabora.com,
+        abailon@baylibre.com, khilman@baylibre.com
+References: <20230530195132.2286163-1-bero@baylibre.com>
+ <20230530195132.2286163-3-bero@baylibre.com>
+ <371790cd-5a7c-8fa6-cc38-3a3680525092@collabora.com>
+ <b544e079-c9de-23d3-80f7-cff89293eeb5@linaro.org>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <b544e079-c9de-23d3-80f7-cff89293eeb5@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1695649551;a712ef3c;
-X-HE-SMSGID: 1qkluH-0001kB-8Q
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25.09.23 15:25, Mario Limonciello wrote:
-> On 9/25/2023 05:55, Thorsten Leemhuis wrote:
->> Hi Mario! Did you by chance hear anything about lock-ups on resume with
->> mainline affecting AMD systems? I'm asking, as s2idle stopped working
->> for me with 6.6-rc on my Thinkpad T14 G1 (AMD). 
-> You're the first report I've heard of this.
 
-Thx for taking the time and replying.
 
-> Yeah not too much useful stuff here unfortunately.  Can you check
-> /var/lib/systemd/pstore to see if you got a traceback for whatever
-> caused the problem?
-
-Sadly nothing there.
-
->> Dmesg for 6.6-rc3 (with a USB-C dock, but problem happens without it,
->> too):
->> https://www.leemhuis.info/files/misc/dmesg-6.6_rc3
+On 23/08/2023 09:48, Daniel Lezcano wrote:
+> On 31/05/2023 10:05, AngeloGioacchino Del Regno wrote:
 > 
-> Being G1, can you try "amdgpu.mcbp=0" on kernel command line?
+> [ ... ]
+> 
+>>>   static const struct lvts_ctrl_data mt8195_lvts_mcu_data_ctrl[] = {
+>>>       {
+>>>           .cal_offset = { 0x04, 0x07 },
+>>> @@ -1268,6 +1300,8 @@ MODULE_DEVICE_TABLE(of, lvts_of_match);
+>>>   static struct platform_driver lvts_driver = {
+>>>       .probe = lvts_probe,
+>>>       .remove = lvts_remove,
+>>> +    .suspend = lvts_suspend,
+>>
+>> Should we do that in noirq handlers?
+>> We're risking to miss a thermal interrupt.
+> 
+> I'm not sure missing a thermal interrupt is a problem in this context 
+> but we may go in the irq routine with an undefined state sensor setup 
+> (eg. the internal clock stopped in the suspend and then read the sensor 
+> in the isr).
+> 
+> IMO, using suspend_noirq and resume_noirq may be required here.
+> 
+> Alexandre are you taking over the next iteration?
+> 
+> 
 
-Just tried it, but didn't help.
+Hi Daniel,
 
-Guess it bisection time then...
+Sorry I missed your message...
+I don't think taking over the next iteration, Bernhard should continue. 
+Let me check internally to be sure. As I understood, the next change 
+should be heavy.
 
-Thx again for your reply. Ciao, Thorsten
+-- 
+Regards,
+Alexandre
