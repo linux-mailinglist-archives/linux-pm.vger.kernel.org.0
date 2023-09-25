@@ -2,364 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A4F7AD3F9
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 11:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F40F37AD406
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 11:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233108AbjIYJAN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Sep 2023 05:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
+        id S233136AbjIYJCC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Sep 2023 05:02:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233111AbjIYJAL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 05:00:11 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8D86100;
-        Mon, 25 Sep 2023 02:00:03 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CC8A11424;
-        Mon, 25 Sep 2023 02:00:41 -0700 (PDT)
-Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A02E83F5A1;
-        Mon, 25 Sep 2023 02:00:00 -0700 (PDT)
-Date:   Mon, 25 Sep 2023 09:59:58 +0100
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Martin Botka <martin.botka@somainline.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        devicetree@vger.kernel.org, Alan Ma <tech@biqu3d.com>,
-        Luke Harrison <bttuniversity@biqu3d.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rogerio Goncalves <rogerlz@gmail.com>,
-        Martin Botka <martin@biqu3d.com>
-Subject: Re: [PATCH 4/6] cpufreq: sun50i: Add H616 support
-Message-ID: <20230925095958.746d3f69@donnerap.manchester.arm.com>
-In-Reply-To: <20230904-cpufreq-h616-v1-4-b8842e525c43@somainline.org>
-References: <20230904-cpufreq-h616-v1-0-b8842e525c43@somainline.org>
-        <20230904-cpufreq-h616-v1-4-b8842e525c43@somainline.org>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        with ESMTP id S232819AbjIYJB7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 05:01:59 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220EB9B;
+        Mon, 25 Sep 2023 02:01:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1695632508;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=p3gJfj/3kfxn+U4fkywDtekORbYYQSnsyRZS0hPbR8o=;
+        b=R7UcGuvmwCsVxtj/Jm7cuL9WdHKFGpY4ZACoPoPWLECdh8e0bdAWgkPmNTO18YdI8WY1aK
+        zrXnHHQLVoUKXGRc4pmJgjYvLaiJvulIzfizRuj7NALZ9HZaK4cZ1ZQlIzpqdtlmEo/6yK
+        MqHdmfqbSheUJ2dMjzf9ncbT+YKQ5+4=
+Message-ID: <7537e654bfda45ecac953392267e271e37d28ea4.camel@crapouillou.net>
+Subject: Re: [PATCH v4] PM: Fix symbol export for _SIMPLE_ variants of
+ _PM_OPS()
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Raag Jadav <raag.jadav@intel.com>, rafael@kernel.org,
+        len.brown@intel.com, pavel@ucw.cz, Jonathan.Cameron@huawei.com,
+        andriy.shevchenko@linux.intel.com, rf@opensource.cirrus.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mallikarjunappa.sangannavar@intel.com, bala.senthil@intel.com
+Date:   Mon, 25 Sep 2023 11:01:45 +0200
+In-Reply-To: <20230922054552.3570-1-raag.jadav@intel.com>
+References: <20230922054552.3570-1-raag.jadav@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 04 Sep 2023 17:57:04 +0200
-Martin Botka <martin.botka@somainline.org> wrote:
-
-Hi Martin,
-
-> AllWinner H616 SoC has few revisions that support different list
-> of uV and frequencies.
-> 
-> Some revisions have the same NVMEM value and thus we have to check
-> the SoC revision from SMCCC to differentiate between them.
-> 
-> Signed-off-by: Martin Botka <martin.botka@somainline.org>
-> ---
->  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 149 ++++++++++++++++++++++++++++-----
->  1 file changed, 126 insertions(+), 23 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> index 4321d7bbe769..19c126fb081e 100644
-> --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> @@ -10,6 +10,7 @@
->  
->  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
->  
-> +#include <linux/arm-smccc.h>
->  #include <linux/cpu.h>
->  #include <linux/module.h>
->  #include <linux/nvmem-consumer.h>
-> @@ -23,20 +24,94 @@
->  #define NVMEM_MASK	0x7
->  #define NVMEM_SHIFT	5
->  
-> +struct sunxi_cpufreq_soc_data {
-> +	int (*efuse_xlate)(u32 *versions, u32 *efuse, char *name, size_t len);
-> +	u8 ver_freq_limit;
-> +};
-> +
->  static struct platform_device *cpufreq_dt_pdev, *sun50i_cpufreq_pdev;
->  
-> +static int sun50i_h616_efuse_xlate(u32 *versions, u32 *efuse, char *name, size_t len)
-> +{
-> +	int value = 0;
-> +	u32 speedgrade = 0;
-> +	u32 i;
-> +	int ver_bits = arm_smccc_get_soc_id_revision();
-> +
-> +	if (len > 4) {
-> +		pr_err("Invalid nvmem cell length\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	for (i = 0; i < len; i++)
-> +		speedgrade |= (efuse[i] << (i * 8));
-> +
-> +	switch (speedgrade) {
-> +	case 0x2000:
-> +		value = 0;
-> +		break;
-> +	case 0x2400:
-> +	case 0x7400:
-> +	case 0x2c00:
-> +	case 0x7c00:
-> +		if (ver_bits <= 1) {
-> +			/* ic version A/B */
-> +			value = 1;
-> +		} else {
-> +			/* ic version C and later version */
-> +			value = 2;
-> +		}
-> +		break;
-> +	case 0x5000:
-> +	case 0x5400:
-> +	case 0x6000:
-> +		value = 3;
-> +		break;
-> +	case 0x5c00:
-> +		value = 4;
-> +		break;
-> +	case 0x5d00:
-> +	default:
-> +		value = 0;
-> +	}
-> +	*versions = (1 << value);
-> +	snprintf(name, MAX_NAME_LEN, "speed%d", value);
-> +	return 0;
-> +}
-> +
-> +static int sun50i_h6_efuse_xlate(u32 *versions, u32 *efuse, char *name, size_t len)
-> +{
-> +	int efuse_value = (*efuse >> NVMEM_SHIFT) & NVMEM_MASK;
-> +
-> +	/*
-> +	 * We treat unexpected efuse values as if the SoC was from
-> +	 * the slowest bin. Expected efuse values are 1-3, slowest
-> +	 * to fastest.
-> +	 */
-> +	if (efuse_value >= 1 && efuse_value <= 3)
-> +		*versions = efuse_value - 1;
-> +	else
-> +		*versions = 0;
-> +
-> +	snprintf(name, MAX_NAME_LEN, "speed%d", *versions);
-> +	return 0;
-> +}
-> +
->  /**
->   * sun50i_cpufreq_get_efuse() - Determine speed grade from efuse value
-> + * @soc_data: Struct containing soc specific data & functions
->   * @versions: Set to the value parsed from efuse
-> + * @name: Set to the name of speed
->   *
->   * Returns 0 if success.
->   */
-> -static int sun50i_cpufreq_get_efuse(u32 *versions)
-> +static int sun50i_cpufreq_get_efuse(const struct sunxi_cpufreq_soc_data *soc_data,
-> +				    u32 *versions, char *name)
->  {
->  	struct nvmem_cell *speedbin_nvmem;
->  	struct device_node *np;
->  	struct device *cpu_dev;
-> -	u32 *speedbin, efuse_value;
-> +	u32 *speedbin;
->  	size_t len;
->  	int ret;
->  
-> @@ -48,9 +123,9 @@ static int sun50i_cpufreq_get_efuse(u32 *versions)
->  	if (!np)
->  		return -ENOENT;
->  
-> -	ret = of_device_is_compatible(np,
-> -				      "allwinner,sun50i-h6-operating-points");
-> -	if (!ret) {
-> +	if (of_device_is_compatible(np, "allwinner,sun50i-h6-operating-points")) {
-> +	} else if (of_device_is_compatible(np, "allwinner,sun50i-h616-operating-points")) {
-> +	} else {
->  		of_node_put(np);
->  		return -ENOENT;
->  	}
-> @@ -66,17 +141,9 @@ static int sun50i_cpufreq_get_efuse(u32 *versions)
->  	if (IS_ERR(speedbin))
->  		return PTR_ERR(speedbin);
->  
-> -	efuse_value = (*speedbin >> NVMEM_SHIFT) & NVMEM_MASK;
-> -
-> -	/*
-> -	 * We treat unexpected efuse values as if the SoC was from
-> -	 * the slowest bin. Expected efuse values are 1-3, slowest
-> -	 * to fastest.
-> -	 */
-> -	if (efuse_value >= 1 && efuse_value <= 3)
-> -		*versions = efuse_value - 1;
-> -	else
-> -		*versions = 0;
-> +	ret = soc_data->efuse_xlate(versions, speedbin, name, len);
-> +	if (ret)
-> +		return ret;
->  
->  	kfree(speedbin);
->  	return 0;
-> @@ -84,25 +151,30 @@ static int sun50i_cpufreq_get_efuse(u32 *versions)
->  
->  static int sun50i_cpufreq_nvmem_probe(struct platform_device *pdev)
->  {
-> +	const struct of_device_id *match;
-> +	const struct sunxi_cpufreq_soc_data *soc_data;
->  	int *opp_tokens;
->  	char name[MAX_NAME_LEN];
->  	unsigned int cpu;
-> -	u32 speed = 0;
-> +	u32 version = 0;
->  	int ret;
->  
-> +	match = dev_get_platdata(&pdev->dev);
-> +	if (!match)
-> +		return -EINVAL;
-> +	soc_data = match->data;
-> +
->  	opp_tokens = kcalloc(num_possible_cpus(), sizeof(*opp_tokens),
->  			     GFP_KERNEL);
->  	if (!opp_tokens)
->  		return -ENOMEM;
->  
-> -	ret = sun50i_cpufreq_get_efuse(&speed);
-> +	ret = sun50i_cpufreq_get_efuse(match->data, &version, name);
->  	if (ret) {
->  		kfree(opp_tokens);
->  		return ret;
->  	}
->  
-> -	snprintf(name, MAX_NAME_LEN, "speed%d", speed);
-> -
->  	for_each_possible_cpu(cpu) {
->  		struct device *cpu_dev = get_cpu_device(cpu);
->  
-> @@ -117,6 +189,16 @@ static int sun50i_cpufreq_nvmem_probe(struct platform_device *pdev)
->  			pr_err("Failed to set prop name\n");
->  			goto free_opp;
->  		}
-> +
-> +		if (soc_data->ver_freq_limit) {
-> +			opp_tokens[cpu] = dev_pm_opp_set_supported_hw(cpu_dev,
-> +								  &version, 1);
-
-This will overwrite opp_tokens[cpu] from the dev_pm_opp_set_prop_name()
-call above. As the DTs stand today, only one of them would actually
-provide OPPs, but still they reserve data structures and return discrete
-tokens, so all of them would need to be "put" at cleanup/removal.
-
-One solution I found is to pull in the two wrappers of
-dev_pm_opp_set_prop_name() and dev_pm_opp_set_supported_hw(), and combine them in one call.
-The dev_pm_opp_config struct can have multiple fields set, and
-dev_pm_opp_set_config() will try all of them.
-
-> +			if (opp_tokens[cpu] < 0) {
-> +				ret = opp_tokens[cpu];
-> +				pr_err("Failed to set hw\n");
-> +				goto free_opp;
-> +			}
-> +		}
->  	}
->  
->  	cpufreq_dt_pdev = platform_device_register_simple("cpufreq-dt", -1,
-> @@ -132,6 +214,8 @@ static int sun50i_cpufreq_nvmem_probe(struct platform_device *pdev)
->  free_opp:
->  	for_each_possible_cpu(cpu)
->  		dev_pm_opp_put_prop_name(opp_tokens[cpu]);
-> +		if (soc_data->ver_freq_limit)
-> +			dev_pm_opp_put_supported_hw(opp_tokens[cpu]);
-
-See above, that does not make sense, since you "put" the same token again
-as in the dev_pm_opp_put_prop_name() call right before. Would be
-automatically solved by using only one dev_pm_opp_set_config() above.
-
->  	kfree(opp_tokens);
->  
->  	return ret;
-> @@ -140,12 +224,21 @@ static int sun50i_cpufreq_nvmem_probe(struct platform_device *pdev)
->  static int sun50i_cpufreq_nvmem_remove(struct platform_device *pdev)
->  {
->  	int *opp_tokens = platform_get_drvdata(pdev);
-> +	const struct of_device_id *match;
-> +	const struct sunxi_cpufreq_soc_data *soc_data;
->  	unsigned int cpu;
->  
-> +	match = dev_get_platdata(&pdev->dev);
-> +	if (!match)
-> +		return -EINVAL;
-> +	soc_data = match->data;
-> +
->  	platform_device_unregister(cpufreq_dt_pdev);
->  
->  	for_each_possible_cpu(cpu)
->  		dev_pm_opp_put_prop_name(opp_tokens[cpu]);
-> +		if (soc_data->ver_freq_limit)
-> +			dev_pm_opp_put_supported_hw(opp_tokens[cpu]);
->  
->  	kfree(opp_tokens);
->  
-> @@ -160,8 +253,18 @@ static struct platform_driver sun50i_cpufreq_driver = {
->  	},
->  };
->  
-> +static const struct sunxi_cpufreq_soc_data sun50i_h616_data = {
-> +	.efuse_xlate = sun50i_h616_efuse_xlate,
-> +	.ver_freq_limit = true,
-
-As hinted above, the framework allows for both to be tried, and will do
-the right thing depending on what the DT provides, so there is no need for
-this flag.
-
-Cheers,
-Andre
-
-> +};
-> +
-> +static const struct sunxi_cpufreq_soc_data sun50i_h6_data = {
-> +	.efuse_xlate = sun50i_h6_efuse_xlate,
-> +};
-> +
->  static const struct of_device_id sun50i_cpufreq_match_list[] = {
-> -	{ .compatible = "allwinner,sun50i-h6" },
-> +	{ .compatible = "allwinner,sun50i-h6", .data = &sun50i_h6_data },
-> +	{ .compatible = "allwinner,sun50i-h616", .data = &sun50i_h616_data },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(of, sun50i_cpufreq_match_list);
-> @@ -197,8 +300,8 @@ static int __init sun50i_cpufreq_init(void)
->  		return ret;
->  
->  	sun50i_cpufreq_pdev =
-> -		platform_device_register_simple("sun50i-cpufreq-nvmem",
-> -						-1, NULL, 0);
-> +		platform_device_register_data(NULL, "sun50i-cpufreq-nvmem",
-> +						-1, match, sizeof(*match));
->  	ret = PTR_ERR_OR_ZERO(sun50i_cpufreq_pdev);
->  	if (ret == 0)
->  		return 0;
-> 
+SGksCgpMZSB2ZW5kcmVkaSAyMiBzZXB0ZW1icmUgMjAyMyDDoCAxMToxNSArMDUzMCwgUmFhZyBK
+YWRhdiBhIMOpY3JpdMKgOgo+IEN1cnJlbnRseSBFWFBPUlRfKl9TSU1QTEVfREVWX1BNX09QUygp
+IHVzZSBFWFBPUlRfKl9ERVZfUE1fT1BTKCkgc2V0Cj4gb2YgbWFjcm9zIHRvIGV4cG9ydCBkZXZf
+cG1fb3BzIHN5bWJvbCwgd2hpY2ggZXhwb3J0IHRoZSBzeW1ib2wgaW4KPiBjYXNlCj4gQ09ORklH
+X1BNPXkgYnV0IGRvbid0IHRha2UgQ09ORklHX1BNX1NMRUVQIGludG8gY29uc2lkZXJhdGlvbi4K
+PiAKPiBTaW5jZSBfU0lNUExFXyB2YXJpYW50cyBvZiBfUE1fT1BTKCkgZG8gbm90IGluY2x1ZGUg
+cnVudGltZSBQTQo+IGhhbmRsZXMKPiBhbmQgYXJlIG9ubHkgdXNlZCBpbiBjYXNlIENPTkZJR19Q
+TV9TTEVFUD15LCB3ZSBzaG91bGQgbm90IGJlCj4gZXhwb3J0aW5nCj4gZGV2X3BtX29wcyBzeW1i
+b2wgZm9yIHRoZW0gaW4gY2FzZSBDT05GSUdfUE1fU0xFRVA9bi4KPiAKPiBUaGlzIGNhbiBiZSBm
+aXhlZCBieSBoYXZpbmcgdHdvIGRpc3RpbmN0IHNldCBvZiBleHBvcnQgbWFjcm9zIGZvcgo+IGJv
+dGgKPiBfUlVOVElNRV8gYW5kIF9TSU1QTEVfIHZhcmlhbnRzIG9mIF9QTV9PUFMoKSwgc3VjaCB0
+aGF0IHRoZSBleHBvcnQgb2YKPiBkZXZfcG1fb3BzIHN5bWJvbCB1c2VkIGluIGVhY2ggdmFyaWFu
+dCBkZXBlbmRzIG9uIENPTkZJR19QTSBhbmQKPiBDT05GSUdfUE1fU0xFRVAgcmVzcGVjdGl2ZWx5
+Lgo+IAo+IEludHJvZHVjZSBfREVWX1NMRUVQX1BNX09QUygpIHNldCBvZiBleHBvcnQgbWFjcm9z
+IGZvciBfU0lNUExFXwo+IHZhcmlhbnRzCj4gb2YgX1BNX09QUygpLCB3aGljaCBleHBvcnQgZGV2
+X3BtX29wcyBzeW1ib2wgb25seSBpbiBjYXNlCj4gQ09ORklHX1BNX1NMRUVQPXkKPiBhbmQgZGlz
+Y2FyZCBpdCBvdGhlcndpc2UuCj4gCj4gRml4ZXM6IDM0ZTFlZDE4OWZhYiAoIlBNOiBJbXByb3Zl
+IEVYUE9SVF8qX0RFVl9QTV9PUFMgbWFjcm9zIikKPiBTaWduZWQtb2ZmLWJ5OiBSYWFnIEphZGF2
+IDxyYWFnLmphZGF2QGludGVsLmNvbT4KClJldmlld2VkLWJ5OiBQYXVsIENlcmN1ZWlsIDxwYXVs
+QGNyYXBvdWlsbG91Lm5ldD4KCkNoZWVycywKLVBhdWwKCj4gLS0tCj4gUFM6IFRoaXMgaXMgYSBz
+dGFuZGFsb25lIGZpeCBhbmQgd29ya3Mgd2l0aG91dCB1cGRhdGluZyBleGlzdGluZwo+IGRyaXZl
+cnMuCj4gCj4gQ2hhbmdlcyBzaW5jZSB2MzoKPiAtIFJlbmFtZSBfUE1fT1BTIG1hY3JvIHRvIF9E
+SVNDQVJEX1BNX09QUwo+IAo+IENoYW5nZXMgc2luY2UgdjI6Cj4gLSBEcm9wIHJlZHVuZGFudCBw
+YXRjaGVzCj4gCj4gQ2hhbmdlcyBzaW5jZSB2MToKPiAtIFVwZGF0ZSBkcml2ZXJzIHRvIG5ldyBz
+ZXQgb2YgbWFjcm9zCj4gCj4gwqBpbmNsdWRlL2xpbnV4L3BtLmggfCA0MyArKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tLS0tCj4gwqAxIGZpbGUgY2hhbmdlZCwgMjkgaW5z
+ZXJ0aW9ucygrKSwgMTQgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGlu
+dXgvcG0uaCBiL2luY2x1ZGUvbGludXgvcG0uaAo+IGluZGV4IDE0MDBjMzdiMjljNy4uNjI5YzE2
+MzNiYmQwIDEwMDY0NAo+IC0tLSBhL2luY2x1ZGUvbGludXgvcG0uaAo+ICsrKyBiL2luY2x1ZGUv
+bGludXgvcG0uaAo+IEBAIC0zNzQsMjQgKzM3NCwzOSBAQCBjb25zdCBzdHJ1Y3QgZGV2X3BtX29w
+cyBuYW1lID0geyBcCj4gwqDCoMKgwqDCoMKgwqDCoFJVTlRJTUVfUE1fT1BTKHJ1bnRpbWVfc3Vz
+cGVuZF9mbiwgcnVudGltZV9yZXN1bWVfZm4sCj4gaWRsZV9mbikgXAo+IMKgfQo+IMKgCj4gLSNp
+ZmRlZiBDT05GSUdfUE0KPiAtI2RlZmluZSBfRVhQT1JUX0RFVl9QTV9PUFMobmFtZSwgbGljZW5z
+ZSwKPiBucynCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgXAo+ICsjZGVmaW5lIF9FWFBPUlRfUE1fT1BTKG5hbWUsIGxpY2Vuc2UsCj4gbnMpwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgXAo+
+IMKgwqDCoMKgwqDCoMKgwqBjb25zdCBzdHJ1Y3QgZGV2X3BtX29wcwo+IG5hbWU7wqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoFwKPiDCoMKgwqDCoMKgwqDCoMKgX19FWFBPUlRfU1lNQk9MKG5hbWUsIGxpY2Vuc2UsCj4g
+bnMpO8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBcCj4gwqDCoMKgwqDCoMKgwqDCoGNvbnN0IHN0cnVjdCBkZXZfcG1fb3BzIG5hbWUKPiAt
+I2RlZmluZSBFWFBPUlRfUE1fRk5fR1BMKG5hbWUpwqDCoMKgwqDCoMKgwqDCoMKgRVhQT1JUX1NZ
+TUJPTF9HUEwobmFtZSkKPiAtI2RlZmluZSBFWFBPUlRfUE1fRk5fTlNfR1BMKG5hbWUsIG5zKcKg
+wqBFWFBPUlRfU1lNQk9MX05TX0dQTChuYW1lLAo+IG5zKQo+IC0jZWxzZQo+IC0jZGVmaW5lIF9F
+WFBPUlRfREVWX1BNX09QUyhuYW1lLCBsaWNlbnNlLAo+IG5zKcKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBcCj4gKwo+ICsjZGVmaW5lIF9ESVNDQVJE
+X1BNX09QUyhuYW1lLCBsaWNlbnNlLAo+IG5zKcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBcCj4gwqDCoMKgwqDCoMKgwqDCoHN0YXRpYyBf
+X21heWJlX3VudXNlZCBjb25zdCBzdHJ1Y3QgZGV2X3BtX29wcyBfX3N0YXRpY18jI25hbWUKPiAr
+Cj4gKyNpZmRlZiBDT05GSUdfUE0KPiArI2RlZmluZSBfRVhQT1JUX0RFVl9QTV9PUFMobmFtZSwg
+bGljZW5zZSwKPiBucynCoMKgwqDCoMKgwqDCoMKgwqDCoF9FWFBPUlRfUE1fT1BTKG5hbWUsIGxp
+Y2Vuc2UsIG5zKQo+ICsjZGVmaW5lCj4gRVhQT1JUX1BNX0ZOX0dQTChuYW1lKcKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgRVhQT1JUX1NZTUJPTF9HUEwo
+bmFtZQo+ICkKPiArI2RlZmluZSBFWFBPUlRfUE1fRk5fTlNfR1BMKG5hbWUsCj4gbnMpwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgRVhQT1JUX1NZTUJPTF9OU19HUEwobmFtZSwg
+bnMpCj4gKyNlbHNlCj4gKyNkZWZpbmUgX0VYUE9SVF9ERVZfUE1fT1BTKG5hbWUsIGxpY2Vuc2Us
+Cj4gbnMpwqDCoMKgwqDCoMKgwqDCoMKgwqBfRElTQ0FSRF9QTV9PUFMobmFtZSwgbGljZW5zZSwg
+bnMpCj4gwqAjZGVmaW5lIEVYUE9SVF9QTV9GTl9HUEwobmFtZSkKPiDCoCNkZWZpbmUgRVhQT1JU
+X1BNX0ZOX05TX0dQTChuYW1lLCBucykKPiDCoCNlbmRpZgo+IMKgCj4gLSNkZWZpbmUgRVhQT1JU
+X0RFVl9QTV9PUFMobmFtZSkgX0VYUE9SVF9ERVZfUE1fT1BTKG5hbWUsICIiLCAiIikKPiAtI2Rl
+ZmluZSBFWFBPUlRfR1BMX0RFVl9QTV9PUFMobmFtZSkgX0VYUE9SVF9ERVZfUE1fT1BTKG5hbWUs
+ICJHUEwiLAo+ICIiKQo+IC0jZGVmaW5lIEVYUE9SVF9OU19ERVZfUE1fT1BTKG5hbWUsIG5zKSBf
+RVhQT1JUX0RFVl9QTV9PUFMobmFtZSwgIiIsCj4gI25zKQo+IC0jZGVmaW5lIEVYUE9SVF9OU19H
+UExfREVWX1BNX09QUyhuYW1lLCBucykgX0VYUE9SVF9ERVZfUE1fT1BTKG5hbWUsCj4gIkdQTCIs
+ICNucykKPiArI2lmZGVmIENPTkZJR19QTV9TTEVFUAo+ICsjZGVmaW5lIF9FWFBPUlRfREVWX1NM
+RUVQX1BNX09QUyhuYW1lLCBsaWNlbnNlLAo+IG5zKcKgwqDCoMKgX0VYUE9SVF9QTV9PUFMobmFt
+ZSwgbGljZW5zZSwgbnMpCj4gKyNlbHNlCj4gKyNkZWZpbmUgX0VYUE9SVF9ERVZfU0xFRVBfUE1f
+T1BTKG5hbWUsIGxpY2Vuc2UsCj4gbnMpwqDCoMKgwqBfRElTQ0FSRF9QTV9PUFMobmFtZSwgbGlj
+ZW5zZSwgbnMpCj4gKyNlbmRpZgo+ICsKPiArI2RlZmluZQo+IEVYUE9SVF9ERVZfUE1fT1BTKG5h
+bWUpwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoF9FWFBPUlRfREVWX1BNCj4gX09QUyhuYW1lLCAiIiwgIiIpCj4gKyNkZWZpbmUK
+PiBFWFBPUlRfR1BMX0RFVl9QTV9PUFMobmFtZSnCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgX0VYUE9SVF9ERVZfUE1fT1BTKG5hbQo+IGUsICJHUEwiLCAiIikKPiArI2Rl
+ZmluZSBFWFBPUlRfTlNfREVWX1BNX09QUyhuYW1lLAo+IG5zKcKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqBfRVhQT1JUX0RFVl9QTV9PUFMobmFtZSwgIiIsICNucykKPiArI2RlZmlu
+ZSBFWFBPUlRfTlNfR1BMX0RFVl9QTV9PUFMobmFtZSwKPiBucynCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoF9FWFBPUlRfREVWX1BNX09QUyhuYW1lLCAiR1BMIiwgI25zKQo+ICsKPiArI2RlZmlu
+ZQo+IEVYUE9SVF9ERVZfU0xFRVBfUE1fT1BTKG5hbWUpwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgX0VYUE9SVF9ERVZfU0xFRVBfUE1fTwo+IFBTKG5hbWUsICIiLCAiIikKPiAr
+I2RlZmluZQo+IEVYUE9SVF9HUExfREVWX1NMRUVQX1BNX09QUyhuYW1lKcKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqBfRVhQT1JUX0RFVl9TTEVFUF9QTV9PCj4gUFMobmFtZSwgIkdQTCIsICIi
+KQo+ICsjZGVmaW5lIEVYUE9SVF9OU19ERVZfU0xFRVBfUE1fT1BTKG5hbWUsCj4gbnMpwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoF9FWFBPUlRfREVWX1NMRUVQX1BNX09QUyhuYW1lLCAiIiwgI25zKQo+
+ICsjZGVmaW5lIEVYUE9SVF9OU19HUExfREVWX1NMRUVQX1BNX09QUyhuYW1lLAo+IG5zKcKgwqDC
+oMKgwqDCoMKgX0VYUE9SVF9ERVZfU0xFRVBfUE1fT1BTKG5hbWUsICJHUEwiLCAjbnMpCj4gwqAK
+PiDCoC8qCj4gwqAgKiBVc2UgdGhpcyBpZiB5b3Ugd2FudCB0byB1c2UgdGhlIHNhbWUgc3VzcGVu
+ZCBhbmQgcmVzdW1lIGNhbGxiYWNrcwo+IGZvciBzdXNwZW5kCj4gQEAgLTQwNCwxOSArNDE5LDE5
+IEBAIGNvbnN0IHN0cnVjdCBkZXZfcG1fb3BzIG5hbWUgPSB7IFwKPiDCoMKgwqDCoMKgwqDCoMKg
+X0RFRklORV9ERVZfUE1fT1BTKG5hbWUsIHN1c3BlbmRfZm4sIHJlc3VtZV9mbiwgTlVMTCwgTlVM
+TCwKPiBOVUxMKQo+IMKgCj4gwqAjZGVmaW5lIEVYUE9SVF9TSU1QTEVfREVWX1BNX09QUyhuYW1l
+LCBzdXNwZW5kX2ZuLCByZXN1bWVfZm4pIFwKPiAtwqDCoMKgwqDCoMKgwqBFWFBPUlRfREVWX1BN
+X09QUyhuYW1lKSA9IHsgXAo+ICvCoMKgwqDCoMKgwqDCoEVYUE9SVF9ERVZfU0xFRVBfUE1fT1BT
+KG5hbWUpID0geyBcCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBTWVNURU1fU0xF
+RVBfUE1fT1BTKHN1c3BlbmRfZm4sIHJlc3VtZV9mbikgXAo+IMKgwqDCoMKgwqDCoMKgwqB9Cj4g
+wqAjZGVmaW5lIEVYUE9SVF9HUExfU0lNUExFX0RFVl9QTV9PUFMobmFtZSwgc3VzcGVuZF9mbiwg
+cmVzdW1lX2ZuKSBcCj4gLcKgwqDCoMKgwqDCoMKgRVhQT1JUX0dQTF9ERVZfUE1fT1BTKG5hbWUp
+ID0geyBcCj4gK8KgwqDCoMKgwqDCoMKgRVhQT1JUX0dQTF9ERVZfU0xFRVBfUE1fT1BTKG5hbWUp
+ID0geyBcCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBTWVNURU1fU0xFRVBfUE1f
+T1BTKHN1c3BlbmRfZm4sIHJlc3VtZV9mbikgXAo+IMKgwqDCoMKgwqDCoMKgwqB9Cj4gwqAjZGVm
+aW5lIEVYUE9SVF9OU19TSU1QTEVfREVWX1BNX09QUyhuYW1lLCBzdXNwZW5kX2ZuLCByZXN1bWVf
+Zm4sCj4gbnMpwqDCoMKgXAo+IC3CoMKgwqDCoMKgwqDCoEVYUE9SVF9OU19ERVZfUE1fT1BTKG5h
+bWUsIG5zKSA9IHsgXAo+ICvCoMKgwqDCoMKgwqDCoEVYUE9SVF9OU19ERVZfU0xFRVBfUE1fT1BT
+KG5hbWUsIG5zKSA9IHsgXAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgU1lTVEVN
+X1NMRUVQX1BNX09QUyhzdXNwZW5kX2ZuLCByZXN1bWVfZm4pIFwKPiDCoMKgwqDCoMKgwqDCoMKg
+fQo+IMKgI2RlZmluZSBFWFBPUlRfTlNfR1BMX1NJTVBMRV9ERVZfUE1fT1BTKG5hbWUsIHN1c3Bl
+bmRfZm4sIHJlc3VtZV9mbiwKPiBucynCoMKgwqDCoMKgwqDCoFwKPiAtwqDCoMKgwqDCoMKgwqBF
+WFBPUlRfTlNfR1BMX0RFVl9QTV9PUFMobmFtZSwgbnMpID0geyBcCj4gK8KgwqDCoMKgwqDCoMKg
+RVhQT1JUX05TX0dQTF9ERVZfU0xFRVBfUE1fT1BTKG5hbWUsIG5zKSA9IHsgXAo+IMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgU1lTVEVNX1NMRUVQX1BNX09QUyhzdXNwZW5kX2ZuLCBy
+ZXN1bWVfZm4pIFwKPiDCoMKgwqDCoMKgwqDCoMKgfQo+IMKgCgo=
 
