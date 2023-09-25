@@ -2,99 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86BDC7ADC85
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 17:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3B77ADCF3
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 18:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbjIYP7X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Sep 2023 11:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34910 "EHLO
+        id S233033AbjIYQUy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Sep 2023 12:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233025AbjIYP7W (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 11:59:22 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6AA11B
-        for <linux-pm@vger.kernel.org>; Mon, 25 Sep 2023 08:59:14 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-32325534cfaso2324957f8f.3
-        for <linux-pm@vger.kernel.org>; Mon, 25 Sep 2023 08:59:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695657553; x=1696262353; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GneicmgZfpXE6hx2WHE29gWRFXhiOHILZTpcrUZlhUs=;
-        b=eO0GQOk9rO3VWfe5L4Zn1t3B+hziKSgid0CunDNrkfKvz2gGhHd/kaJupXAdSbrBlH
-         ziOjRMiP/vofXhHsS18kTIp0+zArqtf2OT2oXPwHzLvlBjzmmH3oy/SbpEEMWV3GAeXG
-         fMnfQZjQjC8f6VukFun6dGY3s0EnruVCWjJ/zIUhmOygioc1Zti0Q2nkm/Dahr+dv4lD
-         JOaI+8Kzgk0fE3ZXtRonoVxk2qceLtQPmf4YvOd/RO0Sh6FHxdvGyKzuD8beWNScAtXK
-         sgscV0wrXRnro5x10eh+O3OddhX6c7u7bPJFKdrvrPmnAp2inYWnh+tPCT+gErVJQlsP
-         5qCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695657553; x=1696262353;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GneicmgZfpXE6hx2WHE29gWRFXhiOHILZTpcrUZlhUs=;
-        b=qTseQf9LqwzcVbj+q+GaxF81IfGgC+biyfVJEJXS41FJjoLDOAGpKaXYnLlzLqxyvD
-         hmjmu+I0a4mghgyhWBH5bimFdsRpsBqvT1iFkVZp592MlalLyfDEnYabwP7L2Rn5YpMM
-         V7SfGMc0m6NrYyC0A50QfA42oovpPq+4pDVlV+yoQSNsv+8pzbT5BaVSxaG5AvbgSTnH
-         PcK835Ob+Lx7GZrDZ5vMlRoHhuq9YKd7Br2BdKIjGR0rNvH58Uhi1UbjIst9/ojtykKz
-         0HIeeyhvWTjlCWeawZBqecPEmBCWDaJWpL/V9ZSHnI3KB6owG2zNcNZJFabCKDbOfQB9
-         36Lw==
-X-Gm-Message-State: AOJu0YxSG11JhkBdIPfL4gsS5aCaFJK5bcUX0r7/DMXE5hH6OyYW5AoL
-        +pSFnu+tJ1/m6uXDBNvG+pDWhg==
-X-Google-Smtp-Source: AGHT+IHaL2nHE+gPfmVIVjPbQh46rGimWfCVGxsyc2a2vOkwGLunOTR0JtGlIvoOswcgNExhEDbq/g==
-X-Received: by 2002:a5d:6084:0:b0:320:7fa:c71e with SMTP id w4-20020a5d6084000000b0032007fac71emr6996682wrt.15.1695657552615;
-        Mon, 25 Sep 2023 08:59:12 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:c0e1:63ab:648b:6287? ([2a05:6e02:1041:c10:c0e1:63ab:648b:6287])
-        by smtp.googlemail.com with ESMTPSA id o13-20020adfeacd000000b00317f3fd21b7sm12307395wrn.80.2023.09.25.08.59.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Sep 2023 08:59:12 -0700 (PDT)
-Message-ID: <9fcd9003-c210-be46-6a25-460ad6c0e53a@linaro.org>
-Date:   Mon, 25 Sep 2023 17:59:11 +0200
+        with ESMTP id S231689AbjIYQUx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 12:20:53 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222BECE;
+        Mon, 25 Sep 2023 09:20:47 -0700 (PDT)
+Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8AA086607083;
+        Mon, 25 Sep 2023 17:20:44 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1695658845;
+        bh=hLrIxPnIrH+CavuOWQVjMQm2fM6kCBplHnPFlCTy1Fs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i9hHKlbf+AxbsU9Vfk8qvmq56+Cd8O1+RlbISjcVCQ4M+mAbPiUF7L+/E1dtIYXz6
+         zBWeW/7XUOOnnx7hlIJ7Y/zCIsYxyh1MlSGprZLj2bxkI+0wScsuFw3nCY3Il2jYIE
+         VDVBpLsDIVu1fAxpbuxmTnSuNJpS+7NiOTpjo91hsDEheYJlarbisBIIGrxJ1pMhnc
+         ezfxL/DybGO3ZEziv44mB17mQVtJEgoAoiNOR/w4Uixuxkl+nb6H0iCbAKxKVrWKEO
+         tnOXU25RBIWzHqBVXHA4irjsQPeKlLd8EjUPOd1TAXAVyDnkXfynqJvzP9i3ztOuOB
+         b6Q46VZn5t6mA==
+Date:   Mon, 25 Sep 2023 12:20:40 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] thermal: core: Check correct temperature for thermal
+ trip notification
+Message-ID: <4b38b84a-7427-45b1-b8e6-c68c5dbce676@notapiano>
+References: <20230922192724.295129-1-nfraprado@collabora.com>
+ <7558dd96-0d96-9463-9a97-7ea8bac2046e@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v1 3/9] ACPI: thermal: Determine the number of trip points
- earlier
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-References: <5708760.DvuYhMxLoT@kreacher> <1863318.tdWV9SEqCh@kreacher>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <1863318.tdWV9SEqCh@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <7558dd96-0d96-9463-9a97-7ea8bac2046e@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/09/2023 20:37, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Mon, Sep 25, 2023 at 12:19:18PM +0200, Daniel Lezcano wrote:
 > 
-> Compute the number of trip points in acpi_thermal_add() so as to allow the
-> driver's data structures to be simplified going forward.
+> Hi Nicolas,
 > 
-> No intentional functional impact.
+> On 22/09/2023 21:27, Nícolas F. R. A. Prado wrote:
+> > The thermal trip down notification should be triggered when the
+> > temperature goes below the trip temperature minus the hysteresis. But
+> > while the temperature is correctly checked against that, the last
+> > temperature is instead compared against the trip point temperature. The
+> > end result is that the notification won't always be triggered, only when
+> > the temperature happens to drop quick enough so that the last
+> > temperature was still above the trip point temperature.
+> > 
+> > Fix the incorrect check.
+> > 
+> > Fixes: 55cdf0a283b8 ("thermal: core: Add notifications call in the framework")
+> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > 
+> > ---
+> > 
+> >   drivers/thermal/thermal_core.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> > index 58533ea75cd9..120fcf23b8e5 100644
+> > --- a/drivers/thermal/thermal_core.c
+> > +++ b/drivers/thermal/thermal_core.c
+> > @@ -361,7 +361,7 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip_id)
+> >   		    tz->temperature >= trip.temperature)
+> >   			thermal_notify_tz_trip_up(tz->id, trip_id,
+> >   						  tz->temperature);
+> > -		if (tz->last_temperature >= trip.temperature &&
+> > +		if (tz->last_temperature >= (trip.temperature - trip.hysteresis) &&
+> >   		    tz->temperature < (trip.temperature - trip.hysteresis))
+> >   			thermal_notify_tz_trip_down(tz->id, trip_id,
+> >   						    tz->temperature);
 > 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> We already did a try to fix the thermal trip cross notification but this is
+> not sufficient for a full fix.
+> 
+> We are receiving multiple notifications from the same event, all this due to
+> the hysteresis.
+> 
+> Let's say, we have a trip point T and a hysteresis H.
+> 
+> There is a trip point crossed the way up when:
+> 
+> 	last_temperature < T and temperature >= T
+> 
+> At this point, we send a notification
+> 
+> Now, the temperature decreases but it stays in the hysteresis:
+> 
+> 	last_temperature >= T and temperature > (T - H)
+> 
+> And then, the temperature increases again and is greater than T.
+> 
+> 	last_temperature > (T - H) and temperature >= T
+> 
+> We send a second notification.
 
+Right, I've observed this issue in the logic that updates the trip points, and
+just sent the v2 fix for it:
 
-Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+https://lore.kernel.org/all/20230922184425.290894-1-nfraprado@collabora.com
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+I wasn't aware of the cleanups you pointed to below, but at least in their
+current form it doesn't seem they would take care of fixing the trip point
+update logic like I did in that patch. So please do take a look.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+It was while testing that patch that I stumbled upon this code for the
+notification and just quickly fixed it. But indeed this patch is not a full fix
+as the one you pointed to, so let's wait for that one.
 
+Thanks,
+Nícolas
+
+> 
+> With the mitigation kicking in at temp >= T, we end up with multiple events
+> 'temperature crossed the trip point the way up"'. That forces the receiver
+> of the events to detect duplicate events in order to ignore them.
+> 
+> More info:
+> 
+> 	https://lore.kernel.org/all/20220718145038.1114379-4-daniel.lezcano@linaro.org/
+> 	
+> We have done a lot of cleanups to use the 'generic trip points' and remove
+> those get_trip_* ops. So the trip point structure is a core component being
+> reused by the drivers and registered as an array.
+> 
+> Next step is to make sure the trip points are ordered in the array, so we
+> can implement the correct trip point crossing detection.
+> 
+> 
+> 
+> 
+> -- 
+> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+> 
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
+> 
