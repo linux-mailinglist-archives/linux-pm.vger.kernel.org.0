@@ -2,56 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD987ACBEF
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Sep 2023 22:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88CCA7ACDE1
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 04:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229480AbjIXU60 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 24 Sep 2023 16:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44344 "EHLO
+        id S231424AbjIYCHH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 24 Sep 2023 22:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjIXU60 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Sep 2023 16:58:26 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E27EE;
-        Sun, 24 Sep 2023 13:58:20 -0700 (PDT)
-Received: from mercury (cust-west-par-46-193-56-210.cust.wifirst.net [46.193.56.210])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2C93366072E9;
-        Sun, 24 Sep 2023 21:58:18 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1695589098;
-        bh=h8S0AVpoW3F2EytvwOGglewnFQNIvkNAQbE34WlVL0E=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=XeUq47K7GoNnjFu0Z/Xl6fZURJ+CNaPsMYNqh2EYtwcf88C/4ahy2EBGI/7ioASQm
-         SyngW67glqcbQX/gvOCwXWxW9wpfS2KLxQrKoxzk6eMw5+1CVl6o++Ttk2uVgqA7uI
-         TU8qq9SAqEuA7rOzh2LeIgY6EyytQwHAyxZiGsolgYiLE4IhznVXzsdZTYw1k6dLZR
-         CRnxjy4mX1yUXxO5XY/5oLAzCcXpZxEPi7XMkkEIs5KB2CDe5B9HuI8c8ODhA1IoMs
-         BlOKefBWl5QLOEMFHpUBylE5j7g4KAwJLYE/vtM3UKWUQvz2YUJeDFVnNKG867Cglw
-         3JpD8g7/fG+vQ==
-Received: by mercury (Postfix, from userid 1000)
-        id A0C3D10611D9; Sun, 24 Sep 2023 22:58:15 +0200 (CEST)
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Konrad Dybcio <konradybcio@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc:     dan.carpenter@linaro.org, kernel-janitors@vger.kernel.org,
-        error27@gmail.com, kernel test robot <lkp@intel.com>
-In-Reply-To: <20230923114807.2829188-1-harshit.m.mogalapalli@oracle.com>
-References: <20230923114807.2829188-1-harshit.m.mogalapalli@oracle.com>
-Subject: Re: [PATCH next] power: supply: mm8013: Fix error code in
- mm8013_probe()
-Message-Id: <169558909561.1797612.1920151492515517327.b4-ty@collabora.com>
-Date:   Sun, 24 Sep 2023 22:58:15 +0200
+        with ESMTP id S231421AbjIYCHH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Sep 2023 22:07:07 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F07EBD;
+        Sun, 24 Sep 2023 19:07:01 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38P1vjgG027512;
+        Mon, 25 Sep 2023 02:06:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=qNTbe9QPoO8/21t+BidYpK4KyX9AdYBCfl0XfTl0JQA=;
+ b=AYst2SWD+q1sl2JSnCHXFEMXr5+j2ZQk5L/w8PQqPyEJsw2PQb8BvjnOJcmT3HPwgWh+
+ kNKcl1ATmYE1HMEWATznYVHJerrT+d+CHjic3Vq0+NHG4UBQRE91QMXH00gC8NrIJN6I
+ 5lhl4i5oHp7eq5KCPTGxGutCQwDy9SpN/0lICS+85obfHxRJSKlCu+DFfsnltbPYrb3G
+ jGOoz2wAVleqS5bG/wfwTT2A9BoV6GahEdgOz2FQPB3PQCmZkih0JacPr1IhnKqlibLo
+ LhRDjeoSMJrtbXdp7IcXiw2/YSjm70i+caXoWdfsX9u1N3Ko/qss8n785pvJy5N6lAMn 2A== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t9pywatn1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Sep 2023 02:06:46 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38P26joO013617
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Sep 2023 02:06:45 GMT
+Received: from [10.216.19.6] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Sun, 24 Sep
+ 2023 19:06:39 -0700
+Message-ID: <21caae64-b8db-ed1f-2275-a7279227cf92@quicinc.com>
+Date:   Mon, 25 Sep 2023 07:36:36 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH V3 1/4] dt-bindings: thermal: qcom-tsens: Add ipq5018
+ compatible
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <srinivas.kandagatla@linaro.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <thara.gopinath@gmail.com>,
+        <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <dmitry.baryshkov@linaro.org>,
+        Sricharan R <quic_srichara@quicinc.com>
+References: <20230922115116.2748804-1-srichara@win-platform-upstream01.qualcomm.com>
+ <20230922115116.2748804-2-srichara@win-platform-upstream01.qualcomm.com>
+ <f4fa94ab-78fb-d01b-7188-c498ec3053ff@linaro.org>
+From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
+In-Reply-To: <f4fa94ab-78fb-d01b-7188-c498ec3053ff@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 44b3brw9kUK5IUMPCod9XMBp1HhIuf3z
+X-Proofpoint-ORIG-GUID: 44b3brw9kUK5IUMPCod9XMBp1HhIuf3z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-09-24_21,2023-09-21_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ priorityscore=1501 suspectscore=0 clxscore=1015 spamscore=0
+ mlxlogscore=999 lowpriorityscore=0 adultscore=0 impostorscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2309250010
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,20 +88,42 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-On Sat, 23 Sep 2023 04:48:06 -0700, Harshit Mogalapalli wrote:
-> The value of ret is zero when passed to dev_error_probe(), we are passing
-> zero to dev_err_probe() is a success which is incorrect.
+
+On 9/23/2023 5:14 PM, Krzysztof Kozlowski wrote:
+> On 22/09/2023 13:51, Sricharan R wrote:
+>> From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+>>
+>> IPQ5018 has tsens v1.0 block with 4 sensors and 1 interrupt.
 > 
-> Fix this by getting the error code using PTR_ERR().
+> Then why do you allow two interrupts?
 > 
+  infact there is only one interrupt. Will fix in the binding
+  description.
+
+>>
+>> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+>> ---
+>>   [v3] Added the tsens-ipq5018 as  new binding without rpm
+>>
+>>   Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+>> index 27e9e16e6455..a02829deeb24 100644
+>> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+>> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+>> @@ -44,6 +44,10 @@ properties:
+>>                 - qcom,qcs404-tsens
+>>             - const: qcom,tsens-v1
+>>   
+>> +      - description: v1 of TSENS without rpm
+>> +        enum:
+>> +          - qcom,ipq5018-tsens
+> 
+> You miss now description of interrupts, like the other variants have.
 > 
 
-Applied, thanks!
+  ok, will add it.
 
-[1/1] power: supply: mm8013: Fix error code in mm8013_probe()
-      commit: 43ee22422db545800b8bf2c24ef53d040372fc7a
-
-Best regards,
--- 
-Sebastian Reichel <sebastian.reichel@collabora.com>
-
+Regards,
+  Sricharan
