@@ -2,147 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438ED7AD54B
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 12:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 060D87AD5B5
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 12:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbjIYKDq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Sep 2023 06:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51914 "EHLO
+        id S230171AbjIYKTa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Sep 2023 06:19:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230509AbjIYKDW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 06:03:22 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFC51722
-        for <linux-pm@vger.kernel.org>; Mon, 25 Sep 2023 02:58:54 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-991c786369cso731052566b.1
-        for <linux-pm@vger.kernel.org>; Mon, 25 Sep 2023 02:58:54 -0700 (PDT)
+        with ESMTP id S229537AbjIYKTa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 06:19:30 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA3EC2
+        for <linux-pm@vger.kernel.org>; Mon, 25 Sep 2023 03:19:22 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-401d6f6b2e0so48170415e9.1
+        for <linux-pm@vger.kernel.org>; Mon, 25 Sep 2023 03:19:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695635933; x=1696240733; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1695637160; x=1696241960; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=07uVGcYaT587O+lJP2m3ZC4n8yo7xprZQQOPVOh74lw=;
-        b=LQgE6d877ZTfqLeh9Jov8Jp/ZK4NUcsktEp3Nwz0XRnOBNtLp1bsAm7OEfTkNBCoJM
-         2U1aQQTs5z+I9+CvJrG3He7b9+8dRuNijzZQ/4IVeMO/kedBMDRH/6snWJ6QblFJutQr
-         rUNy6fkhUaK2/MPJFmigZA+LPBvssB/WM/KKp32dgyGFD6NSfOoWp+OxiMmDs8eX/qx3
-         njFZxzcqvds1HgLf96iph+3rCiyT2F9e4K6b5iiom7REIoWOvY3E4IVSi4745oevmw+n
-         nc7RWKO1mw843ExIeSzhKzBoq940MeGjP6b9vNKvq3TjES/Yb5KeYxtlhgQZOSaLDdLs
-         Xs4g==
+        bh=BHtjwLPuNIM982JG8tRGrHl7cHo/0iOH5NWHHo23YQ0=;
+        b=kq/BZrKIniVcrT/riHVdGvJKkbh0cmY0CBflhmr6xg20tqNTd7ktEbnrV16ctca1ZR
+         KnTLjjb2XYwss6REge+2CS0d0fz5nKLd8uQQcWdGlGf6uX6QOYWbiPCfccLAbu08T+U9
+         2oHEVQ9vk72FOfpo6/TWws9TFVcCnjMuL8xAV8mkMegLU5zKsa6Mqd1Rq51zuoKNYt3h
+         DlpGAxC19mopX8TzfW08oLyDHfY/NOJ4HUmtQSwl5YB7vo2H+zC5t50uRTvzVv7szkCm
+         5elcVOPQx/hP3gR3zQ0ejcoJ+H9O6jqASaocar98TuXMuSSGkET/OMcTN55s2MLU+lF0
+         9UzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695635933; x=1696240733;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1695637160; x=1696241960;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=07uVGcYaT587O+lJP2m3ZC4n8yo7xprZQQOPVOh74lw=;
-        b=O9MeU9KMm/Mk7faMDy8bRUGrS1I82GSpBYvhhU0l2k8FU7diOS67ATLQ5fEt04+Vjv
-         bcIQhV9oq+iD2L/jXYjrliLlkcpqjIw3TpkP3T1aFC8pQsYaSBXbtsxvUkpBlJpTQU8U
-         VGSMmpZ0obzNE28beJ1DdaSHSA+lcpVWKS46Qz4uSDaeaCwCxIhZ1YRix9z5lTgxO+Q5
-         JX1VSRknTdyqUpK//MDatPG3Ty10KhvMdsZhpcCMqLswzO49EhZpXL/YzcqPMMA/lLId
-         5zu4TeSPaubA31fIIdzsXwe20MV735PYmcn/lsVNrsqLs93eAGAdNWlP8/bSI/K0sqzP
-         whTA==
-X-Gm-Message-State: AOJu0YxXlrxywIGPSakK9XdIwcggq+/K1EPlr35byfdCSkrLKuPftWr9
-        3y9ObBRlGTYzg/NHJlT8GjKJDg==
-X-Google-Smtp-Source: AGHT+IGSfyahZeZWFSCp2lS84BASF/3XwkdnTR8ykM/qYp0D0Ky7td4khxNtqawySDMtRTwzWoBeZw==
-X-Received: by 2002:a17:907:2cc1:b0:9a1:f10d:9746 with SMTP id hg1-20020a1709072cc100b009a1f10d9746mr5022065ejc.20.1695635933026;
-        Mon, 25 Sep 2023 02:58:53 -0700 (PDT)
-Received: from [192.168.101.165] (178235177023.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.23])
-        by smtp.gmail.com with ESMTPSA id k3-20020a17090646c300b009ae57888718sm6040535ejs.207.2023.09.25.02.58.49
+        bh=BHtjwLPuNIM982JG8tRGrHl7cHo/0iOH5NWHHo23YQ0=;
+        b=hXqpBp/GP0g2qhBSX/fganRkAh7HIhnqDdM+bmTQPlKpzMLR2F3vXTYTMqxaKQ+M0b
+         6LkRCzOihu5gxHOvCssmbqHHU8VAXU/hjxl/CAsZLQHovFAwgjU6tuE6W/u64ohrx6ib
+         mvgEFMITN6K28XugXno8b/nXbSFigIvLhI3ZdykV5HLNTesuTYupzTvWrbZwLtucqy4S
+         IblidciftGR2nCUaIZQBsaVKzt07vhXPvUPWr3lJd6ZrVchVnay0fkoiHZlw3IH9zDZc
+         tIBi9DiMkbNSzgRe6ICqFc097EmeSOI+zIzEaVUEQZ+4ZsXANYWDN6SvZmuFkjH2Xdc7
+         1Axg==
+X-Gm-Message-State: AOJu0YxyHh2Y/LOTAo4IVJJCqc4nPAJiT2xhKRMb0Q3fLVxHs1GaYiP5
+        D6ryuh7o2mNpYtILAJ00SMygdw==
+X-Google-Smtp-Source: AGHT+IEk9j2816s7sFR+gkKxXV2xh8ch+/ES8qsjs/S06EjJobIwoZuLiCcNyAiK37ukW2W8UqWo7g==
+X-Received: by 2002:a1c:6a1a:0:b0:403:c70b:b688 with SMTP id f26-20020a1c6a1a000000b00403c70bb688mr5207596wmc.6.1695637160370;
+        Mon, 25 Sep 2023 03:19:20 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:c0e1:63ab:648b:6287? ([2a05:6e02:1041:c10:c0e1:63ab:648b:6287])
+        by smtp.googlemail.com with ESMTPSA id v20-20020a05600c215400b00401b242e2e6sm9199319wml.47.2023.09.25.03.19.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Sep 2023 02:58:52 -0700 (PDT)
-Message-ID: <311837de-5acb-4b5b-b64d-9bdc1403a087@linaro.org>
-Date:   Mon, 25 Sep 2023 11:58:48 +0200
+        Mon, 25 Sep 2023 03:19:19 -0700 (PDT)
+Message-ID: <7558dd96-0d96-9463-9a97-7ea8bac2046e@linaro.org>
+Date:   Mon, 25 Sep 2023 12:19:18 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/40] soc: Convert to platform remove callback returning
- void
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] thermal: core: Check correct temperature for thermal trip
+ notification
 Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Joel Stanley <joel@jms.id.au>, Li Yang <leoyang.li@nxp.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Huisong Li <lihuisong@huawei.com>,
-        Krzysztof Halasa <khalasa@piap.pl>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sumit Gupta <sumitg@nvidia.com>,
-        Shang XiaoJing <shangxiaojing@huawei.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Rob Herring <robh@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Michal Simek <michal.simek@amd.com>
-Cc:     Andrew Jeffery <andrew@aj.id.au>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Zev Weiss <zev@bewilderbeest.net>,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     kernel@collabora.com,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        zhang songyi <zhang.songyi@zte.com.cn>,
-        Lubomir Rintel <lkundrak@v3.sk>, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-samsung-soc@vger.kernel.org,
-        Nick Alcock <nick.alcock@oracle.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        Ruan Jinjie <ruanjinjie@huawei.com>, kernel@pengutronix.de
-References: <20230925095532.1984344-1-u.kleine-koenig@pengutronix.de>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
- BB/OmIWU6X+LZW6P88ZmHe+KeyABLMP5s1tJNK1j4ntT7mECcWZDzafPWF4F6m4WJOG27kTJ
- HGWdmtO+RvadOVi6CoUDqALsmfS3MUG5Pj2Ne9+0jRg4hEnB92AyF9rW2G3qisFcwPgvatt7
- TXD5E38mLyOPOUyXNj9XpDbt1hNwKQfiidmPh5e7VNAWRnW1iCMMoKqzM1Anzq7e5Afyeifz
- zRcQPLaqrPjnKqZGL2BKQSZDh6NkI5ZLRhhHQf61fkWcUpTp1oDC6jWVfT7hwRVIQLrrNj9G
- MpPzrlN4YuAqKeIer1FMt8cq64ifgTzxHzXsMcUdclzq2LTk2RXaPl6Jg/IXWqUClJHbamSk
- t1bfif3SnmhA6TiNvEpDKPiT3IDs42THU6ygslrBxyROQPWLI9IL1y8S6RtEh8H+NZQWZNzm
- UQ3imZirlPjxZtvz1BtnnBWS06e7x/UEAguj7VHCuymVgpl2Za17d1jj81YN5Rp5L9GXxkV1
- aUEwONM3eCI3qcYm5JNc5X+JthZOWsbIPSC1Rhxz3JmWIwP1udr5E3oNRe9u2LIEq+wH/toH
- kpPDhTeMkvt4KfE5m5ercid9+ZXAqoaYLUL4HCEw+HW0DXcKDwARAQABzShLb25yYWQgRHli
- Y2lvIDxrb25yYWQuZHliY2lvQGxpbmFyby5vcmc+wsGOBBMBCAA4FiEEU24if9oCL2zdAAQV
- R4cBcg5dfFgFAmQ5bqwCGwMFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AACgkQR4cBcg5dfFjO
- BQ//YQV6fkbqQCceYebGg6TiisWCy8LG77zV7DB0VMIWJv7Km7Sz0QQrHQVzhEr3trNenZrf
- yy+o2tQOF2biICzbLM8oyQPY8B///KJTWI2khoB8IJSJq3kNG68NjPg2vkP6CMltC/X3ohAo
- xL2UgwN5vj74QnlNneOjc0vGbtA7zURNhTz5P/YuTudCqcAbxJkbqZM4WymjQhe0XgwHLkiH
- 5LHSZ31MRKp/+4Kqs4DTXMctc7vFhtUdmatAExDKw8oEz5NbskKbW+qHjW1XUcUIrxRr667V
- GWH6MkVceT9ZBrtLoSzMLYaQXvi3sSAup0qiJiBYszc/VOu3RbIpNLRcXN3KYuxdQAptacTE
- mA+5+4Y4DfC3rUSun+hWLDeac9z9jjHm5rE998OqZnOU9aztbd6zQG5VL6EKgsVXAZD4D3RP
- x1NaAjdA3MD06eyvbOWiA5NSzIcC8UIQvgx09xm7dThCuQYJR4Yxjd+9JPJHI6apzNZpDGvQ
- BBZzvwxV6L1CojUEpnilmMG1ZOTstktWpNzw3G2Gis0XihDUef0MWVsQYJAl0wfiv/0By+XK
- mm2zRR+l/dnzxnlbgJ5pO0imC2w0TVxLkAp0eo0LHw619finad2u6UPQAkZ4oj++iIGrJkt5
- Lkn2XgB+IW8ESflz6nDY3b5KQRF8Z6XLP0+IEdLOOARkOW7yEgorBgEEAZdVAQUBAQdAwmUx
- xrbSCx2ksDxz7rFFGX1KmTkdRtcgC6F3NfuNYkYDAQgHwsF2BBgBCAAgFiEEU24if9oCL2zd
- AAQVR4cBcg5dfFgFAmQ5bvICGwwACgkQR4cBcg5dfFju1Q//Xta1ShwL0MLSC1KL1lXGXeRM
- 8arzfyiB5wJ9tb9U/nZvhhdfilEDLe0jKJY0RJErbdRHsalwQCrtq/1ewQpMpsRxXzAjgfRN
- jc4tgxRWmI+aVTzSRpywNahzZBT695hMz81cVZJoZzaV0KaMTlSnBkrviPz1nIGHYCHJxF9r
- cIu0GSIyUjZ/7xslxdvjpLth16H27JCWDzDqIQMtg61063gNyEyWgt1qRSaK14JIH/DoYRfn
- jfFQSC8bffFjat7BQGFz4ZpRavkMUFuDirn5Tf28oc5ebe2cIHp4/kajTx/7JOxWZ80U70mA
- cBgEeYSrYYnX+UJsSxpzLc/0sT1eRJDEhI4XIQM4ClIzpsCIN5HnVF76UQXh3a9zpwh3dk8i
- bhN/URmCOTH+LHNJYN/MxY8wuukq877DWB7k86pBs5IDLAXmW8v3gIDWyIcgYqb2v8QO2Mqx
- YMqL7UZxVLul4/JbllsQB8F/fNI8AfttmAQL9cwo6C8yDTXKdho920W4WUR9k8NT/OBqWSyk
- bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
- nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
- izWDgYvmBE8=
-In-Reply-To: <20230925095532.1984344-1-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20230922192724.295129-1-nfraprado@collabora.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230922192724.295129-1-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -151,17 +80,88 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25.09.2023 11:54, Uwe Kleine-König wrote:
-> Hello,
-> 
-> this series converts all platform drivers below drivers/soc to use
-> .remove_new(). The motivation is to get rid of an integer return code
-> that is (mostly) ignored by the platform driver core and error prone on
-> the driver side.
-> 
-> See commit 5c5a7680e67b ("platform: Provide a remove callback that
-> returns no value") for an extended explanation and the eventual goal.
->
-Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org> # qcom
 
-Konrad
+Hi Nicolas,
+
+On 22/09/2023 21:27, Nícolas F. R. A. Prado wrote:
+> The thermal trip down notification should be triggered when the
+> temperature goes below the trip temperature minus the hysteresis. But
+> while the temperature is correctly checked against that, the last
+> temperature is instead compared against the trip point temperature. The
+> end result is that the notification won't always be triggered, only when
+> the temperature happens to drop quick enough so that the last
+> temperature was still above the trip point temperature.
+> 
+> Fix the incorrect check.
+> 
+> Fixes: 55cdf0a283b8 ("thermal: core: Add notifications call in the framework")
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> 
+> ---
+> 
+>   drivers/thermal/thermal_core.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 58533ea75cd9..120fcf23b8e5 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -361,7 +361,7 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip_id)
+>   		    tz->temperature >= trip.temperature)
+>   			thermal_notify_tz_trip_up(tz->id, trip_id,
+>   						  tz->temperature);
+> -		if (tz->last_temperature >= trip.temperature &&
+> +		if (tz->last_temperature >= (trip.temperature - trip.hysteresis) &&
+>   		    tz->temperature < (trip.temperature - trip.hysteresis))
+>   			thermal_notify_tz_trip_down(tz->id, trip_id,
+>   						    tz->temperature);
+
+We already did a try to fix the thermal trip cross notification but this 
+is not sufficient for a full fix.
+
+We are receiving multiple notifications from the same event, all this 
+due to the hysteresis.
+
+Let's say, we have a trip point T and a hysteresis H.
+
+There is a trip point crossed the way up when:
+
+	last_temperature < T and temperature >= T
+
+At this point, we send a notification
+
+Now, the temperature decreases but it stays in the hysteresis:
+
+	last_temperature >= T and temperature > (T - H)
+
+And then, the temperature increases again and is greater than T.
+
+	last_temperature > (T - H) and temperature >= T
+
+We send a second notification.
+
+With the mitigation kicking in at temp >= T, we end up with multiple 
+events 'temperature crossed the trip point the way up"'. That forces the 
+receiver of the events to detect duplicate events in order to ignore them.
+
+More info:
+
+	https://lore.kernel.org/all/20220718145038.1114379-4-daniel.lezcano@linaro.org/
+	
+We have done a lot of cleanups to use the 'generic trip points' and 
+remove those get_trip_* ops. So the trip point structure is a core 
+component being reused by the drivers and registered as an array.
+
+Next step is to make sure the trip points are ordered in the array, so 
+we can implement the correct trip point crossing detection.
+
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
