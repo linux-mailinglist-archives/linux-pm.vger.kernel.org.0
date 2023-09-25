@@ -2,160 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F40F37AD406
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 11:01:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 644437AD4A8
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 11:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233136AbjIYJCC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Sep 2023 05:02:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41096 "EHLO
+        id S229520AbjIYJj5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Sep 2023 05:39:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232819AbjIYJB7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 05:01:59 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220EB9B;
-        Mon, 25 Sep 2023 02:01:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1695632508;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=p3gJfj/3kfxn+U4fkywDtekORbYYQSnsyRZS0hPbR8o=;
-        b=R7UcGuvmwCsVxtj/Jm7cuL9WdHKFGpY4ZACoPoPWLECdh8e0bdAWgkPmNTO18YdI8WY1aK
-        zrXnHHQLVoUKXGRc4pmJgjYvLaiJvulIzfizRuj7NALZ9HZaK4cZ1ZQlIzpqdtlmEo/6yK
-        MqHdmfqbSheUJ2dMjzf9ncbT+YKQ5+4=
-Message-ID: <7537e654bfda45ecac953392267e271e37d28ea4.camel@crapouillou.net>
-Subject: Re: [PATCH v4] PM: Fix symbol export for _SIMPLE_ variants of
- _PM_OPS()
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Raag Jadav <raag.jadav@intel.com>, rafael@kernel.org,
-        len.brown@intel.com, pavel@ucw.cz, Jonathan.Cameron@huawei.com,
-        andriy.shevchenko@linux.intel.com, rf@opensource.cirrus.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mallikarjunappa.sangannavar@intel.com, bala.senthil@intel.com
-Date:   Mon, 25 Sep 2023 11:01:45 +0200
-In-Reply-To: <20230922054552.3570-1-raag.jadav@intel.com>
-References: <20230922054552.3570-1-raag.jadav@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S230467AbjIYJj4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 05:39:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83F9A9C;
+        Mon, 25 Sep 2023 02:39:49 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 71DDCDA7;
+        Mon, 25 Sep 2023 02:40:27 -0700 (PDT)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id BC4FE3F5A1;
+        Mon, 25 Sep 2023 02:39:47 -0700 (PDT)
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Cristian Marussi <cristian.marussi@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 00/13] arm_scmi/cpufreq: Add generic performance scaling support
+Date:   Mon, 25 Sep 2023 10:39:45 +0100
+Message-ID: <169563470105.3833803.2257916927365455980.b4-ty@arm.com>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20230825112633.236607-1-ulf.hansson@linaro.org>
+References: <20230825112633.236607-1-ulf.hansson@linaro.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGksCgpMZSB2ZW5kcmVkaSAyMiBzZXB0ZW1icmUgMjAyMyDDoCAxMToxNSArMDUzMCwgUmFhZyBK
-YWRhdiBhIMOpY3JpdMKgOgo+IEN1cnJlbnRseSBFWFBPUlRfKl9TSU1QTEVfREVWX1BNX09QUygp
-IHVzZSBFWFBPUlRfKl9ERVZfUE1fT1BTKCkgc2V0Cj4gb2YgbWFjcm9zIHRvIGV4cG9ydCBkZXZf
-cG1fb3BzIHN5bWJvbCwgd2hpY2ggZXhwb3J0IHRoZSBzeW1ib2wgaW4KPiBjYXNlCj4gQ09ORklH
-X1BNPXkgYnV0IGRvbid0IHRha2UgQ09ORklHX1BNX1NMRUVQIGludG8gY29uc2lkZXJhdGlvbi4K
-PiAKPiBTaW5jZSBfU0lNUExFXyB2YXJpYW50cyBvZiBfUE1fT1BTKCkgZG8gbm90IGluY2x1ZGUg
-cnVudGltZSBQTQo+IGhhbmRsZXMKPiBhbmQgYXJlIG9ubHkgdXNlZCBpbiBjYXNlIENPTkZJR19Q
-TV9TTEVFUD15LCB3ZSBzaG91bGQgbm90IGJlCj4gZXhwb3J0aW5nCj4gZGV2X3BtX29wcyBzeW1i
-b2wgZm9yIHRoZW0gaW4gY2FzZSBDT05GSUdfUE1fU0xFRVA9bi4KPiAKPiBUaGlzIGNhbiBiZSBm
-aXhlZCBieSBoYXZpbmcgdHdvIGRpc3RpbmN0IHNldCBvZiBleHBvcnQgbWFjcm9zIGZvcgo+IGJv
-dGgKPiBfUlVOVElNRV8gYW5kIF9TSU1QTEVfIHZhcmlhbnRzIG9mIF9QTV9PUFMoKSwgc3VjaCB0
-aGF0IHRoZSBleHBvcnQgb2YKPiBkZXZfcG1fb3BzIHN5bWJvbCB1c2VkIGluIGVhY2ggdmFyaWFu
-dCBkZXBlbmRzIG9uIENPTkZJR19QTSBhbmQKPiBDT05GSUdfUE1fU0xFRVAgcmVzcGVjdGl2ZWx5
-Lgo+IAo+IEludHJvZHVjZSBfREVWX1NMRUVQX1BNX09QUygpIHNldCBvZiBleHBvcnQgbWFjcm9z
-IGZvciBfU0lNUExFXwo+IHZhcmlhbnRzCj4gb2YgX1BNX09QUygpLCB3aGljaCBleHBvcnQgZGV2
-X3BtX29wcyBzeW1ib2wgb25seSBpbiBjYXNlCj4gQ09ORklHX1BNX1NMRUVQPXkKPiBhbmQgZGlz
-Y2FyZCBpdCBvdGhlcndpc2UuCj4gCj4gRml4ZXM6IDM0ZTFlZDE4OWZhYiAoIlBNOiBJbXByb3Zl
-IEVYUE9SVF8qX0RFVl9QTV9PUFMgbWFjcm9zIikKPiBTaWduZWQtb2ZmLWJ5OiBSYWFnIEphZGF2
-IDxyYWFnLmphZGF2QGludGVsLmNvbT4KClJldmlld2VkLWJ5OiBQYXVsIENlcmN1ZWlsIDxwYXVs
-QGNyYXBvdWlsbG91Lm5ldD4KCkNoZWVycywKLVBhdWwKCj4gLS0tCj4gUFM6IFRoaXMgaXMgYSBz
-dGFuZGFsb25lIGZpeCBhbmQgd29ya3Mgd2l0aG91dCB1cGRhdGluZyBleGlzdGluZwo+IGRyaXZl
-cnMuCj4gCj4gQ2hhbmdlcyBzaW5jZSB2MzoKPiAtIFJlbmFtZSBfUE1fT1BTIG1hY3JvIHRvIF9E
-SVNDQVJEX1BNX09QUwo+IAo+IENoYW5nZXMgc2luY2UgdjI6Cj4gLSBEcm9wIHJlZHVuZGFudCBw
-YXRjaGVzCj4gCj4gQ2hhbmdlcyBzaW5jZSB2MToKPiAtIFVwZGF0ZSBkcml2ZXJzIHRvIG5ldyBz
-ZXQgb2YgbWFjcm9zCj4gCj4gwqBpbmNsdWRlL2xpbnV4L3BtLmggfCA0MyArKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tLS0tCj4gwqAxIGZpbGUgY2hhbmdlZCwgMjkgaW5z
-ZXJ0aW9ucygrKSwgMTQgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGlu
-dXgvcG0uaCBiL2luY2x1ZGUvbGludXgvcG0uaAo+IGluZGV4IDE0MDBjMzdiMjljNy4uNjI5YzE2
-MzNiYmQwIDEwMDY0NAo+IC0tLSBhL2luY2x1ZGUvbGludXgvcG0uaAo+ICsrKyBiL2luY2x1ZGUv
-bGludXgvcG0uaAo+IEBAIC0zNzQsMjQgKzM3NCwzOSBAQCBjb25zdCBzdHJ1Y3QgZGV2X3BtX29w
-cyBuYW1lID0geyBcCj4gwqDCoMKgwqDCoMKgwqDCoFJVTlRJTUVfUE1fT1BTKHJ1bnRpbWVfc3Vz
-cGVuZF9mbiwgcnVudGltZV9yZXN1bWVfZm4sCj4gaWRsZV9mbikgXAo+IMKgfQo+IMKgCj4gLSNp
-ZmRlZiBDT05GSUdfUE0KPiAtI2RlZmluZSBfRVhQT1JUX0RFVl9QTV9PUFMobmFtZSwgbGljZW5z
-ZSwKPiBucynCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgXAo+ICsjZGVmaW5lIF9FWFBPUlRfUE1fT1BTKG5hbWUsIGxpY2Vuc2UsCj4gbnMpwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgXAo+
-IMKgwqDCoMKgwqDCoMKgwqBjb25zdCBzdHJ1Y3QgZGV2X3BtX29wcwo+IG5hbWU7wqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoFwKPiDCoMKgwqDCoMKgwqDCoMKgX19FWFBPUlRfU1lNQk9MKG5hbWUsIGxpY2Vuc2UsCj4g
-bnMpO8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqBcCj4gwqDCoMKgwqDCoMKgwqDCoGNvbnN0IHN0cnVjdCBkZXZfcG1fb3BzIG5hbWUKPiAt
-I2RlZmluZSBFWFBPUlRfUE1fRk5fR1BMKG5hbWUpwqDCoMKgwqDCoMKgwqDCoMKgRVhQT1JUX1NZ
-TUJPTF9HUEwobmFtZSkKPiAtI2RlZmluZSBFWFBPUlRfUE1fRk5fTlNfR1BMKG5hbWUsIG5zKcKg
-wqBFWFBPUlRfU1lNQk9MX05TX0dQTChuYW1lLAo+IG5zKQo+IC0jZWxzZQo+IC0jZGVmaW5lIF9F
-WFBPUlRfREVWX1BNX09QUyhuYW1lLCBsaWNlbnNlLAo+IG5zKcKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBcCj4gKwo+ICsjZGVmaW5lIF9ESVNDQVJE
-X1BNX09QUyhuYW1lLCBsaWNlbnNlLAo+IG5zKcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBcCj4gwqDCoMKgwqDCoMKgwqDCoHN0YXRpYyBf
-X21heWJlX3VudXNlZCBjb25zdCBzdHJ1Y3QgZGV2X3BtX29wcyBfX3N0YXRpY18jI25hbWUKPiAr
-Cj4gKyNpZmRlZiBDT05GSUdfUE0KPiArI2RlZmluZSBfRVhQT1JUX0RFVl9QTV9PUFMobmFtZSwg
-bGljZW5zZSwKPiBucynCoMKgwqDCoMKgwqDCoMKgwqDCoF9FWFBPUlRfUE1fT1BTKG5hbWUsIGxp
-Y2Vuc2UsIG5zKQo+ICsjZGVmaW5lCj4gRVhQT1JUX1BNX0ZOX0dQTChuYW1lKcKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgRVhQT1JUX1NZTUJPTF9HUEwo
-bmFtZQo+ICkKPiArI2RlZmluZSBFWFBPUlRfUE1fRk5fTlNfR1BMKG5hbWUsCj4gbnMpwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgRVhQT1JUX1NZTUJPTF9OU19HUEwobmFtZSwg
-bnMpCj4gKyNlbHNlCj4gKyNkZWZpbmUgX0VYUE9SVF9ERVZfUE1fT1BTKG5hbWUsIGxpY2Vuc2Us
-Cj4gbnMpwqDCoMKgwqDCoMKgwqDCoMKgwqBfRElTQ0FSRF9QTV9PUFMobmFtZSwgbGljZW5zZSwg
-bnMpCj4gwqAjZGVmaW5lIEVYUE9SVF9QTV9GTl9HUEwobmFtZSkKPiDCoCNkZWZpbmUgRVhQT1JU
-X1BNX0ZOX05TX0dQTChuYW1lLCBucykKPiDCoCNlbmRpZgo+IMKgCj4gLSNkZWZpbmUgRVhQT1JU
-X0RFVl9QTV9PUFMobmFtZSkgX0VYUE9SVF9ERVZfUE1fT1BTKG5hbWUsICIiLCAiIikKPiAtI2Rl
-ZmluZSBFWFBPUlRfR1BMX0RFVl9QTV9PUFMobmFtZSkgX0VYUE9SVF9ERVZfUE1fT1BTKG5hbWUs
-ICJHUEwiLAo+ICIiKQo+IC0jZGVmaW5lIEVYUE9SVF9OU19ERVZfUE1fT1BTKG5hbWUsIG5zKSBf
-RVhQT1JUX0RFVl9QTV9PUFMobmFtZSwgIiIsCj4gI25zKQo+IC0jZGVmaW5lIEVYUE9SVF9OU19H
-UExfREVWX1BNX09QUyhuYW1lLCBucykgX0VYUE9SVF9ERVZfUE1fT1BTKG5hbWUsCj4gIkdQTCIs
-ICNucykKPiArI2lmZGVmIENPTkZJR19QTV9TTEVFUAo+ICsjZGVmaW5lIF9FWFBPUlRfREVWX1NM
-RUVQX1BNX09QUyhuYW1lLCBsaWNlbnNlLAo+IG5zKcKgwqDCoMKgX0VYUE9SVF9QTV9PUFMobmFt
-ZSwgbGljZW5zZSwgbnMpCj4gKyNlbHNlCj4gKyNkZWZpbmUgX0VYUE9SVF9ERVZfU0xFRVBfUE1f
-T1BTKG5hbWUsIGxpY2Vuc2UsCj4gbnMpwqDCoMKgwqBfRElTQ0FSRF9QTV9PUFMobmFtZSwgbGlj
-ZW5zZSwgbnMpCj4gKyNlbmRpZgo+ICsKPiArI2RlZmluZQo+IEVYUE9SVF9ERVZfUE1fT1BTKG5h
-bWUpwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoF9FWFBPUlRfREVWX1BNCj4gX09QUyhuYW1lLCAiIiwgIiIpCj4gKyNkZWZpbmUK
-PiBFWFBPUlRfR1BMX0RFVl9QTV9PUFMobmFtZSnCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgX0VYUE9SVF9ERVZfUE1fT1BTKG5hbQo+IGUsICJHUEwiLCAiIikKPiArI2Rl
-ZmluZSBFWFBPUlRfTlNfREVWX1BNX09QUyhuYW1lLAo+IG5zKcKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqBfRVhQT1JUX0RFVl9QTV9PUFMobmFtZSwgIiIsICNucykKPiArI2RlZmlu
-ZSBFWFBPUlRfTlNfR1BMX0RFVl9QTV9PUFMobmFtZSwKPiBucynCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoF9FWFBPUlRfREVWX1BNX09QUyhuYW1lLCAiR1BMIiwgI25zKQo+ICsKPiArI2RlZmlu
-ZQo+IEVYUE9SVF9ERVZfU0xFRVBfUE1fT1BTKG5hbWUpwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgX0VYUE9SVF9ERVZfU0xFRVBfUE1fTwo+IFBTKG5hbWUsICIiLCAiIikKPiAr
-I2RlZmluZQo+IEVYUE9SVF9HUExfREVWX1NMRUVQX1BNX09QUyhuYW1lKcKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqBfRVhQT1JUX0RFVl9TTEVFUF9QTV9PCj4gUFMobmFtZSwgIkdQTCIsICIi
-KQo+ICsjZGVmaW5lIEVYUE9SVF9OU19ERVZfU0xFRVBfUE1fT1BTKG5hbWUsCj4gbnMpwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoF9FWFBPUlRfREVWX1NMRUVQX1BNX09QUyhuYW1lLCAiIiwgI25zKQo+
-ICsjZGVmaW5lIEVYUE9SVF9OU19HUExfREVWX1NMRUVQX1BNX09QUyhuYW1lLAo+IG5zKcKgwqDC
-oMKgwqDCoMKgX0VYUE9SVF9ERVZfU0xFRVBfUE1fT1BTKG5hbWUsICJHUEwiLCAjbnMpCj4gwqAK
-PiDCoC8qCj4gwqAgKiBVc2UgdGhpcyBpZiB5b3Ugd2FudCB0byB1c2UgdGhlIHNhbWUgc3VzcGVu
-ZCBhbmQgcmVzdW1lIGNhbGxiYWNrcwo+IGZvciBzdXNwZW5kCj4gQEAgLTQwNCwxOSArNDE5LDE5
-IEBAIGNvbnN0IHN0cnVjdCBkZXZfcG1fb3BzIG5hbWUgPSB7IFwKPiDCoMKgwqDCoMKgwqDCoMKg
-X0RFRklORV9ERVZfUE1fT1BTKG5hbWUsIHN1c3BlbmRfZm4sIHJlc3VtZV9mbiwgTlVMTCwgTlVM
-TCwKPiBOVUxMKQo+IMKgCj4gwqAjZGVmaW5lIEVYUE9SVF9TSU1QTEVfREVWX1BNX09QUyhuYW1l
-LCBzdXNwZW5kX2ZuLCByZXN1bWVfZm4pIFwKPiAtwqDCoMKgwqDCoMKgwqBFWFBPUlRfREVWX1BN
-X09QUyhuYW1lKSA9IHsgXAo+ICvCoMKgwqDCoMKgwqDCoEVYUE9SVF9ERVZfU0xFRVBfUE1fT1BT
-KG5hbWUpID0geyBcCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBTWVNURU1fU0xF
-RVBfUE1fT1BTKHN1c3BlbmRfZm4sIHJlc3VtZV9mbikgXAo+IMKgwqDCoMKgwqDCoMKgwqB9Cj4g
-wqAjZGVmaW5lIEVYUE9SVF9HUExfU0lNUExFX0RFVl9QTV9PUFMobmFtZSwgc3VzcGVuZF9mbiwg
-cmVzdW1lX2ZuKSBcCj4gLcKgwqDCoMKgwqDCoMKgRVhQT1JUX0dQTF9ERVZfUE1fT1BTKG5hbWUp
-ID0geyBcCj4gK8KgwqDCoMKgwqDCoMKgRVhQT1JUX0dQTF9ERVZfU0xFRVBfUE1fT1BTKG5hbWUp
-ID0geyBcCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBTWVNURU1fU0xFRVBfUE1f
-T1BTKHN1c3BlbmRfZm4sIHJlc3VtZV9mbikgXAo+IMKgwqDCoMKgwqDCoMKgwqB9Cj4gwqAjZGVm
-aW5lIEVYUE9SVF9OU19TSU1QTEVfREVWX1BNX09QUyhuYW1lLCBzdXNwZW5kX2ZuLCByZXN1bWVf
-Zm4sCj4gbnMpwqDCoMKgXAo+IC3CoMKgwqDCoMKgwqDCoEVYUE9SVF9OU19ERVZfUE1fT1BTKG5h
-bWUsIG5zKSA9IHsgXAo+ICvCoMKgwqDCoMKgwqDCoEVYUE9SVF9OU19ERVZfU0xFRVBfUE1fT1BT
-KG5hbWUsIG5zKSA9IHsgXAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgU1lTVEVN
-X1NMRUVQX1BNX09QUyhzdXNwZW5kX2ZuLCByZXN1bWVfZm4pIFwKPiDCoMKgwqDCoMKgwqDCoMKg
-fQo+IMKgI2RlZmluZSBFWFBPUlRfTlNfR1BMX1NJTVBMRV9ERVZfUE1fT1BTKG5hbWUsIHN1c3Bl
-bmRfZm4sIHJlc3VtZV9mbiwKPiBucynCoMKgwqDCoMKgwqDCoFwKPiAtwqDCoMKgwqDCoMKgwqBF
-WFBPUlRfTlNfR1BMX0RFVl9QTV9PUFMobmFtZSwgbnMpID0geyBcCj4gK8KgwqDCoMKgwqDCoMKg
-RVhQT1JUX05TX0dQTF9ERVZfU0xFRVBfUE1fT1BTKG5hbWUsIG5zKSA9IHsgXAo+IMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgU1lTVEVNX1NMRUVQX1BNX09QUyhzdXNwZW5kX2ZuLCBy
-ZXN1bWVfZm4pIFwKPiDCoMKgwqDCoMKgwqDCoMKgfQo+IMKgCgo=
+On Fri, 25 Aug 2023 13:26:20 +0200, Ulf Hansson wrote:
+> Changes in v3:
+> 	- Re-based upon the for-next/scmi/updates branch.
+> 	- Re-ordered some of the patches in the series, to eas review.
+> 	- Added some new DT doc patches in the series, according to comments.
+> 	- Fixed other comments, see version history for each patch.
+> 
+> Changes in v2:
+> 	- Split up the series, to get the basic support in place as the first
+> 	step. The part that remains is the integration with the OPP library, to
+> 	allow consumer drivers to change performance level using the OPP lib.
+> 	- Re-based on top v6.5-rc1.
+> 	- Other changes will be described for each patch.
+> 
+> [...]
+
+Applied to sudeep.holla/linux (for-next/scmi/updates), thanks!
+
+[01/13] firmware: arm_scmi: Extend perf protocol ops to get number of domains
+        https://git.kernel.org/sudeep.holla/c/e9090e70e618
+[02/13] firmware: arm_scmi: Extend perf protocol ops to get information of a domain
+        https://git.kernel.org/sudeep.holla/c/3d99ed60721b
+[03/13] cpufreq: scmi: Prepare to move OF parsing of domain-id to cpufreq
+        https://git.kernel.org/sudeep.holla/c/e336baa4193e
+[04/13] firmware: arm_scmi: Align perf ops to use domain-id as in-parameter
+        https://git.kernel.org/sudeep.holla/c/39dfa5b9e1f0
+[05/13] firmware: arm_scmi: Drop redundant ->device_domain_id() from perf ops
+        https://git.kernel.org/sudeep.holla/c/9b578d83629e
+[06/13] cpufreq: scmi: Avoid one OF parsing in scmi_get_sharing_cpus()
+        https://git.kernel.org/sudeep.holla/c/4f1f0bc8ed16
+[08/13] dt-bindings: arm: cpus: Add a power-domain-name for a performance-domain
+        https://git.kernel.org/sudeep.holla/c/6e429adc60b1
+[09/13] dt-bindings: firmware: arm,scmi: Extend bindings for protocol@13
+        https://git.kernel.org/sudeep.holla/c/e11c480b6df1
+[10/13] dt-bindings: power: Clarify performance capabilities of power-domains
+        https://git.kernel.org/sudeep.holla/c/0ead1f3e158c
+[11/13] cpufreq: scmi: Add support to parse domain-id using #power-domain-cells
+        https://git.kernel.org/sudeep.holla/c/92b2028b00ff
+[12/13] PM: domains: Allow genpd providers to manage OPP tables directly by its FW
+        https://git.kernel.org/sudeep.holla/c/3dd91515ef43
+
+--
+Regards,
+Sudeep
 
