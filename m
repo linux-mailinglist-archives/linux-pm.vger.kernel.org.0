@@ -2,265 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E677AD733
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 13:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6B1F7AD7A8
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 14:06:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjIYLr3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Sep 2023 07:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39116 "EHLO
+        id S231882AbjIYMGr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Sep 2023 08:06:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjIYLr3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 07:47:29 -0400
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92E7DA
-        for <linux-pm@vger.kernel.org>; Mon, 25 Sep 2023 04:47:22 -0700 (PDT)
-Received: by mail-oo1-xc2b.google.com with SMTP id 006d021491bc7-57b5f0d658dso3294400eaf.0
-        for <linux-pm@vger.kernel.org>; Mon, 25 Sep 2023 04:47:22 -0700 (PDT)
+        with ESMTP id S231569AbjIYMGd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 08:06:33 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2F7E6D
+        for <linux-pm@vger.kernel.org>; Mon, 25 Sep 2023 05:05:56 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-27752a1e180so1141793a91.1
+        for <linux-pm@vger.kernel.org>; Mon, 25 Sep 2023 05:05:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1695642442; x=1696247242; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=FymRbtwApwrc4PB0+3FfvhkzUy5BTBOpi4eBi/++jUc=;
-        b=T4F+YPJZcsx6RUxG9jdxRQjJsRUdi02kxaDzW8Z3FLvXDGBNVkNtq95zERELT7hoPT
-         E5Sxj3zmxskniEucRifl8sAdsEkWKvNT/HyTW3MBSFjRz3shPUrclCoznoLZoGMqjzMQ
-         7Ccl8RX6N7yoHiNWtX2e1tuTnKN4WzRK6AnUZO5vFoeu/tNQqgdbPNTVH0s1F2OaEhg9
-         VaeEjzXdilZd0nMEbEFAdzgIkqmGGLOPUwHjF5Z0XXCi/arAvuLU9VdYXct6zAWhXVFW
-         uk/DrWAYOXabW2cR+L3SYBFlIX5spl3fgE1+ABQIcxI5iChId5YjryVo0riiZ4afcfqJ
-         fUEw==
+        d=linaro.org; s=google; t=1695643556; x=1696248356; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3AQMzFTiHHxsEkB1mP8F0ofwmLCD3NmtCDXLCwWRp38=;
+        b=MqQmLKyWZbO6gqn5Wu11uUykZ9CnrCDbEVjnTO3cI6GF0Zl5z2yniMrhBm9XDjc/0I
+         Y99egt8ebCV7Magx+8Bu1SJ3yxWusd5cCepUOIfBpCSD0ggsgk0f8L9oMKlXBSAHhe2V
+         D+UrLv5Ofp/jF1sOlT9+vXM16Zth3CT1hlwoaktN3MIg/5rpt4gA9ivNORw9qPJrm4sb
+         10krBe7MUZcVgZVFJxdMe2umkCIG1cAcs66AmezelfZrCRRQvclWZgiBKAvoRWU/W7Yy
+         vI7On0Z9zGweN7ys9g4oV1cEm5ohPhy1nxXAtZAyvN55DYvftKJtxVolcnGP5Sv/vszN
+         7Emg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695642442; x=1696247242;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1695643556; x=1696248356;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FymRbtwApwrc4PB0+3FfvhkzUy5BTBOpi4eBi/++jUc=;
-        b=R3GsiwM4pRb7oX2Pa/AHR2986pyQe7JRF4+C3cLYE4/mHY1WFmyDPvkhBkJFVNwUHw
-         1xvzstixJiI/jei634CyyP50FNMhWP2UnzyCyJD7B12XoEPjNR2MKNgih54AxTWLOS8F
-         MCg9eOEd6BdCOhaR4YwC+fN2LPztELo2gbQ6jX5UXJQAQ27XUwLze+Fkyz8rZ4v04iqD
-         hmjQ7TlO/IcyjiAZs7dL30nEvGTmxK0zM1ZN2ZzxVwT/OspDPj/rL+Q8xguj1rHn3q8e
-         ourx0zNglYWdz1cvBIM/2lw/VcH550Q1XsDwb7kcHk9isVvAU2YkRVdlV30nbk8etRsA
-         ieIA==
-X-Gm-Message-State: AOJu0YxfrGOm3FIpVNKS7DcpI7hDJpygi5+MClGH52LgJbSKz7HYsVHh
-        NZ7wOjEIynEu/yvCuib/CGIG7Q==
-X-Google-Smtp-Source: AGHT+IHXOJ2ZeBHTzFhOhBTGj6IJMZfYB99+igJMz3oUWdZziKPr2UTG76BXovS+evU5SyOH02EI1A==
-X-Received: by 2002:a05:6358:78b:b0:143:1063:d1f4 with SMTP id n11-20020a056358078b00b001431063d1f4mr7314805rwj.13.1695642442168;
-        Mon, 25 Sep 2023 04:47:22 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id a31-20020a056a001d1f00b0069266a66a6esm7580942pfx.139.2023.09.25.04.47.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Sep 2023 04:47:21 -0700 (PDT)
-Message-ID: <65117349.050a0220.4fae8.ff6b@mx.google.com>
-Date:   Mon, 25 Sep 2023 04:47:21 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        bh=3AQMzFTiHHxsEkB1mP8F0ofwmLCD3NmtCDXLCwWRp38=;
+        b=u02zmCHM28eCmistOdGYgqRz3tWwH3DBQSgtoxbbOY9S29i0mphaCy9m67J4us5SnE
+         SY34fflM/ycojXf0CxKvuXLW/WOmDwx22XnlaQ36YDGA9bHdAjbUa9Kc6ZmenuG7Y1Mq
+         FCkiKF4nvYz1YuV+sW/LgwW2ML0JT+QIWTsP14N4yVWMv3lq7ApCPtb5VPdjzF5YcKyY
+         PYF/kPriLjfBCzrDXZZtd5ApGcmrrgKBednbbQVFP7SgkSLYaQ4FpQmvuDCW3BZUIUNO
+         L5b1vAA5aPmYYbdKT0Kf68wg8wMQOV5zFrEOZyOK1CXO0e0396P68ex+bITIgmelKMRE
+         3YhA==
+X-Gm-Message-State: AOJu0YwkZd5ZH9Ys9Dyw6UCgWd0YPUCgxNQl3rFUQYJog+WVdYO6cP3c
+        Wh11Y4kKALPkQZaidWzon/pNY3HAYSjyoBcB1vIpVQ==
+X-Google-Smtp-Source: AGHT+IEMG7wYE1v5WNPowSB4OI1pjxJk59BVXgECJSpoy8JeeRRykPlun/yJH3SD+MYcGrEgbFO/3NawGB+miB/mjAA=
+X-Received: by 2002:a17:90a:d354:b0:273:f584:40ca with SMTP id
+ i20-20020a17090ad35400b00273f58440camr4169349pjx.16.1695643555929; Mon, 25
+ Sep 2023 05:05:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v6.6-rc3-36-g6e2207203652
-X-Kernelci-Report-Type: test
-Subject: pm/testing baseline: 48 runs,
- 3 regressions (v6.6-rc3-36-g6e2207203652)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230901130312.247719-1-vincent.guittot@linaro.org> <ZQwW+XoOFqvyuQ63@arm.com>
+In-Reply-To: <ZQwW+XoOFqvyuQ63@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Mon, 25 Sep 2023 14:05:43 +0200
+Message-ID: <CAKfTPtC+qBEjnwketZRdF6Lgbr9aCYNW1sqSVe5-TJfUq25p8w@mail.gmail.com>
+Subject: Re: [PATCH 0/4] consolidate and cleanup CPU capacity
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
+        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-pm@vger.kernel.org, conor.dooley@microchip.com,
+        suagrfillet@gmail.com, ajones@ventanamicro.com, lftan@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 48 runs, 3 regressions (v6.6-rc3-36-g6e2207203652)
-
-Regressions Summary
--------------------
-
-platform      | arch  | lab           | compiler | defconfig | regressions
---------------+-------+---------------+----------+-----------+------------
-imx8mp-evk    | arm64 | lab-broonie   | gcc-10   | defconfig | 1          =
-
-r8a77960-ulcb | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
-
-r8a779m1-ulcb | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.6-rc3=
--36-g6e2207203652/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.6-rc3-36-g6e2207203652
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      6e220720365264d94eccc7916ef936d8d39e3040 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform      | arch  | lab           | compiler | defconfig | regressions
---------------+-------+---------------+----------+-----------+------------
-imx8mp-evk    | arm64 | lab-broonie   | gcc-10   | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65116943207b11ce868a0ab2
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.6-rc3-36-g6e2207=
-203652/arm64/defconfig/gcc-10/lab-broonie/baseline-imx8mp-evk.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.6-rc3-36-g6e2207=
-203652/arm64/defconfig/gcc-10/lab-broonie/baseline-imx8mp-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/65116943207b11ce868a0aba
-        failing since 12 days (last pass: pm-6.6-rc1-122-g07b618ec9d7a, fir=
-st fail: v6.6-rc1-5-gb5eda4c9c923)
-
-    2023-09-25T11:04:21.980457  + set<8>[   27.213978] <LAVA_SIGNAL_ENDRUN =
-0_dmesg 130494_1.5.2.4.1>
-    2023-09-25T11:04:21.981103   +x
-    2023-09-25T11:04:22.094431  / # #
-    2023-09-25T11:04:23.260824  export SHELL=3D/bin/sh
-    2023-09-25T11:04:23.266955  #
-    2023-09-25T11:04:24.765946  / # export SHELL=3D/bin/sh. /lava-130494/en=
-vironment
-    2023-09-25T11:04:24.771966  =
-
-    2023-09-25T11:04:27.495043  / # . /lava-130494/environment/lava-130494/=
-bin/lava-test-runner /lava-130494/1
-    2023-09-25T11:04:27.501852  =
-
-    2023-09-25T11:04:27.518407  / # /lava-130494/bin/lava-test-runner /lava=
--130494/1 =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform      | arch  | lab           | compiler | defconfig | regressions
---------------+-------+---------------+----------+-----------+------------
-r8a77960-ulcb | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/651169141f893b6a9d8a0ac7
-
-  Results:     4 PASS, 2 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.6-rc3-36-g6e2207=
-203652/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a77960-ulcb.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.6-rc3-36-g6e2207=
-203652/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a77960-ulcb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/651169141f893b6a9d8a0ad0
-        failing since 67 days (last pass: pm-6.5-rc2-210-ga648a2d354da, fir=
-st fail: v6.5-rc2-44-g6384f300e9f3)
-
-    2023-09-25T11:07:56.533214  / # #
-
-    2023-09-25T11:07:56.635174  export SHELL=3D/bin/sh
-
-    2023-09-25T11:07:56.635856  #
-
-    2023-09-25T11:07:56.737209  / # export SHELL=3D/bin/sh. /lava-11613326/=
-environment
-
-    2023-09-25T11:07:56.737790  =
-
-
-    2023-09-25T11:07:56.839171  / # . /lava-11613326/environment/lava-11613=
-326/bin/lava-test-runner /lava-11613326/1
-
-    2023-09-25T11:07:56.840377  =
-
-
-    2023-09-25T11:07:56.841696  / # /lava-11613326/bin/lava-test-runner /la=
-va-11613326/1
-
-    2023-09-25T11:07:56.906317  + export 'TESTRUN_ID=3D1_bootrr'
-
-    2023-09-25T11:07:56.906819  + cd /lava-116133<8>[   20.398331] <LAVA_SI=
-GNAL_STARTRUN 1_bootrr 11613326_1.5.2.4.5>
- =
-
-    ... (28 line(s) more)  =
-
- =
-
-
-
-platform      | arch  | lab           | compiler | defconfig | regressions
---------------+-------+---------------+----------+-----------+------------
-r8a779m1-ulcb | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65116947207b11ce868a0ac8
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.6-rc3-36-g6e2207=
-203652/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a779m1-ulcb.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.6-rc3-36-g6e2207=
-203652/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a779m1-ulcb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/65116947207b11ce868a0ad1
-        failing since 67 days (last pass: pm-6.5-rc2-210-ga648a2d354da, fir=
-st fail: v6.5-rc2-44-g6384f300e9f3)
-
-    2023-09-25T11:06:34.023475  / # #
-
-    2023-09-25T11:06:35.099031  export SHELL=3D/bin/sh
-
-    2023-09-25T11:06:35.100274  #
-
-    2023-09-25T11:06:36.589278  / # export SHELL=3D/bin/sh. /lava-11613331/=
-environment
-
-    2023-09-25T11:06:36.591231  =
-
-
-    2023-09-25T11:06:39.315618  / # . /lava-11613331/environment/lava-11613=
-331/bin/lava-test-runner /lava-11613331/1
-
-    2023-09-25T11:06:39.317740  =
-
-
-    2023-09-25T11:06:39.331724  / # /lava-11613331/bin/lava-test-runner /la=
-va-11613331/1
-
-    2023-09-25T11:06:39.347810  + export 'TESTRUN_ID=3D1_bootrr'
-
-    2023-09-25T11:06:39.390855  + cd /lava-116133<8>[   29.552012] <LAVA_SI=
-GNAL_STARTRUN 1_bootrr 11613331_1.5.2.4.5>
- =
-
-    ... (44 line(s) more)  =
-
- =20
+On Thu, 21 Sept 2023 at 12:12, Ionela Voinescu <ionela.voinescu@arm.com> wrote:
+>
+> On Friday 01 Sep 2023 at 15:03:08 (+0200), Vincent Guittot wrote:
+> > This is the 1st part of consolidating how the max compute capacity is
+> > used in the scheduler and how we calculate the frequency for a level of
+> > utilization.
+> >
+> > Fix some unconsistancy when computing frequency for an utilization. There
+> > can be a mismatch between energy model and schedutil.
+>
+> There are a few more pieces of functionality that would be worth
+> consolidating in this set as well, if you'd like to consider them:
+>
+> - arch_set_freq_scale() still uses policy->cpuinfo.max_freq. It might be
+>   good to use the boot time stored max_freq here as well. Given that
+>   arch_scale_cpu_capacity() would be based on that stored value, if
+>   arch_scale_freq_capacity() ends up using a different value, it could
+>   have interesting effects on the utilization signals in case of
+>   boosting.
+
+That's a good point, I will have a look at this part too. From a quick
+look, this seems to be only used by  architecture that are using
+arch_topology.c too
+
+
+>
+> - As Pierre mentioned in a previous comment, there is already a
+>   cpufreq_get_hw_max_freq() weak function that returns
+>   policy->cpuinfo.max_freq and it's only used at boot time by
+>   the setup code for AMU use for frequency invariance. I'm tempted to
+>   suggest to use this to initialize what is now "freq_factor" as my
+>   intention when I created that function was to provide platform
+>   providers with the possibility to implement their own and decide on
+>   the frequency they choose as their maximum. This could have been an
+>   arch_ function as well, but as you mentioned before, mobile and server
+>   platforms might want to choose different maximum values even if they
+>   are using the same architecture.
+>
+> Thanks,
+> Ionela.
+>
+> >
+> > Next step will be to make a difference between the original
+> > max compute capacity of a CPU and what is currently available when
+> > there is a capping applying forever (i.e. seconds or more).
+> >
+> > Vincent Guittot (4):
+> >   sched: consolidate and cleanup access to CPU's max compute capacity
+> >   topology: add a new arch_scale_freq_reference
+> >   cpufreq/schedutil: use a fixed reference frequency
+> >   energy_model: use a fixed reference frequency
+> >
+> >  arch/arm/include/asm/topology.h   |  1 +
+> >  arch/arm64/include/asm/topology.h |  1 +
+> >  arch/riscv/include/asm/topology.h |  1 +
+> >  drivers/base/arch_topology.c      |  9 +++------
+> >  include/linux/arch_topology.h     |  7 +++++++
+> >  include/linux/energy_model.h      | 20 +++++++++++++++++---
+> >  kernel/sched/core.c               |  2 +-
+> >  kernel/sched/cpudeadline.c        |  2 +-
+> >  kernel/sched/cpufreq_schedutil.c  | 29 +++++++++++++++++++++++++++--
+> >  kernel/sched/deadline.c           |  4 ++--
+> >  kernel/sched/fair.c               | 18 ++++++++----------
+> >  kernel/sched/rt.c                 |  2 +-
+> >  kernel/sched/sched.h              |  6 ------
+> >  kernel/sched/topology.c           |  7 +++++--
+> >  14 files changed, 75 insertions(+), 34 deletions(-)
+> >
+> > --
+> > 2.34.1
+> >
+> >
