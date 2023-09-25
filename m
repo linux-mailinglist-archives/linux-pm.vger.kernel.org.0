@@ -2,232 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E657ACF52
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 07:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5099F7AD071
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Sep 2023 08:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231592AbjIYFG6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Sep 2023 01:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33284 "EHLO
+        id S232214AbjIYGqs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Sep 2023 02:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjIYFG5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 01:06:57 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CD1DA;
-        Sun, 24 Sep 2023 22:06:51 -0700 (PDT)
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38P43Gxv015554;
-        Mon, 25 Sep 2023 05:06:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : content-transfer-encoding : mime-version; s=pp1;
- bh=C+Am1hs4BkW3DIdDY654brlQSLgS04t9wYlBnYLOdFw=;
- b=VlR1a+XceBkjbpjjivbKKEhAO2KLI2j1sOTlA6qGglUqLGFo+H94b/Dcilb6ukD0PjdG
- Tl/m5jitpl2MN/YOiSnM+wdHjfZVM0jkw+I/2bR4/iUN4ucNxG9SgRiy/lg9+pgiENJT
- yN9+7ur8WfJ5hXLImX7LNNovnJ5jzhBxCEouRlXzP2tGG09uLCZEM8SENoXvfiTjRAjk
- 280/BOZH8kS3jz70sLRWR33aWULCfRA7+9aQdyQ/NYTNd6LwwOTl+9dzr5rvvvqa4viH
- 8JqKv7Ho1XroYuMFOnBhKhN9qeOyvhTyneJy1+qb0OKlBMVgR4QMkpOsitRnAkrJPCP6 Lw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ta6dhs3qy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Sep 2023 05:06:28 +0000
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38P4qb9v029115;
-        Mon, 25 Sep 2023 05:06:28 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ta6dhs3qe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Sep 2023 05:06:28 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-        by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38P3SMkt011010;
-        Mon, 25 Sep 2023 05:06:27 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
-        by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3tabujyexq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Sep 2023 05:06:27 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38P56Qdo7995916
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 25 Sep 2023 05:06:27 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BD88558057;
-        Mon, 25 Sep 2023 05:06:26 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2C76458065;
-        Mon, 25 Sep 2023 05:06:21 +0000 (GMT)
-Received: from li-34d1fccc-27cd-11b2-a85c-c167793e56f7.ibm.com (unknown [9.171.87.83])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 25 Sep 2023 05:06:20 +0000 (GMT)
-Message-ID: <2725211932028cf24ab34da9eb9d19190848cceb.camel@linux.vnet.ibm.com>
-Subject: Re: [RFC v3 0/2] CPU-Idle latency selftest framework
-From:   Aboorva Devarajan <aboorvad@linux.vnet.ibm.com>
-Reply-To: 20230911053620.87973-1-aboorvad@linux.vnet.ibm.com
-To:     mpe@ellerman.id.au, npiggin@gmail.com, rmclure@linux.ibm.com,
-        arnd@arndb.de, joel@jms.id.au, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, pratik.r.sampat@gmail.com,
-        aboorvad@linux.vnet.ibm.com
-Cc:     sshegde@linux.vnet.ibm.com, srikar@linux.vnet.ibm.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org
-Date:   Mon, 25 Sep 2023 10:36:19 +0530
-In-Reply-To: <20230911053620.87973-1-aboorvad@linux.vnet.ibm.com>
-References: <20230911053620.87973-1-aboorvad@linux.vnet.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 6cY4PlYdrtJwZsXuoaQ-NxoofsXmwBHb
-X-Proofpoint-ORIG-GUID: FpWd_RXR3RWrFyiWORBVe2Lww56IVftl
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S232172AbjIYGqn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 02:46:43 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122D0A9
+        for <linux-pm@vger.kernel.org>; Sun, 24 Sep 2023 23:46:36 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3ff1c397405so64991845e9.3
+        for <linux-pm@vger.kernel.org>; Sun, 24 Sep 2023 23:46:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1695624394; x=1696229194; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7zP+NjIlNjRAiXaH5LNC5KgFvcvWMT47edQrMT2FN/A=;
+        b=yoRjRNIj8XdStntouaN5xcieBg+xaov9i0cbPkAZge3Y5lljKd8fgWP3sD/Wjm0D8i
+         jCdJXAK9F70ZtNbTi5OG+wODKMnLLqnVvFg61g+ZLwT+KVktrQmTcu56WAg4Tu9fYDca
+         WL/w9n9PfOF1m0V3FdVVM2m2we5jkqTIXdsgRV60iWqXAgwotY1tErC80n9dQXV5an9c
+         hBi9Y7+mWwmdau45Yb6xwlOw3xQu+FKpB6gk+TEQHJrfquS8edHIjiAco1wCxrle4/Hz
+         jdf3/6CBNfGHLPW5WXk4+/K/2p7kqYzpdTtzwao9j4QRhflY8Uxd0ef3lmlDeoi1YiCv
+         wmSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695624394; x=1696229194;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7zP+NjIlNjRAiXaH5LNC5KgFvcvWMT47edQrMT2FN/A=;
+        b=kQXgcvRWkAKZn9jDsWD24b35NFL1atMbi/TT8t8LBUWu5XUt33dvPVIUEx0SLbIK/l
+         bKz8YlzmMe9NPxHOcIY7byHFUS8NzcHuLznUk4RwSLshyytYJYq2ZwqglgfW4LubO76i
+         ZyqHocz7qMtCZmasymd06SgqSyVIT8D7detL/ztGygqeIbhA2oleOK6dMBI7XulFWBci
+         Yg0cUbfZmtMVJtrjAg292QjGfVcPVHV5HnwojLjml2foJWF3+GkeFK8J+6cAz1yzY/rm
+         dt5LWfKM1KWGnnohZlckWoBjZYQUX6AwSe6XNQTFtzsjTmM3cqsqv/RpBiyejQ8kC/HI
+         VCAQ==
+X-Gm-Message-State: AOJu0Yy/sk0KNnqcUOKRMDVQb3nd4/ZGQcVDS8iLvkFjo/T8MQOzS8zq
+        /jiMKpN2zomnnV27iz3iF2Tk5g==
+X-Google-Smtp-Source: AGHT+IFQq4Npta2WxJCgCaYtpMI5scWS0Ym6YvP4yb2aYNrE3wk19TxWKb5wR1Nckrzgw0NrSg5yHg==
+X-Received: by 2002:a1c:7207:0:b0:3fc:dd9:91fd with SMTP id n7-20020a1c7207000000b003fc0dd991fdmr4921420wmc.40.1695624394481;
+        Sun, 24 Sep 2023 23:46:34 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.100])
+        by smtp.gmail.com with ESMTPSA id w10-20020adfd4ca000000b0031762e89f94sm10899573wrk.117.2023.09.24.23.46.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Sep 2023 23:46:33 -0700 (PDT)
+Message-ID: <a225833f-e645-48cc-a0e9-103999064548@linaro.org>
+Date:   Mon, 25 Sep 2023 08:46:32 +0200
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-09-25_02,2023-09-21_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 spamscore=0 clxscore=1011 impostorscore=0 phishscore=0
- priorityscore=1501 bulkscore=0 adultscore=0 malwarescore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2309250034
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V3 1/4] dt-bindings: thermal: qcom-tsens: Add ipq5018
+ compatible
+Content-Language: en-US
+To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dmitry.baryshkov@linaro.org
+References: <20230922115116.2748804-1-srichara@win-platform-upstream01.qualcomm.com>
+ <20230922115116.2748804-2-srichara@win-platform-upstream01.qualcomm.com>
+ <f4fa94ab-78fb-d01b-7188-c498ec3053ff@linaro.org>
+ <21caae64-b8db-ed1f-2275-a7279227cf92@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <21caae64-b8db-ed1f-2275-a7279227cf92@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2023-09-11 at 11:06 +0530, Aboorva Devarajan wrote:
+On 25/09/2023 04:06, Sricharan Ramabadhran wrote:
+> 
+> 
+> On 9/23/2023 5:14 PM, Krzysztof Kozlowski wrote:
+>> On 22/09/2023 13:51, Sricharan R wrote:
+>>> From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+>>>
+>>> IPQ5018 has tsens v1.0 block with 4 sensors and 1 interrupt.
+>>
+>> Then why do you allow two interrupts?
+>>
+>   infact there is only one interrupt. Will fix in the binding
+>   description.
 
-CC'ing CPUidle lists and maintainers,
+Description? So you still allow two interrupts? No, this must be
+constrained in allOf:if:then.
 
-Patch Summary:
-
-The patchset introduces a kernel module and userspace driver designed
-for estimating the wakeup latency experienced when waking up from
-various CPU idle states. It primarily measures latencies related to two
-types of events: Inter-Processor Interrupts (IPIs) and Timers.
-
-Background:
-
-Initially, these patches were introduced as a generic self-test.
-However, it was later discovered that Intel platforms incorporate
-timer-based wakeup optimizations. These optimizations allow CPUs to
-perform a pre-wakeup, which limits the effectiveness of latency
-observation in certain scenarios because it only measures the optimized
-wakeup latency [1]. 
-
-Therefore, in this RFC, the self-test is specifically integrated into
-PowerPC, as it has been tested and used in PowerPC so far.
-
-Another proposal is to introduce these patches as a generic cpuilde IPI
-and timer wake-up test. While this method may not give us an exact
-measurement of latency variations at the hardware level, it can still
-help us assess this metric from a software observability standpoint.
-
-Looking forward to hearing what you think and any suggestions you may
-have regarding this. Thanks.
-
-[1] 
-https://lore.kernel.org/linux-pm/20200914174625.GB25628@in.ibm.com/T/#m5c004b9b1a918f669e91b3d0f33e2e3500923234
-
-> Changelog: v2 -> v3
-> 
-> * Minimal code refactoring
-> * Rebased on v6.6-rc1
-> 
-> RFC v1: 
-> https://lore.kernel.org/all/20210611124154.56427-1-psampat@linux.ibm.com/
-> 
-> RFC v2:
-> https://lore.kernel.org/all/20230828061530.126588-2-aboorvad@linux.vnet.ibm.com/
-> 
-> Other related RFC:
-> https://lore.kernel.org/all/20210430082804.38018-1-psampat@linux.ibm.com/
-> 
-> Userspace selftest:
-> https://lkml.org/lkml/2020/9/2/356
-> 
-> ----
-> 
-> A kernel module + userspace driver to estimate the wakeup latency
-> caused by going into stop states. The motivation behind this program
-> is
-> to find significant deviations behind advertised latency and
-> residency
-> values.
-> 
-> The patchset measures latencies for two kinds of events. IPIs and
-> Timers
-> As this is a software-only mechanism, there will be additional
-> latencies
-> of the kernel-firmware-hardware interactions. To account for that,
-> the
-> program also measures a baseline latency on a 100 percent loaded CPU
-> and the latencies achieved must be in view relative to that.
-> 
-> To achieve this, we introduce a kernel module and expose its control
-> knobs through the debugfs interface that the selftests can engage
-> with.
-> 
-> The kernel module provides the following interfaces within
-> /sys/kernel/debug/powerpc/latency_test/ for,
-> 
-> IPI test:
->     ipi_cpu_dest = Destination CPU for the IPI
->     ipi_cpu_src = Origin of the IPI
->     ipi_latency_ns = Measured latency time in ns
-> Timeout test:
->     timeout_cpu_src = CPU on which the timer to be queued
->     timeout_expected_ns = Timer duration
->     timeout_diff_ns = Difference of actual duration vs expected timer
-> 
-> Sample output is as follows:
-> 
-> # --IPI Latency Test---
-> # Baseline Avg IPI latency(ns): 2720
-> # Observed Avg IPI latency(ns) - State snooze: 2565
-> # Observed Avg IPI latency(ns) - State stop0_lite: 3856
-> # Observed Avg IPI latency(ns) - State stop0: 3670
-> # Observed Avg IPI latency(ns) - State stop1: 3872
-> # Observed Avg IPI latency(ns) - State stop2: 17421
-> # Observed Avg IPI latency(ns) - State stop4: 1003922
-> # Observed Avg IPI latency(ns) - State stop5: 1058870
-> #
-> # --Timeout Latency Test--
-> # Baseline Avg timeout diff(ns): 1435
-> # Observed Avg timeout diff(ns) - State snooze: 1709
-> # Observed Avg timeout diff(ns) - State stop0_lite: 2028
-> # Observed Avg timeout diff(ns) - State stop0: 1954
-> # Observed Avg timeout diff(ns) - State stop1: 1895
-> # Observed Avg timeout diff(ns) - State stop2: 14556
-> # Observed Avg timeout diff(ns) - State stop4: 873988
-> # Observed Avg timeout diff(ns) - State stop5: 959137
-> 
-> Aboorva Devarajan (2):
->   powerpc/cpuidle: cpuidle wakeup latency based on IPI and timer
-> events
->   powerpc/selftest: Add support for cpuidle latency measurement
-> 
->  arch/powerpc/Kconfig.debug                    |  10 +
->  arch/powerpc/kernel/Makefile                  |   1 +
->  arch/powerpc/kernel/test_cpuidle_latency.c    | 154 ++++++
->  tools/testing/selftests/powerpc/Makefile      |   1 +
->  .../powerpc/cpuidle_latency/.gitignore        |   2 +
->  .../powerpc/cpuidle_latency/Makefile          |   6 +
->  .../cpuidle_latency/cpuidle_latency.sh        | 443
-> ++++++++++++++++++
->  .../powerpc/cpuidle_latency/settings          |   1 +
->  8 files changed, 618 insertions(+)
->  create mode 100644 arch/powerpc/kernel/test_cpuidle_latency.c
->  create mode 100644
-> tools/testing/selftests/powerpc/cpuidle_latency/.gitignore
->  create mode 100644
-> tools/testing/selftests/powerpc/cpuidle_latency/Makefile
->  create mode 100755
-> tools/testing/selftests/powerpc/cpuidle_latency/cpuidle_latency.sh
->  create mode 100644
-> tools/testing/selftests/powerpc/cpuidle_latency/settings
-> 
+Best regards,
+Krzysztof
 
