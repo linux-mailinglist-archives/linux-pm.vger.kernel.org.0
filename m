@@ -2,78 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A8437AF674
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 00:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26AA67AF64B
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 00:30:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229463AbjIZWrv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Sep 2023 18:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
+        id S231975AbjIZWaI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Sep 2023 18:30:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbjIZWpv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 18:45:51 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980CD180
-        for <linux-pm@vger.kernel.org>; Tue, 26 Sep 2023 13:56:30 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1c724577e1fso1175345ad.0
-        for <linux-pm@vger.kernel.org>; Tue, 26 Sep 2023 13:56:30 -0700 (PDT)
+        with ESMTP id S232405AbjIZW2H (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 18:28:07 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EED95FFC
+        for <linux-pm@vger.kernel.org>; Tue, 26 Sep 2023 14:16:23 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-4053d53a1bfso86688985e9.1
+        for <linux-pm@vger.kernel.org>; Tue, 26 Sep 2023 14:16:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695761790; x=1696366590; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=K+cA0vEenc1gqjUMM9wmqTHY3iLNBl/eCPHeoCPbd9o=;
-        b=Kq/RuLeI1lsxBMQk6FTV9WLOxdyOooQs0Jb29yl0kLyXR9SBKICMctAwUj71b2pgSm
-         l7Bd2Tie3PBRIhRmzsZWl4Q5kDzQuhoFiLsCdL/5p206FS+lSLbapfL6FAfzBXOc/yC5
-         DK/VWMVnjYvxdWLKh7Lxf/MwA98AJBzNG4YH5uI57g8xKa3Jd1o71Wee2HNbFxiC9i5x
-         S4bAbvDf70DVjeonBw77JLXtKLzEbI1rg4UyiSfPP1dLA/V+DDBmCiiAEXAL5k8t2F2T
-         SkWpIclpLt8ElFDJZOamU3AMGOj2pjI7QUm9QYn4mCw6+DTCB2gEJ31l6uFT9Ke6TGW+
-         fVOw==
+        d=linaro.org; s=google; t=1695762982; x=1696367782; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6KWZPT1cVuVAxwKDV1pCBXg/18ZoYQrcOIuq4Q9pEZ8=;
+        b=Za+ZYEJ2KrP1Q69UqsS+32GjP/LE/LfefHFmzNosRQW9MWImQ+t8jTjsEVfIQDx9RZ
+         ffFRNEohk0wRiBqhtCa/4q9NoW8rqQrbYAF/JVCi9iV40bBp/w8zF+EcHGO6SrA13vs7
+         z/GRHcWv+RDDtHCYebJ8/ak2525YRov/IFfJ0l8i9hqxso2SYXuljW6WytFDWQK6qo73
+         gpvUAWGI1f/isG3bPntWSCE76NIM8uG2cHWs2DYluvaaCuQnZeI09mkBQy/H+4fKUYSw
+         AP38jQ5m84Ha+HJNUujYRRCi3r/Uck5vrvBTJF/7lWzTzniQyhfRQ6OdlffWgtrzVyfc
+         GncA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695761790; x=1696366590;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K+cA0vEenc1gqjUMM9wmqTHY3iLNBl/eCPHeoCPbd9o=;
-        b=IWIx5JFP2dojmr4Qgag+jsbxvI6JFYTNuuE+wMMAAOWMRk84M9f7A5QAkLUXKtXPoQ
-         f/Ge5PM3BIrrPAo3nO9lFq0Kj4lcBqIrZNqJrlgpeVRpT60fmhDeLxzXhJaGJrgEV74I
-         70aCFUPaSDoBHWvNypEk0JqJu1WguM+uKUV7wV9PI4Xmhl4OtN2PUswamn6D1kJzJHxI
-         bBHPP93fvE+8UnBI0GPlQNgkMH1o/rkaMZdTSBKom5tQRG+WmGL/20djPdnP5R/YiLu/
-         aKLu9jtjoyoEUcw82upePuw+bb1tqzu92kmsuwbiGVnyZ97u84yR39T1sSr7u5qtl2SO
-         1H7Q==
-X-Gm-Message-State: AOJu0YwSTXc1dSwPvCd/g8aWo4FpgBLLPqRvv0lTH+EpiPzqcbTVBbko
-        d8AGChXuazJ6CstyZV0mJTwl/w==
-X-Google-Smtp-Source: AGHT+IHm1IEuFlvmqbG+rMZZJWspqFftAv9gQV/yoTCiylQnMNOAJue7sY122lWTZw0J/AV6+YyC/Q==
-X-Received: by 2002:a17:902:c951:b0:1c3:a91a:627f with SMTP id i17-20020a170902c95100b001c3a91a627fmr12682196pla.47.1695761789886;
-        Tue, 26 Sep 2023 13:56:29 -0700 (PDT)
-Received: from google.com (55.212.185.35.bc.googleusercontent.com. [35.185.212.55])
-        by smtp.gmail.com with ESMTPSA id f13-20020a170902ce8d00b001bdb85291casm11445673plg.208.2023.09.26.13.56.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Sep 2023 13:56:29 -0700 (PDT)
-Date:   Tue, 26 Sep 2023 20:56:25 +0000
-From:   Carlos Llamas <cmllamas@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Elliot Berman <quic_eberman@quicinc.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>, kernel@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Prakash Viswalingam <quic_prakashv@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v4 0/2] Avoid spurious freezer wakeups
-Message-ID: <ZRNFeXZ4tRbT7ws6@google.com>
-References: <20230908-avoid-spurious-freezer-wakeups-v4-0-6155aa3dafae@quicinc.com>
- <ZRMEHb3_0Ku1UuK_@google.com>
- <20230926200238.GB13828@noisy.programming.kicks-ass.net>
+        d=1e100.net; s=20230601; t=1695762982; x=1696367782;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6KWZPT1cVuVAxwKDV1pCBXg/18ZoYQrcOIuq4Q9pEZ8=;
+        b=FxNYcgySwr1hiWlSgsdnAW8/cs/D5GnEnEe6mV/8edovy8cFdTxX7eZICYGXFcMni2
+         XZqmtVa22gpk08w6H9tHQiRNfatlu5JH47RTOPS0z/dpQWlJUdHWg1aWwvCpi6WuWgA8
+         csr1iQ5IcjL7kpN2moo38hqDQSrKQg4u3UefHcYlu6242ZO0c8TN5RDoOO4IHuALxTjV
+         JnVLcJj46wLIC8Jdodj2hqKKwMOUZsgZzWq3PtHWYGBFZJ2roNju4Ay7fo28XaTCxAqe
+         joRQb2uZr3WJutJS8s72OosIiYCtIllDfG/DBULOWQjWBWpO9w7FLxPYf8AYYKlqvCip
+         jGeQ==
+X-Gm-Message-State: AOJu0Yy9eYl/OzRRTiZh8iPvUWOzMC+ivWz4bFo0FO+rgzlMTVgkR5W0
+        9ugpje/+M+qgc8szvCj/9x06Xw==
+X-Google-Smtp-Source: AGHT+IHhT+JIEvulFq13sJ8dtu11qYoMwlAEUeIVyQAx9mWJQ2iwa0eRkCvZjWPXS0mYic7qN0JwVQ==
+X-Received: by 2002:adf:e3ca:0:b0:31f:98b4:4b4d with SMTP id k10-20020adfe3ca000000b0031f98b44b4dmr9718944wrm.42.1695762981581;
+        Tue, 26 Sep 2023 14:16:21 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
+        by smtp.googlemail.com with ESMTPSA id c2-20020adfe702000000b003217c096c1esm15555497wrm.73.2023.09.26.14.16.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Sep 2023 14:16:20 -0700 (PDT)
+Message-ID: <eaf3cef4-628f-8f6c-b77d-c8b2ee62f50b@linaro.org>
+Date:   Tue, 26 Sep 2023 23:16:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230926200238.GB13828@noisy.programming.kicks-ass.net>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v1 02/13] ACPI: thermal: Collapse trip devices update
+ functions
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
+References: <1957441.PYKUYFuaPT@kreacher> <3534976.iIbC2pHGDl@kreacher>
+ <38ea14aa-ecc2-c40e-34ea-05b348158cfb@linaro.org>
+ <CAJZ5v0iww__Kd2e8bSarXL5ugjL1zuCaXgOfzLp-VGdmHBBabQ@mail.gmail.com>
+ <CAJZ5v0gA1488TeNTHNFb0yCjfqFBe8cEWZNteBmk6m_Eo4QTsQ@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0gA1488TeNTHNFb0yCjfqFBe8cEWZNteBmk6m_Eo4QTsQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,23 +83,51 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 26, 2023 at 10:02:38PM +0200, Peter Zijlstra wrote:
-> On Tue, Sep 26, 2023 at 04:17:33PM +0000, Carlos Llamas wrote:
-> > 
-> > This issue is hurting the performance of our stable 6.1 releases. Does
-> > it make sense to backport these patches into stable branches once they
-> > land in mainline? I would assume we want to fix the perf regression
-> > there too?
+On 26/09/2023 20:04, Rafael J. Wysocki wrote:
+> On Tue, Sep 26, 2023 at 7:56 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>>
+>> On Tue, Sep 26, 2023 at 7:18 PM Daniel Lezcano
+>> <daniel.lezcano@linaro.org> wrote:
+>>>
+>>> On 21/09/2023 19:49, Rafael J. Wysocki wrote:
+>>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>>
+>>>> In order to reduce code duplication, merge update_passive_devices() and
+>>>> update_active_devices() into one function called update_trip_devices()
+>>>> that will be used for updating both the passive and active trip points.
+>>>>
+>>>> No intentional functional impact.
+>>>>
+>>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>> ---
+>>>>    drivers/acpi/thermal.c |   53 ++++++++++++++++++-------------------------------
+
+[ ... ]
+
+>>>> +     if (index != ACPI_THERMAL_TRIP_PASSIVE) {
+>>>> +             method[1] = 'A';
+>>>> +             method[2] = 'L';
+>>>> +             method[3] = '0' + index;
+>>>> +     }
+>>>
+>>> Could be index > 9 ?
+>>
+>> I can add a check, but it will never be called with index > 9 anyway.
 > 
-> Note that these patches are in tip/sched/core, slated for the next merge
-> window.
+> To be more precise, update_trip_devices() is called in two places,
+> acpi_thermal_init_trip() and acpi_thermal_update_trip_devices().
+> 
+> Both of these are called either with ACPI_THERMAL_TRIP_PASSIVE passed
+> as index, or from a loop over indices between 0 and
+> ACPI_THERMAL_MAX_ACTIVE-1 inclusive.
 
-We can wait, no problem. I just wanted to make sure we also patch stable
-if needed. Elliot, would you be able to send a backport of your patches
-to stable once they land in mainline on the next merge window?
+Ok, thanks for clarifying
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: stable@vger.kernel.org
 
---
-Carlos Llamas
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
