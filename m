@@ -2,102 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6D37AF644
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 00:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 787897AF63D
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 00:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231540AbjIZWX7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Sep 2023 18:23:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
+        id S231222AbjIZWSA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Sep 2023 18:18:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbjIZWV7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 18:21:59 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A0C15EBD
-        for <linux-pm@vger.kernel.org>; Tue, 26 Sep 2023 14:33:24 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-4053c6f0d55so97899535e9.0
-        for <linux-pm@vger.kernel.org>; Tue, 26 Sep 2023 14:33:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695764002; x=1696368802; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZieSTgMmUxr/NfrkjbwSgNBNg4r3Zk2KAXB7myr0pX4=;
-        b=LeF/fgiUcq3PBpwMTeTs20NQ+6zTGiMrhFzQvGfQOczpdv4mB/bqLouRDav9rC7inT
-         YR2FQ54CuvN836AaA5aVTi5Rm8GIEuyynMklnF+Kb6RDkxVYmMcAhwGDf6NH/+A7K0WU
-         +3Y5w3MB9mkvtFLgVqXt7hzcsemtvDtoFTknkmYrX3uxKfBlolRivauc8GyFI7xiV2LP
-         hsT/9evepJAG7TRVf/FEEihpLOHHiuH+q5tqB1iPB4pPumKMNzqxkLUd+oBJ5AtUW/FT
-         EAhpsc312xu8C3ArStLw3v4ibgh6J5yKcSyJOTJkfkcZ1cB5/kbqbawvziF/4MeUwgH6
-         LPGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695764002; x=1696368802;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZieSTgMmUxr/NfrkjbwSgNBNg4r3Zk2KAXB7myr0pX4=;
-        b=klrnItESpuwdGJQ3fCpx3hDqsORFa8mNMY1jTXuqN9C7lcxYJy7YPKqc+U3MN6AElJ
-         wt+jv/kVi5mx1ExS09OcYtEb2DSE+0A3AGBtCTK1jlt4cd2igadD8w48r1pk/7MajMjR
-         mp7pNQrSeLv8qcIyokmugbpW6he4rZrUAR1KKKkiDINaY2WSbMzmJt5CxSTTlO06GB2H
-         /jgrJRQJOsexarhH1eQ3jKxvAVbOlaAmzcYYjuE1GToLDhyOaQoz3nTI5hrO+XMi0J6B
-         O5DRpF8I+9QXeitycgl9iYgt3Yt231wtBta6rvc7UmhvJaDZp9LMYs8uNM+0ITNrNdMm
-         TUcA==
-X-Gm-Message-State: AOJu0YxnYOClUNuViChC+DuA3kpqtH4MlUayYaQCHFmI8/DIKyWaNCCk
-        SvnWluuO1RYTegCWMhlktgg4BA==
-X-Google-Smtp-Source: AGHT+IFOOMgkDp4RpIOH4fcxCTjyZKjvfOrC5prP7B4X4f0NsVWVwuRAKhYSlLCC9KDKAJF1jpA7Mw==
-X-Received: by 2002:a5d:4fc9:0:b0:31f:f99c:6009 with SMTP id h9-20020a5d4fc9000000b0031ff99c6009mr11016450wrw.22.1695764002559;
-        Tue, 26 Sep 2023 14:33:22 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
-        by smtp.googlemail.com with ESMTPSA id m16-20020a056000009000b0031c71693449sm15709182wrx.1.2023.09.26.14.33.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Sep 2023 14:33:21 -0700 (PDT)
-Message-ID: <44f9b368-395e-eaf7-b548-7906b33e039b@linaro.org>
-Date:   Tue, 26 Sep 2023 23:33:21 +0200
+        with ESMTP id S231447AbjIZWP7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 18:15:59 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B70423128;
+        Tue, 26 Sep 2023 15:05:28 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38QLs9jb012012;
+        Tue, 26 Sep 2023 22:04:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=PKb/D0HqamWxi3Wj4ngvJzC8qkJDnebrZ+o4mvzqv1s=;
+ b=p6d1x0TQkx3wzOuyLL7onb4u6LtHYEyn58xaDH3eS1aUpaDUsCbNKDwzQPiZeyzoJYOA
+ oUDklgXR5Ihtz6bX2D0bOsAf0wWfm5FlYytvmoSmCg6XhPcft7YWhVLY2uva3jdO6tJY
+ ldY+w8pRI36mlun8k4uvucDoqmy5blVkHjl2oY+9cgn5fnyMnrn42Z5elGaJwhovMwPv
+ YoOVL5V5dyJ6oFK28j5hkUkxP7r51RXHN5+O90Ma43OTqQNVYw1f3tb1X45lnVNrY4MZ
+ 4qB4dq2GCme6pGC8Q5fVhOEdwwWh661OtPaSLr9Ra2W0zzHM4byK2DLeFWPToYRm70+I 0w== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tbgfv37v8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Sep 2023 22:04:49 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38QM4miu006581
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Sep 2023 22:04:48 GMT
+Received: from [10.110.53.84] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Tue, 26 Sep
+ 2023 15:04:45 -0700
+Message-ID: <7db6eaee-af6d-492a-bc7c-23c6aa6bbdf8@quicinc.com>
+Date:   Tue, 26 Sep 2023 15:04:44 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v1 02/13] ACPI: thermal: Collapse trip devices update
- functions
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 0/2] Avoid spurious freezer wakeups
+To:     Carlos Llamas <cmllamas@google.com>,
+        Peter Zijlstra <peterz@infradead.org>
+CC:     Ingo Molnar <mingo@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>, <kernel@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>,
+        "Prakash Viswalingam" <quic_prakashv@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <stable@vger.kernel.org>
+References: <20230908-avoid-spurious-freezer-wakeups-v4-0-6155aa3dafae@quicinc.com>
+ <ZRMEHb3_0Ku1UuK_@google.com>
+ <20230926200238.GB13828@noisy.programming.kicks-ass.net>
+ <ZRNFeXZ4tRbT7ws6@google.com>
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-References: <1957441.PYKUYFuaPT@kreacher> <3534976.iIbC2pHGDl@kreacher>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <3534976.iIbC2pHGDl@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Elliot Berman <quic_eberman@quicinc.com>
+In-Reply-To: <ZRNFeXZ4tRbT7ws6@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: xtoe0jaJDYGL5l2tozlam7dUcuC-zwrx
+X-Proofpoint-ORIG-GUID: xtoe0jaJDYGL5l2tozlam7dUcuC-zwrx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-09-26_15,2023-09-26_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ phishscore=0 impostorscore=0 bulkscore=0 mlxlogscore=793 mlxscore=0
+ spamscore=0 adultscore=0 priorityscore=1501 clxscore=1015
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2309260189
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21/09/2023 19:49, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+
+On 9/26/2023 1:56 PM, Carlos Llamas wrote:
+> On Tue, Sep 26, 2023 at 10:02:38PM +0200, Peter Zijlstra wrote:
+>> On Tue, Sep 26, 2023 at 04:17:33PM +0000, Carlos Llamas wrote:
+>>>
+>>> This issue is hurting the performance of our stable 6.1 releases. Does
+>>> it make sense to backport these patches into stable branches once they
+>>> land in mainline? I would assume we want to fix the perf regression
+>>> there too?
+>>
+>> Note that these patches are in tip/sched/core, slated for the next merge
+>> window.
 > 
-> In order to reduce code duplication, merge update_passive_devices() and
-> update_active_devices() into one function called update_trip_devices()
-> that will be used for updating both the passive and active trip points.
+> We can wait, no problem. I just wanted to make sure we also patch stable
+> if needed. Elliot, would you be able to send a backport of your patches
+> to stable once they land in mainline on the next merge window?
+
+Yep, happy to send it. There's a trivial conflict to resolve w/older
+kernels not having the new guard(...)(...) macros.
+
 > 
-> No intentional functional impact.
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: stable@vger.kernel.org
 > 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-
-Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+> --
+> Carlos Llamas
