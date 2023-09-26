@@ -2,46 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF477AF41A
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Sep 2023 21:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 946D97AF462
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Sep 2023 21:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjIZT0g convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 26 Sep 2023 15:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41710 "EHLO
+        id S233431AbjIZTsj convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 26 Sep 2023 15:48:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235724AbjIZT0f (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 15:26:35 -0400
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852D311F;
-        Tue, 26 Sep 2023 12:26:28 -0700 (PDT)
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-57de3096e25so80284eaf.1;
-        Tue, 26 Sep 2023 12:26:28 -0700 (PDT)
+        with ESMTP id S229862AbjIZTsj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 15:48:39 -0400
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B82592;
+        Tue, 26 Sep 2023 12:48:32 -0700 (PDT)
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-57b83ff7654so244077eaf.1;
+        Tue, 26 Sep 2023 12:48:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695756388; x=1696361188;
+        d=1e100.net; s=20230601; t=1695757712; x=1696362512;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=i4Jq5nSjfc/CI/cvpv3MrTFI/arZy6OI2bEoo1gBoe8=;
-        b=RlYAYGu/E9PyNPADMtSwGFmWq+LKF/HxldbK2O/laa9pRGe+J4JJUUYnTzMwcJu3gw
-         nZWVQMzmn2VvdugEmk+Ca+qo0mnpWGTE70XithwyqP5MZyF5NmquuJnJ7gpHCXDKq9FR
-         Plda6hOE/stq1GknyWWPb+eZ8RSwdotsSyfG72FYSZF37K8UZ6CxOwp59qPWG6H8AjtE
-         j1PxwNA5L9S8aULmitly7TYhjFu9HaM0YDtREPfU73vty+zD5ix0vfnEYlXG7wUuF5iU
-         FxgMYVclLuojFMu0hh9sVOQv7KuD5H8J5grJEuliXVBjwCLidM9F8lQOUPQfmnqipQ/t
-         mktQ==
-X-Gm-Message-State: AOJu0Yz29bvPRk5YpBcl7K0095i0gMBwBGKb5zeTulhBvqHC6LbgNL+J
-        3pb2x2d09czQQvbGp5PM95htCipJg5Z4zichlJg=
-X-Google-Smtp-Source: AGHT+IF41kAFJEUJpDEBURDcOZ7UFLM5SsrQuwAwYxGOOHom20VI62UJHURJ66mby2R6X10BAwSQTInLefgYj9Iri9o=
-X-Received: by 2002:a4a:e704:0:b0:57b:94b7:c6ba with SMTP id
- y4-20020a4ae704000000b0057b94b7c6bamr78238oou.0.1695756387728; Tue, 26 Sep
- 2023 12:26:27 -0700 (PDT)
+        bh=QhlNiAk3BDM82ZwDVqCvko/vR/btlls97+/dsCckRpU=;
+        b=AuKTbpHzE4W2GqtsrPYmQjR9wFBU2bkwG4QGoIaA+W1yojuCoDq89FkMDHxQH14KZk
+         Tj0zUbI43u7V3BVox8IZmjCcYHLATtOj/vwNkMjtTI+wuRH9fao99XWS28ZKqxFwyASC
+         Q+CwH+Z5wq3eVXmr7qQ3gDYCSMFN5fEawLG9Ab+sSoHt1GePYS7oMRdTeE+mlb82d8Tc
+         76YXtLxFqt69B8eQQgHQjI49g4+kb3YdRckxgO4gmV3NsaYZSeu6fGZwwv5xTXvFrl7Q
+         byASb1co6EamSl9tQxsG98gcuHUqcxZk8OovP3bIPvw51GGUI+20zw0sQGY/3FJH2WOT
+         5KFQ==
+X-Gm-Message-State: AOJu0YyQbPo4VZZL0iReyFd+H9/O9bd2alrq0wL2ZP5421dr8QQaIpRA
+        kwXojdwc+/O25xI4j+4Tg6+h05k2nuvvbma5ZBE=
+X-Google-Smtp-Source: AGHT+IFV9/V/WuwC1oXtLytZIEVRRQGEnamOe+oHwg1Ntj9qproRlPbDWXYvLRMVlfvG1TNOT+wxiqsiZYFR76RYCyE=
+X-Received: by 2002:a4a:a504:0:b0:57c:6e35:251e with SMTP id
+ v4-20020a4aa504000000b0057c6e35251emr69511ook.1.1695757711630; Tue, 26 Sep
+ 2023 12:48:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230925081139.1305766-1-lukasz.luba@arm.com> <20230925081139.1305766-11-lukasz.luba@arm.com>
-In-Reply-To: <20230925081139.1305766-11-lukasz.luba@arm.com>
+References: <20230925081139.1305766-1-lukasz.luba@arm.com> <20230925081139.1305766-12-lukasz.luba@arm.com>
+In-Reply-To: <20230925081139.1305766-12-lukasz.luba@arm.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 26 Sep 2023 21:26:16 +0200
-Message-ID: <CAJZ5v0g6jPr3LqTuRfwUWsK4em7F1pfsZDn9pVziyu3tV56m8A@mail.gmail.com>
-Subject: Re: [PATCH v4 10/18] PM: EM: Add RCU mechanism which safely cleans
- the old data
+Date:   Tue, 26 Sep 2023 21:48:20 +0200
+Message-ID: <CAJZ5v0iebSOT--AiP-9-CYwqtTe7+kRddryJ3DdvFb3WUeji7w@mail.gmail.com>
+Subject: Re: [PATCH v4 11/18] PM: EM: Add runtime update interface to modify
+ EM power
 To:     Lukasz Luba <lukasz.luba@arm.com>
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         rafael@kernel.org, dietmar.eggemann@arm.com, rui.zhang@intel.com,
@@ -62,86 +62,216 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On Mon, Sep 25, 2023 at 10:11 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->
-> The EM is going to support runtime modifications of the power data.
-> Introduce RCU safe mechanism to clean up the old allocated EM data.
 
-"RCU-based" probably and "to clean up the old EM data safely".
+First off, I would merge this with the previous patch, as the changes
+would be much clearer then IMO.
 
-> It also adds a mutex for the EM structure to serialize the modifiers.
+> Add an interface which allows to modify EM power data at runtime.
+> The new power information is populated by the provided callback, which
+> is called for each performance state.
 
-This part doesn't match the code changes in the patch.
+But it all starts with copying the frequencies from the default table.
+
+> The CPU frequencies' efficiency is
+> re-calculated since that might be affected as well. The old EM memory
+> is going to be freed later using RCU mechanism.
+
+Not all of it, but the old runtime table that is not going to be used any more.
 
 > Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 > ---
->  kernel/power/energy_model.c | 29 +++++++++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
+>  include/linux/energy_model.h |   8 +++
+>  kernel/power/energy_model.c  | 111 +++++++++++++++++++++++++++++++++++
+>  2 files changed, 119 insertions(+)
 >
-> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-> index 5b40db38b745..2345837bfd2c 100644
-> --- a/kernel/power/energy_model.c
-> +++ b/kernel/power/energy_model.c
-> @@ -23,6 +23,9 @@
->   */
->  static DEFINE_MUTEX(em_pd_mutex);
+> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+> index 740e7c25cfff..8f055ab356ed 100644
+> --- a/include/linux/energy_model.h
+> +++ b/include/linux/energy_model.h
+> @@ -201,6 +201,8 @@ struct em_data_callback {
 >
-> +static void em_cpufreq_update_efficiencies(struct device *dev,
-> +                                          struct em_perf_state *table);
-> +
->  static bool _is_cpu_device(struct device *dev)
+>  struct em_perf_domain *em_cpu_get(int cpu);
+>  struct em_perf_domain *em_pd_get(struct device *dev);
+> +int em_dev_update_perf_domain(struct device *dev, struct em_data_callback *cb,
+> +                             void *priv);
+>  int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
+>                                 struct em_data_callback *cb, cpumask_t *span,
+>                                 bool microwatts);
+> @@ -384,6 +386,12 @@ static inline int em_pd_nr_perf_states(struct em_perf_domain *pd)
 >  {
->         return (dev->bus == &cpu_subsys);
-> @@ -104,6 +107,32 @@ static void em_debug_create_pd(struct device *dev) {}
->  static void em_debug_remove_pd(struct device *dev) {}
+>         return 0;
+>  }
+> +static inline
+> +int em_dev_update_perf_domain(struct device *dev, struct em_data_callback *cb,
+> +                             void *priv)
+> +{
+> +       return -EINVAL;
+> +}
 >  #endif
 >
-> +static void em_destroy_rt_table_rcu(struct rcu_head *rp)
+>  #endif
+> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+> index 2345837bfd2c..78e1495dc87e 100644
+> --- a/kernel/power/energy_model.c
+> +++ b/kernel/power/energy_model.c
+> @@ -172,6 +172,101 @@ static int em_compute_costs(struct device *dev, struct em_perf_state *table,
+>         return 0;
+>  }
+>
+> +/**
+> + * em_dev_update_perf_domain() - Update runtime EM table for a device
+> + * @dev                : Device for which the EM is to be updated
+> + * @cb         : Callback function providing the power data for the EM
+> + * @priv       : Pointer to private data useful for passing context
+> + *             which might be required while calling @cb
 
-Adding static functions without callers will obviously cause the
-compiler to complain, which is one of the reasons to avoid doing that.
-The other is that it is hard to say how these functions are going to
-be used without reviewing multiple patches simultaneously, which is a
-pain as far as I'm concerned.
+It is still unclear to me who is going to use this priv pointer and how.
 
+> + *
+> + * Update EM runtime modifiable table for a @dev using the callback
+> + * defined in @cb. The EM new power values are then used for calculating
+> + * the em_perf_state::cost for associated performance state.
+
+It actually allocates a new runtime table and populates it from
+scratch, using the frequencies from the default table and the
+callback.
+
+> + *
+> + * This function uses mutex to serialize writers, so it must not be called
+
+"a mutex"
+
+> + * from non-sleeping context.
+> + *
+> + * Return 0 on success or a proper error in case of failure.
+> + */
+> +int em_dev_update_perf_domain(struct device *dev, struct em_data_callback *cb,
+> +                             void *priv)
 > +{
 > +       struct em_perf_table *runtime_table;
+> +       unsigned long power, freq;
+> +       struct em_perf_domain *pd;
+> +       int ret, i;
 > +
-> +       runtime_table = container_of(rp, struct em_perf_table, rcu);
+> +       if (!cb || !cb->update_power)
+> +               return -EINVAL;
+> +
+> +       /*
+> +        * The lock serializes update and unregister code paths. When the
+> +        * EM has been unregistered in the meantime, we should capture that
+> +        * when entering this critical section. It also makes sure that
+> +        * two concurrent updates will be serialized.
+> +        */
+> +       mutex_lock(&em_pd_mutex);
+> +
+> +       if (!dev || !dev->em_pd) {
+
+Checking dev against NULL under the mutex is pointless (either it is
+NULL or it isn't, so check it earlier).
+
+> +               ret = -EINVAL;
+> +               goto unlock_em;
+> +       }
+> +
+> +       pd = dev->em_pd;
+
+And I would check pd against NULL here.
+
+> +
+> +       runtime_table = kzalloc(sizeof(*runtime_table), GFP_KERNEL);
+> +       if (!runtime_table) {
+> +               ret = -ENOMEM;
+> +               goto unlock_em;
+> +       }
+> +
+> +       runtime_table->state = kcalloc(pd->nr_perf_states,
+> +                                      sizeof(struct em_perf_state),
+> +                                      GFP_KERNEL);
+> +       if (!runtime_table->state) {
+> +               ret = -ENOMEM;
+> +               goto free_runtime_table;
+> +       }
+
+The above allocations can be merged into one and allocating memory
+under the mutex is questionable.
+
+> +
+> +       /* Populate runtime table with updated values using driver callback */
+> +       for (i = 0; i < pd->nr_perf_states; i++) {
+> +               freq = pd->default_table->state[i].frequency;
+> +               runtime_table->state[i].frequency = freq;
+> +
+> +               /*
+> +                * Call driver callback to get a new power value for
+> +                * a given frequency.
+> +                */
+> +               ret = cb->update_power(dev, freq, &power, priv);
+> +               if (ret) {
+> +                       dev_dbg(dev, "EM: runtime update error: %d\n", ret);
+> +                       goto free_runtime_state_table;
+> +               }
+> +
+> +               runtime_table->state[i].power = power;
+> +       }
+> +
+> +       ret = em_compute_costs(dev, runtime_table->state, cb,
+> +                              pd->nr_perf_states, pd->flags);
+> +       if (ret)
+> +               goto free_runtime_state_table;
+> +
+> +       em_perf_runtime_table_set(dev, runtime_table);
+> +
+> +       mutex_unlock(&em_pd_mutex);
+> +       return 0;
+> +
+> +free_runtime_state_table:
 > +       kfree(runtime_table->state);
+> +free_runtime_table:
 > +       kfree(runtime_table);
-
-If runtime_table and its state were allocated in one go, it would be
-possible to free them in one go either.
-
-For some reason, you don't seem to want to do that, but why?
-
+> +unlock_em:
+> +       mutex_unlock(&em_pd_mutex);
+> +
+> +       return -EINVAL;
 > +}
+> +EXPORT_SYMBOL_GPL(em_dev_update_perf_domain);
 > +
-> +static void em_perf_runtime_table_set(struct device *dev,
-> +                                     struct em_perf_table *runtime_table)
-> +{
-> +       struct em_perf_domain *pd = dev->em_pd;
-> +       struct em_perf_table *tmp;
-> +
-> +       tmp = pd->runtime_table;
-> +
-> +       rcu_assign_pointer(pd->runtime_table, runtime_table);
-> +
-> +       em_cpufreq_update_efficiencies(dev, runtime_table->state);
-> +
-> +       /* Don't free default table since it's used by other frameworks. */
+>  static int em_create_perf_table(struct device *dev, struct em_perf_domain *pd,
+>                                 int nr_states, struct em_data_callback *cb,
+>                                 unsigned long flags)
+> @@ -494,6 +589,8 @@ void em_dev_unregister_perf_domain(struct device *dev)
+>          * The mutex separates all register/unregister requests and protects
+>          * from potential clean-up/setup issues in the debugfs directories.
+>          * The debugfs directory name is the same as device's name.
+> +        * The lock also protects the updater of the runtime modifiable
+> +        * EM and this remover.
+>          */
+>         mutex_lock(&em_pd_mutex);
+>
+> @@ -501,9 +598,23 @@ void em_dev_unregister_perf_domain(struct device *dev)
+>
+>         runtime_table = pd->runtime_table;
+>
+> +       /*
+> +        * Safely destroy runtime modifiable EM. By using the call
+> +        * synchronize_rcu() we make sure we don't progress till last user
+> +        * finished the RCU section and our update got applied.
+> +        */
+>         rcu_assign_pointer(pd->runtime_table, NULL);
+>         synchronize_rcu();
+>
+> +       /*
+> +        * After the sync no updates will be in-flight, so free the
+> +        * memory allocated for runtime table (if there was such).
+> +        */
+> +       if (runtime_table != pd->default_table) {
+> +               kfree(runtime_table->state);
+> +               kfree(runtime_table);
+> +       }
 
-Apparently, some frameworks are only going to use the default table
-while the runtime-updatable table will be used somewhere else at the
-same time.
+Can't this race with the RCU callback freeing the runtime table?
 
-I'm not really sure if this is a good idea.
-
-> +       if (tmp != pd->default_table)
-> +               call_rcu(&tmp->rcu, em_destroy_rt_table_rcu);
-> +}
 > +
->  static int em_compute_costs(struct device *dev, struct em_perf_state *table,
->                             struct em_data_callback *cb, int nr_states,
->                             unsigned long flags)
+>         kfree(pd->default_table->state);
+>         kfree(pd->default_table);
+>         kfree(dev->em_pd);
 > --
