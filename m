@@ -2,80 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54FA57AE877
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Sep 2023 10:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 085BA7AE87E
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Sep 2023 11:00:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234088AbjIZI7W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Sep 2023 04:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46500 "EHLO
+        id S234015AbjIZJAg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Sep 2023 05:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234085AbjIZI7U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 04:59:20 -0400
+        with ESMTP id S229685AbjIZJAf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 05:00:35 -0400
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C762F194;
-        Tue, 26 Sep 2023 01:59:07 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38Q8tN5V003425;
-        Tue, 26 Sep 2023 08:58:53 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71D4DD;
+        Tue, 26 Sep 2023 02:00:28 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38Q4kQGv025635;
+        Tue, 26 Sep 2023 09:00:21 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=+FWEZmpVo670+zlkSCbGGZPPfcsX4EQ/S+LkbxUTsK0=;
- b=OY/L1oVFG1pUxJ1ef9POd/xPOSWNitwKOigd/Qt0LzDs+dyQRuxWvbUT0NRauuyNK3xi
- BABxcsLiNRIT/NfUFFQu3FJyvjURuqaJJhq5ewyxUun7LORnrN3lVQ4ZQfAEz+6z8eFG
- kGLvCdrGeZU7e9Wq6fovdvgqMwZ43t6c+v9d7+T9O09FZ75ifz4Mw3xkLwIMAzK6vtoA
- ZVkomR+W0MRZ/oTA8yFXldEj+em1QmjAoqdkahdC841FTn0qLVLPT5ILc5OydWwbru4t
- zNIwjTL9q173grusZxl6pJ4b0QsJGK/CVKGVrSKbyWJsLjJNNR+odMcfQ83TWS4Andvp IQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tbc79a1mg-1
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=gvCQTCR/NydbDHGjQ2qfSwSTxf+YX72vUpmHW0UtVCw=;
+ b=OrEI4jCLOf4d7agg/8+w2A7X2oGPT4Pdf1Nv3Wj3fmq4r1H0QmCWUEEI20FencZm/1i+
+ wTOfsDvOJHYMDKXPPrqiXKYfRzRt/SCH1wvy+bNyL42hmDB/v8t7iPP/sGXaHeOxGhGE
+ BXiD0s+aWrhKUORq784aBX80DnHPlrDQG1hzcS7YoN4KY33M0uvt2jESztVfjxE5m6Zw
+ cD2JzsGrPE1pgwvbvY3lb/orbsVgfwGa7bIMGuDwflLD5BeY+1nTDiIzc7/Tc3o0uHQW
+ SAqG9svwmBTtLxp7Knxrl067BRfwbo3kcWbcXBHqHsbhKY+4iWI9G066vob7gkkTfeHR cA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tbh25h7vx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Sep 2023 08:58:53 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38Q8wpwx005141
+        Tue, 26 Sep 2023 09:00:21 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38Q90KNv024341
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Sep 2023 08:58:52 GMT
-Received: from hu-nprakash-blr.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+        Tue, 26 Sep 2023 09:00:20 GMT
+Received: from hu-priyjain-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Tue, 26 Sep 2023 01:58:45 -0700
-From:   Nikhil V <quic_nprakash@quicinc.com>
-To:     Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     Nikhil V <quic_nprakash@quicinc.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>, Tejun Heo <tj@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_kprasan@quicinc.com>, <quic_mpilaniy@quicinc.com>,
-        <quic_shrekk@quicinc.com>, <mpleshivenkov@google.com>,
-        <ericyin@google.com>
-Subject: [RFC PATCH 4/4] PM: hibernate: Support to select compression algorithm
-Date:   Tue, 26 Sep 2023 14:27:14 +0530
-Message-ID: <b49a7bdd957bf86913700220b6c1f8f12c753b52.1695711299.git.quic_nprakash@quicinc.com>
+ 15.2.1118.36; Tue, 26 Sep 2023 02:00:12 -0700
+From:   Priyansh Jain <quic_priyjain@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_manafm@quicinc.com>, <quic_priyjain@quicinc.com>,
+        <kernel@quicinc.com>
+Subject: [PATCH v2 0/2] Enable tsens and thermal for sa8775p SoC
+Date:   Tue, 26 Sep 2023 14:29:46 +0530
+Message-ID: <20230926085948.23046-1-quic_priyjain@quicinc.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1695711299.git.quic_nprakash@quicinc.com>
-References: <cover.1695711299.git.quic_nprakash@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 6MnlpxIwDHzkDSBHHuASkueym7gFWp6Z
-X-Proofpoint-GUID: 6MnlpxIwDHzkDSBHHuASkueym7gFWp6Z
+X-Proofpoint-GUID: ZDcfSJX9FAT4pdWoM8sqex-HGrpANbG-
+X-Proofpoint-ORIG-GUID: ZDcfSJX9FAT4pdWoM8sqex-HGrpANbG-
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-09-26_06,2023-09-25_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- clxscore=1015 adultscore=0 priorityscore=1501 lowpriorityscore=0
- suspectscore=0 mlxscore=0 bulkscore=0 mlxlogscore=999 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2309260078
+ definitions=2023-09-26_07,2023-09-25_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ spamscore=0 adultscore=0 malwarescore=0 phishscore=0 lowpriorityscore=0
+ priorityscore=1501 clxscore=1011 suspectscore=0 mlxscore=0 mlxlogscore=793
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
+ definitions=main-2309260078
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -85,97 +83,28 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently the default compression algorithm is selected based on
-Kconfig. Introduce a kernel command line parameter "hib_compression" to
-override this behaviour.
+Adding compatible string in TSENS dt-bindings, device node
+for TSENS controller and Thermal zone support
 
-Different compression algorithms have different characteristics and
-hibernation may benefit when it uses any of these algorithms, especially
-when a secondary algorithm offers better decompression speeds over a
-default algorithm, which in turn reduces hibernation image restore time.
+Changes since v3:
+- Correct the unit address of tsens node
+- Updated tsens nodes in sorted order by address
+- Moved thermal zones outside /soc node
 
-Users can set "hib_compression" command line parameter to override the
-default algorithm. Currently LZO and LZ4 are the supported algorithms.
-Usage:
-    LZO: hib_compression=lzo
-    LZ4: hib_compression=lz4
+Changes since v2:
+- Indentation mistakes are resolved
+- Updated offset of tsens srot region in reg property
+- Updated tsens reg property cells properly
 
-LZO is the default compression algorithm used with hibernation.
 
-Signed-off-by: Nikhil V <quic_nprakash@quicinc.com>
----
- .../admin-guide/kernel-parameters.txt         |  6 ++++
- kernel/power/hibernate.c                      | 29 ++++++++++++++++++-
- 2 files changed, 34 insertions(+), 1 deletion(-)
+Priyansh Jain (2):
+  dt-bindings: thermal: tsens: Add sa8775p compatible
+  arm64: dts: qcom: Enable tsens and thermal for sa8775p SoC
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 0a1731a0f0ef..3f5f3e453db1 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -1734,6 +1734,12 @@
- 				(that will set all pages holding image data
- 				during restoration read-only).
- 
-+	hib_compression= [COMPRESSION ALGORITHM]
-+		lzo		Select LZO compression algorithm to compress/decompress
-+				hibernation images.
-+		lz4		Select LZ4 compression algorithm to compress/decompress
-+				hibernation images.
-+
- 	highmem=nn[KMG]	[KNL,BOOT] forces the highmem zone to have an exact
- 			size of <nn>. This works even on boxes that have no
- 			highmem otherwise. This also works to reduce highmem
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index 87be8cda9b9b..22296a7b640c 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -742,7 +742,8 @@ int hibernate(void)
- 	 * Query for the compression algorithm support if compression is enabled.
- 	 */
- 	if (!nocompress) {
--		strscpy(hib_comp_algo, default_compressor, sizeof(hib_comp_algo));
-+		if (!hib_comp_algo[0])
-+			strscpy(hib_comp_algo, default_compressor, sizeof(hib_comp_algo));
- 		if (crypto_has_comp(hib_comp_algo, 0, 0) != 1) {
- 			pr_err("%s compression is not available\n", hib_comp_algo);
- 			return -EOPNOTSUPP;
-@@ -1416,6 +1417,31 @@ static int __init nohibernate_setup(char *str)
- 	return 1;
- }
- 
-+static const char * const comp_alg_enabled[] = {
-+#if IS_ENABLED(CONFIG_CRYPTO_LZO)
-+	COMPRESSION_ALGO_LZO,
-+#endif
-+#if IS_ENABLED(CONFIG_CRYPTO_LZ4)
-+	COMPRESSION_ALGO_LZ4,
-+#endif
-+};
-+
-+static int __init compression_setup(char *str)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(comp_alg_enabled); i++) {
-+		if (!strcmp(str, comp_alg_enabled[i])) {
-+			strscpy(hib_comp_algo, str, sizeof(hib_comp_algo));
-+			goto setup_done;
-+		}
-+	}
-+	strscpy(hib_comp_algo, default_compressor, sizeof(hib_comp_algo));
-+
-+setup_done:
-+	return 1;
-+}
-+
- __setup("noresume", noresume_setup);
- __setup("resume_offset=", resume_offset_setup);
- __setup("resume=", resume_setup);
-@@ -1423,3 +1449,4 @@ __setup("hibernate=", hibernate_setup);
- __setup("resumewait", resumewait_setup);
- __setup("resumedelay=", resumedelay_setup);
- __setup("nohibernate", nohibernate_setup);
-+__setup("hib_compression=", compression_setup);
+ .../bindings/thermal/qcom-tsens.yaml          |    1 +
+ arch/arm64/boot/dts/qcom/sa8775p.dtsi         | 1096 +++++++++++++++++
+ 2 files changed, 1097 insertions(+)
+
 -- 
 2.17.1
 
