@@ -2,120 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE737AE226
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Sep 2023 01:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E31C7AE406
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Sep 2023 05:20:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233464AbjIYXRh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Sep 2023 19:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40908 "EHLO
+        id S229689AbjIZDUR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Sep 2023 23:20:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjIYXRg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 19:17:36 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA018101;
-        Mon, 25 Sep 2023 16:17:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=lK9wsOQ0X+liH8Gj+buTBXV/sF1bkg6KdP4DvULH538=; b=zxMH/KaHAkwdrC1+MS43+Ar/0c
-        rF9M5PWf4SI63IOtDUMqPRSW6tx0l0M4RgxdATupJXkPwvbD4Vjve6+5Pnpd2m8XxJLTvGA6jBcps
-        CrAAAsUI+8oEAzcWtoOUIl+cadXKxUnz7Nor3Qk2xr1D8zH2rTVem6vEVssyMUQuXeIfDYeBoFS58
-        n2uyCGUlyi+MjdH1aveQezpB6xzm5Xcb1HMIJU++NkCaZ/iWZtjdq/0Atrt63PgrvLM5Y0+a084ZP
-        P8gAGwISZUzUKkQkmiZTlTZKWibCLuKxDD0MK4wnuWO1yGiZujLHgPNDabuGLmfu5dJ9P/WBEBMxY
-        VbEzIwOw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:40444)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1qkupO-0001gn-1S;
-        Tue, 26 Sep 2023 00:17:22 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qkupL-0008F5-Vw; Tue, 26 Sep 2023 00:17:20 +0100
-Date:   Tue, 26 Sep 2023 00:17:19 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-acpi@vger.kernel.org,
-        James Morse <james.morse@arm.com>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        jianyong.wu@arm.com, justin.he@arm.com,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Salil Mehta <salil.mehta@huawei.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-ia64@vger.kernel.org
-Subject: Re: [PATCH] cpu-hotplug: provide prototypes for arch CPU registration
-Message-ID: <ZRIU/yFrbFbIR7zZ@shell.armlinux.org.uk>
-References: <E1qkoRr-0088Q8-Da@rmk-PC.armlinux.org.uk>
- <dd4dee9e-4d75-e1e6-04c8-82d84b28fd35@redhat.com>
+        with ESMTP id S229651AbjIZDUQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Sep 2023 23:20:16 -0400
+X-Greylist: delayed 2862 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Sep 2023 20:20:08 PDT
+Received: from mail.iszf.irk.ru (mx.iszf.irk.ru [84.237.20.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E7C89F;
+        Mon, 25 Sep 2023 20:20:08 -0700 (PDT)
+Received: from mail.iszf.irk.ru (unknown [10.0.0.3])
+        by mail.iszf.irk.ru (Postfix) with ESMTP id 66C29673C1;
+        Tue, 26 Sep 2023 09:59:27 +0800 (IRKT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dd4dee9e-4d75-e1e6-04c8-82d84b28fd35@redhat.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 26 Sep 2023 02:59:27 +0100
+From:   Roweel Hambrick <tseg@iszf.irk.ru>
+To:     undisclosed-recipients:;
+Subject: Re
+Reply-To: rowellhambrick019@gmail.com
+Mail-Reply-To: rowellhambrick019@gmail.com
+Message-ID: <d59cd1ec399504e4ad5adc9727d841dd@mail.iszf.irk.ru>
+X-Sender: tseg@iszf.irk.ru
+User-Agent: Roundcube Webmail/1.1.4
+X-Spam-Status: Yes, score=7.0 required=5.0 tests=BAYES_99,BAYES_999,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,ODD_FREEM_REPTO,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query to
+        *      DNSWL was blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [84.237.20.139 listed in list.dnswl.org]
+        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
+        *      [score: 1.0000]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 1.0000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [rowellhambrick019[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  1.0 ODD_FREEM_REPTO Has unusual reply-to header
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 26, 2023 at 09:04:46AM +1000, Gavin Shan wrote:
-> Hi Russell,
-> 
-> On 9/26/23 02:28, Russell King (Oracle) wrote:
-> > Provide common prototypes for arch_register_cpu() and
-> > arch_unregister_cpu(). These are called by acpi_processor.c, with
-> > weak versions, so the prototype for this is already set. It is
-> > generally not necessary for function prototypes to be conditional
-> > on preprocessor macros.
-> > 
-> > Some architectures (e.g. Loongarch) are missing the prototype for this,
-> > and rather than add it to Loongarch's asm/cpu.h, lets do the job once
-> > for everyone.
-> > 
-> > Since this covers everyone, remove the now unnecessary prototypes in
-> > asm/cpu.h, and we also need to remove the 'static' from one of ia64's
-> > arch_register_cpu() definitions.
-> > 
-> > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> > ---
-> > Changes since RFC v2:
-> >   - drop ia64 changes, as ia64 has already been removed.
-> > 
-> >   arch/x86/include/asm/cpu.h  | 2 --
-> >   arch/x86/kernel/topology.c  | 2 +-
-> >   include/linux/cpu.h         | 2 ++
-> >   3 files changed, 3 insertions(+), 3 deletions(-)
-> > 
-> 
-> In Linux 6.6.rc3, the prototypes are still existing in arch/ia64/include/asm/cpu.h.
-
-Correct, but I have been told that IA64 has been removed, so I removed
-those changes from my patch.
-
-> They may have been dropped in other ia64 or x86 git repository, which this patch
-> bases on.
-
-I have no idea which repository they have been dropped from. I only know
-what tglx told me, and despite asking the question, I never got any
-answer. So I've done the best I can with this patch. If kernel devs want
-to state things in vague terms, and then go silent when asked questions
-to elaborate, then that leads to guessing.
-
-Maybe someone else should adapt this patch to apply to whatever tree it
-is going to end up being applied to - because I have no idea _which_
-tree it'll end up being applied to.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Did you get my last mail
