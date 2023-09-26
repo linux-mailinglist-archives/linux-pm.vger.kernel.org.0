@@ -2,49 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B36E97AF2CF
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Sep 2023 20:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E517AF300
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Sep 2023 20:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235571AbjIZS1k convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 26 Sep 2023 14:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
+        id S235420AbjIZScw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 26 Sep 2023 14:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235481AbjIZS1e (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 14:27:34 -0400
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6764A126
-        for <linux-pm@vger.kernel.org>; Tue, 26 Sep 2023 11:27:26 -0700 (PDT)
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-57be74614c0so300687eaf.1
-        for <linux-pm@vger.kernel.org>; Tue, 26 Sep 2023 11:27:26 -0700 (PDT)
+        with ESMTP id S229885AbjIZScv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 14:32:51 -0400
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69619BF;
+        Tue, 26 Sep 2023 11:32:45 -0700 (PDT)
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-57b83ff7654so229527eaf.1;
+        Tue, 26 Sep 2023 11:32:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695752845; x=1696357645;
+        d=1e100.net; s=20230601; t=1695753164; x=1696357964;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JhC0uYVK2kytMZ9QlYozCMzFKnpkFHJU2B3NdKlzRjo=;
-        b=amF1dbOFEjGzM5C+tJRFUCB33BlBKsH5+XnT+cdGTa11czMQj3d/1k02cy3ITBQPAe
-         QXk1l3fpCG0lE3w1kzXL7QEoalxdqqtnkQsbY7FoojIx3DmlLzCz8JgpgCL1U+QfUVn8
-         QZbl7VceMcqve0uhvhugkRTeyhJ2iWQOugRflPtoa/+ZpRfPiMUcgVuL7Up9Vqu7u3oJ
-         AK2qV8zBIRX93s04U6JfI7fPdP9vGDoh7g41g7UA0JVoAlPTNHc2BNWV2rFf6P85hoaE
-         hK1jy/ky5iqwAUD/GC7B1CKb4VstlelLOWQShKywiAggdCWU17l2K+5T58k9xVbY20ZJ
-         95Iw==
-X-Gm-Message-State: AOJu0YwVEDKgX63KzxzQjjcYRCt2HGUXfsp0y9zgnAV0zZNBGML6t781
-        1eFvBbQscB/r4MUOdCjtc90IVa6ASrmGFiDtH0M=
-X-Google-Smtp-Source: AGHT+IFiuT3AYEbHWFxtTc4HW8guzIMaizhJ1yZ5kTe53BeSimZ/KDH4kB+n/IkopOGQu4uGW85kcQPHfQsW7e8dvk0=
-X-Received: by 2002:a05:6870:c587:b0:192:6fce:d3be with SMTP id
- ba7-20020a056870c58700b001926fced3bemr11164190oab.1.1695752845479; Tue, 26
- Sep 2023 11:27:25 -0700 (PDT)
+        bh=rlwH9j7aEpiUK7f0oRPeOnDbGJAgp1YU3tyVHfKNU4A=;
+        b=DNLhFY6mqrQsDfd2H/OQ/Vj8cPyqAbVLPlTccG56DjjMQJEeQAa1pLpALxogwyzDG4
+         Lr7O1aBPn4CbdDw+KfRfWv6rIH70v1The8YrrvNcjfpVWQbCBBuPa9GzmXVBcXHsUdH+
+         1cZvaNCZgyHiBNz1DPk6B59bZ/F/6pbI9XzJ9yLd1Tih+IsL5uKJeTjFQp0Lpnp+YnBo
+         s4g62i9BMGPSflsNNZDHWf7fWwI5diIvcnlg5rYu88wDs6O2JI0zRIbloU/6w2trqLB2
+         JS4J9DY16Jtx+vRvuRFcxisucMoPI9Cd1N0UqYhUWCnrA17gtHB7bVxW+7wCVlWtzJyw
+         6deg==
+X-Gm-Message-State: AOJu0YwmQW1NS+kuu15+BsBRabQM7zCW3EZM7/EN9zn0ZFkIkmVZcdPX
+        TomjFdutJIpZ/gf/vrnoejusOUG78nLw9bn1NkrgVOhrGDc=
+X-Google-Smtp-Source: AGHT+IGkCPrKsFdqWq8jZ/oj/t6RoME/zkN+juTACzc6huG5ngYBInlghjmtZJ8By9wpQnHKTelq3OGcXW2KvT1VBRk=
+X-Received: by 2002:a05:6870:f689:b0:1d5:f814:56a3 with SMTP id
+ el9-20020a056870f68900b001d5f81456a3mr9566114oab.2.1695753164734; Tue, 26 Sep
+ 2023 11:32:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230925074058.149779-1-hch@lst.de>
-In-Reply-To: <20230925074058.149779-1-hch@lst.de>
+References: <20230925081139.1305766-1-lukasz.luba@arm.com> <20230925081139.1305766-4-lukasz.luba@arm.com>
+In-Reply-To: <20230925081139.1305766-4-lukasz.luba@arm.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 26 Sep 2023 20:27:14 +0200
-Message-ID: <CAJZ5v0hHzYjB=f5C9VV8=MAG4YCZjjo6mqNAYv20DEV7DYOW7g@mail.gmail.com>
-Subject: Re: [PATCH] PM: hibernate: fix the kerneldoc comment for swsusp_check
- and swsusp_close
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
-        linux-pm@vger.kernel.org
+Date:   Tue, 26 Sep 2023 20:32:33 +0200
+Message-ID: <CAJZ5v0h6AsQCrtJ1b5VoWD_=yTKC=Y0e5KqSHy5GsFt-H7NFXA@mail.gmail.com>
+Subject: Re: [PATCH v4 03/18] PM: EM: Find first CPU online while updating OPP efficiency
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rafael@kernel.org, dietmar.eggemann@arm.com, rui.zhang@intel.com,
+        amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
+        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
+        len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org,
+        qyousef@layalina.io, wvw@google.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -57,42 +60,48 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 25, 2023 at 9:41 AM Christoph Hellwig <hch@lst.de> wrote:
+On Mon, Sep 25, 2023 at 10:11 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
 >
-> The comments for both swsusp_check and swsusp_close don't actually
-> describe what they are doing.
+> The Energy Model might be updated at runtime and the energy efficiency
+> for each OPP may change. Thus, there is a need to update also the
+> cpufreq framework and make it aligned to the new values. In order to
+> do that, use a first online CPU from the Performance Domain.
 >
-> Just removing the comments would probably better, but as the file is
-> full of useless kerneldoc comments for non-exported symbols this fits
-> in better with the style.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 > ---
->  kernel/power/swap.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  kernel/power/energy_model.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
 >
-> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-> index 48ec6a8ef9c445..b9763f2f632b8a 100644
-> --- a/kernel/power/swap.c
-> +++ b/kernel/power/swap.c
-> @@ -1513,7 +1513,7 @@ int swsusp_read(unsigned int *flags_p)
->  static void *swsusp_holder;
+> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+> index 42486674b834..3dafdd7731c4 100644
+> --- a/kernel/power/energy_model.c
+> +++ b/kernel/power/energy_model.c
+> @@ -243,12 +243,19 @@ em_cpufreq_update_efficiencies(struct device *dev, struct em_perf_state *table)
+>         struct em_perf_domain *pd = dev->em_pd;
+>         struct cpufreq_policy *policy;
+>         int found = 0;
+> -       int i;
+> +       int i, cpu;
 >
->  /**
-> - * swsusp_check - Check for swsusp signature in the resume device
-> + * swsusp_check - Open the resume device and check for the swsusp signature.
->   * @exclusive: Open the resume device exclusively.
->   */
+>         if (!_is_cpu_device(dev) || !pd)
+>                 return;
 >
-> @@ -1567,7 +1567,7 @@ int swsusp_check(bool exclusive)
->  }
->
->  /**
-> - * swsusp_close - close swap device.
-> + * swsusp_close - close resume device.
->   * @exclusive: Close the resume device which is exclusively opened.
->   */
->
-> --
+> -       policy = cpufreq_cpu_get(cpumask_first(em_span_cpus(pd)));
+> +       /* Try to get a CPU which is online and in this PD */
+> +       cpu = cpumask_first_and(em_span_cpus(pd), cpu_active_mask);
 
-Applied as 6.7 material, thanks!
+The comment talks about "online" and cpu_active_mask is used.  Isn't
+it a bit inconsistent?
+
+> +       if (cpu >= nr_cpu_ids) {
+> +               dev_warn(dev, "EM: No online CPU for CPUFreq policy\n");
+> +               return;
+> +       }
+> +
+> +       policy = cpufreq_cpu_get(cpu);
+>         if (!policy) {
+>                 dev_warn(dev, "EM: Access to CPUFreq policy failed\n");
+>                 return;
+> --
+> 2.25.1
+>
