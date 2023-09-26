@@ -2,151 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E3F67AF1B3
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Sep 2023 19:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86FB17AF1CA
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Sep 2023 19:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233424AbjIZRX3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Sep 2023 13:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
+        id S232053AbjIZRhy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Sep 2023 13:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232053AbjIZRX2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 13:23:28 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E55180;
-        Tue, 26 Sep 2023 10:23:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695749002; x=1727285002;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qjVC/s4j7SxQRGeSzIg7naJ8oHI9PB59wRQgY2RtkPE=;
-  b=Gq6PY16UWxKVSSvV5/9Oh9wXMb/Tk7I/EsLqoPWGppz/RUQMt8/FLnmX
-   DKnNKJOPpPy06ucDcbGexVuQjHJfmpjrKQiQOP/J6NZ2C5djUkDgTyqVP
-   ET7qEeu66QeQBHDFH0w8RC8FqbaU7CIjZVUKlQRYhTyD4O+W1yK/Tzv4N
-   w9AHvvfpqg3tvnWdTrdJM4zrAZf2KTAP99k0tJ3FsDQC/JmeZ7rO6d2S9
-   saM2NUmqza2BvdbGzT7ZgLkCK2IKYI7staLqWcu08v1iMUEbiPm8E/llj
-   b1B+umLtG3xZ0XLFXO9E3Aa/nQv0000BQNrzh6BkE5SKz66grtCmAziRO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="381520625"
-X-IronPort-AV: E=Sophos;i="6.03,178,1694761200"; 
-   d="scan'208";a="381520625"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 10:21:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.03,178,1694761200"; 
-   d="scan'208";a="235632"
-Received: from lkp-server02.sh.intel.com (HELO 32c80313467c) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 26 Sep 2023 10:21:23 -0700
-Received: from kbuild by 32c80313467c with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qlBkp-0003Ap-2V;
-        Tue, 26 Sep 2023 17:21:48 +0000
-Date:   Wed, 27 Sep 2023 01:21:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, rafael@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, lukasz.luba@arm.com,
-        dietmar.eggemann@arm.com, rui.zhang@intel.com,
-        amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
-        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
-        len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org,
-        qyousef@layalina.io, wvw@google.com
-Subject: Re: [PATCH v4 11/18] PM: EM: Add runtime update interface to modify
- EM power
-Message-ID: <202309270106.c56Z2Tci-lkp@intel.com>
-References: <20230925081139.1305766-12-lukasz.luba@arm.com>
+        with ESMTP id S231659AbjIZRhw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 13:37:52 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249E8DC;
+        Tue, 26 Sep 2023 10:37:46 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1c61c511cbeso7780335ad.1;
+        Tue, 26 Sep 2023 10:37:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695749865; x=1696354665; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=avIZNP/kVwTxfUJrkUHAHZVU2AnGKIlWeQ7L/YwCkE0=;
+        b=HM34oUXHfI2Zs87uI9vWG9+KcDkKcaPMwusPKXS4UdY9Rh7edyNscZYGcvz799BlnG
+         EnTxvSG6A4Wewf0Z2WDO6H79+Up2+fcAT3IWE/v7xYwu+1ycoJSj2vtW8ZUE+RIxrJXR
+         cjGDGM6AYjGaN+LjXZoml/TwwA/hVuKFyEZeDAwCR5ZXe3IHWMyabWOA5jwWNnjYI8NA
+         LWntGGdgecpvTD0OZfLh2LYzpfiYQN54wRiqVuWiwjd27Jmh5xpCgfzCVnGGMJ3oANuA
+         cMaAL/mJxUnq252VEB7FoAiT240tk516U17CTsavRDfH4MNp+PNIuFi7nV0G4BafYXUl
+         ZHtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695749865; x=1696354665;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=avIZNP/kVwTxfUJrkUHAHZVU2AnGKIlWeQ7L/YwCkE0=;
+        b=aXL6Ve+cgKFvOHfPKfIU+8EafXZT/KEin6X6JSQv2HSUewdMye5QS39cXAUURMDEKk
+         etjaqfB5SWqYHQSgQ504Y6MJdBZ/FiO7hohBX8p0VGIgqCiTnogMpapyRC2qj61bHXAe
+         ux5+xZv5gZftM35gxpjfs+pFDwPGYNa89ORAmBAoTv4M5dkxRNej8Jci1QYMGbxGml0P
+         WKZQdTdXtX6Ydyb5A4FdX4CeDhRRfG9wBeAsfa4OI7kZzM6JuIlWDtEU3AsQgju0TxXv
+         RcOl/46qasIa7NQLC+ayS/6g7zCYJi1Ji5RnrQ1Wl1F52xIqZK3KqjTF4BMdp9fbWaKu
+         3BSQ==
+X-Gm-Message-State: AOJu0YzfVu1Lf/HCbSLSd2//XJK3gAPbTSIj2Dl7vrTR55x1I7CF2ay+
+        WB/vzRkEMzzZfBivAHfVe7E=
+X-Google-Smtp-Source: AGHT+IF2tkOY68FSq4ob220vK3b9PCoX1xYhW2HvjiAkuH7E9cmpvhwghAKGXUqqf6g3b/L04fLlgA==
+X-Received: by 2002:a17:902:d4c5:b0:1c3:a4f2:7c99 with SMTP id o5-20020a170902d4c500b001c3a4f27c99mr11781313plg.4.1695749865561;
+        Tue, 26 Sep 2023 10:37:45 -0700 (PDT)
+Received: from localhost.localdomain ([140.116.154.65])
+        by smtp.gmail.com with ESMTPSA id jw18-20020a170903279200b001adf6b21c77sm11310927plb.107.2023.09.26.10.37.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Sep 2023 10:37:44 -0700 (PDT)
+From:   Kuan-Wei Chiu <visitorckw@gmail.com>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     amitk@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kuan-Wei Chiu <visitorckw@gmail.com>
+Subject: [PATCH v2] tools/thermal: remove unused 'mds' and 'nrhandler' variables
+Date:   Wed, 27 Sep 2023 01:37:36 +0800
+Message-Id: <20230926173736.1142420-1-visitorckw@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <93c87b5c-ae8f-d27d-0342-faa884a3142e@linaro.org>
+References: <93c87b5c-ae8f-d27d-0342-faa884a3142e@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230925081139.1305766-12-lukasz.luba@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Lukasz,
+In the previous code, the 'mds' and 'nrhandler' variables were not
+utilized in the codebase. Additionally, there was a potential NULL
+pointer dereference and memory leak due to improper handling of memory
+reallocation failure.
 
-kernel test robot noticed the following build warnings:
+This patch removes the unused 'mds' and 'nrhandler' variables along with
+the associated code, addressing the unused variable issue, NULL pointer
+dereference issue and the memory leak issue.
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on rafael-pm/thermal linus/master v6.6-rc3 next-20230926]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
+---
+Changes since v1:
+ * Remove the unused 'mds' and 'nrhandler' variables along with the
+   associated code.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lukasz-Luba/PM-EM-Add-missing-newline-for-the-message-log/20230925-181243
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20230925081139.1305766-12-lukasz.luba%40arm.com
-patch subject: [PATCH v4 11/18] PM: EM: Add runtime update interface to modify EM power
-config: i386-randconfig-063-20230926 (https://download.01.org/0day-ci/archive/20230927/202309270106.c56Z2Tci-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230927/202309270106.c56Z2Tci-lkp@intel.com/reproduce)
+ tools/thermal/lib/mainloop.c | 16 ----------------
+ 1 file changed, 16 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309270106.c56Z2Tci-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
-   kernel/power/energy_model.c:125:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct em_perf_table *tmp @@     got struct em_perf_table [noderef] __rcu *runtime_table @@
-   kernel/power/energy_model.c:125:13: sparse:     expected struct em_perf_table *tmp
-   kernel/power/energy_model.c:125:13: sparse:     got struct em_perf_table [noderef] __rcu *runtime_table
->> kernel/power/energy_model.c:613:27: sparse: sparse: incompatible types in comparison expression (different address spaces):
->> kernel/power/energy_model.c:613:27: sparse:    struct em_perf_table [noderef] __rcu *
->> kernel/power/energy_model.c:613:27: sparse:    struct em_perf_table *
-
-vim +613 kernel/power/energy_model.c
-
-   569	
-   570	/**
-   571	 * em_dev_unregister_perf_domain() - Unregister Energy Model (EM) for a device
-   572	 * @dev		: Device for which the EM is registered
-   573	 *
-   574	 * Unregister the EM for the specified @dev (but not a CPU device).
-   575	 */
-   576	void em_dev_unregister_perf_domain(struct device *dev)
-   577	{
-   578		struct em_perf_table __rcu *runtime_table;
-   579		struct em_perf_domain *pd;
-   580	
-   581		if (IS_ERR_OR_NULL(dev) || !dev->em_pd)
-   582			return;
-   583	
-   584		if (_is_cpu_device(dev))
-   585			return;
-   586	
-   587		pd = dev->em_pd;
-   588		/*
-   589		 * The mutex separates all register/unregister requests and protects
-   590		 * from potential clean-up/setup issues in the debugfs directories.
-   591		 * The debugfs directory name is the same as device's name.
-   592		 * The lock also protects the updater of the runtime modifiable
-   593		 * EM and this remover.
-   594		 */
-   595		mutex_lock(&em_pd_mutex);
-   596	
-   597		em_debug_remove_pd(dev);
-   598	
-   599		runtime_table = pd->runtime_table;
-   600	
-   601		/*
-   602		 * Safely destroy runtime modifiable EM. By using the call
-   603		 * synchronize_rcu() we make sure we don't progress till last user
-   604		 * finished the RCU section and our update got applied.
-   605		 */
-   606		rcu_assign_pointer(pd->runtime_table, NULL);
-   607		synchronize_rcu();
-   608	
-   609		/*
-   610		 * After the sync no updates will be in-flight, so free the
-   611		 * memory allocated for runtime table (if there was such).
-   612		 */
- > 613		if (runtime_table != pd->default_table) {
-
+diff --git a/tools/thermal/lib/mainloop.c b/tools/thermal/lib/mainloop.c
+index 94cbbcbd1c14..bf4c1b730d7b 100644
+--- a/tools/thermal/lib/mainloop.c
++++ b/tools/thermal/lib/mainloop.c
+@@ -9,7 +9,6 @@
+ #include "log.h"
+ 
+ static int epfd = -1;
+-static unsigned short nrhandler;
+ static sig_atomic_t exit_mainloop;
+ 
+ struct mainloop_data {
+@@ -18,8 +17,6 @@ struct mainloop_data {
+ 	int fd;
+ };
+ 
+-static struct mainloop_data **mds;
+-
+ #define MAX_EVENTS 10
+ 
+ int mainloop(unsigned int timeout)
+@@ -61,13 +58,6 @@ int mainloop_add(int fd, mainloop_callback_t cb, void *data)
+ 
+ 	struct mainloop_data *md;
+ 
+-	if (fd >= nrhandler) {
+-		mds = realloc(mds, sizeof(*mds) * (fd + 1));
+-		if (!mds)
+-			return -1;
+-		nrhandler = fd + 1;
+-	}
+-
+ 	md = malloc(sizeof(*md));
+ 	if (!md)
+ 		return -1;
+@@ -76,7 +66,6 @@ int mainloop_add(int fd, mainloop_callback_t cb, void *data)
+ 	md->cb = cb;
+ 	md->fd = fd;
+ 
+-	mds[fd] = md;
+ 	ev.data.ptr = md;
+ 
+ 	if (epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &ev) < 0) {
+@@ -89,14 +78,9 @@ int mainloop_add(int fd, mainloop_callback_t cb, void *data)
+ 
+ int mainloop_del(int fd)
+ {
+-	if (fd >= nrhandler)
+-		return -1;
+-
+ 	if (epoll_ctl(epfd, EPOLL_CTL_DEL, fd, NULL) < 0)
+ 		return -1;
+ 
+-	free(mds[fd]);
+-
+ 	return 0;
+ }
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.25.1
+
