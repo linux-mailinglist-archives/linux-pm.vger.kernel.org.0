@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E18477AF4AC
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Sep 2023 22:05:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 196E57AF4CB
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Sep 2023 22:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235807AbjIZUFE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Sep 2023 16:05:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
+        id S231899AbjIZUHd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Sep 2023 16:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235695AbjIZUFD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 16:05:03 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8591A13A
-        for <linux-pm@vger.kernel.org>; Tue, 26 Sep 2023 13:04:55 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-405361bb9cdso97185385e9.0
-        for <linux-pm@vger.kernel.org>; Tue, 26 Sep 2023 13:04:55 -0700 (PDT)
+        with ESMTP id S235820AbjIZUHc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 16:07:32 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8944513A
+        for <linux-pm@vger.kernel.org>; Tue, 26 Sep 2023 13:07:25 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-99357737980so1179372366b.2
+        for <linux-pm@vger.kernel.org>; Tue, 26 Sep 2023 13:07:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695758694; x=1696363494; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1695758844; x=1696363644; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=oDuSK4KGoNy5IBROwbpo5Gs9zMqpOACWxsw/hgKI19I=;
-        b=Y9zKW0kFemT29oWCVhMEa8HO3N4zuEloGknPoMRplonwK1W6Wn5/TId1J3KupmNDUZ
-         tRAgZD2okqOsg+4wOtSOM6I0aSuk41JSzA7pxf3ha7VLLAAzFjLDjobGYnD0rYHNxcxT
-         AEQ5XiCyrRMZ6U+jSZbPzmNFMv9I4u7MsJvMH/5hsVNDvBuIy5YgAACyGT4YW/npU/fh
-         gF0gLfaExMYyboEjMfv9s26pkhk7BUzf+vpaR7th46T6Gd4kH12UNXUz7lSrZwN+kBWp
-         AV4y/ebwioe7H/9oTOQdR8IVO3ivRMJChmBrCjGE+aD9by6ju9sq+OQwQHhADCHBBrBt
-         sQ1Q==
+        bh=GnPN1NOYmkf+oNudX673WFOim8syjAZ8/Se4c2tU2Nc=;
+        b=CN/ZO5Cr3TelCc9UIRzrIv9ENKncxKTvpQhTJE7AwYdNWMEhhRrbV1VoSSSFCCFBDG
+         WseRZyyreYNXgwuUQokKQMZfL2fPsb4qCuCfyEmWk+WA11H+HmNmpdYwUtgR6Q52oq8z
+         Et2/gy8WLeg7dOfUS7j910GrGAo3NikB38Cdea4evmL1t7H+IherJtcMsPGQjZSyZZQY
+         lXEXPNm1EvhDDDy8yHbrOVR0RMNP8bp2rrRJ1sGjZ5oGin1GAaOp8VI9x+JkU1MpmN5a
+         Lyt80MyuLoGwzvhMVA0WU/gROCyAshNcgn3zB7RWXUADqUFOpIgk8paoxUO1SVywFuZ3
+         AdVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695758694; x=1696363494;
+        d=1e100.net; s=20230601; t=1695758844; x=1696363644;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oDuSK4KGoNy5IBROwbpo5Gs9zMqpOACWxsw/hgKI19I=;
-        b=blMW7gnx6tG252rEXP6I+bjkMsiZeJuuWBGBS+Z4n2xFd68n3LHmAe51siqErEWcRv
-         cKY/rfwd/p91zW2IXDNBN8emxyNKPyj490fb6e6PdSOWdExTw4/F+4zDZLTmvjYMfqVh
-         Dno7QiYqjO5j+BluZGYao/b77N19qSH2gswyw8f0UvWAudD8O1TLyXkpLOUL1yoRc3Mb
-         F5dl9QMnLnVjyRSmmhM8tmCScC/FR8Lcbl2CIrI04Ecj3iDqlxxR9tpqhJ1EyfBd89o9
-         mHbQ/K9ZT6LSW9vBl7kBscn146HaFlnffgharYJVGqOSlmaWUeLwHfNQV7rj+r1ttO5P
-         vLrw==
-X-Gm-Message-State: AOJu0Yx4/bv+OF2bwpT2+N7Obk7sh3ybnuzBx3q4gyP0eVjx0yTRtnbY
-        owAKIJlkxLiEzqaPh918YPL/hQ==
-X-Google-Smtp-Source: AGHT+IEq2S5YFKgDav65p1XenZETXWnJAWMoyizGalrJtdFoiekdF4QJFzS2G23idkhDiljU8kfKGg==
-X-Received: by 2002:a5d:4e0b:0:b0:31a:d6cb:7f9e with SMTP id p11-20020a5d4e0b000000b0031ad6cb7f9emr9386196wrt.21.1695758693166;
-        Tue, 26 Sep 2023 13:04:53 -0700 (PDT)
+        bh=GnPN1NOYmkf+oNudX673WFOim8syjAZ8/Se4c2tU2Nc=;
+        b=K03OBPhEgXoVcebdK9ZM4v+g2gXRdV/fGp9vscQf4XdkxL0iCfkFlYA/ZfGZoO7jCL
+         j/aaxeYSKmXoGSeXAnLyTaWR1wloJ2N8oHSngjNRD1cAvHObcsGd7rYwDjv2tzIqSU3a
+         i3SCoWSwcwsr+HZqm4JCCISdLC0i1qPhmswovCPd0tEgThk0SIeW7t68ZiDME523j6My
+         OybLN4zbm8SpFq4H8O5xMuJ1Kq3M4eVw0/EIBOrUQ188A2u2tD81KGQMZkc9E61QvvaM
+         s5eLIyv3Th4ecK92ZiB4TEdh2rrdsm+WViaWKn0fbjFJhMRDK/tX545cOcKM4jPBA3S1
+         UCOA==
+X-Gm-Message-State: AOJu0Yyt+H8EgqnGnoFik8RPZJjFlb/f28WLUpqYZ9wPukqIMiNekyO9
+        u4NgXQbEHGj3d2EI6dUEjgcwyw==
+X-Google-Smtp-Source: AGHT+IEpcloLUT7V/Nzji/sun7iJolr6vWxw/e3GcLqXFw2c32z0CZyuBUDDPjlr4esUEcapUYoVyQ==
+X-Received: by 2002:a17:906:310d:b0:9a2:24f9:fabe with SMTP id 13-20020a170906310d00b009a224f9fabemr10679684ejx.66.1695758843936;
+        Tue, 26 Sep 2023 13:07:23 -0700 (PDT)
 Received: from [192.168.33.189] (178235177023.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.23])
-        by smtp.gmail.com with ESMTPSA id v13-20020a17090606cd00b009ae5e46210asm8169519ejb.99.2023.09.26.13.04.51
+        by smtp.gmail.com with ESMTPSA id h9-20020a17090619c900b009ae54eba5casm8218821ejd.102.2023.09.26.13.07.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Sep 2023 13:04:52 -0700 (PDT)
-Message-ID: <28473da7-e194-4581-a1d9-6ef574d52ed7@linaro.org>
-Date:   Tue, 26 Sep 2023 22:04:51 +0200
+        Tue, 26 Sep 2023 13:07:23 -0700 (PDT)
+Message-ID: <47a4bc7d-3f87-4a55-9905-19df20a9e03d@linaro.org>
+Date:   Tue, 26 Sep 2023 22:07:21 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/2] Enable tsens and thermal for sa8775p SoC
+Subject: Re: [PATCH v2 0/2] Enable tsens and thermal for sa8775p SoC
 Content-Language: en-US
 To:     Priyansh Jain <quic_priyjain@quicinc.com>,
         Andy Gross <agross@kernel.org>,
@@ -69,7 +69,7 @@ To:     Priyansh Jain <quic_priyjain@quicinc.com>,
 Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         quic_manafm@quicinc.com, kernel@quicinc.com
-References: <20230926091154.25463-1-quic_priyjain@quicinc.com>
+References: <20230926085948.23046-1-quic_priyjain@quicinc.com>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
@@ -106,11 +106,11 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <20230926091154.25463-1-quic_priyjain@quicinc.com>
+In-Reply-To: <20230926085948.23046-1-quic_priyjain@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -119,30 +119,23 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26.09.2023 11:11, Priyansh Jain wrote:
+On 26.09.2023 10:59, Priyansh Jain wrote:
 > Adding compatible string in TSENS dt-bindings, device node
 > for TSENS controller and Thermal zone support
 > 
 > Changes since v3:
-> - Correct the unit address of tsens node
-> - Updated tsens nodes in sorted order by address
-> - Moved thermal zones outside /soc node
-> 
-> Changes since v2:
-> - Indentation mistakes are resolved
-> - Updated offset of tsens srot region in reg property
-> - Updated tsens reg property cells properly
-> 
-> 
-> Priyansh Jain (2):
->   dt-bindings: thermal: tsens: Add sa8775p compatible
->   arm64: dts: qcom: Enable tsens and thermal for sa8775p SoC
-> 
->  .../bindings/thermal/qcom-tsens.yaml          |    1 +
->  arch/arm64/boot/dts/qcom/sa8775p.dtsi         | 1096 +++++++++++++++++
->  2 files changed, 1097 insertions(+)
-> 
-I only seem to have received the cover letter, and so did
-the list..
+"since v3", but this is v2.. but only in the cover letter?
+Did you mean "in v3"?
+
+I guess this is the v3 series, but you accidentally sent the cover
+letter with "v2" in the title and then resent it separately at [1]?
+
+Please consider using the b4 tool [2], it makes such mistakes not
+happen and simplifies a couple more things for both the submitters
+and maintainers.
+
+
+[1] https://lore.kernel.org/linux-arm-msm/28473da7-e194-4581-a1d9-6ef574d52ed7@linaro.org/T/#t
+[2] https://b4.docs.kernel.org/en/latest/index.html
 
 Konrad
