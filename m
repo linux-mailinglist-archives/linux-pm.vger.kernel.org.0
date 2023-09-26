@@ -2,115 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 787897AF63D
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 00:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A0B7AF6DB
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 01:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbjIZWSA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Sep 2023 18:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52264 "EHLO
+        id S233161AbjIZXn6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Sep 2023 19:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231447AbjIZWP7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 18:15:59 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B70423128;
-        Tue, 26 Sep 2023 15:05:28 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38QLs9jb012012;
-        Tue, 26 Sep 2023 22:04:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=PKb/D0HqamWxi3Wj4ngvJzC8qkJDnebrZ+o4mvzqv1s=;
- b=p6d1x0TQkx3wzOuyLL7onb4u6LtHYEyn58xaDH3eS1aUpaDUsCbNKDwzQPiZeyzoJYOA
- oUDklgXR5Ihtz6bX2D0bOsAf0wWfm5FlYytvmoSmCg6XhPcft7YWhVLY2uva3jdO6tJY
- ldY+w8pRI36mlun8k4uvucDoqmy5blVkHjl2oY+9cgn5fnyMnrn42Z5elGaJwhovMwPv
- YoOVL5V5dyJ6oFK28j5hkUkxP7r51RXHN5+O90Ma43OTqQNVYw1f3tb1X45lnVNrY4MZ
- 4qB4dq2GCme6pGC8Q5fVhOEdwwWh661OtPaSLr9Ra2W0zzHM4byK2DLeFWPToYRm70+I 0w== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tbgfv37v8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Sep 2023 22:04:49 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38QM4miu006581
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Sep 2023 22:04:48 GMT
-Received: from [10.110.53.84] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Tue, 26 Sep
- 2023 15:04:45 -0700
-Message-ID: <7db6eaee-af6d-492a-bc7c-23c6aa6bbdf8@quicinc.com>
-Date:   Tue, 26 Sep 2023 15:04:44 -0700
+        with ESMTP id S232157AbjIZXl5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 19:41:57 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8751F0F;
+        Tue, 26 Sep 2023 15:58:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695769096; x=1727305096;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DxIF+KDozytca3TFXn/HBp6pAW3jotr/Qf5xWOpXuSw=;
+  b=b+I6qgiAHbWlMUFxTLlNRq2zXJoRte+Mbfkt2852qPrAH2xnnQ0tqT64
+   0WMzdCIfKHDjI08x0jI0IkxnpsNgfaGFKVL7uGdCz4u1pHhrJsBhhVhBe
+   af7z2GmiY/OprfKC5igWYedKLNi5O8haz20WiCxnOWsjDDtQqsRqvnT35
+   m+DyHb4WTMuXdTt7JrxPEnpEpEeCCeazMNqtwepvMoOMaF37qSSBNIrpU
+   diUjnwkttkigIw94hyHAh89tK6D4ZsaNwULiYE+E5a14wWjBHs2Kf2ASd
+   Zg4OnSKeh1HEySVRyJsj0vRhj8DdqyDrJfOytMwu9H2wdd4xd0F5PXwmh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="412599577"
+X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
+   d="scan'208";a="412599577"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 15:58:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="752346080"
+X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
+   d="scan'208";a="752346080"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.14])
+  by fmsmga007.fm.intel.com with ESMTP; 26 Sep 2023 15:58:14 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH 0/5] thermal: processor_thermal: Power floor status
+Date:   Tue, 26 Sep 2023 15:58:08 -0700
+Message-Id: <20230926225813.995948-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/2] Avoid spurious freezer wakeups
-To:     Carlos Llamas <cmllamas@google.com>,
-        Peter Zijlstra <peterz@infradead.org>
-CC:     Ingo Molnar <mingo@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>, <kernel@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>,
-        "Prakash Viswalingam" <quic_prakashv@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <stable@vger.kernel.org>
-References: <20230908-avoid-spurious-freezer-wakeups-v4-0-6155aa3dafae@quicinc.com>
- <ZRMEHb3_0Ku1UuK_@google.com>
- <20230926200238.GB13828@noisy.programming.kicks-ass.net>
- <ZRNFeXZ4tRbT7ws6@google.com>
-Content-Language: en-US
-From:   Elliot Berman <quic_eberman@quicinc.com>
-In-Reply-To: <ZRNFeXZ4tRbT7ws6@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: xtoe0jaJDYGL5l2tozlam7dUcuC-zwrx
-X-Proofpoint-ORIG-GUID: xtoe0jaJDYGL5l2tozlam7dUcuC-zwrx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-09-26_15,2023-09-26_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- phishscore=0 impostorscore=0 bulkscore=0 mlxlogscore=793 mlxscore=0
- spamscore=0 adultscore=0 priorityscore=1501 clxscore=1015
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2309260189
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Support power floor notifications for Meteor Lake processors.
 
+The first change is to prepare for power floor status and others
+add support for power floor.
 
-On 9/26/2023 1:56 PM, Carlos Llamas wrote:
-> On Tue, Sep 26, 2023 at 10:02:38PM +0200, Peter Zijlstra wrote:
->> On Tue, Sep 26, 2023 at 04:17:33PM +0000, Carlos Llamas wrote:
->>>
->>> This issue is hurting the performance of our stable 6.1 releases. Does
->>> it make sense to backport these patches into stable branches once they
->>> land in mainline? I would assume we want to fix the perf regression
->>> there too?
->>
->> Note that these patches are in tip/sched/core, slated for the next merge
->> window.
-> 
-> We can wait, no problem. I just wanted to make sure we also patch stable
-> if needed. Elliot, would you be able to send a backport of your patches
-> to stable once they land in mainline on the next merge window?
+Srinivas Pandruvada (5):
+  thermal: int340x: processor_thermal: Set feature mask before
+    proc_thermal_add
+  thermal: int340x: processor_thermal: Support power floor notifications
+  thermal: int340x: processor_thermal: Handle power floor interrupts
+  thermal: int340x: processor_thermal: Enable power floor support
+  selftests/thermel/intel: Add test to read power floor status
 
-Yep, happy to send it. There's a trivial conflict to resolve w/older
-kernels not having the new guard(...)(...) macros.
+ .../driver-api/thermal/intel_dptf.rst         |   8 ++
+ .../thermal/intel/int340x_thermal/Makefile    |   1 +
+ .../processor_thermal_device.c                |  68 ++++++++++-
+ .../processor_thermal_device.h                |   8 ++
+ .../processor_thermal_device_pci.c            |  29 +++--
+ .../processor_thermal_power_floor.c           | 114 ++++++++++++++++++
+ tools/testing/selftests/Makefile              |   1 +
+ .../thermal/intel/power_floor/Makefile        |  12 ++
+ .../intel/power_floor/power_floor_test.c      | 108 +++++++++++++++++
+ 9 files changed, 336 insertions(+), 13 deletions(-)
+ create mode 100644 drivers/thermal/intel/int340x_thermal/processor_thermal_power_floor.c
+ create mode 100644 tools/testing/selftests/thermal/intel/power_floor/Makefile
+ create mode 100644 tools/testing/selftests/thermal/intel/power_floor/power_floor_test.c
 
-> 
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: stable@vger.kernel.org
-> 
-> --
-> Carlos Llamas
+-- 
+2.41.0
+
