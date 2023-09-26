@@ -2,126 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A6867AF3C8
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Sep 2023 21:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03EDB7AF3DF
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Sep 2023 21:12:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235771AbjIZTGl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Sep 2023 15:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49326 "EHLO
+        id S235404AbjIZTMZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 26 Sep 2023 15:12:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235768AbjIZTGk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 15:06:40 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB87139
-        for <linux-pm@vger.kernel.org>; Tue, 26 Sep 2023 12:06:32 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-4060b623e64so20092835e9.0
-        for <linux-pm@vger.kernel.org>; Tue, 26 Sep 2023 12:06:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1695755191; x=1696359991; darn=vger.kernel.org;
-        h=in-reply-to:references:message-id:to:from:subject:cc:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0WhT3I1HoyzXvrF4bNIAgqqZZC+4W+J5yKlGXFNwrb0=;
-        b=xT9mI7pRhQ0ktJdTvbx9kmBaq+XPr9CzwEeuIgFIXMyBB6xMOhnAYpFGPAcpFKdj4H
-         C2u1hPJYYZbFxJmLPfgscZb0Q856XJ5tmRrFQnwTDMBIiCHsYGBaL4Zxy3ZBvW6bg+N+
-         WdmaUAFZI+22Dxkw05dFh8kdhIJYGU6sBTaoVjKLvwQL0zx0D0IEJtOIRrnrqT/OcSCo
-         UfWWOCIWYOQ51q8oRz0eezv5O+r2CPoXFWy7aifFkCfPpoEBINhrbXxCeTbWcs426ocT
-         cgg/mjuV+UEhhmtn3hQ2hBmVYJIQBp5icgh1ACmxF/1nkvEOS1csavjMUZE3v8joeJoo
-         /gAA==
+        with ESMTP id S229580AbjIZTMY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 15:12:24 -0400
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6319F;
+        Tue, 26 Sep 2023 12:12:17 -0700 (PDT)
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-57b68555467so703413eaf.0;
+        Tue, 26 Sep 2023 12:12:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695755191; x=1696359991;
-        h=in-reply-to:references:message-id:to:from:subject:cc:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0WhT3I1HoyzXvrF4bNIAgqqZZC+4W+J5yKlGXFNwrb0=;
-        b=G1aepQxggRq25Y0qK5czKP58HeUYQ3l+xyVEAiiYUNfD4K08QVrLojnQCIPdujqjAB
-         pF9ksp6z3dHFJ6ygrXXkYL/nlys7qu9bNDozd5MrLkqsccAJ/nm9MpJR0fdeYZQbMvX5
-         oefuLSIFdcNOTvnfWkCGEsyLXQpPiRiz7RV5tlkKK6Wx61amsY4AAjC0EVNA/dgx6mSJ
-         Kqz97vlIl5kFalYQ5W+7DaV/olF8XhOAql+9hpBnlcX2N0KwhIqOI/yAaqEbu/V8Ao85
-         oVK9Ug00YhKd3drWr3FiUMfmCyads9njHuG88c3OE1wi+cxpgBmNRb9KKbwbhffszNyy
-         l66A==
-X-Gm-Message-State: AOJu0YzkjyASCF2pgOOsc/G7ffadzAuh1Eyro4MOUckRfMVxln6N95OB
-        SGD1YSYtlDu3bWB7v1v5owsayg==
-X-Google-Smtp-Source: AGHT+IGaUXN/N9KEtl6bp24m+BoEu1jQER0zYBcCo8xTUVE52B6AjkzCayrdZDCq5883ChqfuRarjA==
-X-Received: by 2002:a7b:ce0a:0:b0:3fe:1587:fdf3 with SMTP id m10-20020a7bce0a000000b003fe1587fdf3mr2743086wmc.14.1695755190970;
-        Tue, 26 Sep 2023 12:06:30 -0700 (PDT)
-Received: from localhost ([213.144.205.82])
-        by smtp.gmail.com with ESMTPSA id q25-20020a7bce99000000b003fefcbe7fa8sm3624996wmj.28.2023.09.26.12.06.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Sep 2023 12:06:30 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 26 Sep 2023 21:06:30 +0200
-Cc:     <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2 5/7] dt-bindings: pinctrl: qcom,sc7280: Allow
- gpio-reserved-ranges
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Luca Weiss" <luca.weiss@fairphone.com>,
-        <cros-qcom-dts-watchers@chromium.org>,
-        "Andy Gross" <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Conor Dooley" <conor+dt@kernel.org>,
-        "Srinivas Kandagatla" <srinivas.kandagatla@linaro.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Viresh Kumar" <viresh.kumar@linaro.org>
-Message-Id: <CVT30PLQGDL5.3A3O07UX6YCL2@otso>
-X-Mailer: aerc 0.15.2
-References: <20230919-fp5-initial-v2-0-14bb7cedadf5@fairphone.com>
- <20230919-fp5-initial-v2-5-14bb7cedadf5@fairphone.com>
-In-Reply-To: <20230919-fp5-initial-v2-5-14bb7cedadf5@fairphone.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20230601; t=1695755536; x=1696360336;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ykZfOZJ1ITttngrJpDx2p0tJ44eHQ73Nv8oUXM/To3g=;
+        b=BRPCG7IFw9w4vLQSju0hFrTnyOZDV9PufSpGak14h2WfnTFEeq18/lxQUt1W9Tr9Oc
+         344kfRq+ueZTUCU6Iw6fgHiN2ShOusJt0OhYqwGxaU3ltzVL8QVj0WU/lMkFCTjsZDlN
+         EH4lEHc9DqBUKCSkFvA4g/0k0HpA5gZgUIHQPPwJrcKcsPyd9BAo8gZUqz8PqWZQ1ifw
+         HXnRdrQupgfH8TQIdtSYDIfsHN6/ybVQI9WixOa2+pAl5I+WdLgWkUlQb/sYdhv84+kt
+         jv4ivxYae0TViIbDyQ2LseEIoMV/22om4MESAaAxbP7nCfu8Ih/SZmcLQ2UTE5LyvkA9
+         IGfg==
+X-Gm-Message-State: AOJu0Yw+whEMYWoozhakTHGUro0huk+dyhlOjT7xFOZtqIqLY905Ce3X
+        xdrGLxfZ1OyD0Zf0CntPcnc4MoNXQ/SXlPuNgKg=
+X-Google-Smtp-Source: AGHT+IEiVQrYe3+rFvZCcJ9JKqjkMoNtf05g/ufF+32vzlk0CXa2Io7YcY0TdKewQDjAoTKgUXm9pT4JjZUHSpQcWkE=
+X-Received: by 2002:a4a:e60c:0:b0:57b:73f6:6f80 with SMTP id
+ f12-20020a4ae60c000000b0057b73f66f80mr43248oot.0.1695755536621; Tue, 26 Sep
+ 2023 12:12:16 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230925081139.1305766-1-lukasz.luba@arm.com> <20230925081139.1305766-10-lukasz.luba@arm.com>
+In-Reply-To: <20230925081139.1305766-10-lukasz.luba@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 26 Sep 2023 21:12:05 +0200
+Message-ID: <CAJZ5v0gxjJRoZpGjs4qWy_CQbwnztgrQxHJpffdFHeEL7ikbYQ@mail.gmail.com>
+Subject: Re: [PATCH v4 09/18] PM: EM: Introduce runtime modifiable table
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rafael@kernel.org, dietmar.eggemann@arm.com, rui.zhang@intel.com,
+        amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
+        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
+        len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org,
+        qyousef@layalina.io, wvw@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue Sep 19, 2023 at 2:45 PM CEST, Luca Weiss wrote:
-> Allow the gpio-reserved-ranges property on SC7280 TLMM.
+On Mon, Sep 25, 2023 at 10:11 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
 >
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-
-Hi Linus,
-
-the rest of this series is merged so would be great if you could pick up
-this patch (as you wrote in v1) :)
-
-Regards
-Luca
-
+> The new runtime table would be populated with a new power data to better
+> reflect the actual power. The power can vary over time e.g. due to the
+> SoC temperature change. Higher temperature can increase power values.
+> For longer running scenarios, such as game or camera, when also other
+> devices are used (e.g. GPU, ISP) the CPU power can change. The new
+> EM framework is able to addresses this issue and change the data
+> at runtime safely.
+>
+> The runtime modifiable EM data is used by the Energy Aware Scheduler (EAS)
+> for the task placement. All the other users (thermal, etc.) are still
+> using the default (basic) EM. This fact drove the design of this feature.
+>
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 > ---
->  Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml | 4 +=
-+++
->  1 file changed, 4 insertions(+)
+>  include/linux/energy_model.h |  4 +++-
+>  kernel/power/energy_model.c  | 12 +++++++++++-
+>  2 files changed, 14 insertions(+), 2 deletions(-)
 >
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctr=
-l.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml
-> index 368d44ff5468..c8735ab97e40 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml
-> @@ -41,6 +41,10 @@ properties:
->    gpio-ranges:
->      maxItems: 1
-> =20
-> +  gpio-reserved-ranges:
-> +    minItems: 1
-> +    maxItems: 88
-> +
->    gpio-line-names:
->      maxItems: 175
-> =20
+> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+> index 546dee90f716..740e7c25cfff 100644
+> --- a/include/linux/energy_model.h
+> +++ b/include/linux/energy_model.h
+> @@ -39,7 +39,7 @@ struct em_perf_state {
+>  /**
+>   * struct em_perf_table - Performance states table
+>   * @state:     List of performance states, in ascending order
+> - * @rcu:       RCU used for safe access and destruction
+> + * @rcu:       RCU used only for runtime modifiable table
 
+This still doesn't appear to be used anywhere, so why change it here?
+
+>   */
+>  struct em_perf_table {
+>         struct em_perf_state *state;
+> @@ -49,6 +49,7 @@ struct em_perf_table {
+>  /**
+>   * struct em_perf_domain - Performance domain
+>   * @default_table:     Pointer to the default em_perf_table
+> + * @runtime_table:     Pointer to the runtime modifiable em_perf_table
+
+"Pointer to em_perf_table that can be dynamically updated"
+
+>   * @nr_perf_states:    Number of performance states
+>   * @flags:             See "em_perf_domain flags"
+>   * @cpus:              Cpumask covering the CPUs of the domain. It's here
+> @@ -64,6 +65,7 @@ struct em_perf_table {
+>   */
+>  struct em_perf_domain {
+>         struct em_perf_table *default_table;
+> +       struct em_perf_table __rcu *runtime_table;
+>         int nr_perf_states;
+>         unsigned long flags;
+>         unsigned long cpus[];
+> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+> index 797141638b29..5b40db38b745 100644
+> --- a/kernel/power/energy_model.c
+> +++ b/kernel/power/energy_model.c
+> @@ -251,6 +251,9 @@ static int em_create_pd(struct device *dev, int nr_states,
+>                 return ret;
+>         }
+>
+> +       /* Initialize runtime table as default table. */
+
+Redundant comment.
+
+> +       rcu_assign_pointer(pd->runtime_table, default_table);
+> +
+>         if (_is_cpu_device(dev))
+>                 for_each_cpu(cpu, cpus) {
+>                         cpu_dev = get_cpu_device(cpu);
+> @@ -448,6 +451,7 @@ EXPORT_SYMBOL_GPL(em_dev_register_perf_domain);
+>   */
+>  void em_dev_unregister_perf_domain(struct device *dev)
+>  {
+> +       struct em_perf_table __rcu *runtime_table;
+>         struct em_perf_domain *pd;
+>
+>         if (IS_ERR_OR_NULL(dev) || !dev->em_pd)
+> @@ -457,18 +461,24 @@ void em_dev_unregister_perf_domain(struct device *dev)
+>                 return;
+>
+>         pd = dev->em_pd;
+> -
+
+Unrelated change.
+
+>         /*
+>          * The mutex separates all register/unregister requests and protects
+>          * from potential clean-up/setup issues in the debugfs directories.
+>          * The debugfs directory name is the same as device's name.
+>          */
+>         mutex_lock(&em_pd_mutex);
+> +
+
+Same here.
+
+>         em_debug_remove_pd(dev);
+>
+> +       runtime_table = pd->runtime_table;
+> +
+> +       rcu_assign_pointer(pd->runtime_table, NULL);
+> +       synchronize_rcu();
+
+Is it really a good idea to call this under a mutex?
+
+> +
+>         kfree(pd->default_table->state);
+>         kfree(pd->default_table);
+>         kfree(dev->em_pd);
+> +
+
+Unrelated change.
+
+>         dev->em_pd = NULL;
+>         mutex_unlock(&em_pd_mutex);
+>  }
+> --
+
+So this really adds a pointer to a table that can be dynamically
+updated to struct em_perf_domain without any users so far.  It is not
+used anywhere as of this patch AFAICS, which is not what the changelog
+is saying.
