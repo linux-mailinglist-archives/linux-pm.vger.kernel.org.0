@@ -2,138 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9498F7AF1A4
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Sep 2023 19:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E3F67AF1B3
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Sep 2023 19:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbjIZRSo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Sep 2023 13:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
+        id S233424AbjIZRX3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Sep 2023 13:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbjIZRSn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 13:18:43 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D79F127
-        for <linux-pm@vger.kernel.org>; Tue, 26 Sep 2023 10:18:36 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-32320381a07so5236537f8f.0
-        for <linux-pm@vger.kernel.org>; Tue, 26 Sep 2023 10:18:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695748715; x=1696353515; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=u/873jRuHIB8KVUpv9XQXwxtjHGUlH2X/UtfyeX7Noc=;
-        b=Si3HMSDUoMibWMXh853mDl3QfwMuqGLorOYRp1vZM2s632lwxSSsTvWvGtinclTLrq
-         6bUIfKKCv1SKG9Vcyx0wkv+H1gO4ggTp31oEtA3svMVjfltYFAAYQ490NFeEjcbTmQQ9
-         qsOqiZQB2EDJElqx+pfG485zisQtEYd/atnR4y7uK65BJHZbrRxAdVdEt/ghc5fIGw+A
-         bZRXSwVo2AjP+LWCWTAHxXUwfiSERRY9Vm4gzZLwj2x6w8W6gjZ+jvbxhoTXkGBgm9s2
-         t0LSdj3Dg0DfbDQaKIvSovxSXMcn5wf5i7nENX1pZFS4SBkllKN29iZXFLIR8KGRcXRx
-         vTXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695748715; x=1696353515;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u/873jRuHIB8KVUpv9XQXwxtjHGUlH2X/UtfyeX7Noc=;
-        b=fPtjFxry32j28cYthRNTfSkZGxEo860mZszwgibavHOJ1tdhGxjhqqAdyblXC6N8ly
-         ePWQw3u/g+3fzpEQ+tMjv8aIAL+SOU2efSpjpdkLVy1KOx9zScRduaJxwLsLQdzJMR/o
-         Tv8So7wZ8+gNvZ6XociqrUjfgUD8WuVlBOuL0+NsWlfVmf4XhfioxfP7VKyieyBkpI0r
-         QPDHe1QLh8VrKlX5dVkGeTvSKIlONrxIwg1W7QwdJtGb98clyKdBol2zBvQOmN0StW3a
-         if+sQ49ecQHH9f7EsBQDST8bSvkNuxENpdk7m1BHs/Nktv7SV9Or2rKT5acyJdn+jGjx
-         SNRQ==
-X-Gm-Message-State: AOJu0Yxa1ajXDGERrKG8ookqfBXMh3nPG9M0VcAi72+4EDO6wS0OVJG4
-        3fqkqNQ/+NljxSQ8F4V/lSd9uZkKN6a2+eA1+QY=
-X-Google-Smtp-Source: AGHT+IEDQG3OiHowx9com9DgvI1ed+w0oyedIjlgxDirS7OxkA2/EvHN12Z6TpEqao+AYEtYtRfpDw==
-X-Received: by 2002:a5d:6d87:0:b0:323:3ab5:990c with SMTP id l7-20020a5d6d87000000b003233ab5990cmr1828775wrs.44.1695748714652;
-        Tue, 26 Sep 2023 10:18:34 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
-        by smtp.googlemail.com with ESMTPSA id h17-20020a5d5051000000b003197c7d08ddsm15139853wrt.71.2023.09.26.10.18.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Sep 2023 10:18:34 -0700 (PDT)
-Message-ID: <38ea14aa-ecc2-c40e-34ea-05b348158cfb@linaro.org>
-Date:   Tue, 26 Sep 2023 19:18:32 +0200
+        with ESMTP id S232053AbjIZRX2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 13:23:28 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E55180;
+        Tue, 26 Sep 2023 10:23:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695749002; x=1727285002;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qjVC/s4j7SxQRGeSzIg7naJ8oHI9PB59wRQgY2RtkPE=;
+  b=Gq6PY16UWxKVSSvV5/9Oh9wXMb/Tk7I/EsLqoPWGppz/RUQMt8/FLnmX
+   DKnNKJOPpPy06ucDcbGexVuQjHJfmpjrKQiQOP/J6NZ2C5djUkDgTyqVP
+   ET7qEeu66QeQBHDFH0w8RC8FqbaU7CIjZVUKlQRYhTyD4O+W1yK/Tzv4N
+   w9AHvvfpqg3tvnWdTrdJM4zrAZf2KTAP99k0tJ3FsDQC/JmeZ7rO6d2S9
+   saM2NUmqza2BvdbGzT7ZgLkCK2IKYI7staLqWcu08v1iMUEbiPm8E/llj
+   b1B+umLtG3xZ0XLFXO9E3Aa/nQv0000BQNrzh6BkE5SKz66grtCmAziRO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="381520625"
+X-IronPort-AV: E=Sophos;i="6.03,178,1694761200"; 
+   d="scan'208";a="381520625"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 10:21:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.03,178,1694761200"; 
+   d="scan'208";a="235632"
+Received: from lkp-server02.sh.intel.com (HELO 32c80313467c) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 26 Sep 2023 10:21:23 -0700
+Received: from kbuild by 32c80313467c with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qlBkp-0003Ap-2V;
+        Tue, 26 Sep 2023 17:21:48 +0000
+Date:   Wed, 27 Sep 2023 01:21:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, rafael@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, lukasz.luba@arm.com,
+        dietmar.eggemann@arm.com, rui.zhang@intel.com,
+        amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
+        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
+        len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org,
+        qyousef@layalina.io, wvw@google.com
+Subject: Re: [PATCH v4 11/18] PM: EM: Add runtime update interface to modify
+ EM power
+Message-ID: <202309270106.c56Z2Tci-lkp@intel.com>
+References: <20230925081139.1305766-12-lukasz.luba@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v1 02/13] ACPI: thermal: Collapse trip devices update
- functions
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-References: <1957441.PYKUYFuaPT@kreacher> <3534976.iIbC2pHGDl@kreacher>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <3534976.iIbC2pHGDl@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230925081139.1305766-12-lukasz.luba@arm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21/09/2023 19:49, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> In order to reduce code duplication, merge update_passive_devices() and
-> update_active_devices() into one function called update_trip_devices()
-> that will be used for updating both the passive and active trip points.
-> 
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->   drivers/acpi/thermal.c |   53 ++++++++++++++++++-------------------------------
->   1 file changed, 20 insertions(+), 33 deletions(-)
-> 
-> Index: linux-pm/drivers/acpi/thermal.c
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/thermal.c
-> +++ linux-pm/drivers/acpi/thermal.c
-> @@ -43,6 +43,8 @@
->   #define ACPI_THERMAL_MAX_ACTIVE		10
->   #define ACPI_THERMAL_MAX_LIMIT_STR_LEN	65
->   
-> +#define ACPI_THERMAL_TRIP_PASSIVE	(-1)
-> +
->   /*
->    * This exception is thrown out in two cases:
->    * 1.An invalid trip point becomes invalid or a valid trip point becomes invalid
-> @@ -202,18 +204,25 @@ static void acpi_thermal_update_passive_
->   		ACPI_THERMAL_TRIPS_EXCEPTION(tz, "state");
->   }
->   
-> -static bool update_passive_devices(struct acpi_thermal *tz, bool compare)
-> +static bool update_trip_devices(struct acpi_thermal *tz,
-> +				struct acpi_thermal_trip *acpi_trip,
-> +				int index, bool compare)
->   {
-> -	struct acpi_thermal_trip *acpi_trip = &tz->trips.passive.trip;
->   	struct acpi_handle_list devices;
-> +	char method[] = "_PSL";
->   	acpi_status status;
->   
-> +	if (index != ACPI_THERMAL_TRIP_PASSIVE) {
-> +		method[1] = 'A';
-> +		method[2] = 'L';
-> +		method[3] = '0' + index;
-> +	}
+Hi Lukasz,
 
-Could be index > 9 ?
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on rafael-pm/thermal linus/master v6.6-rc3 next-20230926]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Lukasz-Luba/PM-EM-Add-missing-newline-for-the-message-log/20230925-181243
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20230925081139.1305766-12-lukasz.luba%40arm.com
+patch subject: [PATCH v4 11/18] PM: EM: Add runtime update interface to modify EM power
+config: i386-randconfig-063-20230926 (https://download.01.org/0day-ci/archive/20230927/202309270106.c56Z2Tci-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230927/202309270106.c56Z2Tci-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309270106.c56Z2Tci-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+   kernel/power/energy_model.c:125:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct em_perf_table *tmp @@     got struct em_perf_table [noderef] __rcu *runtime_table @@
+   kernel/power/energy_model.c:125:13: sparse:     expected struct em_perf_table *tmp
+   kernel/power/energy_model.c:125:13: sparse:     got struct em_perf_table [noderef] __rcu *runtime_table
+>> kernel/power/energy_model.c:613:27: sparse: sparse: incompatible types in comparison expression (different address spaces):
+>> kernel/power/energy_model.c:613:27: sparse:    struct em_perf_table [noderef] __rcu *
+>> kernel/power/energy_model.c:613:27: sparse:    struct em_perf_table *
+
+vim +613 kernel/power/energy_model.c
+
+   569	
+   570	/**
+   571	 * em_dev_unregister_perf_domain() - Unregister Energy Model (EM) for a device
+   572	 * @dev		: Device for which the EM is registered
+   573	 *
+   574	 * Unregister the EM for the specified @dev (but not a CPU device).
+   575	 */
+   576	void em_dev_unregister_perf_domain(struct device *dev)
+   577	{
+   578		struct em_perf_table __rcu *runtime_table;
+   579		struct em_perf_domain *pd;
+   580	
+   581		if (IS_ERR_OR_NULL(dev) || !dev->em_pd)
+   582			return;
+   583	
+   584		if (_is_cpu_device(dev))
+   585			return;
+   586	
+   587		pd = dev->em_pd;
+   588		/*
+   589		 * The mutex separates all register/unregister requests and protects
+   590		 * from potential clean-up/setup issues in the debugfs directories.
+   591		 * The debugfs directory name is the same as device's name.
+   592		 * The lock also protects the updater of the runtime modifiable
+   593		 * EM and this remover.
+   594		 */
+   595		mutex_lock(&em_pd_mutex);
+   596	
+   597		em_debug_remove_pd(dev);
+   598	
+   599		runtime_table = pd->runtime_table;
+   600	
+   601		/*
+   602		 * Safely destroy runtime modifiable EM. By using the call
+   603		 * synchronize_rcu() we make sure we don't progress till last user
+   604		 * finished the RCU section and our update got applied.
+   605		 */
+   606		rcu_assign_pointer(pd->runtime_table, NULL);
+   607		synchronize_rcu();
+   608	
+   609		/*
+   610		 * After the sync no updates will be in-flight, so free the
+   611		 * memory allocated for runtime table (if there was such).
+   612		 */
+ > 613		if (runtime_table != pd->default_table) {
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
