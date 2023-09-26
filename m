@@ -2,125 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B437AF265
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Sep 2023 20:05:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CDE27AF28F
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Sep 2023 20:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235395AbjIZSEx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 26 Sep 2023 14:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46236 "EHLO
+        id S229809AbjIZSYT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 26 Sep 2023 14:24:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235564AbjIZSEw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 14:04:52 -0400
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1931D139;
-        Tue, 26 Sep 2023 11:04:46 -0700 (PDT)
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-57ddba5ba84so99300eaf.0;
-        Tue, 26 Sep 2023 11:04:46 -0700 (PDT)
+        with ESMTP id S231300AbjIZSYT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 14:24:19 -0400
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7990910A;
+        Tue, 26 Sep 2023 11:24:12 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-3a9e89fa553so647816b6e.1;
+        Tue, 26 Sep 2023 11:24:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695751485; x=1696356285;
+        d=1e100.net; s=20230601; t=1695752652; x=1696357452;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=U27hlPgGqPLU6XmNuvI90P/WMHTPv95Abz8ctFWAnKs=;
-        b=csnuOAfXNSyoq7NtB5k51nuu/qtqedl7TTvdnDvQiIcfAboC19lQXriUj8/cYsHdWE
-         9PM9rnxukEdK+GfGc9cQ7dC49DnEqarN5j3zmfWQtuX9jYpVDfTTWPpz6+IhouP3PbbU
-         jjjwlem7ggxUJVPNo1pXnjbOJE37b7UohiNgGTgZCGMlpa0CqQbLPSG6wifRzb0tGQfw
-         tGR+UFFjaOM29WdzA/bSZbOI+TL7m4UgLuOnH3Tcwo45YxV4+j5W3Cqm4gUdq2FWWTll
-         CsxEtkpQqO8oLpE2ff/9ClAApNCbm4frOPJ8AjwgruK7KDSG4vVPH+nn3CCHzTeAOo9s
-         8/0Q==
-X-Gm-Message-State: AOJu0YyPYdAuj+lR0qEfZoOG98COfvHh6XU2U8v4j2b47yGHBOuqi3hw
-        eH8k5ZJYInCVl2rnaugWn9zRVIXnM7+q7Yb/BNY=
-X-Google-Smtp-Source: AGHT+IHG/F41S7ep8TIwAk2zdhu/TBrObc5YxCBJopPYiSCZKbimkloZLP0lIU9JKhvyZwX6XLgwpIELReV9MR0ZaZY=
-X-Received: by 2002:a4a:e2d8:0:b0:578:c2af:45b5 with SMTP id
- l24-20020a4ae2d8000000b00578c2af45b5mr9430902oot.0.1695751485276; Tue, 26 Sep
- 2023 11:04:45 -0700 (PDT)
+        bh=Z1jMRdpSdzQrDa2L4TREv6W57Utusu2tmUVuwynV3Fo=;
+        b=g3T8f0sHC8FLbHBiykGp4beqQaSbNnIgQldflljH48e29fKs0davxmV7nYDbTJ3mKy
+         UP7U0/lAJ2LqprFrr0+hJPA7ivyeHI6IVhgV0SPJO5jkolXXu39xOAw3MU2OyvlC4bmQ
+         I8LkBm01RwTHSjg8ir5qNnDgIH1qXrQDUu6l6d4t2GdRpXu4Bl1xalKZFBkcGx8BFzfH
+         BnX4/27KkHCNEO478o+rT3wDMgSons6IWJx1mr7dVK137Ah8wk6HANjQaudBSFDJ8Hyg
+         5zkfIjLGK1/aJzssuYE6j+C26Q+lVRg2JeZyANXFaS03XjnCND2sn7xfc2t91imSHhNl
+         ygig==
+X-Gm-Message-State: AOJu0YyUYbDixboNOuMzzOmXgyaJma6eD2/fROOOMVMKgn135lJujsIw
+        9vTzpNvk/+QMIcMoGE7YcZsxgEKtFIF/s/I1/D8=
+X-Google-Smtp-Source: AGHT+IEJApnyKFAVsD//6ntw+VsS6xU80ugH4FLesVFpfhfQY7QYVZANmM+g46a8zmvq9y4D85SPTRQeVGCGXaNQPvk=
+X-Received: by 2002:a05:6808:1823:b0:3ae:100d:5320 with SMTP id
+ bh35-20020a056808182300b003ae100d5320mr11905031oib.2.1695752651775; Tue, 26
+ Sep 2023 11:24:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <1957441.PYKUYFuaPT@kreacher> <3534976.iIbC2pHGDl@kreacher>
- <38ea14aa-ecc2-c40e-34ea-05b348158cfb@linaro.org> <CAJZ5v0iww__Kd2e8bSarXL5ugjL1zuCaXgOfzLp-VGdmHBBabQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iww__Kd2e8bSarXL5ugjL1zuCaXgOfzLp-VGdmHBBabQ@mail.gmail.com>
+References: <20230922155336.507220-1-bgeffon@google.com> <20230922160704.511283-1-bgeffon@google.com>
+In-Reply-To: <20230922160704.511283-1-bgeffon@google.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 26 Sep 2023 20:04:34 +0200
-Message-ID: <CAJZ5v0gA1488TeNTHNFb0yCjfqFBe8cEWZNteBmk6m_Eo4QTsQ@mail.gmail.com>
-Subject: Re: [PATCH v1 02/13] ACPI: thermal: Collapse trip devices update functions
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>
+Date:   Tue, 26 Sep 2023 20:24:00 +0200
+Message-ID: <CAJZ5v0gRmoSaP3T0s9Li3grBB6DkaXf6D_0oHdw3=-UJWjJEKA@mail.gmail.com>
+Subject: Re: [PATCH] PM: hibernate: clean up sync_read handling in snapshot_write_next
+To:     Brian Geffon <bgeffon@google.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthias Kaehlcke <mka@chromium.org>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 26, 2023 at 7:56 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Fri, Sep 22, 2023 at 6:07 PM Brian Geffon <bgeffon@google.com> wrote:
 >
-> On Tue, Sep 26, 2023 at 7:18 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
-> >
-> > On 21/09/2023 19:49, Rafael J. Wysocki wrote:
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > In order to reduce code duplication, merge update_passive_devices() and
-> > > update_active_devices() into one function called update_trip_devices()
-> > > that will be used for updating both the passive and active trip points.
-> > >
-> > > No intentional functional impact.
-> > >
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > ---
-> > >   drivers/acpi/thermal.c |   53 ++++++++++++++++++-------------------------------
-> > >   1 file changed, 20 insertions(+), 33 deletions(-)
-> > >
-> > > Index: linux-pm/drivers/acpi/thermal.c
-> > > ===================================================================
-> > > --- linux-pm.orig/drivers/acpi/thermal.c
-> > > +++ linux-pm/drivers/acpi/thermal.c
-> > > @@ -43,6 +43,8 @@
-> > >   #define ACPI_THERMAL_MAX_ACTIVE             10
-> > >   #define ACPI_THERMAL_MAX_LIMIT_STR_LEN      65
-> > >
-> > > +#define ACPI_THERMAL_TRIP_PASSIVE    (-1)
-> > > +
-> > >   /*
-> > >    * This exception is thrown out in two cases:
-> > >    * 1.An invalid trip point becomes invalid or a valid trip point becomes invalid
-> > > @@ -202,18 +204,25 @@ static void acpi_thermal_update_passive_
-> > >               ACPI_THERMAL_TRIPS_EXCEPTION(tz, "state");
-> > >   }
-> > >
-> > > -static bool update_passive_devices(struct acpi_thermal *tz, bool compare)
-> > > +static bool update_trip_devices(struct acpi_thermal *tz,
-> > > +                             struct acpi_thermal_trip *acpi_trip,
-> > > +                             int index, bool compare)
-> > >   {
-> > > -     struct acpi_thermal_trip *acpi_trip = &tz->trips.passive.trip;
-> > >       struct acpi_handle_list devices;
-> > > +     char method[] = "_PSL";
-> > >       acpi_status status;
-> > >
-> > > +     if (index != ACPI_THERMAL_TRIP_PASSIVE) {
-> > > +             method[1] = 'A';
-> > > +             method[2] = 'L';
-> > > +             method[3] = '0' + index;
-> > > +     }
-> >
-> > Could be index > 9 ?
+> In snapshot_write_next sync_read is set and unset in three different
+> spots unnecessiarly. As a result there is a subtle bug where the first
+> page after the meta data has been loaded unconditionally sets sync_read
+> to 0. If this first pfn was actually a highmem page then the returned
+> buffer will be the global "buffer," and the page needs to be loaded
+> synchronously.
 >
-> I can add a check, but it will never be called with index > 9 anyway.
+> That is, I'm not sure we can always assume the following to be safe:
+>                 handle->buffer = get_buffer(&orig_bm, &ca);
+>                 handle->sync_read = 0;
+>
+> Because get_buffer can call get_highmem_page_buffer which can
+> return 'buffer'
+>
+> The easiest way to address this is just set sync_read before
+> snapshot_write_next returns if handle->buffer == buffer.
+>
+> Signed-off-by: Brian Geffon <bgeffon@google.com>
+> Fixes: 8357376d3df2 ("[PATCH] swsusp: Improve handling of highmem")
+> Cc: stable@vger.kernel.org
 
-To be more precise, update_trip_devices() is called in two places,
-acpi_thermal_init_trip() and acpi_thermal_update_trip_devices().
+If you send an update of a patch, it is always better to give it a
+higher version number to avoid any possible confusion.
 
-Both of these are called either with ACPI_THERMAL_TRIP_PASSIVE passed
-as index, or from a loop over indices between 0 and
-ACPI_THERMAL_MAX_ACTIVE-1 inclusive.
+> ---
+>  kernel/power/snapshot.c | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
+>
+> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+> index 190ed707ddcc..362e6bae5891 100644
+> --- a/kernel/power/snapshot.c
+> +++ b/kernel/power/snapshot.c
+> @@ -2780,8 +2780,6 @@ int snapshot_write_next(struct snapshot_handle *handle)
+>         if (handle->cur > 1 && handle->cur > nr_meta_pages + nr_copy_pages + nr_zero_pages)
+>                 return 0;
+>
+> -       handle->sync_read = 1;
+> -
+>         if (!handle->cur) {
+>                 if (!buffer)
+>                         /* This makes the buffer be freed by swsusp_free() */
+> @@ -2824,7 +2822,6 @@ int snapshot_write_next(struct snapshot_handle *handle)
+>                         memory_bm_position_reset(&zero_bm);
+>                         restore_pblist = NULL;
+>                         handle->buffer = get_buffer(&orig_bm, &ca);
+> -                       handle->sync_read = 0;
+>                         if (IS_ERR(handle->buffer))
+>                                 return PTR_ERR(handle->buffer);
+>                 }
+> @@ -2834,9 +2831,8 @@ int snapshot_write_next(struct snapshot_handle *handle)
+>                 handle->buffer = get_buffer(&orig_bm, &ca);
+>                 if (IS_ERR(handle->buffer))
+>                         return PTR_ERR(handle->buffer);
+> -               if (handle->buffer != buffer)
+> -                       handle->sync_read = 0;
+>         }
+> +       handle->sync_read = (handle->buffer == buffer);
+>         handle->cur++;
+>
+>         /* Zero pages were not included in the image, memset it and move on. */
+> --
+
+Anyway, applied as 6.7 material with some minor edits in the subject
+and changelog.
+
+Thanks!
