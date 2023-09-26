@@ -2,130 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4517AF47D
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Sep 2023 21:54:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DEAF7AF49E
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Sep 2023 22:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233435AbjIZTy2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 26 Sep 2023 15:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
+        id S235799AbjIZUDV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Sep 2023 16:03:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235606AbjIZTy1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 15:54:27 -0400
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DE55C0;
-        Tue, 26 Sep 2023 12:54:21 -0700 (PDT)
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-57be74614c0so317848eaf.1;
-        Tue, 26 Sep 2023 12:54:21 -0700 (PDT)
+        with ESMTP id S235795AbjIZUDS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 16:03:18 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6914811F
+        for <linux-pm@vger.kernel.org>; Tue, 26 Sep 2023 13:03:11 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-27762a19386so3528343a91.2
+        for <linux-pm@vger.kernel.org>; Tue, 26 Sep 2023 13:03:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1695758591; x=1696363391; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fA05+bYS7KOIKR/I8Uj+c2mjDDZM40BJJRZc83kHMhs=;
+        b=pNGxaZJY6XSKDWtaxJ6XWeX4twkjghpOUJXzslSuxvE4vqljxtL/R671TaNpJePTaZ
+         y6A+4UHFA3IHcGokPJgih9tf7BtB9sQUHpzTE5SQ/j1JEAen/3fbt7LQ9x4PpHlYIvO2
+         KDgwnDKN5bTR6VmxViftxxwCtUesGX9bnL/iA2ZTCK3UH47C6qgDJ9tmzCHrj41IwiQ0
+         UjPYKqS/c3quP/1xEshQ/aM8h0fYfMxVf0q0QnlNLkyr3qAf4dByeLbJ/sBykIxcssuH
+         Nou66/kqJi/v3oNXA+ODpltDrfsXlKpUYnsJOyAOzzutRDyJETUn1WrZF2qsdcalN+vT
+         2SWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695758060; x=1696362860;
+        d=1e100.net; s=20230601; t=1695758591; x=1696363391;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=06BDXw+aAsRZJmkH29TBr2CENepoEaV3xhr3PlQFcqA=;
-        b=j8pJ0Iv7DFKZqJoZR3C+GSAl68bWY35bLPTo0DqbNgMb5Ve1Kcftpbc0/2b6jYmOCK
-         Af6lrMTsc7n6bzPzf4ksMAa3ZTBu0vPmhJKz8b5vkfxRAlqZALAmIXOtx4MX2lOt80vw
-         KaHiMKw4zgtwquxC9egJRprTcQX+lro78xzJpKpU9Kzuj7HeGlgivKuFqxHD4/lXw7V+
-         r9fuBSdYXdl/GFmwtYUtzOONxYfOyVh/76GWjiwx/Latr1BNWqFlUL49LPOXpYUTywmN
-         jC0T+ZTOWW8nHV/aZRbg6UJPcgGMcEE6KGoBvu20NPjA8JktUIXvD79ON+phrxMw5PcU
-         4ZWA==
-X-Gm-Message-State: AOJu0Yxi7PtJsfiKhvB57bXiCZ7l5qF9E4NckRrEEegJvuU7Z4ethPuo
-        cYCI7g0m18jHjOuPXBirn96OREeIIc4vWZVNheY=
-X-Google-Smtp-Source: AGHT+IEz9FuVLAFKk1rCFfQcKhvYL1wc0uuG6qkYOGCi08eKz+4CbpYXS5/O4EdhAsoBPP/x0iUQZoh2GGF3VXNjSrQ=
-X-Received: by 2002:a4a:e687:0:b0:57b:3b64:7ea5 with SMTP id
- u7-20020a4ae687000000b0057b3b647ea5mr80798oot.1.1695758060246; Tue, 26 Sep
- 2023 12:54:20 -0700 (PDT)
+        bh=fA05+bYS7KOIKR/I8Uj+c2mjDDZM40BJJRZc83kHMhs=;
+        b=Ze3oce9qpdH4J0J2UFLCbbbL2oAyehETkqWigrT6Lk6omLrp+zzwcImL64JrSUHvsf
+         o9xuKwGWECx6lwYhHVRAy2CoZvLGtE3hhgeZ0xzGUREL9Xtvvj4f61Mu0a9wGnFko8lg
+         RzxI8mbFf82edopTLD9fco5yKIzdbuBaGpUdWmpFco4qJYxtM0JS1GHyJCPZ6tYChiS5
+         KgT0LtMZZTxHKK9ckxLQyTtZ3zUW6z6LSrQreTxObMDZCkxT1DX6J1NNWEBx8DUPfUoP
+         5yT43wfgfBlXEDg36a0vVtkJKoLnyBazWeOrX2X+7lbGD2BqJMK5GXNvIaXxgjCxtxkM
+         yi0w==
+X-Gm-Message-State: AOJu0YzVpFrq0hngQpoaDWLghWVVdhLXqNKNaEyLXzimLzs8HET0KpDE
+        yVQSe8z9PynQO9bYFJ2r6QR4U0t8w6zFhmwKAY2QzQ==
+X-Google-Smtp-Source: AGHT+IEQWocucOt77iz92cLf81oVW1Qi0Z2ZvMtVVl9yhDa/wA+LToQsFIZ/7D0ie7+TsWMUTo3dCgff4aufnilluGc=
+X-Received: by 2002:a17:90a:6341:b0:263:4305:4e82 with SMTP id
+ v1-20020a17090a634100b0026343054e82mr7899778pjs.6.1695758590638; Tue, 26 Sep
+ 2023 13:03:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230925081139.1305766-1-lukasz.luba@arm.com> <20230925081139.1305766-13-lukasz.luba@arm.com>
-In-Reply-To: <20230925081139.1305766-13-lukasz.luba@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 26 Sep 2023 21:54:09 +0200
-Message-ID: <CAJZ5v0igw77JdpoSbOkbdWxw3pwX2ejr+sv077OuQJWLLD5GxA@mail.gmail.com>
-Subject: Re: [PATCH v4 12/18] PM: EM: Use runtime modified EM for CPUs energy
- estimation in EAS
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rafael@kernel.org, dietmar.eggemann@arm.com, rui.zhang@intel.com,
-        amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
-        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
-        len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org,
-        qyousef@layalina.io, wvw@google.com
+References: <20230922155336.507220-1-bgeffon@google.com> <20230922160704.511283-1-bgeffon@google.com>
+ <CAJZ5v0gRmoSaP3T0s9Li3grBB6DkaXf6D_0oHdw3=-UJWjJEKA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gRmoSaP3T0s9Li3grBB6DkaXf6D_0oHdw3=-UJWjJEKA@mail.gmail.com>
+From:   Brian Geffon <bgeffon@google.com>
+Date:   Tue, 26 Sep 2023 16:02:34 -0400
+Message-ID: <CADyq12wMR0viVN+m6T3rAL0kn1792iB0V5s=_tSxkLuPZk6KxA@mail.gmail.com>
+Subject: Re: [PATCH] PM: hibernate: clean up sync_read handling in snapshot_write_next
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthias Kaehlcke <mka@chromium.org>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 25, 2023 at 10:11 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+On Tue, Sep 26, 2023 at 2:24=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
+g> wrote:
 >
-> The new Energy Model (EM) supports runtime modification of the performance
-> state table to better model the power used by the SoC. Use this new
-> feature to improve energy estimation and therefore task placement in
-> Energy Aware Scheduler (EAS).
+> On Fri, Sep 22, 2023 at 6:07=E2=80=AFPM Brian Geffon <bgeffon@google.com>=
+ wrote:
+> >
+> > In snapshot_write_next sync_read is set and unset in three different
+> > spots unnecessiarly. As a result there is a subtle bug where the first
+> > page after the meta data has been loaded unconditionally sets sync_read
+> > to 0. If this first pfn was actually a highmem page then the returned
+> > buffer will be the global "buffer," and the page needs to be loaded
+> > synchronously.
+> >
+> > That is, I'm not sure we can always assume the following to be safe:
+> >                 handle->buffer =3D get_buffer(&orig_bm, &ca);
+> >                 handle->sync_read =3D 0;
+> >
+> > Because get_buffer can call get_highmem_page_buffer which can
+> > return 'buffer'
+> >
+> > The easiest way to address this is just set sync_read before
+> > snapshot_write_next returns if handle->buffer =3D=3D buffer.
+> >
+> > Signed-off-by: Brian Geffon <bgeffon@google.com>
+> > Fixes: 8357376d3df2 ("[PATCH] swsusp: Improve handling of highmem")
+> > Cc: stable@vger.kernel.org
 >
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->  include/linux/energy_model.h | 20 +++++++++++++-------
->  1 file changed, 13 insertions(+), 7 deletions(-)
->
-> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-> index 8f055ab356ed..41290ee2cdd0 100644
-> --- a/include/linux/energy_model.h
-> +++ b/include/linux/energy_model.h
-> @@ -261,15 +261,14 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
->                                 unsigned long max_util, unsigned long sum_util,
->                                 unsigned long allowed_cpu_cap)
->  {
-> +       struct em_perf_table *runtime_table;
+> If you send an update of a patch, it is always better to give it a
+> higher version number to avoid any possible confusion.
 
-You may as well call it just "table".  The "runtime_" prefix doesn't
-add much value here IMO.
+Yes, I apologize. I wanted to add a Fixes line and I wasn't sure what
+the best practice was. I'll do my best to not create any additional
+work for you going forward!
 
->         unsigned long freq, scale_cpu;
-> -       struct em_perf_state *table, *ps;
-> +       struct em_perf_state *ps;
->         int cpu, i;
 >
->         if (!sum_util)
->                 return 0;
+> > ---
+> >  kernel/power/snapshot.c | 6 +-----
+> >  1 file changed, 1 insertion(+), 5 deletions(-)
+> >
+> > diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+> > index 190ed707ddcc..362e6bae5891 100644
+> > --- a/kernel/power/snapshot.c
+> > +++ b/kernel/power/snapshot.c
+> > @@ -2780,8 +2780,6 @@ int snapshot_write_next(struct snapshot_handle *h=
+andle)
+> >         if (handle->cur > 1 && handle->cur > nr_meta_pages + nr_copy_pa=
+ges + nr_zero_pages)
+> >                 return 0;
+> >
+> > -       handle->sync_read =3D 1;
+> > -
+> >         if (!handle->cur) {
+> >                 if (!buffer)
+> >                         /* This makes the buffer be freed by swsusp_fre=
+e() */
+> > @@ -2824,7 +2822,6 @@ int snapshot_write_next(struct snapshot_handle *h=
+andle)
+> >                         memory_bm_position_reset(&zero_bm);
+> >                         restore_pblist =3D NULL;
+> >                         handle->buffer =3D get_buffer(&orig_bm, &ca);
+> > -                       handle->sync_read =3D 0;
+> >                         if (IS_ERR(handle->buffer))
+> >                                 return PTR_ERR(handle->buffer);
+> >                 }
+> > @@ -2834,9 +2831,8 @@ int snapshot_write_next(struct snapshot_handle *h=
+andle)
+> >                 handle->buffer =3D get_buffer(&orig_bm, &ca);
+> >                 if (IS_ERR(handle->buffer))
+> >                         return PTR_ERR(handle->buffer);
+> > -               if (handle->buffer !=3D buffer)
+> > -                       handle->sync_read =3D 0;
+> >         }
+> > +       handle->sync_read =3D (handle->buffer =3D=3D buffer);
+> >         handle->cur++;
+> >
+> >         /* Zero pages were not included in the image, memset it and mov=
+e on. */
+> > --
 >
-> -       table = pd->default_table->state;
-> -
->         /*
->          * In order to predict the performance state, map the utilization of
->          * the most utilized CPU of the performance domain to a requested
-> @@ -280,7 +279,14 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
->          */
->         cpu = cpumask_first(to_cpumask(pd->cpus));
->         scale_cpu = arch_scale_cpu_capacity(cpu);
-> -       ps = &table[pd->nr_perf_states - 1];
-> +
-> +       /*
-> +        * No rcu_read_lock() since it's already called by task scheduler.
-> +        * The runtime_table is always there for CPUs, so we don't check.
-> +        */
-> +       runtime_table = rcu_dereference(pd->runtime_table);
-> +
-> +       ps = &runtime_table->state[pd->nr_perf_states - 1];
+> Anyway, applied as 6.7 material with some minor edits in the subject
+> and changelog.
+
+Thank you for taking the time to review!
+Cheers
+
 >
->         max_util = map_util_perf(max_util);
->         max_util = min(max_util, allowed_cpu_cap);
-> @@ -290,9 +296,9 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
->          * Find the lowest performance state of the Energy Model above the
->          * requested frequency.
->          */
-> -       i = em_pd_get_efficient_state(table, pd->nr_perf_states, freq,
-> -                                     pd->flags);
-> -       ps = &table[i];
-> +       i = em_pd_get_efficient_state(runtime_table->state, pd->nr_perf_states,
-> +                                     freq, pd->flags);
-> +       ps = &runtime_table->state[i];
->
->         /*
->          * The capacity of a CPU in the domain at the performance state (ps)
-> --
+> Thanks!
