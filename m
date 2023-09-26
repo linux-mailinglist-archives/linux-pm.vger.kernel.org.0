@@ -2,123 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F5097AEA57
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Sep 2023 12:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 456017AEAD5
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Sep 2023 12:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234339AbjIZK2b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Sep 2023 06:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39808 "EHLO
+        id S232786AbjIZKzX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 26 Sep 2023 06:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234200AbjIZK21 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 06:28:27 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D86E5;
-        Tue, 26 Sep 2023 03:28:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695724100; x=1727260100;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Xvco+exeZgwRDJrrqal2tUOI+h+5Ttj2/k49gkG3aJs=;
-  b=XEVkWlXl8qRf/eqIGmLtozVqvCemowAgsQxtuhqDLlaHCGQcv9+d0TCh
-   EKIU9j494ZRY0LNyTa7Tf2w9/iOXHLFbRopZvp/km6FxYHHCpidL+J7jP
-   F/93iiojnzxw7Hg/x9L8EhgmlElRxune+BR2df7K/pn25LqAPTwox5FFR
-   hB/rld3GxJp+L4Bty3VBBGVnPirJSXY92s07j9swKkPQ/EUYjrx368L2t
-   wZk72gZg/ZhaabAN/i8Ejv4t4XgGq1n4MHHTcBd1zmqA1WUg5ikbFIohT
-   z06GUf0WrDFBbJHViXGd3vVKFLoh6aSJGTzdRjUGmqhLVOY+baV6IEKe3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="448033233"
-X-IronPort-AV: E=Sophos;i="6.03,177,1694761200"; 
-   d="scan'208";a="448033233"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 03:28:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="752126418"
-X-IronPort-AV: E=Sophos;i="6.03,177,1694761200"; 
-   d="scan'208";a="752126418"
-Received: from lkp-server02.sh.intel.com (HELO 32c80313467c) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 26 Sep 2023 03:28:16 -0700
-Received: from kbuild by 32c80313467c with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ql5Ib-0002j5-2W;
-        Tue, 26 Sep 2023 10:28:13 +0000
-Date:   Tue, 26 Sep 2023 18:28:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, rafael@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, lukasz.luba@arm.com,
-        dietmar.eggemann@arm.com, rui.zhang@intel.com,
-        amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
-        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
-        len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org,
-        qyousef@layalina.io, wvw@google.com
-Subject: Re: [PATCH v4 10/18] PM: EM: Add RCU mechanism which safely cleans
- the old data
-Message-ID: <202309261850.jrucSbN8-lkp@intel.com>
-References: <20230925081139.1305766-11-lukasz.luba@arm.com>
+        with ESMTP id S234387AbjIZKzW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Sep 2023 06:55:22 -0400
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC9295
+        for <linux-pm@vger.kernel.org>; Tue, 26 Sep 2023 03:55:15 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-59c0b9ad491so101576147b3.1
+        for <linux-pm@vger.kernel.org>; Tue, 26 Sep 2023 03:55:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695725714; x=1696330514;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OvtTsf3vpAC3463ssznlJAFWAnBfRPI8L0YmeYOh6ic=;
+        b=VMS5YXKkoO+brGkHH3H5ZDpmr67o7oewEVfZlw98428XWXRDI7/x8cXeR4MDUeJqHJ
+         PtwAFeRrDS2ydrKx0+YOVvP9fEZWnaxOc6fERugGzYYqlJOhBqq1H9ZazAJHqq1LoZ+i
+         3bh+kIWcso5gOos6denUfr/DxDC9TRx00vNGAyBTiy0pJkAQ2rhHvpLDFqDqP3bDDuGQ
+         RTsRx8sDLmf6Ro8GPCz0eijImeZIh0VLo+ayIWLxAz3yH1ZQGqa2dWqONBAwN8UWZ7Z+
+         McwVdtyMsl4nkpfkmEmixaaszX8uC0vjX2OLyw4RZGgcC3//NFDFcBhq2BpIahXwYU32
+         7hRA==
+X-Gm-Message-State: AOJu0YwdBo0AgA1YVFyCabkUClCgyej8K55MU7lCD2VbGyGx/qZSsZIv
+        EUsWP361wt84OEpldM25yYTfk0sTO8qgGA==
+X-Google-Smtp-Source: AGHT+IHMgxtPsmigztx0Hdn0UhqYx3a9U8YIcQgMPXz7FPzQdug8ixPgxd9+UW92M7ghiGfM/V439Q==
+X-Received: by 2002:a81:5c54:0:b0:583:d9dd:37fd with SMTP id q81-20020a815c54000000b00583d9dd37fdmr8683026ywb.31.1695725714578;
+        Tue, 26 Sep 2023 03:55:14 -0700 (PDT)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id i6-20020a0dc606000000b0058427045833sm2923403ywd.133.2023.09.26.03.55.14
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Sep 2023 03:55:14 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-d849df4f1ffso9791027276.0
+        for <linux-pm@vger.kernel.org>; Tue, 26 Sep 2023 03:55:14 -0700 (PDT)
+X-Received: by 2002:a25:fc0e:0:b0:d4c:cbd2:f6f3 with SMTP id
+ v14-20020a25fc0e000000b00d4ccbd2f6f3mr9064526ybd.53.1695725713917; Tue, 26
+ Sep 2023 03:55:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230925081139.1305766-11-lukasz.luba@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230913-bloomers-scorebook-fb45e0a2aa19@spud> <20230913-grumbly-rewrite-34c85539f2ed@spud>
+In-Reply-To: <20230913-grumbly-rewrite-34c85539f2ed@spud>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 26 Sep 2023 12:55:01 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXmNCXvFj8gF0COQrvhbRuugrJN0sM_DL1vDE=4EU0bEA@mail.gmail.com>
+Message-ID: <CAMuHMdXmNCXvFj8gF0COQrvhbRuugrJN0sM_DL1vDE=4EU0bEA@mail.gmail.com>
+Subject: Re: [GIT PULL 2/5] dt-bindings: power: Add power-domain header for JH7110
+To:     Conor Dooley <conor@kernel.org>, changhuang.liang@starfivetech.com
+Cc:     ulf.hansson@linaro.org, Conor Dooley <conor.dooley@microchip.com>,
+        arnd@arndb.de, jiajie.ho@starfivetech.com,
+        linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        robh@kernel.org, walker.chen@starfivetech.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Lukasz,
+Hi Conor, Changhuang,
 
-kernel test robot noticed the following build warnings:
+On Wed, Sep 13, 2023 at 3:58 PM Conor Dooley <conor@kernel.org> wrote:
+> From: Changhuang Liang <changhuang.liang@starfivetech.com>
+>
+> Add power-domain header for JH7110 SoC, it can use to operate dphy
+> power.
+>
+> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on rafael-pm/thermal linus/master v6.6-rc3 next-20230926]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks for your patch, which is now commit 41b66b54a72bd796
+("dt-bindings: power: Add power-domain header for JH7110")
+in pmdomain/next.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lukasz-Luba/PM-EM-Add-missing-newline-for-the-message-log/20230925-181243
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20230925081139.1305766-11-lukasz.luba%40arm.com
-patch subject: [PATCH v4 10/18] PM: EM: Add RCU mechanism which safely cleans the old data
-config: i386-randconfig-063-20230926 (https://download.01.org/0day-ci/archive/20230926/202309261850.jrucSbN8-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230926/202309261850.jrucSbN8-lkp@intel.com/reproduce)
+Conor: looks like you forgot to update the patch description, as promised in
+https://lore.kernel.org/all/20230519-irk-dwelled-6a499c482e62@spud?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309261850.jrucSbN8-lkp@intel.com/
+> --- a/include/dt-bindings/power/starfive,jh7110-pmu.h
+> +++ b/include/dt-bindings/power/starfive,jh7110-pmu.h
+> @@ -1,6 +1,6 @@
+>  /* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+>  /*
+> - * Copyright (C) 2022 StarFive Technology Co., Ltd.
+> + * Copyright (C) 2022-2023 StarFive Technology Co., Ltd.
+>   * Author: Walker Chen <walker.chen@starfivetech.com>
+>   */
+>  #ifndef __DT_BINDINGS_POWER_JH7110_POWER_H__
+> @@ -14,4 +14,7 @@
+>  #define JH7110_PD_ISP          5
+>  #define JH7110_PD_VENC         6
+>
+> +#define JH7110_PD_DPHY_TX      0
+> +#define JH7110_PD_DPHY_RX      1
 
-sparse warnings: (new ones prefixed by >>)
->> kernel/power/energy_model.c:125:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct em_perf_table *tmp @@     got struct em_perf_table [noderef] __rcu *runtime_table @@
-   kernel/power/energy_model.c:125:13: sparse:     expected struct em_perf_table *tmp
-   kernel/power/energy_model.c:125:13: sparse:     got struct em_perf_table [noderef] __rcu *runtime_table
+These values are conflicting with similarly-named values above:
 
-vim +125 kernel/power/energy_model.c
+    #define JH7110_PD_SYSTOP        0
+    #define JH7110_PD_CPU           1
 
-   118	
-   119	static void em_perf_runtime_table_set(struct device *dev,
-   120					      struct em_perf_table *runtime_table)
-   121	{
-   122		struct em_perf_domain *pd = dev->em_pd;
-   123		struct em_perf_table *tmp;
-   124	
- > 125		tmp = pd->runtime_table;
-   126	
-   127		rcu_assign_pointer(pd->runtime_table, runtime_table);
-   128	
-   129		em_cpufreq_update_efficiencies(dev, runtime_table->state);
-   130	
-   131		/* Don't free default table since it's used by other frameworks. */
-   132		if (tmp != pd->default_table)
-   133			call_rcu(&tmp->rcu, em_destroy_rt_table_rcu);
-   134	}
-   135	
+Upon closer look, and diving into the driver, this header file contains
+definitions for two separate number spaces: the first set is meant
+to be used in PM Domain specifiers referring to a node compatible
+with "starfive,jh7110-pmu", while the second set is meant to be
+used in PM Domain specifiers referring to a node compatible with
+"starfive,jh7110-aon-syscon".
+I think it would be nice to have this reflected in the names of
+the defines (e.g. JH7110_PD_AON_DPHY_TX), and/or to add comments
+clearly delimiting the two separate number spaces, and explaining
+where they apply to.
+
+> +
+>  #endif
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
