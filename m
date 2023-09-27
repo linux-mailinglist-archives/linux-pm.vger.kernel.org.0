@@ -2,161 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C07FE7B0F0A
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Sep 2023 00:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6777B0F28
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Sep 2023 00:57:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbjI0WsE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Sep 2023 18:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38840 "EHLO
+        id S229589AbjI0W5u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Sep 2023 18:57:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbjI0WsD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 18:48:03 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEA5102;
-        Wed, 27 Sep 2023 15:48:02 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38RMYSAr031747;
-        Wed, 27 Sep 2023 22:47:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=r1Gvu1bF8AwQw7PU6ySJiAjPOzZWal6A/ahP3m0/aNc=;
- b=SCrZtmdngHHoXrS2RAGNAX3zLp1rcfWiFxWsQEm9EpG5dZ87SdvJ282pR60W1TN9zmUI
- /oetP36u4089dTMMZbhujEwmDtst+teSXPnRNycO4BgaxINvoVmsQf7EwB7J1cUmlIBK
- Y4E0IknVWT5iI3t9VVOW9A6CI/kyaDSoODeH/d9lvHyCAk/LwSihM4FcUUYyg+fHDVvq
- thBmYKt9Ln6N/4hmf7yb2jPF/0+wAUo4jLg2bz3txi9WPIpZOZclRkGFiezK1BYL84Zj
- o5kx8tJOcPboVpn1BsgbtB64mrglSUm/qW8kKJYJ2TMtJdzbFDFjvbdE6DRFe0NCLUW3 fw== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tcra20per-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Sep 2023 22:47:21 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38RMlKOj025359
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Sep 2023 22:47:20 GMT
-Received: from quicinc.com (10.49.16.6) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Wed, 27 Sep
- 2023 15:47:17 -0700
-Date:   Wed, 27 Sep 2023 15:47:16 -0700
-From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-CC:     Guru Das Srinagesh <quic_gurus@quicinc.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@quicinc.com>,
-        <workflows@vger.kernel.org>, <tools@linux.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v3 1/1] scripts: Add add-maintainer.py
-Message-ID: <ZRSw9EGuYEpZC6GE@quicinc.com>
-Mail-Followup-To: Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, kernel@quicinc.com,
-        workflows@vger.kernel.org, tools@linux.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-References: <cover.1693037031.git.quic_gurus@quicinc.com>
- <141b9fcab2208ace3001df4fc10e3dfd42b9f5d9.1693037031.git.quic_gurus@quicinc.com>
- <d0711242-df00-45c7-962f-841f7cefa7e3@quicinc.com>
+        with ESMTP id S229460AbjI0W5t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 18:57:49 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D52AF;
+        Wed, 27 Sep 2023 15:57:47 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E53C9C433C7;
+        Wed, 27 Sep 2023 22:57:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695855467;
+        bh=U6mvGN6IUsN3aQ3Mg+rtFDHole4TLUqxeXU4RuqCc9I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BghfInz1dtGj+a0NwGrQpQyiHTPQFE7pGKytrpsBClpu9NX2eDcjSChVYZmAF6XDB
+         owkxfj0jdteMSoWlG/cGItYI7rwQRUHp8gvgTfu6LqVuG2Ju3NmaLW+PzihWROGETC
+         8im2c1V6bhHXdTgg2FyeVqoOoGl2C9rGCm7cO+QnD4KASaYNOMS1b5kWe3RD3hlBwa
+         8K94UVok49+wD2jCK35a7ooWNY6CyXEsRolTaaTlHbmMq6gapMGZ2q5sD3ePlXHOQS
+         huIRK9HVFU8DWh9mV8DVS8hYOkca+rRCVDtybY9i3VxzNc3SAJ8sCy+Qm1xR/Ceo4m
+         4kcCfJF20jzJQ==
+Date:   Wed, 27 Sep 2023 16:01:58 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Joel Stanley <joel@jms.id.au>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Leo Li <leoyang.li@nxp.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Qiang Zhao <qiang.zhao@nxp.com>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Huisong Li <lihuisong@huawei.com>,
+        Krzysztof Halasa <khalasa@piap.pl>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Sumit Gupta <sumitg@nvidia.com>,
+        Shang XiaoJing <shangxiaojing@huawei.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Rob Herring <robh@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Michal Simek <michal.simek@amd.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Zev Weiss <zev@bewilderbeest.net>,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-mediatek@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        "zhang.songyi" <zhang.songyi@zte.com.cn>,
+        Lubomir Rintel <lkundrak@v3.sk>, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-samsung-soc@vger.kernel.org,
+        Nick Alcock <nick.alcock@oracle.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        Ruan Jinjie <ruanjinjie@huawei.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: Re: [PATCH 00/40] soc: Convert to platform remove callback returning
+ void
+Message-ID: <f4hvrslynlgmxu4a2gogc5idvumskhaalxgwildy56yqk2wz7d@lkh4swkv52mi>
+References: <20230925095532.1984344-1-u.kleine-koenig@pengutronix.de>
+ <CACPK8XeROYz_XaB3TvUhdXm7Vm8fjC8yU+mfvA58=_FiDrBy-g@mail.gmail.com>
+ <1b2fddf8-c0a6-4afa-8ad0-f280dea1607f@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <d0711242-df00-45c7-962f-841f7cefa7e3@quicinc.com>
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: zhzRcrILGrIWX2kTrOYxJRxEppcDMjte
-X-Proofpoint-GUID: zhzRcrILGrIWX2kTrOYxJRxEppcDMjte
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-09-27_15,2023-09-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- spamscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=780
- malwarescore=0 priorityscore=1501 adultscore=0 clxscore=1015
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2309270196
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1b2fddf8-c0a6-4afa-8ad0-f280dea1607f@app.fastmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sep 26 2023 17:32, Pavan Kondeti wrote:
-> On Sat, Aug 26, 2023 at 01:07:42AM -0700, Guru Das Srinagesh wrote:
-> > +def gather_maintainers_of_file(patch_file):
-> > +    all_entities_of_patch = dict()
-> > +
-> > +    # Run get_maintainer.pl on patch file
-> > +    logging.info("GET: Patch: {}".format(os.path.basename(patch_file)))
-> > +    cmd = ['scripts/get_maintainer.pl']
-> > +    cmd.extend([patch_file])
-> > +
-> > +    try:
-> > +        p = subprocess.run(cmd, stdout=subprocess.PIPE, check=True)
-> > +    except:
-> > +        sys.exit(1)
-> > +
-> > +    logging.debug("\n{}".format(p.stdout.decode()))
-> > +
-> > +    entries = p.stdout.decode().splitlines()
-> > +
-> > +    maintainers = []
-> > +    lists = []
-> > +    others = []
-> > +
-> > +    for entry in entries:
-> > +        entity = entry.split('(')[0].strip()
-> > +        if any(role in entry for role in ["maintainer", "reviewer"]):
-> > +            maintainers.append(entity)
-> > +        elif "list" in entry:
-> > +            lists.append(entity)
-> > +        else:
-> > +            others.append(entity)
-> > +
-> > +    all_entities_of_patch["maintainers"] = set(maintainers)
-> > +    all_entities_of_patch["lists"] = set(lists)
-> > +    all_entities_of_patch["others"] = set(others)
-> > +
-> > +    return all_entities_of_patch
-> > +
+On Wed, Sep 27, 2023 at 10:43:16AM +0200, Arnd Bergmann wrote:
+> On Wed, Sep 27, 2023, at 04:25, Joel Stanley wrote:
+> > On Mon, 25 Sept 2023 at 09:55, Uwe Kleine-König <u.kleine-koenig@pengutronix.de> wrote:
+> >>
+> >> this series converts all platform drivers below drivers/soc to use
+> >> .remove_new(). The motivation is to get rid of an integer return code
+> >> that is (mostly) ignored by the platform driver core and error prone on
+> >> the driver side.
+> >>
+> >> See commit 5c5a7680e67b ("platform: Provide a remove callback that
+> >> returns no value") for an extended explanation and the eventual goal.
+> >>
+> >> As there is no single maintainer team for drivers/soc, I suggest the
+> >> individual maintainers to pick up "their" patches.
+> >
+> > I'd be happy if Arnd merged the lot at once. Arnd, what do you think?
+> >
+> > If that will be too messy then I understand. I have queued the aspeed
+> > ones locally and will push that out if we decide that's the best way
+> > to go.
 > 
-> FYI, there are couple of issues found while playing around.
-
-Thanks for testing this out :) I am no longer working on this due to pushback
-from the maintainers in favour of b4.
-
+> The main downside of merging it all at once through the soc tree
+> is that there may be patches that conflict with other work going on
+> in individual drivers.
 > 
-> - Some entries in MAINTAINERS could be "supporter"
+> What I'd suggest doing here is:
+> 
+> - have platform maintainers pick up patches for their drivers
+>   if that is their preference for any reason
+> 
 
-This was intentional - I didn't want to include "supporter"s.
+I'd prefer this for the qcom drivers at least, please let me know if you
+would like me to proceed.
 
-> - When names contain ("company"), the script fails to extract name.
+Regards,
+Bjorn
 
-Interesting... I had not tested this out.
-
-In any case, I am not devoting resources to work on this unless I see some
-interest from maintainers, which, as it stands currently, is nil.
-
-Thanks for the support, Pavan.
-
-Guru Das.
+> - get a pull request from Uwe for the soc tree for anything that has
+>   not been picked up in one or two weeks from now
+> 
+>       Arnd
