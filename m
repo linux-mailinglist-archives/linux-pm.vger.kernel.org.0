@@ -2,83 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B63857B028C
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 13:15:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 828E57B02B5
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 13:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231345AbjI0LPv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Sep 2023 07:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
+        id S231331AbjI0LYM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Sep 2023 07:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbjI0LPu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 07:15:50 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF15F3
-        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 04:15:49 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-690d8c05784so8432208b3a.2
-        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 04:15:49 -0700 (PDT)
+        with ESMTP id S231303AbjI0LYL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 07:24:11 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB968191
+        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 04:24:09 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1c5ff5f858dso52860925ad.2
+        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 04:24:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695813349; x=1696418149; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1695813849; x=1696418649; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7ILQTIya7HcBL5OZKx6dzjYAup4yveW1HKg0YsYZucU=;
-        b=nSzohTHczpdag7naXoE2adPHh/Xn9NhSJno4hgEJwib6XGti0U5R4lKRj4K4UQvOve
-         LxI1ZP7cyshbq5vk81dcylZmz/IBP9dHa9o94q50SPUABCLEcGLcwSayf6Ce4SLbfb3E
-         M0xpZ4I5JDMZnvZfFIrZlYlEE6Hqa4TOc4CctbTJBYc8WmhC1hWbePS+bhgz+WNg1afb
-         kmTJUd7qZR3yxPV3x6PSsiYBwdRfa4yIy2+tc4dY/eAwjSrfv431UVqnbyS/FXsZurjm
-         XpkmC8bS2Ttdok+zTmHyU+TL+ZgZH1C/N7LFrV9zuPRYKZgllzUMCbKM3EkkNOFk8fN/
-         8LeA==
+        bh=gP1E3ybnFCNnfUSyv6qObP/eYdp0ZyA/1w1KLw4Ai0s=;
+        b=g994XAxScpCtXbkNPu7tVi1r4u2zDiMmriuk5wp3c41cSFbOh5/hCcPXhR+A6K1SWo
+         ac7lJxC40C60Xc17LQrPR1fc+p5eqyDdSdnp3+NsBAkgDajQGKbwNfYaXPpUfhVL16rJ
+         RXM5w16shZUea0b9iAxTKqfRgXaeRbOmrVVM1yXuILMv8CUGAoWyvSc6M1ZCb5ie06/P
+         bLUVpUEai/Qa2mC2AxldFnTfAcaBbJJSDQKfLXT0VUVyxhoyh3q8/iG/OI6RSVcpLVUS
+         qRkPHRPYOazH1luM7MLO6v1sTcOqNGqBIICyI2ip8EClMzSwRFG/K8hGM6Y301VT66nn
+         ap0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695813349; x=1696418149;
+        d=1e100.net; s=20230601; t=1695813849; x=1696418649;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7ILQTIya7HcBL5OZKx6dzjYAup4yveW1HKg0YsYZucU=;
-        b=iKzkSGaQfIi9ekek4rC3NIKSvk4ma9ON5tg+3z6zNKzU2Qpwq/kt9is8nijj3xSk6G
-         G7LYrqCRFLt7BFxQdXYUVUVZHrzwiqapl7q8IwfuXSXeFuoM+DHI5zLQKOstgYggwtnH
-         0vxtGk5d9rn/aJNDAvpPYuwRqjCooKOLzMXSZKVmAvY58dSgUQD4Vv2K6e37PrOODBes
-         SAIWy0ighdyc85N/fanLQo1lN63KzoVDBcl4k/e9RjxhSI/1l66YMbQoKt8dQjtBKBZC
-         RFV8pLCerw8KW50qUApS2mHhaiaDeQ/UOVi+8CxbAd+TIbcDSro06uoBJsROwC9gsj2r
-         X/6w==
-X-Gm-Message-State: AOJu0YywOSmEElpm6rI0fPw08q7rGHH72uulbx8Usl9sshpalB4XpQ8R
-        5eBjv8/LVhIB2Nw2KZvuiqwafw==
-X-Google-Smtp-Source: AGHT+IF+OQNFDztWq/9f7H4m3a5CkvfRLNuyr7Z1Y+kYUGAK9CSyS/G0wHhHEiX+Nc+jvptbD3e6ig==
-X-Received: by 2002:a05:6a20:a11b:b0:15d:facd:f20c with SMTP id q27-20020a056a20a11b00b0015dfacdf20cmr1779519pzk.41.1695813349251;
-        Wed, 27 Sep 2023 04:15:49 -0700 (PDT)
+        bh=gP1E3ybnFCNnfUSyv6qObP/eYdp0ZyA/1w1KLw4Ai0s=;
+        b=pPAwYtH6eqToXFhJjE5nDBSLIzzqEdMjpjFamOpEMtoII2K4hh6hi+fBDYNiV9ny15
+         7ygyEj6zppmwQLx9DUB2iQ0pYOgC4hAOTpQEqx11F0ldhz0P16APOryl2pqmTStpLY1i
+         mXkTtC78TtFuU7OP5/+PsaUV8ZxVzEEhQ5ELL9QmHl6QyfL0vsmv8iPAW2/17LKze8aY
+         R+53qKMBuS3hingMDq577OJRP4yulfTCefkACmvgN4gAZolKfrYXKfmUV5zGNnVrC6E5
+         1pzZyx+NFLroT40vsOunPalBA/EeAvAl+6jt8Unyfyc3KWtfMP9VRMVnDtmZwZqtdBpE
+         3Q3Q==
+X-Gm-Message-State: AOJu0Yyddf+ptvjl8seQI1CeDFVt49n4+xV8zDopO1fb5NbexFWw7WJb
+        WgfNI4ynEXo2j1b2WtpHjhg+mw==
+X-Google-Smtp-Source: AGHT+IGev39zzv4dY6dg+otC4jHEFuclV1L0cE+VDxgx48elDLd1l4JA7PhiLb/3lGC7jEbvJTvjMg==
+X-Received: by 2002:a17:902:e844:b0:1c4:2b87:76f0 with SMTP id t4-20020a170902e84400b001c42b8776f0mr1585486plg.47.1695813849268;
+        Wed, 27 Sep 2023 04:24:09 -0700 (PDT)
 Received: from localhost ([122.172.81.92])
-        by smtp.gmail.com with ESMTPSA id gk6-20020a17090b118600b00263cca08d95sm3647431pjb.55.2023.09.27.04.15.48
+        by smtp.gmail.com with ESMTPSA id y16-20020a170902b49000b001bd62419744sm12816123plr.147.2023.09.27.04.24.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Sep 2023 04:15:48 -0700 (PDT)
-Date:   Wed, 27 Sep 2023 16:45:46 +0530
+        Wed, 27 Sep 2023 04:24:08 -0700 (PDT)
+Date:   Wed, 27 Sep 2023 16:54:06 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, vireshk@kernel.org,
-        nm@ti.com, sboyd@kernel.org, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com, cw00.choi@samsung.com,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Varadarajan Narayanan <quic_varada@quicinc.com>,
+        ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, rafael@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
-        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        quic_kathirav@quicinc.com, linux-pm@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
-        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
-        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 5/6] arm64: dts: qcom: sdm845: Add OPP table support
- to UFSHC
-Message-ID: <20230927111546.uyaod34zcjr7npgf@vireshk-i7>
-References: <20230731163357.49045-1-manivannan.sadhasivam@linaro.org>
- <20230731163357.49045-6-manivannan.sadhasivam@linaro.org>
- <04eb9f71-78f0-41f2-96a6-fc759ba296fa@linaro.org>
- <20230912065918.GB6404@thinkpad>
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v1 08/10] dt-bindings: cpufreq: qcom-cpufreq-nvmem:
+ document IPQ9574
+Message-ID: <20230927112406.teqtqq2phg2nrypk@vireshk-i7>
+References: <cover.1693996662.git.quic_varada@quicinc.com>
+ <e0f54a4b249f24b10d3dc21a0224718e46ebd158.1693996662.git.quic_varada@quicinc.com>
+ <2de8953c-f1c5-3c17-5c95-973ef550bc32@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230912065918.GB6404@thinkpad>
+In-Reply-To: <2de8953c-f1c5-3c17-5c95-973ef550bc32@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,35 +79,19 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12-09-23, 12:29, Manivannan Sadhasivam wrote:
-> On Mon, Sep 11, 2023 at 04:15:10PM +0300, Dmitry Baryshkov wrote:
-> > I'd say, I'm still slightly unhappy about the 0 clock rates here.
-> 
-> Neither do I. But it is the only viable option I could found.
-> 
-> > We need only three clocks here: core, core_clk_unipro and optional
-> > ice_core_clk. Can we modify ufshcd_parse_operating_points() to pass only
-> > these two or three clock names to devm_pm_opp_set_config() ? The OPP core
-> > doesn't need to know about all the rest of the clocks.
+On 07-09-23, 08:04, Krzysztof Kozlowski wrote:
+> On 07/09/2023 07:21, Varadarajan Narayanan wrote:
+> > Document IPQ9574 compatible for Qcom NVMEM CPUFreq driver.
 > > 
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> >  Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml | 1 +
+> >  1 file changed, 1 insertion(+)
 > 
-> We need to enable/disable all of the clocks, but only need to control the rate
-> for these 3 clocks. So we cannot just use 3 clocks.
 > 
-> If the OPP table has only 3 entries (omitting the gate-only clocks), then we
-> need some hack in the driver to match the rates against the clock entries. Doing
-> so will result in hardcoding the clock info in the driver which I do not want to
-> do.
-> 
-> If we have something like "opp-hz-names" to relate the rates to clock-names, it
-> might do the job. But it needs some input from Viresh.
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I have already given an option earlier about this [1]. You can change the order
-of clks in the "clock-names" field, so that the first three are the one with
-valid frequencies. You shouldn't need much of the hacks after that I guess.
-
-Or maybe I missed something else now, talked about this a long time ago :)
+Applied. Thanks.
 
 -- 
 viresh
-[1] https://lore.kernel.org/all/20230713040918.jnf5oqiwymrdnrmq@vireshk-i7/
