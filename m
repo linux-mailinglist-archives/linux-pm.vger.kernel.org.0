@@ -2,77 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4AE97B0717
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 16:38:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F067B0751
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 16:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232046AbjI0OiV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Sep 2023 10:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
+        id S232073AbjI0Owv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Sep 2023 10:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232103AbjI0OiU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 10:38:20 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842D6F4;
-        Wed, 27 Sep 2023 07:38:19 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1c44c0f9138so83145935ad.2;
-        Wed, 27 Sep 2023 07:38:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695825499; x=1696430299; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Wg9JCAMjvjZwbC735OPsJLUGNr3Ze8+WvpWD8+0Wa8Y=;
-        b=jpcgxuRwqxFjr3h3My4JqjBkjrZcuYEjrA3ic5txRZbv0C2C+qa7Gu2vnyDADd1dvk
-         DK7OPM6JH7gv/duqGM2E4aQ2WXma0UI5zg08+3FomoLPbC2dMuCFBwmJSlYntMOYKph6
-         ou7Gt8BXFW3GHDDnJ/K9dLAwtvM2ihOxa/Lrqrimf+sECb3qHq+IkkLO4PGJJ96XmQ73
-         lyVHl+NqoQMMVabWx7H0IgI2rdZs66I1iJjfVsc5GyIOn5IfwynbNPXzvP3rgXAIlVHN
-         F7PbXtKNZpVqxft6VcNT0f7jEpfWA496Qa2pixw9h1PhjN0hGUGW4CtsJ9r47IF8vvOS
-         YAnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695825499; x=1696430299;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wg9JCAMjvjZwbC735OPsJLUGNr3Ze8+WvpWD8+0Wa8Y=;
-        b=wScD5+Juo2cA1mUtfkWt0ueW6wtLqHJIvNOx9SaJzCh2x2xf0OQlVQr2lnce6n7dnO
-         NhqA1eyzwzChctg+Kz4hHPjbpBIAqO79mqCtUzC/2FJaZuzI4CTZYoX6Bmao09L2Wvys
-         ttzlaFDhjal8Ol6bqK3BSo3g6aHWmzYK1nkE8cOv20nA1Cybb6ZQPSlGoOafkM1VyIbP
-         3opkyVuUbqbj4NTm4ot1kvMAfSO8pIwmz0MnbyQHAhqFdz4mNqKKsTUlM/UkU06pjVWM
-         A410C/lIoXhqkgAvfOje1cJ82o0e9R+Jlqct30hTCmBuI4cmGZNLm1G027fILQjWX+G2
-         eBFQ==
-X-Gm-Message-State: AOJu0YzugNXTyIHezz6VNKot0p8iQFr0u5yLix+UFmFJ3S1Nwqe+sVYW
-        ZChNej7MN6ls48UHZQKMrD4=
-X-Google-Smtp-Source: AGHT+IH+Pf7ytQ1lXJUd1H3FhkjrBQE6vNLJh0Hp56wth1H0Rau/gwGEsi4MFg9ftJk0alyE/L26jA==
-X-Received: by 2002:a17:903:1109:b0:1b9:e937:9763 with SMTP id n9-20020a170903110900b001b9e9379763mr2282601plh.12.1695825498846;
-        Wed, 27 Sep 2023 07:38:18 -0700 (PDT)
-Received: from [192.168.31.134] ([27.4.138.218])
-        by smtp.gmail.com with ESMTPSA id z13-20020a170903018d00b001b8062c1db3sm13141034plg.82.2023.09.27.07.38.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Sep 2023 07:38:18 -0700 (PDT)
-Message-ID: <2ada40ae-f11b-9ac5-a493-6ae2383fac2a@gmail.com>
-Date:   Wed, 27 Sep 2023 20:08:13 +0530
+        with ESMTP id S232046AbjI0Owu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 10:52:50 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3D1F4;
+        Wed, 27 Sep 2023 07:52:49 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E010C433C7;
+        Wed, 27 Sep 2023 14:52:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695826369;
+        bh=KYsU6F1OWipGJBjQhqhwLEtZLYFO0yCsHTzUzpd2p2A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fEOIaLTaSOlMEI3zbHLgX2Rq9MOxZ1qYbwvuGcXFaqKZjXlwVan4cwG+d++ZTI0fQ
+         Robf6HffovF7TGOQUcNoyUDCaTGEc10MKc7xIa+6490fZIs9X//C+CjtJRJTssI4Ej
+         Kuc6FMUa2t2Lh8GSL2SztyGeA3f6kmn9wLKwi6jym+xediWk3qdAPNGh0m3GAdx4kg
+         MgBx5VXxwCFouYEJBKN+VaXuMx3UcYO+n4wsKFpa55CJe8irhp8yaPQDMv90JS3v99
+         mftCUrnL9SyfWQ957hKBmEaneaXlJcBraOKHYaYLLXWYCyvXkWmRCMA1zIuJcUHBR1
+         haUDsiQaqrmgw==
+Date:   Wed, 27 Sep 2023 15:52:44 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Changhuang Liang <changhuang.liang@starfivetech.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        Hal Feng <hal.feng@starfivetech.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [-next v1 1/2] dt-bindings: power: Update prefixes for AON power
+ domain
+Message-ID: <20230927-coma-flashback-07d2e7b34f96@spud>
+References: <20230927130734.9921-1-changhuang.liang@starfivetech.com>
+ <20230927130734.9921-2-changhuang.liang@starfivetech.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH] thermal: imx8mm_thermal: Fix function pointer declaration
- by adding identifier name
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org,
-        rui.zhang@intel.com, amitk@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com
-Cc:     linux-imx@nxp.com, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230917083443.3220-1-bragathemanick0908@gmail.com>
- <786d197a-a2b5-2507-f5d7-24e8224a3922@gmail.com>
- <883b0780-1f89-40a4-fbd0-a3d4845c2826@linaro.org>
-From:   Bragatheswaran Manickavel <bragathemanick0908@gmail.com>
-In-Reply-To: <883b0780-1f89-40a4-fbd0-a3d4845c2826@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="xGOf7ag5cN9+/+jq"
+Content-Disposition: inline
+In-Reply-To: <20230927130734.9921-2-changhuang.liang@starfivetech.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,56 +57,55 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-On 25/09/23 13:17, Daniel Lezcano wrote:
-> On 22/09/2023 11:31, Bragatheswaran Manickavel wrote:
->>
->> On 17/09/23 14:04, Bragatheswaran Manickavel wrote:
->>> Added identifier names to respective definitions for fix
->>> warnings reported by checkpatch.pl
->>>
->>> WARNING: function definition argument 'void *' should also have an 
->>> identifier name
->>> WARNING: function definition argument 'int *' should also have an 
->>> identifier name
->>> Signed-off-by: Bragatheswaran Manickavel <bragathemanick0908@gmail.com>
->>> ---
->>>   drivers/thermal/imx8mm_thermal.c | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/thermal/imx8mm_thermal.c 
->>> b/drivers/thermal/imx8mm_thermal.c
->>> index 14111ccf6e4c..5dc6c18f12df 100644
->>> --- a/drivers/thermal/imx8mm_thermal.c
->>> +++ b/drivers/thermal/imx8mm_thermal.c
->>> @@ -78,7 +78,7 @@
->>>   struct thermal_soc_data {
->>>       u32 num_sensors;
->>>       u32 version;
->>> -    int (*get_temp)(void *, int *);
->>> +    int (*get_temp)(void *data, int *temp);
->>>   };
->>>   struct tmu_sensor {
->>
->> Hi Team, Could someone help in reviewing it.
->
-> Please no more "gentle reminder"
->
-> Read:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/Documentation/process/submitting-patches.rst 
->
->
-> Especially, the section _9_
->
-> Thanks
->
->    -- Daniel
->
+--xGOf7ag5cN9+/+jq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hi Daniel,
+On Wed, Sep 27, 2023 at 06:07:33AM -0700, Changhuang Liang wrote:
+> Use "JH7110_AON_PD_" prefix for AON power doamin for JH7110 SoC.
+>=20
+> Reviewed-by: Walker Chen <walker.chen@starfivetech.com>
+> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
 
-Understood. Will wait for this to get reviewed.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
 Thanks,
-Bragathe
+Conor.
 
+> ---
+>  include/dt-bindings/power/starfive,jh7110-pmu.h | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/include/dt-bindings/power/starfive,jh7110-pmu.h b/include/dt=
+-bindings/power/starfive,jh7110-pmu.h
+> index 341e2a0676ba..7b4f24927dee 100644
+> --- a/include/dt-bindings/power/starfive,jh7110-pmu.h
+> +++ b/include/dt-bindings/power/starfive,jh7110-pmu.h
+> @@ -14,7 +14,8 @@
+>  #define JH7110_PD_ISP		5
+>  #define JH7110_PD_VENC		6
+> =20
+> -#define JH7110_PD_DPHY_TX	0
+> -#define JH7110_PD_DPHY_RX	1
+> +/* AON Power Domain */
+> +#define JH7110_AON_PD_DPHY_TX	0
+> +#define JH7110_AON_PD_DPHY_RX	1
+> =20
+>  #endif
+> --=20
+> 2.25.1
+>=20
+
+--xGOf7ag5cN9+/+jq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZRRBvAAKCRB4tDGHoIJi
+0gecAQD3KIdJsVdpHOt1Z0tStNB+PSX9XCQVNaOTNXm6DboR5AEAxVgdVcUs49EP
+rivtCK7ZZmaldoxIUnLYA+jEPrzFqQM=
+=5LyB
+-----END PGP SIGNATURE-----
+
+--xGOf7ag5cN9+/+jq--
