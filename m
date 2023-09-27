@@ -2,137 +2,260 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D6777B0F28
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Sep 2023 00:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B3EB7B0FB6
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Sep 2023 01:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbjI0W5u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Sep 2023 18:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50606 "EHLO
+        id S229469AbjI0X6L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Sep 2023 19:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjI0W5t (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 18:57:49 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D52AF;
-        Wed, 27 Sep 2023 15:57:47 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E53C9C433C7;
-        Wed, 27 Sep 2023 22:57:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695855467;
-        bh=U6mvGN6IUsN3aQ3Mg+rtFDHole4TLUqxeXU4RuqCc9I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BghfInz1dtGj+a0NwGrQpQyiHTPQFE7pGKytrpsBClpu9NX2eDcjSChVYZmAF6XDB
-         owkxfj0jdteMSoWlG/cGItYI7rwQRUHp8gvgTfu6LqVuG2Ju3NmaLW+PzihWROGETC
-         8im2c1V6bhHXdTgg2FyeVqoOoGl2C9rGCm7cO+QnD4KASaYNOMS1b5kWe3RD3hlBwa
-         8K94UVok49+wD2jCK35a7ooWNY6CyXEsRolTaaTlHbmMq6gapMGZ2q5sD3ePlXHOQS
-         huIRK9HVFU8DWh9mV8DVS8hYOkca+rRCVDtybY9i3VxzNc3SAJ8sCy+Qm1xR/Ceo4m
-         4kcCfJF20jzJQ==
-Date:   Wed, 27 Sep 2023 16:01:58 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Joel Stanley <joel@jms.id.au>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Leo Li <leoyang.li@nxp.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Huisong Li <lihuisong@huawei.com>,
-        Krzysztof Halasa <khalasa@piap.pl>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        with ESMTP id S229445AbjI0X6K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 19:58:10 -0400
+Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8CCF4;
+        Wed, 27 Sep 2023 16:58:08 -0700 (PDT)
+Received: from local
+        by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1qlePg-00049j-38;
+        Wed, 27 Sep 2023 23:57:53 +0000
+Date:   Thu, 28 Sep 2023 00:55:33 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     Frank Wunderlich <linux@fw-web.de>
+Cc:     linux-mediatek@lists.infradead.org,
+        Frank Wunderlich <frank-w@public-files.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Sumit Gupta <sumitg@nvidia.com>,
-        Shang XiaoJing <shangxiaojing@huawei.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Rob Herring <robh@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Michal Simek <michal.simek@amd.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Zev Weiss <zev@bewilderbeest.net>,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        "zhang.songyi" <zhang.songyi@zte.com.cn>,
-        Lubomir Rintel <lkundrak@v3.sk>, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-samsung-soc@vger.kernel.org,
-        Nick Alcock <nick.alcock@oracle.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        Ruan Jinjie <ruanjinjie@huawei.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: Re: [PATCH 00/40] soc: Convert to platform remove callback returning
- void
-Message-ID: <f4hvrslynlgmxu4a2gogc5idvumskhaalxgwildy56yqk2wz7d@lkh4swkv52mi>
-References: <20230925095532.1984344-1-u.kleine-koenig@pengutronix.de>
- <CACPK8XeROYz_XaB3TvUhdXm7Vm8fjC8yU+mfvA58=_FiDrBy-g@mail.gmail.com>
- <1b2fddf8-c0a6-4afa-8ad0-f280dea1607f@app.fastmail.com>
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 3/4] thermal/drivers/mediatek/lvts_thermal: make coeff
+ configurable
+Message-ID: <ZRTA9UtVm9zxf2QD@pidgin.makrotopia.org>
+References: <20230922055020.6436-1-linux@fw-web.de>
+ <20230922055020.6436-4-linux@fw-web.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1b2fddf8-c0a6-4afa-8ad0-f280dea1607f@app.fastmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230922055020.6436-4-linux@fw-web.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 27, 2023 at 10:43:16AM +0200, Arnd Bergmann wrote:
-> On Wed, Sep 27, 2023, at 04:25, Joel Stanley wrote:
-> > On Mon, 25 Sept 2023 at 09:55, Uwe Kleine-König <u.kleine-koenig@pengutronix.de> wrote:
-> >>
-> >> this series converts all platform drivers below drivers/soc to use
-> >> .remove_new(). The motivation is to get rid of an integer return code
-> >> that is (mostly) ignored by the platform driver core and error prone on
-> >> the driver side.
-> >>
-> >> See commit 5c5a7680e67b ("platform: Provide a remove callback that
-> >> returns no value") for an extended explanation and the eventual goal.
-> >>
-> >> As there is no single maintainer team for drivers/soc, I suggest the
-> >> individual maintainers to pick up "their" patches.
-> >
-> > I'd be happy if Arnd merged the lot at once. Arnd, what do you think?
-> >
-> > If that will be too messy then I understand. I have queued the aspeed
-> > ones locally and will push that out if we decide that's the best way
-> > to go.
+On Fri, Sep 22, 2023 at 07:50:19AM +0200, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
 > 
-> The main downside of merging it all at once through the soc tree
-> is that there may be patches that conflict with other work going on
-> in individual drivers.
+> The upcoming mt7988 has different temperature coefficients so we
+> cannot use constants in the functions lvts_golden_temp_init,
+> lvts_golden_temp_init and lvts_raw_to_temp anymore.
 > 
-> What I'd suggest doing here is:
+> Add a field in the lvts_ctrl pointing to the lvts_data which now
+> contains the soc-specific temperature coefficents.
 > 
-> - have platform maintainers pick up patches for their drivers
->   if that is their preference for any reason
+> To make the code better readable, rename static int coeff_b to
+> golden_temp_offset, COEFF_A to temp_factor and COEFF_B to temp_offset.
 > 
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-I'd prefer this for the qcom drivers at least, please let me know if you
-would like me to proceed.
+Tested-by: Daniel Golle <daniel@makrotopia.org>
 
-Regards,
-Bjorn
-
-> - get a pull request from Uwe for the soc tree for anything that has
->   not been picked up in one or two weeks from now
+> ---
+> v2:
+> - rename static int coeff_b to golden_temp_offset
+> - rename coeff.a to temp_factor and coeff.b to temp_offset
+> ---
+>  drivers/thermal/mediatek/lvts_thermal.c | 51 ++++++++++++++++---------
+>  1 file changed, 34 insertions(+), 17 deletions(-)
 > 
->       Arnd
+> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+> index effd9b00a424..c2669f405a94 100644
+> --- a/drivers/thermal/mediatek/lvts_thermal.c
+> +++ b/drivers/thermal/mediatek/lvts_thermal.c
+> @@ -80,8 +80,8 @@
+>  #define LVTS_SENSOR_MAX				4
+>  #define LVTS_GOLDEN_TEMP_MAX		62
+>  #define LVTS_GOLDEN_TEMP_DEFAULT	50
+> -#define LVTS_COEFF_A				-250460
+> -#define LVTS_COEFF_B				250460
+> +#define LVTS_COEFF_A_MT8195			-250460
+> +#define LVTS_COEFF_B_MT8195			250460
+>  
+>  #define LVTS_MSR_IMMEDIATE_MODE		0
+>  #define LVTS_MSR_FILTERED_MODE		1
+> @@ -94,7 +94,7 @@
+>  #define LVTS_MINIMUM_THRESHOLD		20000
+>  
+>  static int golden_temp = LVTS_GOLDEN_TEMP_DEFAULT;
+> -static int coeff_b = LVTS_COEFF_B;
+> +static int golden_temp_offset;
+>  
+>  struct lvts_sensor_data {
+>  	int dt_id;
+> @@ -112,6 +112,8 @@ struct lvts_ctrl_data {
+>  struct lvts_data {
+>  	const struct lvts_ctrl_data *lvts_ctrl;
+>  	int num_lvts_ctrl;
+> +	int temp_factor;
+> +	int temp_offset;
+>  };
+>  
+>  struct lvts_sensor {
+> @@ -126,6 +128,7 @@ struct lvts_sensor {
+>  
+>  struct lvts_ctrl {
+>  	struct lvts_sensor sensors[LVTS_SENSOR_MAX];
+> +	const struct lvts_data *lvts_data;
+>  	u32 calibration[LVTS_SENSOR_MAX];
+>  	u32 hw_tshut_raw_temp;
+>  	int num_lvts_sensor;
+> @@ -247,21 +250,21 @@ static void lvts_debugfs_exit(struct lvts_domain *lvts_td) { }
+>  
+>  #endif
+>  
+> -static int lvts_raw_to_temp(u32 raw_temp)
+> +static int lvts_raw_to_temp(u32 raw_temp, int temp_factor)
+>  {
+>  	int temperature;
+>  
+> -	temperature = ((s64)(raw_temp & 0xFFFF) * LVTS_COEFF_A) >> 14;
+> -	temperature += coeff_b;
+> +	temperature = ((s64)(raw_temp & 0xFFFF) * temp_factor) >> 14;
+> +	temperature += golden_temp_offset;
+>  
+>  	return temperature;
+>  }
+>  
+> -static u32 lvts_temp_to_raw(int temperature)
+> +static u32 lvts_temp_to_raw(int temperature, int temp_factor)
+>  {
+> -	u32 raw_temp = ((s64)(coeff_b - temperature)) << 14;
+> +	u32 raw_temp = ((s64)(golden_temp_offset - temperature)) << 14;
+>  
+> -	raw_temp = div_s64(raw_temp, -LVTS_COEFF_A);
+> +	raw_temp = div_s64(raw_temp, -temp_factor);
+>  
+>  	return raw_temp;
+>  }
+> @@ -269,6 +272,9 @@ static u32 lvts_temp_to_raw(int temperature)
+>  static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
+>  {
+>  	struct lvts_sensor *lvts_sensor = thermal_zone_device_priv(tz);
+> +	struct lvts_ctrl *lvts_ctrl = container_of(lvts_sensor, struct lvts_ctrl,
+> +						   sensors[lvts_sensor->id]);
+> +	const struct lvts_data *lvts_data = lvts_ctrl->lvts_data;
+>  	void __iomem *msr = lvts_sensor->msr;
+>  	u32 value;
+>  	int rc;
+> @@ -301,7 +307,7 @@ static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
+>  	if (rc)
+>  		return -EAGAIN;
+>  
+> -	*temp = lvts_raw_to_temp(value & 0xFFFF);
+> +	*temp = lvts_raw_to_temp(value & 0xFFFF, lvts_data->temp_factor);
+>  
+>  	return 0;
+>  }
+> @@ -348,10 +354,13 @@ static bool lvts_should_update_thresh(struct lvts_ctrl *lvts_ctrl, int high)
+>  static int lvts_set_trips(struct thermal_zone_device *tz, int low, int high)
+>  {
+>  	struct lvts_sensor *lvts_sensor = thermal_zone_device_priv(tz);
+> -	struct lvts_ctrl *lvts_ctrl = container_of(lvts_sensor, struct lvts_ctrl, sensors[lvts_sensor->id]);
+> +	struct lvts_ctrl *lvts_ctrl = container_of(lvts_sensor, struct lvts_ctrl,
+> +						   sensors[lvts_sensor->id]);
+> +	const struct lvts_data *lvts_data = lvts_ctrl->lvts_data;
+>  	void __iomem *base = lvts_sensor->base;
+> -	u32 raw_low = lvts_temp_to_raw(low != -INT_MAX ? low : LVTS_MINIMUM_THRESHOLD);
+> -	u32 raw_high = lvts_temp_to_raw(high);
+> +	u32 raw_low = lvts_temp_to_raw(low != -INT_MAX ? low : LVTS_MINIMUM_THRESHOLD,
+> +				       lvts_data->temp_factor);
+> +	u32 raw_high = lvts_temp_to_raw(high, lvts_data->temp_factor);
+>  	bool should_update_thresh;
+>  
+>  	lvts_sensor->low_thresh = low;
+> @@ -692,7 +701,7 @@ static int lvts_calibration_read(struct device *dev, struct lvts_domain *lvts_td
+>  	return 0;
+>  }
+>  
+> -static int lvts_golden_temp_init(struct device *dev, u32 *value)
+> +static int lvts_golden_temp_init(struct device *dev, u32 *value, int temp_offset)
+>  {
+>  	u32 gt;
+>  
+> @@ -701,7 +710,7 @@ static int lvts_golden_temp_init(struct device *dev, u32 *value)
+>  	if (gt && gt < LVTS_GOLDEN_TEMP_MAX)
+>  		golden_temp = gt;
+>  
+> -	coeff_b = golden_temp * 500 + LVTS_COEFF_B;
+> +	golden_temp_offset = golden_temp * 500 + temp_offset;
+>  
+>  	return 0;
+>  }
+> @@ -724,7 +733,7 @@ static int lvts_ctrl_init(struct device *dev, struct lvts_domain *lvts_td,
+>  	 * The golden temp information is contained in the first chunk
+>  	 * of efuse data.
+>  	 */
+> -	ret = lvts_golden_temp_init(dev, (u32 *)lvts_td->calib);
+> +	ret = lvts_golden_temp_init(dev, (u32 *)lvts_td->calib, lvts_data->temp_offset);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -735,6 +744,7 @@ static int lvts_ctrl_init(struct device *dev, struct lvts_domain *lvts_td,
+>  	for (i = 0; i < lvts_data->num_lvts_ctrl; i++) {
+>  
+>  		lvts_ctrl[i].base = lvts_td->base + lvts_data->lvts_ctrl[i].offset;
+> +		lvts_ctrl[i].lvts_data = lvts_data;
+>  
+>  		ret = lvts_sensor_init(dev, &lvts_ctrl[i],
+>  				       &lvts_data->lvts_ctrl[i]);
+> @@ -758,7 +768,8 @@ static int lvts_ctrl_init(struct device *dev, struct lvts_domain *lvts_td,
+>  		 * after initializing the calibration.
+>  		 */
+>  		lvts_ctrl[i].hw_tshut_raw_temp =
+> -			lvts_temp_to_raw(lvts_data->lvts_ctrl[i].hw_tshut_temp);
+> +			lvts_temp_to_raw(lvts_data->lvts_ctrl[i].hw_tshut_temp,
+> +					 lvts_data->temp_factor);
+>  
+>  		lvts_ctrl[i].low_thresh = INT_MIN;
+>  		lvts_ctrl[i].high_thresh = INT_MIN;
+> @@ -1223,6 +1234,8 @@ static int lvts_probe(struct platform_device *pdev)
+>  	if (irq < 0)
+>  		return irq;
+>  
+> +	golden_temp_offset = lvts_data->temp_offset;
+> +
+>  	ret = lvts_domain_init(dev, lvts_td, lvts_data);
+>  	if (ret)
+>  		return dev_err_probe(dev, ret, "Failed to initialize the lvts domain\n");
+> @@ -1338,11 +1351,15 @@ static const struct lvts_ctrl_data mt8195_lvts_ap_data_ctrl[] = {
+>  static const struct lvts_data mt8195_lvts_mcu_data = {
+>  	.lvts_ctrl	= mt8195_lvts_mcu_data_ctrl,
+>  	.num_lvts_ctrl	= ARRAY_SIZE(mt8195_lvts_mcu_data_ctrl),
+> +	.temp_factor	= LVTS_COEFF_A_MT8195,
+> +	.temp_offset	= LVTS_COEFF_B_MT8195,
+>  };
+>  
+>  static const struct lvts_data mt8195_lvts_ap_data = {
+>  	.lvts_ctrl	= mt8195_lvts_ap_data_ctrl,
+>  	.num_lvts_ctrl	= ARRAY_SIZE(mt8195_lvts_ap_data_ctrl),
+> +	.temp_factor	= LVTS_COEFF_A_MT8195,
+> +	.temp_offset	= LVTS_COEFF_B_MT8195,
+>  };
+>  
+>  static const struct of_device_id lvts_of_match[] = {
+> -- 
+> 2.34.1
+> 
