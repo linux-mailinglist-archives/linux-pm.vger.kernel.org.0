@@ -2,119 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C22277AFF09
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 10:55:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F9FE7AFF11
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 10:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjI0IzY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Sep 2023 04:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49090 "EHLO
+        id S230187AbjI0Izz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Sep 2023 04:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbjI0IzW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 04:55:22 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A17FE5
-        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 01:55:20 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-27747002244so5491412a91.2
-        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 01:55:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695804920; x=1696409720; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2otPEB/xF2y2gWB3F3HzuUrVDzeh6ktV3K7Sy+EklX0=;
-        b=EbmpA7qT9M07ebVuaPitNjzgcOedRb9DydqODUjph9L9OPUcAwRfTGDOcewdYuszZT
-         TbBmw0tdaA/anFCxTZnHd2j2mOkpxzKXE5/lUqcNeOzOr15iXYpNxTx1ziHSmwBccRCO
-         ZUItyftG46X8ffNRQfy3OcB85aEXXMWXbPWv2YwISp61vO0gaG8M6GZtvSYMThlqRVVK
-         J4tJP3Te8pOFWXISLDXSFHgZIJFctPONCdEZHjJ2pw2mFxuChBBR/IqT2yTYFvDqNB78
-         Lto0LYTHYL6ivRQzepkILBW9y2gZYVUCmBGfqWNxmrLgiVtRqDhKQ9Iaj2qCaP3Tip/6
-         6fbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695804920; x=1696409720;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2otPEB/xF2y2gWB3F3HzuUrVDzeh6ktV3K7Sy+EklX0=;
-        b=jLE4//jHtEmPWPtOGr5x7p4gPLugBCaG0cma/oIIJGv/COUY8oepvmrCuDcPop+tBD
-         6O354ofPVAlK1ty1gp9vFz2zzpNue7ra+seQksCEEkGaTwRqZL8ZW2Wt9G8pj4Gguo/X
-         pr90mgQEojmh7SalwwxAOz04VZeTlMlrKWUqgDKOtV+QPIr4WoSXdr1cGPBGFH264Jk0
-         TLWxLEnCeFFsdmn2yqKohkAAhxyMN7UOBPSBIyEE0aYT00eexRySDm4MkjMNjAyxw5Ig
-         qhxPycMrSgxXLfdc/i6Tp2/9+G0alyesjiyczBOxU2qnL9kXeGM4N5TjDDJfqh6PgOD+
-         Uwgw==
-X-Gm-Message-State: AOJu0YwIeVhjvQe0dbGxWoNOD1O+gxfG3S1p0keZhUMd7q3PgNpBOm0S
-        nZVkL2Z+vIjxhJn2vYb8QO+OFQ==
-X-Google-Smtp-Source: AGHT+IG/oCqceFX/Qd4NKpfRUZDTTCa9LfZsFCLlueXp5y0ROoFg+gfO1s0WqoKsLZQKLcS8odhwMQ==
-X-Received: by 2002:a17:90b:4d89:b0:274:bf7a:60cd with SMTP id oj9-20020a17090b4d8900b00274bf7a60cdmr1143971pjb.34.1695804919803;
-        Wed, 27 Sep 2023 01:55:19 -0700 (PDT)
-Received: from localhost ([122.172.81.92])
-        by smtp.gmail.com with ESMTPSA id lj8-20020a17090b344800b0026b4decfe59sm11424070pjb.31.2023.09.27.01.55.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Sep 2023 01:55:19 -0700 (PDT)
-Date:   Wed, 27 Sep 2023 14:25:17 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Liao Chang <liaochang1@huawei.com>
-Cc:     rafael@kernel.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: schedutil: Merge initialization code of sg_cpu
- in single loop
-Message-ID: <20230927085517.udfg3udsqkmrugj2@vireshk-i7>
-References: <20230908031604.2262422-1-liaochang1@huawei.com>
+        with ESMTP id S230185AbjI0Izv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 04:55:51 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CB0E4;
+        Wed, 27 Sep 2023 01:55:49 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qlQKi-0001vm-Al; Wed, 27 Sep 2023 10:55:48 +0200
+Message-ID: <3efa338a-6d0c-46a9-ae59-d96fbe6aa5af@leemhuis.info>
+Date:   Wed, 27 Sep 2023 10:55:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230908031604.2262422-1-liaochang1@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: s2idle stopped working with 6.6-rc on Thinkpad T14 G1 (AMD)
+Content-Language: en-US, de-DE
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+References: <0d84fb59-4628-4c7f-ab1a-f58889ef2c9b@leemhuis.info>
+ <e556ae63-0539-4b34-b33f-5f5beb4183d1@amd.com>
+ <e049aa41-b136-4071-850f-d06b47fe67a1@leemhuis.info>
+ <5f753ef4-caec-479a-bff4-43c16fb3317b@amd.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <5f753ef4-caec-479a-bff4-43c16fb3317b@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1695804949;b555128c;
+X-HE-SMSGID: 1qlQKi-0001vm-Al
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08-09-23, 03:16, Liao Chang wrote:
-> The initialization code of the per-cpu sg_cpu struct is currently split
-> into two for-loop blocks. This can be simplified by merging the two
-> blocks into a single loop. This will make the code more maintainable.
+On 25.09.23 19:44, Mario Limonciello wrote:
+> On 9/25/2023 08:45, Thorsten Leemhuis wrote:
+>> On 25.09.23 15:25, Mario Limonciello wrote:
+>>> On 9/25/2023 05:55, Thorsten Leemhuis wrote:
+>>>> Hi Mario! Did you by chance hear anything about lock-ups on resume with
+>>>> mainline affecting AMD systems? I'm asking, as s2idle stopped working
+>>>> for me with 6.6-rc on my Thinkpad T14 G1 (AMD).
+>>> You're the first report I've heard of this.
+>> Thx for taking the time and replying.
+> [...]
+> FWIW your email prompted me to double check the two other Lenovo systems
+> I have on hand at my desk:
+> * P14s Gen 1
+> * L14 Gen2a
 > 
-> Signed-off-by: Liao Chang <liaochang1@huawei.com>
-> ---
->  kernel/sched/cpufreq_schedutil.c | 11 +++--------
->  1 file changed, 3 insertions(+), 8 deletions(-)
+> One of them had a Ubuntu userspace (20.04 IIRC) and the other a Fedora
+> 38.  I built 6.6-rc3 and couldn't reproduce any issues with s2idle.
 > 
-> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> index 4492608b7d7f..f3a95def49cc 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -767,14 +767,6 @@ static int sugov_start(struct cpufreq_policy *policy)
->  
->  	sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
->  
-> -	for_each_cpu(cpu, policy->cpus) {
-> -		struct sugov_cpu *sg_cpu = &per_cpu(sugov_cpu, cpu);
-> -
-> -		memset(sg_cpu, 0, sizeof(*sg_cpu));
-> -		sg_cpu->cpu			= cpu;
-> -		sg_cpu->sg_policy		= sg_policy;
-> -	}
-> -
->  	if (policy_is_shared(policy))
->  		uu = sugov_update_shared;
->  	else if (policy->fast_switch_enabled && cpufreq_driver_has_adjust_perf())
-> @@ -785,6 +777,9 @@ static int sugov_start(struct cpufreq_policy *policy)
->  	for_each_cpu(cpu, policy->cpus) {
->  		struct sugov_cpu *sg_cpu = &per_cpu(sugov_cpu, cpu);
->  
-> +		memset(sg_cpu, 0, sizeof(*sg_cpu));
-> +		sg_cpu->cpu = cpu;
-> +		sg_cpu->sg_policy = sg_policy;
->  		cpufreq_add_update_util_hook(cpu, &sg_cpu->update_util, uu);
->  	}
->  	return 0;
+> So yes; bisect is the next step, thanks.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Thx again for your work. Turns out it was
 
--- 
-viresh
+
