@@ -2,46 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 591FE7B0CB8
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 21:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0271A7B0CBD
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 21:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbjI0TiC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Sep 2023 15:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58758 "EHLO
+        id S229796AbjI0TiD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Sep 2023 15:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbjI0Th7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 15:37:59 -0400
+        with ESMTP id S229769AbjI0TiA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 15:38:00 -0400
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9A910E
-        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 12:37:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F84E136
+        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 12:37:59 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qlaM0-0002T6-Kb; Wed, 27 Sep 2023 21:37:48 +0200
+        id 1qlaM0-0002Ug-SM; Wed, 27 Sep 2023 21:37:48 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qlaLz-009Paa-D5; Wed, 27 Sep 2023 21:37:47 +0200
+        id 1qlaLz-009Pae-KJ; Wed, 27 Sep 2023 21:37:47 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qlaLz-005Rgo-3N; Wed, 27 Sep 2023 21:37:47 +0200
+        id 1qlaLz-005Rgs-Al; Wed, 27 Sep 2023 21:37:47 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        linux-pm@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 23/31] thermal: rzg2l: Convert to platform remove callback returning void
-Date:   Wed, 27 Sep 2023 21:37:28 +0200
-Message-Id: <20230927193736.2236447-24-u.kleine-koenig@pengutronix.de>
+Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de
+Subject: [PATCH 24/31] thermal: exynos_tmu: Convert to platform remove callback returning void
+Date:   Wed, 27 Sep 2023 21:37:29 +0200
+Message-Id: <20230927193736.2236447-25-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230927193736.2236447-1-u.kleine-koenig@pengutronix.de>
 References: <20230927193736.2236447-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1880; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=Up1lglqpfdf9VLmMWd7Hmz7cVMwrd6pIZicDU3lYJx8=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlFIRzy2F6EAlRnmDM7iCbG+GETqZS/kSe4yYUM /yjH+Pr8UOJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZRSEcwAKCRCPgPtYfRL+ TlreB/40HEcyLNwWYoFLiX8jB9eDuzrqb3Fo/LSLd3ysFgl/4H927kth6MY9SDQ1uGYupMa4+ea xlxcswOHhKwNVRhOqaBStcurxXiPdt4lAiebRxj4XvDJlL0UN40L5XOdd9ZeUOqH3prcksjg27g 4JZeESW2ryN8x11Kw5EkkT/CQTKyBJPmvYVDLM82ZUnSuuxvzYYyw3wRIxZeKh9Z2c4FgqlhJkz qRUtDw635aFEhjDxxdjHcqSlr3Im6534CGM/MJKF0OaajEOy+Ts+ZrWVo1ATgUoweYDnpFdoCcD e56zG01Q0FqUPhWFgMdINsBkhxEqfO9kXhPJROTsDgJ/OkKE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1858; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=dsnoZztErRYNWr2jU7eLRLQsZSepGY3S0hl8c5LtKzA=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlFIR0TaGGXeMoBxWYJ1msvYfy3UomoULeWg05x o4x+QoASn6JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZRSEdAAKCRCPgPtYfRL+ TtvGCACfmjjCslXNoNAEjTNPuJidBY+JAYOn9VRADLcP46dCsssoj6+L1IipPI+RMzpGPG/e0y4 56ncD423YD1HsRiGbXpRFGK8gaz5M1WMrNM8LNq6I2d5k1H73pF3mZqNrv48JgqgPXNluPo6ucv vIVumXOSzZqTAcT8aPnRHD5Gt9iL5ioYrYVqAcmIVHeq5f4jOL1TZzW/7JMZeWzRmUzgqFhJeG0 4FGA0BWU0pobgS75av4ftclcgKJN4QFZT6hsWvoeDAnNp6+YWEUThxGW9MJsSHlPQygpirBW9U/ IOPPHiP4Xlebq1YX2Co52t8yqBgiTCg33fsGe4a+59bt/Eu4
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -72,38 +77,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/thermal/rzg2l_thermal.c | 6 ++----
+ drivers/thermal/samsung/exynos_tmu.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/thermal/rzg2l_thermal.c b/drivers/thermal/rzg2l_thermal.c
-index 6b2bf3426f52..04efd824ac4c 100644
---- a/drivers/thermal/rzg2l_thermal.c
-+++ b/drivers/thermal/rzg2l_thermal.c
-@@ -150,14 +150,12 @@ static void rzg2l_thermal_reset_assert_pm_disable_put(struct platform_device *pd
- 	reset_control_assert(priv->rstc);
+diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
+index e5bc2c82010f..123ec81e1943 100644
+--- a/drivers/thermal/samsung/exynos_tmu.c
++++ b/drivers/thermal/samsung/exynos_tmu.c
+@@ -1124,7 +1124,7 @@ static int exynos_tmu_probe(struct platform_device *pdev)
+ 	return ret;
  }
  
--static int rzg2l_thermal_remove(struct platform_device *pdev)
-+static void rzg2l_thermal_remove(struct platform_device *pdev)
+-static int exynos_tmu_remove(struct platform_device *pdev)
++static void exynos_tmu_remove(struct platform_device *pdev)
  {
- 	struct rzg2l_thermal_priv *priv = dev_get_drvdata(&pdev->dev);
+ 	struct exynos_tmu_data *data = platform_get_drvdata(pdev);
  
- 	thermal_remove_hwmon_sysfs(priv->zone);
- 	rzg2l_thermal_reset_assert_pm_disable_put(pdev);
+@@ -1137,8 +1137,6 @@ static int exynos_tmu_remove(struct platform_device *pdev)
+ 
+ 	if (!IS_ERR(data->regulator))
+ 		regulator_disable(data->regulator);
 -
 -	return 0;
  }
  
- static int rzg2l_thermal_probe(struct platform_device *pdev)
-@@ -242,7 +240,7 @@ static struct platform_driver rzg2l_thermal_driver = {
- 		.of_match_table = rzg2l_thermal_dt_ids,
+ #ifdef CONFIG_PM_SLEEP
+@@ -1173,7 +1171,7 @@ static struct platform_driver exynos_tmu_driver = {
+ 		.of_match_table = exynos_tmu_match,
  	},
- 	.probe = rzg2l_thermal_probe,
--	.remove = rzg2l_thermal_remove,
-+	.remove_new = rzg2l_thermal_remove,
+ 	.probe = exynos_tmu_probe,
+-	.remove	= exynos_tmu_remove,
++	.remove_new = exynos_tmu_remove,
  };
- module_platform_driver(rzg2l_thermal_driver);
  
+ module_platform_driver(exynos_tmu_driver);
 -- 
 2.40.1
 
