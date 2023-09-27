@@ -2,54 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4C297B075D
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 16:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FCDA7B076F
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 16:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232179AbjI0Oxl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Sep 2023 10:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50384 "EHLO
+        id S232258AbjI0O4t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Sep 2023 10:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232100AbjI0Oxk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 10:53:40 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186BFF4;
-        Wed, 27 Sep 2023 07:53:40 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3B76C433C7;
-        Wed, 27 Sep 2023 14:53:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695826419;
-        bh=ks2l+BMDg4lCkkBqKC04Z5qzTIgadGUiaB5wSsEhvyU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HzjiIzhDYsdkCUPN6FyfHTAS7J2NFOl34P8gwGVXQdi/0QXMWc/dgM40gP9Vfk+jk
-         SJfba7q+KVwJV0fAUBeTM/goy1UJCbTDmrj+JN854tsdRlRDKN1nLYCaRzIDPq1uAg
-         nQVFE9tZ/TGbXNdqQTOsJ78aSFL8GUkoy9ZvuXvWB8j/7RUaCjF3NnEsIyOUAdYYux
-         vaXI+p8DQnQyhv1N9kTw7poG2+HRtPQ1rXj7ljvivJg1hZwdsNbVKQyT5G3RKOK6jd
-         XEOhMUsYbQstAm3muGYxSfVTyPgymVHnuQ7IU1muRoMrjLqjS2DPnglK80/ie9ZYLa
-         ILjkZI/ugHl3A==
-Date:   Wed, 27 Sep 2023 15:53:35 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Changhuang Liang <changhuang.liang@starfivetech.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        Hal Feng <hal.feng@starfivetech.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [-next v1 1/2] dt-bindings: power: Update prefixes for AON power
- domain
-Message-ID: <20230927-unselfish-relapsing-a087cf6135c6@spud>
-References: <20230927130734.9921-1-changhuang.liang@starfivetech.com>
- <20230927130734.9921-2-changhuang.liang@starfivetech.com>
- <20230927-coma-flashback-07d2e7b34f96@spud>
+        with ESMTP id S232054AbjI0O4s (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 10:56:48 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0218612A
+        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 07:56:45 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-32003aae100so8458094f8f.0
+        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 07:56:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1695826603; x=1696431403; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sngrgBmcc0SNVGKMiz3UxrHAAX6L7zKBd8TMIQEgu/I=;
+        b=WOgYVGT5dOoRVhJF6Qn4HMadW3x8DLaZ95Ld0oVJzxMai+4yKPSVxdwYcKZxDxsZkM
+         DwSxvgz0uAXEhguosm1qU8ElSAv7BdGhut5jxgE/rbR3hWrjJbyzrsoJqMw8RV9yZwFm
+         s5HXirslZWY8eR1cy8Qf4sD8ZuyvFFU9ANrusjeZSkywUDR8EVnGsN+qX4f+e//hukss
+         lVA0UJqPSconPT304216rYeiVZOd9nwgt09Auj+zlACCdJjKXJIp/LfDbcsAAssTcff3
+         Vjtrvet2MVzg5FZxHcjF3YFDg5JXajELiSHDWt5z5tHE2TfRnH5+vQ12vPHK08Dc9X5U
+         Hkww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695826603; x=1696431403;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sngrgBmcc0SNVGKMiz3UxrHAAX6L7zKBd8TMIQEgu/I=;
+        b=j0wkTzvtLHM6WamlCmPWyMC6QghEHjRgGpkdQ2ghJS2nopNQj2jOeiSP57NZTi0gmO
+         Z4nXrWqRoOCW+7czxoTqvc69q3yapEiLnM7QJymRXI04lBRjDTpIOcrq3jUwYl72MCCd
+         12KvrL3iE0Ckdphc5JUUmCRGx228p/U4dVJDSmHrCVilIWBtdqqyt9iIGSb1vjdJt6Tn
+         Zs+oKy3ngfpPgcaKVT33xdyBBd9zJOIX7eVUWO5CmusHpevFfgpIWcu8XajvOxw+pHr1
+         h5Iz6LU/NA9Lpe4MMpqkNJekvEIjxiyy+CdmuogisJ1i4iYkzZ6hCWLr8DarJ/2TIAS2
+         KRog==
+X-Gm-Message-State: AOJu0YyyuC7dmnR46EEXhSFwAgDpZWOw4iJWJ68Gk6d/COjZQhsCfc6u
+        bnJtXHHzFEHQ4YlLWZINqZJ+PQ==
+X-Google-Smtp-Source: AGHT+IEmnAhUscM+ELai9UJbSrjbIHumSFpekzbWpdFz9hhQRNPdNIpgopswacO/VqV16BtM9+v2+g==
+X-Received: by 2002:adf:fe09:0:b0:323:30d0:5c4d with SMTP id n9-20020adffe09000000b0032330d05c4dmr4942698wrr.19.1695826603342;
+        Wed, 27 Sep 2023 07:56:43 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
+        by smtp.googlemail.com with ESMTPSA id r2-20020adfe682000000b0031ff89af0e4sm17283525wrm.99.2023.09.27.07.56.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Sep 2023 07:56:42 -0700 (PDT)
+Message-ID: <bb7f32c9-249c-2ad8-135c-82098430bcfd@linaro.org>
+Date:   Wed, 27 Sep 2023 16:56:41 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="XBVBzVPHfwlmd97t"
-Content-Disposition: inline
-In-Reply-To: <20230927-coma-flashback-07d2e7b34f96@spud>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v1 05/13] thermal: core: Store trip pointer in struct
+ thermal_instance
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+References: <1957441.PYKUYFuaPT@kreacher> <1977624.usQuhbGJ8B@kreacher>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <1977624.usQuhbGJ8B@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,63 +80,41 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 21/09/2023 19:52, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Replace the integer trip number stored in struct thermal_instance with
+> a pointer to the relevant trip and adjust the code using the structure
+> in question accordingly.
+> 
+> The main reason for making this change is to allow the trip point to
+> cooling device binding code more straightforward, as illustrated by
+> subsequent modifications of the ACPI thermal driver, but it also helps
+> to clarify the overall design and allows the governor code overhead to
+> be reduced (through subsequent modifications).
+> 
+> The only case in which it adds complexity is trip_point_show() that
+> needs to walk the trips[] table to find the index of the given trip
+> point, but this is not a critical path and the interface that
+> trip_point_show() belongs to is problematic anyway (for instance, it
+> doesn't cover the case when the same cooling devices is associated
+> with multiple trip points).
+> 
+> This is a preliminary change and the affected code will be refined by
+> a series of subsequent modifications of thermal governors, the core and
+> the ACPI thermal driver.
+> 
+> The general functionality is not expected to be affected by this change.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
 
---XBVBzVPHfwlmd97t
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-On Wed, Sep 27, 2023 at 03:52:44PM +0100, Conor Dooley wrote:
-> On Wed, Sep 27, 2023 at 06:07:33AM -0700, Changhuang Liang wrote:
-> > Use "JH7110_AON_PD_" prefix for AON power doamin for JH7110 SoC.
-> >=20
-> > Reviewed-by: Walker Chen <walker.chen@starfivetech.com>
-> > Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
->=20
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Also, It'd have been worth mentioning that there are no ABI issues here
-due to this stuff not yet being in Linus' tree.
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
->=20
-> Thanks,
-> Conor.
->=20
-> > ---
-> >  include/dt-bindings/power/starfive,jh7110-pmu.h | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/include/dt-bindings/power/starfive,jh7110-pmu.h b/include/=
-dt-bindings/power/starfive,jh7110-pmu.h
-> > index 341e2a0676ba..7b4f24927dee 100644
-> > --- a/include/dt-bindings/power/starfive,jh7110-pmu.h
-> > +++ b/include/dt-bindings/power/starfive,jh7110-pmu.h
-> > @@ -14,7 +14,8 @@
-> >  #define JH7110_PD_ISP		5
-> >  #define JH7110_PD_VENC		6
-> > =20
-> > -#define JH7110_PD_DPHY_TX	0
-> > -#define JH7110_PD_DPHY_RX	1
-> > +/* AON Power Domain */
-> > +#define JH7110_AON_PD_DPHY_TX	0
-> > +#define JH7110_AON_PD_DPHY_RX	1
-> > =20
-> >  #endif
-> > --=20
-> > 2.25.1
-> >=20
-
-
-
---XBVBzVPHfwlmd97t
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZRRB7wAKCRB4tDGHoIJi
-0lTiAP9qoPZX/TGvi8wHXi8+VftfRNK/r9TwhvddwUcmy5JqtwEAgoQJf8YI+4Lu
-VGL+agnsi5p+wbzE+jBDzOSKL9u0jwc=
-=HUZb
------END PGP SIGNATURE-----
-
---XBVBzVPHfwlmd97t--
