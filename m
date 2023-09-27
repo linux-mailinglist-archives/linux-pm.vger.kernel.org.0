@@ -2,27 +2,28 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9FE7AFF11
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 10:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A6FD7AFF22
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 10:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjI0Izz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Sep 2023 04:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
+        id S229930AbjI0I5t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Sep 2023 04:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbjI0Izv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 04:55:51 -0400
+        with ESMTP id S229945AbjI0I5q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 04:57:46 -0400
 Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CB0E4;
-        Wed, 27 Sep 2023 01:55:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7CDCC;
+        Wed, 27 Sep 2023 01:57:44 -0700 (PDT)
 Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
         by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qlQKi-0001vm-Al; Wed, 27 Sep 2023 10:55:48 +0200
-Message-ID: <3efa338a-6d0c-46a9-ae59-d96fbe6aa5af@leemhuis.info>
-Date:   Wed, 27 Sep 2023 10:55:48 +0200
+        id 1qlQMZ-0002b8-BV; Wed, 27 Sep 2023 10:57:43 +0200
+Message-ID: <e3cc6486-48be-46fb-9850-32add544530b@leemhuis.info>
+Date:   Wed, 27 Sep 2023 10:57:42 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
 Subject: Re: s2idle stopped working with 6.6-rc on Thinkpad T14 G1 (AMD)
-Content-Language: en-US, de-DE
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
 To:     Mario Limonciello <mario.limonciello@amd.com>
 Cc:     Linux PM <linux-pm@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
@@ -31,14 +32,12 @@ References: <0d84fb59-4628-4c7f-ab1a-f58889ef2c9b@leemhuis.info>
  <e556ae63-0539-4b34-b33f-5f5beb4183d1@amd.com>
  <e049aa41-b136-4071-850f-d06b47fe67a1@leemhuis.info>
  <5f753ef4-caec-479a-bff4-43c16fb3317b@amd.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Content-Language: en-US, de-DE
 In-Reply-To: <5f753ef4-caec-479a-bff4-43c16fb3317b@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1695804949;b555128c;
-X-HE-SMSGID: 1qlQKi-0001vm-Al
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1695805064;3488a796;
+X-HE-SMSGID: 1qlQMZ-0002b8-BV
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
@@ -47,6 +46,8 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
+
+[one more time, please ignore the previous message]
 
 On 25.09.23 19:44, Mario Limonciello wrote:
 > On 9/25/2023 08:45, Thorsten Leemhuis wrote:
@@ -68,6 +69,17 @@ On 25.09.23 19:44, Mario Limonciello wrote:
 > 
 > So yes; bisect is the next step, thanks.
 
-Thx again for your work. Turns out it was
+Thx again for your work.
+
+FWIW, turned out the problem is caused by 92e24e0e57f72e ("Input:
+psmouse - add delay when deactivating for SMBus mode"). Guess it's a
+timing issue. Reported it in a new thread:
+
+#regzbot dup-of:
+https://lore.kernel.org/regressions/ca0109fa-c64b-43c1-a651-75b294d750a1@leemhuis.info/
+
+Ciao, Thorsten
+
+
 
 
