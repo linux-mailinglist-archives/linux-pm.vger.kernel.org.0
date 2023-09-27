@@ -2,336 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8467B0340
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 13:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22C137B0365
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 13:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231409AbjI0Lm1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Sep 2023 07:42:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50710 "EHLO
+        id S231169AbjI0L6S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Sep 2023 07:58:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbjI0Lm1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 07:42:27 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF20413A
-        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 04:42:25 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-d81f079fe73so12538293276.3
-        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 04:42:25 -0700 (PDT)
+        with ESMTP id S230268AbjI0L6R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 07:58:17 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B29FC
+        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 04:58:16 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-40566f89f6eso79810355e9.3
+        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 04:58:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695814945; x=1696419745; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aIt1l7/IgUpo4k3Bjm4G/lamSevl4u5gHJJCk6sbhjY=;
-        b=xsPg3XBei4POs485522lXmJI/VVXzDFUOyKO++s/cN5omgrmCmLhN+3ym0UBNxwUMD
-         vmWtmGawHIqSLV3FC6hLxzu785CBsANaxcFkJhibDM0Y6khDgt8ef17x3ako3qZnvXFM
-         yUMYJAwWpIKprLoQoIwxqCKypujE67zgC+y9d7/UwQZF9wvvDOfnRZAMCCQmKFnCCvgo
-         k2i0kiZsctiQzF9+tx5sL1BL/33/PVpew8Pe25/rI1TF5jZaf/WGK08bZMcRQt6NmNAR
-         gMJbnbOPTpRCipjzSNd8w8hzIJL9WLMfN/FZtMUWUl1/6jkA7+V/TPy2di2j1zzd7Vr2
-         VpZA==
+        d=linaro.org; s=google; t=1695815894; x=1696420694; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GxBT05QSaKYLy2VHz5mpN5js/FV2wLDKiGhrnovBJpM=;
+        b=xq/0WbYP9QsWTd/8pk7bMcHl22hgLbTMarCfwcQdshQm+/YYbC9rA22lbvaVhSCEwa
+         R6uZ92je3wppp1tmdauk+duYzNSFECL4EtbzlsPk6P1VM23VJm6396+Yc2TL/gxBBz2L
+         7R/ZYGhWb6n7E0VXvLasInqSlgfYm/DT7pxB3+HveBD0SCO2e0Q8YWeTJmA9X2m9jMS2
+         A44wOstRnEQ7x8Q82+8sJ+nF5UaDwVZ2g148cyLJhyewKBfXj1rndI+rSJCI/mE6wffJ
+         qURG9uxMCxeU9w4kiDlaWN3hjn8FzXK/4BRCAXL3mUdOaP2jZ83A8PhXYqaFENuNKLDz
+         Lphw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695814945; x=1696419745;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aIt1l7/IgUpo4k3Bjm4G/lamSevl4u5gHJJCk6sbhjY=;
-        b=rd19ss63oGr2PL8AwTT4mk42dk6OaPPXcQ/XMJuc2bGey8D8jFnPF8mqylLQNjb2KD
-         mTCWisp73iw4OZVqTlcUv+CIVLzRX8XrTDsQ4nf6HzdYcZR+OzhrMvz8EqHyOsG1D2+L
-         ypeVURZKVwf9nFLauGDSDdo8s9AIgSIxYlMP49+7kQ7D3Po6fEyYsu3j+kQRVkINO8Za
-         9lMnWyxaDl08q9BYiHqSr8wKNHSY1r6vj9IgW7eBSoAxgakGOEE7Pvxo4XAZTGsZJpPP
-         s61dLn/fLEQwVUpEo3uE8+h3uD7diyVJ34lh+r/XPbc7TqsCOxQzxwyO1gfeVqhq4JeI
-         4Udg==
-X-Gm-Message-State: AOJu0Yy0a+91zaUgcGznyhMvAsgcD1MOdKzKYawjCf4BhQ3ns3qaKa7m
-        +qEa8nMuEsDrlYfEDF5B6dOIzMACQImwcsTEH1xiRw==
-X-Google-Smtp-Source: AGHT+IHBVFquJJT8K4Rl86v3hUqmDvjlekCjqCBE5F8bmAbHvZ8Ouu4MachaenQPWgpZPR02xLIw1xRN9sVjV4UBFTI=
-X-Received: by 2002:a25:dccb:0:b0:d81:ce57:571a with SMTP id
- y194-20020a25dccb000000b00d81ce57571amr1701528ybe.54.1695814944913; Wed, 27
- Sep 2023 04:42:24 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1695815894; x=1696420694;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GxBT05QSaKYLy2VHz5mpN5js/FV2wLDKiGhrnovBJpM=;
+        b=U2DbqftQ6qdweS5fLtpU51Y3sfuC78e0bP69TOMMOl/qbZCDXDceflgxPVD+wRLrQP
+         dpSPPs6r4KiMbEAt2sF/LrqazVN5WzSfwK/dp1wclwANqK8esEU0FEeOJ4dH0tDaoz8I
+         OQjuoANJuwh7KyGA50ui6VuIUlhnQVcuxjCdD7ttyQd8ImRhMdG/8JYcp5UV/DxOBA8c
+         bmIEpL82k1PnsA+ZCxvQjU+zypHpBErDgHqY1Z6y+RnFZyAYq1EAjEHLsk2JIWWU0Qu6
+         xPchgAV+qQui76KV41WXOo4duAWoPqieBuIPDcUGLgOcp+DmZEc1sKOxbyaeEGHMeevu
+         qmFQ==
+X-Gm-Message-State: AOJu0YxO4ngudfpmPHg5m3t8NLC3DkhfHlqwJNtEpWad6dKE+njtqZWl
+        f1UknStLRo4tubRBxVdYZwEj6aNZHSUy6NQ/eoY=
+X-Google-Smtp-Source: AGHT+IFC1nJTi1+9q1YPtODs3+1SqLVX/KlO7kVRVqmPJV7UgGFXZDSWD24bnnFuSRUjHFEAaPNKhA==
+X-Received: by 2002:a05:600c:28f:b0:405:39b4:314f with SMTP id 15-20020a05600c028f00b0040539b4314fmr1966413wmk.24.1695815894432;
+        Wed, 27 Sep 2023 04:58:14 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
+        by smtp.googlemail.com with ESMTPSA id t21-20020a7bc3d5000000b00405c7591b09sm5389181wmj.35.2023.09.27.04.58.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Sep 2023 04:58:14 -0700 (PDT)
+Message-ID: <704d7983-16e0-a614-7db8-b1c71859800c@linaro.org>
+Date:   Wed, 27 Sep 2023 13:58:13 +0200
 MIME-Version: 1.0
-References: <20230912-simpledrm-multiple-power-domains-v2-1-01b66bfb1980@jannau.net>
- <ff8e4a01-9a58-45bf-a743-08f4f6027251@suse.de> <CAMuHMdV9Ahp2ACYfRbnnnMbn9Cps939uwCQM+Md_PcCKYG=piw@mail.gmail.com>
-In-Reply-To: <CAMuHMdV9Ahp2ACYfRbnnnMbn9Cps939uwCQM+Md_PcCKYG=piw@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 27 Sep 2023 13:41:49 +0200
-Message-ID: <CAPDyKFodCrFPVTdNo8VBG8FHs26MVaY9WcOmYyu7YwjahvuzTA@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/simpledrm: Add support for multiple "power-domains"
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>, j@jannau.net,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v1 04/13] ACPI: thermal: Merge trip initialization
+ functions
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+References: <1957441.PYKUYFuaPT@kreacher> <1785516.VLH7GnMWUR@kreacher>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <1785516.VLH7GnMWUR@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 26 Sept 2023 at 09:32, Geert Uytterhoeven <geert@linux-m68k.org> wr=
-ote:
->
-> CC genpd
->
-> On Mon, Sep 18, 2023 at 10:24=E2=80=AFAM Thomas Zimmermann <tzimmermann@s=
-use.de> wrote:
-> > Am 12.09.23 um 22:22 schrieb Janne Grunau via B4 Relay:
-> > > From: Janne Grunau <j@jannau.net>
-> > >
-> > > Multiple power domains need to be handled explicitly in each driver. =
-The
-> > > driver core can not handle it automatically since it is not aware of
-> > > power sequencing requirements the hardware might have. This is not a
-> > > problem for simpledrm since everything is expected to be powered on b=
-y
-> > > the bootloader. simpledrm has just ensure it remains powered on durin=
-g
-> > > its lifetime.
-> > > This is required on Apple silicon M2 and M2 Pro/Max/Ultra desktop
-> > > systems. The HDMI output initialized by the bootloader requires keepi=
-ng
-> > > the display controller and a DP phy power domain on.
-> > >
-> > > Signed-off-by: Janne Grunau <j@jannau.net>
->
-> Thanks for your patch, which is now commit 61df9ca231075e70
-> ("drm/simpledrm: Add support for multiple "power-domains"") in
-> drm-misc/for-linux-next.
->
-> > As a simpledrm patch:
-> >
-> > Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-> >
-> > Do you want to wait for another review from  someone with
-> > power-management expertise?
->
-> Yeah, why not? Let's CC them, so they become aware...
->
-> > Do we need a similar patch for ofdrm?
+On 21/09/2023 19:51, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> In order to reduce code duplicationeve further, merge
+> acpi_thermal_init_passive/active_trip() into one function called
+> acpi_thermal_init_trip() that will be used for initializing both
+> the passive and active trip points.
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
 
-Drivers/subsystems for devices that are attached to multiple PM
-domains are getting more and more common. Clearly there is boilerplate
-code in drivers that we could get rid of, by using some common helper
-functions to deal with attach/detach.
+Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-I believe there have been some attempts to add such helpers too, but
-we didn't quite reach a point where those were ready to be applied. It
-sounds like someone (me? :-)) needs to find some time to revisit this.
-Until then, there is no other way than having each driver to deal with
-this.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Kind regards
-Uffe
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
-> >
-> > Best regards
-> > Thomas
-> >
-> > > ---
-> > > Changes in v2:
-> > > - removed broken drm_err() log statement only ment for debugging
-> > > - removed commented cast
-> > > - use correct format spcifier for 'int' in log statement
-> > > - add 'continue;' after failure to get device for power_domain
-> > > - use drm_warn() in non fatal error cases
-> > > - removed duplicate PTR_ERR conversion
-> > > - Link to v1: https://lore.kernel.org/r/20230910-simpledrm-multiple-p=
-ower-domains-v1-1-f8718aefc685@jannau.net
-> > > ---
-> > >   drivers/gpu/drm/tiny/simpledrm.c | 105 ++++++++++++++++++++++++++++=
-+++++++++++
-> > >   1 file changed, 105 insertions(+)
-> > >
-> > > diff --git a/drivers/gpu/drm/tiny/simpledrm.c b/drivers/gpu/drm/tiny/=
-simpledrm.c
-> > > index ff86ba1ae1b8..9c597461d1e2 100644
-> > > --- a/drivers/gpu/drm/tiny/simpledrm.c
-> > > +++ b/drivers/gpu/drm/tiny/simpledrm.c
-> > > @@ -6,6 +6,7 @@
-> > >   #include <linux/of_address.h>
-> > >   #include <linux/platform_data/simplefb.h>
-> > >   #include <linux/platform_device.h>
-> > > +#include <linux/pm_domain.h>
-> > >   #include <linux/regulator/consumer.h>
-> > >
-> > >   #include <drm/drm_aperture.h>
-> > > @@ -227,6 +228,12 @@ struct simpledrm_device {
-> > >       unsigned int regulator_count;
-> > >       struct regulator **regulators;
-> > >   #endif
-> > > +     /* power-domains */
-> > > +#if defined CONFIG_OF && defined CONFIG_PM_GENERIC_DOMAINS
-> > > +     int pwr_dom_count;
-> > > +     struct device **pwr_dom_devs;
-> > > +     struct device_link **pwr_dom_links;
-> > > +#endif
-> > >
-> > >       /* simplefb settings */
-> > >       struct drm_display_mode mode;
-> > > @@ -468,6 +475,101 @@ static int simpledrm_device_init_regulators(str=
-uct simpledrm_device *sdev)
-> > >   }
-> > >   #endif
-> > >
-> > > +#if defined CONFIG_OF && defined CONFIG_PM_GENERIC_DOMAINS
-> > > +/*
-> > > + * Generic power domain handling code.
-> > > + *
-> > > + * Here we handle the power-domains properties of our "simple-frameb=
-uffer"
-> > > + * dt node. This is only necessary if there is more than one power-d=
-omain.
-> > > + * A single power-domains is handled automatically by the driver cor=
-e. Multiple
-> > > + * power-domains have to be handled by drivers since the driver core=
- can't know
-> > > + * the correct power sequencing. Power sequencing is not an issue fo=
-r simpledrm
-> > > + * since the bootloader has put the power domains already in the cor=
-rect state.
-> > > + * simpledrm has only to ensure they remain active for its lifetime.
-> > > + *
-> > > + * When the driver unloads, we detach from the power-domains.
-> > > + *
-> > > + * We only complain about errors here, no action is taken as the mos=
-t likely
-> > > + * error can only happen due to a mismatch between the bootloader wh=
-ich set
-> > > + * up the "simple-framebuffer" dt node, and the PM domain providers =
-in the
-> > > + * device tree. Chances are that there are no adverse effects, and i=
-f there are,
-> > > + * a clean teardown of the fb probe will not help us much either. So=
- just
-> > > + * complain and carry on, and hope that the user actually gets a wor=
-king fb at
-> > > + * the end of things.
-> > > + */
-> > > +static void simpledrm_device_detach_genpd(void *res)
-> > > +{
-> > > +     int i;
-> > > +     struct simpledrm_device *sdev =3D res;
-> > > +
-> > > +     if (sdev->pwr_dom_count <=3D 1)
-> > > +             return;
-> > > +
-> > > +     for (i =3D sdev->pwr_dom_count - 1; i >=3D 0; i--) {
-> > > +             if (!sdev->pwr_dom_links[i])
-> > > +                     device_link_del(sdev->pwr_dom_links[i]);
-> > > +             if (!IS_ERR_OR_NULL(sdev->pwr_dom_devs[i]))
-> > > +                     dev_pm_domain_detach(sdev->pwr_dom_devs[i], tru=
-e);
-> > > +     }
-> > > +}
-> > > +
-> > > +static int simpledrm_device_attach_genpd(struct simpledrm_device *sd=
-ev)
-> > > +{
-> > > +     struct device *dev =3D sdev->dev.dev;
-> > > +     int i;
-> > > +
-> > > +     sdev->pwr_dom_count =3D of_count_phandle_with_args(dev->of_node=
-, "power-domains",
-> > > +                                                      "#power-domain=
--cells");
-> > > +     /*
-> > > +      * Single power-domain devices are handled by driver core nothi=
-ng to do
-> > > +      * here. The same for device nodes without "power-domains" prop=
-erty.
-> > > +      */
-> > > +     if (sdev->pwr_dom_count <=3D 1)
-> > > +             return 0;
-> > > +
-> > > +     sdev->pwr_dom_devs =3D devm_kcalloc(dev, sdev->pwr_dom_count,
-> > > +                                            sizeof(*sdev->pwr_dom_de=
-vs),
-> > > +                                            GFP_KERNEL);
-> > > +     if (!sdev->pwr_dom_devs)
-> > > +             return -ENOMEM;
-> > > +
-> > > +     sdev->pwr_dom_links =3D devm_kcalloc(dev, sdev->pwr_dom_count,
-> > > +                                             sizeof(*sdev->pwr_dom_l=
-inks),
-> > > +                                             GFP_KERNEL);
-> > > +     if (!sdev->pwr_dom_links)
-> > > +             return -ENOMEM;
-> > > +
-> > > +     for (i =3D 0; i < sdev->pwr_dom_count; i++) {
-> > > +             sdev->pwr_dom_devs[i] =3D dev_pm_domain_attach_by_id(de=
-v, i);
-> > > +             if (IS_ERR(sdev->pwr_dom_devs[i])) {
-> > > +                     int ret =3D PTR_ERR(sdev->pwr_dom_devs[i]);
-> > > +                     if (ret =3D=3D -EPROBE_DEFER) {
-> > > +                             simpledrm_device_detach_genpd(sdev);
-> > > +                             return ret;
-> > > +                     }
-> > > +                     drm_warn(&sdev->dev,
-> > > +                              "pm_domain_attach_by_id(%u) failed: %d=
-\n", i, ret);
-> > > +                     continue;
-> > > +             }
-> > > +
-> > > +             sdev->pwr_dom_links[i] =3D device_link_add(dev,
-> > > +                                                      sdev->pwr_dom_=
-devs[i],
-> > > +                                                      DL_FLAG_STATEL=
-ESS |
-> > > +                                                      DL_FLAG_PM_RUN=
-TIME |
-> > > +                                                      DL_FLAG_RPM_AC=
-TIVE);
-> > > +             if (!sdev->pwr_dom_links[i])
-> > > +                     drm_warn(&sdev->dev, "failed to link power-doma=
-in %d\n", i);
-> > > +     }
-> > > +
-> > > +     return devm_add_action_or_reset(dev, simpledrm_device_detach_ge=
-npd, sdev);
-> > > +}
-> > > +#else
-> > > +static int simpledrm_device_attach_genpd(struct simpledrm_device *sd=
-ev)
-> > > +{
-> > > +     return 0;
-> > > +}
-> > > +#endif
-> > > +
-> > >   /*
-> > >    * Modesetting
-> > >    */
-> > > @@ -651,6 +753,9 @@ static struct simpledrm_device *simpledrm_device_=
-create(struct drm_driver *drv,
-> > >       if (ret)
-> > >               return ERR_PTR(ret);
-> > >       ret =3D simpledrm_device_init_regulators(sdev);
-> > > +     if (ret)
-> > > +             return ERR_PTR(ret);
-> > > +     ret =3D simpledrm_device_attach_genpd(sdev);
-> > >       if (ret)
-> > >               return ERR_PTR(ret);
-> > >
-> > >
-> > > ---
-> > > base-commit: 15d30b46573d75f5cb58cfacded8ebab9c76a2b0
-> > > change-id: 20230910-simpledrm-multiple-power-domains-f41efa6ad9bc
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
-8k.org
->
-> In personal conversations with technical people, I call myself a hacker. =
-But
-> when I'm talking to journalists I just say "programmer" or something like=
- that.
->                                 -- Linus Torvalds
