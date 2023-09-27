@@ -2,201 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B4B7B005B
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 11:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9EFC7B022E
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 12:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230527AbjI0JfD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Sep 2023 05:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
+        id S230138AbjI0Kuf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Sep 2023 06:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231151AbjI0Je7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 05:34:59 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C71F19F;
-        Wed, 27 Sep 2023 02:34:49 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A4C4F1FD68;
-        Wed, 27 Sep 2023 09:34:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1695807284; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z5OCfoVmTsaBL2Gfx6TUXOFq7TTPvyZsCL/Ny27Rypk=;
-        b=OtRd956PzORnCmj7nHXnA7pNQIlJ5q2TgW7rGbbbcBidcmE/oPQ0+xbSRBPqu4Fu4amFTS
-        viF4wcZzVfAfJiyQvf1CkJ6XliKsW9xJh4sOwI3pUeRDTioCrngwtK9DKqKZliBWTYxTH5
-        Z9vxxvmWnZ/OpZwgbBzQYXsj0B1ZH98=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1695807284;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z5OCfoVmTsaBL2Gfx6TUXOFq7TTPvyZsCL/Ny27Rypk=;
-        b=tY2GuTgZlnT5Jv2rXYOdnpLhg2ktTanaP+bwzW0VL3v1Rynzt1SUzLw8ou/UzDEnayGoR3
-        YU7Zew8b7zW8m9Bg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 929151338F;
-        Wed, 27 Sep 2023 09:34:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id bDrFIzT3E2UjEwAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 27 Sep 2023 09:34:44 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 6526AA07EA; Wed, 27 Sep 2023 11:34:43 +0200 (CEST)
-From:   Jan Kara <jack@suse.cz>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     <linux-fsdevel@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>, Jan Kara <jack@suse.cz>,
-        linux-pm@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Subject: [PATCH 17/29] PM: hibernate: Drop unused snapshot_test argument
-Date:   Wed, 27 Sep 2023 11:34:23 +0200
-Message-Id: <20230927093442.25915-17-jack@suse.cz>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20230818123232.2269-1-jack@suse.cz>
-References: <20230818123232.2269-1-jack@suse.cz>
+        with ESMTP id S229543AbjI0Kuf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 06:50:35 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DCB713A
+        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 03:50:33 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-530bc7c5bc3so13205571a12.1
+        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 03:50:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1695811832; x=1696416632; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BcZwty3YwKXMNp2kaCQvwRNl/V3x5eEkhxHVuvITMA0=;
+        b=AUxIQfo8XwQf5b2IU3HMUpdWjMxoVougKzohWqwpZstmQ+LJezcZEzuWDIvxDu7jPg
+         cRqep9SZD49L4liBkT9SWEH9kAApIvWTpS39FAAdGlW29YubgzkI8Bh3E1fzKRk+wOCG
+         vcwr9HXdDrPMhjxuhCQ9dvc9Z5KM40JWFXnDyfQOgRCJ02BZSIvQcvi1q4XggWCMqL+w
+         ZJhnJk/mmflCrQgO+aMnorlaGnmoLr6F1LsTiyaiDp128tF8YfR9EEPoYQnwz4aizP+e
+         hUHunTs4h9ft53iDzp7ZxYXF14/Zsliy7eE+MWHOUs99G1uZJsuD7BtZotB79xg3tU0p
+         hp2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695811832; x=1696416632;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BcZwty3YwKXMNp2kaCQvwRNl/V3x5eEkhxHVuvITMA0=;
+        b=ULwrSLS8HYEqPfPKr2ZUAAwwK1xmpKURnETQtzp6WBHRhboHA4G5ztT4RazCIITT5y
+         ZE4Ltiztg2gGHktWhT4zSkXSAKmb1BBaAkFxD7NC9zkm95JRzA8CBoGHQz/XE32CH/8G
+         oNJpTRbYp6OUBrnsL5bki4C8ALp37jwvDiZ+iW7/lca2pFbw399YqoQR5EzmCJmKxLNM
+         GuDo6Ke/2TODSJCDj1qT21akVJXc0vzdpmGQ0J75HixzmzZQm9AA71iWWnfiXV8AGTz3
+         Hswv6g/QbOloSiJ8uvf53FMaIeyfNyfblidp7MTI/xmAJ8U4+PXuoxIuulAI1Qjf4kQy
+         O/0g==
+X-Gm-Message-State: AOJu0Yyp49hYOLRCK9WHcFGLYv3evyzAxgRV0BtPB7rgU4Btr9tdiq9T
+        9FLAVcvolRWnp6yAvI0dfhYPQmYUx56s4ilBKhw5Ww==
+X-Google-Smtp-Source: AGHT+IGUq/BYy543S0FfnecrLfwf3mygukChFBYkop7PfCIKMlcjBeO+5A58iVIZsNaWTTrq/zlVDA==
+X-Received: by 2002:a05:6402:759:b0:530:c536:443 with SMTP id p25-20020a056402075900b00530c5360443mr1705055edy.1.1695811832000;
+        Wed, 27 Sep 2023 03:50:32 -0700 (PDT)
+Received: from [192.168.33.189] (178235177023.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.23])
+        by smtp.gmail.com with ESMTPSA id r21-20020aa7c155000000b005227e53cec2sm8039228edp.50.2023.09.27.03.50.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Sep 2023 03:50:31 -0700 (PDT)
+Message-ID: <08febf5f-c0a1-48f1-a017-32b28857a6d8@linaro.org>
+Date:   Wed, 27 Sep 2023 12:50:28 +0200
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3587; i=jack@suse.cz; h=from:subject; bh=ue+d316dU3wKe970FQgK6UwU0ZJMWcHPgjUjn81LUJc=; b=owEBbQGS/pANAwAIAZydqgc/ZEDZAcsmYgBlE/cgqt+pK7mBPymiUvyrC8EZQuP5m3r6g9hplhOk gq3ZAeiJATMEAAEIAB0WIQSrWdEr1p4yirVVKBycnaoHP2RA2QUCZRP3IAAKCRCcnaoHP2RA2dA3B/ 0SRUwo54z6mYOGazjAxztad6pjzapFEcC6+7GnIe90mklxKvfI/Bndrs1pVYNkl5hv0T3m+hrMJ9c+ dkorLtXViACZ3jcRcAlmka60swIoEcgm+BnURcZSd/KhB7bH2W1XXLaGuP5GNiw19KhkW9YlzxgLrp VeTBCLxuIWacOC2JOJ4dY3ceOoZ0ip6smEsJ6il8PfLp/ZZ+Jbu7kMDxHuLQ6d5mWzgERWA8zbsNPe DDtLxZ4X3reatLC6Uu4Q+8KQTebGayXVj6IWmckDpl0aX9uszLAFvv1trks0qa3QY0+Ysl/QtpKw2D lm3Aq1XfbCaFHoCCentYIHqIRZeEl0
-X-Developer-Key: i=jack@suse.cz; a=openpgp; fpr=93C6099A142276A28BBE35D815BC833443038D8C
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] pmdomain: qcom: rpmhpd: Add support for SM7150
+ rpmh clocks
+Content-Language: en-US
+To:     Danila Tikhonov <danila@jiaxyga.com>, agross@kernel.org,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        ulf.hansson@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20230916175952.178611-1-danila@jiaxyga.com>
+ <20230916175952.178611-3-danila@jiaxyga.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <20230916175952.178611-3-danila@jiaxyga.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-snapshot_test argument is now unused in swsusp_close() and
-load_image_and_restore(). Drop it
+On 16.09.2023 19:59, Danila Tikhonov wrote:
+> This adds the RPMH clocks present in SM7150 SoC.
+> 
+> Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-CC: linux-pm@vger.kernel.org
-Acked-by: Christoph Hellwig <hch@lst.de>
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
-Acked-by: Christian Brauner <brauner@kernel.org>
-Signed-off-by: Jan Kara <jack@suse.cz>
----
- kernel/power/hibernate.c | 14 +++++++-------
- kernel/power/power.h     |  2 +-
- kernel/power/swap.c      |  6 +++---
- 3 files changed, 11 insertions(+), 11 deletions(-)
-
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index 8d35b9f9aaa3..dee341ae4ace 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -684,7 +684,7 @@ static void power_down(void)
- 		cpu_relax();
- }
- 
--static int load_image_and_restore(bool snapshot_test)
-+static int load_image_and_restore(void)
- {
- 	int error;
- 	unsigned int flags;
-@@ -694,12 +694,12 @@ static int load_image_and_restore(bool snapshot_test)
- 	lock_device_hotplug();
- 	error = create_basic_memory_bitmaps();
- 	if (error) {
--		swsusp_close(snapshot_test);
-+		swsusp_close();
- 		goto Unlock;
- 	}
- 
- 	error = swsusp_read(&flags);
--	swsusp_close(snapshot_test);
-+	swsusp_close();
- 	if (!error)
- 		error = hibernation_restore(flags & SF_PLATFORM_MODE);
- 
-@@ -788,7 +788,7 @@ int hibernate(void)
- 		pm_pr_dbg("Checking hibernation image\n");
- 		error = swsusp_check(false);
- 		if (!error)
--			error = load_image_and_restore(false);
-+			error = load_image_and_restore();
- 	}
- 	thaw_processes();
- 
-@@ -952,7 +952,7 @@ static int software_resume(void)
- 	/* The snapshot device should not be opened while we're running */
- 	if (!hibernate_acquire()) {
- 		error = -EBUSY;
--		swsusp_close(true);
-+		swsusp_close();
- 		goto Unlock;
- 	}
- 
-@@ -973,7 +973,7 @@ static int software_resume(void)
- 		goto Close_Finish;
- 	}
- 
--	error = load_image_and_restore(true);
-+	error = load_image_and_restore();
- 	thaw_processes();
-  Finish:
- 	pm_notifier_call_chain(PM_POST_RESTORE);
-@@ -987,7 +987,7 @@ static int software_resume(void)
- 	pm_pr_dbg("Hibernation image not present or could not be loaded.\n");
- 	return error;
-  Close_Finish:
--	swsusp_close(true);
-+	swsusp_close();
- 	goto Finish;
- }
- 
-diff --git a/kernel/power/power.h b/kernel/power/power.h
-index a98f95e309a3..17fd9aaaf084 100644
---- a/kernel/power/power.h
-+++ b/kernel/power/power.h
-@@ -172,7 +172,7 @@ int swsusp_check(bool exclusive);
- extern void swsusp_free(void);
- extern int swsusp_read(unsigned int *flags_p);
- extern int swsusp_write(unsigned int flags);
--void swsusp_close(bool exclusive);
-+void swsusp_close(void);
- #ifdef CONFIG_SUSPEND
- extern int swsusp_unmark(void);
- #endif
-diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index 095a263da7c4..68a5c2f06957 100644
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -444,7 +444,7 @@ static int get_swap_writer(struct swap_map_handle *handle)
- err_rel:
- 	release_swap_writer(handle);
- err_close:
--	swsusp_close(false);
-+	swsusp_close();
- 	return ret;
- }
- 
-@@ -509,7 +509,7 @@ static int swap_writer_finish(struct swap_map_handle *handle,
- 	if (error)
- 		free_all_swap_pages(root_swap);
- 	release_swap_writer(handle);
--	swsusp_close(false);
-+	swsusp_close();
- 
- 	return error;
- }
-@@ -1569,7 +1569,7 @@ int swsusp_check(bool exclusive)
-  * @exclusive: Close the resume device which is exclusively opened.
-  */
- 
--void swsusp_close(bool exclusive)
-+void swsusp_close(void)
- {
- 	if (IS_ERR(hib_resume_bdev_handle)) {
- 		pr_debug("Image device not initialised\n");
--- 
-2.35.3
-
+Konrad
