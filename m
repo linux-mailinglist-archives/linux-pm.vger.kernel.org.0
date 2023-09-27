@@ -2,69 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFC6C7B025C
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 13:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 209887B0289
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 13:15:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231256AbjI0LEM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Sep 2023 07:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46900 "EHLO
+        id S231377AbjI0LPC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Sep 2023 07:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbjI0LEK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 07:04:10 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D09194
-        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 04:04:06 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1c453379020so79362725ad.1
-        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 04:04:06 -0700 (PDT)
+        with ESMTP id S231397AbjI0LO7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 07:14:59 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12581A6
+        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 04:14:55 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-d894b8b9b7cso6417372276.1
+        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 04:14:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695812646; x=1696417446; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1695813295; x=1696418095; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5Olui9SEAYGZ/qLdWlOCc/Jx3V7KvjrAKjWFcO+OQFo=;
-        b=X1qikUUuvIVGQNWH1ne6FBTiJjHtCofgUHqv95pEoDIK6yD49dc9ZjH6CtSd8BW8kK
-         f9OIPiRmIC+1SDu8xPTMQ8iFLYtuOILuv3BUL1ogQgY7lgqto6aFewz09sAOmVL0/0AA
-         raEbhjE6cA5s50j3RaajiAor1r9x5M/2h3IyXQgytYbSQI1XfgzR87FznqsMLZCrVw9t
-         01NV4OcWSm/yNKLJecM1A/YeMKSAoSnJ4sGWv96h6X9Wug9xwAup2739zNExg2FnDkbh
-         jsOebyVEHnngPQStwxeueaVUf2bRx3RrVOhvU5ZJ1xlq5Q2/JQRJiE7YjIYoQIyf5KBi
-         CpDg==
+        bh=CPJwzNvZylvTQiOIT8nQFH9SZPRi6/HairHaCmuEtNs=;
+        b=AMBmhhrE18QeWrtS2JIX7VBdZjVHc5+Sridf2a98pFccWi/5V1BaXrEsmssrwf/XT0
+         K/Qi0jWDh6+iNssAfG8NJBA4sXlzhr2zspvx/6NGRCXoLEFcxEKKWkdy9ZHy2YvnRWHL
+         wP7HihOF1Oc5Da3az9TAb3sH8EyEskZXtdb+SJT8jNySbilpHpurm4CjZEEr1kLdGp3e
+         SKXtrr8q5YLwDwsEfN5YXJ9I0AalBg7CYV/hemPhKrvkZq6vtizoYMPhCD6zI7jKLiVm
+         Ndbp/zM9tcKxzUcY78bebx/MMVBDaTK5lHb84y4OA0khTSxrsFs0HXbXbgeA1UmMCjnj
+         Mb2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695812646; x=1696417446;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1695813295; x=1696418095;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5Olui9SEAYGZ/qLdWlOCc/Jx3V7KvjrAKjWFcO+OQFo=;
-        b=Uf1UPtxvn6b8z7d5DtSPp002FY0Vu+0k2ctZ/wJsdsPmCTO9TSa3vzaluyi1hqQe1l
-         pONFHpoOpQbYUEdsZkcT23T5ug9X/IOxK7GRCk8ISDS7DYp4EBadj9CZ9Abb9lfC7AXs
-         ZF0krTY9tFiKvnDky5SvnaO1hxoRFhpt/wshReRhB9AQBe29kMIV0XnvY4z4FTQP+GJK
-         E/kowiAmyteNP5NlQjyZdaYXY+IOw6/nTS4WWN0jM1yJOFYZPHvBWRgAD4GTWcfBztnC
-         OF9DhbYRzs5xYZp7OiNfFwsLYU1QcVcL3bRsazUkY6RvPtmnqPVEAdlLJhCAeWHi0sUv
-         qMfg==
-X-Gm-Message-State: AOJu0YwseYcn5hS1CF/C/2PHSuadX+2rZdBrxeIRf5TbjkCfK7vsep8+
-        W4h6D1iJ7i4JIBxbhA6ZAkUoseKUuUPx6JgQgo8=
-X-Google-Smtp-Source: AGHT+IFxzrWNLufY50IyW3bEWJWsf1QdJoE3jrrMDzWOS4nFSr+1s4uQ8C8I1SJ4clQWRwKWHf4H+w==
-X-Received: by 2002:a17:902:7d96:b0:1c5:bc83:556b with SMTP id a22-20020a1709027d9600b001c5bc83556bmr1203539plm.52.1695812646068;
-        Wed, 27 Sep 2023 04:04:06 -0700 (PDT)
-Received: from localhost ([122.172.81.92])
-        by smtp.gmail.com with ESMTPSA id iy3-20020a170903130300b001b9d335223csm8845093plb.26.2023.09.27.04.04.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Sep 2023 04:04:05 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] OPP: debugfs: Fix warning with W=1 builds
-Date:   Wed, 27 Sep 2023 16:33:56 +0530
-Message-Id: <d1f97b7149af693b2ff7cfe0126eaf774d967f32.1695812634.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
-In-Reply-To: <0484680a9c7bb66cf1fb583a5178e753dd763afd.1695812634.git.viresh.kumar@linaro.org>
-References: <0484680a9c7bb66cf1fb583a5178e753dd763afd.1695812634.git.viresh.kumar@linaro.org>
+        bh=CPJwzNvZylvTQiOIT8nQFH9SZPRi6/HairHaCmuEtNs=;
+        b=jWhgkDdI1rhIajHvHWkAeNEgmM5jEMPdHvTsyiIOMoy4/oU9WOFJoG0RY88Q+t4IAX
+         2KtUJeofm2oObU86omXGzaKuzAdxnZLbKfdg+SBbhPWmcgXM1xwJbr1hY2siAy1EMtWH
+         r8uyU8YrHz5N3qY90FjAdD1Dubbf4rs6dOraBQ00JLbXlQRMT60NXMQ4NOqK0l31AobA
+         g1z8+057ELd8WD/Xx+R64Ijj1oYDJYzy4GLdpco/Feq4+sn4rmA40EtZuifd7I/+OGaZ
+         DZRiHi8qWOZbPeY1oNYzXJjLnS0lF6OpWAOOXpuZ8t3aiCmjrjiy3pP3a/wynKT7Ozrl
+         prOw==
+X-Gm-Message-State: AOJu0Ywwa9siO0XwGHKDK+jG2wkGyFTsNtc9gX9rI3qI2JzhYvJ7tdnf
+        6QgBIVuKlo0s9Hd8FH5sHB6/PjaIMtCsP5Bhvy5+dg==
+X-Google-Smtp-Source: AGHT+IEn2A7RS/m3JUkpvx+tmDV6V0R2eCw+Of0nQLfgxCdKPWwgPYxVdAeR/zX+HB0XruKv1fpwYUQ6tD6Zm5e1DDc=
+X-Received: by 2002:a25:f810:0:b0:d7b:aaae:2037 with SMTP id
+ u16-20020a25f810000000b00d7baaae2037mr4192438ybd.22.1695813294798; Wed, 27
+ Sep 2023 04:14:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20230814-void-drivers-soc-renesas-rmobile-sysc-v1-1-6648dfd854de@google.com>
+ <CAMuHMdWiC4v9fctp18bRrEH-m_-0VjMg9+XpON8vdRYwniTU3g@mail.gmail.com>
+ <CAMuHMdWk_jcZ1V7J68bw11YZ+EjEqAWOKHzanVyxo2zktbMteg@mail.gmail.com>
+ <CAPDyKFqgsHYz1hfOQ=KniNJj+u7ZSMoxS03Rixj1n2AOUdSVaQ@mail.gmail.com> <CAMuHMdW+ovx_Vbp1FQbvHESYrv3kHx5FvkjSb0V8dq857x5e9w@mail.gmail.com>
+In-Reply-To: <CAMuHMdW+ovx_Vbp1FQbvHESYrv3kHx5FvkjSb0V8dq857x5e9w@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 27 Sep 2023 13:14:19 +0200
+Message-ID: <CAPDyKFp_PfP4mVWucbMHwrRBvOAkktJDjqaYrMtEKat7raQ68A@mail.gmail.com>
+Subject: Re: [PATCH] soc: renesas: rmobile-sysc: fix -Wvoid-pointer-to-enum-cast
+ warning
+To:     Justin Stitt <justinstitt@google.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -75,38 +77,78 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-We currently get the following warning:
+On Wed, 27 Sept 2023 at 11:28, Geert Uytterhoeven <geert@linux-m68k.org> wr=
+ote:
+>
+> Hi Ulf,
+>
+> On Tue, Sep 26, 2023 at 1:22=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.o=
+rg> wrote:
+> > On Mon, 18 Sept 2023 at 11:21, Geert Uytterhoeven <geert@linux-m68k.org=
+> wrote:
+> > > On Wed, Aug 30, 2023 at 10:24=E2=80=AFAM Geert Uytterhoeven
+> > > <geert@linux-m68k.org> wrote:
+> > > > On Tue, Aug 15, 2023 at 12:11=E2=80=AFAM Justin Stitt <justinstitt@=
+google.com> wrote:
+> > > > > When building with clang 18 I see the following warning:
+> > > > > |      drivers/soc/renesas/rmobile-sysc.c:193:22: warning: cast t=
+o smaller integer
+> > > > > |               type 'enum pd_types' from 'const void *' [-Wvoid-=
+pointer-to-enum-cast]
+> > > > > |        193 |                 add_special_pd(np, (enum pd_types)=
+id->data);
+> > > > >
+> > > > > This is due to the fact that `id->data` is a void* and `enum pd_t=
+ypes`
+> > > > > has the size of an integer. This cast from pointer-width to int-w=
+idth
+> > > > > causes truncation and possible data loss. Instead, cast to `uintp=
+tr_t`
+> > > > > which has the same width as void*.
+> > > > >
+> > > > > Link: https://github.com/ClangBuiltLinux/linux/issues/1910
+> > > > > Reported-by: Nathan Chancellor <nathan@kernel.org>
+> > > >
+> > > > scripts/checkpatch.pl:
+> > > >
+> > > >     WARNING: Reported-by: should be immediately followed by Closes:
+> > > > with a URL to the report
+> > > >
+> > > > Hence changing the Link: tag to a Closes: tag.
+> > > >
+> > > > > Signed-off-by: Justin Stitt <justinstitt@google.com>
+> > > > > ---
+> > > > > Note: It should be noted that there is likely no data loss occurr=
+ing in
+> > > > > this case since the enum only has a few fields. The narrowing cas=
+t from
+> > > > > pointer to int will not lose any data.
+> > > >
+> > > > Indeed, the theoretical narrowing could only happen on a 64-bit
+> > > > platform, while this driver is only used on arm32.
+> > > >
+> > > > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > > > i.e. will queue in renesas-devel for v6.7.
+> > >
+> > > As the Generic PM Domain providers were moved to drivers/pmdomain/
+> > > in v6.6-rc2, and now have their own maintainer, I have moved this
+> > > commit from renesas-drivers-for-v6.7 to renesas-pmdomain-for-v6.7[1],
+> > > with s/soc/pmdomain/ in the oneline-summary.
+> > >
+> > > Ulf: if you prefer, you can still take this patch directly.
+> > > Else I will send a PR after rc3 and/or rc5, like I do with my other
+> > > renesas-<foo>-for-<version> branches.
+> > > Thanks!
+> >
+> > Apologize for the delay, been traveling lately. Anyway, I can
+> > certainly pick up the patch and carry it for v6.7. Just let me know,
+> > if/when you have dropped the patch from your tree.
+>
+> Thanks, dropped.
 
-debugfs.c: In function ‘opp_debug_create_one’:
-debugfs.c:63:42: warning: ‘%.1d’ directive output may be truncated writing between 1 and 10 bytes into a region of size 2 [-Wformat-truncation=]
-   snprintf(name, sizeof(name), "icc-path-%.1d", i);
-                                          ^~~~
-debugfs.c:63:32: note: directive argument in the range [0, 2147483647]
-   snprintf(name, sizeof(name), "icc-path-%.1d", i);
-                                ^~~~~~~~~~~~~~~
-debugfs.c:63:3: note: ‘snprintf’ output between 11 and 20 bytes into a destination of size 11
-   snprintf(name, sizeof(name), "icc-path-%.1d", i);
+Applied for next, thanks!
 
-Fix it by increasing size of the `name` array.
+[...]
 
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/opp/debugfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
-index 17543c0aa5b6..ec030b19164a 100644
---- a/drivers/opp/debugfs.c
-+++ b/drivers/opp/debugfs.c
-@@ -56,7 +56,7 @@ static void opp_debug_create_bw(struct dev_pm_opp *opp,
- 				struct dentry *pdentry)
- {
- 	struct dentry *d;
--	char name[11];
-+	char name[20];
- 	int i;
- 
- 	for (i = 0; i < opp_table->path_count; i++) {
--- 
-2.31.1.272.g89b43f80a514
-
+Kind regards
+Uffe
