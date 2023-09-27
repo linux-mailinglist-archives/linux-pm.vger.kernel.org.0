@@ -2,57 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19AE47B0557
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 15:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB797B069D
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 16:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231905AbjI0N0r convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 27 Sep 2023 09:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
+        id S232271AbjI0OUX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Sep 2023 10:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231854AbjI0N0r (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 09:26:47 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CEEC10A
-        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 06:26:45 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 6F2D724DF1F;
-        Wed, 27 Sep 2023 21:26:43 +0800 (CST)
-Received: from EXMBX062.cuchost.com (172.16.6.62) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 27 Sep
- 2023 21:26:43 +0800
-Received: from [192.168.125.107] (113.72.144.128) by EXMBX062.cuchost.com
- (172.16.6.62) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 27 Sep
- 2023 21:26:42 +0800
-Message-ID: <5d942896-df35-f4a8-53ed-045023e579c9@starfivetech.com>
-Date:   Wed, 27 Sep 2023 21:26:41 +0800
+        with ESMTP id S232213AbjI0OTp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 10:19:45 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1899CD3
+        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 07:19:40 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2c18b0569b6so549061fa.1
+        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 07:19:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1695824379; x=1696429179; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Wwk46okUDVQfnnelgDDAXJI2PyNHcNwKe3ka13udWbU=;
+        b=DeI+ndmzygXiV26g14+sM5/i8LsgL9CgDy9VB19Br8mLYRZAuIXT5fRRQQG6dlR8uL
+         ZHHEpTz9ZokFgwqp34n75yS1PY5jIPS2kExh12XhknOQ2eKCYOv28dsCXeJAXJsi1HEl
+         F2Zx2jmfkSiekVnLkJ+WFP/RjHCF0P4hSSv/TEmiFoZUevCIhKJiTrNv3PuTvlSLSujz
+         Wf0VyalzJuC9m/i5NNQ2Jq1nDpP2QrA8a1dJThFB6+d4PeMeHZ2KUcdfKMEpuuI5ak06
+         ZG9/SXQPZ7P5UXbdQF7zqfmdxHWvYx4R5uZ/etWrlX8CR5WPQ2foeStaY5DOJOnP6vcl
+         LLCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695824379; x=1696429179;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wwk46okUDVQfnnelgDDAXJI2PyNHcNwKe3ka13udWbU=;
+        b=V8KUkSkE1l3CB6McUkx7pwhbMrla/CGWO1H8wT39usQ4dHIUlMfNg/gfrccxhUxLi9
+         /JbtgQlCP3QlV7yk4V+VvCIv4panG7Z2mernPVXeU+BoUtC4p3n2pfliUDszJe6ltep4
+         0ZM+INB3LNT9FujLAPehcguVeTp5qoL2c+PF0h4x8OXu1lqa9jy2A1b23wpCfApesnS4
+         ssJUMivyBRTCK/EUDRPOrUd5bk1aBGhAEm8J+BdiJOcrpD5m+dfLOEIAMYP3hxff+l0R
+         tjVR2YQU6SQM2Ek4/Hx2vBfl1XUdb0fJ0f3G9EW1v48D1Aia3W8L53iNXBOymb4n04jS
+         t9uA==
+X-Gm-Message-State: AOJu0YymASGsV5PlFmB6GzjhFF8Kv5wdIiDTvJ8baPZTG/LM9Vp/9DQM
+        +WrNRdnCu2BbfPFP8h67aku5Bg==
+X-Google-Smtp-Source: AGHT+IExVCqrFIxKzo43T8FMa/9T5rz6/xdccYRyI4cqxFk27k3RqgKqbk6x0v1Y5TMyg8NtKFdEkg==
+X-Received: by 2002:a05:651c:3cf:b0:2b6:cd7f:5ea8 with SMTP id f15-20020a05651c03cf00b002b6cd7f5ea8mr1801740ljp.1.1695824378667;
+        Wed, 27 Sep 2023 07:19:38 -0700 (PDT)
+Received: from [172.20.13.88] ([45.147.210.162])
+        by smtp.gmail.com with ESMTPSA id mh2-20020a170906eb8200b00992b2c55c67sm9370253ejb.156.2023.09.27.07.19.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Sep 2023 07:19:37 -0700 (PDT)
+Message-ID: <9cc59d88-4b77-4e56-ae54-737baca1d435@kernel.dk>
+Date:   Wed, 27 Sep 2023 08:19:36 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [GIT PULL 2/5] dt-bindings: power: Add power-domain header for
- JH7110
+User-Agent: Mozilla Thunderbird
+From:   Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH v4 0/29] block: Make blkdev_get_by_*() return handle
+To:     Jan Kara <jack@suse.cz>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>, Jan Kara <jack@suse.cz>,
+        Alasdair Kergon <agk@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anna Schumaker <anna@kernel.org>, Chao Yu <chao@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Kleikamp <shaggy@kernel.org>,
+        David Sterba <dsterba@suse.com>, dm-devel@redhat.com,
+        drbd-dev@lists.linbit.com, Gao Xiang <xiang@kernel.org>,
+        Jack Wang <jinpu.wang@ionos.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        jfs-discussion@lists.sourceforge.net,
+        Joern Engel <joern@lazybastard.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        linux-bcache@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-raid@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-xfs@vger.kernel.org,
+        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Minchan Kim <minchan@kernel.org>, ocfs2-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Song Liu <song@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        target-devel@vger.kernel.org, Ted Tso <tytso@mit.edu>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        xen-devel@lists.xenproject.org
+References: <20230818123232.2269-1-jack@suse.cz>
 Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Conor Dooley <conor@kernel.org>
-CC:     <ulf.hansson@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>, <arnd@arndb.de>,
-        <jiajie.ho@starfivetech.com>, <linux-pm@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <robh@kernel.org>,
-        <walker.chen@starfivetech.com>
-References: <20230913-bloomers-scorebook-fb45e0a2aa19@spud>
- <20230913-grumbly-rewrite-34c85539f2ed@spud>
- <CAMuHMdXmNCXvFj8gF0COQrvhbRuugrJN0sM_DL1vDE=4EU0bEA@mail.gmail.com>
-From:   Changhuang Liang <changhuang.liang@starfivetech.com>
-In-Reply-To: <CAMuHMdXmNCXvFj8gF0COQrvhbRuugrJN0sM_DL1vDE=4EU0bEA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [113.72.144.128]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX062.cuchost.com
- (172.16.6.62)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+In-Reply-To: <20230818123232.2269-1-jack@suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,65 +105,36 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, Sep 27, 2023 at 3:34?AM Jan Kara <jack@suse.cz> wrote:
+>
+> Hello,
+>
+> this is a v3 of the patch series which implements the idea of blkdev_get_by_*()
 
+v4?
 
-On 2023/9/26 18:55, Geert Uytterhoeven wrote:
-> Hi Conor, Changhuang,
-> 
-> On Wed, Sep 13, 2023 at 3:58 PM Conor Dooley <conor@kernel.org> wrote:
->> From: Changhuang Liang <changhuang.liang@starfivetech.com>
->>
->> Add power-domain header for JH7110 SoC, it can use to operate dphy
->> power.
->>
->> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
->> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> 
-> Thanks for your patch, which is now commit 41b66b54a72bd796
-> ("dt-bindings: power: Add power-domain header for JH7110")
-> in pmdomain/next.
-> 
-> Conor: looks like you forgot to update the patch description, as promised in
-> https://lore.kernel.org/all/20230519-irk-dwelled-6a499c482e62@spud?
-> 
->> --- a/include/dt-bindings/power/starfive,jh7110-pmu.h
->> +++ b/include/dt-bindings/power/starfive,jh7110-pmu.h
->> @@ -1,6 +1,6 @@
->>  /* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
->>  /*
->> - * Copyright (C) 2022 StarFive Technology Co., Ltd.
->> + * Copyright (C) 2022-2023 StarFive Technology Co., Ltd.
->>   * Author: Walker Chen <walker.chen@starfivetech.com>
->>   */
->>  #ifndef __DT_BINDINGS_POWER_JH7110_POWER_H__
->> @@ -14,4 +14,7 @@
->>  #define JH7110_PD_ISP          5
->>  #define JH7110_PD_VENC         6
->>
->> +#define JH7110_PD_DPHY_TX      0
->> +#define JH7110_PD_DPHY_RX      1
-> 
-> These values are conflicting with similarly-named values above:
-> 
->     #define JH7110_PD_SYSTOP        0
->     #define JH7110_PD_CPU           1
-> 
-> Upon closer look, and diving into the driver, this header file contains
-> definitions for two separate number spaces: the first set is meant
-> to be used in PM Domain specifiers referring to a node compatible
-> with "starfive,jh7110-pmu", while the second set is meant to be
-> used in PM Domain specifiers referring to a node compatible with
-> "starfive,jh7110-aon-syscon".
-> I think it would be nice to have this reflected in the names of
-> the defines (e.g. JH7110_PD_AON_DPHY_TX), and/or to add comments
-> clearly delimiting the two separate number spaces, and explaining
-> where they apply to.
-> 
+> calls returning bdev_handle which is then passed to blkdev_put() [1]. This
+> makes the get and put calls for bdevs more obviously matching and allows us to
+> propagate context from get to put without having to modify all the users
+> (again!). In particular I need to propagate used open flags to blkdev_put() to
+> be able count writeable opens and add support for blocking writes to mounted
+> block devices. I'll send that series separately.
+>
+> The series is based on Btrfs tree's for-next branch [2] as of today as the
+> series depends on Christoph's changes to btrfs device handling.  Patches have
+> passed some reasonable testing - I've tested block changes, md, dm, bcache,
+> xfs, btrfs, ext4, swap. More testing or review is always welcome. Thanks! I've
+> pushed out the full branch to:
+>
+> git://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.git bdev_handle
+>
+> to ease review / testing. Christian, can you pull the patches to your tree
+> to get some exposure in linux-next as well? Thanks!
 
-Hi Geert,
+For the block bits:
 
-I have sent a series to fix this, but I forget to send it to you.
-https://patchwork.kernel.org/project/linux-pm/patch/20230927130734.9921-2-changhuang.liang@starfivetech.com/
+Acked-by: Jens Axboe <axboe@kernel.dk>
 
-Thanks,
-Changhuang
+-- 
+Jens Axboe
+
