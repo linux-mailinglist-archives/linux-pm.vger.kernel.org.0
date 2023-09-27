@@ -2,120 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6112C7B09B9
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 18:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8717B09DD
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 18:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbjI0QOU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 27 Sep 2023 12:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42908 "EHLO
+        id S230415AbjI0QVf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Sep 2023 12:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbjI0QOT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 12:14:19 -0400
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA93A91;
-        Wed, 27 Sep 2023 09:14:18 -0700 (PDT)
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-57bc11c197aso830668eaf.1;
-        Wed, 27 Sep 2023 09:14:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695831258; x=1696436058;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E1ahmo9waRUqjCTDTV6N3TPA6RbVuxWOLI3ShINewQQ=;
-        b=tR7o3/xpvI3DyNjTFPiwxEmR/RP6ShPh8MNrF2m2WrwLPeupDP47bAaBKN2DRYsVCp
-         s7sBy8uVnlURWsIWpbAN0oH08UOC0W/QDWBmFuuNAcZKx0XAsGPb5Vyo1FdHEYsRKiW2
-         Q+zxyILRYg1IAEyc7ICqsi4zFG2G6cGZ2cXcw2R7r7uHnjEuP2CGEsf0IuPP63DyVzAR
-         zuRyEkawH2OrMMAkYmK5eOOmjt1kTpsOAHBnZPEjWX8NSYa6EAuk16ckz7vi+q+1v4Mg
-         JwDhRABizYe96L4fhdVvbChkGWCwcDMokRYKNg+rcrOiNxrpTCj0f3Gp3mt0wCxA2n7r
-         Nmgw==
-X-Gm-Message-State: AOJu0YysxsXtVmev/kwxdfPBl4vRHmgMtKv+cn1WQ+ssv80Z099NqZnG
-        P0cZJEOlZ9yINQOHWImKdugOIDQYd/szXmeM/lA=
-X-Google-Smtp-Source: AGHT+IFBpFosaX2K+I5sHnXh1LWvPJSn6Sr5sxXngfz5rSCyc+9SiiFyG1qQYhJMi9AUVgv/Q02VhqmrWlAFmv+zlEs=
-X-Received: by 2002:a4a:ee18:0:b0:56e:94ed:c098 with SMTP id
- bd24-20020a4aee18000000b0056e94edc098mr3051244oob.0.1695831257895; Wed, 27
- Sep 2023 09:14:17 -0700 (PDT)
+        with ESMTP id S229901AbjI0QVe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 12:21:34 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E702DD;
+        Wed, 27 Sep 2023 09:21:31 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF3E3C433C7;
+        Wed, 27 Sep 2023 16:21:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695831690;
+        bh=5fVqTod0fsU3D85/NgpH5eX11yWtVW2s8jme29QI3SA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K+SdxwDZhx8uxbb5abeHgPolVgmwSiIBL6/AzX/eEpmg7s5Jd1TwEPpueT17Z+y1i
+         r/3aJFhGZoIRaqB+ADboLRaAQZpJm6SMvyfu5jpdUX9fmjLLqHrtdJHSnoHaBHBoNB
+         1Ras0NDOeGzjZ5rjoNJ7hj3RFSgjPFHQeOCu0doiR1ZFlmc7Dtn7+Tg4yFYE5HRxY7
+         FflbgLOEB1zCas3wjtrhbqXfzlZd6DZqKcBXDoRDLeETsNHRLxD2cXgjOH7guvx0ma
+         AufPlRnLwdi+pMqoWiBGk6SGa+Snjtz53w/pXkwTjOc2fDnSaUxFN105snuKm+T14u
+         FBsBAdYo6oMFA==
+Date:   Wed, 27 Sep 2023 18:21:19 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Jan Kara <jack@suse.cz>
+Cc:     linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Alasdair Kergon <agk@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anna Schumaker <anna@kernel.org>, Chao Yu <chao@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Kleikamp <shaggy@kernel.org>,
+        David Sterba <dsterba@suse.com>, dm-devel@redhat.com,
+        drbd-dev@lists.linbit.com, Gao Xiang <xiang@kernel.org>,
+        Jack Wang <jinpu.wang@ionos.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        jfs-discussion@lists.sourceforge.net,
+        Joern Engel <joern@lazybastard.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        linux-bcache@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-raid@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-xfs@vger.kernel.org,
+        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Minchan Kim <minchan@kernel.org>, ocfs2-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Song Liu <song@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        target-devel@vger.kernel.org, Ted Tso <tytso@mit.edu>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v4 0/29] block: Make blkdev_get_by_*() return handle
+Message-ID: <20230927-prahlen-reintreten-93706074e58d@brauner>
+References: <20230818123232.2269-1-jack@suse.cz>
 MIME-Version: 1.0
-References: <1957441.PYKUYFuaPT@kreacher> <2590280.Lt9SDvczpP@kreacher>
- <9f1374db-f866-ff52-e86c-99fecee24d1b@linaro.org> <CAJZ5v0hw3LGByW=18tiFEB7JQ9rOVo6TqCGhzxWcrUQYb+VGEw@mail.gmail.com>
- <f193e4a5-b315-a1bd-7488-7ea0d5e267f8@linaro.org>
-In-Reply-To: <f193e4a5-b315-a1bd-7488-7ea0d5e267f8@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 27 Sep 2023 18:14:06 +0200
-Message-ID: <CAJZ5v0h_HB6DX3NemyojE8aZrQeH05aAsdKLE-q-gp4UC+NBJQ@mail.gmail.com>
-Subject: Re: [PATCH v1 07/13] thermal: gov_power_allocator: Use trip pointers
- instead of trip indices
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230818123232.2269-1-jack@suse.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 27, 2023 at 5:46 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 27/09/2023 17:27, Rafael J. Wysocki wrote:
-> > On Wed, Sep 27, 2023 at 5:10 PM Daniel Lezcano
-> > <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> On 21/09/2023 19:55, Rafael J. Wysocki wrote:
-> >>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>>
-> >>> Eliminate the __thermal_zone_get_trip() usage that adds unnecessary
-> >>> overhead (due to pointless bounds checking and copying of trip point
-> >>> data) from the power allocator thermal governor and generally make it
-> >>> use trip pointers instead of trip indices where applicable.
-> >>
-> >> Actually the __thermal_zone_get_trip() change was done on purpose to
-> >> replace the 'throttle' callback index parameter by the trip pointer and
-> >> removing those call to __thermal_zone_get_trip() while the code was
-> >> using the trip pointer.
-> >>
-> >> IMO, the changes should focus on changing the trip_index parameter by
-> >> the trip pointer directly in the throttle ops.
-> >
-> > So you would like .throttle() to take a trip pointer argument instead
-> > of an index?
-> >
-> > The difficulty here is that the user space governor needs to expose
-> > the index to user space anyway, so it would need to find it if it gets
-> > a trip pointer instead.
-> >
-> > Not a big deal I suppose, but a bit of extra overhead.
-> >
-> > Also it is easier to switch the governors over to using trip pointers
-> > internally and then change the .throttle() argument on top of that.
-> >
-> >> The pointer can be
-> >> retrieved in the handle_thermal_trip() function and passed around for
-> >> the rest of the actions on this trip point
-> >
-> > Right, except for the user space governor which needs a trip index.
-> > And the indices are used for tracing too.
->
-> Given the userspace governor is going obsolete and the notifications are
-> for the userspace, which is slow, we can retrieve the index from the
-> throttling ops
+On Wed, 27 Sep 2023 11:34:07 +0200, Jan Kara wrote:
+> Create struct bdev_handle that contains all parameters that need to be
+> passed to blkdev_put() and provide bdev_open_* functions that return
+> this structure instead of plain bdev pointer. This will eventually allow
+> us to pass one more argument to blkdev_put() (renamed to bdev_release())
+> without too much hassle.
+> 
+> 
+> [...]
 
-OK
+> to ease review / testing. Christian, can you pull the patches to your tree
+> to get some exposure in linux-next as well? Thanks!
 
-Given that patches [01-05/13] are not controversial, I'll respon the
-governor patches into a separate series on top of them.
+Yep. So I did it slighly differently. I pulled in the btrfs prereqs and
+then applied your series on top of it so we get all the Link: tags right.
+I'm running tests right now. Please double-check.
 
-I would much appreciate it if you could take a look at patch [10/13]
-and the remaining ACPi thermal patches in this series [11-13/13].
-They don't depend on the governor changes.
+---
+
+Applied to the vfs.super branch of the vfs/vfs.git tree.
+Patches in the vfs.super branch should appear in linux-next soon.
+
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
+
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
+
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs.super
+
+[01/29] block: Provide bdev_open_* functions
+       https://git.kernel.org/vfs/vfs/c/b7c828aa0b3c
+[02/29] block: Use bdev_open_by_dev() in blkdev_open()
+        https://git.kernel.org/vfs/vfs/c/d4e36f27b45a
+[03/29] block: Use bdev_open_by_dev() in disk_scan_partitions() and blkdev_bszset()
+        https://git.kernel.org/vfs/vfs/c/5f9bd6764c7a
+[04/29] drdb: Convert to use bdev_open_by_path()
+        https://git.kernel.org/vfs/vfs/c/0220ca8e443d
+[05/29] pktcdvd: Convert to bdev_open_by_dev()
+        https://git.kernel.org/vfs/vfs/c/7af10b889789
+[06/29] rnbd-srv: Convert to use bdev_open_by_path()
+        https://git.kernel.org/vfs/vfs/c/3d27892a4be7
+[07/29] xen/blkback: Convert to bdev_open_by_dev()
+        https://git.kernel.org/vfs/vfs/c/26afb0ed10b3
+[08/29] zram: Convert to use bdev_open_by_dev()
+        https://git.kernel.org/vfs/vfs/c/efc8e3f4c6dc
+[09/29] bcache: Convert to bdev_open_by_path()
+        https://git.kernel.org/vfs/vfs/c/dc893f51d24a
+[10/29] dm: Convert to bdev_open_by_dev()
+        https://git.kernel.org/vfs/vfs/c/80c2267c6d07
+[11/29] md: Convert to bdev_open_by_dev()
+        https://git.kernel.org/vfs/vfs/c/15db36126ca6
+[12/29] mtd: block2mtd: Convert to bdev_open_by_dev/path()
+        https://git.kernel.org/vfs/vfs/c/4c27234bf3ce
+[13/29] nvmet: Convert to bdev_open_by_path()
+        https://git.kernel.org/vfs/vfs/c/70cffddcc300
+[14/29] s390/dasd: Convert to bdev_open_by_path()
+        https://git.kernel.org/vfs/vfs/c/5581d03457f8
+[15/29] scsi: target: Convert to bdev_open_by_path()
+        https://git.kernel.org/vfs/vfs/c/43de7d844d47
+[16/29] PM: hibernate: Convert to bdev_open_by_dev()
+        https://git.kernel.org/vfs/vfs/c/105ea4a2fd18
+[17/29] PM: hibernate: Drop unused snapshot_test argument
+        https://git.kernel.org/vfs/vfs/c/b589a66e3688
+[18/29] mm/swap: Convert to use bdev_open_by_dev()
+        https://git.kernel.org/vfs/vfs/c/615af8e29233
+[19/29] fs: Convert to bdev_open_by_dev()
+        https://git.kernel.org/vfs/vfs/c/5173192bcfe6
+[20/29] btrfs: Convert to bdev_open_by_path()
+        https://git.kernel.org/vfs/vfs/c/8cf64782764f
+[21/29] erofs: Convert to use bdev_open_by_path()
+        https://git.kernel.org/vfs/vfs/c/4d41880bf249
+[22/29] ext4: Convert to bdev_open_by_dev()
+        https://git.kernel.org/vfs/vfs/c/f7507612395e
+[23/29] f2fs: Convert to bdev_open_by_dev/path()
+        https://git.kernel.org/vfs/vfs/c/d9ff8e3b6498
+[24/29] jfs: Convert to bdev_open_by_dev()
+        https://git.kernel.org/vfs/vfs/c/459dc6376338
+[25/29] nfs/blocklayout: Convert to use bdev_open_by_dev/path()
+        https://git.kernel.org/vfs/vfs/c/5b1df9a40929
+[26/29] ocfs2: Convert to use bdev_open_by_dev()
+        https://git.kernel.org/vfs/vfs/c/b6b95acbd943
+[27/29] reiserfs: Convert to bdev_open_by_dev/path()
+        https://git.kernel.org/vfs/vfs/c/7e3615ff6119
+[28/29] xfs: Convert to bdev_open_by_path()
+        https://git.kernel.org/vfs/vfs/c/176ccb99e207
+[29/29] block: Remove blkdev_get_by_*() functions
+        https://git.kernel.org/vfs/vfs/c/953863a5a2ff
