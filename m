@@ -2,220 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB887B0CE3
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 21:45:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C717B0D54
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 22:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229460AbjI0Tpa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 27 Sep 2023 15:45:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57464 "EHLO
+        id S229821AbjI0U00 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Sep 2023 16:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjI0Tp3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 15:45:29 -0400
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1254310E;
-        Wed, 27 Sep 2023 12:45:26 -0700 (PDT)
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-57bf04841ccso490361eaf.0;
-        Wed, 27 Sep 2023 12:45:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695843925; x=1696448725;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZdrldCq/11jLKtSHJnC0CV3/MzVWic6Gg0opWfLdlIY=;
-        b=RqO4wDtEdl0t5BzX26SqxWEma6WzFCL1n+DVW7rYHhqklu9J69/EWU69vuxIP0Pu2g
-         kaxxKS19niUHg6PpMwZ2pATH25Z4iTJTFtA7hJgpzKxnsBSJ6+5jeXvuOOJJMAHL4C5t
-         zNAOZms1qG/EaZZgvbK8Iunupx7GE8l92qqi1BCnRvzDzSQfqlKvgpYZsaHXscX2HB38
-         TnzaOo+iA/wNow9VO0i/3ZgDVMFSG+AQhiExjIKnM5+pjmxO9fjCIF91hUk3vfD4pYpm
-         nwwtAdBLZdiE1GBzv9YZZbYyAPnZceNda83E9Tv/IEABthUtlz68ltsw/zs3QAZDQELW
-         B32g==
-X-Gm-Message-State: AOJu0YxmVLd+oQdKdUrCJCnOxH6z1fw9XC12KczXYSQ7XNOQ9u4FN7wF
-        Kngo9hwuCaQHBBxJmfZiG4VYyfI36s04DbXduZ0=
-X-Google-Smtp-Source: AGHT+IGMlW6Putl8V3MXq3RkAqHyCPJSNsGyuWiCwQkEk43f5FSeBHFESqXka7uzLRnNc/5oUKZ3iepgewdBHpsbPHk=
-X-Received: by 2002:a4a:e704:0:b0:57b:94b7:c6ba with SMTP id
- y4-20020a4ae704000000b0057b94b7c6bamr3501682oou.0.1695843925125; Wed, 27 Sep
- 2023 12:45:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230927193736.2236447-1-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20230927193736.2236447-1-u.kleine-koenig@pengutronix.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 27 Sep 2023 21:45:14 +0200
-Message-ID: <CAJZ5v0guyQ-SpNHXYBG2F_WyCSvgjXocGBy61Ep1Cy5-H-MOsQ@mail.gmail.com>
-Subject: Re: [PATCH 00/31] thermal: Convert to platform remove callback
- returning void
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Guillaume La Roque <glaroque@baylibre.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, kernel@pengutronix.de,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Heiko Stuebner <heiko@sntech.de>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        with ESMTP id S229816AbjI0U0W (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 16:26:22 -0400
+Received: from sonic301-22.consmr.mail.ir2.yahoo.com (sonic301-22.consmr.mail.ir2.yahoo.com [77.238.176.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA806139
+        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 13:26:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1695846378; bh=bdJ4OqXlD/zeiVIdNwvA+dR0iZ/NGVosaVOt/mywBxw=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=fgEizL9ArHtxqG93hXFLZidPFVGlw1kDhGy8Crt9nMeTWJ4Wqh0K6Sr68WJJVeApku1yQXSMWUMo0Tc/B0aoP3Q8T+e6kuHGqRMrHZh4UiHbe4Zkxpsdo+AqH379SKAy03RyDNGSzrjtTEMfYSo+pvL/rwBO7MWyL4iYT9AVWt5wFbiajd59vDl7VoyFRvkUni0A6/zWMcpAv0YnLwPBDb6TILTWAMDBs0XUhu4d75uaNQwbhTBm+/xKKYJP4nXC0O8efq9dFqpy4oFZyiPJXnYdYQmYU0TvZV4QukgPbdASonoaOvO057rYWIznyWsEY660ofUrI3o4AZCk2iYsWw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1695846378; bh=b0hsLidCOJsdBCSFikF5eBukHXpMS3ifNeFQvkDOdEQ=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=IHrOQkJZh3NvsmrCcNXJWM8DNgXq7zGabjI3kx00bccRUpRU/045BE0zyOsCFboYmjSwv0sUk8oBAZ9EwTqOdVLohwuquC+pVMlW/aorTINDUt5PGJ5zhGwzsL47+z+0qG5S8zTYXvg4cWQIHJEJePrji/5mRDOh/2QEsrTKEggcNedVMcHM0ga9IoAs7OAgop2UZESmZdL8bZUBXu4hhc1qu+mUZXDWWG5zhcg94JzvBWGzVFXG5MusK+OYLLBMBDvIiICj0RQOw6sK9xNpLuFZR4Qj3+vRyTBeNImzcJXXDtS8oN+oS0IFz2Hl35pYWrr2AWo344jKoDp3INEa3g==
+X-YMail-OSG: fVpVq3kVM1n8F55FrA5unfAEMCO8W4W8CBLYsspe0FcmvMoKYYBDvABzE1P4G4u
+ .cR0EJNUEfFHNIqJEwqfC5bdhtnJBT7GAqm.KXzEShU6i.6E4zgALABMyGgWvsglMKeZ8GfkVhqD
+ Jq7h5dWgp1ktuqtjuvkP6VcRtAlKAu.n3aHFQ8ABfdYJXc9h4hPnUfhZCTEHCh.UH45Jwu4Rzobq
+ YSytrucZcAAPHKgXvGwuLVEZUYOOZ0KTEuWw8D1k.W9f3gICvaqyu1aFwjZDi.Q4vBww0JwwzGyc
+ 4267pa1oVGRjrPFcFlijihCm5tj0iVtBFyH3.MAJ31OMMlQP8CQyrpy_V9BRoadAWalCtZ0qQEik
+ UAZXT8xmQd6qyYyovxRYEuQezzZTD44Wt2dzxcAJgPUfU0SH3fvSnQ3ggEVsNcs5CRgf.G4DPSws
+ i5AmgUw00xkiHKQ_qDj6btm8CqYWrPgCyDxWZRrzu94gjb4NBifzccdn.uNkd.VqaQ8SmiycIyeR
+ 3Bgg4WcCkN.6tfn_GKrjv1F1ISTASWiocK7RtlGSU3.AyvKyYKYOWezMwGjtMYP3NPLT5z.KU59O
+ 6oFm3yE7luUxWHb_rchiXhqoC69.qlM07NEILpWSvoujp26inK1TkrB0FoQ6bXr4ppka3S72d66v
+ 7Thasu8iDZgzmlusRujlSZh.lvCp4X130Y1.cHWxrzyJFSnzjWqArBjYGt27tox_Z1ghTMHrAxPK
+ nIvNDE8oCOSGbY5OxsvTxWyhqFmDEmDW0PAp8TmkYXL20o89Orv9GdfezJoWz6EgTLDQA6ukKX6S
+ .7jL5zzG5uMezxyc2aEaDsk7mFt5c377BsCucq3_Ru.isCr2DiBz9RqyThTLKQm6qvJpuXeTyx7K
+ jkaUP.yGXVb88a5QVrPUbAllQDgvkzLvM0S_4Lglso09xrpjSFaqmlpIT5_EWxeJsHWdstLRt6Zi
+ JbzeZOvmvehHp5zLPbgoXyMaou8HkpiWuJe7eHxOy0q6g_gZix5_KK6fh.Ubl008H7B0hnDx17n4
+ ub77ULIwYvCxGaTyY8IrwIekYp3XnIEs.2AHDj_XU7rzJiDv0f3MVLtJmpeiZ7FxdflVvWL8fw8T
+ X5Ep.DVT0PI3orvz7UTOjeqQgGQDfCI.udCcS5Y7S7dbf3vz5lPFxZJxtmwujexjr1tuMUvFNYDV
+ 5.L0oUWx04d9E1cbN5HxqkKd1h8ifsHKnw59bNsjfwL8MPYYGwrgX1eZ.4Whdmc6gaQp6MTojAvL
+ dLY4jbY9B_Qm.OVDd4yM5eKk27lJokymWaoyL8C1r9BTqNSZnx.QR.fFjYzzUN0DCLT2zXCuG_dm
+ Y.ziKrGq5juG.PXYbMVHauR3XvxD0II5S9l0n0WYjrvzMUqPftIuONubMmJHWRuycD364sV5g_.B
+ JI0orq6hZiv8p5WE97AuUXmTRz7RESiFE1.zjJ0ZS02uF7KLQvz4N4gs56_dQaTcLvwMu3PJaZNo
+ GvpHHMYCPfzing785m4Ms6oBuFMt3.qVmyueGs6rGIu4G0Or.r375Z8S8i7EEdy9HZEfg7yRvgXb
+ 8wWY1sYFP7kRc68IYfrKjNgUv7hDJRh8XiDgIBaX._6m0ASuF3EyWaySIl5TMdEEW0MCliSGU2iA
+ XEp6AudPE_qwYtlyN0iwxjWPeYM2Z424I0Wj5oLTmrj5.9C7eSebDrJRWse1qO2A8zSmglP74LIF
+ q4nuQJyRFxwrRUVdkWA81YuIWHgHeugZof6IXKeiT_.yMihyQpqY1RoYfItG94pSo.BWSMuvvnvF
+ _bKctthhmX_zQ_pd_6STEySf6KL92k2rcKPUQmh0g88dKMUi6N9oQTdOD5Fa4lJPVmy0X7a7WiOE
+ QAamrn.WiPdhErVnMaLlPuRXIKGjQ_q0i58KI0WhXPK79tqTZuHqptPe8f8gM6icisKctNaynZb4
+ Eu0rIdhCuoJQ59e1wg4pRyz3ZZ7At5_9w6NdRNm4xZNaY9OxbFdSCPD95w_rL_.b2xMnykAMANmP
+ sgIYRZrm2cYaLRL0W68_5lycIenKoMuQZmFPc3KC6B3pHR4YXaMO7nbpeWr8BeTgYthtSRAvVSdl
+ iJfaiaF0T2I_LCgvv6j_Via.dI5h6PlInGQUoKCNjYs4Zf4k2_2K49L2X_1evZMBvuc.WBVyjeH7
+ gkc.xKa07.9t4vUtm35fx.IIucY2chh_mWXtXjG2NIVyv91wHPIutOYxzOVWqCtcxnGpqk0YZtxR
+ bQdVsUchOGCzmRk7vlSPiL9hUxRK3d8X0FbSMCt41utrF_ItU_fI9TJ46wVaB1Q9NmhvSNHgGQzQ
+ W0Gwn3tUDS0I_6YY7PXHuqtgB3w--
+X-Sonic-MF: <jahau@rocketmail.com>
+X-Sonic-ID: 72a831c0-3dbf-4a57-bcad-7a3e35457f10
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.ir2.yahoo.com with HTTP; Wed, 27 Sep 2023 20:26:18 +0000
+Received: by hermes--production-ir2-55db9d9d5-5hvhf (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 1d998f486e26fd309cd8d11c694d3a2b;
+          Wed, 27 Sep 2023 20:26:14 +0000 (UTC)
+From:   Jakob Hauser <jahau@rocketmail.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Lee Jones <lee@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Yang Yingliang <yangyingliang@huawei.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Chen Jiahao <chenjiahao16@huawei.com>,
-        linux-mediatek@lists.infradead.org,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-samsung-soc@vger.kernel.org,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        linux-tegra@vger.kernel.org,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>, linux-omap@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Henrik Grimler <henrik@grimler.se>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Jakob Hauser <jahau@rocketmail.com>
+Subject: [PATCH 0/5] Remaining patches for RT5033 charger
+Date:   Wed, 27 Sep 2023 22:25:57 +0200
+Message-Id: <cover.1695844349.git.jahau@rocketmail.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+References: <cover.1695844349.git.jahau.ref@rocketmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+This series collects remaining patches for the RT5033 charger driver.
 
-On Wed, Sep 27, 2023 at 9:38 PM Uwe Kleine-König
-<u.kleine-koenig@pengutronix.de> wrote:
->
-> Hello,
->
-> this series converts all platform drivers below drivers/thermal to use
-> .remove_new(). The motivation is to get rid of an integer return code
-> that is (mostly) ignored by the platform driver core and error prone on
-> the driver side.
->
-> See commit 5c5a7680e67b ("platform: Provide a remove callback that
-> returns no value") for an extended explanation and the eventual goal.
->
-> There are no interdependencies between the patches. As there are still
-> quite a few drivers to convert, I'm happy about every patch that makes
-> it in. So even if there is a merge conflict with one patch until you
-> apply or a subject prefix is suboptimal, please apply the remainder of
-> this series anyhow.
+The patches are based on 6.6-rc1.
 
-I think I'll go ahead and apply all of this in one go (for 6.7).
+Mailing list links where the patches were taken from:
+ - Patch 1
+   https://lore.kernel.org/linux-next/20230821125741.3a2474d7@canb.auug.org.au
+ - Patch 2
+   https://lore.kernel.org/linux-pm/cover.1684182964.git.jahau@rocketmail.com/T/#m27164a05bbe2ec649be1fc32157b34ba814ff31f
+ - Patch 3
+   https://lore.kernel.org/linux-pm/20230822030207.644738-1-yangyingliang@huawei.com/T/#u
+ - Patches 4 & 5
+   https://lore.kernel.org/linux-pm/cover.1686948074.git.jahau@rocketmail.com/T/#u
 
-Daniel, any objections?
+Jakob Hauser (3):
+  power: supply: rt5033_charger: Add cable detection and USB OTG supply
+  power: supply: rt5033_charger: Simplify initialization of
+    rt5033_charger_data
+  power: supply: rt5033_charger: Replace "&pdev->dev" by "charger->dev"
+    in probe
 
+Stephen Rothwell (1):
+  fixup for "power: Explicitly include correct DT includes"
 
-> Uwe Kleine-König (31):
->   thermal: amlogic: Convert to platform remove callback returning void
->   thermal: armada: Convert to platform remove callback returning void
->   thermal: bcm2835: Convert to platform remove callback returning void
->   thermal: ns: Convert to platform remove callback returning void
->   thermal: da9062: Convert to platform remove callback returning void
->   thermal: dove: Convert to platform remove callback returning void
->   thermal: hisi: Convert to platform remove callback returning void
->   thermal: imx8mm: Convert to platform remove callback returning void
->   thermal: imx: Convert to platform remove callback returning void
->   thermal: int3400: Convert to platform remove callback returning void
->   thermal: int3401: Convert to platform remove callback returning void
->   thermal: int3402: Convert to platform remove callback returning void
->   thermal: int3403: Convert to platform remove callback returning void
->   thermal: int3406: Convert to platform remove callback returning void
->   thermal: k3_bandgap: Convert to platform remove callback returning void
->   thermal: k3_j72xx_bandgap: Convert to platform remove callback returning void
->   thermal: kirkwood: Convert to platform remove callback returning void
->   thermal: lvts: Convert to platform remove callback returning void
->   thermal: tsens: Convert to platform remove callback returning void
->   thermal: rcar_gen3: Convert to platform remove callback returning void
->   thermal: rcar: Convert to platform remove callback returning void
->   thermal: rockchip: Convert to platform remove callback returning void
->   thermal: rzg2l: Convert to platform remove callback returning void
->   thermal: exynos_tmu: Convert to platform remove callback returning void
->   thermal: spear: Convert to platform remove callback returning void
->   thermal: sprd: Convert to platform remove callback returning void
->   thermal: stm: Convert to platform remove callback returning void
->   thermal: soctherm: Convert to platform remove callback returning void
->   thermal: tegra-bpmp: Convert to platform remove callback returning void
->   thermal: ti-bandgap: Convert to platform remove callback returning void
->   thermal: uniphier: Convert to platform remove callback returning void
->
->  drivers/thermal/amlogic_thermal.c                    | 12 +++++-------
->  drivers/thermal/armada_thermal.c                     |  6 ++----
->  drivers/thermal/broadcom/bcm2835_thermal.c           |  6 ++----
->  drivers/thermal/broadcom/ns-thermal.c                |  6 ++----
->  drivers/thermal/da9062-thermal.c                     |  5 ++---
->  drivers/thermal/dove_thermal.c                       |  6 ++----
->  drivers/thermal/hisi_thermal.c                       |  6 ++----
->  drivers/thermal/imx8mm_thermal.c                     |  6 ++----
->  drivers/thermal/imx_thermal.c                        |  6 ++----
->  .../thermal/intel/int340x_thermal/int3400_thermal.c  |  5 ++---
->  .../thermal/intel/int340x_thermal/int3401_thermal.c  |  6 ++----
->  .../thermal/intel/int340x_thermal/int3402_thermal.c  |  6 ++----
->  .../thermal/intel/int340x_thermal/int3403_thermal.c  |  6 ++----
->  .../thermal/intel/int340x_thermal/int3406_thermal.c  |  5 ++---
->  drivers/thermal/k3_bandgap.c                         |  6 ++----
->  drivers/thermal/k3_j72xx_bandgap.c                   |  6 ++----
->  drivers/thermal/kirkwood_thermal.c                   |  6 ++----
->  drivers/thermal/mediatek/lvts_thermal.c              |  6 ++----
->  drivers/thermal/qcom/tsens.c                         |  6 ++----
->  drivers/thermal/rcar_gen3_thermal.c                  |  6 ++----
->  drivers/thermal/rcar_thermal.c                       |  6 ++----
->  drivers/thermal/rockchip_thermal.c                   |  6 ++----
->  drivers/thermal/rzg2l_thermal.c                      |  6 ++----
->  drivers/thermal/samsung/exynos_tmu.c                 |  6 ++----
->  drivers/thermal/spear_thermal.c                      |  6 ++----
->  drivers/thermal/sprd_thermal.c                       |  5 ++---
->  drivers/thermal/st/stm_thermal.c                     |  6 ++----
->  drivers/thermal/tegra/soctherm.c                     |  6 ++----
->  drivers/thermal/tegra/tegra-bpmp-thermal.c           |  6 ++----
->  drivers/thermal/ti-soc-thermal/ti-bandgap.c          |  6 ++----
->  drivers/thermal/uniphier_thermal.c                   |  6 ++----
->  31 files changed, 65 insertions(+), 123 deletions(-)
->
-> base-commit: 18030226a48de1fbfabf4ae16aaa2695a484254f
-> --
-> 2.40.1
->
+Yang Yingliang (1):
+  power: supply: rt5033_charger: fix missing unlock
+
+ drivers/power/supply/rt5033_charger.c | 320 ++++++++++++++++++++++++--
+ 1 file changed, 299 insertions(+), 21 deletions(-)
+
+-- 
+2.39.2
+
