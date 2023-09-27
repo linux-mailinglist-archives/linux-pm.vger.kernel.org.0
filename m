@@ -2,73 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 209887B0289
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 13:15:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B63857B028C
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 13:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231377AbjI0LPC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Sep 2023 07:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53860 "EHLO
+        id S231345AbjI0LPv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Sep 2023 07:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231397AbjI0LO7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 07:14:59 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12581A6
-        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 04:14:55 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-d894b8b9b7cso6417372276.1
-        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 04:14:55 -0700 (PDT)
+        with ESMTP id S231211AbjI0LPu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 07:15:50 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF15F3
+        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 04:15:49 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-690d8c05784so8432208b3a.2
+        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 04:15:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695813295; x=1696418095; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CPJwzNvZylvTQiOIT8nQFH9SZPRi6/HairHaCmuEtNs=;
-        b=AMBmhhrE18QeWrtS2JIX7VBdZjVHc5+Sridf2a98pFccWi/5V1BaXrEsmssrwf/XT0
-         K/Qi0jWDh6+iNssAfG8NJBA4sXlzhr2zspvx/6NGRCXoLEFcxEKKWkdy9ZHy2YvnRWHL
-         wP7HihOF1Oc5Da3az9TAb3sH8EyEskZXtdb+SJT8jNySbilpHpurm4CjZEEr1kLdGp3e
-         SKXtrr8q5YLwDwsEfN5YXJ9I0AalBg7CYV/hemPhKrvkZq6vtizoYMPhCD6zI7jKLiVm
-         Ndbp/zM9tcKxzUcY78bebx/MMVBDaTK5lHb84y4OA0khTSxrsFs0HXbXbgeA1UmMCjnj
-         Mb2g==
+        d=linaro.org; s=google; t=1695813349; x=1696418149; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7ILQTIya7HcBL5OZKx6dzjYAup4yveW1HKg0YsYZucU=;
+        b=nSzohTHczpdag7naXoE2adPHh/Xn9NhSJno4hgEJwib6XGti0U5R4lKRj4K4UQvOve
+         LxI1ZP7cyshbq5vk81dcylZmz/IBP9dHa9o94q50SPUABCLEcGLcwSayf6Ce4SLbfb3E
+         M0xpZ4I5JDMZnvZfFIrZlYlEE6Hqa4TOc4CctbTJBYc8WmhC1hWbePS+bhgz+WNg1afb
+         kmTJUd7qZR3yxPV3x6PSsiYBwdRfa4yIy2+tc4dY/eAwjSrfv431UVqnbyS/FXsZurjm
+         XpkmC8bS2Ttdok+zTmHyU+TL+ZgZH1C/N7LFrV9zuPRYKZgllzUMCbKM3EkkNOFk8fN/
+         8LeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695813295; x=1696418095;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CPJwzNvZylvTQiOIT8nQFH9SZPRi6/HairHaCmuEtNs=;
-        b=jWhgkDdI1rhIajHvHWkAeNEgmM5jEMPdHvTsyiIOMoy4/oU9WOFJoG0RY88Q+t4IAX
-         2KtUJeofm2oObU86omXGzaKuzAdxnZLbKfdg+SBbhPWmcgXM1xwJbr1hY2siAy1EMtWH
-         r8uyU8YrHz5N3qY90FjAdD1Dubbf4rs6dOraBQ00JLbXlQRMT60NXMQ4NOqK0l31AobA
-         g1z8+057ELd8WD/Xx+R64Ijj1oYDJYzy4GLdpco/Feq4+sn4rmA40EtZuifd7I/+OGaZ
-         DZRiHi8qWOZbPeY1oNYzXJjLnS0lF6OpWAOOXpuZ8t3aiCmjrjiy3pP3a/wynKT7Ozrl
-         prOw==
-X-Gm-Message-State: AOJu0Ywwa9siO0XwGHKDK+jG2wkGyFTsNtc9gX9rI3qI2JzhYvJ7tdnf
-        6QgBIVuKlo0s9Hd8FH5sHB6/PjaIMtCsP5Bhvy5+dg==
-X-Google-Smtp-Source: AGHT+IEn2A7RS/m3JUkpvx+tmDV6V0R2eCw+Of0nQLfgxCdKPWwgPYxVdAeR/zX+HB0XruKv1fpwYUQ6tD6Zm5e1DDc=
-X-Received: by 2002:a25:f810:0:b0:d7b:aaae:2037 with SMTP id
- u16-20020a25f810000000b00d7baaae2037mr4192438ybd.22.1695813294798; Wed, 27
- Sep 2023 04:14:54 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1695813349; x=1696418149;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7ILQTIya7HcBL5OZKx6dzjYAup4yveW1HKg0YsYZucU=;
+        b=iKzkSGaQfIi9ekek4rC3NIKSvk4ma9ON5tg+3z6zNKzU2Qpwq/kt9is8nijj3xSk6G
+         G7LYrqCRFLt7BFxQdXYUVUVZHrzwiqapl7q8IwfuXSXeFuoM+DHI5zLQKOstgYggwtnH
+         0vxtGk5d9rn/aJNDAvpPYuwRqjCooKOLzMXSZKVmAvY58dSgUQD4Vv2K6e37PrOODBes
+         SAIWy0ighdyc85N/fanLQo1lN63KzoVDBcl4k/e9RjxhSI/1l66YMbQoKt8dQjtBKBZC
+         RFV8pLCerw8KW50qUApS2mHhaiaDeQ/UOVi+8CxbAd+TIbcDSro06uoBJsROwC9gsj2r
+         X/6w==
+X-Gm-Message-State: AOJu0YywOSmEElpm6rI0fPw08q7rGHH72uulbx8Usl9sshpalB4XpQ8R
+        5eBjv8/LVhIB2Nw2KZvuiqwafw==
+X-Google-Smtp-Source: AGHT+IF+OQNFDztWq/9f7H4m3a5CkvfRLNuyr7Z1Y+kYUGAK9CSyS/G0wHhHEiX+Nc+jvptbD3e6ig==
+X-Received: by 2002:a05:6a20:a11b:b0:15d:facd:f20c with SMTP id q27-20020a056a20a11b00b0015dfacdf20cmr1779519pzk.41.1695813349251;
+        Wed, 27 Sep 2023 04:15:49 -0700 (PDT)
+Received: from localhost ([122.172.81.92])
+        by smtp.gmail.com with ESMTPSA id gk6-20020a17090b118600b00263cca08d95sm3647431pjb.55.2023.09.27.04.15.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Sep 2023 04:15:48 -0700 (PDT)
+Date:   Wed, 27 Sep 2023 16:45:46 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, vireshk@kernel.org,
+        nm@ti.com, sboyd@kernel.org, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, cw00.choi@samsung.com,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
+        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
+        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 5/6] arm64: dts: qcom: sdm845: Add OPP table support
+ to UFSHC
+Message-ID: <20230927111546.uyaod34zcjr7npgf@vireshk-i7>
+References: <20230731163357.49045-1-manivannan.sadhasivam@linaro.org>
+ <20230731163357.49045-6-manivannan.sadhasivam@linaro.org>
+ <04eb9f71-78f0-41f2-96a6-fc759ba296fa@linaro.org>
+ <20230912065918.GB6404@thinkpad>
 MIME-Version: 1.0
-References: <20230814-void-drivers-soc-renesas-rmobile-sysc-v1-1-6648dfd854de@google.com>
- <CAMuHMdWiC4v9fctp18bRrEH-m_-0VjMg9+XpON8vdRYwniTU3g@mail.gmail.com>
- <CAMuHMdWk_jcZ1V7J68bw11YZ+EjEqAWOKHzanVyxo2zktbMteg@mail.gmail.com>
- <CAPDyKFqgsHYz1hfOQ=KniNJj+u7ZSMoxS03Rixj1n2AOUdSVaQ@mail.gmail.com> <CAMuHMdW+ovx_Vbp1FQbvHESYrv3kHx5FvkjSb0V8dq857x5e9w@mail.gmail.com>
-In-Reply-To: <CAMuHMdW+ovx_Vbp1FQbvHESYrv3kHx5FvkjSb0V8dq857x5e9w@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 27 Sep 2023 13:14:19 +0200
-Message-ID: <CAPDyKFp_PfP4mVWucbMHwrRBvOAkktJDjqaYrMtEKat7raQ68A@mail.gmail.com>
-Subject: Re: [PATCH] soc: renesas: rmobile-sysc: fix -Wvoid-pointer-to-enum-cast
- warning
-To:     Justin Stitt <justinstitt@google.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230912065918.GB6404@thinkpad>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,78 +87,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 27 Sept 2023 at 11:28, Geert Uytterhoeven <geert@linux-m68k.org> wr=
-ote:
->
-> Hi Ulf,
->
-> On Tue, Sep 26, 2023 at 1:22=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.o=
-rg> wrote:
-> > On Mon, 18 Sept 2023 at 11:21, Geert Uytterhoeven <geert@linux-m68k.org=
-> wrote:
-> > > On Wed, Aug 30, 2023 at 10:24=E2=80=AFAM Geert Uytterhoeven
-> > > <geert@linux-m68k.org> wrote:
-> > > > On Tue, Aug 15, 2023 at 12:11=E2=80=AFAM Justin Stitt <justinstitt@=
-google.com> wrote:
-> > > > > When building with clang 18 I see the following warning:
-> > > > > |      drivers/soc/renesas/rmobile-sysc.c:193:22: warning: cast t=
-o smaller integer
-> > > > > |               type 'enum pd_types' from 'const void *' [-Wvoid-=
-pointer-to-enum-cast]
-> > > > > |        193 |                 add_special_pd(np, (enum pd_types)=
-id->data);
-> > > > >
-> > > > > This is due to the fact that `id->data` is a void* and `enum pd_t=
-ypes`
-> > > > > has the size of an integer. This cast from pointer-width to int-w=
-idth
-> > > > > causes truncation and possible data loss. Instead, cast to `uintp=
-tr_t`
-> > > > > which has the same width as void*.
-> > > > >
-> > > > > Link: https://github.com/ClangBuiltLinux/linux/issues/1910
-> > > > > Reported-by: Nathan Chancellor <nathan@kernel.org>
-> > > >
-> > > > scripts/checkpatch.pl:
-> > > >
-> > > >     WARNING: Reported-by: should be immediately followed by Closes:
-> > > > with a URL to the report
-> > > >
-> > > > Hence changing the Link: tag to a Closes: tag.
-> > > >
-> > > > > Signed-off-by: Justin Stitt <justinstitt@google.com>
-> > > > > ---
-> > > > > Note: It should be noted that there is likely no data loss occurr=
-ing in
-> > > > > this case since the enum only has a few fields. The narrowing cas=
-t from
-> > > > > pointer to int will not lose any data.
-> > > >
-> > > > Indeed, the theoretical narrowing could only happen on a 64-bit
-> > > > platform, while this driver is only used on arm32.
-> > > >
-> > > > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > > > i.e. will queue in renesas-devel for v6.7.
-> > >
-> > > As the Generic PM Domain providers were moved to drivers/pmdomain/
-> > > in v6.6-rc2, and now have their own maintainer, I have moved this
-> > > commit from renesas-drivers-for-v6.7 to renesas-pmdomain-for-v6.7[1],
-> > > with s/soc/pmdomain/ in the oneline-summary.
-> > >
-> > > Ulf: if you prefer, you can still take this patch directly.
-> > > Else I will send a PR after rc3 and/or rc5, like I do with my other
-> > > renesas-<foo>-for-<version> branches.
-> > > Thanks!
-> >
-> > Apologize for the delay, been traveling lately. Anyway, I can
-> > certainly pick up the patch and carry it for v6.7. Just let me know,
-> > if/when you have dropped the patch from your tree.
->
-> Thanks, dropped.
+On 12-09-23, 12:29, Manivannan Sadhasivam wrote:
+> On Mon, Sep 11, 2023 at 04:15:10PM +0300, Dmitry Baryshkov wrote:
+> > I'd say, I'm still slightly unhappy about the 0 clock rates here.
+> 
+> Neither do I. But it is the only viable option I could found.
+> 
+> > We need only three clocks here: core, core_clk_unipro and optional
+> > ice_core_clk. Can we modify ufshcd_parse_operating_points() to pass only
+> > these two or three clock names to devm_pm_opp_set_config() ? The OPP core
+> > doesn't need to know about all the rest of the clocks.
+> > 
+> 
+> We need to enable/disable all of the clocks, but only need to control the rate
+> for these 3 clocks. So we cannot just use 3 clocks.
+> 
+> If the OPP table has only 3 entries (omitting the gate-only clocks), then we
+> need some hack in the driver to match the rates against the clock entries. Doing
+> so will result in hardcoding the clock info in the driver which I do not want to
+> do.
+> 
+> If we have something like "opp-hz-names" to relate the rates to clock-names, it
+> might do the job. But it needs some input from Viresh.
 
-Applied for next, thanks!
+I have already given an option earlier about this [1]. You can change the order
+of clks in the "clock-names" field, so that the first three are the one with
+valid frequencies. You shouldn't need much of the hacks after that I guess.
 
-[...]
+Or maybe I missed something else now, talked about this a long time ago :)
 
-Kind regards
-Uffe
+-- 
+viresh
+[1] https://lore.kernel.org/all/20230713040918.jnf5oqiwymrdnrmq@vireshk-i7/
