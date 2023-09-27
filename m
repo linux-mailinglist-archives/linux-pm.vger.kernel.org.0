@@ -2,145 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7437AFDEC
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 10:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8BAA7AFEF5
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 10:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbjI0INh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Sep 2023 04:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33294 "EHLO
+        id S229958AbjI0Iu4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Sep 2023 04:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230339AbjI0INR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 04:13:17 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CAB1BEC
-        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 01:11:40 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-3247cefa13aso293948f8f.1
-        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 01:11:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695802299; x=1696407099; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3ckTbHwDfKzFbEI8tdS6hS5ynC3aqs1kXGK7gaHMXpc=;
-        b=vJ2BgLML1YkR6GUzMBZQyQ8dehgqPRFZaY8Xh3mLH+vO434g2aWMUt7hOHkP9WxjmH
-         T2hHh75G6LskoatP+9oVym2Sk+I9bOKg+ua8u3/a1tWXcpE8SJ4Og3zjHCdqrFeZML4i
-         IbcbJ9UdZaG7lAO71Fhiz3yIIQsxg/Q6/tOKODHI6RNJaE/Jwi9IRFW9K/xgl7HmT1IF
-         5R24BuCeIebA3duVY6GKyHHQzInqiz8nSUsh5QUbTz4ctkfks2vJCLI+fH0xIXrFQ4UJ
-         ovzh7WJPRlN+a/WKlZi+GZMFWQ/F1SY4jZKMkFslMRLB/T4YuC4HkKGWw+hApUCFxqTN
-         S22A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695802299; x=1696407099;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3ckTbHwDfKzFbEI8tdS6hS5ynC3aqs1kXGK7gaHMXpc=;
-        b=ncjA8BzzRZ6mfFterb6CDEMps9wrhN1ICvb4USWFRNqSNoqIczoe/R6OxxWO6kZO8y
-         aHYlavy/8BUrC4PhXRb/edkZa+jjBl3+gx2zfuqCXSb6DLMoLcz9D1CX9aB8fz7GvVgg
-         rY/qaegSdNyM0lZHuNjIw4H2JwSWWylDrIauU2KSQJPb9N36kbRV3fLnGBx+QkeegI4q
-         GWXWlS0FlGymTQYuY/xJsPi7fZ4n24pp6HuHHeP3uQEnIcBHX2e+YEj8YB0L8VzkqO+R
-         +R+1r7z/ZjEghmecKBFYaEGdApSnK5IOGkftZMhS6OW3tWyvHQot21C4j6uVxL4aLqfr
-         Oycw==
-X-Gm-Message-State: AOJu0YxCkZTgL7itV0oOu3XRsH92XUrAarlmJgtL3cXCIWDz8HigIdyX
-        /WmObPbWY2TGG8rbj7mDK9BP+Q==
-X-Google-Smtp-Source: AGHT+IF2l9Sai5n3yixiIddWbof/CUWzBiu0+9NTPTJD2EieajhSUDrqyEmJt8yl5o/Ukr5g9z8moQ==
-X-Received: by 2002:a5d:4ec1:0:b0:321:504a:bc9a with SMTP id s1-20020a5d4ec1000000b00321504abc9amr775399wrv.71.1695802298786;
-        Wed, 27 Sep 2023 01:11:38 -0700 (PDT)
-Received: from [192.168.27.65] (home.beaume.starnux.net. [82.66.176.246])
-        by smtp.gmail.com with ESMTPSA id b15-20020adfde0f000000b0031c6cc74882sm16621381wrm.107.2023.09.27.01.11.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Sep 2023 01:11:38 -0700 (PDT)
-Message-ID: <c45df003-43fe-8ec1-42dc-9f688cc24acf@linaro.org>
-Date:   Wed, 27 Sep 2023 10:11:36 +0200
+        with ESMTP id S229985AbjI0Iuy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 04:50:54 -0400
+X-Greylist: delayed 423 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 27 Sep 2023 01:50:51 PDT
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA0ED6;
+        Wed, 27 Sep 2023 01:50:51 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.west.internal (Postfix) with ESMTP id AD2CB2B00190;
+        Wed, 27 Sep 2023 04:43:40 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 27 Sep 2023 04:43:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1695804220; x=1695811420; bh=o7VjoUAbmEtRJA+8mE/ljFlKqx4X7034jZT
+        pRVdZN6U=; b=ADzfipzn1H6nvZj6IPUSg2e6bCMhLYRmEs66usghC3Y3gx5303Q
+        aTTmtJG0A0L9CHLezJhajL9yKQwYfnfAFiXMKhwusvHW50CG5uI5iEl7tt3E5O/c
+        109Prl9v1WY5Dz5zbA1UlVJNeFc9OyrqpbnS2acBLHAax7mj4JSazShKhZ2AKtL5
+        Kb+sO9zLKfRG70g6mMx2NTtBQwA5XqhQTr1ML37jliO1pEZ8oPvMjAfQWzjpeRwp
+        P93tKMWDgbtYnrHOA50hnF/3YZr7ca8sSU/zKOdnxmfL7uNzchYn4fxuizIz9Uwo
+        wSMlNWEE93us8pOvJ6bXAOtzDZ3Y1r8Dkqg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1695804220; x=1695811420; bh=o7VjoUAbmEtRJA+8mE/ljFlKqx4X7034jZT
+        pRVdZN6U=; b=T05vfZWD4SeZP01Wx6kQneLrsFr8U69yAe1OGWDRowa7yugQwJ3
+        94K12SDEFGNefEiYGYpscPNiz8fBtJOZO5fFMXK84Cq+DLpoiisAlVL+RurIMkNt
+        Nb2Kj7pvRYINg5vwBm6juNHbkdHU+vbRdM25KS0/MoCFoR7dMv4jNuYUJK728O7n
+        iuONNqsQxEpFoNEgNZeMqcSx2GySa1Mo1t3OXUYum79164XAx8pAzMB2VEr5DM4K
+        l2fTK2Za9USzPDJVwoXHD61JS9bNxlIY3Zqu64JfZbZVGMo1Hh9jhGdTq1v3tyYS
+        fgvfYIMPcx51AjviWxI9VX5zh0EwxD/MAaA==
+X-ME-Sender: <xms:OusTZTxl4DMJTP59c2KJ3iAewQQWbzZvdalDvbWGKOLzv2EzLdBGuA>
+    <xme:OusTZbQexVSnj58RtwR8RCEaMhCEDqGXO2BE_Mcdl6H_L2Irne_1ea8tvqBCQSDTq
+    Rq5c7228oHf_xSqDlE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvjedrtddvgddtjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudektdfg
+    jeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:OusTZdUi1I6Gdh1mDxeBlJHg-Yno8M5T2KHxAbUCNM4lr_pKsVlrxA>
+    <xmx:OusTZdie3X4oFed4rWhvAe5IK10Jrbz1ltYCRBKW4lbI9_Q9epjx-A>
+    <xmx:OusTZVB2dhx1vK4otJlVYTjXkXX07gEQS0rDAla7iUQqudzIuChogw>
+    <xmx:POsTZXqlhNzvo9JMY5-8GSCqucFjQ1YuFjO0FqgTBEXKd9KEj2fANC8DefA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 30D92B60089; Wed, 27 Sep 2023 04:43:38 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-957-ga1ccdb4cff-fm-20230919.001-ga1ccdb4c
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.15.0
-Subject: Re: (subset) [PATCH V3 RESEND 0/6] Power: T7: add power domain driver
-To:     Lucas Tanure <tanure@linux.com>, devicetree@vger.kernel.org,
+Message-Id: <1b2fddf8-c0a6-4afa-8ad0-f280dea1607f@app.fastmail.com>
+In-Reply-To: <CACPK8XeROYz_XaB3TvUhdXm7Vm8fjC8yU+mfvA58=_FiDrBy-g@mail.gmail.com>
+References: <20230925095532.1984344-1-u.kleine-koenig@pengutronix.de>
+ <CACPK8XeROYz_XaB3TvUhdXm7Vm8fjC8yU+mfvA58=_FiDrBy-g@mail.gmail.com>
+Date:   Wed, 27 Sep 2023 10:43:16 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Joel Stanley" <joel@jms.id.au>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     "Leo Li" <leoyang.li@nxp.com>,
+        "Herve Codina" <herve.codina@bootlin.com>,
+        "Qiang Zhao" <qiang.zhao@nxp.com>,
+        "Hitomi Hasegawa" <hasegawa-hitomi@fujitsu.com>,
+        "Huisong Li" <lihuisong@huawei.com>,
+        "Krzysztof Halasa" <khalasa@piap.pl>,
+        "Karol Gugala" <kgugala@antmicro.com>,
+        "Mateusz Holenko" <mholenko@antmicro.com>,
+        "Gabriel Somlo" <gsomlo@gmail.com>,
+        "Yinbo Zhu" <zhuyinbo@loongson.cn>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        "Daire McNamara" <daire.mcnamara@microchip.com>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        "Thierry Reding" <thierry.reding@gmail.com>,
+        "Jon Hunter" <jonathanh@nvidia.com>,
+        "Sumit Gupta" <sumitg@nvidia.com>,
+        "Shang XiaoJing" <shangxiaojing@huawei.com>,
+        "Muhammad Usama Anjum" <usama.anjum@collabora.com>,
+        "Rob Herring" <robh@kernel.org>, "Nishanth Menon" <nm@ti.com>,
+        "Santosh Shilimkar" <ssantosh@kernel.org>,
+        "Michal Simek" <michal.simek@amd.com>,
+        "Andrew Jeffery" <andrew@aj.id.au>,
         linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Xianwei Zhao <xianwei.zhao@amlogic.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-References: <20230911025223.3433776-1-xianwei.zhao@amlogic.com>
- <169444496123.3944766.3763051739383485051.b4-ty@linaro.org>
- <916aea7d-50ba-45d8-9b3c-0f507c922601@linux.com>
-Content-Language: en-GB
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-In-Reply-To: <916aea7d-50ba-45d8-9b3c-0f507c922601@linux.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        "Zev Weiss" <zev@bewilderbeest.net>, linuxppc-dev@lists.ozlabs.org,
+        loongarch@lists.linux.dev,
+        "AngeloGioacchino Del Regno" 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-mediatek@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        "zhang.songyi" <zhang.songyi@zte.com.cn>,
+        "Lubomir Rintel" <lkundrak@v3.sk>, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        "Alim Akhtar" <alim.akhtar@samsung.com>,
+        linux-samsung-soc@vger.kernel.org,
+        "Nick Alcock" <nick.alcock@oracle.com>,
+        "Yang Yingliang" <yangyingliang@huawei.com>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Ruan Jinjie" <ruanjinjie@huawei.com>,
+        "Pengutronix Kernel Team" <kernel@pengutronix.de>
+Subject: Re: [PATCH 00/40] soc: Convert to platform remove callback returning void
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Lucas,
+On Wed, Sep 27, 2023, at 04:25, Joel Stanley wrote:
+> On Mon, 25 Sept 2023 at 09:55, Uwe Kleine-K=C3=B6nig <u.kleine-koenig@=
+pengutronix.de> wrote:
+>>
+>> this series converts all platform drivers below drivers/soc to use
+>> .remove_new(). The motivation is to get rid of an integer return code
+>> that is (mostly) ignored by the platform driver core and error prone =
+on
+>> the driver side.
+>>
+>> See commit 5c5a7680e67b ("platform: Provide a remove callback that
+>> returns no value") for an extended explanation and the eventual goal.
+>>
+>> As there is no single maintainer team for drivers/soc, I suggest the
+>> individual maintainers to pick up "their" patches.
+>
+> I'd be happy if Arnd merged the lot at once. Arnd, what do you think?
+>
+> If that will be too messy then I understand. I have queued the aspeed
+> ones locally and will push that out if we decide that's the best way
+> to go.
 
-Le 27/09/2023 à 08:05, Lucas Tanure a écrit :
-> On 11-09-2023 16:09, Neil Armstrong wrote:
->> Hi,
->>
->> On Mon, 11 Sep 2023 10:52:17 +0800, Xianwei Zhao wrote:
->>> First patch is that remove C3 some power domain ALWAYS_ON property.
->>> Second patch is that add driver to support power parent node.
->>> Third patch is that turn on power if initial power domain with
->>> "AWAY_ON" property state is off.
->>>
->>> Other patchs adds power controller driver support for Amlogic T7 SoC.
->>>
->>> [...]
->>
->> Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.7/arm64-dt)
->>
->> [6/6] arm64: dts: amlogic: t7: add power domain controller node
->>        https://git.kernel.org/amlogic/c/5355699dabac3c97492a30e6e01820fcaae11218
->>
->> These changes has been applied on the intermediate git tree [1].
->>
->> The v6.7/arm64-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
->> for inclusion in their intermediate git branches in order to be sent to Linus during
->> the next merge window, or sooner if it's a set of fixes.
->>
->> In the cases of fixes, those will be merged in the current release candidate
->> kernel and as soon they appear on the Linux master branch they will be
->> backported to the previous Stable and Long-Stable kernels [2].
->>
->> The intermediate git branches are merged daily in the linux-next tree [3],
->> people are encouraged testing these pre-release kernels and report issues on the
->> relevant mailing-lists.
->>
->> If problems are discovered on those changes, please submit a signed-off-by revert
->> patch followed by a corrective changeset.
->>
->> [1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
->> [2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
->> [3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->>
-> I re-tested this today with Vim4 and works fine.
-> By works I mean, vim4 is able to boot without panics but drops to emergency shell as expected.
-> 
-> I was not able to find patches 1-3 and 5 at amlogic/for-next.
-> Is there a reason why amlogic/for-next only have DTs changes?
+The main downside of merging it all at once through the soc tree
+is that there may be patches that conflict with other work going on
+in individual drivers.
 
- From now I'll only take the DT and the genpd/ changes will go into the new
-subsystem maintained by Ulf.
+What I'd suggest doing here is:
 
-You should use the daily linux-next tree which would contain both trees merged.
+- have platform maintainers pick up patches for their drivers
+  if that is their preference for any reason
 
-Thanks,
-Neil
+- get a pull request from Uwe for the soc tree for anything that has
+  not been picked up in one or two weeks from now
 
-> 
-> Tested-by: Lucas Tanure <tanure@linux.com>
-> 
-> 
-> 
-
+      Arnd
