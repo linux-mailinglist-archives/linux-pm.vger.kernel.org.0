@@ -2,114 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5451C7B07DB
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 17:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 195077B0839
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Sep 2023 17:28:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232289AbjI0PNf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Sep 2023 11:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
+        id S232431AbjI0P2G convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 27 Sep 2023 11:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232334AbjI0PNf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 11:13:35 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D665F9;
-        Wed, 27 Sep 2023 08:13:34 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E879C433C7;
-        Wed, 27 Sep 2023 15:13:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695827614;
-        bh=M59HXSnofJHl+d0SzaDEQ+iFiL1u7mpzFZkkV512/mg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YRf964xRaUPDySff6eLJgM9Lx2KtcqOwEvT3EgL4trCBHw0lapy0dFi1XIenuyfi+
-         6Tvm4uao7BYtDJ4T2HmMhpAEg4vmvzW3gkDRuzH4DxFxrGZKT306CiwuiAwskU5lL9
-         mzT01FVQyLty2Hp9nZff35g0YWa7YY60ZtT9X0hCNw4qbg5MYHvXVvRss5ZXvHnz+O
-         DzP9h4dPOyFsWg7/0HZSDRaWaNDIkwYdG1STMhDAihjEAcFOX7HLBZsyM0EcJO0ad4
-         SQzQp1wtQZH1odv/cu/uIr2mMnNGPg/GRzHanZ9PKF1FvhUIc7Lu0VfrCHy0tNRsP2
-         UUOtHQkgIW7yQ==
-Date:   Wed, 27 Sep 2023 16:13:30 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: power/supply: sbs-manager: Add missing
- unevaluatedProperties on child node schemas
-Message-ID: <20230927-swimming-gender-3579e2771ffa@spud>
-References: <20230926164446.101327-1-robh@kernel.org>
+        with ESMTP id S232429AbjI0P2F (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Sep 2023 11:28:05 -0400
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E505180;
+        Wed, 27 Sep 2023 08:28:04 -0700 (PDT)
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-57b68555467so864268eaf.0;
+        Wed, 27 Sep 2023 08:28:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695828484; x=1696433284;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GrJ+LVorbFBvQ25l422kAsahBWNHUUbzw/OsuBiPPcI=;
+        b=DpnztN081es8uFyzNAZxFKc4eslq+E2tgRNYc546DehO93GSqGMH98Ml6vmVPNmow/
+         InGv7s6gwNI360JcfBs+kZKZD6qNuGgGocK3veFQLhzNTizv5JLQnSJVZuk2D4MQQ5vy
+         C6z/M4tBf7lCW5K/d6AwuTiyP9QneTXFWisKKhrTY0sC3OdyxpVn3O+fkZfEwqbqT7Ka
+         y+CiEBUh71Z+DSrtp/JpsKLedq5tUxcPabEHdzBjyVwd6CwRdbr6w5ai+6vtkcFoVvjw
+         it4WGvkbeRFpxEt8gFUnDlwwa5Wwm2UY+e6ziaZxL0I39Sw6tGfUvTXEU0KD6rwUif7Y
+         jMYA==
+X-Gm-Message-State: AOJu0YySl6GenFN4twSO6h8xjRc/woBphgvuiqS+Ca9BbNT31t6mUSR9
+        WfL5ZTEPulg6HEU3LpXjw3OAgvl5trxSrLlB4RI=
+X-Google-Smtp-Source: AGHT+IHsKKKybxNHeGTXA++HPKol4GYH13nBVus5vxuKblbsNJopgKj6YjMp+qwFLepHAXHcKGquT1Nw2rA3z57mc0o=
+X-Received: by 2002:a4a:e687:0:b0:57b:3b64:7ea5 with SMTP id
+ u7-20020a4ae687000000b0057b3b647ea5mr2619493oot.1.1695828483804; Wed, 27 Sep
+ 2023 08:28:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="vLhAzWIRrewJs9du"
-Content-Disposition: inline
-In-Reply-To: <20230926164446.101327-1-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1957441.PYKUYFuaPT@kreacher> <2590280.Lt9SDvczpP@kreacher> <9f1374db-f866-ff52-e86c-99fecee24d1b@linaro.org>
+In-Reply-To: <9f1374db-f866-ff52-e86c-99fecee24d1b@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 27 Sep 2023 17:27:52 +0200
+Message-ID: <CAJZ5v0hw3LGByW=18tiFEB7JQ9rOVo6TqCGhzxWcrUQYb+VGEw@mail.gmail.com>
+Subject: Re: [PATCH v1 07/13] thermal: gov_power_allocator: Use trip pointers
+ instead of trip indices
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, Sep 27, 2023 at 5:10 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 21/09/2023 19:55, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Eliminate the __thermal_zone_get_trip() usage that adds unnecessary
+> > overhead (due to pointless bounds checking and copying of trip point
+> > data) from the power allocator thermal governor and generally make it
+> > use trip pointers instead of trip indices where applicable.
+>
+> Actually the __thermal_zone_get_trip() change was done on purpose to
+> replace the 'throttle' callback index parameter by the trip pointer and
+> removing those call to __thermal_zone_get_trip() while the code was
+> using the trip pointer.
+>
+> IMO, the changes should focus on changing the trip_index parameter by
+> the trip pointer directly in the throttle ops.
 
---vLhAzWIRrewJs9du
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+So you would like .throttle() to take a trip pointer argument instead
+of an index?
 
-On Tue, Sep 26, 2023 at 11:44:42AM -0500, Rob Herring wrote:
-> Just as unevaluatedProperties or additionalProperties are required at
-> the top level of schemas, they should (and will) also be required for
-> child node schemas. That ensures only documented properties are
-> present for any node.
->=20
-> Add unevaluatedProperties as needed, and then add any missing properties
-> flagged by the addition.
->=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
+The difficulty here is that the user space governor needs to expose
+the index to user space anyway, so it would need to find it if it gets
+a trip pointer instead.
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Not a big deal I suppose, but a bit of extra overhead.
 
-Thanks,
-Conor.
+Also it is easier to switch the governors over to using trip pointers
+internally and then change the .throttle() argument on top of that.
 
-> ---
->  .../devicetree/bindings/power/supply/sbs,sbs-manager.yaml   | 6 ++++++
->  1 file changed, 6 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/power/supply/sbs,sbs-manag=
-er.yaml b/Documentation/devicetree/bindings/power/supply/sbs,sbs-manager.ya=
-ml
-> index f255f3858d08..2e21846463ba 100644
-> --- a/Documentation/devicetree/bindings/power/supply/sbs,sbs-manager.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/sbs,sbs-manager.yaml
-> @@ -47,6 +47,12 @@ patternProperties:
->    "^i2c@[1-4]$":
->      type: object
->      $ref: /schemas/i2c/i2c-controller.yaml#
-> +    unevaluatedProperties: false
-> +
-> +    properties:
-> +      reg:
-> +        minimum: 1
-> +        maximum: 4
-> =20
->  examples:
->    - |
-> --=20
-> 2.40.1
->=20
+> The pointer can be
+> retrieved in the handle_thermal_trip() function and passed around for
+> the rest of the actions on this trip point
 
---vLhAzWIRrewJs9du
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZRRGmgAKCRB4tDGHoIJi
-0gypAP0dN5ITkZ+G3bk0n/yF3+Z1vTnBZrJIUo0Jps5Tg7OMigD/adydJeyXH7Cf
-C7uGu5/5p/xMHpKf7cDEplM8NlAJuQI=
-=e37f
------END PGP SIGNATURE-----
-
---vLhAzWIRrewJs9du--
+Right, except for the user space governor which needs a trip index.
+And the indices are used for tracing too.
