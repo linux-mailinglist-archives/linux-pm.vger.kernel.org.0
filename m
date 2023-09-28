@@ -2,69 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 417D07B1496
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Sep 2023 09:18:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48AE57B14BA
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Sep 2023 09:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbjI1HSQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Sep 2023 03:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
+        id S230358AbjI1HYY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Sep 2023 03:24:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbjI1HSP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 03:18:15 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0CBD6
-        for <linux-pm@vger.kernel.org>; Thu, 28 Sep 2023 00:18:13 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id 46e09a7af769-6c0a3a2cc20so7192502a34.0
-        for <linux-pm@vger.kernel.org>; Thu, 28 Sep 2023 00:18:13 -0700 (PDT)
+        with ESMTP id S229835AbjI1HYY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 03:24:24 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E36995
+        for <linux-pm@vger.kernel.org>; Thu, 28 Sep 2023 00:24:22 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-40651a726acso3157325e9.1
+        for <linux-pm@vger.kernel.org>; Thu, 28 Sep 2023 00:24:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695885492; x=1696490292; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SLRpGiit+sJwzR8qIWWGXU438uIPMVyxLn/z2JLLlVw=;
-        b=DBFfBfrCadXtpIJmqLMNuTKWzLVjhYU3PGAxOThtE5M8MXRbSmzLpavlNYk8kPq5VJ
-         yqqbAxe3EtINuQN4q/ad+9dEUGzADwx0j20wWRhPeDJViCGVcPYH5OxIf8fBbm/FhFUA
-         ay5rEMT0xuUQMqVly/wzJIwGogV2eF4xy064Ng6uRteQa6vYInMPIGAA6OKl79G4iyVf
-         +JGaFkCROUPyVFa6Og3pXo9lydBSFYBfZfx9bbhcJw8rCGt3aRTvw/SHjptxEKaNWMd4
-         YAseNXm/2tUGvhEazUWMq3Dsud8XEm0792op+kyAVx1azSMVrO27Qju9XpldwjX3ZqFA
-         sjyQ==
+        d=linaro.org; s=google; t=1695885860; x=1696490660; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+UA9uHWWeYBOdu4MsloFMHQ1l07sPdcS1vaYRXSvUR8=;
+        b=HcKSu2ffDMyf2m/+ZhRD5BKwWRMUnWt3xkFekzABD2LT9XhxMBDlg2E35GXOtsD1mq
+         lR/zYCnbMIeVczvaAz9U2bqgQh+HFyP6z64V3oULZTC2BPjou/pFILeE6cPp/yAnnjnT
+         rcDuXLnSqgOVJOubhK4oC84xKZcImgpZiuzYdJwBsRGIFGED1AUKHiYgLwMpEDveYzMm
+         eocladxAXfHAcHhJzUbN28tUmofGJjOM3hKfqMy978uCsy2RnZFaBvecYH2T/d4H4MXB
+         kKOZ9Ga5XBLGXv7eTOR+O+sytiL0HifPLVWebo0uspYuTSCD8UAuIKC0KANTd03ibWg+
+         Te5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695885492; x=1696490292;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SLRpGiit+sJwzR8qIWWGXU438uIPMVyxLn/z2JLLlVw=;
-        b=Rp3b9NrsjyjokZjOEG+Y9dLge9ESG1YUA6hvr2oEh62xNSl0xs3QMOj1azgPBQ+9Za
-         2aaZSRoEb8yQ8ELEAZ1AiYE5bMK5LsummmR9ctNhW7WVBGKU1/58cZuiSHTzN+rvVmi4
-         ktXYZctS9o0AV+zT1tQp+hboeQpsCE7DOSkYfETiXRBMWQdkGy8NnLfsJQcrWb9u8bYD
-         i4swadzlhFBm9caTD56oHRdj8bFmBPhPRW35s7TtAqk9BtNhxwIR7NWV170itu+vCiHq
-         nQJpUd7n9nlyUyw471JnFww/1yyuRERpQtCmYH6xflPpcoYh8rG7suEEkXeUkGS5iwHS
-         kQ5A==
-X-Gm-Message-State: AOJu0YyCYUd70CNHANfDo09lLdU4Y3MOEIMNcd4hWjdehPAeaRXfWFWS
-        uwv14ultbPqHQghRsL5VZeCO6wrn6u1vE11mPZE=
-X-Google-Smtp-Source: AGHT+IGWIP72/g0OKh8wEA7aVc8k8yYTJn4/XYg19kDlzIfKVmxB+J3mb/+BWVd7u1O0+mKn4jbvxw==
-X-Received: by 2002:a05:6830:1da1:b0:6b2:91c9:8e1e with SMTP id z1-20020a0568301da100b006b291c98e1emr481187oti.2.1695885492528;
-        Thu, 28 Sep 2023 00:18:12 -0700 (PDT)
-Received: from localhost ([122.172.81.92])
-        by smtp.gmail.com with ESMTPSA id u10-20020aa7848a000000b0069343e474bcsm1221361pfn.104.2023.09.28.00.18.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Sep 2023 00:18:12 -0700 (PDT)
-Date:   Thu, 28 Sep 2023 12:48:10 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Shrikanth Hegde <sshegde@linux.vnet.ibm.com>,
-        vschneid@redhat.com, "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: Rebuild sched-domains when removing cpufreq
- driver
-Message-ID: <20230928071810.hkdmuoaasrv4b2oq@vireshk-i7>
-References: <20230918112937.493352-1-pierre.gondois@arm.com>
+        d=1e100.net; s=20230601; t=1695885860; x=1696490660;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+UA9uHWWeYBOdu4MsloFMHQ1l07sPdcS1vaYRXSvUR8=;
+        b=pVPByx+E7q+JHdOFG5572WZhlyVVPeunhA5iBl2nYX18wqJnyd3CpsvXcdv0eaPLmk
+         Fm84KFwq1mxULWcP8CZGqFxrwsWnbVGD5AfnnDzIqRlauSGsxlfRYuI2+MLcIovFh4Id
+         n9wsazGZRIFN7NNVMjETWndFP9f6BZTMoh5FzwKsLUNlG38s0LkPyhcFlUO1WwjDM/cp
+         Ob5hVG4IdQK9+7x7R3vURfU8iAsUo9jVv7upfbtjXTJod7a1+W42Cb76XXZ+240PouGE
+         ql1cVuzpRVn2gjOJfbMaYQx6w8+J72Yms+CjFqd2b0AZKwIoqnoxaKsWTOV3ewR+um/2
+         Ib6g==
+X-Gm-Message-State: AOJu0YzyY11EYtSgBvwn+zHd4zbOsnlyeeK93AbcEiVINXXpJJ9FEm2J
+        +4d4/zmd32f+Lu1+JEOoK/YHfA==
+X-Google-Smtp-Source: AGHT+IEcIlXAmdvv9WcCA53AfD+QpBf5eGEwdf+8z26e7iBPCWPvls3jal7oS+TqSFQzP2rJYRmDnQ==
+X-Received: by 2002:a1c:6a09:0:b0:401:b76d:3b8b with SMTP id f9-20020a1c6a09000000b00401b76d3b8bmr406862wmc.16.1695885860422;
+        Thu, 28 Sep 2023 00:24:20 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
+        by smtp.googlemail.com with ESMTPSA id u17-20020a05600c00d100b00405935b417asm9400467wmm.2.2023.09.28.00.24.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Sep 2023 00:24:20 -0700 (PDT)
+Message-ID: <87dd2af9-ea1f-7995-2b3b-eaed356c659e@linaro.org>
+Date:   Thu, 28 Sep 2023 09:24:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230918112937.493352-1-pierre.gondois@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v1 11/13] ACPI: thermal: Do not use trip indices for
+ cooling device binding
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+References: <1957441.PYKUYFuaPT@kreacher> <113039009.nniJfEyVGO@kreacher>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <113039009.nniJfEyVGO@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,44 +79,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18-09-23, 13:29, Pierre Gondois wrote:
-> The Energy Aware Scheduler (EAS) relies on the schedutil governor.
-> When moving to/from the schedutil governor, sched domains must be
-> rebuilt to allow re-evaluating the enablement conditions of EAS.
-> This is done through sched_cpufreq_governor_change().
+On 21/09/2023 20:02, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Having a cpufreq governor assumes having a cpufreq driver running.
-> Inserting/removing a cpufreq driver should trigger a re-evaluation
-> of EAS enablement conditions, avoiding to see EAS enabled when
-> removing a running cpufreq driver.
+> Rearrange the ACPI thermal driver's callback functions used for cooling
+> device binding and unbinding, acpi_thermal_bind_cooling_device() and
+> acpi_thermal_unbind_cooling_device(), respectively, so that they use trip
+> pointers instead of trip indices which is more straightforward and allows
+> the driver to become independent of the ordering of trips in the thermal
+> zone structure.
 > 
-> Add a sched_cpufreq_governor_change() call in cpufreq driver removal
-> path.
+> The general functionality is not expected to be changed.
 > 
-> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->  drivers/cpufreq/cpufreq.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 60ed89000e82..0a4979c34fd1 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1673,6 +1673,8 @@ static void __cpufreq_offline(unsigned int cpu, struct cpufreq_policy *policy)
->  		cpufreq_driver->exit(policy);
->  		policy->freq_table = NULL;
->  	}
-> +
-> +	sched_cpufreq_governor_change(policy, policy->governor);
 
-This is called from many paths. Consider using cpufreq_remove_dev() instead,
-before the policy is freed.
-
->  }
->  
->  static int cpufreq_offline(unsigned int cpu)
-> -- 
-> 2.25.1
+Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
 -- 
-viresh
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
