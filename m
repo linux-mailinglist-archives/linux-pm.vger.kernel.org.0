@@ -2,172 +2,196 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA4787B2633
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Sep 2023 22:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 849477B2700
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Sep 2023 23:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231426AbjI1UBa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Sep 2023 16:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33560 "EHLO
+        id S231676AbjI1VFg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Sep 2023 17:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbjI1UBa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 16:01:30 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2040.outbound.protection.outlook.com [40.107.94.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A0E180;
-        Thu, 28 Sep 2023 13:01:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GX4Hh6pYeXaENZBRduHnZ+twWBAxgsarJQAzaLrdRc8X9UCzibo9OBheY3x/oQC3FNSRbqXvxtOy0QKWRtPuBFnhlK8KY7/eMHOmk02nWBrZ03iLmSSih4xYLMlEQ6/Fte2DiaBpVMWkulAPHrJgKKMjbwHjpvZNoUYY8hkdf4ZA270cB/XcCd2Q7nUgqtMC0PfoAqmdlC5zQzgQq61BDdAXZOXlEvNkxQXKV2E1YS3EtGrwvdkebtzsOBU2owfj8MqVOsOz7sPIT2WFcWgRRjzFzjOU4SySxZFrO1Jk+PGE+f+hQJhxsMGqG9lGcTUJfdS7rbstGod//ZLOfVPjnw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=p0zKZOFNa9DDlVYoFzJBaoQ65W1IEx880uL0m2ztPsg=;
- b=EnDBdqH52DWzp+HkmBje3IZkt9wPKKktgghsUWs5w08POwOiLjw+oNyPdgZBx07dWRvXMfKtjvxkrseD5F8TfSYayzDDc+02eyOad+BcBwCTXPaa+PzpncB3xrYXm4Orjp3gBa5W/T9dqiemhJaZ2XXt48HmZKdio4voUKsM517YEVJ++AkB4YGMCt0j+ZtxKZ7WkQaIeKHtju7AMQCBixZEsGJFpUOOhWGLAv9o4gif2De53dvxFIOU+s5Gj+Nd49U+4zR8jtQHZ9pRrqHXGWOqWHaBampaD06GrNH8vOCHq/fnufWvo9n/PwsdDDwf6OcCjd8hjeK/liJQh41vDg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p0zKZOFNa9DDlVYoFzJBaoQ65W1IEx880uL0m2ztPsg=;
- b=c0ECV3WHpYnYKMItXf+QSIcdF30OB8ac3RLmEfQLISskgn//biwZk6wJ+iwyPduxkrlslSFB4QmsA7Z0waShTaEfSmifS+AEO6DUEscOgBMgdpZ5nw+rQ89LCNazlPM+lsI4NIFCoo/oD0fHjL/FHk6khunxwXe6/3WlCEQDRMQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by SJ2PR12MB8133.namprd12.prod.outlook.com (2603:10b6:a03:4af::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.33; Thu, 28 Sep
- 2023 20:01:20 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::3e65:d396:58fb:27d4]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::3e65:d396:58fb:27d4%3]) with mapi id 15.20.6813.017; Thu, 28 Sep 2023
- 20:01:20 +0000
-Message-ID: <8cae7afb-3e6d-42cd-925f-4ee3af920178@amd.com>
-Date:   Thu, 28 Sep 2023 15:01:16 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] Fix Navi3x boot and hotplug problems
-To:     Alex Deucher <alexdeucher@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     amd-gfx@lists.freedesktop.org,
-        Alex Deucher <alexander.deucher@amd.com>, Jun.ma2@amd.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230926225955.386553-1-mario.limonciello@amd.com>
- <CADnq5_NHQhUZ9DzNtOy67Hx1g2_ZeBfKPC6O22YY_bzSJsMiUw@mail.gmail.com>
-Content-Language: en-US
-From:   Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <CADnq5_NHQhUZ9DzNtOy67Hx1g2_ZeBfKPC6O22YY_bzSJsMiUw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: DM6PR14CA0070.namprd14.prod.outlook.com
- (2603:10b6:5:18f::47) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        with ESMTP id S231322AbjI1VFg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 17:05:36 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B08B7;
+        Thu, 28 Sep 2023 14:05:30 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9b27bc8b65eso1164511166b.0;
+        Thu, 28 Sep 2023 14:05:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695935129; x=1696539929; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nyOTkl7GDrmjuhn9G46tKFpIgEVwvVY54Rn5f3HxobM=;
+        b=LcAPAaD/Vm+7Olplc954zxRClqnpXQCNPfQMx8GcfMVSvcyijOgtWiF+L6Yhh563BV
+         9y77n/w0MzlAaRh1o2nGRshoy6cMAtd6lDA3GJKyrNu7CLyeFntqZB1YlsPtF6+uRO26
+         anBBs7yh/Ukmy39nCYe9xJxfGUqLXpqnBH+dMoOUU53cqof8yUsFmHDLj2mBtvSOip/O
+         jT1AXQJqyea6DR0Cr8xLPDsWS0mwZnRqcX6SKqpE4CaXL44Zt34KHt+nh0zSBK3Ax9vq
+         lOZGrJ0ub276nFLjWNs8kdnr6vO7kme64fUCRNSQTk3sq2L4oHpr4oN/UVXOJaaMA7eg
+         mBVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695935129; x=1696539929;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nyOTkl7GDrmjuhn9G46tKFpIgEVwvVY54Rn5f3HxobM=;
+        b=qNYWj6oouJnspEf58zutFNdhrEll5Y/1gpUtfxXtcte3ZQdj60ugF8f/PJnVuq8PVr
+         91Y3EWliVez9j6SPk5PLmzvKZ4Qr5OYH3/3Jt0jVkM6xq7ZOSZGUIhWiNUAGEBs5y0NX
+         nNdNTVPKzMpsiqEqebx6gp/wsyCsfAL7INLzKa8YTZXe1I3v/So74XygetvbPvq6hLaA
+         QlTOQ54mgeIdC0qqJuh7aeAQVBoeh8xuBpi0s+HyrrLY8+rzvrYDsz5bvNI/UsB+UFni
+         LE7Omz4KuH1to3ajUnbSNnl1MUmNfwr9BFTFtjX8Od7p05MnY302b0Un4KERIal6BNgB
+         3N/w==
+X-Gm-Message-State: AOJu0YwC1fZdHuI75fru4i6KnLSpL3IIM9KEmLVu2Yv//aYwfMfJ4TQX
+        RXAvPrM0V+sl/qRd8DZZgDA=
+X-Google-Smtp-Source: AGHT+IHtGpqsYb74w+cPI7fArutheXUqF8+OnSiqP74i/B8LEUMUkAocX4MICjiEH5/NjntOyJ22+A==
+X-Received: by 2002:a17:906:2ca:b0:9ae:7433:aec6 with SMTP id 10-20020a17090602ca00b009ae7433aec6mr1979206ejk.60.1695935128805;
+        Thu, 28 Sep 2023 14:05:28 -0700 (PDT)
+Received: from fedora.. (dh207-99-57.xnet.hr. [88.207.99.57])
+        by smtp.googlemail.com with ESMTPSA id la9-20020a170906ad8900b0098f33157e7dsm11386849ejb.82.2023.09.28.14.05.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Sep 2023 14:05:27 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     ilia.lin@kernel.org, vireshk@kernel.org, nm@ti.com,
+        sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        rafael@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH v4 1/4] cpufreq: qcom-nvmem: add support for IPQ8074
+Date:   Thu, 28 Sep 2023 23:04:04 +0200
+Message-ID: <20230928210525.1265958-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|SJ2PR12MB8133:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3ddef2ed-3e5f-4a92-9c68-08dbc05dae9f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /aj4RWTLaLJyAu/6sA8RJUQO3TW+2VDbMZwWlj/gyFwLFjPJx4ELiB1oH3EH9owdIjdOdNRFAQ7NxGmDzDpEcAcL5d/8H4e6Q04Sq4w9z0NFVp+rwvCcyDdeffeS1C6ryoJgKkeuVdoQ5cfDyjCgo+Ia6FVnnQJdT1CByKGUazFZ4iWVgtHHf2VEMm5WJb6lg182Nai1b07VZvDvGfUYzvmm+fpS8xbmkMM/2gQVd4BaJSlVHfZJ1AJApfQnPdZJVmQABrgXOmiOgw18ghlMS3xeXFF3ilPpnz1hNPGaiug/UnCGErhIJ0n7QmxIOvrJqdS0i9sJ3NCSj1dnwFbakHr/dZKm+H2RxMHNu9gcv0lIf+foUgtb+oNCN3Ww06/Gd84FQE0t+MwXzGShzlqYJsiJe481c730i7f0BdG8az+1J4pdaW0OF5Fwg9RidvjqUnhpEOrNgg6ITzUQ6iNjHsLBUT/WatPjMCfWa6KOjNCZ3781g7yDxRfUf9PFU4xBELk0ORlN6o8+ejD16COQG3bEYggV3saeTJsLrw0iuQyrFtmY47dTibHCqLh3/vZIE4+/mZGhXknIL//3uWvAxXwLjftfXg6hFm6RLBz/Qwn+NRR32LNd6VlA6/emUf3ZkpbrOcNzSp01z3Sg1JULgpzfJ4tpV7HJjwiT0n0yQZY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(396003)(39860400002)(346002)(376002)(136003)(230922051799003)(64100799003)(451199024)(1800799009)(186009)(31686004)(53546011)(2616005)(26005)(5660300002)(38100700002)(36756003)(478600001)(86362001)(31696002)(6512007)(66556008)(83380400001)(6666004)(110136005)(6486002)(4326008)(6506007)(316002)(41300700001)(66476007)(8676002)(8936002)(44832011)(2906002)(66946007)(32563001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Rm1uTmpwTXBoaXpzV1NudW0wdlhhSjdKVWFDcXEvYXZQanoyVXkxWnRGSjI2?=
- =?utf-8?B?Y3JKQnFESENQVnh6RTI0SmR0SllDMUpReDFoVGVDN0VxWmkvQmhNVWt0dGhB?=
- =?utf-8?B?a1kyazgyQjMvL3QxUmRwK2lnYjZUNVpyeGlvckZnYzJobGpiVVl3M0xkeVRJ?=
- =?utf-8?B?bVU2Sjl1cjJ2cFMxaCtMQW1yai8yZllVcDhNUUp5eGpoOUNjN1dUbDRabTdT?=
- =?utf-8?B?SG9GdkprWHZQY3RONGgxYndsVFE2MVBsbFJ1Zk9QeUJSdVhpWXlveFlYeGhk?=
- =?utf-8?B?bVNnM1FLVjE3OUU2aFZ5K1NOdFFNaUNpMTBBcGJ0eDdZOW81N21EZlVpYTBC?=
- =?utf-8?B?MU00MStpSi9ocWx0NkFFRXIxNGJyVVJyWno1RkdDYi96Sk8vdC90Y0hRMjMr?=
- =?utf-8?B?SGp6MjJHZXk1eXRJUTFXeCtNRktrSUh2SytOQUFMQjFmcTFrZXNpYUtVbWdx?=
- =?utf-8?B?U0pIMk9qbk9aRWRhbVZYTGtINHF3SGJBVWhndE1mZlMxR1ZTNzgxdk1nU1Vk?=
- =?utf-8?B?ZlVUbnlmL1Z2S1ZBdThoYklkUFkzclIwYTEwNGNwdVZ0VjYvLzdscXJOYTdZ?=
- =?utf-8?B?eCtuUStRL3ZlbWlJQ2UvWE5lSjNWTzZsMGVkZldqUVpldUo3dExBNzI2aFUr?=
- =?utf-8?B?cFdQSENMVjVpYVg0NlZWVzJsV2FPRnBTREVyK20wVXRmcTRMb2Q3Z0RhSk1H?=
- =?utf-8?B?b1V5a2NKMFduQ3R2MzdzdktLZ3ZqbnVySHF2aUNNaDlSRjRGeXlpTzJLUGZW?=
- =?utf-8?B?cDZ5cGtwTTZ4bThmem5xL1JML1UyazR2OHVqRVhvNVNBYVBBL2dlU2JPZlU1?=
- =?utf-8?B?VWxMSVhHSTFQRnVCYytRa1VRRmhMRThVclVQTTFjQk9RMzNLRmJWa2pEN2pJ?=
- =?utf-8?B?Y0RKUmFLeTB4K29hVUYzUU5EcHpLcDIzK2dzSUh1QVVDeTRrQ0orQXhxL1Ft?=
- =?utf-8?B?VkgzWEZkcTZnQWloU3ZiZjZSWS8zM3JiS3V3d21SYTJVM25OdkEvaitMRERO?=
- =?utf-8?B?U1REMDVPNGJUWlhFclh5Q0g3NG9SN2k2Yk1ZRTM4K01jbk1CUkthL0NNZFpN?=
- =?utf-8?B?ZUZXMlg1Y0xaQ0d1dW5vU2hkMUNYcHFXbGZJRmtNbEZhSFlkcG14NmJIZE14?=
- =?utf-8?B?MmcrRmJrUCtGcExpT2FXTkVXUUxTVjZDTUtTMUI5ckYyS2dHdEN4SXhNc0V0?=
- =?utf-8?B?WDVUTWFYQkVlT3pQOGJhay9jc2hNaFZ5NjN2R2U1dUF2bXB0NzVsSE5od3do?=
- =?utf-8?B?WkRyeVJhUElsdUhSMlFGRnlMbnJpTVlrZ2doNWk3ZmIrTW12UGFtK3BvTHQz?=
- =?utf-8?B?K3ZJU2tqZ2s0WFpkazd3T0h2WVEzY1NKdEdmN1BrQUJ5UVVlWHZKeFVYSEcv?=
- =?utf-8?B?dHZGSnhPNVlydG82MjhOZ1FzNG5VVVh6RmdqS2tWeFBTWWxPR3ZMNGkxUGpp?=
- =?utf-8?B?Tk1NbVBUTFMvZjdTblhmNHpTU2FxeTNweXVqdnhNeVR4UWFmYnQzNEZ1Qk8r?=
- =?utf-8?B?Wm5LN0d0cy8zdUljRUxHSVNpRHJPVVNZOHZwVStjWFFRa2xrS2JsbEMrbFRy?=
- =?utf-8?B?blo5bGhtd2NmZGRKUUV4bU8yZG0vdHZvdjZVTGtFTmtGR05OdUliRWdiemFK?=
- =?utf-8?B?S1dTWlpEWW9NWU1vUUx6S2JrTlp3K1NtMDV0dTNOTldGMWdHaUMvb080YjVm?=
- =?utf-8?B?UmY2QWxqWis1VE5wUWlSMkxsdTV1Y3gxK0RlRXp6RXcrSHlxRzhIN1FQRURQ?=
- =?utf-8?B?bU1FNjQ4YTU3Sk5BajlsaUxsMkZSdFc2MnlkblJiN2ZQTmRZWjZLUW5iczEz?=
- =?utf-8?B?TE90ei9nbitTR1MyNTdPNkhzRXEza0JCeUU2eG5pazVldTQrSDJWc2UxeWNC?=
- =?utf-8?B?TXBPcFFWOTlPQWkvZ1RlQnlwaWVZVlZnUTduRGZ2TzNseUtjMG1jT3p1RGtn?=
- =?utf-8?B?R2R5RUFRdTJ3bks0RUhGdjMyNlhCQmpiNEl4eGhGcFBub3hTWkRMTGZEd2tm?=
- =?utf-8?B?b3BCK0U5L2VSNm1TQ08vRGtxMjRuS1F0RXE2bjA1VXM5WjFOL2dXSkNkSVZv?=
- =?utf-8?B?bXlkNThRYTF1VWhza3M3M3BQeHR3MllQVklCdjVpc1UycWRVTDIySkEyMVAz?=
- =?utf-8?Q?m0ivzvP3Si/muwl61xjwxQaCO?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ddef2ed-3e5f-4a92-9c68-08dbc05dae9f
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Sep 2023 20:01:19.9416
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: H4qIB8o6fLJxSg98DWVc+c5xYczSAgpefQOkj1y6kcspLA5OCPUR1TBEApHl3Z6NzQ7fCfm1X5UlBpR5k7Upuw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8133
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 9/28/2023 13:00, Alex Deucher wrote:
-> On Thu, Sep 28, 2023 at 12:41 PM Mario Limonciello
-> <mario.limonciello@amd.com> wrote:
->>
->> On some OEM systems multiple navi3x dGPUS are triggering RAS errors
->> and BACO errors.
->>
->> These errors come from elements of the OEM system that weren't part of
->> original test environment.  This series addresses those problems.
->>
->> NOTE: Although this series touches two subsystems, I would prefer to
->> take this all through DRM because there is a workaround in linux-next
->> that I would like to be reverted at the same time as picking up the first
->> two patches.
-> 
-> FWIW, the workaround is not in linux-next yet.  At the time I thought
-> it was already fixed by the fixes in ucsi and power supply when we
-> first encountered this.
+IPQ8074 comes in 2 families:
+* IPQ8070A/IPQ8071A (Acorn) up to 1.4GHz
+* IPQ8172/IPQ8173/IPQ8174 (Oak) up to 1.4GHz
+* IPQ8072A/IPQ8074A/IPQ8076A/IPQ8078A (Hawkeye) up to 2.2GHz
 
-I looked yesterday and I did see it there, but I think it was 
-specifically because it had merged the amd-staging-drm-next tree.
-It's not there today..
+So, in order to be able to share one OPP table lets add support for IPQ8074
+family based of SMEM SoC ID-s as speedbin fuse is always 0 on IPQ8074.
 
-If Sebastian is OK, I'd still rather keep it all together so that people 
-testing amd-staging-drm-next get the fixes.
+IPQ8074 compatible is blacklisted from DT platdev as the cpufreq device
+will get created by NVMEM CPUFreq driver.
 
-> 
-> Alex
-> 
->>
->> Mario Limonciello (3):
->>    drm/amd: Fix detection of _PR3 on the PCIe root port
->>    power: supply: Don't count 'unknown' scope power supplies
->>    Revert "drm/amd/pm: workaround for the wrong ac power detection on smu
->>      13.0.0"
->>
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_device.c           | 2 +-
->>   drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c       | 3 ++-
->>   drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c | 1 +
->>   drivers/power/supply/power_supply_core.c             | 2 +-
->>   4 files changed, 5 insertions(+), 3 deletions(-)
->>
->> --
->> 2.34.1
->>
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+Changes in v4:
+* Add support for IPQ8174 (Oak) family
+
+Changes in v3:
+* Use enum for SoC versions
+
+Changes in v2:
+* Print an error if SMEM ID is not part of the IPQ8074 family
+and restrict the speed to Acorn variant (1.4GHz)
+---
+ drivers/cpufreq/cpufreq-dt-platdev.c |  1 +
+ drivers/cpufreq/qcom-cpufreq-nvmem.c | 48 ++++++++++++++++++++++++++++
+ 2 files changed, 49 insertions(+)
+
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index 02ec58a8603b..cc3ccc1519c3 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -179,6 +179,7 @@ static const struct of_device_id blocklist[] __initconst = {
+ 	{ .compatible = "ti,am62a7", },
+ 
+ 	{ .compatible = "qcom,ipq8064", },
++	{ .compatible = "qcom,ipq8074", },
+ 	{ .compatible = "qcom,apq8064", },
+ 	{ .compatible = "qcom,msm8974", },
+ 	{ .compatible = "qcom,msm8960", },
+diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+index 84d7033e5efe..3fa12648ceb6 100644
+--- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
++++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+@@ -30,6 +30,11 @@
+ 
+ #include <dt-bindings/arm/qcom,ids.h>
+ 
++enum ipq8074_versions {
++	IPQ8074_HAWKEYE_VERSION = 0,
++	IPQ8074_ACORN_VERSION,
++};
++
+ struct qcom_cpufreq_drv;
+ 
+ struct qcom_cpufreq_match_data {
+@@ -203,6 +208,44 @@ static int qcom_cpufreq_krait_name_version(struct device *cpu_dev,
+ 	return ret;
+ }
+ 
++static int qcom_cpufreq_ipq8074_name_version(struct device *cpu_dev,
++					     struct nvmem_cell *speedbin_nvmem,
++					     char **pvs_name,
++					     struct qcom_cpufreq_drv *drv)
++{
++	u32 msm_id;
++	int ret;
++	*pvs_name = NULL;
++
++	ret = qcom_smem_get_soc_id(&msm_id);
++	if (ret)
++		return ret;
++
++	switch (msm_id) {
++	case QCOM_ID_IPQ8070A:
++	case QCOM_ID_IPQ8071A:
++	case QCOM_ID_IPQ8172:
++	case QCOM_ID_IPQ8173:
++	case QCOM_ID_IPQ8174:
++		drv->versions = BIT(IPQ8074_ACORN_VERSION);
++		break;
++	case QCOM_ID_IPQ8072A:
++	case QCOM_ID_IPQ8074A:
++	case QCOM_ID_IPQ8076A:
++	case QCOM_ID_IPQ8078A:
++		drv->versions = BIT(IPQ8074_HAWKEYE_VERSION);
++		break;
++	default:
++		dev_err(cpu_dev,
++			"SoC ID %u is not part of IPQ8074 family, limiting to 1.4GHz!\n",
++			msm_id);
++		drv->versions = BIT(IPQ8074_ACORN_VERSION);
++		break;
++	}
++
++	return 0;
++}
++
+ static const struct qcom_cpufreq_match_data match_data_kryo = {
+ 	.get_version = qcom_cpufreq_kryo_name_version,
+ };
+@@ -217,6 +260,10 @@ static const struct qcom_cpufreq_match_data match_data_qcs404 = {
+ 	.genpd_names = qcs404_genpd_names,
+ };
+ 
++static const struct qcom_cpufreq_match_data match_data_ipq8074 = {
++	.get_version = qcom_cpufreq_ipq8074_name_version,
++};
++
+ static int qcom_cpufreq_probe(struct platform_device *pdev)
+ {
+ 	struct qcom_cpufreq_drv *drv;
+@@ -360,6 +407,7 @@ static const struct of_device_id qcom_cpufreq_match_list[] __initconst = {
+ 	{ .compatible = "qcom,msm8996", .data = &match_data_kryo },
+ 	{ .compatible = "qcom,qcs404", .data = &match_data_qcs404 },
+ 	{ .compatible = "qcom,ipq8064", .data = &match_data_krait },
++	{ .compatible = "qcom,ipq8074", .data = &match_data_ipq8074 },
+ 	{ .compatible = "qcom,apq8064", .data = &match_data_krait },
+ 	{ .compatible = "qcom,msm8974", .data = &match_data_krait },
+ 	{ .compatible = "qcom,msm8960", .data = &match_data_krait },
+-- 
+2.41.0
 
