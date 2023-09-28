@@ -2,98 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18FDC7B1463
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Sep 2023 09:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 417D07B1496
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Sep 2023 09:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231652AbjI1HPD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Sep 2023 03:15:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36628 "EHLO
+        id S231150AbjI1HSQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Sep 2023 03:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231485AbjI1HOy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 03:14:54 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4012ACDD
-        for <linux-pm@vger.kernel.org>; Thu, 28 Sep 2023 00:14:01 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-690d8fb3b7eso11358813b3a.1
-        for <linux-pm@vger.kernel.org>; Thu, 28 Sep 2023 00:14:01 -0700 (PDT)
+        with ESMTP id S229835AbjI1HSP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 03:18:15 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0CBD6
+        for <linux-pm@vger.kernel.org>; Thu, 28 Sep 2023 00:18:13 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id 46e09a7af769-6c0a3a2cc20so7192502a34.0
+        for <linux-pm@vger.kernel.org>; Thu, 28 Sep 2023 00:18:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695885240; x=1696490040; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1695885492; x=1696490292; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VtAQFshoixr4PLMOGpQ5x3E+4JvwXvrJVP5lWSHmXcs=;
-        b=GI3+uX4Fm/RDCPJZ2JY+NH3noeb5l18RbVYWJcjXV2Mercx3uMRgOH5JKxzvGLElV8
-         e5ibjR3IE05dHJcokZ2YZDrx75MYFyAltNX08b7rbKuFwlD4k8mGEf9HEmPvA5cdyhPU
-         7UKFTcs5N+HJe8isGPwlpAmZury+YPBf35zw+9ZA7NA6GyqUV6y+CA9VDL2rMflqNRGB
-         4pjrHJ40M5qmBTjjJdKZFdMcofWVSz9jcI2OT31vxvB6hkbW02Yb+nDp5hLvUOLWUJlO
-         +4URWUN2fAwf7vOW+0mUMMygHnwBWRtcuCcUuROVntXrQIOqUuyfsew2pN5NhvSPUlKK
-         tY5Q==
+        bh=SLRpGiit+sJwzR8qIWWGXU438uIPMVyxLn/z2JLLlVw=;
+        b=DBFfBfrCadXtpIJmqLMNuTKWzLVjhYU3PGAxOThtE5M8MXRbSmzLpavlNYk8kPq5VJ
+         yqqbAxe3EtINuQN4q/ad+9dEUGzADwx0j20wWRhPeDJViCGVcPYH5OxIf8fBbm/FhFUA
+         ay5rEMT0xuUQMqVly/wzJIwGogV2eF4xy064Ng6uRteQa6vYInMPIGAA6OKl79G4iyVf
+         +JGaFkCROUPyVFa6Og3pXo9lydBSFYBfZfx9bbhcJw8rCGt3aRTvw/SHjptxEKaNWMd4
+         YAseNXm/2tUGvhEazUWMq3Dsud8XEm0792op+kyAVx1azSMVrO27Qju9XpldwjX3ZqFA
+         sjyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695885240; x=1696490040;
+        d=1e100.net; s=20230601; t=1695885492; x=1696490292;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VtAQFshoixr4PLMOGpQ5x3E+4JvwXvrJVP5lWSHmXcs=;
-        b=CHHz0NYl1T8YLBatSdZxhn4gjCQkCDyEbn0G8ZP6It4V8mjrsmU1tkSoR9A18HpN5B
-         I1OnPYcoqDlRSoVARM6okRmEtyf1XuRmEY+ANC0a2RHWliu0BIVl12vbhBAxx10l09A5
-         FtlDqAQwg7yGXwkfwMiCXnUzS0S7Rt6Gb593u/RLPCUWeH0ejBrRnH3KZuHozD1M53KN
-         gEjWGQF0N3T2lYm/EZPGlNXDB7q+n2Aos9umjbwwMatIVRvRJLdReBCcg1pkCDF7HRmb
-         lY0IQWnwvnSUwRNmSX6bEKnvA4IG7Rp+50wE+HM+n+FBgcaBbPAVmGTkNOqsNEHcgpNA
-         a5ZQ==
-X-Gm-Message-State: AOJu0YxoY/74xdFj+UhfJpniH9v2+Gpbc/o4neRrhzE3g2QAxhU+yRKH
-        dLuGXnCigxMQZjGAJdky8wxLEg==
-X-Google-Smtp-Source: AGHT+IF+ebHc4PI7RDBAqlxE+M8CNQuYhiPegz6Bi2F6ZoLnTZtxR5vgvmHJEfj4gXpYMG0OC++96g==
-X-Received: by 2002:a05:6a20:914f:b0:160:83e1:712f with SMTP id x15-20020a056a20914f00b0016083e1712fmr396378pzc.23.1695885240687;
-        Thu, 28 Sep 2023 00:14:00 -0700 (PDT)
+        bh=SLRpGiit+sJwzR8qIWWGXU438uIPMVyxLn/z2JLLlVw=;
+        b=Rp3b9NrsjyjokZjOEG+Y9dLge9ESG1YUA6hvr2oEh62xNSl0xs3QMOj1azgPBQ+9Za
+         2aaZSRoEb8yQ8ELEAZ1AiYE5bMK5LsummmR9ctNhW7WVBGKU1/58cZuiSHTzN+rvVmi4
+         ktXYZctS9o0AV+zT1tQp+hboeQpsCE7DOSkYfETiXRBMWQdkGy8NnLfsJQcrWb9u8bYD
+         i4swadzlhFBm9caTD56oHRdj8bFmBPhPRW35s7TtAqk9BtNhxwIR7NWV170itu+vCiHq
+         nQJpUd7n9nlyUyw471JnFww/1yyuRERpQtCmYH6xflPpcoYh8rG7suEEkXeUkGS5iwHS
+         kQ5A==
+X-Gm-Message-State: AOJu0YyCYUd70CNHANfDo09lLdU4Y3MOEIMNcd4hWjdehPAeaRXfWFWS
+        uwv14ultbPqHQghRsL5VZeCO6wrn6u1vE11mPZE=
+X-Google-Smtp-Source: AGHT+IGWIP72/g0OKh8wEA7aVc8k8yYTJn4/XYg19kDlzIfKVmxB+J3mb/+BWVd7u1O0+mKn4jbvxw==
+X-Received: by 2002:a05:6830:1da1:b0:6b2:91c9:8e1e with SMTP id z1-20020a0568301da100b006b291c98e1emr481187oti.2.1695885492528;
+        Thu, 28 Sep 2023 00:18:12 -0700 (PDT)
 Received: from localhost ([122.172.81.92])
-        by smtp.gmail.com with ESMTPSA id a12-20020a170902b58c00b001bc5dc0cd75sm3726200pls.180.2023.09.28.00.13.59
+        by smtp.gmail.com with ESMTPSA id u10-20020aa7848a000000b0069343e474bcsm1221361pfn.104.2023.09.28.00.18.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Sep 2023 00:14:00 -0700 (PDT)
-Date:   Thu, 28 Sep 2023 12:43:58 +0530
+        Thu, 28 Sep 2023 00:18:12 -0700 (PDT)
+Date:   Thu, 28 Sep 2023 12:48:10 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH] dt-bindings: opp: opp-v2-kryo-cpu: Allow opp-peak-kBps
-Message-ID: <20230928071358.nwhy7lpsrawlrkf6@vireshk-i7>
-References: <20230920-opp-kbps-binding-cleanup-v1-1-65b059bb4afc@quicinc.com>
- <169532249877.800354.7360993815442441183.robh@kernel.org>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Shrikanth Hegde <sshegde@linux.vnet.ibm.com>,
+        vschneid@redhat.com, "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: Rebuild sched-domains when removing cpufreq
+ driver
+Message-ID: <20230928071810.hkdmuoaasrv4b2oq@vireshk-i7>
+References: <20230918112937.493352-1-pierre.gondois@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <169532249877.800354.7360993815442441183.robh@kernel.org>
+In-Reply-To: <20230918112937.493352-1-pierre.gondois@arm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21-09-23, 13:55, Rob Herring wrote:
+On 18-09-23, 13:29, Pierre Gondois wrote:
+> The Energy Aware Scheduler (EAS) relies on the schedutil governor.
+> When moving to/from the schedutil governor, sched domains must be
+> rebuilt to allow re-evaluating the enablement conditions of EAS.
+> This is done through sched_cpufreq_governor_change().
 > 
-> On Wed, 20 Sep 2023 16:03:57 -0700, Bjorn Andersson wrote:
-> > Many of the users of operating-points-v2-kryo-cpu scales interconnect
-> > bandwidth based on the selected opp. Extend the binding to allow the
-> > opp-peak-kBps property, inherited from opp-v2-base.yaml, to be used to
-> > specify the requested bandwidth.
-> > 
-> > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> > ---
-> >  Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
+> Having a cpufreq governor assumes having a cpufreq driver running.
+> Inserting/removing a cpufreq driver should trigger a re-evaluation
+> of EAS enablement conditions, avoiding to see EAS enabled when
+> removing a running cpufreq driver.
 > 
-> Acked-by: Rob Herring <robh@kernel.org>
+> Add a sched_cpufreq_governor_change() call in cpufreq driver removal
+> path.
+> 
+> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 60ed89000e82..0a4979c34fd1 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1673,6 +1673,8 @@ static void __cpufreq_offline(unsigned int cpu, struct cpufreq_policy *policy)
+>  		cpufreq_driver->exit(policy);
+>  		policy->freq_table = NULL;
+>  	}
+> +
+> +	sched_cpufreq_governor_change(policy, policy->governor);
 
-Applied. Thanks.
+This is called from many paths. Consider using cpufreq_remove_dev() instead,
+before the policy is freed.
+
+>  }
+>  
+>  static int cpufreq_offline(unsigned int cpu)
+> -- 
+> 2.25.1
 
 -- 
 viresh
