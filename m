@@ -2,57 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 780E07B205B
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Sep 2023 17:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2727B212C
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Sep 2023 17:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231451AbjI1PEs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Sep 2023 11:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
+        id S231827AbjI1P0N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Sep 2023 11:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231444AbjI1PEr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 11:04:47 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409CD195;
-        Thu, 28 Sep 2023 08:04:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695913486; x=1727449486;
-  h=date:from:to:cc:subject:message-id;
-  bh=c8xmeByehlzm4xT97+/edfv+ipE1HUQoCEC8h7wEWAg=;
-  b=M42m6DkbhtPQu89SEDWnehvZtx69gnYv7WAzLPTqYD/ivS1W43cyGvIl
-   /BkyeOTOzVkHnG+aWk8VuSH1XM/Rw2s1WuzwWFh7QFdfpxldDEYaQCgSX
-   liuHtFUxFeSjU4s4fN0BegM1mqbyOj2JQuGSC1dOJCoK1g1ImscXgd48w
-   SWevJ1YbPhGMUUB/dGqYoRTKJ7V0U11oJjP4eG85xsF6mYsLwrPVRLB2u
-   Ey8BmS3WCYHWiN3iwlY6Kf2p0Vqg7nCVmbOJzMxjWhkEaaRLue29FcajH
-   RzkjBVq8iiP3xbyUrtOfSK5vq4JvTyA25FooF1DCw2w9S+XOU7fLreQ10
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="379352565"
-X-IronPort-AV: E=Sophos;i="6.03,184,1694761200"; 
-   d="scan'208";a="379352565"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2023 08:03:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="784729422"
-X-IronPort-AV: E=Sophos;i="6.03,184,1694761200"; 
-   d="scan'208";a="784729422"
-Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 28 Sep 2023 08:03:01 -0700
-Received: from kbuild by c3b01524d57c with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qlsXb-0001Zu-1F;
-        Thu, 28 Sep 2023 15:02:59 +0000
-Date:   Thu, 28 Sep 2023 23:02:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- a2577d67cb05d6553674e7ddda362d22096a955b
-Message-ID: <202309282308.XXC43w11-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        with ESMTP id S231438AbjI1P0M (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 11:26:12 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F3FD6
+        for <linux-pm@vger.kernel.org>; Thu, 28 Sep 2023 08:26:08 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-5042bfb4fe9so20471341e87.1
+        for <linux-pm@vger.kernel.org>; Thu, 28 Sep 2023 08:26:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20230601.gappssmtp.com; s=20230601; t=1695914766; x=1696519566; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=CZ/zDwhOQDppGR7MzKf6vb93wC4sZ+GMBUdA6oEyzhc=;
+        b=RSLAdaPJwO+/y24vvPltZHVVM0MDdiditeC+n+JpdIrupPQKvjLaJhTQ96mJAszthG
+         bgQ/iuDykQqKlWAZ8r2L6vf7d46aIa+IIqoqmNeukCCpg4VHWg/W+rdLYk5DxX7kKui6
+         wNa42EbnY8lbApcJLsFW64o8vRkrDqybgWgDx+xnX0pIfldEtvylP3aExSNMSGU4lBLC
+         m2tqJGDMrYwPaahSjCjbW8EvWqFv1cfSp+8ncxDvq5QWOQaom5fdYutEtxP0+PBziuvX
+         ShsOEHlds84pyC74PMjo04IzOTki5DNMI0aF7VGIXMUgaWXPDU2ILCIisMJdDfM+vQUH
+         tIdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695914766; x=1696519566;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CZ/zDwhOQDppGR7MzKf6vb93wC4sZ+GMBUdA6oEyzhc=;
+        b=ZFjTo8xOz4Kz9nYtXy1+qW72hIK8OaCvyE8JutX45i0H2zvAqr8lqhwqRLor5WPWtM
+         NIkuQCAvSA6N3OeyZwnIN9IswYKwEV0VIU0rVLuczcsmWchp+AYmEM0bhygscmV4EdJx
+         kHjsJez6OSMB3WXrqfv3XvqB4s6tOr+PGi0fe8ti+irw6KV6Pkk7KG9hHR4TCnLhk1d7
+         /EBXk5LauX77nMTeHTyY44QzmZ8dWfSXmjnowue9dRoyOij9yZnjNRHy+d63GPFRjRS3
+         rMTh2umcyEYGUja8XXAicslKIUpDT8ZhUhbtD+g1680g1+Y+oum6bJttuD4kBOw5H4nF
+         lxWg==
+X-Gm-Message-State: AOJu0Yx6T/EfEmRQdiIc3dxthJGvPoueT4WiaVjqM0/5P5OsgMGawIxR
+        DFHHwxlS0djDGkdwehtS20uICQ==
+X-Google-Smtp-Source: AGHT+IG6bal1q5BD8rsgHmRKZsqcyVOUYljgwmRInLdRiM413d6FSmhVtR+qDdDt6Hwd0UTJiGpytw==
+X-Received: by 2002:a05:6512:3e1e:b0:500:79a6:38d4 with SMTP id i30-20020a0565123e1e00b0050079a638d4mr1858434lfv.40.1695914766482;
+        Thu, 28 Sep 2023 08:26:06 -0700 (PDT)
+Received: from localhost (h-46-59-36-206.A463.priv.bahnhof.se. [46.59.36.206])
+        by smtp.gmail.com with ESMTPSA id c14-20020a056512104e00b005047bf13b6fsm911431lfb.134.2023.09.28.08.26.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Sep 2023 08:26:05 -0700 (PDT)
+Date:   Thu, 28 Sep 2023 17:26:05 +0200
+From:   Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH 20/31] thermal: rcar_gen3: Convert to platform remove
+ callback returning void
+Message-ID: <ZRWbDfbYFGt14RXT@oden.dyn.berto.se>
+References: <20230927193736.2236447-1-u.kleine-koenig@pengutronix.de>
+ <20230927193736.2236447-21-u.kleine-koenig@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230927193736.2236447-21-u.kleine-koenig@pengutronix.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,148 +77,61 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: a2577d67cb05d6553674e7ddda362d22096a955b  Merge branch 'pm-sleep' into linux-next
+On 2023-09-27 21:37:25 +0200, Uwe Kleine-König wrote:
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is ignored (apart
+> from emitting a warning) and this typically results in resource leaks.
+> 
+> To improve here there is a quest to make the remove callback return
+> void. In the first step of this quest all drivers are converted to
+> .remove_new(), which already returns void. Eventually after all drivers
+> are converted, .remove_new() will be renamed to .remove().
+> 
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-elapsed time: 1463m
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-configs tested: 129
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20230927   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                   randconfig-001-20230928   gcc  
-arm64                            allmodconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20230928   gcc  
-i386         buildonly-randconfig-002-20230928   gcc  
-i386         buildonly-randconfig-003-20230928   gcc  
-i386         buildonly-randconfig-004-20230928   gcc  
-i386         buildonly-randconfig-005-20230928   gcc  
-i386         buildonly-randconfig-006-20230928   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20230928   gcc  
-i386                  randconfig-002-20230928   gcc  
-i386                  randconfig-003-20230928   gcc  
-i386                  randconfig-004-20230928   gcc  
-i386                  randconfig-005-20230928   gcc  
-i386                  randconfig-006-20230928   gcc  
-i386                  randconfig-011-20230928   gcc  
-i386                  randconfig-012-20230928   gcc  
-i386                  randconfig-013-20230928   gcc  
-i386                  randconfig-014-20230928   gcc  
-i386                  randconfig-015-20230928   gcc  
-i386                  randconfig-016-20230928   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20230927   gcc  
-loongarch             randconfig-001-20230928   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20230928   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20230928   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                 randconfig-001-20230928   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-001-20230928   gcc  
-x86_64       buildonly-randconfig-002-20230928   gcc  
-x86_64       buildonly-randconfig-003-20230928   gcc  
-x86_64       buildonly-randconfig-004-20230928   gcc  
-x86_64       buildonly-randconfig-005-20230928   gcc  
-x86_64       buildonly-randconfig-006-20230928   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20230928   gcc  
-x86_64                randconfig-002-20230928   gcc  
-x86_64                randconfig-003-20230928   gcc  
-x86_64                randconfig-004-20230928   gcc  
-x86_64                randconfig-005-20230928   gcc  
-x86_64                randconfig-006-20230928   gcc  
-x86_64                randconfig-011-20230928   gcc  
-x86_64                randconfig-012-20230928   gcc  
-x86_64                randconfig-013-20230928   gcc  
-x86_64                randconfig-014-20230928   gcc  
-x86_64                randconfig-015-20230928   gcc  
-x86_64                randconfig-016-20230928   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
+> ---
+>  drivers/thermal/rcar_gen3_thermal.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
+> index bd2fb8c2e968..cafcb6d6e235 100644
+> --- a/drivers/thermal/rcar_gen3_thermal.c
+> +++ b/drivers/thermal/rcar_gen3_thermal.c
+> @@ -432,14 +432,12 @@ static const struct of_device_id rcar_gen3_thermal_dt_ids[] = {
+>  };
+>  MODULE_DEVICE_TABLE(of, rcar_gen3_thermal_dt_ids);
+>  
+> -static int rcar_gen3_thermal_remove(struct platform_device *pdev)
+> +static void rcar_gen3_thermal_remove(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  
+>  	pm_runtime_put(dev);
+>  	pm_runtime_disable(dev);
+> -
+> -	return 0;
+>  }
+>  
+>  static void rcar_gen3_hwmon_action(void *data)
+> @@ -594,7 +592,7 @@ static struct platform_driver rcar_gen3_thermal_driver = {
+>  		.of_match_table = rcar_gen3_thermal_dt_ids,
+>  	},
+>  	.probe		= rcar_gen3_thermal_probe,
+> -	.remove		= rcar_gen3_thermal_remove,
+> +	.remove_new	= rcar_gen3_thermal_remove,
+>  };
+>  module_platform_driver(rcar_gen3_thermal_driver);
+>  
+> -- 
+> 2.40.1
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kind Regards,
+Niklas Söderlund
