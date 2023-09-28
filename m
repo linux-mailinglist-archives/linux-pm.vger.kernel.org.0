@@ -2,180 +2,177 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 813A27B11FE
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Sep 2023 07:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C88E7B1281
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Sep 2023 08:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbjI1FXs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Sep 2023 01:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
+        id S230250AbjI1GQA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Sep 2023 02:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjI1FXs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 01:23:48 -0400
-Received: from smtp.smtpout.orange.fr (smtp-17.smtpout.orange.fr [80.12.242.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44807BF
-        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 22:23:45 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id ljUtq9EaLa6PDljUtqdzVs; Thu, 28 Sep 2023 07:23:43 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1695878623;
-        bh=K5LYNUETcp0qOAJpxVYNrqfYgPjTj2D48kgaIAy23YY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=YUSISq9Cl/SHiLrMnGRgXt+HQoS/XFHpvOinBwhI22S0oSSdgX/T4VroXIp0CjlKC
-         CVyQhT1BdBQgkobw8JuPpeTsNJ+/AzBDCbIUtGQv/2dx76g61Mvk9XvVNYOWcA6JBJ
-         fTFZsbpJ976wxWKyWlQbvE+piOv1hu3QX7FVV82I3KW8ajUJDrX2OoFhsmSvlDqdtD
-         wpq5NnjxUe0MhnoSEhwH/R0/iKC1qZsR0yQm9EG4dx8B9rBOEvwTGIAcyrVvRASiII
-         kbHFtbz0YDCbieuosQBpbB00+UqVlSiWNvqfpm+aRLcTSsPB7Ml2eRLv5u2Uj3GOeo
-         CutG4094UGBGw==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 28 Sep 2023 07:23:43 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <89351ef6-ab81-c679-4432-cc44de9a91f1@wanadoo.fr>
-Date:   Thu, 28 Sep 2023 07:23:35 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH 3/5] power: supply: rt5033_charger: fix missing unlock
-Content-Language: fr
-To:     Jakob Hauser <jahau@rocketmail.com>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     Lee Jones <lee@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S229453AbjI1GP7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 02:15:59 -0400
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E66699
+        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 23:15:57 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qlkIf-0005M7-3R; Thu, 28 Sep 2023 08:15:01 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qlkIT-009W0C-Oq; Thu, 28 Sep 2023 08:14:49 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qlkIT-005Ytu-DX; Thu, 28 Sep 2023 08:14:49 +0200
+Date:   Thu, 28 Sep 2023 08:14:49 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Nishanth Menon <nm@ti.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        linux-tegra@vger.kernel.org,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-riscv@lists.infradead.org,
+        Karol Gugala <kgugala@antmicro.com>,
+        Qiang Zhao <qiang.zhao@nxp.com>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Rob Herring <robh@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        Ruan Jinjie <ruanjinjie@huawei.com>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        linux-rockchip@lists.infradead.org,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Huisong Li <lihuisong@huawei.com>,
+        Joel Stanley <joel@jms.id.au>, Sumit Gupta <sumitg@nvidia.com>,
+        "zhang.songyi" <zhang.songyi@zte.com.cn>,
+        Zev Weiss <zev@bewilderbeest.net>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
         Yang Yingliang <yangyingliang@huawei.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Henrik Grimler <henrik@grimler.se>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <cover.1695844349.git.jahau@rocketmail.com>
- <e437e728317b6a2a860f7812f64a98146a27965e.1695844349.git.jahau@rocketmail.com>
-From:   Marion & Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <e437e728317b6a2a860f7812f64a98146a27965e.1695844349.git.jahau@rocketmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Krzysztof Halasa <khalasa@piap.pl>, loongarch@lists.linux.dev,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Michal Simek <michal.simek@amd.com>,
+        linux-arm-kernel@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        linux-kernel@vger.kernel.org,
+        Shang XiaoJing <shangxiaojing@huawei.com>,
+        Leo Li <leoyang.li@nxp.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-mediatek@lists.infradead.org,
+        Nick Alcock <nick.alcock@oracle.com>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 00/40] soc: Convert to platform remove callback returning
+ void
+Message-ID: <20230928061449.xxqhyyrg6e357dn2@pengutronix.de>
+References: <20230925095532.1984344-1-u.kleine-koenig@pengutronix.de>
+ <CACPK8XeROYz_XaB3TvUhdXm7Vm8fjC8yU+mfvA58=_FiDrBy-g@mail.gmail.com>
+ <1b2fddf8-c0a6-4afa-8ad0-f280dea1607f@app.fastmail.com>
+ <f4hvrslynlgmxu4a2gogc5idvumskhaalxgwildy56yqk2wz7d@lkh4swkv52mi>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yfll6esgccshw4fu"
+Content-Disposition: inline
+In-Reply-To: <f4hvrslynlgmxu4a2gogc5idvumskhaalxgwildy56yqk2wz7d@lkh4swkv52mi>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Ok, but why not already in patch #1?
 
-CJ
+--yfll6esgccshw4fu
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Sep 27, 2023 at 04:01:58PM -0700, Bjorn Andersson wrote:
+> On Wed, Sep 27, 2023 at 10:43:16AM +0200, Arnd Bergmann wrote:
+> > On Wed, Sep 27, 2023, at 04:25, Joel Stanley wrote:
+> > > On Mon, 25 Sept 2023 at 09:55, Uwe Kleine-K=F6nig <u.kleine-koenig@pe=
+ngutronix.de> wrote:
+> > >>
+> > >> this series converts all platform drivers below drivers/soc to use
+> > >> .remove_new(). The motivation is to get rid of an integer return code
+> > >> that is (mostly) ignored by the platform driver core and error prone=
+ on
+> > >> the driver side.
+> > >>
+> > >> See commit 5c5a7680e67b ("platform: Provide a remove callback that
+> > >> returns no value") for an extended explanation and the eventual goal.
+> > >>
+> > >> As there is no single maintainer team for drivers/soc, I suggest the
+> > >> individual maintainers to pick up "their" patches.
+> > >
+> > > I'd be happy if Arnd merged the lot at once. Arnd, what do you think?
+> > >
+> > > If that will be too messy then I understand. I have queued the aspeed
+> > > ones locally and will push that out if we decide that's the best way
+> > > to go.
+> >=20
+> > The main downside of merging it all at once through the soc tree
+> > is that there may be patches that conflict with other work going on
+> > in individual drivers.
+> >=20
+> > What I'd suggest doing here is:
+> >=20
+> > - have platform maintainers pick up patches for their drivers
+> >   if that is their preference for any reason
+>=20
+> I'd prefer this for the qcom drivers at least, please let me know if you
+> would like me to proceed.
 
-Le 27/09/2023 à 22:26, Jakob Hauser a écrit :
-> From: Yang Yingliang <yangyingliang@huawei.com>
->
-> Fix missing mutex_unlock() in some error path.
->
-> Fixes: 12cc585f36b8 ("power: supply: rt5033_charger: Add cable detection and USB OTG supply")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
-> ---
->   drivers/power/supply/rt5033_charger.c | 28 ++++++++++++++++++---------
->   1 file changed, 19 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/power/supply/rt5033_charger.c b/drivers/power/supply/rt5033_charger.c
-> index 2c2073b8979d..091ca4a21f29 100644
-> --- a/drivers/power/supply/rt5033_charger.c
-> +++ b/drivers/power/supply/rt5033_charger.c
-> @@ -361,7 +361,8 @@ static int rt5033_charger_set_otg(struct rt5033_charger *charger)
->   			0x37 << RT5033_CHGCTRL2_CV_SHIFT);
->   	if (ret) {
->   		dev_err(charger->dev, "Failed set OTG boost v_out\n");
-> -		return -EINVAL;
-> +		ret = -EINVAL;
-> +		goto out_unlock;
->   	}
->   
->   	/* Set operation mode to OTG */
-> @@ -369,7 +370,8 @@ static int rt5033_charger_set_otg(struct rt5033_charger *charger)
->   			RT5033_CHGCTRL1_MODE_MASK, RT5033_BOOST_MODE);
->   	if (ret) {
->   		dev_err(charger->dev, "Failed to update OTG mode.\n");
-> -		return -EINVAL;
-> +		ret = -EINVAL;
-> +		goto out_unlock;
->   	}
->   
->   	/* In case someone switched from charging to OTG directly */
-> @@ -378,9 +380,10 @@ static int rt5033_charger_set_otg(struct rt5033_charger *charger)
->   
->   	charger->otg = true;
->   
-> +out_unlock:
->   	mutex_unlock(&charger->lock);
->   
-> -	return 0;
-> +	return ret;
->   }
->   
->   static int rt5033_charger_unset_otg(struct rt5033_charger *charger)
-> @@ -420,8 +423,10 @@ static int rt5033_charger_set_charging(struct rt5033_charger *charger)
->   	/* In case someone switched from OTG to charging directly */
->   	if (charger->otg) {
->   		ret = rt5033_charger_unset_otg(charger);
-> -		if (ret)
-> +		if (ret) {
-> +			mutex_unlock(&charger->lock);
->   			return -EINVAL;
-> +		}
->   	}
->   
->   	charger->online = true;
-> @@ -448,6 +453,7 @@ static int rt5033_charger_set_mivr(struct rt5033_charger *charger)
->   			RT5033_CHGCTRL4_MIVR_MASK, RT5033_CHARGER_MIVR_4600MV);
->   	if (ret) {
->   		dev_err(charger->dev, "Failed to set MIVR level.\n");
-> +		mutex_unlock(&charger->lock);
->   		return -EINVAL;
->   	}
->   
-> @@ -463,7 +469,7 @@ static int rt5033_charger_set_mivr(struct rt5033_charger *charger)
->   
->   static int rt5033_charger_set_disconnect(struct rt5033_charger *charger)
->   {
-> -	int ret;
-> +	int ret = 0;
->   
->   	mutex_lock(&charger->lock);
->   
-> @@ -475,7 +481,8 @@ static int rt5033_charger_set_disconnect(struct rt5033_charger *charger)
->   				RT5033_CHARGER_MIVR_DISABLE);
->   		if (ret) {
->   			dev_err(charger->dev, "Failed to disable MIVR.\n");
-> -			return -EINVAL;
-> +			ret = -EINVAL;
-> +			goto out_unlock;
->   		}
->   
->   		charger->mivr_enabled = false;
-> @@ -483,16 +490,19 @@ static int rt5033_charger_set_disconnect(struct rt5033_charger *charger)
->   
->   	if (charger->otg) {
->   		ret = rt5033_charger_unset_otg(charger);
-> -		if (ret)
-> -			return -EINVAL;
-> +		if (ret) {
-> +			ret = -EINVAL;
-> +			goto out_unlock;
-> +		}
->   	}
->   
->   	if (charger->online)
->   		charger->online = false;
->   
-> +out_unlock:
->   	mutex_unlock(&charger->lock);
->   
-> -	return 0;
-> +	return ret;
->   }
->   
->   static enum power_supply_property rt5033_charger_props[] = {
+I can send a pull request as Arnd suggested. So iff you want the qcom
+drivers not be a part of that PR, just make sure they appear in next
+during the next week. :-)
+
+(I'm not sure if "this" in your last quoted sentence is "platform
+maintainers pick up" or "merging it all at once through the soc tree". I
+think you mean the former. Still if you don't want me to pick up the
+qcom patches and won't manage to make them appear in next via your tree,
+I ask you to tell me explicitly to skip these in my PR.)
+
+Best regards and thanks,
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--yfll6esgccshw4fu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmUVGdgACgkQj4D7WH0S
+/k4H8ggAlzMNhL51l548JwUtvGIKaakJoHBLPcGIj/hsCvofuN0HLiMSEtj8Dg6K
+8y1eWVR1Yl+MqkggqjwkOCCy2eX7GYvKXYBRynjaryEtuaE5wSH09zlTWvWBc/ac
+XaBPBsvT6wrBDQBNG9hy4EuMwz7hTRZqp6r0nJV4SSrnor+Lh3EgudImNy82xdmh
+qewYGPdP1R2M1dIIvRSxcLGWHQike9Rti3B8LNTQOTOKB4RrnNfwmPZAk+6LSRAW
+ArlW9S66AzVOe1E5gY70pi4VTQ8AmegEFPOJf3ZqPVAr5s/FYfmxf7GUUM/j/BMh
+7vHOjZMrtO+JkBW/lzWwgV6oKIHgtA==
+=TaoJ
+-----END PGP SIGNATURE-----
+
+--yfll6esgccshw4fu--
