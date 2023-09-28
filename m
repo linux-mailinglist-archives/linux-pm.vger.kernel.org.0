@@ -2,51 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B51AB7B28E4
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 01:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 493F97B2818
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 00:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjI1Xi4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Sep 2023 19:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48018 "EHLO
+        id S231689AbjI1WFJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Sep 2023 18:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjI1Xi4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 19:38:56 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9AB195;
-        Thu, 28 Sep 2023 16:38:54 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B0CEC433C8;
-        Thu, 28 Sep 2023 23:38:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695944333;
-        bh=eWU967jREmjZE4MCqLTeXdTZLBzl8v3/op7N9RLiY+E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kfM4lHBOYywiUs1pSsJD72kDGGNfgjYh2nlEYO/Hn5nbeITF+6qyQUmtAbQcdYbW7
-         XdcdgETTEEoPg5c7zOshcCcA3jjeEg0W42+ivpFGnbDL40OIEEX1Jz68enbD/EHZwD
-         RnOffNJf0bvf2KHzcbwjA0smxFXx3yBpoY+mSmvg7UV/ExaKyFc6OWEkCcIuhvqd8l
-         30jSqINA6zVSQRvGDH8ig9BH+FfxTNwl9ifdO3ab+M7zojCxUMxVS0p/yj5tOsI5oe
-         Hu/ZEI00ZJKeyi47AGEQIqf31w7d0vpcuPo5jC331mPR61a+4nbYZv67g/uH/SxXam
-         GdQWaV5q66dFw==
-Received: by mercury (Postfix, from userid 1000)
-        id C06C9106058E; Thu, 28 Sep 2023 15:38:14 +0200 (CEST)
-Date:   Thu, 28 Sep 2023 15:38:14 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Johan Hovold <johan@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] power: supply: qcom_battmgr: fix battery_id type
-Message-ID: <20230928133814.szn5dd4gzshmccia@mercury.elektranox.org>
-References: <20230919124222.1155894-1-sebastian.reichel@collabora.com>
+        with ESMTP id S230325AbjI1WFJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 18:05:09 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D43D199
+        for <linux-pm@vger.kernel.org>; Thu, 28 Sep 2023 15:05:07 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-405621baba7so107440355e9.0
+        for <linux-pm@vger.kernel.org>; Thu, 28 Sep 2023 15:05:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1695938706; x=1696543506; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ArDC+M/Fj9/rymDfPmXsJ4SDmxJk6crmGXVQHrpZfh4=;
+        b=KxgUIrtyjEy7/g8YMcZVf/n0F/JCfovtnretUayc4SYLldBYJCbnnCceGqxPW/Miqd
+         3RNI63iJQc5VimmYYqwCDEsdKQxKVnN/6QANip7pWG00xbep1l+a5N2e9qFIjxFyyYSc
+         5jsZeISsVmiRHZb7j0a1IHi+GgdGoo3eBeBhxOdiXXu9zRINyzx/RRHKanuIr+wLg/+8
+         yB/SEiIKcU3AiDB4vnhkSYPcVm+ioXrXqAry3IYMrEv+SiZeZUi4q3YdXco6N5AUaWZu
+         us0LIvUOAmRQTF7EqKvTCF917s0s1fFO7x6+tppraeDlko7B2F1vHskMxYOLsukkOY1J
+         jUFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695938706; x=1696543506;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ArDC+M/Fj9/rymDfPmXsJ4SDmxJk6crmGXVQHrpZfh4=;
+        b=vUY/22M5ajtHlDiQ96ToFyZ4XgmphRAHTeuo4TYACZXec3PPYNenAeNpJex8As6A5t
+         apmw8HPEK4zk955C35xJv9OKzOStvLT9cIhYUiS43aEt96AbxWD1FxjcrzbSc7nvTEBZ
+         tQuphAnsxgSgVGFNyB9rWUnYvXby7O/5rEcJLfB92KBwx+mPfZbNTiwlzAfZI+EAOI8l
+         u8SQy9ZITckkmudhnka9zYOlg4HYF5QFVfG5uWniqoVT5mdwJ00o0DE65eXiJNe7j/Tv
+         FYUTPqZZrlEt7pfdJWn4tQY+o3pZSpDjsOnKX28A+hPcOyguaDXZLiT9j3glmyVT4BZ6
+         cUug==
+X-Gm-Message-State: AOJu0YzXfas4eRttDpWJHVr1R8AF35pyzAcSthCDAEYVR82qTizsj1Kt
+        yRmyVdup9QqSFl4yAeH0kKReZA==
+X-Google-Smtp-Source: AGHT+IHU/EtVhwXCw30fq3cDxe4k2xBSQJzSV11vdm9krtEtk8XG/afGLewXVtCXSrWuuq7tQZnVaw==
+X-Received: by 2002:a05:600c:ad3:b0:402:e68f:888c with SMTP id c19-20020a05600c0ad300b00402e68f888cmr2387507wmr.7.1695938705848;
+        Thu, 28 Sep 2023 15:05:05 -0700 (PDT)
+Received: from airbuntu (host109-151-228-137.range109-151.btcentralplus.com. [109.151.228.137])
+        by smtp.gmail.com with ESMTPSA id m5-20020a05600c280500b0040535648639sm74825wmb.36.2023.09.28.15.05.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Sep 2023 15:05:05 -0700 (PDT)
+Date:   Thu, 28 Sep 2023 23:05:04 +0100
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Subject: Re: [PATCH 2/4] sched: cpufreq: Fix apply_dvfs_headroom() escaping
+ uclamp constraints
+Message-ID: <20230928220504.gcft523kvt5jlfoi@airbuntu>
+References: <20230829163740.uadhv2jfjuumqk3w@airbuntu>
+ <CAKfTPtCP6uX79dOrzN4PxFTMBFrDAMOOrWyZrsVypUQ0RY7BAA@mail.gmail.com>
+ <20230907215555.exjxho34ntkjmn6r@airbuntu>
+ <CAKfTPtA8Ljy4NBqjw8Wj4pEFc-OCR55QPuwh+5GgrHN6u+ugsg@mail.gmail.com>
+ <20230910174638.qe7jqq6mq36brh6o@airbuntu>
+ <CAKfTPtBFAXO=CgqSJ1+y=2ppb5t4oErCtvV336fS6J2nSjBCkQ@mail.gmail.com>
+ <20230916192509.bportepj7dbgp6ro@airbuntu>
+ <CAKfTPtA5JqNCauG-rP3wGfq+p8EEVx9Tvwj6ksM3SYCwRmfCTg@mail.gmail.com>
+ <20230924172301.7lqdcsnpqk7trtno@airbuntu>
+ <ZRW86K0Y1ECd4NRG@vingu-book>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jpqm2iodkegz3nb3"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230919124222.1155894-1-sebastian.reichel@collabora.com>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <ZRW86K0Y1ECd4NRG@vingu-book>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,66 +84,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 09/28/23 19:50, Vincent Guittot wrote:
 
---jpqm2iodkegz3nb3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> > 
+> > Yep, absolutely. It seems we agree that CFS shouldn't go above 800 if it is
+> > capped even if there's headroom, but the question you have on the way it is
+> 
+> At least I want to ensure that cpufreq has the right information to make a
+> smart decision. In the example above, it's not needed to go above 800 for
+> neither cfs nor irq.
 
-+cc Johan Hovold who gave away that he is involved with this at
-Kernel Recipes :)
+Okay you want to do even bigger rework :-) I thought I might have pushed some
+boundary with the rework I had in mind hehe.
 
-On Tue, Sep 19, 2023 at 02:42:22PM +0200, Sebastian Reichel wrote:
-> qcom_battmgr_update_request.battery_id is written to using cpu_to_le32()
-> and should be of type __le32, just like all other 32bit integer requests
-> for qcom_battmgr.
->=20
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202309162149.4owm9iXc-lkp@i=
-ntel.com/
-> Fixes: 29e8142b5623 ("power: supply: Introduce Qualcomm PMIC GLINK power =
-supply")
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->  drivers/power/supply/qcom_battmgr.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/q=
-com_battmgr.c
-> index de77df97b3a4..a05fd00711f6 100644
-> --- a/drivers/power/supply/qcom_battmgr.c
-> +++ b/drivers/power/supply/qcom_battmgr.c
-> @@ -105,7 +105,7 @@ struct qcom_battmgr_property_request {
-> =20
->  struct qcom_battmgr_update_request {
->  	struct pmic_glink_hdr hdr;
-> -	u32 battery_id;
-> +	__le32 battery_id;
->  };
-> =20
->  struct qcom_battmgr_charge_time_request {
-> --=20
-> 2.40.1
->=20
+> I'm not in favor of showing all details to cpufreq because it will have to
+> follow the internal changes. In instead, I was thinking of something like:
+> 
+> /* Function name to be changed */
+> unsigned_long effective_cpu_util(int cpu, unsigned int *min, unsigned int *max)
+> 
+> The function returns the actual utilization of the CPU and some minimum and
+> maximum limits with the possibility to have the min and/or Actual values > Max
+> because the min would be a hard minimum value whereas max only a soft maximum
+> value.
+> 
+> Min would be the minimum perf to provide to the cpu : typically DL_bw + irq
+> Actual would be the actual utilization of the cpu: cfs+rt+dl+irq (after scaling
+>   everything in the normal range)
+> Max would be the maximum needed performance for normal work: typically the
+> minimum between uclamp and capacity
+> 
+> Then cpufreq can use these 3 values to compute a performance level and it 
+> will know up to which perf level it should go and if it is worth it.
+> Something likr:
 
---jpqm2iodkegz3nb3
-Content-Type: application/pgp-signature; name="signature.asc"
+Okay thanks! I think I have better clarity now. Let me try to rework the
+patches.
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmUVgb8ACgkQ2O7X88g7
-+prwdhAAoPJP/kxvYglc2zIyjQTXI/AExR3u3+o47C9YvdKmXIQOiosSNdIs+a//
-BvpjDsFrTx32MCX4koS+KGSO1f64xepggcCzddr/Kp/URu0oc7zcx2560YC9IRrT
-ioFr3PT3+OZXbcA2KxT4m2emAcr0tANrQL6ri2BO5O59U5lVOEMZCIUE5Mef6wIC
-0VdBZwxlthYKEdFJiLW5bvWK5tm+U7nhimTWCX84/5jTvOXYXId7RY1oZjh3I0LV
-bOC6Ah0bVbF5nJ+tlA5kDHzFeRqsOhyxURxejasWqq9IrvYooOe0bKPwGRyEmATe
-qPewgJMwK/4ki0YIPVWsNTUTKf8gRw+7e2RmX0WJX/5Vf6/U5mMZNXhK6OQ9G8PU
-OiihKwvTlFToYadhXUSAl8iMP24047AUy1KTTA23FKB7uvUxryg6ylW2K1FndmV+
-WZxJZlJ2c+Gj8Z5FC8/LFV3OnCxfh9kyVdu8n8UoMGs+UNQ4VZnfC1ZkluskQEcO
-EfDQunn3u1xS9sPRcF7tdKF3rW7sDJHp7WObe+AiVkOmxUrFU45AwaE3NFp7OmFN
-tbNbEHMGJXmU1rsuhO7BNogLltx1eXjQstPkSMkOAjaprs5FXaKXQVOflQVohwjv
-b5M7LGGcJQBBaViH+xs16eSTlUg08RobdGZZjW1AcddVAzRv1gQ=
-=qDg+
------END PGP SIGNATURE-----
+Cheers
 
---jpqm2iodkegz3nb3--
+--
+Qais Yousef
