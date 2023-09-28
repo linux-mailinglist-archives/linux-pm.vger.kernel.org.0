@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48AE57B14BA
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Sep 2023 09:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2784D7B14C7
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Sep 2023 09:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230358AbjI1HYY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Sep 2023 03:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
+        id S230355AbjI1H0F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Sep 2023 03:26:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbjI1HYY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 03:24:24 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E36995
-        for <linux-pm@vger.kernel.org>; Thu, 28 Sep 2023 00:24:22 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-40651a726acso3157325e9.1
-        for <linux-pm@vger.kernel.org>; Thu, 28 Sep 2023 00:24:22 -0700 (PDT)
+        with ESMTP id S229835AbjI1H0E (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 03:26:04 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6D0F9
+        for <linux-pm@vger.kernel.org>; Thu, 28 Sep 2023 00:26:00 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-3231d67aff2so8975205f8f.0
+        for <linux-pm@vger.kernel.org>; Thu, 28 Sep 2023 00:26:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695885860; x=1696490660; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1695885959; x=1696490759; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=+UA9uHWWeYBOdu4MsloFMHQ1l07sPdcS1vaYRXSvUR8=;
-        b=HcKSu2ffDMyf2m/+ZhRD5BKwWRMUnWt3xkFekzABD2LT9XhxMBDlg2E35GXOtsD1mq
-         lR/zYCnbMIeVczvaAz9U2bqgQh+HFyP6z64V3oULZTC2BPjou/pFILeE6cPp/yAnnjnT
-         rcDuXLnSqgOVJOubhK4oC84xKZcImgpZiuzYdJwBsRGIFGED1AUKHiYgLwMpEDveYzMm
-         eocladxAXfHAcHhJzUbN28tUmofGJjOM3hKfqMy978uCsy2RnZFaBvecYH2T/d4H4MXB
-         kKOZ9Ga5XBLGXv7eTOR+O+sytiL0HifPLVWebo0uspYuTSCD8UAuIKC0KANTd03ibWg+
-         Te5A==
+        bh=T1zwWE6Tost6V2Eimgm6IgNYAgd+hKcAiIDviQJCo6E=;
+        b=hBEO0Qf35J+tTJgnRfqtX/HxPN3UIK5PP3YarmZBEUgw+X0Pg0dkhStX7gy46PkcEG
+         2ic5SZok8tGlsq11+0Mq5W7GijQawVmQ2AVXq8kIkKkCDqndMOlnV2me6E4sXrFbA3BO
+         WknLNgm+OghhsD5KGBuPG00uVGDpwTMPEs5GCTbXggX5goVVCK5OXHLweB9jGd9FCM9T
+         kw+pHPxLYWJ0YE0iXss5y3JTapAl4EeGxS0CofFAauFSmPW9QMQ1pC0G7asL7SIuZ99h
+         POzVD1czZgOJKiOcR5XbE2zTyipmweOb9xujeAvhUwh1gCLjAtf+yaws5ZjEni7Mr3Y8
+         EcwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695885860; x=1696490660;
+        d=1e100.net; s=20230601; t=1695885959; x=1696490759;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+UA9uHWWeYBOdu4MsloFMHQ1l07sPdcS1vaYRXSvUR8=;
-        b=pVPByx+E7q+JHdOFG5572WZhlyVVPeunhA5iBl2nYX18wqJnyd3CpsvXcdv0eaPLmk
-         Fm84KFwq1mxULWcP8CZGqFxrwsWnbVGD5AfnnDzIqRlauSGsxlfRYuI2+MLcIovFh4Id
-         n9wsazGZRIFN7NNVMjETWndFP9f6BZTMoh5FzwKsLUNlG38s0LkPyhcFlUO1WwjDM/cp
-         Ob5hVG4IdQK9+7x7R3vURfU8iAsUo9jVv7upfbtjXTJod7a1+W42Cb76XXZ+240PouGE
-         ql1cVuzpRVn2gjOJfbMaYQx6w8+J72Yms+CjFqd2b0AZKwIoqnoxaKsWTOV3ewR+um/2
-         Ib6g==
-X-Gm-Message-State: AOJu0YzyY11EYtSgBvwn+zHd4zbOsnlyeeK93AbcEiVINXXpJJ9FEm2J
-        +4d4/zmd32f+Lu1+JEOoK/YHfA==
-X-Google-Smtp-Source: AGHT+IEcIlXAmdvv9WcCA53AfD+QpBf5eGEwdf+8z26e7iBPCWPvls3jal7oS+TqSFQzP2rJYRmDnQ==
-X-Received: by 2002:a1c:6a09:0:b0:401:b76d:3b8b with SMTP id f9-20020a1c6a09000000b00401b76d3b8bmr406862wmc.16.1695885860422;
-        Thu, 28 Sep 2023 00:24:20 -0700 (PDT)
+        bh=T1zwWE6Tost6V2Eimgm6IgNYAgd+hKcAiIDviQJCo6E=;
+        b=UQEwB6N6xatsVcnJlDBCmfEex5mAAsDHQoH03m+7orJYbkbk1jHGhBiRSBIuxdwH8r
+         sD6dx4cplOTTbqXPa8/OqvGzutfn0OYMYDvyl1dvoHGB8ZIB+1GnPHVAQ3OW9s9bpNEI
+         /tMGyQK713mMdg9WZXYeDFCw6wTyJuY0gk38N92X05jL4ordaG9TsjIrixQsVMLcbUHr
+         ImP2ya8tnOc0+5+I7Av+heHtp4jchfpPFk0q2NIoR7SyFtpd5uSfYVjfdJcoWYTCfY0U
+         MN4EvhobFHeelhWjTdopjLG7IG3VfmygxYI38pmzvBQ7saUSd1VynhQIZssTxZnCqeNH
+         TlyA==
+X-Gm-Message-State: AOJu0Ywd3Xd8i/0ck5Ov4i0DpS2H9xlg1eIcLzPZtLPrer9PoLy6KGOC
+        Z5yIYlqKItCMM9k3WLT7Agv/0m/2PcIfY0KwxyQ=
+X-Google-Smtp-Source: AGHT+IHtrtemWZL7OawPII6sSb2oZ6RkKjIwpNwqwDPXFEsITB3M9/Sz3GFCs24Sxx/kqqIzQZV2Ig==
+X-Received: by 2002:adf:d0cc:0:b0:31d:da10:e471 with SMTP id z12-20020adfd0cc000000b0031dda10e471mr436228wrh.69.1695885958905;
+        Thu, 28 Sep 2023 00:25:58 -0700 (PDT)
 Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
-        by smtp.googlemail.com with ESMTPSA id u17-20020a05600c00d100b00405935b417asm9400467wmm.2.2023.09.28.00.24.19
+        by smtp.googlemail.com with ESMTPSA id w10-20020adfd4ca000000b0031762e89f94sm18629720wrk.117.2023.09.28.00.25.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Sep 2023 00:24:20 -0700 (PDT)
-Message-ID: <87dd2af9-ea1f-7995-2b3b-eaed356c659e@linaro.org>
-Date:   Thu, 28 Sep 2023 09:24:19 +0200
+        Thu, 28 Sep 2023 00:25:58 -0700 (PDT)
+Message-ID: <ca521ece-41b6-294a-81bd-eaf54a901335@linaro.org>
+Date:   Thu, 28 Sep 2023 09:25:57 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH v1 11/13] ACPI: thermal: Do not use trip indices for
- cooling device binding
+Subject: Re: [PATCH v1 12/13] ACPI: thermal: Drop critical_valid and hot_valid
+ trip flags
 Content-Language: en-US
 To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Linux PM <linux-pm@vger.kernel.org>
@@ -65,9 +65,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Lukasz Luba <lukasz.luba@arm.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>
-References: <1957441.PYKUYFuaPT@kreacher> <113039009.nniJfEyVGO@kreacher>
+References: <1957441.PYKUYFuaPT@kreacher> <2375603.NG923GbCHz@kreacher>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <113039009.nniJfEyVGO@kreacher>
+In-Reply-To: <2375603.NG923GbCHz@kreacher>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,17 +79,16 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21/09/2023 20:02, Rafael J. Wysocki wrote:
+On 21/09/2023 20:04, Rafael J. Wysocki wrote:
 > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Rearrange the ACPI thermal driver's callback functions used for cooling
-> device binding and unbinding, acpi_thermal_bind_cooling_device() and
-> acpi_thermal_unbind_cooling_device(), respectively, so that they use trip
-> pointers instead of trip indices which is more straightforward and allows
-> the driver to become independent of the ordering of trips in the thermal
-> zone structure.
+> The critical_valid and hot_valid flags in struct acpi_thermal_trips are
+> only used during initialization and they are only false if the
+> corresponding trip temperatures are equal to THERMAL_TEMP_INVALID, so
+> drop them and use THERMAL_TEMP_INVALID checks instead of them where
+> applicable.
 > 
-> The general functionality is not expected to be changed.
+> No intentional functional impact.
 > 
 > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
