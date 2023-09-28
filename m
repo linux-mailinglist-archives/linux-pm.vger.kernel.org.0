@@ -2,96 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E8C67B138A
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Sep 2023 09:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2DE7B1451
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Sep 2023 09:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjI1HFv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Sep 2023 03:05:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
+        id S231339AbjI1HNb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Sep 2023 03:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbjI1HFu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 03:05:50 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C3EC0
-        for <linux-pm@vger.kernel.org>; Thu, 28 Sep 2023 00:05:49 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-6907e44665bso11311012b3a.1
-        for <linux-pm@vger.kernel.org>; Thu, 28 Sep 2023 00:05:49 -0700 (PDT)
+        with ESMTP id S231324AbjI1HNP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 03:13:15 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD9BCC4
+        for <linux-pm@vger.kernel.org>; Thu, 28 Sep 2023 00:10:30 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-40572aeb673so97571485e9.0
+        for <linux-pm@vger.kernel.org>; Thu, 28 Sep 2023 00:10:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695884748; x=1696489548; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qrlIZw5qja4JqqyR+qcaKYLNZ4ub2lqDzG6RTlB/DIQ=;
-        b=VXgfD9XaxeF/63XgRHFT/wxooGGjwigre/IKZ3thmGDBWqHMRj8WJbQZ+FJFMKrzRz
-         1xGgpJeL/3zgeH7cwGGfAEQ0tj6R8CDLy3aLQmOywDHM88lGZmNWpZv8Jbs/tWgRL+Fb
-         Scshc0vJcZQ7G1oFlkoFgV9mbd73ladCvyHws7+XZItsoNkkH8CJg8OXCCOs88kZrCqn
-         oVuSNMb4DNJ858GCovzDcO4wLQjyPeEZ79kYZ8msTytispHzsj/b9MRIr7K36DV+ENUO
-         cPrqJ4vgCY5/DS6A0dsZCn67isYWGdlgm8bMWBt5dVNGvMZIFFvm6G2Pn3kWs1lPD2Ak
-         3TtA==
+        d=linaro.org; s=google; t=1695885027; x=1696489827; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VkIBE+TCRLRjYetF+cyx1hJuGQDYf3kDYmaiNSOiVj8=;
+        b=ToJAxIDp6VFXWlWb9DUZLg5P7nRl9fmM4fKmYEhYvJCfiPil3rk7zNjn1yA8z1WpHc
+         gfT09oiqoHSOsb29kRx0tFs9gDqPCQ7PiR+S7rdgM/+BxJp7W+avKLgHFZ33STC14Q6Z
+         PVZZA/PTN6jS0DC/MCcjgEX5rkPK3YAwmkaT51xs03yu6MZKPxgtBx9mAK8G96voUFGd
+         tSAXJU6Pp8lswGLUf3f7Yhf2UQ+n2DEPz/6N5natsNnZvKF7+Sq7JGzAlJDvSs7bX+k7
+         O73fuvtNp0mNN666XKwMFE3zgV3GFG1JbkqHl3Tgyv6+4LnggB0CJ0rRTSKXpC1Hh7Vo
+         gkuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695884748; x=1696489548;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qrlIZw5qja4JqqyR+qcaKYLNZ4ub2lqDzG6RTlB/DIQ=;
-        b=QYopk8/XJwdDu5DnwEknA7b3jbfN0rYg0UXw4kaGXTI46nTMXRviaJNu1xb4SX1v6F
-         b8PNyHDNyBnEKUs6DCV0fQK3JTXZh67BsMDRqbywGgrw1MOGOUK5pDdpzqgdA2o20ioJ
-         +9iiwgYm7w7Z9V9KmqANIF54ejUx4IG5uFV3cp3RVlZ7DqueM0uxXq+Diz/x6vI7AVbc
-         fE+YyehLE0CIe+lsBAufQmmV+HEamHpJSXE1Xi0QbGQf/SSic7Iy6SDlcurBSac88SKi
-         MarH+04gOCa42h2KhUlPJ3kLY2Qy2bmsc0UzWVGHkbFgJQj8Tpy83BO6pg7YyFYQ+tBC
-         sb+w==
-X-Gm-Message-State: AOJu0YzU8ZBlNPdeLaYqWAu1EvV7UH74cdKGCHBmRHTXNLKMSLBhExdF
-        9bkTBY8QmJewCapM6OknzY8hIA==
-X-Google-Smtp-Source: AGHT+IFkhgWod0clEQ5v67I4kF7osyGMadaETWiWbfHAflJHTZy3NiF4g4a1a+48SnTo7y0HALWaTw==
-X-Received: by 2002:a05:6a00:22c6:b0:68a:59c6:c0a6 with SMTP id f6-20020a056a0022c600b0068a59c6c0a6mr472441pfj.24.1695884748490;
-        Thu, 28 Sep 2023 00:05:48 -0700 (PDT)
-Received: from localhost ([122.172.81.92])
-        by smtp.gmail.com with ESMTPSA id y19-20020aa78053000000b006889348ba6esm7162087pfm.127.2023.09.28.00.05.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Sep 2023 00:05:47 -0700 (PDT)
-Date:   Thu, 28 Sep 2023 12:35:45 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        treding@nvidia.com, jonathanh@nvidia.com, bbasu@nvidia.com,
-        amiettinen@nvidia.com
-Subject: Re: [Patch v2 1/2] cpufreq: tegra194: save CPU data to avoid
- repeated SMP calls
-Message-ID: <20230928070545.b7l367qi2q4rynji@vireshk-i7>
-References: <20230901164113.29139-1-sumitg@nvidia.com>
- <20230901164113.29139-2-sumitg@nvidia.com>
+        d=1e100.net; s=20230601; t=1695885027; x=1696489827;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VkIBE+TCRLRjYetF+cyx1hJuGQDYf3kDYmaiNSOiVj8=;
+        b=ua7xo4KOam1m8yxKuPzT1FuwAcPWpoTotuveF+p25fwhB/dBUKH7zxqzOb+hX2W3Rz
+         Zk2CzPAQZ+2aVYXBTzGGLjz7G5xAuv+m/mYlgpyXcLdc5TGgUmQAkrgKAZvFG1Y4zm9G
+         gizPVLfPPm2zAtRH1pxb+rh1efFfnE5zfG3NtodcyR6UkWn8Jq5sunPOEhFOuW521h2m
+         mggAiL9QPGloiPPPRt0wbZ84bhOJ4KZW5EIhAIZpJm/suCg+Km3aTCupwOOEOGs6G22s
+         jMUoky//Te0RkE17/hTJDmyOSsbm0orlLK6a9NX9PcdIJHbbbhAjHWKHkYW0GCjQvXbB
+         99sg==
+X-Gm-Message-State: AOJu0Yy+1B8IjiEI5NqCVe+8uHx6GKOHFLXYVvPKxP0fM/9DM51Lu+0Q
+        F6JS/e00cgk2oCURCNgNqi7fUA==
+X-Google-Smtp-Source: AGHT+IGNaZcVgF8TWexpbmorAxSeNepOwNaCRGtwfaC9auOLiO/MLnnmv7ZMk5XMR5I+ZC87mTNoRQ==
+X-Received: by 2002:a05:600c:b4e:b0:402:95a0:b2ae with SMTP id k14-20020a05600c0b4e00b0040295a0b2aemr405295wmr.32.1695885027206;
+        Thu, 28 Sep 2023 00:10:27 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
+        by smtp.googlemail.com with ESMTPSA id a24-20020a05600c225800b004063c9f68f2sm5664262wmm.26.2023.09.28.00.10.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Sep 2023 00:10:26 -0700 (PDT)
+Message-ID: <065636fa-e6ac-4fcb-5d78-b3f281ac4609@linaro.org>
+Date:   Thu, 28 Sep 2023 09:10:26 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230901164113.29139-2-sumitg@nvidia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v1 10/13] thermal: core: Allow trip pointers to be used
+ for cooling device binding
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+References: <1957441.PYKUYFuaPT@kreacher> <45837158.fMDQidcC6G@kreacher>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <45837158.fMDQidcC6G@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01-09-23, 22:11, Sumit Gupta wrote:
-> @@ -131,19 +132,10 @@ static int tegra234_get_cpu_ndiv(u32 cpu, u32 cpuid, u32 clusterid, u64 *ndiv)
->  static void tegra234_set_cpu_ndiv(struct cpufreq_policy *policy, u64 ndiv)
->  {
+On 21/09/2023 20:01, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Add new helper functions, thermal_bind_cdev_to_trip() and
+> thermal_unbind_cdev_from_trip(), to allow a trip pointer to be used for
+> binding a cooling device to a trip point and unbinding it, respectively,
+> and redefine the existing helpers, thermal_zone_bind_cooling_device()
+> and thermal_zone_unbind_cooling_device(), as wrappers around the new
+> ones, respectively.
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
 
-> +	for_each_cpu_and(cpu, policy->cpus, cpu_online_mask)
+Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-(Yes this is existing code, but ..) you don't need to perform AND with
-cpu_online_mask as policy->cpus should only contain currently online CPUs.
-
-Please check if you ever see it differently.
-
-> +	data->cpu_data = devm_kcalloc(&pdev->dev, data->soc->num_clusters *
-> +				      data->soc->maxcpus_per_cluster,
-> +				      sizeof(struct tegra_cpu_data), GFP_KERNEL);
-
-This should be: sizeof(*data->cpu_data) instead. Didn't checkpatch complain
-about it ?
 
 -- 
-viresh
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
