@@ -2,70 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA2BC7B27C1
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Sep 2023 23:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B51AB7B28E4
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 01:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231935AbjI1V4e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Sep 2023 17:56:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
+        id S229794AbjI1Xi4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Sep 2023 19:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231689AbjI1V4d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 17:56:33 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A434C199
-        for <linux-pm@vger.kernel.org>; Thu, 28 Sep 2023 14:56:31 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-40651a72807so12352595e9.1
-        for <linux-pm@vger.kernel.org>; Thu, 28 Sep 2023 14:56:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1695938190; x=1696542990; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZZ+JMo8V6Wz42802JHuPtu0Gp5ARsCgYfg45BA+tI/Y=;
-        b=0sB2IGOLjRg1hLzscJBhDhrIr1+NelfvTguJ8ITY4DhxQXiedFxClO0Vy1SvY46VDR
-         JU9J7hQyJy9Ar8QMlBOCnFBvpJBGEOuKr9Hecen1PGDly7R5iCZblRmKBnJTzSEiJB2I
-         ixOUmdySyQegyv9Hsb9qWSqzegndIyM7Ptc0wXsxT3rooyvUPshvmAvWEMNoKoEPpJgv
-         3vwDqR4MNvtRryBVsQ4XcJ3Qyd7qtaF442sB5Tj3HRtTLooQ9vxt94ZPai8RTuPzdFkL
-         pJX4l9fmBiJ94WCkXQ4FfgmEN/XccsN5iV0d658lt7pABkL14Tr7+GIs0LyXqgodtXJO
-         O8cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695938190; x=1696542990;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZZ+JMo8V6Wz42802JHuPtu0Gp5ARsCgYfg45BA+tI/Y=;
-        b=wa+UGoGtQ4sag0k1mYfjucKQawmmDmacWbaJBNcDsprlUOQgE8RttjYc7uIWR/vxty
-         IJjt/YP6NsVzKHfOTDrE9zDBLSfWvYsDP1WXhqkGmmTleI6saYa3mQiO8dPgGkiN+Hsv
-         JxLQaR7YjzNA+EovBPhei+UdjRN+m8O7mPGREkhzMNMfWQQ8j78sizbsyUFnbqgy0tQG
-         MkTvnHJg+WWLW0jryhz/6w6/L+xUwNUa9JCwVGXcJla+lEKUUPrMerpNXkNtp3C/CSZn
-         opatMQvIy5XP1mGbuN6dDl9xVo2vb0x2vRXVmDoFtFtan8TZF1FIzxAbTIH1iBucV/rW
-         XECg==
-X-Gm-Message-State: AOJu0Yz8RiMIn9YXbDEddlI4Xy4TenC5Ch24AXcip8x3OTBEmOl1Q50j
-        WcdaDV8XnoO9PXyfZgjDnBJ1rg==
-X-Google-Smtp-Source: AGHT+IFGAZs15eAB0nMhOS0SGwjaQr6z+YM1hrsVNfS7p5IbowMrlzFUDnG4zqCEElNL0h0Z752N2g==
-X-Received: by 2002:a5d:640d:0:b0:320:16b:167d with SMTP id z13-20020a5d640d000000b00320016b167dmr2398306wru.63.1695938190049;
-        Thu, 28 Sep 2023 14:56:30 -0700 (PDT)
-Received: from airbuntu (host109-151-228-137.range109-151.btcentralplus.com. [109.151.228.137])
-        by smtp.gmail.com with ESMTPSA id bt14-20020a056000080e00b003200c918c81sm13825072wrb.112.2023.09.28.14.56.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Sep 2023 14:56:29 -0700 (PDT)
-Date:   Thu, 28 Sep 2023 22:56:28 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rafael@kernel.org, dietmar.eggemann@arm.com, rui.zhang@intel.com,
-        amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
-        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
-        len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org,
-        wvw@google.com
-Subject: Re: [PATCH v4 00/18] Introduce runtime modifiable Energy Model
-Message-ID: <20230928215628.u53wmwlr6lm5qzpe@airbuntu>
-References: <20230925081139.1305766-1-lukasz.luba@arm.com>
+        with ESMTP id S229541AbjI1Xi4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 19:38:56 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9AB195;
+        Thu, 28 Sep 2023 16:38:54 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B0CEC433C8;
+        Thu, 28 Sep 2023 23:38:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695944333;
+        bh=eWU967jREmjZE4MCqLTeXdTZLBzl8v3/op7N9RLiY+E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kfM4lHBOYywiUs1pSsJD72kDGGNfgjYh2nlEYO/Hn5nbeITF+6qyQUmtAbQcdYbW7
+         XdcdgETTEEoPg5c7zOshcCcA3jjeEg0W42+ivpFGnbDL40OIEEX1Jz68enbD/EHZwD
+         RnOffNJf0bvf2KHzcbwjA0smxFXx3yBpoY+mSmvg7UV/ExaKyFc6OWEkCcIuhvqd8l
+         30jSqINA6zVSQRvGDH8ig9BH+FfxTNwl9ifdO3ab+M7zojCxUMxVS0p/yj5tOsI5oe
+         Hu/ZEI00ZJKeyi47AGEQIqf31w7d0vpcuPo5jC331mPR61a+4nbYZv67g/uH/SxXam
+         GdQWaV5q66dFw==
+Received: by mercury (Postfix, from userid 1000)
+        id C06C9106058E; Thu, 28 Sep 2023 15:38:14 +0200 (CEST)
+Date:   Thu, 28 Sep 2023 15:38:14 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Johan Hovold <johan@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] power: supply: qcom_battmgr: fix battery_id type
+Message-ID: <20230928133814.szn5dd4gzshmccia@mercury.elektranox.org>
+References: <20230919124222.1155894-1-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jpqm2iodkegz3nb3"
 Content-Disposition: inline
-In-Reply-To: <20230925081139.1305766-1-lukasz.luba@arm.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20230919124222.1155894-1-sebastian.reichel@collabora.com>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,32 +54,66 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Lukasz
 
-On 09/25/23 09:11, Lukasz Luba wrote:
-> Hi all,
-> 
-> This patch set adds a new feature which allows to modify Energy Model (EM)
-> power values at runtime. It will allow to better reflect power model of
-> a recent SoCs and silicon. Different characteristics of the power usage
-> can be leveraged and thus better decisions made during task placement in EAS.
-> 
-> It's part of feature set know as Dynamic Energy Model. It has been presented
-> and discussed recently at OSPM2023 [3]. This patch set implements the 1st
-> improvement for the EM.
+--jpqm2iodkegz3nb3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the series! I'm on CC this time :-) Unfortunately I have a planned
-holiday starting tomorrow, so won't get a chance to do proper review till I'm
-back which would be few weeks from now.
++cc Johan Hovold who gave away that he is involved with this at
+Kernel Recipes :)
 
-I just want to iterate that this is a real problem being seen in practice where
-it's hard to provide a single average EM for all workloads now. So we certainly
-need something like this.
+On Tue, Sep 19, 2023 at 02:42:22PM +0200, Sebastian Reichel wrote:
+> qcom_battmgr_update_request.battery_id is written to using cpu_to_le32()
+> and should be of type __le32, just like all other 32bit integer requests
+> for qcom_battmgr.
+>=20
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202309162149.4owm9iXc-lkp@i=
+ntel.com/
+> Fixes: 29e8142b5623 ("power: supply: Introduce Qualcomm PMIC GLINK power =
+supply")
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  drivers/power/supply/qcom_battmgr.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/q=
+com_battmgr.c
+> index de77df97b3a4..a05fd00711f6 100644
+> --- a/drivers/power/supply/qcom_battmgr.c
+> +++ b/drivers/power/supply/qcom_battmgr.c
+> @@ -105,7 +105,7 @@ struct qcom_battmgr_property_request {
+> =20
+>  struct qcom_battmgr_update_request {
+>  	struct pmic_glink_hdr hdr;
+> -	u32 battery_id;
+> +	__le32 battery_id;
+>  };
+> =20
+>  struct qcom_battmgr_charge_time_request {
+> --=20
+> 2.40.1
+>=20
 
-Hopefully I'll get a chance to help with review when I'm back from holidays.
+--jpqm2iodkegz3nb3
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-Thanks!
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmUVgb8ACgkQ2O7X88g7
++prwdhAAoPJP/kxvYglc2zIyjQTXI/AExR3u3+o47C9YvdKmXIQOiosSNdIs+a//
+BvpjDsFrTx32MCX4koS+KGSO1f64xepggcCzddr/Kp/URu0oc7zcx2560YC9IRrT
+ioFr3PT3+OZXbcA2KxT4m2emAcr0tANrQL6ri2BO5O59U5lVOEMZCIUE5Mef6wIC
+0VdBZwxlthYKEdFJiLW5bvWK5tm+U7nhimTWCX84/5jTvOXYXId7RY1oZjh3I0LV
+bOC6Ah0bVbF5nJ+tlA5kDHzFeRqsOhyxURxejasWqq9IrvYooOe0bKPwGRyEmATe
+qPewgJMwK/4ki0YIPVWsNTUTKf8gRw+7e2RmX0WJX/5Vf6/U5mMZNXhK6OQ9G8PU
+OiihKwvTlFToYadhXUSAl8iMP24047AUy1KTTA23FKB7uvUxryg6ylW2K1FndmV+
+WZxJZlJ2c+Gj8Z5FC8/LFV3OnCxfh9kyVdu8n8UoMGs+UNQ4VZnfC1ZkluskQEcO
+EfDQunn3u1xS9sPRcF7tdKF3rW7sDJHp7WObe+AiVkOmxUrFU45AwaE3NFp7OmFN
+tbNbEHMGJXmU1rsuhO7BNogLltx1eXjQstPkSMkOAjaprs5FXaKXQVOflQVohwjv
+b5M7LGGcJQBBaViH+xs16eSTlUg08RobdGZZjW1AcddVAzRv1gQ=
+=qDg+
+-----END PGP SIGNATURE-----
 
---
-Qais Yousef
+--jpqm2iodkegz3nb3--
