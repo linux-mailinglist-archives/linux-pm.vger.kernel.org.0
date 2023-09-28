@@ -2,177 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C88E7B1281
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Sep 2023 08:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DFF17B12FB
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Sep 2023 08:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjI1GQA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Sep 2023 02:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57950 "EHLO
+        id S230373AbjI1GcE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Sep 2023 02:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjI1GP7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 02:15:59 -0400
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E66699
-        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 23:15:57 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qlkIf-0005M7-3R; Thu, 28 Sep 2023 08:15:01 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qlkIT-009W0C-Oq; Thu, 28 Sep 2023 08:14:49 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qlkIT-005Ytu-DX; Thu, 28 Sep 2023 08:14:49 +0200
-Date:   Thu, 28 Sep 2023 08:14:49 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Nishanth Menon <nm@ti.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        linux-tegra@vger.kernel.org,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-riscv@lists.infradead.org,
-        Karol Gugala <kgugala@antmicro.com>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Rob Herring <robh@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        Ruan Jinjie <ruanjinjie@huawei.com>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        linux-rockchip@lists.infradead.org,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Huisong Li <lihuisong@huawei.com>,
-        Joel Stanley <joel@jms.id.au>, Sumit Gupta <sumitg@nvidia.com>,
-        "zhang.songyi" <zhang.songyi@zte.com.cn>,
-        Zev Weiss <zev@bewilderbeest.net>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Krzysztof Halasa <khalasa@piap.pl>, loongarch@lists.linux.dev,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Michal Simek <michal.simek@amd.com>,
-        linux-arm-kernel@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        linux-kernel@vger.kernel.org,
-        Shang XiaoJing <shangxiaojing@huawei.com>,
-        Leo Li <leoyang.li@nxp.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-mediatek@lists.infradead.org,
-        Nick Alcock <nick.alcock@oracle.com>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 00/40] soc: Convert to platform remove callback returning
- void
-Message-ID: <20230928061449.xxqhyyrg6e357dn2@pengutronix.de>
-References: <20230925095532.1984344-1-u.kleine-koenig@pengutronix.de>
- <CACPK8XeROYz_XaB3TvUhdXm7Vm8fjC8yU+mfvA58=_FiDrBy-g@mail.gmail.com>
- <1b2fddf8-c0a6-4afa-8ad0-f280dea1607f@app.fastmail.com>
- <f4hvrslynlgmxu4a2gogc5idvumskhaalxgwildy56yqk2wz7d@lkh4swkv52mi>
+        with ESMTP id S231479AbjI1Gbp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 02:31:45 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8FA1B0
+        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 23:31:39 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-690f7bf73ddso9874122b3a.2
+        for <linux-pm@vger.kernel.org>; Wed, 27 Sep 2023 23:31:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1695882699; x=1696487499; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CnNgEhksy6JyUenvntvdDf8qNAXSTU1fGqU1YXMs6HY=;
+        b=p6JyfmZW/E9b9JbqL4n/LHekaMK96HWSHN03sBbyPbL7Ft9ezDwL9Ug19gOB+TQJRB
+         KwJnHvBsAs1JGNQRgAVpvP10diFKM/PiKyg8d1vfUcEC/fwWhqgURFacyVih4GV1FL/7
+         0l8dtQ2jZ0W3ZbwMgehh4Syw11Dq33lB3J6k22grU5f0166V7VK0UPBAM0NjKVOEOfrW
+         rvFDkYWITkGLeqnYTzgw1SQHNGWm0u5Sy2UOv7MUWwrhVsSRDMFyhBWUUNaNGyMgPg8j
+         e1XokMLG4SquJQSGU1NVNW5vLFqkFiRiqlt9S4PfUTGsggarA8kAlfpDpq8wAVRtX0jJ
+         MNFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695882699; x=1696487499;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CnNgEhksy6JyUenvntvdDf8qNAXSTU1fGqU1YXMs6HY=;
+        b=PLE/aMJ97b7FV9tpq90RInqWuuGpIUWVXszkj6zkDOxgyC3g0qFMWYt2v23na+5adL
+         NgaK256P2vUxlx1UGhkfkGMWmc+tIL9QxiUVlDhqWWGA2yWabGR0ORIV96cOFZO1AxON
+         dxmlIOdDadnFcIYrL4CKr7T93flXID6mLFn95v8QmddybA+wF/9cCljoWUbPyoHqiiJy
+         rKDpoc5ViGT1uzZmWkT5axsE9jJe1bJdXfNzdfmIBcU6ADrKzC3jloFqiKOLKdag+BOS
+         Sl3eBuC0zrH8e9drhzXcSAMpxgkXjgZcIYlxVk0FbCntLbljoXxszx5TumTOAIYK7RFk
+         Nupg==
+X-Gm-Message-State: AOJu0YwWDH7Un6LjWx2w51eNkKIPyA5VfE0EFkKcA/w3ko5GlF8hzw5F
+        dHVxEenc+E+J2l4umcDmJk+bMw==
+X-Google-Smtp-Source: AGHT+IEJ7meKS5fzKsPZ6iXjhY0FikUwRdddU3+yeil6gcKA0lmFE1CtLXV39iamYXCS0rt+INPbqg==
+X-Received: by 2002:a05:6a21:3288:b0:15e:986:d92b with SMTP id yt8-20020a056a21328800b0015e0986d92bmr406063pzb.16.1695882699233;
+        Wed, 27 Sep 2023 23:31:39 -0700 (PDT)
+Received: from localhost ([122.172.81.92])
+        by smtp.gmail.com with ESMTPSA id iz7-20020a170902ef8700b001b9f7bc3e77sm4481817plb.189.2023.09.27.23.31.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Sep 2023 23:31:38 -0700 (PDT)
+Date:   Thu, 28 Sep 2023 12:01:36 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org, mani@kernel.org,
+        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, rafael@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_vbadigan@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, quic_parass@quicinc.com
+Subject: Re: [PATCH v5 5/5] PCI: qcom: Add OPP support to scale performance
+ state of power domain
+Message-ID: <20230928063136.3u47bw2lis6yvksn@vireshk-i7>
+References: <1694066433-8677-1-git-send-email-quic_krichai@quicinc.com>
+ <1694066433-8677-6-git-send-email-quic_krichai@quicinc.com>
+ <20230927065324.w73ae326vs5ftlfo@vireshk-i7>
+ <f7a5ac7f-2857-8d30-e29c-f64c2c5f1330@quicinc.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yfll6esgccshw4fu"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f4hvrslynlgmxu4a2gogc5idvumskhaalxgwildy56yqk2wz7d@lkh4swkv52mi>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <f7a5ac7f-2857-8d30-e29c-f64c2c5f1330@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Adding everyone back, reply to you only by mistake earlier :(
 
---yfll6esgccshw4fu
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 28-09-23, 08:53, Krishna Chaitanya Chundru wrote:
+> 
+> On 9/27/2023 12:23 PM, Viresh Kumar wrote:
+> > On 07-09-23, 11:30, Krishna chaitanya chundru wrote:
+> > > While scaling the interconnect clocks based on PCIe link speed, it is also
+> > > mandatory to scale the power domain performance state so that the SoC can
+> > > run under optimum power conditions.
+> > Why aren't you scaling interconnect bw via OPP core too ?
+> 
+> The power domain performance state varies from PCIe instance to instance and
+> from target to target,
+> 
+> whereas interconnect BW remains same and changes only based upon PCIe GEN
+> speed. So in the driver code itself
+> 
+> based upon GEN speed we are calculating the BW and voting for it.
+> 
+> That is the reason we are not scaling interconnect BW through OPP as no dt
+> entries required for this.
 
-On Wed, Sep 27, 2023 at 04:01:58PM -0700, Bjorn Andersson wrote:
-> On Wed, Sep 27, 2023 at 10:43:16AM +0200, Arnd Bergmann wrote:
-> > On Wed, Sep 27, 2023, at 04:25, Joel Stanley wrote:
-> > > On Mon, 25 Sept 2023 at 09:55, Uwe Kleine-K=F6nig <u.kleine-koenig@pe=
-ngutronix.de> wrote:
-> > >>
-> > >> this series converts all platform drivers below drivers/soc to use
-> > >> .remove_new(). The motivation is to get rid of an integer return code
-> > >> that is (mostly) ignored by the platform driver core and error prone=
- on
-> > >> the driver side.
-> > >>
-> > >> See commit 5c5a7680e67b ("platform: Provide a remove callback that
-> > >> returns no value") for an extended explanation and the eventual goal.
-> > >>
-> > >> As there is no single maintainer team for drivers/soc, I suggest the
-> > >> individual maintainers to pick up "their" patches.
-> > >
-> > > I'd be happy if Arnd merged the lot at once. Arnd, what do you think?
-> > >
-> > > If that will be too messy then I understand. I have queued the aspeed
-> > > ones locally and will push that out if we decide that's the best way
-> > > to go.
-> >=20
-> > The main downside of merging it all at once through the soc tree
-> > is that there may be patches that conflict with other work going on
-> > in individual drivers.
-> >=20
-> > What I'd suggest doing here is:
-> >=20
-> > - have platform maintainers pick up patches for their drivers
-> >   if that is their preference for any reason
->=20
-> I'd prefer this for the qcom drivers at least, please let me know if you
-> would like me to proceed.
+Not sure I understand it fully yet. I tried looking at code and this is what I
+see:
 
-I can send a pull request as Arnd suggested. So iff you want the qcom
-drivers not be a part of that PR, just make sure they appear in next
-during the next week. :-)
+At probe initialization, you just configure bw.
 
-(I'm not sure if "this" in your last quoted sentence is "platform
-maintainers pick up" or "merging it all at once through the soc tree". I
-think you mean the former. Still if you don't want me to pick up the
-qcom patches and won't manage to make them appear in next via your tree,
-I ask you to tell me explicitly to skip these in my PR.)
+Later on, towards end of probe and resume, you set both bw and performance
+state.
 
-Best regards and thanks,
-Uwe
+Also your DT changes add virtual level numbers to PCIe OPP table like this:
++                               opp-1 {
++                                       opp-level = <1>;
++                                       required-opps = <&rpmhpd_opp_low_svs>;
++                               };
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Instead what you can do here is, add bw values and remove level completely (as
+it is not serving any meaningful purpose) and use the OPP core to set both bw
+and performance state (via required OPPs).
 
---yfll6esgccshw4fu
-Content-Type: application/pgp-signature; name="signature.asc"
+What won't work if you do this ?
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmUVGdgACgkQj4D7WH0S
-/k4H8ggAlzMNhL51l548JwUtvGIKaakJoHBLPcGIj/hsCvofuN0HLiMSEtj8Dg6K
-8y1eWVR1Yl+MqkggqjwkOCCy2eX7GYvKXYBRynjaryEtuaE5wSH09zlTWvWBc/ac
-XaBPBsvT6wrBDQBNG9hy4EuMwz7hTRZqp6r0nJV4SSrnor+Lh3EgudImNy82xdmh
-qewYGPdP1R2M1dIIvRSxcLGWHQike9Rti3B8LNTQOTOKB4RrnNfwmPZAk+6LSRAW
-ArlW9S66AzVOe1E5gY70pi4VTQ8AmegEFPOJf3ZqPVAr5s/FYfmxf7GUUM/j/BMh
-7vHOjZMrtO+JkBW/lzWwgV6oKIHgtA==
-=TaoJ
------END PGP SIGNATURE-----
-
---yfll6esgccshw4fu--
+-- 
+viresh
