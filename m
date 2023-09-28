@@ -2,110 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF177B2850
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 00:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEAC17B286C
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 00:26:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232557AbjI1WWX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Sep 2023 18:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58166 "EHLO
+        id S232166AbjI1W0l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Sep 2023 18:26:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232545AbjI1WWW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 18:22:22 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3FE1B4;
-        Thu, 28 Sep 2023 15:21:39 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1c5cc63ce27so22324885ad.0;
-        Thu, 28 Sep 2023 15:21:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695939699; x=1696544499; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SN+WpjnbWQ/SgFseTyvAxaRi1FEF0pQJe3jhNkS4sxk=;
-        b=h474tLifb8ZTBeEWJIkBSxbkegdJipf6Vknl1cwrYdfXyHzupyQ91T3jdrS8Zv2HgM
-         AdN+MaVi7fTfHSWsrIstoO5P67a+UjLwD+2TyrWs59lOeneeHhxm+b5wVAfHAcyXI7cc
-         hcCjvKvx3wjnpi2+ioPhqQAzKZj4FYpt5Lv0/eqVg4Vf4gnpH/HiylqEjIxwTWIzessb
-         1GBt4c9q5TjDRXIVa9d0jUjA/PXpzG5KAG8riEyfw7Px3OsiD/IfOLsOpeNiWa8RAWq0
-         fz5MQVpx7lRzeNXDYI5Pq1yaNu/BXj7QGQd2JfEB4UYy7nWKSebxFT1oupUmRacAPNsX
-         bpGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695939699; x=1696544499;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SN+WpjnbWQ/SgFseTyvAxaRi1FEF0pQJe3jhNkS4sxk=;
-        b=GqSdFbAEciOlrgT8N2wpfINGUHPVHwJxdx8q7z2rc30kQZGBFxi7H+BJbKMMZFCy1V
-         quqVHzBKpbN4S0q00a3yv8dWKk31HuVld583gOT+0PX5tIZDNzBVQQvEG+A2hTi2SXn+
-         qGMd12+9M/whj0YsCzOjIdkhGqaM4wMky8jud4qqjvYXWIjcTUAtvu6A67VpaSms+GrE
-         K8Xc0hh+0gKjSB8l1tme5SqSqfEd0CC2VgFA5M6H/aIQB2QCC5rkHSDFTiiTbQaHCJVE
-         fUj2UCGfc4rrCGg7Nsr+hiNEBBDPS7UmwGQW0h6z+PYU2gDri7PrXEXK6TMKfADMqdPV
-         /0nw==
-X-Gm-Message-State: AOJu0YxW8De4RurVmK2lP595zw2BNXumciLOp+sFCUwMbje0cT08xpSB
-        dO0f1zq+id/Lc+6GayR9i5rZ21KOgHE=
-X-Google-Smtp-Source: AGHT+IFKC5eW58DWkRcEJ8zCdITc/FL/EvrMuPT1Z3eEzdTvMoFYtFSjSTYoXxg7k0FFa2pdAuNAKw==
-X-Received: by 2002:a17:902:e845:b0:1b3:d8ac:8db3 with SMTP id t5-20020a170902e84500b001b3d8ac8db3mr2544181plg.6.1695939698581;
-        Thu, 28 Sep 2023 15:21:38 -0700 (PDT)
-Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:386c:ba81:a385:9374])
-        by smtp.gmail.com with ESMTPSA id v7-20020a170902b7c700b001c61073b064sm9610002plz.69.2023.09.28.15.21.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Sep 2023 15:21:37 -0700 (PDT)
-From:   Fabio Estevam <festevam@gmail.com>
-To:     daniel.lezcano@linaro.org
-Cc:     rafael@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, conor+dt@kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>
-Subject: [PATCH v3] dt-bindings: thermal: qoriq-thermal: Adjust fsl,tmu-range min/maxItems
-Date:   Thu, 28 Sep 2023 19:21:30 -0300
-Message-Id: <20230928222130.580487-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S231864AbjI1W0k (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 18:26:40 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50175180;
+        Thu, 28 Sep 2023 15:26:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695939999; x=1727475999;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4M/dahLhUbBKzNYghaLTW6oMoRm3cJLl1K9+PgdVjfw=;
+  b=kteTX0Ifg8iSY9rkYMW8+C/3JLoxH9EW7ZsNxRg3XAUems9dxjjrkwuk
+   F7QtbXvYxR4c/ttZ4W7zCr56QdHn+/sOQ8Y2y0doIWFPmQN45qipYe6Fn
+   bzd/fSxDlAkbhrOodkjLMX2icWcmaTdftOdi7T2170+oujfcDVArMFraw
+   uel2c/fddxX0B/7nT6g32V3mSQTmM+/68sRWAPY0l+FNrmFSM+hQasblc
+   s0vTd9ags4EVWlE7mN8hQY+I/W4NR97u/N03fAgSXwjZhoFT4rs7pb8Z2
+   t92zVitrmp+Zi5oR5dhEdgOnRojDMKL76LsYeTzdziWhqyXFjDgejvcGM
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="413098985"
+X-IronPort-AV: E=Sophos;i="6.03,185,1694761200"; 
+   d="scan'208";a="413098985"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2023 15:26:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="699444311"
+X-IronPort-AV: E=Sophos;i="6.03,185,1694761200"; 
+   d="scan'208";a="699444311"
+Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 28 Sep 2023 15:26:36 -0700
+Received: from kbuild by c3b01524d57c with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qlzSs-00023y-1t;
+        Thu, 28 Sep 2023 22:26:34 +0000
+Date:   Fri, 29 Sep 2023 06:26:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
+        devel@acpica.org, linux-pm@vger.kernel.org,
+        Vicki Pfau <vi@endrift.com>
+Subject: [rafael-pm:bleeding-edge 86/94] drivers/acpi/utils.c:427: warning:
+ Function parameter or member 'list2' not described in
+ 'acpi_handle_list_equal'
+Message-ID: <202309290642.18zicoLj-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Fabio Estevam <festevam@denx.de>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   2cff74feed4a2a3a1c220e0ee2838b85b08d4999
+commit: 2f5042ef239e43d2b02f7724714673e5e604bd6f [86/94] ACPI: utils: Dynamically determine acpi_handle_list size
+config: loongarch-allyesconfig (https://download.01.org/0day-ci/archive/20230929/202309290642.18zicoLj-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230929/202309290642.18zicoLj-lkp@intel.com/reproduce)
 
-The number of fsl,tmu-range entries vary among the several NXP SoCs.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309290642.18zicoLj-lkp@intel.com/
 
-- lx2160a has two fsl,tmu-range entries  (fsl,qoriq-tmu compatible)
-- imx8mq has four fsl,tmu-range entries. (fsl,imx8mq-tmu compatible)
-- imx93 has seven fsl,tmu-range entries. (fsl,qoriq-tmu compatible)
+All warnings (new ones prefixed by >>):
 
-Change minItems and maxItems accordingly.
+>> drivers/acpi/utils.c:427: warning: Function parameter or member 'list2' not described in 'acpi_handle_list_equal'
+>> drivers/acpi/utils.c:427: warning: Excess function parameter 'List2' description in 'acpi_handle_list_equal'
 
-This fixes the following schema warning:
 
-imx93-11x11-evk.dtb: tmu@44482000: fsl,tmu-range: 'oneOf' conditional failed, one must be fixed:
-        [2147483866, 2147483881, 2147483906, 2147483946, 2147484006, 2147484071, 2147484086] is too long
+vim +427 drivers/acpi/utils.c
 
-Signed-off-by: Fabio Estevam <festevam@denx.de>
----
-Changes since v1:
-- Adjust min/maxItems to cover all NXP SoCs.
+   416	
+   417	/**
+   418	 * acpi_handle_list_equal - Check if two ACPI handle lists are the same
+   419	 * @list1: First list to compare.
+   420	 * @List2: Second list to compare.
+   421	 *
+   422	 * Return true if the given ACPI handle lists are of the same size and
+   423	 * contain the same ACPI handles in the same order.  Otherwise, return false.
+   424	 */
+   425	bool acpi_handle_list_equal(struct acpi_handle_list *list1,
+   426				    struct acpi_handle_list *list2)
+ > 427	{
+   428		return list1->count == list2->count &&
+   429			!memcmp(list1->handles, list2->handles,
+   430			        list1->count * sizeof(acpi_handle));
+   431	}
+   432	EXPORT_SYMBOL_GPL(acpi_handle_list_equal);
+   433	
 
- Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml b/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
-index ee4780f186f9..60b9d79e7543 100644
---- a/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
-@@ -36,7 +36,8 @@ properties:
-     description: |
-       The values to be programmed into TTRnCR, as specified by the SoC
-       reference manual. The first cell is TTR0CR, the second is TTR1CR, etc.
--    minItems: 4
-+    minItems: 2
-+    maxItems: 7
- 
-   fsl,tmu-calibration:
-     $ref: /schemas/types.yaml#/definitions/uint32-matrix
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
