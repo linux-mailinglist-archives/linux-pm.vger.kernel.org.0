@@ -2,51 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 002D87B2895
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 00:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC0B7B28BD
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 01:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbjI1Wtk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Sep 2023 18:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42460 "EHLO
+        id S229653AbjI1XVC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Sep 2023 19:21:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232507AbjI1Wtj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 18:49:39 -0400
+        with ESMTP id S229541AbjI1XVC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Sep 2023 19:21:02 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49289180;
-        Thu, 28 Sep 2023 15:49:37 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7121DC433C8;
-        Thu, 28 Sep 2023 22:49:34 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C143419D;
+        Thu, 28 Sep 2023 16:21:00 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 238A6C433C7;
+        Thu, 28 Sep 2023 23:21:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695941376;
-        bh=v0+vkpTY/RLF/EzpXIGRgfx86rBxRuba+sYAoF7Bu6o=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=vDn45AGf7UUATdgrquYxTLTtfAYRwT9ECykm29dys80QWEZpoK8fo+Mc3967A/80B
-         eevEiwNOq8PS2CR6w5O1Qa1HYkDRl9M672vmPmvmoUSJ7VlL4ckAp4ZVEDgS2ybbDx
-         9unC1GEdi56xrp7dbPqt4HS7YbTXDLOZNmolHs2IFVbRq6BnRF0ewbXvtzAgqW/05+
-         y83SekigV4O86uf2yqMrbo3Kix8xTGbe/riK30NA4ikxGPAqUzjY39M3RiH5v3Dlom
-         j/ceddyaqdPwjDaHl4kMq3r4+1AKRF9V5bQqXNAjiFAmp/ENfic0ICK1ahr/ywoG7I
-         jy6TVRmfCG/zQ==
-Received: (nullmailer pid 1490249 invoked by uid 1000);
-        Thu, 28 Sep 2023 22:49:33 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        s=k20201202; t=1695943260;
+        bh=k64X9q04AEuNGrWkclSxZJW6XBP6jAVc1KA+H9h5J5E=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ZnYJ5ZaAC1DG+zN5R3A6CWFGNLLLAOYMZuzaF4kqwaCrmXT9K0QFm+Xe22tyCFUMa
+         2nlABDwfIdFTrrnS8sUpzTrAZOEIZK8ceZH9xVVvEV90pUbjpWDI+BIydA5Mvsylrn
+         8G6I2dJDGpHhFO1Wezd9p8gIjcOfT5x911gW8qR3/ei6ioZP4Pm3FzFnHdgpZfLitq
+         7Wq6+bThyz92Oqy3yPZYLBAEb8e2e/aC+uu9qBih77UDWRd96WABk1nKVxJqEWC7d+
+         gRAx0y1yJGep9HFmKZ6HmaXV+Im/A4arndjmkEgrMhxU7pspwas+ZAiisyTThJn4qz
+         jBpbtGsqRWAMw==
+Received: by mercury (Postfix, from userid 1000)
+        id 10DD010605D8; Fri, 29 Sep 2023 01:20:58 +0200 (CEST)
+Date:   Fri, 29 Sep 2023 01:20:58 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [GIT PULL] power-supply fixes for 6.6-rc
+Message-ID: <20230928232058.twqyaqzrwqsrvjmu@mercury.elektranox.org>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Robert Marko <robimarko@gmail.com>
-Cc:     robh+dt@kernel.org, nm@ti.com, rafael@kernel.org,
-        vireshk@kernel.org, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        conor+dt@kernel.org, Christian Marangi <ansuelsmth@gmail.com>,
-        konrad.dybcio@linaro.org, ilia.lin@kernel.org, sboyd@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        agross@kernel.org, linux-arm-msm@vger.kernel.org
-In-Reply-To: <20230928210525.1265958-2-robimarko@gmail.com>
-References: <20230928210525.1265958-1-robimarko@gmail.com>
- <20230928210525.1265958-2-robimarko@gmail.com>
-Message-Id: <169594137337.1490220.6287570268277812840.robh@kernel.org>
-Subject: Re: [PATCH v4 2/4] dt-bindings: opp: opp-v2-kryo-cpu: Document
- named opp-microvolt property
-Date:   Thu, 28 Sep 2023 17:49:33 -0500
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5zhobtwbbsjzysaz"
+Content-Disposition: inline
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,50 +48,102 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-On Thu, 28 Sep 2023 23:04:05 +0200, Robert Marko wrote:
-> From: Christian Marangi <ansuelsmth@gmail.com>
-> 
-> Document named opp-microvolt property for opp-v2-kryo-cpu schema.
-> This property is used to declare multiple voltage ranges selected on the
-> different values read from efuses. The selection is done based on the
-> speed pvs values and the named opp-microvolt property is selected by the
-> qcom-cpufreq-nvmem driver.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> ---
-> Changes in v4:
-> * Describe PVS
-> * Add description for opp-microvolt entries
-> ---
->  .../bindings/opp/opp-v2-kryo-cpu.yaml         | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
-> 
+--5zhobtwbbsjzysaz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Hi Linus,
 
-yamllint warnings/errors:
+All patches have been in linux-next for a week, no issues have been
+reported. Please pull. Greetings,
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml: patternProperties:^opp-?[0-9]+$:patternProperties:^opp-microvolt-speed[0-9]+-pvs[0-9]+$: {'description': 'Named opp-microvolt property following the same generic\nbinding for named opp-microvolt.\n\nThe correct voltage range is selected based on the values\nin the efuse for the speed and the pvs (power variable\nscaling).\n', 'minItems': 1, 'maxItems': 4, 'items': [{'description': 'nominal voltage'}, {'description': 'minimum voltage'}, {'description': 'maximum voltage'}]} should not be valid under {'required': ['maxItems']}
-	hint: "maxItems" is not needed with an "items" list
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
+-- Sebastian
 
-doc reference errors (make refcheckdocs):
+The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230928210525.1265958-2-robimarko@gmail.com
+  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+are available in the Git repository at:
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+  https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.6-rc
 
-pip3 install dtschema --upgrade
+for you to fetch changes up to 488ef44c068e79752dba8eda0b75f524f111a695:
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+  power: supply: rk817: Fix node refcount leak (2023-09-20 19:37:15 +0200)
 
+----------------------------------------------------------------
+Power Supply Fixes for 6.6 cycle
+
+ * core: fix use after free during device release
+ * ab8500: avoid reporting multiple batteries to userspace
+ * rk817: fix DT node resource leak
+ * misc. small fixes, mostly for compiler warnings/errors
+
+----------------------------------------------------------------
+Chris Morgan (1):
+      power: supply: rk817: Fix node refcount leak
+
+Christophe JAILLET (1):
+      power: supply: rt9467: Fix rt9467_run_aicl()
+
+Dan Carpenter (1):
+      power: supply: ucs1002: fix error code in ucs1002_get_property()
+
+David Thompson (1):
+      pwr-mlxbf: extend Kconfig to include gpio-mlxbf3 dependency
+
+Harshit Mogalapalli (1):
+      power: supply: mt6370: Fix missing error code in mt6370_chg_toggle_cfo()
+
+Justin Stitt (1):
+      power: vexpress: fix -Wvoid-pointer-to-enum-cast warning
+
+Krzysztof Kozlowski (1):
+      power: reset: use capital "OR" for multiple licenses in SPDX
+
+Linus Walleij (1):
+      power: supply: ab8500: Set typing and props
+
+Nicolas Frattaroli (1):
+      power: supply: rk817: Add missing module alias
+
+Randy Dunlap (1):
+      power: supply: rt5033_charger: recognize EXTCON setting
+
+Sebastian Reichel (1):
+      power: supply: core: fix use after free in uevent
+
+ drivers/power/reset/Kconfig               |  2 +-
+ drivers/power/reset/pwr-mlxbf.c           |  2 +-
+ drivers/power/reset/vexpress-poweroff.c   |  2 +-
+ drivers/power/supply/Kconfig              |  1 +
+ drivers/power/supply/ab8500_btemp.c       |  9 +--------
+ drivers/power/supply/ab8500_chargalg.c    |  2 +-
+ drivers/power/supply/mt6370-charger.c     |  2 +-
+ drivers/power/supply/power_supply_sysfs.c |  7 +++++++
+ drivers/power/supply/rk817_charger.c      | 16 +++++++++++++---
+ drivers/power/supply/rt9467-charger.c     |  4 ++--
+ drivers/power/supply/ucs1002_power.c      |  3 ++-
+ 11 files changed, 31 insertions(+), 19 deletions(-)
+
+--5zhobtwbbsjzysaz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmUWClkACgkQ2O7X88g7
++pq8uw//SQI0R3FPJ20CdlBauqP/1Hn9F+LqVfMke/s5s60GDHB2Gqc9zhWDj6Kc
+PDZIelZ6LktRwUiEHkbk1mJnAQS8bdfzXaDewUAspnK8PRG8y1X5X5LVBnWeYj/v
+QZAEA8PBOTCGIEFK1Dz2njkSJhNsv/uMZcUf9kzeuEnakjIvkWtv5f/aMkGDnSEb
+sgm+ek7stI9CiLZsnlOKw3vgyu/KWZUD3WRZ9ixI5m4Z4frrMW01lOJnFfanbVWt
+bBnYWUsE3LyHzOkMFWvPXB2KYzUJTcv07mTHrmwYYbQ77JdMez3lQHDOe/khj33X
+KDhXDHSLG4ueZ7XUaRCBbWxNeCmvlRnaOx4Y/Er4dmtGVCKTbKS6LWKf1pSa2+jy
+V7IUV7V6V4txOK6yeZW6yoXVsME29TWHm7M8Bq0yhmN8AiTaV14mVBAfFCCwKjfs
+uh9NVQMLzwvuVVDGHuiTSGfByOz+4jItFgUyEQD9STM136pHGqXGcGItXodqcTUk
+RK9EvpW2+ZYROH/ZWHW7yS4vO3WBb3+w3iar103DldU4jJ4f9SXYZB6Em63d29Xv
+kYa29Ka5O/TckTy++OC1BoKjBtUlyE0qz+G0NJYmo6BQdM33FfC2mxrMbZmC1wWv
+XXF/ZIGD2cgDnQt6t/CoEGHOi2M7A72vKOCLT/E2jlHbNL07Xk0=
+=rnvM
+-----END PGP SIGNATURE-----
+
+--5zhobtwbbsjzysaz--
