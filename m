@@ -2,210 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3497F7B2DD0
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 10:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A86F7B2DDB
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 10:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232830AbjI2I3x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Sep 2023 04:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34366 "EHLO
+        id S232883AbjI2Ibh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Sep 2023 04:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232713AbjI2I3w (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 04:29:52 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F201B1
-        for <linux-pm@vger.kernel.org>; Fri, 29 Sep 2023 01:29:49 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-59f7f2b1036so114688887b3.3
-        for <linux-pm@vger.kernel.org>; Fri, 29 Sep 2023 01:29:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695976189; x=1696580989; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AO/uJHLmfHTJFDVuIxPPusBgqH9ox/rasg3E2WmZG1g=;
-        b=dKrxe4IOhWMdnecL3TxzRqEYGGylcXhIGBOC8IJWomqgYY/Cwq0GiDPnpBkTEQTc0Z
-         iqMA9cE2+4SNthocdCCMn97Ou+Uqd9TgmLe9goQvRps8eB0XwCxKEVr5PNOIvkCehEeD
-         N2J+z04wJkLVkD6M8enQ0gM87SmgfFVQs5wl5IVmM+CB6pfaQehZp89wAFDSqwYoXUaz
-         fbFUiJ/kS4jRzVwoabzSUdsc+Q5UYbquwB9PlLsUdR+H27ps1sUG/g7jw3dMuGD34FMy
-         pUWV28W4SQwpFsLLGGIWvAgVQ7qPst7kPtatgc31rKRumBZCm9ISWsMDHNFIIX/72zih
-         J6aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695976189; x=1696580989;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AO/uJHLmfHTJFDVuIxPPusBgqH9ox/rasg3E2WmZG1g=;
-        b=CKmn2khUTVgR+OfGMJJuQ47MDTZ+mu60s9CUUcKq6qvZeY7Y6BVW75rb6F+5Z7xeMg
-         zPcRWGJEnvA3MadU2ftHZP2uJLRZVEdueTZ3MjOSnwUBPds2j7ycVvwEDNHEuRU1/Ddk
-         Nz/27GiEuqwHqpPM1CX64uVarMoqc13BHYXN6/5aPgQfeg3ww0k11ZNWFCnEdh6ty1fl
-         GKBil4ZQYrMkxRI6y2r1NtjjuRuzfI143+VjYJTZ+a0YBR29Op6HdNz4LrfJBYVAH6GC
-         hKd+t6cniTwGpyv+VzDXubutvyXEmbNaiqkHaQq8gRIjai+7iuh6u9xDeYzkIr6XAuWn
-         Bogg==
-X-Gm-Message-State: AOJu0Yw0pZ3OJq4Nis7BN68iR1JjI8wRuCT2g5mWET6GDvlbfyujL4iv
-        yafoHSOoIjttltlHMGFrbmJgN/uj8+YWiWDe9A8okQ==
-X-Google-Smtp-Source: AGHT+IEQryF/Jq6ClcrXeNFwkaLrgTZMOGtwSpYsQb1fq1tuW4ZUQrgK4aRlhvqYry4WQ+Zv62sfUNQpqbZP7hNpur0=
-X-Received: by 2002:a0d:d992:0:b0:59e:7fc1:dba0 with SMTP id
- b140-20020a0dd992000000b0059e7fc1dba0mr3269915ywe.44.1695976188816; Fri, 29
- Sep 2023 01:29:48 -0700 (PDT)
+        with ESMTP id S232861AbjI2Ibf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 04:31:35 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B20FD1A8;
+        Fri, 29 Sep 2023 01:31:32 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ACBBA1FB;
+        Fri, 29 Sep 2023 01:32:10 -0700 (PDT)
+Received: from [10.57.93.169] (unknown [10.57.93.169])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 149023F5A1;
+        Fri, 29 Sep 2023 01:31:29 -0700 (PDT)
+Message-ID: <8a9a0d27-b714-a884-ae32-728cde21dddd@arm.com>
+Date:   Fri, 29 Sep 2023 09:32:09 +0100
 MIME-Version: 1.0
-References: <cover.1693996662.git.quic_varada@quicinc.com> <5e3c29df2b42cceb8072b00546a78e1b99b2d374.1693996662.git.quic_varada@quicinc.com>
- <b0508a69-130d-4b05-9dfc-399e482dc2ae@linaro.org> <20230929073216.GB15001@varda-linux.qualcomm.com>
-In-Reply-To: <20230929073216.GB15001@varda-linux.qualcomm.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 29 Sep 2023 11:29:36 +0300
-Message-ID: <CAA8EJprD=zuvCrjOdeinPq=NaFLuATYWad4GDHzBH_PJZnOKHw@mail.gmail.com>
-Subject: Re: [PATCH v1 04/10] clk: qcom: apss-ipq6018: ipq5332: add safe
- source switch for a53pll
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>, ilia.lin@kernel.org,
-        agross@kernel.org, andersson@kernel.org, rafael@kernel.org,
-        viresh.kumar@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        quic_kathirav@quicinc.com, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v4 03/18] PM: EM: Find first CPU online while updating OPP
+ efficiency
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        dietmar.eggemann@arm.com, rui.zhang@intel.com,
+        amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
+        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
+        len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org,
+        qyousef@layalina.io, wvw@google.com
+References: <20230925081139.1305766-1-lukasz.luba@arm.com>
+ <20230925081139.1305766-4-lukasz.luba@arm.com>
+ <CAJZ5v0h6AsQCrtJ1b5VoWD_=yTKC=Y0e5KqSHy5GsFt-H7NFXA@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAJZ5v0h6AsQCrtJ1b5VoWD_=yTKC=Y0e5KqSHy5GsFt-H7NFXA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 29 Sept 2023 at 10:33, Varadarajan Narayanan
-<quic_varada@quicinc.com> wrote:
->
-> On Thu, Sep 07, 2023 at 10:31:55AM +0200, Konrad Dybcio wrote:
-> > On 7.09.2023 07:21, Varadarajan Narayanan wrote:
-> > > Stromer Plus PLL found on IPQ53xx doesn't support dynamic
-> > > frequency scaling. To achieve the same, we need to park the APPS
-> > > PLL source to GPLL0, re configure the PLL and then switch the
-> > > source to APSS_PLL_EARLY.
-> > >
-> > > To support this, register a clock notifier to get the PRE_RATE
-> > > and POST_RATE notification. Change the APSS PLL source to GPLL0
-> > > when PRE_RATE notification is received, then configure the PLL
-> > > and then change back the source to APSS_PLL_EARLY.
-> > >
-> > > Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > > ---
-> > >  drivers/clk/qcom/apss-ipq6018.c | 54 ++++++++++++++++++++++++++++++++++++++++-
-> > >  1 file changed, 53 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/clk/qcom/apss-ipq6018.c b/drivers/clk/qcom/apss-ipq6018.c
-> > > index 4e13a08..ffb6ab5 100644
-> > > --- a/drivers/clk/qcom/apss-ipq6018.c
-> > > +++ b/drivers/clk/qcom/apss-ipq6018.c
-> > > @@ -9,8 +9,11 @@
-> > >  #include <linux/clk-provider.h>
-> > >  #include <linux/regmap.h>
-> > >  #include <linux/module.h>
-> > > +#include <linux/clk.h>
-> > > +#include <linux/soc/qcom/smem.h>
-> > >
-> > >  #include <dt-bindings/clock/qcom,apss-ipq.h>
-> > > +#include <dt-bindings/arm/qcom,ids.h>
-> > >
-> > >  #include "common.h"
-> > >  #include "clk-regmap.h"
-> > > @@ -84,15 +87,64 @@ static const struct qcom_cc_desc apss_ipq6018_desc = {
-> > >     .num_clks = ARRAY_SIZE(apss_ipq6018_clks),
-> > >  };
-> > >
-> > > +static int cpu_clk_notifier_fn(struct notifier_block *nb, unsigned long action,
-> > > +                           void *data)
-> > > +{
-> > > +   u8 index;
-> > > +   int err;
-> > > +
-> > > +   if (action == PRE_RATE_CHANGE)
-> > > +           index = P_GPLL0;
-> > > +   else if (action == POST_RATE_CHANGE)
-> > > +           index = P_APSS_PLL_EARLY;
-> > > +   else
-> > > +           return 0;
-> > > +
-> > > +   err = clk_rcg2_mux_closest_ops.set_parent(&apcs_alias0_clk_src.clkr.hw,
-> > > +                                             index);
-> > Adding a variable for clk_hw within the apcs_alias0 clock would
-> > make this easier to digest, I think.
-> >
-> > And if we wanna be even less error-prone, you can reference the
-> > ops of this clock in an indirect way.
->
-> Will change it as
->
->         struct clk_hw *hw;
->
->         hw = &apcs_alias0_clk_src.clkr.hw;
->         err = hw->init->ops->set_parent(hw, index);
+Hi Rafael,
 
-You can not do this, hw->init is cleared during registration.
+Thank you having reviewing those patches!
 
->
-> > > +   return notifier_from_errno(err);
-> > > +}
-> > > +
-> > > +static struct notifier_block cpu_clk_notifier = {
-> > > +   .notifier_call = cpu_clk_notifier_fn,
-> > > +};
-> > > +
-> > >  static int apss_ipq6018_probe(struct platform_device *pdev)
-> > >  {
-> > >     struct regmap *regmap;
-> > > +   u32 soc_id;
-> > > +   int ret;
-> > > +
-> > > +   ret = qcom_smem_get_soc_id(&soc_id);
-> > > +   if (ret)
-> > > +           return ret;
-> > >
-> > >     regmap = dev_get_regmap(pdev->dev.parent, NULL);
-> > >     if (!regmap)
-> > >             return -ENODEV;
-> > >
-> > > -   return qcom_cc_really_probe(pdev, &apss_ipq6018_desc, regmap);
-> > > +   ret = qcom_cc_really_probe(pdev, &apss_ipq6018_desc, regmap);
-> > > +   if (ret)
-> > > +           return ret;
-> > > +
-> > > +   switch (soc_id) {
-> > > +   /*
-> > > +    * Only below variants of IPQ53xx support scaling
-> > > +    */
-> > 1. /* Keep this in a 1-line comment */
->
-> Ok
->
-> > 2. why? explain the reasoning in the commit message
->
-> Ok
->
-> Thanks
-> Varada
->
-> > > +   case QCOM_ID_IPQ5332:
-> > > +   case QCOM_ID_IPQ5322:
-> > > +   case QCOM_ID_IPQ5300:
-> > > +           ret = clk_notifier_register(apcs_alias0_clk_src.clkr.hw.clk,
-> > > +                                           &cpu_clk_notifier);
-> > > +           if (ret)
-> > > +                   return ret;
-> > > +           break;
-> > > +   default:
-> > > +           break;
-> > > +   }
-> > > +
-> > > +   return 0;
-> > >  }
-> > >
-> > >  static struct platform_driver apss_ipq6018_driver = {
+On 9/26/23 19:32, Rafael J. Wysocki wrote:
+> On Mon, Sep 25, 2023 at 10:11 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>> The Energy Model might be updated at runtime and the energy efficiency
+>> for each OPP may change. Thus, there is a need to update also the
+>> cpufreq framework and make it aligned to the new values. In order to
+>> do that, use a first online CPU from the Performance Domain.
+>>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   kernel/power/energy_model.c | 11 +++++++++--
+>>   1 file changed, 9 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+>> index 42486674b834..3dafdd7731c4 100644
+>> --- a/kernel/power/energy_model.c
+>> +++ b/kernel/power/energy_model.c
+>> @@ -243,12 +243,19 @@ em_cpufreq_update_efficiencies(struct device *dev, struct em_perf_state *table)
+>>          struct em_perf_domain *pd = dev->em_pd;
+>>          struct cpufreq_policy *policy;
+>>          int found = 0;
+>> -       int i;
+>> +       int i, cpu;
+>>
+>>          if (!_is_cpu_device(dev) || !pd)
+>>                  return;
+>>
+>> -       policy = cpufreq_cpu_get(cpumask_first(em_span_cpus(pd)));
+>> +       /* Try to get a CPU which is online and in this PD */
+>> +       cpu = cpumask_first_and(em_span_cpus(pd), cpu_active_mask);
+> 
+> The comment talks about "online" and cpu_active_mask is used.  Isn't
+> it a bit inconsistent?
 
+good point, I'll change the word to 'active'
 
-
--- 
-With best wishes
-Dmitry
+> 
+>> +       if (cpu >= nr_cpu_ids) {
+>> +               dev_warn(dev, "EM: No online CPU for CPUFreq policy\n");
+>> +               return;
+>> +       }
+>> +
+>> +       policy = cpufreq_cpu_get(cpu);
+>>          if (!policy) {
+>>                  dev_warn(dev, "EM: Access to CPUFreq policy failed\n");
+>>                  return;
+>> --
+>> 2.25.1
+>>
