@@ -2,53 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 808457B33FE
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 15:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8CCE7B3407
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 15:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233266AbjI2Ns2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Sep 2023 09:48:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54030 "EHLO
+        id S232960AbjI2N5l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Sep 2023 09:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233217AbjI2Ns1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 09:48:27 -0400
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8661A8
-        for <linux-pm@vger.kernel.org>; Fri, 29 Sep 2023 06:48:25 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qmDqb-0003x9-CW; Fri, 29 Sep 2023 15:48:01 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qmDqa-009pKl-AB; Fri, 29 Sep 2023 15:48:00 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qmDqa-005wF3-0o; Fri, 29 Sep 2023 15:48:00 +0200
-Date:   Fri, 29 Sep 2023 15:47:57 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev,
-        linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: [rafael-pm:bleeding-edge 48/94]
- drivers/thermal/amlogic_thermal.c:303:16: error: void value not ignored as
- it ought to be
-Message-ID: <20230929134757.5ztol37eqttvr4wo@pengutronix.de>
-References: <202309291214.Hjn3gJ94-lkp@intel.com>
- <CAJZ5v0gGissufTrvCa+z5i=kPMDM+-RKoQfOHW41zf7o2=z4SQ@mail.gmail.com>
+        with ESMTP id S232932AbjI2N5k (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 09:57:40 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605CF1A8
+        for <linux-pm@vger.kernel.org>; Fri, 29 Sep 2023 06:57:38 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-53406799540so12640819a12.1
+        for <linux-pm@vger.kernel.org>; Fri, 29 Sep 2023 06:57:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1695995856; x=1696600656; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MqvODDBtWBNjtDJNYqGdOzftA4f4uyWFomekAFhFUiE=;
+        b=v7h7vASByDXZ0rTuVo6gxxsnCIlJtQARv4xoo0XSM5KUM1NWn8m4SuyVooTooLCfN5
+         iTi6bbMVuopcE3IiLecEMCqy1yoGxZw2XXOqWLj51qSlX/f08B2ERikIj91fBvpDIoS4
+         T84pIei9Gxhiw69Sl4RFOOR8Y6OkE3mZ1pJ51oRDaH3lcOAZrpjewcYB0hEU9f8bn7qG
+         O9JgaqBww11V/wTVB8zP3HsFraQCS+E/Q/FLlfdGl+NOrCaSTqnKvw67vCM7ncXm2WNu
+         z6xmGTiwmtPFwSl0GXGR5JnuL072mdySsGihrH5CPFgJjFawNwVoQE10nOEyc1hxS7FI
+         oZUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695995856; x=1696600656;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MqvODDBtWBNjtDJNYqGdOzftA4f4uyWFomekAFhFUiE=;
+        b=np1jzXe9uMI/JcwT2ARbTqN5XzyBzU/NqEL0nBNYHmc07Fe4vU2dm7fuRT+JWLZmlv
+         BbkRvay/aXy88ygosSyZSfsUa4E3lVovSMKRK19809qRpEIPdBdsKRPVu2VKIvy9qle4
+         nuZJmdmGo1SWH7rxT5zNtovrDgagfUZSWgBpIvNZGHxhgHytwz31vSRWT6ydFCntErnJ
+         WV7Zwme8Wo9kz/VYfjBGZ4rSBu35KDbn7sUHmReNYf0XcyHahvPDbo2A21V3HDP5r94w
+         Qz87c+4F52we/CYYnJvVF4UkEsCAAJe6VHBjOyAWntVTYYO5hd2EiuumBK2x6yvqfqHv
+         H4tw==
+X-Gm-Message-State: AOJu0YwbS/L3uYpWuyj9RMw0BH2ZAQINlz31FzteaCzQz17rSDuTbylg
+        IX6L/ZDl4wIh2xgys8i/gxG/tw==
+X-Google-Smtp-Source: AGHT+IHL45cWVCGHfJIwgYAU+xiijTYw9hrymNHUt70vHNMBwYeV7RFCvC3L4yH2VGQn0Y6xgX6o5g==
+X-Received: by 2002:aa7:c582:0:b0:532:c08a:eac0 with SMTP id g2-20020aa7c582000000b00532c08aeac0mr3756236edq.26.1695995856608;
+        Fri, 29 Sep 2023 06:57:36 -0700 (PDT)
+Received: from [192.168.33.189] (178235177217.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.217])
+        by smtp.gmail.com with ESMTPSA id cy23-20020a0564021c9700b005362c9905b2sm2257462edb.35.2023.09.29.06.57.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Sep 2023 06:57:36 -0700 (PDT)
+Message-ID: <fac9c693-5d50-428d-9ea6-83ebec7239c3@linaro.org>
+Date:   Fri, 29 Sep 2023 15:57:33 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="h5m4qeuiyxuq2nm4"
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gGissufTrvCa+z5i=kPMDM+-RKoQfOHW41zf7o2=z4SQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 4/4] ARM: dts: qcom: ipq8064: Add CPU OPP table
+Content-Language: en-US
+To:     Robert Marko <robimarko@gmail.com>, ilia.lin@kernel.org,
+        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, agross@kernel.org, andersson@kernel.org,
+        rafael@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Cc:     Christian Marangi <ansuelsmth@gmail.com>
+References: <20230928210525.1265958-1-robimarko@gmail.com>
+ <20230928210525.1265958-4-robimarko@gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <20230928210525.1265958-4-robimarko@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,116 +114,18 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 28.09.2023 23:04, Robert Marko wrote:
+> From: Christian Marangi <ansuelsmth@gmail.com>
+> 
+> Add CPU OPP table for IPQ8062, IPQ8064 and IPQ8065 SoC.
+> Use opp-supported-hw binding to correctly enable and disable the
+> frequency as IPQ8062 supports up to 1.0Ghz, IPQ8064 supports up to
+> 1.4GHz with 1.2GHz as an additional frequency and IPQ8065 supports
+> 1.7GHZ but doesn't have 1.2GHZ frequency and has to be disabled.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+When resending somebody else's patches, you need to add your own
+sign-off at the end.
 
---h5m4qeuiyxuq2nm4
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Sep 29, 2023 at 12:37:03PM +0200, Rafael J. Wysocki wrote:
-> On Fri, Sep 29, 2023 at 6:21=E2=80=AFAM kernel test robot <lkp@intel.com>=
- wrote:
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-=2Egit bleeding-edge
-> > head:   2cff74feed4a2a3a1c220e0ee2838b85b08d4999
-> > commit: 88af8b66ffedcad8c5a1522f6a9c02bf8129a951 [48/94] thermal: amlog=
-ic: Convert to platform remove callback returning void
-> > config: arm-randconfig-004-20230929 (https://download.01.org/0day-ci/ar=
-chive/20230929/202309291214.Hjn3gJ94-lkp@intel.com/config)
-> > compiler: arm-linux-gnueabi-gcc (GCC) 13.2.0
-> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
-hive/20230929/202309291214.Hjn3gJ94-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202309291214.Hjn3gJ94-l=
-kp@intel.com/
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> >    drivers/thermal/amlogic_thermal.c: In function 'amlogic_thermal_susp=
-end':
-> > >> drivers/thermal/amlogic_thermal.c:303:16: error: void value not igno=
-red as it ought to be
-> >      303 |         return amlogic_thermal_disable(data);
-> >          |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->=20
-> amlogic_thermal_disable() should not be modified by this commit -
-> fixed up in the tree.
-
-Thanks for choosing an option that hides that embarrassing build
-failure. :-)
-
-IMHO
-
-https://lore.kernel.org/all/20230929061305.2351953-1-u.kleine-koenig@pengut=
-ronix.de
-
-is the nicer fix because with that amlogic_thermal_remove() would ignore
-the return value of amlogic_thermal_disable(). On top of your current
-tree that would be:
-
-diff --git a/drivers/thermal/amlogic_thermal.c b/drivers/thermal/amlogic_th=
-ermal.c
-index 5877cde25b79..562f63b7bf27 100644
---- a/drivers/thermal/amlogic_thermal.c
-+++ b/drivers/thermal/amlogic_thermal.c
-@@ -167,13 +167,11 @@ static int amlogic_thermal_enable(struct amlogic_ther=
-mal *data)
- 	return 0;
- }
-=20
--static int amlogic_thermal_disable(struct amlogic_thermal *data)
-+static void amlogic_thermal_disable(struct amlogic_thermal *data)
- {
- 	regmap_update_bits(data->regmap, TSENSOR_CFG_REG1,
- 			   TSENSOR_CFG_REG1_ENABLE, 0);
- 	clk_disable_unprepare(data->clk);
--
--	return 0;
- }
-=20
- static int amlogic_thermal_get_temp(struct thermal_zone_device *tz, int *t=
-emp)
-@@ -302,7 +300,9 @@ static int __maybe_unused amlogic_thermal_suspend(struc=
-t device *dev)
- {
- 	struct amlogic_thermal *data =3D dev_get_drvdata(dev);
-=20
--	return amlogic_thermal_disable(data);
-+	amlogic_thermal_disable(data);
-+
-+	return 0;
- }
-=20
- static int __maybe_unused amlogic_thermal_resume(struct device *dev)
-
-But I won't argue further and consider the case closed.
-
-Thanks
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
-   |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---h5m4qeuiyxuq2nm4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmUW1YwACgkQj4D7WH0S
-/k5fBwf8DU6ytLGBe3UCbC4aCs+KSO9KKMjRB2/wRBIg/wcF8uSiGYXVEdxaqiTT
-OuDnFPRnlI0rxYff524ZBxgQCD8XFBR0qZYCs9Nd1aWYDfYNS3EDPxIJ7Zl1srjO
-OppgV0rQILZZ4I3+1WfxqaeQbdvQszrPIrdOS8gGdRvFkmxo/nMx9zrtDp7Xl0XO
-xeywc1J736A6+rSm7D56a7TzY/xwuqDT9f6IBqYskBCufGm3FEgbxjrV6hzXr4Bc
-7MNU1kNZivh7TPMweQSUrmzoZRECWLA5I8w2Gt6GwTFgpNsEEce+26Cjq2qTipUI
-vzeYqecdnuRzTESFNswd4PClJC0biA==
-=oV9Q
------END PGP SIGNATURE-----
-
---h5m4qeuiyxuq2nm4--
+Konrad
