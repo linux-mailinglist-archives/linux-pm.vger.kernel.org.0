@@ -2,215 +2,195 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70BC17B32C4
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 14:46:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ABA97B32FC
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 15:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232977AbjI2MqW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Sep 2023 08:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
+        id S233249AbjI2NAH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 29 Sep 2023 09:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232959AbjI2MqW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 08:46:22 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F101AB
-        for <linux-pm@vger.kernel.org>; Fri, 29 Sep 2023 05:46:19 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-68c576d35feso12427071b3a.2
-        for <linux-pm@vger.kernel.org>; Fri, 29 Sep 2023 05:46:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1695991578; x=1696596378; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=PoQKrJd9kKi3K5BN3LNXduSs9pojAN7dwfjLj/NAsCo=;
-        b=VjKZdi+WbDgOeCfiFx5KaHAoubGmbKsjGzlH7au7s6PvVzkBiSnW+Jzdmh3kjXgoY4
-         2Bb0yhKnpQkafGXkJMgcw3Hb9PXIci3HiN9NxKldKQPFanCqdsoq2DKh8QrYw8MRxiNp
-         1cI7fzIUtvHWwPmCKFr1BYokF4aaEx+uas51IrTW6yYeUftuvIweD4B4sOjulpQ30ncx
-         gBBTvE3X6F7TcHbN+vO2CvXr89JOcPqC85ZdbiKVjbpo1v71XRt8Ejxg2byB6+qYDxfV
-         01pBDy4b/LB0ArWIaeyztf3Ol1Dng3dl+31rS7yfktXQ3bNL6wlqLiJ3V2TVIuIypV72
-         jriw==
+        with ESMTP id S232990AbjI2NAG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 09:00:06 -0400
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A732E1B4;
+        Fri, 29 Sep 2023 06:00:02 -0700 (PDT)
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-3ae473c0bd6so1205110b6e.0;
+        Fri, 29 Sep 2023 06:00:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695991578; x=1696596378;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PoQKrJd9kKi3K5BN3LNXduSs9pojAN7dwfjLj/NAsCo=;
-        b=uyiY2puh/NNEZDQpyRxL3PqxB9mOGjsLJrOHcFGZXWaBUMNezjaEsUTccWwsdAKYJk
-         wk76JcamjhnOKOZMgdGuh838TRLrA8SmBUiJCUgSXgrpmd6C+jb4viqT7MUsr5OtQIAH
-         Q8FYRDqcO8fMTSfW+aniVPyRPr/+lKdMaMLusOP5ReAoXnUJwi8xkrPTLR6Itz3B0bYL
-         MMnjDG2UQVjY/AowDy/kMcYu/LfjsawrRT8VzcRvP9luLAQrpV6F+uXzMZ5hRSfvWt3/
-         gcBtYtgDP0IQPUkMiHSF+g/yvWhukb63+BxXL23yuxsLeBULUM/ITmunNn5j9cIlvjDB
-         uWcg==
-X-Gm-Message-State: AOJu0YxusmW/nKJY7VxPYe4Tp75F4uoY070+vOQWZnneOi57dD51hT8r
-        6kZRAPA7ea4oWZ+14gmgnbFmxQ==
-X-Google-Smtp-Source: AGHT+IGib4k3RxgedUamTfJURN7bz2w1phioYOcOFkvkoVe3X0NHdCWvi8hF4Kv9aCMS+Hb6ssQllQ==
-X-Received: by 2002:a05:6a00:3912:b0:690:2ecd:a593 with SMTP id fh18-20020a056a00391200b006902ecda593mr4708382pfb.26.1695991578534;
-        Fri, 29 Sep 2023 05:46:18 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id j26-20020aa7801a000000b0068c10187dc3sm14888395pfi.168.2023.09.29.05.46.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Sep 2023 05:46:18 -0700 (PDT)
-Message-ID: <6516c71a.a70a0220.c03e7.b57f@mx.google.com>
-Date:   Fri, 29 Sep 2023 05:46:18 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20230601; t=1695992402; x=1696597202;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=01V3P6+msIVHSmslLlWF4i0z60WIhO/ur5s2K2/Of2o=;
+        b=qZIsJbc/1rQq5VlAcE/GO8Esu+cc0pHTSG/XWMUOqp2lxUrQXZnbzT9yL9ORSAUcjc
+         j1PCtrLoHEPMvVLqXXOU/iUO0mzM32uPszQQ3m0oYxbVPeckHFku3+Pma3xJcGRyWRY/
+         Ton4ay1CLuaOeZg6LbB/gWx3h2Cyk+NVr0v4uIunrmvi06lYQ3O3l0cWID1axWH+AzlY
+         ajGp8xJZV+9KRv0Zbk40vumOxwDgNZNgF21AuW/J86TVKexFu9UfUXNaF9Wyw5s+Q0Ww
+         IiCQLz42zQ9NqYhdlIQHPPqRqTuYhvI4EcMC/DVDW8YojmQejI1pnt37kTC1thDUYwNb
+         3ZYg==
+X-Gm-Message-State: AOJu0Yx+evnJ3WhyUqLnvjBHSBdMnrVnX9YZCDziUekiGDkFJt8Fs4ob
+        NpIQwEHTCCtBVCr+91PsY8oWEhR6MpuCUjma4gQ=
+X-Google-Smtp-Source: AGHT+IFvnQLuy3+BVdcbBi3YOd/7Lyty9O7edPDmUmadJJeh/c6WUjSCuOZc9ZMxlZh+L39fYGx/MOIzlq/4DHZKCS8=
+X-Received: by 2002:a05:6808:212a:b0:3ae:b06:2140 with SMTP id
+ r42-20020a056808212a00b003ae0b062140mr5147515oiw.4.1695992401881; Fri, 29 Sep
+ 2023 06:00:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v6.6-rc3-95-g705ffbf392dc
-X-Kernelci-Report-Type: test
-Subject: pm/testing baseline: 46 runs,
- 2 regressions (v6.6-rc3-95-g705ffbf392dc)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230925081139.1305766-1-lukasz.luba@arm.com> <20230925081139.1305766-11-lukasz.luba@arm.com>
+ <CAJZ5v0g6jPr3LqTuRfwUWsK4em7F1pfsZDn9pVziyu3tV56m8A@mail.gmail.com> <f7a6da56-93e4-0b7c-1746-bc3357bf8163@arm.com>
+In-Reply-To: <f7a6da56-93e4-0b7c-1746-bc3357bf8163@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 29 Sep 2023 14:59:50 +0200
+Message-ID: <CAJZ5v0hBPD8cHJe-Xa8354SE5jdM1bYw94DjG-MVHsRKrUY=gQ@mail.gmail.com>
+Subject: Re: [PATCH v4 10/18] PM: EM: Add RCU mechanism which safely cleans
+ the old data
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        dietmar.eggemann@arm.com, rui.zhang@intel.com,
+        amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
+        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
+        len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org,
+        qyousef@layalina.io, wvw@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 46 runs, 2 regressions (v6.6-rc3-95-g705ffbf392dc)
+On Fri, Sep 29, 2023 at 11:36 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+>
+>
+> On 9/26/23 20:26, Rafael J. Wysocki wrote:
+> > On Mon, Sep 25, 2023 at 10:11 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+> >>
+> >> The EM is going to support runtime modifications of the power data.
+> >> Introduce RCU safe mechanism to clean up the old allocated EM data.
+> >
+> > "RCU-based" probably and "to clean up the old EM data safely".
+>
+> Yes, thanks
+>
+> >
+> >> It also adds a mutex for the EM structure to serialize the modifiers.
+> >
+> > This part doesn't match the code changes in the patch.
+>
+> Good catch. It left from some older version. We use the existing
+> em_pd_mutex.
+>
+> >
+> >> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> >> ---
+> >>   kernel/power/energy_model.c | 29 +++++++++++++++++++++++++++++
+> >>   1 file changed, 29 insertions(+)
+> >>
+> >> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+> >> index 5b40db38b745..2345837bfd2c 100644
+> >> --- a/kernel/power/energy_model.c
+> >> +++ b/kernel/power/energy_model.c
+> >> @@ -23,6 +23,9 @@
+> >>    */
+> >>   static DEFINE_MUTEX(em_pd_mutex);
+> >>
+> >> +static void em_cpufreq_update_efficiencies(struct device *dev,
+> >> +                                          struct em_perf_state *table);
+> >> +
+> >>   static bool _is_cpu_device(struct device *dev)
+> >>   {
+> >>          return (dev->bus == &cpu_subsys);
+> >> @@ -104,6 +107,32 @@ static void em_debug_create_pd(struct device *dev) {}
+> >>   static void em_debug_remove_pd(struct device *dev) {}
+> >>   #endif
+> >>
+> >> +static void em_destroy_rt_table_rcu(struct rcu_head *rp)
+> >
+> > Adding static functions without callers will obviously cause the
+> > compiler to complain, which is one of the reasons to avoid doing that.
+> > The other is that it is hard to say how these functions are going to
+> > be used without reviewing multiple patches simultaneously, which is a
+> > pain as far as I'm concerned.
+>
+> It is used in this patch, but inside the call_rcu() as 2nd arg.
 
-Regressions Summary
--------------------
+I missed that, sorry for the noise.
 
-platform      | arch  | lab           | compiler | defconfig | regressions
---------------+-------+---------------+----------+-----------+------------
-r8a77960-ulcb | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
+> I have marked that below. The compiler didn't complain IIRC.
+>
+> >
+> >> +{
+> >> +       struct em_perf_table *runtime_table;
+> >> +
+> >> +       runtime_table = container_of(rp, struct em_perf_table, rcu);
+> >> +       kfree(runtime_table->state);
+> >> +       kfree(runtime_table);
+> >
+> > If runtime_table and its state were allocated in one go, it would be
+> > possible to free them in one go either.
+> >
+> > For some reason, you don't seem to want to do that, but why?
+>
+> We had a few internal reviews and there were voices where saying that
+> it's better to have 2 identical tables: 'default_table' and
+> 'runtime_table' to make sure it's visible everywhere when it's used.
+> That made the need to actually have also the 'state' table inside.
+> I don't see it as a big problem, though.
 
-r8a779m1-ulcb | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
+What I'm trying to say is that you can allocate runtime_table along
+with the table pointed to by its state field in one invocation of
+kzalloc() (say).
 
+Having just one memory region to free eventually instead of two of
+them would help to avoid some complexity, especially in the next
+patch.
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.6-rc3=
--95-g705ffbf392dc/plan/baseline/
+> >
+> >> +}
+> >> +
+> >> +static void em_perf_runtime_table_set(struct device *dev,
+> >> +                                     struct em_perf_table *runtime_table)
+> >> +{
+> >> +       struct em_perf_domain *pd = dev->em_pd;
+> >> +       struct em_perf_table *tmp;
+> >> +
+> >> +       tmp = pd->runtime_table;
+> >> +
+> >> +       rcu_assign_pointer(pd->runtime_table, runtime_table);
+> >> +
+> >> +       em_cpufreq_update_efficiencies(dev, runtime_table->state);
+> >> +
+> >> +       /* Don't free default table since it's used by other frameworks. */
+> >
+> > Apparently, some frameworks are only going to use the default table
+> > while the runtime-updatable table will be used somewhere else at the
+> > same time.
+> >
+> > I'm not really sure if this is a good idea.
+>
+> Runtime table is only for driving the task placement in the EAS.
+>
+> The thermal gov IPA won't make better decisions because it already
+> has the mechanism to accumulate the error that it made.
+>
+> The same applies to DTPM, which works in a more 'configurable' way,
+> rather that hard optimization mechanism (like EAS).
 
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.6-rc3-95-g705ffbf392dc
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      705ffbf392dc64e6f54772eb08e99d94f7845ed8 =
+My understanding of the above is that the other EM users don't really
+care that much so they can get away with using the default table all
+the time, but EAS needs more accuracy, so the table used by it needs
+to be adjusted in certain situations.
 
+Fair enough, I'm assuming that you've done some research around it.
+Still, this is rather confusing.
 
-
-Test Regressions
----------------- =
-
-
-
-platform      | arch  | lab           | compiler | defconfig | regressions
---------------+-------+---------------+----------+-----------+------------
-r8a77960-ulcb | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6516bcc7e93a393af68a0a42
-
-  Results:     4 PASS, 2 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.6-rc3-95-g705ffb=
-f392dc/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a77960-ulcb.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.6-rc3-95-g705ffb=
-f392dc/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a77960-ulcb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/6516bcc8e93a393af68a0a4b
-        failing since 71 days (last pass: pm-6.5-rc2-210-ga648a2d354da, fir=
-st fail: v6.5-rc2-44-g6384f300e9f3)
-
-    2023-09-29T12:06:23.272214  / # #
-
-    2023-09-29T12:06:23.372681  export SHELL=3D/bin/sh
-
-    2023-09-29T12:06:23.372850  #
-
-    2023-09-29T12:06:23.473421  / # export SHELL=3D/bin/sh. /lava-11639476/=
-environment
-
-    2023-09-29T12:06:23.473570  =
-
-
-    2023-09-29T12:06:23.574027  / # . /lava-11639476/environment/lava-11639=
-476/bin/lava-test-runner /lava-11639476/1
-
-    2023-09-29T12:06:23.574243  =
-
-
-    2023-09-29T12:06:23.586081  / # /lava-11639476/bin/lava-test-runner /la=
-va-11639476/1
-
-    2023-09-29T12:06:23.627909  + export 'TESTRUN_ID=3D1_bootrr'
-
-    2023-09-29T12:06:23.645378  + cd /lav<8>[   20.535598] <LAVA_SIGNAL_STA=
-RTRUN 1_bootrr 11639476_1.5.2.4.5>
- =
-
-    ... (28 line(s) more)  =
-
- =
-
-
-
-platform      | arch  | lab           | compiler | defconfig | regressions
---------------+-------+---------------+----------+-----------+------------
-r8a779m1-ulcb | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6516bcdae93a393af68a0a5b
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.6-rc3-95-g705ffb=
-f392dc/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a779m1-ulcb.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.6-rc3-95-g705ffb=
-f392dc/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a779m1-ulcb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/6516bcdae93a393af68a0a64
-        failing since 71 days (last pass: pm-6.5-rc2-210-ga648a2d354da, fir=
-st fail: v6.5-rc2-44-g6384f300e9f3)
-
-    2023-09-29T12:04:34.353780  / # #
-
-    2023-09-29T12:04:35.434433  export SHELL=3D/bin/sh
-
-    2023-09-29T12:04:35.436310  #
-
-    2023-09-29T12:04:36.922133  / # export SHELL=3D/bin/sh. /lava-11639469/=
-environment
-
-    2023-09-29T12:04:36.923424  =
-
-
-    2023-09-29T12:04:39.646946  / # . /lava-11639469/environment/lava-11639=
-469/bin/lava-test-runner /lava-11639469/1
-
-    2023-09-29T12:04:39.649085  =
-
-
-    2023-09-29T12:04:39.662401  / # /lava-11639469/bin/lava-test-runner /la=
-va-11639469/1
-
-    2023-09-29T12:04:39.678430  + export 'TESTRUN_ID=3D1_bootrr'
-
-    2023-09-29T12:04:39.721511  + cd /lava-116394<8>[   28.545948] <LAVA_SI=
-GNAL_STARTRUN 1_bootrr 11639469_1.5.2.4.5>
- =
-
-    ... (44 line(s) more)  =
-
- =20
+> >
+> >> +       if (tmp != pd->default_table)
+> >> +               call_rcu(&tmp->rcu, em_destroy_rt_table_rcu);
+>
+> The em_destroy_rt_table_rcu() is used here ^^^^^^
