@@ -2,169 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED9AB7B31F8
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 14:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F3F7B324D
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 14:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232964AbjI2MCy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Sep 2023 08:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53472 "EHLO
+        id S233221AbjI2MSX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 29 Sep 2023 08:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjI2MCx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 08:02:53 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC51EF9
-        for <linux-pm@vger.kernel.org>; Fri, 29 Sep 2023 05:02:51 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id e9e14a558f8ab-351232a46b3so39650945ab.1
-        for <linux-pm@vger.kernel.org>; Fri, 29 Sep 2023 05:02:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1695988971; x=1696593771; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=UJnZWusS+auwrzmf7ucKQZ1g7pCIeU4HyU06wEXGLYE=;
-        b=FRkUNIlfqkOY3T/U0uyG7y27qk8E7t7qo91znwA+sJ2PQthuiaDHGyuRdZBwFL30GU
-         cGI5P+tmIN9ji1cILpVLfKZDKfzyWygAEGivoQyg0av6cK3zr9VahgMN8SeZG2+4n/2A
-         cgpTNXUPVZbBjejePOFE8Bthgm7kBUcLC6xeR9jfbpCFy6hBoqNAHc3Qq1sKAPlVBk2v
-         oX/C7Zu0XDHvh6xnum7ScHX9cqJhcUCwOd+XYIhWc9IiJ27XXo0URMsFWz6UlA56WjxQ
-         pHE/SKgZ2H/cY0aylAqVZdnW22z+GVXys1l2f/fMTcG6agPFFcOp6Ajy67UJxvUYWdew
-         inFA==
+        with ESMTP id S233219AbjI2MSW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 08:18:22 -0400
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02EBD1AA;
+        Fri, 29 Sep 2023 05:18:21 -0700 (PDT)
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-57bc11c197aso1219405eaf.1;
+        Fri, 29 Sep 2023 05:18:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695988971; x=1696593771;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UJnZWusS+auwrzmf7ucKQZ1g7pCIeU4HyU06wEXGLYE=;
-        b=mWhDszpr8DyBF7Rz7q900JAd3dEYVlEdSu3OJCWlMd03ix6tzfjl37rpg9yOoiYIBg
-         eePD7Dj6ht7NfB1w2YaWc4E5PDbqujXaApiSzIGh6mvDCNvAxpdESiaXMaNrz1Mkw19l
-         3dOpA7e2L7UStT9YDYRbF9IoBfbCp3+vAmttfJqHdYj+jcfYKtop5tFQTrvIz1e5YD+z
-         Dzz8yAVLJnC6dleHtiOXwhkrX6CExc9kHrGkyOu2hwxQ87Hbk5nkcP0FLbdXisQqQGAG
-         3u1Knvum0UCj68JxCDS3pzSCLpHjdnQU+e12zOCqt/hg2ymfBabfHyPpgklSc3PZOJ2c
-         9j4Q==
-X-Gm-Message-State: AOJu0YwkR+i+NU4mKtWxktsrPH3SKHuNcBB1iTaD46NbAQZka+HISxLz
-        Z7ptgu2M41wugjyQ6jQWBeVSww==
-X-Google-Smtp-Source: AGHT+IEzVmOlrw/Xt0Rd2POGcw+9vj+3md7it+RmJ4DcK4zUAnnngeIXygLpbtFpMLyxOQ3aGk+hfg==
-X-Received: by 2002:a92:ca45:0:b0:34d:ec9c:7321 with SMTP id q5-20020a92ca45000000b0034dec9c7321mr4667575ilo.3.1695988971094;
-        Fri, 29 Sep 2023 05:02:51 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id y15-20020a63ad4f000000b00578bb0066b6sm3641567pgo.71.2023.09.29.05.02.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Sep 2023 05:02:50 -0700 (PDT)
-Message-ID: <6516bcea.630a0220.11b20.b113@mx.google.com>
-Date:   Fri, 29 Sep 2023 05:02:50 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20230601; t=1695989900; x=1696594700;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UkUCEKbP8HqOOiE0WgtqrpGwplsIgZxlbsQ4QxXPJXs=;
+        b=wD5IQP1Jskr8BXGu/Kt5xfiBIhbquua0ZVaSLi1wp6eeVcrt4qqV5CHrAKxBa8GJqI
+         ZuzYyFn1xrAzJurgHzENUxHoI63cxhbbJvPtvwhrlPSfAUFnRRDrQuVcvNoKp691BbXE
+         RSv1YtBc2MnhS6BkGk3WYd2MZKbkeBxXrDZhBHd2Bug/2zJkPduI0NrQszdqI0VqbM/3
+         jRzy74vuQUKxWI9MniXXvFLJe5NNHs/xOFFmejrG+MyO5AE6W+aHv2H1PQJnnUh5foCt
+         Yfm2y1zd9BP3ypfg8lD+vtsK0kRHDswYo5/j5wVW6wgROaeoMyQkO+WNETCib9GyENi9
+         u1vg==
+X-Gm-Message-State: AOJu0YyK+HaUHaEKFXSFOb7lLJ0S++/JjPfcjMOdqW6Sq9c/aeo/lJPc
+        LLYpNRtOgMoPt5RwJjQ3u5CWExQMOGWQaDB5jfw=
+X-Google-Smtp-Source: AGHT+IEx/75T/hzvBFoUXXwhQGu997npYkFXA2nC3oXdZavdBeCKxwxBtvBBpr0N7RpFpdgVnY6iAgSleay6DFyFHGc=
+X-Received: by 2002:a05:6820:629:b0:57b:7e31:c12 with SMTP id
+ e41-20020a056820062900b0057b7e310c12mr4465454oow.1.1695989900147; Fri, 29 Sep
+ 2023 05:18:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v6.6-rc3-95-g705ffbf392dc
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.6-rc3-95-g705ffbf392dc)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230925081139.1305766-1-lukasz.luba@arm.com> <20230925081139.1305766-9-lukasz.luba@arm.com>
+ <CAJZ5v0hM3DvEZSyDubd29bkEPDv6JUm8FaKM8+suaWOpKESp+w@mail.gmail.com> <516cb2e8-6b54-b17f-f275-1bebe908bf34@arm.com>
+In-Reply-To: <516cb2e8-6b54-b17f-f275-1bebe908bf34@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 29 Sep 2023 14:18:09 +0200
+Message-ID: <CAJZ5v0jSSrAMO9S1g49c6mH3DPYJOqfspV7EscQCDpkPgox+=Q@mail.gmail.com>
+Subject: Re: [PATCH v4 08/18] PM: EM: Add update_power() callback for runtime modifications
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        dietmar.eggemann@arm.com, rui.zhang@intel.com,
+        amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
+        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
+        len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org,
+        qyousef@layalina.io, wvw@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.6-rc3-95-g70=
-5ffbf392dc)
+On Fri, Sep 29, 2023 at 10:59 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+> On 9/26/23 19:59, Rafael J. Wysocki wrote:
+> > On Mon, Sep 25, 2023 at 10:11 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+> >>
+> >> The Energy Model (EM) is going to support runtime modifications. This
+> >> new callback would be used in the upcoming EM changes. The drivers
+> >> or frameworks which want to modify the EM have to implement the
+> >> update_power() callback.
+> >>
+> >> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> >> ---
+> >>   include/linux/energy_model.h | 22 ++++++++++++++++++++++
+> >>   1 file changed, 22 insertions(+)
+> >>
+> >> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+> >> index d236e08e80dc..546dee90f716 100644
+> >> --- a/include/linux/energy_model.h
+> >> +++ b/include/linux/energy_model.h
+> >> @@ -168,6 +168,26 @@ struct em_data_callback {
+> >>           */
+> >>          int (*get_cost)(struct device *dev, unsigned long freq,
+> >>                          unsigned long *cost);
+> >> +
+> >> +       /**
+> >> +        * update_power() - Provide new power at the given performance state of
+> >> +        *              a device
+> >
+> > The meaning of the above is unclear to me.
+>
+> I can try to rephrase this a bit:
+> ' Provide a new power value for the device at the given frequency. This
+> allows to reflect changed power profile in runtime.'
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-6-rc3-95-g705ffbf392dc/
+Maybe "Estimate power for a given device frequency"
 
-Tree: pm
-Branch: testing
-Git Describe: v6.6-rc3-95-g705ffbf392dc
-Git Commit: 705ffbf392dc64e6f54772eb08e99d94f7845ed8
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+> >
+> >> +        * @dev         : Device for which we do this operation (can be a CPU)
+> >
+> > It is unclear what "we" means in this context.  Maybe say "Target
+> > device (can be a CPU)"?
+>
+> That sounds better indeed.
+>
+> >
+> >> +        * @freq        : Frequency at the performance state in kHz
+> >
+> > What performance state does this refer to?  And the frequency of what?
+>
+> We just call the entry in EM the 'performance state' (so frequency and
+> power). I will rephrase this as well:
+> 'Frequency of the @dev expressed in kHz'
 
-Warnings Detected:
+Or "Device frequency for which to estimate power"?
 
-arc:
+> >
+> >> +        * @power       : New power value at the performance state
+> >> +        *              (modified)
+> >
+> > Similarly unclear as the above.
+>
+> OK, it can be re-written as:
+> 'Power value of the @dev at the given @freq (modified)'
 
-arm64:
+This is not a power value, but a return pointer AFAICS.  So "location
+to store the return power value".
 
-arm:
+> >
+> >> +        * @priv        : Pointer to private data useful for tracking context
+> >> +        *              during runtime modifications of EM.
+> >
+> > Who's going to set this pointer and use this data?
+>
+> The driver or kernel module, which is aware about thermal events. Those
+> events might be coming from FW to kernel, but we need to maintain
+> the same 'context' for all OPPs when we start the EM update.
+>
+> This 'priv' field is used for passing the 'context' back to the
+> caller, so the caller can consistently the update. The update might
+> be with some math formula which multiplies the power by some factor
+> value (based on thermal model and current temperature).
 
-i386:
+I would say "Additional data for the callback function, provided by
+the entity setting the callback pointer".
 
-mips:
+> >
+> >> +        *
+> >> +        * The update_power() is used by runtime modifiable EM. It aims to
+> >
+> > I would drop "The" from the above.
+>
+> OK
+>
+> >
+> >> +        * provide updated power value for a given frequency, which is stored
+> >> +        * in the performance state.
+> >
+> > A given frequency of what and the performance state of what does this refer to?
+>
+> I will change that and add the '@dev' word to make this more precised.
 
-riscv:
+That would help.  Overall, I would say "is used by ... to obtain a new
+power value for a given frequency of @dev".
 
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+>
+> 'update_power() is used by runtime modifiable EM. It aims to update the
+> @dev EM power values for all registered frequencies.'
