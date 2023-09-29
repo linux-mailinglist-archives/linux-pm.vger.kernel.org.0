@@ -2,243 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 155CA7B3354
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 15:18:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 808457B33FE
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 15:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233139AbjI2NSu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 29 Sep 2023 09:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
+        id S233266AbjI2Ns2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Sep 2023 09:48:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232990AbjI2NSu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 09:18:50 -0400
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220AEB7;
-        Fri, 29 Sep 2023 06:18:48 -0700 (PDT)
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-57bf04841ccso851271eaf.0;
-        Fri, 29 Sep 2023 06:18:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695993527; x=1696598327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PN8DsXjpnwwdKwwuRQAbxWLd/VJ6QmmZmSxP4LzKLFM=;
-        b=b5IE6OPUgICG/S+zJyTY1OD09fZYcdLpkjEtOqEX8V4SsBemLEg1P2jqh18Fday5ve
-         IJJp3PWUUDhGDcwhJci4bcYtFIVC2ilW4AaWtAu74BO7S7tptyZiBm6vnppZZRI8+n6G
-         Q7sfwcLANtIYYDCZ3M9DBrlJD4M9IWenaCjQWFHcZwBmE5ZgZlPv7YNVJ+v4Jt5nMlW5
-         T4u3vlw/C4A+vW5Z4zTxNtYGZGDHkzBRavbWVAKJNhbwvLA0tUFsPcTJEgG83js/KWVv
-         r/q6mjfb1ns+6D6/pcStrXO64MSpsgqZwwWfq3VQTpuqrT+FNAqN06V4LzOfSAEXvCK6
-         A5OA==
-X-Gm-Message-State: AOJu0YyMT6UJ/pei/OzuuF+mbcfTXfavNhT6ZSkVkFa3zgq192Cq4lPY
-        fhfpbL/970RONozz/2ubjRPaNGW2Kequx6ZyJy0=
-X-Google-Smtp-Source: AGHT+IE8kxs8jZ7qOdr7ur9o+LAaYVeL0S8+xOVyMwluAODY07tu+JAOByIH80Vtezd++SQKMDs7eFtRyAT5Nj1RBGc=
-X-Received: by 2002:a4a:a342:0:b0:57b:7804:9d72 with SMTP id
- u2-20020a4aa342000000b0057b78049d72mr4234797ool.1.1695993527255; Fri, 29 Sep
- 2023 06:18:47 -0700 (PDT)
+        with ESMTP id S233217AbjI2Ns1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 09:48:27 -0400
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8661A8
+        for <linux-pm@vger.kernel.org>; Fri, 29 Sep 2023 06:48:25 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qmDqb-0003x9-CW; Fri, 29 Sep 2023 15:48:01 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qmDqa-009pKl-AB; Fri, 29 Sep 2023 15:48:00 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qmDqa-005wF3-0o; Fri, 29 Sep 2023 15:48:00 +0200
+Date:   Fri, 29 Sep 2023 15:47:57 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev,
+        linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: Re: [rafael-pm:bleeding-edge 48/94]
+ drivers/thermal/amlogic_thermal.c:303:16: error: void value not ignored as
+ it ought to be
+Message-ID: <20230929134757.5ztol37eqttvr4wo@pengutronix.de>
+References: <202309291214.Hjn3gJ94-lkp@intel.com>
+ <CAJZ5v0gGissufTrvCa+z5i=kPMDM+-RKoQfOHW41zf7o2=z4SQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230925081139.1305766-1-lukasz.luba@arm.com> <20230925081139.1305766-12-lukasz.luba@arm.com>
- <CAJZ5v0iebSOT--AiP-9-CYwqtTe7+kRddryJ3DdvFb3WUeji7w@mail.gmail.com> <a3907ec0-7e20-e3a5-3814-476a25e1efaa@arm.com>
-In-Reply-To: <a3907ec0-7e20-e3a5-3814-476a25e1efaa@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 29 Sep 2023 15:18:36 +0200
-Message-ID: <CAJZ5v0jU1SZ5kPHYqM3DLGY9j8DgGp7XCciyy=fJAyHnkyGgtA@mail.gmail.com>
-Subject: Re: [PATCH v4 11/18] PM: EM: Add runtime update interface to modify
- EM power
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        dietmar.eggemann@arm.com, rui.zhang@intel.com,
-        amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
-        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
-        len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org,
-        qyousef@layalina.io, wvw@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="h5m4qeuiyxuq2nm4"
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gGissufTrvCa+z5i=kPMDM+-RKoQfOHW41zf7o2=z4SQ@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 29, 2023 at 11:59 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->
->
->
-> On 9/26/23 20:48, Rafael J. Wysocki wrote:
-> > On Mon, Sep 25, 2023 at 10:11 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
-> >
-> > First off, I would merge this with the previous patch, as the changes
-> > would be much clearer then IMO.
->
-> I was trying to avoid a big patch ~150 lines. I will do that merge.
->
-> >
-> >> Add an interface which allows to modify EM power data at runtime.
-> >> The new power information is populated by the provided callback, which
-> >> is called for each performance state.
-> >
-> > But it all starts with copying the frequencies from the default table.
->
-> Yes, I can add that to the description.
->
-> >
-> >> The CPU frequencies' efficiency is
-> >> re-calculated since that might be affected as well. The old EM memory
-> >> is going to be freed later using RCU mechanism.
-> >
-> > Not all of it, but the old runtime table that is not going to be used any more.
->
-> True, I will rephrase that, to make it more precised.
->
-> >
-> >> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->
-> [snip]
->
-> >>
-> >> +/**
-> >> + * em_dev_update_perf_domain() - Update runtime EM table for a device
-> >> + * @dev                : Device for which the EM is to be updated
-> >> + * @cb         : Callback function providing the power data for the EM
-> >> + * @priv       : Pointer to private data useful for passing context
-> >> + *             which might be required while calling @cb
-> >
-> > It is still unclear to me who is going to use this priv pointer and how.
->
-> I have explained that in some previous patch response. A driver or
-> kernel module which monitors the thermal situation and has context.
->
-> >
-> >> + *
-> >> + * Update EM runtime modifiable table for a @dev using the callback
-> >> + * defined in @cb. The EM new power values are then used for calculating
-> >> + * the em_perf_state::cost for associated performance state.
-> >
-> > It actually allocates a new runtime table and populates it from
-> > scratch, using the frequencies from the default table and the
-> > callback.
->
-> Yes, it allocated new table and put the updated power values there.
-> I can add that to the comment.
->
-> >
-> >> + *
-> >> + * This function uses mutex to serialize writers, so it must not be called
-> >
-> > "a mutex"
->
-> ACK
->
-> >
-> >> + * from non-sleeping context.
->
-> [snip]
->
-> >> +
-> >> +       if (!dev || !dev->em_pd) {
-> >
-> > Checking dev against NULL under the mutex is pointless (either it is
-> > NULL or it isn't, so check it earlier).
->
-> ACK
->
-> >
-> >> +               ret = -EINVAL;
-> >> +               goto unlock_em;
-> >> +       }
-> >> +
-> >> +       pd = dev->em_pd;
-> >
-> > And I would check pd against NULL here.
->
-> It's done above, next to '!dev || !dev->em_pd'
 
-Yes, it is, I meant something like this:
+--h5m4qeuiyxuq2nm4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-    if (!cb || !cb->update_power || !dev)
-        return -EINVAL;
-
-    mutex_lock(&em_pd_mutex);
-
-    pd = dev->em_pd;
-    if (!pd) {
-        ret = -EINVAL; /* or perhaps -ENODATA */
-        goto unlock_em;
-    }
-
-
+On Fri, Sep 29, 2023 at 12:37:03PM +0200, Rafael J. Wysocki wrote:
+> On Fri, Sep 29, 2023 at 6:21=E2=80=AFAM kernel test robot <lkp@intel.com>=
+ wrote:
 > >
-> >> +
-> >> +       runtime_table = kzalloc(sizeof(*runtime_table), GFP_KERNEL);
-> >> +       if (!runtime_table) {
-> >> +               ret = -ENOMEM;
-> >> +               goto unlock_em;
-> >> +       }
-> >> +
-> >> +       runtime_table->state = kcalloc(pd->nr_perf_states,
-> >> +                                      sizeof(struct em_perf_state),
-> >> +                                      GFP_KERNEL);
-> >> +       if (!runtime_table->state) {
-> >> +               ret = -ENOMEM;
-> >> +               goto free_runtime_table;
-> >> +       }
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+=2Egit bleeding-edge
+> > head:   2cff74feed4a2a3a1c220e0ee2838b85b08d4999
+> > commit: 88af8b66ffedcad8c5a1522f6a9c02bf8129a951 [48/94] thermal: amlog=
+ic: Convert to platform remove callback returning void
+> > config: arm-randconfig-004-20230929 (https://download.01.org/0day-ci/ar=
+chive/20230929/202309291214.Hjn3gJ94-lkp@intel.com/config)
+> > compiler: arm-linux-gnueabi-gcc (GCC) 13.2.0
+> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
+hive/20230929/202309291214.Hjn3gJ94-lkp@intel.com/reproduce)
 > >
-> > The above allocations can be merged into one and allocating memory
-> > under the mutex is questionable.
->
-> So how to make sure that there is no 2 callers trying to update the
-> same EM or unregistration is not in the background?
-
-You can allocate memory upfront and take the mutex before accessing
-the shared data structures.  If there's an error in the code running
-under the mutex, release it and then free the memory.
-
-Allocating memory is one operation, updating the shared data
-structures to use it is another one.  The former doesn't affect the
-shared state in any way, so why do it under the mutex?
-
-> [snip]
->
-> >>
-> >> @@ -501,9 +598,23 @@ void em_dev_unregister_perf_domain(struct device *dev)
-> >>
-> >>          runtime_table = pd->runtime_table;
-> >>
-> >> +       /*
-> >> +        * Safely destroy runtime modifiable EM. By using the call
-> >> +        * synchronize_rcu() we make sure we don't progress till last user
-> >> +        * finished the RCU section and our update got applied.
-> >> +        */
-> >>          rcu_assign_pointer(pd->runtime_table, NULL);
-> >>          synchronize_rcu();
-> >>
-> >> +       /*
-> >> +        * After the sync no updates will be in-flight, so free the
-> >> +        * memory allocated for runtime table (if there was such).
-> >> +        */
-> >> +       if (runtime_table != pd->default_table) {
-> >> +               kfree(runtime_table->state);
-> >> +               kfree(runtime_table);
-> >> +       }
+> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
+rsion of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202309291214.Hjn3gJ94-l=
+kp@intel.com/
 > >
-> > Can't this race with the RCU callback freeing the runtime table?
->
-> That's why there is this 'synchronize_rcu()' above and the mutex. The
-> updating caller if finished the update, would unlock the mutex and this
-> unregister code can go. Here we call the synchronize_rcu() so we assure
-> the callback has finished for the update path and than we explicitly
-> free the saved 'runtime_table' here. So all data should be freed and
-> code serialized in those two paths.
+> > All errors (new ones prefixed by >>):
+> >
+> >    drivers/thermal/amlogic_thermal.c: In function 'amlogic_thermal_susp=
+end':
+> > >> drivers/thermal/amlogic_thermal.c:303:16: error: void value not igno=
+red as it ought to be
+> >      303 |         return amlogic_thermal_disable(data);
+> >          |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>=20
+> amlogic_thermal_disable() should not be modified by this commit -
+> fixed up in the tree.
 
-This doesn't quite agree with my understanding of what synchronize_rcu() does.
+Thanks for choosing an option that hides that embarrassing build
+failure. :-)
 
-IIUC, RCU callbacks can run as soon as the grace period has elapsed
-and they need not wait for synchronize_rcu() to return.  Conversely,
-synchronize_rcu() doesn't wait for all of the RCU callbacks to
-complete.
+IMHO
 
-Now, em_destroy_rt_table_rcu() doesn't actually use the mutex, so how
-exactly is it protected against racing with this code?
+https://lore.kernel.org/all/20230929061305.2351953-1-u.kleine-koenig@pengut=
+ronix.de
+
+is the nicer fix because with that amlogic_thermal_remove() would ignore
+the return value of amlogic_thermal_disable(). On top of your current
+tree that would be:
+
+diff --git a/drivers/thermal/amlogic_thermal.c b/drivers/thermal/amlogic_th=
+ermal.c
+index 5877cde25b79..562f63b7bf27 100644
+--- a/drivers/thermal/amlogic_thermal.c
++++ b/drivers/thermal/amlogic_thermal.c
+@@ -167,13 +167,11 @@ static int amlogic_thermal_enable(struct amlogic_ther=
+mal *data)
+ 	return 0;
+ }
+=20
+-static int amlogic_thermal_disable(struct amlogic_thermal *data)
++static void amlogic_thermal_disable(struct amlogic_thermal *data)
+ {
+ 	regmap_update_bits(data->regmap, TSENSOR_CFG_REG1,
+ 			   TSENSOR_CFG_REG1_ENABLE, 0);
+ 	clk_disable_unprepare(data->clk);
+-
+-	return 0;
+ }
+=20
+ static int amlogic_thermal_get_temp(struct thermal_zone_device *tz, int *t=
+emp)
+@@ -302,7 +300,9 @@ static int __maybe_unused amlogic_thermal_suspend(struc=
+t device *dev)
+ {
+ 	struct amlogic_thermal *data =3D dev_get_drvdata(dev);
+=20
+-	return amlogic_thermal_disable(data);
++	amlogic_thermal_disable(data);
++
++	return 0;
+ }
+=20
+ static int __maybe_unused amlogic_thermal_resume(struct device *dev)
+
+But I won't argue further and consider the case closed.
+
+Thanks
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
+   |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--h5m4qeuiyxuq2nm4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmUW1YwACgkQj4D7WH0S
+/k5fBwf8DU6ytLGBe3UCbC4aCs+KSO9KKMjRB2/wRBIg/wcF8uSiGYXVEdxaqiTT
+OuDnFPRnlI0rxYff524ZBxgQCD8XFBR0qZYCs9Nd1aWYDfYNS3EDPxIJ7Zl1srjO
+OppgV0rQILZZ4I3+1WfxqaeQbdvQszrPIrdOS8gGdRvFkmxo/nMx9zrtDp7Xl0XO
+xeywc1J736A6+rSm7D56a7TzY/xwuqDT9f6IBqYskBCufGm3FEgbxjrV6hzXr4Bc
+7MNU1kNZivh7TPMweQSUrmzoZRECWLA5I8w2Gt6GwTFgpNsEEce+26Cjq2qTipUI
+vzeYqecdnuRzTESFNswd4PClJC0biA==
+=oV9Q
+-----END PGP SIGNATURE-----
+
+--h5m4qeuiyxuq2nm4--
