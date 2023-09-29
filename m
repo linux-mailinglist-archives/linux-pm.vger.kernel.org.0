@@ -2,93 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A877B3104
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 13:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C457B31A7
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 13:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbjI2LGR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 29 Sep 2023 07:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58566 "EHLO
+        id S233074AbjI2Lpp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Sep 2023 07:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjI2LGQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 07:06:16 -0400
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F438199
-        for <linux-pm@vger.kernel.org>; Fri, 29 Sep 2023 04:06:14 -0700 (PDT)
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-57ddba5ba84so501297eaf.0
-        for <linux-pm@vger.kernel.org>; Fri, 29 Sep 2023 04:06:14 -0700 (PDT)
+        with ESMTP id S233249AbjI2Lp1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 07:45:27 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106A2CE4
+        for <linux-pm@vger.kernel.org>; Fri, 29 Sep 2023 04:45:11 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-406618d080eso1558295e9.2
+        for <linux-pm@vger.kernel.org>; Fri, 29 Sep 2023 04:45:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1695987909; x=1696592709; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8bm0ODN6EVFxISuZSf0X5YLAHe/Sx50i0t5BgX3iJIc=;
+        b=cbB1yLE9KkVRmubK79T2H08A2jl7COb6+3G1RKcvP0psSvm+VtTHQM4lv9bbxK3f3T
+         JdajpYNusJ06KE50fhdgfk4CCTrD7DVzqJjW8cRz0LoGkBeJebBstuCMo2/Egk/xd8vs
+         ype7XbQR0m6wRCabharm6hPJv7z7GfX7J+QnaIGZSDr3+jrnQ2uCV8IVk9qXzmSa/o1X
+         /R4+89a+g/LxapVYC0dhMquMR0AidkVl/SP3xWR2vzDHd4XsPFPWl91575Oljqcsmzyb
+         TKVV1EHC8uvBOMmJFvMf1yeHjUueKTAYYDb1JsfcByPBTK4U1WQCZ9iojyrjPlp7nkhR
+         DElw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695985574; x=1696590374;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eXfAf5K3soRpBRm4siYV07qIpnEuTmFZ/fmri8xNbS0=;
-        b=eE6l7spgxrtHS9hm/I33rmmfSa6f1jNh0ZhIuXSWbqdIwJ2pIEPBOBtxLsCjIvzHSw
-         VjoCeVvjorQIaJAk7CulCN+a89EcEQREZfZuPOsh+0UGyARxhO4SBmtdMg+ZwHVETskS
-         AwQp8vxY2LW8nsqkLV9wFYKwvnaW0/jAictyxnR7Ra1QzOR6sGF6mTOim+cWtftxEo1Q
-         1OL3gNUIIMwsCw+Ct71OAbG0+REb3D1HH5mR3yGJUiQs2eftFz0+AbvDhoEOiPHN2lQn
-         FZuiRRJuDxmO3xK+nNfOgdaKP5BtM0x4J7bAHGO5Rje0N9UuXhrGO8WoSSSvYXAZczSV
-         9VKA==
-X-Gm-Message-State: AOJu0YyF8GWQIzOQ+lCgCv705whe44zK6ZxVkoAj0aM9ry3KB872tjRh
-        V2R9iMIoGOyvOx4V5L7mo42LlTEA/zju0H5tvtoRAsjEqR4=
-X-Google-Smtp-Source: AGHT+IHnjMQf4TcIXqCYxJb3MiiDMpkfJS1bbFz8BdVVdymPezpCAoDu2EEE46tvAJIh66O1sFSg8v/jwiHNHZ+/gT0=
-X-Received: by 2002:a05:6820:3c1:b0:57c:6e35:251e with SMTP id
- s1-20020a05682003c100b0057c6e35251emr3709817ooj.1.1695985573695; Fri, 29 Sep
- 2023 04:06:13 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1695987909; x=1696592709;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8bm0ODN6EVFxISuZSf0X5YLAHe/Sx50i0t5BgX3iJIc=;
+        b=sR6sbJMX0WBVtoDRCM6IQPp6haUvCCqMmUwO+znNFtWckkvFuUcFP44lPJa+sK+Ncf
+         xmmA0U5Oi+A201CWdpldRT0aJ6UkwF5JuzlFdsFjarxM0Z7fVyKoIIucaCnXas6PzQS5
+         X++M1Gf9n+04NUgbMd8XuLwP+g3CZZk5fSjrAMZ5TrPZWht+pQrhKcSGRAiv57gqwh+v
+         7QG3swhlrRbf77+95k4O1fxQTQF6rWFWqhx3JT0vpiUkUaWL1beHTrD6csqf8qqdThJr
+         HmojkB5f7z9xl/ZiQ5c9bus4tdYyA5mQ61UovBLQ0z1bDYyFoHyhrVJd2Kz4wW+TPqgZ
+         OoXw==
+X-Gm-Message-State: AOJu0YzPkHpXEiWBxYeBcO5kLomWqjPRx/TdIc6KvDPUW37sJcVGgvoD
+        A7DpjTQZOD70X20sELc5jFgIeQ==
+X-Google-Smtp-Source: AGHT+IHsIEssfQt5XeKAofIU/RxmZVpToDfthUbKqwTlh2dGt/cky4WWeS6zIlGKK/dVFRr9l5w41Q==
+X-Received: by 2002:a1c:4c03:0:b0:405:7400:1e42 with SMTP id z3-20020a1c4c03000000b0040574001e42mr3462853wmf.41.1695987909197;
+        Fri, 29 Sep 2023 04:45:09 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
+        by smtp.googlemail.com with ESMTPSA id s22-20020a7bc396000000b003fee53feab5sm1267451wmj.10.2023.09.29.04.45.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Sep 2023 04:45:08 -0700 (PDT)
+Message-ID: <10e6377e-ab3f-c318-9860-56ff3b8aed92@linaro.org>
+Date:   Fri, 29 Sep 2023 13:45:07 +0200
 MIME-Version: 1.0
-References: <20230929061305.2351953-1-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20230929061305.2351953-1-u.kleine-koenig@pengutronix.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 29 Sep 2023 13:06:02 +0200
-Message-ID: <CAJZ5v0gZa24GuaqxH2M7Br9jWzivqVdxDurZv3F0K1xRVj8e4A@mail.gmail.com>
-Subject: Re: [PATCH] thermal: amlogic: Fix build failure after conversion to .remove_new()
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        kernel@pengutronix.de, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Guillaume La Roque <glaroque@baylibre.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2 4/7] thermal: exynos: simplify regulator
+ (de)initialization
+Content-Language: en-US
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        m.majewski2@samsung.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Zhang Rui <rui.zhang@intel.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+References: <bf9a07ff-5628-05ab-2362-a917d3d38313@linaro.org>
+ <20230911133435.14061-1-m.majewski2@samsung.com>
+ <20230911133435.14061-5-m.majewski2@samsung.com>
+ <CGME20230911133616eucas1p10c5eeb0f0240dde975ccc5935cb5c311@eucms1p2>
+ <20230926110239eucms1p2b539245c5b10591def4cd15f14896ad6@eucms1p2>
+ <67a7d507-7025-ee3e-f388-0a96e11eae41@linaro.org>
+ <a6f943be-a92f-f9ec-4103-7edc70a2c9a8@samsung.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <a6f943be-a92f-f9ec-4103-7edc70a2c9a8@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 29, 2023 at 8:13 AM Uwe Kleine-König
-<u.kleine-koenig@pengutronix.de> wrote:
->
-> Commit 88af8b66ffed ("thermal: amlogic: Convert to platform remove
-> callback returning void") converted amlogic_thermal_disable() to return
-> no value but missed that amlogic_thermal_suspend() makes use of the int
-> returned by this function. As amlogic_thermal_disable() returned zero
-> unconditionally before, add a return 0 to get the same behaviour as
-> before the offending commit.
->
-> Fixes: 88af8b66ffed ("thermal: amlogic: Convert to platform remove callback returning void")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202309291214.Hjn3gJ94-lkp@intel.com/
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
-> Hello,
->
-> sorry for not catching that before sending. I don't understand yet what
-> was wrong with my testing; I would have bet the series was tested with
-> an ARCH=arm64 allmodconfig build. :-\
->
-> If you prefer it, feel free to squash this patch into the offending
-> commit.
+On 29/09/2023 13:03, Marek Szyprowski wrote:
+> On 29.09.2023 12:46, Daniel Lezcano wrote:
+>> On 26/09/2023 13:02, Mateusz Majewski wrote:
+>>> Hi,
+>>>
+>>>> This is not equivalent. If regulator is provided and enable fails, the
+>>>> old code is nicely returning error. Now, it will print misleading
+>>>> message - failed to get regulator - and continue.
+>>>>
+>>>> While this simplifies the code, it ignores important running
+>>>> condition -
+>>>> having regulator enabled.
+>>>
+>>> Would doing this be correct?
+>>>
+>>> ret = devm_regulator_get_enable_optional(&pdev->dev, "vtmu");
+>>> switch (ret) {
+>>> case 0:
+>>> case -ENODEV:
+>>
+>> Not sure to understand why -NODEV is not an error
+> 
+> 
+> Because this what devm_regulator_get_enable_optional() returns if no
+> regulator is defined. I also got confused by this a few times.
 
-Instead, I've dropped the changes in amlogic_thermal_disable() from that commit.
+The code before this change calls devm_regulator_get_optional() which 
+returns -ENODEV too, right ? But there is no special case for this error.
 
-IMO they are not really related to it, because "remove" is not the
-only caller of the above.
+So this change uses devm_regulator_get_enable_optional() and handle the 
+ENODEV as a non-error, so there is a change in the behavior.
 
-Thanks!
+
+>>>      break;
+>>> case -EPROBE_DEFER:
+>>>      return -EPROBE_DEFER;
+>>> default:
+>>>      dev_err(&pdev->dev, "Failed to get enabled regulator: %d\n",
+>>>          ret);
+>>>      return ret;
+>>> }
+>>
+>> ret = devm_regulator_get_enable_optional(&pdev->dev, "vtmu");
+>> if (ret < 0) {
+>>      if (ret != EPROBE_DEFER)
+>>          dev_err(&pdev->dev, "Failed to get enabled regulator: %d\n",
+>> ret);
+>>      return ret;
+>> }
+>>
+>> ??
+>>
+> Best regards
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
