@@ -2,46 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58F3F7B324D
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 14:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B637B3289
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 14:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233221AbjI2MSX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 29 Sep 2023 08:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37646 "EHLO
+        id S232732AbjI2M1S convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 29 Sep 2023 08:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233219AbjI2MSW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 08:18:22 -0400
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02EBD1AA;
-        Fri, 29 Sep 2023 05:18:21 -0700 (PDT)
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-57bc11c197aso1219405eaf.1;
-        Fri, 29 Sep 2023 05:18:20 -0700 (PDT)
+        with ESMTP id S232896AbjI2M1S (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 08:27:18 -0400
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044C31A4;
+        Fri, 29 Sep 2023 05:27:16 -0700 (PDT)
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-57bc11c197aso1220958eaf.1;
+        Fri, 29 Sep 2023 05:27:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695989900; x=1696594700;
+        d=1e100.net; s=20230601; t=1695990435; x=1696595235;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UkUCEKbP8HqOOiE0WgtqrpGwplsIgZxlbsQ4QxXPJXs=;
-        b=wD5IQP1Jskr8BXGu/Kt5xfiBIhbquua0ZVaSLi1wp6eeVcrt4qqV5CHrAKxBa8GJqI
-         ZuzYyFn1xrAzJurgHzENUxHoI63cxhbbJvPtvwhrlPSfAUFnRRDrQuVcvNoKp691BbXE
-         RSv1YtBc2MnhS6BkGk3WYd2MZKbkeBxXrDZhBHd2Bug/2zJkPduI0NrQszdqI0VqbM/3
-         jRzy74vuQUKxWI9MniXXvFLJe5NNHs/xOFFmejrG+MyO5AE6W+aHv2H1PQJnnUh5foCt
-         Yfm2y1zd9BP3ypfg8lD+vtsK0kRHDswYo5/j5wVW6wgROaeoMyQkO+WNETCib9GyENi9
-         u1vg==
-X-Gm-Message-State: AOJu0YyK+HaUHaEKFXSFOb7lLJ0S++/JjPfcjMOdqW6Sq9c/aeo/lJPc
-        LLYpNRtOgMoPt5RwJjQ3u5CWExQMOGWQaDB5jfw=
-X-Google-Smtp-Source: AGHT+IEx/75T/hzvBFoUXXwhQGu997npYkFXA2nC3oXdZavdBeCKxwxBtvBBpr0N7RpFpdgVnY6iAgSleay6DFyFHGc=
+        bh=YtzJRowMW7e/E03q1lTUM5DVXc8/q+Drl19Zckr7ENQ=;
+        b=xLcibNgp0FRB9aYCsgGKj15qJqrxxZ+RFgtDg76lp9YaDs5DrtY/Mhy9RnTjB67qSq
+         hba/WKFUq/po/2UVoXiF63YUiyKflEcgPF6DwT3dJjTiowp05WdL+nj3bt4ikREDmx3n
+         vLqFqNbkjaQrGvXIVJDHws3He9WDs/MTtIQVV99aLvts37OUMUG6n/t4/Oq2SoIYgloc
+         1PAhBRr5MY0RWWBUyLYfECUXgoQU5i6v0aEFuo49PIX/wfYTRmzGuDrGQuzYabe05Os7
+         FS+P8t/9Pn2Ddjepqi8mz49QM4v8+ppf6r+QkKvAahp0m0MvuoBe1M+JDvP67VbTUDBc
+         f47g==
+X-Gm-Message-State: AOJu0YzfoEJX0h5w+t9SJLVp4a+teEW5AkaqogCb0Le2i1yb8eNs05+h
+        2w3PMHw2fusIU+gn6pTtFA8Zzd46Ec7hpcGfYvA=
+X-Google-Smtp-Source: AGHT+IEtWG6gWh2H8Sy+zC4ImyVW6S3AzZ5nzFhIapMQ4DfuepOZ6G4Rron/XwY+FxOvCAEaixm+lckahESotu0wlCw=
 X-Received: by 2002:a05:6820:629:b0:57b:7e31:c12 with SMTP id
- e41-20020a056820062900b0057b7e310c12mr4465454oow.1.1695989900147; Fri, 29 Sep
- 2023 05:18:20 -0700 (PDT)
+ e41-20020a056820062900b0057b7e310c12mr4488775oow.1.1695990435118; Fri, 29 Sep
+ 2023 05:27:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230925081139.1305766-1-lukasz.luba@arm.com> <20230925081139.1305766-9-lukasz.luba@arm.com>
- <CAJZ5v0hM3DvEZSyDubd29bkEPDv6JUm8FaKM8+suaWOpKESp+w@mail.gmail.com> <516cb2e8-6b54-b17f-f275-1bebe908bf34@arm.com>
-In-Reply-To: <516cb2e8-6b54-b17f-f275-1bebe908bf34@arm.com>
+References: <20230925081139.1305766-1-lukasz.luba@arm.com> <20230925081139.1305766-10-lukasz.luba@arm.com>
+ <CAJZ5v0gxjJRoZpGjs4qWy_CQbwnztgrQxHJpffdFHeEL7ikbYQ@mail.gmail.com> <e1b36a7b-0524-0559-7ae1-801bdda91e60@arm.com>
+In-Reply-To: <e1b36a7b-0524-0559-7ae1-801bdda91e60@arm.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 29 Sep 2023 14:18:09 +0200
-Message-ID: <CAJZ5v0jSSrAMO9S1g49c6mH3DPYJOqfspV7EscQCDpkPgox+=Q@mail.gmail.com>
-Subject: Re: [PATCH v4 08/18] PM: EM: Add update_power() callback for runtime modifications
+Date:   Fri, 29 Sep 2023 14:27:03 +0200
+Message-ID: <CAJZ5v0g1MYxABDEYJxjveWALV6yecuV1=Ly6REkR4eb1kS-cUA@mail.gmail.com>
+Subject: Re: [PATCH v4 09/18] PM: EM: Introduce runtime modifiable table
 To:     Lukasz Luba <lukasz.luba@arm.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
@@ -54,118 +54,189 @@ Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 29, 2023 at 10:59 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+On Fri, Sep 29, 2023 at 11:15 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
 >
-> On 9/26/23 19:59, Rafael J. Wysocki wrote:
+>
+>
+> On 9/26/23 20:12, Rafael J. Wysocki wrote:
 > > On Mon, Sep 25, 2023 at 10:11 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
 > >>
-> >> The Energy Model (EM) is going to support runtime modifications. This
-> >> new callback would be used in the upcoming EM changes. The drivers
-> >> or frameworks which want to modify the EM have to implement the
-> >> update_power() callback.
+> >> The new runtime table would be populated with a new power data to better
+> >> reflect the actual power. The power can vary over time e.g. due to the
+> >> SoC temperature change. Higher temperature can increase power values.
+> >> For longer running scenarios, such as game or camera, when also other
+> >> devices are used (e.g. GPU, ISP) the CPU power can change. The new
+> >> EM framework is able to addresses this issue and change the data
+> >> at runtime safely.
+> >>
+> >> The runtime modifiable EM data is used by the Energy Aware Scheduler (EAS)
+> >> for the task placement. All the other users (thermal, etc.) are still
+> >> using the default (basic) EM. This fact drove the design of this feature.
 > >>
 > >> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 > >> ---
-> >>   include/linux/energy_model.h | 22 ++++++++++++++++++++++
-> >>   1 file changed, 22 insertions(+)
+> >>   include/linux/energy_model.h |  4 +++-
+> >>   kernel/power/energy_model.c  | 12 +++++++++++-
+> >>   2 files changed, 14 insertions(+), 2 deletions(-)
 > >>
 > >> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-> >> index d236e08e80dc..546dee90f716 100644
+> >> index 546dee90f716..740e7c25cfff 100644
 > >> --- a/include/linux/energy_model.h
 > >> +++ b/include/linux/energy_model.h
-> >> @@ -168,6 +168,26 @@ struct em_data_callback {
-> >>           */
-> >>          int (*get_cost)(struct device *dev, unsigned long freq,
-> >>                          unsigned long *cost);
-> >> +
-> >> +       /**
-> >> +        * update_power() - Provide new power at the given performance state of
-> >> +        *              a device
+> >> @@ -39,7 +39,7 @@ struct em_perf_state {
+> >>   /**
+> >>    * struct em_perf_table - Performance states table
+> >>    * @state:     List of performance states, in ascending order
+> >> - * @rcu:       RCU used for safe access and destruction
+> >> + * @rcu:       RCU used only for runtime modifiable table
 > >
-> > The meaning of the above is unclear to me.
+> > This still doesn't appear to be used anywhere, so why change it here?
 >
-> I can try to rephrase this a bit:
-> ' Provide a new power value for the device at the given frequency. This
-> allows to reflect changed power profile in runtime.'
-
-Maybe "Estimate power for a given device frequency"
-
-> >
-> >> +        * @dev         : Device for which we do this operation (can be a CPU)
-> >
-> > It is unclear what "we" means in this context.  Maybe say "Target
-> > device (can be a CPU)"?
->
-> That sounds better indeed.
+> I will try to move this later in the series.
 >
 > >
-> >> +        * @freq        : Frequency at the performance state in kHz
+> >>    */
+> >>   struct em_perf_table {
+> >>          struct em_perf_state *state;
+> >> @@ -49,6 +49,7 @@ struct em_perf_table {
+> >>   /**
+> >>    * struct em_perf_domain - Performance domain
+> >>    * @default_table:     Pointer to the default em_perf_table
+> >> + * @runtime_table:     Pointer to the runtime modifiable em_perf_table
 > >
-> > What performance state does this refer to?  And the frequency of what?
->
-> We just call the entry in EM the 'performance state' (so frequency and
-> power). I will rephrase this as well:
-> 'Frequency of the @dev expressed in kHz'
-
-Or "Device frequency for which to estimate power"?
-
-> >
-> >> +        * @power       : New power value at the performance state
-> >> +        *              (modified)
-> >
-> > Similarly unclear as the above.
->
-> OK, it can be re-written as:
-> 'Power value of the @dev at the given @freq (modified)'
-
-This is not a power value, but a return pointer AFAICS.  So "location
-to store the return power value".
-
-> >
-> >> +        * @priv        : Pointer to private data useful for tracking context
-> >> +        *              during runtime modifications of EM.
-> >
-> > Who's going to set this pointer and use this data?
->
-> The driver or kernel module, which is aware about thermal events. Those
-> events might be coming from FW to kernel, but we need to maintain
-> the same 'context' for all OPPs when we start the EM update.
->
-> This 'priv' field is used for passing the 'context' back to the
-> caller, so the caller can consistently the update. The update might
-> be with some math formula which multiplies the power by some factor
-> value (based on thermal model and current temperature).
-
-I would say "Additional data for the callback function, provided by
-the entity setting the callback pointer".
-
-> >
-> >> +        *
-> >> +        * The update_power() is used by runtime modifiable EM. It aims to
-> >
-> > I would drop "The" from the above.
+> > "Pointer to em_perf_table that can be dynamically updated"
 >
 > OK
 >
 > >
-> >> +        * provide updated power value for a given frequency, which is stored
-> >> +        * in the performance state.
+> >>    * @nr_perf_states:    Number of performance states
+> >>    * @flags:             See "em_perf_domain flags"
+> >>    * @cpus:              Cpumask covering the CPUs of the domain. It's here
+> >> @@ -64,6 +65,7 @@ struct em_perf_table {
+> >>    */
+> >>   struct em_perf_domain {
+> >>          struct em_perf_table *default_table;
+> >> +       struct em_perf_table __rcu *runtime_table;
+> >>          int nr_perf_states;
+> >>          unsigned long flags;
+> >>          unsigned long cpus[];
+> >> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+> >> index 797141638b29..5b40db38b745 100644
+> >> --- a/kernel/power/energy_model.c
+> >> +++ b/kernel/power/energy_model.c
+> >> @@ -251,6 +251,9 @@ static int em_create_pd(struct device *dev, int nr_states,
+> >>                  return ret;
+> >>          }
+> >>
+> >> +       /* Initialize runtime table as default table. */
 > >
-> > A given frequency of what and the performance state of what does this refer to?
+> > Redundant comment.
 >
-> I will change that and add the '@dev' word to make this more precised.
-
-That would help.  Overall, I would say "is used by ... to obtain a new
-power value for a given frequency of @dev".
-
+> I'll drop it.
 >
-> 'update_power() is used by runtime modifiable EM. It aims to update the
-> @dev EM power values for all registered frequencies.'
+> >
+> >> +       rcu_assign_pointer(pd->runtime_table, default_table);
+> >> +
+> >>          if (_is_cpu_device(dev))
+> >>                  for_each_cpu(cpu, cpus) {
+> >>                          cpu_dev = get_cpu_device(cpu);
+> >> @@ -448,6 +451,7 @@ EXPORT_SYMBOL_GPL(em_dev_register_perf_domain);
+> >>    */
+> >>   void em_dev_unregister_perf_domain(struct device *dev)
+> >>   {
+> >> +       struct em_perf_table __rcu *runtime_table;
+> >>          struct em_perf_domain *pd;
+> >>
+> >>          if (IS_ERR_OR_NULL(dev) || !dev->em_pd)
+> >> @@ -457,18 +461,24 @@ void em_dev_unregister_perf_domain(struct device *dev)
+> >>                  return;
+> >>
+> >>          pd = dev->em_pd;
+> >> -
+> >
+> > Unrelated change.
+>
+> ACK
+>
+> >
+> >>          /*
+> >>           * The mutex separates all register/unregister requests and protects
+> >>           * from potential clean-up/setup issues in the debugfs directories.
+> >>           * The debugfs directory name is the same as device's name.
+> >>           */
+> >>          mutex_lock(&em_pd_mutex);
+> >> +
+> >
+> > Same here.
+>
+> ACK
+>
+> >
+> >>          em_debug_remove_pd(dev);
+> >>
+> >> +       runtime_table = pd->runtime_table;
+> >> +
+> >> +       rcu_assign_pointer(pd->runtime_table, NULL);
+> >> +       synchronize_rcu();
+> >
+> > Is it really a good idea to call this under a mutex?
+>
+> This is the unregistration of the EM code path, so a thermal
+> driver which gets some IRQs might not be aware that the EM
+> is going to vanish. That's why those two code paths: update
+> & unregister are protected with the same lock.
+>
+> This synchronize_rcu() won't be long,
+
+Are you sure?  This potentially waits for all of the CPUs in the
+system to go through a quiescent state which may take a while in
+principle.
+
+In any case, though, this effectively makes everyone waiting for the
+mutex also wait for the grace period to elapse and they may not care
+about it.
+
+> but makes sure that when we free(dev->em_pd) we don't leak runtime_table.
+>
+> >
+> >> +
+> >>          kfree(pd->default_table->state);
+> >>          kfree(pd->default_table);
+> >>          kfree(dev->em_pd);
+> >> +
+> >
+> > Unrelated change.
+>
+> ACK
+>
+> >
+> >>          dev->em_pd = NULL;
+> >>          mutex_unlock(&em_pd_mutex);
+> >>   }
+> >> --
+> >
+> > So this really adds a pointer to a table that can be dynamically
+> > updated to struct em_perf_domain without any users so far.  It is not
+> > used anywhere as of this patch AFAICS, which is not what the changelog
+> > is saying.
+>
+> Good catch. I will adjust the changlog in header and say:
+>
+> 'Add infrastructure and mechanisms for the new runtime table.
+> The runtime modifiable EM data is used by the Energy Aware Scheduler
+> (EAS)for the task placement.
+
+I would make it more clear that this is going to happen after some
+other subsequent changes.
+
+> All the other users (thermal, etc.) are
+> still using the default (basic) EM. This fact drove the design of this
+> feature.'
