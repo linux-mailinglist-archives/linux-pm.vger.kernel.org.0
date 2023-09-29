@@ -2,298 +2,378 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D1B77B2D36
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 09:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ED977B2D6C
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 10:01:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232490AbjI2HtV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Sep 2023 03:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51836 "EHLO
+        id S232814AbjI2IBl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Sep 2023 04:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231774AbjI2HtU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 03:49:20 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2059.outbound.protection.outlook.com [40.107.244.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45D319F;
-        Fri, 29 Sep 2023 00:49:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q94M+is7q3waojNwcQuWE2XeNChhs0GuC7BNl+0H6ujwbD3RILejKG3F88DL/Vjr6eOYfeF9qMMUqGc5pocWhBfY7rhU/r0cg6X++anChX/7J2chh3efBw6cTcpTZ9NLBcqBJe+6+5gjL5C5ZmdbHe354pzAUnnUNVbvFcSoafF8QC7nSt1ByMxTZRoR1ByAIWCt9FtUNM9q8Y9G9WGyTeldF9NgX35StF5SFGGih3JS5l//4iNAPuwO7tYIwExEkKDpdK+Vb4UGiZCStR0v9Z6c4ftYGxHx+1FryUahuFivkt+ZFj9pE1zSa9rOu7gbW7cD1PGEWiNTsDvbRc9quA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=N2RdSw+xQvJS0O0O4bMwI1IERweMkCzXhgqJmmk6V4Y=;
- b=jqIwjmEwUi7f4N2H5M/vPiGAudnrkhTe+m+8xU6Bmj2guIp6gvMIVLJobX/35EqJoYFRQbhBNCtI3TaTGpDDhSuxhZzwbIzFvPY0oMTh09PBXukl3HtUieeZ/Lh9VdbjdfP5+5poJC/XTp8W4eGqaU5yCcfLjRjoZVaVvJvN4vNSbQ+esDlGhAm9GFH5FcLfE0MXJ7stD4fhACPQQEIeWBk9gPhyzKnD1Z7lsTCeaahCLoR01yAogk1Q6eCyPOC/l6fFNc95eJtevktTE9tY8M8uzNFLuFdFp7bwXEHBXkGGKntycdFHJTvesMzVNCJAZMovsQ76/EI+Nmju1GkHYQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=N2RdSw+xQvJS0O0O4bMwI1IERweMkCzXhgqJmmk6V4Y=;
- b=1t3r1rlmE+JI/08A50cGeRZpTeviPr8O2ijwBX80+ah2SDH6xVqjHQg9LsG9dZh/LgUH1R1/skva5d5nOdYxAYwFD1lvyyDWfVIKaU6uLqfVoc0idarNyKsPGjT4X7fZ2hizEbgPuHfdTgX7EPk/NnJCF0fQggUlgV3V0ygp1Es=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB6165.namprd12.prod.outlook.com (2603:10b6:8:9a::21) by
- DM6PR12MB4529.namprd12.prod.outlook.com (2603:10b6:5:2ab::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6838.26; Fri, 29 Sep 2023 07:49:11 +0000
-Received: from DS7PR12MB6165.namprd12.prod.outlook.com
- ([fe80::495c:3afa:1762:efd5]) by DS7PR12MB6165.namprd12.prod.outlook.com
- ([fe80::495c:3afa:1762:efd5%4]) with mapi id 15.20.6813.017; Fri, 29 Sep 2023
- 07:49:11 +0000
-Message-ID: <438bb1f9-8663-690b-6696-15233b0ef100@amd.com>
-Date:   Fri, 29 Sep 2023 13:18:58 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2] selftests/amd-pstate: Fix broken paths to run
- workloads in amd-pstate-ut
-To:     Mario Limonciello <mario.limonciello@amd.com>, ray.huang@amd.com,
-        shuah@kernel.org
-Cc:     sukrut.bellary@gmail.com, li.meng@amd.com, gautham.shenoy@amd.com,
-        wyes.karny@amd.com, Perry.Yuan@amd.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20230919103351.48681-1-swapnil.sapkal@amd.com>
- <2d5a83d8-2101-4c36-ac37-be0375b0067f@amd.com>
-Content-Language: en-US
-From:   Swapnil Sapkal <Swapnil.Sapkal@amd.com>
-In-Reply-To: <2d5a83d8-2101-4c36-ac37-be0375b0067f@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN2PR01CA0028.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:25::33) To DS7PR12MB6165.namprd12.prod.outlook.com
- (2603:10b6:8:9a::21)
+        with ESMTP id S232868AbjI2IBh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 04:01:37 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82096CE2
+        for <linux-pm@vger.kernel.org>; Fri, 29 Sep 2023 01:01:31 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-4065dea9a33so2960735e9.3
+        for <linux-pm@vger.kernel.org>; Fri, 29 Sep 2023 01:01:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1695974489; x=1696579289; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yqgUS7wJ1G03tinBZqXJ1SkurpIUlMBVyenZP4LmNNQ=;
+        b=oWPYbCG3ZvfhtLEWmxyqUVlNawQmiBMckugbR6z5qyYdpidq/ENHqWt+/FuW2mLAW+
+         raCQuweC0upu2EXArjptASw3gqujsEi4L4rhXYxCWl9IexDyhVd764WSDsVn7xWgWw1c
+         OTddeyqNr9t22SDYFSA+SHZcrlUmEw14l4FATN6LyHKXl9ChipXv3cLt8gDv3qtFXyn8
+         tgiGJJA5zIyycWpgxQBjPh8t20/k+VI8lo5f6tq16w9CSd9533h8rIAP4+Q7hQLGtMew
+         orI9PGHq0A4ZnBo2EsnHgtyQDyQlGBCdH2YpoJfFAm+LkRh8uCoU0D0i+BgHjvjsR5A/
+         4euw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695974489; x=1696579289;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yqgUS7wJ1G03tinBZqXJ1SkurpIUlMBVyenZP4LmNNQ=;
+        b=jYIrXyzEqcCNi6fA89TFNP7SIkYyh00Fbc6dOQM6w/5PvQGqycOTktq11j9mjZe8XX
+         GIc4KJSMprOArejSaVXZwKYC402o2yzazbygQr19dsbrijt39jEMtj+FXxqu6yORETI1
+         Qbsdufz0dKP5+KJM7Ip1/00HlkGuZPL480ftlwzA/qkEjlSaWxBsf95z3FvfTEB1Pl0a
+         obQKuN53nGKH7z/kgtdH/E4xse564Uq0B2eFJ86nyjShqgtX9QZ5T0TrYkKmVsZv7c3P
+         Jeu2aA+03sNVu3nMHmVrowZF0qbP8iyWmJrWhz0mDdYH4iIFgRra+PzbIOHlqjlC1oQ9
+         CZvA==
+X-Gm-Message-State: AOJu0YyxHM2dTFZSMXdLj/QleiIE7LtkoEx8a4q4ebgjKfvUa6NVE+/H
+        FiT/MNrrpHN+Xyp2O8dn+Wi9HQ==
+X-Google-Smtp-Source: AGHT+IFF6D7gLCaTRJBIayLWemsQAjQF0xCX8b58zlZoMz8qWEZ+IbGdv72ZMDksJAId3mlv8/Sseg==
+X-Received: by 2002:a5d:4006:0:b0:321:5e13:3829 with SMTP id n6-20020a5d4006000000b003215e133829mr3120086wrp.1.1695974488744;
+        Fri, 29 Sep 2023 01:01:28 -0700 (PDT)
+Received: from vingu-book ([2a01:e0a:f:6020:215e:6126:9867:da1f])
+        by smtp.gmail.com with ESMTPSA id w10-20020adfd4ca000000b0031762e89f94sm20852413wrk.117.2023.09.29.01.01.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Sep 2023 01:01:28 -0700 (PDT)
+Date:   Fri, 29 Sep 2023 10:01:26 +0200
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Subject: Re: [PATCH 2/4] sched: cpufreq: Fix apply_dvfs_headroom() escaping
+ uclamp constraints
+Message-ID: <ZRaEViPRHOGeH0MM@vingu-book>
+References: <CAKfTPtCP6uX79dOrzN4PxFTMBFrDAMOOrWyZrsVypUQ0RY7BAA@mail.gmail.com>
+ <20230907215555.exjxho34ntkjmn6r@airbuntu>
+ <CAKfTPtA8Ljy4NBqjw8Wj4pEFc-OCR55QPuwh+5GgrHN6u+ugsg@mail.gmail.com>
+ <20230910174638.qe7jqq6mq36brh6o@airbuntu>
+ <CAKfTPtBFAXO=CgqSJ1+y=2ppb5t4oErCtvV336fS6J2nSjBCkQ@mail.gmail.com>
+ <20230916192509.bportepj7dbgp6ro@airbuntu>
+ <CAKfTPtA5JqNCauG-rP3wGfq+p8EEVx9Tvwj6ksM3SYCwRmfCTg@mail.gmail.com>
+ <20230924172301.7lqdcsnpqk7trtno@airbuntu>
+ <ZRW86K0Y1ECd4NRG@vingu-book>
+ <20230928220504.gcft523kvt5jlfoi@airbuntu>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6165:EE_|DM6PR12MB4529:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8bb92118-9b87-41ba-8e84-08dbc0c09136
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: f0258XUeRSZzOnE3lzSDwQ2EnQReK7LflY/5GhB90U9iyxN7/0cGp7Ez06DkZduXnlKHOKbLF+Hbb5hfwfXCAKRN3zY/JEEs9UFoknc4ukrXU8sUywupjVLrewl+zcwOfwUYfDh2MqAasxmZ72pVndYJ1zJRviJlgJh9aaJM8OYTYEbs6TxExEODOrPX2WAt7cZD+R1gOYhNKAfV3sAOcjDtm8y5VZmNEC9zXXgEZWpGil4zsu6qcDQJxD3JO5fgNrR9nh6VSLw4SrLhnlhSioi6AlF40klHAos8U3CEVTjzDpcGLvXIK/4BxBuIcIa/+1SEYbPy4kv4sLpvW0WWmz+85IkzDByXQ4goSLefs11fULuWtQvTh9llmwH0AEV4G8pEFR1jjWNMWaI37xUW2L1dI9n8Avf199vvZTfFyRcAb8vmGIjKbpmlpXFmGpZ3E+jYhjoqNbaCPAB8bK3rMRrxB4eBgjz6R38R6Cp7tocqO74lX6XYZ2wjoZrimhT9EUHKAg5hhAvpQBIrRPSYTTd6qnJ2HbMpoKCilbQDkhRvUjtemOlOatfsVYV7I6EzenCLLBd+N8t/B9nXP2z9Z9rVDNsPrOzjMdbs+sxtzjgI5jZThNpW0Pbjlh3riDA9paEQdt1YZPTmVb1rz17svg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6165.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(376002)(346002)(396003)(136003)(366004)(230922051799003)(186009)(64100799003)(1800799009)(451199024)(2906002)(5660300002)(31686004)(8936002)(4326008)(8676002)(26005)(36756003)(2616005)(41300700001)(66556008)(66946007)(66476007)(316002)(53546011)(6506007)(6666004)(83380400001)(6486002)(478600001)(6512007)(38100700002)(86362001)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aWVwYkxwdDZQVjlXS1o4NFZsOUp3WXNMd2Z3R0Ixc3kyN1haa1FnL2NDRlF1?=
- =?utf-8?B?SS9tMm9sNHFXQ0NaaE1aK014Sk95RlpObmtIOTNySEpkd05WdUVwVnFSYTI3?=
- =?utf-8?B?U25Mc1BydDBHZjIxYVRzSDgwMExoZm03amo5QkpjdjRqdHQ3Um5xdERLWFNF?=
- =?utf-8?B?VDBhdHgvK2NweTBYbmhHV3dlN0FVUjF5S0NBcmpsRTNNc0FvQ0hWbEFyeXlN?=
- =?utf-8?B?MHlhT04rNE0vM1dBTmJVYmtXS2VTbWFpZkNpZ2ZGbTYxWTVvT0IzRU9UVlYr?=
- =?utf-8?B?VkdwWllSMHVpOTJwZVdIZnZPN3JMemx5WXY3aGpSTHlRek1MY1BMM3E5WXVs?=
- =?utf-8?B?aDlid2NxM3Y4UU5vZWNDbG9BcUNUOXMvd25UdHB6ZXM5QzZSNVZBbmU2MFEw?=
- =?utf-8?B?Z1RoRFlmNEhLcnZMMVRLSTgybkRhMTVKUS9oWEw3ekljb25RdjRicDAwZjAr?=
- =?utf-8?B?L3I4akdjNUxDdmkva1JDWWdvUzBSTzFMZCtYRG5lbU1lMFJVNFpXa0VBNGxu?=
- =?utf-8?B?LytFS3NSNTg0YklkWG9BWDc4UmtUMUlZMEEvbmZwalVONHprQnVIZkM2OTg0?=
- =?utf-8?B?YWdUYk9keHMvc01rUVlIcTQ1VXl2Z1pQYzkzckNJVGdIc2I0QXZGSUJXVjIx?=
- =?utf-8?B?VGxqZy8yS3RIbEpCTFJ5Y2ZVTFhPN04vaTJlYm5YeHUyQ0dGRFFRdXdTR2h0?=
- =?utf-8?B?S0psdy8xb25DR1cvanUyR3JHK09MZEE0K0xmK1U3VXJ3bS94eUs2L2N6eXRF?=
- =?utf-8?B?cmpVQTB3Rm1zTWtmb0tQN3ZockhOOEZKLzNkOHJESUVEK21CWDlFNzl0NEQx?=
- =?utf-8?B?UkUzYUQwc1djVFl4Y1V0WW9RRW9CeTlLU2lZM0Uza21teTc0bU1XWHd5RFFV?=
- =?utf-8?B?SkdmV3k2L0NNYTVNT3lBM3prNHdoK1I5OU9HMFRiRDIxdGJSVFl4S1pvT21s?=
- =?utf-8?B?YzhiamZ5TEwxUHhVK2kvOWY0UGR1aERha05Md0NpUUdpbGh0Sk5QOUpCV0to?=
- =?utf-8?B?cXQzK3NQMGs0end3cVlkOHFFeGZRVEx3enk4OXkwMUNPandpaklLM3c3NGJR?=
- =?utf-8?B?UmFRclhjcE5nYTBFTDZOTTBnei9DVy83OTJjZzBKWnZ3WlYxTnJZc2dydnA5?=
- =?utf-8?B?SkliR3dBVHZRRnJzU1hvSTdTYW4wSjgvcGZIdm1NM1FrUmJhOEtwcmFLYU91?=
- =?utf-8?B?YnNuUHB4MFh3aS9XUWF0WXpWUVc4a0k0R3Baa2JIQmdEeUtSbVdWOW1USkx4?=
- =?utf-8?B?cHV5L09JbnFDQ0RIVkVMR0tzcnFTNU9YcE5vRHVSRXBJdHVDcXU2eTlDV0FZ?=
- =?utf-8?B?K2VnYlZUSXYrRWdSUGlicTV3MkoxMXdVc2Y1Wjl2WWNCekEwZnVxZzRWN3lx?=
- =?utf-8?B?dDU0bG5aRGI2eUxsYTU3eG1sbytPb0NsYTZsbzkydWw5a2g1NlhWWHdrWUhR?=
- =?utf-8?B?amhXbFMyZTlhcE1PMnI2ZnFNZy9zajhidEQ1MEN5WUZ0OFo2TTAyZnJoU0ZG?=
- =?utf-8?B?Z0dsMUM4MlZXMEV4SWFYVWNhTnd0OXZZelpQekN3UFNVNmlwYlRzdCtyazc4?=
- =?utf-8?B?ckw0c0p4N2RvTWdybnJ3WktzeS9ZSG9lRFNMZUhJNTh1NzhDN1VtdGcrRFFp?=
- =?utf-8?B?Nk9iQmlyYXBTaGF1SkVUQVRiK3dWWUhuN3BXKzhZcVhnbHorb2tJS3VpWnN6?=
- =?utf-8?B?L09oa2hLNHRUcXVxa1lCMlpXSWlCNmpHdU1KaXJKdlhFS0pOYUE4RXlSUmJ6?=
- =?utf-8?B?a1E2bCt5VzhLaVdkWjdIUTZXQjM1M0hqMzRDd1BMVC93eVF1cHQxVjUxeG93?=
- =?utf-8?B?MW5qVTFhMS9pajVpNWRnT3ZHdGJyQzVLekpJb1FRQTFZZ0dIaktndDAwVG5F?=
- =?utf-8?B?ZDJVajNCTnNJVDhmWHVhU3cxVHNEbDJUN2hwWXYxT29WNUJTQm1uSFJiVVY2?=
- =?utf-8?B?WDlQS2EwOVIrUStGZ2JOYmZhT3d1cW5JN3NDSXRVQVl5dFV1OFVWVmdJZFdG?=
- =?utf-8?B?QXozaFgvZVdKTCtKeVJNMDlZUXpWUTNKQXFoeGNxK0ZlSjUwWWVDWHVYZ2dZ?=
- =?utf-8?B?RjJFVVo0c1pjUnpwN1R1VzllTmVMY2NaSW03UG1wdW1HWC9jVndEVnU0VGQx?=
- =?utf-8?Q?prpdCcttqKGwVj2dqDDWA2IVL?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8bb92118-9b87-41ba-8e84-08dbc0c09136
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6165.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2023 07:49:10.9006
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AvVBS55XHhOVsU/sIwU8m6GqqgcsUTAIpG5sb7FZJzv3X0BD8oy3EhP0a3BinI8c40hCe4szq005AH5OqYlYWw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4529
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230928220504.gcft523kvt5jlfoi@airbuntu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Mario,
+Le jeudi 28 sept. 2023 � 23:05:04 (+0100), Qais Yousef a �crit :
+> On 09/28/23 19:50, Vincent Guittot wrote:
+> 
+> > > 
+> > > Yep, absolutely. It seems we agree that CFS shouldn't go above 800 if it is
+> > > capped even if there's headroom, but the question you have on the way it is
+> > 
+> > At least I want to ensure that cpufreq has the right information to make a
+> > smart decision. In the example above, it's not needed to go above 800 for
+> > neither cfs nor irq.
+> 
+> Okay you want to do even bigger rework :-) I thought I might have pushed some
+> boundary with the rework I had in mind hehe.
+> 
+> > I'm not in favor of showing all details to cpufreq because it will have to
+> > follow the internal changes. In instead, I was thinking of something like:
+> > 
+> > /* Function name to be changed */
+> > unsigned_long effective_cpu_util(int cpu, unsigned int *min, unsigned int *max)
+> > 
+> > The function returns the actual utilization of the CPU and some minimum and
+> > maximum limits with the possibility to have the min and/or Actual values > Max
+> > because the min would be a hard minimum value whereas max only a soft maximum
+> > value.
+> > 
+> > Min would be the minimum perf to provide to the cpu : typically DL_bw + irq
+> > Actual would be the actual utilization of the cpu: cfs+rt+dl+irq (after scaling
+> >   everything in the normal range)
+> > Max would be the maximum needed performance for normal work: typically the
+> > minimum between uclamp and capacity
+> > 
+> > Then cpufreq can use these 3 values to compute a performance level and it 
+> > will know up to which perf level it should go and if it is worth it.
+> > Something likr:
+> 
+> Okay thanks! I think I have better clarity now. Let me try to rework the
+> patches.
 
-Thanks for taking a look at this patch.
+This is the patch with everything amended, some pieces were missing in the previous version.
 
-On 9/23/2023 3:52 AM, Mario Limonciello wrote:
-> On 9/19/2023 05:33, Swapnil Sapkal wrote:
->> In selftests/amd-pstate, tbench and gitsource microbenchmarks are used to
->> compare the performance with different governors. In Current
->> implementation relative path to run `amd_pstate_tracer.py`
->> broken. Fixed this by using absolute paths.
->> Also selftests/amd-pstate uses distro `perf` to capture stats while running
->> these microbenchmarks. Distro `perf` is not working with upstream
->> kernel. Fixed this by providing an option to give the perf binary path.
->>
-> 
-> This should be multiple separate patches, at least two.
-> 
-Sure, I will update this in v3.
+---
+ include/linux/energy_model.h     |   1 -
+ kernel/sched/core.c              | 103 +++++++++++++++++--------------
+ kernel/sched/cpufreq_schedutil.c |   6 +-
+ kernel/sched/fair.c              |   4 +-
+ kernel/sched/sched.h             |   7 ++-
+ 5 files changed, 66 insertions(+), 55 deletions(-)
 
->> Signed-off-by: Swapnil Sapkal <swapnil.sapkal@amd.com>
->> ---
->>   .../x86/amd_pstate_tracer/amd_pstate_trace.py |  2 +-
->>   .../testing/selftests/amd-pstate/gitsource.sh | 14 +++++++-----
->>   tools/testing/selftests/amd-pstate/run.sh     | 22 +++++++++++++------
->>   tools/testing/selftests/amd-pstate/tbench.sh  |  4 ++--
->>   4 files changed, 27 insertions(+), 15 deletions(-)
->>
->> diff --git a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
->> index 904df0ea0a1e..2448bb07973f 100755
->> --- a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
->> +++ b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
->> @@ -30,7 +30,7 @@ import getopt
->>   import Gnuplot
->>   from numpy import *
->>   from decimal import *
->> -sys.path.append('../intel_pstate_tracer')
->> +sys.path.append(os.path.join(os.path.dirname(__file__), '../intel_pstate_tracer'))
->>   #import intel_pstate_tracer
->>   import intel_pstate_tracer as ipt
->> diff --git a/tools/testing/selftests/amd-pstate/gitsource.sh b/tools/testing/selftests/amd-pstate/gitsource.sh
->> index 5f2171f0116d..c327444d3506 100755
->> --- a/tools/testing/selftests/amd-pstate/gitsource.sh
->> +++ b/tools/testing/selftests/amd-pstate/gitsource.sh
->> @@ -66,12 +66,15 @@ post_clear_gitsource()
->>   install_gitsource()
->>   {
->> -    if [ ! -d $git_name ]; then
->> +    if [ ! -d $SCRIPTDIR/$git_name ]; then
->> +        BACKUP_DIR=$(pwd)
->> +        cd $SCRIPTDIR
->>           printf "Download gitsource, please wait a moment ...\n\n"
->>           wget -O $git_tar $gitsource_url > /dev/null 2>&1
->>           printf "Tar gitsource ...\n\n"
->>           tar -xzf $git_tar
->> +        cd $BACKUP_DIR
->>       fi
->>   }
->> @@ -79,12 +82,13 @@ install_gitsource()
->>   run_gitsource()
->>   {
->>       echo "Launching amd pstate tracer for $1 #$2 tracer_interval: $TRACER_INTERVAL"
->> -    ./amd_pstate_trace.py -n tracer-gitsource-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1 &
->> +    $SCRIPTDIR/../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py -n tracer-gitsource-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1 &
->>       printf "Make and test gitsource for $1 #$2 make_cpus: $MAKE_CPUS\n"
->> -    cd $git_name
->> -    perf stat -a --per-socket -I 1000 -e power/energy-pkg/ /usr/bin/time -o ../$OUTFILE_GIT.time-gitsource-$1-$2.log make test -j$MAKE_CPUS > ../$OUTFILE_GIT-perf-$1-$2.log 2>&1
->> -    cd ..
->> +    BACKUP_DIR=$(pwd)
->> +    cd $SCRIPTDIR/$git_name
->> +    $PERF stat -a --per-socket -I 1000 -e power/energy-pkg/ /usr/bin/time -o $BACKUP_DIR/$OUTFILE_GIT.time-gitsource-$1-$2.log make test -j$MAKE_CPUS > $BACKUP_DIR/$OUTFILE_GIT-perf-$1-$2.log 2>&1
->> +    cd $BACKUP_DIR
->>       for job in `jobs -p`
->>       do
->> diff --git a/tools/testing/selftests/amd-pstate/run.sh b/tools/testing/selftests/amd-pstate/run.sh
->> index de4d8e9c9565..0803e70b04da 100755
->> --- a/tools/testing/selftests/amd-pstate/run.sh
->> +++ b/tools/testing/selftests/amd-pstate/run.sh
->> @@ -8,9 +8,11 @@ else
->>       FILE_MAIN=DONE
->>   fi
->> -source basic.sh
->> -source tbench.sh
->> -source gitsource.sh
->> +SCRIPTDIR=`dirname "$0"`
->> +
->> +source $SCRIPTDIR/basic.sh
->> +source $SCRIPTDIR/tbench.sh
->> +source $SCRIPTDIR/gitsource.sh
-> 
-> Rather than hardcoding $SCRIPTDIR/../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py in multiple places, how about you delcare a new variable here?
-> 
-> TRACER=$SCRIPTDIR/../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
-> 
-> Then all the commands can be called with $TRACER instead.
-> 
-> Furthermore if there needs to be flexibility for multiple calling paths in the future (say in tree vs in filessytem) then you can easily add another case right here that is:
-> 
-> if [ ! -f $TRACER ]; then
->      TRACER=foo/bar/baz
-> fi
-> 
-This is a good suggestion. I will update this in v3.
+diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+index e4cf9baf5f9e..c424a1bcec38 100644
+--- a/include/linux/energy_model.h
++++ b/include/linux/energy_model.h
+@@ -261,7 +261,6 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
+ 	scale_cpu = arch_scale_cpu_capacity(cpu);
+ 	ref_freq = em_get_capacity_ref_freq(cpu, pd);
 
->>   # amd-pstate-ut only run on x86/x86_64 AMD systems.
->>   ARCH=$(uname -m 2>/dev/null | sed -e 's/i.86/x86/' -e 's/x86_64/x86/')
->> @@ -22,6 +24,7 @@ OUTFILE=selftest
->>   OUTFILE_TBENCH="$OUTFILE.tbench"
->>   OUTFILE_GIT="$OUTFILE.gitsource"
->> +PERF=/usr/bin/perf
->>   SYSFS=
->>   CPUROOT=
->>   CPUFREQROOT=
->> @@ -149,8 +152,9 @@ help()
->>            gitsource: Gitsource testing.>]
->>       [-t <tbench time limit>]
->>       [-p <tbench process number>]
->> -    [-l <loop times for tbench>]
->> +    [-l <loop times for tbench/gitsource>]
->>       [-i <amd tracer interval>]
->> +    [-b <perf binary>]
->>       [-m <comparative test: acpi-cpufreq>]
->>       \n"
->>       exit 2
->> @@ -158,7 +162,7 @@ help()
->>   parse_arguments()
->>   {
->> -    while getopts ho:c:t:p:l:i:m: arg
->> +    while getopts ho:c:t:p:l:i:b:m: arg
->>       do
->>           case $arg in
->>               h) # --help
->> @@ -189,6 +193,10 @@ parse_arguments()
->>                   TRACER_INTERVAL=$OPTARG
->>                   ;;
->> +            b) # --perf-binary
->> +                PERF=`realpath $OPTARG`
->> +                ;;
->> +
->>               m) # --comparative-test
->>                   COMPARATIVE_TEST=$OPTARG
->>                   ;;
->> @@ -202,8 +210,8 @@ parse_arguments()
->>   command_perf()
->>   {
->> -    if ! command -v perf > /dev/null; then
->> -        echo $msg please install perf. >&2
->> +    if ! $PERF -v; then
->> +        echo $msg please install perf or provide perf binary path as argument >&2
->>           exit $ksft_skip
->>       fi
->>   }
->> diff --git a/tools/testing/selftests/amd-pstate/tbench.sh b/tools/testing/selftests/amd-pstate/tbench.sh
->> index 49c9850341f6..70e5863e74ea 100755
->> --- a/tools/testing/selftests/amd-pstate/tbench.sh
->> +++ b/tools/testing/selftests/amd-pstate/tbench.sh
->> @@ -64,11 +64,11 @@ post_clear_tbench()
->>   run_tbench()
->>   {
->>       echo "Launching amd pstate tracer for $1 #$2 tracer_interval: $TRACER_INTERVAL"
->> -    ./amd_pstate_trace.py -n tracer-tbench-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1 &
->> +    $SCRIPTDIR/../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py -n tracer-tbench-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1 &
->>       printf "Test tbench for $1 #$2 time_limit: $TIME_LIMIT procs_num: $PROCESS_NUM\n"
->>       tbench_srv > /dev/null 2>&1 &
->> -    perf stat -a --per-socket -I 1000 -e power/energy-pkg/ tbench -t $TIME_LIMIT $PROCESS_NUM > $OUTFILE_TBENCH-perf-$1-$2.log 2>&1
->> +    $PERF stat -a --per-socket -I 1000 -e power/energy-pkg/ tbench -t $TIME_LIMIT $PROCESS_NUM > $OUTFILE_TBENCH-perf-$1-$2.log 2>&1
->>       pid=`pidof tbench_srv`
->>       kill $pid
-> 
+-	max_util = map_util_perf(max_util);
+ 	max_util = min(max_util, allowed_cpu_cap);
+ 	freq = map_util_freq(max_util, ref_freq, scale_cpu);
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 6560392f2f83..e5476703ba49 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -7404,18 +7404,13 @@ int sched_core_idle_cpu(int cpu)
+  * required to meet deadlines.
+  */
+ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
+-				 enum cpu_util_type type,
+-				 struct task_struct *p)
++				 unsigned long *min,
++				 unsigned long *max)
+ {
+-	unsigned long dl_util, util, irq, max;
++	unsigned long util, irq, scale;
+ 	struct rq *rq = cpu_rq(cpu);
+
+-	max = arch_scale_cpu_capacity(cpu);
+-
+-	if (!uclamp_is_used() &&
+-	    type == FREQUENCY_UTIL && rt_rq_is_runnable(&rq->rt)) {
+-		return max;
+-	}
++	scale = arch_scale_cpu_capacity(cpu);
+
+ 	/*
+ 	 * Early check to see if IRQ/steal time saturates the CPU, can be
+@@ -7423,9 +7418,16 @@ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
+ 	 * update_irq_load_avg().
+ 	 */
+ 	irq = cpu_util_irq(rq);
+-	if (unlikely(irq >= max))
+-		return max;
++	if (unlikely(irq >= scale)) {
++		if (min)
++			*min = scale;
++		if (max)
++			*max = scale;
++		return scale;
++	}
+
++	if (min)
++		*min = irq + cpu_bw_dl(rq);
+ 	/*
+ 	 * Because the time spend on RT/DL tasks is visible as 'lost' time to
+ 	 * CFS tasks and we use the same metric to track the effective
+@@ -7439,29 +7441,13 @@ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
+ 	 * frequency will be gracefully reduced with the utilization decay.
+ 	 */
+ 	util = util_cfs + cpu_util_rt(rq);
+-	if (type == FREQUENCY_UTIL)
+-		util = uclamp_rq_util_with(rq, util, p);
+-
+-	dl_util = cpu_util_dl(rq);
+-
+-	/*
+-	 * For frequency selection we do not make cpu_util_dl() a permanent part
+-	 * of this sum because we want to use cpu_bw_dl() later on, but we need
+-	 * to check if the CFS+RT+DL sum is saturated (ie. no idle time) such
+-	 * that we select f_max when there is no idle time.
+-	 *
+-	 * NOTE: numerical errors or stop class might cause us to not quite hit
+-	 * saturation when we should -- something for later.
+-	 */
+-	if (util + dl_util >= max)
+-		return max;
++	util += cpu_util_dl(rq);
+
+-	/*
+-	 * OTOH, for energy computation we need the estimated running time, so
+-	 * include util_dl and ignore dl_bw.
+-	 */
+-	if (type == ENERGY_UTIL)
+-		util += dl_util;
++	if (util >= scale) {
++		if (max)
++			*max = scale;
++		return scale;
++	}
+
+ 	/*
+ 	 * There is still idle time; further improve the number by using the
+@@ -7472,28 +7458,53 @@ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
+ 	 *   U' = irq + --------- * U
+ 	 *                 max
+ 	 */
+-	util = scale_irq_capacity(util, irq, max);
++	util = scale_irq_capacity(util, irq, scale);
+ 	util += irq;
+
++	if (max)
++		*max = uclamp_rq_util_with(rq, util, NULL);
++
++	return min(scale, util);
++}
++
++
++/*
++ *  TODO: move this in cpufreq
++ */
++unsigned long effective_cpu_perf(int cpu, unsigned long util_cfs,
++				 struct task_struct *p)
++{
++	unsigned long actual, target, min, max;
++	struct rq *rq = cpu_rq(cpu);
++
++	/* Get utilization stats */
++	actual = effective_cpu_util(cpu, util_cfs, &min, &max);
++
++	/* Check how max would be changed with p */
++	if (p)
++		max = min(max, uclamp_rq_util_with(rq, util_cfs, p));
++
+ 	/*
+-	 * Bandwidth required by DEADLINE must always be granted while, for
+-	 * FAIR and RT, we use blocked utilization of IDLE CPUs as a mechanism
+-	 * to gracefully reduce the frequency when no tasks show up for longer
+-	 * periods of time.
+-	 *
+-	 * Ideally we would like to set bw_dl as min/guaranteed freq and util +
+-	 * bw_dl as requested freq. However, cpufreq is not yet ready for such
+-	 * an interface. So, we only do the latter for now.
++	 * Provide at least enough capacity for DL + irq plus some headroom
++	 * for other activities
+ 	 */
+-	if (type == FREQUENCY_UTIL)
+-		util += cpu_bw_dl(rq);
++	target =  map_util_perf(min);
+
+-	return min(max, util);
++	actual = map_util_perf(actual);
++	/* Actually we don't need to target the max performance */
++	if (actual < max)
++		max = actual;
++
++	/*
++	 * Ensure at least minimum perf target while providing more computa capacity when
++	 * possible
++	 */
++	return max(target,max);
+ }
+
+ unsigned long sched_cpu_util(int cpu)
+ {
+-	return effective_cpu_util(cpu, cpu_util_cfs(cpu), ENERGY_UTIL, NULL);
++	return effective_cpu_util(cpu, cpu_util_cfs(cpu), NULL, NULL);
+ }
+ #endif /* CONFIG_SMP */
+
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index e2b9c8c3d69a..ef6b4b09ac12 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -162,7 +162,6 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
+ 	unsigned int freq;
+ 	struct cpufreq_policy *policy = sg_policy->policy;
+
+-	util = map_util_perf(util);
+ 	freq = get_capacity_ref_freq(policy);
+ 	freq = map_util_freq(util, freq, max);
+
+@@ -179,8 +178,7 @@ static void sugov_get_util(struct sugov_cpu *sg_cpu)
+ 	struct rq *rq = cpu_rq(sg_cpu->cpu);
+
+ 	sg_cpu->bw_dl = cpu_bw_dl(rq);
+-	sg_cpu->util = effective_cpu_util(sg_cpu->cpu, util,
+-					  FREQUENCY_UTIL, NULL);
++	sg_cpu->util = effective_cpu_perf(sg_cpu->cpu, util, NULL);
+ }
+
+ /**
+@@ -427,7 +425,7 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
+ 		sg_cpu->util = prev_util;
+
+ 	cpufreq_driver_adjust_perf(sg_cpu->cpu, map_util_perf(sg_cpu->bw_dl),
+-				   map_util_perf(sg_cpu->util), max_cap);
++				   sg_cpu->util, max_cap);
+
+ 	sg_cpu->sg_policy->last_freq_update_time = time;
+ }
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 06d6d0dde48a..50568e2fa1ba 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -7570,7 +7570,7 @@ static inline void eenv_pd_busy_time(struct energy_env *eenv,
+ 	for_each_cpu(cpu, pd_cpus) {
+ 		unsigned long util = cpu_util(cpu, p, -1, 0);
+
+-		busy_time += effective_cpu_util(cpu, util, ENERGY_UTIL, NULL);
++		busy_time += effective_cpu_util(cpu, util, NULL, NULL);
+ 	}
+
+ 	eenv->pd_busy_time = min(eenv->pd_cap, busy_time);
+@@ -7602,7 +7602,7 @@ eenv_pd_max_util(struct energy_env *eenv, struct cpumask *pd_cpus,
+ 		 * NOTE: in case RT tasks are running, by default the
+ 		 * FREQUENCY_UTIL's utilization can be max OPP.
+ 		 */
+-		eff_util = effective_cpu_util(cpu, util, FREQUENCY_UTIL, tsk);
++		eff_util = effective_cpu_perf(cpu, util, tsk);
+ 		max_util = max(max_util, eff_util);
+ 	}
+
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 17ae151e90c0..4cae9d7c4d8f 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -2988,10 +2988,13 @@ enum cpu_util_type {
+ 	ENERGY_UTIL,
+ };
+
+-unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
+-				 enum cpu_util_type type,
++unsigned long effective_cpu_perf(int cpu, unsigned long util_cfs,
+ 				 struct task_struct *p);
+
++unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
++				 unsigned long *min,
++				 unsigned long *max);
++
+ /*
+  * Verify the fitness of task @p to run on @cpu taking into account the
+  * CPU original capacity and the runtime/deadline ratio of the task.
 --
-Thanks and Regards,
-Swapnil
+2.34.1
+
+> 
+> 
+> Cheers
+> 
+> --
+> Qais Yousef
