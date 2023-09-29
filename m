@@ -2,320 +2,388 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D1867B3833
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 18:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 044CC7B3845
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 19:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233215AbjI2Q4l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Sep 2023 12:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57002 "EHLO
+        id S233594AbjI2RB3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Sep 2023 13:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233239AbjI2Q4k (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 12:56:40 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895641B4
-        for <linux-pm@vger.kernel.org>; Fri, 29 Sep 2023 09:56:36 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-405524e6740so125646535e9.1
-        for <linux-pm@vger.kernel.org>; Fri, 29 Sep 2023 09:56:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696006595; x=1696611395; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xND+MW/+UJCbTpDVHmrFxQeOX19ZNbbE88mX3i18+R4=;
-        b=BELjiJtjShLwwF+3anLAYLL0pDH4nu7aFLQb8fYm78xaRVKg+rx0BFGJX2Pf0PBXSG
-         m29DIbJDLmQUQLO0UG8ZjTKUYBGOynGsA5PLewNvG4Lvd/inlzCMsPzzjIIz3P0CDhv1
-         aWdqhmp5LGNI2Im/Y1F5LbxaVDl1RIuOvHEJ2wE8pgyZdxTmEAqBr9pZvMbuiG8f9HXN
-         vWIdhhRMOJ/VvZLexpjhY813arvZW+Kg7dHtlpvVcjgYzuvtfdGBynFs1NVUTF+Mv+Tx
-         obq1XL+clC1/MZSQBewJHKVQiHTDoRFbu8snE28a8fg5ERw7koaXqDzWCLOEnLDGma0b
-         pyOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696006595; x=1696611395;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xND+MW/+UJCbTpDVHmrFxQeOX19ZNbbE88mX3i18+R4=;
-        b=ClV4eg/qUnb/cY0ygL0XQpuP/CyUmSjJabbulFspnb4dKFJBJsYm+6judQt52qLmcs
-         zRJX9QjLddXiXhIOTKKHfm+mpPwJJpjc9x8H0Lw2D/Z8fQWbeyLRiwzNt1oKnWQuXjWn
-         ukLSPMuq7KFHxa5FoWpwwgv/+JMMERlKSYWx4jEu8HGiSX1gXVFfBF6L5VPfcP1DZ16I
-         0MA0t7PfUYuRF2p8Dz5VeDJHX29JUkLWp7RYWUdGrgPr1xYdfDoMNicEaPeyEPqd54ay
-         x66pBhuPIFVAsklUJPVTl7UCsZgys6GAPPj4Xa0DrDjd2VbchJiKk6Vl8EOpLPrvnY7C
-         Y9iA==
-X-Gm-Message-State: AOJu0YyxqZJPVuAzlsM5ZhQSLeONBpe37VQNWQ1cKo9xat2BZYQEM+Ox
-        sCRw1HEjg58XPRGwDmRwGO6mHQ==
-X-Google-Smtp-Source: AGHT+IHL6Thh2nSYg3/7lYJjbnPF19w1qpgTK8doTP2ZGsc7IIv5ssUcTLXHAP1i0i+sB6dIU9sgQg==
-X-Received: by 2002:a1c:7c11:0:b0:405:4a78:a890 with SMTP id x17-20020a1c7c11000000b004054a78a890mr4246266wmc.8.1696006594912;
-        Fri, 29 Sep 2023 09:56:34 -0700 (PDT)
-Received: from [192.168.1.8] (host-2-99-112-229.as13285.net. [2.99.112.229])
-        by smtp.gmail.com with ESMTPSA id y21-20020a7bcd95000000b00405c7591b09sm1787900wmj.35.2023.09.29.09.56.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Sep 2023 09:56:34 -0700 (PDT)
-Message-ID: <1765d8c7-2f7e-4cb9-9063-f78c5d29e1a4@linaro.org>
-Date:   Fri, 29 Sep 2023 17:56:32 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] thermal: qcom: add qmi-cooling driver
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        with ESMTP id S233700AbjI2RBZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 13:01:25 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEEB81BE;
+        Fri, 29 Sep 2023 10:01:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1696006879; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=ELcoQqitbuh5QdUYiVG8Rnt+JD6sXbYawK/KlsXip2upmaBl6b2xy04L3gdovRDLKz
+    ZT6J1fa6WIN19YMYV00JMfRTeL5mb4W62ZMsd/bUzuwwYNYQfacQUZ3o1eIpomhWtHxF
+    cfd34Mmxbw562wpKPoVmB8bP0ilBlgXRqPTvdjwljsMigJ8jEfJGZUThTGREEM4/zf+F
+    fF+vmCz9PujyWCxT7Q9Cf5mo6YjakrYjvwyPHeGrUN261KHp/JybKkElkOA+kp0ECMCl
+    nyf5y8rSYFMbAOMujDDcXZVaUIsN8JPNogHPQb8RzZsZ2S+j4enOwABhA8IRSbHjy6AA
+    F3Hw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1696006879;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=c1LZOAquz+98eoqb9/BPIKYFm1QoBh+bs+Yd6UWIzlw=;
+    b=XYdv6GdZarmwMw8y8bVYrj7EodVZ9akDC+G8y8w8wAO4TWij3Ty3NDYO+8Qwku2Qlf
+    q5aXZMjUAjaFxnqc9b5DjB8EeR91uMT9yI9a6cYUPjy9KiHzwouQawRLWbQgxGG0tUzr
+    zHa9lcTTx6gjYiObqM7rESiSQHqoNaUae0jxZSKeeQnhGJZacGgJM1W51QxKcRouNzkB
+    3ycCtdSmuqxUaErPWwcduUkDBDGrgEyThp5AZqc+UaJTsr0NTYeiDQHnwMy9GCKXtPmm
+    P/IAOvrdQytFzMIzKBXCgmEseEmFNOXtwt8/5iJ/Xu+oLv8B7gd+rCkfEC5NcttM8lkw
+    6UdQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1696006879;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=c1LZOAquz+98eoqb9/BPIKYFm1QoBh+bs+Yd6UWIzlw=;
+    b=jvlgKpP/uRc5xocd7MWVTfXUURRfsnJlHWhZqNDwnKHkzAM8QAR/bnNBMWhhoGVsq4
+    R7qN5HQzw9MCAbtbopi0Rz1fhGhtCkLnaFpHm4RyzTzes+7MNmM80khZJCZIwRL61PoW
+    WCmoU+6axKnyLKfEqQJkcQ2bUqwjSHP6jHSj0koXg6UFgR9gfRBFqCTuxqL+I/djAdHY
+    HaRLcpL4w2rkfLg1o/YCgnk+bE4CBsksLpN5b7IpA6BHugsXXJH3enTzVw2Qt8olAGjC
+    sCtJyxEwM7JSJK0kNyl5qCGmzJEQQHkSUu2niWnFXJt6OyPZeR9hJngmLXG8/+ks/2g6
+    2HIA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1696006879;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=c1LZOAquz+98eoqb9/BPIKYFm1QoBh+bs+Yd6UWIzlw=;
+    b=QnBR3urVd889J9a7/uaadrOTG9OqqN8fZn0KB/qwahXxXaIiYMVBUtG316jmYQwOqz
+    px0jJXliBkw1Ek4xiyDA==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA95vh"
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.8.2 SBL|AUTH)
+    with ESMTPSA id R04c57z8TH1IrLK
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Fri, 29 Sep 2023 19:01:18 +0200 (CEST)
+Date:   Fri, 29 Sep 2023 19:01:12 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Andy Gross <agross@kernel.org>,
-        Bhupesh Sharma <bhupesh.linux@gmail.com>,
         Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230905-caleb-qmi_cooling-v1-0-5aa39d4164a7@linaro.org>
- <20230905-caleb-qmi_cooling-v1-3-5aa39d4164a7@linaro.org>
- <30aa40c9-b63a-093c-954d-86e4bb232431@linaro.org>
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-In-Reply-To: <30aa40c9-b63a-093c-954d-86e4bb232431@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/4] cpufreq: qcom-nvmem: Enable virtual power domain
+ devices
+Message-ID: <ZRcC2IRRv6dtKY65@gerhold.net>
+References: <20230912-msm8909-cpufreq-v1-0-767ce66b544b@kernkonzept.com>
+ <20230912-msm8909-cpufreq-v1-1-767ce66b544b@kernkonzept.com>
+ <CAPDyKFq6U-MR4Bd+GmixYseRECDh142RhydtKbiPd3NHV2g6aw@mail.gmail.com>
+ <ZQGqfMigCFZP_HLA@gerhold.net>
+ <CAPDyKFppdXe1AZo1jm2Bc_ZR18hw5Bmh1x+2P7Obhb_rJ2gc4Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFppdXe1AZo1jm2Bc_ZR18hw5Bmh1x+2P7Obhb_rJ2gc4Q@mail.gmail.com>
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, Sep 29, 2023 at 03:14:07PM +0200, Ulf Hansson wrote:
+> On Wed, 13 Sept 2023 at 14:26, Stephan Gerhold <stephan@gerhold.net> wrote:
+> > On Wed, Sep 13, 2023 at 12:56:16PM +0200, Ulf Hansson wrote:
+> > > On Tue, 12 Sept 2023 at 11:40, Stephan Gerhold
+> > > <stephan.gerhold@kernkonzept.com> wrote:
+> > > > [...]
+> > > > However, at the
+> > > > moment nothing ever enables the virtual devices created in
+> > > > qcom-cpufreq-nvmem for the cpufreq power domain scaling, so they are
+> > > > permanently runtime-suspended.
+> > > >
+> > > > Fix this by enabling the devices after attaching them and use
+> > > > dev_pm_syscore_device() to ensure the power domain also stays on when
+> > > > going to suspend. Since it supplies the CPU we can never turn it off
+> > > > from Linux. There are other mechanisms to turn it off when needed,
+> > > > usually in the RPM firmware or the cpuidle path.
+> > > >
+> > > > Without this fix performance states votes are silently ignored, and the
+> > > > CPU/CPR voltage is never adjusted. This has been broken since 5.14 but
+> > > > for some reason no one noticed this on QCS404 so far.
+> > > >
+> > > > Cc: stable@vger.kernel.org
+> > > > Fixes: 1cb8339ca225 ("cpufreq: qcom: Add support for qcs404 on nvmem driver")
+> > > > Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+> > > > ---
+> > > >  drivers/cpufreq/qcom-cpufreq-nvmem.c | 21 ++++++++++++++++++++-
+> > > >  1 file changed, 20 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> > > > index 84d7033e5efe..17d6ab14c909 100644
+> > > > --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> > > > +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> > > > @@ -25,6 +25,7 @@
+> > > >  #include <linux/platform_device.h>
+> > > >  #include <linux/pm_domain.h>
+> > > >  #include <linux/pm_opp.h>
+> > > > +#include <linux/pm_runtime.h>
+> > > >  #include <linux/slab.h>
+> > > >  #include <linux/soc/qcom/smem.h>
+> > > >
+> > > > @@ -280,6 +281,7 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
+> > > >         }
+> > > >
+> > > >         for_each_possible_cpu(cpu) {
+> > > > +               struct device **virt_devs = NULL;
+> > > >                 struct dev_pm_opp_config config = {
+> > > >                         .supported_hw = NULL,
+> > > >                 };
+> > > > @@ -300,7 +302,7 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
+> > > >
+> > > >                 if (drv->data->genpd_names) {
+> > > >                         config.genpd_names = drv->data->genpd_names;
+> > > > -                       config.virt_devs = NULL;
+> > > > +                       config.virt_devs = &virt_devs;
+> > > >                 }
+> > > >
+> > > >                 if (config.supported_hw || config.genpd_names) {
+> > > > @@ -311,6 +313,23 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
+> > > >                                 goto free_opp;
+> > > >                         }
+> > > >                 }
+> > > > +
+> > > > +               if (virt_devs) {
+> > > > +                       const char * const *name = config.genpd_names;
+> > > > +                       int i;
+> > > > +
+> > > > +                       for (i = 0; *name; i++, name++) {
+> > > > +                               ret = pm_runtime_resume_and_get(virt_devs[i]);
+> > > > +                               if (ret) {
+> > > > +                                       dev_err(cpu_dev, "failed to resume %s: %d\n",
+> > > > +                                               *name, ret);
+> > > > +                                       goto free_opp;
+> > > > +                               }
+> > >
+> > > Shouldn't we restore the usage count at ->remove() too?
+> > >
+> > > > +
+> > > > +                               /* Keep CPU power domain always-on */
+> > > > +                               dev_pm_syscore_device(virt_devs[i], true);
+> > >
+> > > Is this really correct? cpufreq is suspended/resumed by the PM core
+> > > during system wide suspend/resume. See dpm_suspend|resume(). Isn't
+> > > that sufficient?
+> > >
+> > > Moreover, it looks like the cpr genpd provider supports genpd's
+> > > ->power_on|off() callbacks. Is there something wrong with this, that I
+> > > am missing?
+> > >
+> >
+> > I think this question is a quite fundamental one. To explain this
+> > properly I will need to delve a bit into the implementation details of
+> > the two different GENPD providers that are applicable here:
+> >
+> > Fundamentally, we are describing the main power supply for the CPU here.
+> > Consider a simple regulator with adjustable voltage. From the Linux
+> > point of view this regulator should be marked as "regulator-always-on".
+> > If we would turn off this regulator, the CPU would be immediately dead
+> > without proper shutdown done by firmware or hardware.
+> >
+> > Representing the regulator as power domain does not change much, except
+> > that we now have abstract "performance states" instead of actual voltages.
+> > However, for power domains there is currently no generic mechanism like
+> > "regulator-always-on" in the DT, only drivers can specify
+> > GENPD_FLAG_ALWAYS_ON.
+> 
+> We have relied on genpd providers to act on their compatible strings
+> to make the correct configuration. If that isn't sufficient, I don't
+> see why we couldn't add a new DT property corresponding to
+> GENPD_FLAG_ALWAYS_ON.
+> 
 
+Right. It's not completely trivial though, since a DT node may provide
+many different power domains with #power-domain-cells = <N>. A regulator
+on the other hand has a dedicated DT node where you can just add
+"regulator-always-on". :')
 
-On 29/09/2023 17:28, Konrad Dybcio wrote:
+> >
+> > The special situation on MSM8909 is that there are two possible setups
+> > for the CPU power supply depending on the PMIC that is used (see
+> > "[PATCH 4/4] cpufreq: qcom-nvmem: Add MSM8909"): CPR or RPMPD. Both are
+> > GENPD providers so in theory we can just have either
+> >
+> >   cpu@0 { power-domains = <&cpr>; }; // or
+> >   cpu@0 { power-domains = <&rpmpd MSM8909_VDDCX_AO>; };
+> >
+> > in the DT, without handling this specifically on the cpufreq side.
 > 
+> Looks like it would be nice to get a patch for the MSM8909 DTS too, as
+> part of the series, to get a better picture of how this is going to be
+> used. Would that be possible for you to provide?
 > 
-> On 9/29/23 18:16, Caleb Connolly wrote:
->> The Thermal Mitigation Device (TMD) service exposes various platform
->> specific thermal mitigations available on remote subsystems (ie the
->> modem, adsp, cdsp, and sdsp). The service is exposed via the QMI
->> messaging
->> interface, usually over the QRTR transport.
->>
->> These controls affect things like the power limits of the modem power
->> amplifier and cpu core, skin temperature mitigations, as well as rail
->> voltage restrictions under cold conditions.
->>
->> Each remote subsystem has its own TMD instance, where each child node
->> represents a single thermal control.
->>
->> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
->> ---
-> [...]
-> 
->> +/* Notify the remote subsystem of the requested cooling state */
->> +static int qmi_tmd_send_state_request(struct qmi_tmd *tmd)
->> +{
->> +    struct tmd_set_mitigation_level_resp_msg_v01 tmd_resp;
->> +    struct tmd_set_mitigation_level_req_msg_v01 req;
->> +    struct qmi_tmd_client *client;
->> +    struct qmi_txn txn;
->> +    int ret = 0;
->> +
->> +    client = tmd->client;
-> You can assign it at declaration time
 
-Is this just personal preference or is it subsystem rules? I generally
-prefer to avoid non-const assignments at declaration time, it's just
-easier to read this way.
->> +
->> +    if (!client->connection_active)
->> +        return 0;
-> Is that an expected scenario?
+Sure! Right now I cannot include it as working patch in this series
+since I don't have the base SoC DT (msm8909.dtsi) upstream yet. It's
+mostly a copy-paste of msm8916.dtsi so I was trying to finish up the
+SoC-specific parts before sending it.
 
-Yes, this function is called by the cooling device set_cur_state op. The
-cooling device itself is always registered, even if the remoteproc is
-offline (in which case the cached state will be sent to it when it
-starts up).
-> 
->> +
->> +    memset(&req, 0, sizeof(req));
->> +    memset(&tmd_resp, 0, sizeof(tmd_resp));
-> Since you're declaring them above, you can do = { 0 }; instead, which
-> will be faster
+I'm happy to provide links to the full DT and my changes though. Does
+that help? If you would like to comment inline I could copy paste the
+diffs in a mail or include some kind of RFC patch. It just wouldn't be
+possible to apply it successfully. :')
 
-Thanks, will do (though fwiw the compiler almost definitely optimises
-this out).
-> 
->> +
->> +    strscpy(req.mitigation_dev_id.mitigation_dev_id, tmd->qmi_name,
->> +        QMI_TMD_MITIGATION_DEV_ID_LENGTH_MAX_V01 + 1);
->> +    req.mitigation_level = tmd->cur_state;
->> +
->> +    mutex_lock(&client->mutex);
-> Look into fancy scoped mutexes https://lwn.net/Articles/934679/
+Here are the two commits with the my current DT changes (WIP):
+  - MSM8909+PM8909 (RPMPD only):
+    https://github.com/msm8916-mainline/linux/commit/791e0c5a3162372a0738bc7b0f4a5e87247923db
+  - MSM8916 (CPR+RPMPD):
+    https://github.com/msm8916-mainline/linux/commit/8880f39108206d7a60a0a8351c0373bddf58657c
+  (- QCS404 (CPR only): already in mainline (see qcs404.dtsi))
 
-ooh nice, that actually improves things a lot :D
+> >
+> > The two GENPD providers behave quite differently though:
+> >
+> >  - CPR: CPR is not really a power domain itself. It's more like a monitor
+> >    on a power supply line coming from some other regulator. CPR provides
+> >    suggestions how to adjust the voltage for best power/stability.
+> >
+> >    The GENPD .power_off() disables the CPR state machine and forwards
+> >    this to the regulator with regulator_disable(). On QCS404 the
+> >    regulator is marked regulator-always-on, so it will never be disabled
+> >    from Linux. The SAW/SPM hardware component on Qualcomm SoCs will
+> >    usually disable the regulator during deep cpuidle states.
 > 
-> [...]
+> Parts of this sound a bit odd to me. The CPR/CPUfreq shouldn't really
+> need to vote for the CPU's power-rail(s) from a powered-on/off (CPU
+> idle states) point of view, but only from a performance (voltage
+> level) point of view.
 > 
->> +static int qmi_set_cur_state(struct thermal_cooling_device *cdev,
->> unsigned long state)
->> +{
->> +    struct qmi_tmd *tmd = cdev->devdata;
->> +
->> +    if (!tmd)
->> +        return -EINVAL;
->> +
->> +    if (state > tmd->max_state)
->> +        return -EINVAL;Would it be useful if this threw an error in
->> dmesg?
+> If the enable/disable voting on the regulator really has an impact on
+> some platforms, it sounds like it could prevent deeper CPU idle states
+> too. That's probably not what we want, right?
+> 
 
-I may be mistaken but I think the only place this will be hit is when
-userspace attempts to write to it via sysfs, in that case the invalid
-argument is likely enough.
-> 
-> 
->> + * When the QMI service starts up on a remote subsystem this function
->> will fetch
->> + * the list of TMDs on the subsystem, match it to the TMDs specified
->> in devicetree
->> + * and call qmi_tmd_init_control() for each
->> + */
->> +static void qmi_tmd_svc_arrive(struct work_struct *work)
->> +{
->> +    struct qmi_tmd_client *client =
->> +        container_of(work, struct qmi_tmd_client, svc_arrive_work);
->> +
->> +    struct tmd_get_mitigation_device_list_req_msg_v01 req;
->> +    struct tmd_get_mitigation_device_list_resp_msg_v01 *resp;
->> +    int ret = 0, i;
->> +    struct qmi_txn txn;
->> +
->> +    memset(&req, 0, sizeof(req));
-> = { 0 }
-> 
-> [...]
-> 
->> +
->> +    pr_info("QMI TMD service reset %s\n", client->name);
-> Is it useful to the user? pr_debug?
+I think this heavily depends on what exactly this "regulator"
+represents. Are we talking about a physical regulator with a binary
+enable/disable signal or actually some hardware/firmware magic that
+combines multiple independent "votes"?
 
-Oops, forgot to remove these!
-> 
->> +
->> +    list_for_each_entry(tmd, &client->cdev_list, node) {
->> +        qmi_tmd_send_state_request(tmd);
->> +    }
->> +}
->> +
->> +static void thermal_qmi_del_server(struct qmi_handle *qmi, struct
->> qmi_service *service)
->> +{
->> +    struct qmi_tmd_client *client = container_of(qmi, struct
->> qmi_tmd_client, handle);
->> +
->> +    pr_info("QMI TMD service stop %s\n", client->name);
-> Ditto
-> 
->> +
->> +    client->connection_active = false;
->> +}
->> +
->> +static int thermal_qmi_new_server(struct qmi_handle *qmi, struct
->> qmi_service *service)
->> +{
->> +    struct qmi_tmd_client *client = container_of(qmi, struct
->> qmi_tmd_client, handle);
->> +    struct sockaddr_qrtr sq = { AF_QIPCRTR, service->node,
->> service->port };
->> +
->> +    pr_info("QMI TMD service start %s\n", client->name);
-> Ditto
-> 
->> +        tmd->type = devm_kasprintf(client->dev, GFP_KERNEL, "%s:%s",
->> +                        client->name, subnode->name);
->> +        if (!tmd->type)
->> +            return dev_err_probe(dev, -ENOMEM, "Cooling device name\n");
-> Cooling device name-what? :D
+If we are talking about a physical regulator then we can never disable
+it from Linux. Not even during CPU idle states. It would just cut off
+all power immediately and kill the CPU without proper shutdown. Instead,
+the platform might have special hardware/firmware functionality that
+will control the actual physical enable/disable signal of the regulator.
 
-"error -12: Cooling device name"
+> I also had a look at the existing CPR genpd provider's probe
+> function/path (cpr_probe()) - and it turns out there is no call to
+> regulator_enable(). Whatever that means to us.
 
-Maybe this shouldn't print an error at all? I usually just like to have
-something to grep for so I don't have to binary search through error
-paths when debugging.
-> 
->> +
->> +        if (of_property_read_string(subnode, "label", &name)) {
->> +            return dev_err_probe(client->dev, -EINVAL,
->> +                         "Fail to parse dev name for %s\n",
-> Failed
+In most (all?) setups the CPR genpd provider will manage the actual
+physical regulator. It could be part of the PMIC or even some
+off-the-shelf regulator with I2C control. It doesn't matter. There is
+nothing special about that regulator. You have the standard Linux
+regulator driver, set up the DT node for it and hook it up to CPR.
 
-ack
-> 
-> [...]
-> 
->> +static int qmi_tmd_client_probe(struct platform_device *pdev)
->> +{
->> +    struct device *dev;
->> +    struct qmi_tmd_client *client;
->> +    const struct qmi_instance_id *match;
->> +    int ret;
->> +
->> +    dev = &pdev->dev;
-> Initialize at declaration
-> 
->> +
->> +    client = devm_kzalloc(dev, sizeof(*client), GFP_KERNEL);
->> +    if (!client)
->> +        return -ENOMEM;
->> +
->> +    client->dev = dev;
->> +
->> +    match = of_device_get_match_data(dev);
->> +    if (!match)
->> +        return dev_err_probe(dev, -EINVAL, "No match data\n");
->> +
->> +    client->id = match->id;
->> +    client->name = match->name;
->> +
->> +    mutex_init(&client->mutex);
->> +    INIT_LIST_HEAD(&client->cdev_list);
->> +    INIT_WORK(&client->svc_arrive_work, qmi_tmd_svc_arrive);
->> +
->> +    ret = qmi_tmd_alloc_cdevs(client);
->> +    if (ret)
->> +        return ret;
->> +
->> +    platform_set_drvdata(pdev, client);
->> +
->> +    ret = qmi_handle_init(&client->handle,
->> +                 
->> TMD_GET_MITIGATION_DEVICE_LIST_RESP_MSG_V01_MAX_MSG_LEN,
->> +                  &thermal_qmi_event_ops, NULL);
->> +    if (ret < 0)
->> +        return dev_err_probe(client->dev, ret, "QMI handle init
->> failed for client %#x\n",
->> +                  client->id);
->> +
->> +    ret = qmi_add_lookup(&client->handle, TMD_SERVICE_ID_V01,
->> TMD_SERVICE_VERS_V01,
->> +                 client->id);
->> +    if (ret < 0) {
->> +        qmi_handle_release(&client->handle);
->> +        return dev_err_probe(client->dev, ret, "QMI register failed
->> for client 0x%x\n",
->> +                  client->id);
->> +    }
->> +
->> +    return 0;
->> +}
->> +
->> +static int qmi_tmd_client_remove(struct platform_device *pdev)
-> void + .remove_new
+Now, to prevent the regulator driver in Linux from touching the physical
+enable signal (see above) we add "regulator-always-on". When Linux
+requests deep CPU idle states via PSCI the hardware will toggle the
+physical enable/disable signal of the regulator for us (after the CPU
+has been shut down).
 
-Ack
-> 
-> Konrad
+On some platforms CPR is also used for the GPU or other power rails that
+are not critical for the CPU to run. In that case it's fine to disable
+the regulator directly from Linux. Just not for the CPU.
 
--- 
-// Caleb (they/them)
+> 
+> >
+> >  - RPMPD: This is the generic driver for all the SoC power domains
+> >    managed by the RPM firmware. It's not CPU-specific. However, as
+> >    special feature each power domain is exposed twice in Linux, e.g.
+> >    "MSM8909_VDDCX" and "MSM8909_VDDCX_AO". The _AO ("active-only")
+> >    variant tells the RPM firmware that the performance/enable vote only
+> >    applies when the CPU is active (not in deep cpuidle state).
+> >
+> >    The GENPD .power_off() drops all performance state votes and also
+> >    releases the "enable" vote for the power domain.
+> >
+> > Now, imagine what happens during system wide suspend/resume:
+> >
+> >  - CPR: The CPR state machine gets disabled. The voltage stays as-is.
+> >      - With "regulator-always-on": The CPU keeps running until WFI.
+> >      - Without: I would expect the CPU is dead immediately(?)
+> 
+> As I indicated above, I am starting to feel that this is a bit upside
+> down. CPR/CPUfreq should vote on voltages to scale performance, but
+> not for cpu idle states.
+> 
+> Perhaps what is missing is a synchronization point or a notification,
+> to inform the CPR driver that its state machine (registers) needs to
+> be saved/restored, when the power-rails get turned on/off. In fact, we
+> have a couple mechanisms at hand to support this.
+> 
+
+I think we can ignore this part of CPR for now. AFAICT Qualcomm's vendor
+driver does not explicitly disable the CPR state machine during CPU idle
+when the power rails are potentially turned off. They only do it during
+system wide suspend, for whatever reason. For that we don't need such a
+notification mechanism.
+
+> >
+> >  - RPMPD: The performance/enable vote is dropped. The power domain might
+> >    go to minimal voltage or even turn off completely. However, the CPU
+> >    actually needs to keep running at the same frequency until WFI!
+> >    Worst case, the CPU is dead immediately when the power domain votes
+> >    get dropped.
+> 
+> Since RPMPD is managing the voting for both performance and low power
+> states for different kinds of devices, this certainly gets a bit more
+> complicated.
+> 
+> On the other hand, the CPUfreq driver should really only vote for
+> performance states for the CPUs and not for low power states. The
+> latter is a job for cpuidle and other consumers of the RPMPD to
+> manage, I think.
+> 
+> So, while thinking of this, I just realized that it may not always be
+> a good idea for genpd to cache a performance state request, for an
+> attached device and for which pm_runtime_suspended() returns true for
+> it. As this is the default behaviour in genpd, I am thinking that we
+> need a way to make that behaviour configurable for an attached device.
+> What do you think about that?
+> 
+
+Hm. This would be a bit of a special case of course. But I think this
+would be fine to solve the regression for CPR on QCS404.
+
+Then we "just" need to solve the fundamental question from a few years
+ago: Who *will* actually vote for enabling the power domains/regulators
+required by the CPU? :D
+
+I agree that enabling/disabling power supplies feels closer to cpuidle.
+But it's not a perfect fit either, given that we don't actually want to
+change our vote while entering CPU idle states. I think on all platforms
+I'm looking at here we need a permanent enable vote (effectively making
+the regulator/power domains always-on from the Linux point of view).
+
+We could solve this by adding a "regulator-always-on" mechanism in the
+DT for power domains. This feels more like a workaround to me than an
+actual solution. With this the CPU won't appear as always-on consumer of
+the power domains in debugfs. There will just be a "suspended" consumer
+attributed to the CPU (from CPUfreq, since we don't have a dedicated
+device for CPUfreq).
+
+While this patch is a bit strange from a conceptual perspective, on the
+implementation side it effectively makes that CPU consumer appear as
+active. So the end result is actually kind of the one we need. :'D
+
+Thanks,
+Stephan
