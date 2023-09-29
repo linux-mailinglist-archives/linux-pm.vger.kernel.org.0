@@ -2,31 +2,31 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 074CD7B2DE3
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 10:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47AF27B2E0D
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 10:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231429AbjI2Ihi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Sep 2023 04:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
+        id S232630AbjI2ImM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Sep 2023 04:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232518AbjI2Ihg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 04:37:36 -0400
+        with ESMTP id S232621AbjI2ImK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 04:42:10 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C892792;
-        Fri, 29 Sep 2023 01:37:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B4F41AB;
+        Fri, 29 Sep 2023 01:42:08 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8B5361FB;
-        Fri, 29 Sep 2023 01:38:12 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 63FC41FB;
+        Fri, 29 Sep 2023 01:42:46 -0700 (PDT)
 Received: from [10.57.93.169] (unknown [10.57.93.169])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0B1DD3F5A1;
-        Fri, 29 Sep 2023 01:37:30 -0700 (PDT)
-Message-ID: <13a1f636-a61e-044c-ed92-1750339c1ed5@arm.com>
-Date:   Fri, 29 Sep 2023 09:38:10 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C1C313F5A1;
+        Fri, 29 Sep 2023 01:42:05 -0700 (PDT)
+Message-ID: <6942961b-a5f6-983a-e5c5-10fa097a907d@arm.com>
+Date:   Fri, 29 Sep 2023 09:42:45 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH v4 05/18] PM: EM: Refactor a new function
- em_compute_costs()
+Subject: Re: [PATCH v4 06/18] PM: EM: Check if the get_cost() callback is
+ present in em_compute_costs()
 Content-Language: en-US
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
@@ -36,10 +36,10 @@ Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org,
         qyousef@layalina.io, wvw@google.com
 References: <20230925081139.1305766-1-lukasz.luba@arm.com>
- <20230925081139.1305766-6-lukasz.luba@arm.com>
- <CAJZ5v0hyeKGuC5-jJDoxBpNksMg1cZ7eoCysjx7O8Ey1i8YSDg@mail.gmail.com>
+ <20230925081139.1305766-7-lukasz.luba@arm.com>
+ <CAJZ5v0g9hX6S1jnSD3=uatnPmF3vDPEF3ARru5ORst-CNc=5dQ@mail.gmail.com>
 From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0hyeKGuC5-jJDoxBpNksMg1cZ7eoCysjx7O8Ey1i8YSDg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0g9hX6S1jnSD3=uatnPmF3vDPEF3ARru5ORst-CNc=5dQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -53,21 +53,24 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
-On 9/26/23 19:39, Rafael J. Wysocki wrote:
+On 9/26/23 19:46, Rafael J. Wysocki wrote:
 > On Mon, Sep 25, 2023 at 10:11 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
 >>
->> Refactor a dedicated function which will be easier to maintain and re-use
->> in future. The upcoming changes for the modifiable EM perf_state table
->> will use it (instead of duplicating the code).
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> The em_compute_cost() is going to be re-used in runtime modified EM
+>> code path. Thus, make sure that this common code is safe and won't
+>> try to use the NULL pointer. The former em_compute_cost() didn't have to
+>> care about runtime modification code path. The upcoming changes introduce
+>> such option, but with different callback. Those two paths which use
+>> get_cost() (during first EM registration) or update_power() (during
+>> runtime modification) need to be safely handled in em_compute_costs().
 > 
-> If I'm not mistaken, this patch by itself is not going to change the
-> observable functionality in any way and it would be good to say that
-> in the changelog.
+> I would just say something like this:
 > 
-> This also applies to some other patches in this series.
+> "Subsequent changes will introduce a case in which cb->get_cost may
+> not be set in em_compute_costs(), so add a check to ensure that it is
+> not NULL before attempting to dereference it."
+> 
+> The rest of the changelog is just redundant IMO.
 > 
 
-Correct, no functional changes. I will add that information to the
-patch header in next version.
+Make sense, thanks, I'll change that.
