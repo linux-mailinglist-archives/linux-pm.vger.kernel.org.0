@@ -2,48 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD9C7B2FED
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 12:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52F6A7B2FF7
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 12:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232916AbjI2KR4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Sep 2023 06:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38734 "EHLO
+        id S232519AbjI2KVl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Sep 2023 06:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233087AbjI2KRt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 06:17:49 -0400
+        with ESMTP id S229687AbjI2KVl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 06:21:41 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30ECCFB;
-        Fri, 29 Sep 2023 03:17:40 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A0C1C433C7;
-        Fri, 29 Sep 2023 10:17:40 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E70C0;
+        Fri, 29 Sep 2023 03:21:39 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29EEEC433C7;
+        Fri, 29 Sep 2023 10:21:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695982660;
-        bh=Fi+IDHGlBgmNRYu1rK859S59T3doLUrBZChLlDSK6B4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=HTpXzlSV1r3+kMFhGBJEbYO0Kx/5XXFGf7QJcGdXmb8luEww4sON51bn8Bv8kSDiP
-         3pRXSVPdnopll4AxB9MLiD2lVogHCm0JoezvpTGiy0A645WHLH6o2O9TsYKfF4WmTj
-         VfAsI01gYSB/yYy6TFtVvfN6+AW0If6RoZhBgZkxnateA5hrGPpB0i99ukvmJq1Kks
-         CXSHfjmO1q1Z3errqrDbYxnaYuFon14ZCICGYX+dzbQABtdnYf9iPLJq6VrtfeuEuT
-         v8yFYvBzri+yMDc9i8+dW9cwL+R/Nn0rODKVdLuCGjnZdvUIin0DKaVeeq4pJLJwBO
-         4k5zhc1vd2qYg==
+        s=k20201202; t=1695982899;
+        bh=+2zBsjqoJzmRSTJwJguyALkmIBOSjgetCm1y/CgYy2M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gSOII6snpINNn77ls7lb3TKnyCuss9CPxUksQDwwLC2CWsC+jXCCj5TSvnboufiB8
+         FTtzT1w9gMkzpALX/7zWFNv3K8TdrSRtAt75vUypLImqWCuihAAmtUqjN5EiTU1CPQ
+         3MdsQFbxFTL/V4KIOKdtN6VzogxizI7UZkS9ZtoyM7XKpP8cDujFBKmGmQT7k2hFGe
+         A04ShedLOZKppDuqZ9NKoQa0sgcO9h0tqTC+8Ub+28/Ymx6qpdJstDoSr8z//3nuO7
+         5lzR/0/t+wRhuKBUzte7b7qEMOt6riUeVFkffuQ0Sq2xW2cM71vjZhhZRsHhKUsbav
+         N/08e6O5aDdHw==
 Received: from johan by xi.lan with local (Exim 4.96)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1qmAZ1-0005GE-1y;
-        Fri, 29 Sep 2023 12:17:39 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
+        (envelope-from <johan@kernel.org>)
+        id 1qmAcs-0005HB-0S;
+        Fri, 29 Sep 2023 12:21:38 +0200
+Date:   Fri, 29 Sep 2023 12:21:38 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Sebastian Reichel <sre@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH] power: supply: qcom_battmgr: fix enable request endianness
-Date:   Fri, 29 Sep 2023 12:16:49 +0200
-Message-ID: <20230929101649.20206-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.41.0
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] power: supply: qcom_battmgr: fix battery_id type
+Message-ID: <ZRalMiem9dcDiYHm@hovoldconsulting.com>
+References: <20230919124222.1155894-1-sebastian.reichel@collabora.com>
+ <ZRahE9StzjDMzaCy@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZRahE9StzjDMzaCy@hovoldconsulting.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,36 +55,24 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add the missing endianness conversion when sending the enable request so
-that the driver will work also on a hypothetical big-endian machine.
+On Fri, Sep 29, 2023 at 12:04:04PM +0200, Johan Hovold wrote:
+> On Tue, Sep 19, 2023 at 02:42:22PM +0200, Sebastian Reichel wrote:
+> > qcom_battmgr_update_request.battery_id is written to using cpu_to_le32()
+> > and should be of type __le32, just like all other 32bit integer requests
+> > for qcom_battmgr.
+> > 
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Closes: https://lore.kernel.org/oe-kbuild-all/202309162149.4owm9iXc-lkp@intel.com/
+> > Fixes: 29e8142b5623 ("power: supply: Introduce Qualcomm PMIC GLINK power supply")
 
-This issue was reported by sparse.
+I think you should add
 
-Fixes: 29e8142b5623 ("power: supply: Introduce Qualcomm PMIC GLINK power supply")
 Cc: stable@vger.kernel.org      # 6.3
-Cc: Bjorn Andersson <andersson@kernel.org>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/power/supply/qcom_battmgr.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
-index de77df97b3a4..6ec71276bb70 100644
---- a/drivers/power/supply/qcom_battmgr.c
-+++ b/drivers/power/supply/qcom_battmgr.c
-@@ -1282,9 +1282,9 @@ static void qcom_battmgr_enable_worker(struct work_struct *work)
- {
- 	struct qcom_battmgr *battmgr = container_of(work, struct qcom_battmgr, enable_work);
- 	struct qcom_battmgr_enable_request req = {
--		.hdr.owner = PMIC_GLINK_OWNER_BATTMGR,
--		.hdr.type = PMIC_GLINK_NOTIFY,
--		.hdr.opcode = BATTMGR_REQUEST_NOTIFICATION,
-+		.hdr.owner = cpu_to_le32(PMIC_GLINK_OWNER_BATTMGR),
-+		.hdr.type = cpu_to_le32(PMIC_GLINK_NOTIFY),
-+		.hdr.opcode = cpu_to_le32(BATTMGR_REQUEST_NOTIFICATION),
- 	};
- 	int ret;
- 
--- 
-2.41.0
+when applying as the robots may run sparse on the stable trees as well.
 
+> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+
+Johan
