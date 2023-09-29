@@ -2,71 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A817B36D9
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 17:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23EC47B379E
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Sep 2023 18:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233646AbjI2Pca (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Sep 2023 11:32:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39042 "EHLO
+        id S233572AbjI2QQw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Sep 2023 12:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233631AbjI2Pc3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 11:32:29 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F06D6
-        for <linux-pm@vger.kernel.org>; Fri, 29 Sep 2023 08:32:26 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-3513b5a9e8eso31249605ab.0
-        for <linux-pm@vger.kernel.org>; Fri, 29 Sep 2023 08:32:26 -0700 (PDT)
+        with ESMTP id S233454AbjI2QQv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Sep 2023 12:16:51 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB2C1B8
+        for <linux-pm@vger.kernel.org>; Fri, 29 Sep 2023 09:16:49 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-323ef9a8b59so4684454f8f.3
+        for <linux-pm@vger.kernel.org>; Fri, 29 Sep 2023 09:16:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google; t=1696001546; x=1696606346; darn=vger.kernel.org;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tFDk6UrGoDPEHdabEQOO71J18seMwjl2IAh1g7oDA/c=;
-        b=YWmNA3BOwsl7h/eWQnclgu55KU/becx+x1WyVR2tNTnYz1TKeEBUJWmqfbksAhcwlu
-         hs8OhmSXRC+nnNjifFbWt7PJm6KNvqQwmf4dBlJd13RRrFv2ml40RasZgnoWY69sdRSG
-         bS+BiVs7v8Me8PCqMAkqw1zRjh6HoDik/cIzr463K1qwajJkziVIXxmu2zQvrTz5mWbq
-         EGkogogu7IfHvKi45nSwfek5JklSfu/Nct+HNeg8UDD2rGvGiqL3PAnkSont3+pg879X
-         p9VwvCl8ycqzrUIB0oteQyNiiDvP4etM1e6NmwJqLQlkzyg4FZBh2xz75vmG3FLm+QVD
-         +8UQ==
+        d=linaro.org; s=google; t=1696004207; x=1696609007; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6B/E0C5Y9HDPBbLwfMxu8cDXR2QSrQXT/5EMKQgQGJ4=;
+        b=yYLYY15TvCfxbDTHxFLQaq01iSQ1lJiSBMoq8yXGMNx4VsFpj3Qfw+fQZs8Bu6QU3c
+         B37pmYP5tY01XuS1wXjCk2SsdQo/JhpBqO+b10Tba2+k8ykCoWrupCstufaSZAmk7x6o
+         j1rUpI9psQYXd2xK1lnbaXFRUggHnZc1RvwdtFIlDd75nOQNoMRRypY8cW563SGztviH
+         7p9v47VtTlOvJh2yWilAymBgdCsxp2JXQpN4XQB4zwwcChLGh4vBl6jXr6p3HSZPkhxS
+         JkYFZptVvRI8Yr3nCu5zWs1GdC1/uI9uO4hzNF9X6ahl6qU6YC8Vv6UVwVZLDohrPqJ5
+         Uhzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696001546; x=1696606346;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tFDk6UrGoDPEHdabEQOO71J18seMwjl2IAh1g7oDA/c=;
-        b=J7pebFlQy5LtQDXNjUS20o8xfHvTz3mKtn9FXe4+om2jct0QgiJcccUcm1dUc5n+jR
-         GRE4nkzm2/+qk6o8M/RZf4CyxH3ygm8DyDbP5skH/qMnDW4pSxj/KbLOLBkOQ4PMyiJq
-         ydqzY3J74KLEiNTvoOxRmtmZ8vK88/Phv7stwd1mbGxEpGps56ypNJJKF+aEPhzE6R5P
-         1QgDZNbIKNEkxKJ9LZHN8r9vBQFLqBBAJQtGMvw5Dez2wUTzysxJ0eoOc4C+y/RPX5s5
-         x7H8dy+l+asR2slCy3gYiWFuEKTzrYE6OAdbaHPCTijstAEKz/HA/YNoFm2fWFOyCDIH
-         BnWA==
-X-Gm-Message-State: AOJu0YyCegzQ8rEFCSZJt6LlXbEfjQS8840OXbukFupvz7OCN7csbalo
-        j2jmmNz4xIyy4rhW6itHuFDNeA==
-X-Google-Smtp-Source: AGHT+IG8wiJnaAVP43/dUw8kr4Sqc7PbdDu9QqB22PtoOw81ibOowDTtW5p9Ot4FRpHfABnKY22G1w==
-X-Received: by 2002:a92:d249:0:b0:352:609f:e4af with SMTP id v9-20020a92d249000000b00352609fe4afmr2132139ilg.24.1696001545989;
-        Fri, 29 Sep 2023 08:32:25 -0700 (PDT)
-Received: from DougS18 (s66-183-142-209.bc.hsia.telus.net. [66.183.142.209])
-        by smtp.gmail.com with ESMTPSA id a8-20020a637f08000000b0057d86bb613esm12393901pgd.45.2023.09.29.08.32.25
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 29 Sep 2023 08:32:25 -0700 (PDT)
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Wyes Karny'" <wyes.karny@amd.com>
-Cc:     <lenb@kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230922092823.478042-1-wyes.karny@amd.com> <004501d9ed96$16af12f0$440d38d0$@telus.net> <ZRO6ofa9sHbKJBCv@BLR-5CG13462PL.amd.com>
-In-Reply-To: <ZRO6ofa9sHbKJBCv@BLR-5CG13462PL.amd.com>
-Subject: RE: [PATCH] tools/power turbostat: Increase the limit for fd opened
-Date:   Fri, 29 Sep 2023 08:32:26 -0700
-Message-ID: <001601d9f2ea$26ef3420$74cd9c60$@telus.net>
+        d=1e100.net; s=20230601; t=1696004207; x=1696609007;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6B/E0C5Y9HDPBbLwfMxu8cDXR2QSrQXT/5EMKQgQGJ4=;
+        b=jq34OJQSCUs73sRxyr/IZVe+C4VvGaMb3H0JS6gBCc6xwgp4RXtTZFeLac+yXJvLuS
+         hfXnBuufJH4g/PGy3xeIAI470RZdpSrrNE1bBu4MPysBniPl4dlWsEjhcIdiaRagd9kd
+         x1fVR3XzWdE89rgbCoimD9PXgzjB8z7aVrnaomrdipwE/qQuGw5sfRUfM4vcVKP1h6WI
+         xoQPu5bLLuK/5xlO4lYZaZ5t8FvSQcqtsTJAiNBps3XjpsVyVjk87oFsXGNvmPTcIvIj
+         QUgoQWckPghZ/T+Nv6BVhS7aMtyDZmy/kphGpH5bNRoLJm57wCpUfpNJvzWWxCyS1YYe
+         sulQ==
+X-Gm-Message-State: AOJu0Yz8NCvQrO6ru/XZcudE6qH6IFihWNSSj1qwKBgnCYEH3M/NgLzu
+        Qi+i4JwdOChECnKW5lhPIm8M8A==
+X-Google-Smtp-Source: AGHT+IEURs7bInoQ81f7TxnaWBu2zV/xWMNibaPJeamfCDb/iMreoEFs2yEUilVfvFeJeX7kmmcn5g==
+X-Received: by 2002:a5d:6687:0:b0:317:5b32:b2c3 with SMTP id l7-20020a5d6687000000b003175b32b2c3mr4321868wru.6.1696004207465;
+        Fri, 29 Sep 2023 09:16:47 -0700 (PDT)
+Received: from lion.localdomain (host-2-99-112-229.as13285.net. [2.99.112.229])
+        by smtp.gmail.com with ESMTPSA id x15-20020adfcc0f000000b0032330e43590sm10226848wrh.22.2023.09.29.09.16.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Sep 2023 09:16:47 -0700 (PDT)
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+Subject: [PATCH 0/4] thermal: Introduce Qualcomm Thermal Mitigation Device
+ support
+Date:   Fri, 29 Sep 2023 17:16:16 +0100
+Message-Id: <20230905-caleb-qmi_cooling-v1-0-5aa39d4164a7@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-ca
-Thread-Index: AQLdRauO63O5kGzkuYXvBkOCK34JtgIw5XPgA4q3bG+t/WnRoA==
+X-B4-Tracking: v=1; b=H4sIAFD4FmUC/x2N0QqDMAwAf0XyvLK2Q8X9yhgjzTINaOvSKQPx3
+ 1f3eBzHbZBZhTNcqw2UV8mSYgF3qoAGjD0beRYGb/3FdrY2hCMH857kQSmNEntTN65pkbo2OA+
+ lC5jZBMVIw1Eu83nC/GE93Kz8ku//d7vv+w9mbY5tfwAAAA==
+To:     Andy Gross <agross@kernel.org>,
+        Bhupesh Sharma <bhupesh.linux@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Caleb Connolly <caleb.connolly@linaro.org>
+X-Mailer: b4 0.13-dev-46309
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1836;
+ i=caleb.connolly@linaro.org; h=from:subject:message-id;
+ bh=VEPqvD4CC9Ro8CIyvLwYQ44Yqd1l9r+l5d1hnsJWdDY=;
+ b=owGbwMvMwCFYaeA6f6eBkTjjabUkhlSxH3klzcXeAlrxp/SMEmubHvy+v/Pz6aIZZnN/z4yqb
+ XgWwRTTUcrCIMjBICumyCJ+Ypll09rL9hrbF1yAmcPKBDKEgYtTACYy9yvD/4JJz5Q/nWj62xgR
+ 9/veg2NzQgtiTpUePXFx0n2llyb7r29g+J8llnla/JdiqdPm+b+vziv6oz+D5/ieSTuev+lQn/B
+ Rfl49AA==
+X-Developer-Key: i=caleb.connolly@linaro.org; a=openpgp;
+ fpr=83B24DA7FE145076BC38BB250CD904EB673A7C47
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,131 +97,43 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Wyes,
+The Thermal Mitigation Device (TMD) Service is a QMI service that runs
+on remote subsystems (the modem and DSPs) on Qualcomm SoCs.
+It exposes various mitigations including passive thermal controls and
+rail voltage restrictions.
 
-On 2023.09.26 10:16 Wyes Karny wrote:
-> On 22 Sep 13:48, Doug Smythies wrote:
-> > On 2023.09.22 02:28 Wyes Karny wrote:
-> >
-> > > When running turbostat, a system with 512 cpus reaches the limit for
-> >
-> > Suggest" ... reaches the default limit for..."
-> >
-> > > maximum number of file descriptors that can be opened. To solve this
-> > > problem, the limit is raised to 2^15, which is a large enough number.
-> > >
-> > > Below data is collected from AMD server systems while running turbostat:
-> > >
-> > > |-----------+-------------------------------|
-> > > | # of cpus | # of opened fds for turbostat |
-> > > |-----------+-------------------------------|
-> > > | 128       | 260                           |
-> > > |-----------+-------------------------------|
-> > > | 192       | 388                           |
-> > > |-----------+-------------------------------|
-> > > | 512       | 1028                          |
-> > > |-----------+-------------------------------|
-> >
-> > The number of open files is a function of what is being "show"ed or "hide"en.
-> > They can also increase beyond the above 2 X (# of CPUs) + 4 number
-> > via the --add directive.
-> > >
-> > > So, the new max limit would be sufficient up to 2^14 cpus.
-> >
-> > Well, not quiet, but the point is valid.
-> >
-> > Normally, I would assume that a server with a large number of
-> > CPUs would have set a much higher limit of the number of open
-> > files than the default. I use 131,072 and so this patch reduces the
-> > maximum.
->
-> I think below will fix the problem.
->
-> +#define MAX_NOFILE 0x8000
-> +
-> +void set_rlimit(void)
-> +{
-> +       struct rlimit limit;
-> +
-> +       if(getrlimit(RLIMIT_NOFILE, &limit) < 0) {
-> +               err(1, "Failed to get rlimit");
-> +       }
-> +
-> +       if (limit.rlim_max < MAX_NOFILE)
-> +               limit.rlim_max = MAX_NOFILE;
-> +       if (limit.rlim_cur < MAX_NOFILE)
-> +               limit.rlim_cur = MAX_NOFILE;
-> +
-> +       if (setrlimit(RLIMIT_NOFILE, &limit) < 0) {
-> +               err(1, "Failed to set rlimit");
-> +       }
-> +       return;
-> +}
->
-> Is this looks okay to you?
+This series introduces support for exposing TMDs as cooling devices
+in the kernel through the thermal framework, using the QMI interface.
 
-Either the original or the above is fine.
-I was just being nit-picky and annoying is all.
-I still added a "Reviewed-by" below.
+Each TMD client is described as a child of the remoteproc node in
+devicetree. With subnodes for each control.
 
-... Doug
+This series is based on previous work by Bhupesh Sharma which can be
+found at [1]. I'm sending this as a fresh series as it has been a
+year since the original version and I have rewritten most of the driver.
 
-> Thanks,
-> Wyes
-> >
-> > Unpatched:
-> > root@s19:~# cat /proc/47043/limits | grep "Max open files"
-> > Max open files            131072               131072               files
-> >
-> > Patched:
-> > root@s19:~# cat /proc/47032/limits | grep "Max open files"
-> > Max open files            32768                32768                files
-> >
-> > Anyway:
-> >
-> > Reviewed-by: Doug Smythies <dsmythies@telus.net>
-> > Tested-by: Doug Smythies <dsmythies@telus.net>
-> >
-> > >
-> > > Signed-off-by: Wyes Karny <wyes.karny@amd.com>
-> > > ---
-> > >  tools/power/x86/turbostat/turbostat.c | 15 +++++++++++++++
-> > >  1 file changed, 15 insertions(+)
-> > >
-> > > diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-> > > index 9a10512e3407..23f1fe58289a 100644
-> > > --- a/tools/power/x86/turbostat/turbostat.c
-> > > +++ b/tools/power/x86/turbostat/turbostat.c
-> > > @@ -6717,6 +6717,18 @@ void cmdline(int argc, char **argv)
-> > >       }
-> > >  }
-> > >
-> > > +void set_rlimit(void)
-> > > +{
-> > > +     struct rlimit limit;
-> > > +
-> > > +     limit.rlim_cur = 0x8000;
-> > > +     limit.rlim_max = 0x8000;
-> > > +
-> > > +     if (setrlimit(RLIMIT_NOFILE, &limit) < 0) {
-> > > +             err(1, "Failed to set rlimit");
-> > > +     }
-> > > +}
-> > > +
-> > >  int main(int argc, char **argv)
-> > >  {
-> > >       outf = stderr;
-> > > @@ -6729,6 +6741,9 @@ int main(int argc, char **argv)
-> > >
-> > >       probe_sysfs();
-> > >
-> > > +     if (!getuid())
-> > > +             set_rlimit();
-> > > +
-> > >       turbostat_init();
-> > >
-> > >       msr_sum_record();
-> > > --
-> > > 2.34.1
+[1]: https://lore.kernel.org/linux-arm-msm/20220912085049.3517140-1-bhupesh.sharma@linaro.org/
 
+---
+Caleb Connolly (4):
+      remoteproc: qcom: probe all child devices
+      dt-bindings: thermal: Add qcom,qmi-cooling yaml bindings
+      thermal: qcom: add qmi-cooling driver
+      MAINTAINERS: Add entry for Qualcomm Cooling Driver
+
+ .../bindings/remoteproc/qcom,msm8996-mss-pil.yaml  |  13 +
+ .../bindings/remoteproc/qcom,pas-common.yaml       |   6 +
+ .../bindings/thermal/qcom,qmi-cooling.yaml         | 168 +++++++
+ MAINTAINERS                                        |   8 +
+ drivers/remoteproc/qcom_q6v5.c                     |   4 +
+ drivers/remoteproc/qcom_q6v5_mss.c                 |   8 -
+ drivers/thermal/qcom/Kconfig                       |  13 +
+ drivers/thermal/qcom/Makefile                      |   1 +
+ drivers/thermal/qcom/qmi-cooling.c                 | 520 +++++++++++++++++++++
+ drivers/thermal/qcom/qmi-cooling.h                 | 428 +++++++++++++++++
+ 10 files changed, 1161 insertions(+), 8 deletions(-)
+---
+base-commit: 9067f80db58bbce81d5f0703aa2fd261e88bc812
+
+// Caleb (they/them)
 
