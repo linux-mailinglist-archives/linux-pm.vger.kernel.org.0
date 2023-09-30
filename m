@@ -2,74 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C87F7B3FEA
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Sep 2023 12:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6B37B4023
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Sep 2023 13:37:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234150AbjI3KWj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 30 Sep 2023 06:22:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51446 "EHLO
+        id S234164AbjI3Lh5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 30 Sep 2023 07:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234112AbjI3KWa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 Sep 2023 06:22:30 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D93F1AB;
-        Sat, 30 Sep 2023 03:22:27 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5335725cf84so18277736a12.2;
-        Sat, 30 Sep 2023 03:22:27 -0700 (PDT)
+        with ESMTP id S234130AbjI3Lh4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 Sep 2023 07:37:56 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7B01A4
+        for <linux-pm@vger.kernel.org>; Sat, 30 Sep 2023 04:37:52 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-27751ac0653so8233410a91.3
+        for <linux-pm@vger.kernel.org>; Sat, 30 Sep 2023 04:37:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696069345; x=1696674145; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1696073872; x=1696678672; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=upvkOshm+Utk6b+l4TjTOIuE/7SOxFRjndlDlP7Geug=;
-        b=BteT6fkt8qOUyo3MKGDOkg3c1DJnlHouFWbZo2Gefy1lAn4M+HjOVGxMOnyaS+CHaJ
-         eVf3bo+k6APFjoE01n3zfIDmA3C2eufCBHq0eXH83fxf5iPwp0U/lsE8NV6sI0OpRbNn
-         gksWQ16QAYKwtgsiSORC0JfpnJ2gI/22ax2FMJYN8pA5EkynaGpgBrreBJoxLGiK1W+3
-         YixP0iChf2jIKp9q6EEzdPC2YOENmPeV9RYvJCmJV1OYx/Lft1mFuO7SeiLiY6/qNWLF
-         2oNW//piN1W+vQLlP7o1MKk/73nhSyE97AntPTIgmbMpRU2RpdGJYSlPCMQV9gBwGIZt
-         /EgA==
+        bh=dt7EuEXqGI7TXewH6QEsSanrI9GOVcdSiE0pkdtioME=;
+        b=tvdnAlxQ2QQW0cEygPweyIfpRXwOv/hL0TNtZzrewulVCAEfCVucEfvxwhoBeC296h
+         JoudJKJUpXmByRQplyOi8lGlYWWhMryTVr3m9EVctaWPTLbov7EJIV9NJqsO3l/sMkP1
+         HTGEc8fute/518Dk3G9NhfOTz4Ve7J+DfSQXYItixkOEqx2fmUSFdJUei79iDjAtk/O1
+         /osKNs3tmD6jdqfea97MY9l63LV/RfIdaT1jMxW0rmsqdDxci+HHCdoORpEF3vPAgEkL
+         ce6IKEQli1YekWgnJMNjj7PEyO1KwLMGdMV+Dy4gF/Btvi9zEKLJjX9GMzdIndZLi5YX
+         y6/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696069345; x=1696674145;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1696073872; x=1696678672;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=upvkOshm+Utk6b+l4TjTOIuE/7SOxFRjndlDlP7Geug=;
-        b=j9ULVqHQsoC/cyRI/1bcvN0tKfB5yEjsh2yi0micyjLBnUZhycNda6dhwtLPvXbBHH
-         tk/5wY/+wrmxtLfg3HpzbNn0yqsELHQ+WxN0kfmqbQHFdhpaqsLYrL/BMvlwubqgdeBg
-         UPDmHbtxM6/m0FrsLp7LKk7qgRwOfe1p2knURRRi7WfGHlO+J1ymdDb/BolNKWjpZgTX
-         eWDbiT6a2vhfdTV3KrC68sEZcEwL4tVBBkFp/brvrXvzwLubMTAzX6F/viFmBHi0r6dz
-         G5T/9pxXkzIyFkAkQYt/1D31TVMq3d6PhHyQaaKcZd2gXwGZqBEWpFzylzdFoFAwOwdz
-         K87A==
-X-Gm-Message-State: AOJu0YxRMimygFgMntGNIWBYLUs7//Q3UR35rGQOPxWB6LsWP0FoSA8I
-        a1nlzV3P8sZNmCAGukhgLNE=
-X-Google-Smtp-Source: AGHT+IGcDhCz//73gt6W6Dq+CQ+r80HKhSBIex7xtCKsHl3/kCHELm/j6qln6fyfhwhGnqQw8lC3aw==
-X-Received: by 2002:a17:907:77cf:b0:9b2:c2a9:356e with SMTP id kz15-20020a17090777cf00b009b2c2a9356emr6062679ejc.49.1696069345482;
-        Sat, 30 Sep 2023 03:22:25 -0700 (PDT)
-Received: from fedora.. (dh207-96-216.xnet.hr. [88.207.96.216])
-        by smtp.googlemail.com with ESMTPSA id j25-20020a170906255900b0099bcf1c07c6sm13716547ejb.138.2023.09.30.03.22.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Sep 2023 03:22:24 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     ilia.lin@kernel.org, vireshk@kernel.org, nm@ti.com,
-        sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        rafael@kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>,
-        Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v5 4/4] ARM: dts: qcom: ipq8064: Add CPU OPP table
-Date:   Sat, 30 Sep 2023 12:21:19 +0200
-Message-ID: <20230930102218.229613-4-robimarko@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230930102218.229613-1-robimarko@gmail.com>
-References: <20230930102218.229613-1-robimarko@gmail.com>
+        bh=dt7EuEXqGI7TXewH6QEsSanrI9GOVcdSiE0pkdtioME=;
+        b=eHqCH0pUO6N/4SNKL/o+Unxtp1ssVwa7H3fQ7I+74GvcBjLBmKLn82n/w/vL6Q8X0y
+         tqlE5Z9OxYbbeqKSwm1ooxPKquHYc5j8MxY13/rWhCX5Hi5qjS84uNpyiSegFlwjMyei
+         AkEXEvJ0v8wMtf5PTpheurFPjb/3dKvJu7ut3865KI3JtU30d9QY7iFcH8U2jh1pNRZx
+         wz+s3yNQEjk0DqM/elfNPa6LROG37IjgIwkdKdo1O3kYFTg0WWiiFNttDA58ONVmO2qR
+         lZubVjWgUMo6a2xf6ymn8R9JCS7PasXrDjwngR0lj4k38jC7erc3tI9Df6ec+3twUcUy
+         V4+w==
+X-Gm-Message-State: AOJu0YyFRfsk+f5I0tTGtIV0RyyATSmxKDtD/dyLOiH/oS+LEG1lVQfY
+        sHzUDaN6RFAq9WSXT3mv0ED8q9MWhghTVuYu55du7+nglM5OBw3aIyQKWQ==
+X-Google-Smtp-Source: AGHT+IEplTMs5wTWAV3lc34WWYLDdwEUeqbkGBjDssJRaa7W3LDVbSCo+nHNjHyv+OakTKM9V/CulKIAyJvSNclCXVg=
+X-Received: by 2002:a17:90a:9a7:b0:268:2d92:55d3 with SMTP id
+ 36-20020a17090a09a700b002682d9255d3mr5803488pjo.39.1696073871651; Sat, 30 Sep
+ 2023 04:37:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230929-hib_zero_bitmap_fix-v1-1-6cfdcb785250@quicinc.com>
+In-Reply-To: <20230929-hib_zero_bitmap_fix-v1-1-6cfdcb785250@quicinc.com>
+From:   Brian Geffon <bgeffon@google.com>
+Date:   Sat, 30 Sep 2023 07:37:13 -0400
+Message-ID: <CADyq12wRVJURCuB0ZjL878J-U9kCxNE0pSoihRWBP8OJWk1M1A@mail.gmail.com>
+Subject: Re: [PATCH] PM: hibernate: Fix a bug in copying the zero bitmap to
+ safe pages
+To:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        kernel@quicinc.com,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,228 +73,133 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Christian Marangi <ansuelsmth@gmail.com>
+On Fri, Sep 29, 2023 at 1:31=E2=80=AFPM Pavankumar Kondeti
+<quic_pkondeti@quicinc.com> wrote:
+>
+Hi Pavankumar,
 
-Add CPU OPP table for IPQ8062, IPQ8064 and IPQ8065 SoC.
-Use opp-supported-hw binding to correctly enable and disable the
-frequency as IPQ8062 supports up to 1.0Ghz, IPQ8064 supports up to
-1.4GHz with 1.2GHz as an additional frequency and IPQ8065 supports
-1.7GHZ but doesn't have 1.2GHZ frequency and has to be disabled.
+> The following crash is observed 100% of the time during resume from
+> the hibernation on a x86 QEMU system.
+>
+> [   12.931887]  ? __die_body+0x1a/0x60
+> [   12.932324]  ? page_fault_oops+0x156/0x420
+> [   12.932824]  ? search_exception_tables+0x37/0x50
+> [   12.933389]  ? fixup_exception+0x21/0x300
+> [   12.933889]  ? exc_page_fault+0x69/0x150
+> [   12.934371]  ? asm_exc_page_fault+0x26/0x30
+> [   12.934869]  ? get_buffer.constprop.0+0xac/0x100
+> [   12.935428]  snapshot_write_next+0x7c/0x9f0
+> [   12.935929]  ? submit_bio_noacct_nocheck+0x2c2/0x370
+> [   12.936530]  ? submit_bio_noacct+0x44/0x2c0
+> [   12.937035]  ? hib_submit_io+0xa5/0x110
+> [   12.937501]  load_image+0x83/0x1a0
+> [   12.937919]  swsusp_read+0x17f/0x1d0
+> [   12.938355]  ? create_basic_memory_bitmaps+0x1b7/0x240
+> [   12.938967]  load_image_and_restore+0x45/0xc0
+> [   12.939494]  software_resume+0x13c/0x180
+> [   12.939994]  resume_store+0xa3/0x1d0
+>
+> The commit being fixed introduced a bug in copying the zero bitmap
+> to safe pages. A temporary bitmap is allocated in prepare_image()
+> to make a copy of zero bitmap after the unsafe pages are marked.
+> Freeing this temporary bitmap later results in an inconsistent state
+> of unsafe pages. Since free bit is left as is for this temporary bitmap
+> after free, these pages are treated as unsafe pages when they are
+> allocated again. This results in incorrect calculation of the number
+> of pages pre-allocated for the image.
+>
+> nr_pages =3D (nr_zero_pages + nr_copy_pages) - nr_highmem - allocated_uns=
+afe_pages;
+>
+> The allocate_unsafe_pages is estimated to be higher than the actual
+> which results in running short of pages in safe_pages_list. Hence the
+> crash is observed in get_buffer() due to NULL pointer access of
+> safe_pages_list.
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
-Changes v4:
-* Add OPP DTS patch for IPQ8064
+Rafael pulled https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-=
+pm.git/commit/?h=3Dlinux-next&id=3Df0c7183008b41e92fa676406d87f18773724b48b
+which addresses the null pointer dereference which regardless
+shouldn't be touching the list directly and should be using
+__get_safe_page(). I'll review this patch in the next day or two.
 
- arch/arm/boot/dts/qcom/qcom-ipq8062.dtsi | 30 +++++++++++
- arch/arm/boot/dts/qcom/qcom-ipq8064.dtsi | 67 ++++++++++++++++++++++++
- arch/arm/boot/dts/qcom/qcom-ipq8065.dtsi | 65 +++++++++++++++++++++++
- 3 files changed, 162 insertions(+)
+>
+> Fixes: 005e8dddd497 ("PM: hibernate: don't store zero pages in the image =
+file")
+> Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+> ---
+>  kernel/power/snapshot.c | 23 ++++++++++++++---------
+>  1 file changed, 14 insertions(+), 9 deletions(-)
+>
+> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+> index 87e9f7e2bdc0..cb7341a71a21 100644
+> --- a/kernel/power/snapshot.c
+> +++ b/kernel/power/snapshot.c
+> @@ -2628,7 +2628,7 @@ static int prepare_image(struct memory_bitmap *new_=
+bm, struct memory_bitmap *bm,
+>                 struct memory_bitmap *zero_bm)
+>  {
+>         unsigned int nr_pages, nr_highmem;
+> -       struct memory_bitmap tmp;
+> +       struct memory_bitmap tmp_zero_bm;
+>         struct linked_page *lp;
+>         int error;
+>
+> @@ -2636,6 +2636,16 @@ static int prepare_image(struct memory_bitmap *new=
+_bm, struct memory_bitmap *bm,
+>         free_image_page(buffer, PG_UNSAFE_CLEAR);
+>         buffer =3D NULL;
+>
+> +       /*
+> +        * Allocate a temporary bitmap to create a copy of zero_bm in
+> +        * safe pages. This allocation needs to be done before marking
+> +        * unsafe pages below so that it can be freed without altering
+> +        * the state of unsafe pages.
+> +        */
+> +       error =3D memory_bm_create(&tmp_zero_bm, GFP_ATOMIC, PG_ANY);
+> +       if (error)
+> +               goto Free;
+> +
+>         nr_highmem =3D count_highmem_image_pages(bm);
+>         mark_unsafe_pages(bm);
+>
+> @@ -2646,12 +2656,7 @@ static int prepare_image(struct memory_bitmap *new=
+_bm, struct memory_bitmap *bm,
+>         duplicate_memory_bitmap(new_bm, bm);
+>         memory_bm_free(bm, PG_UNSAFE_KEEP);
+>
+> -       /* Make a copy of zero_bm so it can be created in safe pages */
+> -       error =3D memory_bm_create(&tmp, GFP_ATOMIC, PG_ANY);
+> -       if (error)
+> -               goto Free;
+> -
+> -       duplicate_memory_bitmap(&tmp, zero_bm);
+> +       duplicate_memory_bitmap(&tmp_zero_bm, zero_bm);
+>         memory_bm_free(zero_bm, PG_UNSAFE_KEEP);
+>
+>         /* Recreate zero_bm in safe pages */
+> @@ -2659,8 +2664,8 @@ static int prepare_image(struct memory_bitmap *new_=
+bm, struct memory_bitmap *bm,
+>         if (error)
+>                 goto Free;
+>
+> -       duplicate_memory_bitmap(zero_bm, &tmp);
+> -       memory_bm_free(&tmp, PG_UNSAFE_KEEP);
+> +       duplicate_memory_bitmap(zero_bm, &tmp_zero_bm);
+> +       memory_bm_free(&tmp_zero_bm, PG_UNSAFE_KEEP);
+>         /* At this point zero_bm is in safe pages and it can be used for =
+restoring. */
+>
+>         if (nr_highmem > 0) {
+>
+> ---
+> base-commit: 6465e260f48790807eef06b583b38ca9789b6072
+> change-id: 20230929-hib_zero_bitmap_fix-bc5884eba0ae
+>
+> Best regards,
+> --
+> Pavankumar Kondeti <quic_pkondeti@quicinc.com>
 
-diff --git a/arch/arm/boot/dts/qcom/qcom-ipq8062.dtsi b/arch/arm/boot/dts/qcom/qcom-ipq8062.dtsi
-index 5d3ebd3e2e51..72d9782c3d6f 100644
---- a/arch/arm/boot/dts/qcom/qcom-ipq8062.dtsi
-+++ b/arch/arm/boot/dts/qcom/qcom-ipq8062.dtsi
-@@ -6,3 +6,33 @@ / {
- 	model = "Qualcomm Technologies, Inc. IPQ8062";
- 	compatible = "qcom,ipq8062", "qcom,ipq8064";
- };
-+
-+&opp_table_cpu {
-+	opp-384000000 {
-+		opp-microvolt-speed0-pvs0 = <1000000 950000 1050000>;
-+		opp-microvolt-speed0-pvs1 = <925000 878750 971250>;
-+		opp-microvolt-speed0-pvs2 = <875000 831250 918750>;
-+		opp-microvolt-speed0-pvs3 = <800000 760000 840000>;
-+	};
-+
-+	opp-600000000 {
-+		opp-microvolt-speed0-pvs0 = <1050000 997500 1102500>;
-+		opp-microvolt-speed0-pvs1 = <975000 926250 1023750>;
-+		opp-microvolt-speed0-pvs2 = <925000 878750 971250>;
-+		opp-microvolt-speed0-pvs3 = <850000 807500 892500>;
-+	};
-+
-+	opp-800000000 {
-+		opp-microvolt-speed0-pvs0 = <1100000 1045000 1155000>;
-+		opp-microvolt-speed0-pvs1 = <1025000 973750 1076250>;
-+		opp-microvolt-speed0-pvs2 = <995000 945250 1044750>;
-+		opp-microvolt-speed0-pvs3 = <900000 855000 945000>;
-+	};
-+
-+	opp-1000000000 {
-+		opp-microvolt-speed0-pvs0 = <1150000 1092500 1207500>;
-+		opp-microvolt-speed0-pvs1 = <1075000 1021250 1128750>;
-+		opp-microvolt-speed0-pvs2 = <1025000 973750 1076250>;
-+		opp-microvolt-speed0-pvs3 = <950000 902500 997500>;
-+	};
-+};
-diff --git a/arch/arm/boot/dts/qcom/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom/qcom-ipq8064.dtsi
-index 6198f42f6a9c..cbbd28b43dc4 100644
---- a/arch/arm/boot/dts/qcom/qcom-ipq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom/qcom-ipq8064.dtsi
-@@ -30,6 +30,7 @@ cpu0: cpu@0 {
- 			next-level-cache = <&L2>;
- 			qcom,acc = <&acc0>;
- 			qcom,saw = <&saw0>;
-+			operating-points-v2 = <&opp_table_cpu>;
- 		};
- 
- 		cpu1: cpu@1 {
-@@ -40,6 +41,7 @@ cpu1: cpu@1 {
- 			next-level-cache = <&L2>;
- 			qcom,acc = <&acc1>;
- 			qcom,saw = <&saw1>;
-+			operating-points-v2 = <&opp_table_cpu>;
- 		};
- 
- 		L2: l2-cache {
-@@ -49,6 +51,71 @@ L2: l2-cache {
- 		};
- 	};
- 
-+	opp_table_cpu: opp-table-cpu {
-+		compatible = "operating-points-v2-kryo-cpu";
-+		nvmem-cells = <&speedbin_efuse>;
-+
-+		opp-384000000 {
-+			opp-hz = /bits/ 64 <384000000>;
-+			opp-microvolt-speed0-pvs0 = <1000000 950000 1050000>;
-+			opp-microvolt-speed0-pvs1 = <925000 878750 971250>;
-+			opp-microvolt-speed0-pvs2 = <875000 831250 918750>;
-+			opp-microvolt-speed0-pvs3 = <800000 760000 840000>;
-+			opp-supported-hw = <0x7>;
-+			clock-latency-ns = <100000>;
-+		};
-+
-+		opp-600000000 {
-+			opp-hz = /bits/ 64 <600000000>;
-+			opp-microvolt-speed0-pvs0 = <1050000 997500 1102500>;
-+			opp-microvolt-speed0-pvs1 = <975000 926250 1023750>;
-+			opp-microvolt-speed0-pvs2 = <925000 878750 971250>;
-+			opp-microvolt-speed0-pvs3 = <850000 807500 892500>;
-+			opp-supported-hw = <0x7>;
-+			clock-latency-ns = <100000>;
-+		};
-+
-+		opp-800000000 {
-+			opp-hz = /bits/ 64 <800000000>;
-+			opp-microvolt-speed0-pvs0 = <1100000 1045000 1155000>;
-+			opp-microvolt-speed0-pvs1 = <1025000 973750 1076250>;
-+			opp-microvolt-speed0-pvs2 = <995000 945250 1044750>;
-+			opp-microvolt-speed0-pvs3 = <900000 855000 945000>;
-+			opp-supported-hw = <0x7>;
-+			clock-latency-ns = <100000>;
-+		};
-+
-+		opp-1000000000 {
-+			opp-hz = /bits/ 64 <1000000000>;
-+			opp-microvolt-speed0-pvs0 = <1150000 1092500 1207500>;
-+			opp-microvolt-speed0-pvs1 = <1075000 1021250 1128750>;
-+			opp-microvolt-speed0-pvs2 = <1025000 973750 1076250>;
-+			opp-microvolt-speed0-pvs3 = <950000 902500 997500>;
-+			opp-supported-hw = <0x7>;
-+			clock-latency-ns = <100000>;
-+		};
-+
-+		opp-1200000000 {
-+			opp-hz = /bits/ 64 <1200000000>;
-+			opp-microvolt-speed0-pvs0 = <1200000 1140000 1260000>;
-+			opp-microvolt-speed0-pvs1 = <1125000 1068750 1181250>;
-+			opp-microvolt-speed0-pvs2 = <1075000 1021250 1128750>;
-+			opp-microvolt-speed0-pvs3 = <1000000 950000 1050000>;
-+			opp-supported-hw = <0x2>;
-+			clock-latency-ns = <100000>;
-+		};
-+
-+		opp-1400000000 {
-+			opp-hz = /bits/ 64 <1400000000>;
-+			opp-microvolt-speed0-pvs0 = <1250000 1187500 1312500>;
-+			opp-microvolt-speed0-pvs1 = <1175000 1116250 1233750>;
-+			opp-microvolt-speed0-pvs2 = <1125000 1068750 1181250>;
-+			opp-microvolt-speed0-pvs3 = <1050000 997500 1102500>;
-+			opp-supported-hw = <0x6>;
-+			clock-latency-ns = <100000>;
-+		};
-+	};
-+
- 	thermal-zones {
- 		sensor0-thermal {
- 			polling-delay-passive = <0>;
-diff --git a/arch/arm/boot/dts/qcom/qcom-ipq8065.dtsi b/arch/arm/boot/dts/qcom/qcom-ipq8065.dtsi
-index ea49f6cc416d..d9ead31b897b 100644
---- a/arch/arm/boot/dts/qcom/qcom-ipq8065.dtsi
-+++ b/arch/arm/boot/dts/qcom/qcom-ipq8065.dtsi
-@@ -6,3 +6,68 @@ / {
- 	model = "Qualcomm Technologies, Inc. IPQ8065";
- 	compatible = "qcom,ipq8065", "qcom,ipq8064";
- };
-+
-+&opp_table_cpu {
-+	opp-384000000 {
-+		opp-microvolt-speed0-pvs0 = <975000 926250 1023750>;
-+		opp-microvolt-speed0-pvs1 = <950000 902500 997500>;
-+		opp-microvolt-speed0-pvs2 = <925000 878750 971250>;
-+		opp-microvolt-speed0-pvs3 = <900000 855000 945000>;
-+		opp-microvolt-speed0-pvs4 = <875000 831250 918750>;
-+		opp-microvolt-speed0-pvs5 = <825000 783750 866250>;
-+		opp-microvolt-speed0-pvs6 = <775000 736250 813750>;
-+	};
-+
-+	opp-600000000 {
-+		opp-microvolt-speed0-pvs0 = <1000000 950000 1050000>;
-+		opp-microvolt-speed0-pvs1 = <975000 926250 1023750>;
-+		opp-microvolt-speed0-pvs2 = <950000 902500 997500>;
-+		opp-microvolt-speed0-pvs3 = <925000 878750 971250>;
-+		opp-microvolt-speed0-pvs4 = <900000 855000 945000>;
-+		opp-microvolt-speed0-pvs5 = <850000 807500 892500>;
-+		opp-microvolt-speed0-pvs6 = <800000 760000 840000>;
-+	};
-+
-+	opp-800000000 {
-+		opp-microvolt-speed0-pvs0 = <1050000 997500 1102500>;
-+		opp-microvolt-speed0-pvs1 = <1025000 973750 1076250>;
-+		opp-microvolt-speed0-pvs2 = <1000000 950000 1050000>;
-+		opp-microvolt-speed0-pvs3 = <975000 926250 1023750>;
-+		opp-microvolt-speed0-pvs4 = <950000 902500 997500>;
-+		opp-microvolt-speed0-pvs5 = <900000 855000 945000>;
-+		opp-microvolt-speed0-pvs6 = <850000 807500 892500>;
-+	};
-+
-+	opp-1000000000 {
-+		opp-microvolt-speed0-pvs0 = <1100000 1045000 1155000>;
-+		opp-microvolt-speed0-pvs1 = <1075000 1021250 1128750>;
-+		opp-microvolt-speed0-pvs2 = <1050000 997500 1102500>;
-+		opp-microvolt-speed0-pvs3 = <1025000 973750 1076250>;
-+		opp-microvolt-speed0-pvs4 = <1000000 950000 1050000>;
-+		opp-microvolt-speed0-pvs5 = <950000 902500 997500>;
-+		opp-microvolt-speed0-pvs6 = <900000 855000 945000>;
-+	};
-+
-+	opp-1400000000 {
-+		opp-microvolt-speed4-pvs0 = <1175000 1116250 1233750>;
-+		opp-microvolt-speed4-pvs1 = <1150000 1092500 1207500>;
-+		opp-microvolt-speed4-pvs2 = <1125000 1068750 1181250>;
-+		opp-microvolt-speed4-pvs3 = <1100000 1045000 1155000>;
-+		opp-microvolt-speed4-pvs4 = <1075000 1021250 1128750>;
-+		opp-microvolt-speed4-pvs5 = <1025000 973750 1076250>;
-+		opp-microvolt-speed4-pvs6 = <975000 926250 1023750>;
-+	};
-+
-+	opp-1725000000 {
-+		opp-hz = /bits/ 64 <1725000000>;
-+		opp-microvolt-speed0-pvs0 = <1262500 1199375 1325625>;
-+		opp-microvolt-speed0-pvs1 = <1225000 1163750 1286250>;
-+		opp-microvolt-speed0-pvs2 = <1200000 1140000 1260000>;
-+		opp-microvolt-speed0-pvs3 = <1175000 1116250 1233750>;
-+		opp-microvolt-speed0-pvs4 = <1150000 1092500 1207500>;
-+		opp-microvolt-speed0-pvs5 = <1100000 1045000 1155000>;
-+		opp-microvolt-speed0-pvs6 = <1050000 997500 1102500>;
-+		opp-supported-hw = <0x4>;
-+		clock-latency-ns = <100000>;
-+	};
-+};
--- 
-2.41.0
+Thanks,
+Brian
 
+>
