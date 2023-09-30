@@ -2,141 +2,192 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C59E7B3FEF
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Sep 2023 12:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39EA67B3FDD
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Sep 2023 12:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234078AbjI3K3f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 30 Sep 2023 06:29:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45188 "EHLO
+        id S234066AbjI3KW1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 30 Sep 2023 06:22:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233030AbjI3K3f (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 Sep 2023 06:29:35 -0400
-X-Greylist: delayed 512 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 30 Sep 2023 03:29:31 PDT
-Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDAE193
-        for <linux-pm@vger.kernel.org>; Sat, 30 Sep 2023 03:29:31 -0700 (PDT)
-Received: from meshulam (37-48-48-31.nat.epc.tmcz.cz [37.48.48.31])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bee.tesarici.cz (Postfix) with ESMTPSA id 404481881B7
-        for <linux-pm@vger.kernel.org>; Sat, 30 Sep 2023 12:20:56 +0200 (CEST)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-        t=1696069256; bh=4TD1HZ1LGPGRYRQGWhCDM4MlJtyBb6h0t9nDK8inbtc=;
-        h=Date:From:To:Subject:From;
-        b=OhsVefXqbkZHl9i8yCbevuYNOQOjDWVxK07+ZcMXbvQNBSZvBhwlWqI0AD/VK6T6x
-         5bdvcrHJS+qh33G5v+GScQ6tjYoGxzaXG2toEJtkS+zXcZ2VATdXAjeZHPC7xRu2sP
-         MnK16ioPcszaYyPZoPEB79zfF6A3U5NH16gEvfb8H5SrK8CFA/fhyMitPGGSsrRHVB
-         6wLk5AWxQpkjLezXeF/w7B1wZaT5z9Q0lOHPLEwfvl88Dv1UY93WAFymcMn/4FWwAz
-         znTVeTjQ89R+CotdyWhLLJXioEBrADV2Z2tMZY8suIMcuJe7+LKVEE4bHtWoQVvCkp
-         Qd/l+kWuxUMzA==
-Date:   Sat, 30 Sep 2023 12:20:54 +0200
-From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To:     linux-pm@vger.kernel.org
-Subject: Thinkpad E595 system deadlock on resume from S3
-Message-ID: <20230930122054.3cf727a4@meshulam>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
+        with ESMTP id S234061AbjI3KWZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 Sep 2023 06:22:25 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D232193;
+        Sat, 30 Sep 2023 03:22:23 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5362bcc7026so4627367a12.1;
+        Sat, 30 Sep 2023 03:22:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696069341; x=1696674141; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2cw31Dklv6LbIdS/IsVHOoHw1kB38CKqlZS0s3OaLsA=;
+        b=ZsgEtLfqgmGHkIGx4MtMKbdwnTroxkKr0De5EOUCs9eOb4XMbJTcN6LjIf3OrZwBUm
+         dXTmg9ccNxraOO/lJ7BeRy3ZYKqYuCR1wUVDJhRzf1LmGNomZ2akZqnU+aXpbpJahZJw
+         RApqBjTIL62O63gve7pmt2ymzUZ1aMVIn2QHHSTsAE/2i1FRehoAx/x27mP2wDIlh3vw
+         6vxKAerdYXoP0QJ3DjK86Rkw26aqsipaMEWKE2ppAwz7COkSh7sEGXZ9CjNvoT8Eu5G0
+         nOWYSjfQjBAxgJffO9G9tNVntt2QfQUibb/bVYprMcMf/Rr4OSlLo5OiAVhqhAbtfv6o
+         CJNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696069341; x=1696674141;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2cw31Dklv6LbIdS/IsVHOoHw1kB38CKqlZS0s3OaLsA=;
+        b=XKeO1GnvUiCUoJ9qMr5++LfiXeUcMQcspXBX5fEesbScHjYppZxxH6+pl/GzivHsxd
+         1AJRRZi/NT4aS45FX6V41WJJ0PSGnGGJtp5j6LTeJaAIFcZuzuQpYwi0e81oJoMAmBae
+         hjthDsp+KUyIVSF8bOUMeqvLDNk1c1MYEqHIFq6y0A/uEDN5ixX1corXjRc9mOm3N8x7
+         vMVwK5FvNcZq22DwuCjuiH1LHotXXMA1Dp+nDL7pL5VuEqzTUNqIWlLjW/RS76zOMP4X
+         VCOdxlpJK2QIK5KmSb/WQL60AnW7Z9EEn2WV1/FtPnarm/V01+TRCdg96zsNiV1MC/rh
+         8cFw==
+X-Gm-Message-State: AOJu0YxuL3Gii3oWYPYySPMwJtyF7HlrI40Vtdd23plICqzhSfMGOMLe
+        /Zc76FVfi1ptBTH0EDo+MTA=
+X-Google-Smtp-Source: AGHT+IFPaOzMep6Ta1wNJ5ZEFYYnN+5naZP3Mq/f/gUdSLTk4k8Jd9dajDC275ZkuPBe0WnIWrr2iw==
+X-Received: by 2002:a17:906:51c9:b0:9ae:6355:5ef4 with SMTP id v9-20020a17090651c900b009ae63555ef4mr5432600ejk.3.1696069341055;
+        Sat, 30 Sep 2023 03:22:21 -0700 (PDT)
+Received: from fedora.. (dh207-96-216.xnet.hr. [88.207.96.216])
+        by smtp.googlemail.com with ESMTPSA id j25-20020a170906255900b0099bcf1c07c6sm13716547ejb.138.2023.09.30.03.22.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Sep 2023 03:22:20 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     ilia.lin@kernel.org, vireshk@kernel.org, nm@ti.com,
+        sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        rafael@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH v5 1/4] cpufreq: qcom-nvmem: add support for IPQ8074
+Date:   Sat, 30 Sep 2023 12:21:16 +0200
+Message-ID: <20230930102218.229613-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi all,
+IPQ8074 comes in 2 families:
+* IPQ8070A/IPQ8071A (Acorn) up to 1.4GHz
+* IPQ8072A/IPQ8074A/IPQ8076A/IPQ8078A (Hawkeye) up to 2.2GHz
 
-this time no patch (yet). In short, my Thinkpad running v6.6-rc3 fails
-to resume from S3. It also fails the same way with Tumbleweed v6.5
-kernel. I was able to capture a crash dump of the v6.5 kernel, and
-here's my analysis:
+So, in order to be able to share one OPP table lets add support for IPQ8074
+family based of SMEM SoC ID-s as speedbin fuse is always 0 on IPQ8074.
 
-The system never gets to waking up my SATA SSD disk:
+IPQ8074 compatible is blacklisted from DT platdev as the cpufreq device
+will get created by NVMEM CPUFreq driver.
 
-[0:0:0:0]    disk    ATA      KINGSTON SEDC600 H5.1  /dev/sda 
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+Changes in v4:
+* Add support for IPQ8174 (Oak) family
 
-There is a pending resume work for kworker/u32:12 (PID 11032), but this
-worker is stuck in 'D' state:
+Changes in v3:
+* Use enum for SoC versions
 
->>> prog.stack_trace(11032)
-#0  context_switch (../kernel/sched/core.c:5381:2)
-#1  __schedule (../kernel/sched/core.c:6710:8)
-#2  schedule (../kernel/sched/core.c:6786:3)
-#3  schedule_preempt_disabled (../kernel/sched/core.c:6845:2)
-#4  __mutex_lock_common (../kernel/locking/mutex.c:679:3)
-#5  __mutex_lock (../kernel/locking/mutex.c:747:9)
-#6  acpi_device_hotplug (../drivers/acpi/scan.c:382:2)
-#7  acpi_hotplug_work_fn (../drivers/acpi/osl.c:1162:2)
-#8  process_one_work (../kernel/workqueue.c:2600:2)
-#9  worker_thread (../kernel/workqueue.c:2751:4)
-#10 kthread (../kernel/kthread.c:389:9)
-#11 ret_from_fork (../arch/x86/kernel/process.c:145:3)
-#12 ret_from_fork_asm+0x1b/0x20 (../arch/x86/entry/entry_64.S:304)
+Changes in v2:
+* Print an error if SMEM ID is not part of the IPQ8074 family
+and restrict the speed to Acorn variant (1.4GHz)
 
-acpi_device_hotplug() tries to acquire acpi_scan_lock, which is held by
-systemd-sleep (PID 11002). This task is also in 'D' state:
+ drivers/cpufreq/cpufreq-dt-platdev.c |  1 +
+ drivers/cpufreq/qcom-cpufreq-nvmem.c | 45 ++++++++++++++++++++++++++++
+ 2 files changed, 46 insertions(+)
 
->>> prog.stack_trace(11002)
-#0  context_switch (../kernel/sched/core.c:5381:2)
-#1  __schedule (../kernel/sched/core.c:6710:8)
-#2  schedule (../kernel/sched/core.c:6786:3)
-#3  schedule_preempt_disabled (../kernel/sched/core.c:6845:2)
-#4  __mutex_lock_common (../kernel/locking/mutex.c:679:3)
-#5  __mutex_lock (../kernel/locking/mutex.c:747:9)
-#6  device_lock (../include/linux/device.h:958:2)
-#7  device_complete (../drivers/base/power/main.c:1063:2)
-#8  dpm_complete (../drivers/base/power/main.c:1121:3)
-#9  suspend_devices_and_enter (../kernel/power/suspend.c:516:2)
-#10 enter_state (../kernel/power/suspend.c:592:10)
-#11 pm_suspend (../kernel/power/suspend.c:619:10)
-#12 state_store (../kernel/power/main.c:707:11)
-#13 kernfs_fop_write_iter (../fs/kernfs/file.c:334:9)
-#14 call_write_iter (../include/linux/fs.h:1877:9)
-#15 new_sync_write (../fs/read_write.c:491:8)
-#16 vfs_write (../fs/read_write.c:584:9)
-#17 ksys_write (../fs/read_write.c:637:9)
-#18 do_syscall_x64 (../arch/x86/entry/common.c:50:14)
-#19 do_syscall_64 (../arch/x86/entry/common.c:80:7)
-#20 entry_SYSCALL_64+0xaa/0x1a6 (../arch/x86/entry/entry_64.S:120)
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index 2016d47889c0..157c91b9962c 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -180,6 +180,7 @@ static const struct of_device_id blocklist[] __initconst = {
+ 	{ .compatible = "ti,am62a7", },
+ 
+ 	{ .compatible = "qcom,ipq8064", },
++	{ .compatible = "qcom,ipq8074", },
+ 	{ .compatible = "qcom,apq8064", },
+ 	{ .compatible = "qcom,msm8974", },
+ 	{ .compatible = "qcom,msm8960", },
+diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+index 84d7033e5efe..ba9e1d60e5b5 100644
+--- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
++++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+@@ -30,6 +30,11 @@
+ 
+ #include <dt-bindings/arm/qcom,ids.h>
+ 
++enum ipq8074_versions {
++	IPQ8074_HAWKEYE_VERSION = 0,
++	IPQ8074_ACORN_VERSION,
++};
++
+ struct qcom_cpufreq_drv;
+ 
+ struct qcom_cpufreq_match_data {
+@@ -203,6 +208,41 @@ static int qcom_cpufreq_krait_name_version(struct device *cpu_dev,
+ 	return ret;
+ }
+ 
++static int qcom_cpufreq_ipq8074_name_version(struct device *cpu_dev,
++					     struct nvmem_cell *speedbin_nvmem,
++					     char **pvs_name,
++					     struct qcom_cpufreq_drv *drv)
++{
++	u32 msm_id;
++	int ret;
++	*pvs_name = NULL;
++
++	ret = qcom_smem_get_soc_id(&msm_id);
++	if (ret)
++		return ret;
++
++	switch (msm_id) {
++	case QCOM_ID_IPQ8070A:
++	case QCOM_ID_IPQ8071A:
++		drv->versions = BIT(IPQ8074_ACORN_VERSION);
++		break;
++	case QCOM_ID_IPQ8072A:
++	case QCOM_ID_IPQ8074A:
++	case QCOM_ID_IPQ8076A:
++	case QCOM_ID_IPQ8078A:
++		drv->versions = BIT(IPQ8074_HAWKEYE_VERSION);
++		break;
++	default:
++		dev_err(cpu_dev,
++			"SoC ID %u is not part of IPQ8074 family, limiting to 1.4GHz!\n",
++			msm_id);
++		drv->versions = BIT(IPQ8074_ACORN_VERSION);
++		break;
++	}
++
++	return 0;
++}
++
+ static const struct qcom_cpufreq_match_data match_data_kryo = {
+ 	.get_version = qcom_cpufreq_kryo_name_version,
+ };
+@@ -217,6 +257,10 @@ static const struct qcom_cpufreq_match_data match_data_qcs404 = {
+ 	.genpd_names = qcs404_genpd_names,
+ };
+ 
++static const struct qcom_cpufreq_match_data match_data_ipq8074 = {
++	.get_version = qcom_cpufreq_ipq8074_name_version,
++};
++
+ static int qcom_cpufreq_probe(struct platform_device *pdev)
+ {
+ 	struct qcom_cpufreq_drv *drv;
+@@ -360,6 +404,7 @@ static const struct of_device_id qcom_cpufreq_match_list[] __initconst = {
+ 	{ .compatible = "qcom,msm8996", .data = &match_data_kryo },
+ 	{ .compatible = "qcom,qcs404", .data = &match_data_qcs404 },
+ 	{ .compatible = "qcom,ipq8064", .data = &match_data_krait },
++	{ .compatible = "qcom,ipq8074", .data = &match_data_ipq8074 },
+ 	{ .compatible = "qcom,apq8064", .data = &match_data_krait },
+ 	{ .compatible = "qcom,msm8974", .data = &match_data_krait },
+ 	{ .compatible = "qcom,msm8960", .data = &match_data_krait },
+-- 
+2.41.0
 
-It is trying to acquire dev->mutex, which is in turn held by
-kworker/0:0 (PID 10830), also in 'D' state:
-
->>> prog.stack_trace(10830)
-#0  context_switch (../kernel/sched/core.c:5381:2)
-#1  __schedule (../kernel/sched/core.c:6710:8)
-#2  schedule (../kernel/sched/core.c:6786:3)
-#3  blk_queue_enter (../block/blk-core.c:326:3)
-#4  blk_mq_alloc_request (../block/blk-mq.c:592:9)
-#5  scsi_alloc_request (../drivers/scsi/scsi_lib.c:1139:7)
-#6  scsi_execute_cmd (../drivers/scsi/scsi_lib.c:217:8)
-#7  scsi_vpd_inquiry (../drivers/scsi/scsi.c:312:11)
-#8  scsi_get_vpd_size (../drivers/scsi/scsi.c:345:11)
-#9  scsi_get_vpd_size (../drivers/scsi/scsi.c:336:5)
-#10 scsi_get_vpd_buf (../drivers/scsi/scsi.c:415:12)
-#11 scsi_attach_vpd (../drivers/scsi/scsi.c:483:12)
-#12 scsi_rescan_device (../drivers/scsi/scsi_scan.c:1628:2)
-#13 ata_scsi_dev_rescan (../drivers/ata/libata-scsi.c:4894:4)
-#14 process_one_work (../kernel/workqueue.c:2600:2)
-#15 worker_thread (../kernel/workqueue.c:2751:4)
-#16 kthread (../kernel/kthread.c:389:9)
-#17 ret_from_fork (../arch/x86/kernel/process.c:145:3)
-#18 ret_from_fork_asm+0x1b/0x20 (../arch/x86/entry/entry_64.S:304)
-
-And here we are, waiting for the completion of the resume work that is
-scheduled on the blocked kworker/u32:12 (PID 11032), see above.
-
-FWIW the deadlock does not happen if autosuspend is turned off for this
-disk.
-
-I'm willing to invest more time into debugging, but I'm not well-versed
-in power management, so I may need some help from you as to what else I
-should look at. Please, include me in Cc of all potential replies; I'm
-not subscribed to linux-pm.
-
-Petr T
