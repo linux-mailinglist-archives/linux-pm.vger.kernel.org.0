@@ -2,56 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 762B87B4381
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Sep 2023 22:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD0D07B438A
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Sep 2023 22:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbjI3U2V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 30 Sep 2023 16:28:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48872 "EHLO
+        id S231401AbjI3U2W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 30 Sep 2023 16:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbjI3U2U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 Sep 2023 16:28:20 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF97CA;
+        with ESMTP id S231351AbjI3U2V (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 Sep 2023 16:28:21 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE667E6;
         Sat, 30 Sep 2023 13:28:18 -0700 (PDT)
 Received: from mercury (unknown [185.254.75.28])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5072B6607285;
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5F81466072A4;
         Sat, 30 Sep 2023 21:28:17 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1696105697;
-        bh=hRlP4DfBi86OovKpM21F/xWPEezlBHK/OG5lsM8V+Sw=;
+        bh=gp02ydvSAYoJwU1pztBoDmdfx1Rdol+wtGtkHuTzNdY=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=fMB7aJfZXrh7iex7stsguBcQ2tYDcR2fIaw1W/etZfGkG/Wrv62zz7Srvy0C2hJGb
-         TBQHVnX98LXJfG2mQNd9HTXHBe0jJMpptCsRDNCfJ5cXDsmVZsHG+7upLb7r8NuX4y
-         bFCUPVMaoDWELQOellD7+DFN21ySb9m+Vsli+QIM6BEIEupnVgCDoMXiXA70l/rRrc
-         Pswf6eGDb4kx39se8pvmqhIMqrukMF3y/mulv3fSg1dZv58OVRmKVFUlA6aei8TLCq
-         pGu+XAmesx4FP0B3x9iGLrtuGY1mkGyGGv+v/vruTyEeOo6mu7CnW2mzihvLn6wSbH
-         zaItx0xGQGX+g==
+        b=PCrzBNG77u7f359Eg3YFqM4uAUhZcNZr9t/zYn70ofsJeyT0WpM0KkmSvrRnBdaGH
+         u9F085IWI1qEfen7bo4B6JFqD0HshUYAkntxFERxjbqrfLPa8NvnhIUjILNnh4Db85
+         wkc2Yoe4ZsF2BnyIrK+ez9KMri+gbKxw9+t8Gjy7Tlq/Qp6x8dbqJ7HAecboV/TqcO
+         ESTaUtZnfVXcghG9VfyDw07xexe6p70oBGdEgS3yNYow4UbKcO5nrwl87lx/S4hzIe
+         0ALvvP1K47N+PtoH4YudrwkzrSmVudy5PX8mniz4cLO3zBdrI3aHJH08HbunrF2GIZ
+         7ep1AhT2HroYA==
 Received: by mercury (Postfix, from userid 1000)
-        id 2184910603F9; Sat, 30 Sep 2023 22:28:15 +0200 (CEST)
+        id 29DD910605D9; Sat, 30 Sep 2023 22:28:15 +0200 (CEST)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     Konrad Dybcio <konradybcio@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-In-Reply-To: <c46b4408-bf1d-408d-9e6b-16b0ad272532@moroto.mountain>
-References: <c46b4408-bf1d-408d-9e6b-16b0ad272532@moroto.mountain>
-Subject: Re: [PATCH] power: supply: mm8013: Fix an error checking issue in
- mm8013_checkdevice()
-Message-Id: <169610569512.214910.12711679981052235128.b4-ty@collabora.com>
+To:     Sebastian Reichel <sre@kernel.org>,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230929-power_supply-string_lower-v1-1-3141a2634d53@weissschuh.net>
+References: <20230929-power_supply-string_lower-v1-1-3141a2634d53@weissschuh.net>
+Subject: Re: [PATCH] power: supply: core: remove opencoded string_lower()
+Message-Id: <169610569516.214910.6033808058669103520.b4-ty@collabora.com>
 Date:   Sat, 30 Sep 2023 22:28:15 +0200
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Mailer: b4 0.12.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,TVD_SUBJ_WIPE_DEBT autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,16 +57,17 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-On Wed, 27 Sep 2023 15:41:05 +0300, Dan Carpenter wrote:
-> There is a missing "ret = " assignment so this checks the same "ret"
-> value twice.
+On Fri, 29 Sep 2023 19:39:00 +0200, Thomas Weißschuh wrote:
+> string_lower from string_helpers.h can be used to modify the string
+> in-place.
+> Use it to get rid of the custom str_to_lower().
 > 
 > 
 
 Applied, thanks!
 
-[1/1] power: supply: mm8013: Fix an error checking issue in mm8013_checkdevice()
-      commit: 8f8e9b7388514d937843337140f18ceb0f3da6eb
+[1/1] power: supply: core: remove opencoded string_lower()
+      commit: 0ce51459c8353b2b18ad3a430dbebf29af8b579c
 
 Best regards,
 -- 
