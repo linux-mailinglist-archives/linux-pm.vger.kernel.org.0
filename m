@@ -2,62 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C585B7B435D
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Sep 2023 21:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8973F7B4378
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Sep 2023 22:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjI3Tpt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 30 Sep 2023 15:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
+        id S230029AbjI3USd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 30 Sep 2023 16:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjI3Tpt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 Sep 2023 15:45:49 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D22B3;
-        Sat, 30 Sep 2023 12:45:46 -0700 (PDT)
-Received: from mercury (unknown [185.254.75.45])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2DD606607258;
-        Sat, 30 Sep 2023 20:45:44 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1696103144;
-        bh=Q+1jxZysTPtWBx/WufxCB1nhy7BZR+3ZnP/hTN5+Ins=;
+        with ESMTP id S229535AbjI3USc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 Sep 2023 16:18:32 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929FCBD;
+        Sat, 30 Sep 2023 13:18:30 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1471C433C8;
+        Sat, 30 Sep 2023 20:18:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696105110;
+        bh=FTlwwgmgFwVTZLLMsU57H1kZgpJ32lA2eayUmZZAFx0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Eaw2WmCr3JXGqV9sSO7jOow1L9iu+roPm3nuZAbYI/9n3H7tVMiFcBvHtWiN4Y0BI
-         Eoz2r6zzMK/g1uPgzv1AcADVtP1ak+oz2GP+U+Za3Us5vGTTDOK10LkKrW+aU+Uoq+
-         3tF1dFOd9t5dIduSAb256Yv8ejiyLiReAjRqwoP2GA0OJN/ROuaGgEH0VXcjvT2LCr
-         P3XTPeBogBWberaelp34yxlfWwpSkb/qJVPfRUhSpwytmbY5uljzLYkaMcmR24y6eZ
-         8VahK++eELa00fa9fa080KY/YIanp/1aNCQrhGiuz+D9EdNTBKZ1CGzvQZcJ9HZfdV
-         uJU9tRYyLKypg==
+        b=CIf0m6kTiLVmN7vphVVTDYVxtcA4zyYjmfiYHMlH96MAEvj7/X4JN20CtuRsbECYD
+         H/CrCdw/GrmuVwnFhZhYkcbVFO/lmXXbqxGvI6PJWDyozRDaweQWgOmas9ozjn3iyT
+         9QItmVMox2fl713LAOO8P/bIdUBkArOe7B5ilyyk9dbU8aMyZFcDmqY7M3TZu7uCSQ
+         6FLEimcs9X0Fl/ds6Dl0zq70xHjEakA+Hyv28eehdHI858aYZhkNfOUCm3Ahzgqs+1
+         zr0WbMfVSTp5RMAjntTA25X0F0nhjDiDlSuUxoE70khv6ZC3N90gp526bZywSCvLPL
+         neZLvDetlKMfQ==
 Received: by mercury (Postfix, from userid 1000)
-        id 3716D10603F9; Sat, 30 Sep 2023 21:45:40 +0200 (CEST)
-Date:   Sat, 30 Sep 2023 21:45:40 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Jakob Hauser <jahau@rocketmail.com>
-Cc:     Marion & Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Lee Jones <lee@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Henrik Grimler <henrik@grimler.se>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH 3/5] power: supply: rt5033_charger: fix missing unlock
-Message-ID: <20230930194540.szci6qlut5ecodpa@mercury.elektranox.org>
-References: <cover.1695844349.git.jahau@rocketmail.com>
- <e437e728317b6a2a860f7812f64a98146a27965e.1695844349.git.jahau@rocketmail.com>
- <89351ef6-ab81-c679-4432-cc44de9a91f1@wanadoo.fr>
- <24162857-6863-d9eb-7fdf-e6c119e252d1@rocketmail.com>
+        id 3236B10603F9; Sat, 30 Sep 2023 22:18:26 +0200 (CEST)
+Date:   Sat, 30 Sep 2023 22:18:26 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     amd-gfx@lists.freedesktop.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jun.ma2@amd.com
+Subject: Re: [PATCH 2/3] power: supply: Don't count 'unknown' scope power
+ supplies
+Message-ID: <20230930201826.biy27esyw4ttxt4p@mercury.elektranox.org>
+References: <20230926225955.386553-1-mario.limonciello@amd.com>
+ <20230926225955.386553-3-mario.limonciello@amd.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="i2mxvavpm3tig5z5"
+        protocol="application/pgp-signature"; boundary="4p2i5gnoe5rlcwny"
 Content-Disposition: inline
-In-Reply-To: <24162857-6863-d9eb-7fdf-e6c119e252d1@rocketmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230926225955.386553-3-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,70 +55,86 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---i2mxvavpm3tig5z5
-Content-Type: text/plain; charset=utf-8
+--4p2i5gnoe5rlcwny
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Thu, Sep 28, 2023 at 09:46:33PM +0200, Jakob Hauser wrote:
-> On 28.09.23 07:23, Marion & Christophe JAILLET wrote:
-> > Ok, but why not already in patch #1?
+On Tue, Sep 26, 2023 at 05:59:54PM -0500, Mario Limonciello wrote:
+> On some systems AMD Navi3x dGPU triggers RAS errors on startup; but
+> only if the amdgpu kernel module is not part of the initramfs.
+> This is because the hardware is not properly programmed for the
+> AC/DC state of the system when it is loaded later in boot.
+
+I don't understand the last sentence. As far as I can see
+i2c_dw_pci_probe() either does not registers UCSI at all or
+with the dGPU properties (and thus scope) set.
+
+> The AC/DC state of the system is incorrect specifically when UCSI power
+> supplies have been initialized.  These power supplies are marked as
+> POWER_SUPPLY_SCOPE_UNKNOWN scope. As they're 'offline' the power
+> supply count is increased but the resultant return value is
+> power_supply_is_system_supplied() 0.
 >=20
-> Thanks for your hints about the missing "unlock"s. And sorry for causing =
-you
-> extra work by having the fix in a separate patch.
+> To fix this look explicitly for `POWER_SUPPLY_SCOPE_SYSTEM` power
+> supplies before incrementing the count. If no system power supply
+> is found then the system is assumed to be on AC.
 >=20
-> The patch you refer to ("power: supply: rt5033_charger: Add cable detecti=
-on
-> and USB OTG supply") has its own history. It was already applied once,
-> showed up in linux-next, caused some issues, was therefore removed again.=
- In
-> the meantime, some fixes were provided by different contributors.
+> Cc: stable@vger.kernel.org
+> Tested-by: David Perry <David.Perry@amd.com>
+> Fixes: 95339f40a8b6 ("power: supply: Fix logic checking if system is runn=
+ing from battery")
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
 
-Since the commit has been dropped, please merge the fixes into the
-patch. E.g. patch #1 does not make any sense on its own.
-
-> This series actually tries to apply that patch again, accompanied by two
-> fixes =E2=80=93 and two additional clean-up patches. I added the fixes pa=
-tches
-> as-is, also to credit the contributors.
-
-You can use Co-developed-by tag for that.
-
-> Possibly the cover sheet of the series was a bit too thin about that
-> history.
->=20
-> Kind regards,
-> Jakob
-
-Patches 4-5 look fine to me, but do not apply without 1-3. For 1-3 I
-did not check them in detail. Please merge them first, since it's
-quite hard to read in the current state.
-
-Thanks,
+This effectively fully disables supply detection for UCSI, because
+it is never set to POWER_SUPPLY_SCOPE_SYSTEM. Please fix the amdgpu
+init part instead.
 
 -- Sebastian
 
---i2mxvavpm3tig5z5
+>  drivers/power/supply/power_supply_core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/sup=
+ply/power_supply_core.c
+> index d325e6dbc770..3de6e6d00815 100644
+> --- a/drivers/power/supply/power_supply_core.c
+> +++ b/drivers/power/supply/power_supply_core.c
+> @@ -349,7 +349,7 @@ static int __power_supply_is_system_supplied(struct d=
+evice *dev, void *data)
+>  	unsigned int *count =3D data;
+> =20
+>  	if (!psy->desc->get_property(psy, POWER_SUPPLY_PROP_SCOPE, &ret))
+> -		if (ret.intval =3D=3D POWER_SUPPLY_SCOPE_DEVICE)
+> +		if (ret.intval !=3D POWER_SUPPLY_SCOPE_SYSTEM)
+>  			return 0;
+> =20
+>  	(*count)++;
+> --=20
+> 2.34.1
+>=20
+
+--4p2i5gnoe5rlcwny
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmUYetoACgkQ2O7X88g7
-+ppjzRAAqQYV7WWR3ahCHvFo8pWEWJ4xetIyHA9FUQ3UArpMJYI2/3WlrymChj97
-caDn7XDA5wvt18FLVkZMmLW9mPGhxDBUcmJHFyrKfkkQYjtXCgdeKSUNWA9lKqZa
-cRmPVLmAARAlB6nK5P22cTnIXBvpHSJvP5wA4BS3kt7CIeqbYqZBUSwTeB3GhJLJ
-nu46CoAfYxIN0aZMqK2KJLjI4/qWltnnl1gegCtyI7/f+42ELQ+9OzdCCNVHJjdW
-vRN07zFeuqoVt/9XS1mo9fkOsITIgAKmtFdeGrzv0jqRt00x/GfWsn1xH0i4JZnJ
-ef5jO5DCyxVbDCjs50NcpdGuIn5ujIjFs/qY48uFIhfL6lI/NNpkr57hLwrAhCi2
-BZSIQa0UU1DxEeszc3K4Alrhu4He+xU+xQB2Ieogr5IP/1wAaGgfWbnVlmXsj6IZ
-mGNQPvtNWDEQOSD0zg9YirZEWi9ZsVNrIJkY8q8YUVsjR5aScqk7rKtZIp+eHxKx
-0coHkta6vaqL8tuJZYdKwOazHckLO1Mhu9K2on3hkduRt1VYTCH17pv0rJB2rtT0
-4RHnmvLmAIBqrlxw01wjkHYnqPmLLo5Xk1q0/0R5yGwKprCSSnOAxTD1NQcMpU1x
-V+anAa1F74A/7qL77+SIrvDNS4oOtMWy0hCivsRRqdFS6N/O94U=
-=tYmM
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmUYgocACgkQ2O7X88g7
++pq7lA//a6K7B++DJWK3qkFLkvZrvZfxhxBV7WbHyZ/uCAaUihZnq2ItQVwlZlRE
+W4NvbCAtY4ifJhEaf+kpFSVF6xF2LEr0sw6Z6tsa822T+w+icl/+23elZwrJzuG5
+xA66zaamIYkyVeirbMo/FW8YokslGc+LPzzl2VlPiv2YjupS0+US48HON00gFc8t
+OsGo9CAqbpXRMe9GZAtun0oVni/pMV3NZp9U1RVdfepE7GPuHQEQKxSjQnbf92/k
+hbgTNAA1ehb0I60YbCyyeoFkJvGVA5FMxmetlFQ5oR7Idb6AHhvU3Qs4jhFApC1Q
+yqX5tn2ieZS8gzhhUj0YPvFjJ8qXqDX6TKnjeUzcy3FzF1lZg5WiVqkVtFEHTClK
+cWPfr0MpMEDgnvcKWs9TJQb4cUNB1te5slrip86Goh0Au/RlL5cSsQDhx5U+vsCc
+Tz9S+lgkqUDTzmQ7/ecjZwiihXb49Uq4bLRm9ir9vNkOJNFCnoum6UboVh/UbROJ
+qN7HKK/HPdSlCdfNwfRsJMBj7q7uQj8SZZSRyGKA3k7BFiu2VmG0poM+nbK1gye7
+Q0qHZSZo+UrdUqWEhS0zMDz/udJwCZvfrIxAo1DKwEyPwNNOynVmAMEtOGASUiV8
+zxIHpH/ys1uLHSRop1O66W3uNxF+I1k6dljKdSIWxemE0CJo8bc=
+=skRU
 -----END PGP SIGNATURE-----
 
---i2mxvavpm3tig5z5--
+--4p2i5gnoe5rlcwny--
