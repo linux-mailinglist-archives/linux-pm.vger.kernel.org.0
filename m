@@ -2,146 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B7E7B4773
-	for <lists+linux-pm@lfdr.de>; Sun,  1 Oct 2023 14:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59EDF7B4793
+	for <lists+linux-pm@lfdr.de>; Sun,  1 Oct 2023 15:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234942AbjJAMe3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 1 Oct 2023 08:34:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57102 "EHLO
+        id S235014AbjJANSH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 1 Oct 2023 09:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234896AbjJAMe3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 1 Oct 2023 08:34:29 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2058.outbound.protection.outlook.com [40.107.21.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6603994;
-        Sun,  1 Oct 2023 05:34:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AigZJZkahtwIwh1+ClwtasVXar8JTtj0HgpekceZpHQ1dUGWJCjxtIx1PSsw8YB3hdQz1Tf+cUeOJtjRDUdRoKle5tzzijnL2d/boVblAl7r19dGeROFVGbA5lA6QrJ5xtPNUku/e6R9zyAisPqlXtcxZ9za+9etmcqoGp4EwaDbY9lmHQeyNXU7iN5xXE7VaSXoG5Us98lmC3nCYWC06O2O/MyoBKscQkcqnnKe+h1Dd9sEack9T3k7v6RB/8jf0IioCW8679MOWKKMkdn7kAju+2X6PuPRSi7MiSTwQ0H8LFCbs1oW13c7t5f1tfuzudyKZ5z+FpQUwTQckm5qBw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TKBFoXA6t1zyJFBEp8w4iE5PFiGNiC6HHMYYVwlfJGI=;
- b=hPpnfDtDbmLxrFxEV2dK4O1kFnpL55GrBvRVn4AsOoJ0cU96Nj+mujLIwpUdXoGIO/zp7dvMZZ8qnSAypjYDmDI3ES1s0dIoXfzh4C5WOhzmZ1Y2/w1j8noe7vNe+qdChoIlfj7zKGmYVFsbVrO3ooNK6iOSNswWojfJ7Hj4xrjwr8swghRFa4opZoqvh24LVAxxaJdKsyYtYWa8tnYny1gD8LZGFJmyluz9GbhtrSRimGMDJKLGXz1rvdUCuhSsdmF5fuf0ZDfaARKrix1REclP1X2WOYdsVrIl5lkkpZpJpfYnFy7cJqUho0vZ+EVqxyxEqIlPwLY6jeMcQkJyQQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TKBFoXA6t1zyJFBEp8w4iE5PFiGNiC6HHMYYVwlfJGI=;
- b=MlkhCbk+UH1kjph09Veoxn7q6l28Jog2EuErz1Ah8w8vgVlLtVkYRB890A5iwcj+SBkvXgoFpJmf7BU6EHWy9DC+2dY2B2enVU9Wf5Xd32X1kxQ2ziqM+7GUVLUkfcSL1J2DnHXyy8+DLrXzmlyp1thAvTmWgL3M1WhnBnQWkuc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by DU2PR04MB8758.eurprd04.prod.outlook.com (2603:10a6:10:2e1::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.29; Sun, 1 Oct
- 2023 12:34:22 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::2b3:d8de:95c8:b28b]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::2b3:d8de:95c8:b28b%3]) with mapi id 15.20.6838.024; Sun, 1 Oct 2023
- 12:34:21 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     ulf.hansson@linaro.org, shawnguo@kernel.org, s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        Dong Aisheng <Aisheng.dong@nxp.com>
-Subject: [PATCH] pmdomain: imx: scu-pd: correct DMA2 channel
-Date:   Sun,  1 Oct 2023 20:38:53 +0800
-Message-Id: <20231001123853.200773-1-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.37.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0004.apcprd02.prod.outlook.com
- (2603:1096:4:1f7::12) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+        with ESMTP id S235004AbjJANSF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 1 Oct 2023 09:18:05 -0400
+Received: from sonic311-30.consmr.mail.ir2.yahoo.com (sonic311-30.consmr.mail.ir2.yahoo.com [77.238.176.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58ED9C4
+        for <linux-pm@vger.kernel.org>; Sun,  1 Oct 2023 06:18:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1696166280; bh=kNrx2gSsDcIRy0/jUMhx14yk2GcQW+d/YuI+hbflL44=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=ivdMzMmksKqkVBOPJtaf2qg27MbF194EN65foLJjObHSsbIHT+TZSPPr7Rj6b19vuLInCO2chf/YlX7m+uORURCqeXnmAk3pmvmftjMs8N/S/xPV5WSR43UI5Fjn+0sRPf5B1n1/8K+l/hCjcxLqCu2rr+QMQydUPp9lcHn0tEfmO70winp+OuEDaFFRIV1/Pslf1ouGzqYqQ4wCO4krhQP0EfiMRHy41izmuukKhFLWuUJWngUotIw4JmbVlmKyMuGhjoSkr9pbw8Hv3eqyJBdeuf6P+EzXnOWm7TdlJ9FmMKXzPXwR4OzbfyxaBzDHQfzmc7l6Hk792rViYef2VA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1696166280; bh=gGSrZcH0TzgQp6Bu3ZNTwMT8hibJ/uSGMjflmD8yLAE=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=BldcmYrOJy6iwHzfj3jCyou2/ga6yo+pl14po2Z/+01mYoN/1PBFTVHCfPyuY0oPrFY3TCCwkfeeIfAxpbSt6t9DNBiEMqTX6kY4HHeH98qsUSCuEQEuq7QjQXIqpOz1cpJyzdDTF5QfBMEHVyXTcLfZlq2d7o/iYw0ndYgnvfljsBJFa/8yQ8MTImy1eh6slnnntiHWH9D5OTIzGgl0C+L5g3Sgm2MbrOVD6MtYsxEsJGMKI3rr5ftJIxn/fVSAXUyPjrUyFGgx7QQCiTnwiJRJhiZtpPtx7Ha96ILs1OtGpGLq2QRoGuaaJAxPLEpdVb0kGaxLHKKjl3dw9Zv0Yg==
+X-YMail-OSG: _IApiQ0VM1kLZ5bDrJwQnZgoFwCRjbGuXSJQuCbZoK6vMeF1q2qIMzEZ3b_XZPu
+ rPu8_2pv76ZLMyv9aIAfQVpEAnLMLTMyLmGmmsAEYkYPTqHWunC5Tqu_CqSuVz7FOrjjbSxz8ntY
+ qe123CJLpU4_BH_F_7xwrUZ9izP8nG22ME8vm9S3mPX8diyr_PjS50B5QISerFdRuDn.jKOi_Wc8
+ RiQ1AqcVmqD5a1xMt8hqsq.wS6MLH9MF5ly2WiZofwhImT7PrORlerv6StppebGEEvd25zTkj52n
+ k55S0EBLN3kok6xRGiteZ4DSpNki_HCujSAjXPEtmHmTbBPYakq6Ze0cipCrngcFIF69TqR.1x.y
+ 6WgkpDlH4DhTbzDdzg1bIm1ABH9C9XXI.w1QF3UO04xFkMhWl9SPVsvwJbOE.BGF2x2224Woga1D
+ ySOvqjseuZRDHpezPSy3gS4smHspk4O9cQHQD_vVeACh7avv6JMF2geYUIIkp1rcDut5CdQXKqXB
+ dCujSS8RPodK5lP7r5AKcoAAc2MNiHTWnYSR4s.jBS1_NUPT48gkXPdKagnuuLuVM7vpvtn6glxr
+ lsew.nAuOWNDvG145cPnGUdYuHgLDcL.4vQfpZq6ITmAKRwklfrr_xM1rPyjRvhPeNqeTHwn._gJ
+ zThPWZXfel0w9LisWbrUO4gRS9RaGV8I0TW8E6nYNlHPcMDAtLSCgbplcZGgp2vrXfojeYk20Vf5
+ IuJ5L0ln3vMrnmJJqtK_3OyOlgelXX_pF_FH6l06A42v7AaNuWoL97x2SJRUPTBynlOHzrNmz4LI
+ mJuz7aRwBnp7vZFzcb4_RwbrkSgap6U2VmHoGS8XC02yfpuONfYGGU7iNbWluhmzQG1mt14NnUQl
+ UehKThmVXxXehXfzZFCQfziYqKAMiQ7AlaqDtLZx4EWRCDM.pSnXcHFAecfQy0x__ei9H3iZbw0h
+ _MN4hatiuBdmLyQ0is3zXXHhAiFOpy95VdP0CNzGFSNCrNdv.2quX9G8ENeC_65Tx3KGAi0quLhm
+ 8e.RUVAw89w_uEy5iqlL3XwYSa.bEI71gygvjrSVJpVlqEX3bhuHU_MpSTyY9BsDfhkTWOoCE1k3
+ Hh688YQhimXqeLWgUuOi_iR8KnaJP835IzHRjzyAMql0V.OKmKW5kcUPYLir3GLl5YWJ0agsuB69
+ 6x2DJh4v8BEyXLDrwq5ernvna92l8rM9euVx1hXiceXqm.I2LqjkIwT5xp.gz0ty2Pc4gtDL3Xrc
+ stJH2A_65To5vn45P24FC1EJONsrz6eXnPSv9KNkZL9VX.KcnuC6iSFN0XXMG3oHblUHUlX.Xc7c
+ JJwkobz7nNWiUuEvIciQf3eIQMezDdN4zNpjuszrVn36KuKIJ7MaNV9NrFt0beXkOqZEtRZrTiae
+ LJ09G4Gj3I6KheSpANjiR89DdGOrFXCsg2uyX.ohm8EQcj72D5FmZdrrbeCkV4nN83SJy_dbhMKU
+ .pnQaXeG_X04zv9GlPRVPa9Ltz4YEXf8IWXp5LDDw_kYBPdF9Tm3vMYK9CjScH4WySrN8u10cviq
+ A_KHBPdFzHJqz8POVNTyaMw87AKbDUOupSlj_MuOVn_LkCDGODwb.s1eeVT3H3tQXm5dZ4TUKYS9
+ 7XWBscKiqRk.kDLOt8dEL0UxAwn_hBXnWKj1YAOySBTUSfShq5UlBvnIi3P3YYnCoWbSqAmcIWFM
+ DtZB1m6ypvkqskLcLI.PY9MZZqFuXjpPVGlk6V72PIckznn.gAtLi65dxA91jzyxwETBSqgL73D1
+ 3RuRXZUVPfw5v16Icnorwh21Gw2P3EDVtEEPjhwfd__9ESyK2720z_YsCo_WnlZ1IGVS4B3d4prh
+ z4M0rRjy2hMrHefT4k6XrUzVlei5okfAwlUbD_vEIpsGVZIUNcBzepg7.qnE.gNHX2p2GqVHAglI
+ hJelwMF033Pc8bR1Pz5Nv8oRo6g9Rc1XVtLIkgMpPD9nm0cBPcRbFv.X1Hz8Bn2IcpQat.cc6C8f
+ iXX2.QCPU8CcXH.XfGVPMixNOAtW1L8Ni2EC6O8MM7GoUn75JyvkZ7bW60kqRr84HjJqQ6kkPNBS
+ cjv4eT1Xrzc85YwrvyYZpzvWOPOomzwJBsDsZOAviKlpfn7OgmMlkdnjwBPv.WZNDaF1hqKGOTqC
+ B9AHCWZ2B4XoUU.Y9AqC.DVHgc1h868QDiD5On7O57iaRG7jEXuiBYR_6PEFiCFpgNwa.mJBcxsh
+ KUS2TvhNClFLvdKtFHTe3er_YhPSxpl5qT3XiGjM2oLSmdhFYL0RQjKHxAvlGfjYFuPT0zUV9ADw
+ JRed16H2P3st7c0EUJac1D93few--
+X-Sonic-MF: <jahau@rocketmail.com>
+X-Sonic-ID: 97622b99-d75f-47de-a1fd-ae88f0c6aa69
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ir2.yahoo.com with HTTP; Sun, 1 Oct 2023 13:18:00 +0000
+Received: by hermes--production-ir2-55db9d9d5-gk4f2 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID f1c2828dd5bee1de58f8566f5b57afb9;
+          Sun, 01 Oct 2023 13:17:56 +0000 (UTC)
+From:   Jakob Hauser <jahau@rocketmail.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Lee Jones <lee@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Henrik Grimler <henrik@grimler.se>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Jakob Hauser <jahau@rocketmail.com>
+Subject: [PATCH v2 0/3] Remaining patches for RT5033 charger
+Date:   Sun,  1 Oct 2023 15:17:41 +0200
+Message-Id: <cover.1696165240.git.jahau@rocketmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|DU2PR04MB8758:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9f5c9cff-54a9-4fc0-0ab9-08dbc27abcf0
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: n4d3l7etQxW8oLDJjZEtl3Vnz7iSp1Uwklr4LBzDWuZN1ZBwVM8iam1k1ve0amVQqX2mTnfP23SkwrFpPfPmKmjgYyiCWkxpidcOj/QUuEJckHHXBkPCcvtImYu2d9YbjDfbthk+p6dk6FFd7q+AM95aIzObUpb5cVlUC5JCYtlLEF64iDtuHiJwGZslOtjj9hpLqbBTKy3BONP1vFkAXWbJjLdfqoGRVIQoawm4gh8P/gaUTNnoGKkPt9GMVCLWSHZVjkq7xjBb0F0svaQmZflapcKrlRpd/14FFbgnFFixs2uhFD7SdSWRkQT57i6PKP4tjIQsHDm463kJDEmp1KdJ+TiSy0lw2EvtCMre5htHl6XizPygBLkp28aRkjtC5WpdQ8+3gBe/XUzlA07iH1r83iJnBv3Ek8wxwwzEuCYZBr6mlDO1J/lAAEZadZLjVGT1+pjRkVt1rHSztIU12Dk/27thWbi40ML5qMpA8V7hoER2+x+jLWuo86SHhvt8RRjUK8XEIZBunL54+Sqazqs4KpDZ83m3qJ2JlNPCqI/xSwWWcIuK6sBhEmcNNlqvVlWV5Z8yMOOe0sIstR5Wh/jQmHOiSS1pob4VqGCpOdz6YabwLUTq0GGXKrIOyA+j
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(39850400004)(136003)(366004)(346002)(376002)(230922051799003)(186009)(451199024)(64100799003)(1800799009)(66556008)(54906003)(66946007)(66476007)(316002)(478600001)(83380400001)(41300700001)(8936002)(8676002)(4326008)(26005)(38100700002)(38350700002)(2616005)(86362001)(5660300002)(6486002)(1076003)(6506007)(52116002)(6512007)(6666004)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9Q71vHPMXyRvyAWwrUgcB5Hi2vpLJiiOw+uOxOMoFwFFAu65qM9ibE1WKRGU?=
- =?us-ascii?Q?f2FDW0IKRvk0e/gKwsoctgoy7Ka+q5DL6mynP9RwrCzeDzULJPcJBfMlJSmh?=
- =?us-ascii?Q?YrUo9Y72fZCe2L7j1ynyTMsX7JSxZ/B4cze41W9kpvWgaOK0LPjt9NmjezRD?=
- =?us-ascii?Q?uzjO9EHYSF97yVrz5Bl7QjahbeaXBNedZ3n8BJIyaDPUoSB7AXDg0zHu+/6D?=
- =?us-ascii?Q?ZgSlA/rQrGCadqn18HcVX0ChXRTFmGOo6FteHFW8sUVMD+x8den18L6GWxc9?=
- =?us-ascii?Q?duGwVXMQuNbj32JHLkLMbKhw6lPIfvWjaKGhb3qWjO8NPuhWu1M8citY12i+?=
- =?us-ascii?Q?TiO/FpRjqOthNNKL7gjZPsZMH+Q/mqZY2ll534LC5j7ukXkjAz3FGI8V2xCs?=
- =?us-ascii?Q?LmwK2Sta7XCPqHq+PvmGklMzb8/qOm0K8UzFSAlI12lrAnYxrWRlmkYDmZs2?=
- =?us-ascii?Q?TD1/K74SvRsje8RTHm0gjI3z+hl0Tsau8q1Oanp9kg3/vQBymNQacar6kOTQ?=
- =?us-ascii?Q?pmXDNpyaEAV73meikDwDJkueoEmhrdKNpGIystSRot4vGDUjTFKLtwoAFgch?=
- =?us-ascii?Q?VkPcmJOdPbYYJIGvvGGQcS9tqUFevGGVFUu8xqxq5eAy/gAYppWJKTMmhiE2?=
- =?us-ascii?Q?cwT3mjskqNW6QNXx5wqo4FJphOJRMYF+ju4Ci40IrftV9l8EPJUjb4E2sRnC?=
- =?us-ascii?Q?l4a+qH3hhLv4oY+wo8MobD0xMU5qAMLB+PjjYlZhxhbKssA54MwnVBWtAlPC?=
- =?us-ascii?Q?ui55zEunELqCC5kgOAmQwvXaBR8MC+xxGhzVDuiHG9GR+uCbaDgvSvDWkvDS?=
- =?us-ascii?Q?TkUiA7haAqtesouZ7XWxl/ieLSNDC17AZ4xnsvQoxbN0LdPyV0pQZ2TIHp6U?=
- =?us-ascii?Q?oRGpQ+ED0yb0VJdi0PHp8ENf96J78BtftisVPNkinS/L8bRbpfJcXCn76F1M?=
- =?us-ascii?Q?iSXAoz1W4YBPI7HxQc12ehelY4vR4rV+1IWX/gl8wxo8K7MWBwtT180IQ2QP?=
- =?us-ascii?Q?IVLmqmG7cFV/zx2jQtDOUN6ecDsOjd0MdjT8qjY4KHhKPwt42FQYOe20P/1w?=
- =?us-ascii?Q?3qqBzhkJrfxZUS/azg8LjpPJ5lDlc2WU+jqYfaghVqzIZWmD6AVlELTl5KEv?=
- =?us-ascii?Q?6nb9E20R+9HluU7sGskMlY51BaHY3pLRHMejQqbcjVfrEv/0fQJ2bZyitUaZ?=
- =?us-ascii?Q?R8JawUWDYEYhMosyf4OVWaA05EYWsMjx8Lv8RrzxCBQcnIA+rAWkLjSoRk6u?=
- =?us-ascii?Q?/R24JZb9Kh371BZqN8dZteq/oPmyvIGrL0RaQJM26nTxnpcZNvXyviKSnYnZ?=
- =?us-ascii?Q?FnJdLUqQVhqdUg3Px1SJQWU2EGyrakXpru/BMoQLLEyMP3EUtIxmICor56ar?=
- =?us-ascii?Q?xMJHbiVulT4rhvnTyJnvPv7jFdBo/WVj/bbLqc8wImqO3NuiaxvAYfai1qw4?=
- =?us-ascii?Q?PAe4m/3LIIkQmPBRVnakS4umvbG/V5asKgbumWk4JdGBfO1ktt4ugsWu1uT6?=
- =?us-ascii?Q?tnQ7SBIQG4BKIXdV7TavuUcsOimmHIzzffK3tD5RFHdkk6n9kP6a9vq+NJOz?=
- =?us-ascii?Q?oCmg6v9uaEe3ZK8qTtpNCmAciZj2hkql6HPQqS2L?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9f5c9cff-54a9-4fc0-0ab9-08dbc27abcf0
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Oct 2023 12:34:21.7770
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Dv9yc9PhfKzOPObJ0RIbufa5/hg7qFH5A2e9aTS98KHcCe7VpugxVwpO0655Uzt1aJfR8CgGCsUTfw6yCLjSwA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8758
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+References: <cover.1696165240.git.jahau.ref@rocketmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+This series adds the missing patch "Add cable detection and USB OTG supply"
+to the RT5033 charger driver. The patch didn't make it with the initial
+series [1].
 
-Per "dt-bindings/firmware/imx/rsrc.h", `IMX_SC_R_DMA_2_CH0 + 5` not
-equals to IMX_SC_R_DMA_2_CH5, so there should be two entries in
-imx8qxp_scu_pd_ranges, otherwise the imx_scu_add_pm_domain may filter
-out wrong power domains.
+In the meantime, two fixes patches [2][3] were squashed into that patch.
+Additionally there are two clean-up patches, which are patches No. 2 & 3
+in this series.
 
-Fixes: 927b7d15dcf2 ("genpd: imx: scu-pd: enlarge PD range")
-Reported-by: Dong Aisheng <Aisheng.dong@nxp.com>
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- drivers/pmdomain/imx/scu-pd.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On squashing the fixes patches into the main patch: I didn't add a
+Co-developed-by tag of Stephen because the one fix on the includes seemed
+to me below the threshold for that tag.
 
-diff --git a/drivers/pmdomain/imx/scu-pd.c b/drivers/pmdomain/imx/scu-pd.c
-index 2f693b67ddb4..891c1d925a9d 100644
---- a/drivers/pmdomain/imx/scu-pd.c
-+++ b/drivers/pmdomain/imx/scu-pd.c
-@@ -150,7 +150,8 @@ static const struct imx_sc_pd_range imx8qxp_scu_pd_ranges[] = {
- 	{ "mclk-out-1", IMX_SC_R_MCLK_OUT_1, 1, false, 0 },
- 	{ "dma0-ch", IMX_SC_R_DMA_0_CH0, 32, true, 0 },
- 	{ "dma1-ch", IMX_SC_R_DMA_1_CH0, 16, true, 0 },
--	{ "dma2-ch", IMX_SC_R_DMA_2_CH0, 32, true, 0 },
-+	{ "dma2-ch-0", IMX_SC_R_DMA_2_CH0, 5, true, 0 },
-+	{ "dma2-ch-1", IMX_SC_R_DMA_2_CH5, 27, true, 0 },
- 	{ "dma3-ch", IMX_SC_R_DMA_3_CH0, 32, true, 0 },
- 	{ "asrc0", IMX_SC_R_ASRC_0, 1, false, 0 },
- 	{ "asrc1", IMX_SC_R_ASRC_1, 1, false, 0 },
+Changes in v2:
+- Patch 1: Squashed fixes patches into patch 1.
+- Patch 1: Added Co-developed-by tag of Yang Yingliang and a short
+  description about that in the commit message.
+- Patch 1: Removed Acked-by tag of Sebastian as the patch has changed.
+
+v1: https://lore.kernel.org/linux-pm/cover.1695844349.git.jahau@rocketmail.com/T/#t
+
+[1] https://lore.kernel.org/linux-pm/cover.1684182964.git.jahau@rocketmail.com/T/#t
+[2] https://lore.kernel.org/linux-next/20230821125741.3a2474d7@canb.auug.org.au
+[3] https://lore.kernel.org/linux-pm/20230822030207.644738-1-yangyingliang@huawei.com/T/#u
+
+Jakob Hauser (3):
+  power: supply: rt5033_charger: Add cable detection and USB OTG supply
+  power: supply: rt5033_charger: Simplify initialization of
+    rt5033_charger_data
+  power: supply: rt5033_charger: Replace "&pdev->dev" by "charger->dev"
+    in probe
+
+ drivers/power/supply/rt5033_charger.c | 320 ++++++++++++++++++++++++--
+ 1 file changed, 299 insertions(+), 21 deletions(-)
+
 -- 
-2.37.1
+2.39.2
 
