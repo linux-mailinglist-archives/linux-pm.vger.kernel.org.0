@@ -2,31 +2,32 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4762F7B5430
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Oct 2023 15:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8D27B54A3
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Oct 2023 16:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237452AbjJBNna (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Oct 2023 09:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53474 "EHLO
+        id S237652AbjJBOJW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Oct 2023 10:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237476AbjJBNn3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Oct 2023 09:43:29 -0400
+        with ESMTP id S236201AbjJBOJV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Oct 2023 10:09:21 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46CC4B0;
-        Mon,  2 Oct 2023 06:43:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A706E9B;
+        Mon,  2 Oct 2023 07:09:17 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 70AD2C15;
-        Mon,  2 Oct 2023 06:44:04 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B2718C15;
+        Mon,  2 Oct 2023 07:09:55 -0700 (PDT)
 Received: from [10.57.93.204] (unknown [10.57.93.204])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CD7653F59C;
-        Mon,  2 Oct 2023 06:43:23 -0700 (PDT)
-Message-ID: <57078a6b-83bc-d558-1071-be23d213a56f@arm.com>
-Date:   Mon, 2 Oct 2023 14:44:05 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 172413F762;
+        Mon,  2 Oct 2023 07:09:14 -0700 (PDT)
+Message-ID: <91d6e9be-d50c-d157-55a0-79134cbd01fb@arm.com>
+Date:   Mon, 2 Oct 2023 15:09:57 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH v4 10/18] PM: EM: Add RCU mechanism which safely cleans
- the old data
+Subject: Re: [PATCH v4 11/18] PM: EM: Add runtime update interface to modify
+ EM power
+Content-Language: en-US
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         dietmar.eggemann@arm.com, rui.zhang@intel.com,
@@ -35,13 +36,12 @@ Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org,
         qyousef@layalina.io, wvw@google.com
 References: <20230925081139.1305766-1-lukasz.luba@arm.com>
- <20230925081139.1305766-11-lukasz.luba@arm.com>
- <CAJZ5v0g6jPr3LqTuRfwUWsK4em7F1pfsZDn9pVziyu3tV56m8A@mail.gmail.com>
- <f7a6da56-93e4-0b7c-1746-bc3357bf8163@arm.com>
- <CAJZ5v0hBPD8cHJe-Xa8354SE5jdM1bYw94DjG-MVHsRKrUY=gQ@mail.gmail.com>
-Content-Language: en-US
+ <20230925081139.1305766-12-lukasz.luba@arm.com>
+ <CAJZ5v0iebSOT--AiP-9-CYwqtTe7+kRddryJ3DdvFb3WUeji7w@mail.gmail.com>
+ <a3907ec0-7e20-e3a5-3814-476a25e1efaa@arm.com>
+ <CAJZ5v0jU1SZ5kPHYqM3DLGY9j8DgGp7XCciyy=fJAyHnkyGgtA@mail.gmail.com>
 From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0hBPD8cHJe-Xa8354SE5jdM1bYw94DjG-MVHsRKrUY=gQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jU1SZ5kPHYqM3DLGY9j8DgGp7XCciyy=fJAyHnkyGgtA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -55,94 +55,164 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
-On 9/29/23 13:59, Rafael J. Wysocki wrote:
-> On Fri, Sep 29, 2023 at 11:36 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+On 9/29/23 14:18, Rafael J. Wysocki wrote:
+> On Fri, Sep 29, 2023 at 11:59 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
 
 [snip]
 
->> We had a few internal reviews and there were voices where saying that
->> it's better to have 2 identical tables: 'default_table' and
->> 'runtime_table' to make sure it's visible everywhere when it's used.
->> That made the need to actually have also the 'state' table inside.
->> I don't see it as a big problem, though.
-> 
-> What I'm trying to say is that you can allocate runtime_table along
-> with the table pointed to by its state field in one invocation of
-> kzalloc() (say).
-> 
-> Having just one memory region to free eventually instead of two of
-> them would help to avoid some complexity, especially in the next
-> patch.
-
-I think, I know what you mean, basically:
-
-------------------------------
-struct em_perf_table {
-	struct rcu_head rcu;
-	struct em_perf_state state[];
-}
-
-kzalloc(sizeof(struct em_perf_table) + N * sizeof(struct em_perf_state))
-
-------
-
-IMO that should also be OK in the rest of places.
-I agree the alloc/free code would be smaller.
-
-Let me do that than.
-
-> 
->>>
->>>> +}
->>>> +
->>>> +static void em_perf_runtime_table_set(struct device *dev,
->>>> +                                     struct em_perf_table *runtime_table)
->>>> +{
->>>> +       struct em_perf_domain *pd = dev->em_pd;
->>>> +       struct em_perf_table *tmp;
->>>> +
->>>> +       tmp = pd->runtime_table;
->>>> +
->>>> +       rcu_assign_pointer(pd->runtime_table, runtime_table);
->>>> +
->>>> +       em_cpufreq_update_efficiencies(dev, runtime_table->state);
->>>> +
->>>> +       /* Don't free default table since it's used by other frameworks. */
->>>
->>> Apparently, some frameworks are only going to use the default table
->>> while the runtime-updatable table will be used somewhere else at the
->>> same time.
->>>
->>> I'm not really sure if this is a good idea.
 >>
->> Runtime table is only for driving the task placement in the EAS.
->>
->> The thermal gov IPA won't make better decisions because it already
->> has the mechanism to accumulate the error that it made.
->>
->> The same applies to DTPM, which works in a more 'configurable' way,
->> rather that hard optimization mechanism (like EAS).
+>> It's done above, next to '!dev || !dev->em_pd'
 > 
-> My understanding of the above is that the other EM users don't really
-> care that much so they can get away with using the default table all
-> the time, but EAS needs more accuracy, so the table used by it needs
-> to be adjusted in certain situations.
-
-Yes
-
+> Yes, it is, I meant something like this:
 > 
-> Fair enough, I'm assuming that you've done some research around it.
-> Still, this is rather confusing.
-
-Yes, I have presented those ~2y ago in Android Gerrit world
-(got feedback from a few vendors) and in a few Linux conferences.
-
-For now we don't plan to have this feature for the thermal
-governor or something similar.
-
+>      if (!cb || !cb->update_power || !dev)
+>          return -EINVAL;
 > 
+>      mutex_lock(&em_pd_mutex);
+> 
+>      pd = dev->em_pd;
+>      if (!pd) {
+>          ret = -EINVAL; /* or perhaps -ENODATA */
+>          goto unlock_em;
+>      }
+> 
+> 
+
+OK, I see what you mean. Let me change that.
+
 >>>
->>>> +       if (tmp != pd->default_table)
->>>> +               call_rcu(&tmp->rcu, em_destroy_rt_table_rcu);
+>>>> +
+>>>> +       runtime_table = kzalloc(sizeof(*runtime_table), GFP_KERNEL);
+>>>> +       if (!runtime_table) {
+>>>> +               ret = -ENOMEM;
+>>>> +               goto unlock_em;
+>>>> +       }
+>>>> +
+>>>> +       runtime_table->state = kcalloc(pd->nr_perf_states,
+>>>> +                                      sizeof(struct em_perf_state),
+>>>> +                                      GFP_KERNEL);
+>>>> +       if (!runtime_table->state) {
+>>>> +               ret = -ENOMEM;
+>>>> +               goto free_runtime_table;
+>>>> +       }
+>>>
+>>> The above allocations can be merged into one and allocating memory
+>>> under the mutex is questionable.
 >>
->> The em_destroy_rt_table_rcu() is used here ^^^^^^
+>> So how to make sure that there is no 2 callers trying to update the
+>> same EM or unregistration is not in the background?
+> 
+> You can allocate memory upfront and take the mutex before accessing
+> the shared data structures.  If there's an error in the code running
+> under the mutex, release it and then free the memory.
+> 
+> Allocating memory is one operation, updating the shared data
+> structures to use it is another one.  The former doesn't affect the
+> shared state in any way, so why do it under the mutex?
+
+Yes, make sense. I will shrink that critical section. Good catch,
+thanks!
+
+> 
+>> [snip]
+>>
+>>>>
+>>>> @@ -501,9 +598,23 @@ void em_dev_unregister_perf_domain(struct device *dev)
+>>>>
+>>>>           runtime_table = pd->runtime_table;
+>>>>
+>>>> +       /*
+>>>> +        * Safely destroy runtime modifiable EM. By using the call
+>>>> +        * synchronize_rcu() we make sure we don't progress till last user
+>>>> +        * finished the RCU section and our update got applied.
+>>>> +        */
+>>>>           rcu_assign_pointer(pd->runtime_table, NULL);
+>>>>           synchronize_rcu();
+>>>>
+>>>> +       /*
+>>>> +        * After the sync no updates will be in-flight, so free the
+>>>> +        * memory allocated for runtime table (if there was such).
+>>>> +        */
+>>>> +       if (runtime_table != pd->default_table) {
+>>>> +               kfree(runtime_table->state);
+>>>> +               kfree(runtime_table);
+>>>> +       }
+>>>
+>>> Can't this race with the RCU callback freeing the runtime table?
+>>
+>> That's why there is this 'synchronize_rcu()' above and the mutex. The
+>> updating caller if finished the update, would unlock the mutex and this
+>> unregister code can go. Here we call the synchronize_rcu() so we assure
+>> the callback has finished for the update path and than we explicitly
+>> free the saved 'runtime_table' here. So all data should be freed and
+>> code serialized in those two paths.
+> 
+> This doesn't quite agree with my understanding of what synchronize_rcu() does.
+> 
+> IIUC, RCU callbacks can run as soon as the grace period has elapsed
+> and they need not wait for synchronize_rcu() to return.  Conversely,
+> synchronize_rcu() doesn't wait for all of the RCU callbacks to
+> complete.
+> 
+> Now, em_destroy_rt_table_rcu() doesn't actually use the mutex, so how
+> exactly is it protected against racing with this code?
+
+
+I'll try to draw in on some pictures...
+
+(previous instance )
++---------------------+
+|                     |
+| runtime table    #1 |
+|                     |
++---------------------+
+
+
+(next instance )
++---------------------+
+|                     |
+| runtime table    #2 |
+|                     |
++---------------------+
+
+
+(not possible new instance)
++.....................+
+.                     .
+. runtime table    #3 .
+.                     .
++.....................+
+
+
+
+    cpu A - "updater"          |    cpu B - "remover"
+                               |
+------------------------------|------------------------------
+    lock em_pd_mutex           |
+                               |
+       alloc runtime table #2  |   lock em_pd_mutex
+                               |   (waiting)
+       async free instance #1  |    .
+                               |    .
+    unlock em_pd_mutex         |    .
+                               |   (enter critical section)
+                               |
+    lock em_pd_mutex           |   set NULL to runtime table ptr
+    (waiting)                  |
+    (wanted to create #3 inst) |   synchronize rcu to make it is visible
+    .                          |
+    .                          |   implicit free instance #2
+    .                          |
+    .                          |   free the rest of EM and EM
+    .                          |
+    .                          |   unlock em_pd_mutex
+    (enter critical section)   |
+    !dev->em_pd so             |
+    unlock & exit              |
+                               |
+                               |
+
+
+This should clean all involved memory and also prevent
+of allocating new instance, when we unregister EM.
