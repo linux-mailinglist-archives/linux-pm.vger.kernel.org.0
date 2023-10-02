@@ -2,178 +2,235 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4157B59B2
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Oct 2023 20:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1907B5A57
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Oct 2023 20:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238705AbjJBSEI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Oct 2023 14:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59226 "EHLO
+        id S232711AbjJBSfB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Oct 2023 14:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238697AbjJBSEH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Oct 2023 14:04:07 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA13B4;
-        Mon,  2 Oct 2023 11:04:03 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id 323f4ac4e097ed97; Mon, 2 Oct 2023 20:04:02 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id ACC1D6658DF;
-        Mon,  2 Oct 2023 20:04:01 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH v1 4/4] thermal: int340x: Use thermal_zone_for_each_trip()
-Date:   Mon, 02 Oct 2023 20:03:42 +0200
-Message-ID: <3260859.aeNJFYEL58@kreacher>
-In-Reply-To: <4871671.31r3eYUQgx@kreacher>
-References: <4871671.31r3eYUQgx@kreacher>
+        with ESMTP id S229628AbjJBSfA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Oct 2023 14:35:00 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30169B
+        for <linux-pm@vger.kernel.org>; Mon,  2 Oct 2023 11:34:57 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id 5614622812f47-3af603da0d1so48888b6e.1
+        for <linux-pm@vger.kernel.org>; Mon, 02 Oct 2023 11:34:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1696271697; x=1696876497; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HYZ0mG+1+QVjGIg5If9O0ArAPvVVYNnY7+gjoXl9mzo=;
+        b=fk2pmspdhWuHu2MrckRunBhxps1phBOY5nQfUtldiN+rOsqeiy0aQocWZB0Dx0Azdd
+         unFEY38sVk1/Y8yw9dqLCvwzd5S+8/TVDddAK4h1S43NQb9e+zDkd+X8bgf7N6AV0t2S
+         Bxa/H4bB7NjCLGYtDWBwktnYebddFBxAViUT8tFjAuiEhBo0boxOxDTv9VT05d64hCr9
+         iObGe1zZvHlIxzpXjSDWcPHyviIOJOr1uOOHatu7jBnTgaiAv8tLFLZ1alVDf3It0+uI
+         /DueyZtOhhoz6ax/QDrk0AECKgB1hzvgIOadIssYg3gro8gAblF21/YVjc9kkIvHZZq2
+         jRNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696271697; x=1696876497;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HYZ0mG+1+QVjGIg5If9O0ArAPvVVYNnY7+gjoXl9mzo=;
+        b=qfztwe+X8bmO2HzYTpEWE9w8l8kVB35LL/nNKVe82UOUkir4c6PraCOpX9v47OusLD
+         cjb5dS4jMepnk3r50+uSG/dFx89HwKOwaItTMIu3ZqaQcXgwX4E28M5gT4aPbaDxC7CW
+         wyr99hWqO6kkdww3Je8vhF9IjBIkmGVptFTE3Wuxc60o+Ui4UF4MUrWVyt0LhsV7GOJH
+         4HKoAip0Buz4Wwy75bJp0iDhfAPOsQSu4nYAqsTw3t8rqC8c35Wvj6bozP9QHGUaHXIj
+         kxhIjwfYEsY59FB6xMTuwSlirdsQQVqSyNJIg/rnc8ZmlHZBIzs4w+FiGLTlioKDdnpA
+         UbRw==
+X-Gm-Message-State: AOJu0YySmwB9jW+YT+C5YfVGYqntCHGcRkS8BCejEp2b3WOSje3nAtjn
+        9MrsQ/SV9RAe/7/Krscxzz2S0NxPmFVroa4gpL6+2A==
+X-Google-Smtp-Source: AGHT+IFrSNucroAoFPYKzSHS0KRFLI9bSO+V8Flpb1DSqKOAUJFSimWbH4j2jPQlv0ng/oP3xMX7UteRLf895ba4L5o=
+X-Received: by 2002:a05:6808:1484:b0:3a4:316c:8eeb with SMTP id
+ e4-20020a056808148400b003a4316c8eebmr16210570oiw.40.1696271696596; Mon, 02
+ Oct 2023 11:34:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <20230929-hib_zero_bitmap_fix-v1-1-6cfdcb785250@quicinc.com> <CADyq12znHG_VPLVxSe+2ofX-WR1Uha2hu1MhoUAquMnoD_oP0w@mail.gmail.com>
+In-Reply-To: <CADyq12znHG_VPLVxSe+2ofX-WR1Uha2hu1MhoUAquMnoD_oP0w@mail.gmail.com>
+From:   Brian Geffon <bgeffon@google.com>
+Date:   Mon, 2 Oct 2023 14:34:20 -0400
+Message-ID: <CADyq12x1wZb0Yt3sXR21pQSagT7tGvFmXTBaoeNXkOjPi5-Rnw@mail.gmail.com>
+Subject: Re: [PATCH] PM: hibernate: Fix a bug in copying the zero bitmap to
+ safe pages
+To:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        kernel@quicinc.com,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrvdelgdduvddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepjedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghp
- thhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Mon, Oct 2, 2023 at 1:56=E2=80=AFPM Brian Geffon <bgeffon@google.com> wr=
+ote:
+>
+> On Fri, Sep 29, 2023 at 1:31=E2=80=AFPM Pavankumar Kondeti
+> <quic_pkondeti@quicinc.com> wrote:
+> >
+> > The following crash is observed 100% of the time during resume from
+> > the hibernation on a x86 QEMU system.
+> >
+> > [   12.931887]  ? __die_body+0x1a/0x60
+> > [   12.932324]  ? page_fault_oops+0x156/0x420
+> > [   12.932824]  ? search_exception_tables+0x37/0x50
+> > [   12.933389]  ? fixup_exception+0x21/0x300
+> > [   12.933889]  ? exc_page_fault+0x69/0x150
+> > [   12.934371]  ? asm_exc_page_fault+0x26/0x30
+> > [   12.934869]  ? get_buffer.constprop.0+0xac/0x100
+> > [   12.935428]  snapshot_write_next+0x7c/0x9f0
+> > [   12.935929]  ? submit_bio_noacct_nocheck+0x2c2/0x370
+> > [   12.936530]  ? submit_bio_noacct+0x44/0x2c0
+> > [   12.937035]  ? hib_submit_io+0xa5/0x110
+> > [   12.937501]  load_image+0x83/0x1a0
+> > [   12.937919]  swsusp_read+0x17f/0x1d0
+> > [   12.938355]  ? create_basic_memory_bitmaps+0x1b7/0x240
+> > [   12.938967]  load_image_and_restore+0x45/0xc0
+> > [   12.939494]  software_resume+0x13c/0x180
+> > [   12.939994]  resume_store+0xa3/0x1d0
+> >
+> > The commit being fixed introduced a bug in copying the zero bitmap
+> > to safe pages. A temporary bitmap is allocated in prepare_image()
+> > to make a copy of zero bitmap after the unsafe pages are marked.
+> > Freeing this temporary bitmap later results in an inconsistent state
+> > of unsafe pages. Since free bit is left as is for this temporary bitmap
+> > after free, these pages are treated as unsafe pages when they are
+> > allocated again. This results in incorrect calculation of the number
+> > of pages pre-allocated for the image.
+> >
+> > nr_pages =3D (nr_zero_pages + nr_copy_pages) - nr_highmem - allocated_u=
+nsafe_pages;
+> >
+> > The allocate_unsafe_pages is estimated to be higher than the actual
+> > which results in running short of pages in safe_pages_list. Hence the
+> > crash is observed in get_buffer() due to NULL pointer access of
+> > safe_pages_list.
+>
+> After reading through the code, perhaps I'm missing something, I'm not
+> sure that this is really fixing the problem.
+>
+> It seems like the problem would be that memory_bm_create() results in
+> calls to get_image_page() w/ safe_needed =3D PG_ANY =3D=3D 0, meaning tha=
+t
+> get_image_page() will not touch allocated_unsafe_pages and instead
+> will mark the page as in use by setting it in the forbidden_pages_map
+> and the free_pages_map simultaneously. The problem is that the
+> free_pages_map was already populated by the call to mark_unsafe_pages,
+> meaning that if we allocated a safe page in get_image_page() we just
+> set the free bit when it otherwise should not be set.
+>
+> When the page is later free'd via the call to memory_bm_free(&tmp,
+> PG_UNSAFE_KEEP), it results in calls to free_image_page() w/
+> clear_page_nosave =3D PG_UNSAFE_KEEP =3D=3D 0. This means that we do not
+> touch the free_pages_map because we don't call
+> swsusp_unset_page_free().
+>
+> With all that being said it seems like the correct way to deal with
+> that would be to do:
+>    error =3D memory_bm_create(&tmp, GFP_ATOMIC, PG_SAFE);
+> Here we know that the pages were not in the free_pages_map initially.
+>
+> Followed by freeing it as:
+>     memory_bm_free(&tmp, PG_UNSAFE_CLEAR);
+> And here we know that swsusp_unset_page_free() will be called making
+> sure the page is not in the free_pages_map afterwards.
+>
+> And that should result in an unchanged free_pages_map. Does that make
+> sense? Please correct me if I'm misunderstanding something.
+>
 
-Modify int340x_thermal_update_trips() to use thermal_zone_for_each_trip()
-for walking trips instead of using the trips[] table passed to the
-thermal zone registration function.
+To restate this another way, if I'm reading it correctly, I think the
+outcome is actually nearly the same, the difference is, when
+allocating the bitmap before w/ PG_ANY we're setting bits in the
+free_page_list which will be unset a few lines later in the call to
+mark_unsafe_pages(), and then we won't touch the free_pages_list
+during the memory_bm_free() because it's called with PG_UNSAFE_KEEP.
 
-For this purpose, store active trip point indices in the priv fieids of
-the corresponding thermal_trip structures.
-
-No intentional functional impact.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c |   76 +++++------
- 1 file changed, 41 insertions(+), 35 deletions(-)
-
-Index: linux-pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-+++ linux-pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-@@ -67,6 +67,16 @@ static struct thermal_zone_device_ops in
- 	.critical	= int340x_thermal_critical,
- };
- 
-+static inline void *int_to_trip_priv(int i)
-+{
-+	return (void *)(long)i;
-+}
-+
-+static inline int trip_priv_to_int(const struct thermal_trip *trip)
-+{
-+	return (long)trip->priv;
-+}
-+
- static int int340x_thermal_read_trips(struct acpi_device *zone_adev,
- 				      struct thermal_trip *zone_trips,
- 				      int trip_cnt)
-@@ -101,6 +111,7 @@ static int int340x_thermal_read_trips(st
- 			break;
- 
- 		zone_trips[trip_cnt].type = THERMAL_TRIP_ACTIVE;
-+		zone_trips[trip_cnt].priv = int_to_trip_priv(i);
- 		trip_cnt++;
- 	}
- 
-@@ -212,45 +223,40 @@ void int340x_thermal_zone_remove(struct
- }
- EXPORT_SYMBOL_GPL(int340x_thermal_zone_remove);
- 
--void int340x_thermal_update_trips(struct int34x_thermal_zone *int34x_zone)
-+static int int340x_update_one_trip(struct thermal_trip *trip, void *arg)
- {
--	struct acpi_device *zone_adev = int34x_zone->adev;
--	struct thermal_trip *zone_trips = int34x_zone->trips;
--	int trip_cnt = int34x_zone->zone->num_trips;
--	int act_trip_nr = 0;
--	int i;
--
--	mutex_lock(&int34x_zone->zone->lock);
--
--	for (i = int34x_zone->aux_trip_nr; i < trip_cnt; i++) {
--		int temp, err;
--
--		switch (zone_trips[i].type) {
--		case THERMAL_TRIP_CRITICAL:
--			err = thermal_acpi_critical_trip_temp(zone_adev, &temp);
--			break;
--		case THERMAL_TRIP_HOT:
--			err = thermal_acpi_hot_trip_temp(zone_adev, &temp);
--			break;
--		case THERMAL_TRIP_PASSIVE:
--			err = thermal_acpi_passive_trip_temp(zone_adev, &temp);
--			break;
--		case THERMAL_TRIP_ACTIVE:
--			err = thermal_acpi_active_trip_temp(zone_adev, act_trip_nr++,
--							    &temp);
--			break;
--		default:
--			err = -ENODEV;
--		}
--		if (err) {
--			zone_trips[i].temperature = THERMAL_TEMP_INVALID;
--			continue;
--		}
-+	struct acpi_device *zone_adev = arg;
-+	int temp, err;
- 
--		zone_trips[i].temperature = temp;
-+	switch (trip->type) {
-+	case THERMAL_TRIP_CRITICAL:
-+		err = thermal_acpi_critical_trip_temp(zone_adev, &temp);
-+		break;
-+	case THERMAL_TRIP_HOT:
-+		err = thermal_acpi_hot_trip_temp(zone_adev, &temp);
-+		break;
-+	case THERMAL_TRIP_PASSIVE:
-+		err = thermal_acpi_passive_trip_temp(zone_adev, &temp);
-+		break;
-+	case THERMAL_TRIP_ACTIVE:
-+		err = thermal_acpi_active_trip_temp(zone_adev,
-+						    trip_priv_to_int(trip),
-+						    &temp);
-+		break;
-+	default:
-+		err = -ENODEV;
- 	}
-+	if (err)
-+		temp = THERMAL_TEMP_INVALID;
- 
--	mutex_unlock(&int34x_zone->zone->lock);
-+	trip->temperature = temp;
-+	return 0;
-+}
-+
-+void int340x_thermal_update_trips(struct int34x_thermal_zone *int34x_zone)
-+{
-+	thermal_zone_for_each_trip(int34x_zone->zone, int340x_update_one_trip,
-+				   int34x_zone->adev);
- }
- EXPORT_SYMBOL_GPL(int340x_thermal_update_trips);
- 
-
-
-
+> >
+> > Fixes: 005e8dddd497 ("PM: hibernate: don't store zero pages in the imag=
+e file")
+> > Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+> > ---
+> >  kernel/power/snapshot.c | 23 ++++++++++++++---------
+> >  1 file changed, 14 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+> > index 87e9f7e2bdc0..cb7341a71a21 100644
+> > --- a/kernel/power/snapshot.c
+> > +++ b/kernel/power/snapshot.c
+> > @@ -2628,7 +2628,7 @@ static int prepare_image(struct memory_bitmap *ne=
+w_bm, struct memory_bitmap *bm,
+> >                 struct memory_bitmap *zero_bm)
+> >  {
+> >         unsigned int nr_pages, nr_highmem;
+> > -       struct memory_bitmap tmp;
+> > +       struct memory_bitmap tmp_zero_bm;
+> >         struct linked_page *lp;
+> >         int error;
+> >
+> > @@ -2636,6 +2636,16 @@ static int prepare_image(struct memory_bitmap *n=
+ew_bm, struct memory_bitmap *bm,
+> >         free_image_page(buffer, PG_UNSAFE_CLEAR);
+> >         buffer =3D NULL;
+> >
+> > +       /*
+> > +        * Allocate a temporary bitmap to create a copy of zero_bm in
+> > +        * safe pages. This allocation needs to be done before marking
+> > +        * unsafe pages below so that it can be freed without altering
+> > +        * the state of unsafe pages.
+> > +        */
+> > +       error =3D memory_bm_create(&tmp_zero_bm, GFP_ATOMIC, PG_ANY);
+> > +       if (error)
+> > +               goto Free;
+> > +
+> >         nr_highmem =3D count_highmem_image_pages(bm);
+> >         mark_unsafe_pages(bm);
+> >
+> > @@ -2646,12 +2656,7 @@ static int prepare_image(struct memory_bitmap *n=
+ew_bm, struct memory_bitmap *bm,
+> >         duplicate_memory_bitmap(new_bm, bm);
+> >         memory_bm_free(bm, PG_UNSAFE_KEEP);
+> >
+> > -       /* Make a copy of zero_bm so it can be created in safe pages */
+> > -       error =3D memory_bm_create(&tmp, GFP_ATOMIC, PG_ANY);
+> > -       if (error)
+> > -               goto Free;
+> > -
+> > -       duplicate_memory_bitmap(&tmp, zero_bm);
+> > +       duplicate_memory_bitmap(&tmp_zero_bm, zero_bm);
+> >         memory_bm_free(zero_bm, PG_UNSAFE_KEEP);
+> >
+> >         /* Recreate zero_bm in safe pages */
+> > @@ -2659,8 +2664,8 @@ static int prepare_image(struct memory_bitmap *ne=
+w_bm, struct memory_bitmap *bm,
+> >         if (error)
+> >                 goto Free;
+> >
+> > -       duplicate_memory_bitmap(zero_bm, &tmp);
+> > -       memory_bm_free(&tmp, PG_UNSAFE_KEEP);
+> > +       duplicate_memory_bitmap(zero_bm, &tmp_zero_bm);
+> > +       memory_bm_free(&tmp_zero_bm, PG_UNSAFE_KEEP);
+> >         /* At this point zero_bm is in safe pages and it can be used fo=
+r restoring. */
+> >
+> >         if (nr_highmem > 0) {
+> >
+> > ---
+> > base-commit: 6465e260f48790807eef06b583b38ca9789b6072
+> > change-id: 20230929-hib_zero_bitmap_fix-bc5884eba0ae
+> >
+> > Best regards,
+> > --
+> > Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+> >
