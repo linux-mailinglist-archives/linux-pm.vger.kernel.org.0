@@ -2,235 +2,400 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F1907B5A57
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Oct 2023 20:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31BE67B5A6C
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Oct 2023 20:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232711AbjJBSfB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Oct 2023 14:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
+        id S238735AbjJBSmH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 2 Oct 2023 14:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjJBSfA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Oct 2023 14:35:00 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30169B
-        for <linux-pm@vger.kernel.org>; Mon,  2 Oct 2023 11:34:57 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id 5614622812f47-3af603da0d1so48888b6e.1
-        for <linux-pm@vger.kernel.org>; Mon, 02 Oct 2023 11:34:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696271697; x=1696876497; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HYZ0mG+1+QVjGIg5If9O0ArAPvVVYNnY7+gjoXl9mzo=;
-        b=fk2pmspdhWuHu2MrckRunBhxps1phBOY5nQfUtldiN+rOsqeiy0aQocWZB0Dx0Azdd
-         unFEY38sVk1/Y8yw9dqLCvwzd5S+8/TVDddAK4h1S43NQb9e+zDkd+X8bgf7N6AV0t2S
-         Bxa/H4bB7NjCLGYtDWBwktnYebddFBxAViUT8tFjAuiEhBo0boxOxDTv9VT05d64hCr9
-         iObGe1zZvHlIxzpXjSDWcPHyviIOJOr1uOOHatu7jBnTgaiAv8tLFLZ1alVDf3It0+uI
-         /DueyZtOhhoz6ax/QDrk0AECKgB1hzvgIOadIssYg3gro8gAblF21/YVjc9kkIvHZZq2
-         jRNA==
+        with ESMTP id S238650AbjJBSmG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Oct 2023 14:42:06 -0400
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81DC69B;
+        Mon,  2 Oct 2023 11:42:03 -0700 (PDT)
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-57bf04841ccso12955eaf.0;
+        Mon, 02 Oct 2023 11:42:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696271697; x=1696876497;
+        d=1e100.net; s=20230601; t=1696272123; x=1696876923;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HYZ0mG+1+QVjGIg5If9O0ArAPvVVYNnY7+gjoXl9mzo=;
-        b=qfztwe+X8bmO2HzYTpEWE9w8l8kVB35LL/nNKVe82UOUkir4c6PraCOpX9v47OusLD
-         cjb5dS4jMepnk3r50+uSG/dFx89HwKOwaItTMIu3ZqaQcXgwX4E28M5gT4aPbaDxC7CW
-         wyr99hWqO6kkdww3Je8vhF9IjBIkmGVptFTE3Wuxc60o+Ui4UF4MUrWVyt0LhsV7GOJH
-         4HKoAip0Buz4Wwy75bJp0iDhfAPOsQSu4nYAqsTw3t8rqC8c35Wvj6bozP9QHGUaHXIj
-         kxhIjwfYEsY59FB6xMTuwSlirdsQQVqSyNJIg/rnc8ZmlHZBIzs4w+FiGLTlioKDdnpA
-         UbRw==
-X-Gm-Message-State: AOJu0YySmwB9jW+YT+C5YfVGYqntCHGcRkS8BCejEp2b3WOSje3nAtjn
-        9MrsQ/SV9RAe/7/Krscxzz2S0NxPmFVroa4gpL6+2A==
-X-Google-Smtp-Source: AGHT+IFrSNucroAoFPYKzSHS0KRFLI9bSO+V8Flpb1DSqKOAUJFSimWbH4j2jPQlv0ng/oP3xMX7UteRLf895ba4L5o=
-X-Received: by 2002:a05:6808:1484:b0:3a4:316c:8eeb with SMTP id
- e4-20020a056808148400b003a4316c8eebmr16210570oiw.40.1696271696596; Mon, 02
- Oct 2023 11:34:56 -0700 (PDT)
+        bh=W8a704JflSj3pI3y3Xgh4yVCmyPmtThEVtu9+wifhXA=;
+        b=aARAi0QFI4PI1RkkCILAJiWksK/y8+JJ8Tv05qsR7o1GPOPYRN/yUkOcIcQZQodc94
+         VbYZYtbuTN4DwzoKEegesvkc4eU985Z2AbH7n3LS8N2BNVXI/tMBXcaCIWngz8enVRKP
+         cLnQOq5uJMt61Ppe42Ic6r7Vw5xTPIbQrR0m+wY/8t3k6uErcS4UllEDgzvhKgaFAn49
+         8xA8xE1qowggZzLSfUN5K6dsaJ21WCPcYq0P90pb36PoUyKyMq/MZM0aciqu3Lfp3xJ/
+         J3rsKMsBJOO9dvgx8ige1hK6la/ZqdRQGPaddjuRePv5E5i0IYk7jOt6UvaG2iOZ0aPd
+         qPFg==
+X-Gm-Message-State: AOJu0YwEBMcT1MNhOUeOnwqokNb/hvBtN8qMagBYUu5xLBjEkXs0jS3H
+        aOrCvMetlwhaHQBN2ormoicIJIEQVl9Rbyq8sAqXHo0bUpw=
+X-Google-Smtp-Source: AGHT+IH+UsSXasSZjFIpClF3O5SDMHWAtaPKZFRCQbQiMAsDqWYaDD0Ezv3bN1fme2Bb501+fx0Y9pcPD+oHhcrg17c=
+X-Received: by 2002:a05:6808:97:b0:3a1:d457:83b5 with SMTP id
+ s23-20020a056808009700b003a1d45783b5mr11496334oic.3.1696272122527; Mon, 02
+ Oct 2023 11:42:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230929-hib_zero_bitmap_fix-v1-1-6cfdcb785250@quicinc.com> <CADyq12znHG_VPLVxSe+2ofX-WR1Uha2hu1MhoUAquMnoD_oP0w@mail.gmail.com>
-In-Reply-To: <CADyq12znHG_VPLVxSe+2ofX-WR1Uha2hu1MhoUAquMnoD_oP0w@mail.gmail.com>
-From:   Brian Geffon <bgeffon@google.com>
-Date:   Mon, 2 Oct 2023 14:34:20 -0400
-Message-ID: <CADyq12x1wZb0Yt3sXR21pQSagT7tGvFmXTBaoeNXkOjPi5-Rnw@mail.gmail.com>
-Subject: Re: [PATCH] PM: hibernate: Fix a bug in copying the zero bitmap to
- safe pages
-To:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        kernel@quicinc.com,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+References: <20230926225813.995948-1-srinivas.pandruvada@linux.intel.com> <20230926225813.995948-3-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20230926225813.995948-3-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 2 Oct 2023 20:41:51 +0200
+Message-ID: <CAJZ5v0i8Y=tphmYtmwq-i93_OkxuiNvk_N-k1dUkqn46CwUj0w@mail.gmail.com>
+Subject: Re: [PATCH 2/5] thermal: int340x: processor_thermal: Support power
+ floor notifications
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 2, 2023 at 1:56=E2=80=AFPM Brian Geffon <bgeffon@google.com> wr=
-ote:
+On Wed, Sep 27, 2023 at 12:58 AM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
 >
-> On Fri, Sep 29, 2023 at 1:31=E2=80=AFPM Pavankumar Kondeti
-> <quic_pkondeti@quicinc.com> wrote:
-> >
-> > The following crash is observed 100% of the time during resume from
-> > the hibernation on a x86 QEMU system.
-> >
-> > [   12.931887]  ? __die_body+0x1a/0x60
-> > [   12.932324]  ? page_fault_oops+0x156/0x420
-> > [   12.932824]  ? search_exception_tables+0x37/0x50
-> > [   12.933389]  ? fixup_exception+0x21/0x300
-> > [   12.933889]  ? exc_page_fault+0x69/0x150
-> > [   12.934371]  ? asm_exc_page_fault+0x26/0x30
-> > [   12.934869]  ? get_buffer.constprop.0+0xac/0x100
-> > [   12.935428]  snapshot_write_next+0x7c/0x9f0
-> > [   12.935929]  ? submit_bio_noacct_nocheck+0x2c2/0x370
-> > [   12.936530]  ? submit_bio_noacct+0x44/0x2c0
-> > [   12.937035]  ? hib_submit_io+0xa5/0x110
-> > [   12.937501]  load_image+0x83/0x1a0
-> > [   12.937919]  swsusp_read+0x17f/0x1d0
-> > [   12.938355]  ? create_basic_memory_bitmaps+0x1b7/0x240
-> > [   12.938967]  load_image_and_restore+0x45/0xc0
-> > [   12.939494]  software_resume+0x13c/0x180
-> > [   12.939994]  resume_store+0xa3/0x1d0
-> >
-> > The commit being fixed introduced a bug in copying the zero bitmap
-> > to safe pages. A temporary bitmap is allocated in prepare_image()
-> > to make a copy of zero bitmap after the unsafe pages are marked.
-> > Freeing this temporary bitmap later results in an inconsistent state
-> > of unsafe pages. Since free bit is left as is for this temporary bitmap
-> > after free, these pages are treated as unsafe pages when they are
-> > allocated again. This results in incorrect calculation of the number
-> > of pages pre-allocated for the image.
-> >
-> > nr_pages =3D (nr_zero_pages + nr_copy_pages) - nr_highmem - allocated_u=
-nsafe_pages;
-> >
-> > The allocate_unsafe_pages is estimated to be higher than the actual
-> > which results in running short of pages in safe_pages_list. Hence the
-> > crash is observed in get_buffer() due to NULL pointer access of
-> > safe_pages_list.
+> When the hardware reduces the power to the minimum possible, the power
+> floor is notified via an interrupt. This can happen when user space
+> requests a power limit via powercap RAPL interface, which forces the
+> system to enter to the lowest power. This power floor indication can
+> be used as a hint to resort to other methods of reducing power than
+> via RAPL power limit.
 >
-> After reading through the code, perhaps I'm missing something, I'm not
-> sure that this is really fixing the problem.
+> Before power floor status can be read or get notifications from the
+> firmware, it needs to be configured via a mailbox command. Actual power
+> floor status is read via bit 39 of MMIO offset 0x5B18 of the processor
+> thermal PCI device.
 >
-> It seems like the problem would be that memory_bm_create() results in
-> calls to get_image_page() w/ safe_needed =3D PG_ANY =3D=3D 0, meaning tha=
-t
-> get_image_page() will not touch allocated_unsafe_pages and instead
-> will mark the page as in use by setting it in the forbidden_pages_map
-> and the free_pages_map simultaneously. The problem is that the
-> free_pages_map was already populated by the call to mark_unsafe_pages,
-> meaning that if we allocated a safe page in get_image_page() we just
-> set the free bit when it otherwise should not be set.
+> To show the current power floor status and get notification
+> on a sysfs attribute, add additional attributes to
+> /sys/bus/pci/devices/0000\:00\:04.0/power_limits/
 >
-> When the page is later free'd via the call to memory_bm_free(&tmp,
-> PG_UNSAFE_KEEP), it results in calls to free_image_page() w/
-> clear_page_nosave =3D PG_UNSAFE_KEEP =3D=3D 0. This means that we do not
-> touch the free_pages_map because we don't call
-> swsusp_unset_page_free().
+> power_floor_enable : This attribute is present when a SoC supports
+> power floor notification. This attribute allows to enable/disable
+> power floor notifications.
 >
-> With all that being said it seems like the correct way to deal with
-> that would be to do:
->    error =3D memory_bm_create(&tmp, GFP_ATOMIC, PG_SAFE);
-> Here we know that the pages were not in the free_pages_map initially.
+> power_floor_status : This attribute is present when a SoC supports
+> power floor notification. When enabled this shows the current
+> status of power floor.
 >
-> Followed by freeing it as:
->     memory_bm_free(&tmp, PG_UNSAFE_CLEAR);
-> And here we know that swsusp_unset_page_free() will be called making
-> sure the page is not in the free_pages_map afterwards.
+> The power floor implementation provides interfaces, which are called
+> from the sysfs callbacks to enable/disable and read power floor
+> status. Also provides two additional interface to check if the current
+> processor thermal device interrupt is for power floor status and
+> send notification to user space.
 >
-> And that should result in an unchanged free_pages_map. Does that make
-> sense? Please correct me if I'm misunderstanding something.
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> ---
+>  .../driver-api/thermal/intel_dptf.rst         |   8 ++
+>  .../thermal/intel/int340x_thermal/Makefile    |   1 +
+>  .../processor_thermal_device.c                |  68 ++++++++++-
+>  .../processor_thermal_device.h                |   8 ++
+>  .../processor_thermal_power_floor.c           | 114 ++++++++++++++++++
+>  5 files changed, 198 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/thermal/intel/int340x_thermal/processor_thermal_power_floor.c
 >
+> diff --git a/Documentation/driver-api/thermal/intel_dptf.rst b/Documentation/driver-api/thermal/intel_dptf.rst
+> index 2d11e74ac665..55d90eafd94b 100644
+> --- a/Documentation/driver-api/thermal/intel_dptf.rst
+> +++ b/Documentation/driver-api/thermal/intel_dptf.rst
+> @@ -164,6 +164,14 @@ ABI.
+>  ``power_limit_1_tmax_us`` (RO)
+>         Maximum powercap sysfs constraint_1_time_window_us for Intel RAPL
+>
+> +``power_floor_status`` (RO)
+> +       When set to 1, hardware is not able to satisfy the requested power limit
+> +       via Intel RAPL.
+> +
+> +``power_floor_enable`` (RW)
+> +       When set to 1, enable reading and notification of power floor status.
+> +       Notifications are issued for changes in the power_floor_status attribute.
+> +
+>  :file:`/sys/bus/pci/devices/0000\:00\:04.0/`
+>
+>  ``tcc_offset_degree_celsius`` (RW)
+> diff --git a/drivers/thermal/intel/int340x_thermal/Makefile b/drivers/thermal/intel/int340x_thermal/Makefile
+> index f33a3ad3bef3..fe3f43924525 100644
+> --- a/drivers/thermal/intel/int340x_thermal/Makefile
+> +++ b/drivers/thermal/intel/int340x_thermal/Makefile
+> @@ -12,5 +12,6 @@ obj-$(CONFIG_INT340X_THERMAL) += processor_thermal_rfim.o
+>  obj-$(CONFIG_INT340X_THERMAL)  += processor_thermal_mbox.o
+>  obj-$(CONFIG_INT340X_THERMAL)  += processor_thermal_wt_req.o
+>  obj-$(CONFIG_INT340X_THERMAL)  += processor_thermal_wt_hint.o
+> +obj-$(CONFIG_INT340X_THERMAL)  += processor_thermal_power_floor.o
+>  obj-$(CONFIG_INT3406_THERMAL)  += int3406_thermal.o
+>  obj-$(CONFIG_ACPI_THERMAL_REL) += acpi_thermal_rel.o
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> index 29ed7d0f7022..649f67fdf345 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> @@ -26,6 +26,48 @@ static ssize_t power_limit_##index##_##suffix##_show(struct device *dev, \
+>         (unsigned long)proc_dev->power_limits[index].suffix * 1000); \
+>  }
+>
+> +static ssize_t power_floor_status_show(struct device *dev,
+> +                                      struct device_attribute *attr,
+> +                                      char *buf)
+> +{
+> +       struct proc_thermal_device *proc_dev = dev_get_drvdata(dev);
+> +       int ret;
+> +
+> +       ret = proc_thermal_read_power_floor_status(proc_dev);
+> +
+> +       return sysfs_emit(buf, "%d\n", ret);
+> +}
+> +
+> +static ssize_t power_floor_enable_show(struct device *dev,
+> +                                      struct device_attribute *attr,
+> +                                      char *buf)
+> +{
+> +       struct proc_thermal_device *proc_dev = dev_get_drvdata(dev);
+> +       bool ret;
+> +
+> +       ret = proc_thermal_power_floor_get_state(proc_dev);
+> +
+> +       return sysfs_emit(buf, "%d\n", ret);
+> +}
+> +
+> +static ssize_t power_floor_enable_store(struct device *dev,
+> +                                       struct device_attribute *attr,
+> +                                       const char *buf, size_t count)
+> +{
+> +       struct proc_thermal_device *proc_dev = dev_get_drvdata(dev);
+> +       u8 state;
+> +       int ret;
+> +
+> +       if (kstrtou8(buf, 0, &state))
+> +               return -EINVAL;
+> +
+> +       ret = proc_thermal_power_floor_set_state(proc_dev, !!state);
+> +       if (ret)
+> +               return ret;
+> +
+> +       return count;
+> +}
+> +
+>  POWER_LIMIT_SHOW(0, min_uw)
+>  POWER_LIMIT_SHOW(0, max_uw)
+>  POWER_LIMIT_SHOW(0, step_uw)
+> @@ -50,6 +92,9 @@ static DEVICE_ATTR_RO(power_limit_1_step_uw);
+>  static DEVICE_ATTR_RO(power_limit_1_tmin_us);
+>  static DEVICE_ATTR_RO(power_limit_1_tmax_us);
+>
+> +static DEVICE_ATTR_RO(power_floor_status);
+> +static DEVICE_ATTR_RW(power_floor_enable);
+> +
+>  static struct attribute *power_limit_attrs[] = {
+>         &dev_attr_power_limit_0_min_uw.attr,
+>         &dev_attr_power_limit_1_min_uw.attr,
+> @@ -61,12 +106,30 @@ static struct attribute *power_limit_attrs[] = {
+>         &dev_attr_power_limit_1_tmin_us.attr,
+>         &dev_attr_power_limit_0_tmax_us.attr,
+>         &dev_attr_power_limit_1_tmax_us.attr,
+> +       &dev_attr_power_floor_status.attr,
+> +       &dev_attr_power_floor_enable.attr,
+>         NULL
+>  };
+>
+> +static umode_t power_limit_attr_visible(struct kobject *kobj, struct attribute *attr, int unused)
+> +{
+> +       struct device *dev = kobj_to_dev(kobj);
+> +       struct proc_thermal_device *proc_dev;
+> +
+> +       if (attr != &dev_attr_power_floor_status.attr && attr != &dev_attr_power_floor_enable.attr)
+> +               return attr->mode;
+> +
+> +       proc_dev = dev_get_drvdata(dev);
+> +       if (!proc_dev || !(proc_dev->mmio_feature_mask & PROC_THERMAL_FEATURE_POWER_FLOOR))
+> +               return 0;
+> +
+> +       return attr->mode;
+> +}
+> +
+>  static const struct attribute_group power_limit_attribute_group = {
+>         .attrs = power_limit_attrs,
+> -       .name = "power_limits"
+> +       .name = "power_limits",
+> +       .is_visible = power_limit_attr_visible,
+>  };
+>
+>  static ssize_t tcc_offset_degree_celsius_show(struct device *dev,
+> @@ -380,6 +443,9 @@ void proc_thermal_mmio_remove(struct pci_dev *pdev, struct proc_thermal_device *
+>             proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DVFS)
+>                 proc_thermal_rfim_remove(pdev);
+>
+> +       if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_POWER_FLOOR)
+> +               proc_thermal_power_floor_set_state(proc_priv, false);
+> +
+>         if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_WT_REQ)
+>                 proc_thermal_wt_req_remove(pdev);
+>         else if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_WT_HINT)
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> index dd025c8c2bac..89e98f025a49 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> @@ -63,6 +63,7 @@ struct rapl_mmio_regs {
+>  #define PROC_THERMAL_FEATURE_WT_REQ    0x08
+>  #define PROC_THERMAL_FEATURE_DLVR      0x10
+>  #define PROC_THERMAL_FEATURE_WT_HINT   0x20
+> +#define PROC_THERMAL_FEATURE_POWER_FLOOR       0x40
+>
+>  #if IS_ENABLED(CONFIG_PROC_THERMAL_MMIO_RAPL)
+>  int proc_thermal_rapl_add(struct pci_dev *pdev, struct proc_thermal_device *proc_priv);
+> @@ -91,6 +92,13 @@ void proc_thermal_wt_req_remove(struct pci_dev *pdev);
+>  #define MBOX_DATA_BIT_AC_DC            30
+>  #define MBOX_DATA_BIT_VALID            31
+>
+> +int proc_thermal_read_power_floor_status(struct proc_thermal_device *proc_priv);
+> +int proc_thermal_power_floor_set_state(struct proc_thermal_device *proc_priv, bool enable);
+> +bool proc_thermal_power_floor_get_state(struct proc_thermal_device *proc_priv);
+> +void proc_thermal_power_floor_intr_callback(struct pci_dev *pdev,
+> +                                           struct proc_thermal_device *proc_priv);
+> +bool proc_thermal_check_power_floor_intr(struct proc_thermal_device *proc_priv);
+> +
+>  int processor_thermal_send_mbox_read_cmd(struct pci_dev *pdev, u16 id, u64 *resp);
+>  int processor_thermal_send_mbox_write_cmd(struct pci_dev *pdev, u16 id, u32 data);
+>  int processor_thermal_mbox_interrupt_config(struct pci_dev *pdev, bool enable, int enable_bit,
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_power_floor.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_power_floor.c
+> new file mode 100644
+> index 000000000000..cac3a38f430f
+> --- /dev/null
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_power_floor.c
+> @@ -0,0 +1,114 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Processor thermal device module for registering and processing
+> + * power floor. When the hardware reduces the power to the minimum
+> + * possible, the power floor is notified via an interrupt.
+> + *
+> + * Operation:
+> + * When user space enables power floor reporting:
+> + * - Use mailbox to:
+> + *     Enable processor thermal device interrupt
+> + *
+> + * - Current status of power floor is read from offset 0x5B18
+> + *   bit 39.
+> + *
+> + * Two interface functions are provided to call when there is a
+> + * thermal device interrupt:
+> + * - proc_thermal_power_floor_intr():
+> + *     Check if the interrupt is for change in power floor.
+> + *     Called from interrupt context.
+> + *
+> + * - proc_thermal_power_floor_intr_callback():
+> + *     Callback for interrupt processing in thread context. This involves
+> + *     sending notification to user space that there is a change in the
+> + *     power floor status.
+> + *
+> + * Copyright (c) 2023, Intel Corporation.
+> + */
+> +
+> +#include <linux/pci.h>
+> +#include "processor_thermal_device.h"
+> +
+> +#define SOC_POWER_FLOOR_INT_STATUS_OFF 0x5B18
 
-To restate this another way, if I'm reading it correctly, I think the
-outcome is actually nearly the same, the difference is, when
-allocating the bitmap before w/ PG_ANY we're setting bits in the
-free_page_list which will be unset a few lines later in the call to
-mark_unsafe_pages(), and then we won't touch the free_pages_list
-during the memory_bm_free() because it's called with PG_UNSAFE_KEEP.
+"OFFSET" would be better than "OFF" IMO.
 
-> >
-> > Fixes: 005e8dddd497 ("PM: hibernate: don't store zero pages in the imag=
-e file")
-> > Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-> > ---
-> >  kernel/power/snapshot.c | 23 ++++++++++++++---------
-> >  1 file changed, 14 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-> > index 87e9f7e2bdc0..cb7341a71a21 100644
-> > --- a/kernel/power/snapshot.c
-> > +++ b/kernel/power/snapshot.c
-> > @@ -2628,7 +2628,7 @@ static int prepare_image(struct memory_bitmap *ne=
-w_bm, struct memory_bitmap *bm,
-> >                 struct memory_bitmap *zero_bm)
-> >  {
-> >         unsigned int nr_pages, nr_highmem;
-> > -       struct memory_bitmap tmp;
-> > +       struct memory_bitmap tmp_zero_bm;
-> >         struct linked_page *lp;
-> >         int error;
-> >
-> > @@ -2636,6 +2636,16 @@ static int prepare_image(struct memory_bitmap *n=
-ew_bm, struct memory_bitmap *bm,
-> >         free_image_page(buffer, PG_UNSAFE_CLEAR);
-> >         buffer =3D NULL;
-> >
-> > +       /*
-> > +        * Allocate a temporary bitmap to create a copy of zero_bm in
-> > +        * safe pages. This allocation needs to be done before marking
-> > +        * unsafe pages below so that it can be freed without altering
-> > +        * the state of unsafe pages.
-> > +        */
-> > +       error =3D memory_bm_create(&tmp_zero_bm, GFP_ATOMIC, PG_ANY);
-> > +       if (error)
-> > +               goto Free;
-> > +
-> >         nr_highmem =3D count_highmem_image_pages(bm);
-> >         mark_unsafe_pages(bm);
-> >
-> > @@ -2646,12 +2656,7 @@ static int prepare_image(struct memory_bitmap *n=
-ew_bm, struct memory_bitmap *bm,
-> >         duplicate_memory_bitmap(new_bm, bm);
-> >         memory_bm_free(bm, PG_UNSAFE_KEEP);
-> >
-> > -       /* Make a copy of zero_bm so it can be created in safe pages */
-> > -       error =3D memory_bm_create(&tmp, GFP_ATOMIC, PG_ANY);
-> > -       if (error)
-> > -               goto Free;
-> > -
-> > -       duplicate_memory_bitmap(&tmp, zero_bm);
-> > +       duplicate_memory_bitmap(&tmp_zero_bm, zero_bm);
-> >         memory_bm_free(zero_bm, PG_UNSAFE_KEEP);
-> >
-> >         /* Recreate zero_bm in safe pages */
-> > @@ -2659,8 +2664,8 @@ static int prepare_image(struct memory_bitmap *ne=
-w_bm, struct memory_bitmap *bm,
-> >         if (error)
-> >                 goto Free;
-> >
-> > -       duplicate_memory_bitmap(zero_bm, &tmp);
-> > -       memory_bm_free(&tmp, PG_UNSAFE_KEEP);
-> > +       duplicate_memory_bitmap(zero_bm, &tmp_zero_bm);
-> > +       memory_bm_free(&tmp_zero_bm, PG_UNSAFE_KEEP);
-> >         /* At this point zero_bm is in safe pages and it can be used fo=
-r restoring. */
-> >
-> >         if (nr_highmem > 0) {
-> >
-> > ---
-> > base-commit: 6465e260f48790807eef06b583b38ca9789b6072
-> > change-id: 20230929-hib_zero_bitmap_fix-bc5884eba0ae
-> >
-> > Best regards,
-> > --
-> > Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-> >
+> +#define SOC_POWER_FLOOR_STATUS         BIT(39)
+> +#define SOC_POWER_FLOOR_SHIFT          39
+> +
+> +#define SOC_POWER_FLOOR_INT_ENABLE_BIT 31
+> +#define SOC_POWER_FLOOR_INT_ACTIVE     BIT(3)
+> +
+> +/* Mark time windows as invalid as this is not applicable */
+
+The meaning of the above comment is unclear.
+
+> +#define SOC_POWER_FLOOR_TIME_WINDOW    -1
+> +
+> +int proc_thermal_read_power_floor_status(struct proc_thermal_device *proc_priv)
+> +{
+> +       u64 status = 0;
+> +
+> +       status = readq(proc_priv->mmio_base + SOC_POWER_FLOOR_INT_STATUS_OFF);
+> +       return (status & SOC_POWER_FLOOR_STATUS) >> SOC_POWER_FLOOR_SHIFT;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(proc_thermal_read_power_floor_status, INT340X_THERMAL);
+> +
+> +static bool enable_state;
+> +static DEFINE_MUTEX(pf_lock);
+> +
+> +int proc_thermal_power_floor_set_state(struct proc_thermal_device *proc_priv, bool enable)
+> +{
+> +       int ret = 0;
+> +
+> +       mutex_lock(&pf_lock);
+> +       if (enable_state == enable)
+> +               goto pf_unlock;
+> +
+> +       ret = processor_thermal_mbox_interrupt_config(to_pci_dev(proc_priv->dev), enable,
+> +                                                     SOC_POWER_FLOOR_INT_ENABLE_BIT,
+> +                                                     SOC_POWER_FLOOR_TIME_WINDOW);
+> +       if (!ret)
+> +               enable_state = enable;
+> +
+> +pf_unlock:
+> +       mutex_unlock(&pf_lock);
+> +
+> +       return ret;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(proc_thermal_power_floor_set_state, INT340X_THERMAL);
+> +
+> +bool proc_thermal_power_floor_get_state(struct proc_thermal_device *proc_priv)
+> +{
+> +       return enable_state;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(proc_thermal_power_floor_get_state, INT340X_THERMAL);
+> +
+> +/*
+> + * Callback to check if interrupt for power floor is active.
+> + * Caution: Called from interrupt context.
+> + */
+
+I would prefer this comment and the one below to be proper kerneldoc
+ones or to be moved inside the functions.
+
+> +bool proc_thermal_check_power_floor_intr(struct proc_thermal_device *proc_priv)
+> +{
+> +       u64 int_status;
+> +
+> +       int_status = readq(proc_priv->mmio_base + SOC_POWER_FLOOR_INT_STATUS_OFF);
+> +       if (int_status & SOC_POWER_FLOOR_INT_ACTIVE)
+> +               return true;
+> +
+> +       return false;
+
+return !!(int_status & SOC_POWER_FLOOR_INT_ACTIVE);
+
+> +}
+> +EXPORT_SYMBOL_NS_GPL(proc_thermal_check_power_floor_intr, INT340X_THERMAL);
+> +
+> +/* Callback to notify user space */
+
+Notify user space about what and how?  As is, this comment isn't very
+useful IMO.
+
+> +void proc_thermal_power_floor_intr_callback(struct pci_dev *pdev,
+> +                                           struct proc_thermal_device *proc_priv)
+> +{
+> +       u64 status;
+> +
+> +       status = readq(proc_priv->mmio_base + SOC_POWER_FLOOR_INT_STATUS_OFF);
+> +       if (!(status & SOC_POWER_FLOOR_INT_ACTIVE))
+> +               return;
+> +
+> +       writeq(status & ~SOC_POWER_FLOOR_INT_ACTIVE,
+> +              proc_priv->mmio_base + SOC_POWER_FLOOR_INT_STATUS_OFF);
+> +       sysfs_notify(&pdev->dev.kobj, "power_limits", "power_floor_status");
+> +}
+> +EXPORT_SYMBOL_NS_GPL(proc_thermal_power_floor_intr_callback, INT340X_THERMAL);
+> +
+> +MODULE_IMPORT_NS(INT340X_THERMAL);
+> +MODULE_LICENSE("GPL");
+> --
