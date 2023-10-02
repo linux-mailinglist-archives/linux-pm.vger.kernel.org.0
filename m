@@ -2,162 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2CB7B550A
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Oct 2023 16:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2ED47B55F1
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Oct 2023 17:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237710AbjJBOQi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Oct 2023 10:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51138 "EHLO
+        id S237734AbjJBOwy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Oct 2023 10:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237704AbjJBOQf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Oct 2023 10:16:35 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E254AD;
-        Mon,  2 Oct 2023 07:16:32 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 392EDi1r029079;
-        Mon, 2 Oct 2023 09:13:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1696256024;
-        bh=9xwbB9UUJNHYGsvOL2OWasF1jedaAyNp2p7Cekqs654=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=By/tIsGE+iOxh5Xc+vk8G7bJIcgKrRMlPYXZHcFUKin/3+STUwGcSbwHAlEJAygAg
-         cYX4zyPPw/iOWY5DN75uQdDwGYBXfP8SBN+kqJyxUMDBGrYpXulQ+jDabJRfTmMu9G
-         DJaTDmzj2DXwuD/TrpxGcgigx7G0iwH+ZRX59CSI=
-Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 392EDiPN020538
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 2 Oct 2023 09:13:44 -0500
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 2
- Oct 2023 09:13:44 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 2 Oct 2023 09:13:44 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 392EDhKD007764;
-        Mon, 2 Oct 2023 09:13:44 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Joel Stanley <joel@jms.id.au>, Li Yang <leoyang.li@nxp.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Huisong Li <lihuisong@huawei.com>,
-        Krzysztof Halasa <khalasa@piap.pl>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        with ESMTP id S237593AbjJBOwx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Oct 2023 10:52:53 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC48F9D;
+        Mon,  2 Oct 2023 07:52:50 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C14BC433C8;
+        Mon,  2 Oct 2023 14:52:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696258370;
+        bh=Etqxxf/D+cQv+It0W6UkjfNaCRmxy8NfOCgMspxGg4A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MsHyhGPdNFcCYSuzntBAkFqGejwIzlUuGDxKha2iPiGz/eh7uaLHH0+6ZGjddbxtD
+         b/OQPeDqUsB3GGSGwo0Jr/RlK97mCdMXtv+XaKXXlRYTz7HRtXgwOINlmSJL1uzPNC
+         uPOQXNXCufurO8XH4tu3OolpBWCfTbR6Z9DR5kSk7IYosRdvB8yR+oiS2yaqnlA8Si
+         VmDpdUCOvmX1yFW20Z34mcHiVH+7tS0tF2UYophMM38N4LgJKoPmcSfodHkncBnHXL
+         tZ366z+H33h/kxztAeTRHxfpnAzfJ8miO3TNzZQ6687NGwIFR/qAfhkpKtyWiSll3k
+         EK9i13cD9y/PA==
+Date:   Mon, 2 Oct 2023 20:22:39 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Caleb Connolly <caleb.connolly@linaro.org>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
         Andy Gross <agross@kernel.org>,
+        Bhupesh Sharma <bhupesh.linux@gmail.com>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sumit Gupta <sumitg@nvidia.com>,
-        Shang XiaoJing <shangxiaojing@huawei.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Rob Herring <robh@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Michal Simek <michal.simek@amd.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-CC:     Nishanth Menon <nm@ti.com>, Andrew Jeffery <andrew@aj.id.au>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Zev Weiss <zev@bewilderbeest.net>,
-        <linuxppc-dev@lists.ozlabs.org>, <loongarch@lists.linux.dev>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>,
-        zhang songyi <zhang.songyi@zte.com.cn>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        <linux-arm-msm@vger.kernel.org>,
-        <linux-rockchip@lists.infradead.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        <linux-samsung-soc@vger.kernel.org>,
-        Nick Alcock <nick.alcock@oracle.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        <linux-tegra@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        Ruan Jinjie <ruanjinjie@huawei.com>, <kernel@pengutronix.de>
-Subject: Re: (subset) [PATCH 00/40] soc: Convert to platform remove callback returning void
-Date:   Mon, 2 Oct 2023 09:13:43 -0500
-Message-ID: <169625598637.2878306.1181893226380989815.b4-ty@ti.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230925095532.1984344-1-u.kleine-koenig@pengutronix.de>
-References: <20230925095532.1984344-1-u.kleine-koenig@pengutronix.de>
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 0/4] thermal: Introduce Qualcomm Thermal Mitigation
+ Device support
+Message-ID: <20231002145239.GA12041@thinkpad>
+References: <20230905-caleb-qmi_cooling-v1-0-5aa39d4164a7@linaro.org>
+ <20231001155701.GA53767@thinkpad>
+ <cefe711b-d274-4d83-9dda-01f33b342387@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <cefe711b-d274-4d83-9dda-01f33b342387@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Uwe Kleine-König,
-
-On Mon, 25 Sep 2023 11:54:51 +0200, Uwe Kleine-König wrote:
-> this series converts all platform drivers below drivers/soc to use
-> .remove_new(). The motivation is to get rid of an integer return code
-> that is (mostly) ignored by the platform driver core and error prone on
-> the driver side.
+On Sun, Oct 01, 2023 at 06:26:14PM +0100, Caleb Connolly wrote:
 > 
-> See commit 5c5a7680e67b ("platform: Provide a remove callback that
-> returns no value") for an extended explanation and the eventual goal.
 > 
-> [...]
+> On 01/10/2023 16:57, Manivannan Sadhasivam wrote:
+> > On Fri, Sep 29, 2023 at 05:16:16PM +0100, Caleb Connolly wrote:
+> > > The Thermal Mitigation Device (TMD) Service is a QMI service that runs
+> > > on remote subsystems (the modem and DSPs) on Qualcomm SoCs.
+> > > It exposes various mitigations including passive thermal controls and
+> > > rail voltage restrictions.
+> > > 
+> > > This series introduces support for exposing TMDs as cooling devices
+> > > in the kernel through the thermal framework, using the QMI interface.
+> > > 
+> > > Each TMD client is described as a child of the remoteproc node in
+> > > devicetree. With subnodes for each control.
+> > > 
+> > 
+> > Daniel expressed concerns in the past aganist representing TMD driver as a
+> > cooling device since it is not tied to thermal zones and the governors cannot
+> > use it. Instead he suggested to represent it as a powercap device with thermal
+> > constraints.
+> 
+> Hi Mani,
+> 
+> Forgive me as I'm not yet super familiar with the thermal subsystem.
+> 
+> As I understand it, the DT layout here enables each control to be referenced
+> under the thermal zones, at least this is the approach taken in CAF 4.9.
+> 
+> Maybe I don't quite understand what you mean, are you saying that using
+> thermal zones is the wrong approach?
 
-I have applied the following to branch ti-drivers-soc-next on [1].
-Thank you!
+Thermal framework expects each thermal zone represented in DT to have atleast
+one corresponding thermal sensor defined using "thermal-sensors" property. But
+with TMD, there is no thermal sensor AFAIK.
 
-[33/40] soc/ti: k3-ringacc: Convert to platform remove callback returning void
-        commit: f34b902c5ba67841902cd7f0e24e64bb82f69cb4
-[34/40] soc/ti: knav_dma: Convert to platform remove callback returning void
-        commit: 3af4ec7c7dd39a2c4618f6536b2e7b73a19be169
-[35/40] soc/ti: knav_qmss_queue: Convert to platform remove callback returning void
-        commit: af97160a0c5f1908c6f2830023fb93baac4451d3
-[36/40] soc/ti: pm33xx: Convert to platform remove callback returning void
-        commit: 9eb950e9fffc5337bfe1798cf89ce4d97a4f1221
-[37/40] soc/ti: pruss: Convert to platform remove callback returning void
-        commit: d183b20d340b7c098f44cb5c02f4ced01cfd0b16
-[38/40] soc/ti: smartreflex: Convert to platform remove callback returning void
-        commit: ba03aab9bfb4c9d456419da3891375d45c6bfe15
-[39/40] soc/ti: wkup_m3_ipc: Convert to platform remove callback returning void
-        commit: 82e83cb51c87b5bf3ab83f7c7b150c19400056c2
+> > 
+> > So please look into that approach.
+> 
+> Any recommended reading? Or drivers I can use as a reference?
+> 
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+drivers/powercap/arm_scmi_powercap.c seems to be a good reference.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+- Mani
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+> Thanks
+> > 
+> > - Mani
+> > 
+> > > This series is based on previous work by Bhupesh Sharma which can be
+> > > found at [1]. I'm sending this as a fresh series as it has been a
+> > > year since the original version and I have rewritten most of the driver.
+> > > 
+> > > [1]: https://lore.kernel.org/linux-arm-msm/20220912085049.3517140-1-bhupesh.sharma@linaro.org/
+> > > 
+> > > ---
+> > > Caleb Connolly (4):
+> > >        remoteproc: qcom: probe all child devices
+> > >        dt-bindings: thermal: Add qcom,qmi-cooling yaml bindings
+> > >        thermal: qcom: add qmi-cooling driver
+> > >        MAINTAINERS: Add entry for Qualcomm Cooling Driver
+> > > 
+> > >   .../bindings/remoteproc/qcom,msm8996-mss-pil.yaml  |  13 +
+> > >   .../bindings/remoteproc/qcom,pas-common.yaml       |   6 +
+> > >   .../bindings/thermal/qcom,qmi-cooling.yaml         | 168 +++++++
+> > >   MAINTAINERS                                        |   8 +
+> > >   drivers/remoteproc/qcom_q6v5.c                     |   4 +
+> > >   drivers/remoteproc/qcom_q6v5_mss.c                 |   8 -
+> > >   drivers/thermal/qcom/Kconfig                       |  13 +
+> > >   drivers/thermal/qcom/Makefile                      |   1 +
+> > >   drivers/thermal/qcom/qmi-cooling.c                 | 520 +++++++++++++++++++++
+> > >   drivers/thermal/qcom/qmi-cooling.h                 | 428 +++++++++++++++++
+> > >   10 files changed, 1161 insertions(+), 8 deletions(-)
+> > > ---
+> > > base-commit: 9067f80db58bbce81d5f0703aa2fd261e88bc812
+> > > 
+> > > // Caleb (they/them)
+> > > 
+> > 
+> 
+> -- 
+> // Caleb (they/them)
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
-
+மணிவண்ணன் சதாசிவம்
