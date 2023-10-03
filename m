@@ -2,186 +2,179 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D7837B64F8
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 11:06:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A034A7B6590
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 11:31:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239463AbjJCJGI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Oct 2023 05:06:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56722 "EHLO
+        id S231645AbjJCJbp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Oct 2023 05:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239299AbjJCJGI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 05:06:08 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B512AB
-        for <linux-pm@vger.kernel.org>; Tue,  3 Oct 2023 02:06:04 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5384975e34cso1071047a12.0
-        for <linux-pm@vger.kernel.org>; Tue, 03 Oct 2023 02:06:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696323963; x=1696928763; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yTn3D6znwaCBRUiGNETpplkhBo7JdWjGGXiqyWYcpRY=;
-        b=dB00IByxelr8I0TQ+SlfL/zcGz7pvnvf/z3AFkZRagSvngaUCY9P3EP9oBeAHxNCVN
-         P3QlxtscZrj9HT4s4q0FJ/f/fEH4NXoBZCy/h+cMBU/VMv9WQkuYv2Lrmt4Fo3pokCIk
-         4U4Kw+NLgcP5Tgr+JhKjxNETXAXxaobu90M69kjXnqE7LsUUZ/Hc+09SSeIUGELv3y93
-         +eaZGGfw+9UabcTP5j9PqN6jDLt6AYaSgpPt5vsSfQ2weEPZ7wuaVxE26Y/WF47nd59K
-         zKEzF0ZayDrXdtsFDTiyLlXi+7wyQkvXYMK0WndiOt2rCBsSyxyuaKi/eWFi7vNwfZIG
-         ofFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696323963; x=1696928763;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yTn3D6znwaCBRUiGNETpplkhBo7JdWjGGXiqyWYcpRY=;
-        b=Asb8rqgicawlZmPg6KRLeZzvhS0LcfSMdsrP9Q2WgpX17dWd5ComrxD4kHJuKH6vsy
-         JtZODE5c4TkwAD+iiJHPaS1mDXbkLeGBmO2fqVoMNMBrkyUJd9anOt3Ml9iz59U9lpXX
-         Knh5kmKcBj+mE/RmzSN3MeG8Rpl/15kw2llb7BPTsLQZVikv+dy2DiUX33DHdxYBnEj5
-         6hw/gOSPi/1rYMrDCagEu5kiuR7yg+tHfnLqrxFowvqgKOt+sRuHgwkDrCwtqOROtAHs
-         NXMHyiRxclU555ptTd8+O/CBY9DQeT9hKR4P9/Ux3+D/mbmCeAeh4EK6NNRFFwrvHfkh
-         dBvQ==
-X-Gm-Message-State: AOJu0YzIPQClUmoyqhn2WqhBZt5vW3Q0iOy+f+L93D9DuWBU9T7bt/yf
-        hjRg1rq3sHiUKwKxclns8shq8Q==
-X-Google-Smtp-Source: AGHT+IG3WBtRtTk9mAInS4n1ptJJuNmHc7Y6kJeSwHHKSDILPqaOyieoUgi9z1ravG8PuW/F1IZzNw==
-X-Received: by 2002:aa7:c584:0:b0:530:a226:1f25 with SMTP id g4-20020aa7c584000000b00530a2261f25mr11151740edq.17.1696323962742;
-        Tue, 03 Oct 2023 02:06:02 -0700 (PDT)
-Received: from [192.168.1.197] (5-157-101-10.dyn.eolo.it. [5.157.101.10])
-        by smtp.gmail.com with ESMTPSA id j15-20020a50ed0f000000b0052ffc2e82f1sm545005eds.4.2023.10.03.02.06.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Oct 2023 02:06:02 -0700 (PDT)
-Message-ID: <8f139c6e-78e1-4804-bbd5-f598bba9908d@linaro.org>
-Date:   Tue, 3 Oct 2023 11:06:00 +0200
+        with ESMTP id S231626AbjJCJbp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 05:31:45 -0400
+Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B1E90
+        for <linux-pm@vger.kernel.org>; Tue,  3 Oct 2023 02:31:40 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bee.tesarici.cz (Postfix) with ESMTPSA id 6713E18D84D;
+        Tue,  3 Oct 2023 11:31:37 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1696325497; bh=P+TM8hsW63TpOOR3YRCb5m9FSugqhKVXuZlubU4JFKo=;
+        h=Date:From:To:Subject:In-Reply-To:References:From;
+        b=BlKo0uiKzGMzXPWz57lQUL5ruXFlQZNkpQ4PAR5kpiY8q4KVixyaprBBlIrTWTZU4
+         cYb7u7YTJ3LIgRDMtpud1J/fV1qt//bhsoDyrVSzVT7STA+FhbUnLLzKoxmijRaK5h
+         EEHD6cu5uOX9AZC7TcLnuR9OrnDxHGQD5oIBGAjENJymcpSUbKp282ZrnD1oSKHj1b
+         tqOmdgvJ9eUcb4hWu5It8dmKGTgS6W3kk4LaDSr2j2LEZbfIt2jTl2o5kW0+81GuqV
+         Gnr9pl756KR3aFqSAETdgSFFcJgG3RjSMjPRoSYXbCG6FlBXVsKUYDxteisNSkTOTP
+         VRue+rJLbSxfQ==
+Date:   Tue, 3 Oct 2023 11:31:35 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: Thinkpad E595 system deadlock on resume from S3
+Message-ID: <20231003113135.38384a87@meshulam.tesarici.cz>
+In-Reply-To: <20230930122054.3cf727a4@meshulam>
+References: <20230930122054.3cf727a4@meshulam>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/7] thermal: exynos: simplify regulator
- (de)initialization
-Content-Language: en-US
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        m.majewski2@samsung.com,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-References: <bf9a07ff-5628-05ab-2362-a917d3d38313@linaro.org>
- <20230911133435.14061-1-m.majewski2@samsung.com>
- <20230911133435.14061-5-m.majewski2@samsung.com>
- <CGME20230911133616eucas1p10c5eeb0f0240dde975ccc5935cb5c311@eucms1p2>
- <20230926110239eucms1p2b539245c5b10591def4cd15f14896ad6@eucms1p2>
- <67a7d507-7025-ee3e-f388-0a96e11eae41@linaro.org>
- <a6f943be-a92f-f9ec-4103-7edc70a2c9a8@samsung.com>
- <10e6377e-ab3f-c318-9860-56ff3b8aed92@linaro.org>
- <2e688177-7a69-051f-2d2c-c8067c38f3be@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <2e688177-7a69-051f-2d2c-c8067c38f3be@samsung.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29/09/2023 14:00, Marek Szyprowski wrote:
-> On 29.09.2023 13:45, Daniel Lezcano wrote:
->> On 29/09/2023 13:03, Marek Szyprowski wrote:
->>> On 29.09.2023 12:46, Daniel Lezcano wrote:
->>>> On 26/09/2023 13:02, Mateusz Majewski wrote:
->>>>> Hi,
->>>>>
->>>>>> This is not equivalent. If regulator is provided and enable fails, 
->>>>>> the
->>>>>> old code is nicely returning error. Now, it will print misleading
->>>>>> message - failed to get regulator - and continue.
->>>>>>
->>>>>> While this simplifies the code, it ignores important running
->>>>>> condition -
->>>>>> having regulator enabled.
->>>>>
->>>>> Would doing this be correct?
->>>>>
->>>>> ret = devm_regulator_get_enable_optional(&pdev->dev, "vtmu");
->>>>> switch (ret) {
->>>>> case 0:
->>>>> case -ENODEV:
->>>>
->>>> Not sure to understand why -NODEV is not an error
->>>
->>>
->>> Because this what devm_regulator_get_enable_optional() returns if no
->>> regulator is defined. I also got confused by this a few times.
->>
->> The code before this change calls devm_regulator_get_optional() which 
->> returns -ENODEV too, right ? But there is no special case for this error.
->>
->> So this change uses devm_regulator_get_enable_optional() and handle 
->> the ENODEV as a non-error, so there is a change in the behavior.
-> 
-> 
-> It looks that the original code ignores any non-EPROBE_DEFER errors from 
-> devm_regulator_get_optional(). That's a bug, indeed.
+Hi again (adding more recipients),
 
-How about separate change fixing it? I know the same code will be
-changed twice, but it will be easier to backport and analyze in case of
-issues.
+On Sat, 30 Sep 2023 12:20:54 +0200
+Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz> wrote:
 
-Best regards,
-Krzysztof
+> Hi all,
+>=20
+> this time no patch (yet). In short, my Thinkpad running v6.6-rc3 fails
+> to resume from S3. It also fails the same way with Tumbleweed v6.5
+> kernel. I was able to capture a crash dump of the v6.5 kernel, and
+> here's my analysis:
+>=20
+> The system never gets to waking up my SATA SSD disk:
+>=20
+> [0:0:0:0]    disk    ATA      KINGSTON SEDC600 H5.1  /dev/sda=20
+>=20
+> There is a pending resume work for kworker/u32:12 (PID 11032), but this
+> worker is stuck in 'D' state:
+>=20
+> >>> prog.stack_trace(11032) =20
+> #0  context_switch (../kernel/sched/core.c:5381:2)
+> #1  __schedule (../kernel/sched/core.c:6710:8)
+> #2  schedule (../kernel/sched/core.c:6786:3)
+> #3  schedule_preempt_disabled (../kernel/sched/core.c:6845:2)
+> #4  __mutex_lock_common (../kernel/locking/mutex.c:679:3)
+> #5  __mutex_lock (../kernel/locking/mutex.c:747:9)
+> #6  acpi_device_hotplug (../drivers/acpi/scan.c:382:2)
+> #7  acpi_hotplug_work_fn (../drivers/acpi/osl.c:1162:2)
+> #8  process_one_work (../kernel/workqueue.c:2600:2)
+> #9  worker_thread (../kernel/workqueue.c:2751:4)
+> #10 kthread (../kernel/kthread.c:389:9)
+> #11 ret_from_fork (../arch/x86/kernel/process.c:145:3)
+> #12 ret_from_fork_asm+0x1b/0x20 (../arch/x86/entry/entry_64.S:304)
+>=20
+> acpi_device_hotplug() tries to acquire acpi_scan_lock, which is held by
+> systemd-sleep (PID 11002). This task is also in 'D' state:
+>=20
+> >>> prog.stack_trace(11002) =20
+> #0  context_switch (../kernel/sched/core.c:5381:2)
+> #1  __schedule (../kernel/sched/core.c:6710:8)
+> #2  schedule (../kernel/sched/core.c:6786:3)
+> #3  schedule_preempt_disabled (../kernel/sched/core.c:6845:2)
+> #4  __mutex_lock_common (../kernel/locking/mutex.c:679:3)
+> #5  __mutex_lock (../kernel/locking/mutex.c:747:9)
+> #6  device_lock (../include/linux/device.h:958:2)
+> #7  device_complete (../drivers/base/power/main.c:1063:2)
+> #8  dpm_complete (../drivers/base/power/main.c:1121:3)
+> #9  suspend_devices_and_enter (../kernel/power/suspend.c:516:2)
+
+I believe the issue must be somewhere here. The whole suspend and
+resume logic in suspend_devices_and_enter() is framed by
+platform_suspend_begin() and platform_resume_end().
+
+My system is an ACPI system, so suspend_ops contains:
+
+	.begin =3D acpi_suspend_begin,
+	.end =3D acpi_pm_end,
+
+Now, acpi_suspend_begin() acquires acpi_scan_lock through
+acpi_pm_start(), and the lock is not released until acpi_pm_end().
+Since dpm_complete() waits for the completion of a work that tries to
+acquire acpi_scan_lock, the system will deadlock.
+
+AFAICS either:
+
+a. the ACPI lock cannot be held while dpm_complete() runs, or
+b. ata_scsi_dev_rescan() must not be scheduled before the system is
+resumed, or
+c. acpi_device_hotplug() must be implemented without taking dev->mutex.
+
+My gut feeling is that b. is the right answer.
+
+I'm afraid I can't contribute too much more ATM, at least not before I
+find out what broke my USB hub between rc3 and rc4.
+
+Regards
+Petr T
+
+> #10 enter_state (../kernel/power/suspend.c:592:10)
+> #11 pm_suspend (../kernel/power/suspend.c:619:10)
+> #12 state_store (../kernel/power/main.c:707:11)
+> #13 kernfs_fop_write_iter (../fs/kernfs/file.c:334:9)
+> #14 call_write_iter (../include/linux/fs.h:1877:9)
+> #15 new_sync_write (../fs/read_write.c:491:8)
+> #16 vfs_write (../fs/read_write.c:584:9)
+> #17 ksys_write (../fs/read_write.c:637:9)
+> #18 do_syscall_x64 (../arch/x86/entry/common.c:50:14)
+> #19 do_syscall_64 (../arch/x86/entry/common.c:80:7)
+> #20 entry_SYSCALL_64+0xaa/0x1a6 (../arch/x86/entry/entry_64.S:120)
+>=20
+> It is trying to acquire dev->mutex, which is in turn held by
+> kworker/0:0 (PID 10830), also in 'D' state:
+>=20
+> >>> prog.stack_trace(10830) =20
+> #0  context_switch (../kernel/sched/core.c:5381:2)
+> #1  __schedule (../kernel/sched/core.c:6710:8)
+> #2  schedule (../kernel/sched/core.c:6786:3)
+> #3  blk_queue_enter (../block/blk-core.c:326:3)
+> #4  blk_mq_alloc_request (../block/blk-mq.c:592:9)
+> #5  scsi_alloc_request (../drivers/scsi/scsi_lib.c:1139:7)
+> #6  scsi_execute_cmd (../drivers/scsi/scsi_lib.c:217:8)
+> #7  scsi_vpd_inquiry (../drivers/scsi/scsi.c:312:11)
+> #8  scsi_get_vpd_size (../drivers/scsi/scsi.c:345:11)
+> #9  scsi_get_vpd_size (../drivers/scsi/scsi.c:336:5)
+> #10 scsi_get_vpd_buf (../drivers/scsi/scsi.c:415:12)
+> #11 scsi_attach_vpd (../drivers/scsi/scsi.c:483:12)
+> #12 scsi_rescan_device (../drivers/scsi/scsi_scan.c:1628:2)
+> #13 ata_scsi_dev_rescan (../drivers/ata/libata-scsi.c:4894:4)
+> #14 process_one_work (../kernel/workqueue.c:2600:2)
+> #15 worker_thread (../kernel/workqueue.c:2751:4)
+> #16 kthread (../kernel/kthread.c:389:9)
+> #17 ret_from_fork (../arch/x86/kernel/process.c:145:3)
+> #18 ret_from_fork_asm+0x1b/0x20 (../arch/x86/entry/entry_64.S:304)
+>=20
+> And here we are, waiting for the completion of the resume work that is
+> scheduled on the blocked kworker/u32:12 (PID 11032), see above.
+>=20
+> FWIW the deadlock does not happen if autosuspend is turned off for this
+> disk.
+>=20
+> I'm willing to invest more time into debugging, but I'm not well-versed
+> in power management, so I may need some help from you as to what else I
+> should look at. Please, include me in Cc of all potential replies; I'm
+> not subscribed to linux-pm.
+>=20
+> Petr T
 
