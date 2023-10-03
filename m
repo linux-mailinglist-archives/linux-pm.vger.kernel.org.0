@@ -2,168 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A0A77B63FD
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 10:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E827B6405
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 10:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239713AbjJCIYH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Oct 2023 04:24:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
+        id S239391AbjJCI0L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Oct 2023 04:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239949AbjJCIX6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 04:23:58 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00525D7
-        for <linux-pm@vger.kernel.org>; Tue,  3 Oct 2023 01:23:25 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-58916df84c8so377700a12.3
-        for <linux-pm@vger.kernel.org>; Tue, 03 Oct 2023 01:23:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696321405; x=1696926205; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=thmnWGackJ2kyq9MtKqHyc87CEf9Q0TEhF2e90bIrDA=;
-        b=LPH8u4/lLveFuwbih63P8nVkE9DDCv7sVF//AdO6Piuc41TaG+TaK6TrHFdqdGKJGt
-         uFpOPICAdbc2+n7g5J6QBn9NUmdCXTdH+w4Up3ru5DoYDdZELsuTBNQXdldHxEc0Jg+o
-         rmbsgD3Yl5mBL1GCvqz5hsLA77kFCUaqDAYlrN3BXLnTR6CESvG6FYB5x7uVanPKjkoa
-         qItc92QXf98reNVxXDM7G9pQ39Zb+TavmejvFclAUXZgXQwGqBLUkBqStbL1dRUjc3Un
-         JavF6XY9cP9M/wjYHByKkn/sR7gaOUeOflxwjYfR1jb3AHyrb31KoCev3EpOZD8fF4qn
-         07Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696321405; x=1696926205;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=thmnWGackJ2kyq9MtKqHyc87CEf9Q0TEhF2e90bIrDA=;
-        b=GUJ5RvqeyMImkp01GBm9Qkarxd8ASLY5A0OIxMBGVx6t9q+ClR3nrFOw1nU94MSd01
-         BG8ahUOcC7XkL564U48ES94F5Q935+9l+uB+nWSgXJpVeAEcHZl0N7GzlFAaFKQKPESd
-         5V28j68I7BnZ58p82vioJHL3tctcHvFWvx7Y9HqPmEm0p+wcmlhY1QYYfZxVZPkcnq7m
-         diN4xUUgUbYCFJ9LfoOVzYjPgCndyZf9QQ33A88z43Ja5EkLvavMmCtOfl9rO6LJZA/p
-         /Z+L18Ll+mIg89+OZYNzZZckKxJyYYrVj01PpGtB1RFr88IrNwfpVBUqcEd5/BWt4NCW
-         5OWA==
-X-Gm-Message-State: AOJu0YyPIvDZxr0fOHB5uXLvxVUO8A44c++QDr1TAlqhUuuHzDoQwtQF
-        huKTcQ6iIwlV8zV7XIKZQCBmvA==
-X-Google-Smtp-Source: AGHT+IGuKv0tqMz8b0543XZiDpuoC5Tfgl8jOlIiHvPuG4yQ/mq4Hmo9V5ohffrrUvqOSUSeg08hKA==
-X-Received: by 2002:a05:6a20:dd9f:b0:156:851e:b167 with SMTP id kw31-20020a056a20dd9f00b00156851eb167mr10314153pzb.44.1696321405368;
-        Tue, 03 Oct 2023 01:23:25 -0700 (PDT)
-Received: from localhost ([122.172.81.92])
-        by smtp.gmail.com with ESMTPSA id t7-20020a62ea07000000b006933b69f7afsm782412pfh.42.2023.10.03.01.23.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Oct 2023 01:23:24 -0700 (PDT)
-Date:   Tue, 3 Oct 2023 13:53:22 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Nikunj Kela <nkela@quicinc.com>,
-        Prasad Sodagudi <psodagud@quicinc.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/9] OPP: Extend support for the opp-level beyond
- required-opps
-Message-ID: <20231003082322.cmok766jxzftsgrg@vireshk-i7>
-References: <20230925131715.138411-1-ulf.hansson@linaro.org>
- <20230925131715.138411-7-ulf.hansson@linaro.org>
- <CAPDyKFo+XCEtTSNqtA1SeajWo4tuRroA4GrRegta5TsqSGd4eQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFo+XCEtTSNqtA1SeajWo4tuRroA4GrRegta5TsqSGd4eQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        with ESMTP id S239430AbjJCI0K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 04:26:10 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF201AD;
+        Tue,  3 Oct 2023 01:26:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696321566; x=1727857566;
+  h=date:from:to:cc:subject:message-id;
+  bh=5qh8I7jim+K59g3HieYZ/aC4ydJDQON/9o3WI39UzBs=;
+  b=KuwHjI8Euc4RP53mg2qqrfNgvYd3tSTF0aCLifCt8nkIIB1N2ZNlG9V7
+   80OnaoBt417rD0H1UU8W7pJkRqqqyU/K93fIW7VHAocUDTObCTdyaC6WD
+   cfEG1Hc3DrHPG4I7sR/WYR+XoC6896Z63nOOzWK8Q5LEhyqJgY4kcJzm/
+   cjVJhKoflVWojZSfI3dYZjwfTih0gmUvDTNhsm0IpG8zwCQGH0dD9j8/9
+   Yez0nknDP2T+g2yywParX9ejbAESlMUw1kIW3bRaO9MctiUWMbaPyqiAF
+   xUo4OZX/aIGz2g/+Dzk31YFR/u4Vvyd3/kuGsIQz/reXTlizZIVH3usFV
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="381703019"
+X-IronPort-AV: E=Sophos;i="6.03,196,1694761200"; 
+   d="scan'208";a="381703019"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2023 01:26:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="997921721"
+X-IronPort-AV: E=Sophos;i="6.03,196,1694761200"; 
+   d="scan'208";a="997921721"
+Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 03 Oct 2023 01:26:04 -0700
+Received: from kbuild by c3b01524d57c with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qnajB-0006vc-3D;
+        Tue, 03 Oct 2023 08:26:01 +0000
+Date:   Tue, 03 Oct 2023 16:25:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 9b7758dec57ddcff690c146435946ee1a56b36aa
+Message-ID: <202310031659.MtBI0bID-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25-09-23, 15:33, Ulf Hansson wrote:
-> On Mon, 25 Sept 2023 at 15:18, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> >
-> > At this point the level (performance state) for an OPP is currently limited
-> > to be requested for a device that is attached to a PM domain.  Moreover,
-> > the device needs to have the so called required-opps assigned to it, which
-> > are based upon OPP tables being described in DT.
-> >
-> > To extend the support beyond required-opps and DT, let's enable the level
-> > to be set for all OPPs. More precisely, if the requested OPP has a valid
-> > level let's try to request it through the device's optional PM domain, via
-> > calling dev_pm_domain_set_performance_state().
-> >
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > ---
-> >  drivers/opp/core.c | 29 +++++++++++++++++++++++++++++
-> >  1 file changed, 29 insertions(+)
-> >
-> > diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> > index 60dca60ac4af..afb73978cdcb 100644
-> > --- a/drivers/opp/core.c
-> > +++ b/drivers/opp/core.c
-> > @@ -1107,6 +1107,22 @@ void _update_set_required_opps(struct opp_table *opp_table)
-> >                 opp_table->set_required_opps = _opp_set_required_opps_generic;
-> >  }
-> >
-> > +static int _set_opp_level(struct device *dev, struct opp_table *opp_table,
-> > +                         struct dev_pm_opp *opp)
-> > +{
-> > +       int ret = 0;
-> > +
-> > +       /* Request a new performance state through the device's PM domain. */
-> > +       if (opp && opp->level) {
-> > +               ret = dev_pm_domain_set_performance_state(dev, opp->level);
-> > +               if (ret)
-> > +                       dev_err(dev, "Failed to set performance state %u (%d)\n",
-> > +                               opp->level, ret);
-> > +       }
-> 
-> Okay, so reviewing my own code found a problem here. We need an "else"
-> here, that should request the performance state to be set to 0.
-> 
-> I am not sending a new version at this point, but awaiting more feedback first.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 9b7758dec57ddcff690c146435946ee1a56b36aa  Merge branches 'pm-cpufreq', 'pm-sleep' and 'pm-tools' into linux-next
 
-I am looking to add below to this patch, is that okay with you ?
+elapsed time: 939m
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 7b505316bb1c..a113e9caaa5a 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1135,16 +1135,22 @@ void _update_set_required_opps(struct opp_table *opp_table)
- static int _set_opp_level(struct device *dev, struct opp_table *opp_table,
-                          struct dev_pm_opp *opp)
- {
-+       unsigned int level = 0;
-        int ret = 0;
+configs tested: 107
+configs skipped: 2
 
--       /* Request a new performance state through the device's PM domain. */
--       if (opp && opp->level) {
--               ret = dev_pm_domain_set_performance_state(dev, opp->level);
--               if (ret)
--                       dev_err(dev, "Failed to set performance state %u (%d)\n",
--                               opp->level, ret);
-+       if (opp) {
-+               if (!opp->level)
-+                       return 0;
-+
-+               level = opp->level;
-        }
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-+       /* Request a new performance state through the device's PM domain. */
-+       ret = dev_pm_genpd_set_performance_state(dev, level);
-+       if (ret)
-+               dev_err(dev, "Failed to set performance state %u (%d)\n", level,
-+                       ret);
-+
-        return ret;
- }
-
-I am switching back to dev_pm_genpd_set_performance_state() as I won't be
-applying the power domain changes. I will then push out a branch and you can
-rebase your patches on top of it ? And then probably Sudeep or someone else can
-apply everything ?
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20231003   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                   randconfig-001-20231003   gcc  
+arm64                            allmodconfig   gcc  
+arm64                             allnoconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20231003   gcc  
+i386         buildonly-randconfig-002-20231003   gcc  
+i386         buildonly-randconfig-003-20231003   gcc  
+i386         buildonly-randconfig-004-20231003   gcc  
+i386         buildonly-randconfig-005-20231003   gcc  
+i386         buildonly-randconfig-006-20231003   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                  randconfig-001-20231003   gcc  
+i386                  randconfig-002-20231003   gcc  
+i386                  randconfig-003-20231003   gcc  
+i386                  randconfig-004-20231003   gcc  
+i386                  randconfig-005-20231003   gcc  
+i386                  randconfig-006-20231003   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20231003   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20231003   gcc  
+x86_64                randconfig-002-20231003   gcc  
+x86_64                randconfig-003-20231003   gcc  
+x86_64                randconfig-004-20231003   gcc  
+x86_64                randconfig-005-20231003   gcc  
+x86_64                randconfig-006-20231003   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
 
 -- 
-viresh
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
