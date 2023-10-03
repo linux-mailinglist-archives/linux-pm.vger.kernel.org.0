@@ -2,162 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 676EA7B670F
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 13:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B2F7B6758
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 13:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239867AbjJCLCv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Oct 2023 07:02:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38582 "EHLO
+        id S239897AbjJCLMy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Oct 2023 07:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239945AbjJCLCu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 07:02:50 -0400
-X-Greylist: delayed 5465 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 03 Oct 2023 04:02:45 PDT
-Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E20C9B;
-        Tue,  3 Oct 2023 04:02:45 -0700 (PDT)
-Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bee.tesarici.cz (Postfix) with ESMTPSA id 6A2D018EE8A;
-        Tue,  3 Oct 2023 13:02:42 +0200 (CEST)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-        t=1696330962; bh=GRNMxptcupM2yhuPTKM5Ro8fLg2P4aLFSxQAo0H3JoI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IX5lNOScRmWBpSz6qVImAKii4KYXt3xp9PParWD6pE8bRJd69sirPafxkelxvqaO5
-         LyULJdhjkgdws8GZBkn1C2cSFNEbeme3WEgMUOyCvmFBgr43BQmwYBsfXAOT6V7aV9
-         Wf51NhtVTz4hEET9/XVCnlV2+JfUcf3PJJpLMxbEWfj60I0VhijvhD++GN/TDcsQjg
-         aKoDNf9ttJC5d79QwgoVPG76JbTYbFe8C2LTwHgddb7qx63vVe6QqtOg6wuo3F/9PM
-         FCChjjosq1nMxU+hBQiRz/AXtPAEc6bTuSBjREiqUxWSWLRowyfFieueScdZBUaL7z
-         aOgql4y2gKoUQ==
-Date:   Tue, 3 Oct 2023 13:02:40 +0200
-From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: Thinkpad E595 system deadlock on resume from S3
-Message-ID: <20231003130240.0c64bc2e@meshulam.tesarici.cz>
-In-Reply-To: <CAJZ5v0i-FV29TUq8E=FGxB_dRKEJvdoKxzwPGAX0C9vnD7O8eg@mail.gmail.com>
-References: <20230930122054.3cf727a4@meshulam>
-        <20231003113135.38384a87@meshulam.tesarici.cz>
-        <CAJZ5v0i-FV29TUq8E=FGxB_dRKEJvdoKxzwPGAX0C9vnD7O8eg@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
+        with ESMTP id S232417AbjJCLMx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 07:12:53 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0821BCC
+        for <linux-pm@vger.kernel.org>; Tue,  3 Oct 2023 04:12:50 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1c3cbfa40d6so5732495ad.1
+        for <linux-pm@vger.kernel.org>; Tue, 03 Oct 2023 04:12:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696331569; x=1696936369; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9tBABO7GPyJwZw3Nk8JykIKdvU51HhvEtWXYIL3h5YI=;
+        b=PgHhF3Sdw9k3XNoVvq2aN22cVzV+dotmdsIJfOMyVWL16ZstbTSeiMCiVTkHhsrocc
+         WQHs6RdXnHZv+w0Fep/WQPM4Gkls3mJh8Qa66x25yK/SgPEIvE5XPvTqxBSZUcWAtUfz
+         +8vkxO0+i5KldeIffnIDVOkhqsn54N1FpKtErNBORz8FHt9SJm6RGrG3MjAfIV8tZ9QH
+         men/1PgZ+mKutOw55lCn32r1b7yoXEMfzgfgmAT7GU7T4RqSzWAMLIMnJT78bR0I7umQ
+         FQOMvFZjna5oqVbG6jMgHQDqq7hOm62dsHIEkgKHQeL5W97qrcM16Pl/iGuJpf4D+zSb
+         iTYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696331569; x=1696936369;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9tBABO7GPyJwZw3Nk8JykIKdvU51HhvEtWXYIL3h5YI=;
+        b=Yb+Ts1w/PIFF9hDK2ncfSXpsQ68T8C4b87f4k8gv/qnpI+6QcfDcsT7IKGGWdWs4ak
+         q7gFXfrAbLQmCQIfN6tHjrFFiDfxS7RYeH7ExTTp7Z7lO3JKTyfG1U/838D87YuoVF4+
+         PUse/iCY+TPZx8TwREcwH/+USZePRS4u16DjLlMuRa6ujR6W8qSBxVJl4zBdkfYSv9jd
+         dhiXksnaHS+zZ4C5hAHDa8ofMyH3MvWGNSbMjwVKANyHqD/oRybdonZFP+dW6ZQjmh98
+         Hhz5WVVXgUCIgOWG/E1DT4AaNTTvJGynmr2W0pTinw4Oy7xjFxQx5m81gMHQsJDvIUOI
+         Hg7g==
+X-Gm-Message-State: AOJu0Yzlb/TUcyn50kh6EvXJlM6vDU8pLqbLfATfgz7ymjZPncwoJzxB
+        8jQwLR3LsZ8am4ltiapNs+Qb
+X-Google-Smtp-Source: AGHT+IHzp+SOMu/BZxx+P/nC6osmYhEk82BGK9A+pP8pfPwut57hIo4DZE6nffFz8+zx+Z9d247D5w==
+X-Received: by 2002:a17:902:c948:b0:1c4:4c73:94e6 with SMTP id i8-20020a170902c94800b001c44c7394e6mr16668612pla.51.1696331569220;
+        Tue, 03 Oct 2023 04:12:49 -0700 (PDT)
+Received: from localhost.localdomain ([117.217.185.220])
+        by smtp.gmail.com with ESMTPSA id d9-20020a170903230900b001ab2b4105ddsm1250328plh.60.2023.10.03.04.12.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Oct 2023 04:12:48 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, andersson@kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
+        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
+        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
+        linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v4 0/6] UFS: Add OPP support
+Date:   Tue,  3 Oct 2023 16:42:26 +0530
+Message-Id: <20231003111232.42663-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 3 Oct 2023 12:15:10 +0200
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
+Hi,
 
-> On Tue, Oct 3, 2023 at 11:31=E2=80=AFAM Petr Tesa=C5=99=C3=ADk <petr@tesa=
-rici.cz> wrote:
-> >
-> > Hi again (adding more recipients),
-> >
-> > On Sat, 30 Sep 2023 12:20:54 +0200
-> > Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz> wrote:
-> > =20
-> > > Hi all,
-> > >
-> > > this time no patch (yet). In short, my Thinkpad running v6.6-rc3 fails
-> > > to resume from S3. It also fails the same way with Tumbleweed v6.5
-> > > kernel. I was able to capture a crash dump of the v6.5 kernel, and
-> > > here's my analysis:
-> > >
-> > > The system never gets to waking up my SATA SSD disk:
-> > >
-> > > [0:0:0:0]    disk    ATA      KINGSTON SEDC600 H5.1  /dev/sda
-> > >
-> > > There is a pending resume work for kworker/u32:12 (PID 11032), but th=
-is
-> > > worker is stuck in 'D' state:
-> > > =20
-> > > >>> prog.stack_trace(11032) =20
-> > > #0  context_switch (../kernel/sched/core.c:5381:2)
-> > > #1  __schedule (../kernel/sched/core.c:6710:8)
-> > > #2  schedule (../kernel/sched/core.c:6786:3)
-> > > #3  schedule_preempt_disabled (../kernel/sched/core.c:6845:2)
-> > > #4  __mutex_lock_common (../kernel/locking/mutex.c:679:3)
-> > > #5  __mutex_lock (../kernel/locking/mutex.c:747:9)
-> > > #6  acpi_device_hotplug (../drivers/acpi/scan.c:382:2)
-> > > #7  acpi_hotplug_work_fn (../drivers/acpi/osl.c:1162:2)
-> > > #8  process_one_work (../kernel/workqueue.c:2600:2)
-> > > #9  worker_thread (../kernel/workqueue.c:2751:4)
-> > > #10 kthread (../kernel/kthread.c:389:9)
-> > > #11 ret_from_fork (../arch/x86/kernel/process.c:145:3)
-> > > #12 ret_from_fork_asm+0x1b/0x20 (../arch/x86/entry/entry_64.S:304)
-> > >
-> > > acpi_device_hotplug() tries to acquire acpi_scan_lock, which is held =
-by
-> > > systemd-sleep (PID 11002). This task is also in 'D' state:
-> > > =20
-> > > >>> prog.stack_trace(11002) =20
-> > > #0  context_switch (../kernel/sched/core.c:5381:2)
-> > > #1  __schedule (../kernel/sched/core.c:6710:8)
-> > > #2  schedule (../kernel/sched/core.c:6786:3)
-> > > #3  schedule_preempt_disabled (../kernel/sched/core.c:6845:2)
-> > > #4  __mutex_lock_common (../kernel/locking/mutex.c:679:3)
-> > > #5  __mutex_lock (../kernel/locking/mutex.c:747:9)
-> > > #6  device_lock (../include/linux/device.h:958:2)
-> > > #7  device_complete (../drivers/base/power/main.c:1063:2)
-> > > #8  dpm_complete (../drivers/base/power/main.c:1121:3)
-> > > #9  suspend_devices_and_enter (../kernel/power/suspend.c:516:2) =20
-> >
-> > I believe the issue must be somewhere here. The whole suspend and
-> > resume logic in suspend_devices_and_enter() is framed by
-> > platform_suspend_begin() and platform_resume_end().
-> >
-> > My system is an ACPI system, so suspend_ops contains:
-> >
-> >         .begin =3D acpi_suspend_begin,
-> >         .end =3D acpi_pm_end,
-> >
-> > Now, acpi_suspend_begin() acquires acpi_scan_lock through
-> > acpi_pm_start(), and the lock is not released until acpi_pm_end().
-> > Since dpm_complete() waits for the completion of a work that tries to
-> > acquire acpi_scan_lock, the system will deadlock. =20
->=20
-> So holding acpi_scan_lock across suspend-resume is basically to
-> prevent the hotplug from taking place then IIRC.
->=20
-> > AFAICS either:
-> >
-> > a. the ACPI lock cannot be held while dpm_complete() runs, or
-> > b. ata_scsi_dev_rescan() must not be scheduled before the system is
-> > resumed, or
-> > c. acpi_device_hotplug() must be implemented without taking dev->mutex.
-> >
-> > My gut feeling is that b. is the right answer. =20
->=20
-> It's been a while since I looked at that code last time, but then it
-> has not changed for quite some time too.
->=20
-> It looks like the acpi_device_hotplug() path attempts to acquire
-> acpi_scan_lock() while holding dev->mutex which is kind of silly.  I
-> need to check that, though.
+This series adds OPP (Operating Points) support to UFSHCD driver.
 
-Thanks for your willingness. Well, it's not quite what you describe. If
-it was a simple ABBA deadlock, then it would be reported by lockdep.
-No, it's more complicated:
+Motivation behind adding OPP support is to scale both clocks as well as
+regulators/performance state dynamically. Currently, UFSHCD just scales
+clock frequency during runtime with the help of "freq-table-hz" property
+defined in devicetree. With the addition of OPP tables in devicetree (as
+done for Qcom SDM845 and SM8250 SoCs in this series) UFSHCD can now scale
+both clocks and performance state of power domain which helps in power
+saving.
 
-1. suspend_devices_and_enter() holds acpi_scan_lock,
-2. an ACPI hotplug work runs, but acpi_device_hotplug() goes to sleep
-   when it gets to acquiring acpi_scan_lock,
-3. ata_scsi_dev_rescan() submits a SCSI command and waits for its
-   completion while holding dev->mutex,
-4. the SCSI completion work happens to be put on the same workqueue as
-   the ACPI hotplug work in step 2,
-   ^^^--- THIS is how the two events are serialized!
-5. suspend_devices_and_enter() calls dpm_complete() ->
-   device_complete() -> device_lock() and cannot acquire dev->mutex.
+For the addition of OPP support to UFSHCD, there are changes required to
+the OPP framework and devfreq drivers. The OPP framework changes are already
+merged and the devfreq change is added in this series.
 
-HTH,
-Petr T
+Credits
+=======
+
+This series is a continuation of previous work by Krzysztof Kozlowski [1].
+
+Testing
+=======
+
+This series is tested on 96Boards RB3 (SDM845 SoC) and RB5 (SM8250 SoC)
+development boards.
+
+Merging Strategy
+================
+
+Since the devfreq patch got an Ack from the maintainer, either it can be merged
+to scsi tree with rest of the patches or merged separately through devfreq tree.
+
+Thanks,
+Mani
+
+[1] https://lore.kernel.org/all/20220513061347.46480-1-krzysztof.kozlowski@linaro.org/
+
+Changes in v4:
+
+* Rebased on top of v6.6-rc3
+
+Changes in v3:
+
+* Rebased on top of linux-next/master tag: next-20230731
+* Dropped the already applied patches (dts, opp binding and framework)
+* Moved the interconnect patches to a separate series:
+  https://lore.kernel.org/linux-scsi/20230731145020.41262-1-manivannan.sadhasivam@linaro.org/
+* Moved ufshcd_opp_config_clks() API to ufshcd.c to fix the build failure
+  reported by Kbuild bot: https://lore.kernel.org/all/202307210542.KoLHRbU6-lkp@intel.com/
+* Collected Acks
+* v2: https://lore.kernel.org/all/20230720054100.9940-1-manivannan.sadhasivam@linaro.org/
+
+Changes in v2:
+
+* Added more description to the bindings patch 2/15
+* Fixed dev_pm_opp_put() usage in patch 10/15
+* Added a new patch for adding enums for UFS lanes 14/15
+* Changed the icc variables to mem_bw and cfg_bw and used
+  the enums for gears and lanes in bw_table
+* Collected review tags
+* Added SCSI list and folks
+* Removed duplicate patches
+
+Krzysztof Kozlowski (2):
+  dt-bindings: ufs: common: add OPP table
+  arm64: dts: qcom: sdm845: Add OPP table support to UFSHC
+
+Manivannan Sadhasivam (4):
+  PM / devfreq: Switch to dev_pm_opp_find_freq_{ceil/floor}_indexed()
+    APIs
+  scsi: ufs: core: Add OPP support for scaling clocks and regulators
+  scsi: ufs: host: Add support for parsing OPP
+  arm64: dts: qcom: sm8250: Add OPP table support to UFSHC
+
+ .../devicetree/bindings/ufs/ufs-common.yaml   |  36 +++-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  42 +++-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          |  39 +++-
+ drivers/devfreq/devfreq.c                     |  14 +-
+ drivers/ufs/core/ufshcd.c                     | 179 ++++++++++++++----
+ drivers/ufs/host/ufshcd-pltfrm.c              |  78 ++++++++
+ include/ufs/ufshcd.h                          |   7 +
+ 7 files changed, 332 insertions(+), 63 deletions(-)
+
+-- 
+2.25.1
+
