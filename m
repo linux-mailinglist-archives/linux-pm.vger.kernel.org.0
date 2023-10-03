@@ -2,57 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E70B17B6F87
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 19:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0CE7B700F
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 19:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240501AbjJCRTr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Oct 2023 13:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
+        id S231899AbjJCRko (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Oct 2023 13:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231368AbjJCRTr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 13:19:47 -0400
-Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4832AA6;
-        Tue,  3 Oct 2023 10:19:42 -0700 (PDT)
-Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bee.tesarici.cz (Postfix) with ESMTPSA id 5264F18E6B0;
-        Tue,  3 Oct 2023 19:19:40 +0200 (CEST)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-        t=1696353580; bh=uIqcEc6QXN5oqzFcRDgHN1UWgTJW8U+1gePOILpg2Ig=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KrH5AJ2BjBG8jyW1HnwaG4XpTzgsiquCDERxOh7SbH6iKEgFkrFfvG+ItY/jnmU6E
-         F7u8in3ZYmZtF+Lq6ptuoqbugveTH91QHnwzkWOyXudf2Yd2CXJ3s4v8YebxxpDa7v
-         0G3AyHbi4eCw1pn/tUSG7Z1hwQFukeT3vXxDa4SIbuzEvcyU1hH5EMCJj3IVkVjdDO
-         8PulPdd9JNW6CwDJEuyIE4417N4Ffi1coIw5OAc2el/PCYdmt7iZbQNY2TDsXhbS29
-         Zq6xChoX2xniOmqqsdrw2LLy9K9Xkeq8V1QoUO2sKgAXA5pEdP7s5OeKCkZb+2b8rS
-         YXDXy71ENZUpg==
-Date:   Tue, 3 Oct 2023 19:19:34 +0200
-From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Damien Le Moal <dlemoal@kernel.org>, linux-pm@vger.kernel.org,
-        linux-ide@vger.kernel.org
-Subject: Re: Thinkpad E595 system deadlock on resume from S3
-Message-ID: <20231003191934.60706bef@meshulam.tesarici.cz>
-In-Reply-To: <CAJZ5v0hXZx3ghWrfcTmTzwDJzYqLpzeBhx+CqBjg65Dngc2eRg@mail.gmail.com>
-References: <20230930122054.3cf727a4@meshulam>
-        <20231003113135.38384a87@meshulam.tesarici.cz>
-        <CAJZ5v0i-FV29TUq8E=FGxB_dRKEJvdoKxzwPGAX0C9vnD7O8eg@mail.gmail.com>
-        <20231003130240.0c64bc2e@meshulam.tesarici.cz>
-        <CAJZ5v0hvEyVAwA3r5OWv4W_vTbRXt_Oxv+Avvn6N0=1RoN=NCg@mail.gmail.com>
-        <20231003144019.24566b05@meshulam.tesarici.cz>
-        <CAJZ5v0jttFqKE_CLpF+-vJ_wDAuOo_BUS33htpFUs6idNMugKg@mail.gmail.com>
-        <20231003145110.1f22adfb@meshulam.tesarici.cz>
-        <CAJZ5v0jbT0DaDpFpLbzO46-Yg6QJ-MrcZAuP+c60q9KpFHAtpQ@mail.gmail.com>
-        <20231003171710.2c6a913c@meshulam.tesarici.cz>
-        <CAJZ5v0hXZx3ghWrfcTmTzwDJzYqLpzeBhx+CqBjg65Dngc2eRg@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
+        with ESMTP id S231845AbjJCRko (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 13:40:44 -0400
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36BDBD;
+        Tue,  3 Oct 2023 10:40:40 -0700 (PDT)
+Received: from [192.168.7.187] ([76.103.185.250])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 393Hb5dd1691810
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Tue, 3 Oct 2023 10:37:05 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 393Hb5dd1691810
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023091101; t=1696354628;
+        bh=pV/MsKucrKusG2Y/zWi1V+/lmmij2RlMuAhslhwjBGY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ie+iUNG++evbuJJIH4LlVE0y2kO/anm5d/KQwE81BTvjNrZxoKeTGUjvRP94gJyOW
+         sFFwd0PevILqj6hD6U2qhBArrigpGLpXM8fHjGxeiGT+ars6lZM63/+CSvM7JcI6Ce
+         i/1trzuvN3L4daAHaFAv1RVz8+foCPfh2Rmolh8QxMA/Xrvn95KJpYWuswaXnnZolW
+         YcYqO+AG6Y17Wv5Ou8D9OODEB0u/t1bXtlvbsLuz6TiurGl9UM3D82tn97PdzO/W6E
+         Iv0qGHQNJAC0k8ul3K4pRSLLwEm7lTKyXhJ30LwwQxK+sgBP6hHFmJXb3j2p6StTgX
+         RDV3jN2oQ7j6A==
+Message-ID: <7aee5021-8bb6-4343-b746-a8417af030a9@zytor.com>
+Date:   Tue, 3 Oct 2023 10:37:02 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cpu-hotplug: provide prototypes for arch CPU registration
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Gavin Shan <gshan@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-acpi@vger.kernel.org,
+        James Morse <james.morse@arm.com>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        jianyong.wu@arm.com, justin.he@arm.com,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Salil Mehta <salil.mehta@huawei.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-ia64@vger.kernel.org
+References: <E1qkoRr-0088Q8-Da@rmk-PC.armlinux.org.uk>
+ <dd4dee9e-4d75-e1e6-04c8-82d84b28fd35@redhat.com>
+ <ZRIU/yFrbFbIR7zZ@shell.armlinux.org.uk>
+ <ZRwmj/e+jAXFfvCm@shell.armlinux.org.uk>
+Content-Language: en-US
+From:   Xin Li <xin@zytor.com>
+Autocrypt: addr=xin@zytor.com; keydata=
+ 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
+ l75w1xInsg==
+In-Reply-To: <ZRwmj/e+jAXFfvCm@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,247 +103,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 3 Oct 2023 18:48:27 +0200
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
+On 10/3/2023 7:34 AM, Russell King (Oracle) wrote:
+>>>>
+>>>> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+>>>> ---
+>>>> Changes since RFC v2:
+>>>>    - drop ia64 changes, as ia64 has already been removed.
+>>>>
 
-> On Tue, Oct 3, 2023 at 5:18=E2=80=AFPM Petr Tesa=C5=99=C3=ADk <petr@tesar=
-ici.cz> wrote:
-> >
-> > On Tue, 3 Oct 2023 14:57:46 +0200
-> > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> > =20
-> > > On Tue, Oct 3, 2023 at 2:51=E2=80=AFPM Petr Tesa=C5=99=C3=ADk <petr@t=
-esarici.cz> wrote: =20
-> > > >
-> > > > On Tue, 3 Oct 2023 14:48:13 +0200
-> > > > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> > > > =20
-> > > > > On Tue, Oct 3, 2023 at 2:40=E2=80=AFPM Petr Tesa=C5=99=C3=ADk <pe=
-tr@tesarici.cz> wrote: =20
-> > > > > >
-> > > > > > On Tue, 3 Oct 2023 14:34:56 +0200
-> > > > > > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> > > > > > =20
-> > > > > > > On Tue, Oct 3, 2023 at 1:02=E2=80=AFPM Petr Tesa=C5=99=C3=ADk=
- <petr@tesarici.cz> wrote: =20
-> > > > > > > >
-> > > > > > > > On Tue, 3 Oct 2023 12:15:10 +0200
-> > > > > > > > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> > > > > > > > =20
-> > > > > > > > > On Tue, Oct 3, 2023 at 11:31=E2=80=AFAM Petr Tesa=C5=99=
-=C3=ADk <petr@tesarici.cz> wrote: =20
-> > > > > > > > > >
-> > > > > > > > > > Hi again (adding more recipients),
-> > > > > > > > > >
-> > > > > > > > > > On Sat, 30 Sep 2023 12:20:54 +0200
-> > > > > > > > > > Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz> wrote:
-> > > > > > > > > > =20
-> > > > > > > > > > > Hi all,
-> > > > > > > > > > >
-> > > > > > > > > > > this time no patch (yet). In short, my Thinkpad runni=
-ng v6.6-rc3 fails
-> > > > > > > > > > > to resume from S3. It also fails the same way with Tu=
-mbleweed v6.5
-> > > > > > > > > > > kernel. I was able to capture a crash dump of the v6.=
-5 kernel, and
-> > > > > > > > > > > here's my analysis:
-> > > > > > > > > > >
-> > > > > > > > > > > The system never gets to waking up my SATA SSD disk:
-> > > > > > > > > > >
-> > > > > > > > > > > [0:0:0:0]    disk    ATA      KINGSTON SEDC600 H5.1  =
-/dev/sda
-> > > > > > > > > > >
-> > > > > > > > > > > There is a pending resume work for kworker/u32:12 (PI=
-D 11032), but this
-> > > > > > > > > > > worker is stuck in 'D' state:
-> > > > > > > > > > > =20
-> > > > > > > > > > > >>> prog.stack_trace(11032) =20
-> > > > > > > > > > > #0  context_switch (../kernel/sched/core.c:5381:2)
-> > > > > > > > > > > #1  __schedule (../kernel/sched/core.c:6710:8)
-> > > > > > > > > > > #2  schedule (../kernel/sched/core.c:6786:3)
-> > > > > > > > > > > #3  schedule_preempt_disabled (../kernel/sched/core.c=
-:6845:2)
-> > > > > > > > > > > #4  __mutex_lock_common (../kernel/locking/mutex.c:67=
-9:3)
-> > > > > > > > > > > #5  __mutex_lock (../kernel/locking/mutex.c:747:9)
-> > > > > > > > > > > #6  acpi_device_hotplug (../drivers/acpi/scan.c:382:2)
-> > > > > > > > > > > #7  acpi_hotplug_work_fn (../drivers/acpi/osl.c:1162:=
-2)
-> > > > > > > > > > > #8  process_one_work (../kernel/workqueue.c:2600:2)
-> > > > > > > > > > > #9  worker_thread (../kernel/workqueue.c:2751:4)
-> > > > > > > > > > > #10 kthread (../kernel/kthread.c:389:9)
-> > > > > > > > > > > #11 ret_from_fork (../arch/x86/kernel/process.c:145:3)
-> > > > > > > > > > > #12 ret_from_fork_asm+0x1b/0x20 (../arch/x86/entry/en=
-try_64.S:304)
-> > > > > > > > > > >
-> > > > > > > > > > > acpi_device_hotplug() tries to acquire acpi_scan_lock=
-, which is held by
-> > > > > > > > > > > systemd-sleep (PID 11002). This task is also in 'D' s=
-tate:
-> > > > > > > > > > > =20
-> > > > > > > > > > > >>> prog.stack_trace(11002) =20
-> > > > > > > > > > > #0  context_switch (../kernel/sched/core.c:5381:2)
-> > > > > > > > > > > #1  __schedule (../kernel/sched/core.c:6710:8)
-> > > > > > > > > > > #2  schedule (../kernel/sched/core.c:6786:3)
-> > > > > > > > > > > #3  schedule_preempt_disabled (../kernel/sched/core.c=
-:6845:2)
-> > > > > > > > > > > #4  __mutex_lock_common (../kernel/locking/mutex.c:67=
-9:3)
-> > > > > > > > > > > #5  __mutex_lock (../kernel/locking/mutex.c:747:9)
-> > > > > > > > > > > #6  device_lock (../include/linux/device.h:958:2)
-> > > > > > > > > > > #7  device_complete (../drivers/base/power/main.c:106=
-3:2)
-> > > > > > > > > > > #8  dpm_complete (../drivers/base/power/main.c:1121:3)
-> > > > > > > > > > > #9  suspend_devices_and_enter (../kernel/power/suspen=
-d.c:516:2) =20
-> > > > > > > > > >
-> > > > > > > > > > I believe the issue must be somewhere here. The whole s=
-uspend and
-> > > > > > > > > > resume logic in suspend_devices_and_enter() is framed by
-> > > > > > > > > > platform_suspend_begin() and platform_resume_end().
-> > > > > > > > > >
-> > > > > > > > > > My system is an ACPI system, so suspend_ops contains:
-> > > > > > > > > >
-> > > > > > > > > >         .begin =3D acpi_suspend_begin,
-> > > > > > > > > >         .end =3D acpi_pm_end,
-> > > > > > > > > >
-> > > > > > > > > > Now, acpi_suspend_begin() acquires acpi_scan_lock throu=
-gh
-> > > > > > > > > > acpi_pm_start(), and the lock is not released until acp=
-i_pm_end().
-> > > > > > > > > > Since dpm_complete() waits for the completion of a work=
- that tries to
-> > > > > > > > > > acquire acpi_scan_lock, the system will deadlock. =20
-> > > > > > > > >
-> > > > > > > > > So holding acpi_scan_lock across suspend-resume is basica=
-lly to
-> > > > > > > > > prevent the hotplug from taking place then IIRC.
-> > > > > > > > > =20
-> > > > > > > > > > AFAICS either:
-> > > > > > > > > >
-> > > > > > > > > > a. the ACPI lock cannot be held while dpm_complete() ru=
-ns, or
-> > > > > > > > > > b. ata_scsi_dev_rescan() must not be scheduled before t=
-he system is
-> > > > > > > > > > resumed, or
-> > > > > > > > > > c. acpi_device_hotplug() must be implemented without ta=
-king dev->mutex.
-> > > > > > > > > >
-> > > > > > > > > > My gut feeling is that b. is the right answer. =20
-> > > > > > > > >
-> > > > > > > > > It's been a while since I looked at that code last time, =
-but then it
-> > > > > > > > > has not changed for quite some time too.
-> > > > > > > > >
-> > > > > > > > > It looks like the acpi_device_hotplug() path attempts to =
-acquire
-> > > > > > > > > acpi_scan_lock() while holding dev->mutex which is kind o=
-f silly.  I
-> > > > > > > > > need to check that, though. =20
-> > > > > > > >
-> > > > > > > > Thanks for your willingness. Well, it's not quite what you =
-describe. If
-> > > > > > > > it was a simple ABBA deadlock, then it would be reported by=
- lockdep.
-> > > > > > > > No, it's more complicated:
-> > > > > > > >
-> > > > > > > > 1. suspend_devices_and_enter() holds acpi_scan_lock,
-> > > > > > > > 2. an ACPI hotplug work runs, but acpi_device_hotplug() goe=
-s to sleep
-> > > > > > > >    when it gets to acquiring acpi_scan_lock,
-> > > > > > > > 3. ata_scsi_dev_rescan() submits a SCSI command and waits f=
-or its
-> > > > > > > >    completion while holding dev->mutex,
-> > > > > > > > 4. the SCSI completion work happens to be put on the same w=
-orkqueue as
-> > > > > > > >    the ACPI hotplug work in step 2,
-> > > > > > > >    ^^^--- THIS is how the two events are serialized! =20
-> > > > > > >
-> > > > > > > Which is unexpected.
-> > > > > > >
-> > > > > > > And quite honestly I'm not sure how this can happen, because
-> > > > > > > acpi_hotplug_schedule() uses a dedicated workqueue and it is =
-called
-> > > > > > > from (a) the "eject" sysfs attribute (which cannot happen whi=
-le system
-> > > > > > > suspend-resume is in progress) and (b) acpi_bus_notify() whic=
-h has
-> > > > > > > nothing to do with SCSI. =20
-> > > > > >
-> > > > > > Oh, you're right, and I was too quick. They cannot be on the sa=
-me
-> > > > > > queue...
-> > > > > > =20
-> > > > > > > Maybe the workqueue used for the SCSI completion is freezable=
-? =20
-> > > > > >
-> > > > > > Yes, that's it:
-> > > > > >
-> > > > > > *(struct workqueue_struct *)0xffff97d240b2fe00 =3D {
-> > > > > > /* ... */
-> > > > > >         .flags =3D (unsigned int)4,
-> > > > > > /* WQ_FREEZABLE            =3D 1 << 2 */
-> > > > > >
-> > > > > > Good. But if this workqueue is frozen, the system still cannot =
-make
-> > > > > > progress. =20
-> > > > >
-> > > > > The problem seems to be that dev->mutex is held while the work it=
-em
-> > > > > goes to a freezable workqueue and is waited for, which is an almo=
-st
-> > > > > guaranteed deadlock scenario. =20
-> > > >
-> > > > Ah. Thanks for explanation and direction! I'm going to dive into the
-> > > > block layer and/or SCSI code and bug other people with my findings.=
- =20
-> > >
-> > > Please feel free to CC me on that in case I can help. =20
-> >
-> > And here I am again... The frozen workqueue is in fact pm_wq, and the
-> > work item that is waited for is pm_runtime_work. The block layer calls
-> > pm_request_resume() on the device to resume the queue. =20
->=20
-> If it called pm_runtime_resume() instead, this might work.
->=20
-> > I bet the queue should not be resumed this early. In fact, it seems
-> > that this is somewhat known to the ATA developers, because
-> > ata_scsi_dev_rescan() contains this beautiful comment and code:
-> >
-> >                         /*
-> >                          * If the rescan work was scheduled because of =
-a resume
-> >                          * event, the port is already fully resumed, bu=
-t the
-> >                          * SCSI device may not yet be fully resumed. In=
- such
-> >                          * case, executing scsi_rescan_device() may cau=
-se a
-> >                          * deadlock with the PM code on device_lock(). =
-Prevent
-> >                          * this by giving up and retrying rescan after =
-a short
-> >                          * delay.
-> >                          */
-> >                         delay_rescan =3D sdev->sdev_gendev.power.is_sus=
-pended;
-> >                         if (delay_rescan) {
-> >                                 scsi_device_put(sdev);
-> >                                 break;
-> >                         }
-> >
-> > It just doesn't seem to work as expected, at least not in my case. =20
->=20
-> Well, calling pm_request_resume() and waiting for the resume to
-> actually happen is problematic regardless.  It is just better to call
-> pm_runtime_resume() to synchronously resume the device instead.
+If this is RFC v2, we put "RFC v2" in the subject, then people know you
+are sending a newer version.  People are busy, and your patch could be 
+skipped if it appears the same as a previous one.
 
-That code is in blk_pm_resume_queue(), which is pretty deep in the
-block layer. I can imagine that pm_runtime_resume() cannot be always
-used there. We may have to add an alternative API just for resume.
-
-OTOH this may in fact be the correct fix.
-
-But I want to try out a few other things before proposing a solution.
-
-Petr T
