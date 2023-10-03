@@ -2,192 +2,265 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05BDC7B6C17
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 16:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1727B6CDF
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 17:18:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240118AbjJCOut (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Oct 2023 10:50:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56396 "EHLO
+        id S230511AbjJCPSi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Oct 2023 11:18:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239511AbjJCOut (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 10:50:49 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04981A7;
-        Tue,  3 Oct 2023 07:50:46 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 393CVwju002045;
-        Tue, 3 Oct 2023 14:50:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=qcppdkim1;
- bh=fQyq13eSj4y6UdArCi6DtNxpAUAz2ZeWNxOn/5XVvGo=;
- b=PZiBdyAphtTqQHUU9tQcs+BjyhS+OUZ/LrN5lB0T2OsSPCLdoOPxBMtC1ua+pc6lrzuI
- PemSin+tG/0JT/YZQSCVm62NUnBPe+iF432vwdDmPzWYPsrW47zAsVUiFmKOwbNaWiq+
- WAjD4Jb/rDfc+laK4PwOY8AM1c0/Bu0QvHCEB4wi7sNjUTrKjEkR2R44p39nc6oD7owX
- zI9TSfSCY0+X9ArQWc43eDF458WnMfb+xVzBUvJcRgVxxGWoEZdPdiGQW82VyfvmQkuh
- XRC5eWWYeKnc0OYvNcYuK69ymN1M/N7lj8/ab293umL36U6QllEDsNzm5NKWx8cdbIUt kQ== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tgbjj98mj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Oct 2023 14:50:32 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 393EoWQQ031358
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 3 Oct 2023 14:50:32 GMT
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Tue, 3 Oct 2023 07:50:26 -0700
-Date:   Tue, 3 Oct 2023 20:20:23 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Brian Geffon <bgeffon@google.com>
-CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        <kernel@quicinc.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] PM: hibernate: Fix a bug in copying the zero bitmap to
- safe pages
-Message-ID: <4c9e1932-681f-4854-a04d-af9fbc35fc5e@quicinc.com>
-References: <20230929-hib_zero_bitmap_fix-v1-1-6cfdcb785250@quicinc.com>
- <CADyq12znHG_VPLVxSe+2ofX-WR1Uha2hu1MhoUAquMnoD_oP0w@mail.gmail.com>
- <CADyq12x1wZb0Yt3sXR21pQSagT7tGvFmXTBaoeNXkOjPi5-Rnw@mail.gmail.com>
- <e75a57a9-c9df-4dd5-a109-9ae8c49fb3ae@quicinc.com>
- <CADyq12wmda6B1pJvOVhM4=VLwun9n4ef232td70-uGz435SSvg@mail.gmail.com>
+        with ESMTP id S230428AbjJCPSh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 11:18:37 -0400
+Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E17BB4
+        for <linux-pm@vger.kernel.org>; Tue,  3 Oct 2023 08:18:33 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bee.tesarici.cz (Postfix) with ESMTPSA id 5FA0C18D67E;
+        Tue,  3 Oct 2023 17:18:30 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1696346310; bh=1CujshXz8GCIw8PsRmFcl4lb/juGa+lsbhI57czNbSI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bSHpRQ6lneyJBmVPxmFiX+7IesQ6YIIT4kGj5k+mbTj8wpyY7PVLvdbT5lrGvvvCU
+         mMD7tAg0L72QK34ozM9a2zdZYTyUt5GSURFBmw3w0B5yjY3llMpR214wqRfFuDO/db
+         rCT0kaKCcLipb99dP2mTB6OaiC2SM5V/O0ayFikqwWmf8GzzGeVno0/TnexqR3vWsW
+         nNqjRRgqH+9TxAsop3SUdeSRP9wtEAoQPSr/iA+Lh2wyO5k27OpdJMklv63eayYC8v
+         bJqGjYXug0ZdsHS1U4hHoAwdbSiE2o9yRvNOegCxDsV/YFANNMjG1P1Iu58B4mQS5e
+         ApyHSLOWOeQEA==
+Date:   Tue, 3 Oct 2023 17:18:24 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Damien Le Moal <dlemoal@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-ide@vger.kernel.org
+Subject: Re: Thinkpad E595 system deadlock on resume from S3
+Message-ID: <20231003171710.2c6a913c@meshulam.tesarici.cz>
+In-Reply-To: <CAJZ5v0jbT0DaDpFpLbzO46-Yg6QJ-MrcZAuP+c60q9KpFHAtpQ@mail.gmail.com>
+References: <20230930122054.3cf727a4@meshulam>
+        <20231003113135.38384a87@meshulam.tesarici.cz>
+        <CAJZ5v0i-FV29TUq8E=FGxB_dRKEJvdoKxzwPGAX0C9vnD7O8eg@mail.gmail.com>
+        <20231003130240.0c64bc2e@meshulam.tesarici.cz>
+        <CAJZ5v0hvEyVAwA3r5OWv4W_vTbRXt_Oxv+Avvn6N0=1RoN=NCg@mail.gmail.com>
+        <20231003144019.24566b05@meshulam.tesarici.cz>
+        <CAJZ5v0jttFqKE_CLpF+-vJ_wDAuOo_BUS33htpFUs6idNMugKg@mail.gmail.com>
+        <20231003145110.1f22adfb@meshulam.tesarici.cz>
+        <CAJZ5v0jbT0DaDpFpLbzO46-Yg6QJ-MrcZAuP+c60q9KpFHAtpQ@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADyq12wmda6B1pJvOVhM4=VLwun9n4ef232td70-uGz435SSvg@mail.gmail.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: SnhBvkjRGwMo1_QqvnQPyLQ0GXuG-O0W
-X-Proofpoint-ORIG-GUID: SnhBvkjRGwMo1_QqvnQPyLQ0GXuG-O0W
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-03_12,2023-10-02_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
- clxscore=1015 impostorscore=0 phishscore=0 malwarescore=0
- priorityscore=1501 mlxlogscore=475 adultscore=0 suspectscore=0 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310030110
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 03, 2023 at 10:36:25AM -0400, Brian Geffon wrote:
-> On Mon, Oct 2, 2023 at 11:05 PM Pavan Kondeti <quic_pkondeti@quicinc.com> wrote:
+On Tue, 3 Oct 2023 14:57:46 +0200
+"Rafael J. Wysocki" <rafael@kernel.org> wrote:
+
+> On Tue, Oct 3, 2023 at 2:51=E2=80=AFPM Petr Tesa=C5=99=C3=ADk <petr@tesar=
+ici.cz> wrote:
 > >
-> > On Mon, Oct 02, 2023 at 02:34:20PM -0400, Brian Geffon wrote:
-> > > On Mon, Oct 2, 2023 at 1:56 PM Brian Geffon <bgeffon@google.com> wrote:
+> > On Tue, 3 Oct 2023 14:48:13 +0200
+> > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+> > =20
+> > > On Tue, Oct 3, 2023 at 2:40=E2=80=AFPM Petr Tesa=C5=99=C3=ADk <petr@t=
+esarici.cz> wrote: =20
 > > > >
-> > > > On Fri, Sep 29, 2023 at 1:31 PM Pavankumar Kondeti
-> > > > <quic_pkondeti@quicinc.com> wrote:
+> > > > On Tue, 3 Oct 2023 14:34:56 +0200
+> > > > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+> > > > =20
+> > > > > On Tue, Oct 3, 2023 at 1:02=E2=80=AFPM Petr Tesa=C5=99=C3=ADk <pe=
+tr@tesarici.cz> wrote: =20
+> > > > > >
+> > > > > > On Tue, 3 Oct 2023 12:15:10 +0200
+> > > > > > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+> > > > > > =20
+> > > > > > > On Tue, Oct 3, 2023 at 11:31=E2=80=AFAM Petr Tesa=C5=99=C3=AD=
+k <petr@tesarici.cz> wrote: =20
+> > > > > > > >
+> > > > > > > > Hi again (adding more recipients),
+> > > > > > > >
+> > > > > > > > On Sat, 30 Sep 2023 12:20:54 +0200
+> > > > > > > > Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz> wrote:
+> > > > > > > > =20
+> > > > > > > > > Hi all,
+> > > > > > > > >
+> > > > > > > > > this time no patch (yet). In short, my Thinkpad running v=
+6.6-rc3 fails
+> > > > > > > > > to resume from S3. It also fails the same way with Tumble=
+weed v6.5
+> > > > > > > > > kernel. I was able to capture a crash dump of the v6.5 ke=
+rnel, and
+> > > > > > > > > here's my analysis:
+> > > > > > > > >
+> > > > > > > > > The system never gets to waking up my SATA SSD disk:
+> > > > > > > > >
+> > > > > > > > > [0:0:0:0]    disk    ATA      KINGSTON SEDC600 H5.1  /dev=
+/sda
+> > > > > > > > >
+> > > > > > > > > There is a pending resume work for kworker/u32:12 (PID 11=
+032), but this
+> > > > > > > > > worker is stuck in 'D' state:
+> > > > > > > > > =20
+> > > > > > > > > >>> prog.stack_trace(11032) =20
+> > > > > > > > > #0  context_switch (../kernel/sched/core.c:5381:2)
+> > > > > > > > > #1  __schedule (../kernel/sched/core.c:6710:8)
+> > > > > > > > > #2  schedule (../kernel/sched/core.c:6786:3)
+> > > > > > > > > #3  schedule_preempt_disabled (../kernel/sched/core.c:684=
+5:2)
+> > > > > > > > > #4  __mutex_lock_common (../kernel/locking/mutex.c:679:3)
+> > > > > > > > > #5  __mutex_lock (../kernel/locking/mutex.c:747:9)
+> > > > > > > > > #6  acpi_device_hotplug (../drivers/acpi/scan.c:382:2)
+> > > > > > > > > #7  acpi_hotplug_work_fn (../drivers/acpi/osl.c:1162:2)
+> > > > > > > > > #8  process_one_work (../kernel/workqueue.c:2600:2)
+> > > > > > > > > #9  worker_thread (../kernel/workqueue.c:2751:4)
+> > > > > > > > > #10 kthread (../kernel/kthread.c:389:9)
+> > > > > > > > > #11 ret_from_fork (../arch/x86/kernel/process.c:145:3)
+> > > > > > > > > #12 ret_from_fork_asm+0x1b/0x20 (../arch/x86/entry/entry_=
+64.S:304)
+> > > > > > > > >
+> > > > > > > > > acpi_device_hotplug() tries to acquire acpi_scan_lock, wh=
+ich is held by
+> > > > > > > > > systemd-sleep (PID 11002). This task is also in 'D' state:
+> > > > > > > > > =20
+> > > > > > > > > >>> prog.stack_trace(11002) =20
+> > > > > > > > > #0  context_switch (../kernel/sched/core.c:5381:2)
+> > > > > > > > > #1  __schedule (../kernel/sched/core.c:6710:8)
+> > > > > > > > > #2  schedule (../kernel/sched/core.c:6786:3)
+> > > > > > > > > #3  schedule_preempt_disabled (../kernel/sched/core.c:684=
+5:2)
+> > > > > > > > > #4  __mutex_lock_common (../kernel/locking/mutex.c:679:3)
+> > > > > > > > > #5  __mutex_lock (../kernel/locking/mutex.c:747:9)
+> > > > > > > > > #6  device_lock (../include/linux/device.h:958:2)
+> > > > > > > > > #7  device_complete (../drivers/base/power/main.c:1063:2)
+> > > > > > > > > #8  dpm_complete (../drivers/base/power/main.c:1121:3)
+> > > > > > > > > #9  suspend_devices_and_enter (../kernel/power/suspend.c:=
+516:2) =20
+> > > > > > > >
+> > > > > > > > I believe the issue must be somewhere here. The whole suspe=
+nd and
+> > > > > > > > resume logic in suspend_devices_and_enter() is framed by
+> > > > > > > > platform_suspend_begin() and platform_resume_end().
+> > > > > > > >
+> > > > > > > > My system is an ACPI system, so suspend_ops contains:
+> > > > > > > >
+> > > > > > > >         .begin =3D acpi_suspend_begin,
+> > > > > > > >         .end =3D acpi_pm_end,
+> > > > > > > >
+> > > > > > > > Now, acpi_suspend_begin() acquires acpi_scan_lock through
+> > > > > > > > acpi_pm_start(), and the lock is not released until acpi_pm=
+_end().
+> > > > > > > > Since dpm_complete() waits for the completion of a work tha=
+t tries to
+> > > > > > > > acquire acpi_scan_lock, the system will deadlock. =20
+> > > > > > >
+> > > > > > > So holding acpi_scan_lock across suspend-resume is basically =
+to
+> > > > > > > prevent the hotplug from taking place then IIRC.
+> > > > > > > =20
+> > > > > > > > AFAICS either:
+> > > > > > > >
+> > > > > > > > a. the ACPI lock cannot be held while dpm_complete() runs, =
+or
+> > > > > > > > b. ata_scsi_dev_rescan() must not be scheduled before the s=
+ystem is
+> > > > > > > > resumed, or
+> > > > > > > > c. acpi_device_hotplug() must be implemented without taking=
+ dev->mutex.
+> > > > > > > >
+> > > > > > > > My gut feeling is that b. is the right answer. =20
+> > > > > > >
+> > > > > > > It's been a while since I looked at that code last time, but =
+then it
+> > > > > > > has not changed for quite some time too.
+> > > > > > >
+> > > > > > > It looks like the acpi_device_hotplug() path attempts to acqu=
+ire
+> > > > > > > acpi_scan_lock() while holding dev->mutex which is kind of si=
+lly.  I
+> > > > > > > need to check that, though. =20
+> > > > > >
+> > > > > > Thanks for your willingness. Well, it's not quite what you desc=
+ribe. If
+> > > > > > it was a simple ABBA deadlock, then it would be reported by loc=
+kdep.
+> > > > > > No, it's more complicated:
+> > > > > >
+> > > > > > 1. suspend_devices_and_enter() holds acpi_scan_lock,
+> > > > > > 2. an ACPI hotplug work runs, but acpi_device_hotplug() goes to=
+ sleep
+> > > > > >    when it gets to acquiring acpi_scan_lock,
+> > > > > > 3. ata_scsi_dev_rescan() submits a SCSI command and waits for i=
+ts
+> > > > > >    completion while holding dev->mutex,
+> > > > > > 4. the SCSI completion work happens to be put on the same workq=
+ueue as
+> > > > > >    the ACPI hotplug work in step 2,
+> > > > > >    ^^^--- THIS is how the two events are serialized! =20
 > > > > >
-> > > > > The following crash is observed 100% of the time during resume from
-> > > > > the hibernation on a x86 QEMU system.
+> > > > > Which is unexpected.
 > > > > >
-> > > > > [   12.931887]  ? __die_body+0x1a/0x60
-> > > > > [   12.932324]  ? page_fault_oops+0x156/0x420
-> > > > > [   12.932824]  ? search_exception_tables+0x37/0x50
-> > > > > [   12.933389]  ? fixup_exception+0x21/0x300
-> > > > > [   12.933889]  ? exc_page_fault+0x69/0x150
-> > > > > [   12.934371]  ? asm_exc_page_fault+0x26/0x30
-> > > > > [   12.934869]  ? get_buffer.constprop.0+0xac/0x100
-> > > > > [   12.935428]  snapshot_write_next+0x7c/0x9f0
-> > > > > [   12.935929]  ? submit_bio_noacct_nocheck+0x2c2/0x370
-> > > > > [   12.936530]  ? submit_bio_noacct+0x44/0x2c0
-> > > > > [   12.937035]  ? hib_submit_io+0xa5/0x110
-> > > > > [   12.937501]  load_image+0x83/0x1a0
-> > > > > [   12.937919]  swsusp_read+0x17f/0x1d0
-> > > > > [   12.938355]  ? create_basic_memory_bitmaps+0x1b7/0x240
-> > > > > [   12.938967]  load_image_and_restore+0x45/0xc0
-> > > > > [   12.939494]  software_resume+0x13c/0x180
-> > > > > [   12.939994]  resume_store+0xa3/0x1d0
-> > > > >
-> > > > > The commit being fixed introduced a bug in copying the zero bitmap
-> > > > > to safe pages. A temporary bitmap is allocated in prepare_image()
-> > > > > to make a copy of zero bitmap after the unsafe pages are marked.
-> > > > > Freeing this temporary bitmap later results in an inconsistent state
-> > > > > of unsafe pages. Since free bit is left as is for this temporary bitmap
-> > > > > after free, these pages are treated as unsafe pages when they are
-> > > > > allocated again. This results in incorrect calculation of the number
-> > > > > of pages pre-allocated for the image.
-> > > > >
-> > > > > nr_pages = (nr_zero_pages + nr_copy_pages) - nr_highmem - allocated_unsafe_pages;
-> > > > >
-> > > > > The allocate_unsafe_pages is estimated to be higher than the actual
-> > > > > which results in running short of pages in safe_pages_list. Hence the
-> > > > > crash is observed in get_buffer() due to NULL pointer access of
-> > > > > safe_pages_list.
+> > > > > And quite honestly I'm not sure how this can happen, because
+> > > > > acpi_hotplug_schedule() uses a dedicated workqueue and it is call=
+ed
+> > > > > from (a) the "eject" sysfs attribute (which cannot happen while s=
+ystem
+> > > > > suspend-resume is in progress) and (b) acpi_bus_notify() which has
+> > > > > nothing to do with SCSI. =20
 > > > >
-> > > > After reading through the code, perhaps I'm missing something, I'm not
-> > > > sure that this is really fixing the problem.
+> > > > Oh, you're right, and I was too quick. They cannot be on the same
+> > > > queue...
+> > > > =20
+> > > > > Maybe the workqueue used for the SCSI completion is freezable? =20
 > > > >
-> > > > It seems like the problem would be that memory_bm_create() results in
-> > > > calls to get_image_page() w/ safe_needed = PG_ANY == 0, meaning that
-> > > > get_image_page() will not touch allocated_unsafe_pages and instead
-> > > > will mark the page as in use by setting it in the forbidden_pages_map
-> > > > and the free_pages_map simultaneously. The problem is that the
-> > > > free_pages_map was already populated by the call to mark_unsafe_pages,
-> > > > meaning that if we allocated a safe page in get_image_page() we just
-> > > > set the free bit when it otherwise should not be set.
+> > > > Yes, that's it:
 > > > >
-> > > > When the page is later free'd via the call to memory_bm_free(&tmp,
-> > > > PG_UNSAFE_KEEP), it results in calls to free_image_page() w/
-> > > > clear_page_nosave = PG_UNSAFE_KEEP == 0. This means that we do not
-> > > > touch the free_pages_map because we don't call
-> > > > swsusp_unset_page_free().
+> > > > *(struct workqueue_struct *)0xffff97d240b2fe00 =3D {
+> > > > /* ... */
+> > > >         .flags =3D (unsigned int)4,
+> > > > /* WQ_FREEZABLE            =3D 1 << 2 */
 > > > >
-> > > > With all that being said it seems like the correct way to deal with
-> > > > that would be to do:
-> > > >    error = memory_bm_create(&tmp, GFP_ATOMIC, PG_SAFE);
-> > > > Here we know that the pages were not in the free_pages_map initially.
-> > > >
-> > > > Followed by freeing it as:
-> > > >     memory_bm_free(&tmp, PG_UNSAFE_CLEAR);
-> > > > And here we know that swsusp_unset_page_free() will be called making
-> > > > sure the page is not in the free_pages_map afterwards.
-> > > >
-> > > > And that should result in an unchanged free_pages_map. Does that make
-> > > > sense? Please correct me if I'm misunderstanding something.
-> > > >
-> >
-> > Thanks for your review. Appreciate the detailed summary.
-> >
+> > > > Good. But if this workqueue is frozen, the system still cannot make
+> > > > progress. =20
 > > >
-> > > To restate this another way, if I'm reading it correctly, I think the
-> > > outcome is actually nearly the same, the difference is, when
-> > > allocating the bitmap before w/ PG_ANY we're setting bits in the
-> > > free_page_list which will be unset a few lines later in the call to
-> > > mark_unsafe_pages(), and then we won't touch the free_pages_list
-> > > during the memory_bm_free() because it's called with PG_UNSAFE_KEEP.
-> > >
+> > > The problem seems to be that dev->mutex is held while the work item
+> > > goes to a freezable workqueue and is waited for, which is an almost
+> > > guaranteed deadlock scenario. =20
 > >
-> > The current patch and your suggestion both gives the same effect like
-> > you said. Since it is a temporary buffer to hold the zero bit map page, I
-> > did not allocate safe pages. Allocating safe pages means a bit more
-> > work. In this case this it is not completely throw away work but
-> > re-ordering the call seems to be simple here. Pls let me know if you
-> > want to me incorporate your suggestion.
-> 
-> My personal opinion is that PG_SAFE makes a bit more sense, it's not
-> really wasted work as any pages which are not safe end up being added
-> to the allocated_unsafe_pages pool.
-> 
+> > Ah. Thanks for explanation and direction! I'm going to dive into the
+> > block layer and/or SCSI code and bug other people with my findings. =20
+>=20
+> Please feel free to CC me on that in case I can help.
 
-Yes, the extra bit of works does not go waste. I will send v2 with your
-suggestion. Thanks a lot for your review and detailed comments.
+And here I am again... The frozen workqueue is in fact pm_wq, and the
+work item that is waited for is pm_runtime_work. The block layer calls
+pm_request_resume() on the device to resume the queue.
 
-Thanks,
-Pavan
+I bet the queue should not be resumed this early. In fact, it seems
+that this is somewhat known to the ATA developers, because
+ata_scsi_dev_rescan() contains this beautiful comment and code:
 
+			/*
+			 * If the rescan work was scheduled because of a resume
+			 * event, the port is already fully resumed, but the
+			 * SCSI device may not yet be fully resumed. In such
+			 * case, executing scsi_rescan_device() may cause a
+			 * deadlock with the PM code on device_lock(). Prevent
+			 * this by giving up and retrying rescan after a short
+			 * delay.
+			 */
+			delay_rescan =3D sdev->sdev_gendev.power.is_suspended;
+			if (delay_rescan) {
+				scsi_device_put(sdev);
+				break;
+			}
+
+It just doesn't seem to work as expected, at least not in my case.
+
+Petr T
