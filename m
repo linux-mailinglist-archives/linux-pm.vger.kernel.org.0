@@ -2,197 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D640B7B6046
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 07:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6B67B6328
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 10:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239127AbjJCFLC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Oct 2023 01:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50406 "EHLO
+        id S229835AbjJCIF7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Oct 2023 04:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239148AbjJCFK6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 01:10:58 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2063.outbound.protection.outlook.com [40.107.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B395B4;
-        Mon,  2 Oct 2023 22:10:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GCGi79T2aSazPDthvG+cKnC8OxNvR0PRILvVa9Ok57ytH/DgmEVQBhgK3yq/wuEInXuMQFkL/iFwYxpz3IkzDb2CU4PRPSZejuX6feduFE2QJpSXgXduspoln/eRKS4kDFAiRvr7dczDiimtHH1jtxL+mR3Li3k9ZUSja/rqnpNdfUqfV14l0sD4+fTiTzkg3vaYgXI8PUSZCDGFT+nN99JtAgCQV8nMKt8221z1yriEmbid/EjczNeFe3PBRl43oro8bg5y8q75KVY6q+h84w3hkW/GpYmod0fAPGgxkZB6UJh/flagM0XDmNpjdDdyEqdSvMpCaEAQEhdjv8fvmQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XQa8JedNR1fo25+2UQDrWIJDmzjgNihz4DK5NAGM+7A=;
- b=Aoqu4x1iGZxjPOuwwKC9GedcScotSXNFWUu+pvmtseI7F8mGuUnt/qKg72dB6UGNZ5Hjco8wyPoUKT7J0wbESOYaTc/kugQR2/DFytHGRMtwA3YwbYpEDng1/91EyjfuytkEwqbnUB1VmpdjnAH8jMD9edab9qnQFGj9V8oJ6zSEBUm+0QNmwWMUCudbwCLT1l1UHjDkUSuUUKvgocJFsxgDZx/9rp8ByZ82DGvODgHOC6wmXhRnFyAv5S/DXTkNK1gKegDx0Ife5nNZN8ZejsN5+pwydnuQZsmV7U/8esT1a6vs8W3U5y9UyTeJ3RCMJFuMx99WiZPLwcqDDR2jHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XQa8JedNR1fo25+2UQDrWIJDmzjgNihz4DK5NAGM+7A=;
- b=0SV3wbxp8rYMZ1oLLD1UfuZFj/o/2YmyTln7bD5iCShfYt2QJGMBZkWJMO4oOqXqy32/lkl/yN6fPpSmRXRf152MHu2i1NBY/ils3Tjv39G7GDf9q0euTGYfmluh5RhpDk+zsRMVP+uMhzwV0lyv8z9e2xSM5C+a9pg7AgVTH3A=
-Received: from BYAPR11CA0055.namprd11.prod.outlook.com (2603:10b6:a03:80::32)
- by DM4PR12MB5724.namprd12.prod.outlook.com (2603:10b6:8:5f::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6838.28; Tue, 3 Oct 2023 05:10:52 +0000
-Received: from CO1PEPF000042A7.namprd03.prod.outlook.com
- (2603:10b6:a03:80:cafe::8) by BYAPR11CA0055.outlook.office365.com
- (2603:10b6:a03:80::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.31 via Frontend
- Transport; Tue, 3 Oct 2023 05:10:52 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF000042A7.mail.protection.outlook.com (10.167.243.36) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6838.14 via Frontend Transport; Tue, 3 Oct 2023 05:10:52 +0000
-Received: from ethanolxb491host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 3 Oct
- 2023 00:10:51 -0500
-From:   Swapnil Sapkal <swapnil.sapkal@amd.com>
-To:     <ray.huang@amd.com>, <shuah@kernel.org>
-CC:     <sukrut.bellary@gmail.com>, <li.meng@amd.com>,
-        <gautham.shenoy@amd.com>, <wyes.karny@amd.com>,
-        <Perry.Yuan@amd.com>, <Mario.Limonciello@amd.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Swapnil Sapkal <swapnil.sapkal@amd.com>
-Subject: [PATCH v3 2/2] selftests/amd-pstate: Added option to provide perf binary path
-Date:   Tue, 3 Oct 2023 05:10:06 +0000
-Message-ID: <20231003051006.6343-3-swapnil.sapkal@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231003051006.6343-1-swapnil.sapkal@amd.com>
-References: <20231003051006.6343-1-swapnil.sapkal@amd.com>
+        with ESMTP id S231159AbjJCIF6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 04:05:58 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFC5A1;
+        Tue,  3 Oct 2023 01:05:55 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3937Fhtc026907;
+        Tue, 3 Oct 2023 08:05:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=1tal2cgRC6oqox3sOIDN/YYmG4aPIsYT09lyq1uKd/I=;
+ b=msKMvmHqsCYyTWFmtYXUrbiNspn764yOpGWSgvEoerxHJKuAzU2dahfzq8pMtnUlUFSf
+ rT9nTcyCZ4J39NviAkaP78/kVwo73Ri7K/84tKUwPINhtwzMQfS5/Mwu+0aQ/kf+mIgM
+ ex0eCVPeHeQ6/MxGMXAjeUUElH6Kiy2e4Cc7VtDpCJ4cEIxebu3mWuE7S5WaxP7NUCFD
+ UWH6gu2Bk4wHp1oKF3qFa9k/OVrEOpp0j0cQ8uL0PRkLgZQ+II7XYvMFaGmr27GEmiYI
+ Uc82mX1gMD6QOQ39vqiL/E3bmctbM7iceWtc00iZx9ijjjo2qw7btvjmYBOoG2AQh3SH sw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tgbjkrckc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Oct 2023 08:05:21 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39385KbK012279
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 3 Oct 2023 08:05:20 GMT
+Received: from [10.50.29.64] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Tue, 3 Oct
+ 2023 01:05:14 -0700
+Message-ID: <4c01666b-5f2b-616b-7f07-3c7603ce1bb1@quicinc.com>
+Date:   Tue, 3 Oct 2023 13:35:10 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000042A7:EE_|DM4PR12MB5724:EE_
-X-MS-Office365-Filtering-Correlation-Id: b0e94a4f-5a36-4822-bad6-08dbc3cf1d88
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: F1UYDHcUB9oFBSjVVwJCg3tB1ZM3qDo8OeCUAtrtfmHDlaZADAE6UsGqP5zVC4NCMiX4MTFHa5wRmA363aErNAFSUUllpymr7EAEV9PjBnVf16cMHYxv8uf1LBtCc34A+ePCX3oDXJXA4XIU6AFtQwytuqEav9dHhYo6turT1azolTdfNRVqxe/j6LLRQYkxKqoJ/i9U3wQaH5NRkFlMwUrzyQpoTPlwchg+oJ5ecI/D4/3he/EK1TZa6Y72FhN8stjWaKWXxY4tGoq8srDDNHzKb9hjHxtpc2SS9fKjr5Pk3hr47BvkpxKGjzDh3QT+euevaKJvjLQJrkGsvEYYbr9Hfd2GZqJvfI2QznxBmdbDGLj6af+DQJRrno/vzT4ixXYXKonTigkyxf1DtNU7iG7NGpBGTI51n9xnWuDHC80B6FsxWShRJCW/8Y7heBVGSJGNGTIX3LndtuRrKAundkFsEZ4v6GP4WtB0zhiOO9X7H6fnq1clLmAz1L31hGRoRC+7mxllJQl1Tjc6YT9wHcnUrCD6IHZr/Goy/i3s/uRWT8JgXTWLi5qGyARbpTOSxvt/+8R8LT5lHjs3/105U8bjTBuzlZ8GTg9nENrS1oTvDEl7TV/dEZolMAonUFB+9XiBPHU77AJtfjMSfdOroKQuaW5xMtjrF5sIRjM1IYoYHMJrazO7KOl/uGXj1Jj2fdzTHM1tqe8r1R14zTwNaF80MfwmRCF3LisqfrF/Gf4oHhLTiYSKO4fI1ec7UIL/AyavzhmCiOerGvz8dcdz3g==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(346002)(376002)(396003)(136003)(230922051799003)(64100799003)(1800799009)(451199024)(186009)(82310400011)(40470700004)(46966006)(36840700001)(26005)(70586007)(110136005)(2906002)(44832011)(4326008)(8676002)(5660300002)(316002)(70206006)(54906003)(8936002)(41300700001)(478600001)(6666004)(7696005)(16526019)(36860700001)(336012)(426003)(2616005)(1076003)(47076005)(83380400001)(82740400003)(40460700003)(356005)(81166007)(40480700001)(36756003)(86362001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Oct 2023 05:10:52.2797
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b0e94a4f-5a36-4822-bad6-08dbc3cf1d88
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000042A7.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5724
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: [RFC PATCH 0/4] PM: hibernate: LZ4 compression support
+Content-Language: en-US
+To:     Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>, Tejun Heo <tj@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_kprasan@quicinc.com>, <quic_mpilaniy@quicinc.com>,
+        <quic_shrekk@quicinc.com>, <mpleshivenkov@google.com>,
+        <ericyin@google.com>
+References: <cover.1695711299.git.quic_nprakash@quicinc.com>
+From:   Nikhil V <quic_nprakash@quicinc.com>
+In-Reply-To: <cover.1695711299.git.quic_nprakash@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ljYaXZdlWXbwH_GntMayl7_70nF7fyNx
+X-Proofpoint-ORIG-GUID: ljYaXZdlWXbwH_GntMayl7_70nF7fyNx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-03_05,2023-10-02_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ adultscore=0 suspectscore=0 spamscore=0 impostorscore=0 priorityscore=1501
+ phishscore=0 lowpriorityscore=0 clxscore=1015 mlxlogscore=999 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
+ definitions=main-2310030056
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In selftests/amd-pstate, distro `perf` is used to capture `perf stat`
-while running microbenchmarks. Distro `perf` is not working with
-upstream kernel. Fixed this by providing an option to give the perf
-binary path.
 
-Signed-off-by: Swapnil Sapkal <swapnil.sapkal@amd.com>
----
- tools/testing/selftests/amd-pstate/gitsource.sh |  2 +-
- tools/testing/selftests/amd-pstate/run.sh       | 14 ++++++++++----
- tools/testing/selftests/amd-pstate/tbench.sh    |  2 +-
- 3 files changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/amd-pstate/gitsource.sh b/tools/testing/selftests/amd-pstate/gitsource.sh
-index d0ad2ed5ba9d..5acc065e9e3e 100755
---- a/tools/testing/selftests/amd-pstate/gitsource.sh
-+++ b/tools/testing/selftests/amd-pstate/gitsource.sh
-@@ -87,7 +87,7 @@ run_gitsource()
- 	printf "Make and test gitsource for $1 #$2 make_cpus: $MAKE_CPUS\n"
- 	BACKUP_DIR=$(pwd)
- 	cd $SCRIPTDIR/$git_name
--	perf stat -a --per-socket -I 1000 -e power/energy-pkg/ /usr/bin/time -o $BACKUP_DIR/$OUTFILE_GIT.time-gitsource-$1-$2.log make test -j$MAKE_CPUS > $BACKUP_DIR/$OUTFILE_GIT-perf-$1-$2.log 2>&1
-+	$PERF stat -a --per-socket -I 1000 -e power/energy-pkg/ /usr/bin/time -o $BACKUP_DIR/$OUTFILE_GIT.time-gitsource-$1-$2.log make test -j$MAKE_CPUS > $BACKUP_DIR/$OUTFILE_GIT-perf-$1-$2.log 2>&1
- 	cd $BACKUP_DIR
- 
- 	for job in `jobs -p`
-diff --git a/tools/testing/selftests/amd-pstate/run.sh b/tools/testing/selftests/amd-pstate/run.sh
-index 279d073c5728..b87cdc5bfe4a 100755
---- a/tools/testing/selftests/amd-pstate/run.sh
-+++ b/tools/testing/selftests/amd-pstate/run.sh
-@@ -25,6 +25,7 @@ OUTFILE=selftest
- OUTFILE_TBENCH="$OUTFILE.tbench"
- OUTFILE_GIT="$OUTFILE.gitsource"
- 
-+PERF=/usr/bin/perf
- SYSFS=
- CPUROOT=
- CPUFREQROOT=
-@@ -152,8 +153,9 @@ help()
- 	     gitsource: Gitsource testing.>]
- 	[-t <tbench time limit>]
- 	[-p <tbench process number>]
--	[-l <loop times for tbench>]
-+	[-l <loop times for tbench/gitsource>]
- 	[-i <amd tracer interval>]
-+	[-b <perf binary>]
- 	[-m <comparative test: acpi-cpufreq>]
- 	\n"
- 	exit 2
-@@ -161,7 +163,7 @@ help()
- 
- parse_arguments()
- {
--	while getopts ho:c:t:p:l:i:m: arg
-+	while getopts ho:c:t:p:l:i:b:m: arg
- 	do
- 		case $arg in
- 			h) # --help
-@@ -192,6 +194,10 @@ parse_arguments()
- 				TRACER_INTERVAL=$OPTARG
- 				;;
- 
-+			b) # --perf-binary
-+				PERF=`realpath $OPTARG`
-+				;;
-+
- 			m) # --comparative-test
- 				COMPARATIVE_TEST=$OPTARG
- 				;;
-@@ -205,8 +211,8 @@ parse_arguments()
- 
- command_perf()
- {
--	if ! command -v perf > /dev/null; then
--		echo $msg please install perf. >&2
-+	if ! $PERF -v; then
-+		echo $msg please install perf or provide perf binary path as argument >&2
- 		exit $ksft_skip
- 	fi
- }
-diff --git a/tools/testing/selftests/amd-pstate/tbench.sh b/tools/testing/selftests/amd-pstate/tbench.sh
-index 4d2e8ce2da3b..2a98d9c9202e 100755
---- a/tools/testing/selftests/amd-pstate/tbench.sh
-+++ b/tools/testing/selftests/amd-pstate/tbench.sh
-@@ -68,7 +68,7 @@ run_tbench()
- 
- 	printf "Test tbench for $1 #$2 time_limit: $TIME_LIMIT procs_num: $PROCESS_NUM\n"
- 	tbench_srv > /dev/null 2>&1 &
--	perf stat -a --per-socket -I 1000 -e power/energy-pkg/ tbench -t $TIME_LIMIT $PROCESS_NUM > $OUTFILE_TBENCH-perf-$1-$2.log 2>&1
-+	$PERF stat -a --per-socket -I 1000 -e power/energy-pkg/ tbench -t $TIME_LIMIT $PROCESS_NUM > $OUTFILE_TBENCH-perf-$1-$2.log 2>&1
- 
- 	pid=`pidof tbench_srv`
- 	kill $pid
--- 
-2.34.1
+On 9/26/2023 2:27 PM, Nikhil V wrote:
+> This patch series covers the following:
+> 1. Renaming lzo* to generic names, except for lzo_xxx() APIs. This is
+> used in the next patch where we move to crypto based APIs for
+> compression. There are no functional changes introduced by this
+> approach.
+> 
+> 
+> 2. Replace LZO library calls with crypto generic APIs
+> 
+> Currently for hibernation, LZO is the only compression algorithm
+> available and uses the existing LZO library calls. However, there
+> is no flexibility to switch to other algorithms which provides better
+> results. The main idea is that different compression algorithms have
+> different characteristics and hibernation may benefit when it uses
+> alternate algorithms.
+> 
+> By moving to crypto based APIs, it lays a foundation to use other
+> compression algorithms for hibernation.
+> 
+> 
+> 3. LZ4 compression
+> Extend the support for LZ4 compression to be used with hibernation.
+> The main idea is that different compression algorithms
+> have different characteristics and hibernation may benefit when it uses
+> any of these algorithms: a default algorithm, having higher
+> compression rate but is slower(compression/decompression) and a
+> secondary algorithm, that is faster(compression/decompression) but has
+> lower compression rate.
+> 
+> LZ4 algorithm has better decompression speeds over LZO. This reduces
+> the hibernation image restore time.
+> As per test results:
+>                                      LZO             LZ4
+> Size before Compression(bytes)   682696704       682393600
+> Size after Compression(bytes)    146502402       155993547
+> Decompression Rate               335.02 MB/s     501.05 MB/s
+> Restore time                       4.4s             3.8s
+> 
+> LZO is the default compression algorithm used for hibernation. Enable
+> CONFIG_HIBERNATION_DEF_COMP_LZ4 to set the default compressor as LZ4.
+> 
+> Compression Benchmarks: https://github.com/lz4/lz4
+> 
+> 4. Support to select compression algorithm
+> 
+> Currently the default compression algorithm is selected based on Kconfig.
+> Introduce a kernel command line parameter "hib_compression" to
+> override this behaviour.
+> 
+> Users can set "hib_compression" command line parameter to specify
+> the algorithm.
+> Usage:
+>      LZO: hib_compression=lzo
+>      LZ4: hib_compression=lz4
+> LZO is the default compression algorithm used with hibernation.
+> 
+> Nikhil V (4):
+>    PM: hibernate: Rename lzo* to make it generic
+>    PM: hibernate: Move to crypto APIs for LZO compression
+>    PM: hibernate: Add support for LZ4 compression for hibernation
+>    PM: hibernate: Support to select compression algorithm
+> 
+>   .../admin-guide/kernel-parameters.txt         |   6 +
+>   kernel/power/Kconfig                          |  25 ++-
+>   kernel/power/hibernate.c                      |  83 +++++++-
+>   kernel/power/power.h                          |  19 ++
+>   kernel/power/swap.c                           | 189 +++++++++++-------
+>   5 files changed, 248 insertions(+), 74 deletions(-)
+> 
 
+Hi,
+
+Could you please let me know if you have any concerns/comments on this 
+approach? If there are no comments, I could push another patch series 
+with PATCH tag for review.
+
+Thanks
+Nikhil V
