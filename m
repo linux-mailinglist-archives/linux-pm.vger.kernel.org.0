@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 720337B6A78
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 15:26:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31AC87B6A74
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 15:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235865AbjJCN04 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Oct 2023 09:26:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57686 "EHLO
+        id S235573AbjJCN0z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Oct 2023 09:26:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235483AbjJCN0z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 09:26:55 -0400
+        with ESMTP id S235077AbjJCN0x (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 09:26:53 -0400
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD09BD;
-        Tue,  3 Oct 2023 06:26:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C5AAB;
+        Tue,  3 Oct 2023 06:26:49 -0700 (PDT)
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id fee7940ee958ee86; Tue, 3 Oct 2023 15:26:49 +0200
+ id a243c055453c96a8; Tue, 3 Oct 2023 15:26:48 +0200
 Received: from kreacher.localnet (unknown [195.136.19.94])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id C63456659AF;
-        Tue,  3 Oct 2023 15:26:48 +0200 (CEST)
+        by v370.home.net.pl (Postfix) with ESMTPSA id F01D96659AF;
+        Tue,  3 Oct 2023 15:26:47 +0200 (CEST)
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux PM <linux-pm@vger.kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -31,9 +31,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH v2 2/6] ACPI: thermal: Move get_active_temp()
-Date:   Tue, 03 Oct 2023 15:18:31 +0200
-Message-ID: <2913298.e9J7NaK4W3@kreacher>
+Subject: [PATCH v2 3/6] ACPI: thermal: Combine passive and active trip update functions
+Date:   Tue, 03 Oct 2023 15:21:30 +0200
+Message-ID: <8288399.T7Z3S40VBb@kreacher>
 In-Reply-To: <4846448.GXAFRqVoOG@kreacher>
 References: <4846448.GXAFRqVoOG@kreacher>
 MIME-Version: 1.0
@@ -56,81 +56,84 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Put the get_active_temp() function next to the analogous
-get_passive_temp() one to allow subsequent changes to be easier to
-follow.
+Combine acpi_thermal_update_passive_trip() and
+acpi_thermal_update_active_trip() into one common function called
+acpi_thermal_update_trip(), so as to reduce code duplication and
+prepare the code in question for subsequent changes.
 
-No functional impact.
+No intentional functional impact.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/acpi/thermal.c |   46 +++++++++++++++++++++++-----------------------
- 1 file changed, 23 insertions(+), 23 deletions(-)
+ drivers/acpi/thermal.c |   35 +++++++++++++++++------------------
+ 1 file changed, 17 insertions(+), 18 deletions(-)
 
 Index: linux-pm/drivers/acpi/thermal.c
 ===================================================================
 --- linux-pm.orig/drivers/acpi/thermal.c
 +++ linux-pm/drivers/acpi/thermal.c
-@@ -189,6 +189,29 @@ static long get_passive_temp(struct acpi
+@@ -212,14 +212,25 @@ static long get_active_temp(struct acpi_
  	return tmp;
  }
  
-+static long get_active_temp(struct acpi_thermal *tz, int index)
-+{
-+	char method[] = { '_', 'A', 'C', '0' + index, '\0' };
-+	unsigned long long tmp;
-+	acpi_status status;
-+
-+	status = acpi_evaluate_integer(tz->device->handle, method, NULL, &tmp);
-+	if (ACPI_FAILURE(status))
-+		return THERMAL_TEMP_INVALID;
-+
-+	/*
-+	 * If an override has been provided, apply it so there are no active
-+	 * trips with thresholds greater than the override.
-+	 */
-+	if (act > 0) {
-+		unsigned long long override = celsius_to_deci_kelvin(act);
-+
-+		if (tmp > override)
-+			tmp = override;
-+	}
-+	return tmp;
-+}
-+
- static void acpi_thermal_update_passive_trip(struct acpi_thermal *tz)
+-static void acpi_thermal_update_passive_trip(struct acpi_thermal *tz)
++static void acpi_thermal_update_trip(struct acpi_thermal *tz,
++				     int index)
  {
- 	struct acpi_thermal_trip *acpi_trip = &tz->trips.passive.trip;
-@@ -250,29 +273,6 @@ static void acpi_thermal_update_trip_dev
+-	struct acpi_thermal_trip *acpi_trip = &tz->trips.passive.trip;
++	struct acpi_thermal_trip *acpi_trip;
+ 
+-	if (!acpi_thermal_trip_valid(acpi_trip) || psv > 0)
++	acpi_trip = index == ACPI_THERMAL_TRIP_PASSIVE ?
++			&tz->trips.passive.trip : &tz->trips.active[index].trip;
++	if (!acpi_thermal_trip_valid(acpi_trip))
+ 		return;
+ 
+-	acpi_trip->temp_dk = get_passive_temp(tz);
++	if (index == ACPI_THERMAL_TRIP_PASSIVE) {
++		if (psv > 0)
++			return;
++
++		acpi_trip->temp_dk = get_passive_temp(tz);
++	} else {
++		acpi_trip->temp_dk = get_active_temp(tz, index);
++	}
++
+ 	if (!acpi_thermal_trip_valid(acpi_trip))
+ 		ACPI_THERMAL_TRIPS_EXCEPTION(tz, "state");
+ }
+@@ -273,18 +284,6 @@ static void acpi_thermal_update_trip_dev
  	ACPI_THERMAL_TRIPS_EXCEPTION(tz, "state");
  }
  
--static long get_active_temp(struct acpi_thermal *tz, int index)
+-static void acpi_thermal_update_active_trip(struct acpi_thermal *tz, int index)
 -{
--	char method[] = { '_', 'A', 'C', '0' + index, '\0' };
--	unsigned long long tmp;
--	acpi_status status;
+-	struct acpi_thermal_trip *acpi_trip = &tz->trips.active[index].trip;
 -
--	status = acpi_evaluate_integer(tz->device->handle, method, NULL, &tmp);
--	if (ACPI_FAILURE(status))
--		return THERMAL_TEMP_INVALID;
+-	if (!acpi_thermal_trip_valid(acpi_trip))
+-		return;
 -
--	/*
--	 * If an override has been provided, apply it so there are no active
--	 * trips with thresholds greater than the override.
--	 */
--	if (act > 0) {
--		unsigned long long override = celsius_to_deci_kelvin(act);
--
--		if (tmp > override)
--			tmp = override;
--	}
--	return tmp;
+-	acpi_trip->temp_dk = get_active_temp(tz, index);
+-	if (!acpi_thermal_trip_valid(acpi_trip))
+-		ACPI_THERMAL_TRIPS_EXCEPTION(tz, "state");
 -}
 -
- static void acpi_thermal_update_active_trip(struct acpi_thermal *tz, int index)
+ static int acpi_thermal_adjust_trip(struct thermal_trip *trip, void *data)
  {
- 	struct acpi_thermal_trip *acpi_trip = &tz->trips.active[index].trip;
+ 	struct acpi_thermal_trip *acpi_trip = trip->priv;
+@@ -308,9 +307,9 @@ static void acpi_thermal_adjust_thermal_
+ 	int i;
+ 
+ 	if (data == ACPI_THERMAL_NOTIFY_THRESHOLDS) {
+-		acpi_thermal_update_passive_trip(tz);
++		acpi_thermal_update_trip(tz, ACPI_THERMAL_TRIP_PASSIVE);
+ 		for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE; i++)
+-			acpi_thermal_update_active_trip(tz, i);
++			acpi_thermal_update_trip(tz, i);
+ 	} else {
+ 		acpi_thermal_update_trip_devices(tz, ACPI_THERMAL_TRIP_PASSIVE);
+ 		for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE; i++)
+
 
 
 
