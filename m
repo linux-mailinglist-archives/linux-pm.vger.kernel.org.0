@@ -2,193 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD2A7B6932
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 14:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7628C7B6949
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 14:44:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbjJCMkZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Oct 2023 08:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48534 "EHLO
+        id S230300AbjJCMo6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Oct 2023 08:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbjJCMkZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 08:40:25 -0400
-Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C240483;
-        Tue,  3 Oct 2023 05:40:21 -0700 (PDT)
-Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bee.tesarici.cz (Postfix) with ESMTPSA id 3876318C6A3;
-        Tue,  3 Oct 2023 14:40:20 +0200 (CEST)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-        t=1696336820; bh=k8ga/n4jJGZ2XopsRMCjNoqWPcsRfuxhU8cQlADnJE0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=pYhr3Xr6pq9hwO4YMU7gmQ8e5vF4izsyq5RDibFbokrm46XgsDIPH1gRW11icTyFs
-         3+5XA1mwuBFFmBXpgQgSFSeSfqnVnaHcp1UA1cUjg80envP3EsiHS73pVLtenCL/x9
-         bgEnLNQ2Z6tDq1O6Q5tgXF17QDNzK8kiB7Qbc5wTZiLkJyotLxCFb5wJ8Ghit0yBxw
-         kFdqnfNdeVDc/4R1N4JvwbrAAMM3xxMOo4HezC61/09O2UIHQPA1GOAujGuAopmVNE
-         wqlOhZD4xKxHG5MTa7QM4ZNEDB3Vs5lcqu6GwbYsO+MQ4bMAzzxKOkX6vonEvMyT+5
-         w0EwiJryXaNeQ==
-Date:   Tue, 3 Oct 2023 14:40:19 +0200
-From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: Thinkpad E595 system deadlock on resume from S3
-Message-ID: <20231003144019.24566b05@meshulam.tesarici.cz>
-In-Reply-To: <CAJZ5v0hvEyVAwA3r5OWv4W_vTbRXt_Oxv+Avvn6N0=1RoN=NCg@mail.gmail.com>
-References: <20230930122054.3cf727a4@meshulam>
-        <20231003113135.38384a87@meshulam.tesarici.cz>
-        <CAJZ5v0i-FV29TUq8E=FGxB_dRKEJvdoKxzwPGAX0C9vnD7O8eg@mail.gmail.com>
-        <20231003130240.0c64bc2e@meshulam.tesarici.cz>
-        <CAJZ5v0hvEyVAwA3r5OWv4W_vTbRXt_Oxv+Avvn6N0=1RoN=NCg@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
+        with ESMTP id S230321AbjJCMo5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 08:44:57 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36542A6
+        for <linux-pm@vger.kernel.org>; Tue,  3 Oct 2023 05:44:53 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-77409065623so62707985a.0
+        for <linux-pm@vger.kernel.org>; Tue, 03 Oct 2023 05:44:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696337092; x=1696941892; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=xDj1q+Ee+ORzJ70hRtintqC5xZdcBaiRQa5S4Cdho10=;
+        b=WRfTQWpvQp3+AMJ84YUZSAUj2gNVc7Hi3P+fItsZqVcekiIBUL/TLW2hha/Z/y+qYx
+         Ypz9th/0xCyj6J6TKhiJptrUgz+mVs8MQ4tpUzYmrtFMab05nANMLSS2wniw43cvALkD
+         YzobMSnDKQbJu66dv0HcEZZh/EKJXkIJ3i9/2MzSnNj3IDtBy2dYvSX+8ziIWkN0RQ8Q
+         QY3s/UkAvX8CSk/OPGQSjxEVuNzAmagoVfcfiIlC4SBNpZRSjN5GwdXoZBcUCVIALz/t
+         M45H8D9ECJKh0ku7Z+xyGPWKOWPliBb7OexwYMGZcHn/7CsQ3uWdIcB3ZKWy2ixoXqlx
+         8+CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696337092; x=1696941892;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xDj1q+Ee+ORzJ70hRtintqC5xZdcBaiRQa5S4Cdho10=;
+        b=pawtQG7R9oT2ecZhihwPVV8fyfdJB9b9FCAls+wiZAsrTh8Ml3ELq/SN+KWlrCocT9
+         ZGD65MAjtsQqpH8IyGSArOK11SX/GVc1jwQMf1JFy3uIvsvSo//Z7ItHCaBpcSWWqlxh
+         m3KVbmm1d9duP0IQ3jrzAapPldyHiSiChpv8RWraj+o/++Zt2cVZQU2Bzrb/+nf5nyus
+         dCDH7V/0/B+z0/NfZGKYRmu2ZZDl1ybtRmt7Rcplk3MRWuZMkXdpPdNkR4ZDxkPS/xGI
+         Q/Rwgpy7kXY0BQjKqvTUPYPH0lRmyipAEWQmGpPIKH0EevV9gBiE4vhQ0SiOR1+Ny29O
+         f0Rg==
+X-Gm-Message-State: AOJu0YyGOUzMns8JVH6AC0bRr6Q3rSy5FOPiXLPsn09w4sdQ/l8/avjt
+        pHpRw3UMfZZ9MBnwNIa/gMF+
+X-Google-Smtp-Source: AGHT+IEbRFcGxZgw52UjDfv1LBZdcZLdSA4iZ7N+WH5lAbH4U4/cWa8LNP/L/IMXn2BWS/8z2N+zyQ==
+X-Received: by 2002:a05:620a:4007:b0:775:9bc3:c492 with SMTP id h7-20020a05620a400700b007759bc3c492mr9066667qko.7.1696337092194;
+        Tue, 03 Oct 2023 05:44:52 -0700 (PDT)
+Received: from thinkpad ([117.217.185.220])
+        by smtp.gmail.com with ESMTPSA id d15-20020a05620a136f00b007756d233fbdsm425442qkl.37.2023.10.03.05.44.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Oct 2023 05:44:51 -0700 (PDT)
+Date:   Tue, 3 Oct 2023 18:14:35 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     quic_narepall@quicinc.com, bmasney@redhat.com,
+        krzysztof.kozlowski+dt@linaro.org, quic_nitirawa@quicinc.com,
+        vireshk@kernel.org, quic_asutoshd@quicinc.com,
+        quic_bhaskarv@quicinc.com, avri.altman@wdc.com,
+        krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
+        robh+dt@kernel.org, quic_cang@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
+        jejb@linux.ibm.com, cw00.choi@samsung.com, andersson@kernel.org,
+        bvanassche@acm.org, conor+dt@kernel.org, kyungmin.park@samsung.com,
+        martin.petersen@oracle.com, nm@ti.com,
+        linux-kernel@vger.kernel.org, quic_richardp@quicinc.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-scsi@vger.kernel.org, myungjoo.ham@samsung.com,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        sboyd@kernel.org
+Subject: Re: [PATCH v4 1/6] dt-bindings: ufs: common: add OPP table
+Message-ID: <20231003124435.GA44736@thinkpad>
+References: <20231003111232.42663-1-manivannan.sadhasivam@linaro.org>
+ <20231003111232.42663-2-manivannan.sadhasivam@linaro.org>
+ <169633539510.282606.1450427416869008072.robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <169633539510.282606.1450427416869008072.robh@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 3 Oct 2023 14:34:56 +0200
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
+On Tue, Oct 03, 2023 at 07:16:35AM -0500, Rob Herring wrote:
+> 
+> On Tue, 03 Oct 2023 16:42:27 +0530, Manivannan Sadhasivam wrote:
+> > From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > 
+> > Except scaling UFS and bus clocks, it's necessary to scale also the
+> > voltages of regulators or power domain performance state levels.  Adding
+> > Operating Performance Points table allows to adjust power domain
+> > performance state, depending on the UFS clock speed.
+> > 
+> > OPPv2 deprecates previous property limited to clock scaling:
+> > freq-table-hz.
+> > 
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  .../devicetree/bindings/ufs/ufs-common.yaml   | 36 ++++++++++++++++---
+> >  1 file changed, 32 insertions(+), 4 deletions(-)
+> > 
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> ./Documentation/devicetree/bindings/ufs/ufs-common.yaml:90:20: [error] string value is redundantly quoted with any quotes (quoted-strings)
+> ./Documentation/devicetree/bindings/ufs/ufs-common.yaml:91:26: [error] string value is redundantly quoted with any quotes (quoted-strings)
+> ./Documentation/devicetree/bindings/ufs/ufs-common.yaml:91:36: [error] string value is redundantly quoted with any quotes (quoted-strings)
+> 
 
-> On Tue, Oct 3, 2023 at 1:02=E2=80=AFPM Petr Tesa=C5=99=C3=ADk <petr@tesar=
-ici.cz> wrote:
-> >
-> > On Tue, 3 Oct 2023 12:15:10 +0200
-> > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> > =20
-> > > On Tue, Oct 3, 2023 at 11:31=E2=80=AFAM Petr Tesa=C5=99=C3=ADk <petr@=
-tesarici.cz> wrote: =20
-> > > >
-> > > > Hi again (adding more recipients),
-> > > >
-> > > > On Sat, 30 Sep 2023 12:20:54 +0200
-> > > > Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz> wrote:
-> > > > =20
-> > > > > Hi all,
-> > > > >
-> > > > > this time no patch (yet). In short, my Thinkpad running v6.6-rc3 =
-fails
-> > > > > to resume from S3. It also fails the same way with Tumbleweed v6.5
-> > > > > kernel. I was able to capture a crash dump of the v6.5 kernel, and
-> > > > > here's my analysis:
-> > > > >
-> > > > > The system never gets to waking up my SATA SSD disk:
-> > > > >
-> > > > > [0:0:0:0]    disk    ATA      KINGSTON SEDC600 H5.1  /dev/sda
-> > > > >
-> > > > > There is a pending resume work for kworker/u32:12 (PID 11032), bu=
-t this
-> > > > > worker is stuck in 'D' state:
-> > > > > =20
-> > > > > >>> prog.stack_trace(11032) =20
-> > > > > #0  context_switch (../kernel/sched/core.c:5381:2)
-> > > > > #1  __schedule (../kernel/sched/core.c:6710:8)
-> > > > > #2  schedule (../kernel/sched/core.c:6786:3)
-> > > > > #3  schedule_preempt_disabled (../kernel/sched/core.c:6845:2)
-> > > > > #4  __mutex_lock_common (../kernel/locking/mutex.c:679:3)
-> > > > > #5  __mutex_lock (../kernel/locking/mutex.c:747:9)
-> > > > > #6  acpi_device_hotplug (../drivers/acpi/scan.c:382:2)
-> > > > > #7  acpi_hotplug_work_fn (../drivers/acpi/osl.c:1162:2)
-> > > > > #8  process_one_work (../kernel/workqueue.c:2600:2)
-> > > > > #9  worker_thread (../kernel/workqueue.c:2751:4)
-> > > > > #10 kthread (../kernel/kthread.c:389:9)
-> > > > > #11 ret_from_fork (../arch/x86/kernel/process.c:145:3)
-> > > > > #12 ret_from_fork_asm+0x1b/0x20 (../arch/x86/entry/entry_64.S:304)
-> > > > >
-> > > > > acpi_device_hotplug() tries to acquire acpi_scan_lock, which is h=
-eld by
-> > > > > systemd-sleep (PID 11002). This task is also in 'D' state:
-> > > > > =20
-> > > > > >>> prog.stack_trace(11002) =20
-> > > > > #0  context_switch (../kernel/sched/core.c:5381:2)
-> > > > > #1  __schedule (../kernel/sched/core.c:6710:8)
-> > > > > #2  schedule (../kernel/sched/core.c:6786:3)
-> > > > > #3  schedule_preempt_disabled (../kernel/sched/core.c:6845:2)
-> > > > > #4  __mutex_lock_common (../kernel/locking/mutex.c:679:3)
-> > > > > #5  __mutex_lock (../kernel/locking/mutex.c:747:9)
-> > > > > #6  device_lock (../include/linux/device.h:958:2)
-> > > > > #7  device_complete (../drivers/base/power/main.c:1063:2)
-> > > > > #8  dpm_complete (../drivers/base/power/main.c:1121:3)
-> > > > > #9  suspend_devices_and_enter (../kernel/power/suspend.c:516:2) =
-=20
-> > > >
-> > > > I believe the issue must be somewhere here. The whole suspend and
-> > > > resume logic in suspend_devices_and_enter() is framed by
-> > > > platform_suspend_begin() and platform_resume_end().
-> > > >
-> > > > My system is an ACPI system, so suspend_ops contains:
-> > > >
-> > > >         .begin =3D acpi_suspend_begin,
-> > > >         .end =3D acpi_pm_end,
-> > > >
-> > > > Now, acpi_suspend_begin() acquires acpi_scan_lock through
-> > > > acpi_pm_start(), and the lock is not released until acpi_pm_end().
-> > > > Since dpm_complete() waits for the completion of a work that tries =
-to
-> > > > acquire acpi_scan_lock, the system will deadlock. =20
-> > >
-> > > So holding acpi_scan_lock across suspend-resume is basically to
-> > > prevent the hotplug from taking place then IIRC.
-> > > =20
-> > > > AFAICS either:
-> > > >
-> > > > a. the ACPI lock cannot be held while dpm_complete() runs, or
-> > > > b. ata_scsi_dev_rescan() must not be scheduled before the system is
-> > > > resumed, or
-> > > > c. acpi_device_hotplug() must be implemented without taking dev->mu=
-tex.
-> > > >
-> > > > My gut feeling is that b. is the right answer. =20
-> > >
-> > > It's been a while since I looked at that code last time, but then it
-> > > has not changed for quite some time too.
-> > >
-> > > It looks like the acpi_device_hotplug() path attempts to acquire
-> > > acpi_scan_lock() while holding dev->mutex which is kind of silly.  I
-> > > need to check that, though. =20
-> >
-> > Thanks for your willingness. Well, it's not quite what you describe. If
-> > it was a simple ABBA deadlock, then it would be reported by lockdep.
-> > No, it's more complicated:
-> >
-> > 1. suspend_devices_and_enter() holds acpi_scan_lock,
-> > 2. an ACPI hotplug work runs, but acpi_device_hotplug() goes to sleep
-> >    when it gets to acquiring acpi_scan_lock,
-> > 3. ata_scsi_dev_rescan() submits a SCSI command and waits for its
-> >    completion while holding dev->mutex,
-> > 4. the SCSI completion work happens to be put on the same workqueue as
-> >    the ACPI hotplug work in step 2,
-> >    ^^^--- THIS is how the two events are serialized! =20
->=20
-> Which is unexpected.
->=20
-> And quite honestly I'm not sure how this can happen, because
-> acpi_hotplug_schedule() uses a dedicated workqueue and it is called
-> from (a) the "eject" sysfs attribute (which cannot happen while system
-> suspend-resume is in progress) and (b) acpi_bus_notify() which has
-> nothing to do with SCSI.
+Oops! I ran the check on wrong binding file :/ Will fix it in next version.
 
-Oh, you're right, and I was too quick. They cannot be on the same
-queue...
+- Mani
 
-> Maybe the workqueue used for the SCSI completion is freezable?
+> dtschema/dtc warnings/errors:
+> 
+> doc reference errors (make refcheckdocs):
+> 
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20231003111232.42663-2-manivannan.sadhasivam@linaro.org
+> 
+> The base for the series is generally the latest rc1. A different dependency
+> should be noted in *this* patch.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your schema.
+> 
 
-Yes, that's it:
-
-*(struct workqueue_struct *)0xffff97d240b2fe00 =3D {
-/* ... */
-        .flags =3D (unsigned int)4,
-/* WQ_FREEZABLE            =3D 1 << 2 */
-
-Good. But if this workqueue is frozen, the system still cannot make
-progress.
-
-Petr T
+-- 
+மணிவண்ணன் சதாசிவம்
