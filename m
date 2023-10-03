@@ -2,167 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B9E7B6919
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 14:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA5A7B691B
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 14:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232082AbjJCMfd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Oct 2023 08:35:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48268 "EHLO
+        id S232133AbjJCMg6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Oct 2023 08:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbjJCMfd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 08:35:33 -0400
-Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E8F83
-        for <linux-pm@vger.kernel.org>; Tue,  3 Oct 2023 05:35:29 -0700 (PDT)
-Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bee.tesarici.cz (Postfix) with ESMTPSA id 4811618DDC5;
-        Tue,  3 Oct 2023 14:35:23 +0200 (CEST)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-        t=1696336523; bh=1xxn/DNj7bRTSIWCCgEm37x5aw7+iaYbn4pZE7w+ehA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nfPA/mewjvnJKuQTpJY0zKnuLaSRUCTyKfEJv2l08iy+rdZqnGJi/Y181712mgSxJ
-         X0YIFgka9f5JKWHU94cADbkuiajiA/huOeHKgzT44YAvoGddeOY+qOFxABtakJpcFY
-         i0lqVA5JyRMGx/lwHMGRR1sAvLVMxudwhZd7n3M+vBQaLqvPmAuSvTumctNjb01pb5
-         KN1+aSJI3Knf9+i6rkn3cPq+NpsjTBC6bcUnMQQqTkJy/3p1CyJXlJp/PpNf1y3x5m
-         vOQYhQST5uZ+auFMbf9wRMCl2czY3VhNdz0v9N1tXeMRhJbFLp/yKumydC9Q2bf9CI
-         BnGlABa2IO5iA==
-Date:   Tue, 3 Oct 2023 14:35:21 +0200
-From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: Thinkpad E595 system deadlock on resume from S3
-Message-ID: <20231003143521.7b7dc86e@meshulam.tesarici.cz>
-In-Reply-To: <20231003130240.0c64bc2e@meshulam.tesarici.cz>
-References: <20230930122054.3cf727a4@meshulam>
-        <20231003113135.38384a87@meshulam.tesarici.cz>
-        <CAJZ5v0i-FV29TUq8E=FGxB_dRKEJvdoKxzwPGAX0C9vnD7O8eg@mail.gmail.com>
-        <20231003130240.0c64bc2e@meshulam.tesarici.cz>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
+        with ESMTP id S231127AbjJCMg5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 08:36:57 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2243F91
+        for <linux-pm@vger.kernel.org>; Tue,  3 Oct 2023 05:36:54 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5a4c073cc06so18367707b3.1
+        for <linux-pm@vger.kernel.org>; Tue, 03 Oct 2023 05:36:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696336613; x=1696941413; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BBX7WALro7ZMkb002Ch3k9j1xjJ9wEjQFSfSLSNKyVA=;
+        b=wowDWE69tD5ieLR6Ads/Gyej3DkIMinqPh4cf/7coSvZFkJzUDlN2cLFVx7EQ3hTNB
+         6fJcMgDSlDvBfW49tVCMEksYLzhaL93dCQCXELdqo0cHyuPZwmm1n4ohS6zn5M5QjfQy
+         /GxFQfrb6uTdu+j8YJ9znAVNbXndw2vrEWS07hFxk4reJyYXEq5G2DUT0yemwBRvrOF3
+         VIhBDKDjQW9pJnapUZZp2ZVG/GX5JYq6yJPwwTR0uvocDQHTGybydTc0/P1Csa9tkwHZ
+         246VrjNHqcNLnvN+30nged/SL2CYVWX3Y16qte3XE1Y3REak48Uvrbsern8cKwXf+vIU
+         l+zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696336613; x=1696941413;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BBX7WALro7ZMkb002Ch3k9j1xjJ9wEjQFSfSLSNKyVA=;
+        b=kZAUMfgxSp7iznKyz0VQE29Jr1ZR+9huTAMCmMIANgGuPb+LsDjTArCGf5C6jNj6nR
+         iwTp7pHPBQmSuYgV4zwejJTGtkQMLiIvGAQhnUqw1C9oPEHCmCCh77FNVPqi/j0dAk8L
+         LK8omKlk1L69vsd00FwXgdsFmZgMtCC3FmH3fOCzOBH7kwVjAsGlRKNWYiCVCjLL6zkO
+         HmiQPJ1pKIMYdfvrG1aXC1JdI6rYWym+7xbkGP/8sZD30ALFqSwAI/7uPCm8jTa0DgRz
+         HFe0G9+efAIusSSJxtyRUAaXHyFFISNHkwJXAgciQSLlUTsKVsrfnjpSf6fDoqaV/KxE
+         yLlQ==
+X-Gm-Message-State: AOJu0YxBucMvTbes4Qkirqx2I6MHAHNcfZnjRurDFSQjpv0GgQlE9bFm
+        TzK4I4DSx5ax3Zg63NsOmXsz85BSr1ci69QA4tXjTw==
+X-Google-Smtp-Source: AGHT+IGdl+vhW0m01pb/+ML+OMGARTp9lewRZVPBj7PzhWM7waqR82ShESUiVLf8ufb7gdbuRoiu4yVr0cW53ETCZw0=
+X-Received: by 2002:a25:8b09:0:b0:d81:b5e2:b1cc with SMTP id
+ i9-20020a258b09000000b00d81b5e2b1ccmr1931296ybl.5.1696336613296; Tue, 03 Oct
+ 2023 05:36:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+References: <20230925131715.138411-1-ulf.hansson@linaro.org>
+ <20230925131715.138411-7-ulf.hansson@linaro.org> <CAPDyKFo+XCEtTSNqtA1SeajWo4tuRroA4GrRegta5TsqSGd4eQ@mail.gmail.com>
+ <20231003082322.cmok766jxzftsgrg@vireshk-i7>
+In-Reply-To: <20231003082322.cmok766jxzftsgrg@vireshk-i7>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 3 Oct 2023 14:36:17 +0200
+Message-ID: <CAPDyKForAJfdqqpkAP0vwZFAtSAtGMyqChLVr96v7PDWRj2qzw@mail.gmail.com>
+Subject: Re: [PATCH 6/9] OPP: Extend support for the opp-level beyond required-opps
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 3 Oct 2023 13:02:40 +0200
-Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz> wrote:
+On Tue, 3 Oct 2023 at 10:23, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 25-09-23, 15:33, Ulf Hansson wrote:
+> > On Mon, 25 Sept 2023 at 15:18, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > >
+> > > At this point the level (performance state) for an OPP is currently limited
+> > > to be requested for a device that is attached to a PM domain.  Moreover,
+> > > the device needs to have the so called required-opps assigned to it, which
+> > > are based upon OPP tables being described in DT.
+> > >
+> > > To extend the support beyond required-opps and DT, let's enable the level
+> > > to be set for all OPPs. More precisely, if the requested OPP has a valid
+> > > level let's try to request it through the device's optional PM domain, via
+> > > calling dev_pm_domain_set_performance_state().
+> > >
+> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > ---
+> > >  drivers/opp/core.c | 29 +++++++++++++++++++++++++++++
+> > >  1 file changed, 29 insertions(+)
+> > >
+> > > diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> > > index 60dca60ac4af..afb73978cdcb 100644
+> > > --- a/drivers/opp/core.c
+> > > +++ b/drivers/opp/core.c
+> > > @@ -1107,6 +1107,22 @@ void _update_set_required_opps(struct opp_table *opp_table)
+> > >                 opp_table->set_required_opps = _opp_set_required_opps_generic;
+> > >  }
+> > >
+> > > +static int _set_opp_level(struct device *dev, struct opp_table *opp_table,
+> > > +                         struct dev_pm_opp *opp)
+> > > +{
+> > > +       int ret = 0;
+> > > +
+> > > +       /* Request a new performance state through the device's PM domain. */
+> > > +       if (opp && opp->level) {
+> > > +               ret = dev_pm_domain_set_performance_state(dev, opp->level);
+> > > +               if (ret)
+> > > +                       dev_err(dev, "Failed to set performance state %u (%d)\n",
+> > > +                               opp->level, ret);
+> > > +       }
+> >
+> > Okay, so reviewing my own code found a problem here. We need an "else"
+> > here, that should request the performance state to be set to 0.
+> >
+> > I am not sending a new version at this point, but awaiting more feedback first.
+>
+> I am looking to add below to this patch, is that okay with you ?
+>
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 7b505316bb1c..a113e9caaa5a 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -1135,16 +1135,22 @@ void _update_set_required_opps(struct opp_table *opp_table)
+>  static int _set_opp_level(struct device *dev, struct opp_table *opp_table,
+>                           struct dev_pm_opp *opp)
+>  {
+> +       unsigned int level = 0;
+>         int ret = 0;
+>
+> -       /* Request a new performance state through the device's PM domain. */
+> -       if (opp && opp->level) {
+> -               ret = dev_pm_domain_set_performance_state(dev, opp->level);
+> -               if (ret)
+> -                       dev_err(dev, "Failed to set performance state %u (%d)\n",
+> -                               opp->level, ret);
+> +       if (opp) {
+> +               if (!opp->level)
+> +                       return 0;
+> +
+> +               level = opp->level;
+>         }
+>
+> +       /* Request a new performance state through the device's PM domain. */
+> +       ret = dev_pm_genpd_set_performance_state(dev, level);
+> +       if (ret)
+> +               dev_err(dev, "Failed to set performance state %u (%d)\n", level,
+> +                       ret);
+> +
+>         return ret;
+>  }
+>
+> I am switching back to dev_pm_genpd_set_performance_state() as I won't be
+> applying the power domain changes.
 
-> On Tue, 3 Oct 2023 12:15:10 +0200
-> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
->=20
-> > On Tue, Oct 3, 2023 at 11:31=E2=80=AFAM Petr Tesa=C5=99=C3=ADk <petr@te=
-sarici.cz> wrote:
-> > >
-> > > Hi again (adding more recipients),
-> > >
-> > > On Sat, 30 Sep 2023 12:20:54 +0200
-> > > Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz> wrote:
-> > > =20
-> > > > Hi all,
-> > > >
-> > > > this time no patch (yet). In short, my Thinkpad running v6.6-rc3 fa=
-ils
-> > > > to resume from S3. It also fails the same way with Tumbleweed v6.5
-> > > > kernel. I was able to capture a crash dump of the v6.5 kernel, and
-> > > > here's my analysis:
-> > > >
-> > > > The system never gets to waking up my SATA SSD disk:
-> > > >
-> > > > [0:0:0:0]    disk    ATA      KINGSTON SEDC600 H5.1  /dev/sda
-> > > >
-> > > > There is a pending resume work for kworker/u32:12 (PID 11032), but =
-this
-> > > > worker is stuck in 'D' state:
-> > > > =20
-> > > > >>> prog.stack_trace(11032) =20
-> > > > #0  context_switch (../kernel/sched/core.c:5381:2)
-> > > > #1  __schedule (../kernel/sched/core.c:6710:8)
-> > > > #2  schedule (../kernel/sched/core.c:6786:3)
-> > > > #3  schedule_preempt_disabled (../kernel/sched/core.c:6845:2)
-> > > > #4  __mutex_lock_common (../kernel/locking/mutex.c:679:3)
-> > > > #5  __mutex_lock (../kernel/locking/mutex.c:747:9)
-> > > > #6  acpi_device_hotplug (../drivers/acpi/scan.c:382:2)
-> > > > #7  acpi_hotplug_work_fn (../drivers/acpi/osl.c:1162:2)
-> > > > #8  process_one_work (../kernel/workqueue.c:2600:2)
-> > > > #9  worker_thread (../kernel/workqueue.c:2751:4)
-> > > > #10 kthread (../kernel/kthread.c:389:9)
-> > > > #11 ret_from_fork (../arch/x86/kernel/process.c:145:3)
-> > > > #12 ret_from_fork_asm+0x1b/0x20 (../arch/x86/entry/entry_64.S:304)
-> > > >
-> > > > acpi_device_hotplug() tries to acquire acpi_scan_lock, which is hel=
-d by
-> > > > systemd-sleep (PID 11002). This task is also in 'D' state:
-> > > > =20
-> > > > >>> prog.stack_trace(11002) =20
-> > > > #0  context_switch (../kernel/sched/core.c:5381:2)
-> > > > #1  __schedule (../kernel/sched/core.c:6710:8)
-> > > > #2  schedule (../kernel/sched/core.c:6786:3)
-> > > > #3  schedule_preempt_disabled (../kernel/sched/core.c:6845:2)
-> > > > #4  __mutex_lock_common (../kernel/locking/mutex.c:679:3)
-> > > > #5  __mutex_lock (../kernel/locking/mutex.c:747:9)
-> > > > #6  device_lock (../include/linux/device.h:958:2)
-> > > > #7  device_complete (../drivers/base/power/main.c:1063:2)
-> > > > #8  dpm_complete (../drivers/base/power/main.c:1121:3)
-> > > > #9  suspend_devices_and_enter (../kernel/power/suspend.c:516:2) =20
-> > >
-> > > I believe the issue must be somewhere here. The whole suspend and
-> > > resume logic in suspend_devices_and_enter() is framed by
-> > > platform_suspend_begin() and platform_resume_end().
-> > >
-> > > My system is an ACPI system, so suspend_ops contains:
-> > >
-> > >         .begin =3D acpi_suspend_begin,
-> > >         .end =3D acpi_pm_end,
-> > >
-> > > Now, acpi_suspend_begin() acquires acpi_scan_lock through
-> > > acpi_pm_start(), and the lock is not released until acpi_pm_end().
-> > > Since dpm_complete() waits for the completion of a work that tries to
-> > > acquire acpi_scan_lock, the system will deadlock. =20
-> >=20
-> > So holding acpi_scan_lock across suspend-resume is basically to
-> > prevent the hotplug from taking place then IIRC.
-> >=20
-> > > AFAICS either:
-> > >
-> > > a. the ACPI lock cannot be held while dpm_complete() runs, or
-> > > b. ata_scsi_dev_rescan() must not be scheduled before the system is
-> > > resumed, or
-> > > c. acpi_device_hotplug() must be implemented without taking dev->mute=
-x.
-> > >
-> > > My gut feeling is that b. is the right answer. =20
-> >=20
-> > It's been a while since I looked at that code last time, but then it
-> > has not changed for quite some time too.
-> >=20
-> > It looks like the acpi_device_hotplug() path attempts to acquire
-> > acpi_scan_lock() while holding dev->mutex which is kind of silly.  I
-> > need to check that, though.
->=20
-> Thanks for your willingness. Well, it's not quite what you describe. If
-> it was a simple ABBA deadlock, then it would be reported by lockdep.
-> No, it's more complicated:
->=20
-> 1. suspend_devices_and_enter() holds acpi_scan_lock,
-> 2. an ACPI hotplug work runs, but acpi_device_hotplug() goes to sleep
->    when it gets to acquiring acpi_scan_lock,
-> 3. ata_scsi_dev_rescan() submits a SCSI command and waits for its
->    completion while holding dev->mutex,
-> 4. the SCSI completion work happens to be put on the same workqueue as
->    the ACPI hotplug work in step 2,
->    ^^^--- THIS is how the two events are serialized!
+Can you please explain further on this. Rafael has acked those
+patches, so it should be perfectly fine for you to pick them via your
+tree too. There is no need to defer them.
 
-While wondering why the work was not taken by another worker, I noticed
-that it was placed on the inactive_work list. Might be relevant.
+> I will then push out a branch and you can
+> rebase your patches on top of it ? And then probably Sudeep or someone else can
+> apply everything ?
 
-Petr T
+Or are you suggesting to just take one of the patches from my series,
+and then I will re-base everything on top?
+
+Just trying to understand the way forward. :-)
+
+Kind regards
+Uffe
