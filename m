@@ -2,77 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D60907B67D5
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 13:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E7C7B68D0
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 14:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231548AbjJCL04 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Oct 2023 07:26:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42444 "EHLO
+        id S232320AbjJCMQq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Oct 2023 08:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231337AbjJCL0z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 07:26:55 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B79B09B;
-        Tue,  3 Oct 2023 04:26:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EE1BFC15;
-        Tue,  3 Oct 2023 04:27:29 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B6C863F762;
-        Tue,  3 Oct 2023 04:26:49 -0700 (PDT)
-Date:   Tue, 3 Oct 2023 12:26:47 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Nikunj Kela <nkela@quicinc.com>,
-        Prasad Sodagudi <psodagud@quicinc.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 9/9] firmware: arm_scmi: Add generic OPP support to the
- SCMI performance domain
-Message-ID: <20231003112647.bbqwnre5bzijw5sg@bogus>
-References: <20230925131715.138411-1-ulf.hansson@linaro.org>
- <20230925131715.138411-10-ulf.hansson@linaro.org>
- <20230929162522.zjoh5d2tqspzm3nc@bogus>
- <20231003082133.xyu46szs3jfm6fks@vireshk-i7>
+        with ESMTP id S232371AbjJCMQp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 08:16:45 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B64AF;
+        Tue,  3 Oct 2023 05:16:41 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D63D5C433C7;
+        Tue,  3 Oct 2023 12:16:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696335400;
+        bh=HOMiDWufZS8RdGpxw7PziOf8wnBkhbZbrB+flX6wANQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=FXcS12JQDypAcLO2+RuZJymMiJLGw4aAALOhEi0MZt+Ft2rZWejpbEshkDj3Gp1nH
+         hu45WqKRqFhK7B2l2e51FzopfWdKbLDGuJyUSYp0tcAaf8IudgMStT/xymuBGMzvwm
+         jAv2hczSB68xiTnsnfzFNn2PoOu4rmLxvBjy4tNLh4cv4hYMMyu8EPGnsjEgYg1sDe
+         99VMzye2SB+bf6GDfpUsx2jx9aoMy+mL+xruZVTvd2rb0kwFKmu3UmA209CB1iRzZR
+         UPCJkvxI1xgMfdJ1LTI18ov9qbUEYyMfA21F7tozPBotila4H3dE8K/JZqlMFBIkgR
+         PX0PH+SDv2dfQ==
+Received: (nullmailer pid 282697 invoked by uid 1000);
+        Tue, 03 Oct 2023 12:16:35 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231003082133.xyu46szs3jfm6fks@vireshk-i7>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     quic_narepall@quicinc.com, bmasney@redhat.com,
+        krzysztof.kozlowski+dt@linaro.org, quic_nitirawa@quicinc.com,
+        vireshk@kernel.org, quic_asutoshd@quicinc.com,
+        quic_bhaskarv@quicinc.com, avri.altman@wdc.com,
+        krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
+        robh+dt@kernel.org, quic_cang@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
+        jejb@linux.ibm.com, cw00.choi@samsung.com, andersson@kernel.org,
+        bvanassche@acm.org, conor+dt@kernel.org, kyungmin.park@samsung.com,
+        martin.petersen@oracle.com, nm@ti.com,
+        linux-kernel@vger.kernel.org, quic_richardp@quicinc.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-scsi@vger.kernel.org, myungjoo.ham@samsung.com,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        sboyd@kernel.org
+In-Reply-To: <20231003111232.42663-2-manivannan.sadhasivam@linaro.org>
+References: <20231003111232.42663-1-manivannan.sadhasivam@linaro.org>
+ <20231003111232.42663-2-manivannan.sadhasivam@linaro.org>
+Message-Id: <169633539510.282606.1450427416869008072.robh@kernel.org>
+Subject: Re: [PATCH v4 1/6] dt-bindings: ufs: common: add OPP table
+Date:   Tue, 03 Oct 2023 07:16:35 -0500
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 03, 2023 at 01:51:33PM +0530, Viresh Kumar wrote:
-> On 29-09-23, 17:25, Sudeep Holla wrote:
-> > On Mon, Sep 25, 2023 at 03:17:15PM +0200, Ulf Hansson wrote:
-> > > To allow a consumer driver to use the OPP library to scale the performance
-> > > for its device, let's dynamically add the OPP table when the device gets
-> > > attached to its SCMI performance domain.
-> > >
-> > 
-> > The SCMI changes(patches 7-9) look fine to me. Rafael was fine with genpd
-> > changes, Viresh if you are OK with OPP changes I can take it via SCMI as
-> > there are some dependent patches as Ulf has pointed out in the cover letter.
+
+On Tue, 03 Oct 2023 16:42:27 +0530, Manivannan Sadhasivam wrote:
+> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> I would like to take OPP patches via my tree as there are some changes in my
-> tree and I plan to add some more changes on top of this. I can give an immutable
-> branch though.
->
+> Except scaling UFS and bus clocks, it's necessary to scale also the
+> voltages of regulators or power domain performance state levels.  Adding
+> Operating Performance Points table allows to adjust power domain
+> performance state, depending on the UFS clock speed.
+> 
+> OPPv2 deprecates previous property limited to clock scaling:
+> freq-table-hz.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  .../devicetree/bindings/ufs/ufs-common.yaml   | 36 ++++++++++++++++---
+>  1 file changed, 32 insertions(+), 4 deletions(-)
+> 
 
-Works for me. Please do share it once you have it ready.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
--- 
-Regards,
-Sudeep
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/ufs/ufs-common.yaml:90:20: [error] string value is redundantly quoted with any quotes (quoted-strings)
+./Documentation/devicetree/bindings/ufs/ufs-common.yaml:91:26: [error] string value is redundantly quoted with any quotes (quoted-strings)
+./Documentation/devicetree/bindings/ufs/ufs-common.yaml:91:36: [error] string value is redundantly quoted with any quotes (quoted-strings)
+
+dtschema/dtc warnings/errors:
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20231003111232.42663-2-manivannan.sadhasivam@linaro.org
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
