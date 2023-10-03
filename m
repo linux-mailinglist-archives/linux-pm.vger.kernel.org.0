@@ -2,189 +2,192 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCA27B6BCF
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 16:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05BDC7B6C17
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 16:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240047AbjJCOhJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Oct 2023 10:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34498 "EHLO
+        id S240118AbjJCOut (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Oct 2023 10:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235755AbjJCOhI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 10:37:08 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83DD90
-        for <linux-pm@vger.kernel.org>; Tue,  3 Oct 2023 07:37:01 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-5859b06509cso655875a12.2
-        for <linux-pm@vger.kernel.org>; Tue, 03 Oct 2023 07:37:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696343821; x=1696948621; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QwnD3WaCB3QuXIpXLWOOv1IEIdb1g/OoCibdXrPuBk8=;
-        b=dNva37YW8U4foWo+vopooRL70icAkZ89oEvjSsKMikmb+qW/0i5TIMx8lm/JO8PW1B
-         FNc92oPyOGdCIq8rjT0txV0MfFkG/NDyrnWL4h0NLgAvJ+p4hvQ7DfXDkMEOLYpzAsdg
-         LG7pL3IGRUKRmGOEwnijg7TNgO/Lph5o7G1UdBrh/ORg5bapzqzrMEgh/5aa8ZIpugOm
-         cRhs/U+cEuHw9L4YGhurWwdHgYykz7sqHWfLZv4azHgJ1+SUEdPSLnq3kJEz6xIMYA7K
-         k/1ly+YEAQ0s2/xhh0Cbf8tYAGO7TZmmS2SZJL/XqMX796Pn0qSvDqqEzC3uUILR9sYv
-         7QWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696343821; x=1696948621;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QwnD3WaCB3QuXIpXLWOOv1IEIdb1g/OoCibdXrPuBk8=;
-        b=E455PDCU+8O03+TAVpD5Ei5r1FylZMcYIPItJDvN4uZDfQHAm4zl0sILWRS8nuShVm
-         u6kSZrTAAmCwSmp9djnuNedsPF9ntzwxDBIPWm6txbHjSVy3sL2m6KCzsnTdL/vZQw1S
-         OZNn43hcw1/QGu9jnMSX2tS3X3DMBnDRqGHzOvyasej139NLAGRNFQcp7CQzeU5H5Njh
-         LTp8GJ9/sTyC8UbhbAyluawV0sVasi1wb7sVQHqXgaWjhV9NrH92tbw2lmiKROwj4rhe
-         yKP5T+jhzDCMO/9BRPq13ArRLH56RHbYI/iwBahIxm9ruGt8G2o3VZ6zmAGKNYtzOtmq
-         j3IQ==
-X-Gm-Message-State: AOJu0Ywd1g+u8ZjHhwdrCYWnmKWKqg2T0YfQ4Dv0nWAQZ0Y4EmfLd89u
-        HJK+4g6MbZsIvWmrcJYlh6Ptu6QW0vqoSCLsZ/1zcg==
-X-Google-Smtp-Source: AGHT+IGiDfRi3zRUWIaM35PLLvi2ytA0RVCDjq/ooBLCufAar5Q4KtbXSga6DuCy8BSbgHGhQqkWi2J/5SUbCQWB0aE=
-X-Received: by 2002:a17:90a:ce92:b0:26d:4ab3:fe11 with SMTP id
- g18-20020a17090ace9200b0026d4ab3fe11mr10925628pju.24.1696343821063; Tue, 03
- Oct 2023 07:37:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230929-hib_zero_bitmap_fix-v1-1-6cfdcb785250@quicinc.com>
- <CADyq12znHG_VPLVxSe+2ofX-WR1Uha2hu1MhoUAquMnoD_oP0w@mail.gmail.com>
- <CADyq12x1wZb0Yt3sXR21pQSagT7tGvFmXTBaoeNXkOjPi5-Rnw@mail.gmail.com> <e75a57a9-c9df-4dd5-a109-9ae8c49fb3ae@quicinc.com>
-In-Reply-To: <e75a57a9-c9df-4dd5-a109-9ae8c49fb3ae@quicinc.com>
-From:   Brian Geffon <bgeffon@google.com>
-Date:   Tue, 3 Oct 2023 10:36:25 -0400
-Message-ID: <CADyq12wmda6B1pJvOVhM4=VLwun9n4ef232td70-uGz435SSvg@mail.gmail.com>
+        with ESMTP id S239511AbjJCOut (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 10:50:49 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04981A7;
+        Tue,  3 Oct 2023 07:50:46 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 393CVwju002045;
+        Tue, 3 Oct 2023 14:50:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=qcppdkim1;
+ bh=fQyq13eSj4y6UdArCi6DtNxpAUAz2ZeWNxOn/5XVvGo=;
+ b=PZiBdyAphtTqQHUU9tQcs+BjyhS+OUZ/LrN5lB0T2OsSPCLdoOPxBMtC1ua+pc6lrzuI
+ PemSin+tG/0JT/YZQSCVm62NUnBPe+iF432vwdDmPzWYPsrW47zAsVUiFmKOwbNaWiq+
+ WAjD4Jb/rDfc+laK4PwOY8AM1c0/Bu0QvHCEB4wi7sNjUTrKjEkR2R44p39nc6oD7owX
+ zI9TSfSCY0+X9ArQWc43eDF458WnMfb+xVzBUvJcRgVxxGWoEZdPdiGQW82VyfvmQkuh
+ XRC5eWWYeKnc0OYvNcYuK69ymN1M/N7lj8/ab293umL36U6QllEDsNzm5NKWx8cdbIUt kQ== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tgbjj98mj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Oct 2023 14:50:32 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 393EoWQQ031358
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 3 Oct 2023 14:50:32 GMT
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.36; Tue, 3 Oct 2023 07:50:26 -0700
+Date:   Tue, 3 Oct 2023 20:20:23 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Brian Geffon <bgeffon@google.com>
+CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        <kernel@quicinc.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH] PM: hibernate: Fix a bug in copying the zero bitmap to
  safe pages
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        kernel@quicinc.com,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <4c9e1932-681f-4854-a04d-af9fbc35fc5e@quicinc.com>
+References: <20230929-hib_zero_bitmap_fix-v1-1-6cfdcb785250@quicinc.com>
+ <CADyq12znHG_VPLVxSe+2ofX-WR1Uha2hu1MhoUAquMnoD_oP0w@mail.gmail.com>
+ <CADyq12x1wZb0Yt3sXR21pQSagT7tGvFmXTBaoeNXkOjPi5-Rnw@mail.gmail.com>
+ <e75a57a9-c9df-4dd5-a109-9ae8c49fb3ae@quicinc.com>
+ <CADyq12wmda6B1pJvOVhM4=VLwun9n4ef232td70-uGz435SSvg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CADyq12wmda6B1pJvOVhM4=VLwun9n4ef232td70-uGz435SSvg@mail.gmail.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: SnhBvkjRGwMo1_QqvnQPyLQ0GXuG-O0W
+X-Proofpoint-ORIG-GUID: SnhBvkjRGwMo1_QqvnQPyLQ0GXuG-O0W
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-03_12,2023-10-02_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ clxscore=1015 impostorscore=0 phishscore=0 malwarescore=0
+ priorityscore=1501 mlxlogscore=475 adultscore=0 suspectscore=0 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310030110
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 2, 2023 at 11:05=E2=80=AFPM Pavan Kondeti <quic_pkondeti@quicin=
-c.com> wrote:
->
-> On Mon, Oct 02, 2023 at 02:34:20PM -0400, Brian Geffon wrote:
-> > On Mon, Oct 2, 2023 at 1:56=E2=80=AFPM Brian Geffon <bgeffon@google.com=
-> wrote:
-> > >
-> > > On Fri, Sep 29, 2023 at 1:31=E2=80=AFPM Pavankumar Kondeti
-> > > <quic_pkondeti@quicinc.com> wrote:
-> > > >
-> > > > The following crash is observed 100% of the time during resume from
-> > > > the hibernation on a x86 QEMU system.
-> > > >
-> > > > [   12.931887]  ? __die_body+0x1a/0x60
-> > > > [   12.932324]  ? page_fault_oops+0x156/0x420
-> > > > [   12.932824]  ? search_exception_tables+0x37/0x50
-> > > > [   12.933389]  ? fixup_exception+0x21/0x300
-> > > > [   12.933889]  ? exc_page_fault+0x69/0x150
-> > > > [   12.934371]  ? asm_exc_page_fault+0x26/0x30
-> > > > [   12.934869]  ? get_buffer.constprop.0+0xac/0x100
-> > > > [   12.935428]  snapshot_write_next+0x7c/0x9f0
-> > > > [   12.935929]  ? submit_bio_noacct_nocheck+0x2c2/0x370
-> > > > [   12.936530]  ? submit_bio_noacct+0x44/0x2c0
-> > > > [   12.937035]  ? hib_submit_io+0xa5/0x110
-> > > > [   12.937501]  load_image+0x83/0x1a0
-> > > > [   12.937919]  swsusp_read+0x17f/0x1d0
-> > > > [   12.938355]  ? create_basic_memory_bitmaps+0x1b7/0x240
-> > > > [   12.938967]  load_image_and_restore+0x45/0xc0
-> > > > [   12.939494]  software_resume+0x13c/0x180
-> > > > [   12.939994]  resume_store+0xa3/0x1d0
-> > > >
-> > > > The commit being fixed introduced a bug in copying the zero bitmap
-> > > > to safe pages. A temporary bitmap is allocated in prepare_image()
-> > > > to make a copy of zero bitmap after the unsafe pages are marked.
-> > > > Freeing this temporary bitmap later results in an inconsistent stat=
-e
-> > > > of unsafe pages. Since free bit is left as is for this temporary bi=
-tmap
-> > > > after free, these pages are treated as unsafe pages when they are
-> > > > allocated again. This results in incorrect calculation of the numbe=
-r
-> > > > of pages pre-allocated for the image.
-> > > >
-> > > > nr_pages =3D (nr_zero_pages + nr_copy_pages) - nr_highmem - allocat=
-ed_unsafe_pages;
-> > > >
-> > > > The allocate_unsafe_pages is estimated to be higher than the actual
-> > > > which results in running short of pages in safe_pages_list. Hence t=
-he
-> > > > crash is observed in get_buffer() due to NULL pointer access of
-> > > > safe_pages_list.
-> > >
-> > > After reading through the code, perhaps I'm missing something, I'm no=
-t
-> > > sure that this is really fixing the problem.
-> > >
-> > > It seems like the problem would be that memory_bm_create() results in
-> > > calls to get_image_page() w/ safe_needed =3D PG_ANY =3D=3D 0, meaning=
- that
-> > > get_image_page() will not touch allocated_unsafe_pages and instead
-> > > will mark the page as in use by setting it in the forbidden_pages_map
-> > > and the free_pages_map simultaneously. The problem is that the
-> > > free_pages_map was already populated by the call to mark_unsafe_pages=
-,
-> > > meaning that if we allocated a safe page in get_image_page() we just
-> > > set the free bit when it otherwise should not be set.
-> > >
-> > > When the page is later free'd via the call to memory_bm_free(&tmp,
-> > > PG_UNSAFE_KEEP), it results in calls to free_image_page() w/
-> > > clear_page_nosave =3D PG_UNSAFE_KEEP =3D=3D 0. This means that we do =
-not
-> > > touch the free_pages_map because we don't call
-> > > swsusp_unset_page_free().
-> > >
-> > > With all that being said it seems like the correct way to deal with
-> > > that would be to do:
-> > >    error =3D memory_bm_create(&tmp, GFP_ATOMIC, PG_SAFE);
-> > > Here we know that the pages were not in the free_pages_map initially.
-> > >
-> > > Followed by freeing it as:
-> > >     memory_bm_free(&tmp, PG_UNSAFE_CLEAR);
-> > > And here we know that swsusp_unset_page_free() will be called making
-> > > sure the page is not in the free_pages_map afterwards.
-> > >
-> > > And that should result in an unchanged free_pages_map. Does that make
-> > > sense? Please correct me if I'm misunderstanding something.
-> > >
->
-> Thanks for your review. Appreciate the detailed summary.
->
+On Tue, Oct 03, 2023 at 10:36:25AM -0400, Brian Geffon wrote:
+> On Mon, Oct 2, 2023 at 11:05 PM Pavan Kondeti <quic_pkondeti@quicinc.com> wrote:
 > >
-> > To restate this another way, if I'm reading it correctly, I think the
-> > outcome is actually nearly the same, the difference is, when
-> > allocating the bitmap before w/ PG_ANY we're setting bits in the
-> > free_page_list which will be unset a few lines later in the call to
-> > mark_unsafe_pages(), and then we won't touch the free_pages_list
-> > during the memory_bm_free() because it's called with PG_UNSAFE_KEEP.
+> > On Mon, Oct 02, 2023 at 02:34:20PM -0400, Brian Geffon wrote:
+> > > On Mon, Oct 2, 2023 at 1:56 PM Brian Geffon <bgeffon@google.com> wrote:
+> > > >
+> > > > On Fri, Sep 29, 2023 at 1:31 PM Pavankumar Kondeti
+> > > > <quic_pkondeti@quicinc.com> wrote:
+> > > > >
+> > > > > The following crash is observed 100% of the time during resume from
+> > > > > the hibernation on a x86 QEMU system.
+> > > > >
+> > > > > [   12.931887]  ? __die_body+0x1a/0x60
+> > > > > [   12.932324]  ? page_fault_oops+0x156/0x420
+> > > > > [   12.932824]  ? search_exception_tables+0x37/0x50
+> > > > > [   12.933389]  ? fixup_exception+0x21/0x300
+> > > > > [   12.933889]  ? exc_page_fault+0x69/0x150
+> > > > > [   12.934371]  ? asm_exc_page_fault+0x26/0x30
+> > > > > [   12.934869]  ? get_buffer.constprop.0+0xac/0x100
+> > > > > [   12.935428]  snapshot_write_next+0x7c/0x9f0
+> > > > > [   12.935929]  ? submit_bio_noacct_nocheck+0x2c2/0x370
+> > > > > [   12.936530]  ? submit_bio_noacct+0x44/0x2c0
+> > > > > [   12.937035]  ? hib_submit_io+0xa5/0x110
+> > > > > [   12.937501]  load_image+0x83/0x1a0
+> > > > > [   12.937919]  swsusp_read+0x17f/0x1d0
+> > > > > [   12.938355]  ? create_basic_memory_bitmaps+0x1b7/0x240
+> > > > > [   12.938967]  load_image_and_restore+0x45/0xc0
+> > > > > [   12.939494]  software_resume+0x13c/0x180
+> > > > > [   12.939994]  resume_store+0xa3/0x1d0
+> > > > >
+> > > > > The commit being fixed introduced a bug in copying the zero bitmap
+> > > > > to safe pages. A temporary bitmap is allocated in prepare_image()
+> > > > > to make a copy of zero bitmap after the unsafe pages are marked.
+> > > > > Freeing this temporary bitmap later results in an inconsistent state
+> > > > > of unsafe pages. Since free bit is left as is for this temporary bitmap
+> > > > > after free, these pages are treated as unsafe pages when they are
+> > > > > allocated again. This results in incorrect calculation of the number
+> > > > > of pages pre-allocated for the image.
+> > > > >
+> > > > > nr_pages = (nr_zero_pages + nr_copy_pages) - nr_highmem - allocated_unsafe_pages;
+> > > > >
+> > > > > The allocate_unsafe_pages is estimated to be higher than the actual
+> > > > > which results in running short of pages in safe_pages_list. Hence the
+> > > > > crash is observed in get_buffer() due to NULL pointer access of
+> > > > > safe_pages_list.
+> > > >
+> > > > After reading through the code, perhaps I'm missing something, I'm not
+> > > > sure that this is really fixing the problem.
+> > > >
+> > > > It seems like the problem would be that memory_bm_create() results in
+> > > > calls to get_image_page() w/ safe_needed = PG_ANY == 0, meaning that
+> > > > get_image_page() will not touch allocated_unsafe_pages and instead
+> > > > will mark the page as in use by setting it in the forbidden_pages_map
+> > > > and the free_pages_map simultaneously. The problem is that the
+> > > > free_pages_map was already populated by the call to mark_unsafe_pages,
+> > > > meaning that if we allocated a safe page in get_image_page() we just
+> > > > set the free bit when it otherwise should not be set.
+> > > >
+> > > > When the page is later free'd via the call to memory_bm_free(&tmp,
+> > > > PG_UNSAFE_KEEP), it results in calls to free_image_page() w/
+> > > > clear_page_nosave = PG_UNSAFE_KEEP == 0. This means that we do not
+> > > > touch the free_pages_map because we don't call
+> > > > swsusp_unset_page_free().
+> > > >
+> > > > With all that being said it seems like the correct way to deal with
+> > > > that would be to do:
+> > > >    error = memory_bm_create(&tmp, GFP_ATOMIC, PG_SAFE);
+> > > > Here we know that the pages were not in the free_pages_map initially.
+> > > >
+> > > > Followed by freeing it as:
+> > > >     memory_bm_free(&tmp, PG_UNSAFE_CLEAR);
+> > > > And here we know that swsusp_unset_page_free() will be called making
+> > > > sure the page is not in the free_pages_map afterwards.
+> > > >
+> > > > And that should result in an unchanged free_pages_map. Does that make
+> > > > sense? Please correct me if I'm misunderstanding something.
+> > > >
 > >
->
-> The current patch and your suggestion both gives the same effect like
-> you said. Since it is a temporary buffer to hold the zero bit map page, I
-> did not allocate safe pages. Allocating safe pages means a bit more
-> work. In this case this it is not completely throw away work but
-> re-ordering the call seems to be simple here. Pls let me know if you
-> want to me incorporate your suggestion.
+> > Thanks for your review. Appreciate the detailed summary.
+> >
+> > >
+> > > To restate this another way, if I'm reading it correctly, I think the
+> > > outcome is actually nearly the same, the difference is, when
+> > > allocating the bitmap before w/ PG_ANY we're setting bits in the
+> > > free_page_list which will be unset a few lines later in the call to
+> > > mark_unsafe_pages(), and then we won't touch the free_pages_list
+> > > during the memory_bm_free() because it's called with PG_UNSAFE_KEEP.
+> > >
+> >
+> > The current patch and your suggestion both gives the same effect like
+> > you said. Since it is a temporary buffer to hold the zero bit map page, I
+> > did not allocate safe pages. Allocating safe pages means a bit more
+> > work. In this case this it is not completely throw away work but
+> > re-ordering the call seems to be simple here. Pls let me know if you
+> > want to me incorporate your suggestion.
+> 
+> My personal opinion is that PG_SAFE makes a bit more sense, it's not
+> really wasted work as any pages which are not safe end up being added
+> to the allocated_unsafe_pages pool.
+> 
 
-My personal opinion is that PG_SAFE makes a bit more sense, it's not
-really wasted work as any pages which are not safe end up being added
-to the allocated_unsafe_pages pool.
+Yes, the extra bit of works does not go waste. I will send v2 with your
+suggestion. Thanks a lot for your review and detailed comments.
 
->
-> Thanks,
-> Pavan
+Thanks,
+Pavan
+
