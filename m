@@ -2,183 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E827B6405
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 10:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47FCE7B6424
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Oct 2023 10:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239391AbjJCI0L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Oct 2023 04:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
+        id S239299AbjJCIaz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Oct 2023 04:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239430AbjJCI0K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 04:26:10 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF201AD;
-        Tue,  3 Oct 2023 01:26:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696321566; x=1727857566;
-  h=date:from:to:cc:subject:message-id;
-  bh=5qh8I7jim+K59g3HieYZ/aC4ydJDQON/9o3WI39UzBs=;
-  b=KuwHjI8Euc4RP53mg2qqrfNgvYd3tSTF0aCLifCt8nkIIB1N2ZNlG9V7
-   80OnaoBt417rD0H1UU8W7pJkRqqqyU/K93fIW7VHAocUDTObCTdyaC6WD
-   cfEG1Hc3DrHPG4I7sR/WYR+XoC6896Z63nOOzWK8Q5LEhyqJgY4kcJzm/
-   cjVJhKoflVWojZSfI3dYZjwfTih0gmUvDTNhsm0IpG8zwCQGH0dD9j8/9
-   Yez0nknDP2T+g2yywParX9ejbAESlMUw1kIW3bRaO9MctiUWMbaPyqiAF
-   xUo4OZX/aIGz2g/+Dzk31YFR/u4Vvyd3/kuGsIQz/reXTlizZIVH3usFV
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="381703019"
-X-IronPort-AV: E=Sophos;i="6.03,196,1694761200"; 
-   d="scan'208";a="381703019"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2023 01:26:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="997921721"
-X-IronPort-AV: E=Sophos;i="6.03,196,1694761200"; 
-   d="scan'208";a="997921721"
-Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Oct 2023 01:26:04 -0700
-Received: from kbuild by c3b01524d57c with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qnajB-0006vc-3D;
-        Tue, 03 Oct 2023 08:26:01 +0000
-Date:   Tue, 03 Oct 2023 16:25:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 9b7758dec57ddcff690c146435946ee1a56b36aa
-Message-ID: <202310031659.MtBI0bID-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231232AbjJCIaw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Oct 2023 04:30:52 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E626DFD
+        for <linux-pm@vger.kernel.org>; Tue,  3 Oct 2023 01:30:31 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-504427aae4fso4913594e87.1
+        for <linux-pm@vger.kernel.org>; Tue, 03 Oct 2023 01:30:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696321830; x=1696926630; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0Upai5QPyYhZqvlPnDXtxS/IJLPhOhdON/NIKGQEvYU=;
+        b=iiDuskM0u7fMq+7zUoHpz4SndOdtQoQK3zWpH1W3BqfBQA/rVVwORu4MkGWyNpna28
+         0mqeJYAl5iyDwyMpP5ku0TZ1gyOlnS5ab3BS9DYogsLkePdUR5ocY3g1pIJaNN84JTQY
+         XfNHDXKcWYtsgeq1dkipJRciwgtJctedqYVh8dQ0t0bww/AEFoSS9R5lHNsJ9sxk1ACc
+         G6GtMTdjgWIDEolA6UmpKfGuVpVPqJQ/QrUiEeAxnGKZo5psRK3rrucX1KRyQu1PPsUy
+         jQtJaijXgnYGMxKsTne5xMs3GPN3Io97XcKMFRFiw0ZAmnCIZtYT9r6uQmex/2Sm4mrT
+         UgmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696321830; x=1696926630;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Upai5QPyYhZqvlPnDXtxS/IJLPhOhdON/NIKGQEvYU=;
+        b=oZU3CXpV2PU0eVxUWjV4PgsF5LVY229rAyVV/u6dtyq75v6S1cjXwLSge+N/tPOIuI
+         H+skM1UETHSvMMB/4iw6b8hDbTQoF7UM4TlQujHKlZmTMit3Iv2UF/EaiCTaEZySH35m
+         oM23GpBLhfKg47JDI5iODMOCehx/KLhiirv2GjuhRtZtzoKIWgP8KMIr29oAlGyUdbqQ
+         R+hJSZ8IqOYDoBtZqZBa3wTbE0kPyfRWZgp4nC9X/myztxI0ZhFebOur59AzcK1SVF1R
+         ULHzJ6XdWOioAL9eSKGSCrI2zmNwhPb7HSb6oaRgsyC4T24jrM4tx9fLUiQkJcwJSDY9
+         s5wA==
+X-Gm-Message-State: AOJu0Yw5yjHZJ+I377oIGx/cnTKU3LcJvh8ZPHvYnu6Y+oSeuoTBelO6
+        OkAoOvPM22gAnGgCpODyGRfhow==
+X-Google-Smtp-Source: AGHT+IGxRj7o/xKxQnfARL8kw7LPsBap9THlWkCKqS+Sj7FzwYabnhEfXed4ig9109nAC5QpgutbFQ==
+X-Received: by 2002:a05:6512:10d4:b0:504:86ae:5851 with SMTP id k20-20020a05651210d400b0050486ae5851mr1655723lfg.23.1696321829840;
+        Tue, 03 Oct 2023 01:30:29 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id g8-20020a19ac08000000b004fe48a27fa1sm108239lfc.114.2023.10.03.01.30.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Oct 2023 01:30:29 -0700 (PDT)
+Message-ID: <7312633f-3b53-43a1-b6e3-010513c2a1e2@linaro.org>
+Date:   Tue, 3 Oct 2023 11:30:28 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 05/23] interconnect: icc-clk: add support for scaling
+ using OPP
+Content-Language: en-GB
+To:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Nishanth Menon <nm@ti.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Stephan Gerhold <stephan@gerhold.net>
+References: <20230827115033.935089-1-dmitry.baryshkov@linaro.org>
+ <20230827115033.935089-6-dmitry.baryshkov@linaro.org>
+ <493aff10d698c9ca5bdbeae45250f5fe.sboyd@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <493aff10d698c9ca5bdbeae45250f5fe.sboyd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 9b7758dec57ddcff690c146435946ee1a56b36aa  Merge branches 'pm-cpufreq', 'pm-sleep' and 'pm-tools' into linux-next
+On 28/08/2023 21:09, Stephen Boyd wrote:
+> Quoting Dmitry Baryshkov (2023-08-27 04:50:15)
+>> diff --git a/drivers/interconnect/icc-clk.c b/drivers/interconnect/icc-clk.c
+>> index d787f2ea36d9..45ffb068979d 100644
+>> --- a/drivers/interconnect/icc-clk.c
+>> +++ b/drivers/interconnect/icc-clk.c
+>> @@ -25,12 +28,16 @@ struct icc_clk_provider {
+>>   static int icc_clk_set(struct icc_node *src, struct icc_node *dst)
+>>   {
+>>          struct icc_clk_node *qn = src->data;
+>> +       unsigned long rate = icc_units_to_bps(src->peak_bw);
+>>          int ret;
+>>   
+>>          if (!qn || !qn->clk)
+>>                  return 0;
+>>   
+>> -       if (!src->peak_bw) {
+>> +       if (qn->opp)
+>> +               return dev_pm_opp_set_rate(qn->dev, rate);
+> 
+> Just curious how does lockdep do with this? Doesn't OPP call into
+> interconnect code, so lockdep will complain about ABBA?
 
-elapsed time: 939m
-
-configs tested: 107
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20231003   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                   randconfig-001-20231003   gcc  
-arm64                            allmodconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20231003   gcc  
-i386         buildonly-randconfig-002-20231003   gcc  
-i386         buildonly-randconfig-003-20231003   gcc  
-i386         buildonly-randconfig-004-20231003   gcc  
-i386         buildonly-randconfig-005-20231003   gcc  
-i386         buildonly-randconfig-006-20231003   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20231003   gcc  
-i386                  randconfig-002-20231003   gcc  
-i386                  randconfig-003-20231003   gcc  
-i386                  randconfig-004-20231003   gcc  
-i386                  randconfig-005-20231003   gcc  
-i386                  randconfig-006-20231003   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20231003   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20231003   gcc  
-x86_64                randconfig-002-20231003   gcc  
-x86_64                randconfig-003-20231003   gcc  
-x86_64                randconfig-004-20231003   gcc  
-x86_64                randconfig-005-20231003   gcc  
-x86_64                randconfig-006-20231003   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
+Unfortunately it does. It seems, the icc-clk is not a proper way to go 
+here. I will take a look at reusing set_required_opps for this case.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With best wishes
+Dmitry
+
