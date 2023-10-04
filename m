@@ -2,177 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5847B7EE8
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Oct 2023 14:19:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B250B7B801D
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Oct 2023 15:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242325AbjJDMTP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Oct 2023 08:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
+        id S233003AbjJDNCM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Oct 2023 09:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242307AbjJDMTP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Oct 2023 08:19:15 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01AFCB0
-        for <linux-pm@vger.kernel.org>; Wed,  4 Oct 2023 05:19:11 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-6934202b8bdso1613742b3a.1
-        for <linux-pm@vger.kernel.org>; Wed, 04 Oct 2023 05:19:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696421951; x=1697026751; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PEeWc8DqfnzpJ6zj4F7xZkjTH42TKKVplAVNMTpWCq8=;
-        b=v6oaLhg8dYROMsptZsOZh5zEFwFQwGvuD/eneU/pxyMBaB6S//Uz9dUwiwVVbf+9DC
-         MGeFgSEmYsegeGS7bTwHzipVfzqmZ2LndT5vDh5BsO11XZpKc3gxMOyfwBnJq4RBkTWO
-         y5gOZj85KskooD/IV/ZxYcCnbwqZbAezLxazF85i0ggpfe4Ww1YyKsMLY3OZX0sXMHyD
-         9jYlHN8mel5qQPlK6wguoD3iHqyW+R8zba99FfiA6dYOvPZ9fMEWAeENOqPIXM5GX31c
-         L9ALvofbTm80W6xBREhX2rTN5r+UUbHvoccrI482uhraja+IY99hRAkWCO7y86kVyTR5
-         N71w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696421951; x=1697026751;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PEeWc8DqfnzpJ6zj4F7xZkjTH42TKKVplAVNMTpWCq8=;
-        b=WcvIpFhxvo0TolTMGo24yfX1qklvDq2zzneaaSj85cvL1kxzk77i08XX3SZLOfcDlu
-         iPndz3tqVy6sKDYyPJL4tj19xJZu+yJtD7y+6+crhZZDCYbvoeh1a6Y0QWyIxf7IuN4F
-         40Ggd/8h9iBrOmR5y6++1XvBTDps8hsajznqnUbVuynB1n0G+nzU9W2XOQaGkzo/ZEjk
-         RDQ3k2UNqtJH2DxcwsC8xKMRUtbK3AYoMjIGNcTbdFyIgWD4HE2N7LFCveVDlTyC5Qbi
-         DF6LmCa/C5fOz2Q0fQ5aG9tqqkqQo85A21IgVnC/3P2dLURGb933sCGgXlLBk/7bYI1U
-         JssA==
-X-Gm-Message-State: AOJu0Ywh0Nb99Nsh8JFqrDwDlOU6GEylE5HHgOeGFrl7FC8Fqf81p2nk
-        n63MBGb14vcwAmHWQEsi52GvRVEUyruHbD9zARBBKQ==
-X-Google-Smtp-Source: AGHT+IEzfoagUbnIfET05xNcAuU7M6mTc0Wm2xWkyvWAiOWEx1SL7Xac1rTM6tKJ/hNG9/88u8rYMlRcR6LUAbiA98M=
-X-Received: by 2002:a05:6a21:6d9b:b0:14b:8023:33cb with SMTP id
- wl27-20020a056a216d9b00b0014b802333cbmr2654388pzb.11.1696421951306; Wed, 04
- Oct 2023 05:19:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231004-hib_zero_bitmap_fix-v2-1-6a530b7b6e98@quicinc.com>
-In-Reply-To: <20231004-hib_zero_bitmap_fix-v2-1-6a530b7b6e98@quicinc.com>
-From:   Brian Geffon <bgeffon@google.com>
-Date:   Wed, 4 Oct 2023 08:18:35 -0400
-Message-ID: <CADyq12ziGEpkpvLv9zg91Zpp-12GW1iLnXcT8LaMt48WiKaVMw@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: hibernate: Fix a bug in copying the zero bitmap to
- safe pages
-To:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        kernel@quicinc.com,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable <stable@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        with ESMTP id S233096AbjJDNCL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Oct 2023 09:02:11 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238DA98;
+        Wed,  4 Oct 2023 06:02:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696424528; x=1727960528;
+  h=date:from:to:cc:subject:message-id;
+  bh=ZHVR+iEcz2o50eBhM0aiYhokgRtwOBS0DLChfgTPnmI=;
+  b=NSu5sTYZzMDMQkIUYdDJ/y1jKSTQ7Kxy0GlkakvUs8yyOZJazc4UguKR
+   15CcvBCKSJpOh+4CxhBKciRF/g4X3UjX+G07cMB7fUxZylgF+oPwKxYKt
+   QQIV8//gxmfy3NT/M7gStIiZR3yfESpHjv+KOPlhi7uXH3qvjRA+aNkHf
+   kEGdwwo6Uz9D4Dic/8bubH8YUnYAebwCct+uBMWB8sfAqpswK9mWNOFJD
+   /ACap4RrRjuNB7vK/sSu4XElf+L7/nKLqoTNis1JZqzH99CiBC8OjHGO0
+   e8I92ld5NyCXANj7fMRntKymGZS1P9gfffEWCkfefyQJQ6yWKC2ljCBqd
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="382027639"
+X-IronPort-AV: E=Sophos;i="6.03,200,1694761200"; 
+   d="scan'208";a="382027639"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2023 06:02:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="754924619"
+X-IronPort-AV: E=Sophos;i="6.03,200,1694761200"; 
+   d="scan'208";a="754924619"
+Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 04 Oct 2023 06:02:06 -0700
+Received: from kbuild by c3b01524d57c with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qo1Vs-000JFW-15;
+        Wed, 04 Oct 2023 13:02:04 +0000
+Date:   Wed, 04 Oct 2023 21:01:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 57ecdfe1a18d82998d66297800d217bfe1124824
+Message-ID: <202310042142.cusieYEI-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 4, 2023 at 1:01=E2=80=AFAM Pavankumar Kondeti
-<quic_pkondeti@quicinc.com> wrote:
->
-> The following crash is observed 100% of the time during resume from
-> the hibernation on a x86 QEMU system.
->
-> [   12.931887]  ? __die_body+0x1a/0x60
-> [   12.932324]  ? page_fault_oops+0x156/0x420
-> [   12.932824]  ? search_exception_tables+0x37/0x50
-> [   12.933389]  ? fixup_exception+0x21/0x300
-> [   12.933889]  ? exc_page_fault+0x69/0x150
-> [   12.934371]  ? asm_exc_page_fault+0x26/0x30
-> [   12.934869]  ? get_buffer.constprop.0+0xac/0x100
-> [   12.935428]  snapshot_write_next+0x7c/0x9f0
-> [   12.935929]  ? submit_bio_noacct_nocheck+0x2c2/0x370
-> [   12.936530]  ? submit_bio_noacct+0x44/0x2c0
-> [   12.937035]  ? hib_submit_io+0xa5/0x110
-> [   12.937501]  load_image+0x83/0x1a0
-> [   12.937919]  swsusp_read+0x17f/0x1d0
-> [   12.938355]  ? create_basic_memory_bitmaps+0x1b7/0x240
-> [   12.938967]  load_image_and_restore+0x45/0xc0
-> [   12.939494]  software_resume+0x13c/0x180
-> [   12.939994]  resume_store+0xa3/0x1d0
->
-> The commit being fixed introduced a bug in copying the zero bitmap
-> to safe pages. A temporary bitmap is allocated with PG_ANY flag in
-> prepare_image() to make a copy of zero bitmap after the unsafe pages
-> are marked. Freeing this temporary bitmap with PG_UNSAFE_KEEP later
-> results in an inconsistent state of unsafe pages. Since free bit is
-> left as is for this temporary bitmap after free, these pages are
-> treated as unsafe pages when they are allocated again. This results
-> in incorrect calculation of the number of pages pre-allocated for the
-> image.
->
-> nr_pages =3D (nr_zero_pages + nr_copy_pages) - nr_highmem - allocated_uns=
-afe_pages;
->
-> The allocate_unsafe_pages is estimated to be higher than the actual
-> which results in running short of pages in safe_pages_list. Hence the
-> crash is observed in get_buffer() due to NULL pointer access of
-> safe_pages_list.
->
-> Fix this issue by creating the temporary zero bitmap from safe pages
-> (free bit not set) so that the corresponding free bits can be cleared whi=
-le
-> freeing this bitmap.
->
-> Cc: stable <stable@kernel.org>
-> Fixes: 005e8dddd497 ("PM: hibernate: don't store zero pages in the image =
-file")
-> Suggested-by:: Brian Geffon <bgeffon@google.com>
-> Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 57ecdfe1a18d82998d66297800d217bfe1124824  Merge branch 'acpi-prm' into bleeding-edge
 
-Reviewed-by: Brian Geffon <bgeffon@google.com>
+elapsed time: 1002m
 
-> ---
-> Changes in v2:
-> - Allocate zero bit map from safe pages as suggested by Brian
-> - Link to v1: https://lore.kernel.org/r/20230929-hib_zero_bitmap_fix-v1-1=
--6cfdcb785250@quicinc.com
-> ---
->  kernel/power/snapshot.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-> index 87e9f7e2bdc0..0f12e0a97e43 100644
-> --- a/kernel/power/snapshot.c
-> +++ b/kernel/power/snapshot.c
-> @@ -2647,7 +2647,7 @@ static int prepare_image(struct memory_bitmap *new_=
-bm, struct memory_bitmap *bm,
->         memory_bm_free(bm, PG_UNSAFE_KEEP);
->
->         /* Make a copy of zero_bm so it can be created in safe pages */
-> -       error =3D memory_bm_create(&tmp, GFP_ATOMIC, PG_ANY);
-> +       error =3D memory_bm_create(&tmp, GFP_ATOMIC, PG_SAFE);
->         if (error)
->                 goto Free;
->
-> @@ -2660,7 +2660,7 @@ static int prepare_image(struct memory_bitmap *new_=
-bm, struct memory_bitmap *bm,
->                 goto Free;
->
->         duplicate_memory_bitmap(zero_bm, &tmp);
-> -       memory_bm_free(&tmp, PG_UNSAFE_KEEP);
-> +       memory_bm_free(&tmp, PG_UNSAFE_CLEAR);
->         /* At this point zero_bm is in safe pages and it can be used for =
-restoring. */
->
->         if (nr_highmem > 0) {
->
-> ---
-> base-commit: 8a749fd1a8720d4619c91c8b6e7528c0a355c0aa
-> change-id: 20230929-hib_zero_bitmap_fix-bc5884eba0ae
->
+configs tested: 107
+configs skipped: 2
 
-Thanks!
-Brian
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> Best regards,
-> --
-> Pavankumar Kondeti <quic_pkondeti@quicinc.com>
->
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20231004   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                   randconfig-001-20231004   gcc  
+arm64                            allmodconfig   gcc  
+arm64                             allnoconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20231004   gcc  
+i386         buildonly-randconfig-002-20231004   gcc  
+i386         buildonly-randconfig-003-20231004   gcc  
+i386         buildonly-randconfig-004-20231004   gcc  
+i386         buildonly-randconfig-005-20231004   gcc  
+i386         buildonly-randconfig-006-20231004   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                  randconfig-001-20231004   gcc  
+i386                  randconfig-002-20231004   gcc  
+i386                  randconfig-003-20231004   gcc  
+i386                  randconfig-004-20231004   gcc  
+i386                  randconfig-005-20231004   gcc  
+i386                  randconfig-006-20231004   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20231004   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20231004   gcc  
+x86_64                randconfig-002-20231004   gcc  
+x86_64                randconfig-003-20231004   gcc  
+x86_64                randconfig-004-20231004   gcc  
+x86_64                randconfig-005-20231004   gcc  
+x86_64                randconfig-006-20231004   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
