@@ -2,110 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA2307B96A7
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Oct 2023 23:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 996127B97BB
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Oct 2023 00:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244135AbjJDVrH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Oct 2023 17:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50708 "EHLO
+        id S231513AbjJDWJr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Oct 2023 18:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244129AbjJDVrC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Oct 2023 17:47:02 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB996D7
-        for <linux-pm@vger.kernel.org>; Wed,  4 Oct 2023 14:46:58 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-59f7f2b1036so2959227b3.3
-        for <linux-pm@vger.kernel.org>; Wed, 04 Oct 2023 14:46:58 -0700 (PDT)
+        with ESMTP id S231196AbjJDWJr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Oct 2023 18:09:47 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B1CD7
+        for <linux-pm@vger.kernel.org>; Wed,  4 Oct 2023 15:09:43 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-d857c8a1d50so363455276.3
+        for <linux-pm@vger.kernel.org>; Wed, 04 Oct 2023 15:09:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696456018; x=1697060818; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1696457382; x=1697062182; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tpTnpDJ8m5u92YyzRJIrb4UFVgAGSfyLUUGh9QrCbEs=;
-        b=cxH1nUU6x2vefMLkWSdvBIHTVHCwhRcorKMT7bToAafoDfONZ1TQcx1h/Hk/4IqR0V
-         D9aSi0+aTp1z/LgiZAPab01nNv0v7YCyMJxH5VN7HYeV2QirqyOI5MpkNTLnorxkbigJ
-         eV2q8CfaQbut00/10H5G4wdRh5bcL0zWp+oRAW/mzJhX7Scnh5lByoJgJx7q2VWdptTd
-         0WaqwQRqa5FggbzDakARe99KG2zY+pXkbtfueU7DJAEbkuUH6gHqae7hfsMVnKmXF4Hi
-         a5mxZ/AW49dC8PqxofQ/hxAPkZks3i+EXbfLFcxYXUSbiPpiWoSjnpf3z/7/kri+lIjT
-         0Xqw==
+        bh=cGtL9ni/bmY+k+XLO0zZ//MJWYpwr9WdA7Lq88K11GI=;
+        b=r0NfUJhLIWnl8d+T7mPYNKKQ5OaUUvMwYuOd5fUR6kaXxUmQzYdU4b0aRxDb0UX3/y
+         pCBnCAYwBBhxZbV1a/fMJtBH2BgwZKcbe1IZP9eciOm9DmvFlrdZACNoQFrIt+z2v+EP
+         Ne25ID5PulMrmmW3NDK77YU/2Oc+PLxRh/zlIm+yYQYSmidmXsLl8E94anAt7yt6wrs/
+         +HryNABdKJuOEQtnTEmXt8mHBP9BeaVGyvA10t1QwDj8w8Aw8z2We8e+OIeG0CweWT6g
+         +6t0w0i63818BPSwD2N0bEDaL+lbSzYh2ifq6bEncN21HHji2dVfAlwk7/MLoS/VT66x
+         Ys/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696456018; x=1697060818;
+        d=1e100.net; s=20230601; t=1696457382; x=1697062182;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tpTnpDJ8m5u92YyzRJIrb4UFVgAGSfyLUUGh9QrCbEs=;
-        b=n35+vwMLejUuvlB3tt50s/uYG9D3MMjSSNQv+yoSlUiBGrNZsGLo4Tp3SDU+kHCo9D
-         qw+Z7vHrI4rfRDAgalXY+lLPKnDuth1VjdoxSKoF5I/FJVPVA3NeTU2rhfFBY6isISXf
-         hnSgfyQhBrzURR4EximgpglmNfcLX2LFrHX/FoRMR1YJL+kdEG+OToNibJxbD77ZA5vp
-         I41KrmeftmUNfWozwwrDp7qk8cUANNTPC3pZyoXh5Hsq2H77M3FXQ3VuxNwslwmzPojA
-         0jHMk81O3+Qv9hUm+dRofmHTS0WBygAmg+rIre/S4SCG8DTCTHcYeZYc9UdEjiYjM+Ow
-         LwxQ==
-X-Gm-Message-State: AOJu0YxNCyp27abCFCQ5vWxP1E90Y7BR0PWxALnM6z/mz4Yq/AuawQ74
-        m4xGt1NFoSPnIPRjEAfQ6LIi2wZHwTl/SITKJWddqg==
-X-Google-Smtp-Source: AGHT+IGRAT6txNT8z5BHKJlzrsBs/tEhnvh+ByZd2oleUCBulCvOS6ym+tk5iY2/WHH1JuKvU7PVGteknDPUUHfWA/w=
-X-Received: by 2002:a25:9cc2:0:b0:d85:abce:3f43 with SMTP id
- z2-20020a259cc2000000b00d85abce3f43mr3251502ybo.38.1696456018079; Wed, 04 Oct
- 2023 14:46:58 -0700 (PDT)
+        bh=cGtL9ni/bmY+k+XLO0zZ//MJWYpwr9WdA7Lq88K11GI=;
+        b=dSXw7czRv6ir+uGP/rOy8OREHsaKsknoydAd7F0NY7VJLxre69+WqoMdde9e8pyBoa
+         nTxdVSJkQRaJFpc2P+UyOuRxkwc88Nv8m4WsoqzCsLgKu06ft3iYlcruksy3uNlkYw51
+         89gvsNhUAReOnShTcX6fcTiTf0qpcQF0APskjvmXtXMOiTP51sj7gC0R3/cTCfTSqhW/
+         OHRzD71Z+ePwzLCJPkFUzgcuRaDLzroKe09KFY/lLuMM6XK4g6qN/vUuxtUFN/4c4hQm
+         7scDeCBpEBGw6C6asAuYp7nK0dtQ5o4GwisOXhApe4RhQULX8T1v4REljpY8isPeS8KP
+         YUXA==
+X-Gm-Message-State: AOJu0YwArU8mKXhZ8P14y1kxZEylD7IcYPqIxfBQ9OksMkZ2IzdJ7Ykg
+        jEy1iaNZbaiX7jgDHnv7qE+VaqpQdWudUdUgaEgBIQ==
+X-Google-Smtp-Source: AGHT+IG2vlQncNwaL0mmf9ziNDQ+6c9ln+am4OcVzZ69yv7TcOY3i+q6gckxUGP152XYVi1xj1I6LdPgzXEO0LROnnE=
+X-Received: by 2002:a25:d707:0:b0:d8d:5dc1:b463 with SMTP id
+ o7-20020a25d707000000b00d8d5dc1b463mr3381310ybg.64.1696457382451; Wed, 04 Oct
+ 2023 15:09:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230927130734.9921-1-changhuang.liang@starfivetech.com> <20230927130734.9921-3-changhuang.liang@starfivetech.com>
-In-Reply-To: <20230927130734.9921-3-changhuang.liang@starfivetech.com>
+References: <20230918093751.1188668-1-msp@baylibre.com>
+In-Reply-To: <20230918093751.1188668-1-msp@baylibre.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 4 Oct 2023 23:46:22 +0200
-Message-ID: <CAPDyKFpQr87+SxGpX=KBYF6sCJJqcE84ugttQ9Zkuqf3iZDLmw@mail.gmail.com>
-Subject: Re: [-next v1 2/2] pmdomain: starfive: Update prefixes for AON power domain
-To:     Changhuang Liang <changhuang.liang@starfivetech.com>
+Date:   Thu, 5 Oct 2023 00:09:06 +0200
+Message-ID: <CAPDyKFrUbWBQgMm6wYwFfybiRQKhBpwH7wwcXaT+KrQJLevq3w@mail.gmail.com>
+Subject: Re: [PATCH v8 0/8] soc: mediatek: MT8365 power support
+To:     Markus Schneider-Pargmann <msp@baylibre.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        Hal Feng <hal.feng@starfivetech.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 27 Sept 2023 at 15:07, Changhuang Liang
-<changhuang.liang@starfivetech.com> wrote:
+On Mon, 18 Sept 2023 at 11:38, Markus Schneider-Pargmann
+<msp@baylibre.com> wrote:
 >
-> Use "JH7110_AON_PD_" prefix for AON power doamin for JH7110 SoC.
+> Hi,
 >
-> Reviewed-by: Walker Chen <walker.chen@starfivetech.com>
-> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
+> no real changes in this update. Rebase to v6.6-rc2 and according change
+> of directory.
+>
+> Thanks for any feedback!
+>
+> Best,
+> Markus
+>
+> Based on v6.6-rc2
+>
+> Changes in v8:
+> - Rebased to v6.6-rc2
+> - Moved changes from drivers/soc to drivers/pmdomain
+>
+> Changes in v7:
+> - Rebased to v6.5-rc1
+> - Fixed a couple of small style issues pointed out by Angelo
+>
+> Changes in v6:
+> - Change flags field to be u8 instead of u32
+> - Use macro concatenation to simplify BUS_PROT macros:
+>   BUS_PROT_WR(_hwip, ...) etc.
+> - Use the final bit values for scpsys_bus_prot_flags from the beginning
+>   of the series.
+> - Changed scpsys_domain_data->caps to be u16 to accommodate the new flag
+>   MTK_SCPD_STRICT_BUS_PROTECTION.
+>
+> Changes in v5:
+> - Create defines for all registers and bits in mt8365 power domain patch
+> - Redesign scpsys_bus_prot_data to use flags to store reg_update,
+>   clr_ack as well as the difference between SMI and INFRACFG. The code
+>   uses the appropriate regmap depending on the flags.
+> - The WAY_EN patch now uses two flags, one for inverted operations
+>   'BUS_PROT_INVERTED' and one to use infracfg-nao for the status flags
+>   'BUS_PROT_STA_COMPONENT_INFRA_NAO'.
+>
+> Changes in v4:
+> - Redesigned WAY_EN patch and split it up in smaller patches.
+> - Added two documentation patches.
+> - Added mediatek,infracfg-nao field to the binding.
+>
+> Changes in v3:
+> - Mainly redesigned WAY_EN patch to be easier to understand
+> - Rebased onto v6.0-rc1
+> - Several other stuff that is described in the individual patches
+>
+> Changes in v2:
+> - Updated error handling path for scpsys_power_on()
+> - Minor updates described in each patch
+>
+> Previous versions:
+> v1 - https://lore.kernel.org/linux-mediatek/20220530204214.913251-1-fparent@baylibre.com/
+> v2 - https://lore.kernel.org/linux-mediatek/20220725081853.1636444-1-msp@baylibre.com/
+> v3 - https://lore.kernel.org/linux-mediatek/20220822144303.3438467-1-msp@baylibre.com/
+> v4 - https://lore.kernel.org/linux-arm-kernel/20230105170735.1637416-1-msp@baylibre.com/
+> v5 - https://lore.kernel.org/linux-arm-kernel/20230619085344.2885311-1-msp@baylibre.com/
+> v6 - https://lore.kernel.org/linux-arm-kernel/20230627131040.3418538-1-msp@baylibre.com/
+> v7 - https://lore.kernel.org/linux-arm-kernel/20230713150414.891893-1-msp@baylibre.com
+>
+> Alexandre Bailon (2):
+>   soc: mediatek: Add support for WAY_EN operations
+>   soc: mediatek: Add support for MTK_SCPD_STRICT_BUS_PROTECTION cap
+>
+> Fabien Parent (2):
+>   dt-bindings: power: Add MT8365 power domains
+>   soc: mediatek: pm-domains: Add support for MT8365
+>
+> Markus Schneider-Pargmann (4):
+>   soc: mediatek: pm-domains: Move bools to a flags field
+>   soc: mediatek: pm-domains: Split bus_prot_mask
+>   soc: mediatek: pm-domains: Create bus protection operation functions
+>   soc: mediatek: pm-domains: Unify configuration for infracfg and smi
+>
+>  .../power/mediatek,power-controller.yaml      |   6 +
+>  drivers/pmdomain/mediatek/mt6795-pm-domains.h |  16 +-
+>  drivers/pmdomain/mediatek/mt8167-pm-domains.h |  20 +-
+>  drivers/pmdomain/mediatek/mt8173-pm-domains.h |  16 +-
+>  drivers/pmdomain/mediatek/mt8183-pm-domains.h | 125 ++++++----
+>  drivers/pmdomain/mediatek/mt8186-pm-domains.h | 236 ++++++++++--------
+>  drivers/pmdomain/mediatek/mt8188-pm-domains.h | 223 +++++++++++------
+>  drivers/pmdomain/mediatek/mt8192-pm-domains.h | 112 ++++++---
+>  drivers/pmdomain/mediatek/mt8195-pm-domains.h | 199 +++++++++------
+>  drivers/pmdomain/mediatek/mt8365-pm-domains.h | 197 +++++++++++++++
+>  drivers/pmdomain/mediatek/mtk-pm-domains.c    | 157 ++++++++----
+>  drivers/pmdomain/mediatek/mtk-pm-domains.h    |  51 ++--
+>  .../dt-bindings/power/mediatek,mt8365-power.h |  19 ++
+>  include/linux/soc/mediatek/infracfg.h         |  41 +++
+>  14 files changed, 972 insertions(+), 446 deletions(-)
+>  create mode 100644 drivers/pmdomain/mediatek/mt8365-pm-domains.h
+>  create mode 100644 include/dt-bindings/power/mediatek,mt8365-power.h
+>
 
 Applied for next, thanks!
 
+Note that while applying I amended the patch-prefix for patch 2->8 to
+"pmdomain: mediatek:", please try to conform to this when going
+forward, as it help me to better filter emails.
+
 Kind regards
 Uffe
-
-
-> ---
->  drivers/pmdomain/starfive/jh71xx-pmu.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/pmdomain/starfive/jh71xx-pmu.c b/drivers/pmdomain/starfive/jh71xx-pmu.c
-> index 2724bee7e85f..74720c09a6e3 100644
-> --- a/drivers/pmdomain/starfive/jh71xx-pmu.c
-> +++ b/drivers/pmdomain/starfive/jh71xx-pmu.c
-> @@ -419,11 +419,11 @@ static const struct jh71xx_pmu_match_data jh7110_pmu = {
->  };
->
->  static const struct jh71xx_domain_info jh7110_aon_power_domains[] = {
-> -       [JH7110_PD_DPHY_TX] = {
-> +       [JH7110_AON_PD_DPHY_TX] = {
->                 .name = "DPHY-TX",
->                 .bit = 30,
->         },
-> -       [JH7110_PD_DPHY_RX] = {
-> +       [JH7110_AON_PD_DPHY_RX] = {
->                 .name = "DPHY-RX",
->                 .bit = 31,
->         },
-> --
-> 2.25.1
->
