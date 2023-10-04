@@ -2,143 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C42497B8A64
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Oct 2023 20:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7597B8AEB
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Oct 2023 20:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244418AbjJDSfF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Oct 2023 14:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59612 "EHLO
+        id S233141AbjJDSmy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 4 Oct 2023 14:42:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244415AbjJDSfE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Oct 2023 14:35:04 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FF0A7;
-        Wed,  4 Oct 2023 11:35:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696444500; x=1727980500;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=bpSnUeyMCwr5z8q24pn1zkzo5CtrPo+vd10q6+Wf0l0=;
-  b=Uo9vqPMr/6k6DuxuUB+ra/S5yf6o8RCQosIHI7cQKqv19sEEnFWwUE6S
-   T6vq7Ka5Kq3dfueJD3tFpPLRydKWFDpk99YuUgj6RSxNDFH2upM4JkS1g
-   InCjUpR7hVDbD9bFX9rvEafBwG8CZleg3BkBVd74oGq4sxWmzo8szJWeK
-   umtSU11W+XSvK6vbPqo829RW+q0bl50Dk5ngWznNsrj8uFN3j4PEb+Noi
-   2Ff7+9ajvtyqrEnk9AOyylSsfka2YCsoiv8LqCABR7N2a3SLYDNVOheUF
-   7Yt3oDiF7322Zoc59FEnYvzYxTFOvNtF28xDHUos+8SNdLsYTS1REeA7l
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="383168102"
-X-IronPort-AV: E=Sophos;i="6.03,201,1694761200"; 
-   d="scan'208";a="383168102"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2023 11:34:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="780909015"
-X-IronPort-AV: E=Sophos;i="6.03,201,1694761200"; 
-   d="scan'208";a="780909015"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.153])
-  by orsmga008.jf.intel.com with SMTP; 04 Oct 2023 11:34:55 -0700
-Received: by stinkbox (sSMTP sendmail emulation); Wed, 04 Oct 2023 21:34:55 +0300
-From:   Ville Syrjala <ville.syrjala@linux.intel.com>
-To:     linux-pm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wang Wendy <wendy.wang@intel.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@intel.com>
-Subject: [PATCH] powercap: intel_rapl: Don't warn about BIOS locked limits during resume
-Date:   Wed,  4 Oct 2023 21:34:55 +0300
-Message-ID: <20231004183455.27797-1-ville.syrjala@linux.intel.com>
-X-Mailer: git-send-email 2.41.0
+        with ESMTP id S243292AbjJDSmx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Oct 2023 14:42:53 -0400
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67A3C4;
+        Wed,  4 Oct 2023 11:42:49 -0700 (PDT)
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-57b68555467so8590eaf.0;
+        Wed, 04 Oct 2023 11:42:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696444969; x=1697049769;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8s+6m9BEsGqmegjmEMQJTpUF0Z6UX9C9OppOPuzfH2g=;
+        b=Sk48lb/mULGEToam9I+vVLhvTtoNyKfolAX6OZZya7xUt/M02pehdFLOxK3PsFn0J9
+         TfUDIl1GKR8mgOEeVVcJ23zf0XAkzJDaGSgK6N5XRq1wJepeyORAKKb/KJKwFN5HBPtf
+         qAdVRp6Kryb3Y43/md0R6GpgCFimFO4ju6W49NG6hCQXJrgWuhuXS4sqZ5bRsJ8qfv7P
+         f4tw2fwXw/nMfcpPPl/xtcG862zxSf8OevWwt1lt3qsDCADXWr7Bs/hmuJL24bEQGZWt
+         UHuJXj36iwxRQNBBxakOY9HuP7itua77QCIP9AlMP+kQcTTm7romhIirSP6pNRd9XNWv
+         yTew==
+X-Gm-Message-State: AOJu0Yyq2/uL426UWLESFCgUlkc40PI3+FRgwsvJfCZOS4//rbMRL1bu
+        92BAMESIAPvmGj3Pfy9AtQ+Kw+aaQ/omootWywg=
+X-Google-Smtp-Source: AGHT+IGtp5mZcvEOsvezG3nc9wPvbnGaCm9i+RbXDlKGHH4PZ32XVLkUJoWdc2yMvAwye9V831diJ43l0YN+YPtadZQ=
+X-Received: by 2002:a4a:df07:0:b0:57b:73f6:6f80 with SMTP id
+ i7-20020a4adf07000000b0057b73f66f80mr3213282oou.0.1696444968908; Wed, 04 Oct
+ 2023 11:42:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20231004-hib_zero_bitmap_fix-v2-1-6a530b7b6e98@quicinc.com>
+In-Reply-To: <20231004-hib_zero_bitmap_fix-v2-1-6a530b7b6e98@quicinc.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 4 Oct 2023 20:42:37 +0200
+Message-ID: <CAJZ5v0h_XhpcGHrKKOQoita7TStZO95qFZWRpiLThCmPpRxFcQ@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: hibernate: Fix a bug in copying the zero bitmap to
+ safe pages
+To:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Brian Geffon <bgeffon@google.com>, kernel@quicinc.com,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable <stable@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Ville Syrjälä <ville.syrjala@linux.intel.com>
+On Wed, Oct 4, 2023 at 7:01 AM Pavankumar Kondeti
+<quic_pkondeti@quicinc.com> wrote:
+>
+> The following crash is observed 100% of the time during resume from
+> the hibernation on a x86 QEMU system.
+>
+> [   12.931887]  ? __die_body+0x1a/0x60
+> [   12.932324]  ? page_fault_oops+0x156/0x420
+> [   12.932824]  ? search_exception_tables+0x37/0x50
+> [   12.933389]  ? fixup_exception+0x21/0x300
+> [   12.933889]  ? exc_page_fault+0x69/0x150
+> [   12.934371]  ? asm_exc_page_fault+0x26/0x30
+> [   12.934869]  ? get_buffer.constprop.0+0xac/0x100
+> [   12.935428]  snapshot_write_next+0x7c/0x9f0
+> [   12.935929]  ? submit_bio_noacct_nocheck+0x2c2/0x370
+> [   12.936530]  ? submit_bio_noacct+0x44/0x2c0
+> [   12.937035]  ? hib_submit_io+0xa5/0x110
+> [   12.937501]  load_image+0x83/0x1a0
+> [   12.937919]  swsusp_read+0x17f/0x1d0
+> [   12.938355]  ? create_basic_memory_bitmaps+0x1b7/0x240
+> [   12.938967]  load_image_and_restore+0x45/0xc0
+> [   12.939494]  software_resume+0x13c/0x180
+> [   12.939994]  resume_store+0xa3/0x1d0
+>
+> The commit being fixed introduced a bug in copying the zero bitmap
+> to safe pages. A temporary bitmap is allocated with PG_ANY flag in
+> prepare_image() to make a copy of zero bitmap after the unsafe pages
+> are marked. Freeing this temporary bitmap with PG_UNSAFE_KEEP later
+> results in an inconsistent state of unsafe pages. Since free bit is
+> left as is for this temporary bitmap after free, these pages are
+> treated as unsafe pages when they are allocated again. This results
+> in incorrect calculation of the number of pages pre-allocated for the
+> image.
+>
+> nr_pages = (nr_zero_pages + nr_copy_pages) - nr_highmem - allocated_unsafe_pages;
+>
+> The allocate_unsafe_pages is estimated to be higher than the actual
+> which results in running short of pages in safe_pages_list. Hence the
+> crash is observed in get_buffer() due to NULL pointer access of
+> safe_pages_list.
+>
+> Fix this issue by creating the temporary zero bitmap from safe pages
+> (free bit not set) so that the corresponding free bits can be cleared while
+> freeing this bitmap.
+>
+> Cc: stable <stable@kernel.org>
 
-Restore enough of the original behaviour to stop spamming
-dmesg with warnings about BIOS locked limits when trying
-to restore them during resume.
+Why is this tag present?  The commit below hasn't made it to a major
+release yet AFAICS.
 
-This still doesn't 100% match the original behaviour
-as we no longer attempt to blindly restore the BIOS locked
-limits. No idea if that makes any difference in practice.
-
-Cc: Zhang Rui <rui.zhang@intel.com>
-Cc: Wang Wendy <wendy.wang@intel.com>
-Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@intel.com>
-Fixes: 9050a9cd5e4c ("powercap: intel_rapl: Cleanup Power Limits support")
-Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
----
- drivers/powercap/intel_rapl_common.c | 28 ++++++++++++++++++++--------
- 1 file changed, 20 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-index 40a2cc649c79..9a6a40c83f82 100644
---- a/drivers/powercap/intel_rapl_common.c
-+++ b/drivers/powercap/intel_rapl_common.c
-@@ -882,22 +882,34 @@ static int rapl_read_pl_data(struct rapl_domain *rd, int pl,
- 	return rapl_read_data_raw(rd, prim, xlate, data);
- }
- 
--static int rapl_write_pl_data(struct rapl_domain *rd, int pl,
--			       enum pl_prims pl_prim,
--			       unsigned long long value)
-+static int rapl_write_pl_data_nowarn(struct rapl_domain *rd, int pl,
-+				     enum pl_prims pl_prim,
-+				     unsigned long long value)
- {
- 	enum rapl_primitives prim = get_pl_prim(rd, pl, pl_prim);
- 
- 	if (!is_pl_valid(rd, pl))
- 		return -EINVAL;
- 
--	if (rd->rpl[pl].locked) {
--		pr_warn("%s:%s:%s locked by BIOS\n", rd->rp->name, rd->name, pl_names[pl]);
-+	if (rd->rpl[pl].locked)
- 		return -EACCES;
--	}
- 
- 	return rapl_write_data_raw(rd, prim, value);
- }
-+
-+static int rapl_write_pl_data(struct rapl_domain *rd, int pl,
-+			      enum pl_prims pl_prim,
-+			      unsigned long long value)
-+{
-+	int ret;
-+
-+	ret = rapl_write_pl_data_nowarn(rd, pl, pl_prim, value);
-+	if (ret == -EACCES)
-+		pr_warn("%s:%s:%s locked by BIOS\n", rd->rp->name, rd->name, pl_names[pl]);
-+
-+	return ret;
-+}
-+
- /*
-  * Raw RAPL data stored in MSRs are in certain scales. We need to
-  * convert them into standard units based on the units reported in
-@@ -1634,8 +1646,8 @@ static void power_limit_state_restore(void)
- 		rd = power_zone_to_rapl_domain(rp->power_zone);
- 		for (i = POWER_LIMIT1; i < NR_POWER_LIMITS; i++)
- 			if (rd->rpl[i].last_power_limit)
--				rapl_write_pl_data(rd, i, PL_LIMIT,
--					       rd->rpl[i].last_power_limit);
-+				rapl_write_pl_data_nowarn(rd, i, PL_LIMIT,
-+							  rd->rpl[i].last_power_limit);
- 	}
- 	cpus_read_unlock();
- }
--- 
-2.41.0
-
+> Fixes: 005e8dddd497 ("PM: hibernate: don't store zero pages in the image file")
+> Suggested-by:: Brian Geffon <bgeffon@google.com>
+> Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+> ---
+> Changes in v2:
+> - Allocate zero bit map from safe pages as suggested by Brian
+> - Link to v1: https://lore.kernel.org/r/20230929-hib_zero_bitmap_fix-v1-1-6cfdcb785250@quicinc.com
+> ---
+>  kernel/power/snapshot.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+> index 87e9f7e2bdc0..0f12e0a97e43 100644
+> --- a/kernel/power/snapshot.c
+> +++ b/kernel/power/snapshot.c
+> @@ -2647,7 +2647,7 @@ static int prepare_image(struct memory_bitmap *new_bm, struct memory_bitmap *bm,
+>         memory_bm_free(bm, PG_UNSAFE_KEEP);
+>
+>         /* Make a copy of zero_bm so it can be created in safe pages */
+> -       error = memory_bm_create(&tmp, GFP_ATOMIC, PG_ANY);
+> +       error = memory_bm_create(&tmp, GFP_ATOMIC, PG_SAFE);
+>         if (error)
+>                 goto Free;
+>
+> @@ -2660,7 +2660,7 @@ static int prepare_image(struct memory_bitmap *new_bm, struct memory_bitmap *bm,
+>                 goto Free;
+>
+>         duplicate_memory_bitmap(zero_bm, &tmp);
+> -       memory_bm_free(&tmp, PG_UNSAFE_KEEP);
+> +       memory_bm_free(&tmp, PG_UNSAFE_CLEAR);
+>         /* At this point zero_bm is in safe pages and it can be used for restoring. */
+>
+>         if (nr_highmem > 0) {
+>
+> ---
+> base-commit: 8a749fd1a8720d4619c91c8b6e7528c0a355c0aa
+> change-id: 20230929-hib_zero_bitmap_fix-bc5884eba0ae
+>
+> Best regards,
+> --
+> Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+>
