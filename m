@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14B9B7B8D2D
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Oct 2023 21:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 363727B8CE5
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Oct 2023 21:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245590AbjJDTJg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Oct 2023 15:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
+        id S245621AbjJDTKR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Oct 2023 15:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245252AbjJDTJY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Oct 2023 15:09:24 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA18D10C7;
-        Wed,  4 Oct 2023 12:07:39 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-53829312d12so2886594a12.0;
-        Wed, 04 Oct 2023 12:07:39 -0700 (PDT)
+        with ESMTP id S245382AbjJDTKB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Oct 2023 15:10:01 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E8830D5;
+        Wed,  4 Oct 2023 12:09:02 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-533e7d127d4so182558a12.3;
+        Wed, 04 Oct 2023 12:09:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696446458; x=1697051258; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=LfKbENQF1OCDpyRozcLgcbIFYekG+q6fUxVUaA/+cFk=;
-        b=b3VtB/EKY2wwAsSWeMt2BAqctndLxxPkiM9CLeN3v025aqwFW6KxJMueyd0P4B73pf
-         p1VhqXJ3V07VCyPpsZ+QOQpRbWI36TCYZ2z25t28zmlpLX+IBmzdqNaWtkY4ju0TMW2T
-         8m/yHoQmqN9ltqnKDCZn7/XFkuhstZdKyhJDSo7wJICr4TZY+9A4njqhPuN/xg9LxOD5
-         h8Nyy8bsJJ8hoHaWqODP09BxclXHw+IAv5yE6nAsFiJxuOFACFaVI5DpFXQlNcr4Wqtx
-         Y1zEujuKNPKpczSANlA0xrfBU+x+3w2PFen35B5AfjDNIoQfNOvJpmO5gLKABNFsDdC3
-         DZYw==
+        d=gmail.com; s=20230601; t=1696446541; x=1697051341; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KuJ2CLb6+MUVtdnSy1rgrDtPNCbJpfpGSVNkFiavsuM=;
+        b=ShK2h3SVwRonGRHd58RWYx0kASOLQ4U6bUmzl/yyF3cXbMDzKc1xVC1husWUzJqmD5
+         j6ibFNVuJHsNlsYN4x1h8m6jJlkn4fUhGPC8obtIF6MV5U9hjee/JMgh3MTy2JhY3BKV
+         pvP1RP0UMgbfDNbXo2cSeqEJ+F9q2ByIuA7spiCYRPG1etP2iswOX0cX9gxwqL1BFXwl
+         BI0QHgFklGIj2p6hvArnUpFlEUxOkYaEwzBME3ydBwKzT8FtVHb4mR85OY20ZeQ9FEEe
+         qjhdaXbTn345DvpCGgDU8CUeI+e6QHPwEUNvGZbuqPBz8ZIoP2Q4pQVDIX2xQ40VRTbX
+         Hf1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696446458; x=1697051258;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1696446541; x=1697051341;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LfKbENQF1OCDpyRozcLgcbIFYekG+q6fUxVUaA/+cFk=;
-        b=pxH3bE57OMhi50foVjhso/T/7R1SzRIYwKedd89ix5tsuKzH+SvkOyo48YJmlNN4Tu
-         7VO+1SoHlcgJyd+lr8yRbc1q2flsxG6T32DOUdRd2NlqIJohl3eDm+pH+zgz/4mP3kNJ
-         gMqBAqWiNlVE6myvYF+NZQDiazFPJDkFjjFLGSWDdXcOxqw6WsXpD0W4nG9Q+jZshR0a
-         L5+RKdWesxdRutnpoV8SxXeHZx+5Ni0fDBNdtKP1VyaMfXTrFIrm9Flw8j79KA497dvk
-         MZIS/oRqtJb225g+kWwu+wuUf6KHSFKZa0MUTPa0u3znY16OOSPZj68z8UjlonlLe2Ss
-         U8oQ==
-X-Gm-Message-State: AOJu0YxRS9AEKT+mgL5kqDiWLoPmN8PU9BnjackTwC8CCj3gY7ReuePv
-        rY5bFJizr30bSjZlVjJC3m4+mVQtWbfnww==
-X-Google-Smtp-Source: AGHT+IHqhJ4GZi6aYGamS04rmL30PBsqdW0lHsZ2cwUiZHgmls26+BclzmYEh0miTmW7ThqWmgJIAA==
-X-Received: by 2002:a17:906:3109:b0:9b6:3be9:a8f with SMTP id 9-20020a170906310900b009b63be90a8fmr497677ejx.20.1696446457879;
-        Wed, 04 Oct 2023 12:07:37 -0700 (PDT)
+        bh=KuJ2CLb6+MUVtdnSy1rgrDtPNCbJpfpGSVNkFiavsuM=;
+        b=IhdJ4l4rRxI92Sd1323eT/33jpUwpdG1QV5HMSn4AYh73Na7nzcKgn9u1BACYZ3PQz
+         ypthYMGwaVNhKXVZqKLkk/NzOKdSRNuwfmXfkXDbRkE5Zw3cNeWYZT85tS6yUOubOhQG
+         sHK4Yw9ByBxMqYLSDc/xNgNLbW0p21kyrUOVXa29b/Tbv9M4WEBpXrtN2hkaH0s9ZS9J
+         3iCz64ZdQCC1DzYyxqmSMgJkLNsF3RtFnm65kzl7lUYb4lAPMh7sRVTcXJ2+C97ERNt3
+         cBDXbWyDyJqPwyr/3ZJtx+w4VbhynBc3fYh4BpVe+uOIng6sc2+yiXklvgcStBdITqAg
+         W3Wg==
+X-Gm-Message-State: AOJu0YyEw40MfOO+PMGNEyrjiJHd1XJeVxz8K6UIFyZWh7994tLsIhh8
+        9SgrivvmFCim1lBE0eprPo8=
+X-Google-Smtp-Source: AGHT+IHSi8Q6UpsWldn23PzMnBl9MWjowK+IxaoR933B6zBeB0WwS/khLi2m0aSoDcvuYKB6ehca6A==
+X-Received: by 2002:aa7:db95:0:b0:526:9cfb:c12 with SMTP id u21-20020aa7db95000000b005269cfb0c12mr3077590edt.38.1696446540940;
+        Wed, 04 Oct 2023 12:09:00 -0700 (PDT)
 Received: from [192.168.3.32] (cpezg-94-253-131-161-cbl.xnet.hr. [94.253.131.161])
-        by smtp.gmail.com with ESMTPSA id p24-20020a170906a01800b009b28ad521f4sm3261380ejy.4.2023.10.04.12.07.35
+        by smtp.gmail.com with ESMTPSA id e10-20020a50fb8a000000b0053404772535sm270964edq.81.2023.10.04.12.08.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Oct 2023 12:07:37 -0700 (PDT)
-Message-ID: <cbe6eae5-3490-eb3e-7f28-87ec2c600875@gmail.com>
-Date:   Wed, 4 Oct 2023 21:07:35 +0200
+        Wed, 04 Oct 2023 12:09:00 -0700 (PDT)
+Message-ID: <1c6ecc92-89d3-3b7e-c2d0-e2fded9b446d@gmail.com>
+Date:   Wed, 4 Oct 2023 21:08:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH V3 3/4] thermal/drivers/tsens: Add support for IPQ5018
- tsens
+Subject: Re: [PATCH V3 4/4] arm64: dts: qcom: ipq5018: Add tsens node
+Content-Language: en-US
 To:     Sricharan R <srichara@win-platform-upstream01.qualcomm.com>,
         krzysztof.kozlowski@linaro.org, agross@kernel.org,
         andersson@kernel.org, konrad.dybcio@linaro.org,
@@ -67,10 +67,9 @@ To:     Sricharan R <srichara@win-platform-upstream01.qualcomm.com>,
         linux-pm@vger.kernel.org, dmitry.baryshkov@linaro.org,
         quic_srichara@quicinc.com
 References: <20230922115116.2748804-1-srichara@win-platform-upstream01.qualcomm.com>
- <20230922115116.2748804-4-srichara@win-platform-upstream01.qualcomm.com>
-Content-Language: en-US
+ <20230922115116.2748804-5-srichara@win-platform-upstream01.qualcomm.com>
 From:   Robert Marko <robimarko@gmail.com>
-In-Reply-To: <20230922115116.2748804-4-srichara@win-platform-upstream01.qualcomm.com>
+In-Reply-To: <20230922115116.2748804-5-srichara@win-platform-upstream01.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,133 +86,211 @@ X-Mailing-List: linux-pm@vger.kernel.org
 On 22. 09. 2023. 13:51, Sricharan R wrote:
 > From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
 >
-> IPQ5018 has tsens IP V1.0, 4 sensors and 1 interrupt.
-> The soc does not have a RPM, hence tsens has to be reset and
-> enabled in the driver init. Adding the driver support for same.
+> IPQ5018 has tsens V1.0 IP with 4 sensors.
+> There is no RPM, so tsens has to be manually enabled. Adding the tsens
+> and nvmem node and IPQ5018 has 4 thermal sensors (zones). With the
+> critical temperature being 120'C and action is to reboot. Adding all
+> the 4 zones here.
 >
 > Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
 > ---
->   [v3] Fixed Dmitry's comments for error checks in init_ipq5018
+>   [v3] Ordered the qfprom device node properties as per
+>        Krzysztof's comments
 >
->   drivers/thermal/qcom/tsens-v1.c | 60 +++++++++++++++++++++++++++++++++
->   drivers/thermal/qcom/tsens.c    |  3 ++
->   drivers/thermal/qcom/tsens.h    |  2 +-
->   3 files changed, 64 insertions(+), 1 deletion(-)
+>   arch/arm64/boot/dts/qcom/ipq5018.dtsi | 169 ++++++++++++++++++++++++++
+>   1 file changed, 169 insertions(+)
 >
-> diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
-> index dc1c4ae2d8b0..acee2064f83e 100644
-> --- a/drivers/thermal/qcom/tsens-v1.c
-> +++ b/drivers/thermal/qcom/tsens-v1.c
-> @@ -79,6 +79,18 @@ static struct tsens_features tsens_v1_feat = {
->   	.trip_max_temp	= 120000,
->   };
+> diff --git a/arch/arm64/boot/dts/qcom/ipq5018.dtsi b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
+> index 9f13d2dcdfd5..9e28b54ebcbd 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq5018.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
+> @@ -93,6 +93,117 @@ soc: soc@0 {
+>   		#size-cells = <1>;
+>   		ranges = <0 0 0 0xffffffff>;
 >   
-> +static struct tsens_features tsens_v1_ipq5018_feat = {
-> +	.ver_major	= VER_1_X,
-> +	.crit_int	= 0,
-> +	.combo_int	= 0,
-> +	.adc		= 1,
-> +	.srot_split	= 1,
-> +	.max_sensors	= 11,
-> +	.trip_min_temp	= -40000,
-> +	.trip_max_temp	= 120000,
-> +	.ignore_enable	= 1,
-> +};
-> +
->   static const struct reg_field tsens_v1_regfields[MAX_REGFIELDS] = {
->   	/* ----- SROT ------ */
->   	/* VERSION */
-> @@ -150,6 +162,41 @@ static int __init init_8956(struct tsens_priv *priv) {
->   	return init_common(priv);
->   }
->   
-> +static int init_ipq5018(struct tsens_priv *priv)
+> +		qfprom: qfprom@a0000 {
+> +			compatible = "qcom,ipq5018-qfprom", "qcom,qfprom";
+Hi,
 
-__init is missing after int, otherwise I get modpost warning while building:
-WARNING: modpost: vmlinux: section mismatch in reference: 
-init_ipq5018+0x14 (section: .text) -> init_common (section: .init.text)
+"qcom,ipq5018-qfprom" needs to be documented in QFPROM bindings first.
 
 Regards,
 Robert
 
-> +{
-> +	int ret;
-> +	u32 mask;
+> +			reg = <0xa0000 0x1000>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
 > +
-> +	ret = init_common(priv);
-> +	if (ret < 0) {
-> +		dev_err(priv->dev, "Init common failed %d\n", ret);
-> +		return ret;
-> +	}
+> +			tsens_base1: base1@249 {
+> +				reg = <0x249 2>;
+> +				bits = <3 8>;
+> +			};
 > +
-> +	ret = regmap_field_write(priv->rf[TSENS_SW_RST], 1);
-> +	if (ret) {
-> +		dev_err(priv->dev, "Reset failed\n");
-> +		return ret;
-> +	}
+> +			tsens_base2: base2@24a {
+> +				reg = <0x24a 2>;
+> +				bits = <3 8>;
+> +			};
 > +
-> +	mask = GENMASK(priv->num_sensors, 0);
-> +	ret = regmap_field_update_bits(priv->rf[SENSOR_EN], mask, mask);
-> +	if (ret) {
-> +		dev_err(priv->dev, "Sensor Enable failed\n");
-> +		return ret;
-> +	}
+> +			tsens_mode: mode@249 {
+> +				reg = <0x249 1>;
+> +				bits = <0 3>;
+> +			};
 > +
-> +	ret = regmap_field_write(priv->rf[TSENS_EN], 1);
-> +	if (ret) {
-> +		dev_err(priv->dev, "Enable failed\n");
-> +		return ret;
-> +	}
+> +			tsens_s0_p1: s0-p1@24b {
+> +				reg = <0x24b 0x2>;
+> +				bits = <2 6>;
+> +			};
 > +
-> +	ret = regmap_field_write(priv->rf[TSENS_SW_RST], 0);
+> +			tsens_s0_p2: s0-p2@24c {
+> +				reg = <0x24c 0x1>;
+> +				bits = <1 6>;
+> +			};
 > +
-> +	return ret;
-> +}
+> +			tsens_s1_p1: s1-p1@24c {
+> +				reg = <0x24c 0x2>;
+> +				bits = <7 6>;
+> +			};
 > +
->   static const struct tsens_ops ops_generic_v1 = {
->   	.init		= init_common,
->   	.calibrate	= calibrate_v1,
-> @@ -187,3 +234,16 @@ struct tsens_plat_data data_8976 = {
->   	.feat		= &tsens_v1_feat,
->   	.fields		= tsens_v1_regfields,
->   };
+> +			tsens_s1_p2: s1-p2@24d {
+> +				reg = <0x24d 0x2>;
+> +				bits = <5 6>;
+> +			};
 > +
-> +const struct tsens_ops ops_ipq5018 = {
-> +	.init		= init_ipq5018,
-> +	.calibrate	= tsens_calibrate_common,
-> +	.get_temp	= get_temp_tsens_valid,
-> +};
+> +			tsens_s2_p1: s2-p1@24e {
+> +				reg = <0x24e 0x2>;
+> +				bits = <3 6>;
+> +			};
 > +
-> +struct tsens_plat_data data_ipq5018 = {
-> +	.num_sensors	= 5,
-> +	.ops		= &ops_ipq5018,
-> +	.feat		= &tsens_v1_ipq5018_feat,
-> +	.fields		= tsens_v1_regfields,
-> +};
-> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> index 0a43ccf02ec4..c792b9dc6676 100644
-> --- a/drivers/thermal/qcom/tsens.c
-> +++ b/drivers/thermal/qcom/tsens.c
-> @@ -1101,6 +1101,9 @@ static SIMPLE_DEV_PM_OPS(tsens_pm_ops, tsens_suspend, tsens_resume);
+> +			tsens_s2_p2: s2-p2@24f {
+> +				reg = <0x24f 0x1>;
+> +				bits = <1 6>;
+> +			};
+> +
+> +			tsens_s3_p1: s3-p1@24f {
+> +				reg = <0x24f 0x2>;
+> +				bits = <7 6>;
+> +			};
+> +
+> +			tsens_s3_p2: s3-p2@250 {
+> +				reg = <0x250 0x2>;
+> +				bits = <5 6>;
+> +			};
+> +
+> +			tsens_s4_p1: s4-p1@251 {
+> +				reg = <0x251 0x2>;
+> +				bits = <3 6>;
+> +			};
+> +
+> +			tsens_s4_p2: s4-p2@254 {
+> +				reg = <0x254 0x1>;
+> +				bits = <0 6>;
+> +			};
+> +		};
+> +
+> +		tsens: thermal-sensor@4a9000 {
+> +			compatible = "qcom,ipq5018-tsens";
+> +			reg = <0x4a9000 0x1000>, /* TM */
+> +			      <0x4a8000 0x1000>; /* SORT */
+> +
+> +			nvmem-cells = <&tsens_mode>,
+> +				      <&tsens_base1>,
+> +				      <&tsens_base2>,
+> +				      <&tsens_s0_p1>,
+> +				      <&tsens_s0_p2>,
+> +				      <&tsens_s1_p1>,
+> +				      <&tsens_s1_p2>,
+> +				      <&tsens_s2_p1>,
+> +				      <&tsens_s2_p2>,
+> +				      <&tsens_s3_p1>,
+> +				      <&tsens_s3_p2>,
+> +				      <&tsens_s4_p1>,
+> +				      <&tsens_s4_p2>;
+> +
+> +			nvmem-cell-names = "mode",
+> +					   "base1",
+> +					   "base2",
+> +					   "s0_p1",
+> +					   "s0_p2",
+> +					   "s1_p1",
+> +					   "s1_p2",
+> +					   "s2_p1",
+> +					   "s2_p2",
+> +					   "s3_p1",
+> +					   "s3_p2",
+> +					   "s4_p1",
+> +					   "s4_p2";
+> +
+> +			interrupts = <GIC_SPI 184 IRQ_TYPE_EDGE_RISING>;
+> +			interrupt-names = "uplow";
+> +			#qcom,sensors = <5>;
+> +			#thermal-sensor-cells = <1>;
+> +		};
+> +
+>   		tlmm: pinctrl@1000000 {
+>   			compatible = "qcom,ipq5018-tlmm";
+>   			reg = <0x01000000 0x300000>;
+> @@ -240,6 +351,64 @@ frame@b128000 {
+>   		};
+>   	};
 >   
->   static const struct of_device_id tsens_table[] = {
->   	{
-> +		.compatible = "qcom,ipq5018-tsens",
-> +		.data = &data_ipq5018,
-> +	}, {
->   		.compatible = "qcom,ipq8064-tsens",
->   		.data = &data_8960,
->   	}, {
-> diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
-> index e254cd2df904..b6594b546d11 100644
-> --- a/drivers/thermal/qcom/tsens.h
-> +++ b/drivers/thermal/qcom/tsens.h
-> @@ -645,7 +645,7 @@ extern struct tsens_plat_data data_8960;
->   extern struct tsens_plat_data data_8226, data_8909, data_8916, data_8939, data_8974, data_9607;
->   
->   /* TSENS v1 targets */
-> -extern struct tsens_plat_data data_tsens_v1, data_8976, data_8956;
-> +extern struct tsens_plat_data data_tsens_v1, data_8976, data_8956, data_ipq5018;
->   
->   /* TSENS v2 targets */
->   extern struct tsens_plat_data data_8996, data_ipq8074, data_tsens_v2;
+> +	thermal-zones {
+> +		ubi32-thermal {
+> +			polling-delay-passive = <0>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&tsens 1>;
+> +
+> +			trips {
+> +				ubi32-critical {
+> +					temperature = <120000>;
+> +					hysteresis = <2>;
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +
+> +		cpu-thermal {
+> +			polling-delay-passive = <0>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&tsens 2>;
+> +
+> +			trips {
+> +				cpu-critical {
+> +					temperature = <120000>;
+> +					hysteresis = <2>;
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +
+> +		top-glue-thermal {
+> +			polling-delay-passive = <0>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&tsens 3>;
+> +
+> +			trips {
+> +				top_glue-critical {
+> +					temperature = <120000>;
+> +					hysteresis = <2>;
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +
+> +		gephy-thermal {
+> +			polling-delay-passive = <0>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&tsens 4>;
+> +
+> +			trips {
+> +				gephy-critical {
+> +					temperature = <120000>;
+> +					hysteresis = <2>;
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+>   	timer {
+>   		compatible = "arm,armv8-timer";
+>   		interrupts = <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
