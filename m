@@ -2,190 +2,376 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 220C27B9891
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Oct 2023 01:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BEAD7B98A7
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Oct 2023 01:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240547AbjJDXKM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Oct 2023 19:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40084 "EHLO
+        id S233866AbjJDXVV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Oct 2023 19:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240519AbjJDXKL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Oct 2023 19:10:11 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BFC3D8;
-        Wed,  4 Oct 2023 16:10:07 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A01CEC433C7;
-        Wed,  4 Oct 2023 23:10:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696461006;
-        bh=sr3ifcYlnQGpK7RnHCI5qP/JfUY4gY6cRzG0hwZktu8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CIyVh30kCx/E3HkEEl2nSJkUfwb0kjb3KXI8ARak+kw+rvNQCmJglP/CtQEaDBYOP
-         UmJgRx1niIHuZVu4fiOMIgM/xdw8s/DHLyfteoAF9i91+74oPnxgaSVFgPqxVQxweM
-         XYaRLUNX1C6k4R5n9S0lI0bCMK2o5Ck45irETSBscxPno1fsrsFattKipt61D0NwG9
-         x1ocuKJBWNjJjS/B14TN+SU3kAuHDrUgdr1cKqJskBA/uaVMKgNZx0tQ+j1gdrZIhg
-         9WIc2//ILIuhU4N2mnGJh+bVkeVx82YFrXhrsvuPZPhJllvTE7UZ3YBIekGloVb7sc
-         O/MzMZwgP7sYw==
-Received: by mercury (Postfix, from userid 1000)
-        id B812E106052D; Thu,  5 Oct 2023 01:10:03 +0200 (CEST)
-Date:   Thu, 5 Oct 2023 01:10:03 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     amd-gfx@lists.freedesktop.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jun.ma2@amd.com
-Subject: Re: [PATCH 2/3] power: supply: Don't count 'unknown' scope power
- supplies
-Message-ID: <20231004231003.z55btgajmixxadqo@mercury.elektranox.org>
-References: <20230926225955.386553-1-mario.limonciello@amd.com>
- <20230926225955.386553-3-mario.limonciello@amd.com>
- <20230930201826.biy27esyw4ttxt4p@mercury.elektranox.org>
- <8d4e4b74-4477-41e0-a690-8b9f38907a7b@amd.com>
+        with ESMTP id S240519AbjJDXVU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Oct 2023 19:21:20 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E89BC9
+        for <linux-pm@vger.kernel.org>; Wed,  4 Oct 2023 16:21:16 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id 5614622812f47-3af5fda8f6fso247116b6e.3
+        for <linux-pm@vger.kernel.org>; Wed, 04 Oct 2023 16:21:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1696461675; x=1697066475; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zgm7TGA8FumuxJVjfJvdxL0jzs2syhl4iTqhUKUVlH4=;
+        b=20svLlBco071OeYq6P7bFzB5i219ew56gNuyT7zvBs9Qkp4FiavcQbRSbSd1hFtk3G
+         N0Bua6eQjXF5fbbeSEAnFUk85LAWIEtMqegGnfAA60JaA2t2LB9E7HBPJIcOBSUePqoO
+         qyarBs0uzxnNJGNUWMn6k1nx38mPvJcKoPkKdGmVm7I0EiQL+V7OWRwgrChJ8wdX5dW9
+         m8JGQa/khpAPTTEFonA/DXmaxCkx2au0ONYQ2L3BGJu46TPwPwOvwAI8obY3/Ztww2yX
+         ckmhgYwIoOAYLQdH54Z/kuEzuu8+wa5bIGOaugeH1Hgv3kUdZnwwYXzBxHXBjZQe6WlW
+         W7tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696461675; x=1697066475;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Zgm7TGA8FumuxJVjfJvdxL0jzs2syhl4iTqhUKUVlH4=;
+        b=UmZ1WuFqdPMxbywkh9iws1iKSUaEnPyTI/WyznypiKfHuO8+v5j2QaRKmOherWZU5V
+         xQgisctHQQM9kayxOzeQ9qB/hcaTc/yll+8nFAwrXCulbUSEv4UbCzY0LpvRQlTkefUu
+         XVaHv4MdIgXBL2cAJO+kHRW7vqoLHPHpE7rrdU0tx7DGjCjGbBh9d3mEhhHG0X7uLvkR
+         c6WRUozOEuk5Jjk4VQjdB7nI/4T6qfZ1TUrSXL0Kq3qreXzMHC8DYzLcnl7fp/Q+rdEV
+         uTcGLuY8pGaKDC3cdf1oQOoxt9nOK9brYUIg67uypRSwmhDtRBpUpiwKD2pRorv02Gxz
+         YAHQ==
+X-Gm-Message-State: AOJu0YwC7uxMOrmXvuLIZDKTjLf2+efPJ6fAfC2RA47/F4w8y47mGcgT
+        YvnAtpUMCFvKVm/NoQYA6yxR1w==
+X-Google-Smtp-Source: AGHT+IG2UiAu2LMMgwVhJlHvbOe5xvvHPTKaN92zeH7T/fnoXhufX5MQutk2ZrzwowUmdTcS55NBHA==
+X-Received: by 2002:a05:6808:bca:b0:3a7:6b1c:8142 with SMTP id o10-20020a0568080bca00b003a76b1c8142mr4655307oik.25.1696461675458;
+        Wed, 04 Oct 2023 16:21:15 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id o7-20020a637307000000b0056b27af8715sm78751pgc.43.2023.10.04.16.21.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Oct 2023 16:21:14 -0700 (PDT)
+Message-ID: <651df36a.630a0220.b74fa.0439@mx.google.com>
+Date:   Wed, 04 Oct 2023 16:21:14 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mavrvis2xy3vzwff"
-Content-Disposition: inline
-In-Reply-To: <8d4e4b74-4477-41e0-a690-8b9f38907a7b@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v6.6-rc4-110-g087dbcb21272
+X-Kernelci-Report-Type: test
+Subject: pm/testing baseline: 48 runs,
+ 6 regressions (v6.6-rc4-110-g087dbcb21272)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+pm/testing baseline: 48 runs, 6 regressions (v6.6-rc4-110-g087dbcb21272)
 
---mavrvis2xy3vzwff
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Regressions Summary
+-------------------
 
-Hi,
+platform           | arch  | lab           | compiler | defconfig | regress=
+ions
+-------------------+-------+---------------+----------+-----------+--------=
+----
+bcm2711-rpi-4-b    | arm64 | lab-collabora | gcc-10   | defconfig | 1      =
+    =
 
-On Sun, Oct 01, 2023 at 07:00:11PM -0500, Mario Limonciello wrote:
-> Let me try to add more detail.
->=20
-> This is an OEM system that has 3 USB type C ports.  It's an Intel system,
-> but this doesn't matter for the issue.
-> * when ucsi_acpi is not loaded there are no power supplies in the system =
-and
-> it reports power_supply_is_system_supplied() as AC.
-> * When ucsi_acpi is loaded 3 power supplies will be registered.
-> power_supply_is_system_supplied() reports as DC.
->=20
-> Now when you add in a Navi3x AMD dGPU to the system the power supplies do=
-n't
-> change.  This particular dGPU model doesn't contain a USB-C port, so there
-> is no UCSI power supply registered.
->=20
-> As amdgpu is loaded it looks at device initialization whether the system =
-is
-> powered by AC or DC.  Here is how it looks:
->=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/dri=
-vers/gpu/drm/amd/amdgpu/amdgpu_device.c?h=3Dlinux-6.5.y#n3834
->=20
-> On the OEM system if amdgpu loads before the ucsi_acpi driver (such as in
-> the initramfs) then the right value is returned for
-> power_supply_is_system_supplied() - AC.
->=20
-> If amdgpu is loaded after the ucsi_acpi driver, the wrong value is return=
-ed
-> for power_supply_is_system_supplied() - DC.
->=20
-> This value is very important to set up the dGPU properly.  If the wrong
-> value is returned, the wrong value will be notified to the hardware and t=
-he
-> hardware will not behave properly.  On the OEM system this is a "black
-> screen" at bootup along with RAS errors emitted by the dGPU.
->=20
-> With no changes to a malfunctioning kernel or initramfs binaries I can add
-> modprobe.blacklist=3Ducsi_acpi to kernel command line avoid registering t=
-hose
-> 3 power supplies and the system behaves properly.
->=20
-> So I think it's inappropriate for "UNKNOWN" scope power supplies to be
-> registered and treated as system supplies, at least as it pertains to
-> power_supply_is_system_supplied().
+imx8mp-evk         | arm64 | lab-broonie   | gcc-10   | defconfig | 1      =
+    =
 
-So the main issue is, that the ucsi_acpi registers a bunch of
-power-supply chargers with unknown scope on a desktop systems
-and that results in the system assumed to be supplied from battery.
+kontron-pitx-imx8m | arm64 | lab-kontron   | gcc-10   | defconfig | 2      =
+    =
 
-The problem with your change is, that many of the charger drivers
-don't set a scope at all (and thus report unknown scope). Those
-obviously should not be skipped. Probably most of these drivers
-could be changed to properly set the scope, but it needs to be
-checked on a case-by-case basis. With your current patch they would
-regress in the oposite direction of your use-case.
+r8a77960-ulcb      | arm64 | lab-collabora | gcc-10   | defconfig | 1      =
+    =
 
-Ideally ucsi is changed to properly describe the scope, but I
-suppose this information is not available in ACPI?
+r8a779m1-ulcb      | arm64 | lab-collabora | gcc-10   | defconfig | 1      =
+    =
 
-Assuming that the above are not solvable easily, my idea would be to
-only count the number of POWER_SUPPLY_TYPE_BATTERY device, which have
-!POWER_SUPPLY_SCOPE_DEVICE and exit early if there are none.
-Basically change __power_supply_is_system_supplied(), so that it
-looks like this:
 
-=2E..
-	if (!psy->desc->get_property(psy, POWER_SUPPLY_PROP_SCOPE, &ret))
-		if (ret.intval =3D=3D POWER_SUPPLY_SCOPE_DEVICE)
-			return 0;
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.6-rc4=
+-110-g087dbcb21272/plan/baseline/
 
-	if (psy->desc->type =3D=3D POWER_SUPPLY_TYPE_BATTERY)
-			(*count)++;
-    else
-		if (!psy->desc->get_property(psy, POWER_SUPPLY_PROP_ONLINE,
-					&ret))
-			return ret.intval;
-=2E..
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v6.6-rc4-110-g087dbcb21272
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      087dbcb2127272bfc2419ec2dc1e19e6a030f3af =
 
-That should work in both cases.
 
--- Sebastian
 
-> > >   drivers/power/supply/power_supply_core.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > >=20
-> > > diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power=
-/supply/power_supply_core.c
-> > > index d325e6dbc770..3de6e6d00815 100644
-> > > --- a/drivers/power/supply/power_supply_core.c
-> > > +++ b/drivers/power/supply/power_supply_core.c
-> > > @@ -349,7 +349,7 @@ static int __power_supply_is_system_supplied(stru=
-ct device *dev, void *data)
-> > >   	unsigned int *count =3D data;
-> > >   	if (!psy->desc->get_property(psy, POWER_SUPPLY_PROP_SCOPE, &ret))
-> > > -		if (ret.intval =3D=3D POWER_SUPPLY_SCOPE_DEVICE)
-> > > +		if (ret.intval !=3D POWER_SUPPLY_SCOPE_SYSTEM)
-> > >   			return 0;
-> > >   	(*count)++;
-> > > --=20
-> > > 2.34.1
-> > >=20
->=20
+Test Regressions
+---------------- =
 
---mavrvis2xy3vzwff
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmUd8McACgkQ2O7X88g7
-+poWjA/9HdkzUe4iv3N7kLQ1MX8LLpg04IlI4kPsSscO2XL8B9FQgQVSaVaH8bSc
-IB0/8clq1dhPvpsC2lZBKGxEnzm1DA3Q97UZ+i+pO2yCeYB2b/I5dnXLYr5m3teZ
-prHUSgoGMNF3lc5QeLO7hc/RT4pKbk7eme3geqCj8Z1JDRUnJLychMMhtzqRch7k
-14ZZWZ3e93vDs6J0Kz5/MT4ws/4m831MzA9sbXK2qRtugV259jeEw/6UtUIdyp8V
-QK2/P9k6ZXfcZjzkm0JVm19lWvyF3YM2WzeoLLeYE8bz6BIBQauw/DyTknKFDmQx
-3ftwFyd6fbnfOfKRgXac2zlrG5W1v1y6Xs8GfMvrWf1KxvXNrpzU8VBCArJk67k3
-CP2s6f7CvFxe9XrMinsge58mraayaqSUmc9QeM/tKuBNpUGglUJo/FFFHMBfITqb
-M1zll2uGFGajOfEpiI9pHIIVWhXzVCoYUdvu3KJsmTciuqSX2qJWY/76P6YdVLXR
-JT1i64+6ca7VklC5PWgG98s2xoGHYowVmGSChtEkYvAD8GpR+CQELBj8R6xcApAu
-njA+xFNG6ZvP8BSLYUd5Qon+EHqHmBA70oj9FkZueKie1+YLSlH4prMn5aQqThkP
-WZodfhxa5KMbzTbnsd62i4yZkfbU1uKFsgYPXDCA/feQeuQLLwE=
-=/PRi
------END PGP SIGNATURE-----
+platform           | arch  | lab           | compiler | defconfig | regress=
+ions
+-------------------+-------+---------------+----------+-----------+--------=
+----
+bcm2711-rpi-4-b    | arm64 | lab-collabora | gcc-10   | defconfig | 1      =
+    =
 
---mavrvis2xy3vzwff--
+
+  Details:     https://kernelci.org/test/plan/id/651de9043f8544beec8a0a8d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.6-rc4-110-g087db=
+cb21272/arm64/defconfig/gcc-10/lab-collabora/baseline-bcm2711-rpi-4-b.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.6-rc4-110-g087db=
+cb21272/arm64/defconfig/gcc-10/lab-collabora/baseline-bcm2711-rpi-4-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/651de9043f8544beec8a0=
+a8e
+        new failure (last pass: v6.6-rc3-95-g705ffbf392dc) =
+
+ =
+
+
+
+platform           | arch  | lab           | compiler | defconfig | regress=
+ions
+-------------------+-------+---------------+----------+-----------+--------=
+----
+imx8mp-evk         | arm64 | lab-broonie   | gcc-10   | defconfig | 1      =
+    =
+
+
+  Details:     https://kernelci.org/test/plan/id/651de8d2e3f64ddf2a8a0a5c
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.6-rc4-110-g087db=
+cb21272/arm64/defconfig/gcc-10/lab-broonie/baseline-imx8mp-evk.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.6-rc4-110-g087db=
+cb21272/arm64/defconfig/gcc-10/lab-broonie/baseline-imx8mp-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/651de8d2e3f64ddf2a8a0a65
+        failing since 22 days (last pass: pm-6.6-rc1-122-g07b618ec9d7a, fir=
+st fail: v6.6-rc1-5-gb5eda4c9c923)
+
+    2023-10-04T22:35:43.840688  + set<8>[   27.341092] <LAVA_SIGNAL_ENDRUN =
+0_dmesg 154025_1.5.2.4.1>
+    2023-10-04T22:35:43.841086   +x
+    2023-10-04T22:35:43.946190  / # #
+    2023-10-04T22:35:45.106010  export SHELL=3D/bin/sh
+    2023-10-04T22:35:45.111622  #
+    2023-10-04T22:35:46.603727  / # export SHELL=3D/bin/sh. /lava-154025/en=
+vironment
+    2023-10-04T22:35:46.609770  =
+
+    2023-10-04T22:35:49.333358  / # . /lava-154025/environment/lava-154025/=
+bin/lava-test-runner /lava-154025/1
+    2023-10-04T22:35:49.340113  =
+
+    2023-10-04T22:35:49.344873  / # /lava-154025/bin/lava-test-runner /lava=
+-154025/1 =
+
+    ... (12 line(s) more)  =
+
+ =
+
+
+
+platform           | arch  | lab           | compiler | defconfig | regress=
+ions
+-------------------+-------+---------------+----------+-----------+--------=
+----
+kontron-pitx-imx8m | arm64 | lab-kontron   | gcc-10   | defconfig | 2      =
+    =
+
+
+  Details:     https://kernelci.org/test/plan/id/651de89287e22f2b9f8a0adb
+
+  Results:     51 PASS, 2 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.6-rc4-110-g087db=
+cb21272/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-imx8m.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.6-rc4-110-g087db=
+cb21272/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-imx8m.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/651de89287e22f2b9f8a0ae2
+        new failure (last pass: v6.6-rc3-95-g705ffbf392dc)
+
+    2023-10-04T22:34:33.724605  / # #
+    2023-10-04T22:34:33.826667  export SHELL=3D/bin/sh
+    2023-10-04T22:34:33.827374  #
+    2023-10-04T22:34:33.928735  / # export SHELL=3D/bin/sh. /lava-384329/en=
+vironment
+    2023-10-04T22:34:33.929451  =
+
+    2023-10-04T22:34:34.030765  / # . /lava-384329/environment/lava-384329/=
+bin/lava-test-runner /lava-384329/1
+    2023-10-04T22:34:34.031779  =
+
+    2023-10-04T22:34:34.036315  / # /lava-384329/bin/lava-test-runner /lava=
+-384329/1
+    2023-10-04T22:34:34.102343  + export 'TESTRUN_ID=3D1_bootrr'
+    2023-10-04T22:34:34.102772  + cd /l<8>[   15.876644] <LAVA_SIGNAL_START=
+RUN 1_bootrr 384329_1.5.2.4.5> =
+
+    ... (10 line(s) more)  =
+
+
+  * baseline.bootrr.dwc3-usb1-probed: https://kernelci.org/test/case/id/651=
+de89287e22f2b9f8a0af2
+        new failure (last pass: v6.6-rc3-95-g705ffbf392dc)
+
+    2023-10-04T22:34:36.487363  /lava-384329/1/../bin/lava-test-case
+    2023-10-04T22:34:36.487785  <8>[   18.357472] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Ddwc3-usb1-probed RESULT=3Dfail>
+    2023-10-04T22:34:36.488079  /lava-384329/1/../bin/lava-test-case   =
+
+ =
+
+
+
+platform           | arch  | lab           | compiler | defconfig | regress=
+ions
+-------------------+-------+---------------+----------+-----------+--------=
+----
+r8a77960-ulcb      | arm64 | lab-collabora | gcc-10   | defconfig | 1      =
+    =
+
+
+  Details:     https://kernelci.org/test/plan/id/651de897ac66c335b88a0a60
+
+  Results:     4 PASS, 2 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.6-rc4-110-g087db=
+cb21272/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a77960-ulcb.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.6-rc4-110-g087db=
+cb21272/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a77960-ulcb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/651de897ac66c335b88a0a69
+        failing since 77 days (last pass: pm-6.5-rc2-210-ga648a2d354da, fir=
+st fail: v6.5-rc2-44-g6384f300e9f3)
+
+    2023-10-04T22:39:09.671218  / # #
+
+    2023-10-04T22:39:09.773222  export SHELL=3D/bin/sh
+
+    2023-10-04T22:39:09.773912  #
+
+    2023-10-04T22:39:09.875253  / # export SHELL=3D/bin/sh. /lava-11681341/=
+environment
+
+    2023-10-04T22:39:09.876015  =
+
+
+    2023-10-04T22:39:09.977473  / # . /lava-11681341/environment/lava-11681=
+341/bin/lava-test-runner /lava-11681341/1
+
+    2023-10-04T22:39:09.978576  =
+
+
+    2023-10-04T22:39:09.980867  / # /lava-11681341/bin/lava-test-runner /la=
+va-11681341/1
+
+    2023-10-04T22:39:10.044331  + export 'TESTRUN_ID=3D1_bootrr'
+
+    2023-10-04T22:39:10.044846  + cd /lava-116813<8>[   19.458332] <LAVA_SI=
+GNAL_STARTRUN 1_bootrr 11681341_1.5.2.4.5>
+ =
+
+    ... (28 line(s) more)  =
+
+ =
+
+
+
+platform           | arch  | lab           | compiler | defconfig | regress=
+ions
+-------------------+-------+---------------+----------+-----------+--------=
+----
+r8a779m1-ulcb      | arm64 | lab-collabora | gcc-10   | defconfig | 1      =
+    =
+
+
+  Details:     https://kernelci.org/test/plan/id/651de8aeac66c335b88a0ba0
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.6-rc4-110-g087db=
+cb21272/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a779m1-ulcb.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.6-rc4-110-g087db=
+cb21272/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a779m1-ulcb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/651de8aeac66c335b88a0ba9
+        failing since 77 days (last pass: pm-6.5-rc2-210-ga648a2d354da, fir=
+st fail: v6.5-rc2-44-g6384f300e9f3)
+
+    2023-10-04T22:37:31.411495  / # #
+
+    2023-10-04T22:37:32.489728  export SHELL=3D/bin/sh
+
+    2023-10-04T22:37:32.491439  #
+
+    2023-10-04T22:37:33.980403  / # export SHELL=3D/bin/sh. /lava-11681346/=
+environment
+
+    2023-10-04T22:37:33.982033  =
+
+
+    2023-10-04T22:37:36.702378  / # . /lava-11681346/environment/lava-11681=
+346/bin/lava-test-runner /lava-11681346/1
+
+    2023-10-04T22:37:36.704553  =
+
+
+    2023-10-04T22:37:36.710933  / # /lava-11681346/bin/lava-test-runner /la=
+va-11681346/1
+
+    2023-10-04T22:37:36.773645  + export 'TESTRUN_ID=3D1_bootrr'
+
+    2023-10-04T22:37:36.774125  + cd /lava-116813<8>[   28.515690] <LAVA_SI=
+GNAL_STARTRUN 1_bootrr 11681346_1.5.2.4.5>
+ =
+
+    ... (38 line(s) more)  =
+
+ =20
