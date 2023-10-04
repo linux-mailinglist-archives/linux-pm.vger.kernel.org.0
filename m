@@ -2,184 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B250B7B801D
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Oct 2023 15:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A17677B81C4
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Oct 2023 16:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233003AbjJDNCM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Oct 2023 09:02:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36458 "EHLO
+        id S242779AbjJDOGP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Oct 2023 10:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233096AbjJDNCL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Oct 2023 09:02:11 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238DA98;
-        Wed,  4 Oct 2023 06:02:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696424528; x=1727960528;
-  h=date:from:to:cc:subject:message-id;
-  bh=ZHVR+iEcz2o50eBhM0aiYhokgRtwOBS0DLChfgTPnmI=;
-  b=NSu5sTYZzMDMQkIUYdDJ/y1jKSTQ7Kxy0GlkakvUs8yyOZJazc4UguKR
-   15CcvBCKSJpOh+4CxhBKciRF/g4X3UjX+G07cMB7fUxZylgF+oPwKxYKt
-   QQIV8//gxmfy3NT/M7gStIiZR3yfESpHjv+KOPlhi7uXH3qvjRA+aNkHf
-   kEGdwwo6Uz9D4Dic/8bubH8YUnYAebwCct+uBMWB8sfAqpswK9mWNOFJD
-   /ACap4RrRjuNB7vK/sSu4XElf+L7/nKLqoTNis1JZqzH99CiBC8OjHGO0
-   e8I92ld5NyCXANj7fMRntKymGZS1P9gfffEWCkfefyQJQ6yWKC2ljCBqd
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="382027639"
-X-IronPort-AV: E=Sophos;i="6.03,200,1694761200"; 
-   d="scan'208";a="382027639"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2023 06:02:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="754924619"
-X-IronPort-AV: E=Sophos;i="6.03,200,1694761200"; 
-   d="scan'208";a="754924619"
-Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 04 Oct 2023 06:02:06 -0700
-Received: from kbuild by c3b01524d57c with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qo1Vs-000JFW-15;
-        Wed, 04 Oct 2023 13:02:04 +0000
-Date:   Wed, 04 Oct 2023 21:01:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 57ecdfe1a18d82998d66297800d217bfe1124824
-Message-ID: <202310042142.cusieYEI-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S242757AbjJDOGO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Oct 2023 10:06:14 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2051.outbound.protection.outlook.com [40.107.101.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394A1AD;
+        Wed,  4 Oct 2023 07:06:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JAFqm5oaP/IicXRveVlpI3clqwQRdVMo7evxSgWqnrUgMn5JVwVoH5RK5Ckhwbv+DpUueb099c7bNCoq1gt5k4oVnMPlh23XvIcNqUKVeZa9+BCvMYma2SCNPQ+18KlfBwAOVIuhIxWoh1bicqywjh594bS55iGp+tEoihKpoZPunnPAHzkVsDtyw8Mhkb+EkcAjUIB1tCHQtgMKaEtPIB4nLfbJdSuTfnbA12sPFuiT8NDg+7INbKJv7AhIFKZuHCHNPuasR3XCmq5xOXa8qjijJsfs57+FIK+mYsuW0ibqsnZksS91DkrB4fouYTiIAoC/kXwBvKj2Zb4fkNALJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ox70atXCa1yw/ahkFwgVYgCGINbSrJ3tXMMuQ4HFBWg=;
+ b=duXVL9/KEBsfsKXsrBBcXBD1KIPCao4lkHS74/phg1unfkOwT/1/ibSoX8PTZp/9o5ioTR6nmOJMRYmijKwFLEQMbOmJKX+iy+gzZK/C16tZ7jBuPyhERHXrlAN1deTMpjuz22atNLYEGuQSgfSU77Vk9BiPs2AtLazg0AxLN4YRuoZr89ksv5fCpedl3Zn2onnYZFGlC0wqlB1GDUacJZblKOvAbz3swQmdvaEA1sGqpwZslqvkydW4cFlT2OeEXfm3BaaASg+l8N1+l268y75eVY6AHmDyTWoqSDL2Ny9AGUc9lb33Z9Hk7kBZ6grxIoWfXcp7isrdJ/knbrKFnA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ox70atXCa1yw/ahkFwgVYgCGINbSrJ3tXMMuQ4HFBWg=;
+ b=MGtZRQyB8kXzmjpOJfZr8B1PV4QrM9h5gclTuc7JFUe4ATtBdA1CMA8qU6nSajsyZuTjGDmgG+ZyCL6PpqQlbblQ+MD4EAcXvh0/4p+st6CNNi6ROeXvxoaWPYUH12vL9/nRA9x2bJ3ciYP6HQiIwJKAinHHy1CLm7gLEMw9hlJVILcOKVukpsSem7FkeHEvVXBukbBJVpAqvRIPHE/vxlr+9HveJSrZG6eVwb+mhdNbvu/CAQMjeC+3QjdjYK2WB//fZD1dsGvTp8/KXhVNvfqvOki1+3nJMve2CGkaLYOOsTgij50twxUFPz+w6zbJU8lPkjJLcqBImeG2JI61Ow==
+Received: from DS0PR17CA0013.namprd17.prod.outlook.com (2603:10b6:8:191::11)
+ by SN7PR12MB7106.namprd12.prod.outlook.com (2603:10b6:806:2a1::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.28; Wed, 4 Oct
+ 2023 14:06:09 +0000
+Received: from DS3PEPF000099E1.namprd04.prod.outlook.com
+ (2603:10b6:8:191:cafe::fe) by DS0PR17CA0013.outlook.office365.com
+ (2603:10b6:8:191::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.25 via Frontend
+ Transport; Wed, 4 Oct 2023 14:06:06 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DS3PEPF000099E1.mail.protection.outlook.com (10.167.17.196) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6838.22 via Frontend Transport; Wed, 4 Oct 2023 14:06:06 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 4 Oct 2023
+ 07:05:48 -0700
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 4 Oct 2023
+ 07:05:47 -0700
+Received: from sumitg-l4t.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server id 15.2.986.41 via Frontend
+ Transport; Wed, 4 Oct 2023 07:05:44 -0700
+From:   Sumit Gupta <sumitg@nvidia.com>
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <treding@nvidia.com>, <jonathanh@nvidia.com>, <bbasu@nvidia.com>,
+        <sumitg@nvidia.com>, <amiettinen@nvidia.com>
+Subject: [Patch v3 0/2] Improvements to the Tegra CPUFREQ driver
+Date:   Wed, 4 Oct 2023 19:35:35 +0530
+Message-ID: <20231004140537.1954-1-sumitg@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
+MIME-Version: 1.0
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS3PEPF000099E1:EE_|SN7PR12MB7106:EE_
+X-MS-Office365-Filtering-Correlation-Id: f4e24e44-0e30-41c4-3dbc-08dbc4e30d73
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kEIKC32gkd+YYbeEHXsUns3w45SD1R6PNSlghKLaRVGAdzkPzjyLIhSUn6qeWlGw70RB5PEL7ulgA9+elUtlMrlXhb5qx3vs6F6gXCEmPEZxQlzzhQxWb6C6hCT+AP0jTSDWnSDtA4J/p8rFOkhAJ8LxPQIAgYIgPtuPw5TBKuzURBgOxOaWE4pM4etP9M1YwVa1Em7z/HE1zoDqr1JXdWkqQMVKZWECw+eIUIyKyfJKWnRncFV2L1OFYGr28h5TyQ3CJPHaW3LoybErKDZ/fEQCHxXwtJlQPpy4oIpltAsIMvZzZnnmSf0FYUvF328dVMpPgSL/YXa8DBkd/MoFDwdvwNShlq04WTJ2zGHUPAopdLHmlIPcP7qhahIj+bSjW2Vg4ssd57QBw7ODz5M9rHYdh7mJDc3U29KO4QR/Cl7Imb3AG2J0s1ODqGO0Okn9YpTsb6dAnZPY+Q+L1VKibfyoKEGW4VGENVnmdgaDsafucBIsybwbg7PGmcwp8aIAFTiRf1AbpwT9KWVxX2gas/sVeglXuZHnCjLAtCmjCej2eNnywXrCww7Z7OmOoLTKj9oF64Q/OtwO6ehvYDwFVaW5Ez2GKaT5p826qq5wM7DegDEKA4zIi64cFo6M5ZyxnwrXCwo1U2tHjWGNwNfYV7wfUqD/vpPMI8AMbHqWdVieGQX/iN9XCtxscy50d/r76odFOXE9dr6BhZmtSHEB5Vze4Vq1Des6qRnN76bifkyCKInnvJB/++WBMsDUh0sCIiYPZT71TiKB7qfIHBzjK8dn4RzvA3RAQNavxzP9dgRGKdPF+0U/R91iMnSN27cu
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(396003)(376002)(136003)(346002)(230922051799003)(64100799003)(451199024)(1800799009)(82310400011)(186009)(46966006)(40470700004)(36840700001)(40460700003)(40480700001)(7696005)(478600001)(6666004)(47076005)(426003)(966005)(36860700001)(86362001)(356005)(7636003)(82740400003)(83380400001)(336012)(107886003)(1076003)(26005)(2906002)(2616005)(316002)(36756003)(70206006)(70586007)(110136005)(41300700001)(8936002)(8676002)(5660300002)(4326008)(54906003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2023 14:06:06.3771
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f4e24e44-0e30-41c4-3dbc-08dbc4e30d73
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS3PEPF000099E1.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7106
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 57ecdfe1a18d82998d66297800d217bfe1124824  Merge branch 'acpi-prm' into bleeding-edge
+This patch set adds below improvements to the Tegra194 CPUFREQ driver.
+They are applicable to all the Tegra SoC's supported by the driver.
 
-elapsed time: 1002m
+1) Patch 1: Avoid making SMP call on every frequency request to reduce
+   the time for frequency set and get calls.
 
-configs tested: 107
-configs skipped: 2
+2) Patch 2: Use reference clock count based loop instead of udelay()
+   to improve the accuracy of re-generated CPU frequency.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+The patches are not related but have minor conflict. So, need to be
+applied in order of patch numbers. If 'Patch 2' is to be applied first
+then will rebase that and send separately.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20231004   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                   randconfig-001-20231004   gcc  
-arm64                            allmodconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20231004   gcc  
-i386         buildonly-randconfig-002-20231004   gcc  
-i386         buildonly-randconfig-003-20231004   gcc  
-i386         buildonly-randconfig-004-20231004   gcc  
-i386         buildonly-randconfig-005-20231004   gcc  
-i386         buildonly-randconfig-006-20231004   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20231004   gcc  
-i386                  randconfig-002-20231004   gcc  
-i386                  randconfig-003-20231004   gcc  
-i386                  randconfig-004-20231004   gcc  
-i386                  randconfig-005-20231004   gcc  
-i386                  randconfig-006-20231004   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20231004   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20231004   gcc  
-x86_64                randconfig-002-20231004   gcc  
-x86_64                randconfig-003-20231004   gcc  
-x86_64                randconfig-004-20231004   gcc  
-x86_64                randconfig-005-20231004   gcc  
-x86_64                randconfig-006-20231004   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
+---
+v1[2] -> v3:
+- Patch 1: used sizeof(*data->cpu_data) in devm_kcalloc(). 
+
+v1[1] -> v2:
+- Patch 1: added new patch.
+- Patch 2: changed subject and patch order.
+
+Sumit Gupta (2):
+  cpufreq: tegra194: save CPU data to avoid repeated SMP calls
+  cpufreq: tegra194: use refclk delta based loop instead of udelay
+
+ drivers/cpufreq/tegra194-cpufreq.c | 151 ++++++++++++++++++++---------
+ 1 file changed, 106 insertions(+), 45 deletions(-)
+
+[2] https://lore.kernel.org/lkml/20230901164113.29139-1-sumitg@nvidia.com/
+[1] https://lore.kernel.org/lkml/20230901152046.25662-1-sumitg@nvidia.com/ 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.17.1
+
