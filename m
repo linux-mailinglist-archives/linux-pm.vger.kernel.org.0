@@ -2,109 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D997B84B0
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Oct 2023 18:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 000907B8545
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Oct 2023 18:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243254AbjJDQMP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Oct 2023 12:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44874 "EHLO
+        id S243276AbjJDQaV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Oct 2023 12:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243299AbjJDQMO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Oct 2023 12:12:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7795111C
-        for <linux-pm@vger.kernel.org>; Wed,  4 Oct 2023 09:11:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1696435886;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XiFNZxESte6xiokxDPwUzmpBYy6wkjDyf6f7P3Qz3QU=;
-        b=ch4idYfFdc1ogNK0JbRzZRhPQtV0UOFYl5syEEVgddrPP+JylyjWwg9DeB7do3Ywmt0zN5
-        wtBBekjntciVftDORkjdpw2T+mHnLfe9ol3HBwVcwEseDOH0qHFzorz7d2LZFEokvWauhY
-        E+A0WXpI0jr7Q225/8BM327c20GadFs=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-117-Zq4VPg1SNhu54lA5yoBgFg-1; Wed, 04 Oct 2023 12:11:07 -0400
-X-MC-Unique: Zq4VPg1SNhu54lA5yoBgFg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D8E1B3804068;
-        Wed,  4 Oct 2023 16:11:05 +0000 (UTC)
-Received: from [10.22.32.136] (unknown [10.22.32.136])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A52D51004042;
-        Wed,  4 Oct 2023 16:11:04 +0000 (UTC)
-Message-ID: <946e6723-9635-1db1-d636-0a7904c40d40@redhat.com>
-Date:   Wed, 4 Oct 2023 12:11:04 -0400
+        with ESMTP id S233484AbjJDQaU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Oct 2023 12:30:20 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67385C0
+        for <linux-pm@vger.kernel.org>; Wed,  4 Oct 2023 09:30:16 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-40651a72807so23387275e9.1
+        for <linux-pm@vger.kernel.org>; Wed, 04 Oct 2023 09:30:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696437015; x=1697041815; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WIJySTs34JmUmNbMiJ7I6/1TQWbHfds1YxEs2wK2HFc=;
+        b=tmFFOdFXRCd8xlM25wllqndrTLanxhzxnYXBl2R6zubMQUB8b7xHSIXyjoVlzQDTrm
+         sRVm9xMwEroMaBAeONYmVLuuAEKdavapncUFWM1LyMXXrHlDCBjK2xm4D5KYcLpj6J7P
+         BPG6mbLymcueZDmWxAcaE/t/cCtRQ0/C5mEtlx4vBg2CVhHSBuF1z1RprIJ7Wn8fJeiV
+         B+v7MEAqwQn8jJnaR5PpuWhbYad1HEylW+ooDVKDYV5yXURA0RWq3WY12Hu9zKm8rEWM
+         fi/zf7ZOdV6Mj+nIs9yP/p5n0JAl+pVI1B5tuVYEpFTxZgsHzW2SvUjn2eHuBc7s1q+S
+         tbxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696437015; x=1697041815;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WIJySTs34JmUmNbMiJ7I6/1TQWbHfds1YxEs2wK2HFc=;
+        b=MFTrzyDauuStL0sAsJmGUtgjY+GKoYxWkyQd499D5kp7XYYpCu7guiQFEuuOB+lFgJ
+         8yGkXuA8k/pjv2h5VQFcJJn8fMJX8EsDk4jKYXjMski/yQAV7k9uwdNH7igdFOOeJ0cp
+         bRaB/dzoi7vhpBnnOIIPBLKOuHzEhEmbpTsrxeGVqQENUTln5odiP9PZqRgyTY1ovyhK
+         PQ8Y2YxTlLULwFzYvdNFenL6D7gbQlxLJdpYdpGsoti6NHhdWS2/OarpGnTXbOOXcMcX
+         Dx4VuEUz05loZCTvFEU00r1Unye7cbdH3w4z5rca7FlKUZgiLjUWqpfQxR5I77ZeRLrt
+         Kjug==
+X-Gm-Message-State: AOJu0Yz3sxquv8V6qijPN2Xgq80qWAmAW/wMRImAe+r+oGHRDY2fx9No
+        ydx6NV/2jpiXHYJ49xpK015hnw==
+X-Google-Smtp-Source: AGHT+IH7J/z4cjaLtMMeUDbk3FPajWRTR3LSHA+By88VR2RVrlVEvH0lmzLgNmMQ8qUBLgGR5HT2vA==
+X-Received: by 2002:a05:600c:230d:b0:401:dc7c:2494 with SMTP id 13-20020a05600c230d00b00401dc7c2494mr2974381wmo.27.1696437014776;
+        Wed, 04 Oct 2023 09:30:14 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:426:5324:c7e9:5012? ([2a05:6e02:1041:c10:426:5324:c7e9:5012])
+        by smtp.googlemail.com with ESMTPSA id 17-20020a05600c021100b003feae747ff2sm1918307wmi.35.2023.10.04.09.30.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Oct 2023 09:30:14 -0700 (PDT)
+Message-ID: <f14894b4-805c-3eb4-755c-4795405d7e7e@linaro.org>
+Date:   Wed, 4 Oct 2023 18:30:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v6 0/4] x86/speculation: Disable IBRS when idle
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2 3/6] ACPI: thermal: Combine passive and active trip
+ update functions
 Content-Language: en-US
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        x86@kernel.org, linux-pm@vger.kernel.org,
-        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20230727184600.26768-1-longman@redhat.com>
- <ZR1RePXx6/zZueI8@gmail.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <ZR1RePXx6/zZueI8@gmail.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+References: <4846448.GXAFRqVoOG@kreacher> <8288399.T7Z3S40VBb@kreacher>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <8288399.T7Z3S40VBb@kreacher>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/4/23 07:50, Ingo Molnar wrote:
-> * Waiman Long <longman@redhat.com> wrote:
->
->> For Intel processors that need to turn on IBRS to protect against
->> Spectre v2 and Retbleed, the IBRS bit in the SPEC_CTRL MSR affects
->> the performance of the whole core even if only one thread is turning
->> it on when running in the kernel. For user space heavy applications,
->> the performance impact of occasionally turning IBRS on during syscalls
->> shouldn't be significant. Unfortunately, that is not the case when the
->> sibling thread is idling in the kernel. In that case, the performance
->> impact can be significant.
->>
->> When DPDK is running on an isolated CPU thread processing network packets
->> in user space while its sibling thread is idle. The performance of the
->> busy DPDK thread with IBRS on and off in the sibling idle thread are:
->>
->>                                  IBRS on         IBRS off
->>                                  -------         --------
->>    packets/second:                  7.8M           10.4M
->>    avg tsc cycles/packet:         282.26          209.86
->>
->> This is a 25% performance degradation. The test system is a Intel Xeon
->> 4114 CPU @ 2.20GHz.
-> Ok, that's a solid improvement, and the feature has no obvious
-> downsides, so I've applied your series to tip:sched/core with a few
-> edits here and there.
+On 03/10/2023 15:21, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Combine acpi_thermal_update_passive_trip() and
+> acpi_thermal_update_active_trip() into one common function called
+> acpi_thermal_update_trip(), so as to reduce code duplication and
+> prepare the code in question for subsequent changes.
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
 
-Thanks!
+Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
--Longman
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
