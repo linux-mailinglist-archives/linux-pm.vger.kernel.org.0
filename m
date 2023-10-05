@@ -2,186 +2,208 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74AF97BA127
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Oct 2023 16:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 930967B9F6B
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Oct 2023 16:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237054AbjJEOnY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Oct 2023 10:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55950 "EHLO
+        id S232371AbjJEOXs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Oct 2023 10:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238539AbjJEOkk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Oct 2023 10:40:40 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACA477644;
-        Thu,  5 Oct 2023 07:12:58 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3958A1lg012152;
-        Thu, 5 Oct 2023 09:57:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=TULmcO8l188rP5vtjqFrkpttdGmBezWswKLwM6tqT+k=;
- b=Qj7I3eeKQbICxxNLcDf5mcOHdj3UtQIdHYHW2wnUCyZU6x6xlHzHPqqBsPyfiY3rOw9A
- 0b03WbvtDQ3foBmuYteEiAO4in9C/+s9ZBh/4D9ICpLfNdRljEkkN1OEanDWjzgsel8z
- iOS/6pFb3Tdht6vV4XSmSWp91aKKZos440p/+oTTJhIDQ6VMhhgAjtNNq1oHIqIk6B93
- iCfHE3/F6fwZpB8mi7iRyRs86dQGDqc7MSmKTViYighBvUG19YiOAhqV5cliyTt0oYKD
- GJau/y+OshTswMi4sZMfaI8RLcyJCpK5o6/k7tgysj3CB8AbYw8FLeVcE9qd5TKZmyPv mA== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3th8e1teue-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Oct 2023 09:57:56 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3959vtAJ028265
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 5 Oct 2023 09:57:55 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Thu, 5 Oct 2023 02:57:49 -0700
-Date:   Thu, 5 Oct 2023 15:27:45 +0530
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <ilia.lin@kernel.org>, <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_kathirav@quicinc.com>, <linux-pm@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v1 07/10] arm64: dts: qcom: ipq5332: populate the opp
- table based on the eFuse
-Message-ID: <20231005095744.GA29795@varda-linux.qualcomm.com>
-References: <cover.1693996662.git.quic_varada@quicinc.com>
- <a6d12e3b253d6a55d85f66979ba8b7d9c9ff6072.1693996662.git.quic_varada@quicinc.com>
- <CAA8EJppNsgUNgwadq9oM0_KyORNR5PBZGVZukN6MzAm2KPzC9g@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAA8EJppNsgUNgwadq9oM0_KyORNR5PBZGVZukN6MzAm2KPzC9g@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: oIcgO5TZ66_7muH1tFN8rHdOi-fpZKDV
-X-Proofpoint-ORIG-GUID: oIcgO5TZ66_7muH1tFN8rHdOi-fpZKDV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-05_06,2023-10-02_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
- adultscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0 spamscore=0
- bulkscore=0 mlxlogscore=999 malwarescore=0 impostorscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
- definitions=main-2310050077
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S233553AbjJEOW3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Oct 2023 10:22:29 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4EC10D1;
+        Thu,  5 Oct 2023 06:48:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696513712; x=1728049712;
+  h=date:from:to:cc:subject:message-id;
+  bh=Bsp9ehixeLHcbtUpyA+rx7/7o5Slibw2J6eHfc2hOYE=;
+  b=YflALmyFUKrPrA7oM0a+QtjP3T7vZaosfNicSTCfOruoCc5k3ZLqjMjv
+   W+5xj8p4A0gVHrL0ZmYfiv1pODYzo/fFHRyOyvlmoGvvYU6cmTjeYvPuL
+   RJi0JfaTx3r6MGhuJUdZ7hBg3DhxzWuuKCmkqAmCou0RsveoRIh7eKh2k
+   YBQiT1N1nw5RitlPvulFv+5iQ+EhXAgKQlV0oRj3hxZizC5c8fGUGHD9F
+   SezRKE1QLBZefislW1KuysOlliUwTQe/OpnxCqLaCUA/EYaj+D47mnMIn
+   RWubZNviqmPfPQjpOmsLYrZ3eptfAqq7A93+LVSZeBwlDaLzfh0DGLWlr
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="469730089"
+X-IronPort-AV: E=Sophos;i="6.03,202,1694761200"; 
+   d="scan'208";a="469730089"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 03:05:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="781190361"
+X-IronPort-AV: E=Sophos;i="6.03,202,1694761200"; 
+   d="scan'208";a="781190361"
+Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 05 Oct 2023 03:05:43 -0700
+Received: from kbuild by c3b01524d57c with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qoLEk-000LH9-0Q;
+        Thu, 05 Oct 2023 10:05:42 +0000
+Date:   Thu, 05 Oct 2023 18:04:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 087dbcb2127272bfc2419ec2dc1e19e6a030f3af
+Message-ID: <202310051838.6aED2Oiq-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 07, 2023 at 04:59:28PM +0300, Dmitry Baryshkov wrote:
-> On Thu, 7 Sept 2023 at 08:23, Varadarajan Narayanan
-> <quic_varada@quicinc.com> wrote:
-> >
-> > IPQ53xx have different OPPs available for the CPU based on
-> > SoC variant. This can be determined through use of an eFuse
-> > register present in the silicon.
-> >
-> > Add support to read the eFuse and populate the OPPs based on it.
-> >
-> > Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > ---
-> >  arch/arm64/boot/dts/qcom/ipq5332.dtsi | 34 +++++++++++++++++++++++++++++++---
-> >  1 file changed, 31 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> > index 82761ae..3ca3f34 100644
-> > --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> > @@ -91,11 +91,34 @@
-> >         };
-> >
-> >         cpu_opp_table: opp-table-cpu {
-> > -               compatible = "operating-points-v2";
-> > +               compatible = "operating-points-v2-kryo-cpu";
-> >                 opp-shared;
-> > +               nvmem-cells = <&cpu_speed_bin>;
-> > +               nvmem-cell-names = "speed_bin";
-> > +
-> > +               /*
-> > +                * Listed all supported CPU frequencies and opp-supported-hw
-> > +                * values to select CPU frequencies based on the limits fused.
-> > +                * ------------------------------------------------------------
-> > +                * Frequency     BIT3   BIT2   BIT1    BIT0    opp-supported-hw
-> > +                *              1.0GHz 1.2GHz 1.5GHz No Limit
-> > +                * ------------------------------------------------------------
-> > +                * 1100000000     1      1      1       1            0xF
-> > +                * 1500000000     0      0      1       1            0x3
-> > +                * -----------------------------------------------------------
-> > +                */
->
-> This can probably go to the commit message instead.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 087dbcb2127272bfc2419ec2dc1e19e6a030f3af  Merge branch 'pm-sleep-fixes' into linux-next
 
-Ok
+elapsed time: 728m
 
-> > +
-> > +               opp-1100000000 {
-> > +                       opp-hz = /bits/ 64 <1100000000>;
->
-> But your table shows 1.0 GHz and 1.2 GHz instead of 1.1 GHz
+configs tested: 130
+configs skipped: 2
 
-Will update it.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> > +                       opp-microvolt = <850000>;
-> > +                       opp-supported-hw = <0xF>;
-> > +                       clock-latency-ns = <200000>;
-> > +               };
-> >
-> > -               opp-1488000000 {
-> > -                       opp-hz = /bits/ 64 <1488000000>;
-> > +               opp-1500000000 {
-> > +                       opp-hz = /bits/ 64 <1500000000>;
->
-> So, 1.488 GHz or 1.5 GHz?
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20231005   gcc  
+arm                              alldefconfig   clang
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                         bcm2835_defconfig   clang
+arm                                 defconfig   gcc  
+arm                            dove_defconfig   clang
+arm                         lpc32xx_defconfig   clang
+arm                         orion5x_defconfig   clang
+arm                   randconfig-001-20231005   gcc  
+arm                         s3c6400_defconfig   gcc  
+arm                         s5pv210_defconfig   clang
+arm                           spitz_defconfig   clang
+arm                    vt8500_v6_v7_defconfig   clang
+arm64                            allmodconfig   gcc  
+arm64                             allnoconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20231005   gcc  
+i386         buildonly-randconfig-002-20231005   gcc  
+i386         buildonly-randconfig-003-20231005   gcc  
+i386         buildonly-randconfig-004-20231005   gcc  
+i386         buildonly-randconfig-005-20231005   gcc  
+i386         buildonly-randconfig-006-20231005   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                  randconfig-001-20231005   gcc  
+i386                  randconfig-002-20231005   gcc  
+i386                  randconfig-003-20231005   gcc  
+i386                  randconfig-004-20231005   gcc  
+i386                  randconfig-005-20231005   gcc  
+i386                  randconfig-006-20231005   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20231005   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                  decstation_64_defconfig   gcc  
+mips                           ip28_defconfig   clang
+mips                  maltasmvp_eva_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc                         alldefconfig   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                      acadia_defconfig   clang
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   gcc  
+powerpc                       ebony_defconfig   clang
+powerpc                     kmeter1_defconfig   clang
+powerpc                     ksi8560_defconfig   clang
+powerpc                         wii_defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                           se7750_defconfig   gcc  
+sh                             sh03_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                       sparc32_defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20231005   gcc  
+x86_64                randconfig-002-20231005   gcc  
+x86_64                randconfig-003-20231005   gcc  
+x86_64                randconfig-004-20231005   gcc  
+x86_64                randconfig-005-20231005   gcc  
+x86_64                randconfig-006-20231005   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                            allnoconfig   gcc  
+xtensa                           allyesconfig   gcc  
 
-1.5 GHz
-
-> > +                       opp-microvolt = <950000>;
->
-> Which regulator is controlled by this microvolt?
-
-Based on the SKU, the XBL sets up the regulator to provide 950000uV
-on CPUs capable of running 1.5G and 850000uV on other SKUs. Linux
-doesn't control it.
-
-Thanks
-Varada
-> > +                       opp-supported-hw = <0x3>;
-> >                         clock-latency-ns = <200000>;
-> >                 };
-> >         };
-> > @@ -150,6 +173,11 @@
-> >                         reg = <0x000a4000 0x721>;
-> >                         #address-cells = <1>;
-> >                         #size-cells = <1>;
-> > +
-> > +                       cpu_speed_bin: cpu_speed_bin@1d {
-> > +                               reg = <0x1d 0x2>;
-> > +                               bits = <7 2>;
-> > +                       };
-> >                 };
-> >
-> >                 rng: rng@e3000 {
-> > --
-> > 2.7.4
-> >
->
->
-> --
-> With best wishes
-> Dmitry
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
