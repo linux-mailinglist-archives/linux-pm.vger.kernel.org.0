@@ -2,130 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7DA87BA167
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Oct 2023 16:53:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FBD57BA0DE
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Oct 2023 16:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238084AbjJEOnU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Oct 2023 10:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46276 "EHLO
+        id S229872AbjJEOut (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Oct 2023 10:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237088AbjJEOi2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Oct 2023 10:38:28 -0400
+        with ESMTP id S239681AbjJEOrn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Oct 2023 10:47:43 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883834F077;
-        Thu,  5 Oct 2023 07:02:49 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3952obcM020199;
-        Thu, 5 Oct 2023 02:52:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=dFUWap6jlVEo0/FWKF6ZbuQBL/+MeVOOJ+8zsML8Umo=;
- b=edDpNhoHl+kWZPg5qVWs2Gzi7Y81akUnBumc1EpagtG3tiiGNE/zIMkzrpwP8D3wtJOJ
- q7LEHVmd6ww7Q6IjqC3NoaGxWO0fp7Xmfcyw5cMFrukL2REFE6UP1jED3rgj0Re84fdW
- FfHaiRIcSCEQ3m0tlDQ6WBoVNTIjEm5kZp0pc+Oh61L3SAQEN/WlG1ikGJEaYEwNTp5E
- BTKXlK330LmGV6+LQYcelciZH+Pv6YQzvSal9US7e/UBPtWuIieteax0GbZVQzx4qFDK
- 0dm0wRa0dkZde2v8rKkeiq2a5S1i02Ynl7TXW4n68w4AdxIpq47RFApBxmXOcqH2H7TX LQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3thj6gg9hp-1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40424682;
+        Thu,  5 Oct 2023 07:34:51 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3957jcwf026789;
+        Thu, 5 Oct 2023 08:53:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=eE+3lVu2w4k3uwLOxwaySx3ouHPIax279I51XhOh3ug=;
+ b=Gry/b2rfE4ADnco0RlmPzyXgRrhKf36W7iHcINr8grmWGfu1fTEVPbwQhcAGM9kBy3/O
+ UKE1C2vjiPntBn2lng2F4ZMmkytnS2PeItM5JLROMesiW9t0rr8wg/46W3/89Euu9weF
+ jQ7ztUONtPX5DNjh7BG2anhIcmRKFlndK1DEmKqh0MS5xvhIdxUbdEa66393imoi20ce
+ CQtaP76GMbQVsyUT4tK8aj2mUvuTC83MgwH7n0T3GB6iTvNr/3Udc2X0YR7N/K/k1I9+
+ UrIcWSvyXiW6tbu4vWR7PKcy++QghmS6fcYXxd0RVJg76ZCQfpjXlj0geheQNKeBH/tw xA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tgynhbh8t-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Oct 2023 02:52:08 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3952q7YM016314
+        Thu, 05 Oct 2023 08:53:00 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3958qxDO027273
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 5 Oct 2023 02:52:07 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Wed, 4 Oct 2023 19:52:07 -0700
-Date:   Wed, 4 Oct 2023 19:52:06 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Manivannan Sadhasivam <mani@kernel.org>
-CC:     Caleb Connolly <caleb.connolly@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bhupesh Sharma <bhupesh.linux@gmail.com>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 0/4] thermal: Introduce Qualcomm Thermal Mitigation
- Device support
-Message-ID: <20231005025206.GF3553829@hu-bjorande-lv.qualcomm.com>
-References: <20230905-caleb-qmi_cooling-v1-0-5aa39d4164a7@linaro.org>
- <20231001155701.GA53767@thinkpad>
+        Thu, 5 Oct 2023 08:52:59 GMT
+Received: from [10.217.219.216] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Thu, 5 Oct
+ 2023 01:52:52 -0700
+Message-ID: <396a55c1-8ae3-8296-2826-e7ab0f5cb103@quicinc.com>
+Date:   Thu, 5 Oct 2023 14:22:49 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20231001155701.GA53767@thinkpad>
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v5 2/5] arm64: dts: qcom: sm8450: Add opp table support to
+ PCIe
+Content-Language: en-US
+To:     Manivannan Sadhasivam <mani@kernel.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <vireshk@kernel.org>, <nm@ti.com>,
+        <sboyd@kernel.org>, <lpieralisi@kernel.org>, <kw@linux.com>,
+        <robh@kernel.org>, <bhelgaas@google.com>, <rafael@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <quic_vbadigan@quicinc.com>,
+        <quic_nitegupt@quicinc.com>, <quic_skananth@quicinc.com>,
+        <quic_ramkri@quicinc.com>, <quic_parass@quicinc.com>
+References: <1694066433-8677-1-git-send-email-quic_krichai@quicinc.com>
+ <1694066433-8677-3-git-send-email-quic_krichai@quicinc.com>
+ <20230928183808.GA10963@thinkpad>
+From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+In-Reply-To: <20230928183808.GA10963@thinkpad>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: FrSBzj2ulkS9SaY4CyHpLk6gx13PtlDB
-X-Proofpoint-ORIG-GUID: FrSBzj2ulkS9SaY4CyHpLk6gx13PtlDB
+X-Proofpoint-GUID: po57y_E2hETBeVbcWCnsVmh_SpTwKbCa
+X-Proofpoint-ORIG-GUID: po57y_E2hETBeVbcWCnsVmh_SpTwKbCa
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-04_13,2023-10-02_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
- lowpriorityscore=0 suspectscore=0 spamscore=0 malwarescore=0 adultscore=0
- priorityscore=1501 clxscore=1015 mlxlogscore=999 impostorscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310050023
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+ definitions=2023-10-05_06,2023-10-02_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ priorityscore=1501 impostorscore=0 malwarescore=0 mlxscore=0
+ mlxlogscore=992 clxscore=1015 adultscore=0 lowpriorityscore=0 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310050067
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Oct 01, 2023 at 09:27:01PM +0530, Manivannan Sadhasivam wrote:
-> On Fri, Sep 29, 2023 at 05:16:16PM +0100, Caleb Connolly wrote:
-> > The Thermal Mitigation Device (TMD) Service is a QMI service that runs
-> > on remote subsystems (the modem and DSPs) on Qualcomm SoCs.
-> > It exposes various mitigations including passive thermal controls and
-> > rail voltage restrictions.
-> > 
-> > This series introduces support for exposing TMDs as cooling devices
-> > in the kernel through the thermal framework, using the QMI interface.
-> > 
-> > Each TMD client is described as a child of the remoteproc node in
-> > devicetree. With subnodes for each control.
-> > 
-> 
-> Daniel expressed concerns in the past aganist representing TMD driver as a
-> cooling device since it is not tied to thermal zones and the governors cannot
-> use it. Instead he suggested to represent it as a powercap device with thermal
-> constraints.
-> 
-> So please look into that approach.
-> 
 
-The powercap framework revolves around the idea that we have some amount
-of power (micro-watt) being available to the system, which can be split
-across a range of devices.
+On 9/29/2023 12:08 AM, Manivannan Sadhasivam wrote:
+> On Thu, Sep 07, 2023 at 11:30:30AM +0530, Krishna chaitanya chundru wrote:
+>> PCIe needs to choose the appropriate performance state of RPMH power
+>> domain based up on the PCIe gen speed.
+>>
+>> So let's add the OPP table support to specify RPMH performance states.
+>>
+>> Use opp-level for the PCIe gen speed for easier use.
+>>
+> So, you just want to control RPMh performance state using OPP and not clock
+> rates? What will happen if you switch to lowest performance state of RPMh but
+> still run PCIe clocks at max rate?
+>
+> - Mani
 
-Say that we implement this as a powercap thing, what current consumption
-would you attribute these entires? How would you map a given uW value to
-the mitigation levels provided by the qmi-cooling instances?
+Based up on the RPMH state the clock rates will be scaled accordingly.
 
+- KC
 
-Beyond that, I'm still not sure how we would plug this in. We don't have
-a picture of the power consumption/flow through the system at any point
-in time - as the control of the power grid is distributed across the
-various subsystems.
-
-Regards,
-Bjorn
+>> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+>> ---
+>>   arch/arm64/boot/dts/qcom/sm8450.dtsi | 47 ++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 47 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>> index 2a60cf8..a6264a5 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>> @@ -1820,7 +1820,28 @@
+>>   			pinctrl-names = "default";
+>>   			pinctrl-0 = <&pcie0_default_state>;
+>>   
+>> +			operating-points-v2 = <&pcie0_opp_table>;
+>> +
+>>   			status = "disabled";
+>> +
+>> +			pcie0_opp_table: opp-table {
+>> +				compatible = "operating-points-v2";
+>> +
+>> +				opp-1 {
+>> +					opp-level = <1>;
+>> +					required-opps = <&rpmhpd_opp_low_svs>;
+>> +				};
+>> +
+>> +				opp-2 {
+>> +					opp-level = <2>;
+>> +					required-opps = <&rpmhpd_opp_low_svs>;
+>> +				};
+>> +
+>> +				opp-3 {
+>> +					opp-level = <3>;
+>> +					required-opps = <&rpmhpd_opp_nom>;
+>> +				};
+>> +			};
+>>   		};
+>>   
+>>   		pcie0_phy: phy@1c06000 {
+>> @@ -1932,7 +1953,33 @@
+>>   			pinctrl-names = "default";
+>>   			pinctrl-0 = <&pcie1_default_state>;
+>>   
+>> +			operating-points-v2 = <&pcie1_opp_table>;
+>> +
+>>   			status = "disabled";
+>> +
+>> +			pcie1_opp_table: opp-table {
+>> +				compatible = "operating-points-v2";
+>> +
+>> +				opp-1 {
+>> +					opp-level = <1>;
+>> +					required-opps = <&rpmhpd_opp_low_svs>;
+>> +				};
+>> +
+>> +				opp-2 {
+>> +					opp-level = <2>;
+>> +					required-opps = <&rpmhpd_opp_low_svs>;
+>> +				};
+>> +
+>> +				opp-3 {
+>> +					opp-level = <3>;
+>> +					required-opps = <&rpmhpd_opp_low_svs>;
+>> +				};
+>> +
+>> +				opp-4 {
+>> +					opp-level = <4>;
+>> +					required-opps = <&rpmhpd_opp_nom>;
+>> +				};
+>> +			};
+>>   		};
+>>   
+>>   		pcie1_phy: phy@1c0f000 {
+>> -- 
+>> 2.7.4
+>>
