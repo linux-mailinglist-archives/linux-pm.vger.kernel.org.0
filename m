@@ -2,57 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 930967B9F6B
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Oct 2023 16:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5FF7B9F74
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Oct 2023 16:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232371AbjJEOXs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Oct 2023 10:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
+        id S229688AbjJEOYv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Oct 2023 10:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233553AbjJEOW3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Oct 2023 10:22:29 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4EC10D1;
-        Thu,  5 Oct 2023 06:48:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696513712; x=1728049712;
-  h=date:from:to:cc:subject:message-id;
-  bh=Bsp9ehixeLHcbtUpyA+rx7/7o5Slibw2J6eHfc2hOYE=;
-  b=YflALmyFUKrPrA7oM0a+QtjP3T7vZaosfNicSTCfOruoCc5k3ZLqjMjv
-   W+5xj8p4A0gVHrL0ZmYfiv1pODYzo/fFHRyOyvlmoGvvYU6cmTjeYvPuL
-   RJi0JfaTx3r6MGhuJUdZ7hBg3DhxzWuuKCmkqAmCou0RsveoRIh7eKh2k
-   YBQiT1N1nw5RitlPvulFv+5iQ+EhXAgKQlV0oRj3hxZizC5c8fGUGHD9F
-   SezRKE1QLBZefislW1KuysOlliUwTQe/OpnxCqLaCUA/EYaj+D47mnMIn
-   RWubZNviqmPfPQjpOmsLYrZ3eptfAqq7A93+LVSZeBwlDaLzfh0DGLWlr
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="469730089"
-X-IronPort-AV: E=Sophos;i="6.03,202,1694761200"; 
-   d="scan'208";a="469730089"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 03:05:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="781190361"
-X-IronPort-AV: E=Sophos;i="6.03,202,1694761200"; 
-   d="scan'208";a="781190361"
-Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 05 Oct 2023 03:05:43 -0700
-Received: from kbuild by c3b01524d57c with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qoLEk-000LH9-0Q;
-        Thu, 05 Oct 2023 10:05:42 +0000
-Date:   Thu, 05 Oct 2023 18:04:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 087dbcb2127272bfc2419ec2dc1e19e6a030f3af
-Message-ID: <202310051838.6aED2Oiq-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        with ESMTP id S229767AbjJEOWi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Oct 2023 10:22:38 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FEDE23D15
+        for <linux-pm@vger.kernel.org>; Thu,  5 Oct 2023 04:03:24 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1c61acd1285so5491735ad.2
+        for <linux-pm@vger.kernel.org>; Thu, 05 Oct 2023 04:03:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696503804; x=1697108604; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tlcMpFTEGkun5fY2EQzH5O3YtCneY5PYvuzDAb/3BCc=;
+        b=Ifsau/CbOFHhHiKCQCz/Un93uMTQsNKQa8mYyAoCqpnJoNr9zELfRZ2Q9OpJrDPfAG
+         dNGNA8Z2QuGNIDx8Rb8S1zUUdhZORX7hDwwcjMX5drTvviABmjnEaKFbZQybnY6JErQM
+         wrX0AeLfwOGjrRwtDyrfuKZuR5vPnH/9/eqo0TD9BXM4A2Py1wmMSyCxIFdGu30KVy/X
+         b5LXMYnK5YmsEKnOu5YcCu4J8UxEgEL3gGWBXhXck4bTcO5vI/v7IdrPn1mlnhrKMQio
+         Hs7UIHUjiRCkakY/e8DdpgtNA68AHyHOjbYgE9zmt6XA7kzy78IBotNd589Y8B6Bq2F1
+         BwcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696503804; x=1697108604;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tlcMpFTEGkun5fY2EQzH5O3YtCneY5PYvuzDAb/3BCc=;
+        b=LyoufthdswTmNmJDfDIhqQe72Qw9W4czPcvqMr8lv4ASVFBHG4ge3GnZRMj36NJDur
+         n2bVUPqNSYocC97+hzbsFxg/nXKcii6qtkFtvjKiZiaIfhSe9fdJMz2CkftLJaMrRYeC
+         FZtWFsPaYxSOKDBzg5ENkvvhGx86rrSTxCsdhlkO9hHH41jRUI1Zm7fW7CeCXgifILTo
+         a7SfioTjVRHcnd+4Y+CuGoHA1ernpgD3woW4JSscHSS4CZQbJHyTLAhlMDxhclxh4Eit
+         EBbD7o0Eddgy4HgKgjGqxEWDlrNiMWZqI9lg6Ym1+j86D86ee3ePmn7czFZRgWdESWNn
+         GJBA==
+X-Gm-Message-State: AOJu0YzE0RHP9QCoAkK0qYbW2gExICa4fhT0PKvTHl3yYFHSGxEj7OZp
+        C+kbSBanH6J6UBJ57USk29w21w==
+X-Google-Smtp-Source: AGHT+IEE30y5cggjo7TIaKZK9gXoRYY8q0eXCt0k1bfV/W+365AotNoCtt2rx3tPShczRgXukld3bQ==
+X-Received: by 2002:a17:902:6bc1:b0:1c3:6e38:3943 with SMTP id m1-20020a1709026bc100b001c36e383943mr4092169plt.56.1696503803794;
+        Thu, 05 Oct 2023 04:03:23 -0700 (PDT)
+Received: from localhost ([122.172.81.92])
+        by smtp.gmail.com with ESMTPSA id w19-20020a1709027b9300b001b89536974bsm1351261pll.202.2023.10.05.04.03.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Oct 2023 04:03:23 -0700 (PDT)
+Date:   Thu, 5 Oct 2023 16:33:21 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Liao Chang <liaochang1@huawei.com>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] cpufreq: userspace: Move is_managed indicator into
+ per-policy structure
+Message-ID: <20231005110321.ythrdcueqwjrksbq@vireshk-i7>
+References: <20230912061057.2516963-1-liaochang1@huawei.com>
+ <20230912061057.2516963-2-liaochang1@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230912061057.2516963-2-liaochang1@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,150 +72,63 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 087dbcb2127272bfc2419ec2dc1e19e6a030f3af  Merge branch 'pm-sleep-fixes' into linux-next
+On 12-09-23, 06:10, Liao Chang wrote:
+> The userspace governor use the 'cpu' field of cpufreq_policy structure
+> to track if it is allowed to set the speed of policy.  However, there is
+> a window where the 'cpu' field is equal to the value of nr_cpus_id when
+> all affected CPUs of policy are offline, which is an illegal value to
+> get the per-CPU variable. To avoid this issue, this patch uses a
+> per-policy indicator to track if the policy is managed.
+> 
+> Signed-off-by: Liao Chang <liaochang1@huawei.com>
+> ---
+>  drivers/cpufreq/cpufreq_userspace.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq_userspace.c b/drivers/cpufreq/cpufreq_userspace.c
+> index 442e31060d62..2c42fee76daa 100644
+> --- a/drivers/cpufreq/cpufreq_userspace.c
+> +++ b/drivers/cpufreq/cpufreq_userspace.c
+> @@ -15,9 +15,8 @@
+>  #include <linux/mutex.h>
+>  #include <linux/slab.h>
+>  
+> -static DEFINE_PER_CPU(unsigned int, cpu_is_managed);
+> -
+>  struct userspace_policy {
+> +	unsigned int is_managed;
+>  	unsigned int setspeed;
+>  	struct mutex mutex;
+>  };
+> @@ -37,7 +36,7 @@ static int cpufreq_set(struct cpufreq_policy *policy, unsigned int freq)
+>  	pr_debug("cpufreq_set for cpu %u, freq %u kHz\n", policy->cpu, freq);
+>  
+>  	mutex_lock(&userspace->mutex);
+> -	if (!per_cpu(cpu_is_managed, policy->cpu))
+> +	if (!userspace->is_managed)
+>  		goto err;
+>  
+>  	userspace->setspeed = freq;
+> @@ -85,7 +84,7 @@ static int cpufreq_userspace_policy_start(struct cpufreq_policy *policy)
+>  	pr_debug("started managing cpu %u\n", policy->cpu);
+>  
+>  	mutex_lock(&userspace->mutex);
+> -	per_cpu(cpu_is_managed, policy->cpu) = 1;
+> +	userspace->is_managed = 1;
+>  	userspace->setspeed = policy->cur;
+>  	mutex_unlock(&userspace->mutex);
+>  	return 0;
+> @@ -98,7 +97,7 @@ static void cpufreq_userspace_policy_stop(struct cpufreq_policy *policy)
+>  	pr_debug("managing cpu %u stopped\n", policy->cpu);
+>  
+>  	mutex_lock(&userspace->mutex);
+> -	per_cpu(cpu_is_managed, policy->cpu) = 0;
+> +	userspace->is_managed = 0;
+>  	userspace->setspeed = 0;
+>  	mutex_unlock(&userspace->mutex);
+>  }
 
-elapsed time: 728m
-
-configs tested: 130
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20231005   gcc  
-arm                              alldefconfig   clang
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                         bcm2835_defconfig   clang
-arm                                 defconfig   gcc  
-arm                            dove_defconfig   clang
-arm                         lpc32xx_defconfig   clang
-arm                         orion5x_defconfig   clang
-arm                   randconfig-001-20231005   gcc  
-arm                         s3c6400_defconfig   gcc  
-arm                         s5pv210_defconfig   clang
-arm                           spitz_defconfig   clang
-arm                    vt8500_v6_v7_defconfig   clang
-arm64                            allmodconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20231005   gcc  
-i386         buildonly-randconfig-002-20231005   gcc  
-i386         buildonly-randconfig-003-20231005   gcc  
-i386         buildonly-randconfig-004-20231005   gcc  
-i386         buildonly-randconfig-005-20231005   gcc  
-i386         buildonly-randconfig-006-20231005   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20231005   gcc  
-i386                  randconfig-002-20231005   gcc  
-i386                  randconfig-003-20231005   gcc  
-i386                  randconfig-004-20231005   gcc  
-i386                  randconfig-005-20231005   gcc  
-i386                  randconfig-006-20231005   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20231005   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                  decstation_64_defconfig   gcc  
-mips                           ip28_defconfig   clang
-mips                  maltasmvp_eva_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                         alldefconfig   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                      acadia_defconfig   clang
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-powerpc                       ebony_defconfig   clang
-powerpc                     kmeter1_defconfig   clang
-powerpc                     ksi8560_defconfig   clang
-powerpc                         wii_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                           se7750_defconfig   gcc  
-sh                             sh03_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                       sparc32_defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20231005   gcc  
-x86_64                randconfig-002-20231005   gcc  
-x86_64                randconfig-003-20231005   gcc  
-x86_64                randconfig-004-20231005   gcc  
-x86_64                randconfig-005-20231005   gcc  
-x86_64                randconfig-006-20231005   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+viresh
