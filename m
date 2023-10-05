@@ -2,160 +2,201 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFA47BA039
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Oct 2023 16:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 812BE7BA214
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Oct 2023 17:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233673AbjJEOew (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Oct 2023 10:34:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58076 "EHLO
+        id S229461AbjJEPNL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Oct 2023 11:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234934AbjJEOcl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Oct 2023 10:32:41 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C33524EB8
-        for <linux-pm@vger.kernel.org>; Thu,  5 Oct 2023 04:39:55 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-59f6767a15dso17633087b3.0
-        for <linux-pm@vger.kernel.org>; Thu, 05 Oct 2023 04:39:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696505994; x=1697110794; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0IYhvMB+/tYsbO1if1548hQ+c5ri7I00N34cZT67haM=;
-        b=oUq2raYXSnEPlgXt9I4U8k/ylLqsjxW7iy19qYuBTNdQNuQgMb3A7Dpz1OpTKmXVpZ
-         bsMOeRUoimciF283mTMFn2aX+N2iDW5xlSkEBBPqawFIl6M/UxoJVSWEsyTulKgmfPRs
-         SaU9+JOqJTJPx4MyVA4FiY5en+miU2dTVehnKbFJ5R+cLqZ547vuBbmgyp0VqL0FATmR
-         ZbywQHrc3+dm1lA+tG/gYeLz+vkztGYrG8fNPF7egVXjnxqQNu1swsvhbDZlGbr75sid
-         kF/Z2tBOpOx57v+pW3Y/YqqpsycOPdvliwuUJbC0UpWPTnev5H22Y+rUIV+UBWMOHiCv
-         k1UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696505994; x=1697110794;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0IYhvMB+/tYsbO1if1548hQ+c5ri7I00N34cZT67haM=;
-        b=VDtY975LsY3nHML16+3jABW1EW7VOKsGkR2CEP3dRzqHYOLAybCZWHvxEPjRpBAx5Q
-         i8CtC0daTOlHfZmhePbcqTymCJ4UISTM9n2KmHp05YRQn3pWbrqmJPOVIuAp9BjrYeTZ
-         hEvorHFHYBUeuQTN831qI8EoeXs/d9x+qCHvWm3/VvVSUjVWFb1FfPVV9mXEEytx89e+
-         RV6OvRNEQaM4aQ21tBxb1eJ57d8bj5UAHqTYB71LiQbs2LOYm6smLeqiUoX9Ajyn7aT7
-         bBopbuWLRGGbR6XEmn6UfbvLSf7J/wXCyGFFJig6otS+e2W2gsjqm4Eaz55ZSBeK08fN
-         BHNQ==
-X-Gm-Message-State: AOJu0YzYoBG7q4vDSkP+pwEWwbgK2sFvq4dV+TT6mip4IJazi9pRPCxO
-        goIHS73bcIjCQA/qaMPB6v3Z1pMCK7JmboAy84gF5Q==
-X-Google-Smtp-Source: AGHT+IGz2SaLD3aU6BIPbHvTjKIKQ4LlW6fB/f1GiSxG/rP9irvPSE52u5ik65BnlAY9ONpAHojoUO4fqPhRZjJyZyE=
-X-Received: by 2002:a0d:d711:0:b0:59f:79e7:6e5d with SMTP id
- z17-20020a0dd711000000b0059f79e76e5dmr716346ywd.15.1696505994365; Thu, 05 Oct
- 2023 04:39:54 -0700 (PDT)
+        with ESMTP id S233471AbjJEPMP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Oct 2023 11:12:15 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A9C9194;
+        Thu,  5 Oct 2023 06:48:18 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7DA30168F;
+        Thu,  5 Oct 2023 06:42:06 -0700 (PDT)
+Received: from e126645.arm.com (e126645.nice.arm.com [10.34.100.116])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B6CBD3F641;
+        Thu,  5 Oct 2023 06:41:25 -0700 (PDT)
+From:   Pierre Gondois <pierre.gondois@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Pierre Gondois <pierre.gondois@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v2] cpufreq: Rebuild sched-domains when removing cpufreq driver
+Date:   Thu,  5 Oct 2023 15:41:20 +0200
+Message-Id: <20231005134120.1217829-1-pierre.gondois@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <cover.1693996662.git.quic_varada@quicinc.com> <a6d12e3b253d6a55d85f66979ba8b7d9c9ff6072.1693996662.git.quic_varada@quicinc.com>
- <CAA8EJppNsgUNgwadq9oM0_KyORNR5PBZGVZukN6MzAm2KPzC9g@mail.gmail.com> <20231005095744.GA29795@varda-linux.qualcomm.com>
-In-Reply-To: <20231005095744.GA29795@varda-linux.qualcomm.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 5 Oct 2023 14:39:43 +0300
-Message-ID: <CAA8EJpr124fymnbZ1bO=Dbbxavn3Z=1xOPmFRPnfSp-UB3p6OQ@mail.gmail.com>
-Subject: Re: [PATCH v1 07/10] arm64: dts: qcom: ipq5332: populate the opp
- table based on the eFuse
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc:     ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, rafael@kernel.org,
-        viresh.kumar@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        quic_kathirav@quicinc.com, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 5 Oct 2023 at 12:58, Varadarajan Narayanan
-<quic_varada@quicinc.com> wrote:
->
-> On Thu, Sep 07, 2023 at 04:59:28PM +0300, Dmitry Baryshkov wrote:
-> > On Thu, 7 Sept 2023 at 08:23, Varadarajan Narayanan
-> > <quic_varada@quicinc.com> wrote:
-> > >
-> > > IPQ53xx have different OPPs available for the CPU based on
-> > > SoC variant. This can be determined through use of an eFuse
-> > > register present in the silicon.
-> > >
-> > > Add support to read the eFuse and populate the OPPs based on it.
-> > >
-> > > Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > > ---
-> > >  arch/arm64/boot/dts/qcom/ipq5332.dtsi | 34 +++++++++++++++++++++++++++++++---
-> > >  1 file changed, 31 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> > > index 82761ae..3ca3f34 100644
-> > > --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> > > +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> > > @@ -91,11 +91,34 @@
-> > >         };
-> > >
-> > >         cpu_opp_table: opp-table-cpu {
-> > > -               compatible = "operating-points-v2";
-> > > +               compatible = "operating-points-v2-kryo-cpu";
-> > >                 opp-shared;
-> > > +               nvmem-cells = <&cpu_speed_bin>;
-> > > +               nvmem-cell-names = "speed_bin";
-> > > +
-> > > +               /*
-> > > +                * Listed all supported CPU frequencies and opp-supported-hw
-> > > +                * values to select CPU frequencies based on the limits fused.
-> > > +                * ------------------------------------------------------------
-> > > +                * Frequency     BIT3   BIT2   BIT1    BIT0    opp-supported-hw
-> > > +                *              1.0GHz 1.2GHz 1.5GHz No Limit
-> > > +                * ------------------------------------------------------------
-> > > +                * 1100000000     1      1      1       1            0xF
-> > > +                * 1500000000     0      0      1       1            0x3
-> > > +                * -----------------------------------------------------------
-> > > +                */
-> >
-> > This can probably go to the commit message instead.
->
-> Ok
->
-> > > +
-> > > +               opp-1100000000 {
-> > > +                       opp-hz = /bits/ 64 <1100000000>;
-> >
-> > But your table shows 1.0 GHz and 1.2 GHz instead of 1.1 GHz
->
-> Will update it.
->
-> > > +                       opp-microvolt = <850000>;
-> > > +                       opp-supported-hw = <0xF>;
-> > > +                       clock-latency-ns = <200000>;
-> > > +               };
-> > >
-> > > -               opp-1488000000 {
-> > > -                       opp-hz = /bits/ 64 <1488000000>;
-> > > +               opp-1500000000 {
-> > > +                       opp-hz = /bits/ 64 <1500000000>;
-> >
-> > So, 1.488 GHz or 1.5 GHz?
->
-> 1.5 GHz
->
-> > > +                       opp-microvolt = <950000>;
-> >
-> > Which regulator is controlled by this microvolt?
->
-> Based on the SKU, the XBL sets up the regulator to provide 950000uV
-> on CPUs capable of running 1.5G and 850000uV on other SKUs. Linux
-> doesn't control it.
+The Energy Aware Scheduler (EAS) relies on the schedutil governor.
+When moving to/from the schedutil governor, sched domains must be
+rebuilt to allow re-evaluating the enablement conditions of EAS.
+This is done through sched_cpufreq_governor_change().
 
-Then why do you need this property here in the first place?
+Having a cpufreq governor assumes a cpufreq driver is running.
+Inserting/removing a cpufreq driver should trigger a re-evaluation
+of EAS enablement conditions, avoiding to see EAS enabled when
+removing a running cpufreq driver.
 
+Rebuild the sched domains in schedutil's sugov_init()/sugov_exit(),
+allowing to check EAS's enablement condition whenever schedutil
+governor is initialized/exited from.
+Move relevant code up in schedutil.c to avoid a split and conditional
+function declaration.
+Rename sched_cpufreq_governor_change() to sugov_eas_rebuild_sd().
 
+Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+---
+ drivers/cpufreq/cpufreq.c        |  3 +-
+ include/linux/cpufreq.h          |  8 -----
+ kernel/sched/cpufreq_schedutil.c | 55 +++++++++++++++++---------------
+ 3 files changed, 30 insertions(+), 36 deletions(-)
+
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 60ed89000e82..4bc15634d49c 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1544,7 +1544,7 @@ static int cpufreq_online(unsigned int cpu)
+ 
+ 		/*
+ 		 * Register with the energy model before
+-		 * sched_cpufreq_governor_change() is called, which will result
++		 * sugov_eas_rebuild_sd() is called, which will result
+ 		 * in rebuilding of the sched domains, which should only be done
+ 		 * once the energy model is properly initialized for the policy
+ 		 * first.
+@@ -2652,7 +2652,6 @@ static int cpufreq_set_policy(struct cpufreq_policy *policy,
+ 		ret = cpufreq_start_governor(policy);
+ 		if (!ret) {
+ 			pr_debug("governor change\n");
+-			sched_cpufreq_governor_change(policy, old_gov);
+ 			return 0;
+ 		}
+ 		cpufreq_exit_governor(policy);
+diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+index 71d186d6933a..1c5ca92a0555 100644
+--- a/include/linux/cpufreq.h
++++ b/include/linux/cpufreq.h
+@@ -1193,14 +1193,6 @@ static inline int of_perf_domain_get_sharing_cpumask(int pcpu, const char *list_
+ }
+ #endif
+ 
+-#if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_CPU_FREQ_GOV_SCHEDUTIL)
+-void sched_cpufreq_governor_change(struct cpufreq_policy *policy,
+-			struct cpufreq_governor *old_gov);
+-#else
+-static inline void sched_cpufreq_governor_change(struct cpufreq_policy *policy,
+-			struct cpufreq_governor *old_gov) { }
+-#endif
+-
+ extern unsigned int arch_freq_get_on_cpu(int cpu);
+ 
+ #ifndef arch_set_freq_scale
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index 4492608b7d7f..901cada51ba7 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -555,6 +555,31 @@ static const struct kobj_type sugov_tunables_ktype = {
+ 
+ /********************** cpufreq governor interface *********************/
+ 
++#ifdef CONFIG_ENERGY_MODEL
++static void rebuild_sd_workfn(struct work_struct *work)
++{
++	rebuild_sched_domains_energy();
++}
++
++static DECLARE_WORK(rebuild_sd_work, rebuild_sd_workfn);
++
++/*
++ * EAS shouldn't be attempted without sugov, so rebuild the sched_domains
++ * on governor changes to make sure the scheduler knows about it.
++ */
++static void sugov_eas_rebuild_sd(void)
++{
++	/*
++	 * When called from the cpufreq_register_driver() path, the
++	 * cpu_hotplug_lock is already held, so use a work item to
++	 * avoid nested locking in rebuild_sched_domains().
++	 */
++	schedule_work(&rebuild_sd_work);
++}
++#else
++static inline void sugov_eas_rebuild_sd(void) { };
++#endif
++
+ struct cpufreq_governor schedutil_gov;
+ 
+ static struct sugov_policy *sugov_policy_alloc(struct cpufreq_policy *policy)
+@@ -709,6 +734,8 @@ static int sugov_init(struct cpufreq_policy *policy)
+ 	if (ret)
+ 		goto fail;
+ 
++	sugov_eas_rebuild_sd();
++
+ out:
+ 	mutex_unlock(&global_tunables_lock);
+ 	return 0;
+@@ -750,6 +777,8 @@ static void sugov_exit(struct cpufreq_policy *policy)
+ 	sugov_kthread_stop(sg_policy);
+ 	sugov_policy_free(sg_policy);
+ 	cpufreq_disable_fast_switch(policy);
++
++	sugov_eas_rebuild_sd();
+ }
+ 
+ static int sugov_start(struct cpufreq_policy *policy)
+@@ -838,29 +867,3 @@ struct cpufreq_governor *cpufreq_default_governor(void)
+ #endif
+ 
+ cpufreq_governor_init(schedutil_gov);
+-
+-#ifdef CONFIG_ENERGY_MODEL
+-static void rebuild_sd_workfn(struct work_struct *work)
+-{
+-	rebuild_sched_domains_energy();
+-}
+-static DECLARE_WORK(rebuild_sd_work, rebuild_sd_workfn);
+-
+-/*
+- * EAS shouldn't be attempted without sugov, so rebuild the sched_domains
+- * on governor changes to make sure the scheduler knows about it.
+- */
+-void sched_cpufreq_governor_change(struct cpufreq_policy *policy,
+-				  struct cpufreq_governor *old_gov)
+-{
+-	if (old_gov == &schedutil_gov || policy->governor == &schedutil_gov) {
+-		/*
+-		 * When called from the cpufreq_register_driver() path, the
+-		 * cpu_hotplug_lock is already held, so use a work item to
+-		 * avoid nested locking in rebuild_sched_domains().
+-		 */
+-		schedule_work(&rebuild_sd_work);
+-	}
+-
+-}
+-#endif
 -- 
-With best wishes
-Dmitry
+2.25.1
+
