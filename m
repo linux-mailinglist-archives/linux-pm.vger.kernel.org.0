@@ -2,211 +2,186 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 653E27B9F4A
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Oct 2023 16:21:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74AF97BA127
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Oct 2023 16:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbjJEOUD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Oct 2023 10:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
+        id S237054AbjJEOnY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Oct 2023 10:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233217AbjJEORn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Oct 2023 10:17:43 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DC821D02
-        for <linux-pm@vger.kernel.org>; Thu,  5 Oct 2023 02:43:19 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-3247d69ed2cso788630f8f.0
-        for <linux-pm@vger.kernel.org>; Thu, 05 Oct 2023 02:43:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1696498998; x=1697103798; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JwKnCE50Or3wTNbb8nnaCjSfC0KHldEcWfUSQ5mNeMI=;
-        b=PcjYl6fosxe3bu124GfB1jVOexCe2p5G1dYKIInFv7zmOBTZ2RLTD5bxDytT9F/s/q
-         7Gl+lrx7WsZ3db5b6q5954TN4MV20dJTtaBzqHRB3NATgnVYCOD7xVHwUGBlWltcp3z2
-         UNx1IpttiSEJHxn5N+To8PKATussPj/ym20yoa4YRcTq7f/2fgZGWjsnq2Mx1zB33lXZ
-         2VC70HbtLNJGXbIEI9H68tqWtY12yJ4o1pYDeBnHfp4Cp7HlqQbITxWl8XuBKNd8tlmo
-         gKeroiZRz1EPGziaY+KTLSt1x7BEaIVy09vtxJmaGqzTyavt+SgHq+WRKlRjwLEuvSx0
-         JdxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696498998; x=1697103798;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JwKnCE50Or3wTNbb8nnaCjSfC0KHldEcWfUSQ5mNeMI=;
-        b=D7WfKwCWMUyRpOloygt/At/bg4KKDYTXjxKsNRFMVOwQryzkPy6m3QhE3l6wCMY3+Z
-         V7Y+0dDL5J6GZL/Z5OlzOC7bFp5eJYq9U3JcNaZmpWqSRerRUCSB3dK7NtqRaFdtke51
-         XMrJSPXsCYttorKymjGqf7+DevIARPAr/iNBGnPxHHaUndVsqMZEoKcYAU720pxwXqTA
-         qQ70iKNs/S9wq3Rlfy7aY0OSiAPtq4HKneIbIB5+t0m8iCQwHdMvmFKpfrxKSYX3blNr
-         QLMhSulHYDLmHWo2jgcLksgzyYaueiSbgcdcpvV2+ynGo/czFNvQc78kYxvNjIXWd6fW
-         7CBw==
-X-Gm-Message-State: AOJu0YxRgBp1cV5lyoja6P5y8e1NLuudq4+zD700lnA8SizA4nNzqNmu
-        7q9bDG5jfDRunUKHXb0S2lgY3A==
-X-Google-Smtp-Source: AGHT+IEA8Pv/FN9E11LJAyjgn8EofUjuGcu3RKUVzw7ZzFbiuhbNcnB4JemmblVGztHfx0rlL56C5A==
-X-Received: by 2002:a5d:630c:0:b0:31f:fa6a:936e with SMTP id i12-20020a5d630c000000b0031ffa6a936emr4440521wru.17.1696498998220;
-        Thu, 05 Oct 2023 02:43:18 -0700 (PDT)
-Received: from blmsp ([2001:4091:a246:8222:dbda:9cd9:39cc:f174])
-        by smtp.gmail.com with ESMTPSA id d16-20020adff850000000b003232d122dbfsm1355989wrq.66.2023.10.05.02.43.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Oct 2023 02:43:17 -0700 (PDT)
-Date:   Thu, 5 Oct 2023 11:43:16 +0200
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v8 0/8] soc: mediatek: MT8365 power support
-Message-ID: <20231005094316.nj5w6cmefvc36tbl@blmsp>
-References: <20230918093751.1188668-1-msp@baylibre.com>
- <06f8a769-1845-ea87-dcc4-37dd5ad255ed@collabora.com>
+        with ESMTP id S238539AbjJEOkk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Oct 2023 10:40:40 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACA477644;
+        Thu,  5 Oct 2023 07:12:58 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3958A1lg012152;
+        Thu, 5 Oct 2023 09:57:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=TULmcO8l188rP5vtjqFrkpttdGmBezWswKLwM6tqT+k=;
+ b=Qj7I3eeKQbICxxNLcDf5mcOHdj3UtQIdHYHW2wnUCyZU6x6xlHzHPqqBsPyfiY3rOw9A
+ 0b03WbvtDQ3foBmuYteEiAO4in9C/+s9ZBh/4D9ICpLfNdRljEkkN1OEanDWjzgsel8z
+ iOS/6pFb3Tdht6vV4XSmSWp91aKKZos440p/+oTTJhIDQ6VMhhgAjtNNq1oHIqIk6B93
+ iCfHE3/F6fwZpB8mi7iRyRs86dQGDqc7MSmKTViYighBvUG19YiOAhqV5cliyTt0oYKD
+ GJau/y+OshTswMi4sZMfaI8RLcyJCpK5o6/k7tgysj3CB8AbYw8FLeVcE9qd5TKZmyPv mA== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3th8e1teue-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Oct 2023 09:57:56 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3959vtAJ028265
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 5 Oct 2023 09:57:55 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.36; Thu, 5 Oct 2023 02:57:49 -0700
+Date:   Thu, 5 Oct 2023 15:27:45 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <ilia.lin@kernel.org>, <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <quic_kathirav@quicinc.com>, <linux-pm@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v1 07/10] arm64: dts: qcom: ipq5332: populate the opp
+ table based on the eFuse
+Message-ID: <20231005095744.GA29795@varda-linux.qualcomm.com>
+References: <cover.1693996662.git.quic_varada@quicinc.com>
+ <a6d12e3b253d6a55d85f66979ba8b7d9c9ff6072.1693996662.git.quic_varada@quicinc.com>
+ <CAA8EJppNsgUNgwadq9oM0_KyORNR5PBZGVZukN6MzAm2KPzC9g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <06f8a769-1845-ea87-dcc4-37dd5ad255ed@collabora.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <CAA8EJppNsgUNgwadq9oM0_KyORNR5PBZGVZukN6MzAm2KPzC9g@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: oIcgO5TZ66_7muH1tFN8rHdOi-fpZKDV
+X-Proofpoint-ORIG-GUID: oIcgO5TZ66_7muH1tFN8rHdOi-fpZKDV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-05_06,2023-10-02_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
+ adultscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0 spamscore=0
+ bulkscore=0 mlxlogscore=999 malwarescore=0 impostorscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
+ definitions=main-2310050077
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Angelo,
+On Thu, Sep 07, 2023 at 04:59:28PM +0300, Dmitry Baryshkov wrote:
+> On Thu, 7 Sept 2023 at 08:23, Varadarajan Narayanan
+> <quic_varada@quicinc.com> wrote:
+> >
+> > IPQ53xx have different OPPs available for the CPU based on
+> > SoC variant. This can be determined through use of an eFuse
+> > register present in the silicon.
+> >
+> > Add support to read the eFuse and populate the OPPs based on it.
+> >
+> > Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> >  arch/arm64/boot/dts/qcom/ipq5332.dtsi | 34 +++++++++++++++++++++++++++++++---
+> >  1 file changed, 31 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> > index 82761ae..3ca3f34 100644
+> > --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> > @@ -91,11 +91,34 @@
+> >         };
+> >
+> >         cpu_opp_table: opp-table-cpu {
+> > -               compatible = "operating-points-v2";
+> > +               compatible = "operating-points-v2-kryo-cpu";
+> >                 opp-shared;
+> > +               nvmem-cells = <&cpu_speed_bin>;
+> > +               nvmem-cell-names = "speed_bin";
+> > +
+> > +               /*
+> > +                * Listed all supported CPU frequencies and opp-supported-hw
+> > +                * values to select CPU frequencies based on the limits fused.
+> > +                * ------------------------------------------------------------
+> > +                * Frequency     BIT3   BIT2   BIT1    BIT0    opp-supported-hw
+> > +                *              1.0GHz 1.2GHz 1.5GHz No Limit
+> > +                * ------------------------------------------------------------
+> > +                * 1100000000     1      1      1       1            0xF
+> > +                * 1500000000     0      0      1       1            0x3
+> > +                * -----------------------------------------------------------
+> > +                */
+>
+> This can probably go to the commit message instead.
 
-On Thu, Oct 05, 2023 at 10:54:16AM +0200, AngeloGioacchino Del Regno wrote:
-> Il 18/09/23 11:37, Markus Schneider-Pargmann ha scritto:
-> > Hi,
-> > 
-> > no real changes in this update. Rebase to v6.6-rc2 and according change
-> > of directory.
-> 
-> Since the driver changed to pmdomain/mediatek, can you please change the commit
-> titles for the driver commits?
+Ok
 
-As far as I understand Ulf applied the series today and changed the
-title as well:
-https://lore.kernel.org/lkml/CAPDyKFrUbWBQgMm6wYwFfybiRQKhBpwH7wwcXaT+KrQJLevq3w@mail.gmail.com/
+> > +
+> > +               opp-1100000000 {
+> > +                       opp-hz = /bits/ 64 <1100000000>;
+>
+> But your table shows 1.0 GHz and 1.2 GHz instead of 1.1 GHz
 
-Best,
-Markus
+Will update it.
 
-> 
-> soc: mediatek: pm-domains: ===> pmdomain: mediatek: pm-domains:
-> 
-> or alternatively, I honestly would like it more like
-> 
-> pmdomain: mediatek: pd:
-> 
-> and (not relevant to this series)
-> 
-> pmdomain: mediatek: scpsys:
-> 
-> ...but before that, does anyone have any strong opinions against the prefix
-> "pmdomain: mediatek: pd:", instead of the full "pm-domains"?
-> 
-> Thanks!
-> Angelo
-> 
-> > 
-> > Thanks for any feedback!
-> > 
-> > Best,
-> > Markus
-> > 
-> > Based on v6.6-rc2
-> > 
-> > Changes in v8:
-> > - Rebased to v6.6-rc2
-> > - Moved changes from drivers/soc to drivers/pmdomain
-> > 
-> > Changes in v7:
-> > - Rebased to v6.5-rc1
-> > - Fixed a couple of small style issues pointed out by Angelo
-> > 
-> > Changes in v6:
-> > - Change flags field to be u8 instead of u32
-> > - Use macro concatenation to simplify BUS_PROT macros:
-> >    BUS_PROT_WR(_hwip, ...) etc.
-> > - Use the final bit values for scpsys_bus_prot_flags from the beginning
-> >    of the series.
-> > - Changed scpsys_domain_data->caps to be u16 to accommodate the new flag
-> >    MTK_SCPD_STRICT_BUS_PROTECTION.
-> > 
-> > Changes in v5:
-> > - Create defines for all registers and bits in mt8365 power domain patch
-> > - Redesign scpsys_bus_prot_data to use flags to store reg_update,
-> >    clr_ack as well as the difference between SMI and INFRACFG. The code
-> >    uses the appropriate regmap depending on the flags.
-> > - The WAY_EN patch now uses two flags, one for inverted operations
-> >    'BUS_PROT_INVERTED' and one to use infracfg-nao for the status flags
-> >    'BUS_PROT_STA_COMPONENT_INFRA_NAO'.
-> > 
-> > Changes in v4:
-> > - Redesigned WAY_EN patch and split it up in smaller patches.
-> > - Added two documentation patches.
-> > - Added mediatek,infracfg-nao field to the binding.
-> > 
-> > Changes in v3:
-> > - Mainly redesigned WAY_EN patch to be easier to understand
-> > - Rebased onto v6.0-rc1
-> > - Several other stuff that is described in the individual patches
-> > 
-> > Changes in v2:
-> > - Updated error handling path for scpsys_power_on()
-> > - Minor updates described in each patch
-> > 
-> > Previous versions:
-> > v1 - https://lore.kernel.org/linux-mediatek/20220530204214.913251-1-fparent@baylibre.com/
-> > v2 - https://lore.kernel.org/linux-mediatek/20220725081853.1636444-1-msp@baylibre.com/
-> > v3 - https://lore.kernel.org/linux-mediatek/20220822144303.3438467-1-msp@baylibre.com/
-> > v4 - https://lore.kernel.org/linux-arm-kernel/20230105170735.1637416-1-msp@baylibre.com/
-> > v5 - https://lore.kernel.org/linux-arm-kernel/20230619085344.2885311-1-msp@baylibre.com/
-> > v6 - https://lore.kernel.org/linux-arm-kernel/20230627131040.3418538-1-msp@baylibre.com/
-> > v7 - https://lore.kernel.org/linux-arm-kernel/20230713150414.891893-1-msp@baylibre.com
-> > 
-> > Alexandre Bailon (2):
-> >    soc: mediatek: Add support for WAY_EN operations
-> >    soc: mediatek: Add support for MTK_SCPD_STRICT_BUS_PROTECTION cap
-> > 
-> > Fabien Parent (2):
-> >    dt-bindings: power: Add MT8365 power domains
-> >    soc: mediatek: pm-domains: Add support for MT8365
-> > 
-> > Markus Schneider-Pargmann (4):
-> >    soc: mediatek: pm-domains: Move bools to a flags field
-> >    soc: mediatek: pm-domains: Split bus_prot_mask
-> >    soc: mediatek: pm-domains: Create bus protection operation functions
-> >    soc: mediatek: pm-domains: Unify configuration for infracfg and smi
-> > 
-> >   .../power/mediatek,power-controller.yaml      |   6 +
-> >   drivers/pmdomain/mediatek/mt6795-pm-domains.h |  16 +-
-> >   drivers/pmdomain/mediatek/mt8167-pm-domains.h |  20 +-
-> >   drivers/pmdomain/mediatek/mt8173-pm-domains.h |  16 +-
-> >   drivers/pmdomain/mediatek/mt8183-pm-domains.h | 125 ++++++----
-> >   drivers/pmdomain/mediatek/mt8186-pm-domains.h | 236 ++++++++++--------
-> >   drivers/pmdomain/mediatek/mt8188-pm-domains.h | 223 +++++++++++------
-> >   drivers/pmdomain/mediatek/mt8192-pm-domains.h | 112 ++++++---
-> >   drivers/pmdomain/mediatek/mt8195-pm-domains.h | 199 +++++++++------
-> >   drivers/pmdomain/mediatek/mt8365-pm-domains.h | 197 +++++++++++++++
-> >   drivers/pmdomain/mediatek/mtk-pm-domains.c    | 157 ++++++++----
-> >   drivers/pmdomain/mediatek/mtk-pm-domains.h    |  51 ++--
-> >   .../dt-bindings/power/mediatek,mt8365-power.h |  19 ++
-> >   include/linux/soc/mediatek/infracfg.h         |  41 +++
-> >   14 files changed, 972 insertions(+), 446 deletions(-)
-> >   create mode 100644 drivers/pmdomain/mediatek/mt8365-pm-domains.h
-> >   create mode 100644 include/dt-bindings/power/mediatek,mt8365-power.h
-> > 
-> > 
-> > base-commit: ce9ecca0238b140b88f43859b211c9fdfd8e5b70
-> 
-> 
+> > +                       opp-microvolt = <850000>;
+> > +                       opp-supported-hw = <0xF>;
+> > +                       clock-latency-ns = <200000>;
+> > +               };
+> >
+> > -               opp-1488000000 {
+> > -                       opp-hz = /bits/ 64 <1488000000>;
+> > +               opp-1500000000 {
+> > +                       opp-hz = /bits/ 64 <1500000000>;
+>
+> So, 1.488 GHz or 1.5 GHz?
+
+1.5 GHz
+
+> > +                       opp-microvolt = <950000>;
+>
+> Which regulator is controlled by this microvolt?
+
+Based on the SKU, the XBL sets up the regulator to provide 950000uV
+on CPUs capable of running 1.5G and 850000uV on other SKUs. Linux
+doesn't control it.
+
+Thanks
+Varada
+> > +                       opp-supported-hw = <0x3>;
+> >                         clock-latency-ns = <200000>;
+> >                 };
+> >         };
+> > @@ -150,6 +173,11 @@
+> >                         reg = <0x000a4000 0x721>;
+> >                         #address-cells = <1>;
+> >                         #size-cells = <1>;
+> > +
+> > +                       cpu_speed_bin: cpu_speed_bin@1d {
+> > +                               reg = <0x1d 0x2>;
+> > +                               bits = <7 2>;
+> > +                       };
+> >                 };
+> >
+> >                 rng: rng@e3000 {
+> > --
+> > 2.7.4
+> >
+>
+>
+> --
+> With best wishes
+> Dmitry
