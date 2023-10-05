@@ -2,74 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4DE7BA64D
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Oct 2023 18:33:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34B097BA65E
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Oct 2023 18:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235320AbjJEQdL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Oct 2023 12:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52808 "EHLO
+        id S231793AbjJEQdl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Oct 2023 12:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231613AbjJEQce (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Oct 2023 12:32:34 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A775E24870
-        for <linux-pm@vger.kernel.org>; Thu,  5 Oct 2023 04:20:16 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-313e742a787so511037f8f.1
-        for <linux-pm@vger.kernel.org>; Thu, 05 Oct 2023 04:20:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696504815; x=1697109615; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=D4AE5jS4qjwXCMnOlOFtdJ9RttCSKbWymcLORudPBgc=;
-        b=vITy67iqXCawyJRrBYTbANj04Wqd82i9f+X41xRdVLpr9q1nrjp3lsGFiHlsCH4/Mm
-         gYaoQefcPxWoF98ga9pncX77lQMPRQgXX5DlFeNEWdkrD7jVEA4VmiAonOKryk1TfyP8
-         Xf/ODAA7V8B2gZkU8C/xsfqPlqxWBhEehk7ysxdNpqytvgNkJj5CllMfDprn49pUEKT7
-         OlgtR6JFLaxWz3LozZJ5G3+wdPB+at/WpKJKi/DeZqjdgNeEx3aT5HuOoDzmhwmoJ19G
-         RrDWYo6ObHQwOXN+QuZunJj8p0F5Nl5JdS7rlbIFcT3WQLYQL6NMEKxcncm3Le4s1NKf
-         kqVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696504815; x=1697109615;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D4AE5jS4qjwXCMnOlOFtdJ9RttCSKbWymcLORudPBgc=;
-        b=UjNI5eUMKIWSvj3bc20TZ4zH9+fvRtKvXp2u9Tf80Gcfr8nW74jCBKDIKfFmxTeGEq
-         11lX0ODiOCuUy7PtsYHfL1msbn7/0cCGrpZlBGqSgpruEJyVrg4p1Fv3MDsizHdUllvJ
-         VCVWhvpNh1iuHUZApWzbfKNttAaNJyNol7bIj3axQH0WA8PhUs3YK0liByAsqKGN71pp
-         tVmYtv4J8kiCFuqAPoyEzy8EnGDygEJTZlgqI3KPZlSbBWagzpSrspljo4LzY7HBIJzo
-         VceZm+oFG7TFERzpcXwdOuPUW6U0TDvTZMY6iO2qPHUga63YDlXGRkdY7CbvL4h29bKI
-         Ldfg==
-X-Gm-Message-State: AOJu0Ywx7VN2XyOWx5mOyOt8DunPV8xDxI25zOsAVQ/FOCyK9aBBRqgC
-        gJj66LGvfUOyDwKmuY+gJniJ8A==
-X-Google-Smtp-Source: AGHT+IEI36e0d7npO9gHvSq0PCK8REknqrsXlLxeDQM2Vg3iDm3n0GAUq6RQUC7RZu5soOlpwzCm6w==
-X-Received: by 2002:a5d:6387:0:b0:323:1688:a70e with SMTP id p7-20020a5d6387000000b003231688a70emr1084141wru.16.1696504815109;
-        Thu, 05 Oct 2023 04:20:15 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:8bb6:12b3:863a:e5dd? ([2a05:6e02:1041:c10:8bb6:12b3:863a:e5dd])
-        by smtp.googlemail.com with ESMTPSA id t25-20020a1c7719000000b004065daba6casm3539418wmi.46.2023.10.05.04.20.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Oct 2023 04:20:14 -0700 (PDT)
-Message-ID: <d784edb6-9a95-b30c-6f55-a1daccad2f9e@linaro.org>
-Date:   Thu, 5 Oct 2023 13:20:13 +0200
+        with ESMTP id S233059AbjJEQck (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Oct 2023 12:32:40 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB93A60B5;
+        Thu,  5 Oct 2023 07:42:24 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 395DjE7F021621;
+        Thu, 5 Oct 2023 14:42:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=gA4E+LhvP+QOudqDT1Vi4Udvi1IE4594Djagbj9I1mE=;
+ b=lTD6IGZb3zWeeVH33QF8GupBS+4Lg/dsfOdpdAIsKkg34jqIWfZei72FiZEmHEFbR1iI
+ o82CDRBQQAA6EWuQllY578mIK2ATNgWfiVOT5reXR5+YfbAbTPBTG+MhUNImkp/c9yly
+ lBnSIQbn83TrMMHaslmNWCulUlJgnA5G4zt+sim/QPwwdyY+L8BdWlTCrtGNsc9TjSIp
+ JB+q6pftkFphRxm62UY3M51j2GNC5VyQJNJV4eb/JVY5fEpFkoWtOZ3SnTtATt5MnRsY
+ SCdDxu20s5cqJ81h8EycmQ6YbdMVizE0N5rPh03zY0cxs5a6rFgO9tP//RbjxPhqtDlC mQ== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3thg7hsm0p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Oct 2023 14:42:17 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 395EgGNr003904
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 5 Oct 2023 14:42:16 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.36; Thu, 5 Oct 2023 07:42:10 -0700
+Date:   Thu, 5 Oct 2023 20:12:06 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <ilia.lin@kernel.org>, <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <quic_kathirav@quicinc.com>, <linux-pm@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v1 07/10] arm64: dts: qcom: ipq5332: populate the opp
+ table based on the eFuse
+Message-ID: <20231005144205.GB29795@varda-linux.qualcomm.com>
+References: <cover.1693996662.git.quic_varada@quicinc.com>
+ <a6d12e3b253d6a55d85f66979ba8b7d9c9ff6072.1693996662.git.quic_varada@quicinc.com>
+ <CAA8EJppNsgUNgwadq9oM0_KyORNR5PBZGVZukN6MzAm2KPzC9g@mail.gmail.com>
+ <20231005095744.GA29795@varda-linux.qualcomm.com>
+ <CAA8EJpr124fymnbZ1bO=Dbbxavn3Z=1xOPmFRPnfSp-UB3p6OQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 6/6] thermal: int340x: Use thermal_zone_for_each_trip()
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-References: <4846448.GXAFRqVoOG@kreacher> <3532950.iIbC2pHGDl@kreacher>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <3532950.iIbC2pHGDl@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAA8EJpr124fymnbZ1bO=Dbbxavn3Z=1xOPmFRPnfSp-UB3p6OQ@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: UZ043y7PLOrm6BR2rXvCw8tfzxFtUx0U
+X-Proofpoint-ORIG-GUID: UZ043y7PLOrm6BR2rXvCw8tfzxFtUx0U
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-05_08,2023-10-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ priorityscore=1501 mlxscore=0 suspectscore=0 spamscore=0 bulkscore=0
+ lowpriorityscore=0 impostorscore=0 adultscore=0 malwarescore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310050113
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,31 +86,92 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/10/2023 15:26, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Modify int340x_thermal_update_trips() to use thermal_zone_for_each_trip()
-> for walking trips instead of using the trips[] table passed to the
-> thermal zone registration function.
-> 
-> For this purpose, store active trip point indices in the priv fieids of
-> the corresponding thermal_trip structures.
-> 
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> 
-> v1 -> v2: Mo changes
-> 
-> ---
+On Thu, Oct 05, 2023 at 02:39:43PM +0300, Dmitry Baryshkov wrote:
+> On Thu, 5 Oct 2023 at 12:58, Varadarajan Narayanan
+> <quic_varada@quicinc.com> wrote:
+> >
+> > On Thu, Sep 07, 2023 at 04:59:28PM +0300, Dmitry Baryshkov wrote:
+> > > On Thu, 7 Sept 2023 at 08:23, Varadarajan Narayanan
+> > > <quic_varada@quicinc.com> wrote:
+> > > >
+> > > > IPQ53xx have different OPPs available for the CPU based on
+> > > > SoC variant. This can be determined through use of an eFuse
+> > > > register present in the silicon.
+> > > >
+> > > > Add support to read the eFuse and populate the OPPs based on it.
+> > > >
+> > > > Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+> > > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > > > ---
+> > > >  arch/arm64/boot/dts/qcom/ipq5332.dtsi | 34 +++++++++++++++++++++++++++++++---
+> > > >  1 file changed, 31 insertions(+), 3 deletions(-)
+> > > >
+> > > > diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> > > > index 82761ae..3ca3f34 100644
+> > > > --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> > > > +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> > > > @@ -91,11 +91,34 @@
+> > > >         };
+> > > >
+> > > >         cpu_opp_table: opp-table-cpu {
+> > > > -               compatible = "operating-points-v2";
+> > > > +               compatible = "operating-points-v2-kryo-cpu";
+> > > >                 opp-shared;
+> > > > +               nvmem-cells = <&cpu_speed_bin>;
+> > > > +               nvmem-cell-names = "speed_bin";
+> > > > +
+> > > > +               /*
+> > > > +                * Listed all supported CPU frequencies and opp-supported-hw
+> > > > +                * values to select CPU frequencies based on the limits fused.
+> > > > +                * ------------------------------------------------------------
+> > > > +                * Frequency     BIT3   BIT2   BIT1    BIT0    opp-supported-hw
+> > > > +                *              1.0GHz 1.2GHz 1.5GHz No Limit
+> > > > +                * ------------------------------------------------------------
+> > > > +                * 1100000000     1      1      1       1            0xF
+> > > > +                * 1500000000     0      0      1       1            0x3
+> > > > +                * -----------------------------------------------------------
+> > > > +                */
+> > >
+> > > This can probably go to the commit message instead.
+> >
+> > Ok
+> >
+> > > > +
+> > > > +               opp-1100000000 {
+> > > > +                       opp-hz = /bits/ 64 <1100000000>;
+> > >
+> > > But your table shows 1.0 GHz and 1.2 GHz instead of 1.1 GHz
+> >
+> > Will update it.
+> >
+> > > > +                       opp-microvolt = <850000>;
+> > > > +                       opp-supported-hw = <0xF>;
+> > > > +                       clock-latency-ns = <200000>;
+> > > > +               };
+> > > >
+> > > > -               opp-1488000000 {
+> > > > -                       opp-hz = /bits/ 64 <1488000000>;
+> > > > +               opp-1500000000 {
+> > > > +                       opp-hz = /bits/ 64 <1500000000>;
+> > >
+> > > So, 1.488 GHz or 1.5 GHz?
+> >
+> > 1.5 GHz
+> >
+> > > > +                       opp-microvolt = <950000>;
+> > >
+> > > Which regulator is controlled by this microvolt?
+> >
+> > Based on the SKU, the XBL sets up the regulator to provide 950000uV
+> > on CPUs capable of running 1.5G and 850000uV on other SKUs. Linux
+> > doesn't control it.
+>
+> Then why do you need this property here in the first place?
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+I get these errors without this property
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+[    1.018065] cpu cpu0: opp_parse_microvolt: opp-microvolt missing although OPP managing regulators
+[    1.018074] cpu cpu0: _of_add_opp_table_v2: Failed to add OPP, -22
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Thanks
+Varada
