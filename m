@@ -2,185 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3FC7BC259
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Oct 2023 00:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 666857BC282
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Oct 2023 00:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233796AbjJFWq1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Oct 2023 18:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
+        id S233862AbjJFWvZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Oct 2023 18:51:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233805AbjJFWq1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 18:46:27 -0400
+        with ESMTP id S233827AbjJFWvY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 18:51:24 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6709F;
-        Fri,  6 Oct 2023 15:46:24 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 410B4C433C7;
-        Fri,  6 Oct 2023 22:46:23 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC35B6;
+        Fri,  6 Oct 2023 15:51:22 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4445AC433C8;
+        Fri,  6 Oct 2023 22:51:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696632384;
-        bh=D9nd/T1QbYtvFd+kC/X4Q1OtVD/3HpjeGmA8YdjLW20=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KtoakUqVnLPmvv9T3lObN9A7LSeFB/+nVzId9ubHHKSxu5dzFdCX/fZIwudFomtab
-         zKfMsWQ8ZcdmzjLPMZFgSqyd07i2NV/Tc/ZciZHlT1AEFQksLdF6Mn3bIixUJoBHrY
-         WeTd7S0mG2NKVP5AXzWq+8h8A5dvX6XuXURf/jzHTJawtLHFZHScfhX14yPfkD8wca
-         /FdOmgH9BsCADIKWJ2Tn9JWol1p2PeKFNZ0vW6VsYPnGFeTe3/iwFB+wQo4HCmAuQ0
-         +wOJgRcBNTCcYwploTNibIIoOoyLQ4cZprvyIgF9XxRbJr1mYxFwqthoUH1PaJk1se
-         kjGrOJN+W0QuQ==
-Received: (nullmailer pid 444811 invoked by uid 1000);
-        Fri, 06 Oct 2023 22:46:22 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Subject: [PATCH] pmdomain: Use device_get_match_data()
-Date:   Fri,  6 Oct 2023 17:46:13 -0500
-Message-Id: <20231006224614.444488-1-robh@kernel.org>
-X-Mailer: git-send-email 2.40.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        s=k20201202; t=1696632682;
+        bh=j652Gqnm5RMXSEocjqqYIeJBYBsa0Gx7jopD3zxKQDc=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=d50HWmPCW5wnb4kwLQ701Scmonh0bY0oEZTTh1HhIxqLXDe6eXVqsaIktX05Z6/Xy
+         hYd1nvcVzrDNJ4saWefdX0FzhiqsUnKBEkhreXzQ5kna6IYu0bXCbzDQ6lrmRbvDuX
+         kHm0XwCatug1wHA6gwiYDwVjlEa5aT3vQ9dbFIzF+F1Sx3XBTZmFRglfCl7BynriFO
+         /uMcD4ykqr/SfGn1eaGjh7CdSk036wtRem6kfO48KoOORoEJey6sPApcYpg6pQqo0W
+         +/OU9QOSrsDLqaBEWZqhq8edYmJAlrtNRFkVxtjFiPNROZ0qocpNjXurKLvYABykaJ
+         hEIHCALuXO53Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 324F6C41671;
+        Fri,  6 Oct 2023 22:51:22 +0000 (UTC)
+Subject: Re: [GIT PULL] Power management fix for v6.6-rc5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0hwHxOO3qbrLrxkXbJgy2Wrz1BVLXZqKdwFZKzkPd9mEw@mail.gmail.com>
+References: <CAJZ5v0hwHxOO3qbrLrxkXbJgy2Wrz1BVLXZqKdwFZKzkPd9mEw@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0hwHxOO3qbrLrxkXbJgy2Wrz1BVLXZqKdwFZKzkPd9mEw@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.6-rc5
+X-PR-Tracked-Commit-Id: b21f18ef964b2c71aa0b451df6d17b7bcad8280d
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 82714078aee4ccbd6ee7579d5a21f8a72155d0fb
+Message-Id: <169663268220.26682.7770011256259635795.pr-tracker-bot@kernel.org>
+Date:   Fri, 06 Oct 2023 22:51:22 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use preferred device_get_match_data() instead of of_match_device() to
-get the driver match data. With this, adjust the includes to explicitly
-include the correct headers.
+The pull request you sent on Fri, 6 Oct 2023 19:17:24 +0200:
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- drivers/pmdomain/actions/owl-sps.c     | 16 +++++-----------
- drivers/pmdomain/imx/gpc.c             |  7 +++----
- drivers/pmdomain/rockchip/pm-domains.c | 13 ++++---------
- 3 files changed, 12 insertions(+), 24 deletions(-)
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.6-rc5
 
-diff --git a/drivers/pmdomain/actions/owl-sps.c b/drivers/pmdomain/actions/owl-sps.c
-index 73a9e0bb7e8e..3a586d1f3256 100644
---- a/drivers/pmdomain/actions/owl-sps.c
-+++ b/drivers/pmdomain/actions/owl-sps.c
-@@ -8,8 +8,10 @@
-  * Copyright (c) 2017 Andreas Färber
-  */
- 
-+#include <linux/mod_devicetable.h>
- #include <linux/of_address.h>
--#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/property.h>
- #include <linux/pm_domain.h>
- #include <linux/soc/actions/owl-sps.h>
- #include <dt-bindings/power/owl-s500-powergate.h>
-@@ -96,24 +98,16 @@ static int owl_sps_init_domain(struct owl_sps *sps, int index)
- 
- static int owl_sps_probe(struct platform_device *pdev)
- {
--	const struct of_device_id *match;
- 	const struct owl_sps_info *sps_info;
- 	struct owl_sps *sps;
- 	int i, ret;
- 
--	if (!pdev->dev.of_node) {
--		dev_err(&pdev->dev, "no device node\n");
--		return -ENODEV;
--	}
--
--	match = of_match_device(pdev->dev.driver->of_match_table, &pdev->dev);
--	if (!match || !match->data) {
-+	sps_info = device_get_match_data(&pdev->dev);
-+	if (!sps_info) {
- 		dev_err(&pdev->dev, "unknown compatible or missing data\n");
- 		return -EINVAL;
- 	}
- 
--	sps_info = match->data;
--
- 	sps = devm_kzalloc(&pdev->dev,
- 			   struct_size(sps, domains, sps_info->num_domains),
- 			   GFP_KERNEL);
-diff --git a/drivers/pmdomain/imx/gpc.c b/drivers/pmdomain/imx/gpc.c
-index 90a8b2c0676f..114f44ca07dd 100644
---- a/drivers/pmdomain/imx/gpc.c
-+++ b/drivers/pmdomain/imx/gpc.c
-@@ -7,9 +7,10 @@
- #include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/io.h>
--#include <linux/of_device.h>
-+#include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/pm_domain.h>
-+#include <linux/property.h>
- #include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
- 
-@@ -403,9 +404,7 @@ static int imx_gpc_old_dt_init(struct device *dev, struct regmap *regmap,
- 
- static int imx_gpc_probe(struct platform_device *pdev)
- {
--	const struct of_device_id *of_id =
--			of_match_device(imx_gpc_dt_ids, &pdev->dev);
--	const struct imx_gpc_dt_data *of_id_data = of_id->data;
-+	const struct imx_gpc_dt_data *of_id_data = device_get_match_data(&pdev->dev);
- 	struct device_node *pgc_node;
- 	struct regmap *regmap;
- 	void __iomem *base;
-diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
-index d5d3ecb38283..9b76b62869d0 100644
---- a/drivers/pmdomain/rockchip/pm-domains.c
-+++ b/drivers/pmdomain/rockchip/pm-domains.c
-@@ -9,11 +9,13 @@
- #include <linux/iopoll.h>
- #include <linux/err.h>
- #include <linux/mutex.h>
-+#include <linux/platform_device.h>
- #include <linux/pm_clock.h>
- #include <linux/pm_domain.h>
-+#include <linux/property.h>
-+#include <linux/of.h>
- #include <linux/of_address.h>
- #include <linux/of_clk.h>
--#include <linux/of_platform.h>
- #include <linux/clk.h>
- #include <linux/regmap.h>
- #include <linux/mfd/syscon.h>
-@@ -857,7 +859,6 @@ static int rockchip_pm_domain_probe(struct platform_device *pdev)
- 	struct device_node *node;
- 	struct device *parent;
- 	struct rockchip_pmu *pmu;
--	const struct of_device_id *match;
- 	const struct rockchip_pmu_info *pmu_info;
- 	int error;
- 
-@@ -866,13 +867,7 @@ static int rockchip_pm_domain_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
- 
--	match = of_match_device(dev->driver->of_match_table, dev);
--	if (!match || !match->data) {
--		dev_err(dev, "missing pmu data\n");
--		return -EINVAL;
--	}
--
--	pmu_info = match->data;
-+	pmu_info = device_get_match_data(dev);
- 
- 	pmu = devm_kzalloc(dev,
- 			   struct_size(pmu, domains, pmu_info->num_domains),
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/82714078aee4ccbd6ee7579d5a21f8a72155d0fb
+
+Thank you!
+
 -- 
-2.40.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
