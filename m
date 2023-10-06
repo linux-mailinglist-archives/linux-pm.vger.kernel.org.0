@@ -2,75 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C3E7BB959
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 15:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16C27BB960
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 15:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232302AbjJFNlk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Oct 2023 09:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56834 "EHLO
+        id S232340AbjJFNn2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Oct 2023 09:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232389AbjJFNlj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 09:41:39 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60809E
-        for <linux-pm@vger.kernel.org>; Fri,  6 Oct 2023 06:41:37 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9adca291f99so372087366b.2
-        for <linux-pm@vger.kernel.org>; Fri, 06 Oct 2023 06:41:37 -0700 (PDT)
+        with ESMTP id S232302AbjJFNn1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 09:43:27 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA1B9E
+        for <linux-pm@vger.kernel.org>; Fri,  6 Oct 2023 06:43:25 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-51e28cac164so7051674a12.1
+        for <linux-pm@vger.kernel.org>; Fri, 06 Oct 2023 06:43:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696599696; x=1697204496; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1696599804; x=1697204604; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=rNR97TSeG/Stmz9F4Oo2bu8gF3PfrIDjuLtuxenu4mU=;
-        b=hzxJ/zZZksugwDcKx4m+oqNlbuTIYFqQs8/ArLdmMJtZnvdh2rwbDks/u5o12lOyen
-         gxvXpp1KtTIPKZj17ksE6ljktoafmmYb3ynoUbqj+MlJq6UGHGLYkGgh9tcaFuBugmru
-         vk6VE20pWfMpwCr7QkmS/81JTGRbwrQu01Hw+1kbSfLf++Tmjje5S/kk7rOEERGg6NfM
-         cisqcjcRggSBYg3OPAoMukmNaNCYIdviBd7QyxKDM/bt5SROzWJZQbDNlyu8doB/cdLs
-         0J/1YwhRpCdAL5nOpu3Cszs7XaqQsEpm7S5WODLgcBJMcEvK9O215URmKq0sjkSU8zVL
-         R8iw==
+        bh=feVfn+SZyMB58Ty0SE1O7fQ7qhvVrdu6Dzc/t3U1hF4=;
+        b=qo5Iue4p9pjk05SA5dVpsBgrwe/IJZZO19nGjlaBqD3teL59mDpXeIsu1nvKO6wKxF
+         JRlajzvc0T0GV9rpdXBzHdyJEj7VPBCRtomS9hAT5P69lhRUa6Lbq6/F7giEYOK2WtVy
+         O93O+JvBc8D9jMrMNexe4TRkfkJ7nMJgtPghzc+PcW/IvjPpn5tg2NzbY4VNPjIr3BpS
+         oq43VEJ1dDrFmFH62B42iiSpxiT/3kKelnHBKHe0IxZVMdMylGFjmOU9RNFl49f7FzDD
+         BZs0KPDk4dstWMtg69hYIY2yQZ0HxFuvDUApSngbj5HVpo+U9YuIJgME2m1BHYaoLTtl
+         GqCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696599696; x=1697204496;
+        d=1e100.net; s=20230601; t=1696599804; x=1697204604;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rNR97TSeG/Stmz9F4Oo2bu8gF3PfrIDjuLtuxenu4mU=;
-        b=L8GZYfhxuZXh9OCUjPZ5vcfACZdZ5+5qTnHKgQQTox7MkKdv56f9uv2/u5xDRoKGbi
-         HHodZwbZzC79H7z9QBNo2EX9K/ykb4kffO5kJfvkKkvwVZiJ0Xtw5bJfvIoUrtTDntqv
-         RKfZ/3WrfFMxheKUHt/g/WXQ950UOLpaeMVDOu8LglR1FPd/BsqGMdNTRQ4cqHq6N5+H
-         1NF3HQHcFnwoXlNDcfFrg0q4MyPU0UvHVX2zVxqPHWYp1DC5O9qPGfQaLtEq2XOWBDk8
-         XI5QiSK9t1n2bxS+2Peu/3JwqcL7NaoymLpljAWpduNr5vH3ln8tLyFTmGratqeQAfIJ
-         uFjg==
-X-Gm-Message-State: AOJu0YymQjBQaGi5YKU+ti8/aMa0LlzAxeHCnwPmWR/QfK6ljcl+xcXF
-        D2KFeUhbGAiBgc3J2laI6T4Hew==
-X-Google-Smtp-Source: AGHT+IGww1qBNhxg9utdCvH9oqC+40gHXtBF6ObrEEqRfUhbFUoXFQNNMNTlCPi9Js+U3OC+xY2kdQ==
-X-Received: by 2002:a17:907:2723:b0:9a5:d657:47ee with SMTP id d3-20020a170907272300b009a5d65747eemr6732466ejl.58.1696599696268;
-        Fri, 06 Oct 2023 06:41:36 -0700 (PDT)
+        bh=feVfn+SZyMB58Ty0SE1O7fQ7qhvVrdu6Dzc/t3U1hF4=;
+        b=Nytn3MWX25v4w3Su94wcmLqX77SpaK6sJ5MCMfvliwBk2nvIExuO9Hev+eZgr//AG2
+         JgQcAFkymqBW4TyoLTq5fbfQXPIkjm+X1jqyQYu6uIPKPvx5u1yVDb2/DEInUo9Z4vcP
+         pQ6/aHcvUDn1RDk27Q6jfWSPR8EE76M/PXnNhOsr18d9ldmeA8ufglZsu40cHYFkdues
+         +HTPgZ5FoMG9VF3UfKAUMODfhkYdRD3yjKq1W7gRD7SEs0m/WUsg9gj342pIlfR0X/vf
+         Hg/OLw0VuY5KRmDabzo+g+Ebynrso9qMEoacAWDeCt7S634Kq5dZ2LFOPu00k+1KJlcu
+         g9Dg==
+X-Gm-Message-State: AOJu0Yw7oCwwBf4yxGdNNdvusGsmcFWYEH1RPrKEklSIkIyIa6Y+PPen
+        RWgVuHtJj8QEZudXm6HrV1YgL1z7HfekHNKVRp1dEw==
+X-Google-Smtp-Source: AGHT+IFKu91vRH+wRnE4uGKKSd4b30effv5woJU+nB2j5FJ8e+H3XswzXk6wzAY8SuPy9jnbisH6oA==
+X-Received: by 2002:a17:906:c106:b0:9b8:df8e:cbd0 with SMTP id do6-20020a170906c10600b009b8df8ecbd0mr3138828ejc.37.1696599804350;
+        Fri, 06 Oct 2023 06:43:24 -0700 (PDT)
 Received: from [192.168.1.197] (5-157-101-10.dyn.eolo.it. [5.157.101.10])
-        by smtp.gmail.com with ESMTPSA id ci24-20020a170906c35800b009a2235ed496sm2953812ejb.141.2023.10.06.06.41.34
+        by smtp.gmail.com with ESMTPSA id ci24-20020a170906c35800b009a2235ed496sm2953812ejb.141.2023.10.06.06.43.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Oct 2023 06:41:35 -0700 (PDT)
-Message-ID: <1ee043ec-a47b-498e-9399-6e2cdd99f701@linaro.org>
-Date:   Fri, 6 Oct 2023 15:41:28 +0200
+        Fri, 06 Oct 2023 06:43:23 -0700 (PDT)
+Message-ID: <f0daa859-f9eb-4631-b2f9-6ee3ce5b691f@linaro.org>
+Date:   Fri, 6 Oct 2023 15:43:22 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 7/8] thermal: exynos: split initialization of TMU and
- the thermal zone
+Subject: Re: [PATCH v1] thermal: Remove Amit Kucheria from MAINTAINERS
 Content-Language: en-US
-To:     Mateusz Majewski <m.majewski2@samsung.com>,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-References: <20231003111638.241542-1-m.majewski2@samsung.com>
- <CGME20231003111713eucas1p27fcc64df0091b6097461f28b05bf772a@eucas1p2.samsung.com>
- <20231003111638.241542-8-m.majewski2@samsung.com>
+        LKML <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
+        Amit Kucheria <amitk@kernel.org>
+References: <5716404.DvuYhMxLoT@kreacher>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -116,7 +112,7 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231003111638.241542-8-m.majewski2@samsung.com>
+In-Reply-To: <5716404.DvuYhMxLoT@kreacher>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -129,16 +125,21 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/10/2023 13:16, Mateusz Majewski wrote:
-> This will be needed in the future, as the thermal zone subsystem might
-> call our callbacks right after devm_thermal_of_zone_register. Currently
-> we just make get_temp return EAGAIN in such case, but this will not be
-> possible with state-modifying callbacks, for instance set_trips.
+On 06/10/2023 13:21, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Signed-off-by: Mateusz Majewski <m.majewski2@samsung.com>
+> Amit Kucheria has not been participating in kernel development in any
+> way or form for quite some time, so it is not useful to list him as a
+> designated reviewer for the thermal subsystem or as the maintainer of
+> the thermal zone device bindings.
+> 
+> Remove him from those two places accordingly.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
+>  Documentation/devicetree/bindings/thermal/thermal-zones.yaml |    3 ---
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
