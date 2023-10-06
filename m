@@ -2,71 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB177BC083
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 22:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A0D47BC15D
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 23:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233544AbjJFUlX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Oct 2023 16:41:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50666 "EHLO
+        id S233814AbjJFVjo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Oct 2023 17:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233540AbjJFUlW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 16:41:22 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0DDC6
-        for <linux-pm@vger.kernel.org>; Fri,  6 Oct 2023 13:41:21 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-690d2441b95so2011924b3a.1
-        for <linux-pm@vger.kernel.org>; Fri, 06 Oct 2023 13:41:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1696624880; x=1697229680; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RA6Sc7k2eYudohPOyjS2xNwEbkA0LuukS0jdW+sshIU=;
-        b=KnhAYIbYofbLdRZzQedmFGPtAW4ACp7+OYSB3BKlpT1JZJbYezQdp1RNZxQaB0s8qT
-         o/nRZdUPQgkSF69MyKiEJDCVCR5Ko2j2yusuyn0YjFpJqsMeK3wwg5W+7K+j2llAyUaW
-         y//kPdOAFZSmXDTNKesN+s8SzpsbtnyVY6NNw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696624880; x=1697229680;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RA6Sc7k2eYudohPOyjS2xNwEbkA0LuukS0jdW+sshIU=;
-        b=YXcSUSeDfLxw85g8RhDLiPgeZ0gRUKUSpXfKOR7uxTQV/1W+O3ElUw0BWkYCKIrCyM
-         llXTGlpCsuMBrv4MBKrpsmlidiPFBtiMoQLNHu1JmkfmVAgjFKFqiTkvqEpkl0StpNHP
-         FxgsEmRMFlylxVuk+MlAZKYTwSId3K5rf3xRuXJoKjCeONd81qWxGyTD6pBtofBqdCbz
-         LrxAOV5hJBpW62SVUAo56FBthWD+fFfVMiKmUeJjH5lj+bZyeE0cSFWg14hZ3lITfabG
-         jmS64JyhhXyo8oQv5EFLUQyRAIgUkZPRNJmUw87kjlgYlydXgUkNowsiYGuKgFi+7wr6
-         fSOQ==
-X-Gm-Message-State: AOJu0YzNfjq9pQYOnwpVPVeKyEQwjsiF0YQrNz571bj/RIasMDK9S/4R
-        UqvD0SZf4AHTk4T+nWwUshVLgg==
-X-Google-Smtp-Source: AGHT+IFSmFU6FkhA8Oz6MBMj4ikhUHOgSULluvCcw1BxoKIl88jeZRsxIUFaVyPPQ1RvqNgCCc7Y6g==
-X-Received: by 2002:a05:6a00:a1b:b0:68f:cbd3:5b01 with SMTP id p27-20020a056a000a1b00b0068fcbd35b01mr8784952pfh.13.1696624880594;
-        Fri, 06 Oct 2023 13:41:20 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id a25-20020a62e219000000b0068fe7e07190sm1905152pfi.3.2023.10.06.13.41.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Oct 2023 13:41:19 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Andy Gross <agross@kernel.org>, Kees Cook <keescook@chromium.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] drivers: thermal: tsens: Annotate struct tsens_priv with __counted_by
-Date:   Fri,  6 Oct 2023 13:41:09 -0700
-Message-Id: <169662486916.2156024.11406030732291665443.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230922175341.work.919-kees@kernel.org>
-References: <20230922175341.work.919-kees@kernel.org>
+        with ESMTP id S233779AbjJFVjh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 17:39:37 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEFF9185;
+        Fri,  6 Oct 2023 14:39:16 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7264FC433CB;
+        Fri,  6 Oct 2023 21:39:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696628356;
+        bh=KOey3waN6ffVSfn0qfjxnmBrlFFQ4d0BRx5/VjhJFvI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=b1ncxJpbZL/htugLz2JMwoueHn5a377shvJmt8RiyXpc2obwbfbqHDZi62/rRcqyA
+         hRHoOfWuI8mf21l+hUJVEvieNM6O0Pud/KZ4VajE3OX9w/IQ5tX8vxEPLa4W8ne5VG
+         jmqqDzXsf6Fx8e9DVHqmrzipTXLHhgpbZharQhciuBpq6Rhwq57nxId37mN9H64a7Z
+         2wuD7xZiWE2uu9CNbPaAYNowntx/znkEU+rn3C4H15qCOQw6TSz7YQsp26Tq5YvEvb
+         tQYIAl65nvIbm84A+hMezcpHvrA3YE3JGV3Xramgyd8UtdL1P6sxrKmaFfwZHaDAS0
+         ato+0w8DkGl2w==
+Received: (nullmailer pid 333645 invoked by uid 1000);
+        Fri, 06 Oct 2023 21:39:14 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] PM / devfreq: exynos-ppmu: Use device_get_match_data()
+Date:   Fri,  6 Oct 2023 16:38:54 -0500
+Message-Id: <20231006213854.333261-1-robh@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -78,27 +52,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 22 Sep 2023 10:53:41 -0700, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct tsens_priv.
-> 
-> [...]
+Use preferred device_get_match_data() instead of of_match_device() to
+get the driver match data. With this, adjust the includes to explicitly
+include the correct headers.
 
-Since this is a trivial change and it's been 2 week without further
-discussion, I'll snag this patch.
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ drivers/devfreq/event/exynos-ppmu.c | 13 +++----------
+ 1 file changed, 3 insertions(+), 10 deletions(-)
 
-Applied to for-next/hardening, thanks!
-
-[1/1] drivers: thermal: tsens: Annotate struct tsens_priv with __counted_by
-      https://git.kernel.org/kees/c/aa0a14629c2d
-
-Take care,
-
+diff --git a/drivers/devfreq/event/exynos-ppmu.c b/drivers/devfreq/event/exynos-ppmu.c
+index 896a6cc93b00..56bac4702006 100644
+--- a/drivers/devfreq/event/exynos-ppmu.c
++++ b/drivers/devfreq/event/exynos-ppmu.c
+@@ -12,9 +12,9 @@
+ #include <linux/io.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+-#include <linux/of_address.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
++#include <linux/property.h>
+ #include <linux/regmap.h>
+ #include <linux/suspend.h>
+ #include <linux/devfreq-event.h>
+@@ -507,7 +507,6 @@ static int of_get_devfreq_events(struct device_node *np,
+ 	struct device *dev = info->dev;
+ 	struct device_node *events_np, *node;
+ 	int i, j, count;
+-	const struct of_device_id *of_id;
+ 	int ret;
+ 
+ 	events_np = of_get_child_by_name(np, "events");
+@@ -525,13 +524,7 @@ static int of_get_devfreq_events(struct device_node *np,
+ 	}
+ 	info->num_events = count;
+ 
+-	of_id = of_match_device(exynos_ppmu_id_match, dev);
+-	if (of_id)
+-		info->ppmu_type = (enum exynos_ppmu_type)of_id->data;
+-	else {
+-		of_node_put(events_np);
+-		return -EINVAL;
+-	}
++	info->ppmu_type = (enum exynos_ppmu_type)device_get_match_data(dev);
+ 
+ 	j = 0;
+ 	for_each_child_of_node(events_np, node) {
 -- 
-Kees Cook
+2.40.1
 
