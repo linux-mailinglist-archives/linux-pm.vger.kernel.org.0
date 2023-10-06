@@ -2,144 +2,235 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D407BAF17
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 01:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B57587BB1E9
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 09:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbjJEXHK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Oct 2023 19:07:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33526 "EHLO
+        id S230219AbjJFHHN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Oct 2023 03:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjJEXEw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Oct 2023 19:04:52 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE4AD4F;
-        Thu,  5 Oct 2023 16:00:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696546838; x=1728082838;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YSc5DqPuCbhoQCscHYL5riDMSg61/UNw+XjJOkVlsYk=;
-  b=ClOq/JHenUDs/DEFwcalJZTrpVTEXzdZquRfQfsadWKjZsnZlxF25IjJ
-   Cvti4DllVy/HC6ZL+qVHDs2M2ru0hNT0+RsZK1y7tkZLWg/2gAt4H0Brl
-   9j7m4LE2C+7ieRtCDzkYPnUCjjxH6fwvot1tSyzDwLmC8F9BJ4e00nh75
-   IZj0Jo0/0kqFPN+X/S1R/uaD90tv6AxJqowXXZFmJHl54dkp/5NvdhK1s
-   kZOqjsX4k78BFQSz72pmRXQEWqybfqU+KXg/94Ivv4RcTOLAVSZ6qryQD
-   8QHEHOHG7QNAsNDxMdg4itfX+bYRajI3P60VNsDV6nzmdPM1AcvIzMfvK
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10854"; a="387516067"
-X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
-   d="scan'208";a="387516067"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 16:00:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10854"; a="895648208"
-X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
-   d="scan'208";a="895648208"
-Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 05 Oct 2023 15:59:05 -0700
-Received: from kbuild by c3b01524d57c with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qoXKb-000M09-0N;
-        Thu, 05 Oct 2023 23:00:33 +0000
-Date:   Fri, 6 Oct 2023 07:00:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-        devel@acpica.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge 127/130]
- drivers/thermal/gov_power_allocator.c:127:13: warning: unused variable 'ret'
-Message-ID: <202310060618.FJ4z229a-lkp@intel.com>
+        with ESMTP id S230150AbjJFHHM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 03:07:12 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E3CCA
+        for <linux-pm@vger.kernel.org>; Fri,  6 Oct 2023 00:07:11 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-690bd59322dso1530506b3a.3
+        for <linux-pm@vger.kernel.org>; Fri, 06 Oct 2023 00:07:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696576030; x=1697180830; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0D1B3SZ/QYDtg8qv7mkYgD/tl+1/r/j69EpuD+M+9DM=;
+        b=dZHyxrEGWQi5olaXYqYq8ubAfoO545rYO5wM8069KikWefsWOcj0C7T8wkCKQeEedV
+         BOzAxAnUp4JBbn6lD82Uq3FOWs3c/cS6q0KpLR2Z8kPyquZmTOja4pzBQssNdc0dQoTF
+         ruKMV83kL530fwM3/mze0lONitDo1XTh0zj9298U2xiCVWpGprmxCz7ESaWIdwDkq13U
+         LBTQ0ZNlKc2eH0MkG/ZDieEhlyTIlfJxGGSN0RR2dTECLQ80T2T3q9w1Igq8R2ty5wyE
+         4BHA0IdAYv2hGgK9LABNdYGQaiAWIhufg2Ulw11w22xgY1LOxEZDqJIY3gfmEs0wWH6q
+         4eoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696576030; x=1697180830;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0D1B3SZ/QYDtg8qv7mkYgD/tl+1/r/j69EpuD+M+9DM=;
+        b=Um5FkwINqP5Wi7GhIDELMNMY1+ukuM3d73WrGyIXMH6hR+E8hhgsZhTNkzMwe/tW2k
+         FSJwa3hs2Wsh4F8JaWEaM7J4PmXp2LBu85wTpcVy+SqGJtKRf0bCwpi5DYl2c1pH12y9
+         8HDznpr6qOc+asfm/U809qN93RaSrKQFO9pMcrRyXCLxrc7/i/YjYFi17MKhQXEEze0e
+         JQSMYKE49IRdebIjT+ZU+M8eW+GGMvK7JO7pkSV3chgAxgaS44io6GpsxfKU04RTvRqT
+         UyoZ3zfZjxaESXbyX1Gmo/lIOQt0CEndR0NhTvLPEGOYLbGYgBI/GNOgVK1WG4hKnZik
+         nlSw==
+X-Gm-Message-State: AOJu0Yx/adqz2BR47Nrr+W59Q51rqu9IwTbxeb5VIzn/hWneKA8/AwKb
+        PmvGMb/pXZnJZteheI7hSTJ5LA==
+X-Google-Smtp-Source: AGHT+IHBvZy2r9Mba8Il+qMyIUdEqm47MGXHHJJULj98afmbMBXHLDlqaqSYL2XXgKk5gNqYeCMPIw==
+X-Received: by 2002:a05:6a21:1f12:b0:149:f82a:2640 with SMTP id ry18-20020a056a211f1200b00149f82a2640mr6394778pzb.30.1696576030160;
+        Fri, 06 Oct 2023 00:07:10 -0700 (PDT)
+Received: from localhost ([122.172.81.92])
+        by smtp.gmail.com with ESMTPSA id m29-20020a638c1d000000b0057406c4306fsm2597513pgd.12.2023.10.06.00.07.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Oct 2023 00:07:09 -0700 (PDT)
+Date:   Fri, 6 Oct 2023 12:37:07 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2] cpufreq: Rebuild sched-domains when removing cpufreq
+ driver
+Message-ID: <20231006070707.ia4qa25citvvbn45@vireshk-i7>
+References: <20231005134120.1217829-1-pierre.gondois@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20231005134120.1217829-1-pierre.gondois@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   ef7625d78dd079600f642d5875c08e059b002b52
-commit: 9212159685caa222bbe01f9b4d49f6c1f9ddb11a [127/130] thermal: gov_power_allocator: Use trip pointers instead of trip indices
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20231006/202310060618.FJ4z229a-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231006/202310060618.FJ4z229a-lkp@intel.com/reproduce)
+On 05-10-23, 15:41, Pierre Gondois wrote:
+> The Energy Aware Scheduler (EAS) relies on the schedutil governor.
+> When moving to/from the schedutil governor, sched domains must be
+> rebuilt to allow re-evaluating the enablement conditions of EAS.
+> This is done through sched_cpufreq_governor_change().
+> 
+> Having a cpufreq governor assumes a cpufreq driver is running.
+> Inserting/removing a cpufreq driver should trigger a re-evaluation
+> of EAS enablement conditions, avoiding to see EAS enabled when
+> removing a running cpufreq driver.
+> 
+> Rebuild the sched domains in schedutil's sugov_init()/sugov_exit(),
+> allowing to check EAS's enablement condition whenever schedutil
+> governor is initialized/exited from.
+> Move relevant code up in schedutil.c to avoid a split and conditional
+> function declaration.
+> Rename sched_cpufreq_governor_change() to sugov_eas_rebuild_sd().
+> 
+> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+> ---
+>  drivers/cpufreq/cpufreq.c        |  3 +-
+>  include/linux/cpufreq.h          |  8 -----
+>  kernel/sched/cpufreq_schedutil.c | 55 +++++++++++++++++---------------
+>  3 files changed, 30 insertions(+), 36 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 60ed89000e82..4bc15634d49c 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1544,7 +1544,7 @@ static int cpufreq_online(unsigned int cpu)
+>  
+>  		/*
+>  		 * Register with the energy model before
+> -		 * sched_cpufreq_governor_change() is called, which will result
+> +		 * sugov_eas_rebuild_sd() is called, which will result
+>  		 * in rebuilding of the sched domains, which should only be done
+>  		 * once the energy model is properly initialized for the policy
+>  		 * first.
+> @@ -2652,7 +2652,6 @@ static int cpufreq_set_policy(struct cpufreq_policy *policy,
+>  		ret = cpufreq_start_governor(policy);
+>  		if (!ret) {
+>  			pr_debug("governor change\n");
+> -			sched_cpufreq_governor_change(policy, old_gov);
+>  			return 0;
+>  		}
+>  		cpufreq_exit_governor(policy);
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index 71d186d6933a..1c5ca92a0555 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -1193,14 +1193,6 @@ static inline int of_perf_domain_get_sharing_cpumask(int pcpu, const char *list_
+>  }
+>  #endif
+>  
+> -#if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_CPU_FREQ_GOV_SCHEDUTIL)
+> -void sched_cpufreq_governor_change(struct cpufreq_policy *policy,
+> -			struct cpufreq_governor *old_gov);
+> -#else
+> -static inline void sched_cpufreq_governor_change(struct cpufreq_policy *policy,
+> -			struct cpufreq_governor *old_gov) { }
+> -#endif
+> -
+>  extern unsigned int arch_freq_get_on_cpu(int cpu);
+>  
+>  #ifndef arch_set_freq_scale
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index 4492608b7d7f..901cada51ba7 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -555,6 +555,31 @@ static const struct kobj_type sugov_tunables_ktype = {
+>  
+>  /********************** cpufreq governor interface *********************/
+>  
+> +#ifdef CONFIG_ENERGY_MODEL
+> +static void rebuild_sd_workfn(struct work_struct *work)
+> +{
+> +	rebuild_sched_domains_energy();
+> +}
+> +
+> +static DECLARE_WORK(rebuild_sd_work, rebuild_sd_workfn);
+> +
+> +/*
+> + * EAS shouldn't be attempted without sugov, so rebuild the sched_domains
+> + * on governor changes to make sure the scheduler knows about it.
+> + */
+> +static void sugov_eas_rebuild_sd(void)
+> +{
+> +	/*
+> +	 * When called from the cpufreq_register_driver() path, the
+> +	 * cpu_hotplug_lock is already held, so use a work item to
+> +	 * avoid nested locking in rebuild_sched_domains().
+> +	 */
+> +	schedule_work(&rebuild_sd_work);
+> +}
+> +#else
+> +static inline void sugov_eas_rebuild_sd(void) { };
+> +#endif
+> +
+>  struct cpufreq_governor schedutil_gov;
+>  
+>  static struct sugov_policy *sugov_policy_alloc(struct cpufreq_policy *policy)
+> @@ -709,6 +734,8 @@ static int sugov_init(struct cpufreq_policy *policy)
+>  	if (ret)
+>  		goto fail;
+>  
+> +	sugov_eas_rebuild_sd();
+> +
+>  out:
+>  	mutex_unlock(&global_tunables_lock);
+>  	return 0;
+> @@ -750,6 +777,8 @@ static void sugov_exit(struct cpufreq_policy *policy)
+>  	sugov_kthread_stop(sg_policy);
+>  	sugov_policy_free(sg_policy);
+>  	cpufreq_disable_fast_switch(policy);
+> +
+> +	sugov_eas_rebuild_sd();
+>  }
+>  
+>  static int sugov_start(struct cpufreq_policy *policy)
+> @@ -838,29 +867,3 @@ struct cpufreq_governor *cpufreq_default_governor(void)
+>  #endif
+>  
+>  cpufreq_governor_init(schedutil_gov);
+> -
+> -#ifdef CONFIG_ENERGY_MODEL
+> -static void rebuild_sd_workfn(struct work_struct *work)
+> -{
+> -	rebuild_sched_domains_energy();
+> -}
+> -static DECLARE_WORK(rebuild_sd_work, rebuild_sd_workfn);
+> -
+> -/*
+> - * EAS shouldn't be attempted without sugov, so rebuild the sched_domains
+> - * on governor changes to make sure the scheduler knows about it.
+> - */
+> -void sched_cpufreq_governor_change(struct cpufreq_policy *policy,
+> -				  struct cpufreq_governor *old_gov)
+> -{
+> -	if (old_gov == &schedutil_gov || policy->governor == &schedutil_gov) {
+> -		/*
+> -		 * When called from the cpufreq_register_driver() path, the
+> -		 * cpu_hotplug_lock is already held, so use a work item to
+> -		 * avoid nested locking in rebuild_sched_domains().
+> -		 */
+> -		schedule_work(&rebuild_sd_work);
+> -	}
+> -
+> -}
+> -#endif
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310060618.FJ4z229a-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/thermal/gov_power_allocator.c: In function 'estimate_pid_constants':
->> drivers/thermal/gov_power_allocator.c:127:13: warning: unused variable 'ret' [-Wunused-variable]
-     127 |         int ret;
-         |             ^~~
-
-
-vim +/ret +127 drivers/thermal/gov_power_allocator.c
-
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  110  
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  111  /**
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  112   * estimate_pid_constants() - Estimate the constants for the PID controller
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  113   * @tz:		thermal zone for which to estimate the constants
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  114   * @sustainable_power:	sustainable power for the thermal zone
-9212159685caa2 drivers/thermal/gov_power_allocator.c Rafael J. Wysocki 2023-10-05  115   * @trip_switch_on:	trip point for the switch on temperature
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  116   * @control_temp:	target temperature for the power allocator governor
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  117   *
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  118   * This function is used to update the estimation of the PID
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  119   * controller constants in struct thermal_zone_parameters.
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  120   */
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  121  static void estimate_pid_constants(struct thermal_zone_device *tz,
-9212159685caa2 drivers/thermal/gov_power_allocator.c Rafael J. Wysocki 2023-10-05  122  				   u32 sustainable_power,
-9212159685caa2 drivers/thermal/gov_power_allocator.c Rafael J. Wysocki 2023-10-05  123  				   const struct thermal_trip *trip_switch_on,
-90a996544946d1 drivers/thermal/gov_power_allocator.c Lukasz Luba       2020-11-24  124  				   int control_temp)
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  125  {
-7f725a23f2b7bb drivers/thermal/gov_power_allocator.c Daniel Lezcano    2022-10-03  126  	u32 temperature_threshold = control_temp;
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14 @127  	int ret;
-e34a7233896928 drivers/thermal/gov_power_allocator.c Lukasz Luba       2020-11-24  128  	s32 k_i;
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  129  
-9212159685caa2 drivers/thermal/gov_power_allocator.c Rafael J. Wysocki 2023-10-05  130  	if (trip_switch_on)
-9212159685caa2 drivers/thermal/gov_power_allocator.c Rafael J. Wysocki 2023-10-05  131  		temperature_threshold -= trip_switch_on->temperature;
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  132  
-44241628bb207e drivers/thermal/power_allocator.c     Andrea Arcangeli  2015-10-01  133  	/*
-44241628bb207e drivers/thermal/power_allocator.c     Andrea Arcangeli  2015-10-01  134  	 * estimate_pid_constants() tries to find appropriate default
-44241628bb207e drivers/thermal/power_allocator.c     Andrea Arcangeli  2015-10-01  135  	 * values for thermal zones that don't provide them. If a
-44241628bb207e drivers/thermal/power_allocator.c     Andrea Arcangeli  2015-10-01  136  	 * system integrator has configured a thermal zone with two
-44241628bb207e drivers/thermal/power_allocator.c     Andrea Arcangeli  2015-10-01  137  	 * passive trip points at the same temperature, that person
-44241628bb207e drivers/thermal/power_allocator.c     Andrea Arcangeli  2015-10-01  138  	 * hasn't put any effort to set up the thermal zone properly
-44241628bb207e drivers/thermal/power_allocator.c     Andrea Arcangeli  2015-10-01  139  	 * so just give up.
-44241628bb207e drivers/thermal/power_allocator.c     Andrea Arcangeli  2015-10-01  140  	 */
-44241628bb207e drivers/thermal/power_allocator.c     Andrea Arcangeli  2015-10-01  141  	if (!temperature_threshold)
-44241628bb207e drivers/thermal/power_allocator.c     Andrea Arcangeli  2015-10-01  142  		return;
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  143  
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  144  	tz->tzp->k_po = int_to_frac(sustainable_power) /
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  145  		temperature_threshold;
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  146  
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  147  	tz->tzp->k_pu = int_to_frac(2 * sustainable_power) /
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  148  		temperature_threshold;
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  149  
-e34a7233896928 drivers/thermal/gov_power_allocator.c Lukasz Luba       2020-11-24  150  	k_i = tz->tzp->k_pu / 10;
-e34a7233896928 drivers/thermal/gov_power_allocator.c Lukasz Luba       2020-11-24  151  	tz->tzp->k_i = k_i > 0 ? k_i : 1;
-e34a7233896928 drivers/thermal/gov_power_allocator.c Lukasz Luba       2020-11-24  152  
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  153  	/*
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  154  	 * The default for k_d and integral_cutoff is 0, so we can
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  155  	 * leave them as they are.
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  156  	 */
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  157  }
-e055bb0f9a6e5c drivers/thermal/power_allocator.c     Javi Merino       2015-09-14  158  
-
-:::::: The code at line 127 was first introduced by commit
-:::::: e055bb0f9a6e5c09bedf41c2a5b881edbd7f2ed0 thermal: power_allocator: relax the requirement of a sustainable_power in tzp
-
-:::::: TO: Javi Merino <javi.merino@arm.com>
-:::::: CC: Eduardo Valentin <edubezval@gmail.com>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+viresh
