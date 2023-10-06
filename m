@@ -2,123 +2,207 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE3C07BBDFA
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 19:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 990887BBDE8
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 19:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233080AbjJFRvd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Oct 2023 13:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35792 "EHLO
+        id S233033AbjJFRnP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Oct 2023 13:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233058AbjJFRvb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 13:51:31 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A782FB6;
-        Fri,  6 Oct 2023 10:51:30 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id 6f63dadd0b78c61c; Fri, 6 Oct 2023 19:51:29 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 9AD47665D08;
-        Fri,  6 Oct 2023 19:51:28 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Subject: [PATCH v1 3/6] thermal: gov_fair_share: Rearrange get_trip_level()
-Date:   Fri, 06 Oct 2023 19:42:48 +0200
-Message-ID: <2244940.iZASKD2KPV@kreacher>
-In-Reply-To: <13365827.uLZWGnKmhe@kreacher>
-References: <13365827.uLZWGnKmhe@kreacher>
+        with ESMTP id S233011AbjJFRnP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 13:43:15 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15236CE;
+        Fri,  6 Oct 2023 10:43:11 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2BDCC433C7;
+        Fri,  6 Oct 2023 17:43:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696614190;
+        bh=3pHBD8r/iPh/v5cgOzJJy4If3hivbFUEGjN+b6bqFKI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=OvPbzaM2D/+mLKHaRTMMFrEpSKvYejfKtoC/+RB+YAabg/6A0VNDQRGB+7TAtZuak
+         uS64Q/Sft1qfwBN87fAPShxrS7YYollPm7HQlVrSl4w+8Hnap/mYjI8utfUE3Jo2XN
+         /I4fS8KyXJfgv0wbgfQM9uVPr+JIU2/Sn/pJmg9xyPWj7wHBvSmxz1dM2Znfd80spl
+         FHbIf7UeIREC89a4S8JbzrDSKg26GiJilhrzCNvELcupBvD8/LGtqzEE9KPV+TPDUS
+         pmaNKW7CLwgRk67DkXeq5yjKGSVIKm5sSpEkNaErN0y7HOgag4Oqz3CikmAxgbODEF
+         TvQO2dMbhDbnA==
+Message-ID: <f142ae65-0609-ccf2-5908-663cd2ecab73@kernel.org>
+Date:   Sat, 7 Oct 2023 02:43:04 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrgeeigdduudehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepiedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgv
- lhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v7 08/26] PM / devfreq: rk3399_dmc,dfi: generalize DDRTYPE
+ defines
+Content-Language: en-US
+To:     Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-rockchip@lists.infradead.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+References: <20230704093242.583575-1-s.hauer@pengutronix.de>
+ <20230704093242.583575-9-s.hauer@pengutronix.de>
+From:   Chanwoo Choi <chanwoo@kernel.org>
+In-Reply-To: <20230704093242.583575-9-s.hauer@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 23. 7. 4. 18:32, Sascha Hauer wrote:
+> The DDRTYPE defines are named to be RK3399 specific, but they can be
+> used for other Rockchip SoCs as well, so replace the RK3399_PMUGRF_
+> prefix with ROCKCHIP_. They are defined in a SoC specific header
+> file, so when generalizing the prefix also move the new defines to
+> a SoC agnostic header file. While at it use GENMASK to define the
+> DDRTYPE bitfield and give it a name including the full register name.
+> 
+> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> ---
+>  drivers/devfreq/event/rockchip-dfi.c |  9 +++++----
+>  drivers/devfreq/rk3399_dmc.c         | 10 +++++-----
+>  include/soc/rockchip/rk3399_grf.h    |  7 +------
+>  include/soc/rockchip/rockchip_grf.h  | 17 +++++++++++++++++
+>  4 files changed, 28 insertions(+), 15 deletions(-)
+>  create mode 100644 include/soc/rockchip/rockchip_grf.h
+> 
+> diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event/rockchip-dfi.c
+> index 82de24a027579..6bccb6fbcfc0c 100644
+> --- a/drivers/devfreq/event/rockchip-dfi.c
+> +++ b/drivers/devfreq/event/rockchip-dfi.c
+> @@ -18,8 +18,10 @@
+>  #include <linux/list.h>
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+> +#include <linux/bitfield.h>
+>  #include <linux/bits.h>
+>  
+> +#include <soc/rockchip/rockchip_grf.h>
+>  #include <soc/rockchip/rk3399_grf.h>
+>  
+>  #define DMC_MAX_CHANNELS	2
+> @@ -74,9 +76,9 @@ static void rockchip_dfi_start_hardware_counter(struct devfreq_event_dev *edev)
+>  	writel_relaxed(CLR_DDRMON_CTRL, dfi_regs + DDRMON_CTRL);
+>  
+>  	/* set ddr type to dfi */
+> -	if (dfi->ddr_type == RK3399_PMUGRF_DDRTYPE_LPDDR3)
+> +	if (dfi->ddr_type == ROCKCHIP_DDRTYPE_LPDDR3)
+>  		writel_relaxed(LPDDR3_EN, dfi_regs + DDRMON_CTRL);
+> -	else if (dfi->ddr_type == RK3399_PMUGRF_DDRTYPE_LPDDR4)
+> +	else if (dfi->ddr_type == ROCKCHIP_DDRTYPE_LPDDR4)
+>  		writel_relaxed(LPDDR4_EN, dfi_regs + DDRMON_CTRL);
+>  
+>  	/* enable count, use software mode */
+> @@ -191,8 +193,7 @@ static int rk3399_dfi_init(struct rockchip_dfi *dfi)
+>  
+>  	/* get ddr type */
+>  	regmap_read(regmap_pmu, RK3399_PMUGRF_OS_REG2, &val);
+> -	dfi->ddr_type = (val >> RK3399_PMUGRF_DDRTYPE_SHIFT) &
+> -			RK3399_PMUGRF_DDRTYPE_MASK;
+> +	dfi->ddr_type = FIELD_GET(RK3399_PMUGRF_OS_REG2_DDRTYPE, val);
+>  
+>  	dfi->channel_mask = GENMASK(1, 0);
+>  
+> diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
+> index daff407026157..fd2c5ffedf41e 100644
+> --- a/drivers/devfreq/rk3399_dmc.c
+> +++ b/drivers/devfreq/rk3399_dmc.c
+> @@ -22,6 +22,7 @@
+>  #include <linux/suspend.h>
+>  
+>  #include <soc/rockchip/pm_domains.h>
+> +#include <soc/rockchip/rockchip_grf.h>
+>  #include <soc/rockchip/rk3399_grf.h>
+>  #include <soc/rockchip/rockchip_sip.h>
+>  
+> @@ -381,17 +382,16 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	regmap_read(data->regmap_pmu, RK3399_PMUGRF_OS_REG2, &val);
+> -	ddr_type = (val >> RK3399_PMUGRF_DDRTYPE_SHIFT) &
+> -		    RK3399_PMUGRF_DDRTYPE_MASK;
+> +	ddr_type = FIELD_GET(RK3399_PMUGRF_OS_REG2_DDRTYPE, val);
+>  
+>  	switch (ddr_type) {
+> -	case RK3399_PMUGRF_DDRTYPE_DDR3:
+> +	case ROCKCHIP_DDRTYPE_DDR3:
+>  		data->odt_dis_freq = data->ddr3_odt_dis_freq;
+>  		break;
+> -	case RK3399_PMUGRF_DDRTYPE_LPDDR3:
+> +	case ROCKCHIP_DDRTYPE_LPDDR3:
+>  		data->odt_dis_freq = data->lpddr3_odt_dis_freq;
+>  		break;
+> -	case RK3399_PMUGRF_DDRTYPE_LPDDR4:
+> +	case ROCKCHIP_DDRTYPE_LPDDR4:
+>  		data->odt_dis_freq = data->lpddr4_odt_dis_freq;
+>  		break;
+>  	default:
+> diff --git a/include/soc/rockchip/rk3399_grf.h b/include/soc/rockchip/rk3399_grf.h
+> index 3eebabcb28123..775f8444bea8d 100644
+> --- a/include/soc/rockchip/rk3399_grf.h
+> +++ b/include/soc/rockchip/rk3399_grf.h
+> @@ -11,11 +11,6 @@
+>  
+>  /* PMU GRF Registers */
+>  #define RK3399_PMUGRF_OS_REG2		0x308
+> -#define RK3399_PMUGRF_DDRTYPE_SHIFT	13
+> -#define RK3399_PMUGRF_DDRTYPE_MASK	7
+> -#define RK3399_PMUGRF_DDRTYPE_DDR3	3
+> -#define RK3399_PMUGRF_DDRTYPE_LPDDR2	5
+> -#define RK3399_PMUGRF_DDRTYPE_LPDDR3	6
+> -#define RK3399_PMUGRF_DDRTYPE_LPDDR4	7
+> +#define RK3399_PMUGRF_OS_REG2_DDRTYPE		GENMASK(15, 13)
+>  
+>  #endif
+> diff --git a/include/soc/rockchip/rockchip_grf.h b/include/soc/rockchip/rockchip_grf.h
+> new file mode 100644
+> index 0000000000000..dde1a9796ccb5
+> --- /dev/null
+> +++ b/include/soc/rockchip/rockchip_grf.h
+> @@ -0,0 +1,17 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +/*
+> + * Rockchip General Register Files definitions
+> + */
+> +
+> +#ifndef __SOC_ROCKCHIP_GRF_H
+> +#define __SOC_ROCKCHIP_GRF_H
+> +
+> +/* Rockchip DDRTYPE defines */
+> +enum {
+> +	ROCKCHIP_DDRTYPE_DDR3	= 3,
+> +	ROCKCHIP_DDRTYPE_LPDDR2	= 5,
+> +	ROCKCHIP_DDRTYPE_LPDDR3	= 6,
+> +	ROCKCHIP_DDRTYPE_LPDDR4	= 7,
+> +};
+> +
+> +#endif /* __SOC_ROCKCHIP_GRF_H */
 
-Make get_trip_level() use for_each_trip() to iterate over trip points
-and make it call thermal_zone_trip_id() to obtain the integer ID of a
-given trip point so as to avoid relying on the knowledge of struct
-thermal_zone_device internals.
 
-The general functionality is not expected to be changed.
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 
-This change causes the governor to use trip pointers instead of trip
-indices everywhere except for the fair_share_throttle() second argument
-that will be modified subsequently along with the definition of the
-governor .throttle() callback.
+This patch must require Ack of rockchip Maintainer (Heiko Stuebner)
+because of include/soc/rockchip.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/gov_fair_share.c |   30 ++++++++++++++----------------
- 1 file changed, 14 insertions(+), 16 deletions(-)
-
-Index: linux-pm/drivers/thermal/gov_fair_share.c
-===================================================================
---- linux-pm.orig/drivers/thermal/gov_fair_share.c
-+++ linux-pm/drivers/thermal/gov_fair_share.c
-@@ -15,29 +15,27 @@
- 
- #include "thermal_core.h"
- 
--/**
-- * get_trip_level: - obtains the current trip level for a zone
-- * @tz:		thermal zone device
-- */
- static int get_trip_level(struct thermal_zone_device *tz)
- {
--	struct thermal_trip trip;
--	int count;
-+	const struct thermal_trip *trip, *level_trip = NULL;
-+	int trip_level;
- 
--	for (count = 0; count < tz->num_trips; count++) {
--		__thermal_zone_get_trip(tz, count, &trip);
--		if (tz->temperature < trip.temperature)
-+	for_each_trip(tz, trip) {
-+		if (level_trip && trip->temperature >= tz->temperature)
- 			break;
-+
-+		level_trip = trip;
- 	}
- 
--	/*
--	 * count > 0 only if temperature is greater than first trip
--	 * point, in which case, trip_point = count - 1
--	 */
--	if (count > 0)
--		trace_thermal_zone_trip(tz, count - 1, trip.type);
-+	/*  Bail out if the temperature is not greater than any trips. */
-+	if (level_trip->temperature >= tz->temperature)
-+		return 0;
-+
-+	trip_level = thermal_zone_trip_id(tz, level_trip);
-+
-+	trace_thermal_zone_trip(tz, trip_level, level_trip->type);
- 
--	return count;
-+	return trip_level;
- }
- 
- static long get_target_state(struct thermal_zone_device *tz,
-
-
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
 
