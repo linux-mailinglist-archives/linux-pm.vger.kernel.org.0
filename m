@@ -2,33 +2,29 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEFAD7BB885
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 15:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B72237BB889
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 15:05:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232033AbjJFNEx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Oct 2023 09:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40250 "EHLO
+        id S232178AbjJFNE6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Oct 2023 09:04:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232172AbjJFNEw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 09:04:52 -0400
-Received: from mail11.truemail.it (mail11.truemail.it [IPv6:2001:4b7e:0:8::81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E53BCF;
-        Fri,  6 Oct 2023 06:04:51 -0700 (PDT)
+        with ESMTP id S232311AbjJFNE5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 09:04:57 -0400
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00EB8EA;
+        Fri,  6 Oct 2023 06:04:53 -0700 (PDT)
 Received: from francesco-nb.corp.toradex.com (unknown [201.82.41.210])
-        by mail11.truemail.it (Postfix) with ESMTPA id CC59C2115B;
-        Fri,  6 Oct 2023 15:04:46 +0200 (CEST)
+        by mail11.truemail.it (Postfix) with ESMTPA id 74766212BC;
+        Fri,  6 Oct 2023 15:04:50 +0200 (CEST)
 From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
+To:     Sebastian Reichel <sre@kernel.org>
 Cc:     Stefan Eichenberger <stefan.eichenberger@toradex.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Francesco Dolcini <francesco.dolcini@toradex.com>
-Subject: [PATCH v2 3/4] dt-bindings: power: reset: gpio-poweroff: Add priority property
-Date:   Fri,  6 Oct 2023 10:04:27 -0300
-Message-Id: <20231006130428.11259-4-francesco@dolcini.it>
+Subject: [PATCH v2 4/4] power: reset: gpio-poweroff: make sys handler priority configurable
+Date:   Fri,  6 Oct 2023 10:04:28 -0300
+Message-Id: <20231006130428.11259-5-francesco@dolcini.it>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20231006130428.11259-1-francesco@dolcini.it>
 References: <20231006130428.11259-1-francesco@dolcini.it>
@@ -45,41 +41,48 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
 
-Add the priority property to the gpio-poweroff bindings description.
+Add a priority property equal to gpio-restart to allow increasing the
+priority of the gpio-poweroff handler.
 
 Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
 Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 ---
-v1->v2:
- - Add $ref to restart-handler.yaml in gpio-poweroff.yaml
----
- .../devicetree/bindings/power/reset/gpio-poweroff.yaml      | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/power/reset/gpio-poweroff.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/power/reset/gpio-poweroff.yaml b/Documentation/devicetree/bindings/power/reset/gpio-poweroff.yaml
-index b54ec003a1e0..a4b437fce37c 100644
---- a/Documentation/devicetree/bindings/power/reset/gpio-poweroff.yaml
-+++ b/Documentation/devicetree/bindings/power/reset/gpio-poweroff.yaml
-@@ -18,6 +18,9 @@ description: >
-   Finally the operating system assumes the power off failed if
-   the system is still running after waiting some time (timeout-ms).
+diff --git a/drivers/power/reset/gpio-poweroff.c b/drivers/power/reset/gpio-poweroff.c
+index 0deb293eb2d6..52cfeee2cb28 100644
+--- a/drivers/power/reset/gpio-poweroff.c
++++ b/drivers/power/reset/gpio-poweroff.c
+@@ -54,6 +54,7 @@ static int gpio_poweroff_probe(struct platform_device *pdev)
+ 	struct gpio_poweroff *gpio_poweroff;
+ 	bool input = false;
+ 	enum gpiod_flags flags;
++	int priority = SYS_OFF_PRIO_DEFAULT;
+ 	int ret;
  
-+allOf:
-+  - $ref: restart-handler.yaml#
-+
- properties:
-   compatible:
-     const: gpio-poweroff
-@@ -40,6 +43,9 @@ properties:
-     default: 100
-     description: Delay to wait after driving gpio inactive
+ 	gpio_poweroff = devm_kzalloc(&pdev->dev, sizeof(*gpio_poweroff), GFP_KERNEL);
+@@ -75,14 +76,18 @@ static int gpio_poweroff_probe(struct platform_device *pdev)
+ 	device_property_read_u32(&pdev->dev, "inactive-delay-ms",
+ 				 &gpio_poweroff->inactive_delay_ms);
+ 	device_property_read_u32(&pdev->dev, "timeout-ms", &gpio_poweroff->timeout_ms);
++	device_property_read_u32(&pdev->dev, "priority", &priority);
++	if (priority > 255) {
++		dev_err(&pdev->dev, "Invalid priority property: %u\n", priority);
++		return -EINVAL;
++	}
  
-+  priority:
-+    default: 0
-+
-   timeout-ms:
-     default: 3000
-     description: Time to wait before assuming the power off sequence failed.
+ 	gpio_poweroff->reset_gpio = devm_gpiod_get(&pdev->dev, NULL, flags);
+ 	if (IS_ERR(gpio_poweroff->reset_gpio))
+ 		return PTR_ERR(gpio_poweroff->reset_gpio);
+ 
+ 	ret = devm_register_sys_off_handler(&pdev->dev, SYS_OFF_MODE_POWER_OFF,
+-					    SYS_OFF_PRIO_DEFAULT, gpio_poweroff_do_poweroff,
+-					    gpio_poweroff);
++					    priority, gpio_poweroff_do_poweroff, gpio_poweroff);
+ 	if (ret)
+ 		return dev_err_probe(&pdev->dev, ret, "Cannot register poweroff handler\n");
+ 
 -- 
 2.25.1
 
