@@ -2,91 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E185F7BBC2E
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 17:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B33047BBC45
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 18:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232888AbjJFPy3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 6 Oct 2023 11:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36122 "EHLO
+        id S232718AbjJFQDU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Oct 2023 12:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232876AbjJFPy2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 11:54:28 -0400
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6FCB6;
-        Fri,  6 Oct 2023 08:54:27 -0700 (PDT)
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-57b83ff7654so153263eaf.1;
-        Fri, 06 Oct 2023 08:54:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696607666; x=1697212466;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qyVUD+jtO3xjKZijmbi69I8h0KpD3PVUx5fopCCsA34=;
-        b=Cs8sBu7oNCAza03v36rrmlmVZb7ASF+ZwCGI4KpAgxRmwr35KRaNS/BNPF5K1ldsoF
-         jks4ZR1AOwMbrzQctRiAS0xIp8UXQivYldSTI+w/hTtgwPpiMnQb/WsdB/ZXVdZeAMnu
-         HT4dCqKw5Oye6a1qSKF+9b0AgCYC5jQd5Guiyw05A4LJ+ZVIY+vntqKIChR06yeqMW5B
-         jpWVztHlc0cqqaOUDInMTt9kBMxE/oNtOJxrZhOiqLtxQs9XinJM8rT2p6zoFUx3C7yx
-         +ESjHhMuK7KL2uuaZBaeYQnRwqopheUX0yBQe4QTTN8HIxReS8YL1lQI9Agczufkmb4s
-         nBYg==
-X-Gm-Message-State: AOJu0Ywf9p+PedjYCqi7jXBRVl0m+WiWade4RvxCq6Z4OuXHh5s3aa6b
-        5KfY9I1ZAWdtQEU6l3Uca7Keg5mhlwkBpFm6s2w=
-X-Google-Smtp-Source: AGHT+IFWASLRCNFIE/UGk9jOTbyA2SJBiczvi635c3ueLXQnQ5y0w5AY3AsHaewjdL00Z0TXAa6dEyI3BhB4/hf8iaM=
-X-Received: by 2002:a4a:b588:0:b0:578:c2af:45b5 with SMTP id
- t8-20020a4ab588000000b00578c2af45b5mr8191603ooo.0.1696607665758; Fri, 06 Oct
- 2023 08:54:25 -0700 (PDT)
+        with ESMTP id S229853AbjJFQDU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 12:03:20 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400E39E;
+        Fri,  6 Oct 2023 09:03:19 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB46AC433C7;
+        Fri,  6 Oct 2023 16:03:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696608198;
+        bh=R8EzuiOPzX++xJlYgn5dTs5bXl/SqLiLW9dDDvGhA+k=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=lASRVfTLCObH/UC45oJ698Wzi/++O6o5B25Bbx+OIWwDyhTqNzJeyOWo3Go2adD6C
+         /D2RkLc8BV9pwCFn8bVVuGlkXNOuSy2DXlAiIYtCLk+xAxNoh99OODMSGXC9s46hn1
+         nyAnrvhiSXI+kA9EOIGWAl07ZKEIQ97fW/hg8P8RGEq70O45rBHLue/leUSVSazoQw
+         PJjM6JQ9wYABQxKT0g/pZ7rXjhLIjy0Ql1eMy8LJLj5uyxTb9xaiZBkee+f+VWITZG
+         i/RYhcj4guXxbBh6ysHuwDo61WVw7/PjqGRM15Ci0ofFo2hbkSKvSvPtZCzavPca0I
+         LjuZB5hrDFlgw==
+Message-ID: <f9a0cd9b-eba8-2abf-2839-2cf3f230c92c@kernel.org>
+Date:   Sat, 7 Oct 2023 01:03:13 +0900
 MIME-Version: 1.0
-References: <2702191.mvXUDI8C0e@kreacher> <20231006-earthly-equal-dd5d82312add@spud>
-In-Reply-To: <20231006-earthly-equal-dd5d82312add@spud>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 6 Oct 2023 17:54:14 +0200
-Message-ID: <CAJZ5v0g56dS0xV4m+WUCZPU3aU_5JNP52ex6ebTQmNh7hjVacA@mail.gmail.com>
-Subject: Re: [PATCH v2] thermal: Remove Amit Kucheria from MAINTAINERS
-To:     Conor Dooley <conor@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v7 01/26] PM / devfreq: rockchip-dfi: Make pmu regmap
+ mandatory
+To:     Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-rockchip@lists.infradead.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
-        Amit Kucheria <amitk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+References: <20230704093242.583575-1-s.hauer@pengutronix.de>
+ <20230704093242.583575-2-s.hauer@pengutronix.de>
+From:   Chanwoo Choi <chanwoo@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20230704093242.583575-2-s.hauer@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 6, 2023 at 5:46 PM Conor Dooley <conor@kernel.org> wrote:
->
-> On Fri, Oct 06, 2023 at 05:04:42PM +0200, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Amit Kucheria has not been participating in kernel development in any
-> > way or form for quite some time, so it is not useful to list him as a
-> > designated reviewer for the thermal subsystem.
-> >
-> > Remove him from the THERMAL entry in MAINTAINERS.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >
-> > v1 -> v2: Drop the DT binding change
-> >
-> > I'm really not inclined to fight over stuff that doesn't make any sense to me.
->
-> I don't understand what you mean by this. All that was required was
-> putting __someone__ down as a maintainer in the dt-binding, as Rob's bot
-> told you:
-> https://lore.kernel.org/linux-devicetree/CAJZ5v0gwvo_CriNwz_g-oQ8EZUqdp4ymiuamU-KkrmQ87RhZyA@mail.gmail.com/T/#m56a9b1616477566e2976044c11b58dccbd3be0fb
+On 23. 7. 4. 18:32, Sascha Hauer wrote:
+> As a matter of fact the regmap_pmu already is mandatory because
+> it is used unconditionally in the driver. Bail out gracefully in
+> probe() rather than crashing later.
+> 
+> Fixes: b9d1262bca0af ("PM / devfreq: event: support rockchip dfi controller")
+> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> ---
+> 
+> Notes:
+>     Changes since v4:
+>     - move to beginning of the series to make it easier to backport to stable
+>     - Add a Fixes: tag
+>     - add missing of_node_put()
+> 
+>  drivers/devfreq/event/rockchip-dfi.c | 15 ++++++++-------
+>  1 file changed, 8 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event/rockchip-dfi.c
+> index 39ac069cabc75..74893c06aa087 100644
+> --- a/drivers/devfreq/event/rockchip-dfi.c
+> +++ b/drivers/devfreq/event/rockchip-dfi.c
+> @@ -193,14 +193,15 @@ static int rockchip_dfi_probe(struct platform_device *pdev)
+>  		return dev_err_probe(dev, PTR_ERR(data->clk),
+>  				     "Cannot get the clk pclk_ddr_mon\n");
+>  
+> -	/* try to find the optional reference to the pmu syscon */
+>  	node = of_parse_phandle(np, "rockchip,pmu", 0);
+> -	if (node) {
+> -		data->regmap_pmu = syscon_node_to_regmap(node);
+> -		of_node_put(node);
+> -		if (IS_ERR(data->regmap_pmu))
+> -			return PTR_ERR(data->regmap_pmu);
+> -	}
+> +	if (!node)
+> +		return dev_err_probe(&pdev->dev, -ENODEV, "Can't find pmu_grf registers\n");
+> +
+> +	data->regmap_pmu = syscon_node_to_regmap(node);
+> +	of_node_put(node);
+> +	if (IS_ERR(data->regmap_pmu))
+> +		return PTR_ERR(data->regmap_pmu);
+> +
+>  	data->dev = dev;
+>  
+>  	desc = devm_kzalloc(dev, sizeof(*desc), GFP_KERNEL);
 
-And this doesn't make sense, because I don't know who to put in there
-and the current record is clearly stale.
+Applied it. Thanks.
+
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
+
