@@ -2,37 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CBA7BBEA7
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 20:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC4A7BBEAE
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 20:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233234AbjJFSYk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Oct 2023 14:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43988 "EHLO
+        id S233273AbjJFS0M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Oct 2023 14:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233236AbjJFSYk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 14:24:40 -0400
+        with ESMTP id S233295AbjJFS0J (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 14:26:09 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4CFBE;
-        Fri,  6 Oct 2023 11:24:38 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D67D8C433B9;
-        Fri,  6 Oct 2023 18:24:34 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4F0106;
+        Fri,  6 Oct 2023 11:26:07 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02E30C433C9;
+        Fri,  6 Oct 2023 18:26:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696616678;
-        bh=XMRbzsY9A1FpB7Vearw0HGHjviPa4Dpe+NZgXwP5iv4=;
+        s=k20201202; t=1696616767;
+        bh=DMnsAyUwTj54QnEen7gCvken46S4eDiVAXnoNg1seOA=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ZSahHaYaKVg4WEtqzwfvKNNUo0gzDdfLcPymxZt3Qn2Q7bcl5pfMEogdU4o/nZYur
-         J6fuaWBP8lUXAvd1XfDJEVlHmCLJkKJM8FGNTuulgNI0UJ991JCaP/p4kVQ2aMw6UP
-         EjwzCcoVGxlSMlD2wQzV+Xj2kjwUaAT2ePHEmBkqOQ3Ui9d50v5+KY4hs1FurXmohF
-         uBOo4+sZgm1J2DWEEhGGnjRo2tSaH4Nr7uUYRTZjOsVshfCw2W8d0ZHGYzo+CapYoh
-         vTQT8jDYtaj3SjJ0Z5W4GY8Fu1bGxnbgNW0THGzh5pLq3B6CjhB34RIGsNxFDhg7b3
-         TqntO7l2Ly4Ag==
-Message-ID: <df27b5a4-9010-e76c-e974-452ee8ee22c3@kernel.org>
-Date:   Sat, 7 Oct 2023 03:24:33 +0900
+        b=Oa1pz1OTZt/oOkqajeiEN0hflFW2ehI8EIMVSkZYPhy7fcEOUb7ZSsWTRAp28nrPP
+         JklCWOaq6FbD0G7uGVy5K/qzHyDLv4azhg0ideDhw1ptBJefMJRarfnwJV4uKUEBQ5
+         jdLgsVuTiSUtCBFb+2Fm6jFEa9seNnqECjW7dwScGcG58l+orK55KZLoaeI/fApeay
+         9M+wRqR38/fj5zAFIxD3u/uloiBFTWv5OwSaFtOar4eGzicdGRxsYC1+ebdHEHH6s6
+         gkz9uW3a1J/+qlMvqzn+vewd/aBpMoBjAsg+nhpGnrDBMamI4gSFJ8+j8eED6ZG0d5
+         F5CkIJ5UbXwPA==
+Message-ID: <aa8b7d74-008d-f704-5d63-1cbaac70cf77@kernel.org>
+Date:   Sat, 7 Oct 2023 03:26:02 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH v7 11/26] PM / devfreq: rockchip-dfi: Handle LPDDR2
- correctly
+Subject: Re: [PATCH v7 12/26] PM / devfreq: rockchip-dfi: Handle LPDDR4X
 Content-Language: en-US
 To:     Sascha Hauer <s.hauer@pengutronix.de>,
         linux-rockchip@lists.infradead.org
@@ -51,9 +50,9 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
 References: <20230704093242.583575-1-s.hauer@pengutronix.de>
- <20230704093242.583575-12-s.hauer@pengutronix.de>
+ <20230704093242.583575-13-s.hauer@pengutronix.de>
 From:   Chanwoo Choi <chanwoo@kernel.org>
-In-Reply-To: <20230704093242.583575-12-s.hauer@pengutronix.de>
+In-Reply-To: <20230704093242.583575-13-s.hauer@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -67,44 +66,41 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 23. 7. 4. 18:32, Sascha Hauer wrote:
-> According to the downstream driver the DDRMON_CTRL_LPDDR23 bit must be
-> set for both LPDDR2 and LPDDR3. Add the missing LPDDR2 case and while
-> at it turn the if/else if/else into switch/case which makes it easier
-> to read.
+> In the DFI driver LPDDR4X can be handled in the same way as LPDDR4. Add
+> the missing case.
 > 
 > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
 > ---
->  drivers/devfreq/event/rockchip-dfi.c | 11 +++++++++--
->  1 file changed, 9 insertions(+), 2 deletions(-)
+>  drivers/devfreq/event/rockchip-dfi.c | 1 +
+>  include/soc/rockchip/rockchip_grf.h  | 1 +
+>  2 files changed, 2 insertions(+)
 > 
 > diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event/rockchip-dfi.c
-> index 261d112580c9e..16cd5365671f7 100644
+> index 16cd5365671f7..0a568c5551699 100644
 > --- a/drivers/devfreq/event/rockchip-dfi.c
 > +++ b/drivers/devfreq/event/rockchip-dfi.c
-> @@ -82,12 +82,19 @@ static void rockchip_dfi_start_hardware_counter(struct devfreq_event_dev *edev)
->  		       DDRMON_CTRL_HARDWARE_EN), dfi_regs + DDRMON_CTRL);
->  
->  	/* set ddr type to dfi */
-> -	if (dfi->ddr_type == ROCKCHIP_DDRTYPE_LPDDR3)
-> +	switch (dfi->ddr_type) {
-> +	case ROCKCHIP_DDRTYPE_LPDDR2:
-> +	case ROCKCHIP_DDRTYPE_LPDDR3:
->  		writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_LPDDR23, DDRMON_CTRL_DDR_TYPE_MASK),
+> @@ -89,6 +89,7 @@ static void rockchip_dfi_start_hardware_counter(struct devfreq_event_dev *edev)
 >  			       dfi_regs + DDRMON_CTRL);
-> -	else if (dfi->ddr_type == ROCKCHIP_DDRTYPE_LPDDR4)
-> +		break;
-> +	case ROCKCHIP_DDRTYPE_LPDDR4:
+>  		break;
+>  	case ROCKCHIP_DDRTYPE_LPDDR4:
+> +	case ROCKCHIP_DDRTYPE_LPDDR4X:
 >  		writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_LPDDR4, DDRMON_CTRL_DDR_TYPE_MASK),
 >  			       dfi_regs + DDRMON_CTRL);
-> +		break;
-> +	default:
-> +		break;
-> +	}
+>  		break;
+> diff --git a/include/soc/rockchip/rockchip_grf.h b/include/soc/rockchip/rockchip_grf.h
+> index dde1a9796ccb5..e46fd72aea8d1 100644
+> --- a/include/soc/rockchip/rockchip_grf.h
+> +++ b/include/soc/rockchip/rockchip_grf.h
+> @@ -12,6 +12,7 @@ enum {
+>  	ROCKCHIP_DDRTYPE_LPDDR2	= 5,
+>  	ROCKCHIP_DDRTYPE_LPDDR3	= 6,
+>  	ROCKCHIP_DDRTYPE_LPDDR4	= 7,
+> +	ROCKCHIP_DDRTYPE_LPDDR4X = 8,
+>  };
 >  
->  	/* enable count, use software mode */
->  	writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_SOFTWARE_EN, DDRMON_CTRL_SOFTWARE_EN),
+>  #endif /* __SOC_ROCKCHIP_GRF_H */
 
 Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 
