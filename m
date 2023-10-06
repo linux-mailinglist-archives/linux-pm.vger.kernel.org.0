@@ -2,217 +2,221 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED9BB7BBFF8
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 22:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E152D7BBFFE
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 22:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233306AbjJFUDS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 6 Oct 2023 16:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
+        id S233339AbjJFUHz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 6 Oct 2023 16:07:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbjJFUDR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 16:03:17 -0400
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64ED83;
-        Fri,  6 Oct 2023 13:03:14 -0700 (PDT)
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6bc9353be9bso352413a34.1;
-        Fri, 06 Oct 2023 13:03:14 -0700 (PDT)
+        with ESMTP id S233306AbjJFUHy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 16:07:54 -0400
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D47BD;
+        Fri,  6 Oct 2023 13:07:53 -0700 (PDT)
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-57de3096e25so468179eaf.1;
+        Fri, 06 Oct 2023 13:07:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696622594; x=1697227394;
+        d=1e100.net; s=20230601; t=1696622872; x=1697227672;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nrnQlg+Ks22EwGBpOoGufahFztzvaGoZvpb10F2egwQ=;
-        b=UTKLJa09Xmgyttk1+eZD4QFPifDz58ws5WB5dGJfQs8c5U5eSSmBtSjdumIT3msDsu
-         3agrzizzDZk3B9/qiAm9ipjkhvmSW7Q5yUOL/MsPMHQ1n+TWLhleQoB9Hs3o5mL2UWkn
-         m5kRKOo4/EQIbNBxRJVyXIhasE16w0erBeKR/HPHS2gfCS9WgH6UBiZ85QkgDYRQMfc4
-         lRsw6iboE4YuG/Bx8yF9d3blYobU6OL2O+uv20+ckXAMAc/Mq/uNZM91ENoHF5aVO6C0
-         N9bGWnWrj4114ntTjSVtujmvnI99DchTqQAm2yigOb3XBeu92UVTbk9U7msD26+Q4CS6
-         dy6g==
-X-Gm-Message-State: AOJu0YxwmH6dQMNQy5C+MKYX6yEbEJ3k2nfBSdGFoXxKzo/1/CHzCJCY
-        aNrBcDa6QCAWUA+u1DZsKVWVn4A/FxSdH8Bw9AYfacFt
-X-Google-Smtp-Source: AGHT+IE5lf+OzVD0JblqRIq9hmdGUD6xjJvQXOB/f7VFJrSqWnkhXWjdREK1gIYLCAer976QignmLzOkzCqB8ZrSWno=
-X-Received: by 2002:a4a:b588:0:b0:578:c2af:45b5 with SMTP id
- t8-20020a4ab588000000b00578c2af45b5mr8791223ooo.0.1696622594035; Fri, 06 Oct
- 2023 13:03:14 -0700 (PDT)
+        bh=yi8IHkhUe0aac+4wlgQ6/aSkZ2gvlW+JPHDq/3mOla0=;
+        b=tEXBpTPSXU2T3MQXxPGKb2ka+1B3mC/6jHEZKtH/5P+/Zk9t41IPd3SZzk+taBF2XB
+         UBb/b8sfedGCOlcHTjWQGQMspxqU1mAsLeoHh/NUWNPRO0GW2lTMCjHeOgEt7xc/pum4
+         LhKMwqFLh/GV7gbwOiyi6HuX91RbZiQjRLFdooinOEzJlw6foob3IyNbOkUypzZ5s8IR
+         nuOz4W8uSWO6hzlYxKbS26fIxwoD04AcgOi1EPLR8ouaPJ5EasJxRtQrjgAvk3YmXNPF
+         CDNG+ScrrdKstmrNA2uSYTTLNHl/WGEQzztnDszgDHT22FU8npO1fKC620yokrj3k++g
+         9BsQ==
+X-Gm-Message-State: AOJu0Yyhjq8f3s66WJWSAf+iG4OPxVh76r35Evjcbtaz0ekydSGiWZsK
+        6F7A+ytT1rMYAiFPDTh7TuYP04t64phzAEjIk/c=
+X-Google-Smtp-Source: AGHT+IH83w1+L9n9SEM0zfgntM+xmt+afPwlFw05NNYwUcG+AlqS8R1yQE+t4ohzfK8blQkiwoxZnH/jijtFP2zINSI=
+X-Received: by 2002:a4a:c509:0:b0:57e:c9bf:696e with SMTP id
+ i9-20020a4ac509000000b0057ec9bf696emr9112969ooq.1.1696622872620; Fri, 06 Oct
+ 2023 13:07:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230912061057.2516963-1-liaochang1@huawei.com> <20231005110255.fk736npzqsrffl2c@vireshk-i7>
-In-Reply-To: <20231005110255.fk736npzqsrffl2c@vireshk-i7>
+References: <20231005134120.1217829-1-pierre.gondois@arm.com> <20231006070707.ia4qa25citvvbn45@vireshk-i7>
+In-Reply-To: <20231006070707.ia4qa25citvvbn45@vireshk-i7>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 6 Oct 2023 22:03:03 +0200
-Message-ID: <CAJZ5v0iA0HbvFnOUDcrJKDVxEBx_87HK4QVoqCVEeGsntsgiQw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] cpufreq: userspace: Use fine-grained mutex in
- userspace governor
+Date:   Fri, 6 Oct 2023 22:07:41 +0200
+Message-ID: <CAJZ5v0jB2kn3CfX_-hdH0cVcEo5pwrMAEhvPmpmHgYkYx9GW1g@mail.gmail.com>
+Subject: Re: [PATCH v2] cpufreq: Rebuild sched-domains when removing cpufreq driver
 To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Liao Chang <liaochang1@huawei.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+        Pierre Gondois <pierre.gondois@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 5, 2023 at 1:05 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Fri, Oct 6, 2023 at 9:07 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> On 12-09-23, 06:10, Liao Chang wrote:
-> > The userspace governor currently uses a big global mutex to avoid the
-> > race condition on the governor_data field of cpufreq_policy structure.
-> > This leads to a low concurrency if multiple userspace applications are
-> > trying to set the speed of different policies at the same time. This
-> > patch introduces a per-policy mutex to allow the updating of different
-> > policies to be performed concurrently, improving overall concurrency.
+> On 05-10-23, 15:41, Pierre Gondois wrote:
+> > The Energy Aware Scheduler (EAS) relies on the schedutil governor.
+> > When moving to/from the schedutil governor, sched domains must be
+> > rebuilt to allow re-evaluating the enablement conditions of EAS.
+> > This is done through sched_cpufreq_governor_change().
 > >
-> > Signed-off-by: Liao Chang <liaochang1@huawei.com>
+> > Having a cpufreq governor assumes a cpufreq driver is running.
+> > Inserting/removing a cpufreq driver should trigger a re-evaluation
+> > of EAS enablement conditions, avoiding to see EAS enabled when
+> > removing a running cpufreq driver.
+> >
+> > Rebuild the sched domains in schedutil's sugov_init()/sugov_exit(),
+> > allowing to check EAS's enablement condition whenever schedutil
+> > governor is initialized/exited from.
+> > Move relevant code up in schedutil.c to avoid a split and conditional
+> > function declaration.
+> > Rename sched_cpufreq_governor_change() to sugov_eas_rebuild_sd().
+> >
+> > Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 > > ---
-> >  drivers/cpufreq/cpufreq_userspace.c | 69 +++++++++++++++++------------
-> >  1 file changed, 40 insertions(+), 29 deletions(-)
+> >  drivers/cpufreq/cpufreq.c        |  3 +-
+> >  include/linux/cpufreq.h          |  8 -----
+> >  kernel/sched/cpufreq_schedutil.c | 55 +++++++++++++++++---------------
+> >  3 files changed, 30 insertions(+), 36 deletions(-)
 > >
-> > diff --git a/drivers/cpufreq/cpufreq_userspace.c b/drivers/cpufreq/cpufreq_userspace.c
-> > index 50a4d7846580..442e31060d62 100644
-> > --- a/drivers/cpufreq/cpufreq_userspace.c
-> > +++ b/drivers/cpufreq/cpufreq_userspace.c
-> > @@ -16,7 +16,11 @@
-> >  #include <linux/slab.h>
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 60ed89000e82..4bc15634d49c 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -1544,7 +1544,7 @@ static int cpufreq_online(unsigned int cpu)
 > >
-> >  static DEFINE_PER_CPU(unsigned int, cpu_is_managed);
-> > -static DEFINE_MUTEX(userspace_mutex);
-> > +
-> > +struct userspace_policy {
-> > +     unsigned int setspeed;
-> > +     struct mutex mutex;
-> > +};
-> >
-> >  /**
-> >   * cpufreq_set - set the CPU frequency
-> > @@ -28,19 +32,19 @@ static DEFINE_MUTEX(userspace_mutex);
-> >  static int cpufreq_set(struct cpufreq_policy *policy, unsigned int freq)
-> >  {
-> >       int ret = -EINVAL;
-> > -     unsigned int *setspeed = policy->governor_data;
-> > +     struct userspace_policy *userspace = policy->governor_data;
-> >
-> >       pr_debug("cpufreq_set for cpu %u, freq %u kHz\n", policy->cpu, freq);
-> >
-> > -     mutex_lock(&userspace_mutex);
-> > +     mutex_lock(&userspace->mutex);
-> >       if (!per_cpu(cpu_is_managed, policy->cpu))
-> >               goto err;
-> >
-> > -     *setspeed = freq;
-> > +     userspace->setspeed = freq;
-> >
-> >       ret = __cpufreq_driver_target(policy, freq, CPUFREQ_RELATION_L);
-> >   err:
-> > -     mutex_unlock(&userspace_mutex);
-> > +     mutex_unlock(&userspace->mutex);
-> >       return ret;
+> >               /*
+> >                * Register with the energy model before
+> > -              * sched_cpufreq_governor_change() is called, which will result
+> > +              * sugov_eas_rebuild_sd() is called, which will result
+> >                * in rebuilding of the sched domains, which should only be done
+> >                * once the energy model is properly initialized for the policy
+> >                * first.
+> > @@ -2652,7 +2652,6 @@ static int cpufreq_set_policy(struct cpufreq_policy *policy,
+> >               ret = cpufreq_start_governor(policy);
+> >               if (!ret) {
+> >                       pr_debug("governor change\n");
+> > -                     sched_cpufreq_governor_change(policy, old_gov);
+> >                       return 0;
+> >               }
+> >               cpufreq_exit_governor(policy);
+> > diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> > index 71d186d6933a..1c5ca92a0555 100644
+> > --- a/include/linux/cpufreq.h
+> > +++ b/include/linux/cpufreq.h
+> > @@ -1193,14 +1193,6 @@ static inline int of_perf_domain_get_sharing_cpumask(int pcpu, const char *list_
 > >  }
+> >  #endif
 > >
-> > @@ -51,67 +55,74 @@ static ssize_t show_speed(struct cpufreq_policy *policy, char *buf)
-> >
-> >  static int cpufreq_userspace_policy_init(struct cpufreq_policy *policy)
-> >  {
-> > -     unsigned int *setspeed;
-> > +     struct userspace_policy *userspace;
-> >
-> > -     setspeed = kzalloc(sizeof(*setspeed), GFP_KERNEL);
-> > -     if (!setspeed)
-> > +     userspace = kzalloc(sizeof(*userspace), GFP_KERNEL);
-> > +     if (!userspace)
-> >               return -ENOMEM;
-> >
-> > -     policy->governor_data = setspeed;
-> > +     mutex_init(&userspace->mutex);
-> > +
-> > +     policy->governor_data = userspace;
-> >       return 0;
-> >  }
-> >
-> > +/*
-> > + * Any routine that writes to the policy struct will hold the "rwsem" of
-> > + * policy struct that means it is free to free "governor_data" here.
-> > + */
-> >  static void cpufreq_userspace_policy_exit(struct cpufreq_policy *policy)
-> >  {
-> > -     mutex_lock(&userspace_mutex);
-> >       kfree(policy->governor_data);
-> >       policy->governor_data = NULL;
-> > -     mutex_unlock(&userspace_mutex);
-> >  }
-> >
-> >  static int cpufreq_userspace_policy_start(struct cpufreq_policy *policy)
-> >  {
-> > -     unsigned int *setspeed = policy->governor_data;
-> > +     struct userspace_policy *userspace = policy->governor_data;
-> >
-> >       BUG_ON(!policy->cur);
-> >       pr_debug("started managing cpu %u\n", policy->cpu);
-> >
-> > -     mutex_lock(&userspace_mutex);
-> > +     mutex_lock(&userspace->mutex);
-> >       per_cpu(cpu_is_managed, policy->cpu) = 1;
-> > -     *setspeed = policy->cur;
-> > -     mutex_unlock(&userspace_mutex);
-> > +     userspace->setspeed = policy->cur;
-> > +     mutex_unlock(&userspace->mutex);
-> >       return 0;
-> >  }
-> >
-> >  static void cpufreq_userspace_policy_stop(struct cpufreq_policy *policy)
-> >  {
-> > -     unsigned int *setspeed = policy->governor_data;
-> > +     struct userspace_policy *userspace = policy->governor_data;
-> >
-> >       pr_debug("managing cpu %u stopped\n", policy->cpu);
-> >
-> > -     mutex_lock(&userspace_mutex);
-> > +     mutex_lock(&userspace->mutex);
-> >       per_cpu(cpu_is_managed, policy->cpu) = 0;
-> > -     *setspeed = 0;
-> > -     mutex_unlock(&userspace_mutex);
-> > +     userspace->setspeed = 0;
-> > +     mutex_unlock(&userspace->mutex);
-> >  }
-> >
-> >  static void cpufreq_userspace_policy_limits(struct cpufreq_policy *policy)
-> >  {
-> > -     unsigned int *setspeed = policy->governor_data;
-> > +     struct userspace_policy *userspace = policy->governor_data;
-> >
-> > -     mutex_lock(&userspace_mutex);
-> > +     mutex_lock(&userspace->mutex);
-> >
-> >       pr_debug("limit event for cpu %u: %u - %u kHz, currently %u kHz, last set to %u kHz\n",
-> > -              policy->cpu, policy->min, policy->max, policy->cur, *setspeed);
+> > -#if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_CPU_FREQ_GOV_SCHEDUTIL)
+> > -void sched_cpufreq_governor_change(struct cpufreq_policy *policy,
+> > -                     struct cpufreq_governor *old_gov);
+> > -#else
+> > -static inline void sched_cpufreq_governor_change(struct cpufreq_policy *policy,
+> > -                     struct cpufreq_governor *old_gov) { }
+> > -#endif
 > > -
-> > -     if (policy->max < *setspeed)
-> > -             __cpufreq_driver_target(policy, policy->max, CPUFREQ_RELATION_H);
-> > -     else if (policy->min > *setspeed)
-> > -             __cpufreq_driver_target(policy, policy->min, CPUFREQ_RELATION_L);
-> > +              policy->cpu, policy->min, policy->max, policy->cur, userspace->setspeed);
-> > +
-> > +     if (policy->max < userspace->setspeed)
-> > +             __cpufreq_driver_target(policy, policy->max,
-> > +                                     CPUFREQ_RELATION_H);
-> > +     else if (policy->min > userspace->setspeed)
-> > +             __cpufreq_driver_target(policy, policy->min,
-> > +                                     CPUFREQ_RELATION_L);
-> >       else
-> > -             __cpufreq_driver_target(policy, *setspeed, CPUFREQ_RELATION_L);
-> > +             __cpufreq_driver_target(policy, userspace->setspeed,
-> > +                                     CPUFREQ_RELATION_L);
+> >  extern unsigned int arch_freq_get_on_cpu(int cpu);
 > >
-> > -     mutex_unlock(&userspace_mutex);
-> > +     mutex_unlock(&userspace->mutex);
+> >  #ifndef arch_set_freq_scale
+> > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> > index 4492608b7d7f..901cada51ba7 100644
+> > --- a/kernel/sched/cpufreq_schedutil.c
+> > +++ b/kernel/sched/cpufreq_schedutil.c
+> > @@ -555,6 +555,31 @@ static const struct kobj_type sugov_tunables_ktype = {
+> >
+> >  /********************** cpufreq governor interface *********************/
+> >
+> > +#ifdef CONFIG_ENERGY_MODEL
+> > +static void rebuild_sd_workfn(struct work_struct *work)
+> > +{
+> > +     rebuild_sched_domains_energy();
+> > +}
+> > +
+> > +static DECLARE_WORK(rebuild_sd_work, rebuild_sd_workfn);
+> > +
+> > +/*
+> > + * EAS shouldn't be attempted without sugov, so rebuild the sched_domains
+> > + * on governor changes to make sure the scheduler knows about it.
+> > + */
+> > +static void sugov_eas_rebuild_sd(void)
+> > +{
+> > +     /*
+> > +      * When called from the cpufreq_register_driver() path, the
+> > +      * cpu_hotplug_lock is already held, so use a work item to
+> > +      * avoid nested locking in rebuild_sched_domains().
+> > +      */
+> > +     schedule_work(&rebuild_sd_work);
+> > +}
+> > +#else
+> > +static inline void sugov_eas_rebuild_sd(void) { };
+> > +#endif
+> > +
+> >  struct cpufreq_governor schedutil_gov;
+> >
+> >  static struct sugov_policy *sugov_policy_alloc(struct cpufreq_policy *policy)
+> > @@ -709,6 +734,8 @@ static int sugov_init(struct cpufreq_policy *policy)
+> >       if (ret)
+> >               goto fail;
+> >
+> > +     sugov_eas_rebuild_sd();
+> > +
+> >  out:
+> >       mutex_unlock(&global_tunables_lock);
+> >       return 0;
+> > @@ -750,6 +777,8 @@ static void sugov_exit(struct cpufreq_policy *policy)
+> >       sugov_kthread_stop(sg_policy);
+> >       sugov_policy_free(sg_policy);
+> >       cpufreq_disable_fast_switch(policy);
+> > +
+> > +     sugov_eas_rebuild_sd();
 > >  }
 > >
-> >  static struct cpufreq_governor cpufreq_gov_userspace = {
+> >  static int sugov_start(struct cpufreq_policy *policy)
+> > @@ -838,29 +867,3 @@ struct cpufreq_governor *cpufreq_default_governor(void)
+> >  #endif
+> >
+> >  cpufreq_governor_init(schedutil_gov);
+> > -
+> > -#ifdef CONFIG_ENERGY_MODEL
+> > -static void rebuild_sd_workfn(struct work_struct *work)
+> > -{
+> > -     rebuild_sched_domains_energy();
+> > -}
+> > -static DECLARE_WORK(rebuild_sd_work, rebuild_sd_workfn);
+> > -
+> > -/*
+> > - * EAS shouldn't be attempted without sugov, so rebuild the sched_domains
+> > - * on governor changes to make sure the scheduler knows about it.
+> > - */
+> > -void sched_cpufreq_governor_change(struct cpufreq_policy *policy,
+> > -                               struct cpufreq_governor *old_gov)
+> > -{
+> > -     if (old_gov == &schedutil_gov || policy->governor == &schedutil_gov) {
+> > -             /*
+> > -              * When called from the cpufreq_register_driver() path, the
+> > -              * cpu_hotplug_lock is already held, so use a work item to
+> > -              * avoid nested locking in rebuild_sched_domains().
+> > -              */
+> > -             schedule_work(&rebuild_sd_work);
+> > -     }
+> > -
+> > -}
+> > -#endif
 >
 > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Applied as 6.7 material along with the [2/2], thanks!
+Applied as 6.7 material, thanks!
