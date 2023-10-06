@@ -2,127 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8497BC178
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 23:45:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3FC7BC259
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Oct 2023 00:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233773AbjJFVo7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Oct 2023 17:44:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39316 "EHLO
+        id S233796AbjJFWq1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Oct 2023 18:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233794AbjJFVoy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 17:44:54 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B93010D
-        for <linux-pm@vger.kernel.org>; Fri,  6 Oct 2023 14:44:52 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-405524e6768so25191845e9.2
-        for <linux-pm@vger.kernel.org>; Fri, 06 Oct 2023 14:44:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696628690; x=1697233490; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zJM3i291v2QugmEKmLTZguR5dO9/xbtzKBboNYneqHA=;
-        b=jFO8uIXCbSCU8e5tiwBJSWruc5GW5/qA3ADqk24ceImXwQST9wBiUYxvurfoolDNZn
-         dQZL2OyCJ1C23myoJz1PFCCFAmnMnZa+t0d5WJFdtTf4lyYIyd1MtfM4OOgduw45ZwXi
-         irnYi7+0UvxrjUFf6lBLjdddGk+DZ2d7loHYZ3O1WOKU0iQCfmbBPplKFZZVClAKwoIb
-         ROxNS4yADyOt+BsMlrpsXeGt+zYBDW1qnGumt6AdMrT13u9BVTgREDUKumyKyL1PGaIJ
-         k7K5ykyVp3jucJE6NSuhf+lKaQDaqtenG71VQMpdsa9sQx6/jxNFwONfViYnzQ3zuOcH
-         4IUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696628690; x=1697233490;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zJM3i291v2QugmEKmLTZguR5dO9/xbtzKBboNYneqHA=;
-        b=Jh4kZJPJBNEpdA2Qz8FbJgZ3N5OA9Hob/LGEGKTs8CKyfIDFc9SW2q6UQZ0orkmnOb
-         5HCO5SSSTe6rjmBt24QJnFrDt3cbh/qxYy4jQG+ICoUVmegvBhNDntJ9pCntG7UQjGls
-         yVJmHY03TtoN9d8xQJylaonZIkNu6z9/aLupMFY76hDQmaiiz4jXVOV599/nxofPUqiG
-         qCim8Hi2vN1imkniGi0eFJZcMoezJZBImSz0Yz//UU/UprrmbUXc0DrGLiZxzNkSPegl
-         XVPlvovHOukXK2F1kjdDuz8pwSzWIaYzGOVnbqa3H+z90bKwHG6CjCLL7xOSGDHeYqKj
-         eoHA==
-X-Gm-Message-State: AOJu0YzCMmiGIe1M0I7TMS+JfXFVZF5jzH+XUcE2w8P/MjzVDLI3FRWm
-        BDehm8Qbq/5RpXtfQ+sOXc6MTg==
-X-Google-Smtp-Source: AGHT+IHNGp9wN1FEMydl8FfeyM/0EeBWsAlnmmZUbcfQU1BhWNEAtJwj68zwg+jXii180gDebhsDJg==
-X-Received: by 2002:a7b:cbcf:0:b0:406:545a:f8fe with SMTP id n15-20020a7bcbcf000000b00406545af8femr8773574wmi.29.1696628690405;
-        Fri, 06 Oct 2023 14:44:50 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:ae93:531e:11ce:c83d? ([2a05:6e02:1041:c10:ae93:531e:11ce:c83d])
-        by smtp.googlemail.com with ESMTPSA id y11-20020a05600c364b00b004063977eccesm6810458wmq.42.2023.10.06.14.44.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Oct 2023 14:44:50 -0700 (PDT)
-Message-ID: <ca4b87ea-7b59-4465-ba29-3280e82149e4@linaro.org>
-Date:   Fri, 6 Oct 2023 23:44:48 +0200
+        with ESMTP id S233805AbjJFWq1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 18:46:27 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6709F;
+        Fri,  6 Oct 2023 15:46:24 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 410B4C433C7;
+        Fri,  6 Oct 2023 22:46:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696632384;
+        bh=D9nd/T1QbYtvFd+kC/X4Q1OtVD/3HpjeGmA8YdjLW20=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KtoakUqVnLPmvv9T3lObN9A7LSeFB/+nVzId9ubHHKSxu5dzFdCX/fZIwudFomtab
+         zKfMsWQ8ZcdmzjLPMZFgSqyd07i2NV/Tc/ZciZHlT1AEFQksLdF6Mn3bIixUJoBHrY
+         WeTd7S0mG2NKVP5AXzWq+8h8A5dvX6XuXURf/jzHTJawtLHFZHScfhX14yPfkD8wca
+         /FdOmgH9BsCADIKWJ2Tn9JWol1p2PeKFNZ0vW6VsYPnGFeTe3/iwFB+wQo4HCmAuQ0
+         +wOJgRcBNTCcYwploTNibIIoOoyLQ4cZprvyIgF9XxRbJr1mYxFwqthoUH1PaJk1se
+         kjGrOJN+W0QuQ==
+Received: (nullmailer pid 444811 invoked by uid 1000);
+        Fri, 06 Oct 2023 22:46:22 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Subject: [PATCH] pmdomain: Use device_get_match_data()
+Date:   Fri,  6 Oct 2023 17:46:13 -0500
+Message-Id: <20231006224614.444488-1-robh@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] thermal: Remove Amit Kucheria from MAINTAINERS
-To:     Lukasz Luba <lukasz.luba@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Amit Kucheria <amitk@kernel.org>
-References: <5716404.DvuYhMxLoT@kreacher>
- <f0daa859-f9eb-4631-b2f9-6ee3ce5b691f@linaro.org>
- <9833cebf-e951-47c6-97b7-458ae1a5b747@linaro.org>
- <908fc8d6-10d2-51f9-fd70-171522c7e67d@arm.com>
-Content-Language: en-US
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <908fc8d6-10d2-51f9-fd70-171522c7e67d@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/10/2023 15:48, Lukasz Luba wrote:
-> 
-> 
-> On 10/6/23 14:43, Krzysztof Kozlowski wrote:
->> On 06/10/2023 15:43, Krzysztof Kozlowski wrote:
->>> On 06/10/2023 13:21, Rafael J. Wysocki wrote:
->>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>>
->>>> Amit Kucheria has not been participating in kernel development in any
->>>> way or form for quite some time, so it is not useful to list him as a
->>>> designated reviewer for the thermal subsystem or as the maintainer of
->>>> the thermal zone device bindings.
->>>>
->>>> Remove him from those two places accordingly.
->>>>
->>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>> ---
->>>>   Documentation/devicetree/bindings/thermal/thermal-zones.yaml |    
->>>> 3 ---
->>>
->>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
->> and unAcked. We need a maintainer for the bindings. Someone else from
->> thermal?
->>
-> 
-> I'm going to handle the review in thermal subsystem. Although,
-> I forgot about this 'binding' thing...
-> 
-> Daniel, what do you think?
+Use preferred device_get_match_data() instead of of_match_device() to
+get the driver match data. With this, adjust the includes to explicitly
+include the correct headers.
 
-I can handle the bindings, I rewrote the thermal-of code and worked with 
-Amit on the txt to yaml conversion.
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ drivers/pmdomain/actions/owl-sps.c     | 16 +++++-----------
+ drivers/pmdomain/imx/gpc.c             |  7 +++----
+ drivers/pmdomain/rockchip/pm-domains.c | 13 ++++---------
+ 3 files changed, 12 insertions(+), 24 deletions(-)
 
-
+diff --git a/drivers/pmdomain/actions/owl-sps.c b/drivers/pmdomain/actions/owl-sps.c
+index 73a9e0bb7e8e..3a586d1f3256 100644
+--- a/drivers/pmdomain/actions/owl-sps.c
++++ b/drivers/pmdomain/actions/owl-sps.c
+@@ -8,8 +8,10 @@
+  * Copyright (c) 2017 Andreas Färber
+  */
+ 
++#include <linux/mod_devicetable.h>
+ #include <linux/of_address.h>
+-#include <linux/of_platform.h>
++#include <linux/platform_device.h>
++#include <linux/property.h>
+ #include <linux/pm_domain.h>
+ #include <linux/soc/actions/owl-sps.h>
+ #include <dt-bindings/power/owl-s500-powergate.h>
+@@ -96,24 +98,16 @@ static int owl_sps_init_domain(struct owl_sps *sps, int index)
+ 
+ static int owl_sps_probe(struct platform_device *pdev)
+ {
+-	const struct of_device_id *match;
+ 	const struct owl_sps_info *sps_info;
+ 	struct owl_sps *sps;
+ 	int i, ret;
+ 
+-	if (!pdev->dev.of_node) {
+-		dev_err(&pdev->dev, "no device node\n");
+-		return -ENODEV;
+-	}
+-
+-	match = of_match_device(pdev->dev.driver->of_match_table, &pdev->dev);
+-	if (!match || !match->data) {
++	sps_info = device_get_match_data(&pdev->dev);
++	if (!sps_info) {
+ 		dev_err(&pdev->dev, "unknown compatible or missing data\n");
+ 		return -EINVAL;
+ 	}
+ 
+-	sps_info = match->data;
+-
+ 	sps = devm_kzalloc(&pdev->dev,
+ 			   struct_size(sps, domains, sps_info->num_domains),
+ 			   GFP_KERNEL);
+diff --git a/drivers/pmdomain/imx/gpc.c b/drivers/pmdomain/imx/gpc.c
+index 90a8b2c0676f..114f44ca07dd 100644
+--- a/drivers/pmdomain/imx/gpc.c
++++ b/drivers/pmdomain/imx/gpc.c
+@@ -7,9 +7,10 @@
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/io.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_domain.h>
++#include <linux/property.h>
+ #include <linux/regmap.h>
+ #include <linux/regulator/consumer.h>
+ 
+@@ -403,9 +404,7 @@ static int imx_gpc_old_dt_init(struct device *dev, struct regmap *regmap,
+ 
+ static int imx_gpc_probe(struct platform_device *pdev)
+ {
+-	const struct of_device_id *of_id =
+-			of_match_device(imx_gpc_dt_ids, &pdev->dev);
+-	const struct imx_gpc_dt_data *of_id_data = of_id->data;
++	const struct imx_gpc_dt_data *of_id_data = device_get_match_data(&pdev->dev);
+ 	struct device_node *pgc_node;
+ 	struct regmap *regmap;
+ 	void __iomem *base;
+diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
+index d5d3ecb38283..9b76b62869d0 100644
+--- a/drivers/pmdomain/rockchip/pm-domains.c
++++ b/drivers/pmdomain/rockchip/pm-domains.c
+@@ -9,11 +9,13 @@
+ #include <linux/iopoll.h>
+ #include <linux/err.h>
+ #include <linux/mutex.h>
++#include <linux/platform_device.h>
+ #include <linux/pm_clock.h>
+ #include <linux/pm_domain.h>
++#include <linux/property.h>
++#include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <linux/of_clk.h>
+-#include <linux/of_platform.h>
+ #include <linux/clk.h>
+ #include <linux/regmap.h>
+ #include <linux/mfd/syscon.h>
+@@ -857,7 +859,6 @@ static int rockchip_pm_domain_probe(struct platform_device *pdev)
+ 	struct device_node *node;
+ 	struct device *parent;
+ 	struct rockchip_pmu *pmu;
+-	const struct of_device_id *match;
+ 	const struct rockchip_pmu_info *pmu_info;
+ 	int error;
+ 
+@@ -866,13 +867,7 @@ static int rockchip_pm_domain_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+ 
+-	match = of_match_device(dev->driver->of_match_table, dev);
+-	if (!match || !match->data) {
+-		dev_err(dev, "missing pmu data\n");
+-		return -EINVAL;
+-	}
+-
+-	pmu_info = match->data;
++	pmu_info = device_get_match_data(dev);
+ 
+ 	pmu = devm_kzalloc(dev,
+ 			   struct_size(pmu, domains, pmu_info->num_domains),
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.40.1
 
