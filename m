@@ -2,37 +2,37 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2AAF7BBC99
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 18:22:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DABBB7BBCD3
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 18:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231705AbjJFQWk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Oct 2023 12:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40612 "EHLO
+        id S232738AbjJFQe3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Oct 2023 12:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbjJFQWj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 12:22:39 -0400
+        with ESMTP id S232699AbjJFQe3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 12:34:29 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96971C5;
-        Fri,  6 Oct 2023 09:22:38 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24B26C433C7;
-        Fri,  6 Oct 2023 16:22:34 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0ACA6;
+        Fri,  6 Oct 2023 09:34:28 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DDA2C433C8;
+        Fri,  6 Oct 2023 16:34:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696609358;
-        bh=uBFklTtcxYYolSP1xeVJ+qDQ45NL1scnT8mlqYObgng=;
+        s=k20201202; t=1696610067;
+        bh=1HcmpHjvQ0eMD+nDrJ3xLK1sZ1Um3mNVlGOZd0rUGWQ=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ExHkbbykJhmkAWEtl2xsVh5Yo76a3FDW+JZz3ZIG02s8kMluIsuN/5EDTF69w5f8k
-         66sHcHImRQUNpqNfybn/aiRGQS8aO4zRJX11icoKdY3G0vxf1hGUmIB7J8jJwP1VFW
-         J6RiMlpSsUOx+ytr+9vCml3UXM0NvAao8T9JsK5CSOR4Q+qNmXZJ3c7IfNmw8288iB
-         aeE88wuvk5vpHH+LglqINv0iQp0pnoWfcbeU8rq5q+WVm9smsAHRCS71nL1TVXcz/z
-         N23QkA+PvjNxHgMIzx4U04r8DscZ47VUothGEX7AwvH9FvwxIfskAGSdCYI3Sr6tqb
-         Faua7ZQwTeMqg==
-Message-ID: <5f4dec5b-88a6-ee72-78a9-71c6b20b8da2@kernel.org>
-Date:   Sat, 7 Oct 2023 01:22:33 +0900
+        b=QbsK2TdiCNYvwi75XBByYOb4fM1yAFUGIh/CljHhZghz5tbhcaeeFJFq/wT2B5xhk
+         dhjDraRzwOrPDbsp75VhI7amEg0spNerkdLwD3TA12F21eVcW9K806vcdDqeFsOX5S
+         yuLHV8etb9TczUBgWU1ROsWiqy01mvoXj3DdmN9lbv4yhfU/g75GUkRYpu/Qi6yu/n
+         LAZwS7N+cWu7mYcU48aAHB4k3iexxzC3ICN7B1hU/Clkr2rFna7EXq5ZUrxpyRU7iM
+         VLW00Ol305cyMMBSyprYOJ9NtLyEJ+J16BdpD5eIog2rUfn5TCfgCbcDgfeh9kmfn5
+         k0zGTUcaXEobg==
+Message-ID: <0b4adfee-b559-aa87-93c3-7591faf0dabc@kernel.org>
+Date:   Sat, 7 Oct 2023 01:34:22 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH v7 04/26] PM / devfreq: rockchip-dfi: Add SoC specific
- init function
+Subject: Re: [PATCH v7 05/26] PM / devfreq: rockchip-dfi: dfi store raw values
+ in counter struct
 Content-Language: en-US
 To:     Sascha Hauer <s.hauer@pengutronix.de>,
         linux-rockchip@lists.infradead.org
@@ -48,11 +48,12 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
 References: <20230704093242.583575-1-s.hauer@pengutronix.de>
- <20230704093242.583575-5-s.hauer@pengutronix.de>
+ <20230704093242.583575-6-s.hauer@pengutronix.de>
 From:   Chanwoo Choi <chanwoo@kernel.org>
-In-Reply-To: <20230704093242.583575-5-s.hauer@pengutronix.de>
+In-Reply-To: <20230704093242.583575-6-s.hauer@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -66,131 +67,42 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 23. 7. 4. 18:32, Sascha Hauer wrote:
-> Move the RK3399 specifics to a SoC specific init function to make
-> the way free for supporting other SoCs later.
+> When adding perf support to the DFI driver the perf part will
+> need the raw counter values, so move the fixed * 4 factor to
+> rockchip_dfi_get_event().
 > 
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
 > ---
-> 
-> Notes:
->     Changes since v4:
->     - use of_device_get_match_data()
->     - use a callback rather than a struct type as driver data
-> 
->  drivers/devfreq/event/rockchip-dfi.c | 48 +++++++++++++++++++---------
->  1 file changed, 33 insertions(+), 15 deletions(-)
+>  drivers/devfreq/event/rockchip-dfi.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event/rockchip-dfi.c
-> index e19e5acaa362c..6b1ef29df7048 100644
+> index 6b1ef29df7048..680f629da64fc 100644
 > --- a/drivers/devfreq/event/rockchip-dfi.c
 > +++ b/drivers/devfreq/event/rockchip-dfi.c
-> @@ -17,6 +17,7 @@
->  #include <linux/slab.h>
->  #include <linux/list.h>
->  #include <linux/of.h>
-> +#include <linux/of_device.h>
+> @@ -97,7 +97,7 @@ static int rockchip_dfi_get_busier_ch(struct devfreq_event_dev *edev)
+>  	/* Find out which channel is busier */
+>  	for (i = 0; i < RK3399_DMC_NUM_CH; i++) {
+>  		dfi->ch_usage[i].access = readl_relaxed(dfi_regs +
+> -				DDRMON_CH0_DFI_ACCESS_NUM + i * 20) * 4;
+> +				DDRMON_CH0_DFI_ACCESS_NUM + i * 20);
+>  		dfi->ch_usage[i].total = readl_relaxed(dfi_regs +
+>  				DDRMON_CH0_COUNT_NUM + i * 20);
+>  		tmp = dfi->ch_usage[i].access;
+> @@ -149,7 +149,7 @@ static int rockchip_dfi_get_event(struct devfreq_event_dev *edev,
 >  
->  #include <soc/rockchip/rk3399_grf.h>
+>  	busier_ch = rockchip_dfi_get_busier_ch(edev);
 >  
-> @@ -55,27 +56,21 @@ struct rockchip_dfi {
->  	void __iomem *regs;
->  	struct regmap *regmap_pmu;
->  	struct clk *clk;
-> +	u32 ddr_type;
->  };
+> -	edata->load_count = dfi->ch_usage[busier_ch].access;
+> +	edata->load_count = dfi->ch_usage[busier_ch].access * 4;
+>  	edata->total_count = dfi->ch_usage[busier_ch].total;
 >  
->  static void rockchip_dfi_start_hardware_counter(struct devfreq_event_dev *edev)
->  {
->  	struct rockchip_dfi *dfi = devfreq_event_get_drvdata(edev);
->  	void __iomem *dfi_regs = dfi->regs;
-> -	u32 val;
-> -	u32 ddr_type;
-> -
-> -	/* get ddr type */
-> -	regmap_read(dfi->regmap_pmu, RK3399_PMUGRF_OS_REG2, &val);
-> -	ddr_type = (val >> RK3399_PMUGRF_DDRTYPE_SHIFT) &
-> -		    RK3399_PMUGRF_DDRTYPE_MASK;
->  
->  	/* clear DDRMON_CTRL setting */
->  	writel_relaxed(CLR_DDRMON_CTRL, dfi_regs + DDRMON_CTRL);
->  
->  	/* set ddr type to dfi */
-> -	if (ddr_type == RK3399_PMUGRF_DDRTYPE_LPDDR3)
-> +	if (dfi->ddr_type == RK3399_PMUGRF_DDRTYPE_LPDDR3)
->  		writel_relaxed(LPDDR3_EN, dfi_regs + DDRMON_CTRL);
-> -	else if (ddr_type == RK3399_PMUGRF_DDRTYPE_LPDDR4)
-> +	else if (dfi->ddr_type == RK3399_PMUGRF_DDRTYPE_LPDDR4)
->  		writel_relaxed(LPDDR4_EN, dfi_regs + DDRMON_CTRL);
->  
->  	/* enable count, use software mode */
-> @@ -167,8 +162,26 @@ static const struct devfreq_event_ops rockchip_dfi_ops = {
->  	.set_event = rockchip_dfi_set_event,
->  };
->  
-> +static int rk3399_dfi_init(struct rockchip_dfi *dfi)
-> +{
-> +	struct regmap *regmap_pmu = dfi->regmap_pmu;
-> +	u32 val;
-> +
-> +	dfi->clk = devm_clk_get(dfi->dev, "pclk_ddr_mon");
-> +	if (IS_ERR(dfi->clk))
-> +		return dev_err_probe(dfi->dev, PTR_ERR(dfi->clk),
-> +				     "Cannot get the clk pclk_ddr_mon\n");
-> +
-> +	/* get ddr type */
-> +	regmap_read(regmap_pmu, RK3399_PMUGRF_OS_REG2, &val);
-> +	dfi->ddr_type = (val >> RK3399_PMUGRF_DDRTYPE_SHIFT) &
-> +			RK3399_PMUGRF_DDRTYPE_MASK;
-> +
-> +	return 0;
-> +};
-> +
->  static const struct of_device_id rockchip_dfi_id_match[] = {
-> -	{ .compatible = "rockchip,rk3399-dfi" },
-> +	{ .compatible = "rockchip,rk3399-dfi", .data = rk3399_dfi_init },
->  	{ },
->  };
->  MODULE_DEVICE_TABLE(of, rockchip_dfi_id_match);
-> @@ -179,6 +192,12 @@ static int rockchip_dfi_probe(struct platform_device *pdev)
->  	struct rockchip_dfi *dfi;
->  	struct devfreq_event_desc *desc;
->  	struct device_node *np = pdev->dev.of_node, *node;
-> +	int (*soc_init)(struct rockchip_dfi *dfi);
-> +	int ret;
-> +
-> +	soc_init = of_device_get_match_data(&pdev->dev);
-> +	if (!soc_init)
-> +		return -EINVAL;
->  
->  	dfi = devm_kzalloc(dev, sizeof(*dfi), GFP_KERNEL);
->  	if (!dfi)
-> @@ -188,11 +207,6 @@ static int rockchip_dfi_probe(struct platform_device *pdev)
->  	if (IS_ERR(dfi->regs))
->  		return PTR_ERR(dfi->regs);
->  
-> -	dfi->clk = devm_clk_get(dev, "pclk_ddr_mon");
-> -	if (IS_ERR(dfi->clk))
-> -		return dev_err_probe(dev, PTR_ERR(dfi->clk),
-> -				     "Cannot get the clk pclk_ddr_mon\n");
-> -
->  	node = of_parse_phandle(np, "rockchip,pmu", 0);
->  	if (!node)
->  		return dev_err_probe(&pdev->dev, -ENODEV, "Can't find pmu_grf registers\n");
-> @@ -209,6 +223,10 @@ static int rockchip_dfi_probe(struct platform_device *pdev)
->  	desc->driver_data = dfi;
->  	desc->name = np->name;
->  
-> +	ret = soc_init(dfi);
-> +	if (ret)
-> +		return ret;
-> +
->  	dfi->edev = devm_devfreq_event_add_edev(&pdev->dev, desc);
->  	if (IS_ERR(dfi->edev)) {
->  		dev_err(&pdev->dev,
-
+>  	return 0;
 
 Applied it. Thanks.
+
 -- 
 Best Regards,
 Samsung Electronics
