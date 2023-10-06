@@ -2,61 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CFC97BBE53
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 20:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DDBB7BBE55
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 20:05:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233173AbjJFSFM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Oct 2023 14:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
+        id S233144AbjJFSFQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Oct 2023 14:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233165AbjJFSFL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 14:05:11 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6DECE;
-        Fri,  6 Oct 2023 11:05:10 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1c45c45efeeso1439035ad.0;
-        Fri, 06 Oct 2023 11:05:10 -0700 (PDT)
+        with ESMTP id S233165AbjJFSFP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 14:05:15 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D5CC6;
+        Fri,  6 Oct 2023 11:05:14 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1c746bc3bceso4074715ad.1;
+        Fri, 06 Oct 2023 11:05:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696615510; x=1697220310; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1696615513; x=1697220313; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FXyPDavHOtQ7HLLH2RqJNaI3/l9BPsuhohNmiySwoOg=;
-        b=i9d8EwqHSUuazqB0SGZ4P9g8bUdaE6MJJfcRHLUi/t54gh3XspZS/FsGR8q4gRxnib
-         ewLR7ShkwhgX0cRvnm8IEyfD483z8m2HaoD+xp0bdyjAFN7/4PErytq8OxrhM8Ur4R9R
-         4tjqiNVttigVYwyvQROGYdpq1zYqu7btsw1cLoo6Pe0gicLC2Al7LAyit2si9o8rHS6a
-         5aZ2PK8xbsPrd0SZ8n96BLohokSSvCxiLCmU1iG51U2grNhjX/ZeYBejkepfHPNQZ8cN
-         1azewDAuC54p8Rt9qWcu+r1kDxmspcVVQIyLwhqcQYcSDEPP7rZRbGGr7kI4OXJXDULI
-         1OMg==
+        bh=9GzLt7eqjSCCnRTgmtF1m2Nl7kCjjeUWS02UJrHNOb4=;
+        b=IAyRYkOB3ZjINQMESzouL9O0XgQTk5YP8DxT6Z0iEfvnGAFqRjTBLtmqR6Lg9onik9
+         kpE1rKjq2fTdcFEx9CaGsPkA/Dv9S79+biP0YO0QDGm3OPUTzZX1DaIQVkqq2nkXwyvc
+         2ZUUdSKHgJlqhgj8e8RUiKsUtZNvg4Ac4oed6fOQCFUUIstTHnKU2FTIoQFsHSNSU8+i
+         HWhHOFPVg5KUiWYITjdjASDfJAebrMVuSZqwwcdwpeE/YmD1yy4d7kUcn8zfSgXPC3hk
+         S6F0AZwglQv2TvspquotNDCQF2AqxfIazxSoYS5vN8gZ/6og63NwrMdhNPYk8nz8mkde
+         z5EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696615510; x=1697220310;
+        d=1e100.net; s=20230601; t=1696615513; x=1697220313;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FXyPDavHOtQ7HLLH2RqJNaI3/l9BPsuhohNmiySwoOg=;
-        b=EW1gpGgieU/tdvxI92Ra5us2IFh+KnRQiYFMG1Iy54yywXB+GtdwQmKSf8/p1Mvlx2
-         9uIrZz5+wsz/gtN5+iRGfxPJi0BDXZ+4gu5CvPj3h0WfQjGG58jDVHLuUqL2tZ3fo5yb
-         oeH3EBl+mGA8lkNprXVYLgImpp+mmyCgkTe549/LBZ8uw9yvXDVaVV3xmLfZmW0ayfNq
-         LM8rP9TYuwDhxDz96iQ6Cr0litToySsy/ublyWjZqV2KARjb0VTb65qQaznVXxoEKYie
-         womEyC/sUsHz80QPMIjIDvR6GlamYEz5aRambRze/zsR2QgNytKSknEFwUw/5/32PX27
-         uB0w==
-X-Gm-Message-State: AOJu0YyKb/4M9MLM63BzLCiRLStmlAebsDm202CTCANRSR7D2oau6pQL
-        1l0C5oLJczB+/SJ1Iv24w2w=
-X-Google-Smtp-Source: AGHT+IG+WP0v8GL/FBPzLrUdKaQ7CC6xmIrILrkXK15KSSjE3UfRZRRlK4drATBHwMiY8mudNTpvUA==
-X-Received: by 2002:a17:902:e5d2:b0:1c4:1cd3:8062 with SMTP id u18-20020a170902e5d200b001c41cd38062mr9522994plf.2.1696615509539;
-        Fri, 06 Oct 2023 11:05:09 -0700 (PDT)
+        bh=9GzLt7eqjSCCnRTgmtF1m2Nl7kCjjeUWS02UJrHNOb4=;
+        b=Mimu1/6k2100LZA7xaCLmO35/s7dHXBbnZd59BcyWDMW7Xh/pW5ZdDGlHwqusFcPxA
+         RgNalUOk31rGjPKhoODv5AXioKJAhqwz1CA0/ct8eMhrG1AQKrHiVjXc2jAF/HyeSz/p
+         CkPDzb73vMeXH+JLvLW7x248y0z+Ys+xnF0rVYo068sTot37iwuA6zuXjB6hDGKtQ7/0
+         LjrLrPzg0UHIW09zBQfRC4whAHx3uppW24jUfNOsKiCnrleAgNkiV3LYgqwIvgitS7HV
+         bNwf31PINljj70l9zJdGgHxezH5IfrLX9wipfCoql+dNRB0qNtHrHP4TECbj67T1rxEK
+         YNPQ==
+X-Gm-Message-State: AOJu0YxMmfkPc7+/zOkphRyleB3bYZ+L7AO32H/Rf3+Yb+E3L2e1x+yU
+        P05T5OQxIo0y9wIy7nppk5T5UQoOVHY=
+X-Google-Smtp-Source: AGHT+IHAjDxfF1dQpZF1YV7RdnNH3OLMGhipF0xm8+hRiswMOrfbOBgqkz6p6+vxaIsfd4wGO9P1Pw==
+X-Received: by 2002:a17:902:ec88:b0:1c0:bf60:ba4f with SMTP id x8-20020a170902ec8800b001c0bf60ba4fmr9297996plg.4.1696615512909;
+        Fri, 06 Oct 2023 11:05:12 -0700 (PDT)
 Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:d018:9da6:2e69:1658])
-        by smtp.gmail.com with ESMTPSA id f11-20020a17090274cb00b001bb1f0605b2sm4165355plt.214.2023.10.06.11.05.06
+        by smtp.gmail.com with ESMTPSA id f11-20020a17090274cb00b001bb1f0605b2sm4165355plt.214.2023.10.06.11.05.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Oct 2023 11:05:09 -0700 (PDT)
+        Fri, 06 Oct 2023 11:05:12 -0700 (PDT)
 From:   Fabio Estevam <festevam@gmail.com>
 To:     daniel.lezcano@linaro.org
 Cc:     rafael@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         robh+dt@kernel.org, conor+dt@kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>
-Subject: [PATCH v10 3/4] reboot: Introduce thermal_zone_device_critical_reboot()
-Date:   Fri,  6 Oct 2023 15:04:52 -0300
-Message-Id: <20231006180453.2903342-3-festevam@gmail.com>
+Subject: [PATCH v10 4/4] thermal: thermal_of: Allow rebooting after critical temp
+Date:   Fri,  6 Oct 2023 15:04:53 -0300
+Message-Id: <20231006180453.2903342-4-festevam@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231006180453.2903342-1-festevam@gmail.com>
 References: <20231006180453.2903342-1-festevam@gmail.com>
@@ -74,126 +74,64 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Fabio Estevam <festevam@denx.de>
 
-Introduce thermal_zone_device_critical_reboot() to trigger an
-emergency reboot.
+Currently, the default mechanism is to trigger a shutdown after the
+critical temperature is reached.
 
-It is a counterpart of thermal_zone_device_critical() with the
-difference that it will force a reboot instead of shutdown.
+In some embedded cases, such behavior does not suit well, as the board may
+be unattended in the field and rebooting may be a better approach.
 
-The motivation for doing this is to allow the thermal subystem
-to trigger a reboot when the temperature reaches the critical
-temperature.
+The bootloader may also check the temperature and only allow the boot to
+proceed when the temperature is below a certain threshold.
+
+Introduce support for allowing a reboot to be triggered after the
+critical temperature is reached.
+
+If the "critical-action" devicetree property is not found, fall back to
+the shutdown action to preserve the existing default behavior.
+
+If a custom ops->critical exists, then it takes preference over
+critical-actions.
+
+Tested on a i.MX8MM board with the following devicetree changes:
+
+	thermal-zones {
+		cpu-thermal {
+			critical-action = "reboot";
+		};
+	};
 
 Signed-off-by: Fabio Estevam <festevam@denx.de>
 ---
 Changes since v9:
-- Make it smaller after introducing the previous patch. (Daniel)
- drivers/thermal/thermal_core.c |  7 +++++++
- include/linux/reboot.h         |  5 +++++
- include/linux/thermal.h        |  1 +
- kernel/reboot.c                | 27 ++++++++++++++++-----------
- 4 files changed, 29 insertions(+), 11 deletions(-)
+- Fixed a typo in the Subject.
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 3184e9f2eadd..b92795529a53 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -326,6 +326,8 @@ static void thermal_zone_device_halt(struct thermal_zone_device *tz, bool shutdo
+ drivers/thermal/thermal_of.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index 1e0655b63259..4d6c22e0ed85 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -475,6 +475,7 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
+ 	struct thermal_zone_params tzp = {};
+ 	struct thermal_zone_device_ops *of_ops;
+ 	struct device_node *np;
++	const char *action;
+ 	int delay, pdelay;
+ 	int ntrips, mask;
+ 	int ret;
+@@ -511,6 +512,11 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
  
- 	if (shutdown)
- 		hw_protection_shutdown(msg, poweroff_delay_ms);
-+	else
-+		hw_protection_reboot(msg, poweroff_delay_ms);
- }
+ 	mask = GENMASK_ULL((ntrips) - 1, 0);
  
- void thermal_zone_device_critical(struct thermal_zone_device *tz)
-@@ -334,6 +336,11 @@ void thermal_zone_device_critical(struct thermal_zone_device *tz)
- }
- EXPORT_SYMBOL(thermal_zone_device_critical);
- 
-+void thermal_zone_device_critical_reboot(struct thermal_zone_device *tz)
-+{
-+	thermal_zone_device_halt(tz, false);
-+}
++	ret = of_property_read_string(np, "critical-action", &action);
++	if (!ret)
++		if (!of_ops->critical && !strcasecmp(action, "reboot"))
++			of_ops->critical = thermal_zone_device_critical_reboot;
 +
- static void handle_critical_trips(struct thermal_zone_device *tz,
- 				  int trip, int trip_temp, enum thermal_trip_type trip_type)
- {
-diff --git a/include/linux/reboot.h b/include/linux/reboot.h
-index 4586c663884e..abcdde4df697 100644
---- a/include/linux/reboot.h
-+++ b/include/linux/reboot.h
-@@ -179,6 +179,11 @@ extern void orderly_poweroff(bool force);
- extern void orderly_reboot(void);
- void __hw_protection_shutdown(const char *reason, int ms_until_forced, bool shutdown);
- 
-+static inline void hw_protection_reboot(const char *reason, int ms_until_forced)
-+{
-+	__hw_protection_shutdown(reason, ms_until_forced, false);
-+}
-+
- static inline void hw_protection_shutdown(const char *reason, int ms_until_forced)
- {
- 	__hw_protection_shutdown(reason, ms_until_forced, true);
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 6710a4ace992..a026ce390a87 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -361,6 +361,7 @@ int thermal_zone_get_offset(struct thermal_zone_device *tz);
- int thermal_zone_device_enable(struct thermal_zone_device *tz);
- int thermal_zone_device_disable(struct thermal_zone_device *tz);
- void thermal_zone_device_critical(struct thermal_zone_device *tz);
-+void thermal_zone_device_critical_reboot(struct thermal_zone_device *tz);
- #else
- static inline struct thermal_zone_device *thermal_zone_device_register_with_trips(
- 					const char *type,
-diff --git a/kernel/reboot.c b/kernel/reboot.c
-index b236c4c06bb3..7bc01b38629a 100644
---- a/kernel/reboot.c
-+++ b/kernel/reboot.c
-@@ -957,19 +957,22 @@ static void hw_failure_emergency_poweroff(int poweroff_delay_ms)
- }
- 
- /**
-- * __hw_protection_shutdown - Trigger an emergency system poweroff
-+ * __hw_protection_shutdown - Trigger an emergency system shutdown or reboot
-  *
-- * @reason:		Reason of emergency shutdown to be printed.
-- * @ms_until_forced:	Time to wait for orderly shutdown before tiggering a
-- *			forced shudown. Negative value disables the forced
-- *			shutdown.
-+ * @reason:		Reason of emergency shutdown or reboot to be printed.
-+ * @ms_until_forced:	Time to wait for orderly shutdown or reboot before
-+ *			triggering it. Negative value disables the forced
-+ *			shutdown or reboot.
-+ * @shutdown:		If true, indicates that a shutdown will happen
-+ *			after the critical tempeature is reached.
-+ *			If false, indicates that a reboot will happen
-+ *			after the critical tempeature is reached.
-  *
-- * Initiate an emergency system shutdown in order to protect hardware from
-- * further damage. Usage examples include a thermal protection or a voltage or
-- * current regulator failures.
-- * NOTE: The request is ignored if protection shutdown is already pending even
-- * if the previous request has given a large timeout for forced shutdown.
-- * Can be called from any context.
-+ * Initiate an emergency system shutdown or reboot in order to protect
-+ * hardware from further damage. Usage examples include a thermal protection.
-+ * NOTE: The request is ignored if protection shutdown or reboot is already
-+ * pending even if the previous request has given a large timeout for forced
-+ * shutdown/reboot.
-  */
- void __hw_protection_shutdown(const char *reason, int ms_until_forced, bool shutdown)
- {
-@@ -988,6 +991,8 @@ void __hw_protection_shutdown(const char *reason, int ms_until_forced, bool shut
- 	hw_failure_emergency_poweroff(ms_until_forced);
- 	if (shutdown)
- 		orderly_poweroff(true);
-+	else
-+		orderly_reboot();
- }
- 
- static int __init reboot_setup(char *str)
+ 	tz = thermal_zone_device_register_with_trips(np->name, trips, ntrips,
+ 						     mask, data, of_ops, &tzp,
+ 						     pdelay, delay);
 -- 
 2.34.1
 
