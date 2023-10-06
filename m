@@ -2,144 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FC57BBE25
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 19:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD207BBE50
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Oct 2023 20:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233005AbjJFR5b convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 6 Oct 2023 13:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46320 "EHLO
+        id S233161AbjJFSFH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Oct 2023 14:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233094AbjJFR5b (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 13:57:31 -0400
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A7FC6;
-        Fri,  6 Oct 2023 10:57:29 -0700 (PDT)
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6c6591642f2so517215a34.1;
-        Fri, 06 Oct 2023 10:57:29 -0700 (PDT)
+        with ESMTP id S233088AbjJFSFG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Oct 2023 14:05:06 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C22C6;
+        Fri,  6 Oct 2023 11:05:04 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1c76ef40e84so4030915ad.0;
+        Fri, 06 Oct 2023 11:05:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696615503; x=1697220303; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hk+HMYmdsBSiI3wko9Q700ZyaXdyPZJ6QDWD9D8aPsE=;
+        b=K9Adg8vA9t3KF6YnAlHcmvze4uzQeE8WNbQR9jcEVCgI3Gg9g6WcrkVdSBnLhy8LPd
+         e6iIeH3FP1Thy11jhLYEZSnQUdaJWTM+fqE2PaDojgVKsT6zGL6XXXV8kMXCAqduGGLL
+         2jja62LPL3MicR9P/yqZjxYWF4fVaOjhbsKe6NG2AjwDXuYoy8ZeyVGK7CSm5VnylsKI
+         8jlHICXJX5/B7+47eUKb19g6YQylyUN2VR4M4ADeCKXSYb5tps8ZsThJ+aV/iEji1JwL
+         An8iBSEpq5skaGBZ04xR731In5I11YaJ6hL3m76OviC6rzH/VqpKNQ2x885VhO6XFmt3
+         DXhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696615049; x=1697219849;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=d+dhIoEDM1PenE6vLFoSqXGSc7iM/SVLbgtY4WYn6B4=;
-        b=QBoh6KbzE2wjS8YSVpxqkRvuj5Bc/XFMYoHfwzqI9DVAp6icHl/H0kMcdjpI4A6FFO
-         3K43EEJ3TmzLzdtfkXwiS1SZ0BOAFfWGeE8u13tMaT0m9jIXBBNWdWirT8Ox70LCDIg3
-         hfXaDpuqDl3YsqPfpC0+19Hc3pZX7gluzuz+fZVuhPQ1t0zh+htCZCk93Mu9Ws+mm9WM
-         Mfs9mg85b6h8TP7dlnm92Qr26iCEV7sJ6ExwhBh1h/AfoA4fIk2g+Vs/XgTvcf6AMFas
-         fNWZTSMudgHN1XCeHRGDU2rTi4Vwfjeadvo4RHtLzgiT4/xCtUa3sFEJqJAwI/Jlm014
-         oYCw==
-X-Gm-Message-State: AOJu0Yzak7bklGW1pViDA9chAaJL/9DRZT6LZKsyi2xmCwZ1j9/xD+BW
-        Pka28XJ2kpP6atMvBqcYeWIJoNzOVCywuSSk/Dw=
-X-Google-Smtp-Source: AGHT+IFQiP2+5fPGIBtxfCHPwHkFQVRVFSTgV7dwuQI3d0uucjF6cm31T6uWBAEa3xg0Xg59eK69Jb1nw5EWZV3fg2g=
-X-Received: by 2002:a4a:b807:0:b0:57b:3b64:7ea5 with SMTP id
- g7-20020a4ab807000000b0057b3b647ea5mr8048795oop.1.1696615048770; Fri, 06 Oct
- 2023 10:57:28 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1696615503; x=1697220303;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hk+HMYmdsBSiI3wko9Q700ZyaXdyPZJ6QDWD9D8aPsE=;
+        b=G1ZHSKmkEarkDUuvP+w1njNaC/C+RExliIX02t62qgBL2kK94DBlkiDlHzYN4sCJdj
+         mulUvHv9gIAojZXQoVeASdvkx4mdRH0UB4BbsoXNVceZ2AXDharuFncO6hAAGIHagR7s
+         YFhlV/ifUf6DLRxjEpze06uFuqP3oBrx7Bk4edyjOiSkC1QNbBLFUK+vUuFXYcWDZisw
+         jn4wcbLpB9P/RPSIJGWUp3Qy7JFUsWCuQRNZVMs+//u38kl6/j8KocgbqIu5dKVRQcdq
+         hhM1tH9xJ6v1aCph9NoLjnNDd0s8yJC6Wyql9QUH+UFt6XAnNuscNuI4Ndx/fbGU/QE4
+         1z9Q==
+X-Gm-Message-State: AOJu0YxLCCul0EbjsaZ7gCWMGKNzB7k9ETgVcLE5SBYHNotmW1QGHJz/
+        trFgU++DAQbNAxQk2VWG7Najal+At50=
+X-Google-Smtp-Source: AGHT+IHMT9wrw66+siRHGmq7PA4f3HQHS7miNS9pasTVAwUJXcnycWb+h8LEPFjQaBHOtVVDF4qUGw==
+X-Received: by 2002:a17:902:dacd:b0:1b3:d8ac:8db3 with SMTP id q13-20020a170902dacd00b001b3d8ac8db3mr9336899plx.6.1696615502715;
+        Fri, 06 Oct 2023 11:05:02 -0700 (PDT)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:d018:9da6:2e69:1658])
+        by smtp.gmail.com with ESMTPSA id f11-20020a17090274cb00b001bb1f0605b2sm4165355plt.214.2023.10.06.11.04.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Oct 2023 11:05:02 -0700 (PDT)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     daniel.lezcano@linaro.org
+Cc:     rafael@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, conor+dt@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v10 1/4] dt-bindings: thermal-zones: Document critical-action
+Date:   Fri,  6 Oct 2023 15:04:50 -0300
+Message-Id: <20231006180453.2903342-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20231004-hib_zero_bitmap_fix-v2-1-6a530b7b6e98@quicinc.com>
- <CADyq12ziGEpkpvLv9zg91Zpp-12GW1iLnXcT8LaMt48WiKaVMw@mail.gmail.com>
- <CAJZ5v0g8uBw6syXMC9p6BRn_E77wyUsvBOYX3dv1jwXU7k-uHA@mail.gmail.com> <ZSBCLE1VLxN-hdRD@FVFF77S0Q05N.cambridge.arm.com>
-In-Reply-To: <ZSBCLE1VLxN-hdRD@FVFF77S0Q05N.cambridge.arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 6 Oct 2023 19:57:17 +0200
-Message-ID: <CAJZ5v0jy3D13AERvPBRG+nzVupERB059zsvpb_hzcifA52=Vqw@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: hibernate: Fix a bug in copying the zero bitmap to
- safe pages
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        kernel@quicinc.com,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 6, 2023 at 7:21 PM Mark Rutland <mark.rutland@arm.com> wrote:
->
-> Hi Rafael,
->
-> On Wed, Oct 04, 2023 at 08:46:56PM +0200, Rafael J. Wysocki wrote:
-> > On Wed, Oct 4, 2023 at 2:19 PM Brian Geffon <bgeffon@google.com> wrote:
-> > >
-> > > On Wed, Oct 4, 2023 at 1:01 AM Pavankumar Kondeti
-> > > <quic_pkondeti@quicinc.com> wrote:
-> > > >
-> > > > The following crash is observed 100% of the time during resume from
-> > > > the hibernation on a x86 QEMU system.
-> > > >
-> > > > [   12.931887]  ? __die_body+0x1a/0x60
-> > > > [   12.932324]  ? page_fault_oops+0x156/0x420
-> > > > [   12.932824]  ? search_exception_tables+0x37/0x50
-> > > > [   12.933389]  ? fixup_exception+0x21/0x300
-> > > > [   12.933889]  ? exc_page_fault+0x69/0x150
-> > > > [   12.934371]  ? asm_exc_page_fault+0x26/0x30
-> > > > [   12.934869]  ? get_buffer.constprop.0+0xac/0x100
-> > > > [   12.935428]  snapshot_write_next+0x7c/0x9f0
-> > > > [   12.935929]  ? submit_bio_noacct_nocheck+0x2c2/0x370
-> > > > [   12.936530]  ? submit_bio_noacct+0x44/0x2c0
-> > > > [   12.937035]  ? hib_submit_io+0xa5/0x110
-> > > > [   12.937501]  load_image+0x83/0x1a0
-> > > > [   12.937919]  swsusp_read+0x17f/0x1d0
-> > > > [   12.938355]  ? create_basic_memory_bitmaps+0x1b7/0x240
-> > > > [   12.938967]  load_image_and_restore+0x45/0xc0
-> > > > [   12.939494]  software_resume+0x13c/0x180
-> > > > [   12.939994]  resume_store+0xa3/0x1d0
-> > > >
-> > > > The commit being fixed introduced a bug in copying the zero bitmap
-> > > > to safe pages. A temporary bitmap is allocated with PG_ANY flag in
-> > > > prepare_image() to make a copy of zero bitmap after the unsafe pages
-> > > > are marked. Freeing this temporary bitmap with PG_UNSAFE_KEEP later
-> > > > results in an inconsistent state of unsafe pages. Since free bit is
-> > > > left as is for this temporary bitmap after free, these pages are
-> > > > treated as unsafe pages when they are allocated again. This results
-> > > > in incorrect calculation of the number of pages pre-allocated for the
-> > > > image.
-> > > >
-> > > > nr_pages = (nr_zero_pages + nr_copy_pages) - nr_highmem - allocated_unsafe_pages;
-> > > >
-> > > > The allocate_unsafe_pages is estimated to be higher than the actual
-> > > > which results in running short of pages in safe_pages_list. Hence the
-> > > > crash is observed in get_buffer() due to NULL pointer access of
-> > > > safe_pages_list.
-> > > >
-> > > > Fix this issue by creating the temporary zero bitmap from safe pages
-> > > > (free bit not set) so that the corresponding free bits can be cleared while
-> > > > freeing this bitmap.
-> > > >
-> > > > Cc: stable <stable@kernel.org>
-> > > > Fixes: 005e8dddd497 ("PM: hibernate: don't store zero pages in the image file")
-> > > > Suggested-by:: Brian Geffon <bgeffon@google.com>
-> > > > Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-> > >
-> > > Reviewed-by: Brian Geffon <bgeffon@google.com>
-> >
-> > Applied as 6.7 material, but without the Cc: stable tag that is (a)
-> > invalid (there should be vger.kernel.org in the host part) and (b)
-> > unnecessary AFAICS.
->
-> Just to check, did you mean as v6.6 material?
+From: Fabio Estevam <festevam@denx.de>
 
-Yes, I did, sorry.
+Document the critical-action property to describe the thermal action
+the OS should perform after the critical temperature is reached.
 
-Actually, I've just sent a pull request with it.
+The possible values are "shutdown" and "reboot".
 
-> I'm consistently hitting this on real arm64 hardware with v6.6-rc*.
->
-> If this is v6.7 material, are we going to revert 005e8dddd497 for now?
->
-> I've tested the above patch atop v6.6-rc3, and it solves the problem for me, so
-> FWIW:
->
-> Tested-by: Mark Rutland <mark.rutland@arm.com>
+The motivation for introducing the critical-action property is that
+different systems may need different thermal actions when the critical
+temperature is reached.
 
-Thanks a lot for verifying this!  Alas, it is too late to add the tag ...
+For example, in a desktop PC, it is desired that a shutdown happens
+after the critical temperature is reached.
+
+However, in some embedded cases, such behavior does not suit well,
+as the board may be unattended in the field and rebooting may be a
+better approach.
+
+The bootloader may also benefit from this new property as it can check
+the SoC temperature and in case the temperature is above the critical
+point, it can trigger a shutdown or reboot accordingly.
+
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+Changes since v9:
+- Emphasize that critical-action should be used with care. (Daniel)
+
+ .../bindings/thermal/thermal-zones.yaml          | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+index 4f3acdc4dec0..f88fbafecb01 100644
+--- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
++++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+@@ -75,6 +75,22 @@ patternProperties:
+           framework and assumes that the thermal sensors in this zone
+           support interrupts.
+ 
++      critical-action:
++        $ref: /schemas/types.yaml#/definitions/string
++        description: |
++          The action the OS should perform after the critical temperature is reached.
++          By default the system will shutdown as a safe action to prevent damage
++          to the hardware, if the property is not set.
++          The shutdown action should be always the default and preferred one.
++          Choose 'reboot' with care, as the hardware may be in thermal stress,
++          thus leading to infinite reboots that may cause damage to the hardware.
++          Make sure the firmware/bootloader will act as the last resort and take
++          over the thermal control.
++
++        enum:
++          - shutdown
++          - reboot
++
+       thermal-sensors:
+         $ref: /schemas/types.yaml#/definitions/phandle-array
+         maxItems: 1
+-- 
+2.34.1
+
