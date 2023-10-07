@@ -2,150 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1365B7BC85B
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Oct 2023 16:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 783FA7BC904
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Oct 2023 18:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbjJGOh0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 7 Oct 2023 10:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53714 "EHLO
+        id S1344042AbjJGQM4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 7 Oct 2023 12:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbjJGOh0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 7 Oct 2023 10:37:26 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D476BBC
-        for <linux-pm@vger.kernel.org>; Sat,  7 Oct 2023 07:37:24 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-3226cc3e324so2986293f8f.3
-        for <linux-pm@vger.kernel.org>; Sat, 07 Oct 2023 07:37:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696689443; x=1697294243; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=R1n2aIFcmdHgTuvrTI5K1MdYMzE5yyw/35kE30f7idk=;
-        b=ARBmpMZ2CKbMgLAbKAWH2zMdFlooAdgJFs5ZitFsFwjCvHzBzTj5qvN4/zcqynrGS3
-         lCEzott0DFyY6hD0YH2vMJ0ZTbUhgXmeYSOaHJf6YdlmyzZFLma7VivOQlLD0gRZdFis
-         aMVKJVrSmdJeQq54Rh5fG0hGvcgkFvNbfvvhgJV3H0uw4E19i6LJkhQEClcqm3HLD5qN
-         6nq/toIA+8wdHqKn7z1jbGNLUq6Pe1lGIcnUnqUsmtiIC5D48ukyQlLLYRcVeiXkYt8Y
-         AHT/1mCRc+eWwcvpGW6losWsb/2LefkJvoyX5Jfx+MRCV9j+aYQzcZmrffWnwzalmYJm
-         eOdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696689443; x=1697294243;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R1n2aIFcmdHgTuvrTI5K1MdYMzE5yyw/35kE30f7idk=;
-        b=M+vLlG8V06BZGE+nzN34j7tjT0k7yt2neuBJkeCv67PcftOaw1IKKdgvnQBY02nvKf
-         P+c+w87nhYNvyCNQtq4AajbPbmWYw1aoxQNZ4IhYu6UtwQ2iYoQ1lSrkBxj6PStAXLg/
-         F+cTRnObVEBreNzz4FL2gsyA1AC8/QCr410QHmRjAS3likwpBf2FWGYGDyuDdMesCBuy
-         7E+MAE0rNfe7JOmn06g3hU40DHMdW0YLKC7HSm8TECVuEq/KxADh9PhLxKtB9ULoeFk+
-         d4oO5zQOEI4IcU56C6K60cRSnieX8B/qrLFomEZnmCF9ga5BBSnKv9bh3PVclF8MNblR
-         pV2Q==
-X-Gm-Message-State: AOJu0Yymjrx6BO9j5V0ek30OC9Wt4zdUPTTzU2DGNxLipgWIzrTMLrSc
-        5k7Kp0iRIcdYBHdDSDpiGWWnWw==
-X-Google-Smtp-Source: AGHT+IGgs0++LBuIMfFPJS2l/rwKjRKyHXiI7lepN31HtemOIjYtuTMjbVH6CgYMz2Ed0CfJ/QDF9g==
-X-Received: by 2002:a05:6000:1085:b0:323:35f7:ccfd with SMTP id y5-20020a056000108500b0032335f7ccfdmr9641571wrw.62.1696689442774;
-        Sat, 07 Oct 2023 07:37:22 -0700 (PDT)
-Received: from [192.168.1.197] (5-157-101-10.dyn.eolo.it. [5.157.101.10])
-        by smtp.gmail.com with ESMTPSA id l34-20020a05600c1d2200b003fef5e76f2csm3829354wms.0.2023.10.07.07.37.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 Oct 2023 07:37:22 -0700 (PDT)
-Message-ID: <1e9d6388-737b-456a-b140-1c1c636cd4fa@linaro.org>
-Date:   Sat, 7 Oct 2023 16:37:20 +0200
+        with ESMTP id S1343992AbjJGQMz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 7 Oct 2023 12:12:55 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F35BA;
+        Sat,  7 Oct 2023 09:12:54 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id DF3613200A1B;
+        Sat,  7 Oct 2023 12:12:50 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Sat, 07 Oct 2023 12:12:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1696695170; x=1696781570; bh=dF
+        Y5rJ9ss5jREpKWCyTg9PCxV3WUDkMb9tB5voCmoG0=; b=S1boMD8Z9oJuyRcCW4
+        LU/yIsjhtK9iB7xt0GNQEzT3TRgDaUqXRVrUeECY02XuVFgmimAnPvg07ORRgugn
+        lAuyRf+bTXrGc+lO4SngO4VjvJ22NlKzFuTJK3hK42633wIaEJfS+CyeMa0XuoB2
+        CZejm+SUusEI1vtqwgxyArfpszS4UA89UmTXR1E6Ez7jG1e52Cj0PrpVSCWCSY3X
+        0T0TK/e3WiuL+HP8OdOcv2Z9hByfOlnWZkyzJ3X3XL5h2UV39YsJZnFN4WMMWc/E
+        xbx5Q5I53tBDYkzEICHjkGfM7ewLpFNln38hvQSMSUq9U3QouXB8sMN9BVb5hOCs
+        W/1g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1696695170; x=1696781570; bh=dFY5rJ9ss5jRE
+        pKWCyTg9PCxV3WUDkMb9tB5voCmoG0=; b=h8lmJgtWkUjaW8sU87IPOMR5cslQd
+        sovt+Q+onaWG6sBVGQyGmciGn8fRC0n4JRi/r3EasrFvqgLEkj1e55ywlrmzYh3o
+        CL/EYIZ6e9YCngmVGPYayTEMH4Bd02SqtMs7GN5bYeizRnZA7yM4DMKKHVo/6pmn
+        8eKFR7WMrzqZEGtbdXGRKv9/uNOlB3FJ810IxhmYG2soaqZ7k2nR3ytqg3T/iwo3
+        Has6mDCVD4UcCu26q4h5j4qTaN185a0iLgMirHx14nIgVwAG284ve2k+3dI6mJc5
+        s/egJ6YKvVK2/8gSYzFF739eDaCB0rStsUC6Brl9S4sO+RL8Q/dgyT8Fw==
+X-ME-Sender: <xms:goMhZc3eks1SdcKfIx2NfB7qJriGEUus_HmJ_ykyMLaHx6Uqen62BQ>
+    <xme:goMhZXEnp-4CE2zl8VrfaJxUamLeULh_4yLrjSp6r5ttXnWE3dW42rfT7niRuljQB
+    sG_Jz6IG1F85Q>
+X-ME-Received: <xmr:goMhZU6pJxxyGaMtDDs1T42lf95ScmhfDv-O3LN3VaCWi3IKN_ybqvLsvbLRB0QsZo-OCqpoCJa3z1utergIzPKqM51u0KLQ-w8CFw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrgeelgdelkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
+    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:goMhZV2Wypu8vkiYQVco4ynn19GahgT0KofVdArNVAy2ZDaibIHRBQ>
+    <xmx:goMhZfFXWdhGQ8Ysi9krchLG2ZEj-e9kVnUijUP5IUgi8Pt_8jT0kg>
+    <xmx:goMhZe-TH_RyhNJu7NN6r5Pc1O3GGhLjw4Yr4OpYaf12Wcvmia6mQQ>
+    <xmx:goMhZVaBa6T4LP6zy-qxzM7T1NEIFf_1zs8hJqzAXQpxnyKdM981jQ>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 7 Oct 2023 12:12:49 -0400 (EDT)
+Date:   Sat, 7 Oct 2023 18:12:38 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Hauke Mehrtens <hauke@hauke-m.de>
+Cc:     stable@vger.kernel.org, ivan@cloudflare.com,
+        skhan@linuxfoundation.org, linux-pm@vger.kernel.org
+Subject: Re: Backport "cpupower: add Makefile dependencies for install
+ targets" to stable
+Message-ID: <2023100731-lurk-outsider-4e5e@gregkh>
+References: <615ae9bd-f220-4189-aca2-7aa946444043@hauke-m.de>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] thermal: Remove Amit Kucheria from MAINTAINERS
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
-        Amit Kucheria <amitk@kernel.org>
-References: <5725069.DvuYhMxLoT@kreacher>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzTRLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+wsGUBBMBCgA+FiEE
- m9B+DgxR+NWWd7dUG5NDfTtBYpsFAmI+BxMCGwMFCRRfreEFCwkIBwIGFQoJCAsCBBYCAwEC
- HgECF4AACgkQG5NDfTtBYptgbhAAjAGunRoOTduBeC7V6GGOQMYIT5n3OuDSzG1oZyM4kyvO
- XeodvvYv49/ng473E8ZFhXfrre+c1olbr1A8pnz9vKVQs9JGVa6wwr/6ddH7/yvcaCQnHRPK
- mnXyP2BViBlyDWQ71UC3N12YCoHE2cVmfrn4JeyK/gHCvcW3hUW4i5rMd5M5WZAeiJj3rvYh
- v8WMKDJOtZFXxwaYGbvFJNDdvdTHc2x2fGaWwmXMJn2xs1ZyFAeHQvrp49mS6PBQZzcx0XL5
- cU9ZjhzOZDn6Apv45/C/lUJvPc3lo/pr5cmlOvPq1AsP6/xRXsEFX/SdvdxJ8w9KtGaxdJuf
- rpzLQ8Ht+H0lY2On1duYhmro8WglOypHy+TusYrDEry2qDNlc/bApQKtd9uqyDZ+rx8bGxyY
- qBP6bvsQx5YACI4p8R0J43tSqWwJTP/R5oPRQW2O1Ye1DEcdeyzZfifrQz58aoZrVQq+innR
- aDwu8qDB5UgmMQ7cjDSeAQABdghq7pqrA4P8lkA7qTG+aw8Z21OoAyZdUNm8NWJoQy8m4nUP
- gmeeQPRc0vjp5JkYPgTqwf08cluqO6vQuYL2YmwVBIbO7cE7LNGkPDA3RYMu+zPY9UUi/ln5
- dcKuEStFZ5eqVyqVoZ9eu3RTCGIXAHe1NcfcMT9HT0DPp3+ieTxFx6RjY3kYTGLOwU0EVUNc
- NAEQAM2StBhJERQvgPcbCzjokShn0cRA4q2SvCOvOXD+0KapXMRFE+/PZeDyfv4dEKuCqeh0
- hihSHlaxTzg3TcqUu54w2xYskG8Fq5tg3gm4kh1Gvh1LijIXX99ABA8eHxOGmLPRIBkXHqJY
- oHtCvPc6sYKNM9xbp6I4yF56xVLmHGJ61KaWKf5KKWYgA9kfHufbja7qR0c6H79LIsiYqf92
- H1HNq1WlQpu/fh4/XAAaV1axHFt/dY/2kU05tLMj8GjeQDz1fHas7augL4argt4e+jum3Nwt
- yupodQBxncKAUbzwKcDrPqUFmfRbJ7ARw8491xQHZDsP82JRj4cOJX32sBg8nO2N5OsFJOcd
- 5IE9v6qfllkZDAh1Rb1h6DFYq9dcdPAHl4zOj9EHq99/CpyccOh7SrtWDNFFknCmLpowhct9
- 5ZnlavBrDbOV0W47gO33WkXMFI4il4y1+Bv89979rVYn8aBohEgET41SpyQz7fMkcaZU+ok/
- +HYjC/qfDxT7tjKXqBQEscVODaFicsUkjheOD4BfWEcVUqa+XdUEciwG/SgNyxBZepj41oVq
- FPSVE+Ni2tNrW/e16b8mgXNngHSnbsr6pAIXZH3qFW+4TKPMGZ2rZ6zITrMip+12jgw4mGjy
- 5y06JZvA02rZT2k9aa7i9dUUFggaanI09jNGbRA/ABEBAAHCwXwEGAEKACYCGwwWIQSb0H4O
- DFH41ZZ3t1Qbk0N9O0FimwUCYDzvagUJFF+UtgAKCRAbk0N9O0Fim9JzD/0auoGtUu4mgnna
- oEEpQEOjgT7l9TVuO3Qa/SeH+E0m55y5Fjpp6ZToc481za3xAcxK/BtIX5Wn1mQ6+szfrJQ6
- 59y2io437BeuWIRjQniSxHz1kgtFECiV30yHRgOoQlzUea7FgsnuWdstgfWi6LxstswEzxLZ
- Sj1EqpXYZE4uLjh6dW292sO+j4LEqPYr53hyV4I2LPmptPE9Rb9yCTAbSUlzgjiyyjuXhcwM
- qf3lzsm02y7Ooq+ERVKiJzlvLd9tSe4jRx6Z6LMXhB21fa5DGs/tHAcUF35hSJrvMJzPT/+u
- /oVmYDFZkbLlqs2XpWaVCo2jv8+iHxZZ9FL7F6AHFzqEFdqGnJQqmEApiRqH6b4jRBOgJ+cY
- qc+rJggwMQcJL9F+oDm3wX47nr6jIsEB5ZftdybIzpMZ5V9v45lUwmdnMrSzZVgC4jRGXzsU
- EViBQt2CopXtHtYfPAO5nAkIvKSNp3jmGxZw4aTc5xoAZBLo0OV+Ezo71pg3AYvq0a3/oGRG
- KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
- fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <5725069.DvuYhMxLoT@kreacher>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <615ae9bd-f220-4189-aca2-7aa946444043@hauke-m.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/10/2023 13:36, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Subject: [PATCH v2] thermal: Remove Amit Kucheria from MAINTAINERS
+On Sat, Oct 07, 2023 at 03:38:39PM +0200, Hauke Mehrtens wrote:
+> Hi,
 > 
-> Amit Kucheria has not been participating in kernel development in any
-> way or form for quite some time, so it is not useful to list him as a
-> designated reviewer for the thermal subsystem or as the thermal zone DT
-> binding maintainer.
+> Please backport the following commit back to the Linux stable kernels 5.10
+> and older:
 > 
-> Remove him from the THERMAL entry in MAINTAINERS and list Daniel Lezcano
-> as the new thermal zone DT binding maintainer.
+> commit fb7791e213a64495ec2336869b868fcd8af14346
+> Author: Ivan Babrou <ivan@cloudflare.com>
+> Date:   Mon Jan 4 15:57:18 2021 -0800
+>     cpupower: add Makefile dependencies for install targets
 > 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
+>     This allows building cpupower in parallel rather than serially.
 > 
-> v2 -> v3: List Daniel Lezcano as the thermal zone DT binding maintainer.
+>     Signed-off-by: Ivan Babrou <ivan@cloudflare.com>
+>     Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 > 
-> ---
+> 
+> When I was building cpupower from kernel 5.4 using buildroot I was running
+> into this build problem. This patch applied cleanly on top of kernel 5.4.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Now queued up.
 
-Best regards,
-Krzysztof
+thanks,
 
+greg k-h
