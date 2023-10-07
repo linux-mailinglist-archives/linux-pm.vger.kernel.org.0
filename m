@@ -2,30 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E5E7BC735
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Oct 2023 13:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B427BC7D4
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Oct 2023 14:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234186AbjJGLgd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 7 Oct 2023 07:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55440 "EHLO
+        id S1343904AbjJGMvW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 7 Oct 2023 08:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234148AbjJGLgc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 7 Oct 2023 07:36:32 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D96BD;
-        Sat,  7 Oct 2023 04:36:29 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id b51d04623ba10436; Sat, 7 Oct 2023 13:36:28 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id DF0816621FA;
-        Sat,  7 Oct 2023 13:36:27 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
+        with ESMTP id S1343882AbjJGMvW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 7 Oct 2023 08:51:22 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27E0E4
+        for <linux-pm@vger.kernel.org>; Sat,  7 Oct 2023 05:51:19 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-406402933edso27266155e9.2
+        for <linux-pm@vger.kernel.org>; Sat, 07 Oct 2023 05:51:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696683078; x=1697287878; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xvT6SDn6XOTMM7WN3V9Qer8S4PTe9uPFURCibPnQCSE=;
+        b=ZuJMIs1Hc7oNXCUr9iyFyEP34sGd6DX3TWi+6E7mK2w6iXGx7p8NkqFlJHkq+hE/F7
+         1PFvAhDmHk6aTp+hbV2qzby+lkT66UWMsMwh6jGrPGnL8n5cBBoJT2tfOAoWPU9Svd9I
+         zWHjXOuWfJMVKTsaDcEvD4KDjjJubsQvWomZQLLFcqWwbHjqR5S7PShkWNagyNZOI2YW
+         DfOZlawJgf9UP7TtdvEBQaqmdzKKSu52kPn4JN9qbGqIv36Gg+ncY7+JbwbYUtEEoupk
+         0IAanaVyipj2EB355869+lPRtEmO+Udu3oFElgQlWdXszpCGmLqdrBluCdUAqtpVsKNy
+         Q/6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696683078; x=1697287878;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xvT6SDn6XOTMM7WN3V9Qer8S4PTe9uPFURCibPnQCSE=;
+        b=mpfHE/Hr3hgdG3EttLigohpm1vDw7zzW3PKNBsucYdG4J9PovmGfkZjg+C6oa+I2a9
+         ikmJClVtk20xYb0m0YxQSPrgoYVCUpzlNW2N41tZjRZDC37oaDp4gky3MFinhyepzkDQ
+         ZNuCQeQzJlMboIEgQpEYzcWp7DELomkovBf7AWzBBchN8kR6VKGo162od2nXZAtlpfSm
+         IRIR1RhgqeDfjSBSfT/3EIsga8q+1X/LGhoxjs4KTtcf4e67Ysc7c75xbxbbQGtV1ZXD
+         UlF7awFdaV8Yu4y+kKWQo5saSYKET5m+cifdy7mI1WSjgaAhGU21qHw30WEvL9fcub+O
+         aD7Q==
+X-Gm-Message-State: AOJu0YwW7QmhJ7j9Uvd6McteXRz3nwe/e/uPytATHISen98uBcqQx8rF
+        JgVFi99i0xMOP6IY2fQgA1pNDQ==
+X-Google-Smtp-Source: AGHT+IFPVNcTiGWX1DJytlquK2kkJt6EJB9eK4ST5TT+6DPRGc9InfXTGto/Cfmad8KqxPyOgfdaOw==
+X-Received: by 2002:a1c:7914:0:b0:401:1b58:72f7 with SMTP id l20-20020a1c7914000000b004011b5872f7mr9782629wme.38.1696683077724;
+        Sat, 07 Oct 2023 05:51:17 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:ae93:531e:11ce:c83d? ([2a05:6e02:1041:c10:ae93:531e:11ce:c83d])
+        by smtp.googlemail.com with ESMTPSA id z19-20020a7bc7d3000000b0040641a9d49bsm6052434wmk.17.2023.10.07.05.51.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 07 Oct 2023 05:51:17 -0700 (PDT)
+Message-ID: <f74a029d-39be-4deb-bc4f-a1bc1e401082@linaro.org>
+Date:   Sat, 7 Oct 2023 14:51:16 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] thermal: Remove Amit Kucheria from MAINTAINERS
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Zhang Rui <rui.zhang@intel.com>,
@@ -34,72 +65,42 @@ Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         devicetree@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
         Amit Kucheria <amitk@kernel.org>
-Subject: [PATCH v3] thermal: Remove Amit Kucheria from MAINTAINERS
-Date:   Sat, 07 Oct 2023 13:36:27 +0200
-Message-ID: <5725069.DvuYhMxLoT@kreacher>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrgeelgdegvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeefvddtfeffveeguefgtdeiuddtieelheegkefhhefgkeefuddutdehgfdvudduieenucffohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepuddupdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurges
- lhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=11 Fuz1=11 Fuz2=11
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <5725069.DvuYhMxLoT@kreacher>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <5725069.DvuYhMxLoT@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Subject: [PATCH v2] thermal: Remove Amit Kucheria from MAINTAINERS
+On 07/10/2023 13:36, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Subject: [PATCH v2] thermal: Remove Amit Kucheria from MAINTAINERS
+> 
+> Amit Kucheria has not been participating in kernel development in any
+> way or form for quite some time, so it is not useful to list him as a
+> designated reviewer for the thermal subsystem or as the thermal zone DT
+> binding maintainer.
+> 
+> Remove him from the THERMAL entry in MAINTAINERS and list Daniel Lezcano
+> as the new thermal zone DT binding maintainer.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
 
-Amit Kucheria has not been participating in kernel development in any
-way or form for quite some time, so it is not useful to list him as a
-designated reviewer for the thermal subsystem or as the thermal zone DT
-binding maintainer.
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-Remove him from the THERMAL entry in MAINTAINERS and list Daniel Lezcano
-as the new thermal zone DT binding maintainer.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-v2 -> v3: List Daniel Lezcano as the thermal zone DT binding maintainer.
-
----
- Documentation/devicetree/bindings/thermal/thermal-zones.yaml |    2 +-
- MAINTAINERS                                                  |    1 -
- 2 files changed, 1 insertion(+), 2 deletions(-)
-
-Index: linux-pm/MAINTAINERS
-===================================================================
---- linux-pm.orig/MAINTAINERS
-+++ linux-pm/MAINTAINERS
-@@ -21363,7 +21363,6 @@ F:	drivers/media/radio/radio-raremono.c
- THERMAL
- M:	Rafael J. Wysocki <rafael@kernel.org>
- M:	Daniel Lezcano <daniel.lezcano@linaro.org>
--R:	Amit Kucheria <amitk@kernel.org>
- R:	Zhang Rui <rui.zhang@intel.com>
- L:	linux-pm@vger.kernel.org
- S:	Supported
-Index: linux-pm/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-===================================================================
---- linux-pm.orig/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-+++ linux-pm/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-@@ -8,7 +8,7 @@ $schema: http://devicetree.org/meta-sche
- title: Thermal zone
- 
- maintainers:
--  - Amit Kucheria <amitk@kernel.org>
-+  - Daniel Lezcano <daniel.lezcano@linaro.org>
- 
- description: |
-   Thermal management is achieved in devicetree by describing the sensor hardware
-
-
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
