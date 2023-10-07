@@ -2,109 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9B37BC6D5
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Oct 2023 12:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 401327BC6E5
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Oct 2023 12:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343820AbjJGKgs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 7 Oct 2023 06:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37902 "EHLO
+        id S1343854AbjJGKpB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Sat, 7 Oct 2023 06:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343795AbjJGKgr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 7 Oct 2023 06:36:47 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D7392;
-        Sat,  7 Oct 2023 03:36:46 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68AA1C433C7;
-        Sat,  7 Oct 2023 10:36:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696675006;
-        bh=v/WXLYgb6BqL0vB6xdnedE9f7p/YOe7av+z9qkOq7uA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EydEweVS2gYgQ/Oe74RNgW8PQDVzQb6T0RPXODOvwckxP035KnxcqNvx3oLt2DRZ1
-         xNXOjvkOpibee6glErXh+thqtj+egVYMvkHFz5wUjoa1UpfCZ0OlAC99sblt3/NNFY
-         /zyCtRDNtAsrEiKVkplhwSVnMmlWXhyrflDM1DbzloorbBsa6iEuFbjSr7AjNiQvoj
-         dbKl4yzUC6Ophv0YLYbpqzob61wG83ZZ/Sj7vdenJd4LvO9RYpQEdiqMx4kEcPQtPJ
-         IOBiWp+axF3rg4xOlmb8yn7ox8F8ZVLQo1zIwUn9PUddaeM2GEhcici4/zdlT4FV3i
-         WRblF+z/yNZ7A==
-Date:   Sat, 7 Oct 2023 11:36:42 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Hermes Zhang <Hermes.Zhang@axis.com>
-Cc:     sre@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, Conor Dooley <conor+dt@kernel.org>,
-        linux-kernel@vger.kernel.org, kernel@axis.com,
-        Hermes Zhang <chenhuiz@axis.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: power: supply: bq24190: Add BQ24296
- compatible
-Message-ID: <20231007-tablet-hunk-d9f13553831a@spud>
-References: <20231007020701.1912553-1-Hermes.Zhang@axis.com>
- <20231007020701.1912553-2-Hermes.Zhang@axis.com>
+        with ESMTP id S1343815AbjJGKpA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 7 Oct 2023 06:45:00 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5BAEA;
+        Sat,  7 Oct 2023 03:44:59 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3af59a017a5so520914b6e.1;
+        Sat, 07 Oct 2023 03:44:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696675498; x=1697280298;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VXhc4AjiVWEhMnGIoyNOjXGEIVUwbZEwWnoHiLFbjX0=;
+        b=ilMMd8G9ORFMvuZyVSd4lnr4CSkFz4qWYf3MrCUy9qP/nT/VevQ2g3yswrvSG9DPq6
+         H/cVtyix+t/pRQsbwRAet36SMsKCVJR4SNLTJ5gS2GxqKapYmfmF2viN1OkSgztGsZpc
+         IfFOlEfV/UNeo8sgfW74KAWkkF50sZIlKQF/LhX97igzKNBdfyKN/WUsqUZiGCALOd0B
+         aXSWXCVRf0PtZT4VXzKfaSg9dmx5+O0Ne7rEBd9KCyS/jMeVgkDINaGJv1RDNKOo1+6P
+         r0U2SZuMGESTbXtkEeztwpl3Ne7pXawGDvmYaVR3KzCVYW/tqHy1KYm4hMq95FehkV3v
+         ypfQ==
+X-Gm-Message-State: AOJu0Yz4yIf0QDUBifjfgWfDs/bK99g1jMdU/S+SRGSelfEEfRrzLo9k
+        6At+x8pMJhadfp4rnMi6iLKtQW8WuV25rhLMrWc=
+X-Google-Smtp-Source: AGHT+IFRS4P43ZIQse0aIU83wX0h2pT4KbfEj1/GBsYLcEBcde33BDz2cby3K6bpc13NeyU0HatTVwRle8efMP7f4PU=
+X-Received: by 2002:a05:6830:490e:b0:6c4:7516:f2cf with SMTP id
+ eq14-20020a056830490e00b006c47516f2cfmr13156936otb.2.1696675497907; Sat, 07
+ Oct 2023 03:44:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="GAidJ2fG47DIHjuO"
-Content-Disposition: inline
-In-Reply-To: <20231007020701.1912553-2-Hermes.Zhang@axis.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <5716404.DvuYhMxLoT@kreacher> <f0daa859-f9eb-4631-b2f9-6ee3ce5b691f@linaro.org>
+ <9833cebf-e951-47c6-97b7-458ae1a5b747@linaro.org> <908fc8d6-10d2-51f9-fd70-171522c7e67d@arm.com>
+ <ca4b87ea-7b59-4465-ba29-3280e82149e4@linaro.org>
+In-Reply-To: <ca4b87ea-7b59-4465-ba29-3280e82149e4@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sat, 7 Oct 2023 12:44:46 +0200
+Message-ID: <CAJZ5v0jXPN4KEfZsFO0yU76jUVKLYFnp8-ib2tkcOvc1R+k0eg@mail.gmail.com>
+Subject: Re: [PATCH v1] thermal: Remove Amit Kucheria from MAINTAINERS
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Amit Kucheria <amitk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, Oct 6, 2023 at 11:44 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 06/10/2023 15:48, Lukasz Luba wrote:
+> >
+> >
+> > On 10/6/23 14:43, Krzysztof Kozlowski wrote:
+> >> On 06/10/2023 15:43, Krzysztof Kozlowski wrote:
+> >>> On 06/10/2023 13:21, Rafael J. Wysocki wrote:
+> >>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >>>>
+> >>>> Amit Kucheria has not been participating in kernel development in any
+> >>>> way or form for quite some time, so it is not useful to list him as a
+> >>>> designated reviewer for the thermal subsystem or as the maintainer of
+> >>>> the thermal zone device bindings.
+> >>>>
+> >>>> Remove him from those two places accordingly.
+> >>>>
+> >>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >>>> ---
+> >>>>   Documentation/devicetree/bindings/thermal/thermal-zones.yaml |
+> >>>> 3 ---
+> >>>
+> >>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >>
+> >> and unAcked. We need a maintainer for the bindings. Someone else from
+> >> thermal?
+> >>
+> >
+> > I'm going to handle the review in thermal subsystem. Although,
+> > I forgot about this 'binding' thing...
+> >
+> > Daniel, what do you think?
+>
+> I can handle the bindings, I rewrote the thermal-of code and worked with
+> Amit on the txt to yaml conversion.
 
---GAidJ2fG47DIHjuO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sounds good!
 
-On Sat, Oct 07, 2023 at 10:07:00AM +0800, Hermes Zhang wrote:
-> From: Hermes Zhang <chenhuiz@axis.com>
->=20
-> The BQ24296 is most similar to the BQ24196, but the:
-> 1. OTG config is split from CHG config (REG01)
-> 2. ICHG (Fast Charge Current limit) range is smaller (<=3D3008mA)
-> 3. NTC fault is simplified to 2 bits
->=20
-> Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
-
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-
-Thanks,
-Conor.
-
-> ---
->  Documentation/devicetree/bindings/power/supply/bq24190.yaml | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq24190.yaml =
-b/Documentation/devicetree/bindings/power/supply/bq24190.yaml
-> index d3ebc9de8c0b..131b7e57d22f 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq24190.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq24190.yaml
-> @@ -20,6 +20,7 @@ properties:
->        - ti,bq24192
->        - ti,bq24192i
->        - ti,bq24196
-> +      - ti,bq24296
-> =20
->    reg:
->      maxItems: 1
-> --=20
-> 2.30.2
->=20
-
---GAidJ2fG47DIHjuO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZSE0uQAKCRB4tDGHoIJi
-0hrxAP40V/Cau0h6qS7og70nKzPelwXlSpyduLWH0G01c9ppeQD/f1uvwHm3CvW0
-Ns685SiP/CB2FAMoZRYOpbFLNvuxBQ4=
-=lpUM
------END PGP SIGNATURE-----
-
---GAidJ2fG47DIHjuO--
+I'll send a v3 of the patch then with this change included, please ACK it.
