@@ -2,108 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 401327BC6E5
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Oct 2023 12:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E317BC72D
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Oct 2023 13:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343854AbjJGKpB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Sat, 7 Oct 2023 06:45:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42938 "EHLO
+        id S1343875AbjJGLen (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 7 Oct 2023 07:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343815AbjJGKpA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 7 Oct 2023 06:45:00 -0400
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5BAEA;
-        Sat,  7 Oct 2023 03:44:59 -0700 (PDT)
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3af59a017a5so520914b6e.1;
-        Sat, 07 Oct 2023 03:44:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696675498; x=1697280298;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VXhc4AjiVWEhMnGIoyNOjXGEIVUwbZEwWnoHiLFbjX0=;
-        b=ilMMd8G9ORFMvuZyVSd4lnr4CSkFz4qWYf3MrCUy9qP/nT/VevQ2g3yswrvSG9DPq6
-         H/cVtyix+t/pRQsbwRAet36SMsKCVJR4SNLTJ5gS2GxqKapYmfmF2viN1OkSgztGsZpc
-         IfFOlEfV/UNeo8sgfW74KAWkkF50sZIlKQF/LhX97igzKNBdfyKN/WUsqUZiGCALOd0B
-         aXSWXCVRf0PtZT4VXzKfaSg9dmx5+O0Ne7rEBd9KCyS/jMeVgkDINaGJv1RDNKOo1+6P
-         r0U2SZuMGESTbXtkEeztwpl3Ne7pXawGDvmYaVR3KzCVYW/tqHy1KYm4hMq95FehkV3v
-         ypfQ==
-X-Gm-Message-State: AOJu0Yz4yIf0QDUBifjfgWfDs/bK99g1jMdU/S+SRGSelfEEfRrzLo9k
-        6At+x8pMJhadfp4rnMi6iLKtQW8WuV25rhLMrWc=
-X-Google-Smtp-Source: AGHT+IFRS4P43ZIQse0aIU83wX0h2pT4KbfEj1/GBsYLcEBcde33BDz2cby3K6bpc13NeyU0HatTVwRle8efMP7f4PU=
-X-Received: by 2002:a05:6830:490e:b0:6c4:7516:f2cf with SMTP id
- eq14-20020a056830490e00b006c47516f2cfmr13156936otb.2.1696675497907; Sat, 07
- Oct 2023 03:44:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <5716404.DvuYhMxLoT@kreacher> <f0daa859-f9eb-4631-b2f9-6ee3ce5b691f@linaro.org>
- <9833cebf-e951-47c6-97b7-458ae1a5b747@linaro.org> <908fc8d6-10d2-51f9-fd70-171522c7e67d@arm.com>
- <ca4b87ea-7b59-4465-ba29-3280e82149e4@linaro.org>
-In-Reply-To: <ca4b87ea-7b59-4465-ba29-3280e82149e4@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 7 Oct 2023 12:44:46 +0200
-Message-ID: <CAJZ5v0jXPN4KEfZsFO0yU76jUVKLYFnp8-ib2tkcOvc1R+k0eg@mail.gmail.com>
-Subject: Re: [PATCH v1] thermal: Remove Amit Kucheria from MAINTAINERS
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Lukasz Luba <lukasz.luba@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
+        with ESMTP id S233662AbjJGLem (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 7 Oct 2023 07:34:42 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04532FA;
+        Sat,  7 Oct 2023 04:34:38 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id 9c1dd8458e715ef9; Sat, 7 Oct 2023 13:34:36 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id D356B6621FA;
+        Sat,  7 Oct 2023 13:34:35 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Amit Kucheria <amitk@kernel.org>
+        Zhang Rui <rui.zhang@intel.com>
+Subject: [PATCH v1] thermal: trip: Remove lockdep assertion from for_each_thermal_trip()
+Date:   Sat, 07 Oct 2023 13:34:35 +0200
+Message-ID: <2709769.mvXUDI8C0e@kreacher>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrgeelgdegudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthho
+ pehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 6, 2023 at 11:44 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 06/10/2023 15:48, Lukasz Luba wrote:
-> >
-> >
-> > On 10/6/23 14:43, Krzysztof Kozlowski wrote:
-> >> On 06/10/2023 15:43, Krzysztof Kozlowski wrote:
-> >>> On 06/10/2023 13:21, Rafael J. Wysocki wrote:
-> >>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>>>
-> >>>> Amit Kucheria has not been participating in kernel development in any
-> >>>> way or form for quite some time, so it is not useful to list him as a
-> >>>> designated reviewer for the thermal subsystem or as the maintainer of
-> >>>> the thermal zone device bindings.
-> >>>>
-> >>>> Remove him from those two places accordingly.
-> >>>>
-> >>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>>> ---
-> >>>>   Documentation/devicetree/bindings/thermal/thermal-zones.yaml |
-> >>>> 3 ---
-> >>>
-> >>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >>
-> >> and unAcked. We need a maintainer for the bindings. Someone else from
-> >> thermal?
-> >>
-> >
-> > I'm going to handle the review in thermal subsystem. Although,
-> > I forgot about this 'binding' thing...
-> >
-> > Daniel, what do you think?
->
-> I can handle the bindings, I rewrote the thermal-of code and worked with
-> Amit on the txt to yaml conversion.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Sounds good!
+The lockdep assertion in for_each_thermal_trip() was added to possibly
+catch incorrect usage of that function without the thermal zone lock.
+However, it turns out that the ACPI thermal driver has a legitimate
+reason to call for_each_thermal_trip() without locking.
 
-I'll send a v3 of the patch then with this change included, please ACK it.
+Namely, it is called by acpi_thermal_bind_unbind_cdev() in the thermal
+zone registration and unregistration paths.  That function cannot acquire
+the thermal zone lock by itself, because it calls functions that acquire
+it, thermal_bind_cdev_to_trip() or thermal_unbind_cdev_from_trip().
+However, it is invoked when the ACPI notify handler for the thermal
+zone in question has not been registered yet (in the registration path)
+or after that handler has been unregistered (in the unregistration
+path).  Therefore, when for_each_thermal_trip() is called by
+acpi_thermal_bind_unbind_cdev(), thermal trip changes induced by the
+platform firmware cannot take place and so the thermal zone's trips[]
+table is effectively immutable.  Hence, it is valid to call
+for_each_thermal_trip() from acpi_thermal_bind_unbind_cdev() without
+locking and the lockdep assertion in the former is in fact incorrect, so
+remove it.
+
+Fixes: d5ea889246b1 ("ACPI: thermal: Do not use trip indices for cooling device binding")
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/thermal/thermal_trip.c |    2 --
+ 1 file changed, 2 deletions(-)
+
+Index: linux-pm/drivers/thermal/thermal_trip.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_trip.c
++++ linux-pm/drivers/thermal/thermal_trip.c
+@@ -15,8 +15,6 @@ int for_each_thermal_trip(struct thermal
+ {
+ 	int i, ret;
+ 
+-	lockdep_assert_held(&tz->lock);
+-
+ 	for (i = 0; i < tz->num_trips; i++) {
+ 		ret = cb(&tz->trips[i], data);
+ 		if (ret)
+
+
+
