@@ -2,111 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 511A67BE838
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Oct 2023 19:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 642D97BE803
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Oct 2023 19:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378149AbjJIRdN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Oct 2023 13:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53610 "EHLO
+        id S1377910AbjJIRap (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Oct 2023 13:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378110AbjJIRc7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Oct 2023 13:32:59 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33039184;
-        Mon,  9 Oct 2023 10:32:53 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64278C433CB;
-        Mon,  9 Oct 2023 17:32:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696872772;
-        bh=JQbWPDFsl0qN3wvjJzvnJTkMPT8Tve5fQAAfMjMgSmA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=EcPaWquz30v0eQx4v7wpeCCivFKKYPuLfrITErlF9RNjiBTjCErFwD9riAKfpWQZW
-         8nsOyRjcOa947N9aLyuAG/D9t5A1Z8WRgYfHbLByHuVmU+g5CxCls7SWuMdmb6XuOJ
-         THrY6jYRnqBWYJrQE76l3wHPRo5VzId8m43qTjaHEhhqqoG5QKHfKFJx2Q2RIua/qI
-         inCbIHg/+mG9huqSNUuHOPZwL2M1dH2WwpMStvdWMS48mVywRWAUbe/m3YPdEVrTK4
-         8BTUdNN2jOxmOpqukCRgw/oWuYmpN63DEFsvy+Yw/xjtOSRN2AGrxCqyUwO38ApPMQ
-         oaD8XNJbKMQpA==
-Received: (nullmailer pid 2533476 invoked by uid 1000);
-        Mon, 09 Oct 2023 17:32:51 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] power: supply: cpcap: Drop non-DT driver matching
-Date:   Mon,  9 Oct 2023 12:29:15 -0500
-Message-ID: <20231009172923.2457844-20-robh@kernel.org>
-X-Mailer: git-send-email 2.42.0
+        with ESMTP id S1377966AbjJIRaj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Oct 2023 13:30:39 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3DA5EA
+        for <linux-pm@vger.kernel.org>; Mon,  9 Oct 2023 10:30:36 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2c00e1d4c08so60662141fa.3
+        for <linux-pm@vger.kernel.org>; Mon, 09 Oct 2023 10:30:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google; t=1696872635; x=1697477435; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HHSd56ONGtiYc/4iRkmyqmxuAngFJzU7FR00LimB0+s=;
+        b=grFtVCa9AE5vZnIqHY2K2bNP8Z6TwHUlqSnlQynYLfm5yY9bfW+Udn2tegWIbDpqZV
+         eIy68gqJd/Ry9v9XmIvfaKaBKzf/fJAMUDootzAKML2FCQG9tgQHF0skd2fI8KSZj4Zj
+         5laR0MFZ2upzjp7XVdBB/uX+wUaNSql2ew7bKicL1rvMh4AiP1yQa7jS/aHH4SPCv+h7
+         mJmiRaOLnWW7Fevap8tTGkZJxbnV/PQaBzkPAQA5vis85tB6Wt4vnGuO2FY3G3WXWPPQ
+         5TGZ66RGIVBojnHk2wmoPN+YgNuIJfFDQYYSHN5NHspuLbK0Eb2LJ9kod7O3tg0yOsLb
+         o0Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696872635; x=1697477435;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HHSd56ONGtiYc/4iRkmyqmxuAngFJzU7FR00LimB0+s=;
+        b=clj4GFeDk+rzge4nlPSRJA3QTgoY4CqP7pMHCO5XvCOfYejPjKz6PBgeAvtM1vZUXR
+         uVwhcUYfoJ592HnPO/QghJUbTTjgyTvvbxk67LC3T158Vk0OPCCZpj/JCQT4JM5XiGmi
+         gXiwHWG2XB0cef3l9Y8OngUWn56glKOwZvi9E+agtrKDmFNl2q9XmtkrN5irQ/lkFzhB
+         VJKRlDnI0VKmqFQbBdVLS5PvDONXT2NyT0CwMwpj1Lb4lxPMWREbrd6NmP77L/juBSdB
+         yb5JWQFMh6BVk5LHXwBOLb3eusGegJ2C/oiijJ8OmyZGAJjd5jwrgm0v0kHmFF+7qw+K
+         uENw==
+X-Gm-Message-State: AOJu0YzgZS7lMITH6m8vVUKOPeJUfLxvmoho2JMqzhq16C9PDrUCJ2YB
+        2oJNyqT3PHPYstqHqbjGjG9OdclF+IcbMot/gltdTg==
+X-Google-Smtp-Source: AGHT+IHBRA959tJKQ7jnBDww7hLjflOoCbxbxU4OC4L9uyovk7KidWNus9mZc9b5/3C/KVDAr0hL4Kjy/lMZJqv9EF4=
+X-Received: by 2002:a2e:86d6:0:b0:2c2:9e5c:2c82 with SMTP id
+ n22-20020a2e86d6000000b002c29e5c2c82mr13644840ljj.46.1696872635192; Mon, 09
+ Oct 2023 10:30:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20231009165741.746184-1-max.kellermann@ionos.com>
+ <20231009165741.746184-6-max.kellermann@ionos.com> <2023100921-that-jasmine-2240@gregkh>
+In-Reply-To: <2023100921-that-jasmine-2240@gregkh>
+From:   Max Kellermann <max.kellermann@ionos.com>
+Date:   Mon, 9 Oct 2023 19:30:24 +0200
+Message-ID: <CAKPOu+8Tb2CopWgBN29hmJrmU9mjG63PyVoaewuY0FYj=aGTZA@mail.gmail.com>
+Subject: Re: [PATCH 6/7] fs/sysfs/group: make attribute_group pointers const
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        James Clark <james.clark@arm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-rdma@vger.kernel.org, iommu@lists.linux.dev,
+        nvdimm@lists.linux.dev, linux-nvme@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-leds@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Only DT based probing is used for the Motorola CPCAP charger driver, so
-drop the !CONFIG_OF parts and redundant of_match_device() call.
+On Mon, Oct 9, 2023 at 7:26=E2=80=AFPM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> I'm all for doing this type of work, but this is going to be rough.  You
+> sent patch 6/7 that hit almost all subsystems at once :(
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- drivers/power/supply/cpcap-charger.c | 13 ++-----------
- 1 file changed, 2 insertions(+), 11 deletions(-)
+I wasn't sure whether splitting patches was desired. In the past, I
+was often asked to fold multiple patches into one. There are so many
+opinions :-) but I'll gladly change to whatever is asked.
 
-diff --git a/drivers/power/supply/cpcap-charger.c b/drivers/power/supply/cpcap-charger.c
-index 431e951cccf0..cebca34ff872 100644
---- a/drivers/power/supply/cpcap-charger.c
-+++ b/drivers/power/supply/cpcap-charger.c
-@@ -17,8 +17,7 @@
- #include <linux/err.h>
- #include <linux/interrupt.h>
- #include <linux/notifier.h>
--#include <linux/of.h>
--#include <linux/of_platform.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/platform_device.h>
- #include <linux/power_supply.h>
- #include <linux/regmap.h>
-@@ -865,7 +864,6 @@ static const struct power_supply_desc cpcap_charger_usb_desc = {
- 	.property_is_writeable = cpcap_charger_property_is_writeable,
- };
- 
--#ifdef CONFIG_OF
- static const struct of_device_id cpcap_charger_id_table[] = {
- 	{
- 		.compatible = "motorola,mapphone-cpcap-charger",
-@@ -873,20 +871,13 @@ static const struct of_device_id cpcap_charger_id_table[] = {
- 	{},
- };
- MODULE_DEVICE_TABLE(of, cpcap_charger_id_table);
--#endif
- 
- static int cpcap_charger_probe(struct platform_device *pdev)
- {
- 	struct cpcap_charger_ddata *ddata;
--	const struct of_device_id *of_id;
- 	struct power_supply_config psy_cfg = {};
- 	int error;
- 
--	of_id = of_match_device(of_match_ptr(cpcap_charger_id_table),
--				&pdev->dev);
--	if (!of_id)
--		return -EINVAL;
--
- 	ddata = devm_kzalloc(&pdev->dev, sizeof(*ddata), GFP_KERNEL);
- 	if (!ddata)
- 		return -ENOMEM;
-@@ -975,7 +966,7 @@ static struct platform_driver cpcap_charger_driver = {
- 	.probe = cpcap_charger_probe,
- 	.driver	= {
- 		.name	= "cpcap-charger",
--		.of_match_table = of_match_ptr(cpcap_charger_id_table),
-+		.of_match_table = cpcap_charger_id_table,
- 	},
- 	.shutdown = cpcap_charger_shutdown,
- 	.remove_new = cpcap_charger_remove,
--- 
-2.42.0
+> "*const*groups"?   That's a parsing nightmare, really hard for humans to
+> read and understand.  Doesn't checkpatch complain about this?
 
+No. I'll change the coding style (and maybe take some time to fix checkpatc=
+h?)
