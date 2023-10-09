@@ -2,121 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A50C87BD5E0
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Oct 2023 10:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE05B7BD8BB
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Oct 2023 12:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345404AbjJIIy2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Oct 2023 04:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32948 "EHLO
+        id S1345853AbjJIKg3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Oct 2023 06:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346043AbjJIIyP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Oct 2023 04:54:15 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEB718C
-        for <linux-pm@vger.kernel.org>; Mon,  9 Oct 2023 01:54:07 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-4054f790190so41112615e9.2
-        for <linux-pm@vger.kernel.org>; Mon, 09 Oct 2023 01:54:07 -0700 (PDT)
+        with ESMTP id S1345825AbjJIKg2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Oct 2023 06:36:28 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1646D9C
+        for <linux-pm@vger.kernel.org>; Mon,  9 Oct 2023 03:36:27 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-406618d0992so42518105e9.0
+        for <linux-pm@vger.kernel.org>; Mon, 09 Oct 2023 03:36:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696841646; x=1697446446; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tawKlj4NwKRNWJhg+WB2iw2MzhEt5iLp9WdomLuxTsc=;
-        b=mRiNXmtqJCzygC5B+ccp5dJe/2rmo6pYIiU5Y1ns6fBHR0gLgZZeTkyJx7o72FXL9U
-         et4y9WOBxCBaIe4hjJbp8ZihVoTikWqwlkR6lTgpVUMipDub61XMesD8LC9TeAle9MSY
-         h8M8xH5EfnjgMDi+ty3xYTcpO6pcaIviS9jxl6SQrQubLHfUq0pmLIhR8cl+GXSEsHbU
-         rLyYrVClhBpwktJf6dAvsFnFH1zcLpjr/RPnSlQK6BsiYs3FVzCx06cVKj+Kqj/VvBTp
-         cDW7FxNl5oi2GpMrVHZJjHRKBMP5FKp13bkkswZFn30/s/+oVITUw6GQaX6aOs4uH+7S
-         AUaA==
+        d=linaro.org; s=google; t=1696847785; x=1697452585; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mzXAWoLrB1CkCF7mnZtizIq1zJhQkfdilgU0TBelMuw=;
+        b=Us6e6PWGj6XlNK2Skz7LUZpzXHWEvVO6m827u9HDVicCO8OTiEiaa3tI+SBFrmARRp
+         rU+ij6pb5kGZlT5gIkn/AErlaHQLhoythYScwTyKiBwGh0IM/qPVdvzxcqAi2QnKPxyN
+         JU7/Ud+7kLeamG3VEnZdlLNn+V9tzD2V9jePQHarXKTlGtICncZSmqrongmbmaTxFg0V
+         vWtzZITqN2iPQ/beFypp+4uFi4VjAlWkO9V46z/6j/5HTDr0Y9FKU2TqZJSEmWbi/FA6
+         BPVg3y24tQA9ym8b51/F5RnNW4UxRwG3S73xIK2qmabFhZWK71wFYzV1XNUzRDn7WuiY
+         KjrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696841646; x=1697446446;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tawKlj4NwKRNWJhg+WB2iw2MzhEt5iLp9WdomLuxTsc=;
-        b=Yh43c0K+hIoOulu5IiZ00WNObw9Q4CthtF1LnbOOiZLxF52lQnfVlD++ZJ35Gnaq3y
-         S6pGm34OHG5uJ9tpD/r6rstPxbrje8VSbq8T0wcVAOF5TvoIhBqUNrpT4hAdriCY1ICq
-         RL4IpVtcT5UBdvzK8DpC0gHG+24LV6Z4kmzZN9kuo/ArQFrTzanHJCovi1pS+Qv7e1OH
-         yXfTtVFl8elU/e7EPfjPaT/3tck5khJnciMLpRltIKJFenMrkcsSgQYuWDYLR+tX48/F
-         ZnAKQ541pcNT8JadgMQ6nA1L22vMhZtPO1BWdSCPqsNafnAcj/2gQSlPMfPnWr+McODC
-         F2BQ==
-X-Gm-Message-State: AOJu0YyeWqJTMWHZVrLhPKGZPqQ1nr3HQh8K/s2iRr/DEOj9eypddQEp
-        xGVhVUCiwb5JX00qJHGDfFBaJg==
-X-Google-Smtp-Source: AGHT+IGouuR+IH+XtAVq/zCHR2lpY8VEe17w2cFVnpj5OMERr7qv5EDkNuA3hymIkLLbseauor52Wg==
-X-Received: by 2002:a05:600c:298c:b0:401:b2c7:34a4 with SMTP id r12-20020a05600c298c00b00401b2c734a4mr13337773wmd.11.1696841645668;
-        Mon, 09 Oct 2023 01:54:05 -0700 (PDT)
-Received: from [192.168.1.197] (5-157-101-10.dyn.eolo.it. [5.157.101.10])
-        by smtp.gmail.com with ESMTPSA id h11-20020a056000000b00b00325a59b2080sm8988371wrx.97.2023.10.09.01.54.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Oct 2023 01:54:05 -0700 (PDT)
-Message-ID: <0ed03631-a2f7-41ab-b956-ec190e35d304@linaro.org>
-Date:   Mon, 9 Oct 2023 10:54:03 +0200
+        d=1e100.net; s=20230601; t=1696847785; x=1697452585;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mzXAWoLrB1CkCF7mnZtizIq1zJhQkfdilgU0TBelMuw=;
+        b=X3Ik01xXnA+LC6a4oxIqB3rzgHtCKmD4PoMMWviiu9HbXPj3KCiI126TS7d8tIOOnP
+         CY/QVHThkR7YB61H2OThoumgbUJmkEf9n/02fxFYUzpLuT0gR1jvZ+CtM+r7cNhMwN/q
+         m/vdFd9LHsbhS9YL/iUTvRkmBPAplSOVU6kZPzjuW9WKHyMCuQlNlpzE8WgJu/MM8U1e
+         aSLrTpdbuppvmKXv0mqPwPlItK5KSHrOceE58RddntZJN6e2qEphI9y7sabSI2jnEpqb
+         xwLjYC2MuJMFV3P13axJIMNR+KOI0Ms44aDVHFz/3QVkgLIL4XobpVgQXfmqsuoHz7Nv
+         iKYg==
+X-Gm-Message-State: AOJu0YwVpXSSEqr2qFzir4CIGSgfLFa3EfOda54x3eSCapBGg0xhyzcm
+        6Ufai5f4frMr7eeE3taiIw+Vcg==
+X-Google-Smtp-Source: AGHT+IEt52pH56UVIExYbvyXxteaZw3b7eTLevs8DuSQX1Vs9f8YnvubABJjGN5j4jCclR3s+K07Pw==
+X-Received: by 2002:adf:e689:0:b0:319:8bb3:ab83 with SMTP id r9-20020adfe689000000b003198bb3ab83mr12316323wrm.66.1696847785473;
+        Mon, 09 Oct 2023 03:36:25 -0700 (PDT)
+Received: from vingu-book.. ([2a01:e0a:f:6020:53f1:24bc:5e47:821d])
+        by smtp.gmail.com with ESMTPSA id f16-20020adfdb50000000b0031ff89af0e4sm9226722wrj.99.2023.10.09.03.36.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Oct 2023 03:36:24 -0700 (PDT)
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+To:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
+        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        viresh.kumar@linaro.org, lukasz.luba@arm.com,
+        ionela.voinescu@arm.com, pierre.gondois@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org
+Cc:     conor.dooley@microchip.com, suagrfillet@gmail.com,
+        ajones@ventanamicro.com, lftan@kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [PATCH v2 0/6] consolidate and cleanup CPU capacity
+Date:   Mon,  9 Oct 2023 12:36:15 +0200
+Message-Id: <20231009103621.374412-1-vincent.guittot@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/4] dt-bindings: power: reset: gpio-poweroff: Add
- priority property
-Content-Language: en-US
-To:     Francesco Dolcini <francesco@dolcini.it>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Stefan Eichenberger <stefan.eichenberger@toradex.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Francesco Dolcini <francesco.dolcini@toradex.com>
-References: <20231006130428.11259-1-francesco@dolcini.it>
- <20231006130428.11259-4-francesco@dolcini.it>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231006130428.11259-4-francesco@dolcini.it>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -124,18 +78,63 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/10/2023 15:04, Francesco Dolcini wrote:
-> From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
-> 
-> Add the priority property to the gpio-poweroff bindings description.
-> 
-> Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
-> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
-> ---
-> v1->v2:
+This is the 1st part of consolidating how the max compute capacity is
+used in the scheduler and how we calculate the frequency for a level of
+utilization.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Fix some unconsistancy when computing frequency for an utilization. There
+can be a mismatch between energy model and schedutil.
 
-Best regards,
-Krzysztof
+Next step will be to make a difference between the original
+max compute capacity of a CPU and what is currently available when
+there is a capping applying forever (i.e. seconds or more).
+
+
+Changes since v1:
+- Fix typos
+- Added changes in cpufreq to use arch_scale_freq_ref() when calling
+  arch_set_freq_scale (patch 3).
+- arch_scale_freq_ref() is always defined and returns 0 (as proposed
+  by Ionela) when not defined by the arch. This simplifies the code with
+  the addition of patch 3.
+- Simplify Energy Model which always uses arch_scale_freq_ref(). The
+  latter returns 0 when not defined by arch instead of last item of the 
+  perf domain. This is not a problem because the function is only defined
+  for compilation purpose in this case and we don't care about the
+  returned value. (patch 5)
+- Added changes in cppc cpufreq to set capacity_ref_freq (patch 6)
+- Added reviewed tag for patch 1 which got a minor change but not for
+  others as I did some changes which could make previous reviewed tag
+  no more relevant.
+
+Vincent Guittot (6):
+  sched: consolidate and cleanup access to CPU's max compute capacity
+  topology: add a new arch_scale_freq_reference
+  cpufreq: use the fixed and coherent frequency for scaling capacity
+  cpufreq/schedutil: use a fixed reference frequency
+  energy_model: use a fixed reference frequency
+  cpufreq/cppc: set the frequency used for capacity computation
+
+ Documentation/scheduler/sched-capacity.rst | 13 +++++-----
+ arch/arm/include/asm/topology.h            |  1 +
+ arch/arm64/include/asm/topology.h          |  1 +
+ arch/riscv/include/asm/topology.h          |  1 +
+ drivers/base/arch_topology.c               | 29 +++++++++++-----------
+ drivers/cpufreq/cppc_cpufreq.c             | 18 ++++++++++++++
+ drivers/cpufreq/cpufreq.c                  |  4 +--
+ include/linux/arch_topology.h              |  7 ++++++
+ include/linux/cpufreq.h                    |  9 +++++++
+ include/linux/energy_model.h               | 14 ++++++++---
+ kernel/sched/core.c                        |  2 +-
+ kernel/sched/cpudeadline.c                 |  2 +-
+ kernel/sched/cpufreq_schedutil.c           | 26 +++++++++++++++++--
+ kernel/sched/deadline.c                    |  4 +--
+ kernel/sched/fair.c                        | 18 ++++++--------
+ kernel/sched/rt.c                          |  2 +-
+ kernel/sched/sched.h                       |  6 -----
+ kernel/sched/topology.c                    |  7 ++++--
+ 18 files changed, 113 insertions(+), 51 deletions(-)
+
+-- 
+2.34.1
 
