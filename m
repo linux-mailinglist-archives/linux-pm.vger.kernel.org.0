@@ -2,90 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B03AD7BE1E2
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Oct 2023 15:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAECC7BE1F8
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Oct 2023 15:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377548AbjJINzM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 9 Oct 2023 09:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
+        id S1376895AbjJIN6m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Oct 2023 09:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377601AbjJINzH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Oct 2023 09:55:07 -0400
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E362FA;
-        Mon,  9 Oct 2023 06:55:06 -0700 (PDT)
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6c623d55b98so422063a34.1;
-        Mon, 09 Oct 2023 06:55:06 -0700 (PDT)
+        with ESMTP id S1376852AbjJIN6m (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Oct 2023 09:58:42 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D190A3
+        for <linux-pm@vger.kernel.org>; Mon,  9 Oct 2023 06:58:40 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-40566f8a093so42270585e9.3
+        for <linux-pm@vger.kernel.org>; Mon, 09 Oct 2023 06:58:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696859919; x=1697464719; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J7aAFQmtFZngidEZ+zvaFbvJXqmGzVQdu9SnwN3LMKA=;
+        b=QAcU7i4364MPmGeglKjJ0Yo+S0aEIw4hPYY+BQukqL5kMXSNlz/i1wCVSgKy5fficy
+         FPX7lfJ73gZ3nkG+h4Qiu0grBYfzzryPu1TphM0vM63Wavt+HdBtzaiviGBrJEP0b9Gq
+         CQqgP/E5y3eL0teYFJ8OahM/R8BvGaLrQGQ/xePyFzEAPKl1msMmAA8Zebbzo9zO+iAk
+         qu5zb+VV2JqYxqY6LW3IGKNK3s41QjspxOtLbLeXTql9/BBTnddSmGiKYXcs6vOEs/y1
+         4vBA8o3oxrPxF2JaCqm2wzF8Tjuds2g0ItKlyHQCir7CqbgVQ8CbHEl1DWxGZU6HKNNe
+         xn1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696859706; x=1697464506;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1696859919; x=1697464719;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DbYSaAkppXiXwPywgJaYV/kJCNrZ4Yezq8j1jCwJ9gw=;
-        b=AaxdZsCkw+tlye9GTa9lkjDafIxwx8PzI7csCeYi81riIISIjmWXJaDFj6CnL2IjlJ
-         D5F8RruMoIKnDVoGHJXzbw6Bsp40s5cqftun4Mdj6VQ1nKWpZ+nyj+igoeR26kiWl9GC
-         gw/pyiYMynCqweb0qpTRQ0LFyV/TPWaAy3XzmgxbAVOrzgaXYfyZFLR3IDI49j9YxP2i
-         7mIuyt+i9Sekr/GXlPRjMSXEC1PHtPw82nzwZeSpAqX8NL6SJrhWaoUEYReC26O0KSIj
-         QeukspOsJ8XVPApNUeoUnvtjKT0hvZcPq3vekUP+gKO/iCXPX6rNBeEINrVxn/1JW8i1
-         yDyg==
-X-Gm-Message-State: AOJu0Yy/ofKCoyuB8bztaLAA6HVBTvsXIFJD6OcG4M1xbaOVHTqesNxi
-        WkakSz3lQW7OxXXRrEwnL8hiUs4EOBmloEK5Oo0=
-X-Google-Smtp-Source: AGHT+IE2VRWkpXzrRv5siKgPmRUKaCxwWCJwWFC7kks38lnM7w5ZjjKOORJg03+CHic70zFb0JwtENEPLcu9N2QoEfE=
-X-Received: by 2002:a4a:ee90:0:b0:57b:94b7:c6ba with SMTP id
- dk16-20020a4aee90000000b0057b94b7c6bamr13458447oob.0.1696859705868; Mon, 09
- Oct 2023 06:55:05 -0700 (PDT)
+        bh=J7aAFQmtFZngidEZ+zvaFbvJXqmGzVQdu9SnwN3LMKA=;
+        b=KC68Ns2p0zmIHvNQbcTeN9sRZLfk450cv9fCyqNHpS5rqs0LhB/O687YpPCXLi+vf/
+         zElknbOqMEdgBJfNlUGuI4gwhpSuuICt7CVXJdW/KCIpZ4s/aKzvEL9sIeB9hJSppILQ
+         TZ+4R3/YfgPFey/vCqtrf+0bVw3bbpTLFcNqb0Ay28EiAWgiBCRJ5978lyMFDXu92o//
+         oMdJSaunqIFAzTTrJm135HfnRVY1OmBDmzdIemRt247SmHj9DLNURKOAm1IdnJTfhULS
+         TMoPdlK9FyOepI636qHIMyn9+91ACzsq1O5+R7ZLslMI9Oi/Hw00hOWhe547IwuNh6jc
+         T+DA==
+X-Gm-Message-State: AOJu0YzUS6DUSVj7skG5F/dlNy+Y1fS3dTIMjXyxl1Je7wTylRorjt1K
+        UNVX5iveMHOIV5ElL8kmpXA=
+X-Google-Smtp-Source: AGHT+IFafcmJH4Bnizt1oeh38NpJli8wyUInMQou89EMLcODMJkK95CzypgH0HoqqiErHwCe5BTudA==
+X-Received: by 2002:a7b:cc8f:0:b0:401:dc7e:b688 with SMTP id p15-20020a7bcc8f000000b00401dc7eb688mr13471200wma.6.1696859918633;
+        Mon, 09 Oct 2023 06:58:38 -0700 (PDT)
+Received: from morpheus.home.roving-it.com.com (8.c.1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.8.6.2.1.1.b.f.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:fb11:2681::1c8])
+        by smtp.googlemail.com with ESMTPSA id l34-20020a05600c1d2200b003fef5e76f2csm6756826wms.0.2023.10.09.06.58.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Oct 2023 06:58:38 -0700 (PDT)
+From:   Peter Robinson <pbrobinson@gmail.com>
+To:     Florian Fainelli <florian.fainelli@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Peter Robinson <pbrobinson@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH 2/3] power: reset: brcmstb: Depend on actual SoC dependencies
+Date:   Mon,  9 Oct 2023 14:58:18 +0100
+Message-ID: <20231009135833.17880-3-pbrobinson@gmail.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20231009135833.17880-1-pbrobinson@gmail.com>
+References: <20231009135833.17880-1-pbrobinson@gmail.com>
 MIME-Version: 1.0
-References: <20231006135434.3602921-1-lukasz.luba@arm.com>
-In-Reply-To: <20231006135434.3602921-1-lukasz.luba@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 9 Oct 2023 15:54:54 +0200
-Message-ID: <CAJZ5v0hiPcPWgqwmjpJhG4wG4WbSzkO8yxvVw5=ED8w3HNwBTw@mail.gmail.com>
-Subject: Re: [PATCH] thermal: Add myself as thermal reviewer in MAINTAINERS
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rafael.j.wysocki@intel.com,
-        linux-pm@vger.kernel.org, srinivas.pandruvada@linux.intel.com,
-        rui.zhang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 6, 2023 at 3:54 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->
-> Become designated reviewer and help thermal subsystem in development
-> process.
->
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
-> Hi Rafael,
->
-> This should apply on top of your patch removing the previous reviewer.
+Depend on the explicit SoC defines rather than generic
+architectures like most of the rest of the HW drivers do.
+This makes the drivers only available for the HW and for
+compile testing.
 
-Applied, thanks!
+Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
+Cc: Sebastian Reichel <sre@kernel.org>
+Cc: linux-pm@vger.kernel.org
+---
+ drivers/power/reset/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 63186c63cba6..70087a08d720 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -21357,6 +21357,7 @@ THERMAL
->  M:     Rafael J. Wysocki <rafael@kernel.org>
->  M:     Daniel Lezcano <daniel.lezcano@linaro.org>
->  R:     Zhang Rui <rui.zhang@intel.com>
-> +R:     Lukasz Luba <lukasz.luba@arm.com>
->  L:     linux-pm@vger.kernel.org
->  S:     Supported
->  Q:     https://patchwork.kernel.org/project/linux-pm/list/
-> --
-> 2.25.1
->
+diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+index 411e00b255d6..fece990af4a7 100644
+--- a/drivers/power/reset/Kconfig
++++ b/drivers/power/reset/Kconfig
+@@ -66,7 +66,7 @@ config POWER_RESET_BRCMKONA
+ 
+ config POWER_RESET_BRCMSTB
+ 	bool "Broadcom STB reset driver"
+-	depends on ARM || ARM64 || MIPS || COMPILE_TEST
++	depends on ARCH_BRCMSTB || BMIPS_GENERIC || COMPILE_TEST
+ 	depends on MFD_SYSCON
+ 	default ARCH_BRCMSTB || BMIPS_GENERIC
+ 	help
+-- 
+2.41.0
+
