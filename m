@@ -2,227 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 478C37BEA4C
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Oct 2023 21:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D50057BEB31
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Oct 2023 22:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346699AbjJITGM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Oct 2023 15:06:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
+        id S234597AbjJIUGL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Oct 2023 16:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378277AbjJITGF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Oct 2023 15:06:05 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B934AC;
-        Mon,  9 Oct 2023 12:06:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696878364; x=1728414364;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dsIbd807+kpu2yLdERegqOkBtiEXXVBZXwPZza2l1+k=;
-  b=hncYOf5BabrINWeJyG5L5WrEqyst+Wl5glTon9xbLmfB0ML1CCIh+JzX
-   GIWiddCW20cH4JDMyjyIE8u7GTFaTfcRkl8UIkDyYk/xp5A7D9m1chDWh
-   9eNtfDxPjtQgFLyv3e3MdQ8bwntOqUi23oCju919Gpgj+uuE4J/eA1A+T
-   hlovLRWO/dC0an1HK9rtjgLPKDwkVzC7oxu4jRbdigpWsvl094f2VvqlY
-   /C/+8sjfn3ricB8yQBhHj5SzTrZVRfYozvi/U7+hfqIPV0evAmemRedsN
-   4khMCdnZ8iOqFhh5fh8AbJsm/9FyUm7688/Rw9UJHtBiJlqVHeSjyywkD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="415213787"
-X-IronPort-AV: E=Sophos;i="6.03,210,1694761200"; 
-   d="scan'208";a="415213787"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2023 12:06:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="823445859"
-X-IronPort-AV: E=Sophos;i="6.03,210,1694761200"; 
-   d="scan'208";a="823445859"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.14])
-  by fmsmga004.fm.intel.com with ESMTP; 09 Oct 2023 12:06:01 -0700
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH v2 7/7] selftests/thermel/intel: Add test to read power floor status
-Date:   Mon,  9 Oct 2023 12:05:38 -0700
-Message-Id: <20231009190538.2488792-8-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20231009190538.2488792-1-srinivas.pandruvada@linux.intel.com>
-References: <20231009190538.2488792-1-srinivas.pandruvada@linux.intel.com>
+        with ESMTP id S1378490AbjJIUGK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Oct 2023 16:06:10 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CA4CF
+        for <linux-pm@vger.kernel.org>; Mon,  9 Oct 2023 13:06:08 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2c1807f3400so60244861fa.1
+        for <linux-pm@vger.kernel.org>; Mon, 09 Oct 2023 13:06:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google; t=1696881966; x=1697486766; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vntWR/EJpWFamZ/9NMXVbCLlV4xDhJbERcnlqbMN6Xk=;
+        b=BFuMz3FMbhLgkIJi/HkkmJ1VkLf2I7vqp4svyIwG2+yDE+U4S96EGEikgUcb8O02Uo
+         8j8iLlfo7vmxsfcwVcs/qIKkl99xa5dmEeJRo1cSF6V+ygbEal7iO3+v912NQA+dawBz
+         Soy5yco9XA4Rbc4rDCwVGkioAfXZalXRitmVvyF0C2rWZ0Ewe2//XA3FBEsbn52apGZL
+         aRFt/c7Wzbg6QpYPQ0dm8EJR8fe2x3S+duZuFSIP/H5VlRW/FVRYn5HxOETlTJKz3xcb
+         BMDmJLPjWEXQ8IaDm9bc5q/71Ibv+h4ffhs1BXiaAk1KUwUk/S2rUW6zLyroy1Lm1kJC
+         OAGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696881966; x=1697486766;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vntWR/EJpWFamZ/9NMXVbCLlV4xDhJbERcnlqbMN6Xk=;
+        b=GUFkF2t1M6FNPUK8Mu1GppqrsRq7B2vrjLgNJ1qeHo6WOMSYzcUweQDRmVSTEEGiXI
+         FZGI6CJltHMXqqqNIYLfjY2u6aMzeWMw7zPV+aXr6sKyvsbAD99swE+IjIHi/aekHha3
+         6KCWLewntEBOSuRwU25ZQ2+3H5CDtm5yrLe4S5jLqGYWNNB2tt1q84qZ9xCnYyX56x16
+         JQkOQ/YBFTVzNO3r8S4qrCaDEbuYhC8UagJ441gPfmPu1brk2klAfIvScO15E/LaVc3c
+         Xiw8LO3srA7b6hy8btvrthSZE0wG5RqJVxoPCJKG235EAbXaS0l3f6KS2B7R9sz79A2u
+         /bLg==
+X-Gm-Message-State: AOJu0YytqeReY+QbXGo1mcQ+1uf1iCDqv4K0nqBJjjagx6u8ppL07419
+        mkPcWO0LcVBoljQ0xmaWEqWc0PqIaAdzIKhZ/EUX5w==
+X-Google-Smtp-Source: AGHT+IFghqg7b3VfDVvZ+soPEwEaIfxhrwarlOcz2b03PC3KagC0O9BH1UGRNCP79pJ8yT5JMzxC/VoYSKvtKG/y1ws=
+X-Received: by 2002:a2e:870c:0:b0:2b6:cbdb:790c with SMTP id
+ m12-20020a2e870c000000b002b6cbdb790cmr11535962lji.1.1696881966432; Mon, 09
+ Oct 2023 13:06:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20231009165741.746184-1-max.kellermann@ionos.com>
+ <20231009165741.746184-6-max.kellermann@ionos.com> <264fa39d-aed6-4a54-a085-107997078f8d@roeck-us.net>
+In-Reply-To: <264fa39d-aed6-4a54-a085-107997078f8d@roeck-us.net>
+From:   Max Kellermann <max.kellermann@ionos.com>
+Date:   Mon, 9 Oct 2023 22:05:55 +0200
+Message-ID: <CAKPOu+8k2x1CucWSzoouts0AfMJk+srJXWWf3iWVOeY+fWkOpQ@mail.gmail.com>
+Subject: Re: [PATCH 6/7] fs/sysfs/group: make attribute_group pointers const
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        James Clark <james.clark@arm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-rdma@vger.kernel.org, iommu@lists.linux.dev,
+        nvdimm@lists.linux.dev, linux-nvme@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-leds@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Some SoCs have firmware support to notify, if the system can't lower
-power limit to a value requested from user space via RAPL constraints.
+On Mon, Oct 9, 2023 at 7:24=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> w=
+rote:
+> Also, I don't know why checkpatch is happy with all the
+>
+>         const struct attribute_group *const*groups;
+>
+> instead of
+>
+>         const struct attribute_group *const *groups;
 
-This test program waits for notification of power floor and prints. This
-program can be used to test this feature and also allows other user space
-programs to use as a reference.
+I found out that checkpatch has no check for this at all; it does
+complain about such lines, but only for local variables. But that
+warning is actually a bug, because this is a check for unary
+operators: it thinks the asterisk is a dereference operator, not a
+pointer declaration, and complains that the unary operator must be
+preceded by a space. Thus warnings on local variable are only correct
+by coincidence, not by design.
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
-v2:
-- No change
-
- tools/testing/selftests/Makefile              |   1 +
- .../thermal/intel/power_floor/Makefile        |  12 ++
- .../intel/power_floor/power_floor_test.c      | 108 ++++++++++++++++++
- 3 files changed, 121 insertions(+)
- create mode 100644 tools/testing/selftests/thermal/intel/power_floor/Makefile
- create mode 100644 tools/testing/selftests/thermal/intel/power_floor/power_floor_test.c
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 8d9b2341b79a..3b2061d1c1a5 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -86,6 +86,7 @@ TARGETS += syscall_user_dispatch
- TARGETS += sysctl
- TARGETS += tc-testing
- TARGETS += tdx
-+TARGETS += thermal/intel/power_floor
- TARGETS += thermal/intel/workload_hint
- TARGETS += timens
- ifneq (1, $(quicktest))
-diff --git a/tools/testing/selftests/thermal/intel/power_floor/Makefile b/tools/testing/selftests/thermal/intel/power_floor/Makefile
-new file mode 100644
-index 000000000000..9b88e57dbba5
---- /dev/null
-+++ b/tools/testing/selftests/thermal/intel/power_floor/Makefile
-@@ -0,0 +1,12 @@
-+# SPDX-License-Identifier: GPL-2.0
-+ifndef CROSS_COMPILE
-+uname_M := $(shell uname -m 2>/dev/null || echo not)
-+ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
-+
-+ifeq ($(ARCH),x86)
-+TEST_GEN_PROGS := power_floor_test
-+
-+include ../../../lib.mk
-+
-+endif
-+endif
-diff --git a/tools/testing/selftests/thermal/intel/power_floor/power_floor_test.c b/tools/testing/selftests/thermal/intel/power_floor/power_floor_test.c
-new file mode 100644
-index 000000000000..0326b39a11b9
---- /dev/null
-+++ b/tools/testing/selftests/thermal/intel/power_floor/power_floor_test.c
-@@ -0,0 +1,108 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+
-+#include <stdio.h>
-+#include <string.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <fcntl.h>
-+#include <poll.h>
-+#include <signal.h>
-+
-+#define POWER_FLOOR_ENABLE_ATTRIBUTE "/sys/bus/pci/devices/0000:00:04.0/power_limits/power_floor_enable"
-+#define POWER_FLOOR_STATUS_ATTRIBUTE  "/sys/bus/pci/devices/0000:00:04.0/power_limits/power_floor_status"
-+
-+void power_floor_exit(int signum)
-+{
-+	int fd;
-+
-+	/* Disable feature via sysfs knob */
-+
-+	fd = open(POWER_FLOOR_ENABLE_ATTRIBUTE, O_RDWR);
-+	if (fd < 0) {
-+		perror("Unable to open power floor enable file\n");
-+		exit(1);
-+	}
-+
-+	if (write(fd, "0\n", 2) < 0) {
-+		perror("Can' disable power floor notifications\n");
-+		exit(1);
-+	}
-+
-+	printf("Disabled power floor notifications\n");
-+
-+	close(fd);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	struct pollfd ufd;
-+	char status_str[3];
-+	int fd, ret;
-+
-+	if (signal(SIGINT, power_floor_exit) == SIG_IGN)
-+		signal(SIGINT, SIG_IGN);
-+	if (signal(SIGHUP, power_floor_exit) == SIG_IGN)
-+		signal(SIGHUP, SIG_IGN);
-+	if (signal(SIGTERM, power_floor_exit) == SIG_IGN)
-+		signal(SIGTERM, SIG_IGN);
-+
-+	/* Enable feature via sysfs knob */
-+	fd = open(POWER_FLOOR_ENABLE_ATTRIBUTE, O_RDWR);
-+	if (fd < 0) {
-+		perror("Unable to open power floor enable file\n");
-+		exit(1);
-+	}
-+
-+	if (write(fd, "1\n", 2) < 0) {
-+		perror("Can' enable power floor notifications\n");
-+		exit(1);
-+	}
-+
-+	close(fd);
-+
-+	printf("Enabled power floor notifications\n");
-+
-+	while (1) {
-+		fd = open(POWER_FLOOR_STATUS_ATTRIBUTE, O_RDONLY);
-+		if (fd < 0) {
-+			perror("Unable to power floor status file\n");
-+			exit(1);
-+		}
-+
-+		if ((lseek(fd, 0L, SEEK_SET)) < 0) {
-+			fprintf(stderr, "Failed to set pointer to beginning\n");
-+			exit(1);
-+		}
-+
-+		if (read(fd, status_str, sizeof(status_str)) < 0) {
-+			fprintf(stderr, "Failed to read from:%s\n",
-+			POWER_FLOOR_STATUS_ATTRIBUTE);
-+			exit(1);
-+		}
-+
-+		ufd.fd = fd;
-+		ufd.events = POLLPRI;
-+
-+		ret = poll(&ufd, 1, -1);
-+		if (ret < 0) {
-+			perror("poll error");
-+			exit(1);
-+		} else if (ret == 0) {
-+			printf("Poll Timeout\n");
-+		} else {
-+			if ((lseek(fd, 0L, SEEK_SET)) < 0) {
-+				fprintf(stderr, "Failed to set pointer to beginning\n");
-+				exit(1);
-+			}
-+
-+			if (read(fd, status_str, sizeof(status_str)) < 0)
-+				exit(0);
-+
-+			printf("power floor status: %s\n", status_str);
-+		}
-+
-+		close(fd);
-+	}
-+}
--- 
-2.40.1
-
+Inside structs or parameters (where my coding style violations can be
+found), it's a different context and thus checkpatch doesn't apply the
+rules for unary operators.
