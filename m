@@ -2,78 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C75827BD8C5
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Oct 2023 12:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 451347BD91F
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Oct 2023 13:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346134AbjJIKgp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Oct 2023 06:36:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34682 "EHLO
+        id S1345822AbjJILBS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Oct 2023 07:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345926AbjJIKgh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Oct 2023 06:36:37 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1F4BA
-        for <linux-pm@vger.kernel.org>; Mon,  9 Oct 2023 03:36:35 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-3296b49c546so2468782f8f.3
-        for <linux-pm@vger.kernel.org>; Mon, 09 Oct 2023 03:36:35 -0700 (PDT)
+        with ESMTP id S234515AbjJILBQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Oct 2023 07:01:16 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5751F9F
+        for <linux-pm@vger.kernel.org>; Mon,  9 Oct 2023 04:01:14 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-690d8fb3b7eso3915143b3a.1
+        for <linux-pm@vger.kernel.org>; Mon, 09 Oct 2023 04:01:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696847793; x=1697452593; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zLqmJToKVvGx3RPF93C/D7OTDNmDiwUSULcdREcteNg=;
-        b=V4ndD/FvTN8lDLyDZ+iL1ssnIQXGKkAxLC7Gh+qcxuxRwg/FhAD/TVT73fKADskQrU
-         1cveajp1LH72QU65QuUopll3bPyK9bDBOJzUAmTmoa3nZluUL7vesFFIU+SQQR/KkuPr
-         8m08QwvP9FKNhgHIVeNVG2Tt0F7BqhbJHr0F7duxV63YusafmwMjcKyO6ZK3axtUsZqo
-         w6XTcqnQ+3blMZxf4mH+kQlo60LS+gNWeoaOCXY2kmIQFg75gPCpMyc+NfeFtkhM8ijY
-         l4L5NejI8U/JD8NdUPBtpAmSVxw4F46tlb5HhFn7m+0/Rs8dWJz1T9wSMBZ6qSoOEcyH
-         csog==
+        d=linaro.org; s=google; t=1696849274; x=1697454074; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=20UBSnZ21RVqEDRJGZ13WLMQlN/IzJeVLBl1dR+JWvA=;
+        b=SyuHM73QZaxDoPGX22cjAdV1/EJ64tT156cd54rUQtMhuEBfs87xFRQuDMmmRZlkTq
+         ULFjT0u8qNok/ApgZaaWZci08cDiAlwYrqltGj7QJyfKic1/TkK9pomiCde7JwB42mqE
+         nb+qEGva+HCgaWRkNEhAx1ineQHwxFsDNfa0J9aGB2+e2HZNCMm2s4t/OIcPO7xkgo/Q
+         1UeR9Rrv+8c2TyuSvGxAx+kRr7dh19Qn9eftWLHjUqrtA2+1d/zo0EgY/qbmkd3PApYp
+         i+yTSWj8zr8nO8XQuHj+vbwn0Z3o2ZHawA448Giah38NFc61p2puuACE7XIrROJo1gnv
+         m7sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696847793; x=1697452593;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zLqmJToKVvGx3RPF93C/D7OTDNmDiwUSULcdREcteNg=;
-        b=X6uaqMG0OUWfkuuadLDkQssUzchu1mGzp4EuNc5A8+0W71RUklrp8MIw/+L4Xfk4if
-         GCWGWCBaZSCUxhHMdODNbI264SJJe/aMJbVlNT0ynrtWJAV5xTMtnQRoXMYWysMv8vIs
-         i4YdReoRcZr+xwUieoR1JYXj8iPS2eUU5vNS6IO13osmVKN69hosFFEKVWFHF4ww0cCF
-         KN2dTYV0VYeZfu8sbrhcN3AD33aKB/MfWeNEIBocpler50c43pREOqWL7WKum1ai/na2
-         aV/w0e5BPtTYK8+66SDRdvX/Q24r8doBBu0uf9PYv3afuSHDCrN21vg0/IwZIVSltPdy
-         cPHw==
-X-Gm-Message-State: AOJu0Ywmb9s4nodaJwhlG1LW54UBktdgRY72MNjdOYQHl8mGuwjAZfbj
-        zxp4ToqxBJNBAutmK+926I7DqA==
-X-Google-Smtp-Source: AGHT+IE1c9bbdHMwBLMomM9sWbKgUcq5hfVG4KlvDcosRRJkN4Ti2TteiXopQtpHeenYl1QcJ2PxJw==
-X-Received: by 2002:a5d:614b:0:b0:31c:8c93:61e3 with SMTP id y11-20020a5d614b000000b0031c8c9361e3mr12270603wrt.60.1696847793608;
-        Mon, 09 Oct 2023 03:36:33 -0700 (PDT)
-Received: from vingu-book.. ([2a01:e0a:f:6020:53f1:24bc:5e47:821d])
-        by smtp.gmail.com with ESMTPSA id f16-20020adfdb50000000b0031ff89af0e4sm9226722wrj.99.2023.10.09.03.36.32
+        d=1e100.net; s=20230601; t=1696849274; x=1697454074;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=20UBSnZ21RVqEDRJGZ13WLMQlN/IzJeVLBl1dR+JWvA=;
+        b=JbGkI/b2/VaV6gnxqspeoqz5P2r/QGNEaHEvFcDbvaBsH8g+BfdzyIgs/Tua5ZmGt2
+         I0GnayEMUXXIuEWiDNthjCqENq2c9x9JEupRzXd4sJDKRHqK+zR0yHiNRXTGf2RJUSo1
+         +DUS0eiDEO5S6a2pN2qmfLHDE/EIDatmD+JB4aHBdgzxU2Uc8DTcQENUiy+crfu4+VD7
+         EjIuOpF0Mv19MPbjuk1ZwzVZ5apcppd1c+l5eAVz6hNCZRHfQxwrZ2OCw01TisR2qyf3
+         JghZSMY4q/xJx1sxPqdcaysbX1dB5Os3FbbUlHMAeD+3LjWRhEFoDIQmdR89d0OeQrnp
+         jQbw==
+X-Gm-Message-State: AOJu0Yz5Vtla7v7opLZH/7S3+9fCthDI1+iju40RphVFaTP773mXYzpO
+        vWc/+sxZ7YTqSjrxk2ngygyM/A==
+X-Google-Smtp-Source: AGHT+IHe1jCSbOpGTUJ7WuGxCNpKASE8C+Y2DxHdiDOD36WoYmFY8Ro/O/Bx/pkU+uFk/jP4FO5q8Q==
+X-Received: by 2002:a05:6a00:2da2:b0:68f:cc47:fcd7 with SMTP id fb34-20020a056a002da200b0068fcc47fcd7mr17093067pfb.28.1696849273710;
+        Mon, 09 Oct 2023 04:01:13 -0700 (PDT)
+Received: from localhost ([122.172.81.92])
+        by smtp.gmail.com with ESMTPSA id gu21-20020a056a004e5500b00690c2cd7e0esm6146001pfb.49.2023.10.09.04.01.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Oct 2023 03:36:33 -0700 (PDT)
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-To:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        Mon, 09 Oct 2023 04:01:13 -0700 (PDT)
+Date:   Mon, 9 Oct 2023 16:31:11 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
         paul.walmsley@sifive.com, palmer@dabbelt.com,
         aou@eecs.berkeley.edu, sudeep.holla@arm.com,
         gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
         peterz@infradead.org, juri.lelli@redhat.com,
         dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
         mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        viresh.kumar@linaro.org, lukasz.luba@arm.com,
-        ionela.voinescu@arm.com, pierre.gondois@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org
-Cc:     conor.dooley@microchip.com, suagrfillet@gmail.com,
-        ajones@ventanamicro.com, lftan@kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH v2 6/6] cpufreq/cppc: set the frequency used for capacity computation
-Date:   Mon,  9 Oct 2023 12:36:21 +0200
-Message-Id: <20231009103621.374412-7-vincent.guittot@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231009103621.374412-1-vincent.guittot@linaro.org>
+        lukasz.luba@arm.com, ionela.voinescu@arm.com,
+        pierre.gondois@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-pm@vger.kernel.org, conor.dooley@microchip.com,
+        suagrfillet@gmail.com, ajones@ventanamicro.com, lftan@kernel.org
+Subject: Re: [PATCH v2 3/6] cpufreq: use the fixed and coherent frequency for
+ scaling capacity
+Message-ID: <20231009110111.tdehkpammwyigzia@vireshk-i7>
 References: <20231009103621.374412-1-vincent.guittot@linaro.org>
+ <20231009103621.374412-4-vincent.guittot@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231009103621.374412-4-vincent.guittot@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,51 +82,64 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-cppc cpufreq driver can register an artificial energy model. In such case,
-it also have to register the frequency that is used to define the CPU
-capacity
+On 09-10-23, 12:36, Vincent Guittot wrote:
+> cpuinfo.max_freq can change at runtime because of boost as an example. This
+> implies that the value could be different from the frequency that has been
+> used to compute the capacity of a CPU.
+> 
+> The new arch_scale_freq_ref() returns a fixed and coherent frequency
+> that can be used to compute the capacity for a given frequency.
+> 
+> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> ---
+>  drivers/cpufreq/cpufreq.c | 4 ++--
+>  include/linux/cpufreq.h   | 9 +++++++++
+>  2 files changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 60ed89000e82..8c4f9c2f9c44 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -454,7 +454,7 @@ void cpufreq_freq_transition_end(struct cpufreq_policy *policy,
+>  
+>  	arch_set_freq_scale(policy->related_cpus,
+>  			    policy->cur,
+> -			    policy->cpuinfo.max_freq);
+> +			    arch_scale_freq_ref(policy->cpu));
+>  
+>  	spin_lock(&policy->transition_lock);
+>  	policy->transition_ongoing = false;
+> @@ -2174,7 +2174,7 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
+>  
+>  	policy->cur = freq;
+>  	arch_set_freq_scale(policy->related_cpus, freq,
+> -			    policy->cpuinfo.max_freq);
+> +			    arch_scale_freq_ref(policy->cpu));
+>  	cpufreq_stats_record_transition(policy, freq);
+>  
+>  	if (trace_cpu_frequency_enabled()) {
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index 71d186d6933a..bbc483b4b6e5 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -1211,6 +1211,15 @@ void arch_set_freq_scale(const struct cpumask *cpus,
+>  {
+>  }
+>  #endif
+> +
+> +#ifndef arch_scale_freq_ref
+> +static __always_inline
+> +unsigned int arch_scale_freq_ref(int cpu)
+> +{
+> +	return 0;
+> +}
+> +#endif
+> +
+>  /* the following are really really optional */
+>  extern struct freq_attr cpufreq_freq_attr_scaling_available_freqs;
+>  extern struct freq_attr cpufreq_freq_attr_scaling_boost_freqs;
 
-Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
----
- drivers/cpufreq/cppc_cpufreq.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index fe08ca419b3d..24c6ba349f01 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -636,6 +636,21 @@ static int populate_efficiency_class(void)
- 	return 0;
- }
- 
-+
-+static void cppc_cpufreq_set_capacity_ref_freq(struct cpufreq_policy *policy)
-+{
-+	struct cppc_perf_caps *perf_caps;
-+	struct cppc_cpudata *cpu_data;
-+	unsigned int ref_freq;
-+
-+	cpu_data = policy->driver_data;
-+	perf_caps = &cpu_data->perf_caps;
-+
-+	ref_freq = cppc_cpufreq_perf_to_khz(cpu_data, perf_caps->highest_perf);
-+
-+	per_cpu(capacity_ref_freq, policy->cpu) = ref_freq;
-+}
-+
- static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
- {
- 	struct cppc_cpudata *cpu_data;
-@@ -643,6 +658,9 @@ static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
- 		EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
- 
- 	cpu_data = policy->driver_data;
-+
-+	cppc_cpufreq_set_capacity_ref_freq(policy);
-+
- 	em_dev_register_perf_domain(get_cpu_device(policy->cpu),
- 			get_perf_level_count(policy), &em_cb,
- 			cpu_data->shared_cpu_map, 0);
 -- 
-2.34.1
-
+viresh
