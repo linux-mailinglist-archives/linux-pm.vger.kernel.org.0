@@ -2,150 +2,471 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E697BDA14
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Oct 2023 13:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE0F7BDCFA
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Oct 2023 15:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234530AbjJILhQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Oct 2023 07:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39586 "EHLO
+        id S1376652AbjJINAR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Oct 2023 09:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234518AbjJILhP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Oct 2023 07:37:15 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2079.outbound.protection.outlook.com [40.107.223.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE30694;
-        Mon,  9 Oct 2023 04:37:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PqxBJmiKhhWe2vjtgAgZUqjxKpShPob6I7pdvBCseneFO5UTIcmB0NSFN1rWR3PFgcZtGn+czfpqRwaCjXt0hS6mzOepucuKButJ3snkSaJOlfbMy0tIoZV9FVNiJoPgODsl1HoYJ65pI2evVsoUD5XF1J3/XuiMWEyawDYPbp3l/meislh8RVMNMSldyWmIjMRq99ftwZbX3vpIk1KSCr4MuGZ5+RhEapTPmq8fINmWtBLVv6f5XNznl3yXJ2uT0zYU0ybhm7S5iD6+TrjVPWzmQAaJIPM/gdVCW+3gsfXsIuUAKum+7IUNyf3EvZ+QdzzNm7FTu/dDLAKWg1pNvA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1VIY+Sw25htvtyxLbQ9nkkLSH+8IYN5mP0NVAQpHsf8=;
- b=jWAb0bWND9xd1tituUHI0AFR4XB3rSC434kx1x2FRdNTSPChfTBX5Qre2iSxty67YmKY+tdci1u+7HlVLJ8xZ3EvXsSa/uBxMRcl062jlvI6/Hx4D6qEFytfcRim6CSlobG1AD8nVsyGb9lDen/PglgGphad6fmNT8SMC5Hi9FRpxU7bnL0ryLSXtKx37yAHJVcdVtpQLtJpMjZRUl+00LoluKlTbc89mGAIPvxtVOMvkXBBw+t7AM1fxShPZsgbk0WmLwC1ceDeRth1z887ia0mDuPTvdQG6HcCdOtgQnCpck3OYtHuva00b/6H4vzq1ERKtiUgaCEaQu7AGOnc6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1VIY+Sw25htvtyxLbQ9nkkLSH+8IYN5mP0NVAQpHsf8=;
- b=rsB65FuqcHuuSgr4Q14HLL6/UrT0SyV8RdgGtnDKvPodRVGmoN92Yy/3DfuWVUi5VvEd+gAkEJTXmXsM0sEZQiKEaOpjW7432K4NDoLZMxcsxrOulrzdtWdk/5+cm4lONdWGTZ/GhkI6BGF0gTGtvDEaIOzBq6kgTIB0cL/MbjAu22/NQwBqoa7pZZa1MuJMeRD9Vl4UaVh83eM6u9gCMjq+sUSenGVPgYzGuLT+RiQnGN3eq+EI0QwwLexGlc2hiUtHm0Z93DngDolzDiKa0RGtcOKJB7bo2FMo9hRVarJWEpjyGBFcJg4ol+m+w1iOK7x9t8t8wViRx1+TgQBWYA==
-Received: from CH0PR03CA0434.namprd03.prod.outlook.com (2603:10b6:610:10e::16)
- by CH2PR12MB4938.namprd12.prod.outlook.com (2603:10b6:610:34::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.38; Mon, 9 Oct
- 2023 11:37:05 +0000
-Received: from DS3PEPF000099D5.namprd04.prod.outlook.com
- (2603:10b6:610:10e:cafe::b4) by CH0PR03CA0434.outlook.office365.com
- (2603:10b6:610:10e::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.29 via Frontend
- Transport; Mon, 9 Oct 2023 11:37:04 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- DS3PEPF000099D5.mail.protection.outlook.com (10.167.17.6) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6838.14 via Frontend Transport; Mon, 9 Oct 2023 11:37:04 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 9 Oct 2023
- 04:36:51 -0700
-Received: from [10.41.21.79] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 9 Oct 2023
- 04:36:48 -0700
-Message-ID: <72e9f769-9cbb-274e-e99d-10c71f84bbe0@nvidia.com>
-Date:   Mon, 9 Oct 2023 17:06:40 +0530
+        with ESMTP id S1376642AbjJINAP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Oct 2023 09:00:15 -0400
+X-Greylist: delayed 21923 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 Oct 2023 06:00:10 PDT
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709E38F;
+        Mon,  9 Oct 2023 06:00:10 -0700 (PDT)
+Received: from spock.localnet (unknown [94.142.239.106])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 3B27B15356C3;
+        Mon,  9 Oct 2023 15:00:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1696856403;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Jv2ouviQ9JRHif0I/YLnvZflUpDg+74ZEHaRP9yz9pQ=;
+        b=SyC27gtbDH3QDTNFIdvBJtuFRvpF3fh3D0LX8kavoo6AzY2DbprZSgzRAhoaHiwd/fsFuZ
+        K6pZ+u6mhpNuWagg++7qU8tnR2W/PV+iFtZdeKKdqlPHKLBj+EHA8DhGldGz/a8HiPzfWU
+        BzIKKFI0dffSU2nmJEWn0xeN1UTLJuA=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        "Huang, Ray" <Ray.Huang@amd.com>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>
+Subject: Re: [PATCH V8 0/7] amd-pstate preferred core
+Date:   Mon, 09 Oct 2023 14:59:51 +0200
+Message-ID: <5718037.DvuYhMxLoT@natalenko.name>
+In-Reply-To: <DM4PR12MB63512D20912A9F66561B9FA1F7CEA@DM4PR12MB6351.namprd12.prod.outlook.com>
+References: <20231009024932.2563622-1-li.meng@amd.com>
+ <12301186.O9o76ZdvQC@natalenko.name>
+ <DM4PR12MB63512D20912A9F66561B9FA1F7CEA@DM4PR12MB6351.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [Patch v3 0/2] Improvements to the Tegra CPUFREQ driver
-Content-Language: en-US
-To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <treding@nvidia.com>, <jonathanh@nvidia.com>, <bbasu@nvidia.com>,
-        <amiettinen@nvidia.com>, Sumit Gupta <sumitg@nvidia.com>
-References: <20231004140537.1954-1-sumitg@nvidia.com>
-From:   Sumit Gupta <sumitg@nvidia.com>
-In-Reply-To: <20231004140537.1954-1-sumitg@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.231.35]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS3PEPF000099D5:EE_|CH2PR12MB4938:EE_
-X-MS-Office365-Filtering-Correlation-Id: d3fb7de4-1549-450c-3aa3-08dbc8bc0fd7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sAkTnJVz+vbqs5CRWQZXMutPZ+IidJmjs1yyB14w0SI5yGVT8tGAYL4tQQgkZ520BERl0hrQO/vrmYchb2iaKiAHvuLyN15Mxq6YE3cItmQDtDwnm8b7G0IZUR2O7JIqq7E6Frx0IOde06PQ7SjR3uktjs7QnldRic7PP+i5I4iYeWoAJXm9J5HHunwl41ueBUprr+li3RtBGsUQVCSlETr/1joIvHsMCkBt4fIXM/7xlSbZsYkcrJmH1UT0NEI+/aZSDbl7d+zMzoaL68dXn2JisJwAGnOYm/+4dWKhRpmEyxfoskxF4aLH6vUv3zLExsWcYXG9teuBeP0KQymzC88biXn4Ap6RoNXd3GzxeThCHExySjnDm6RYi2cHl+Bpqne4GzMMQ7nITH6GcgCPffcxi93Q7MAa8yCdd4Tjlf0jRijHY8jystE/mL/sBnAeKEKU0w9NobHc3JchoGdCQ2YmRd0hKGQ0Rbo9QCBaaz1tbozuNzp9ZhNbFy1HTbrM1PN7Vrtcng1gZ6eEynzODQyc9NW8x1GWchKd69XeNxgL2efuf3ng//CbhzUP4Bj4VDeSJy7avrETqVdvy/ExIt4qy3nw7yc8qyTo4SdR5K2DEmIycXrpeL4e5UF7YSxwKRiYfPoHXwLTNjMLkYFY80It58MCKVCWk0j6k/QhBoFkTnBafIDIUIY/mNy99VNzoex+Pn4+2d/WZqQ9pUSUQv9i8tb0QEppoD25Kn13e4EO09ZPdvUBYViJLYwtcTx40xx8vI1SfsNb26AzPbYhcrcc95bEjNr0SW2zPY4Y8Q8EhXWa3dZUH1Lusr4l8xgJLheFnYTD6q4yCoHf+1gW1rkPdKAWYC++KIpwQ+Z9kUw=
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(136003)(376002)(346002)(39860400002)(396003)(230922051799003)(64100799003)(1800799009)(186009)(451199024)(82310400011)(46966006)(40470700004)(36840700001)(31686004)(2616005)(26005)(336012)(16526019)(426003)(53546011)(40460700003)(36756003)(82740400003)(31696002)(86362001)(40480700001)(356005)(7636003)(83380400001)(107886003)(4326008)(2906002)(478600001)(6666004)(8676002)(36860700001)(47076005)(966005)(8936002)(316002)(16576012)(5660300002)(41300700001)(70586007)(54906003)(110136005)(70206006)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Oct 2023 11:37:04.6664
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d3fb7de4-1549-450c-3aa3-08dbc8bc0fd7
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS3PEPF000099D5.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4938
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="nextPart5979562.lOV4Wx5bFT";
+ micalg="pgp-sha256"; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+--nextPart5979562.lOV4Wx5bFT
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"; protected-headers="v1"
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: Re: [PATCH V8 0/7] amd-pstate preferred core
+Date: Mon, 09 Oct 2023 14:59:51 +0200
+Message-ID: <5718037.DvuYhMxLoT@natalenko.name>
+MIME-Version: 1.0
+
+Hello.
+
+On pond=C4=9Bl=C3=AD 9. =C5=99=C3=ADjna 2023 9:23:29 CEST Meng, Li (Jassmin=
+e) wrote:
+> [AMD Official Use Only - General]
+>=20
+> Hi Oleksandr:
+>=20
+> > -----Original Message-----
+> > From: Oleksandr Natalenko <oleksandr@natalenko.name>
+> > Sent: Monday, October 9, 2023 2:55 PM
+> > To: Rafael J . Wysocki <rafael.j.wysocki@intel.com>; Huang, Ray
+> > <Ray.Huang@amd.com>; Meng, Li (Jassmine) <Li.Meng@amd.com>
+> > Cc: linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org;
+> > x86@kernel.org; linux-acpi@vger.kernel.org; Shuah Khan
+> > <skhan@linuxfoundation.org>; linux-kselftest@vger.kernel.org; Fontenot,
+> > Nathan <Nathan.Fontenot@amd.com>; Sharma, Deepak
+> > <Deepak.Sharma@amd.com>; Deucher, Alexander
+> > <Alexander.Deucher@amd.com>; Limonciello, Mario
+> > <Mario.Limonciello@amd.com>; Huang, Shimmer
+> > <Shimmer.Huang@amd.com>; Yuan, Perry <Perry.Yuan@amd.com>; Du,
+> > Xiaojian <Xiaojian.Du@amd.com>; Viresh Kumar <viresh.kumar@linaro.org>;
+> > Borislav Petkov <bp@alien8.de>; Meng, Li (Jassmine) <Li.Meng@amd.com>
+> > Subject: Re: [PATCH V8 0/7] amd-pstate preferred core
+> >
+> > Hello.
+> >
+> > On pond=C4=9Bl=C3=AD 9. =C5=99=C3=ADjna 2023 4:49:25 CEST Meng Li wrote:
+> > > Hi all:
+> > >
+> > > The core frequency is subjected to the process variation in semicondu=
+ctors.
+> > > Not all cores are able to reach the maximum frequency respecting the
+> > > infrastructure limits. Consequently, AMD has redefined the concept of
+> > > maximum frequency of a part. This means that a fraction of cores can
+> > > reach maximum frequency. To find the best process scheduling policy
+> > > for a given scenario, OS needs to know the core ordering informed by
+> > > the platform through highest performance capability register of the C=
+PPC
+> > interface.
+> > >
+> > > Earlier implementations of amd-pstate preferred core only support a
+> > > static core ranking and targeted performance. Now it has the ability
+> > > to dynamically change the preferred core based on the workload and
+> > > platform conditions and accounting for thermals and aging.
+> > >
+> > > Amd-pstate driver utilizes the functions and data structures provided
+> > > by the ITMT architecture to enable the scheduler to favor scheduling
+> > > on cores which can be get a higher frequency with lower voltage.
+> > > We call it amd-pstate preferred core.
+> > >
+> > > Here sched_set_itmt_core_prio() is called to set priorities and
+> > > sched_set_itmt_support() is called to enable ITMT feature.
+> > > Amd-pstate driver uses the highest performance value to indicate the
+> > > priority of CPU. The higher value has a higher priority.
+> > >
+> > > Amd-pstate driver will provide an initial core ordering at boot time.
+> > > It relies on the CPPC interface to communicate the core ranking to the
+> > > operating system and scheduler to make sure that OS is choosing the
+> > > cores with highest performance firstly for scheduling the process.
+> > > When amd-pstate driver receives a message with the highest performance
+> > > change, it will update the core ranking.
+> > >
+> > > Changes form V7->V8:
+> > > - all:
+> > > - - pick up Review-By flag added by Mario and Ray.
+> > > - cpufreq: amd-pstate:
+> > > - - use hw_prefcore embeds into cpudata structure.
+> > > - - delete preferred core init from cpu online/off.
+> >
+> > Could you please let me know if this change means a fix for the report =
+I've
+> > sent previously? [1]
+> >
+> [Meng, Li (Jassmine)] Yes.
+> I have deleted online handle function of amd pstate driver.
+> It doesn't re-initialize preferred core.
+> This online function will set incorrect des perf value.
+
+Thank you for the confirmation. I've built v6.5.5 with this patchset applie=
+d, and now the frequency is as expected after the suspend-resume cycle.
+
+I've also added the following modification to accommodate recent feedback:
+
+```
+commit 1450ac395434c532f995521e1a2497d09ddf106c
+Author: Oleksandr Natalenko <oleksandr@natalenko.name>
+Date:   Mon Oct 9 11:19:50 2023 +0200
+
+    cpufreq/amd-pstate: show prefcore_ranking separately
+   =20
+    Signed-off-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index d3369247c6c9c..86999d861e87b 100644
+=2D-- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -954,6 +954,17 @@ static ssize_t show_amd_pstate_highest_perf(struct cpu=
+freq_policy *policy,
+ 	u32 perf;
+ 	struct amd_cpudata *cpudata =3D policy->driver_data;
+=20
++	perf =3D READ_ONCE(cpudata->highest_perf);
++
++	return sysfs_emit(buf, "%u\n", perf);
++}
++
++static ssize_t show_amd_pstate_prefcore_ranking(struct cpufreq_policy *pol=
+icy,
++						char *buf)
++{
++	u32 perf;
++	struct amd_cpudata *cpudata =3D policy->driver_data;
++
+ 	perf =3D READ_ONCE(cpudata->prefcore_ranking);
+=20
+ 	return sysfs_emit(buf, "%u\n", perf);
+@@ -1172,6 +1183,7 @@ cpufreq_freq_attr_ro(amd_pstate_max_freq);
+ cpufreq_freq_attr_ro(amd_pstate_lowest_nonlinear_freq);
+=20
+ cpufreq_freq_attr_ro(amd_pstate_highest_perf);
++cpufreq_freq_attr_ro(amd_pstate_prefcore_ranking);
+ cpufreq_freq_attr_ro(amd_pstate_hw_prefcore);
+ cpufreq_freq_attr_rw(energy_performance_preference);
+ cpufreq_freq_attr_ro(energy_performance_available_preferences);
+@@ -1182,6 +1194,7 @@ static struct freq_attr *amd_pstate_attr[] =3D {
+ 	&amd_pstate_max_freq,
+ 	&amd_pstate_lowest_nonlinear_freq,
+ 	&amd_pstate_highest_perf,
++	&amd_pstate_prefcore_ranking,
+ 	&amd_pstate_hw_prefcore,
+ 	NULL,
+ };
+@@ -1190,6 +1203,7 @@ static struct freq_attr *amd_pstate_epp_attr[] =3D {
+ 	&amd_pstate_max_freq,
+ 	&amd_pstate_lowest_nonlinear_freq,
+ 	&amd_pstate_highest_perf,
++	&amd_pstate_prefcore_ranking,
+ 	&amd_pstate_hw_prefcore,
+ 	&energy_performance_preference,
+ 	&energy_performance_available_preferences,
+```
+
+with the following output as a result:
+
+```
+[~]> grep . /sys/devices/system/cpu*/cpufreq/policy*/amd_pstate_highest_perf
+/sys/devices/system/cpu/cpufreq/policy0/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy1/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy2/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy3/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy4/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy5/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy6/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy7/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy8/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy9/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy10/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy11/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy12/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy13/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy14/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy15/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy16/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy17/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy18/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy19/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy20/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy21/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy22/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy23/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy24/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy25/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy26/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy27/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy28/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy29/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy30/amd_pstate_highest_perf:166
+/sys/devices/system/cpu/cpufreq/policy31/amd_pstate_highest_perf:166
+
+[~]> grep . /sys/devices/system/cpu*/cpufreq/policy*/amd_pstate_hw_prefcore
+/sys/devices/system/cpu/cpufreq/policy0/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy1/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy2/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy3/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy4/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy5/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy6/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy7/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy8/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy9/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy10/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy11/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy12/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy13/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy14/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy15/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy16/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy17/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy18/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy19/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy20/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy21/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy22/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy23/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy24/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy25/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy26/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy27/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy28/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy29/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy30/amd_pstate_hw_prefcore:supported
+/sys/devices/system/cpu/cpufreq/policy31/amd_pstate_hw_prefcore:supported
+
+[~]> grep . /sys/devices/system/cpu*/cpufreq/policy*/amd_pstate_prefcore_ra=
+nking
+/sys/devices/system/cpu/cpufreq/policy0/amd_pstate_prefcore_ranking:226
+/sys/devices/system/cpu/cpufreq/policy1/amd_pstate_prefcore_ranking:231
+/sys/devices/system/cpu/cpufreq/policy2/amd_pstate_prefcore_ranking:211
+/sys/devices/system/cpu/cpufreq/policy3/amd_pstate_prefcore_ranking:236
+/sys/devices/system/cpu/cpufreq/policy4/amd_pstate_prefcore_ranking:216
+/sys/devices/system/cpu/cpufreq/policy5/amd_pstate_prefcore_ranking:236
+/sys/devices/system/cpu/cpufreq/policy6/amd_pstate_prefcore_ranking:206
+/sys/devices/system/cpu/cpufreq/policy7/amd_pstate_prefcore_ranking:221
+/sys/devices/system/cpu/cpufreq/policy8/amd_pstate_prefcore_ranking:191
+/sys/devices/system/cpu/cpufreq/policy9/amd_pstate_prefcore_ranking:201
+/sys/devices/system/cpu/cpufreq/policy10/amd_pstate_prefcore_ranking:186
+/sys/devices/system/cpu/cpufreq/policy11/amd_pstate_prefcore_ranking:196
+/sys/devices/system/cpu/cpufreq/policy12/amd_pstate_prefcore_ranking:171
+/sys/devices/system/cpu/cpufreq/policy13/amd_pstate_prefcore_ranking:166
+/sys/devices/system/cpu/cpufreq/policy14/amd_pstate_prefcore_ranking:176
+/sys/devices/system/cpu/cpufreq/policy15/amd_pstate_prefcore_ranking:181
+/sys/devices/system/cpu/cpufreq/policy16/amd_pstate_prefcore_ranking:226
+/sys/devices/system/cpu/cpufreq/policy17/amd_pstate_prefcore_ranking:231
+/sys/devices/system/cpu/cpufreq/policy18/amd_pstate_prefcore_ranking:211
+/sys/devices/system/cpu/cpufreq/policy19/amd_pstate_prefcore_ranking:236
+/sys/devices/system/cpu/cpufreq/policy20/amd_pstate_prefcore_ranking:216
+/sys/devices/system/cpu/cpufreq/policy21/amd_pstate_prefcore_ranking:236
+/sys/devices/system/cpu/cpufreq/policy22/amd_pstate_prefcore_ranking:206
+/sys/devices/system/cpu/cpufreq/policy23/amd_pstate_prefcore_ranking:221
+/sys/devices/system/cpu/cpufreq/policy24/amd_pstate_prefcore_ranking:191
+/sys/devices/system/cpu/cpufreq/policy25/amd_pstate_prefcore_ranking:201
+/sys/devices/system/cpu/cpufreq/policy26/amd_pstate_prefcore_ranking:186
+/sys/devices/system/cpu/cpufreq/policy27/amd_pstate_prefcore_ranking:196
+/sys/devices/system/cpu/cpufreq/policy28/amd_pstate_prefcore_ranking:171
+/sys/devices/system/cpu/cpufreq/policy29/amd_pstate_prefcore_ranking:166
+/sys/devices/system/cpu/cpufreq/policy30/amd_pstate_prefcore_ranking:176
+/sys/devices/system/cpu/cpufreq/policy31/amd_pstate_prefcore_ranking:181
+```
+
+When I run `dd if=3D/dev/zero of=3D/dev/null`, the load lands onto cores 3,=
+ 5, 19 or 21, IOW, those that have the highest `amd_pstate_prefcore_ranking=
+` value given `schedutil` is in use.
+
+If all of the above is as expected, please add:
+
+Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+
+> > Would you also be able to Cc me on the next iteration of this patchset?
+> [Meng, Li (Jassmine)] OK.
+
+Thanks.
+
+> >
+> > Thank you!
+> >
+> > [1] https://lore.kernel.org/lkml/5973628.lOV4Wx5bFT@natalenko.name/
+> >
+> > >
+> > > Changes form V6->V7:
+> > > - x86:
+> > > - - Modify kconfig about X86_AMD_PSTATE.
+> > > - cpufreq: amd-pstate:
+> > > - - modify incorrect comments about scheduler_work().
+> > > - - convert highest_perf data type.
+> > > - - modify preferred core init when cpu init and online.
+> > > - acpi: cppc:
+> > > - - modify link of CPPC highest performance.
+> > > - cpufreq:
+> > > - - modify link of CPPC highest performance changed.
+> > >
+> > > Changes form V5->V6:
+> > > - cpufreq: amd-pstate:
+> > > - - modify the wrong tag order.
+> > > - - modify warning about hw_prefcore sysfs attribute.
+> > > - - delete duplicate comments.
+> > > - - modify the variable name cppc_highest_perf to prefcore_ranking.
+> > > - - modify judgment conditions for setting highest_perf.
+> > > - - modify sysfs attribute for CPPC highest perf to pr_debug message.
+> > > - Documentation: amd-pstate:
+> > > - - modify warning: title underline too short.
+> > >
+> > > Changes form V4->V5:
+> > > - cpufreq: amd-pstate:
+> > > - - modify sysfs attribute for CPPC highest perf.
+> > > - - modify warning about comments
+> > > - - rebase linux-next
+> > > - cpufreq:
+> > > - - Moidfy warning about function declarations.
+> > > - Documentation: amd-pstate:
+> > > - - align with ``amd-pstat``
+> > >
+> > > Changes form V3->V4:
+> > > - Documentation: amd-pstate:
+> > > - - Modify inappropriate descriptions.
+> > >
+> > > Changes form V2->V3:
+> > > - x86:
+> > > - - Modify kconfig and description.
+> > > - cpufreq: amd-pstate:
+> > > - - Add Co-developed-by tag in commit message.
+> > > - cpufreq:
+> > > - - Modify commit message.
+> > > - Documentation: amd-pstate:
+> > > - - Modify inappropriate descriptions.
+> > >
+> > > Changes form V1->V2:
+> > > - acpi: cppc:
+> > > - - Add reference link.
+> > > - cpufreq:
+> > > - - Moidfy link error.
+> > > - cpufreq: amd-pstate:
+> > > - - Init the priorities of all online CPUs
+> > > - - Use a single variable to represent the status of preferred core.
+> > > - Documentation:
+> > > - - Default enabled preferred core.
+> > > - Documentation: amd-pstate:
+> > > - - Modify inappropriate descriptions.
+> > > - - Default enabled preferred core.
+> > > - - Use a single variable to represent the status of preferred core.
+> > >
+> > > Meng Li (7):
+> > >   x86: Drop CPU_SUP_INTEL from SCHED_MC_PRIO for the expansion.
+> > >   acpi: cppc: Add get the highest performance cppc control
+> > >   cpufreq: amd-pstate: Enable amd-pstate preferred core supporting.
+> > >   cpufreq: Add a notification message that the highest perf has chang=
+ed
+> > >   cpufreq: amd-pstate: Update amd-pstate preferred core ranking
+> > >     dynamically
+> > >   Documentation: amd-pstate: introduce amd-pstate preferred core
+> > >   Documentation: introduce amd-pstate preferrd core mode kernel
+> > command
+> > >     line options
+> > >
+> > >  .../admin-guide/kernel-parameters.txt         |   5 +
+> > >  Documentation/admin-guide/pm/amd-pstate.rst   |  59 +++++-
+> > >  arch/x86/Kconfig                              |   5 +-
+> > >  drivers/acpi/cppc_acpi.c                      |  13 ++
+> > >  drivers/acpi/processor_driver.c               |   6 +
+> > >  drivers/cpufreq/amd-pstate.c                  | 186 ++++++++++++++++=
+=2D-
+> > >  drivers/cpufreq/cpufreq.c                     |  13 ++
+> > >  include/acpi/cppc_acpi.h                      |   5 +
+> > >  include/linux/amd-pstate.h                    |  10 +
+> > >  include/linux/cpufreq.h                       |   5 +
+> > >  10 files changed, 285 insertions(+), 22 deletions(-)
+> > >
+> > >
+> >
+> >
+> > --
+> > Oleksandr Natalenko (post-factum)
+>=20
 
 
-On 04/10/23 19:35, Sumit Gupta wrote:
-> This patch set adds below improvements to the Tegra194 CPUFREQ driver.
-> They are applicable to all the Tegra SoC's supported by the driver.
-> 
-> 1) Patch 1: Avoid making SMP call on every frequency request to reduce
->     the time for frequency set and get calls.
-> 
-> 2) Patch 2: Use reference clock count based loop instead of udelay()
->     to improve the accuracy of re-generated CPU frequency.
-> 
-> The patches are not related but have minor conflict. So, need to be
-> applied in order of patch numbers. If 'Patch 2' is to be applied first
-> then will rebase that and send separately.
-> 
-> ---
-> v1[2] -> v3:
-> - Patch 1: used sizeof(*data->cpu_data) in devm_kcalloc().
-> 
-> v1[1] -> v2:
-> - Patch 1: added new patch.
-> - Patch 2: changed subject and patch order.
-> 
-> Sumit Gupta (2):
->    cpufreq: tegra194: save CPU data to avoid repeated SMP calls
->    cpufreq: tegra194: use refclk delta based loop instead of udelay
-> 
->   drivers/cpufreq/tegra194-cpufreq.c | 151 ++++++++++++++++++++---------
->   1 file changed, 106 insertions(+), 45 deletions(-)
-> 
-> [2] https://lore.kernel.org/lkml/20230901164113.29139-1-sumitg@nvidia.com/
-> [1] https://lore.kernel.org/lkml/20230901152046.25662-1-sumitg@nvidia.com/
-> 
+=2D-=20
+Oleksandr Natalenko (post-factum)
+--nextPart5979562.lOV4Wx5bFT
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
 
-Hi Viresh,
+-----BEGIN PGP SIGNATURE-----
 
-If there is no further comment.
-Can we please still apply these patches for 6.7 ?
+iQIzBAABCAAdFiEEZUOOw5ESFLHZZtOKil/iNcg8M0sFAmUj+UcACgkQil/iNcg8
+M0ufew//Uuqt6V9vN3k5my7d3pOKc0mdisLT/VGfY8gXDB2P3CAhpYHmo5yvEZ16
+0OJgF/uWTWcw0USw6ITTO9UhcaLrxAk3nVkkJcUZY0WEjvjtoAdA2ubkVb97p2dy
+6P521zyPeeVZNvBW/lP0d/5KrIWl44LFCumJOYGRnumn68I0+HCb7LzN2tPsAZvX
+vU8G/Jur9dqsSQ0y/bKKVvweocwgeBezKIaXUnl+SaemXg231pW2t68/OigUqFWM
+JdtY8CFf6Q+YQ5oDuSULCBJR5PbwPikc24B0IL9aKkWnZXgPBKQoLkStrDtZhPdS
+GGqSom7vm+0jU+PmJjf5MtOch4+P3rIzSfCOIFSPMoaxNlSMDSfJwtfI80dRosNO
+1WodeheGhaSRYnO9nw0hn/LszptAFJSBO7wBeYygHSwDRZd5HyZmCBRopP5nepWu
+a4k7vrNzwwj9K6Llxe2n3/rUbfvUX1ozLSsIjRGknEP0/nrKdA+o6v3RyNzV9Qni
+xjZWEr3dDI2qpfqkviDytFSbR4OZO6tZF0pshaBZQWWCF+77qZcJr8V9BMDegA5R
+lcTsjSQHi/5/l2ruE0La6SW2Fv+DFAKdn9fk8/QjbZs6hbjwB3NExkW+GdBbad9t
+2GAZWLtVS3+2l/KEAO8gHUhrAcyHogxSiN5qYn3OQZIPcuTvXI4=
+=VmGM
+-----END PGP SIGNATURE-----
 
-Best Regards,
-Sumit Gupta
+--nextPart5979562.lOV4Wx5bFT--
+
+
+
