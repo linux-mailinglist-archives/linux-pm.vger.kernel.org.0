@@ -2,39 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5937BE82E
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Oct 2023 19:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8FA7BE837
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Oct 2023 19:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377910AbjJIRch (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Oct 2023 13:32:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60714 "EHLO
+        id S1378000AbjJIRdM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Oct 2023 13:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377997AbjJIRcd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Oct 2023 13:32:33 -0400
+        with ESMTP id S1378018AbjJIRc7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Oct 2023 13:32:59 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531ADB6;
-        Mon,  9 Oct 2023 10:32:29 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 414E0C433C7;
-        Mon,  9 Oct 2023 17:32:28 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2DF132;
+        Mon,  9 Oct 2023 10:32:51 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BB0BC433C8;
+        Mon,  9 Oct 2023 17:32:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696872748;
-        bh=hOqxwwj4R1P+EKnufjhjvIS/kNuMb6T35WWc1dRZ9O4=;
+        s=k20201202; t=1696872771;
+        bh=SVXshXiEdwU2vmo+Rd2WRtoCqJf4zLLOZYef9zCZqeM=;
         h=From:To:Cc:Subject:Date:From;
-        b=uEcN4iqpBBPTXSuTJmmsQW0XBmgffVYlQgaBjmqqdTkRMVBG3BPa8lkOyWVCiwydU
-         3UuptraJO6PiL4/jHqCtCVy7SBukoRQZkIpSXQM74DtScLLZeIn6rEoAdqqv44LPlq
-         hTyApjxodLZmzbOPa81Mzs0EvyUJ1mMNGXa2ZCpkIb0AhuQGzdOkz6h/wsixIaX67b
-         AqDMNmUTbTAFH+gmagJH7m1KciVoh8iecrwwuRs7IDflPBSn6msD4mUb4WKZscDXo3
-         ZVBsOTMkYpgYhuo0I8Fi1xNzkEWqhft5b3tfUaMhb7EkdATxM03er2qwuR78FSd7FX
-         1lhz54xTAGRjg==
-Received: (nullmailer pid 2526325 invoked by uid 1000);
-        Mon, 09 Oct 2023 17:32:27 -0000
+        b=KIiaAQun92uGEzEnXnpSCd6MxUz9S9l94W/P1vnDz2MTFrn61Rip6EzZC7q4cWFgb
+         ZA0UypE1C/YicJpz4OqcALR72Yu4e4OyKLuWvVftWPy7DWEG59nJY0NpoDbo07Btch
+         uSG7qF+InS+Yi1vPANVq286rpM+aDPYQSj0pLuo8SpSe5JtOs2oir7sT8kGlhi2qHl
+         NEIMOWTcubNYEbsEiDlL7TkHclJJTwAT7x8WiA0VjCiuY17mK1cFODuOf2ADlQf46A
+         42pHJbHheRyujLP5NxwtI4IT1LJ9hhUYh/QASvPCod3fcZwbK2EVV27e+h5KJu8RHb
+         Yh/akRVn+ZNGw==
+Received: (nullmailer pid 2532666 invoked by uid 1000);
+        Mon, 09 Oct 2023 17:32:48 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] opp: ti: Use device_get_match_data()
-Date:   Mon,  9 Oct 2023 12:29:08 -0500
-Message-ID: <20231009172923.2457844-13-robh@kernel.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] power: reset: vexpress: Use device_get_match_data()
+Date:   Mon,  9 Oct 2023 12:29:14 -0500
+Message-ID: <20231009172923.2457844-19-robh@kernel.org>
 X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,49 +51,53 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Use preferred device_get_match_data() instead of of_match_device() to
+get the driver match data. With this, adjust the includes to explicitly
+include the correct headers.
+
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/opp/ti-opp-supply.c | 13 +++----------
- 1 file changed, 3 insertions(+), 10 deletions(-)
+ drivers/power/reset/vexpress-poweroff.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/opp/ti-opp-supply.c b/drivers/opp/ti-opp-supply.c
-index 8f3f13fbbb25..e3b97cd1fbbf 100644
---- a/drivers/opp/ti-opp-supply.c
-+++ b/drivers/opp/ti-opp-supply.c
-@@ -18,6 +18,7 @@
+diff --git a/drivers/power/reset/vexpress-poweroff.c b/drivers/power/reset/vexpress-poweroff.c
+index 17064d7b19f6..bb22b2db5907 100644
+--- a/drivers/power/reset/vexpress-poweroff.c
++++ b/drivers/power/reset/vexpress-poweroff.c
+@@ -7,8 +7,8 @@
+ #include <linux/delay.h>
+ #include <linux/notifier.h>
  #include <linux/of.h>
+-#include <linux/of_device.h>
  #include <linux/platform_device.h>
- #include <linux/pm_opp.h>
 +#include <linux/property.h>
- #include <linux/regulator/consumer.h>
- #include <linux/slab.h>
+ #include <linux/reboot.h>
+ #include <linux/stat.h>
+ #include <linux/vexpress.h>
+@@ -108,20 +108,17 @@ static int _vexpress_register_restart_handler(struct device *dev)
  
-@@ -373,23 +374,15 @@ static int ti_opp_supply_probe(struct platform_device *pdev)
+ static int vexpress_reset_probe(struct platform_device *pdev)
  {
- 	struct device *dev = &pdev->dev;
- 	struct device *cpu_dev = get_cpu_device(0);
--	const struct of_device_id *match;
- 	const struct ti_opp_supply_of_data *of_data;
+-	const struct of_device_id *match =
+-			of_match_device(vexpress_reset_of_match, &pdev->dev);
++	enum vexpress_reset_func func;
+ 	struct regmap *regmap;
  	int ret = 0;
  
--	match = of_match_device(ti_opp_supply_of_match, dev);
--	if (!match) {
--		/* We do not expect this to happen */
--		dev_err(dev, "%s: Unable to match device\n", __func__);
--		return -ENODEV;
--	}
--	if (!match->data) {
-+	of_data = device_get_match_data(dev);
-+	if (!of_data) {
- 		/* Again, unlikely.. but mistakes do happen */
- 		dev_err(dev, "%s: Bad data in match\n", __func__);
- 		return -EINVAL;
- 	}
--	of_data = match->data;
+-	if (!match)
+-		return -EINVAL;
 -
- 	dev_set_drvdata(dev, (void *)of_data);
+ 	regmap = devm_regmap_init_vexpress_config(&pdev->dev);
+ 	if (IS_ERR(regmap))
+ 		return PTR_ERR(regmap);
+ 	dev_set_drvdata(&pdev->dev, regmap);
  
- 	/* If we need optimized voltage */
+-	switch ((uintptr_t)match->data) {
++	func = (uintptr_t)device_get_match_data(&pdev->dev);
++	switch (func) {
+ 	case FUNC_SHUTDOWN:
+ 		vexpress_power_off_device = &pdev->dev;
+ 		pm_power_off = vexpress_power_off;
 -- 
 2.42.0
 
