@@ -2,54 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 451347BD91F
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Oct 2023 13:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4841A7BD921
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Oct 2023 13:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345822AbjJILBS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Oct 2023 07:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45844 "EHLO
+        id S1346146AbjJILBU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Oct 2023 07:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234515AbjJILBQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Oct 2023 07:01:16 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5751F9F
-        for <linux-pm@vger.kernel.org>; Mon,  9 Oct 2023 04:01:14 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-690d8fb3b7eso3915143b3a.1
-        for <linux-pm@vger.kernel.org>; Mon, 09 Oct 2023 04:01:14 -0700 (PDT)
+        with ESMTP id S1346148AbjJILBT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Oct 2023 07:01:19 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBB099;
+        Mon,  9 Oct 2023 04:01:18 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-313e742a787so2574217f8f.1;
+        Mon, 09 Oct 2023 04:01:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696849274; x=1697454074; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1696849276; x=1697454076; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=20UBSnZ21RVqEDRJGZ13WLMQlN/IzJeVLBl1dR+JWvA=;
-        b=SyuHM73QZaxDoPGX22cjAdV1/EJ64tT156cd54rUQtMhuEBfs87xFRQuDMmmRZlkTq
-         ULFjT0u8qNok/ApgZaaWZci08cDiAlwYrqltGj7QJyfKic1/TkK9pomiCde7JwB42mqE
-         nb+qEGva+HCgaWRkNEhAx1ineQHwxFsDNfa0J9aGB2+e2HZNCMm2s4t/OIcPO7xkgo/Q
-         1UeR9Rrv+8c2TyuSvGxAx+kRr7dh19Qn9eftWLHjUqrtA2+1d/zo0EgY/qbmkd3PApYp
-         i+yTSWj8zr8nO8XQuHj+vbwn0Z3o2ZHawA448Giah38NFc61p2puuACE7XIrROJo1gnv
-         m7sg==
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=//K5iOSx+LhnQE5qyVFs7BiRBbgN/L2K75+Fy0+HDh4=;
+        b=HZ7WDkNRwjPuZD7WzE1Ua8CiF0yPRwZ6HOTS6ByHwWSVOlz6zJC7w3ehPyOyeoZrNZ
+         moOjziTGlPRypN+LFav92bmKxebyx5R3BC3M3rg1N3qGwPPPRjPVx/0CQ+MhE/hCW7UY
+         Bxj7bqGNJg81tF88ibZ5jjwCJORBctgqZUPaOoj+UFIh3oCsUbvo3oARYlBg1kgK/2Pm
+         4eNsY1fgQqX3YnyBfGtXZ8bNGK4MbU5TvYtKlTs33laKKY+v9jtvZ1PXZSYEZ+qLASWX
+         YV+N0eQ3kKuo/3ok5ionwylKmzbeqXxfqKk+5Tt5uQ9sQjrGA2qqJ1tb5XLZZUMhhEdX
+         nY6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696849274; x=1697454074;
+        d=1e100.net; s=20230601; t=1696849276; x=1697454076;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=20UBSnZ21RVqEDRJGZ13WLMQlN/IzJeVLBl1dR+JWvA=;
-        b=JbGkI/b2/VaV6gnxqspeoqz5P2r/QGNEaHEvFcDbvaBsH8g+BfdzyIgs/Tua5ZmGt2
-         I0GnayEMUXXIuEWiDNthjCqENq2c9x9JEupRzXd4sJDKRHqK+zR0yHiNRXTGf2RJUSo1
-         +DUS0eiDEO5S6a2pN2qmfLHDE/EIDatmD+JB4aHBdgzxU2Uc8DTcQENUiy+crfu4+VD7
-         EjIuOpF0Mv19MPbjuk1ZwzVZ5apcppd1c+l5eAVz6hNCZRHfQxwrZ2OCw01TisR2qyf3
-         JghZSMY4q/xJx1sxPqdcaysbX1dB5Os3FbbUlHMAeD+3LjWRhEFoDIQmdR89d0OeQrnp
-         jQbw==
-X-Gm-Message-State: AOJu0Yz5Vtla7v7opLZH/7S3+9fCthDI1+iju40RphVFaTP773mXYzpO
-        vWc/+sxZ7YTqSjrxk2ngygyM/A==
-X-Google-Smtp-Source: AGHT+IHe1jCSbOpGTUJ7WuGxCNpKASE8C+Y2DxHdiDOD36WoYmFY8Ro/O/Bx/pkU+uFk/jP4FO5q8Q==
-X-Received: by 2002:a05:6a00:2da2:b0:68f:cc47:fcd7 with SMTP id fb34-20020a056a002da200b0068fcc47fcd7mr17093067pfb.28.1696849273710;
-        Mon, 09 Oct 2023 04:01:13 -0700 (PDT)
-Received: from localhost ([122.172.81.92])
-        by smtp.gmail.com with ESMTPSA id gu21-20020a056a004e5500b00690c2cd7e0esm6146001pfb.49.2023.10.09.04.01.12
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=//K5iOSx+LhnQE5qyVFs7BiRBbgN/L2K75+Fy0+HDh4=;
+        b=lECx71qzBZyr0BXMQzfhjBStGBPWOsSlTKmyvDBW6mWNANyBd47QBn45vBu3r67WRv
+         HUXMKdEFj2nzMUfUQ6swxA4qaWU14H9yq9emGQmn+PbbuiooQuFTzmcu/3pnqg+9vkvR
+         1M3gkROzWC4bCW5HFfwAjteRiVFhEq0ADegQotE9r5S1xX+PIIuLBri7dms0lR2dz5jn
+         pkpz8froWys/mJPVWgRtj+UCyrAFOK8lHUxmNZOeXXYDBYK3rhDCI65LsvXi6BRanQY6
+         8OmpY3T0OUR0w1iqLHzWRKdHKplGDAzftw5NlKKKvQgD/WcN0vxgXy92hyTtZY54V7ix
+         97Rg==
+X-Gm-Message-State: AOJu0Yze2bmwFdhBdUzU88KvI1CxJG/tStJ5m/THLza9ybhyRLfEJ97d
+        g2VPJr4D2KmvXE1wTLBsdGs=
+X-Google-Smtp-Source: AGHT+IEFkAwgr/vL1oef8RnFaRM4o2hfmBtyLBgYWVUESswjOL3cwhDGTXs4EkSMp162uqsg+l3/dQ==
+X-Received: by 2002:a5d:4690:0:b0:318:720c:bb3 with SMTP id u16-20020a5d4690000000b00318720c0bb3mr10012693wrq.20.1696849275995;
+        Mon, 09 Oct 2023 04:01:15 -0700 (PDT)
+Received: from gmail.com (1F2EF237.nat.pool.telekom.hu. [31.46.242.55])
+        by smtp.gmail.com with ESMTPSA id b6-20020adfee86000000b0031f300a4c26sm9257600wro.93.2023.10.09.04.01.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Oct 2023 04:01:13 -0700 (PDT)
-Date:   Mon, 9 Oct 2023 16:31:11 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
+        Mon, 09 Oct 2023 04:01:15 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Mon, 9 Oct 2023 13:01:12 +0200
+From:   Ingo Molnar <mingo@kernel.org>
 To:     Vincent Guittot <vincent.guittot@linaro.org>
 Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
         paul.walmsley@sifive.com, palmer@dabbelt.com,
@@ -58,88 +60,71 @@ Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
         peterz@infradead.org, juri.lelli@redhat.com,
         dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
         mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        lukasz.luba@arm.com, ionela.voinescu@arm.com,
-        pierre.gondois@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-pm@vger.kernel.org, conor.dooley@microchip.com,
-        suagrfillet@gmail.com, ajones@ventanamicro.com, lftan@kernel.org
-Subject: Re: [PATCH v2 3/6] cpufreq: use the fixed and coherent frequency for
- scaling capacity
-Message-ID: <20231009110111.tdehkpammwyigzia@vireshk-i7>
+        viresh.kumar@linaro.org, lukasz.luba@arm.com,
+        ionela.voinescu@arm.com, pierre.gondois@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
+        conor.dooley@microchip.com, suagrfillet@gmail.com,
+        ajones@ventanamicro.com, lftan@kernel.org
+Subject: Re: [PATCH v2 1/6] sched: consolidate and cleanup access to CPU's
+ max compute capacity
+Message-ID: <ZSPdeMzCzDRCIqUw@gmail.com>
 References: <20231009103621.374412-1-vincent.guittot@linaro.org>
- <20231009103621.374412-4-vincent.guittot@linaro.org>
+ <20231009103621.374412-2-vincent.guittot@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231009103621.374412-4-vincent.guittot@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20231009103621.374412-2-vincent.guittot@linaro.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09-10-23, 12:36, Vincent Guittot wrote:
-> cpuinfo.max_freq can change at runtime because of boost as an example. This
-> implies that the value could be different from the frequency that has been
-> used to compute the capacity of a CPU.
+
+* Vincent Guittot <vincent.guittot@linaro.org> wrote:
+
+> Remove struct rq cpu_capacity_orig field and use arch_scale_cpu_capacity()
+> instead.
 > 
-> The new arch_scale_freq_ref() returns a fixed and coherent frequency
-> that can be used to compute the capacity for a given frequency.
+> Scheduler uses 3 methods to get access to the CPU's max compute capacity:
+> - arch_scale_cpu_capacity(cpu) which is the default way to get CPU's capacity.
+> - cpu_capacity_orig field which is periodically updated with
+>   arch_scale_cpu_capacity().
+> - capacity_orig_of(cpu) which encapsulates rq->cpu_capacity_orig.
+> 
+> There is no real need to save the value returned by arch_scale_cpu_capacity()
+> in struct rq. arch_scale_cpu_capacity() returns:
+> - either a per_cpu variable.
+> - or a const value for systems which have only one capacity.
+> 
+> Remove cpu_capacity_orig and use arch_scale_cpu_capacity() everywhere.
+> 
+> No functional changes.
+> 
+> some tests of Arm64
+> small SMP device (hikey): no noticeable changes
+> HMP device (RB5): hackbench shows minor improvement (1-2%)
+> large smp (thx2): hackbench and tbench shows minor improvement (1%)
 > 
 > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> ---
->  drivers/cpufreq/cpufreq.c | 4 ++--
->  include/linux/cpufreq.h   | 9 +++++++++
->  2 files changed, 11 insertions(+), 2 deletions(-)
+> Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 > 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 60ed89000e82..8c4f9c2f9c44 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -454,7 +454,7 @@ void cpufreq_freq_transition_end(struct cpufreq_policy *policy,
->  
->  	arch_set_freq_scale(policy->related_cpus,
->  			    policy->cur,
-> -			    policy->cpuinfo.max_freq);
-> +			    arch_scale_freq_ref(policy->cpu));
->  
->  	spin_lock(&policy->transition_lock);
->  	policy->transition_ongoing = false;
-> @@ -2174,7 +2174,7 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
->  
->  	policy->cur = freq;
->  	arch_set_freq_scale(policy->related_cpus, freq,
-> -			    policy->cpuinfo.max_freq);
-> +			    arch_scale_freq_ref(policy->cpu));
->  	cpufreq_stats_record_transition(policy, freq);
->  
->  	if (trace_cpu_frequency_enabled()) {
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index 71d186d6933a..bbc483b4b6e5 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -1211,6 +1211,15 @@ void arch_set_freq_scale(const struct cpumask *cpus,
->  {
->  }
->  #endif
-> +
-> +#ifndef arch_scale_freq_ref
-> +static __always_inline
-> +unsigned int arch_scale_freq_ref(int cpu)
-> +{
-> +	return 0;
-> +}
-> +#endif
-> +
->  /* the following are really really optional */
->  extern struct freq_attr cpufreq_freq_attr_scaling_available_freqs;
->  extern struct freq_attr cpufreq_freq_attr_scaling_boost_freqs;
+> ---
+>  Documentation/scheduler/sched-capacity.rst | 13 +++++++------
+>  kernel/sched/core.c                        |  2 +-
+>  kernel/sched/cpudeadline.c                 |  2 +-
+>  kernel/sched/deadline.c                    |  4 ++--
+>  kernel/sched/fair.c                        | 18 ++++++++----------
+>  kernel/sched/rt.c                          |  2 +-
+>  kernel/sched/sched.h                       |  6 ------
+>  kernel/sched/topology.c                    |  7 +++++--
+>  8 files changed, 25 insertions(+), 29 deletions(-)
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+I've applied patch #1 to tip:sched/core, thanks!
 
--- 
-viresh
+	Ingo
