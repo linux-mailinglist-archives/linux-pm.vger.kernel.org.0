@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FCA97BD8C4
+	by mail.lfdr.de (Postfix) with ESMTP id C75827BD8C5
 	for <lists+linux-pm@lfdr.de>; Mon,  9 Oct 2023 12:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346112AbjJIKgo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Oct 2023 06:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47072 "EHLO
+        id S1346134AbjJIKgp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Oct 2023 06:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345870AbjJIKgf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Oct 2023 06:36:35 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C5FDE
-        for <linux-pm@vger.kernel.org>; Mon,  9 Oct 2023 03:36:33 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-3247d69ed2cso4201715f8f.0
-        for <linux-pm@vger.kernel.org>; Mon, 09 Oct 2023 03:36:33 -0700 (PDT)
+        with ESMTP id S1345926AbjJIKgh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Oct 2023 06:36:37 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1F4BA
+        for <linux-pm@vger.kernel.org>; Mon,  9 Oct 2023 03:36:35 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-3296b49c546so2468782f8f.3
+        for <linux-pm@vger.kernel.org>; Mon, 09 Oct 2023 03:36:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696847792; x=1697452592; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1696847793; x=1697452593; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FXD0QUw+ffX/G//mljsP8uVRxSPaNtugfzKgqO7nW9U=;
-        b=hnyiZ8kx7BATKD47TcsSy9fXoBlQiTLbElApM1luHBCfrVTchy3UUaK2iIBYlMQgFU
-         k/TqLI7PtsnQNeNUPMZdf9ESFq8DoMy/mhlSehvtVc/NUYLTt6gehjOPQjYX3+jXGhzY
-         PnF9eMW5fHW7eTxgrzlJ2CQ3ppyzfISqPHzJUW1KyrMLooc04n+SQb0nyRp9r+Ysc3fO
-         1Tn6QhMDa578reGzRaW71apGOiFvc5X4+yUooK6TtrsqKHzb2okpmj5Jx+qrplm7Hepg
-         JfixR2uoI842zbNcRRV+7RWaXNoI6UO+UubLfm7feyxF5d8XOPj3iydEjojuDMvNxfFd
-         BF5w==
+        bh=zLqmJToKVvGx3RPF93C/D7OTDNmDiwUSULcdREcteNg=;
+        b=V4ndD/FvTN8lDLyDZ+iL1ssnIQXGKkAxLC7Gh+qcxuxRwg/FhAD/TVT73fKADskQrU
+         1cveajp1LH72QU65QuUopll3bPyK9bDBOJzUAmTmoa3nZluUL7vesFFIU+SQQR/KkuPr
+         8m08QwvP9FKNhgHIVeNVG2Tt0F7BqhbJHr0F7duxV63YusafmwMjcKyO6ZK3axtUsZqo
+         w6XTcqnQ+3blMZxf4mH+kQlo60LS+gNWeoaOCXY2kmIQFg75gPCpMyc+NfeFtkhM8ijY
+         l4L5NejI8U/JD8NdUPBtpAmSVxw4F46tlb5HhFn7m+0/Rs8dWJz1T9wSMBZ6qSoOEcyH
+         csog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696847792; x=1697452592;
+        d=1e100.net; s=20230601; t=1696847793; x=1697452593;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FXD0QUw+ffX/G//mljsP8uVRxSPaNtugfzKgqO7nW9U=;
-        b=izeQwDTKeZ8r0UM+LkvQ886ZhRjLbirsTujcGmPJUPLF621v7p9RNOsPNpNfBwwozU
-         Qkyp/lNW7nmDT1T+EwSgvgWP4Hh7dZACCORElAOaa3dGtpM5m+r7lZGhfqa1TrLYQHgQ
-         mZuR5tCYcb56QdYLNvlel+V7EdzJ+kX7bt+G1d9Rsy6e4Q6OOBypie5YwGe/gyZbeBHx
-         HMJTwcKOyP227vg4Sr4g6UJiz9GH463Payx/FsljHGn6Mnf3WxNNVuoo44gOPByRJgf/
-         KVxn62kFLnHBT/UwN0XJKQtXkWmQUQGgKnRRzVj50Ym4UFQ18Ye9BXc9+VaiDdTPM3GP
-         TC3g==
-X-Gm-Message-State: AOJu0YxMAbc7LIJ3a0MFbTbBPiyTkcpPIpTfjNOjZ6jcXYfEN3KC6eKr
-        oQIW58DmaRfz17if6s1CoO+cJg==
-X-Google-Smtp-Source: AGHT+IHr3aX+9E7V3PEwqGZuQkX9W7nIP+EyPQGbKJ+lRYHFakcvBtj79RtXlZzvZ8DwRc3af55fNw==
-X-Received: by 2002:adf:ed10:0:b0:320:933:4524 with SMTP id a16-20020adfed10000000b0032009334524mr13404865wro.2.1696847792183;
-        Mon, 09 Oct 2023 03:36:32 -0700 (PDT)
+        bh=zLqmJToKVvGx3RPF93C/D7OTDNmDiwUSULcdREcteNg=;
+        b=X6uaqMG0OUWfkuuadLDkQssUzchu1mGzp4EuNc5A8+0W71RUklrp8MIw/+L4Xfk4if
+         GCWGWCBaZSCUxhHMdODNbI264SJJe/aMJbVlNT0ynrtWJAV5xTMtnQRoXMYWysMv8vIs
+         i4YdReoRcZr+xwUieoR1JYXj8iPS2eUU5vNS6IO13osmVKN69hosFFEKVWFHF4ww0cCF
+         KN2dTYV0VYeZfu8sbrhcN3AD33aKB/MfWeNEIBocpler50c43pREOqWL7WKum1ai/na2
+         aV/w0e5BPtTYK8+66SDRdvX/Q24r8doBBu0uf9PYv3afuSHDCrN21vg0/IwZIVSltPdy
+         cPHw==
+X-Gm-Message-State: AOJu0Ywmb9s4nodaJwhlG1LW54UBktdgRY72MNjdOYQHl8mGuwjAZfbj
+        zxp4ToqxBJNBAutmK+926I7DqA==
+X-Google-Smtp-Source: AGHT+IE1c9bbdHMwBLMomM9sWbKgUcq5hfVG4KlvDcosRRJkN4Ti2TteiXopQtpHeenYl1QcJ2PxJw==
+X-Received: by 2002:a5d:614b:0:b0:31c:8c93:61e3 with SMTP id y11-20020a5d614b000000b0031c8c9361e3mr12270603wrt.60.1696847793608;
+        Mon, 09 Oct 2023 03:36:33 -0700 (PDT)
 Received: from vingu-book.. ([2a01:e0a:f:6020:53f1:24bc:5e47:821d])
-        by smtp.gmail.com with ESMTPSA id f16-20020adfdb50000000b0031ff89af0e4sm9226722wrj.99.2023.10.09.03.36.30
+        by smtp.gmail.com with ESMTPSA id f16-20020adfdb50000000b0031ff89af0e4sm9226722wrj.99.2023.10.09.03.36.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Oct 2023 03:36:31 -0700 (PDT)
+        Mon, 09 Oct 2023 03:36:33 -0700 (PDT)
 From:   Vincent Guittot <vincent.guittot@linaro.org>
 To:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
         paul.walmsley@sifive.com, palmer@dabbelt.com,
@@ -64,16 +64,16 @@ To:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
 Cc:     conor.dooley@microchip.com, suagrfillet@gmail.com,
         ajones@ventanamicro.com, lftan@kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH v2 5/6] energy_model: use a fixed reference frequency
-Date:   Mon,  9 Oct 2023 12:36:20 +0200
-Message-Id: <20231009103621.374412-6-vincent.guittot@linaro.org>
+Subject: [PATCH v2 6/6] cpufreq/cppc: set the frequency used for capacity computation
+Date:   Mon,  9 Oct 2023 12:36:21 +0200
+Message-Id: <20231009103621.374412-7-vincent.guittot@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231009103621.374412-1-vincent.guittot@linaro.org>
 References: <20231009103621.374412-1-vincent.guittot@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,67 +82,51 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The last item of a performance domain is not always the performance point
-that has been used to compute CPU's capacity. This can lead to different
-target frequency compared with other part of the system like schedutil and
-would result in wrong energy estimation.
-
-A new arch_scale_freq_ref() is available to return a fixed and coherent
-frequency reference that can be used when computing the CPU's frequency
-for an level of utilization. Use this function to get this reference
-frequency.
-
-Energy model is never used without defining arch_scale_freq_ref() but
-can be compiled. Define a default arch_scale_freq_ref() returning 0
-in such case.
+cppc cpufreq driver can register an artificial energy model. In such case,
+it also have to register the frequency that is used to define the CPU
+capacity
 
 Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
 ---
- include/linux/energy_model.h | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ drivers/cpufreq/cppc_cpufreq.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-index b9caa01dfac4..1b0c8490d4bd 100644
---- a/include/linux/energy_model.h
-+++ b/include/linux/energy_model.h
-@@ -204,6 +204,14 @@ struct em_perf_state *em_pd_get_efficient_state(struct em_perf_domain *pd,
- 	return ps;
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index fe08ca419b3d..24c6ba349f01 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -636,6 +636,21 @@ static int populate_efficiency_class(void)
+ 	return 0;
  }
  
-+#ifndef arch_scale_freq_ref
-+static __always_inline
-+unsigned int arch_scale_freq_ref(int cpu)
-+{
-+	return 0;
-+}
-+#endif
 +
- /**
-  * em_cpu_energy() - Estimates the energy consumed by the CPUs of a
-  *		performance domain
-@@ -224,7 +232,7 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
- 				unsigned long max_util, unsigned long sum_util,
- 				unsigned long allowed_cpu_cap)
++static void cppc_cpufreq_set_capacity_ref_freq(struct cpufreq_policy *policy)
++{
++	struct cppc_perf_caps *perf_caps;
++	struct cppc_cpudata *cpu_data;
++	unsigned int ref_freq;
++
++	cpu_data = policy->driver_data;
++	perf_caps = &cpu_data->perf_caps;
++
++	ref_freq = cppc_cpufreq_perf_to_khz(cpu_data, perf_caps->highest_perf);
++
++	per_cpu(capacity_ref_freq, policy->cpu) = ref_freq;
++}
++
+ static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
  {
--	unsigned long freq, scale_cpu;
-+	unsigned long freq, ref_freq, scale_cpu;
- 	struct em_perf_state *ps;
- 	int cpu;
+ 	struct cppc_cpudata *cpu_data;
+@@ -643,6 +658,9 @@ static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
+ 		EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
  
-@@ -241,11 +249,11 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
- 	 */
- 	cpu = cpumask_first(to_cpumask(pd->cpus));
- 	scale_cpu = arch_scale_cpu_capacity(cpu);
--	ps = &pd->table[pd->nr_perf_states - 1];
-+	ref_freq = arch_scale_freq_ref(cpu);
- 
- 	max_util = map_util_perf(max_util);
- 	max_util = min(max_util, allowed_cpu_cap);
--	freq = map_util_freq(max_util, ps->frequency, scale_cpu);
-+	freq = map_util_freq(max_util, ref_freq, scale_cpu);
- 
- 	/*
- 	 * Find the lowest performance state of the Energy Model above the
+ 	cpu_data = policy->driver_data;
++
++	cppc_cpufreq_set_capacity_ref_freq(policy);
++
+ 	em_dev_register_perf_domain(get_cpu_device(policy->cpu),
+ 			get_perf_level_count(policy), &em_cb,
+ 			cpu_data->shared_cpu_map, 0);
 -- 
 2.34.1
 
