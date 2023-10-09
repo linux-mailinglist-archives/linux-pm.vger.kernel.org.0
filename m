@@ -2,53 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E625C7BE1CA
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Oct 2023 15:54:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B03AD7BE1E2
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Oct 2023 15:55:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377555AbjJINyW convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 9 Oct 2023 09:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
+        id S1377548AbjJINzM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 9 Oct 2023 09:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377659AbjJINyK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Oct 2023 09:54:10 -0400
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674C391;
-        Mon,  9 Oct 2023 06:54:07 -0700 (PDT)
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-6c4c40ca4f4so424557a34.0;
-        Mon, 09 Oct 2023 06:54:07 -0700 (PDT)
+        with ESMTP id S1377601AbjJINzH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Oct 2023 09:55:07 -0400
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E362FA;
+        Mon,  9 Oct 2023 06:55:06 -0700 (PDT)
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6c623d55b98so422063a34.1;
+        Mon, 09 Oct 2023 06:55:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696859646; x=1697464446;
+        d=1e100.net; s=20230601; t=1696859706; x=1697464506;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tr0Ks+DzpCxj2Tm5X8RhGp9w9ypX3KRdOtOpwoJiGjc=;
-        b=CH9wo4Okm35EP2ZIibm+LRUjll1w6vMlD6czBHK6v1P1P6AJKGKkdgPWZhoFP8W3eA
-         Y1K68DgcATNtJsbrvuEHBhXirFqzH9CZTKQAHzJ8EYG2iIXBiyqUzuTUshpz9EXawoNV
-         4uT/TVqKG1wnw1P/9fo/R50wZZG2zOi4cpgyX/yxIFVpOT3rTrtsHfeCvqP4kq276XcC
-         H5xoGDHZ4sLJxlJ1laPEplPPcbXiNgFPq7qsH2bB7ltK2byHp8k2wForYjZMy4vXi1pc
-         +WGHpSX77viPOSVVpm3omSinB5SusRuIUKoLxxLyJnw2t14+aLas/4TCHDtH4L/D30d0
-         9nrQ==
-X-Gm-Message-State: AOJu0YywWQLSdJNVx+OzWbCD0NO/Hf5DX4R7k10XptRXKr/1C2U9hIpe
-        sQ9d48gHOMN+90rQWCIAymuhB4QtqWhzAmhSAbFO1RFT
-X-Google-Smtp-Source: AGHT+IE9Rwip+TGOvl+gCaBsaQyvpRsKiROcw1KB4xANYuzHZvexXqgz5D1FfrnpNxVuH2aTgbILb7LAbYIO8ego840=
-X-Received: by 2002:a4a:c509:0:b0:57e:c9bf:696e with SMTP id
- i9-20020a4ac509000000b0057ec9bf696emr13507256ooq.1.1696859646687; Mon, 09 Oct
- 2023 06:54:06 -0700 (PDT)
+        bh=DbYSaAkppXiXwPywgJaYV/kJCNrZ4Yezq8j1jCwJ9gw=;
+        b=AaxdZsCkw+tlye9GTa9lkjDafIxwx8PzI7csCeYi81riIISIjmWXJaDFj6CnL2IjlJ
+         D5F8RruMoIKnDVoGHJXzbw6Bsp40s5cqftun4Mdj6VQ1nKWpZ+nyj+igoeR26kiWl9GC
+         gw/pyiYMynCqweb0qpTRQ0LFyV/TPWaAy3XzmgxbAVOrzgaXYfyZFLR3IDI49j9YxP2i
+         7mIuyt+i9Sekr/GXlPRjMSXEC1PHtPw82nzwZeSpAqX8NL6SJrhWaoUEYReC26O0KSIj
+         QeukspOsJ8XVPApNUeoUnvtjKT0hvZcPq3vekUP+gKO/iCXPX6rNBeEINrVxn/1JW8i1
+         yDyg==
+X-Gm-Message-State: AOJu0Yy/ofKCoyuB8bztaLAA6HVBTvsXIFJD6OcG4M1xbaOVHTqesNxi
+        WkakSz3lQW7OxXXRrEwnL8hiUs4EOBmloEK5Oo0=
+X-Google-Smtp-Source: AGHT+IE2VRWkpXzrRv5siKgPmRUKaCxwWCJwWFC7kks38lnM7w5ZjjKOORJg03+CHic70zFb0JwtENEPLcu9N2QoEfE=
+X-Received: by 2002:a4a:ee90:0:b0:57b:94b7:c6ba with SMTP id
+ dk16-20020a4aee90000000b0057b94b7c6bamr13458447oob.0.1696859705868; Mon, 09
+ Oct 2023 06:55:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <514ef814-458d-4421-b93d-2d30bdc4a1e7@moroto.mountain>
-In-Reply-To: <514ef814-458d-4421-b93d-2d30bdc4a1e7@moroto.mountain>
+References: <20231006135434.3602921-1-lukasz.luba@arm.com>
+In-Reply-To: <20231006135434.3602921-1-lukasz.luba@arm.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 9 Oct 2023 15:53:55 +0200
-Message-ID: <CAJZ5v0j83GHpmWhQPPJG6Xrv9ryy0tKEzcX=nbM0K71arpAwog@mail.gmail.com>
-Subject: Re: [PATCH] thermal: core: prevent potential string overflow
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Thomas Sujith <sujith.thomas@intel.com>,
-        linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org
+Date:   Mon, 9 Oct 2023 15:54:54 +0200
+Message-ID: <CAJZ5v0hiPcPWgqwmjpJhG4wG4WbSzkO8yxvVw5=ED8w3HNwBTw@mail.gmail.com>
+Subject: Re: [PATCH] thermal: Add myself as thermal reviewer in MAINTAINERS
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rafael.j.wysocki@intel.com,
+        linux-pm@vger.kernel.org, srinivas.pandruvada@linux.intel.com,
+        rui.zhang@intel.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -61,41 +58,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Oct 7, 2023 at 10:59 AM Dan Carpenter <dan.carpenter@linaro.org> wrote:
+On Fri, Oct 6, 2023 at 3:54 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
 >
-> The dev->id value comes from ida_alloc() so it's a number between zero
-> and INT_MAX.  If it's too high then these sprintf()s will overflow.
+> Become designated reviewer and help thermal subsystem in development
+> process.
 >
-> Fixes: 203d3d4aa482 ("the generic thermal sysfs driver")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 > ---
->  drivers/thermal/thermal_core.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+> Hi Rafael,
 >
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 45d0aa0b69b7..61f0b5a3b00c 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -681,7 +681,8 @@ int thermal_bind_cdev_to_trip(struct thermal_zone_device *tz,
->         if (result)
->                 goto release_ida;
->
-> -       sprintf(dev->attr_name, "cdev%d_trip_point", dev->id);
-> +       snprintf(dev->attr_name, sizeof(dev->attr_name), "cdev%d_trip_point",
-> +                dev->id);
->         sysfs_attr_init(&dev->attr.attr);
->         dev->attr.attr.name = dev->attr_name;
->         dev->attr.attr.mode = 0444;
-> @@ -690,7 +691,8 @@ int thermal_bind_cdev_to_trip(struct thermal_zone_device *tz,
->         if (result)
->                 goto remove_symbol_link;
->
-> -       sprintf(dev->weight_attr_name, "cdev%d_weight", dev->id);
-> +       snprintf(dev->weight_attr_name, sizeof(dev->weight_attr_name),
-> +                "cdev%d_weight", dev->id);
->         sysfs_attr_init(&dev->weight_attr.attr);
->         dev->weight_attr.attr.name = dev->weight_attr_name;
->         dev->weight_attr.attr.mode = S_IWUSR | S_IRUGO;
-> --
+> This should apply on top of your patch removing the previous reviewer.
 
-Applied as 6.7 material, thanks!
+Applied, thanks!
+
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 63186c63cba6..70087a08d720 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -21357,6 +21357,7 @@ THERMAL
+>  M:     Rafael J. Wysocki <rafael@kernel.org>
+>  M:     Daniel Lezcano <daniel.lezcano@linaro.org>
+>  R:     Zhang Rui <rui.zhang@intel.com>
+> +R:     Lukasz Luba <lukasz.luba@arm.com>
+>  L:     linux-pm@vger.kernel.org
+>  S:     Supported
+>  Q:     https://patchwork.kernel.org/project/linux-pm/list/
+> --
+> 2.25.1
+>
