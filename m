@@ -2,107 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAECC7BE1F8
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Oct 2023 15:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B6E7BE44A
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Oct 2023 17:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376895AbjJIN6m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Oct 2023 09:58:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47868 "EHLO
+        id S1377742AbjJIPOb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Oct 2023 11:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376852AbjJIN6m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Oct 2023 09:58:42 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D190A3
-        for <linux-pm@vger.kernel.org>; Mon,  9 Oct 2023 06:58:40 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-40566f8a093so42270585e9.3
-        for <linux-pm@vger.kernel.org>; Mon, 09 Oct 2023 06:58:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696859919; x=1697464719; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J7aAFQmtFZngidEZ+zvaFbvJXqmGzVQdu9SnwN3LMKA=;
-        b=QAcU7i4364MPmGeglKjJ0Yo+S0aEIw4hPYY+BQukqL5kMXSNlz/i1wCVSgKy5fficy
-         FPX7lfJ73gZ3nkG+h4Qiu0grBYfzzryPu1TphM0vM63Wavt+HdBtzaiviGBrJEP0b9Gq
-         CQqgP/E5y3eL0teYFJ8OahM/R8BvGaLrQGQ/xePyFzEAPKl1msMmAA8Zebbzo9zO+iAk
-         qu5zb+VV2JqYxqY6LW3IGKNK3s41QjspxOtLbLeXTql9/BBTnddSmGiKYXcs6vOEs/y1
-         4vBA8o3oxrPxF2JaCqm2wzF8Tjuds2g0ItKlyHQCir7CqbgVQ8CbHEl1DWxGZU6HKNNe
-         xn1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696859919; x=1697464719;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=J7aAFQmtFZngidEZ+zvaFbvJXqmGzVQdu9SnwN3LMKA=;
-        b=KC68Ns2p0zmIHvNQbcTeN9sRZLfk450cv9fCyqNHpS5rqs0LhB/O687YpPCXLi+vf/
-         zElknbOqMEdgBJfNlUGuI4gwhpSuuICt7CVXJdW/KCIpZ4s/aKzvEL9sIeB9hJSppILQ
-         TZ+4R3/YfgPFey/vCqtrf+0bVw3bbpTLFcNqb0Ay28EiAWgiBCRJ5978lyMFDXu92o//
-         oMdJSaunqIFAzTTrJm135HfnRVY1OmBDmzdIemRt247SmHj9DLNURKOAm1IdnJTfhULS
-         TMoPdlK9FyOepI636qHIMyn9+91ACzsq1O5+R7ZLslMI9Oi/Hw00hOWhe547IwuNh6jc
-         T+DA==
-X-Gm-Message-State: AOJu0YzUS6DUSVj7skG5F/dlNy+Y1fS3dTIMjXyxl1Je7wTylRorjt1K
-        UNVX5iveMHOIV5ElL8kmpXA=
-X-Google-Smtp-Source: AGHT+IFafcmJH4Bnizt1oeh38NpJli8wyUInMQou89EMLcODMJkK95CzypgH0HoqqiErHwCe5BTudA==
-X-Received: by 2002:a7b:cc8f:0:b0:401:dc7e:b688 with SMTP id p15-20020a7bcc8f000000b00401dc7eb688mr13471200wma.6.1696859918633;
-        Mon, 09 Oct 2023 06:58:38 -0700 (PDT)
-Received: from morpheus.home.roving-it.com.com (8.c.1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.8.6.2.1.1.b.f.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:fb11:2681::1c8])
-        by smtp.googlemail.com with ESMTPSA id l34-20020a05600c1d2200b003fef5e76f2csm6756826wms.0.2023.10.09.06.58.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Oct 2023 06:58:38 -0700 (PDT)
-From:   Peter Robinson <pbrobinson@gmail.com>
-To:     Florian Fainelli <florian.fainelli@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Peter Robinson <pbrobinson@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH 2/3] power: reset: brcmstb: Depend on actual SoC dependencies
-Date:   Mon,  9 Oct 2023 14:58:18 +0100
-Message-ID: <20231009135833.17880-3-pbrobinson@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231009135833.17880-1-pbrobinson@gmail.com>
-References: <20231009135833.17880-1-pbrobinson@gmail.com>
+        with ESMTP id S1376488AbjJIPOJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Oct 2023 11:14:09 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D4CE1;
+        Mon,  9 Oct 2023 08:13:56 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8696A20008;
+        Mon,  9 Oct 2023 15:13:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1696864434;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qXkxOiYSFneTGLhk5il+8SZPucsOCBsZOYZ/HrPz4DA=;
+        b=odLtLQNAUf7WSgCe5nu+P4zzFmfpRimsiVBXhYJbezc11TiAcFzcjdOBJ5Z68HDQ2aqOCa
+        Q8DbEb544MwpITwL1g5S9P2WrWhWgsODl4V9xkkdcz6SkJ0WD2AdjE4jm1EvvEX8gVswrh
+        RGCKYRavraWFYQB6k2NSJ84WNMAyiUxoyFasL3gPj/UKbgjtdnp1r+t/tBesg9eaOWOvWW
+        ZkZwJMkMbKxrr6Gb39k2UhwwkT7rlOzR2nrWMTfk5WCnf2Gcxu86ggjV+0YXsMm9LNNiWW
+        j8TSEhaJ3HIaa0yU3ESkhQefQUBlzqlNfnngLtv0VrTQhyHNFQ0o6vvubRm+Ig==
+Message-ID: <a5bee830-07af-426b-94ac-3574cba34bec@bootlin.com>
+Date:   Mon, 9 Oct 2023 17:13:52 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: serial: 8250_omap: suspend issue with console_suspend disabled
+Content-Language: en-US
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Kumar Udit <u-kumar1@ti.com>, Dhruva Gole <d-gole@ti.com>
+References: <59b13c93-6637-3050-c145-31be0d6c12c9@bootlin.com>
+ <20230920053828.GD5282@atomide.com>
+From:   Thomas Richard <thomas.richard@bootlin.com>
+In-Reply-To: <20230920053828.GD5282@atomide.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: thomas.richard@bootlin.com
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Depend on the explicit SoC defines rather than generic
-architectures like most of the rest of the HW drivers do.
-This makes the drivers only available for the HW and for
-compile testing.
+On 9/20/23 07:38, Tony Lindgren wrote:
+> Hi,
+> 
+> * Thomas Richard <thomas.richard@bootlin.com> [230915 09:57]:
+>> The regression was introduced in commit 20a41a62618d "serial: 8250_omap:
+>> Use force_suspend and resume for system suspend"
+> ...
+> 
+>> --- a/drivers/tty/serial/8250/8250_omap.c
+>> +++ b/drivers/tty/serial/8250/8250_omap.c
+>> @@ -1630,7 +1630,7 @@ static int omap8250_suspend(struct device *dev)
+>>         err = pm_runtime_force_suspend(dev);
+>>         flush_work(&priv->qos_work);
+>>
+>> -       return err;
+>> +       return 0;
+>>  }
+> 
+> Maybe we can now just simplify things a bit here with the patch below.
+> Care to give it a try, it's compile tested only so far.
+> 
+>> Once the omap8250_suspend doesn't return an error, the suspend sequence
+>> can continue, but I get an other issue.
+>> This issue is not related to commit 20a41a62618d, it has already been
+>> present.
+>> The power domain of the console is powered-off, so no more messages are
+>> printed, and the SoC is stucked.
+>> As the uart port is used as console, we don't want to power-off it.
+>> My workaround is to set the corresponding power domain to
+>> GENPD_FLAG_ALWAYS_ON, so the uart port is not powered-off.
+> 
+> The runtime PM usage count should keep the related power domain on though,
+> sounds like this issue somewhere else if the power domains get force
+> suspended with runtime PM usage count?
 
-Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
-Cc: Sebastian Reichel <sre@kernel.org>
-Cc: linux-pm@vger.kernel.org
----
- drivers/power/reset/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If I understand correctly, there are 2 solutions to keep the power
+domain on through.
+The first one is to set the flag GENPD_FLAG_ALWAYS_ON for the power domain.
+The second one is to set the wakup_path of the device (using
+device_set_wakeup_path) and set the flag GENPD_FLAG_ACTIVE_WAKEUP to the
+power domain.
 
-diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-index 411e00b255d6..fece990af4a7 100644
---- a/drivers/power/reset/Kconfig
-+++ b/drivers/power/reset/Kconfig
-@@ -66,7 +66,7 @@ config POWER_RESET_BRCMKONA
- 
- config POWER_RESET_BRCMSTB
- 	bool "Broadcom STB reset driver"
--	depends on ARM || ARM64 || MIPS || COMPILE_TEST
-+	depends on ARCH_BRCMSTB || BMIPS_GENERIC || COMPILE_TEST
- 	depends on MFD_SYSCON
- 	default ARCH_BRCMSTB || BMIPS_GENERIC
- 	help
--- 
-2.41.0
+I didn't found any flag or option to say that the device is not
+suspended, but it is not an error, so we don't want to poweroff the
+power domain.
 
+Regards,
+
+Thomas
+
+> 
+> Regards,
+> 
+> Tony
+> 
+> 8< ------------------------------
+> diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+> --- a/drivers/tty/serial/8250/8250_omap.c
+> +++ b/drivers/tty/serial/8250/8250_omap.c
+> @@ -1617,7 +1617,7 @@ static int omap8250_suspend(struct device *dev)
+>  {
+>  	struct omap8250_priv *priv = dev_get_drvdata(dev);
+>  	struct uart_8250_port *up = serial8250_get_port(priv->line);
+> -	int err;
+> +	int err = 0;
+>  
+>  	serial8250_suspend_port(priv->line);
+>  
+> @@ -1627,7 +1627,8 @@ static int omap8250_suspend(struct device *dev)
+>  	if (!device_may_wakeup(dev))
+>  		priv->wer = 0;
+>  	serial_out(up, UART_OMAP_WER, priv->wer);
+> -	err = pm_runtime_force_suspend(dev);
+> +	if (uart_console(&up->port) && console_suspend_enabled)
+> +		err = pm_runtime_force_suspend(dev);
+>  	flush_work(&priv->qos_work);
+>  
+>  	return err;
+> @@ -1636,11 +1637,15 @@ static int omap8250_suspend(struct device *dev)
+>  static int omap8250_resume(struct device *dev)
+>  {
+>  	struct omap8250_priv *priv = dev_get_drvdata(dev);
+> +	struct uart_8250_port *up = serial8250_get_port(priv->line);
+>  	int err;
+>  
+> -	err = pm_runtime_force_resume(dev);
+> -	if (err)
+> -		return err;
+> +	if (uart_console(&up->port) && console_suspend_enabled) {
+> +		err = pm_runtime_force_resume(dev);
+> +		if (err)
+> +			return err;
+> +	}
+> +
+>  	serial8250_resume_port(priv->line);
+>  	/* Paired with pm_runtime_resume_and_get() in omap8250_suspend() */
+>  	pm_runtime_mark_last_busy(dev);
+> @@ -1717,16 +1722,6 @@ static int omap8250_runtime_suspend(struct device *dev)
+>  
+>  	if (priv->line >= 0)
+>  		up = serial8250_get_port(priv->line);
+> -	/*
+> -	 * When using 'no_console_suspend', the console UART must not be
+> -	 * suspended. Since driver suspend is managed by runtime suspend,
+> -	 * preventing runtime suspend (by returning error) will keep device
+> -	 * active during suspend.
+> -	 */
+> -	if (priv->is_suspending && !console_suspend_enabled) {
+> -		if (up && uart_console(&up->port))
+> -			return -EBUSY;
+> -	}
+>  
+>  	if (priv->habit & UART_ERRATA_CLOCK_DISABLE) {
+>  		int ret;
