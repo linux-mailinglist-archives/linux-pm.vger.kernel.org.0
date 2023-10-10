@@ -2,55 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3904B7C407D
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Oct 2023 22:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BC647C40CF
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Oct 2023 22:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234354AbjJJUAa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Oct 2023 16:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39116 "EHLO
+        id S234724AbjJJUHl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Oct 2023 16:07:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234351AbjJJUA3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Oct 2023 16:00:29 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E633893;
-        Tue, 10 Oct 2023 13:00:27 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-406619b53caso56469695e9.1;
-        Tue, 10 Oct 2023 13:00:27 -0700 (PDT)
+        with ESMTP id S234658AbjJJUH0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Oct 2023 16:07:26 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CC01BFC;
+        Tue, 10 Oct 2023 13:05:28 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-405417465aaso58396385e9.1;
+        Tue, 10 Oct 2023 13:05:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696968026; x=1697572826; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1696968327; x=1697573127; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:subject:cc
          :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=eQ4NRAmtnN/NRZQzjQnyQ6stD/3in+1JTool5Rxbj9g=;
-        b=a1Fycwmzhul6madsDHKnqALUkVlJDOgtGEjt829dLjSZXqpvcA7lOlZe43BROms+D6
-         qK+RwDptI9Ny/Gqa4wyTI9yVBzhFOdnT7+8MskvVuhmMgdkbwIXgqkr+hMW0XcbSYGiI
-         7yV9s2aXC3l8GT76jEmQo/rKeayFpShwH5zkxC/5lI0CYdNrz82myeL179xDLNXSNktR
-         VWwZogRu6y1fhBEchV3fEauqClmfhQtCxblEx3m5xOTJjhF1EKWf7M0ssoTVzs5ts5CE
-         CjagSz8acXvrhmgVXY3JlQcgHO4biXRTRQDRS3b/t4FANo20wgsQHYZ+QBdkQ4Nne2wo
-         8D+Q==
+        bh=uvdQ8oQKu8Aprzrh7sBdRyTzraBANoJZwsaVttcUpNw=;
+        b=gyZ8sDlDQKHSwo/ZZVsee8yuoaCSxVnL8LgLx1M/biU88co5WmQ2B8QGpALpUO36Jf
+         HRCFlOUwkDAl0oChhxH+Dn4HDYUcIs230GSypBuF9GiRua0Whd/n8hPjRBBJ1pWfXRQf
+         BgxmsEGnK+hYb+rbiPnKlalZRmN0dGdPFbdiPKumHJMdUSc7urKC3mr3YFrJvlXNwpbR
+         aS6Jtbd4mJFp6NFS5jKJhscRC9vdQpTOe4WFfPWNPzuenOa35XcZeEG6eaJG8HE152+R
+         X6M/8iYI3OVfgMrvxOtM/vZCVfl/phi81y/ZaRN33GCZixoMmBp8hM9UWaI1QkMAritx
+         o6ZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696968026; x=1697572826;
+        d=1e100.net; s=20230601; t=1696968327; x=1697573127;
         h=in-reply-to:content-disposition:mime-version:references:subject:cc
          :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eQ4NRAmtnN/NRZQzjQnyQ6stD/3in+1JTool5Rxbj9g=;
-        b=LLYAaQXQcf357BNlNJo1onL3IR/k5/dBl9F9hrtlWVxMmcytFZ5CeGPHbkee8xTT8+
-         b+1fMHNZCsCXkQoTkQ/UKtks1N9U9QXTDWn59IlOFBZ7cFz0j/emVVy7rE8I0Er4B56w
-         O9FDUo5krEbuN8wYGP0rJYRihIF4SxFD6Vjc4B4axB7TJFbVBt33Kbgpg6gpEo2zyvCL
-         ISFd1fZsqM/iiiozlrcCW5JKNWD0JYQJf5WX6SPavAg2gKUGiP32XareSvllbvSaR5Qx
-         GkCfKD37p03q7Zvs/GQf+Vrwh7Jx4yknbUTyZGBUrHOH7GHuyRuaUtTgX+fyfM70bVfS
-         YAqA==
-X-Gm-Message-State: AOJu0Yz+3yrdde2tEP2cl+NeE7zEWDTkHP19PK6LwQA+dIHqqg8IIL8c
-        DPTfSywjdskgH+U6OOgCUM9cf32iPiM=
-X-Google-Smtp-Source: AGHT+IGq2z9HR84nxbJLb+mZvoR2JGu6JiTGC/OK2iwe+mFB0lNNAELhdNThlwt4cGJFsCppI7hC1A==
-X-Received: by 2002:a05:600c:20b:b0:406:177e:5de8 with SMTP id 11-20020a05600c020b00b00406177e5de8mr17177489wmi.35.1696968025979;
-        Tue, 10 Oct 2023 13:00:25 -0700 (PDT)
+        bh=uvdQ8oQKu8Aprzrh7sBdRyTzraBANoJZwsaVttcUpNw=;
+        b=G7HcJBaauXdAhiopzl3y7vnoQwGnpoMtzib/LRzD5o6tZrp8ByjcTXz6/MtpoitCZV
+         HSfB7mCNDutntbWzWNpW6Fo84XVyfZPD2seWSlInk5AuOQYqgR7jGY6FgLxB5hnbbmpQ
+         KG8QnExW3ev40K9x5gMJICdDyhy1fkz8OjzE+EftwXQAbjwqtCj86CtEADdYPvxxaSXt
+         VDlS724mumhH1bILZ1f/6pb917KkpsRZTiZDioNBN8ae+5iPGQImYOrkzdLUGGwtBxsW
+         3NYR/O5bMF2P9EAc9eNaAjebWbvx2iBtK39vCKf6SAwqNCBpGynSuj1bsFgwnLnTSzGI
+         CJ9Q==
+X-Gm-Message-State: AOJu0Ywh0V/w3d7qiWBbp1Uk8dSImRbIpuMCNLrDAozWV3USiubW8R7L
+        7ylue9BniJl3zc2e+7M2FWk=
+X-Google-Smtp-Source: AGHT+IHO4aDIeIdZ+DANdqp04v6I8NqSgq3Pd3g1mL4+TWHC+Dza0YQcGYv+82hNXvTyBmB6SPneDg==
+X-Received: by 2002:a05:600c:ad6:b0:3fc:7eb:1119 with SMTP id c22-20020a05600c0ad600b003fc07eb1119mr16666366wmr.15.1696968326929;
+        Tue, 10 Oct 2023 13:05:26 -0700 (PDT)
 Received: from Ansuel-xps. (93-34-89-13.ip49.fastwebnet.it. [93.34.89.13])
-        by smtp.gmail.com with ESMTPSA id v2-20020a1cf702000000b00405d9a950a2sm17275895wmh.28.2023.10.10.13.00.24
+        by smtp.gmail.com with ESMTPSA id e17-20020a05600c219100b0040646a708dasm14926114wme.15.2023.10.10.13.05.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Oct 2023 13:00:25 -0700 (PDT)
-Message-ID: <6525ad59.1c0a0220.e3509.8545@mx.google.com>
-X-Google-Original-Message-ID: <ZSWtWAbVThLbpCk3@Ansuel-xps.>
-Date:   Tue, 10 Oct 2023 22:00:24 +0200
+        Tue, 10 Oct 2023 13:05:26 -0700 (PDT)
+Message-ID: <6525ae86.050a0220.827f2.c59d@mx.google.com>
+X-Google-Original-Message-ID: <ZSWuhTM/O+fUI5fk@Ansuel-xps.>
+Date:   Tue, 10 Oct 2023 22:05:25 +0200
 From:   Christian Marangi <ansuelsmth@gmail.com>
 To:     Konrad Dybcio <konrad.dybcio@linaro.org>
 Cc:     Robert Marko <robimarko@gmail.com>, ilia.lin@kernel.org,
@@ -63,13 +63,11 @@ Cc:     Robert Marko <robimarko@gmail.com>, ilia.lin@kernel.org,
 Subject: Re: [PATCH v5 4/4] ARM: dts: qcom: ipq8064: Add CPU OPP table
 References: <20230930102218.229613-1-robimarko@gmail.com>
  <20230930102218.229613-4-robimarko@gmail.com>
- <e255dcbd-6342-49e6-9bfe-17a47b2a3c8a@linaro.org>
- <65255c81.050a0220.141f8.7b8f@mx.google.com>
- <1aea4a86-7f7c-46ee-9cbe-655eb7663c2a@linaro.org>
+ <e2d6c9c7-ff59-408f-94cf-81e66d291963@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1aea4a86-7f7c-46ee-9cbe-655eb7663c2a@linaro.org>
+In-Reply-To: <e2d6c9c7-ff59-408f-94cf-81e66d291963@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -80,47 +78,60 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 10, 2023 at 09:52:50PM +0200, Konrad Dybcio wrote:
+On Tue, Oct 10, 2023 at 09:55:26PM +0200, Konrad Dybcio wrote:
 > 
 > 
-> On 10/10/23 16:15, Christian Marangi wrote:
-> > On Tue, Oct 10, 2023 at 03:40:32PM +0200, Konrad Dybcio wrote:
-> > > 
-> > > 
-> > > On 9/30/23 12:21, Robert Marko wrote:
-> > > > From: Christian Marangi <ansuelsmth@gmail.com>
-> > > > 
-> > > > Add CPU OPP table for IPQ8062, IPQ8064 and IPQ8065 SoC.
-> > > > Use opp-supported-hw binding to correctly enable and disable the
-> > > > frequency as IPQ8062 supports up to 1.0Ghz, IPQ8064 supports up to
-> > > > 1.4GHz with 1.2GHz as an additional frequency and IPQ8065 supports
-> > > > 1.7GHZ but doesn't have 1.2GHZ frequency and has to be disabled.
-> > > > 
-> > > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > > > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > > > ---
-> > > Christian/Robert, can you provide a downstream source for this?
-> > > 
+> On 9/30/23 12:21, Robert Marko wrote:
+> > From: Christian Marangi <ansuelsmth@gmail.com>
 > > 
-> > Sure, consider that everything is with +/-5%.
-> Hm, so you're e.g. putting ipq8062 384MHz voltage for PVS3 equal to
-> 0.95*800000 = 760000, but I'm not sure if it's a good idea?
+> > Add CPU OPP table for IPQ8062, IPQ8064 and IPQ8065 SoC.
+> > Use opp-supported-hw binding to correctly enable and disable the
+> > frequency as IPQ8062 supports up to 1.0Ghz, IPQ8064 supports up to
+> > 1.4GHz with 1.2GHz as an additional frequency and IPQ8065 supports
+> > 1.7GHZ but doesn't have 1.2GHZ frequency and has to be disabled.
+> > 
+> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > Signed-off-by: Robert Marko <robimarko@gmail.com>
+> > ---
+> > Changes v4:
+> > * Add OPP DTS patch for IPQ8064
+> > 
+> >   arch/arm/boot/dts/qcom/qcom-ipq8062.dtsi | 30 +++++++++++
+> >   arch/arm/boot/dts/qcom/qcom-ipq8064.dtsi | 67 ++++++++++++++++++++++++
+> >   arch/arm/boot/dts/qcom/qcom-ipq8065.dtsi | 65 +++++++++++++++++++++++
+> >   3 files changed, 162 insertions(+)
+> > 
+> > diff --git a/arch/arm/boot/dts/qcom/qcom-ipq8062.dtsi b/arch/arm/boot/dts/qcom/qcom-ipq8062.dtsi
+> > index 5d3ebd3e2e51..72d9782c3d6f 100644
+> > --- a/arch/arm/boot/dts/qcom/qcom-ipq8062.dtsi
+> > +++ b/arch/arm/boot/dts/qcom/qcom-ipq8062.dtsi
+> > @@ -6,3 +6,33 @@ / {
+> >   	model = "Qualcomm Technologies, Inc. IPQ8062";
+> >   	compatible = "qcom,ipq8062", "qcom,ipq8064";
+> >   };
+> > +
+> > +&opp_table_cpu {
+> > +	opp-384000000 {
+> > +		opp-microvolt-speed0-pvs0 = <1000000 950000 1050000>;
+> > +		opp-microvolt-speed0-pvs1 = <925000 878750 971250>;
+> > +		opp-microvolt-speed0-pvs2 = <875000 831250 918750>;
+> > +		opp-microvolt-speed0-pvs3 = <800000 760000 840000>;
+> We can just make use of opp-supported-hw and define opp-384...-0,
+> opp-384..-1 etc. with a valid corresponding bitmask in opp-supported-hw
 > 
-> The comment in downstream:
-> 
-> "These are based on +/-5% Margin on the VDD_APCx that is advertised in our
-> Datasheet across Temperature"
-> 
-> suggests this is already not very accurate, and betting that the lower
-> threshold works on all chips is probably not the best idea.
+> otherwise it's somewhat confusing to follow, I think..
 >
 
-Consider that everything is driven by the rpm. The original qsdk used the
-same approach of taking the value, apply +-5% and pass it as a voltage
-triplet to the rpm regulator. Also the driver have ranges so it
-autodecide the best voltage in the range of the voltage triplet based on
-the one supported by the regulator. Normally the normal voltage is
-always used.
+Ehh should we really double the nodes for ipq8062 and ipq8065?
+The idea here was to overwrite the one since the pvs always match and at
+worst(ipq8065) have 7 pvs instead of 4. From the system it would be
+easier to read since only one table is present in the final dts and not
+2 and referring to the opp-supported-hw.
+
+The original idea was to declare one opp table and reuse pvs version (by
+faking it with hardcoded values) to put additional pvs for ipq8062 and
+ipq8065, but Dmitry didn't like it and asked to move the opp in
+different dtsi.
 
 -- 
 	Ansuel
