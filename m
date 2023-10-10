@@ -2,120 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA55D7BFE39
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Oct 2023 15:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0707E7BFEC5
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Oct 2023 16:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232752AbjJJNo6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Oct 2023 09:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53736 "EHLO
+        id S232670AbjJJOIg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Oct 2023 10:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232576AbjJJNoi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Oct 2023 09:44:38 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2079.outbound.protection.outlook.com [40.107.8.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC645E4
-        for <linux-pm@vger.kernel.org>; Tue, 10 Oct 2023 06:43:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NCrsO8KihOdCoQu81MftNvkBQuJ2IyhO+6pvYDrHTUJX7VwY18h0GhwPapNa7KOMvpQD0WujCcG4bkRsMdneBvi1h1k/ANyPzInTWH01tJTqI250VZNSOxYlHJbkLv5CzudZM14uYf2RN3uuhqP6lDSD6kGOXQVeq8pqquSvKLinfn8R7Ihc9aeU7EEj0ug8FOZ+pxYMfxxZBIAl5JTxHWLTZsrGhfVvZoCWCQBZU2tB0kc1z501PCOVWz+PjeahD50dG20EljoL7BvxuYhwAAjmDArLPRQ91xMy8LMwEbhK3UaBS5hzNa+GYW6mayo2cL/7WtXeGPjfj4RnGDyh0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Y1dF4oNEypKG50wnqobJ37ohBjl+KT4XVcTsFbreCWc=;
- b=BGRZ7zbqFAySj5diBfIVhu08LG3pvNvDvJa+ub3nSOdCGluuSQj3yFs1gMjzbkYv94LiDOCxWfj+uTFys0fGDOZJf56QunxGq/3pjWX2UvP64LzfEg2x4YTmrmw6qnPtnx9h8+qKfP8qgWYz6kpFCTomAUQNQKeIYTSs6/5JAcjHr1VK1ORt3Jr3wglX701dATXp6mzeV7yaRtDNVFmpHEkhJKtzZTOyYoFJLtGi0Oy1evbogvRMAIOSZJCzJtWmuoO76MzevSgmdxmCK4JRssT2baejMC3t7JFwQOGvF6MtHnTkK2K4TJ1icjdHfWkZ8ApQD8sk2G1nZuTT73Z7bQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Y1dF4oNEypKG50wnqobJ37ohBjl+KT4XVcTsFbreCWc=;
- b=g4GgHq3bHrCgnrFMIEC1NPR3VQV7wFCzqKQ2ntVErzLo9xPA3iAxR24J+GxahQ/T3V0zkTy8DNY3otetBw6qgYTYP24kwrD0KxC24/cDi5UQWSUV1jwGVdn3Zbxeau8MjIuStqxdLIYFctn2g7ngrXPG41fYth9PJdlO+8hhjxU=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AM8PR04MB7969.eurprd04.prod.outlook.com (2603:10a6:20b:24c::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.38; Tue, 10 Oct
- 2023 13:43:32 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::2b3:d8de:95c8:b28b]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::2b3:d8de:95c8:b28b%3]) with mapi id 15.20.6838.040; Tue, 10 Oct 2023
- 13:43:32 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-CC:     Ulf Hansson <ulf.hansson@linaro.org>,
-        "cristian.marussi@arm.com" <cristian.marussi@arm.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>,
-        Glen G Wienecke <glen.wienecke@nxp.com>
-Subject: RE: Question regarding scmi_perf_domain.c
-Thread-Topic: Question regarding scmi_perf_domain.c
-Thread-Index: Adn7ZJVuPYTdu0ufRKeeVXBw4lJjnAAA6M+AAAA+SYAAALxWIAADapAAAABn5rAAAKUSgAAAVlkA
-Date:   Tue, 10 Oct 2023 13:43:32 +0000
-Message-ID: <DU0PR04MB9417D01218CA4803D00545A788CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <DU0PR04MB9417DE145496DC03579F50E488CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <20231010105503.jwrmjahuvcjgwtk5@bogus>
- <CAPDyKFqEpnKeF7Yuvv_a+=Kqs=pNU_kM59EqWdpCniHrY_373A@mail.gmail.com>
- <DU0PR04MB941755466872E84217378F6388CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <20231010130054.ieylxocuapugajif@bogus>
- <DU0PR04MB94177FFEAA62AC27839D826F88CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <20231010133059.57rs52qedrc5mxfr@bogus>
-In-Reply-To: <20231010133059.57rs52qedrc5mxfr@bogus>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|AM8PR04MB7969:EE_
-x-ms-office365-filtering-correlation-id: 991c175b-3625-454a-8d8a-08dbc996e4b6
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: sak/DqKGlw7zryYBufCu+DvSvRz1X9RdcPEIk0GF/HWLrP5PZp9k0DN4eQ+WTixZ0CxGiACmLKO+3adSrI5BBjLignop8JoIw5Y/qoXE7j/tdkdLiNKPYor5/bwvcnGnkyhe0eRgwrVFTzMg7odEW08zl3zlmaAAI5qDD9lRBBxuKz2DOebksGfT88ri88jlt+JBaCoNBSyLmXrVi+NDj38SZIlwPx06QmFcubJkZsphNP5KrNy9ylXjEb5EppdIaa5m/HtvyjXSmpUZwXsHbVPFag6yxldcwz63XAEQrJpM18HT3+x2aDGYsB67LW0Q+Sb4xJSvDlLWvyBy/cC5fmJFC+CIcWGVuIZIgiiTh1Q0v74/b0rKbPrTi8aNEGXVlSRoaR35XGLzenI9NQ6sPRMACUAl2lswEB9/POrgrTlPSHKJCChYu3UfcqWtJwJNAJh7Y9tzZpc9Pvspx1tyV/UH5giuHhcM+hRKJYojeN69zxiAv9/QmjjPHVDbWriiacMnzTglcqsBxR9kN1bN7Z+Rzz0CZCwtNBMqoWPP0QNJxqmQFUyv8eFcG8rr/ME1BoKDmlaqPEccTvDEbTaOKIdtvRtOcvvZAzzAlKvFeL81/1zA4DQsbsNPK+fzlT1T
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(396003)(39860400002)(376002)(346002)(136003)(230922051799003)(451199024)(1800799009)(186009)(64100799003)(55016003)(71200400001)(7696005)(6506007)(83380400001)(76116006)(9686003)(26005)(44832011)(41300700001)(4326008)(478600001)(8936002)(8676002)(5660300002)(2906002)(6916009)(54906003)(316002)(66556008)(66946007)(52536014)(66446008)(66476007)(64756008)(38070700005)(122000001)(33656002)(86362001)(38100700002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?4gV773xN7Hnkx3HRCeozis/cjiHF7lML6EaX4+wF6L6gIz3F7/FEv4S4pbnr?=
- =?us-ascii?Q?vb4G/3jyVhwtttuFZFZDTeTmnJSezLdwbrU85aHJi40hCcKy+aK+ebrX0Di1?=
- =?us-ascii?Q?lkVZlGJJvl2eRk4pGqUuX1Hqv2HbLv93ywhplFX5d5RK9jlKoHsSr3gBwOHI?=
- =?us-ascii?Q?cuyg71gQgWAmiGSzyxvl3uWtQDCMqQCZtT1S+iFKh4UzIx+1TYENHk8WM89e?=
- =?us-ascii?Q?eW2jtWaYYpn5bxLwmZvtVVepkvHCjzM7XVvtmUGnxvBvGjY19y+R2IXmt7qa?=
- =?us-ascii?Q?IQE34l6Ze1uRawyURKJCTB6Ll1kf505EGn0C4JyK5cCEPXLrRdDKKeBzGy8i?=
- =?us-ascii?Q?yzWCCPvnXd/DfQE37XVYr9itrw5W8mVWSbLs6SnHk8Te6GwHwJWCjJQfGYBE?=
- =?us-ascii?Q?sFcQfWAILhoxj0q+LwICtsQ9eMFkaoDELLU7FjrwOOa76qwPtdGSP8DJQ2FO?=
- =?us-ascii?Q?z+q7NifZvfhR+FhbegUrAd02jIwJL8ZDZFg+jB2mlLAMZIuHOjJ0GecfFcyl?=
- =?us-ascii?Q?5sx1yjTA1BVd+4A35v+sxdW4bqFEd/QsJgIybKdCTRoLQJ/hEf4Bl61nAjEA?=
- =?us-ascii?Q?lLV8rTj0M53Yi9Y+rVljjCe0f0EqSSG6QuSa7Euzg5F4f6/Wr0Z67pW0jRpB?=
- =?us-ascii?Q?4MvOvZZ0KwluGWkqN3N+srUHfBe+4z4Q8Omc2KtFU2nM2OoEmeYeYG7XASwL?=
- =?us-ascii?Q?e/e4eFQl7YB86dCrn5m0giUhp9QkQMjFpEI3mbTD2rXMXUaukWjwJi8JbC8+?=
- =?us-ascii?Q?GOHBVwHCB8jO4UUcEFQzZbCPfQAEGwjjhnXa7+j5w/Rv+IzeEJc6UogmfY7B?=
- =?us-ascii?Q?RP70oRbbHtSINttcC0Nkqt5QzpD6QaRLmzr5LooNVvaBuAgskCWmCaheCsTW?=
- =?us-ascii?Q?/O+1P8D6ixCghViC/oaABoJbjLju/KfTeHvvwtn7QIktR4q2xuLN951LjG5T?=
- =?us-ascii?Q?D9yJr6mKTdg/Hs6iwtUrxUIIMwz9XdFF4JMBxlk0hP08A7MO85Wc3EGy7Ux3?=
- =?us-ascii?Q?a73d9R8kAyAQZfD87IxwUUv74ESRXPOOq6WTtyGfkS2vXLCj79MJUNMJoDYd?=
- =?us-ascii?Q?mgoIwCDl6ME0EEun6t8QKBsQmfqgLuG+0wpZjdwkaUTuHMtvHaU5oxfczuWH?=
- =?us-ascii?Q?ull6TJXqqSXqopNg39Vxme1TFMr/dnj7siDoS3jIsz3XDK90q8vBL6E/bsIw?=
- =?us-ascii?Q?TcKNmZN7dSJ3Sp0bOO0b0q4eeN2ZWPSrmOo6ACjTQNeMAmLGCUkrBn4tWIqF?=
- =?us-ascii?Q?3s3loT10CVnxhpND85tLariucz9vrkeetLKkbO5unJmPGHeVsAlnI06DfpUL?=
- =?us-ascii?Q?GgfsByPnpGqn5PL7O5OSaFXR5ndX7PLlGBzxv9aEA5MxzIejRgaSwUXMkSEH?=
- =?us-ascii?Q?dB8uViOS3iCwPJJoHjX74gIP2l53cKqM36IJoCPW0IQJzUmqfshPB1qrJF1E?=
- =?us-ascii?Q?UB1vI4IlzxKTHNTQxnipn1Df6/1xzT8BA6PcV8XWov2MLyjX9N1Y9XltdGw5?=
- =?us-ascii?Q?TCknxMF+JA1NiDilj6e3nWrRd7P/FnLhNyNR5ihPyWsNIaniqzv7r5/Ny60U?=
- =?us-ascii?Q?lNnRZ3AH+F3gyA/rONI=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S231997AbjJJOIe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Oct 2023 10:08:34 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B87DA7;
+        Tue, 10 Oct 2023 07:08:32 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-3247cefa13aso5205661f8f.1;
+        Tue, 10 Oct 2023 07:08:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696946910; x=1697551710; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=k2Very6RldBCzTfWE3kixTMSpP7cmdjStMj9exgkPjU=;
+        b=Mm9LKzgi7b7on3KUTrVv0icEuH1SSqkAlKz4x3vMBzIwqRmwyyOkyzhES3J4Wu0CUU
+         jOk+/w3jK48w4IFlTgbAQX4bS5m1fvjiJJCVvKV5j5xZ4ImbPwLEBgb7ayi+N+pSych4
+         tAS9Lz/HL4QxVAZXND6Tg6bBPSeJBQqm+ezizyvto1NsffLskhR3reHJ6vf799hrhKPU
+         v0ZvFTHQEBq3RgVZiZkJV6tp1HZ5SjPx1ARh4sjCWAW1HEDW6VraigYkxENWnt24zBXD
+         zLGq05CdkFlpBlxipe90GcMIMu4z61z8o+x5W95YG08QrgmkW8FYV1Cy26TeFMJsdjTU
+         bAog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696946910; x=1697551710;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k2Very6RldBCzTfWE3kixTMSpP7cmdjStMj9exgkPjU=;
+        b=gkjqLEYnbiYMR9SNGI4bCtowoCgEkMtNLkINfRdbWxlIdXxDKyXhoBqVWiSq2OzCrd
+         zDmCkkmgkj7fBb7/en0ZxGozy5PfQ7CxHBQhCLg+qzrFG5oB4rksHL7HiiOhdjvsCXql
+         Rp1KG7p8W9qIDiOwC9DyTVYUUAA0tfzNWAT0STgYH+euOYPYPxQFJpEi+2nIVOZZ6KK1
+         5608MsjBMkj4xjCxCrtUjBAvCOYcd4hR2JAubDsj468vmMk58dyS0jkcSktiFL3K01vp
+         qGM21poHliBLjkhEf5KTsf9m/O2QWYa5+50Ns7To0XpQaprUD5R6yQmnQtbHRPDjmsyL
+         yk4g==
+X-Gm-Message-State: AOJu0Yw0bE/faD5n/iZ37rvWQGMeTImH/9w3GKXZSz7oNrF9lsheFc6c
+        J6dIOE3zxcIDmo+N2mtKz1c=
+X-Google-Smtp-Source: AGHT+IGK8a/xY8dx9qijIprNgPtnjeeEi8L86iN5hElkw2DXb8x4UZqPCWmnz2E26uesS3W4ykeRVA==
+X-Received: by 2002:a5d:6a4c:0:b0:31f:8a6d:e527 with SMTP id t12-20020a5d6a4c000000b0031f8a6de527mr16864437wrw.45.1696946910316;
+        Tue, 10 Oct 2023 07:08:30 -0700 (PDT)
+Received: from Ansuel-xps. (93-34-89-13.ip49.fastwebnet.it. [93.34.89.13])
+        by smtp.gmail.com with ESMTPSA id s13-20020adfeccd000000b003198a9d758dsm12801549wro.78.2023.10.10.07.08.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Oct 2023 07:08:29 -0700 (PDT)
+Message-ID: <65255add.df0a0220.ff2f9.021d@mx.google.com>
+X-Google-Original-Message-ID: <ZSVa3JfmUmLRBkda@Ansuel-xps.>
+Date:   Tue, 10 Oct 2023 16:08:28 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Robert Marko <robimarko@gmail.com>, ilia.lin@kernel.org,
+        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, agross@kernel.org, andersson@kernel.org,
+        rafael@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v5 3/4] cpufreq: qcom-nvmem: add support for IPQ8064
+References: <20230930102218.229613-1-robimarko@gmail.com>
+ <20230930102218.229613-3-robimarko@gmail.com>
+ <5b57e0e0-490e-464d-bdc8-5823ad8da2d8@linaro.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 991c175b-3625-454a-8d8a-08dbc996e4b6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Oct 2023 13:43:32.1910
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xGzXX4jySwv96HV/5NXMd3pO6SAMfWW1NVh0UtOZafzopvqeB5kuTqPy1yzxMSUBnW3LeNruTPttSox7VpADrg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7969
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5b57e0e0-490e-464d-bdc8-5823ad8da2d8@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -123,58 +78,114 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> Subject: Re: Question regarding scmi_perf_domain.c
->=20
-> On Tue, Oct 10, 2023 at 01:15:26PM +0000, Peng Fan wrote:
-> >
-> > Thanks for the detailed explanation, so power-domains property could
-> > be used both for power domain or performance domain. But if one device
-> > has both power domain and performance domain. Only power-domain
-> > property is not enough. I may understand wrong, let me look into the co=
-de.
-> >
->=20
-> I haven't tried this but something I could come up quick wit Juno DTS as
-> reference:
->=20
-> We can change something like this:
->=20
->       scmi_dvfs: protocol@13 {
->               reg =3D <0x13>;
-> -             #clock-cells =3D <1>;
-> +             #power-domain-cells =3D <1>;
->               mbox-names =3D "tx", "rx";
->               mboxes =3D <&mailbox 1 0 &mailbox 1 1>;
->               shmem =3D <&cpu_scp_hpri0 &cpu_scp_hpri1>;
->       };
->=20
-> And then in the consumer node(taking GPU as it has both perf and power
-> domains). The CPUs are simpler as don't have explicit power domains, some
-> Qcom platforms do use that. Anyways I would change GPU node like this.
-> Hope this clarifies things for you.
->=20
->  &gpu {
-> -       clocks =3D <&scmi_dvfs 2>;
-> -       power-domains =3D <&scmi_devpd 9>;
-> +       power-domains =3D <&scmi_dvfs 2 &scmi_devpd 9>;
-> +       power-domain-names =3D "perf", "power";
+On Tue, Oct 10, 2023 at 03:39:54PM +0200, Konrad Dybcio wrote:
+> 
+> 
+> On 9/30/23 12:21, Robert Marko wrote:
+> > From: Christian Marangi <ansuelsmth@gmail.com>
+> > 
+> > IPQ8064 comes in 3 families:
+> > * IPQ8062 up to 1.0GHz
+> > * IPQ8064/IPQ8066/IPQ8068 up to 1.4GHz
+> > * IPQ8065/IPQ8069 up to 1.7Ghz
+> > 
+> > So, in order to be able to support one OPP table, add support for
+> > IPQ8064 family based of SMEM SoC ID-s and correctly set the version so
+> > opp-supported-hw can be correctly used.
+> > 
+> > Bit are set with the following logic:
+> > * IPQ8062 BIT 0
+> > * IPQ8064/IPQ8066/IPQ8068 BIT 1
+> > * IPQ8065/IPQ8069 BIT 2
+> > 
+> > speed is never fused, only pvs values are fused.
+> > 
+> > IPQ806x SoC doesn't have pvs_version so we drop and we use the new
+> > pattern:
+> > opp-microvolt-speed0-pvs<PSV_VALUE>
+> > 
+> > Example:
+> > - for ipq8062 psv2
+> >    opp-microvolt-speed0-pvs2 = < 925000 878750 971250>
+> > 
+> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > Signed-off-by: Robert Marko <robimarko@gmail.com>
+> > ---
+> [...]
+> 
+> > +{
+> > +	int speed = 0, pvs = 0, pvs_ver = 0;
+> > +	int msm_id, ret = 0;
+> > +	u8 *speedbin;
+> > +	size_t len;
+> > +
+> > +	speedbin = nvmem_cell_read(speedbin_nvmem, &len);
+> > +
+> > +	if (IS_ERR(speedbin))
+> The stray newline above this line triggers my OCD :D
+> 
+> > +		return PTR_ERR(speedbin);
+> > +
+> > +	if (len != 4) {
+> > +		dev_err(cpu_dev, "Unable to read nvmem data. Defaulting to 0!\n");
+> > +		kfree(speedbin);
+> > +		return -ENODEV;
+> > +	}
+> > +
+> > +	get_krait_bin_format_a(cpu_dev, &speed, &pvs, &pvs_ver, speedbin);
+> > +
+> > +	ret = qcom_smem_get_soc_id(&msm_id);
+> > +	if (ret)
+> > +		return ret;
+> speedbin leaks here
+> 
+> you can free it right after the get_krait.. call
+> > +
+> > +	switch (msm_id) {
+> > +	case QCOM_ID_IPQ8062:
+> > +		drv->versions = BIT(IPQ8062_VERSION);
+> > +		break;
+> > +	case QCOM_ID_IPQ8064:
+> > +	case QCOM_ID_IPQ8066:
+> > +	case QCOM_ID_IPQ8068:
+> > +		drv->versions = BIT(IPQ8064_VERSION);
+> > +		break;
+> > +	case QCOM_ID_IPQ8065:
+> > +	case QCOM_ID_IPQ8069:
+> > +		drv->versions = BIT(IPQ8065_VERSION);
+> > +		break;
+> > +	default:
+> > +		dev_err(cpu_dev,
+> > +			"SoC ID %u is not part of IPQ8064 family, limiting to 1.0GHz!\n",
+> > +			msm_id);
+> > +		drv->versions = BIT(IPQ8062_VERSION);
+> > +		break;
+> > +	}
+> > +
+> > +	/* IPQ8064 speed is never fused. Only pvs values are fused. */
+> > +	snprintf(*pvs_name, sizeof("speedXX-pvsXX"), "speed%d-pvs%d",
+> > +		 speed, pvs);
+> Then drop the format for `speed` and just throw in a zero!
+> 
+> [...]
+> 
+> > -	{ .compatible = "qcom,ipq8064", .data = &match_data_krait },
+> > +	{ .compatible = "qcom,ipq8064", .data = &match_data_ipq8064 },
+> This change demands a Fixes tag, because you're essentially saying "the
+> support for this SoC was supposedly there, but it could have never worked
+> and was broken all along".
+>
 
-With one single power domain, the platform common code
-will automatically power on the domain before probe, with
-help from genpd_dev_pm_attach.
+Mhhh actually no. We are just changing the opp binding and introducing
+hardcoded versions. But the thing worked and actually it's what was used
+before this change in openwrt. Also current ipq806x dtsi doesn't have
+any opp definition so no regression there. (and also 99% downstream either
+use openwrt or use qcom sdk where this implementation is not used at
+all)
 
-But with multiple entries, device driver should handle power
-domains by themselves.
+Given these thing should we still add a fixes tag referencing the commit
+that introduced the compatible for qcom,ipq8064? It's quite problematic
+as this depends on qcom_smem_get_soc_id().
 
-Maybe Ulf could comment whether the genpd could update
-to support perf/power case just as one power domain
-entry before.
-
-Thanks
-Peng.
->         status =3D "disabled";
->  };
->=20
-> --
-> Regards,
-> Sudeep
+-- 
+	Ansuel
