@@ -2,151 +2,221 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6227BFB4D
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Oct 2023 14:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB9257BFB5F
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Oct 2023 14:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231603AbjJJMZI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Oct 2023 08:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47654 "EHLO
+        id S231698AbjJJM0N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Oct 2023 08:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231371AbjJJMZH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Oct 2023 08:25:07 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3D99D;
-        Tue, 10 Oct 2023 05:25:05 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A470C433C7;
-        Tue, 10 Oct 2023 12:24:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696940705;
-        bh=omFIqKia3wy7Xbwqgl3lEDlQS0jMr0mlUIHVa8ZY/jQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RB9t1Xi6C6UY8MEAUWcmpc14/Xjsaa4NraUXJX6ziZ6S77LJRYcw5jPz1uuO9fARo
-         r+70AQEjYZjsYmbjTpHHdqjp8Q80rxgQpZNdtZkrZKZcaUuCSZhzMFM0MMNJLrc6OO
-         35nHg0XtxoELdzajsUHQF2HW6wg85SteBC9WdymQikpsZTy+65jjOvwVI54Sdk2amZ
-         Lkqar4AL7Hfzm2z7jAXAIytZOxyGCV9QxKa26KqGzt8mWu84II+BDaG6/plyWnLrtv
-         7QZeOUeSd0dC8DTMW1o2gSOzVWOCJq+FICgRYyiBeTUz9OvqK6CGJZ9BvKe7kn7HHm
-         aWmLRQoVsbMDg==
-Date:   Tue, 10 Oct 2023 17:54:47 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bhupesh Sharma <bhupesh.linux@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 0/4] thermal: Introduce Qualcomm Thermal Mitigation
- Device support
-Message-ID: <20231010122447.GJ4884@thinkpad>
-References: <20230905-caleb-qmi_cooling-v1-0-5aa39d4164a7@linaro.org>
- <20231001155701.GA53767@thinkpad>
- <cefe711b-d274-4d83-9dda-01f33b342387@linaro.org>
- <20231002145239.GA12041@thinkpad>
- <CAA8EJppn-f6R3ObGvagqkg1_KtXGgtNAgRn-LQiN3ORSHQY3-Q@mail.gmail.com>
- <20231002155814.GB12041@thinkpad>
- <CAA8EJpowGjnecOjr9h4r3=UXSrE4VdptoLADpQq3gDv_W9D3OQ@mail.gmail.com>
- <20231002161308.GC12041@thinkpad>
- <20231005023658.GE3553829@hu-bjorande-lv.qualcomm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231005023658.GE3553829@hu-bjorande-lv.qualcomm.com>
+        with ESMTP id S231873AbjJJM0L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Oct 2023 08:26:11 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00260D7;
+        Tue, 10 Oct 2023 05:26:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696940767; x=1728476767;
+  h=date:from:to:cc:subject:message-id;
+  bh=NqDoUXNW/BIL8w/vzSmJnM9wCQ8mHwEWseVV5y1BKVU=;
+  b=Lu09vo+22febvO+A6WeEGUrUvHyCXp36kxR1rh7RsonQtp/mN/pmrp1F
+   wJcn6crOBsdKAy61eyA07Dw2YzkFTZtPdFchg2+ra4w65DLWj5R3wPEWe
+   7vd7emGl4Yb+2TwADdleM6CYgzT9qPBSyEz8ZHLv45W8qOCUUd3V7hX0j
+   rCcSnK6bM+DW60jwPV+5KOW7OE0FkFo7U/ZFCoV2ARhz7ue8EYrQ3pGcs
+   uTMgzTLHQ9yVCm5E2vZoRl69N2/+AmULPipJm0NhUUxacGmIvK28QXz61
+   y4tceufMszvZCFqZl722oZ6bKaMDjVXFA5gZMdxXROrvyhtNSTNKFFByb
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="5936231"
+X-IronPort-AV: E=Sophos;i="6.03,212,1694761200"; 
+   d="scan'208";a="5936231"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2023 05:26:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="1084757309"
+X-IronPort-AV: E=Sophos;i="6.03,212,1694761200"; 
+   d="scan'208";a="1084757309"
+Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 10 Oct 2023 05:26:05 -0700
+Received: from kbuild by f64821696465 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qqBoI-0000Og-2g;
+        Tue, 10 Oct 2023 12:26:02 +0000
+Date:   Tue, 10 Oct 2023 20:25:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ d256a6b9698c7bcb778fdc2fc91b2e65a3271cf9
+Message-ID: <202310102016.98qJzXyi-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 04, 2023 at 07:36:58PM -0700, Bjorn Andersson wrote:
-> On Mon, Oct 02, 2023 at 09:43:08PM +0530, Manivannan Sadhasivam wrote:
-> > On Mon, Oct 02, 2023 at 07:00:27PM +0300, Dmitry Baryshkov wrote:
-> > > On Mon, 2 Oct 2023 at 18:58, Manivannan Sadhasivam <mani@kernel.org> wrote:
-> > > >
-> > > > On Mon, Oct 02, 2023 at 06:00:37PM +0300, Dmitry Baryshkov wrote:
-> > > > > On Mon, 2 Oct 2023 at 17:52, Manivannan Sadhasivam <mani@kernel.org> wrote:
-> > > > > >
-> > > > > > On Sun, Oct 01, 2023 at 06:26:14PM +0100, Caleb Connolly wrote:
-> > > > > > >
-> > > > > > >
-> > > > > > > On 01/10/2023 16:57, Manivannan Sadhasivam wrote:
-> > > > > > > > On Fri, Sep 29, 2023 at 05:16:16PM +0100, Caleb Connolly wrote:
-> > > > > > > > > The Thermal Mitigation Device (TMD) Service is a QMI service that runs
-> > > > > > > > > on remote subsystems (the modem and DSPs) on Qualcomm SoCs.
-> > > > > > > > > It exposes various mitigations including passive thermal controls and
-> > > > > > > > > rail voltage restrictions.
-> > > > > > > > >
-> > > > > > > > > This series introduces support for exposing TMDs as cooling devices
-> > > > > > > > > in the kernel through the thermal framework, using the QMI interface.
-> > > > > > > > >
-> > > > > > > > > Each TMD client is described as a child of the remoteproc node in
-> > > > > > > > > devicetree. With subnodes for each control.
-> > > > > > > > >
-> > > > > > > >
-> > > > > > > > Daniel expressed concerns in the past aganist representing TMD driver as a
-> > > > > > > > cooling device since it is not tied to thermal zones and the governors cannot
-> > > > > > > > use it. Instead he suggested to represent it as a powercap device with thermal
-> > > > > > > > constraints.
-> > > > > > >
-> > > > > > > Hi Mani,
-> > > > > > >
-> > > > > > > Forgive me as I'm not yet super familiar with the thermal subsystem.
-> > > > > > >
-> > > > > > > As I understand it, the DT layout here enables each control to be referenced
-> > > > > > > under the thermal zones, at least this is the approach taken in CAF 4.9.
-> > > > > > >
-> > > > > > > Maybe I don't quite understand what you mean, are you saying that using
-> > > > > > > thermal zones is the wrong approach?
-> > > > > >
-> > > > > > Thermal framework expects each thermal zone represented in DT to have atleast
-> > > > > > one corresponding thermal sensor defined using "thermal-sensors" property. But
-> > > > > > with TMD, there is no thermal sensor AFAIK.
-> > > > >
-> > > > > As far as I understand, no. It is perfectly fine to have 'cooling'
-> > > > > devices, which react to external thermal monitoring events. I might be
-> > > > > mistaken, but I think that is the case here, isn't it?
-> > > > >
-> > > >
-> > > > Yes it is represented as cooling device(s). But I do not see any cognizant way
-> > > > to plug it with thermal zones i.e., unless TMD itself reports temperature of the
-> > > > modem, using it as a cooling device for external temperature events doesn't
-> > > > sound good to me.
-> > > 
-> > > Why? We have compute, q6, wlan tsens sensors. So it seems natural to
-> > > tell CDSP to slow down if compute sensor reports overheating.
-> > > 
-> > 
-> > TMD is for external devices such as PCIe modems as well. Is there a temperature
-> > sensor for that?
-> > 
-> 
-> According to the schematics for the SC8280XP CRD sys_therm5 would be the
-> sensor you're looking for.
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: d256a6b9698c7bcb778fdc2fc91b2e65a3271cf9  Merge branch 'thermal-core-next' into bleeding-edge
 
-Hmm, then it seems fine from my end as long we have the correct sensor data to
-hook up these cooling devices.
+elapsed time: 1006m
 
-- Mani
+configs tested: 145
+configs skipped: 2
 
-> Regards,
-> Bjorn
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20231010   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                          collie_defconfig   clang
+arm                                 defconfig   gcc  
+arm                          ep93xx_defconfig   clang
+arm                          ixp4xx_defconfig   clang
+arm                   randconfig-001-20231010   gcc  
+arm                           sama5_defconfig   gcc  
+arm                           sunxi_defconfig   gcc  
+arm64                            allmodconfig   gcc  
+arm64                             allnoconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20231010   gcc  
+i386         buildonly-randconfig-002-20231010   gcc  
+i386         buildonly-randconfig-003-20231010   gcc  
+i386         buildonly-randconfig-004-20231010   gcc  
+i386         buildonly-randconfig-005-20231010   gcc  
+i386         buildonly-randconfig-006-20231010   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                  randconfig-001-20231010   gcc  
+i386                  randconfig-002-20231010   gcc  
+i386                  randconfig-003-20231010   gcc  
+i386                  randconfig-004-20231010   gcc  
+i386                  randconfig-005-20231010   gcc  
+i386                  randconfig-006-20231010   gcc  
+i386                  randconfig-011-20231010   gcc  
+i386                  randconfig-012-20231010   gcc  
+i386                  randconfig-013-20231010   gcc  
+i386                  randconfig-014-20231010   gcc  
+i386                  randconfig-015-20231010   gcc  
+i386                  randconfig-016-20231010   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20231010   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                            mac_defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+openrisc                       virt_defconfig   gcc  
+parisc                           alldefconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   gcc  
+powerpc                    amigaone_defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                 randconfig-001-20231010   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                  randconfig-001-20231010   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                           se7705_defconfig   gcc  
+sh                           se7751_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                 randconfig-001-20231010   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-001-20231010   gcc  
+x86_64       buildonly-randconfig-002-20231010   gcc  
+x86_64       buildonly-randconfig-003-20231010   gcc  
+x86_64       buildonly-randconfig-004-20231010   gcc  
+x86_64       buildonly-randconfig-005-20231010   gcc  
+x86_64       buildonly-randconfig-006-20231010   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20231010   gcc  
+x86_64                randconfig-002-20231010   gcc  
+x86_64                randconfig-003-20231010   gcc  
+x86_64                randconfig-004-20231010   gcc  
+x86_64                randconfig-005-20231010   gcc  
+x86_64                randconfig-006-20231010   gcc  
+x86_64                randconfig-011-20231010   gcc  
+x86_64                randconfig-012-20231010   gcc  
+x86_64                randconfig-013-20231010   gcc  
+x86_64                randconfig-014-20231010   gcc  
+x86_64                randconfig-015-20231010   gcc  
+x86_64                randconfig-016-20231010   gcc  
+x86_64                randconfig-071-20231010   gcc  
+x86_64                randconfig-072-20231010   gcc  
+x86_64                randconfig-073-20231010   gcc  
+x86_64                randconfig-074-20231010   gcc  
+x86_64                randconfig-075-20231010   gcc  
+x86_64                randconfig-076-20231010   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
 
 -- 
-மணிவண்ணன் சதாசிவம்
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
