@@ -2,128 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEBC57C026B
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Oct 2023 19:20:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BCB67C030F
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Oct 2023 19:55:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233690AbjJJRUI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Oct 2023 13:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46314 "EHLO
+        id S234123AbjJJRzg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Oct 2023 13:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232756AbjJJRUI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Oct 2023 13:20:08 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A147F93;
-        Tue, 10 Oct 2023 10:20:06 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39426C433C7;
-        Tue, 10 Oct 2023 17:20:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696958406;
-        bh=qCJusQWtmT7cmM9tukUxP7rBW0qd61lclOqkdLABC9Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d4AoOsv5XE1vd2PTasKy09QSiUySWg/qOeHiXxYa5Hl8L6f4B268VJ4FHQf5uDN+f
-         OuGGGEdLfwRgw/dhsgHIKHIE0ZIBtbC3iWsrnib0rEbWvT2YeP8WSr1tA75Scm7m76
-         rHLrobj6O8lSI2Urs9u2QZifRiXuAR3H+YqMgSXNWz9IDi45GgEzIhs2tT16vwiIUM
-         +dwZTd2PFqrHVXzQSxVTXljAbuRTOzZzCZjmFsndVhQgZ0ZbTzwgSMOmc5X9bNUVbK
-         Qq5L8uYim+az0tUwbMzBxbIsB1Pdf6ZQAOatqmrJZ/Pzk+illVXcyf/NQ7fSnUYGkc
-         VsFGGOpovrRiQ==
-Date:   Tue, 10 Oct 2023 18:19:59 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Naresh Solanki <naresh.solanki@9elements.com>,
-        zev@bewilderbeest.net, Sebastian Reichel <sre@kernel.org>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v1 3/3] regulator: fixed: forward under-voltage events
-Message-ID: <c2ee404d-d07f-42c6-b5ba-41659773e8eb@sirena.org.uk>
-References: <20231010085906.3440452-1-o.rempel@pengutronix.de>
- <20231010085906.3440452-3-o.rempel@pengutronix.de>
- <5e51792a-cc93-4364-a51b-c2b116d89369@sirena.org.uk>
- <20231010125531.GA3268051@pengutronix.de>
+        with ESMTP id S234120AbjJJRzf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Oct 2023 13:55:35 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C666EB6;
+        Tue, 10 Oct 2023 10:55:30 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 39AHtQLc020714;
+        Tue, 10 Oct 2023 12:55:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1696960526;
+        bh=2vRqxyjvNiTXuW5n7S+93rlxonDxAUlJF8y4TRgu2H0=;
+        h=From:To:CC:Subject:Date;
+        b=nyG7/iCR78SO1fVuZX55auCdF9WShnvuut1+0LqrwOj5RqhfbLRWnJFTLYuihRnZq
+         LG4sk3hApC9mSaUB3ofUz0GFaQqorImtDnxWwG+EwIJp6l45eONONLVXUhLgvkZkKA
+         lK7TecII96UCL8iLelYrIdkE+Wi8GBHMtWX1X3Z0=
+Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 39AHtQlu092611
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 10 Oct 2023 12:55:26 -0500
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 10
+ Oct 2023 12:55:26 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 10 Oct 2023 12:55:26 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 39AHtQWp035430;
+        Tue, 10 Oct 2023 12:55:26 -0500
+From:   Bryan Brattlof <bb@ti.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+CC:     Vibhore Vardhan <vibhore@ti.com>, Dhruva Gole <d-gole@ti.com>,
+        ARM Power Management <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bryan Brattlof <bb@ti.com>
+Subject: [PATCH 0/2] cpufreq: ti-cpufreq: Enable AM62P5 CPUFreq
+Date:   Tue, 10 Oct 2023 12:55:25 -0500
+Message-ID: <20231010175524.558577-4-bb@ti.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ih8Qo3EanWX6jsWc"
-Content-Disposition: inline
-In-Reply-To: <20231010125531.GA3268051@pengutronix.de>
-X-Cookie: I feel partially hydrogenated!
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=655; i=bb@ti.com; h=from:subject; bh=3kH20oH9+v+qks6XbMW/ipJmFMODHCgjuRduTChPqIE=; b=owNCWmg5MUFZJlNZpX6GxwAAan///7/7+/v++e/j4/tNv25fHZU32H/K6Vev+utu+n7l7v+wA RsbRD1BoMQA0000aaGgADTI0DI0BkAMgBoDTI0A0yaMIyaNBoA08oANA0eoeo2mkOTagAZBoBo0 DQAGgHoT1HqDQABpoGg0ZPU0B6nqDTJ6ho0A00ADRp6IGgHqHqGhD1GZTT1AyaGJoGIAGTT1GIy AZNAyaAAYgAyBoAAAGmQNBoYjBPSAZAAaNLB9qUK/aAj4AgYj1k137AI4HRbTmhAw5B6wGgHrlh k0gTs+WUzZNyAsEstTkqwgDcswb+4YiOgC8sy4+x5lUWMSLN5EGSpwAuxFX760ld1JF9Qkb4xTU 8hUmjBTvgIlfdHJ7PXZk+c/6+m7DUkfl8s4La/DZNpi6AZxopK1mA7Q92oRhGQINUso7RbxIGSr JXJRTmIGSQ6fj5q5uyAbTL/4hsQOjEdmrGtcKI10MfFyKhaQGl4d2TuFjwjatkgd5kddMGKG6ej p8VFndHeFzyXoxZgpSrjsp9mJA9f1MtBuz/xg8VRQ1xn7UCOrZvSMXmdlZ8WjnvYV1I7uR+CBHn cHdB15qjrXgBwXHFA10rjum8r5vsP4CH8AArea+xBhFAgTvCmRzkS7I0J4++HqgZZ/OWceM6SAP 6rbGYMrqYd72b/i7kinChIUr9DY4A==
+X-Developer-Key: i=bb@ti.com; a=openpgp; fpr=D3D177E40A38DF4D1853FEEF41B90D5D71D56CE0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hello everyone!
 
---ih8Qo3EanWX6jsWc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This short series adds the am62p5 compatible to ti-cpufreq and
+cpufreq-dt-platdev for the new am62p family of TI SoCs. It uses the same
+A53s and efuse configuration as the rest of the am62xxx extended family
+so we're just using the same am625 data structure for the am62p5.
 
-On Tue, Oct 10, 2023 at 02:55:31PM +0200, Oleksij Rempel wrote:
+Thanks for reviewing
+~Bryan
 
-> The hardware I am working with has an under-voltage sensor on the 24V
-> supply regulator and some backup capacitors to run SoC for 100ms. I want
-> to forward under-voltage events across a chain of different regulators
-> to a designated consumer. For instance, to the mmc driver, enabling it
-> to initiate shutdown before power loss occurs.  Additionally, a bit can
-> be set in the volatile memory of a scratch pad in an RTC clock to record
-> sudden power loss, which can be checked on the next system start.
+Bryan Brattlof (2):
+  cpufreq: dt-platdev: add am62p5 to blocklist
+  cpufreq: ti-cpufreq: Add opp support for am62p5 SoCs
 
-So it sounds like the underlying need is to flag the notifications from
-one of the regulators as being system wide and then take action based on
-those notifications somewhere basically disconnected?  That does seem
-like a good use case.
+ drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+ drivers/cpufreq/ti-cpufreq.c         | 1 +
+ 2 files changed, 2 insertions(+)
 
-The MMC doesn't specifically care that it is handling a regulator
-notification, it more wants to know that the system is dying and doesn't
-really care how we figured that out so if we can hook it into a system
-level notificaiton it'd be happy and would also be able to handle other
-critical faults.  I would have thought that we should have some
-mechanisms for this already for RAS type stuff but I'm drawing a blank
-on what it actually is if there is an existing abstraction.  It could
-potentially go through userspace though there's latency concerns there
-which might not be ideal, there should at least be some policy for
-userspace.
 
-For the regulator itself we probably want a way to identify regulators
-as being system critical so they start notifying.  It would be tempting
-to just do that by default but that would likely cause some issues for
-example with regulators for things like SD cards which are more likely
-to get hardware problems that don't comprimise the entire system.  We
-could do that with DT, either a property or some sort of runtime
-consumer, but it might be better to have a control in sysfs that
-userspace can turn on?  OTOH the ability do something about this depends
-on specific hardware design...
+base-commit: c9727271cb239dce91add464364f10fb2b376456
+-- 
+2.42.0
 
-I've copied in Sebastian since this sounds like the sort of thing that
-power supplies might have some kind of handling for, or at least if we
-need to add something we should make it so that the power supplies can
-be joined up to it.  I do see temperature and capacity alerts in the
-sysfs ABI for power supplies, but nothing for voltage.
-
-I've also coped in Naresh and Zev who've been discussing something
-vaugely similar with userspace notifications for the userspace consumer
-- it's not the same thing given that you don't specifically need
-userspace to be involved here but it feels like it might have something
-of a similar shape, or at least there might be some shared interest.
-
---ih8Qo3EanWX6jsWc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUlh74ACgkQJNaLcl1U
-h9BF5Af/cNLrd9suEh0YQRnHMcZMOu5P6+gEvdfAYSXg0loxTuDLopt6elxYJCv2
-zmqJiVW40ro7MaAB0jXUOtx24Pmq9+Bk6fzfMLa7VXbXagJWATmiyQSnSkppCyWM
-92lTC3Q4ki1/ESroIxYQRWk7UMCPN+S4GC3qgOuRxrVhLjPJ+GcT9HFUeq8batZf
-7ublB0wmAYUM4qZiTDMhxlxC0emAgob7u4qJXaeNOPk/26mksiuJTdeiDhMTx5b3
-Ud3mzW+o8ErnRwNGAVAZ/kM+MH5idQAb6U1Kgu2XzDc6znqCie4e46XmekD0WeIT
-q7CtZrlu1/m46hXmiF9WVnGe4p4UfQ==
-=EDr0
------END PGP SIGNATURE-----
-
---ih8Qo3EanWX6jsWc--
