@@ -2,88 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84AC57BFD84
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Oct 2023 15:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF5C57BFD8C
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Oct 2023 15:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232072AbjJJNbF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Oct 2023 09:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47246 "EHLO
+        id S232346AbjJJNeL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Oct 2023 09:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbjJJNbF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Oct 2023 09:31:05 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D09AB0
-        for <linux-pm@vger.kernel.org>; Tue, 10 Oct 2023 06:31:03 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0D5941FB;
-        Tue, 10 Oct 2023 06:31:44 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 53DA63F762;
-        Tue, 10 Oct 2023 06:31:02 -0700 (PDT)
-Date:   Tue, 10 Oct 2023 14:30:59 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "cristian.marussi@arm.com" <cristian.marussi@arm.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>,
-        Glen G Wienecke <glen.wienecke@nxp.com>
-Subject: Re: Question regarding scmi_perf_domain.c
-Message-ID: <20231010133059.57rs52qedrc5mxfr@bogus>
-References: <DU0PR04MB9417DE145496DC03579F50E488CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <20231010105503.jwrmjahuvcjgwtk5@bogus>
- <CAPDyKFqEpnKeF7Yuvv_a+=Kqs=pNU_kM59EqWdpCniHrY_373A@mail.gmail.com>
- <DU0PR04MB941755466872E84217378F6388CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <20231010130054.ieylxocuapugajif@bogus>
- <DU0PR04MB94177FFEAA62AC27839D826F88CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
+        with ESMTP id S232331AbjJJNeK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Oct 2023 09:34:10 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE705B4
+        for <linux-pm@vger.kernel.org>; Tue, 10 Oct 2023 06:34:08 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2c3e23a818bso26801951fa.0
+        for <linux-pm@vger.kernel.org>; Tue, 10 Oct 2023 06:34:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696944847; x=1697549647; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u3ufIXJTPDUi37xaLcqz/JBb6qC8rajJx6bDQbsS0J0=;
+        b=ElIIARZi+gjhG5QuyVguoYsd8Apv1+991gibzG3e6XtnvwBQuWni0ctTDtF6P6IfKX
+         cMKIMdMeM7Fa0o1qLt6UaqufAcFtIgB137r4MDUNZLoWQ0ctgenGWe9rg6jQrcDvnCvC
+         +XVUpaejSva0sR3d7+3IKq9XygWUpSe8TyEPHTv27I4E3ci4Z/+LNfowWDxQ16oacQDJ
+         GSbIMNEXIjNLaEy1b10MKpKhnaEmdSO97bqmE8JgzmVvBYmgM/xTrJme2bFR/ChnKqqK
+         6ysJrjPjs+8thv7pb7Es4RLCuJf42jZVDfuCjXRGLPqZZn6aJ/JbVzKB5ihDge5BHdu3
+         mO1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696944847; x=1697549647;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u3ufIXJTPDUi37xaLcqz/JBb6qC8rajJx6bDQbsS0J0=;
+        b=qYTrrvNA1i70ZofLl+kndJwKXZxdrfPJNbV7duNv1GknJBVi4MQBEgaJb/3wQRCYrU
+         Iee7iySryztffbPDhFDbNJkbmPl4nmggjgT2APi+ZDpgdQlV1oL9Mt7JLUIg0AA+3G+s
+         H++doFnzIWmGRH7o8HxFJsNEnoyWeCdnTiYxNEP9y+WSa+ASBgs0nQnZJtbZ1GYoy6S1
+         ctFbPtUjGg2M16apVPSD2cg9eNFXgDEZicyTVk385Yss6NM60d5vaCBRu+CBKx4w7ZF2
+         MNJCXgA0ib+GNyW0aPRrUDF0na5jlk13L+UHOrQB/7YpmChLWYg4hSWurG/xlBmwGVj7
+         CQWA==
+X-Gm-Message-State: AOJu0Yx3zXHA0rCPYA+ZpJeFaYiFJ7IpA/uuhmQtaM7zX7vdUFbEh0GD
+        avqEjMrlDcdJdw9pcEC9or2aHQ==
+X-Google-Smtp-Source: AGHT+IHVlEd6wxtkukWJ4E28XaOUeg+7a2DayqjOWtQGYvIOrLbjENhKkn7cfLUU3G4liOCJKbax5w==
+X-Received: by 2002:a2e:90c3:0:b0:2c0:172b:dc2b with SMTP id o3-20020a2e90c3000000b002c0172bdc2bmr11490692ljg.14.1696944846944;
+        Tue, 10 Oct 2023 06:34:06 -0700 (PDT)
+Received: from [172.30.204.192] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
+        by smtp.gmail.com with ESMTPSA id e9-20020a2e8189000000b002c12630e4d3sm2452017ljg.127.2023.10.10.06.34.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Oct 2023 06:34:06 -0700 (PDT)
+Message-ID: <d0714c75-e827-4bbc-a854-59004cab2563@linaro.org>
+Date:   Tue, 10 Oct 2023 15:34:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DU0PR04MB94177FFEAA62AC27839D826F88CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 1/4] cpufreq: qcom-nvmem: add support for IPQ8074
+Content-Language: en-US
+To:     Robert Marko <robimarko@gmail.com>, ilia.lin@kernel.org,
+        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, agross@kernel.org, andersson@kernel.org,
+        rafael@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20230930102218.229613-1-robimarko@gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230930102218.229613-1-robimarko@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 10, 2023 at 01:15:26PM +0000, Peng Fan wrote:
+
+
+On 9/30/23 12:21, Robert Marko wrote:
+> IPQ8074 comes in 2 families:
+> * IPQ8070A/IPQ8071A (Acorn) up to 1.4GHz
+> * IPQ8072A/IPQ8074A/IPQ8076A/IPQ8078A (Hawkeye) up to 2.2GHz
 > 
-> Thanks for the detailed explanation, so power-domains property could be
-> used both for power domain or performance domain. But if one
-> device has both power domain and performance domain. Only power-domain
-> property is not enough. I may understand wrong, let me look into the code.
+> So, in order to be able to share one OPP table lets add support for IPQ8074
+> family based of SMEM SoC ID-s as speedbin fuse is always 0 on IPQ8074.
 > 
+> IPQ8074 compatible is blacklisted from DT platdev as the cpufreq device
+> will get created by NVMEM CPUFreq driver.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> ---
+> Changes in v4:
+> * Add support for IPQ8174 (Oak) family
+> 
+> Changes in v3:
+> * Use enum for SoC versions
+> 
+> Changes in v2:
+> * Print an error if SMEM ID is not part of the IPQ8074 family
+> and restrict the speed to Acorn variant (1.4GHz)
+> 
+>   drivers/cpufreq/cpufreq-dt-platdev.c |  1 +
+>   drivers/cpufreq/qcom-cpufreq-nvmem.c | 45 ++++++++++++++++++++++++++++
+>   2 files changed, 46 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+> index 2016d47889c0..157c91b9962c 100644
+> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+> @@ -180,6 +180,7 @@ static const struct of_device_id blocklist[] __initconst = {
+>   	{ .compatible = "ti,am62a7", },
+>   
+>   	{ .compatible = "qcom,ipq8064", },
+> +	{ .compatible = "qcom,ipq8074", },
+>   	{ .compatible = "qcom,apq8064", },
+>   	{ .compatible = "qcom,msm8974", },
+>   	{ .compatible = "qcom,msm8960", },
+Generally this lands in a separate commit, but I guess since Viresh 
+takes changes to both of the files, it's even better..
 
-I haven't tried this but something I could come up quick wit Juno DTS
-as reference:
+Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-We can change something like this:
-
-      scmi_dvfs: protocol@13 {
-              reg = <0x13>;
--             #clock-cells = <1>;
-+             #power-domain-cells = <1>;
-              mbox-names = "tx", "rx";
-              mboxes = <&mailbox 1 0 &mailbox 1 1>;
-              shmem = <&cpu_scp_hpri0 &cpu_scp_hpri1>;
-      };
-
-And then in the consumer node(taking GPU as it has both perf and power
-domains). The CPUs are simpler as don't have explicit power domains, some
-Qcom platforms do use that. Anyways I would change GPU node like this.
-Hope this clarifies things for you.
-
- &gpu {
--       clocks = <&scmi_dvfs 2>;
--       power-domains = <&scmi_devpd 9>;
-+       power-domains = <&scmi_dvfs 2 &scmi_devpd 9>;
-+       power-domain-names = "perf", "power";
-        status = "disabled";
- };
-
--- 
-Regards,
-Sudeep
+Konrad
