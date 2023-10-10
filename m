@@ -2,185 +2,200 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D637C0336
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Oct 2023 20:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3207C7C0493
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Oct 2023 21:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232809AbjJJSQd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Oct 2023 14:16:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42474 "EHLO
+        id S229983AbjJJT0x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Oct 2023 15:26:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232728AbjJJSQc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Oct 2023 14:16:32 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9639B99
-        for <linux-pm@vger.kernel.org>; Tue, 10 Oct 2023 11:16:31 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-694f75deb1aso98926b3a.0
-        for <linux-pm@vger.kernel.org>; Tue, 10 Oct 2023 11:16:31 -0700 (PDT)
+        with ESMTP id S231320AbjJJT0w (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Oct 2023 15:26:52 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762F594
+        for <linux-pm@vger.kernel.org>; Tue, 10 Oct 2023 12:26:46 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-504a7f9204eso7414945e87.3
+        for <linux-pm@vger.kernel.org>; Tue, 10 Oct 2023 12:26:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1696961791; x=1697566591; darn=vger.kernel.org;
-        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=VJqlcB+TIpcVsf3JAMUnWMr1MkTNnIUnPrUDXTUUK6U=;
-        b=fTFFuHwOWAGwqtuph28pAokJNsudoVQmE08bI8N8ICdshLGe6MRHCgsJveqqLtsxVi
-         AzEeeIYQCHNeyPBc0w9fyw+2uLibyXio5JexgYsLJ+/gKwWSxvZdiZ4zygSQgegScw6c
-         Wa6j7gP3DfUviSzwcVdotmRjlCDgriLX8QB0w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696961791; x=1697566591;
-        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
+        d=linaro.org; s=google; t=1696966005; x=1697570805; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=VJqlcB+TIpcVsf3JAMUnWMr1MkTNnIUnPrUDXTUUK6U=;
-        b=gTFrjImkfDKbFsjfwtBN5YN0BgeHnAhtJVdm3vKJdkvZDYxkNXRnikER6R+frqcd7H
-         3R0PXXJIAQ/his5quGp3SJHuL3JkoBMEECOAa7lImKz9uMlQwdR+Bx6qW7RG9cLWezi6
-         ekf4B45YsXGTm2B7m4KmSnBh2v2NqThlFeyC9ULvq2WWe3BcsJpdUmSVY1fVoRHzE6Sb
-         30z9n6i7qIiYbwv1h19uEisSuKLv8hOCeOk6AvRUx9yWD1w8d0EUoo+mx6DmDFioTcO/
-         mnROZFZcQU4xo6dVTX4n7nS6R4+5+aoie4Mi0BtG6UwF15ab7tsf8ciXT75uGwMQ0Umz
-         gHHg==
-X-Gm-Message-State: AOJu0YzNqaZ5XkTsv5m3MOYWOesqYWAIUiZ3Rfjo834oqI174CGgH5ci
-        jE5bIFOlYdAjXIj3+RwnWHYsmw==
-X-Google-Smtp-Source: AGHT+IHB9aOqxyWNaGnzCM1ZGlKoXIdoBOTkH9mVMZjGQHukDtXYLzOTDnkiy8DEQ8hgTi5KHh8ajA==
-X-Received: by 2002:a17:902:c946:b0:1c8:7bb8:321a with SMTP id i6-20020a170902c94600b001c87bb8321amr20995663pla.27.1696961790973;
-        Tue, 10 Oct 2023 11:16:30 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id u4-20020a170902e5c400b001bf6ea340b3sm12135513plf.116.2023.10.10.11.16.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Oct 2023 11:16:28 -0700 (PDT)
-From:   Florian Fainelli <florian.fainelli@broadcom.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     mmayer@broadcom.com,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org (open list:CPU FREQUENCY SCALING FRAMEWORK)
-Subject: [PATCH] cpufreq: ARM_BRCMSTB_AVS_CPUFREQ cannot be used with ARM_SCMI_CPUFREQ
-Date:   Tue, 10 Oct 2023 11:16:26 -0700
-Message-Id: <20231010181626.3449090-1-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.34.1
+        bh=M+6rfPIT5Qs4nYSzMA/UOS/nCpICENl2aTb8ca8T/Zc=;
+        b=oszXq2R5PF4Sxmjfoec91fhXte2lRaPiyRiMvo3KuDlapP3Kdpa0dAEvuxPlN1ckB4
+         azPDc7pk7Bz6V48ObIgnfNkxmpJPBI3LRQP5bruvcjRX5se/7TbYHagb0A2f8FV013Hd
+         zm+bGO8wM9QJ6S62RjX9T3ShF9dbZAYivXGGdfZwwsArkk0TiWVuLUUtPihQgnXGqguu
+         72ONN+bCadOA/eSZ4BnTCYCyqHMVrKKE2xjTzb9U46NgiKcghIFvAFVhugY9AoefME5H
+         9CwVs9kVUbmNRlH/zpu1cpnMDpbUIwR+vzod6qCcTfzFQqi777nLFf2vV2DRnvglovqo
+         bayQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696966005; x=1697570805;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M+6rfPIT5Qs4nYSzMA/UOS/nCpICENl2aTb8ca8T/Zc=;
+        b=ZLmIkrm919jjOV22rxRzR1ezAU3aw9Ls9rwvqhdMQRyqt4n8WHgG9GHRN5b4OBW39B
+         sJBv/N9tRVuAiN2+aCVHZC8IFq8fkpDdLHUu0gRdo51ZdnZabjJzVv9yZmm8afxjhJmn
+         WLXsmrG53he2dJj1m709dzdXfNG9VHRHjMhhqhGQe2/XyEwg/NniNYcfyUn4dhKsdv50
+         jSao+EsxPBYzUIm38EV7ZFTC1ZYc60he0L3gFKo+cCFQCXZnmoh5FLX+wUXPcJrgvr2i
+         yhTkC6xP59+o5OqpnJ+0oIpFnKz5lmiOxRmjGlzkjZKKKj1dD2Foo+5g5iRlzUMdF99Z
+         L7cg==
+X-Gm-Message-State: AOJu0YzIYDvjBEADUJ765qCclZKyuWHpNR2spb8BSatlYXWcnZ0s0Nep
+        +NC7f6EpjPIE5VJygm+qj/VLVw==
+X-Google-Smtp-Source: AGHT+IFF5XFoH7IUXUg0uaL+/UGO9fbuPocNcepcEnAF4sm6ZJjbyl2BcOi6WWoOG40yH+aowuLq5Q==
+X-Received: by 2002:ac2:5f90:0:b0:505:6fcd:dc41 with SMTP id r16-20020ac25f90000000b005056fcddc41mr13709463lfe.43.1696966004612;
+        Tue, 10 Oct 2023 12:26:44 -0700 (PDT)
+Received: from [172.30.204.182] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
+        by smtp.gmail.com with ESMTPSA id d4-20020ac24c84000000b0050567a8b36esm1927443lfl.251.2023.10.10.12.26.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Oct 2023 12:26:44 -0700 (PDT)
+Message-ID: <017265ae-c9d5-4ea0-94eb-9090945cbc91@linaro.org>
+Date:   Tue, 10 Oct 2023 21:26:40 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000c579f9060760b488"
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 3/4] cpufreq: qcom-nvmem: add support for IPQ8064
+Content-Language: en-US
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Robert Marko <robimarko@gmail.com>, ilia.lin@kernel.org,
+        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, agross@kernel.org, andersson@kernel.org,
+        rafael@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20230930102218.229613-1-robimarko@gmail.com>
+ <20230930102218.229613-3-robimarko@gmail.com>
+ <5b57e0e0-490e-464d-bdc8-5823ad8da2d8@linaro.org>
+ <65255add.df0a0220.ff2f9.021d@mx.google.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <65255add.df0a0220.ff2f9.021d@mx.google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---000000000000c579f9060760b488
-Content-Transfer-Encoding: 8bit
-
-The brcmstb-avs-cpufreq driver is considered a legacy driver and since
-2018, ARCH_BRCMSTB systems have been using scmi-cpufreq. As a matter of
-fact, when SCMI is in use, brcmstb-avs-cpufreq is unusable since the
-SCMI firmware takes over, this can result in various problems, including
-external synchronous aborts.
-
-Express those constraints such that the driver is not enabled by default
-when SCMI CPU frequency scaling is in use.
-
-Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
----
- drivers/cpufreq/Kconfig.arm | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-index 123b4bbfcfee..c287305820b7 100644
---- a/drivers/cpufreq/Kconfig.arm
-+++ b/drivers/cpufreq/Kconfig.arm
-@@ -90,7 +90,7 @@ config ARM_VEXPRESS_SPC_CPUFREQ
- 
- config ARM_BRCMSTB_AVS_CPUFREQ
- 	tristate "Broadcom STB AVS CPUfreq driver"
--	depends on ARCH_BRCMSTB || COMPILE_TEST
-+	depends on ARCH_BRCMSTB && !(ARM_SCMI_PROTOCOL && ARM_SCMI_CPUFREQ) || COMPILE_TEST
- 	default y
- 	help
- 	  Some Broadcom STB SoCs use a co-processor running proprietary firmware
--- 
-2.34.1
 
 
---000000000000c579f9060760b488
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+On 10/10/23 16:08, Christian Marangi wrote:
+> On Tue, Oct 10, 2023 at 03:39:54PM +0200, Konrad Dybcio wrote:
+>>
+>>
+>> On 9/30/23 12:21, Robert Marko wrote:
+>>> From: Christian Marangi <ansuelsmth@gmail.com>
+>>>
+>>> IPQ8064 comes in 3 families:
+>>> * IPQ8062 up to 1.0GHz
+>>> * IPQ8064/IPQ8066/IPQ8068 up to 1.4GHz
+>>> * IPQ8065/IPQ8069 up to 1.7Ghz
+>>>
+>>> So, in order to be able to support one OPP table, add support for
+>>> IPQ8064 family based of SMEM SoC ID-s and correctly set the version so
+>>> opp-supported-hw can be correctly used.
+>>>
+>>> Bit are set with the following logic:
+>>> * IPQ8062 BIT 0
+>>> * IPQ8064/IPQ8066/IPQ8068 BIT 1
+>>> * IPQ8065/IPQ8069 BIT 2
+>>>
+>>> speed is never fused, only pvs values are fused.
+>>>
+>>> IPQ806x SoC doesn't have pvs_version so we drop and we use the new
+>>> pattern:
+>>> opp-microvolt-speed0-pvs<PSV_VALUE>
+>>>
+>>> Example:
+>>> - for ipq8062 psv2
+>>>     opp-microvolt-speed0-pvs2 = < 925000 878750 971250>
+>>>
+>>> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+>>> Signed-off-by: Robert Marko <robimarko@gmail.com>
+>>> ---
+>> [...]
+>>
+>>> +{
+>>> +	int speed = 0, pvs = 0, pvs_ver = 0;
+>>> +	int msm_id, ret = 0;
+>>> +	u8 *speedbin;
+>>> +	size_t len;
+>>> +
+>>> +	speedbin = nvmem_cell_read(speedbin_nvmem, &len);
+>>> +
+>>> +	if (IS_ERR(speedbin))
+>> The stray newline above this line triggers my OCD :D
+>>
+>>> +		return PTR_ERR(speedbin);
+>>> +
+>>> +	if (len != 4) {
+>>> +		dev_err(cpu_dev, "Unable to read nvmem data. Defaulting to 0!\n");
+>>> +		kfree(speedbin);
+>>> +		return -ENODEV;
+>>> +	}
+>>> +
+>>> +	get_krait_bin_format_a(cpu_dev, &speed, &pvs, &pvs_ver, speedbin);
+>>> +
+>>> +	ret = qcom_smem_get_soc_id(&msm_id);
+>>> +	if (ret)
+>>> +		return ret;
+>> speedbin leaks here
+>>
+>> you can free it right after the get_krait.. call
+>>> +
+>>> +	switch (msm_id) {
+>>> +	case QCOM_ID_IPQ8062:
+>>> +		drv->versions = BIT(IPQ8062_VERSION);
+>>> +		break;
+>>> +	case QCOM_ID_IPQ8064:
+>>> +	case QCOM_ID_IPQ8066:
+>>> +	case QCOM_ID_IPQ8068:
+>>> +		drv->versions = BIT(IPQ8064_VERSION);
+>>> +		break;
+>>> +	case QCOM_ID_IPQ8065:
+>>> +	case QCOM_ID_IPQ8069:
+>>> +		drv->versions = BIT(IPQ8065_VERSION);
+>>> +		break;
+>>> +	default:
+>>> +		dev_err(cpu_dev,
+>>> +			"SoC ID %u is not part of IPQ8064 family, limiting to 1.0GHz!\n",
+>>> +			msm_id);
+>>> +		drv->versions = BIT(IPQ8062_VERSION);
+>>> +		break;
+>>> +	}
+>>> +
+>>> +	/* IPQ8064 speed is never fused. Only pvs values are fused. */
+>>> +	snprintf(*pvs_name, sizeof("speedXX-pvsXX"), "speed%d-pvs%d",
+>>> +		 speed, pvs);
+>> Then drop the format for `speed` and just throw in a zero!
+>>
+>> [...]
+>>
+>>> -	{ .compatible = "qcom,ipq8064", .data = &match_data_krait },
+>>> +	{ .compatible = "qcom,ipq8064", .data = &match_data_ipq8064 },
+>> This change demands a Fixes tag, because you're essentially saying "the
+>> support for this SoC was supposedly there, but it could have never worked
+>> and was broken all along".
+>>
+> 
+> Mhhh actually no. We are just changing the opp binding and introducing
+> hardcoded versions. But the thing worked and actually it's what was used
+> before this change in openwrt. Also current ipq806x dtsi doesn't have
+> any opp definition so no regression there. (and also 99% downstream either
+> use openwrt or use qcom sdk where this implementation is not used at
+> all)
+> 
+> Given these thing should we still add a fixes tag referencing the commit
+> that introduced the compatible for qcom,ipq8064? It's quite problematic
+> as this depends on qcom_smem_get_soc_id().
+Fixes only hints auto backports, you shouldn't be worried about putting 
+fixes on commits that fix bugs.
 
-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
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
-9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
-AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
-UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
-KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
-nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
-Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
-VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
-ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
-CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
-MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
-d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
-hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
-bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
-BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
-KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
-kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
-2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
-3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
-NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
-AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
-LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIEZAYZppl9ITK+9w
-upf228e0u/TKvwAVk1iAL6D/JkQbMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMTAxMDE4MTYzMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
-AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAnSaeOHrusfPbY1bH1irC070e0rMnlS6xN
-5WmQQ0uaFnoB+qghmltjd1n0GkP9H4l7hllGpYMAJK61CAVy4cJo/DheUqJegjR9Tv8cRZauqYnM
-LJkTKtvu6tC/S76145Rhb0Mh9adPNP58v5mMPiHxMmJWN/IneIScVMP1e7uqngkriotnjmDPvq0h
-kg0NVNdnifScDWlwdmk/P861qcrFO+Gb0u/t3/JRZs7N3yigeyvH5G/kI5VPwWwujfkHDGetc/8T
-dYoE19lxIg5UOUaRzsG+ismndCHw1L2r3AQ/5O44GpPDPDtVXubmQJdA7wXkS8WObd2dMQ6yncHx
-Da1O
---000000000000c579f9060760b488--
+I see this as a "didnt work" -> "works" commit, which in my eyes 
+qualifies as a fix.
+
+Konrad
