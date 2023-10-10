@@ -2,107 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C9E7BF31C
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Oct 2023 08:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6437BF386
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Oct 2023 08:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442266AbjJJGco (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Oct 2023 02:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47302 "EHLO
+        id S1442385AbjJJG6q convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 10 Oct 2023 02:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442248AbjJJGcn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Oct 2023 02:32:43 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6E4B0
-        for <linux-pm@vger.kernel.org>; Mon,  9 Oct 2023 23:32:39 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-35140cc9187so22485215ab.2
-        for <linux-pm@vger.kernel.org>; Mon, 09 Oct 2023 23:32:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696919559; x=1697524359; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TMjAqcpLnIT/rrI7hIEQLgNPdRLO8Rld137dNw3SF7I=;
-        b=mP8I8d6e5a5ShtHsoOZr83t0almE7JYNg5YZ6NV/SnQDGUb79i6xA6b7xjWu9mh4bH
-         hyB1+eZWuhlmIiT7PCBILsMlUO49kQfTqEfu4SuYdyoo41ZLzlUEwC/cSJqonBOyOgxS
-         uAJURKxKWPXFXhGEGebvl0Qzgz3OGJkSW9EBdvuzV/WAc5zFVvHhbWxKTESaZAQOyNXi
-         iGqKBKeFTi536sVR9+KlgUcKR36uTUCp+beRa7ezXd/bdb2US5APZf1F6PQmSclYTtCt
-         gJTQTsm8XEzrWjN4W2lJ0FgiAY/j+H2ZdbH8SuXIECZHm8QtkR/+H+sOVnJs8qslygI+
-         BOpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696919559; x=1697524359;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TMjAqcpLnIT/rrI7hIEQLgNPdRLO8Rld137dNw3SF7I=;
-        b=eVdmmJdFJK12Trdhr6GQtwrYjYCbWhv+jd5F6IlZgpC+tnfBmnJSdff7RWZuiwpvzx
-         xWxN0hxBmVOA6bTX/Ts4M91ft6KkuRXE6+BfQ0qaRA9Ny6HSL+IIicVfBQWmFXVYB1jF
-         CNn4ljPrmir/HgA/FRm0xR4IZpaJk3WiPQoCIZvL93lTVxxdZNvpjFVTDeTPPrJEy4k4
-         8KqaUbIIoGMckSGdZVcWF/vLh3ZyG4zt1f2YICWajXSRo74CyGgcS3Y3G3eCHrFjChMA
-         865Gpnfx5lq0p1D5OCIEHD00MlHoBNlj8PtMMkvEvP4Y6cZirwpogsoR68hH+pXZ+JAb
-         +LkA==
-X-Gm-Message-State: AOJu0Ywfk8A7jHkvYwvnnvuNsT1UGRCDmoxaO2/TMxtvjA2pBupuB7HR
-        RwV9yoFNsRYrFjwry5VVEYXb8w==
-X-Google-Smtp-Source: AGHT+IFudao3PbpP569Ne+5jwXH4fImT8uscTRIidiWKdGzpzFr6qyIB+LvshslYWivEZAwnbXVarQ==
-X-Received: by 2002:a05:6e02:180a:b0:357:3d82:2d48 with SMTP id a10-20020a056e02180a00b003573d822d48mr381725ilv.8.1696919558757;
-        Mon, 09 Oct 2023 23:32:38 -0700 (PDT)
-Received: from localhost ([122.172.81.92])
-        by smtp.gmail.com with ESMTPSA id u7-20020a637907000000b005776446f7cbsm9400467pgc.66.2023.10.09.23.32.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Oct 2023 23:32:38 -0700 (PDT)
-Date:   Tue, 10 Oct 2023 12:02:35 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
+        with ESMTP id S1442319AbjJJG6p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Oct 2023 02:58:45 -0400
+X-Greylist: delayed 602 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 Oct 2023 23:58:43 PDT
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB0499;
+        Mon,  9 Oct 2023 23:58:43 -0700 (PDT)
+Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay08.hostedemail.com (Postfix) with ESMTP id 9C649140199;
+        Tue, 10 Oct 2023 06:48:39 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf06.hostedemail.com (Postfix) with ESMTPA id 379272000F;
+        Tue, 10 Oct 2023 06:48:11 +0000 (UTC)
+Message-ID: <f511170fe61d7e7214a3a062661cf4103980dad6.camel@perches.com>
+Subject: Re: [PATCH 6/7] fs/sysfs/group: make attribute_group pointers const
+From:   Joe Perches <joe@perches.com>
+To:     Max Kellermann <max.kellermann@ionos.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Stephan Gerhold <stephan@gerhold.net>
-Subject: Re: [PATCH v5 0/6] cpufreq: qcom-nvmem: support apq8064 cpufreq
- scaling
-Message-ID: <20231010063235.rj2ehxugtjr5x2xr@vireshk-i7>
-References: <20231002185940.1271800-1-dmitry.baryshkov@linaro.org>
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        James Clark <james.clark@arm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-rdma@vger.kernel.org, iommu@lists.linux.dev,
+        nvdimm@lists.linux.dev, linux-nvme@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-leds@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Date:   Mon, 09 Oct 2023 23:48:10 -0700
+In-Reply-To: <CAKPOu+8k2x1CucWSzoouts0AfMJk+srJXWWf3iWVOeY+fWkOpQ@mail.gmail.com>
+References: <20231009165741.746184-1-max.kellermann@ionos.com>
+         <20231009165741.746184-6-max.kellermann@ionos.com>
+         <264fa39d-aed6-4a54-a085-107997078f8d@roeck-us.net>
+         <CAKPOu+8k2x1CucWSzoouts0AfMJk+srJXWWf3iWVOeY+fWkOpQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231002185940.1271800-1-dmitry.baryshkov@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Stat-Signature: x66gji9pr8zwbank5ef871m9qoojjjfr
+X-Rspamd-Server: rspamout04
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
+        version=3.4.6
+X-Rspamd-Queue-Id: 379272000F
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19bm9nHqj2XrX3TKwatvC/C1GajNvD5h9I=
+X-HE-Tag: 1696920491-749924
+X-HE-Meta: U2FsdGVkX1/+029EmPc9sKVNFK2VRUjBCte/A2E+5y43hxFCP+MAKFoIxkcikfn6Jucu52vLqnvIqQDvdm6WvqlwnI8PH42O3yPwjrf6/Rk44z8SFUR40tWN1QdYZq3HPOEvKn0PLMPTqRRMr7zlpFwkMW85ySQYIyr+J8E4OP6W/LoiP3zYhR+0cmnV5ToftIwEMltweE+g/zUx+NL1fSjTbqk3Sf4w33VMSw7k9oncskJ8CUN/bQZEOiHhpNbgGpLqoQJ7ob3InQymsj8a//o/6ldtQbuoxFCk/RnYuGfC0EahOFEMbfIs5+kJ0g+hK4chvkcdMx/L2QmQgmCvPhqiadvx8BYdkeJ2IpCV5Y5g+W85x67f7ON0uqOVXWab
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02-10-23, 21:59, Dmitry Baryshkov wrote:
-> This is a split of APQ8064 cpufreq series, as requested by Viresh. This
-> series includes only opp and cpufreq parts, with the DT and soc parts
-> being split to a separate patchset.
+On Mon, 2023-10-09 at 22:05 +0200, Max Kellermann wrote:
+> On Mon, Oct 9, 2023 at 7:24 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> > Also, I don't know why checkpatch is happy with all the
+> > 
+> >         const struct attribute_group *const*groups;
+> > 
+> > instead of
+> > 
+> >         const struct attribute_group *const *groups;
 > 
-> Each core has independent power and frequency control. Additionally the
-> L2 cache is scaled to follow the CPU frequencies (failure to do so
-> results in strange semi-random crashes).
+> I found out that checkpatch has no check for this at all; it does
+> complain about such lines, but only for local variables. But that
+> warning is actually a bug, because this is a check for unary
+> operators: it thinks the asterisk is a dereference operator, not a
+> pointer declaration, and complains that the unary operator must be
+> preceded by a space. Thus warnings on local variable are only correct
+> by coincidence, not by design.
 > 
-> Core voltage is controlled through the SAW2 devices, one for each core.
-> The L2 has two regulators, vdd-mem and vdd-dig.
-> 
-> Changes since v4:
-> - Reordered variables in qcom_cpufreq_init() (Konrad)
-> - Fixed of_platform_device_create() error check (Konrad)
-> - Dropped unused ret variable in qcom_cpufreq_apq8064_name_version() (Konrad)
+> Inside structs or parameters (where my coding style violations can be
+> found), it's a different context and thus checkpatch doesn't apply the
+> rules for unary operators.
 
-Applied. Thanks.
+My opinion is that const use in the kernel should almost
+always have whitespace before and after it except when
+preceded by a open parenthesis or a newline.
 
--- 
-viresh
+$ git grep -wh const -- '*.[ch]' | \
+  grep -oP "[ \*\(]?const[ \*]?" | \
+  sort | uniq -c | sort -rn
+ 222438  const 
+  83386 const 
+  51667 (const 
+   2766 *const 
+    834 const
+    442  const
+    343  const*
+     88 *const
+     37 (const
+      4 *const*
+
