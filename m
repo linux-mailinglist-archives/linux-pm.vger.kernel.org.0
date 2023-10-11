@@ -2,79 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72CE77C5212
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 13:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 374917C5242
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 13:38:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234803AbjJKLa2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Oct 2023 07:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
+        id S230138AbjJKLi3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Oct 2023 07:38:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234765AbjJKLa1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Oct 2023 07:30:27 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8E098
-        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 04:30:25 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-3226b8de467so6269880f8f.3
-        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 04:30:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697023824; x=1697628624; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=d7jf66VDbLwDGQFts5Mk3zmoqfgZj1njMNnWJVHShyQ=;
-        b=qBzjgIwoQtEpyNqxJ/rS+2TSxuOxqRm97dL0GLepZzyjCephxFRPk3vgRf1c6A9ZVo
-         Uj09gs08wiLnktVlOUHN9QxxYZ1jnHUnZo0xROSqLqQcY4DB7YqiRvvC0ZtbVmPAi6Va
-         1ACtFRHesEHtguYMJwJtWH4+Dfi0cuQ02qpo8R5C+KufmHUjrLu9tzPflJpefcyQsU06
-         LjFu4mIvvTL4jndGfV4474nGv/YaJOEjkQTU6/rhnNKYEOelxOPYGu+VA3GWGIgteSTs
-         LPCQ4QwoHcEGf7BN85S0t9EDnW71aejb9RJtdwlFk2X6jYrdGSlP9D6qCaVIiC/4P5Ha
-         UsuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697023824; x=1697628624;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d7jf66VDbLwDGQFts5Mk3zmoqfgZj1njMNnWJVHShyQ=;
-        b=C76t/AB6B1mVZ9NDbDR1tBHwnfM3lzM1ky8BEwloFdGxjpIILEd5kRRI1M44tyzXCm
-         m6ttvAufvyzOaRuB8XebxeyDDJv/qVHQzdwwFA0k7fm+ZW6ytCkPpL+h2PHOZOEWokbX
-         CaZmbx3fe4yz3+TocJgUAzVo0cHrSuq3YYiouS3InMT0xT4mud0Pu15oka1R9PE2OuwZ
-         vApZIw3TEIWzTvGzs/RpCgCEikfYRr7srGFOroOBDWrIN7TuS2AfH0noNyTy/fw8yx85
-         MtKSOx+lR2onVVAh85XFdBqa8VCTFMgeT2aC7V5FwI7TjVqx/QNRPtddKoEpVBRaUCEo
-         x3Qg==
-X-Gm-Message-State: AOJu0YyQ9KCRNTwa7w7i+06YAbHdl4FhQs6ceepj2p0oqto7aqASBzkv
-        7JYD1+YryAOdodgN0G42fNpekA==
-X-Google-Smtp-Source: AGHT+IHuiNcQZJf+Rmj8oNoUni1H4MhMhq2pN9qd3b2XdAV7M3v2EdBQhAsQuJ+PZNTRTBZv3+imhg==
-X-Received: by 2002:adf:c089:0:b0:32d:5cc0:2f0b with SMTP id d9-20020adfc089000000b0032d5cc02f0bmr2726061wrf.57.1697023823657;
-        Wed, 11 Oct 2023 04:30:23 -0700 (PDT)
-Received: from [172.30.204.240] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
-        by smtp.gmail.com with ESMTPSA id s11-20020a5d424b000000b003248a490e3asm15280520wrr.39.2023.10.11.04.30.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Oct 2023 04:30:23 -0700 (PDT)
-Message-ID: <90e45a4a-457d-4b89-aa05-ddf40fec6e2c@linaro.org>
-Date:   Wed, 11 Oct 2023 13:30:21 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] of: export of_find_next_cache_node() for modules
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        with ESMTP id S230175AbjJKLi2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Oct 2023 07:38:28 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551918F;
+        Wed, 11 Oct 2023 04:38:26 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 584D0C433C8;
+        Wed, 11 Oct 2023 11:38:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1697024306;
+        bh=4fx02kIVzNS5/Linr6xalperWLzJEYnNr9bOurgYi+E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FqRScT5FTcuS3fYqdQHWtC5gAFPo1tF6UDWr2uuRZDMiuuIJrc0PU6OrpuV4nBIb+
+         6lSnNp++41Vk1/p8G3bh94Sms/awnr5WMobOOwZJpQRuTc79uoHgrjBjCef1X8EqZ6
+         yHaRL5sjr29GCbIqrWAT9rG2WyjvN9aNaT4Y3t3AS/lyIAm3omAVRDRIK8SUdozjrk
+         FVpvJfQkbbuPO3Dp5ZAIyca8P0ud9BqGZtQ3aVvpqy3ok2JZRmhj2+tB/zd8TBkKWw
+         YIoA9v3Mm5CY8NZFYxZK6AoZjmJbIfZxqu7ka9i4GeTeDRwD+7D9gi44XWPWfAc5Id
+         1mqmAb8PDv5Sw==
+Date:   Wed, 11 Oct 2023 12:38:19 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20231011112726.166052-1-dmitry.baryshkov@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20231011112726.166052-1-dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        zev@bewilderbeest.net, Sebastian Reichel <sre@kernel.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v1 3/3] regulator: fixed: forward under-voltage events
+Message-ID: <2d14fd22-c37b-4c15-a2ea-a2fd2c201adb@sirena.org.uk>
+References: <20231010085906.3440452-1-o.rempel@pengutronix.de>
+ <20231010085906.3440452-3-o.rempel@pengutronix.de>
+ <5e51792a-cc93-4364-a51b-c2b116d89369@sirena.org.uk>
+ <20231010125531.GA3268051@pengutronix.de>
+ <c2ee404d-d07f-42c6-b5ba-41659773e8eb@sirena.org.uk>
+ <20231011075931.GA3305420@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="9eSSa5JQlmOnKXkT"
+Content-Disposition: inline
+In-Reply-To: <20231011075931.GA3305420@pengutronix.de>
+X-Cookie: What an artist dies with me!
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,16 +61,69 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
+--9eSSa5JQlmOnKXkT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 10/11/23 13:27, Dmitry Baryshkov wrote:
-> The qcom-cpufreq-nvmem module uses of_find_next_cache_node() function,
-> so export it to be available to the modules.
-> 
-> Fixes: 7683a63c08ff ("cpufreq: qcom-nvmem: create L2 cache device")
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+On Wed, Oct 11, 2023 at 09:59:31AM +0200, Oleksij Rempel wrote:
 
-Pity the testing robot didn't catch this
+> Configuration through the device tree and kernel defaults is preferable.
+> For instance, having a default kernel governor that doesn=E2=80=99t requi=
+re user
+> space configuration aligns with the project=E2=80=99s objectives.
 
-Konrad
+That's policy though...
+
+>=20
+> > For the regulator itself we probably want a way to identify regulators
+> > as being system critical so they start notifying.  It would be tempting
+> > to just do that by default but that would likely cause some issues for
+> > example with regulators for things like SD cards which are more likely
+> > to get hardware problems that don't comprimise the entire system.  We
+> > could do that with DT, either a property or some sort of runtime
+> > consumer, but it might be better to have a control in sysfs that
+> > userspace can turn on?  OTOH the ability do something about this depends
+> > on specific hardware design...
+> >=20
+> > I've copied in Sebastian since this sounds like the sort of thing that
+> > power supplies might have some kind of handling for, or at least if we
+> > need to add something we should make it so that the power supplies can
+> > be joined up to it.  I do see temperature and capacity alerts in the
+> > sysfs ABI for power supplies, but nothing for voltage.
+>=20
+> Thank you for pointing towards the power supply framework. Given the hard=
+ware
+> design of my project, I can envision mapping the following states and
+> properties within this framework:
+
+There's also hw_failure_emergency_poweroff() which looks like exactly
+what you're trying to trigger here.
+
+> Considering the above mapping, my initial step would be to create a simple
+> regulator coupled (if regulator is still needed in this casr) with a Devi=
+ce
+> Tree (DT) based power supply driver.  This setup would align with the exi=
+sting
+> power supply framework, with a notable extension being the system-wide
+> notification for emergency shutdown upon under-voltage detection.
+
+It sounds like this is actually a regulator regardless of if it also
+appears via some other API.
+
+--9eSSa5JQlmOnKXkT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUmiSsACgkQJNaLcl1U
+h9AXKAf9E3DOuTsypes7HuEYKgcVvvwy45I43FH7VZN2D7Xf19e7tsoHXpWGap5f
+LYqv2PoNNArcGBX/V8ioAhYv2GbICFWCefxawYDB8SM+xsKI0/4zRQfz9qKf4xax
+pPgDcmCH4bfXsUYMTfjbRZ/l9CRAjwZuYJgJpjRQwlMGe/X1ZYDDAJ/2ulotdVqa
+rWBb0vmafnGj/u3oUKOoNYwjUiK4zKRhE/YklWyVQ+APsGzyQ/6R2irdL7sQK0s4
+dISgQYXzfljoo9Fpnyn5ZvMQEd1uZyPeyNkoLtcStmlg0SUuc5vPDn7aK0C0GSHf
+UQzT4X8/qVMXalQjcHdeimxOL+Uy3A==
+=k1e/
+-----END PGP SIGNATURE-----
+
+--9eSSa5JQlmOnKXkT--
