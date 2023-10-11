@@ -2,60 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D535B7C52DB
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 14:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 300667C53D1
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 14:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231758AbjJKMGP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Oct 2023 08:06:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48234 "EHLO
+        id S234953AbjJKM0S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Oct 2023 08:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231889AbjJKMGO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Oct 2023 08:06:14 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30317A4;
-        Wed, 11 Oct 2023 05:06:10 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1697025969;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=e8PMcuYySmTK2GLGzDl7ickSIL5xZv3CLwffGGkD0iM=;
-        b=YIjUXdrvRneuXFgc7gq7Rn4OY3r/Caz1QfO/PDv0g1CxSKzy/JObsngmnPSIL5InPiL5wb
-        oZfTjPtiVApWl+yNCYR6qGxu1NhdHl264HE+q4etwtvlceDSzsK55ijK/8fKVymicPDUvr
-        PeBukGq/h+e/CxmKXPHaeCzDULMVqJcu2htT4ul+cAH4Vg8ld6Q2seATPdoZs5harGwQAE
-        5FI+Y6qwsG1KaGYooyqLdICL2aI+YhN95XDjvvrZ6rZaSYk/Lv2DD4XZI0WWuQGEGEH5qi
-        scUiHjHYSC+sTvAbciNbgwzE3/aMU0B/0FnDkIysRRdzAoOS+eh6+x9yZwl//A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1697025969;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=e8PMcuYySmTK2GLGzDl7ickSIL5xZv3CLwffGGkD0iM=;
-        b=ZOhzBjNvuXO9xiRWpa7Tdwnq7GT1Qfbi1aZb6EEWC5hCIlDewkaxbXXyrQaiE4o1EynyFn
-        IL9wQ8L8YD+6czAw==
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-acpi@vger.kernel.org, James Morse <james.morse@arm.com>,
-        loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        jianyong.wu@arm.com, justin.he@arm.com,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Salil Mehta <salil.mehta@huawei.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-ia64@vger.kernel.org
-Subject: Re: [PATCH] cpu-hotplug: provide prototypes for arch CPU registration
-In-Reply-To: <ZSV6i4pnjQqvWuKp@shell.armlinux.org.uk>
-References: <E1qkoRr-0088Q8-Da@rmk-PC.armlinux.org.uk>
- <ZSV6i4pnjQqvWuKp@shell.armlinux.org.uk>
-Date:   Wed, 11 Oct 2023 14:06:08 +0200
-Message-ID: <87o7h5l5xr.ffs@tglx>
+        with ESMTP id S231970AbjJKM0G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Oct 2023 08:26:06 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FDDF0
+        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 05:26:04 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-692b2bdfce9so6056118b3a.3
+        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 05:26:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697027163; x=1697631963; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uv/rlRYitJnK0DrpOEwxamLSxws/97bJsaf1Cey2fBE=;
+        b=ypOpv9MTQSM/x9I87a53UyCxwB6tAdg1RxsJvh5M8Dd1Hi7sWLmIrJrpCv/YaFScXg
+         J/kwzjFtI+cPGnFaNP1TYRA/r8315yK4SfIAVxhrYP1oqXarshmmSpNcPFKYpm+0Mozz
+         1q12WiXOG5YxhL+H30kJWg1d8PXiXVjlIoAQFxALMWKKmc+t8ULLpBqHZlFUmVOd2TuA
+         FJvTUETUrzWwUddY/aLL7jOcGcvg7dEikmfkQv3W1GGFkB8i+LaBZd4O13O0Lb97ZvBk
+         CnKYgjfzQ6CQndPr59kdSs4U+34WxMuHrFUbx3TCHHZctcIWxbC6tiZskLfa0kXb1XrF
+         aqJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697027163; x=1697631963;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uv/rlRYitJnK0DrpOEwxamLSxws/97bJsaf1Cey2fBE=;
+        b=Bqcr2LL92Q2XjB9XWqjvmo0rzP/zng4iWiuC2dNutDoDRoFGTiwc2QNMt/0XOfKd0A
+         1igT7voC/yC9AqzmUQGHLkOb5DCxT4tkOSBIQj/lWVBbKSplk1oWfph8KpzoYvZ9aCFO
+         ygc5VPdUd8cnVCiqqQSMHtjU32l6+cnbWX0AtU9Wsg09NW6ntRE7ZRivaqYu0AfpF3ZU
+         5by7GcbSa9wdwJK724uVmONcCDirA4k/xRtbkrg5hB3JDsFE0AzctiiVGDFiIhQ641tn
+         wz68xwDVgTOs70TeCantlLgN2yiErXtTOcUu4dwA6jDK0ZkHxzuj5cpiHTyq45qa9V8A
+         Eu9w==
+X-Gm-Message-State: AOJu0YyG5RYBiwh5qHhHFouCsFsfThY49l2ZSwO2t2gqU72fyHlCLeh8
+        TLppnqkGi6zmmwg5v0qoFpCR
+X-Google-Smtp-Source: AGHT+IHMgFvyP/ZNlgH1hd7LaMJ22CwW7IVsks4SREGW/bKUOs8S5+Yani2sRPyVQFYaval6GFImcQ==
+X-Received: by 2002:a05:6a00:2d23:b0:690:c5cf:91f4 with SMTP id fa35-20020a056a002d2300b00690c5cf91f4mr23872761pfb.12.1697027163274;
+        Wed, 11 Oct 2023 05:26:03 -0700 (PDT)
+Received: from localhost.localdomain ([120.138.12.180])
+        by smtp.gmail.com with ESMTPSA id a19-20020aa78653000000b0068fb8080939sm9953620pfo.65.2023.10.11.05.25.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Oct 2023 05:26:02 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, andersson@kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
+        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
+        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
+        linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v5 0/5] UFS: Add OPP support
+Date:   Wed, 11 Oct 2023 17:55:38 +0530
+Message-Id: <20231011122543.11922-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -66,28 +81,93 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 10 2023 at 17:23, Russell King wrote:
-> Okay, I give up. 15 days, still no real progress. I don't see any point
-> in submitting any further patches for the kernel outside of those areas
-> that I maintain. Clearly no one cares enough to bother (a) properly
-> reviewing the patch, (b) applying the patch that Thomas thought
-> "makes tons of sense."
->
-> If patches that "makes tons of sense" just get ignored, then what does
-> the future of the kernel hold? Crap, that's what, utter crap.
->
-> As I said, it seems that the Linux kernel process is basically totally
-> broken and rotten. If a six line patch that "makes tons of sense" can't
-> be applied, then there's basically no hope what so ever.
+Hi,
 
-Oh well. I usually try to keep track of such stuff, but this one fell
-through the cracks.
+This series adds OPP (Operating Points) support to UFSHCD driver.
 
-Shit happens and we are all human, no?
+Motivation behind adding OPP support is to scale both clocks as well as
+regulators/performance state dynamically. Currently, UFSHCD just scales
+clock frequency during runtime with the help of "freq-table-hz" property
+defined in devicetree. With the addition of OPP tables in devicetree (as
+done for Qcom SDM845 and SM8250 SoCs in this series) UFSHCD can now scale
+both clocks and performance state of power domain which helps in power
+saving.
 
-Sorry for the wrong information about ia64. The removal did not happen
-because someone stepped up as a possible maintainer.
+For the addition of OPP support to UFSHCD, there are changes required to
+the OPP framework and devfreq drivers. The OPP framework changes are already
+merged and the devfreq change is added in this series.
+
+Credits
+=======
+
+This series is a continuation of previous work by Krzysztof Kozlowski [1].
+
+Testing
+=======
+
+This series is tested on 96Boards RB3 (SDM845 SoC) and RB5 (SM8250 SoC)
+development boards.
+
+Merging Strategy
+================
+
+Since the devfreq patch got an Ack from the maintainer, either it can be merged
+to scsi tree with rest of the patches or merged separately through devfreq tree.
 
 Thanks,
+Mani
 
-        tglx
+[1] https://lore.kernel.org/all/20220513061347.46480-1-krzysztof.kozlowski@linaro.org/
+
+Changes in v5:
+
+* Dropped the devfreq patch since it got applied
+* Fixed the bindings issue reported by DT bot
+* Rebased on top of mkp/scsi/for-next
+
+Changes in v4:
+
+* Rebased on top of v6.6-rc3
+
+Changes in v3:
+
+* Rebased on top of linux-next/master tag: next-20230731
+* Dropped the already applied patches (dts, opp binding and framework)
+* Moved the interconnect patches to a separate series:
+  https://lore.kernel.org/linux-scsi/20230731145020.41262-1-manivannan.sadhasivam@linaro.org/
+* Moved ufshcd_opp_config_clks() API to ufshcd.c to fix the build failure
+  reported by Kbuild bot: https://lore.kernel.org/all/202307210542.KoLHRbU6-lkp@intel.com/
+* Collected Acks
+* v2: https://lore.kernel.org/all/20230720054100.9940-1-manivannan.sadhasivam@linaro.org/
+
+Changes in v2:
+
+* Added more description to the bindings patch 2/15
+* Fixed dev_pm_opp_put() usage in patch 10/15
+* Added a new patch for adding enums for UFS lanes 14/15
+* Changed the icc variables to mem_bw and cfg_bw and used
+  the enums for gears and lanes in bw_table
+* Collected review tags
+* Added SCSI list and folks
+* Removed duplicate patches
+
+Krzysztof Kozlowski (2):
+  dt-bindings: ufs: common: add OPP table
+  arm64: dts: qcom: sdm845: Add OPP table support to UFSHC
+
+Manivannan Sadhasivam (3):
+  scsi: ufs: core: Add OPP support for scaling clocks and regulators
+  scsi: ufs: host: Add support for parsing OPP
+  arm64: dts: qcom: sm8250: Add OPP table support to UFSHC
+
+ .../devicetree/bindings/ufs/ufs-common.yaml   |  35 +++-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  42 +++-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          |  39 +++-
+ drivers/ufs/core/ufshcd.c                     | 179 ++++++++++++++----
+ drivers/ufs/host/ufshcd-pltfrm.c              |  78 ++++++++
+ include/ufs/ufshcd.h                          |   7 +
+ 6 files changed, 325 insertions(+), 55 deletions(-)
+
+-- 
+2.25.1
+
