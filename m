@@ -2,136 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C9997C5013
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 12:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5302D7C5203
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 13:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346119AbjJKK2D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Oct 2023 06:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49082 "EHLO
+        id S234786AbjJKL1d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Oct 2023 07:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346255AbjJKK2C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Oct 2023 06:28:02 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01DC0D9;
-        Wed, 11 Oct 2023 03:27:57 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 645B21477;
-        Wed, 11 Oct 2023 03:28:38 -0700 (PDT)
-Received: from [192.168.1.13] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7BA1C3F762;
-        Wed, 11 Oct 2023 03:27:51 -0700 (PDT)
-Message-ID: <ac8968b9-8463-4aa2-a38d-fc2b9137460d@arm.com>
-Date:   Wed, 11 Oct 2023 12:27:51 +0200
+        with ESMTP id S231312AbjJKL1c (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Oct 2023 07:27:32 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E92D93
+        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 04:27:30 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-5033918c09eso8517819e87.2
+        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 04:27:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697023648; x=1697628448; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/zWK+bD8Aid1fpusuW1MHz1xIacL85O9/h4oyYVsZ/0=;
+        b=Ej8D5yfkmy8v6C8HTqPcdvZP6KPW2sG9mFYuuLI04Az5JtVjtW3ZJFCiiOfvPt6DCT
+         fY86pJktZ1gyYRs7skZCyvJBZT5zTQZes7jVwGAezewb/YcRYLSlop7+SwMCY0dZpT6B
+         7JvZSxv7Nxt2YtxLTynNLvfGfJ56mt3JRHIOzrCx2cTJ8O8TvaZwuC4EQucG3rHAtOkE
+         RlTuMxMQXONDQn8l7xIIBN0MSkCY5Fn3IqRTKS36g9PdjyCIAC8HdJEkbSm4IfQnnC8K
+         fKgKPDNzeEmKqP1CT1ZGrQTpUYnqP5t5Nz1XdfzhhdrFwThwTsPQAiGpyMXjpNF0SnZE
+         LdFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697023648; x=1697628448;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/zWK+bD8Aid1fpusuW1MHz1xIacL85O9/h4oyYVsZ/0=;
+        b=X6UVB1FoHWyVHRLQBUKL9uETsR6SnJh2KTBBqzPmKX9eGZ26y2HNdCDS9JEaI3vmlx
+         tkjczesEdJr75FDqPfWK1c41rgOsDNJa764J5y/W2MT8kRypwSSE8Q86l0EU61UZS/83
+         pjYzPVbPBxeYcpnCFPA4I8pThbv6l9ZJu3gareISqya6PUYYjl4MSKZLSnEzwdZtyt7c
+         joVdQLjOSox5Qhh3IB+c3X+YKxT0VoP9MZkPSfQz3ulb873Hi7vDV3MbGz2FdNSjKn5G
+         7h7Slilt0irnUZBicyFA/7lBjRRu9mODI+7pC+hyqkNx5dhGn96QByZOAhoZRg5ZrRB5
+         8LIA==
+X-Gm-Message-State: AOJu0YyQ9K+l7lL8kEMyzWRXHiWYFcshMB0vlaD1K3R/0jmqNgF5T9Di
+        +6nRYaeny0/xlVZMhiQFn2hphw==
+X-Google-Smtp-Source: AGHT+IGvenwk2MJkOq3Kj8WNWwdd/u1jV8TzOJNidj7MkUHF50J7iU+JoTJQf+ppFys3K+MXURN1ow==
+X-Received: by 2002:a05:6512:6c7:b0:503:95d:f2bd with SMTP id u7-20020a05651206c700b00503095df2bdmr20944407lff.34.1697023648266;
+        Wed, 11 Oct 2023 04:27:28 -0700 (PDT)
+Received: from umbar.unikie.fi ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id a29-20020a056512021d00b005008c11ca6dsm2228154lfo.184.2023.10.11.04.27.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Oct 2023 04:27:27 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH] of: export of_find_next_cache_node() for modules
+Date:   Wed, 11 Oct 2023 14:27:26 +0300
+Message-Id: <20231011112726.166052-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 6/6] cpufreq/cppc: set the frequency used for capacity
- computation
-To:     Vincent Guittot <vincent.guittot@linaro.org>,
-        linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
-        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        viresh.kumar@linaro.org, lukasz.luba@arm.com,
-        ionela.voinescu@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Cc:     conor.dooley@microchip.com, suagrfillet@gmail.com,
-        ajones@ventanamicro.com, lftan@kernel.org
-References: <20231009103621.374412-1-vincent.guittot@linaro.org>
- <20231009103621.374412-7-vincent.guittot@linaro.org>
-Content-Language: en-US
-From:   Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <20231009103621.374412-7-vincent.guittot@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Vincent,
+The qcom-cpufreq-nvmem module uses of_find_next_cache_node() function,
+so export it to be available to the modules.
 
-On 10/9/23 12:36, Vincent Guittot wrote:
-> cppc cpufreq driver can register an artificial energy model. In such case,
-> it also have to register the frequency that is used to define the CPU
-> capacity
-> 
-> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> ---
->   drivers/cpufreq/cppc_cpufreq.c | 18 ++++++++++++++++++
->   1 file changed, 18 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index fe08ca419b3d..24c6ba349f01 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -636,6 +636,21 @@ static int populate_efficiency_class(void)
->   	return 0;
->   }
->   
-> +
-> +static void cppc_cpufreq_set_capacity_ref_freq(struct cpufreq_policy *policy)
-> +{
-> +	struct cppc_perf_caps *perf_caps;
-> +	struct cppc_cpudata *cpu_data;
-> +	unsigned int ref_freq;
-> +
-> +	cpu_data = policy->driver_data;
-> +	perf_caps = &cpu_data->perf_caps;
-> +
-> +	ref_freq = cppc_cpufreq_perf_to_khz(cpu_data, perf_caps->highest_perf);
-> +
-> +	per_cpu(capacity_ref_freq, policy->cpu) = ref_freq;
+Fixes: 7683a63c08ff ("cpufreq: qcom-nvmem: create L2 cache device")
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
 
-'capacity_ref_freq' seems to be updated only if CONFIG_ENERGY_MODEL is set. However in
-[1], get_capacity_ref_freq() relies on 'capacity_ref_freq'. The cpufreq_schedutil governor
-should have a valid 'capacity_ref_freq' value set if the CPPC cpufreq driver is used
-without energy model I believe.
+This patch fixes the discrepancy caused by the patch for the
+qcom-cpufreq-nvmem. I'd like to ask for this patch to be also merged via
+the cpufreq tree.
 
-Also 'capacity_ref_freq' seems to be set only for 'policy->cpu'. I believe it should
-be set for the whole perf domain in case this 'policy->cpu' goes offline.
+---
+ drivers/of/base.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Another thing, related my comment to [1] and to [2], for CPPC the max capacity matches
-the boosting frequency. We have:
-   'non-boosted max capacity' < 'boosted max capacity'.
--
-If boosting is not enabled, the CPU utilization can still go above the 'non-boosted max
-capacity'. The overutilization of the system seems to be triggered by comparing the CPU
-util to the 'boosted max capacity'. So systems might not be detected as overutilized.
+diff --git a/drivers/of/base.c b/drivers/of/base.c
+index 8d93cb6ea9cd..c4cf558e60d9 100644
+--- a/drivers/of/base.c
++++ b/drivers/of/base.c
+@@ -1905,6 +1905,7 @@ struct device_node *of_find_next_cache_node(const struct device_node *np)
+ 
+ 	return NULL;
+ }
++EXPORT_SYMBOL_GPL(of_find_next_cache_node);
+ 
+ /**
+  * of_find_last_cache_level - Find the level at which the last cache is
+-- 
+2.39.2
 
-For the EAS energy computation, em_cpu_energy() tries to predict the frequency that will
-be used. It is currently unknown to the function that the frequency request will be
-clamped by __resolve_freq():
-get_next_freq()
-\-cpufreq_driver_resolve_freq()
-   \-__resolve_freq()
-This means that the energy computation might use boosting frequencies, which are not
-available.
-
-Regards,
-Pierre
-
-[1]: [PATCH v2 4/6] cpufreq/schedutil: use a fixed reference frequency
-[2]: https://lore.kernel.org/lkml/20230905113308.GF28319@noisy.programming.kicks-ass.net/
-
-> +}
-> +
->   static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
->   {
->   	struct cppc_cpudata *cpu_data;
-> @@ -643,6 +658,9 @@ static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
->   		EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
->   
->   	cpu_data = policy->driver_data;
-> +
-> +	cppc_cpufreq_set_capacity_ref_freq(policy);
-> +
->   	em_dev_register_perf_domain(get_cpu_device(policy->cpu),
->   			get_perf_level_count(policy), &em_cb,
->   			cpu_data->shared_cpu_map, 0);
