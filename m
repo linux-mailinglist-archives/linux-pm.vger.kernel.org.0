@@ -2,114 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2056A7C4969
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 07:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4957F7C4C78
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 09:59:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbjJKFtG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Oct 2023 01:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59754 "EHLO
+        id S1345232AbjJKH7u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Oct 2023 03:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjJKFtF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Oct 2023 01:49:05 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899FE9B
-        for <linux-pm@vger.kernel.org>; Tue, 10 Oct 2023 22:49:02 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-690d2e13074so4984814b3a.1
-        for <linux-pm@vger.kernel.org>; Tue, 10 Oct 2023 22:49:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697003342; x=1697608142; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=i3/xooCfzn+HEb84CSy8n1NiyDH9US0NidBeh+kHVYE=;
-        b=DENHURHFEXIX2Casi1G4byCfgdWPbRWZ3fdZYmZbR/8y7e7K60CN4HF7DxokoU7PGz
-         IQVwrSqYcd88epKDNfBsi0VP8dH8a7bbWOWuqCQqkU+woXUDNak5J1hEsePjzZNpk9iD
-         TbNzpmdlRUqrwZC2BlhSiVOBPWMP0gexI4rnIIE+VIjRExMCHBH/C8LCzvSXvLrOBdXe
-         1uE3Xg55EfqlMmMktQRFhx+wp3Fd+QDNRKyovrf40gh04QLaZdnuiELfVQnZ5mgFsZa9
-         8tnc/nUfsrXf+ft+MgOheEmBzINuVDKju5Ql5cx9eEYxoBKBXCFHcQJFXiQVjpghcrCq
-         +g2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697003342; x=1697608142;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i3/xooCfzn+HEb84CSy8n1NiyDH9US0NidBeh+kHVYE=;
-        b=uF6raV+2Yccblf9gJ6NUmFSxCdVm6G5yCGKZi+82SMvRJ88Te7Q5BH5X4Xkqn7BhQv
-         RT0kF6xvGeLCEqzl01yvbk8FdDvcf3gCrwmYLqf9vikotH1SmiecCE/2MDlmJyGL5/A9
-         VmfoFZt9DQkupbQD9mpYrAMVNvFg1ghIRfTNEibupyZr//yVEi5yJOPqy/brYHAiq/5o
-         wTm++vCMpfMdO5mv5uXuZkNJROYqbIV0/p2amUm48O97MlioJCyIwu26QhE5iFUr00GT
-         /BRsRO2o4ogPmMyiDQZIpZ6COilvj2FWpdNYEGzaO112PZVh9OXSFAz/rrLyKgROQfnw
-         D+7w==
-X-Gm-Message-State: AOJu0YwBdX9foRieWC/7AsKRGwsjgGvHH5vsoU5qmtMMnfbyZhPyvV+r
-        tXpbgieAB+obFWmLFMwz1/qoKA==
-X-Google-Smtp-Source: AGHT+IELb9UJT6sC7GTilNP+4QfWdcX9+gyN7cf4Rlq0B7kFgPDad3Hdi4I21cnODq4uhQcLWot/+w==
-X-Received: by 2002:a05:6a00:885:b0:68f:e810:e86f with SMTP id q5-20020a056a00088500b0068fe810e86fmr21643745pfj.28.1697003341973;
-        Tue, 10 Oct 2023 22:49:01 -0700 (PDT)
-Received: from localhost ([122.172.81.92])
-        by smtp.gmail.com with ESMTPSA id p6-20020a62ab06000000b0069302c3c050sm9172133pff.218.2023.10.10.22.49.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Oct 2023 22:49:00 -0700 (PDT)
-Date:   Wed, 11 Oct 2023 11:18:58 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Johan Hovold <johan@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        robdclark@gmail.com
-Subject: Re: [PATCH 2/2] OPP: Disallow "opp-hz" property without a
- corresponding clk
-Message-ID: <20231011054858.3vvnr76u5enu5lf6@vireshk-i7>
-References: <cover.1669012140.git.viresh.kumar@linaro.org>
- <c03c4f2b9d4dcc3264d1902606c6c5c464b4b043.1669012140.git.viresh.kumar@linaro.org>
- <Y3snGQet8yc7HnJK@hovoldconsulting.com>
- <20221121073946.GE11945@thinkpad>
- <20230125042145.hrjpnskywwqn7b6v@vireshk-i7>
- <20230216064727.GA2420@thinkpad>
+        with ESMTP id S1345140AbjJKH7u (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Oct 2023 03:59:50 -0400
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FEA98
+        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 00:59:48 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1qqU7w-0006Ab-CQ; Wed, 11 Oct 2023 09:59:32 +0200
+Received: from [2a0a:edc0:2:b01:1d::c0] (helo=ptx.whiteo.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1qqU7v-000qiI-HM; Wed, 11 Oct 2023 09:59:31 +0200
+Received: from ore by ptx.whiteo.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1qqU7v-00Ds9z-EG; Wed, 11 Oct 2023 09:59:31 +0200
+Date:   Wed, 11 Oct 2023 09:59:31 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        zev@bewilderbeest.net, Sebastian Reichel <sre@kernel.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v1 3/3] regulator: fixed: forward under-voltage events
+Message-ID: <20231011075931.GA3305420@pengutronix.de>
+References: <20231010085906.3440452-1-o.rempel@pengutronix.de>
+ <20231010085906.3440452-3-o.rempel@pengutronix.de>
+ <5e51792a-cc93-4364-a51b-c2b116d89369@sirena.org.uk>
+ <20231010125531.GA3268051@pengutronix.de>
+ <c2ee404d-d07f-42c6-b5ba-41659773e8eb@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230216064727.GA2420@thinkpad>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c2ee404d-d07f-42c6-b5ba-41659773e8eb@sirena.org.uk>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16-02-23, 12:17, Manivannan Sadhasivam wrote:
-> Sorry for the delay. I've submitted the dts changes [1] to handle the CPU clocks
-> for the rest of the Qcom SoCs.
+On Tue, Oct 10, 2023 at 06:19:59PM +0100, Mark Brown wrote:
+> On Tue, Oct 10, 2023 at 02:55:31PM +0200, Oleksij Rempel wrote:
 > 
-> For the Qcom GPUs, I've CCed Rob Clark who is the maintainer.
+> > The hardware I am working with has an under-voltage sensor on the 24V
+> > supply regulator and some backup capacitors to run SoC for 100ms. I want
+> > to forward under-voltage events across a chain of different regulators
+> > to a designated consumer. For instance, to the mmc driver, enabling it
+> > to initiate shutdown before power loss occurs.  Additionally, a bit can
+> > be set in the volatile memory of a scratch pad in an RTC clock to record
+> > sudden power loss, which can be checked on the next system start.
 > 
-> Rob, here is the background on the issue that is being discussed in this
-> thread:
+> So it sounds like the underlying need is to flag the notifications from
+> one of the regulators as being system wide and then take action based on
+> those notifications somewhere basically disconnected?  That does seem
+> like a good use case.
 > 
-> Viresh submitted a series [2] back in July to improve the OPP framework, but
-> that ended up breaking cpufreq on multiple Qcom SoCs. After investigation, it
-> was found that the series was expecting the clocks supplied to the OPP end
-> devices like CPUs/GPUs to be modeled in DT. But on Qcom platforms even though
-> the clocks for these nodes are supplied by a separate entity, like CPUFreq
-> (EPSS/OSM) for CPUs and GMU for GPUs, there was no clock property present in
-> the respective nodes. And these nodes are using OPP table to switch frequencies
-> dynamically.
-> 
-> While the series was merged with a hack that still allows the OPP nodes without
-> clock property in DT, we came to an agreement that the clock hierarchy should
-> be modeled properly.
-> 
-> So I submitted a series [3] that added clock provider support to cpufreq driver
-> and sourced the clock from cpufreq node to CPU nodes in DT.
-> 
-> Likewise, it should be handled for the adreno GPUs whose clock is managed by
-> GMU on newer SoCs. Can you take a look at this?
+> The MMC doesn't specifically care that it is handling a regulator
+> notification, it more wants to know that the system is dying and doesn't
+> really care how we figured that out so if we can hook it into a system
+> level notificaiton it'd be happy and would also be able to handle other
+> critical faults.  I would have thought that we should have some
+> mechanisms for this already for RAS type stuff but I'm drawing a blank
+> on what it actually is if there is an existing abstraction.  It could
+> potentially go through userspace though there's latency concerns there
+> which might not be ideal, there should at least be some policy for
+> userspace.
 
-Any update on this ?
+The project I'm working prefers reducing user space daemons to configure and
+enforce RAS policies due to time and financial budget constraints. The customer
+is inclined to invest only in essential infrastructure.
 
+Configuration through the device tree and kernel defaults is preferable.
+For instance, having a default kernel governor that doesn’t require user
+space configuration aligns with the project’s objectives.
+
+While a proper UAPI might not be implemented in the first run, the
+design will allow for it to be added and extended by other projects in
+the future.
+
+> For the regulator itself we probably want a way to identify regulators
+> as being system critical so they start notifying.  It would be tempting
+> to just do that by default but that would likely cause some issues for
+> example with regulators for things like SD cards which are more likely
+> to get hardware problems that don't comprimise the entire system.  We
+> could do that with DT, either a property or some sort of runtime
+> consumer, but it might be better to have a control in sysfs that
+> userspace can turn on?  OTOH the ability do something about this depends
+> on specific hardware design...
+> 
+> I've copied in Sebastian since this sounds like the sort of thing that
+> power supplies might have some kind of handling for, or at least if we
+> need to add something we should make it so that the power supplies can
+> be joined up to it.  I do see temperature and capacity alerts in the
+> sysfs ABI for power supplies, but nothing for voltage.
+
+Thank you for pointing towards the power supply framework. Given the hardware
+design of my project, I can envision mapping the following states and
+properties within this framework:
+
+1. States:
+   - POWER_SUPPLY_STATUS_FULL: When the capacitor is fully charged.
+   - POWER_SUPPLY_STATUS_DISCHARGING: Triggered when an under-voltage event is
+                                      detected.
+
+2. Technology:
+   - POWER_SUPPLY_TECHNOLOGY_CAPACITOR
+
+3. Capacity Level:
+   - Post under-voltage detection, the system would immediately transition to
+     POWER_SUPPLY_CAPACITY_LEVEL_CRITICAL state.
+
+4. Properties:
+   - POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW: 100ms, representing the time until
+                                          complete power loss.
+   - POWER_SUPPLY_TYPE_MAINS: Under normal operation.
+   - POWER_SUPPLY_TYPE_BATTERY: Triggered when under-voltage is detected.
+
+Considering the above mapping, my initial step would be to create a simple
+regulator coupled (if regulator is still needed in this casr) with a Device
+Tree (DT) based power supply driver.  This setup would align with the existing
+power supply framework, with a notable extension being the system-wide
+notification for emergency shutdown upon under-voltage detection.
+
+> I've also coped in Naresh and Zev who've been discussing something
+> vaugely similar with userspace notifications for the userspace consumer
+> - it's not the same thing given that you don't specifically need
+> userspace to be involved here but it feels like it might have something
+> of a similar shape, or at least there might be some shared interest.
+
+Regards,
+Oleksij
 -- 
-viresh
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
