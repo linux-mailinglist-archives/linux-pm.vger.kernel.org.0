@@ -2,54 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5302D7C5203
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 13:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72CE77C5212
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 13:30:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234786AbjJKL1d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Oct 2023 07:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
+        id S234803AbjJKLa2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Oct 2023 07:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231312AbjJKL1c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Oct 2023 07:27:32 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E92D93
-        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 04:27:30 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-5033918c09eso8517819e87.2
-        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 04:27:30 -0700 (PDT)
+        with ESMTP id S234765AbjJKLa1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Oct 2023 07:30:27 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8E098
+        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 04:30:25 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-3226b8de467so6269880f8f.3
+        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 04:30:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697023648; x=1697628448; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/zWK+bD8Aid1fpusuW1MHz1xIacL85O9/h4oyYVsZ/0=;
-        b=Ej8D5yfkmy8v6C8HTqPcdvZP6KPW2sG9mFYuuLI04Az5JtVjtW3ZJFCiiOfvPt6DCT
-         fY86pJktZ1gyYRs7skZCyvJBZT5zTQZes7jVwGAezewb/YcRYLSlop7+SwMCY0dZpT6B
-         7JvZSxv7Nxt2YtxLTynNLvfGfJ56mt3JRHIOzrCx2cTJ8O8TvaZwuC4EQucG3rHAtOkE
-         RlTuMxMQXONDQn8l7xIIBN0MSkCY5Fn3IqRTKS36g9PdjyCIAC8HdJEkbSm4IfQnnC8K
-         fKgKPDNzeEmKqP1CT1ZGrQTpUYnqP5t5Nz1XdfzhhdrFwThwTsPQAiGpyMXjpNF0SnZE
-         LdFQ==
+        d=linaro.org; s=google; t=1697023824; x=1697628624; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=d7jf66VDbLwDGQFts5Mk3zmoqfgZj1njMNnWJVHShyQ=;
+        b=qBzjgIwoQtEpyNqxJ/rS+2TSxuOxqRm97dL0GLepZzyjCephxFRPk3vgRf1c6A9ZVo
+         Uj09gs08wiLnktVlOUHN9QxxYZ1jnHUnZo0xROSqLqQcY4DB7YqiRvvC0ZtbVmPAi6Va
+         1ACtFRHesEHtguYMJwJtWH4+Dfi0cuQ02qpo8R5C+KufmHUjrLu9tzPflJpefcyQsU06
+         LjFu4mIvvTL4jndGfV4474nGv/YaJOEjkQTU6/rhnNKYEOelxOPYGu+VA3GWGIgteSTs
+         LPCQ4QwoHcEGf7BN85S0t9EDnW71aejb9RJtdwlFk2X6jYrdGSlP9D6qCaVIiC/4P5Ha
+         UsuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697023648; x=1697628448;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/zWK+bD8Aid1fpusuW1MHz1xIacL85O9/h4oyYVsZ/0=;
-        b=X6UVB1FoHWyVHRLQBUKL9uETsR6SnJh2KTBBqzPmKX9eGZ26y2HNdCDS9JEaI3vmlx
-         tkjczesEdJr75FDqPfWK1c41rgOsDNJa764J5y/W2MT8kRypwSSE8Q86l0EU61UZS/83
-         pjYzPVbPBxeYcpnCFPA4I8pThbv6l9ZJu3gareISqya6PUYYjl4MSKZLSnEzwdZtyt7c
-         joVdQLjOSox5Qhh3IB+c3X+YKxT0VoP9MZkPSfQz3ulb873Hi7vDV3MbGz2FdNSjKn5G
-         7h7Slilt0irnUZBicyFA/7lBjRRu9mODI+7pC+hyqkNx5dhGn96QByZOAhoZRg5ZrRB5
-         8LIA==
-X-Gm-Message-State: AOJu0YyQ9K+l7lL8kEMyzWRXHiWYFcshMB0vlaD1K3R/0jmqNgF5T9Di
-        +6nRYaeny0/xlVZMhiQFn2hphw==
-X-Google-Smtp-Source: AGHT+IGvenwk2MJkOq3Kj8WNWwdd/u1jV8TzOJNidj7MkUHF50J7iU+JoTJQf+ppFys3K+MXURN1ow==
-X-Received: by 2002:a05:6512:6c7:b0:503:95d:f2bd with SMTP id u7-20020a05651206c700b00503095df2bdmr20944407lff.34.1697023648266;
-        Wed, 11 Oct 2023 04:27:28 -0700 (PDT)
-Received: from umbar.unikie.fi ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id a29-20020a056512021d00b005008c11ca6dsm2228154lfo.184.2023.10.11.04.27.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Oct 2023 04:27:27 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
+        d=1e100.net; s=20230601; t=1697023824; x=1697628624;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=d7jf66VDbLwDGQFts5Mk3zmoqfgZj1njMNnWJVHShyQ=;
+        b=C76t/AB6B1mVZ9NDbDR1tBHwnfM3lzM1ky8BEwloFdGxjpIILEd5kRRI1M44tyzXCm
+         m6ttvAufvyzOaRuB8XebxeyDDJv/qVHQzdwwFA0k7fm+ZW6ytCkPpL+h2PHOZOEWokbX
+         CaZmbx3fe4yz3+TocJgUAzVo0cHrSuq3YYiouS3InMT0xT4mud0Pu15oka1R9PE2OuwZ
+         vApZIw3TEIWzTvGzs/RpCgCEikfYRr7srGFOroOBDWrIN7TuS2AfH0noNyTy/fw8yx85
+         MtKSOx+lR2onVVAh85XFdBqa8VCTFMgeT2aC7V5FwI7TjVqx/QNRPtddKoEpVBRaUCEo
+         x3Qg==
+X-Gm-Message-State: AOJu0YyQ9KCRNTwa7w7i+06YAbHdl4FhQs6ceepj2p0oqto7aqASBzkv
+        7JYD1+YryAOdodgN0G42fNpekA==
+X-Google-Smtp-Source: AGHT+IHuiNcQZJf+Rmj8oNoUni1H4MhMhq2pN9qd3b2XdAV7M3v2EdBQhAsQuJ+PZNTRTBZv3+imhg==
+X-Received: by 2002:adf:c089:0:b0:32d:5cc0:2f0b with SMTP id d9-20020adfc089000000b0032d5cc02f0bmr2726061wrf.57.1697023823657;
+        Wed, 11 Oct 2023 04:30:23 -0700 (PDT)
+Received: from [172.30.204.240] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
+        by smtp.gmail.com with ESMTPSA id s11-20020a5d424b000000b003248a490e3asm15280520wrr.39.2023.10.11.04.30.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Oct 2023 04:30:23 -0700 (PDT)
+Message-ID: <90e45a4a-457d-4b89-aa05-ddf40fec6e2c@linaro.org>
+Date:   Wed, 11 Oct 2023 13:30:21 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] of: export of_find_next_cache_node() for modules
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Frank Rowand <frowand.list@gmail.com>,
         Ilia Lin <ilia.lin@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -57,51 +64,34 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH] of: export of_find_next_cache_node() for modules
-Date:   Wed, 11 Oct 2023 14:27:26 +0300
-Message-Id: <20231011112726.166052-1-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+References: <20231011112726.166052-1-dmitry.baryshkov@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20231011112726.166052-1-dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The qcom-cpufreq-nvmem module uses of_find_next_cache_node() function,
-so export it to be available to the modules.
 
-Fixes: 7683a63c08ff ("cpufreq: qcom-nvmem: create L2 cache device")
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
 
-This patch fixes the discrepancy caused by the patch for the
-qcom-cpufreq-nvmem. I'd like to ask for this patch to be also merged via
-the cpufreq tree.
+On 10/11/23 13:27, Dmitry Baryshkov wrote:
+> The qcom-cpufreq-nvmem module uses of_find_next_cache_node() function,
+> so export it to be available to the modules.
+> 
+> Fixes: 7683a63c08ff ("cpufreq: qcom-nvmem: create L2 cache device")
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
----
- drivers/of/base.c | 1 +
- 1 file changed, 1 insertion(+)
+Pity the testing robot didn't catch this
 
-diff --git a/drivers/of/base.c b/drivers/of/base.c
-index 8d93cb6ea9cd..c4cf558e60d9 100644
---- a/drivers/of/base.c
-+++ b/drivers/of/base.c
-@@ -1905,6 +1905,7 @@ struct device_node *of_find_next_cache_node(const struct device_node *np)
- 
- 	return NULL;
- }
-+EXPORT_SYMBOL_GPL(of_find_next_cache_node);
- 
- /**
-  * of_find_last_cache_level - Find the level at which the last cache is
--- 
-2.39.2
-
+Konrad
