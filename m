@@ -2,179 +2,190 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2077C58D9
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 18:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5278E7C5977
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 18:47:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232608AbjJKQHh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 11 Oct 2023 12:07:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50116 "EHLO
+        id S232512AbjJKQru (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Oct 2023 12:47:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232345AbjJKQHg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Oct 2023 12:07:36 -0400
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E3C9D;
-        Wed, 11 Oct 2023 09:07:33 -0700 (PDT)
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-57c0775d4fcso942eaf.0;
-        Wed, 11 Oct 2023 09:07:33 -0700 (PDT)
+        with ESMTP id S230292AbjJKQru (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Oct 2023 12:47:50 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEDC8F
+        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 09:47:47 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-7757f2d3956so102650185a.0
+        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 09:47:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1697042867; x=1697647667; darn=vger.kernel.org;
+        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=yH9UYAVOTpbitNpatu+5LwDak6jVrw/FFwga9RZiacQ=;
+        b=EiG+veYZLL/I0ItQR4q6QLjBtKKBgP9VpXbK5jkBeyFaxGhkHGVE8qwFoCruAQU+L5
+         fpN2+yaC3eyJfkTHAsWTRureuq+nTbebk5JLrhfsdmmvJGeCqiDHvep9dRHckCsEmE7A
+         d73f6d5W/olsflTdcPEMy5T/Dm1+TDOLMHW0g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697040452; x=1697645252;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dpx2iMJcMAx/Jfpz+noMvSlj0roFwY4oLZzvU5pnyxM=;
-        b=HX+K8Hjok0VBM/Z1hgwXzh7o73Wl4dBbIt40Az3EzIslezkqn/Hb+96HPAYzTGQrir
-         343uCZ7aCJnZD4MFK8y/Ii8dL+tH4m5XZzttrVdj5R0jEEtUwvmaSUx1FXwWz2hSQeB/
-         Ih8U+970gKouYA9CX4N5anvbq/NoduMefnLy/EKxxO7ROZPNiqkB5KU0ogzYx1+8hmUj
-         VcDbC588761pfNUNQyaiM7hWE7tXDOxgYAlrvEwTrGLJ853U2yju1r11QBB9CkSqp97P
-         IyinqKNYZN7zx61vLv8kVUth3bF8j4R11/CnXUOKhv9awHn4BJUNjKgNZP4fMl/pST9R
-         Vw2A==
-X-Gm-Message-State: AOJu0YxDgreQB2NT7YNxJ4aRzypCUQAEgOPkvjTi5iOQGA7vpHL4bQ4j
-        K/kA6ykjOlXM/XP1IGAPCTkCiMuZskH4Muyj+Pi+Hxnk
-X-Google-Smtp-Source: AGHT+IEW4IVmIZWZ9yVYnPskAwGoAICrJC9XLLzLZwnDdOUwFUvY50Hj7ivSMdTejxJOWyxo9ghCNv1pdNrdYtV62/c=
-X-Received: by 2002:a4a:de08:0:b0:56e:94ed:c098 with SMTP id
- y8-20020a4ade08000000b0056e94edc098mr20226212oot.0.1697040452515; Wed, 11 Oct
- 2023 09:07:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230925081139.1305766-1-lukasz.luba@arm.com> <20230925081139.1305766-11-lukasz.luba@arm.com>
- <CAJZ5v0g6jPr3LqTuRfwUWsK4em7F1pfsZDn9pVziyu3tV56m8A@mail.gmail.com>
- <f7a6da56-93e4-0b7c-1746-bc3357bf8163@arm.com> <CAJZ5v0hBPD8cHJe-Xa8354SE5jdM1bYw94DjG-MVHsRKrUY=gQ@mail.gmail.com>
- <57078a6b-83bc-d558-1071-be23d213a56f@arm.com> <666857b9-729d-7af3-5d9a-9d9e4c0a68e2@arm.com>
- <CAGXk5yqGOC8STC4wUNbUyKWR1m1NPOu6K-qXTz0=_UJEe64B2g@mail.gmail.com>
-In-Reply-To: <CAGXk5yqGOC8STC4wUNbUyKWR1m1NPOu6K-qXTz0=_UJEe64B2g@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 11 Oct 2023 18:07:21 +0200
-Message-ID: <CAJZ5v0jGWzZx3jdkYTpdJZiWLFKaozTVdTU2h+dnVhvL18UwtQ@mail.gmail.com>
-Subject: Re: [PATCH v4 10/18] PM: EM: Add RCU mechanism which safely cleans
- the old data
-To:     Wei Wang <wvw@google.com>
-Cc:     Lukasz Luba <lukasz.luba@arm.com>,
+        d=1e100.net; s=20230601; t=1697042867; x=1697647667;
+        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yH9UYAVOTpbitNpatu+5LwDak6jVrw/FFwga9RZiacQ=;
+        b=TvD2CmEWhV/KkDaSV0RO99TVAuolSYueUJ2GxNmytxwJzPSP9rb/edTzoZ/w4uZPNx
+         roF9mauCDpj/UfOyQTI1gSla0ndCMIXCPMFQAPGaTkE05giUm7GCX2IbbD3RkmiQJUOT
+         jR12Q9ZK0p4pBnXo86wZ+qZlgOqdu0pHRnqtVidH9WOEY4J3hwqv7ww/yp+Oq97Gyxed
+         2AiHFHxFyw10Z+/nIBSQQ7JVsgjklYDNADzLH74+iZD7VXnT67iBL2HU5/CeEyoS8Tcb
+         slavw90Imv7xcZJ8rQ9Gf7jLz2Ea2Yd+ar17XrPUeNA7ZOjhhZY/jSByiUqcOetVBx0N
+         QrwA==
+X-Gm-Message-State: AOJu0Yy0TEFDJwVM7q0ZwzIIlgJ1MljbcluPtoZfDIicoeCh87v6AkgF
+        6kaZF6guhHJ58CpyHSlQUPp08A==
+X-Google-Smtp-Source: AGHT+IEQVzLN89/EdvfZheK0lp4J6jfe0BP65NP796kpX7DLb3ibpJV8wiMeInE3xEYvAdQ5P2l0cg==
+X-Received: by 2002:a05:620a:c45:b0:76c:b7f0:2bc9 with SMTP id u5-20020a05620a0c4500b0076cb7f02bc9mr26509977qki.16.1697042866716;
+        Wed, 11 Oct 2023 09:47:46 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id c24-20020a05620a11b800b0076ee973b9a7sm5357492qkk.27.2023.10.11.09.47.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Oct 2023 09:47:46 -0700 (PDT)
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     mmayer@broadcom.com,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        dietmar.eggemann@arm.com, rui.zhang@intel.com,
-        amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
-        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
-        len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org,
-        qyousef@layalina.io
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org (open list:CPU FREQUENCY SCALING FRAMEWORK)
+Subject: [PATCH v2] cpufreq: ARM_BRCMSTB_AVS_CPUFREQ cannot be used with ARM_SCMI_CPUFREQ
+Date:   Wed, 11 Oct 2023 09:46:54 -0700
+Message-Id: <20231011164654.3671490-1-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000041ec62060773953c"
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 11, 2023 at 6:03 PM Wei Wang <wvw@google.com> wrote:
->
-> On Fri, Oct 6, 2023 at 1:45 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
-> >
-> > Hi Rafael,
-> >
-> > A change of direction here, regarding your comment below.
-> >
-> > On 10/2/23 14:44, Lukasz Luba wrote:
-> > >
-> > >
-> > > On 9/29/23 13:59, Rafael J. Wysocki wrote:
-> > >> On Fri, Sep 29, 2023 at 11:36 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
-> > >
-> > > [snip]
-> > >
-> >
-> > [snip]
-> >
-> > >>>> Apparently, some frameworks are only going to use the default table
-> > >>>> while the runtime-updatable table will be used somewhere else at the
-> > >>>> same time.
-> > >>>>
-> > >>>> I'm not really sure if this is a good idea.
-> > >>>
-> > >>> Runtime table is only for driving the task placement in the EAS.
-> > >>>
-> > >>> The thermal gov IPA won't make better decisions because it already
-> > >>> has the mechanism to accumulate the error that it made.
-> > >>>
-> > >>> The same applies to DTPM, which works in a more 'configurable' way,
-> > >>> rather that hard optimization mechanism (like EAS).
-> > >>
-> > >> My understanding of the above is that the other EM users don't really
-> > >> care that much so they can get away with using the default table all
-> > >> the time, but EAS needs more accuracy, so the table used by it needs
-> > >> to be adjusted in certain situations.
-> > >
-> > > Yes
-> > >
-> > >>
-> > >> Fair enough, I'm assuming that you've done some research around it.
-> > >> Still, this is rather confusing.
-> > >
-> > > Yes, I have presented those ~2y ago in Android Gerrit world
-> > > (got feedback from a few vendors) and in a few Linux conferences.
-> > >
-> > > For now we don't plan to have this feature for the thermal
-> > > governor or something similar.
-> > >
-> >
-> > I have discussed with one of our partners your comment about 2 tables.
-> > They would like to have this runtime modified EM in other places
-> > as well: DTPM and thermal governor. So you had good gut feeling.
-> >
-> > In the past in our IPA (thermal gov ~2016 and kernel v4.14) we
-> > had two callbacks:
-> > - get_static_power() [1]
-> > - get_dynamic_power() [2]
-> >
-> > Later ~2017/2018 v4.16 the static power mechanism was removed
-> > completely by this commit 84fe2cab48590e4373978e4e.
-> > The way how it was design, implemented and used justified that
-> > decision. We later used EM in the cpu cooling which also only
-> > had dynamic power information.
-> >
-> > The PID mechanism in IPA tries to compensate that
-> > missing information (about changed static power in time or a chip
-> > binning) and adjusts the 'error'. How good and fast that is in all
-> > situations - it's a different story (out of this scope).
-> > So, IPA should not be worse with the runtime table.
-> >
-> > The static power was on the chips and probably will be still.
-> > You might remember my slide 13 from OSPM2024 showing two power
-> > usage plots for the same Big CPU and 1.4GHz fixed (50% of fmax):
-> > - w/ GPU working in the background using 1-1.5W
-> > - w/o GPU in the background
-> >
-> > The same workload run on Big, but power bigger is ~15% higher
-> > after ~1min.
-> >
-> > The static power (leakage) is the issue that this patch tries
-> > to address for EAS. Although, there is not only the leakage.
-> > It's about the whole 'profile', which can be different than what
-> > could be built during boot default information.
-> >
-> > So we would want to go for one single table in EM, which
-> > is runtime modifiable.
-> >
-> > That is something that you might be more confident and we would
-> > have less diversity (2 tables) in the kernel.
-> >
-> > Regards,
-> > Lukasz
-> >
-> >
->
-> Indeed, we had a conversation about this with Lukasz recently. The key
-> idea is that there is no compelling reason to introduce diversity in
-> the mathematics involved. If we have confidence in the superior
-> accuracy of our model, it should be universally implemented. While the
-> governors are designed with some error tolerance, they can benefit
-> from enhanced accuracy in their operation.
+--00000000000041ec62060773953c
+Content-Transfer-Encoding: 8bit
 
-I agree, thanks!
+The brcmstb-avs-cpufreq driver is considered a legacy driver and since
+2018, ARCH_BRCMSTB systems have been using scmi-cpufreq. As a matter of
+fact, when SCMI is in use, brcmstb-avs-cpufreq is unusable since the
+SCMI firmware takes over, this can result in various problems, including
+external synchronous aborts.
 
-> > [1]
-> > https://elixir.bootlin.com/linux/v4.14/source/drivers/thermal/cpu_cooling.c#L336
-> > [2]
-> > https://elixir.bootlin.com/linux/v4.14/source/drivers/thermal/cpu_cooling.c#L383
+Express those constraints such that the driver is not enabled by default
+when SCMI CPU frequency scaling is in use.
+
+Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+---
+Changes in v2:
+
+- address Viresh's feedback and reduce the depdendency to
+  !ARM_SCMI_CPUFREQ
+
+ drivers/cpufreq/Kconfig.arm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+index 123b4bbfcfee..207618043ee0 100644
+--- a/drivers/cpufreq/Kconfig.arm
++++ b/drivers/cpufreq/Kconfig.arm
+@@ -90,7 +90,7 @@ config ARM_VEXPRESS_SPC_CPUFREQ
+ 
+ config ARM_BRCMSTB_AVS_CPUFREQ
+ 	tristate "Broadcom STB AVS CPUfreq driver"
+-	depends on ARCH_BRCMSTB || COMPILE_TEST
++	depends on (ARCH_BRCMSTB && !ARM_SCMI_CPUFREQ) || COMPILE_TEST
+ 	default y
+ 	help
+ 	  Some Broadcom STB SoCs use a co-processor running proprietary firmware
+-- 
+2.34.1
+
+
+--00000000000041ec62060773953c
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIP8S6TMP/3FVghbN
+UObLE5QAASm9eeek5Hn87v8cj6s1MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMTAxMTE2NDc0N1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCQNt/GK4/Fycg+KwUIWY8DFaWSv2xAxyHH
+PZ4kn6lKAQANRNizNsI0aKLCUiw4xWwWmtqqUkvkBxkLZyo3eNKKnbOm89k+rixagC2slaPomtU1
+2zRwXaxiT76Ktr513MCgVe3LiJOEifBCA5IXpkQLTq7gqsAwCHtKA1juDa534LnfUBAQxyQg1u9i
+KGWb745F9A/Dyx5At4cST9zqe6SMtYt1djaJUpSIMot927hPWKWPfGDUDvrZ3WAP39mOXC2rl+vf
+dkCKQ4baXcoP+2hEM4oyScvTAFs7vyodeOZIWxu8zdihMH9vQD2YnDbQ6llu90WQ8z0hFYqnQiug
+TkNL
+--00000000000041ec62060773953c--
