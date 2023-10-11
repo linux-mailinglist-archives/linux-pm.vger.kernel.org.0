@@ -2,78 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C3BB7C54E1
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 15:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F717C54E7
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 15:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234905AbjJKNIu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Oct 2023 09:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36610 "EHLO
+        id S234942AbjJKNJP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Oct 2023 09:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232375AbjJKNIt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Oct 2023 09:08:49 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A82AA9;
-        Wed, 11 Oct 2023 06:08:47 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-504a7f9204eso8363703e87.3;
-        Wed, 11 Oct 2023 06:08:47 -0700 (PDT)
+        with ESMTP id S234953AbjJKNJM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Oct 2023 09:09:12 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78257BA
+        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 06:09:10 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-5a7ad24b3aaso31392867b3.2
+        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 06:09:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697029726; x=1697634526; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MYM9UN1cQM24eN/cx1yRvLKv4WydXJJTwKdXLA9EWM8=;
-        b=fdfGOIn6tWJIfLGDqKmVroC1PK/c37r2YuQcFBAanciQg7QFn8r+eDD7Quc6euRCGs
-         d9tT5RV33GZHiXceKzTN+4wYqMQ/PL/YwwHA80w8xSODcngfp2G2JCyyjv9RW3BLyAWk
-         VbxsiixST+GEHoTpjLYh3tEQb2pJsxHv+zPhhELKY2V7W+8Z1NixX/yQRiu6kgndT9Uc
-         Aado8LHwgb0N8v2SxYpFOXMTFxQQHFOnmK1zmYHdOAZVauRYoUuLrqvVHRovcc0zi8oN
-         AqgOzpEeqKtJpFhkuhxtHVsnXaLtsm7VhwXx+6b8pFUgTrrIeDorcicvAZ4oW+138OWI
-         B0aQ==
+        d=linaro.org; s=google; t=1697029749; x=1697634549; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=yiWRUyEiDpWCGNyAPRXmmc17YAfusk8TYErSchfY5T8=;
+        b=wv6BDwUziErC+8cGvaZ5WKLoRcKg2zkn0LS4GeO55//cX/2apZF80pdk20FXo9nuUs
+         +TCRcJ0g1uSBFyN6HuoXRvSCM2MsIlihsuItVxRJwZDlkbzRNcG0qCDzJfSA4JTbCvEc
+         ecXFsp3eGWN0uRKoi8xc+9MGjUh2VEiWLDECZkJ72PVY0WKyL5ZtMQf4zO4ym/3BfpjL
+         J9Q/b7/fHRwlXQyrT5hMTpG6KDQ/Etd5Mc4Lk3gdHg8rEqQS/kgKb1ej43lI1xRL1K5l
+         HfDqzOfyX4GGOsjZ19HTpuV56oGnFCGVHfD4ViJc2/DeDp5oC/MVYqa2q7QJ3K+2XDyA
+         W3yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697029726; x=1697634526;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MYM9UN1cQM24eN/cx1yRvLKv4WydXJJTwKdXLA9EWM8=;
-        b=tzuB/xeWiIKVq18iXuAoC0VfNKqFyfkrfcDESImXO1UeqVnGL3GJk88xY0hai5aoEz
-         q3Iqo3/TpmVtr2+mA8Q9VIIz2F1071po5MHQpLlExuRGGPrKe/CihXut/0y73QFWgxtp
-         5Rf1i10YPECUipPe0hbIBE4LKMITv+Y2mc+uio0tQrIJVJm7CB82yAz1dcZfgLrxhGmB
-         z1lZPnJGEG6e2y+Nxz6M1VVtf2sTU9xHBuS5ZY2sH97Yb4QOa025Uo7rlqR8NJHqvrMI
-         I6l+NbmoIBzfTpcs6vfutHqCX8tZfYjE2xvTLSlrXKEGQ2YW7BsEiMcjV7v2NnqJJ4JY
-         XgoA==
-X-Gm-Message-State: AOJu0YzIZrIZxvD/0yMhw/fC3LFT7dxcYGRfgLcinZEfJ8B0frevtYw3
-        3mKUIWP/ZBrfnutsZ28mj6NPrBPWmJP/VbRe/jQ=
-X-Google-Smtp-Source: AGHT+IEjN10vumMrnkaVLm49rRcsyi0oHpP0pF8gEAjsR7W/99v8G6qx2BYXKqogcr2nJ1Z3MXtFLamAEVvS47wud0A=
-X-Received: by 2002:ac2:4431:0:b0:503:258d:643c with SMTP id
- w17-20020ac24431000000b00503258d643cmr16419640lfl.21.1697029725500; Wed, 11
- Oct 2023 06:08:45 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697029749; x=1697634549;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yiWRUyEiDpWCGNyAPRXmmc17YAfusk8TYErSchfY5T8=;
+        b=faMi8FuuFWVdxmklo8+FFpBBhWXw4Pdv0RI014Mkowr45As6dqJ5J2X/mnkIeC9VSq
+         5Y/9P3C9ovnHb5rR1f5HFeOz091OBfGChy4bX9+HMqHOtAZlXRzrdTL19OKt5WxerMco
+         dC+1ESVQ5RSyihboEL2F0/3uXNtyx4IYbg0+bshodlG5TuZyu2/GugULmpoZSJsEF4CK
+         FU0VkyAOFuNS21xtGd04eKzhzx3escCeHc+ClZ/2W7Ru5uKcx55lYu9Ls2jdYKMcq8/E
+         TLP6A+oyY0DnDQ0Xr8dk9vn9MSzUcrI2AeCh94ZucBbKBUezU67U3d8yYmTan3vS5gWA
+         1pDQ==
+X-Gm-Message-State: AOJu0YyO3DWvQfUU2VWfMATymnA/n5UU3ENrVdhliZQIian8dtDnhnUF
+        8vQ/hbO3ErrCoCC27cNoEju7u2NqxCEPI5fED2sMJA==
+X-Google-Smtp-Source: AGHT+IHPeYGW++8x+sjpixD4qx2spNUFG0w29RwTYjN1/EfQS3maABvYM9h8FieFcy0MebMY2EQIXWY+wRKbOMFmN2s=
+X-Received: by 2002:a05:690c:fc8:b0:5a7:ed69:120 with SMTP id
+ dg8-20020a05690c0fc800b005a7ed690120mr943754ywb.6.1697029749566; Wed, 11 Oct
+ 2023 06:09:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <E1qkoRr-0088Q8-Da@rmk-PC.armlinux.org.uk> <ZSV6i4pnjQqvWuKp@shell.armlinux.org.uk>
- <87o7h5l5xr.ffs@tglx>
-In-Reply-To: <87o7h5l5xr.ffs@tglx>
-From:   =?UTF-8?B?VG9tw6HFoSBHbG96YXI=?= <tglozar@gmail.com>
-Date:   Wed, 11 Oct 2023 15:08:34 +0200
-Message-ID: <CAHtyXDdr_R_Moypb3ieFs54RRGu+zqHS46WrjEvWCFtT0KZRaQ@mail.gmail.com>
-Subject: Re: [PATCH] cpu-hotplug: provide prototypes for arch CPU registration
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-acpi@vger.kernel.org, James Morse <james.morse@arm.com>,
-        loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        jianyong.wu@arm.com, justin.he@arm.com,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Salil Mehta <salil.mehta@huawei.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-ia64@vger.kernel.org
+References: <20231011122543.11922-1-manivannan.sadhasivam@linaro.org> <20231011122543.11922-6-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20231011122543.11922-6-manivannan.sadhasivam@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 11 Oct 2023 16:08:58 +0300
+Message-ID: <CAA8EJpoKPq2sVcudb84YRDGUtDtS3YMhNPejNeOtSr_7uU84qA@mail.gmail.com>
+Subject: Re: [PATCH v5 5/5] arm64: dts: qcom: sm8250: Add OPP table support to UFSHC
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, andersson@kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
+        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
+        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,26 +79,23 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Thomas,
-
-st 11. 10. 2023 v 14:06 odes=C3=ADlatel Thomas Gleixner <tglx@linutronix.de=
-> napsal:
+On Wed, 11 Oct 2023 at 15:27, Manivannan Sadhasivam
+<manivannan.sadhasivam@linaro.org> wrote:
 >
-> Sorry for the wrong information about ia64. The removal did not happen
-> because someone stepped up as a possible maintainer.
+> UFS host controller, when scaling gears, should choose appropriate
+> performance state of RPMh power domain controller along with clock
+> frequency. So let's add the OPP table support to specify both clock
+> frequency and RPMh performance states replacing the old "freq-table-hz"
+> property.
 >
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Does that mean that the removal patch will be reverted soon in
-asm-generic and linux-next? Both have no ia64 as of now, and there are
-already a few patches without ia64 part (e,g,
-https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/commit=
-/?id=3D2fd0ebad27bcd4c8fc61c61a98d4283c47054bcf).
-Without the revert, patches affecting ia64 will conflict.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-I am the person who volunteered to maintain the architecture. If the
-removal was indeed cancelled, me and Frank Scheiner can start testing
-and reviewing patches affecting ia64.
+> ---
+>  arch/arm64/boot/dts/qcom/sm8250.dtsi | 39 +++++++++++++++++++++-------
+>  1 file changed, 30 insertions(+), 9 deletions(-)
 
-Thanks,
-
-Tomas
+-- 
+With best wishes
+Dmitry
