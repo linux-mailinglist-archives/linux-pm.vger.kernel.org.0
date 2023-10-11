@@ -2,61 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ECB97C5453
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 14:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F9D7C5464
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 14:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbjJKMwu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Oct 2023 08:52:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
+        id S1346884AbjJKMym (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Oct 2023 08:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231758AbjJKMwt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Oct 2023 08:52:49 -0400
+        with ESMTP id S234670AbjJKMyk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Oct 2023 08:54:40 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28137A4;
-        Wed, 11 Oct 2023 05:52:48 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ADCAC433C7;
-        Wed, 11 Oct 2023 12:52:47 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDB7A4
+        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 05:54:39 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74058C43140
+        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 12:54:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697028767;
-        bh=7nNHhTFSnvsctexULERMu++eP5boExVclBtDAh2DWK8=;
+        s=k20201202; t=1697028879;
+        bh=lsXLuQurGnh4Z0akGPosK/CsIo+qnmnGl1yd/JhynMQ=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=byiSFe85ODvmEz8k8cS0xJ3/08MXWJB2WtfGGMACCLtPca+YyLQ1GAhI6j1huUlgS
-         qSXhG7H7mgi+XQ+w9Kj4wNTexSEsVDczEkr5XH5PN3gvbMYRJn4Okbj9lSVWGriM0F
-         8CRNOtHbWd4DZ7HjYZUNmo37wMRSZnlIeldFwsksj9nVxKp/ae5E+to7Y02A206M5i
-         YwBAavrgIqIxw7KgDFVHJ0jE7Xk2uQkBEN2r86OToVJq5JsiUDpv8YRGALYAa4gv4f
-         PGJehCdMzCclMdLyYRRvxB0Fv3i4X5npEXjowsy19UyVltjoHm60R2DAKA5+mEvyTM
-         GBoPKfEzPEKVg==
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5068dab8c00so5746503e87.0;
-        Wed, 11 Oct 2023 05:52:47 -0700 (PDT)
-X-Gm-Message-State: AOJu0Yyy/cOf6oGXwA2UrUnIHUIQafmwO2KlpeP4MeT1gpaJ66xTNcLg
-        ZF7sMPvvhwRtAzsGCImeg7zm1Lh3Y8Dda3IZiA==
-X-Google-Smtp-Source: AGHT+IH/9CIDym2+ooxw52sokSgt93JvGLmPMXG8mQ+BYLgc6mr8q1Zja1fo33uvxZMXbJuLjTuECww1Pj/VshNPtQk=
-X-Received: by 2002:a19:6456:0:b0:503:442:5957 with SMTP id
- b22-20020a196456000000b0050304425957mr16044041lfj.41.1697028765631; Wed, 11
- Oct 2023 05:52:45 -0700 (PDT)
+        b=TJr4PxMfQ66iTpUsLi0t/XB2NNLOOVtPTsOuvyhUmXSF637kHZ/ag5bcrCmpsGnLw
+         2zDvMx1av8zgYaUiFDcux3qv9N/T9Txx/q5UhM9NYjlHqncGDww1JGua9oNP4vw7vU
+         F8DRzCDUBXADwLVeBXEJSMmUNLxUJKwNsNahkLLkH2M0zFyI2sZRRoF5gCbQCw86gQ
+         fO7LytSB6utLlF8Sos6Z//qU3c9b1urxAhDKrm8vmSnCCFzjOPP6GLxYz38wVmggd7
+         uoDgQbYeI5q3vOoJZItq1LMT3Bj+Mb2R4ntYJifdQFx7CrmJM0K5SeerDAWekaNoRP
+         0A/JhtfjM/c+w==
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-9b275afb6abso196883266b.1
+        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 05:54:39 -0700 (PDT)
+X-Gm-Message-State: AOJu0YyXliO1/NLii7+uls736CfLV2mptqHS8dhjJcdjQgA9R8Zx0H+6
+        a+yIYEtlzFZagCB9eSF3KEsZa9QfowK0ajv+MM94ZQ==
+X-Google-Smtp-Source: AGHT+IHbEm3Uc2en9wMFmmEPBhW/KYWyTxzoEHjV+GnKE9YZ88khdvtKcTY7Q+g52u+n7nUhh4rPKmXMuT2NYqW9/gE=
+X-Received: by 2002:a17:907:7246:b0:9a1:aaae:8207 with SMTP id
+ ds6-20020a170907724600b009a1aaae8207mr14014040ejc.20.1697028877819; Wed, 11
+ Oct 2023 05:54:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231011112726.166052-1-dmitry.baryshkov@linaro.org>
-In-Reply-To: <20231011112726.166052-1-dmitry.baryshkov@linaro.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 11 Oct 2023 07:52:32 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+HdceLczej4_q-wjg2870v3y-e_E+jEq0xbetDguaXAw@mail.gmail.com>
-Message-ID: <CAL_Jsq+HdceLczej4_q-wjg2870v3y-e_E+jEq0xbetDguaXAw@mail.gmail.com>
-Subject: Re: [PATCH] of: export of_find_next_cache_node() for modules
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Ilia Lin <ilia.lin@kernel.org>,
+References: <5725069.DvuYhMxLoT@kreacher> <f74a029d-39be-4deb-bc4f-a1bc1e401082@linaro.org>
+In-Reply-To: <f74a029d-39be-4deb-bc4f-a1bc1e401082@linaro.org>
+From:   Amit Kucheria <amitk@kernel.org>
+Date:   Wed, 11 Oct 2023 18:24:26 +0530
+X-Gmail-Original-Message-ID: <CAHLCerOYRm6_ZUbpBAxtRZ2e6O_1-w9k-FxfsMv7k-wkN1nG-Q@mail.gmail.com>
+Message-ID: <CAHLCerOYRm6_ZUbpBAxtRZ2e6O_1-w9k-FxfsMv7k-wkN1nG-Q@mail.gmail.com>
+Subject: Re: [PATCH v3] thermal: Remove Amit Kucheria from MAINTAINERS
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,17 +64,25 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 11, 2023 at 6:27=E2=80=AFAM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
+On Sat, Oct 7, 2023 at 6:21=E2=80=AFPM Daniel Lezcano <daniel.lezcano@linar=
+o.org> wrote:
 >
-> The qcom-cpufreq-nvmem module uses of_find_next_cache_node() function,
-> so export it to be available to the modules.
+> On 07/10/2023 13:36, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Subject: [PATCH v2] thermal: Remove Amit Kucheria from MAINTAINERS
+> >
+> > Amit Kucheria has not been participating in kernel development in any
+> > way or form for quite some time, so it is not useful to list him as a
+> > designated reviewer for the thermal subsystem or as the thermal zone DT
+> > binding maintainer.
+> >
+> > Remove him from the THERMAL entry in MAINTAINERS and list Daniel Lezcan=
+o
+> > as the new thermal zone DT binding maintainer.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+>
+> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-You really should be using the cacheinfo API which has already parsed
-the cache nodes.
-
-Also, why do you need a platform_device? I don't see a driver.
-cacheinfo already creates a struct device, so kind of weird to have 2
-devices.
-
-Rob
+Acked-by: Amit Kucheria <amitk@kernel.org>
