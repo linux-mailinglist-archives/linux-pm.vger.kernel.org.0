@@ -2,205 +2,223 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1AE7C46B0
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 02:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A84E67C46FA
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 03:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344281AbjJKAas (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Oct 2023 20:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37050 "EHLO
+        id S1344470AbjJKBCG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Oct 2023 21:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344451AbjJKAaq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Oct 2023 20:30:46 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2058.outbound.protection.outlook.com [40.107.7.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039C2120
-        for <linux-pm@vger.kernel.org>; Tue, 10 Oct 2023 17:30:38 -0700 (PDT)
+        with ESMTP id S1344488AbjJKBCE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Oct 2023 21:02:04 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2074.outbound.protection.outlook.com [40.107.94.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6271E98;
+        Tue, 10 Oct 2023 18:02:01 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EwQVGhcbRnmeQ6iI9gj/kFN1P0dpq+EX2jTAYZ86GREkcWwjt8KpXxxBmyUQex18XbFcvlTqJpgqGYI8uV8x6RsDWkyw7du92CivTD6aNBEj6HCPoqYL7wTlcW9XLkkleOowb0T8MHKW7PtDs0w6/0tS1kO6mt2VdHfxfDWWtWVGkxgfZyt7z/gaewE/uCORDJ+WMn3X7QcnC6U4oUmxp9I37NezIYXntAx+FF/vy/+nPwh3nDsyJphF1p0Ez5ef/sbQTsZPhxbSRBfDv/qIWr/gP4m3VmNl1gkXxC0UGkrnl+WXBz8oLw9ul5Rhbh5+WQNVE0Lt50xXcOxgE2ibnw==
+ b=KEbklP2QBrGQmqiXDlkn8fFLrlrHpvxvEN9uUP3IP//0dToxIxCdrNe0dFdnyPPkPuAq9JD7wy7RWC0ygvpx9rmWhmLUD1Mmse2JIlres3E30edihLx/bsn5lRx0f/A41RHcn48GDM5WNopGFUHh1+akz6vP1xx/6G777Yq2z8P6dkcdMAAz68OFikjGCzcX5XFMUpHRNT9zNqjy5MHk9ufU1XD5FV3NxoYeLL04nu5SmWHu1XidSyEwzpfKPaZebT02Iopg4YVuCUX9QeuMj0ogMzOel9bZt70DP1vlXnpak1+n+UD/qnBCA2rmNats2o48k5XNghRijTvSKCxwQw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IHLBnI/AGSmhywEebEQY3Ip5lh6zQ33/bTXtKxNAF3E=;
- b=BBdD233doWqGQw5Ns4qD8Z5sNUKs/DxkeIoQgmYmCMBu3uReCij+gI9pSEmknefSaNU1msXkLHGEXHyUQTENp4LKSd/t6j3rnXZ1U1wr/AzBi1Z3U/bLOMMcIcUw7G+CrSr5UIzyMjnhIXs+FIa9SgEFGf/fzap3vy7O6c8MDd1Ntsx9Qfy8zob1u890vfRzBjjAfhqmJsxxhV5uM3Diaxelr9imiflY5nP61M2TjzJOdo1aDjUF/jwHmse+UtLWGdqwtj/rA545v23wDnSVAjxjH9v+CeLGhQTn0t6JdwDF1jUHAR4hFOmAq4Ol4z44lA84xYJEM9uFXWuX2IvBVA==
+ bh=XCfMy3WlkkL3HYNCDFdCi9DFrbrClxKjroXlhCXB7Sc=;
+ b=Aqlp485YvTT6R4EaPFw6b2DpPF3k77vGBZql2UBuGYd8ude0f2ZXuD8OUDFEaZ4n/zbtCmmSgCzPbVCCSc8uj4I/IPpDhZ0UehlZG8qis7jBcuQfPkn9VTY6/Rhn89ZLXMkDNfdYu7bB5SXPKBxnfs6v6rJ55d4tJt6PX4XgBBXLApO253sjXQxRzl2wmOX+T75GnLL8OX5+Yo1EabTufUqV1PcL8YFhV/v2Upi7GnB17f9Zgs8lNpeMV4HCPyq/76W5ledjX9LbidE3hHZy9S3n6kyMYksgIate5KwmU/wL63a9Dp51y18R6l9ATydhZbDzgPF2CdUdFd5uqNtCLQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IHLBnI/AGSmhywEebEQY3Ip5lh6zQ33/bTXtKxNAF3E=;
- b=K1GANDdU6GcyPgXbI40gGDOwKZpcgG46diop5FdA3U+decFd8JXFThYcZ6lOf33FcdWmFufzThkLeX/4zLEHlGV7SgvuPRpU1eJrfdmfYTSJeZ0DpsBouiuX69Sd0/nbw4YD/u82aKL/g0nM2MPBBeYuQEq5bxI7L2hhJFPmNyw=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AM9PR04MB8906.eurprd04.prod.outlook.com (2603:10a6:20b:409::9) with
+ bh=XCfMy3WlkkL3HYNCDFdCi9DFrbrClxKjroXlhCXB7Sc=;
+ b=O1btytX1fa6Ka9b5chQo+PKzb6E8RZnsv7t9CAVq0yzV+r/o6g16kdqhfOhv8jf7ndSuh6KPFimujq9SniPzJ7idAvIWSIo3pNWf7zfc2/lA5q5VL4hTL6ximY+eqP3jLTjGPhrsNmKFp3pkm+3/uaRGwkh8HaGdLJuMSYxo394=
+Received: from DM4PR12MB6351.namprd12.prod.outlook.com (2603:10b6:8:a2::6) by
+ CH3PR12MB8186.namprd12.prod.outlook.com (2603:10b6:610:129::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.41; Wed, 11 Oct
- 2023 00:30:35 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::2b3:d8de:95c8:b28b]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::2b3:d8de:95c8:b28b%3]) with mapi id 15.20.6838.040; Wed, 11 Oct 2023
- 00:30:35 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-CC:     Ulf Hansson <ulf.hansson@linaro.org>,
-        "cristian.marussi@arm.com" <cristian.marussi@arm.com>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.38; Wed, 11 Oct
+ 2023 01:01:56 +0000
+Received: from DM4PR12MB6351.namprd12.prod.outlook.com
+ ([fe80::4ead:d69:799a:281e]) by DM4PR12MB6351.namprd12.prod.outlook.com
+ ([fe80::4ead:d69:799a:281e%5]) with mapi id 15.20.6863.032; Wed, 11 Oct 2023
+ 01:01:56 +0000
+From:   "Meng, Li (Jassmine)" <Li.Meng@amd.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        "Huang, Ray" <Ray.Huang@amd.com>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>,
-        Glen G Wienecke <glen.wienecke@nxp.com>
-Subject: RE: Question regarding scmi_perf_domain.c
-Thread-Topic: Question regarding scmi_perf_domain.c
-Thread-Index: Adn7ZJVuPYTdu0ufRKeeVXBw4lJjnAAA6M+AAAA+SYAAALxWIAADapAAAABn5rAAAKUSgAAAVlkAAAJ6koAAEqiu0A==
-Date:   Wed, 11 Oct 2023 00:30:35 +0000
-Message-ID: <DU0PR04MB9417233F914A061FB0A23B3088CCA@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <DU0PR04MB9417DE145496DC03579F50E488CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <20231010105503.jwrmjahuvcjgwtk5@bogus>
- <CAPDyKFqEpnKeF7Yuvv_a+=Kqs=pNU_kM59EqWdpCniHrY_373A@mail.gmail.com>
- <DU0PR04MB941755466872E84217378F6388CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <20231010130054.ieylxocuapugajif@bogus>
- <DU0PR04MB94177FFEAA62AC27839D826F88CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <20231010133059.57rs52qedrc5mxfr@bogus>
- <DU0PR04MB9417D01218CA4803D00545A788CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <20231010145137.fyxjlsj5qq3elq7l@bogus>
-In-Reply-To: <20231010145137.fyxjlsj5qq3elq7l@bogus>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>
+Subject: RE: [PATCH V8 3/7] cpufreq: amd-pstate: Enable amd-pstate preferred
+ core supporting.
+Thread-Topic: [PATCH V8 3/7] cpufreq: amd-pstate: Enable amd-pstate preferred
+ core supporting.
+Thread-Index: AQHZ+ltmN5UUPx2tK0qrfRcVz/4ST7BC1oqAgADwr4A=
+Date:   Wed, 11 Oct 2023 01:01:56 +0000
+Message-ID: <DM4PR12MB6351B6577E32E8A27F1991E9F7CCA@DM4PR12MB6351.namprd12.prod.outlook.com>
+References: <20231009024932.2563622-1-li.meng@amd.com>
+ <20231009024932.2563622-4-li.meng@amd.com>
+ <20231010103629.GI377@noisy.programming.kicks-ass.net>
+In-Reply-To: <20231010103629.GI377@noisy.programming.kicks-ass.net>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=2c2cadd2-4350-45b8-bc3e-4d7b20b37857;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-10-11T00:57:55Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
+ header.d=none;dmarc=none action=none header.from=amd.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|AM9PR04MB8906:EE_
-x-ms-office365-filtering-correlation-id: b7cf7b20-5d10-46d7-94e8-08dbc9f1493d
+x-ms-traffictypediagnostic: DM4PR12MB6351:EE_|CH3PR12MB8186:EE_
+x-ms-office365-filtering-correlation-id: 2ea5b752-b341-40f8-a618-08dbc9f5aa36
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ySnuapDXvsD3I0b56CSGZ1kasJzbD66Q0cU75z+wvEJ0F+O0oME54jqsxYLV5vZlyYKFGbwbM3q6QTac+udx3PjP9Jk6HYQur3NnOJA8jMeUHUzBzYChEBw4Cb1pSXniiMpUKzIJhSDzuBiOrNWJut/WY0J+qnNff1bpEiY3pv9hEXJ/z94zVKdLBfu3x+jbCWVqaU3LtWre6HBPaL90sUeMw1lrQ1lVKfaizqIHYbXqYTjw9OmFUxmIsAyVqNuKlpSvQl8yqbg4UtPJLuRt//Et1bwVInKA5l8v3lXoMDKU2+x8rEo6cXKKxtgVDbokVxOWlL+AFcPzBJtLQwdNtXsnwjctz9X6joiJo7JUJ4iVzv+kyEWr+LFyvIjydRyuYO5u4N+0DqNxOgdRJw7hxSNoDdI1De207IYwVkyVvIfd5ynTKrhdZJKewB0HC/J21Gjzj0hAQ4pDVR+dQ3JTFDloDEYTARJKvwvI2J9BlFE4Iq/frtIoz0+o68duR6UIWbZi5PzuOkqSP4C2WnZwZqoDKFsYAPclYhBbkmHtFZgY3uaehmiYDu90fK5+Arm75YwB7og/1fOgVLNRm5x9F90iuteQb9cWSS/4VZj04oXG1y91JEetoWTbHqlIpucT
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(376002)(366004)(39860400002)(396003)(136003)(230922051799003)(64100799003)(1800799009)(451199024)(186009)(86362001)(2906002)(55016003)(4326008)(8936002)(8676002)(66476007)(76116006)(66946007)(64756008)(54906003)(66446008)(66556008)(41300700001)(316002)(6916009)(5660300002)(52536014)(44832011)(33656002)(83380400001)(122000001)(478600001)(6506007)(7696005)(9686003)(38070700005)(38100700002)(71200400001)(26005);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: eZOGH3fiOGU9TdhFD7kNwS17rpPARfaHyzZa/ZYRLxLx71zlQuymfVe8KwnnpaWlx8ZOXDWtQ9726x9U+w1rwHJylq31NaWVotWRW2WTVUZDHtmWG5FDzibqFX+2hOSOvBxb2S6k0fU4VmdsPPh1DX0aUMDXEFTPHcJE6gjmvLdHZ9x2fAKAaOI32pxOG9JYc/7mK+NJoogWkNDdvS+gAWFSsvCpYo2SNxiuFwdTzJ6rpXwqrfR1a7VmRnQYFEHwP+EjFW39s+E52Vn2WBV7rNMb8w+6kH5nex+82Zb/S8Hswlo/wMjUrtvZjAotn4W4oI6N9cJ1HXZIRzRi9XiBLiwTtnFAarKqUvVWzOjMcBygrFQ19zyJfQKHnDywm0DJSK90TZAWRRQ9EoECR370prARGhm1Yj39GofhXy4UOu9uffjxiWsM+miuhKne8EJJibiA0HRkFQze1omY4L4LMhU5j5OBS6T2byeaFOimDNqgam2zefS07rR5Hhlfe6fS6uD4/V4x+69jGdp1V2n5SbA73qPh1vxEvNryONZugFnYc5dthBhcmkyzhvx9U0W/cvzz0lt6DdM6rNGGRxahvhBu0Nb4pUG+/x6auwQRF9s=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6351.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(136003)(346002)(376002)(366004)(396003)(230922051799003)(64100799003)(451199024)(1800799009)(186009)(26005)(71200400001)(33656002)(478600001)(38070700005)(83380400001)(53546011)(9686003)(38100700002)(122000001)(7696005)(6506007)(5660300002)(86362001)(8676002)(52536014)(316002)(4326008)(8936002)(54906003)(6916009)(66556008)(64756008)(66476007)(7416002)(66946007)(76116006)(66446008)(2906002)(55016003)(41300700001);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?5vcltzpXjgZWkzOkVB2G+WSOyA3N5yP5jfIGKy+YGOWqkKhOX5M6rBq2CWH0?=
- =?us-ascii?Q?Lj2OkUVcw/dcl9YT8LjCqC2WYgb94i9RT+P0xpFjtOSncyC4f7AR0nowvzT+?=
- =?us-ascii?Q?T7uVwK1ZOHmdZtyDIf6lnDEauWXfmbqQRvqsdF1DPwQRXhc5+SJ/YVYVuAG3?=
- =?us-ascii?Q?NnxW1a/kgY7DJRCo8uaDGotaGqsQmMzGG/IRls66s1HoWfI4vcl//lyAI5xj?=
- =?us-ascii?Q?9woHyPMBaEXt+9jQniGM5paMF9TS4BY1DGZQLrU3YO9MwlYhRTJh1XA6KLdQ?=
- =?us-ascii?Q?LuXZa3s2lHlHlYU7fmE6vSthVr/U0I/LsuHdNJF0xhG3voAwO2nUf4pMCOSr?=
- =?us-ascii?Q?8xN9loyy1we9iuzlIYIW7MXQb+86nfsq/wAdtP/vDanyL7h48aG23fDFJcWp?=
- =?us-ascii?Q?DVZb2Pmfjws32AmW9Vh7fX4V42RSfEw0Vfj6ChUXDWxosvpl7iPyJ6UUDwO4?=
- =?us-ascii?Q?TU/sL4pYJn4zK/sYwTju2wBDg/Oi7F+vEYJ0t3FkipyQ1Ev0BMoD3WPYqT92?=
- =?us-ascii?Q?BLX7E2XZ5THE+M9gjP1gBXVRu/2by1v0hfK4cy9qUVxW92Euop0jBCat/sJa?=
- =?us-ascii?Q?hPFL1NNTmTij8jUauO7qU3oS+5+gN1GUnB72/L1MUiW/smGxr1iXCPCPXln4?=
- =?us-ascii?Q?+ITQQu9Vrw16aJeNn3a+ugDgbh/A4yLwGcPimGlWoPrsgFg2WfWLmrttgT6J?=
- =?us-ascii?Q?4uDdpXiIPLfkx41JF+ONv1kT2wgXlIncT5hvFjDiK4qyb0b3mSJEBXXvYQxY?=
- =?us-ascii?Q?KlrVJWDww8orQ/Ffm6F6lJLw/cspn02zPAakHDsdOtkwIHQQGSvZNq1eY2QB?=
- =?us-ascii?Q?izsOOXA0p6YGHTDcP5XBHng+pH4sm3/d2qBjcrWrch2foWAoT/6Vl59cgvMe?=
- =?us-ascii?Q?Pz1XCpr0FY9f4QrOPtffzx2XrDos0ysafrgklNo0mmZaFQTQlun7UkrWeHgU?=
- =?us-ascii?Q?hWPEH7J+l/y0GzRGcjzqa6CNapyRIiR5ieWjRolTXoVs9O7mMmPCydVd9/D+?=
- =?us-ascii?Q?NuAWj8SfxT1j3LkxTO6P8xjpXxD4lOemTi90t8b7w2OacVu80/JqrOiaZ3zb?=
- =?us-ascii?Q?e6jf6tmr/bavFlOqpgjdY89o7I6ckA3od1bC4Jr+KDZK8pJynUcPxX2C5bp/?=
- =?us-ascii?Q?zbMakpOOuOU1azcFw4gdxcIBJfu9RIOfbQAqWnvlGmw5HRa3AnBLtqbfDXSR?=
- =?us-ascii?Q?Ce+wXjRLyX1P2XVkL5HwnrHkQv8tq91v2+r++vAzf9I5GXwzG1uFofcHp5zG?=
- =?us-ascii?Q?T1N7Z1ziyfRmWG8el1eyzngPFntzFV7xH/ERqTycm/aGH2xQuk+8rUzXlbnN?=
- =?us-ascii?Q?bGkXlhuFReRRTA0CtauvtwI49IDuvmVYb9YrhIIv6JyeQfRSRtQcaCpCD+Be?=
- =?us-ascii?Q?hhya35T6pjWdq3M3HEd+8C/I//U3a1JzIiHy+8fzHNS3lJ0jWbWaRPXwu7bJ?=
- =?us-ascii?Q?zzPhzFzPmSziR4MfR3I6ZFCV0fdTNDDOvKgXSWoJbKavxeS5GyTdFeas3TBz?=
- =?us-ascii?Q?Y7ejuMn50b0sbtljUqd4w+yV0BUjRkBjA71lWqjen7F26bB9R1FKv/2/mGxc?=
- =?us-ascii?Q?QV3fNPwv1r+pnRRuIjA=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?w7icwbRkybV7geXaWrKzENQFxkiifzGZwSufi0VBQrX3TjILDTxL6o1sYOfO?=
+ =?us-ascii?Q?yU9BphwHe5he9/BuIJDMrG5eCwhwyEH3m77Wp2wlfkBAa8btjKwuD2qTZVho?=
+ =?us-ascii?Q?jusCpQLoHYhwgMO8/TzWEIHTGaoIk5o2W58SmItbKjCY+Qb5/jSlhwmpjg+a?=
+ =?us-ascii?Q?KhaJYgidB9P0FTuNnvy2xdRGpAJWIyqCBDXEQZL7nGtRzqbB1w1kA/D2owlU?=
+ =?us-ascii?Q?vIb7RS8jAeUsPjFdfkRDdxVuQ5jRG1dHuQd1KiwFQAuSSCnzA6XzLnedxcAs?=
+ =?us-ascii?Q?kpmDS3f5tvUWD1LEFH6989gwyRYO3I9nCqGh3ALuM/1egfCnUELk26EAm5SJ?=
+ =?us-ascii?Q?qbgCsFBLS+xi31QR+I/1JhZvJGGtHJiLvfD/A29vR7H6W3MTJG07NgVcp5k6?=
+ =?us-ascii?Q?Gif7NDpy5xVFqmH7K4GjBTAF+Y/PTvU7fkg3XzUZvYlx3tOaY5V3EEAERNzb?=
+ =?us-ascii?Q?KRn3MjiKQ6PM2E8ovI5Rd9fd+1drBeu149323YGYCb6SXx8TEG/Am/1EWBLp?=
+ =?us-ascii?Q?XMI2KyBJNSpSQo6Ggh7TNdNstxacadeP/E41rvDTTf0mSiVOJrDPKR9LqNnk?=
+ =?us-ascii?Q?+O8XM5YLwQimj3jrYEmhxwKAqpLxWWTVda8/dIyrqBSMUD0vBEP0VeHTLa42?=
+ =?us-ascii?Q?371EI9dqKsCuR/Or6HeyiPjkb21viBtUV5k+SFT+n+9+TUvifDUv9q+fvXmH?=
+ =?us-ascii?Q?xm1in4hV05gVVRz7m+pqdryJ/vqg0YnKMmuiPYdHVBMqnltTW0GSFOa87+Lb?=
+ =?us-ascii?Q?9ZbJErhyp81mlIGpaEbRngZGyRYzRxVHALR+zPo86HJR12fFt7e7FXwHNFNH?=
+ =?us-ascii?Q?CarHL/rNhCyyhu2GJqq7IxIhow7HVMp7V6WCL6JCuhlsPHMcEUXcRmTYBRyg?=
+ =?us-ascii?Q?RZ7SJEq/g6579i14kZEzaBGkroF2y41FUeTkX1f17hK74Vy8XdHSLl0IeV+6?=
+ =?us-ascii?Q?0Cv2lXGVdOswBha55C3H30cl+NKjsBi2C1zmKqth0UOVlCkzWUUD17sUdgFm?=
+ =?us-ascii?Q?qv5O1Poth92mbO5I9Efl2llPWsC9GAOK55z1pZEm1AmQXmsJnSMVEjGXAWrF?=
+ =?us-ascii?Q?kibXQysLIquLjibvdE7hC9X8OyuJVfEB+vU1bRwbmfJTiR8WGStjtHpJf/ue?=
+ =?us-ascii?Q?1TGjWeYySJfaoKgVD1VxkpRloars8ma/tYbegRlBlUv9X++Tpny5CU8nhqmL?=
+ =?us-ascii?Q?I/5IdOYE2ZLZBGD0MfHSkLBh36mEfVUgEYL2O9PfQQ5+xJso8OIEC5AbixJZ?=
+ =?us-ascii?Q?OsCjlz5QVO18a5X4/SUrWCJ5a8NAUAtsejBLw6p1Sdrc7Z754YEeGwkFWy/v?=
+ =?us-ascii?Q?3AvLpzijoNBUwjU2nukZKX9afvUz6Q/7C8YmMalqDDOVU7pAxrE2R+V060cV?=
+ =?us-ascii?Q?d6pDbJ03pAzVSaBRj78rKuHFst4Yg1klfOFgIxXkAfs6WoLqmPyOiGIYNCVd?=
+ =?us-ascii?Q?RQgmiu9StoXNzJRmfEbCWz2zQnLxPVdLnoU5YON19p3ztyrm83WIVGPPUc3Y?=
+ =?us-ascii?Q?FnyHhetnSg7919rjf0MIJ/8ZYSwS1i5EmGc5X3ZKykf7didav0pKSlG+2PEv?=
+ =?us-ascii?Q?2WzQecuZHPx6KiEabFY=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
+X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b7cf7b20-5d10-46d7-94e8-08dbc9f1493d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Oct 2023 00:30:35.5560
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6351.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2ea5b752-b341-40f8-a618-08dbc9f5aa36
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Oct 2023 01:01:56.2913
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hpPg/syB0zLhkd2BwaMgxpqcV2MGnStBnn2+K6dpyyJJBDydANxRRgFWig/VDt3Rnbs8UUY8SoUmqMM6m4xSIA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8906
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-userprincipalname: tiGjcpGytPVo99Rb34DsvLtooODfyMe2hD6nuHcAEGUUYLYrpLz9Vtwvk3P5zlYoEwJ4UvjA94BH0L/hPLyzTA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8186
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> Subject: Re: Question regarding scmi_perf_domain.c
->=20
-> On Tue, Oct 10, 2023 at 01:43:32PM +0000, Peng Fan wrote:
-> > > Subject: Re: Question regarding scmi_perf_domain.c
-> > >
-> > > On Tue, Oct 10, 2023 at 01:15:26PM +0000, Peng Fan wrote:
-> > > >
-> > > > Thanks for the detailed explanation, so power-domains property
-> > > > could be used both for power domain or performance domain. But if
-> > > > one device has both power domain and performance domain. Only
-> > > > power-domain property is not enough. I may understand wrong, let me
-> look into the code.
-> > > >
-> > >
-> > > I haven't tried this but something I could come up quick wit Juno
-> > > DTS as
-> > > reference:
-> > >
-> > > We can change something like this:
-> > >
-> > >       scmi_dvfs: protocol@13 {
-> > >               reg =3D <0x13>;
-> > > -             #clock-cells =3D <1>;
-> > > +             #power-domain-cells =3D <1>;
-> > >               mbox-names =3D "tx", "rx";
-> > >               mboxes =3D <&mailbox 1 0 &mailbox 1 1>;
-> > >               shmem =3D <&cpu_scp_hpri0 &cpu_scp_hpri1>;
-> > >       };
-> > >
-> > > And then in the consumer node(taking GPU as it has both perf and
-> > > power domains). The CPUs are simpler as don't have explicit power
-> > > domains, some Qcom platforms do use that. Anyways I would change
-> GPU node like this.
-> > > Hope this clarifies things for you.
-> > >
-> > >  &gpu {
-> > > -       clocks =3D <&scmi_dvfs 2>;
-> > > -       power-domains =3D <&scmi_devpd 9>;
-> > > +       power-domains =3D <&scmi_dvfs 2 &scmi_devpd 9>;
-> > > +       power-domain-names =3D "perf", "power";
-> >
-> > With one single power domain, the platform common code will
-> > automatically power on the domain before probe, with help from
-> > genpd_dev_pm_attach.
-> >
-> > But with multiple entries, device driver should handle power domains
-> > by themselves.
-> >
-> > Maybe Ulf could comment whether the genpd could update to support
-> > perf/power case just as one power domain entry before.
-> >
->=20
-> Hmm, I would rather check if the genpd can still handle automatic
-> power on of the domain before probe with one power and one perf domain.
-> IWO, one power domains and other domains in the mix. The reason why we
-> can't have single domain to support both power and perf using SCMI is
-> we don't know if the domains are 1:1 as presented by the SCMI platform
-> firmware.
->=20
-> AFAIU it was the main issue/confusion you raised initially. I am
-> surprised as how we had all these discussions and now you are circling
-> back and requesting to combine the support in single domain which
-> contradicts your initial confusion. I am seriously lost as what you are
-> looking for now ?
+[AMD Official Use Only - General]
 
-No, I am not requesting to combine in single domain. I still wanna perf
-domain and power domain has their own IDs. But I was not aware
-perf domain is using power-domains property, so one device has
-power domains and perf domains both, the automatic power domain
-on is broken. I was thinking we introduce a new property saying
-perf-domains property.
+Hi Peter:
 
-Regards,
-Peng.
+> -----Original Message-----
+> From: Peter Zijlstra <peterz@infradead.org>
+> Sent: Tuesday, October 10, 2023 6:36 PM
+> To: Meng, Li (Jassmine) <Li.Meng@amd.com>
+> Cc: Rafael J . Wysocki <rafael.j.wysocki@intel.com>; Huang, Ray
+> <Ray.Huang@amd.com>; linux-pm@vger.kernel.org; linux-
+> kernel@vger.kernel.org; x86@kernel.org; linux-acpi@vger.kernel.org; Shuah
+> Khan <skhan@linuxfoundation.org>; linux-kselftest@vger.kernel.org;
+> Fontenot, Nathan <Nathan.Fontenot@amd.com>; Sharma, Deepak
+> <Deepak.Sharma@amd.com>; Deucher, Alexander
+> <Alexander.Deucher@amd.com>; Limonciello, Mario
+> <Mario.Limonciello@amd.com>; Huang, Shimmer
+> <Shimmer.Huang@amd.com>; Yuan, Perry <Perry.Yuan@amd.com>; Du,
+> Xiaojian <Xiaojian.Du@amd.com>; Viresh Kumar <viresh.kumar@linaro.org>;
+> Borislav Petkov <bp@alien8.de>
+> Subject: Re: [PATCH V8 3/7] cpufreq: amd-pstate: Enable amd-pstate
+> preferred core supporting.
+>
+> Caution: This message originated from an External Source. Use proper
+> caution when opening attachments, clicking links, or responding.
+>
+>
+> On Mon, Oct 09, 2023 at 10:49:28AM +0800, Meng Li wrote:
+>
+> > +static void amd_pstate_init_prefcore(struct amd_cpudata *cpudata) {
+> > +     int ret;
+> > +     u32 highest_perf;
+> > +     static u32 max_highest_perf =3D 0, min_highest_perf =3D U32_MAX;
+> > +
+> > +     ret =3D amd_pstate_get_highest_perf(cpudata->cpu, &highest_perf);
+> > +     if (ret)
+> > +             return;
+> > +
+> > +     cpudata->hw_prefcore =3D true;
+> > +     /* check if CPPC preferred core feature is enabled*/
+> > +     if (highest_perf =3D=3D AMD_PSTATE_MAX_CPPC_PERF) {
+> > +             pr_debug("AMD CPPC preferred core is unsupported!\n");
+> > +             cpudata->hw_prefcore =3D false;
+> > +             return;
+> > +     }
+> > +
+> > +     if (!amd_pstate_prefcore)
+> > +             return;
+> > +
+> > +     /*
+> > +      * The priorities can be set regardless of whether or not
+> > +      * sched_set_itmt_support(true) has been called and it is valid t=
+o
+> > +      * update them at any time after it has been called.
+> > +      */
+> > +     sched_set_itmt_core_prio(highest_perf, cpudata->cpu);
+>
+> You still got the whole u32 vs int thing confused, I've only pointed that=
+ out
+> *TWICE* before.
+>
+> Boris, can you pull out the clue hammer please?
+>
+[Meng, Li (Jassmine)]
+I feel very sorry, I will immediately double check and correct all modified=
+ data type.
+Thanks a lot.
 
->=20
-> --
-> Regards,
-> Sudeep
+> > +
+> > +     if (max_highest_perf <=3D min_highest_perf) {
+> > +             if (highest_perf > max_highest_perf)
+> > +                     max_highest_perf =3D highest_perf;
+> > +
+> > +             if (highest_perf < min_highest_perf)
+> > +                     min_highest_perf =3D highest_perf;
+> > +
+> > +             if (max_highest_perf > min_highest_perf) {
+> > +                     /*
+> > +                      * This code can be run during CPU online under t=
+he
+> > +                      * CPU hotplug locks, so sched_set_itmt_support()
+> > +                      * cannot be called from here.  Queue up a work i=
+tem
+> > +                      * to invoke it.
+> > +                      */
+> > +                     schedule_work(&sched_prefcore_work);
+> > +             }
+> > +     }
+> > +}
