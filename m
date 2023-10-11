@@ -2,79 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 982BC7C42F4
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Oct 2023 23:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1AE7C46B0
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 02:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjJJVuH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Oct 2023 17:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36838 "EHLO
+        id S1344281AbjJKAas (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Oct 2023 20:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbjJJVuG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Oct 2023 17:50:06 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05162B0;
-        Tue, 10 Oct 2023 14:50:05 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-40684f53ef3so60680315e9.3;
-        Tue, 10 Oct 2023 14:50:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696974603; x=1697579403; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=uhhCfmEihEvzPfEJHxe6vuWeG2oCPRjB6A9CxxsOshQ=;
-        b=U0QjOXFohUtoud7MtbbAmyuwfAWsex1nv2JChk4OjeZp7/nOFUwShj8sAqozP+6Vab
-         61w3NhzBfukw6PLPeKiiHlZVHrmA9+vTCDIZuYcyiQ1Zd2Mcm5ZqtBiLKFjVdClz/QWL
-         OhFr0IOX7kGca/EyYhpNCpqMb1PTg5k1jkbeyNSf3vOXHXKMIFIT6R/C+chJufSwoJ8k
-         EjEgY80uLGmcaQPmJQ5k95wlPBtWCom5ncHdb0Hlcdj7MZT9KpLLL607zCMbrLPpXsLm
-         Q32WJKDwrtKWt6ymp6yGREJ15jmkT5DrEKZkFqFpl/3aOwMgsxyyUKJOe3UNufHSJ1cV
-         MUqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696974603; x=1697579403;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uhhCfmEihEvzPfEJHxe6vuWeG2oCPRjB6A9CxxsOshQ=;
-        b=kLn5b/odwE8AZTB2W+L9KJqOnaicsuf85VktYhw2QRhyNDNg+Int9ikPAzctRiZ7ED
-         6zDjOmRspszAdVfL3RlgGa8h5cqmDKZ68lQ20HWrK/HVukcl3Drd/8N64Q2nIRlFD3tH
-         IOzMwXyEYMaQIBQcAMQdGHaWAoXd2SqEkXCBsgEZmr1X85dA9oXRzfMpkRpfAMkMHlaH
-         UdSyvxFBS3cjRsOT1577hONNRxz0Fcpv1yfAmImIROlpk7/mfmRrFKRJaFuqPfMunZEa
-         dmSo+/gEvwz54AC+4t70FsDMF58Wg3X4VUbKusIekGh1PKBLzdZHupQYRMoZDqKb8YWd
-         DmAA==
-X-Gm-Message-State: AOJu0YxUBorhE6Rb0fE0+n0juUX1/BcmBX/DGTUdT5nfWMh8tDqLXH3s
-        hYm3EEzA8GiolX8L6vhWDYOUhf5Fz8I=
-X-Google-Smtp-Source: AGHT+IH37+bvK5d+zP39zcoxUMywDp8ldTWiFrQQobM+sUnXyLPZXlocTrRGqEKJ75FPlR4B1MYd3A==
-X-Received: by 2002:a05:600c:3786:b0:3fe:2b8c:9f0b with SMTP id o6-20020a05600c378600b003fe2b8c9f0bmr16606360wmr.23.1696974602725;
-        Tue, 10 Oct 2023 14:50:02 -0700 (PDT)
-Received: from Ansuel-xps. (93-34-89-13.ip49.fastwebnet.it. [93.34.89.13])
-        by smtp.gmail.com with ESMTPSA id p15-20020a7bcc8f000000b003fee6e170f9sm15140387wma.45.2023.10.10.14.50.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Oct 2023 14:50:02 -0700 (PDT)
-Message-ID: <6525c70a.7b0a0220.3e593.d92d@mx.google.com>
-X-Google-Original-Message-ID: <ZSXHCDSZ+SC9PCj3@Ansuel-xps.>
-Date:   Tue, 10 Oct 2023 23:50:00 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Robert Marko <robimarko@gmail.com>, ilia.lin@kernel.org,
-        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, agross@kernel.org, andersson@kernel.org,
-        rafael@kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v5 4/4] ARM: dts: qcom: ipq8064: Add CPU OPP table
-References: <20230930102218.229613-1-robimarko@gmail.com>
- <20230930102218.229613-4-robimarko@gmail.com>
- <e255dcbd-6342-49e6-9bfe-17a47b2a3c8a@linaro.org>
- <65255c81.050a0220.141f8.7b8f@mx.google.com>
- <1aea4a86-7f7c-46ee-9cbe-655eb7663c2a@linaro.org>
- <6525ad59.1c0a0220.e3509.8545@mx.google.com>
- <3c3c80da-8986-4a8b-8b53-c33b36107e95@linaro.org>
+        with ESMTP id S1344451AbjJKAaq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Oct 2023 20:30:46 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2058.outbound.protection.outlook.com [40.107.7.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039C2120
+        for <linux-pm@vger.kernel.org>; Tue, 10 Oct 2023 17:30:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EwQVGhcbRnmeQ6iI9gj/kFN1P0dpq+EX2jTAYZ86GREkcWwjt8KpXxxBmyUQex18XbFcvlTqJpgqGYI8uV8x6RsDWkyw7du92CivTD6aNBEj6HCPoqYL7wTlcW9XLkkleOowb0T8MHKW7PtDs0w6/0tS1kO6mt2VdHfxfDWWtWVGkxgfZyt7z/gaewE/uCORDJ+WMn3X7QcnC6U4oUmxp9I37NezIYXntAx+FF/vy/+nPwh3nDsyJphF1p0Ez5ef/sbQTsZPhxbSRBfDv/qIWr/gP4m3VmNl1gkXxC0UGkrnl+WXBz8oLw9ul5Rhbh5+WQNVE0Lt50xXcOxgE2ibnw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IHLBnI/AGSmhywEebEQY3Ip5lh6zQ33/bTXtKxNAF3E=;
+ b=BBdD233doWqGQw5Ns4qD8Z5sNUKs/DxkeIoQgmYmCMBu3uReCij+gI9pSEmknefSaNU1msXkLHGEXHyUQTENp4LKSd/t6j3rnXZ1U1wr/AzBi1Z3U/bLOMMcIcUw7G+CrSr5UIzyMjnhIXs+FIa9SgEFGf/fzap3vy7O6c8MDd1Ntsx9Qfy8zob1u890vfRzBjjAfhqmJsxxhV5uM3Diaxelr9imiflY5nP61M2TjzJOdo1aDjUF/jwHmse+UtLWGdqwtj/rA545v23wDnSVAjxjH9v+CeLGhQTn0t6JdwDF1jUHAR4hFOmAq4Ol4z44lA84xYJEM9uFXWuX2IvBVA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IHLBnI/AGSmhywEebEQY3Ip5lh6zQ33/bTXtKxNAF3E=;
+ b=K1GANDdU6GcyPgXbI40gGDOwKZpcgG46diop5FdA3U+decFd8JXFThYcZ6lOf33FcdWmFufzThkLeX/4zLEHlGV7SgvuPRpU1eJrfdmfYTSJeZ0DpsBouiuX69Sd0/nbw4YD/u82aKL/g0nM2MPBBeYuQEq5bxI7L2hhJFPmNyw=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AM9PR04MB8906.eurprd04.prod.outlook.com (2603:10a6:20b:409::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.41; Wed, 11 Oct
+ 2023 00:30:35 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::2b3:d8de:95c8:b28b]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::2b3:d8de:95c8:b28b%3]) with mapi id 15.20.6838.040; Wed, 11 Oct 2023
+ 00:30:35 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+CC:     Ulf Hansson <ulf.hansson@linaro.org>,
+        "cristian.marussi@arm.com" <cristian.marussi@arm.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>,
+        Glen G Wienecke <glen.wienecke@nxp.com>
+Subject: RE: Question regarding scmi_perf_domain.c
+Thread-Topic: Question regarding scmi_perf_domain.c
+Thread-Index: Adn7ZJVuPYTdu0ufRKeeVXBw4lJjnAAA6M+AAAA+SYAAALxWIAADapAAAABn5rAAAKUSgAAAVlkAAAJ6koAAEqiu0A==
+Date:   Wed, 11 Oct 2023 00:30:35 +0000
+Message-ID: <DU0PR04MB9417233F914A061FB0A23B3088CCA@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <DU0PR04MB9417DE145496DC03579F50E488CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <20231010105503.jwrmjahuvcjgwtk5@bogus>
+ <CAPDyKFqEpnKeF7Yuvv_a+=Kqs=pNU_kM59EqWdpCniHrY_373A@mail.gmail.com>
+ <DU0PR04MB941755466872E84217378F6388CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <20231010130054.ieylxocuapugajif@bogus>
+ <DU0PR04MB94177FFEAA62AC27839D826F88CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <20231010133059.57rs52qedrc5mxfr@bogus>
+ <DU0PR04MB9417D01218CA4803D00545A788CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <20231010145137.fyxjlsj5qq3elq7l@bogus>
+In-Reply-To: <20231010145137.fyxjlsj5qq3elq7l@bogus>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|AM9PR04MB8906:EE_
+x-ms-office365-filtering-correlation-id: b7cf7b20-5d10-46d7-94e8-08dbc9f1493d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ySnuapDXvsD3I0b56CSGZ1kasJzbD66Q0cU75z+wvEJ0F+O0oME54jqsxYLV5vZlyYKFGbwbM3q6QTac+udx3PjP9Jk6HYQur3NnOJA8jMeUHUzBzYChEBw4Cb1pSXniiMpUKzIJhSDzuBiOrNWJut/WY0J+qnNff1bpEiY3pv9hEXJ/z94zVKdLBfu3x+jbCWVqaU3LtWre6HBPaL90sUeMw1lrQ1lVKfaizqIHYbXqYTjw9OmFUxmIsAyVqNuKlpSvQl8yqbg4UtPJLuRt//Et1bwVInKA5l8v3lXoMDKU2+x8rEo6cXKKxtgVDbokVxOWlL+AFcPzBJtLQwdNtXsnwjctz9X6joiJo7JUJ4iVzv+kyEWr+LFyvIjydRyuYO5u4N+0DqNxOgdRJw7hxSNoDdI1De207IYwVkyVvIfd5ynTKrhdZJKewB0HC/J21Gjzj0hAQ4pDVR+dQ3JTFDloDEYTARJKvwvI2J9BlFE4Iq/frtIoz0+o68duR6UIWbZi5PzuOkqSP4C2WnZwZqoDKFsYAPclYhBbkmHtFZgY3uaehmiYDu90fK5+Arm75YwB7og/1fOgVLNRm5x9F90iuteQb9cWSS/4VZj04oXG1y91JEetoWTbHqlIpucT
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(376002)(366004)(39860400002)(396003)(136003)(230922051799003)(64100799003)(1800799009)(451199024)(186009)(86362001)(2906002)(55016003)(4326008)(8936002)(8676002)(66476007)(76116006)(66946007)(64756008)(54906003)(66446008)(66556008)(41300700001)(316002)(6916009)(5660300002)(52536014)(44832011)(33656002)(83380400001)(122000001)(478600001)(6506007)(7696005)(9686003)(38070700005)(38100700002)(71200400001)(26005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?5vcltzpXjgZWkzOkVB2G+WSOyA3N5yP5jfIGKy+YGOWqkKhOX5M6rBq2CWH0?=
+ =?us-ascii?Q?Lj2OkUVcw/dcl9YT8LjCqC2WYgb94i9RT+P0xpFjtOSncyC4f7AR0nowvzT+?=
+ =?us-ascii?Q?T7uVwK1ZOHmdZtyDIf6lnDEauWXfmbqQRvqsdF1DPwQRXhc5+SJ/YVYVuAG3?=
+ =?us-ascii?Q?NnxW1a/kgY7DJRCo8uaDGotaGqsQmMzGG/IRls66s1HoWfI4vcl//lyAI5xj?=
+ =?us-ascii?Q?9woHyPMBaEXt+9jQniGM5paMF9TS4BY1DGZQLrU3YO9MwlYhRTJh1XA6KLdQ?=
+ =?us-ascii?Q?LuXZa3s2lHlHlYU7fmE6vSthVr/U0I/LsuHdNJF0xhG3voAwO2nUf4pMCOSr?=
+ =?us-ascii?Q?8xN9loyy1we9iuzlIYIW7MXQb+86nfsq/wAdtP/vDanyL7h48aG23fDFJcWp?=
+ =?us-ascii?Q?DVZb2Pmfjws32AmW9Vh7fX4V42RSfEw0Vfj6ChUXDWxosvpl7iPyJ6UUDwO4?=
+ =?us-ascii?Q?TU/sL4pYJn4zK/sYwTju2wBDg/Oi7F+vEYJ0t3FkipyQ1Ev0BMoD3WPYqT92?=
+ =?us-ascii?Q?BLX7E2XZ5THE+M9gjP1gBXVRu/2by1v0hfK4cy9qUVxW92Euop0jBCat/sJa?=
+ =?us-ascii?Q?hPFL1NNTmTij8jUauO7qU3oS+5+gN1GUnB72/L1MUiW/smGxr1iXCPCPXln4?=
+ =?us-ascii?Q?+ITQQu9Vrw16aJeNn3a+ugDgbh/A4yLwGcPimGlWoPrsgFg2WfWLmrttgT6J?=
+ =?us-ascii?Q?4uDdpXiIPLfkx41JF+ONv1kT2wgXlIncT5hvFjDiK4qyb0b3mSJEBXXvYQxY?=
+ =?us-ascii?Q?KlrVJWDww8orQ/Ffm6F6lJLw/cspn02zPAakHDsdOtkwIHQQGSvZNq1eY2QB?=
+ =?us-ascii?Q?izsOOXA0p6YGHTDcP5XBHng+pH4sm3/d2qBjcrWrch2foWAoT/6Vl59cgvMe?=
+ =?us-ascii?Q?Pz1XCpr0FY9f4QrOPtffzx2XrDos0ysafrgklNo0mmZaFQTQlun7UkrWeHgU?=
+ =?us-ascii?Q?hWPEH7J+l/y0GzRGcjzqa6CNapyRIiR5ieWjRolTXoVs9O7mMmPCydVd9/D+?=
+ =?us-ascii?Q?NuAWj8SfxT1j3LkxTO6P8xjpXxD4lOemTi90t8b7w2OacVu80/JqrOiaZ3zb?=
+ =?us-ascii?Q?e6jf6tmr/bavFlOqpgjdY89o7I6ckA3od1bC4Jr+KDZK8pJynUcPxX2C5bp/?=
+ =?us-ascii?Q?zbMakpOOuOU1azcFw4gdxcIBJfu9RIOfbQAqWnvlGmw5HRa3AnBLtqbfDXSR?=
+ =?us-ascii?Q?Ce+wXjRLyX1P2XVkL5HwnrHkQv8tq91v2+r++vAzf9I5GXwzG1uFofcHp5zG?=
+ =?us-ascii?Q?T1N7Z1ziyfRmWG8el1eyzngPFntzFV7xH/ERqTycm/aGH2xQuk+8rUzXlbnN?=
+ =?us-ascii?Q?bGkXlhuFReRRTA0CtauvtwI49IDuvmVYb9YrhIIv6JyeQfRSRtQcaCpCD+Be?=
+ =?us-ascii?Q?hhya35T6pjWdq3M3HEd+8C/I//U3a1JzIiHy+8fzHNS3lJ0jWbWaRPXwu7bJ?=
+ =?us-ascii?Q?zzPhzFzPmSziR4MfR3I6ZFCV0fdTNDDOvKgXSWoJbKavxeS5GyTdFeas3TBz?=
+ =?us-ascii?Q?Y7ejuMn50b0sbtljUqd4w+yV0BUjRkBjA71lWqjen7F26bB9R1FKv/2/mGxc?=
+ =?us-ascii?Q?QV3fNPwv1r+pnRRuIjA=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3c3c80da-8986-4a8b-8b53-c33b36107e95@linaro.org>
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b7cf7b20-5d10-46d7-94e8-08dbc9f1493d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Oct 2023 00:30:35.5560
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: hpPg/syB0zLhkd2BwaMgxpqcV2MGnStBnn2+K6dpyyJJBDydANxRRgFWig/VDt3Rnbs8UUY8SoUmqMM6m4xSIA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8906
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,89 +125,82 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 10, 2023 at 11:17:34PM +0200, Konrad Dybcio wrote:
-> 
-> 
-> On 10/10/23 22:00, Christian Marangi wrote:
-> > On Tue, Oct 10, 2023 at 09:52:50PM +0200, Konrad Dybcio wrote:
-> > > 
-> > > 
-> > > On 10/10/23 16:15, Christian Marangi wrote:
-> > > > On Tue, Oct 10, 2023 at 03:40:32PM +0200, Konrad Dybcio wrote:
-> > > > > 
-> > > > > 
-> > > > > On 9/30/23 12:21, Robert Marko wrote:
-> > > > > > From: Christian Marangi <ansuelsmth@gmail.com>
-> > > > > > 
-> > > > > > Add CPU OPP table for IPQ8062, IPQ8064 and IPQ8065 SoC.
-> > > > > > Use opp-supported-hw binding to correctly enable and disable the
-> > > > > > frequency as IPQ8062 supports up to 1.0Ghz, IPQ8064 supports up to
-> > > > > > 1.4GHz with 1.2GHz as an additional frequency and IPQ8065 supports
-> > > > > > 1.7GHZ but doesn't have 1.2GHZ frequency and has to be disabled.
-> > > > > > 
-> > > > > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > > > > > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > > > > > ---
-> > > > > Christian/Robert, can you provide a downstream source for this?
-> > > > > 
-> > > > 
-> > > > Sure, consider that everything is with +/-5%.
-> > > Hm, so you're e.g. putting ipq8062 384MHz voltage for PVS3 equal to
-> > > 0.95*800000 = 760000, but I'm not sure if it's a good idea?
-> > > 
-> > > The comment in downstream:
-> > > 
-> > > "These are based on +/-5% Margin on the VDD_APCx that is advertised in our
-> > > Datasheet across Temperature"
-> > > 
-> > > suggests this is already not very accurate, and betting that the lower
-> > > threshold works on all chips is probably not the best idea.
-> > > 
-> > 
-> > Consider that everything is driven by the rpm. The original qsdk used the
-> > same approach of taking the value, apply +-5% and pass it as a voltage
-> > triplet to the rpm regulator. Also the driver have ranges so it
-> > autodecide the best voltage in the range of the voltage triplet based on
-> > the one supported by the regulator. Normally the normal voltage is
-> > always used.
-> Eeh? So you pass any half-random value to it and RPM edits it in flight?
-> 
-> Please be more specific, I'm not very familiar with this platform
-> 
+> Subject: Re: Question regarding scmi_perf_domain.c
+>=20
+> On Tue, Oct 10, 2023 at 01:43:32PM +0000, Peng Fan wrote:
+> > > Subject: Re: Question regarding scmi_perf_domain.c
+> > >
+> > > On Tue, Oct 10, 2023 at 01:15:26PM +0000, Peng Fan wrote:
+> > > >
+> > > > Thanks for the detailed explanation, so power-domains property
+> > > > could be used both for power domain or performance domain. But if
+> > > > one device has both power domain and performance domain. Only
+> > > > power-domain property is not enough. I may understand wrong, let me
+> look into the code.
+> > > >
+> > >
+> > > I haven't tried this but something I could come up quick wit Juno
+> > > DTS as
+> > > reference:
+> > >
+> > > We can change something like this:
+> > >
+> > >       scmi_dvfs: protocol@13 {
+> > >               reg =3D <0x13>;
+> > > -             #clock-cells =3D <1>;
+> > > +             #power-domain-cells =3D <1>;
+> > >               mbox-names =3D "tx", "rx";
+> > >               mboxes =3D <&mailbox 1 0 &mailbox 1 1>;
+> > >               shmem =3D <&cpu_scp_hpri0 &cpu_scp_hpri1>;
+> > >       };
+> > >
+> > > And then in the consumer node(taking GPU as it has both perf and
+> > > power domains). The CPUs are simpler as don't have explicit power
+> > > domains, some Qcom platforms do use that. Anyways I would change
+> GPU node like this.
+> > > Hope this clarifies things for you.
+> > >
+> > >  &gpu {
+> > > -       clocks =3D <&scmi_dvfs 2>;
+> > > -       power-domains =3D <&scmi_devpd 9>;
+> > > +       power-domains =3D <&scmi_dvfs 2 &scmi_devpd 9>;
+> > > +       power-domain-names =3D "perf", "power";
+> >
+> > With one single power domain, the platform common code will
+> > automatically power on the domain before probe, with help from
+> > genpd_dev_pm_attach.
+> >
+> > But with multiple entries, device driver should handle power domains
+> > by themselves.
+> >
+> > Maybe Ulf could comment whether the genpd could update to support
+> > perf/power case just as one power domain entry before.
+> >
+>=20
+> Hmm, I would rather check if the genpd can still handle automatic
+> power on of the domain before probe with one power and one perf domain.
+> IWO, one power domains and other domains in the mix. The reason why we
+> can't have single domain to support both power and perf using SCMI is
+> we don't know if the domains are 1:1 as presented by the SCMI platform
+> firmware.
+>=20
+> AFAIU it was the main issue/confusion you raised initially. I am
+> surprised as how we had all these discussions and now you are circling
+> back and requesting to combine the support in single domain which
+> contradicts your initial confusion. I am seriously lost as what you are
+> looking for now ?
 
-Sorry, probably I was a bit confusing.
+No, I am not requesting to combine in single domain. I still wanna perf
+domain and power domain has their own IDs. But I was not aware
+perf domain is using power-domains property, so one device has
+power domains and perf domains both, the automatic power domain
+on is broken. I was thinking we introduce a new property saying
+perf-domains property.
 
-ipq806x mount on 99% of the devices (this is the suggested design by
-qcom) smb208 regulator. These have selector and step since not every
-voltage is supported. So the closest one is selected in the range of the
-provided min and max.
+Regards,
+Peng.
 
-Most of the time the normal voltage is correctly used by sometimes an
-higher one is used. The ranges are described here [1].
-
-Consider that in later version of the qsdk where the moved to DT
-definition, they started using OPP v1 where voltage-tollerance binding
-is used. The voltage-tollerance was set to 5.
-
-You can find how this value was used for OPPv1 here [2].
-
-As you can see they internally calculate the min and max value and set
-them. OPP v2 dropped this and make the dev directly provide min and max.
-
-Effectively we pass the same voltage values.
-
-For the voltage and how it's set, we use cpufreq-dt where if an attached
-regulator is found, the set_voltage_triplet is used by providing normal
-min and max value and then internally the best value is selected. This
-same implementation was used in the qsdk source when they moved to dt
-implementation.
-
-Hope it's more clear now how the voltages are set on this platform.
-For the RPM part, the voltage is requested but there isn't a direct
-control of the system on the regulator since everything is handled by
-RPM so there is also that extra step.
-
-[1] https://elixir.bootlin.com/linux/latest/source/drivers/regulator/qcom_rpm-regulator.c#L178
-[2] https://elixir.bootlin.com/linux/latest/source/drivers/opp/core.c#L1956
--- 
-	Ansuel
+>=20
+> --
+> Regards,
+> Sudeep
