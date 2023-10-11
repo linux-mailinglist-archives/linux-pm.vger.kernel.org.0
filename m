@@ -2,100 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B667C480B
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 04:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A11B7C4928
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 07:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344874AbjJKC7V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Oct 2023 22:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38010 "EHLO
+        id S229686AbjJKFXD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Oct 2023 01:23:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343612AbjJKC7V (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Oct 2023 22:59:21 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 581F492;
-        Tue, 10 Oct 2023 19:59:19 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 39B2xE0G031018;
-        Tue, 10 Oct 2023 21:59:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1696993154;
-        bh=EP1YvOVaGbO3RTerwTA6049JxbPAS+eZUO4pwPmaX8I=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=P+ay8nu6K2bSbQDPwDWpHtxqviEW4EIaDxmL8hb55xlkqqICftXNicQEDhL2QZIUv
-         gwC4jNClxgNmu/I8RU075dFzRaY0KpWb/wdI3kLL5qxBMlr/dChOi4LAQBXJK7HAA0
-         0NqOea95j1BHPOqUPhlMD0b0yK2+DVQTm4RFj1OE=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 39B2xEZf024974
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 10 Oct 2023 21:59:14 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 10
- Oct 2023 21:59:14 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 10 Oct 2023 21:59:14 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 39B2xDM8123858;
-        Tue, 10 Oct 2023 21:59:13 -0500
-Date:   Wed, 11 Oct 2023 08:29:13 +0530
-From:   Dhruva Gole <d-gole@ti.com>
-To:     Bryan Brattlof <bb@ti.com>
-CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vibhore Vardhan <vibhore@ti.com>,
-        ARM Power Management <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/2] cpufreq: ti-cpufreq: Enable AM62P5 CPUFreq
-Message-ID: <20231011025913.aadng3zuq6mpwjel@dhruva>
-References: <20231010175524.558577-4-bb@ti.com>
+        with ESMTP id S229607AbjJKFXD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Oct 2023 01:23:03 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5DD98
+        for <linux-pm@vger.kernel.org>; Tue, 10 Oct 2023 22:23:00 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-5859b2eaa55so4243663a12.1
+        for <linux-pm@vger.kernel.org>; Tue, 10 Oct 2023 22:23:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697001780; x=1697606580; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yd6bY2jeOYPiGoBLqHgpAOXMIaT9UW6PlUc9Ge/NMwY=;
+        b=QK537KTWAZDpVxT8hVhq/ldQse2qAiHTDZr9cCWmZpC6DHg6ShHFvO/3AdGAXvHglH
+         pF+4qK0mIjElQv5aCYseWRglogJw6bP8f9ZKfNUgd6P6emwoRzuneks1hpOFXwNJt5G2
+         +ASdCoF5qIcZBVpaJRNLO8qRbDLNxmyUTHkm5yXdbOMa1wT7RbQTISwIvuUSHyyVHRH9
+         hk6Gx1M254Ikh0bNTpDpMEQjltf3brVj+K7TfyOVpW4p+k/r1X2a7oLzqxiABImsc2jS
+         fUEyhSwkykyaCNfCSS7TFpArR7my1TDGaHIPPXWTAW72udkkmmooiPBiM/h6rkac9U/p
+         7osg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697001780; x=1697606580;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Yd6bY2jeOYPiGoBLqHgpAOXMIaT9UW6PlUc9Ge/NMwY=;
+        b=ApYi0torZ6rbQ6OOW0eI4/6eBCkfp6VWkfuMYEUfDBn6jbP/jUYwYU9q1ENCQAJpLZ
+         DdapO2pyTLqDETlWD4I4t28fwrx6pPmwsPiCShmqD5JaDueuKd4WOdARxLiR8m3ZKHOK
+         em3mzXugh0RTgPlgyR5yZU2tn6JLF/VxQoH74K7f5Y6H21KnElmBtS8zpX/3eAK8n30W
+         phpaV/bFxAxMxmaROVtookOULqyA0vS7Goe0xV8T54dkDCHpnhC7TlrLPC6YS0hOESXA
+         ZYb1PTKF0l9iS99ama4hEl8uWs5brn15aNR6P0zRg4afSp8/Yie6CZr0FQ/ZvqmdhKwS
+         Mwog==
+X-Gm-Message-State: AOJu0YxkqtqAQgNW7sYVbZlizL0wbCQdnZufEohT7954YAlSNc9l3At8
+        kWNEpEkIZTNuePD7q3kIXktscQ==
+X-Google-Smtp-Source: AGHT+IFFch8XhhW5FVKRD1ftq3ydV2OUtAQX2dMkC9Xm4ZBmUHqzpv2pnzUIv8pgy4KFsYI7apOtag==
+X-Received: by 2002:a17:90b:1e02:b0:27d:775:56d9 with SMTP id pg2-20020a17090b1e0200b0027d077556d9mr327774pjb.15.1697001780213;
+        Tue, 10 Oct 2023 22:23:00 -0700 (PDT)
+Received: from localhost ([122.172.81.92])
+        by smtp.gmail.com with ESMTPSA id cf11-20020a17090aebcb00b00276bde3b8cesm12975235pjb.15.2023.10.10.22.22.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Oct 2023 22:22:59 -0700 (PDT)
+Date:   Wed, 11 Oct 2023 10:52:57 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Florian Fainelli <florian.fainelli@broadcom.com>
+Cc:     linux-kernel@vger.kernel.org, mmayer@broadcom.com,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "open list:CPU FREQUENCY SCALING FRAMEWORK" 
+        <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH] cpufreq: ARM_BRCMSTB_AVS_CPUFREQ cannot be used with
+ ARM_SCMI_CPUFREQ
+Message-ID: <20231011052257.ly5g5zm5quqpcgfb@vireshk-i7>
+References: <20231010181626.3449090-1-florian.fainelli@broadcom.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231010175524.558577-4-bb@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20231010181626.3449090-1-florian.fainelli@broadcom.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On 10-10-23, 11:16, Florian Fainelli wrote:
+> The brcmstb-avs-cpufreq driver is considered a legacy driver and since
+> 2018, ARCH_BRCMSTB systems have been using scmi-cpufreq. As a matter of
+> fact, when SCMI is in use, brcmstb-avs-cpufreq is unusable since the
+> SCMI firmware takes over, this can result in various problems, including
+> external synchronous aborts.
+> 
+> Express those constraints such that the driver is not enabled by default
+> when SCMI CPU frequency scaling is in use.
+> 
+> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> ---
+>  drivers/cpufreq/Kconfig.arm | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+> index 123b4bbfcfee..c287305820b7 100644
+> --- a/drivers/cpufreq/Kconfig.arm
+> +++ b/drivers/cpufreq/Kconfig.arm
+> @@ -90,7 +90,7 @@ config ARM_VEXPRESS_SPC_CPUFREQ
+>  
+>  config ARM_BRCMSTB_AVS_CPUFREQ
+>  	tristate "Broadcom STB AVS CPUfreq driver"
+> -	depends on ARCH_BRCMSTB || COMPILE_TEST
+> +	depends on ARCH_BRCMSTB && !(ARM_SCMI_PROTOCOL && ARM_SCMI_CPUFREQ) || COMPILE_TEST
 
-On Oct 10, 2023 at 12:55:25 -0500, Bryan Brattlof wrote:
-> Hello everyone!
-> 
-> This short series adds the am62p5 compatible to ti-cpufreq and
-> cpufreq-dt-platdev for the new am62p family of TI SoCs. It uses the same
-> A53s and efuse configuration as the rest of the am62xxx extended family
-> so we're just using the same am625 data structure for the am62p5.
-> 
-> Thanks for reviewing
-> ~Bryan
-> 
-> Bryan Brattlof (2):
->   cpufreq: dt-platdev: add am62p5 to blocklist
->   cpufreq: ti-cpufreq: Add opp support for am62p5 SoCs
-> 
->  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
->  drivers/cpufreq/ti-cpufreq.c         | 1 +
->  2 files changed, 2 insertions(+)
-
-For the series,
-Reviewed-by: Dhruva Gole <d-gole@ti.com>
-
-> 
-> 
-> base-commit: c9727271cb239dce91add464364f10fb2b376456
-> -- 
-> 2.42.0
-> 
+ARM_SCMI_CPUFREQ already implies ARM_SCMI_PROTOCOL, you don't need to
+add both here.
 
 -- 
-Best regards,
-Dhruva Gole <d-gole@ti.com>
+viresh
