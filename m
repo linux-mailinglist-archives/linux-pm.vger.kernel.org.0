@@ -2,165 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4957F7C4C78
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 09:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6247C4E5B
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Oct 2023 11:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345232AbjJKH7u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Oct 2023 03:59:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33066 "EHLO
+        id S1345857AbjJKJSU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Oct 2023 05:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345140AbjJKH7u (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Oct 2023 03:59:50 -0400
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FEA98
-        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 00:59:48 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1qqU7w-0006Ab-CQ; Wed, 11 Oct 2023 09:59:32 +0200
-Received: from [2a0a:edc0:2:b01:1d::c0] (helo=ptx.whiteo.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1qqU7v-000qiI-HM; Wed, 11 Oct 2023 09:59:31 +0200
-Received: from ore by ptx.whiteo.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1qqU7v-00Ds9z-EG; Wed, 11 Oct 2023 09:59:31 +0200
-Date:   Wed, 11 Oct 2023 09:59:31 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Naresh Solanki <naresh.solanki@9elements.com>,
-        zev@bewilderbeest.net, Sebastian Reichel <sre@kernel.org>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v1 3/3] regulator: fixed: forward under-voltage events
-Message-ID: <20231011075931.GA3305420@pengutronix.de>
-References: <20231010085906.3440452-1-o.rempel@pengutronix.de>
- <20231010085906.3440452-3-o.rempel@pengutronix.de>
- <5e51792a-cc93-4364-a51b-c2b116d89369@sirena.org.uk>
- <20231010125531.GA3268051@pengutronix.de>
- <c2ee404d-d07f-42c6-b5ba-41659773e8eb@sirena.org.uk>
+        with ESMTP id S1345869AbjJKJST (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Oct 2023 05:18:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D9392A7
+        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 02:18:17 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 85902106F;
+        Wed, 11 Oct 2023 02:18:57 -0700 (PDT)
+Received: from bogus (unknown [10.57.93.106])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B9FA33F762;
+        Wed, 11 Oct 2023 02:18:15 -0700 (PDT)
+Date:   Wed, 11 Oct 2023 10:16:44 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "cristian.marussi@arm.com" <cristian.marussi@arm.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>,
+        Glen G Wienecke <glen.wienecke@nxp.com>
+Subject: Re: Question regarding scmi_perf_domain.c
+Message-ID: <20231011091644.gwzkpbppuyjs3xp6@bogus>
+References: <DU0PR04MB9417DE145496DC03579F50E488CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <20231010105503.jwrmjahuvcjgwtk5@bogus>
+ <CAPDyKFqEpnKeF7Yuvv_a+=Kqs=pNU_kM59EqWdpCniHrY_373A@mail.gmail.com>
+ <DU0PR04MB941755466872E84217378F6388CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <20231010130054.ieylxocuapugajif@bogus>
+ <DU0PR04MB94177FFEAA62AC27839D826F88CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <20231010133059.57rs52qedrc5mxfr@bogus>
+ <DU0PR04MB9417D01218CA4803D00545A788CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <20231010145137.fyxjlsj5qq3elq7l@bogus>
+ <DU0PR04MB9417233F914A061FB0A23B3088CCA@DU0PR04MB9417.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c2ee404d-d07f-42c6-b5ba-41659773e8eb@sirena.org.uk>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <DU0PR04MB9417233F914A061FB0A23B3088CCA@DU0PR04MB9417.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 10, 2023 at 06:19:59PM +0100, Mark Brown wrote:
-> On Tue, Oct 10, 2023 at 02:55:31PM +0200, Oleksij Rempel wrote:
+On Wed, Oct 11, 2023 at 12:30:35AM +0000, Peng Fan wrote:
+> > Subject: Re: Question regarding scmi_perf_domain.c
+> > 
+> > On Tue, Oct 10, 2023 at 01:43:32PM +0000, Peng Fan wrote:
+> > > > Subject: Re: Question regarding scmi_perf_domain.c
+> > > >
+> > > > On Tue, Oct 10, 2023 at 01:15:26PM +0000, Peng Fan wrote:
+> > > > >
+> > > > > Thanks for the detailed explanation, so power-domains property
+> > > > > could be used both for power domain or performance domain. But if
+> > > > > one device has both power domain and performance domain. Only
+> > > > > power-domain property is not enough. I may understand wrong, let me
+> > look into the code.
+> > > > >
+> > > >
+> > > > I haven't tried this but something I could come up quick wit Juno
+> > > > DTS as
+> > > > reference:
+> > > >
+> > > > We can change something like this:
+> > > >
+> > > >       scmi_dvfs: protocol@13 {
+> > > >               reg = <0x13>;
+> > > > -             #clock-cells = <1>;
+> > > > +             #power-domain-cells = <1>;
+> > > >               mbox-names = "tx", "rx";
+> > > >               mboxes = <&mailbox 1 0 &mailbox 1 1>;
+> > > >               shmem = <&cpu_scp_hpri0 &cpu_scp_hpri1>;
+> > > >       };
+> > > >
+> > > > And then in the consumer node(taking GPU as it has both perf and
+> > > > power domains). The CPUs are simpler as don't have explicit power
+> > > > domains, some Qcom platforms do use that. Anyways I would change
+> > GPU node like this.
+> > > > Hope this clarifies things for you.
+> > > >
+> > > >  &gpu {
+> > > > -       clocks = <&scmi_dvfs 2>;
+> > > > -       power-domains = <&scmi_devpd 9>;
+> > > > +       power-domains = <&scmi_dvfs 2 &scmi_devpd 9>;
+> > > > +       power-domain-names = "perf", "power";
+> > >
+> > > With one single power domain, the platform common code will
+> > > automatically power on the domain before probe, with help from
+> > > genpd_dev_pm_attach.
+> > >
+> > > But with multiple entries, device driver should handle power domains
+> > > by themselves.
+> > >
+> > > Maybe Ulf could comment whether the genpd could update to support
+> > > perf/power case just as one power domain entry before.
+> > >
+> > 
+> > Hmm, I would rather check if the genpd can still handle automatic
+> > power on of the domain before probe with one power and one perf domain.
+> > IWO, one power domains and other domains in the mix. The reason why we
+> > can't have single domain to support both power and perf using SCMI is
+> > we don't know if the domains are 1:1 as presented by the SCMI platform
+> > firmware.
+> > 
+> > AFAIU it was the main issue/confusion you raised initially. I am
+> > surprised as how we had all these discussions and now you are circling
+> > back and requesting to combine the support in single domain which
+> > contradicts your initial confusion. I am seriously lost as what you are
+> > looking for now ?
 > 
-> > The hardware I am working with has an under-voltage sensor on the 24V
-> > supply regulator and some backup capacitors to run SoC for 100ms. I want
-> > to forward under-voltage events across a chain of different regulators
-> > to a designated consumer. For instance, to the mmc driver, enabling it
-> > to initiate shutdown before power loss occurs.  Additionally, a bit can
-> > be set in the volatile memory of a scratch pad in an RTC clock to record
-> > sudden power loss, which can be checked on the next system start.
+> No, I am not requesting to combine in single domain. I still wanna perf
+> domain and power domain has their own IDs. But I was not aware
+> perf domain is using power-domains property, so one device has
+> power domains and perf domains both, the automatic power domain
+> on is broken. I was thinking we introduce a new property saying
+> perf-domains property.
 > 
-> So it sounds like the underlying need is to flag the notifications from
-> one of the regulators as being system wide and then take action based on
-> those notifications somewhere basically disconnected?  That does seem
-> like a good use case.
-> 
-> The MMC doesn't specifically care that it is handling a regulator
-> notification, it more wants to know that the system is dying and doesn't
-> really care how we figured that out so if we can hook it into a system
-> level notificaiton it'd be happy and would also be able to handle other
-> critical faults.  I would have thought that we should have some
-> mechanisms for this already for RAS type stuff but I'm drawing a blank
-> on what it actually is if there is an existing abstraction.  It could
-> potentially go through userspace though there's latency concerns there
-> which might not be ideal, there should at least be some policy for
-> userspace.
 
-The project I'm working prefers reducing user space daemons to configure and
-enforce RAS policies due to time and financial budget constraints. The customer
-is inclined to invest only in essential infrastructure.
+IIUC, this should not need any extra information from the DT than what we
+already have. It is just implementation could improve to deal with your ask.
 
-Configuration through the device tree and kernel defaults is preferable.
-For instance, having a default kernel governor that doesn’t require user
-space configuration aligns with the project’s objectives.
-
-While a proper UAPI might not be implemented in the first run, the
-design will allow for it to be added and extended by other projects in
-the future.
-
-> For the regulator itself we probably want a way to identify regulators
-> as being system critical so they start notifying.  It would be tempting
-> to just do that by default but that would likely cause some issues for
-> example with regulators for things like SD cards which are more likely
-> to get hardware problems that don't comprimise the entire system.  We
-> could do that with DT, either a property or some sort of runtime
-> consumer, but it might be better to have a control in sysfs that
-> userspace can turn on?  OTOH the ability do something about this depends
-> on specific hardware design...
-> 
-> I've copied in Sebastian since this sounds like the sort of thing that
-> power supplies might have some kind of handling for, or at least if we
-> need to add something we should make it so that the power supplies can
-> be joined up to it.  I do see temperature and capacity alerts in the
-> sysfs ABI for power supplies, but nothing for voltage.
-
-Thank you for pointing towards the power supply framework. Given the hardware
-design of my project, I can envision mapping the following states and
-properties within this framework:
-
-1. States:
-   - POWER_SUPPLY_STATUS_FULL: When the capacitor is fully charged.
-   - POWER_SUPPLY_STATUS_DISCHARGING: Triggered when an under-voltage event is
-                                      detected.
-
-2. Technology:
-   - POWER_SUPPLY_TECHNOLOGY_CAPACITOR
-
-3. Capacity Level:
-   - Post under-voltage detection, the system would immediately transition to
-     POWER_SUPPLY_CAPACITY_LEVEL_CRITICAL state.
-
-4. Properties:
-   - POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW: 100ms, representing the time until
-                                          complete power loss.
-   - POWER_SUPPLY_TYPE_MAINS: Under normal operation.
-   - POWER_SUPPLY_TYPE_BATTERY: Triggered when under-voltage is detected.
-
-Considering the above mapping, my initial step would be to create a simple
-regulator coupled (if regulator is still needed in this casr) with a Device
-Tree (DT) based power supply driver.  This setup would align with the existing
-power supply framework, with a notable extension being the system-wide
-notification for emergency shutdown upon under-voltage detection.
-
-> I've also coped in Naresh and Zev who've been discussing something
-> vaugely similar with userspace notifications for the userspace consumer
-> - it's not the same thing given that you don't specifically need
-> userspace to be involved here but it feels like it might have something
-> of a similar shape, or at least there might be some shared interest.
-
-Regards,
-Oleksij
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Regards,
+Sudeep
