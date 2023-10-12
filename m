@@ -2,65 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B97CA7C714F
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 17:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 235D47C7154
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 17:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347155AbjJLPVi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Oct 2023 11:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
+        id S1347251AbjJLPYG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Oct 2023 11:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347050AbjJLPVi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 11:21:38 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17944BE
-        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 08:21:36 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-50325ce89e9so1564103e87.0
-        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 08:21:35 -0700 (PDT)
+        with ESMTP id S1343999AbjJLPYF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 11:24:05 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AF0B8
+        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 08:24:04 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-4056ce55e7eso11237835e9.2
+        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 08:24:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697124094; x=1697728894; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hM2IUyL3dTocxTxwOsznMTNjBlX93NcKqGbt9NreAaE=;
-        b=zgEuYLr1Wa+zQOozndi7N1ShMNu7gMlwQCEiwlup4cC529vXgJMrp8XB4/latvbMxh
-         Ve0IAw7NXUw4pFpHswTAeC8cMatx6vI5nuz0l3xSRHUoyZJyIoSwJ5izyubXJMr9kK8G
-         MN7B5PSnp4IIt7TV0Xx0UMXgXBrQbjyc7artYVhV8Z2+50LdATJrk+SL6VsOvZjM9Gh8
-         C5UBA5sS0KkROPWQ40CMNmOKlHzUpH0T06NlBSTlP95s9zYfY/QY9+vojXQwjUCfAMpF
-         nskjFoya5c+4IaqjFdxuh7GeUY6elEoL1Ucku0dgRupd9b+0atDtowbeSsAFHgX82Aor
-         RkLg==
+        d=linaro.org; s=google; t=1697124242; x=1697729042; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=We1PipUaRJ2GmRv7NyqA8SqBPMWku7fp5p2NGcKu6y8=;
+        b=ajGpRcEtYpHcL/8N/myAF5/Jndhkzr85EAjL8k5M3hiW/C6VlmFOIW77msi2f98Xgg
+         FQQv+cPv1ZH3KySqW2LWPzz2JMthb0rw2B4wFGyPV0i+OJ/fgF0u3VYjXzcrTFMAL5jx
+         y4kbDpSk/8lDFjZCIH6vlyAzhp0VFCWXgt2zSZ92GzuI2wecJ6WXAmYKP5jkDZtCmZm/
+         djJDkE9A5p2QYcSbCG+3Al1xkoU4S7Wd+3AEde772zUjqpXrR7k7AkyphRQetLrUPvd6
+         IUOfoxjvBBGwhW2uToLjKC4KdX6ss0vSdFhtS/mWCLisMH2uGPqd7WAk+TTu/tJO5tsb
+         R10w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697124094; x=1697728894;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hM2IUyL3dTocxTxwOsznMTNjBlX93NcKqGbt9NreAaE=;
-        b=d8yqSUSKbaJ7yrNqCTNc2gDLe1xCSkYqBSz6MhWQjujyouBUEd41nK9lOcU64M2/m5
-         gTbaJHTX4WrTWeslLkRwYXFRSo4i8acuZ9RnQNAyKyubLzGv6mgFjFf/dzW8T0XcnqeR
-         hXSrQbP+rhxrKFBF3BGWFh65YAdSTg9q7G80wc26EQy1Yo6dNFaHEMXZNJ+qUJksir/Z
-         AXwwRo+fUb6nPRXPUCuI290wGjzY7XVRi7dp5rLLnjoCxqa9KkclLdh975wgZUKnQprV
-         QheuZ0K8Ync6hP2CytdjZL/0v4LOo3VtcL7mnqbrI5H2/aHCYUlNF8jJnCaICERZtOob
-         T3lg==
-X-Gm-Message-State: AOJu0YxhpjaH3Q2iJ9PHojctQMVNI+ej7+JKv5udhwchy5/YkZ3/bbNU
-        8f7/NmwaUIfYujRkhLD8NBNmKQ==
-X-Google-Smtp-Source: AGHT+IG99A57kmCU0lF5bXK/Qz13g5IKvmP9fe2U6OPhLsJGd9LUtXHcI4IbRxlw3ObXDNi3cOkflg==
-X-Received: by 2002:a05:6512:69:b0:505:98a8:fa2f with SMTP id i9-20020a056512006900b0050598a8fa2fmr19413767lfo.60.1697124094270;
-        Thu, 12 Oct 2023 08:21:34 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id j18-20020ac253b2000000b00501bd76ccaasm2853676lfh.166.2023.10.12.08.21.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Oct 2023 08:21:33 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/5] PM: domains: Drop pm_genpd_opp_to_performance_state()
-Date:   Thu, 12 Oct 2023 17:21:08 +0200
-Message-Id: <20231012152108.101270-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1697124242; x=1697729042;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=We1PipUaRJ2GmRv7NyqA8SqBPMWku7fp5p2NGcKu6y8=;
+        b=oM2qcGJFFkbgPG8uCu3dmrkjaGvenDleZH3cp4GOoJslsLJ4DVnqb3wrH7e21ZDVSI
+         CQ6XzQnIqXF530611hPEUm2XE7t1bShhpHaKF60aM/54fWJtVJ2c5Jx/mGWHVIENm2cn
+         njlI2BCv4pi6wXDwb0NL0qwuOFR2eJwBc6O3pQIVNvBV84bcaOuc9+ofID/w9MLprgHN
+         iGVQZbwVY8boOmCsnlQj2arjz1Fyb7jNzS4craqe5GllZ4ASUlwxEeLjIFk5JoA9gnix
+         45CbWFMUoI1hvG+d9/nGhKbE0Ku+QLP7Jt49y07X9qzjSO/zLNRFSKiKM3+qXCWqaRgx
+         QW1Q==
+X-Gm-Message-State: AOJu0YwRfNgKXtvM04u0vWAemDslVOLwMypO3Tq/5wHiorMU6fkBbREJ
+        1xAWYq7nyQnK8Gr2d5N7XbNQFg==
+X-Google-Smtp-Source: AGHT+IGaTzOx/6hybNBs9W8g0AcuD4Z+IJKW3BY68R2VfyDSeURDOB+dCGHwpPdaNmhmzzqe6VG29Q==
+X-Received: by 2002:a1c:4c13:0:b0:406:7d74:a29b with SMTP id z19-20020a1c4c13000000b004067d74a29bmr21127609wmf.13.1697124242353;
+        Thu, 12 Oct 2023 08:24:02 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
+        by smtp.googlemail.com with ESMTPSA id q19-20020a1cf313000000b00405bbfd5d16sm119132wmq.7.2023.10.12.08.24.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Oct 2023 08:24:01 -0700 (PDT)
+Message-ID: <d248e126-2b0e-4f9a-adf4-94740dc472da@linaro.org>
+Date:   Thu, 12 Oct 2023 17:24:01 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 5/6] thermal: gov_step_wise: Fold
+ update_passive_instance() into its caller
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
+References: <13365827.uLZWGnKmhe@kreacher> <9177552.CDJkKcVGEf@kreacher>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <9177552.CDJkKcVGEf@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -71,36 +76,24 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Since commit 7c41cdcd3bbe ("OPP: Simplify the over-designed pstate <-> level
-dance"), there is no longer any users of the
-pm_genpd_opp_to_performance_state() API, while a few genpd providers are still
-assigning the redundant ->opp_to_performance_state() callback.
+On 06/10/2023 19:49, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Fold update_passive_instance() into thermal_zone_trip_update() that is
+> its only caller so as to make the code in question easeir to follow.
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
 
-Let's clean this up so we can drop pm_genpd_opp_to_performance_state() and the
-callback too.
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-Rafael, I would like to take this through my pmdomain tree, unless you see a
-problem with it ofcourse, hence I need your ack on the last patch in the series.
-
-Kind regards
-Uffe
-
-
-Ulf Hansson (5):
-  soc/tegra: pmc: Drop the ->opp_to_performance_state() callback
-  pmdomain: qcom: cpr: Drop the ->opp_to_performance_state() callback
-  pmdomain: qcom: rpmpd: Drop the ->opp_to_performance_state() callback
-  pmdomain: qcom: rpmhpd: Drop the ->opp_to_performance_state() callback
-  PM: domains: Drop the unused pm_genpd_opp_to_performance_state()
-
- drivers/base/power/domain.c    | 32 --------------------------------
- drivers/pmdomain/qcom/cpr.c    |  7 -------
- drivers/pmdomain/qcom/rpmhpd.c |  7 -------
- drivers/pmdomain/qcom/rpmpd.c  |  7 -------
- drivers/soc/tegra/pmc.c        |  8 --------
- include/linux/pm_domain.h      | 12 ------------
- 6 files changed, 73 deletions(-)
 
 -- 
-2.34.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
