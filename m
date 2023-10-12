@@ -2,234 +2,177 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 611077C6454
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 07:05:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D560D7C64B9
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 07:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347042AbjJLFFD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Oct 2023 01:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57898 "EHLO
+        id S1377165AbjJLFpa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Oct 2023 01:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjJLFFC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 01:05:02 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2078.outbound.protection.outlook.com [40.107.243.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011B890;
-        Wed, 11 Oct 2023 22:04:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZMHTzrTfWwsIHaMxQZ2MvAZc4aItkbClwEWF+X7DntT2k7EOSu0puwCqiEkmVBj/Hrz1o6hInwJrAgvQdroiPSHqDy+3SgkuSdf7J98ozOvDIQJpPING4qZdf1+jeWn+aRTBi7CiOxZEe6+57rcu2IYspGiLNPK5EJ3f+v1l73CwWWdXwHkXJNrFQpJbdkJTuf8uJhj3K6KUYqHdjSOo8gWydX6viexAsRFGqnknXlN8z07vId9trBOtStrxNyNpjNyCRdCGSZcnOZcFeT7+IZyGcMDzLaT6HU7plGfPiI7NNV3cIu1avwTN4yjG/0TqMdV9CHjpkwvyITOKZjwtQA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qVYHf2twcBJh65WAu0x2OWgWkBgkUdvbSHlb/lwKn8w=;
- b=OgpnK3bGFk+frUpGvnuD8skNCmW/SDc1POuK95s/GuB7nbl6Im2XfYZCT7SIwDttQq2rWvPirCIKnFJwmQ3peVQgnMrWm2cgLroTxqkaxk1Pql/ADNiXW9hPsfqdfBXKX28RXrO5x3ptcZa3UzzeAN2sIRkkK7EmxGzuDOgZfBfZYbb47WVAex7DFwyu+WNQ0wxfN7ugq5l9Lp819oBF9RxKjbSueP9uU8hri66MvQ15bNCJRtEkRdlTp9/fRJphxnSOOW3TGmAJtyyxIZWPBjLTIMWS/hT20cpnBvJJv+qkMmOUugU2YIUqVGMgeoc63NLQJzbbOxDM+hrOXOfAtA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qVYHf2twcBJh65WAu0x2OWgWkBgkUdvbSHlb/lwKn8w=;
- b=ApPH3Ryq29ceU6Dvid3ilNqIvJI7wXR5aMkGKSedaY00qAoyNbjVopRUxN9JBwRr0EvgR83Wg/Z6p+5Mxx5r4oS4LHg0C/gwk2Osat9cF5K1clg/j2ABN5lczGZaGxE1U4lUapPCWSsswrW3Tsg4MLalVZyST4eRYdC5zdlbMJY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB6165.namprd12.prod.outlook.com (2603:10b6:8:9a::21) by
- MN0PR12MB5836.namprd12.prod.outlook.com (2603:10b6:208:37b::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.45; Thu, 12 Oct
- 2023 05:04:57 +0000
-Received: from DS7PR12MB6165.namprd12.prod.outlook.com
- ([fe80::495c:3afa:1762:efd5]) by DS7PR12MB6165.namprd12.prod.outlook.com
- ([fe80::495c:3afa:1762:efd5%4]) with mapi id 15.20.6863.032; Thu, 12 Oct 2023
- 05:04:57 +0000
-Message-ID: <c780c60d-0957-0931-ef01-f940899f59c9@amd.com>
-Date:   Thu, 12 Oct 2023 10:34:44 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 2/2] selftests/amd-pstate: Added option to provide perf
- binary path
-Content-Language: en-US
-To:     Mario Limonciello <mario.limonciello@amd.com>, ray.huang@amd.com,
-        shuah@kernel.org
-Cc:     sukrut.bellary@gmail.com, li.meng@amd.com, gautham.shenoy@amd.com,
-        wyes.karny@amd.com, Perry.Yuan@amd.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20231003051006.6343-1-swapnil.sapkal@amd.com>
- <20231003051006.6343-3-swapnil.sapkal@amd.com>
- <33271bcf-66fd-42e9-9b19-0c1547814f38@amd.com>
-From:   Swapnil Sapkal <Swapnil.Sapkal@amd.com>
-In-Reply-To: <33271bcf-66fd-42e9-9b19-0c1547814f38@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN2PR01CA0234.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:eb::6) To DS7PR12MB6165.namprd12.prod.outlook.com
- (2603:10b6:8:9a::21)
+        with ESMTP id S1377117AbjJLFp3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 01:45:29 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0376BE
+        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 22:45:26 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id 5614622812f47-3af8b498d31so387779b6e.1
+        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 22:45:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697089526; x=1697694326; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=raoSzlBu377kKldWUANth43g0MsA6j2B790E+ofOJ/U=;
+        b=K0xbE6FefcE+vu+l8RaU2MEnrpvjE5hCqFluoCSO3N5IZV+qGpZ1rUm/0cy7Zefx6g
+         T7L0vxm5kIf24iteZECcy0T2/s0gN5+1eV5ylwrmScVWYmrQZ4NQ0FhJhkNsbVTt0omI
+         KEsFlYRA82BUG1aB4R2GKWCo7SrahAsRr9KuwD1qdfSFk3JXU0GWZfdaEVW0dC+Nims4
+         tMeOhHzqnd54BNOyWWOuI1i7G/oHdLbzON84gk0wCysvR/X3mGLmUijai3+c6I6Cc9h7
+         eCbBsctqITEVbJxUT/Fb2k01iMj8kcXTDSVwNjVwpxBxha6EhSBSdP4wYpJ/KtC+9gf0
+         ap2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697089526; x=1697694326;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=raoSzlBu377kKldWUANth43g0MsA6j2B790E+ofOJ/U=;
+        b=rLSnj5JBlI6Q1T3dBP12nVj1stq36B6AYEhoOLGiCdhaCPZlHIF8PsAqrbFBGxGb8N
+         kqmmo+UuGNgW6fXOerIUFQXQutuPjcphxC+zFQUI4egZSh9NKDk625pTYQAWJvx98g5K
+         1cjF1R0Xr76dZTXOp3v8sVo1O+dVc3V7O2L6cK8O7RwT6k/nBw/JyQbJSSU1aSDMeJ0N
+         iCOIo0yl9gjH/8uhzswpzqeGL5flCTSWSg++8P1DxZMLYNkHA+8L+4mrlCP86bpD6+tH
+         TNcDI2J4//Ai0OGhJxHF4aEKbWqHYueiUWZ8WwxNZOPe5paWkEu34OZQoePQaQ5gCG5W
+         gKnA==
+X-Gm-Message-State: AOJu0YzhwYE6NXwvucR8PPLvwfLLA2yK7pi/4WzPyM1gxrwFHA9Vb7ln
+        cx7NRuEETQ2998BC29ifJ6CF
+X-Google-Smtp-Source: AGHT+IFVaISV/7UIfSrZc652ewcqW0S6kGKAv2RdH2i9tzTOlDpdz1KHLLqPcCZcgW0AF89218QNxg==
+X-Received: by 2002:aca:2808:0:b0:3a8:472b:febf with SMTP id 8-20020aca2808000000b003a8472bfebfmr23277086oix.21.1697089526137;
+        Wed, 11 Oct 2023 22:45:26 -0700 (PDT)
+Received: from localhost.localdomain ([120.138.12.180])
+        by smtp.gmail.com with ESMTPSA id c5-20020a633505000000b0057cb5a780ebsm812396pga.76.2023.10.11.22.45.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Oct 2023 22:45:25 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, andersson@kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
+        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
+        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
+        linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v6 0/5] UFS: Add OPP support
+Date:   Thu, 12 Oct 2023 11:15:07 +0530
+Message-Id: <20231012054512.10963-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6165:EE_|MN0PR12MB5836:EE_
-X-MS-Office365-Filtering-Correlation-Id: c31c2146-7fb3-4fdb-a008-08dbcae0c761
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pcXnbDvoP09gdXN3ZgylpBXDJd5+PTaRg5jFnhAzwQurUDgAIJCz+srCi4naiLR1Ul0zlGf/GwM2QR/3YTeEEbYXD8bZ48/265qE/qRCGvAaW0GS6/i1My2/k/gohs4/nL7uzXuEV+TfpAu+atxSDGykvHIqIjfSiJvqnaumm6HtT74SGAS7/FqjBya4MBGDAU8ViJiqIkCblPItmk0J4ti9KpBYvPMx77n4tKIJmzEanjI5It82CAd15ygkPk0F4Q8R7zYKyR2Dm4O8VnX2enp4iGkAEHZHMN28UIgmN0/3aT4+Vf9aAcNrcK0/V6YHZKgjiXNLFcR6BUjSeICiV9rDjqp778HRnKfiaUPDKBJoHSQUNLh3Dp44ckb+Ded37jlnPKIF7wRZey1aB+8g51w9rBnNbknfV480Zc4Ra6388S3EdH6TtfHHDLxwD1c3PzyJuiCsKAvOGrv7uLjEIRYdAeJlHNVDDymXOy1yEv/UNXL00pcviXqlvi7jzWuWpVvNJxapJJTku2mcCS3JMB9Teppv3INP4u+gfVWJtDGwcoBOmqJi/R6oL0jGBy9GXgXg9NghdbQuHBfIfg61c+o7iEeefwEvy8mptCLtiHza36uze5dCsXhtZWCJq7M1XNFL8t6qEfvJMPwIiutU9w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6165.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(39860400002)(136003)(366004)(346002)(376002)(230922051799003)(451199024)(186009)(64100799003)(1800799009)(5660300002)(41300700001)(4326008)(8936002)(8676002)(31696002)(86362001)(2906002)(478600001)(53546011)(6512007)(6506007)(6666004)(31686004)(83380400001)(36756003)(2616005)(26005)(316002)(66556008)(66476007)(66946007)(38100700002)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Yk5wcHBFT3FxNFBJV1NBREhPTVRwaFpFSWtjZlNTSnNmZ24ydmlXZ01STnow?=
- =?utf-8?B?RXIzVVB6ajczVGw5ZjNNdDJuL2MwY01yS2RIU1o1UVpTQUY0ZTd0SkgyblFa?=
- =?utf-8?B?NVNIZVowS1czSThZVnROck5aSE5tZGJBNDFFd1pRdDFTVTZEN0JOdDVLcmFV?=
- =?utf-8?B?cjRXNmlYLzF4MEhJVHhOY3RFRlBMVS8remVHR09nYkVpSEcyV1ZzNTUwK0Rw?=
- =?utf-8?B?dmNaS0RtSERaRzhXNThFeWZrTXVPU2QvNm1hRkw4TTRHKzRiS0lWb0dsaEJG?=
- =?utf-8?B?ZjcvZTYrTWhuWGVmREE1WkpHYkZYaXZHcU0zeE9hRHpDbE53UkJjc3I5UTIx?=
- =?utf-8?B?dUs2YUs2T2VWait5Q2pFS091SElEWjBuajFVY0pZRFNUYjVjWU1MeTlwSjZY?=
- =?utf-8?B?bmlDcGVRSG8ydkV1VG9aMmRhV1RCbjcyZ21IRXArU2tYU25kTW1MdUU0dDBx?=
- =?utf-8?B?Zk5kbW1BaGQ4OGNUWmI2ckwzbk1ybzRyZ1JnUDZkMUJJVVQ3dDU4WXRIR0la?=
- =?utf-8?B?MzNLSjVoKzcwY1FBT1VUdFozdnJDcGZHckNtNERkOUVyTDFLaTZZTXdOVEE2?=
- =?utf-8?B?WGkyMXRYNHJWSlhBS1pSMU9Tc2lqelB0ZEI4cjJpdTZxcURJSFRhclljSXFO?=
- =?utf-8?B?NlJzS3hvMnVqVEc0elpSNlZRb01XN1pIdU5qcjBObnRTN2hndDFBSXJsSkRr?=
- =?utf-8?B?TEhkQldEUkdlYUh4cFZ1M1RXWkp1SDVMdXdIR2FqWDNLMGliK2VKTE1OU3JR?=
- =?utf-8?B?b1hKckErQU1QSWZySmlhaFlKQStmQ2VEUHowdG9kc1ZxSEhyczFxU1kyMTdP?=
- =?utf-8?B?T2UyQ2dueG14SmptU2NTZEc0N1ZXN0xiaFlwR0FvSkNzTjZ5Um1vY2Vrajhm?=
- =?utf-8?B?QzdmRk43ay9DNkFKRUlwMU1JekhpcVpNSzhISFM2aFhBazROSEM4c2swZ1hK?=
- =?utf-8?B?Q0dQeHVSMFNzTWFVWjZtamxvY2VJVFZDREtLaVdlcDlxTThmUTJXWVZENHJV?=
- =?utf-8?B?YUtRRjEyc2RYMU1hYWdVdVRKMFo2K0ZVd3YrSzl2WWFzSUljK0ErcHoyQ1V6?=
- =?utf-8?B?TU1iWE5XRitpZzlzR3hMaDFpOFZUUXIzbURwaXBER0F6bmJDSlNMWWpJdytY?=
- =?utf-8?B?NHYrU1cyQzVRK0xtaUlia01KWXAyWHoxRVJWNUdJRHdWUFI4dHZzOWJmV2dX?=
- =?utf-8?B?WGduams0UjJVeDJSa3ZpbE1BWGRVVmQvMWtPRFFOVkZTdWVxYWNPZ1ZTczZK?=
- =?utf-8?B?eDlJUFdrSk93U09VVFhGZ1E5SmZ2dXpySjNzcnFDTjUxVFIrbUplYUc0YWo0?=
- =?utf-8?B?RTc5amZjQWRuYTNSOEhMSzVxbG9vbFduZ1pObXl6MnRDSDA0cDhvanBFemho?=
- =?utf-8?B?N2R3VFVUeHdXTDQ5VmozK1VoTUVBWWZkSThyaFJYb3V4Y3kwQlA0NDFtUmxY?=
- =?utf-8?B?cjJGM294R3FFSHpzUytwTGVaM0VvSHJZRFplWDV3WVRjLzNxbGd5a1ZYU2Q5?=
- =?utf-8?B?TVIrMlQ3dmgza1l4TFFVSTd4YlRJZEJoZDg4QTMwQ3BQS1VUN2loanNyUlow?=
- =?utf-8?B?RkV5eWtxa0l4UXBSRjgxL1JxTXVuR3JzK1UyWFRPV0RxaEMxb1ptTmdyQ3cw?=
- =?utf-8?B?Y3cwVUVRY3U2WU1UcW93UWNsS0FRODVOYzBKRThPQ2ZDUXBNWCsrK2pRQUZ2?=
- =?utf-8?B?dy9CT1VreUlRdEEralR0VXRrK1V2Q3drS2luaC8wdU9zTEJqK0RkN251a3Nt?=
- =?utf-8?B?bnZuUDB3RVZnaUwwWFh4dHN2UHh3MXNFWExNUGpXNVRYK2tDTkpWamoyT0l5?=
- =?utf-8?B?V3REVDRFcnpGbVpuK0JUMXdtNFJsdTkyWWpnYWd4dU0ySzNnNUNUeW04NXFU?=
- =?utf-8?B?M2tkaWtrK1hTem93ZXhGOEpkVjVFV0lCQ29GWUZWS2ViY1R5My9FVUoxZ0l2?=
- =?utf-8?B?UGVpbm5iQUdleG9Jd0FBOEsvZlU3R1UydVhKajFFbXJXbWUvS252emdBS0h3?=
- =?utf-8?B?SzNkM1FhcGVZMjVaM3hlZFRRVmdHZUMySUsvaGJXczFnN1lqenV3NDJGdmNu?=
- =?utf-8?B?ZzNuaDFiRDdTN3gzc0Z6VWtQVWVHT3ppWURNcnIxTU0yS3RGK0hmczdQVXk2?=
- =?utf-8?Q?d3ysqu+6FAE27qKsn6Q/uVteL?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c31c2146-7fb3-4fdb-a008-08dbcae0c761
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6165.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2023 05:04:57.2760
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9f0tWF7VWSA7xhVf/gSVgKTgfBqyg6Gqei+ISauhKfGkN1vfP0UwY0SKgkn8SW+/F/ItqldKMPLOwE1KGiuhsg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5836
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Mario,
+Hi,
 
-On 10/7/2023 12:29 AM, Mario Limonciello wrote:
-> On 10/3/2023 00:10, Swapnil Sapkal wrote:
->> In selftests/amd-pstate, distro `perf` is used to capture `perf stat`
->> while running microbenchmarks. Distro `perf` is not working with
->> upstream kernel. Fixed this by providing an option to give the perf
->> binary path.
->>
->> Signed-off-by: Swapnil Sapkal <swapnil.sapkal@amd.com>
->> ---
-> 
-> One small nit, otherwise:
-> 
-> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> 
-I will include the tag in next version.
+This series adds OPP (Operating Points) support to UFSHCD driver.
 
->>   tools/testing/selftests/amd-pstate/gitsource.sh |  2 +-
->>   tools/testing/selftests/amd-pstate/run.sh       | 14 ++++++++++----
->>   tools/testing/selftests/amd-pstate/tbench.sh    |  2 +-
->>   3 files changed, 12 insertions(+), 6 deletions(-)
->>
->> diff --git a/tools/testing/selftests/amd-pstate/gitsource.sh b/tools/testing/selftests/amd-pstate/gitsource.sh
->> index d0ad2ed5ba9d..5acc065e9e3e 100755
->> --- a/tools/testing/selftests/amd-pstate/gitsource.sh
->> +++ b/tools/testing/selftests/amd-pstate/gitsource.sh
->> @@ -87,7 +87,7 @@ run_gitsource()
->>       printf "Make and test gitsource for $1 #$2 make_cpus: $MAKE_CPUS\n"
->>       BACKUP_DIR=$(pwd)
->>       cd $SCRIPTDIR/$git_name
->> -    perf stat -a --per-socket -I 1000 -e power/energy-pkg/ /usr/bin/time -o $BACKUP_DIR/$OUTFILE_GIT.time-gitsource-$1-$2.log make test -j$MAKE_CPUS > $BACKUP_DIR/$OUTFILE_GIT-perf-$1-$2.log 2>&1
->> +    $PERF stat -a --per-socket -I 1000 -e power/energy-pkg/ /usr/bin/time -o $BACKUP_DIR/$OUTFILE_GIT.time-gitsource-$1-$2.log make test -j$MAKE_CPUS > $BACKUP_DIR/$OUTFILE_GIT-perf-$1-$2.log 2>&1
->>       cd $BACKUP_DIR
->>       for job in `jobs -p`
->> diff --git a/tools/testing/selftests/amd-pstate/run.sh b/tools/testing/selftests/amd-pstate/run.sh
->> index 279d073c5728..b87cdc5bfe4a 100755
->> --- a/tools/testing/selftests/amd-pstate/run.sh
->> +++ b/tools/testing/selftests/amd-pstate/run.sh
->> @@ -25,6 +25,7 @@ OUTFILE=selftest
->>   OUTFILE_TBENCH="$OUTFILE.tbench"
->>   OUTFILE_GIT="$OUTFILE.gitsource"
->> +PERF=/usr/bin/perf
->>   SYSFS=
->>   CPUROOT=
->>   CPUFREQROOT=
->> @@ -152,8 +153,9 @@ help()
->>            gitsource: Gitsource testing.>]
->>       [-t <tbench time limit>]
->>       [-p <tbench process number>]
->> -    [-l <loop times for tbench>]
->> +    [-l <loop times for tbench/gitsource>]
-> 
-> This looks like unrelated change.
+Motivation behind adding OPP support is to scale both clocks as well as
+regulators/performance state dynamically. Currently, UFSHCD just scales
+clock frequency during runtime with the help of "freq-table-hz" property
+defined in devicetree. With the addition of OPP tables in devicetree (as
+done for Qcom SDM845 and SM8250 SoCs in this series) UFSHCD can now scale
+both clocks and performance state of power domain which helps in power
+saving.
 
-I will remove this change.
-> 
->>       [-i <amd tracer interval>]
->> +    [-b <perf binary>]
->>       [-m <comparative test: acpi-cpufreq>]
->>       \n"
->>       exit 2
->> @@ -161,7 +163,7 @@ help()
->>   parse_arguments()
->>   {
->> -    while getopts ho:c:t:p:l:i:m: arg
->> +    while getopts ho:c:t:p:l:i:b:m: arg
->>       do
->>           case $arg in
->>               h) # --help
->> @@ -192,6 +194,10 @@ parse_arguments()
->>                   TRACER_INTERVAL=$OPTARG
->>                   ;;
->> +            b) # --perf-binary
->> +                PERF=`realpath $OPTARG`
->> +                ;;
->> +
->>               m) # --comparative-test
->>                   COMPARATIVE_TEST=$OPTARG
->>                   ;;
->> @@ -205,8 +211,8 @@ parse_arguments()
->>   command_perf()
->>   {
->> -    if ! command -v perf > /dev/null; then
->> -        echo $msg please install perf. >&2
->> +    if ! $PERF -v; then
->> +        echo $msg please install perf or provide perf binary path as argument >&2
->>           exit $ksft_skip
->>       fi
->>   }
->> diff --git a/tools/testing/selftests/amd-pstate/tbench.sh b/tools/testing/selftests/amd-pstate/tbench.sh
->> index 4d2e8ce2da3b..2a98d9c9202e 100755
->> --- a/tools/testing/selftests/amd-pstate/tbench.sh
->> +++ b/tools/testing/selftests/amd-pstate/tbench.sh
->> @@ -68,7 +68,7 @@ run_tbench()
->>       printf "Test tbench for $1 #$2 time_limit: $TIME_LIMIT procs_num: $PROCESS_NUM\n"
->>       tbench_srv > /dev/null 2>&1 &
->> -    perf stat -a --per-socket -I 1000 -e power/energy-pkg/ tbench -t $TIME_LIMIT $PROCESS_NUM > $OUTFILE_TBENCH-perf-$1-$2.log 2>&1
->> +    $PERF stat -a --per-socket -I 1000 -e power/energy-pkg/ tbench -t $TIME_LIMIT $PROCESS_NUM > $OUTFILE_TBENCH-perf-$1-$2.log 2>&1
->>       pid=`pidof tbench_srv`
->>       kill $pid
-> 
---
-Thanks and Regards,
-Swapnil
+For the addition of OPP support to UFSHCD, there are changes required to
+the OPP framework and devfreq drivers. The OPP framework changes are already
+merged and the devfreq change is added in this series.
+
+Credits
+=======
+
+This series is a continuation of previous work by Krzysztof Kozlowski [1].
+
+Testing
+=======
+
+This series is tested on 96Boards RB3 (SDM845 SoC) and RB5 (SM8250 SoC)
+development boards.
+
+Merging Strategy
+================
+
+Since the devfreq patch got an Ack from the maintainer, either it can be merged
+to scsi tree with rest of the patches or merged separately through devfreq tree.
+
+Thanks,
+Mani
+
+[1] https://lore.kernel.org/all/20220513061347.46480-1-krzysztof.kozlowski@linaro.org/
+
+Changes in v6:
+
+* Collected tags from Dmitry
+* Fixed bindings issues reported by Krzysztof
+
+Changes in v5:
+
+* Dropped the devfreq patch since it got applied
+* Fixed the bindings issue reported by DT bot
+* Rebased on top of mkp/scsi/for-next
+
+Changes in v4:
+
+* Rebased on top of v6.6-rc3
+
+Changes in v3:
+
+* Rebased on top of linux-next/master tag: next-20230731
+* Dropped the already applied patches (dts, opp binding and framework)
+* Moved the interconnect patches to a separate series:
+  https://lore.kernel.org/linux-scsi/20230731145020.41262-1-manivannan.sadhasivam@linaro.org/
+* Moved ufshcd_opp_config_clks() API to ufshcd.c to fix the build failure
+  reported by Kbuild bot: https://lore.kernel.org/all/202307210542.KoLHRbU6-lkp@intel.com/
+* Collected Acks
+* v2: https://lore.kernel.org/all/20230720054100.9940-1-manivannan.sadhasivam@linaro.org/
+
+Changes in v2:
+
+* Added more description to the bindings patch 2/15
+* Fixed dev_pm_opp_put() usage in patch 10/15
+* Added a new patch for adding enums for UFS lanes 14/15
+* Changed the icc variables to mem_bw and cfg_bw and used
+  the enums for gears and lanes in bw_table
+* Collected review tags
+* Added SCSI list and folks
+* Removed duplicate patches
+
+Krzysztof Kozlowski (2):
+  dt-bindings: ufs: common: add OPP table
+  arm64: dts: qcom: sdm845: Add OPP table support to UFSHC
+
+Manivannan Sadhasivam (3):
+  scsi: ufs: core: Add OPP support for scaling clocks and regulators
+  scsi: ufs: host: Add support for parsing OPP
+  arm64: dts: qcom: sm8250: Add OPP table support to UFSHC
+
+ .../devicetree/bindings/ufs/ufs-common.yaml   |  35 +++-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  42 +++-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          |  39 +++-
+ drivers/ufs/core/ufshcd.c                     | 179 ++++++++++++++----
+ drivers/ufs/host/ufshcd-pltfrm.c              |  78 ++++++++
+ include/ufs/ufshcd.h                          |   7 +
+ 6 files changed, 325 insertions(+), 55 deletions(-)
+
+-- 
+2.25.1
+
