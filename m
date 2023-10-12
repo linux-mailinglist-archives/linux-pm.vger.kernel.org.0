@@ -2,157 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE187C74BA
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 19:24:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D35347C7503
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 19:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379657AbjJLRYh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Oct 2023 13:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
+        id S1344076AbjJLRoP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 12 Oct 2023 13:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442170AbjJLRYA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 13:24:00 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8481711
-        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 10:22:24 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1c9d407bb15so10901325ad.0
-        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 10:22:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697131343; x=1697736143; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HMmysdE7+hFUIPmp9MMMe3xjxP9qrN7IYcx3e2tg+gE=;
-        b=gOB7i2M85ii23YGZtPxsNInGH8EMkqzyqiIxcLdvAAr574FIKDDdKK0Df02dlxfSqU
-         3MLpXuNgyNx2BJJXSafq5AASfdIDQ7E7ToS30ZiPFj7RfRZaY/oIE/QZmVCfdTEKe5e7
-         vimhSO5XT+Rmol2ZTeZ11MAU+w96YtUI0WvTGXQTW6BExtEOuops2bGF1wqP2lqC9Z3F
-         VZ2O0apAsAS8j4fhAneB2UD1wCkcUo0fx1QG2uGFEGTGcnfkSqgh8eHNoHTkjcz4x7kJ
-         RBxxo/YI+htpV+xNWjeymO6NeajCB3YOWJEyXxwrMcHzjCkk3Q2fmXZ6Non/3N4h8Gu/
-         EEnQ==
+        with ESMTP id S1344050AbjJLRoO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 13:44:14 -0400
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27491C9;
+        Thu, 12 Oct 2023 10:44:13 -0700 (PDT)
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-57ddba5ba84so133367eaf.0;
+        Thu, 12 Oct 2023 10:44:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697131343; x=1697736143;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1697132652; x=1697737452;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HMmysdE7+hFUIPmp9MMMe3xjxP9qrN7IYcx3e2tg+gE=;
-        b=cY5tv4CYguOxpz4YzTjWSG8FCDjWTgt1vexzI9nr9B4AqQPTK6WznvpiixN6g9vyTc
-         uJwsqfWEe1nggMvn0fzMFjALVRme0UmATDXlu4wquv8dLZZk6aTKUHkqx+s9TiL8ByQX
-         sgZeCf4DKP4wY3zvOvk+kanGtk+Ob5Z29bJJrJrzqLpop1l2dG2FjITujxL8WYVNvmnv
-         7tl8VTU4O9Naf5GEkVd/UPkqsr1z+nO8nU9olnROuccwnPsgVtoLP9Dj42FWXW9v6Aqr
-         XBrLmvzRPAIj4kOBArMVrvQH5bUHiXy4XV95Nte6KmgpN/dQfqpcX62o7Ub4Vl1HAYFk
-         tY9Q==
-X-Gm-Message-State: AOJu0Ywui/e8I+yojTJQFDrihb2yGiPLGq6YLTVNcWkGPHuPE7GuRqE6
-        83Z3ET7/rJ/D/iwXyn+x2G/RP3xfi8hVxc82uA==
-X-Google-Smtp-Source: AGHT+IEsgE6ZgEYuinnbucjd4chMH0VEihKg62mgofe7VrNz3RjzeB8emSofOhYBqOb/zVE2j1+PVw==
-X-Received: by 2002:a17:902:e749:b0:1b8:76ce:9d91 with SMTP id p9-20020a170902e74900b001b876ce9d91mr31392438plf.1.1697131343079;
-        Thu, 12 Oct 2023 10:22:23 -0700 (PDT)
-Received: from localhost.localdomain ([120.138.12.180])
-        by smtp.gmail.com with ESMTPSA id f9-20020a170902ce8900b001c75a07f62esm2242359plg.34.2023.10.12.10.22.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Oct 2023 10:22:22 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, andersson@kernel.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
-        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
-        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
-        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
-        linux-kernel@vger.kernel.org, alessandro.carminati@gmail.com,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [PATCH v7 5/5] arm64: dts: qcom: sm8250: Add OPP table support to UFSHC
-Date:   Thu, 12 Oct 2023 22:51:29 +0530
-Message-Id: <20231012172129.65172-6-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231012172129.65172-1-manivannan.sadhasivam@linaro.org>
-References: <20231012172129.65172-1-manivannan.sadhasivam@linaro.org>
+        bh=Pe7bpLJT3uvTuZB09KxlybQ/Xw31ItduIV6kQwN3xO4=;
+        b=VQswEwKWNUlZSkEKh00OKM3ZYfk5bgn2keF0F4k5tOFEQC/JPOkkh10A7qIKkR2gFP
+         haGNsw/swUypTQ+e8kJEXnPxbVAxD1LCFf6UxjNAldYzg0xcVrFtodTpMtO9ELyw7FvF
+         LtXVuEth5IXymvreOWqnq3E66GgpbLkdfr0f5EKAD5VHAYDfqXsZnhTCTO1p99YGjck8
+         nSwulXneOLyjP9wcnwF4Ilmu87m9BiY5ZYCVvFO6Vsssxwlf5nFILTLBdFSxsvILQtv2
+         79SQXBmziYH9EO9r76cavfuC8gP6TLxu/uUov5Lh7IeZ71R/tVm4Fj+Pc1tUUQ1SS28F
+         fR9A==
+X-Gm-Message-State: AOJu0YyyF/zb1L0Y6FTRYyo/INzdqX7mv0ccoLNeWTxTpoWtD2axZ5ki
+        52pvFD8C0rTc3XTc2obotEv0G2qyJAOlCDdEdMs=
+X-Google-Smtp-Source: AGHT+IGlh8ZNkVDw3rsaT4gXeZ10Ykb1ZWW62xdRl0XywCfW3u729x88z0FDpJ/m29/7Vgx6qeThdP3okBG4epcI/eA=
+X-Received: by 2002:a05:6820:390:b0:57c:6e35:251e with SMTP id
+ r16-20020a056820039000b0057c6e35251emr23653110ooj.1.1697132652457; Thu, 12
+ Oct 2023 10:44:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20231012102700.2858952-1-daniel.lezcano@linaro.org>
+ <a6b51de7-4f56-4db9-a7dd-60555ac6c37f@arm.com> <d9f3bd7b-a5db-4d37-bb1f-f97e40c8a63a@linaro.org>
+In-Reply-To: <d9f3bd7b-a5db-4d37-bb1f-f97e40c8a63a@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 12 Oct 2023 19:44:01 +0200
+Message-ID: <CAJZ5v0gC4+Jam0a4KpEr7onydn8Sp8MkN2yzVxm0W9qDpmEoDw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] thermal/core: Hardening the self-encapsulation
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>,
+        Thierry Reding <thierry.reding@gmail.com>, rafael@kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-UFS host controller, when scaling gears, should choose appropriate
-performance state of RPMh power domain controller along with clock
-frequency. So let's add the OPP table support to specify both clock
-frequency and RPMh performance states replacing the old "freq-table-hz"
-property.
+On Thu, Oct 12, 2023 at 3:14 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+>
+> Hi Lukasz,
+>
+> On 12/10/2023 14:01, Lukasz Luba wrote:
+> > Hi Daniel,
+> >
+> > On 10/12/23 11:26, Daniel Lezcano wrote:
+> >> The thermal private header has leaked all around the drivers which
+> >> interacted with the core internals. The thermal zone structure which
+> >> was part of the exported header led also to a leakage of the fields
+> >> into the different drivers, making very difficult to improve the core
+> >> code without having to change the drivers.
+> >>
+> >> Now we mostly fixed how the thermal drivers were interacting with the
+> >> thermal zones (actually fixed how they should not interact). The
+> >> thermal zone structure will be moved to the private thermal core
+> >> header. This header has been removed from the different drivers and
+> >> must belong to the core code only. In order to prevent this private
+> >> header to be included again in the drivers, make explicit only the
+> >> core code can include this header by defining a THERMAL_CORE_SUBSYS
+> >> macro. The private header will contain a check against this macro.
+> >>
+> >> The Tegra SoCtherm driver needs to access thermal_core.h to have the
+> >> get_thermal_instance() function definition. It is the only one
+> >> remaining driver which need to access the thermal_core.h header, so
+> >> the check will emit a warning at compilation time.
+> >>
+> >> Thierry Reding is reworking the driver to get rid of this function [1]
+> >> and thus when the changes will be merged, the compilation warning will
+> >> be converted to a compilation error, closing definitively the door to
+> >> the drivers willing to play with the thermal zone device internals.
+> >
+> > That looks like a good idea. Although, shouldn't we avoid the
+> > compilation warnings and just first merge the fixes for drivers?
+>
+> Yes, we should but there is the series for nvidia (pointed in the
+> changelog) which need a slight refresh for the bindings AFAIR. That
+> series is since March 2023 and Thierry seems busy [1]. I'm holding the
+> hardening since then.
+>
+> So I don't know how to make progress on this? I was assuming we can
+> merge this series and let the compiler recall what has to be fixed.
+>
+> [1] https://lore.kernel.org/all/ZK14edZUih1kH_sZ@orome/
+>
+> and as soon as it is fixed, we convert the WARNING to ERROR :P
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 39 +++++++++++++++++++++-------
- 1 file changed, 30 insertions(+), 9 deletions(-)
+To be honest, I'm not sure if anything needs to be done along the
+lines of this patch right now or even at all.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index a4e58ad731c3..33abd84aae53 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -2198,21 +2198,42 @@ ufs_mem_hc: ufshc@1d84000 {
- 				<&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
- 				<&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
- 				<&gcc GCC_UFS_PHY_RX_SYMBOL_1_CLK>;
--			freq-table-hz =
--				<37500000 300000000>,
--				<0 0>,
--				<0 0>,
--				<37500000 300000000>,
--				<0 0>,
--				<0 0>,
--				<0 0>,
--				<0 0>;
-+
-+			operating-points-v2 = <&ufs_opp_table>;
- 
- 			interconnects = <&aggre1_noc MASTER_UFS_MEM 0 &mc_virt SLAVE_EBI_CH0 0>,
- 					<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_UFS_MEM_CFG 0>;
- 			interconnect-names = "ufs-ddr", "cpu-ufs";
- 
- 			status = "disabled";
-+
-+			ufs_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-37500000 {
-+					opp-hz = /bits/ 64 <37500000>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <37500000>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>;
-+					required-opps = <&rpmhpd_opp_low_svs>;
-+				};
-+
-+				opp-300000000 {
-+					opp-hz = /bits/ 64 <300000000>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <300000000>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>;
-+					required-opps = <&rpmhpd_opp_nom>;
-+				};
-+			};
- 		};
- 
- 		ufs_mem_phy: phy@1d87000 {
--- 
-2.25.1
+The only concern here would be that some new drivers would include
+thermal_core.h while we were waiting for the remaining existing
+abusers to be fixed, but since this hasn't happened for the last 6
+months, I'm not worried.
 
+It would be good to add a notice to thermal_core.h that this file is
+for internal use in the thermal core only, though.
