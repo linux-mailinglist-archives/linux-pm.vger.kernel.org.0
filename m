@@ -2,45 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1E6A7C7259
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 18:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BDC67C7293
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 18:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379513AbjJLQVX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 12 Oct 2023 12:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48380 "EHLO
+        id S1347324AbjJLQ3m convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 12 Oct 2023 12:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347319AbjJLQVV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 12:21:21 -0400
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3661D8;
-        Thu, 12 Oct 2023 09:21:19 -0700 (PDT)
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-57ddba5ba84so124139eaf.0;
-        Thu, 12 Oct 2023 09:21:19 -0700 (PDT)
+        with ESMTP id S1379582AbjJLQ3l (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 12:29:41 -0400
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5F9D3;
+        Thu, 12 Oct 2023 09:29:40 -0700 (PDT)
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-57b68555467so26292eaf.0;
+        Thu, 12 Oct 2023 09:29:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697127679; x=1697732479;
+        d=1e100.net; s=20230601; t=1697128179; x=1697732979;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fghx/3ez5n58sg38991FNjnRDD8UbfxWtztsAcswAE8=;
-        b=cZOwT7QKDoD5LPE6pZwbu9oHivlESZotA1GUIOH9rKijipk5a0fTEYrr62Nxmwc5hY
-         ElEHqL6YzRXo++MWDYYHnUCLzJQ4YrfQ7viDAzRFQjCHKZW/xAMTs2HbAsfzafdahsch
-         T9tfsW9LcXXaLThtgxlsv+mXJWVrv/vkNd7t6jLuw/fFL/0/LANC+d5bVzOQdkPEoUcz
-         sDPN4OPcUCJFRvLk1/zwfj2ajrB+tHAi9fMiUIhIXfFc9tVilpHWhkbcW4W9exQK0AVu
-         2guPZFmkp1EADTZExurtdGtmbkdQCb1PaOev3AdIVshmAXtwcHDgV+jra9I9lYMaGEn5
-         fZPg==
-X-Gm-Message-State: AOJu0YxGpkMgr+9CwDiQP+TQEm0DeYXas0kzfO/y4WODoXPQLoXagVYr
-        STU+8PJI1lE1uZA3QOwmb/cF/oDf16xBB9TzT+z3g51JVI0=
-X-Google-Smtp-Source: AGHT+IEtwVncZ1lNS/4QhQySCQtVDBTBTrHBnDC97w1kkgBQ2mlqnkLCMS+6fCDQkcNyuKd4fdP9SgKcafwgPr03XH0=
-X-Received: by 2002:a4a:b588:0:b0:578:c2af:45b5 with SMTP id
- t8-20020a4ab588000000b00578c2af45b5mr22923283ooo.0.1697127679100; Thu, 12 Oct
- 2023 09:21:19 -0700 (PDT)
+        bh=sAl3+uNQYC6UB13kffuDk/amKGx+yj+5/jXC7+UiWUQ=;
+        b=cgGkWAwPyiAcf3yczETm34FV9hgQB1wEvWsTL1YK91007CXGiFtmqNZfoYyOe1R/Fj
+         DSDZw8BV0PklhiyX01UHVihEJg8lytclg6rb1uOybA9noiuIhVuC2+CNoza5PBvM73S/
+         Gq/jvIo7FRyHd39ouJr+Sn6WGHkBYXgcaSbAiiN0XNwCbPdi08/V6XUgZWmHj1cG2jOf
+         njR0ZTj6rbDQiuRiI63S1YxpxFbjc7RdLqlr/3rEeFSOgOgmhU+eF8HAc1IDLdXoEXRF
+         WcS77DnslJ9D0wFSg3UhtCOMkIVun3VX7T/1hHFvwjuloQWUHuNOQouizFaNXJgeDMXP
+         0gpA==
+X-Gm-Message-State: AOJu0YyvHPcC5ES193TR0CzMhoelsrhJ22ZodmFYVpIOII+H7Rqa7Yye
+        304X0COyncat+OvfaYh1fu5G9rFG9UzPNbYtNyA=
+X-Google-Smtp-Source: AGHT+IGh1f6oVO/LvwqDvixeJyTAYBP0I2APjNZQmOTNP+tmXqle0Qk4fGO835S/gtpG9LzlSqo3GE6fHAZnFbc3JB0=
+X-Received: by 2002:a4a:df07:0:b0:57b:73f6:6f80 with SMTP id
+ i7-20020a4adf07000000b0057b73f66f80mr24662463oou.0.1697128179431; Thu, 12 Oct
+ 2023 09:29:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <13365827.uLZWGnKmhe@kreacher> <3256881.aeNJFYEL58@kreacher> <d2d6fae5-ace7-4b94-9354-a01cd6a7e343@linaro.org>
-In-Reply-To: <d2d6fae5-ace7-4b94-9354-a01cd6a7e343@linaro.org>
+References: <13365827.uLZWGnKmhe@kreacher> <2244940.iZASKD2KPV@kreacher> <a9c42b1d-919d-4c77-991d-be113b9cf2a5@linaro.org>
+In-Reply-To: <a9c42b1d-919d-4c77-991d-be113b9cf2a5@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 12 Oct 2023 18:21:08 +0200
-Message-ID: <CAJZ5v0iBD-z6-ncM4jG_eDp+TNBLpPXSrhyrSC+UCt--wmf_8Q@mail.gmail.com>
-Subject: Re: [PATCH v1 1/6] thermal: trip: Simplify computing trip indices
+Date:   Thu, 12 Oct 2023 18:29:28 +0200
+Message-ID: <CAJZ5v0hrfoZbXTdPLZ5o9j5h0whb4jRhDjJ0iyqPeBTzA1gTZg@mail.gmail.com>
+Subject: Re: [PATCH v1 3/6] thermal: gov_fair_share: Rearrange get_trip_level()
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Linux PM <linux-pm@vger.kernel.org>,
@@ -52,56 +52,104 @@ Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 12, 2023 at 4:27 PM Daniel Lezcano
+On Thu, Oct 12, 2023 at 5:04 PM Daniel Lezcano
 <daniel.lezcano@linaro.org> wrote:
 >
-> On 06/10/2023 19:40, Rafael J. Wysocki wrote:
+> On 06/10/2023 19:42, Rafael J. Wysocki wrote:
 > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > >
-> > A trip index can be computed right away as a difference between the
-> > value of a trip pointer pointing to the given trip object and the
-> > start of the trips[] table in the thermal zone containing the trip, so
-> > change thermal_zone_trip_id() accordingly.
+> > Make get_trip_level() use for_each_trip() to iterate over trip points
+> > and make it call thermal_zone_trip_id() to obtain the integer ID of a
+> > given trip point so as to avoid relying on the knowledge of struct
+> > thermal_zone_device internals.
 > >
-> > No intentional functional impact (except for some speedup).
+> > The general functionality is not expected to be changed.
+> >
+> > This change causes the governor to use trip pointers instead of trip
+> > indices everywhere except for the fair_share_throttle() second argument
+> > that will be modified subsequently along with the definition of the
+> > governor .throttle() callback.
 > >
 > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > > ---
-> >   drivers/thermal/thermal_trip.c |   13 +++++--------
-> >   1 file changed, 5 insertions(+), 8 deletions(-)
+> >   drivers/thermal/gov_fair_share.c |   30 ++++++++++++++----------------
+> >   1 file changed, 14 insertions(+), 16 deletions(-)
 > >
-> > Index: linux-pm/drivers/thermal/thermal_trip.c
+> > Index: linux-pm/drivers/thermal/gov_fair_share.c
 > > ===================================================================
-> > --- linux-pm.orig/drivers/thermal/thermal_trip.c
-> > +++ linux-pm/drivers/thermal/thermal_trip.c
-> > @@ -175,14 +175,11 @@ int thermal_zone_set_trip(struct thermal
-> >   int thermal_zone_trip_id(struct thermal_zone_device *tz,
-> >                        const struct thermal_trip *trip)
-> >   {
-> > -     int i;
-> > -
-> >       lockdep_assert_held(&tz->lock);
+> > --- linux-pm.orig/drivers/thermal/gov_fair_share.c
+> > +++ linux-pm/drivers/thermal/gov_fair_share.c
+> > @@ -15,29 +15,27 @@
 > >
-> > -     for (i = 0; i < tz->num_trips; i++) {
-> > -             if (&tz->trips[i] == trip)
-> > -                     return i;
-> > -     }
-> > -
-> > -     return -ENODATA;
-> > +     /*
-> > +      * Assume the trip to be located within the bounds of the thermal
-> > +      * zone's trips[] table.
-> > +      */
-> > +     return trip - tz->trips;
+> >   #include "thermal_core.h"
+> >
+> > -/**
+> > - * get_trip_level: - obtains the current trip level for a zone
+> > - * @tz:              thermal zone device
+> > - */
+> >   static int get_trip_level(struct thermal_zone_device *tz)
+> >   {
+> > -     struct thermal_trip trip;
+> > -     int count;
+> > +     const struct thermal_trip *trip, *level_trip = NULL;
+> > +     int trip_level;
+> >
+> > -     for (count = 0; count < tz->num_trips; count++) {
+> > -             __thermal_zone_get_trip(tz, count, &trip);
+> > -             if (tz->temperature < trip.temperature)
+> > +     for_each_trip(tz, trip) {
+> > +             if (level_trip && trip->temperature >= tz->temperature)
+> >                       break;
 >
-> Shouldn't be divided by sizeof(*trip) ?
+> Even if very likely the trip points are ordered by the hardware
+> enumeration, strictly we don't have yet the guarantee the trips are
+> ordered (as that is the final goal to correctly detect thresholds
+> crossing with the generic trip). We should go through all the trip
+> points, no?
 
-No, it's in sizeof(*trip) units already.
+Well, I just retained the existing logic, because changing it is not
+the purpose of this patch.
+
+Such a change can certainly be considered, but not in this patch and
+not in this patch series.
+
+> > +             level_trip = trip;
+> >       }
+> >
+> > -     /*
+> > -      * count > 0 only if temperature is greater than first trip
+> > -      * point, in which case, trip_point = count - 1
+> > -      */
+> > -     if (count > 0)
+> > -             trace_thermal_zone_trip(tz, count - 1, trip.type);
+> > +     /*  Bail out if the temperature is not greater than any trips. */
+> > +     if (level_trip->temperature >= tz->temperature)
+> > +             return 0;
+>
+> Isn't simpler to remove the test level_trip != NULL in the loop and then
+> check here if it is NULL and then return 0.
+
+Yes, good point.
+
+> > +     trip_level = thermal_zone_trip_id(tz, level_trip);
+> > +
+> > +     trace_thermal_zone_trip(tz, trip_level, level_trip->type);
+> >
+> > -     return count;
+> > +     return trip_level;
+> >   }
+> >
+> >   static long get_target_state(struct thermal_zone_device *tz,
+> >
+> >
+> >
+>
+> --
