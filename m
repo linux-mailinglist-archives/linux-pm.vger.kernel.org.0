@@ -2,75 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB8EC7C6EED
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 15:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FCC57C6EF7
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 15:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378780AbjJLNO3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Oct 2023 09:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
+        id S1344014AbjJLNQA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Oct 2023 09:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378792AbjJLNO2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 09:14:28 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAEFD8
-        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 06:14:26 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-405497850dbso9881125e9.0
-        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 06:14:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697116465; x=1697721265; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CGxpG5sySkyzmI8OEkqZujhsy1RfTOcPN5J5Y4xsLqQ=;
-        b=Wg0ipS7f1tkM3aoNIkur9kiLjZrxXqocPDT2dcG457X237ER/rzkf3SYCVLLUVeUie
-         0l5sG3DcjaAzGpX10MDnIuWWQiE9r5IhG9dwaygJWtd5TragV4MLPKN33wMS1AgtElvo
-         rZUuedOwhg9YEaFEtFrW3KAMpScGE2t9v4JYhpHZpaWUpVTMWLmBavoMM/NT5vHrcZzu
-         kOz7l7eFKgJrNW1VwKhYXJuUenk6kUWh2yjE1O6ZJgbazB35HhlhwX1IbGXItDsRQZaV
-         9lhQYBpYIzHvHO8IhdgVYLvgJNFjgUkFOKeP9rc9bL7D6l2KwLXtCVaV2QVl9+dKZtKm
-         X4/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697116465; x=1697721265;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CGxpG5sySkyzmI8OEkqZujhsy1RfTOcPN5J5Y4xsLqQ=;
-        b=sh66RyNNPnZBjfnJT+aYWQkrK4F0t/mbTB9QUQ0Z7K60eY1PnVvo4dm+YIv/eyLc7z
-         z6rIfcZkDv13wJQLY7rPCAlEJUyKgtjhp2W+JAEu6hBugB5+r+kqRdTpkrKZd6oHEW36
-         g97gQvdxMkuPcv0svA2WYYv+dwjbzH0hsIKn8oAUnQf25IA2+HqJfIZah7316rwWiew7
-         3AWLmsXQUKv1apS203NPwyTQurE4eOtB+ovTIyKRS5VeLMjVbQPVYmRam1BAV2nUrhMj
-         Wvj1xefAROL2OYJUWLGmsGT65TgneNHg02L0k14WvZ4aiswbvsQRxboufoR6OS4sdRZa
-         aa3A==
-X-Gm-Message-State: AOJu0YwbUciWHfOxApWinCU3eyDxt5NJuvLevByq24b1WV6LFeFLMGic
-        +RtfJ4wwFvw3no33xQXRymRauw==
-X-Google-Smtp-Source: AGHT+IG5FBvx6h3rweF+lc3pX+7wrDJo3+bueRZ5ZXPOGUr0QjJSlkyXomBlJX8IQEp5yOQntjegGg==
-X-Received: by 2002:a7b:ce89:0:b0:402:f07c:4b48 with SMTP id q9-20020a7bce89000000b00402f07c4b48mr20417716wmj.28.1697116464566;
-        Thu, 12 Oct 2023 06:14:24 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
-        by smtp.googlemail.com with ESMTPSA id i14-20020a05600c354e00b004068de50c64sm19851900wmq.46.2023.10.12.06.14.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Oct 2023 06:14:24 -0700 (PDT)
-Message-ID: <d9f3bd7b-a5db-4d37-bb1f-f97e40c8a63a@linaro.org>
-Date:   Thu, 12 Oct 2023 15:14:23 +0200
+        with ESMTP id S1347197AbjJLNP7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 09:15:59 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 182A4BA;
+        Thu, 12 Oct 2023 06:15:57 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6676613D5;
+        Thu, 12 Oct 2023 06:16:37 -0700 (PDT)
+Received: from [10.57.81.19] (unknown [10.57.81.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 544C33F762;
+        Thu, 12 Oct 2023 06:15:54 -0700 (PDT)
+Message-ID: <5eb8899b-8846-4ad1-a37f-38fb0280cde2@arm.com>
+Date:   Thu, 12 Oct 2023 14:16:39 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] thermal/core: Hardening the self-encapsulation
+Subject: Re: [PATCH v4 10/18] PM: EM: Add RCU mechanism which safely cleans
+ the old data
 Content-Language: en-US
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>, rafael@kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20231012102700.2858952-1-daniel.lezcano@linaro.org>
- <a6b51de7-4f56-4db9-a7dd-60555ac6c37f@arm.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <a6b51de7-4f56-4db9-a7dd-60555ac6c37f@arm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>, Wei Wang <wvw@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        dietmar.eggemann@arm.com, rui.zhang@intel.com,
+        amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
+        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
+        len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org,
+        qyousef@layalina.io
+References: <20230925081139.1305766-1-lukasz.luba@arm.com>
+ <20230925081139.1305766-11-lukasz.luba@arm.com>
+ <CAJZ5v0g6jPr3LqTuRfwUWsK4em7F1pfsZDn9pVziyu3tV56m8A@mail.gmail.com>
+ <f7a6da56-93e4-0b7c-1746-bc3357bf8163@arm.com>
+ <CAJZ5v0hBPD8cHJe-Xa8354SE5jdM1bYw94DjG-MVHsRKrUY=gQ@mail.gmail.com>
+ <57078a6b-83bc-d558-1071-be23d213a56f@arm.com>
+ <666857b9-729d-7af3-5d9a-9d9e4c0a68e2@arm.com>
+ <CAGXk5yqGOC8STC4wUNbUyKWR1m1NPOu6K-qXTz0=_UJEe64B2g@mail.gmail.com>
+ <CAJZ5v0jGWzZx3jdkYTpdJZiWLFKaozTVdTU2h+dnVhvL18UwtQ@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAJZ5v0jGWzZx3jdkYTpdJZiWLFKaozTVdTU2h+dnVhvL18UwtQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,59 +56,114 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-Hi Lukasz,
 
-On 12/10/2023 14:01, Lukasz Luba wrote:
-> Hi Daniel,
+On 10/11/23 17:07, Rafael J. Wysocki wrote:
+> On Wed, Oct 11, 2023 at 6:03 PM Wei Wang <wvw@google.com> wrote:
+>>
+>> On Fri, Oct 6, 2023 at 1:45 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>>
+>>> Hi Rafael,
+>>>
+>>> A change of direction here, regarding your comment below.
+>>>
+>>> On 10/2/23 14:44, Lukasz Luba wrote:
+>>>>
+>>>>
+>>>> On 9/29/23 13:59, Rafael J. Wysocki wrote:
+>>>>> On Fri, Sep 29, 2023 at 11:36 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>>>
+>>>> [snip]
+>>>>
+>>>
+>>> [snip]
+>>>
+>>>>>>> Apparently, some frameworks are only going to use the default table
+>>>>>>> while the runtime-updatable table will be used somewhere else at the
+>>>>>>> same time.
+>>>>>>>
+>>>>>>> I'm not really sure if this is a good idea.
+>>>>>>
+>>>>>> Runtime table is only for driving the task placement in the EAS.
+>>>>>>
+>>>>>> The thermal gov IPA won't make better decisions because it already
+>>>>>> has the mechanism to accumulate the error that it made.
+>>>>>>
+>>>>>> The same applies to DTPM, which works in a more 'configurable' way,
+>>>>>> rather that hard optimization mechanism (like EAS).
+>>>>>
+>>>>> My understanding of the above is that the other EM users don't really
+>>>>> care that much so they can get away with using the default table all
+>>>>> the time, but EAS needs more accuracy, so the table used by it needs
+>>>>> to be adjusted in certain situations.
+>>>>
+>>>> Yes
+>>>>
+>>>>>
+>>>>> Fair enough, I'm assuming that you've done some research around it.
+>>>>> Still, this is rather confusing.
+>>>>
+>>>> Yes, I have presented those ~2y ago in Android Gerrit world
+>>>> (got feedback from a few vendors) and in a few Linux conferences.
+>>>>
+>>>> For now we don't plan to have this feature for the thermal
+>>>> governor or something similar.
+>>>>
+>>>
+>>> I have discussed with one of our partners your comment about 2 tables.
+>>> They would like to have this runtime modified EM in other places
+>>> as well: DTPM and thermal governor. So you had good gut feeling.
+>>>
+>>> In the past in our IPA (thermal gov ~2016 and kernel v4.14) we
+>>> had two callbacks:
+>>> - get_static_power() [1]
+>>> - get_dynamic_power() [2]
+>>>
+>>> Later ~2017/2018 v4.16 the static power mechanism was removed
+>>> completely by this commit 84fe2cab48590e4373978e4e.
+>>> The way how it was design, implemented and used justified that
+>>> decision. We later used EM in the cpu cooling which also only
+>>> had dynamic power information.
+>>>
+>>> The PID mechanism in IPA tries to compensate that
+>>> missing information (about changed static power in time or a chip
+>>> binning) and adjusts the 'error'. How good and fast that is in all
+>>> situations - it's a different story (out of this scope).
+>>> So, IPA should not be worse with the runtime table.
+>>>
+>>> The static power was on the chips and probably will be still.
+>>> You might remember my slide 13 from OSPM2024 showing two power
+>>> usage plots for the same Big CPU and 1.4GHz fixed (50% of fmax):
+>>> - w/ GPU working in the background using 1-1.5W
+>>> - w/o GPU in the background
+>>>
+>>> The same workload run on Big, but power bigger is ~15% higher
+>>> after ~1min.
+>>>
+>>> The static power (leakage) is the issue that this patch tries
+>>> to address for EAS. Although, there is not only the leakage.
+>>> It's about the whole 'profile', which can be different than what
+>>> could be built during boot default information.
+>>>
+>>> So we would want to go for one single table in EM, which
+>>> is runtime modifiable.
+>>>
+>>> That is something that you might be more confident and we would
+>>> have less diversity (2 tables) in the kernel.
+>>>
+>>> Regards,
+>>> Lukasz
+>>>
+>>>
+>>
+>> Indeed, we had a conversation about this with Lukasz recently. The key
+>> idea is that there is no compelling reason to introduce diversity in
+>> the mathematics involved. If we have confidence in the superior
+>> accuracy of our model, it should be universally implemented. While the
+>> governors are designed with some error tolerance, they can benefit
+>> from enhanced accuracy in their operation.
 > 
-> On 10/12/23 11:26, Daniel Lezcano wrote:
->> The thermal private header has leaked all around the drivers which
->> interacted with the core internals. The thermal zone structure which
->> was part of the exported header led also to a leakage of the fields
->> into the different drivers, making very difficult to improve the core
->> code without having to change the drivers.
->>
->> Now we mostly fixed how the thermal drivers were interacting with the
->> thermal zones (actually fixed how they should not interact). The
->> thermal zone structure will be moved to the private thermal core
->> header. This header has been removed from the different drivers and
->> must belong to the core code only. In order to prevent this private
->> header to be included again in the drivers, make explicit only the
->> core code can include this header by defining a THERMAL_CORE_SUBSYS
->> macro. The private header will contain a check against this macro.
->>
->> The Tegra SoCtherm driver needs to access thermal_core.h to have the
->> get_thermal_instance() function definition. It is the only one
->> remaining driver which need to access the thermal_core.h header, so
->> the check will emit a warning at compilation time.
->>
->> Thierry Reding is reworking the driver to get rid of this function [1]
->> and thus when the changes will be merged, the compilation warning will
->> be converted to a compilation error, closing definitively the door to
->> the drivers willing to play with the thermal zone device internals.
+> I agree, thanks!
 > 
-> That looks like a good idea. Although, shouldn't we avoid the
-> compilation warnings and just first merge the fixes for drivers?
 
-Yes, we should but there is the series for nvidia (pointed in the 
-changelog) which need a slight refresh for the bindings AFAIR. That 
-series is since March 2023 and Thierry seems busy [1]. I'm holding the 
-hardening since then.
-
-So I don't know how to make progress on this? I was assuming we can 
-merge this series and let the compiler recall what has to be fixed.
-
-[1] https://lore.kernel.org/all/ZK14edZUih1kH_sZ@orome/
-
-and as soon as it is fixed, we convert the WARNING to ERROR :P
-
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Thank you Wei and Rafael. I'm working on that implementation and
+will be in v5 soon.
