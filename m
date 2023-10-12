@@ -2,97 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8613F7C7253
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 18:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E6A7C7259
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 18:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379497AbjJLQUD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Oct 2023 12:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36986 "EHLO
+        id S1379513AbjJLQVX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 12 Oct 2023 12:21:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379465AbjJLQUD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 12:20:03 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E851CC
-        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 09:20:01 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-53d9f001b35so2017096a12.2
-        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 09:20:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697127599; x=1697732399; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wNdRrL2lHxhThNPZvRkFJ+lJM4hbLTuDXZgSRjthoBY=;
-        b=B2OHq24zxx8Olto6B2dwKCCzRdpmaN5nNb/IEk3tLgr2Txrue1/hW6YF2NCxcJ/Bgj
-         luMVGKXFrcai6fsEAte+146gG0XMJi7OeslXmULS2ZG07mODWE1VtLfGvjWK2om4LOzr
-         ZRXO6rhxMdgNqOSxlqUmKce7cW2oMo/jEs+dSLKOqQpu9LDCs8l6zEslV7e2BXDRH/qL
-         UuydfZI10G3kE/w9z6lBfi8AJMgzeUCGyj27QM2GovSrwxwQZyPixIxZ5AHGXEsNBMtJ
-         YnFqogxGJoUggxqBkoJ8OhpmZg2h8ZW4Bjl67HmmLGL/m3b2FlpHQnEkdzhwTZfavCOn
-         bwHQ==
+        with ESMTP id S1347319AbjJLQVV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 12:21:21 -0400
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3661D8;
+        Thu, 12 Oct 2023 09:21:19 -0700 (PDT)
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-57ddba5ba84so124139eaf.0;
+        Thu, 12 Oct 2023 09:21:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697127599; x=1697732399;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wNdRrL2lHxhThNPZvRkFJ+lJM4hbLTuDXZgSRjthoBY=;
-        b=hK9exArz7Cl4IUH+ig/gNLlsBB0orc5oRg+IFZsmwiLzV0pFHyQtlgJDGRNUzmAM3w
-         u+Ph+JU0KR743mQaue5WGqXSbWtjVxrgslUnmMFgNdN89PSL6ghttee3ZYoHSoeJnwje
-         zM4Th3IIJWAvK3c7Oq0MfuoQhavHRUlZ4Olan/Oacgc2xLJERMCQoH+cNS1DJOj1qpMv
-         hF7GZRSfVG/M+EU7CVEB+wIRExQ9XRC6q3WMeWyNH9ewaAJ+RQw8atzh07RW/0v0NdQc
-         sy7jvdEJdtwSdHPiNbWcdyFfs6OdB2Ioyd7G/x7jcXNerIgl7zKx0ncKvz+MeQMB2IU4
-         r1QA==
-X-Gm-Message-State: AOJu0YwZ41YQ+oMrJsDIJsM8m9zEkuaOwnBSTZoFrDx7wwhu4L0jI9BO
-        vvaRHKjPbRquOxdkd9uRjlB7jg==
-X-Google-Smtp-Source: AGHT+IEfXg5su3hHbXAWyooXL7T1iT+D3jNRN7LrMIHRp8JCYhHv8XeV+kJhWtbwYXUcGRPcklBIbw==
-X-Received: by 2002:a05:6402:25ca:b0:53d:be55:602 with SMTP id x10-20020a05640225ca00b0053dbe550602mr5583110edb.3.1697127599660;
-        Thu, 12 Oct 2023 09:19:59 -0700 (PDT)
-Received: from [172.30.204.175] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
-        by smtp.gmail.com with ESMTPSA id o18-20020aa7d3d2000000b0053420e55616sm10457118edr.75.2023.10.12.09.19.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Oct 2023 09:19:59 -0700 (PDT)
-Message-ID: <30f2aba3-7ce3-4d1a-9ca0-08391cd57c73@linaro.org>
-Date:   Thu, 12 Oct 2023 18:19:56 +0200
+        d=1e100.net; s=20230601; t=1697127679; x=1697732479;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fghx/3ez5n58sg38991FNjnRDD8UbfxWtztsAcswAE8=;
+        b=cZOwT7QKDoD5LPE6pZwbu9oHivlESZotA1GUIOH9rKijipk5a0fTEYrr62Nxmwc5hY
+         ElEHqL6YzRXo++MWDYYHnUCLzJQ4YrfQ7viDAzRFQjCHKZW/xAMTs2HbAsfzafdahsch
+         T9tfsW9LcXXaLThtgxlsv+mXJWVrv/vkNd7t6jLuw/fFL/0/LANC+d5bVzOQdkPEoUcz
+         sDPN4OPcUCJFRvLk1/zwfj2ajrB+tHAi9fMiUIhIXfFc9tVilpHWhkbcW4W9exQK0AVu
+         2guPZFmkp1EADTZExurtdGtmbkdQCb1PaOev3AdIVshmAXtwcHDgV+jra9I9lYMaGEn5
+         fZPg==
+X-Gm-Message-State: AOJu0YxGpkMgr+9CwDiQP+TQEm0DeYXas0kzfO/y4WODoXPQLoXagVYr
+        STU+8PJI1lE1uZA3QOwmb/cF/oDf16xBB9TzT+z3g51JVI0=
+X-Google-Smtp-Source: AGHT+IEtwVncZ1lNS/4QhQySCQtVDBTBTrHBnDC97w1kkgBQ2mlqnkLCMS+6fCDQkcNyuKd4fdP9SgKcafwgPr03XH0=
+X-Received: by 2002:a4a:b588:0:b0:578:c2af:45b5 with SMTP id
+ t8-20020a4ab588000000b00578c2af45b5mr22923283ooo.0.1697127679100; Thu, 12 Oct
+ 2023 09:21:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/5] PM: domains: Drop pm_genpd_opp_to_performance_state()
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20231012152108.101270-1-ulf.hansson@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20231012152108.101270-1-ulf.hansson@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+References: <13365827.uLZWGnKmhe@kreacher> <3256881.aeNJFYEL58@kreacher> <d2d6fae5-ace7-4b94-9354-a01cd6a7e343@linaro.org>
+In-Reply-To: <d2d6fae5-ace7-4b94-9354-a01cd6a7e343@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 12 Oct 2023 18:21:08 +0200
+Message-ID: <CAJZ5v0iBD-z6-ncM4jG_eDp+TNBLpPXSrhyrSC+UCt--wmf_8Q@mail.gmail.com>
+Subject: Re: [PATCH v1 1/6] thermal: trip: Simplify computing trip indices
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, Oct 12, 2023 at 4:27 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 06/10/2023 19:40, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > A trip index can be computed right away as a difference between the
+> > value of a trip pointer pointing to the given trip object and the
+> > start of the trips[] table in the thermal zone containing the trip, so
+> > change thermal_zone_trip_id() accordingly.
+> >
+> > No intentional functional impact (except for some speedup).
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >   drivers/thermal/thermal_trip.c |   13 +++++--------
+> >   1 file changed, 5 insertions(+), 8 deletions(-)
+> >
+> > Index: linux-pm/drivers/thermal/thermal_trip.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/thermal/thermal_trip.c
+> > +++ linux-pm/drivers/thermal/thermal_trip.c
+> > @@ -175,14 +175,11 @@ int thermal_zone_set_trip(struct thermal
+> >   int thermal_zone_trip_id(struct thermal_zone_device *tz,
+> >                        const struct thermal_trip *trip)
+> >   {
+> > -     int i;
+> > -
+> >       lockdep_assert_held(&tz->lock);
+> >
+> > -     for (i = 0; i < tz->num_trips; i++) {
+> > -             if (&tz->trips[i] == trip)
+> > -                     return i;
+> > -     }
+> > -
+> > -     return -ENODATA;
+> > +     /*
+> > +      * Assume the trip to be located within the bounds of the thermal
+> > +      * zone's trips[] table.
+> > +      */
+> > +     return trip - tz->trips;
+>
+> Shouldn't be divided by sizeof(*trip) ?
 
-
-On 10/12/23 17:21, Ulf Hansson wrote:
-> Since commit 7c41cdcd3bbe ("OPP: Simplify the over-designed pstate <-> level
-> dance"), there is no longer any users of the
-> pm_genpd_opp_to_performance_state() API, while a few genpd providers are still
-> assigning the redundant ->opp_to_performance_state() callback.
-> 
-> Let's clean this up so we can drop pm_genpd_opp_to_performance_state() and the
-> callback too.
-> 
-> Rafael, I would like to take this through my pmdomain tree, unless you see a
-> problem with it ofcourse, hence I need your ack on the last patch in the series.
-> 
-> Kind regards
-> Uffe
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
+No, it's in sizeof(*trip) units already.
