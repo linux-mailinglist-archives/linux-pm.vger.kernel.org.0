@@ -2,129 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 540497C703F
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 16:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6421F7C7050
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 16:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235737AbjJLO1w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Oct 2023 10:27:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47412 "EHLO
+        id S1347196AbjJLOaY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Oct 2023 10:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233710AbjJLO1v (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 10:27:51 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC04BE
-        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 07:27:49 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-31f71b25a99so981185f8f.2
-        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 07:27:49 -0700 (PDT)
+        with ESMTP id S1347299AbjJLOaV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 10:30:21 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9986DE;
+        Thu, 12 Oct 2023 07:30:16 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-53e2dc8fa02so208134a12.2;
+        Thu, 12 Oct 2023 07:30:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697120868; x=1697725668; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Z35x2KMCJCXsBIbmy9n6f3au11P/WJPEJir5cY6NYBA=;
-        b=cpEcuOqtZeBLV93szk1EtBzLksMPNyNvY1ONY2CJISb+/iYT++Uu3Vp2JwzXpqLTxq
-         BiuvAoogMVaofvPfvgdelErAt0LX2LSxKAarHJcUeOVkARPOrSBjSozPON3YqvNw1VyH
-         NyS39Kq8Usu+ub3nriwTX6LnK4+B8ZhJA6GDRRkxibPUpqG6qycYrg/4R6liC8fae/QW
-         4mC8JDEewYMZmG2hKX8XeaDEyfKNdOWnZ7wYWoeaVPk8MfHUEBywh1V1HHbSBrDaX1wZ
-         4do8+S9ioLEMs2e+3Ls0s5EHs9qn6XH96LgS1BFGbSYyAQGWVgMDN6CnpBTx3qIQKey+
-         IoRQ==
+        d=gmail.com; s=20230601; t=1697121015; x=1697725815; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zp4wVCfS4MuzC+8sZiTH1CMTD77leYtWSl6pm5bOwTo=;
+        b=j7ZQ3wNGC9zNq9Z30DonZ87Dn8Yny6tEbGXkqXh5zD7f1mPWANl/CJHa+aaxVdmKKj
+         eV9eUxnoI4hfFD8jEpw2vcRCYyz7IrpdXDhgSJfklMk44UPKEnSzq9YfVAIX+m4vnDwH
+         J/SNcIvNIV7tcXvRoExSU0/FPGZfJ8KuCey8PQmy0BgxoSkvd5rV77UxgOX+f2NRRWc1
+         Sxl77xOWqNiQw7b11hVk7JMCSPeWYRfdkaGD06yscMx2vvhXSFeUaNZ/hrry/3pe2dPW
+         p2sY05liSErXPb7fIrEWbhSXC6FE8WyzbyyAjwz9iqsl+tWGoHieBf1Esf9l8y3mKZKu
+         bvVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697120868; x=1697725668;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z35x2KMCJCXsBIbmy9n6f3au11P/WJPEJir5cY6NYBA=;
-        b=CfJizRwD/fXaOuDUDHupB+pOXO+agHGuCajP+GnWuv274zhX2XbqPMSYxV9h7eJBDQ
-         hCHycx/jcHbqDxRYPRTLJKTTfwxqZQmsoIS6KlUT5+cCoxen1ign4nArZ8eS51cao4dm
-         WxN3ChHC5lFu4EJxFaB9cGRrlGMDhIMRF6A86wZXvbcXPtDx2OLiAn3vHPwOc2wv/ZZE
-         3mrsa6UTpVINf/zk/dJLK29u1yPWyTdg1xvAIUsFuTfHxRQqLVoAzRyIv1H7dG+QgpmM
-         Qg7PCMCxio5CGrh0+jVLe0J+qqotSLP0Dk6jxbnKnLUVaTS4kUnacu+dOe9WhdXR3uPZ
-         rn1Q==
-X-Gm-Message-State: AOJu0Yy5Lt+3f8q4IR+ZqSiCjmm5LQi1tWHIWHcBmc/vSjMuhxYToUFh
-        8hU0DiivMIGBpqq8fCiQ7oz3Bc/dV1CkmlGQDM4=
-X-Google-Smtp-Source: AGHT+IFD4a3WZd0zpYx192NfjOK9B5wAOPso8bC8/zQTNhtWjwd2SDA5n8vga56vCN0MrttiyJtvVg==
-X-Received: by 2002:a5d:654e:0:b0:31d:db92:31ae with SMTP id z14-20020a5d654e000000b0031ddb9231aemr22318455wrv.44.1697120867810;
-        Thu, 12 Oct 2023 07:27:47 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
-        by smtp.googlemail.com with ESMTPSA id j13-20020adfe50d000000b003196b1bb528sm18458016wrm.64.2023.10.12.07.27.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Oct 2023 07:27:47 -0700 (PDT)
-Message-ID: <d2d6fae5-ace7-4b94-9354-a01cd6a7e343@linaro.org>
-Date:   Thu, 12 Oct 2023 16:27:46 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/6] thermal: trip: Simplify computing trip indices
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        d=1e100.net; s=20230601; t=1697121015; x=1697725815;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zp4wVCfS4MuzC+8sZiTH1CMTD77leYtWSl6pm5bOwTo=;
+        b=aqXl8TG812H3ZWoSNFdEMoK1VXtuzFmk36JmI+bf2/lttZ9o98tjhcNAcn1h+v/zVq
+         KZfhISxiJMXKyyUqh9jmixVRpgS/iSzzq7FBBPtEG5K70YW8+pw+z7Ohv9ecib9yhQkG
+         LYsMn0BsoSdljmpru2heADjMyf+oPDMS6+jhDtbm9/Z48ngKcY+3WI+WiZdXk7zLJLsL
+         DeI7sMeqbeYjQeqTH5xLj5yY0q8GDLBRUs0CUNDbt9dmnn4M1sHC4ZqHtUw2pksUNwJV
+         7IsvcpZ6KCoFa8sitqtS+okO7xhvdfSWJTOcXsXycQ9S2ZSHKfP7fp5z4NdtdAAKmTdC
+         DlEQ==
+X-Gm-Message-State: AOJu0YyBBN6qNyIHsecmWJancMQY0Hgb7DS9XUyP69s02wwxuX1d7JH6
+        Wf77qb1TF0MGQjagIgR1t8Bm0bq1tE4=
+X-Google-Smtp-Source: AGHT+IHLzI8ne8OuqeIuLuJv4sq6vNdVpgCeX5faLw3CVHMUIUANnnos38xMW3g5gCPk+okf6wXx9Q==
+X-Received: by 2002:aa7:c154:0:b0:522:b112:6254 with SMTP id r20-20020aa7c154000000b00522b1126254mr21621650edp.4.1697121015055;
+        Thu, 12 Oct 2023 07:30:15 -0700 (PDT)
+Received: from orome.fritz.box (p200300e41f3f4900f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f3f:4900:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id cy7-20020a0564021c8700b0053de19620b9sm1911874edb.2.2023.10.12.07.30.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Oct 2023 07:30:14 -0700 (PDT)
+Date:   Thu, 12 Oct 2023 16:30:12 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>, rafael@kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>
-References: <13365827.uLZWGnKmhe@kreacher> <3256881.aeNJFYEL58@kreacher>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <3256881.aeNJFYEL58@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] thermal/core: Hardening the self-encapsulation
+Message-ID: <ZSgC9DxVXC-bHleo@orome.fritz.box>
+References: <20231012102700.2858952-1-daniel.lezcano@linaro.org>
+ <a6b51de7-4f56-4db9-a7dd-60555ac6c37f@arm.com>
+ <d9f3bd7b-a5db-4d37-bb1f-f97e40c8a63a@linaro.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="cSV4NKVWE6plEgmG"
+Content-Disposition: inline
+In-Reply-To: <d9f3bd7b-a5db-4d37-bb1f-f97e40c8a63a@linaro.org>
+User-Agent: Mutt/2.2.12 (2023-09-09)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/10/2023 19:40, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> A trip index can be computed right away as a difference between the
-> value of a trip pointer pointing to the given trip object and the
-> start of the trips[] table in the thermal zone containing the trip, so
-> change thermal_zone_trip_id() accordingly.
-> 
-> No intentional functional impact (except for some speedup).
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->   drivers/thermal/thermal_trip.c |   13 +++++--------
->   1 file changed, 5 insertions(+), 8 deletions(-)
-> 
-> Index: linux-pm/drivers/thermal/thermal_trip.c
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_trip.c
-> +++ linux-pm/drivers/thermal/thermal_trip.c
-> @@ -175,14 +175,11 @@ int thermal_zone_set_trip(struct thermal
->   int thermal_zone_trip_id(struct thermal_zone_device *tz,
->   			 const struct thermal_trip *trip)
->   {
-> -	int i;
-> -
->   	lockdep_assert_held(&tz->lock);
->   
-> -	for (i = 0; i < tz->num_trips; i++) {
-> -		if (&tz->trips[i] == trip)
-> -			return i;
-> -	}
-> -
-> -	return -ENODATA;
-> +	/*
-> +	 * Assume the trip to be located within the bounds of the thermal
-> +	 * zone's trips[] table.
-> +	 */
-> +	return trip - tz->trips;
 
-Shouldn't be divided by sizeof(*trip) ?
+--cSV4NKVWE6plEgmG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->   }
-> 
-> 
-> 
+On Thu, Oct 12, 2023 at 03:14:23PM +0200, Daniel Lezcano wrote:
+>=20
+> Hi Lukasz,
+>=20
+> On 12/10/2023 14:01, Lukasz Luba wrote:
+> > Hi Daniel,
+> >=20
+> > On 10/12/23 11:26, Daniel Lezcano wrote:
+> > > The thermal private header has leaked all around the drivers which
+> > > interacted with the core internals. The thermal zone structure which
+> > > was part of the exported header led also to a leakage of the fields
+> > > into the different drivers, making very difficult to improve the core
+> > > code without having to change the drivers.
+> > >=20
+> > > Now we mostly fixed how the thermal drivers were interacting with the
+> > > thermal zones (actually fixed how they should not interact). The
+> > > thermal zone structure will be moved to the private thermal core
+> > > header. This header has been removed from the different drivers and
+> > > must belong to the core code only. In order to prevent this private
+> > > header to be included again in the drivers, make explicit only the
+> > > core code can include this header by defining a THERMAL_CORE_SUBSYS
+> > > macro. The private header will contain a check against this macro.
+> > >=20
+> > > The Tegra SoCtherm driver needs to access thermal_core.h to have the
+> > > get_thermal_instance() function definition. It is the only one
+> > > remaining driver which need to access the thermal_core.h header, so
+> > > the check will emit a warning at compilation time.
+> > >=20
+> > > Thierry Reding is reworking the driver to get rid of this function [1]
+> > > and thus when the changes will be merged, the compilation warning will
+> > > be converted to a compilation error, closing definitively the door to
+> > > the drivers willing to play with the thermal zone device internals.
+> >=20
+> > That looks like a good idea. Although, shouldn't we avoid the
+> > compilation warnings and just first merge the fixes for drivers?
+>=20
+> Yes, we should but there is the series for nvidia (pointed in the changel=
+og)
+> which need a slight refresh for the bindings AFAIR. That series is since
+> March 2023 and Thierry seems busy [1]. I'm holding the hardening since th=
+en.
+>=20
+> So I don't know how to make progress on this? I was assuming we can merge
+> this series and let the compiler recall what has to be fixed.
+>=20
+> [1] https://lore.kernel.org/all/ZK14edZUih1kH_sZ@orome/
+>=20
+> and as soon as it is fixed, we convert the WARNING to ERROR :P
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Yeah, sorry about that. This has been plagued by bad luck. Since then
+the device that I need to test this on broke and it then took a while to
+get a new one. I still need to find time to set this up and do some more
+extensive testing to make sure I haven't regressed anything.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Thierry
 
+--cSV4NKVWE6plEgmG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmUoAvIACgkQ3SOs138+
+s6FWNw/9Fbxna4WnbhzeH/lRKiMZOxQ2Qw7RCAatQfzWLSzU0+A1G1VxwDmlTyj8
+toZiJy/NkAfRGrR7Avbc6nmdnx20x4syCu9zjWcbnJcwQh+mmo3Vqg4hEW1OkbSC
+GnkXEckyRIPYbOScbEElOyoxFredVScWdyddHGka+9C1H1tXE7BR+P/I2zJZP/M9
+zAgo1/bvC3QHTgY3TK9yQRsZ5X10t4N14n4Q3h+RzrAQQl6Zsc5BBUh8OHt3+XTI
+hIeubvBJS7dXehCA0llu9iLIqCDMBv6z/tVbjdPQZJNsshPYqpwCYEm6t3k/pnxj
+EFGCWN/taqKHJi4Q36jjOFkCwoCXnKzhS1ViRcXkcZaC13n6ljiZM1/RzS3/wW2t
+CP6/7IG3dWB6euXSY8LGGxHxYN17epdICpIXmH1i6Ua1vfcjY2ynISDb2Ao+4Bvq
+89T7F9lGth9MneWGiDUm4n9OhEH5+q00u9sfus/MDWGLPzTqGiHKxcmjQQP0VDui
+nimpP/LnPXvD3Z4CUYHZpYkE0nnIHYF4utUfeuM5lCsRp8cHtHcVpB8KN8VZR+Fl
+LzUb1K6585hC28Vm87+EDI4HAZ9PpbxoJGGUsZZdBO2mzE30maU02l9UWEabEWeT
+4CfdVdBuWY2mw63GiHB/tOaFvz5D5EV9lhTxib8cO46f90lEd9k=
+=k0xl
+-----END PGP SIGNATURE-----
+
+--cSV4NKVWE6plEgmG--
