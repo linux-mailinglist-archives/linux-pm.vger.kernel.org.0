@@ -2,147 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A31737C735D
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 18:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4169B7C739D
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 19:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379559AbjJLQpd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Oct 2023 12:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35482 "EHLO
+        id S1379320AbjJLRDn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 12 Oct 2023 13:03:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379509AbjJLQpc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 12:45:32 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DC5CA
-        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 09:45:30 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9b1ebc80d0aso184100266b.0
-        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 09:45:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697129129; x=1697733929; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kRh+Vupx0XypJiTrUDbDPsKcsjU0eEhEwWX6GsRTbtw=;
-        b=M3WGMV8HoyeP3/jPDaNPDSuBqQsHKWODClmLyKtJx5di7YL2ABsiR3lArZpDnoumXB
-         8bFjAN3ypyaQqT81WUikEEqAnU98o/GReLZq3ZlWj2c9Q9Q3MC2EdTsdi45HU4B+KL9A
-         5TViomjOKTzo+8cszm5QM1cIqu/U67wiXDwLuXxnajEWKY3dcO4nc+5KwEIDyvAp5847
-         uINnPS8vjP/c9O+a2Em+7OVO6mOhnafH9oC7YOY264/3xg/tBtentb1fTonuEXjR9ThP
-         l4cwoSgJB6+9CdCHbHAkgNiqdmpSxWzYLQgcNtG2YTVoowrJLrQRX6tCPlaNFGVoiRWo
-         8+9g==
+        with ESMTP id S1378915AbjJLRDm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 13:03:42 -0400
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00399C0;
+        Thu, 12 Oct 2023 10:03:40 -0700 (PDT)
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6bc57401cb9so256583a34.0;
+        Thu, 12 Oct 2023 10:03:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697129129; x=1697733929;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kRh+Vupx0XypJiTrUDbDPsKcsjU0eEhEwWX6GsRTbtw=;
-        b=MbM5TYeTGcR3P/3Ih/DnutIOJSxzM215VvTKERSdHrOKYDn7N7VYEev9b56qJXpB97
-         xBlWFS9IUEXUsTG2S2Ix5yDawkr0ogdsIeg0GQO22pLKIdsk3VoXGDwCuBe/I/wfnIoo
-         b0LlN0mtaa2PjGBhCvzzf2WibjDVdlRbcL/4DERYEKev9agZxUa/4owYEG/ePX/yoqbz
-         y7JfCdvOx6EE56E6iBJXs6e/4lDYenKpijYtONrpMCL1KEhutA1S8ay9f8+3fd6OQu42
-         nEzLTxFdoEBrV9DNvZ6jEvDLJ6NabgqXqzZeHQD9i3em9bQzBIsUhOpmEIf0OcH0d7mh
-         RSYw==
-X-Gm-Message-State: AOJu0YxNvtuK1hDiH50zH+QIT0SOdTaG0ZKl95kTEW0iZQqKi9nG9ZNA
-        8Qv3EXnoJEBhTGRm/OJCFB/Cig==
-X-Google-Smtp-Source: AGHT+IEXqEp3kFB6IUpjF8BAzbvasyJj3DSZYDjbuCP/F0tb8JGBX/QQLV+mGV4P8Tus5qj+oyhvlg==
-X-Received: by 2002:a17:906:24e:b0:9a1:e293:9882 with SMTP id 14-20020a170906024e00b009a1e2939882mr21330362ejl.63.1697129129266;
-        Thu, 12 Oct 2023 09:45:29 -0700 (PDT)
-Received: from [172.30.204.175] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
-        by smtp.gmail.com with ESMTPSA id g7-20020a1709067c4700b0099bd1a78ef5sm11250236ejp.74.2023.10.12.09.45.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Oct 2023 09:45:28 -0700 (PDT)
-Message-ID: <fef38d0e-f24b-41ce-9d28-82cd637ce342@linaro.org>
-Date:   Thu, 12 Oct 2023 18:45:08 +0200
+        d=1e100.net; s=20230601; t=1697130220; x=1697735020;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WQ+0aHw6sQMmsRhISm2t/oJY7lh7N5E9AbFnFFga21k=;
+        b=JvV+IFeMmEvHin7JS3QYivIRwrYZIiZyCrPHWe/1Fh5j3xmRF5FFCKeM5dgTuHXnp0
+         q6ZGC7kAlU9jIifPM0P5DCN5qyoTroJzy5oN6jDW9j9Ga5s0XsT1hk0y6eWHzxk5PtOR
+         TkUUyF0Cl3nlW541Mmv/md/xbuqKtFfBNTyiedpwYZGkrVYXHOLX1izozaHN5LiqES/s
+         ELfNdeHIBsX2QapkzTVaGUWjUlxAU19MggRJj0pY3W88AYUwuLOjPat7jA2/WIr0kSjb
+         3xAFhIOfeLs6fQUhHTO6TPNE2TC1c72Gyudoy2FXu8oMzVcCavpwM89WjnwZfbgT8gNg
+         FqjQ==
+X-Gm-Message-State: AOJu0YzbSAh1jjhqmyEtkz42xJ/2Gd88+L7BjeHdl1MltVMa5wnfW85W
+        1VXEY3f/RYGnyAGrx9wfDGYYmiepd88mGBvzf8U=
+X-Google-Smtp-Source: AGHT+IGBZDKyJD0i4Rb6WrCw/7nCmvRCRZiPDHCjEHSYH2ay0b2U53TEfTm6dOdP4vl4qt1PTdMgxQtx16k2IVf+oXk=
+X-Received: by 2002:a4a:df07:0:b0:57b:73f6:6f80 with SMTP id
+ i7-20020a4adf07000000b0057b73f66f80mr24752122oou.0.1697130220076; Thu, 12 Oct
+ 2023 10:03:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 4/4] ARM: dts: qcom: ipq8064: Add CPU OPP table
-Content-Language: en-US
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Robert Marko <robimarko@gmail.com>, ilia.lin@kernel.org,
-        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, agross@kernel.org, andersson@kernel.org,
-        rafael@kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20230930102218.229613-1-robimarko@gmail.com>
- <20230930102218.229613-4-robimarko@gmail.com>
- <e2d6c9c7-ff59-408f-94cf-81e66d291963@linaro.org>
- <6525ae86.050a0220.827f2.c59d@mx.google.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <6525ae86.050a0220.827f2.c59d@mx.google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+References: <20230916113327.85693-1-bo.ye@mediatek.com> <a3255da4-b2af-4403-af68-3067a5fd49bf@linaro.org>
+In-Reply-To: <a3255da4-b2af-4403-af68-3067a5fd49bf@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 12 Oct 2023 19:03:28 +0200
+Message-ID: <CAJZ5v0i0Yk+juOQthy2dh89L9RdOBRHcSk43KLEGMeJszTXBVQ@mail.gmail.com>
+Subject: Re: [PATCH] Subject: thermal: Fix potential race condition in suspend/resume
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Bo Ye <bo.ye@mediatek.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        yugang.wang@mediatek.com, yongdong.zhang@mediatek.com,
+        browse.zhang@mediatek.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, Oct 12, 2023 at 5:39 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 16/09/2023 13:33, Bo Ye wrote:
+> > From: "yugang.wang" <yugang.wang@mediatek.com>
+> >
+> > Body:
+> > This patch fixes a race condition during system resume. It occurs if
+> > the system is exiting a suspend state and a user is trying to
+> > register/unregister a thermal zone concurrently. The root cause is
+> > that both actions access the `thermal_tz_list`.
+>
+> I'm not sure the tasks are already thawed during POST_RESTORE, so no
+> user can unload a driver and then reaching the race window.
 
+Yes, they are.
 
-On 10/10/23 22:05, Christian Marangi wrote:
-> On Tue, Oct 10, 2023 at 09:55:26PM +0200, Konrad Dybcio wrote:
->>
->>
->> On 9/30/23 12:21, Robert Marko wrote:
->>> From: Christian Marangi <ansuelsmth@gmail.com>
->>>
->>> Add CPU OPP table for IPQ8062, IPQ8064 and IPQ8065 SoC.
->>> Use opp-supported-hw binding to correctly enable and disable the
->>> frequency as IPQ8062 supports up to 1.0Ghz, IPQ8064 supports up to
->>> 1.4GHz with 1.2GHz as an additional frequency and IPQ8065 supports
->>> 1.7GHZ but doesn't have 1.2GHZ frequency and has to be disabled.
->>>
->>> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
->>> Signed-off-by: Robert Marko <robimarko@gmail.com>
->>> ---
->>> Changes v4:
->>> * Add OPP DTS patch for IPQ8064
->>>
->>>    arch/arm/boot/dts/qcom/qcom-ipq8062.dtsi | 30 +++++++++++
->>>    arch/arm/boot/dts/qcom/qcom-ipq8064.dtsi | 67 ++++++++++++++++++++++++
->>>    arch/arm/boot/dts/qcom/qcom-ipq8065.dtsi | 65 +++++++++++++++++++++++
->>>    3 files changed, 162 insertions(+)
->>>
->>> diff --git a/arch/arm/boot/dts/qcom/qcom-ipq8062.dtsi b/arch/arm/boot/dts/qcom/qcom-ipq8062.dtsi
->>> index 5d3ebd3e2e51..72d9782c3d6f 100644
->>> --- a/arch/arm/boot/dts/qcom/qcom-ipq8062.dtsi
->>> +++ b/arch/arm/boot/dts/qcom/qcom-ipq8062.dtsi
->>> @@ -6,3 +6,33 @@ / {
->>>    	model = "Qualcomm Technologies, Inc. IPQ8062";
->>>    	compatible = "qcom,ipq8062", "qcom,ipq8064";
->>>    };
->>> +
->>> +&opp_table_cpu {
->>> +	opp-384000000 {
->>> +		opp-microvolt-speed0-pvs0 = <1000000 950000 1050000>;
->>> +		opp-microvolt-speed0-pvs1 = <925000 878750 971250>;
->>> +		opp-microvolt-speed0-pvs2 = <875000 831250 918750>;
->>> +		opp-microvolt-speed0-pvs3 = <800000 760000 840000>;
->> We can just make use of opp-supported-hw and define opp-384...-0,
->> opp-384..-1 etc. with a valid corresponding bitmask in opp-supported-hw
->>
->> otherwise it's somewhat confusing to follow, I think..
->>
-> 
-> Ehh should we really double the nodes for ipq8062 and ipq8065?
-Hm.. I'm not 100% sure, both solutions are kinda meh, but perhaps 
-overwriting it will be less of a hassle for looking at the decompiled dt 
-indeed..
+> Is that an observed issue?
 
-> The idea here was to overwrite the one since the pvs always match and at
-> worst(ipq8065) have 7 pvs instead of 4. From the system it would be
-> easier to read since only one table is present in the final dts and not
-> 2 and referring to the opp-supported-hw.
-> 
-> The original idea was to declare one opp table and reuse pvs version (by
-> faking it with hardcoded values) to put additional pvs for ipq8062 and
-> ipq8065, but Dmitry didn't like it and asked to move the opp in
-> different dtsi.
-Yeah this fusing thing is complex enough already
+Good question, but the patch looks correct to me.
 
-KOnrad
+> > In detail:
+> >
+> > 1. At PM_POST_SUSPEND during the resume, the system reads all thermal
+> >     zones in `thermal_tz_list`, then resets and updates their
+> >     temperatures.
+> > 2. When registering/unregistering a thermal zone, the
+> >     `thermal_tz_list` gets manipulated.
+> >
+> > These two actions might occur concurrently, causing a race condition.
+> > To solve this issue, we introduce a mutex lock to protect
+> > `thermal_tz_list` from being modified while it's being read and
+> > updated during the resume from suspend.
+> >
+> > Kernel oops excerpt related to this fix:
+> >
+> > [ 5201.869845] [T316822] pc: [0xffffffeb7d4876f0] mutex_lock+0x34/0x170
+> > [ 5201.869856] [T316822] lr: [0xffffffeb7ca98a84] thermal_pm_notify+0xd4/0x26c
+> > [... cut for brevity ...]
+> > [ 5201.871061] [T316822]  suspend_prepare+0x150/0x470
+> > [ 5201.871067] [T316822]  enter_state+0x84/0x6f4
+> > [ 5201.871076] [T316822]  state_store+0x15c/0x1e8
+> >
+> > Change-Id: Ifdbdecba17093f91eab7e36ce04b46d311ca6568
+> > Signed-off-by: yugang.wang <yugang.wang@mediatek.com>
+> > Signed-off-by: Bo Ye <bo.ye@mediatek.com>
+> > ---
+> >   drivers/thermal/thermal_core.c | 2 ++
+> >   1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> > index 8717a3343512..a7a18ed57b6d 100644
+> > --- a/drivers/thermal/thermal_core.c
+> > +++ b/drivers/thermal/thermal_core.c
+> > @@ -1529,12 +1529,14 @@ static int thermal_pm_notify(struct notifier_block *nb,
+> >       case PM_POST_HIBERNATION:
+> >       case PM_POST_RESTORE:
+> >       case PM_POST_SUSPEND:
+> > +             mutex_lock(&thermal_list_lock);
+> >               atomic_set(&in_suspend, 0);
+> >               list_for_each_entry(tz, &thermal_tz_list, node) {
+> >                       thermal_zone_device_init(tz);
+> >                       thermal_zone_device_update(tz,
+> >                                                  THERMAL_EVENT_UNSPECIFIED);
+> >               }
+> > +             mutex_unlock(&thermal_list_lock);
+> >               break;
+> >       default:
+> >               break;
+>
+> --
