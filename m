@@ -2,73 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 434177C7583
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 19:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7D17C75F1
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 20:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379671AbjJLR7J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Oct 2023 13:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
+        id S1442006AbjJLSfJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Oct 2023 14:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442086AbjJLR7B (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 13:59:01 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20CECDC;
-        Thu, 12 Oct 2023 10:59:00 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9a645e54806so195597566b.0;
-        Thu, 12 Oct 2023 10:59:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697133538; x=1697738338; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zs3+sAOJu0kBwxZ0dser/vItknBWGT6p32J9u+acJCk=;
-        b=iaZrBED548IW1oaqTyFiylNlS6rwaa4z3MIZSWBZTELGs75jurHxDiaMqPtYtFatkC
-         jKWtL0Z5mkePuA2Vgj9Zh6VbblaNBeriNGZ82HcLwlbHAe1Mn/xbmXu0KNFHh9IItMtW
-         m0OwQadbq88HgS4TS16Oi+UbYEbFdL/aGWfNQtvBvGtktLAbgFwNPrfukBVtGqf8QvXi
-         Om+YEvEJVJQsmXfbtBo00j/fnFRnPK/fXk3Xh7CbFqDxWtyuBYdT7BXJEnbJh9j3wogU
-         R6RDelqlnddhWTcoh3tuUuqT+C1feOjKueUzAeest1aExHbSF/nwh8oymVYie++Oryar
-         KScg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697133538; x=1697738338;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zs3+sAOJu0kBwxZ0dser/vItknBWGT6p32J9u+acJCk=;
-        b=bG/D3MhY8I9z0X0CjA30vzFavwCY5e3R5cI9wsAQ9S0jmOMfeMwuK6xXh4zLaBw44A
-         7U6/kjg8Hx1orBr9xme8Rq03+ya3uIIzxSZ+XD0DyE/ClQATlhYpHohnUVxnWypYRet7
-         3I9yz9ZX5kXB/an+w0h5jkr6vsb6mjHfB12WjB7ceycR1LckYJpsnmDS3EUIjnriKQ2m
-         ybLc2jaRTqgQf3plmFCebUW8lEUTDhDPSi8uyRtrCGboWzuFS2vNcHvJzN55D5UHWSMO
-         3XIvzeIUkullUvHWoKzE/NH6FzSxlkQ7BNh0wAYfKMx/VFwVpm8cpxLd8TF5qRH3srQs
-         lTKw==
-X-Gm-Message-State: AOJu0YxC0226hRWjqt1mjxVd86hLb8HwIvR9bwauTQ5iVDKptawE8Otz
-        PH/6g9U4se+NHuqW7ckXxCs=
-X-Google-Smtp-Source: AGHT+IF/YU8vd6JUNl+eP3lbnEbdb/071IgSnsQGblva12Ql0JpQaNX94lXgXn3I3hzmtY1egSQFgw==
-X-Received: by 2002:a17:907:774c:b0:9b2:7a4e:69fc with SMTP id kx12-20020a170907774c00b009b27a4e69fcmr22373760ejc.19.1697133538582;
-        Thu, 12 Oct 2023 10:58:58 -0700 (PDT)
-Received: from localhost (p200300e41f3f4900f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f3f:4900:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id cf7-20020a170906b2c700b009b296ce13a3sm11628560ejb.18.2023.10.12.10.58.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Oct 2023 10:58:58 -0700 (PDT)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        Jon Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v2 13/13] thermal: Enforce self-encapsulation
-Date:   Thu, 12 Oct 2023 19:58:36 +0200
-Message-ID: <20231012175836.3408077-16-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231012175836.3408077-1-thierry.reding@gmail.com>
-References: <20231012175836.3408077-1-thierry.reding@gmail.com>
+        with ESMTP id S1441952AbjJLSfI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 14:35:08 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B31CF;
+        Thu, 12 Oct 2023 11:35:06 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id 272b597e78663fd7; Thu, 12 Oct 2023 20:35:05 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by cloudserver094114.home.pl (Postfix) with ESMTPSA id 81206666870;
+        Thu, 12 Oct 2023 20:35:04 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Subject: [PATCH v2 0/6] thermal: core: Pass trip pointers to governor .throttle() callbacks
+Date:   Thu, 12 Oct 2023 20:23:43 +0200
+Message-ID: <5734364.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedriedtgdduudeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgu
+ rhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,30 +51,48 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+Hi All,
 
-With the last driver being fixed to not reach into the core anymore,
-make sure that no new drivers will be able to do so by generating a
-build error when they try to do so.
+This is a v2 of
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
- drivers/thermal/thermal_core.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+https://lore.kernel.org/linux-pm/13365827.uLZWGnKmhe@kreacher/
 
-diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-index 91d9d4f63609..9c599658b866 100644
---- a/drivers/thermal/thermal_core.h
-+++ b/drivers/thermal/thermal_core.h
-@@ -15,7 +15,7 @@
- #include "thermal_netlink.h"
- 
- #ifndef THERMAL_CORE_SUBSYS
--#warning This header can only be included by the thermal core code
-+#error This header can only be included by the thermal core code
- #endif
- 
- /* Default Thermal Governor */
--- 
-2.42.0
+which only slightly updates 2 patches and adds some tags, so the
+cover letter below is still applicable:
+
+While working on https://lore.kernel.org/linux-pm/4846448.GXAFRqVoOG@kreacher/
+I started to change thermal governors so as to reduce the usage of trip
+indices in them.  At that time, I was concerned that they could not be
+replaced with trip pointers overall, because they were needed in certain
+situations (tracing, debug messages, userspace governor) and computing them
+whenever they were needed would be extra overhead with relatively weak
+justification.  In the meantime, however, I realized that for a given trip
+pointer, it is actually trivial to compute the corresponding index: it is
+sufficient to subtract the start of the trips[] table in the thermal zone
+containing the trip from that trip pointer for this purpose.  Patch [1/6]
+modifies thermal_zone_trip_id() in accordance with this observation.
+
+Now that the cost of computing a trip index for a given trip pointer and
+thermal zone is not a concern any more, the governors can be generally
+switched over to using trip pointers for representing trips.  One of the
+things they need to do sometimes, though, is to iterate over trips in a
+given thermal zone (the core needs to do that too, of course) and
+for_each_thermal_trip() is somewhat inconvenient for this purpose, because
+it requires callback functions to be defined and in some cases new data
+types need to be introduced just in order to use it.  For this reason,
+patch [2/6] adds a macro for iterating over trip points in a given thermal
+zone with the help of a trip pointer and changes for_each_thermal_trip() to
+use that macro internally.
+
+Patches [3-5/6] change individual governors to prepare them for using trip
+pointers everywhere for representing trips, except for the trip argument of
+the .throttle() callback and patch [6/6] finally changes the .throttle()
+callback definition so that it takes a trip pointer as the argument
+representing the trip.
+
+Please refer to the individual patch changelogs for details.
+
+Thanks!
+
+
 
