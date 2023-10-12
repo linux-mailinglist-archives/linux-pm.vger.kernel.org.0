@@ -2,80 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE937C635C
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 05:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB09C7C635F
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 05:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344734AbjJLDms (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Oct 2023 23:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48850 "EHLO
+        id S234110AbjJLDo0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Oct 2023 23:44:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233652AbjJLDmq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Oct 2023 23:42:46 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4D1A9
-        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 20:42:45 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1c8a1541232so4945625ad.0
-        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 20:42:45 -0700 (PDT)
+        with ESMTP id S234050AbjJLDoZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Oct 2023 23:44:25 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB80EB6
+        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 20:44:23 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-1e10507a4d6so351251fac.1
+        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 20:44:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697082165; x=1697686965; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1697082263; x=1697687063; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7nADTi8p/TYCcFoqwy7wIdRGyUAvcVuWu1MGhn66nEA=;
-        b=Qe8o0U3g4ZajNWQpqJrfqnjeVRhtgFz6SqZYXAmyUP4UibufYVfyoIK9ilgZwlhD9C
-         /ivgEKBq/VazLMpAhhHa+Ev5i0JNpM1/nJzerAN/59/lOxEju7bP8k3J69RvO5g2yOfO
-         ads1hoMxg2yMiL8+qUCalIizd3iH5LhTrGdU4il+F9UcCcC0eRXgkbXGiBX6eaVOY27A
-         AI8iB2Bxb7XyTIjDgAvUaxVLw8eoFsmGD0YkT4cU7AZGQ4JMdL6ictFitGZIvpZbYzEE
-         6eClqQ7XggtjlsHVwGNIqLYLhBq95Dbh6Z2dff6XX4FmsEBu/rNEOdz5LNI7uTZT/4CU
-         4Asw==
+        bh=k0BxKHUdCNcLP6r7RcXc4pSH0oFUe83JsYgb7jzHk4Q=;
+        b=pRQQcFoKOyA3VFFk6Ath5NWduIB7hnct2SqbzSmhl9SC5eaxWmOODHYK8UdO0PbtEq
+         YYbvLeLH+B42oi12bSi2jVg0cDbxuxbZYZcABznPnEP9HZ8T8djU5wI8MgKeMsY0j5HC
+         Mql3PqZZ47EW5bRlP04UsofkTmJ2qOWR6Wudi/wfnss1K3P95xRdJqJn7ffHpcC3DP3K
+         h0uUgdbvyTTh3fMBB5BxFjAOYFb4wP+iBQWkRC4Pj8/CiE3TT8e+bUIWMznxBt4fB9mi
+         FqZ+UTrhaAUh3hL6pgWrkF/JeVINgTnagU8H2h4tp5MhpB4Wv89MfBKsk6eqtH3eH6WF
+         9nng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697082165; x=1697686965;
+        d=1e100.net; s=20230601; t=1697082263; x=1697687063;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7nADTi8p/TYCcFoqwy7wIdRGyUAvcVuWu1MGhn66nEA=;
-        b=tJc8KSP5B3Qwx4xgfVrYefUBiLEypUu0rBGsCHWN7ZtMnkLCsgPhmhaBf3+IPHdx+M
-         JW4/yA44y5sPcoTrzOe/7KNIT/sJ85mJ8YhiwYdg4QPPnTScd5ABmDJp3NhH0O2GhY9R
-         dXJolN/5TtzxEd9ECAr4JrjBzQ4Z3MMzI0kKOLa/RwSgo9U0RiAbXKbk3T1fi1+NhXAV
-         8H3PEvPb7bUhINeeoHKPr3stxf0bGpTjk+x5K8QRUcRPY3yjtA1sZYfQFSJBGq3sAemQ
-         TR8ky627H0YtkUBph0zDqJ5ymnUUIVBKU85MEHy+LGfgYpArYE7mRoU3zv/W59OgVIY4
-         wF+Q==
-X-Gm-Message-State: AOJu0YwhO1V4Nzr/2+s6BfgjKUoNnDE0kRByqovIf0gakscCl71dUUBB
-        GfnfWOnTgPgdi+XTiuC3SbXkIA==
-X-Google-Smtp-Source: AGHT+IH5vhqHicRELepcn9OOPQFFmVMWymakQt2rn9zy2Upu2MiP4JWmXB4wVeUfWQoNqfdb5giMlw==
-X-Received: by 2002:a17:903:810:b0:1c9:e257:f88 with SMTP id kr16-20020a170903081000b001c9e2570f88mr108445plb.10.1697082164766;
-        Wed, 11 Oct 2023 20:42:44 -0700 (PDT)
+        bh=k0BxKHUdCNcLP6r7RcXc4pSH0oFUe83JsYgb7jzHk4Q=;
+        b=mZgyYDUdmPi0H2cQBltFBb2yYFYeMpvqXuqo/om8yBKbrQM2fJkAIk4LqBPBD8Jmtk
+         A14bq2EQL5UMkbZrKxIxRVT9B8se+JKWbVmwm5i3x1hyd7LyTTCFC5EiKn5txBBc8HoL
+         8PAnQ6EY5uATyBLVLOPunmoMkRuZ1eOiKsrBkjw3dmv7CDnu1R0UG3kO5fR85ZNWR+2m
+         KC+AvJ7fg8c/tBlxFjG3z+PpAYTwR8DYiyT5ACXJ7It41GOKzSJqMbfnL4NlNeFEXteu
+         44fb5kjVJQ1DGmeZkWVcjcmmB9ijaZqXk61LyRUD3Z6816CZWCdXWVBsnKWG+b+loJXr
+         YgHg==
+X-Gm-Message-State: AOJu0Yy4GzRmX/LOJ/z1nr7Kg2rUVA3zgCXbNX3FWp/qJJW6p+ZTyeRm
+        oBCPONoEqroYvtT1tonZ4GsMig==
+X-Google-Smtp-Source: AGHT+IGxCfcSWd7e1MtC/Sqvo7w/H83R9ET23iTyAYY86GtouCR46ST5urax6XwXyPecQJJuPCt13A==
+X-Received: by 2002:a05:6870:b604:b0:1d7:1ad1:3f8c with SMTP id cm4-20020a056870b60400b001d71ad13f8cmr25675866oab.49.1697082262743;
+        Wed, 11 Oct 2023 20:44:22 -0700 (PDT)
 Received: from localhost ([122.172.80.14])
-        by smtp.gmail.com with ESMTPSA id p6-20020a170902e74600b001c9c5a1b477sm685950plf.169.2023.10.11.20.42.43
+        by smtp.gmail.com with ESMTPSA id o20-20020a639214000000b0059cc2f1b7basm645907pgd.11.2023.10.11.20.44.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Oct 2023 20:42:44 -0700 (PDT)
-Date:   Thu, 12 Oct 2023 09:12:41 +0530
+        Wed, 11 Oct 2023 20:44:22 -0700 (PDT)
+Date:   Thu, 12 Oct 2023 09:14:20 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
+To:     Florian Fainelli <florian.fainelli@broadcom.com>
+Cc:     linux-kernel@vger.kernel.org, mmayer@broadcom.com,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Stephan Gerhold <stephan@gerhold.net>
-Subject: Re: [PATCH v5 0/6] cpufreq: qcom-nvmem: support apq8064 cpufreq
- scaling
-Message-ID: <20231012034241.jwtsq22w2lwzfbvn@vireshk-i7>
-References: <20231002185940.1271800-1-dmitry.baryshkov@linaro.org>
- <20231010063235.rj2ehxugtjr5x2xr@vireshk-i7>
+        "open list:CPU FREQUENCY SCALING FRAMEWORK" 
+        <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v2] cpufreq: ARM_BRCMSTB_AVS_CPUFREQ cannot be used with
+ ARM_SCMI_CPUFREQ
+Message-ID: <20231012034420.ik34htzw2wkiwimp@vireshk-i7>
+References: <20231011164654.3671490-1-florian.fainelli@broadcom.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231010063235.rj2ehxugtjr5x2xr@vireshk-i7>
+In-Reply-To: <20231011164654.3671490-1-florian.fainelli@broadcom.com>
 X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
@@ -87,30 +74,41 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10-10-23, 12:02, Viresh Kumar wrote:
-> On 02-10-23, 21:59, Dmitry Baryshkov wrote:
-> > This is a split of APQ8064 cpufreq series, as requested by Viresh. This
-> > series includes only opp and cpufreq parts, with the DT and soc parts
-> > being split to a separate patchset.
-> > 
-> > Each core has independent power and frequency control. Additionally the
-> > L2 cache is scaled to follow the CPU frequencies (failure to do so
-> > results in strange semi-random crashes).
-> > 
-> > Core voltage is controlled through the SAW2 devices, one for each core.
-> > The L2 has two regulators, vdd-mem and vdd-dig.
-> > 
-> > Changes since v4:
-> > - Reordered variables in qcom_cpufreq_init() (Konrad)
-> > - Fixed of_platform_device_create() error check (Konrad)
-> > - Dropped unused ret variable in qcom_cpufreq_apq8064_name_version() (Konrad)
+On 11-10-23, 09:46, Florian Fainelli wrote:
+> The brcmstb-avs-cpufreq driver is considered a legacy driver and since
+> 2018, ARCH_BRCMSTB systems have been using scmi-cpufreq. As a matter of
+> fact, when SCMI is in use, brcmstb-avs-cpufreq is unusable since the
+> SCMI firmware takes over, this can result in various problems, including
+> external synchronous aborts.
 > 
-> Applied. Thanks.
+> Express those constraints such that the driver is not enabled by default
+> when SCMI CPU frequency scaling is in use.
+> 
+> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> ---
+> Changes in v2:
+> 
+> - address Viresh's feedback and reduce the depdendency to
+>   !ARM_SCMI_CPUFREQ
+> 
+>  drivers/cpufreq/Kconfig.arm | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+> index 123b4bbfcfee..207618043ee0 100644
+> --- a/drivers/cpufreq/Kconfig.arm
+> +++ b/drivers/cpufreq/Kconfig.arm
+> @@ -90,7 +90,7 @@ config ARM_VEXPRESS_SPC_CPUFREQ
+>  
+>  config ARM_BRCMSTB_AVS_CPUFREQ
+>  	tristate "Broadcom STB AVS CPUfreq driver"
+> -	depends on ARCH_BRCMSTB || COMPILE_TEST
+> +	depends on (ARCH_BRCMSTB && !ARM_SCMI_CPUFREQ) || COMPILE_TEST
+>  	default y
+>  	help
+>  	  Some Broadcom STB SoCs use a co-processor running proprietary firmware
 
-Since these are causing build issues, and it isn't entirely clear what's the
-right approach for now, I have dropped the changes from my branch to avoid any
-further issues. You don't need to resend these, lets finalize a solution and
-then I can apply them again.
+Applied. Thanks.
 
 -- 
 viresh
