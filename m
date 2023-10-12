@@ -2,182 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 649807C6635
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 09:19:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4219F7C6703
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 09:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232199AbjJLHJC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Oct 2023 03:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38194 "EHLO
+        id S1377770AbjJLH2c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Oct 2023 03:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231828AbjJLHJC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 03:09:02 -0400
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB4A9D;
-        Thu, 12 Oct 2023 00:09:00 -0700 (PDT)
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5045cb9c091so934615e87.3;
-        Thu, 12 Oct 2023 00:09:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697094539; x=1697699339;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        with ESMTP id S234125AbjJLH2b (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 03:28:31 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501CC9D;
+        Thu, 12 Oct 2023 00:28:27 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9b2cee40de8so125154466b.1;
+        Thu, 12 Oct 2023 00:28:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1697095706; x=1697700506; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TpSfoJwDtnAsoTPya6J4WKkXULjEB6HnzhqPzwoz4os=;
-        b=KhYpNwrSN9qG88SjqCplJa9WOav8/ZsRBEQ6s13uEWxWB5usom/87pBHRImc6YjXFf
-         yqhjt8HEd+xROBKBYmS/ddE8ndhKMuTYCPD274N+C6aLcpKcA0trbzHB0y0d9Gqx93Br
-         7BYbYrYZXJF9HnEi4VUZbz9HYUqnPArNT5bydSxcMt9qRRpff0OaoQjpnK3D8Rmu2z8L
-         IFiTpsylo/Xq76H05LM70iMQGSCvhHjaAIq/C2xS8UE1aONB00RCDKTrXUo9tCBFm4Ur
-         2MeYg/ROv1egJSNr/iJxV4TtYYbd9/4rzVv6xne1B91af3Z3uySk8PSIFQXzmN1AvEa9
-         dgSw==
-X-Gm-Message-State: AOJu0Ywuf27eVTara/etf+Ttf9L8PC+6qhRidLgIlf7LSGVM5Xdr93pW
-        TZk9R35cccFbRS27tjtL26o=
-X-Google-Smtp-Source: AGHT+IGkWgEz1bua7UOe8c93Xd+zUIbbCX+AXuqOrArTKHM5MbSYMr2Oc+70mEn2xzFeFATL4gjEIw==
-X-Received: by 2002:a05:6512:280d:b0:503:a9c:af83 with SMTP id cf13-20020a056512280d00b005030a9caf83mr23404209lfb.41.1697094538523;
-        Thu, 12 Oct 2023 00:08:58 -0700 (PDT)
-Received: from dc78bmyyyyyyyyyyyyydt-3.rev.dnainternet.fi (dc78bmyyyyyyyyyyyyydt-3.rev.dnainternet.fi. [2001:14ba:16f8:1500::7])
-        by smtp.gmail.com with ESMTPSA id v23-20020ac25597000000b0050306259d8asm2646893lfg.215.2023.10.12.00.08.57
+        bh=kEqKvIWeFRr8W5s0BPeSsPwNLKn93+5XPQoiJhuCABo=;
+        b=b5UXYZkc91cIBJ7igE7i2UsySuIydTQXjE55MupknR44qFIjeVJIL2eLMxwFvD7sSG
+         6h14rQqhPym0LJg/Vzb0XzLQdpSYqUhAx664sIYN12deQcb+bqTrskESdpJyaLSQKT2I
+         rIvMTcCZzZFiR5i0BeUDTYN+s2xAuoE5uDKViBFonnPCv4H3qts1V8fIOCx8zUVCE17U
+         Ve7GulhV/o0p6GLhQ/PXtE+0JvJYvdYZNiWtRU/PaQ3sk0aqoeevCGaXTb3qGe0TUNq9
+         naqOlSixCZu4HyuaUeXX0PZbun9xANgfKLsjImFXHepvL6TBt0norQ84MzrWL6Si+Ryw
+         WpZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697095706; x=1697700506;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kEqKvIWeFRr8W5s0BPeSsPwNLKn93+5XPQoiJhuCABo=;
+        b=IcufihXrY9gM7/bnLrIDjXMzSsTlYLJYW+0H30WIOidWyHcj1YTm1dLyAUqcxcwyTZ
+         KrJGRegIp6MmnMVSimjwyFj/mpQEVPVOyJDU/Z4eJb7RG8FdjTaM4NhRlPIXHkyxXwcW
+         ccXMI363j1mvzkj4Cj8Gql8DxlL6MXJU+u0HyL3AzDY9CK0h6keFU4ww3THpVXFAk0NY
+         enXSnk4POBEm9XIR465XVRDIhk8l+ugGht0YVoEZDvDqRCllOFTXoK3tD1y2j3wsTwvU
+         cx63jz7uiFGVlVtGCC1f57CLUmAupk4YrEt+QWVV+mgvA1PTI10wgKjbzeHqX8J4wuEk
+         cJcA==
+X-Gm-Message-State: AOJu0YxoHdRTMIBmMfrOGlHgKg60eK4WfUz23ZMQj5yu6919nY+Lf0zY
+        xopNcQhtxIs8BfpZHDS1//8=
+X-Google-Smtp-Source: AGHT+IFdcug422fZ9CQ3p/vnodtvTJxBtSb/0L4CdV5alrbUijpVrx+baQdM5YlE+adz/UU7cIal8g==
+X-Received: by 2002:a17:907:7f08:b0:9a9:9d19:b250 with SMTP id qf8-20020a1709077f0800b009a99d19b250mr16312225ejc.17.1697095705420;
+        Thu, 12 Oct 2023 00:28:25 -0700 (PDT)
+Received: from lab.hqhome163.com ([194.183.10.152])
+        by smtp.googlemail.com with ESMTPSA id a6-20020a170906468600b009a5f7fb51dcsm10616261ejr.42.2023.10.12.00.28.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Oct 2023 00:08:57 -0700 (PDT)
-Date:   Thu, 12 Oct 2023 10:08:40 +0300
-From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Naresh Solanki <naresh.solanki@9elements.com>,
-        zev@bewilderbeest.net, Sebastian Reichel <sre@kernel.org>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v1 3/3] regulator: fixed: forward under-voltage events
-Message-ID: <ZSebeJKa0sEzNzP4@dc78bmyyyyyyyyyyyyydt-3.rev.dnainternet.fi>
-References: <20231010085906.3440452-1-o.rempel@pengutronix.de>
- <20231010085906.3440452-3-o.rempel@pengutronix.de>
- <5e51792a-cc93-4364-a51b-c2b116d89369@sirena.org.uk>
- <20231010125531.GA3268051@pengutronix.de>
- <c2ee404d-d07f-42c6-b5ba-41659773e8eb@sirena.org.uk>
- <20231011075931.GA3305420@pengutronix.de>
- <2d14fd22-c37b-4c15-a2ea-a2fd2c201adb@sirena.org.uk>
+        Thu, 12 Oct 2023 00:28:24 -0700 (PDT)
+From:   "Alessandro Carminati (Red Hat)" <alessandro.carminati@gmail.com>
+To:     manivannan.sadhasivam@linaro.org
+Cc:     alim.akhtar@samsung.com, andersson@kernel.org, avri.altman@wdc.com,
+        bmasney@redhat.com, bvanassche@acm.org, conor+dt@kernel.org,
+        cw00.choi@samsung.com, devicetree@vger.kernel.org,
+        jejb@linux.ibm.com, konrad.dybcio@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org,
+        kyungmin.park@samsung.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
+        myungjoo.ham@samsung.com, nm@ti.com, quic_asutoshd@quicinc.com,
+        quic_bhaskarv@quicinc.com, quic_cang@quicinc.com,
+        quic_narepall@quicinc.com, quic_nguyenb@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_richardp@quicinc.com,
+        quic_ziqichen@quicinc.com, robh+dt@kernel.org, sboyd@kernel.org,
+        vireshk@kernel.org,
+        "Alessandro Carminati (Red Hat)" <alessandro.carminati@gmail.com>
+Subject: [PATCH] scsi: ufs: core: Fix build error: ufshcd_opp_config_clks
+Date:   Thu, 12 Oct 2023 07:20:51 +0000
+Message-Id: <20231012072051.1517826-1-alessandro.carminati@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231011122543.11922-4-manivannan.sadhasivam@linaro.org>
+References: <20231011122543.11922-4-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="zTBIn7qXME7IwVru"
-Content-Disposition: inline
-In-Reply-To: <2d14fd22-c37b-4c15-a2ea-a2fd2c201adb@sirena.org.uk>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Building linux-6.6-rc3 with this patchset applied and the following
+configuration:
 
---zTBIn7qXME7IwVru
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+CONFIG_SCSI_UFSHCD=m
+CONFIG_SCSI_UFS_BSG=y
 
-On Wed, Oct 11, 2023 at 12:38:19PM +0100, Mark Brown wrote:
-> On Wed, Oct 11, 2023 at 09:59:31AM +0200, Oleksij Rempel wrote:
->=20
-> > Configuration through the device tree and kernel defaults is preferable.
-> > For instance, having a default kernel governor that doesn=E2=80=99t req=
-uire user
-> > space configuration aligns with the project=E2=80=99s objectives.
->=20
-> That's policy though...
->=20
-> >=20
-> > > For the regulator itself we probably want a way to identify regulators
-> > > as being system critical so they start notifying.  It would be tempti=
-ng
+I got:
 
-Can the "criticality" could be determined by the severity (ERROR vs WARNING=
-)?
+   scripts/mod/modpost -M -m -a      -o Module.symvers -T modules.order vmlinux.o
+ERROR: modpost: "ufshcd_opp_config_clks" [drivers/ufs/host/ufshcd-pltfrm.ko] undefined!
+make[2]: *** [scripts/Makefile.modpost:145: Module.symvers] Error 1
+make[1]: *** [/home/alessandro/src/linux-6.6-rc3/Makefile:1865: modpost] Error 2
+make: *** [Makefile:234: __sub-make] Error 2
 
-> > > to just do that by default but that would likely cause some issues for
-> > > example with regulators for things like SD cards which are more likely
-> > > to get hardware problems that don't comprimise the entire system.  We
+I needed to add an export symbol to have the build complete
 
-"comprimise the entire system" sounds (to my ears) exactly the
-difference between WARNING and ERROR notifications.
+Signed-off-by: Alessandro Carminati (Red Hat) <alessandro.carminati@gmail.com>
+---
+ drivers/ufs/core/ufshcd.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> > > could do that with DT, either a property or some sort of runtime
-> > > consumer, but it might be better to have a control in sysfs that
-> > > userspace can turn on?  OTOH the ability do something about this depe=
-nds
-> > > on specific hardware design...
-> > >=20
-> > > I've copied in Sebastian since this sounds like the sort of thing that
-> > > power supplies might have some kind of handling for, or at least if we
-> > > need to add something we should make it so that the power supplies can
-> > > be joined up to it.  I do see temperature and capacity alerts in the
-> > > sysfs ABI for power supplies, but nothing for voltage.
-> >=20
-> > Thank you for pointing towards the power supply framework. Given the ha=
-rdware
-> > design of my project, I can envision mapping the following states and
-> > properties within this framework:
->=20
-> There's also hw_failure_emergency_poweroff() which looks like exactly
-> what you're trying to trigger here.
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index ccd7fcd18355..c0631c37c3d1 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -1098,6 +1098,7 @@ int ufshcd_opp_config_clks(struct device *dev, struct opp_table *opp_table,
+ 
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(ufshcd_opp_config_clks);
+ 
+ static int ufshcd_opp_set_rate(struct ufs_hba *hba, unsigned long freq)
+ {
+-- 
+2.34.1
 
-There is already a path from regulator notification handling to the
-hw_failure_emergency_poweroff() - although only when handling the IRQs
-fail and this failure is marked as fatal.
-
-> > Considering the above mapping, my initial step would be to create a sim=
-ple
-> > regulator coupled (if regulator is still needed in this casr) with a De=
-vice
-> > Tree (DT) based power supply driver.  This setup would align with the e=
-xisting
-> > power supply framework, with a notable extension being the system-wide
-> > notification for emergency shutdown upon under-voltage detection.
->=20
-> It sounds like this is actually a regulator regardless of if it also
-> appears via some other API.
-
-I wonder if it would make sense to add a 'protector' in regulator core.
-The 'protector' could register to listen the notifications from those
-regulators which have some
-'regulator-fatal-notifications =3D <list of notifications>;' -property
-defined in device-tree.
-
-In my eyes the device-tree is correct place for this information
-because whether an "anomaly" in regulator output compromises the system
-is a property of hardware.
-
-Yours,
-	-- Matti
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---zTBIn7qXME7IwVru
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmUnm20ACgkQeFA3/03a
-ocWoBAgAvt694sDu7d/r9CyhNbd/uDFnCTQ6LVK2CakUfO4JsjW/x+Pe1YrvRlQc
-EZkpcaH0TKhQEc1jS+E8pYuX9YVjmAmmRJKQVe3PhK3lRc8WwqX2iWgALbHI0A/b
-GudY8ngHDk1ShNLZfwMFLRghRSc+kBIEs/ZnsWG0dJDr2l/Tr6n6uAtgkWZC3i6X
-vuAoq7g9NQRXBD0kBctmmWJfWcUSc0tFPN+fAqvQuUERms8opu95YFpIpBuFx8Hi
-yw2JiMPrwVOrHeIb5ZhJuVho41BcmnFcU2bCKYXdrXfS1QX5b3mbUHdC3nrBfI0V
-HtUJ12Ohl3YkW1euY/4rfDrL7lYHTw==
-=JFJH
------END PGP SIGNATURE-----
-
---zTBIn7qXME7IwVru--
