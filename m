@@ -2,66 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED597C6FD5
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 15:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 540497C703F
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 16:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235121AbjJLN4q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Oct 2023 09:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51678 "EHLO
+        id S235737AbjJLO1w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Oct 2023 10:27:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235726AbjJLN4p (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 09:56:45 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25249BA
-        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 06:56:42 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2c038a1e2e6so11876411fa.2
-        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 06:56:42 -0700 (PDT)
+        with ESMTP id S233710AbjJLO1v (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 10:27:51 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC04BE
+        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 07:27:49 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-31f71b25a99so981185f8f.2
+        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 07:27:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697119000; x=1697723800; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0C0ORECBJTogxYQi5iDF0CcmtgNFNzkwmbMUlUi37Uw=;
-        b=eY9jVRqtRQKzQnm8ospk9kjl9u0Rf3ng9X8hvqSbqkQu7SXC5E4oV97gld6FtglXDN
-         bPmxyBKJT75Uv/LV83YTJ/MRmW1fohdstXqGjIFcHacnRGkMyEVdVmaNpHFrVwaA4uUy
-         sCRrdT93/Wf+RtACLle4zFy+gR0RDPn1ufYmRoRbMvs8y0yksaviuTlBLlUkFHd4M6GF
-         39hkbetutxWrmPk8UnFnykkvLWykJJL1DI0dbrqrUxwHWuKcmWWJP9EC1KWrGvecfwDS
-         6QLwoD1amzSiPNOY/76nmGtpLvFjoc9d6ht5+LSg37Ajz6slgUBv70uHfHaJL1Z+z92T
-         DYIw==
+        d=linaro.org; s=google; t=1697120868; x=1697725668; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Z35x2KMCJCXsBIbmy9n6f3au11P/WJPEJir5cY6NYBA=;
+        b=cpEcuOqtZeBLV93szk1EtBzLksMPNyNvY1ONY2CJISb+/iYT++Uu3Vp2JwzXpqLTxq
+         BiuvAoogMVaofvPfvgdelErAt0LX2LSxKAarHJcUeOVkARPOrSBjSozPON3YqvNw1VyH
+         NyS39Kq8Usu+ub3nriwTX6LnK4+B8ZhJA6GDRRkxibPUpqG6qycYrg/4R6liC8fae/QW
+         4mC8JDEewYMZmG2hKX8XeaDEyfKNdOWnZ7wYWoeaVPk8MfHUEBywh1V1HHbSBrDaX1wZ
+         4do8+S9ioLEMs2e+3Ls0s5EHs9qn6XH96LgS1BFGbSYyAQGWVgMDN6CnpBTx3qIQKey+
+         IoRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697119000; x=1697723800;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0C0ORECBJTogxYQi5iDF0CcmtgNFNzkwmbMUlUi37Uw=;
-        b=X3WM967TJq+acnOg0TwrN/F948qZ2jpKRTRRx47yJ3iU1uc2JfBScBg6+TPoTQYlhX
-         lVjC3k46BSa4K9a3UxBfU2Mu/PKLOjUGNY/hZ5r35dXCatdOn99C3S3vwLTUAXmbub3E
-         97eA3Ux0oVFAvXrOa1CLp7/hIiZkDFQgjdf38kUu7G6EOhJS7g+qOqsiJfjB2MVhk2Ad
-         i9quCx+jkscXG0P9mxYqPCEHyoX35MXt5gMDUH4SRC+Oswcp2IfYsomxvOcRrPbQ441X
-         l+APBC9jlv015KxSxD75fc96ZGzJFGGR3ooIE5grXi+4MXNiZzBYtnjzb+faXIoBRfj5
-         0S3A==
-X-Gm-Message-State: AOJu0YyTaCZPeY/RxDJuZ6FbZzT5+mVuaxW3GYfLjpyL19nDs3AuDU68
-        1My4i2lb/aFQEjCTZxBxBysaBA==
-X-Google-Smtp-Source: AGHT+IGx31uLy8rL+rFIHO2SmgNtBeARAJKHgBIoVQQzrHsiObna4oUIOfKdc+mZ7sjdKbMaRYMjpQ==
-X-Received: by 2002:a2e:9009:0:b0:2bf:fde1:2586 with SMTP id h9-20020a2e9009000000b002bffde12586mr21577889ljg.1.1697119000375;
-        Thu, 12 Oct 2023 06:56:40 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id l22-20020a2e8356000000b002b70a64d4desm3572227ljh.46.2023.10.12.06.56.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Oct 2023 06:56:39 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Linus <torvalds@linux-foundation.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>, soc@kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] pmdomain fixes for v6.6-rc6
-Date:   Thu, 12 Oct 2023 15:56:38 +0200
-Message-Id: <20231012135638.52674-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1697120868; x=1697725668;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z35x2KMCJCXsBIbmy9n6f3au11P/WJPEJir5cY6NYBA=;
+        b=CfJizRwD/fXaOuDUDHupB+pOXO+agHGuCajP+GnWuv274zhX2XbqPMSYxV9h7eJBDQ
+         hCHycx/jcHbqDxRYPRTLJKTTfwxqZQmsoIS6KlUT5+cCoxen1ign4nArZ8eS51cao4dm
+         WxN3ChHC5lFu4EJxFaB9cGRrlGMDhIMRF6A86wZXvbcXPtDx2OLiAn3vHPwOc2wv/ZZE
+         3mrsa6UTpVINf/zk/dJLK29u1yPWyTdg1xvAIUsFuTfHxRQqLVoAzRyIv1H7dG+QgpmM
+         Qg7PCMCxio5CGrh0+jVLe0J+qqotSLP0Dk6jxbnKnLUVaTS4kUnacu+dOe9WhdXR3uPZ
+         rn1Q==
+X-Gm-Message-State: AOJu0Yy5Lt+3f8q4IR+ZqSiCjmm5LQi1tWHIWHcBmc/vSjMuhxYToUFh
+        8hU0DiivMIGBpqq8fCiQ7oz3Bc/dV1CkmlGQDM4=
+X-Google-Smtp-Source: AGHT+IFD4a3WZd0zpYx192NfjOK9B5wAOPso8bC8/zQTNhtWjwd2SDA5n8vga56vCN0MrttiyJtvVg==
+X-Received: by 2002:a5d:654e:0:b0:31d:db92:31ae with SMTP id z14-20020a5d654e000000b0031ddb9231aemr22318455wrv.44.1697120867810;
+        Thu, 12 Oct 2023 07:27:47 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
+        by smtp.googlemail.com with ESMTPSA id j13-20020adfe50d000000b003196b1bb528sm18458016wrm.64.2023.10.12.07.27.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Oct 2023 07:27:47 -0700 (PDT)
+Message-ID: <d2d6fae5-ace7-4b94-9354-a01cd6a7e343@linaro.org>
+Date:   Thu, 12 Oct 2023 16:27:46 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/6] thermal: trip: Simplify computing trip indices
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
+References: <13365827.uLZWGnKmhe@kreacher> <3256881.aeNJFYEL58@kreacher>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <3256881.aeNJFYEL58@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,36 +75,56 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+On 06/10/2023 19:40, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> A trip index can be computed right away as a difference between the
+> value of a trip pointer pointing to the given trip object and the
+> start of the trips[] table in the thermal zone containing the trip, so
+> change thermal_zone_trip_id() accordingly.
+> 
+> No intentional functional impact (except for some speedup).
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>   drivers/thermal/thermal_trip.c |   13 +++++--------
+>   1 file changed, 5 insertions(+), 8 deletions(-)
+> 
+> Index: linux-pm/drivers/thermal/thermal_trip.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/thermal_trip.c
+> +++ linux-pm/drivers/thermal/thermal_trip.c
+> @@ -175,14 +175,11 @@ int thermal_zone_set_trip(struct thermal
+>   int thermal_zone_trip_id(struct thermal_zone_device *tz,
+>   			 const struct thermal_trip *trip)
+>   {
+> -	int i;
+> -
+>   	lockdep_assert_held(&tz->lock);
+>   
+> -	for (i = 0; i < tz->num_trips; i++) {
+> -		if (&tz->trips[i] == trip)
+> -			return i;
+> -	}
+> -
+> -	return -ENODATA;
+> +	/*
+> +	 * Assume the trip to be located within the bounds of the thermal
+> +	 * zone's trips[] table.
+> +	 */
+> +	return trip - tz->trips;
 
-Here's a PR with a pmdomain fix intended for v6.6-rc6. Details about the
-highlights are as usual found in the signed tag.
+Shouldn't be divided by sizeof(*trip) ?
 
-Please pull this in!
+>   }
+> 
+> 
+> 
 
-Kind regards
-Ulf Hansson
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
-The following changes since commit e2ad626f8f409899baf1bf192d0533a851128b19:
-
-  pmdomain: Rename the genpd subsystem to pmdomain (2023-09-13 11:09:21 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.6-rc1-2
-
-for you to fetch changes up to 767881c470b3140c33795031c4e4d65572731c1c:
-
-  pmdomain: imx: scu-pd: correct DMA2 channel (2023-10-05 00:28:52 +0200)
-
-----------------------------------------------------------------
-pmdomain:
-  - imx: scu-pd: Correct the DMA2 channel
-
-----------------------------------------------------------------
-Peng Fan (1):
-      pmdomain: imx: scu-pd: correct DMA2 channel
-
- drivers/pmdomain/imx/scu-pd.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
