@@ -2,107 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A7657C767F
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 21:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 005607C7817
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 22:51:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347366AbjJLTOu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 12 Oct 2023 15:14:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60718 "EHLO
+        id S1442372AbjJLUvG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Oct 2023 16:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344140AbjJLTOt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 15:14:49 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79FBB7;
-        Thu, 12 Oct 2023 12:14:48 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1e99a55a9c0so112543fac.1;
-        Thu, 12 Oct 2023 12:14:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697138088; x=1697742888;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LT61jJcy+T9cpr72bcE+s5GrJr0v/YeWRBlC23o1xQY=;
-        b=LYnmW11vs1HDEVFvOuJBZcxDmVs0ALRa41xcbK35mbcVw/9QxoTGxeKFFn4SfIqz8q
-         XGK0erE6Jb6Oyj7/ocJ3rwpNnzmRpFWx+cuklAxpX47MixA8QxTX5uSgrozVD58nqF+p
-         qNV9xNy2FEhXeKPzE3iBc7tlPrpPojDodKezFHcgH7SL/xBaGteRszPVU1UjWtOjVmUV
-         IDKnaMQcFnUhgyRIHLhk200b8JGBmNIrTF8ekJO0KfCGMJNHwtPQ9ifIjWpVBbdTs9J/
-         HFVYNFZ6kq8eA/MzBlvs9JwbTiH/PyUiKYQzK/nFG8NZ9RuHrIFPxXBppwh0nsZ1HYuB
-         9YcA==
-X-Gm-Message-State: AOJu0Yzk4KdXAgCR7rtmTqyt0tHV66p8c+a9bwZ4x6LrMk7vIcioNg2b
-        bOIOAq2s33DYefApxYgsKwruBZP4aDYsaHKgVpY=
-X-Google-Smtp-Source: AGHT+IESIkFVO5Up/TkYa/+tM7AY+UGJHT3nhd/+b3txSN1DY3R8aMvvSFfjlYy6pBo8B+al3AoaxIGVM4qGAjcfGCY=
-X-Received: by 2002:a05:6820:390:b0:57c:6e35:251e with SMTP id
- r16-20020a056820039000b0057c6e35251emr23868576ooj.1.1697138084151; Thu, 12
- Oct 2023 12:14:44 -0700 (PDT)
+        with ESMTP id S1344156AbjJLUvF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 16:51:05 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0639D;
+        Thu, 12 Oct 2023 13:51:03 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86685C433C7;
+        Thu, 12 Oct 2023 20:51:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1697143862;
+        bh=rV4lK4JGUrPmimJpLCdBBLhbiabz6+ijJVca0/lx3O4=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=kPSf6VYSK5BQ3nE8zBMmnyNKnFSp/appVHQM6jBf6Ve3OBsW2QnIkohqv21Sn7Ksg
+         tYmgQqOyRulshSbD7Zf9rKhYpAowFGq9GKIU+rQk9k/3ImE4dDYVp6yL4zmAQISuwJ
+         qpCFQJx9bcw/FatgwudaCDzfc5pDizaRESeW5puhgo7A9jpr3n/WgifjySPe2sAklf
+         IAI2h1KjrBN79V6I5IGQdg4NCUE3fRvtflRbjZti2p2PYpPq8oopprzhFX1Hu794wq
+         2DRz1poNShwU0WHgsAy6PzqDyNn9YEMHIUNPDYAv5YAwBqZTt5XBDpd6fhJXFMtTid
+         e3YJZFRjNUWiA==
+Message-ID: <1dfef5d380b3a5f920620fbf491280f9.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20231009190538.2488792-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20231009190538.2488792-1-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 12 Oct 2023 21:14:33 +0200
-Message-ID: <CAJZ5v0jH9ZYxvK6MxXXb-RggzwtPie9dhpfmUBduyc2P9rczEg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/7] thermal: processor_thermal: Power floor status
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <000c61a028814f08a9fc6d1d5c446e8dad11a650.1697101543.git.quic_varada@quicinc.com>
+References: <cover.1697101543.git.quic_varada@quicinc.com> <000c61a028814f08a9fc6d1d5c446e8dad11a650.1697101543.git.quic_varada@quicinc.com>
+Subject: Re: [PATCH v2 4/8] clk: qcom: apss-ipq6018: ipq5332: add safe source switch for a53pll
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, conor+dt@kernel.org,
+        devicetree@vger.kernel.org, ilia.lin@kernel.org,
+        konrad.dybcio@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        mturquette@baylibre.com, quic_kathirav@quicinc.com,
+        rafael@kernel.org, robh+dt@kernel.org, viresh.kumar@linaro.org
+Date:   Thu, 12 Oct 2023 13:51:00 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 9, 2023 at 9:06 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> Support power floor notifications for Meteor Lake processors.
->
-> The first three changes is to prepare for power floor status and others
-> add support for power floor.
->
-> v2
-> - Use common define for offset
-> - Fix potential race during clearing of interrupt with workload hint
-> - Address comment for v1 for
-> thermal: int340x: processor_thermal: Support power floor notifications
->
-> Srinivas Pandruvada (7):
->   thermal: int340x: processor_thermal: Move interrupt status MMIO offset
->     to common header
->   thermal: int340x: processor_thermal: Common function to clear SOC
->     interrupt
->   thermal: int340x: processor_thermal: Set feature mask before
->     proc_thermal_add
->   thermal: int340x: processor_thermal: Support power floor notifications
->   thermal: int340x: processor_thermal: Handle power floor interrupts
->   thermal: int340x: processor_thermal: Enable power floor support
->   selftests/thermel/intel: Add test to read power floor status
->
->  .../driver-api/thermal/intel_dptf.rst         |   8 ++
->  .../thermal/intel/int340x_thermal/Makefile    |   1 +
->  .../processor_thermal_device.c                |  68 +++++++++-
->  .../processor_thermal_device.h                |  11 ++
->  .../processor_thermal_device_pci.c            |  43 ++++--
->  .../processor_thermal_power_floor.c           | 126 ++++++++++++++++++
->  .../processor_thermal_wt_hint.c               |   3 -
->  tools/testing/selftests/Makefile              |   1 +
->  .../thermal/intel/power_floor/Makefile        |  12 ++
->  .../intel/power_floor/power_floor_test.c      | 108 +++++++++++++++
->  10 files changed, 365 insertions(+), 16 deletions(-)
->  create mode 100644 drivers/thermal/intel/int340x_thermal/processor_thermal_power_floor.c
->  create mode 100644 tools/testing/selftests/thermal/intel/power_floor/Makefile
->  create mode 100644 tools/testing/selftests/thermal/intel/power_floor/power_floor_test.c
->
-> --
+Quoting Varadarajan Narayanan (2023-10-12 02:26:20)
+> diff --git a/drivers/clk/qcom/apss-ipq6018.c b/drivers/clk/qcom/apss-ipq6=
+018.c
+> index 4e13a08..c05c2b2 100644
+> --- a/drivers/clk/qcom/apss-ipq6018.c
+> +++ b/drivers/clk/qcom/apss-ipq6018.c
+> @@ -84,15 +87,63 @@ static const struct qcom_cc_desc apss_ipq6018_desc =
+=3D {
+>         .num_clks =3D ARRAY_SIZE(apss_ipq6018_clks),
+>  };
+> =20
+> +static int cpu_clk_notifier_fn(struct notifier_block *nb, unsigned long =
+action,
+> +                               void *data)
+> +{
+> +       struct clk_hw *hw;
+> +       u8 index;
+> +       int err;
+> +
+> +       if (action =3D=3D PRE_RATE_CHANGE)
+> +               index =3D P_GPLL0;
+> +       else if ((action =3D=3D POST_RATE_CHANGE) || (action =3D=3D ABORT=
+_RATE_CHANGE))
 
-Whole series queued up as 6.7 material.
+This has too many parenthesis.
 
-I've edited a couple of changelogs to clarify them a bit and changed
-the documentation of the new sysfs attributes somewhat, so they don't
-talk about RAPL directly, because I think that the key point here is
-that if the power floor is signaled, the configuration of the system
-needs to be changed in order to reduce power below the current level.
+> +               index =3D P_APSS_PLL_EARLY;
+> +       else
+> +               return 0;
+
+Maybe 'return NOTIFY_OK' instead?
+
+> +
+> +       hw =3D &apcs_alias0_clk_src.clkr.hw;
+> +       err =3D clk_rcg2_mux_closest_ops.set_parent(hw, index);
+> +
+> +       return notifier_from_errno(err);
+> +}
+> +
+> +static struct notifier_block cpu_clk_notifier =3D {
+
+Instead of a static global can this be allocated with kzalloc?
+
+> +       .notifier_call =3D cpu_clk_notifier_fn,
+> +};
+> +
+>  static int apss_ipq6018_probe(struct platform_device *pdev)
