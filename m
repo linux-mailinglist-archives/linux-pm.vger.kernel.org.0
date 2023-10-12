@@ -2,131 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFDE07C6705
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 09:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 770DD7C684E
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 10:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377939AbjJLHkN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Oct 2023 03:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49608 "EHLO
+        id S1378166AbjJLIAl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Oct 2023 04:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235319AbjJLHkM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 03:40:12 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264D2B8
-        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 00:40:10 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-690f7bf73ddso530275b3a.2
-        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 00:40:10 -0700 (PDT)
+        with ESMTP id S1347198AbjJLIAk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 04:00:40 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01190B8;
+        Thu, 12 Oct 2023 01:00:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697096409; x=1697701209; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=t0g3CHLupMrDhHkMlK6gfozlJQHBhX7jZYJ+e0keXWk=;
-        b=HDtVHuCftKxdgE/BPt0LBE9bFa1rKgr8eVqNClDcuKPHzaslCm+Yt5KQSaicOIhuCx
-         eq38bVojnj8VO69LgmZHEtJOY1djbZjOc/q7bRtS+xfb/ZOTtplBA2EQFp6iaULa/vqJ
-         SFnEOajDtrMUMld4MOjWyDtnKwwK+NkOzxi5tpSzueiHA9/D17qJ6POm/bYbavYodpRt
-         ypx5ns3frbzKMY6F3SDi/mh25/xZdmKtUW12WdpzT93T+wLYNdVSJvP0RsndMnJmzbLi
-         mR5eJvSJ8CfCNZsHqZdNwZ9CRnv7PD8znJlUvBhOnPHvpqkvCvfDLJQB/X+mE6XvqqnI
-         EfVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697096409; x=1697701209;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t0g3CHLupMrDhHkMlK6gfozlJQHBhX7jZYJ+e0keXWk=;
-        b=tPlONofwkCtuEGfRdfjHkqiH/715fEpySYWNeu54PRHWodbHxWqxiMXMi1a1BHIvle
-         LxoOixdI94IuDDfVqprMeFm2XDKoA0veg3P33zOL0MsSrze0TxtkHb5flwQQaVoNVngR
-         C67OacFgg0uBTPRn/iUNtcpmzKsV7rVkklcSl7vytHEARx16Hfk2MDdzFjKjIPX0YE59
-         7tu5JZXHR3n3rdGgjgzaRbW+Nkj9otVESuMuVz6dZ99mabDoNJnHLAT3Y8Wtjx5jkdF4
-         igEhG8bZ94nCb6uZ6iIGO+7jVi03vrVZOCu5jNvLjeCEdGxAXgA8qZ+bbD59Eg6OEpn9
-         h1Xw==
-X-Gm-Message-State: AOJu0Yx6IQMstr9bg3D7fRCEKVSDHO6z0AKDO0BTousXR5upd3S0SUrD
-        iwjdZJD2ztSaV0X4C1NqGfzH
-X-Google-Smtp-Source: AGHT+IH0EXGX3kM6pYUNayPRavDSGKGosRNmNjQtofu1wwryxdfzHLf8UxV8MNlsKoohZ4oxr897Hg==
-X-Received: by 2002:aa7:88ca:0:b0:68e:2af1:b193 with SMTP id k10-20020aa788ca000000b0068e2af1b193mr24429012pff.28.1697096409579;
-        Thu, 12 Oct 2023 00:40:09 -0700 (PDT)
-Received: from thinkpad ([120.138.12.180])
-        by smtp.gmail.com with ESMTPSA id y12-20020a056a001c8c00b006a77343b0ccsm4896434pfw.89.2023.10.12.00.39.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Oct 2023 00:40:08 -0700 (PDT)
-Date:   Thu, 12 Oct 2023 13:09:55 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     "Alessandro Carminati (Red Hat)" <alessandro.carminati@gmail.com>
-Cc:     alim.akhtar@samsung.com, andersson@kernel.org, avri.altman@wdc.com,
-        bmasney@redhat.com, bvanassche@acm.org, conor+dt@kernel.org,
-        cw00.choi@samsung.com, devicetree@vger.kernel.org,
-        jejb@linux.ibm.com, konrad.dybcio@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org,
-        kyungmin.park@samsung.com, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
-        myungjoo.ham@samsung.com, nm@ti.com, quic_asutoshd@quicinc.com,
-        quic_bhaskarv@quicinc.com, quic_cang@quicinc.com,
-        quic_narepall@quicinc.com, quic_nguyenb@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_richardp@quicinc.com,
-        quic_ziqichen@quicinc.com, robh+dt@kernel.org, sboyd@kernel.org,
-        vireshk@kernel.org
-Subject: Re: [PATCH] scsi: ufs: core: Fix build error: ufshcd_opp_config_clks
-Message-ID: <20231012073955.GA14957@thinkpad>
-References: <20231011122543.11922-4-manivannan.sadhasivam@linaro.org>
- <20231012072051.1517826-1-alessandro.carminati@gmail.com>
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1697097636; x=1728633636;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8sDm0h+pCIl9iKfc4jxuflqUqRc8yd1m5/OgP1/13vY=;
+  b=NhMdpW4MZMRhxLbQed+nd3kQTgk2CPHK4+Xx9+yb9bzKd4t34lVYhU4d
+   FPRr8GPMkPwheq3iWeZAq3qWksp7aLeIeQTM85GbnoAJLzMQUcoJ4YQCf
+   /jaipljUm/whFVMRH6boA595JGzv1NakVAoW1IPn68feH5tvw+LSa9u+V
+   YktipGhROtRTPddUde0loRP2q50pjjkCsnow6ZnwX9J6JG1z52W6HyB6j
+   xAXOVykqi4IvMmNFdKicn9JQ8pvAGHzJHkfjODPV775gCdyKFO7bgy5rD
+   boN/6ycfmL3At3p1G0II3fFIA+86zxLLw5kpTYf7os8TKZ+17Ekgqs/0Y
+   A==;
+X-IronPort-AV: E=Sophos;i="6.03,218,1694728800"; 
+   d="scan'208";a="33422563"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 12 Oct 2023 10:00:33 +0200
+Received: from steina-w.tq-net.de (steina-w.tq-net.de [10.123.53.18])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 781CE280082;
+        Thu, 12 Oct 2023 10:00:33 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2 0/3] imx6q related DT binding fixes
+Date:   Thu, 12 Oct 2023 10:00:30 +0200
+Message-Id: <20231012080033.2715241-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231012072051.1517826-1-alessandro.carminati@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 12, 2023 at 07:20:51AM +0000, Alessandro Carminati (Red Hat) wrote:
-> Building linux-6.6-rc3 with this patchset applied and the following
-> configuration:
-> 
-> CONFIG_SCSI_UFSHCD=m
-> CONFIG_SCSI_UFS_BSG=y
-> 
-> I got:
-> 
->    scripts/mod/modpost -M -m -a      -o Module.symvers -T modules.order vmlinux.o
-> ERROR: modpost: "ufshcd_opp_config_clks" [drivers/ufs/host/ufshcd-pltfrm.ko] undefined!
-> make[2]: *** [scripts/Makefile.modpost:145: Module.symvers] Error 1
-> make[1]: *** [/home/alessandro/src/linux-6.6-rc3/Makefile:1865: modpost] Error 2
-> make: *** [Makefile:234: __sub-make] Error 2
-> 
-> I needed to add an export symbol to have the build complete
-> 
-> Signed-off-by: Alessandro Carminati (Red Hat) <alessandro.carminati@gmail.com>
+Hi everyone,
 
-Thanks for the diff. I will squash it with the offending patch.
+while working on i.MX6Q based board (arch/arm/boot/dts/nxp/imx/imx6q-mba6a.dts)
+I noticed several warnings on dtbs_check.
+I'm also not sure whether thse patches warrent a Fixes tag, so I only added that
+for patch 3. All of these patches are independent and can be picked up
+individually.
 
-- Mani
+Patches already merged:
+* 0268e1ae25949 ("dt-bindings: trivial-devices: Remove national,lm75")
+* 57db57ae15a97 ("dt-bindings: display: fsl,imx6-hdmi: Change to 'unevaluatedProperties: false'")
+  which deprecates v1 patch 3
 
-> ---
->  drivers/ufs/core/ufshcd.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-> index ccd7fcd18355..c0631c37c3d1 100644
-> --- a/drivers/ufs/core/ufshcd.c
-> +++ b/drivers/ufs/core/ufshcd.c
-> @@ -1098,6 +1098,7 @@ int ufshcd_opp_config_clks(struct device *dev, struct opp_table *opp_table,
->  
->  	return 0;
->  }
-> +EXPORT_SYMBOL_GPL(ufshcd_opp_config_clks);
->  
->  static int ufshcd_opp_set_rate(struct ufs_hba *hba, unsigned long freq)
->  {
-> -- 
-> 2.34.1
-> 
+Changes in v2:
+* Fix example for imx-thermal.yaml
+* Collected R-b & A-b
+* Dropped v1 patch 6 for now as it is contoversial
+
+Best regards,
+Alexander
+
+Alexander Stein (3):
+  dt-bindings: imx-thermal: Add #thermal-sensor-cells property
+  dt-bindings: net: microchip: Allow nvmem-cell usage
+  dt-bindings: timer: add imx7d compatible
+
+ .../devicetree/bindings/net/microchip,lan95xx.yaml         | 2 ++
+ Documentation/devicetree/bindings/thermal/imx-thermal.yaml | 7 +++++++
+ Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml    | 4 +++-
+ 3 files changed, 12 insertions(+), 1 deletion(-)
 
 -- 
-மணிவண்ணன் சதாசிவம்
+2.34.1
+
