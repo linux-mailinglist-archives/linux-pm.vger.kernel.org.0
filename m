@@ -2,157 +2,182 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BDB27C64D2
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 07:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 649807C6635
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 09:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377521AbjJLFqg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Oct 2023 01:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58086 "EHLO
+        id S232199AbjJLHJC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Oct 2023 03:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235359AbjJLFqS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 01:46:18 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8086194
-        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 22:46:05 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id 5614622812f47-3af5fcb5e37so361074b6e.0
-        for <linux-pm@vger.kernel.org>; Wed, 11 Oct 2023 22:46:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697089565; x=1697694365; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HMmysdE7+hFUIPmp9MMMe3xjxP9qrN7IYcx3e2tg+gE=;
-        b=q2rFxBiC7dVO+AIBAj1om5KfTI5rAPzoQQXsgvhloFK1EqyUUOezeB9hBK9mXj1ZqD
-         0Nhs8xp3w5eX2hQKN9PAI/T5yW/Fikz9U4QHrZz6ILgxOu8+Wh6g5nqT+RQv/Yl57AbD
-         15ApKQHLcAeE3XC1kfwEaiYxyO4diEbXXcXpk9EADb6gCP66bHaVyqo/lclR0dxM+Fpm
-         5+o8C3dM3mC6jUZZOCI90CTr9+mmmW4Art/sFyz8V0Nk7CbUTi6tyVmovmnsDfgpllw1
-         iW1B2How1TbJ15CmSjYLzwR36T1bMJn6uWbDpK7XlWiQDUu5eo9pDtktYlqZIas3/kZn
-         MjMA==
+        with ESMTP id S231828AbjJLHJC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 03:09:02 -0400
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB4A9D;
+        Thu, 12 Oct 2023 00:09:00 -0700 (PDT)
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5045cb9c091so934615e87.3;
+        Thu, 12 Oct 2023 00:09:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697089565; x=1697694365;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HMmysdE7+hFUIPmp9MMMe3xjxP9qrN7IYcx3e2tg+gE=;
-        b=o8JLs3IpvszJYpPDK5dRmlC74zCnnw4/whZmwoGmTho+zD27+Vrnd2SQFE/knicxrk
-         t9yb1wHfoSUSRXn+wpNG4zBgJzMJDuLaul41x0xd8AytZV7BsQCdrjBDVc7q3fPxgYnc
-         qV/GUzwoAFrR2jqD6WMqzUPGDDGj9cYtB6auTuplr8RG+x4kGd56AXNWLJ0Pi+pIV6+9
-         bDmd92ydzV91NWX6SAV3dMefR13WhPttziW1p903n+SzGgUNZGGyuVObtBWrVZLwtzye
-         TOi+psQLLdzVMxQUjQWW+iswnLwsfv2KjwtS6NIHDyp8RS/VdXGqD2Nq0ancb++hMAfX
-         i75Q==
-X-Gm-Message-State: AOJu0YxqZsNes1hQiaT4RbEbUNswQz7l0WcdW8SbRxWbm7xZxenJqKpS
-        En7YbX2XdZjOalGODjVkKtXu
-X-Google-Smtp-Source: AGHT+IHN9zCwe//72WmN/4AIFcmMeQCy5WLSod7P5ruMv69SJKQqOewxIAI99dLEebbL3vgHPz4UMA==
-X-Received: by 2002:a05:6808:1441:b0:3af:583d:3c5d with SMTP id x1-20020a056808144100b003af583d3c5dmr30255565oiv.52.1697089564929;
-        Wed, 11 Oct 2023 22:46:04 -0700 (PDT)
-Received: from localhost.localdomain ([120.138.12.180])
-        by smtp.gmail.com with ESMTPSA id c5-20020a633505000000b0057cb5a780ebsm812396pga.76.2023.10.11.22.45.57
+        d=1e100.net; s=20230601; t=1697094539; x=1697699339;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TpSfoJwDtnAsoTPya6J4WKkXULjEB6HnzhqPzwoz4os=;
+        b=KhYpNwrSN9qG88SjqCplJa9WOav8/ZsRBEQ6s13uEWxWB5usom/87pBHRImc6YjXFf
+         yqhjt8HEd+xROBKBYmS/ddE8ndhKMuTYCPD274N+C6aLcpKcA0trbzHB0y0d9Gqx93Br
+         7BYbYrYZXJF9HnEi4VUZbz9HYUqnPArNT5bydSxcMt9qRRpff0OaoQjpnK3D8Rmu2z8L
+         IFiTpsylo/Xq76H05LM70iMQGSCvhHjaAIq/C2xS8UE1aONB00RCDKTrXUo9tCBFm4Ur
+         2MeYg/ROv1egJSNr/iJxV4TtYYbd9/4rzVv6xne1B91af3Z3uySk8PSIFQXzmN1AvEa9
+         dgSw==
+X-Gm-Message-State: AOJu0Ywuf27eVTara/etf+Ttf9L8PC+6qhRidLgIlf7LSGVM5Xdr93pW
+        TZk9R35cccFbRS27tjtL26o=
+X-Google-Smtp-Source: AGHT+IGkWgEz1bua7UOe8c93Xd+zUIbbCX+AXuqOrArTKHM5MbSYMr2Oc+70mEn2xzFeFATL4gjEIw==
+X-Received: by 2002:a05:6512:280d:b0:503:a9c:af83 with SMTP id cf13-20020a056512280d00b005030a9caf83mr23404209lfb.41.1697094538523;
+        Thu, 12 Oct 2023 00:08:58 -0700 (PDT)
+Received: from dc78bmyyyyyyyyyyyyydt-3.rev.dnainternet.fi (dc78bmyyyyyyyyyyyyydt-3.rev.dnainternet.fi. [2001:14ba:16f8:1500::7])
+        by smtp.gmail.com with ESMTPSA id v23-20020ac25597000000b0050306259d8asm2646893lfg.215.2023.10.12.00.08.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Oct 2023 22:46:04 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, andersson@kernel.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
-        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
-        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
-        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
-        linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [PATCH v6 5/5] arm64: dts: qcom: sm8250: Add OPP table support to UFSHC
-Date:   Thu, 12 Oct 2023 11:15:12 +0530
-Message-Id: <20231012054512.10963-6-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231012054512.10963-1-manivannan.sadhasivam@linaro.org>
-References: <20231012054512.10963-1-manivannan.sadhasivam@linaro.org>
+        Thu, 12 Oct 2023 00:08:57 -0700 (PDT)
+Date:   Thu, 12 Oct 2023 10:08:40 +0300
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        zev@bewilderbeest.net, Sebastian Reichel <sre@kernel.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v1 3/3] regulator: fixed: forward under-voltage events
+Message-ID: <ZSebeJKa0sEzNzP4@dc78bmyyyyyyyyyyyyydt-3.rev.dnainternet.fi>
+References: <20231010085906.3440452-1-o.rempel@pengutronix.de>
+ <20231010085906.3440452-3-o.rempel@pengutronix.de>
+ <5e51792a-cc93-4364-a51b-c2b116d89369@sirena.org.uk>
+ <20231010125531.GA3268051@pengutronix.de>
+ <c2ee404d-d07f-42c6-b5ba-41659773e8eb@sirena.org.uk>
+ <20231011075931.GA3305420@pengutronix.de>
+ <2d14fd22-c37b-4c15-a2ea-a2fd2c201adb@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="zTBIn7qXME7IwVru"
+Content-Disposition: inline
+In-Reply-To: <2d14fd22-c37b-4c15-a2ea-a2fd2c201adb@sirena.org.uk>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-UFS host controller, when scaling gears, should choose appropriate
-performance state of RPMh power domain controller along with clock
-frequency. So let's add the OPP table support to specify both clock
-frequency and RPMh performance states replacing the old "freq-table-hz"
-property.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 39 +++++++++++++++++++++-------
- 1 file changed, 30 insertions(+), 9 deletions(-)
+--zTBIn7qXME7IwVru
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index a4e58ad731c3..33abd84aae53 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -2198,21 +2198,42 @@ ufs_mem_hc: ufshc@1d84000 {
- 				<&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
- 				<&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
- 				<&gcc GCC_UFS_PHY_RX_SYMBOL_1_CLK>;
--			freq-table-hz =
--				<37500000 300000000>,
--				<0 0>,
--				<0 0>,
--				<37500000 300000000>,
--				<0 0>,
--				<0 0>,
--				<0 0>,
--				<0 0>;
-+
-+			operating-points-v2 = <&ufs_opp_table>;
- 
- 			interconnects = <&aggre1_noc MASTER_UFS_MEM 0 &mc_virt SLAVE_EBI_CH0 0>,
- 					<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_UFS_MEM_CFG 0>;
- 			interconnect-names = "ufs-ddr", "cpu-ufs";
- 
- 			status = "disabled";
-+
-+			ufs_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-37500000 {
-+					opp-hz = /bits/ 64 <37500000>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <37500000>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>;
-+					required-opps = <&rpmhpd_opp_low_svs>;
-+				};
-+
-+				opp-300000000 {
-+					opp-hz = /bits/ 64 <300000000>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <300000000>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>;
-+					required-opps = <&rpmhpd_opp_nom>;
-+				};
-+			};
- 		};
- 
- 		ufs_mem_phy: phy@1d87000 {
--- 
-2.25.1
+On Wed, Oct 11, 2023 at 12:38:19PM +0100, Mark Brown wrote:
+> On Wed, Oct 11, 2023 at 09:59:31AM +0200, Oleksij Rempel wrote:
+>=20
+> > Configuration through the device tree and kernel defaults is preferable.
+> > For instance, having a default kernel governor that doesn=E2=80=99t req=
+uire user
+> > space configuration aligns with the project=E2=80=99s objectives.
+>=20
+> That's policy though...
+>=20
+> >=20
+> > > For the regulator itself we probably want a way to identify regulators
+> > > as being system critical so they start notifying.  It would be tempti=
+ng
 
+Can the "criticality" could be determined by the severity (ERROR vs WARNING=
+)?
+
+> > > to just do that by default but that would likely cause some issues for
+> > > example with regulators for things like SD cards which are more likely
+> > > to get hardware problems that don't comprimise the entire system.  We
+
+"comprimise the entire system" sounds (to my ears) exactly the
+difference between WARNING and ERROR notifications.
+
+> > > could do that with DT, either a property or some sort of runtime
+> > > consumer, but it might be better to have a control in sysfs that
+> > > userspace can turn on?  OTOH the ability do something about this depe=
+nds
+> > > on specific hardware design...
+> > >=20
+> > > I've copied in Sebastian since this sounds like the sort of thing that
+> > > power supplies might have some kind of handling for, or at least if we
+> > > need to add something we should make it so that the power supplies can
+> > > be joined up to it.  I do see temperature and capacity alerts in the
+> > > sysfs ABI for power supplies, but nothing for voltage.
+> >=20
+> > Thank you for pointing towards the power supply framework. Given the ha=
+rdware
+> > design of my project, I can envision mapping the following states and
+> > properties within this framework:
+>=20
+> There's also hw_failure_emergency_poweroff() which looks like exactly
+> what you're trying to trigger here.
+
+There is already a path from regulator notification handling to the
+hw_failure_emergency_poweroff() - although only when handling the IRQs
+fail and this failure is marked as fatal.
+
+> > Considering the above mapping, my initial step would be to create a sim=
+ple
+> > regulator coupled (if regulator is still needed in this casr) with a De=
+vice
+> > Tree (DT) based power supply driver.  This setup would align with the e=
+xisting
+> > power supply framework, with a notable extension being the system-wide
+> > notification for emergency shutdown upon under-voltage detection.
+>=20
+> It sounds like this is actually a regulator regardless of if it also
+> appears via some other API.
+
+I wonder if it would make sense to add a 'protector' in regulator core.
+The 'protector' could register to listen the notifications from those
+regulators which have some
+'regulator-fatal-notifications =3D <list of notifications>;' -property
+defined in device-tree.
+
+In my eyes the device-tree is correct place for this information
+because whether an "anomaly" in regulator output compromises the system
+is a property of hardware.
+
+Yours,
+	-- Matti
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--zTBIn7qXME7IwVru
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmUnm20ACgkQeFA3/03a
+ocWoBAgAvt694sDu7d/r9CyhNbd/uDFnCTQ6LVK2CakUfO4JsjW/x+Pe1YrvRlQc
+EZkpcaH0TKhQEc1jS+E8pYuX9YVjmAmmRJKQVe3PhK3lRc8WwqX2iWgALbHI0A/b
+GudY8ngHDk1ShNLZfwMFLRghRSc+kBIEs/ZnsWG0dJDr2l/Tr6n6uAtgkWZC3i6X
+vuAoq7g9NQRXBD0kBctmmWJfWcUSc0tFPN+fAqvQuUERms8opu95YFpIpBuFx8Hi
+yw2JiMPrwVOrHeIb5ZhJuVho41BcmnFcU2bCKYXdrXfS1QX5b3mbUHdC3nrBfI0V
+HtUJ12Ohl3YkW1euY/4rfDrL7lYHTw==
+=JFJH
+-----END PGP SIGNATURE-----
+
+--zTBIn7qXME7IwVru--
