@@ -2,58 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0427C786B
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 23:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4978F7C7870
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 23:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442831AbjJLVPK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Oct 2023 17:15:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
+        id S1442824AbjJLVQA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Oct 2023 17:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442824AbjJLVPJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 17:15:09 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F576A9
-        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 14:15:08 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-4066692ad35so15301195e9.1
-        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 14:15:08 -0700 (PDT)
+        with ESMTP id S1442682AbjJLVP6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 17:15:58 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DBBA9
+        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 14:15:56 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-406650da82bso14539505e9.3
+        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 14:15:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697145307; x=1697750107; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1697145355; x=1697750155; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=LXj2JrQj56sgWsNLBX3n0JJqicUacQ5S9A/AXrcip2E=;
-        b=TXpzMrw+jjofLXYR1SeP8AWuHL2wWVhNj19yQmFhoBs6dxOBcklzh/DroXZFyMZjau
-         X8lLBJvXulcN1o4zp9sPyr/SUoWmnyCxT/d0oA9DPtgVbDCKorxG+ZnxmjX6F631YM63
-         5KzZeSku0b+738/RtYBew7mI/3JiShGaHNUFJm52T4ip+32soZl6V17JAvq/vHtXmzDp
-         ybWNQvNe1Q7tgJDUSJSAVMde7ADUs8isSCwqgdnFCm+hJaWMxSn3qM3vD9GTqHbqESLv
-         wUGv/RZbKZ79h8/WLBFySv23c1W0uQi3VptTLx6QAuKyynVyd89srAL+hHKsJsv/SbBw
-         fjPw==
+        bh=fM0DXXboWe5a80zsbvWwo3m0mrD8GmZVCasDLYdIcEM=;
+        b=P7WQLGDxIpcgOFEAVxE9bJ75x2ynuqHs+SEd9MknG+R39JD8CTEw4DPxA9Kj/P41GF
+         EZ2snNZMhdXe70w+aehWMBpsUXO6+SkAsndXHFa+ZYqACWNaW+wXcO6GPNQC6I0w7rTK
+         WRR/EWuG3ntYbdOUexfRsZgBX+t3NfVINGsi64WYBlkMrmEVyYVPHutt+7ED7v7MWsGb
+         jp4Jgyc+LuhuCjwxznaVCq5NpQY733o6TJVMNO4i8rkcxyM9Kjkpd8/YRIMiRQLxk0fA
+         tt8La86xNxOK91yYh+6mYJZx21T582fluM9whGp8l0PXiuSMiEjR/A38vSisNLsn7vWu
+         0avg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697145307; x=1697750107;
+        d=1e100.net; s=20230601; t=1697145355; x=1697750155;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LXj2JrQj56sgWsNLBX3n0JJqicUacQ5S9A/AXrcip2E=;
-        b=BZU0QoJjx0cNMwwR2VzDWQ3yFAQ/J98eoWWqEPoXWMeetsq2MW78d52fUAzGn/uXgM
-         uvDYizVU/4x4dIzDcwfUwggHm4nLjQftg14Ndn/kj4H+9siqhFweqQfrfpJ3LAawsH/L
-         3tgEy5O0fV4930WL/MjX7i3x+iv9IHXNb7c5y8A6AYYLm3bo7WIzy+PGCMZ/sF+2O7Ey
-         nbUZPq1dxs65L5FlJyQ7bRxj3D21GXIhgFZJK/EnzdjQV7UDHwL50hlWS8FdMxEoxhU7
-         pkhPRxd6g4LkqjuUNFQTbjhhpfFBTwgS9dLAspPFF3wwGDj7R7SinzVOrpGSnpEaApbE
-         n4Cg==
-X-Gm-Message-State: AOJu0YymmK/NIHsOatdtLMFJHID8WwLpX0yU7YkR2ChvLkzlxrKfPhd7
-        5IRxTEn10FNx/BwHeYjxATVOuA==
-X-Google-Smtp-Source: AGHT+IHzvIxR4s5jjJ4TBL6sFjqX8qfM2TNzRyoAL30WuuFBiuKX6R3ZIcDp2KOD8leDEtJD0bLmQg==
-X-Received: by 2002:a05:600c:684:b0:406:8496:bd8c with SMTP id a4-20020a05600c068400b004068496bd8cmr21767568wmn.20.1697145306267;
-        Thu, 12 Oct 2023 14:15:06 -0700 (PDT)
+        bh=fM0DXXboWe5a80zsbvWwo3m0mrD8GmZVCasDLYdIcEM=;
+        b=vUYrtvtFWc96NXOgjTf9HmZN0lLbrVSRepyasao1Nshx7UPIcESILZqm9xC9EQf8s9
+         5WjK7JU/DbvtlSkqPBxCU5t3x9FCDk6ZACJHS15tidfR9dBKikxK4qpXi8yF09H74wjo
+         UyvuormAKVSc5v9SdZE6KmuucGoDctsMz3R8yDuPLvLv8/9zscW+2pQ28iyyjOUUA/ih
+         g9tKR8kUR/k11riSpPqtFNrLKh1sxgZ526Do6lFJQixsZWThkLiv5c7I6Wyl6enjHhzw
+         F00XDlpHBlz+agfg1RK+Jy8hm4r8O+1OhvY21WdrjliqO3PC3L3SZEGR76WimbEJRT+R
+         v+9A==
+X-Gm-Message-State: AOJu0YyzQLysn/ZOWZ0HAvfeW7IgxBNi1ACxzCZ4jbwF4/vh4tnJjth0
+        6EsHSHI60Q+qk+Sm0J48AkD7bg==
+X-Google-Smtp-Source: AGHT+IGnhYZy39oYwrq//smjlyz4lEvmT2v2EcPW/pw6yueHBg5L2AuBDkhLP/4ph9q70ITFtaBy4Q==
+X-Received: by 2002:a1c:7419:0:b0:3fe:89be:cd3 with SMTP id p25-20020a1c7419000000b003fe89be0cd3mr21652442wmc.22.1697145355443;
+        Thu, 12 Oct 2023 14:15:55 -0700 (PDT)
 Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
-        by smtp.googlemail.com with ESMTPSA id l25-20020a7bc459000000b004054dcbf92asm779383wmi.20.2023.10.12.14.15.05
+        by smtp.googlemail.com with ESMTPSA id l25-20020a7bc459000000b004054dcbf92asm779383wmi.20.2023.10.12.14.15.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Oct 2023 14:15:05 -0700 (PDT)
-Message-ID: <519c78b8-55b4-4774-92b2-ae3dece9bf09@linaro.org>
-Date:   Thu, 12 Oct 2023 23:15:05 +0200
+        Thu, 12 Oct 2023 14:15:55 -0700 (PDT)
+Message-ID: <561802cb-318c-4a83-92e6-5328be1106d4@linaro.org>
+Date:   Thu, 12 Oct 2023 23:15:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/6] thermal: trip: Simplify computing trip indices
+Subject: Re: [PATCH v2 3/6] thermal: gov_fair_share: Rearrange
+ get_trip_level()
 Content-Language: en-US
 To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Linux PM <linux-pm@vger.kernel.org>
@@ -61,30 +62,34 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Zhang Rui <rui.zhang@intel.com>,
         Lukasz Luba <lukasz.luba@arm.com>
-References: <5734364.DvuYhMxLoT@kreacher> <4882956.31r3eYUQgx@kreacher>
+References: <5734364.DvuYhMxLoT@kreacher> <2176566.irdbgypaU6@kreacher>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <4882956.31r3eYUQgx@kreacher>
+In-Reply-To: <2176566.irdbgypaU6@kreacher>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/10/2023 20:25, Rafael J. Wysocki wrote:
+On 12/10/2023 20:29, Rafael J. Wysocki wrote:
 > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> A trip index can be computed right away as a difference between the
-> value of a trip pointer pointing to the given trip object and the
-> start of the trips[] table in the given thermal zone, so change
-> thermal_zone_trip_id() accordingly.
+> Make get_trip_level() use for_each_trip() to iterate over trip points
+> and make it call thermal_zone_trip_id() to obtain the integer ID of a
+> given trip point so as to avoid relying on the knowledge of struct
+> thermal_zone_device internals.
 > 
-> No intentional functional impact (except for some speedup).
+> The general functionality is not expected to be changed.
+> 
+> This change causes the governor to use trip pointers instead of trip
+> indices everywhere except for the fair_share_throttle() second argument
+> that will be modified subsequently along with the definition of the
+> governor .throttle() callback.
 > 
 > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
