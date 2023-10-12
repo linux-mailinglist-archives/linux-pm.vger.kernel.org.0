@@ -2,111 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C769E7C783D
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 22:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 857DB7C7867
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 23:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442894AbjJLUzp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Oct 2023 16:55:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50654 "EHLO
+        id S1442372AbjJLVNt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Oct 2023 17:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442825AbjJLUzk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 16:55:40 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380DBBB;
-        Thu, 12 Oct 2023 13:55:39 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C26BCC433C8;
-        Thu, 12 Oct 2023 20:55:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697144138;
-        bh=m9flpVKMwQXZtGkfSUe6b4uSPp366RZ2/kvGUm5Xl70=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=RgO5/hLdpTJ/2+u7XCaw07k/yQ4nie8zNnB3ds5lPdxB0F0rRVHujCHPXWaGYqfLX
-         VNfK2wBVrTXj7nDkqd5rH9lDK839cU5OmSx40grKHAmx4PoiWGIXq1Gy5GMdadSm9a
-         Kko1WtC5kknew5+aE/AW1uAEGmqZh1Dt6199nqAqGrRx9P9kKEIV514wht6zLN0xHT
-         p0b30PrqnXDAhJQHDMzfNMwrhmPDkzonaF3VrAicc8MwLLVRQITeDc5M3E41rh14AM
-         rArYHbQ/bpzaSPW9OM7B3wPSWMOtD5zVKfKhxbyHt1e4XkOizljX4e2t0f9ljytR+U
-         IWKOaNhpX3qRw==
-Message-ID: <06b823d5c2ec05a940849ac341c48090.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S1442825AbjJLVNs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 17:13:48 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8145ABB
+        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 14:13:46 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-4065f29e933so16824605e9.1
+        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 14:13:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697145225; x=1697750025; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JHc53RKO8nhqYnehqtbOrBzFrWfxOOgucL77D+OqER8=;
+        b=SfVh2eFI16gsj+L9htqhOHpp6t5KQTurkUoiXm8Gcd3rpCuRsf3KxMU4//DneKmbF2
+         ODNoIKWjxjSE5zVMO6tWDTN0jtt49R/mj0ie7dZ1Ey47lEIkJ+V5TJJN2h6ZGLbuw9zX
+         gQNbmn86Q4KBOUK2SLxt23sjQ0XDnl+y2ap5CMkTTdWgJ8t1Gts6FlMTRQfD59bwMelf
+         5b+Mmr9FC0t6sFxDiR/WJrpWjcDkm9cUPCUoTCJQKqhlKsw7VfYX8uKjmqyHmSccoGHG
+         J4MrD2ZKVu9vdW+TiWqDk3LGwPVt4eO9U5ll7+ZQfx/+NvflrNclFy2Ouw5lE4+Mf0Q/
+         n0YQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697145225; x=1697750025;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JHc53RKO8nhqYnehqtbOrBzFrWfxOOgucL77D+OqER8=;
+        b=GEj5Ipvchz+61uhi+g3PY97UUpWNQSGLPFbgGnhqyHdmPsT2mYFx7NU355GWasxrfg
+         h1yDRkCQukWnFy985WmAsC1/IzVOplcHQPPoXgGbq7mYbqUZg/p/JH0ijuDuIM9glAw+
+         bSZMzTu8FKlj7eoNMxAqvR8e9Fr8yYxUK3Bw2Q3/Vzh9u0wcAHFk4jn/RAeNZ5p436to
+         YYwePjrrnHHRY/i+dlQ4PjdvkKN6gypPLK2u4GdF7zcFxDyJZ9cIQMS/O3YuVQBJM9NL
+         3P25CHV66pAJTP/dnHG/7qYIqaKjxQdTs3bx4UL2QqZwHXrz2Rxssf4Z4zEzl0q4h6lD
+         zYLw==
+X-Gm-Message-State: AOJu0Yy/5KYcN7VeMnfL++T3DYP7kmYZueR97937M6UL7DAbTUHWSqOb
+        ThO/3iBoca/OuWuGJGv615rG+OUc9wWwd7ax8W0=
+X-Google-Smtp-Source: AGHT+IHkMdU2x5GDOFlu8prnbGfQ0iRf1BTa/zweOozEQ7yKut6PFviK1gyX1aQoj//OSEFwvENNJg==
+X-Received: by 2002:a7b:cc8f:0:b0:403:7b2:6d8f with SMTP id p15-20020a7bcc8f000000b0040307b26d8fmr22114721wma.2.1697145224900;
+        Thu, 12 Oct 2023 14:13:44 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
+        by smtp.googlemail.com with ESMTPSA id l25-20020a7bc459000000b004054dcbf92asm779383wmi.20.2023.10.12.14.13.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Oct 2023 14:13:44 -0700 (PDT)
+Message-ID: <dcafb275-40eb-4663-8ede-bf15546f83f6@linaro.org>
+Date:   Thu, 12 Oct 2023 23:13:43 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <8f578277cc015cfe9cdca06586b2c82f1a728bad.1697101543.git.quic_varada@quicinc.com>
-References: <cover.1697101543.git.quic_varada@quicinc.com> <8f578277cc015cfe9cdca06586b2c82f1a728bad.1697101543.git.quic_varada@quicinc.com>
-Subject: Re: [PATCH v2 1/8] clk: qcom: clk-alpha-pll: introduce stromer plus ops
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, ilia.lin@kernel.org,
-        konrad.dybcio@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        mturquette@baylibre.com, quic_kathirav@quicinc.com,
-        rafael@kernel.org, robh+dt@kernel.org, viresh.kumar@linaro.org
-Date:   Thu, 12 Oct 2023 13:55:36 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] thermal/core: Hardening the self-encapsulation
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20231012102700.2858952-1-daniel.lezcano@linaro.org>
+ <a6b51de7-4f56-4db9-a7dd-60555ac6c37f@arm.com>
+ <d9f3bd7b-a5db-4d37-bb1f-f97e40c8a63a@linaro.org>
+ <CAJZ5v0gC4+Jam0a4KpEr7onydn8Sp8MkN2yzVxm0W9qDpmEoDw@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0gC4+Jam0a4KpEr7onydn8Sp8MkN2yzVxm0W9qDpmEoDw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Varadarajan Narayanan (2023-10-12 02:26:17)
-> Stromer plus APSS PLL does not support dynamic frequency scaling.
-> To switch between frequencies, we have to shut down the PLL,
-> configure the L and ALPHA values and turn on again. So introduce the
-> separate set of ops for Stromer Plus PLL.
+On 12/10/2023 19:44, Rafael J. Wysocki wrote:
 
-Does this assume the PLL is always on?
+[ ... ]
 
->=20
-> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
-> v2:     Use clk_alpha_pll_stromer_determine_rate, instead of adding new
->         clk_alpha_pll_stromer_plus_determine_rate as the alpha pll width
->         is same for both
->=20
->         Fix review comments
->                 udelay(50) -> usleep_range(50, 60)
->                 Remove SoC-specific from print message
-> ---
->  drivers/clk/qcom/clk-alpha-pll.c | 57 ++++++++++++++++++++++++++++++++++=
-++++++
->  drivers/clk/qcom/clk-alpha-pll.h |  1 +
->  2 files changed, 58 insertions(+)
->=20
-> diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alph=
-a-pll.c
-> index 4edbf77..5221b6c 100644
-> --- a/drivers/clk/qcom/clk-alpha-pll.c
-> +++ b/drivers/clk/qcom/clk-alpha-pll.c
-> @@ -2508,3 +2508,60 @@ const struct clk_ops clk_alpha_pll_stromer_ops =3D=
- {
->         .set_rate =3D clk_alpha_pll_stromer_set_rate,
->  };
->  EXPORT_SYMBOL_GPL(clk_alpha_pll_stromer_ops);
-> +
-> +static int clk_alpha_pll_stromer_plus_set_rate(struct clk_hw *hw,
-> +                                              unsigned long rate,
-> +                                              unsigned long prate)
-> +{
-> +       struct clk_alpha_pll *pll =3D to_clk_alpha_pll(hw);
-> +       u32 l, alpha_width =3D pll_alpha_width(pll);
-> +       int ret;
-> +       u64 a;
-> +
-> +       rate =3D alpha_pll_round_rate(rate, prate, &l, &a, alpha_width);
-> +
-> +       regmap_write(pll->clkr.regmap, PLL_MODE(pll), 0);
+>> Yes, we should but there is the series for nvidia (pointed in the
+>> changelog) which need a slight refresh for the bindings AFAIR. That
+>> series is since March 2023 and Thierry seems busy [1]. I'm holding the
+>> hardening since then.
+>>
+>> So I don't know how to make progress on this? I was assuming we can
+>> merge this series and let the compiler recall what has to be fixed.
+>>
+>> [1] https://lore.kernel.org/all/ZK14edZUih1kH_sZ@orome/
+>>
+>> and as soon as it is fixed, we convert the WARNING to ERROR :P
+> 
+> To be honest, I'm not sure if anything needs to be done along the
+> lines of this patch right now or even at all.
+> 
+> The only concern here would be that some new drivers would include
+> thermal_core.h while we were waiting for the remaining existing
+> abusers to be fixed, but since this hasn't happened for the last 6
+> months, I'm not worried.
+> 
+> It would be good to add a notice to thermal_core.h that this file is
+> for internal use in the thermal core only, though.
 
-There's a theoretical problem here if I understand correctly. A call to
-clk_enable() can happen while clk_set_rate() is in progress or vice
-versa. Probably we need some sort of spinlock for this PLL that
-synchronizes any enable/disable with the rate change so that when we
-restore the enable bit the clk isn't enabled when it was supposed to be
-off.
+So this series will give a warning for the remaining nvidia driver but 
+Thierry just send the changes to get rid of the thermal_core.h (Thanks!)
+
+AFAICT, the last user of the thermal_zone_device structure is the 
+int340x driver but the patch fixing the structure internal usage is 
+already in the bleeding edge (well perhaps one nit is missing for the trace)
+
+As soon as the bindings are acked, then I can pick the patches from 
+Thierry which will end up in your tree. Then you can apply the current 
+series. And finally I'll send the last patch moving the thermal zone 
+device structure to the thermal_core.h. And we will be done with this part.
+
+Having a compilation warning (I would prefer a more coercive error if we 
+agree on that) will help to not have to double check every time 
+thermal_core.h is not pulled in the drivers when patches are submitted.
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
