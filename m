@@ -2,362 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C017C7325
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 18:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A31737C735D
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 18:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235728AbjJLQgj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 12 Oct 2023 12:36:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
+        id S1379559AbjJLQpd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Oct 2023 12:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235758AbjJLQgh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 12:36:37 -0400
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A49C6;
-        Thu, 12 Oct 2023 09:36:35 -0700 (PDT)
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-57b83ff7654so123363eaf.1;
-        Thu, 12 Oct 2023 09:36:35 -0700 (PDT)
+        with ESMTP id S1379509AbjJLQpc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 12:45:32 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DC5CA
+        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 09:45:30 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9b1ebc80d0aso184100266b.0
+        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 09:45:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697129129; x=1697733929; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kRh+Vupx0XypJiTrUDbDPsKcsjU0eEhEwWX6GsRTbtw=;
+        b=M3WGMV8HoyeP3/jPDaNPDSuBqQsHKWODClmLyKtJx5di7YL2ABsiR3lArZpDnoumXB
+         8bFjAN3ypyaQqT81WUikEEqAnU98o/GReLZq3ZlWj2c9Q9Q3MC2EdTsdi45HU4B+KL9A
+         5TViomjOKTzo+8cszm5QM1cIqu/U67wiXDwLuXxnajEWKY3dcO4nc+5KwEIDyvAp5847
+         uINnPS8vjP/c9O+a2Em+7OVO6mOhnafH9oC7YOY264/3xg/tBtentb1fTonuEXjR9ThP
+         l4cwoSgJB6+9CdCHbHAkgNiqdmpSxWzYLQgcNtG2YTVoowrJLrQRX6tCPlaNFGVoiRWo
+         8+9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697128594; x=1697733394;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xn2d1ZalxgHpJArrXkOlMAYABXDVS3l+5vwuPAudUHw=;
-        b=F2Q1mxzqWyw5AXjqAZW4c4m9EzrQNsPiHL+ns+XDoMi6hzP3woPEFbCEozwivDkGsy
-         BEwisHh0YMmPT+vmTaovFc3ABASzE019xRWBgzfP1giCeNArzwzs1hbqYJl4V9FXU1yE
-         O7iJ2OhGKXuqizr5tjghk0IOHa4/eQhrWSOU3fQFtcGDYhkkxux/5GHZEONmwmFjBatZ
-         +v8BNQyKg2o6LpTT44xpqTVC1g9Tegn4MKF7MJ1AXFsCYI54imwCi6lOe2H8QF8jYUao
-         ALmZE1zjSWEZREk5v9QoYRlP24viXeBggQ767E1dQDvQRIT8qeoiYcLhojhX8CM4dHOq
-         G0sA==
-X-Gm-Message-State: AOJu0YyGlASl8lpEhx5NMDs4xe/R0vr3KGlCPnxwb6xamDRxWMp2JQRR
-        wNXtJpqdHCfySbLPst7hSgS88Bbq3TzV5rZj5JA=
-X-Google-Smtp-Source: AGHT+IEm3hpOsQVoGeL5Jq1J13Yx/bJ+WwUrMPDPdGBNCHLYJxM6aXHmYxTLIuKhLsOMwnjzTY2wvQ7iTl5ug6vHFzE=
-X-Received: by 2002:a4a:b588:0:b0:578:c2af:45b5 with SMTP id
- t8-20020a4ab588000000b00578c2af45b5mr22964211ooo.0.1697128594221; Thu, 12 Oct
- 2023 09:36:34 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697129129; x=1697733929;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kRh+Vupx0XypJiTrUDbDPsKcsjU0eEhEwWX6GsRTbtw=;
+        b=MbM5TYeTGcR3P/3Ih/DnutIOJSxzM215VvTKERSdHrOKYDn7N7VYEev9b56qJXpB97
+         xBlWFS9IUEXUsTG2S2Ix5yDawkr0ogdsIeg0GQO22pLKIdsk3VoXGDwCuBe/I/wfnIoo
+         b0LlN0mtaa2PjGBhCvzzf2WibjDVdlRbcL/4DERYEKev9agZxUa/4owYEG/ePX/yoqbz
+         y7JfCdvOx6EE56E6iBJXs6e/4lDYenKpijYtONrpMCL1KEhutA1S8ay9f8+3fd6OQu42
+         nEzLTxFdoEBrV9DNvZ6jEvDLJ6NabgqXqzZeHQD9i3em9bQzBIsUhOpmEIf0OcH0d7mh
+         RSYw==
+X-Gm-Message-State: AOJu0YxNvtuK1hDiH50zH+QIT0SOdTaG0ZKl95kTEW0iZQqKi9nG9ZNA
+        8Qv3EXnoJEBhTGRm/OJCFB/Cig==
+X-Google-Smtp-Source: AGHT+IEXqEp3kFB6IUpjF8BAzbvasyJj3DSZYDjbuCP/F0tb8JGBX/QQLV+mGV4P8Tus5qj+oyhvlg==
+X-Received: by 2002:a17:906:24e:b0:9a1:e293:9882 with SMTP id 14-20020a170906024e00b009a1e2939882mr21330362ejl.63.1697129129266;
+        Thu, 12 Oct 2023 09:45:29 -0700 (PDT)
+Received: from [172.30.204.175] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
+        by smtp.gmail.com with ESMTPSA id g7-20020a1709067c4700b0099bd1a78ef5sm11250236ejp.74.2023.10.12.09.45.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Oct 2023 09:45:28 -0700 (PDT)
+Message-ID: <fef38d0e-f24b-41ce-9d28-82cd637ce342@linaro.org>
+Date:   Thu, 12 Oct 2023 18:45:08 +0200
 MIME-Version: 1.0
-References: <13365827.uLZWGnKmhe@kreacher> <3768557.kQq0lBPeGt@kreacher> <47191d10-354b-415b-b75a-f15a5f8f4cff@linaro.org>
-In-Reply-To: <47191d10-354b-415b-b75a-f15a5f8f4cff@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 12 Oct 2023 18:36:23 +0200
-Message-ID: <CAJZ5v0h0v-jrEfTq0t8U4wmoVWTgy1Poq4p6AA9H75-GiDUutg@mail.gmail.com>
-Subject: Re: [PATCH v1 4/6] thermal: gov_power_allocator: Use trip pointers
- instead of trip indices
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 4/4] ARM: dts: qcom: ipq8064: Add CPU OPP table
+Content-Language: en-US
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Robert Marko <robimarko@gmail.com>, ilia.lin@kernel.org,
+        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, agross@kernel.org, andersson@kernel.org,
+        rafael@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20230930102218.229613-1-robimarko@gmail.com>
+ <20230930102218.229613-4-robimarko@gmail.com>
+ <e2d6c9c7-ff59-408f-94cf-81e66d291963@linaro.org>
+ <6525ae86.050a0220.827f2.c59d@mx.google.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <6525ae86.050a0220.827f2.c59d@mx.google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 12, 2023 at 5:19 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 06/10/2023 19:47, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Modify the power allocator thermal governor to use trip pointers instead
-> > of trip indices everywhere except for the power_allocator_throttle()
-> > second argument that will be changed subsequently along with the
-> > definition of the .throttle() governor callback.
-> >
-> > The general functionality is not expected to be changed.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >   drivers/thermal/gov_power_allocator.c |  123 +++++++++++++---------------------
-> >   1 file changed, 49 insertions(+), 74 deletions(-)
-> >
-> > Index: linux-pm/drivers/thermal/gov_power_allocator.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/thermal/gov_power_allocator.c
-> > +++ linux-pm/drivers/thermal/gov_power_allocator.c
-> > @@ -16,8 +16,6 @@
-> >
-> >   #include "thermal_core.h"
-> >
-> > -#define INVALID_TRIP -1
-> > -
-> >   #define FRAC_BITS 10
-> >   #define int_to_frac(x) ((x) << FRAC_BITS)
-> >   #define frac_to_int(x) ((x) >> FRAC_BITS)
-> > @@ -55,23 +53,23 @@ static inline s64 div_frac(s64 x, s64 y)
-> >    * @err_integral:   accumulated error in the PID controller.
-> >    * @prev_err:       error in the previous iteration of the PID controller.
-> >    *          Used to calculate the derivative term.
-> > + * @sustainable_power:       Sustainable power (heat) that this thermal zone can
-> > + *                   dissipate
-> >    * @trip_switch_on: first passive trip point of the thermal zone.  The
-> >    *                  governor switches on when this trip point is crossed.
-> >    *                  If the thermal zone only has one passive trip point,
-> > - *                   @trip_switch_on should be INVALID_TRIP.
-> > + *                   @trip_switch_on should be NULL.
-> >    * @trip_max_desired_temperature:   last passive trip point of the thermal
-> >    *                                  zone.  The temperature we are
-> >    *                                  controlling for.
-> > - * @sustainable_power:       Sustainable power (heat) that this thermal zone can
-> > - *                   dissipate
-> >    */
-> >   struct power_allocator_params {
-> >       bool allocated_tzp;
-> >       s64 err_integral;
-> >       s32 prev_err;
-> > -     int trip_switch_on;
-> > -     int trip_max_desired_temperature;
-> >       u32 sustainable_power;
-> > +     const struct thermal_trip *trip_switch_on;
-> > +     const struct thermal_trip *trip_max_desired_temperature;
-> >   };
-> >
-> >   /**
-> > @@ -90,14 +88,12 @@ static u32 estimate_sustainable_power(st
-> >       u32 sustainable_power = 0;
-> >       struct thermal_instance *instance;
-> >       struct power_allocator_params *params = tz->governor_data;
-> > -     const struct thermal_trip *trip_max_desired_temperature =
-> > -                     &tz->trips[params->trip_max_desired_temperature];
-> >
-> >       list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
-> >               struct thermal_cooling_device *cdev = instance->cdev;
-> >               u32 min_power;
-> >
-> > -             if (instance->trip != trip_max_desired_temperature)
-> > +             if (instance->trip != params->trip_max_desired_temperature)
-> >                       continue;
-> >
-> >               if (!cdev_is_power_actor(cdev))
-> > @@ -116,24 +112,23 @@ static u32 estimate_sustainable_power(st
-> >    * estimate_pid_constants() - Estimate the constants for the PID controller
-> >    * @tz:             thermal zone for which to estimate the constants
-> >    * @sustainable_power:      sustainable power for the thermal zone
-> > - * @trip_switch_on:  trip point number for the switch on temperature
-> > + * @trip_switch_on:  trip point for the switch on temperature
-> >    * @control_temp:   target temperature for the power allocator governor
-> >    *
-> >    * This function is used to update the estimation of the PID
-> >    * controller constants in struct thermal_zone_parameters.
-> >    */
-> >   static void estimate_pid_constants(struct thermal_zone_device *tz,
-> > -                                u32 sustainable_power, int trip_switch_on,
-> > +                                u32 sustainable_power,
-> > +                                const struct thermal_trip *trip_switch_on,
-> >                                  int control_temp)
-> >   {
-> > -     struct thermal_trip trip;
-> >       u32 temperature_threshold = control_temp;
-> >       int ret;
-> >       s32 k_i;
-> >
-> > -     ret = __thermal_zone_get_trip(tz, trip_switch_on, &trip);
-> > -     if (!ret)
-> > -             temperature_threshold -= trip.temperature;
-> > +     if (trip_switch_on)
-> > +             temperature_threshold -= trip_switch_on->temperature;
-> >
-> >       /*
-> >        * estimate_pid_constants() tries to find appropriate default
-> > @@ -386,7 +381,7 @@ static int allocate_power(struct thermal
-> >       struct thermal_instance *instance;
-> >       struct power_allocator_params *params = tz->governor_data;
-> >       const struct thermal_trip *trip_max_desired_temperature =
-> > -                     &tz->trips[params->trip_max_desired_temperature];
-> > +                                     params->trip_max_desired_temperature;
-> >       u32 *req_power, *max_power, *granted_power, *extra_actor_power;
-> >       u32 *weighted_req_power;
-> >       u32 total_req_power, max_allocatable_power, total_weighted_req_power;
-> > @@ -496,7 +491,7 @@ static int allocate_power(struct thermal
-> >   }
-> >
-> >   /**
-> > - * get_governor_trips() - get the number of the two trip points that are key for this governor
-> > + * get_governor_trips() - get the two trip points that are key for this governor
-> >    * @tz:     thermal zone to operate on
-> >    * @params: pointer to private data for this governor
-> >    *
-> > @@ -513,46 +508,36 @@ static int allocate_power(struct thermal
-> >   static void get_governor_trips(struct thermal_zone_device *tz,
-> >                              struct power_allocator_params *params)
-> >   {
-> > -     int i, last_active, last_passive;
-> > -     bool found_first_passive;
-> > -
-> > -     found_first_passive = false;
-> > -     last_active = INVALID_TRIP;
-> > -     last_passive = INVALID_TRIP;
-> > -
-> > -     for (i = 0; i < tz->num_trips; i++) {
-> > -             struct thermal_trip trip;
-> > -             int ret;
-> > -
-> > -             ret = __thermal_zone_get_trip(tz, i, &trip);
-> > -             if (ret) {
-> > -                     dev_warn(&tz->device,
-> > -                              "Failed to get trip point %d type: %d\n", i,
-> > -                              ret);
-> > -                     continue;
-> > -             }
-> > -
-> > -             if (trip.type == THERMAL_TRIP_PASSIVE) {
-> > -                     if (!found_first_passive) {
-> > -                             params->trip_switch_on = i;
-> > -                             found_first_passive = true;
-> > -                     } else  {
-> > -                             last_passive = i;
-> > +     const struct thermal_trip *first_passive = NULL;
-> > +     const struct thermal_trip *last_passive = NULL;
-> > +     const struct thermal_trip *last_active = NULL;
-> > +     const struct thermal_trip *trip;
-> > +
-> > +     for_each_trip(tz, trip) {
-> > +             switch (trip->type) {
-> > +             case THERMAL_TRIP_PASSIVE:
-> > +                     if (!first_passive) {
-> > +                             first_passive = trip;
-> > +                             break;
-> >                       }
-> > -             } else if (trip.type == THERMAL_TRIP_ACTIVE) {
-> > -                     last_active = i;
-> > -             } else {
-> > +                     last_passive = trip;
-> > +                     break;
-> > +             case THERMAL_TRIP_ACTIVE:
-> > +                     last_active = trip;
-> > +                     break;
-> > +             default:
-> >                       break;
-> >               }
-> >       }
-> >
-> > -     if (last_passive != INVALID_TRIP) {
-> > +     if (last_passive) {
-> > +             params->trip_switch_on = first_passive;
-> >               params->trip_max_desired_temperature = last_passive;
-> > -     } else if (found_first_passive) {
-> > -             params->trip_max_desired_temperature = params->trip_switch_on;
-> > -             params->trip_switch_on = INVALID_TRIP;
-> > +     } else if (first_passive) {
-> > +             params->trip_switch_on = NULL;
-> > +             params->trip_max_desired_temperature = first_passive;
-> >       } else {
-> > -             params->trip_switch_on = INVALID_TRIP;
-> > +             params->trip_switch_on = NULL;
-> >               params->trip_max_desired_temperature = last_active;
-> >       }
-> >   }
-> > @@ -567,14 +552,12 @@ static void allow_maximum_power(struct t
-> >   {
-> >       struct thermal_instance *instance;
-> >       struct power_allocator_params *params = tz->governor_data;
-> > -     const struct thermal_trip *trip_max_desired_temperature =
-> > -                     &tz->trips[params->trip_max_desired_temperature];
-> >       u32 req_power;
-> >
-> >       list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
-> >               struct thermal_cooling_device *cdev = instance->cdev;
-> >
-> > -             if ((instance->trip != trip_max_desired_temperature) ||
-> > +             if (instance->trip != params->trip_max_desired_temperature ||
-> >                   (!cdev_is_power_actor(instance->cdev)))
-> >                       continue;
-> >
-> > @@ -636,7 +619,6 @@ static int power_allocator_bind(struct t
-> >   {
-> >       int ret;
-> >       struct power_allocator_params *params;
-> > -     struct thermal_trip trip;
-> >
-> >       ret = check_power_actors(tz);
-> >       if (ret)
-> > @@ -662,12 +644,13 @@ static int power_allocator_bind(struct t
-> >       get_governor_trips(tz, params);
-> >
-> >       if (tz->num_trips > 0) {
->
-> Maybe this test can go away because if (trip) is true below, then
-> logically (tz->num_trips > 0) ?
 
-Yes, it can go away.
 
-> > -             ret = __thermal_zone_get_trip(tz, params->trip_max_desired_temperature,
-> > -                                           &trip);
-> > -             if (!ret)
-> > +             const struct thermal_trip *trip;
-> > +
-> > +             trip = params->trip_max_desired_temperature;
-> > +             if (trip)
-> >                       estimate_pid_constants(tz, tz->tzp->sustainable_power,
-> >                                              params->trip_switch_on,
-> > -                                            trip.temperature);
-> > +                                            trip->temperature);
-> >       }
-> >
-> >       reset_pid_controller(params);
-> > @@ -697,11 +680,10 @@ static void power_allocator_unbind(struc
-> >       tz->governor_data = NULL;
-> >   }
-> >
-> > -static int power_allocator_throttle(struct thermal_zone_device *tz, int trip_id)
-> > +static int power_allocator_throttle(struct thermal_zone_device *tz, int trip_index)
-> >   {
-> >       struct power_allocator_params *params = tz->governor_data;
-> > -     struct thermal_trip trip;
-> > -     int ret;
-> > +     const struct thermal_trip *trip = &tz->trips[trip_index];
-> >       bool update;
-> >
-> >       lockdep_assert_held(&tz->lock);
-> > @@ -710,12 +692,12 @@ static int power_allocator_throttle(stru
-> >        * We get called for every trip point but we only need to do
-> >        * our calculations once
-> >        */
-> > -     if (trip_id != params->trip_max_desired_temperature)
-> > +     if (trip != params->trip_max_desired_temperature)
-> >               return 0;
-> >
-> > -     ret = __thermal_zone_get_trip(tz, params->trip_switch_on, &trip);
-> > -     if (!ret && (tz->temperature < trip.temperature)) {
-> > -             update = (tz->last_temperature >= trip.temperature);
-> > +     trip = params->trip_switch_on;
-> > +     if (trip && tz->temperature < trip->temperature) {
-> > +             update = tz->last_temperature >= trip->temperature;
-> >               tz->passive = 0;
-> >               reset_pid_controller(params);
-> >               allow_maximum_power(tz, update);
-> > @@ -724,14 +706,7 @@ static int power_allocator_throttle(stru
-> >
-> >       tz->passive = 1;
-> >
-> > -     ret = __thermal_zone_get_trip(tz, params->trip_max_desired_temperature, &trip);
-> > -     if (ret) {
-> > -             dev_warn(&tz->device, "Failed to get the maximum desired temperature: %d\n",
-> > -                      ret);
-> > -             return ret;
-> > -     }
-> > -
-> > -     return allocate_power(tz, trip.temperature);
-> > +     return allocate_power(tz, params->trip_max_desired_temperature->temperature);
-> >   }
-> >
-> >   static struct thermal_governor thermal_gov_power_allocator = {
-> >
-> >
-> >
->
-> --
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
->
+On 10/10/23 22:05, Christian Marangi wrote:
+> On Tue, Oct 10, 2023 at 09:55:26PM +0200, Konrad Dybcio wrote:
+>>
+>>
+>> On 9/30/23 12:21, Robert Marko wrote:
+>>> From: Christian Marangi <ansuelsmth@gmail.com>
+>>>
+>>> Add CPU OPP table for IPQ8062, IPQ8064 and IPQ8065 SoC.
+>>> Use opp-supported-hw binding to correctly enable and disable the
+>>> frequency as IPQ8062 supports up to 1.0Ghz, IPQ8064 supports up to
+>>> 1.4GHz with 1.2GHz as an additional frequency and IPQ8065 supports
+>>> 1.7GHZ but doesn't have 1.2GHZ frequency and has to be disabled.
+>>>
+>>> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+>>> Signed-off-by: Robert Marko <robimarko@gmail.com>
+>>> ---
+>>> Changes v4:
+>>> * Add OPP DTS patch for IPQ8064
+>>>
+>>>    arch/arm/boot/dts/qcom/qcom-ipq8062.dtsi | 30 +++++++++++
+>>>    arch/arm/boot/dts/qcom/qcom-ipq8064.dtsi | 67 ++++++++++++++++++++++++
+>>>    arch/arm/boot/dts/qcom/qcom-ipq8065.dtsi | 65 +++++++++++++++++++++++
+>>>    3 files changed, 162 insertions(+)
+>>>
+>>> diff --git a/arch/arm/boot/dts/qcom/qcom-ipq8062.dtsi b/arch/arm/boot/dts/qcom/qcom-ipq8062.dtsi
+>>> index 5d3ebd3e2e51..72d9782c3d6f 100644
+>>> --- a/arch/arm/boot/dts/qcom/qcom-ipq8062.dtsi
+>>> +++ b/arch/arm/boot/dts/qcom/qcom-ipq8062.dtsi
+>>> @@ -6,3 +6,33 @@ / {
+>>>    	model = "Qualcomm Technologies, Inc. IPQ8062";
+>>>    	compatible = "qcom,ipq8062", "qcom,ipq8064";
+>>>    };
+>>> +
+>>> +&opp_table_cpu {
+>>> +	opp-384000000 {
+>>> +		opp-microvolt-speed0-pvs0 = <1000000 950000 1050000>;
+>>> +		opp-microvolt-speed0-pvs1 = <925000 878750 971250>;
+>>> +		opp-microvolt-speed0-pvs2 = <875000 831250 918750>;
+>>> +		opp-microvolt-speed0-pvs3 = <800000 760000 840000>;
+>> We can just make use of opp-supported-hw and define opp-384...-0,
+>> opp-384..-1 etc. with a valid corresponding bitmask in opp-supported-hw
+>>
+>> otherwise it's somewhat confusing to follow, I think..
+>>
+> 
+> Ehh should we really double the nodes for ipq8062 and ipq8065?
+Hm.. I'm not 100% sure, both solutions are kinda meh, but perhaps 
+overwriting it will be less of a hassle for looking at the decompiled dt 
+indeed..
+
+> The idea here was to overwrite the one since the pvs always match and at
+> worst(ipq8065) have 7 pvs instead of 4. From the system it would be
+> easier to read since only one table is present in the final dts and not
+> 2 and referring to the opp-supported-hw.
+> 
+> The original idea was to declare one opp table and reuse pvs version (by
+> faking it with hardcoded values) to put additional pvs for ipq8062 and
+> ipq8065, but Dmitry didn't like it and asked to move the opp in
+> different dtsi.
+Yeah this fusing thing is complex enough already
+
+KOnrad
