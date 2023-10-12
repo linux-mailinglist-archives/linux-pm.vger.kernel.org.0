@@ -2,82 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A0BA7C6AA2
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 12:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67CE67C6B10
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Oct 2023 12:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343757AbjJLKLk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Oct 2023 06:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45060 "EHLO
+        id S1347152AbjJLK1O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Oct 2023 06:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347073AbjJLKLj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 06:11:39 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03CBDD8;
-        Thu, 12 Oct 2023 03:11:36 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39CA7OIX001877;
-        Thu, 12 Oct 2023 10:11:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=vAX90PP85Yb4sr/auFBh5RzBVFlgXiKa9q/nycAJa5g=;
- b=dMQGfWSYHjhl7XPE/2tqtRx5/2iUAS/M3MR4ZuTmIvjGMUsXO9JZE9NgJ8xFgCYo1yC+
- iBT4t+X5Vk6WSAPPpVT829+mfU7ERHTbCR9xFChNpY67/64Umq+LBLHA/IbS7TjIPPSq
- OYdAyA9uRiN+ZI1pL0Cla9ygLpV/Gi226QFR+WxqPi9yvNLclRdx3r2hWJnukbqrXKnp
- w6ohUgosodf31LPX4l2R61cfBbxZCGgxvlPeW5i5tUhRsAyGDRyz/sv/v6eiIP9N0jJ4
- JG+Rinwak9SldUNYGRdAMK74cQtVks16AP5/3m6xkggh3bdYbEWlfhCJYsPv9mwovfDQ VQ== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tnv1raj0h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Oct 2023 10:11:31 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39CABU8O027544
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Oct 2023 10:11:30 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Thu, 12 Oct 2023 03:11:24 -0700
-Date:   Thu, 12 Oct 2023 15:41:20 +0530
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <ilia.lin@kernel.org>, <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_kathirav@quicinc.com>, <linux-pm@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v1 07/10] arm64: dts: qcom: ipq5332: populate the opp
- table based on the eFuse
-Message-ID: <20231012101119.GA32310@varda-linux.qualcomm.com>
-References: <cover.1693996662.git.quic_varada@quicinc.com>
- <a6d12e3b253d6a55d85f66979ba8b7d9c9ff6072.1693996662.git.quic_varada@quicinc.com>
- <CAA8EJppNsgUNgwadq9oM0_KyORNR5PBZGVZukN6MzAm2KPzC9g@mail.gmail.com>
- <20231005095744.GA29795@varda-linux.qualcomm.com>
- <CAA8EJpr124fymnbZ1bO=Dbbxavn3Z=1xOPmFRPnfSp-UB3p6OQ@mail.gmail.com>
- <20231005144205.GB29795@varda-linux.qualcomm.com>
- <CAA8EJppJVzjyKjggkmi8uHGSPaHJ2ChsUV4Bfd0yNNDu3R+Kow@mail.gmail.com>
+        with ESMTP id S1347129AbjJLK1N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 06:27:13 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1F8C9
+        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 03:27:08 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-406650da82bso7977535e9.3
+        for <linux-pm@vger.kernel.org>; Thu, 12 Oct 2023 03:27:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697106427; x=1697711227; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zQFTPYux32bkJIxgqrdnxVBc3lqPGjAfWUK2pgjn7rI=;
+        b=RrtLssvUJxeY9mT0JuHVfFepvq+2fJpnZ+eX6SxoiVe5+3svG2Ez+NaXl/KluFIbie
+         FlFctnhv1oFoIghI2XqoVYvUMfKnfnr+3Ri8xDlVVZeGA3pCUTfbtqywj8gaTLq1Dq5f
+         Ji5WUr3/dOETrHalZwPMujBphDB/Q3g2lth+xp1xQg+iE/D4Mn7292oivbRFH1B+8K8u
+         oOcLzMXiyMX0XlVC5l2LTsH385Tt9FV0WUKzQwzWQLGE7mdAc7vkaqNcj+EecCcdUHKH
+         rAS3K524eiPC9/TmLuqBEahu0Hy84mM++G/fcP+rUloqHbXVWvf9om2gUQx9j7oVX80D
+         rzEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697106427; x=1697711227;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zQFTPYux32bkJIxgqrdnxVBc3lqPGjAfWUK2pgjn7rI=;
+        b=o6m/r8GJFy0ICWFXbpSLboCu0RChMJkHnYynY6Ujd42fEt6jy7bS9o20dyZaJJp5hF
+         HOyHhFJDx3ksyzujofwS9IqkbH3c9XrxiZgviT/me6awUQY474qezQprzJ1qdGczGhYM
+         BbOEweCmgBqfy7dJGB3Gy/k+vtnjfDqS+9IMQT6R2OqSz9x1z/6UFXp/1zTLGuN8sLkp
+         uPqlmDTV7jW+X+WIya3rBIBUJ1a7cpUVomU/TB8sIJ11bE42r2tgZAKhxVBswWdHnzGV
+         5BauUVRS68VwA7oMaNXIgtmzShxyssn6wE5Ac3bRJUt2n34tWiZSnvxlUES6+byIy/XH
+         JLPw==
+X-Gm-Message-State: AOJu0Ywom7+FhJI53vvuRgCk82Tu3GXUMlTRWe6zF0HqDTVYNVSSn13l
+        oc79Ycva/8IU1BqSxjsCuC5KVQ==
+X-Google-Smtp-Source: AGHT+IFqoY1cr+DhnY1o7SPlM2iF7e9VXj353COvBQwi/ECuub7MVp44/HtQGMV6tDkQ5D0EHknaeA==
+X-Received: by 2002:a05:600c:3652:b0:405:3dd0:6ee9 with SMTP id y18-20020a05600c365200b004053dd06ee9mr21322101wmq.34.1697106427168;
+        Thu, 12 Oct 2023 03:27:07 -0700 (PDT)
+Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
+        by smtp.gmail.com with ESMTPSA id z7-20020a7bc7c7000000b003fee567235bsm21506797wmk.1.2023.10.12.03.27.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Oct 2023 03:27:06 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        linux-pm@vger.kernel.org (open list:THERMAL),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 1/2] thermal/core: Hardening the self-encapsulation
+Date:   Thu, 12 Oct 2023 12:26:58 +0200
+Message-Id: <20231012102700.2858952-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAA8EJppJVzjyKjggkmi8uHGSPaHJ2ChsUV4Bfd0yNNDu3R+Kow@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: IdE7GPfk822aRGIe1QEeTC7ZFG-hDa_t
-X-Proofpoint-GUID: IdE7GPfk822aRGIe1QEeTC7ZFG-hDa_t
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-12_05,2023-10-12_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 impostorscore=0 lowpriorityscore=0 phishscore=0
- mlxscore=0 clxscore=1015 spamscore=0 suspectscore=0 adultscore=0
- bulkscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2309180000 definitions=main-2310120083
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -87,105 +71,225 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 05, 2023 at 10:39:55PM +0300, Dmitry Baryshkov wrote:
-> On Thu, 5 Oct 2023 at 17:42, Varadarajan Narayanan
-> <quic_varada@quicinc.com> wrote:
-> >
-> > On Thu, Oct 05, 2023 at 02:39:43PM +0300, Dmitry Baryshkov wrote:
-> > > On Thu, 5 Oct 2023 at 12:58, Varadarajan Narayanan
-> > > <quic_varada@quicinc.com> wrote:
-> > > >
-> > > > On Thu, Sep 07, 2023 at 04:59:28PM +0300, Dmitry Baryshkov wrote:
-> > > > > On Thu, 7 Sept 2023 at 08:23, Varadarajan Narayanan
-> > > > > <quic_varada@quicinc.com> wrote:
-> > > > > >
-> > > > > > IPQ53xx have different OPPs available for the CPU based on
-> > > > > > SoC variant. This can be determined through use of an eFuse
-> > > > > > register present in the silicon.
-> > > > > >
-> > > > > > Add support to read the eFuse and populate the OPPs based on it.
-> > > > > >
-> > > > > > Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> > > > > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > > > > > ---
-> > > > > >  arch/arm64/boot/dts/qcom/ipq5332.dtsi | 34 +++++++++++++++++++++++++++++++---
-> > > > > >  1 file changed, 31 insertions(+), 3 deletions(-)
-> > > > > >
-> > > > > > diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> > > > > > index 82761ae..3ca3f34 100644
-> > > > > > --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> > > > > > +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> > > > > > @@ -91,11 +91,34 @@
-> > > > > >         };
-> > > > > >
-> > > > > >         cpu_opp_table: opp-table-cpu {
-> > > > > > -               compatible = "operating-points-v2";
-> > > > > > +               compatible = "operating-points-v2-kryo-cpu";
-> > > > > >                 opp-shared;
-> > > > > > +               nvmem-cells = <&cpu_speed_bin>;
-> > > > > > +               nvmem-cell-names = "speed_bin";
-> > > > > > +
-> > > > > > +               /*
-> > > > > > +                * Listed all supported CPU frequencies and opp-supported-hw
-> > > > > > +                * values to select CPU frequencies based on the limits fused.
-> > > > > > +                * ------------------------------------------------------------
-> > > > > > +                * Frequency     BIT3   BIT2   BIT1    BIT0    opp-supported-hw
-> > > > > > +                *              1.0GHz 1.2GHz 1.5GHz No Limit
-> > > > > > +                * ------------------------------------------------------------
-> > > > > > +                * 1100000000     1      1      1       1            0xF
-> > > > > > +                * 1500000000     0      0      1       1            0x3
-> > > > > > +                * -----------------------------------------------------------
-> > > > > > +                */
-> > > > >
-> > > > > This can probably go to the commit message instead.
-> > > >
-> > > > Ok
-> > > >
-> > > > > > +
-> > > > > > +               opp-1100000000 {
-> > > > > > +                       opp-hz = /bits/ 64 <1100000000>;
-> > > > >
-> > > > > But your table shows 1.0 GHz and 1.2 GHz instead of 1.1 GHz
-> > > >
-> > > > Will update it.
-> > > >
-> > > > > > +                       opp-microvolt = <850000>;
-> > > > > > +                       opp-supported-hw = <0xF>;
-> > > > > > +                       clock-latency-ns = <200000>;
-> > > > > > +               };
-> > > > > >
-> > > > > > -               opp-1488000000 {
-> > > > > > -                       opp-hz = /bits/ 64 <1488000000>;
-> > > > > > +               opp-1500000000 {
-> > > > > > +                       opp-hz = /bits/ 64 <1500000000>;
-> > > > >
-> > > > > So, 1.488 GHz or 1.5 GHz?
-> > > >
-> > > > 1.5 GHz
-> > > >
-> > > > > > +                       opp-microvolt = <950000>;
-> > > > >
-> > > > > Which regulator is controlled by this microvolt?
-> > > >
-> > > > Based on the SKU, the XBL sets up the regulator to provide 950000uV
-> > > > on CPUs capable of running 1.5G and 850000uV on other SKUs. Linux
-> > > > doesn't control it.
-> > >
-> > > Then why do you need this property here in the first place?
-> >
-> > I get these errors without this property
-> >
-> > [    1.018065] cpu cpu0: opp_parse_microvolt: opp-microvolt missing although OPP managing regulators
->
-> But you have said that "Linux doesn't control it" [the regulator]!
+The thermal private header has leaked all around the drivers which
+interacted with the core internals. The thermal zone structure which
+was part of the exported header led also to a leakage of the fields
+into the different drivers, making very difficult to improve the core
+code without having to change the drivers.
 
-Got confused between the ipq9574 and ipq5332 patches.
-Have removed and addressed other comments too and
-posted v2 - https://lore.kernel.org/linux-arm-msm/cover.1697101543.git.quic_varada@quicinc.com/
+Now we mostly fixed how the thermal drivers were interacting with the
+thermal zones (actually fixed how they should not interact). The
+thermal zone structure will be moved to the private thermal core
+header. This header has been removed from the different drivers and
+must belong to the core code only. In order to prevent this private
+header to be included again in the drivers, make explicit only the
+core code can include this header by defining a THERMAL_CORE_SUBSYS
+macro. The private header will contain a check against this macro.
 
-Please take a look.
+The Tegra SoCtherm driver needs to access thermal_core.h to have the
+get_thermal_instance() function definition. It is the only one
+remaining driver which need to access the thermal_core.h header, so
+the check will emit a warning at compilation time.
 
-Thanks
-Varada
->
-> > [    1.018074] cpu cpu0: _of_add_opp_table_v2: Failed to add OPP, -22
+Thierry Reding is reworking the driver to get rid of this function [1]
+and thus when the changes will be merged, the compilation warning will
+be converted to a compilation error, closing definitively the door to
+the drivers willing to play with the thermal zone device internals.
+
+No functional changes intended.
+
+[1] https://lore.kernel.org/all/20230414125721.1043589-1-thierry.reding@gmail.com/
+
+Cc: Thierry Reding <thierry.reding@gmail.com>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/thermal/gov_bang_bang.c       | 1 +
+ drivers/thermal/gov_fair_share.c      | 1 +
+ drivers/thermal/gov_power_allocator.c | 1 +
+ drivers/thermal/gov_step_wise.c       | 1 +
+ drivers/thermal/gov_user_space.c      | 1 +
+ drivers/thermal/thermal_acpi.c        | 1 +
+ drivers/thermal/thermal_core.c        | 1 +
+ drivers/thermal/thermal_core.h        | 4 ++++
+ drivers/thermal/thermal_helpers.c     | 1 +
+ drivers/thermal/thermal_hwmon.c       | 1 +
+ drivers/thermal/thermal_netlink.c     | 1 +
+ drivers/thermal/thermal_of.c          | 1 +
+ drivers/thermal/thermal_sysfs.c       | 1 +
+ drivers/thermal/thermal_trip.c        | 1 +
+ 14 files changed, 17 insertions(+)
+
+diff --git a/drivers/thermal/gov_bang_bang.c b/drivers/thermal/gov_bang_bang.c
+index 1b121066521f..752c627075ba 100644
+--- a/drivers/thermal/gov_bang_bang.c
++++ b/drivers/thermal/gov_bang_bang.c
+@@ -11,6 +11,7 @@
+ 
+ #include <linux/thermal.h>
+ 
++#define THERMAL_CORE_SUBSYS
+ #include "thermal_core.h"
+ 
+ static int thermal_zone_trip_update(struct thermal_zone_device *tz, int trip_id)
+diff --git a/drivers/thermal/gov_fair_share.c b/drivers/thermal/gov_fair_share.c
+index 03c2daeb6ee8..108cb5074594 100644
+--- a/drivers/thermal/gov_fair_share.c
++++ b/drivers/thermal/gov_fair_share.c
+@@ -13,6 +13,7 @@
+ #include <linux/thermal.h>
+ #include "thermal_trace.h"
+ 
++#define THERMAL_CORE_SUBSYS
+ #include "thermal_core.h"
+ 
+ /**
+diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+index 8642f1096b91..d1c6ad92e5b4 100644
+--- a/drivers/thermal/gov_power_allocator.c
++++ b/drivers/thermal/gov_power_allocator.c
+@@ -14,6 +14,7 @@
+ #define CREATE_TRACE_POINTS
+ #include "thermal_trace_ipa.h"
+ 
++#define THERMAL_CORE_SUBSYS
+ #include "thermal_core.h"
+ 
+ #define INVALID_TRIP -1
+diff --git a/drivers/thermal/gov_step_wise.c b/drivers/thermal/gov_step_wise.c
+index 1050fb4d94c2..1c844004afe5 100644
+--- a/drivers/thermal/gov_step_wise.c
++++ b/drivers/thermal/gov_step_wise.c
+@@ -14,6 +14,7 @@
+ #include <linux/minmax.h>
+ #include "thermal_trace.h"
+ 
++#define THERMAL_CORE_SUBSYS
+ #include "thermal_core.h"
+ 
+ /*
+diff --git a/drivers/thermal/gov_user_space.c b/drivers/thermal/gov_user_space.c
+index 8bc1c22aaf03..8883c9ca930f 100644
+--- a/drivers/thermal/gov_user_space.c
++++ b/drivers/thermal/gov_user_space.c
+@@ -13,6 +13,7 @@
+ #include <linux/slab.h>
+ #include <linux/thermal.h>
+ 
++#define THERMAL_CORE_SUBSYS
+ #include "thermal_core.h"
+ 
+ static int user_space_bind(struct thermal_zone_device *tz)
+diff --git a/drivers/thermal/thermal_acpi.c b/drivers/thermal/thermal_acpi.c
+index 0e5698818f69..556c9f0cc40d 100644
+--- a/drivers/thermal/thermal_acpi.c
++++ b/drivers/thermal/thermal_acpi.c
+@@ -9,6 +9,7 @@
+ #include <linux/acpi.h>
+ #include <linux/units.h>
+ 
++#define THERMAL_CORE_SUBSYS
+ #include "thermal_core.h"
+ 
+ /*
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 58533ea75cd9..9ee0ec3bdff6 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -24,6 +24,7 @@
+ #define CREATE_TRACE_POINTS
+ #include "thermal_trace.h"
+ 
++#define THERMAL_CORE_SUBSYS
+ #include "thermal_core.h"
+ #include "thermal_hwmon.h"
+ 
+diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
+index de884bea28b6..387b06c49415 100644
+--- a/drivers/thermal/thermal_core.h
++++ b/drivers/thermal/thermal_core.h
+@@ -14,6 +14,10 @@
+ 
+ #include "thermal_netlink.h"
+ 
++#ifndef THERMAL_CORE_SUBSYS
++#warning This header can only be included by the thermal core code
++#endif
++
+ /* Default Thermal Governor */
+ #if defined(CONFIG_THERMAL_DEFAULT_GOV_STEP_WISE)
+ #define DEFAULT_THERMAL_GOVERNOR       "step_wise"
+diff --git a/drivers/thermal/thermal_helpers.c b/drivers/thermal/thermal_helpers.c
+index 4d66372c9629..26804cfdd494 100644
+--- a/drivers/thermal/thermal_helpers.c
++++ b/drivers/thermal/thermal_helpers.c
+@@ -19,6 +19,7 @@
+ #include <linux/string.h>
+ #include <linux/sysfs.h>
+ 
++#define THERMAL_CORE_SUBSYS
+ #include "thermal_core.h"
+ #include "thermal_trace.h"
+ 
+diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
+index c3ae44659b81..ba2ae5be0c23 100644
+--- a/drivers/thermal/thermal_hwmon.c
++++ b/drivers/thermal/thermal_hwmon.c
+@@ -17,6 +17,7 @@
+ #include <linux/thermal.h>
+ 
+ #include "thermal_hwmon.h"
++#define THERMAL_CORE_SUBSYS
+ #include "thermal_core.h"
+ 
+ /* hwmon sys I/F */
+diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
+index 08bc46c3ec7b..f3ac6432bf5f 100644
+--- a/drivers/thermal/thermal_netlink.c
++++ b/drivers/thermal/thermal_netlink.c
+@@ -11,6 +11,7 @@
+ #include <net/genetlink.h>
+ #include <uapi/linux/thermal.h>
+ 
++#define THERMAL_CORE_SUBSYS
+ #include "thermal_core.h"
+ 
+ static const struct genl_multicast_group thermal_genl_mcgrps[] = {
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index 1e0655b63259..db83596ea105 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -16,6 +16,7 @@
+ #include <linux/types.h>
+ #include <linux/string.h>
+ 
++#define THERMAL_CORE_SUBSYS
+ #include "thermal_core.h"
+ 
+ /***   functions parsing device tree nodes   ***/
+diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+index 4e6a97db894e..ca616b3f5172 100644
+--- a/drivers/thermal/thermal_sysfs.c
++++ b/drivers/thermal/thermal_sysfs.c
+@@ -19,6 +19,7 @@
+ #include <linux/string.h>
+ #include <linux/jiffies.h>
+ 
++#define THERMAL_CORE_SUBSYS
+ #include "thermal_core.h"
+ 
+ /* sys I/F for thermal zone */
+diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
+index 024e2e365a26..2f4c6fa83bea 100644
+--- a/drivers/thermal/thermal_trip.c
++++ b/drivers/thermal/thermal_trip.c
+@@ -7,6 +7,7 @@
+  *
+  * Thermal trips handling
+  */
++#define THERMAL_CORE_SUBSYS
+ #include "thermal_core.h"
+ 
+ int for_each_thermal_trip(struct thermal_zone_device *tz,
+-- 
+2.34.1
+
