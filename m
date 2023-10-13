@@ -2,68 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9777C8473
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Oct 2023 13:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C2987C84AE
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Oct 2023 13:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbjJMLeg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Oct 2023 07:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45746 "EHLO
+        id S230147AbjJMLkt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Oct 2023 07:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbjJMLeg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Oct 2023 07:34:36 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9A3BE
-        for <linux-pm@vger.kernel.org>; Fri, 13 Oct 2023 04:34:34 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id 46e09a7af769-6c4e38483d2so1326085a34.1
-        for <linux-pm@vger.kernel.org>; Fri, 13 Oct 2023 04:34:34 -0700 (PDT)
+        with ESMTP id S229903AbjJMLks (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Oct 2023 07:40:48 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD107B7;
+        Fri, 13 Oct 2023 04:40:46 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-51e28cac164so6505692a12.1;
+        Fri, 13 Oct 2023 04:40:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1697196873; x=1697801673; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=xKEQIcOM3MdjvO2j/p0Wbp17RHXs4ZX0D3r8r2bGeK4=;
-        b=jcL/gaWqn/SxGbLvzveLdNMj0jSYmi4pMCrPdlQTjcIffZ/ra2rd3wENmRgrdivLbN
-         qLrKp+Rm3hUlQMNlpksDBhbdMTiYEXMg2gTLTWEV/e3W1vsbm8d4mb7R4e2ZbQbhx6ci
-         pN0emus1gSyJ+/fG53EHkzwWpf2+5QBvgfFfMdny9rcjsNtrlrVEGLLEla5yQW2pcbFp
-         hLtJVReDcaeSkyQhjqqJ/G3eyOcefH0LsCQXw0XCD7W83NrZ4SImoClxhsm8Bromeq4q
-         cJWKktbqj7jHPfEjKxMfPGPAIHRKQZIbxK+8LuGxu7py3dmyAlTMSncoqYGtCg0CjOvN
-         L7Og==
+        d=gmail.com; s=20230601; t=1697197245; x=1697802045; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mH4tRv4+dZr4M5iR8AWhdg07jhklJyUHM7PsxthvZxU=;
+        b=J4PGRdrKCKcqudNRCfRPHTrecxSEEGoMaPAy/mIf7Qxi+oCrkGkJ+Tcll0S6cY2h4z
+         eSj4XmlNsY/WGUvs7DfA/3NykWwljbsZCdUgseHiIazTfcNAbNG/BTyMH/5UxMR5KX5o
+         gcUmhZlWhQwHmTtKjriUurWLFKR4IubJkqwHUUcJXIw8olxZGRgPOxKJFi7iCoIDc1Y/
+         VfyXhfhyimaM/360TRMablwAVZsIJdB4w79Oyw4aW++/8ZZT4ylrjC5XMB9qjB2EjgSC
+         cp+VU/Z5upumAMbGX6IQ7vvApZdOQhSnh7Mr6cVRzj/Ox4iFGTtCm/gzoM/VNoe9bQ1v
+         xFiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697196873; x=1697801673;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xKEQIcOM3MdjvO2j/p0Wbp17RHXs4ZX0D3r8r2bGeK4=;
-        b=meuGve5z+uoiKdenZ/VHN9wJESy6KlIlpCaiAaCYAcB6hztisRT9OTU/WS4n8pkoDP
-         zG848wqFWGS2Asl6Nee9+j5YU095CPO0yoNgKAEDN9AkIGRqTEju9HZN2Phlz2xoo4LQ
-         ICBzilflaDk/8YwwUbwLVyMoHL0X2Jh9k3Hv4wWh3x+UpwJRyMWUrfB5Gd8nv36yO8m9
-         6AqqP9BC81rR5Qy27qonw1Q1j6PhLo2b7asjMQdfhL+2uX0nL0CnZkNslgxszPfbRbak
-         Q+xYT1iNQgsoJtoC6RgjziNDPfDascaenHjsIiLr+158jnMGldeC4d4ZFKfOb2QaEY4Q
-         fv+A==
-X-Gm-Message-State: AOJu0YwfjRJj6oSv8Rkmk/+I8FfeIr24JyVQPHoYhZa+5MdSDXyJ24c3
-        fBaA3nsPYmh2aR/2WWcfMzheyg==
-X-Google-Smtp-Source: AGHT+IHqrTB50Y0L+sDZdxCqWqILF0fACndqcpa4ci726HLCidVT8IigB7mdLPPMNy3fFF3jnmayUA==
-X-Received: by 2002:a9d:6e09:0:b0:6b9:ed64:1423 with SMTP id e9-20020a9d6e09000000b006b9ed641423mr29059670otr.2.1697196873751;
-        Fri, 13 Oct 2023 04:34:33 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id a5-20020aa794a5000000b0069327d0b491sm1173786pfl.195.2023.10.13.04.34.32
+        d=1e100.net; s=20230601; t=1697197245; x=1697802045;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mH4tRv4+dZr4M5iR8AWhdg07jhklJyUHM7PsxthvZxU=;
+        b=k4u9ycTfRogK+jxbZTZjU9VnToUgnOXqVtAY4ko9tiHQ6m2wSOmsKDTQ/KVr9PGhRF
+         uPRzqaT/m/+fm3Mevxqp0pEO3QKvf9qOrSTLP0eVb0GrzN5RxbNiBtMgvIZZVpd4q+3N
+         TkjkIRh2iwmTmb9kuerQQpAz3tdxHphMCs6m0BXBY6+bezfeMaYN7Bbdd2x5xMBVqzJE
+         Wv+mgmur0fF64OAhqYDKc9TUxpsTbG+sbFWRFC6Jgkof525o0gRoXyMD2XDokTUfnyub
+         UUUuPhrY4xuLjfVz/TM4UeMr/MUe6MJUL2xT4b5tfRdS5vGUQKPtKkCF0CYBV639HWfk
+         9FVA==
+X-Gm-Message-State: AOJu0YxS5hL/fkiDXEgDbaplheH/hE6WaxqA/znLtn/hYwK/B/XY3gj9
+        Ouz/EsJx1dBI35j5YBnuj7c=
+X-Google-Smtp-Source: AGHT+IEUKKrj+yWWt0k1ic4SMvRZQ3sKRrfjY9N2UXsvbFceieqAee1KOZsE/sjmr/6DlTtZcPEKDg==
+X-Received: by 2002:a05:6402:40c1:b0:527:1855:be59 with SMTP id z1-20020a05640240c100b005271855be59mr20152782edb.3.1697197245072;
+        Fri, 13 Oct 2023 04:40:45 -0700 (PDT)
+Received: from orome.fritz.box (p200300e41f3f4900f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f3f:4900:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id v3-20020a056402174300b0053e3839fc79sm916698edx.96.2023.10.13.04.40.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Oct 2023 04:34:33 -0700 (PDT)
-Message-ID: <65292b49.a70a0220.b4e54.2a57@mx.google.com>
-Date:   Fri, 13 Oct 2023 04:34:33 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 13 Oct 2023 04:40:44 -0700 (PDT)
+Date:   Fri, 13 Oct 2023 13:40:42 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jon Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v2 04/13] thermal: tegra: Use driver-private data
+ consistently
+Message-ID: <ZSksuix4Imy2zonN@orome.fritz.box>
+References: <20231012175836.3408077-1-thierry.reding@gmail.com>
+ <20231012175836.3408077-5-thierry.reding@gmail.com>
+ <24073646-373e-452d-94b6-3d91101ac5e2@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.6-rc5-157-g8134843f53ba
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.6-rc5-157-g8134843f53ba)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="esywz0M3I1a4TjD0"
+Content-Disposition: inline
+In-Reply-To: <24073646-373e-452d-94b6-3d91101ac5e2@linaro.org>
+User-Agent: Mutt/2.2.12 (2023-09-09)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,100 +82,72 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.6-rc5-157-g8=
-134843f53ba)
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-6-rc5-157-g8134843f53ba/
+--esywz0M3I1a4TjD0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Tree: pm
-Branch: testing
-Git Describe: v6.6-rc5-157-g8134843f53ba
-Git Commit: 8134843f53ba0826c8d090964f9bedeeea19c665
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+On Fri, Oct 13, 2023 at 10:04:33AM +0200, Daniel Lezcano wrote:
+> On 12/10/2023 19:58, Thierry Reding wrote:
+> > From: Thierry Reding <treding@nvidia.com>
+> >=20
+> > Instead of passing around platform and plain devices and figuring out
+> > the driver-private data within each helper, directly pass around the
+> > driver-private data when it's available.
+> >=20
+> > Also store a pointer to the parent device in the main driver-private
+> > data structure for easier access.
+> >=20
+> > Signed-off-by: Thierry Reding <treding@nvidia.com>
+> > ---
+>=20
+> [ ... ]
+>=20
+> > -static void soctherm_debug_init(struct platform_device *pdev)
+> > +static void soctherm_debug_init(struct tegra_soctherm *tegra)
+> >   {
+> > -	struct tegra_soctherm *tegra =3D platform_get_drvdata(pdev);
+> >   	struct dentry *root;
+> >   	root =3D debugfs_create_dir("soctherm", NULL);
+> >   	tegra->debugfs_dir =3D root;
+> > -	debugfs_create_file("reg_contents", 0644, root, pdev, &regs_fops);
+> > +	debugfs_create_file("reg_contents", 0644, root, tegra, &regs_fops);
+>=20
+> (Orthogonal to this series) : in case you are not aware of it there is the
+> debugfs_create_regset32() function. That may make go away a bunch of code
+> related to the debugfs code here.
+>=20
+> cf. https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tre=
+e/drivers/thermal/mediatek/lvts_thermal.c?h=3Dthermal/bleeding-edge#n159
 
-Warnings Detected:
+Doesn't look like we could 1:1 transition to that because a bunch of the
+output is parameterized on some per-SoC variables, but it might be
+possible to rework the whole debugfs interfaces and split it up into
+multiple directories and files, much like LVTS does this. That's going
+to be quite a bit of work, but I can add it to my TODO list to look at
+when I get some spare time.
 
-arc:
+Thierry
 
-arm64:
+--esywz0M3I1a4TjD0
+Content-Type: application/pgp-signature; name="signature.asc"
 
-arm:
+-----BEGIN PGP SIGNATURE-----
 
-i386:
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmUpLLoACgkQ3SOs138+
+s6GY3RAAwVtMi2CkaD1HK7reJ2BEu/fUIm+/GXGamvccsDnDcoWUa+qiaHz1TnU+
+bt2tPh1qqcF+d28iThxflAFDWsEPzYa4E0YSp+OnFjDeyuXS3jEvq+9fem8VwL0c
+sPx6haZ4aun6NVW0XrJwSjfBlDIkrHCY7mbNG2pWY0GznWR2bNnWcfc5VCbvQa8U
+OyBAeF8UOHZ8Vj2GCpDRhiK25NLaXtLmTO38fDMHO2TMI8QHVw+wSYmc5vzGjJrs
+NKtKEDfpNpfS+hrlSq6Nv5WqrY3xdaJJL1jmuwM406xZ2guQfaafZjhwDRViJQBJ
+EhYASoE7giyw6v5ZM4dfk5NeQC9OlWDWcAVgB66jlZpE28NrE7XV6obwqpK2U5LE
+HAKWkSoJYYFD0t9/EAaKWRyaPlzOW9eYSxNuCnO5DRhz7iesqIVlZXHtCMWdLm7n
+WpyTk7WJWtUzyTKB5UIt7yR6InXNm83Xfqa6aqjSWCD1V5rEyozAxN8po7JgpP+k
+Y2IWGCXjfKhSeR6tPPFB9d8uEazePKPuBhHqwNgk5XjmGmlSEDV1wCKF7bKtwRGH
+0B7eF7hfPzDlmwb1RdWcejh0xAEjx0cp0Lglic+dCCfWZAmbGFRSNxpsfz1/P0dl
+Rcwco02sHxqs8XFR/QH52J8YEu0djT5JnLwpLbbL4lhEehMEFEc=
+=Uxnh
+-----END PGP SIGNATURE-----
 
-mips:
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+--esywz0M3I1a4TjD0--
