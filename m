@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 712287C80A9
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Oct 2023 10:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C19B7C80AC
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Oct 2023 10:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbjJMItD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Oct 2023 04:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57608 "EHLO
+        id S230234AbjJMItM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Oct 2023 04:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbjJMItC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Oct 2023 04:49:02 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9959FD9
-        for <linux-pm@vger.kernel.org>; Fri, 13 Oct 2023 01:48:59 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6b26a3163acso343180b3a.2
-        for <linux-pm@vger.kernel.org>; Fri, 13 Oct 2023 01:48:59 -0700 (PDT)
+        with ESMTP id S230229AbjJMItK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Oct 2023 04:49:10 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02298CE
+        for <linux-pm@vger.kernel.org>; Fri, 13 Oct 2023 01:49:02 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-690ce3c55f1so1479985b3a.0
+        for <linux-pm@vger.kernel.org>; Fri, 13 Oct 2023 01:49:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697186939; x=1697791739; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1697186942; x=1697791742; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Il8qfrUz/VvYSn9zWibaW2EcrYf9IhDD8qWnA/nDM/0=;
-        b=zFvuZ+v6bcwUvKVEs+3fLEJhusLNtle5frH1gamu5LxaQSETaab5Aozpa6sGqw9qMT
-         SeSmIxsc+ccqs/p+lveeerVxz4jHK1vGW2yXxcbFs9pbV72ge2///v4NJ6etsg5fnS/O
-         jBl+qz7wLlkQxgSUN3yJuNZ6VLHqokTsEjBRD4yjJl9h5QP5cDpeYAbzU/sReQzli2p+
-         JgeJJvEgzZf/IDiR285Ev88BcpAfwZMlrxsJyplKi+s5EV/8oJzphjTXQe/shl5IGXSE
-         B/rmGG4rVYoNPppTbjMidByz4p7KhBOpUe0PJnIbK9cZQ7TYd4Gje1CLVA/dp+s1VAOH
-         WADg==
+        bh=mjra0WdYWK36KGusor5NGq8FRrUa/zXmRjm2tlyhEOI=;
+        b=dVBG7CgmwOVdX0Q6tRMxDQHCe7vJKwugJ12eucHlErvu77dc9H9gbH41/UCtYo6lvO
+         /57YJNjq95QSQfjp9hJHw+FTmzNpadKW9q6kJT+B61uJ5FzzTB1D4ehgImALPRuSrHnZ
+         u9SezJZ4iG+3jPXaJHpXAeixqqK4kxwvFLUTKZAWBW+mbLO7U8kqh/if9sTdZepuBpqF
+         pC9xgeQZpJMF7g4kbgMK7YHh/bdpeH/XYYCyQ+GGcCNBjZ2jTnJnsEU0UKawL7g5zmJQ
+         N5zvrWB2d9FhnOyDwtREMwpgJPtn6LyNyOS+RrxE5zvclKo3MxThb1alp2nCVfzStpbJ
+         yyDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697186939; x=1697791739;
+        d=1e100.net; s=20230601; t=1697186942; x=1697791742;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Il8qfrUz/VvYSn9zWibaW2EcrYf9IhDD8qWnA/nDM/0=;
-        b=ALSnX+q8ASubxT4PxvZiZYyJQaaabcxQYueg+7SUIxJGTooUqpVCi4JJWh/veNhYra
-         Xn2dQbUhFjA16w2cIQzEQFxOo3i9l9BKk9xrt87oLYF2vHyjcBIMI7mdLP9HWOQYne7c
-         7YUveEXMPc9Sr6ranebhfIZzy38g1cNE9gYZ/NYxeziWdZNTRH2D9EBEtKA/2NiAt1MK
-         yXzbHLp4ACa/vlfF3LM/mZxBaYi6+3MGgJ6U+CXqU2yUohj6yi2ylxgaWDczTZlN+bkH
-         jQGpeRa+hdtGFp/nhU860jUxYb+j5UVA8qoAJBSY2n6ODBpe8L83fFT0Lx1JpsJc4z3o
-         b19A==
-X-Gm-Message-State: AOJu0YwGrqq//YmPFPEI0eipqm7//d6ImfWV8O9Z3dTwytjUVlOFOAnU
-        rBw/aAaePTEQTMfF5QyIXAMtZxA69IDGFlVYNqM=
-X-Google-Smtp-Source: AGHT+IFuX8OHWuQqLIHMu+hE/a9qLVdUVDAqw5Eo/AfAH/SMAqPwytZyqJGU2cHfT2sWeC/2xRVuaw==
-X-Received: by 2002:a05:6a00:b8f:b0:693:4202:b535 with SMTP id g15-20020a056a000b8f00b006934202b535mr29675823pfj.27.1697186939127;
-        Fri, 13 Oct 2023 01:48:59 -0700 (PDT)
+        bh=mjra0WdYWK36KGusor5NGq8FRrUa/zXmRjm2tlyhEOI=;
+        b=wkVEb8fsU0z1GLopPb7RKnSPdxigGtJNcW1q9WKUBpzBKh3qIcV+ND+zKvmUR2GfKy
+         PJCjqcJxEtGBkcpLQG60tBfBnzsh1hSLIb+H/KQUfi+xzZdINJhbJ9PcMCdblH5yfZRO
+         x0eQVxldhfM7fx8p4gPCN1ENpYl9Ya6Vw6Wr9lOJLg4h3mn+JVSPb57TGg6N68cbJNb7
+         dgOZiLjoxVRPLTNXVPhAxgZpgxwvCjDSxyApB+Iq/v4sCl9XmxhED/7tqWHy8IjyVZIt
+         WgzaEEbXMXCWzzIbGZ6gTKm5WmqYb13wH3EjIGTE7LL0/Y451okwu/G2DAvGHLz0Tian
+         NF7w==
+X-Gm-Message-State: AOJu0Yx/1LAC2wagJtnCBbwZbDZJM96xDuD5dOCE2WQwUDNdF9y2gJfy
+        e1CgzjlUWg/fB91ZM5T1EsQDnQ==
+X-Google-Smtp-Source: AGHT+IG41+b3yJXum4xwBP/+ABHsqzUFb6HvYHzaanfXBpdfqmBBj6O4RsroSNMhxFSQ+EiCBLZ8jw==
+X-Received: by 2002:a05:6a20:3d89:b0:174:210c:34b0 with SMTP id s9-20020a056a203d8900b00174210c34b0mr6362313pzi.0.1697186942446;
+        Fri, 13 Oct 2023 01:49:02 -0700 (PDT)
 Received: from localhost ([122.172.80.14])
-        by smtp.gmail.com with ESMTPSA id g24-20020a62e318000000b00696e8215d28sm13025120pfh.20.2023.10.13.01.48.58
+        by smtp.gmail.com with ESMTPSA id im16-20020a170902bb1000b001c5fed0b35esm3382039plb.300.2023.10.13.01.49.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Oct 2023 01:48:58 -0700 (PDT)
+        Fri, 13 Oct 2023 01:49:02 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Stephen Boyd <sboyd@kernel.org>
@@ -57,9 +57,9 @@ Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/5] OPP: Reorder code in _opp_set_required_opps_genpd()
-Date:   Fri, 13 Oct 2023 14:18:39 +0530
-Message-Id: <a5bd698a7a899fb63b4c5caec7068bf5a395165c.1697186772.git.viresh.kumar@linaro.org>
+Subject: [PATCH 4/5] OPP: Remove genpd_virt_dev_lock
+Date:   Fri, 13 Oct 2023 14:18:40 +0530
+Message-Id: <afec94cb6515e79c3b336f74be8aa929a303b26f.1697186772.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1697186772.git.viresh.kumar@linaro.org>
 References: <cover.1697186772.git.viresh.kumar@linaro.org>
@@ -76,69 +76,147 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Reorder code in _opp_set_required_opps_genpd() to reduce duplicate code.
+All the config operations for OPP tables share common code paths now and
+none of the other ones have such protection in place. Either all should
+have it or none.
+
+The understanding here is that user won't clear the OPP configs while
+still using them and so such a case won't happen. We can always come
+back and use a wider lock for all resource types if required.
+
+Also fix the error on failing to allocate memory.
 
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/opp/core.c | 34 +++++++++++++++++++---------------
- 1 file changed, 19 insertions(+), 15 deletions(-)
+ drivers/opp/core.c | 33 +++------------------------------
+ drivers/opp/opp.h  |  2 --
+ 2 files changed, 3 insertions(+), 32 deletions(-)
 
 diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index f42b663a4d8b..3516e79cf743 100644
+index 3516e79cf743..befe46036ad5 100644
 --- a/drivers/opp/core.c
 +++ b/drivers/opp/core.c
-@@ -1076,7 +1076,18 @@ static int _opp_set_required_opps_genpd(struct device *dev,
- {
- 	struct device **genpd_virt_devs =
- 		opp_table->genpd_virt_devs ? opp_table->genpd_virt_devs : &dev;
--	int i, ret = 0;
-+	int index, target, delta, ret;
-+
-+	/* Scaling up? Set required OPPs in normal order, else reverse */
-+	if (!scaling_down) {
-+		index = 0;
-+		target = opp_table->required_opp_count;
-+		delta = 1;
-+	} else {
-+		index = opp_table->required_opp_count - 1;
-+		target = -1;
-+		delta = -1;
-+	}
- 
- 	/*
- 	 * Acquire genpd_virt_dev_lock to make sure we don't use a genpd_dev
-@@ -1084,24 +1095,17 @@ static int _opp_set_required_opps_genpd(struct device *dev,
- 	 */
- 	mutex_lock(&opp_table->genpd_virt_dev_lock);
- 
--	/* Scaling up? Set required OPPs in normal order, else reverse */
--	if (!scaling_down) {
--		for (i = 0; i < opp_table->required_opp_count; i++) {
--			ret = _set_performance_state(dev, genpd_virt_devs[i], opp, i);
--			if (ret)
--				break;
--		}
--	} else {
--		for (i = opp_table->required_opp_count - 1; i >= 0; i--) {
--			ret = _set_performance_state(dev, genpd_virt_devs[i], opp, i);
--			if (ret)
--				break;
--		}
-+	while (index != target) {
-+		ret = _set_performance_state(dev, genpd_virt_devs[index], opp, index);
-+		if (ret)
-+			break;
-+
-+		index += delta;
+@@ -1089,12 +1089,6 @@ static int _opp_set_required_opps_genpd(struct device *dev,
+ 		delta = -1;
  	}
  
- 	mutex_unlock(&opp_table->genpd_virt_dev_lock);
+-	/*
+-	 * Acquire genpd_virt_dev_lock to make sure we don't use a genpd_dev
+-	 * after it is freed from another thread.
+-	 */
+-	mutex_lock(&opp_table->genpd_virt_dev_lock);
+-
+ 	while (index != target) {
+ 		ret = _set_performance_state(dev, genpd_virt_devs[index], opp, index);
+ 		if (ret)
+@@ -1103,8 +1097,6 @@ static int _opp_set_required_opps_genpd(struct device *dev,
+ 		index += delta;
+ 	}
  
--	return ret;
-+	return 0;
+-	mutex_unlock(&opp_table->genpd_virt_dev_lock);
+-
+ 	return 0;
  }
  
- /* This is only called for PM domain for now */
+@@ -1474,7 +1466,6 @@ static struct opp_table *_allocate_opp_table(struct device *dev, int index)
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	mutex_init(&opp_table->lock);
+-	mutex_init(&opp_table->genpd_virt_dev_lock);
+ 	INIT_LIST_HEAD(&opp_table->dev_list);
+ 	INIT_LIST_HEAD(&opp_table->lazy);
+ 
+@@ -1510,7 +1501,6 @@ static struct opp_table *_allocate_opp_table(struct device *dev, int index)
+ remove_opp_dev:
+ 	_of_clear_opp_table(opp_table);
+ 	_remove_opp_dev(opp_dev, opp_table);
+-	mutex_destroy(&opp_table->genpd_virt_dev_lock);
+ 	mutex_destroy(&opp_table->lock);
+ err:
+ 	kfree(opp_table);
+@@ -1678,7 +1668,6 @@ static void _opp_table_kref_release(struct kref *kref)
+ 	list_for_each_entry_safe(opp_dev, temp, &opp_table->dev_list, node)
+ 		_remove_opp_dev(opp_dev, opp_table);
+ 
+-	mutex_destroy(&opp_table->genpd_virt_dev_lock);
+ 	mutex_destroy(&opp_table->lock);
+ 	kfree(opp_table);
+ }
+@@ -2395,7 +2384,7 @@ static void _opp_put_config_regulators_helper(struct opp_table *opp_table)
+ 		opp_table->config_regulators = NULL;
+ }
+ 
+-static void _detach_genpd(struct opp_table *opp_table)
++static void _opp_detach_genpd(struct opp_table *opp_table)
+ {
+ 	int index;
+ 
+@@ -2449,13 +2438,11 @@ static int _opp_attach_genpd(struct opp_table *opp_table, struct device *dev,
+ 	if (!opp_table->required_opp_count)
+ 		return -EPROBE_DEFER;
+ 
+-	mutex_lock(&opp_table->genpd_virt_dev_lock);
+-
+ 	opp_table->genpd_virt_devs = kcalloc(opp_table->required_opp_count,
+ 					     sizeof(*opp_table->genpd_virt_devs),
+ 					     GFP_KERNEL);
+ 	if (!opp_table->genpd_virt_devs)
+-		goto unlock;
++		return -ENOMEM;
+ 
+ 	while (*name) {
+ 		if (index >= opp_table->required_opp_count) {
+@@ -2478,29 +2465,15 @@ static int _opp_attach_genpd(struct opp_table *opp_table, struct device *dev,
+ 
+ 	if (virt_devs)
+ 		*virt_devs = opp_table->genpd_virt_devs;
+-	mutex_unlock(&opp_table->genpd_virt_dev_lock);
+ 
+ 	return 0;
+ 
+ err:
+-	_detach_genpd(opp_table);
+-unlock:
+-	mutex_unlock(&opp_table->genpd_virt_dev_lock);
++	_opp_detach_genpd(opp_table);
+ 	return ret;
+ 
+ }
+ 
+-static void _opp_detach_genpd(struct opp_table *opp_table)
+-{
+-	/*
+-	 * Acquire genpd_virt_dev_lock to make sure virt_dev isn't getting
+-	 * used in parallel.
+-	 */
+-	mutex_lock(&opp_table->genpd_virt_dev_lock);
+-	_detach_genpd(opp_table);
+-	mutex_unlock(&opp_table->genpd_virt_dev_lock);
+-}
+-
+ static void _opp_clear_config(struct opp_config_data *data)
+ {
+ 	if (data->flags & OPP_CONFIG_GENPD)
+diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
+index fefdf9845692..08366f90f16b 100644
+--- a/drivers/opp/opp.h
++++ b/drivers/opp/opp.h
+@@ -160,7 +160,6 @@ enum opp_table_access {
+  * @rate_clk_single: Currently configured frequency for single clk.
+  * @current_opp: Currently configured OPP for the table.
+  * @suspend_opp: Pointer to OPP to be used during device suspend.
+- * @genpd_virt_dev_lock: Mutex protecting the genpd virtual device pointers.
+  * @genpd_virt_devs: List of virtual devices for multiple genpd support.
+  * @required_opp_tables: List of device OPP tables that are required by OPPs in
+  *		this table.
+@@ -212,7 +211,6 @@ struct opp_table {
+ 	struct dev_pm_opp *current_opp;
+ 	struct dev_pm_opp *suspend_opp;
+ 
+-	struct mutex genpd_virt_dev_lock;
+ 	struct device **genpd_virt_devs;
+ 	struct opp_table **required_opp_tables;
+ 	unsigned int required_opp_count;
 -- 
 2.31.1.272.g89b43f80a514
 
