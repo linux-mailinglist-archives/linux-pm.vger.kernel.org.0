@@ -2,67 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2F287C8868
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Oct 2023 17:15:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 084257C8894
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Oct 2023 17:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232343AbjJMPPN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Oct 2023 11:15:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
+        id S232297AbjJMPZm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Oct 2023 11:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232315AbjJMPPH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Oct 2023 11:15:07 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146D2BB
-        for <linux-pm@vger.kernel.org>; Fri, 13 Oct 2023 08:15:04 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-4056ce55e7eso22667335e9.2
-        for <linux-pm@vger.kernel.org>; Fri, 13 Oct 2023 08:15:03 -0700 (PDT)
+        with ESMTP id S232350AbjJMPZm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Oct 2023 11:25:42 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF8AC9
+        for <linux-pm@vger.kernel.org>; Fri, 13 Oct 2023 08:25:39 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-32003aae100so2252644f8f.0
+        for <linux-pm@vger.kernel.org>; Fri, 13 Oct 2023 08:25:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697210102; x=1697814902; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wyxGVZwTo+k49X7yswwdJnlfM7vyBM0WpBEkY1/lOJA=;
-        b=G1NwDz0qQqbyqZ7aJ0VbOkS3c8yrJA91/nVu6A8vKUbr0LrDh4pGOegvalbSwQaJKp
-         Et6nGuvHYdC7cjJChjV8BEaheCsmZbmztaUBGF+bpbtZFswpKsh9vJQ1V+e/4d4qlREU
-         2IWKBsNDZfOhYei911Xi3FkYcce1Jg5oS4OeIu7vEFf13v8p1Wj6Ne9bQRpNpwmsd+OO
-         BYsHD2IGvII+K7PqiTPROvsS3iOvbyo0l9i6XMhlqA59Fu0ugygYMT+s+prlT3G4VtJw
-         uOcgL+oDyIxIsFW0HDfUHZ6s85G4hpyfor7jlJBgp+UkA7K5af8EXJcAhATJycRBneZ7
-         yPOQ==
+        d=linaro.org; s=google; t=1697210738; x=1697815538; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OqiyO5h666WNcMBFY0zx+uO/TZpSzYvmxb3OC1OULWs=;
+        b=NVcjHByJCWtE737XCAW5NyLyfdqhnldEsZQOu9/YQl/p6qrg/NGvoviIzidw2yrAhZ
+         G87giDn0LNzm4Vi9wzkyG/KwiUU/l/mamKP+k8XF0Lp5X2jew+sySe72twBDeeQS296+
+         OvhUpWlLwALfDNZph8sgTGykDtQ1XbyFS4A5eI/7HhpJhoOQdvICXU3XKDNSrrAPmD3f
+         UokZPY5m0iS//GraRTR8FpNsnEWZkhbE9do092dMpUL5aYPkfGOCydu8DM/NAgUws2BS
+         CpylEqzgCC4DCLpbdBh8jiF+e1s8kpBkYKMjzoRHUQZ90X+YBKLkFFXOH+t6+k+EHnsM
+         Us/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697210102; x=1697814902;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wyxGVZwTo+k49X7yswwdJnlfM7vyBM0WpBEkY1/lOJA=;
-        b=I1b0L11JTg2yqkjlGp78EwdepgP2stBGWR06Xuk4r/bzciRFRhMfwjXcPSWJ2ZXP1N
-         n9zTs+nJ1EfcXAxKB5aMFfybJDQzibLVld/ZtuRCtv4r7cQ1X1wRITtXml/M+xHtwtyb
-         wiK8KBj5TV4jLQwNNtvqjcJOF7XaE31Rvhr5jzLsTnYQtVK3/TTZQglVTKBZNnQUbLEa
-         MKsiJBz8/28NsI5+NHvXOaetQDvlOkf99zRkSJorQljj+/CsWUvmzvs5C2yeqcsiDsrI
-         Gw3sbsyt+KkmH89VoThT9Sr+s1ti75ab86GwpUbSOQJ5bg2VAWAcQHqfLVQnbiGDqqCe
-         O++Q==
-X-Gm-Message-State: AOJu0Yxz5hb6b0smDFWqCJ96IDfsobyCBD1IkWzIKu2pddNjsJQlJtwi
-        JCMo5XfTB3qoZ8Fq4UMdVHlMmw==
-X-Google-Smtp-Source: AGHT+IEtyHxKSYFD0gN9kXyRQUa5Ao8tAG9HXvKt/zy5aeSFsJOaTvPl5MiF6PRi8HLwud6CCtfeFQ==
-X-Received: by 2002:a05:6000:14e:b0:320:a19:7f87 with SMTP id r14-20020a056000014e00b003200a197f87mr23475295wrx.18.1697210102347;
-        Fri, 13 Oct 2023 08:15:02 -0700 (PDT)
-Received: from vingu-book.. ([2a01:e0a:f:6020:38a9:4647:7a2a:5b13])
-        by smtp.gmail.com with ESMTPSA id d9-20020a5d6dc9000000b00327b5ca093dsm20814975wrz.117.2023.10.13.08.15.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Oct 2023 08:15:01 -0700 (PDT)
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        rafael@kernel.org, viresh.kumar@linaro.org, qyousef@layalina.io,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     lukasz.luba@arm.com, Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH 2/2] sched/schedutil: rework iowait boost
-Date:   Fri, 13 Oct 2023 17:14:50 +0200
-Message-Id: <20231013151450.257891-3-vincent.guittot@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231013151450.257891-1-vincent.guittot@linaro.org>
-References: <20231013151450.257891-1-vincent.guittot@linaro.org>
+        d=1e100.net; s=20230601; t=1697210738; x=1697815538;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OqiyO5h666WNcMBFY0zx+uO/TZpSzYvmxb3OC1OULWs=;
+        b=lr08S/X6iFxU4WpN3VwaHkLkj/FcOYUsqzHALrIY1Kssw+A4RoDI5qiMC1bdEN9U5b
+         l+HkUHMvaVZyW0dgF/b2c1SnjPu1TEvJjpTz8xYvXhmVuQx653epEzgQTiykZ9hzJ+59
+         Z31M62MhBPwUH8K2vviIMDZKTfgs25dDbcEfKJypGOFgtpxTAnlNBAjWcWxqfdpaHyiY
+         osu2P2nB5HyhSjoPEN3EeZJmZS8+ttD8xEzyDGO65J4OVF46Xlnd+bRgi4K7Ve+tJNiI
+         nF+P4txNgR4/pmBJ6hqoxAR9dFo8/nC9DDWjYhli4j66o606jbgHzkY0ANOqrkrW/VDB
+         mKww==
+X-Gm-Message-State: AOJu0YxVxRtm9pg6gaTO+PTKkdbqaQqawuFNH1N6pcbEhg8RdfD+JWE7
+        Xu4H8/vtGxOz2RKknosyrXr2rg==
+X-Google-Smtp-Source: AGHT+IG3Q2dwNrMf0dpK3UfqA9ZkhmleZbTUt/8zaNtFpNTgsYvyfK+j2Ev8RbzmQ/zhSYaCKQzf6A==
+X-Received: by 2002:adf:8b98:0:b0:31f:f95c:dd7f with SMTP id o24-20020adf8b98000000b0031ff95cdd7fmr353980wra.12.1697210738255;
+        Fri, 13 Oct 2023 08:25:38 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
+        by smtp.googlemail.com with ESMTPSA id bh6-20020a05600c3d0600b00406408dc788sm391301wmb.44.2023.10.13.08.25.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Oct 2023 08:25:37 -0700 (PDT)
+Message-ID: <1ef28d5e-ae16-4668-8fe0-13b5521ae572@linaro.org>
+Date:   Fri, 13 Oct 2023 17:25:37 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] thermal: ACPI: Include the right header file
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
+References: <2721589.mvXUDI8C0e@kreacher>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <2721589.mvXUDI8C0e@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
@@ -74,188 +77,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use the max value that has already been computed inside sugov_get_util()
-to cap the iowait boost and remove dependency with uclamp_rq_util_with()
-which is not used anymore.
+On 13/10/2023 17:14, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> It is not necessary to include thermal_core.h into thermal_acpi.c,
+> because none of the code in there depends on anything in the former,
+> except for the linux/thermal.h, but it is better to include that one
+> directly instead of including the entire thermal_core.h, so make that
+> change.
+> 
+> No functional impact.
+> 
+> Fixes: 7a0e39748861 ("thermal: ACPI: Add ACPI trip point routines")
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
 
-Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
----
- kernel/sched/cpufreq_schedutil.c | 29 ++++++++-------
- kernel/sched/sched.h             | 60 --------------------------------
- 2 files changed, 14 insertions(+), 75 deletions(-)
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 8cb323522b90..820612867769 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -177,11 +177,12 @@ unsigned long sugov_effective_cpu_perf(int cpu, unsigned long actual,
- 	return max(target, max);
- }
- 
--static void sugov_get_util(struct sugov_cpu *sg_cpu)
-+static void sugov_get_util(struct sugov_cpu *sg_cpu, unsigned long boost)
- {
- 	unsigned long min, max, util = cpu_util_cfs_boost(sg_cpu->cpu);
- 
- 	util = effective_cpu_util(sg_cpu->cpu, util, &min, &max);
-+	util = max(util, boost);
- 	sg_cpu->bw_min = map_util_perf(min);
- 	sg_cpu->util = sugov_effective_cpu_perf(sg_cpu->cpu, util, min, max);
- }
-@@ -274,18 +275,16 @@ static void sugov_iowait_boost(struct sugov_cpu *sg_cpu, u64 time,
-  * This mechanism is designed to boost high frequently IO waiting tasks, while
-  * being more conservative on tasks which does sporadic IO operations.
-  */
--static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
-+static unsigned long sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
- 			       unsigned long max_cap)
- {
--	unsigned long boost;
--
- 	/* No boost currently required */
- 	if (!sg_cpu->iowait_boost)
--		return;
-+		return 0;
- 
- 	/* Reset boost if the CPU appears to have been idle enough */
- 	if (sugov_iowait_reset(sg_cpu, time, false))
--		return;
-+		return 0;
- 
- 	if (!sg_cpu->iowait_boost_pending) {
- 		/*
-@@ -294,7 +293,7 @@ static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
- 		sg_cpu->iowait_boost >>= 1;
- 		if (sg_cpu->iowait_boost < IOWAIT_BOOST_MIN) {
- 			sg_cpu->iowait_boost = 0;
--			return;
-+			return 0;
- 		}
- 	}
- 
-@@ -304,10 +303,7 @@ static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
- 	 * sg_cpu->util is already in capacity scale; convert iowait_boost
- 	 * into the same scale so we can compare.
- 	 */
--	boost = (sg_cpu->iowait_boost * max_cap) >> SCHED_CAPACITY_SHIFT;
--	boost = uclamp_rq_util_with(cpu_rq(sg_cpu->cpu), boost, NULL);
--	if (sg_cpu->util < boost)
--		sg_cpu->util = boost;
-+	return (sg_cpu->iowait_boost * max_cap) >> SCHED_CAPACITY_SHIFT;
- }
- 
- #ifdef CONFIG_NO_HZ_COMMON
-@@ -337,6 +333,8 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
- 					      u64 time, unsigned long max_cap,
- 					      unsigned int flags)
- {
-+	unsigned long boost;
-+
- 	sugov_iowait_boost(sg_cpu, time, flags);
- 	sg_cpu->last_update = time;
- 
-@@ -345,8 +343,8 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
- 	if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
- 		return false;
- 
--	sugov_get_util(sg_cpu);
--	sugov_iowait_apply(sg_cpu, time, max_cap);
-+	boost = sugov_iowait_apply(sg_cpu, time, max_cap);
-+	sugov_get_util(sg_cpu, boost);
- 
- 	return true;
- }
-@@ -447,9 +445,10 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
- 
- 	for_each_cpu(j, policy->cpus) {
- 		struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
-+		unsigned long boost;
- 
--		sugov_get_util(j_sg_cpu);
--		sugov_iowait_apply(j_sg_cpu, time, max_cap);
-+		boost = sugov_iowait_apply(j_sg_cpu, time, max_cap);
-+		sugov_get_util(j_sg_cpu, boost);
- 
- 		util = max(j_sg_cpu->util, util);
- 	}
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 3873b4de7cfa..b181edaf4d41 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -3026,59 +3026,6 @@ static inline bool uclamp_rq_is_idle(struct rq *rq)
- 	return rq->uclamp_flags & UCLAMP_FLAG_IDLE;
- }
- 
--/**
-- * uclamp_rq_util_with - clamp @util with @rq and @p effective uclamp values.
-- * @rq:		The rq to clamp against. Must not be NULL.
-- * @util:	The util value to clamp.
-- * @p:		The task to clamp against. Can be NULL if you want to clamp
-- *		against @rq only.
-- *
-- * Clamps the passed @util to the max(@rq, @p) effective uclamp values.
-- *
-- * If sched_uclamp_used static key is disabled, then just return the util
-- * without any clamping since uclamp aggregation at the rq level in the fast
-- * path is disabled, rendering this operation a NOP.
-- *
-- * Use uclamp_eff_value() if you don't care about uclamp values at rq level. It
-- * will return the correct effective uclamp value of the task even if the
-- * static key is disabled.
-- */
--static __always_inline
--unsigned long uclamp_rq_util_with(struct rq *rq, unsigned long util,
--				  struct task_struct *p)
--{
--	unsigned long min_util = 0;
--	unsigned long max_util = 0;
--
--	if (!static_branch_likely(&sched_uclamp_used))
--		return util;
--
--	if (p) {
--		min_util = uclamp_eff_value(p, UCLAMP_MIN);
--		max_util = uclamp_eff_value(p, UCLAMP_MAX);
--
--		/*
--		 * Ignore last runnable task's max clamp, as this task will
--		 * reset it. Similarly, no need to read the rq's min clamp.
--		 */
--		if (uclamp_rq_is_idle(rq))
--			goto out;
--	}
--
--	min_util = max_t(unsigned long, min_util, uclamp_rq_get(rq, UCLAMP_MIN));
--	max_util = max_t(unsigned long, max_util, uclamp_rq_get(rq, UCLAMP_MAX));
--out:
--	/*
--	 * Since CPU's {min,max}_util clamps are MAX aggregated considering
--	 * RUNNABLE tasks with _different_ clamps, we can end up with an
--	 * inversion. Fix it now when the clamps are applied.
--	 */
--	if (unlikely(min_util >= max_util))
--		return min_util;
--
--	return clamp(util, min_util, max_util);
--}
--
- /* Is the rq being capped/throttled by uclamp_max? */
- static inline bool uclamp_rq_is_capped(struct rq *rq)
- {
-@@ -3116,13 +3063,6 @@ static inline unsigned long uclamp_eff_value(struct task_struct *p,
- 	return SCHED_CAPACITY_SCALE;
- }
- 
--static inline
--unsigned long uclamp_rq_util_with(struct rq *rq, unsigned long util,
--				  struct task_struct *p)
--{
--	return util;
--}
--
- static inline bool uclamp_rq_is_capped(struct rq *rq) { return false; }
- 
- static inline bool uclamp_is_used(void)
 -- 
-2.34.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
