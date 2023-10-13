@@ -2,115 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 196FE7C8D00
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Oct 2023 20:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B417E7C8F0C
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Oct 2023 23:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjJMSVF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Oct 2023 14:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
+        id S230297AbjJMVaO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Oct 2023 17:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjJMSVF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Oct 2023 14:21:05 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6CB91;
-        Fri, 13 Oct 2023 11:21:03 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-40776b200e5so3793015e9.2;
-        Fri, 13 Oct 2023 11:21:03 -0700 (PDT)
+        with ESMTP id S229830AbjJMVaO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Oct 2023 17:30:14 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EFFDB7
+        for <linux-pm@vger.kernel.org>; Fri, 13 Oct 2023 14:30:12 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-419b53acc11so35941cf.0
+        for <linux-pm@vger.kernel.org>; Fri, 13 Oct 2023 14:30:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697221262; x=1697826062; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gv9tvIF0FJcUZfx9a5PjRlvRxUAHlFbHKhq9rtR1+SM=;
-        b=Jx0M6m4FSS6T6LnRxoh7pGwl3UyGqF11seGtQwCcXkE/Yi6kaplUL2aAtq81TRQ0gy
-         3qy/hoEwmz27s4LC7+yVlArPXbsMI5NYNavhhrJ3diqxriiwp3uU+yATPk2TpgqlCUmt
-         Z4pvV6LAGFbxhnTCHKhfa00nHTTZpZ5L61Y4BuGV7E2lKe48tukZOfTsVP30UHa7D0Vm
-         lb3/j3xS8Y4rV/50V4IHZW6AXvGeErbA0g6dd8VTRnSDH0q6hTXUJDHUiJghG6Ty0+8U
-         CGxihbDbPI0KFMQ57vtzPZ9YEdTWeOiuNDCek977noqfx+8s7dwhfAUeq8TX+AF1+Vtq
-         myLA==
+        d=google.com; s=20230601; t=1697232611; x=1697837411; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sAFhh0UnBjMrpFbTC5AXbZwOOdusiznbF8lSwFMaVaE=;
+        b=bnySvF2PI3SYjja3YZWxTqdLncedf11lm45Vuucqhv0b5MH2ODTOnLG/p1f4toEwgD
+         m7unZwSSu0V0H5mQ3cYxk3mfkzwdwDSPcg3tiWFtxVMMkIEstrSZOHPM5Ur9zPKv95fM
+         F1rcPJ2o5upGlRmF+yLy1mWTT9ASbnB235N1Vsj6S/2Z48ijIbUpg7zUHI23ADAQQl1+
+         /DOMa+Zc+l9gFN99qSQ7xnAPPSBxUS4P4Z13HWCO3LT/fbvmoKGQ0eIHlAt5Hesxe8Fy
+         fsTPXXc2S/zPdPWuAUmGADN4aAd4dgHxS23aaZts5No268Y4mLwv6O8Df4naXtUlcpQi
+         /QGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697221262; x=1697826062;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1697232611; x=1697837411;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gv9tvIF0FJcUZfx9a5PjRlvRxUAHlFbHKhq9rtR1+SM=;
-        b=mQjihCPy/AO5Q0TUZ6irRxLHoWgYtc0LNEoJPJL7lGUJj20OYG/8bOGGS3tysY97p+
-         JiAbgs69SmR5sXbNOksq0I2dOk229l1fFgV1NC8TclJ5eeMGwG7QT5V45Zl6wSXk5DTt
-         1H+R9JvnKgOHttxSxa51zspOxivx3Q/0iLnW2oBZ2F9TsLuCgbhTTIogN1X9tR34Okaz
-         efNJiJ9goSIfGJZPPJzjzC5FNIVVXVLvfx0VZ8EJxgBET5aAtNKekM+gSPi/lGk8Ryil
-         LVBkTrZe81pXHaz3LK4+vUBwuqB0hvtMhKsStmVw7jnkaUC0rm7D+djQRbNxgQoNrtlT
-         X7qQ==
-X-Gm-Message-State: AOJu0YxMgG2uIhlsQGyPQTfHKoUkvgdPuMfbvzUj4DEkor66djtZQ++k
-        /Q9R8j46LqbPl7y7JTlO8GI=
-X-Google-Smtp-Source: AGHT+IG0o6aMR2CPAIeUL7MdgJKlaB6hjSmfXfd3uql46yTPYWc65TiCib6s5bX0SPcUYuph/4qgyQ==
-X-Received: by 2002:a05:600c:3781:b0:405:1bfb:ff14 with SMTP id o1-20020a05600c378100b004051bfbff14mr22984089wmr.9.1697221261269;
-        Fri, 13 Oct 2023 11:21:01 -0700 (PDT)
-Received: from gmail.com (1F2EF405.nat.pool.telekom.hu. [31.46.244.5])
-        by smtp.gmail.com with ESMTPSA id ew14-20020a05600c808e00b004064ac107cfsm788824wmb.39.2023.10.13.11.21.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Oct 2023 11:21:00 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Fri, 13 Oct 2023 20:20:58 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        rafael@kernel.org, viresh.kumar@linaro.org, qyousef@layalina.io,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        lukasz.luba@arm.com
-Subject: Re: [PATCH 1/2] sched/schedutil: rework performance estimation
-Message-ID: <ZSmKiquvV6clE1ux@gmail.com>
-References: <20231013151450.257891-1-vincent.guittot@linaro.org>
- <20231013151450.257891-2-vincent.guittot@linaro.org>
+        bh=sAFhh0UnBjMrpFbTC5AXbZwOOdusiznbF8lSwFMaVaE=;
+        b=AR1r7H31cvcq9Yh8cryGdjLAki65BeFCi5yTCTTU2kJGrtlhqlYfyHBlRbkZS1eZ5J
+         3rr8pSQJcg6eSgDhQk35XRA4afUD+o9FN76Gh+lbAtua3VkumUsUcng206znhj/k7fta
+         BXwzvdwNe1iTMA6Af7qhz9jxXhxyHPCFxTdPix7B2IcxQZqLax/G/rt8ojHh4Pg05ruJ
+         YDk2udYZEHPlgV9d6bu+1D9afIVW4i6EwG5jX6azCBSQrIiBbc/kRfVGHK+EhqFfiryH
+         FtDfxg7jsNF2vxEWSv4+3oTN82eqmPzUtrujwBbgWmyLTKjocVR2VRX026oPwibTIh2G
+         KMjw==
+X-Gm-Message-State: AOJu0YzYqqOrEuqRsu309zDCLVmmPD/gLgKn0dju8R4cSeXE/9PS1cnk
+        xepOppY2aD32zhp4oVBrU91YBHzY9oS0R6h8i9sP4A==
+X-Google-Smtp-Source: AGHT+IF4Z+15fJ9zlezugWUa6Y7qSQixakl5BbpSQAF0GpLbjLvXXPWs6Dm/F13K9ZY2NPOpTn0J3CMZt0JHWcrYsPo=
+X-Received: by 2002:ac8:5e8c:0:b0:3fa:3c8f:3435 with SMTP id
+ r12-20020ac85e8c000000b003fa3c8f3435mr2108qtx.27.1697232611523; Fri, 13 Oct
+ 2023 14:30:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231013151450.257891-2-vincent.guittot@linaro.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20231012132214.257207-1-emkan@prevas.dk>
+In-Reply-To: <20231012132214.257207-1-emkan@prevas.dk>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Fri, 13 Oct 2023 14:29:35 -0700
+Message-ID: <CAGETcx9mUVzERc8Uf3FWYtMv+RZyNgvjm1oOtQZq6yN4_3Bp8Q@mail.gmail.com>
+Subject: Re: [PATCH] pmdomain: imx: gpc: set fwnode from parent device
+To:     Emil Kronborg Andersen <emkan@prevas.dk>
+Cc:     ulf.hansson@linaro.org, linux-pm@vger.kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-* Vincent Guittot <vincent.guittot@linaro.org> wrote:
-
+On Thu, Oct 12, 2023 at 6:22=E2=80=AFAM Emil Kronborg Andersen <emkan@preva=
+s.dk> wrote:
+>
+> Before commit 3fb16866b51d ("driver core: fw_devlink: Make cycle
+> detection more robust"), consumer devices without their fwnode set
+> printed errors like the one below:
+>
+> [    1.039830] imx-gpc 20dc000.gpc: Failed to create device link (0x180) =
+with 20c8000.anatop:regulator-vddpu
+>
+> To fix this, set the fwnode so fw_devlink can find and handle it
+> properly.
+>
+> Signed-off-by: Emil Kronborg Andersen <emkan@prevas.dk>
+> ---
+>  drivers/pmdomain/imx/gpc.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/pmdomain/imx/gpc.c b/drivers/pmdomain/imx/gpc.c
+> index 90a8b2c0676f..8759eab72880 100644
+> --- a/drivers/pmdomain/imx/gpc.c
+> +++ b/drivers/pmdomain/imx/gpc.c
+> @@ -411,6 +411,8 @@ static int imx_gpc_probe(struct platform_device *pdev=
+)
+>         void __iomem *base;
+>         int ret;
+>
+> +       device_set_node(&pdev->dev, dev_fwnode(pdev->dev.parent));
 > +
-> +	/* The minimum utilization returns the highest level between:
-> +	 * - the computed DL bandwidth needed with the irq pressure which
-> +	 *   steals time to the deadline task.
-> +	 * - The minimum bandwidth requirement for CFS.
-> +	 */
 
-Nit: please use the standard multi-line Linux kernel comment style.
+Similar question as the other patch. Can we do this at a pmdomain
+framework level instead of per driver?
 
-> +	/* The maximum hint is a soft bandwidth requirement which can be lower
-> +	 * than the actual utilization because of max uclamp requirments
->  	 */
+-Saravana
 
-Ditto.
-
-> +unsigned long sugov_effective_cpu_perf(int cpu, unsigned long actual,
-> +				 unsigned long min,
-> +				 unsigned long max)
-> +{
-> +	unsigned long target;
-> +	struct rq *rq = cpu_rq(cpu);
-> +
-> +	if (rt_rq_is_runnable(&rq->rt))
-> +		return max;
-> +
-> +	/* Provide at least enough capacity for DL + irq */
-> +	target =  min;
-
-s/  / /
-s/irq/IRQ/
-
-Thanks,
-
-	Ingo
+>         pgc_node =3D of_get_child_by_name(pdev->dev.of_node, "pgc");
+>
+>         /* bail out if DT too old and doesn't provide the necessary info =
+*/
+> --
+> 2.41.0
+>
