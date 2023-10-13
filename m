@@ -2,39 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF4C7C7F5C
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Oct 2023 10:04:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 758DA7C7FB1
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Oct 2023 10:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbjJMIEp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Oct 2023 04:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
+        id S229998AbjJMIMG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Oct 2023 04:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbjJMIEo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Oct 2023 04:04:44 -0400
+        with ESMTP id S230036AbjJMIME (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Oct 2023 04:12:04 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0E2AD6;
-        Fri, 13 Oct 2023 01:04:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10038B8;
+        Fri, 13 Oct 2023 01:12:03 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0018E11FB;
-        Fri, 13 Oct 2023 01:05:21 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 423D411FB;
+        Fri, 13 Oct 2023 01:12:43 -0700 (PDT)
 Received: from [10.57.80.116] (unknown [10.57.80.116])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7F73E3F7A6;
-        Fri, 13 Oct 2023 01:04:40 -0700 (PDT)
-Message-ID: <763f1d6d-28f0-43a7-b537-1a3229987ea3@arm.com>
-Date:   Fri, 13 Oct 2023 09:05:27 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BF9193F7A6;
+        Fri, 13 Oct 2023 01:12:01 -0700 (PDT)
+Message-ID: <0f6d3d0a-3685-4a0c-b922-b5aa72f20b19@arm.com>
+Date:   Fri, 13 Oct 2023 09:12:42 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] thermal/core: Reorder the headers inclusion
+Subject: Re: [PATCH v1 0/6] thermal: core: Pass trip pointers to governor
+ .throttle() callbacks
 Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Amit Kucheria <amitk@kernel.org>, rafael@kernel.org,
-        Zhang Rui <rui.zhang@intel.com>,
-        "open list:THERMAL/POWER_ALLOCATOR" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20231012102700.2858952-1-daniel.lezcano@linaro.org>
- <20231012102700.2858952-2-daniel.lezcano@linaro.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>
+References: <13365827.uLZWGnKmhe@kreacher>
 From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20231012102700.2858952-2-daniel.lezcano@linaro.org>
+In-Reply-To: <13365827.uLZWGnKmhe@kreacher>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
@@ -46,49 +47,53 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Rafael,
 
 
-On 10/12/23 11:26, Daniel Lezcano wrote:
-> The next changes will move the thermal device structure inside the
-> thermal core code. Consequently, the traces must be included after
-> thermal_core.h as this one contains the thermal zone device structure
-> definition the traces need.
+On 10/6/23 18:38, Rafael J. Wysocki wrote:
+> Hi All,
 > 
-> Reorder the inclusions.
+> While working on https://lore.kernel.org/linux-pm/4846448.GXAFRqVoOG@kreacher/
+> I started to change thermal governors so as to reduce the usage of trip
+> indices in them.  At that time, I was concerned that they could not be
+> replaced with trip pointers overall, because they were needed in certain
+> situations (tracing, debug messages, userspace governor) and computing them
+> whenever they were needed would be extra overhead with relatively weak
+> justification.  In the meantime, however, I realized that for a given trip
+> pointer, it is actually trivial to compute the corresponding index: it is
+> sufficient to subtract the start of the trips[] table in the thermal zone
+> containing the trip from that trip pointer for this purpose.  Patch [1/6]
+> modifies thermal_zone_trip_id() in accordance with this observation.
 > 
-> No functional changes intended.
+> Now that the cost of computing a trip index for a given trip pointer and
+> thermal zone is not a concern any more, the governors can be generally
+> switched over to using trip pointers for representing trips.  One of the
+> things they need to do sometimes, though, is to iterate over trips in a
+> given thermal zone (the core needs to do that too, of course) and
+> for_each_thermal_trip() is somewhat inconvenient for this purpose, because
+> it requires callback functions to be defined and in some cases new data
+> types need to be introduced just in order to use it.  For this reason,
+> patch [2/6] adds a macro for iterating over trip points in a given thermal
+> zone with the help of a trip pointer and changes for_each_thermal_trip() to
+> use that macro internally.
 > 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->   drivers/thermal/gov_power_allocator.c | 6 +++---
->   drivers/thermal/thermal_core.c        | 6 +++---
->   2 files changed, 6 insertions(+), 6 deletions(-)
+> Patches [3-5/6] change individual governors to prepare them for using trip
+> pointers everywhere for representing trips, except for the trip argument of
+> the .throttle() callback and patch [6/6] finally changes the .throttle()
+> callback definition so that it takes a trip pointer as the argument
+> representing the trip.
 > 
-> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-> index d1c6ad92e5b4..6056ed15460b 100644
-> --- a/drivers/thermal/gov_power_allocator.c
-> +++ b/drivers/thermal/gov_power_allocator.c
-> @@ -11,12 +11,12 @@
->   #include <linux/slab.h>
->   #include <linux/thermal.h>
->   
-> -#define CREATE_TRACE_POINTS
-> -#include "thermal_trace_ipa.h"
-> -
->   #define THERMAL_CORE_SUBSYS
->   #include "thermal_core.h"
->   
-> +#define CREATE_TRACE_POINTS
-> +#include "thermal_trace_ipa.h"
+> Please refer to the individual patch changelogs for details.
+> 
+> Thanks!
+> 
+> 
+> 
 
+I have issues to apply this series, could you tell me the best
+base branch from your tree?
 
-There is a small issue here to fix:
+I will give it a try on my boards and review.
 
-Applying: thermal/core: Reorder the headers inclusion
-.git/rebase-apply/patch:21: trailing whitespace.
-#include "thermal_trace_ipa.h"
-warning: 1 line adds whitespace errors.
-
-Other than that LGTM
-
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+Thanks,
+Lukasz
