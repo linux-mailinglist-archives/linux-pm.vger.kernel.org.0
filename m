@@ -2,196 +2,197 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 457257C8A97
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Oct 2023 18:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3C47C8C36
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Oct 2023 19:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232775AbjJMQM2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Oct 2023 12:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
+        id S229743AbjJMRUm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Oct 2023 13:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232597AbjJMQMV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Oct 2023 12:12:21 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF63E103;
-        Fri, 13 Oct 2023 09:11:38 -0700 (PDT)
-Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D81AD6607362;
-        Fri, 13 Oct 2023 17:10:58 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697213460;
-        bh=N/d1KDLrzpfGVy44YM7QBFJuquGjOyuZ7mvw9nlm5es=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZDoLUXrJPDPTLoIC0bPU+SJr0nXDOHnvQPidfcqohWOCw914G/zt8Ur6OFDaukEQq
-         IScJENZPA12se6YQJfEYozCixgkw84pjcJ9Z5O7gc36OVYEETNOLO+6Ok6ZPTMfkRk
-         bWy+Rz+RW498IOpP9cE+HXic7gUQ3N0AdpTAyEESyaXKXnZVHCVcS64KccFIsqPAuW
-         inIEN1zZUVY7q5IuxGVXpi3GodZ3m7pdKO2bYi0JLFrZ20stAQek/gt264xJHSJ/mi
-         3KY5L8Ax0UpuQjDrf+el6qwpmklmCprPxLeyVfqXV5uaw8bo65YIGDh5jq9/X6hHsO
-         01nEhLn7Lls9g==
-Date:   Fri, 13 Oct 2023 12:10:54 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        kernel@collabora.com, Amit Kucheria <amitk@kernel.org>,
-        Caesar Wang <wxt@rock-chips.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Javi Merino <javi.merino@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2] thermal/core: Don't update trip points inside the
- hysteresis range
-Message-ID: <f33a5cb1-7ec3-429e-a162-fb5dcbcdd664@notapiano>
-References: <20230922184425.290894-1-nfraprado@collabora.com>
- <6627b83b-bee7-a123-d845-cad8523ffb30@collabora.com>
- <CAJZ5v0hU9E10BeEjF-PZ8Yx9NZO1YimitockY3Hsobha7dARDQ@mail.gmail.com>
+        with ESMTP id S229632AbjJMRUl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Oct 2023 13:20:41 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D644A9;
+        Fri, 13 Oct 2023 10:20:40 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-53e08e439c7so3661475a12.0;
+        Fri, 13 Oct 2023 10:20:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1697217638; x=1697822438; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q8uXQkYNo3bGoskQXQpsae5HsE3SRZJlPG9uoRZ+Rcc=;
+        b=mPB8E6Vj2P2mo8o9BZ8cqVZsAX3SHdtoLWw+1RBRR4D22dUE7CCBAXrgGpVoCOA6qw
+         ZdCQ0S3B4nKW2Y90bw7rXx+GmVnEOtukBUSawfo0stKemp70/q0aYSq7PAMNevJRpJLj
+         wLOA00jOMOyMOOtX0JH0lZwj4bu5Naj0xftekrb/g8UgKww8d1P7C2JaZMDlg1d7LZd9
+         4eQAkKq4NymlaxZCiYb5igP3kVTGcgeokbocq5vHIwJqhlh2UEvrO+fB27Jn4dDo5FMI
+         5zlnn50Fs5LU7zOw9VrwIrIWjDDOUPo8zGIPy/w/Xysnw8uWFbd0nagrK37vK+aSVCQ/
+         7TLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697217638; x=1697822438;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q8uXQkYNo3bGoskQXQpsae5HsE3SRZJlPG9uoRZ+Rcc=;
+        b=EZoH7DHKkXmE2yoH1M7kMUc5La9YlyYWcPQIslaa6DkaZO4RbEp/GOUuVCIFF0AF/i
+         vuOMPyiW13Pp7ZMJg0LrZRxoNj6aKH9yUILOmTKWdP71PGHjh826iWD9pMPASnYzw+Rn
+         jGv9drsi+b0p7IsI8KsW2K+JeltcpEmSxs48ai1MyKdGmIjcZqbOdWB7SrITQ95k1tWa
+         h5MlYqQCtP9ku40chLMID8C9oYQ+rLjgAzB73iBW4va8OBr6UAW/gSyBqk41dxn6YEX9
+         ZNtVUfJNqfBFdehaHI0A+gof5tEE5DdEeEF0apXSMgjGITJ2afAfJgUvzoyMonTnmuTU
+         djOA==
+X-Gm-Message-State: AOJu0Yx5N1EmVXjRjoBL0whk7dGRtLNjaGzMLOOx8bmLnXbTgi7GPhm4
+        aj/LNgOiV+F8bfHQyZ3qUuM=
+X-Google-Smtp-Source: AGHT+IHv3bBuzeeXYE32saD3QLU2OktKI977bWzTRNyRcoGH71CF7cTqqA49rb4LsybuQd2ZY/A/FA==
+X-Received: by 2002:a05:6402:42c5:b0:53e:1e7f:482f with SMTP id i5-20020a05640242c500b0053e1e7f482fmr5134815edc.3.1697217638057;
+        Fri, 13 Oct 2023 10:20:38 -0700 (PDT)
+Received: from fedora.. (dh207-96-122.xnet.hr. [88.207.96.122])
+        by smtp.googlemail.com with ESMTPSA id a90-20020a509ee3000000b0053e589016a7sm653125edf.16.2023.10.13.10.20.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Oct 2023 10:20:37 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     rafael@kernel.org, viresh.kumar@linaro.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        ilia.lin@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH v6] cpufreq: qcom-nvmem: add support for IPQ8074
+Date:   Fri, 13 Oct 2023 19:20:02 +0200
+Message-ID: <20231013172033.3549476-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0hU9E10BeEjF-PZ8Yx9NZO1YimitockY3Hsobha7dARDQ@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 13, 2023 at 05:27:08PM +0200, Rafael J. Wysocki wrote:
-> On Mon, Sep 25, 2023 at 9:29 AM AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
-> >
-> > Il 22/09/23 20:44, Nícolas F. R. A. Prado ha scritto:
-> > > When searching for the trip points that need to be set, the nearest
-> > > higher trip point's temperature is used for the high trip, while the
-> > > nearest lower trip point's temperature minus the hysteresis is used for
-> > > the low trip. The issue with this logic is that when the current
-> > > temperature is inside a trip point's hysteresis range, both high and low
-> > > trips will come from the same trip point. As a consequence instability
-> > > can still occur like this:
-> > > * the temperature rises slightly and enters the hysteresis range of a
-> > >    trip point
-> > > * polling happens and updates the trip points to the hysteresis range
-> > > * the temperature falls slightly, exiting the hysteresis range, crossing
-> > >    the trip point and triggering an IRQ, the trip points are updated
-> > > * repeat
-> > >
-> > > So even though the current hysteresis implementation prevents
-> > > instability from happening due to IRQs triggering on the same
-> > > temperature value, both ways, it doesn't prevent it from happening due
-> > > to an IRQ on one way and polling on the other.
-> > >
-> > > To properly implement a hysteresis behavior, when inside the hysteresis
-> > > range, don't update the trip points. This way, the previously set trip
-> > > points will stay in effect, which will in a way remember the previous
-> > > state (if the temperature signal came from above or below the range) and
-> > > therefore have the right trip point already set. The exception is if
-> > > there was no previous trip point set, in which case a previous state
-> > > doesn't exist, and so it's sensible to allow the hysteresis range as
-> > > trip points.
-> > >
-> > > The following logs show the current behavior when running on a real
-> > > machine:
-> > >
-> > > [  202.524658] thermal thermal_zone0: new temperature boundaries: -2147483647 < x < 40000
-> > >     203.562817: thermal_temperature: thermal_zone=vpu0-thermal id=0 temp_prev=36986 temp=37979
-> > > [  203.562845] thermal thermal_zone0: new temperature boundaries: 37000 < x < 40000
-> > >     204.176059: thermal_temperature: thermal_zone=vpu0-thermal id=0 temp_prev=37979 temp=40028
-> > > [  204.176089] thermal thermal_zone0: new temperature boundaries: 37000 < x < 100000
-> > >     205.226813: thermal_temperature: thermal_zone=vpu0-thermal id=0 temp_prev=40028 temp=38652
-> > > [  205.226842] thermal thermal_zone0: new temperature boundaries: 37000 < x < 40000
-> > >
-> > > And with this patch applied:
-> > >
-> > > [  184.933415] thermal thermal_zone0: new temperature boundaries: -2147483647 < x < 40000
-> > >     185.981182: thermal_temperature: thermal_zone=vpu0-thermal id=0 temp_prev=36986 temp=37872
-> > >     186.744685: thermal_temperature: thermal_zone=vpu0-thermal id=0 temp_prev=37872 temp=40058
-> > > [  186.744716] thermal thermal_zone0: new temperature boundaries: 37000 < x < 100000
-> > >     187.773284: thermal_temperature: thermal_zone=vpu0-thermal id=0 temp_prev=40058 temp=38698
-> > >
-> > > Fixes: 060c034a9741 ("thermal: Add support for hardware-tracked trip points")
-> > > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> >
-> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> >
-> > >
-> > > ---
-> > >
-> > > Changes in v2:
-> > > - Changed logic as suggested by Rafael
-> > > - Added log example to commit message
-> > > - Added fixes tag
-> > >
-> > >   drivers/thermal/thermal_trip.c | 19 +++++++++++++++++--
-> > >   1 file changed, 17 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
-> > > index 024e2e365a26..597ac4144e33 100644
-> > > --- a/drivers/thermal/thermal_trip.c
-> > > +++ b/drivers/thermal/thermal_trip.c
-> > > @@ -55,6 +55,7 @@ void __thermal_zone_set_trips(struct thermal_zone_device *tz)
-> > >   {
-> > >       struct thermal_trip trip;
-> > >       int low = -INT_MAX, high = INT_MAX;
-> > > +     bool same_trip = false;
-> > >       int i, ret;
-> > >
-> > >       lockdep_assert_held(&tz->lock);
-> > > @@ -63,6 +64,7 @@ void __thermal_zone_set_trips(struct thermal_zone_device *tz)
-> > >               return;
-> > >
-> > >       for (i = 0; i < tz->num_trips; i++) {
-> > > +             bool low_set = false;
-> > >               int trip_low;
-> > >
-> > >               ret = __thermal_zone_get_trip(tz, i , &trip);
-> > > @@ -71,18 +73,31 @@ void __thermal_zone_set_trips(struct thermal_zone_device *tz)
-> > >
-> > >               trip_low = trip.temperature - trip.hysteresis;
-> > >
-> > > -             if (trip_low < tz->temperature && trip_low > low)
-> > > +             if (trip_low < tz->temperature && trip_low > low) {
-> > >                       low = trip_low;
-> > > +                     low_set = true;
-> > > +                     same_trip = false;
-> > > +             }
-> > >
-> > >               if (trip.temperature > tz->temperature &&
-> > > -                 trip.temperature < high)
-> > > +                 trip.temperature < high) {
-> > >                       high = trip.temperature;
-> > > +                     same_trip = low_set;
-> > > +             }
-> > >       }
-> > >
-> > >       /* No need to change trip points */
-> > >       if (tz->prev_low_trip == low && tz->prev_high_trip == high)
-> > >               return;
-> > >
-> > > +     /*
-> > > +      * If "high" and "low" are the same, skip the change unless this is the
-> > > +      * first time.
-> > > +      */
-> > > +     if (same_trip && (tz->prev_low_trip != -INT_MAX ||
-> > > +         tz->prev_high_trip != INT_MAX))
-> > > +             return;
-> > > +
-> > >       tz->prev_low_trip = low;
-> > >       tz->prev_high_trip = high;
-> > >
-> 
-> Applied as 6.7 material, but I added a Co-developed-by tag for myself,
-> because it has been based on my patch.
+IPQ8074 comes in 3 families:
+* IPQ8070A/IPQ8071A (Acorn) up to 1.4GHz
+* IPQ8172/IPQ8173/IPQ8174 (Oak) up to 1.4GHz
+* IPQ8072A/IPQ8074A/IPQ8076A/IPQ8078A (Hawkeye) up to 2.2GHz
 
-Sounds good, thanks! I'll add it myself in situations like this in the future.
+So, in order to be able to share one OPP table lets add support for IPQ8074
+family based of SMEM SoC ID-s as speedbin fuse is always 0 on IPQ8074.
 
-Thanks,
-Nícolas
+IPQ8074 compatible is blacklisted from DT platdev as the cpufreq device
+will get created by NVMEM CPUFreq driver.
+
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Changes in v6:
+* Split IPQ8074 from the IPQ8064 as IPQ8064 has additional dependencies.
+
+Changes in v4:
+* Add support for IPQ8174 (Oak) family
+
+Changes in v3:
+* Use enum for SoC versions
+
+Changes in v2:
+* Print an error if SMEM ID is not part of the IPQ8074 family
+and restrict the speed to Acorn variant (1.4GHz)
+
+ drivers/cpufreq/cpufreq-dt-platdev.c |  1 +
+ drivers/cpufreq/qcom-cpufreq-nvmem.c | 48 ++++++++++++++++++++++++++++
+ 2 files changed, 49 insertions(+)
+
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index 0b3776f558db..675da7f36846 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -181,6 +181,7 @@ static const struct of_device_id blocklist[] __initconst = {
+ 	{ .compatible = "ti,am62p5", },
+ 
+ 	{ .compatible = "qcom,ipq8064", },
++	{ .compatible = "qcom,ipq8074", },
+ 	{ .compatible = "qcom,apq8064", },
+ 	{ .compatible = "qcom,msm8974", },
+ 	{ .compatible = "qcom,msm8960", },
+diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+index 84d7033e5efe..3fa12648ceb6 100644
+--- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
++++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+@@ -30,6 +30,11 @@
+ 
+ #include <dt-bindings/arm/qcom,ids.h>
+ 
++enum ipq8074_versions {
++	IPQ8074_HAWKEYE_VERSION = 0,
++	IPQ8074_ACORN_VERSION,
++};
++
+ struct qcom_cpufreq_drv;
+ 
+ struct qcom_cpufreq_match_data {
+@@ -203,6 +208,44 @@ static int qcom_cpufreq_krait_name_version(struct device *cpu_dev,
+ 	return ret;
+ }
+ 
++static int qcom_cpufreq_ipq8074_name_version(struct device *cpu_dev,
++					     struct nvmem_cell *speedbin_nvmem,
++					     char **pvs_name,
++					     struct qcom_cpufreq_drv *drv)
++{
++	u32 msm_id;
++	int ret;
++	*pvs_name = NULL;
++
++	ret = qcom_smem_get_soc_id(&msm_id);
++	if (ret)
++		return ret;
++
++	switch (msm_id) {
++	case QCOM_ID_IPQ8070A:
++	case QCOM_ID_IPQ8071A:
++	case QCOM_ID_IPQ8172:
++	case QCOM_ID_IPQ8173:
++	case QCOM_ID_IPQ8174:
++		drv->versions = BIT(IPQ8074_ACORN_VERSION);
++		break;
++	case QCOM_ID_IPQ8072A:
++	case QCOM_ID_IPQ8074A:
++	case QCOM_ID_IPQ8076A:
++	case QCOM_ID_IPQ8078A:
++		drv->versions = BIT(IPQ8074_HAWKEYE_VERSION);
++		break;
++	default:
++		dev_err(cpu_dev,
++			"SoC ID %u is not part of IPQ8074 family, limiting to 1.4GHz!\n",
++			msm_id);
++		drv->versions = BIT(IPQ8074_ACORN_VERSION);
++		break;
++	}
++
++	return 0;
++}
++
+ static const struct qcom_cpufreq_match_data match_data_kryo = {
+ 	.get_version = qcom_cpufreq_kryo_name_version,
+ };
+@@ -217,6 +260,10 @@ static const struct qcom_cpufreq_match_data match_data_qcs404 = {
+ 	.genpd_names = qcs404_genpd_names,
+ };
+ 
++static const struct qcom_cpufreq_match_data match_data_ipq8074 = {
++	.get_version = qcom_cpufreq_ipq8074_name_version,
++};
++
+ static int qcom_cpufreq_probe(struct platform_device *pdev)
+ {
+ 	struct qcom_cpufreq_drv *drv;
+@@ -360,6 +407,7 @@ static const struct of_device_id qcom_cpufreq_match_list[] __initconst = {
+ 	{ .compatible = "qcom,msm8996", .data = &match_data_kryo },
+ 	{ .compatible = "qcom,qcs404", .data = &match_data_qcs404 },
+ 	{ .compatible = "qcom,ipq8064", .data = &match_data_krait },
++	{ .compatible = "qcom,ipq8074", .data = &match_data_ipq8074 },
+ 	{ .compatible = "qcom,apq8064", .data = &match_data_krait },
+ 	{ .compatible = "qcom,msm8974", .data = &match_data_krait },
+ 	{ .compatible = "qcom,msm8960", .data = &match_data_krait },
+-- 
+2.41.0
+
