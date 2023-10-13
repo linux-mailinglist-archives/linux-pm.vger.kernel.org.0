@@ -2,87 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948897C7B4B
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Oct 2023 03:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC0C7C7B78
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Oct 2023 04:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229445AbjJMBnu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Oct 2023 21:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56398 "EHLO
+        id S229445AbjJMCDX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Oct 2023 22:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjJMBnu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 21:43:50 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B9EBB;
-        Thu, 12 Oct 2023 18:43:48 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39D1QwBS000909;
-        Fri, 13 Oct 2023 01:42:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=lqJi9R4Y6Xefr89eckmLA1t1hKHCECZfuxNDRt7dtGU=;
- b=LFX+pxBBFGFiqP6CNcWO0letVoSnYCFgBLp50GsrJ4WnkqcoE1KT1wf/T6V35CVBxaR9
- oh+e2Ah+OCVxjQ1kx121IMvyog/KUwnYtR7W5d9/8UEASGeoBi1UvIVCzrPNukUipUIN
- 16oJJGDSVdbSv2448RyIZ8/75RsXrDwpIYnkQPpzOUnW8BDxzal8KDkejRWEK4Ed9s25
- IyxL/NRJT0sYIHLB4c51zHyxNYu7FcJgPiqVmWqS4jiCJnHRJ4KudPgbmdKYaDVH4UIc
- MTrIY+rpW8HtYwT7Ov6JTsEFAK4+OmwGQ6/Ap8IjJygAptClTZcc2N9Q9kUNdbHSTyMe AA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tpt1k07fk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Oct 2023 01:42:22 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39D1gLbV001368
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Oct 2023 01:42:21 GMT
-Received: from [10.50.46.242] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Thu, 12 Oct
- 2023 18:42:14 -0700
-Message-ID: <e951d2be-0807-acff-5959-38dad7560659@quicinc.com>
-Date:   Fri, 13 Oct 2023 07:12:10 +0530
+        with ESMTP id S229469AbjJMCDW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 22:03:22 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6563C0;
+        Thu, 12 Oct 2023 19:03:20 -0700 (PDT)
+Received: from mercury (dyndsl-091-248-212-229.ewe-ip-backbone.de [91.248.212.229])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id ED4C4660735A;
+        Fri, 13 Oct 2023 03:03:18 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1697162599;
+        bh=sKttk4Nu1SkDWKSUsvrHZFpKP7vj4n6hxYQeDBYZvwE=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=VC8r0ZqRFJ1DHgyi+V+LGXZMS2b4TcWQvS1VcjhTVdgYMWpqm523dPU8uXpSJpMLH
+         jrwx0MGshwhqlIyxe0xwSbAPX1KIUPBbkhmnf9HJlXZ6OysBmhLZfX1v2Fxlrg6AZH
+         dVzqzLx0EoK96WHsUFlU3blT5j1ns3ET0aJcNdRHTP74pphoXf5mTOogGZWxCk39B6
+         xm72K+2GtrGeqXG4Y6HNbgGomVMbNcJ9fxealSUwhz6i3apg4rV88Z2fJpLf4U0tsw
+         XncyE0UCeGB9fUEhgAJCbC1F1jLFbDmW5WncfYmW5v0dXNtOb8+yj1w5bvKxf9n2L7
+         3irbUQMWdJ/1A==
+Received: by mercury (Postfix, from userid 1000)
+        id 75CAF1062B50; Fri, 13 Oct 2023 04:03:16 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Francesco Dolcini <francesco@dolcini.it>
+Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20231006130428.11259-1-francesco@dolcini.it>
+References: <20231006130428.11259-1-francesco@dolcini.it>
+Subject: Re: [PATCH v2 0/4] power: reset: gpio-poweroff: use sys-off
+ handler API
+Message-Id: <169716259646.1002132.13986378548211553065.b4-ty@collabora.com>
+Date:   Fri, 13 Oct 2023 04:03:16 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Subject: Re: [PATCH 0/4] PM: hibernate: LZ4 compression support
-To:     Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Tejun Heo <tj@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_kprasan@quicinc.com>, <quic_mpilaniy@quicinc.com>,
-        <quic_shrekk@quicinc.com>, <mpleshivenkov@google.com>,
-        <ericyin@google.com>
-References: <cover.1696410298.git.quic_nprakash@quicinc.com>
-Content-Language: en-US
-From:   Nikhil V <quic_nprakash@quicinc.com>
-In-Reply-To: <cover.1696410298.git.quic_nprakash@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: kTL2ZntX3j8tvzq0vpM4pAzd-453bPa0
-X-Proofpoint-GUID: kTL2ZntX3j8tvzq0vpM4pAzd-453bPa0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-12_14,2023-10-12_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
- spamscore=0 mlxscore=0 malwarescore=0 priorityscore=1501 adultscore=0
- clxscore=1015 bulkscore=0 impostorscore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310130013
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mailer: b4 0.12.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -90,83 +62,29 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
+On Fri, 06 Oct 2023 10:04:24 -0300, Francesco Dolcini wrote:
+> Use the new sys-off handler API for gpio-poweroff. This allows us to have more
+> than one power-off handler and to have a priority for the handler. Also, add a
+> priority property so we can use gpio-poweroff even when registering another
+> poweroff handler or using the legacy pm_power_off method.
+> 
+> v1->v2:
+>  - Add $ref to restart-handler.yaml in gpio-poweroff.yaml
+> 
+> [...]
 
-On 10/4/2023 3:00 PM, Nikhil V wrote:
-> This patch series covers the following:
-> 1. Renaming lzo* to generic names, except for lzo_xxx() APIs. This is
-> used in the next patch where we move to crypto based APIs for
-> compression. There are no functional changes introduced by this
-> approach.
-> 
-> 
-> 2. Replace LZO library calls with crypto generic APIs
-> 
-> Currently for hibernation, LZO is the only compression algorithm
-> available and uses the existing LZO library calls. However, there
-> is no flexibility to switch to other algorithms which provides better
-> results. The main idea is that different compression algorithms have
-> different characteristics and hibernation may benefit when it uses
-> alternate algorithms.
-> 
-> By moving to crypto based APIs, it lays a foundation to use other
-> compression algorithms for hibernation.
-> 
-> 
-> 3. LZ4 compression
-> Extend the support for LZ4 compression to be used with hibernation.
-> The main idea is that different compression algorithms
-> have different characteristics and hibernation may benefit when it uses
-> any of these algorithms: a default algorithm, having higher
-> compression rate but is slower(compression/decompression) and a
-> secondary algorithm, that is faster(compression/decompression) but has
-> lower compression rate.
-> 
-> LZ4 algorithm has better decompression speeds over LZO. This reduces
-> the hibernation image restore time.
-> As per test results:
->                                      LZO             LZ4
-> Size before Compression(bytes)   682696704       682393600
-> Size after Compression(bytes)    146502402       155993547
-> Decompression Rate               335.02 MB/s     501.05 MB/s
-> Restore time                       4.4s             3.8s
-> 
-> LZO is the default compression algorithm used for hibernation. Enable
-> CONFIG_HIBERNATION_DEF_COMP_LZ4 to set the default compressor as LZ4.
-> 
-> Compression Benchmarks: https://github.com/lz4/lz4
-> 
-> 
-> 4. Support to select compression algorithm
-> 
-> Currently the default compression algorithm is selected based on
-> Kconfig. Introduce a kernel command line parameter "hib_compression" to
-> override this behaviour.
-> 
-> Users can set "hib_compression" command line parameter to specify
-> the algorithm.
-> Usage:
->      LZO: hib_compression=lzo
->      LZ4: hib_compression=lz4
-> LZO is the default compression algorithm used with hibernation.
-> 
-> Nikhil V (4):
->    PM: hibernate: Rename lzo* to make it generic
->    PM: hibernate: Move to crypto APIs for LZO compression
->    PM: hibernate: Add support for LZ4 compression for hibernation
->    PM: hibernate: Support to select compression algorithm
-> 
->   .../admin-guide/kernel-parameters.txt         |   6 +
->   kernel/power/Kconfig                          |  25 ++-
->   kernel/power/hibernate.c                      |  85 +++++++-
->   kernel/power/power.h                          |  19 ++
->   kernel/power/swap.c                           | 189 +++++++++++-------
->   5 files changed, 250 insertions(+), 74 deletions(-)
-> 
+Applied, thanks!
 
-Hi @Rafael/@Pavel/@Len,
+[1/4] power: reset: gpio-poweroff: use a struct to store the module variables
+      commit: 13b4c6964665cadb9b06c085029710c43a0c662e
+[2/4] power: reset: gpio-poweroff: use sys-off handler API
+      commit: b16d9f49735f3d26e23f0ba4a2cf21668fc6b66b
+[3/4] dt-bindings: power: reset: gpio-poweroff: Add priority property
+      commit: 4ee17bd30788496a279ceaabc7ecaaf39f61cfc4
+[4/4] power: reset: gpio-poweroff: make sys handler priority configurable
+      commit: d03d2a8cdefe86f04cfb53934a708620e7dfbfcb
 
-Could you please let me know if you have any concerns/comments on this 
-approach?
+Best regards,
+-- 
+Sebastian Reichel <sebastian.reichel@collabora.com>
 
-Regards,
-Nikhil V
