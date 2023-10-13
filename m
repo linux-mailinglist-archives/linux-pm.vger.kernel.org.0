@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8F17C7B7A
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Oct 2023 04:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F08537C7BB7
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Oct 2023 04:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbjJMCDX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Oct 2023 22:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
+        id S229482AbjJMCtw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Oct 2023 22:49:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjJMCDW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 22:03:22 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF05FCA;
-        Thu, 12 Oct 2023 19:03:20 -0700 (PDT)
-Received: from mercury (dyndsl-091-248-212-229.ewe-ip-backbone.de [91.248.212.229])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 08EF7660735B;
-        Fri, 13 Oct 2023 03:03:19 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697162599;
-        bh=tuNzyGDEu1v+l5lllc4ysrPhH5ok6L1sMzLUROzKTMQ=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=gmbclGuoMihxqpPfBsW2q4QFqODVSRTESdQ1j1ohNMSJk45eFSNR+ph/xTQbOHMvm
-         zpbQsxLjUDrdhH9EIdArrJmc2GZDOCTctPeG3UGDbWONiy2vqVrnq0IkKKdJAzuyHY
-         1U+jKDnBGTuTmF+y/J9cXmLHquoOBQP9wOiCXxkj+eH4QnRL8nStTxmhDlp4V4Jt4u
-         sTEM1MX28Q7Ye6x52Iia35UX5HcXzns3LwLg7piW6M1meBjKS65g3SEjYYSOtiavux
-         hBOKdGzMBTeVwv3WcoJK+0oc99XnD5hRSlr2K7Oa2aKtHwliwueRZedjRzfErRGlKF
-         P+hPHzuvTJ85Q==
-Received: by mercury (Postfix, from userid 1000)
-        id 7F3DC1062B59; Fri, 13 Oct 2023 04:03:16 +0200 (CEST)
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20231009172923.2457844-20-robh@kernel.org>
-References: <20231009172923.2457844-20-robh@kernel.org>
-Subject: Re: [PATCH] power: supply: cpcap: Drop non-DT driver matching
-Message-Id: <169716259651.1002132.11843544877394485261.b4-ty@collabora.com>
-Date:   Fri, 13 Oct 2023 04:03:16 +0200
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        with ESMTP id S229436AbjJMCtw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Oct 2023 22:49:52 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F20B7;
+        Thu, 12 Oct 2023 19:49:51 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E87E8C433C7;
+        Fri, 13 Oct 2023 02:49:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1697165390;
+        bh=QePjhnrr5bXOySLZ4yd6DXsFYEB+DEt3y1Ny2geqJ3s=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=OLal7hPnYTXYKcnZgEy/0KTceZLQ4i4Wk26o3Is7Rj+tm8t7r3P3+rE3pwhwn2uBi
+         7EGGHMYdybHnPLXZmUGF9ubH1c7+pqbT3EDHCPPg7AoCakpwpLzBJkM0Mhn2EbTbzc
+         b0Vq9YkdP26YabTrwPKM9BkkZHnuc2NgLbKODo99RUtPJsp9bW5/PPgNctfhPE6Izs
+         anKNKrqQth9VrePsY0M7tUptbLbA2o7bPXQqoGc71iRg/KoCJpD4Hpm5TAt/21NPEx
+         1BTwr6xrinCpme0cfYX8n7MKZkp+nX5/MDP0Lorks/jHW8Ik0iAm/riL0q9b+zdNE5
+         5Pu7nXR73Zq9w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CB7BCC39563;
+        Fri, 13 Oct 2023 02:49:50 +0000 (UTC)
+Subject: Re: [GIT PULL] power-supply changes for 6.6-rc2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20231013014139.yhfw45mur7lbyxfm@mercury.elektranox.org>
+References: <20231013014139.yhfw45mur7lbyxfm@mercury.elektranox.org>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20231013014139.yhfw45mur7lbyxfm@mercury.elektranox.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.6-rc2
+X-PR-Tracked-Commit-Id: 8894b432548851f705f72ff135d3dcbd442a18d1
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: ce583d5fb9d3f4e20473b9d5619d51ea3cc92283
+Message-Id: <169716539082.12343.1558552470274382291.pr-tracker-bot@kernel.org>
+Date:   Fri, 13 Oct 2023 02:49:50 +0000
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,19 +54,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The pull request you sent on Fri, 13 Oct 2023 03:41:39 +0200:
 
-On Mon, 09 Oct 2023 12:29:15 -0500, Rob Herring wrote:
-> Only DT based probing is used for the Motorola CPCAP charger driver, so
-> drop the !CONFIG_OF parts and redundant of_match_device() call.
-> 
-> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.6-rc2
 
-Applied, thanks!
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/ce583d5fb9d3f4e20473b9d5619d51ea3cc92283
 
-[1/1] power: supply: cpcap: Drop non-DT driver matching
-      commit: b3c3a197baf23ca445ba74e3c7c40cfacfedd9fb
+Thank you!
 
-Best regards,
 -- 
-Sebastian Reichel <sebastian.reichel@collabora.com>
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
