@@ -2,126 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE9727C8974
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Oct 2023 18:02:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 549E57C897E
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Oct 2023 18:02:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232507AbjJMP7o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Oct 2023 11:59:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
+        id S232486AbjJMQB6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Oct 2023 12:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232807AbjJMP7Z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Oct 2023 11:59:25 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E0E101
-        for <linux-pm@vger.kernel.org>; Fri, 13 Oct 2023 08:59:18 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-40675f06f1fso21874285e9.1
-        for <linux-pm@vger.kernel.org>; Fri, 13 Oct 2023 08:59:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697212757; x=1697817557; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YxW+eJtcnC0E0SJpXFcLjjbQKwvukxtZrwKx+nQrH3k=;
-        b=zNmY2jAvrN0XlBf4GAjyiyOm+GbF39VAjmGmyN2seNrSXCdP/OaibwuyYwzAhQs5li
-         TbL/L1gO+j8p34+qNDH8ea5O6uHsfflTQXxXAC0Hf8EEJuZUcbhsekW+b/zay6APGCOz
-         9wN1Tx7XaqRY8ZlmNoxPxhL52NilHszOIy7Fyvf3GGQzHDjOE1x7EwFSLRsFVS4SvlPA
-         NYeVkvebRfNJdEGUwXjPzNWYBe9N15sBuFckce/0nb9z0FG3Yd5PVPwjPofn1M1P4wZP
-         44PlgyuucrXgHKGej2W91XtM3BJtLgZvr9XLESehDo3O986zuGnNS+xajFjZ2ySXnZlo
-         0CtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697212757; x=1697817557;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YxW+eJtcnC0E0SJpXFcLjjbQKwvukxtZrwKx+nQrH3k=;
-        b=SZo/ZJUNjhbkb272SkDQvxu6YIPWNazbft+ctPIh0PbV2t0TEOPm18PW7CGY9OV5B4
-         srtOVciCaEoa2veqITaZH+hKpFBtLhgrKXeKYkZmlc28DnFs3peowM40v2oqrrAsHLn6
-         O8trGPEy+q2iUadpHeXDhH0w7L2ynzWMTTU+HiR5Gb7/pxt6RoFFlmUaSPmn286DBAYM
-         mKBU624aI2MioaN2EDIL2Id8Y3CK27SQpoUjRl0viKR81R1ImZeOHMHnd/aAqS37Wqtc
-         XdSu94QU/dPS9ONtMbIuhhSVaU0RN0WB+s6gBL6K5zDqGUCDshRwZPm5lx2jGwsqysXW
-         VtAg==
-X-Gm-Message-State: AOJu0YxlkVacdVAVfA9tIwBcaw+/EcVLbFrhMfiMuaOPF6wkxY+4RPyZ
-        iZWYpzqt3Ko1gQeNL4y2mYV/zQ==
-X-Google-Smtp-Source: AGHT+IECqTwQVm4ULj3UM8Bat5aO219Wvjuq7wSOK2sIHlyPCLUn51JLF1j/zKPnu6q6ak+kSLtdVg==
-X-Received: by 2002:a05:600c:5198:b0:401:c7ec:b930 with SMTP id fa24-20020a05600c519800b00401c7ecb930mr470965wmb.10.1697212757331;
-        Fri, 13 Oct 2023 08:59:17 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
-        by smtp.googlemail.com with ESMTPSA id m39-20020a05600c3b2700b003fee567235bsm529436wms.1.2023.10.13.08.59.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Oct 2023 08:59:17 -0700 (PDT)
-Message-ID: <076c0672-8656-4af2-9960-7c31589d8794@linaro.org>
-Date:   Fri, 13 Oct 2023 17:59:16 +0200
+        with ESMTP id S232452AbjJMQB5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Oct 2023 12:01:57 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0BEB7;
+        Fri, 13 Oct 2023 09:01:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=R1BXEjw/tdVpUH9FfenMcwOFEve9DMEy/SsDnd6XIV8=; b=g+CaL7TNnTOSCiZ8cFDSFAoPWe
+        P4/WPfJckr/usSf+r9yzJT1lS4xprCch7vI7na4OF1+wDRkfh9hV43y2+MQiSygejZqJwwLCqj1Ko
+        qdjwNr1NdfCOq++uUQvWWjkdxyDIN2/vMLnhH0SHt02IFOd2WuyAO1QQc9+x234lQ6jV3F5/JCZQS
+        YRjSra9iyBZBfy8wKY8BOyV/JRR+lnVLZqM3ER4TDgEWKECQ2ma5a6nihfEv+5NGDfApEEaMQYiU4
+        yMijICBewF3eqYM94tkOI9/4sIRvmpdn9FGPS8t0dkSCwDip2AtFHHz0Oq8mgXmnqTes/JxSoko9h
+        O/UVkEJA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qrKbP-002rBl-2p;
+        Fri, 13 Oct 2023 16:01:30 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 030C83002E1; Fri, 13 Oct 2023 18:01:29 +0200 (CEST)
+Date:   Fri, 13 Oct 2023 18:01:28 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Meng Li <li.meng@amd.com>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Wyes Karny <wyes.karny@amd.com>
+Subject: Re: [RESEND PATCH V9 3/7] cpufreq: amd-pstate: Enable amd-pstate
+ preferred core supporting.
+Message-ID: <20231013160128.GB36211@noisy.programming.kicks-ass.net>
+References: <20231013033118.3759311-1-li.meng@amd.com>
+ <20231013033118.3759311-4-li.meng@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 03/13] dt-bindings: thermal: tegra: Add
- nvidia,thermal-zones property
-Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        Jon Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20231012175836.3408077-1-thierry.reding@gmail.com>
- <20231012175836.3408077-4-thierry.reding@gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20231012175836.3408077-4-thierry.reding@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231013033118.3759311-4-li.meng@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/10/2023 19:58, Thierry Reding wrote:
-> From: Thierry Reding <treding@nvidia.com>
-> 
-> The throttle configurations need to be associated with one or more
-> thermal zones before they can be enabled, so introduce a new property,
-> called nvidia,thermal-zones, that contains a list of phandles to the
-> thermal zones for which a throttle configuration is applicable.
-> 
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
-> ---
-> Changes in v2:
-> - new patch to hook up throttling with thermal zones
-> 
->   .../bindings/thermal/nvidia,tegra124-soctherm.yaml           | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml b/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml
-> index 0eb6277082fe..359344f60a6e 100644
-> --- a/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml
-> @@ -161,6 +161,11 @@ properties:
->                 throttling is engaged after the OC event is deasserted.
->               default: 0
->   
-> +          nvidia,thermal-zones:
-> +            $ref: /schemas/types.yaml#/definitions/phandle
-> +            description: A list of phandles to the thermal zones that this
-> +              throttle configuration applies to.
+On Fri, Oct 13, 2023 at 11:31:14AM +0800, Meng Li wrote:
+
+> +#define AMD_PSTATE_PREFCORE_THRESHOLD	166
+> +#define AMD_PSTATE_MAX_CPPC_PERF	255
+
+> +static void amd_pstate_init_prefcore(struct amd_cpudata *cpudata)
+> +{
+> +	int ret, prio;
+> +	u32 highest_perf;
+> +	static u32 max_highest_perf = 0, min_highest_perf = U32_MAX;
+
+What serializes these things?
+
+Also, *why* are you using u32 here, what's wrong with something like:
+
+	int max_hp = INT_MIN, min_hp = INT_MAX;
+
 > +
+> +	ret = amd_pstate_get_highest_perf(cpudata->cpu, &highest_perf);
+> +	if (ret)
+> +		return;
+> +
+> +	cpudata->hw_prefcore = true;
+> +	/* check if CPPC preferred core feature is enabled*/
+> +	if (highest_perf == AMD_PSTATE_MAX_CPPC_PERF) {
 
- From a DT perspective, I believe it is more correct to point to the 
-devices the hardware throttling mechanism applies to instead of the 
-thermal zones which is kind of software component
+Which effectively means <255 (also, seems to suggest MAX_CPPC_PERF might
+not be the best name, hmm?)
 
->     # optional
->     nvidia,thermtrips:
->       $ref: /schemas/types.yaml#/definitions/uint32-matrix
+Should you not write '>= 255' then? Just in case something 'funny'
+happens?
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+> +		pr_debug("AMD CPPC preferred core is unsupported!\n");
+> +		cpudata->hw_prefcore = false;
+> +		return;
+> +	}
+> +
+> +	if (!amd_pstate_prefcore)
+> +		return;
+> +
+> +	/* The maximum value of highest perf is 255 */
+> +	prio = (int)(highest_perf & 0xff);
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+If for some weird reason you get 0x1ff or whatever above (dodgy BIOS
+never happens, right) then this makes sense how?
 
+Perhaps stop sending patches at break-nek speed and think for a little
+while on how to write this and not be confused?
+
+
+> +	/*
+> +	 * The priorities can be set regardless of whether or not
+> +	 * sched_set_itmt_support(true) has been called and it is valid to
+> +	 * update them at any time after it has been called.
+> +	 */
+> +	sched_set_itmt_core_prio(prio, cpudata->cpu);
+> +
+> +	if (max_highest_perf <= min_highest_perf) {
+> +		if (highest_perf > max_highest_perf)
+> +			max_highest_perf = highest_perf;
+> +
+> +		if (highest_perf < min_highest_perf)
+> +			min_highest_perf = highest_perf;
+> +
+> +		if (max_highest_perf > min_highest_perf) {
+> +			/*
+> +			 * This code can be run during CPU online under the
+> +			 * CPU hotplug locks, so sched_set_itmt_support()
+> +			 * cannot be called from here.  Queue up a work item
+> +			 * to invoke it.
+> +			 */
+> +			schedule_work(&sched_prefcore_work);
+> +		}
+> +	}
+
+Not a word about what serializes these variables.
+
+> +}
