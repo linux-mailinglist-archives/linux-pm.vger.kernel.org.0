@@ -2,273 +2,279 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C05E7C8908
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Oct 2023 17:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE4A7C8904
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Oct 2023 17:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232410AbjJMPpi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Oct 2023 11:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51560 "EHLO
+        id S232479AbjJMPpY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Oct 2023 11:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232434AbjJMPph (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Oct 2023 11:45:37 -0400
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34ABCF;
-        Fri, 13 Oct 2023 08:45:33 -0700 (PDT)
-Received: from spock.localnet (unknown [94.142.239.106])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id C2C75153EFD9;
-        Fri, 13 Oct 2023 17:45:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1697211926;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GF/P3UK58QtWzAMZuYI1b/cNsajjo8+2kJ1HkJvuQz4=;
-        b=JD3mEtxLUQ2J2+Vax0UJsf2QngVA5PWdjV1VljOvAyCGii8cy2yagHAHAi7XWDiTGqWY2k
-        mkMK1Yi5RV8+SVfY7T6h0rcenpAfUiVhBXsWd1q2Ccg7A4GNQXEUz73SfA/02LkLwm70Zg
-        qlmCzCurmIH+zK8G92v+FW1Cs5Iu2L8=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>, Meng Li <li.meng@amd.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-acpi@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Shimmer Huang <shimmer.huang@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>
-Subject: Re: [RESEND PATCH V9 0/7] amd-pstate preferred core
-Date:   Fri, 13 Oct 2023 17:45:15 +0200
-Message-ID: <12303526.O9o76ZdvQC@natalenko.name>
-In-Reply-To: <20231013033118.3759311-1-li.meng@amd.com>
-References: <20231013033118.3759311-1-li.meng@amd.com>
+        with ESMTP id S232506AbjJMPpX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Oct 2023 11:45:23 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1EDBF;
+        Fri, 13 Oct 2023 08:45:20 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-53dd3f169d8so3912207a12.3;
+        Fri, 13 Oct 2023 08:45:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1697211919; x=1697816719; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/4Qik/8tCjQ/LSJkEYQYDKeqkxZOUG2QhVh5qP6Dp1k=;
+        b=MYRY2A/AcFnFito6Vr/yWe4jNT1Wuk1SP9c2yTf0P2VMmQhc8trC2hnrAaRqBXaH67
+         AfUuUU0c5Pgr0mXLe+XBYvHmEwnAg5WGSwXSPr9B0JY8CTQ/x1st+G1bkdYne8s4zmOy
+         4xkyun26fiVI2wJysXMqiEyzJggupLWWxIDl/pd+DEhNBAa4+CwT9XVowMx+hb7pZWVn
+         B143RW+Kspg2/6Q2siUW4XLwajWcP8WDfkriXSWLAgx/yP7fwU5nGIZX6+Oys5HbHRHZ
+         eI4dVfKfmO2mbJsyAsL8AhT22qB4WvB8KG3qb9ds0r3eCy2kp29c7Og2Uv9EahvRZQRO
+         11fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697211919; x=1697816719;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/4Qik/8tCjQ/LSJkEYQYDKeqkxZOUG2QhVh5qP6Dp1k=;
+        b=CvBrqB0+usWKWqK8pddHoOvqQJLKpnuwdu1V+vyOHK6vTv3kLFy3bIje7nG8ZpI3MZ
+         cMUhasvTpZx/iXNeA8fez4L1RrAlnwXdEflKP37dg0nGVYIuuKOCk7waUDEOl6Rkss8C
+         sNpNP9dnSqtDBYnrSG6bdsT3CB9O8JGh+uaGB48a2Rcps8uwzI83SS+71i5WudQ/sd5i
+         tlvevL+qqPtIgEC9I9aQNUh476pd15vMsQwityfP2V/91oULk9JzOWFel5duEaIg1BNu
+         uS2O2VZve3pBznAHbqvqW3ZEyzniI2qA74V2TOMEPIgxfw0l6QaurzY9J75QL4oBWRds
+         ZzPA==
+X-Gm-Message-State: AOJu0Yyv/ZEMcL/kT1ukp+bXiwW1FZETeQVGffbc1vHCcnyfeoIReEYD
+        W155ndTQZPZszwVHem+LPV8=
+X-Google-Smtp-Source: AGHT+IGRbOXVhP0p7A0CuC6eXHOhNpqbEjwICKKgevPXpz7KnnlcZBKHMALqs03YW8kgUcYM1+3m6Q==
+X-Received: by 2002:aa7:c159:0:b0:530:b86f:9c3f with SMTP id r25-20020aa7c159000000b00530b86f9c3fmr22878712edp.37.1697211919189;
+        Fri, 13 Oct 2023 08:45:19 -0700 (PDT)
+Received: from orome.fritz.box (p200300e41f3f4900f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f3f:4900:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id a23-20020a50ff17000000b005342fa19070sm11635888edu.89.2023.10.13.08.45.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Oct 2023 08:45:18 -0700 (PDT)
+Date:   Fri, 13 Oct 2023 17:45:17 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Nicolas Chauvet <kwizart@gmail.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jon Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 00/13] thermal: tegra: Do not register cooling device
+Message-ID: <ZSlmDTareNuAgX-r@orome.fritz.box>
+References: <20231012175836.3408077-1-thierry.reding@gmail.com>
+ <CABr+WTkT4LSYrMPVpxYO4VT87xoFA98qA9wFQMwoO4b4J8gF3g@mail.gmail.com>
+ <ZSktVaje_h2Hiyy6@orome.fritz.box>
+ <CABr+WTk9EGqVQ3_5579RmLVvOZj_NzNN3U8JMbyrQze5-9Wx8A@mail.gmail.com>
+ <ZSlCjptcuIvVHuuM@orome.fritz.box>
+ <CABr+WTnP-JencnDt-u9emuc7knm1LSNDS5VRf-X9sZzQ0jrs1w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart5719407.DvuYhMxLoT";
- micalg="pgp-sha256"; protocol="application/pgp-signature"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="YE9OTwrIN9bc6tni"
+Content-Disposition: inline
+In-Reply-To: <CABr+WTnP-JencnDt-u9emuc7knm1LSNDS5VRf-X9sZzQ0jrs1w@mail.gmail.com>
+User-Agent: Mutt/2.2.12 (2023-09-09)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---nextPart5719407.DvuYhMxLoT
+
+--YE9OTwrIN9bc6tni
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"; protected-headers="v1"
-From: Oleksandr Natalenko <oleksandr@natalenko.name>
-Subject: Re: [RESEND PATCH V9 0/7] amd-pstate preferred core
-Date: Fri, 13 Oct 2023 17:45:15 +0200
-Message-ID: <12303526.O9o76ZdvQC@natalenko.name>
-In-Reply-To: <20231013033118.3759311-1-li.meng@amd.com>
-References: <20231013033118.3759311-1-li.meng@amd.com>
-MIME-Version: 1.0
 
-Hello.
+On Fri, Oct 13, 2023 at 03:55:43PM +0200, Nicolas Chauvet wrote:
+> Le ven. 13 oct. 2023 =C3=A0 15:13, Thierry Reding
+> <thierry.reding@gmail.com> a =C3=A9crit :
+> >
+> > On Fri, Oct 13, 2023 at 02:45:57PM +0200, Nicolas Chauvet wrote:
+> > > Le ven. 13 oct. 2023 =C3=A0 13:43, Thierry Reding
+> > > <thierry.reding@gmail.com> a =C3=A9crit :
+> > > >
+> > > > On Fri, Oct 13, 2023 at 11:14:25AM +0200, Nicolas Chauvet wrote:
+> > > > > Le jeu. 12 oct. 2023 =C3=A0 19:58, Thierry Reding
+> > > > > <thierry.reding@gmail.com> a =C3=A9crit :
+> > > > > >
+> > > > > > From: Thierry Reding <treding@nvidia.com>
+> > > > > >
+> > > > > > Hi,
+> > > > > >
+> > > > > > this set of patches removes the registration of the SOCTHERM in=
+ternal
+> > > > > > throttling mechanism as cooling device. Since this throttling s=
+tarts
+> > > > > > automatically once a certain temperature threshold is crossed, =
+it
+> > > > > > doesn't make sense to represent it as a cooling device, which a=
+re
+> > > > > > typically "manually" activated by the thermal framework when th=
+ermal
+> > > > > > sensors report temperature thresholds being crossed.
+> > > > > >
+> > > > > > Instead of using the cooling device mechanism, this statically =
+programs
+> > > > > > the throttling mechanism when it is configured in device tree. =
+In order
+> > > > > > to do this, an additional device tree property is needed to rep=
+lace the
+> > > > > > information that was previously contained in trip points.
+> > > > > >
+> > > > > > There's a few preparatory patches to make the removal a bit sim=
+pler and
+> > > > > > also some follow up cleanups included as well.
+> > > > > >
+> > > > > > Changes in v2:
+> > > > > > - rework the device tree bindings:
+> > > > > >   - add nvidia,thermal-zones property to attach throttling to z=
+ones
+> > > > > >   - use -millicelsius suffix and add hysteresis
+> > > > > > - add patch to store thermal zone device tree node for later use
+> > > > > > - add patch to enforce self-encapsulation of the thermal core n=
+ow that
+> > > > > >   no drivers need to reach into it anymore
+> > > > > >
+> > > > > > This applies on top of Daniel's self-encapsulation hardening se=
+ries:
+> > > > > >
+> > > > > >         https://lore.kernel.org/all/20231012102700.2858952-1-da=
+niel.lezcano@linaro.org/
+> > > > > >
+> > > > > > Thierry
+> > > > > >
+> > > > > > Thierry Reding (13):
+> > > > > >   thermal: Store device tree node for thermal zone devices
+> > > > > >   dt-bindings: thermal: tegra: Document throttle temperature
+> > > > > >   dt-bindings: thermal: tegra: Add nvidia,thermal-zones property
+> > > > > >   thermal: tegra: Use driver-private data consistently
+> > > > > >   thermal: tegra: Constify SoC-specific data
+> > > > > >   thermal: tegra: Do not register cooling device
+> > > > > >   thermal: tegra: Use unsigned int where appropriate
+> > > > > >   thermal: tegra: Avoid over-allocation of temporary array
+> > > > > >   thermal: tegra: Remove gratuitous error assignment
+> > > > > >   thermal: tegra: Minor stylistic cleanups
+> > > > > >   ARM: tegra: Rework SOCTHERM on Tegra124
+> > > > > >   arm64: tegra: Rework SOCTHERM on Tegra132 and Tegra210
+> > > > > >   thermal: Enforce self-encapsulation
+> > > > > >
+> > > > > >  .../thermal/nvidia,tegra124-soctherm.yaml     |  19 +
+> > > > > >  arch/arm/boot/dts/nvidia/tegra124.dtsi        |  68 +--
+> > > > > >  arch/arm64/boot/dts/nvidia/tegra132.dtsi      |  66 +--
+> > > > > >  arch/arm64/boot/dts/nvidia/tegra210.dtsi      |  86 +--
+> > > > > >  drivers/thermal/tegra/soctherm.c              | 525 ++++++++--=
+--------
+> > > > > >  drivers/thermal/tegra/soctherm.h              |   1 +
+> > > > > >  drivers/thermal/tegra/tegra124-soctherm.c     |   4 +
+> > > > > >  drivers/thermal/tegra/tegra132-soctherm.c     |   4 +
+> > > > > >  drivers/thermal/tegra/tegra210-soctherm.c     |   4 +
+> > > > > >  drivers/thermal/thermal_core.h                |   2 +-
+> > > > > >  drivers/thermal/thermal_of.c                  |   3 +
+> > > > > >  11 files changed, 329 insertions(+), 453 deletions(-)
+> > > > > >
+> > > > > > --
+> > > > > > 2.42.0
+> > > > > >
+> > > > >
+> > > > > I'm still experiencing the following message on jetson-tx1 with t=
+his
+> > > > > serie applied on top of 6.6-rc5 (with iommu-next and tegra-next
+> > > > > applied).
+> > > > > oct. 13 10:53:16 jetson-tx1 kernel: max77620-thermal max77620-the=
+rmal:
+> > > > > Failed to register thermal zone: -19
+> > > >
+> > > > Not sure about this one. I don't think I've seen it. Do you know if
+> > > > that's somehow caused by this series, or is it preexisting?
+> > >
+> > > It's pre-existing from this serie.
+> > >
+> > > > > oct. 13 10:53:16 jetson-tx1 kernel: tegra_soctherm
+> > > > > 700e2000.thermal-sensor: throttle-cfg: heavy: no throt prop or in=
+valid
+> > > > > prop
+> > > > >
+> > > > > Is this expected ?
+> > > >
+> > > > This one is definitely not expected. I have seen this before, and it
+> > > > happens when the device tree doesn't contain all the properties tha=
+t are
+> > > > expected. Patch 12 in this series should take care of that. Have you
+> > > > made sure that that's been applied and is what the kernel uses to b=
+oot
+> > > > with?
+> > >
+> > > Yes, this dtb change in patch12 is propagated to the device (as seen
+> > > in /boot/dtbs)
+> > > But comparing with what's available at runtime in /proc/device-tree, I
+> > > see some changes
+> > >
+> > >                         heavy {
+> > > -                               hysteresis-millicelsius =3D <0xfa0>;
+> > > +                               #cooling-cells =3D <0x02>;
+> > >                                 nvidia,cpu-throt-percent =3D <0x55>;
+> > >                                 nvidia,gpu-throt-level =3D <0x03>;
+> > >                                 nvidia,priority =3D <0x64>;
+> > > -                               nvidia,thermal-zones =3D <0x49 0x4a>;
+> > > -                               temperature-millicelsius =3D <0x180c4=
+>;
+> > > +                               phandle =3D <0x130>;
+> > >                         };
+> >
+> > Okay, that explains the error message.
+> >
+> > >
+> > > I'm using u-boot 2023.07 with EFI boot (L4T 32.7.4).
+> > > Could it be that the bootloader has changed these entries ? Can this
+> > > be prevented ?
+> >
+> > I'm not aware of anything in the bootloader that would do this. Some
+> > versions of U-Boot that ships with L4T can copy certain nodes in DTB but
+> > I have never seen anything that would've touched thermal.
+> >
+> > Is it possible that you're not loading the DTB and end up receiving one
+> > from UEFI or cboot?
+> Seems like it: a previous copy was in /boot/dts that took over /boot/dtbs.
+> With updated dtb, the warning disappeared.
 
-On p=C3=A1tek 13. =C5=99=C3=ADjna 2023 5:31:11 CEST Meng Li wrote:
-> Hi all:
->=20
-> The core frequency is subjected to the process variation in semiconductor=
-s.
-> Not all cores are able to reach the maximum frequency respecting the
-> infrastructure limits. Consequently, AMD has redefined the concept of
-> maximum frequency of a part. This means that a fraction of cores can reach
-> maximum frequency. To find the best process scheduling policy for a given
-> scenario, OS needs to know the core ordering informed by the platform thr=
-ough
-> highest performance capability register of the CPPC interface.
->=20
-> Earlier implementations of amd-pstate preferred core only support a static
-> core ranking and targeted performance. Now it has the ability to dynamica=
-lly
-> change the preferred core based on the workload and platform conditions a=
-nd
-> accounting for thermals and aging.
->=20
-> Amd-pstate driver utilizes the functions and data structures provided by
-> the ITMT architecture to enable the scheduler to favor scheduling on cores
-> which can be get a higher frequency with lower voltage.
-> We call it amd-pstate preferred core.
->=20
-> Here sched_set_itmt_core_prio() is called to set priorities and
-> sched_set_itmt_support() is called to enable ITMT feature.
-> Amd-pstate driver uses the highest performance value to indicate
-> the priority of CPU. The higher value has a higher priority.
->=20
-> Amd-pstate driver will provide an initial core ordering at boot time.
-> It relies on the CPPC interface to communicate the core ranking to the
-> operating system and scheduler to make sure that OS is choosing the cores
-> with highest performance firstly for scheduling the process. When amd-pst=
-ate
-> driver receives a message with the highest performance change, it will
-> update the core ranking.
->=20
-> Changes form V8->V9:
-> - all:
-> - - pick up Tested-By flag added by Oleksandr.
-> - cpufreq: amd-pstate:
-> - - pick up Review-By flag added by Wyes.
-> - - ignore modification of bug.
+Okay, great!
 
-Thanks for this submission.
+> Only remaining error is: kernel: max77620-thermal max77620-thermal:
+> Failed to register thermal zone: -19
 
-The bug you refer to, I assume it should have been fixed by this hunk:
+Looks like that's -ENODEV from devm_thermal_of_zone_register() via
+max77620_thermal_probe(). Looking at thermal_of_zone_register(), the
+-ENODEV case is treated specially, so perhaps we should be doing the
+same thing in max77620_probe()?
 
-```
-=2D-- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -542,7 +542,7 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
- 	if (target_perf < capacity)
- 		des_perf =3D DIV_ROUND_UP(cap_perf * target_perf, capacity);
-=20
-=2D	min_perf =3D READ_ONCE(cpudata->highest_perf);
-+	min_perf =3D READ_ONCE(cpudata->lowest_perf);
- 	if (_min_perf < capacity)
- 		min_perf =3D DIV_ROUND_UP(cap_perf * _min_perf, capacity);
-```
+Let me send out a patch.
 
-which is now missing from this patchset as it was suggested to send it as a=
- separate patch.
+Thierry
 
-Am I correct? If so, are you going to send it as a separate patch within th=
-e next round of this patchset, or it will be sent separately (if it hasn't =
-yet)?
-
-> - - add a attribute of prefcore_ranking.
-> - - modify data type conversion from u32 to int.
-> - Documentation: amd-pstate:
-> - - pick up Review-By flag added by Wyes.
->=20
-> Changes form V7->V8:
-> - all:
-> - - pick up Review-By flag added by Mario and Ray.
-> - cpufreq: amd-pstate:
-> - - use hw_prefcore embeds into cpudata structure.
-> - - delete preferred core init from cpu online/off.
->=20
-> Changes form V6->V7:
-> - x86:
-> - - Modify kconfig about X86_AMD_PSTATE.
-> - cpufreq: amd-pstate:
-> - - modify incorrect comments about scheduler_work().
-> - - convert highest_perf data type.
-> - - modify preferred core init when cpu init and online.
-> - acpi: cppc:
-> - - modify link of CPPC highest performance.
-> - cpufreq:
-> - - modify link of CPPC highest performance changed.
->=20
-> Changes form V5->V6:
-> - cpufreq: amd-pstate:
-> - - modify the wrong tag order.
-> - - modify warning about hw_prefcore sysfs attribute.
-> - - delete duplicate comments.
-> - - modify the variable name cppc_highest_perf to prefcore_ranking.
-> - - modify judgment conditions for setting highest_perf.
-> - - modify sysfs attribute for CPPC highest perf to pr_debug message.
-> - Documentation: amd-pstate:
-> - - modify warning: title underline too short.
->=20
-> Changes form V4->V5:
-> - cpufreq: amd-pstate:
-> - - modify sysfs attribute for CPPC highest perf.
-> - - modify warning about comments
-> - - rebase linux-next
-> - cpufreq:=20
-> - - Moidfy warning about function declarations.
-> - Documentation: amd-pstate:
-> - - align with ``amd-pstat``
->=20
-> Changes form V3->V4:
-> - Documentation: amd-pstate:
-> - - Modify inappropriate descriptions.
->=20
-> Changes form V2->V3:
-> - x86:
-> - - Modify kconfig and description.
-> - cpufreq: amd-pstate:=20
-> - - Add Co-developed-by tag in commit message.
-> - cpufreq:
-> - - Modify commit message.
-> - Documentation: amd-pstate:
-> - - Modify inappropriate descriptions.
->=20
-> Changes form V1->V2:
-> - acpi: cppc:
-> - - Add reference link.
-> - cpufreq:
-> - - Moidfy link error.
-> - cpufreq: amd-pstate:=20
-> - - Init the priorities of all online CPUs
-> - - Use a single variable to represent the status of preferred core.
-> - Documentation:
-> - - Default enabled preferred core.
-> - Documentation: amd-pstate:=20
-> - - Modify inappropriate descriptions.
-> - - Default enabled preferred core.
-> - - Use a single variable to represent the status of preferred core.
->=20
-> Meng Li (7):
->   x86: Drop CPU_SUP_INTEL from SCHED_MC_PRIO for the expansion.
->   acpi: cppc: Add get the highest performance cppc control
->   cpufreq: amd-pstate: Enable amd-pstate preferred core supporting.
->   cpufreq: Add a notification message that the highest perf has changed
->   cpufreq: amd-pstate: Update amd-pstate preferred core ranking
->     dynamically
->   Documentation: amd-pstate: introduce amd-pstate preferred core
->   Documentation: introduce amd-pstate preferrd core mode kernel command
->     line options
->=20
->  .../admin-guide/kernel-parameters.txt         |   5 +
->  Documentation/admin-guide/pm/amd-pstate.rst   |  59 ++++-
->  arch/x86/Kconfig                              |   5 +-
->  drivers/acpi/cppc_acpi.c                      |  13 ++
->  drivers/acpi/processor_driver.c               |   6 +
->  drivers/cpufreq/amd-pstate.c                  | 204 ++++++++++++++++--
->  drivers/cpufreq/cpufreq.c                     |  13 ++
->  include/acpi/cppc_acpi.h                      |   5 +
->  include/linux/amd-pstate.h                    |  10 +
->  include/linux/cpufreq.h                       |   5 +
->  10 files changed, 305 insertions(+), 20 deletions(-)
->=20
->=20
-
-
-=2D-=20
-Oleksandr Natalenko (post-factum)
---nextPart5719407.DvuYhMxLoT
+--YE9OTwrIN9bc6tni
 Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEZUOOw5ESFLHZZtOKil/iNcg8M0sFAmUpZgsACgkQil/iNcg8
-M0saeQ/+ITtu+L9VzE+fm2PU5Ym/icfRCnp0TME5PQY+YNAnWNKMJeeyP+IVIsGK
-mC/Yru7gP4UxbWz8Ex/eKV+J3B7Afe5V7Z5vrVjRyJVAwU5RbuKLYvxZPQSDuy16
-8gK75tCK639bYViG9q0zWgZulc0qtjt7zsS5lRM0m+XRbEbvNR4Sr0gh2c1lHOa+
-nA5DwkUDbEtmCgebyEbBHidtklha9yTuhEVL38BpiNra+KjzC81A+Acc+VyPCTP0
-hgYf/NHtI6jzZo+f/Jvg1Y4bEvjsn8VDruUQ7GHuvAGshunkqLUsHJwAUfUJZbPX
-tjuFyp/ah2861e+Q1/kyjMr2tsfglBu2ISxsM51P5KN2s/bqdws2+mv+CMLj8iph
-6Jrp3aDgPainEwyMXONsyZRcNvMQtFGLZOLosOJOZ7N98B8cN+EnyAoLC02S1VAO
-U31S9O0Xef5bancSf/0VsKQ0opD1Rw9Vn5orSWJIRXm5u+bN+8SFIroz77dHuokZ
-+t+bD/3KnmUHzKG8PDaS96yE65Jd9ZS1f460lKQ0Au82rSpdMWCW3AbdJw57TpAa
-9lqMSnbRos75cPc3T455e1XTnwiiIqsygu53x9chZF+mU+w8+SZoMCmeKXhQ5qtk
-M1x9isx4WxZ4M2MJKCVkbIz3gBTflv1YW9laJJ2WrDOU79KuCn8=
-=GFQL
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmUpZgwACgkQ3SOs138+
+s6HFpxAAomBPc3BD2JvOlgt52XHD96e/Let5pkwF4VGsSDLWG/bZHohyiZuqHxcu
+mEa/jZ2wntgZNZWpVyv0Nmwe7hGlw5pChrjPAJYzHsW/Y+wjDumGdprHybYqIyzr
+FAY2sUBm2C6EiHFOHedA1Ceir8rk+y8m77GndWmSlOmQ8oB01UJ+tvjE3dtx6Aqx
+5+lqLPLe92djrpq7eZVdGLXacQn2It6vsyeCr8QxCPhzCglYRh16s9M/Ffa2nJih
+mtdtqJfb9rhpTzbM4yNPbbZq4+5siZA/QqlcEHyBfkt8WGW4/O9HEgdgBjRdnV7r
+FWSJTVl/adQCSEYAZA+4H+mSun/1qPJWLc3yiZC2t8jBv/+KxMOB8a2uzaU+O0Ax
+zgFR3v+ZQskcWG71eXm939PksOWWNLEAgkU/M8sCBfNZL7Cq2qO5iZrF8XimkXaQ
+pO0V3OXObqanSlqJK3CNTkGz4h95pzhVergoOnmd9mwkytDYrrnwTHIrK+MuIPTK
+HdsjPBEYL83wd89m1vEouEaQGl2K5w0Nr+0RkNhyYsmYHqowzTi9HElVqo5HS6mu
+kiOVHT7cu9rRU8PNktK2bV+gnJxh17j9JZsJkK3YyvAjBGBOrr6J2m0rfCvH7BuB
+SIagI1VI3XKfXsWaWvZ4hdmNPLwgRWCW9LYNMLerE6vdWC1Hiyc=
+=ybdg
 -----END PGP SIGNATURE-----
 
---nextPart5719407.DvuYhMxLoT--
-
-
-
+--YE9OTwrIN9bc6tni--
