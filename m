@@ -2,123 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFB857C9BD8
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Oct 2023 23:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 325497C9C04
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Oct 2023 23:54:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbjJOVSQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 15 Oct 2023 17:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52202 "EHLO
+        id S229766AbjJOVyl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 15 Oct 2023 17:54:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjJOVSP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 Oct 2023 17:18:15 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429C0A1;
-        Sun, 15 Oct 2023 14:18:11 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 80B0EC0004;
-        Sun, 15 Oct 2023 21:18:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1697404689;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QyLwk8RWeHwb+iTYV4j14/CAsO9UnmgTLhIoR7pcM84=;
-        b=G5I8ztJvdFI8tTwSCy0AWY+6MRhNlKLte1yNV4fIGQl6O23J6Xdoh0CefROrNByOpZhwE7
-        P/dmdthsO5WAs8rqcbBfrDUN9cugU7l4OxjWmfddhyL0LuZ/a6CfmZiXNmu06TC7W2khE9
-        NDZu0i9NIxBjr696iBip4sRRM3d0VMBYV0oc5glex8E5b5g9pnVjfW5fIkCPQERxPzL1Jd
-        mjqglreUfQeV1UDlGgRG/+b2MG2/c1Vo/UDOnu2p9/qVGfq8Q3Iz2g50VMtUD0J76grZyh
-        DkuCxT22BotwyKZelbq33dd3q4OFLHJ92smEnKVwc5a4qUfDVLMQmLsddUpmAw==
-Date:   Sun, 15 Oct 2023 23:17:56 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Hartley Sweeten <hsweeten@visionengravers.com>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Lukasz Majewski <lukma@denx.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andy@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-input@vger.kernel.org, alsa-devel@alsa-project.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: (subset) [PATCH v4 00/42] ep93xx device tree conversion
-Message-ID: <169740466288.180093.13375010968334465004.b4-ty@bootlin.com>
-References: <20230915-ep93xx-v4-0-a1d779dcec10@maquefel.me>
+        with ESMTP id S229500AbjJOVyk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 Oct 2023 17:54:40 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E6FAD
+        for <linux-pm@vger.kernel.org>; Sun, 15 Oct 2023 14:54:38 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-40651a726acso36008205e9.1
+        for <linux-pm@vger.kernel.org>; Sun, 15 Oct 2023 14:54:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697406877; x=1698011677; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0QG9vlqxiNVALcyUAQIY9+SbjzzlS00U4CnvIpEmDRQ=;
+        b=c8IoE1VlOM4P9DeE5bJfPGlVr0Wb1LMAzh5d8PG+SvqnBc0nVUaBZkJqYihYDOaxSB
+         BQApQS79Z4v8pF1ea1UvPY3pBQC+DNpUhmcOEGi2CJsHIx+csl0ugEFQ9IRGMWX2KJgK
+         KYd+8iQnkV/cn9NsDC4iXejKtMBTW3D3O0FtlEYfvjtwJYjwN+r4CppydQkEI7dsqp5a
+         rp+QuP3UUcKtfB3HBlvzTVYtymcYMgCNGRBlfV8V1KMW3tRODTq9m89AVZWH51KHJYr0
+         PAlk6g1YV7ISOfC/Vtoc284501bvqd/I2hnyYzXIX8Z7FUiOC0J8JQoGx3rziJB8DXBx
+         AaAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697406877; x=1698011677;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0QG9vlqxiNVALcyUAQIY9+SbjzzlS00U4CnvIpEmDRQ=;
+        b=FYBll4eVBzPoRSuENO/TDeD9nvVhd4t+0gJpE6bZDoDBe4AaaIyN4ItzBjQw1OxDpc
+         TdaysD+rcR7WLKbIic+UdI1NwQpqJM56d85qP7criemBWSH5jeBkdiPmvud/B/U8Tbo0
+         /FM8tH0ZT+qHYVPRPJb3kjTojRn45tqP89LilIabRt1at5Z2+3JDvg1frrGCECjjqCmV
+         kjl7x/BV1j261lUQ0E4Ce7KYxXd6FCYJnhXgA+UkQWh4wpBVLIbGuL0+VTB2039VFC1w
+         Fuh9/BgyeElKsGTED8y/WtgQlbFy/xA9seS6jkWuD9c3PjYEH1JGDTInWA+cHA3BGNQZ
+         4idA==
+X-Gm-Message-State: AOJu0YwdSkEgQ2tO8+LQcJv+we9hb+xicLJOE2Xd81NNk+QBLXwayvw7
+        2YW+jd7Xc0HgmbnXtlt/jxmsMI8mI3rUsC7j0VM=
+X-Google-Smtp-Source: AGHT+IGXZ6gUTWqXb+xT9o+FleuWv6jXqAEwhIBbsrFbTegYHrtte+4y/J8ZdhEBguj+srpdLn/7kg==
+X-Received: by 2002:a05:600c:1910:b0:407:859c:a1bc with SMTP id j16-20020a05600c191000b00407859ca1bcmr709327wmq.26.1697406877121;
+        Sun, 15 Oct 2023 14:54:37 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
+        by smtp.googlemail.com with ESMTPSA id jb17-20020a05600c54f100b00401bbfb9b2bsm889040wmb.0.2023.10.15.14.54.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 Oct 2023 14:54:36 -0700 (PDT)
+Message-ID: <83dbd835-c36e-4e7d-a5e4-c572e19c649d@linaro.org>
+Date:   Sun, 15 Oct 2023 23:54:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230915-ep93xx-v4-0-a1d779dcec10@maquefel.me>
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 1/4] dt-bindings: thermal-zones: Document
+ critical-action
+Content-Language: en-US
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     rafael@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, conor+dt@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20231006180453.2903342-1-festevam@gmail.com>
+ <CAOMZO5CfW10dwVDYaHkvhTMKeHw38ZAt1kdH8qB=8AM=cqdHvw@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAOMZO5CfW10dwVDYaHkvhTMKeHw38ZAt1kdH8qB=8AM=cqdHvw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-On Fri, 15 Sep 2023 11:10:42 +0300, Nikita Shubin wrote:
-> This series aims to convert ep93xx from platform to full device tree support.
+On 13/10/2023 12:39, Fabio Estevam wrote:
+> Hi Daniel,
 > 
-> The main goal is to receive ACK's to take it via Arnd's arm-soc branch.
+> On Fri, Oct 6, 2023 at 3:05 PM Fabio Estevam <festevam@gmail.com> wrote:
+>>
+>> From: Fabio Estevam <festevam@denx.de>
+>>
+>> Document the critical-action property to describe the thermal action
+>> the OS should perform after the critical temperature is reached.
 > 
-> Major changes:
-> - drop newline at the end from each YAML files
-> - rename dma and clk bindings headers to match first compatible
-> - shrink SoC exported functions number to only 2
-> - dropped some ep93xx_pata fixes from these series
-> - dropped m48t86 stuff from these series
-> 
-> [...]
+> Are you happy with the v10 series?
 
-Applied, thanks!
+Yes, I think they are fine except one thing.
 
-[13/42] dt-bindings: rtc: Add Cirrus EP93xx
-        commit: 207bddd97881913bcb8bef84737c0971e712fbee
-[14/42] rtc: ep93xx: add DT support for Cirrus EP93xx
-        commit: 1d70f9fe5f1c8fbd5d838223b8aec27c69a7e609
-
-Best regards,
+The include/linux/reboot.h is changed along with thermal*.c file. IMO it 
+is preferable to have separate patch, I mean all reboot.h changes folded 
+in a single patch before the thermal_*.c changes. It is actually 
+orphaned and we should ask Matti Vaittinen <mazziesaccount@gmail.com> 
+its acked-by as he is the author of the code you are changing. 
+Otherwise, he will have to ack the patches which contain also thermal 
+code which is not its area.
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
