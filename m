@@ -2,149 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB2B7CA235
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 10:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C55EE7CA42D
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 11:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbjJPIrR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Oct 2023 04:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
+        id S229848AbjJPJcQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Oct 2023 05:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232931AbjJPIrK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 04:47:10 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D109EB4
-        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 01:47:07 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-579de633419so52184527b3.3
-        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 01:47:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697446027; x=1698050827; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=W5NJ69kX6Bm+ubsFCLmuvdrCURMYuhfL3kxTQtdRQ+o=;
-        b=NDfzuOtuFXPrbza2/JIvk8SJzRnoHadvnc4lSEoz3ZoB1hxYL/9U4eNiPtfpC7e0oY
-         g1CaX6WftO0AaYzWCA3Y4bJJAdw2zeWFRAeDwMoGInJYqmBievaBPkYpFJjpzDm2yjv4
-         KwpTGHDJM8boc1r23WOYKu3qh9S/vbVigURfoE4C+nkPO2zWlqLKD92jKc/YnB+IdP7I
-         FCsi4CYb8etuLw8KJCgPUfPkqPgHq6+BvtfFQnLlPKAn7+jm6vRSbzRT8eb4aOF6bX07
-         LJarDWzLy99oJRE/KVCpl0RqauR+k7tVlY4LiQuSF+cL1QpLQqeHddgpVPAvMKHhwBNc
-         XzBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697446027; x=1698050827;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=W5NJ69kX6Bm+ubsFCLmuvdrCURMYuhfL3kxTQtdRQ+o=;
-        b=ESocpUcfgWwRWDoqRvM+dc4jx1U5Vb4mLcxEkNZyxv0Fx1Z66SYAKdQ2DcOD6clpE9
-         QeT7Ru4eu+BKrbLw0LcxernaLgVNyUHyjNcRYX6hssUWozQ6KoSN7EOERExLFSfmsltV
-         ngUshcLN1NoI3UHSkpHtwvdHvBPCe2mRNJgzg97eoM99aO0m+PLEx5422ZuZCY5/9Zuw
-         5aWLoZ2yLuJOmuqC5AiMLYoaSNCqp29D6xCauMQJNJ9RkazIM+44Av8mwaasrfc6RRai
-         A6E9Zy01+yT+jax5+kJGseVVeagooK48T4AIlwY/ekv44cRca5tu0fYpew9NKWzVgTxK
-         zLbw==
-X-Gm-Message-State: AOJu0Yz5fbypxKQrZE2qbLS9H/AZCaEQnSaICRTTyAcR0nVsz/GMUHYt
-        4aFzGfZTyJJxDCE9fEcVlC9sTq4S1wwjd7PL3/wOEGJbn+FYKouOA4motQ==
-X-Google-Smtp-Source: AGHT+IG8XvfaO2iDQZru45tosMwj2yXei141FG7yCZLeVf1EhFA7GavmH/c+LB3Hs9LuIeU78Tz3RVP03MeUP/zdExg=
-X-Received: by 2002:a05:690c:a08:b0:5a7:af51:e274 with SMTP id
- cg8-20020a05690c0a0800b005a7af51e274mr17967004ywb.18.1697446027019; Mon, 16
- Oct 2023 01:47:07 -0700 (PDT)
+        with ESMTP id S229666AbjJPJcP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 05:32:15 -0400
+Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F5497;
+        Mon, 16 Oct 2023 02:32:13 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 8AC352800A290;
+        Mon, 16 Oct 2023 11:32:10 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 7C3D82ED8B5; Mon, 16 Oct 2023 11:32:10 +0200 (CEST)
+Date:   Mon, 16 Oct 2023 11:32:10 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     bhelgaas@google.com, linux-pm@vger.kernel.org,
+        linux-mmc@vger.kernel.org, Ricky Wu <ricky_wu@realtek.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH] PCI: pciehp: Prevent child devices from doing RPM on
+ PCIe Link Down
+Message-ID: <20231016093210.GA22952@wunner.de>
+References: <20231016040132.23824-1-kai.heng.feng@canonical.com>
 MIME-Version: 1.0
-References: <cover.1697101543.git.quic_varada@quicinc.com> <8f578277cc015cfe9cdca06586b2c82f1a728bad.1697101543.git.quic_varada@quicinc.com>
- <06b823d5c2ec05a940849ac341c48090.sboyd@kernel.org> <20231016070256.GA24128@varda-linux.qualcomm.com>
-In-Reply-To: <20231016070256.GA24128@varda-linux.qualcomm.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 16 Oct 2023 11:46:56 +0300
-Message-ID: <CAA8EJpoQwDaUa+-WyM6FBzQJo9gn1k2rYLmKSFBLUH00epGJ0Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/8] clk: qcom: clk-alpha-pll: introduce stromer plus ops
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>, agross@kernel.org,
-        andersson@kernel.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, ilia.lin@kernel.org,
-        konrad.dybcio@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        mturquette@baylibre.com, quic_kathirav@quicinc.com,
-        rafael@kernel.org, robh+dt@kernel.org, viresh.kumar@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231016040132.23824-1-kai.heng.feng@canonical.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 16 Oct 2023 at 10:03, Varadarajan Narayanan
-<quic_varada@quicinc.com> wrote:
->
-> On Thu, Oct 12, 2023 at 01:55:36PM -0700, Stephen Boyd wrote:
-> > Quoting Varadarajan Narayanan (2023-10-12 02:26:17)
-> > > Stromer plus APSS PLL does not support dynamic frequency scaling.
-> > > To switch between frequencies, we have to shut down the PLL,
-> > > configure the L and ALPHA values and turn on again. So introduce the
-> > > separate set of ops for Stromer Plus PLL.
-> >
-> > Does this assume the PLL is always on?
->
-> Yes once the PLL is configured by apss-ipq-pll driver, it is always on.
->
-> > > Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > > ---
-> > > v2:     Use clk_alpha_pll_stromer_determine_rate, instead of adding new
-> > >         clk_alpha_pll_stromer_plus_determine_rate as the alpha pll width
-> > >         is same for both
-> > >
-> > >         Fix review comments
-> > >                 udelay(50) -> usleep_range(50, 60)
-> > >                 Remove SoC-specific from print message
-> > > ---
-> > >  drivers/clk/qcom/clk-alpha-pll.c | 57 ++++++++++++++++++++++++++++++++++++++++
-> > >  drivers/clk/qcom/clk-alpha-pll.h |  1 +
-> > >  2 files changed, 58 insertions(+)
-> > >
-> > > diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
-> > > index 4edbf77..5221b6c 100644
-> > > --- a/drivers/clk/qcom/clk-alpha-pll.c
-> > > +++ b/drivers/clk/qcom/clk-alpha-pll.c
-> > > @@ -2508,3 +2508,60 @@ const struct clk_ops clk_alpha_pll_stromer_ops = {
-> > >         .set_rate = clk_alpha_pll_stromer_set_rate,
-> > >  };
-> > >  EXPORT_SYMBOL_GPL(clk_alpha_pll_stromer_ops);
-> > > +
-> > > +static int clk_alpha_pll_stromer_plus_set_rate(struct clk_hw *hw,
-> > > +                                              unsigned long rate,
-> > > +                                              unsigned long prate)
-> > > +{
-> > > +       struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
-> > > +       u32 l, alpha_width = pll_alpha_width(pll);
-> > > +       int ret;
-> > > +       u64 a;
-> > > +
-> > > +       rate = alpha_pll_round_rate(rate, prate, &l, &a, alpha_width);
-> > > +
-> > > +       regmap_write(pll->clkr.regmap, PLL_MODE(pll), 0);
-> >
-> > There's a theoretical problem here if I understand correctly. A call to
-> > clk_enable() can happen while clk_set_rate() is in progress or vice
-> > versa. Probably we need some sort of spinlock for this PLL that
-> > synchronizes any enable/disable with the rate change so that when we
-> > restore the enable bit the clk isn't enabled when it was supposed to be
-> > off.
->
-> Since the PLL is always on, should we worry about enable/disable?
-> If you feel it is better to synchronize with a spin lock, will
-> add and post a new revision. Please let me know.
+On Mon, Oct 16, 2023 at 12:01:31PM +0800, Kai-Heng Feng wrote:
+> When inserting an SD7.0 card to Realtek card reader, it can trigger PCI
+> slot Link down and causes the following error:
 
-Probably another option might be to change stromer PLL ops to use
-prepare/unprepare instead of enable/disable. This way the
-clk_prepare_lock() in clk_set_rate() will take care of locking.
-
->
-> Thanks
-> Varada
+Why does *inserting* a card cause a Link Down?
 
 
+> [   63.898861] pcieport 0000:00:1c.0: pciehp: Slot(8): Link Down
+> [   63.912118] BUG: unable to handle page fault for address: ffffb24d403e5010
+[...]
+> [   63.912198]  ? asm_exc_page_fault+0x27/0x30
+> [   63.912203]  ? ioread32+0x2e/0x70
+> [   63.912206]  ? rtsx_pci_write_register+0x5b/0x90 [rtsx_pci]
+> [   63.912217]  rtsx_set_l1off_sub+0x1c/0x30 [rtsx_pci]
+> [   63.912226]  rts5261_set_l1off_cfg_sub_d0+0x36/0x40 [rtsx_pci]
+> [   63.912234]  rtsx_pci_runtime_idle+0xc7/0x160 [rtsx_pci]
+> [   63.912243]  ? __pfx_pci_pm_runtime_idle+0x10/0x10
+> [   63.912246]  pci_pm_runtime_idle+0x34/0x70
+> [   63.912248]  rpm_idle+0xc4/0x2b0
+> [   63.912251]  pm_runtime_work+0x93/0xc0
+> [   63.912254]  process_one_work+0x21a/0x430
+> [   63.912258]  worker_thread+0x4a/0x3c0
 
--- 
-With best wishes
-Dmitry
+This looks like pcr->remap_addr is accessed after it has been iounmap'ed
+in rtsx_pci_remove() or before it has been iomap'ed in rtsx_pci_probe().
+
+Is the card reader itself located below a hotplug port and unplugged here?
+Or is this about the card being removed from the card reader?
+
+Having full dmesg output and lspci -vvv output attached to a bugzilla
+would help to understand what is going on.
+
+Thanks,
+
+Lukas
