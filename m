@@ -2,90 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 926427C9DAC
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 05:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D75B7C9DD4
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 05:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231464AbjJPDTb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 15 Oct 2023 23:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34232 "EHLO
+        id S231727AbjJPDYZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 15 Oct 2023 23:24:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbjJPDTa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 Oct 2023 23:19:30 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E01FD6
-        for <linux-pm@vger.kernel.org>; Sun, 15 Oct 2023 20:19:28 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-27d0251d305so2087362a91.2
-        for <linux-pm@vger.kernel.org>; Sun, 15 Oct 2023 20:19:28 -0700 (PDT)
+        with ESMTP id S231744AbjJPDYL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 Oct 2023 23:24:11 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DFC182
+        for <linux-pm@vger.kernel.org>; Sun, 15 Oct 2023 20:24:04 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-7742be66bd3so299921885a.3
+        for <linux-pm@vger.kernel.org>; Sun, 15 Oct 2023 20:24:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697426368; x=1698031168; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pDYopfK40jPubbfAMF0ZB98ABj9yrqlTAb4VRGo8NsM=;
-        b=oWHer8PnXr3OD+mogE5TjrmVcequgErZ1BXNuaJelY3NJzWbfrVpL3PrxNQqG6VFnz
-         2U3grcedmhp9DckNJP1yq2ITip+qP4JbkbJwxK41VZTOXSWIoGkPHzUUGXbBb4HGzDPP
-         ehaM9h5HpnIMbYR/loIjA6kZ1YKeMPGJnLFA7zCqt1W4axXmzMLHAuW0e+UXKiMExM8y
-         0hmnz5Clj3Il9Cxggn2WdKHY44YHmOixs2eMfn8OyXbEisGonDar7akdG0AEU56Fy3W/
-         3rI4K7f0UMFslEx39tlmnZNF267FvPBxWE59C4NVDj43jQ/MRRpvSVcrzQ2wVm8QUTpk
-         e4pg==
+        d=linaro.org; s=google; t=1697426644; x=1698031444; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=mdYzk4cHVPhgvHjEMYfaKUA+ZiI9hKzw2EziBndWpjs=;
+        b=gLqKKkKu1jsxaQ01UOHi2MjSWVqqGA7edGheSydMnn8x65o5kxbeOYqhkxw+caYzNU
+         CfjetWzIsTWM4hXXPlPk4hOjX+NCkIronE0u+aLsp6692XUKteTUlcmmWRX0mWCflNgC
+         RXC8nvQf7vyvJMrG+9J/sJ7ypaj2VpT30/FsVL7H8MKtNmL3CPVpwPEZ3e7BqRW6F/MQ
+         S8GHMr6tNnua/2axykGdJJnC8hjejigr9a6d9bUJxENvckgeC892YToEVjQ879GnI42M
+         m3Vrw4R5a8rDn2hcQsJvcI8PloERkOIQZKlRKec2l0Xp589mf35W8kRCb7c2Kc4W0+Wj
+         pV5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697426368; x=1698031168;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pDYopfK40jPubbfAMF0ZB98ABj9yrqlTAb4VRGo8NsM=;
-        b=AywR9ENZddlzB/djDIWQy9z/WjH9H+TI01fL0460h400enQBXnwDa36z8YoGk3kb4b
-         YOnAy2UXV6SSNDBeGgGNaOh7xoYyGSaiW2pRE+D3AjF/f8tadpehHX9bm9nIdFemGn99
-         N0yB74PvUcFdgYYcKHRSPnXQFq4BRHBYNPjE1RkfHNAZ9QkRLq9if6cFFawAYls0KSRX
-         leJMxb3dEO7Gac7qDWNXxd+JHxMTPMAsTLTFZ9VfT3Wj4VDSsumFoBD/ketK5pI9i0v9
-         29PMdboBNxAPiPlzhN+wgDdMhz4tgJjRdJl0nD85Lse9dstytllHCAaw9xyThk/7OAHy
-         VE5Q==
-X-Gm-Message-State: AOJu0Yyt0CVC0q+pyq6MOyR4kizlPjAQEUBT24Rp/keEA/m8AUMYFelX
-        tpD0Va2x/bvt7MBECbqnBg635A==
-X-Google-Smtp-Source: AGHT+IGxPwpQoJbeM42Kx91ViLrPK676fLQ+CDc22svG4x4yLe446Rh+QuDeJMDtUYlcQYEaVooOGg==
-X-Received: by 2002:a17:90b:4e8f:b0:27d:492e:137a with SMTP id sr15-20020a17090b4e8f00b0027d492e137amr4631222pjb.45.1697426367777;
-        Sun, 15 Oct 2023 20:19:27 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697426644; x=1698031444;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mdYzk4cHVPhgvHjEMYfaKUA+ZiI9hKzw2EziBndWpjs=;
+        b=TAtPwdJfU/triuxvqJyptnn/fIk0yszAcukHwffQnBAgPfFvkm+7K2IwuCMBewUcTm
+         JTmPz39RmP7PJSjSHZ4D40N54p9EVSaa7ykH0VC0huXG4deE91s29wzKwqCi6Q6gmzlb
+         aNpW9+18vEX+WLmY6WVMP9I0+cxlbX7pj6SoiL6MrYgZQzDqDTcI2hEHeWf/KUR9cDOr
+         HEaI5kwjoi3m4FUlIAZsiN7PzMnxSYIWlf9dUV3U7d72Xopi0UwlYKTLvNy3tPKeSqol
+         mBKRdmcfzCR15y4zHU9u4g5iSEj2cvCUnaQF4VnOHBaiccXW5+NkOg+fkljrsA5pauz+
+         C3aw==
+X-Gm-Message-State: AOJu0Yy0nnqp4twAeX9yW/LoP7/C946CNnQuWw/yjGj8x06/o0pfbeiA
+        FWkN5OXyf0roJZbiInVfB0txlA==
+X-Google-Smtp-Source: AGHT+IEVT6R0ff/QzrGmRuoqEkDyEFviIVFFlPkoZDcaqNh1ru4cf9F2XqB95qlV3aRKJzdSY9n5Nw==
+X-Received: by 2002:a05:620a:953:b0:76f:ad1:3afb with SMTP id w19-20020a05620a095300b0076f0ad13afbmr32325866qkw.69.1697426643785;
+        Sun, 15 Oct 2023 20:24:03 -0700 (PDT)
 Received: from localhost ([122.172.80.14])
-        by smtp.gmail.com with ESMTPSA id ge9-20020a17090b0e0900b0026b3a86b0d5sm3648903pjb.33.2023.10.15.20.19.26
+        by smtp.gmail.com with ESMTPSA id z8-20020a6553c8000000b005b1bf3a200fsm2562933pgr.1.2023.10.15.20.24.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Oct 2023 20:19:26 -0700 (PDT)
-Date:   Mon, 16 Oct 2023 08:49:16 +0530
+        Sun, 15 Oct 2023 20:24:03 -0700 (PDT)
+Date:   Mon, 16 Oct 2023 08:53:53 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Manivannan Sadhasivam <mani@kernel.org>
-Cc:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        rafael@kernel.org, tglx@linutronix.de, maz@kernel.org,
-        robimarko@gmail.com, linux-arm-msm@vger.kernel.org,
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 4/5] dt-bindings: cpufreq: cpufreq-qcom-hw: Add SDX75
- compatible
-Message-ID: <20231016031916.mprtotrnkg5htyid@vireshk-i7>
-References: <1686311438-24177-1-git-send-email-quic_rohiagar@quicinc.com>
- <1686311438-24177-5-git-send-email-quic_rohiagar@quicinc.com>
- <20230609155635.GF6847@thinkpad>
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] of: export of_find_next_cache_node() for modules
+Message-ID: <20231016032353.xv3fm7dyuz52txy5@vireshk-i7>
+References: <20231011112726.166052-1-dmitry.baryshkov@linaro.org>
+ <CAL_Jsq+HdceLczej4_q-wjg2870v3y-e_E+jEq0xbetDguaXAw@mail.gmail.com>
+ <CAA8EJppCO-q=swYOH+O2fOdUDbNzd1yz9ZoTEBswV7RmvFJifA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230609155635.GF6847@thinkpad>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAA8EJppCO-q=swYOH+O2fOdUDbNzd1yz9ZoTEBswV7RmvFJifA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09-06-23, 21:26, Manivannan Sadhasivam wrote:
-> On Fri, Jun 09, 2023 at 05:20:37PM +0530, Rohit Agarwal wrote:
-> > Add compatible for EPSS CPUFREQ-HW on SDX75.
-> > 
-> > Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+On 11-10-23, 15:59, Dmitry Baryshkov wrote:
+> On Wed, 11 Oct 2023 at 15:52, Rob Herring <robh+dt@kernel.org> wrote:
+> >
+> > On Wed, Oct 11, 2023 at 6:27 AM Dmitry Baryshkov
+> > <dmitry.baryshkov@linaro.org> wrote:
+> > >
+> > > The qcom-cpufreq-nvmem module uses of_find_next_cache_node() function,
+> > > so export it to be available to the modules.
+> >
+> > You really should be using the cacheinfo API which has already parsed
+> > the cache nodes.
+> >
+> > Also, why do you need a platform_device? I don't see a driver.
+> > cacheinfo already creates a struct device, so kind of weird to have 2
+> > devices.
 > 
-> Acked-by: Manivannan Sadhasivam <mani@kernel.org>
+> The driver is pending as a part of the series at [1]. We need to scale
+> the L2 supplies and clock frequency following the core frequency
+> changes.
 
-Applied. Thanks.
+Guys, can we please resolve this soon ? I had to revert the patches
+for the time being to avoid these failures.
 
 -- 
 viresh
