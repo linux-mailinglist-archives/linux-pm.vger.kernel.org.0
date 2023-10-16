@@ -2,120 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2297CB52C
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 23:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DCB17CB5C8
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 23:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233462AbjJPVQY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Oct 2023 17:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
+        id S234108AbjJPVzu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Oct 2023 17:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233546AbjJPVQV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 17:16:21 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE4EB4
-        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 14:16:19 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-4066692ad35so51218865e9.1
-        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 14:16:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697490978; x=1698095778; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DcZOeSXh+u7zYgVbz4jeD55N5KKrZbWxg9Gitt8s0ZU=;
-        b=InfiUZ9zoQwgpzaKujbu97hHvHIeMgQC6u62XMCGBugZuG58Gvn/RB0/yvwG1mWewW
-         pzmi86ofAeZzVGJ95vf+RA1A2DTWNAaRAAoiOG2MHbtzw8Dkcp9UnCK1B3RW4VAVHocg
-         +JV62HK92H371RN7zdPXMY6hSgvHZmbjWQ8SAGo5u1NrwF+NwhA0c+VTJKW/vII18l1c
-         /I6cm5NIiAsJ6B5RRZSM19ST3R2JCLS7ha2q1PXu84oEMOpO7TtfX2yGf5faIJxgQDX5
-         FDLyGF+3qlVPH0u1TKK6TY7EJR+cEhHatmm6nnrYEbUiCXdTN/pJW8rAcOp+xr7EwGHp
-         8QZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697490978; x=1698095778;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DcZOeSXh+u7zYgVbz4jeD55N5KKrZbWxg9Gitt8s0ZU=;
-        b=C/P4uEXEwJzHbV5Iau7mJ7UjATxZkB3nAVdwcLzUC/DY9WfhVuL07LBhOLgE5ABY2X
-         T8HEdg2B1ZT2r+apo2mEo+WsXZC968nXd+fO5DzAYL5cMznSwB0SUpAuL1meTD19EcOk
-         Q/41nI9C97iopVAqt4z5vgE5ETwsIUvD2bUrIGcCCCcGRyLpHppbVl65fMWpl7zgU+mV
-         4fB0WOy82wnK21bVeNBh3bj7FrWkYHx/vCWoDWgsj4o8w1zM2Fvzn0gOI7HyLovjTtrw
-         5NvBOLH0hrxAY3v2qMEEP7tcNHUcdEdMmui4HEm9083FDT3LgCVTiHGEMuJY/JA6w/eZ
-         AuGg==
-X-Gm-Message-State: AOJu0YzJifulPBUXo36twT0OopxP3wW9b+Vbv/9zWpW+HY2uaMnlbOF7
-        TdGD/IVhjizyZGgFLz6lXHEWmo6Rzv47IJ/+nqM=
-X-Google-Smtp-Source: AGHT+IGUgnLMTGGXEqlNHo3bXWZ4BGLGJVUdQ4WNOO1wSLEr7rxdXnR4D9OyNMwDTbjQ/qWjcX9h8A==
-X-Received: by 2002:a05:600c:5494:b0:3fe:5501:d293 with SMTP id iv20-20020a05600c549400b003fe5501d293mr230568wmb.30.1697490978060;
-        Mon, 16 Oct 2023 14:16:18 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
-        by smtp.googlemail.com with ESMTPSA id n7-20020a05600c4f8700b00406408dc788sm8233988wmq.44.2023.10.16.14.16.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Oct 2023 14:16:17 -0700 (PDT)
-Message-ID: <be30d282-bc50-43ac-9a34-a904cd357718@linaro.org>
-Date:   Mon, 16 Oct 2023 23:16:17 +0200
+        with ESMTP id S232845AbjJPVzt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 17:55:49 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC248A1;
+        Mon, 16 Oct 2023 14:55:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5tkJ2bgsDt87q0DstoWjpZMRRfhwElRsndfgSDa9gto=; b=o8l1EIS9wF0DSvO7/lfeP5B37V
+        2AWM2VflsyAMUBYhrSPTzyGG9HyA41o1eXWfsXoDsN7NHlrc6J71nqGFHQ8wehp1r5g9UZcMnAi1s
+        sHCywxWN2ize1mTom6zOpMwC29C5HtySnp4/u4mf83V5aVEdb8Gi0C9l6gLTu5EmdIGMvqOdtahJf
+        d2jSHUve/q3MpzLRILd5aXqaRhCrkQc4pUb8c8dWtWmyuHiQw8BNo4FxLCA8ofsbTqb4Wgo2Q0Fc+
+        jQDRRHy5TkhhdWOMUz2Tzn1/a7yMb2rMdvoTFOOmlgmli+27CBQwfODl/b6B3WXI7OowUApHwrsFU
+        hb85lJjw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qsVYW-006KoG-1c;
+        Mon, 16 Oct 2023 21:55:22 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 815DE300513; Mon, 16 Oct 2023 23:55:21 +0200 (CEST)
+Date:   Mon, 16 Oct 2023 23:55:21 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
+        "Huang, Ray" <Ray.Huang@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        "Karny, Wyes" <Wyes.Karny@amd.com>
+Subject: Re: [RESEND PATCH V9 3/7] cpufreq: amd-pstate: Enable amd-pstate
+ preferred core supporting.
+Message-ID: <20231016215521.GD36211@noisy.programming.kicks-ass.net>
+References: <20231013033118.3759311-1-li.meng@amd.com>
+ <20231013033118.3759311-4-li.meng@amd.com>
+ <20231013160128.GB36211@noisy.programming.kicks-ass.net>
+ <DM4PR12MB6351E2E9504B57BD40DAE985F7D7A@DM4PR12MB6351.namprd12.prod.outlook.com>
+ <20231016105845.GA33217@noisy.programming.kicks-ass.net>
+ <e82fc689-5cc3-d799-6e5f-a9e4ac98e26f@intel.com>
+ <eeb77ec34d2002e507c09949aac9110d8b8eff4a.camel@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: PM QoS performance aggregator
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-References: <734738ec-b72f-49b4-9a4e-6aaf2a44c9f3@linaro.org>
- <CAJZ5v0j4ceLwx3sh-AOPwtPk6_mya0TvtMRC+d_v0r_hk8jnsQ@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0j4ceLwx3sh-AOPwtPk6_mya0TvtMRC+d_v0r_hk8jnsQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <eeb77ec34d2002e507c09949aac9110d8b8eff4a.camel@linux.intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/10/2023 19:46, Rafael J. Wysocki wrote:
-> On Mon, Oct 16, 2023 at 3:03 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->>
->> Hi,
->>
->> the kernel provides an API to specify latency timings for devices and
->> CPUs. In addition, it allows to deal with the frequencies.
->>
->> However, the unit is Hz and that may not fit very well with some devices
->> where the performance is an index. The devices can have different
->> performance capping mechanisms under the hood (IOW the firmware).
->>
->> The pm QoS seems to not have an interface to describe constraints based
->> on performance index.
->>
->> In the same page, the devices can also be requesting power values
->> instead of performance indexes or frequencies. So having a power based
->> pm QoS would make also sense IMO.
->>
->> Actually, performance indexes, power values, frequencies are just all
->> values but in different units.
->>
->> Would it make sense to create a generic PM QoS constraint with values
->> and units ?
+On Mon, Oct 16, 2023 at 11:50:34AM -0700, srinivas pandruvada wrote:
+
+I'll respond to the rest tomorrow, it's far too late.
+
+> > > Also, same question as to the amd folks; what serializes those
+> > > static
+> > > variables?
+> > 
+> > That's a good one.
 > 
-> All of the existing QoS types are frontends to the same underlying
-> mechanism and each of them is about using a specific unit, so it's a
-> matter of creating a new one for each new unit.
+> This function which is checking static variables is called from cpufreq
+> ->init callback. Which in turn is called from a function which is
+> passed as startup() function pointer to
+> cpuhp_setup_state_nocalls_cpuslocked().
 > 
-> That said, using performance indices as QoS values directly is
-> fundamentally problematic IMV, because they are device-specific and
-> not portable in any way and letting user space operate them would be a
-> mistake.
+> I see that startup() callbacks are called under a mutex
+> cpuhp_state_mutex for each present CPUs. So if some tear down happen,
+> that is also protected by the same mutex. The assumption is here is
+> that cpuhp_invoke_callback() in hotplug state machine is not called in
+> parallel on two CPUs by the hotplug state machine. But I see activity
+> on parallel bringup, so this is questionable now.
 
-What about normalizing them to 1024 ?
+Parallel bringup should still serialise this. It mostly only does the
+hardware bringup in parallel.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Having a pointer back to the cpu hotplug lock would make it easier to
+untangle this code though.
