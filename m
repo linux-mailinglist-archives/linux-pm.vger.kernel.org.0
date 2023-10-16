@@ -2,62 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9EE7C9FAD
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 08:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3CB7CA00E
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 09:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbjJPGea (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Oct 2023 02:34:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32910 "EHLO
+        id S230525AbjJPHDS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Oct 2023 03:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjJPGea (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 02:34:30 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D9E97
-        for <linux-pm@vger.kernel.org>; Sun, 15 Oct 2023 23:34:28 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0528DC433C8
-        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 06:34:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697438068;
-        bh=DCZBrjUITnXCdX5wuq1pwZ5ISj78xcUaEvAY0kZaUwI=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=td6ZRNINXNbjrwg/Y3I3oxOaZgB8+/0gPuVBPGYO+0FQZ7+QksOyHF2idsazWF7vV
-         un/Eu0aF/rB35ivMrW6/7HySjaBpUluqKCBgdtSnFfMyR2kHjUBseg+BxAlwYnZuB/
-         3MbWbq33gCy1c3zOhB605gpstaSSTuQGMx23lOhy4CwaDwWGR1U6WV1CjHBHxyD5Wf
-         Q16AiLkrFu3VYez5Cl2W7S4mJxnVXGzKdsx0+XYeq/PxXHVG5gcysgbbdQTxpBeyK/
-         j6kExSsHSIxza08SCP36VGL3hY7KUGsz0lZiZlCBe4e6qLFjFxAYPm5YOquuDnnqRS
-         16KOo7Wz5XHVw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id D6874C53BD0; Mon, 16 Oct 2023 06:34:27 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 218013] [question] option
- CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y available in config kernel?
-Date:   Mon, 16 Oct 2023 06:34:27 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: ionut_n2001@yahoo.com
-X-Bugzilla-Status: REOPENED
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-218013-137361-H7C0GNMEAt@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218013-137361@https.bugzilla.kernel.org/>
-References: <bug-218013-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229590AbjJPHDR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 03:03:17 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D9297;
+        Mon, 16 Oct 2023 00:03:15 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39G6H59K028812;
+        Mon, 16 Oct 2023 07:03:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=17sxN1p7rORK+aDYPpUNLI9nkqxS5BmjqXxXbni6Ke4=;
+ b=pkKpausmx3Qh6II+766RwgsTw7pfGUSLaGPYu0m2A6c/xJa4xGRyhASCX1PHERVRuYDd
+ orRPQIXpr2EgDUTurfFBK4F9kgqJuDiWyxDZ0sWUC2xhRjgLgxlF8OFCra+IZO1TQ0X1
+ CuEI9/Mkgj7JmNU+cf7VlJu9ab06pVFcVcss7ljs4i4sVMzcCG4F26d0VOhbF3Kc5p6K
+ UOYlzgFIEFBBpUdvXt14+eZX69nOHfrQKhgZ9xz5L1CiKYREu+gHEEv1/ErDyqlmRAqB
+ hGvAzpHHPuKYxuVAChe+6uYYD3yIgcuPlD94rcWpsT2lw2tuzpgHsSUKuLslvAoWUbxd 2g== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tqkrpbd87-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 Oct 2023 07:03:06 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39G736kW004835
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 Oct 2023 07:03:06 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.36; Mon, 16 Oct 2023 00:03:00 -0700
+Date:   Mon, 16 Oct 2023 12:32:56 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>, <conor+dt@kernel.org>,
+        <devicetree@vger.kernel.org>, <ilia.lin@kernel.org>,
+        <konrad.dybcio@linaro.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <mturquette@baylibre.com>, <quic_kathirav@quicinc.com>,
+        <rafael@kernel.org>, <robh+dt@kernel.org>,
+        <viresh.kumar@linaro.org>
+Subject: Re: [PATCH v2 1/8] clk: qcom: clk-alpha-pll: introduce stromer plus
+ ops
+Message-ID: <20231016070256.GA24128@varda-linux.qualcomm.com>
+References: <cover.1697101543.git.quic_varada@quicinc.com>
+ <8f578277cc015cfe9cdca06586b2c82f1a728bad.1697101543.git.quic_varada@quicinc.com>
+ <06b823d5c2ec05a940849ac341c48090.sboyd@kernel.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <06b823d5c2ec05a940849ac341c48090.sboyd@kernel.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Is35Iy1OTMyWouqkVf0a2KM7CBzvmL3C
+X-Proofpoint-GUID: Is35Iy1OTMyWouqkVf0a2KM7CBzvmL3C
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-15_09,2023-10-12_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ malwarescore=0 adultscore=0 bulkscore=0 spamscore=0 priorityscore=1501
+ mlxscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
+ definitions=main-2310160060
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,45 +83,64 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218013
+On Thu, Oct 12, 2023 at 01:55:36PM -0700, Stephen Boyd wrote:
+> Quoting Varadarajan Narayanan (2023-10-12 02:26:17)
+> > Stromer plus APSS PLL does not support dynamic frequency scaling.
+> > To switch between frequencies, we have to shut down the PLL,
+> > configure the L and ALPHA values and turn on again. So introduce the
+> > separate set of ops for Stromer Plus PLL.
+>
+> Does this assume the PLL is always on?
 
-sander44 (ionut_n2001@yahoo.com) changed:
+Yes once the PLL is configured by apss-ipq-pll driver, it is always on.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|RESOLVED                    |REOPENED
-         Resolution|ANSWERED                    |---
+> > Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> > v2:     Use clk_alpha_pll_stromer_determine_rate, instead of adding new
+> >         clk_alpha_pll_stromer_plus_determine_rate as the alpha pll width
+> >         is same for both
+> >
+> >         Fix review comments
+> >                 udelay(50) -> usleep_range(50, 60)
+> >                 Remove SoC-specific from print message
+> > ---
+> >  drivers/clk/qcom/clk-alpha-pll.c | 57 ++++++++++++++++++++++++++++++++++++++++
+> >  drivers/clk/qcom/clk-alpha-pll.h |  1 +
+> >  2 files changed, 58 insertions(+)
+> >
+> > diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
+> > index 4edbf77..5221b6c 100644
+> > --- a/drivers/clk/qcom/clk-alpha-pll.c
+> > +++ b/drivers/clk/qcom/clk-alpha-pll.c
+> > @@ -2508,3 +2508,60 @@ const struct clk_ops clk_alpha_pll_stromer_ops = {
+> >         .set_rate = clk_alpha_pll_stromer_set_rate,
+> >  };
+> >  EXPORT_SYMBOL_GPL(clk_alpha_pll_stromer_ops);
+> > +
+> > +static int clk_alpha_pll_stromer_plus_set_rate(struct clk_hw *hw,
+> > +                                              unsigned long rate,
+> > +                                              unsigned long prate)
+> > +{
+> > +       struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
+> > +       u32 l, alpha_width = pll_alpha_width(pll);
+> > +       int ret;
+> > +       u64 a;
+> > +
+> > +       rate = alpha_pll_round_rate(rate, prate, &l, &a, alpha_width);
+> > +
+> > +       regmap_write(pll->clkr.regmap, PLL_MODE(pll), 0);
+>
+> There's a theoretical problem here if I understand correctly. A call to
+> clk_enable() can happen while clk_set_rate() is in progress or vice
+> versa. Probably we need some sort of spinlock for this PLL that
+> synchronizes any enable/disable with the rate change so that when we
+> restore the enable bit the clk isn't enabled when it was supposed to be
+> off.
 
---- Comment #2 from sander44 (ionut_n2001@yahoo.com) ---
-Hi Artem S. Tashkinov,
+Since the PLL is always on, should we worry about enable/disable?
+If you feel it is better to synchronize with a spin lock, will
+add and post a new revision. Please let me know.
 
-I use vanilla kernel.
-But this option is not available.
-
-I have AMD platform.
-
-From what I noticed, there is a condition in Kconfig for this.
-
-../linux/drivers/cpufreq/Kconfig
-
-This is a option:
-And i notice this: depends on !(X86_INTEL_PSTATE && SMP)
-
-config CPU_FREQ_DEFAULT_GOV_ONDEMAND
-        bool "ondemand"
-        depends on !(X86_INTEL_PSTATE && SMP)
-        select CPU_FREQ_GOV_ONDEMAND
-        select CPU_FREQ_GOV_PERFORMANCE
-        help
-          Use the CPUFreq governor 'ondemand' as default. This allows
-          you to get a full dynamic frequency capable system by simply
-          loading your cpufreq low-level hardware driver.
-          Be aware that not all cpufreq drivers support the ondemand
-          governor. If unsure have a look at the help section of the
-          driver. Fallback governor will be the performance governor.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
+Thanks
+Varada
