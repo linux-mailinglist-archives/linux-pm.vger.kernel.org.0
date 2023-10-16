@@ -2,127 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8246F7CA1EF
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 10:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BB2B7CA235
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 10:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231803AbjJPInd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Oct 2023 04:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
+        id S232778AbjJPIrR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Oct 2023 04:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231795AbjJPInc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 04:43:32 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B5DE5;
-        Mon, 16 Oct 2023 01:43:30 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-352a1a0348fso17024435ab.1;
-        Mon, 16 Oct 2023 01:43:30 -0700 (PDT)
+        with ESMTP id S232931AbjJPIrK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 04:47:10 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D109EB4
+        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 01:47:07 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-579de633419so52184527b3.3
+        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 01:47:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697445810; x=1698050610; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1697446027; x=1698050827; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xQUA2kVIK9BvRQHq7INiXTqvFwcbvDawTtrHlGAf8Qg=;
-        b=lluTCjb2rbEV6RYhlHcRWXWJ9bdawhTL1SYsrbe4RjEesZRLtjgLEkcvDwSuwJ4n8P
-         7gpVxSEP/SBJZFt9u9HTi/Bi7EYZDxd/JJa/jWTOULz2ympIwermojD3KEHchXwOIcEJ
-         w9CTpb1grgGgnfcmgWQ2vYEgxEyTmgAAHrSTyvZR6SZNpEPywYc8Pc1B+aZv579NIPjA
-         yBCiSyW77P7YtbPKwGfPLz9HSFa2Zq34E6DG0ojmNL4pMxTiGHoCNQLlfpP8npyYCLrV
-         V+AEmw1zCFns45xx5/zOtWHLyJLzFXF/EC59TXJbuf7GL9+oGCBR1+8lxU22aufIoMO/
-         oPvg==
+        bh=W5NJ69kX6Bm+ubsFCLmuvdrCURMYuhfL3kxTQtdRQ+o=;
+        b=NDfzuOtuFXPrbza2/JIvk8SJzRnoHadvnc4lSEoz3ZoB1hxYL/9U4eNiPtfpC7e0oY
+         g1CaX6WftO0AaYzWCA3Y4bJJAdw2zeWFRAeDwMoGInJYqmBievaBPkYpFJjpzDm2yjv4
+         KwpTGHDJM8boc1r23WOYKu3qh9S/vbVigURfoE4C+nkPO2zWlqLKD92jKc/YnB+IdP7I
+         FCsi4CYb8etuLw8KJCgPUfPkqPgHq6+BvtfFQnLlPKAn7+jm6vRSbzRT8eb4aOF6bX07
+         LJarDWzLy99oJRE/KVCpl0RqauR+k7tVlY4LiQuSF+cL1QpLQqeHddgpVPAvMKHhwBNc
+         XzBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697445810; x=1698050610;
+        d=1e100.net; s=20230601; t=1697446027; x=1698050827;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xQUA2kVIK9BvRQHq7INiXTqvFwcbvDawTtrHlGAf8Qg=;
-        b=SwPy8RC+KmaMEqxkMaFhV20TQFjyp0Lfj97Xoia9QCpiiffOE3ZUHOonf1sTBBuYgg
-         HwjNk4ErZHpDJvA+avvxL4NGhDQJtZttalfTvUETGB1j6h3UDSwQWomtsEij03fAbArT
-         mRY7M3p7Tlc1lZDPqUUVna1HxvnZaSQapmtxSaYn33tvggjez0YjBsfwnRWo4hlAgrv7
-         5gSEPhDxDBKq+ee34CruM0ZIpFAgTIf7h8UbOW1eL/GbyXbtJ8AxDrUtkvU34urmbDBl
-         24PMAHqEo30gI8R35J5kttYgnaJjTlogPofBBEvFG9XwrT16YLkxC1IRkRu1e7ff3yqu
-         1DNA==
-X-Gm-Message-State: AOJu0YwNDa/9Jpi8fABKMKlW/FaxxsjMPKeDL0iFAHqDyUZU6BJGSz/A
-        zuRZWIFvAPNXPQMLPftg+syKi7fACuiXjD9qXHpuWnAB
-X-Google-Smtp-Source: AGHT+IGjLW7nb/ZlLwueRbrLE5qmdQxF+5HSgLfPcrsUVd2ctUvRcr8GmZwJlf4irl2Il4qJjf51CpdWBGi6yVKnO3c=
-X-Received: by 2002:a92:c54d:0:b0:352:8b80:4744 with SMTP id
- a13-20020a92c54d000000b003528b804744mr39881115ilj.4.1697445809913; Mon, 16
- Oct 2023 01:43:29 -0700 (PDT)
+        bh=W5NJ69kX6Bm+ubsFCLmuvdrCURMYuhfL3kxTQtdRQ+o=;
+        b=ESocpUcfgWwRWDoqRvM+dc4jx1U5Vb4mLcxEkNZyxv0Fx1Z66SYAKdQ2DcOD6clpE9
+         QeT7Ru4eu+BKrbLw0LcxernaLgVNyUHyjNcRYX6hssUWozQ6KoSN7EOERExLFSfmsltV
+         ngUshcLN1NoI3UHSkpHtwvdHvBPCe2mRNJgzg97eoM99aO0m+PLEx5422ZuZCY5/9Zuw
+         5aWLoZ2yLuJOmuqC5AiMLYoaSNCqp29D6xCauMQJNJ9RkazIM+44Av8mwaasrfc6RRai
+         A6E9Zy01+yT+jax5+kJGseVVeagooK48T4AIlwY/ekv44cRca5tu0fYpew9NKWzVgTxK
+         zLbw==
+X-Gm-Message-State: AOJu0Yz5fbypxKQrZE2qbLS9H/AZCaEQnSaICRTTyAcR0nVsz/GMUHYt
+        4aFzGfZTyJJxDCE9fEcVlC9sTq4S1wwjd7PL3/wOEGJbn+FYKouOA4motQ==
+X-Google-Smtp-Source: AGHT+IG8XvfaO2iDQZru45tosMwj2yXei141FG7yCZLeVf1EhFA7GavmH/c+LB3Hs9LuIeU78Tz3RVP03MeUP/zdExg=
+X-Received: by 2002:a05:690c:a08:b0:5a7:af51:e274 with SMTP id
+ cg8-20020a05690c0a0800b005a7af51e274mr17967004ywb.18.1697446027019; Mon, 16
+ Oct 2023 01:47:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231013172033.3549476-1-robimarko@gmail.com> <20231016033202.i54nequofzea6mfd@vireshk-i7>
- <20231016082239.2onlrqp4bpcgxhbt@vireshk-i7> <CAOX2RU5paPXyG-1Fbp+T9+Aycwno9DQ8ugMwUr_8iNhhc3HiHA@mail.gmail.com>
- <CAA8EJpq9=dtemYLCeL8=+q1x_i8Gp2duMSAo90ZttgaejBXCdg@mail.gmail.com>
-In-Reply-To: <CAA8EJpq9=dtemYLCeL8=+q1x_i8Gp2duMSAo90ZttgaejBXCdg@mail.gmail.com>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Mon, 16 Oct 2023 10:43:18 +0200
-Message-ID: <CAOX2RU6K7h8Xc0SGK2CeOCaAaimKRf9eqhMYAaySXxQLZiUNtg@mail.gmail.com>
-Subject: Re: [PATCH v6] cpufreq: qcom-nvmem: add support for IPQ8074
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, rafael@kernel.org,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        ilia.lin@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <cover.1697101543.git.quic_varada@quicinc.com> <8f578277cc015cfe9cdca06586b2c82f1a728bad.1697101543.git.quic_varada@quicinc.com>
+ <06b823d5c2ec05a940849ac341c48090.sboyd@kernel.org> <20231016070256.GA24128@varda-linux.qualcomm.com>
+In-Reply-To: <20231016070256.GA24128@varda-linux.qualcomm.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Mon, 16 Oct 2023 11:46:56 +0300
+Message-ID: <CAA8EJpoQwDaUa+-WyM6FBzQJo9gn1k2rYLmKSFBLUH00epGJ0Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/8] clk: qcom: clk-alpha-pll: introduce stromer plus ops
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>, agross@kernel.org,
+        andersson@kernel.org, conor+dt@kernel.org,
+        devicetree@vger.kernel.org, ilia.lin@kernel.org,
+        konrad.dybcio@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        mturquette@baylibre.com, quic_kathirav@quicinc.com,
+        rafael@kernel.org, robh+dt@kernel.org, viresh.kumar@linaro.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 16 Oct 2023 at 10:36, Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
+On Mon, 16 Oct 2023 at 10:03, Varadarajan Narayanan
+<quic_varada@quicinc.com> wrote:
 >
-> On Mon, 16 Oct 2023 at 11:29, Robert Marko <robimarko@gmail.com> wrote:
+> On Thu, Oct 12, 2023 at 01:55:36PM -0700, Stephen Boyd wrote:
+> > Quoting Varadarajan Narayanan (2023-10-12 02:26:17)
+> > > Stromer plus APSS PLL does not support dynamic frequency scaling.
+> > > To switch between frequencies, we have to shut down the PLL,
+> > > configure the L and ALPHA values and turn on again. So introduce the
+> > > separate set of ops for Stromer Plus PLL.
 > >
-> > On Mon, 16 Oct 2023 at 10:22, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > Does this assume the PLL is always on?
+>
+> Yes once the PLL is configured by apss-ipq-pll driver, it is always on.
+>
+> > > Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+> > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > > ---
+> > > v2:     Use clk_alpha_pll_stromer_determine_rate, instead of adding new
+> > >         clk_alpha_pll_stromer_plus_determine_rate as the alpha pll width
+> > >         is same for both
 > > >
-> > > On 16-10-23, 09:02, Viresh Kumar wrote:
-> > > > On 13-10-23, 19:20, Robert Marko wrote:
-> > > > > IPQ8074 comes in 3 families:
-> > > > > * IPQ8070A/IPQ8071A (Acorn) up to 1.4GHz
-> > > > > * IPQ8172/IPQ8173/IPQ8174 (Oak) up to 1.4GHz
-> > > > > * IPQ8072A/IPQ8074A/IPQ8076A/IPQ8078A (Hawkeye) up to 2.2GHz
-> > > > >
-> > > > > So, in order to be able to share one OPP table lets add support for IPQ8074
-> > > > > family based of SMEM SoC ID-s as speedbin fuse is always 0 on IPQ8074.
-> > > > >
-> > > > > IPQ8074 compatible is blacklisted from DT platdev as the cpufreq device
-> > > > > will get created by NVMEM CPUFreq driver.
-> > > > >
-> > > > > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > > > > Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> > > > > ---
-> > > > > Changes in v6:
-> > > > > * Split IPQ8074 from the IPQ8064 as IPQ8064 has additional dependencies.
-> > > >
-> > > > Applied. Thanks.
+> > >         Fix review comments
+> > >                 udelay(50) -> usleep_range(50, 60)
+> > >                 Remove SoC-specific from print message
+> > > ---
+> > >  drivers/clk/qcom/clk-alpha-pll.c | 57 ++++++++++++++++++++++++++++++++++++++++
+> > >  drivers/clk/qcom/clk-alpha-pll.h |  1 +
+> > >  2 files changed, 58 insertions(+)
 > > >
-> > > And it failed to build, please fix it. Dropped from my tree now.
+> > > diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
+> > > index 4edbf77..5221b6c 100644
+> > > --- a/drivers/clk/qcom/clk-alpha-pll.c
+> > > +++ b/drivers/clk/qcom/clk-alpha-pll.c
+> > > @@ -2508,3 +2508,60 @@ const struct clk_ops clk_alpha_pll_stromer_ops = {
+> > >         .set_rate = clk_alpha_pll_stromer_set_rate,
+> > >  };
+> > >  EXPORT_SYMBOL_GPL(clk_alpha_pll_stromer_ops);
+> > > +
+> > > +static int clk_alpha_pll_stromer_plus_set_rate(struct clk_hw *hw,
+> > > +                                              unsigned long rate,
+> > > +                                              unsigned long prate)
+> > > +{
+> > > +       struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
+> > > +       u32 l, alpha_width = pll_alpha_width(pll);
+> > > +       int ret;
+> > > +       u64 a;
+> > > +
+> > > +       rate = alpha_pll_round_rate(rate, prate, &l, &a, alpha_width);
+> > > +
+> > > +       regmap_write(pll->clkr.regmap, PLL_MODE(pll), 0);
 > >
-> > I am looking at the error and it should not happen as the ID-s have
-> > been in linux-next for a month now:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/include/dt-bindings/arm/qcom,ids.h?h=next-20231016&id=b8c889bef9797a58b8b5aad23875cc4d04b3efd3
-> >
-> > They are also part of Bjorns 6.7 driver PR:
-> > https://lore.kernel.org/all/20231015204014.855672-1-andersson@kernel.org/T/
+> > There's a theoretical problem here if I understand correctly. A call to
+> > clk_enable() can happen while clk_set_rate() is in progress or vice
+> > versa. Probably we need some sort of spinlock for this PLL that
+> > synchronizes any enable/disable with the rate change so that when we
+> > restore the enable bit the clk isn't enabled when it was supposed to be
+> > off.
 >
-> But Bjorn's tree isn't a part of the cpufreq tree. In such cases it is
-> typical to ask first maintainer to create an immutable branch / tag,
-> which can later be also merged into another tree without going into
-> troubles of merging the whole tree of the irrelevant subsystem.
+> Since the PLL is always on, should we worry about enable/disable?
+> If you feel it is better to synchronize with a spin lock, will
+> add and post a new revision. Please let me know.
 
-Ok, I understand now, the thing is that the ID-s were added for
-socinfo initially but recently
-I finally had somebody with access to the Oak HW so I added them to
-cpufreq as well.
+Probably another option might be to change stromer PLL ops to use
+prepare/unprepare instead of enable/disable. This way the
+clk_prepare_lock() in clk_set_rate() will take care of locking.
 
-What can I do to help this get resolved?
-
-Regards,
-Robert
 >
->
-> --
-> With best wishes
-> Dmitry
+> Thanks
+> Varada
+
+
+
+-- 
+With best wishes
+Dmitry
