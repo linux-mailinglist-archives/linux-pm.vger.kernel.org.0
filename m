@@ -2,169 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEFA87CA63F
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 13:05:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF29F7CA6A7
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 13:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232836AbjJPLF4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Oct 2023 07:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48410 "EHLO
+        id S232090AbjJPLWq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Oct 2023 07:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231971AbjJPLFz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 07:05:55 -0400
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C4283
-        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 04:05:53 -0700 (PDT)
-Received: by mail-oo1-xc30.google.com with SMTP id 006d021491bc7-57e40f0189aso2322765eaf.1
-        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 04:05:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1697454352; x=1698059152; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ENcxuEdqZVuHuNDeDYTthdY6xmNNsGtNg5YaX8ZazDQ=;
-        b=cFgh+VX4DhDYzJBGsLAX9TU3y0SP5eQ24iuoTia4F8gfCDz6X6a5sbIJECgKXF6jUZ
-         v8OA3HgBNrA7El+pL5QkP8XmoFEWYrLFyDjjkz2FeM13vsk/j/sAccFpSyLeEh5WJQQQ
-         AFIE9uhNt9eboGtYpJhRjH2qVTGbGcpzG4ySt7rCTNVZgSfLgrn4pgXuvBz9m6FNG1wx
-         moKDMxOPcGQR6+KZUxN2RHFomC51swVIaHEeyGCSQwQmbIxmTxfjCOR7jDdEKlGVRDL6
-         A5bbhlbFks42b8yQipv54A7IAg8LGYCUWWkN1qkgDR+mRI5+1sfweNoL/MiGqRBXlTSQ
-         EA9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697454352; x=1698059152;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ENcxuEdqZVuHuNDeDYTthdY6xmNNsGtNg5YaX8ZazDQ=;
-        b=l4YLt0Pymxb4iEsJWX5/XQu9fFUukO5aSK2Ld0Qq8N3TQ5fU7z0PehDD68Vy1QmJOM
-         QQe9HlakOF+TL/x1cdWT+sig/aPHJ8yfGMxR/6HnERTsHjSmtkMaQbRWKWPxFMFpEuSR
-         AWB/UNYpFpUSNhj4+AAjIfxFUnV87/IAsr9YBJ1DznIFU3QOHkGw9EWpJICjRaIxbSbm
-         RcOiyuZomcCl57Qy7MmLYg+306m7cyeG+kMx35pvzB3jJSGrJK1z2NbyKSNAMU1ouxKS
-         f/l7BUgA/FN1vpgsB6SYB35HB9hOVo68Toc81KxZ6ZL4D2Z4EBo+SPAiN/L4NuWYXEt1
-         1VwA==
-X-Gm-Message-State: AOJu0Yw9NIorCYXvfC+1Kn+3Qq04ryLYa9LuEWGJuyciy3tF+x8thVln
-        xhc/9a3Mj8NJUP5ssWiyxW+kw/XCqGpiB+HKR4+RNQ==
-X-Google-Smtp-Source: AGHT+IE8yH8rwPuP0cEyrr7N70+IUDtE4HlzQOnkEl7MiOIwf49RZvIyXjVC8L4xAyCspU2cXFbOdA==
-X-Received: by 2002:a05:6358:785:b0:143:82e0:8cbc with SMTP id n5-20020a056358078500b0014382e08cbcmr40728175rwj.1.1697454352565;
-        Mon, 16 Oct 2023 04:05:52 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id l8-20020a63be08000000b00588e8421fa8sm6667529pgf.84.2023.10.16.04.05.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Oct 2023 04:05:51 -0700 (PDT)
-Message-ID: <652d190f.630a0220.59c80.1ece@mx.google.com>
-Date:   Mon, 16 Oct 2023 04:05:51 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S233003AbjJPLWq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 07:22:46 -0400
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47282F3
+        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 04:22:43 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qsLfu-0004ep-A3; Mon, 16 Oct 2023 13:22:18 +0200
+Received: from [2a0a:edc0:2:b01:1d::c0] (helo=ptx.whiteo.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qsLfs-0024Qn-Mq; Mon, 16 Oct 2023 13:22:16 +0200
+Received: from sha by ptx.whiteo.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qsLfs-00EjNr-Jp; Mon, 16 Oct 2023 13:22:16 +0200
+Date:   Mon, 16 Oct 2023 13:22:16 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Chanwoo Choi <chanwoo@kernel.org>
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: [PATCH v7 07/26] PM / devfreq: rockchip-dfi: introduce channel
+ mask
+Message-ID: <20231016112216.GY3359458@pengutronix.de>
+References: <20230704093242.583575-1-s.hauer@pengutronix.de>
+ <20230704093242.583575-8-s.hauer@pengutronix.de>
+ <859b0091-e361-6060-2977-4aba13af418a@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.6-rc6-156-g701ff0817fdda
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.6-rc6-156-g701ff0817fdda)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <859b0091-e361-6060-2977-4aba13af418a@kernel.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.6-rc6-156-g7=
-01ff0817fdda)
+On Sat, Oct 07, 2023 at 02:21:10AM +0900, Chanwoo Choi wrote:
+> Hi,
+> 
+> On 23. 7. 4. 18:32, Sascha Hauer wrote:
+> > Different Rockchip SoC variants have a different number of channels.
+> > Introduce a channel mask to make the number of channels configurable
+> > from SoC initialization code.
+> > 
+> > Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> > ---
+> >  drivers/devfreq/event/rockchip-dfi.c | 23 +++++++++++++++++------
+> >  1 file changed, 17 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event/rockchip-dfi.c
+> > index 126bb744645b6..82de24a027579 100644
+> > --- a/drivers/devfreq/event/rockchip-dfi.c
+> > +++ b/drivers/devfreq/event/rockchip-dfi.c
+> > @@ -18,10 +18,11 @@
+> >  #include <linux/list.h>
+> >  #include <linux/of.h>
+> >  #include <linux/of_device.h>
+> > +#include <linux/bits.h>
+> >  
+> >  #include <soc/rockchip/rk3399_grf.h>
+> >  
+> > -#define RK3399_DMC_NUM_CH	2
+> > +#define DMC_MAX_CHANNELS	2
+> >  
+> >  /* DDRMON_CTRL */
+> >  #define DDRMON_CTRL	0x04
+> > @@ -44,7 +45,7 @@ struct dmc_count_channel {
+> >  };
+> >  
+> >  struct dmc_count {
+> > -	struct dmc_count_channel c[RK3399_DMC_NUM_CH];
+> > +	struct dmc_count_channel c[DMC_MAX_CHANNELS];
+> >  };
+> >  
+> >  /*
+> > @@ -61,6 +62,7 @@ struct rockchip_dfi {
+> >  	struct regmap *regmap_pmu;
+> >  	struct clk *clk;
+> >  	u32 ddr_type;
+> > +	unsigned int channel_mask;
+> >  };
+> >  
+> >  static void rockchip_dfi_start_hardware_counter(struct devfreq_event_dev *edev)
+> > @@ -95,7 +97,9 @@ static void rockchip_dfi_read_counters(struct devfreq_event_dev *edev, struct dm
+> >  	u32 i;
+> >  	void __iomem *dfi_regs = dfi->regs;
+> >  
+> > -	for (i = 0; i < RK3399_DMC_NUM_CH; i++) {
+> > +	for (i = 0; i < DMC_MAX_CHANNELS; i++) {
+> > +		if (!(dfi->channel_mask & BIT(i)))
+> > +			continue;
+> >  		count->c[i].access = readl_relaxed(dfi_regs +
+> >  				DDRMON_CH0_DFI_ACCESS_NUM + i * 20);
+> >  		count->c[i].total = readl_relaxed(dfi_regs +
+> > @@ -145,9 +149,14 @@ static int rockchip_dfi_get_event(struct devfreq_event_dev *edev,
+> >  	rockchip_dfi_read_counters(edev, &count);
+> >  
+> >  	/* We can only report one channel, so find the busiest one */
+> > -	for (i = 0; i < RK3399_DMC_NUM_CH; i++) {
+> > -		u32 a = count.c[i].access - last->c[i].access;
+> > -		u32 t = count.c[i].total - last->c[i].total;
+> > +	for (i = 0; i < DMC_MAX_CHANNELS; i++) {
+> 
+> Instead of DMC_MAX_CHANNELS defintion,
+> you can initialize the max channel in each rkXXXX_dfi_init() like 'dfi->channel_count'.
+> It reduces the unnecessary loop by initializing the proper max channel.
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-6-rc6-156-g701ff0817fdda/
+That is not easily possible. Some SoCs, eg the RK3588 have four
+channels, but not all channels are necessarily enabled it also
+might not be the first channels that are enabled. On a RK3588
+the channel mask might for example be 0b0101.
 
-Tree: pm
-Branch: testing
-Git Describe: v6.6-rc6-156-g701ff0817fdda
-Git Commit: 701ff0817fdda8d4fc8de43d1a314958273b3b33
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+Sascha
 
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
