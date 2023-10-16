@@ -2,195 +2,299 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5B97CA7C7
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 14:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 242777CA7DA
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 14:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbjJPMND (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Oct 2023 08:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40432 "EHLO
+        id S233341AbjJPMQ4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Oct 2023 08:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjJPMNC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 08:13:02 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7CB0AC;
-        Mon, 16 Oct 2023 05:13:00 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0070E1FB;
-        Mon, 16 Oct 2023 05:13:41 -0700 (PDT)
-Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.78.69])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 18F683F5A1;
-        Mon, 16 Oct 2023 05:13:00 -0700 (PDT)
-Date:   Mon, 16 Oct 2023 13:12:58 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Pierre Gondois <pierre.gondois@arm.com>, linux@armlinux.org.uk,
-        catalin.marinas@arm.com, will@kernel.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, sudeep.holla@arm.com,
-        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        viresh.kumar@linaro.org, lukasz.luba@arm.com,
+        with ESMTP id S231676AbjJPMQz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 08:16:55 -0400
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1BFAC
+        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 05:16:53 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qsMWO-0006gq-PE; Mon, 16 Oct 2023 14:16:32 +0200
+Received: from [2a0a:edc0:2:b01:1d::c0] (helo=ptx.whiteo.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qsMWN-00252d-4x; Mon, 16 Oct 2023 14:16:31 +0200
+Received: from sha by ptx.whiteo.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qsMWN-00EjlH-1v; Mon, 16 Oct 2023 14:16:31 +0200
+Date:   Mon, 16 Oct 2023 14:16:31 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Chanwoo Choi <chanwoo@kernel.org>
+Cc:     linux-rockchip@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
-        conor.dooley@microchip.com, suagrfillet@gmail.com,
-        ajones@ventanamicro.com, lftan@kernel.org
-Subject: Re: [PATCH v2 6/6] cpufreq/cppc: set the frequency used for capacity
- computation
-Message-ID: <ZS0oyhbVDtXO1p5b@arm.com>
-References: <20231009103621.374412-7-vincent.guittot@linaro.org>
- <ac8968b9-8463-4aa2-a38d-fc2b9137460d@arm.com>
- <CAKfTPtBhXRk_Y-xiHn9_jQ1C_ALzbr3-KdwzcTCyupzJ4Gru5g@mail.gmail.com>
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: [PATCH v7 16/26] PM / devfreq: rockchip-dfi: Add perf support
+Message-ID: <20231016121631.GB3359458@pengutronix.de>
+References: <20230704093242.583575-1-s.hauer@pengutronix.de>
+ <20230704093242.583575-17-s.hauer@pengutronix.de>
+ <73ed646a-f20b-8050-2a45-c6faa5539193@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKfTPtBhXRk_Y-xiHn9_jQ1C_ALzbr3-KdwzcTCyupzJ4Gru5g@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <73ed646a-f20b-8050-2a45-c6faa5539193@kernel.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi both,
-
-On Wednesday 11 Oct 2023 at 16:25:46 (+0200), Vincent Guittot wrote:
-> On Wed, 11 Oct 2023 at 12:27, Pierre Gondois <pierre.gondois@arm.com> wrote:
-> >
-> > Hello Vincent,
-> >
-> > On 10/9/23 12:36, Vincent Guittot wrote:
-> > > cppc cpufreq driver can register an artificial energy model. In such case,
-> > > it also have to register the frequency that is used to define the CPU
-> > > capacity
-> > >
-> > > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> > > ---
-> > >   drivers/cpufreq/cppc_cpufreq.c | 18 ++++++++++++++++++
-> > >   1 file changed, 18 insertions(+)
-> > >
-> > > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> > > index fe08ca419b3d..24c6ba349f01 100644
-> > > --- a/drivers/cpufreq/cppc_cpufreq.c
-> > > +++ b/drivers/cpufreq/cppc_cpufreq.c
-> > > @@ -636,6 +636,21 @@ static int populate_efficiency_class(void)
-> > >       return 0;
-> > >   }
-> > >
-> > > +
-> > > +static void cppc_cpufreq_set_capacity_ref_freq(struct cpufreq_policy *policy)
-> > > +{
-> > > +     struct cppc_perf_caps *perf_caps;
-> > > +     struct cppc_cpudata *cpu_data;
-> > > +     unsigned int ref_freq;
-> > > +
-> > > +     cpu_data = policy->driver_data;
-> > > +     perf_caps = &cpu_data->perf_caps;
-> > > +
-> > > +     ref_freq = cppc_cpufreq_perf_to_khz(cpu_data, perf_caps->highest_perf);
-> > > +
-> > > +     per_cpu(capacity_ref_freq, policy->cpu) = ref_freq;
-> >
-> > 'capacity_ref_freq' seems to be updated only if CONFIG_ENERGY_MODEL is set. However in
-> > [1], get_capacity_ref_freq() relies on 'capacity_ref_freq'. The cpufreq_schedutil governor
-> > should have a valid 'capacity_ref_freq' value set if the CPPC cpufreq driver is used
-> > without energy model I believe.
+On Mon, Oct 09, 2023 at 06:48:43AM +0900, Chanwoo Choi wrote:
+> On 23. 7. 4. 18:32, Sascha Hauer wrote:
+> > The DFI is a unit which is suitable for measuring DDR utilization, but
+> > so far it could only be used as an event driver for the DDR frequency
+> > scaling driver. This adds perf support to the DFI driver.
+> > 
+> > Usage with the 'perf' tool can look like:
+> > 
+> > perf stat -a -e rockchip_ddr/cycles/,\
+> > 		rockchip_ddr/read-bytes/,\
+> > 		rockchip_ddr/write-bytes/,\
+> > 		rockchip_ddr/bytes/ sleep 1
+> > 
+> >  Performance counter stats for 'system wide':
+> > 
+> >         1582524826      rockchip_ddr/cycles/
+> >            1802.25 MB   rockchip_ddr/read-bytes/
+> >            1793.72 MB   rockchip_ddr/write-bytes/
+> >            3595.90 MB   rockchip_ddr/bytes/
+> > 
+> >        1.014369709 seconds time elapsed
+> > 
+> > perf support has been tested on a RK3568 and a RK3399, the latter with
+> > dual channel DDR.
+> > 
+> > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> > Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> > ---
+> > 
+> > Notes:
+> >     Changes since v5:
+> >     - Add missing initialization of &dfi->last_perf_count
+> >     
+> >     Changes since v4:
+> >     
+> >     - use __stringify to ensure event type definitions and event numbers in sysfs are consistent
+> >     - only use 64bit values in structs holding counters
+> >     - support monitoring individual DDR channels
+> >     - fix return value in rockchip_ddr_perf_event_init(): -EOPNOTSUPP -> -EINVAL
+> >     - check for invalid event->attr.config values
+> >     - start hrtimer to trigger in one second, not immediately
+> >     - use devm_add_action_or_reset()
+> >     - add suppress_bind_attrs
+> >     - enable DDRMON during probe when perf is enabled
+> >     - use a seqlock to protect perf reading the counters from the hrtimer callback modifying them
+> > 
+> >  drivers/devfreq/event/rockchip-dfi.c | 442 ++++++++++++++++++++++++++-
+> >  include/soc/rockchip/rk3399_grf.h    |   2 +
+> >  include/soc/rockchip/rk3568_grf.h    |   1 +
+> >  3 files changed, 440 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event/rockchip-dfi.c
+> > index 50e497455dc69..969b62f071b83 100644
+> > --- a/drivers/devfreq/event/rockchip-dfi.c
+> > +++ b/drivers/devfreq/event/rockchip-dfi.c
+> > @@ -16,10 +16,12 @@
+> >  #include <linux/regmap.h>
+> >  #include <linux/slab.h>
+> >  #include <linux/list.h>
+> > +#include <linux/seqlock.h>
+> >  #include <linux/of.h>
+> >  #include <linux/of_device.h>
+> >  #include <linux/bitfield.h>
+> >  #include <linux/bits.h>
+> > +#include <linux/perf_event.h>
+> >  
+> >  #include <soc/rockchip/rockchip_grf.h>
+> >  #include <soc/rockchip/rk3399_grf.h>
+> > @@ -41,19 +43,39 @@
+> >  					 DDRMON_CTRL_LPDDR4 | \
+> >  					 DDRMON_CTRL_LPDDR23)
+> >  
+> > +#define DDRMON_CH0_WR_NUM		0x20
+> > +#define DDRMON_CH0_RD_NUM		0x24
+> >  #define DDRMON_CH0_COUNT_NUM		0x28
+> >  #define DDRMON_CH0_DFI_ACCESS_NUM	0x2c
+> >  #define DDRMON_CH1_COUNT_NUM		0x3c
+> >  #define DDRMON_CH1_DFI_ACCESS_NUM	0x40
+> >  
+> > +#define PERF_EVENT_CYCLES		0x0
+> > +#define PERF_EVENT_READ_BYTES		0x1
+> > +#define PERF_EVENT_WRITE_BYTES		0x2
+> > +#define PERF_EVENT_READ_BYTES0		0x3
+> > +#define PERF_EVENT_WRITE_BYTES0		0x4
+> > +#define PERF_EVENT_READ_BYTES1		0x5
+> > +#define PERF_EVENT_WRITE_BYTES1		0x6
+> > +#define PERF_EVENT_READ_BYTES2		0x7
+> > +#define PERF_EVENT_WRITE_BYTES2		0x8
+> > +#define PERF_EVENT_READ_BYTES3		0x9
+> > +#define PERF_EVENT_WRITE_BYTES3		0xa
+> > +#define PERF_EVENT_BYTES		0xb
+> > +#define PERF_ACCESS_TYPE_MAX		0xc
+> > +
+> >  /**
+> >   * struct dmc_count_channel - structure to hold counter values from the DDR controller
+> >   * @access:       Number of read and write accesses
+> >   * @clock_cycles: DDR clock cycles
+> > + * @read_access:  number of read accesses
+> > + * @write_acccess: number of write accesses
+> >   */
+> >  struct dmc_count_channel {
+> > -	u32 access;
+> > -	u32 clock_cycles;
+> > +	u64 access;
+> > +	u64 clock_cycles;
+> > +	u64 read_access;
+> > +	u64 write_access;
+> >  };
+> >  
+> >  struct dmc_count {
+> > @@ -69,6 +91,11 @@ struct rockchip_dfi {
+> >  	struct devfreq_event_dev *edev;
+> >  	struct devfreq_event_desc desc;
+> >  	struct dmc_count last_event_count;
+> > +
+> > +	struct dmc_count last_perf_count;
+> > +	struct dmc_count total_count;
+> > +	seqlock_t count_seqlock; /* protects last_perf_count and total_count */
+> > +
+> >  	struct device *dev;
+> >  	void __iomem *regs;
+> >  	struct regmap *regmap_pmu;
+> > @@ -77,6 +104,14 @@ struct rockchip_dfi {
+> >  	struct mutex mutex;
+> >  	u32 ddr_type;
+> >  	unsigned int channel_mask;
+> > +	enum cpuhp_state cpuhp_state;
+> > +	struct hlist_node node;
+> > +	struct pmu pmu;
+> > +	struct hrtimer timer;
+> > +	unsigned int cpu;
+> > +	int active_events;
+> > +	int burst_len;
+> > +	int buswidth[DMC_MAX_CHANNELS];
+> >  };
+> >  
+> >  static int rockchip_dfi_enable(struct rockchip_dfi *dfi)
+> > @@ -145,7 +180,7 @@ static void rockchip_dfi_disable(struct rockchip_dfi *dfi)
+> >  	mutex_unlock(&dfi->mutex);
+> >  }
+> >  
+> > -static void rockchip_dfi_read_counters(struct rockchip_dfi *dfi, struct dmc_count *count)
+> > +static void rockchip_dfi_read_counters(struct rockchip_dfi *dfi, struct dmc_count *c)
 > 
-> we can disable it by setting capacity_ref_freq to 0 so it will
-> fallback on cpuinfo like intel and amd which uses default
-> SCHED_CAPACITY_SCALE capacity
+> Actually, this change is not related to the patch's role which supports perf.
+> Also, it is better to use 'res' argument name because rockchip_ddr_perf_counters_add()
+> used the 'struct dmc_count *res' argument name.
+
+Indeed the variable rename is not required here and for consistency
+with rockchip_ddr_perf_counters_add() 'res' would be a better name.
+
+Are you fine with renaming 'c' to 'res' in this patch or do you want me
+to make a separate patch from the renaming?
+
 > 
-> Could you provide me with more details about your platform ? I still
-> try to understand how the cpu compute capacity is set up on your
-> system. How do you set per_cpu cpu_scale variable ? we should set the
-> ref freq at the same time
 > 
+> >  {
+> >  	u32 i;
+> >  	void __iomem *dfi_regs = dfi->regs;
+> > @@ -153,13 +188,36 @@ static void rockchip_dfi_read_counters(struct rockchip_dfi *dfi, struct dmc_coun
+> >  	for (i = 0; i < DMC_MAX_CHANNELS; i++) {
+> >  		if (!(dfi->channel_mask & BIT(i)))
+> >  			continue;
+> > -		count->c[i].access = readl_relaxed(dfi_regs +
+> > +		c->c[i].read_access = readl_relaxed(dfi_regs +
+> > +				DDRMON_CH0_RD_NUM + i * 20);
+> > +		c->c[i].write_access = readl_relaxed(dfi_regs +
+> > +				DDRMON_CH0_WR_NUM + i * 20);
+> > +		c->c[i].access = readl_relaxed(dfi_regs +
+> >  				DDRMON_CH0_DFI_ACCESS_NUM + i * 20);
+> > -		count->c[i].clock_cycles = readl_relaxed(dfi_regs +
+> > +		c->c[i].clock_cycles = readl_relaxed(dfi_regs +
+> >  				DDRMON_CH0_COUNT_NUM + i * 20);
+> >  	}
+> >  }
+> >  
+> > +static void rockchip_ddr_perf_counters_add(struct rockchip_dfi *dfi,
+> > +					   const struct dmc_count *now,
+> > +					   struct dmc_count *res)
+> > +{
+> > +	const struct dmc_count *last = &dfi->last_perf_count;
+> > +	int i;
+> > +
+> > +	for (i = 0; i < DMC_MAX_CHANNELS; i++) {
+> > +		res->c[i].read_access = dfi->total_count.c[i].read_access +
+> > +			(u32)(now->c[i].read_access - last->c[i].read_access);
+> > +		res->c[i].write_access = dfi->total_count.c[i].write_access +
+> > +			(u32)(now->c[i].write_access - last->c[i].write_access);
+> > +		res->c[i].access = dfi->total_count.c[i].access +
+> > +			(u32)(now->c[i].access - last->c[i].access);
+> > +		res->c[i].clock_cycles = dfi->total_count.c[i].clock_cycles +
+> > +			(u32)(now->c[i].clock_cycles - last->c[i].clock_cycles);
+> > +	}
+> > +}
+> > +
+> >  static int rockchip_dfi_event_disable(struct devfreq_event_dev *edev)
+> >  {
+> >  	struct rockchip_dfi *dfi = devfreq_event_get_drvdata(edev);
+> > @@ -223,6 +281,370 @@ static const struct devfreq_event_ops rockchip_dfi_ops = {
+> >  	.set_event = rockchip_dfi_set_event,
+> >  };
+> >  
 
-Yes, the best place to set it would be in:
-drivers/base/arch_topology.c: topology_init_cpu_capacity_cppc()
+[...]
 
-But:
- - That function reuses topology_normalize_cpu_scale() and when called
-   it needs to have capacity_ref_freq = 1. So either capacity_ref_freq
-   needs to be set for each CPU after topology_normalize_cpu_scale() is
-   called or we should not call topology_normalize_cpu_scale() here and
-   just unpack a CPPC specific version of it in
-   topology_init_cpu_capacity_cppc(). The latter is probably better as
-   we avoid iterating through all CPUs a couple of times.
-
- - When set, capacity_ref_freq needs to be a "frequency" (at least
-   in reference to the reference frequencies provided by CPPC). So 
-   cppc_cpufreq_khz_to_perf() and cppc_cpufreq_perf_to_khz() would need
-   to move to drivers/acpi/cppc_acpi.c. They don't have any dependency
-   on cpufreq (policies) so that should be alright.
-
-topology_init_cpu_capacity_cppc() is a better place to set
-capacity_ref_freq because one can do it for each CPU, and it not only
-caters for the EAS case but also for frequency invariance, when
-arch_set_freq_scale() is called, if no counters are supported.
-
-When counters are supported, there are still two loose threads:
- - amu_fie_setup(): Vincent, would you mind completely removing
-   cpufreq_get_hw_max_freq() and reusing arch_scale_freq_ref() here?
-
- - It would be nice if cppc_scale_freq_workfn() would use
-   arch_scale_freq_ref() as well, for consistency. But it would need
-   to be converted back to performance before use, so that would mean
-   extra work on the tick, which is not ideal.
-
-Basically it would be good if what gets used for capacity
-(arch_scale_freq_ref()) gets used for frequency invariance as well,
-in all locations.
-
-Thanks,
-Ionela.
-
-> >
-> > Also 'capacity_ref_freq' seems to be set only for 'policy->cpu'. I believe it should
-> > be set for the whole perf domain in case this 'policy->cpu' goes offline.
-> >
-> > Another thing, related my comment to [1] and to [2], for CPPC the max capacity matches
-> > the boosting frequency. We have:
-> >    'non-boosted max capacity' < 'boosted max capacity'.
-> > -
-> > If boosting is not enabled, the CPU utilization can still go above the 'non-boosted max
-> > capacity'. The overutilization of the system seems to be triggered by comparing the CPU
-> > util to the 'boosted max capacity'. So systems might not be detected as overutilized.
+> > +static u64 rockchip_ddr_perf_event_get_count(struct perf_event *event)
+> > +{
+> > +	struct rockchip_dfi *dfi = container_of(event->pmu, struct rockchip_dfi, pmu);
+> > +	int blen = dfi->burst_len;
+> > +	struct dmc_count total, now;
+> > +	unsigned int seq;
+> > +	u64 c = 0;
 > 
-> As Peter mentioned, we have to decide what is the original compute
-> capacity of your CPUs which is usually the sustainable max compute
-> capacity, especially when using EAS and EM
-> 
-> >
-> > For the EAS energy computation, em_cpu_energy() tries to predict the frequency that will
-> > be used. It is currently unknown to the function that the frequency request will be
-> > clamped by __resolve_freq():
-> > get_next_freq()
-> > \-cpufreq_driver_resolve_freq()
-> >    \-__resolve_freq()
-> > This means that the energy computation might use boosting frequencies, which are not
-> > available.
-> >
-> > Regards,
-> > Pierre
-> >
-> > [1]: [PATCH v2 4/6] cpufreq/schedutil: use a fixed reference frequency
-> > [2]: https://lore.kernel.org/lkml/20230905113308.GF28319@noisy.programming.kicks-ass.net/
-> >
-> > > +}
-> > > +
-> > >   static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
-> > >   {
-> > >       struct cppc_cpudata *cpu_data;
-> > > @@ -643,6 +658,9 @@ static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
-> > >               EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
-> > >
-> > >       cpu_data = policy->driver_data;
-> > > +
-> > > +     cppc_cpufreq_set_capacity_ref_freq(policy);
-> > > +
-> > >       em_dev_register_perf_domain(get_cpu_device(policy->cpu),
-> > >                       get_perf_level_count(policy), &em_cb,
-> > >                       cpu_data->shared_cpu_map, 0);
+> Actually, it is difficult to understand the meaning of 'c' local variable name.
+> Need to use the more clear vairable name instead of 'c'.
+
+'c' is short for 'count' as in the function name xxx_get_count(). It is
+initialized to 0, filled with values throughout the function and
+returned at the end. Which other name do you suggest?
+
+Sascha
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
