@@ -2,69 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8BAC7CA87B
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 14:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF3F7CA8C7
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 15:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232929AbjJPMtc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Oct 2023 08:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
+        id S233100AbjJPNDR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Oct 2023 09:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233470AbjJPMtb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 08:49:31 -0400
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15074EA
-        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 05:49:28 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1qsN1u-0003V0-JA; Mon, 16 Oct 2023 14:49:06 +0200
-Received: from [2a0a:edc0:2:b01:1d::c0] (helo=ptx.whiteo.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1qsN1r-0025Wd-Gh; Mon, 16 Oct 2023 14:49:03 +0200
-Received: from sha by ptx.whiteo.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1qsN1r-00EkBm-DU; Mon, 16 Oct 2023 14:49:03 +0200
-Date:   Mon, 16 Oct 2023 14:49:03 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Chanwoo Choi <chanwoo@kernel.org>
-Cc:     linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Vincent Legoll <vincent.legoll@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v7 18/26] PM / devfreq: rockchip-dfi: account for
- multiple DDRMON_CTRL registers
-Message-ID: <20231016124903.GC3359458@pengutronix.de>
-References: <20230704093242.583575-1-s.hauer@pengutronix.de>
- <20230704093242.583575-19-s.hauer@pengutronix.de>
- <98c448be-8ea8-a0bd-62cc-3bc3a5cf5569@kernel.org>
+        with ESMTP id S231569AbjJPNDQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 09:03:16 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEB69B
+        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 06:03:13 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-325e9cd483eso4360004f8f.2
+        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 06:03:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697461392; x=1698066192; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qRIQzJVjQPflm7dkpuP19WJe82g35LDlQb0GVzpSU1w=;
+        b=rdq7w8UoEIBi4IvFhsjnIsE/U38Kzyh1fIQgfOAZpwJpbHqo9n+oOfr95r3S1gG5t4
+         Z+0zov4oisqCe4cfZXGhMpA7hm03hhpVxfV2kWX5LCfBdOTRCELbMtdeDP59XBLsT+rJ
+         9oKfnAZqyyWQD7Cb+S9gj3b+b2AGla2pIRSNDTwljk1jKc50yX9z0d2DnTo81HXY3KFZ
+         qMiK5c6GULvVxIUouRISsiIEyQe//lV278dTtLb8ereWbMa0NoV0ES66q7Z4ZwVvjDfp
+         6TnjWw75oIE6orBMnRUU3FAM7Fd7SISK1nG+IiZc0V5M4yYX0CNk9h4+NP6FUSFCayCT
+         w2zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697461392; x=1698066192;
+        h=content-transfer-encoding:cc:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qRIQzJVjQPflm7dkpuP19WJe82g35LDlQb0GVzpSU1w=;
+        b=um5LxwNpNiwPH0aBQ7UypDzj0mEI1j/9mAD6JCAzRX8KFYcEruFht0lkOY+4CWnjEh
+         tPxgLHZbaUe884IZb+Aq5OoxHDrTSozZTzc1urRxf6qcYqB7c9+cMPn9iS47mKCLFWzO
+         9R9+6f9s8lcIRC4hOUudXHeakvX1Ci2i9qyOWL/9mDjRjgMl7rGF8sqEoFWsK202Zspr
+         rkvxG4gmxpUOO0OkQ8TD5UEhJEBe11hVLlh5h2ffHfvngJhSJWPETQB5t028o060bAB0
+         xYbixZu6eHJr3kqF/gKDtpkgflKVTS44ryRtpWwif9P/4pD5NcVv/KISKSCLoIqYta4f
+         JINw==
+X-Gm-Message-State: AOJu0YwGEJsypIevikmwOP+UsZpmwHsG6m0tTKopv0jne2gckh6KozFE
+        4QlSBYaVc1StEU1cgJfEpBiMJQ==
+X-Google-Smtp-Source: AGHT+IEPGnTU1wjlmS9k4eskeWOz3X5dd9Yu1/Dv87W8Q/I3q6SzPYkw++mhH/Yxniig/Pha2vh3mw==
+X-Received: by 2002:a5d:4e88:0:b0:32d:9572:646e with SMTP id e8-20020a5d4e88000000b0032d9572646emr8283133wru.54.1697461391660;
+        Mon, 16 Oct 2023 06:03:11 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
+        by smtp.googlemail.com with ESMTPSA id f18-20020adff452000000b0032dbf6bf7a2sm103447wrp.97.2023.10.16.06.03.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Oct 2023 06:03:11 -0700 (PDT)
+Message-ID: <734738ec-b72f-49b4-9a4e-6aaf2a44c9f3@linaro.org>
+Date:   Mon, 16 Oct 2023 15:03:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <98c448be-8ea8-a0bd-62cc-3bc3a5cf5569@kernel.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: PM QoS performance aggregator
+Cc:     Caleb Connolly <caleb.connolly@linaro.org>,
+        Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,157 +71,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 09, 2023 at 07:19:04AM +0900, Chanwoo Choi wrote:
-> On 23. 7. 4. 18:32, Sascha Hauer wrote:
-> > The currently supported RK3399 has a set of registers per channel, but
-> > it has only a single DDRMON_CTRL register. With upcoming RK3588 this
-> > will be different, the RK3588 has a DDRMON_CTRL register per channel.
-> > 
-> > Instead of expecting a single DDRMON_CTRL register, loop over the
-> > channels and write the channel specific DDRMON_CTRL register. Break
-> > out early out of the loop when there is only a single DDRMON_CTRL
-> > register like on the RK3399.
-> > 
-> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> > ---
-> >  drivers/devfreq/event/rockchip-dfi.c | 72 ++++++++++++++++++----------
-> >  1 file changed, 48 insertions(+), 24 deletions(-)
-> > 
-> > diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event/rockchip-dfi.c
-> > index 85ec93fd41858..2362d3953ba40 100644
-> > --- a/drivers/devfreq/event/rockchip-dfi.c
-> > +++ b/drivers/devfreq/event/rockchip-dfi.c
-> > @@ -113,12 +113,13 @@ struct rockchip_dfi {
-> >  	int burst_len;
-> >  	int buswidth[DMC_MAX_CHANNELS];
-> >  	int ddrmon_stride;
-> > +	bool ddrmon_ctrl_single;
-> >  };
-> >  
-> >  static int rockchip_dfi_enable(struct rockchip_dfi *dfi)
-> >  {
-> >  	void __iomem *dfi_regs = dfi->regs;
-> > -	int ret = 0;
-> > +	int i, ret = 0;
-> >  
-> >  	mutex_lock(&dfi->mutex);
-> >  
-> > @@ -132,29 +133,41 @@ static int rockchip_dfi_enable(struct rockchip_dfi *dfi)
-> >  		goto out;
-> >  	}
-> >  
-> > -	/* clear DDRMON_CTRL setting */
-> > -	writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_TIMER_CNT_EN | DDRMON_CTRL_SOFTWARE_EN |
-> > -		       DDRMON_CTRL_HARDWARE_EN), dfi_regs + DDRMON_CTRL);
-> > +	for (i = 0; i < DMC_MAX_CHANNELS; i++) {
-> > +		u32 ctrl = 0;
-> >  
-> > -	/* set ddr type to dfi */
-> > -	switch (dfi->ddr_type) {
-> > -	case ROCKCHIP_DDRTYPE_LPDDR2:
-> > -	case ROCKCHIP_DDRTYPE_LPDDR3:
-> > -		writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_LPDDR23, DDRMON_CTRL_DDR_TYPE_MASK),
-> > -			       dfi_regs + DDRMON_CTRL);
-> > -		break;
-> > -	case ROCKCHIP_DDRTYPE_LPDDR4:
-> > -	case ROCKCHIP_DDRTYPE_LPDDR4X:
-> > -		writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_LPDDR4, DDRMON_CTRL_DDR_TYPE_MASK),
-> > -			       dfi_regs + DDRMON_CTRL);
-> > -		break;
-> > -	default:
-> > -		break;
-> > -	}
-> > +		if (!(dfi->channel_mask & BIT(i)))
-> > +			continue;
-> >  
-> > -	/* enable count, use software mode */
-> > -	writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_SOFTWARE_EN, DDRMON_CTRL_SOFTWARE_EN),
-> > -		       dfi_regs + DDRMON_CTRL);
-> > +		/* clear DDRMON_CTRL setting */
-> > +		writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_TIMER_CNT_EN |
-> > +			       DDRMON_CTRL_SOFTWARE_EN | DDRMON_CTRL_HARDWARE_EN),
-> > +			       dfi_regs + i * dfi->ddrmon_stride + DDRMON_CTRL);
-> > +
-> > +		/* set ddr type to dfi */
-> > +		switch (dfi->ddr_type) {
-> > +		case ROCKCHIP_DDRTYPE_LPDDR2:
-> > +		case ROCKCHIP_DDRTYPE_LPDDR3:
-> > +			ctrl = DDRMON_CTRL_LPDDR23;
-> > +			break;
-> > +		case ROCKCHIP_DDRTYPE_LPDDR4:
-> > +		case ROCKCHIP_DDRTYPE_LPDDR4X:
-> > +			ctrl = DDRMON_CTRL_LPDDR4;
-> > +			break;
-> > +		default:
-> > +			break;
-> > +		}
-> > +
-> > +		writel_relaxed(HIWORD_UPDATE(ctrl, DDRMON_CTRL_DDR_TYPE_MASK),
-> > +			       dfi_regs + i * dfi->ddrmon_stride + DDRMON_CTRL);
-> > +
-> > +		/* enable count, use software mode */
-> > +		writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_SOFTWARE_EN, DDRMON_CTRL_SOFTWARE_EN),
-> > +			       dfi_regs + i * dfi->ddrmon_stride + DDRMON_CTRL);
-> > +
-> > +		if (dfi->ddrmon_ctrl_single)
-> > +			break;
-> > +	}
-> >  out:
-> >  	mutex_unlock(&dfi->mutex);
-> >  
-> > @@ -164,6 +177,7 @@ static int rockchip_dfi_enable(struct rockchip_dfi *dfi)
-> >  static void rockchip_dfi_disable(struct rockchip_dfi *dfi)
-> >  {
-> >  	void __iomem *dfi_regs = dfi->regs;
-> > +	int i;
-> >  
-> >  	mutex_lock(&dfi->mutex);
-> >  
-> > @@ -174,8 +188,17 @@ static void rockchip_dfi_disable(struct rockchip_dfi *dfi)
-> >  	if (dfi->usecount > 0)
-> >  		goto out;
-> >  
-> > -	writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_SOFTWARE_EN),
-> > -		       dfi_regs + DDRMON_CTRL);
-> > +	for (i = 0; i < DMC_MAX_CHANNELS; i++) {
-> > +		if (!(dfi->channel_mask & BIT(i)))
-> > +			continue;
-> > +
-> > +		writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_SOFTWARE_EN),
-> > +			      dfi_regs + i * dfi->ddrmon_stride + DDRMON_CTRL);
-> > +
-> > +		if (dfi->ddrmon_ctrl_single)
-> > +			break;
-> > +	}
-> > +
-> >  	clk_disable_unprepare(dfi->clk);
-> >  out:
-> >  	mutex_unlock(&dfi->mutex);
-> > @@ -666,6 +689,7 @@ static int rk3399_dfi_init(struct rockchip_dfi *dfi)
-> >  	dfi->buswidth[1] = FIELD_GET(RK3399_PMUGRF_OS_REG2_BW_CH1, val) == 0 ? 4 : 2;
-> >  
-> >  	dfi->ddrmon_stride = 0x14;
-> > +	dfi->ddrmon_ctrl_single = true;
-> >  
-> >  	return 0;
-> >  };
-> 
-> Even if rk3568 has the only one channle and don't need to check whether 'dfi->ddrmon_ctrl_single'
-> is true or not because of 'if (!(dfi->channel_mask & BIT(i)))',
-> I recommand the add 'dfi->ddrmon_ctrl_single = true;' for rk3568 in order to
-> provide the number of DDRMON_CTRL reigster of rk3568.
-> 
-> If rk3568 doesn't have the 'ddrmon_ctrl_single', actually it is not easy
-> to catch what why are there no initilization for rk3568.
 
-Ok, will change.
+Hi,
 
-Sascha
+the kernel provides an API to specify latency timings for devices and 
+CPUs. In addition, it allows to deal with the frequencies.
+
+However, the unit is Hz and that may not fit very well with some devices 
+where the performance is an index. The devices can have different 
+performance capping mechanisms under the hood (IOW the firmware).
+
+The pm QoS seems to not have an interface to describe constraints based 
+on performance index.
+
+In the same page, the devices can also be requesting power values 
+instead of performance indexes or frequencies. So having a power based 
+pm QoS would make also sense IMO.
+
+Actually, performance indexes, power values, frequencies are just all 
+values but in different units.
+
+Would it make sense to create a generic PM QoS constraint with values 
+and units ?
+
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
