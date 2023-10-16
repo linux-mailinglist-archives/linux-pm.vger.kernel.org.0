@@ -2,93 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D287CB186
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 19:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B36D7CB1A8
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 19:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232943AbjJPRqp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 16 Oct 2023 13:46:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47496 "EHLO
+        id S233951AbjJPRzk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Oct 2023 13:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233962AbjJPRqn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 13:46:43 -0400
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2839FD
-        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 10:46:41 -0700 (PDT)
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-57f137dffa5so722216eaf.1
-        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 10:46:41 -0700 (PDT)
+        with ESMTP id S230271AbjJPRzj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 13:55:39 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1417EA7;
+        Mon, 16 Oct 2023 10:55:37 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-991c786369cso778719666b.1;
+        Mon, 16 Oct 2023 10:55:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1697478935; x=1698083735; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BhPkYhJAW7CH6nBOo+T09ywLEzEHOW0bchh9MjRNi/s=;
+        b=fSnS3zhWwJzGUU/sPgDw+WXaXiX+JT+TPsmS5qkuIImnHRDQ8xvSK8RhqOxCF2S2aR
+         rZgMJWf6+0jxpOYvytOn9IhDjefiDbIQjS+nQyBc7JeWG7puocyAeSmoB40YO4bU8SqI
+         83Gsx8jdFKsIWOCctfodeqZ99EA5TC8G1LFwkq42+FJxLYQ+oe+6Yg5iriU7zarm5pPp
+         rj+A10l9s5C1GsAxSrkkHtvTdGfMEU+qYTPL9RvaKH2w8YIL3FdhRisy9BlVvekkVdOS
+         ZLLtHvt9/0X8fmUBzBJIp0/ihwOoUAvY+Sz6qlW0Dv95D9nqYHKGW2kZlD44RX4yLRDa
+         CM5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697478401; x=1698083201;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Yl4os4YCTUEv9MuBinBrGRjLi4bpa2Avh0gIybU4Wws=;
-        b=w1lTQHO8Cw11g//YJc5cCgKwonmYReaEWr/qzRB+CQPPv+Kn/NjFx/A/AKl0+3mQwt
-         9umKhrdiy0HYKKwUPYq0sJ1BGmoAXP9ZsRZcyJdaYylbLHrlHbrIi9qLkfvuJvDRlOCR
-         I9RPFTFBVLaiEK1gEU4ZwYmGEzkFkgab6sY9Av3kC//pbUZ8JgFifpyAQ+n6u8UPN0QD
-         7A9E3XflUCl+ZyQe2lHVH74I8VCVqguMxPtdVevLblIUa0FFDJ8S1ZejirHmCCgxpUaV
-         D+CwK+I0lgMiFFNjrWx2Aox7Su0SheKYao0B2fv8J0KdfozG7TS7qMKzGQxsXNG8Zlmh
-         Ipvg==
-X-Gm-Message-State: AOJu0YxJq2MXOXaQ/sZiBGmaMiTX/jc0AJ67wy3jS4sfiTY1P6Me8Ce6
-        0KbYjSB71GS3TBfvr76WFtlakkN2lLbf3OrRed8=
-X-Google-Smtp-Source: AGHT+IEIs0rUex+j/+sqSHHN8F8Z5ErPKaWD4bei68FHRBud4HRMtcyJfM6AYvI/iW2ER1mSxaQkdQmgIdPAQfbEIwA=
-X-Received: by 2002:a4a:d097:0:b0:57b:7e31:c12 with SMTP id
- i23-20020a4ad097000000b0057b7e310c12mr33944388oor.1.1697478400729; Mon, 16
- Oct 2023 10:46:40 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697478935; x=1698083735;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BhPkYhJAW7CH6nBOo+T09ywLEzEHOW0bchh9MjRNi/s=;
+        b=ggThk9lgvefFQTjVgrSzTXQZjQd/zBt3f572+u9aCqnoAWm1E5urqBu/Qc8eWJyKG4
+         W3Ne4dllk3FVt5ZvLW1VFh9fPvA+BZJfP80WHl+cwl943Ve3Z4nfPKcIU1YEZy5qmdrS
+         S2McwCvvmdYLXGXedQm/WerMWa5HmbVX/LVIT6pW2KUwCNnltkPYVnv5uYqgcCd2VQhA
+         hSj9/RgmTN1LYgEmfFH27eXxGm8qOBCNzm7W5CpNelDOeR+UkMc5X/bDiabpI5UNR7xg
+         NWuNLlNtNBW9OHubQaPVTnY5SxVvljU48C0jL7dOOaxifCmWNreh2FM1tbqvVAH5Rt1p
+         eMWg==
+X-Gm-Message-State: AOJu0YwGUnOxnTDhN1TQH/4DtHbxiEM2I+FU7SfiUEkwGbFhxbynS3aV
+        zYg7MY94v9v3H4gSNRPjeM8=
+X-Google-Smtp-Source: AGHT+IGQoFoxmsZEJYD/hH3nnI9DdEj2LO5ATmuYzHnVSHJZ/f5Hk+a+1dS//iIYDEwSTI2ScjC7+w==
+X-Received: by 2002:a17:906:7310:b0:9bf:5771:a8cf with SMTP id di16-20020a170906731000b009bf5771a8cfmr4954114ejc.70.1697478935271;
+        Mon, 16 Oct 2023 10:55:35 -0700 (PDT)
+Received: from fedora.. ([188.252.220.210])
+        by smtp.googlemail.com with ESMTPSA id g15-20020a170906348f00b009c3f8f46c22sm2378007ejb.77.2023.10.16.10.55.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Oct 2023 10:55:34 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        ilia.lin@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH 1/3] dt-bindings: cpufreq: qcom-cpufreq-nvmem: document IPQ6018
+Date:   Mon, 16 Oct 2023 19:55:15 +0200
+Message-ID: <20231016175532.2081344-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-References: <734738ec-b72f-49b4-9a4e-6aaf2a44c9f3@linaro.org>
-In-Reply-To: <734738ec-b72f-49b4-9a4e-6aaf2a44c9f3@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 16 Oct 2023 19:46:24 +0200
-Message-ID: <CAJZ5v0j4ceLwx3sh-AOPwtPk6_mya0TvtMRC+d_v0r_hk8jnsQ@mail.gmail.com>
-Subject: Re: PM QoS performance aggregator
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 16, 2023 at 3:03 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi,
->
-> the kernel provides an API to specify latency timings for devices and
-> CPUs. In addition, it allows to deal with the frequencies.
->
-> However, the unit is Hz and that may not fit very well with some devices
-> where the performance is an index. The devices can have different
-> performance capping mechanisms under the hood (IOW the firmware).
->
-> The pm QoS seems to not have an interface to describe constraints based
-> on performance index.
->
-> In the same page, the devices can also be requesting power values
-> instead of performance indexes or frequencies. So having a power based
-> pm QoS would make also sense IMO.
->
-> Actually, performance indexes, power values, frequencies are just all
-> values but in different units.
->
-> Would it make sense to create a generic PM QoS constraint with values
-> and units ?
+Document IPQ6018 compatible for Qcom NVMEM CPUFreq driver.
 
-All of the existing QoS types are frontends to the same underlying
-mechanism and each of them is about using a specific unit, so it's a
-matter of creating a new one for each new unit.
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+ .../devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml          | 1 +
+ 1 file changed, 1 insertion(+)
 
-That said, using performance indices as QoS values directly is
-fundamentally problematic IMV, because they are device-specific and
-not portable in any way and letting user space operate them would be a
-mistake.
+diff --git a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+index 7391660a25ac9..f929892d654ea 100644
+--- a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
++++ b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+@@ -28,6 +28,7 @@ select:
+           - qcom,apq8064
+           - qcom,apq8096
+           - qcom,ipq5332
++          - qcom,ipq6018
+           - qcom,ipq8064
+           - qcom,ipq8074
+           - qcom,ipq9574
+-- 
+2.41.0
+
