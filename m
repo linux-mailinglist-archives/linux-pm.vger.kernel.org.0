@@ -2,111 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC567C9E24
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 06:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38BCC7C9F0E
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 07:44:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbjJPEWL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Oct 2023 00:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56438 "EHLO
+        id S229831AbjJPFoa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Oct 2023 01:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjJPEWK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 00:22:10 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F85DC
-        for <linux-pm@vger.kernel.org>; Sun, 15 Oct 2023 21:22:08 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-5a7be88e9ccso51405697b3.2
-        for <linux-pm@vger.kernel.org>; Sun, 15 Oct 2023 21:22:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697430128; x=1698034928; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sXhdl4AwuQ5b9hQDSuOSRNecvIq4BMJtEIoefKWTOwk=;
-        b=RG5GKHE4OyRue1e6h1RImnuIxlBzCRfoa4cno1BzHrBOCTZP2j28T3EfuzCd4zHrQM
-         H/p03MxaeZZnEOSRIG/46EAYfaqXN9rX1YnzlyzajDfPPHNs2AFVVD7RygYATpSerlbm
-         Xg+FhDQI5jrR5qubBp+1LuBikMqrx+CYvafhDPitoZ0jo4sIan/g8TVe6unDSNzX9VId
-         Zxl+MqvDHfOmcDUcdjBLS9z5mI0zpOoxNfQtej1Uc/AlXVt6TKFawvgBT6qT+Earl4Xo
-         afwQSb1R3YS+wJbjIJT3WrWYCDL68hpq1pzRshAOgEfzAW3VeSVl0OkQG/bnJOPv4JtR
-         BmLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697430128; x=1698034928;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sXhdl4AwuQ5b9hQDSuOSRNecvIq4BMJtEIoefKWTOwk=;
-        b=UfIFI2U5EcnDrhmCh3UpqXj9wZgPczrMaB0fnLKwWCC2CIiVQl9GQ1w1wlz92zRDQv
-         3JD9+GrjII04bxOvgLQPjIoGBMY2SH+5lrld9UZeouCbr4oZ07Ehh7gF3m3XxJAqojYo
-         oEt6YezgRF6lknyCITxv5rOD2x8dGbbvstEM/duyWIVGgJBkL559VvojlSEdGRxtl5r6
-         lCjctZ/EC+ri+B3zTonHpGy04X22hbkmkvoGd9EZevyTb8MY79fXn+JJZCXeVkNTaAS3
-         YSnFriRvtPt9owsOl/A5XAzZJz+rlAoD7t0Ywe2W+BpjL0sLjWQyIyyhv23ZgB3xrGXy
-         ksBw==
-X-Gm-Message-State: AOJu0YyObeoH5uSIN5zO8nV1k7oRRRh2xRKRicIM5WAnIFNgR6PPrRae
-        3e4IWNk3FZ3xDRnpCSzcHswB5bv055ra0ZGNy4WYtw==
-X-Google-Smtp-Source: AGHT+IEWICUr8ouffrqathl0hNxRRfFYEJr8OtwREFGFT/mzl2TbvlM8qa/kD/+RuyTMrnZ45hQekK4YtAYQ2uCgO5Q=
-X-Received: by 2002:a0d:cbd7:0:b0:5a7:d9e6:8fc6 with SMTP id
- n206-20020a0dcbd7000000b005a7d9e68fc6mr15564582ywd.39.1697430127742; Sun, 15
- Oct 2023 21:22:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231011112726.166052-1-dmitry.baryshkov@linaro.org>
- <CAL_Jsq+HdceLczej4_q-wjg2870v3y-e_E+jEq0xbetDguaXAw@mail.gmail.com>
- <CAA8EJppCO-q=swYOH+O2fOdUDbNzd1yz9ZoTEBswV7RmvFJifA@mail.gmail.com> <20231016032353.xv3fm7dyuz52txy5@vireshk-i7>
-In-Reply-To: <20231016032353.xv3fm7dyuz52txy5@vireshk-i7>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 16 Oct 2023 07:21:56 +0300
-Message-ID: <CAA8EJpqfxBMS9x9=kRFdZEduWVt6y4z0QMs0vFL9qvqKUoMjbQ@mail.gmail.com>
-Subject: Re: [PATCH] of: export of_find_next_cache_node() for modules
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+        with ESMTP id S229686AbjJPFo3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 01:44:29 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F76DD9
+        for <linux-pm@vger.kernel.org>; Sun, 15 Oct 2023 22:44:28 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 04642C433C7
+        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 05:44:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1697435068;
+        bh=daGrIIjivMK1GecsKyzz3sV3ppwG6cpgQD0LJEJCjpg=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=my3g74NfDTdG5BWMnGPcAqqcNEFI1tPZ1iqCFoPoikDgOiiS8YFjSoF3AJyPRd7Xn
+         zBhWSYUyhk7UXfsI/2p73lGz3UP7C2I4c//x81FJCzRK6+kk/FnEaXAZvVCB8OO94X
+         I1pqCnovE3qJ7BKlKXXWvnZCqe+cEoGYv3emX44c51aGvJh+tOf+mQkKKVzPjxbgUm
+         /V9vDzP/YaiC203svRdwVs+TGtMJSvKA4ZDKBkvvfVTsAevlXvB7FAU3wtT44BCh8U
+         qAJjCPTiu34EAeYD8VddEhsENNTwpKa0QNPPxHNUHuykgohQZAAEzwyuzUG1LrRc9y
+         6BD3I7zjxrtYw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id E07C0C53BD2; Mon, 16 Oct 2023 05:44:27 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 218013] [question] option
+ CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y available in config kernel?
+Date:   Mon, 16 Oct 2023 05:44:27 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: aros@gmx.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: ANSWERED
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-218013-137361-xJ5PSUztpr@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218013-137361@https.bugzilla.kernel.org/>
+References: <bug-218013-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 16 Oct 2023 at 06:24, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 11-10-23, 15:59, Dmitry Baryshkov wrote:
-> > On Wed, 11 Oct 2023 at 15:52, Rob Herring <robh+dt@kernel.org> wrote:
-> > >
-> > > On Wed, Oct 11, 2023 at 6:27=E2=80=AFAM Dmitry Baryshkov
-> > > <dmitry.baryshkov@linaro.org> wrote:
-> > > >
-> > > > The qcom-cpufreq-nvmem module uses of_find_next_cache_node() functi=
-on,
-> > > > so export it to be available to the modules.
-> > >
-> > > You really should be using the cacheinfo API which has already parsed
-> > > the cache nodes.
-> > >
-> > > Also, why do you need a platform_device? I don't see a driver.
-> > > cacheinfo already creates a struct device, so kind of weird to have 2
-> > > devices.
-> >
-> > The driver is pending as a part of the series at [1]. We need to scale
-> > the L2 supplies and clock frequency following the core frequency
-> > changes.
->
-> Guys, can we please resolve this soon ? I had to revert the patches
-> for the time being to avoid these failures.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218013
 
-Rob pointed out that I should rework my code to use the cacheinfo
-device for the L2 cache. This means that L2 device population should
-be dropped from cpufreq. I'll post newer series as soon as I finish
-the implementation.
+Artem S. Tashkinov (aros@gmx.com) changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |ANSWERED
+
+--- Comment #1 from Artem S. Tashkinov (aros@gmx.com) ---
+This doesn't look like a normal .config file.
+
+Are you sure your question is not about a specific disto kernel configurati=
+on?
+
+Here's my kernel config and it's seemingly exactly how you want it:
+
+grep -i freq config-6.5=20
+CONFIG_ACPI_CPU_FREQ_PSS=3Dy
+# CPU Frequency scaling
+CONFIG_CPU_FREQ=3Dy
+CONFIG_CPU_FREQ_GOV_ATTR_SET=3Dy
+CONFIG_CPU_FREQ_GOV_COMMON=3Dy
+CONFIG_CPU_FREQ_STAT=3Dy
+# CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE is not set
+# CONFIG_CPU_FREQ_DEFAULT_GOV_POWERSAVE is not set
+# CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE is not set
+CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=3Dy
+# CONFIG_CPU_FREQ_DEFAULT_GOV_CONSERVATIVE is not set
+# CONFIG_CPU_FREQ_DEFAULT_GOV_SCHEDUTIL is not set
+CONFIG_CPU_FREQ_GOV_PERFORMANCE=3Dy
+CONFIG_CPU_FREQ_GOV_POWERSAVE=3Dy
+CONFIG_CPU_FREQ_GOV_USERSPACE=3Dy
+CONFIG_CPU_FREQ_GOV_ONDEMAND=3Dy
+CONFIG_CPU_FREQ_GOV_CONSERVATIVE=3Dy
+CONFIG_CPU_FREQ_GOV_SCHEDUTIL=3Dy
+# CPU frequency scaling drivers
+CONFIG_X86_PCC_CPUFREQ=3Dm
+CONFIG_X86_ACPI_CPUFREQ=3Dy
+# CONFIG_X86_ACPI_CPUFREQ_CPB is not set
+CONFIG_X86_AMD_FREQ_SENSITIVITY=3Dm
+# end of CPU Frequency scaling
+CONFIG_DEVFREQ_THERMAL=3Dy
+# Intel Uncore Frequency Control
+# CONFIG_INTEL_UNCORE_FREQ_CONTROL is not set
+# end of Intel Uncore Frequency Control
+CONFIG_PM_DEVFREQ=3Dy
+# DEVFREQ Governors
+CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND=3Dy
+CONFIG_DEVFREQ_GOV_PERFORMANCE=3Dy
+CONFIG_DEVFREQ_GOV_POWERSAVE=3Dy
+CONFIG_DEVFREQ_GOV_USERSPACE=3Dy
+CONFIG_DEVFREQ_GOV_PASSIVE=3Dy
+# DEVFREQ Drivers
+# CONFIG_PM_DEVFREQ_EVENT is not set
 
 --=20
-With best wishes
-Dmitry
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
