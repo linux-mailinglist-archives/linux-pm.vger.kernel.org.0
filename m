@@ -2,107 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9587CA59C
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 12:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 277787CA62D
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 12:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232370AbjJPKiT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Oct 2023 06:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59632 "EHLO
+        id S232903AbjJPK7V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Oct 2023 06:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjJPKiS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 06:38:18 -0400
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD4183
-        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 03:38:16 -0700 (PDT)
-Received: by mail-oo1-xc31.google.com with SMTP id 006d021491bc7-57b64731334so2618300eaf.1
-        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 03:38:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697452696; x=1698057496; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fAgUR3xRL7gFj/DHyTLw31gfxB/iFGUHd6OvglMhuyo=;
-        b=cerybdnnTWUHBq+WT6zaGRt2p81hMN1oG4MnzF8eCgDFxGxW3iS3tu5RasPB596euG
-         eTTnECuQmeX1+bsVLQN1i435q2GulNqa9k0BgvJmwt2ksrg4W5mO6lK8oPwC1UpdG4Gg
-         5CRwjJHyA/FjLdQepwLa/kjDrX/WoD8RS6eHjLuSltopLqEso2EPuibPOFh7Kl/1Z3pc
-         Xtb/h5pfEqFsX1GQ/9LfQ9U3GDpry5Y5CgCm/SY3cn+c1YCVDbHIMFTIofeYh5F3c/LQ
-         INp8QxVFg1vlmTW33jsRIsLC7Z81nnxps3LJ9y5cq2fCCFBLjYXPFYqxH2NpGYXE8grX
-         DNig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697452696; x=1698057496;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fAgUR3xRL7gFj/DHyTLw31gfxB/iFGUHd6OvglMhuyo=;
-        b=BZxzlPwDjRxSlT7zVnT8yG9ooQ4yUaDcbLMpFDCuaLt57/jUoNHDrFxnZYwCKdfKNL
-         G/9baIiavmuLnX5ToNrZ3hpod35JFB6k2WjKaxd65l3/ZCGmL5MvgYiAZF5h8PhWku8x
-         9Pg9TS+FBL6jJHZlzZU+p6VQ7f2yQaXyCOqR2E1nx8WwAHc7zlbPvjQP1s/PZKOn2DQB
-         3qYw5za63StlO6Eu1C9wfkFAkVlHVTV8KwaEE4gORW4fvlDdEYUJYCCh5pQMlBE/kwq6
-         fYk/3NxbVWNVVQkKEeb5EJP1KQBju81YX2KpX4c9s7/a675g7dCiYQLvPxPjACBYWxMe
-         wu0w==
-X-Gm-Message-State: AOJu0YwFl1hC3ebzOT3oZXPfJafW7QEGJyA9ZyYvpKNoxmc2DUNF4Dw2
-        itQChv0tG0YxM6NEY/s9bjr79w==
-X-Google-Smtp-Source: AGHT+IExsrhW9bSKl2TqFLDIEryzLqEfN3vuGhRQyK6BYqYnDMGH+JqMehUgeO2CLApwK5kpIcJsPg==
-X-Received: by 2002:a05:6358:9485:b0:135:46d9:12f7 with SMTP id i5-20020a056358948500b0013546d912f7mr33192103rwb.26.1697452695978;
-        Mon, 16 Oct 2023 03:38:15 -0700 (PDT)
-Received: from localhost ([122.172.80.14])
-        by smtp.gmail.com with ESMTPSA id w21-20020a637b15000000b005ab281d0777sm5493770pgc.20.2023.10.16.03.38.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Oct 2023 03:38:15 -0700 (PDT)
-Date:   Mon, 16 Oct 2023 16:08:13 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/5] OPP: Reorder code in _opp_set_required_opps_genpd()
-Message-ID: <20231016103813.mz26xhfzfca7c7kf@vireshk-i7>
-References: <cover.1697186772.git.viresh.kumar@linaro.org>
- <a5bd698a7a899fb63b4c5caec7068bf5a395165c.1697186772.git.viresh.kumar@linaro.org>
- <CAPDyKFpHy-32h+yu4X-psGqpaqFNpY0CgveHgd_3Zu57KPg3Dw@mail.gmail.com>
+        with ESMTP id S230116AbjJPK7U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 06:59:20 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C2795;
+        Mon, 16 Oct 2023 03:59:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=P5ifjwAGWvwt8UdPAGRFDaEieTTOaEIZSTQ8cKCMbcA=; b=cs7JmvWNb3ISfTeRVqrLDJ3hb6
+        4ejwBMKbJkO52e9dcJ0rJy3p6TH/1AcjMnL3vbVyA3AT3LgrwqkXMvgecAumcGpwX92Nrq7hlN8eY
+        xRX9RPg6sT8dmS172NUE3cZRZk0ldfrB74gOYnO3otY0BZYHEocfAtWm18AWU+zKy4pSzNszJJ7/4
+        5oVtl1bL+1sSPuDZmzmsLkrkKbm6QR27dHMPH0Vo27gdhhJ1DSVzYQ+7KIGcttZQ0pgdlsy9kA/lz
+        IExW1dYrYUX+pblYqRwDdd0hDvaunDI1tg7W6TsWAVi3oLqE/4scNTbUWWk1Oka/KccmsJ68uIcqq
+        9xfrY0Aw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qsLJ6-005woe-0M;
+        Mon, 16 Oct 2023 10:58:47 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 39C6B3005AA; Mon, 16 Oct 2023 12:58:45 +0200 (CEST)
+Date:   Mon, 16 Oct 2023 12:58:45 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Meng, Li (Jassmine)" <Li.Meng@amd.com>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        "Huang, Ray" <Ray.Huang@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        "Karny, Wyes" <Wyes.Karny@amd.com>
+Subject: Re: [RESEND PATCH V9 3/7] cpufreq: amd-pstate: Enable amd-pstate
+ preferred core supporting.
+Message-ID: <20231016105845.GA33217@noisy.programming.kicks-ass.net>
+References: <20231013033118.3759311-1-li.meng@amd.com>
+ <20231013033118.3759311-4-li.meng@amd.com>
+ <20231013160128.GB36211@noisy.programming.kicks-ass.net>
+ <DM4PR12MB6351E2E9504B57BD40DAE985F7D7A@DM4PR12MB6351.namprd12.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFpHy-32h+yu4X-psGqpaqFNpY0CgveHgd_3Zu57KPg3Dw@mail.gmail.com>
+In-Reply-To: <DM4PR12MB6351E2E9504B57BD40DAE985F7D7A@DM4PR12MB6351.namprd12.prod.outlook.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16-10-23, 12:11, Ulf Hansson wrote:
-> Why always return 0 and not the error code anymore?
+On Mon, Oct 16, 2023 at 06:20:53AM +0000, Meng, Li (Jassmine) wrote:
+> > > +static void amd_pstate_init_prefcore(struct amd_cpudata *cpudata) {
+> > > +     int ret, prio;
+> > > +     u32 highest_perf;
+> > > +     static u32 max_highest_perf = 0, min_highest_perf = U32_MAX;
+> >
+> > What serializes these things?
+> >
+> > Also, *why* are you using u32 here, what's wrong with something like:
+> >
+> >         int max_hp = INT_MIN, min_hp = INT_MAX;
+> >
+> [Meng, Li (Jassmine)]
+> We use ITMT architecture to utilize preferred core features.
+> Therefore, we need to try to be consistent with Intel's implementation
+> as much as possible.  For details, please refer to the
+> intel_pstate_set_itmt_prio function in file intel_pstate.c. (Line 355)
+> 
+> I think using the data type of u32 is consistent with the data
+> structures of cppc_perf_ctrls and amd_cpudata etc.
 
-Oops, fixed with:
+Rafael, should we fix intel_pstate too?
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 3516e79cf743..42ca52fbe210 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1076,7 +1076,7 @@ static int _opp_set_required_opps_genpd(struct device *dev,
- {
-        struct device **genpd_virt_devs =
-                opp_table->genpd_virt_devs ? opp_table->genpd_virt_devs : &dev;
--       int index, target, delta, ret;
-+       int index, target, delta, ret = 0;
+The point is, that sched_asym_prefer(), the final consumer of these
+values uses int and thus an explicitly signed compare.
 
-        /* Scaling up? Set required OPPs in normal order, else reverse */
-        if (!scaling_down) {
-@@ -1105,7 +1105,7 @@ static int _opp_set_required_opps_genpd(struct device *dev,
+Using u32 and U32_MAX anywhere near the setting the priority makes
+absolutely no sense.
 
-        mutex_unlock(&opp_table->genpd_virt_dev_lock);
+If you were to have the high bit set, things do not behave as expected.
 
--       return 0;
-+       return ret;
- }
-
- /* This is only called for PM domain for now */
-
-
--- 
-viresh
+Also, same question as to the amd folks; what serializes those static
+variables?
