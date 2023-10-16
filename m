@@ -2,62 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAF247C9D7E
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 04:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 926427C9DAC
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 05:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbjJPCqW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 15 Oct 2023 22:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39572 "EHLO
+        id S231464AbjJPDTb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 15 Oct 2023 23:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjJPCqW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 Oct 2023 22:46:22 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A75C5
-        for <linux-pm@vger.kernel.org>; Sun, 15 Oct 2023 19:46:18 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 455A9C433C7
-        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 02:46:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697424378;
-        bh=FZGU7hv8Lj7PQ3PXAUd6Fpq6k9alktet7bFE5DkfbUo=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Y2ywGx71p4a2uvMLUeKJae/DP5jNcd85Sn6w6OJzXjbK66FdJ1TJby0hoJmvqoVeT
-         UXmU0U8PG9bFXMT8OfNK/P+AW5FM0Q7NXaCLb3IRBReDDw+aIIacc5PjrzSavAa6br
-         5r5Of8rVZQhe55Bu2cou4jlxpoh3IO6sBYUFQ3YRgaSMAZj19NRieWgJ+W6s2KPkhP
-         itkpvj3ajLhnjtNHmYl000iVdpNM0dNgXTrfrxhGqhYRNXjZUxIMsYx9ujoS5tj7TU
-         oQ6QWaOUNdgulzPgaiw5/gI1otLzXQ7MargXtembHsZ3KDAWMD313Zl8/cFuKE8qye
-         qAkiQIgAgTdMQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 2C2FDC53BD2; Mon, 16 Oct 2023 02:46:18 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 217618] Changing maximum frequency and boost state does not
- work with amd-pstate in passive mode plus the schedutil governor
-Date:   Mon, 16 Oct 2023 02:46:17 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: Perry.Yuan@amd.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217618-137361-vDhxU1imJB@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217618-137361@https.bugzilla.kernel.org/>
-References: <bug-217618-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S230451AbjJPDTa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 Oct 2023 23:19:30 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E01FD6
+        for <linux-pm@vger.kernel.org>; Sun, 15 Oct 2023 20:19:28 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-27d0251d305so2087362a91.2
+        for <linux-pm@vger.kernel.org>; Sun, 15 Oct 2023 20:19:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697426368; x=1698031168; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pDYopfK40jPubbfAMF0ZB98ABj9yrqlTAb4VRGo8NsM=;
+        b=oWHer8PnXr3OD+mogE5TjrmVcequgErZ1BXNuaJelY3NJzWbfrVpL3PrxNQqG6VFnz
+         2U3grcedmhp9DckNJP1yq2ITip+qP4JbkbJwxK41VZTOXSWIoGkPHzUUGXbBb4HGzDPP
+         ehaM9h5HpnIMbYR/loIjA6kZ1YKeMPGJnLFA7zCqt1W4axXmzMLHAuW0e+UXKiMExM8y
+         0hmnz5Clj3Il9Cxggn2WdKHY44YHmOixs2eMfn8OyXbEisGonDar7akdG0AEU56Fy3W/
+         3rI4K7f0UMFslEx39tlmnZNF267FvPBxWE59C4NVDj43jQ/MRRpvSVcrzQ2wVm8QUTpk
+         e4pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697426368; x=1698031168;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pDYopfK40jPubbfAMF0ZB98ABj9yrqlTAb4VRGo8NsM=;
+        b=AywR9ENZddlzB/djDIWQy9z/WjH9H+TI01fL0460h400enQBXnwDa36z8YoGk3kb4b
+         YOnAy2UXV6SSNDBeGgGNaOh7xoYyGSaiW2pRE+D3AjF/f8tadpehHX9bm9nIdFemGn99
+         N0yB74PvUcFdgYYcKHRSPnXQFq4BRHBYNPjE1RkfHNAZ9QkRLq9if6cFFawAYls0KSRX
+         leJMxb3dEO7Gac7qDWNXxd+JHxMTPMAsTLTFZ9VfT3Wj4VDSsumFoBD/ketK5pI9i0v9
+         29PMdboBNxAPiPlzhN+wgDdMhz4tgJjRdJl0nD85Lse9dstytllHCAaw9xyThk/7OAHy
+         VE5Q==
+X-Gm-Message-State: AOJu0Yyt0CVC0q+pyq6MOyR4kizlPjAQEUBT24Rp/keEA/m8AUMYFelX
+        tpD0Va2x/bvt7MBECbqnBg635A==
+X-Google-Smtp-Source: AGHT+IGxPwpQoJbeM42Kx91ViLrPK676fLQ+CDc22svG4x4yLe446Rh+QuDeJMDtUYlcQYEaVooOGg==
+X-Received: by 2002:a17:90b:4e8f:b0:27d:492e:137a with SMTP id sr15-20020a17090b4e8f00b0027d492e137amr4631222pjb.45.1697426367777;
+        Sun, 15 Oct 2023 20:19:27 -0700 (PDT)
+Received: from localhost ([122.172.80.14])
+        by smtp.gmail.com with ESMTPSA id ge9-20020a17090b0e0900b0026b3a86b0d5sm3648903pjb.33.2023.10.15.20.19.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Oct 2023 20:19:26 -0700 (PDT)
+Date:   Mon, 16 Oct 2023 08:49:16 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        rafael@kernel.org, tglx@linutronix.de, maz@kernel.org,
+        robimarko@gmail.com, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 4/5] dt-bindings: cpufreq: cpufreq-qcom-hw: Add SDX75
+ compatible
+Message-ID: <20231016031916.mprtotrnkg5htyid@vireshk-i7>
+References: <1686311438-24177-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1686311438-24177-5-git-send-email-quic_rohiagar@quicinc.com>
+ <20230609155635.GF6847@thinkpad>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230609155635.GF6847@thinkpad>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,15 +77,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217618
+On 09-06-23, 21:26, Manivannan Sadhasivam wrote:
+> On Fri, Jun 09, 2023 at 05:20:37PM +0530, Rohit Agarwal wrote:
+> > Add compatible for EPSS CPUFREQ-HW on SDX75.
+> > 
+> > Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+> 
+> Acked-by: Manivannan Sadhasivam <mani@kernel.org>
 
---- Comment #4 from Perry Yuan(AMD) (Perry.Yuan@amd.com) ---
-I have implemented a new boost control with a patchset that are under inter=
-nal
-viewing. it works for both the passive and active mode.
+Applied. Thanks.
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
+-- 
+viresh
