@@ -2,113 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B717CA8FA
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 15:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3AD7CAAED
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 16:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233780AbjJPNLc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Oct 2023 09:11:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50544 "EHLO
+        id S233704AbjJPODd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Oct 2023 10:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233788AbjJPNLP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 09:11:15 -0400
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF38D4D
-        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 06:10:47 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1qsNMZ-0007X1-Dt; Mon, 16 Oct 2023 15:10:27 +0200
-Received: from [2a0a:edc0:2:b01:1d::c0] (helo=ptx.whiteo.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1qsNMX-0025bR-6v; Mon, 16 Oct 2023 15:10:25 +0200
-Received: from sha by ptx.whiteo.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1qsNMX-00EkKQ-3o; Mon, 16 Oct 2023 15:10:25 +0200
-Date:   Mon, 16 Oct 2023 15:10:25 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Chanwoo Choi <chanwoo@kernel.org>,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Vincent Legoll <vincent.legoll@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S233695AbjJPODU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 10:03:20 -0400
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945751AC;
+        Mon, 16 Oct 2023 07:02:52 -0700 (PDT)
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6c64a3c4912so3236411a34.3;
+        Mon, 16 Oct 2023 07:02:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697464971; x=1698069771;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aPwOcKolA5h59LfiwhDD2NsiWDiYTaeF64Ez9uATyPQ=;
+        b=RonnbeL+twCYiA6d79iP+7XIaQC0Hn0CNAMI1GIvR0bTCMeoN1hldlyjNV9YumgPIQ
+         XTWhCQrnD15vxNwOkCkuDaY93zj0cnua8cLzbYw0E3aDMnNaJNWqLdtsCrG8YmugD0h+
+         a+4cHXkF3xI2lShe1vjqf9h0d3bd3wMEW9YCroHGDGYSwDkuWUty6vA148fSTxDhRHct
+         4T6L2YlgHkbEpHA1HD8MzJogUYJiQt/6eSKho9Ja3dsN7JV4hVicsUrk+KVLQHi03+7b
+         1IrjY19CvkiqcxBrVV/wV+6e75p8lAMhZe8w5BnyLB5euiytrCIdhpkOvw6KPuT7nuVj
+         BLbQ==
+X-Gm-Message-State: AOJu0YwDH3DzPTFzhioWbdsEdSNsz0ZC05eyQqAZa9npotInM/yo3gyO
+        NagfO/Ss3ONIjNLcKIjVWw==
+X-Google-Smtp-Source: AGHT+IGtFSHkWAYs7Rmg3ynupfWgMC2K0w58JDQY6Ll10QBud020o2yHbCZ3OrASx4vDGZ+riEGT+A==
+X-Received: by 2002:a05:6870:7d12:b0:1ea:3746:b7d6 with SMTP id os18-20020a0568707d1200b001ea3746b7d6mr4026697oab.28.1697464971594;
+        Mon, 16 Oct 2023 07:02:51 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id gk24-20020a0568703c1800b001dcde628a6fsm2016544oab.42.2023.10.16.07.02.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Oct 2023 07:02:50 -0700 (PDT)
+Received: (nullmailer pid 2677955 invoked by uid 1000);
+        Mon, 16 Oct 2023 14:02:49 -0000
+Date:   Mon, 16 Oct 2023 09:02:49 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: Re: [PATCH v7 08/26] PM / devfreq: rk3399_dmc,dfi: generalize
- DDRTYPE defines
-Message-ID: <20231016131025.GD3359458@pengutronix.de>
-References: <20230704093242.583575-1-s.hauer@pengutronix.de>
- <20230704093242.583575-9-s.hauer@pengutronix.de>
- <f142ae65-0609-ccf2-5908-663cd2ecab73@kernel.org>
+        Conor Dooley <conor+dt@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jon Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v2 02/13] dt-bindings: thermal: tegra: Document throttle
+ temperature
+Message-ID: <20231016140249.GA2655027-robh@kernel.org>
+References: <20231012175836.3408077-1-thierry.reding@gmail.com>
+ <20231012175836.3408077-3-thierry.reding@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f142ae65-0609-ccf2-5908-663cd2ecab73@kernel.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20231012175836.3408077-3-thierry.reding@gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Heiko,
-
-On Sat, Oct 07, 2023 at 02:43:04AM +0900, Chanwoo Choi wrote:
-> On 23. 7. 4. 18:32, Sascha Hauer wrote:
-> > The DDRTYPE defines are named to be RK3399 specific, but they can be
-> > used for other Rockchip SoCs as well, so replace the RK3399_PMUGRF_
-> > prefix with ROCKCHIP_. They are defined in a SoC specific header
-> > file, so when generalizing the prefix also move the new defines to
-> > a SoC agnostic header file. While at it use GENMASK to define the
-> > DDRTYPE bitfield and give it a name including the full register name.
-> > 
-> > Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> > ---
-
-[...]
-
-> > +	ROCKCHIP_DDRTYPE_LPDDR2	= 5,
-> > +	ROCKCHIP_DDRTYPE_LPDDR3	= 6,
-> > +	ROCKCHIP_DDRTYPE_LPDDR4	= 7,
-> > +};
-> > +
-> > +#endif /* __SOC_ROCKCHIP_GRF_H */
+On Thu, Oct 12, 2023 at 07:58:23PM +0200, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
 > 
+> Each throttling configuration needs to specify the temperature threshold
+> at which it should start throttling. Previously this was tied to a given
+> trip point as a cooling device and used the temperature specified for
+> that trip point. This doesn't work well because the throttling mechanism
+> is not a cooling device in the traditional sense.
 > 
-> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+> Instead, allow device trees to specify the throttle temperature in the
+> throttle configuration directly so that the throttle doesn't need to be
+> exposed as a cooling device.
 > 
-> This patch must require Ack of rockchip Maintainer (Heiko Stuebner)
-> because of include/soc/rockchip.
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> ---
+> Changes in v2:
+> - rename temperature to temperature-millicelsius and drop $ref
+> - add hysteresis-millicelsius property
+> 
+>  .../bindings/thermal/nvidia,tegra124-soctherm.yaml | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml b/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml
+> index 04a2ba1aa946..0eb6277082fe 100644
+> --- a/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml
+> @@ -121,6 +121,20 @@ properties:
+>                # high (85%, TEGRA_SOCTHERM_THROT_LEVEL_HIGH)
+>                - 3
+>  
+> +          temperature-millicelsius:
 
-Could you provide your Acked-by: for this patch?
+'temperature' is redundant since we have units. Perhaps 
+'throttle-millicelsius' or 'auto-throttle-millicelsius' instead to say 
+what the temperature is for.
 
-Sascha
+> +            minimum: -273000
+> +            maximum: 200000
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Quite impressive operating range.
+
+> +            description: The temperature threshold (in millicelsius) that,
+> +              when crossed, will trigger the configured automatic throttling.
+> +
+> +          hysteresis-millicelsius:
+> +            description: An unsigned integer expressing the hysteresis delta
+> +              (in millicelsius) with respect to the threshold temperature
+> +              property above. Throttling will be initiated when the
+> +              temperature falls below (temperature - hysteresis). This avoids
+> +              situations where throttling is repeatedly initiated and stopped
+> +              because of minor temperature variations.
+> +
+>            # optional
+>            # Tegra210 specific and valid only for OCx throttle events
+>            nvidia,count-threshold:
+> -- 
+> 2.42.0
+> 
