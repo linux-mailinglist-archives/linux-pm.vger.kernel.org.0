@@ -2,129 +2,329 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C3AD7CAAED
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 16:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 453807CAC00
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 16:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233704AbjJPODd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Oct 2023 10:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36412 "EHLO
+        id S233564AbjJPOse (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Oct 2023 10:48:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233695AbjJPODU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 10:03:20 -0400
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945751AC;
-        Mon, 16 Oct 2023 07:02:52 -0700 (PDT)
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6c64a3c4912so3236411a34.3;
-        Mon, 16 Oct 2023 07:02:52 -0700 (PDT)
+        with ESMTP id S233527AbjJPOsd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 10:48:33 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C10AED
+        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 07:48:30 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-d77ad095f13so4599524276.2
+        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 07:48:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697467710; x=1698072510; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GxypX+GEfUXKbSOzwP0/C/E3Z4J92Eo/3dLzh/Ra8sE=;
+        b=MDcKJvjoXcB8n0XH+nX/HCQCvKEIcbKdUTyyPGZPqWQYYWTu7wkVAU2/7pEPcqs3Nc
+         KvqnTXDtFs+UnWTNce8o1MU6XVPrs1QvyhJ/T2yttZwblBLVXgce3l0RSeWmlM3d4lRm
+         jyUle3M7pw8GXjpZTJQWRIJ6FZx95OPf3kYCrbNM92KeZQOAM3zhlwBUuHJFAJOh+/sr
+         jT7uA9ZxTVP8Jm03/XqJr7X6H0hOu6WkpTOTfh429GbPI/qMaJCsO0M/sSbVBbZBts8l
+         G8pnLnpPP/7nrxWqPZwxEIWq5jmiM7UBK6ZEdmnfWP3dCBjVX1uKvqiD2vJ78FRffZrS
+         UKqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697464971; x=1698069771;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aPwOcKolA5h59LfiwhDD2NsiWDiYTaeF64Ez9uATyPQ=;
-        b=RonnbeL+twCYiA6d79iP+7XIaQC0Hn0CNAMI1GIvR0bTCMeoN1hldlyjNV9YumgPIQ
-         XTWhCQrnD15vxNwOkCkuDaY93zj0cnua8cLzbYw0E3aDMnNaJNWqLdtsCrG8YmugD0h+
-         a+4cHXkF3xI2lShe1vjqf9h0d3bd3wMEW9YCroHGDGYSwDkuWUty6vA148fSTxDhRHct
-         4T6L2YlgHkbEpHA1HD8MzJogUYJiQt/6eSKho9Ja3dsN7JV4hVicsUrk+KVLQHi03+7b
-         1IrjY19CvkiqcxBrVV/wV+6e75p8lAMhZe8w5BnyLB5euiytrCIdhpkOvw6KPuT7nuVj
-         BLbQ==
-X-Gm-Message-State: AOJu0YwDH3DzPTFzhioWbdsEdSNsz0ZC05eyQqAZa9npotInM/yo3gyO
-        NagfO/Ss3ONIjNLcKIjVWw==
-X-Google-Smtp-Source: AGHT+IGtFSHkWAYs7Rmg3ynupfWgMC2K0w58JDQY6Ll10QBud020o2yHbCZ3OrASx4vDGZ+riEGT+A==
-X-Received: by 2002:a05:6870:7d12:b0:1ea:3746:b7d6 with SMTP id os18-20020a0568707d1200b001ea3746b7d6mr4026697oab.28.1697464971594;
-        Mon, 16 Oct 2023 07:02:51 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id gk24-20020a0568703c1800b001dcde628a6fsm2016544oab.42.2023.10.16.07.02.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Oct 2023 07:02:50 -0700 (PDT)
-Received: (nullmailer pid 2677955 invoked by uid 1000);
-        Mon, 16 Oct 2023 14:02:49 -0000
-Date:   Mon, 16 Oct 2023 09:02:49 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jon Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v2 02/13] dt-bindings: thermal: tegra: Document throttle
- temperature
-Message-ID: <20231016140249.GA2655027-robh@kernel.org>
-References: <20231012175836.3408077-1-thierry.reding@gmail.com>
- <20231012175836.3408077-3-thierry.reding@gmail.com>
+        d=1e100.net; s=20230601; t=1697467710; x=1698072510;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GxypX+GEfUXKbSOzwP0/C/E3Z4J92Eo/3dLzh/Ra8sE=;
+        b=wxANKWcGp6adcOi7RmJS/FOC1wghADjxGFfmVCJ26emmFop8Iwfn43JpMNzwmQW0aS
+         ET9wUA4LXOYCuVls1IHD31sAP0eXwJi9ngX8AyeTLKBIXd2U053qL1XyncPixRwM6U/R
+         /c1p6MMivSEDN+bivn4mBwcpYEN5lxYDkUGffzHtMwb1sEYH7t90mkLXzIk1XkzusCWd
+         iEodhNsEBbPHsOzgSYHL0KDHMqLpLJwAjXUXWJSHoBA1KYdZdcKrmDa3qGmWSUfT8BYh
+         p/IHcMMxLtB25eKJ5TcNN1ktp21qq074Ciye4KrUqvUEaJ3/SHkyPVy8LI1WOWPUS3fC
+         sVlA==
+X-Gm-Message-State: AOJu0YywMpW2r4PfgLK/JDG6xJBCVjRtBjSz4fKsos9PpQAxSgqvPyLG
+        HJU+1nL9IqOWP9n/k7iurDZJYwk6Yz+Fd29Fk+ctNA==
+X-Google-Smtp-Source: AGHT+IFydC4JiwFHumykEit+4bc15qpX+YfvV1l4iiaVG8PNsPGn4dovyuswKlpyIeP4zBTlngKF3aJXGed59EMhMvI=
+X-Received: by 2002:a25:2d15:0:b0:d9a:c4df:cd8e with SMTP id
+ t21-20020a252d15000000b00d9ac4dfcd8emr10401524ybt.33.1697467709642; Mon, 16
+ Oct 2023 07:48:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231012175836.3408077-3-thierry.reding@gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230912-msm8909-cpufreq-v1-0-767ce66b544b@kernkonzept.com>
+ <20230912-msm8909-cpufreq-v1-1-767ce66b544b@kernkonzept.com>
+ <CAPDyKFq6U-MR4Bd+GmixYseRECDh142RhydtKbiPd3NHV2g6aw@mail.gmail.com>
+ <ZQGqfMigCFZP_HLA@gerhold.net> <CAPDyKFppdXe1AZo1jm2Bc_ZR18hw5Bmh1x+2P7Obhb_rJ2gc4Q@mail.gmail.com>
+ <ZRcC2IRRv6dtKY65@gerhold.net> <CAPDyKFoiup8KNv=1LFGKDdDLA1pHsdJUgTTWMdgxnikEmReXzg@mail.gmail.com>
+ <ZSg-XtwMxg3_fWxc@gerhold.net>
+In-Reply-To: <ZSg-XtwMxg3_fWxc@gerhold.net>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 16 Oct 2023 16:47:52 +0200
+Message-ID: <CAPDyKFoH5EOvRRKy-Bgp_B9B3rf=PUKK5N45s5PNgfBi55PaOQ@mail.gmail.com>
+Subject: Re: [PATCH 1/4] cpufreq: qcom-nvmem: Enable virtual power domain devices
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 12, 2023 at 07:58:23PM +0200, Thierry Reding wrote:
-> From: Thierry Reding <treding@nvidia.com>
-> 
-> Each throttling configuration needs to specify the temperature threshold
-> at which it should start throttling. Previously this was tied to a given
-> trip point as a cooling device and used the temperature specified for
-> that trip point. This doesn't work well because the throttling mechanism
-> is not a cooling device in the traditional sense.
-> 
-> Instead, allow device trees to specify the throttle temperature in the
-> throttle configuration directly so that the throttle doesn't need to be
-> exposed as a cooling device.
-> 
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
-> ---
-> Changes in v2:
-> - rename temperature to temperature-millicelsius and drop $ref
-> - add hysteresis-millicelsius property
-> 
->  .../bindings/thermal/nvidia,tegra124-soctherm.yaml | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml b/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml
-> index 04a2ba1aa946..0eb6277082fe 100644
-> --- a/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml
-> @@ -121,6 +121,20 @@ properties:
->                # high (85%, TEGRA_SOCTHERM_THROT_LEVEL_HIGH)
->                - 3
->  
-> +          temperature-millicelsius:
+[...]
 
-'temperature' is redundant since we have units. Perhaps 
-'throttle-millicelsius' or 'auto-throttle-millicelsius' instead to say 
-what the temperature is for.
+> > >
+> > > Here are the two commits with the my current DT changes (WIP):
+> > >   - MSM8909+PM8909 (RPMPD only):
+> > >     https://github.com/msm8916-mainline/linux/commit/791e0c5a3162372a0738bc7b0f4a5e87247923db
+> >
+> > Okay, so this looks pretty straight forward. One thing though, it
+> > looks like we need to update the DT bindings for cpus.
+> >
+> > I recently updated Documentation/devicetree/bindings/arm/cpus.yaml
+> > [1], to let "perf" be the common "power-domain-name" for a CPU's SCMI
+> > performance-domain. I look like we should extend the description to
+> > allow "perf" to be used for all types of performance domains.
+> >
+>
+> "perf" sounds fine for a single power domain, I just used "apc" here for
+> consistency with the MSM8916 changes (which scales this power domain and
+> several others, as you saw).
+>
+> (BTW, I would appreciate such a generic name for the cpuidle case as
+>  well, so "idle" instead of "psci" vs "sbi". I have another WIP cpuidle
+>  driver and didn't want to invent another name there...)
 
-> +            minimum: -273000
-> +            maximum: 200000
+Whether it's "idle" or "power" or something else, we should certainly
+avoid a provider specific (psci) name, as has been pointed out earlier
+by Rob too.
 
-Quite impressive operating range.
+I will try to get some time to update the DT docs as soon as I can.
+Unless you get to it first, feel free to do it.
 
-> +            description: The temperature threshold (in millicelsius) that,
-> +              when crossed, will trigger the configured automatic throttling.
-> +
-> +          hysteresis-millicelsius:
-> +            description: An unsigned integer expressing the hysteresis delta
-> +              (in millicelsius) with respect to the threshold temperature
-> +              property above. Throttling will be initiated when the
-> +              temperature falls below (temperature - hysteresis). This avoids
-> +              situations where throttling is repeatedly initiated and stopped
-> +              because of minor temperature variations.
-> +
->            # optional
->            # Tegra210 specific and valid only for OCx throttle events
->            nvidia,count-threshold:
-> -- 
-> 2.42.0
-> 
+>
+> > >   - MSM8916 (CPR+RPMPD):
+> > >     https://github.com/msm8916-mainline/linux/commit/8880f39108206d7a60a0a8351c0373bddf58657c
+> >
+> > This looks a bit odd to me. Does a CPU really have four different
+> > power-domains, where three of them are performance-domains?
+> >
+>
+> Good question. I think we're largely entering "uncharted territory" with
+> these questions, I can just try to answer it the best I can from the
+> limited documentation and knowledge I have. :)
+>
+> The CPU does indeed use four different power domains. There also seem to
+> be additional power switches that gate power for some components without
+> having to turn off the entire supply.
+>
+> I'll list them twice from two points of view: Once mapping component ->
+> power domain, then again showing each power domain separately to make it
+> more clear. At the end I also want to make clear that MSM8909 (with the
+> "single" power domain) is actually exactly the same SoC design, just
+> with different regulators supplying the power domains.
+>
+> It's totally fine if you just skim over it. I'm listing it in detail
+> also as reference for myself. :D
+>
+> # Components
+>  - SoC
+>    - CPU subsystem ("APPS")
+>      - CPU cluster
+>        - 4x CPU core (logic and L1 cache) -> VDD_APC
+>        - Shared L2 cache
+>          - Logic -> VDD_APC
+>          - Memory -> VDD_MX
+>      - CPU clock controller (logic) -> VDD_CX
+>        - Provides CPU frequency from different clock sources
+>        - L2 cache runs at 1/2 of CPU frequency
+>        => Both VDD_APC and VDD_MX must be scaled based on frequency
+>      - CPU PLL clock source
+>        - Generates the higher (GHz) CPU frequencies
+>        - Logic (?, unsure) -> VDD_CX
+>        - ??? -> VDD_SR2_APPS_PLL
+>        => VDD_CX must be scaled based on PLL frequency
+>
+> # Power Domains
+> ## VDD_APC
+>  - dedicated for CPU
+>  - powered off completely in deepest cluster cpuidle state
+>
+>  - per-core power switch (per-core cpuidle)
+>    - CPU logic
+>    - L1 cache controller/logic and maybe memory(?, unsure)
+>  - shared L2 cache controller/logic
+>
+>  => must be scaled based on CPU frequency
+>
+> ## VDD_MX
+>  - global SoC power domain for "on-chip memories"
+>  - always on, reduced to minimal voltage when entire SoC is idle
+>
+>  - power switch (controlled by deepest cluster cpuidle state?, unsure)
+>    - L2 cache memory
+>
+>  => must be scaled based on L2 frequency (=> 1/2 CPU frequency)
+>
+> ## VDD_CX
+>  - global SoC power domain for "digital logic"
+>  - always on, reduced to minimal voltage when entire SoC is idle
+>  - voting for VDD_CX in the RPM firmware also affects VDD_MX performance
+>    state (firmware implicitly sets VDD_MX >= VDD_CX)
+>
+>  - CPU clock controller logic, CPU PLL logic(?, unsure)
+>
+>  => must be scaled based on CPU PLL frequency
+>
+> ## VDD_SR2_APPS_PLL
+>  - global SoC power domain for CPU clock PLLs
+>  - on MSM8916: always on with constant voltage
+>
+>  => ignored in Linux at the moment
+>
+> # Power Domain Regulators
+> These power domains are literally input pins on the SoC chip. In theory
+> one could connect any suitable regulator to each of those. In practice
+> there are just a couple of standard reference designs that everyone
+> uses:
+>
+> ## MSM8916 (SoC) + PM8916 (PMIC)
+> We need to scale 3 power domains together with cpufreq:
+>
+>  - VDD_APC (CPU logic) = &pm8916_spmi_s2 (via CPR)
+>  - VDD_MX  (L2 memory) = &pm8916_l3 (via RPMPD: MSM8916_VDDMX)
+>  - VDD_CX  (CPU PLL)   = &pm8916_s1 (via RPMPD: MSM8916_VDDCX)
+>
+> ## MSM8909 (SoC) + PM8909 (PMIC)
+> We need to scale 1 power domain together with cpufreq:
+>
+>  - VDD_APC = VDD_CX    = &pm8909_s1 (via RPMPD: MSM8909_VDDCX)
+>    (CPU logic, L2 logic and CPU PLL)
+> (- VDD_MX  (L2 memory) = &pm8909_l3 (RPM firmware enforces VDD_MX >= VDD_CX))
+>
+> There is implicit magic in the RPM firmware here that saves us from
+> scaling VDD_MX. VDD_CX/APC are the same power rail.
+>
+> ## MSM8909 (SoC) + PM8916 (PMIC)
+> When MSM8909 is paired with PM8916 instead of PM8909, the setup is
+> identical to MSM8916+PM8916. We need to scale 3 power domains.
+>
+> > In a way it sounds like an option could be to hook up the cpr to the
+> > rpmpd:s instead (possibly even set it as a child-domains to the
+> > rpmpd:s), assuming that is a better description of the HW, which it
+> > may not be, of course.
+>
+> Hm. It's definitely an option. I must admit I haven't really looked
+> much at child-domains so far, so spontaneously I'm not sure about
+> the implications, for both the abstract hardware description and
+> the implementation.
+>
+> There seems to be indeed some kind of relation between MX <=> CX/APC:
+>
+>  - When voting for CX in the RPM firmware, it will always implicitly
+>    adjust the MX performance state to be MX >= CX.
+>
+>  - When scaling APC up, we must increase MX before APC.
+>  - When scaling APC down, we must decrease MX after APC.
+>  => Clearly MX >= APC. Not in terms of raw voltage, but at least for the
+>     abstract performance state.
+>
+> Is this some kind of parent-child relationship between MX <=> CX and
+> MX <=> APC?
+
+Thanks for sharing the above. Yes, to me, it looks like there is a
+parent/child-domain relationship that could be worth describing/using.
+
+>
+> If yes, maybe we could indeed bind MX to the CPR genpd somehow. They use
+> different performance state numbering, so we need some kind of
+> translation. I'm not entirely sure how that would be described.
+
+Both the power-domain and the required-opps DT bindings
+(Documentation/devicetree/bindings/opp/opp-v2-base.yaml) are already
+allowing us to describe these kinds of hierarchical
+dependencies/layouts.
+
+In other words, to scale performance for a child domain, the child may
+rely on that we scale performance for the parent domain too. This is
+already supported by genpd and through the opp library - so it should
+just work. :-)
+
+>
+> Scaling VDD_CX for the PLL is more complicated. APC <=> CX feel more
+> like siblings, so I don't think it makes sense to vote for CX as part of
+> the CPR genpd. Spontaneously I would argue scaling CX belongs into the
+> CPU PLL driver (since that's what the vote is for). However, for some
+> reason it was decided to handle such votes on the consumer side (here =
+> cpufreq) on mainline [1].
+>
+> [1]: https://lore.kernel.org/linux-arm-msm/20200910162610.GA7008@gerhold.net/
+
+Right. I assume the above works just fine, so probably best to stick
+to that for this case too.
+
+[...]
+
+> >
+> > *) The approach you have taken in the $subject patch with the call to
+> > pm_runtime_resume_and_get() works as a fix for QCS404, as there is
+> > only the CPR to attach to. The problem with it, is that it doesn't
+> > work for cases where the RPMPD is used for performance scaling, either
+> > separate or in combination with the CPR. It would keep the rpmpd:s
+> > powered-on, which would be wrong. In regards to the
+> > dev_pm_syscore_device() thingy, this should not be needed, as long as
+> > we keep the vdd-apc-supply enabled, right?
+> >
+> > **) A more generic solution, that would work for all cases (even
+> > when/if hooking up the CPR to the rpmpd:s), consists of tweaking genpd
+> > to avoid "caching" performance states for these kinds of devices. And
+> > again, I don't see that we need dev_pm_syscore_device(), assuming we
+> > manage the vdd-apc-supply correctly.
+> >
+> > Did I miss anything?
+> >
+>
+> We do need to keep the CPU-related RPMPDs always-on too.
+>
+> Keeping the CPU-related RPMPDs always-on is a bit counter-intuitive, but
+> it's because of this:
+>
+> > > > >  - RPMPD: This is the generic driver for all the SoC power domains
+> > > > >    managed by the RPM firmware. It's not CPU-specific. However, as
+> > > > >    special feature each power domain is exposed twice in Linux, e.g.
+> > > > >    "MSM8909_VDDCX" and "MSM8909_VDDCX_AO". The _AO ("active-only")
+> > > > >    variant tells the RPM firmware that the performance/enable vote only
+> > > > >    applies when the CPU is active (not in deep cpuidle state).
+>
+> The CPU only uses the "_AO"/active-only variants in RPMPD. Keeping these
+> always-on effectively means "keep the power domain on as long as the CPU
+> is active".
+>
+> I hope that clears up some of the confusion. :)
+
+Yes, it does, thanks! Is the below the correct conclusion for how we
+could move forward then?
+
+*) The pm_runtime_resume_and_get() works for QCS404 as a fix. It also
+works fine when there is only one RPMPD that manages the performance
+scaling.
+
+**) In cases where we have multiple PM domains to scale performance
+for, using pm_runtime_resume_and_get() would work fine too. Possibly
+we want to use device_link_add() to set up suppliers, to avoid calling
+pm_runtime_resume_and_get() for each and every device.
+
+***) Due to the above, we don't need a new mechanism to avoid
+"caching" performance states for genpd. At least for the time being.
+
+Kind regards
+Uffe
