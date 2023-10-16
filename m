@@ -2,174 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C0B7CB2FC
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 20:50:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5DAA7CB32A
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 21:08:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbjJPSuv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Oct 2023 14:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51410 "EHLO
+        id S232608AbjJPTIk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Oct 2023 15:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbjJPSuu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 14:50:50 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E34D95;
-        Mon, 16 Oct 2023 11:50:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697482249; x=1729018249;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=Iulu54IDYUFpU+iC/guD05U9rT3+qcojMqimF0BvD7c=;
-  b=jhD4+rZJQNVsfSUT8UJbDT9HLUwyecBBVj4HRHrMfkfg1XVUwMobtE7g
-   BDbSxTsuduPB3ueu+4/gbXnRR7LiIlQBsM8Kk5DLQL/o+ZIiZ2UkNXJpH
-   E0lmz2GC/CmNWjuizonjcZQzsofBdAzzlVIKTOmsRXUYjaskdYlywWfKM
-   3a1uDfYzdcLPy3hDe4UrQahcYbCygR1spbZ9lOf6OgtTyyAubZUaJii4D
-   Gs8E0g+WbUYpm4AdTxDkxyxm+rS/I98xApjEg3FgqxCiYmCtlFQjrVM3B
-   42gcHaJxs4mJ9ejKau+ZO1M7qGULAUeyvN7/jI8evUwxRtu0hVsqDUH8P
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="7182384"
-X-IronPort-AV: E=Sophos;i="6.03,230,1694761200"; 
-   d="scan'208";a="7182384"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2023 11:50:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="826131454"
-X-IronPort-AV: E=Sophos;i="6.03,230,1694761200"; 
-   d="scan'208";a="826131454"
-Received: from spandruv-desk1.amr.corp.intel.com ([10.209.124.179])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2023 11:50:34 -0700
-Message-ID: <eeb77ec34d2002e507c09949aac9110d8b8eff4a.camel@linux.intel.com>
-Subject: Re: [RESEND PATCH V9 3/7] cpufreq: amd-pstate: Enable amd-pstate
- preferred core supporting.
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>
-Cc:     "Huang, Ray" <Ray.Huang@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        "Karny, Wyes" <Wyes.Karny@amd.com>
-Date:   Mon, 16 Oct 2023 11:50:34 -0700
-In-Reply-To: <e82fc689-5cc3-d799-6e5f-a9e4ac98e26f@intel.com>
-References: <20231013033118.3759311-1-li.meng@amd.com>
-         <20231013033118.3759311-4-li.meng@amd.com>
-         <20231013160128.GB36211@noisy.programming.kicks-ass.net>
-         <DM4PR12MB6351E2E9504B57BD40DAE985F7D7A@DM4PR12MB6351.namprd12.prod.outlook.com>
-         <20231016105845.GA33217@noisy.programming.kicks-ass.net>
-         <e82fc689-5cc3-d799-6e5f-a9e4ac98e26f@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+        with ESMTP id S231508AbjJPTIj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 15:08:39 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3063E8
+        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 12:08:37 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id ca18e2360f4ac-7a24c86aae3so59692639f.0
+        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 12:08:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1697483317; x=1698088117; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JcTH0VsoF1buUa3wYI5JOhUxSLxinwGPh2bn6jgrf1M=;
+        b=e9LhRIbvi72jdoM/sj1fB8VUKUya4Os1hXbTXmkbsDdRj4jpYqhhu5c/l5qS30Y7KE
+         TX85O4ZHF/B8wcuoqb588Socp4Y93e6GH3cbdLbC7B1q8v5oNXwfdN8lbIVqTkewcO05
+         LHTUYfxIxiiEliGf715YwOlb2pT0RXLXMPfrg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697483317; x=1698088117;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JcTH0VsoF1buUa3wYI5JOhUxSLxinwGPh2bn6jgrf1M=;
+        b=EKj7TwysHe7/qKT7S/MbADoKwJcIpMsw++QZ4aztKlS5rIhhOU779QR5yJGYSj4UbP
+         4FvVS3CuBWErAVWYAE6xfiZDz2KbgNxlfagSf2DzlHueQDfd+F390NzCZ8F/RSab2/ps
+         moNxdBVk2IWIuXoRBr7tCkBK9BMBNBKcjXdMfL957xbggPi5TWXV2vY1KgtUDZIWIYGG
+         QTDMBctm4Eh1ClEUHqS9D4njwujnGTzWhDxz9Bk/R0zvdLmOwcTkxTHcA2OOJ8Xw5p9R
+         TWrBtUZpPmtmALvGRto4+JtVs8HmtwjQBqi6w2LgevHNN2YgIc51TDq1mzLS0N0oMZQ4
+         96RA==
+X-Gm-Message-State: AOJu0Ywkm3gfTBZ45y27gdP2nItdky5M8NQ/pWdY4je3XcU7HM4KNWsK
+        VO60KWQaWTQQ0fe7eWwhbJGVzg==
+X-Google-Smtp-Source: AGHT+IFZqRn51Qhe9fFK9A7LVu2ok00fy6CncbigbJiZF2FCNIycDF+wcmggfs1hJxQbjwOnbSsJHg==
+X-Received: by 2002:a05:6602:1513:b0:79f:a8c2:290d with SMTP id g19-20020a056602151300b0079fa8c2290dmr199390iow.0.1697483316996;
+        Mon, 16 Oct 2023 12:08:36 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id r22-20020a028816000000b004301f422fbdsm6498947jai.178.2023.10.16.12.08.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Oct 2023 12:08:36 -0700 (PDT)
+Message-ID: <213fb592-de7d-405e-88bd-595a1cb33d48@linuxfoundation.org>
+Date:   Mon, 16 Oct 2023 13:08:35 -0600
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 0/2] Fix issues observed in selftests/amd-pstate
+Content-Language: en-US
+To:     Swapnil Sapkal <swapnil.sapkal@amd.com>, ray.huang@amd.com,
+        shuah@kernel.org
+Cc:     sukrut.bellary@gmail.com, li.meng@amd.com, gautham.shenoy@amd.com,
+        wyes.karny@amd.com, Perry.Yuan@amd.com, Mario.Limonciello@amd.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20231012093225.2045109-1-swapnil.sapkal@amd.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20231012093225.2045109-1-swapnil.sapkal@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2023-10-16 at 19:27 +0200, Wysocki, Rafael J wrote:
-> On 10/16/2023 12:58 PM, Peter Zijlstra wrote:
-> > On Mon, Oct 16, 2023 at 06:20:53AM +0000, Meng, Li (Jassmine)
-> > wrote:
-> > > > > +static void amd_pstate_init_prefcore(struct amd_cpudata
-> > > > > *cpudata) {
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0 int ret, prio;
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0 u32 highest_perf;
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0 static u32 max_highest_perf =3D 0, min_=
-highest_perf =3D
-> > > > > U32_MAX;
-> > > > What serializes these things?
-> > > >=20
-> > > > Also, *why* are you using u32 here, what's wrong with something
-> > > > like:
-> > > >=20
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int max_hp =3D INT=
-_MIN, min_hp =3D INT_MAX;
-> > > >=20
-> > > [Meng, Li (Jassmine)]
-> > > We use ITMT architecture to utilize preferred core features.
-> > > Therefore, we need to try to be consistent with Intel's
-> > > implementation
-> > > as much as possible.=C2=A0 For details, please refer to the
-> > > intel_pstate_set_itmt_prio function in file intel_pstate.c. (Line
-> > > 355)
-> > >=20
-> > > I think using the data type of u32 is consistent with the data
-> > > structures of cppc_perf_ctrls and amd_cpudata etc.
-> > Rafael, should we fix intel_pstate too?
->=20
-> Srinivas should be more familiar with this code than I am, so adding
-> him.
->=20
-If we make
-	static u32 max_highest_perf =3D 0, min_highest_perf =3D U32_MAX;
-to
-	static int max_highest_perf =3D INT_MIN, min_highest_perf =3D
-INT_MAX;
+On 10/12/23 03:32, Swapnil Sapkal wrote:
+> This series fixes issues observed with selftests/amd-pstate while
+> running performance comparison tests with different governors. First
+> patch changes relative paths with absolute paths and also change it
+> with correct paths wherever it is broken.
+> The second patch adds an option to provide perf binary path to
+> handle the case where distro perf does not work.
+> 
+> Changelog v3->v4:
+> 	* Addressed review comments from v3
+> 
+> Swapnil Sapkal (2):
+>    selftests/amd-pstate: Fix broken paths to run workloads in
+>      amd-pstate-ut
+>    selftests/amd-pstate: Added option to provide perf binary path
+> 
+>   .../x86/amd_pstate_tracer/amd_pstate_trace.py |  3 +--
+>   .../testing/selftests/amd-pstate/gitsource.sh | 17 +++++++++------
+>   tools/testing/selftests/amd-pstate/run.sh     | 21 +++++++++++++------
+>   tools/testing/selftests/amd-pstate/tbench.sh  |  4 ++--
+>   4 files changed, 29 insertions(+), 16 deletions(-)
+> 
 
-Then in intel_pstate we will compare signed vs unsigned comparison as
-cppc_perf.highest_perf is u32.
+Both applied to linux-kselftest next for Linux 6.7-rc1
 
-
-In reality this will be fine to change to "int" as we will never reach
-u32 max as performance on any Intel platform.
-
->=20
-> > The point is, that sched_asym_prefer(), the final consumer of these
-> > values uses int and thus an explicitly signed compare.
-> >=20
-> > Using u32 and U32_MAX anywhere near the setting the priority makes
-> > absolutely no sense.
-> >=20
-> > If you were to have the high bit set, things do not behave as
-> > expected.
->=20
-> Right, but in practice these values are always between 0 and 255=20
-> inclusive AFAICS.
->=20
-> It would have been better to use u8 I suppose.
-Should be fine as over clocked parts will set to max 0xff.
-
->=20
->=20
-> > Also, same question as to the amd folks; what serializes those
-> > static
-> > variables?
->=20
-> That's a good one.
-
-This function which is checking static variables is called from cpufreq
-->init callback. Which in turn is called from a function which is
-passed as startup() function pointer to
-cpuhp_setup_state_nocalls_cpuslocked().
-
-I see that startup() callbacks are called under a mutex
-cpuhp_state_mutex for each present CPUs. So if some tear down happen,
-that is also protected by the same mutex. The assumption is here is
-that cpuhp_invoke_callback() in hotplug state machine is not called in
-parallel on two CPUs by the hotplug state machine. But I see activity
-on parallel bringup, so this is questionable now.
-
-Thanks,
-Srinivas
-
->=20
->=20
-
+thanks,
+-- Shuah
