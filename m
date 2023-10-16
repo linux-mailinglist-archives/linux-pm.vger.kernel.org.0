@@ -2,121 +2,244 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F3F7CACFA
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 17:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D1C7CAD8E
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 17:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233788AbjJPPJN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Oct 2023 11:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51568 "EHLO
+        id S232833AbjJPPcS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Oct 2023 11:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233867AbjJPPI6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 11:08:58 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDADDD9
-        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 08:08:54 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-d9a518d66a1so5466014276.0
-        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 08:08:54 -0700 (PDT)
+        with ESMTP id S232143AbjJPPcS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 11:32:18 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13E6AB
+        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 08:32:15 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-6b709048d8eso1757886b3a.2
+        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 08:32:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697468934; x=1698073734; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1697470335; x=1698075135; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AfMzmSAMB17a2NwH2HpOiWWpuFzMguqaGLUDXQnZZEg=;
-        b=BtHTb/Q5HVldX9NirWPq5/7fLVtGPJpxMn8wecF7UXGY7+WTmeE+tVZ2GliI991lV8
-         pFXaTJZKcOGA53M022UmWRjXORbWJBpK33rPDmjJ5QEwSr7U5EZ9wqGDnWTJm1liroxg
-         sFj3KN1WyJVQdViNXW7boTxr/aVqG22b78BG9drp+st7AsQ8x2eyL95pNrglPykG1A7P
-         MOXoLhpRmv2VclVgOGWTz4a7bh5aMBQttNI7tglAB8y52fnQsZp6m+lgO1rwlG0a9Mdr
-         AmOvqHiYls0vd1YQHzGEjMqMR0lT4u3rJ9Er9yPHwCRfslGppW0pmL6hnbCLplsces9t
-         CT0A==
+        bh=5pngVXoLiR/0bx1FlI0DnQePf5uJ9GAS4LvTh4IY1Rk=;
+        b=EVo3XDaPZO5aibDThpCEPFkwbQTLzeHQHmthGXdeMJPVShOEL4XIl8n9JlC/0uku5J
+         Jc6INq5JtfbQj7TDjrlky3Ge7W2r1+FZ6YpKJDX+UuU3f8eB2T67DVmlCuLBS/SgkaFb
+         N7O4EWeLZsVXuGK/x0QX/DQNfAJGfxjJQ4hZHThsWfN9B1+H+xLbzWxKNiIYLuvwhBny
+         izvXN3GwIQmwxmKr+/Dtzw1884gOkfoTsNeQSqh890umRujMrPVDCr3hhKbsMGd8iRWh
+         mnvtwCJnaJ01O/dae/YV59VBA5Jhtl9HbAxCYH5/eyitk+MxoVknSHWVmDnYr802BCxs
+         R2Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697468934; x=1698073734;
+        d=1e100.net; s=20230601; t=1697470335; x=1698075135;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=AfMzmSAMB17a2NwH2HpOiWWpuFzMguqaGLUDXQnZZEg=;
-        b=Dy4qLzCwc1U9SocKnJwXPeI8Znojz5t/257aKzVTsiSl8IaZFrZGysAF6HjOD67fYu
-         g0ahx+8+4IymPar9uTfY06DeXHTW0OaDL0Ae881/CjkYPht+abIT+6QweLnbPR4zSMk2
-         4YFiIrKVgu7sOuk6s48OAebfJ7kAgQjiT5xMZv+fbd6+O3f1xBxGl+VZy2bgQgD1RlbC
-         vtw9qoOtwiCLnTF+69uRLkKSYAY2tmGK3ceWc0rHnuLX0j3fDBF0HHI/emHg/ZUFigRS
-         JvTNO+UdRshHgB4b1CQzTwQomB1I8sWHIsySmHivaVFoZ/+iycEzGMIBj4/AOr9X8dVB
-         2QZQ==
-X-Gm-Message-State: AOJu0YztIXNd/pZVQ8nmSbpRjvq4rl+CPqJVs8okCwo85HJB2BthQiZe
-        +USI/O7jkyzHO+5mF49siwyoVWolhZvQ0DiJCNlsHw==
-X-Google-Smtp-Source: AGHT+IHECKOX8CIKoErpJcR94iahfflcdhD1LxOqcN9jzWh9ZPzHv7UmbSxzk1sdKp55GX0wmwzbvsF3/X+qgKcjXMg=
-X-Received: by 2002:a25:ae85:0:b0:d9a:4362:67ac with SMTP id
- b5-20020a25ae85000000b00d9a436267acmr17826010ybj.15.1697468933976; Mon, 16
- Oct 2023 08:08:53 -0700 (PDT)
+        bh=5pngVXoLiR/0bx1FlI0DnQePf5uJ9GAS4LvTh4IY1Rk=;
+        b=j4sdVdoQQY9sLxymqljprve4q8MMyU88jU5R4Vm5NJ9A+gwEBtM4alhitBRTjWUmaN
+         vqS1e/g4LvbCLUeKGZ15Al5Xi/FQQWpurZmOePPN48lKbnzo5Njfp2c4OrlgimVmbPKZ
+         37RmpwlJw0qfuuU59ncIZe3H4pVQxFLDxjohY0bKC+ZXEXriWFoFfAn9PgZHzcfCee9a
+         TIE5wyx926CGoGSHYpkaeCsR5LGSVVzQrk8lwNLwS8BYkgjeHhnZZzSmoCYXp45TnzD2
+         ZghgSyZPMJ2d4dvJQmtSvSKsvif1D5u2Ug08Zp/ir+p6RJZ5cME+yds47nnz8DI2S2lb
+         fudg==
+X-Gm-Message-State: AOJu0YzNlh+Giqvzr9Vpbehuy2gnU2NCe2Falz75AzazKyua0XayVcn4
+        tKYlda52HoUZlJdn6sCA+/SXiUDhL1yaWmufNx1AVg==
+X-Google-Smtp-Source: AGHT+IFftRs3dPcu6O0OhThxtR8bcXVQFGGiwi0Ct1Wsm4gD9N/FBldJtlh3k9It5AHC5p/u1BypsA1/wFruHNSEbyQ=
+X-Received: by 2002:a05:6a20:9793:b0:174:af85:954b with SMTP id
+ hx19-20020a056a20979300b00174af85954bmr8954867pzc.22.1697470335048; Mon, 16
+ Oct 2023 08:32:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231010105503.jwrmjahuvcjgwtk5@bogus> <CAPDyKFqEpnKeF7Yuvv_a+=Kqs=pNU_kM59EqWdpCniHrY_373A@mail.gmail.com>
- <DU0PR04MB941755466872E84217378F6388CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <20231010130054.ieylxocuapugajif@bogus> <DU0PR04MB94177FFEAA62AC27839D826F88CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <20231010133059.57rs52qedrc5mxfr@bogus> <DU0PR04MB9417D01218CA4803D00545A788CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <20231010145137.fyxjlsj5qq3elq7l@bogus> <DU0PR04MB9417233F914A061FB0A23B3088CCA@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <CAPDyKFo32GQdgMWJ_rkb88mcdc+0jYubWiCapf99Zg9JTnNnPw@mail.gmail.com>
- <20231011141551.exqxkmt3xsl5fyjh@bogus> <CAPDyKFrWjAdujOr8JX5_JawaKqs0_MYUrsUN57XaB9q=darJ0w@mail.gmail.com>
-In-Reply-To: <CAPDyKFrWjAdujOr8JX5_JawaKqs0_MYUrsUN57XaB9q=darJ0w@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 16 Oct 2023 17:08:18 +0200
-Message-ID: <CAPDyKFoJpnF_CezT6RySPpAwJY0+LO+RiSqqM=byTaRibKQPyg@mail.gmail.com>
-Subject: Re: Question regarding scmi_perf_domain.c
-To:     Peng Fan <peng.fan@nxp.com>, Sudeep Holla <sudeep.holla@arm.com>
-Cc:     "cristian.marussi@arm.com" <cristian.marussi@arm.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>,
-        Glen G Wienecke <glen.wienecke@nxp.com>
+References: <20231009103621.374412-7-vincent.guittot@linaro.org>
+ <ac8968b9-8463-4aa2-a38d-fc2b9137460d@arm.com> <CAKfTPtBhXRk_Y-xiHn9_jQ1C_ALzbr3-KdwzcTCyupzJ4Gru5g@mail.gmail.com>
+ <ZS0oyhbVDtXO1p5b@arm.com>
+In-Reply-To: <ZS0oyhbVDtXO1p5b@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Mon, 16 Oct 2023 17:32:03 +0200
+Message-ID: <CAKfTPtCg9aYnWsReT=xtznwkMMMEepj6j9z4J6_ST5oUv69aUA@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] cpufreq/cppc: set the frequency used for capacity computation
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     Pierre Gondois <pierre.gondois@arm.com>, linux@armlinux.org.uk,
+        catalin.marinas@arm.com, will@kernel.org, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, sudeep.holla@arm.com,
+        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        viresh.kumar@linaro.org, lukasz.luba@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
+        conor.dooley@microchip.com, suagrfillet@gmail.com,
+        ajones@ventanamicro.com, lftan@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 12 Oct 2023 at 13:53, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+Hi Ionela,
+
+On Mon, 16 Oct 2023 at 14:13, Ionela Voinescu <ionela.voinescu@arm.com> wrote:
 >
-> On Wed, 11 Oct 2023 at 16:17, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> > On Wed, Oct 11, 2023 at 11:26:54AM +0200, Ulf Hansson wrote:
-> >
-> > [..]
-> >
-> > > Not sure exactly what you are referring to when saying that "automatic
-> > > power domain on is broken". Genpd power-on the PM domain for a device
-> > > that gets attached to it, if the device has only a single PM domain.
-> > > This is the legacy behaviour.
+> Hi both,
+>
+> On Wednesday 11 Oct 2023 at 16:25:46 (+0200), Vincent Guittot wrote:
+> > On Wed, 11 Oct 2023 at 12:27, Pierre Gondois <pierre.gondois@arm.com> wrote:
 > > >
-> > > When we added support for multiple PM domains per device, we decided
-> > > to *not* power-on the PM domain, if the device that gets attached has
-> > > multiple PM domains. This behaviour was chosen deliberately, to allow
-> > > consumer drivers to decide themselves instead. Is there a problem with
-> > > this you think?
+> > > Hello Vincent,
 > > >
+> > > On 10/9/23 12:36, Vincent Guittot wrote:
+> > > > cppc cpufreq driver can register an artificial energy model. In such case,
+> > > > it also have to register the frequency that is used to define the CPU
+> > > > capacity
+> > > >
+> > > > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> > > > ---
+> > > >   drivers/cpufreq/cppc_cpufreq.c | 18 ++++++++++++++++++
+> > > >   1 file changed, 18 insertions(+)
+> > > >
+> > > > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> > > > index fe08ca419b3d..24c6ba349f01 100644
+> > > > --- a/drivers/cpufreq/cppc_cpufreq.c
+> > > > +++ b/drivers/cpufreq/cppc_cpufreq.c
+> > > > @@ -636,6 +636,21 @@ static int populate_efficiency_class(void)
+> > > >       return 0;
+> > > >   }
+> > > >
+> > > > +
+> > > > +static void cppc_cpufreq_set_capacity_ref_freq(struct cpufreq_policy *policy)
+> > > > +{
+> > > > +     struct cppc_perf_caps *perf_caps;
+> > > > +     struct cppc_cpudata *cpu_data;
+> > > > +     unsigned int ref_freq;
+> > > > +
+> > > > +     cpu_data = policy->driver_data;
+> > > > +     perf_caps = &cpu_data->perf_caps;
+> > > > +
+> > > > +     ref_freq = cppc_cpufreq_perf_to_khz(cpu_data, perf_caps->highest_perf);
+> > > > +
+> > > > +     per_cpu(capacity_ref_freq, policy->cpu) = ref_freq;
+> > >
+> > > 'capacity_ref_freq' seems to be updated only if CONFIG_ENERGY_MODEL is set. However in
+> > > [1], get_capacity_ref_freq() relies on 'capacity_ref_freq'. The cpufreq_schedutil governor
+> > > should have a valid 'capacity_ref_freq' value set if the CPPC cpufreq driver is used
+> > > without energy model I believe.
 > >
-> > Just my understanding. Since the second PM domain added now is for perf
-> > and is not strictly power domain, Peng's concern is switching to this
-> > binding will make the platform loose this automatic genpd power-on
-> > feature.
+> > we can disable it by setting capacity_ref_freq to 0 so it will
+> > fallback on cpuinfo like intel and amd which uses default
+> > SCHED_CAPACITY_SCALE capacity
+> >
+> > Could you provide me with more details about your platform ? I still
+> > try to understand how the cpu compute capacity is set up on your
+> > system. How do you set per_cpu cpu_scale variable ? we should set the
+> > ref freq at the same time
+> >
 >
-> Yes, correct, as they way things are today.
+> Yes, the best place to set it would be in:
+> drivers/base/arch_topology.c: topology_init_cpu_capacity_cppc()
+
+Thanks. I didn't notice it
+
 >
-> It all boils down to that attaching a device to multiple PM domains
-> can't really be done in a generic way, as it becomes device/platform
-> specific. Since this needs to be managed by the drivers/buses anyway,
-> they might as well get control of what PM domain they need to power-on
-> to probe their devices.
+> But:
+>  - That function reuses topology_normalize_cpu_scale() and when called
+>    it needs to have capacity_ref_freq = 1. So either capacity_ref_freq
+>    needs to be set for each CPU after topology_normalize_cpu_scale() is
+>    called or we should not call topology_normalize_cpu_scale() here and
+>    just unpack a CPPC specific version of it in
+>    topology_init_cpu_capacity_cppc(). The latter is probably better as
+>    we avoid iterating through all CPUs a couple of times.
+>
+>  - When set, capacity_ref_freq needs to be a "frequency" (at least
+>    in reference to the reference frequencies provided by CPPC). So
+>    cppc_cpufreq_khz_to_perf() and cppc_cpufreq_perf_to_khz() would need
+>    to move to drivers/acpi/cppc_acpi.c. They don't have any dependency
+>    on cpufreq (policies) so that should be alright.
+>
+> topology_init_cpu_capacity_cppc() is a better place to set
+> capacity_ref_freq because one can do it for each CPU, and it not only
 
-Due to the above, it might be a good idea to power-on the SCMI
-*power-domains* during boot and leave them on to allow drivers to
-continue to probe their devices?
+I agree, topology_init_cpu_capacity_cppc() is the best place to set
+capacity_ref_freq()
 
-Maybe a module parameter or Kconfig debug option could be used to control this?
+> caters for the EAS case but also for frequency invariance, when
+> arch_set_freq_scale() is called, if no counters are supported.
+>
+> When counters are supported, there are still two loose threads:
+>  - amu_fie_setup(): Vincent, would you mind completely removing
+>    cpufreq_get_hw_max_freq() and reusing arch_scale_freq_ref() here?
 
-In this way an updated DTS with that adds a performance domain to a
-consumer device node (which already has a power-domain), should allow
-the consumer driver to continue to probe successfully.
+I wonder if we can have a ordering dependency problem as both
+init_cpu_capacity_notifier() and init_amu_fie_notifier() are
+registered for the same CPUFREQ_POLICY_NOTIFIER event and I'm not sure
+ it will happen in the right ordering
 
-Peng, would this resolve your concern?
+>
+>  - It would be nice if cppc_scale_freq_workfn() would use
+>    arch_scale_freq_ref() as well, for consistency. But it would need
+>    to be converted back to performance before use, so that would mean
+>    extra work on the tick, which is not ideal.
 
-Kind regards
-Uffe
+This once seems more complex as it implies other arch that are not
+using arch_topology.c and would need more rework so I would prefer to
+make it a separate patchset
+
+Thanks
+Vincent
+
+>
+> Basically it would be good if what gets used for capacity
+> (arch_scale_freq_ref()) gets used for frequency invariance as well,
+> in all locations.
+>
+> Thanks,
+> Ionela.
+>
+> > >
+> > > Also 'capacity_ref_freq' seems to be set only for 'policy->cpu'. I believe it should
+> > > be set for the whole perf domain in case this 'policy->cpu' goes offline.
+> > >
+> > > Another thing, related my comment to [1] and to [2], for CPPC the max capacity matches
+> > > the boosting frequency. We have:
+> > >    'non-boosted max capacity' < 'boosted max capacity'.
+> > > -
+> > > If boosting is not enabled, the CPU utilization can still go above the 'non-boosted max
+> > > capacity'. The overutilization of the system seems to be triggered by comparing the CPU
+> > > util to the 'boosted max capacity'. So systems might not be detected as overutilized.
+> >
+> > As Peter mentioned, we have to decide what is the original compute
+> > capacity of your CPUs which is usually the sustainable max compute
+> > capacity, especially when using EAS and EM
+> >
+> > >
+> > > For the EAS energy computation, em_cpu_energy() tries to predict the frequency that will
+> > > be used. It is currently unknown to the function that the frequency request will be
+> > > clamped by __resolve_freq():
+> > > get_next_freq()
+> > > \-cpufreq_driver_resolve_freq()
+> > >    \-__resolve_freq()
+> > > This means that the energy computation might use boosting frequencies, which are not
+> > > available.
+> > >
+> > > Regards,
+> > > Pierre
+> > >
+> > > [1]: [PATCH v2 4/6] cpufreq/schedutil: use a fixed reference frequency
+> > > [2]: https://lore.kernel.org/lkml/20230905113308.GF28319@noisy.programming.kicks-ass.net/
+> > >
+> > > > +}
+> > > > +
+> > > >   static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
+> > > >   {
+> > > >       struct cppc_cpudata *cpu_data;
+> > > > @@ -643,6 +658,9 @@ static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
+> > > >               EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
+> > > >
+> > > >       cpu_data = policy->driver_data;
+> > > > +
+> > > > +     cppc_cpufreq_set_capacity_ref_freq(policy);
+> > > > +
+> > > >       em_dev_register_perf_domain(get_cpu_device(policy->cpu),
+> > > >                       get_perf_level_count(policy), &em_cb,
+> > > >                       cpu_data->shared_cpu_map, 0);
