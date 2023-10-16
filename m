@@ -2,189 +2,195 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C3227CA7A5
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 14:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF5B97CA7C7
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 14:13:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233370AbjJPMEQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Oct 2023 08:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32878 "EHLO
+        id S230209AbjJPMND (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Oct 2023 08:13:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjJPMEP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 08:04:15 -0400
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF6DE6
-        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 05:04:13 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1qsMK9-0004KA-HN; Mon, 16 Oct 2023 14:03:53 +0200
-Received: from [2a0a:edc0:2:b01:1d::c0] (helo=ptx.whiteo.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1qsMK7-0024Zf-Fz; Mon, 16 Oct 2023 14:03:51 +0200
-Received: from sha by ptx.whiteo.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1qsMK7-00EjhX-D1; Mon, 16 Oct 2023 14:03:51 +0200
-Date:   Mon, 16 Oct 2023 14:03:51 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Chanwoo Choi <chanwoo@kernel.org>
-Cc:     linux-rockchip@lists.infradead.org,
+        with ESMTP id S229621AbjJPMNC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 08:13:02 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7CB0AC;
+        Mon, 16 Oct 2023 05:13:00 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0070E1FB;
+        Mon, 16 Oct 2023 05:13:41 -0700 (PDT)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.78.69])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 18F683F5A1;
+        Mon, 16 Oct 2023 05:13:00 -0700 (PDT)
+Date:   Mon, 16 Oct 2023 13:12:58 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Pierre Gondois <pierre.gondois@arm.com>, linux@armlinux.org.uk,
+        catalin.marinas@arm.com, will@kernel.org, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, sudeep.holla@arm.com,
+        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        viresh.kumar@linaro.org, lukasz.luba@arm.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Vincent Legoll <vincent.legoll@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: Re: [PATCH v7 09/26] PM / devfreq: rockchip-dfi: Clean up DDR type
- register defines
-Message-ID: <20231016120351.GA3359458@pengutronix.de>
-References: <20230704093242.583575-1-s.hauer@pengutronix.de>
- <20230704093242.583575-10-s.hauer@pengutronix.de>
- <1eaa8d5b-af6b-71bb-df7a-d438b483f5bb@kernel.org>
+        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
+        conor.dooley@microchip.com, suagrfillet@gmail.com,
+        ajones@ventanamicro.com, lftan@kernel.org
+Subject: Re: [PATCH v2 6/6] cpufreq/cppc: set the frequency used for capacity
+ computation
+Message-ID: <ZS0oyhbVDtXO1p5b@arm.com>
+References: <20231009103621.374412-7-vincent.guittot@linaro.org>
+ <ac8968b9-8463-4aa2-a38d-fc2b9137460d@arm.com>
+ <CAKfTPtBhXRk_Y-xiHn9_jQ1C_ALzbr3-KdwzcTCyupzJ4Gru5g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1eaa8d5b-af6b-71bb-df7a-d438b483f5bb@kernel.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAKfTPtBhXRk_Y-xiHn9_jQ1C_ALzbr3-KdwzcTCyupzJ4Gru5g@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Oct 07, 2023 at 04:11:22AM +0900, Chanwoo Choi wrote:
-> On 23. 7. 4. 18:32, Sascha Hauer wrote:
-> > Use the HIWORD_UPDATE() define known from other rockchip drivers to
-> > make the defines look less odd to the readers who've seen other
-> > rockchip drivers.
-> > 
-> > The HIWORD registers have their functional bits in the lower 16 bits
-> > whereas the upper 16 bits contain a mask. Only the functional bits that
-> > have the corresponding mask bit set are modified during a write. Although
-> > the register writes look different, the end result should be the same,
-> > at least there's no functional change intended with this patch.
-> > 
-> > Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> > ---
-> >  drivers/devfreq/event/rockchip-dfi.c | 33 ++++++++++++++++++----------
-> >  1 file changed, 21 insertions(+), 12 deletions(-)
-> > 
-> > diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event/rockchip-dfi.c
-> > index 6bccb6fbcfc0c..6b3ef97b3be09 100644
-> > --- a/drivers/devfreq/event/rockchip-dfi.c
-> > +++ b/drivers/devfreq/event/rockchip-dfi.c
-> > @@ -26,15 +26,19 @@
-> >  
-> >  #define DMC_MAX_CHANNELS	2
-> >  
-> > +#define HIWORD_UPDATE(val, mask)	((val) | (mask) << 16)
-> > +
-> >  /* DDRMON_CTRL */
-> >  #define DDRMON_CTRL	0x04
-> > -#define CLR_DDRMON_CTRL	(0x1f0000 << 0)
-> > -#define LPDDR4_EN	(0x10001 << 4)
-> > -#define HARDWARE_EN	(0x10001 << 3)
-> > -#define LPDDR3_EN	(0x10001 << 2)
-> > -#define SOFTWARE_EN	(0x10001 << 1)
-> > -#define SOFTWARE_DIS	(0x10000 << 1)
-> > -#define TIME_CNT_EN	(0x10001 << 0)
-> > +#define DDRMON_CTRL_DDR4		BIT(5)
-> > +#define DDRMON_CTRL_LPDDR4		BIT(4)
-> > +#define DDRMON_CTRL_HARDWARE_EN		BIT(3)
-> > +#define DDRMON_CTRL_LPDDR23		BIT(2)
-> > +#define DDRMON_CTRL_SOFTWARE_EN		BIT(1)
-> > +#define DDRMON_CTRL_TIMER_CNT_EN	BIT(0)
-> > +#define DDRMON_CTRL_DDR_TYPE_MASK	(DDRMON_CTRL_DDR4 | \
-> > +					 DDRMON_CTRL_LPDDR4 | \
-> > +					 DDRMON_CTRL_LPDDR23)
-> >  
-> >  #define DDRMON_CH0_COUNT_NUM		0x28
-> >  #define DDRMON_CH0_DFI_ACCESS_NUM	0x2c
-> > @@ -73,16 +77,20 @@ static void rockchip_dfi_start_hardware_counter(struct devfreq_event_dev *edev)
-> >  	void __iomem *dfi_regs = dfi->regs;
-> >  
-> >  	/* clear DDRMON_CTRL setting */
-> > -	writel_relaxed(CLR_DDRMON_CTRL, dfi_regs + DDRMON_CTRL);
-> > +	writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_TIMER_CNT_EN | DDRMON_CTRL_SOFTWARE_EN |
-> > +		       DDRMON_CTRL_HARDWARE_EN), dfi_regs + DDRMON_CTRL);
+Hi both,
+
+On Wednesday 11 Oct 2023 at 16:25:46 (+0200), Vincent Guittot wrote:
+> On Wed, 11 Oct 2023 at 12:27, Pierre Gondois <pierre.gondois@arm.com> wrote:
+> >
+> > Hello Vincent,
+> >
+> > On 10/9/23 12:36, Vincent Guittot wrote:
+> > > cppc cpufreq driver can register an artificial energy model. In such case,
+> > > it also have to register the frequency that is used to define the CPU
+> > > capacity
+> > >
+> > > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> > > ---
+> > >   drivers/cpufreq/cppc_cpufreq.c | 18 ++++++++++++++++++
+> > >   1 file changed, 18 insertions(+)
+> > >
+> > > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> > > index fe08ca419b3d..24c6ba349f01 100644
+> > > --- a/drivers/cpufreq/cppc_cpufreq.c
+> > > +++ b/drivers/cpufreq/cppc_cpufreq.c
+> > > @@ -636,6 +636,21 @@ static int populate_efficiency_class(void)
+> > >       return 0;
+> > >   }
+> > >
+> > > +
+> > > +static void cppc_cpufreq_set_capacity_ref_freq(struct cpufreq_policy *policy)
+> > > +{
+> > > +     struct cppc_perf_caps *perf_caps;
+> > > +     struct cppc_cpudata *cpu_data;
+> > > +     unsigned int ref_freq;
+> > > +
+> > > +     cpu_data = policy->driver_data;
+> > > +     perf_caps = &cpu_data->perf_caps;
+> > > +
+> > > +     ref_freq = cppc_cpufreq_perf_to_khz(cpu_data, perf_caps->highest_perf);
+> > > +
+> > > +     per_cpu(capacity_ref_freq, policy->cpu) = ref_freq;
+> >
+> > 'capacity_ref_freq' seems to be updated only if CONFIG_ENERGY_MODEL is set. However in
+> > [1], get_capacity_ref_freq() relies on 'capacity_ref_freq'. The cpufreq_schedutil governor
+> > should have a valid 'capacity_ref_freq' value set if the CPPC cpufreq driver is used
+> > without energy model I believe.
 > 
-> You mentioned that there are no behavior changes even if the different value is written.
-> But, it looks strange. Could you please explain more detailed about it?
-
-Many registers on Rockchip SoCs are effectively only 16 bits wide. The
-lower 16 bits are the functional bits. The upper 16 bits contain a mask
-value. The lower 16 bits are only modified when the coresponding bit in
-the upper 16bits is set.
-
-For example writing 0x0001dead has the same effect as writing
-0x00010001: The lower bit is set, the remaining are unchanged due to the
-mask value being 0.
-
+> we can disable it by setting capacity_ref_freq to 0 so it will
+> fallback on cpuinfo like intel and amd which uses default
+> SCHED_CAPACITY_SCALE capacity
 > 
+> Could you provide me with more details about your platform ? I still
+> try to understand how the cpu compute capacity is set up on your
+> system. How do you set per_cpu cpu_scale variable ? we should set the
+> ref freq at the same time
 > 
-> CLR_DDRMON_CTRL is 0x1f0000
 
-This clears the lower 5 bits.
+Yes, the best place to set it would be in:
+drivers/base/arch_topology.c: topology_init_cpu_capacity_cppc()
 
-> vs.
-> HIWORD_UPDATE(0, DDRMON_CTRL_TIMER_CNT_EN | DDRMON_CTRL_SOFTWARE_EN | DDRMON_CTRL_HARDWARE_EN) = (0 | (BIT(0)|BIT(1)|BIT(3))<<16) = 0xb0000
+But:
+ - That function reuses topology_normalize_cpu_scale() and when called
+   it needs to have capacity_ref_freq = 1. So either capacity_ref_freq
+   needs to be set for each CPU after topology_normalize_cpu_scale() is
+   called or we should not call topology_normalize_cpu_scale() here and
+   just unpack a CPPC specific version of it in
+   topology_init_cpu_capacity_cppc(). The latter is probably better as
+   we avoid iterating through all CPUs a couple of times.
 
-This clears BIT(0), BIT(1) and BIT(3), so it clears:
+ - When set, capacity_ref_freq needs to be a "frequency" (at least
+   in reference to the reference frequencies provided by CPPC). So 
+   cppc_cpufreq_khz_to_perf() and cppc_cpufreq_perf_to_khz() would need
+   to move to drivers/acpi/cppc_acpi.c. They don't have any dependency
+   on cpufreq (policies) so that should be alright.
 
-DDRMON_CTRL_TIMER_CNT_EN, DDRMON_CTRL_SOFTWARE_EN and DDRMON_CTRL_HARDWARE_EN.
+topology_init_cpu_capacity_cppc() is a better place to set
+capacity_ref_freq because one can do it for each CPU, and it not only
+caters for the EAS case but also for frequency invariance, when
+arch_set_freq_scale() is called, if no counters are supported.
 
-In fact it doesn't clear DDRMON_CTRL_LPDDR23 and DDRMON_CTRL_LPDDR4 like
-the operation with CLR_DDRMON_CTRL does, but the LPDDR type bits are
-handled below:
+When counters are supported, there are still two loose threads:
+ - amu_fie_setup(): Vincent, would you mind completely removing
+   cpufreq_get_hw_max_freq() and reusing arch_scale_freq_ref() here?
 
-> 			
-> >  
-> >  	/* set ddr type to dfi */
-> >  	if (dfi->ddr_type == ROCKCHIP_DDRTYPE_LPDDR3)
-> > -		writel_relaxed(LPDDR3_EN, dfi_regs + DDRMON_CTRL);
-> > +		writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_LPDDR23, DDRMON_CTRL_DDR_TYPE_MASK),
-> > +			       dfi_regs + DDRMON_CTRL);
+ - It would be nice if cppc_scale_freq_workfn() would use
+   arch_scale_freq_ref() as well, for consistency. But it would need
+   to be converted back to performance before use, so that would mean
+   extra work on the tick, which is not ideal.
+
+Basically it would be good if what gets used for capacity
+(arch_scale_freq_ref()) gets used for frequency invariance as well,
+in all locations.
+
+Thanks,
+Ionela.
+
+> >
+> > Also 'capacity_ref_freq' seems to be set only for 'policy->cpu'. I believe it should
+> > be set for the whole perf domain in case this 'policy->cpu' goes offline.
+> >
+> > Another thing, related my comment to [1] and to [2], for CPPC the max capacity matches
+> > the boosting frequency. We have:
+> >    'non-boosted max capacity' < 'boosted max capacity'.
+> > -
+> > If boosting is not enabled, the CPU utilization can still go above the 'non-boosted max
+> > capacity'. The overutilization of the system seems to be triggered by comparing the CPU
+> > util to the 'boosted max capacity'. So systems might not be detected as overutilized.
 > 
-> LPDDR3_EN	(0x10001 << 2) = 0x40004
-
-This sets BIT(2) aka DDRMON_CTRL_LPDDR23
-
-> vs.
-> HIWORD_UPDATE(DDRMON_CTRL_LPDDR23, DDRMON_CTRL_DDR_TYPE_MASK) = (BIT(2) | (BIT(5)|BIT(4)|BIT(2))<<16) = 0x340004
-
-This sets BIT(2) and *clears* BIT(4) (DDRMON_CTRL_LPDDR4) and BIT(5)
-(DDRMON_CTRL_DDR4). So effectively we no longer clear BIT(4) in the
-first register access as we do with CLR_DDRMON_CTRL, but in the second
-register access instead.
-
-This also clears BIT(5) which was untouched previously, but this bit had
-never been set by the driver, so should be 0 anyway.
-
-Sascha
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+> As Peter mentioned, we have to decide what is the original compute
+> capacity of your CPUs which is usually the sustainable max compute
+> capacity, especially when using EAS and EM
+> 
+> >
+> > For the EAS energy computation, em_cpu_energy() tries to predict the frequency that will
+> > be used. It is currently unknown to the function that the frequency request will be
+> > clamped by __resolve_freq():
+> > get_next_freq()
+> > \-cpufreq_driver_resolve_freq()
+> >    \-__resolve_freq()
+> > This means that the energy computation might use boosting frequencies, which are not
+> > available.
+> >
+> > Regards,
+> > Pierre
+> >
+> > [1]: [PATCH v2 4/6] cpufreq/schedutil: use a fixed reference frequency
+> > [2]: https://lore.kernel.org/lkml/20230905113308.GF28319@noisy.programming.kicks-ass.net/
+> >
+> > > +}
+> > > +
+> > >   static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
+> > >   {
+> > >       struct cppc_cpudata *cpu_data;
+> > > @@ -643,6 +658,9 @@ static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
+> > >               EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
+> > >
+> > >       cpu_data = policy->driver_data;
+> > > +
+> > > +     cppc_cpufreq_set_capacity_ref_freq(policy);
+> > > +
+> > >       em_dev_register_perf_domain(get_cpu_device(policy->cpu),
+> > >                       get_perf_level_count(policy), &em_cb,
+> > >                       cpu_data->shared_cpu_map, 0);
