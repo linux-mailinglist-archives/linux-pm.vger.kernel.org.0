@@ -2,106 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 277787CA62D
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 12:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEFA87CA63F
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Oct 2023 13:05:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232903AbjJPK7V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Oct 2023 06:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60004 "EHLO
+        id S232836AbjJPLF4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Oct 2023 07:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbjJPK7U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 06:59:20 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C2795;
-        Mon, 16 Oct 2023 03:59:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=P5ifjwAGWvwt8UdPAGRFDaEieTTOaEIZSTQ8cKCMbcA=; b=cs7JmvWNb3ISfTeRVqrLDJ3hb6
-        4ejwBMKbJkO52e9dcJ0rJy3p6TH/1AcjMnL3vbVyA3AT3LgrwqkXMvgecAumcGpwX92Nrq7hlN8eY
-        xRX9RPg6sT8dmS172NUE3cZRZk0ldfrB74gOYnO3otY0BZYHEocfAtWm18AWU+zKy4pSzNszJJ7/4
-        5oVtl1bL+1sSPuDZmzmsLkrkKbm6QR27dHMPH0Vo27gdhhJ1DSVzYQ+7KIGcttZQ0pgdlsy9kA/lz
-        IExW1dYrYUX+pblYqRwDdd0hDvaunDI1tg7W6TsWAVi3oLqE/4scNTbUWWk1Oka/KccmsJ68uIcqq
-        9xfrY0Aw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qsLJ6-005woe-0M;
-        Mon, 16 Oct 2023 10:58:47 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 39C6B3005AA; Mon, 16 Oct 2023 12:58:45 +0200 (CEST)
-Date:   Mon, 16 Oct 2023 12:58:45 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Meng, Li (Jassmine)" <Li.Meng@amd.com>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        "Huang, Ray" <Ray.Huang@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        "Karny, Wyes" <Wyes.Karny@amd.com>
-Subject: Re: [RESEND PATCH V9 3/7] cpufreq: amd-pstate: Enable amd-pstate
- preferred core supporting.
-Message-ID: <20231016105845.GA33217@noisy.programming.kicks-ass.net>
-References: <20231013033118.3759311-1-li.meng@amd.com>
- <20231013033118.3759311-4-li.meng@amd.com>
- <20231013160128.GB36211@noisy.programming.kicks-ass.net>
- <DM4PR12MB6351E2E9504B57BD40DAE985F7D7A@DM4PR12MB6351.namprd12.prod.outlook.com>
+        with ESMTP id S231971AbjJPLFz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Oct 2023 07:05:55 -0400
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C4283
+        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 04:05:53 -0700 (PDT)
+Received: by mail-oo1-xc30.google.com with SMTP id 006d021491bc7-57e40f0189aso2322765eaf.1
+        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 04:05:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1697454352; x=1698059152; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=ENcxuEdqZVuHuNDeDYTthdY6xmNNsGtNg5YaX8ZazDQ=;
+        b=cFgh+VX4DhDYzJBGsLAX9TU3y0SP5eQ24iuoTia4F8gfCDz6X6a5sbIJECgKXF6jUZ
+         v8OA3HgBNrA7El+pL5QkP8XmoFEWYrLFyDjjkz2FeM13vsk/j/sAccFpSyLeEh5WJQQQ
+         AFIE9uhNt9eboGtYpJhRjH2qVTGbGcpzG4ySt7rCTNVZgSfLgrn4pgXuvBz9m6FNG1wx
+         moKDMxOPcGQR6+KZUxN2RHFomC51swVIaHEeyGCSQwQmbIxmTxfjCOR7jDdEKlGVRDL6
+         A5bbhlbFks42b8yQipv54A7IAg8LGYCUWWkN1qkgDR+mRI5+1sfweNoL/MiGqRBXlTSQ
+         EA9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697454352; x=1698059152;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ENcxuEdqZVuHuNDeDYTthdY6xmNNsGtNg5YaX8ZazDQ=;
+        b=l4YLt0Pymxb4iEsJWX5/XQu9fFUukO5aSK2Ld0Qq8N3TQ5fU7z0PehDD68Vy1QmJOM
+         QQe9HlakOF+TL/x1cdWT+sig/aPHJ8yfGMxR/6HnERTsHjSmtkMaQbRWKWPxFMFpEuSR
+         AWB/UNYpFpUSNhj4+AAjIfxFUnV87/IAsr9YBJ1DznIFU3QOHkGw9EWpJICjRaIxbSbm
+         RcOiyuZomcCl57Qy7MmLYg+306m7cyeG+kMx35pvzB3jJSGrJK1z2NbyKSNAMU1ouxKS
+         f/l7BUgA/FN1vpgsB6SYB35HB9hOVo68Toc81KxZ6ZL4D2Z4EBo+SPAiN/L4NuWYXEt1
+         1VwA==
+X-Gm-Message-State: AOJu0Yw9NIorCYXvfC+1Kn+3Qq04ryLYa9LuEWGJuyciy3tF+x8thVln
+        xhc/9a3Mj8NJUP5ssWiyxW+kw/XCqGpiB+HKR4+RNQ==
+X-Google-Smtp-Source: AGHT+IE8yH8rwPuP0cEyrr7N70+IUDtE4HlzQOnkEl7MiOIwf49RZvIyXjVC8L4xAyCspU2cXFbOdA==
+X-Received: by 2002:a05:6358:785:b0:143:82e0:8cbc with SMTP id n5-20020a056358078500b0014382e08cbcmr40728175rwj.1.1697454352565;
+        Mon, 16 Oct 2023 04:05:52 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id l8-20020a63be08000000b00588e8421fa8sm6667529pgf.84.2023.10.16.04.05.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Oct 2023 04:05:51 -0700 (PDT)
+Message-ID: <652d190f.630a0220.59c80.1ece@mx.google.com>
+Date:   Mon, 16 Oct 2023 04:05:51 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM4PR12MB6351E2E9504B57BD40DAE985F7D7A@DM4PR12MB6351.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.6-rc6-156-g701ff0817fdda
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.6-rc6-156-g701ff0817fdda)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 16, 2023 at 06:20:53AM +0000, Meng, Li (Jassmine) wrote:
-> > > +static void amd_pstate_init_prefcore(struct amd_cpudata *cpudata) {
-> > > +     int ret, prio;
-> > > +     u32 highest_perf;
-> > > +     static u32 max_highest_perf = 0, min_highest_perf = U32_MAX;
-> >
-> > What serializes these things?
-> >
-> > Also, *why* are you using u32 here, what's wrong with something like:
-> >
-> >         int max_hp = INT_MIN, min_hp = INT_MAX;
-> >
-> [Meng, Li (Jassmine)]
-> We use ITMT architecture to utilize preferred core features.
-> Therefore, we need to try to be consistent with Intel's implementation
-> as much as possible.  For details, please refer to the
-> intel_pstate_set_itmt_prio function in file intel_pstate.c. (Line 355)
-> 
-> I think using the data type of u32 is consistent with the data
-> structures of cppc_perf_ctrls and amd_cpudata etc.
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.6-rc6-156-g7=
+01ff0817fdda)
 
-Rafael, should we fix intel_pstate too?
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+6-rc6-156-g701ff0817fdda/
 
-The point is, that sched_asym_prefer(), the final consumer of these
-values uses int and thus an explicitly signed compare.
+Tree: pm
+Branch: testing
+Git Describe: v6.6-rc6-156-g701ff0817fdda
+Git Commit: 701ff0817fdda8d4fc8de43d1a314958273b3b33
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-Using u32 and U32_MAX anywhere near the setting the priority makes
-absolutely no sense.
+Warnings Detected:
 
-If you were to have the high bit set, things do not behave as expected.
+arc:
 
-Also, same question as to the amd folks; what serializes those static
-variables?
+arm64:
+
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
