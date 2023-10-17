@@ -2,116 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B9297CC093
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Oct 2023 12:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 628167CC0A7
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Oct 2023 12:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343576AbjJQKUM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Oct 2023 06:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
+        id S234994AbjJQK0c convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 17 Oct 2023 06:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343725AbjJQKT6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Oct 2023 06:19:58 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F8A19D
-        for <linux-pm@vger.kernel.org>; Tue, 17 Oct 2023 03:18:30 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-d9ac43d3b71so5832359276.0
-        for <linux-pm@vger.kernel.org>; Tue, 17 Oct 2023 03:18:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697537910; x=1698142710; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9ktWaOruBUJv9gHaQQ46lfwZNwa4X3oOXCjZ7LwABmo=;
-        b=gzMtPyuB+LwFGeSyBAWQwDMfYZHYp86HOTVNiZRziQqyMmJCoyacdpIBYNUOwxtUPs
-         Z7+CjC3gT9kF2mxGKO40ApJdF27iyKUpYD57qFv780w1q2YIMQ2NJtAvrGh2lg7+Pr7u
-         wZTLekOtqdyN+8rYDhjkFMRUvN4f7YKlaRbmUXmBjx7mv1vTU7mOMhecwy//ffxNm0QU
-         +HxYwSLUDrnltKltG3GB5aHDrJ06GTAKrWawKYnLqs6lqOgnGEuQL8bReTq/3S30EIru
-         D+em4k1kvOXFPAyLrYsPBJTRddWkEbV3xUmf99G8WTbA1pNGv0rPGxl9goh6JykekIEK
-         gI1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697537910; x=1698142710;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9ktWaOruBUJv9gHaQQ46lfwZNwa4X3oOXCjZ7LwABmo=;
-        b=Pu4v0m3XzlToVnSxPXK+fwEW1xAsTDHH7b32X7RBM3EI11PHIh1KrRxjpI5I1D0uVS
-         pzeOU6dOAiZ0Vh0q0LdNWYw3dSSwI7skmewJuT8hamfkN3wf99pKTrSAgwi/q3vZCa9l
-         TmPUpofVn6Ep3UZz/GoCCfv5GNPvSFahuTkn9t1NpMgTSGuO5zxzU0vbp+ILShmI44Oe
-         enMGOIPwMKwHEf/k+T/SOyg12rLDTZrIBJOUFEI68aeNbNzY+w24NT/b/ioXBQXAVIM8
-         ORoqxcxDOuHEkyWE0YLU7BgKD7FfQB99DmjLPTTrHgeTPLPRNa8Y5wwBAVdz1PKdBMYr
-         BBFg==
-X-Gm-Message-State: AOJu0YxsNXXL4PryHAhSs/3qopc1gF4dfbh4W1RTl+RmNtqXRRZkWlWC
-        4OBJsVHDOYg+Ny/MS84O4YhKJf8KdKfHJg16dqUz1g==
-X-Google-Smtp-Source: AGHT+IHWurbz2txUr20HWYPC5aUPeESgl0nAZwOmo0bsLoG2ZVNauyqa5WyOCHDyT5Gabd/QnoSvk/5H3QV3o7/prL0=
-X-Received: by 2002:a25:4155:0:b0:d7f:d6a7:d57d with SMTP id
- o82-20020a254155000000b00d7fd6a7d57dmr1464515yba.27.1697537910046; Tue, 17
- Oct 2023 03:18:30 -0700 (PDT)
+        with ESMTP id S234997AbjJQK0R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Oct 2023 06:26:17 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E7D120;
+        Tue, 17 Oct 2023 03:26:13 -0700 (PDT)
+X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 39HAPeE724097804, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.93/5.92) with ESMTPS id 39HAPeE724097804
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 17 Oct 2023 18:25:40 +0800
+Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Tue, 17 Oct 2023 18:25:39 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 17 Oct 2023 18:25:39 +0800
+Received: from RTEXMBS01.realtek.com.tw ([fe80::9cb8:8d5:b6b3:213b]) by
+ RTEXMBS01.realtek.com.tw ([fe80::9cb8:8d5:b6b3:213b%5]) with mapi id
+ 15.01.2375.007; Tue, 17 Oct 2023 18:25:39 +0800
+From:   Ricky WU <ricky_wu@realtek.com>
+To:     Lukas Wunner <lukas@wunner.de>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+CC:     "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: RE: [PATCH] PCI: pciehp: Prevent child devices from doing RPM on PCIe Link Down
+Thread-Topic: [PATCH] PCI: pciehp: Prevent child devices from doing RPM on
+ PCIe Link Down
+Thread-Index: AQHZ/+WX29Sx+yjN7keHtkFSV38Z/LBLoV4AgAIjnlA=
+Date:   Tue, 17 Oct 2023 10:25:39 +0000
+Message-ID: <263982e90fc046cf977ecb8727003690@realtek.com>
+References: <20231016040132.23824-1-kai.heng.feng@canonical.com>
+ <20231016093210.GA22952@wunner.de>
+In-Reply-To: <20231016093210.GA22952@wunner.de>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+x-originating-ip: [172.22.81.100]
+x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-References: <20231012132214.257207-1-emkan@prevas.dk> <CAGETcx9mUVzERc8Uf3FWYtMv+RZyNgvjm1oOtQZq6yN4_3Bp8Q@mail.gmail.com>
- <CAPDyKFrjtZH-yHu9od7bAA69=AdUHmsFr-amhhW70JLCKZGH5g@mail.gmail.com> <hhx2tqxmgrjbhz2wnhozffpcq63spuli4mrensvbnmilrvbh2d@6qo444ddawc2>
-In-Reply-To: <hhx2tqxmgrjbhz2wnhozffpcq63spuli4mrensvbnmilrvbh2d@6qo444ddawc2>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 17 Oct 2023 12:17:54 +0200
-Message-ID: <CAPDyKFrSzepC0c7-XGeGcHSsfpEGpF0a9ATGpemxvcc8mtL86g@mail.gmail.com>
-Subject: Re: [PATCH] pmdomain: imx: gpc: set fwnode from parent device
-To:     Saravana Kannan <saravanak@google.com>,
-        Emil Kronborg Andersen <emkan@prevas.dk>
-Cc:     linux-pm@vger.kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 17 Oct 2023 at 10:00, Emil Kronborg Andersen <emkan@prevas.dk> wrote:
->
-> Hi Ulf,
->
-> On Mon, Oct 16, 2023 at 11:53 +0200, Ulf Hansson wrote:
-> > Unfortunately, it's not that easy. It's not required by
-> > pm_genpd_init() (or of_genpd_add_provider_*) to use a struct *device
-> > when registering a genpd provider. In fact, that's also the reason why
-> > pm_genpd_init() needs to initialize its own struct device.
->
-> Do you see any way to do it properly at pmdomain level instead, or is
-> that not feasible? I agree with Saravana that a centralized solution,
-> akin to what was implemented for tty devices in commit 1a5ecc73b2bf
-> ("serdev: Set fwnode for serdev devices"), would be ideal. However, I
-> was not able to find other reports or patches of problems regarding
-> fw_devlink at pmdomain level, so it might not be a general problem here,
-> and fixes per driver might be okay in this case?
+> On Mon, Oct 16, 2023 at 12:01:31PM +0800, Kai-Heng Feng wrote:
+> > When inserting an SD7.0 card to Realtek card reader, it can trigger
+> > PCI slot Link down and causes the following error:
+> 
+> Why does *inserting* a card cause a Link Down?
+> 
+> 
+> > [   63.898861] pcieport 0000:00:1c.0: pciehp: Slot(8): Link Down
+> > [   63.912118] BUG: unable to handle page fault for address:
+> ffffb24d403e5010
+> [...]
+> > [   63.912198]  ? asm_exc_page_fault+0x27/0x30
+> > [   63.912203]  ? ioread32+0x2e/0x70
+> > [   63.912206]  ? rtsx_pci_write_register+0x5b/0x90 [rtsx_pci]
+> > [   63.912217]  rtsx_set_l1off_sub+0x1c/0x30 [rtsx_pci]
+> > [   63.912226]  rts5261_set_l1off_cfg_sub_d0+0x36/0x40 [rtsx_pci]
+> > [   63.912234]  rtsx_pci_runtime_idle+0xc7/0x160 [rtsx_pci]
+> > [   63.912243]  ? __pfx_pci_pm_runtime_idle+0x10/0x10
+> > [   63.912246]  pci_pm_runtime_idle+0x34/0x70
+> > [   63.912248]  rpm_idle+0xc4/0x2b0
+> > [   63.912251]  pm_runtime_work+0x93/0xc0
+> > [   63.912254]  process_one_work+0x21a/0x430
+> > [   63.912258]  worker_thread+0x4a/0x3c0
+> 
+> This looks like pcr->remap_addr is accessed after it has been iounmap'ed in
+> rtsx_pci_remove() or before it has been iomap'ed in rtsx_pci_probe().
+> 
+> Is the card reader itself located below a hotplug port and unplugged here?
 
-Sure, we could fix it though a centralized solution, but it requires
-us to patch each and every genpd provider driver too. At this point I
-would therefore say, let's just fix it for those that need it.
+Yes it is card reader unplug itself, because sd7.0 card is not used rtsx_pcr, it use nvme driver 
 
->
-> > That said, can you please explain the special condition that caused
-> > this thing to be needed in the first place?
->
-> I noticed this issue when I updated from 5.15.93 to 6.1.37. Except for
-> the commit I bisected, i.e., 3fb16866b51d ("driver core: fw_devlink:
-> Make cycle detection more robust"), I found that the issue was
-> introduced somewhere between 6.1.16 and 6.1.15. Here, some commits
-> regarding fw_devlink was backported, which might be relevant:
->
-> $ git log --oneline v6.1.15..v6.1.16 -- drivers/base/core.c | grep fw_devlink
-> 11d93294b7c3 driver core: fw_devlink: Avoid spurious error message
-> 3dd596616d10 driver core: fw_devlink: Make cycle detection more robust
-> a3c171751512 driver core: fw_devlink: Improve check for fwnode with no device/driver
-> 7a8ce4d2fbbc driver core: fw_devlink: Consolidate device link flag computation
-> 16aa2487cf15 driver core: fw_devlink: Allow marking a fwnode link as being part of a cycle
-> eaf9b5612a47 driver core: fw_devlink: Don't purge child fwnode's consumer links
-> 2455b81afe68 driver core: fw_devlink: Add DL_FLAG_CYCLE support to device links
+Ricky
 
-Thanks for sharing the commits. I haven't looked much closer to them,
-but maybe Saravana has some ideas about whether this potentially can
-be fixed in the fw_devlink parsing instead?
-
-Kind regards
-Uffe
+> Or is this about the card being removed from the card reader?
+> 
+> Having full dmesg output and lspci -vvv output attached to a bugzilla would
+> help to understand what is going on.
+> 
+> Thanks,
+> 
+> Lukas
