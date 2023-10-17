@@ -2,135 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B1207CB9C4
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Oct 2023 06:35:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 138B07CB9D7
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Oct 2023 06:53:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233654AbjJQEfj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Oct 2023 00:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60524 "EHLO
+        id S234341AbjJQEw7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Oct 2023 00:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234097AbjJQEfg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Oct 2023 00:35:36 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74173B0
-        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 21:35:34 -0700 (PDT)
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C1DFC3F63D
-        for <linux-pm@vger.kernel.org>; Tue, 17 Oct 2023 04:35:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1697517331;
-        bh=iKSzw0H7imvFnQsSbXS4s9q/+KmLgFfqqX5RqZH9/7g=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=mXWxCtu4VYDoH0Y4rZGGzv+kiJ3a77Uo1RPh3iMH1RNzEFijCF/WzKQYi6gvQyMwo
-         eR9KEr2c+t2RhS7xYclxh6H3s9UnQL6zfPAo8eMheEjrYb/QObYI74jl5JNg27CBAl
-         bC903xQYCNB7rQXtUArBfa11NIe+iIk9UYeZKiZVhJJcnYhzZ+BiLzgfBVEsKEM5LH
-         6dHFRLpzcMONViZ20lz1ecTI8JaZJSgu0P3DV8DWVkogH/NCmPp68a7e19MudzBNGF
-         DDmX9SI6DKUmKMgZJ3RYM3tBH8Z27iVAu0HitJAUZXG3ygA3WvuqBTR0Krp8t6HFYr
-         gfIRKhhygNglA==
-Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-6927a39c466so4014361b3a.0
-        for <linux-pm@vger.kernel.org>; Mon, 16 Oct 2023 21:35:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697517330; x=1698122130;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iKSzw0H7imvFnQsSbXS4s9q/+KmLgFfqqX5RqZH9/7g=;
-        b=aW4djXAm0L6p784Afofrwf0O5q+Sfpd+NXisaQo2zrFGZGvUFyZYqrEg1S679Fz4Ao
-         9o9BybWZpcspNmyocDwn7VHLxPUuy6/GOdZn8ZjATJhiY+643EU6Gziw/K2mDXr2Z2qv
-         WD37qNp+2Hw5gh/wKMAy2B0JmyM+JoOrMRQXJKt4JGnO0l9pCqBCWbKPkQ1VkSKXNX6Y
-         3rCgCCZAMNgXlZrR72Ww9///EI1hvwUqNTuVSl5IpP7GBvAGnThu6yKL/pdZuPI2QW2b
-         D8+4kHnF5sgLUOJ/FfgV1kxT1PavJKGt9GQtCsw3Ev0ke1aBrIS2lOoUD06GyX+f3Vyq
-         guog==
-X-Gm-Message-State: AOJu0YwCh5IC7lYor3yTLtEzqhhnLimO6QVoHLr0IAZJway2m8MdnCG/
-        xcDA0iJWxrIbJSD8OhwxPM4JFIdKjdliZuAajjxgX4V57dJEhppptwNYPDFL2EPjoipbFCxL0Rj
-        luhdkgqtxC067kLkAeQGOSlGcrTEDM3vYTlRhmxOJx7pByEMAOR/x
-X-Received: by 2002:a05:6a20:748d:b0:13f:1622:29de with SMTP id p13-20020a056a20748d00b0013f162229demr1084703pzd.7.1697517330285;
-        Mon, 16 Oct 2023 21:35:30 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGFLDvl8FYUD59smCq9rBmVwBQHVhTMqWbcNJ5kiwZ/K6MdL50lc1s9Gp+P/vxymrzoENEc8vjZITD/t6KXXlM=
-X-Received: by 2002:a05:6a20:748d:b0:13f:1622:29de with SMTP id
- p13-20020a056a20748d00b0013f162229demr1084694pzd.7.1697517329969; Mon, 16 Oct
- 2023 21:35:29 -0700 (PDT)
+        with ESMTP id S232228AbjJQEw6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Oct 2023 00:52:58 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE4FA2;
+        Mon, 16 Oct 2023 21:52:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697518376; x=1729054376;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aDjfjftiY1bEitGKNGlzv06DZeVXN5zC6ddC0dUDzPw=;
+  b=iVnB0FgLqwq+64fUCV6oOvw5697Io/XIZfzXpD6OuTiOfqp7wSWrFrLH
+   gw9lqqvWgffJwV8ASWdR7+/ijSsMx3TGsJkuDr8fzaMaukIjV47qS7hnv
+   UUutDXhKooOjEVRU2Du8YIVT51eLVo1wbw0vApNr32M0fRgXXZHSFtp5G
+   qLYRWpnuORc6ofGyq9bwzSfg5PZPXWB0izHkcOe1fiTHs1VnUEIYxvwDf
+   w6vSGZ0dUBvM7O33Gvt2KfrNtFZWuWm29oXBUbNqtpbPVz0tfvqKVDAOZ
+   Csx8vyRP9QFyJQtHhF9xSQR+vGwp7l1qh0iRPa7kYhLWD9s6lEtRQMudE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="376066162"
+X-IronPort-AV: E=Sophos;i="6.03,231,1694761200"; 
+   d="scan'208";a="376066162"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2023 21:52:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.03,231,1694761200"; 
+   d="scan'208";a="3926579"
+Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
+  by fmviesa001.fm.intel.com with ESMTP; 16 Oct 2023 21:52:54 -0700
+Received: from kbuild by f64821696465 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qsc4U-00091n-1v;
+        Tue, 17 Oct 2023 04:52:46 +0000
+Date:   Tue, 17 Oct 2023 12:52:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nikhil V <quic_nprakash@quicinc.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Nikhil V <quic_nprakash@quicinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tejun Heo <tj@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-doc@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_kprasan@quicinc.com, quic_mpilaniy@quicinc.com,
+        quic_shrekk@quicinc.com, mpleshivenkov@google.com,
+        ericyin@google.com
+Subject: Re: [PATCH 2/4] PM: hibernate: Move to crypto APIs for LZO
+ compression
+Message-ID: <202310171226.pLUPeuC7-lkp@intel.com>
+References: <486273fb828eb56d1895fee49481f5c035df8300.1696410298.git.quic_nprakash@quicinc.com>
 MIME-Version: 1.0
-References: <20231016040132.23824-1-kai.heng.feng@canonical.com> <20231016093210.GA22952@wunner.de>
-In-Reply-To: <20231016093210.GA22952@wunner.de>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Tue, 17 Oct 2023 12:35:18 +0800
-Message-ID: <CAAd53p7gbWSkRbng205z2U0_kU42JeFw8qThcBuXuVwCC+Y_VQ@mail.gmail.com>
-Subject: Re: [PATCH] PCI: pciehp: Prevent child devices from doing RPM on PCIe
- Link Down
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     bhelgaas@google.com, linux-pm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, Ricky Wu <ricky_wu@realtek.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <486273fb828eb56d1895fee49481f5c035df8300.1696410298.git.quic_nprakash@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 16, 2023 at 5:32=E2=80=AFPM Lukas Wunner <lukas@wunner.de> wrot=
-e:
->
-> On Mon, Oct 16, 2023 at 12:01:31PM +0800, Kai-Heng Feng wrote:
-> > When inserting an SD7.0 card to Realtek card reader, it can trigger PCI
-> > slot Link down and causes the following error:
->
-> Why does *inserting* a card cause a Link Down?
+Hi Nikhil,
 
-Ricky, do you know the reason why Link Down happens?
+kernel test robot noticed the following build errors:
 
->
->
-> > [   63.898861] pcieport 0000:00:1c.0: pciehp: Slot(8): Link Down
-> > [   63.912118] BUG: unable to handle page fault for address: ffffb24d40=
-3e5010
-> [...]
-> > [   63.912198]  ? asm_exc_page_fault+0x27/0x30
-> > [   63.912203]  ? ioread32+0x2e/0x70
-> > [   63.912206]  ? rtsx_pci_write_register+0x5b/0x90 [rtsx_pci]
-> > [   63.912217]  rtsx_set_l1off_sub+0x1c/0x30 [rtsx_pci]
-> > [   63.912226]  rts5261_set_l1off_cfg_sub_d0+0x36/0x40 [rtsx_pci]
-> > [   63.912234]  rtsx_pci_runtime_idle+0xc7/0x160 [rtsx_pci]
-> > [   63.912243]  ? __pfx_pci_pm_runtime_idle+0x10/0x10
-> > [   63.912246]  pci_pm_runtime_idle+0x34/0x70
-> > [   63.912248]  rpm_idle+0xc4/0x2b0
-> > [   63.912251]  pm_runtime_work+0x93/0xc0
-> > [   63.912254]  process_one_work+0x21a/0x430
-> > [   63.912258]  worker_thread+0x4a/0x3c0
->
-> This looks like pcr->remap_addr is accessed after it has been iounmap'ed
-> in rtsx_pci_remove() or before it has been iomap'ed in rtsx_pci_probe().
->
-> Is the card reader itself located below a hotplug port and unplugged here=
-?
-> Or is this about the card being removed from the card reader?
->
-> Having full dmesg output and lspci -vvv output attached to a bugzilla
-> would help to understand what is going on.
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.6-rc6 next-20231016]
+[cannot apply to pavel-leds/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I don't have the hardware so we need Ricky to provide more information here=
-.
+url:    https://github.com/intel-lab-lkp/linux/commits/Nikhil-V/PM-hibernate-Rename-lzo-to-make-it-generic/20231004-173227
+base:   linus/master
+patch link:    https://lore.kernel.org/r/486273fb828eb56d1895fee49481f5c035df8300.1696410298.git.quic_nprakash%40quicinc.com
+patch subject: [PATCH 2/4] PM: hibernate: Move to crypto APIs for LZO compression
+config: sh-sh7770_generic_defconfig (https://download.01.org/0day-ci/archive/20231017/202310171226.pLUPeuC7-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231017/202310171226.pLUPeuC7-lkp@intel.com/reproduce)
 
-Regardless of the cardreader issue, do you have any concern on the patch it=
-self?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310171226.pLUPeuC7-lkp@intel.com/
 
-Kai-Heng
+All errors (new ones prefixed by >>):
 
->
-> Thanks,
->
-> Lukas
+   sh4-linux-ld: kernel/power/hibernate.o: in function `software_resume':
+>> hibernate.c:(.text+0xd0c): undefined reference to `crypto_has_alg'
+   sh4-linux-ld: kernel/power/hibernate.o: in function `hibernate':
+   hibernate.c:(.text+0x1218): undefined reference to `crypto_has_alg'
+   sh4-linux-ld: kernel/power/swap.o: in function `compress_threadfn':
+>> swap.c:(.text+0x5d8): undefined reference to `crypto_comp_compress'
+   sh4-linux-ld: kernel/power/swap.o: in function `decompress_threadfn':
+>> swap.c:(.text+0x728): undefined reference to `crypto_comp_decompress'
+   sh4-linux-ld: kernel/power/swap.o: in function `load_compressed_image':
+>> swap.c:(.text+0x9ec): undefined reference to `crypto_alloc_base'
+>> sh4-linux-ld: swap.c:(.text+0xe7c): undefined reference to `crypto_destroy_tfm'
+   sh4-linux-ld: kernel/power/swap.o: in function `save_compressed_image':
+   swap.c:(.text+0x14f8): undefined reference to `crypto_alloc_base'
+   sh4-linux-ld: swap.c:(.text+0x169c): undefined reference to `crypto_destroy_tfm'
+   sh4-linux-ld: crypto/lzo.o: in function `lzo_decompress':
+>> lzo.c:(.text+0x50): undefined reference to `lzo1x_decompress_safe'
+   sh4-linux-ld: crypto/lzo.o: in function `lzo_compress':
+>> lzo.c:(.text+0xb0): undefined reference to `lzo1x_1_compress'
+   sh4-linux-ld: crypto/lzo.o: in function `lzo_sdecompress':
+   lzo.c:(.text+0x144): undefined reference to `lzo1x_decompress_safe'
+   sh4-linux-ld: crypto/lzo.o: in function `lzo_scompress':
+   lzo.c:(.text+0x1a0): undefined reference to `lzo1x_1_compress'
+   sh4-linux-ld: crypto/lzo.o: in function `lzo_mod_fini':
+>> lzo.c:(.exit.text+0x14): undefined reference to `crypto_unregister_alg'
+>> sh4-linux-ld: lzo.c:(.exit.text+0x20): undefined reference to `crypto_unregister_scomp'
+   sh4-linux-ld: crypto/lzo.o: in function `lzo_mod_init':
+>> lzo.c:(.init.text+0x30): undefined reference to `crypto_register_alg'
+>> sh4-linux-ld: lzo.c:(.init.text+0x38): undefined reference to `crypto_register_scomp'
+>> sh4-linux-ld: lzo.c:(.init.text+0x40): undefined reference to `crypto_unregister_alg'
+   sh4-linux-ld: crypto/lzo-rle.o: in function `lzorle_decompress':
+>> lzo-rle.c:(.text+0x50): undefined reference to `lzo1x_decompress_safe'
+   sh4-linux-ld: crypto/lzo-rle.o: in function `lzorle_compress':
+>> lzo-rle.c:(.text+0xb0): undefined reference to `lzorle1x_1_compress'
+   sh4-linux-ld: crypto/lzo-rle.o: in function `lzorle_sdecompress':
+   lzo-rle.c:(.text+0x144): undefined reference to `lzo1x_decompress_safe'
+   sh4-linux-ld: crypto/lzo-rle.o: in function `lzorle_scompress':
+   lzo-rle.c:(.text+0x1a0): undefined reference to `lzorle1x_1_compress'
+   sh4-linux-ld: crypto/lzo-rle.o: in function `lzorle_mod_fini':
+>> lzo-rle.c:(.exit.text+0x14): undefined reference to `crypto_unregister_alg'
+>> sh4-linux-ld: lzo-rle.c:(.exit.text+0x20): undefined reference to `crypto_unregister_scomp'
+   sh4-linux-ld: crypto/lzo-rle.o: in function `lzorle_mod_init':
+>> lzo-rle.c:(.init.text+0x30): undefined reference to `crypto_register_alg'
+>> sh4-linux-ld: lzo-rle.c:(.init.text+0x38): undefined reference to `crypto_register_scomp'
+>> sh4-linux-ld: lzo-rle.c:(.init.text+0x40): undefined reference to `crypto_unregister_alg'
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for CRYPTO_LZO
+   Depends on [n]: CRYPTO [=n]
+   Selected by [y]:
+   - HIBERNATION [=y] && SWAP [=y] && ARCH_HIBERNATION_POSSIBLE [=y]
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
