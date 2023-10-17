@@ -2,114 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC8A97CBA4B
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Oct 2023 07:45:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8177CBC0B
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Oct 2023 09:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234541AbjJQFpd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Oct 2023 01:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39952 "EHLO
+        id S234544AbjJQHKY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Oct 2023 03:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234471AbjJQFpZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Oct 2023 01:45:25 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79247EA;
-        Mon, 16 Oct 2023 22:45:20 -0700 (PDT)
-X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 39H5iEadD3730461, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.93/5.92) with ESMTPS id 39H5iEadD3730461
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 Oct 2023 13:44:15 +0800
-Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Tue, 17 Oct 2023 13:44:13 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Tue, 17 Oct 2023 13:44:13 +0800
-Received: from RTEXMBS01.realtek.com.tw ([fe80::9cb8:8d5:b6b3:213b]) by
- RTEXMBS01.realtek.com.tw ([fe80::9cb8:8d5:b6b3:213b%5]) with mapi id
- 15.01.2375.007; Tue, 17 Oct 2023 13:44:13 +0800
-From:   Ricky WU <ricky_wu@realtek.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Lukas Wunner <lukas@wunner.de>
-CC:     "bhelgaas@google.com" <bhelgaas@google.com>,
+        with ESMTP id S229666AbjJQHKW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Oct 2023 03:10:22 -0400
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6488E;
+        Tue, 17 Oct 2023 00:10:21 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id D6555300000A6;
+        Tue, 17 Oct 2023 09:10:14 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id CE0DA4DD3C9; Tue, 17 Oct 2023 09:10:14 +0200 (CEST)
+Date:   Tue, 17 Oct 2023 09:10:14 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Ricky WU <ricky_wu@realtek.com>
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
         "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
         Kees Cook <keescook@chromium.org>,
         Tony Luck <tony.luck@intel.com>,
         "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
         "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: RE: [PATCH] PCI: pciehp: Prevent child devices from doing RPM on PCIe Link Down
-Thread-Topic: [PATCH] PCI: pciehp: Prevent child devices from doing RPM on
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] PCI: pciehp: Prevent child devices from doing RPM on
  PCIe Link Down
-Thread-Index: AQHZ/+WX29Sx+yjN7keHtkFSV38Z/LBLoV4AgAE/YwCAAJeMcA==
-Date:   Tue, 17 Oct 2023 05:44:13 +0000
-Message-ID: <24f72eea9fba45c4b1cd85836b17f251@realtek.com>
+Message-ID: <20231017071014.GA4592@wunner.de>
 References: <20231016040132.23824-1-kai.heng.feng@canonical.com>
  <20231016093210.GA22952@wunner.de>
  <CAAd53p7gbWSkRbng205z2U0_kU42JeFw8qThcBuXuVwCC+Y_VQ@mail.gmail.com>
-In-Reply-To: <CAAd53p7gbWSkRbng205z2U0_kU42JeFw8qThcBuXuVwCC+Y_VQ@mail.gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-x-originating-ip: [172.22.81.100]
-x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ <24f72eea9fba45c4b1cd85836b17f251@realtek.com>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <24f72eea9fba45c4b1cd85836b17f251@realtek.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogS2FpLUhlbmcgRmVuZyA8
-a2FpLmhlbmcuZmVuZ0BjYW5vbmljYWwuY29tPg0KPiANCj4gT24gTW9uLCBPY3QgMTYsIDIwMjMg
-YXQgNTozMuKAr1BNIEx1a2FzIFd1bm5lciA8bHVrYXNAd3VubmVyLmRlPiB3cm90ZToNCj4gPg0K
-PiA+IE9uIE1vbiwgT2N0IDE2LCAyMDIzIGF0IDEyOjAxOjMxUE0gKzA4MDAsIEthaS1IZW5nIEZl
-bmcgd3JvdGU6DQo+ID4gPiBXaGVuIGluc2VydGluZyBhbiBTRDcuMCBjYXJkIHRvIFJlYWx0ZWsg
-Y2FyZCByZWFkZXIsIGl0IGNhbiB0cmlnZ2VyDQo+ID4gPiBQQ0kgc2xvdCBMaW5rIGRvd24gYW5k
-IGNhdXNlcyB0aGUgZm9sbG93aW5nIGVycm9yOg0KPiA+DQo+ID4gV2h5IGRvZXMgKmluc2VydGlu
-ZyogYSBjYXJkIGNhdXNlIGEgTGluayBEb3duPw0KPiANCj4gUmlja3ksIGRvIHlvdSBrbm93IHRo
-ZSByZWFzb24gd2h5IExpbmsgRG93biBoYXBwZW5zPw0KPiANCg0KQmVjYXVzZSBTRDcuMCBjYXJk
-IGlzIHVzZSBwY2llLW52bWUgZHJpdmVyLCByZWFkZXIgbmVlZCB0byByZS1saW5rIHRoZW4ganVz
-dCBkbyB0aGUgcGNpZSBjaGFubmVsIA0KDQo+ID4NCj4gPg0KPiA+ID4gWyAgIDYzLjg5ODg2MV0g
-cGNpZXBvcnQgMDAwMDowMDoxYy4wOiBwY2llaHA6IFNsb3QoOCk6IExpbmsgRG93bg0KPiA+ID4g
-WyAgIDYzLjkxMjExOF0gQlVHOiB1bmFibGUgdG8gaGFuZGxlIHBhZ2UgZmF1bHQgZm9yIGFkZHJl
-c3M6DQo+IGZmZmZiMjRkNDAzZTUwMTANCj4gPiBbLi4uXQ0KPiA+ID4gWyAgIDYzLjkxMjE5OF0g
-ID8gYXNtX2V4Y19wYWdlX2ZhdWx0KzB4MjcvMHgzMA0KPiA+ID4gWyAgIDYzLjkxMjIwM10gID8g
-aW9yZWFkMzIrMHgyZS8weDcwDQo+ID4gPiBbICAgNjMuOTEyMjA2XSAgPyBydHN4X3BjaV93cml0
-ZV9yZWdpc3RlcisweDViLzB4OTAgW3J0c3hfcGNpXQ0KPiA+ID4gWyAgIDYzLjkxMjIxN10gIHJ0
-c3hfc2V0X2wxb2ZmX3N1YisweDFjLzB4MzAgW3J0c3hfcGNpXQ0KPiA+ID4gWyAgIDYzLjkxMjIy
-Nl0gIHJ0czUyNjFfc2V0X2wxb2ZmX2NmZ19zdWJfZDArMHgzNi8weDQwIFtydHN4X3BjaV0NCj4g
-PiA+IFsgICA2My45MTIyMzRdICBydHN4X3BjaV9ydW50aW1lX2lkbGUrMHhjNy8weDE2MCBbcnRz
-eF9wY2ldDQo+ID4gPiBbICAgNjMuOTEyMjQzXSAgPyBfX3BmeF9wY2lfcG1fcnVudGltZV9pZGxl
-KzB4MTAvMHgxMA0KPiA+ID4gWyAgIDYzLjkxMjI0Nl0gIHBjaV9wbV9ydW50aW1lX2lkbGUrMHgz
-NC8weDcwDQo+ID4gPiBbICAgNjMuOTEyMjQ4XSAgcnBtX2lkbGUrMHhjNC8weDJiMA0KPiA+ID4g
-WyAgIDYzLjkxMjI1MV0gIHBtX3J1bnRpbWVfd29yaysweDkzLzB4YzANCj4gPiA+IFsgICA2My45
-MTIyNTRdICBwcm9jZXNzX29uZV93b3JrKzB4MjFhLzB4NDMwDQo+ID4gPiBbICAgNjMuOTEyMjU4
-XSAgd29ya2VyX3RocmVhZCsweDRhLzB4M2MwDQo+ID4NCj4gPiBUaGlzIGxvb2tzIGxpa2UgcGNy
-LT5yZW1hcF9hZGRyIGlzIGFjY2Vzc2VkIGFmdGVyIGl0IGhhcyBiZWVuDQo+ID4gaW91bm1hcCdl
-ZCBpbiBydHN4X3BjaV9yZW1vdmUoKSBvciBiZWZvcmUgaXQgaGFzIGJlZW4gaW9tYXAnZWQgaW4N
-Cj4gcnRzeF9wY2lfcHJvYmUoKS4NCj4gPg0KPiA+IElzIHRoZSBjYXJkIHJlYWRlciBpdHNlbGYg
-bG9jYXRlZCBiZWxvdyBhIGhvdHBsdWcgcG9ydCBhbmQgdW5wbHVnZ2VkIGhlcmU/DQo+ID4gT3Ig
-aXMgdGhpcyBhYm91dCB0aGUgY2FyZCBiZWluZyByZW1vdmVkIGZyb20gdGhlIGNhcmQgcmVhZGVy
-Pw0KPiA+DQo+ID4gSGF2aW5nIGZ1bGwgZG1lc2cgb3V0cHV0IGFuZCBsc3BjaSAtdnZ2IG91dHB1
-dCBhdHRhY2hlZCB0byBhIGJ1Z3ppbGxhDQo+ID4gd291bGQgaGVscCB0byB1bmRlcnN0YW5kIHdo
-YXQgaXMgZ29pbmcgb24uDQo+IA0KPiBJIGRvbid0IGhhdmUgdGhlIGhhcmR3YXJlIHNvIHdlIG5l
-ZWQgUmlja3kgdG8gcHJvdmlkZSBtb3JlIGluZm9ybWF0aW9uIGhlcmUuDQo+IA0KPiBSZWdhcmRs
-ZXNzIG9mIHRoZSBjYXJkcmVhZGVyIGlzc3VlLCBkbyB5b3UgaGF2ZSBhbnkgY29uY2VybiBvbiB0
-aGUgcGF0Y2gNCj4gaXRzZWxmPw0KPiANCj4gS2FpLUhlbmcNCj4gDQo+ID4NCj4gPiBUaGFua3Ms
-DQo+ID4NCj4gPiBMdWthcw0K
+[cc -= unrelated mailing lists bpf, kernel-hardening]
+
+On Tue, Oct 17, 2023 at 05:44:13AM +0000, Ricky WU wrote:
+> > From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > On Mon, Oct 16, 2023 at 5:32???PM Lukas Wunner <lukas@wunner.de> wrote:
+> > > On Mon, Oct 16, 2023 at 12:01:31PM +0800, Kai-Heng Feng wrote:
+> > > > When inserting an SD7.0 card to Realtek card reader, it can trigger
+> > > > PCI slot Link down and causes the following error:
+> > >
+> > > Why does *inserting* a card cause a Link Down?
+> > 
+> > Ricky, do you know the reason why Link Down happens?
+> 
+> Because SD7.0 card is use pcie-nvme driver, reader need to re-link
+> then just do the pcie channel
+
+I don't quite follow.  I don't see a pcie-nvme driver in Linus'
+current master branch.  Which driver are you referring to?
+
+What does "re-link" mean?  Rebind to a different driver?
+
+Thanks,
+
+Lukas
