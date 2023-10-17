@@ -2,107 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D88A7CC210
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Oct 2023 13:54:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB237CC34D
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Oct 2023 14:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234635AbjJQLyB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Oct 2023 07:54:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55490 "EHLO
+        id S232228AbjJQMhk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Oct 2023 08:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234147AbjJQLyA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Oct 2023 07:54:00 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37EECEA
-        for <linux-pm@vger.kernel.org>; Tue, 17 Oct 2023 04:53:59 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-d84c24a810dso6527159276.2
-        for <linux-pm@vger.kernel.org>; Tue, 17 Oct 2023 04:53:59 -0700 (PDT)
+        with ESMTP id S235027AbjJQMhj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Oct 2023 08:37:39 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8F195;
+        Tue, 17 Oct 2023 05:37:38 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-6bd20c30831so635598b3a.1;
+        Tue, 17 Oct 2023 05:37:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697543638; x=1698148438; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gRHWuH+/WXKEnLl3V7UXIEiqd4FVRVva5dZnGflFJOs=;
-        b=WibYCdr1ui+CxY3WgYue3+unNQVW53YdTjd9COHWwcNZ/Qjio7+VKh09mS6VzbeH+N
-         FFvZTst352gdaf8JxT0jdTz2zmw9VcH8KuYqGNXuCpqAIGqNi/Jh/8US+oCoYNeLnl2t
-         HSi2HfSE/L/8R5IcpuzmMMXFtdM0nZ6kzctmeeuQRwsCHWtLvwosAT5ot8sPyfQU4zKx
-         azKTrqD3CWN/OaTwpErq3VAjiqcw6DC81RUj0YvVZbQ3ABwliV8F6/Cu0zo+Eo4W0cfw
-         2IGIYmOlIHJLP7aZP3CrYW/WGcZkOz8BMKyhtP1HSnzLSapUTmzsINczwiZBBfdOfiaF
-         r/hg==
+        d=gmail.com; s=20230601; t=1697546258; x=1698151058; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8yl3XKvfDNY4YlqmwGul51Mx11ikOLsTxoufKMV86Q0=;
+        b=VrWVtE5DXL4XU9awQQEZTBSAFY6Qx4qxsJtiSfPgppoMTXh1tx1Wul1OhT4J2hO13P
+         03NRBl7Q/qp4loSXYX4s0Zj0UkLNdX3Icsht09h0OKObyt6BTvkhFLkftlWd2PWPzDzA
+         R7ida66Iqa4fYakwVWCtW0S/R1NTyfK+KB5fD5uoV37lt753IuEwwM7TKXP3KwsRU8hA
+         qx5METMCgXjUItWpQHmyaPTgWsz0HbdSrD6DIm0lVvJ8G9M9cTdc7h8KASDIo2C1YSTi
+         Ym1h8MQ31dFouZcaE0bkHE4ASxi6r/mVTeqtvonacJpN4sSv9CCAKZes2UKq3VSvQRJO
+         4/9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697543638; x=1698148438;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gRHWuH+/WXKEnLl3V7UXIEiqd4FVRVva5dZnGflFJOs=;
-        b=az0sLDaguy3Hoy9xvfDx+2L7zFsmcTKPQ4TGkmYsgI2NuZN1otO5bNQ/6NsrHDJkjN
-         hN+AegZs5ik9OXBcZLALrmkMeiMHeZR/HBrAFhVmoUlH6yZhNKkNvYlXTvwTNRluzX/G
-         V25rgTRYsnb09+J8J6Q4xiSamQO7dEuaFpFvHRlWfiebTRorl8aPh+QKoOBLgLEEE5Zb
-         xD7EwNBWcl/k2K34W8Qhk56swQWudSZQDVdjYByRs6o4ymK0XRSKpo1YoJAwwXxz5SRm
-         8Oe6e+qXqD49CrjuitDKuECIgSdaw1IUmbQU1GYXsU5zrUiNhL4rCdjj3Nv65aC8V7ko
-         N2LQ==
-X-Gm-Message-State: AOJu0Yy7yqCVJkHrDwhPUTOgxZ+tW9Vyo1eo9wXfTMkogpCzw7JAIcca
-        a0iYtIjdjUG6OETiwaDCKet/ZyczqvKaOnaiteLmZA==
-X-Google-Smtp-Source: AGHT+IG7VrpcqV+J9Ymhq3tlhL4g+lB/bRUE2i5WhXSa6m1eZvyClYY2A0YNsGRnbwg99Yrin/GImtpCg62fHwpZZmk=
-X-Received: by 2002:a25:cf10:0:b0:d9c:2953:bde1 with SMTP id
- f16-20020a25cf10000000b00d9c2953bde1mr1960729ybg.38.1697543638329; Tue, 17
- Oct 2023 04:53:58 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697546258; x=1698151058;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8yl3XKvfDNY4YlqmwGul51Mx11ikOLsTxoufKMV86Q0=;
+        b=KG6NR1aZFv6xc5RuRD1/DxFvzOBJAZ3keE69qajYDWoWcSm6z+0Hrhe4gQXpeHs0RJ
+         Kk0S5WW71DH0ByIfUyZvvtPSxNhIPr7fn+9h9YasDYxd8Ec+ioMTjPb589TJXn18c833
+         jCTrkhxNGAOwr6hwPS/KAdRpZC+0fD/y/uR2nGJNeQfVPISld0yCKeL+JMLOqMuuKTm5
+         9zZcKVr0HFc8TQqQC3D6SMLR2i7ZGEBRnXuOlkdBzRSl6ER2dyn7C0MRsJxeMmTr1THK
+         naXc1b0enMHBXPK6gQb2NlwobV3fguLHmr4vhMfsZaeeNfJ/sq5XndtYHuLolNKwpVXj
+         xr0A==
+X-Gm-Message-State: AOJu0YycoecQhIneeAWg9y1IoeeYAhejidPubabiOQQKvxBCpMQMgWcB
+        BwSf62OGWqk5narBhVzZwMID3gq17bhxlYfo89guxPJ4V0Q=
+X-Google-Smtp-Source: AGHT+IHEkJqr/HImxh2mg/mBjVRkvypqISRXWPE2SLbLkFHHwaW4ixmRl7+MGA6p8Se20Dyyil9tTMDrjFfIit3dRxI=
+X-Received: by 2002:a05:6a20:c182:b0:15d:6fd3:8e74 with SMTP id
+ bg2-20020a056a20c18200b0015d6fd38e74mr2126389pzb.3.1697546257871; Tue, 17 Oct
+ 2023 05:37:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231012152108.101270-1-ulf.hansson@linaro.org>
- <169719833142.3828427.5236534342833939623.b4-ty@nvidia.com> <CAPDyKFpa4Wb2fXRS52cYa4=hs-K63y_Re52tS2VJsO9A31eZeA@mail.gmail.com>
-In-Reply-To: <CAPDyKFpa4Wb2fXRS52cYa4=hs-K63y_Re52tS2VJsO9A31eZeA@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 17 Oct 2023 13:53:22 +0200
-Message-ID: <CAPDyKFo6+QEA_C5HHs7pckqx=MRTKxmUWh+Pfar0E2Ve+1BWsw@mail.gmail.com>
-Subject: Re: (subset) [PATCH 0/5] PM: domains: Drop pm_genpd_opp_to_performance_state()
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20231006180453.2903342-1-festevam@gmail.com> <CAOMZO5CfW10dwVDYaHkvhTMKeHw38ZAt1kdH8qB=8AM=cqdHvw@mail.gmail.com>
+ <83dbd835-c36e-4e7d-a5e4-c572e19c649d@linaro.org>
+In-Reply-To: <83dbd835-c36e-4e7d-a5e4-c572e19c649d@linaro.org>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Tue, 17 Oct 2023 09:37:26 -0300
+Message-ID: <CAOMZO5BMfsGn+rZY-EYwchOtsrYUaSnnEKAaXpNjidrC2Yq5cA@mail.gmail.com>
+Subject: Re: [PATCH v10 1/4] dt-bindings: thermal-zones: Document critical-action
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, conor+dt@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 16 Oct 2023 at 11:57, Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> On Fri, 13 Oct 2023 at 13:59, Thierry Reding <thierry.reding@gmail.com> wrote:
-> >
-> > From: Thierry Reding <treding@nvidia.com>
-> >
-> >
-> > On Thu, 12 Oct 2023 17:21:08 +0200, Ulf Hansson wrote:
-> > > Since commit 7c41cdcd3bbe ("OPP: Simplify the over-designed pstate <-> level
-> > > dance"), there is no longer any users of the
-> > > pm_genpd_opp_to_performance_state() API, while a few genpd providers are still
-> > > assigning the redundant ->opp_to_performance_state() callback.
-> > >
-> > > Let's clean this up so we can drop pm_genpd_opp_to_performance_state() and the
-> > > callback too.
-> > >
-> > > [...]
-> >
-> > Applied, thanks!
-> >
-> > [1/5] soc/tegra: pmc: Drop the ->opp_to_performance_state() callback
-> >       commit: cda263907a6f88c75fb97cf7adecffaafb6237ec
->
-> Thierry, I was planning to queue up the complete series through my
-> pmdomain tree, my apologies if that wasn't clear. I want to get rid of
-> the actual genpd API and the genpd callback altogether (patch5).
->
-> Would it be possible for you to drop the above patch from your tree
-> and provide an ack instead?
+Hi Daniel,
 
-I just noticed that the above went has also been pulled into the soc
-tree from your pull-request. So nevermind, I can do the final cleanup
-later on.
+On Sun, Oct 15, 2023 at 6:54=E2=80=AFPM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 
-Kind regards
-Uffe
+> > Are you happy with the v10 series?
+>
+> Yes, I think they are fine except one thing.
+>
+> The include/linux/reboot.h is changed along with thermal*.c file. IMO it
+> is preferable to have separate patch, I mean all reboot.h changes folded
+> in a single patch before the thermal_*.c changes. It is actually
+
+I tried to follow your suggestion of putting all reboot.h changes
+folded in a single patch before the thermal_*.c changes,
+but I don't think I can do this split and maintain a logic patch
+separation and bisectability.
+
+> orphaned and we should ask Matti Vaittinen <mazziesaccount@gmail.com>
+> its acked-by as he is the author of the code you are changing.
+> Otherwise, he will have to ack the patches which contain also thermal
+> code which is not its area.
+
+The reason I haven't added Matti on Cc on the series is that
+get_maintainer did not list him. Added him on Cc now.
+
+Maybe Matti could help acking patches 2/4 and 3/4?
+
+Full series:
+
+https://lore.kernel.org/linux-pm/20231006180453.2903342-1-festevam@gmail.co=
+m/
+
+https://lore.kernel.org/linux-pm/20231006180453.2903342-2-festevam@gmail.co=
+m/
+
+https://lore.kernel.org/linux-pm/20231006180453.2903342-3-festevam@gmail.co=
+m/
+
+https://lore.kernel.org/linux-pm/20231006180453.2903342-4-festevam@gmail.co=
+m/
