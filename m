@@ -2,188 +2,284 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CE497CC47A
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Oct 2023 15:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E12DB7CC4EE
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Oct 2023 15:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343819AbjJQNS6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Oct 2023 09:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37936 "EHLO
+        id S234843AbjJQNmP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Oct 2023 09:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235141AbjJQNSo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Oct 2023 09:18:44 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2052.outbound.protection.outlook.com [40.107.8.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA4D1A1
-        for <linux-pm@vger.kernel.org>; Tue, 17 Oct 2023 06:18:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=huVjSDDl72HI0AveiTHD5WMtc3cOmA1J/h7uRZ0UN+MKk6PfqghPTNoKRkC7a2xplfZFZP81kyf5knNyYLvCCHvFBJKybVxCXiwo0x7r7K60RwRSVu0koLKoCECklj4uPK3/Ygc7Arpp4fYDjJI2utSqt9EEePjmFbgIvluka/ocj74kXidiJzaMefAPFhzi8KMmq5VdyR8uQ4iaZAKU8Fk9IjHqqdlaK06JdT7bfGxFdslIOJYnQlc1cBhdCKrNmezb62Gkqo3kF4kIkIjG7vb7REFjyqfSgNus666gxu8HXR6QGYMU+p1tZOoo2m3NaQux2OhTM0MrfTfpm0f7cw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8j54BdqnVf6xUYhPm+SPSsncDkPJORPRh8Bgu14IrK8=;
- b=MLbzJ4W9MsSipMGDBvFrgBD1hcv2oHepTTq+4Rr3uoprAZ7nB+l5tDnS2CVLM00emhV2JCEbeYAJfSdSzm8M7M9y3TOOqva2UN9hAlQyHv28fH8PnaNDuv8wrsswBvW1sYxdHYLT1kbYVxp9B6HxOCBzkgrwKB6xSy736wYcIIhO7N/phX/+sjRAlXc9GfrO5n/zV+t8Jq/usBesVsbRYov8NaT+gSUHnLlfkrQAxv5w1Li8NRBnI4AsRThIj1yIJROuCPWMQwudYw53r0gs7j477O6c/7Ox/GfdY9mdYGuA5oZyHIrtzNnSHWIv065rqfxSoPMMiSOvqRbN329qwQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8j54BdqnVf6xUYhPm+SPSsncDkPJORPRh8Bgu14IrK8=;
- b=n3LpIYYo1vYUiEiq8U1SnRIQAoC1rW3kxBps2IYYbPBf6EkkYRLDTXBRdGDsQ5zwTGqzC5wsJUxDZqD13F8H9xhvYUNZRiC7CaBr0IYQuinDOcufPNyve5sL/m1jaPzNyuk6yFyIMLzL+7rIbzoS6zVz+3xA5Z6lRBohkbA+vYs=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by DB9PR04MB9961.eurprd04.prod.outlook.com (2603:10a6:10:4ee::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.35; Tue, 17 Oct
- 2023 13:18:38 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::7a96:ccb1:6dbf:c381]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::7a96:ccb1:6dbf:c381%6]) with mapi id 15.20.6886.034; Tue, 17 Oct 2023
- 13:18:38 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>
-CC:     "cristian.marussi@arm.com" <cristian.marussi@arm.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>,
-        Glen G Wienecke <glen.wienecke@nxp.com>
-Subject: RE: Question regarding scmi_perf_domain.c
-Thread-Topic: Question regarding scmi_perf_domain.c
-Thread-Index: Adn7ZJVuPYTdu0ufRKeeVXBw4lJjnAAA6M+AAAA+SYAAALxWIAADapAAAABn5rAAAKUSgAAAVlkAAAJ6koAAEqiu0AAUSrsAAAoXaoAALVG/gADP+DUAAC4lOtA=
-Date:   Tue, 17 Oct 2023 13:18:38 +0000
-Message-ID: <DU0PR04MB9417BDFD8570B5406A62901788D6A@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20231010105503.jwrmjahuvcjgwtk5@bogus>
- <CAPDyKFqEpnKeF7Yuvv_a+=Kqs=pNU_kM59EqWdpCniHrY_373A@mail.gmail.com>
- <DU0PR04MB941755466872E84217378F6388CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <20231010130054.ieylxocuapugajif@bogus>
- <DU0PR04MB94177FFEAA62AC27839D826F88CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <20231010133059.57rs52qedrc5mxfr@bogus>
- <DU0PR04MB9417D01218CA4803D00545A788CDA@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <20231010145137.fyxjlsj5qq3elq7l@bogus>
- <DU0PR04MB9417233F914A061FB0A23B3088CCA@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <CAPDyKFo32GQdgMWJ_rkb88mcdc+0jYubWiCapf99Zg9JTnNnPw@mail.gmail.com>
- <20231011141551.exqxkmt3xsl5fyjh@bogus>
- <CAPDyKFrWjAdujOr8JX5_JawaKqs0_MYUrsUN57XaB9q=darJ0w@mail.gmail.com>
- <CAPDyKFoJpnF_CezT6RySPpAwJY0+LO+RiSqqM=byTaRibKQPyg@mail.gmail.com>
-In-Reply-To: <CAPDyKFoJpnF_CezT6RySPpAwJY0+LO+RiSqqM=byTaRibKQPyg@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|DB9PR04MB9961:EE_
-x-ms-office365-filtering-correlation-id: 724ba5c5-cede-4674-4977-08dbcf139358
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6yeGQJO32pYTx1J/hGZXOpNd7x8/r0f90SBHZBHY5sz8Bq92Y29o1WUGvhOfDJoh4SqiKRlq9t6LiV3hzdjNuxmw+YnclufF4Fzo+AdA3aUCjqr0d6zldASuIK/zBWG4TbG/BDcepDsG11u12OSdnOTXrswqMva/0FeGdVponrHCicuJPlg4fv2+Mr1HVWBSZJwCjuI5BmkSNaLO+trdOTi/3dLJl8cUt7ZPlX0pdv1APN3cDIX+e2yAFX/riisD4bvEu4rpC/R/FhVfVPsPvozznh7UY4kvlbfjPSUiADvOV6zaxlKvjbZAHJhk/1I6LUR5dO2G8Zi/JEmmFsMRSFGUUmdYImr2/2t1X2qmfXswCwynlMlqbxftRZgDsHClUdqczA/JNE5gEb/FksLFn53et5O96Ou8Ku2sQX0+kC0y1wuqsJGmmz86S2hwleiuZsKx1sWAL4/2/Wfcgt+qg1WT6ZepHlLyc/Ppn8njvpVoe0XQ3sSh6ihwhtlqlzr217BU2toaUwkptOY683sAy35jsBUIv4Mi8/G1jAKUBnB43p96AmJ2b3jh4+9JZriaJEmU+y4j1B0gdYy5nXBvHH9vtcuJ/+z1xdNktH7/+4vEcO1hcLpjaTjI4zmWg4RV
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(39860400002)(366004)(396003)(346002)(230922051799003)(64100799003)(186009)(1800799009)(451199024)(478600001)(76116006)(66446008)(66476007)(54906003)(316002)(110136005)(66946007)(66556008)(33656002)(26005)(7696005)(64756008)(6506007)(2906002)(9686003)(8936002)(52536014)(8676002)(4326008)(5660300002)(44832011)(71200400001)(41300700001)(86362001)(38070700005)(122000001)(38100700002)(83380400001)(66899024)(55016003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZFY3MzJENnJwMU1mSkZwRzV3Q3ZNWFFuK2ZEUXBJNHZsanpLVFZodGxxeDBy?=
- =?utf-8?B?L2UyUURCWHZUM1hOTWcyV2RObEJ4V21LbUZEeVVVZW9oMi9aZ1hQdlJ6V2JU?=
- =?utf-8?B?U0kwU3ZEaHBoNFA4b3JXVXVxYmtvRHJzbWtRTDZBckR2ZFNpclBLSDNQMGxD?=
- =?utf-8?B?SXJHTndHWVdISnJrUjMrdVlzRXlPbUk2M2pGeWFVei9jbWRPNzBITFZmZVQ0?=
- =?utf-8?B?dFprVXdYY1k2ZysrYTEyQjJuMk9wUHloNkoyRVVSL0p2Y1hhc203bmpaSnZY?=
- =?utf-8?B?VTVzalFseWJNRzVyWGh3Zk16YjMvcmZqWVpUTTBRcFM5TW15dHlMMWtNdDh0?=
- =?utf-8?B?NUNaN0IyakIvY3NLNFVIM2xsTW90QmVqcG1tazJ5VkptWXBRU0FOaG9KbCtO?=
- =?utf-8?B?MVhWY2Y0TzZldEd6bjY3U2VMRUJ0NXdYM25SRlF3MVAxeTNYKzFyTnVVTXJV?=
- =?utf-8?B?SWNmUkZ6NGtrMG12SkJISitMNVVUNXNxNlVYZU9lQW9mR2tvUzR4bUpwWStT?=
- =?utf-8?B?eHZ4amZ0VnNLWFA4ODVCaHc4SHlYMm4zcVNyL25qMmREMHIrT1pPYUROeFNy?=
- =?utf-8?B?bVg0UjFDVStCZVVjZ3lHQkxJY2kyZmhmd3V3dlllUUpPZFFKTGJSd2dEaWdr?=
- =?utf-8?B?MXlXbjJCdXRZQ3lUSGZXRmw2R091UGJxaHNwM1VlZkhkVmIvOTJYQXlyOUJJ?=
- =?utf-8?B?SzNJZU1qSU1CbkJ2ckNOcXk0N3FMZmZuTTRzbEo3N0s5NTZGZ29reUYyMkFD?=
- =?utf-8?B?WXJJTmhLNWR2UVdOUmZNVEovQU41bm5NRG13OXlMeXptdmNCYndzZkVuNGp5?=
- =?utf-8?B?OENiaTFWcUJSTGZJODNkS0Rvd084aG5aTmhWSE9hYXNKUERDT2pvM3ZqK3BG?=
- =?utf-8?B?eVZHb0dlTUp6dG56UnlaWWNadVVTck9Yc1ZPS29xblBRQjVwaVZUOEEzanBV?=
- =?utf-8?B?RVFLa2JYVzBjWnY5YWMyMVhLbmNwK05CS1pKajE0QWphdEdXZkZnU1g1OHlE?=
- =?utf-8?B?N0loNlVzemU2Rm1ycGlnVnZrR29VeEdXT0ZRbzlORjJqcHc3MW9LZUEwckJz?=
- =?utf-8?B?SFlTbjZnRjc1MFhlTDAyVFpNdkxhZVNoemd1RTZXTENpYWdQNGliU2hyTGxQ?=
- =?utf-8?B?UUN1MzlRdnNKVVdvdDRRYk5DdWhGdktxcXJWS3hxTURDNzlWTWJ6WU0vanBJ?=
- =?utf-8?B?OFBJcE9xZGg1N3FNUVRBVVg0dVNEV1VDTmxLU004eTRqTnhlS2pqaER2Z3NF?=
- =?utf-8?B?OXk2aDJiNDFHQVFidDF3Tk1EZTNmS1JUc3dvQzNsSElzUVhPZXhyc04vR2Jm?=
- =?utf-8?B?RTc1eEc2VnNuS2lFTFd6eXoycUNISTN1RnRpWXNBYVNDV3dFRCtkZHdSd2dD?=
- =?utf-8?B?NUtkbnFETEV4Unp2Q1RHNW9lcFNOVXhPWDNSR2o2M1g0K3VZNnZXMUpDbFdG?=
- =?utf-8?B?Q3NhcmxmZm5OUFo0TU4wc0ZYVXlDNmdIeHdyTndQdklmLzVtdVRHMDcvNktq?=
- =?utf-8?B?eXNiTFFIN1c0eVQ5K2R6eXJVWmd6bVF4S0dnQkkxQk4xd3J4NUtwWFNMUEh2?=
- =?utf-8?B?eWdmWUxqbTRLSkh6U0hsNjBMRDhNWlNuaUR0Vml1UUsvVVNZeDRuQnNFd0Zy?=
- =?utf-8?B?Ym1pc3JHSk9XRkdiUGRSTmF0NCs1VkxWbmYzUEZhTnFQSjRJdkpVZVEvMVV0?=
- =?utf-8?B?NmZXUEJxY1lCV1RramxWYzNGdGw2RHpLcXpxdFZublErUkJTRlJyeDhQNlI0?=
- =?utf-8?B?N2ZtZEpSOTNVZGMxd0FVQjJPbnl2dUFVTUR4MmZjSyt3SEg0aHpUNlNjbDdp?=
- =?utf-8?B?TENVMWp2ZmZlOTdwVWhMR2FLeU5JMUZIb00zS05kdEltUXhDM0J1WGdaVUFo?=
- =?utf-8?B?QUhoSVJ5Y0Y3dTB4Tit5UTMvcm1rdWUydHNaNnBBekp1Z205djRJRWRmWFBU?=
- =?utf-8?B?TVYrZ1JpQlNnWkFJYk5DM1hHV2drbGFXbGdtb05FcUltd1hGZlF5alpIdE03?=
- =?utf-8?B?MFROYTlYNEU3OEU4K2kvWFM5STJ3YXJjNWdoK0tPa003dUxxZzczM1NrYi8v?=
- =?utf-8?B?ZUFhTm50Yy9Ga1IwbDdacXk0eWRFYVZtMlgweVpUYlBKbmd4K1dTREpKLzZa?=
- =?utf-8?Q?kgJ4=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S234635AbjJQNmO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Oct 2023 09:42:14 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E9BF0
+        for <linux-pm@vger.kernel.org>; Tue, 17 Oct 2023 06:42:12 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1c9c5a1b87bso38913015ad.3
+        for <linux-pm@vger.kernel.org>; Tue, 17 Oct 2023 06:42:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697550131; x=1698154931; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=f4Ac8357kjZmBSEr1y0XOi4bAEg4bWoPEyPAdAtsLWE=;
+        b=uIZXpQ0mzo5ICT44X+91sn4TITo33S0q2Gb/9YZCgL4xdJ+MU9q+SpcD0rsv+FKBqN
+         IubQK/lvEyMLdsyt4WroaLTK/J6OfyssfPeaMnbWNosdAMrWvc647PS2RR0LwTA05Qm6
+         V7/1d//K4+tgBQteHnik7kDsYFvCX8Ur9ufqAL5mXBr7BYNvnyWonGsxLkE5MXVK7Qra
+         s4i6iadp3tGAioxhncScF5ViyCGSeO5ykXZQ0JNO5wVGRGsz2v6IoAvWpYdoOkWlBiPo
+         NeDyVmkuzC+K6pwiC/yTvM0XHyUAfa+lKsW2oJO/Y1+E9jLU2RPIVmNS2OQ8Hi6H6BiV
+         8t4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697550131; x=1698154931;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f4Ac8357kjZmBSEr1y0XOi4bAEg4bWoPEyPAdAtsLWE=;
+        b=O9U0BvM128WEvT7DNDYcKRUQIcorH8uil3UikWqpz0a5fZ5HGLPCIxODVyTpP7Qhv2
+         nv3ohWn68USQx7RNZqzvhiXPWFuwSrhf2XPjeoDXW9/icmlq9Vyeqw7ouLut5/Z4Kodn
+         +tB6JN8695r9cxcxI23zx9ua5E3ndQutiWf4KBEoeP5miaPvcNLTIu9BFr5RWR+3dnYa
+         pzQAimQ6B8Nshwcr5+Pxq+LFaZ7OEYpGFNz7i/Rmzfcpj4fpIGiEogMjL9iRTwXD4UKo
+         JAFjdJuYqQvkWP2XHNUsW6MM0aad9ar3G2lTlguvguCQ2f4UwHbEDEQgNEvwgNISXgi6
+         KAkg==
+X-Gm-Message-State: AOJu0YwSEJ1xA3N3kRtFwBIKcZIffGYvVZ8tcMtshYbd5j46f1WZxKu6
+        4iOgB0+Ra2fQVistwaQu/QMxtFKbeB+vci0+ai6yTw==
+X-Google-Smtp-Source: AGHT+IHtFeoaUQqB6BbRSvNyCKcQArkdii6iyWxk/wLzPCeEtwyijjr9f1hjIT9Ej/YVkc3jHS7h3grHmlfjS3KThAE=
+X-Received: by 2002:a17:90a:fb56:b0:27d:4eff:27ae with SMTP id
+ iq22-20020a17090afb5600b0027d4eff27aemr2025710pjb.40.1697550131252; Tue, 17
+ Oct 2023 06:42:11 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 724ba5c5-cede-4674-4977-08dbcf139358
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Oct 2023 13:18:38.6395
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: nzJEB+bE6MxaBXp3cUjOALj+hfhKoqhq/mufjB7NiePbJYpn8EZbTLwYdqm81lJQSFDtuVqZRabLVxXyOiI0Ug==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9961
+References: <20231009103621.374412-7-vincent.guittot@linaro.org>
+ <ac8968b9-8463-4aa2-a38d-fc2b9137460d@arm.com> <CAKfTPtBhXRk_Y-xiHn9_jQ1C_ALzbr3-KdwzcTCyupzJ4Gru5g@mail.gmail.com>
+ <ZS0oyhbVDtXO1p5b@arm.com> <CAKfTPtCg9aYnWsReT=xtznwkMMMEepj6j9z4J6_ST5oUv69aUA@mail.gmail.com>
+ <ZS5NuK7rjVFM5tj8@arm.com>
+In-Reply-To: <ZS5NuK7rjVFM5tj8@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Tue, 17 Oct 2023 15:41:59 +0200
+Message-ID: <CAKfTPtAXeKRESDEZJMai3KhgXcE_hpndTRfMtcoVbH0FQZQd2Q@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] cpufreq/cppc: set the frequency used for capacity computation
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     Pierre Gondois <pierre.gondois@arm.com>, linux@armlinux.org.uk,
+        catalin.marinas@arm.com, will@kernel.org, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, sudeep.holla@arm.com,
+        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        viresh.kumar@linaro.org, lukasz.luba@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
+        conor.dooley@microchip.com, suagrfillet@gmail.com,
+        ajones@ventanamicro.com, lftan@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-PiBTdWJqZWN0OiBSZTogUXVlc3Rpb24gcmVnYXJkaW5nIHNjbWlfcGVyZl9kb21haW4uYw0KPiAN
-Cj4gT24gVGh1LCAxMiBPY3QgMjAyMyBhdCAxMzo1MywgVWxmIEhhbnNzb24gPHVsZi5oYW5zc29u
-QGxpbmFyby5vcmc+IHdyb3RlOg0KPiA+DQo+ID4gT24gV2VkLCAxMSBPY3QgMjAyMyBhdCAxNjox
-NywgU3VkZWVwIEhvbGxhIDxzdWRlZXAuaG9sbGFAYXJtLmNvbT4NCj4gd3JvdGU6DQo+ID4gPg0K
-PiA+ID4gT24gV2VkLCBPY3QgMTEsIDIwMjMgYXQgMTE6MjY6NTRBTSArMDIwMCwgVWxmIEhhbnNz
-b24gd3JvdGU6DQo+ID4gPg0KPiA+ID4gWy4uXQ0KPiA+ID4NCj4gPiA+ID4gTm90IHN1cmUgZXhh
-Y3RseSB3aGF0IHlvdSBhcmUgcmVmZXJyaW5nIHRvIHdoZW4gc2F5aW5nIHRoYXQNCj4gPiA+ID4g
-ImF1dG9tYXRpYyBwb3dlciBkb21haW4gb24gaXMgYnJva2VuIi4gR2VucGQgcG93ZXItb24gdGhl
-IFBNDQo+ID4gPiA+IGRvbWFpbiBmb3IgYSBkZXZpY2UgdGhhdCBnZXRzIGF0dGFjaGVkIHRvIGl0
-LCBpZiB0aGUgZGV2aWNlIGhhcyBvbmx5IGENCj4gc2luZ2xlIFBNIGRvbWFpbi4NCj4gPiA+ID4g
-VGhpcyBpcyB0aGUgbGVnYWN5IGJlaGF2aW91ci4NCj4gPiA+ID4NCj4gPiA+ID4gV2hlbiB3ZSBh
-ZGRlZCBzdXBwb3J0IGZvciBtdWx0aXBsZSBQTSBkb21haW5zIHBlciBkZXZpY2UsIHdlDQo+ID4g
-PiA+IGRlY2lkZWQgdG8gKm5vdCogcG93ZXItb24gdGhlIFBNIGRvbWFpbiwgaWYgdGhlIGRldmlj
-ZSB0aGF0IGdldHMNCj4gPiA+ID4gYXR0YWNoZWQgaGFzIG11bHRpcGxlIFBNIGRvbWFpbnMuIFRo
-aXMgYmVoYXZpb3VyIHdhcyBjaG9zZW4NCj4gPiA+ID4gZGVsaWJlcmF0ZWx5LCB0byBhbGxvdyBj
-b25zdW1lciBkcml2ZXJzIHRvIGRlY2lkZSB0aGVtc2VsdmVzDQo+ID4gPiA+IGluc3RlYWQuIElz
-IHRoZXJlIGEgcHJvYmxlbSB3aXRoIHRoaXMgeW91IHRoaW5rPw0KPiA+ID4gPg0KPiA+ID4NCj4g
-PiA+IEp1c3QgbXkgdW5kZXJzdGFuZGluZy4gU2luY2UgdGhlIHNlY29uZCBQTSBkb21haW4gYWRk
-ZWQgbm93IGlzIGZvcg0KPiA+ID4gcGVyZiBhbmQgaXMgbm90IHN0cmljdGx5IHBvd2VyIGRvbWFp
-biwgUGVuZydzIGNvbmNlcm4gaXMgc3dpdGNoaW5nDQo+ID4gPiB0byB0aGlzIGJpbmRpbmcgd2ls
-bCBtYWtlIHRoZSBwbGF0Zm9ybSBsb29zZSB0aGlzIGF1dG9tYXRpYyBnZW5wZA0KPiA+ID4gcG93
-ZXItb24gZmVhdHVyZS4NCj4gPg0KPiA+IFllcywgY29ycmVjdCwgYXMgdGhleSB3YXkgdGhpbmdz
-IGFyZSB0b2RheS4NCj4gPg0KPiA+IEl0IGFsbCBib2lscyBkb3duIHRvIHRoYXQgYXR0YWNoaW5n
-IGEgZGV2aWNlIHRvIG11bHRpcGxlIFBNIGRvbWFpbnMNCj4gPiBjYW4ndCByZWFsbHkgYmUgZG9u
-ZSBpbiBhIGdlbmVyaWMgd2F5LCBhcyBpdCBiZWNvbWVzIGRldmljZS9wbGF0Zm9ybQ0KPiA+IHNw
-ZWNpZmljLiBTaW5jZSB0aGlzIG5lZWRzIHRvIGJlIG1hbmFnZWQgYnkgdGhlIGRyaXZlcnMvYnVz
-ZXMgYW55d2F5LA0KPiA+IHRoZXkgbWlnaHQgYXMgd2VsbCBnZXQgY29udHJvbCBvZiB3aGF0IFBN
-IGRvbWFpbiB0aGV5IG5lZWQgdG8gcG93ZXItb24NCj4gPiB0byBwcm9iZSB0aGVpciBkZXZpY2Vz
-Lg0KPiANCj4gRHVlIHRvIHRoZSBhYm92ZSwgaXQgbWlnaHQgYmUgYSBnb29kIGlkZWEgdG8gcG93
-ZXItb24gdGhlIFNDTUkNCj4gKnBvd2VyLWRvbWFpbnMqIGR1cmluZyBib290IGFuZCBsZWF2ZSB0
-aGVtIG9uIHRvIGFsbG93IGRyaXZlcnMgdG8gY29udGludWUNCj4gdG8gcHJvYmUgdGhlaXIgZGV2
-aWNlcz8NCg0KRm9yIGRlYnVnLCB0aGlzIGlzIG9rLiBCdXQgcmVsZWFzZSB0aGUgY29kZSBmb3Ig
-cHJvZHVjdGlvbiwga2VlcCB0aGVtIGVuYWJsZWQNCmR1cmluZyBib290IGlzIG5vdCBnb29kLg0K
-PiANCj4gTWF5YmUgYSBtb2R1bGUgcGFyYW1ldGVyIG9yIEtjb25maWcgZGVidWcgb3B0aW9uIGNv
-dWxkIGJlIHVzZWQgdG8gY29udHJvbA0KPiB0aGlzPw0KDQpHcmVnIG1pZ2h0IG5vdCBiZSBoYXBw
-eSBmb3IgaW50cm9kdWNpbmcgbW9kdWxlIHBhcmFtZXRlciwgSSBndWVzcy4NCg0KPiANCj4gSW4g
-dGhpcyB3YXkgYW4gdXBkYXRlZCBEVFMgd2l0aCB0aGF0IGFkZHMgYSBwZXJmb3JtYW5jZSBkb21h
-aW4gdG8gYQ0KPiBjb25zdW1lciBkZXZpY2Ugbm9kZSAod2hpY2ggYWxyZWFkeSBoYXMgYSBwb3dl
-ci1kb21haW4pLCBzaG91bGQgYWxsb3cgdGhlDQo+IGNvbnN1bWVyIGRyaXZlciB0byBjb250aW51
-ZSB0byBwcm9iZSBzdWNjZXNzZnVsbHkuDQo+IA0KPiBQZW5nLCB3b3VsZCB0aGlzIHJlc29sdmUg
-eW91ciBjb25jZXJuPw0KDQpBY3R1YWxseSBJIGFtIG5vdCBzdXJlLiBtdWx0aXBsZSBQRCBpcyBu
-b3QgYSB0ZWNobmljYWwgaXNzdWUsIGl0IGlzIGp1c3QgYWRkaW5nDQptb3JlIGNoYW5nZXMgdG8g
-dmFyaW91cyBkZXZpY2UgZHJpdmVycywgd2UgaGF2ZSBWUFUvR1BVL0RJU1BMQVkvTlBVLw0KSFNJ
-Ty9DQU1FUkEgYW5kIGV0Yy4uIHNvIGFsbCB0aGUgZHJpdmVycyBuZWVkIHVwZGF0ZSwgd2hpY2gg
-aXMNCm5vdCB3ZWxjb21lZCBieSBkcml2ZXIgZGV2ZWxvcGVycyA6KQ0KSSBhbSBzdGlsbCB0cnlp
-bmcgdG8gZW5hYmxlIG11bHRpcGxlIFBEIGZvciBzYXlpbmcgTU1DLA0KYW5kIHNlZSBob3cgaXQg
-d29ya3MgYWZ0ZXIgYWRkaW5nIHBlcmZvcm1hbmNlIGRvbWFpbiBhbmQgaG93IGRldmljZQ0KZHZm
-cyB3b3JrcyBpbiBzdWNoIGNhc2UuDQoNClRoYW5rcywNClBlbmcuDQoNCj4gDQo+IEtpbmQgcmVn
-YXJkcw0KPiBVZmZlDQo=
+On Tue, 17 Oct 2023 at 11:02, Ionela Voinescu <ionela.voinescu@arm.com> wrote:
+>
+> Hi,
+>
+> On Monday 16 Oct 2023 at 17:32:03 (+0200), Vincent Guittot wrote:
+> > Hi Ionela,
+> >
+> > On Mon, 16 Oct 2023 at 14:13, Ionela Voinescu <ionela.voinescu@arm.com> wrote:
+> > >
+> > > Hi both,
+> > >
+> > > On Wednesday 11 Oct 2023 at 16:25:46 (+0200), Vincent Guittot wrote:
+> > > > On Wed, 11 Oct 2023 at 12:27, Pierre Gondois <pierre.gondois@arm.com> wrote:
+> > > > >
+> > > > > Hello Vincent,
+> > > > >
+> > > > > On 10/9/23 12:36, Vincent Guittot wrote:
+> > > > > > cppc cpufreq driver can register an artificial energy model. In such case,
+> > > > > > it also have to register the frequency that is used to define the CPU
+> > > > > > capacity
+> > > > > >
+> > > > > > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> > > > > > ---
+> > > > > >   drivers/cpufreq/cppc_cpufreq.c | 18 ++++++++++++++++++
+> > > > > >   1 file changed, 18 insertions(+)
+> > > > > >
+> > > > > > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> > > > > > index fe08ca419b3d..24c6ba349f01 100644
+> > > > > > --- a/drivers/cpufreq/cppc_cpufreq.c
+> > > > > > +++ b/drivers/cpufreq/cppc_cpufreq.c
+> > > > > > @@ -636,6 +636,21 @@ static int populate_efficiency_class(void)
+> > > > > >       return 0;
+> > > > > >   }
+> > > > > >
+> > > > > > +
+> > > > > > +static void cppc_cpufreq_set_capacity_ref_freq(struct cpufreq_policy *policy)
+> > > > > > +{
+> > > > > > +     struct cppc_perf_caps *perf_caps;
+> > > > > > +     struct cppc_cpudata *cpu_data;
+> > > > > > +     unsigned int ref_freq;
+> > > > > > +
+> > > > > > +     cpu_data = policy->driver_data;
+> > > > > > +     perf_caps = &cpu_data->perf_caps;
+> > > > > > +
+> > > > > > +     ref_freq = cppc_cpufreq_perf_to_khz(cpu_data, perf_caps->highest_perf);
+> > > > > > +
+> > > > > > +     per_cpu(capacity_ref_freq, policy->cpu) = ref_freq;
+> > > > >
+> > > > > 'capacity_ref_freq' seems to be updated only if CONFIG_ENERGY_MODEL is set. However in
+> > > > > [1], get_capacity_ref_freq() relies on 'capacity_ref_freq'. The cpufreq_schedutil governor
+> > > > > should have a valid 'capacity_ref_freq' value set if the CPPC cpufreq driver is used
+> > > > > without energy model I believe.
+> > > >
+> > > > we can disable it by setting capacity_ref_freq to 0 so it will
+> > > > fallback on cpuinfo like intel and amd which uses default
+> > > > SCHED_CAPACITY_SCALE capacity
+> > > >
+> > > > Could you provide me with more details about your platform ? I still
+> > > > try to understand how the cpu compute capacity is set up on your
+> > > > system. How do you set per_cpu cpu_scale variable ? we should set the
+> > > > ref freq at the same time
+> > > >
+> > >
+> > > Yes, the best place to set it would be in:
+> > > drivers/base/arch_topology.c: topology_init_cpu_capacity_cppc()
+> >
+> > Thanks. I didn't notice it
+> >
+> > >
+> > > But:
+> > >  - That function reuses topology_normalize_cpu_scale() and when called
+> > >    it needs to have capacity_ref_freq = 1. So either capacity_ref_freq
+> > >    needs to be set for each CPU after topology_normalize_cpu_scale() is
+> > >    called or we should not call topology_normalize_cpu_scale() here and
+> > >    just unpack a CPPC specific version of it in
+> > >    topology_init_cpu_capacity_cppc(). The latter is probably better as
+> > >    we avoid iterating through all CPUs a couple of times.
+> > >
+> > >  - When set, capacity_ref_freq needs to be a "frequency" (at least
+> > >    in reference to the reference frequencies provided by CPPC). So
+> > >    cppc_cpufreq_khz_to_perf() and cppc_cpufreq_perf_to_khz() would need
+> > >    to move to drivers/acpi/cppc_acpi.c. They don't have any dependency
+> > >    on cpufreq (policies) so that should be alright.
+> > >
+> > > topology_init_cpu_capacity_cppc() is a better place to set
+> > > capacity_ref_freq because one can do it for each CPU, and it not only
+> >
+> > I agree, topology_init_cpu_capacity_cppc() is the best place to set
+> > capacity_ref_freq()
+> >
+> > > caters for the EAS case but also for frequency invariance, when
+> > > arch_set_freq_scale() is called, if no counters are supported.
+> > >
+> > > When counters are supported, there are still two loose threads:
+> > >  - amu_fie_setup(): Vincent, would you mind completely removing
+> > >    cpufreq_get_hw_max_freq() and reusing arch_scale_freq_ref() here?
+> >
+> > I wonder if we can have a ordering dependency problem as both
+> > init_cpu_capacity_notifier() and init_amu_fie_notifier() are
+> > registered for the same CPUFREQ_POLICY_NOTIFIER event and I'm not sure
+> >  it will happen in the right ordering
+>
+> Yes, you are right, this would be a problem for DT systems. With the
+> implementation above, ACPI systems would obtain capacity_ref_freq on
+> processor probe so it should be then available at policy creation when
+> amu_fie_setup() would be called.
+
+yes. the problem is only for DT
+
+>
+> Initially I thought the only solution might be to move
+> freq_inv_set_max_ratio() in the arch topology driver to the same
+> callback that initialises capacity, but that quickly becomes ugly with
+> making it support both DT and ACPI systems. And then there's the
+> question on whether it belongs there.
+
+The goal would be to update the ratio while initializing everything
+else. But this means that we must initialize the ratio in such a way
+that amu will return by default SCHED_CAPACITY_SCALE until
+arch_topology.c initializes it.
+
+I will make it a try to check how ugly it will be
+
+>
+> But I think the better option is to wrap policy->cpuinfo.max_freq in
+> another getter function which can be used in both amu_fie_setup() and
+> init_cpu_capacity_callback(). This can be implemented in the
+> arch topology driver and exposed to the architecture specific topology
+> files.
+>
+> I'm not sure if this might be worth leaving for another patchset as
+> well. Let us know if you'd like us to help on theses ones.
+>
+> Thanks,
+> Ionela.
+>
+> >
+> > >
+> > >  - It would be nice if cppc_scale_freq_workfn() would use
+> > >    arch_scale_freq_ref() as well, for consistency. But it would need
+> > >    to be converted back to performance before use, so that would mean
+> > >    extra work on the tick, which is not ideal.
+> >
+> > This once seems more complex as it implies other arch that are not
+> > using arch_topology.c and would need more rework so I would prefer to
+> > make it a separate patchset
+> >
+> > Thanks
+> > Vincent
+> >
+> > >
+> > > Basically it would be good if what gets used for capacity
+> > > (arch_scale_freq_ref()) gets used for frequency invariance as well,
+> > > in all locations.
+> > >
+> > > Thanks,
+> > > Ionela.
+> > >
+> > > > >
+> > > > > Also 'capacity_ref_freq' seems to be set only for 'policy->cpu'. I believe it should
+> > > > > be set for the whole perf domain in case this 'policy->cpu' goes offline.
+> > > > >
+> > > > > Another thing, related my comment to [1] and to [2], for CPPC the max capacity matches
+> > > > > the boosting frequency. We have:
+> > > > >    'non-boosted max capacity' < 'boosted max capacity'.
+> > > > > -
+> > > > > If boosting is not enabled, the CPU utilization can still go above the 'non-boosted max
+> > > > > capacity'. The overutilization of the system seems to be triggered by comparing the CPU
+> > > > > util to the 'boosted max capacity'. So systems might not be detected as overutilized.
+> > > >
+> > > > As Peter mentioned, we have to decide what is the original compute
+> > > > capacity of your CPUs which is usually the sustainable max compute
+> > > > capacity, especially when using EAS and EM
+> > > >
+> > > > >
+> > > > > For the EAS energy computation, em_cpu_energy() tries to predict the frequency that will
+> > > > > be used. It is currently unknown to the function that the frequency request will be
+> > > > > clamped by __resolve_freq():
+> > > > > get_next_freq()
+> > > > > \-cpufreq_driver_resolve_freq()
+> > > > >    \-__resolve_freq()
+> > > > > This means that the energy computation might use boosting frequencies, which are not
+> > > > > available.
+> > > > >
+> > > > > Regards,
+> > > > > Pierre
+> > > > >
+> > > > > [1]: [PATCH v2 4/6] cpufreq/schedutil: use a fixed reference frequency
+> > > > > [2]: https://lore.kernel.org/lkml/20230905113308.GF28319@noisy.programming.kicks-ass.net/
+> > > > >
+> > > > > > +}
+> > > > > > +
+> > > > > >   static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
+> > > > > >   {
+> > > > > >       struct cppc_cpudata *cpu_data;
+> > > > > > @@ -643,6 +658,9 @@ static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
+> > > > > >               EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
+> > > > > >
+> > > > > >       cpu_data = policy->driver_data;
+> > > > > > +
+> > > > > > +     cppc_cpufreq_set_capacity_ref_freq(policy);
+> > > > > > +
+> > > > > >       em_dev_register_perf_domain(get_cpu_device(policy->cpu),
+> > > > > >                       get_perf_level_count(policy), &em_cb,
+> > > > > >                       cpu_data->shared_cpu_map, 0);
