@@ -2,159 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 138B07CB9D7
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Oct 2023 06:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD007CBA55
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Oct 2023 07:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234341AbjJQEw7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Oct 2023 00:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55542 "EHLO
+        id S234465AbjJQFrJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Oct 2023 01:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232228AbjJQEw6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Oct 2023 00:52:58 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE4FA2;
-        Mon, 16 Oct 2023 21:52:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697518376; x=1729054376;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aDjfjftiY1bEitGKNGlzv06DZeVXN5zC6ddC0dUDzPw=;
-  b=iVnB0FgLqwq+64fUCV6oOvw5697Io/XIZfzXpD6OuTiOfqp7wSWrFrLH
-   gw9lqqvWgffJwV8ASWdR7+/ijSsMx3TGsJkuDr8fzaMaukIjV47qS7hnv
-   UUutDXhKooOjEVRU2Du8YIVT51eLVo1wbw0vApNr32M0fRgXXZHSFtp5G
-   qLYRWpnuORc6ofGyq9bwzSfg5PZPXWB0izHkcOe1fiTHs1VnUEIYxvwDf
-   w6vSGZ0dUBvM7O33Gvt2KfrNtFZWuWm29oXBUbNqtpbPVz0tfvqKVDAOZ
-   Csx8vyRP9QFyJQtHhF9xSQR+vGwp7l1qh0iRPa7kYhLWD9s6lEtRQMudE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="376066162"
-X-IronPort-AV: E=Sophos;i="6.03,231,1694761200"; 
-   d="scan'208";a="376066162"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2023 21:52:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.03,231,1694761200"; 
-   d="scan'208";a="3926579"
-Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 16 Oct 2023 21:52:54 -0700
-Received: from kbuild by f64821696465 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qsc4U-00091n-1v;
-        Tue, 17 Oct 2023 04:52:46 +0000
-Date:   Tue, 17 Oct 2023 12:52:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nikhil V <quic_nprakash@quicinc.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Nikhil V <quic_nprakash@quicinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tejun Heo <tj@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-doc@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_kprasan@quicinc.com, quic_mpilaniy@quicinc.com,
-        quic_shrekk@quicinc.com, mpleshivenkov@google.com,
-        ericyin@google.com
-Subject: Re: [PATCH 2/4] PM: hibernate: Move to crypto APIs for LZO
- compression
-Message-ID: <202310171226.pLUPeuC7-lkp@intel.com>
-References: <486273fb828eb56d1895fee49481f5c035df8300.1696410298.git.quic_nprakash@quicinc.com>
+        with ESMTP id S234391AbjJQFrJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Oct 2023 01:47:09 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42CB48E;
+        Mon, 16 Oct 2023 22:47:07 -0700 (PDT)
+X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 39H5iEadD3730461, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.93/5.92) with ESMTPS id 39H5iEadD3730461
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 17 Oct 2023 13:44:15 +0800
+Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Tue, 17 Oct 2023 13:44:13 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Tue, 17 Oct 2023 13:44:13 +0800
+Received: from RTEXMBS01.realtek.com.tw ([fe80::9cb8:8d5:b6b3:213b]) by
+ RTEXMBS01.realtek.com.tw ([fe80::9cb8:8d5:b6b3:213b%5]) with mapi id
+ 15.01.2375.007; Tue, 17 Oct 2023 13:44:13 +0800
+From:   Ricky WU <ricky_wu@realtek.com>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Lukas Wunner <lukas@wunner.de>
+CC:     "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: RE: [PATCH] PCI: pciehp: Prevent child devices from doing RPM on PCIe Link Down
+Thread-Topic: [PATCH] PCI: pciehp: Prevent child devices from doing RPM on
+ PCIe Link Down
+Thread-Index: AQHZ/+WX29Sx+yjN7keHtkFSV38Z/LBLoV4AgAE/YwCAAJeMcA==
+Date:   Tue, 17 Oct 2023 05:44:13 +0000
+Message-ID: <24f72eea9fba45c4b1cd85836b17f251@realtek.com>
+References: <20231016040132.23824-1-kai.heng.feng@canonical.com>
+ <20231016093210.GA22952@wunner.de>
+ <CAAd53p7gbWSkRbng205z2U0_kU42JeFw8qThcBuXuVwCC+Y_VQ@mail.gmail.com>
+In-Reply-To: <CAAd53p7gbWSkRbng205z2U0_kU42JeFw8qThcBuXuVwCC+Y_VQ@mail.gmail.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+x-originating-ip: [172.22.81.100]
+x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <486273fb828eb56d1895fee49481f5c035df8300.1696410298.git.quic_nprakash@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Nikhil,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.6-rc6 next-20231016]
-[cannot apply to pavel-leds/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nikhil-V/PM-hibernate-Rename-lzo-to-make-it-generic/20231004-173227
-base:   linus/master
-patch link:    https://lore.kernel.org/r/486273fb828eb56d1895fee49481f5c035df8300.1696410298.git.quic_nprakash%40quicinc.com
-patch subject: [PATCH 2/4] PM: hibernate: Move to crypto APIs for LZO compression
-config: sh-sh7770_generic_defconfig (https://download.01.org/0day-ci/archive/20231017/202310171226.pLUPeuC7-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231017/202310171226.pLUPeuC7-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310171226.pLUPeuC7-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   sh4-linux-ld: kernel/power/hibernate.o: in function `software_resume':
->> hibernate.c:(.text+0xd0c): undefined reference to `crypto_has_alg'
-   sh4-linux-ld: kernel/power/hibernate.o: in function `hibernate':
-   hibernate.c:(.text+0x1218): undefined reference to `crypto_has_alg'
-   sh4-linux-ld: kernel/power/swap.o: in function `compress_threadfn':
->> swap.c:(.text+0x5d8): undefined reference to `crypto_comp_compress'
-   sh4-linux-ld: kernel/power/swap.o: in function `decompress_threadfn':
->> swap.c:(.text+0x728): undefined reference to `crypto_comp_decompress'
-   sh4-linux-ld: kernel/power/swap.o: in function `load_compressed_image':
->> swap.c:(.text+0x9ec): undefined reference to `crypto_alloc_base'
->> sh4-linux-ld: swap.c:(.text+0xe7c): undefined reference to `crypto_destroy_tfm'
-   sh4-linux-ld: kernel/power/swap.o: in function `save_compressed_image':
-   swap.c:(.text+0x14f8): undefined reference to `crypto_alloc_base'
-   sh4-linux-ld: swap.c:(.text+0x169c): undefined reference to `crypto_destroy_tfm'
-   sh4-linux-ld: crypto/lzo.o: in function `lzo_decompress':
->> lzo.c:(.text+0x50): undefined reference to `lzo1x_decompress_safe'
-   sh4-linux-ld: crypto/lzo.o: in function `lzo_compress':
->> lzo.c:(.text+0xb0): undefined reference to `lzo1x_1_compress'
-   sh4-linux-ld: crypto/lzo.o: in function `lzo_sdecompress':
-   lzo.c:(.text+0x144): undefined reference to `lzo1x_decompress_safe'
-   sh4-linux-ld: crypto/lzo.o: in function `lzo_scompress':
-   lzo.c:(.text+0x1a0): undefined reference to `lzo1x_1_compress'
-   sh4-linux-ld: crypto/lzo.o: in function `lzo_mod_fini':
->> lzo.c:(.exit.text+0x14): undefined reference to `crypto_unregister_alg'
->> sh4-linux-ld: lzo.c:(.exit.text+0x20): undefined reference to `crypto_unregister_scomp'
-   sh4-linux-ld: crypto/lzo.o: in function `lzo_mod_init':
->> lzo.c:(.init.text+0x30): undefined reference to `crypto_register_alg'
->> sh4-linux-ld: lzo.c:(.init.text+0x38): undefined reference to `crypto_register_scomp'
->> sh4-linux-ld: lzo.c:(.init.text+0x40): undefined reference to `crypto_unregister_alg'
-   sh4-linux-ld: crypto/lzo-rle.o: in function `lzorle_decompress':
->> lzo-rle.c:(.text+0x50): undefined reference to `lzo1x_decompress_safe'
-   sh4-linux-ld: crypto/lzo-rle.o: in function `lzorle_compress':
->> lzo-rle.c:(.text+0xb0): undefined reference to `lzorle1x_1_compress'
-   sh4-linux-ld: crypto/lzo-rle.o: in function `lzorle_sdecompress':
-   lzo-rle.c:(.text+0x144): undefined reference to `lzo1x_decompress_safe'
-   sh4-linux-ld: crypto/lzo-rle.o: in function `lzorle_scompress':
-   lzo-rle.c:(.text+0x1a0): undefined reference to `lzorle1x_1_compress'
-   sh4-linux-ld: crypto/lzo-rle.o: in function `lzorle_mod_fini':
->> lzo-rle.c:(.exit.text+0x14): undefined reference to `crypto_unregister_alg'
->> sh4-linux-ld: lzo-rle.c:(.exit.text+0x20): undefined reference to `crypto_unregister_scomp'
-   sh4-linux-ld: crypto/lzo-rle.o: in function `lzorle_mod_init':
->> lzo-rle.c:(.init.text+0x30): undefined reference to `crypto_register_alg'
->> sh4-linux-ld: lzo-rle.c:(.init.text+0x38): undefined reference to `crypto_register_scomp'
->> sh4-linux-ld: lzo-rle.c:(.init.text+0x40): undefined reference to `crypto_unregister_alg'
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for CRYPTO_LZO
-   Depends on [n]: CRYPTO [=n]
-   Selected by [y]:
-   - HIBERNATION [=y] && SWAP [=y] && ARCH_HIBERNATION_POSSIBLE [=y]
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogS2FpLUhlbmcgRmVuZyA8
+a2FpLmhlbmcuZmVuZ0BjYW5vbmljYWwuY29tPg0KPiANCj4gT24gTW9uLCBPY3QgMTYsIDIwMjMg
+YXQgNTozMuKAr1BNIEx1a2FzIFd1bm5lciA8bHVrYXNAd3VubmVyLmRlPiB3cm90ZToNCj4gPg0K
+PiA+IE9uIE1vbiwgT2N0IDE2LCAyMDIzIGF0IDEyOjAxOjMxUE0gKzA4MDAsIEthaS1IZW5nIEZl
+bmcgd3JvdGU6DQo+ID4gPiBXaGVuIGluc2VydGluZyBhbiBTRDcuMCBjYXJkIHRvIFJlYWx0ZWsg
+Y2FyZCByZWFkZXIsIGl0IGNhbiB0cmlnZ2VyDQo+ID4gPiBQQ0kgc2xvdCBMaW5rIGRvd24gYW5k
+IGNhdXNlcyB0aGUgZm9sbG93aW5nIGVycm9yOg0KPiA+DQo+ID4gV2h5IGRvZXMgKmluc2VydGlu
+ZyogYSBjYXJkIGNhdXNlIGEgTGluayBEb3duPw0KPiANCj4gUmlja3ksIGRvIHlvdSBrbm93IHRo
+ZSByZWFzb24gd2h5IExpbmsgRG93biBoYXBwZW5zPw0KPiANCg0KQmVjYXVzZSBTRDcuMCBjYXJk
+IGlzIHVzZSBwY2llLW52bWUgZHJpdmVyLCByZWFkZXIgbmVlZCB0byByZS1saW5rIHRoZW4ganVz
+dCBkbyB0aGUgcGNpZSBjaGFubmVsIA0KDQo+ID4NCj4gPg0KPiA+ID4gWyAgIDYzLjg5ODg2MV0g
+cGNpZXBvcnQgMDAwMDowMDoxYy4wOiBwY2llaHA6IFNsb3QoOCk6IExpbmsgRG93bg0KPiA+ID4g
+WyAgIDYzLjkxMjExOF0gQlVHOiB1bmFibGUgdG8gaGFuZGxlIHBhZ2UgZmF1bHQgZm9yIGFkZHJl
+c3M6DQo+IGZmZmZiMjRkNDAzZTUwMTANCj4gPiBbLi4uXQ0KPiA+ID4gWyAgIDYzLjkxMjE5OF0g
+ID8gYXNtX2V4Y19wYWdlX2ZhdWx0KzB4MjcvMHgzMA0KPiA+ID4gWyAgIDYzLjkxMjIwM10gID8g
+aW9yZWFkMzIrMHgyZS8weDcwDQo+ID4gPiBbICAgNjMuOTEyMjA2XSAgPyBydHN4X3BjaV93cml0
+ZV9yZWdpc3RlcisweDViLzB4OTAgW3J0c3hfcGNpXQ0KPiA+ID4gWyAgIDYzLjkxMjIxN10gIHJ0
+c3hfc2V0X2wxb2ZmX3N1YisweDFjLzB4MzAgW3J0c3hfcGNpXQ0KPiA+ID4gWyAgIDYzLjkxMjIy
+Nl0gIHJ0czUyNjFfc2V0X2wxb2ZmX2NmZ19zdWJfZDArMHgzNi8weDQwIFtydHN4X3BjaV0NCj4g
+PiA+IFsgICA2My45MTIyMzRdICBydHN4X3BjaV9ydW50aW1lX2lkbGUrMHhjNy8weDE2MCBbcnRz
+eF9wY2ldDQo+ID4gPiBbICAgNjMuOTEyMjQzXSAgPyBfX3BmeF9wY2lfcG1fcnVudGltZV9pZGxl
+KzB4MTAvMHgxMA0KPiA+ID4gWyAgIDYzLjkxMjI0Nl0gIHBjaV9wbV9ydW50aW1lX2lkbGUrMHgz
+NC8weDcwDQo+ID4gPiBbICAgNjMuOTEyMjQ4XSAgcnBtX2lkbGUrMHhjNC8weDJiMA0KPiA+ID4g
+WyAgIDYzLjkxMjI1MV0gIHBtX3J1bnRpbWVfd29yaysweDkzLzB4YzANCj4gPiA+IFsgICA2My45
+MTIyNTRdICBwcm9jZXNzX29uZV93b3JrKzB4MjFhLzB4NDMwDQo+ID4gPiBbICAgNjMuOTEyMjU4
+XSAgd29ya2VyX3RocmVhZCsweDRhLzB4M2MwDQo+ID4NCj4gPiBUaGlzIGxvb2tzIGxpa2UgcGNy
+LT5yZW1hcF9hZGRyIGlzIGFjY2Vzc2VkIGFmdGVyIGl0IGhhcyBiZWVuDQo+ID4gaW91bm1hcCdl
+ZCBpbiBydHN4X3BjaV9yZW1vdmUoKSBvciBiZWZvcmUgaXQgaGFzIGJlZW4gaW9tYXAnZWQgaW4N
+Cj4gcnRzeF9wY2lfcHJvYmUoKS4NCj4gPg0KPiA+IElzIHRoZSBjYXJkIHJlYWRlciBpdHNlbGYg
+bG9jYXRlZCBiZWxvdyBhIGhvdHBsdWcgcG9ydCBhbmQgdW5wbHVnZ2VkIGhlcmU/DQo+ID4gT3Ig
+aXMgdGhpcyBhYm91dCB0aGUgY2FyZCBiZWluZyByZW1vdmVkIGZyb20gdGhlIGNhcmQgcmVhZGVy
+Pw0KPiA+DQo+ID4gSGF2aW5nIGZ1bGwgZG1lc2cgb3V0cHV0IGFuZCBsc3BjaSAtdnZ2IG91dHB1
+dCBhdHRhY2hlZCB0byBhIGJ1Z3ppbGxhDQo+ID4gd291bGQgaGVscCB0byB1bmRlcnN0YW5kIHdo
+YXQgaXMgZ29pbmcgb24uDQo+IA0KPiBJIGRvbid0IGhhdmUgdGhlIGhhcmR3YXJlIHNvIHdlIG5l
+ZWQgUmlja3kgdG8gcHJvdmlkZSBtb3JlIGluZm9ybWF0aW9uIGhlcmUuDQo+IA0KPiBSZWdhcmRs
+ZXNzIG9mIHRoZSBjYXJkcmVhZGVyIGlzc3VlLCBkbyB5b3UgaGF2ZSBhbnkgY29uY2VybiBvbiB0
+aGUgcGF0Y2gNCj4gaXRzZWxmPw0KPiANCj4gS2FpLUhlbmcNCj4gDQo+ID4NCj4gPiBUaGFua3Ms
+DQo+ID4NCj4gPiBMdWthcw0K
