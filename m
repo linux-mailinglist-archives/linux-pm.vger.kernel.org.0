@@ -2,133 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0527CE552
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Oct 2023 19:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B73127CE6DE
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Oct 2023 20:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbjJRRvs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Oct 2023 13:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59158 "EHLO
+        id S229853AbjJRSij (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Oct 2023 14:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231414AbjJRRvs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Oct 2023 13:51:48 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53596116
-        for <linux-pm@vger.kernel.org>; Wed, 18 Oct 2023 10:51:45 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2c16757987fso94376781fa.3
-        for <linux-pm@vger.kernel.org>; Wed, 18 Oct 2023 10:51:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697651503; x=1698256303; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gHJSF5X1nkWgGuo3YQxKlNnSL2Jb3AlzWdUDQa0ejrA=;
-        b=s82zJd5YurNSHwIlkxxXvaugD8+71EV9KMohp5SjSHngLsC1Rn2yM5RziwTJ7yFafC
-         BfcHav6U41G6MpSuahq5sprt+oHC3z/fVr5IolHlC1bEw5DxDEOINIBTYgapmsEb9Q51
-         v6lsV6HNDZ+vUr/HDAQ6dQsXMZdmdKf7RZp9UID09OPMyhBPLqdDf83hvQr+hi1E9an/
-         DklhOjEqat+97H32YIpZMI7U4p3fqR9ixORxITWDXaQfnmb6dZtcWlL8Web2JfjAmNlH
-         qa0KEzm9YJpAKxLLqPEkP3ebBZAeGR+a3RKgYFR0FU9pQOt49E/RWqBYI1ocx04kmdH0
-         yMvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697651503; x=1698256303;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gHJSF5X1nkWgGuo3YQxKlNnSL2Jb3AlzWdUDQa0ejrA=;
-        b=DgVxb5Ne3+hiqfLtC+4JhDLkf+s4PtgLh2kGC7Is5mXIg62u8aeRn3LmqrEXPWTHN4
-         bkJ+wX/8fJnMiLXnuy4CWXVTg9mbZKwJdN1PdmtpmXm2B+toxYR7AnBE5GEBRIfHCL+u
-         zuSOI0RMWcltzPxcHnyfr+zXoXtr5BFGhKQExO3Xih2K5TUNqOID2XJJUDkMQD6Rs6ME
-         RE4Q8IB5YSGTfnfbRni7NNPd4xxy705PryyEdwRxd1T/9FDslWmfZFWjnkGqTsqTJyf0
-         hKDHIL2+BG0wyVoMeh6U/r20pldJWwMEznckH+nt28L8XQxl91SVrg/jWHHzkGDKKz/R
-         u/oQ==
-X-Gm-Message-State: AOJu0YyStqNcFCdgQwOxbpw8oBSxStY/OjaLKr7Y6qu++cpuVfg54YlJ
-        ZWVbLfHwY+K2K3J0DwR9AuL7XA==
-X-Google-Smtp-Source: AGHT+IGp5OwXk3ooeeFdICyeMDEnuecQP80Ve5odqVSAvaMAzznXCIvH5bx9jBx+HtZf6/Le6CMARA==
-X-Received: by 2002:ac2:484c:0:b0:503:35b3:aa31 with SMTP id 12-20020ac2484c000000b0050335b3aa31mr4419418lfy.27.1697651503384;
-        Wed, 18 Oct 2023 10:51:43 -0700 (PDT)
-Received: from [172.30.205.86] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
-        by smtp.gmail.com with ESMTPSA id x25-20020a19f619000000b0050797a35f8csm779407lfe.162.2023.10.18.10.51.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Oct 2023 10:51:43 -0700 (PDT)
-Message-ID: <b1926ed8-fbe2-4428-aa23-dc4279553417@linaro.org>
-Date:   Wed, 18 Oct 2023 19:51:39 +0200
+        with ESMTP id S229702AbjJRSii (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Oct 2023 14:38:38 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCE6F7
+        for <linux-pm@vger.kernel.org>; Wed, 18 Oct 2023 11:38:37 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 34936C433C7
+        for <linux-pm@vger.kernel.org>; Wed, 18 Oct 2023 18:38:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1697654317;
+        bh=LFUgayu+9rk6ceKHKIIaGE7qskwnLsaaXiMbRxwR2jI=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=uKw0gzMwmd8my9qcdUQm0qHVNO+FJhenHw1pPf4nC91yQossZZ8dmSUcxumjYfdxv
+         /HExL+W+cCDfCN0gDpmwi8BXn7+UBjT57ZS6XFsTgs/G9wfXOVQLEQUhFUQb68Pspl
+         BQKV6FYrItCnQg4eKAqsjF5KL7QvlefQSivFvTIftgjbrUbbulpQfdLnJhJr6RSRNc
+         G1UkwbmcRngwzRQUEnnHo3jqaMs47FrPDtC90EmuSZc8ZD5AKGw3QLVzpCWE+964EF
+         Lw46jdGV/Ncya1iME/A5TVU0JhgcJgsEz2mRAFnAi+LFrFBEFEh4jiGe8OGMeHOGej
+         od+6+JPdL3zVQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 21246C53BD0; Wed, 18 Oct 2023 18:38:37 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 217931] amd-pstate lacks crucial features: CPU frequency and
+ boost control
+Date:   Wed, 18 Oct 2023 18:38:36 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: hej@hot.ee
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217931-137361-oHi9DJJCnQ@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217931-137361@https.bugzilla.kernel.org/>
+References: <bug-217931-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 6/8] arm64: dts: qcom: ipq5332: populate the opp table
- based on the eFuse
-Content-Language: en-US
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, rafael@kernel.org,
-        viresh.kumar@linaro.org, ilia.lin@kernel.org,
-        quic_kathirav@quicinc.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-References: <cover.1697600121.git.quic_varada@quicinc.com>
- <fbd343f731973f532496c2ccfe65e6b487a14db3.1697600121.git.quic_varada@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <fbd343f731973f532496c2ccfe65e6b487a14db3.1697600121.git.quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217931
 
+--- Comment #11 from hej@hot.ee ---
+Hi Perry, is it possible to also add scaling_max_freq support to amd-pstate?
+I'd like to restrict max frequency on the cpu. Thanks.
 
-On 10/18/23 11:29, Varadarajan Narayanan wrote:
-> IPQ53xx have different OPPs available for the CPU based on
-> SoC variant. This can be determined through use of an eFuse
-> register present in the silicon.
-> 
-> Add support to read the eFuse and populate the OPPs based on it.
-> 
-> 	------------------------------------------------
-> 	Frequency	BIT2	BIT1	opp-supported-hw
-> 			1.1GHz	1.5GHz
-> 	------------------------------------------------
-> 	1100000000	1	1	0xf
-BIT(0) | BIT(1) | BIT(2) is 0x7
+--=20
+You may reply to this email to add a comment.
 
-> 	1500000000	0	1	0x3
-> 	------------------------------------------------
-> 
-> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
-> v2:	Fix inconsistencies in comment and move it to commit log
-> 	as suggested
-> 	Remove opp-microvolt entries as no regulator is managed by Linux
-> 	cpu_speed_bin -> cpu-speed-bin in node name
-> 	Remove "nvmem-cell-names" due to dtbs_check error
-> ---
->   arch/arm64/boot/dts/qcom/ipq5332.dtsi | 19 ++++++++++++++++---
->   1 file changed, 16 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> index 4206f05..a0dcba3 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> @@ -91,11 +91,19 @@
->   	};
->   
->   	cpu_opp_table: opp-table-cpu {
-> -		compatible = "operating-points-v2";
-> +		compatible = "operating-points-v2-kryo-cpu";
->   		opp-shared;
-> +		nvmem-cells = <&cpu_speed_bin>;
->   
-> -		opp-1488000000 {
-> -			opp-hz = /bits/ 64 <1488000000>;
-> +		opp-1100000000 {
-> +			opp-hz = /bits/ 64 <1100000000>;
-> +			opp-supported-hw = <0xF>;
-hex literals must be lowercase.
-
-Konrad
+You are receiving this mail because:
+You are the assignee for the bug.=
