@@ -2,157 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11BC27CD11E
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Oct 2023 02:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4482B7CD42D
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Oct 2023 08:18:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbjJRAH0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Oct 2023 20:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57386 "EHLO
+        id S1344642AbjJRGSq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Oct 2023 02:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjJRAHZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Oct 2023 20:07:25 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D500AC4
-        for <linux-pm@vger.kernel.org>; Tue, 17 Oct 2023 17:07:23 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2c50d1b9f22so52645191fa.0
-        for <linux-pm@vger.kernel.org>; Tue, 17 Oct 2023 17:07:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1697587642; x=1698192442; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yL5IHSgiOPCaseF8jxFxoTKSJkLG4FnIxMof3Q5FawM=;
-        b=clXo2BuXwWDeIGHWv6y1m7WBxmQt5y7kTjRrxV5RlJ7+e4RmwbCkHBdPYHWmcpday+
-         e6/HW3c/+1HuhSfRrVOBwA1ph13ytHoAh4u9tVwWF6VttJOHf9tMh8KJN6OzKDL8RuLd
-         1ElbON6TzF86S9AhHUnouq75QrEyuySIsu1+g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697587642; x=1698192442;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yL5IHSgiOPCaseF8jxFxoTKSJkLG4FnIxMof3Q5FawM=;
-        b=SFYDnP3H+p7qHg0GX++cxzpf5roGbeeikaNi8nQtvJZVEI14IBB2ojqrOZOyuMVZCG
-         7w86yAbXME+6Ab7v4NDFLAqm3FTIwxMfSr24VjhSzvi8miPfHYdLVY2J8yoR9CpNWnpE
-         EfW89p5J0nIg04BNLF+C5YjMkPvYzz6KTVUCjn7YY+gahdcuojDnM/P3ZDQ50BX6QUsm
-         Pv0glLPYPwVFPKE4qx5uM5bEhBSkhsjFGdK32ZnmNm6bvYAlJNdu//6emjfCbNN3KMu4
-         lEZQCzher+mk7RT67UKzd+s+5cmNjad2SY6ozIRaQqZb/zddLnH48Pr66oYbI4wvbjAU
-         TagA==
-X-Gm-Message-State: AOJu0YzFWa6JifTbF3RIVZjaRAEgW2+/ZF9dn1CfE6GAitma799eFZd+
-        4m1ZtlXmJMc3iTyZmEmXxundXJP7jQXZy3/fxoI7Pw==
-X-Google-Smtp-Source: AGHT+IHdYpQ7b2GTg0pg2e6yXIg3WUzgg6FphjxIscthWaEOsQp4Vnpo/InQm+NVk8R54x4Et7gna/2lIz01hIOxMHE=
-X-Received: by 2002:ac2:598c:0:b0:507:a33f:135d with SMTP id
- w12-20020ac2598c000000b00507a33f135dmr2672443lfn.4.1697587641970; Tue, 17 Oct
- 2023 17:07:21 -0700 (PDT)
+        with ESMTP id S1344549AbjJRGSK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Oct 2023 02:18:10 -0400
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613A7D41
+        for <linux-pm@vger.kernel.org>; Tue, 17 Oct 2023 23:17:56 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qszrx-0001Zh-7M; Wed, 18 Oct 2023 08:17:25 +0200
+Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qszrq-002UXp-Is; Wed, 18 Oct 2023 08:17:18 +0200
+Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.96)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qszrq-00Evhq-1c;
+        Wed, 18 Oct 2023 08:17:18 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     linux-rockchip@lists.infradead.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Chanwoo Choi <chanwoo@kernel.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Subject: [PATCH v8 00/26] Add perf support to the rockchip-dfi driver
+Date:   Wed, 18 Oct 2023 08:16:48 +0200
+Message-Id: <20231018061714.3553817-1-s.hauer@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20231017190545.157282-1-bero@baylibre.com>
-In-Reply-To: <20231017190545.157282-1-bero@baylibre.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 17 Oct 2023 17:07:10 -0700
-Message-ID: <CAGXv+5FwkBU3wfyZWWaiOgzLACfMVs4Bnu2KM4oSCUa28SzXVw@mail.gmail.com>
-Subject: Re: [PATCH v5 0/5] Add LVTS support for mt8192
-To:     =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>
-Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dunlap@infradead.org,
-        e.xingchen@zte.com.cn, p.zabel@pengutronix.de,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        ames.lo@mediatek.com, rex-bc.chen@mediatek.com,
-        nfraprado@collabora.com, abailon@baylibre.com,
-        amergnat@baylibre.com, khilman@baylibre.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+This series integrates the recent review feedback from Chanwoo Choi to
+v7.
 
-On Tue, Oct 17, 2023 at 12:05=E2=80=AFPM Bernhard Rosenkr=C3=A4nzer
-<bero@baylibre.com> wrote:
->
-> Add full LVTS support (MCU thermal domain + AP thermal domain) to MediaTe=
-k MT8192 SoC.
-> Also, add Suspend and Resume support to LVTS Driver (all SoCs),
-> and update the documentation that describes the Calibration Data Offsets.
->
-> v5 changes are a lot smaller than originally assumed -- commit
-> 185673ca71d3f7e9c7d62ee5084348e084352e56 fixed the issue I
-> was originally planning to work around in this patchset,
-> so what remains for v5 is noirq and cosmetics.
+Chanwoo, I am sending the full patchset again for people to try this
+series. You said that you applied 1-5 already, so please start picking
+from 6/26.
 
-I see two series in my inbox and on the mailing list. Which one is the
-correct one?
+Sascha
 
-Thanks
-ChenYu
+Sascha Hauer (26):
+  PM / devfreq: rockchip-dfi: Make pmu regmap mandatory
+  PM / devfreq: rockchip-dfi: Embed desc into private data struct
+  PM / devfreq: rockchip-dfi: use consistent name for private data
+    struct
+  PM / devfreq: rockchip-dfi: Add SoC specific init function
+  PM / devfreq: rockchip-dfi: dfi store raw values in counter struct
+  PM / devfreq: rockchip-dfi: Use free running counter
+  PM / devfreq: rockchip-dfi: introduce channel mask
+  PM / devfreq: rk3399_dmc,dfi: generalize DDRTYPE defines
+  PM / devfreq: rockchip-dfi: Clean up DDR type register defines
+  PM / devfreq: rockchip-dfi: Add RK3568 support
+  PM / devfreq: rockchip-dfi: Handle LPDDR2 correctly
+  PM / devfreq: rockchip-dfi: Handle LPDDR4X
+  PM / devfreq: rockchip-dfi: Pass private data struct to internal
+    functions
+  PM / devfreq: rockchip-dfi: Prepare for multiple users
+  PM / devfreq: rockchip-dfi: give variable a better name
+  PM / devfreq: rockchip-dfi: Add perf support
+  PM / devfreq: rockchip-dfi: make register stride SoC specific
+  PM / devfreq: rockchip-dfi: account for multiple DDRMON_CTRL registers
+  PM / devfreq: rockchip-dfi: add support for RK3588
+  dt-bindings: devfreq: event: convert Rockchip DFI binding to yaml
+  dt-bindings: devfreq: event: rockchip,dfi: Add rk3568 support
+  dt-bindings: devfreq: event: rockchip,dfi: Add rk3588 support
+  dt-bindings: soc: rockchip: grf: add rockchip,rk3588-pmugrf
+  arm64: dts: rockchip: rk3399: Enable DFI
+  arm64: dts: rockchip: rk356x: Add DFI
+  arm64: dts: rockchip: rk3588s: Add DFI
 
-> Changelog:
->    v5 :
->         - Suspend/Resume in noirq stage
->         - Reorder chipset specific functions
->         - Rebased :
->             base-commit: 4d5ab2376ec576af173e5eac3887ed0b51bd8566
->
->    v4 :
->         - Shrink the lvts_ap thermal sensor I/O range to 0xc00 to make
->           room for SVS support, pointed out by
->           AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora=
-.com>
->
->     v3 :
->         - Rebased :
->             base-commit: 6a3d37b4d885129561e1cef361216f00472f7d2e
->         - Fix issues in v2 pointed out by N=C3=ADcolas F. R. A. Prado <nf=
-raprado@collabora.com>:
->           Use filtered mode to make sure threshold interrupts are trigger=
-ed,
->           protocol documentation, cosmetics
->         - I (bero@baylibre.com) will be taking care of this patchset
->           from now on, since Balsam has left BayLibre. Thanks for
->           getting it almost ready, Balsam!
->
->     v2 :
->         - Based on top of thermal/linux-next :
->             base-commit: 7ac82227ee046f8234471de4c12a40b8c2d3ddcc
->         - Squash "add thermal zones and thermal nodes" and
->             "add temperature mitigation threshold" commits together to fo=
-rm
->             "arm64: dts: mediatek: mt8192: Add thermal nodes and thermal =
-zones" commit.
->         - Add Suspend and Resume support to LVTS Driver.
->         - Update Calibration Data documentation.
->         - Fix calibration data offsets for mt8192
->             (Thanks to "Chen-Yu Tsai" and "N=C3=ADcolas F. R. A. Prado").
->         https://lore.kernel.org/all/20230425133052.199767-1-bchihi@baylib=
-re.com/
->         Tested-by: Chen-Yu Tsai <wenst@chromium.org>
->
->     v1 :
->         - The initial series "Add LVTS support for mt8192" :
->             "https://lore.kernel.org/all/20230307163413.143334-1-bchihi@b=
-aylibre.com/".
->
-> Balsam CHIHI (5):
->   dt-bindings: thermal: mediatek: Add LVTS thermal controller definition
->     for mt8192
->   thermal/drivers/mediatek/lvts_thermal: Add suspend and resume
->   thermal/drivers/mediatek/lvts_thermal: Add mt8192 support
->   arm64: dts: mediatek: mt8192: Add thermal nodes and thermal zones
->   thermal/drivers/mediatek/lvts_thermal: Update calibration data
->     documentation
->
->  arch/arm64/boot/dts/mediatek/mt8192.dtsi      | 454 ++++++++++++++++++
->  drivers/thermal/mediatek/lvts_thermal.c       | 163 ++++++-
->  .../thermal/mediatek,lvts-thermal.h           |  19 +
->  3 files changed, 634 insertions(+), 2 deletions(-)
->
-> --
-> 2.42.0
+ .../bindings/devfreq/event/rockchip,dfi.yaml  |  74 ++
+ .../bindings/devfreq/event/rockchip-dfi.txt   |  18 -
+ .../rockchip,rk3399-dmc.yaml                  |   2 +-
+ .../devicetree/bindings/soc/rockchip/grf.yaml |   1 +
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi      |   1 -
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi      |   7 +
+ arch/arm64/boot/dts/rockchip/rk3588s.dtsi     |  16 +
+ drivers/devfreq/event/rockchip-dfi.c          | 814 +++++++++++++++---
+ drivers/devfreq/rk3399_dmc.c                  |  10 +-
+ include/soc/rockchip/rk3399_grf.h             |   9 +-
+ include/soc/rockchip/rk3568_grf.h             |  13 +
+ include/soc/rockchip/rk3588_grf.h             |  18 +
+ include/soc/rockchip/rockchip_grf.h           |  18 +
+ 13 files changed, 863 insertions(+), 138 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
+ create mode 100644 include/soc/rockchip/rk3568_grf.h
+ create mode 100644 include/soc/rockchip/rk3588_grf.h
+ create mode 100644 include/soc/rockchip/rockchip_grf.h
+
+-- 
+2.39.2
+
