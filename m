@@ -2,47 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE3187CDA2B
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Oct 2023 13:21:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 070887CDA49
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Oct 2023 13:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbjJRLVM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Oct 2023 07:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53404 "EHLO
+        id S229986AbjJRL1N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Oct 2023 07:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbjJRLVK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Oct 2023 07:21:10 -0400
+        with ESMTP id S229908AbjJRL1M (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Oct 2023 07:27:12 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA1FA115;
-        Wed, 18 Oct 2023 04:21:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07361112;
+        Wed, 18 Oct 2023 04:27:11 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 283602F4;
-        Wed, 18 Oct 2023 04:21:49 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AB33D2F4;
+        Wed, 18 Oct 2023 04:27:51 -0700 (PDT)
 Received: from [10.57.81.189] (unknown [10.57.81.189])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9534E3F762;
-        Wed, 18 Oct 2023 04:21:03 -0700 (PDT)
-Message-ID: <368c8a9f-b137-47a9-9468-ebeb04d4bab5@arm.com>
-Date:   Wed, 18 Oct 2023 12:21:52 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2D9053F762;
+        Wed, 18 Oct 2023 04:27:06 -0700 (PDT)
+Message-ID: <688adbc9-6dbc-4c98-971e-630525ff003b@arm.com>
+Date:   Wed, 18 Oct 2023 12:27:55 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/6] cpufreq/schedutil: use a fixed reference frequency
+Subject: Re: [PATCH v2 0/6] consolidate and cleanup CPU capacity
 Content-Language: en-US
 To:     Vincent Guittot <vincent.guittot@linaro.org>
 Cc:     conor.dooley@microchip.com, suagrfillet@gmail.com,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        vschneid@redhat.com, bsegall@google.com, dietmar.eggemann@arm.com,
-        juri.lelli@redhat.com, peterz@infradead.org, rafael@kernel.org,
-        gregkh@linuxfoundation.org, ajones@ventanamicro.com,
+        bsegall@google.com, dietmar.eggemann@arm.com, peterz@infradead.org,
+        mingo@redhat.com, rafael@kernel.org, sudeep.holla@arm.com,
+        aou@eecs.berkeley.edu, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, linux-pm@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        sudeep.holla@arm.com, ionela.voinescu@arm.com,
-        viresh.kumar@linaro.org, mgorman@suse.de, palmer@dabbelt.com,
-        will@kernel.org, bristot@redhat.com, lftan@kernel.org,
-        rostedt@goodmis.org, linux@armlinux.org.uk,
-        paul.walmsley@sifive.com, aou@eecs.berkeley.edu, mingo@redhat.com,
-        catalin.marinas@arm.com, pierre.gondois@arm.com
+        linux-arm-kernel@lists.infradead.org, pierre.gondois@arm.com,
+        ionela.voinescu@arm.com, viresh.kumar@linaro.org,
+        bristot@redhat.com, will@kernel.org, catalin.marinas@arm.com,
+        linux@armlinux.org.uk, ajones@ventanamicro.com, lftan@kernel.org,
+        gregkh@linuxfoundation.org, juri.lelli@redhat.com,
+        rostedt@goodmis.org, mgorman@suse.de, vschneid@redhat.com
 References: <20231009103621.374412-1-vincent.guittot@linaro.org>
- <20231009103621.374412-5-vincent.guittot@linaro.org>
 From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20231009103621.374412-5-vincent.guittot@linaro.org>
+In-Reply-To: <20231009103621.374412-1-vincent.guittot@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
@@ -57,71 +56,25 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 On 10/9/23 11:36, Vincent Guittot wrote:
-> cpuinfo.max_freq can change at runtime because of boost as an example. This
-> implies that the value could be different than the one that has been
-> used when computing the capacity of a CPU.
+> This is the 1st part of consolidating how the max compute capacity is
+> used in the scheduler and how we calculate the frequency for a level of
+> utilization.
 > 
-> The new arch_scale_freq_ref() returns a fixed and coherent reference
-> frequency that can be used when computing a frequency based on utilization.
+> Fix some unconsistancy when computing frequency for an utilization. There
+> can be a mismatch between energy model and schedutil.
 > 
-> Use this arch_scale_freq_ref() when available and fallback to
-> policy otherwise.
+> Next step will be to make a difference between the original
+> max compute capacity of a CPU and what is currently available when
+> there is a capping applying forever (i.e. seconds or more).
 > 
-> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> ---
->   kernel/sched/cpufreq_schedutil.c | 26 ++++++++++++++++++++++++--
->   1 file changed, 24 insertions(+), 2 deletions(-)
 > 
-> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> index 4492608b7d7f..1fa7e74add8f 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -114,6 +114,28 @@ static void sugov_deferred_update(struct sugov_policy *sg_policy)
->   	}
->   }
->   
-> +/**
-> + * cpufreq_get_capacity_ref_freq - get the reference frequency of a given CPU that
-> + * has been used to correlate frequency and compute capacity.
-> + * @policy: the cpufreq policy of the CPU in question.
-> + * @use_current: Fallback to current freq instead of policy->cpuinfo.max_freq.
-> + *
-> + * Return: the reference CPU frequency to compute a capacity.
-> + */
-> +static __always_inline
-> +unsigned long get_capacity_ref_freq(struct cpufreq_policy *policy)
-> +{
-> +	unsigned int freq = arch_scale_freq_ref(policy->cpu);
-> +
-> +	if (freq)
-> +		return freq;
 
-Looks good, for the platforms having this inline function returning 0,
-this will be optimized out.
+I have tested the patches apart from the last CPPC because the platform
+didn't have that. The EAS is working OK, so feel free to add:
 
-> +
-> +	if (arch_scale_freq_invariant())
-> +		return policy->cpuinfo.max_freq;
-> +
-> +	return policy->cur;
-> +}
-> +
->   /**
->    * get_next_freq - Compute a new frequency for a given cpufreq policy.
->    * @sg_policy: schedutil policy object to compute the new frequency for.
-> @@ -140,10 +162,10 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
->   				  unsigned long util, unsigned long max)
->   {
->   	struct cpufreq_policy *policy = sg_policy->policy;
-> -	unsigned int freq = arch_scale_freq_invariant() ?
-> -				policy->cpuinfo.max_freq : policy->cur;
-> +	unsigned int freq;
->   
->   	util = map_util_perf(util);
-> +	freq = get_capacity_ref_freq(policy);
->   	freq = map_util_freq(util, freq, max);
->   
->   	if (freq == sg_policy->cached_raw_freq && !sg_policy->need_freq_update)
+Tested-by: Lukasz Luba <lukasz.luba@arm.com>
 
+apart from the patch 6/6 - with the cppc changes
 
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+Regards,
+Lukasz
