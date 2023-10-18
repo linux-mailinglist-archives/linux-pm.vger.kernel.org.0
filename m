@@ -2,28 +2,29 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 182267CE86F
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Oct 2023 22:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 694F27CE879
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Oct 2023 22:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231657AbjJRUD5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Oct 2023 16:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39896 "EHLO
+        id S229726AbjJRUG0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Oct 2023 16:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjJRUD5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Oct 2023 16:03:57 -0400
+        with ESMTP id S229510AbjJRUGZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Oct 2023 16:06:25 -0400
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172DCF7;
-        Wed, 18 Oct 2023 13:03:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049F995;
+        Wed, 18 Oct 2023 13:06:22 -0700 (PDT)
 Received: from i53875b5b.versanet.de ([83.135.91.91] helo=diego.localnet)
         by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <heiko@sntech.de>)
-        id 1qtClb-0004cs-J4; Wed, 18 Oct 2023 22:03:43 +0200
+        id 1qtCo1-0004e6-29; Wed, 18 Oct 2023 22:06:13 +0200
 From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     linux-rockchip@lists.infradead.org,
-        Sascha Hauer <s.hauer@pengutronix.de>
+To:     Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-rockchip@lists.infradead.org,
+        Chanwoo Choi <chanwoo@kernel.org>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Chanwoo Choi <chanwoo@kernel.org>,
+        linux-pm@vger.kernel.org,
         Kyungmin Park <kyungmin.park@samsung.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
         Will Deacon <will@kernel.org>,
@@ -34,15 +35,13 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v8 19/26] PM / devfreq: rockchip-dfi: add support for RK3588
-Date:   Wed, 18 Oct 2023 22:03:42 +0200
-Message-ID: <2610076.9Mp67QZiUf@diego>
-In-Reply-To: <20231018061714.3553817-20-s.hauer@pengutronix.de>
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: [PATCH v8 00/26] Add perf support to the rockchip-dfi driver
+Date:   Wed, 18 Oct 2023 22:06:11 +0200
+Message-ID: <11026068.BaYr0rKQ5T@diego>
+In-Reply-To: <6e43eb6d-351b-4c32-aba9-65ee5b8fd0ed@kernel.org>
 References: <20231018061714.3553817-1-s.hauer@pengutronix.de>
- <20231018061714.3553817-20-s.hauer@pengutronix.de>
+ <6e43eb6d-351b-4c32-aba9-65ee5b8fd0ed@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -54,21 +53,29 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Am Mittwoch, 18. Oktober 2023, 08:17:07 CEST schrieb Sascha Hauer:
-> Add support for the RK3588 to the driver. The RK3588 has four DDR
-> channels with a register stride of 0x4000 between the channel
-> registers, also it has a DDRMON_CTRL register per channel.
+Hi,
+
+Am Mittwoch, 18. Oktober 2023, 17:21:07 CEST schrieb Chanwoo Choi:
+> Hi Sascha and Heiko,
 > 
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> ---
->  drivers/devfreq/event/rockchip-dfi.c | 36 +++++++++++++++++++++++++++-
->  include/soc/rockchip/rk3588_grf.h    | 18 ++++++++++++++
->  2 files changed, 53 insertions(+), 1 deletion(-)
->  create mode 100644 include/soc/rockchip/rk3588_grf.h
+> I finished the review from  01 ~ 22 patches.
+> - 01-05 patches are merged.
+> - 06-22 patches with acked tags.
+> 
+> 
+> Some patches modifies the 'include/soc/rockchip/*' files.
+> After getting the ack from rockchip maintainer (Heiko Stuebner),
+> I'll merge patches from 06 ~ 22 patches to devfreq.git.
+
+I do hope I caught all patches that needed Acks from that range.
+The changes to the soc includes all looked fine, so if I forgot to Ack
+a patch from that 1-22 range, here is a blanked
 
 Acked-by: Heiko Stuebner <heiko@sntech.de>
 
+for those.
+
+Thanks for reviewing that big series
+Heiko
 
 
