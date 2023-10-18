@@ -2,55 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 778287CE110
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Oct 2023 17:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 551B07CE1DB
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Oct 2023 17:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjJRPVR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Oct 2023 11:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
+        id S232191AbjJRP4N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Oct 2023 11:56:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbjJRPVQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Oct 2023 11:21:16 -0400
+        with ESMTP id S235016AbjJRP4M (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Oct 2023 11:56:12 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A1AEA;
-        Wed, 18 Oct 2023 08:21:14 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECACCC433C8;
-        Wed, 18 Oct 2023 15:21:09 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC2A12C;
+        Wed, 18 Oct 2023 08:56:09 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2E6FC433C9;
+        Wed, 18 Oct 2023 15:56:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697642474;
-        bh=LYagyGRuLOJIx08cI88zPgXWvrkcS7iNbLmlFxrSclU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ZLnIhd9wqi3ayfSZPlcIMGhn5cH+ssUY+jlIdiUjagca/1sntsjihy6sAyb8buY9i
-         t4GDD9OTHBDHbhtx/M5Maf02ICkO51Fdi3uVKmLJBaBpv0pjue7vHK61ZyOnsTIIoC
-         B12j9Szlhdcd/G5cbrOEGnML4dHSZnOY0wQUf2qbgvz8AIu6QIdCgQugSASxV+vsDv
-         m14v6Z30satjrlNduGH3eSKZu5N+PorzNuckMElrfGxEw3OEQmkHgmVUCWPqE+eWQE
-         73tHO5fRAQpY7Su4FJRXizzHo08si1lXn7/jH0hbEB0IGzsLhRQ2ZyrnAUtu/dQsxL
-         6nY08XHyxiuKA==
-Message-ID: <6e43eb6d-351b-4c32-aba9-65ee5b8fd0ed@kernel.org>
-Date:   Thu, 19 Oct 2023 00:21:07 +0900
+        s=k20201202; t=1697644569;
+        bh=xZk3yByiO+3u209tA6RY3MKQENY0UHz3PBRs0HuKHWQ=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=oMTOwNPk76VLuQFZ6X+aCfPcWKXsfrVvdCes+/kxEjg8oc78gPKDahVnXY2w8iMX2
+         AXxEqQPZ72rs6LXxS1oeZpgo60I9XDbCksccWWJA7ZZrqheOgrVMcN0YP28c/zJQv5
+         nmBLNe+Zs9QcpsyiMstWL9mnVcQnmZ5wKPRsdk6CDQfA/IqAn0J5H6zhSW88+2t+aB
+         im40c3KpzJp4hDgJvrr2US+BzASTpFZoaho/3gdT+igrVuQb5dKhXikvtQaASimg42
+         jzGi5fDZWNZuf1pKuJ2ajrDe6DR3FhBH/3kkHUt7LKkASBKvH1srDfQjkrXQoUgPkG
+         kJYcSW8bxNxww==
+Message-ID: <8e90af8f-8abc-4a0b-bdd2-c6352a985f59@kernel.org>
+Date:   Thu, 19 Oct 2023 00:56:06 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 00/26] Add perf support to the rockchip-dfi driver
+Subject: Re: [RFC PATCH] PM / devfreq: introduce multiple devfreq devices per
+ parent device
 Content-Language: en-US
-To:     Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-rockchip@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Vincent Legoll <vincent.legoll@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-References: <20231018061714.3553817-1-s.hauer@pengutronix.de>
+To:     Rodrigo Vivi <rodrigo.vivi@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, cw00.choi@samsung.com,
+        kyungmin.park@samsung.com, myungjoo.ham@samsung.com,
+        digetx@gmail.com, viresh.kumar@linaro.org
+References: <20231017211944.192978-1-rodrigo.vivi@intel.com>
 From:   Chanwoo Choi <chanwoo@kernel.org>
-In-Reply-To: <20231018061714.3553817-1-s.hauer@pengutronix.de>
+In-Reply-To: <20231017211944.192978-1-rodrigo.vivi@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -63,78 +52,229 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sascha and Heiko,
+Hi Rodrigo,
 
-I finished the review from  01 ~ 22 patches.
-- 01-05 patches are merged.
-- 06-22 patches with acked tags.
+I'm always welcoming to extend the devfreq subsystem
+in order to support the new hardware architecture.
+Thanks for your suggestion.
+
+On 23. 10. 18. 06:19, Rodrigo Vivi wrote:
+> Devfreq provides a very good standard for frequency management of
+> a device. However it is limited to a single frequency control and
+> governor per device with a hardcoded 1-1 match since devfreq device
+> name inherits dev_name of the parent device.
+> 
+> Although it suits well most of PCI devices out there, it currently
+> limits its adoption on devices with multiple domain frequencies
+> that could be seen as sub-devices.
+> 
+> This patch introduces the optional string argument 'name'.
+> 
+> When a name is given, the device itself is named with a generic
+> 'df<n>' where 'n' is the global devfreq's device counter.
+> The given name is only visible at /sys/class/devfreq/df<n>/name.
+> 
+> So, when a name is given, multiple devfreq devices can be created
+> for a single parent device that is willing to address multiple
+> frequencies domains or subdevices withing a PCI device for instance.
+> 
+> When no name is given both the device name and the name file uses
+> the the parent's device dev_name() and it is limited to a
+> single devfreq device per parent-device, in order to respect the
+> legacy usage and not break any backwards compatibility.
+> 
+> Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> ---
+> 
+> This is mostly a RFC where the main answer that I'm looking for
+> is to know if this would be acceptable by devfreq subsystem.
+> 
+> For Intel GPUs we have a concept of a multi-tile and multi-gt.
+> Each tile can be seen as a duplication of an entire gpu and
+> contain a GT inside each and each GT has its own independent
+> frequency management.
+> 
+> Also, some newer platforms, even with single tile, has an exclusive
+> GT for media, also with independent frequency management.
+> 
+> Currently our sysfs provides a full representation of the hardware
+> and we could even have something like:
+> /sys/class/drm/card0/device/tile0/gt0/freq/
+> /sys/class/drm/card0/device/tile0/gt1/freq/
+> /sys/class/drm/card0/device/tile1/gt0/freq/
+> /sys/class/drm/card0/device/tile1/gt1/freq/
+> 
+> We are implementing a new driver for the future platforms, so we
+> are looking for standardize our interfaces with other drivers
+> and devfreq seemed to have a bright future.
+> 
+> Unfortunately just this patch by itself wouldn't allow us to use
+> devfreq directly, because we have underlaying firmware governors.
+> Other local experiments that seemed to work for me was to convert
+> the current Tegra's exclusive governor to a generic governor_active.c
+> 
+> On top of that we would need some extra stuff like throttle_reasons,
+> and some custom arguments, however before taking any further step
+> toward this direction I'd like to get back to my original question
+> 
+> is this multiple device/domain acceptable here?
+> 
+> Thoughts?
+
+It is possible to create the multiple devfreq device from one device.
+Instead, I think that better to use the following style node name
+in order to make the group of same parent device.
+- /sys/class/devfreq/devfreq<id>-<id of sub-device>/name.
+
+For example,
+/sys/class/devfreq/devfreq0-0/
+/sys/class/devfreq/devfreq0-1/
+/sys/class/devfreq/devfreq0-2/
+
+/sys/class/devfreq/devfreq1-0/
+/sys/class/devfreq/devfreq1-1/
+/sys/class/devfreq/devfreq1-2/
+/sys/class/devfreq/devfreq1-3/
+/sys/class/devfreq/devfreq1-4/
+
+...
 
 
-Some patches modifies the 'include/soc/rockchip/*' files.
-After getting the ack from rockchip maintainer (Heiko Stuebner),
-I'll merge patches from 06 ~ 22 patches to devfreq.git.
+> 
+> Thanks in advance,
+> Rodrigo.
+> 
+>  drivers/devfreq/devfreq.c | 31 ++++++++++++++++++++++++++-----
+>  include/linux/devfreq.h   |  8 ++++++++
+>  2 files changed, 34 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index 474d81831ad3..7b4355229d0f 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/errno.h>
+>  #include <linux/err.h>
+>  #include <linux/init.h>
+> +#include <linux/idr.h>
+>  #include <linux/export.h>
+>  #include <linux/slab.h>
+>  #include <linux/stat.h>
+> @@ -57,6 +58,8 @@ static const char timer_name[][DEVFREQ_NAME_LEN] = {
+>  	[DEVFREQ_TIMER_DELAYED] = { "delayed" },
+>  };
+>  
+> +static DEFINE_IDA(devfreq_ida);
+> +
+>  /**
+>   * find_device_devfreq() - find devfreq struct using device pointer
+>   * @dev:	device pointer used to lookup device devfreq.
+> @@ -727,12 +730,15 @@ static int qos_max_notifier_call(struct notifier_block *nb,
+>  static void devfreq_dev_release(struct device *dev)
+>  {
+>  	struct devfreq *devfreq = to_devfreq(dev);
+> -	int err;
+> +	int id, err;
+>  
+>  	mutex_lock(&devfreq_list_lock);
+>  	list_del(&devfreq->node);
+>  	mutex_unlock(&devfreq_list_lock);
+>  
+> +	if (sscanf(dev_name(dev), "df%d", &id))
+> +		ida_free(&devfreq_ida, id);
+> +
+>  	err = dev_pm_qos_remove_notifier(devfreq->dev.parent, &devfreq->nb_max,
+>  					 DEV_PM_QOS_MAX_FREQUENCY);
+>  	if (err && err != -ENOENT)
+> @@ -788,17 +794,26 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  	struct devfreq *devfreq;
+>  	struct devfreq_governor *governor;
+>  	unsigned long min_freq, max_freq;
+> -	int err = 0;
+> +	int id, err = 0;
+>  
+>  	if (!dev || !profile || !governor_name) {
+>  		dev_err(dev, "%s: Invalid parameters.\n", __func__);
+>  		return ERR_PTR(-EINVAL);
+>  	}
+>  
+> +	id = ida_alloc(&devfreq_ida, GFP_KERNEL);
+> +	if (id < 0) {
+> +	        err = -ENOMEM;
+> +		goto err_ida;
+> +	}
+> +
+>  	mutex_lock(&devfreq_list_lock);
+>  	devfreq = find_device_devfreq(dev);
+>  	mutex_unlock(&devfreq_list_lock);
+> -	if (!IS_ERR(devfreq)) {
+> +	if (!IS_ERR(devfreq) &&
+> +	    (!profile->name ||
+> +	     (profile->name && devfreq->profile->name &&
+> +	      !strcmp(profile->name, devfreq->profile->name)))) {
+>  		dev_err(dev, "%s: devfreq device already exists!\n",
+>  			__func__);
+>  		err = -EINVAL;
+> @@ -864,7 +879,10 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  
+>  	atomic_set(&devfreq->suspend_count, 0);
+>  
+> -	dev_set_name(&devfreq->dev, "%s", dev_name(dev));
+> +	if (profile->name)
+> +		dev_set_name(&devfreq->dev, "df%d", id);
+> +	else
+> +		dev_set_name(&devfreq->dev, "%s", dev_name(dev));
+>  	err = device_register(&devfreq->dev);
+>  	if (err) {
+>  		mutex_unlock(&devfreq->lock);
+> @@ -955,6 +973,8 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  
+>  	return devfreq;
+>  
+> +err_ida:
+> +	ida_free(&devfreq_ida, id);
+>  err_init:
+>  	mutex_unlock(&devfreq_list_lock);
+>  err_devfreq:
+> @@ -1394,7 +1414,8 @@ static ssize_t name_show(struct device *dev,
+>  			struct device_attribute *attr, char *buf)
+>  {
+>  	struct devfreq *df = to_devfreq(dev);
+> -	return sprintf(buf, "%s\n", dev_name(df->dev.parent));
+> +	return sprintf(buf, "%s\n", df->profile->name ? :
+> +		       dev_name(df->dev.parent));
+>  }
+>  static DEVICE_ATTR_RO(name);
+>  
+> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
+> index d312ffbac4dd..0ec43eac647d 100644
+> --- a/include/linux/devfreq.h
+> +++ b/include/linux/devfreq.h
+> @@ -100,6 +100,13 @@ struct devfreq_dev_status {
+>   * @freq_table:		Optional list of frequencies to support statistics
+>   *			and freq_table must be generated in ascending order.
+>   * @max_state:		The size of freq_table.
+> + * @name:		Optional name string. When a name is given, the device
+> + *			itself is named with a generic 'df<n>' where 'n' is the
+> + *			global devfreq's device counter. The given name is only
+> + *			visible at /sys/class/devfreq/df<n>/name. When no name
+> + *			is given both the device name and the name file uses the
+> + *			the parent's device dev_name() and it is limited to a
+> + *			single devfreq device per parent-device.
+>   *
+>   * @is_cooling_device: A self-explanatory boolean giving the device a
+>   *                     cooling effect property.
+> @@ -117,6 +124,7 @@ struct devfreq_dev_profile {
+>  
+>  	unsigned long *freq_table;
+>  	unsigned int max_state;
+> +	char *name;
+>  
+>  	bool is_cooling_device;
+>  };
 
+-- 
 Best Regards,
+Samsung Electronics
 Chanwoo Choi
-
-On 23. 10. 18. 15:16, Sascha Hauer wrote:
-> This series integrates the recent review feedback from Chanwoo Choi to
-> v7.
-> 
-> Chanwoo, I am sending the full patchset again for people to try this
-> series. You said that you applied 1-5 already, so please start picking
-> from 6/26.
-> 
-> Sascha
-> 
-> Sascha Hauer (26):
->   PM / devfreq: rockchip-dfi: Make pmu regmap mandatory
->   PM / devfreq: rockchip-dfi: Embed desc into private data struct
->   PM / devfreq: rockchip-dfi: use consistent name for private data
->     struct
->   PM / devfreq: rockchip-dfi: Add SoC specific init function
->   PM / devfreq: rockchip-dfi: dfi store raw values in counter struct
->   PM / devfreq: rockchip-dfi: Use free running counter
->   PM / devfreq: rockchip-dfi: introduce channel mask
->   PM / devfreq: rk3399_dmc,dfi: generalize DDRTYPE defines
->   PM / devfreq: rockchip-dfi: Clean up DDR type register defines
->   PM / devfreq: rockchip-dfi: Add RK3568 support
->   PM / devfreq: rockchip-dfi: Handle LPDDR2 correctly
->   PM / devfreq: rockchip-dfi: Handle LPDDR4X
->   PM / devfreq: rockchip-dfi: Pass private data struct to internal
->     functions
->   PM / devfreq: rockchip-dfi: Prepare for multiple users
->   PM / devfreq: rockchip-dfi: give variable a better name
->   PM / devfreq: rockchip-dfi: Add perf support
->   PM / devfreq: rockchip-dfi: make register stride SoC specific
->   PM / devfreq: rockchip-dfi: account for multiple DDRMON_CTRL registers
->   PM / devfreq: rockchip-dfi: add support for RK3588
->   dt-bindings: devfreq: event: convert Rockchip DFI binding to yaml
->   dt-bindings: devfreq: event: rockchip,dfi: Add rk3568 support
->   dt-bindings: devfreq: event: rockchip,dfi: Add rk3588 support
->   dt-bindings: soc: rockchip: grf: add rockchip,rk3588-pmugrf
->   arm64: dts: rockchip: rk3399: Enable DFI
->   arm64: dts: rockchip: rk356x: Add DFI
->   arm64: dts: rockchip: rk3588s: Add DFI
-> 
->  .../bindings/devfreq/event/rockchip,dfi.yaml  |  74 ++
->  .../bindings/devfreq/event/rockchip-dfi.txt   |  18 -
->  .../rockchip,rk3399-dmc.yaml                  |   2 +-
->  .../devicetree/bindings/soc/rockchip/grf.yaml |   1 +
->  arch/arm64/boot/dts/rockchip/rk3399.dtsi      |   1 -
->  arch/arm64/boot/dts/rockchip/rk356x.dtsi      |   7 +
->  arch/arm64/boot/dts/rockchip/rk3588s.dtsi     |  16 +
->  drivers/devfreq/event/rockchip-dfi.c          | 814 +++++++++++++++---
->  drivers/devfreq/rk3399_dmc.c                  |  10 +-
->  include/soc/rockchip/rk3399_grf.h             |   9 +-
->  include/soc/rockchip/rk3568_grf.h             |  13 +
->  include/soc/rockchip/rk3588_grf.h             |  18 +
->  include/soc/rockchip/rockchip_grf.h           |  18 +
->  13 files changed, 863 insertions(+), 138 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
->  delete mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
->  create mode 100644 include/soc/rockchip/rk3568_grf.h
->  create mode 100644 include/soc/rockchip/rk3588_grf.h
->  create mode 100644 include/soc/rockchip/rockchip_grf.h
-> 
 
