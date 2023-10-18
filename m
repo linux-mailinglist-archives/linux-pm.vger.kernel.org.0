@@ -2,279 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 551B07CE1DB
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Oct 2023 17:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 369D87CE2AE
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Oct 2023 18:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232191AbjJRP4N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Oct 2023 11:56:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39768 "EHLO
+        id S229694AbjJRQZu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Oct 2023 12:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235016AbjJRP4M (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Oct 2023 11:56:12 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC2A12C;
-        Wed, 18 Oct 2023 08:56:09 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2E6FC433C9;
-        Wed, 18 Oct 2023 15:56:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697644569;
-        bh=xZk3yByiO+3u209tA6RY3MKQENY0UHz3PBRs0HuKHWQ=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=oMTOwNPk76VLuQFZ6X+aCfPcWKXsfrVvdCes+/kxEjg8oc78gPKDahVnXY2w8iMX2
-         AXxEqQPZ72rs6LXxS1oeZpgo60I9XDbCksccWWJA7ZZrqheOgrVMcN0YP28c/zJQv5
-         nmBLNe+Zs9QcpsyiMstWL9mnVcQnmZ5wKPRsdk6CDQfA/IqAn0J5H6zhSW88+2t+aB
-         im40c3KpzJp4hDgJvrr2US+BzASTpFZoaho/3gdT+igrVuQb5dKhXikvtQaASimg42
-         jzGi5fDZWNZuf1pKuJ2ajrDe6DR3FhBH/3kkHUt7LKkASBKvH1srDfQjkrXQoUgPkG
-         kJYcSW8bxNxww==
-Message-ID: <8e90af8f-8abc-4a0b-bdd2-c6352a985f59@kernel.org>
-Date:   Thu, 19 Oct 2023 00:56:06 +0900
+        with ESMTP id S232684AbjJRQZt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Oct 2023 12:25:49 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFDFD134
+        for <linux-pm@vger.kernel.org>; Wed, 18 Oct 2023 09:25:46 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2c50cd16f3bso73389711fa.2
+        for <linux-pm@vger.kernel.org>; Wed, 18 Oct 2023 09:25:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697646345; x=1698251145; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aBPvPoGvatc00L33SJsgf3xSxpMurf+haw6UVXLiWPI=;
+        b=f86YaXtML514/6hcHcHG494U3VcI39PTNleMOokXtthRJSlhtK+m9+ZWKLuZhxoFam
+         S4/WuueLWNQMmZF8PQlGrEBQVj27gTHcuM1YYzw4fUvTE6h1GPa8NDaP7aBP66rzFzsh
+         l4Ii8o15m9reNVYYYIXHYJunlKa3MfimluOJAWkpZi9oCAeGNZZXHgYOSkRm6edog/8F
+         fHxLWPsjp1Pj8T9jMqFQRFwXRIKAZriuhp9uDPlUVSkLhxZgftsgPtaLFr8vgg2GPzY4
+         gSyvcZ/fh+JdFnTmP1+N1NZWmj2hA8eKOsY5UrEsVYGgk299pMiZlAdFHvfEBgqaBV3w
+         0q0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697646345; x=1698251145;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aBPvPoGvatc00L33SJsgf3xSxpMurf+haw6UVXLiWPI=;
+        b=VEVV/EHEj2Blrt32X9zDUQeQUZRNzU0xdDhTjwZVF+dkdxzbfTV2IToANPq2v1kr+A
+         uNyGNvh6m/HgVOTDdtSiCEsu+E064Y0Hs5OXlkCnpwVDMv4rE6f5SLLpmjjdX0oGPh+l
+         Wacf6GWFJ8bwiEEmghAbIzemycntHeEtCVPxXRE07wWWWV0/Nl5e8HUF1Q5Jxd94kfc9
+         5RI9iJwO71Fk5kHUTbKY9y7jH+WrJ0b6YfP+z/MzCuwrXufbZ/d3FWOmMu+CsM3Leqpl
+         e1TUvVK15UIk2qzhj9V/YlCPSppjazSm37Yhhdw2zT3CD7d9zkKGyJi6BxD+Iz2WxK8E
+         PzPQ==
+X-Gm-Message-State: AOJu0Yz/Hohcm0PA5ayDnVHFqI+CE1OeNTO6YlECL8HBOcLPee8hicDa
+        G+8NSOrQ9bn21zWs4j6SMyssDQ==
+X-Google-Smtp-Source: AGHT+IGH+vBGDOxCQ/foE4RgwBOMrvwQGARWZwd5FKiVeXsCBR4rYrmOd1rONRCEvyTJKlIqnP29Cg==
+X-Received: by 2002:a2e:800f:0:b0:2c0:a99:68e7 with SMTP id j15-20020a2e800f000000b002c00a9968e7mr4322747ljg.19.1697646344796;
+        Wed, 18 Oct 2023 09:25:44 -0700 (PDT)
+Received: from vingu-book.. ([2a01:e0a:f:6020:fcf4:9d83:8d0d:39aa])
+        by smtp.gmail.com with ESMTPSA id q12-20020a05600c2e4c00b0040648217f4fsm2033503wmf.39.2023.10.18.09.25.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Oct 2023 09:25:44 -0700 (PDT)
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+To:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
+        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
+        lukasz.luba@arm.com, ionela.voinescu@arm.com,
+        pierre.gondois@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org
+Cc:     conor.dooley@microchip.com, suagrfillet@gmail.com,
+        ajones@ventanamicro.com, lftan@kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [PATCH v3 0/6] consolidate and cleanup CPU capacity
+Date:   Wed, 18 Oct 2023 18:25:34 +0200
+Message-Id: <20231018162540.667646-1-vincent.guittot@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] PM / devfreq: introduce multiple devfreq devices per
- parent device
-Content-Language: en-US
-To:     Rodrigo Vivi <rodrigo.vivi@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cw00.choi@samsung.com,
-        kyungmin.park@samsung.com, myungjoo.ham@samsung.com,
-        digetx@gmail.com, viresh.kumar@linaro.org
-References: <20231017211944.192978-1-rodrigo.vivi@intel.com>
-From:   Chanwoo Choi <chanwoo@kernel.org>
-In-Reply-To: <20231017211944.192978-1-rodrigo.vivi@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rodrigo,
+This is the 1st part of consolidating how the max compute capacity is
+used in the scheduler and how we calculate the frequency for a level of
+utilization.
 
-I'm always welcoming to extend the devfreq subsystem
-in order to support the new hardware architecture.
-Thanks for your suggestion.
+Fix some unconsistancy when computing frequency for an utilization. There
+can be a mismatch between energy model and schedutil.
 
-On 23. 10. 18. 06:19, Rodrigo Vivi wrote:
-> Devfreq provides a very good standard for frequency management of
-> a device. However it is limited to a single frequency control and
-> governor per device with a hardcoded 1-1 match since devfreq device
-> name inherits dev_name of the parent device.
-> 
-> Although it suits well most of PCI devices out there, it currently
-> limits its adoption on devices with multiple domain frequencies
-> that could be seen as sub-devices.
-> 
-> This patch introduces the optional string argument 'name'.
-> 
-> When a name is given, the device itself is named with a generic
-> 'df<n>' where 'n' is the global devfreq's device counter.
-> The given name is only visible at /sys/class/devfreq/df<n>/name.
-> 
-> So, when a name is given, multiple devfreq devices can be created
-> for a single parent device that is willing to address multiple
-> frequencies domains or subdevices withing a PCI device for instance.
-> 
-> When no name is given both the device name and the name file uses
-> the the parent's device dev_name() and it is limited to a
-> single devfreq device per parent-device, in order to respect the
-> legacy usage and not break any backwards compatibility.
-> 
-> Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> ---
-> 
-> This is mostly a RFC where the main answer that I'm looking for
-> is to know if this would be acceptable by devfreq subsystem.
-> 
-> For Intel GPUs we have a concept of a multi-tile and multi-gt.
-> Each tile can be seen as a duplication of an entire gpu and
-> contain a GT inside each and each GT has its own independent
-> frequency management.
-> 
-> Also, some newer platforms, even with single tile, has an exclusive
-> GT for media, also with independent frequency management.
-> 
-> Currently our sysfs provides a full representation of the hardware
-> and we could even have something like:
-> /sys/class/drm/card0/device/tile0/gt0/freq/
-> /sys/class/drm/card0/device/tile0/gt1/freq/
-> /sys/class/drm/card0/device/tile1/gt0/freq/
-> /sys/class/drm/card0/device/tile1/gt1/freq/
-> 
-> We are implementing a new driver for the future platforms, so we
-> are looking for standardize our interfaces with other drivers
-> and devfreq seemed to have a bright future.
-> 
-> Unfortunately just this patch by itself wouldn't allow us to use
-> devfreq directly, because we have underlaying firmware governors.
-> Other local experiments that seemed to work for me was to convert
-> the current Tegra's exclusive governor to a generic governor_active.c
-> 
-> On top of that we would need some extra stuff like throttle_reasons,
-> and some custom arguments, however before taking any further step
-> toward this direction I'd like to get back to my original question
-> 
-> is this multiple device/domain acceptable here?
-> 
-> Thoughts?
-
-It is possible to create the multiple devfreq device from one device.
-Instead, I think that better to use the following style node name
-in order to make the group of same parent device.
-- /sys/class/devfreq/devfreq<id>-<id of sub-device>/name.
-
-For example,
-/sys/class/devfreq/devfreq0-0/
-/sys/class/devfreq/devfreq0-1/
-/sys/class/devfreq/devfreq0-2/
-
-/sys/class/devfreq/devfreq1-0/
-/sys/class/devfreq/devfreq1-1/
-/sys/class/devfreq/devfreq1-2/
-/sys/class/devfreq/devfreq1-3/
-/sys/class/devfreq/devfreq1-4/
-
-...
+Next step will be to make a difference between the original
+max compute capacity of a CPU and what is currently available when
+there is a capping applying forever (i.e. seconds or more).
 
 
-> 
-> Thanks in advance,
-> Rodrigo.
-> 
->  drivers/devfreq/devfreq.c | 31 ++++++++++++++++++++++++++-----
->  include/linux/devfreq.h   |  8 ++++++++
->  2 files changed, 34 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index 474d81831ad3..7b4355229d0f 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -15,6 +15,7 @@
->  #include <linux/errno.h>
->  #include <linux/err.h>
->  #include <linux/init.h>
-> +#include <linux/idr.h>
->  #include <linux/export.h>
->  #include <linux/slab.h>
->  #include <linux/stat.h>
-> @@ -57,6 +58,8 @@ static const char timer_name[][DEVFREQ_NAME_LEN] = {
->  	[DEVFREQ_TIMER_DELAYED] = { "delayed" },
->  };
->  
-> +static DEFINE_IDA(devfreq_ida);
-> +
->  /**
->   * find_device_devfreq() - find devfreq struct using device pointer
->   * @dev:	device pointer used to lookup device devfreq.
-> @@ -727,12 +730,15 @@ static int qos_max_notifier_call(struct notifier_block *nb,
->  static void devfreq_dev_release(struct device *dev)
->  {
->  	struct devfreq *devfreq = to_devfreq(dev);
-> -	int err;
-> +	int id, err;
->  
->  	mutex_lock(&devfreq_list_lock);
->  	list_del(&devfreq->node);
->  	mutex_unlock(&devfreq_list_lock);
->  
-> +	if (sscanf(dev_name(dev), "df%d", &id))
-> +		ida_free(&devfreq_ida, id);
-> +
->  	err = dev_pm_qos_remove_notifier(devfreq->dev.parent, &devfreq->nb_max,
->  					 DEV_PM_QOS_MAX_FREQUENCY);
->  	if (err && err != -ENOENT)
-> @@ -788,17 +794,26 @@ struct devfreq *devfreq_add_device(struct device *dev,
->  	struct devfreq *devfreq;
->  	struct devfreq_governor *governor;
->  	unsigned long min_freq, max_freq;
-> -	int err = 0;
-> +	int id, err = 0;
->  
->  	if (!dev || !profile || !governor_name) {
->  		dev_err(dev, "%s: Invalid parameters.\n", __func__);
->  		return ERR_PTR(-EINVAL);
->  	}
->  
-> +	id = ida_alloc(&devfreq_ida, GFP_KERNEL);
-> +	if (id < 0) {
-> +	        err = -ENOMEM;
-> +		goto err_ida;
-> +	}
-> +
->  	mutex_lock(&devfreq_list_lock);
->  	devfreq = find_device_devfreq(dev);
->  	mutex_unlock(&devfreq_list_lock);
-> -	if (!IS_ERR(devfreq)) {
-> +	if (!IS_ERR(devfreq) &&
-> +	    (!profile->name ||
-> +	     (profile->name && devfreq->profile->name &&
-> +	      !strcmp(profile->name, devfreq->profile->name)))) {
->  		dev_err(dev, "%s: devfreq device already exists!\n",
->  			__func__);
->  		err = -EINVAL;
-> @@ -864,7 +879,10 @@ struct devfreq *devfreq_add_device(struct device *dev,
->  
->  	atomic_set(&devfreq->suspend_count, 0);
->  
-> -	dev_set_name(&devfreq->dev, "%s", dev_name(dev));
-> +	if (profile->name)
-> +		dev_set_name(&devfreq->dev, "df%d", id);
-> +	else
-> +		dev_set_name(&devfreq->dev, "%s", dev_name(dev));
->  	err = device_register(&devfreq->dev);
->  	if (err) {
->  		mutex_unlock(&devfreq->lock);
-> @@ -955,6 +973,8 @@ struct devfreq *devfreq_add_device(struct device *dev,
->  
->  	return devfreq;
->  
-> +err_ida:
-> +	ida_free(&devfreq_ida, id);
->  err_init:
->  	mutex_unlock(&devfreq_list_lock);
->  err_devfreq:
-> @@ -1394,7 +1414,8 @@ static ssize_t name_show(struct device *dev,
->  			struct device_attribute *attr, char *buf)
->  {
->  	struct devfreq *df = to_devfreq(dev);
-> -	return sprintf(buf, "%s\n", dev_name(df->dev.parent));
-> +	return sprintf(buf, "%s\n", df->profile->name ? :
-> +		       dev_name(df->dev.parent));
->  }
->  static DEVICE_ATTR_RO(name);
->  
-> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-> index d312ffbac4dd..0ec43eac647d 100644
-> --- a/include/linux/devfreq.h
-> +++ b/include/linux/devfreq.h
-> @@ -100,6 +100,13 @@ struct devfreq_dev_status {
->   * @freq_table:		Optional list of frequencies to support statistics
->   *			and freq_table must be generated in ascending order.
->   * @max_state:		The size of freq_table.
-> + * @name:		Optional name string. When a name is given, the device
-> + *			itself is named with a generic 'df<n>' where 'n' is the
-> + *			global devfreq's device counter. The given name is only
-> + *			visible at /sys/class/devfreq/df<n>/name. When no name
-> + *			is given both the device name and the name file uses the
-> + *			the parent's device dev_name() and it is limited to a
-> + *			single devfreq device per parent-device.
->   *
->   * @is_cooling_device: A self-explanatory boolean giving the device a
->   *                     cooling effect property.
-> @@ -117,6 +124,7 @@ struct devfreq_dev_profile {
->  
->  	unsigned long *freq_table;
->  	unsigned int max_state;
-> +	char *name;
->  
->  	bool is_cooling_device;
->  };
+Changes since v2:
+- Remove the 1st patch which has been queued in tip
+- Rework how to initialize the reference frequency for cppc_cpufreq and
+  change topology_init_cpu_capacity_cppc() to also set capacity_ref_freq
+- Add a RFC to convert AMU to use arch_scale_freq_ref and move the config
+  of the AMU ratio to be done when intializing cpu capacity and
+  capacity_ref_freq
+- Added some tags
+
+Changes since v1:
+- Fix typos
+- Added changes in cpufreq to use arch_scale_freq_ref() when calling
+  arch_set_freq_scale (patch 3).
+- arch_scale_freq_ref() is always defined and returns 0 (as proposed
+  by Ionela) when not defined by the arch. This simplifies the code with
+  the addition of patch 3.
+- Simplify Energy Model which always uses arch_scale_freq_ref(). The
+  latter returns 0 when not defined by arch instead of last item of the 
+  perf domain. This is not a problem because the function is only defined
+  for compilation purpose in this case and we don't care about the
+  returned value. (patch 5)
+- Added changes in cppc cpufreq to set capacity_ref_freq (patch 6)
+- Added reviewed tag for patch 1 which got a minor change but not for
+  others as I did some changes which could make previous reviewed tag
+  no more relevant.
+
+Vincent Guittot (6):
+  topology: add a new arch_scale_freq_reference
+  cpufreq: use the fixed and coherent frequency for scaling capacity
+  cpufreq/schedutil: use a fixed reference frequency
+  energy_model: use a fixed reference frequency
+  cpufreq/cppc: set the frequency used for computing the capacity
+  arm64/amu: use capacity_ref_freq to set AMU ratio
+
+ arch/arm/include/asm/topology.h   |   1 +
+ arch/arm64/include/asm/topology.h |   1 +
+ arch/arm64/kernel/topology.c      |  18 ++--
+ arch/riscv/include/asm/topology.h |   1 +
+ drivers/acpi/cppc_acpi.c          |  93 ++++++++++++++++++++
+ drivers/base/arch_topology.c      |  56 ++++++++----
+ drivers/cpufreq/cppc_cpufreq.c    | 141 +++++-------------------------
+ drivers/cpufreq/cpufreq.c         |   4 +-
+ include/acpi/cppc_acpi.h          |   2 +
+ include/linux/arch_topology.h     |   8 ++
+ include/linux/cpufreq.h           |   9 ++
+ include/linux/energy_model.h      |  14 ++-
+ kernel/sched/cpufreq_schedutil.c  |  26 +++++-
+ 13 files changed, 225 insertions(+), 149 deletions(-)
 
 -- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+2.34.1
 
