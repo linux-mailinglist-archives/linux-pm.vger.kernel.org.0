@@ -2,240 +2,275 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 815557CD58C
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Oct 2023 09:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BCEB7CD5D1
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Oct 2023 09:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344500AbjJRHkM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Oct 2023 03:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51916 "EHLO
+        id S229948AbjJRH6c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Oct 2023 03:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjJRHkL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Oct 2023 03:40:11 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C139DC6;
-        Wed, 18 Oct 2023 00:40:08 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7129F2F4;
-        Wed, 18 Oct 2023 00:40:49 -0700 (PDT)
-Received: from e129154.nice.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C0A203F64C;
-        Wed, 18 Oct 2023 00:40:04 -0700 (PDT)
-Date:   Wed, 18 Oct 2023 09:39:28 +0200
-From:   Beata Michalska <beata.michalska@arm.com>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        rafael@kernel.org, viresh.kumar@linaro.org, qyousef@layalina.io,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        lukasz.luba@arm.com
-Subject: Re: [PATCH 2/2] sched/schedutil: rework iowait boost
-Message-ID: <ZS-LsFZH7uC_Cw9f@e129154.nice.arm.com>
-References: <20231013151450.257891-1-vincent.guittot@linaro.org>
- <20231013151450.257891-3-vincent.guittot@linaro.org>
+        with ESMTP id S229916AbjJRH6c (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Oct 2023 03:58:32 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE50C6;
+        Wed, 18 Oct 2023 00:58:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697615910; x=1729151910;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7CsCblM7LOsvb1R6ZhggOe011s3+ZIIulQCoil7hgcc=;
+  b=HYLiztXMXrbs+PHqmeJU8I8r/HeeB2plcfEB8xxzZF4hYtzo+RJLtYe/
+   cvuYH8wg7kkHDfA+Au8ZmLovXD6KM5WNRj5+2MNVg07MJuwrjMubFaFjX
+   BmLfP2IC1U0wIOcKN6PoGCQBG1AiTwcKNFG1EZhqKwiGS+AkshKN7F052
+   z97pLHIZ7Vsg9XuKPbeRtnFmu24SN2hDZQtU5gLxikfCSj3KPI2JIhpSG
+   gUxgb4DxiJFCziHsfwTeXwC8SNtaHFSH/q3whjAnO351L3R/6d4mFfQso
+   sAON/AKPDsg6XZTn9Ss4CP3OmolJdBvTy4kLXq/NX0pxcVEOY1stCA1DK
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10866"; a="384843681"
+X-IronPort-AV: E=Sophos;i="6.03,234,1694761200"; 
+   d="scan'208";a="384843681"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2023 00:58:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10866"; a="756467973"
+X-IronPort-AV: E=Sophos;i="6.03,234,1694761200"; 
+   d="scan'208";a="756467973"
+Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 18 Oct 2023 00:58:23 -0700
+Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qt1Rd-00005c-0M;
+        Wed, 18 Oct 2023 07:58:21 +0000
+Date:   Wed, 18 Oct 2023 15:58:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-rockchip@lists.infradead.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Chanwoo Choi <chanwoo@kernel.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Subject: Re: [PATCH v8 16/26] PM / devfreq: rockchip-dfi: Add perf support
+Message-ID: <202310181557.GIXGL21M-lkp@intel.com>
+References: <20231018061714.3553817-17-s.hauer@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231013151450.257891-3-vincent.guittot@linaro.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20231018061714.3553817-17-s.hauer@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 13, 2023 at 05:14:50PM +0200, Vincent Guittot wrote:
-> Use the max value that has already been computed inside sugov_get_util()
-> to cap the iowait boost and remove dependency with uclamp_rq_util_with()
-> which is not used anymore.
-> 
-> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> ---
->  kernel/sched/cpufreq_schedutil.c | 29 ++++++++-------
->  kernel/sched/sched.h             | 60 --------------------------------
->  2 files changed, 14 insertions(+), 75 deletions(-)
-> 
-> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> index 8cb323522b90..820612867769 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -177,11 +177,12 @@ unsigned long sugov_effective_cpu_perf(int cpu, unsigned long actual,
->  	return max(target, max);
->  }
->  
-> -static void sugov_get_util(struct sugov_cpu *sg_cpu)
-> +static void sugov_get_util(struct sugov_cpu *sg_cpu, unsigned long boost)
->  {
->  	unsigned long min, max, util = cpu_util_cfs_boost(sg_cpu->cpu);
->  
->  	util = effective_cpu_util(sg_cpu->cpu, util, &min, &max);
-> +	util = max(util, boost);
-sugov_get_util could actually call sugov_iowait_apply here instead, to get a
-centralized point of getting and applying the boost. Also sugov_iowait_apply
-naming is no longer reflecting the functionality so maybe renaming it to smth
-like sugov_iowait_get ?
+Hi Sascha,
 
----
-BR
-B.
->  	sg_cpu->bw_min = map_util_perf(min);
->  	sg_cpu->util = sugov_effective_cpu_perf(sg_cpu->cpu, util, min, max);
->  }
-> @@ -274,18 +275,16 @@ static void sugov_iowait_boost(struct sugov_cpu *sg_cpu, u64 time,
->   * This mechanism is designed to boost high frequently IO waiting tasks, while
->   * being more conservative on tasks which does sporadic IO operations.
->   */
-> -static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
-> +static unsigned long sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
->  			       unsigned long max_cap)
->  {
-> -	unsigned long boost;
-> -
->  	/* No boost currently required */
->  	if (!sg_cpu->iowait_boost)
-> -		return;
-> +		return 0;
->  
->  	/* Reset boost if the CPU appears to have been idle enough */
->  	if (sugov_iowait_reset(sg_cpu, time, false))
-> -		return;
-> +		return 0;
->  
->  	if (!sg_cpu->iowait_boost_pending) {
->  		/*
-> @@ -294,7 +293,7 @@ static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
->  		sg_cpu->iowait_boost >>= 1;
->  		if (sg_cpu->iowait_boost < IOWAIT_BOOST_MIN) {
->  			sg_cpu->iowait_boost = 0;
-> -			return;
-> +			return 0;
->  		}
->  	}
->  
-> @@ -304,10 +303,7 @@ static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
->  	 * sg_cpu->util is already in capacity scale; convert iowait_boost
->  	 * into the same scale so we can compare.
->  	 */
-> -	boost = (sg_cpu->iowait_boost * max_cap) >> SCHED_CAPACITY_SHIFT;
-> -	boost = uclamp_rq_util_with(cpu_rq(sg_cpu->cpu), boost, NULL);
-> -	if (sg_cpu->util < boost)
-> -		sg_cpu->util = boost;
-> +	return (sg_cpu->iowait_boost * max_cap) >> SCHED_CAPACITY_SHIFT;
->  }
->  
->  #ifdef CONFIG_NO_HZ_COMMON
-> @@ -337,6 +333,8 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
->  					      u64 time, unsigned long max_cap,
->  					      unsigned int flags)
->  {
-> +	unsigned long boost;
-> +
->  	sugov_iowait_boost(sg_cpu, time, flags);
->  	sg_cpu->last_update = time;
->  
-> @@ -345,8 +343,8 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
->  	if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
->  		return false;
->  
-> -	sugov_get_util(sg_cpu);
-> -	sugov_iowait_apply(sg_cpu, time, max_cap);
-> +	boost = sugov_iowait_apply(sg_cpu, time, max_cap);
-> +	sugov_get_util(sg_cpu, boost);
->  
->  	return true;
->  }
-> @@ -447,9 +445,10 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
->  
->  	for_each_cpu(j, policy->cpus) {
->  		struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
-> +		unsigned long boost;
->  
-> -		sugov_get_util(j_sg_cpu);
-> -		sugov_iowait_apply(j_sg_cpu, time, max_cap);
-> +		boost = sugov_iowait_apply(j_sg_cpu, time, max_cap);
-> +		sugov_get_util(j_sg_cpu, boost);
->  
->  		util = max(j_sg_cpu->util, util);
->  	}
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index 3873b4de7cfa..b181edaf4d41 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -3026,59 +3026,6 @@ static inline bool uclamp_rq_is_idle(struct rq *rq)
->  	return rq->uclamp_flags & UCLAMP_FLAG_IDLE;
->  }
->  
-> -/**
-> - * uclamp_rq_util_with - clamp @util with @rq and @p effective uclamp values.
-> - * @rq:		The rq to clamp against. Must not be NULL.
-> - * @util:	The util value to clamp.
-> - * @p:		The task to clamp against. Can be NULL if you want to clamp
-> - *		against @rq only.
-> - *
-> - * Clamps the passed @util to the max(@rq, @p) effective uclamp values.
-> - *
-> - * If sched_uclamp_used static key is disabled, then just return the util
-> - * without any clamping since uclamp aggregation at the rq level in the fast
-> - * path is disabled, rendering this operation a NOP.
-> - *
-> - * Use uclamp_eff_value() if you don't care about uclamp values at rq level. It
-> - * will return the correct effective uclamp value of the task even if the
-> - * static key is disabled.
-> - */
-> -static __always_inline
-> -unsigned long uclamp_rq_util_with(struct rq *rq, unsigned long util,
-> -				  struct task_struct *p)
-> -{
-> -	unsigned long min_util = 0;
-> -	unsigned long max_util = 0;
-> -
-> -	if (!static_branch_likely(&sched_uclamp_used))
-> -		return util;
-> -
-> -	if (p) {
-> -		min_util = uclamp_eff_value(p, UCLAMP_MIN);
-> -		max_util = uclamp_eff_value(p, UCLAMP_MAX);
-> -
-> -		/*
-> -		 * Ignore last runnable task's max clamp, as this task will
-> -		 * reset it. Similarly, no need to read the rq's min clamp.
-> -		 */
-> -		if (uclamp_rq_is_idle(rq))
-> -			goto out;
-> -	}
-> -
-> -	min_util = max_t(unsigned long, min_util, uclamp_rq_get(rq, UCLAMP_MIN));
-> -	max_util = max_t(unsigned long, max_util, uclamp_rq_get(rq, UCLAMP_MAX));
-> -out:
-> -	/*
-> -	 * Since CPU's {min,max}_util clamps are MAX aggregated considering
-> -	 * RUNNABLE tasks with _different_ clamps, we can end up with an
-> -	 * inversion. Fix it now when the clamps are applied.
-> -	 */
-> -	if (unlikely(min_util >= max_util))
-> -		return min_util;
-> -
-> -	return clamp(util, min_util, max_util);
-> -}
-> -
->  /* Is the rq being capped/throttled by uclamp_max? */
->  static inline bool uclamp_rq_is_capped(struct rq *rq)
->  {
-> @@ -3116,13 +3063,6 @@ static inline unsigned long uclamp_eff_value(struct task_struct *p,
->  	return SCHED_CAPACITY_SCALE;
->  }
->  
-> -static inline
-> -unsigned long uclamp_rq_util_with(struct rq *rq, unsigned long util,
-> -				  struct task_struct *p)
-> -{
-> -	return util;
-> -}
-> -
->  static inline bool uclamp_rq_is_capped(struct rq *rq) { return false; }
->  
->  static inline bool uclamp_is_used(void)
-> -- 
-> 2.34.1
-> 
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.6-rc6]
+[cannot apply to next-20231018]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sascha-Hauer/PM-devfreq-rockchip-dfi-Make-pmu-regmap-mandatory/20231018-142228
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20231018061714.3553817-17-s.hauer%40pengutronix.de
+patch subject: [PATCH v8 16/26] PM / devfreq: rockchip-dfi: Add perf support
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20231018/202310181557.GIXGL21M-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231018/202310181557.GIXGL21M-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310181557.GIXGL21M-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/devfreq/event/rockchip-dfi.c:203:13: warning: 'rockchip_ddr_perf_counters_add' defined but not used [-Wunused-function]
+     203 | static void rockchip_ddr_perf_counters_add(struct rockchip_dfi *dfi,
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--
+>> drivers/devfreq/event/rockchip-dfi.c:79: warning: Function parameter or member 'write_access' not described in 'dmc_count_channel'
+
+
+vim +/rockchip_ddr_perf_counters_add +203 drivers/devfreq/event/rockchip-dfi.c
+
+    66	
+    67	/**
+    68	 * struct dmc_count_channel - structure to hold counter values from the DDR controller
+    69	 * @access:       Number of read and write accesses
+    70	 * @clock_cycles: DDR clock cycles
+    71	 * @read_access:  number of read accesses
+    72	 * @write_acccess: number of write accesses
+    73	 */
+    74	struct dmc_count_channel {
+    75		u64 access;
+    76		u64 clock_cycles;
+    77		u64 read_access;
+    78		u64 write_access;
+  > 79	};
+    80	
+    81	struct dmc_count {
+    82		struct dmc_count_channel c[DMC_MAX_CHANNELS];
+    83	};
+    84	
+    85	/*
+    86	 * The dfi controller can monitor DDR load. It has an upper and lower threshold
+    87	 * for the operating points. Whenever the usage leaves these bounds an event is
+    88	 * generated to indicate the DDR frequency should be changed.
+    89	 */
+    90	struct rockchip_dfi {
+    91		struct devfreq_event_dev *edev;
+    92		struct devfreq_event_desc desc;
+    93		struct dmc_count last_event_count;
+    94	
+    95		struct dmc_count last_perf_count;
+    96		struct dmc_count total_count;
+    97		seqlock_t count_seqlock; /* protects last_perf_count and total_count */
+    98	
+    99		struct device *dev;
+   100		void __iomem *regs;
+   101		struct regmap *regmap_pmu;
+   102		struct clk *clk;
+   103		int usecount;
+   104		struct mutex mutex;
+   105		u32 ddr_type;
+   106		unsigned int channel_mask;
+   107		unsigned int max_channels;
+   108		enum cpuhp_state cpuhp_state;
+   109		struct hlist_node node;
+   110		struct pmu pmu;
+   111		struct hrtimer timer;
+   112		unsigned int cpu;
+   113		int active_events;
+   114		int burst_len;
+   115		int buswidth[DMC_MAX_CHANNELS];
+   116	};
+   117	
+   118	static int rockchip_dfi_enable(struct rockchip_dfi *dfi)
+   119	{
+   120		void __iomem *dfi_regs = dfi->regs;
+   121		int ret = 0;
+   122	
+   123		mutex_lock(&dfi->mutex);
+   124	
+   125		dfi->usecount++;
+   126		if (dfi->usecount > 1)
+   127			goto out;
+   128	
+   129		ret = clk_prepare_enable(dfi->clk);
+   130		if (ret) {
+   131			dev_err(&dfi->edev->dev, "failed to enable dfi clk: %d\n", ret);
+   132			goto out;
+   133		}
+   134	
+   135		/* clear DDRMON_CTRL setting */
+   136		writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_TIMER_CNT_EN | DDRMON_CTRL_SOFTWARE_EN |
+   137			       DDRMON_CTRL_HARDWARE_EN), dfi_regs + DDRMON_CTRL);
+   138	
+   139		/* set ddr type to dfi */
+   140		switch (dfi->ddr_type) {
+   141		case ROCKCHIP_DDRTYPE_LPDDR2:
+   142		case ROCKCHIP_DDRTYPE_LPDDR3:
+   143			writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_LPDDR23, DDRMON_CTRL_DDR_TYPE_MASK),
+   144				       dfi_regs + DDRMON_CTRL);
+   145			break;
+   146		case ROCKCHIP_DDRTYPE_LPDDR4:
+   147		case ROCKCHIP_DDRTYPE_LPDDR4X:
+   148			writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_LPDDR4, DDRMON_CTRL_DDR_TYPE_MASK),
+   149				       dfi_regs + DDRMON_CTRL);
+   150			break;
+   151		default:
+   152			break;
+   153		}
+   154	
+   155		/* enable count, use software mode */
+   156		writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_SOFTWARE_EN, DDRMON_CTRL_SOFTWARE_EN),
+   157			       dfi_regs + DDRMON_CTRL);
+   158	out:
+   159		mutex_unlock(&dfi->mutex);
+   160	
+   161		return ret;
+   162	}
+   163	
+   164	static void rockchip_dfi_disable(struct rockchip_dfi *dfi)
+   165	{
+   166		void __iomem *dfi_regs = dfi->regs;
+   167	
+   168		mutex_lock(&dfi->mutex);
+   169	
+   170		dfi->usecount--;
+   171	
+   172		WARN_ON_ONCE(dfi->usecount < 0);
+   173	
+   174		if (dfi->usecount > 0)
+   175			goto out;
+   176	
+   177		writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_SOFTWARE_EN),
+   178			       dfi_regs + DDRMON_CTRL);
+   179		clk_disable_unprepare(dfi->clk);
+   180	out:
+   181		mutex_unlock(&dfi->mutex);
+   182	}
+   183	
+   184	static void rockchip_dfi_read_counters(struct rockchip_dfi *dfi, struct dmc_count *res)
+   185	{
+   186		u32 i;
+   187		void __iomem *dfi_regs = dfi->regs;
+   188	
+   189		for (i = 0; i < dfi->max_channels; i++) {
+   190			if (!(dfi->channel_mask & BIT(i)))
+   191				continue;
+   192			res->c[i].read_access = readl_relaxed(dfi_regs +
+   193					DDRMON_CH0_RD_NUM + i * 20);
+   194			res->c[i].write_access = readl_relaxed(dfi_regs +
+   195					DDRMON_CH0_WR_NUM + i * 20);
+   196			res->c[i].access = readl_relaxed(dfi_regs +
+   197					DDRMON_CH0_DFI_ACCESS_NUM + i * 20);
+   198			res->c[i].clock_cycles = readl_relaxed(dfi_regs +
+   199					DDRMON_CH0_COUNT_NUM + i * 20);
+   200		}
+   201	}
+   202	
+ > 203	static void rockchip_ddr_perf_counters_add(struct rockchip_dfi *dfi,
+   204						   const struct dmc_count *now,
+   205						   struct dmc_count *res)
+   206	{
+   207		const struct dmc_count *last = &dfi->last_perf_count;
+   208		int i;
+   209	
+   210		for (i = 0; i < dfi->max_channels; i++) {
+   211			res->c[i].read_access = dfi->total_count.c[i].read_access +
+   212				(u32)(now->c[i].read_access - last->c[i].read_access);
+   213			res->c[i].write_access = dfi->total_count.c[i].write_access +
+   214				(u32)(now->c[i].write_access - last->c[i].write_access);
+   215			res->c[i].access = dfi->total_count.c[i].access +
+   216				(u32)(now->c[i].access - last->c[i].access);
+   217			res->c[i].clock_cycles = dfi->total_count.c[i].clock_cycles +
+   218				(u32)(now->c[i].clock_cycles - last->c[i].clock_cycles);
+   219		}
+   220	}
+   221	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
