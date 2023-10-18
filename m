@@ -2,221 +2,179 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED837CD53C
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Oct 2023 09:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA62E7CD55D
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Oct 2023 09:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjJRHIl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Oct 2023 03:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34678 "EHLO
+        id S229730AbjJRHNc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Oct 2023 03:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbjJRHIk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Oct 2023 03:08:40 -0400
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D396B103
-        for <linux-pm@vger.kernel.org>; Wed, 18 Oct 2023 00:08:34 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1qt0fP-0007OP-SW; Wed, 18 Oct 2023 09:08:31 +0200
-Received: from [2a0a:edc0:2:b01:1d::c0] (helo=ptx.whiteo.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1qt0fO-002Uki-2j; Wed, 18 Oct 2023 09:08:30 +0200
-Received: from sha by ptx.whiteo.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1qt0fN-00F2o1-Vu; Wed, 18 Oct 2023 09:08:30 +0200
-Date:   Wed, 18 Oct 2023 09:08:29 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     linux-rockchip@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+        with ESMTP id S229805AbjJRHNb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Oct 2023 03:13:31 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7A7BA;
+        Wed, 18 Oct 2023 00:13:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1697613207; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=YVEdEd+44bqyCaMa0ZwcpYPN05TNXqtKJmkgcXf8d1s0rB5y8IJABHC/SFGIhnBrWx
+    P2AQPou+c7blTkw4dctvljfiAHy+0UbqLbzj1r0cMSXd112hX1svx8qW+tksUt0ioq1O
+    gl1BBIv4byXkLyhElJ74uR8HJEwVyxQCPtYvpJlLW3KlfX9rh/q7ys9lSZVlmH6GCZwh
+    +T4xJbUC8yFbj/gkmoK/9SJL0y4lcwGZS6yp0G+OeH9hH8CXvwZ6fHmusm6WCzFV5r+F
+    w8CBApdg2V986J36+ALVSdb99X2VpriqY3JURWxInQvB/L52n8zktPlIq55Zb04fNM2D
+    v/Uw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1697613207;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=a0tv/jXdlJYYydvKci7q39RV+zMHykUxsafimd8rhKc=;
+    b=W8B1QyGTNGQuEoVTeKHZMTd51/kyyHE42FVV5kcCBzUNVTUGObZDa+TTB8X00XD3fL
+    fx+bPqf0Yt7+NW98z6sHhh+pjcnKO7Zfbpi7GW76HNpsbszKfp9yLhAIlySPgDRspgOr
+    pFTu6OZ+JJ5oI+yEnvSuV6/g5mUPTGxa9YQPC86D9pIlSpFg0SpJe0RUw9k2TX1uIqYJ
+    XWfQyzc0Mv/IUEGfy55s6hXBeKJGXAEmICsarMC6J+7nI3Gq8r7BkpvVyHWbZiS4GUgT
+    5jn9qD7gZMmyjcmwZyn1qMjhuifz76uTOzNsanKeHIEqRoxUJyROEREOhKNEjI1kQIyR
+    rqpg==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1697613207;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=a0tv/jXdlJYYydvKci7q39RV+zMHykUxsafimd8rhKc=;
+    b=fhZjx0VCRuCKmrPK/CZR16ebZEfIwfEUPHVnZfUVV67VdjUiCWHft3498orR681iCq
+    tzl9wvZRymx3gxovj7zUeeMrwgahlFzENRbFxbZjV0NRr3E3xr964ANA0gpCOZN5JUnX
+    q+qRQG1lsKFeqAe/R5jSovW0mcO48541A9ER6pmmSdaQY+ZZ2pTQwvIjdnj6hOMEG3Dg
+    YVF9c5e9vkK6jq5I2JwJr/5kS6hY0wFTNN91eJ5uYp37N4XIG767tPrWVT3YeJ8en42o
+    2asiOWR0j3SEZbVkf/G+zlgkkY/I0Ly9xyjYap3FpQ4EC3f3j7H1QeiCLbYsxrjD08uJ
+    TTlQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1697613207;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=a0tv/jXdlJYYydvKci7q39RV+zMHykUxsafimd8rhKc=;
+    b=9ngWWFvNgop0xqTFoBm8e19FIv/0otce8CLSzVntPzaazdOQr2s4yii0lSyi7i/ra7
+    Z405IM7xnKU755E9SwAQ==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4peA+p3h"
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.9.0 DYNA|AUTH)
+    with ESMTPSA id j34a49z9I7DQ7o8
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 18 Oct 2023 09:13:26 +0200 (CEST)
+Date:   Wed, 18 Oct 2023 09:13:18 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Chanwoo Choi <chanwoo@kernel.org>,
-        Vincent Legoll <vincent.legoll@gmail.com>,
-        Will Deacon <will@kernel.org>, kernel@pengutronix.de,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v8 08/26] PM / devfreq: rk3399_dmc, dfi: generalize
- DDRTYPE defines
-Message-ID: <20231018070829.GH3359458@pengutronix.de>
-References: <20231018061714.3553817-1-s.hauer@pengutronix.de>
- <20231018061714.3553817-9-s.hauer@pengutronix.de>
+        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/4] cpufreq: qcom-nvmem: Enable virtual power domain
+ devices
+Message-ID: <ZS-FjhUU12TssGhy@gerhold.net>
+References: <20230912-msm8909-cpufreq-v1-1-767ce66b544b@kernkonzept.com>
+ <CAPDyKFq6U-MR4Bd+GmixYseRECDh142RhydtKbiPd3NHV2g6aw@mail.gmail.com>
+ <ZQGqfMigCFZP_HLA@gerhold.net>
+ <CAPDyKFppdXe1AZo1jm2Bc_ZR18hw5Bmh1x+2P7Obhb_rJ2gc4Q@mail.gmail.com>
+ <ZRcC2IRRv6dtKY65@gerhold.net>
+ <CAPDyKFoiup8KNv=1LFGKDdDLA1pHsdJUgTTWMdgxnikEmReXzg@mail.gmail.com>
+ <ZSg-XtwMxg3_fWxc@gerhold.net>
+ <CAPDyKFoH5EOvRRKy-Bgp_B9B3rf=PUKK5N45s5PNgfBi55PaOQ@mail.gmail.com>
+ <ZS70aZbP33fkf9dP@gerhold.net>
+ <CAPDyKFpwZdx=vyuAZSv1WGYCyiohfnt87LM1jw=fhKsF5Ks1Yw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231018061714.3553817-9-s.hauer@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAPDyKFpwZdx=vyuAZSv1WGYCyiohfnt87LM1jw=fhKsF5Ks1Yw@mail.gmail.com>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Heiko,
-
-Could you provide your Ack for this patch?
-
-Thanks
- Sascha
-
-On Wed, Oct 18, 2023 at 08:16:56AM +0200, Sascha Hauer wrote:
-> The DDRTYPE defines are named to be RK3399 specific, but they can be
-> used for other Rockchip SoCs as well, so replace the RK3399_PMUGRF_
-> prefix with ROCKCHIP_. They are defined in a SoC specific header
-> file, so when generalizing the prefix also move the new defines to
-> a SoC agnostic header file. While at it use GENMASK to define the
-> DDRTYPE bitfield and give it a name including the full register name.
+On Tue, Oct 17, 2023 at 11:50:21PM +0200, Ulf Hansson wrote:
+> [...]
+> > >
+> > > *) The pm_runtime_resume_and_get() works for QCS404 as a fix. It also
+> > > works fine when there is only one RPMPD that manages the performance
+> > > scaling.
+> > >
+> >
+> > Agreed.
+> >
+> > > **) In cases where we have multiple PM domains to scale performance
+> > > for, using pm_runtime_resume_and_get() would work fine too. Possibly
+> > > we want to use device_link_add() to set up suppliers, to avoid calling
+> > > pm_runtime_resume_and_get() for each and every device.
+> > >
+> >
+> > Hm. What would you use as "supplied" device? The CPU device I guess?
 > 
-> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> ---
->  drivers/devfreq/event/rockchip-dfi.c |  9 +++++----
->  drivers/devfreq/rk3399_dmc.c         | 10 +++++-----
->  include/soc/rockchip/rk3399_grf.h    |  7 +------
->  include/soc/rockchip/rockchip_grf.h  | 17 +++++++++++++++++
->  4 files changed, 28 insertions(+), 15 deletions(-)
->  create mode 100644 include/soc/rockchip/rockchip_grf.h
+> The consumer would be the device that is used to probe the cpureq
+> driver and the supplier(s) the virtual devices returned from genpd
+> when attaching.
 > 
-> diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event/rockchip-dfi.c
-> index 28c18bbf6baa5..82d18c60538a5 100644
-> --- a/drivers/devfreq/event/rockchip-dfi.c
-> +++ b/drivers/devfreq/event/rockchip-dfi.c
-> @@ -18,8 +18,10 @@
->  #include <linux/list.h>
->  #include <linux/of.h>
->  #include <linux/of_device.h>
-> +#include <linux/bitfield.h>
->  #include <linux/bits.h>
->  
-> +#include <soc/rockchip/rockchip_grf.h>
->  #include <soc/rockchip/rk3399_grf.h>
->  
->  #define DMC_MAX_CHANNELS	2
-> @@ -75,9 +77,9 @@ static void rockchip_dfi_start_hardware_counter(struct devfreq_event_dev *edev)
->  	writel_relaxed(CLR_DDRMON_CTRL, dfi_regs + DDRMON_CTRL);
->  
->  	/* set ddr type to dfi */
-> -	if (dfi->ddr_type == RK3399_PMUGRF_DDRTYPE_LPDDR3)
-> +	if (dfi->ddr_type == ROCKCHIP_DDRTYPE_LPDDR3)
->  		writel_relaxed(LPDDR3_EN, dfi_regs + DDRMON_CTRL);
-> -	else if (dfi->ddr_type == RK3399_PMUGRF_DDRTYPE_LPDDR4)
-> +	else if (dfi->ddr_type == ROCKCHIP_DDRTYPE_LPDDR4)
->  		writel_relaxed(LPDDR4_EN, dfi_regs + DDRMON_CTRL);
->  
->  	/* enable count, use software mode */
-> @@ -192,8 +194,7 @@ static int rk3399_dfi_init(struct rockchip_dfi *dfi)
->  
->  	/* get ddr type */
->  	regmap_read(regmap_pmu, RK3399_PMUGRF_OS_REG2, &val);
-> -	dfi->ddr_type = (val >> RK3399_PMUGRF_DDRTYPE_SHIFT) &
-> -			RK3399_PMUGRF_DDRTYPE_MASK;
-> +	dfi->ddr_type = FIELD_GET(RK3399_PMUGRF_OS_REG2_DDRTYPE, val);
->  
->  	dfi->channel_mask = GENMASK(1, 0);
->  	dfi->max_channels = 2;
-> diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
-> index daff407026157..fd2c5ffedf41e 100644
-> --- a/drivers/devfreq/rk3399_dmc.c
-> +++ b/drivers/devfreq/rk3399_dmc.c
-> @@ -22,6 +22,7 @@
->  #include <linux/suspend.h>
->  
->  #include <soc/rockchip/pm_domains.h>
-> +#include <soc/rockchip/rockchip_grf.h>
->  #include <soc/rockchip/rk3399_grf.h>
->  #include <soc/rockchip/rockchip_sip.h>
->  
-> @@ -381,17 +382,16 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
->  	}
->  
->  	regmap_read(data->regmap_pmu, RK3399_PMUGRF_OS_REG2, &val);
-> -	ddr_type = (val >> RK3399_PMUGRF_DDRTYPE_SHIFT) &
-> -		    RK3399_PMUGRF_DDRTYPE_MASK;
-> +	ddr_type = FIELD_GET(RK3399_PMUGRF_OS_REG2_DDRTYPE, val);
->  
->  	switch (ddr_type) {
-> -	case RK3399_PMUGRF_DDRTYPE_DDR3:
-> +	case ROCKCHIP_DDRTYPE_DDR3:
->  		data->odt_dis_freq = data->ddr3_odt_dis_freq;
->  		break;
-> -	case RK3399_PMUGRF_DDRTYPE_LPDDR3:
-> +	case ROCKCHIP_DDRTYPE_LPDDR3:
->  		data->odt_dis_freq = data->lpddr3_odt_dis_freq;
->  		break;
-> -	case RK3399_PMUGRF_DDRTYPE_LPDDR4:
-> +	case ROCKCHIP_DDRTYPE_LPDDR4:
->  		data->odt_dis_freq = data->lpddr4_odt_dis_freq;
->  		break;
->  	default:
-> diff --git a/include/soc/rockchip/rk3399_grf.h b/include/soc/rockchip/rk3399_grf.h
-> index 3eebabcb28123..775f8444bea8d 100644
-> --- a/include/soc/rockchip/rk3399_grf.h
-> +++ b/include/soc/rockchip/rk3399_grf.h
-> @@ -11,11 +11,6 @@
->  
->  /* PMU GRF Registers */
->  #define RK3399_PMUGRF_OS_REG2		0x308
-> -#define RK3399_PMUGRF_DDRTYPE_SHIFT	13
-> -#define RK3399_PMUGRF_DDRTYPE_MASK	7
-> -#define RK3399_PMUGRF_DDRTYPE_DDR3	3
-> -#define RK3399_PMUGRF_DDRTYPE_LPDDR2	5
-> -#define RK3399_PMUGRF_DDRTYPE_LPDDR3	6
-> -#define RK3399_PMUGRF_DDRTYPE_LPDDR4	7
-> +#define RK3399_PMUGRF_OS_REG2_DDRTYPE		GENMASK(15, 13)
->  
->  #endif
-> diff --git a/include/soc/rockchip/rockchip_grf.h b/include/soc/rockchip/rockchip_grf.h
-> new file mode 100644
-> index 0000000000000..dde1a9796ccb5
-> --- /dev/null
-> +++ b/include/soc/rockchip/rockchip_grf.h
-> @@ -0,0 +1,17 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ */
-> +/*
-> + * Rockchip General Register Files definitions
-> + */
-> +
-> +#ifndef __SOC_ROCKCHIP_GRF_H
-> +#define __SOC_ROCKCHIP_GRF_H
-> +
-> +/* Rockchip DDRTYPE defines */
-> +enum {
-> +	ROCKCHIP_DDRTYPE_DDR3	= 3,
-> +	ROCKCHIP_DDRTYPE_LPDDR2	= 5,
-> +	ROCKCHIP_DDRTYPE_LPDDR3	= 6,
-> +	ROCKCHIP_DDRTYPE_LPDDR4	= 7,
-> +};
-> +
-> +#endif /* __SOC_ROCKCHIP_GRF_H */
-> -- 
-> 2.39.2
+> >
+> > I'm looking again at my old patch from 2020 where I implemented this
+> > with device links in the OPP core. Seems like you suggested this back
+> > then too :)
+> >
+> >   https://lore.kernel.org/linux-pm/20200826093328.88268-1-stephan@gerhold.net/
+> >
+> > However, for the special case of the CPU I think we don't gain any code
+> > simplification from using device links. There will just be a single
+> > resume of each virtual genpd device, as well as one put during remove().
+> > Exactly the same applies when using device links, we need to set up the
+> > device links once for each virtual genpd device, and clean them up again
+> > during remove().
+> >
+> > Or can you think of another advantage of using device links?
 > 
+> No, not at this point.
 > 
+> So, in this particular case it may not matter that much. But when the
+> number of PM domains starts to vary between platforms it could be a
+> nice way to abstract some logic. I guess starting without using
+> device-links and seeing how it evolves could be a way forward too.
 > 
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Sounds good :)
+
+> >
+> > > ***) Due to the above, we don't need a new mechanism to avoid
+> > > "caching" performance states for genpd. At least for the time being.
+> > >
+> >
+> > Right. Given *) and **) I'll prepare a v2 of $subject patch with the
+> > remove() cleanup fixed and an improved commit description.
+> >
+> > I'll wait for a bit in case you have more thoughts about the device
+> > links.
+> 
+> One more thing though that crossed my mind. In the rpmpd case, is
+> there anything we need to care about during system suspend/resume that
+> isn't already taken care of correctly?
+> 
+
+No, I don't think so. The RPM firmware makes no difference between deep
+cpuidle and system suspend. As long as we properly enter deep cpuidle as
+part of s2idle, it will automatically release our votes for the
+"active-only" (_AO) variant of the RPMPDs.
+
+I'll send the adjusted v2 shortly for you to look at. :)
+
+Thanks,
+Stephan
