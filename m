@@ -2,111 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D0F7CE88F
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Oct 2023 22:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9C977CEB63
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 00:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbjJRUK0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Oct 2023 16:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46510 "EHLO
+        id S229757AbjJRWh3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Oct 2023 18:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjJRUKZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Oct 2023 16:10:25 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042F1A4
-        for <linux-pm@vger.kernel.org>; Wed, 18 Oct 2023 13:10:22 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2c5210a1515so59077091fa.0
-        for <linux-pm@vger.kernel.org>; Wed, 18 Oct 2023 13:10:21 -0700 (PDT)
+        with ESMTP id S229632AbjJRWh2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Oct 2023 18:37:28 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5CA9116
+        for <linux-pm@vger.kernel.org>; Wed, 18 Oct 2023 15:37:26 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-5a7c7262d5eso92663157b3.1
+        for <linux-pm@vger.kernel.org>; Wed, 18 Oct 2023 15:37:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697659820; x=1698264620; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vC8BSO57sX+RFvEjTRkQdrl0WXBXIli5ij6sBpRlpmY=;
-        b=qp1Ttjd7bg4NjuZFjqHRmkIOMEi5eZZT+fmctQsM9QeVK52AlHj+pQuntQyJzTHJup
-         tMocsb7Y8g1w277Flaw3inb6Ae548IXWa6+xs4PzI+k90VXTV4TEYVQeAjXCWUp0cwxB
-         Vxn9/OQonQYbSfTvUw4HauQDqZTOTEp6ir1r0d3/hYKtuaNBQNI1EQgvpZaHJPegviUI
-         eGTFP9q3l+7owQdLsOnwGVkJA5aqZviIgSU8qZZhvp3j+/36VuhH6bjn/F43sQkE+2jK
-         H5WdKDEIAPmC6d6oOBNj0fJvTz9tOm36GSbxtLRn3Ggz0rDFS8RquSQtbfM6qtaIpRqs
-         ZkuA==
+        d=linaro.org; s=google; t=1697668646; x=1698273446; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3sVJFVpPwshmtNesSZYpLdeu3AKCPAN5fOk/AE0DGUc=;
+        b=uu7qKZO9fW/V52UMWo3os3UxIMUH9+AcUa+7z202HbsLfolO0r15qt5YAVIgx7pi1d
+         M/T5S/U3x+TVKtJiMpa7+PoxbvcXoz8FQMtWZ8OZlFI6lEQ27REdKsUSaCHopLJ3Dpgz
+         GZKPFMH6A7CxX3Tc60KDoTHawa/Jepq/tbpMhWD9eugU878M2wvbol5WP8hEdgLuxkns
+         bXVUHfj94hL0hQuyeL4iApYDom/WFNUTdF9IeDhVVaofVp8mtu9idhvnySsDKapg6Y6o
+         WAMMVzJxvVkkyAnazoaa3bn3rYB8VpOaJMWUXZTcTE/cvIndcNhHL0S0SBYGircUMAiX
+         lvgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697659820; x=1698264620;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vC8BSO57sX+RFvEjTRkQdrl0WXBXIli5ij6sBpRlpmY=;
-        b=k58ubJg5/3wRZIwRJh402rSBj3WxUHEicfeqxDGH2NWrDDOxHOloaf+fWvZQZwxdEc
-         +BWvrUxSK8BOJCtJo6exhM4hsk4c3dJHoDmEkhB3pG0N/AYXCiRGtu/2rS2cWIDvPwFW
-         ZpUHlP4v3yI4sjo/yqf0mNXNedByxqSBhROafZkImOrJEfUxmDFYH/jIKtvAMtX1/Isl
-         VjVWKYiHjmb5mUizhBXQ04Rpp+G/6cF0Z6lXZBIpWUK+ECOWLXA38BIoSQuNf3yRmvB6
-         lMD+thMRZadeoshtkZ74VRXhq5c1EXlfpBpxMR/7slcohzhip7oszyxadFDFy81ryY3N
-         LtfA==
-X-Gm-Message-State: AOJu0Yzaz8eOFFpJirfN7uvOb9ynbm0Rl17tD8cU3u49AWhJp6l4hZVv
-        nWl2KKJYEz7iJlM+yaRa7GuIBQ==
-X-Google-Smtp-Source: AGHT+IEoV8GqxarhRZJW+0Q9BZA1W9wzW1qrmKIldTts6mlhYjR/7ldyMGUwHxDYw3kBmonbwYz5Ug==
-X-Received: by 2002:a05:6512:15b:b0:507:a984:bf40 with SMTP id m27-20020a056512015b00b00507a984bf40mr40011lfo.47.1697659820172;
-        Wed, 18 Oct 2023 13:10:20 -0700 (PDT)
-Received: from [172.30.205.86] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
-        by smtp.gmail.com with ESMTPSA id v7-20020a056512048700b0050336e38735sm816806lfq.92.2023.10.18.13.10.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Oct 2023 13:10:19 -0700 (PDT)
-Message-ID: <5e1eacc5-721e-4ac1-a62f-ece6a1c4355c@linaro.org>
-Date:   Wed, 18 Oct 2023 22:10:16 +0200
+        d=1e100.net; s=20230601; t=1697668646; x=1698273446;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3sVJFVpPwshmtNesSZYpLdeu3AKCPAN5fOk/AE0DGUc=;
+        b=NiErWENHTKq6o22N2nMr0mnEivIYeZTgYA8uPPa2rlTfPPacc5nsW7IAtFSLVVrx3F
+         S3fM1RlnUPHoW0T4RfeNTmMzJo+XYPniHftsk2OIFB44GYV4hVUrgF8UZIARiIpfiRh6
+         D4AKnffxdbFmepSgyxX/bO1/EGRXkiqx70ImMpexKZElYVxe3z0TEjpmgKwT5vA4s3hP
+         iNvbbWoB0l7U8WTeARsUKW2Gga8reFCMau022aIpb1aNCUHHoGVWscg0KeRNh9i8q0Ej
+         9YamFZEuOQVoTDr9v7yKEdvDNHy2TNTtzH20QZfXhcnsOTO+yy+3Xba14p2+7SD79chN
+         UrUA==
+X-Gm-Message-State: AOJu0YyDPdBruCO7jKyBE8c6OktWRVV0UNxhUm/vY7HbijO+b8IiQTCl
+        fNZRnv7uueSk85/3KmwXdJLSrVy5EEr5bP0fJqFzNQ==
+X-Google-Smtp-Source: AGHT+IGQlkbNBVD/SIMZRooMGJ4PHAVW/C3q1NKNDnZ+FMwhI+gT6LA3YI3WJjxYOKCV9tBBzi3ChIxzhBVUQseyZQo=
+X-Received: by 2002:a25:c8c6:0:b0:d9a:f897:f9b4 with SMTP id
+ y189-20020a25c8c6000000b00d9af897f9b4mr616222ybf.65.1697668646025; Wed, 18
+ Oct 2023 15:37:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 8/8] arm64: dts: qcom: ipq9574: populate the opp table
- based on the eFuse
-Content-Language: en-US
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, rafael@kernel.org,
-        viresh.kumar@linaro.org, ilia.lin@kernel.org,
-        quic_kathirav@quicinc.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-References: <cover.1697600121.git.quic_varada@quicinc.com>
- <5d1bf44de58db10a20d1b116c7fd4b073d01271e.1697600121.git.quic_varada@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <5d1bf44de58db10a20d1b116c7fd4b073d01271e.1697600121.git.quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20231014133823.14088-1-otto.pflueger@abscue.de>
+In-Reply-To: <20231014133823.14088-1-otto.pflueger@abscue.de>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 19 Oct 2023 00:36:49 +0200
+Message-ID: <CAPDyKFoq-7FL=e_ACDeSamoKSmoewK=eSEzzaL1xRQwX_jf_LA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] pmdomain: qcom: rpmpd: Add MSM8917 and similar SoCs
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     =?UTF-8?Q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>,
+        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 10/18/23 11:29, Varadarajan Narayanan wrote:
-> IPQ95xx SoCs have different OPPs available for the CPU based on
-> SoC variant. This can be determined from an eFuse register
-> present in the silicon.
-> 
-> Add support to read the eFuse and populate the OPPs based on it.
-> 
-> Frequency	1.2GHz	1.8GHz	1.5GHz	No	opp-supported-hw
-> 					Limit
-> ------------------------------------------------------------
-> 936000000	1	1	1	1	0xf
-> 1104000000	1	1	1	1	0xf
-> 1200000000	1	1	1	1	0xf
-> 1416000000	0	1	1	1	0x7
-> 1488000000	0	1	1	1	0x7
-> 1800000000	0	1	0	1	0x5
-> 2208000000	0	0	0	1	0x1
-> -----------------------------------------------------------
-> 
-> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+On Sat, 14 Oct 2023 at 15:38, Otto Pfl=C3=BCger <otto.pflueger@abscue.de> w=
+rote:
+>
+> Add RPM power domain definitions for the Qualcomm MSM8917, MSM8937 and
+> QM215 SoCs. These SoCs all have the same power domains (VDDCX and VDDMX
+> in voltage level mode), but different regulators are needed for QM215
+> because it is used with a PM8916 PMIC instead of a PM8937 PMIC.
+>
 > ---
-> v2:	cpu_speed_bin -> cpu-speed-bin in node name
-> 	Move comment to commit log
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Changes in v4:
+> - Rebase on latest next as of 2023-10-14 with new SM7150 compatible
+> - Add missing Reviewed-by (if there were no changes to rebase on, I
+>   would have simply resent the patch)
+> Changes in v3:
+> - Sort compatibles in device tree binding documentation (suggested by
+>   Krzysztof)
+> - Rebase on latest next with genpd subsystem renamed to pmdomain
+> Changes in v2:
+> - Fix typo in patch description: VDDMD -> VDDMX
+> - Split MSM8917 and QM215 changes (suggested by Konrad)
+> - Remove redundant qcom,msm8937-rpmpd entry from rpmpd_match_table
+>   and use a fallback compatible instead (suggested by Konrad)
+>
+> Otto Pfl=C3=BCger (3):
+>   dt-bindings: power: rpmpd: Add MSM8917, MSM8937 and QM215
+>   pmdomain: qcom: rpmpd: Add MSM8917 power domains
+>   pmdomain: qcom: rpmpd: Add QM215 power domains
+>
+>  .../devicetree/bindings/power/qcom,rpmpd.yaml | 81 +++++++++--------
+>  drivers/pmdomain/qcom/rpmpd.c                 | 91 +++++++++++++++++++
+>  include/dt-bindings/power/qcom-rpmpd.h        | 21 +++++
+>  3 files changed, 156 insertions(+), 37 deletions(-)
 
-Konrad
+Konrad, Bjorn - it's getting late for v6.7, but not too late yet,
+hence I am pinging you about this.
+
+Can we get an ack from some of you for this series or there is still
+something to improve for Otto?
+
+Kind regards
+Uffe
