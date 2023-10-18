@@ -2,31 +2,31 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FBE17CD432
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Oct 2023 08:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81FF87CD460
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Oct 2023 08:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344489AbjJRGSu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Oct 2023 02:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
+        id S229665AbjJRGWe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Oct 2023 02:22:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344583AbjJRGSV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Oct 2023 02:18:21 -0400
+        with ESMTP id S235194AbjJRGWV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Oct 2023 02:22:21 -0400
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD13AD52
-        for <linux-pm@vger.kernel.org>; Tue, 17 Oct 2023 23:17:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14AED1986
+        for <linux-pm@vger.kernel.org>; Tue, 17 Oct 2023 23:18:16 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <sha@pengutronix.de>)
-        id 1qszrx-0001Zi-7N; Wed, 18 Oct 2023 08:17:25 +0200
+        id 1qszru-0001Zj-CH; Wed, 18 Oct 2023 08:17:22 +0200
 Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <sha@pengutronix.de>)
-        id 1qszrq-002UXq-Kg; Wed, 18 Oct 2023 08:17:18 +0200
+        id 1qszrq-002UXr-L9; Wed, 18 Oct 2023 08:17:18 +0200
 Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.96)
         (envelope-from <sha@pengutronix.de>)
-        id 1qszrq-00Evht-1i;
+        id 1qszrq-00Evhx-1p;
         Wed, 18 Oct 2023 08:17:18 +0200
 From:   Sascha Hauer <s.hauer@pengutronix.de>
 To:     linux-rockchip@lists.infradead.org
@@ -44,10 +44,11 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Subject: [PATCH v8 01/26] PM / devfreq: rockchip-dfi: Make pmu regmap mandatory
-Date:   Wed, 18 Oct 2023 08:16:49 +0200
-Message-Id: <20231018061714.3553817-2-s.hauer@pengutronix.de>
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH v8 02/26] PM / devfreq: rockchip-dfi: Embed desc into private data struct
+Date:   Wed, 18 Oct 2023 08:16:50 +0200
+Message-Id: <20231018061714.3553817-3-s.hauer@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231018061714.3553817-1-s.hauer@pengutronix.de>
 References: <20231018061714.3553817-1-s.hauer@pengutronix.de>
@@ -58,7 +59,7 @@ X-SA-Exim-Mail-From: sha@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,51 +67,46 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-As a matter of fact the regmap_pmu already is mandatory because
-it is used unconditionally in the driver. Bail out gracefully in
-probe() rather than crashing later.
+No need for an extra allocation, just embed the struct
+devfreq_event_desc into the private data struct.
 
-Fixes: b9d1262bca0af ("PM / devfreq: event: support rockchip dfi controller")
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
 ---
-
-Notes:
-    Changes since v4:
-     - move to beginning of the series to make it easier to backport to stable
-     - Add a Fixes: tag
-     - add missing of_node_put()
-
- drivers/devfreq/event/rockchip-dfi.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ drivers/devfreq/event/rockchip-dfi.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event/rockchip-dfi.c
-index 39ac069cabc75..74893c06aa087 100644
+index 74893c06aa087..467f9f42d38f7 100644
 --- a/drivers/devfreq/event/rockchip-dfi.c
 +++ b/drivers/devfreq/event/rockchip-dfi.c
-@@ -193,14 +193,15 @@ static int rockchip_dfi_probe(struct platform_device *pdev)
- 		return dev_err_probe(dev, PTR_ERR(data->clk),
- 				     "Cannot get the clk pclk_ddr_mon\n");
+@@ -49,7 +49,7 @@ struct dmc_usage {
+  */
+ struct rockchip_dfi {
+ 	struct devfreq_event_dev *edev;
+-	struct devfreq_event_desc *desc;
++	struct devfreq_event_desc desc;
+ 	struct dmc_usage ch_usage[RK3399_DMC_NUM_CH];
+ 	struct device *dev;
+ 	void __iomem *regs;
+@@ -204,14 +204,10 @@ static int rockchip_dfi_probe(struct platform_device *pdev)
  
--	/* try to find the optional reference to the pmu syscon */
- 	node = of_parse_phandle(np, "rockchip,pmu", 0);
--	if (node) {
--		data->regmap_pmu = syscon_node_to_regmap(node);
--		of_node_put(node);
--		if (IS_ERR(data->regmap_pmu))
--			return PTR_ERR(data->regmap_pmu);
--	}
-+	if (!node)
-+		return dev_err_probe(&pdev->dev, -ENODEV, "Can't find pmu_grf registers\n");
-+
-+	data->regmap_pmu = syscon_node_to_regmap(node);
-+	of_node_put(node);
-+	if (IS_ERR(data->regmap_pmu))
-+		return PTR_ERR(data->regmap_pmu);
-+
  	data->dev = dev;
  
- 	desc = devm_kzalloc(dev, sizeof(*desc), GFP_KERNEL);
+-	desc = devm_kzalloc(dev, sizeof(*desc), GFP_KERNEL);
+-	if (!desc)
+-		return -ENOMEM;
+-
++	desc = &data->desc;
+ 	desc->ops = &rockchip_dfi_ops;
+ 	desc->driver_data = data;
+ 	desc->name = np->name;
+-	data->desc = desc;
+ 
+ 	data->edev = devm_devfreq_event_add_edev(&pdev->dev, desc);
+ 	if (IS_ERR(data->edev)) {
 -- 
 2.39.2
 
