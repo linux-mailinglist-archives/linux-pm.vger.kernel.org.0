@@ -2,145 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C37AA7CCF85
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Oct 2023 23:51:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11BC27CD11E
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Oct 2023 02:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbjJQVvC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Oct 2023 17:51:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34130 "EHLO
+        id S230219AbjJRAH0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Oct 2023 20:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233170AbjJQVvC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Oct 2023 17:51:02 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C817B0
-        for <linux-pm@vger.kernel.org>; Tue, 17 Oct 2023 14:50:58 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-d9ace5370a0so6101633276.0
-        for <linux-pm@vger.kernel.org>; Tue, 17 Oct 2023 14:50:58 -0700 (PDT)
+        with ESMTP id S229459AbjJRAHZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Oct 2023 20:07:25 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D500AC4
+        for <linux-pm@vger.kernel.org>; Tue, 17 Oct 2023 17:07:23 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2c50d1b9f22so52645191fa.0
+        for <linux-pm@vger.kernel.org>; Tue, 17 Oct 2023 17:07:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697579457; x=1698184257; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BfSq4fUe022kDtkFJa2azWpgcNmqdZxJ8fBh51QJEV8=;
-        b=tUifuL9+/C4O6RqXx9beMS8lhbBgG42woTccPBBbhbPVUNIm8zDKUDe/JU42ywRYQH
-         ALtxXdQjdzeMNzrWD0TbMDqBl83CSGjRy2yQzrBYyztrdkOh4zB2dwYsFuoStdIYevI6
-         bpSQ4/NnbpitUQP6O4NVmq3dwIaRGdab6sWrrQ0nb3uhkQLEKITy4c+5gZ06pDICEHvN
-         nJW9R2/7PRgNlIUUUf2yHSeTlVqKcYZZfU8GoYdXUENWiHZAz9kLf5CgW/1ji9P9GNQa
-         BA5rVV9uyiw6flCSONyeuSiA3mF4Md2pb/j+FdWcOMZ2mWmi9i7/18NQdfMIVT4tdDpC
-         /kPw==
+        d=chromium.org; s=google; t=1697587642; x=1698192442; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yL5IHSgiOPCaseF8jxFxoTKSJkLG4FnIxMof3Q5FawM=;
+        b=clXo2BuXwWDeIGHWv6y1m7WBxmQt5y7kTjRrxV5RlJ7+e4RmwbCkHBdPYHWmcpday+
+         e6/HW3c/+1HuhSfRrVOBwA1ph13ytHoAh4u9tVwWF6VttJOHf9tMh8KJN6OzKDL8RuLd
+         1ElbON6TzF86S9AhHUnouq75QrEyuySIsu1+g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697579457; x=1698184257;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BfSq4fUe022kDtkFJa2azWpgcNmqdZxJ8fBh51QJEV8=;
-        b=ePCV7B76TtStuq5SAI/S/Iw4tTe15TkIIKlOOO3v2MkX57/avsXkULLwBPoCKqcsok
-         BY9U2JN/DaIrAVMJNh/vUezXZ4BbEkMB5qtx7NmkFq5v6UalcsJxAGjyMI6z7Q/Oa18V
-         SlEW4x8l1kc42IDGDGUUXexuz33rcJVed09bmhk9A+C5w35KF58jQiQv886YJSmfqCTR
-         hx3QnoDXBJxPaO0FQKjX4i39Fajt+Zoim90dm7LrN1cyjD3Q9qVJe7BhmCW01k+M02WD
-         LD9LwgXosELB2NsNVKt829bgQvCV46+e4mtP7Pxz7og/PUY1o5F6TmyCBZzDRhnDwily
-         jmRA==
-X-Gm-Message-State: AOJu0YwsA80fi4nIlDmtQj9y/ANYiqso1mYCphsiAf42yN8WLwA9bKxj
-        HTIIzavo15tI4PDTJK9/LriayMQvNwE1h5BsP1/j4Q==
-X-Google-Smtp-Source: AGHT+IH4mYBk2x6zSCe/oj9jgMckIfEgIIlbaCnHdu+xq/07HUwai6hGnMdCcSxiF6naVzSWPbRy3VdGUHd2529Uuiw=
-X-Received: by 2002:a25:254:0:b0:d9b:6264:b79e with SMTP id
- 81-20020a250254000000b00d9b6264b79emr3129729ybc.53.1697579457419; Tue, 17 Oct
- 2023 14:50:57 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697587642; x=1698192442;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yL5IHSgiOPCaseF8jxFxoTKSJkLG4FnIxMof3Q5FawM=;
+        b=SFYDnP3H+p7qHg0GX++cxzpf5roGbeeikaNi8nQtvJZVEI14IBB2ojqrOZOyuMVZCG
+         7w86yAbXME+6Ab7v4NDFLAqm3FTIwxMfSr24VjhSzvi8miPfHYdLVY2J8yoR9CpNWnpE
+         EfW89p5J0nIg04BNLF+C5YjMkPvYzz6KTVUCjn7YY+gahdcuojDnM/P3ZDQ50BX6QUsm
+         Pv0glLPYPwVFPKE4qx5uM5bEhBSkhsjFGdK32ZnmNm6bvYAlJNdu//6emjfCbNN3KMu4
+         lEZQCzher+mk7RT67UKzd+s+5cmNjad2SY6ozIRaQqZb/zddLnH48Pr66oYbI4wvbjAU
+         TagA==
+X-Gm-Message-State: AOJu0YzFWa6JifTbF3RIVZjaRAEgW2+/ZF9dn1CfE6GAitma799eFZd+
+        4m1ZtlXmJMc3iTyZmEmXxundXJP7jQXZy3/fxoI7Pw==
+X-Google-Smtp-Source: AGHT+IHdYpQ7b2GTg0pg2e6yXIg3WUzgg6FphjxIscthWaEOsQp4Vnpo/InQm+NVk8R54x4Et7gna/2lIz01hIOxMHE=
+X-Received: by 2002:ac2:598c:0:b0:507:a33f:135d with SMTP id
+ w12-20020ac2598c000000b00507a33f135dmr2672443lfn.4.1697587641970; Tue, 17 Oct
+ 2023 17:07:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230912-msm8909-cpufreq-v1-0-767ce66b544b@kernkonzept.com>
- <20230912-msm8909-cpufreq-v1-1-767ce66b544b@kernkonzept.com>
- <CAPDyKFq6U-MR4Bd+GmixYseRECDh142RhydtKbiPd3NHV2g6aw@mail.gmail.com>
- <ZQGqfMigCFZP_HLA@gerhold.net> <CAPDyKFppdXe1AZo1jm2Bc_ZR18hw5Bmh1x+2P7Obhb_rJ2gc4Q@mail.gmail.com>
- <ZRcC2IRRv6dtKY65@gerhold.net> <CAPDyKFoiup8KNv=1LFGKDdDLA1pHsdJUgTTWMdgxnikEmReXzg@mail.gmail.com>
- <ZSg-XtwMxg3_fWxc@gerhold.net> <CAPDyKFoH5EOvRRKy-Bgp_B9B3rf=PUKK5N45s5PNgfBi55PaOQ@mail.gmail.com>
- <ZS70aZbP33fkf9dP@gerhold.net>
-In-Reply-To: <ZS70aZbP33fkf9dP@gerhold.net>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 17 Oct 2023 23:50:21 +0200
-Message-ID: <CAPDyKFpwZdx=vyuAZSv1WGYCyiohfnt87LM1jw=fhKsF5Ks1Yw@mail.gmail.com>
-Subject: Re: [PATCH 1/4] cpufreq: qcom-nvmem: Enable virtual power domain devices
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, stable@vger.kernel.org
+References: <20231017190545.157282-1-bero@baylibre.com>
+In-Reply-To: <20231017190545.157282-1-bero@baylibre.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 17 Oct 2023 17:07:10 -0700
+Message-ID: <CAGXv+5FwkBU3wfyZWWaiOgzLACfMVs4Bnu2KM4oSCUa28SzXVw@mail.gmail.com>
+Subject: Re: [PATCH v5 0/5] Add LVTS support for mt8192
+To:     =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>
+Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, dunlap@infradead.org,
+        e.xingchen@zte.com.cn, p.zabel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        ames.lo@mediatek.com, rex-bc.chen@mediatek.com,
+        nfraprado@collabora.com, abailon@baylibre.com,
+        amergnat@baylibre.com, khilman@baylibre.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[...]
+Hi,
 
-> >
-> > *) The pm_runtime_resume_and_get() works for QCS404 as a fix. It also
-> > works fine when there is only one RPMPD that manages the performance
-> > scaling.
-> >
+On Tue, Oct 17, 2023 at 12:05=E2=80=AFPM Bernhard Rosenkr=C3=A4nzer
+<bero@baylibre.com> wrote:
 >
-> Agreed.
+> Add full LVTS support (MCU thermal domain + AP thermal domain) to MediaTe=
+k MT8192 SoC.
+> Also, add Suspend and Resume support to LVTS Driver (all SoCs),
+> and update the documentation that describes the Calibration Data Offsets.
 >
-> > **) In cases where we have multiple PM domains to scale performance
-> > for, using pm_runtime_resume_and_get() would work fine too. Possibly
-> > we want to use device_link_add() to set up suppliers, to avoid calling
-> > pm_runtime_resume_and_get() for each and every device.
-> >
->
-> Hm. What would you use as "supplied" device? The CPU device I guess?
+> v5 changes are a lot smaller than originally assumed -- commit
+> 185673ca71d3f7e9c7d62ee5084348e084352e56 fixed the issue I
+> was originally planning to work around in this patchset,
+> so what remains for v5 is noirq and cosmetics.
 
-The consumer would be the device that is used to probe the cpureq
-driver and the supplier(s) the virtual devices returned from genpd
-when attaching.
+I see two series in my inbox and on the mailing list. Which one is the
+correct one?
 
->
-> I'm looking again at my old patch from 2020 where I implemented this
-> with device links in the OPP core. Seems like you suggested this back
-> then too :)
->
->   https://lore.kernel.org/linux-pm/20200826093328.88268-1-stephan@gerhold.net/
->
-> However, for the special case of the CPU I think we don't gain any code
-> simplification from using device links. There will just be a single
-> resume of each virtual genpd device, as well as one put during remove().
-> Exactly the same applies when using device links, we need to set up the
-> device links once for each virtual genpd device, and clean them up again
-> during remove().
->
-> Or can you think of another advantage of using device links?
+Thanks
+ChenYu
 
-No, not at this point.
-
-So, in this particular case it may not matter that much. But when the
-number of PM domains starts to vary between platforms it could be a
-nice way to abstract some logic. I guess starting without using
-device-links and seeing how it evolves could be a way forward too.
-
+> Changelog:
+>    v5 :
+>         - Suspend/Resume in noirq stage
+>         - Reorder chipset specific functions
+>         - Rebased :
+>             base-commit: 4d5ab2376ec576af173e5eac3887ed0b51bd8566
 >
-> > ***) Due to the above, we don't need a new mechanism to avoid
-> > "caching" performance states for genpd. At least for the time being.
-> >
+>    v4 :
+>         - Shrink the lvts_ap thermal sensor I/O range to 0xc00 to make
+>           room for SVS support, pointed out by
+>           AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora=
+.com>
 >
-> Right. Given *) and **) I'll prepare a v2 of $subject patch with the
-> remove() cleanup fixed and an improved commit description.
+>     v3 :
+>         - Rebased :
+>             base-commit: 6a3d37b4d885129561e1cef361216f00472f7d2e
+>         - Fix issues in v2 pointed out by N=C3=ADcolas F. R. A. Prado <nf=
+raprado@collabora.com>:
+>           Use filtered mode to make sure threshold interrupts are trigger=
+ed,
+>           protocol documentation, cosmetics
+>         - I (bero@baylibre.com) will be taking care of this patchset
+>           from now on, since Balsam has left BayLibre. Thanks for
+>           getting it almost ready, Balsam!
 >
-> I'll wait for a bit in case you have more thoughts about the device
-> links.
-
-One more thing though that crossed my mind. In the rpmpd case, is
-there anything we need to care about during system suspend/resume that
-isn't already taken care of correctly?
-
-Kind regards
-Uffe
+>     v2 :
+>         - Based on top of thermal/linux-next :
+>             base-commit: 7ac82227ee046f8234471de4c12a40b8c2d3ddcc
+>         - Squash "add thermal zones and thermal nodes" and
+>             "add temperature mitigation threshold" commits together to fo=
+rm
+>             "arm64: dts: mediatek: mt8192: Add thermal nodes and thermal =
+zones" commit.
+>         - Add Suspend and Resume support to LVTS Driver.
+>         - Update Calibration Data documentation.
+>         - Fix calibration data offsets for mt8192
+>             (Thanks to "Chen-Yu Tsai" and "N=C3=ADcolas F. R. A. Prado").
+>         https://lore.kernel.org/all/20230425133052.199767-1-bchihi@baylib=
+re.com/
+>         Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+>
+>     v1 :
+>         - The initial series "Add LVTS support for mt8192" :
+>             "https://lore.kernel.org/all/20230307163413.143334-1-bchihi@b=
+aylibre.com/".
+>
+> Balsam CHIHI (5):
+>   dt-bindings: thermal: mediatek: Add LVTS thermal controller definition
+>     for mt8192
+>   thermal/drivers/mediatek/lvts_thermal: Add suspend and resume
+>   thermal/drivers/mediatek/lvts_thermal: Add mt8192 support
+>   arm64: dts: mediatek: mt8192: Add thermal nodes and thermal zones
+>   thermal/drivers/mediatek/lvts_thermal: Update calibration data
+>     documentation
+>
+>  arch/arm64/boot/dts/mediatek/mt8192.dtsi      | 454 ++++++++++++++++++
+>  drivers/thermal/mediatek/lvts_thermal.c       | 163 ++++++-
+>  .../thermal/mediatek,lvts-thermal.h           |  19 +
+>  3 files changed, 634 insertions(+), 2 deletions(-)
+>
+> --
+> 2.42.0
