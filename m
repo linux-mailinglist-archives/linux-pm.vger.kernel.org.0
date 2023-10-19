@@ -2,129 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B457CFBB2
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 15:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CECF17CFC04
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 16:05:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345847AbjJSNv7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Oct 2023 09:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58226 "EHLO
+        id S1345991AbjJSOFz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Oct 2023 10:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345774AbjJSNv5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Oct 2023 09:51:57 -0400
-X-Greylist: delayed 183 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 19 Oct 2023 06:51:55 PDT
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D6C9B
-        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 06:51:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1697723330; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=Wdx2UZFfAlgZFCVP1a17S/qlvThF9NU+4Il6PUktzwwFl6LB+Ozyunu8ecsu9xLitE
-    VKNRL6jWZ7cftIc12eLTVN2cic68eqWlnemHiv+yZHMFnfgeE7HaKDSk0c6h5uNiFs8d
-    79AZmJrRQnsVCNBo1l5OCJeazoda56xxufE+Am3UM9xAdCStR7OOUGR/1lkwdyIQsXAp
-    83PGoNAYa9hUOAjH4feD+jjLVMnFaTBawoIk6l4fPre4OIN5Q22MYONXp6lJh3WTTS1x
-    TeAscj6fYioPFa+QcNeMjQ0X+gNyOyPfpNRWdIk5/zVrO2SJUpF2puD7btkKl9B/K3PF
-    kF0w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1697723330;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=GObdimmw9pskjnof7wPSDzQDxLphrL/hHiKhEwm3O+I=;
-    b=WQY4IBf1YJwomaGLBQuZSRYaCJx75EHSfCAzTNH+KhkADaAJHGnugXKQNZq1San3S3
-    py+V5sAoPevNxYdeWimxjBfcg3u2fxWBXgE3ExS4HWq3OXTiaaek2dYIoW3fHwvDZWPv
-    7UXk48+H+TRiKiusEDzJHIjQmG03wHkqHQPRGWIrV2lvflwJYmK34iWsolIXnnfSezFg
-    Ovy2Fc1bqq62XewzDA+firZhWbYIeKj1YHL16BRL8B84l3U6SalDcsELS1kyFGhpZ7GA
-    I+fgyC5If+zCrUW9gIAen58oXP7Br8jYbjU8Dk7KPXQCnfbyouf/j9mBgq2SLZip9+Jf
-    CnoA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1697723330;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=GObdimmw9pskjnof7wPSDzQDxLphrL/hHiKhEwm3O+I=;
-    b=Q6o6ExnKKpvJAJOcQQjEXdjXP1Xj4dmGQW74FaaQJVqUq3roEHVpWf7qX8cWjCVP0D
-    kBrFI/Djp+grrGKKwkUKdBcBXmoRJfzX1o6qd5cwpKWErtggRSDY32y3aOPTXd+4A41X
-    pj9Uo9q4vpG/EhfAdp53x9bWNvofbKPALsf411MfgntUsLBk0RlVpJC7R3WQW1+zF4FE
-    NmDV3RMT2CqCUk5S5vXUTGBgyfPoOOicY06Y/ce7hU4dynCvZ01ZUygFQ/igP7T/3DMW
-    st6lgqQE0pqY9VTEDDwWsoWQgIGUOnrlmGKn05x6MBzC3/qbTfMfjY/PilMB8iq4VizB
-    I1jQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1697723330;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=GObdimmw9pskjnof7wPSDzQDxLphrL/hHiKhEwm3O+I=;
-    b=UV8LqNpI1mXnn7AO8BNXu5SCePcVw8yTRfKgNWVpdwZWG56Ag+77GLfHgWGlLIgLeY
-    wQcHrG165UYWviT1pgAw==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA95vh"
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.9.0 DYNA|AUTH)
-    with ESMTPSA id j34a49z9JDmoDqV
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 19 Oct 2023 15:48:50 +0200 (CEST)
-Date:   Thu, 19 Oct 2023 15:48:43 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S1345929AbjJSOFy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Oct 2023 10:05:54 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4151130;
+        Thu, 19 Oct 2023 07:05:49 -0700 (PDT)
+Received: from i5e861907.versanet.de ([94.134.25.7] helo=phil.lan)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1qtTef-0004bU-GJ; Thu, 19 Oct 2023 16:05:41 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     linux-rockchip@lists.infradead.org,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] cpufreq: Add basic cpufreq scaling for Qualcomm
- MSM8909
-Message-ID: <ZTEzuz7VrDGIoR7H@gerhold.net>
-References: <20231018-msm8909-cpufreq-v2-0-0962df95f654@kernkonzept.com>
- <20231019061608.wjlf4orkdlpnv3a5@vireshk-i7>
- <20231019102342.5f4oyxd6hmjcju6g@vireshk-i7>
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Mark Rutland <mark.rutland@arm.com>, linux-pm@vger.kernel.org,
+        kernel@pengutronix.de, Vincent Legoll <vincent.legoll@gmail.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Chanwoo Choi <chanwoo@kernel.org>, devicetree@vger.kernel.org,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Will Deacon <will@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>
+Subject: Re: (subset) [PATCH v8 00/26] Add perf support to the rockchip-dfi driver
+Date:   Thu, 19 Oct 2023 16:05:39 +0200
+Message-Id: <169772432936.1425163.10520107144640249546.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231018061714.3553817-1-s.hauer@pengutronix.de>
+References: <20231018061714.3553817-1-s.hauer@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231019102342.5f4oyxd6hmjcju6g@vireshk-i7>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 19, 2023 at 03:53:42PM +0530, Viresh Kumar wrote:
-> On 19-10-23, 11:46, Viresh Kumar wrote:
-> > On 18-10-23, 10:06, Stephan Gerhold wrote:
-> > > Add the necessary definitions to the qcom-cpufreq-nvmem driver to
-> > > support basic cpufreq scaling on the Qualcomm MSM8909 SoC. In practice
-> > > the necessary power domains vary depending on the actual PMIC the SoC
-> > > was combined with. With PM8909 the VDD_APC power domain is shared with
-> > > VDD_CX so the RPM firmware handles all voltage adjustments, while with
-> > > PM8916 and PM660 Linux is responsible to do adaptive voltage scaling
-> > > of a dedicated CPU regulator using CPR.
-> > > 
-> > > Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-> > 
-> > Applied patch 1 and 3. Thanks.
+On Wed, 18 Oct 2023 08:16:48 +0200, Sascha Hauer wrote:
+> This series integrates the recent review feedback from Chanwoo Choi to
+> v7.
 > 
-> Hi Stephan,
+> Chanwoo, I am sending the full patchset again for people to try this
+> series. You said that you applied 1-5 already, so please start picking
+> from 6/26.
 > 
-> I think your platform has exactly what I am looking for. Can you
-> please help me test this, before it lands into linux-next :)
-> 
-> https://lore.kernel.org/cover.1697710527.git.viresh.kumar@linaro.org
-> 
+> [...]
 
-Sure, I will try to test it until end of next week, with both single and
-multiple power domains assigned to the CPU. Is there something
-particular you would like me to look for? Or just that the scaling still
-works correctly as before?
+Applied, thanks!
 
-Stephan
+[24/26] arm64: dts: rockchip: rk3399: Enable DFI
+        commit: f57ef11ec63c17201b27569fbfb58801c227137d
+[25/26] arm64: dts: rockchip: rk356x: Add DFI
+        commit: 085be8875ca8a087e3cc102893f384894962c87e
+[26/26] arm64: dts: rockchip: rk3588s: Add DFI
+        commit: 5a6976b1040a2f99ab84eddbfa7cd072ac5d10fc
+
+Best regards,
+-- 
+Heiko Stuebner <heiko@sntech.de>
