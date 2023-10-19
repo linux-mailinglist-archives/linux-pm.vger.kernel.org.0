@@ -2,55 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1FA7CF744
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 13:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51D227CF752
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 13:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235260AbjJSLoz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Oct 2023 07:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58232 "EHLO
+        id S1345358AbjJSLqY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Oct 2023 07:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235251AbjJSLoy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Oct 2023 07:44:54 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6BB134
-        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 04:44:50 -0700 (PDT)
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20231019114449epoutp0155d523fdaea20e35c7d4290241b32958~Pf5s6sDWK0795007950epoutp014
-        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 11:44:49 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20231019114449epoutp0155d523fdaea20e35c7d4290241b32958~Pf5s6sDWK0795007950epoutp014
+        with ESMTP id S1345407AbjJSLqX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Oct 2023 07:46:23 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EBB813A
+        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 04:46:18 -0700 (PDT)
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20231019114616epoutp039f609bdb3c3b0bec2ad71585195f9d86~Pf6_jqaSi1348613486epoutp03G
+        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 11:46:16 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20231019114616epoutp039f609bdb3c3b0bec2ad71585195f9d86~Pf6_jqaSi1348613486epoutp03G
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1697715889;
-        bh=63ihKBSu3G/vqK4eE3j6mAFoN2L9Sl4C+4eOviUKPPo=;
+        s=mail20170921; t=1697715976;
+        bh=mSBfvOFoNFPkM09tCwPxZBHUPhJ7xD9mMbi8iLkam00=;
         h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=cA28BYfCVhmM7bxmD5xPsQ/sVf1k1aOSlqnjQGqDCXLAYvTrQPd5Go+2ZlW0KxI7W
-         +P+OVdO1TNWfkZPFYZed4ldbJ+VM8QxuFxpqcSf3NgqX2CmOT3fk9S/uyRGh38wp7b
-         AsAew7PEEZOTP9DRStJ643uql3gv5TOECMsWzvGA=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-        20231019114448epcas1p366f78a1bb07e8c4cf92ce22c3a311a1b~Pf5sL97dt3194231942epcas1p3A;
-        Thu, 19 Oct 2023 11:44:48 +0000 (GMT)
-Received: from epsmgec1p1.samsung.com (unknown [182.195.38.236]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4SB5VR0rPkz4x9Pt; Thu, 19 Oct
-        2023 11:44:47 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmgec1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D6.6D.08572.EA611356; Thu, 19 Oct 2023 20:44:47 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        b=TnMPcaCC0QVsqLAt2dxeHKLkD3gaIj9myQXVMWysZmXNuIS2SX4wPOf8LQ2oeIBHu
+         Q/6BbPVtiZKoREz/xAnGbVI96UZUpDoS+2tA9vvh2GfrLNwRHZfqWwns7ayjNtYYyj
+         7mfX45XEBFc7iAkE2/FKUlgBlSNrUpkqBoq3PKOY=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20231019114616epcas1p1fa5aff3c1ce6986dea09eaa32f41ded2~Pf69zmdSd1293912939epcas1p1E;
+        Thu, 19 Oct 2023 11:46:16 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.36.145]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4SB5X71h5fz4x9Pr; Thu, 19 Oct
+        2023 11:46:15 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D4.CD.09739.70711356; Thu, 19 Oct 2023 20:46:15 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
         epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20231019114446epcas1p1d101a7ff9d9f5f3997e5fab119e4003e~Pf5qU98Ha3129131291epcas1p1X;
-        Thu, 19 Oct 2023 11:44:46 +0000 (GMT)
-Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20231019114446epsmtrp2c2eb1e568beeef2038b9041c18e796c7~Pf5qT-Brc0385703857epsmtrp2L;
-        Thu, 19 Oct 2023 11:44:46 +0000 (GMT)
-X-AuditID: b6c32a33-cefff7000000217c-70-653116ae95f1
+        20231019114614epcas1p1693c864aa78ae3cce36346ebba2a44e4~Pf68Xd7Jo3242732427epcas1p1p;
+        Thu, 19 Oct 2023 11:46:14 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20231019114614epsmtrp1c2ef939fbe63033b549351bec1cd256f~Pf68U9DNG1588115881epsmtrp1b;
+        Thu, 19 Oct 2023 11:46:14 +0000 (GMT)
+X-AuditID: b6c32a37-c0bff7000000260b-48-653117070a03
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C7.88.07368.EA611356; Thu, 19 Oct 2023 20:44:46 +0900 (KST)
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        6A.B9.08817.60711356; Thu, 19 Oct 2023 20:46:14 +0900 (KST)
 Received: from cw00choi03 (unknown [10.113.111.106]) by epsmtip1.samsung.com
         (KnoxPortal) with ESMTPA id
-        20231019114446epsmtip197211385f5e777c8100f3e6579ddd765~Pf5p-tXKT1545115451epsmtip1H;
-        Thu, 19 Oct 2023 11:44:46 +0000 (GMT)
+        20231019114614epsmtip1cc0e706eaf625030cc89da7398a01c8d~Pf68B5Esd2936029360epsmtip1G;
+        Thu, 19 Oct 2023 11:46:14 +0000 (GMT)
 From:   "Chanwoo Choi" <cw00.choi@samsung.com>
 To:     "'Sascha Hauer'" <s.hauer@pengutronix.de>,
         <linux-rockchip@lists.infradead.org>
@@ -70,63 +70,62 @@ Cc:     <linux-arm-kernel@lists.infradead.org>,
         "'Conor Dooley'" <conor+dt@kernel.org>,
         <devicetree@vger.kernel.org>,
         "'Sebastian Reichel'" <sebastian.reichel@collabora.com>
-In-Reply-To: <20231018061714.3553817-10-s.hauer@pengutronix.de>
-Subject: RE: [PATCH v8 09/26] PM / devfreq: rockchip-dfi: Clean up DDR type
- register defines
-Date:   Thu, 19 Oct 2023 20:44:45 +0900
-Message-ID: <001001da0281$a88dc130$f9a94390$@samsung.com>
+In-Reply-To: <20231018061714.3553817-11-s.hauer@pengutronix.de>
+Subject: RE: [PATCH v8 10/26] PM / devfreq: rockchip-dfi: Add RK3568 support
+Date:   Thu, 19 Oct 2023 20:46:14 +0900
+Message-ID: <001101da0281$dd10bf70$97323e50$@samsung.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-Mailer: Microsoft Outlook 16.0
 Content-Language: ko
-Thread-Index: AQFYMiMsP3soeW2GlDsie1R9CxInBwGXi04MAravXYaxMi0lUA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xTVxzHc+7tvbSwkksBd+icYjf+kADeAsWDwtRJ5MKcI5liIotwpXeA
-        QNu0ZWPoMlBwg/AUcVBQcDzcGFpgjTyUOToy2BJxiEHHw4GoEToNghAIr7Ve3Pjv8/ud3/f8
-        ft/zEOKSGVIqTFDpOa2KTZKR9oJrv2719jZukHN0RQGGiu7fFaCGjl4MVXb1Emj1oYVA9SVt
-        ApT/dAxHt079Y4eaxwcI1N9eQaKZvC6ApkdXcVR7rw9DnZfeRUMZ35Moq6PLDnVOPSLQckuz
-        AI1YDqDuK09IlDms2O3CNFxsAEzrSA1g2gwjdkxzfTbJDA/cIJmfar5iCpZpJt9UD5iWgYs4
-        M9O8ialcHAcRDkcSg+I5Vslp3TlVrFqZoIoLln3wcfTeaEUALfeWB6LtMncVm8wFy0L2R3jv
-        S0iyGpS5f8YmpVhTEaxOJ9v2XpBWnaLn3OPVOn2wjNMokzQKjY+OTdalqOJ8VJx+h5ymfRXW
-        wpjE+L96ikjNhEdqruUOkQ7+3pwDREJI+cPiGRORA+yFEqoVwKlv60g+mAbwjrEJ44M5AGsW
-        ssBryXBGJs4vdAB4/2z+mn4CwO4Vg1UvFJKUF6yaP2QTuFCHYEFPK2ZjnJoj4NRqmI1F1C7Y
-        U1VN2tiZOgp/KZvFbSygPGDheKnAxmIqEP44fpng2Qn+XvZIwO+zGbY8q8D5gdzhwuM6gs+7
-        wPLsMzjf9314/er8q0EhVS2Ci0t31xyEwMaaW2vsDCe7TXY8S+HM8w6SFxQD2GexrKmNADb9
-        kLnWzg/erC3GbC5xais0tm/j01tg2+IFwE/hCJ/P5hK2EkiJ4TdnJHzJO7B/dATj2Q1Wf51N
-        FgKZYZ03wzpvhnV+DP83qwKCerCB0+iS47hYuUb+33XHqpObwavX7+nXCvorV3zMABMCM4BC
-        XOYi9mBoTiJWsl+kcVp1tDYlidOZgcJ62kW41DVWbf0+Kn203D+Q9g/w9fNH8gC57E3xlsJy
-        pYSKY/VcIsdpOO1rHSYUSdOxo/azuTGOk2ElpeHarPKNG19cvaE7OBSidXRqvODwiSjn9nG3
-        Ez/XdZweTXe1k4buijoeM/ClR1+QWb1D9OLa2MtjB/Y+CD0YUzM96HqbPjn98J7waWQpdbip
-        KzjsJRNZG1D0JPVSk+V8Zvhg5OLNk6Y+L6/kvgXLn2+kd72VsVI+Ydm5J5T+MG23p9nf6Jh9
-        YhK1EytRIec6z9o3Ls3jvznNfp56GTcv5V2JIKKlp5e3Hx4cbYsMKpvNM3639Gzf/vA/Is/f
-        6d2zHJpV0bPwwNnNYQ7D3jb5iZVpmC9tqhprZD5lQoajpj66fkqyaafGiD3OOuJzjJ0uGRJ0
-        01JFcJx9tkygi2flnrhWx/4L/6xgzYYEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrFIsWRmVeSWpSXmKPExsWy7bCSnO46McNUg5NLhSwm3rjCYrFm7zkm
-        i/lHzrFa/H/0mtVi1dSdLBZ9Lx4yW5xtesNusenxNVaLy7vmsFl87j3CaPHpwX9mi6XXLzJZ
-        HFyoYnG7cQWbReveI+wWBz88YbX4u30Ti8Xd134Wx9c+Y7NouWPqIOKxZt4aRo8dd5cweuyc
-        dZfdY9OqTjaPO9f2sHlsXlLv0f/XwKNvyypGj+3X5jF7fN4k5zH/92PGAO4oLpuU1JzMstQi
-        fbsEroybJyayFbxUreh5fYm1gfG+fBcjJ4eEgInEncYW5i5GLg4hgd2MEg9P/GCESEhKTLt4
-        FCjBAWQLSxw+XAxR85xRYtPU7YwgcTYBHYkFP0JBykUEQiX6T+xgAqlhFmhhk9i17DMbRMMh
-        RolXV56xg1RxCthLnFiwmA2kWVggRuLaeg2QMIuAqsSExzNYQGxeAUuJ1Y+Xs0LYghInZz5h
-        ASlnFtCTaNsIdhqzgLzE9rdzmCHOVJD4+XQZK0RcRGJ2ZxszxD1OErvX/WCewCg8C8mkWQiT
-        ZiGZNAtJ9wJGllWMkqkFxbnpucmGBYZ5qeV6xYm5xaV56XrJ+bmbGMHRr6Wxg/He/H96hxiZ
-        OBiBPuRgVhLhVfUwSBXiTUmsrEotyo8vKs1JLT7EKM3BoiTOazhjdoqQQHpiSWp2ampBahFM
-        lomDU6qBSd35+sXVup5yT8P2umheXmzY6OBy/095V8Y3/6MWJ/fZKc+7K2N3Z+MFH/0s6TWt
-        +fEZB2UEOXZqbJSa+ERrl82Wd1YdiiGr/j0VZk81XjonuOvxfaOlbuUTC7dzn5o+Kz+6cMm9
-        xY9+uOwIqtWTnW8b/TDsprbvkY+/tesnNS4SsQn79Mr6TfKfRXP7rpyfwn7llSH/YpdH/ifL
-        tplMuZ3+Lc7s2ze1xIy1J1gfrt21+b3zXIHspz1S904uDok4/fiatZP3nzWrn3NO/FBbU6rH
-        NSfhpeetugk9egcKvJ8unfNPbV9dXJ3aNJW/fybXr2e5+yXyId8X3YDgdnYDn0Pbl4UqGut6
-        pJv1/3xYrqjEUpyRaKjFXFScCABq2KtMbQMAAA==
-X-CMS-MailID: 20231019114446epcas1p1d101a7ff9d9f5f3997e5fab119e4003e
+Thread-Index: AQFYMiMsP3soeW2GlDsie1R9CxInBwHOb9+0Asqp8o6xL9aZQA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Tf0xTVxjl9r2+FrHsrXTjQibCY8RgoLZC4WLEEUaWt8gIU8kS3QYNPCgD
+        2trXmjmz6QiCdCIIY5GuAg5ZWFcgVMKv0RELGRIjkSFMJ0ydyMQOZLABjrGO53Mb/53v5Jzv
+        fue794ox6WMiUJyrNTIGrTqfIjbhHf3h8kiRv5JR1FtF6OzNGziyO4cFqG5gWIg8P7uFyFbd
+        jaMzD+9h6FrhryLkuD8uRKM9VgItlg0AtHDXg6HGH0YE6PKFl9Htj5sIdNI5IEKX56eEaK3T
+        gaNJdwoabJ4mUNGEKkFG22vtgO6avAjobsukiHbYSgl6YryXoC9dPE6XrynoM+02QHeO12L0
+        oiOIrlu9D1J9Dubt1jDqLMYQzGgzdVm52px4au/+9FfTVTEKZaQyDsVSwVp1ARNPJSWnRr6W
+        m78ekAo+os43rVOpapalduzZbdCZjEywRsca4ylGn5WvV+nlrLqANWlz5FrGuEupUOxUrQsz
+        8jS/OGYJfWPQ+5Njo4IToDPADLzFkIyGoy3fi8xgk1hKdgE4V1EG+GIBQHNhC8YXSwAueppw
+        MxA/tTxoSeV5J4DDvX8BrpWUnAHw1mIEpyHICFi/ksbRMjINll/pEnAYI5eEcN7zOoe9yVdg
+        xXwtzmE/MhlaOk4JOYyTYdBZfR1wbSRkHJwuSuZoCfk8HKqZwvk2W2HnrBXjAwTDJw++FPK8
+        DH5eWoxxVhmZCAdHtnFTQrLOG65O3XqmT4Kda5eEPPaDjwbbRTwOhDPlxSLeUAXgiNuN8UUr
+        gG1fFT1zR8G+xioBdwJGhsPWnh08HQK7V88DfghfOPfHaSG/Kgk8VSzlJaFw9O6kgMcBsKGk
+        lKgAlGVDNMuGaJYNcSz/H1YPcBt4kdGzBTkMq9RH/XfVmboCB3j68rfHdoHPZuflLiAQAxeA
+        YoySScJoBSOVZKmPfsAYdOkGUz7DuoBqfddnscAXMnXrX0drTFdGxymiY3ZGRSNljJLyl/w4
+        XZYlJXPURiaPYfSM4V+fQOwdeEJQ0m/L23Kt470qn6D06u4jilav3Ju+XtbfCsvCJqZZuywJ
+        3980tjk89OCyc2Zo21JUw5O39jn735xn8JRD2cf/1HxT39PnZ/Yx9cV9tHpnn+/JoXNDn5Z5
+        2h2KlEeL1cyxtm83B3ndO22bIK4eHYqveDvWnLeQUt5c+d0NndPbdAB+LVi+2hJRdWCZCimp
+        8W+rPJfw0/nffVbtodn1h1OsKz7qwBD/6k/SOnJuh2c8rHm3OcMFu4+F26v2XomM6viw3Nbu
+        9ox90UzAw8LntrgGVIzGHH+oqFLee2HFamh45/rjmYDs/gjR0h5RsT2xyd3fmzA695Jfw661
+        rS65YeXvxDtvUDirUSu3YwZW/Q9PVDauggQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Re0hTcRTH+e3e3d1NRlc386eF5aZoknOGj1/SG4xbSFhhlBW59KqRzrlZ
+        mlGZWJQ1NcLKFWr5KMYKXOKmblmboT00xXxgSplPmoJlRBLLvI3I/w6f8zlfzuGQmMcg7kOe
+        UGYzaqUiXUII8Ea7xDeE8Apj5LaHEN0YfI8jg7WLgyrburho8bODi/RlTTgqnh7FUGfBDA8Z
+        x/q5qLf5HoHmtW0Affu0iKHagR4OenHfH324+IhAl6xtPPRibpyLnCYjjkYce1D740kCFQ5H
+        bBPThgoDoM0jNYBu0o3waKP+KkEP91sI+mnNBbrEKaeLG/SANvVXYPS80Zeu/DUG4twSBJuS
+        mfQTpxl16JZEQdqUcZZQ1frmjvT1cvKBybsIkCSkwuHEk7giICA9qBYAp7uHeUWAv8S94a2e
+        l5jLEUG7XeNypgBceFDMYTlBrYdVP+NZXUzFw5IOM4d1MKqQgM1184RrwAbgzLd8jLX41FZY
+        OleBs7WIioW6xitctsapAGgt6wZsqJDaCCcLY1kspNzhq/JxnMUYJYOX6wGLMWoNNM3ew1xr
+        roULE3VcFxfDu1cv/11ZTO2A7T2BpUCkWxak+x+kWxakWzZcBXA98GZUmozUDE2YaoOSyZFp
+        FBmaU8pUWVJmhhH8fX5wsBlY9HMyG+CQYOlAEpOIhQG0nPEQJivO5DHqzGPqU+mMxgZWkbjE
+        S/jDoU32oFIV2cxJhlEx6n9dDsn3yedsTrn5Ru48WRieeMHN2PluMW/IVC4+kikd+D193pR0
+        2rNuxV5nkWUd33xbK38SFCVyHhTzYqQRhxOCdubnur8ty7HxbZH6hneBx0uSoifdD7ZuaXB7
+        Wf0x5/hzpApvWkPaqsccX4e6r2vxwJ+ExefQmY6koJSClY0Nq65hdktrU1juUYUZ1b/PMu+L
+        z1Ebs/x2CSqlDsPchO9FJ7k1ylq5PTvBlt3X6ydt6aqVqQSRBkV5R6ksyl+r2jh44FzygZjv
+        raLx3nAMq/eOafmy297v+fVZqFL5GqU08+L3LFp9okf9W+vOFwhh19nEsyFtfitnbwRMRDz2
+        KlmddyduvwTXpCnCgjG1RvEHUF5fpWsDAAA=
+X-CMS-MailID: 20231019114614epcas1p1693c864aa78ae3cce36346ebba2a44e4
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20231018063811epcas1p218e4ddfbd99e2135ddb77facd9197207
+X-CMS-RootMailID: 20231018061911epcas1p37a7bedf255e61c583dc933f8f0bc5f08
 References: <20231018061714.3553817-1-s.hauer@pengutronix.de>
-        <CGME20231018063811epcas1p218e4ddfbd99e2135ddb77facd9197207@epcas1p2.samsung.com>
-        <20231018061714.3553817-10-s.hauer@pengutronix.de>
+        <CGME20231018061911epcas1p37a7bedf255e61c583dc933f8f0bc5f08@epcas1p3.samsung.com>
+        <20231018061714.3553817-11-s.hauer@pengutronix.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
@@ -154,104 +153,98 @@ X-Mailing-List: linux-pm@vger.kernel.org
 > <robh+dt@kernel.org>; Krzysztof Kozlowski
 > <krzysztof.kozlowski+dt@linaro.org>; Conor Dooley <conor+dt@kernel.org>;
 > devicetree@vger.kernel.org; Sebastian Reichel
-> <sebastian.reichel@collabora.com>; Sascha Hauer <s.hauer@pengutronix.de>;
-> Chanwoo Choi <cw00.choi@samsung.com>
-> Subject: [PATCH v8 09/26] PM / devfreq: rockchip-dfi: Clean up DDR type
-> register defines
+> <sebastian.reichel@collabora.com>; Sascha Hauer <s.hauer@pengutronix.de>
+> Subject: [PATCH v8 10/26] PM / devfreq: rockchip-dfi: Add RK3568 support
 > 
-> Use the HIWORD_UPDATE() define known from other rockchip drivers to make
-> the defines look less odd to the readers who've seen other rockchip
-> drivers.
-> 
-> The HIWORD registers have their functional bits in the lower 16 bits
-> whereas the upper 16 bits contain a mask. Only the functional bits that
-> have the corresponding mask bit set are modified during a write. Although
-> the register writes look different, the end result should be the same, at
-> least there's no functional change intended with this patch.
+> This adds RK3568 support to the DFI driver.  Only iniitialization differs
+> from the currently supported RK3399.
 > 
 > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 > ---
->  drivers/devfreq/event/rockchip-dfi.c | 33 ++++++++++++++++++----------
->  1 file changed, 21 insertions(+), 12 deletions(-)
+> 
+> Notes:
+>     Changes since v7:
+>      - Add comment to explain << 3
+> 
+>  drivers/devfreq/event/rockchip-dfi.c | 27 +++++++++++++++++++++++++++
+>  include/soc/rockchip/rk3568_grf.h    | 12 ++++++++++++
+>  2 files changed, 39 insertions(+)
+>  create mode 100644 include/soc/rockchip/rk3568_grf.h
 > 
 > diff --git a/drivers/devfreq/event/rockchip-dfi.c
 > b/drivers/devfreq/event/rockchip-dfi.c
-> index 82d18c60538a5..12f9096879235 100644
+> index 12f9096879235..571d72d1abd1c 100644
 > --- a/drivers/devfreq/event/rockchip-dfi.c
 > +++ b/drivers/devfreq/event/rockchip-dfi.c
-> @@ -26,15 +26,19 @@
+> @@ -23,6 +23,7 @@
+> 
+>  #include <soc/rockchip/rockchip_grf.h>
+>  #include <soc/rockchip/rk3399_grf.h>
+> +#include <soc/rockchip/rk3568_grf.h>
 > 
 >  #define DMC_MAX_CHANNELS	2
 > 
-> +#define HIWORD_UPDATE(val, mask)	((val) | (mask) << 16)
+> @@ -211,10 +212,36 @@ static int rk3399_dfi_init(struct rockchip_dfi *dfi)
+>  	return 0;
+>  };
+> 
+> +static int rk3568_dfi_init(struct rockchip_dfi *dfi) {
+> +	struct regmap *regmap_pmu = dfi->regmap_pmu;
+> +	u32 reg2, reg3;
 > +
->  /* DDRMON_CTRL */
->  #define DDRMON_CTRL	0x04
-> -#define CLR_DDRMON_CTRL	(0x1f0000 << 0)
-> -#define LPDDR4_EN	(0x10001 << 4)
-> -#define HARDWARE_EN	(0x10001 << 3)
-> -#define LPDDR3_EN	(0x10001 << 2)
-> -#define SOFTWARE_EN	(0x10001 << 1)
-> -#define SOFTWARE_DIS	(0x10000 << 1)
-> -#define TIME_CNT_EN	(0x10001 << 0)
-> +#define DDRMON_CTRL_DDR4		BIT(5)
-> +#define DDRMON_CTRL_LPDDR4		BIT(4)
-> +#define DDRMON_CTRL_HARDWARE_EN		BIT(3)
-> +#define DDRMON_CTRL_LPDDR23		BIT(2)
-> +#define DDRMON_CTRL_SOFTWARE_EN		BIT(1)
-> +#define DDRMON_CTRL_TIMER_CNT_EN	BIT(0)
-> +#define DDRMON_CTRL_DDR_TYPE_MASK	(DDRMON_CTRL_DDR4 | \
-> +					 DDRMON_CTRL_LPDDR4 | \
-> +					 DDRMON_CTRL_LPDDR23)
+> +	regmap_read(regmap_pmu, RK3568_PMUGRF_OS_REG2, &reg2);
+> +	regmap_read(regmap_pmu, RK3568_PMUGRF_OS_REG3, &reg3);
+> +
+> +	/* lower 3 bits of the DDR type */
+> +	dfi->ddr_type = FIELD_GET(RK3568_PMUGRF_OS_REG2_DRAMTYPE_INFO,
+> reg2);
+> +
+> +	/*
+> +	 * For version three and higher the upper two bits of the DDR type
+> are
+> +	 * in RK3568_PMUGRF_OS_REG3
+> +	 */
+> +	if (FIELD_GET(RK3568_PMUGRF_OS_REG3_SYSREG_VERSION, reg3) >= 0x3)
+> +		dfi->ddr_type |=
+> FIELD_GET(RK3568_PMUGRF_OS_REG3_DRAMTYPE_INFO_V3,
+> +reg3) << 3;
+> +
+> +	dfi->channel_mask = BIT(0);
+> +	dfi->max_channels = 1;
+> +
+> +	return 0;
+> +};
+> +
+>  static const struct of_device_id rockchip_dfi_id_match[] = {
+>  	{ .compatible = "rockchip,rk3399-dfi", .data = rk3399_dfi_init },
+> +	{ .compatible = "rockchip,rk3568-dfi", .data = rk3568_dfi_init },
+>  	{ },
+>  };
+> +
+>  MODULE_DEVICE_TABLE(of, rockchip_dfi_id_match);
 > 
->  #define DDRMON_CH0_COUNT_NUM		0x28
->  #define DDRMON_CH0_DFI_ACCESS_NUM	0x2c
-> @@ -74,16 +78,20 @@ static void rockchip_dfi_start_hardware_counter(struct
-> devfreq_event_dev *edev)
->  	void __iomem *dfi_regs = dfi->regs;
-> 
->  	/* clear DDRMON_CTRL setting */
-> -	writel_relaxed(CLR_DDRMON_CTRL, dfi_regs + DDRMON_CTRL);
-> +	writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_TIMER_CNT_EN |
-> DDRMON_CTRL_SOFTWARE_EN |
-> +		       DDRMON_CTRL_HARDWARE_EN), dfi_regs + DDRMON_CTRL);
-> 
->  	/* set ddr type to dfi */
->  	if (dfi->ddr_type == ROCKCHIP_DDRTYPE_LPDDR3)
-> -		writel_relaxed(LPDDR3_EN, dfi_regs + DDRMON_CTRL);
-> +		writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_LPDDR23,
-> DDRMON_CTRL_DDR_TYPE_MASK),
-> +			       dfi_regs + DDRMON_CTRL);
->  	else if (dfi->ddr_type == ROCKCHIP_DDRTYPE_LPDDR4)
-> -		writel_relaxed(LPDDR4_EN, dfi_regs + DDRMON_CTRL);
-> +		writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_LPDDR4,
-> DDRMON_CTRL_DDR_TYPE_MASK),
-> +			       dfi_regs + DDRMON_CTRL);
-> 
->  	/* enable count, use software mode */
-> -	writel_relaxed(SOFTWARE_EN, dfi_regs + DDRMON_CTRL);
-> +	writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_SOFTWARE_EN,
-> DDRMON_CTRL_SOFTWARE_EN),
-> +		       dfi_regs + DDRMON_CTRL);
->  }
-> 
->  static void rockchip_dfi_stop_hardware_counter(struct devfreq_event_dev
-> *edev) @@ -91,7 +99,8 @@ static void
-> rockchip_dfi_stop_hardware_counter(struct devfreq_event_dev *edev)
->  	struct rockchip_dfi *dfi = devfreq_event_get_drvdata(edev);
->  	void __iomem *dfi_regs = dfi->regs;
-> 
-> -	writel_relaxed(SOFTWARE_DIS, dfi_regs + DDRMON_CTRL);
-> +	writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_SOFTWARE_EN),
-> +		       dfi_regs + DDRMON_CTRL);
->  }
-> 
->  static void rockchip_dfi_read_counters(struct devfreq_event_dev *edev,
-> struct dmc_count *count)
+>  static int rockchip_dfi_probe(struct platform_device *pdev) diff --git
+> a/include/soc/rockchip/rk3568_grf.h b/include/soc/rockchip/rk3568_grf.h
+> new file mode 100644
+> index 0000000000000..575584e9d8834
+> --- /dev/null
+> +++ b/include/soc/rockchip/rk3568_grf.h
+> @@ -0,0 +1,12 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */ #ifndef __SOC_RK3568_GRF_H
+> +#define __SOC_RK3568_GRF_H
+> +
+> +#define RK3568_PMUGRF_OS_REG2		0x208
+> +#define RK3568_PMUGRF_OS_REG2_DRAMTYPE_INFO		GENMASK(15, 13)
+> +
+> +#define RK3568_PMUGRF_OS_REG3		0x20c
+> +#define RK3568_PMUGRF_OS_REG3_DRAMTYPE_INFO_V3		GENMASK(13,
+12)
+> +#define RK3568_PMUGRF_OS_REG3_SYSREG_VERSION		GENMASK(31, 28)
+> +
+> +#endif /* __SOC_RK3568_GRF_H */
 > --
 > 2.39.2
+
 
 
 Applied it. Thanks
