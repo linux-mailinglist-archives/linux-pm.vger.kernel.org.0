@@ -2,279 +2,202 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EECF7CF90B
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 14:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11DF07CFA5B
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 15:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345643AbjJSMe0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Oct 2023 08:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44006 "EHLO
+        id S1345737AbjJSNFY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Oct 2023 09:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345634AbjJSMeZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Oct 2023 08:34:25 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E6BA4
-        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 05:34:22 -0700 (PDT)
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20231019123420epoutp04850e95900aeed671a3f156473916ecd3~Pgk8EgFOD0298002980epoutp04T
-        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 12:34:20 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20231019123420epoutp04850e95900aeed671a3f156473916ecd3~Pgk8EgFOD0298002980epoutp04T
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1697718860;
-        bh=TDOo3bhcjq1V1M/NiUKjoKU/btNbYwTzVuBWaGqt1jA=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=rpDuKZu0qUxG1BuD5FxyxxjD4Yi7ewHHujr+c0DgpZfE4J4deDZnAJoiuqsIcgPJB
-         qJQcH0j+BUSxAFh0tbPj32ZFfXlSbDtPPGkLWGV8yP17sQF5LfWuoVXGMeqL0rbtc4
-         onTA8BsNbKf5bFrG6LcJa49waBvnESVy6oWpt7Vo=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20231019123419epcas1p266cc01c048793aeb28ad566c7f0b97c6~Pgk7LgH3a3075930759epcas1p2t;
-        Thu, 19 Oct 2023 12:34:19 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.36.136]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4SB6bZ4HjXz4x9Pv; Thu, 19 Oct
-        2023 12:34:18 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        9C.31.09739.A4221356; Thu, 19 Oct 2023 21:34:18 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20231019123417epcas1p4e9848b4eb0c174f8765f8154703c463d~Pgk5ykCov2224822248epcas1p4J;
-        Thu, 19 Oct 2023 12:34:17 +0000 (GMT)
-Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20231019123417epsmtrp1c0f155fb521cd0d75209e38a7a7a25df~Pgk5woGVR0993009930epsmtrp1d;
-        Thu, 19 Oct 2023 12:34:17 +0000 (GMT)
-X-AuditID: b6c32a37-c0bff7000000260b-74-6531224a7d92
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        67.3A.07368.94221356; Thu, 19 Oct 2023 21:34:17 +0900 (KST)
-Received: from cw00choi03 (unknown [10.113.111.106]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20231019123417epsmtip256da5cd81b2449a687062668b50d02d5~Pgk5XLG8o2707827078epsmtip2V;
-        Thu, 19 Oct 2023 12:34:17 +0000 (GMT)
-From:   "Chanwoo Choi" <cw00.choi@samsung.com>
-To:     "'Chanwoo Choi'" <chanwoo@kernel.org>,
-        "'Sascha Hauer'" <s.hauer@pengutronix.de>,
-        <linux-rockchip@lists.infradead.org>
-Cc:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        "'Heiko Stuebner'" <heiko@sntech.de>,
-        "'Kyungmin Park'" <kyungmin.park@samsung.com>,
-        "'MyungJoo Ham'" <myungjoo.ham@samsung.com>,
-        "'Will Deacon'" <will@kernel.org>,
-        "'Mark Rutland'" <mark.rutland@arm.com>, <kernel@pengutronix.de>,
-        "'Michael Riesch'" <michael.riesch@wolfvision.net>,
-        "'Robin Murphy'" <robin.murphy@arm.com>,
-        "'Vincent Legoll'" <vincent.legoll@gmail.com>,
-        "'Rob Herring'" <robh+dt@kernel.org>,
-        "'Krzysztof Kozlowski'" <krzysztof.kozlowski+dt@linaro.org>,
-        "'Conor Dooley'" <conor+dt@kernel.org>,
-        <devicetree@vger.kernel.org>,
-        "'Sebastian Reichel'" <sebastian.reichel@collabora.com>
-In-Reply-To: <ffcf4521-5bf0-4933-a25c-22574035f774@kernel.org>
-Subject: RE: [PATCH v8 19/26] PM / devfreq: rockchip-dfi: add support for
- RK3588
-Date:   Thu, 19 Oct 2023 21:34:17 +0900
-Message-ID: <004401da0288$93af2db0$bb0d8910$@samsung.com>
+        with ESMTP id S1345641AbjJSNFX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Oct 2023 09:05:23 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EBE119;
+        Thu, 19 Oct 2023 06:05:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1697720717; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=HQkJwUGjXxiVocX2+JRqv+20JKUah3fIpKJawr5qqY13Qlmh8/IC8xybss6bgFO3sT
+    mzIhLYpqmwxnkWVoA+n9gJBY0kdtehdVgQsOyb+3tEcbi61JfcEykbPOHc9P+5+YOr1N
+    8tfQgfVON770jRcTQLeyRPZ3VPeQ9oy66DJQFjYTF6XBi8GLnNndqh7K2vq3hx9dsuhP
+    4lYHrIZ7Xi3Ky9scvNKSzCxA4SUkNpIK11G03rDP/+E26q4u8PjeDhEv2wweZ3wJT5Nd
+    SplQiaXuLVF6zbdNd94BEJrS/UObr3zsOwne84QeyjlZd3gmxl9CkokblxHWuGBfxymR
+    GYVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1697720717;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=xxfgo5/03Ivn9KxKr/YiTmmInTNFF0S4txFCc5wo/cY=;
+    b=Eq4Wd/oVZVv8nQOqi892ovadJ81VegZ1Ry7+gW2HoW3mrRIWqTiJ/L0QD2dL53dxPG
+    a78fuBUBAFcK9kHkeLmMpNrJp8HfFPwy2n+vkRsV1Fty+phWf1X8Cy84ofvrlt2Spz3N
+    s8woUuKWXSHzKyqBwfU+jYiJ9umxZQlW+KNVpooy7gsjeNZWoeEOUjHZzp1quxMVErml
+    mYcppjd8iwAaisRvWzmuhr8JutQ//JOVqPXB3t3a84nkuVptWmXmc5QBJ705BnZMwE/+
+    OyfdcaAf9KRYtkgNPo4alq7Lwg1tPcM+uQjW0iHoXtMsfWSzlvdY8vk13FOgk9fcxaes
+    GHiQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1697720717;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=xxfgo5/03Ivn9KxKr/YiTmmInTNFF0S4txFCc5wo/cY=;
+    b=ZrGWmf/5PgbELJxxzjqKdMd0xAbnF4jJst4iFXsrTVkkZ6UbIETPjNeae5tsdUX061
+    CY4tV7zFCwzEoo+o6dSUw3XR37sTVGW9mO8jg5nh4wS6CzL7bE0hCygsymGdB0iG4me1
+    jNCQ5jGMdCT9hVtq2/1gmNn2zji7joORpbene1WxfgGuLwH/kYjxRPbgV/Gi4AnlnE83
+    tF2XDacGZuguHUEKMYEGU/Out7azl3HR0Aa9UolUdAO5YzgzBndTR3Z3HlD+3amvlzJ5
+    hFwsEbqdWykZezHIIVoozhlE0K6CuUdHA60sKs267EmiBnsBH0ty2GuoJOZIMKYmNe3R
+    DnTg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1697720717;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=xxfgo5/03Ivn9KxKr/YiTmmInTNFF0S4txFCc5wo/cY=;
+    b=7dyg0EudhUTJj5c11LTuz5JIN03XClSzW5niCEYEngNkgfQTe3UUFazbzrpgFyVi5+
+    7fFwWSvQTXhjqQQ4yxAA==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA95vh"
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.9.0 DYNA|AUTH)
+    with ESMTPSA id j34a49z9JD5HDef
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 19 Oct 2023 15:05:17 +0200 (CEST)
+Date:   Thu, 19 Oct 2023 15:05:11 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] cpufreq: qcom-nvmem: Enable virtual power domain
+ devices
+Message-ID: <ZTEph19CAvbgbN_E@gerhold.net>
+References: <20231018-msm8909-cpufreq-v2-0-0962df95f654@kernkonzept.com>
+ <20231018-msm8909-cpufreq-v2-2-0962df95f654@kernkonzept.com>
+ <CAPDyKFot9=M1ooP_Q1AOgG5o_4DTQ2qsyai1ZdXAzBwf89W4uA@mail.gmail.com>
+ <CAPDyKFr5A-P=UhWs4rUMBWup3pH75WAhcZ56Y2_Sfk3=WfxRCQ@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFr5A-P=UhWs4rUMBWup3pH75WAhcZ56Y2_Sfk3=WfxRCQ@mail.gmail.com>
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: ko
-Thread-Index: AQFYMiMsP3soeW2GlDsie1R9CxInBwGxyFXuAqDH4QoCVt350rEfYV9w
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0xTVxj39Pb2gZZdajePTEe9UzfMgBYoHFDQBUPuBCbTuGRbBG7oDe+2
-        tGXZFphKEK1KnStCKMjDIbNdUQQnD2GbSGALGc6gyFN5uG4ILAhjgzDi2l7d+O/3fd/vd77v
-        951zBJh4jucpSFHpGa2KTid5btwbt719ffaRckZmb/VC5/rvcZGtrYeDKjp6cPRsfApH1vPN
-        XGT8fQxDP+dO81H9RB+OelvKeGi+oAOgudFnGLr04C4H3araioaOXeah420dfHRr9jGOVhrr
-        uWhk6l3UVWvnobxhxR4JZSu3AapppBpQzeYRPlVvNfCo4b5WHtVQfYQ6uyKjjNetgGrsK8eo
-        +frXqIrlCRC79sO0XckMrWS0UkaVqFamqJLCyKiD8RHxiiCZ3EcegoJJqYrOYMLIvdGxPpEp
-        6Q6DpPRjOj3LkYqldTrSL3yXVp2lZ6TJap0+jGQ0ynSNQuOrozN0WaokXxWjD5XLZP4KBzEh
-        LdlkLMQ0fd6fPD29xD0KLpOngFAAiUDYuVyLnQJuAjHRBGCxoYjHBnMAjs/e57PBXwD2L5Vz
-        X0guLBoBW2gDsMbU+Fw/CeCP3XMOvUDAI96ClYuHnAIJkQ1/O/0Id3Iw4g4Oq6arcGdBSITD
-        mtvFrlPXEwdg62wD5sRcYhts7BhzYRERAqurBgGLPeBPJY9dfIzwgo0zZRg7kRQu/VqDs3kJ
-        LDXkY84ZJEQkHDhzkKWUCmGuIZvFe2Hh/DGcxevhk67rfBZ7wsmz+S7HkDABeHdqCmODqwBe
-        s+Q9bxYAv79k4jgbYIQ3vNrix6a3wOblC4CdwR3+sXAGd1IgIYIn88Us5XXYOzrCYfFG+NUJ
-        A+8LQJpXOTOvcmZe5cb8f7NKwLWCVxiNLiOJ0ck1Af/ddqI6ox64Hv+O4CZQNDPr2w44AtAO
-        oAAjJaJtlIwRi5T0p58xWnW8Niud0bUDhWPX5zDPlxPVjt+j0sfLA0NkgUH+AYFIHiQnN4gG
-        7QVKMZFE65k0htEw2hc6jkDoeZSDWWYO5bQoVriisNmn1x5d+XbjpoKJw8MNsrr+iAbPktzB
-        0khtcO7MJo77DxctD+czd25/u9BgLY+zF+dlRlLrrojDH7yaNLF7T7doZWxddNH+wZYbdSZi
-        36jvmnfu7F6TOvANGPJzz24d3JywqDRveejV1GvP0dbyk/d7PFF9J0m7p++JqIsB8EvyoxhJ
-        atykf+bhadqYczOzZIMmOmuhNO5kRVRwqhwojwyHdvpz/O9/YH0JDz5vW+javvaXbr50eIA/
-        9KbxYotiIeaNKEuZBYQs9ka6lY0nbta4H3//n7EDn2dWhv5dXtspDLipjzphGxGpPfKw/tqE
-        P7/eadv6Xk8+ydUl0/IdmFZH/wtdf5D3hQQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDIsWRmVeSWpSXmKPExsWy7bCSvK6nkmGqwbznehYTb1xhsViz9xyT
-        xfwj51gt/j96zWqxaupOFou+Fw+ZLc42vWG32PT4GqvF5V1z2Cw+9x5htPj04D+zxdLrF5ks
-        Di5UsbjduILNonXvEXaLgx+esFr83b6JxeLuaz+L42ufsVm03DF1EPFYM28No8eOu0sYPXbO
-        usvusWlVJ5vHnWt72Dw2L6n36P9r4NG3ZRWjx/Zr85g9Pm+S85j/+zFjAHcUl01Kak5mWWqR
-        vl0CV8bkvinMBdc0Kz52/2RpYFyh1MXIySEhYCIx90cfYxcjF4eQwG5Gid3PvjJDJCQlpl08
-        CmRzANnCEocPF0PUPGeU6G68xAgSZxPQkVjwIxSkXESgTmJy9y42kBpmgdusEgun/2KGaPjC
-        KDG39QMjSBWngJ3EssPTWUBsYYEAiedNp8CWsQioSmw/8hDM5hWwlFiy8BYjhC0ocXLmE7B6
-        ZgFtiac3n0LZ8hLb386BOlRB4ufTZawQcRGJ2Z1tYEeLCLhJ3OwJnsAoPAvJpFlIJs1CMmkW
-        ku4FjCyrGCVTC4pz03OTDQsM81LL9YoTc4tL89L1kvNzNzGCE4CWxg7Ge/P/6R1iZOJgPMQo
-        wcGsJMKr6mGQKsSbklhZlVqUH19UmpNafIhRmoNFSZzXcMbsFCGB9MSS1OzU1ILUIpgsEwen
-        VANTfUqX4TdVox/PnarORl3Ksj3qevX3XVXhz98tti0Nu3JoC9+tOT7aK1L3cpef37ToqenD
-        nwVTypTvHmfN2SWqWMfx17DllmDJ4jAl7cINsTvdvvR/Wmng22AXLeU7rU4xq3sn/7klXJtY
-        gq3ipoSd1rO1dWj6x6vDqv3hs7Pk1J6rrQLKlrqJxzTnJl6d0/Zh7cMLnpL+b9feYo6TsdC7
-        ptp39cz63TY68ozse18fTg80M69dnjNhR4uY3l0RHmW2QIW6D9kvlsxe/MA9kU1R48uazN0L
-        Mvae+vRFuWHKXrUfOrNLNXx8tST+PNHNTz59NO+yRGgRT8fdPapWkkmLcr+F5168pvmNcf6O
-        9UuVWIozEg21mIuKEwFH5QBJbwMAAA==
-X-CMS-MailID: 20231019123417epcas1p4e9848b4eb0c174f8765f8154703c463d
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20231018151237epcas1p343048db94d5678e0dd8ab865f7cad8a1
-References: <20231018061714.3553817-1-s.hauer@pengutronix.de>
-        <20231018061714.3553817-20-s.hauer@pengutronix.de>
-        <CGME20231018151237epcas1p343048db94d5678e0dd8ab865f7cad8a1@epcas1p3.samsung.com>
-        <ffcf4521-5bf0-4933-a25c-22574035f774@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, Oct 19, 2023 at 01:26:19PM +0200, Ulf Hansson wrote:
+> On Thu, 19 Oct 2023 at 12:24, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > On Wed, 18 Oct 2023 at 10:06, Stephan Gerhold
+> > <stephan.gerhold@kernkonzept.com> wrote:
+> > >
+> > > The genpd core caches performance state votes from devices that are
+> > > runtime suspended as of commit 3c5a272202c2 ("PM: domains: Improve
+> > > runtime PM performance state handling"). They get applied once the
+> > > device becomes active again.
+> > >
+> > > To attach the power domains needed by qcom-cpufreq-nvmem the OPP core
+> > > calls genpd_dev_pm_attach_by_id(). This results in "virtual" dummy
+> > > devices that use runtime PM only to control the enable and performance
+> > > state for the attached power domain.
+> > >
+> > > However, at the moment nothing ever resumes the virtual devices created
+> > > for qcom-cpufreq-nvmem. They remain permanently runtime suspended. This
+> > > means that performance state votes made during cpufreq scaling get
+> > > always cached and never applied to the hardware.
+> > >
+> > > Fix this by enabling the devices after attaching them and use
+> > > dev_pm_syscore_device() to ensure the power domains also stay on when
+> > > going to suspend. Since it supplies the CPU we can never turn it off
+> > > from Linux. There are other mechanisms to turn it off when needed,
+> > > usually in the RPM firmware (RPMPD) or the cpuidle path (CPR genpd).
+> >
+> > I believe we discussed using dev_pm_syscore_device() for the previous
+> > version. It's not intended to be used for things like the above.
+> >
 
+Sorry, looks like we still had a misunderstanding in the conclusion of
+the previous discussion. :')
 
-> -----Original Message-----
-> From: Chanwoo Choi <chanwoo@kernel.org>
-> Sent: Thursday, October 19, 2023 12:12 AM
-> To: Sascha Hauer <s.hauer@pengutronix.de>; linux-
-> rockchip@lists.infradead.org
-> Cc: linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
-> linux-pm@vger.kernel.org; Heiko Stuebner <heiko@sntech.de>; Kyungmin Park
-> <kyungmin.park@samsung.com>; MyungJoo Ham <myungjoo.ham@samsung.com>; Will
-> Deacon <will@kernel.org>; Mark Rutland <mark.rutland@arm.com>;
-> kernel@pengutronix.de; Michael Riesch <michael.riesch@wolfvision.net>;
-> Robin Murphy <robin.murphy@arm.com>; Vincent Legoll
-> <vincent.legoll@gmail.com>; Rob Herring <robh+dt@kernel.org>; Krzysztof
-> Kozlowski <krzysztof.kozlowski+dt@linaro.org>; Conor Dooley
-> <conor+dt@kernel.org>; devicetree@vger.kernel.org; Sebastian Reichel
-> <sebastian.reichel@collabora.com>; Jonathan Cameron
-> <Jonathan.Cameron@huawei.com>
-> Subject: Re: [PATCH v8 19/26] PM / devfreq: rockchip-dfi: add support for
-> RK3588
+> > Moreover, I was under the impression that it wasn't really needed. In
+> > fact, I would think that this actually breaks things for system
+> > suspend/resume, as in this case the cpr driver's genpd
+> > ->power_on|off() callbacks are no longer getting called due this,
+> > which means that the cpr state machine isn't going to be restored
+> > properly. Or did I get this wrong?
 > 
-> On 23. 10. 18. 15:17, Sascha Hauer wrote:
-> > Add support for the RK3588 to the driver. The RK3588 has four DDR
-> > channels with a register stride of 0x4000 between the channel
-> > registers, also it has a DDRMON_CTRL register per channel.
-> >
-> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> > ---
-> >  drivers/devfreq/event/rockchip-dfi.c | 36 +++++++++++++++++++++++++++-
-> >  include/soc/rockchip/rk3588_grf.h    | 18 ++++++++++++++
-> >  2 files changed, 53 insertions(+), 1 deletion(-)  create mode 100644
-> > include/soc/rockchip/rk3588_grf.h
-> >
-> > diff --git a/drivers/devfreq/event/rockchip-dfi.c
-> > b/drivers/devfreq/event/rockchip-dfi.c
-> > index bf38829a2a4af..794f36e7eebd1 100644
-> > --- a/drivers/devfreq/event/rockchip-dfi.c
-> > +++ b/drivers/devfreq/event/rockchip-dfi.c
-> > @@ -26,8 +26,9 @@
-> >  #include <soc/rockchip/rockchip_grf.h>  #include
-> > <soc/rockchip/rk3399_grf.h>  #include <soc/rockchip/rk3568_grf.h>
-> > +#include <soc/rockchip/rk3588_grf.h>
-> >
-> > -#define DMC_MAX_CHANNELS	2
-> > +#define DMC_MAX_CHANNELS	4
-> >
-> >  #define HIWORD_UPDATE(val, mask)	((val) | (mask) << 16)
-> >
-> > @@ -723,9 +724,42 @@ static int rk3568_dfi_init(struct rockchip_dfi *dfi)
-> >  	return 0;
-> >  };
-> >
-> > +static int rk3588_dfi_init(struct rockchip_dfi *dfi) {
-> > +	struct regmap *regmap_pmu = dfi->regmap_pmu;
-> > +	u32 reg2, reg3, reg4;
-> > +
-> > +	regmap_read(regmap_pmu, RK3588_PMUGRF_OS_REG2, &reg2);
-> > +	regmap_read(regmap_pmu, RK3588_PMUGRF_OS_REG3, &reg3);
-> > +	regmap_read(regmap_pmu, RK3588_PMUGRF_OS_REG4, &reg4);
-> > +
-> > +	/* lower 3 bits of the DDR type */
-> > +	dfi->ddr_type = FIELD_GET(RK3588_PMUGRF_OS_REG2_DRAMTYPE_INFO,
-> > +reg2);
-> > +
-> > +	/*
-> > +	 * For version three and higher the upper two bits of the DDR type
-> are
-> > +	 * in RK3588_PMUGRF_OS_REG3
-> > +	 */
-> > +	if (FIELD_GET(RK3588_PMUGRF_OS_REG3_SYSREG_VERSION, reg3) >= 0x3)
-> > +		dfi->ddr_type |=
-> FIELD_GET(RK3588_PMUGRF_OS_REG3_DRAMTYPE_INFO_V3,
-> > +reg3) << 3;
-> > +
-> > +	dfi->buswidth[0] = FIELD_GET(RK3588_PMUGRF_OS_REG2_BW_CH0, reg2) ==
-> 0 ? 4 : 2;
-> > +	dfi->buswidth[1] = FIELD_GET(RK3588_PMUGRF_OS_REG2_BW_CH1, reg2) ==
-> 0 ? 4 : 2;
-> > +	dfi->buswidth[2] = FIELD_GET(RK3568_PMUGRF_OS_REG2_BW_CH0, reg4) ==
-> 0 ? 4 : 2;
-> > +	dfi->buswidth[3] = FIELD_GET(RK3588_PMUGRF_OS_REG2_BW_CH1, reg4) ==
-> 0 ? 4 : 2;
-> > +	dfi->channel_mask = FIELD_GET(RK3588_PMUGRF_OS_REG2_CH_INFO, reg2)
-> |
-> > +			    FIELD_GET(RK3588_PMUGRF_OS_REG2_CH_INFO, reg4) << 2;
-> > +	dfi->max_channels = 4;
-> > +
-> > +	dfi->ddrmon_stride = 0x4000;
-> > +
-> > +	return 0;
-> > +};
-> > +
-> >  static const struct of_device_id rockchip_dfi_id_match[] = {
-> >  	{ .compatible = "rockchip,rk3399-dfi", .data = rk3399_dfi_init },
-> >  	{ .compatible = "rockchip,rk3568-dfi", .data = rk3568_dfi_init },
-> > +	{ .compatible = "rockchip,rk3588-dfi", .data = rk3588_dfi_init },
-> >  	{ },
-> >  };
-> >
-> > diff --git a/include/soc/rockchip/rk3588_grf.h
-> > b/include/soc/rockchip/rk3588_grf.h
-> > new file mode 100644
-> > index 0000000000000..630b35a550640
-> > --- /dev/null
-> > +++ b/include/soc/rockchip/rk3588_grf.h
-> > @@ -0,0 +1,18 @@
-> > +/* SPDX-License-Identifier: GPL-2.0+ */ #ifndef __SOC_RK3588_GRF_H
-> > +#define __SOC_RK3588_GRF_H
-> > +
-> > +#define RK3588_PMUGRF_OS_REG2		0x208
-> > +#define RK3588_PMUGRF_OS_REG2_DRAMTYPE_INFO		GENMASK(15, 13)
-> > +#define RK3588_PMUGRF_OS_REG2_BW_CH0			GENMASK(3, 2)
-> > +#define RK3588_PMUGRF_OS_REG2_BW_CH1                    GENMASK(19, 18)
-> > +#define RK3588_PMUGRF_OS_REG2_CH_INFO                   GENMASK(29, 28)
-> > +
-> > +#define RK3588_PMUGRF_OS_REG3		0x20c
-> > +#define RK3588_PMUGRF_OS_REG3_DRAMTYPE_INFO_V3		GENMASK(13, 12)
-> > +#define RK3588_PMUGRF_OS_REG3_SYSREG_VERSION		GENMASK(31, 28)
-> > +
-> > +#define RK3588_PMUGRF_OS_REG4           0x210
-> > +#define RK3588_PMUGRF_OS_REG5           0x214
-> > +
-> > +#endif /* __SOC_RK3588_GRF_H */
+
+We strictly need the RPMPDs to be always-on, also across system suspend
+[1]. The RPM firmware will drop the votes internally as soon as the
+CPU(s) have entered deep cpuidle. We can't do this from Linux, because
+we need the CPU to continue running until it was shut down cleanly.
+
+For CPR, we strictly need the backing regulator to be always-on, also
+across system suspend. Typically the hardware will turn off the
+regulator as soon as the CPU(s) enter deep cpuidle. Similarly, we can't
+do this from Linux, because we need the CPU to continue running until it
+was shut down cleanly.
+
+My understanding was that we're going to pause the CPR state machine
+using the system suspend/resume callbacks on the driver, instead of
+using the genpd->power_on|off() callbacks [2]. I can submit a separate
+patch for this.
+
+I didn't prioritize this because QCS404 (as the only current user of
+CPR) doesn't have proper deep cpuidle/power management set up yet. It's
+not entirely clear to me if there is any advantage (or perhaps even
+disadvantage) if we pause the CPR state machine while the shared L2
+cache is still being actively powered by the CPR power rail during
+system suspend. I suspect this is a configuration that was never
+considered in the hardware design.
+
+Given the strict requirement for the RPMPDs, I only see two options:
+
+ 1. Have an always-on consumer that prevents the power domains to be
+    powered off during system suspend. This is what this patch tries to
+    achieve.
+
+Or:
+
+ 2. Come up with a way to register the RPMPDs used by the CPU with
+    GENPD_FLAG_ALWAYS_ON. This would also be doable, but isn't as
+    straightfoward as "regulator-always-on" in the DT because the rpmpd
+    DT node represents multiple genpds in a single DT node [3].
+
+What do you think? Do you see some other solution perhaps? I hope we can
+clear up the misunderstanding. :-)
+
+[1]: https://lore.kernel.org/linux-arm-msm/ZQGqfMigCFZP_HLA@gerhold.net/
+[2]: https://lore.kernel.org/linux-arm-msm/CAPDyKFoiup8KNv=1LFGKDdDLA1pHsdJUgTTWMdgxnikEmReXzg@mail.gmail.com/
+[3]: https://lore.kernel.org/linux-arm-msm/ZSg-XtwMxg3_fWxc@gerhold.net/
+
+> BTW, if you really need something like the above, the proper way to do
+> it would instead be to call device_set_awake_path() for the device.
 > 
-> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+> This informs genpd that the device needs to stay powered-on during
+> system suspend (assuming that GENPD_FLAG_ACTIVE_WAKEUP has been set
+> for it), hence it will keep the corresponding PM domain powered-on
+> too.
 > 
-> --
-> Best Regards,
-> Samsung Electronics
-> Chanwoo Choi
 
+Thanks, I can try if this works as alternative to the
+dev_pm_syscore_device()!
 
-Applied it. Thanks
+I will wait for your thoughts on the above before accidentally going
+into the wrong direction again. :-)
 
-Best Regards,
-Chanwoo Choi
-
+Thanks!
+Stephan
