@@ -2,210 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3B37CFC35
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 16:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C37967CFCD6
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 16:35:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345906AbjJSONg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Oct 2023 10:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
+        id S1346027AbjJSOfO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Oct 2023 10:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345786AbjJSONf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Oct 2023 10:13:35 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E318CF
-        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 07:13:33 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-d852b28ec3bso9056800276.2
-        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 07:13:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697724812; x=1698329612; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CZ1gUWflsYcH8PP7UpBaAv9qlHVSJ/Dr4WGMpYeMC38=;
-        b=aLkmPGz9sgBNn8lqUAvy1cZXgicYCPPiOzkvpvUraNZxE/kG8kWFT3NpqHCKTuTdKj
-         sq+96OOQbNp6bNtr8+r9H0lG8wU65fX251xfa5ZzHsP46oIr4U7v9us4WzSJPGqBGmNu
-         RE9U1VpuUt6iRUNIyXNmBbulq4hWfMryDeYBZBwW5Ipg116tRB9TiPuXC2EL+ecDZSg4
-         T3xIrAHAtmrZW0fOj/p04fJpV3WzMZWaMm68NsBHdgwL2WSyZhaspI3/hxcc9NeCoS38
-         Eqs+sh7dymslX9i9PSCuvJ9+mWS/S78/DunckO/cH5X1CcLdD+QqWancpx1/Q45o29lm
-         wObg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697724812; x=1698329612;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CZ1gUWflsYcH8PP7UpBaAv9qlHVSJ/Dr4WGMpYeMC38=;
-        b=uXcPQFkSoGCCwEBuhNvd/jCAgymzwCYe2brA30PxPs0kGRaAmb1f2lWmxwp7mHCw7F
-         52g9Zw+7p37hrdi3QxInyAerj5mJYDeYuZFauQQBwSPlATvsv/cnhdV3HE4KV6EiE9jc
-         6RLK8W0qsw/XMeyM2VUFb9CiY9SoaEfQMXz23/i5GTJWlDnYzbHktWV4EyOX4nG8TjZb
-         lUej+4NYC7mrX8Ypojt83N6fKg8hRSCiZrPsdyLM7hfeWTQqxvd7ip1LmnbyiRmiPXJg
-         2DqMGKmJZA08JrnA3dDCFrRzC1R37271dzOaY4StNybphOv+pXk4EzMnuS/PRJMaG3rj
-         r+6w==
-X-Gm-Message-State: AOJu0YzMD6GGKnkYmmxYv8sI93JPruz5dCJlS8SDEtsvePSYnwBRquge
-        AjiFhlAqc531kNMWiA3QK9wJoBLdC9os7tD5IznFUg==
-X-Google-Smtp-Source: AGHT+IFVaisEaUxifZNFQFOjPZkY0wGroDE2WXhfIoEzu0BM1WVOjIVDHR0lnPr069ziHZ4TgS1mlvhyHgpbYnanoEE=
-X-Received: by 2002:a5b:404:0:b0:d9c:7d7d:1ac9 with SMTP id
- m4-20020a5b0404000000b00d9c7d7d1ac9mr2623857ybp.14.1697724812298; Thu, 19 Oct
- 2023 07:13:32 -0700 (PDT)
+        with ESMTP id S1346103AbjJSOfN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Oct 2023 10:35:13 -0400
+Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAFA132;
+        Thu, 19 Oct 2023 07:35:11 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 1BDC82800A261;
+        Thu, 19 Oct 2023 16:35:04 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 113305F021; Thu, 19 Oct 2023 16:35:04 +0200 (CEST)
+Date:   Thu, 19 Oct 2023 16:35:04 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Ricky WU <ricky_wu@realtek.com>
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] PCI: pciehp: Prevent child devices from doing RPM on
+ PCIe Link Down
+Message-ID: <20231019143504.GA25140@wunner.de>
+References: <20231016040132.23824-1-kai.heng.feng@canonical.com>
+ <20231016093210.GA22952@wunner.de>
+ <263982e90fc046cf977ecb8727003690@realtek.com>
+ <20231018094435.GA21090@wunner.de>
+ <02ee7e47166a463d8d4e491b61cdd33f@realtek.com>
 MIME-Version: 1.0
-References: <20231018-msm8909-cpufreq-v2-0-0962df95f654@kernkonzept.com>
- <20231018-msm8909-cpufreq-v2-2-0962df95f654@kernkonzept.com>
- <CAPDyKFot9=M1ooP_Q1AOgG5o_4DTQ2qsyai1ZdXAzBwf89W4uA@mail.gmail.com>
- <CAPDyKFr5A-P=UhWs4rUMBWup3pH75WAhcZ56Y2_Sfk3=WfxRCQ@mail.gmail.com> <ZTEph19CAvbgbN_E@gerhold.net>
-In-Reply-To: <ZTEph19CAvbgbN_E@gerhold.net>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 19 Oct 2023 16:12:56 +0200
-Message-ID: <CAPDyKFo1PVZYsdW_=92EtMmTT9hmkm-mBR69N_WvPh4f-Hw=NA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] cpufreq: qcom-nvmem: Enable virtual power domain devices
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <02ee7e47166a463d8d4e491b61cdd33f@realtek.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 19 Oct 2023 at 15:05, Stephan Gerhold <stephan@gerhold.net> wrote:
->
-> On Thu, Oct 19, 2023 at 01:26:19PM +0200, Ulf Hansson wrote:
-> > On Thu, 19 Oct 2023 at 12:24, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > > On Wed, 18 Oct 2023 at 10:06, Stephan Gerhold
-> > > <stephan.gerhold@kernkonzept.com> wrote:
-> > > >
-> > > > The genpd core caches performance state votes from devices that are
-> > > > runtime suspended as of commit 3c5a272202c2 ("PM: domains: Improve
-> > > > runtime PM performance state handling"). They get applied once the
-> > > > device becomes active again.
-> > > >
-> > > > To attach the power domains needed by qcom-cpufreq-nvmem the OPP core
-> > > > calls genpd_dev_pm_attach_by_id(). This results in "virtual" dummy
-> > > > devices that use runtime PM only to control the enable and performance
-> > > > state for the attached power domain.
-> > > >
-> > > > However, at the moment nothing ever resumes the virtual devices created
-> > > > for qcom-cpufreq-nvmem. They remain permanently runtime suspended. This
-> > > > means that performance state votes made during cpufreq scaling get
-> > > > always cached and never applied to the hardware.
-> > > >
-> > > > Fix this by enabling the devices after attaching them and use
-> > > > dev_pm_syscore_device() to ensure the power domains also stay on when
-> > > > going to suspend. Since it supplies the CPU we can never turn it off
-> > > > from Linux. There are other mechanisms to turn it off when needed,
-> > > > usually in the RPM firmware (RPMPD) or the cpuidle path (CPR genpd).
-> > >
-> > > I believe we discussed using dev_pm_syscore_device() for the previous
-> > > version. It's not intended to be used for things like the above.
-> > >
->
-> Sorry, looks like we still had a misunderstanding in the conclusion of
-> the previous discussion. :')
->
-> > > Moreover, I was under the impression that it wasn't really needed. In
-> > > fact, I would think that this actually breaks things for system
-> > > suspend/resume, as in this case the cpr driver's genpd
-> > > ->power_on|off() callbacks are no longer getting called due this,
-> > > which means that the cpr state machine isn't going to be restored
-> > > properly. Or did I get this wrong?
-> >
->
-> We strictly need the RPMPDs to be always-on, also across system suspend
-> [1]. The RPM firmware will drop the votes internally as soon as the
-> CPU(s) have entered deep cpuidle. We can't do this from Linux, because
-> we need the CPU to continue running until it was shut down cleanly.
->
-> For CPR, we strictly need the backing regulator to be always-on, also
-> across system suspend. Typically the hardware will turn off the
-> regulator as soon as the CPU(s) enter deep cpuidle. Similarly, we can't
-> do this from Linux, because we need the CPU to continue running until it
-> was shut down cleanly.
->
-> My understanding was that we're going to pause the CPR state machine
-> using the system suspend/resume callbacks on the driver, instead of
-> using the genpd->power_on|off() callbacks [2]. I can submit a separate
-> patch for this.
+On Thu, Oct 19, 2023 at 01:49:50AM +0000, Ricky WU wrote:
+> [    0.267813] pci 0000:00:1c.0: [8086:a33c] type 01 class 0x060400
 
-If we are going to do 1) as described below, this looks to me that
-it's going to be needed.
+Cannon Lake PCH Root Port
 
-How will otherwise the cpr state machine be saved/restored during
-system suspend/resume? Note that, beyond 1), the genpd's
-->power_on|off() callbacks are no longer going to be called during
-system suspend/resume.
+> [    0.275241] pci 0000:01:00.0: [10ec:5261] type 00 class 0xff0000
+> [    0.275315] pci 0000:01:00.0: reg 0x10: [mem 0xa3b00000-0xa3b00fff]
+> [    0.275782] pci 0000:01:00.0: supports D1 D2
+> [    0.275784] pci 0000:01:00.0: PME# supported from D1 D2 D3hot D3cold
+> [    0.276490] pci 0000:00:1c.0: PCI bridge to [bus 01]
 
-In a way this also means that the cpr genpd provider might as well
-also have GENPD_FLAG_ALWAYS_ON set for it.
+Device below Root Port is initially a Realtek RTS5261 card reader.
 
->
-> I didn't prioritize this because QCS404 (as the only current user of
-> CPR) doesn't have proper deep cpuidle/power management set up yet. It's
-> not entirely clear to me if there is any advantage (or perhaps even
-> disadvantage) if we pause the CPR state machine while the shared L2
-> cache is still being actively powered by the CPR power rail during
-> system suspend. I suspect this is a configuration that was never
-> considered in the hardware design.
+> [    0.395968] pcieport 0000:00:1c.0: PME: Signaling with IRQ 122
+> [    0.396009] pcieport 0000:00:1c.0: pciehp: Slot #8 AttnBtn- PwrCtrl- MRL- AttnInd- PwrInd- HotPlug+ Surprise+ Interlock- NoCompl+ IbPresDis- LLActRep+
 
-I see.
+Root Port is hotplug-capable.
 
->
-> Given the strict requirement for the RPMPDs, I only see two options:
->
->  1. Have an always-on consumer that prevents the power domains to be
->     powered off during system suspend. This is what this patch tries to
->     achieve.
->
-> Or:
->
->  2. Come up with a way to register the RPMPDs used by the CPU with
->     GENPD_FLAG_ALWAYS_ON. This would also be doable, but isn't as
->     straightfoward as "regulator-always-on" in the DT because the rpmpd
->     DT node represents multiple genpds in a single DT node [3].
+> [   43.180701] pcieport 0000:00:1c.0: pciehp: Slot(8): Link Down
+> [   43.180709] pcieport 0000:00:1c.0: pciehp: Slot(8): Card not present
+> [   44.403768] pcieport 0000:00:1c.0: pciehp: Slot(8): Card present
+> [   44.403772] pcieport 0000:00:1c.0: pciehp: Slot(8): Link Up
+> [   44.540631] pci 0000:01:00.0: [15b7:5007] type 00 class 0x010802
 
-Yes, it sounds like it may be easier to do 1).
+Card reader is unplugged and replaced by SanDisk SN530 NVMe SSD.
 
->
-> What do you think? Do you see some other solution perhaps? I hope we can
-> clear up the misunderstanding. :-)
+> [   51.682628] pcieport 0000:00:1c.0: pciehp: Slot(8): Link Down
+> [   51.716800] nvme0n1: detected capacity change from 495050752 to 0
+> [   51.793382] pcieport 0000:00:1c.0: pciehp: Slot(8): Card present
+> [   51.793392] pcieport 0000:00:1c.0: pciehp: Slot(8): Link Up
+> [   51.928633] pci 0000:01:00.0: [10ec:5261] type 00 class 0xff0000
 
-Yes, thanks!
+NVMe SSD replaced by the card reader again.
 
->
-> [1]: https://lore.kernel.org/linux-arm-msm/ZQGqfMigCFZP_HLA@gerhold.net/
-> [2]: https://lore.kernel.org/linux-arm-msm/CAPDyKFoiup8KNv=1LFGKDdDLA1pHsdJUgTTWMdgxnikEmReXzg@mail.gmail.com/
-> [3]: https://lore.kernel.org/linux-arm-msm/ZSg-XtwMxg3_fWxc@gerhold.net/
->
-> > BTW, if you really need something like the above, the proper way to do
-> > it would instead be to call device_set_awake_path() for the device.
-> >
-> > This informs genpd that the device needs to stay powered-on during
-> > system suspend (assuming that GENPD_FLAG_ACTIVE_WAKEUP has been set
-> > for it), hence it will keep the corresponding PM domain powered-on
-> > too.
-> >
->
-> Thanks, I can try if this works as alternative to the
-> dev_pm_syscore_device()!
+> [   54.872928] pcieport 0000:00:1c.0: pciehp: Slot(8): Link Down
+> [   56.146581] pcieport 0000:00:1c.0: pciehp: Slot(8): Card present
+> [   56.146584] pcieport 0000:00:1c.0: pciehp: Slot(8): Link Up
+> [   56.284632] pci 0000:01:00.0: [15b7:5007] type 00 class 0x010802
 
-Yes, please. We don't want to abuse the dev_pm_syscore_device() thingy.
+Card reader replaced by NVMe SSD, second time.
 
->
-> I will wait for your thoughts on the above before accidentally going
-> into the wrong direction again. :-)
+> [   60.635845] pcieport 0000:00:1c.0: pciehp: Slot(8): Link Down
+> [   60.676842] nvme0n1: detected capacity change from 495050752 to 0
+> [   60.748953] pcieport 0000:00:1c.0: pciehp: Slot(8): Card present
+> [   60.748958] pcieport 0000:00:1c.0: pciehp: Slot(8): Link Up
+> [   60.884619] pci 0000:01:00.0: [10ec:5261] type 00 class 0xff0000
 
-No worries, we are moving forward. :-)
+NVMe SSD replaced by the card reader, second time.
 
-Kind regards
-Uffe
+> [   63.898861] pcieport 0000:00:1c.0: pciehp: Slot(8): Link Down
+> [   63.912118] BUG: unable to handle page fault for address: ffffb24d403e5010
+
+Card reader replaced with NVMe SSD, third time.
+
+So it took three tries to reproduce the page fault.
+
+Thanks for the log, the issue is a little less murky now.
+But it's still unclear what the root cause is and thus
+what the proper solution is.  I think this needs more
+in-depth debugging, see my previous e-mail.
+
+Hope that helps!  Thanks,
+
+Lukas
