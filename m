@@ -2,55 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 141097CF7C6
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 13:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0D07CF88A
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 14:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345483AbjJSL7W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Oct 2023 07:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38694 "EHLO
+        id S235280AbjJSMRA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Oct 2023 08:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345469AbjJSL7U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Oct 2023 07:59:20 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9836C139
-        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 04:59:17 -0700 (PDT)
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20231019115916epoutp03ccd523d8b749135856e0fc451075896c~PgGUL_nKm2177721777epoutp035
-        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 11:59:16 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20231019115916epoutp03ccd523d8b749135856e0fc451075896c~PgGUL_nKm2177721777epoutp035
+        with ESMTP id S235307AbjJSMQ7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Oct 2023 08:16:59 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA6412D
+        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 05:16:55 -0700 (PDT)
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20231019121654epoutp04248807a79fb50b1526b538e18eaebe02~PgVtsXGpZ2335623356epoutp04M
+        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 12:16:54 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20231019121654epoutp04248807a79fb50b1526b538e18eaebe02~PgVtsXGpZ2335623356epoutp04M
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1697716756;
-        bh=etxmksFg/ulfOn3J2o7CamkOha9gpHkvB+dHibgmjd0=;
+        s=mail20170921; t=1697717814;
+        bh=z6vk067XJq61wl6yvblxMhA8AYM9NixgY5wMH/CqLmg=;
         h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=ZOSO4hZdKJIv7jte0WUZNVKOzZnxiUVELPMjOl2sE853ivtQitBXVJDnub8zYZCIc
-         sJ2JF4NaXTUOrHE8thV6fKiIZiQ+wMBtmNC5CuJg5K6/pvhO+Fq+v6iArZTpthaDBi
-         Twp5P0BsG7ohXFW5g1CIAYZZAqEmIrLOoSswidm4=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20231019115915epcas1p4830a09e4aebce1c19013d88df13ea941~PgGTbtWQi3097630976epcas1p45;
-        Thu, 19 Oct 2023 11:59:15 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.36.133]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4SB5q61zypz4x9Pv; Thu, 19 Oct
-        2023 11:59:14 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        CC.DE.09739.21A11356; Thu, 19 Oct 2023 20:59:14 +0900 (KST)
+        b=PLYrut9lE1/NBjN/7KWK9NGGzueTXJetaY5Z1+NVSIxzeyo6TeSb5sOBZLYLMT1w0
+         mcMNK7xn/TWWiCWjq6Qp/hmhVdl4NVYHG4ergnJcuIJPunU2e0SgNy+wbCFnTYRNKj
+         Z/5mgvmGxkHkIsL6XHt4o9/KrzxIKDKj6FsVfbYY=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20231019121653epcas1p2bf01f7721c890b54282000545b7723b4~PgVtE-8ZZ0490604906epcas1p2V;
+        Thu, 19 Oct 2023 12:16:53 +0000 (GMT)
+Received: from epsmgec1p1-new.samsung.com (unknown [182.195.36.134]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4SB6CS48ftz4x9Pr; Thu, 19 Oct
+        2023 12:16:52 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmgec1p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        FD.8F.19104.43E11356; Thu, 19 Oct 2023 21:16:52 +0900 (KST)
 Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20231019115913epcas1p385331b759d2cf54ed17985a857e0ee5a~PgGR-srwb2825428254epcas1p31;
-        Thu, 19 Oct 2023 11:59:13 +0000 (GMT)
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20231019121652epcas1p49d8b24067b72808a0a23bea64f14173f~PgVrvlvwV0634506345epcas1p4N;
+        Thu, 19 Oct 2023 12:16:52 +0000 (GMT)
 Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
         epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20231019115913epsmtrp272e140470691f8d9a65bf905d33dd1e6~PgGR_1rnY1154311543epsmtrp2R;
-        Thu, 19 Oct 2023 11:59:13 +0000 (GMT)
-X-AuditID: b6c32a37-e67fa7000000260b-83-65311a12ee9e
+        20231019121652epsmtrp2222eb153520ed7a60b195929f1e6d677~PgVrtkVQP2185621856epsmtrp2L;
+        Thu, 19 Oct 2023 12:16:52 +0000 (GMT)
+X-AuditID: b6c32a4c-559ff70000004aa0-0a-65311e34e14d
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
         epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B5.F8.07368.11A11356; Thu, 19 Oct 2023 20:59:13 +0900 (KST)
+        94.B9.07368.33E11356; Thu, 19 Oct 2023 21:16:51 +0900 (KST)
 Received: from cw00choi03 (unknown [10.113.111.106]) by epsmtip1.samsung.com
         (KnoxPortal) with ESMTPA id
-        20231019115912epsmtip11ca80a8487ff39c2d0c3b85d04450a8c~PgGQ2OOXV0204702047epsmtip1K;
-        Thu, 19 Oct 2023 11:59:12 +0000 (GMT)
+        20231019121651epsmtip182e19a7b45c9232e47e8f9aef6d1844b~PgVrW_h0I0851508515epsmtip1O;
+        Thu, 19 Oct 2023 12:16:51 +0000 (GMT)
 From:   "Chanwoo Choi" <cw00.choi@samsung.com>
 To:     "'Sascha Hauer'" <s.hauer@pengutronix.de>,
         <linux-rockchip@lists.infradead.org>
@@ -70,68 +70,67 @@ Cc:     <linux-arm-kernel@lists.infradead.org>,
         "'Conor Dooley'" <conor+dt@kernel.org>,
         <devicetree@vger.kernel.org>,
         "'Sebastian Reichel'" <sebastian.reichel@collabora.com>
-In-Reply-To: <20231018061714.3553817-16-s.hauer@pengutronix.de>
-Subject: RE: [PATCH v8 15/26] PM / devfreq: rockchip-dfi: give variable a
- better name
-Date:   Thu, 19 Oct 2023 20:59:12 +0900
-Message-ID: <001a01da0283$ad746a30$085d3e90$@samsung.com>
+In-Reply-To: <20231019064819.3496740-1-s.hauer@pengutronix.de>
+Subject: RE: [PATCH] PM / devfreq: rockchip-dfi: Add perf support
+Date:   Thu, 19 Oct 2023 21:16:51 +0900
+Message-ID: <002901da0286$2450cfc0$6cf26f40$@samsung.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-Mailer: Microsoft Outlook 16.0
 Content-Language: ko
-Thread-Index: AQFYMiMsP3soeW2GlDsie1R9CxInBwHV6+97AZGQ0VixOWcW4A==
-X-Brightmail-Tracker: H4sIAAAAAAAAA01TbUxTVxjO6b29XDRsdxXkyLJRL4MIo9AChYMTEEW8G7IxCSNDN2zaG2DQ
-        D9ti5hLDR4BJMwQ0klAVJcoEBMxKHR/abVYUFhmbsDHGKEM+VGCSDqYDlDDKxY1/z/vkfc77
-        PO85h8QEdsKDzFDpWa1KlkUTG/Cvb/kGigQeElY89guJygd+xlGDpYeHznf08NHy6DQf1Z9u
-        w9GJR/cx9EP+n07INNbPR33tZwk0V9IB0OzIMoZqfr3HQzer30C/59USqNDS4YRu2sf5aKnF
-        hCPb9Luos/EBgQqGpDtdmYaqBsC02i4Bps1oc2JM9cUEM9R/g2CaL+UwpUti5oS5HjAt/VUY
-        M2d6nTn/bAwkbEzJ3JHOyhSsVsiq5GpFhiotgo5LTN2dKg0VS0SScBRGC1UyJRtBx+xLEMVm
-        ZK0EpIVHZFnZK1SCTKejAyN3aNXZelaYrtbpI2hWo8jSSDUBOplSl61KC1Cx+u0SsThIutJ4
-        KDN9sCmPpyl87dOK9jIiF/S6GwBJQioEtnQmG8AGUkC1AlhdU8TnilkAi9utPK54CqDB0IS/
-        UJT1+nK8BcBui2mtaRLAxYcdfEcTQfnDC/NJBuBMulJJsLSrlefAGPWUD+3LbzuwMxUF/7k4
-        hTnwJioZ/m19tHo+TnlDky3ZQbtQ4TB/uRbn8Cvw+8pxnDvGE7Y8PrsqhZQQLkx8yed4V3im
-        uAjjxu6Cky0PMYc1SJ1xhrftAzxOEAPt3ZcBhzfBqU6zE4c94NyMheAEpwC8Nz29pr4K4Fd1
-        BWvjguG3Nad4DqcY5Quvtgdy9FbY9uwc4Fy8BGeefMHnluUCjxcJuBYv2DdiW/OwBV78vJgo
-        A7RxXTbjumzGdXmM/w+7APB6sJnV6JRprE6iCf7vruVqpQmsPn2/sFZQ8dgeYAU8ElgBJDHa
-        1cWbEbMCF4Xs6GesVp2qzc5idVYgXVl2OebhJlev/B2VPlUSEi4OCQ0KDkGSUAnt7jL4oEQh
-        oNJkejaTZTWs9oWORzp75PKirgf31zd4k/tsxsnnW5tD2uXviFp/lHs9X8BFFHk/Ze/tpm5P
-        841X/+o4YD40kBD0Vu1i9UGVsU7pP3690Se+omv/zM7Mjw66bY42+E2+p4W/vbx4azx7rEIx
-        6ozE4qTmN4f1idu3xR+I0ZdHQq9jdbyTp7dV9nn/FF86e80ujxZII5g7kbnW7650Fl5ZGhwa
-        7vLc02M6GbultuTunsSN/tF/fMO4h5Gh5/KE4ruaKsUHbvlR8H35/OidgvkjlZ6WmL0j47uU
-        mLApJ39qRhTxYW/O0WOf+ByeNDcNBys8zT4L1xpGGP1+r4nRvji80XCcTamRfNw4ZJ0YPUxc
-        fpIbF0vjunSZxA/T6mT/AjqAtBqDBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBIsWRmVeSWpSXmKPExsWy7bCSnK6glGGqwa5rShYTb1xhsViz9xyT
+Thread-Index: AQJJLo5n4Y1C3K94xQ3Q2txgQ8G2QQLxgVKlAgrg2OWvSsqGIA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Tf0xTVxTO7WsfrVL3LEwvNWG1SJxslBZa9kBqhBF5Zow0I/wxRsZq+wYM
+        aLv+2JxuGYKAGCk/HJlWEHFUGIEQkPBDKbNAZLqJdDUwBmxsoBOKaIoIyCprebjx33fOd757
+        znfuvUyE8xTlMjNUelKrkmfx0S309r59gmCxv4gU9qz542W/3qPjjZZBGl7dP8jA1/5yMPCG
+        ii46bnz4J4LfyZ3zwlunhhm4/Volii8U9wPcObmG4OYRGw231uzBx07Uo3i+pd8Ltz6ZZuCu
+        jlY6PuFIwAeaHqD4yXHJQV+i8WIjIDonagHRZZrwIlobilBifLgbJa7Wfk2UuISEsa0BEB3D
+        FxFiodWfqF6dArKtyZlR6aRcSWp5pEqhVmao0qT8dxJT306VhAtFwaII/C0+TyXPJqX82HhZ
+        8KGMLLdBPu8zeZbBnZLJdTp+yIEordqgJ3npap1eyic1yiyNRCPQybN1BlWaQEXqI0VCYajE
+        XfhRZnrZyH5NcdDRy852NAcs7z4NWEyIiWFVz03aabCFycG6Acy938fwEBzMCeDjuyhFPAPw
+        qnXZ66XCdvcXBkVYAGzJzfWighkA8x4NuRkmE8XehJeWkzwCXywJlvzYSfNgBHvGgE/WDntK
+        WNgBuPJTrCftg0XDBaMN9WA6Fgid8zPr5WwsAj5oa9jA2+Gt89N06pjXYMejSoSahwdX7l9h
+        UHlfeKGoAKHaxkDj5cX1OSFWzYI3zv3GoASx0DjXTaewD5wdaNswxoUL8xaUEpwF0OZwIFTQ
+        7Hb5/cmNdmHwB/NZmscBgu2DzddCqPRu2LVaBagptsH5xTPre4AYG54q4FAlAdA+OUGjsB/8
+        rrAILQV80yZvpk3eTJv8mP5vdgnQGwCX1Oiy00iFSCMKVpGf/3ffCnV2K1h//kHxnWCp2SXo
+        BTQm6AWQifB92YGEkOSwlfIvjpFadarWkEXqeoHEvfEyhPuqQu3+Pyp9qkgcIRSHh4aJcVG4
+        iL+TneIsVHKwNLmezCRJDal9qaMxWdwcWqK8pmZ68r2Eg6N7LbEhO6w7x0oPn49x1p07lGrL
+        cZz56sNieyBLnJ+yTV/14lvtdludZe168vvS+L03rM3mklU7cCroPVyD65jhSmSc692h51Jp
+        4PWxWv++JnEAc2Y40MG4M5WHg+dHOiNP2W8nsZfKF1HGDlWT101B3ArsdFVUPJwN/2Ck40vF
+        SiGWaMrd9fc3r1ecsM4OGWPsNoEsbqG4xRzNujcrHJy+bYj2Kz/yyfHw5f08s+xTWb3faH37
+        47oSPXjF29L11HuXJCA4rMo2jSa3zCmBNO9oqLl8IKMu/+cCUUJK0gUj6vMi6o3SpVtbo71H
+        /9lT+fH47+D4H3y6Ll0uCkK0Ovm/5YtCgYcEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrJIsWRmVeSWpSXmKPExsWy7bCSnK6xnGGqwe47FhYTb1xhsViz9xyT
         xfwj51gt/j96zWqxaupOFou+Fw+ZLc42vWG32PT4GqvF5V1z2Cw+9x5htPj04D+zxdLrF5ks
         Di5UsbjduILNonXvEXaLgx+esFr83b6JxeLuaz+L42ufsVm03DF1EPFYM28No8eOu0sYPXbO
         usvusWlVJ5vHnWt72Dw2L6n36P9r4NG3ZRWjx/Zr85g9Pm+S85j/+zFjAHcUl01Kak5mWWqR
-        vl0CV8atdY1MBa2yFdN2TWBrYLwk3sXIwSEhYCIx4ZJmFyMXh5DAbkaJs4+nMncxcgLFJSWm
-        XTzKDFEjLHH4cDFEzXNGia1rD4PF2QR0JBb8CAUpFxEIleg/sYMJpIZZoIVNYteyz2wQDYcY
-        JR7s3scEUsUpYC/xffErsGZhoI55D8FMFgFViU13w0EqeAUsJZr+r2CBsAUlTs58wgJSwiyg
-        J9G2kREkzCwgL7H97RyoKxUkfj5dxgoRF5GY3dnGDHGOk8TL7c+ZJzAKz0IyaRbCpFlIJs1C
-        0r2AkWUVo2RqQXFuem6yYYFhXmq5XnFibnFpXrpecn7uJkZw5Gtp7GC8N/+f3iFGJg5GoAc5
-        mJVEeFU9DFKFeFMSK6tSi/Lji0pzUosPMUpzsCiJ8xrOmJ0iJJCeWJKanZpakFoEk2Xi4JRq
-        YIpiDv9YvnGj0JwOI46Y8xUpZjsDLjzod1hu0c2c47RxT6z2pJ9NB7WPTPHZuLxMu/yNf27r
-        LK2DfxY3v+Xvarn8i6nt+cWsrq1nPsyc1CmjzTtJ/k7Um+/TetY13FA0F0mRW7usuNGsYZ73
-        itNn3Gp+ZR44r5+x8Pe8d5U2e1/vfNLRoHps/cegzrUTPr1jvqF8XvWWpdvJzNMibp87E75a
-        iYV99fm2qOJkxUKfk/t07X03rrpw5lD1YsY2nvf507QmLV80p3Pdsa6WcpOzmhs3KN6//r1F
-        O7rRI3MJbyjjjtdye2ZlHVMR3qt916xNWuXh4Z3aOed/v2he2TJT/f2mPwUrzszRnNm1ffoM
-        C1VZJZbijERDLeai4kQADGZRYGsDAAA=
-X-CMS-MailID: 20231019115913epcas1p385331b759d2cf54ed17985a857e0ee5a
+        vl0CV8bE69YFvVoViz5tY2tg/KHYxcjJISFgInHx/CXWLkYuDiGB3YwSpzYvY4FISEpMu3iU
+        uYuRA8gWljh8uBii5jmjRO+bJlaQOJuAjsSCH6Eg5SICoRL9J3YwgdQwC7SwSexa9pkNouEQ
+        o8SViX1gDZwCdhI/T7uANAgLOEp87rvIBmKzCKhKfHr3kgnE5hWwlHi2ZRWULShxcuYTFpBW
+        ZgE9ibaNjCBhZgF5ie1v5zBDnKkg8fPpMlaIuIjE7M42Zoh7nCT6Fn1lncAoPAvJpFkIk2Yh
+        mTQLSfcCRpZVjJKpBcW56bnJhgWGeanlesWJucWleel6yfm5mxjBsa+lsYPx3vx/eocYmTgY
+        gT7kYFYS4VX1MEgV4k1JrKxKLcqPLyrNSS0+xCjNwaIkzms4Y3aKkEB6YklqdmpqQWoRTJaJ
+        g1OqgYnn8P8w/YhVW+3aWBLLZwj+d0s2enRvt6jGeadbTPIbvmmtOpW1letG52vWdy+mO3Mz
+        eRy6JSKU7m2fuGeL3tJVFie+l11qf7Tm3CSvGjY/lz06GX6rTR1qa5aYH3yU37+4WkCvxsOT
+        ic/3LsvT6zeF+ioq/IMun10csbdyidH0zztYuVg2bv8Y/avQcKLgZDYVhlmH16ZWON88fkbj
+        WLxr4AO1Lz6t106bXff+orNvUnjMRv2l4g8f+ifq/Pha7bSfj2m2dtXphM6+iCfPHtjHGPfM
+        atxQIqBl0hzmEL/ZnzOKef3XR9LvnFgiO6aHPN55errsUaf1ASwPY96KvjyrcGnT/587f6aq
+        nl1231yJpTgj0VCLuag4EQBKQbIYbAMAAA==
+X-CMS-MailID: 20231019121652epcas1p49d8b24067b72808a0a23bea64f14173f
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20231018063755epcas1p4ce57f4b2fd0bd82dcf1cd912f2cd89bb
-References: <20231018061714.3553817-1-s.hauer@pengutronix.de>
-        <CGME20231018063755epcas1p4ce57f4b2fd0bd82dcf1cd912f2cd89bb@epcas1p4.samsung.com>
-        <20231018061714.3553817-16-s.hauer@pengutronix.de>
+X-CMS-RootMailID: 20231019064915epcas1p4851c400613e6857f85683520e5ee7caf
+References: <20231018061714.3553817-17-s.hauer@pengutronix.de>
+        <CGME20231019064915epcas1p4851c400613e6857f85683520e5ee7caf@epcas1p4.samsung.com>
+        <20231019064819.3496740-1-s.hauer@pengutronix.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -142,7 +141,7 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 > -----Original Message-----
 > From: Sascha Hauer <s.hauer@pengutronix.de>
-> Sent: Wednesday, October 18, 2023 3:17 PM
+> Sent: Thursday, October 19, 2023 3:48 PM
 > To: linux-rockchip@lists.infradead.org
 > Cc: linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
 > linux-pm@vger.kernel.org; Heiko Stuebner <heiko@sntech.de>; Chanwoo Choi
@@ -156,95 +155,137 @@ X-Mailing-List: linux-pm@vger.kernel.org
 > devicetree@vger.kernel.org; Sebastian Reichel
 > <sebastian.reichel@collabora.com>; Sascha Hauer <s.hauer@pengutronix.de>;
 > Chanwoo Choi <cw00.choi@samsung.com>
-> Subject: [PATCH v8 15/26] PM / devfreq: rockchip-dfi: give variable a
-> better name
+> Subject: [PATCH] PM / devfreq: rockchip-dfi: Add perf support
 > 
-> struct dmc_count_channel::total counts the clock cycles of the DDR
-> controller. Rename it accordingly to give the reader a better idea what
-> this is about. While at it, at some documentation to struct
-> dmc_count_channel.
+> The DFI is a unit which is suitable for measuring DDR utilization, but so
+> far it could only be used as an event driver for the DDR frequency scaling
+> driver. This adds perf support to the DFI driver.
+> 
+> Usage with the 'perf' tool can look like:
+> 
+> perf stat -a -e rockchip_ddr/cycles/,\
+> 		rockchip_ddr/read-bytes/,\
+> 		rockchip_ddr/write-bytes/,\
+> 		rockchip_ddr/bytes/ sleep 1
+> 
+>  Performance counter stats for 'system wide':
+> 
+>         1582524826      rockchip_ddr/cycles/
+>            1802.25 MB   rockchip_ddr/read-bytes/
+>            1793.72 MB   rockchip_ddr/write-bytes/
+>            3595.90 MB   rockchip_ddr/bytes/
+> 
+>        1.014369709 seconds time elapsed
+> 
+> perf support has been tested on a RK3568 and a RK3399, the latter with
+> dual channel DDR.
 > 
 > Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 > Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
 > ---
->  drivers/devfreq/event/rockchip-dfi.c | 19 ++++++++++++-------
->  1 file changed, 12 insertions(+), 7 deletions(-)
+> 
+> Notes:
+>     Changes since v8:
+>     - Move rockchip_ddr_perf_counters_add() inside #ifdef
+> CONFIG_PERF_EVENTS
+>       to avoid unused function warning with CONFIG_PERF_EVENTS disabled
+> 
+>     Changes since v7:
+>      - rename variable 'c' to 'count'
+> 
+>     Changes since v5:
+>      - Add missing initialization of &dfi->last_perf_count
+> 
+>     Changes since v4:
+> 
+>      - use __stringify to ensure event type definitions and event numbers
+> in sysfs are consistent
+>      - only use 64bit values in structs holding counters
+>      - support monitoring individual DDR channels
+>      - fix return value in rockchip_ddr_perf_event_init(): -EOPNOTSUPP ->
+-
+> EINVAL
+>      - check for invalid event->attr.config values
+>      - start hrtimer to trigger in one second, not immediately
+>      - use devm_add_action_or_reset()
+>      - add suppress_bind_attrs
+>      - enable DDRMON during probe when perf is enabled
+>      - use a seqlock to protect perf reading the counters from the hrtimer
+> callback modifying them
+> 
+>  drivers/devfreq/event/rockchip-dfi.c | 440 ++++++++++++++++++++++++++-
+>  include/soc/rockchip/rk3399_grf.h    |   2 +
+>  include/soc/rockchip/rk3568_grf.h    |   1 +
+>  3 files changed, 438 insertions(+), 5 deletions(-)
 > 
 > diff --git a/drivers/devfreq/event/rockchip-dfi.c
 > b/drivers/devfreq/event/rockchip-dfi.c
-> index 7a4f1901314d4..3d5c6d737ccd9 100644
+> index 3d5c6d737ccd9..a7d7b61518fec 100644
 > --- a/drivers/devfreq/event/rockchip-dfi.c
 > +++ b/drivers/devfreq/event/rockchip-dfi.c
-> @@ -46,9 +46,14 @@
+> @@ -16,10 +16,12 @@
+>  #include <linux/regmap.h>
+>  #include <linux/slab.h>
+>  #include <linux/list.h>
+> +#include <linux/seqlock.h>
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+>  #include <linux/bitfield.h>
+>  #include <linux/bits.h>
+> +#include <linux/perf_event.h>
+> 
+>  #include <soc/rockchip/rockchip_grf.h>
+>  #include <soc/rockchip/rk3399_grf.h>
+> @@ -41,19 +43,39 @@
+>  					 DDRMON_CTRL_LPDDR4 | \
+>  					 DDRMON_CTRL_LPDDR23)
+> 
+> +#define DDRMON_CH0_WR_NUM		0x20
+> +#define DDRMON_CH0_RD_NUM		0x24
+>  #define DDRMON_CH0_COUNT_NUM		0x28
+>  #define DDRMON_CH0_DFI_ACCESS_NUM	0x2c
 >  #define DDRMON_CH1_COUNT_NUM		0x3c
 >  #define DDRMON_CH1_DFI_ACCESS_NUM	0x40
 > 
-> +/**
-> + * struct dmc_count_channel - structure to hold counter values from the
+> +#define PERF_EVENT_CYCLES		0x0
+> +#define PERF_EVENT_READ_BYTES		0x1
+> +#define PERF_EVENT_WRITE_BYTES		0x2
+> +#define PERF_EVENT_READ_BYTES0		0x3
+> +#define PERF_EVENT_WRITE_BYTES0		0x4
+> +#define PERF_EVENT_READ_BYTES1		0x5
+> +#define PERF_EVENT_WRITE_BYTES1		0x6
+> +#define PERF_EVENT_READ_BYTES2		0x7
+> +#define PERF_EVENT_WRITE_BYTES2		0x8
+> +#define PERF_EVENT_READ_BYTES3		0x9
+> +#define PERF_EVENT_WRITE_BYTES3		0xa
+> +#define PERF_EVENT_BYTES		0xb
+> +#define PERF_ACCESS_TYPE_MAX		0xc
+> +
+>  /**
+>   * struct dmc_count_channel - structure to hold counter values from the
 > DDR controller
-> + * @access:       Number of read and write accesses
-> + * @clock_cycles: DDR clock cycles
-> + */
->  struct dmc_count_channel {
->  	u32 access;
-> -	u32 total;
-> +	u32 clock_cycles;
->  };
-> 
->  struct dmc_count {
-> @@ -151,7 +156,7 @@ static void rockchip_dfi_read_counters(struct
-> rockchip_dfi *dfi, struct dmc_coun
->  			continue;
->  		count->c[i].access = readl_relaxed(dfi_regs +
->  				DDRMON_CH0_DFI_ACCESS_NUM + i * 20);
-> -		count->c[i].total = readl_relaxed(dfi_regs +
-> +		count->c[i].clock_cycles = readl_relaxed(dfi_regs +
->  				DDRMON_CH0_COUNT_NUM + i * 20);
->  	}
->  }
-> @@ -183,29 +188,29 @@ static int rockchip_dfi_get_event(struct
-> devfreq_event_dev *edev,
->  	struct rockchip_dfi *dfi = devfreq_event_get_drvdata(edev);
->  	struct dmc_count count;
->  	struct dmc_count *last = &dfi->last_event_count;
-> -	u32 access = 0, total = 0;
-> +	u32 access = 0, clock_cycles = 0;
->  	int i;
-> 
->  	rockchip_dfi_read_counters(dfi, &count);
-> 
->  	/* We can only report one channel, so find the busiest one */
->  	for (i = 0; i < dfi->max_channels; i++) {
-> -		u32 a, t;
-> +		u32 a, c;
-> 
->  		if (!(dfi->channel_mask & BIT(i)))
->  			continue;
-> 
->  		a = count.c[i].access - last->c[i].access;
-> -		t = count.c[i].total - last->c[i].total;
-> +		c = count.c[i].clock_cycles - last->c[i].clock_cycles;
-> 
->  		if (a > access) {
->  			access = a;
-> -			total = t;
-> +			clock_cycles = c;
->  		}
->  	}
-> 
->  	edata->load_count = access * 4;
-> -	edata->total_count = total;
-> +	edata->total_count = clock_cycles;
-> 
->  	dfi->last_event_count = count;
-> 
-> --
-> 2.39.2
+>   * @access:       Number of read and write accesses
+>   * @clock_cycles: DDR clock cycles
+> + * @read_access:  number of read accesses
+> + * @write_acccess: number of write accesses
 
 
-Applied it. Thanks
+Need to change it to 'write_access' from 'write_acccess'.
+When I merge it, I fix it by myself.
+
+And,
+Applied it with "Acked-by: Heiko Stuebner <heiko@sntech.de>"
+according to https://lore.kernel.org/all/27832786.gRfpFWEtPU@diego/.
+
+If you have other opinion, please let me know.
 
 Best Regards,
 Chanwoo Choi
+
+
+
+
+
+
 
