@@ -2,55 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F077CF8A6
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 14:25:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D65C7CF8AF
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 14:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235305AbjJSMZE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Oct 2023 08:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
+        id S235321AbjJSM1Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Oct 2023 08:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233195AbjJSMZC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Oct 2023 08:25:02 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8B0A3
-        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 05:24:59 -0700 (PDT)
+        with ESMTP id S235307AbjJSM1O (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Oct 2023 08:27:14 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAD8182
+        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 05:27:12 -0700 (PDT)
 Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20231019122457epoutp04a20d447a78392feda0cad461114dc4ac~PgcvjOsnx2562925629epoutp04b
-        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 12:24:57 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20231019122457epoutp04a20d447a78392feda0cad461114dc4ac~PgcvjOsnx2562925629epoutp04b
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20231019122709epoutp02064c22e7e0cb640dde6312d1cf06d90e~Pgeqqe3NV0851808518epoutp02U
+        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 12:27:09 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20231019122709epoutp02064c22e7e0cb640dde6312d1cf06d90e~Pgeqqe3NV0851808518epoutp02U
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1697718297;
-        bh=GN/OL1eGZIAJ8SFDXhY9taH9HgfUmStQwTVITOEr3AI=;
+        s=mail20170921; t=1697718429;
+        bh=dN+zGFcdP9br6hD3NpsfnvsXV48m9TbzD1vcRMr23po=;
         h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=M3ACzm9GRqAt2bERV5vlVnuJoLV5V0luIbDVaLD2N+Cvv5csh1JR0ZW03hFLg/5gU
-         NS11m2iJvWD9iQds0u5oFh+mDiW+9naGZlH4M1dGfq+E9c/Zt0HooxJIueSaOz6Q1W
-         SFMwvMZEJRHUSgRZFL2JrVnZf4AM9NM9RNE/97MU=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20231019122455epcas1p4007f86221a3b9a056be84ed55f770011~PgcuCnH8A0394103941epcas1p4E;
-        Thu, 19 Oct 2023 12:24:55 +0000 (GMT)
-Received: from epsmgec1p1.samsung.com (unknown [182.195.36.136]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4SB6Nk2h8Pz4x9Pp; Thu, 19 Oct
-        2023 12:24:54 +0000 (GMT)
+        b=jwaw2hj+BCXWoaAD7E/h9b6EbEp9KuOS1J2iUf8qfj0P8zyBisUYODwCmoMQggS4q
+         Ks0U//9bL1VEeDW0rPxLTgUcp4L6S/fSqD7fBMHuV14RGZK9IqhvaYS+jGgtKM4XSl
+         IfEc2Ke+ogrRNjvi6azeGNEUIJbYggGMKCHXpWoY=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20231019122708epcas1p3be3f84be9daa7d1eded5f19370e2fbf8~Pgep0Mw-a1072910729epcas1p3l;
+        Thu, 19 Oct 2023 12:27:08 +0000 (GMT)
+Received: from epsmgec1p1-new.samsung.com (unknown [182.195.36.144]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4SB6RH1MNXz4x9Q7; Thu, 19 Oct
+        2023 12:27:07 +0000 (GMT)
 Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmgec1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        E0.01.08572.61021356; Thu, 19 Oct 2023 21:24:54 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20231019122453epcas1p4eddbd8295bc4bb460aef9233489f80cf~PgcsNhTOb0395503955epcas1p4M;
-        Thu, 19 Oct 2023 12:24:53 +0000 (GMT)
-Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20231019122453epsmtrp2af52d648f2ad9227045be96eff6fcb86~PgcsLWfOE2486824868epsmtrp2R;
-        Thu, 19 Oct 2023 12:24:53 +0000 (GMT)
-X-AuditID: b6c32a33-cefff7000000217c-bd-653120163842
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        8D.A9.18939.51021356; Thu, 19 Oct 2023 21:24:53 +0900 (KST)
-Received: from cw00choi03 (unknown [10.113.111.106]) by epsmtip2.samsung.com
+        epsmgec1p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        CF.10.19104.A9021356; Thu, 19 Oct 2023 21:27:07 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20231019122706epcas1p37194d4e0e8ee7cf441922f367e4fdb7e~PgeoDdeuh1081010810epcas1p3Z;
+        Thu, 19 Oct 2023 12:27:06 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20231019122706epsmtrp11aa5dc35d1ca13919594ac2a0b2cab8c~PgeoBUfQL0593505935epsmtrp1d;
+        Thu, 19 Oct 2023 12:27:06 +0000 (GMT)
+X-AuditID: b6c32a4c-80dff70000004aa0-14-6531209a77f1
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        5A.FA.08817.A9021356; Thu, 19 Oct 2023 21:27:06 +0900 (KST)
+Received: from cw00choi03 (unknown [10.113.111.106]) by epsmtip1.samsung.com
         (KnoxPortal) with ESMTPA id
-        20231019122453epsmtip2b8d63f8a23aa889a4ac0ea28da91645a~Pgcr0Xg4x1032610326epsmtip2U;
-        Thu, 19 Oct 2023 12:24:53 +0000 (GMT)
+        20231019122706epsmtip1bf2880a4a4a116a9c9e27e969088f164~Pgenr4gdo1757917579epsmtip1s;
+        Thu, 19 Oct 2023 12:27:06 +0000 (GMT)
 From:   "Chanwoo Choi" <cw00.choi@samsung.com>
 To:     "'Sascha Hauer'" <s.hauer@pengutronix.de>,
         <linux-rockchip@lists.infradead.org>
@@ -70,69 +70,68 @@ Cc:     <linux-arm-kernel@lists.infradead.org>,
         "'Conor Dooley'" <conor+dt@kernel.org>,
         <devicetree@vger.kernel.org>,
         "'Sebastian Reichel'" <sebastian.reichel@collabora.com>,
-        "'Rob Herring'" <robh@kernel.org>
-In-Reply-To: <20231018061714.3553817-21-s.hauer@pengutronix.de>
-Subject: RE: [PATCH v8 20/26] dt-bindings: devfreq: event: convert Rockchip
- DFI binding to yaml
-Date:   Thu, 19 Oct 2023 21:24:53 +0900
-Message-ID: <002e01da0287$4352c7b0$c9f85710$@samsung.com>
+        "'Conor Dooley'" <conor.dooley@microchip.com>
+In-Reply-To: <20231018061714.3553817-22-s.hauer@pengutronix.de>
+Subject: RE: [PATCH v8 21/26] dt-bindings: devfreq: event: rockchip,dfi: Add
+ rk3568 support
+Date:   Thu, 19 Oct 2023 21:27:06 +0900
+Message-ID: <002f01da0287$929b1b10$b7d15130$@samsung.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-Mailer: Microsoft Outlook 16.0
 Content-Language: ko
-Thread-Index: AQFYMiMsP3soeW2GlDsie1R9CxInBwIh5MZLAfxxT8OxM7eEgA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA01TaVBTVxj15iUvQZr2GREvOGqI0g6MQB7rpUBdh77RymSmY2fs6OArvLJl
-        axbG2ulUKyCLsrh0akDAsogZIDVICVsdMAXBpSMoigXL5gaKFdCRAqYJDy3/zvd959zznXvn
-        CjDRa9xdkKDUMRolLZfgS7m/Xfby9XEVk4x0MH8Zyrt7i4sqm29wUJH1Bg/ZhsZ4yHiqnouy
-        Hw9i6PqPT/nIPNzDQ90NBTiaPGYFaGLAhqGyOzc5qOXsevTXoQocpTZb+cjWZOGjln9GeGiu
-        zsxF/WNRqL3qIY5S+oI2raAqCysBZekvBVS9oZ9PmY0ZONXX04RTNaU/UDlzUir7ohFQdT2F
-        GDVpXkMVzQwDmfOXSeHxDB3LaMSMMkYVm6CMi5Ds+Dx6a3RQsJT0IUNRiESspBVMhGTbZzKf
-        yAS5PaVEnEzL9faWjNZqJX6fhGtUeh0jjldpdRESRh0rVwepfbW0QqtXxvkqGd3HpFTqH2Qn
-        7kuKbxu+AtTPfPZXZnVxDoIHnpnASQCJQHgsIxd3YBFhATDrX79MsNSOJwC0HP4Ve1cMjx/E
-        3ioK8+7z2EE9gM9zTy0UTwA8Wd7NyQQCAU5sgMWvdzkELsQumHPFwnFwMCIfh215j3iOgROx
-        EdqacuZPXU7Q0Gqa4jgwl/CEF6b+nucIiVA4+3IKsHgZ7Dg9wnVgjFgL654VLGwkhtMPynls
-        3wXmZ6RhrPEW+Or6ba7DGBJFTtB6ZxhnBdtgY+FVDouXw9H2i3wWu8PJ8WacFZwA8ObYGMYW
-        JgAvnE9ZsAuAl8pOzMfECC9oavBj2x6wfuYMYLd4H46/PMpzUCAhhOlpIpayDnYP9C/4usGS
-        Ixl4LpAYFmUzLMpmWJTH8L9ZMeAagSuj1irimBhSTb577hiVwgzmv4B3gAV0F73xbQUcAWgF
-        UIBJXISelJQRCWPpbw8wGlW0Ri9ntK0gyH7beZj7ihiV/Q8pddFkYKg0MNg/IBCRwaRkpdAj
-        Nz9WRMTROiaJYdSM5q2OI3ByP8gBT3q/Sj78Cl8nG0jWCxRHzrdMmpx3qx7Xe08bxypqN1fY
-        eBH3sJ/gUernjplwrmHPuXtf93b2HrKkbvwC35uU+VFfgygqMbFl54vbpvTplrO3VpsJXup2
-        fdWG6qdbfMlyl5A997O1jaLJYL++78raT44+J3eMV+f6jTeJhROzv6AlxZtXNR4YKmmeiXxY
-        8CgkrHbJuQDbzs5rqPr3rpLvX+xNH/nzks1qelPW0ba92GPtqDBsf0a6cffV0LTeD9eXhvFX
-        58wGePwRVmRLyNs3e1y9SX55jX6QszIry/lag5u/a6cCrArtOh3pNXN3KEWmn/u0pj3qg9qE
-        985801WzNVFW5SbhauNp0hvTaOn/AMjXq7KLBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDIsWRmVeSWpSXmKPExsWy7bCSvK6ogmGqwdZuaYuJN66wWKzZe47J
-        Yv6Rc6wW/x+9ZrVYNXUni0Xfi4fMFmeb3rBbbHp8jdXi8q45bBafe48wWnx68J/ZYun1i0wW
-        BxeqWNxuXMFm0br3CLvF/z072C0OfnjCavF3+yYWi7uv/SyOr33GZtFyx9RB1GPNvDWMHjvu
-        LmH02DnrLrvHplWdbB53ru1h89i8pN6j/6+BR9+WVYwe26/NY/b4vEnOY/7vx4wB3FFcNimp
-        OZllqUX6dglcGccen2AseKtbsab7ElMD41PVLkZODgkBE4l5E++xdjFycQgJbGeUaD/xnBki
-        ISkx7eJRIJsDyBaWOHy4GKLmOaPEptZv7CBxNgEdiQU/QkHKRQRCJfpP7GACqWEWWMkm8X3R
-        D2aIhkOMEtu2HGQHqeIUsJf4v6cfbIGwQLzErzV/WUBsFgFViY1f7rOC2LwClhJ/vn5hhLAF
-        JU7OfMICsoxZQE+ibSNYmFlAXmL72zlQdypI/Hy6jBUiLiIxu7ONGeIgJ4lvZ6+yTGAUnoVk
-        0iyESbOQTJqFpHsBI8sqRtHUguLc9NzkAkO94sTc4tK8dL3k/NxNjOAEoBW0g3HZ+r96hxiZ
-        OBiB3uNgVhLhVfUwSBXiTUmsrEotyo8vKs1JLT7EKM3BoiTOq5zTmSIkkJ5YkpqdmlqQWgST
-        ZeLglGpgcjSvd00viN28cHXTDN752mLnhJ+8fXz17kpjHuuQP5/cJ7fuftNSrJcqZqW9SKrC
-        dskTobjXWRsfvJPyiTedLXNT71aGn/7juTqP+vSty66amL8rvLhG8Gmk1N9pKV27eOd9mOe2
-        5svcvpoNh9dc3vI+y/iP39ZfquxpPleL6mQNl89k2rT14DGfV/NCM2pUAjNn71ghp+A6fdqN
-        6KgFRnnOSf0hFkJzIu9eXSOza13SFsE3n+/8co3Nzb76YMLPFZ/eXOlhmO7RbtfunKPBMiHY
-        Q9Wq7tL+6btjE06EMFtVTIiZWGuTLrHuwNTOs2d3h8px3FThmmajKaxd6TX7S34/79HdvjJb
-        r10+uS42SYmlOCPRUIu5qDgRAOnI2fZvAwAA
-X-CMS-MailID: 20231019122453epcas1p4eddbd8295bc4bb460aef9233489f80cf
+Thread-Index: AQFYMiMsP3soeW2GlDsie1R9CxInBwJUatcTAX/BZO6xNglxEA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Ta1CUZRT23W9vOC59LDC+bU0ua5hSi/vJ7cXAmDD5NAwa9U9JsC1fQCy7
+        y14wHSbQAHe9gAQpLCRUQMggOy6MsNsyzBKDUiMFNKsUjATWcDFISO6Xdvmw+Pecc57nPec5
+        7xwuxl9jC7gpCi2lVkjlIvZW5u3v9/iLy4QEJSluA6jwwS9MVN/azUDF5hYOqujoZqG14QkW
+        qvvCwkT5o79j6N65xxxkHnGwUJ+1nI1mLncAND20hqHq+z0MZP/qZfTb2Vo2ym3t4CD7349Y
+        aKXZzESDE++gOzf/ZKOcgaAIb7L+ej0gWwarAGkxDnJIc52BTQ44bGyysSqLHJivBmTBioTM
+        b6oDZLPjOkbOmF8iK5ZGQOy291LDkilpIqUWUgqZMjFFkRQuevtYfGR8ULCEEBOhKEQkVEjT
+        qHDRwehY8aEUudOqSJghleucqVipRiPaeyBMrdRpKWGyUqMNF1GqRLkqSOWvkaZpdIokfwWl
+        3U9IJPuCnMSE1OQ8fS5DNen5SY+jlpMNTPgFwOVCPBA2LLx/AWzl8nEbgEuLdg4dTAM4+fAW
+        kw5mAXzSUOusuK0rlj+bZ9GFVgBLDZWYq8DHxwBcyw5wPcvGX4OV8ydcaS/8BCy428Jw8TH8
+        WzZc1pcwXBw3/A1YP3PKxfHE4+Bw1bn195m4LxyrusdyYR4eCi/O5gIae8Cu0kdMF8bwHbD5
+        r3KMnkcIF/6oYdF5L1hmyMPovm9Ce9Uo5uoLcZMbLC5Z3hAchAudN9k09oTjd5o2jAngWEEe
+        hxYUAdgzMfFMDeCtGzkb6gDYVl207gDD90CTdS+d9oGWpS8BPYU7nHx6iUXvlwf1eXyashP2
+        DQ0yaPw8/Oa8gX0FiIybvBk3eTNu8mP8v1klYNYBAaXSpCVRMkJFiBXUqf8+XKZMM4P1S/CL
+        bgFzphX/dsDggnYAuZjIi+dLSig+L1F6+gylVsardXJK0w6CnBsvxATeMqXzlBTaeCIwVBIY
+        vC8gEBHBhGg77+T0+UQ+niTVUqkUpaLUz3QMrpsgm1Gk//Chx8yktzXrg7Pp313hxsk6EtxP
+        Q2NXCOcVrJlI72XcLdYvWVbHty82HInQxgzsWpSqF18YiszI2dY9F0PNLld83BalH9UYpl4s
+        7Jw+Pmsdt+VHRoH0pU/n4sTz7Rk/J5l2HrWWXvu6q8H60dUtgY5+YRPP58xb//BXI3dEe7tH
+        pb06lSm3PDHU9HWk2/JqyqJ1Ww7NltQmlKa8ax/J1EdEz/WGLTaOmTJbwo/7GUKe65/qnL+0
+        n3vSZ7fYI+bHxzE2fuPrXKI/4r5gl+z206M/xDMelGfmHLg6dizrc7tvPefyjUxeNcfmMZx9
+        +OJqbzM/5adKXXafJWDIof1192ERU5MsJfwwtUb6L55RNzuSBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrMIsWRmVeSWpSXmKPExsWy7bCSnO4sBcNUg18NMhYTb1xhsViz9xyT
+        xZRNO9gt5h85x2rx/9FrVotVU3eyWPS9eMhscbbpDbvFpsfXWC0u75rDZvG59wijxacH/5kt
+        ll6/yGRxcKGKxe3GFWwWrXuPsFsc/PCE1eLv9k0sFndf+1kcX/uMzaLljqmDqMeaeWsYPXbc
+        XcLosXPWXXaPTas62TzuXNvD5rF5Sb3HnR9LGT36/xp49G1Zxeix/do8Zo/Pm+Q85v9+zBjA
+        E8Vlk5Kak1mWWqRvl8CV0dbRylTwTrji4rUV7A2M6wW6GDk5JARMJP40/2AFsYUEdjNK9Cy0
+        gohLSky7eJS5i5EDyBaWOHy4uIuRC6jkOaPEppcb2EHibAI6Egt+hIKUiwiESvSf2MEEUsMs
+        sJVNYtLhr4wQDYcYJe6d280E0sApYC+x5nM5SIOwQLTE6j3TWEBsFgFViZdLzoLdwCtgKdH9
+        rZURwhaUODnzCQtIK7OAnkTbRrAws4C8xPa3c5ghzlSQ+Pl0GStEXERidmcbM8Q9ThIHl7xg
+        nsAoPAvJpFkIk2YhmTQLSfcCRpZVjJKpBcW56bnFhgVGeanlesWJucWleel6yfm5mxjB6UBL
+        awfjnlUf9A4xMnEwAn3IwawkwqvqYZAqxJuSWFmVWpQfX1Sak1p8iFGag0VJnPfb694UIYH0
+        xJLU7NTUgtQimCwTB6dUA9NqqWUHvlydNOWujUtpi4Bc8ITAc+tsU7KXHXo8Ke+90Y/Xq/9W
+        H/jy5P3ST9Fbay+vX7tF0GGfT92b7GOXj3Wfir48dcbZtWe3sJz5dPnEtd0JdYzestPtVTuq
+        g6J2hlWur2Bi0ZjbNKeXg+mgYueU1kcKq+MN0goNFa+G/rFQ2c+sPP/WvdYz9vz8NUX+k62e
+        8Amn1AlHroy5caHeI707dxLPJ2d/jZ8MGb23JP63rZ+buDeY6T3b9EPLJKe8+TNpYco8semr
+        9dtaM2acYP6+TtNp0i1Pq6JAIeOwsKUF/lFagRzJqy90GvkfcOv7n/A8/jq3wzz+QxNeaNUt
+        OrVWdZuHatsrdqNTdg9FyoSUWIozEg21mIuKEwFMpQeWdgMAAA==
+X-CMS-MailID: 20231019122706epcas1p37194d4e0e8ee7cf441922f367e4fdb7e
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20231018063729epcas1p27cf2789bbb10d6ef59e20d2e981be580
+X-CMS-RootMailID: 20231018063804epcas1p15faa4554f249a484ffb8ca8f3433daf3
 References: <20231018061714.3553817-1-s.hauer@pengutronix.de>
-        <CGME20231018063729epcas1p27cf2789bbb10d6ef59e20d2e981be580@epcas1p2.samsung.com>
-        <20231018061714.3553817-21-s.hauer@pengutronix.de>
+        <CGME20231018063804epcas1p15faa4554f249a484ffb8ca8f3433daf3@epcas1p1.samsung.com>
+        <20231018061714.3553817-22-s.hauer@pengutronix.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -156,151 +155,60 @@ X-Mailing-List: linux-pm@vger.kernel.org
 > <krzysztof.kozlowski+dt@linaro.org>; Conor Dooley <conor+dt@kernel.org>;
 > devicetree@vger.kernel.org; Sebastian Reichel
 > <sebastian.reichel@collabora.com>; Sascha Hauer <s.hauer@pengutronix.de>;
-> Rob Herring <robh@kernel.org>; Chanwoo Choi <cw00.choi@samsung.com>
-> Subject: [PATCH v8 20/26] dt-bindings: devfreq: event: convert Rockchip
-> DFI binding to yaml
+> Conor Dooley <conor.dooley@microchip.com>; Chanwoo Choi
+> <cw00.choi@samsung.com>
+> Subject: [PATCH v8 21/26] dt-bindings: devfreq: event: rockchip,dfi: Add
+> rk3568 support
 > 
-> Convert the Rockchip DFI binding to yaml.
+> This adds the rockchip,rk3568-dfi compatible to the binding. Make clocks
+> optional for this SoC as the RK3568 doesn't have a kernel controllable
+> PCLK.
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 > Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
 > ---
-> 
-> Notes:
->     Changes since v4:
->      - Revert to state of v3 (changes were lost in v4)
-> 
->  .../bindings/devfreq/event/rockchip,dfi.yaml  | 61 +++++++++++++++++++
->  .../bindings/devfreq/event/rockchip-dfi.txt   | 18 ------
->  .../rockchip,rk3399-dmc.yaml                  |  2 +-
->  3 files changed, 62 insertions(+), 19 deletions(-)  create mode 100644
-> Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
->  delete mode 100644
-> Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
+>  .../bindings/devfreq/event/rockchip,dfi.yaml      | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
 > 
 > diff --git
 > a/Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
 > b/Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
-> new file mode 100644
-> index 0000000000000..7a82f6ae0701e
-> --- /dev/null
+> index 7a82f6ae0701e..e8b64494ee8bd 100644
+> --- a/Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
 > +++ b/Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
-> @@ -0,0 +1,61 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML 1.2
-> +---
-> +$id:
-> +https://protect2.fireeye.com/v1/url?k=33df13d2-525406e4-33de989d-000bab
-> +ff9b5d-4b7a223f95f3c587&q=1&e=ef8cc89e-5dd5-4fbc-9f53-24c072471908&u=ht
-> +tp%3A%2F%2Fdevicetree.org%2Fschemas%2Fdevfreq%2Fevent%2Frockchip%2Cdfi.
-> +yaml%23
-> +$schema:
-> +https://protect2.fireeye.com/v1/url?k=01ded479-6055c14f-01df5f36-000bab
-> +ff9b5d-e828a5719f87a6ff&q=1&e=ef8cc89e-5dd5-4fbc-9f53-24c072471908&u=ht
-> +tp%3A%2F%2Fdevicetree.org%2Fmeta-schemas%2Fcore.yaml%23
-> +
-> +title: Rockchip DFI
-> +
-> +maintainers:
-> +  - Sascha Hauer <s.hauer@pengutronix.de>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - rockchip,rk3399-dfi
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    items:
-> +      - const: pclk_ddr_mon
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  rockchip,pmu:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      Phandle to the syscon managing the "PMU general register files".
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - clock-names
-> +  - interrupts
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/rk3308-cru.h>
-> +
-> +    bus {
-> +      #address-cells = <2>;
-> +      #size-cells = <2>;
-> +
-> +      dfi: dfi@ff630000 {
-> +        compatible = "rockchip,rk3399-dfi";
-> +        reg = <0x00 0xff630000 0x00 0x4000>;
-> +        interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH 0>;
-> +        rockchip,pmu = <&pmugrf>;
-> +        clocks = <&cru PCLK_DDR_MON>;
-> +        clock-names = "pclk_ddr_mon";
-> +      };
-> +    };
-> diff --git a/Documentation/devicetree/bindings/devfreq/event/rockchip-
-> dfi.txt b/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
-> deleted file mode 100644
-> index 148191b0fc158..0000000000000
-> --- a/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
-> +++ /dev/null
-> @@ -1,18 +0,0 @@
-> -
-> -* Rockchip rk3399 DFI device
-> -
-> -Required properties:
-> -- compatible: Must be "rockchip,rk3399-dfi".
-> -- reg: physical base address of each DFI and length of memory mapped
-> region
-> -- rockchip,pmu: phandle to the syscon managing the "pmu general register
-> files"
-> -- clocks: phandles for clock specified in "clock-names" property
-> -- clock-names : the name of clock used by the DFI, must be
-"pclk_ddr_mon";
-> -
-> -Example:
-> -	dfi: dfi@ff630000 {
-> -		compatible = "rockchip,rk3399-dfi";
-> -		reg = <0x00 0xff630000 0x00 0x4000>;
-> -		rockchip,pmu = <&pmugrf>;
-> -		clocks = <&cru PCLK_DDR_MON>;
-> -		clock-names = "pclk_ddr_mon";
-> -	};
-> diff --git a/Documentation/devicetree/bindings/memory-
-> controllers/rockchip,rk3399-dmc.yaml
-> b/Documentation/devicetree/bindings/memory-controllers/rockchip,rk3399-
-> dmc.yaml
-> index 4e4af3cfc0fe4..1f58ee99be280 100644
-> --- a/Documentation/devicetree/bindings/memory-
-> controllers/rockchip,rk3399-dmc.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/rockchip,rk33
-> +++ 99-dmc.yaml
-> @@ -18,7 +18,7 @@ properties:
->      $ref: /schemas/types.yaml#/definitions/phandle
->      description:
->        Node to get DDR loading. Refer to
-> -      Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt.
-> +      Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml.
+> @@ -13,6 +13,7 @@ properties:
+>    compatible:
+>      enum:
+>        - rockchip,rk3399-dfi
+> +      - rockchip,rk3568-dfi
 > 
 >    clocks:
 >      maxItems: 1
+> @@ -34,11 +35,21 @@ properties:
+> 
+>  required:
+>    - compatible
+> -  - clocks
+> -  - clock-names
+>    - interrupts
+>    - reg
+> 
+> +if:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        enum:
+> +          - rockchip,rk3399-dfi
+> +
+> +then:
+> +  required:
+> +    - clocks
+> +    - clock-names
+> +
+>  additionalProperties: false
+> 
+>  examples:
 > --
 > 2.39.2
 
