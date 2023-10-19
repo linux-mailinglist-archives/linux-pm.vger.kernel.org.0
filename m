@@ -2,294 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 542697CF074
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 08:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CB67CF2D5
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 10:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbjJSGxI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Oct 2023 02:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39318 "EHLO
+        id S232976AbjJSIlg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Oct 2023 04:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232383AbjJSGxH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Oct 2023 02:53:07 -0400
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15BF119
-        for <linux-pm@vger.kernel.org>; Wed, 18 Oct 2023 23:53:04 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1qtMtZ-0008N8-0Z; Thu, 19 Oct 2023 08:52:37 +0200
-Received: from [2a0a:edc0:2:b01:1d::c0] (helo=ptx.whiteo.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1qtMtX-002jMJ-SI; Thu, 19 Oct 2023 08:52:35 +0200
-Received: from sha by ptx.whiteo.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1qtMtX-00FE1j-Nd; Thu, 19 Oct 2023 08:52:35 +0200
-Date:   Thu, 19 Oct 2023 08:52:35 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Chanwoo Choi <chanwoo@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        linux-rockchip@lists.infradead.org, oe-kbuild-all@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Vincent Legoll <vincent.legoll@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: Re: [PATCH v8 16/26] PM / devfreq: rockchip-dfi: Add perf support
-Message-ID: <20231019065235.GL3359458@pengutronix.de>
-References: <20231018061714.3553817-17-s.hauer@pengutronix.de>
- <202310181557.GIXGL21M-lkp@intel.com>
- <f5ce51a4-d47d-4074-9498-8632b09791e6@kernel.org>
+        with ESMTP id S232846AbjJSIle (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Oct 2023 04:41:34 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E41E12F;
+        Thu, 19 Oct 2023 01:41:32 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39J7sYWF031717;
+        Thu, 19 Oct 2023 08:40:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=5nq85dacz/FT/KDtbSNEQek159G2NxW0RwewWC/0M3A=;
+ b=Im+CPsSeIkBrBl+5muEz2poNcdn0mh4Wthsa7prnAfICWjdPHJWmN1Qk6YsVfCfDYkzJ
+ e+f37evjATFjEspkdCGuuIuSrZylx0h0+UpMq3iIUhJ/emeIwy0snPRXB8FoSdxpBstl
+ m5wJFz4L83eKTdsSOTu+eXYPOrEoyXIH0CSVKyEQvQaPzpSRkxI9l9CTOLSnNjnU2xd+
+ o28/qzQZOj+SkZoqx/I9isA3j14mJXBhiefYac3DktFJ6ylDmJx8kRttDbVUZtYZVGyj
+ vdC3UsyAuYcnJU1554XMr8uSaSUk6t157jvM4ncWkgy1OkoyEgLQUIvUWndU+3zrB/+3 2Q== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ttnnah9r7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Oct 2023 08:40:56 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39J8euhP018028
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Oct 2023 08:40:56 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.39; Thu, 19 Oct 2023 01:40:50 -0700
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <ilia.lin@kernel.org>,
+        <sivaprak@codeaurora.org>, <quic_kathirav@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: [PATCH v4 0/9] Enable cpufreq for IPQ5332 & IPQ9574
+Date:   Thu, 19 Oct 2023 14:10:34 +0530
+Message-ID: <cover.1697694811.git.quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f5ce51a4-d47d-4074-9498-8632b09791e6@kernel.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: l_mvUwQr8Z_aqSFnuoselBA5hGrldM5P
+X-Proofpoint-ORIG-GUID: l_mvUwQr8Z_aqSFnuoselBA5hGrldM5P
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-19_06,2023-10-18_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ phishscore=0 adultscore=0 malwarescore=0 spamscore=0 bulkscore=0
+ clxscore=1011 mlxlogscore=905 impostorscore=0 suspectscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310190072
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Chanwoo,
+Depends On:
+https://lore.kernel.org/lkml/20230913-gpll_cleanup-v2-6-c8ceb1a37680@quicinc.com/T/
 
-On Thu, Oct 19, 2023 at 12:11:14AM +0900, Chanwoo Choi wrote:
-> Hi Sascha, 
-> 
-> Could you plesae fix the following kernel build report?
+This patch series aims to enable cpufreq for IPQ5332 and IPQ9574.
+For IPQ5332, a minor enhancement to Stromer Plus ops and a safe
+source switch is needed before cpu freq can be enabled.
 
-Just did that as a reply to the original patch. I moved
-rockchip_ddr_perf_counters_add() inside the #ifdef CONFIG_PERF_EVENTS
+These are also included in this series. Posting this as a single
+series. Please let me know if this is not correct, will split in
+the subsequent revisions.
 
-Thanks for reviewing this series and for bringing it forward.
+Passed the following DT related validations
+make W=1 ARCH=arm64 -j16 DT_CHECKER_FLAGS='-v -m' dt_binding_check DT_SCHEMA_FILES=qcom
+make W=1 ARCH=arm64 -j16 CHECK_DTBS=y DT_SCHEMA_FILES=qcom dtbs_check
 
-Sascha
+For IPQ5332:
+~~~~~~~~~~~
+	* This patch series introduces stromer plus ops which
+	  builds on stromer ops and implements a different
+	  set_rate and determine_rate.
 
-> 
-> On 23. 10. 18. 16:58, kernel test robot wrote:
-> > Hi Sascha,
-> > 
-> > kernel test robot noticed the following build warnings:
-> > 
-> > [auto build test WARNING on linus/master]
-> > [also build test WARNING on v6.6-rc6]
-> > [cannot apply to next-20231018]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> > 
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Sascha-Hauer/PM-devfreq-rockchip-dfi-Make-pmu-regmap-mandatory/20231018-142228
-> > base:   linus/master
-> > patch link:    https://lore.kernel.org/r/20231018061714.3553817-17-s.hauer%40pengutronix.de
-> > patch subject: [PATCH v8 16/26] PM / devfreq: rockchip-dfi: Add perf support
-> > config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20231018/202310181557.GIXGL21M-lkp@intel.com/config)
-> > compiler: m68k-linux-gcc (GCC) 13.2.0
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231018/202310181557.GIXGL21M-lkp@intel.com/reproduce)
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202310181557.GIXGL21M-lkp@intel.com/
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> >>> drivers/devfreq/event/rockchip-dfi.c:203:13: warning: 'rockchip_ddr_perf_counters_add' defined but not used [-Wunused-function]
-> >      203 | static void rockchip_ddr_perf_counters_add(struct rockchip_dfi *dfi,
-> >          |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > --
-> >>> drivers/devfreq/event/rockchip-dfi.c:79: warning: Function parameter or member 'write_access' not described in 'dmc_count_channel'
-> > 
-> > 
-> > vim +/rockchip_ddr_perf_counters_add +203 drivers/devfreq/event/rockchip-dfi.c
-> > 
-> >     66	
-> >     67	/**
-> >     68	 * struct dmc_count_channel - structure to hold counter values from the DDR controller
-> >     69	 * @access:       Number of read and write accesses
-> >     70	 * @clock_cycles: DDR clock cycles
-> >     71	 * @read_access:  number of read accesses
-> >     72	 * @write_acccess: number of write accesses
-> >     73	 */
-> >     74	struct dmc_count_channel {
-> >     75		u64 access;
-> >     76		u64 clock_cycles;
-> >     77		u64 read_access;
-> >     78		u64 write_access;
-> >   > 79	};
-> >     80	
-> >     81	struct dmc_count {
-> >     82		struct dmc_count_channel c[DMC_MAX_CHANNELS];
-> >     83	};
-> >     84	
-> >     85	/*
-> >     86	 * The dfi controller can monitor DDR load. It has an upper and lower threshold
-> >     87	 * for the operating points. Whenever the usage leaves these bounds an event is
-> >     88	 * generated to indicate the DDR frequency should be changed.
-> >     89	 */
-> >     90	struct rockchip_dfi {
-> >     91		struct devfreq_event_dev *edev;
-> >     92		struct devfreq_event_desc desc;
-> >     93		struct dmc_count last_event_count;
-> >     94	
-> >     95		struct dmc_count last_perf_count;
-> >     96		struct dmc_count total_count;
-> >     97		seqlock_t count_seqlock; /* protects last_perf_count and total_count */
-> >     98	
-> >     99		struct device *dev;
-> >    100		void __iomem *regs;
-> >    101		struct regmap *regmap_pmu;
-> >    102		struct clk *clk;
-> >    103		int usecount;
-> >    104		struct mutex mutex;
-> >    105		u32 ddr_type;
-> >    106		unsigned int channel_mask;
-> >    107		unsigned int max_channels;
-> >    108		enum cpuhp_state cpuhp_state;
-> >    109		struct hlist_node node;
-> >    110		struct pmu pmu;
-> >    111		struct hrtimer timer;
-> >    112		unsigned int cpu;
-> >    113		int active_events;
-> >    114		int burst_len;
-> >    115		int buswidth[DMC_MAX_CHANNELS];
-> >    116	};
-> >    117	
-> >    118	static int rockchip_dfi_enable(struct rockchip_dfi *dfi)
-> >    119	{
-> >    120		void __iomem *dfi_regs = dfi->regs;
-> >    121		int ret = 0;
-> >    122	
-> >    123		mutex_lock(&dfi->mutex);
-> >    124	
-> >    125		dfi->usecount++;
-> >    126		if (dfi->usecount > 1)
-> >    127			goto out;
-> >    128	
-> >    129		ret = clk_prepare_enable(dfi->clk);
-> >    130		if (ret) {
-> >    131			dev_err(&dfi->edev->dev, "failed to enable dfi clk: %d\n", ret);
-> >    132			goto out;
-> >    133		}
-> >    134	
-> >    135		/* clear DDRMON_CTRL setting */
-> >    136		writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_TIMER_CNT_EN | DDRMON_CTRL_SOFTWARE_EN |
-> >    137			       DDRMON_CTRL_HARDWARE_EN), dfi_regs + DDRMON_CTRL);
-> >    138	
-> >    139		/* set ddr type to dfi */
-> >    140		switch (dfi->ddr_type) {
-> >    141		case ROCKCHIP_DDRTYPE_LPDDR2:
-> >    142		case ROCKCHIP_DDRTYPE_LPDDR3:
-> >    143			writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_LPDDR23, DDRMON_CTRL_DDR_TYPE_MASK),
-> >    144				       dfi_regs + DDRMON_CTRL);
-> >    145			break;
-> >    146		case ROCKCHIP_DDRTYPE_LPDDR4:
-> >    147		case ROCKCHIP_DDRTYPE_LPDDR4X:
-> >    148			writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_LPDDR4, DDRMON_CTRL_DDR_TYPE_MASK),
-> >    149				       dfi_regs + DDRMON_CTRL);
-> >    150			break;
-> >    151		default:
-> >    152			break;
-> >    153		}
-> >    154	
-> >    155		/* enable count, use software mode */
-> >    156		writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_SOFTWARE_EN, DDRMON_CTRL_SOFTWARE_EN),
-> >    157			       dfi_regs + DDRMON_CTRL);
-> >    158	out:
-> >    159		mutex_unlock(&dfi->mutex);
-> >    160	
-> >    161		return ret;
-> >    162	}
-> >    163	
-> >    164	static void rockchip_dfi_disable(struct rockchip_dfi *dfi)
-> >    165	{
-> >    166		void __iomem *dfi_regs = dfi->regs;
-> >    167	
-> >    168		mutex_lock(&dfi->mutex);
-> >    169	
-> >    170		dfi->usecount--;
-> >    171	
-> >    172		WARN_ON_ONCE(dfi->usecount < 0);
-> >    173	
-> >    174		if (dfi->usecount > 0)
-> >    175			goto out;
-> >    176	
-> >    177		writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_SOFTWARE_EN),
-> >    178			       dfi_regs + DDRMON_CTRL);
-> >    179		clk_disable_unprepare(dfi->clk);
-> >    180	out:
-> >    181		mutex_unlock(&dfi->mutex);
-> >    182	}
-> >    183	
-> >    184	static void rockchip_dfi_read_counters(struct rockchip_dfi *dfi, struct dmc_count *res)
-> >    185	{
-> >    186		u32 i;
-> >    187		void __iomem *dfi_regs = dfi->regs;
-> >    188	
-> >    189		for (i = 0; i < dfi->max_channels; i++) {
-> >    190			if (!(dfi->channel_mask & BIT(i)))
-> >    191				continue;
-> >    192			res->c[i].read_access = readl_relaxed(dfi_regs +
-> >    193					DDRMON_CH0_RD_NUM + i * 20);
-> >    194			res->c[i].write_access = readl_relaxed(dfi_regs +
-> >    195					DDRMON_CH0_WR_NUM + i * 20);
-> >    196			res->c[i].access = readl_relaxed(dfi_regs +
-> >    197					DDRMON_CH0_DFI_ACCESS_NUM + i * 20);
-> >    198			res->c[i].clock_cycles = readl_relaxed(dfi_regs +
-> >    199					DDRMON_CH0_COUNT_NUM + i * 20);
-> >    200		}
-> >    201	}
-> >    202	
-> >  > 203	static void rockchip_ddr_perf_counters_add(struct rockchip_dfi *dfi,
-> >    204						   const struct dmc_count *now,
-> >    205						   struct dmc_count *res)
-> >    206	{
-> >    207		const struct dmc_count *last = &dfi->last_perf_count;
-> >    208		int i;
-> >    209	
-> >    210		for (i = 0; i < dfi->max_channels; i++) {
-> >    211			res->c[i].read_access = dfi->total_count.c[i].read_access +
-> >    212				(u32)(now->c[i].read_access - last->c[i].read_access);
-> >    213			res->c[i].write_access = dfi->total_count.c[i].write_access +
-> >    214				(u32)(now->c[i].write_access - last->c[i].write_access);
-> >    215			res->c[i].access = dfi->total_count.c[i].access +
-> >    216				(u32)(now->c[i].access - last->c[i].access);
-> >    217			res->c[i].clock_cycles = dfi->total_count.c[i].clock_cycles +
-> >    218				(u32)(now->c[i].clock_cycles - last->c[i].clock_cycles);
-> >    219		}
-> >    220	}
-> >    221	
-> > 
-> 
-> -- 
-> Best Regards,
-> Samsung Electronics
-> Chanwoo Choi
-> 
-> 
+	  A different set_rate is needed since stromer plus PLLs
+	  do not support dynamic frequency scaling. To switch
+	  between frequencies, we have to shut down the PLL,
+	  configure the L and ALPHA values and turn on again. So
+	  introduce the separate set of ops for Stromer Plus PLL.
+
+	* Update ipq_pll_stromer_plus to use clk_alpha_pll_stromer_plus_ops
+	  instead of clk_alpha_pll_stromer_ops.
+
+	* Set 'l' value to a value that is supported on all SKUs.
+
+	* Provide safe source switch for a53pll
+
+	* Include IPQ5332 in cpufreq nvmem framework
+
+	* Add OPP details to device tree
+
+For IPQ9574:
+~~~~~~~~~~~
+	* Include IPQ9574 in cpufreq nvmem framework
+
+	* Add OPP details to device tree
+
+Removed 2 patches from V1 as they have been merged
+	* dt-bindings: cpufreq: qcom-cpufreq-nvmem: document IPQ5332
+	* dt-bindings: cpufreq: qcom-cpufreq-nvmem: document IPQ9574
+
+v4:	Included a patch to fix 'kernel test robot' build error --
+	https://lore.kernel.org/r/202310181650.g8THtfsm-lkp@intel.com/
+
+Varadarajan Narayanan (9):
+  clk: qcom: config IPQ_APSS_6018 should depend on QCOM_SMEM
+  clk: qcom: clk-alpha-pll: introduce stromer plus ops
+  clk: qcom: apss-ipq-pll: Use stromer plus ops for stromer plus pll
+  clk: qcom: apss-ipq-pll: Fix 'l' value for ipq5332_pll_config
+  clk: qcom: apss-ipq6018: ipq5332: add safe source switch for a53pll
+  cpufreq: qti: Enable cpufreq for ipq53xx
+  arm64: dts: qcom: ipq5332: populate the opp table based on the eFuse
+  cpufreq: qti: Introduce cpufreq for ipq95xx
+  arm64: dts: qcom: ipq9574: populate the opp table based on the eFuse
+
+ arch/arm64/boot/dts/qcom/ipq5332.dtsi | 19 +++++++++--
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi | 21 +++++++++++-
+ drivers/clk/qcom/Kconfig              |  1 +
+ drivers/clk/qcom/apss-ipq-pll.c       |  4 +--
+ drivers/clk/qcom/apss-ipq6018.c       | 58 +++++++++++++++++++++++++++++++-
+ drivers/clk/qcom/clk-alpha-pll.c      | 63 +++++++++++++++++++++++++++++++++++
+ drivers/clk/qcom/clk-alpha-pll.h      |  1 +
+ drivers/cpufreq/cpufreq-dt-platdev.c  |  2 ++
+ drivers/cpufreq/qcom-cpufreq-nvmem.c  | 16 +++++++++
+ 9 files changed, 178 insertions(+), 7 deletions(-)
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.7.4
+
