@@ -2,76 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CECF17CFC04
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 16:05:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94E257CFC16
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 16:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345991AbjJSOFz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Oct 2023 10:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57766 "EHLO
+        id S1345616AbjJSOIY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Oct 2023 10:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345929AbjJSOFy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Oct 2023 10:05:54 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4151130;
-        Thu, 19 Oct 2023 07:05:49 -0700 (PDT)
-Received: from i5e861907.versanet.de ([94.134.25.7] helo=phil.lan)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1qtTef-0004bU-GJ; Thu, 19 Oct 2023 16:05:41 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     linux-rockchip@lists.infradead.org,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Mark Rutland <mark.rutland@arm.com>, linux-pm@vger.kernel.org,
-        kernel@pengutronix.de, Vincent Legoll <vincent.legoll@gmail.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Chanwoo Choi <chanwoo@kernel.org>, devicetree@vger.kernel.org,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Will Deacon <will@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>
-Subject: Re: (subset) [PATCH v8 00/26] Add perf support to the rockchip-dfi driver
-Date:   Thu, 19 Oct 2023 16:05:39 +0200
-Message-Id: <169772432936.1425163.10520107144640249546.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231018061714.3553817-1-s.hauer@pengutronix.de>
-References: <20231018061714.3553817-1-s.hauer@pengutronix.de>
+        with ESMTP id S235413AbjJSOIX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Oct 2023 10:08:23 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A27183
+        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 07:08:20 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-d9a6399cf78so742965276.0
+        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 07:08:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697724500; x=1698329300; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tn/F8o/e5g+CaRAdyAq1gtw+JfJqdGScBADInd6iQVI=;
+        b=iQCuOnLdHUvX/uGzWoRrrpS5R+3szQJRR7Og9ReypjB5+d3Fxhi8JAR/kuptzT9gvR
+         bSmO5SKB8VP1lYEAEYj19/JqwZKvEy9imYVOok1z181c+hu6cgd6gKCb7iw3GweKmiqA
+         HercoOvM+HqBHxJ8PxAcCqUxV7qcSu9LsDX8aYTzImF+V6jp2j/ygySDHQ1aaIRLtxIF
+         FjE9FBg+7xzjIFGFqw3Yd/6XHXxsRhWUttD73HTfurz0WzMYrH0kS3BxhafoV0EyBiv2
+         uMLDvI+A1ORyoJZjehtc0zldF/oVQRGr8HUv1iP6veUa9TtUeQRJGXGgiUoJ8BeRMd2c
+         NTng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697724500; x=1698329300;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Tn/F8o/e5g+CaRAdyAq1gtw+JfJqdGScBADInd6iQVI=;
+        b=N6uVCO86Fd0u3X/nDpJhsTIfHUKrR2iPHjM7SieCPySNG3asW0ek3m/yt/dYxgJgiN
+         ZOgayy8dj/5oYIk5CWbx9j4CSubpsuCRR7GVXAhx4IbqHU3i9ZSzL2i7Hhtx7NE6TpXF
+         OaC/J0M2OoffnqyRxD1XVtSKGEgavQ6GvrlX6rr3tu+WyN3AqzruJSIRnB5Hvf9j8m8C
+         mRknwRpBktcCX2jzB45CCrJ8xUAdqh8Rb4Ks/L19SpCIlQBoXjkxyVK0Y9p2Tvvmja1g
+         lTv1IOw82g/KT9ETAsv1DXeXHC2zHfdhq1S3JmLILGDO80pNV+H7OcMlhGtB5bAxByTV
+         GJwg==
+X-Gm-Message-State: AOJu0YwmUEIAk8X872Qx46ywT0fzNzXNCEhW6J814gl8L3wxwYgQ4nZS
+        i+4QsyFKPymPvyLBWDGhpm58qlHS2fMi3YQXd+UynQ==
+X-Google-Smtp-Source: AGHT+IG/mrmUX35BBmoQAp5bc48eTYOn5e1DBnNGvJopYm45PRsEmhY1lpboqPwPq9YQ44ZSsybWD7ZZPsAeM+tOXY0=
+X-Received: by 2002:a5b:b0e:0:b0:d9a:d9dd:bef with SMTP id z14-20020a5b0b0e000000b00d9ad9dd0befmr1581625ybp.3.1697724500149;
+ Thu, 19 Oct 2023 07:08:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1697694811.git.quic_varada@quicinc.com> <c7bfa2233ce4bbdc326e8aa1967cc5efd1f89932.1697694811.git.quic_varada@quicinc.com>
+In-Reply-To: <c7bfa2233ce4bbdc326e8aa1967cc5efd1f89932.1697694811.git.quic_varada@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 19 Oct 2023 17:08:08 +0300
+Message-ID: <CAA8EJpqfOjGp+FYCxfkFukvZ+bRFytvSFO+nvmMBn6heNpRraA@mail.gmail.com>
+Subject: Re: [PATCH v4 6/9] cpufreq: qti: Enable cpufreq for ipq53xx
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        rafael@kernel.org, viresh.kumar@linaro.org, ilia.lin@kernel.org,
+        sivaprak@codeaurora.org, quic_kathirav@quicinc.com,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 18 Oct 2023 08:16:48 +0200, Sascha Hauer wrote:
-> This series integrates the recent review feedback from Chanwoo Choi to
-> v7.
-> 
-> Chanwoo, I am sending the full patchset again for people to try this
-> series. You said that you applied 1-5 already, so please start picking
-> from 6/26.
-> 
-> [...]
+On Thu, 19 Oct 2023 at 11:43, Varadarajan Narayanan
+<quic_varada@quicinc.com> wrote:
+>
+> IPQ53xx have different OPPs available for the CPU based on
+> SoC variant. This can be determined through use of an eFuse
+> register present in the silicon.
+>
+> Added support for ipq53xx on nvmem driver which helps to
+> determine OPPs at runtime based on the eFuse register which
+> has the CPU frequency limits. opp-supported-hw dt binding
+> can be used to indicate the available OPPs for each limit.
+>
+> nvmem driver also creates the "cpufreq-dt" platform_device after
+> passing the version matching data to the OPP framework so that the
+> cpufreq-dt handles the actual cpufreq implementation.
+>
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 
-Applied, thanks!
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[24/26] arm64: dts: rockchip: rk3399: Enable DFI
-        commit: f57ef11ec63c17201b27569fbfb58801c227137d
-[25/26] arm64: dts: rockchip: rk356x: Add DFI
-        commit: 085be8875ca8a087e3cc102893f384894962c87e
-[26/26] arm64: dts: rockchip: rk3588s: Add DFI
-        commit: 5a6976b1040a2f99ab84eddbfa7cd072ac5d10fc
 
-Best regards,
 -- 
-Heiko Stuebner <heiko@sntech.de>
+With best wishes
+Dmitry
