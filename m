@@ -2,124 +2,187 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0741B7CF5E5
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 12:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5EB27CF673
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 13:16:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232678AbjJSKxI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Oct 2023 06:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55062 "EHLO
+        id S1345199AbjJSLQy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Oct 2023 07:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345285AbjJSKxG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Oct 2023 06:53:06 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506A2121;
-        Thu, 19 Oct 2023 03:53:04 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2c501bd6ff1so95111741fa.3;
-        Thu, 19 Oct 2023 03:53:04 -0700 (PDT)
+        with ESMTP id S1345280AbjJSLQx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Oct 2023 07:16:53 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D1E112
+        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 04:16:51 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-d9beb863816so4702337276.1
+        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 04:16:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697712782; x=1698317582; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=a2iJFIQZU3dMWJmF9fQqJT6sOJuhpG2IbdIzEIIeAV0=;
-        b=dMz2uwuSU7lYXT/hKRJL5HQ3W8Td6np6Idc0NASEawoS/cOZNPXZUZ70fPb0EkSMY3
-         /4nLqK4ym4DzImgE1lATwjbumLMqzZv1iTht9+HtDJb7XpNjQuX52HVsPvYLklOgo9/Y
-         VksStneetXYJSbyqPa1+ZPH1vyyHa6zXLZkKuAklvGvkmknT5YQHVTynKEK2eGQtES1z
-         62qNgWuJedYkJa2PlCPrkx8XQ6gzctVYIrpvxUdgb5eGOa0R2mD6CoSpta+ELwhVKj5J
-         OIkQZxU6ysIdJyAsuea+NBMKEcmcDTyVvYDPU169IfxvTzOvlrKiir/Nnr+1Q8uvscv2
-         f1DA==
+        d=linaro.org; s=google; t=1697714210; x=1698319010; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NgYcXpsAufBvhvqvkU9EfIFdvCzKhOZm6VhiqN3orBs=;
+        b=tCWnJj9WE51uYOiXi2l4HBFYag9C2FVpqUiUpSDkESiarWHDVGJjStxvZ1jA3vT6ub
+         0W3ArpfEUmKmlxruEL9fW8zIzc+WWCxqL/bm4lVOqb8IFqGwGTijLOmFdz+BMaOnRJl5
+         R3dtz85De5u4b0ar9R0ncdyLaFbTDNGoRPbukmlH6Z+RT1KCeurJbf5+mfS29CGz5cng
+         k2ruZglNPZgR6z2sSQjC4eIC6LROMq+f6Qs1q8Ltu1vsU4JbmHOeY2YOXC+FAjhKVqDr
+         HArFxhaehWV/5OUeZaRqDnNH9blD+Uq64A4QcTFWzbSZ5Oq1EzqlljHPDGCBeH2kBlPj
+         noOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697712782; x=1698317582;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a2iJFIQZU3dMWJmF9fQqJT6sOJuhpG2IbdIzEIIeAV0=;
-        b=iqxGzS8Ha1W2i0SREbYt6KLDaZ4lSOdSLwAuy7oSAsolVTqHFFsHNl0qVyqbdY+c8U
-         2VPNXT+bzrEBsDCxad2bq0Fy15838jwdsV+RU8BZ/N/Ox2SDrHB7fwjn59bZIXxMjCjK
-         bYhhNYgeKHeujj1p+2H+y/2CSMgvBe4BvGzVM7fS7Lc2z5JtOGkHQ62J00qU9rpsi1cs
-         G98lqH611mt7mArPM1KpPlMCs/gxUIInaXYfxh7QSCXyxJYmaJIJNFH1s1ulMZki1PcA
-         bi+d6ZQfjZt1WIc/uOP1fK7TkgGeZs/fV/eZ5881jcb8A0vIgGVz7Vgdurp/gp3aJpcr
-         1gKg==
-X-Gm-Message-State: AOJu0YxDpRQ91ZH6fmGQlZYimEUOBXUor4lHosqIWyEg3Sg4vTDxgSDb
-        AMzj61w2aGI/HNvZqoHSWl8=
-X-Google-Smtp-Source: AGHT+IGzZ6w/a2I2t2hj+OoCFUEN+jp/x1/0jBQjv+5/Krw0aEMmBE8FvF+3HQVEJYZ7RYhQGJX34g==
-X-Received: by 2002:ac2:5194:0:b0:503:9eb:47f0 with SMTP id u20-20020ac25194000000b0050309eb47f0mr1122559lfi.59.1697712782192;
-        Thu, 19 Oct 2023 03:53:02 -0700 (PDT)
-Received: from Ansuel-xps. (93-34-89-13.ip49.fastwebnet.it. [93.34.89.13])
-        by smtp.gmail.com with ESMTPSA id fb21-20020a056512125500b005031641b40asm1043740lfb.159.2023.10.19.03.52.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Oct 2023 03:53:01 -0700 (PDT)
-Message-ID: <65310a8d.050a0220.28bdd.4114@mx.google.com>
-X-Google-Original-Message-ID: <ZTEKiUCiP/fMJUdl@Ansuel-xps.>
-Date:   Thu, 19 Oct 2023 12:52:57 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Ilia Lin <ilia.lin@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sricharan Ramabadhran <quic_srichara@quicinc.com>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 0/4] cpufreq: qcom-nvmem: add support for ipq806x
-References: <20231013173854.7399-1-ansuelsmth@gmail.com>
- <20231019064653.feqpjdmblm7mmsug@vireshk-i7>
+        d=1e100.net; s=20230601; t=1697714210; x=1698319010;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NgYcXpsAufBvhvqvkU9EfIFdvCzKhOZm6VhiqN3orBs=;
+        b=flW+/G9olXMMn9rvxxnwZssLQ1f6YXwn4k7NCiwjG4wrdg4a3kjpPmyFg02xnk8+Vb
+         uZIDgPoDDSkOW/zS2kynODXTvOD1IXedOk6AlqhEEcFI3XD9+IVcUM6pUc07RrftJ7+t
+         wV6k39YmxuSVo7xGfRDHisDB0TcPILdAzHUO4ehdyyr7E91tbmBv/3TH+1ab5iDlkuqU
+         BwPdk+oWXjDy6hx76BVcSWOcwtPEVDu6QFLp0xHsOGv8J6+1YRtsfVArLod1vDWLJPBT
+         tkq5aKmIwhgXnICHHwX6C6ExUKATzoAI3MdWPgsV/DJztSJNrRDxLPeDHAEFJF1iyEik
+         vkJQ==
+X-Gm-Message-State: AOJu0YxOl3chFctpRgt1xNPG3h5H40ah4asXUQqAdaNHJWGHl5bocTbr
+        n/Zw1SeGjPaul2K14pGcWsVlUuasTkTpY1+yVcyaunQww8YpmUj4TVY=
+X-Google-Smtp-Source: AGHT+IHaHfcpYADWfbOu61f1MZkU41LPowQtu2w3zd0HGrnOQ7xVjctaIEtW0Wjzzy4Dfec3kuxT4taaXyTcmCcNrCg=
+X-Received: by 2002:a5b:c12:0:b0:d9a:4362:67ac with SMTP id
+ f18-20020a5b0c12000000b00d9a436267acmr1971034ybq.15.1697714210265; Thu, 19
+ Oct 2023 04:16:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231019064653.feqpjdmblm7mmsug@vireshk-i7>
+References: <cover.1697710527.git.viresh.kumar@linaro.org> <f709e9e273004be43efe3a2854a7e7b51a777f99.1697710527.git.viresh.kumar@linaro.org>
+In-Reply-To: <f709e9e273004be43efe3a2854a7e7b51a777f99.1697710527.git.viresh.kumar@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 19 Oct 2023 13:16:14 +0200
+Message-ID: <CAPDyKFqbnsdT0nqKwQhai875CwwpW_vepr816fL+i8yLh=YQhw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] OPP: Use _set_opp_level() for single genpd case
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 19, 2023 at 12:16:53PM +0530, Viresh Kumar wrote:
-> On 13-10-23, 19:38, Christian Marangi wrote:
-> > The first patch of this series was split to a separate series as it
-> > doesn't depend on [1] and can be applied right away,
-> > [1] introduced some breaking change to function that ipq806x, ipq807x
-> > patch was dropped to permit an easier rebase and merge of both.
-> > 
-> > This small series adds support for ipq806x qcom-cpufreq-nvmem driver.
-> > Special function are required to make use of the opp-supported-hw
-> > binding by hardcoding custom bits based on the qcom SoC ID.
-> > 
-> > The qcom-cpufreq-nvmem driver had recent changes to also improve
-> > support for apq8064. Because of this, this series depends on a
-> > just merged series.
-> > 
-> > Depends on [1].
-> > 
-> > [1] https://lore.kernel.org/linux-pm/20231010063235.rj2ehxugtjr5x2xr@vireshk-i7/T/#t
-> > 
-> > Christian Marangi (4):
-> >   dt-bindings: cpufreq: qcom-cpufreq-nvmem: Document krait-cpu
-> >   dt-bindings: opp: opp-v2-kryo-cpu: Document named opp-microvolt
-> >     property
-> 
-> Applied above two. Thanks.
-> 
-> >   cpufreq: qcom-nvmem: add support for IPQ8064
-> 
-> This doesn't apply/build anymore.
+On Thu, 19 Oct 2023 at 12:22, Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
+> There are two genpd (as required-opp) cases that we need to handle,
+> devices with a single genpd and ones with multiple genpds.
+>
+> The multiple genpds case is clear, where the OPP core calls
+> dev_pm_domain_attach_by_name() for them and uses the virtual devices
+> returned by this helper to call dev_pm_domain_set_performance_state()
+> later to change the performance state.
+>
+> The single genpd case however requires special handling as we need to
+> use the same `dev` structure (instead of a virtual one provided by genpd
+> core) for setting the performance state via
+> dev_pm_domain_set_performance_state().
+>
+> As we move towards more generic code to take care of the required OPPs,
+> where we will recursively call dev_pm_opp_set_opp() for all the required
+> OPPs, the above special case becomes a problem.
+>
+> Eventually we want to handle all performance state changes via
+> _set_opp_level(), so lets move the single genpd case to that right away.
+>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  drivers/opp/core.c |  6 ++++--
+>  drivers/opp/of.c   | 25 ++++++++++++++++++++++---
+>  2 files changed, 26 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 84f345c69ea5..aab8c8e79146 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -1074,10 +1074,12 @@ static int _opp_set_required_opps_generic(struct device *dev,
+>  static int _opp_set_required_opps_genpd(struct device *dev,
+>         struct opp_table *opp_table, struct dev_pm_opp *opp, bool scaling_down)
+>  {
+> -       struct device **genpd_virt_devs =
+> -               opp_table->genpd_virt_devs ? opp_table->genpd_virt_devs : &dev;
+> +       struct device **genpd_virt_devs = opp_table->genpd_virt_devs;
+>         int index, target, delta, ret;
+>
+> +       if (!genpd_virt_devs)
+> +               return 0;
+> +
+>         /* Scaling up? Set required OPPs in normal order, else reverse */
+>         if (!scaling_down) {
+>                 index = 0;
+> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+> index 81fa27599d58..e056f31a48b5 100644
+> --- a/drivers/opp/of.c
+> +++ b/drivers/opp/of.c
+> @@ -296,7 +296,7 @@ void _of_clear_opp(struct opp_table *opp_table, struct dev_pm_opp *opp)
+>         of_node_put(opp->np);
+>  }
+>
+> -static int _link_required_opps(struct dev_pm_opp *opp,
+> +static int _link_required_opps(struct dev_pm_opp *opp, struct opp_table *opp_table,
+>                                struct opp_table *required_table, int index)
+>  {
+>         struct device_node *np;
+> @@ -314,6 +314,25 @@ static int _link_required_opps(struct dev_pm_opp *opp,
+>                 return -ENODEV;
+>         }
+>
+> +       /*
+> +        * There are two genpd (as required-opp) cases that we need to handle,
+> +        * devices with a single genpd and ones with multiple genpds.
+> +        *
+> +        * The single genpd case requires special handling as we need to use the
+> +        * same `dev` structure (instead of a virtual one provided by genpd
+> +        * core) for setting the performance state. Lets treat this as a case
+> +        * where the OPP's level is directly available without required genpd
+> +        * link in the DT.
+> +        *
+> +        * Just update the `level` with the right value, which
+> +        * dev_pm_opp_set_opp() will take care of in the normal path itself.
+> +        */
+> +       if (required_table->is_genpd && opp_table->required_opp_count == 1 &&
+> +           !opp_table->genpd_virt_devs) {
+> +               if (!WARN_ON(opp->level))
 
-Hi, I sent v7 that fix the conflict problem. I dropped from the series
-the 2 applied patch and added the 2 dependent patch since it seems
-fixing the problem in the series might take longer times.
+Hmm. Doesn't this introduce an unnecessary limitation?
 
-Can you check? Thanks a lot for the help in accepting this series.
+An opp node that has a required-opps phande, may have "opp-hz",
+"opp-microvolt", etc. Why would we not allow the "opp-level" to be
+used too?
 
-> >   ARM: dts: qcom: ipq8064: Add CPU OPP table
-> 
+> +                       opp->level = opp->required_opps[0]->level;
+> +       }
+> +
+>         return 0;
+>  }
+>
+> @@ -338,7 +357,7 @@ static int _of_opp_alloc_required_opps(struct opp_table *opp_table,
+>                 if (IS_ERR_OR_NULL(required_table))
+>                         continue;
+>
+> -               ret = _link_required_opps(opp, required_table, i);
+> +               ret = _link_required_opps(opp, opp_table, required_table, i);
+>                 if (ret)
+>                         goto free_required_opps;
+>         }
+> @@ -359,7 +378,7 @@ static int lazy_link_required_opps(struct opp_table *opp_table,
+>         int ret;
+>
+>         list_for_each_entry(opp, &opp_table->opp_list, node) {
+> -               ret = _link_required_opps(opp, new_table, index);
+> +               ret = _link_required_opps(opp, opp_table, new_table, index);
+>                 if (ret)
+>                         return ret;
+>         }
 
--- 
-	Ansuel
+Kind regards
+Uffe
