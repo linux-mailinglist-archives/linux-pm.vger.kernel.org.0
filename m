@@ -2,76 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51FB77CFF2D
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 18:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7EED7D0033
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 19:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235461AbjJSQLd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Oct 2023 12:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44124 "EHLO
+        id S233273AbjJSRHz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Oct 2023 13:07:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345035AbjJSQL3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Oct 2023 12:11:29 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AE0181
-        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 09:11:26 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-32db188e254so3476775f8f.0
-        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 09:11:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697731885; x=1698336685; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Okldv9hZ54B+G0kuiw5hRod4eG8R+B5eCHg41GgfuYk=;
-        b=K5zgwdmxVNoHmLgOwoGFsbyOnn+WBZ2h8VoHvY88h2OyW0T9hCFkQf43dEYTwNoGTr
-         2O9nuVSOh0RaT4PtHvRA7wtVuXgncgogHCXo9NPLmlMEbXCp2E7SIXNtP0QYPp9udQb6
-         ReW71Q6cwZtwq7tZX4sNFIyO/JMEDMHuGCb1+ziILGBRVip7hXf2J1J62NL844FjiYC/
-         Yu1EICCxwbUj4P0tmXWioCcRSkrC+e+gCLQIRMLTgS8EtjM7xecK7uVGG1Lya9VdIeAQ
-         eFMASX4iG3e9wPJu6F8C6rG4gjDIRW1d0qdq2RLY0W+PMy9XoSUOehMAEzVUGa4VqjWh
-         wgBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697731885; x=1698336685;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Okldv9hZ54B+G0kuiw5hRod4eG8R+B5eCHg41GgfuYk=;
-        b=Eaqt6AQ/NUjY1uHzs9DfT9fWWMSDN0Dgh9rujhL5KIBxCd0yKtv+G2iQiyeHPcqe7Y
-         4ob9JD45My0WeAtZkNy8CveQzfyVmGR61nwP5wimqmlkwVP0qUmR94C3j3xxOqefqmwI
-         8+C4IeBY4t5owuHzjRdyea7Rvv2hcqlZAZNuOsligJatF5OtgJwY9lrW+ug8RvzG+UhJ
-         m+tz79peehj219zRZU45nRKEE49uZDwoicyHaV6FCcQfbF39KvrJTCjy0PaPFoDVmJBN
-         wZufXN3+p6P+WuwvPYFqXfLYkaBlQ49dWHj0hoRYTrEhM0CvArKrEr2pgLSjuJWUzv/F
-         79aA==
-X-Gm-Message-State: AOJu0Yxod7NsjuCXDkqLV7Zb80l++Ga8urOFhBa7A4oHwHXIVZ8eF+cT
-        8Lz7IHWp8wasVn+X3Ic1h5GqGA==
-X-Google-Smtp-Source: AGHT+IHbCqiAIMmFl08/akkHQAdhgxFvzRCdX7jUwWZGSb4sVsmqsz8K8QqgmI6nhLO4ow5ds48WSQ==
-X-Received: by 2002:a05:6000:1102:b0:32d:81f7:43e4 with SMTP id z2-20020a056000110200b0032d81f743e4mr1988393wrw.51.1697731884913;
-        Thu, 19 Oct 2023 09:11:24 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:6dcf:7c4b:2bce:3cb2? ([2a05:6e02:1041:c10:6dcf:7c4b:2bce:3cb2])
-        by smtp.googlemail.com with ESMTPSA id a14-20020adfe5ce000000b003296b488961sm4802109wrn.31.2023.10.19.09.11.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Oct 2023 09:11:24 -0700 (PDT)
-Message-ID: <dc72872b-24e3-47bc-af9b-4f1c0257f15c@linaro.org>
-Date:   Thu, 19 Oct 2023 18:11:23 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] thermal/qcom/tsens: drop ops_v0_1
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        with ESMTP id S233041AbjJSRHy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Oct 2023 13:07:54 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F1B9E;
+        Thu, 19 Oct 2023 10:07:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1697735268; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=gL+OYJWOZsBK8wjUer7YzfA6lu2/OAmILo7rXbMEpIo6Q5vpMyC7mSWdbhANMzl7q+
+    Yu5Sz+ZybFahk9W7740bmh3r2LQT5BzJ9GIa8FZy0cXEABKXDEY8LS0fzGz4GNwzzAo2
+    7PIAaqu2cgWNqw5JgtFO/ghcduIJuqL9WtdsO3ZItYiXxK8iFxT9KrozvKRvEojXiUCn
+    1hXv6cMNAJGsvhVYq7ntP5eZ+xrumKheqlDvHcyuDN3ITzSmXHIDuPkDxaiznH/Fz83I
+    8wDGnOGbV1esiSODY+sD3w13uc8ia4t1qetiLpxsB0ucKa/Z9Vlf5cBXMHaZcdvp/nIG
+    a5Eg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1697735268;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=ggdAcZ8XFp1hnFIstd7n2G5k77VgwuMSI/PGdGGtmZ8=;
+    b=T8uEwk7akEKn3bWwEfLVQY5L3xK5W0hJHI2EdktHjkdNySOpoSZpJ8sl9eAXEtVwnz
+    P+J2UNQb7RmFnrgApP98u3q24kXUIGQgDv2hlwZfEZzuAgvZp7VCxYq+DTqaNlkjZGbV
+    N+oOEWGaIwpKMKxPUTq3xZPtv+2rrajpsOE1E/VHbjRX9d1eCi9HB8IUyAWLea4U5XSq
+    sVSFQ/EiFq6GfBWeDAD/QVfMyUHbQf2HSc9jqiYy/SDfh7rM5/xzBnqknx/lVFMItKvk
+    wWh2Uw9zNJAWmPqap08exwrIK/zGkyqopS+SAZBHzYJR/DFMa8Ud9FHaZR4QoDdwMFGw
+    Pb4g==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1697735268;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=ggdAcZ8XFp1hnFIstd7n2G5k77VgwuMSI/PGdGGtmZ8=;
+    b=SUmf/7em3PDqqlxJi6XO0HJImqy824rDa1rYbI+jD1uANy/YAqLOaFom9WYb+THzPZ
+    iaDWgRpAtIZSJQvVGyRk2U+/KctdVGTBXKNcZrPV+Za6kbIflE60hn7QCoJQYVocVtrQ
+    cjTrSfj26muuvN1xwmWY02Iz7g/mdToTG6efrS0AzAmyLDhLkVUhCQRHIO5/360bsFkP
+    opF4nVSAQIjPPCf2FVhDW6k6n4rUtOwlLdD+CiaAFvOJ++oqgz5PrgTCAgYa2s0hxef3
+    twDk4RrWo/nWEMlDOQciApA6kKkejkZEpp5rSsfDC5PuIIbknlslSR/ptr6wpsH7262n
+    jFzg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1697735268;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=ggdAcZ8XFp1hnFIstd7n2G5k77VgwuMSI/PGdGGtmZ8=;
+    b=9jhv3SStOE/B1Ma3imgq1ohB5nXLSIXSN7EHHaG3zof6i2DaDRzyTci5sZfrlo/LQN
+    J8uF5e3y68hG2BkmleCw==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA95vh"
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.9.0 DYNA|AUTH)
+    with ESMTPSA id j34a49z9JH7lEPB
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 19 Oct 2023 19:07:47 +0200 (CEST)
+Date:   Thu, 19 Oct 2023 19:07:40 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
+        Ilia Lin <ilia.lin@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20231019144311.1035181-1-dmitry.baryshkov@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20231019144311.1035181-1-dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] cpufreq: qcom-nvmem: Enable virtual power domain
+ devices
+Message-ID: <ZTFiXJ2XO4WQN_gu@gerhold.net>
+References: <20231018-msm8909-cpufreq-v2-0-0962df95f654@kernkonzept.com>
+ <20231018-msm8909-cpufreq-v2-2-0962df95f654@kernkonzept.com>
+ <CAPDyKFot9=M1ooP_Q1AOgG5o_4DTQ2qsyai1ZdXAzBwf89W4uA@mail.gmail.com>
+ <CAPDyKFr5A-P=UhWs4rUMBWup3pH75WAhcZ56Y2_Sfk3=WfxRCQ@mail.gmail.com>
+ <ZTEph19CAvbgbN_E@gerhold.net>
+ <CAPDyKFo1PVZYsdW_=92EtMmTT9hmkm-mBR69N_WvPh4f-Hw=NA@mail.gmail.com>
+ <ZTFBzjLAaaUHux4O@gerhold.net>
+ <CAPDyKFruYqngQoW21Ra+hm4ybjS7LoD4casYbo8bP4J+hLUnaA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFruYqngQoW21Ra+hm4ybjS7LoD4casYbo8bP4J+hLUnaA@mail.gmail.com>
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,24 +103,60 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19/10/2023 16:43, Dmitry Baryshkov wrote:
-> Since the commit 6812d1dfbca9 ("thermal/drivers/qcom/tsens-v0_1: Fix
-> mdm9607 slope values") the default v0.1 implementation of tsens options
-> is unused by the driver. Drop it now to stop compiler complaining about
-> the unused static const. If the need for the default v0.1 ops struct
-> arives, this commit can be easily reverted without further
-> considerations.
+On Thu, Oct 19, 2023 at 05:19:53PM +0200, Ulf Hansson wrote:
+> On Thu, 19 Oct 2023 at 16:49, Stephan Gerhold <stephan@gerhold.net> wrote:
+> > On Thu, Oct 19, 2023 at 04:12:56PM +0200, Ulf Hansson wrote:
+> > > On Thu, 19 Oct 2023 at 15:05, Stephan Gerhold <stephan@gerhold.net> wrote:
+> > > > On Thu, Oct 19, 2023 at 01:26:19PM +0200, Ulf Hansson wrote:
+> > > > > BTW, if you really need something like the above, the proper way to do
+> > > > > it would instead be to call device_set_awake_path() for the device.
+> > > > >
+> > > > > This informs genpd that the device needs to stay powered-on during
+> > > > > system suspend (assuming that GENPD_FLAG_ACTIVE_WAKEUP has been set
+> > > > > for it), hence it will keep the corresponding PM domain powered-on
+> > > > > too.
+> > > >
+> > > > Thanks, I can try if this works as alternative to the
+> > > > dev_pm_syscore_device()!
+> > >
+> > > Yes, please. We don't want to abuse the dev_pm_syscore_device() thingy.
+> >
+> > Could you clarify the idea behind GENPD_FLAG_ACTIVE_WAKEUP? Would I set
+> > it conditionally for all RPMPDs or just the ones consumed by the CPU?
+> > How does the genpd *provider* know if one of its *consumer* devices
+> > needs to have its power domain kept on for wakeup?
 > 
-> Fixes: 6812d1dfbca9 ("thermal/drivers/qcom/tsens-v0_1: Fix mdm9607 slope values")
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
+> We are thinking of the GENPD_FLAG_ACTIVE_WAKEUP as a platform
+> configuration type of flag for the genpd in question. The consumer
+> driver shouldn't need to know about the details of what is happening
+> on the PM domain level - only whether it needs its device to remain
+> powered-on during system suspend or not.
+> 
 
-Applied, thanks
+Thanks! I will test if this works for RPMPD and post new versions of the
+patches. By coincidence I think this flag might actually be useful as
+temporary solution for CPR. If I:
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+ 1. Change $subject patch to use device_set_awake_path() instead, and
+ 2. Set GENPD_FLAG_ACTIVE_WAKEUP for the RPMPD genpds, but
+ 3. Do *not* set GENPD_FLAG_ACTIVE_WAKEUP for the CPR genpd.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Then the genpd ->power_on|off() callbacks should still be called
+for CPR during system suspend, right? :D
 
+> I suspect that the GENPD_FLAG_ACTIVE_WAKEUP is probably okay to set
+> for most genpds, but there may be some exceptions.
+> 
+
+Out of curiosity, do you have an example for such an exception where
+GENPD_FLAG_ACTIVE_WAKEUP shouldn't be set, aside from workarounds like
+I just described?
+
+As you said, the consumer device should just say that it wants to stay
+powered for wakeup during suspend. But if its power domains get powered
+off, I would expect that to break. How could a genpd driver still
+provide power without being powered on? Wouldn't that rather be a low
+performance state?
+
+Thanks,
+Stephan
