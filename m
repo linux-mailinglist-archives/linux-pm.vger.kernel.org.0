@@ -2,65 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5EB27CF673
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 13:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 912A67CF6AF
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Oct 2023 13:27:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345199AbjJSLQy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Oct 2023 07:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34474 "EHLO
+        id S1345329AbjJSL07 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Oct 2023 07:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345280AbjJSLQx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Oct 2023 07:16:53 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D1E112
-        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 04:16:51 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-d9beb863816so4702337276.1
-        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 04:16:51 -0700 (PDT)
+        with ESMTP id S1345324AbjJSL06 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Oct 2023 07:26:58 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF421115
+        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 04:26:56 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-d9abc069c8bso8218809276.3
+        for <linux-pm@vger.kernel.org>; Thu, 19 Oct 2023 04:26:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697714210; x=1698319010; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1697714816; x=1698319616; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NgYcXpsAufBvhvqvkU9EfIFdvCzKhOZm6VhiqN3orBs=;
-        b=tCWnJj9WE51uYOiXi2l4HBFYag9C2FVpqUiUpSDkESiarWHDVGJjStxvZ1jA3vT6ub
-         0W3ArpfEUmKmlxruEL9fW8zIzc+WWCxqL/bm4lVOqb8IFqGwGTijLOmFdz+BMaOnRJl5
-         R3dtz85De5u4b0ar9R0ncdyLaFbTDNGoRPbukmlH6Z+RT1KCeurJbf5+mfS29CGz5cng
-         k2ruZglNPZgR6z2sSQjC4eIC6LROMq+f6Qs1q8Ltu1vsU4JbmHOeY2YOXC+FAjhKVqDr
-         HArFxhaehWV/5OUeZaRqDnNH9blD+Uq64A4QcTFWzbSZ5Oq1EzqlljHPDGCBeH2kBlPj
-         noOg==
+        bh=PUrrcj+/ipouo/XR5RIgfw8wVuJ5J+7IILf/FghVZXQ=;
+        b=L9f38YWU39ice32PN6Gk6IneWrA7GTaQko/2pMcAvyIFSspRayFYidiSyXxz2TvxN2
+         WN+AT23DvUuAmVfiqxO5t7JJvOjTG45teXEl1i17H6KohaXZ2J3HaEv4C1ZzxyqS7CSF
+         XDCY/nfkOClC2h/6Idw1icUqG5+fRg1yqlGOJjZgDiNHGJkLpOXPyvs8sHnJj5rhox1B
+         BIvDcp+Iy3H/Ax05TllbFrTpBmXIJ/lSJOP4Ebbl8eBdcc+w0f4Mwwh0bcjBz9O7taiH
+         WJ9OTdif9c/a0MKh1izip+0iJM2a1P6I0Ba36ezCz5zfbM2xput761mY9GEDuN0WUnMr
+         c5jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697714210; x=1698319010;
+        d=1e100.net; s=20230601; t=1697714816; x=1698319616;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NgYcXpsAufBvhvqvkU9EfIFdvCzKhOZm6VhiqN3orBs=;
-        b=flW+/G9olXMMn9rvxxnwZssLQ1f6YXwn4k7NCiwjG4wrdg4a3kjpPmyFg02xnk8+Vb
-         uZIDgPoDDSkOW/zS2kynODXTvOD1IXedOk6AlqhEEcFI3XD9+IVcUM6pUc07RrftJ7+t
-         wV6k39YmxuSVo7xGfRDHisDB0TcPILdAzHUO4ehdyyr7E91tbmBv/3TH+1ab5iDlkuqU
-         BwPdk+oWXjDy6hx76BVcSWOcwtPEVDu6QFLp0xHsOGv8J6+1YRtsfVArLod1vDWLJPBT
-         tkq5aKmIwhgXnICHHwX6C6ExUKATzoAI3MdWPgsV/DJztSJNrRDxLPeDHAEFJF1iyEik
-         vkJQ==
-X-Gm-Message-State: AOJu0YxOl3chFctpRgt1xNPG3h5H40ah4asXUQqAdaNHJWGHl5bocTbr
-        n/Zw1SeGjPaul2K14pGcWsVlUuasTkTpY1+yVcyaunQww8YpmUj4TVY=
-X-Google-Smtp-Source: AGHT+IHaHfcpYADWfbOu61f1MZkU41LPowQtu2w3zd0HGrnOQ7xVjctaIEtW0Wjzzy4Dfec3kuxT4taaXyTcmCcNrCg=
-X-Received: by 2002:a5b:c12:0:b0:d9a:4362:67ac with SMTP id
- f18-20020a5b0c12000000b00d9a436267acmr1971034ybq.15.1697714210265; Thu, 19
- Oct 2023 04:16:50 -0700 (PDT)
+        bh=PUrrcj+/ipouo/XR5RIgfw8wVuJ5J+7IILf/FghVZXQ=;
+        b=OVmU0PTEjTaVPehzdISOvQlkl+zm4P0LkLFOx/0Jc1eUF77+CGuKQs1QtF+mNZGZqs
+         TsgFpRIS2nkovHtoTXF/fXNK0ZrXXwktFC7eHQ/kAlRkJoWybmEaBCwo+AgEIIaSUOps
+         am6IUixJh5p+RosWXumBvSXUYpcZaaCQwo2P1VN7VN6Tv601xfrfu/KKxi/xV234txsJ
+         ffeociyma8aXBlxYfU1WqhtfwwljEg9df/P/QGmAHJHDbUIb4QKpPICU8FBC9lJC6zra
+         3uVCasRQKyU7WallCs0mC79JT6W4r/8dEiiS7rydtgRrK3MAnam3HZq6QkBq0u1ZzL/f
+         2aAg==
+X-Gm-Message-State: AOJu0Yy82hNQkYvOPk+J+Yd79UuGkzuhoUS9zmsBP9QilTL2kQHS2Ray
+        Zl7zh3deB9f2bFTf5KQbqOCPHXGGnRvfpAiz1inm2w==
+X-Google-Smtp-Source: AGHT+IHHpyH97w+iL3El9mSizFMVO4FKJ8HXRgdkh6mPyu1/bq7yU2Ex3EFkQtcuQTKmfRtzWjhohIwy1xpnLV3M9ik=
+X-Received: by 2002:a25:ae99:0:b0:d9a:fc8e:7c05 with SMTP id
+ b25-20020a25ae99000000b00d9afc8e7c05mr1859738ybj.45.1697714816028; Thu, 19
+ Oct 2023 04:26:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1697710527.git.viresh.kumar@linaro.org> <f709e9e273004be43efe3a2854a7e7b51a777f99.1697710527.git.viresh.kumar@linaro.org>
-In-Reply-To: <f709e9e273004be43efe3a2854a7e7b51a777f99.1697710527.git.viresh.kumar@linaro.org>
+References: <20231018-msm8909-cpufreq-v2-0-0962df95f654@kernkonzept.com>
+ <20231018-msm8909-cpufreq-v2-2-0962df95f654@kernkonzept.com> <CAPDyKFot9=M1ooP_Q1AOgG5o_4DTQ2qsyai1ZdXAzBwf89W4uA@mail.gmail.com>
+In-Reply-To: <CAPDyKFot9=M1ooP_Q1AOgG5o_4DTQ2qsyai1ZdXAzBwf89W4uA@mail.gmail.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 19 Oct 2023 13:16:14 +0200
-Message-ID: <CAPDyKFqbnsdT0nqKwQhai875CwwpW_vepr816fL+i8yLh=YQhw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] OPP: Use _set_opp_level() for single genpd case
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+Date:   Thu, 19 Oct 2023 13:26:19 +0200
+Message-ID: <CAPDyKFr5A-P=UhWs4rUMBWup3pH75WAhcZ56Y2_Sfk3=WfxRCQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] cpufreq: qcom-nvmem: Enable virtual power domain devices
+To:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-kernel@vger.kernel.org
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>,
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
@@ -72,117 +77,51 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 19 Oct 2023 at 12:22, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Thu, 19 Oct 2023 at 12:24, Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
-> There are two genpd (as required-opp) cases that we need to handle,
-> devices with a single genpd and ones with multiple genpds.
+> On Wed, 18 Oct 2023 at 10:06, Stephan Gerhold
+> <stephan.gerhold@kernkonzept.com> wrote:
+> >
+> > The genpd core caches performance state votes from devices that are
+> > runtime suspended as of commit 3c5a272202c2 ("PM: domains: Improve
+> > runtime PM performance state handling"). They get applied once the
+> > device becomes active again.
+> >
+> > To attach the power domains needed by qcom-cpufreq-nvmem the OPP core
+> > calls genpd_dev_pm_attach_by_id(). This results in "virtual" dummy
+> > devices that use runtime PM only to control the enable and performance
+> > state for the attached power domain.
+> >
+> > However, at the moment nothing ever resumes the virtual devices created
+> > for qcom-cpufreq-nvmem. They remain permanently runtime suspended. This
+> > means that performance state votes made during cpufreq scaling get
+> > always cached and never applied to the hardware.
+> >
+> > Fix this by enabling the devices after attaching them and use
+> > dev_pm_syscore_device() to ensure the power domains also stay on when
+> > going to suspend. Since it supplies the CPU we can never turn it off
+> > from Linux. There are other mechanisms to turn it off when needed,
+> > usually in the RPM firmware (RPMPD) or the cpuidle path (CPR genpd).
 >
-> The multiple genpds case is clear, where the OPP core calls
-> dev_pm_domain_attach_by_name() for them and uses the virtual devices
-> returned by this helper to call dev_pm_domain_set_performance_state()
-> later to change the performance state.
+> I believe we discussed using dev_pm_syscore_device() for the previous
+> version. It's not intended to be used for things like the above.
 >
-> The single genpd case however requires special handling as we need to
-> use the same `dev` structure (instead of a virtual one provided by genpd
-> core) for setting the performance state via
-> dev_pm_domain_set_performance_state().
->
-> As we move towards more generic code to take care of the required OPPs,
-> where we will recursively call dev_pm_opp_set_opp() for all the required
-> OPPs, the above special case becomes a problem.
->
-> Eventually we want to handle all performance state changes via
-> _set_opp_level(), so lets move the single genpd case to that right away.
->
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/opp/core.c |  6 ++++--
->  drivers/opp/of.c   | 25 ++++++++++++++++++++++---
->  2 files changed, 26 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 84f345c69ea5..aab8c8e79146 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -1074,10 +1074,12 @@ static int _opp_set_required_opps_generic(struct device *dev,
->  static int _opp_set_required_opps_genpd(struct device *dev,
->         struct opp_table *opp_table, struct dev_pm_opp *opp, bool scaling_down)
->  {
-> -       struct device **genpd_virt_devs =
-> -               opp_table->genpd_virt_devs ? opp_table->genpd_virt_devs : &dev;
-> +       struct device **genpd_virt_devs = opp_table->genpd_virt_devs;
->         int index, target, delta, ret;
->
-> +       if (!genpd_virt_devs)
-> +               return 0;
-> +
->         /* Scaling up? Set required OPPs in normal order, else reverse */
->         if (!scaling_down) {
->                 index = 0;
-> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-> index 81fa27599d58..e056f31a48b5 100644
-> --- a/drivers/opp/of.c
-> +++ b/drivers/opp/of.c
-> @@ -296,7 +296,7 @@ void _of_clear_opp(struct opp_table *opp_table, struct dev_pm_opp *opp)
->         of_node_put(opp->np);
->  }
->
-> -static int _link_required_opps(struct dev_pm_opp *opp,
-> +static int _link_required_opps(struct dev_pm_opp *opp, struct opp_table *opp_table,
->                                struct opp_table *required_table, int index)
->  {
->         struct device_node *np;
-> @@ -314,6 +314,25 @@ static int _link_required_opps(struct dev_pm_opp *opp,
->                 return -ENODEV;
->         }
->
-> +       /*
-> +        * There are two genpd (as required-opp) cases that we need to handle,
-> +        * devices with a single genpd and ones with multiple genpds.
-> +        *
-> +        * The single genpd case requires special handling as we need to use the
-> +        * same `dev` structure (instead of a virtual one provided by genpd
-> +        * core) for setting the performance state. Lets treat this as a case
-> +        * where the OPP's level is directly available without required genpd
-> +        * link in the DT.
-> +        *
-> +        * Just update the `level` with the right value, which
-> +        * dev_pm_opp_set_opp() will take care of in the normal path itself.
-> +        */
-> +       if (required_table->is_genpd && opp_table->required_opp_count == 1 &&
-> +           !opp_table->genpd_virt_devs) {
-> +               if (!WARN_ON(opp->level))
+> Moreover, I was under the impression that it wasn't really needed. In
+> fact, I would think that this actually breaks things for system
+> suspend/resume, as in this case the cpr driver's genpd
+> ->power_on|off() callbacks are no longer getting called due this,
+> which means that the cpr state machine isn't going to be restored
+> properly. Or did I get this wrong?
 
-Hmm. Doesn't this introduce an unnecessary limitation?
+BTW, if you really need something like the above, the proper way to do
+it would instead be to call device_set_awake_path() for the device.
 
-An opp node that has a required-opps phande, may have "opp-hz",
-"opp-microvolt", etc. Why would we not allow the "opp-level" to be
-used too?
+This informs genpd that the device needs to stay powered-on during
+system suspend (assuming that GENPD_FLAG_ACTIVE_WAKEUP has been set
+for it), hence it will keep the corresponding PM domain powered-on
+too.
 
-> +                       opp->level = opp->required_opps[0]->level;
-> +       }
-> +
->         return 0;
->  }
->
-> @@ -338,7 +357,7 @@ static int _of_opp_alloc_required_opps(struct opp_table *opp_table,
->                 if (IS_ERR_OR_NULL(required_table))
->                         continue;
->
-> -               ret = _link_required_opps(opp, required_table, i);
-> +               ret = _link_required_opps(opp, opp_table, required_table, i);
->                 if (ret)
->                         goto free_required_opps;
->         }
-> @@ -359,7 +378,7 @@ static int lazy_link_required_opps(struct opp_table *opp_table,
->         int ret;
->
->         list_for_each_entry(opp, &opp_table->opp_list, node) {
-> -               ret = _link_required_opps(opp, new_table, index);
-> +               ret = _link_required_opps(opp, opp_table, new_table, index);
->                 if (ret)
->                         return ret;
->         }
+[...]
 
 Kind regards
 Uffe
