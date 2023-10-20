@@ -2,116 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACB0A7D0E26
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Oct 2023 13:09:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4F77D0E45
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Oct 2023 13:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376994AbjJTLJw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Oct 2023 07:09:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58084 "EHLO
+        id S1377001AbjJTLQl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Oct 2023 07:16:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376927AbjJTLJv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 07:09:51 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323FE124
-        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 04:09:50 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-d9ac43d3b71so727621276.0
-        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 04:09:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697800189; x=1698404989; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1Ar9JWuEzTg4nm/OuetjJgNewztnGTgqrst37S6ZFCQ=;
-        b=efksqlHRQYmnm1fGTWhS97xSeSSUQfnOkQBMNMXjnyIXAbtD4z5F/NITbpS575M2wu
-         AG7Pk0uC/VXIV0mNVBW7WtZFRYDQAFKoFSX/Yh/GYE/5I8grkJt8QC4yRgVtP+m5+Hoz
-         YOpcW4ICx686I7XXfJLEpWKZReJKzP9mGRBXjgTqixOnkDL6AFfKSjK+qYequq5ox+wM
-         ZZWEZQ7dBpZq9nSXk5Lrzg0WsOXNSFEH+IiQb8RmMb/FzDDN6oDrYKMpcewHz7qewrEo
-         Rv4/JIlqff6DC0H+MGj3JH+Srj7yq6QCBM7mAMlbfrMhao9SgIUbmbwYwxfYiAOWvV76
-         +hCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697800189; x=1698404989;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1Ar9JWuEzTg4nm/OuetjJgNewztnGTgqrst37S6ZFCQ=;
-        b=TZ1Dgl1uDP3JlE58/Hfq/Ck7rPFrhhB3U0KgRHNfN47ap0SWsaQHkZlOzAa1oCP1x6
-         Un04qC5kBnO2OQfCW8AS6Jl8AGcY7yCqGX36r71ubRuAkwqbSefhMpofbhxBpV+7+r5+
-         lNhnVNbya+YXlWSnyUGCNfh6YbkvgS9Z7sUPbAIUmeAlDQKio5Uc0DuL8FFlfHeWKsNx
-         KZLOgAzBmI9fz6hEH+3zzZtPahc3Ufnc4vUVHgIUk69+cAM2rAcAkOf2Qu8KW299Yzhg
-         6y1vqUpBnaAcZktQMkZONWTcRi8nzMmEfHJ+VT1EljqHU2q7m4GSdgRu71Fqrsmru3a5
-         6Sog==
-X-Gm-Message-State: AOJu0YwBc5xDq89l75gBM9EMe5iQznqOOER5xNGi4kEXVciJc3l5uVU6
-        U/ZZ5BiPVNGsW1pe/7ZHT0MkXezMDOf4zQxaWhsljA==
-X-Google-Smtp-Source: AGHT+IHZbfimyskJ/HRBlAXmMseRUx3DjcRk2vI7+ZsVh55aqty8c1QiJ2FDVH6hvepbUT/6A0n8JGmj3DyqO8nY2jw=
-X-Received: by 2002:a5b:64d:0:b0:d9a:f0e8:480 with SMTP id o13-20020a5b064d000000b00d9af0e80480mr1156584ybq.65.1697800189328;
- Fri, 20 Oct 2023 04:09:49 -0700 (PDT)
+        with ESMTP id S1376927AbjJTLQk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 07:16:40 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759A6CA;
+        Fri, 20 Oct 2023 04:16:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=H2KpfR5v8S4cDdfvm+k1Bez67vNujA5KyI4fx/Kz1ps=; b=YgzekWfuW0ZViZvyoL/HkzAklX
+        5nNW5eMYQMXCcU1QdSAFp2AF9Q1KXT5sTeSAtHnZQ/m8i4B1L6Ep823thvglTw3UyUImbkgwmhyDu
+        MWPWCuvm+LO5NStcvSOzrl1wG8pWuXD90e/dP8XNx6EIoA8ioI/CtepzCL35KbgwdacIxoz7mGI0F
+        aAGqzFHJ+LL7bswWK1eApS9KxsLw/kGe4s0eICUD05jcwZeCgM6IuF5ubji454/lne12SDBrPNFFP
+        ENRAcGT1B4VSpRgHHWxzJeLbxeXoi6OVeMDVOCfQ9ss1HnYNq3wNODcnMv5WKQEWbebV+eeFzrEiE
+        Y3Xx91tQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:50880)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1qtnUT-0000Id-1M;
+        Fri, 20 Oct 2023 12:16:29 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1qtnUS-0001UG-19; Fri, 20 Oct 2023 12:16:28 +0100
+Date:   Fri, 20 Oct 2023 12:16:27 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+        x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        jianyong.wu@arm.com, justin.he@arm.com
+Subject: Re: [RFC PATCH v2 05/35] drivers: base: Print a warning instead of
+ panic() when register_cpu() fails
+Message-ID: <ZTJhi6OVaTSEdvvf@shell.armlinux.org.uk>
+References: <20230913163823.7880-1-james.morse@arm.com>
+ <20230913163823.7880-6-james.morse@arm.com>
+ <2c23ab17-7516-e310-8b79-b8c5fc02984a@redhat.com>
 MIME-Version: 1.0
-References: <cover.1697710527.git.viresh.kumar@linaro.org> <f709e9e273004be43efe3a2854a7e7b51a777f99.1697710527.git.viresh.kumar@linaro.org>
- <CAPDyKFqbnsdT0nqKwQhai875CwwpW_vepr816fL+i8yLh=YQhw@mail.gmail.com>
- <20231020034547.suggwoefx5kauek4@vireshk-i7> <CAPDyKFqMA9=qdz4L3Oqj0zRQmSj0bxrF1RzZu-pBcuj9__GSRw@mail.gmail.com>
- <20231020105658.4zjfuiawwyrtnssu@vireshk-i7>
-In-Reply-To: <20231020105658.4zjfuiawwyrtnssu@vireshk-i7>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 20 Oct 2023 13:09:13 +0200
-Message-ID: <CAPDyKFqKVFO-p8Amu8aD7i0tT2dtpJw5rbDVxxhjOpaTYY=ZzA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] OPP: Use _set_opp_level() for single genpd case
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2c23ab17-7516-e310-8b79-b8c5fc02984a@redhat.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 20 Oct 2023 at 12:57, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 20-10-23, 12:02, Ulf Hansson wrote:
-> > For the single PM domain case, consumer drivers are often not able to
-> > use dev_pm_opp_set_config(). That's because the PM domain has already
-> > been attached from some of the generic buses, through
-> > dev_pm_domain_attach().
-> >
-> > In this case, as dev_pm_opp_set_config() ends up trying to attach
-> > again, via dev_pm_domain_attach_by_name() it would receive
-> > "ERR_PTR(-EEXIST)".
-> >
-> > Or maybe I didn't quite understand your point?
->
-> So the thing is that I _really_ want to call dev_pm_opp_set_opp() for
-> each OPP we want to configure, primary or required. For example, the
-> required OPP may want to do more than just performance state and we
-> aren't touching them right now.
+On Mon, Sep 18, 2023 at 01:33:37PM +1000, Gavin Shan wrote:
+> 
+> 
+> On 9/14/23 02:37, James Morse wrote:
+> > loongarch, mips, parisc, riscv and sh all print a warning if
+> > register_cpu() returns an error. Architectures that use
+> > GENERIC_CPU_DEVICES call panic() instead.
+> > 
+> > Errors in this path indicate something is wrong with the firmware
+> > description of the platform, but the kernel is able to keep running.
+> > 
+> > Downgrade this to a warning to make it easier to debug this issue.
+> > 
+> > This will allow architectures that switching over to GENERIC_CPU_DEVICES
+> > to drop their warning, but keep the existing behaviour.
+> > 
+> > Signed-off-by: James Morse <james.morse@arm.com>
+> > ---
+> >   drivers/base/cpu.c | 7 ++++---
+> >   1 file changed, 4 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+> > index 579064fda97b..d31c936f0955 100644
+> > --- a/drivers/base/cpu.c
+> > +++ b/drivers/base/cpu.c
+> > @@ -535,14 +535,15 @@ int __weak arch_register_cpu(int cpu)
+> >   static void __init cpu_dev_register_generic(void)
+> >   {
+> > -	int i;
+> > +	int i, ret;
+> >   	if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES))
+> >   		return;
+> >   	for_each_present_cpu(i) {
+> > -		if (arch_register_cpu(i))
+> > -			panic("Failed to register CPU device");
+> > +		ret = arch_register_cpu(i);
+> > +		if (ret)
+> > +			pr_warn("register_cpu %d failed (%d)\n", i, ret);
+> >   	}
+> >   }
+> 
+> The same warning message has been printed by arch/loongarch/kernel/topology.c::arch_register_cpu().
+> In order to avoid the duplication, I think the warning message in arch/loongarch needs to be dropped?
 
-I understand - and it makes perfect sense to me too!
+No it doesn't, as far as Loongarch is concerned. Given where this change
+occurs in the series, it is correct as far as this is concerned.
 
->
-> Now, in order to call dev_pm_opp_set_opp() for any device, we need a
-> device pointer and an OPP table associated with it.
->
-> I can take care of it for the multi genpd case as there are extra
-> device structures (which we get from dev_pm_domain_attach_by_name()),
-> but there is no clean way out for single PM domain devices, unless
-> they also call dev_pm_opp_set_config() to get a virtual structure.
->
-> This is why I had to get this hackish code in place to make it work
-> with the recursive calls to dev_pm_opp_set_opp(), where I could just
-> reuse the opp-level thing for the primary device.
->
-> How do you suggest we take care of this now ?
+The reason is that this code path can only be reached when
+CONFIG_GENERIC_CPU_DEVICES is set, which is something the arch has to
+select. Loongarch doesn't select that until patch 9 in the series,
+"LoongArch: Switch over to GENERIC_CPU_DEVICES", and that patch is
+where the warning message in arch/loongarch is removed.
 
-Honestly, I don't know yet. But I am certainly willing to help. Allow
-me to have a closer look and see if I can propose a way forward.
-
-Kind regards
-Uffe
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
