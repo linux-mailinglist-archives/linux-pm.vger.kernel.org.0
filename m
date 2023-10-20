@@ -2,40 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F5C7D101B
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Oct 2023 15:00:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 422B27D1020
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Oct 2023 15:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377409AbjJTNAc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Oct 2023 09:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46852 "EHLO
+        id S1377414AbjJTNAe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Oct 2023 09:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377212AbjJTNAb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 09:00:31 -0400
+        with ESMTP id S1377396AbjJTNAc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 09:00:32 -0400
 Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEC3D5F;
-        Fri, 20 Oct 2023 06:00:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E349CD6A;
+        Fri, 20 Oct 2023 06:00:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1697806829; x=1729342829;
+  t=1697806830; x=1729342830;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Hd4Emqyn1f/ioRu7HJKUdLwnMCvvFUuy8Lnwq9cpDbU=;
-  b=n0OI0UIcT+QiHSoozXfs+UBk8EPe8fZ55XwucmjaMzVpDgcXt8ObG1jd
-   HDg3MkJE3rrdqnEjqjE1ggzjJml0RWnC91UWw/9clsh5oqjfSe6YMqygH
-   sjnaW1JY8Gw4F5ZeQja5UWloA5jyrfl/j+4D/39u7E/qRG7s7fgrhyz2Q
-   WY5RqUdWvIs4M9Ef3ij8g3xrIxXYlpvUD3fTV1/smaEkG9MqAyhvRs/1u
-   0uqFvuSA4iz2N51vctsPHJbPqT7KhnQCn0jTdflQlSt5hpne915Kk+0JB
-   erVnY4K3L8hXpOzFCkKcQINnjRt+vdwrzuGnCTUBNaaRIqGNaIAXykEiD
-   w==;
+  bh=6NsjdVRKrU1cywbzFwvQUQKcvsrnAUc1urD+yHBG+gw=;
+  b=GMrSKwaT94mK7uFMHwo1rlQbIAwfiSeRGZx6hSLPZhOciekVPSCJmVFL
+   7WCeKOu6660Zt/78JVnwHm7Kg1xl+DBARCVbOJPFjdyn4eqVGKk7I18Gk
+   Rj4B+rFK8lFtcBJEGnplYULeln6npw94CmaM4Mm//eyzEiwQIxi3zXmRF
+   K7xE+c8Dhyj7KAJZRKxXsauUe66VjFAQN0LTjBsEp2IR3b19l8lr9ruu8
+   A3rjDmGQa2zaVIujUh1dYi7pD2BqC3fctZchKcGRCm6Zn3hvEa56Z30J2
+   LgcabJv6B0AxOhmhjziFSUmIYF9cWm0rkeCQhOK36+vRMneNBLrdQsZ8W
+   A==;
 X-IronPort-AV: E=Sophos;i="6.03,238,1694728800"; 
-   d="scan'208";a="33575470"
+   d="scan'208";a="33575471"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
   by mx1.tq-group.com with ESMTP; 20 Oct 2023 15:00:22 +0200
 Received: from steina-w.tq-net.de (steina-w.tq-net.de [10.123.53.18])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 28134280085;
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 74C8B280086;
         Fri, 20 Oct 2023 15:00:22 +0200 (CEST)
 From:   Alexander Stein <alexander.stein@ew.tq-group.com>
 To:     Rob Herring <robh+dt@kernel.org>,
@@ -55,9 +55,9 @@ Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux@ew.tq-group.com, linux-clk@vger.kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH 2/5] dt-bindings: soc: imx93-media-blk-ctrl: Add LDB subnode into schema and example
-Date:   Fri, 20 Oct 2023 15:00:15 +0200
-Message-Id: <20231020130019.665853-3-alexander.stein@ew.tq-group.com>
+Subject: [PATCH 3/5] arm64: dts: imx93: Add LCDIF & LDB nodes
+Date:   Fri, 20 Oct 2023 15:00:16 +0200
+Message-Id: <20231020130019.665853-4-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231020130019.665853-1-alexander.stein@ew.tq-group.com>
 References: <20231020130019.665853-1-alexander.stein@ew.tq-group.com>
@@ -72,86 +72,110 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Document the LDB bridge subnode and add the subnode into the example.
-For the subnode to work, the block control must scan its subnodes and
-bind drivers to them, do not misuse either simple-bus or simple-mfd
-here.
+LCDIF port 1 is directly attached to the LVDS Display Bridge (LDB).
+Both need the same clock source (VIDEO_PLL1).
 
 Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 ---
- .../soc/imx/fsl,imx93-media-blk-ctrl.yaml     | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ arch/arm64/boot/dts/freescale/imx93.dtsi | 76 ++++++++++++++++++++++++
+ 1 file changed, 76 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml b/Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml
-index b3554e7f9e76..5ba66dfb0e05 100644
---- a/Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml
-+++ b/Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml
-@@ -24,6 +24,12 @@ properties:
-   reg:
-     maxItems: 1
+diff --git a/arch/arm64/boot/dts/freescale/imx93.dtsi b/arch/arm64/boot/dts/freescale/imx93.dtsi
+index ceccf4766440..c0213850445d 100644
+--- a/arch/arm64/boot/dts/freescale/imx93.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx93.dtsi
+@@ -1037,6 +1037,8 @@ s4muap: mailbox@47520000 {
+ 		media_blk_ctrl: system-controller@4ac10000 {
+ 			compatible = "fsl,imx93-media-blk-ctrl", "syscon";
+ 			reg = <0x4ac10000 0x10000>;
++			#address-cells = <1>;
++			#size-cells = <1>;
+ 			power-domains = <&mediamix>;
+ 			clocks = <&clk IMX93_CLK_MEDIA_APB>,
+ 				 <&clk IMX93_CLK_MEDIA_AXI>,
+@@ -1050,8 +1052,82 @@ media_blk_ctrl: system-controller@4ac10000 {
+ 				 <&clk IMX93_CLK_MIPI_DSI_GATE>;
+ 			clock-names = "apb", "axi", "nic", "disp", "cam",
+ 				      "pxp", "lcdif", "isi", "csi", "dsi";
++			assigned-clocks = <&clk IMX93_CLK_MEDIA_AXI>,
++					  <&clk IMX93_CLK_MEDIA_APB>,
++					  <&clk IMX93_CLK_VIDEO_PLL>,
++					  <&clk IMX93_CLK_MEDIA_DISP_PIX>;
++			assigned-clock-parents = <&clk IMX93_CLK_SYS_PLL_PFD1>,
++						 <&clk IMX93_CLK_SYS_PLL_PFD1_DIV2>,
++						 <&clk IMX93_CLK_24M>,
++						 <&clk IMX93_CLK_VIDEO_PLL>;
++			assigned-clock-rates = <400000000>, <133333333>;
+ 			#power-domain-cells = <1>;
+ 			status = "disabled";
++
++			lvds_bridge: bridge@20 {
++				compatible = "fsl,imx93-ldb";
++				reg = <0x20 0x4>, <0x24 0x4>;
++				reg-names = "ldb", "lvds";
++				clocks = <&clk IMX93_CLK_LVDS_GATE>;
++				clock-names = "ldb";
++				assigned-clocks = <&clk IMX93_CLK_MEDIA_LDB>;
++				assigned-clock-parents = <&clk IMX93_CLK_VIDEO_PLL>;
++				status = "disabled";
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++
++						ldb_from_lcdif: endpoint {
++							remote-endpoint = <&lcdif_to_ldb>;
++						};
++					};
++
++					port@1 {
++						reg = <1>;
++
++						ldb_lvds: endpoint {
++						};
++					};
++				};
++			};
++		};
++
++		lcdif: display-controller@4ae30000 {
++			compatible = "fsl,imx93-lcdif";
++			reg = <0x4ae30000 0x23c>;
++			interrupts = <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&clk IMX93_CLK_MEDIA_DISP_PIX>,
++				 <&clk IMX93_CLK_LCDIF_GATE>,
++				 <&clk IMX93_CLK_MEDIA_AXI>;
++			clock-names = "pix", "axi", "disp_axi";
++			assigned-clocks = <&clk IMX93_CLK_VIDEO_PLL>,
++					  <&clk IMX93_CLK_MEDIA_DISP_PIX>;
++			assigned-clock-parents = <&clk IMX93_CLK_24M>,
++						 <&clk IMX93_CLK_VIDEO_PLL>;
++			power-domains = <&media_blk_ctrl IMX93_MEDIABLK_PD_LCDIF>;
++			status = "disabled";
++
++			port {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				lcdif_to_dsi: endpoint@0 {
++					reg = <0>;
++				};
++
++				lcdif_to_ldb: endpoint@1 {
++					reg = <1>;
++					remote-endpoint = <&ldb_from_lcdif>;
++				};
++
++				lcdif_to_dpi: endpoint@2 {
++					reg = <2>;
++				};
++			};
+ 		};
  
-+  '#address-cells':
-+    const: 1
-+
-+  '#size-cells':
-+    const: 1
-+
-   '#power-domain-cells':
-     const: 1
- 
-@@ -46,9 +52,16 @@ properties:
-       - const: csi
-       - const: dsi
- 
-+  bridge@20:
-+    type: object
-+    $ref: /schemas/display/bridge/fsl,ldb.yaml#
-+    unevaluatedProperties: false
-+
- required:
-   - compatible
-   - reg
-+  - '#address-cells'
-+  - '#size-cells'
-   - power-domains
-   - clocks
-   - clock-names
-@@ -77,4 +90,35 @@ examples:
-                clock-names = "apb", "axi", "nic", "disp", "cam",
-                              "pxp", "lcdif", "isi", "csi", "dsi";
-       #power-domain-cells = <1>;
-+      #address-cells = <1>;
-+      #size-cells = <1>;
-+
-+      bridge@20 {
-+          compatible = "fsl,imx93-ldb";
-+          reg = <0x20 0x4>, <0x24 0x4>;
-+          reg-names = "ldb", "lvds";
-+          clocks = <&clk IMX93_CLK_LVDS_GATE>;
-+          clock-names = "ldb";
-+
-+          ports {
-+              #address-cells = <1>;
-+              #size-cells = <0>;
-+
-+              port@0 {
-+                  reg = <0>;
-+
-+                  ldb_from_lcdif2: endpoint {
-+                      remote-endpoint = <&lcdif2_to_ldb>;
-+                  };
-+              };
-+
-+              port@1 {
-+                  reg = <1>;
-+
-+                  ldb_lvds: endpoint {
-+                      remote-endpoint = <&ldb_to_panel>;
-+                  };
-+              };
-+          };
-+        };
-     };
+ 		ddr-pmu@4e300dc0 {
 -- 
 2.34.1
 
