@@ -2,142 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAAA57D15F2
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Oct 2023 20:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C107D15F6
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Oct 2023 20:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjJTSnR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Oct 2023 14:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53410 "EHLO
+        id S229646AbjJTSrL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Oct 2023 14:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjJTSnQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 14:43:16 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54345112
-        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 11:43:13 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-565e54cb93aso810744a12.3
-        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 11:43:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1697827393; x=1698432193; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=k4j0ST73DzoLLM9MbJMnveHu6akxSdB+XraQpl0qwIw=;
-        b=YBFrTi47cd/GMNrSslfL/sv7VMNRe1UFc/F9pTGh2JWNUzJsPaoFO4gOvlyEOSbFzX
-         lk4bPGj8TfLYCSXIeeFX/UPbCFeavrh+GAqLcPQhFI6EPyyOTNYUz7vdW/mW2YyjtXsi
-         vnQFcLbukRk8hab8JdV9qoUfTuP3j/FLpw1TE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697827393; x=1698432193;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k4j0ST73DzoLLM9MbJMnveHu6akxSdB+XraQpl0qwIw=;
-        b=hClgG5tPj4ONhzKe4fkW5u8mcwncLGGjeGRMvjHL6hHqKLVlIVj4BvNqbS1KrYMK2A
-         NuDhw+4Ip92UF8e9XOqCymlX+TMZSrpn1+sWc1Ko2j2wV81iwYDPoA15J3k4vsSXEoD8
-         iJd0edUMSGlDZS1w7IATavW+DgWqqgnufD4nZMN0tAxoqg7xtLTU800DEjwCRGev/ajA
-         68zLipcmUgZFVMiD3PiterjXP/rDX6HhDAMjU1TE5qwEGuKWOsrJ8xAdRXG9jX8+KDZl
-         EkOfJoZcmCoiHJoalNPAluJEmMnkwrsRek+FRZWHg1i+qOLXndynF0JQjx2ZIOnALyxT
-         D4DQ==
-X-Gm-Message-State: AOJu0YxcCfX/lX36LneKwxJQFa3qFzBY3s07uh9NZYk1NbNFZ92wHJsw
-        z5Vvuwbj+d4y324k5E0TFGWEQA==
-X-Google-Smtp-Source: AGHT+IHDjFhtgPPzRwhtKHGylJFWVO5Pw8Mo+6OtHDRda++bfVfLvXMK3PeMwDZDvgflUMEx8pyWwA==
-X-Received: by 2002:a05:6a20:429f:b0:17a:ee7d:c035 with SMTP id o31-20020a056a20429f00b0017aee7dc035mr2509247pzj.38.1697827392801;
-        Fri, 20 Oct 2023 11:43:12 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id k17-20020aa79d11000000b006933866f49dsm1917333pfp.19.2023.10.20.11.43.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Oct 2023 11:43:12 -0700 (PDT)
-Date:   Fri, 20 Oct 2023 11:43:11 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] power: supply: bq24190_charger: replace deprecated
- strncpy with strscpy
-Message-ID: <202310201140.B6C54194@keescook>
-References: <20231020-strncpy-drivers-power-supply-bq24190_charger-c-v1-1-e896223cb795@google.com>
+        with ESMTP id S229437AbjJTSrL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 14:47:11 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8677D7;
+        Fri, 20 Oct 2023 11:47:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
+        Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:Reply-To:Content-ID
+        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+        Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=p30D1Q3zE2qXAXYR3qzel/vvewRxpsqtgQHCmqUYVEc=; b=LtdVRAzT/5ZWoDw0QQ+xhklB9/
+        890ErFfVXqWVySS3OHD9I/gJXfSDCp+LFYKEA06AQdIWecu1WiROyi+hxGDfFV/1Exv8Gt3xM4/Zp
+        jrrxGUmPkdG5J+IZajAAnmyd74VJlPHVEd6cHT8P3HuEtGZFu4nHStDWYitjNYhSEtsZEfsaTRmW2
+        AKBY6J/S0UG58H67P4/tHOxwhdmNloeKleBA3MmXYEClCEnkM9S/Vl6Ya8vvoa7doTjRHhEfQKzy9
+        U2guXWrehQ2IB+qYklB2lYQl+pAwQlvbd1NpxiUJzLoUnup9N6znXpEammjKwPoK/XzTHp7WIHJpj
+        8IuirCgg==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:59232 helo=rmk-PC.armlinux.org.uk)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <rmk@armlinux.org.uk>)
+        id 1qtuWU-0000mU-1u;
+        Fri, 20 Oct 2023 19:47:02 +0100
+Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <rmk@rmk-PC.armlinux.org.uk>)
+        id 1qtuWW-00AQ7P-0W; Fri, 20 Oct 2023 19:47:04 +0100
+From:   Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+To:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev
+Cc:     x86@kernel.org, James Morse <james.morse@arm.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        jianyong.wu@arm.com, justin.he@arm.com,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
+Subject: [PATCH] ACPI: Rename acpi_scan_device_not_present() to be about
+ enumeration
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231020-strncpy-drivers-power-supply-bq24190_charger-c-v1-1-e896223cb795@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <E1qtuWW-00AQ7P-0W@rmk-PC.armlinux.org.uk>
+Sender: Russell King <rmk@armlinux.org.uk>
+Date:   Fri, 20 Oct 2023 19:47:04 +0100
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 20, 2023 at 06:14:47PM +0000, Justin Stitt wrote:
-> strncpy() is deprecated for use on NUL-terminated destination strings
-> [1] and as such we should prefer more robust and less ambiguous string
-> interfaces.
-> 
-> We expect bdi->model_name to be NUL-terminated based on its usage with
-> sysfs_emit and format strings:
-> 
-> val->strval is assigned to bdi->model_name in
-> bq24190_charger_get_property():
-> 1186 | val->strval = bdi->model_name;
-> 
-> ... then in power_supply_sysfs.c we use value.strval with a format string:
-> 311  | ret = sysfs_emit(buf, "%s\n", value.strval);
-> 
-> we assigned value.strval via:
-> 285  | ret = power_supply_get_property(psy, psp, &value);
-> ... which invokes psy->desc->get_property():
-> 1210 | return psy->desc->get_property(psy, psp, val);
-> 
-> with bq24190_charger_get_property():
-> 1320 | static const struct power_supply_desc bq24190_charger_desc = {
-> ...
-> 1325 | 	.get_property		= bq24190_charger_get_property,
-> 
-> Moreover, no NUL-padding is required as bdi is zero-allocated in
-> bq24190_charger.c:
-> 1798 | bdi = devm_kzalloc(dev, sizeof(*bdi), GFP_KERNEL);
-> 
-> Considering the above, a suitable replacement is `strscpy` [2] due to
-> the fact that it guarantees NUL-termination on the destination buffer
-> without unnecessarily NUL-padding.
-> 
-> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
-> Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
-> Link: https://github.com/KSPP/linux/issues/90
-> Cc: linux-hardening@vger.kernel.org
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
-> ---
-> Note: build-tested only.
-> 
-> Found with: $ rg "strncpy\("
-> ---
->  drivers/power/supply/bq24190_charger.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
-> index 3f99cb9590ba..1db290ee2591 100644
-> --- a/drivers/power/supply/bq24190_charger.c
-> +++ b/drivers/power/supply/bq24190_charger.c
-> @@ -1803,7 +1803,7 @@ static int bq24190_probe(struct i2c_client *client)
->  
->  	bdi->client = client;
->  	bdi->dev = dev;
-> -	strncpy(bdi->model_name, id->name, I2C_NAME_SIZE);
-> +	strscpy(bdi->model_name, id->name, sizeof(bdi->model_name));
+From: James Morse <james.morse@arm.com>
 
-struct bq24190_dev_info {
-	...
-        char                            model_name[I2C_NAME_SIZE];
+acpi_scan_device_not_present() is called when a device in the
+hierarchy is not available for enumeration. Historically enumeration
+was only based on whether the device was present.
 
-Length replacement looks correct.
+To add support for only enumerating devices that are both present
+and enabled, this helper should be renamed. It was only ever about
+enumeration, rename it acpi_scan_device_not_enumerated().
 
-struct i2c_device_id {
-        char name[I2C_NAME_SIZE];
+No change in behaviour is intended.
 
-And it looks like this wasn't accidentally leaving strings unterminated,
-so that's nice.
+Signed-off-by: James Morse <james.morse@arm.com>
+Reviewed-by: Gavin Shan <gshan@redhat.com>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+---
+This is another patch from James' aarch64 hotplug vcpu series.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+I asked:
+> Is this another patch which ought to be submitted without waiting
+> for the rest of the series?
+to which Jonathan Cameron replied:
+> Looks like a valid standalone change to me.
 
+So let's get this queued up.
+
+ drivers/acpi/scan.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+index ed01e19514ef..17ab875a7d4e 100644
+--- a/drivers/acpi/scan.c
++++ b/drivers/acpi/scan.c
+@@ -289,10 +289,10 @@ static int acpi_scan_hot_remove(struct acpi_device *device)
+ 	return 0;
+ }
+ 
+-static int acpi_scan_device_not_present(struct acpi_device *adev)
++static int acpi_scan_device_not_enumerated(struct acpi_device *adev)
+ {
+ 	if (!acpi_device_enumerated(adev)) {
+-		dev_warn(&adev->dev, "Still not present\n");
++		dev_warn(&adev->dev, "Still not enumerated\n");
+ 		return -EALREADY;
+ 	}
+ 	acpi_bus_trim(adev);
+@@ -327,7 +327,7 @@ static int acpi_scan_device_check(struct acpi_device *adev)
+ 			error = -ENODEV;
+ 		}
+ 	} else {
+-		error = acpi_scan_device_not_present(adev);
++		error = acpi_scan_device_not_enumerated(adev);
+ 	}
+ 	return error;
+ }
+@@ -339,7 +339,7 @@ static int acpi_scan_bus_check(struct acpi_device *adev, void *not_used)
+ 
+ 	acpi_bus_get_status(adev);
+ 	if (!acpi_device_is_present(adev)) {
+-		acpi_scan_device_not_present(adev);
++		acpi_scan_device_not_enumerated(adev);
+ 		return 0;
+ 	}
+ 	if (handler && handler->hotplug.scan_dependent)
 -- 
-Kees Cook
+2.30.2
+
