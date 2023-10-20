@@ -2,213 +2,288 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8047D143F
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Oct 2023 18:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22E8E7D1454
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Oct 2023 18:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjJTQlv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 20 Oct 2023 12:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57330 "EHLO
+        id S1377908AbjJTQna (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Oct 2023 12:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjJTQlu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 12:41:50 -0400
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFF1CA;
-        Fri, 20 Oct 2023 09:41:47 -0700 (PDT)
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-582a82e6d10so178616eaf.0;
-        Fri, 20 Oct 2023 09:41:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697820107; x=1698424907;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oi9p6sdu5fjBTtQ1cm+vKJjuXhBdwf6LqIRrwx97EmQ=;
-        b=bd8vakvO70wuzD0R41RDf6oN+l+rpP9PVMUe7zX3GCPu8OIja9iroldcXDMOLLlYi/
-         XtBs0ybC0YKnBFQ0CdXknEJr5EmxtpOkyHV6l+2hH79yBlC3H0T8k9jTpTQ63o17SU4q
-         9bAWfglmrsytW4fMOgFxOVYSlLzvuSC0S+8rFbriB7xyLHEPyKsjDT/d9szY6kYDBkhf
-         7EKn+sk8oNZtkZB0INRjqMyRyhL7T6fMgKXmfS/Tc0BoClza3jTfJb9YpBK1WxqsSrj2
-         uH329tvp/qER+6TWSeVFxu0jQMU0zcLXtpSc2wT66iO/kgEfcCaAk40+SXlqnPLrVxQm
-         1Fsw==
-X-Gm-Message-State: AOJu0YwbECknA1lJToD7LHxQKmmPW/2niocgKLJOFRLPVCaEwqR1UICl
-        pXol33jsuXpGnOhAkv7eh2jkYCcvo7mZkskiVdI=
-X-Google-Smtp-Source: AGHT+IEkWQiUJR31we6vIc9qvd0b8g6tvzwisz8vX7qe/lGF6l1RwM3G5yc7FfESQRer+ZF5lDVEeUwdX3zZXlWmRBk=
-X-Received: by 2002:a4a:bb0f:0:b0:583:fc94:c3fd with SMTP id
- f15-20020a4abb0f000000b00583fc94c3fdmr2818335oop.0.1697820106891; Fri, 20 Oct
- 2023 09:41:46 -0700 (PDT)
+        with ESMTP id S229775AbjJTQn3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 12:43:29 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B74D65;
+        Fri, 20 Oct 2023 09:43:26 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4SBr1c3cQrz6K6Hb;
+        Sat, 21 Oct 2023 00:40:52 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Fri, 20 Oct
+ 2023 17:43:21 +0100
+Date:   Fri, 20 Oct 2023 17:43:20 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+CC:     James Morse <james.morse@arm.com>, <linux-pm@vger.kernel.org>,
+        <loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+        <linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+        <x86@kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        <jianyong.wu@arm.com>, <justin.he@arm.com>
+Subject: Re: [RFC PATCH v2 14/35] ACPI: Only enumerate enabled (or
+ functional) devices
+Message-ID: <20231020174320.0000503c@Huawei.com>
+In-Reply-To: <ZTKdgUu/wubKfdef@shell.armlinux.org.uk>
+References: <20230913163823.7880-1-james.morse@arm.com>
+        <20230913163823.7880-15-james.morse@arm.com>
+        <20230914132732.00006908@Huawei.com>
+        <20230914140940.00001417@Huawei.com>
+        <ZTKdgUu/wubKfdef@shell.armlinux.org.uk>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-References: <13365827.uLZWGnKmhe@kreacher> <3768557.kQq0lBPeGt@kreacher> <ecd3e95c-bfea-4f0e-94c8-28f056b6206a@arm.com>
-In-Reply-To: <ecd3e95c-bfea-4f0e-94c8-28f056b6206a@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 20 Oct 2023 18:41:35 +0200
-Message-ID: <CAJZ5v0hCYqZ4qinY09NA05Zdw8N-6jZk0sMVN6epfH=dBX4eJg@mail.gmail.com>
-Subject: Re: [PATCH v1 4/6] thermal: gov_power_allocator: Use trip pointers
- instead of trip indices
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 20, 2023 at 6:36 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->
->
->
-> On 10/6/23 18:47, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Modify the power allocator thermal governor to use trip pointers instead
-> > of trip indices everywhere except for the power_allocator_throttle()
-> > second argument that will be changed subsequently along with the
-> > definition of the .throttle() governor callback.
-> >
-> > The general functionality is not expected to be changed.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >   drivers/thermal/gov_power_allocator.c |  123 +++++++++++++---------------------
-> >   1 file changed, 49 insertions(+), 74 deletions(-)
-> >
->
-> [snip]
->
-> > @@ -636,7 +619,6 @@ static int power_allocator_bind(struct t
-> >   {
-> >       int ret;
-> >       struct power_allocator_params *params;
-> > -     struct thermal_trip trip;
-> >
-> >       ret = check_power_actors(tz);
-> >       if (ret)
-> > @@ -662,12 +644,13 @@ static int power_allocator_bind(struct t
-> >       get_governor_trips(tz, params);
-> >
-> >       if (tz->num_trips > 0) {
-> > -             ret = __thermal_zone_get_trip(tz, params->trip_max_desired_temperature,
-> > -                                           &trip);
-> > -             if (!ret)
-> > +             const struct thermal_trip *trip;
-> > +
-> > +             trip = params->trip_max_desired_temperature;
-> > +             if (trip)
-> >                       estimate_pid_constants(tz, tz->tzp->sustainable_power,
-> >                                              params->trip_switch_on,
-> > -                                            trip.temperature);
-> > +                                            trip->temperature);
-> >       }
->
-> The code check for the populated pointer (by earlier new
-> get_governor_trips(tz, params)) :
->
-> if (params->trip_max_desired_temperature) {
->         int temp = params->trip_max_desired_temperature->temperature;
->
->         estimate_pid_constants(...)
-> }
->
-> looks better (what you have figured out already).
->
-> Other than that the patch LGTM:
->
-> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-> Tested-by: Lukasz Luba <lukasz.luba@arm.com>
+On Fri, 20 Oct 2023 16:32:17 +0100
+"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
 
-Thanks!
+> On Thu, Sep 14, 2023 at 02:09:40PM +0100, Jonathan Cameron wrote:
+> > On Thu, 14 Sep 2023 13:27:32 +0100
+> > Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+> >   
+> > > On Wed, 13 Sep 2023 16:38:02 +0000
+> > > James Morse <james.morse@arm.com> wrote:
+> > >   
+> > > > Today the ACPI enumeration code 'visits' all devices that are present.
+> > > > 
+> > > > This is a problem for arm64, where CPUs are always present, but not
+> > > > always enabled. When a device-check occurs because the firmware-policy
+> > > > has changed and a CPU is now enabled, the following error occurs:
+> > > > | acpi ACPI0007:48: Enumeration failure
+> > > > 
+> > > > This is ultimately because acpi_dev_ready_for_enumeration() returns
+> > > > true for a device that is not enabled. The ACPI Processor driver
+> > > > will not register such CPUs as they are not 'decoding their resources'.
+> > > > 
+> > > > Change acpi_dev_ready_for_enumeration() to also check the enabled bit.
+> > > > ACPI allows a device to be functional instead of maintaining the
+> > > > present and enabled bit. Make this behaviour an explicit check with
+> > > > a reference to the spec, and then check the present and enabled bits.    
+> > > 
+> > > "and the" only applies if the functional route hasn't been followed
+> > > "if not this case check the present and enabled bits."
+> > >   
+> > > > This is needed to avoid enumerating present && functional devices that
+> > > > are not enabled.
+> > > > 
+> > > > Signed-off-by: James Morse <james.morse@arm.com>
+> > > > ---
+> > > > If this change causes problems on deployed hardware, I suggest an
+> > > > arch opt-in: ACPI_IGNORE_STA_ENABLED, that causes
+> > > > acpi_dev_ready_for_enumeration() to only check the present bit.
+> > > > ---
+> > > >  drivers/acpi/device_pm.c    |  2 +-
+> > > >  drivers/acpi/device_sysfs.c |  2 +-
+> > > >  drivers/acpi/internal.h     |  1 -
+> > > >  drivers/acpi/property.c     |  2 +-
+> > > >  drivers/acpi/scan.c         | 23 +++++++++++++----------
+> > > >  5 files changed, 16 insertions(+), 14 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/acpi/device_pm.c b/drivers/acpi/device_pm.c
+> > > > index f007116a8427..76c38478a502 100644
+> > > > --- a/drivers/acpi/device_pm.c
+> > > > +++ b/drivers/acpi/device_pm.c
+> > > > @@ -313,7 +313,7 @@ int acpi_bus_init_power(struct acpi_device *device)
+> > > >  		return -EINVAL;
+> > > >  
+> > > >  	device->power.state = ACPI_STATE_UNKNOWN;
+> > > > -	if (!acpi_device_is_present(device)) {
+> > > > +	if (!acpi_dev_ready_for_enumeration(device)) {
+> > > >  		device->flags.initialized = false;
+> > > >  		return -ENXIO;
+> > > >  	}
+> > > > diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
+> > > > index b9bbf0746199..16e586d74aa2 100644
+> > > > --- a/drivers/acpi/device_sysfs.c
+> > > > +++ b/drivers/acpi/device_sysfs.c
+> > > > @@ -141,7 +141,7 @@ static int create_pnp_modalias(const struct acpi_device *acpi_dev, char *modalia
+> > > >  	struct acpi_hardware_id *id;
+> > > >  
+> > > >  	/* Avoid unnecessarily loading modules for non present devices. */
+> > > > -	if (!acpi_device_is_present(acpi_dev))
+> > > > +	if (!acpi_dev_ready_for_enumeration(acpi_dev))
+> > > >  		return 0;
+> > > >  
+> > > >  	/*
+> > > > diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
+> > > > index 866c7c4ed233..a1b45e345bcc 100644
+> > > > --- a/drivers/acpi/internal.h
+> > > > +++ b/drivers/acpi/internal.h
+> > > > @@ -107,7 +107,6 @@ int acpi_device_setup_files(struct acpi_device *dev);
+> > > >  void acpi_device_remove_files(struct acpi_device *dev);
+> > > >  void acpi_device_add_finalize(struct acpi_device *device);
+> > > >  void acpi_free_pnp_ids(struct acpi_device_pnp *pnp);
+> > > > -bool acpi_device_is_present(const struct acpi_device *adev);
+> > > >  bool acpi_device_is_battery(struct acpi_device *adev);
+> > > >  bool acpi_device_is_first_physical_node(struct acpi_device *adev,
+> > > >  					const struct device *dev);
+> > > > diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
+> > > > index 413e4fcadcaf..e03f00b98701 100644
+> > > > --- a/drivers/acpi/property.c
+> > > > +++ b/drivers/acpi/property.c
+> > > > @@ -1418,7 +1418,7 @@ static bool acpi_fwnode_device_is_available(const struct fwnode_handle *fwnode)
+> > > >  	if (!is_acpi_device_node(fwnode))
+> > > >  		return false;
+> > > >  
+> > > > -	return acpi_device_is_present(to_acpi_device_node(fwnode));
+> > > > +	return acpi_dev_ready_for_enumeration(to_acpi_device_node(fwnode));
+> > > >  }
+> > > >  
+> > > >  static const void *
+> > > > diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+> > > > index 17ab875a7d4e..f898591ce05f 100644
+> > > > --- a/drivers/acpi/scan.c
+> > > > +++ b/drivers/acpi/scan.c
+> > > > @@ -304,7 +304,7 @@ static int acpi_scan_device_check(struct acpi_device *adev)
+> > > >  	int error;
+> > > >  
+> > > >  	acpi_bus_get_status(adev);
+> > > > -	if (acpi_device_is_present(adev)) {
+> > > > +	if (acpi_dev_ready_for_enumeration(adev)) {
+> > > >  		/*
+> > > >  		 * This function is only called for device objects for which
+> > > >  		 * matching scan handlers exist.  The only situation in which
+> > > > @@ -338,7 +338,7 @@ static int acpi_scan_bus_check(struct acpi_device *adev, void *not_used)
+> > > >  	int error;
+> > > >  
+> > > >  	acpi_bus_get_status(adev);
+> > > > -	if (!acpi_device_is_present(adev)) {
+> > > > +	if (!acpi_dev_ready_for_enumeration(adev)) {
+> > > >  		acpi_scan_device_not_enumerated(adev);
+> > > >  		return 0;
+> > > >  	}
+> > > > @@ -1908,11 +1908,6 @@ static bool acpi_device_should_be_hidden(acpi_handle handle)
+> > > >  	return true;
+> > > >  }
+> > > >  
+> > > > -bool acpi_device_is_present(const struct acpi_device *adev)
+> > > > -{
+> > > > -	return adev->status.present || adev->status.functional;
+> > > > -}
+> > > > -
+> > > >  static bool acpi_scan_handler_matching(struct acpi_scan_handler *handler,
+> > > >  				       const char *idstr,
+> > > >  				       const struct acpi_device_id **matchid)
+> > > > @@ -2375,16 +2370,24 @@ EXPORT_SYMBOL_GPL(acpi_dev_clear_dependencies);
+> > > >   * acpi_dev_ready_for_enumeration - Check if the ACPI device is ready for enumeration
+> > > >   * @device: Pointer to the &struct acpi_device to check
+> > > >   *
+> > > > - * Check if the device is present and has no unmet dependencies.
+> > > > + * Check if the device is functional or enabled and has no unmet dependencies.
+> > > >   *
+> > > > - * Return true if the device is ready for enumeratino. Otherwise, return false.
+> > > > + * Return true if the device is ready for enumeration. Otherwise, return false.
+> > > >   */
+> > > >  bool acpi_dev_ready_for_enumeration(const struct acpi_device *device)
+> > > >  {
+> > > >  	if (device->flags.honor_deps && device->dep_unmet)
+> > > >  		return false;
+> > > >  
+> > > > -	return acpi_device_is_present(device);
+> > > > +	/*
+> > > > +	 * ACPI 6.5's 6.3.7 "_STA (Device Status)" allows firmware to return
+> > > > +	 * (!present && functional) for certain types of devices that should be
+> > > > +	 * enumerated.    
+> > > 
+> > > I'd call out the fact that enumeration isn't same as "device driver should be loaded"
+> > > which is the thing that functional is supposed to indicate should not happen.
+> > >   
+> > > > +	 */
+> > > > +	if (!device->status.present && !device->status.enabled)    
+> > > 
+> > > In theory no need to check !enabled if !present
+> > > "If bit [0] is cleared, then bit 1 must also be cleared (in other words, a device that is not present cannot be enabled)."
+> > > We could report an ACPI bug if that's seen.  If that bug case is ignored this code can
+> > > become the simpler.
+> > > 
+> > > 	if (device->status.present)
+> > > 		return device->status_enabled;
+> > > 	else
+> > > 		return device->status.functional;
+> > > 
+> > > Or the following also valid here (as functional should be set for enabled present devices
+> > > unless they failed diagnostics).
+> > > 
+> > > 	if (dev->status.functional)
+> > > 		return true;
+> > > 	return device->status.present && device->status.enabled;
+> > > 
+> > > On assumption we want to enumerate dead devices for debug purposes...  
+> > Actually ignore this.  Could have weird race with present, functional true,
+> > but enabled not quite set - despite the device being there and self
+> > tests having passed.  
+> 
+> Are you suggesting to ignore you're entire suggestion or just this
+> suggestion and go with the first one?
 
-> I have also tested this is a few ways and it still works as expected:
-> 1. Power allocation in different conditions
-> 2. Trip points properly recognized with this nice get_governor_trips(),
->    here is the test output, with many tricky trip point setups:
+I meant just the last one.  Sorry for confusion.
 
-Much appreciated!
+> 
+> So, the code was originally effectively:
+> 
+> 	return adev->status.present || adev->status.functional;
+> 
+> So it has the truth table:
+> 
+> present	functional	result
+> false	false		false
+> false	true		true
+> true	don't care	true
+> 
+> James' replacement code makes this:
+> 
+> 	if (!device->status.present && !device->status.enabled)
+> 		return device->status.functional;
+> 
+> 	return device->status.present && device->status.enabled;
+> 
+> giving:
+> 
+> present	enabled	functional	result
+> false	false	false		false
+> false	false	true		true
+> false	true	don't care	false	<== invalid according to spec
+> true	false	don't care	false
+> true	true	don't care	true
+> 
+> So, I think what you're getting at is that we want the logic to be
+> according to the above table, but simplified, not caring about the
+> invalid state too much?
+> 
+> In which case, I would suggest going with your first suggestion, in
+> other words:
+> 
+> 	if (device->status.present)
+> 		return device->status.enabled;
+> 	else
+> 		return device->status.functional;
+> 
+> Yes?
+> 
+Yes I agree.
 
-> use case A:
-> 5 trip points:
-> - 2 passive for 50, 60 degC
-> - 1 active 70degC
-> - 2 passive 70, 85 degC
-> - 1 critical 120 degC
->
-> expected IPA trip points: 50, 85 deg => 35 degC IPA operating range
->
-> [   24.578806] Power allocator: IPA: trip->temperature=50000
-> [   24.578824] Power allocator: IPA: passive trip->temperature=50000
-> [   24.578838] Power allocator: IPA: fist passive trip->temperature=50000
-> [   24.578851] Power allocator: IPA: trip->temperature=60000
-> [   24.578863] Power allocator: IPA: passive trip->temperature=60000
-> [   24.578875] Power allocator: IPA: trip->temperature=70000
-> [   24.578888] Power allocator: IPA: active trip->temperature=70000
-> [   24.578900] Power allocator: IPA: trip->temperature=120000
-> [   24.578912] Power allocator: IPA: trip->temperature=70000
-> [   24.578925] Power allocator: IPA: passive trip->temperature=70000
-> [   24.578937] Power allocator: IPA: trip->temperature=85000
-> [   24.578950] Power allocator: IPA: passive trip->temperature=85000
-> [   24.578964] Power allocator: IPA: trip_switch_on->temperature=50000
-> control_temp=85000
-> [   24.578978] Power allocator: IPA: temperature_threshold=35000
->
-> -------------------------------------------------------------
-> use case B:
-> 5 trip points:
-> - 2 active for 50, 60 degC
-> - 1 active 70degC
-> - 2 passive 70, 85 degC
-> - 1 critical 120 degC
->
-> expected IPA trip points: 70, 85 deg => 15 degC IPA operating range
->
-> [   27.402474] Power allocator: IPA: trip->temperature=50000
-> [   27.402492] Power allocator: IPA: active trip->temperature=50000
-> [   27.402505] Power allocator: IPA: trip->temperature=60000
-> [   27.402518] Power allocator: IPA: active trip->temperature=60000
-> [   27.402531] Power allocator: IPA: trip->temperature=70000
-> [   27.402544] Power allocator: IPA: active trip->temperature=70000
-> [   27.402557] Power allocator: IPA: trip->temperature=120000
-> [   27.402570] Power allocator: IPA: trip->temperature=70000
-> [   27.402582] Power allocator: IPA: passive trip->temperature=70000
-> [   27.402596] Power allocator: IPA: fist passive trip->temperature=70000
-> [   27.402608] Power allocator: IPA: trip->temperature=85000
-> [   27.402622] Power allocator: IPA: passive trip->temperature=85000
-> [   27.402635] Power allocator: IPA: trip_switch_on->temperature=70000
-> control_temp=85000
-> [   27.402649] Power allocator: IPA: temperature_threshold=15000
->
-> --------------------------------------------------------
-> use case C:
-> 6 trip points:
-> - 2 active for 50, 60 degC
-> - 1 active 70degC
-> - 3 passive 70, 85, 90 degC
-> - 1 critical 120 degC
->
-> expected IPA trip points: 50, 85 deg => 20 degC IPA operating range
->
-> [   36.998907] Power allocator: IPA: trip->temperature=50000
-> [   36.998921] Power allocator: IPA: active trip->temperature=50000
-> [   36.998935] Power allocator: IPA: trip->temperature=60000
-> [   36.998948] Power allocator: IPA: active trip->temperature=60000
-> [   36.998960] Power allocator: IPA: trip->temperature=70000
-> [   36.998973] Power allocator: IPA: active trip->temperature=70000
-> [   36.998985] Power allocator: IPA: trip->temperature=120000
-> [   36.998999] Power allocator: IPA: trip->temperature=70000
-> [   36.999011] Power allocator: IPA: passive trip->temperature=70000
-> [   36.999024] Power allocator: IPA: fist passive trip->temperature=70000
-> [   36.999037] Power allocator: IPA: trip->temperature=85000
-> [   36.999049] Power allocator: IPA: passive trip->temperature=85000
-> [   36.999062] Power allocator: IPA: trip->temperature=90000
-> [   36.999074] Power allocator: IPA: passive trip->temperature=90000
-> [   36.999087] Power allocator: IPA: trip_switch_on->temperature=70000
-> control_temp=90000
-> [   36.999101] Power allocator: IPA: temperature_threshold=20000
->
