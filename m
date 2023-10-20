@@ -2,196 +2,206 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C7557D1023
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Oct 2023 15:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E65737D10B5
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Oct 2023 15:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377408AbjJTNAg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Oct 2023 09:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
+        id S1377417AbjJTNoq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Oct 2023 09:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377017AbjJTNAe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 09:00:34 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C17D68;
-        Fri, 20 Oct 2023 06:00:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1697806831; x=1729342831;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=1v0FIctfXRxXXdGfP79mZdDhr3QMXDS4n7+VsOpM9N4=;
-  b=jayYf5Ruc9xm4OmC3zZHU9ayycL/bCn+Mu4PLDPQUlIm1R0fTLUNhdAV
-   CSZVpcP6fRRdfCPuqSwnLGTMorE4DklwfrxWxI1ig/CwkBgDD+s8gKK4B
-   9s6NMmxPfKOdDDrhOQTekuGO2SuV6CIB9jlqyXqUgLNXipJHkP+ma7eff
-   4KkZBL9J6bmzU3t0XHQzV29JMz5RU53wGrDa+IIdFSOmdS0fb+UWBrK1o
-   SLnKAP/jojUHubjVBzfOUfK8F8hB9050MEu+58rRhQybTl7pW8b1ae03F
-   g1U9Sa6iKV08iA5Lv0eRmM5upRdY74qMm4MwJnsLJbptjlmauBen9gsSg
-   A==;
-X-IronPort-AV: E=Sophos;i="6.03,238,1694728800"; 
-   d="scan'208";a="33575474"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 20 Oct 2023 15:00:23 +0200
-Received: from steina-w.tq-net.de (steina-w.tq-net.de [10.123.53.18])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 21D4E280086;
-        Fri, 20 Oct 2023 15:00:23 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marek Vasut <marex@denx.de>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux@ew.tq-group.com, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH 5/5] arm64: dts: mba93xxla: Add LVDS overlay
-Date:   Fri, 20 Oct 2023 15:00:18 +0200
-Message-Id: <20231020130019.665853-6-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231020130019.665853-1-alexander.stein@ew.tq-group.com>
-References: <20231020130019.665853-1-alexander.stein@ew.tq-group.com>
+        with ESMTP id S1377222AbjJTNop (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 09:44:45 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA8CA3;
+        Fri, 20 Oct 2023 06:44:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=EaJhZw0Zk+uukZ21AQLL1Wa3YNXD1P5PVQhDy79M9q0=; b=Y30Q5KtPVsMmfXmbaBaWKFuqkc
+        4bqAUIrotpwascfiGwvAM0YfAx5r4v8d/93HKciObRSjY7n+A0rEs934jpl7SxrlFtDG+3WRlsmNI
+        cNiSD21IKCVlHirpNr5MZGKmaa+Oy5SjiNPjHKJayZV2j9UbMHI/HvaNvluDtNQsUEyK3472J/14p
+        y+c/KUjPdCl7vBQCqJnu+X+2oSn2/Ja8aXwfAC619F6dVJm89BeZF21oAKs4/ZQdyCt7IyfaiOlbe
+        MXK7DC4bnANefohp3DoFA6aUIBc2qDKxDfx+OF9DeG9E3QSyDnqPLLiEvpXyDqZtG3SNsydKOetci
+        0CN/heNg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:48962)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1qtpno-0000T7-2b;
+        Fri, 20 Oct 2023 14:44:36 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1qtpnn-0001aP-Tx; Fri, 20 Oct 2023 14:44:35 +0100
+Date:   Fri, 20 Oct 2023 14:44:35 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+        x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        jianyong.wu@arm.com, justin.he@arm.com, gregkh@linuxfoundation.org
+Subject: Re: [RFC PATCH v2 11/35] arch_topology: Make
+ register_cpu_capacity_sysctl() tolerant to late CPUs
+Message-ID: <ZTKEQz0DJuv/tqNH@shell.armlinux.org.uk>
+References: <20230913163823.7880-1-james.morse@arm.com>
+ <20230913163823.7880-12-james.morse@arm.com>
+ <20230914130126.000069db@Huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230914130126.000069db@Huawei.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This adds the overlay for the Tinma TM070JVHG33 LVDS display.
+On Thu, Sep 14, 2023 at 01:01:26PM +0100, Jonathan Cameron wrote:
+> On Wed, 13 Sep 2023 16:37:59 +0000
+> James Morse <james.morse@arm.com> wrote:
+> 
+> > register_cpu_capacity_sysctl() adds a property to sysfs that describes
+> > the CPUs capacity. This is done from a subsys_initcall() that assumes
+> > all possible CPUs are registered.
+> > 
+> > With CPU hotplug, possible CPUs aren't registered until they become
+> > present, (or for arm64 enabled). This leads to messages during boot:
+> > | register_cpu_capacity_sysctl: too early to get CPU1 device!
+> > and once these CPUs are added to the system, the file is missing.
+> > 
+> > Move this to a cpuhp callback, so that the file is created once
+> > CPUs are brought online. This covers CPUs that are added late by
+> > mechanisms like hotplug.
+> > One observable difference is the file is now missing for offline CPUs.
+> > 
+> > Signed-off-by: James Morse <james.morse@arm.com>
+> > ---
+> > If the offline CPUs thing is a problem for the tools that consume
+> > this value, we'd need to move cpu_capacity to be part of cpu.c's
+> > common_cpu_attr_groups.
+> 
+> I think we should do that anyway and then use an is_visible() if we want to
+> change whether it is visible in offline cpus.
+> 
+> Dynamic sysfs file creation is horrible - particularly when done
+> from an totally different file from where the rest of the attributes
+> are registered.  I'm curious what the history behind that is.
+> 
+> Whilst here, why is there a common_cpu_attr_groups which is
+> identical to the hotpluggable_cpu_attr_groups in base/cpu.c?
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
- arch/arm64/boot/dts/freescale/Makefile        |  3 ++
- ...3-tqma9352-mba93xxla-lvds-tm070jvhg33.dtso | 45 +++++++++++++++++++
- .../freescale/imx93-tqma9352-mba93xxla.dts    | 27 +++++++++++
- 3 files changed, 75 insertions(+)
- create mode 100644 arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxla-lvds-tm070jvhg33.dtso
+Looking into doing this, the easy bit is adding the attribute group
+with an appropriate .is_visible dependent on cpu_present(), but we
+need to be able to call sysfs_update_groups() when the state of the
+.is_visible() changes.
 
-diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index ba70adc51bef..85802bc1639f 100644
---- a/arch/arm64/boot/dts/freescale/Makefile
-+++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -191,6 +191,9 @@ dtb-$(CONFIG_ARCH_MXC) += imx93-11x11-evk.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx93-tqma9352-mba93xxca.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx93-tqma9352-mba93xxla.dtb
+Given the comment in sysfs_update_groups() about "if an error occurs",
+rather than making this part of common_cpu_attr_groups, would it be
+better that it's part of its own set of groups, thus limiting the
+damage from a possible error? I suspect, however, that any error at
+that point means that the system is rather fatally wounded.
+
+This is what I have so far to implement your idea, less the necessary
+sysfs_update_groups() call when we need to change the visibility of
+the attributes.
+
+diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+index 9ccb7daee78e..06c9fc6620d2 100644
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -215,43 +215,24 @@ static ssize_t cpu_capacity_show(struct device *dev,
+ 	return sysfs_emit(buf, "%lu\n", topology_get_cpu_scale(cpu->dev.id));
+ }
  
-+imx93-tqma9352-mba93xxla-lvds-tm070jvhg33-dtbs += imx93-tqma9352-mba93xxla.dtb imx93-tqma9352-mba93xxla-lvds-tm070jvhg33.dtbo
-+dtb-$(CONFIG_ARCH_MXC) += imx93-tqma9352-mba93xxla-lvds-tm070jvhg33.dtb
-+
- imx8mm-venice-gw72xx-0x-imx219-dtbs	:= imx8mm-venice-gw72xx-0x.dtb imx8mm-venice-gw72xx-0x-imx219.dtbo
- imx8mm-venice-gw72xx-0x-rpidsi-dtbs	:= imx8mm-venice-gw72xx-0x.dtb imx8mm-venice-gw72xx-0x-rpidsi.dtbo
- imx8mm-venice-gw72xx-0x-rs232-rts-dtbs	:= imx8mm-venice-gw72xx-0x.dtb imx8mm-venice-gw72xx-0x-rs232-rts.dtbo
-diff --git a/arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxla-lvds-tm070jvhg33.dtso b/arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxla-lvds-tm070jvhg33.dtso
-new file mode 100644
-index 000000000000..9eb24abca6bf
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxla-lvds-tm070jvhg33.dtso
-@@ -0,0 +1,45 @@
-+// SPDX-License-Identifier: (GPL-2.0-or-later OR MIT)
-+/*
-+ * Copyright (c) 2023 TQ-Systems GmbH <linux@ew.tq-group.com>,
-+ * D-82229 Seefeld, Germany.
-+ * Author: Alexander Stein
-+ */
-+
-+#include <dt-bindings/clock/imx93-clock.h>
-+#include <dt-bindings/gpio/gpio.h>
-+
-+/dts-v1/;
-+/plugin/;
-+
-+&{/} {
-+	compatible = "tq,imx93-tqma9352-mba93xxla",
-+		     "tq,imx93-tqma9352", "fsl,imx93";
-+};
-+
-+&backlight_lvds {
-+	status = "okay";
-+};
-+
-+&display {
-+	compatible = "tianma,tm070jvhg33";
-+	status = "okay";
-+};
-+
-+&lcdif {
-+	assigned-clocks = <&clk IMX93_CLK_VIDEO_PLL>,
-+			  <&clk IMX93_CLK_MEDIA_DISP_PIX>;
-+	assigned-clock-rates = <477400000>;
-+	status = "okay";
-+};
-+
-+&lvds_bridge {
-+	status = "okay";
-+};
-+
-+&media_blk_ctrl {
-+	status = "okay";
-+};
-+
-+&tpm5 {
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxla.dts b/arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxla.dts
-index f0d0bf84f6ba..84fdeaaaea44 100644
---- a/arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxla.dts
-+++ b/arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxla.dts
-@@ -40,6 +40,23 @@ backlight_lvds: backlight {
- 		status = "disabled";
- 	};
+-static void update_topology_flags_workfn(struct work_struct *work);
+-static DECLARE_WORK(update_topology_flags_work, update_topology_flags_workfn);
+-
+ static DEVICE_ATTR_RO(cpu_capacity);
  
-+	display: display {
-+		/*
-+		 * Display is not fixed, so compatible has to be added from
-+		 * DT overlay
-+		 */
-+		power-supply = <&reg_3v3>;
-+		enable-gpios = <&expander2 1 GPIO_ACTIVE_HIGH>;
-+		backlight = <&backlight_lvds>;
-+		status = "disabled";
-+
-+		port {
-+			panel_in_lvds0: endpoint {
-+				remote-endpoint = <&ldb_lvds>;
-+			};
-+		};
-+	};
-+
- 	clk_dp: clk-dp {
- 		compatible = "fixed-clock";
- 		#clock-cells = <0>;
-@@ -420,6 +437,16 @@ &lpuart8 {
- 	status = "okay";
+-static int cpu_capacity_sysctl_add(unsigned int cpu)
+-{
+-	struct device *cpu_dev = get_cpu_device(cpu);
+-
+-	if (!cpu_dev)
+-		return -ENOENT;
+-
+-	device_create_file(cpu_dev, &dev_attr_cpu_capacity);
+-
+-	return 0;
+-}
+-
+-static int cpu_capacity_sysctl_remove(unsigned int cpu)
++static umode_t cpu_present_attrs_visible(struct kobject *kobi,
++					 struct attribute *attr, int index)
+ {
+-	struct device *cpu_dev = get_cpu_device(cpu);
+-
+-	if (!cpu_dev)
+-		return -ENOENT;
+-
+-	device_remove_file(cpu_dev, &dev_attr_cpu_capacity);
++	struct device *dev = kobj_to_dev(kobj);
++	struct cpu *cpu = container_of(dev, struct cpu, dev);
+ 
+-	return 0;
++	return cpu_present(cpu->dev.id) ? attr->mode : 0;
+ }
+ 
+-static int register_cpu_capacity_sysctl(void)
+-{
+-	cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "topology/cpu-capacity",
+-			  cpu_capacity_sysctl_add, cpu_capacity_sysctl_remove);
++const struct attribute_group cpu_capacity_attr_group = {
++	.is_visible = cpu_present_attrs_visible,
++	.attrs = cpu_capacity_attrs
++};
+ 
+-	return 0;
+-}
+-subsys_initcall(register_cpu_capacity_sysctl);
++static void update_topology_flags_workfn(struct work_struct *work);
++static DECLARE_WORK(update_topology_flags_work, update_topology_flags_workfn);
+ 
+ static int update_topology;
+ 
+diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+index a19a8be93102..954b045705c2 100644
+--- a/drivers/base/cpu.c
++++ b/drivers/base/cpu.c
+@@ -192,6 +192,9 @@ static const struct attribute_group crash_note_cpu_attr_group = {
+ static const struct attribute_group *common_cpu_attr_groups[] = {
+ #ifdef CONFIG_KEXEC
+ 	&crash_note_cpu_attr_group,
++#endif
++#ifdef CONFIG_GENERIC_ARCH_TOPOLOGY
++	&cpu_capacity_attr_group,
+ #endif
+ 	NULL
+ };
+diff --git a/include/linux/cpu.h b/include/linux/cpu.h
+index e117c06e0c6b..745ad21e3dc8 100644
+--- a/include/linux/cpu.h
++++ b/include/linux/cpu.h
+@@ -30,6 +30,8 @@ struct cpu {
+ 	struct device dev;
  };
  
-+&lvds_bridge {
-+	ports {
-+		port@1 {
-+			ldb_lvds: endpoint {
-+				remote-endpoint = <&panel_in_lvds0>;
-+			};
-+		};
-+	};
-+};
++extern const struct attribute_group cpu_capacity_attr_group;
 +
- &pcf85063 {
- 	/* RTC_EVENT# is connected on MBa93xxLA */
- 	pinctrl-names = "default";
--- 
-2.34.1
+ extern void boot_cpu_init(void);
+ extern void boot_cpu_hotplug_init(void);
+ extern void cpu_init(void);
 
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
