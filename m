@@ -2,75 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08EC47D0DF1
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Oct 2023 12:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4C567D0E05
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Oct 2023 12:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376745AbjJTK4C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Oct 2023 06:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38522 "EHLO
+        id S1377152AbjJTK53 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Oct 2023 06:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376699AbjJTK4C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 06:56:02 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06679E8;
-        Fri, 20 Oct 2023 03:56:00 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qtnAc-0001wr-FQ; Fri, 20 Oct 2023 12:55:58 +0200
-Message-ID: <37c2c8ee-d909-413d-9cf7-e67efd7fdb30@leemhuis.info>
-Date:   Fri, 20 Oct 2023 12:55:57 +0200
+        with ESMTP id S1377158AbjJTK5U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 06:57:20 -0400
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93D9170A
+        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 03:57:01 -0700 (PDT)
+Received: by mail-oo1-xc34.google.com with SMTP id 006d021491bc7-581d4f9a2c5so369626eaf.0
+        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 03:57:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697799421; x=1698404221; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Imp0xFQ/yJOyVxr8PrpKhW4JYo+eLZzmDsYbFLZ1k+s=;
+        b=pkonPC9ijxgQN1day7EynnL1wLxfp5i3PeQGzUJN4TzXkS3VO4RpM2L1OYNgPiMQwN
+         ntr+NYeHhcOZsSLpTWQru+zL+uiXM8p/hzYrTDWuYWDJD5r/f2Onutpf/927mGH3Oram
+         TyZO7LhBHdpNPtBx00in+HUWvamtWv+f9NyCXv2wci6mfYEziixr4Bi8hCY0L5Pq6FW+
+         SahjlpEG0yiG+IYH3b+DFv2dRVBeP9U2JME+LZghab9WcMslgS63j1i1GqO3g2E2zmy9
+         u+R13NC0vt8ggZKzaRF9KcwglVS2Ev2BP57a1WAR4Sr8ziKMEgaknL9uC35+oRVJniJf
+         kACw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697799421; x=1698404221;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Imp0xFQ/yJOyVxr8PrpKhW4JYo+eLZzmDsYbFLZ1k+s=;
+        b=NynXDooYPdNjZ2j69l8mAkCLoTkveWTJx8gb/rpo/NeoSOhVKKrCp2xARCsq7hwpsb
+         Bd3NmDRP985PMnNxsLxZo/1rUr5u3sKO7dbrH0SrmMNKVKtO8OFgkRSPx7IYWEf+/ng/
+         WMXGB8D8Oer45mnnjh4RN3s/82dmtYNgS0ShGszcyrW6YlK9x6T9qupjZxJ36FaZbA5X
+         HfUbO1Q4AlaVO3KhVo1NSD+DWK/uQRb9p1BAYyOsth4JyKkcYJVecYuy0xs7NNzk93hu
+         mjD4gvGR+5qpQqoY906ATUYd8bPXnDrePCNvuZdJ+EpUCJtPpOPxu33zgwOZMq6NvyQM
+         oHSg==
+X-Gm-Message-State: AOJu0YzNGKP7ZKfjzlKwft987OCYVosZ/ynxRiYgu8TOdbWYui+eUECM
+        i4ICx80Jm/emMs7dCP2ki6X7Gg==
+X-Google-Smtp-Source: AGHT+IHYs5oHxV9O6RTWOkoCgJ3Ns6RIJb90WoP5gupKEBXm8shVWTvh8uPxzSZxiZ3cds5frUpvBg==
+X-Received: by 2002:a05:6358:50cc:b0:157:a791:53cc with SMTP id m12-20020a05635850cc00b00157a79153ccmr1362170rwm.32.1697799420917;
+        Fri, 20 Oct 2023 03:57:00 -0700 (PDT)
+Received: from localhost ([122.172.80.14])
+        by smtp.gmail.com with ESMTPSA id k25-20020aa79739000000b006884844dfcdsm1263112pfg.55.2023.10.20.03.56.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Oct 2023 03:57:00 -0700 (PDT)
+Date:   Fri, 20 Oct 2023 16:26:58 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] OPP: Use _set_opp_level() for single genpd case
+Message-ID: <20231020105658.4zjfuiawwyrtnssu@vireshk-i7>
+References: <cover.1697710527.git.viresh.kumar@linaro.org>
+ <f709e9e273004be43efe3a2854a7e7b51a777f99.1697710527.git.viresh.kumar@linaro.org>
+ <CAPDyKFqbnsdT0nqKwQhai875CwwpW_vepr816fL+i8yLh=YQhw@mail.gmail.com>
+ <20231020034547.suggwoefx5kauek4@vireshk-i7>
+ <CAPDyKFqMA9=qdz4L3Oqj0zRQmSj0bxrF1RzZu-pBcuj9__GSRw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Fwd: High cpu usage caused by kernel process when upgraded to
- linux 5.19.17 or later
-Content-Language: en-US, de-DE
-To:     Linux Regressions <regressions@lists.linux.dev>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Netfilter Development <netfilter-devel@vger.kernel.org>,
-        Netfilter Core Developers <coreteam@netfilter.org>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux Power Management <linux-pm@vger.kernel.org>
-References: <01ac399d-f793-49d4-844b-72cd8e0034df@gmail.com>
-From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <01ac399d-f793-49d4-844b-72cd8e0034df@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1697799360;0c50cbf2;
-X-HE-SMSGID: 1qtnAc-0001wr-FQ
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFqMA9=qdz4L3Oqj0zRQmSj0bxrF1RzZu-pBcuj9__GSRw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[TLDR: This mail in primarily relevant for Linux kernel regression
-tracking. See link in footer if these mails annoy you.]
-
-On 23.06.23 02:58, Bagas Sanjaya wrote:
+On 20-10-23, 12:02, Ulf Hansson wrote:
+> For the single PM domain case, consumer drivers are often not able to
+> use dev_pm_opp_set_config(). That's because the PM domain has already
+> been attached from some of the generic buses, through
+> dev_pm_domain_attach().
 > 
-> I notice a regression report on Bugzilla [1]. Quoting from it:
+> In this case, as dev_pm_opp_set_config() ends up trying to attach
+> again, via dev_pm_domain_attach_by_name() it would receive
+> "ERR_PTR(-EEXIST)".
 > 
->> kernel process "kworker/events_power_efficient" uses a lot of cpu power (100% on ESXI 6.7, ~30% on ESXI 7.0U3 or later) after upgrading from 5.17.3 to 5.19.17 or later.
-> [...]
-> #regzbot introduced: v5.17.3..v5.19.17 https://bugzilla.kernel.org/show_bug.cgi?id=217586
-> #regzbot title: kworker/events_power_efficient utilizes full CPU power after kernel upgrade
-> 
-> Thanks.
-> 
-> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=217586
+> Or maybe I didn't quite understand your point?
 
-#regzbot resolve: afaics: misconfiguration became more problematic due
-to new mitigations
-#regzbot ignore-activity
+So the thing is that I _really_ want to call dev_pm_opp_set_opp() for
+each OPP we want to configure, primary or required. For example, the
+required OPP may want to do more than just performance state and we
+aren't touching them right now.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+Now, in order to call dev_pm_opp_set_opp() for any device, we need a
+device pointer and an OPP table associated with it.
 
+I can take care of it for the multi genpd case as there are extra
+device structures (which we get from dev_pm_domain_attach_by_name()),
+but there is no clean way out for single PM domain devices, unless
+they also call dev_pm_opp_set_config() to get a virtual structure.
+
+This is why I had to get this hackish code in place to make it work
+with the recursive calls to dev_pm_opp_set_opp(), where I could just
+reuse the opp-level thing for the primary device.
+
+How do you suggest we take care of this now ?
+
+-- 
+viresh
