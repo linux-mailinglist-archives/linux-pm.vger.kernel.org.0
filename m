@@ -2,113 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6CEB7D111E
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Oct 2023 15:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E023D7D116E
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Oct 2023 16:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377432AbjJTN7y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Oct 2023 09:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
+        id S1377537AbjJTOVV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Oct 2023 10:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377376AbjJTN7x (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 09:59:53 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9910291;
-        Fri, 20 Oct 2023 06:59:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
-        Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:Reply-To:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=7LtfXe/DEMD/lHzUFvMa+OWRluqZ+xc9nu0Cirekhm8=; b=K8ajnGCN3VL45r0nzCQRkKqgwa
-        uaygU4jSLCNphjhbsSYH8Mw9uxK5T31L7XeD8pTVWCGk8CcAh92YnB/TfUR7mKBwJS80swJozBKlr
-        eXnE7NkUH2skU9CMUPuNlc9uT+khCy+DZMe8tMiuhfaky/jhewxrmnVNLFl4PLGi3Ts+qGGViLz63
-        RHZ2qOf2UeyCHJH5jmS4hdF1X4lUg8k9JphXTk/Ri3v4uOjEAQbWq7MmvzWNDzpYZwW6Oi1Dkh12g
-        O64D98spVaGRJRVcmlWvEiofQPLj/uLdDB7UiqT7+uWqgU0iJlxN7OV57bjSvVAH/KLob5pF8ud/G
-        uKT/B9gA==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:55754 helo=rmk-PC.armlinux.org.uk)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <rmk@armlinux.org.uk>)
-        id 1qtq2V-0000UO-0z;
-        Fri, 20 Oct 2023 14:59:47 +0100
-Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-        id 1qtq2W-00AJ8T-Mm; Fri, 20 Oct 2023 14:59:48 +0100
-From:   Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-To:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev
-Cc:     x86@kernel.org, James Morse <james.morse@arm.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        jianyong.wu@arm.com, justin.he@arm.com,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
-Subject: [PATCH] ACPI: Use the acpi_device_is_present() helper in more places
+        with ESMTP id S1377530AbjJTOVP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 10:21:15 -0400
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B18AD53
+        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 07:21:13 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1qtqMz-0001ST-Pl; Fri, 20 Oct 2023 16:20:57 +0200
+Received: from [2a0a:edc0:2:b01:1d::c0] (helo=ptx.whiteo.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1qtqMx-00333p-R6; Fri, 20 Oct 2023 16:20:55 +0200
+Received: from mfe by ptx.whiteo.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1qtqMx-00FSzZ-O3; Fri, 20 Oct 2023 16:20:55 +0200
+Date:   Fri, 20 Oct 2023 16:20:55 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux@ew.tq-group.com
+Subject: Re: [PATCH 4/5] clk: imx: clk-fracn-gppll: Add 477.4MHz config for
+ video pll
+Message-ID: <20231020142055.xnxbumcg2o6cfpfl@pengutronix.de>
+References: <20231020130019.665853-1-alexander.stein@ew.tq-group.com>
+ <20231020130019.665853-5-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1qtq2W-00AJ8T-Mm@rmk-PC.armlinux.org.uk>
-Sender: Russell King <rmk@armlinux.org.uk>
-Date:   Fri, 20 Oct 2023 14:59:48 +0100
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20231020130019.665853-5-alexander.stein@ew.tq-group.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: James Morse <james.morse@arm.com>
+Hi Alexander,
 
-acpi_device_is_present() checks the present or functional bits
-from the cached copy of _STA.
+On 23-10-20, Alexander Stein wrote:
+> Add the 477.4MHz frequency support that will be used by video subsystem
+> on imx93.
 
-A few places open-code this check. Use the helper instead to
-improve readability.
+albeit the change is fine, could we consider adding support to calc the
+params dynamically?
 
-Signed-off-by: James Morse <james.morse@arm.com>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Reviewed-by: Gavin Shan <gshan@redhat.com>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
----
-Jonathan Cameron suggests "Pull this one out and send it upstream in
-advance of the rest" so let's do that. See
-https://lore.kernel.org/r/20230914130455.00004434@Huawei.com/
-
-So, let's get this upstream to reduce the number of outstanding patches
-for aarch64 vcpu hotplug.
-
- drivers/acpi/scan.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-index 691d4b7686ee..ed01e19514ef 100644
---- a/drivers/acpi/scan.c
-+++ b/drivers/acpi/scan.c
-@@ -304,7 +304,7 @@ static int acpi_scan_device_check(struct acpi_device *adev)
- 	int error;
- 
- 	acpi_bus_get_status(adev);
--	if (adev->status.present || adev->status.functional) {
-+	if (acpi_device_is_present(adev)) {
- 		/*
- 		 * This function is only called for device objects for which
- 		 * matching scan handlers exist.  The only situation in which
-@@ -338,7 +338,7 @@ static int acpi_scan_bus_check(struct acpi_device *adev, void *not_used)
- 	int error;
- 
- 	acpi_bus_get_status(adev);
--	if (!(adev->status.present || adev->status.functional)) {
-+	if (!acpi_device_is_present(adev)) {
- 		acpi_scan_device_not_present(adev);
- 		return 0;
- 	}
--- 
-2.30.2
-
+Regards,
+  Marco
