@@ -2,142 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E0647D1592
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Oct 2023 20:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAAA57D15F2
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Oct 2023 20:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjJTSPA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Oct 2023 14:15:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
+        id S229672AbjJTSnR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Oct 2023 14:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjJTSO7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 14:14:59 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F067D5E
-        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 11:14:58 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d815354ea7fso1319147276.1
-        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 11:14:58 -0700 (PDT)
+        with ESMTP id S229646AbjJTSnQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 14:43:16 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54345112
+        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 11:43:13 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-565e54cb93aso810744a12.3
+        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 11:43:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697825697; x=1698430497; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=NjxtAigxI0HmCKPvB9UmZgA+mMJTBsPd7/Wkgi0tm4s=;
-        b=edobgOcEo2DQnIYa3i60Q0paZQLOBUFFJAspGON0iKv3guCLgQnv3MoUyA5m4XC6B2
-         1NnYrYOXf7ldJY7MtDeGWtmXcZF9gbcimkmUKsw4Tc+/ZndpptNZzqzFc2INZef6xm0S
-         /RPkQNIfekKCAhsQeQyPYpRiEfVlt9Y+ca0Rd0NKmzHNBrEir/weWKIrwLexMzg+b/em
-         uTi2rvaIE1haxah05bSE9QMepMX8j88AYAS3WXIXfMFnU4ehq2hiBJUE9kQ8VA/ylj4L
-         P1eh2Z9KYUc9mDdpZ4aruyzZZzflvk8I95vWb8Nd8z0LiZSHIiZzBpJKO83k2jNizmiA
-         fhWg==
+        d=chromium.org; s=google; t=1697827393; x=1698432193; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=k4j0ST73DzoLLM9MbJMnveHu6akxSdB+XraQpl0qwIw=;
+        b=YBFrTi47cd/GMNrSslfL/sv7VMNRe1UFc/F9pTGh2JWNUzJsPaoFO4gOvlyEOSbFzX
+         lk4bPGj8TfLYCSXIeeFX/UPbCFeavrh+GAqLcPQhFI6EPyyOTNYUz7vdW/mW2YyjtXsi
+         vnQFcLbukRk8hab8JdV9qoUfTuP3j/FLpw1TE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697825697; x=1698430497;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NjxtAigxI0HmCKPvB9UmZgA+mMJTBsPd7/Wkgi0tm4s=;
-        b=edl1MhiGDxPcBkhVlHxgmbOAO8rzZ629RfPAA0jHeNI9feoZCadvJUNSn6VIq2C6Uz
-         WNRZPVdx27NqTTdmcSVJUlZPX2PPrfF74cQMKDDAkc474ELhPrJUVxO3xlfQqjezkxQp
-         DkQTyNN8BNeRJsHLjY7ULMEpLfQ4mu/a8uaDepX8YjiGXDAiTrNBjE8+/tM3CsR3p91y
-         zGKP/50Y78xoNY8yaHEoxvmqxzWKdBNJ+aUqad+++sAFPzVAcfRMvqP1eqBZM/G/+cGI
-         U3CZ7yefLArVWu2Yg0AIr8echKnOVFPi42oqVXNXdFBuMvqXV8/freiB6nrj37EQW0ps
-         LufA==
-X-Gm-Message-State: AOJu0Yye9pva0oT7BdO3/SOQLhymbTe9Krf7VKPvpV54eZ/b+uSY48bY
-        Pg0UoAqwEKmRpy3zcRHo5l3rchF+g/eZ3nLYQw==
-X-Google-Smtp-Source: AGHT+IF9SRE85ngks2gCtXwLYmkhJ3/uV8+grnXvrUYQkNHVHLP3fosnqqpIA3GEUwLdiQJy9CtyqVgplrjQH9jIsA==
-X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
- (user=justinstitt job=sendgmr) by 2002:a05:6902:1083:b0:d9a:6007:223a with
- SMTP id v3-20020a056902108300b00d9a6007223amr82297ybu.8.1697825697460; Fri,
- 20 Oct 2023 11:14:57 -0700 (PDT)
-Date:   Fri, 20 Oct 2023 18:14:47 +0000
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAJbDMmUC/x2NUQrCQAwFr1LybWA3VUGvIiJumtaAbNekVkvp3
- V38nAfzZgUXU3E4NyuYzOo65gpx1wA/7nkQ1K4yUKA2Bgrok2UuC3ams5hjGT9i6O9SngumF+3 jKdyqakOdGY+JOYZDz9QmqKfFpNfvP3i5btsPUwdLHoAAAAA=
-X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1697825696; l=2477;
- i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
- bh=JmvkYA0HtU/j7JDgpCDudlk1OJo4lvEUsupF7z8hezA=; b=reN8ZCf+oaoqlz7W8BUFLMQjlrdg0RWOzYHkUPRlg80x9tWDd0LI/VU/0C9F7Cv4z62I3vr4S
- MgzW8oVQ0SgAYcyQOaq0PxhkKmOjOEfBBehIC/R/ncW9Ox0M3ys31Q7
-X-Mailer: b4 0.12.3
-Message-ID: <20231020-strncpy-drivers-power-supply-bq24190_charger-c-v1-1-e896223cb795@google.com>
-Subject: [PATCH] power: supply: bq24190_charger: replace deprecated strncpy
- with strscpy
-From:   Justin Stitt <justinstitt@google.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20230601; t=1697827393; x=1698432193;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k4j0ST73DzoLLM9MbJMnveHu6akxSdB+XraQpl0qwIw=;
+        b=hClgG5tPj4ONhzKe4fkW5u8mcwncLGGjeGRMvjHL6hHqKLVlIVj4BvNqbS1KrYMK2A
+         NuDhw+4Ip92UF8e9XOqCymlX+TMZSrpn1+sWc1Ko2j2wV81iwYDPoA15J3k4vsSXEoD8
+         iJd0edUMSGlDZS1w7IATavW+DgWqqgnufD4nZMN0tAxoqg7xtLTU800DEjwCRGev/ajA
+         68zLipcmUgZFVMiD3PiterjXP/rDX6HhDAMjU1TE5qwEGuKWOsrJ8xAdRXG9jX8+KDZl
+         EkOfJoZcmCoiHJoalNPAluJEmMnkwrsRek+FRZWHg1i+qOLXndynF0JQjx2ZIOnALyxT
+         D4DQ==
+X-Gm-Message-State: AOJu0YxcCfX/lX36LneKwxJQFa3qFzBY3s07uh9NZYk1NbNFZ92wHJsw
+        z5Vvuwbj+d4y324k5E0TFGWEQA==
+X-Google-Smtp-Source: AGHT+IHDjFhtgPPzRwhtKHGylJFWVO5Pw8Mo+6OtHDRda++bfVfLvXMK3PeMwDZDvgflUMEx8pyWwA==
+X-Received: by 2002:a05:6a20:429f:b0:17a:ee7d:c035 with SMTP id o31-20020a056a20429f00b0017aee7dc035mr2509247pzj.38.1697827392801;
+        Fri, 20 Oct 2023 11:43:12 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id k17-20020aa79d11000000b006933866f49dsm1917333pfp.19.2023.10.20.11.43.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Oct 2023 11:43:12 -0700 (PDT)
+Date:   Fri, 20 Oct 2023 11:43:11 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Justin Stitt <justinstitt@google.com>
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] power: supply: bq24190_charger: replace deprecated
+ strncpy with strscpy
+Message-ID: <202310201140.B6C54194@keescook>
+References: <20231020-strncpy-drivers-power-supply-bq24190_charger-c-v1-1-e896223cb795@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231020-strncpy-drivers-power-supply-bq24190_charger-c-v1-1-e896223cb795@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-strncpy() is deprecated for use on NUL-terminated destination strings
-[1] and as such we should prefer more robust and less ambiguous string
-interfaces.
+On Fri, Oct 20, 2023 at 06:14:47PM +0000, Justin Stitt wrote:
+> strncpy() is deprecated for use on NUL-terminated destination strings
+> [1] and as such we should prefer more robust and less ambiguous string
+> interfaces.
+> 
+> We expect bdi->model_name to be NUL-terminated based on its usage with
+> sysfs_emit and format strings:
+> 
+> val->strval is assigned to bdi->model_name in
+> bq24190_charger_get_property():
+> 1186 | val->strval = bdi->model_name;
+> 
+> ... then in power_supply_sysfs.c we use value.strval with a format string:
+> 311  | ret = sysfs_emit(buf, "%s\n", value.strval);
+> 
+> we assigned value.strval via:
+> 285  | ret = power_supply_get_property(psy, psp, &value);
+> ... which invokes psy->desc->get_property():
+> 1210 | return psy->desc->get_property(psy, psp, val);
+> 
+> with bq24190_charger_get_property():
+> 1320 | static const struct power_supply_desc bq24190_charger_desc = {
+> ...
+> 1325 | 	.get_property		= bq24190_charger_get_property,
+> 
+> Moreover, no NUL-padding is required as bdi is zero-allocated in
+> bq24190_charger.c:
+> 1798 | bdi = devm_kzalloc(dev, sizeof(*bdi), GFP_KERNEL);
+> 
+> Considering the above, a suitable replacement is `strscpy` [2] due to
+> the fact that it guarantees NUL-termination on the destination buffer
+> without unnecessarily NUL-padding.
+> 
+> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
+> Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
+> Link: https://github.com/KSPP/linux/issues/90
+> Cc: linux-hardening@vger.kernel.org
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> ---
+> Note: build-tested only.
+> 
+> Found with: $ rg "strncpy\("
+> ---
+>  drivers/power/supply/bq24190_charger.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
+> index 3f99cb9590ba..1db290ee2591 100644
+> --- a/drivers/power/supply/bq24190_charger.c
+> +++ b/drivers/power/supply/bq24190_charger.c
+> @@ -1803,7 +1803,7 @@ static int bq24190_probe(struct i2c_client *client)
+>  
+>  	bdi->client = client;
+>  	bdi->dev = dev;
+> -	strncpy(bdi->model_name, id->name, I2C_NAME_SIZE);
+> +	strscpy(bdi->model_name, id->name, sizeof(bdi->model_name));
 
-We expect bdi->model_name to be NUL-terminated based on its usage with
-sysfs_emit and format strings:
+struct bq24190_dev_info {
+	...
+        char                            model_name[I2C_NAME_SIZE];
 
-val->strval is assigned to bdi->model_name in
-bq24190_charger_get_property():
-1186 | val->strval = bdi->model_name;
+Length replacement looks correct.
 
-... then in power_supply_sysfs.c we use value.strval with a format string:
-311  | ret = sysfs_emit(buf, "%s\n", value.strval);
+struct i2c_device_id {
+        char name[I2C_NAME_SIZE];
 
-we assigned value.strval via:
-285  | ret = power_supply_get_property(psy, psp, &value);
-... which invokes psy->desc->get_property():
-1210 | return psy->desc->get_property(psy, psp, val);
+And it looks like this wasn't accidentally leaving strings unterminated,
+so that's nice.
 
-with bq24190_charger_get_property():
-1320 | static const struct power_supply_desc bq24190_charger_desc = {
-...
-1325 | 	.get_property		= bq24190_charger_get_property,
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Moreover, no NUL-padding is required as bdi is zero-allocated in
-bq24190_charger.c:
-1798 | bdi = devm_kzalloc(dev, sizeof(*bdi), GFP_KERNEL);
-
-Considering the above, a suitable replacement is `strscpy` [2] due to
-the fact that it guarantees NUL-termination on the destination buffer
-without unnecessarily NUL-padding.
-
-Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
-Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
-Link: https://github.com/KSPP/linux/issues/90
-Cc: linux-hardening@vger.kernel.org
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
-Note: build-tested only.
-
-Found with: $ rg "strncpy\("
----
- drivers/power/supply/bq24190_charger.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
-index 3f99cb9590ba..1db290ee2591 100644
---- a/drivers/power/supply/bq24190_charger.c
-+++ b/drivers/power/supply/bq24190_charger.c
-@@ -1803,7 +1803,7 @@ static int bq24190_probe(struct i2c_client *client)
- 
- 	bdi->client = client;
- 	bdi->dev = dev;
--	strncpy(bdi->model_name, id->name, I2C_NAME_SIZE);
-+	strscpy(bdi->model_name, id->name, sizeof(bdi->model_name));
- 	mutex_init(&bdi->f_reg_lock);
- 	bdi->charge_type = POWER_SUPPLY_CHARGE_TYPE_FAST;
- 	bdi->f_reg = 0;
-
----
-base-commit: bb55d7f7f7445abcc8db50e6a65d4315e79f75c7
-change-id: 20231020-strncpy-drivers-power-supply-bq24190_charger-c-6bcc105fc23b
-
-Best regards,
---
-Justin Stitt <justinstitt@google.com>
-
+-- 
+Kees Cook
