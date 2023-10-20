@@ -2,155 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF3347D166C
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Oct 2023 21:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7195E7D1680
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Oct 2023 21:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbjJTTkI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Oct 2023 15:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44686 "EHLO
+        id S229873AbjJTTqQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Oct 2023 15:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjJTTkI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 15:40:08 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC40D60
-        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 12:40:05 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-53de0d1dc46so1792787a12.3
-        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 12:40:05 -0700 (PDT)
+        with ESMTP id S229555AbjJTTqP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 15:46:15 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88580D60
+        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 12:46:12 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d9bc6447193so1540249276.3
+        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 12:46:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697830804; x=1698435604; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pgSR78Y5iW6fUNSAk+Ec5zBGBhE6zMbcclrxXV+8asg=;
-        b=Qc/dD5c96p/AfnRzl92TiembOzSgE/b188kVcPfi4zGWy0kK1wpk96Jp3ADHRIVsDS
-         wRkMjYz5S5dVRtS7Y7XtneyHP6/fdOSRgaGtxrsOBWjScXwqgsgq447VAb8na4SJ0Qa8
-         Yj3sPYWX/9a7ZHmAYYRYPJRXvWCSbqO0AkGi33X10ZutHPr5j6YkdXV+DrGQgZOfRrUs
-         0qrvNjlQ12OBA/wonO3+kwc6l5G/5Cv9tkx1cPJUmpiSm+ebiQ+e3yHK9FExUCo09Iwm
-         RSo2qhH0eDtvXp8TXZBxXGpO9fDfGUY/xKu36IeIEJVtL4eJ/wdVIWxLrKVLhQBFbGvf
-         H9RQ==
+        d=google.com; s=20230601; t=1697831171; x=1698435971; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=VY26jasGvoK52ErKJqQiLhyEvSJKvdG2hTJjnfxEGsM=;
+        b=ZNgOLavC8fzTZrLtjT8LABBsjAACnBHp8y++tiCif+Z3Xa6VKsWJsEIrSBnRbITeXn
+         oMbBpSVzGVD0q7C72jAGMelMWToILzy7pf8Q9Q564+4fxxTDSFVBINmfMaUuboZXNsT0
+         JbE2r02Kxv2O9H33zAgHz+SVQji/wWScrIAt9gRvcJXHQVWvRqVD5CQT2OMLcUGC9o+R
+         QU0Rn0o1WXno6dXr8FgSCfV+6Fnevy7xPkSei+SAFQolzfraAOarhyaJmsIzc70RFq4i
+         ICVRtqjt6NgYwWQRKVKF2yA2ZT8Aob+bviA5ZwxBvo1agAOUoFSge7x5kyRWcQ9TlMBJ
+         Gkaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697830804; x=1698435604;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pgSR78Y5iW6fUNSAk+Ec5zBGBhE6zMbcclrxXV+8asg=;
-        b=m6xDx+B+Y/pEqXN/sMweD/8ytpvPq5pbP75Ydtj+Qp15PA8O6cx7+wnk4B1D+BLLUF
-         yrwA7fZ/jdG48w9nGS+oS6ZY67z5cxHYgjgX3RdnHbstZ3WBUaFhTyK7+KUMinRPxVHZ
-         /STveNHnVrF8AAYoZ+23GaSq5vXQMPonYjDi0CJbFf1pbUgEa6u+mrUW2DOazOAAKP1v
-         6YdbSJEfJQXIPjQFK3R7ud02/CdFT+hWVPvsNGBC9K4nwzKLkAbpzlsTgeDaN6yXz8cA
-         +cevpPNut8RgTpaAUhNNxKdAQzgGCmauoG1M1OGa44Z0V1zHDesCcBX4lgP27bxW99iK
-         djAg==
-X-Gm-Message-State: AOJu0YxHbpB0umzG+MzzfxOEcYRMchhxOkfwI9yljMuC9z0IJ4deHire
-        wrJHpMHYXwNtRkW9WBbUgYpmhZSJZUTgH3dv84R65w==
-X-Google-Smtp-Source: AGHT+IFTEQobdtzxPAwaayqWrS4ZbZc4xYWbr52usrp2lJE1NRzN7GrvR7+j17KbToBH/AuVe46bdUQ2lvuVKJOjTIQ=
-X-Received: by 2002:a50:9ec4:0:b0:53d:9471:76b3 with SMTP id
- a62-20020a509ec4000000b0053d947176b3mr2125116edf.7.1697830804202; Fri, 20 Oct
- 2023 12:40:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231020-strncpy-drivers-power-supply-surface_battery-c-v1-1-cabaea50e667@google.com>
-In-Reply-To: <20231020-strncpy-drivers-power-supply-surface_battery-c-v1-1-cabaea50e667@google.com>
-From:   Justin Stitt <justinstitt@google.com>
-Date:   Fri, 20 Oct 2023 12:39:51 -0700
-Message-ID: <CAFhGd8pZYrQNCLA1LHckHQYFtAffSAwpf6uKx6cbf_rVPS_+jg@mail.gmail.com>
-Subject: Re: [PATCH] platform/surface: aggregator: replace deprecated strncpy
+        d=1e100.net; s=20230601; t=1697831171; x=1698435971;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VY26jasGvoK52ErKJqQiLhyEvSJKvdG2hTJjnfxEGsM=;
+        b=MsNJduK9aYmpQHwMaQ0o+sJktRt+ntY9tOKcNhJ0voDYlRC5nD04MNo2Kq2ialxA8/
+         2dnrxEFi3BwJCjEOBrKatt8x8ptH0m2FdlfyGzKjHLjRT2d16a5jM+Z5wCNQlvHibo6O
+         lxLJQHdmvfe9YP3XUrOHKoUGgxiDQI6OyllUKiSxP50q19CmOWsoEaPbe8CqlDLlK1Dr
+         qV54Gke7+5w/D3Su/6mXEUGjCFTeidVsYGSmOu0MlbsjpaWOyqaNglGRKut06hvSvwol
+         NnbgQTpYM/VtEkz3JMYn1mOCS0YvTrcfIfZ7k5kO3STSP1Z8EgOd8+RN2FdM72MsRuWC
+         fHLw==
+X-Gm-Message-State: AOJu0YzwcqrQdlHhcsPV/309YfW0S6MRlAI7pkhfDoeVNNYs9xCkkwQ2
+        u7CrK8IFqXgh+zOKH1z4V5LOJQDLtLpIDDykCA==
+X-Google-Smtp-Source: AGHT+IG97zohXV8c60rF/wNzxWx2VFDqrZjuW/RKQVsOoHrGomIA9J+a4stpEs9Ol6SfQRsZL3Blf2RTmc7HiEy5xQ==
+X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
+ (user=justinstitt job=sendgmr) by 2002:a25:5008:0:b0:d77:f7c3:37db with SMTP
+ id e8-20020a255008000000b00d77f7c337dbmr57402ybb.8.1697831171763; Fri, 20 Oct
+ 2023 12:46:11 -0700 (PDT)
+Date:   Fri, 20 Oct 2023 19:46:11 +0000
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAALZMmUC/x2NUQrCQAxEr1LybWB3LUW9iojUbbYGZBuSWi2ld
+ zf4NbyBN7OBkTIZXJoNlBY2nqpDPDSQn30dCXlwhhTSMYYU0GatWVYclBdSQ5k+pGhvkdfqoaX PdHdVR68ztl13TqE8YmlP4KOiVPj7P7ze9v0H31wQnoAAAAA=
+X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1697831170; l=2331;
+ i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
+ bh=MoENqRWLCZfJlaomoU9I/5Gv5zHSfuvBj5Ts109QtOo=; b=AGIAqvvph99TN7o26x2Jna1GEQQbXsXDNhvBOWVmAJ4nDa1gz+pDDw6NLF4IDqEqLdmoBb7dh
+ eSFv7SOqwvQDEk2QPNb16gHfi0TAPdg5TkfUSc3zf/NMuwfjv7hn8ew
+X-Mailer: b4 0.12.3
+Message-ID: <20231020-strncpy-drivers-power-supply-surface_charger-c-v1-1-93ddbf668e10@google.com>
+Subject: [PATCH] power: supply: surface-charger: replace deprecated strncpy
  with strscpy
+From:   Justin Stitt <justinstitt@google.com>
 To:     Maximilian Luz <luzmaximilian@gmail.com>,
         Sebastian Reichel <sre@kernel.org>
 Cc:     linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fixed the subject line in [v2].
+strncpy() is deprecated for use on NUL-terminated destination strings
+[1] and as such we should prefer more robust and less ambiguous string
+interfaces.
 
-On Fri, Oct 20, 2023 at 12:35=E2=80=AFPM Justin Stitt <justinstitt@google.c=
-om> wrote:
->
-> strncpy() is deprecated for use on NUL-terminated destination strings
-> [1] and as such we should prefer more robust and less ambiguous string
-> interfaces.
->
-> We expect bat->name to be NUL-terminated based on its usage with
-> strcmp():
->
-> power_supply_core.c:
-> 445: return strcmp(psy->desc->name, name) =3D=3D 0;
->
-> ... and also by the manual `... - 1` for the length argument of the
-> original strncpy() invocation.
->
-> Furthermore, no NUL-padding is needed as bat is zero-allocated before
-> calling spwr_battery_init():
-> 826: bat =3D devm_kzalloc(&sdev->dev, sizeof(*bat), GFP_KERNEL);
-> 827: if (!bat)
-> 828:   return -ENOMEM;
-> 829:
-> 830: spwr_battery_init(bat, sdev, p->registry, p->name);
->
-> ... this means any further NUL-byte assignments (like the ones that
-> strncpy() does) are redundant.
->
-> Considering the above, a suitable replacement is `strscpy` [2] due to
-> the fact that it guarantees NUL-termination on the destination buffer
-> without unnecessarily NUL-padding.
->
-> Let's also opt to use the more idiomatic strscpy() usage of:
-> (dest, src, sizeof(dest)).
->
-> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strn=
-cpy-on-nul-terminated-strings [1]
-> Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.h=
-tml [2]
-> Link: https://github.com/KSPP/linux/issues/90
-> Cc: linux-hardening@vger.kernel.org
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
-> ---
-> Note: build-tested only.
->
-> Found with: $ rg "strncpy\("
-> ---
->  drivers/power/supply/surface_battery.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/power/supply/surface_battery.c b/drivers/power/suppl=
-y/surface_battery.c
-> index 19d2f8834e56..196d290dc596 100644
-> --- a/drivers/power/supply/surface_battery.c
-> +++ b/drivers/power/supply/surface_battery.c
-> @@ -722,7 +722,7 @@ static void spwr_battery_init(struct spwr_battery_dev=
-ice *bat, struct ssam_devic
->                               struct ssam_event_registry registry, const =
-char *name)
->  {
->         mutex_init(&bat->lock);
-> -       strncpy(bat->name, name, ARRAY_SIZE(bat->name) - 1);
-> +       strscpy(bat->name, name, sizeof(bat->name));
->
->         bat->sdev =3D sdev;
->
->
-> ---
-> base-commit: bb55d7f7f7445abcc8db50e6a65d4315e79f75c7
-> change-id: 20231020-strncpy-drivers-power-supply-surface_battery-c-b0c84b=
-05ac28
->
-> Best regards,
-> --
-> Justin Stitt <justinstitt@google.com>
->
+We expect ac->name to be NUL-terminated based on its usage with format
+strings:
 
-[v2]: https://lore.kernel.org/r/20231020-strncpy-drivers-power-supply-surfa=
-ce_battery-c-v2-1-29ed16b2caf1@google.com
+surface_charger.c:
+190: ac->psy_desc.name = ac->name;
 
-Thanks
-Justin
+...
+
+power_supply_core.c:
+174: dev_dbg(&psy->dev, "%s: Found supply : %s\n",
+175:   psy->desc->name, epsy->desc->name);
+
+Moreover, NUL-padding is not required as ac is already zero-allocated
+before being passed to spwr_ac_init():
+
+surface_charger.c:
+240: ac = devm_kzalloc(&sdev->dev, sizeof(*ac), GFP_KERNEL);
+241: if (!ac)
+242:   return -ENOMEM;
+243:
+244: spwr_ac_init(ac, sdev, p->registry, p->name);
+
+... this means any future NUL-byte assignments (like the ones that
+strncpy() does) are redundant.
+
+Considering the above, a suitable replacement is `strscpy` [2] due to
+the fact that it guarantees NUL-termination on the destination buffer
+without unnecessarily NUL-padding.
+
+Let's also opt for the more idiomatic strscpy() usage of:
+(dest, src, sizeof(dest))
+
+Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
+Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
+Link: https://github.com/KSPP/linux/issues/90
+Cc: linux-hardening@vger.kernel.org
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+Note: build-tested only.
+
+Found with: $ rg "strncpy\("
+---
+ drivers/power/supply/surface_charger.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/power/supply/surface_charger.c b/drivers/power/supply/surface_charger.c
+index cabdd8da12d0..7a6c62d6f883 100644
+--- a/drivers/power/supply/surface_charger.c
++++ b/drivers/power/supply/surface_charger.c
+@@ -175,7 +175,7 @@ static void spwr_ac_init(struct spwr_ac_device *ac, struct ssam_device *sdev,
+ 			 struct ssam_event_registry registry, const char *name)
+ {
+ 	mutex_init(&ac->lock);
+-	strncpy(ac->name, name, ARRAY_SIZE(ac->name) - 1);
++	strscpy(ac->name, name, sizeof(ac->name));
+ 
+ 	ac->sdev = sdev;
+ 
+
+---
+base-commit: bb55d7f7f7445abcc8db50e6a65d4315e79f75c7
+change-id: 20231020-strncpy-drivers-power-supply-surface_charger-c-466920fb1f48
+
+Best regards,
+--
+Justin Stitt <justinstitt@google.com>
+
