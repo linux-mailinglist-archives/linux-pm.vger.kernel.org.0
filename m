@@ -2,157 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07ECA7D0CFF
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Oct 2023 12:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08EC47D0DF1
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Oct 2023 12:56:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376775AbjJTKUw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Oct 2023 06:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45184 "EHLO
+        id S1376745AbjJTK4C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Oct 2023 06:56:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376713AbjJTKUv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 06:20:51 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3BED52
-        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 03:20:48 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-d9a4c0d89f7so642282276.1
-        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 03:20:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697797247; x=1698402047; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=W79U9iklHwLSbhR/94JhGNefp7ntZs362QatUfI3IfI=;
-        b=nfxlTP0z3z6L6PAXEscyKxYpQTRCM9o0adr1SrnQ9q7CTPZqHv+abj+1QI+m0iKr2+
-         BBcWd5APgf9VIUg6OVry26MMWPBCNMIkeM3nzriOyFD6/q+KgwZohtWaGScP0H2GohMw
-         eM3dEx+RI6vZdgKAuJXQqLppBga08jWW/11ebkjXAqF5MRBprg1hXmfMcPX2PC9LFN8c
-         wideoaqq7CUToxKN310zNTGaXduLInkr2lJ9+W6obY+h/ynKuDoHRnLKLgwEoD85vP5b
-         NBXLAhzvJnAkR/oQxFosT3LkLycnau5bKrBvF6CWmlKPfhygvnwPUAvv+rROVDedtnpf
-         SebA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697797247; x=1698402047;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=W79U9iklHwLSbhR/94JhGNefp7ntZs362QatUfI3IfI=;
-        b=R3sX8x7jqzg0mLp1sYskbCa3TkRFhnroRVr75vB1Uw/9NW4P2JxCeze5QxfQGZHRVV
-         Uv6tLs+FL/Zy7HzhvLNUMw0aFpPzBJXjCzVmRz1aLDGBRYoaR5Zk7Lp29X/tlOEQBowF
-         ZZcL9DiQRWLgTljE4mMx7ktab9llkkz56PoLYNXmth4t4rRdR47AGA1cBbsJTGrtvkAV
-         voH8chxt6J2VJ8+uN/hinIb8yxKHkRzUv7p4pY+9QFqd4mt1YSqktut3OXagKRnbmu2X
-         DvQR2u2ZMM3x0Rs/1AuMy6IoboAbRPSDP0lEQ/9lI8h3XJyMF/rXritaKXncECNMeUZh
-         77rA==
-X-Gm-Message-State: AOJu0YyVbxZkiazN8rSAH8qawCAsxZ5EgbXpq/TKpyvg3OUiS89rYRhf
-        CSdOEjSB9MrSAtRV2O1EFQA54IYBz3JoGPm38q25wg==
-X-Google-Smtp-Source: AGHT+IFppxZveglONFPIGli2rJYFfP862ng1fj8gvWuwqd6m5OzeXOk1StoswlMPW+jNGU8qSha8o4+c/CfPZy2DJjA=
-X-Received: by 2002:a5b:f4c:0:b0:d9a:3bf1:35e9 with SMTP id
- y12-20020a5b0f4c000000b00d9a3bf135e9mr1288441ybr.3.1697797247740; Fri, 20 Oct
- 2023 03:20:47 -0700 (PDT)
+        with ESMTP id S1376699AbjJTK4C (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 06:56:02 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06679E8;
+        Fri, 20 Oct 2023 03:56:00 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qtnAc-0001wr-FQ; Fri, 20 Oct 2023 12:55:58 +0200
+Message-ID: <37c2c8ee-d909-413d-9cf7-e67efd7fdb30@leemhuis.info>
+Date:   Fri, 20 Oct 2023 12:55:57 +0200
 MIME-Version: 1.0
-References: <20231018-msm8909-cpufreq-v2-0-0962df95f654@kernkonzept.com>
- <20231018-msm8909-cpufreq-v2-2-0962df95f654@kernkonzept.com>
- <CAPDyKFot9=M1ooP_Q1AOgG5o_4DTQ2qsyai1ZdXAzBwf89W4uA@mail.gmail.com>
- <CAPDyKFr5A-P=UhWs4rUMBWup3pH75WAhcZ56Y2_Sfk3=WfxRCQ@mail.gmail.com>
- <ZTEph19CAvbgbN_E@gerhold.net> <CAPDyKFo1PVZYsdW_=92EtMmTT9hmkm-mBR69N_WvPh4f-Hw=NA@mail.gmail.com>
- <ZTFBzjLAaaUHux4O@gerhold.net> <CAPDyKFruYqngQoW21Ra+hm4ybjS7LoD4casYbo8bP4J+hLUnaA@mail.gmail.com>
- <ZTFiXJ2XO4WQN_gu@gerhold.net>
-In-Reply-To: <ZTFiXJ2XO4WQN_gu@gerhold.net>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 20 Oct 2023 12:20:11 +0200
-Message-ID: <CAPDyKFoRhDnx7SOiT1czcyteMJ=2KMOwZvn7ynDJsYtePthnxA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] cpufreq: qcom-nvmem: Enable virtual power domain devices
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: Fwd: High cpu usage caused by kernel process when upgraded to
+ linux 5.19.17 or later
+Content-Language: en-US, de-DE
+To:     Linux Regressions <regressions@lists.linux.dev>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Netfilter Development <netfilter-devel@vger.kernel.org>,
+        Netfilter Core Developers <coreteam@netfilter.org>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Linux Power Management <linux-pm@vger.kernel.org>
+References: <01ac399d-f793-49d4-844b-72cd8e0034df@gmail.com>
+From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <01ac399d-f793-49d4-844b-72cd8e0034df@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1697799360;0c50cbf2;
+X-HE-SMSGID: 1qtnAc-0001wr-FQ
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 19 Oct 2023 at 19:08, Stephan Gerhold <stephan@gerhold.net> wrote:
->
-> On Thu, Oct 19, 2023 at 05:19:53PM +0200, Ulf Hansson wrote:
-> > On Thu, 19 Oct 2023 at 16:49, Stephan Gerhold <stephan@gerhold.net> wrote:
-> > > On Thu, Oct 19, 2023 at 04:12:56PM +0200, Ulf Hansson wrote:
-> > > > On Thu, 19 Oct 2023 at 15:05, Stephan Gerhold <stephan@gerhold.net> wrote:
-> > > > > On Thu, Oct 19, 2023 at 01:26:19PM +0200, Ulf Hansson wrote:
-> > > > > > BTW, if you really need something like the above, the proper way to do
-> > > > > > it would instead be to call device_set_awake_path() for the device.
-> > > > > >
-> > > > > > This informs genpd that the device needs to stay powered-on during
-> > > > > > system suspend (assuming that GENPD_FLAG_ACTIVE_WAKEUP has been set
-> > > > > > for it), hence it will keep the corresponding PM domain powered-on
-> > > > > > too.
-> > > > >
-> > > > > Thanks, I can try if this works as alternative to the
-> > > > > dev_pm_syscore_device()!
-> > > >
-> > > > Yes, please. We don't want to abuse the dev_pm_syscore_device() thingy.
-> > >
-> > > Could you clarify the idea behind GENPD_FLAG_ACTIVE_WAKEUP? Would I set
-> > > it conditionally for all RPMPDs or just the ones consumed by the CPU?
-> > > How does the genpd *provider* know if one of its *consumer* devices
-> > > needs to have its power domain kept on for wakeup?
-> >
-> > We are thinking of the GENPD_FLAG_ACTIVE_WAKEUP as a platform
-> > configuration type of flag for the genpd in question. The consumer
-> > driver shouldn't need to know about the details of what is happening
-> > on the PM domain level - only whether it needs its device to remain
-> > powered-on during system suspend or not.
-> >
->
-> Thanks! I will test if this works for RPMPD and post new versions of the
-> patches. By coincidence I think this flag might actually be useful as
-> temporary solution for CPR. If I:
->
->  1. Change $subject patch to use device_set_awake_path() instead, and
->  2. Set GENPD_FLAG_ACTIVE_WAKEUP for the RPMPD genpds, but
->  3. Do *not* set GENPD_FLAG_ACTIVE_WAKEUP for the CPR genpd.
->
-> Then the genpd ->power_on|off() callbacks should still be called
-> for CPR during system suspend, right? :D
+[TLDR: This mail in primarily relevant for Linux kernel regression
+tracking. See link in footer if these mails annoy you.]
 
-Yes, correct, that should work fine!
+On 23.06.23 02:58, Bagas Sanjaya wrote:
+> 
+> I notice a regression report on Bugzilla [1]. Quoting from it:
+> 
+>> kernel process "kworker/events_power_efficient" uses a lot of cpu power (100% on ESXI 6.7, ~30% on ESXI 7.0U3 or later) after upgrading from 5.17.3 to 5.19.17 or later.
+> [...]
+> #regzbot introduced: v5.17.3..v5.19.17 https://bugzilla.kernel.org/show_bug.cgi?id=217586
+> #regzbot title: kworker/events_power_efficient utilizes full CPU power after kernel upgrade
+> 
+> Thanks.
+> 
+> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=217586
 
->
-> > I suspect that the GENPD_FLAG_ACTIVE_WAKEUP is probably okay to set
-> > for most genpds, but there may be some exceptions.
-> >
->
-> Out of curiosity, do you have an example for such an exception where
-> GENPD_FLAG_ACTIVE_WAKEUP shouldn't be set, aside from workarounds like
-> I just described?
->
-> As you said, the consumer device should just say that it wants to stay
-> powered for wakeup during suspend. But if its power domains get powered
-> off, I would expect that to break. How could a genpd driver still
-> provide power without being powered on? Wouldn't that rather be a low
-> performance state?
+#regzbot resolve: afaics: misconfiguration became more problematic due
+to new mitigations
+#regzbot ignore-activity
 
-I think this boils down to how the power-rail that the genpd manages,
-is handled by the platform during system suspend.
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
 
-In principle there could be some other separate logic that helps a
-FW/PMIC to understand whether it needs to keep the power-rail on or
-not - no matter whether the genpd releases its vote for it during
-system suspend.
-
-This becomes mostly hypothetical, but clearly there are a lot of
-genpd/platforms that don't use GENPD_FLAG_ACTIVE_WAKEUP too. If those
-are just mistakes or just not needed, I don't actually know.
-
-Kind regards
-Uffe
