@@ -2,72 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE20A7D1642
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Oct 2023 21:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD9DB7D164E
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Oct 2023 21:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbjJTTVx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Oct 2023 15:21:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50218 "EHLO
+        id S229971AbjJTTfy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Oct 2023 15:35:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjJTTVw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 15:21:52 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C32DBE
-        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 12:21:50 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-59f61a639b9so17480687b3.1
-        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 12:21:50 -0700 (PDT)
+        with ESMTP id S229954AbjJTTfu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 15:35:50 -0400
+Received: from mail-oi1-x249.google.com (mail-oi1-x249.google.com [IPv6:2607:f8b0:4864:20::249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12893D65
+        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 12:35:45 -0700 (PDT)
+Received: by mail-oi1-x249.google.com with SMTP id 5614622812f47-3b2e7b41beaso2802783b6e.0
+        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 12:35:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697829710; x=1698434510; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1697830544; x=1698435344; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=qALOrG6vepevyfdTV65I5X2dgTb+XRjcAA0K1wR5V78=;
-        b=avyZOTCxSheiio0cQy8we9ioz7bsEXKOaiDle56ZEEWD3VeroRzhHAwYc4FvxMOp12
-         6CrHrDFoZI556Xdrb+S2T5Ipy7xAkWN04RAjc+wKelNnx4Na7l02arP7YLwqEOlWkcLu
-         ufExZn8FipZ9QPhE6+UsYRwJOzotnuX2LtpRfueFfT7c+RsLaTToycOE76C2GsF/xJEl
-         tfvQOgfzs64n6rTLv5nYP0b59jcO8nmPxEhTxl24l20Ip3H8LyAD4Ep0H6ZSorrfw7MD
-         fKicyMxWnxHFtvh1B2OEIGKDclqoQG7f/L2eLd/m7g8/v2/0IzLiZ2W7N6nckd6Ot7ao
-         Le2g==
+        bh=9+iAGOL8fBcRKregm2UatJBSjxVyGVTi97qzrD87J/M=;
+        b=aRyQvAni2EHDC0yRsExYndr00a4pAr2Rtc9NCVfSzpCdgmvO5I5cL6jHXAntyhyxL2
+         FI9KRSEINv+Hs6h/g1KbBbbso/zbisELGQolS1SFa35WUNcqQ2iZ9dnMyQAqQ1/QUCF7
+         klwPq5O8MSJFKEYZ0DM3XcZwQh3+MzdWqiLmcC1ojS+1CtCn1Xw7Mek462kLySxhoc4h
+         FehbPwXpxTs61coqrVJ9RGMalTRWJN0Ymdl4kSyOZGeAJpjLzdsOzlUIta2TRhogRJve
+         +P1QXvrg5VOCNk4mHO7U2CSk6Zhiezr8zxVyhIj8LTgfHtEwoGataffKbvaUqYufSGtR
+         eGhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697829710; x=1698434510;
+        d=1e100.net; s=20230601; t=1697830544; x=1698435344;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=qALOrG6vepevyfdTV65I5X2dgTb+XRjcAA0K1wR5V78=;
-        b=ArW5bEq28abnE6qaaN14h2corc0nLJt2sZEdSPQRcuvz00dpRT5hPgF6n1MS5MyZDE
-         S5Bw2Q+4UHP0q64RcF75p9/1ymyUAjeeBPOZqw75VdXhz8TqX2/Cw4CKjKYaoSEmI1SF
-         oiDma1bPtxxHnEzIgAw9JZvM6VE43yBH1xk0V8LOR4OKc/AOiL10+YZqGHGtdzDtkQfT
-         OO3xtVIfQa390ZscrVOJ8Hw58rrnMJTIpF+m1GrysxXJtQeIm0xcJN7LiDBCTYQNCcKh
-         L3VYpTpsMH7D3m1nRiUTmHhDWeJI0g0oUcf5dTGUgFCqJ/rUPqKvU0gg+cxd6ZuE/FkB
-         AMmw==
-X-Gm-Message-State: AOJu0YwXZgkOo4/ib54SJZubZQK0VwEs8RVRAUvmRqF/fBMApT0LAMiy
-        0diqFn6iCjiM0GgcqrDhP7q1hA/MVccXvoZpfQ==
-X-Google-Smtp-Source: AGHT+IF0gbKlBuVYWFSDhK1cHQbvO0vJ+f+8x3DRXak9PN8AwNgsgu3tNhmxk4ZIHpRQ+61kd2848nUx67nBfQ58iQ==
+        bh=9+iAGOL8fBcRKregm2UatJBSjxVyGVTi97qzrD87J/M=;
+        b=l6Zo5uJ6zLwsmsmD0c2aoI2fPda5gMBnl+dLVkre6ISJNNpex5pELf5HINudpoPuJO
+         nVjsxr5bmtQKuEByuhOjYjCTq5HdxfzfBckSsH/GmqU4cpNSOVZPpcpUh5138RUqypvx
+         4enPabt0VEALUbuRnshrzPYgxVfT07MRVqJaLWr+dKLIx2LCCrNCwx/u/RDaQIqwQ37H
+         8Z+JvxLrg4okd9B4KqOdOIvKEtXyNEz0zXX6M6kZjNN9/Sf827CHNM1hHBUGyZUPBN36
+         10CW0KGTjKtrqY0LMipPlbG4jK2aCzLg0jsKQciMRVjUHz9Sjfsm4UIDTM+zz+AlT80C
+         4uhQ==
+X-Gm-Message-State: AOJu0YxcmN9fp+HAEOUz6d46AB1rE7TDOS2SV6ZXscOL9L6jUxRMgJTp
+        4SOzZrdrP7CSbXlPAIsxVAZ7KsDspQiWP/kJXg==
+X-Google-Smtp-Source: AGHT+IHZQUY9baCehYvzXAaS7x9nNF6uHCQ2/74bV2qdNWPoNwNQLv1R/Hn9zc2YRsn/RnRPDVOTLR2TZ+Z8Sxp5Ag==
 X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
- (user=justinstitt job=sendgmr) by 2002:a25:d110:0:b0:d9c:c9a8:8c27 with SMTP
- id i16-20020a25d110000000b00d9cc9a88c27mr57393ybg.13.1697829709856; Fri, 20
- Oct 2023 12:21:49 -0700 (PDT)
-Date:   Fri, 20 Oct 2023 19:21:46 +0000
+ (user=justinstitt job=sendgmr) by 2002:a05:6808:448f:b0:3ad:da36:1dd6 with
+ SMTP id eq15-20020a056808448f00b003adda361dd6mr1891601oib.1.1697830544173;
+ Fri, 20 Oct 2023 12:35:44 -0700 (PDT)
+Date:   Fri, 20 Oct 2023 19:35:43 +0000
 Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAErTMmUC/x3NwQqDQAwE0F+RnBtYIyj2V0oPyxptoF2XpLUV8
- d+NPQ3vMDMbGKuwwbXaQHkRkzk76ksF6RHzxCiDGyhQUwcKaG/Nqaw4qCyshmX+sqJ9Snmu6BW dnK+Y45kJqWm7tuOxpz6BjxblUX7/w9t93w+Y0Zw+gAAAAA==
+X-B4-Tracking: v=1; b=H4sIAI7WMmUC/x2N0QrCMAwAf2Xk2UBXJwx/RUTaLNOAdCWp0zL27
+ ys+Hfdyt4GxChtcuw2UVzFZUpP+1AG9QnoyytQcvPPn3nmHVjRRrjiprKyGefmyon1yftcGnQP xI4ZSWCsSRkfjEN0lkB+hRbPyLL//8Hbf9wN9+HSXgAAAAA==
 X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1697829708; l=2442;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1697830543; l=2313;
  i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
- bh=Mdqt94cfpfyPw2z8vNiZUw0jKlb6Y4rhrl6QkPkNsjg=; b=eGMemd00Wx/G5iPloPDERokDgu99pfw0hb8wRp5tP7bzTbL5R7kAwXrl89cUd53z1hIPdIRS8
- PsuJh/QEPMuD+eAqiCuQ/YtrDg+fE0fCywNIJFMoI5Bm2NEFlO3Dq6u
+ bh=zmP6Agkd7BUv41JUTgaRBkw1r6Q9BZkiPWT2tLR0LAQ=; b=qUt1cyoTbXs6qmJVgPAXz5mbtcGQzIOLTkM7z8UR/GVWZ8gVAAzFiOhg9+1gcHscXS/bles5K
+ Hd71E9a1vbbDBn24xeS1hMCC89N3IDNnw1W+pJJ4CZNXEiLH5v1sOMH
 X-Mailer: b4 0.12.3
-Message-ID: <20231020-strncpy-drivers-power-supply-charger-manager-c-v1-1-698f73bcad2a@google.com>
-Subject: [PATCH] power: supply: charger-manager: replace deprecated strncpy
- with strscpy
+Message-ID: <20231020-strncpy-drivers-power-supply-surface_battery-c-v1-1-cabaea50e667@google.com>
+Subject: [PATCH] platform/surface: aggregator: replace deprecated strncpy with strscpy
 From:   Justin Stitt <justinstitt@google.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
+To:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
         Justin Stitt <justinstitt@google.com>
 Content-Type: text/plain; charset="utf-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,24 +78,32 @@ strncpy() is deprecated for use on NUL-terminated destination strings
 [1] and as such we should prefer more robust and less ambiguous string
 interfaces.
 
-We expect cm->psy_name_buf to be NUL-terminated based on its usage with
-format strings:
-1522: cm->charger_psy_desc.name = cm->psy_name_buf;
-...
-1587: dev_err(&pdev->dev, "Cannot register charger-manager with name \"%s\"\n",
-1587:   cm->charger_psy_desc.name);
+We expect bat->name to be NUL-terminated based on its usage with
+strcmp():
 
-Moreover, NUL-padding is not required as `cm` is already zero-allocated
-and thus any future NUL-byte assignments (like what strncpy() will do)
-are redundant:
-1437: cm = devm_kzalloc(&pdev->dev, sizeof(*cm), GFP_KERNEL);
+power_supply_core.c:
+445: return strcmp(psy->desc->name, name) == 0;
+
+... and also by the manual `... - 1` for the length argument of the
+original strncpy() invocation.
+
+Furthermore, no NUL-padding is needed as bat is zero-allocated before
+calling spwr_battery_init():
+826: bat = devm_kzalloc(&sdev->dev, sizeof(*bat), GFP_KERNEL);
+827: if (!bat)
+828:   return -ENOMEM;
+829:
+830: spwr_battery_init(bat, sdev, p->registry, p->name);
+
+... this means any further NUL-byte assignments (like the ones that
+strncpy() does) are redundant.
 
 Considering the above, a suitable replacement is `strscpy` [2] due to
 the fact that it guarantees NUL-termination on the destination buffer
 without unnecessarily NUL-padding.
 
-Let's also opt for the more idiomatic strscpy() usage of:
-strscpy(dest, src, sizeof(dest)).
+Let's also opt to use the more idiomatic strscpy() usage of:
+(dest, src, sizeof(dest)).
 
 Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
 Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
@@ -107,31 +115,26 @@ Note: build-tested only.
 
 Found with: $ rg "strncpy\("
 ---
- drivers/power/supply/charger-manager.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/power/supply/surface_battery.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/supply/charger-manager.c
-index 5fa6ba7f41e1..085d5277bc19 100644
---- a/drivers/power/supply/charger-manager.c
-+++ b/drivers/power/supply/charger-manager.c
-@@ -1516,9 +1516,11 @@ static int charger_manager_probe(struct platform_device *pdev)
- 	memcpy(&cm->charger_psy_desc, &psy_default, sizeof(psy_default));
+diff --git a/drivers/power/supply/surface_battery.c b/drivers/power/supply/surface_battery.c
+index 19d2f8834e56..196d290dc596 100644
+--- a/drivers/power/supply/surface_battery.c
++++ b/drivers/power/supply/surface_battery.c
+@@ -722,7 +722,7 @@ static void spwr_battery_init(struct spwr_battery_device *bat, struct ssam_devic
+ 			      struct ssam_event_registry registry, const char *name)
+ {
+ 	mutex_init(&bat->lock);
+-	strncpy(bat->name, name, ARRAY_SIZE(bat->name) - 1);
++	strscpy(bat->name, name, sizeof(bat->name));
  
- 	if (!desc->psy_name)
--		strncpy(cm->psy_name_buf, psy_default.name, PSY_NAME_MAX);
-+		strscpy(cm->psy_name_buf, psy_default.name,
-+			sizeof(cm->psy_name_buf));
- 	else
--		strncpy(cm->psy_name_buf, desc->psy_name, PSY_NAME_MAX);
-+		strscpy(cm->psy_name_buf, desc->psy_name,
-+			sizeof(cm->psy_name_buf));
- 	cm->charger_psy_desc.name = cm->psy_name_buf;
+ 	bat->sdev = sdev;
  
- 	/* Allocate for psy properties because they may vary */
 
 ---
 base-commit: bb55d7f7f7445abcc8db50e6a65d4315e79f75c7
-change-id: 20231020-strncpy-drivers-power-supply-charger-manager-c-236767ef929c
+change-id: 20231020-strncpy-drivers-power-supply-surface_battery-c-b0c84b05ac28
 
 Best regards,
 --
