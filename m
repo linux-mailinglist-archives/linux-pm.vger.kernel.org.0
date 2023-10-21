@@ -2,47 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF9F7D1A11
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Oct 2023 02:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 812AB7D1A19
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Oct 2023 02:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232356AbjJUAxY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Oct 2023 20:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
+        id S233195AbjJUAxc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Oct 2023 20:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230318AbjJUAxW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 20:53:22 -0400
+        with ESMTP id S233029AbjJUAx2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 20:53:28 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB867D7F;
-        Fri, 20 Oct 2023 17:53:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4BEAD69;
+        Fri, 20 Oct 2023 17:53:22 -0700 (PDT)
 Received: from mercury (cola.collaboradmins.com [195.201.22.229])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 593116607332;
-        Sat, 21 Oct 2023 01:53:14 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DE8546607355;
+        Sat, 21 Oct 2023 01:53:16 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697849594;
-        bh=n+cp6ATKcN+tRvhf+29E1cAWuHZDFud0FRdhecmVEyc=;
+        s=mail; t=1697849597;
+        bh=95P2EWFUKRCbCZzx5BnicmzGP6FSI+AsQsx9+1qnEVo=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=RrxEtuH3C4f6Vch/+SimF3XL4qNqVaVQVY++iL8EDB+zvWHlOxoIxHQvJSrFCHetc
-         lF364MHWTdFYSPAgAF2cvy9sKkdOGWTMmD1y9+4FNySwCs6AGC+Fl8WMYN/eAZcKAc
-         3UPI/eXYpAr/HR3p/+SlXTPnqclFQ7bvAz8R1/Bp+7yc0l6agFmLJrlwza7qGSgCaW
-         UBV5+o6sk5N27Dx300e8GjbQhMaXTWVxKKy5tVgbLpvqZhOd/u21AoXmO7ZNSmWH6z
-         vA9vs35uS5eiXWYrzbosDa57sBtMFD2RbAsspoOq0JSsIt2HXrjL5eTDpYjXdbaHlb
-         lk0goFfEfWMmg==
+        b=WoVUZj7Ab9vIsbbb/vgpCdm//2z2FvhRZHBzt+0paEKhVmgfsj1YHwvc8JCK9rWLA
+         lWuah8qoeJiNPoLMkq9jpztZiYECDfkb+uF4vSqu/30DeDx9819ZYUVuGqefClWfEM
+         yMqb6TU3AYYcIQhk81T3w2ke9OydOGRhvNsRz0BtfOpW7ThsNEFK6jLsapWffbTezI
+         TMXXzDSxpxo6u2KA5wtpB7sXvCNbeXTRpv970fi3SCSAcn4g4EC5PUoTPMdD6eCDyV
+         xEZj4GCmB3B56W3X7rwQQ3l1hrodYgpL/xqBZPUycRmoqJ5A8ptUX6IlXzx18Mrq5L
+         A3c8PBPqFt0Rw==
 Received: by mercury (Postfix, from userid 1000)
-        id 2DC55106061E; Sat, 21 Oct 2023 02:53:11 +0200 (CEST)
+        id 3C9C11066143; Sat, 21 Oct 2023 02:53:11 +0200 (CEST)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Sebastian Reichel <sre@kernel.org>,
+To:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
         Justin Stitt <justinstitt@google.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-In-Reply-To: <20231020-strncpy-drivers-power-supply-bq24190_charger-c-v1-1-e896223cb795@google.com>
-References: <20231020-strncpy-drivers-power-supply-bq24190_charger-c-v1-1-e896223cb795@google.com>
-Subject: Re: [PATCH] power: supply: bq24190_charger: replace deprecated
+Cc:     linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+In-Reply-To: <20231020-strncpy-drivers-power-supply-surface_battery-c-v2-1-29ed16b2caf1@google.com>
+References: <20231020-strncpy-drivers-power-supply-surface_battery-c-v2-1-29ed16b2caf1@google.com>
+Subject: Re: [PATCH v2] power: supply: surface_battery: replace deprecated
  strncpy with strscpy
-Message-Id: <169784959113.1512524.17628671686184916927.b4-ty@collabora.com>
+Message-Id: <169784959123.1512524.16039657676124942354.b4-ty@collabora.com>
 Date:   Sat, 21 Oct 2023 02:53:11 +0200
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -58,20 +59,20 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-On Fri, 20 Oct 2023 18:14:47 +0000, Justin Stitt wrote:
+On Fri, 20 Oct 2023 19:39:02 +0000, Justin Stitt wrote:
 > strncpy() is deprecated for use on NUL-terminated destination strings
 > [1] and as such we should prefer more robust and less ambiguous string
 > interfaces.
 > 
-> We expect bdi->model_name to be NUL-terminated based on its usage with
-> sysfs_emit and format strings:
+> We expect bat->name to be NUL-terminated based on its usage with
+> strcmp():
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] power: supply: bq24190_charger: replace deprecated strncpy with strscpy
-      commit: b0009b8bed98bd5d59449af48781703df261c247
+[1/1] power: supply: surface_battery: replace deprecated strncpy with strscpy
+      commit: 81f07d2b0c4db3b6e53d90419db915c75beb6326
 
 Best regards,
 -- 
