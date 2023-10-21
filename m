@@ -2,146 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E21A7D1A37
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Oct 2023 03:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D61517D1A8F
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Oct 2023 04:30:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjJUBHj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Oct 2023 21:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55208 "EHLO
+        id S229588AbjJUCa3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Oct 2023 22:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjJUBHj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 21:07:39 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1FCD45;
-        Fri, 20 Oct 2023 18:07:34 -0700 (PDT)
-Received: from mercury (cola.collaboradmins.com [195.201.22.229])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 57D4A6607332;
-        Sat, 21 Oct 2023 02:07:33 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1697850453;
-        bh=CH2omJCCy1KMhoXJh0T2xrBmJV7+OSQaAbEtAx3a87U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kUN5ukDwPyNzcMOhSJhIOlXwO5+XrSQ8Az1ADcG2lRkgUpVoMfSFy3t/aAsN94Yz0
-         lQgAmDULCqpm1FWL2Y1bWm5oQUlLTYiX/Jz6xV0W/zNqc5u+xb1NTjhsQO5/K3cYQX
-         YLtNLWH1WPz3lMGga7sgnZl0KMR9uUmRCbCfDtOEQsFxkkOllvNlk9htz+xqc9FOIr
-         W5nVqrPCUVX1UPNBdaTW4rFLOmiDOydi0Xqrp7qR72wh1OGI7a8JZyDTet8R6YDY1J
-         omJzjkDIVrj4nLsPX3VavgCAyp3uzeQWGPViwSJRSQzyrw65JS+qLkVwdWwOmjsa4v
-         6g0h1bpFfaIbw==
-Received: by mercury (Postfix, from userid 1000)
-        id 40DE7106061E; Sat, 21 Oct 2023 03:07:30 +0200 (CEST)
-Date:   Sat, 21 Oct 2023 03:07:30 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Hermes Zhang <Hermes.Zhang@axis.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, kernel@axis.com,
-        Hermes Zhang <chenhuiz@axis.com>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/2] power: supply: bq24190_charger: Add support for
- BQ24296
-Message-ID: <20231021010730.zk2hlbin75fn3cy6@mercury.elektranox.org>
-References: <20231007020701.1912553-1-Hermes.Zhang@axis.com>
- <20231007020701.1912553-3-Hermes.Zhang@axis.com>
+        with ESMTP id S229583AbjJUCa3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Oct 2023 22:30:29 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080EDD71
+        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 19:30:23 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1ca816f868fso10159285ad.1
+        for <linux-pm@vger.kernel.org>; Fri, 20 Oct 2023 19:30:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1697855422; x=1698460222; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=1qAT/k0d0dwlk/nR41CGDYlYvHmhmzcbYGCXa7mtC1A=;
+        b=SyjIE2X5S/nZPKi6oZIB5p7DELSQGTp/zWcV6+UQPlaxC7cQqVKXExCd1dPeFDSvAM
+         RryGx/HVfO4BdX+UfSSfwk5vBzXPK47Tqn/toRu47sSFUGiNTFlOFhA/oleIofQB/MgW
+         RJCsephvgaZaT/RAaUtaI9rd6txTu7umjTlEokjydLddrmtrALbxyf5QPem17k/xj/FA
+         v3SVaqRfdMmvIa3gyMZCPbPOyl4VG+dZ4wUMDNHbJ4V7OOE/EKSlqWWhx7I5JNdPHpXc
+         t42ezbfxxtfPXcHFtRmLI9o+0JPfNZzrb/BP5cVmk1NOqySoh6aJqZc82x8o0BqKE42S
+         DwIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697855422; x=1698460222;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1qAT/k0d0dwlk/nR41CGDYlYvHmhmzcbYGCXa7mtC1A=;
+        b=fF8w+uDmaEP18BBVd/ANtApe6AnkOVuHrcCaFF7IAA+0bspo2VDKAPi85EIVIJsSix
+         6gPKQqLITPojFzy1DNwCC3am60JBXKxHNsPPYHK2oC2/+rzwN3JKerrnhLV6FqWfrbc/
+         9QeoDuB5W31m8+OJGxD20bBvbR2YpmJKVE5AWXbhJBHOWeB2L/qF4pDYdVGY6IpCuxbi
+         brLa2x/4fNg0AbFTpXRTVBzuo7B3gAjjVsIfJCOymnhDEp9yu5swOvhOdEJYZqIPhGkh
+         duYRaOBNbRKtzMKq5FPBW/yfoYH0bPPVcPOpM3rShmoDM3/tvM3rDqSKjnoXTEmEjojX
+         832g==
+X-Gm-Message-State: AOJu0Yz86WG4j48yiSGOnyBj69V/FMTB7DtPk47MkWMx/ztDDZyUzQ1l
+        75gX9OYKulDhrGWsYxRvoFOKk9moJU+lhK6dDmbx9w==
+X-Google-Smtp-Source: AGHT+IGjd7FEaVDGPODDhajgI7cVceECXmELxXUGl9nnqP/22uFZbKIASTQVWS4dw0urcboWPiVCGg==
+X-Received: by 2002:a17:902:b7ca:b0:1ca:8b74:17f2 with SMTP id v10-20020a170902b7ca00b001ca8b7417f2mr3434302plz.6.1697855422535;
+        Fri, 20 Oct 2023 19:30:22 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id o11-20020a170902bccb00b001c613b4aa33sm2139381pls.287.2023.10.20.19.30.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Oct 2023 19:30:21 -0700 (PDT)
+Message-ID: <653337bd.170a0220.6f2ee.8345@mx.google.com>
+Date:   Fri, 20 Oct 2023 19:30:21 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3sqfrwaboxcezix5"
-Content-Disposition: inline
-In-Reply-To: <20231007020701.1912553-3-Hermes.Zhang@axis.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.6-rc6-164-ga1b138ca64c6
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.6-rc6-164-ga1b138ca64c6)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.6-rc6-164-ga=
+1b138ca64c6)
 
---3sqfrwaboxcezix5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+6-rc6-164-ga1b138ca64c6/
 
-Hi,
+Tree: pm
+Branch: testing
+Git Describe: v6.6-rc6-164-ga1b138ca64c6
+Git Commit: a1b138ca64c60d10549cc4641488e75bf9554902
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-On Sat, Oct 07, 2023 at 10:07:01AM +0800, Hermes Zhang wrote:
-> From: Hermes Zhang <chenhuiz@axis.com>
->=20
-> The BQ24296 is most similar to the BQ24196, but the:
-> 1. OTG config is split from CHG config (REG01)
-> 2. ICHG (Fast Charge Current limit) range is smaller (<=3D3008mA)
-> 3. NTC fault is simplified to 2 bits
->=20
-> Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
-> ---
+Warnings Detected:
 
-Thanks for your patch. I did not look into tiny details, because I
-think this needs to be restructured first. Please follow the style
-of bq256xx_charger.c, bq24257_charger.c and bq2515x_charger.c and
-use a struct together with i2c_get_match_data().
+arc:
 
-Also put device specific functions into the struct to avoid a switch
-case structure like the following:
+arm64:
 
-> [...]
-> +static int bq24190_hw_init(struct bq24190_dev_info *bdi)
-> +{
-> +	int ret;
-> +
-> +	/* First check that the device really is what its supposed to be */
-> +	switch (bdi->chip) {
-> +	case BQ24190:
-> +	case BQ24192:
-> +	case BQ24192i:
-> +	case BQ24196:
-> +		ret =3D bq24190_check_chip(bdi);
-> +		break;
-> +	case BQ24296:
-> +		ret =3D bq24296_check_chip(bdi);
-> +		break;
-> +	default:
-> +		dev_err(bdi->dev, "Error unsupported model: %d\n", bdi->chip);
-> +		return -EINVAL;
-> +	}
-> [...]
+arm:
 
-Instead it should look like this:
+i386:
 
-struct info {
-    ...
-    int (*check_chip)(struct bq24190_dev_info *bdi);
-    ...
-};
+mips:
 
-static int bq24190_hw_init(struct bq24190_dev_info *bdi)
-{
-    return bdi->info->check_chip(bdi);
-}
+riscv:
 
-Thanks,
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
 
--- Sebastian
+x86_64:
 
---3sqfrwaboxcezix5
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+Warnings summary:
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmUzJEkACgkQ2O7X88g7
-+pqjUA//QgjsvVdr3gAtIx/BnsNZdVBnoF3sXd12HE+GNGQ/LYYYGYpanZRE8Ak/
-T/GUx27lrGEEDMEYM80N6m8fgm0Y9lVPHn7t7QIKRMItWhiMtzV1vUfWoP6E1v8J
-m8Z/cSGZ5NMdJMnWaNig4Udm8VDA87aE7fRqObXlMBCfF8iTNc2eFkxwBCgpHM/k
-5LJKTyOQFMIvOJOQZe7eTevA1NL6rQORyaNudOoxWVJKHfeYkx4PB97iXLtDDT6c
-0AVaPXehlq7eLaLc56fBVCZeRfJc1E67fiC+eecb+/BUrDsi5LMlSAMX6/Ln9lsf
-684HsVHfGYXJHbemkEWcOveDd2NxqzNm9VA+/B23MkSR1QTL7o5elGPxmpjLsOvX
-ER/nIjsbhccHy/MrFLBIFLNwuwZ5Eo1V0vHxmyYc6sEQRKH3/nXrImwzGFVaP3h2
-wmtFNnm0EramP3CVdGTaYME8G5GTk9da6/C5vP4f9V8KA+ZTbaYlvPickwVZAtMo
-dDKwuRsqORH5oIfxkPvIrQuv1mBLed6SMFCoqZMJ3UDKzPQkG+FrK9eEfGhvWPNW
-4Ffu2xr/A15LuudyGYcA2qtA76Q85N2Q6KtqvIIXcyaDmVtozUFLOUOOp/ESbVhg
-a897/urwUkZP+ccWCaiQTJOUu82ROfEqTwHCwafV9Qzrht89o5s=
-=95PO
------END PGP SIGNATURE-----
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
 
---3sqfrwaboxcezix5--
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
