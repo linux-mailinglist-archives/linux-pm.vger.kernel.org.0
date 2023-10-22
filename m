@@ -2,108 +2,205 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D3E7D212B
-	for <lists+linux-pm@lfdr.de>; Sun, 22 Oct 2023 07:53:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502D37D21F4
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Oct 2023 10:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbjJVFx0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 22 Oct 2023 01:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
+        id S229500AbjJVIkw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 22 Oct 2023 04:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjJVFxZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 22 Oct 2023 01:53:25 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C44CC;
-        Sat, 21 Oct 2023 22:53:24 -0700 (PDT)
+        with ESMTP id S229452AbjJVIkv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 22 Oct 2023 04:40:51 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B0ADA;
+        Sun, 22 Oct 2023 01:40:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697954004; x=1729490004;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/QZoRJe08f8RU60jeWxeNdjpSy9+XWvu0aStnMl+Gkc=;
-  b=OP+lcVhELgPjh13t6HyLgiwLGDpquc10LXEYMRlnOvEYcZYq9AWoVlfe
-   5b+4aepnl0+g97QlM9igKwtMxvNCJ/qGrGkpWQ+NI9wuoNOkyeNeLupvU
-   fZ+mfe0ozzYInmZRyki6BNKlDbnUlTA+WP0SMZ4DtMlLgX5wiJNfV6xEv
-   EYJdL9/bYwiBi8E3x4nfUD57zd23DxxIkGEUb62jgOv18RbEfOj7ZaWEg
-   NwVOmPHwp66za/AHEhmXR1P7TCCBuM1fHynjRM9aapDFV0MAIOOSaPVyz
-   wAwoqSCho2DxBuT//PeTzbFEihqzTSaUYvpFR3BmzAYvUkgL6YI2AuO37
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10870"; a="8242360"
+  t=1697964049; x=1729500049;
+  h=date:from:to:cc:subject:message-id;
+  bh=sXY+Y/GJuM9MkRt+I12RPKQMVuU6mPCKH3Dad3bSk3o=;
+  b=CIg6xbwDugQgitoDKqqSgAPUoDc6JXpi7K6gcM8HEcjwYzAxWPJFrOhy
+   VOpJ0u7uJdD9httEr5Qwpb82TSXv6Ns0XqHV49oHMLBAXMnX1UHsMrRFT
+   A3wf8TWlD17jBh7ljoglR0rYNwGHlZSjqbIiZ5sSYpSCp1K39gnpComMi
+   DgZKz1mA5pW0D839/BF44pqcwulU0aK/ixXCTLuwS2FsrJxs4lwUFSxBJ
+   kwDDJTtBCctEBZTYcN7oDP/180N11ZfDbhnoqcLCb2r4z6gPzLBXeglbm
+   o4TauLgtXLmYeRhs0eDo++tXaQWo109I5dJK1lbB6jRliSVwz/fuff1Nx
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10870"; a="386507128"
 X-IronPort-AV: E=Sophos;i="6.03,242,1694761200"; 
-   d="scan'208";a="8242360"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2023 22:53:23 -0700
+   d="scan'208";a="386507128"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2023 01:40:49 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10870"; a="874341289"
+X-IronPort-AV: E=McAfee;i="6600,9927,10870"; a="901522111"
 X-IronPort-AV: E=Sophos;i="6.03,242,1694761200"; 
-   d="scan'208";a="874341289"
-Received: from chenyu-dev.sh.intel.com ([10.239.62.164])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Oct 2023 22:53:22 -0700
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     Len Brown <lenb@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chen Yu <yu.c.chen@intel.com>,
-        Todd Brandt <todd.e.brandt@intel.com>
-Subject: [RFC PATCH] tools/power turbostat: Do not print negative LPI residency
-Date:   Sun, 22 Oct 2023 13:52:21 +0800
-Message-Id: <20231022055221.569634-1-yu.c.chen@intel.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+   d="scan'208";a="901522111"
+Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 22 Oct 2023 01:38:33 -0700
+Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1quU0r-0005lK-2T;
+        Sun, 22 Oct 2023 08:40:45 +0000
+Date:   Sun, 22 Oct 2023 16:39:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ c55705c294a8e95b0453a868ea9c672a6919235b
+Message-ID: <202310221651.xYL0iu1S-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-turbostat prints the abnormal SYS%LPI across suspend-to-idle:
-SYS%LPI = 114479815993277.50
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: c55705c294a8e95b0453a868ea9c672a6919235b  Merge branch 'acpi-uid' into bleeding-edge
 
-This is reproduced by:
-Run a freeze cycle, e.g. "sleepgraph -m freeze -rtcwake 15".
-Then do a reboot. After boot up, launch the suspend-idle-idle
-and check the SYS%LPI field.
+elapsed time: 2305m
 
-The slp_so residence counter is in LPIT table, and BIOS does not
-clears this register across reset. The PMC expects the OS to calculate
-the LPI residency based on the delta. However, there is an firmware
-issue that the LPIT gets cleared to 0 during the second suspend
-to idle after the reboot, which brings negative delta value.
+configs tested: 129
+configs skipped: 2
 
-Prints a simple 0 to indicate this error to not confuse the user.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Reported-by: Todd Brandt <todd.e.brandt@intel.com>
-Signed-off-by: Chen Yu <yu.c.chen@intel.com>
----
- tools/power/x86/turbostat/turbostat.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20231021   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                   randconfig-001-20231022   gcc  
+arm64                            allmodconfig   gcc  
+arm64                             allnoconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+i386         buildonly-randconfig-001-20231022   gcc  
+i386         buildonly-randconfig-002-20231022   gcc  
+i386         buildonly-randconfig-003-20231022   gcc  
+i386         buildonly-randconfig-004-20231022   gcc  
+i386         buildonly-randconfig-005-20231022   gcc  
+i386         buildonly-randconfig-006-20231022   gcc  
+i386                                defconfig   gcc  
+i386                  randconfig-001-20231022   gcc  
+i386                  randconfig-002-20231022   gcc  
+i386                  randconfig-003-20231022   gcc  
+i386                  randconfig-004-20231022   gcc  
+i386                  randconfig-005-20231022   gcc  
+i386                  randconfig-006-20231022   gcc  
+i386                  randconfig-011-20231021   gcc  
+i386                  randconfig-012-20231021   gcc  
+i386                  randconfig-013-20231021   gcc  
+i386                  randconfig-014-20231021   gcc  
+i386                  randconfig-015-20231021   gcc  
+i386                  randconfig-016-20231021   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20231021   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                 randconfig-001-20231021   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                  randconfig-001-20231021   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                 randconfig-001-20231021   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-001-20231021   gcc  
+x86_64       buildonly-randconfig-002-20231021   gcc  
+x86_64       buildonly-randconfig-003-20231021   gcc  
+x86_64       buildonly-randconfig-004-20231021   gcc  
+x86_64       buildonly-randconfig-005-20231021   gcc  
+x86_64       buildonly-randconfig-006-20231021   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20231021   gcc  
+x86_64                randconfig-002-20231021   gcc  
+x86_64                randconfig-003-20231021   gcc  
+x86_64                randconfig-004-20231021   gcc  
+x86_64                randconfig-005-20231021   gcc  
+x86_64                randconfig-006-20231021   gcc  
+x86_64                randconfig-011-20231022   gcc  
+x86_64                randconfig-012-20231022   gcc  
+x86_64                randconfig-013-20231022   gcc  
+x86_64                randconfig-014-20231022   gcc  
+x86_64                randconfig-015-20231022   gcc  
+x86_64                randconfig-016-20231022   gcc  
+x86_64                randconfig-071-20231022   gcc  
+x86_64                randconfig-072-20231022   gcc  
+x86_64                randconfig-073-20231022   gcc  
+x86_64                randconfig-074-20231022   gcc  
+x86_64                randconfig-075-20231022   gcc  
+x86_64                randconfig-076-20231022   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 9a10512e3407..3fa5f9a0218a 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -1472,8 +1472,16 @@ int delta_package(struct pkg_data *new, struct pkg_data *old)
- 	old->pc8 = new->pc8 - old->pc8;
- 	old->pc9 = new->pc9 - old->pc9;
- 	old->pc10 = new->pc10 - old->pc10;
--	old->cpu_lpi = new->cpu_lpi - old->cpu_lpi;
--	old->sys_lpi = new->sys_lpi - old->sys_lpi;
-+	if (new->cpu_lpi > old->cpu_lpi) {
-+		old->cpu_lpi = new->cpu_lpi - old->cpu_lpi;
-+	} else {
-+		old->cpu_lpi = 0;
-+	}
-+	if (new->sys_lpi > old->sys_lpi) {
-+		old->sys_lpi = new->sys_lpi - old->sys_lpi;
-+	} else {
-+		old->sys_lpi = 0;
-+	}
- 	old->pkg_temp_c = new->pkg_temp_c;
- 
- 	/* flag an error when rc6 counter resets/wraps */
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
