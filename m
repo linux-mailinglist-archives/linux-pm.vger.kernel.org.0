@@ -2,151 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A383B7D3B9A
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Oct 2023 18:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 407B07D3CB7
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Oct 2023 18:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233161AbjJWQAy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Oct 2023 12:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47684 "EHLO
+        id S231395AbjJWQhi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Oct 2023 12:37:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233188AbjJWQAq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Oct 2023 12:00:46 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2082.outbound.protection.outlook.com [40.107.95.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB1610D1;
-        Mon, 23 Oct 2023 09:00:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jw5OKym8eb1sM120uqXUybkxNlNJO50aGr7QdjDKXaXYcxZkM474PofNkKVy/zv3PUw63WissS/FAbmnRRXqjPlZV1BGuFWFwtSCI9rF8GTraHDX8D25heRSFsbwuTiUvMRAnnrv59DQKrrUmJPuR40XW24LzAgdoNmYA4G05ZMN+UbiYFu39g2sN7XgD02bQ0fg+FNASkYXJ8zoUw+Yy8Wzsy48VihPWVF8+hYWuhqm/wgcY/O2n9qXPjq4EWPMSCSSp7eyMrJllHCjLb0Klmsasr6U2AaRSXIBkEwYKJu+vFxyz00bml9yhYo0YsgJSPuWJpck5qtES1HEiO4e7w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jKbpWSI5rdNsAcVT0gIb+6jCCMCBeYe2GrpQggqSXNY=;
- b=myoZGHjWdR8BZ4BcCjQo+Gro5ejchSJFlS5rhAXBqnPP1xk3XQ0lzDWyERlNHXLS4hJ6ElCfGLsIXnZJpEsxWLd96mRu1L6PMuJvw2dLKcsItYOQLCPxYsLAEvapXDKeWkOTwhV4Q0ShoXy3reg2emXd0S99aGOxRaquuXFMLZyBBpbuuX+ODB1LXXRxlMhzUd4jc7YbDBbVMrrw3pYx1akE4xhPfhOobdd/sI5folFtWYJrZFrmVRg/XQHXDX41ur06FDVrzLjIb8Hx9edlOlkaL8hsUhbDX+EOZIJpPHwAnZieL4AoPMlwNddvSi35BYzH/gMoPU92fB8enUqctA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=infradead.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jKbpWSI5rdNsAcVT0gIb+6jCCMCBeYe2GrpQggqSXNY=;
- b=GsnI0IQg4KaJZEqUEjmLMHvOUW7Y2tcolj/BDPf7azdFvzmGAcYJz7KGZzwTdbFcNFTHoQbPse15jXQ4N1dqGtWQX7Il5gfb3m2TxUyfQ+BfE0d8Q756DJdS+npBmW++nypZKFk6JCJ1nMTV/zs/4U+22WS+Vnd4Bv6yIvqRpVE=
-Received: from CY8PR12CA0001.namprd12.prod.outlook.com (2603:10b6:930:4e::24)
- by MW4PR12MB5666.namprd12.prod.outlook.com (2603:10b6:303:188::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.26; Mon, 23 Oct
- 2023 16:00:41 +0000
-Received: from CY4PEPF0000EE3C.namprd03.prod.outlook.com
- (2603:10b6:930:4e:cafe::62) by CY8PR12CA0001.outlook.office365.com
- (2603:10b6:930:4e::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.33 via Frontend
- Transport; Mon, 23 Oct 2023 16:00:40 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000EE3C.mail.protection.outlook.com (10.167.242.16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6933.15 via Frontend Transport; Mon, 23 Oct 2023 16:00:40 +0000
-Received: from AUS-P9-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 23 Oct
- 2023 11:00:39 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        "H . Peter Anvin" <hpa@zytor.com>
-CC:     <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
-        <linux-pm@vger.kernel.org>, <rafael@kernel.org>, <pavel@ucw.cz>,
-        <linux-perf-users@vger.kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Mario Limonciello" <mario.limonciello@amd.com>
-Subject: [PATCH 2/2] perf/x86/amd: Don't allow pre-emption in amd_pmu_lbr_reset()
-Date:   Mon, 23 Oct 2023 11:00:18 -0500
-Message-ID: <20231023160018.164054-3-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231023160018.164054-1-mario.limonciello@amd.com>
-References: <20231023160018.164054-1-mario.limonciello@amd.com>
+        with ESMTP id S230155AbjJWQhh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Oct 2023 12:37:37 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DE1D6E;
+        Mon, 23 Oct 2023 09:37:35 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69DFFC433C7;
+        Mon, 23 Oct 2023 16:37:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698079055;
+        bh=4j4zRVpdENg4gFv1kRMTIK1mdiei4ouowMHUHlbMvdI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UGXh1vBIm6GumULitSKCEjbrLw/iuKY7Ps0Fn88fe0oLBpQKW5p6V9Ryv1rA5z0pl
+         EMJ333zl57pM9ZI0iRgqwVD67mvzLR0N6XdO+rvLmTCFcP/ElWFhrs10gNZNPyKDCu
+         JTgR4zI2YsIR9DfrAmi5bmIKPq4hRgeagt2GtBdepM9vDYyd8wt3vvcEgl6BBVdeWT
+         ZUhhDw21xgZtbhpe1uXMkaPKqWquaxdMYpSIk0sTtqO0pQDFUHIusVHKj+Ojlb0HiE
+         A2b+OjQmp0GYcDrPHtCNMHcOiC5ah1nv8gcAp7g6q9YEG8hqSV6+5eZWo+dhSdvkKN
+         UczVhSBh3Ajbg==
+Date:   Mon, 23 Oct 2023 17:37:29 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Marek Vasut <marex@denx.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux@ew.tq-group.com, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/5] dt-bindings: soc: imx93-media-blk-ctrl: Add LDB
+ subnode into schema and example
+Message-ID: <20231023-quote-wrongly-ed07265e12ac@spud>
+References: <20231020130019.665853-1-alexander.stein@ew.tq-group.com>
+ <20231020130019.665853-3-alexander.stein@ew.tq-group.com>
+ <20231022-helper-dating-a0f65a8f6f72@spud>
+ <5986192.lOV4Wx5bFT@steina-w>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE3C:EE_|MW4PR12MB5666:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3a31c1f0-96c5-4c2a-7682-08dbd3e134a3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qnDU8E0jMpXScECBwwcNfzHnALLCj5smgStDnug8REbs79EYSiTFNtUq0PXn5H4qQd+MC5yMeIeFx6ULyVJlvEr165Wt3NkqYtPzOjhYRNQeCRtCI7/+3TFG1PbUQEFaA2USxl8MRkp6ppVKB7wJtrNO1WxoV1WtlcirVLw5mLc3wsHyL0TnfWPEQeZDADpVP+Wz7x8AMKARotlhlnVBS49XCxtrik9PEtGDPZtPujzNUVClIyVTfBJeC0pfxViz5thLSkjZkkN2GvvgJ90BY0Kl28zstnqvQdCkn5tLRgdYQ960SWoajPXjGHZbAXtTA0GlN3PYN0sm5dJlvySaUksubWJtLiOIKjrMp/8A08OotW9HIffUcZSe+EmXpv3O/kekjlLIoT8LzB7BHACfIU4duRhMRnxUP/C3JyFGOGiiWP8xp8g//Z0NZVixE/m65ewjM7mgJufO6XQNjLWizBh18Mle43l604iPGMFkDuh68KYVhk2T9//xikhcmrzMljtc6pd9Vw71aaclW0dXwmZCjCULpUKzzRQkgekPe7e2OMy3dWbSCDV5NlR2lL3MUM6iP7vG+MZqOVr/9J5ZSOJyCvIHqHCPZrm46w3/PkQ/GujxnHEJp1600MFDs3XgrrFxS3zIcJ8gaYNfmuNw7JPgJF+lpgK7O9cTfoZCfysxw1AnD3ajuqJFFjD62y0Z6N0h8GfnXdZxa/SjNFYp2XbaF+amVDig/SMoX7DtadNjn2n0YvtgPdZa3xNQQjlBXN/Xa5nZk6RfG90IlkuMcg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(396003)(136003)(376002)(346002)(230922051799003)(186009)(82310400011)(451199024)(64100799003)(1800799009)(36840700001)(46966006)(40470700004)(40480700001)(40460700003)(7416002)(36860700001)(5660300002)(82740400003)(2906002)(356005)(41300700001)(16526019)(7696005)(86362001)(1076003)(336012)(83380400001)(81166007)(26005)(426003)(4326008)(8936002)(47076005)(44832011)(2616005)(36756003)(8676002)(6666004)(478600001)(316002)(70586007)(70206006)(110136005)(54906003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Oct 2023 16:00:40.6349
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a31c1f0-96c5-4c2a-7682-08dbd3e134a3
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EE3C.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB5666
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="xhT/qDoRzBha/YYS"
+Content-Disposition: inline
+In-Reply-To: <5986192.lOV4Wx5bFT@steina-w>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fixes a BUG reported during suspend to ram testing.
 
-```
-[  478.274752] BUG: using smp_processor_id() in preemptible [00000000] code: rtcwake/2948
-[  478.274754] caller is amd_pmu_lbr_reset+0x19/0xc0
-```
+--xhT/qDoRzBha/YYS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Cc: stable@vger.kernel.org # 6.1+
-Fixes: ca5b7c0d9621 ("perf/x86/amd/lbr: Add LbrExtV2 branch record support")
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- arch/x86/events/amd/lbr.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On Mon, Oct 23, 2023 at 08:27:20AM +0200, Alexander Stein wrote:
+> Am Sonntag, 22. Oktober 2023, 19:39:12 CEST schrieb Conor Dooley:
+> > On Fri, Oct 20, 2023 at 03:00:15PM +0200, Alexander Stein wrote:
+> > > Document the LDB bridge subnode and add the subnode into the example.
+> > > For the subnode to work, the block control must scan its subnodes and
+> > > bind drivers to them, do not misuse either simple-bus or simple-mfd
+> > > here.
+> > >=20
+> > > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > > ---
+> > >=20
+> > >  .../soc/imx/fsl,imx93-media-blk-ctrl.yaml     | 44 +++++++++++++++++=
+++
+> > >  1 file changed, 44 insertions(+)
+> > >=20
+> > > diff --git
+> > > a/Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.=
+yaml
+> > > b/Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.=
+yaml
+> > > index b3554e7f9e76..5ba66dfb0e05 100644
+> > > ---
+> > > a/Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.=
+yaml
+> > > +++
+> > > b/Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.=
+yaml>=20
+> > > @@ -24,6 +24,12 @@ properties:
+> > >    reg:
+> > >      maxItems: 1
+> > >=20
+> > > +  '#address-cells':
+> > > +    const: 1
+> > > +
+> > > +  '#size-cells':
+> > > +    const: 1
+> > > +
+> > >=20
+> > >    '#power-domain-cells':
+> > >      const: 1
+> > >=20
+> > > @@ -46,9 +52,16 @@ properties:
+> > >        - const: csi
+> > >        - const: dsi
+> > >=20
+> > > +  bridge@20:
+> > > +    type: object
+> > > +    $ref: /schemas/display/bridge/fsl,ldb.yaml#
+> > > +    unevaluatedProperties: false
+> > > +
+> > >=20
+> > >  required:
+> > >    - compatible
+> > >    - reg
+> > >=20
+> > > +  - '#address-cells'
+> > > +  - '#size-cells'
+> >=20
+> > It seems to make little sense to me that these would become required
+> > when the bridge is optional. Is it valid to have one of these
+> > media-blk-ctrls without the ldb subnode?
+>=20
+> fsl,imx93-media-blk-ctrl privides several power-domains (DSI, CSI, ISI, P=
+XP=20
+> and LCDIF), currently unused. This series introduces the usage for LCDIF =
+power=20
+> domain. LDB is the LVDS display bridge. So there are several power domain=
+s=20
+> which don't requires the usage of ldb.
+> On the other hand I prefer consistency, so I opted to keep things similar=
+ to=20
+> commit 1cb0c87d27dc. If it shall not be added here, it should be removed =
+in=20
+> Documentation/devicetree/bindings/soc/imx/fsl,imx8mp-media-blk-ctrl.yaml =
+as=20
+> well.
 
-diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
-index eb31f850841a..5b98e8c7d8b7 100644
---- a/arch/x86/events/amd/lbr.c
-+++ b/arch/x86/events/amd/lbr.c
-@@ -321,7 +321,7 @@ int amd_pmu_lbr_hw_config(struct perf_event *event)
- 
- void amd_pmu_lbr_reset(void)
- {
--	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-+	struct cpu_hw_events *cpuc = get_cpu_ptr(&cpu_hw_events);
- 	int i;
- 
- 	if (!x86_pmu.lbr_nr)
-@@ -335,6 +335,7 @@ void amd_pmu_lbr_reset(void)
- 
- 	cpuc->last_task_ctx = NULL;
- 	cpuc->last_log_id = 0;
-+	put_cpu_ptr(&cpu_hw_events);
- 	wrmsrl(MSR_AMD64_LBR_SELECT, 0);
- }
- 
--- 
-2.34.1
+IIRC the tooling will complain if you have an enabled node containing
+#address-cells and/or #size-cells but no child nodes, so making
+#address-cells or #size-cells required will cause problems. Looks like
+the only user has the child node, so it didn't crop up yet.
 
+--xhT/qDoRzBha/YYS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZTahSAAKCRB4tDGHoIJi
+0vS+AQC45ElFCzZEUe5/Th99QAcnTpLwpHp/8fZYeUbBNEHJSgEAv/Eh5gQhIGd6
+z2Ep4eW1LJXgSQL1VLTN6vznUdXFtgQ=
+=U4hY
+-----END PGP SIGNATURE-----
+
+--xhT/qDoRzBha/YYS--
