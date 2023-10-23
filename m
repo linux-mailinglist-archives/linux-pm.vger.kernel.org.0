@@ -2,107 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1037D2EF1
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Oct 2023 11:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE5F7D2D0F
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Oct 2023 10:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232696AbjJWJxl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Oct 2023 05:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38438 "EHLO
+        id S229524AbjJWIpH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Oct 2023 04:45:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjJWJxk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Oct 2023 05:53:40 -0400
-X-Greylist: delayed 91 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 Oct 2023 02:53:36 PDT
-Received: from omta033.useast.a.cloudfilter.net (omta033.useast.a.cloudfilter.net [44.202.169.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1C6D65;
-        Mon, 23 Oct 2023 02:53:36 -0700 (PDT)
-Received: from eig-obgw-5010a.ext.cloudfilter.net ([10.0.29.199])
-        by cmsmtp with ESMTPS
-        id umGZq9MMVjtZ3urbQqaPCT; Mon, 23 Oct 2023 09:52:04 +0000
-Received: from 162-240-83-27.unifiedlayer.com ([137.59.148.200])
-        by cmsmtp with ESMTPS
-        id urbPqSLt1oIDwurbPq5bmt; Mon, 23 Oct 2023 09:52:04 +0000
-X-Authority-Analysis: v=2.4 cv=TP1W9npa c=1 sm=1 tr=0 ts=65364244
- a=MgGYFET5X96nYrQ76toljg==:117 a=/5CYD1hNzocxg58dEBddTw==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=kj9zAlcOel0A:10 a=bhdUkHdE2iEA:10 a=lUDAUsI-kUQA:10
- a=9m64_h_j2zU8ieQoq-sA:9 a=CjuIK1q_8ugA:10
+        with ESMTP id S229876AbjJWIpG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Oct 2023 04:45:06 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A245CAF;
+        Mon, 23 Oct 2023 01:45:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=35686686.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Sender:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Dm1nus89JLbD/65ItGQLhdR/UwQLhddPM+BxEJ7yOwM=; b=psmQC4SvG8qI0XH/ll0hW7b54T
-        TI7vPSB8ejQbKeTnucwalfcFc9fMHxB4ARdZO2yhvpLYN5zvKaVgiPpZlRYY3JRlsf+mQRxa0VaJE
-        UuSzbutT7fiSK+Q1RIJk5/RuZOFI1jUJcVRROgCOZPRP5VZEuXSF7lwDXtJQfsjYw17bPnxqGU2Sa
-        EzjFojVaO93jRTT0r4+JYlb3ibiLYMUfUQs8OnIoDzTJEdV/2P8CtnZ1ve95WUBGBVcHlN2ZzSjW3
-        hOOm8SySkV1NEnoNV0CKITk5ARiyL27HzPY+2W/YGqnrApIDw1mKPLEIMVeOaYNXBGGSAPARHdaIc
-        Q2D5OdQg==;
-Received: from md-hk-12.webhostbox.net ([137.59.148.200]:17940)
-        by md-hk-12.webhostbox.net with esmtpa (Exim 4.96.2)
-        (envelope-from <jc@35686686.com>)
-        id 1qulJz-003aaJ-2f;
-        Mon, 23 Oct 2023 08:39:39 +0530
-Received: from [181.214.94.254]
- by 35686686.com
- with HTTP (HTTP/1.1 POST); Mon, 23 Oct 2023 08:39:36 +0530
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Apd3KeJ8uuP3OQFLQ5TzxVCBAuh86rEsBBY3n1LtHcM=; b=YBhUuWgpNULl2044fpGJ/4RiyU
+        W2ygtuqlY99XtPXYBTEzLjRfuXprkm+9j4t032PBXwks89r8Z2UW0gWBXD81t1AKXGEa23oSnZ2Ac
+        fy44mvrrt1gfHfc8UFjdtlb9+ta7o1rlQhgpBZVvUPoOSNxT+NFC3RVWyzyv7RLOEghIH25YZQe1W
+        ZNdTbpo5oGx/qPAhtLcliiECxKCJOFs9jPB6FQBDw4kMfy3eoHHpTjQphSdbcucZfc6ejZ+hPA3LL
+        2CCikNXWTwCOrL4Sya5hdrgRD431/EbkJNy4a0c3U2bWPdaEaPH/7yQ+Jo+qll7sVFEAFfRwiYYq+
+        lQ0ZeaKg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:37836)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1quqYO-0002gI-2k;
+        Mon, 23 Oct 2023 09:44:52 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1quqYN-0004g0-0h; Mon, 23 Oct 2023 09:44:51 +0100
+Date:   Mon, 23 Oct 2023 09:44:50 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+        x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        jianyong.wu@arm.com, justin.he@arm.com
+Subject: Re: [RFC PATCH v2 24/35] drivers: base: Implement weak
+ arch_unregister_cpu()
+Message-ID: <ZTYygtKt4w9C0Oxw@shell.armlinux.org.uk>
+References: <20230913163823.7880-1-james.morse@arm.com>
+ <20230913163823.7880-25-james.morse@arm.com>
+ <8be3a9dc-8f59-9ef9-3662-95814e177125@redhat.com>
 MIME-Version: 1.0
-Date:   Mon, 23 Oct 2023 11:09:36 +0800
-From:   jc@35686686.com
-To:     undisclosed-recipients:;
-Subject: LOAN SCHEME
-Reply-To: info@kafurinvestment.com
-Mail-Reply-To: info@kafurinvestment.com
-User-Agent: Roundcube Webmail/1.6.0
-Message-ID: <eb8ad888286bc7fa05b345815a27dbea@35686686.com>
-X-Sender: jc@35686686.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - md-hk-12.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - 35686686.com
-X-BWhitelist: no
-X-Source-IP: 137.59.148.200
-X-Source-L: No
-X-Exim-ID: 1qulJz-003aaJ-2f
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: md-hk-12.webhostbox.net [137.59.148.200]:17940
-X-Source-Auth: jc@35686686.com
-X-Email-Count: 25
-X-Org:  HG=dishared_whb_net_legacy;ORG=directi;
-X-Source-Cap: ZmJkZXN4amc7Ymx1ZWhvc3Q7bWQtaGstMTIud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfOKly1JL98KHXEiMQSh+nonamZItPy8s8ipJUA0erlu2p1v52o+qJDaokyvYnqXR8T8yHurbiDLN2UIxTUYKoBjfuWrsRWhfedHRYMJGR3Rl75QgD1nG
- cTNvbAz2D6RvbE/5irQgUFVmbIYKVgySfu9jn5ie7hQePJQGXkqHwluc/VHa6kxA7ZRhYeElPZGzpZX6YZl2opeU10p4IHO0APVPbzbLRMlD5Z2d42viWhsj
- L7VE7h76UQOeNuTfzhF2fyQnZbvbpvAPLSFStlVgl8jqLID+73yP4e3NZkEWfb9gnjw1XIi+sRw3CnFRCCDKIqRzb8W/8p+Ge3nKAanO04E=
-X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_50,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,SUBJ_ALL_CAPS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8be3a9dc-8f59-9ef9-3662-95814e177125@redhat.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Greetings:
+On Tue, Sep 19, 2023 at 10:59:23AM +1000, Gavin Shan wrote:
+> On 9/14/23 02:38, James Morse wrote:
+> > diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+> > index 677f963e02ce..c709747c4a18 100644
+> > --- a/drivers/base/cpu.c
+> > +++ b/drivers/base/cpu.c
+> > @@ -531,7 +531,14 @@ int __weak arch_register_cpu(int cpu)
+> >   {
+> >   	return register_cpu(&per_cpu(cpu_devices, cpu), cpu);
+> >   }
+> > -#endif
+> > +
+> > +#ifdef CONFIG_HOTPLUG_CPU
+> > +void __weak arch_unregister_cpu(int num)
+> > +{
+> > +	unregister_cpu(&per_cpu(cpu_devices, num));
+> > +}
+> > +#endif /* CONFIG_HOTPLUG_CPU */
+> > +#endif /* CONFIG_GENERIC_CPU_DEVICES */
+> 
+> It seems conflicting with its declaration in include/linux/cpu.h.
 
-I am Mr. Faheem Badawi, working as a project facilitator for (Kafur 
-Project Management Services) also, with numerous investors worldwide. As 
-a means of widening our global portfolio we would like to know if you 
-have any project(s) requiring funding. We also offer business, personal 
-and home loans to finance new projects as well as expansion capital.
+How so? The declaration is:
 
-For more updates on the mode of operation send a reply.
+extern void arch_unregister_cpu(int cpu);
 
-Waiting for your prompt response.
+So:
 
-Kind regards,
-Faheem Badawi.
-(Financial Advisory - KPMS)
+void __weak arch_unregister_cpu(int num)
+
+is compatible.
+
+> Besides, the function is still needed by
+> drivers/acpi/acpi_processor.c::acpi_processor_make_not_present()
+> even both CONFIG_HOTPLUG_CPU and CONFIG_GENERIC_CPU_DEVICES are disabled?
+
+Yes, I agree - it needs to be present when ACPI is built, so I'm
+thinking the right solution is to move it out from under at least
+CONFIG_HOTPLUG_CPU.
+
+It can't be moved out from under CONFIG_GENERIC_CPU_DEVICES because
+then we end up referencing the per-cpu variable cpu_devices which only
+exists when CONFIG_GENERIC_CPU_DEVICES is enabled. Is that a problem
+though, because in the case of !CONFIG_GENERIC_CPU_DEVICES, aren't
+architectures required to provide both arch_.*register_cpu() functions?
+
+Thanks.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
