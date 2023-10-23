@@ -2,192 +2,205 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 832977D4098
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Oct 2023 22:02:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE7B7D4148
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Oct 2023 22:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjJWUCC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Oct 2023 16:02:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40144 "EHLO
+        id S230080AbjJWU6i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Oct 2023 16:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjJWUCC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Oct 2023 16:02:02 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65115F9;
-        Mon, 23 Oct 2023 13:01:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=aZyGRwEv0iUdzK429NjcYATM8WFVnBChclCibm7Si3A=; b=pSY/eaDRzPVfujJtREsnNZj+LO
-        /p+NuKMtQPf/2JkoIfPYg79SLzNYeYhtWZOSComP7w9bgywGy/wzZZDFl0NLnmNFNXPESP0sWalS9
-        VG3DqEOlkmMikGXbr0VhQPXE/lyU5S+xhxhb/vfc+PGsidk3Nk97sdgk+qe1RSt/EC2X16PuOnbZM
-        0QhdrMpGn9tBUegcvYZl/6LVBSQyqABNIhnYDfZxZuPOLOAAHO85JkzyovjAAkuQkGTVpTiKd0imm
-        TqCx3RsW2GCf1fA/3dfVWzIsA6ghyq96uryRM+fe2equbXYHHK4tYinS3xHwE6EMpwOK1NpiUVdNB
-        mHe3Br5A==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56976)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1qv17W-0003Si-0l;
-        Mon, 23 Oct 2023 21:01:50 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qv17S-0005AN-Pc; Mon, 23 Oct 2023 21:01:46 +0100
-Date:   Mon, 23 Oct 2023 21:01:46 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-        x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        jianyong.wu@arm.com, justin.he@arm.com
-Subject: Re: [RFC PATCH v2 20/35] ACPI: Rename acpi_processor_hotadd_init and
- remove pre-processor guards
-Message-ID: <ZTbRKgxtiq9XQKBr@shell.armlinux.org.uk>
-References: <20230913163823.7880-1-james.morse@arm.com>
- <20230913163823.7880-21-james.morse@arm.com>
- <20230914151720.00007105@Huawei.com>
- <b8f430c1-c30f-191f-18c6-f750fa6ba476@redhat.com>
+        with ESMTP id S229968AbjJWU6h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Oct 2023 16:58:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07DD19D;
+        Mon, 23 Oct 2023 13:58:35 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BDCFF2F4;
+        Mon, 23 Oct 2023 13:59:15 -0700 (PDT)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.78.69])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 34DDA3F64C;
+        Mon, 23 Oct 2023 13:58:34 -0700 (PDT)
+Date:   Mon, 23 Oct 2023 21:58:32 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
+        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
+        lukasz.luba@arm.com, pierre.gondois@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, acpica-devel@lists.linuxfoundation.org,
+        conor.dooley@microchip.com, suagrfillet@gmail.com,
+        ajones@ventanamicro.com, lftan@kernel.org
+Subject: Re: [RFC v3 6/6] arm64/amu: use capacity_ref_freq to set AMU ratio
+Message-ID: <ZTbebQrK3K+JwWxR@arm.com>
+References: <20231018162540.667646-1-vincent.guittot@linaro.org>
+ <20231018162540.667646-7-vincent.guittot@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b8f430c1-c30f-191f-18c6-f750fa6ba476@redhat.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20231018162540.667646-7-vincent.guittot@linaro.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 18, 2023 at 03:50:09PM +1000, Gavin Shan wrote:
+Hi,
+
+On Wednesday 18 Oct 2023 at 18:25:40 (+0200), Vincent Guittot wrote:
+> Use the new capacity_ref_freq to set the ratio that is used by AMU for
+> computing the arch_scale_freq_capacity().
+> This helps to keep everything aligned using the same reference for
+> computing CPUs capacity.
 > 
-> On 9/15/23 00:17, Jonathan Cameron wrote:
-> > On Wed, 13 Sep 2023 16:38:08 +0000
-> > James Morse <james.morse@arm.com> wrote:
-> > 
-> > > acpi_processor_hotadd_init() will make a CPU present by mapping it
-> > > based on its hardware id.
-> > > 
-> > > 'hotadd_init' is ambiguous once there are two different behaviours
-> > > for cpu hotplug. This is for toggling the _STA present bit. Subsequent
-> > > patches will add support for toggling the _STA enabled bit, named
-> > > acpi_processor_make_enabled().
-> > > 
-> > > Rename it acpi_processor_make_present() to make it clear this is
-> > > for CPUs that were not previously present.
-> > > 
-> > > Expose the function prototypes it uses to allow the preprocessor
-> > > guards to be removed. The IS_ENABLED() check will let the compiler
-> > > dead-code elimination pass remove this if it isn't going to be
-> > > used.
-> > > 
-> > > Signed-off-by: James Morse <james.morse@arm.com>
-> > > ---
-> > >   drivers/acpi/acpi_processor.c | 14 +++++---------
-> > >   include/linux/acpi.h          |  2 --
-> > >   2 files changed, 5 insertions(+), 11 deletions(-)
-> > > 
-> > > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-> > > index 75257fae10e7..22a15a614f95 100644
-> > > --- a/drivers/acpi/acpi_processor.c
-> > > +++ b/drivers/acpi/acpi_processor.c
-> > > @@ -182,13 +182,15 @@ static void __init acpi_pcc_cpufreq_init(void) {}
-> > >   #endif /* CONFIG_X86 */
-> > >   /* Initialization */
-> > > -#ifdef CONFIG_ACPI_HOTPLUG_PRESENT_CPU
-> > > -static int acpi_processor_hotadd_init(struct acpi_processor *pr)
-> > > +static int acpi_processor_make_present(struct acpi_processor *pr)
-> > >   {
-> > >   	unsigned long long sta;
-> > >   	acpi_status status;
-> > >   	int ret;
-> > > +	if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU))
-> > > +		return -ENODEV;
-> > > +
-> > >   	if (invalid_phys_cpuid(pr->phys_id))
-> > >   		return -ENODEV;
-> > > @@ -222,12 +224,6 @@ static int acpi_processor_hotadd_init(struct acpi_processor *pr)
-> > >   	cpu_maps_update_done();
-> > >   	return ret;
-> > >   }
-> > > -#else
-> > > -static inline int acpi_processor_hotadd_init(struct acpi_processor *pr)
-> > > -{
-> > > -	return -ENODEV;
-> > > -}
-> > > -#endif /* CONFIG_ACPI_HOTPLUG_PRESENT_CPU */
-> > >   static int acpi_processor_get_info(struct acpi_device *device)
-> > >   {
-> > > @@ -335,7 +331,7 @@ static int acpi_processor_get_info(struct acpi_device *device)
-> > >   	 *  because cpuid <-> apicid mapping is persistent now.
-> > >   	 */
-> > >   	if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
-> > > -		int ret = acpi_processor_hotadd_init(pr);
-> > > +		int ret = acpi_processor_make_present(pr);
-> > >   		if (ret)
-> > >   			return ret;
-> > > diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-> > > index 651dd43976a9..b7ab85857bb7 100644
-> > > --- a/include/linux/acpi.h
-> > > +++ b/include/linux/acpi.h
-> > > @@ -316,12 +316,10 @@ static inline int acpi_processor_evaluate_cst(acpi_handle handle, u32 cpu,
-> > >   }
-> > >   #endif
-> > > -#ifdef CONFIG_ACPI_HOTPLUG_PRESENT_CPU
-> > >   /* Arch dependent functions for cpu hotplug support */
-> > >   int acpi_map_cpu(acpi_handle handle, phys_cpuid_t physid, u32 acpi_id,
-> > >   		 int *pcpu);
-> > >   int acpi_unmap_cpu(int cpu);
-> > 
-> > I've lost track somewhat but I think the definitions of these are still under ifdefs
-> > which is messy if nothing else and might cause build issues.
-> > 
+> The default value of the ratio ensures that arch_scale_freq_capacity()
+> returns max capacity until it is set to its correct value with the
+> cpu capacity and capacity_ref_freq.
 > 
-> Yup, it's not safe to use 'if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU))' in
-> acpi_processor_make_present() until the ifdefs are removed for those two functions
-> in individual architectures.
+> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> ---
+>  arch/arm64/kernel/topology.c  | 18 ++++++++++--------
+>  drivers/base/arch_topology.c  | 14 ++++++++++++--
+>  include/linux/arch_topology.h |  1 +
+>  3 files changed, 23 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+> index 817d788cd866..0f8f6e90c46d 100644
+> --- a/arch/arm64/kernel/topology.c
+> +++ b/arch/arm64/kernel/topology.c
+> @@ -82,7 +82,12 @@ int __init parse_acpi_topology(void)
+>  #undef pr_fmt
+>  #define pr_fmt(fmt) "AMU: " fmt
+>  
+> -static DEFINE_PER_CPU_READ_MOSTLY(unsigned long, arch_max_freq_scale);
+> +/*
+> + * Ensure that amu_scale_freq_tick() will return SCHED_CAPACITY_SHIFT until
+> + * the CPU capacity and its assosciated frequency have been correctly
+> + * initialized.
 
-The same thing appears in a final patch that James seems to have added
-to the repository:
+s/SCHED_CAPACITY_SHIFT/SCHED_CAPACITY_SCALE
 
-ACPI: processor: Only call arch_unregister_cpu() if HOTPLUG_CPU is selected
+> + */
+> +static DEFINE_PER_CPU_READ_MOSTLY(unsigned long, arch_max_freq_scale) = (2 * SCHED_CAPACITY_SHIFT);
 
-in which acpi_processor_post_eject() has this change:
+It should be 1UL << (2 * SCHED_CAPACITY_SHIFT).
 
--       if (!device)
-+       if (!IS_ENABLED(CONFIG_HOTPLUG_CPU) || !device)
+>  static DEFINE_PER_CPU(u64, arch_const_cycles_prev);
+>  static DEFINE_PER_CPU(u64, arch_core_cycles_prev);
+>  static cpumask_var_t amu_fie_cpus;
+> @@ -112,9 +117,9 @@ static inline bool freq_counters_valid(int cpu)
+>  	return true;
+>  }
+>  
+> -static int freq_inv_set_max_ratio(int cpu, u64 max_rate, u64 ref_rate)
+> +int freq_inv_set_max_ratio(int cpu, u64 max_rate)
+>  {
+> -	u64 ratio;
+> +	u64 ratio, ref_rate = arch_timer_get_rate();
+>  
+>  	if (unlikely(!max_rate || !ref_rate)) {
+>  		pr_debug("CPU%d: invalid maximum or reference frequency.\n",
+> @@ -142,7 +147,7 @@ static int freq_inv_set_max_ratio(int cpu, u64 max_rate, u64 ref_rate)
+>  		return -EINVAL;
+>  	}
 
-I'm wondering if that's caused by a previous patch making the weak
-definition of arch_unregister_cpu() dependent on HOTPLUG_CPU, and
-whether dropping that ifdef around the function would be better. I
-think I already asked that question, but this final patch seems to be
-the confirmation that we need to provide a definition of it.
+The return value is no longer used so it might be worth declaring it to
+return void and WARN_ONCE for unlikely(!max_rate || !ref_rate).
 
-I think the reason James did it like that is because unregister_cpu()
-is dependent upon CONFIG_HOTPLUG_CPU, but it's probably better to do:
+>  
+> -	per_cpu(arch_max_freq_scale, cpu) = (unsigned long)ratio;
+> +	WRITE_ONCE(per_cpu(arch_max_freq_scale, cpu), (unsigned long)ratio);
+>  
+>  	return 0;
+>  }
+> @@ -195,10 +200,7 @@ static void amu_fie_setup(const struct cpumask *cpus)
+>  		return;
+>  
+>  	for_each_cpu(cpu, cpus) {
+> -		if (!freq_counters_valid(cpu) ||
+> -		    freq_inv_set_max_ratio(cpu,
+> -					   cpufreq_get_hw_max_freq(cpu) * 1000ULL,
+> -					   arch_timer_get_rate()))
+> +		if (!freq_counters_valid(cpu))
+>  			return;
+>  	}
+>  
+> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> index 2372ce791bb4..3a604b77b12d 100644
+> --- a/drivers/base/arch_topology.c
+> +++ b/drivers/base/arch_topology.c
+> @@ -344,6 +344,11 @@ bool __init topology_parse_cpu_capacity(struct device_node *cpu_node, int cpu)
+>  	return !ret;
+>  }
+>  
+> +int __weak freq_inv_set_max_ratio(int cpu, u64 max_rate)
+> +{
+> +	return 0;
+> +}
+> +
+>  #ifdef CONFIG_ACPI_CPPC_LIB
+>  #include <acpi/cppc_acpi.h>
+>  
+> @@ -369,7 +374,6 @@ void topology_init_cpu_capacity_cppc(void)
+>  			capacity_scale = max_t(u64, capacity_scale, raw_capacity[cpu]);
+>  
+>  			per_cpu(capacity_ref_freq, cpu) = cppc_perf_to_khz(&perf_caps, raw_capacity[cpu]);
+> -
+>  			pr_debug("cpu_capacity: CPU%d cpu_capacity=%u (raw).\n",
+>  				 cpu, raw_capacity[cpu]);
+>  			continue;
+> @@ -381,6 +385,9 @@ void topology_init_cpu_capacity_cppc(void)
+>  	}
+>  
+>  	for_each_possible_cpu(cpu) {
+> +		freq_inv_set_max_ratio(cpu,
+> +				       per_cpu(capacity_ref_freq, cpu));
+> +
+>  		capacity = raw_capacity[cpu];
+>  		capacity = div64_u64(capacity << SCHED_CAPACITY_SHIFT,
+>  				     capacity_scale);
+> @@ -422,8 +429,11 @@ init_cpu_capacity_callback(struct notifier_block *nb,
+>  
+>  	cpumask_andnot(cpus_to_visit, cpus_to_visit, policy->related_cpus);
+>  
+> -	for_each_cpu(cpu, policy->related_cpus)
+> +	for_each_cpu(cpu, policy->related_cpus) {
+>  		per_cpu(capacity_ref_freq, cpu) = policy->cpuinfo.max_freq;
+> +		freq_inv_set_max_ratio(cpu,
+> +				       per_cpu(capacity_ref_freq, cpu));
 
-#ifdef CONFIG_HOTPLUG_CPU
-void __weak arch_unregister_cpu(int num)
-{
-	unregister_cpu(&per_cpu(cpu_devices, num));
-}
-#else
-void __weak arch_unregister_cpu(int num)
-{
-}
-#endif
+capacity_ref_freq is in KHz while arch_timer_get_rate() is in Hz. One or
+the other needs to be scaled.
 
-Agreed?
+The same in topology_init_cpu_capacity_cppc().
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Thanks,
+Ionela.
+
+> +	}
+>  
+>  	if (cpumask_empty(cpus_to_visit)) {
+>  		topology_normalize_cpu_scale();
+> diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
+> index 38ca6c76af56..b6e95d763279 100644
+> --- a/include/linux/arch_topology.h
+> +++ b/include/linux/arch_topology.h
+> @@ -99,6 +99,7 @@ void update_siblings_masks(unsigned int cpu);
+>  void remove_cpu_topology(unsigned int cpuid);
+>  void reset_cpu_topology(void);
+>  int parse_acpi_topology(void);
+> +int freq_inv_set_max_ratio(int cpu, u64 max_rate);
+>  #endif
+>  
+>  #endif /* _LINUX_ARCH_TOPOLOGY_H_ */
+> -- 
+> 2.34.1
+> 
