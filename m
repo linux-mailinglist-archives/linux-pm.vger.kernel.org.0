@@ -2,125 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC6087D3F25
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Oct 2023 20:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 948D57D3FAD
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Oct 2023 20:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbjJWSX7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Oct 2023 14:23:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
+        id S229491AbjJWS6t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Oct 2023 14:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233704AbjJWSX5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Oct 2023 14:23:57 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F7D9B
-        for <linux-pm@vger.kernel.org>; Mon, 23 Oct 2023 11:23:54 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2c523ac38fbso53296321fa.0
-        for <linux-pm@vger.kernel.org>; Mon, 23 Oct 2023 11:23:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698085432; x=1698690232; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jH+xgTdGBybTpfmszxd0jH64ej1Z8AlGRUmXL3RZD+E=;
-        b=TfLYPjNTO5DE3b2oOAeEdyXA6CjpxzFgEVtoXNy3TaUkCjIUIbI8KMANDCl+iK3hqv
-         tI3PbDj5gYEXZN9dJ5cuJnBmE+xCXOllS/ddUX4zUNTuDOVtCwSwHhEJ+qee61F5fvEK
-         ytSTfwad+RnSCxbmxIw8n+ZvgFomeML0+EzukGUZ9F5D3NcYEQMAQEjKKitPJlBcb37V
-         FmtN9/CnpakyiOMdo1EGQWkygA67yK1SQTaGj24tbXGK8BBR5g24dGo8Qtu8gYpADxvL
-         iYIAfTyGeFklyPyg2Z58tsmp6xgjpn/p6rey/dO23jtAOozZmbcNnw5G/j2QhUSC9ND8
-         odnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698085432; x=1698690232;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jH+xgTdGBybTpfmszxd0jH64ej1Z8AlGRUmXL3RZD+E=;
-        b=gGk1J6hU9G7J7R4mJgLLYHRoihLnX9nRJQ/XgFnI4PThIBHwR7mCEJaj2Ib2Vj2kmy
-         04iZxaE6YK9P7ZU6jO/yrrBiY2CXMh94UotSknp5mZxJJ3tGo3UFlciMD3LliTHeFsAW
-         jkCBGWF79mBvrEhcaqLtaxonIoiwkCNo1Qs03LHVRVQd7cVSLc7NXVirDYI4et13XWOi
-         w9qeai0CsLxWOjwucwr+mbAzdLCbpe48ROXdpUhojItQWabWjfJ1v0V6EsYrp5zVUQMt
-         7qapmb4JN1EppIEcZmYFRVZG6V2byy41geG4/+nQR1Z/d0k2JxelNI4KH33ovCdUK4Hy
-         Y9RQ==
-X-Gm-Message-State: AOJu0YxaI7rO9M3TuqA4ZUVZJ2rHkn7xfo6J5XdFepuX1/baf9MZ0Gzx
-        iWIVT66VnRHQ9H41xiK/nTfg7w==
-X-Google-Smtp-Source: AGHT+IEB5Xq1aY5x1xCr3qk4yDLLwsgqiYTB5BdIH+raasp//KeLJvmiD97BLkXk5ja6clWVenuP/A==
-X-Received: by 2002:a2e:b00d:0:b0:2c5:260:1026 with SMTP id y13-20020a2eb00d000000b002c502601026mr6726112ljk.12.1698085432161;
-        Mon, 23 Oct 2023 11:23:52 -0700 (PDT)
-Received: from [192.168.198.23] ([37.166.19.143])
-        by smtp.googlemail.com with ESMTPSA id m15-20020a7bcb8f000000b0040523bef620sm5242731wmi.0.2023.10.23.11.23.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Oct 2023 11:23:51 -0700 (PDT)
-Message-ID: <3a70280b-8cc4-9f22-92b7-088fa9cb45df@linaro.org>
-Date:   Mon, 23 Oct 2023 20:23:49 +0200
+        with ESMTP id S229462AbjJWS6t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Oct 2023 14:58:49 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C09BA;
+        Mon, 23 Oct 2023 11:58:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=7A0pd5ea/mWj9XmmTvRG6wtE18VpprIFdxTUBKRhNM0=; b=gtirJysCoPrK4qOy7mI9wMUvVz
+        P33fMEnvCKyA74eRCvoEqjBQtXgT+ZfZaYwQdCj+oxzxDcBug/ZRYPHaMwfrVDsRg+SeYQ4ERiw3e
+        maPZCTvvgkS2b147zcO7rUOaomZAQ0kPL5PTN6DNCaANEnB1lTAFW0ykLuziDuf+Dy8K+AE8O2k19
+        PvdUnlkuD7/LMRkrQnfpX5g/p4kiD3Mj609pBiwd4YrNm3Zrc0ezR23xIBfNb1xScxybdK96le6aG
+        0NeJcWgxNT5jq7CPNUlJH/PqpwF9p1KbFSX+6WabCSjxQo+VlGAEyfwtwC06L6xyK1qMiXK41UoIG
+        5ILYltUQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:45546)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1qv08O-0003OY-1Z;
+        Mon, 23 Oct 2023 19:58:40 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1qv08N-00052v-CV; Mon, 23 Oct 2023 19:58:39 +0100
+Date:   Mon, 23 Oct 2023 19:58:39 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+        x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        jianyong.wu@arm.com, justin.he@arm.com
+Subject: Re: [RFC PATCH v2 29/35] irqchip/gic-v3: Don't return errors from
+ gic_acpi_match_gicc()
+Message-ID: <ZTbCX0n2SrhUBESf@shell.armlinux.org.uk>
+References: <20230913163823.7880-1-james.morse@arm.com>
+ <20230913163823.7880-30-james.morse@arm.com>
+ <20230914160223.0000782f@Huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v4 06/18] PM: EM: Check if the get_cost() callback is
- present in em_compute_costs()
-Content-Language: en-US
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, rafael@kernel.org
-Cc:     dietmar.eggemann@arm.com, rui.zhang@intel.com,
-        amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
-        viresh.kumar@linaro.org, len.brown@intel.com, pavel@ucw.cz,
-        mhiramat@kernel.org, qyousef@layalina.io, wvw@google.com
-References: <20230925081139.1305766-1-lukasz.luba@arm.com>
- <20230925081139.1305766-7-lukasz.luba@arm.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230925081139.1305766-7-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230914160223.0000782f@Huawei.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25/09/2023 10:11, Lukasz Luba wrote:
-> The em_compute_cost() is going to be re-used in runtime modified EM
-> code path. Thus, make sure that this common code is safe and won't
-> try to use the NULL pointer. The former em_compute_cost() didn't have to
-> care about runtime modification code path. The upcoming changes introduce
-> such option, but with different callback. Those two paths which use
-> get_cost() (during first EM registration) or update_power() (during
-> runtime modification) need to be safely handled in em_compute_costs().
+On Thu, Sep 14, 2023 at 04:02:23PM +0100, Jonathan Cameron wrote:
+> On Wed, 13 Sep 2023 16:38:17 +0000
+> James Morse <james.morse@arm.com> wrote:
 > 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->   kernel/power/energy_model.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> > gic_acpi_match_gicc() is only called via gic_acpi_count_gicr_regions().
+> > It should only count the number of enabled redistributors, but it
+> > also tries to sanity check the GICC entry, currently returning an
+> > error if the Enabled bit is set, but the gicr_base_address is zero.
+> > 
+> > Adding support for the online-capable bit to the sanity check
+> > complicates it, for no benefit. The existing check implicitly
+> > depends on gic_acpi_count_gicr_regions() previous failing to find
+> > any GICR regions (as it is valid to have gicr_base_address of zero if
+> > the redistributors are described via a GICR entry).
+> > 
+> > Instead of complicating the check, remove it. Failures that happen
+> > at this point cause the irqchip not to register, meaning no irqs
+> > can be requested. The kernel grinds to a panic() pretty quickly.
+> > 
+> > Without the check, MADT tables that exhibit this problem are still
+> > caught by gic_populate_rdist(), which helpfully also prints what
+> > went wrong:
+> > | CPU4: mpidr 100 has no re-distributor!
+> > 
+> > Signed-off-by: James Morse <james.morse@arm.com>
+> > ---
+> >  drivers/irqchip/irq-gic-v3.c | 18 ++++++------------
+> >  1 file changed, 6 insertions(+), 12 deletions(-)
+> > 
+> > diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+> > index 72d3cdebdad1..0f54811262eb 100644
+> > --- a/drivers/irqchip/irq-gic-v3.c
+> > +++ b/drivers/irqchip/irq-gic-v3.c
+> > @@ -2415,21 +2415,15 @@ static int __init gic_acpi_match_gicc(union acpi_subtable_headers *header,
+> >  
+> >  	/*
+> >  	 * If GICC is enabled and has valid gicr base address, then it means
+> > -	 * GICR base is presented via GICC
+> > +	 * GICR base is presented via GICC. The redistributor is only known to
+> > +	 * be accessible if the GICC is marked as enabled. If this bit is not
+> > +	 * set, we'd need to add the redistributor at runtime, which isn't
+> > +	 * supported.
+> >  	 */
+> > -	if (acpi_gicc_is_usable(gicc) && gicc->gicr_base_address) {
+> > +	if (gicc->flags & ACPI_MADT_ENABLED && gicc->gicr_base_address)
 > 
-> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-> index 7ea882401833..35e07933b34a 100644
-> --- a/kernel/power/energy_model.c
-> +++ b/kernel/power/energy_model.c
-> @@ -116,7 +116,7 @@ static int em_compute_costs(struct device *dev, struct em_perf_state *table,
->   	for (i = nr_states - 1; i >= 0; i--) {
->   		unsigned long power_res, cost;
->   
-> -		if (flags & EM_PERF_DOMAIN_ARTIFICIAL) {
-> +		if (flags & EM_PERF_DOMAIN_ARTIFICIAL && cb->get_cost) {
->   			ret = cb->get_cost(dev, table[i].frequency, &cost);
->   			if (ret || !cost || cost > EM_MAX_POWER) {
->   				dev_err(dev, "EM: invalid cost %lu %d\n",
+> Going in circles...
 
-I do believe & operator has lower precedence than && operator, thus the 
-test is actually:
+It does seem that way. Are you suggesting something should change here?
 
-	(flags & (EM_PERF_DOMAIN_ARTIFICIAL && cb->get_cost))
-
-but it should be
-
-	((flags & EM_PERF_DOMAIN_ARTIFICIAL) && cb->get_cost)
-
-Right ?
+Thanks.
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
