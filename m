@@ -2,52 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A80847D5A85
+	by mail.lfdr.de (Postfix) with ESMTP id 470007D5A84
 	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 20:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343922AbjJXSab (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Oct 2023 14:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
+        id S1344143AbjJXSad (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Oct 2023 14:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343920AbjJXSaa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 14:30:30 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F54DA2;
-        Tue, 24 Oct 2023 11:30:27 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-4083cd39188so37585715e9.2;
-        Tue, 24 Oct 2023 11:30:27 -0700 (PDT)
+        with ESMTP id S1344125AbjJXSab (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 14:30:31 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D4C10C9;
+        Tue, 24 Oct 2023 11:30:29 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-507ac66a969so6468751e87.3;
+        Tue, 24 Oct 2023 11:30:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698172226; x=1698777026; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4S6ZmkT9NoJ2QB74d4iDZQ/Asjhb+835EobMM6vz70A=;
-        b=QPCBdl11SlbpzpmmftlPSL69VU0cmNloW7kSM3T6jFrpYmEp9vnu2ptME2aLMZXrCz
-         AK5aemFJnK8G/OQ5elxjpmkC5kZnfP9+vnWkyewHtZtZJmuiGYqhL+KjQVOQbo/9ISjt
-         QKw20JI2p9pP/hXFm/xiFV8giKUKWDAzVSQmmz+z9daGGddzEdl3+Je1IWojYB7901/L
-         4y5ReO78vtKDGsIw1ZLnzHveWgq9NLFfcsyQYoyxgoGvtJutPaN2H9DDUFgp4jsWRKQC
-         FsOGiwAl3l3fTuR41NZp4tj1pdCteswdugX5vSfIcGRyrWeidR3OtkanBb0LylBEM0MN
-         AFSg==
+        d=gmail.com; s=20230601; t=1698172227; x=1698777027; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GwK66vaLYJmpizm1zY3v8spBF+jasgo//BX2lOJD5Qk=;
+        b=jIjnvbozRZrYd8m+v2AkQG1HkItzXf2xbj6hOaLf7JgvexrAjSPlpw9hNUG+UsxSeD
+         IGAccS+4/xvLPlr0WLyXMOzOlEi8UEC1zctPQP1Dx6HlUfj19+O7BY70eosKXzg2AdS0
+         75iJRTzcVvynr4i1wqyp4IOfmcGQss9XPTG6fjNmcg+Ah1Dv7HRPzTMMoeJxXbLQKm7F
+         qnbrMBGjvfGY2orIuHTI0qjVK2k2EGyn1QLMpvciY3bf2pvt2P07dxG1LKKPGBcX1Ybp
+         ZEmMuHfyj2iv1DceFYK+S5/l07vGCSBdlFQiUjX+HN4Anabvynbilq9bsW0kVTyDfSK8
+         nEbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698172226; x=1698777026;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4S6ZmkT9NoJ2QB74d4iDZQ/Asjhb+835EobMM6vz70A=;
-        b=uF45ZYCEOQdBy40y8oCtFnIKS8mzBS8429m4B+AR6I58c06MnfELRVnj/jF6U5+hwE
-         JOmyhA9zMB7DcGZbR1q6r3gfETT3H1/zcTDnZmBLbNNv31ZmI61S1b4jG71M2r1bLePf
-         TUdJqwUHcBbaPlZHz/ikWjwp3+TUlUvAIfyNGcAdXh46Ode0PGEpyjm7rpAGuXzreO12
-         7RiM4WVFkQOe6liBWQAoN45+cEqJpIXKCmJgLujOfE366Elme5vsO/8lUF87vnr05G9O
-         kiFPKlSiTblSQmIV8pAmqJVYAmjweWw6nr1Qb5TIIJrMutjhuRly6vilnI3Enzypqq1j
-         z4VQ==
-X-Gm-Message-State: AOJu0Yw0Cz5fNOi3+Be8JjeHFcuz6BnKQkoFq0JMiwdhLayvAQPmcI/k
-        LLmBTvibyrDY4GRA+fsUZR8=
-X-Google-Smtp-Source: AGHT+IEMMi72Bl8CnZl20LHGwMFkkwwKrdy3vQNdcOgeNrsDv6kfW+l/YbQgi1/opRjM4AdinTS2cw==
-X-Received: by 2002:a05:600c:3585:b0:406:177e:5de8 with SMTP id p5-20020a05600c358500b00406177e5de8mr10655780wmq.35.1698172225667;
-        Tue, 24 Oct 2023 11:30:25 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1698172227; x=1698777027;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GwK66vaLYJmpizm1zY3v8spBF+jasgo//BX2lOJD5Qk=;
+        b=VgNaJ5qQe3H6xdB7CvlnXYSbsBSwsoKy4cOpJfORIsO9n8BywAMmqw0PYqjWAP1Ruz
+         op+A9JWebZVqL6OGcB1Knqt+LLY4r1QDnCldAWHzzT2Rcss4WcQt71CNEPbckudRejxG
+         Xk5KJH/G59t8aWJ2H+vZZe8nLDLSeIe5YwI1sU2c7ekkGf+uoBOUPyQnJJoNeuSqPsnR
+         BerjGzg2g+dJHRnBJMQBMqT1CIwoYQTNVntJ8VY/iFP/PWXi/vSo1papbDjSZxpYyAUk
+         mIMx8wR+I0D4A82HWHkOq6OESL92iJkKEG2x/kwTsG+hNYMZseQJ7SYRo3dX9oJ/B4g/
+         tXuQ==
+X-Gm-Message-State: AOJu0YzV/7qKJ0dyDqA2H777AyJzGIGSAeZqEDINs5q4MwdX/kVJHs1o
+        +UwIUXZlU9X8slUchAUwEDA=
+X-Google-Smtp-Source: AGHT+IHAPfLa2V2mbjVo7qlWBj0Fhs3PJTkgKcGdwpEUak2ub1bqU3A8/lk1Y8BFaoqozbq1PyAC0A==
+X-Received: by 2002:ac2:5308:0:b0:500:a3be:1ab6 with SMTP id c8-20020ac25308000000b00500a3be1ab6mr9345538lfh.6.1698172227103;
+        Tue, 24 Oct 2023 11:30:27 -0700 (PDT)
 Received: from localhost.localdomain (93-34-89-13.ip49.fastwebnet.it. [93.34.89.13])
-        by smtp.googlemail.com with ESMTPSA id l22-20020a05600c4f1600b003fef5e76f2csm1150398wmq.0.2023.10.24.11.30.24
+        by smtp.googlemail.com with ESMTPSA id l22-20020a05600c4f1600b003fef5e76f2csm1150398wmq.0.2023.10.24.11.30.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Oct 2023 11:30:25 -0700 (PDT)
+        Tue, 24 Oct 2023 11:30:26 -0700 (PDT)
 From:   Christian Marangi <ansuelsmth@gmail.com>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
@@ -59,10 +60,12 @@ To:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Jonghwa Lee <jonghwa3.lee@samsung.com>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Cc:     stable@vger.kernel.org
-Subject: [PATCH 1/3] cpufreq: fix broken buffer overflow detection in trans_stats
-Date:   Tue, 24 Oct 2023 20:30:14 +0200
-Message-Id: <20231024183016.14648-1-ansuelsmth@gmail.com>
+Subject: [PATCH 2/3] PM / devfreq: Fix buffer overflow in trans_stat_show
+Date:   Tue, 24 Oct 2023 20:30:15 +0200
+Message-Id: <20231024183016.14648-2-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20231024183016.14648-1-ansuelsmth@gmail.com>
+References: <20231024183016.14648-1-ansuelsmth@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,76 +78,134 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Commit 3c0897c180c6 ("cpufreq: Use scnprintf() for avoiding potential
-buffer overflow") switched from snprintf to the more secure scnprintf
-but never updated the exit condition for PAGE_SIZE.
+Fix buffer overflow in trans_stat_show().
 
-As the commit say and as scnprintf document, what scnprintf returns what
-is actually written not counting the '\0' end char. This results in the
-case of len exceeding the size, len set to PAGE_SIZE - 1, as it can be
-written at max PAGESIZE - 1 (as '\0' is not counted)
+Convert simple snprintf to the more secure scnprintf with size of
+PAGE_SIZE.
 
-Because of len is never set to PAGE_SIZE, the function never break early,
-never print the warning and never return -EFBIG.
+Add condition checking if we are exceeding PAGE_SIZE and exit early from
+loop. Also add at the end a warning that we exceeded PAGE_SIZE and that
+stats is disabled.
 
-Fix this by fixing the condition to PAGE_SIZE -1 to correctly trigger
-the error condition.
+Return -EFBIG in the case where we don't have enough space to write the
+full transition table.
+
+Also document in the ABI that this function can return -EFBIG error.
 
 Cc: stable@vger.kernel.org
-Fixes: 3c0897c180c6 ("cpufreq: Use scnprintf() for avoiding potential buffer overflow")
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218041
+Fixes: e552bbaf5b98 ("PM / devfreq: Add sysfs node for representing frequency transition information.")
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 ---
- drivers/cpufreq/cpufreq_stats.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ Documentation/ABI/testing/sysfs-class-devfreq |  3 +
+ drivers/devfreq/devfreq.c                     | 57 +++++++++++++------
+ 2 files changed, 42 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/cpufreq/cpufreq_stats.c b/drivers/cpufreq/cpufreq_stats.c
-index a33df3c66c88..40a9ff18da06 100644
---- a/drivers/cpufreq/cpufreq_stats.c
-+++ b/drivers/cpufreq/cpufreq_stats.c
-@@ -131,23 +131,23 @@ static ssize_t show_trans_table(struct cpufreq_policy *policy, char *buf)
- 	len += sysfs_emit_at(buf, len, "   From  :    To\n");
- 	len += sysfs_emit_at(buf, len, "         : ");
- 	for (i = 0; i < stats->state_num; i++) {
--		if (len >= PAGE_SIZE)
-+		if (len >= PAGE_SIZE - 1)
- 			break;
- 		len += sysfs_emit_at(buf, len, "%9u ", stats->freq_table[i]);
+diff --git a/Documentation/ABI/testing/sysfs-class-devfreq b/Documentation/ABI/testing/sysfs-class-devfreq
+index 5e6b74f30406..1e7e0bb4c14e 100644
+--- a/Documentation/ABI/testing/sysfs-class-devfreq
++++ b/Documentation/ABI/testing/sysfs-class-devfreq
+@@ -52,6 +52,9 @@ Description:
+ 
+ 			echo 0 > /sys/class/devfreq/.../trans_stat
+ 
++		If the transition table is bigger than PAGE_SIZE, reading
++		this will return an -EFBIG error.
++
+ What:		/sys/class/devfreq/.../available_frequencies
+ Date:		October 2012
+ Contact:	Nishanth Menon <nm@ti.com>
+diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+index 474d81831ad3..81d9df89dde6 100644
+--- a/drivers/devfreq/devfreq.c
++++ b/drivers/devfreq/devfreq.c
+@@ -1688,7 +1688,7 @@ static ssize_t trans_stat_show(struct device *dev,
+ 			       struct device_attribute *attr, char *buf)
+ {
+ 	struct devfreq *df = to_devfreq(dev);
+-	ssize_t len;
++	ssize_t len = 0;
+ 	int i, j;
+ 	unsigned int max_state;
+ 
+@@ -1697,7 +1697,7 @@ static ssize_t trans_stat_show(struct device *dev,
+ 	max_state = df->max_state;
+ 
+ 	if (max_state == 0)
+-		return sprintf(buf, "Not Supported.\n");
++		return scnprintf(buf, PAGE_SIZE, "Not Supported.\n");
+ 
+ 	mutex_lock(&df->lock);
+ 	if (!df->stop_polling &&
+@@ -1707,31 +1707,52 @@ static ssize_t trans_stat_show(struct device *dev,
  	}
--	if (len >= PAGE_SIZE)
--		return PAGE_SIZE;
+ 	mutex_unlock(&df->lock);
+ 
+-	len = sprintf(buf, "     From  :   To\n");
+-	len += sprintf(buf + len, "           :");
+-	for (i = 0; i < max_state; i++)
+-		len += sprintf(buf + len, "%10lu",
+-				df->freq_table[i]);
++	len += scnprintf(buf + len, PAGE_SIZE - len, "     From  :   To\n");
++	len += scnprintf(buf + len, PAGE_SIZE - len, "           :");
++	for (i = 0; i < max_state; i++) {
++		if (len >= PAGE_SIZE - 1)
++			break;
++		len += scnprintf(buf + len, PAGE_SIZE - len, "%10lu",
++				 df->freq_table[i]);
++	}
 +	if (len >= PAGE_SIZE - 1)
 +		return PAGE_SIZE - 1;
  
- 	len += sysfs_emit_at(buf, len, "\n");
+-	len += sprintf(buf + len, "   time(ms)\n");
++	len += scnprintf(buf + len, PAGE_SIZE - len, "   time(ms)\n");
  
- 	for (i = 0; i < stats->state_num; i++) {
--		if (len >= PAGE_SIZE)
+ 	for (i = 0; i < max_state; i++) {
 +		if (len >= PAGE_SIZE - 1)
- 			break;
- 
- 		len += sysfs_emit_at(buf, len, "%9u: ", stats->freq_table[i]);
- 
- 		for (j = 0; j < stats->state_num; j++) {
--			if (len >= PAGE_SIZE)
++			break;
+ 		if (df->freq_table[i] == df->previous_freq)
+-			len += sprintf(buf + len, "*");
++			len += scnprintf(buf + len, PAGE_SIZE - len, "*");
+ 		else
+-			len += sprintf(buf + len, " ");
++			len += scnprintf(buf + len, PAGE_SIZE - len, " ");
++		if (len >= PAGE_SIZE - 1)
++			break;
++
++		len += scnprintf(buf + len, PAGE_SIZE - len, "%10lu:",
++				 df->freq_table[i]);
++		for (j = 0; j < max_state; j++) {
 +			if (len >= PAGE_SIZE - 1)
- 				break;
- 
- 			if (pending)
-@@ -157,12 +157,12 @@ static ssize_t show_trans_table(struct cpufreq_policy *policy, char *buf)
- 
- 			len += sysfs_emit_at(buf, len, "%9u ", count);
- 		}
--		if (len >= PAGE_SIZE)
++				break;
++			len += scnprintf(buf + len, PAGE_SIZE - len, "%10u",
++					 df->stats.trans_table[(i * max_state) + j]);
++		}
 +		if (len >= PAGE_SIZE - 1)
- 			break;
- 		len += sysfs_emit_at(buf, len, "\n");
++			break;
++		len += scnprintf(buf + len, PAGE_SIZE - len, "%10llu\n", (u64)
++				 jiffies64_to_msecs(df->stats.time_in_state[i]));
++	}
+ 
+-		len += sprintf(buf + len, "%10lu:", df->freq_table[i]);
+-		for (j = 0; j < max_state; j++)
+-			len += sprintf(buf + len, "%10u",
+-				df->stats.trans_table[(i * max_state) + j]);
++	if (len < PAGE_SIZE - 1)
++		len += scnprintf(buf + len, PAGE_SIZE - len, "Total transition : %u\n",
++				 df->stats.total_trans);
+ 
+-		len += sprintf(buf + len, "%10llu\n", (u64)
+-			jiffies64_to_msecs(df->stats.time_in_state[i]));
++	if (len >= PAGE_SIZE - 1) {
++		pr_warn_once("devfreq transition table exceeds PAGE_SIZE. Disabling\n");
++		return -EFBIG;
  	}
  
--	if (len >= PAGE_SIZE) {
-+	if (len >= PAGE_SIZE - 1) {
- 		pr_warn_once("cpufreq transition table exceeds PAGE_SIZE. Disabling\n");
- 		return -EFBIG;
- 	}
+-	len += sprintf(buf + len, "Total transition : %u\n",
+-					df->stats.total_trans);
+ 	return len;
+ }
+ 
 -- 
 2.40.1
 
