@@ -2,143 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26E107D4E2C
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 12:44:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F677D4E42
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 12:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232825AbjJXKoh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Oct 2023 06:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39078 "EHLO
+        id S233885AbjJXKwN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Oct 2023 06:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbjJXKoh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 06:44:37 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB962E5
-        for <linux-pm@vger.kernel.org>; Tue, 24 Oct 2023 03:44:34 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-d9ad90e1038so3943600276.3
-        for <linux-pm@vger.kernel.org>; Tue, 24 Oct 2023 03:44:34 -0700 (PDT)
+        with ESMTP id S232042AbjJXKwM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 06:52:12 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C464A128
+        for <linux-pm@vger.kernel.org>; Tue, 24 Oct 2023 03:52:07 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-5a7af45084eso41775357b3.0
+        for <linux-pm@vger.kernel.org>; Tue, 24 Oct 2023 03:52:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698144274; x=1698749074; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1698144727; x=1698749527; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=57CJP2CeKNDQxn7ZmDxUfwchphm7FXKKVZwgrQ82/58=;
-        b=LCOu1H3q16nrSVyenEkU1v1+L0LWrcjbKJmccExsbSAbl1WO7lB6UFDb+oAnY2VUCJ
-         69T4eabAT6l3kU5NVb0vAhNAw1f7/it1OKncBCkOEF1fXTAyyj95j3JqAi3YhEVxBN+E
-         03+IIW9M56erDdOx3M54SISrVx1vwBfSNAC7b5s/NWdSkyjejWSGO7T+rSEcRORhsSE6
-         EX/mQrwNx41k2EUw0fn0gHnBQ/DRsAuXIH7gGuiP+5QEThx6rtqG15Iua9ez+FimSet0
-         aPOm2YMeG9Y24SrvfgE3+hN1O/tpKt3SkfNKvDp0RRps1IFxYKuWUoDrbC+dWosC6QQV
-         CIbw==
+        bh=ByymKernzbt7l2A1qflNQoCJCAiaYl24vxzOmzj3yAc=;
+        b=Zd5lP/sXC75EiIvr2ffUWi6wB0HRiVU/GYXEbrKB15tS3Mp5En2zqZhFNayCkmcNPW
+         uAHNGNKsG5wdYc3yoxSJROLEqeYB4yQK9tzFU0QjUpddTexI7+ajKFZgHJbQTHjjV/ZI
+         2llVWBpqUHfgD/8fZeUD1+2RJLDEqb1N4IWYeIoL4fGF/kKdiyqp1vbMPMjw6fK/ebvv
+         i2ClR15E2AQObTTnfFU3leIhaTYFBQ6rHUPFRR1SRjy5Z8O4f+rYH8JYpZLrlGlfkjpy
+         OzY0mV315C3sMtOnm9D0OJ4Q0kNIjMubXIziLj82Tg43wFZbzn4l8V/8Mp0pjTcwYO0L
+         UZdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698144274; x=1698749074;
+        d=1e100.net; s=20230601; t=1698144727; x=1698749527;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=57CJP2CeKNDQxn7ZmDxUfwchphm7FXKKVZwgrQ82/58=;
-        b=nA9u8S9yPDM4LG3bbIi4cW6/tMCf/fqmCWeAYWlH/I5XhnC7VIJSUVhGCOB08IKx0h
-         /z8eYadFx5fI38gryLyqJZPv8/LLy9BsPkfqH0KIumZYyPDAdYGzYVfM6J23CdN0VEgF
-         qXNGdSt+hAESzAGHS/IDRerFKdQI1+zXl8xdlVoeNpKm0ilHDPVSQdNkcATid7wryZlF
-         uzgo+g2OB91tqY8aABpu6CEC1O8VtgDyrCu62UDY19JnsxVjJnmG5O6oxWCXKoRXUZyx
-         kBCjdUweouib2oGpQOKnFdGS9aK3kv+mWeujWNqHwiRXUC7amsd7P604lVEHe/toHYGf
-         71Kg==
-X-Gm-Message-State: AOJu0Yy6KY3hkgET0g6vbMOFX1CAjMjafPZQ9u6lCa7L70NMXb4iM/Uc
-        Y1m558D7Y/1WGT5rzQs5kt7ZMxdUbkXgCWeWgZtE7Q==
-X-Google-Smtp-Source: AGHT+IG1v3l8QqghzcZNW12R9dqeFhTDhSBz68vgtAwKvYcl3iHp3lbtX+TDyexSy7qCPgoa8HoyrWCOBHYIVM15PK4=
-X-Received: by 2002:a05:690c:fc4:b0:5a7:bff2:12fd with SMTP id
- dg4-20020a05690c0fc400b005a7bff212fdmr13665421ywb.10.1698144274008; Tue, 24
- Oct 2023 03:44:34 -0700 (PDT)
+        bh=ByymKernzbt7l2A1qflNQoCJCAiaYl24vxzOmzj3yAc=;
+        b=vtKHu9GWqke+9Qh9E6hy7qsEh0TI+tx1xvH0yPCS7aUpdfJwAAVBFKw/ZQitmhrEGq
+         bo5ohGbIELkpE6OKxWMVLP4FvEISvuXfa+eD13kH7LUII+2Erb1jVapyDoAQeY0GcuhH
+         sR5RVPGEHdeyk/w3h5DJ4KmH16TXLKeaRd44BJJ9l0cBo03RcClBBF3X/DM2yaQZf0vb
+         FrPPBfldWGAHhyvnKuKC5ZXf1UYJawaslomryEGWJghXzfbl77R40pVaCU6TwepvAJmN
+         9okbUuSjHkBDuQTpEbjFb3yDI+VpTcw7mMwegoXkAdchaQQV87t2+GrY1BHHSEfRvwLl
+         O3UQ==
+X-Gm-Message-State: AOJu0YxI+vY6E42JZm30MN+C2pCP5N/EuDUjVGyKA3kp7Cft/MkXDOp+
+        wKR93+eh5Vi8wMZsabUag5UGIhfZ7Xgvcn+2Z2up5A==
+X-Google-Smtp-Source: AGHT+IFo/3QgV0KZOi/gmvirPkbINOiDhalcXKuhYUP+qSnmfjX/7XWUmuor40d93j1eqXJDHRoLEpe+HKTeMqXFZ7E=
+X-Received: by 2002:a05:690c:dcd:b0:59f:69ab:22f2 with SMTP id
+ db13-20020a05690c0dcd00b0059f69ab22f2mr13575017ywb.40.1698144727007; Tue, 24
+ Oct 2023 03:52:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231024101251.6357-2-mcanal@igalia.com>
-In-Reply-To: <20231024101251.6357-2-mcanal@igalia.com>
+References: <20231014133823.14088-1-otto.pflueger@abscue.de>
+In-Reply-To: <20231014133823.14088-1-otto.pflueger@abscue.de>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 24 Oct 2023 12:43:58 +0200
-Message-ID: <CAPDyKFrk5OQVQi-OpqWHJt7KrRqonertjaPEngrO2RCuvY9fUA@mail.gmail.com>
-Subject: Re: [PATCH v3] pmdomain: bcm: bcm2835-power: check if the ASB
- register is equal to enable
-To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>
-Cc:     Florian Fainelli <florian.fainelli@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Nick Alcock <nick.alcock@oracle.com>,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Melissa Wen <mwen@igalia.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, kernel-dev@igalia.com
+Date:   Tue, 24 Oct 2023 12:51:31 +0200
+Message-ID: <CAPDyKFpuQmyG9_Hr2XeMx2axYmNMKfr8WsXtvvq-GJPDTQ0vaw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] pmdomain: qcom: rpmpd: Add MSM8917 and similar SoCs
+To:     =?UTF-8?Q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>
+Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 24 Oct 2023 at 12:13, Ma=C3=ADra Canal <mcanal@igalia.com> wrote:
+On Sat, 14 Oct 2023 at 15:38, Otto Pfl=C3=BCger <otto.pflueger@abscue.de> w=
+rote:
 >
-> The commit c494a447c14e ("soc: bcm: bcm2835-power: Refactor ASB control")
-> refactored the ASB control by using a general function to handle both
-> the enable and disable. But this patch introduced a subtle regression:
-> we need to check if !!(readl(base + reg) & ASB_ACK) =3D=3D enable, not ju=
-st
-> check if (readl(base + reg) & ASB_ACK) =3D=3D true.
+> Add RPM power domain definitions for the Qualcomm MSM8917, MSM8937 and
+> QM215 SoCs. These SoCs all have the same power domains (VDDCX and VDDMX
+> in voltage level mode), but different regulators are needed for QM215
+> because it is used with a PM8916 PMIC instead of a PM8937 PMIC.
 >
-> Currently, this is causing an invalid register state in V3D when
-> unloading and loading the driver, because `bcm2835_asb_disable()` will
-> return -ETIMEDOUT and `bcm2835_asb_power_off()` will fail to disable the
-> ASB slave for V3D.
+> ---
+> Changes in v4:
+> - Rebase on latest next as of 2023-10-14 with new SM7150 compatible
+> - Add missing Reviewed-by (if there were no changes to rebase on, I
+>   would have simply resent the patch)
+> Changes in v3:
+> - Sort compatibles in device tree binding documentation (suggested by
+>   Krzysztof)
+> - Rebase on latest next with genpd subsystem renamed to pmdomain
+> Changes in v2:
+> - Fix typo in patch description: VDDMD -> VDDMX
+> - Split MSM8917 and QM215 changes (suggested by Konrad)
+> - Remove redundant qcom,msm8937-rpmpd entry from rpmpd_match_table
+>   and use a fallback compatible instead (suggested by Konrad)
 >
-> [v2]:
->     * Use the !! operator to assure the correct assertion (Stefan Wahren)
+> Otto Pfl=C3=BCger (3):
+>   dt-bindings: power: rpmpd: Add MSM8917, MSM8937 and QM215
+>   pmdomain: qcom: rpmpd: Add MSM8917 power domains
+>   pmdomain: qcom: rpmpd: Add QM215 power domains
 >
-> [v3]:
->     * Include a changelog (Stefan Wahren)
->     * Include Florian's and Stefan's Reviewed-by
+>  .../devicetree/bindings/power/qcom,rpmpd.yaml | 81 +++++++++--------
+>  drivers/pmdomain/qcom/rpmpd.c                 | 91 +++++++++++++++++++
+>  include/dt-bindings/power/qcom-rpmpd.h        | 21 +++++
+>  3 files changed, 156 insertions(+), 37 deletions(-)
+>
+>
 
-The version information belongs a few lines below.
-
->
-> Fixes: c494a447c14e ("soc: bcm: bcm2835-power: Refactor ASB control")
-> Signed-off-by: Ma=C3=ADra Canal <mcanal@igalia.com>
-> Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
-> Reviewed-by: Stefan Wahren <stefan.wahren@i2se.com>
-
-No need to resend this time. I have amended the patch to remove the
-version information from the commit message, applied it for fixes and
-added a stable tag!
+Applied for next, thanks!
 
 Kind regards
 Uffe
-
-> ---
-
-This is where you manually need to edit the format patch-file to add
-the version information.
-
-End the section with three dashes and a newline, like below:
-
----
->  drivers/pmdomain/bcm/bcm2835-power.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/pmdomain/bcm/bcm2835-power.c b/drivers/pmdomain/bcm/=
-bcm2835-power.c
-> index 1a179d4e011c..d2f0233cb620 100644
-> --- a/drivers/pmdomain/bcm/bcm2835-power.c
-> +++ b/drivers/pmdomain/bcm/bcm2835-power.c
-> @@ -175,7 +175,7 @@ static int bcm2835_asb_control(struct bcm2835_power *=
-power, u32 reg, bool enable
->         }
->         writel(PM_PASSWORD | val, base + reg);
->
-> -       while (readl(base + reg) & ASB_ACK) {
-> +       while (!!(readl(base + reg) & ASB_ACK) =3D=3D enable) {
->                 cpu_relax();
->                 if (ktime_get_ns() - start >=3D 1000)
->                         return -ETIMEDOUT;
-> --
-> 2.41.0
->
