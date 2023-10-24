@@ -2,65 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8287D585E
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 18:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28EA67D5868
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 18:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343837AbjJXQbG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Oct 2023 12:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56502 "EHLO
+        id S1343910AbjJXQbz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Oct 2023 12:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234798AbjJXQbF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 12:31:05 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6123112B;
-        Tue, 24 Oct 2023 09:31:02 -0700 (PDT)
+        with ESMTP id S1343821AbjJXQby (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 12:31:54 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15F3118;
+        Tue, 24 Oct 2023 09:31:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=yw1JizmzQa21OHIpxEbqWsvPR+Hf7j2CXdWs4xmNF0k=; b=jyw7JHuwxzc7X7X8xzfcxQNQ1b
-        UjBFZlqt75ASSvoLbUxiITUd7kclX9FIdvcnTPmW7R34OmJNJaey6q//Ob1gJe2KDSsYBG6S1ld+D
-        0LFxu9pr0ctPh0ET/BczCKmpYg0PZgX9Ct5SgB9pi2RvbgB5F3hb66yBj0ILSJIUXeaR2Krsbn6L6
-        Fj5eJHWRLKGk1xqoMt0XqlwMdqDuz5M2G3N85hYwoRhAfdfAJYE2ekPn6bmWnilWiErAqNVPMu3YG
-        i0AR6202kThNeaa5o9Hiauquerm5AGL2qqHa96gTJHR+rlfOrK35qlGYv/BKBNxTTYairTWpK68Hc
-        lodsjShg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qvKIg-00Fdqo-3A;
-        Tue, 24 Oct 2023 16:30:39 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A4998300451; Tue, 24 Oct 2023 18:30:38 +0200 (CEST)
-Date:   Tue, 24 Oct 2023 18:30:38 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-pm@vger.kernel.org, rafael@kernel.org,
-        pavel@ucw.cz, linux-perf-users@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>
-Subject: Re: [PATCH 2/2] perf/x86/amd: Don't allow pre-emption in
- amd_pmu_lbr_reset()
-Message-ID: <20231024163038.GC40044@noisy.programming.kicks-ass.net>
-References: <20231023160018.164054-1-mario.limonciello@amd.com>
- <20231023160018.164054-3-mario.limonciello@amd.com>
- <ZTd6BYr17ycdHR2a@gmail.com>
- <38ea48b4-aaba-4ba4-84a1-e88d6cb9df94@amd.com>
- <20231024155939.GF33965@noisy.programming.kicks-ass.net>
- <47518940-2803-4a6b-88fd-8cfc872b4219@amd.com>
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Mv2+9gUUjwW5p4nAhtEkX5YZZx1pxyCR6znx1hs0kpI=; b=rsZIaVku++xS3FLshJEaUmBzq+
+        IZD6Cn2c0/et6Uo+JOt4WeR9dFq1Ut+rF5FrT6IV5KhIFvVMf+LLjBQLU47NDzgIwcmGbpVvhRTRU
+        gCMWRDcUie6kOaY2a7dMFClZ3267XEs/FktAYAglK9oyph9oihl1JtFf48qSzAA3ywoyWzC0GfK9M
+        PTB0JemBhYOU0lDTVo1ICvemFtxrnnzr1IC3EEZQvKuCtWm90ax0Ijo4QL9EWtWa0cPIQeUEmcXl+
+        LV7aHQWDApKmS5tOWVE6eDqhk5hYbwHCvkYKAl3o4s/teUj9wygTZAZpbtSMTDvDNzQIg9tkuFtyu
+        U9rcIOVQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33572)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1qvKJm-0004fl-0V;
+        Tue, 24 Oct 2023 17:31:46 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1qvKJl-00063d-WA; Tue, 24 Oct 2023 17:31:46 +0100
+Date:   Tue, 24 Oct 2023 17:31:45 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+        x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
+        linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org
+Cc:     Salil Mehta <salil.mehta@huawei.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        jianyong.wu@arm.com, justin.he@arm.com,
+        James Morse <james.morse@arm.com>
+Subject: Re: [RFC PATCH v3 00/39] ACPI/arm64: add support for virtual
+ cpuhotplug
+Message-ID: <ZTfxcU3EsBNOGIUm@shell.armlinux.org.uk>
+References: <ZTffkAdOqL2pI2la@shell.armlinux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <47518940-2803-4a6b-88fd-8cfc872b4219@amd.com>
+In-Reply-To: <ZTffkAdOqL2pI2la@shell.armlinux.org.uk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -70,64 +66,48 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 24, 2023 at 11:04:06AM -0500, Mario Limonciello wrote:
-
-> > IIRC this is the hotplug thread running a teardown function on that CPU
-> > itself. It being a strict per-cpu thread should not trip
-> > smp_processor_id() wanrs.
-> > 
+On Tue, Oct 24, 2023 at 04:15:28PM +0100, Russell King (Oracle) wrote:
+> Hi,
 > 
-> BUG: using smp_processor_id() in preemptible [00000000] code: rtcwake/2960
-> caller is amd_pmu_lbr_reset+0x19/0xc0
-> CPU: 104 PID: 2960 Comm: rtcwake Not tainted 6.6.0-rc6-00002-g3e2c7f3ac51f
+> I'm posting James' patch set updated with most of the review comments
+> from his RFC v2 series back in September. Individual patches have a
+> changelog attached at the bottom of the commit message. Those which
+> I have finished updating have my S-o-b on them, those which still have
+> outstanding review comments from RFC v2 do not. In some of these cases
+> I've asked questions and am waiting for responses.
+> 
+> I'm posting this as RFC v3 because there's still some unaddressed
+> comments and it's clearly not ready for merging. Even if it was ready
+> to be merged, it is too late in this development cycle to be taking
+> this change in, so there would be little point posting it non-RFC.
+> Also James stated that he's waiting for confirmation from the
+> Kubernetes/Kata folk - I have no idea what the status is there.
+> 
+> I will be sending each patch individually to a wider audience
+> appropriate for that patch - apologies to those missing out on this
+> cover message. I have added more mailing lists to the series with the
+> exception of the acpica list in a hope of this cover message also
+> reaching those folk.
+> 
+> The changes that aren't included are:
+> 
+> 1. Updates for my patch that was merged via Thomas (thanks!):
+>    c4dd854f740c cpu-hotplug: Provide prototypes for arch CPU registration
+>    rather than having this change spread through James' patches.
+> 
+> 2. New patch - simplification of PA-RISC's smp_prepare_boot_cpu()
+> 
+> 3. Moved "ACPI: Use the acpi_device_is_present() helper in more places"
+>    and "ACPI: Rename acpi_scan_device_not_present() to be about
+>    enumeration" to the beginning of the series - these two patches are
+>    already queued up for merging into 6.7.
+> 
+> 4. Moved "arm64, irqchip/gic-v3, ACPI: Move MADT GICC enabled check into
+>    a helper" to the beginning of the series, which has been submitted,
+>    but as yet the fate of that posting isn't known.
 
-Very much not the cpuhp/%u thread :/, let me try and figure out how that
-happens.
+Update: Catalin has just merged this patch! Thanks.
 
-> #1025
-> Call Trace:
->  <TASK>
->  dump_stack_lvl+0x44/0x60
->  check_preemption_disabled+0xce/0xf0
->  ? __pfx_x86_pmu_dead_cpu+0x10/0x10
->  amd_pmu_lbr_reset+0x19/0xc0
->  ? __pfx_x86_pmu_dead_cpu+0x10/0x10
->  amd_pmu_cpu_reset.constprop.0+0x51/0x60
->  amd_pmu_cpu_dead+0x3e/0x90
->  x86_pmu_dead_cpu+0x13/0x20
->  cpuhp_invoke_callback+0x169/0x4b0
->  ? __pfx_virtnet_cpu_dead+0x10/0x10
->  __cpuhp_invoke_callback_range+0x76/0xe0
->  _cpu_down+0x112/0x270
->  freeze_secondary_cpus+0x8e/0x280
->  suspend_devices_and_enter+0x342/0x900
->  pm_suspend+0x2fd/0x690
->  state_store+0x71/0xd0
->  kernfs_fop_write_iter+0x128/0x1c0
->  vfs_write+0x2db/0x400
->  ksys_write+0x5f/0xe0
->  do_syscall_64+0x59/0x90
->  ? srso_alias_return_thunk+0x5/0x7f
->  ? count_memcg_events.constprop.0+0x1a/0x30
->  ? srso_alias_return_thunk+0x5/0x7f
->  ? handle_mm_fault+0x1e9/0x340
->  ? srso_alias_return_thunk+0x5/0x7f
->  ? preempt_count_add+0x4d/0xa0
->  ? srso_alias_return_thunk+0x5/0x7f
->  ? up_read+0x38/0x70
->  ? srso_alias_return_thunk+0x5/0x7f
->  ? do_user_addr_fault+0x343/0x6b0
->  ? srso_alias_return_thunk+0x5/0x7f
->  ? exc_page_fault+0x74/0x170
->  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
-> RIP: 0033:0x7f32f8d14a77
-> Code: 10 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f 1f 00 f3 0f 1e fa
-> 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff
-> 77 51 c3 48 83 ec 28 48 89 54 24 18 48 89 74 24
-> RSP: 002b:00007ffdc648de18 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-> RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007f32f8d14a77
-> RDX: 0000000000000004 RSI: 000055b2fc2a5670 RDI: 0000000000000004
-> RBP: 000055b2fc2a5670 R08: 0000000000000000 R09: 000055b2fc2a5670
-> R10: 00007f32f8e1a2f0 R11: 0000000000000246 R12: 0000000000000004
-> R13: 000055b2fc2a2480 R14: 00007f32f8e16600 R15: 00007f32f8e15a00
->  </TASK>
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
