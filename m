@@ -2,132 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE4CD7D5BD0
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 21:49:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BFE67D5C14
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 22:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344207AbjJXTty (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Oct 2023 15:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
+        id S1344105AbjJXUDu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 24 Oct 2023 16:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344305AbjJXTtx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 15:49:53 -0400
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8E8129;
-        Tue, 24 Oct 2023 12:49:49 -0700 (PDT)
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-581fb6f53fcso2891841eaf.2;
-        Tue, 24 Oct 2023 12:49:49 -0700 (PDT)
+        with ESMTP id S1343931AbjJXUDu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 16:03:50 -0400
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB6AA2;
+        Tue, 24 Oct 2023 13:03:47 -0700 (PDT)
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-582a82e6d10so836835eaf.0;
+        Tue, 24 Oct 2023 13:03:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698176989; x=1698781789;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=agKMir3qcuKi14ldHG71aEKuRkt+lScGsRzAjnaqW/E=;
-        b=vF9xmLUxrZ5rPMx5sOUnehlSIul6bvhfnarpTXse7o6u5CXkoykX0ta43F1mHFb/lW
-         IVUK9/0RdYFtZ2D3pwj5g007ksyGJ29nob9MOSN5Mo/muRM+UfK8QY5eM1IVJcuAXGjc
-         nJklLRMp0gdyS1zloK4+xEua/D4ZpY7wcGNcIY3uOcU+MlndOMGrvTi1ElvjGznxEcvV
-         Ba7UZtwB6ovNuD4D/BP5LWeMyXU3nC6F/m1hOi8YrvMubiC4rKEsES0BjcgSYFDVVguX
-         v6L2jG467lV70QCXTr+BHGVQ8ZORYL0QqMNbDi8Q99MAODS2hQivRYF61flLQKZUIcGz
-         qudA==
-X-Gm-Message-State: AOJu0YyIQ0DbowtRm1kw1qaDKpR/Fediqt7GM4+nHPgSa9jb/BLpOiFb
-        K9CZZ8W0D2spoGAjsyO28A==
-X-Google-Smtp-Source: AGHT+IHyx9HB+5+xduv+DWRMK6EwebWorzR3T6o2xTNeFxgl5EwZIRIwryDhY3qLSLdiLQZ2wQLsaQ==
-X-Received: by 2002:a4a:e0ca:0:b0:581:e303:807c with SMTP id e10-20020a4ae0ca000000b00581e303807cmr12970213oot.5.1698176988888;
-        Tue, 24 Oct 2023 12:49:48 -0700 (PDT)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r134-20020a4a378c000000b00582014b0138sm2165972oor.39.2023.10.24.12.49.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Oct 2023 12:49:48 -0700 (PDT)
-Received: (nullmailer pid 452036 invoked by uid 1000);
-        Tue, 24 Oct 2023 19:49:46 -0000
-Date:   Tue, 24 Oct 2023 14:49:46 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marek Vasut <marex@denx.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux@ew.tq-group.com, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/5] dt-bindings: soc: imx93-media-blk-ctrl: Add LDB
- subnode into schema and example
-Message-ID: <20231024194946.GA434797-robh@kernel.org>
-References: <20231020130019.665853-1-alexander.stein@ew.tq-group.com>
- <20231020130019.665853-3-alexander.stein@ew.tq-group.com>
+        d=1e100.net; s=20230601; t=1698177827; x=1698782627;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o+qX/4n2NMuSfs1CHSaW2MKgjMcRj85iCWbWik77oW8=;
+        b=bTjT2pcYbn3TkG+fAsbQvPv9mK8U8HMGNb8kMeKQzMuH73pbQC34pBB3RFsSSmdHQ5
+         8Ip43ec5kfGdf826HlaHRAwMCX+DyUmMb5sO9etmTA4f+VECtBBtNCm2cZcw3chNGpvd
+         7jDVF3Ee3wjFN2BpOpyZ1yagXwCuEalL7fW9DdYRcirVCstUWRQxLzb32uVXiloaLZrs
+         oTm4iylPBClwIodhNO/A/vKVc0nm2DBQCV1zrCF1TFSdMkq9zbdJeMlk/4TAd2I1iiKe
+         EUpq6i1pTF2OFYDGU1lYHAYMSVt7NS8dbb6OAkIDtm42kwrOooLCsAEnINayN0k+mjX8
+         8wwg==
+X-Gm-Message-State: AOJu0YzWgMY+9TUSX7SFuYUxN++0QJ/3dVl8ZLmvFatp4Ve1MGyZ50iC
+        spp0sPeQeZLRUehfGbjtGR74vLk93dyKYjlPY0E=
+X-Google-Smtp-Source: AGHT+IGTJ4XYA9RffuYHKgZVvyF9k3cGpUTxYtE8tnD7+wkdDSCNSvdFhjEC2GY4hzYMdrWdiHBy9WXDvTsqeH01AEw=
+X-Received: by 2002:a05:6870:9d98:b0:1e9:a8ff:67e3 with SMTP id
+ pv24-20020a0568709d9800b001e9a8ff67e3mr16125655oab.4.1698177827121; Tue, 24
+ Oct 2023 13:03:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231020130019.665853-3-alexander.stein@ew.tq-group.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20231024183016.14648-1-ansuelsmth@gmail.com>
+In-Reply-To: <20231024183016.14648-1-ansuelsmth@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 24 Oct 2023 22:03:35 +0200
+Message-ID: <CAJZ5v0gzV+nX+dSEShAopkcvx1Zx2Rc2=pjcdH07U9nQhHRe4Q@mail.gmail.com>
+Subject: Re: [PATCH 1/3] cpufreq: fix broken buffer overflow detection in trans_stats
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Jonghwa Lee <jonghwa3.lee@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 20, 2023 at 03:00:15PM +0200, Alexander Stein wrote:
-> Document the LDB bridge subnode and add the subnode into the example.
-> For the subnode to work, the block control must scan its subnodes and
-> bind drivers to them, do not misuse either simple-bus or simple-mfd
-> here.
-> 
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+On Tue, Oct 24, 2023 at 8:30 PM Christian Marangi <ansuelsmth@gmail.com> wrote:
+>
+> Commit 3c0897c180c6 ("cpufreq: Use scnprintf() for avoiding potential
+> buffer overflow") switched from snprintf to the more secure scnprintf
+> but never updated the exit condition for PAGE_SIZE.
+>
+> As the commit say and as scnprintf document, what scnprintf returns what
+> is actually written not counting the '\0' end char. This results in the
+> case of len exceeding the size, len set to PAGE_SIZE - 1, as it can be
+> written at max PAGESIZE - 1 (as '\0' is not counted)
+>
+> Because of len is never set to PAGE_SIZE, the function never break early,
+> never print the warning and never return -EFBIG.
+>
+> Fix this by fixing the condition to PAGE_SIZE -1 to correctly trigger
+> the error condition.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 3c0897c180c6 ("cpufreq: Use scnprintf() for avoiding potential buffer overflow")
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 > ---
->  .../soc/imx/fsl,imx93-media-blk-ctrl.yaml     | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml b/Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml
-> index b3554e7f9e76..5ba66dfb0e05 100644
-> --- a/Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml
-> +++ b/Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml
-> @@ -24,6 +24,12 @@ properties:
->    reg:
->      maxItems: 1
->  
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 1
-> +
+>  drivers/cpufreq/cpufreq_stats.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq_stats.c b/drivers/cpufreq/cpufreq_stats.c
+> index a33df3c66c88..40a9ff18da06 100644
+> --- a/drivers/cpufreq/cpufreq_stats.c
+> +++ b/drivers/cpufreq/cpufreq_stats.c
+> @@ -131,23 +131,23 @@ static ssize_t show_trans_table(struct cpufreq_policy *policy, char *buf)
+>         len += sysfs_emit_at(buf, len, "   From  :    To\n");
+>         len += sysfs_emit_at(buf, len, "         : ");
+>         for (i = 0; i < stats->state_num; i++) {
+> -               if (len >= PAGE_SIZE)
+> +               if (len >= PAGE_SIZE - 1)
+>                         break;
+>                 len += sysfs_emit_at(buf, len, "%9u ", stats->freq_table[i]);
+>         }
+> -       if (len >= PAGE_SIZE)
+> -               return PAGE_SIZE;
+> +       if (len >= PAGE_SIZE - 1)
+> +               return PAGE_SIZE - 1;
+>
+>         len += sysfs_emit_at(buf, len, "\n");
+>
+>         for (i = 0; i < stats->state_num; i++) {
+> -               if (len >= PAGE_SIZE)
+> +               if (len >= PAGE_SIZE - 1)
+>                         break;
+>
+>                 len += sysfs_emit_at(buf, len, "%9u: ", stats->freq_table[i]);
+>
+>                 for (j = 0; j < stats->state_num; j++) {
+> -                       if (len >= PAGE_SIZE)
+> +                       if (len >= PAGE_SIZE - 1)
+>                                 break;
+>
+>                         if (pending)
+> @@ -157,12 +157,12 @@ static ssize_t show_trans_table(struct cpufreq_policy *policy, char *buf)
+>
+>                         len += sysfs_emit_at(buf, len, "%9u ", count);
+>                 }
+> -               if (len >= PAGE_SIZE)
+> +               if (len >= PAGE_SIZE - 1)
+>                         break;
+>                 len += sysfs_emit_at(buf, len, "\n");
+>         }
+>
+> -       if (len >= PAGE_SIZE) {
+> +       if (len >= PAGE_SIZE - 1) {
+>                 pr_warn_once("cpufreq transition table exceeds PAGE_SIZE. Disabling\n");
+>                 return -EFBIG;
+>         }
+> --
 
-Presumably the child nodes are MMIO? If so, missing 'ranges'.
-
->    '#power-domain-cells':
->      const: 1
->  
-> @@ -46,9 +52,16 @@ properties:
->        - const: csi
->        - const: dsi
->  
-> +  bridge@20:
-> +    type: object
-> +    $ref: /schemas/display/bridge/fsl,ldb.yaml#
-> +    unevaluatedProperties: false
-
-We do this style a lot, but another way to do child nodes is:
-
-type: object
-additionalProperties: true
-
-properties:
-  compatible:
-    contains:
-      const: fsl,imx93-ldb
-
-This way avoids applying the fsl,ldb.yaml schema twice and ensures the 
-right LDB compatible is used. 
-
-Rob
+Applied (with some edits in the subject and changelog) as 6.7 material, thanks!
