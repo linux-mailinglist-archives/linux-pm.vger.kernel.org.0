@@ -2,157 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88C6B7D572E
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 18:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85BEB7D5738
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 18:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232602AbjJXQAU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Oct 2023 12:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
+        id S1343676AbjJXQCg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Oct 2023 12:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343961AbjJXQAL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 12:00:11 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C0083;
-        Tue, 24 Oct 2023 09:00:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=xvNEiBG63OMFNIn4OCYNrNvdsGaoHiuqOfDxDCymSUw=; b=AzsoK5Ff7sTZHDFak0kPEDI5yk
-        VC5DL953fZLBhoy4NmnC1rXy7r5I6rdvL2NC0M+aHyRp6uKWYYUbn9DOZdBDw6xFSwBZ9slONlyTd
-        k1ghMe19z8kQOYAsNOCjoMkXD77GJR7TDJshwXXHh20Lu0W4HJOOwNhAlpHUp7sFoGdIabSVz4slF
-        1hcl3DUGDzQAM7Md/UZiKdslYPr06ZMh7F1qiW5v5zAnNs9+NJm5HmtpjGb7lHtKWyJZU3bkHd8vw
-        VSZPes5rZWCFElEEf5vptiugjyRK6VOCu/y66iRufTApPD+hmDsio39eDk38OaIwYCzYlLKZCIl02
-        eYsb04Ew==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qvJoh-003Mtt-Ov; Tue, 24 Oct 2023 15:59:39 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 6C3C7300451; Tue, 24 Oct 2023 17:59:39 +0200 (CEST)
-Date:   Tue, 24 Oct 2023 17:59:39 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        with ESMTP id S234306AbjJXQCf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 12:02:35 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7916F1B3;
+        Tue, 24 Oct 2023 09:02:33 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C019C433C7;
+        Tue, 24 Oct 2023 16:02:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1698163353;
+        bh=F7gFThJKXxRz67KtPOHXZ1MPyn546aHaKsuQ7HB3hqg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G0VPiT0NaPFcpVExXTrkeNQPAO04ohPxAd37DPcoJLpOtXMCCjTbSvuBTvMKm6fKL
+         7+97TChy1Rw9XyE2D4xj290syTx4P7Q0qI+cUomEuI1s01Fdc+0+On0HONlKTWh43O
+         JYqW/Fa9n5BmP1kwOrdU1rcoFgbCPjndXNvWvCiA=
+Date:   Tue, 24 Oct 2023 18:02:30 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Russell King <rmk+kernel@armlinux.org.uk>
+Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+        x86@kernel.org, linux-csky@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        jianyong.wu@arm.com, justin.he@arm.com,
+        James Morse <james.morse@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-pm@vger.kernel.org, rafael@kernel.org,
-        pavel@ucw.cz, linux-perf-users@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>
-Subject: Re: [PATCH 2/2] perf/x86/amd: Don't allow pre-emption in
- amd_pmu_lbr_reset()
-Message-ID: <20231024155939.GF33965@noisy.programming.kicks-ass.net>
-References: <20231023160018.164054-1-mario.limonciello@amd.com>
- <20231023160018.164054-3-mario.limonciello@amd.com>
- <ZTd6BYr17ycdHR2a@gmail.com>
- <38ea48b4-aaba-4ba4-84a1-e88d6cb9df94@amd.com>
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH 38/39] cpumask: Add enabled cpumask for present CPUs that
+ can be brought online
+Message-ID: <2023102411-ascent-plot-04fd@gregkh>
+References: <ZTffkAdOqL2pI2la@shell.armlinux.org.uk>
+ <E1qvJBk-00AqSW-R8@rmk-PC.armlinux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <38ea48b4-aaba-4ba4-84a1-e88d6cb9df94@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <E1qvJBk-00AqSW-R8@rmk-PC.armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 24, 2023 at 10:32:27AM -0500, Mario Limonciello wrote:
-> On 10/24/2023 03:02, Ingo Molnar wrote:
-> > 
-> > * Mario Limonciello <mario.limonciello@amd.com> wrote:
-> > 
-> > > Fixes a BUG reported during suspend to ram testing.
-> > > 
-> > > ```
-> > > [  478.274752] BUG: using smp_processor_id() in preemptible [00000000] code: rtcwake/2948
-> > > [  478.274754] caller is amd_pmu_lbr_reset+0x19/0xc0
-> > > ```
-> > > 
-> > > Cc: stable@vger.kernel.org # 6.1+
-> > > Fixes: ca5b7c0d9621 ("perf/x86/amd/lbr: Add LbrExtV2 branch record support")
-> > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > > ---
-> > >   arch/x86/events/amd/lbr.c | 3 ++-
-> > >   1 file changed, 2 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
-> > > index eb31f850841a..5b98e8c7d8b7 100644
-> > > --- a/arch/x86/events/amd/lbr.c
-> > > +++ b/arch/x86/events/amd/lbr.c
-> > > @@ -321,7 +321,7 @@ int amd_pmu_lbr_hw_config(struct perf_event *event)
-> > >   void amd_pmu_lbr_reset(void)
-> > >   {
-> > > -	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-> > > +	struct cpu_hw_events *cpuc = get_cpu_ptr(&cpu_hw_events);
-> > >   	int i;
-> > >   	if (!x86_pmu.lbr_nr)
-> > > @@ -335,6 +335,7 @@ void amd_pmu_lbr_reset(void)
-> > >   	cpuc->last_task_ctx = NULL;
-> > >   	cpuc->last_log_id = 0;
-> > > +	put_cpu_ptr(&cpu_hw_events);
-> > >   	wrmsrl(MSR_AMD64_LBR_SELECT, 0);
-> > >   }
-> > 
-> > Weird, amd_pmu_lbr_reset() is called from these places:
-> > 
-> >    - amd_pmu_lbr_sched_task(): during task sched-in during
-> >      context-switching, this should already have preemption disabled.
-> > 
-> >    - amd_pmu_lbr_add(): this gets indirectly called by amd_pmu::add
-> >      (amd_pmu_add_event()), called by event_sched_in(), which too should have
-> >      preemption disabled.
-> > 
-> > I clearly must have missed some additional place it gets called in.
-> > 
-> > Could you please cite the full log of the amd_pmu_lbr_reset() call that
-> > caused the critical section warning?
-> > 
-> > Thanks,
-> > 
-> > 	Ingo
+On Tue, Oct 24, 2023 at 04:19:24PM +0100, Russell King wrote:
+> From: James Morse <james.morse@arm.com>
 > 
-> Below is the call trace in case you think it's better to disable preemption
-> by the caller instead.  If you think it's better to keep it in
-> amd_pmu_lbr_reset() I'll add this trace to the commit message.
-
-You cut too much; what task is running this?
-
-IIRC this is the hotplug thread running a teardown function on that CPU
-itself. It being a strict per-cpu thread should not trip
-smp_processor_id() wanrs.
-
+> The 'offline' file in sysfs shows all offline CPUs, including those
+> that aren't present. User-space is expected to remove not-present CPUs
+> from this list to learn which CPUs could be brought online.
 > 
-> Call Trace:
->  <TASK>
->  dump_stack_lvl+0x44/0x60
->  check_preemption_disabled+0xce/0xf0
->  ? __pfx_x86_pmu_dead_cpu+0x10/0x10
->  amd_pmu_lbr_reset+0x19/0xc0
->  ? __pfx_x86_pmu_dead_cpu+0x10/0x10
->  amd_pmu_cpu_reset.constprop.0+0x51/0x60
->  amd_pmu_cpu_dead+0x3e/0x90
->  x86_pmu_dead_cpu+0x13/0x20
->  cpuhp_invoke_callback+0x169/0x4b0
->  ? __pfx_virtnet_cpu_dead+0x10/0x10
->  __cpuhp_invoke_callback_range+0x76/0xe0
->  _cpu_down+0x112/0x270
->  freeze_secondary_cpus+0x8e/0x280
->  suspend_devices_and_enter+0x342/0x900
->  pm_suspend+0x2fd/0x690
->  state_store+0x71/0xd0
->  kernfs_fop_write_iter+0x128/0x1c0
->  vfs_write+0x2db/0x400
->  ksys_write+0x5f/0xe0
->  do_syscall_64+0x59/0x90
+> CPUs can be present but not-enabled. These CPUs can't be brought online
+> until the firmware policy changes, which comes with an ACPI notification
+> that will register the CPUs.
 > 
+> With only the offline and present files, user-space is unable to
+> determine which CPUs it can try to bring online. Add a new CPU mask
+> that shows this based on all the registered CPUs.
+> 
+> Signed-off-by: James Morse <james.morse@arm.com>
+> ---
+>  drivers/base/cpu.c      | 10 ++++++++++
+>  include/linux/cpumask.h | 25 +++++++++++++++++++++++++
+>  kernel/cpu.c            |  3 +++
+>  3 files changed, 38 insertions(+)
+> 
+> diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+> index 2b9cb2667654..f8bf1d4c7d71 100644
+> --- a/drivers/base/cpu.c
+> +++ b/drivers/base/cpu.c
+> @@ -95,6 +95,7 @@ void unregister_cpu(struct cpu *cpu)
+>  {
+>  	int logical_cpu = cpu->dev.id;
+>  
+> +	set_cpu_enabled(logical_cpu, false);
+>  	unregister_cpu_under_node(logical_cpu, cpu_to_node(logical_cpu));
+>  
+>  	device_unregister(&cpu->dev);
+> @@ -273,6 +274,13 @@ static ssize_t print_cpus_offline(struct device *dev,
+>  }
+>  static DEVICE_ATTR(offline, 0444, print_cpus_offline, NULL);
+>  
+> +static ssize_t print_cpus_enabled(struct device *dev,
+> +				  struct device_attribute *attr, char *buf)
+> +{
+> +	return sysfs_emit(buf, "%*pbl\n", cpumask_pr_args(cpu_enabled_mask));
+> +}
+> +static DEVICE_ATTR(enabled, 0444, print_cpus_enabled, NULL);
+
+This needs to be documented somewhere in Documentation/ABI/ did I miss
+that patch?
+
+thanks,
+
+greg k-h
