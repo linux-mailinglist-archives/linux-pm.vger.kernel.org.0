@@ -2,102 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 417EE7D5AE8
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 20:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE25E7D5B52
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 21:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234875AbjJXSwu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 24 Oct 2023 14:52:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58170 "EHLO
+        id S1344171AbjJXTR0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Oct 2023 15:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232357AbjJXSwu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 14:52:50 -0400
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB2610E0;
-        Tue, 24 Oct 2023 11:52:48 -0700 (PDT)
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5845b7ee438so373390eaf.1;
-        Tue, 24 Oct 2023 11:52:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698173567; x=1698778367;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LVYlVHR9pYIMuvG17VXitFil99pf6BKjPqJU/KKqj2w=;
-        b=TedL5jTYnSv3GWo0PiW6bYGzHAPW7KqvueUFQUmNd3enjZOpfFMdcqUJ6pvyCcbhiS
-         d6nKJ8iBq2eGagZLZg76Yd15oVWnc1csZdKT4LAEsRjvMVXoR2iToIcS4H/cvnWvt3Yw
-         F1F/2SZFR4DCwZIthExya3hhiHzHbPFM6UlSL/aio2DV1dh3ibGSV9NfemW1pViVKGlS
-         +cV8UQhG+UoqUaR0uAbsMBApdzW3FeYTVeTezyV8sa2el10W8V5Gduh9sHO/3OvI1tNK
-         3FKI7JUa9OlWQwRdd4Uuy92Fq5x85/P3mEQevI1DPce8Hro2mlX5DJI/wZdkWQ1f2bl8
-         5spQ==
-X-Gm-Message-State: AOJu0YzB+2m+4iJjDPszJP0hPwFqfiy4CKpMoxd+lbb8FRDfTNA9PHZc
-        4UoQrVmgHw+AQj0HQktJE7G8+OWJ6OQmlBRWnOM=
-X-Google-Smtp-Source: AGHT+IHDPdUZo5h0lWf1OFlLr+zHVQ2nSUpiByu4SZLn0AGulo7kbvG9QdpdztMYUErED+CQYZZunIjx3OMjoaASS20=
-X-Received: by 2002:a4a:df4e:0:b0:57c:6e35:251e with SMTP id
- j14-20020a4adf4e000000b0057c6e35251emr13615268oou.1.1698173567342; Tue, 24
- Oct 2023 11:52:47 -0700 (PDT)
-MIME-Version: 1.0
+        with ESMTP id S1344021AbjJXTRZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 15:17:25 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC49710C3;
+        Tue, 24 Oct 2023 12:17:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698175043; x=1729711043;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=WGKgHwucaZd6y0NQGPmgV3sCFZELqEJC0AJNAp25S3g=;
+  b=OWJCPw/HfGmnd98i63Lyj+3lQTn8uoeir1Za6t93XhOsWteUxIs4ked+
+   eQg6NsJHJgB+NOWfkpKQEsYpF644twv3HCoV9pfRMi5NcdqRQh/dL7MTT
+   xInxCkVCaYs4AooSTnCCs18WtLqZLWV8ec5jHl4RVyOgOn1NAIF/hzhAb
+   cSTTOMj5b61D1CnKVLN+lH5EfRRgreRMBO5Ho4wBH/7D1BdosiqSBXqQd
+   Yz7dT1KnnK0QeUn8IPhTShGwbBXqjiW02ubtF+pKUDXRSk5v7rPRigbj2
+   82OPm67cnw873KMdEF+lVim4Yi0eo9sjzqjymWMKyi+LnBypVWf/8aB2Y
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="418269767"
+X-IronPort-AV: E=Sophos;i="6.03,248,1694761200"; 
+   d="scan'208";a="418269767"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 12:17:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="902303518"
+X-IronPort-AV: E=Sophos;i="6.03,248,1694761200"; 
+   d="scan'208";a="902303518"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.74])
+  by fmsmga001.fm.intel.com with SMTP; 24 Oct 2023 12:14:59 -0700
+Received: by stinkbox (sSMTP sendmail emulation); Tue, 24 Oct 2023 22:17:19 +0300
+From:   Ville Syrjala <ville.syrjala@linux.intel.com>
+To:     linux-pm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wang Wendy <wendy.wang@intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@intel.com>
+Subject: [PATCH v2] powercap: intel_rapl: Downgrade BIOS locked limits pr_warn() to pr_debug()
+Date:   Tue, 24 Oct 2023 22:17:19 +0300
+Message-ID: <20231024191719.4041-1-ville.syrjala@linux.intel.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20231004183455.27797-1-ville.syrjala@linux.intel.com>
 References: <20231004183455.27797-1-ville.syrjala@linux.intel.com>
- <6d207eef73fb2ad32264921ae7d1a536b6b8da61.camel@intel.com>
- <ZR22I-9YgGW9vADB@intel.com> <ZTf6qwCLR3YEwL9K@intel.com> <CAJZ5v0jzqZBHqh8dxChwJ65wT-pU3+9HxVi5f7DAcOTFpYTb9Q@mail.gmail.com>
- <ZTgRhFbp5wdsTa5W@intel.com>
-In-Reply-To: <ZTgRhFbp5wdsTa5W@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 24 Oct 2023 20:52:36 +0200
-Message-ID: <CAJZ5v0hBdPJB_BL9ux0NDUZQfOBddP7w3mcAO-AUGPnosA+Jhg@mail.gmail.com>
-Subject: Re: [Intel-gfx] [PATCH] powercap: intel_rapl: Don't warn about BIOS
- locked limits during resume
-To:     =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 24, 2023 at 8:48 PM Ville Syrjälä
-<ville.syrjala@linux.intel.com> wrote:
->
-> On Tue, Oct 24, 2023 at 08:31:34PM +0200, Rafael J. Wysocki wrote:
-> > On Tue, Oct 24, 2023 at 7:11 PM Ville Syrjälä
-> > <ville.syrjala@linux.intel.com> wrote:
-> > >
-> > > On Wed, Oct 04, 2023 at 09:59:47PM +0300, Ville Syrjälä wrote:
-> > > > On Wed, Oct 04, 2023 at 06:45:22PM +0000, Pandruvada, Srinivas wrote:
-> > > > > On Wed, 2023-10-04 at 21:34 +0300, Ville Syrjala wrote:
-> > > > > > From: Ville Syrjälä <ville.syrjala@linux.intel.com>
-> > > > > >
-> > > > > > Restore enough of the original behaviour to stop spamming
-> > > > > > dmesg with warnings about BIOS locked limits when trying
-> > > > > > to restore them during resume.
-> > > > > >
-> > > > > > This still doesn't 100% match the original behaviour
-> > > > > > as we no longer attempt to blindly restore the BIOS locked
-> > > > > > limits. No idea if that makes any difference in practice.
-> > > > > >
-> > > > > I lost the context here. Why can't we simply change pr_warn to pr_debug
-> > > > > here?
-> > > >
-> > > > I presume someone wanted to make it pr_warn() for a reason.
-> > > > I don't mind either way.
-> > >
-> > > Ping. Can someone make a decision on how this should get fixed
-> > > so we get this moving forward?
-> >
-> > I thought we were going to replace the pr_warn() with pr_debug().
->
-> I didn't get any answer whether anyone wants to keep the pr_warn().
-> If everyone is happy with pr_debug() that then I can send a patch
-> for it.
+From: Ville Syrjälä <ville.syrjala@linux.intel.com>
 
-Yes, please.
+Before the refactoring the pr_warn() only triggered when
+someone explicitly tried to write to a BIOS locked limit.
+After the refactoring the warning is also triggering during
+system resume. The user can't do anything about this so
+printing scary warnings doesn't make sense
+
+Keep the printk but make it pr_debug() instead of pr_warn()
+to make it clear it's not a serious issue.
+
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: Wang Wendy <wendy.wang@intel.com>
+Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@intel.com>
+Fixes: 9050a9cd5e4c ("powercap: intel_rapl: Cleanup Power Limits support")
+Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+---
+ drivers/powercap/intel_rapl_common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+index 40a2cc649c79..2feed036c1cd 100644
+--- a/drivers/powercap/intel_rapl_common.c
++++ b/drivers/powercap/intel_rapl_common.c
+@@ -892,7 +892,7 @@ static int rapl_write_pl_data(struct rapl_domain *rd, int pl,
+ 		return -EINVAL;
+ 
+ 	if (rd->rpl[pl].locked) {
+-		pr_warn("%s:%s:%s locked by BIOS\n", rd->rp->name, rd->name, pl_names[pl]);
++		pr_debug("%s:%s:%s locked by BIOS\n", rd->rp->name, rd->name, pl_names[pl]);
+ 		return -EACCES;
+ 	}
+ 
+-- 
+2.41.0
+
