@@ -2,112 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AAE97D538E
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 16:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF597D53A9
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 16:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234830AbjJXOAt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Oct 2023 10:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40076 "EHLO
+        id S234567AbjJXOJk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Oct 2023 10:09:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234796AbjJXOAj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 10:00:39 -0400
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B6710D4;
-        Tue, 24 Oct 2023 07:00:37 -0700 (PDT)
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-584042e7f73so2635324eaf.2;
-        Tue, 24 Oct 2023 07:00:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698156037; x=1698760837;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4H3TWjIQjf85zyBxIKv34+QRRIwX3a8rnrmF0O3dKsg=;
-        b=s/EV7EcOt5icWCFfLL3dpeLoFzNdHnSJC/smlmqm+yWNYlrikJ/9yU9dnlbzWXsmMp
-         wF6hiqUxxfH8wshEgsl/YpynM9CMhTcC0lPwetdhE1AFz1sOn0TMIG6U+OkWHU2mNjCS
-         hwNkEkF9jTNyhv6YRij8i9EJUjhFu1qLf96gnwE2ANETiznKnNnoTWkoPyJp7qVW2xjL
-         8S6hyHfxYoOAcdZiMSHGSP69BlLnXXJ9pfMF3x2LzFmj4YxjKNpfu/y49zgfxActq6YH
-         TZ8jvfGDz3XjKMM+dVY7lD0rYjg4LtrHleR5vg1CJjvlnmOymIQarKEF9OJcVP2Ife14
-         9Blw==
-X-Gm-Message-State: AOJu0YwOGZisC+2dUWFtfZr4/n1zXvn21ZaJ0yiZrC0GNzYQQsscX1XC
-        Mw+EzCdJ3gIp7IitlLGh0w==
-X-Google-Smtp-Source: AGHT+IH90mhjSMFC6luigjMC7lPfefuM1k+Kx6QDH0HCVGUzuacnelhYBUjr/MSrx7O9d++RvMeWuw==
-X-Received: by 2002:a4a:d6c5:0:b0:57b:8ff1:f482 with SMTP id j5-20020a4ad6c5000000b0057b8ff1f482mr12021472oot.0.1698156035973;
-        Tue, 24 Oct 2023 07:00:35 -0700 (PDT)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w6-20020a9d6746000000b006ce33ba6474sm1865133otm.4.2023.10.24.07.00.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Oct 2023 07:00:34 -0700 (PDT)
-Received: (nullmailer pid 3550335 invoked by uid 1000);
-        Tue, 24 Oct 2023 14:00:33 -0000
-Date:   Tue, 24 Oct 2023 09:00:33 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 0/6] imx6q related DT binding fixes
-Message-ID: <20231024140033.GA3544257-robh@kernel.org>
-References: <20230810144451.1459985-1-alexander.stein@ew.tq-group.com>
+        with ESMTP id S234210AbjJXOJj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 10:09:39 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1ABA4
+        for <linux-pm@vger.kernel.org>; Tue, 24 Oct 2023 07:09:38 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D42C1C433C8
+        for <linux-pm@vger.kernel.org>; Tue, 24 Oct 2023 14:09:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698156577;
+        bh=2YuVfWJRCm9wsUXcVykYFuj7EDjHp7AfNcgNx7Zb/+8=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=Z57zuDX17VgA1Rnoti/QwhKuP2vLc7wIe09Bskr1blpC2ueglWG3w+VxoqkD7yRFA
+         97vmaO2DLUIBzR8uoBAz0VU8ICv5X7OSm2fegG6lHLmy4gkhhLAvby6nmmkeSOsuhj
+         1xTPJJ5VNZXCjDJ8pS5wFWD6fUFvVfrrKL7tVoxXHCNdq6KWXOMdlpB46fAVDqVtRu
+         7HjfsgmUJE5oQaVXuHs2x3ABv/ybjnbuskO2GOS/cN23rwygbIpBIrqtpnIpUjIiVS
+         qvEm1DNQYJU1SPADftMdMXtlUDVp3y8qr4lf7422Z3uWUaRZovSsw3F4MCv796vjlW
+         5BfYO56/l/skw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id C208BC53BD0; Tue, 24 Oct 2023 14:09:37 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 218041] Buffer overrun in devfreq trans_stat_show()
+Date:   Tue, 24 Oct 2023 14:09:37 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: tnifc@protonmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218041-137361-Xh3HnqpUBs@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218041-137361@https.bugzilla.kernel.org/>
+References: <bug-218041-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230810144451.1459985-1-alexander.stein@ew.tq-group.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 10, 2023 at 04:44:45PM +0200, Alexander Stein wrote:
-> Hi everyone,
-> 
-> while working on i.MX6Q based board (arch/arm/boot/dts/nxp/imx/imx6q-mba6a.dts)
-> I noticed several warnings on dtbs_check. The first 5 patches should be pretty
-> much straight forward.
-> I'm not 100% sure on the sixth patch, as it might be affected by incorrect
-> compatible lists. Please refer to the note in that patch.
-> I'm also no sure whether thse patches warrent a Fixes tag, so I only added that
-> for patch 3. All of these patches are independent and can be picked up
-> individually.
-> 
-> Best regards,
-> Alexander
-> 
-> Alexander Stein (6):
->   dt-bindings: trivial-devices: Remove national,lm75
->   dt-bindings: imx-thermal: Add #thermal-sensor-cells property
->   dt-bindings: display: imx: hdmi: Allow 'reg' and 'interrupts'
->   dt-bindings: net: microchip: Allow nvmem-cell usage
->   dt-bindings: timer: add imx7d compatible
->   dt-bindings: timer: fsl,imxgpt: Add optional osc_per clock
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218041
 
-I noticed this is the top warning for 32-bit i.MX[1] and found this. 
-Looks like 5 and 6 never got applied, so I've applied them.
+--- Comment #4 from tnifc@protonmail.com ---
+(In reply to Christian Marangi (Ansuel) from comment #3)
+> Can you describe the amount of frequency?
 
-Rob
+There are 20 available frequencies on the Tegra 30 "Ouya" device.
 
-[1] https://gitlab.com/robherring/linux-dt/-/jobs/5361483372/artifacts/external_file/platform-warnings.log
+$ cat /sys/class/devfreq/6000c800.actmon/available_frequencies=20=20
+12750000 25500000 27000000 51000000 54000000 102000000 108000000 204000000
+266500000 333500000 375000000 400000000 416000000 450000000 500000000 53300=
+0000
+625000000 667000000 750000000 800000000
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
