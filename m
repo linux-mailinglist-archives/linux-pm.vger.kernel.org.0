@@ -2,84 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF597D53A9
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 16:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CBC57D5485
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 16:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234567AbjJXOJk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Oct 2023 10:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
+        id S234608AbjJXO5u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Oct 2023 10:57:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234210AbjJXOJj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 10:09:39 -0400
+        with ESMTP id S234594AbjJXO5t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 10:57:49 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1ABA4
-        for <linux-pm@vger.kernel.org>; Tue, 24 Oct 2023 07:09:38 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D42C1C433C8
-        for <linux-pm@vger.kernel.org>; Tue, 24 Oct 2023 14:09:37 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3ABA93;
+        Tue, 24 Oct 2023 07:57:47 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33EC5C433C7;
+        Tue, 24 Oct 2023 14:57:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698156577;
-        bh=2YuVfWJRCm9wsUXcVykYFuj7EDjHp7AfNcgNx7Zb/+8=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Z57zuDX17VgA1Rnoti/QwhKuP2vLc7wIe09Bskr1blpC2ueglWG3w+VxoqkD7yRFA
-         97vmaO2DLUIBzR8uoBAz0VU8ICv5X7OSm2fegG6lHLmy4gkhhLAvby6nmmkeSOsuhj
-         1xTPJJ5VNZXCjDJ8pS5wFWD6fUFvVfrrKL7tVoxXHCNdq6KWXOMdlpB46fAVDqVtRu
-         7HjfsgmUJE5oQaVXuHs2x3ABv/ybjnbuskO2GOS/cN23rwygbIpBIrqtpnIpUjIiVS
-         qvEm1DNQYJU1SPADftMdMXtlUDVp3y8qr4lf7422Z3uWUaRZovSsw3F4MCv796vjlW
-         5BfYO56/l/skw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id C208BC53BD0; Tue, 24 Oct 2023 14:09:37 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 218041] Buffer overrun in devfreq trans_stat_show()
-Date:   Tue, 24 Oct 2023 14:09:37 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: tnifc@protonmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218041-137361-Xh3HnqpUBs@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218041-137361@https.bugzilla.kernel.org/>
-References: <bug-218041-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        s=k20201202; t=1698159467;
+        bh=s/VUvPIvocwydre8aEQCLcJ68J8VdRol0E4B7DLzRHc=;
+        h=Date:From:To:Subject:Cc:From;
+        b=Ctp1TyfPYbWe/9XLLyWuwjW0W1A5VQslCYUYCixU9MHE7zrerhGEzK+3mF3L45BgJ
+         vpU9D4fBG7s73jxIkoox69gPatUnQBW0+IaL2KH2tTl3Td99AJsIyNGoT//xJ3L0js
+         H+MiUgrO3esFi2QCw/nFYNwTZ653d1nN1U9v8AAtHl5BjGjZEDnHyj/y4LuVtmvRUx
+         nrpDgJYbNpYx8GVlbQtBIjngsm6zW0hrWKGCHnl3xVjBtBIVRD6hXvOeht2zLpYalm
+         lkFnKNoONNxvxcqgu8pISkNCtT8m7QTxGoUulhVYgvJ9tfgkebvHNRTtc9bwEr+LfG
+         8AaJ560a+H42w==
+Message-ID: <ca22c9b7-ad60-4a64-8460-bab57fdc3d9b@kernel.org>
+Date:   Tue, 24 Oct 2023 23:57:44 +0900
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+From:   Chanwoo Choi <chanwoo@kernel.org>
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [GIT PULL] devfreq next for 6.7
+Cc:     "open list:DEVICE FREQUENCY (DEVFREQ)" <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Chanwoo Choi <chanwoo@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218041
+Dear Rafael,
 
---- Comment #4 from tnifc@protonmail.com ---
-(In reply to Christian Marangi (Ansuel) from comment #3)
-> Can you describe the amount of frequency?
+This is devfreq-next pull request for v6.7. I add detailed description of
+this pull request on the following tag. Please pull devfreq with
+following updates.
 
-There are 20 available frequencies on the Tegra 30 "Ouya" device.
+Best Regards,
+Chanwoo Choi
 
-$ cat /sys/class/devfreq/6000c800.actmon/available_frequencies=20=20
-12750000 25500000 27000000 51000000 54000000 102000000 108000000 204000000
-266500000 333500000 375000000 400000000 416000000 450000000 500000000 53300=
-0000
-625000000 667000000 750000000 800000000
+The following changes since commit 8a749fd1a8720d4619c91c8b6e7528c0a355c0aa:
 
---=20
-You may reply to this email to add a comment.
+  Linux 6.6-rc4 (2023-10-01 14:15:13 -0700)
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-6.7
+
+for you to fetch changes up to 8f0cd531ee18c70f4655112c49f3c3e329636e7f:
+
+  dt-bindings: devfreq: event: rockchip,dfi: Add rk3588 support (2023-10-19 21:27:11 +0900)
+
+----------------------------------------------------------------
+Update devfreq next for v6.7
+
+Detailed description for this pull request:
+1. Update devfreq core
+- Switch to dev_pm_opp_find_freq_(ceil/floor)_indexed() APIs
+ to support the specific device like UFS which handle the multiple clocks
+ through OPP (Operationg Performance Point) framework.
+
+2. Update the devfreq / devfreq-event drivers
+- Add perf support to the Rockchip DFI(DDR Monitor Module) devfreq-event driver.
+: Generalize rockchip-dfi.c to support new RK3568/RK3588 using different DDR type.
+: Covert devicetree bidning document format to yaml.
+: DFI is a unit which is suitable for measuring DDR utilization
+  for the DDR frequency scaling driver. Add perf support feature
+  to rockchip-dfi.c to extend DFI usage. The perf support has been tested
+  on a RK3568 and a RK3399.
+
+- Protect the OPP handling code in critical section
+  because the voltage of shared OPP might be changed by multiple drivers
+  on Mediatek CCI devfreq driver.
+
+- Use device_get_match_data() on Samsung Exynos PPMU devfreq-event driver.
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+      PM / devfreq: mediatek: unlock on error in mtk_ccifreq_target()
+
+Manivannan Sadhasivam (1):
+      PM / devfreq: Switch to dev_pm_opp_find_freq_{ceil/floor}_indexed() APIs
+
+Mark Tseng (1):
+      PM / devfreq: mediatek: protect oop in critical session
+
+Rob Herring (1):
+      PM / devfreq: exynos-ppmu: Use device_get_match_data()
+
+Sascha Hauer (22):
+      PM / devfreq: rockchip-dfi: Make pmu regmap mandatory
+      PM / devfreq: rockchip-dfi: Embed desc into private data struct
+      PM / devfreq: rockchip-dfi: use consistent name for private data struct
+      PM / devfreq: rockchip-dfi: Add SoC specific init function
+      PM / devfreq: rockchip-dfi: dfi store raw values in counter struct
+      PM / devfreq: rockchip-dfi: Use free running counter
+      PM / devfreq: rockchip-dfi: introduce channel mask
+      PM / devfreq: rk3399_dmc,dfi: generalize DDRTYPE defines
+      PM / devfreq: rockchip-dfi: Clean up DDR type register defines
+      PM / devfreq: rockchip-dfi: Add RK3568 support
+      PM / devfreq: rockchip-dfi: Handle LPDDR2 correctly
+      PM / devfreq: rockchip-dfi: Handle LPDDR4X
+      PM / devfreq: rockchip-dfi: Pass private data struct to internal functions
+      PM / devfreq: rockchip-dfi: Prepare for multiple users
+      PM / devfreq: rockchip-dfi: give variable a better name
+      PM / devfreq: rockchip-dfi: Add perf support
+      PM / devfreq: rockchip-dfi: make register stride SoC specific
+      PM / devfreq: rockchip-dfi: account for multiple DDRMON_CTRL registers
+      PM / devfreq: rockchip-dfi: add support for RK3588
+      dt-bindings: devfreq: event: convert Rockchip DFI binding to yaml
+      dt-bindings: devfreq: event: rockchip,dfi: Add rk3568 support
+      dt-bindings: devfreq: event: rockchip,dfi: Add rk3588 support
+
+ .../bindings/devfreq/event/rockchip,dfi.yaml       |  74 ++
+ .../bindings/devfreq/event/rockchip-dfi.txt        |  18 -
+ .../memory-controllers/rockchip,rk3399-dmc.yaml    |   2 +-
+ drivers/devfreq/devfreq.c                          |  14 +-
+ drivers/devfreq/event/exynos-ppmu.c                |  13 +-
+ drivers/devfreq/event/rockchip-dfi.c               | 814 ++++++++++++++++++---
+ drivers/devfreq/mtk-cci-devfreq.c                  |   9 +-
+ drivers/devfreq/rk3399_dmc.c                       |  10 +-
+ include/soc/rockchip/rk3399_grf.h                  |   9 +-
+ include/soc/rockchip/rk3568_grf.h                  |  13 +
+ include/soc/rockchip/rk3588_grf.h                  |  18 +
+ include/soc/rockchip/rockchip_grf.h                |  18 +
+ 12 files changed, 854 insertions(+), 158 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
+ create mode 100644 include/soc/rockchip/rk3568_grf.h
+ create mode 100644 include/soc/rockchip/rk3588_grf.h
+ create mode 100644 include/soc/rockchip/rockchip_grf.h
