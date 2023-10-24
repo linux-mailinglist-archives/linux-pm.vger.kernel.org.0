@@ -2,205 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7603D7D5700
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 17:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C6B7D572E
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 18:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234828AbjJXP41 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Oct 2023 11:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
+        id S232602AbjJXQAU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Oct 2023 12:00:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234794AbjJXP4Z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 11:56:25 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B57D7A
-        for <linux-pm@vger.kernel.org>; Tue, 24 Oct 2023 08:56:21 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-408002b5b9fso38186875e9.3
-        for <linux-pm@vger.kernel.org>; Tue, 24 Oct 2023 08:56:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698162979; x=1698767779; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y8htt2DTofVr0nXIIYWPlYVfC5BJ8mEQa00r/zVp9Ss=;
-        b=B/62KdW/caV/u2EYUdlyRyPwi91YljjUorjt+OoegAW5DsWtq2xyL3fpCYYqaE67iI
-         b98xD/86IBE6hPSQfFpUoWLMRax3SbT7mEk3UDaDeEhdPuabbB92MP7UAivdfnGkyr8g
-         wpeAAp1TlIurh7W0hJss34sIGb7qpauvDVcjEhABk0y99fqc9JX70mP6Z1mG+mWEo+kX
-         B02IAnY7o5hIAQkDJUxLAusWeLZUWX7WZ7n+pIIuaQ8W71ZZweeGVrLZWm0s+9/nDogX
-         Dk4oVAeaRjBNLe+v5fHRVUHR28KurS8GWSn2XmCcSNeILJs6r6ynfC5D1icHk/GeqO5v
-         vLoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698162979; x=1698767779;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Y8htt2DTofVr0nXIIYWPlYVfC5BJ8mEQa00r/zVp9Ss=;
-        b=Ha6WYF/ZipMBXhyCiv90Bp1/cF9ghDxkEPEybRbPnA/KS9vaYuUtEG3rp6L1XPZ+mE
-         HAvPQzZPEUZrFfKDxUKf9k2mYOZZcSArpuu16zlBgCp4WdgdUOBXAvWuaDx8NM8iOvjU
-         maGmT4oVu47hp2IrPrWHOmp2m2ucUfU51hvUH9J8UCpBa97Nti6ijMj9n4Keym+vpDr3
-         YLp8lRqlJKK3ol/KW0jesGWd78+w5Uk+dlznlF7DumGi+GC9txYQat4njOo1FFGs4ohg
-         xLfwjlGLgXS7DUcBBVQSV/bVIMdfo8yQG3sbIML7Ak5qNiFZhsFoNhTyhTTgYZ9A6/SG
-         ov8Q==
-X-Gm-Message-State: AOJu0YxV05dn1bNIxFtwheJvYI+hVgLimrsjKwUqGY6V47WBMrITm0bQ
-        25fhmvWYGPgn0kHPt+kBQdgDDQ==
-X-Google-Smtp-Source: AGHT+IHzzVeXBq9eXFNJPi3lvpcsN+5kmAC4tbcfdViwVcdiohYn29anLlYnG26yWXFbsAzsQVRsug==
-X-Received: by 2002:a05:600c:1d1e:b0:408:4160:150a with SMTP id l30-20020a05600c1d1e00b004084160150amr10157626wms.33.1698162979325;
-        Tue, 24 Oct 2023 08:56:19 -0700 (PDT)
-Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id e7-20020a05600c218700b00407efbc4361sm16939479wme.9.2023.10.24.08.56.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Oct 2023 08:56:18 -0700 (PDT)
-Message-ID: <f9043e8e-a061-a33e-7904-a157f09146b1@linaro.org>
-Date:   Tue, 24 Oct 2023 17:56:15 +0200
+        with ESMTP id S1343961AbjJXQAL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 12:00:11 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C0083;
+        Tue, 24 Oct 2023 09:00:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=xvNEiBG63OMFNIn4OCYNrNvdsGaoHiuqOfDxDCymSUw=; b=AzsoK5Ff7sTZHDFak0kPEDI5yk
+        VC5DL953fZLBhoy4NmnC1rXy7r5I6rdvL2NC0M+aHyRp6uKWYYUbn9DOZdBDw6xFSwBZ9slONlyTd
+        k1ghMe19z8kQOYAsNOCjoMkXD77GJR7TDJshwXXHh20Lu0W4HJOOwNhAlpHUp7sFoGdIabSVz4slF
+        1hcl3DUGDzQAM7Md/UZiKdslYPr06ZMh7F1qiW5v5zAnNs9+NJm5HmtpjGb7lHtKWyJZU3bkHd8vw
+        VSZPes5rZWCFElEEf5vptiugjyRK6VOCu/y66iRufTApPD+hmDsio39eDk38OaIwYCzYlLKZCIl02
+        eYsb04Ew==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qvJoh-003Mtt-Ov; Tue, 24 Oct 2023 15:59:39 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6C3C7300451; Tue, 24 Oct 2023 17:59:39 +0200 (CEST)
+Date:   Tue, 24 Oct 2023 17:59:39 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-pm@vger.kernel.org, rafael@kernel.org,
+        pavel@ucw.cz, linux-perf-users@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Subject: Re: [PATCH 2/2] perf/x86/amd: Don't allow pre-emption in
+ amd_pmu_lbr_reset()
+Message-ID: <20231024155939.GF33965@noisy.programming.kicks-ass.net>
+References: <20231023160018.164054-1-mario.limonciello@amd.com>
+ <20231023160018.164054-3-mario.limonciello@amd.com>
+ <ZTd6BYr17ycdHR2a@gmail.com>
+ <38ea48b4-aaba-4ba4-84a1-e88d6cb9df94@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     bero@baylibre.com, Markus Schneider-Pargmann <msp@baylibre.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Priyansh Jain <quic_priyjain@quicinc.com>,
-        Minjie Du <duminjie@vivo.com>,
-        Kuan-Wei Chiu <visitorckw@gmail.com>,
-        Fabio Estevam <festevam@denx.de>,
-        Bragatheswaran Manickavel <bragathemanick0908@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [GIT PULL] thermal for v6.7-rc1
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <38ea48b4-aaba-4ba4-84a1-e88d6cb9df94@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, Oct 24, 2023 at 10:32:27AM -0500, Mario Limonciello wrote:
+> On 10/24/2023 03:02, Ingo Molnar wrote:
+> > 
+> > * Mario Limonciello <mario.limonciello@amd.com> wrote:
+> > 
+> > > Fixes a BUG reported during suspend to ram testing.
+> > > 
+> > > ```
+> > > [  478.274752] BUG: using smp_processor_id() in preemptible [00000000] code: rtcwake/2948
+> > > [  478.274754] caller is amd_pmu_lbr_reset+0x19/0xc0
+> > > ```
+> > > 
+> > > Cc: stable@vger.kernel.org # 6.1+
+> > > Fixes: ca5b7c0d9621 ("perf/x86/amd/lbr: Add LbrExtV2 branch record support")
+> > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> > > ---
+> > >   arch/x86/events/amd/lbr.c | 3 ++-
+> > >   1 file changed, 2 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
+> > > index eb31f850841a..5b98e8c7d8b7 100644
+> > > --- a/arch/x86/events/amd/lbr.c
+> > > +++ b/arch/x86/events/amd/lbr.c
+> > > @@ -321,7 +321,7 @@ int amd_pmu_lbr_hw_config(struct perf_event *event)
+> > >   void amd_pmu_lbr_reset(void)
+> > >   {
+> > > -	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+> > > +	struct cpu_hw_events *cpuc = get_cpu_ptr(&cpu_hw_events);
+> > >   	int i;
+> > >   	if (!x86_pmu.lbr_nr)
+> > > @@ -335,6 +335,7 @@ void amd_pmu_lbr_reset(void)
+> > >   	cpuc->last_task_ctx = NULL;
+> > >   	cpuc->last_log_id = 0;
+> > > +	put_cpu_ptr(&cpu_hw_events);
+> > >   	wrmsrl(MSR_AMD64_LBR_SELECT, 0);
+> > >   }
+> > 
+> > Weird, amd_pmu_lbr_reset() is called from these places:
+> > 
+> >    - amd_pmu_lbr_sched_task(): during task sched-in during
+> >      context-switching, this should already have preemption disabled.
+> > 
+> >    - amd_pmu_lbr_add(): this gets indirectly called by amd_pmu::add
+> >      (amd_pmu_add_event()), called by event_sched_in(), which too should have
+> >      preemption disabled.
+> > 
+> > I clearly must have missed some additional place it gets called in.
+> > 
+> > Could you please cite the full log of the amd_pmu_lbr_reset() call that
+> > caused the critical section warning?
+> > 
+> > Thanks,
+> > 
+> > 	Ingo
+> 
+> Below is the call trace in case you think it's better to disable preemption
+> by the caller instead.  If you think it's better to keep it in
+> amd_pmu_lbr_reset() I'll add this trace to the commit message.
 
-Hi Rafael,
+You cut too much; what task is running this?
 
+IIRC this is the hotplug thread running a teardown function on that CPU
+itself. It being a strict per-cpu thread should not trip
+smp_processor_id() wanrs.
 
-The following changes since commit d3bff6277087c77a12ae6458d6da44d725f6fbaf:
-
-   Merge branch 'thermal-misc' (2023-10-12 20:08:28 +0200)
-
-are available in the Git repository at:
-
- 
-ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
-tags/thermal-v6.7-rc1
-
-for you to fetch changes up to 9618efe343ead954ca5c23856ae23d0a29e7d4b9:
-
-   thermal/qcom/tsens: Drop ops_v0_1 (2023-10-19 17:13:12 +0200)
-
-----------------------------------------------------------------
-- Add support for Mediatek LVTS MT8192 driver along with the
-   suspend/resume routines (Balsam Chihi)
-
-- Fix probe for THERMAL_V2 for the Mediatek LVTS driver (Markus
-   Schneider-Pargmann)
-
-- Remove duplicate error message in the max76620 driver when
-   thermal_of_zone_register() fails as the sub routine already show one
-   (Thierry Reding)
-
-- Add i.MX7D compatible bindings to fix a warning from dtbs_check for
-   the imx6ul platform (Alexander Stein)
-
-- Add sa8775p compatible for the QCom tsens driver (Priyansh Jain)
-
-- Fix error check in lvts_debugfs_init() which is checking against
-   NULL instead of PTR_ERR() on the LVTS Mediatek driver (Minjie Du)
-
-- Remove unused variable in the thermal/tools (Kuan-Wei Chiu)
-
-- Document the imx8dl thermal sensor (Fabio Estevam)
-
-- Add variable names in callback prototypes to prevent warning from
-   checkpatch.pl for the imx8mm driver (Bragatheswaran Manickavel)
-
-- Add missing unevaluatedProperties on child node schemas for tegra124
-   (Rob Herring)
-
-- Add mt7988 support for the Mediatek LVTS driver (Frank Wunderlich)
-
-----------------------------------------------------------------
-Alexander Stein (3):
-       dt-bindings: imx-thermal: Add #thermal-sensor-cells property
-       dt-bindings: net: microchip: Allow nvmem-cell usage
-       dt-bindings: timer: add imx7d compatible
-
-Balsam CHIHI (4):
-       dt-bindings: thermal: mediatek: Add LVTS thermal controller 
-definition for mt8192
-       thermal/drivers/mediatek/lvts_thermal: Add suspend and resume
-       thermal/drivers/mediatek/lvts_thermal: Add mt8192 support
-       thermal/drivers/mediatek/lvts_thermal: Update calibration data 
-documentation
-
-Bragatheswaran Manickavel (1):
-       thermal/drivers/imx8mm_thermal: Fix function pointer declaration 
-by adding identifier name
-
-Dmitry Baryshkov (1):
-       thermal/qcom/tsens: Drop ops_v0_1
-
-Fabio Estevam (1):
-       dt-bindings: thermal: fsl,scu-thermal: Document imx8dl
-
-Frank Wunderlich (4):
-       dt-bindings: thermal: mediatek: Add mt7988 lvts compatible
-       dt-bindings: thermal: mediatek: Add LVTS thermal sensors for mt7988
-       thermal/drivers/mediatek/lvts_thermal: Make coeff configurable
-       thermal/drivers/mediatek/lvts_thermal: Add mt7988 support
-
-Kuan-Wei Chiu (1):
-       tools/thermal: Remove unused 'mds' and 'nrhandler' variables
-
-Markus Schneider-Pargmann (1):
-       thermal/drivers/mediatek: Fix probe for THERMAL_V2
-
-Minjie Du (1):
-       thermal/drivers/mediatek/lvts_thermal: Fix error check in 
-lvts_debugfs_init()
-
-Priyansh Jain (1):
-       dt-bindings: thermal: tsens: Add sa8775p compatible
-
-Rob Herring (1):
-       dt-bindings: thermal: nvidia,tegra124-soctherm: Add missing 
-unevaluatedProperties on child node schemas
-
-Thierry Reding (1):
-       thermal/drivers/max77620: Remove duplicate error message
-
-  .../devicetree/bindings/net/microchip,lan95xx.yaml |   2 +
-  .../bindings/thermal/fsl,scu-thermal.yaml          |   4 +-
-  .../devicetree/bindings/thermal/imx-thermal.yaml   |   7 +
-  .../bindings/thermal/mediatek,lvts-thermal.yaml    |   1 +
-  .../bindings/thermal/nvidia,tegra124-soctherm.yaml |   5 +
-  .../devicetree/bindings/thermal/qcom-tsens.yaml    |   1 +
-  .../devicetree/bindings/timer/fsl,imxgpt.yaml      |   4 +-
-  drivers/thermal/imx8mm_thermal.c                   |   2 +-
-  drivers/thermal/max77620_thermal.c                 |   8 +-
-  drivers/thermal/mediatek/auxadc_thermal.c          |   2 +-
-  drivers/thermal/mediatek/lvts_thermal.c            | 254 
-+++++++++++++++++++--
-  drivers/thermal/qcom/tsens-v0_1.c                  |   6 -
-  .../dt-bindings/thermal/mediatek,lvts-thermal.h    |  28 +++
-  tools/thermal/lib/mainloop.c                       |  16 --
-  14 files changed, 288 insertions(+), 52 deletions(-)
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> 
+> Call Trace:
+>  <TASK>
+>  dump_stack_lvl+0x44/0x60
+>  check_preemption_disabled+0xce/0xf0
+>  ? __pfx_x86_pmu_dead_cpu+0x10/0x10
+>  amd_pmu_lbr_reset+0x19/0xc0
+>  ? __pfx_x86_pmu_dead_cpu+0x10/0x10
+>  amd_pmu_cpu_reset.constprop.0+0x51/0x60
+>  amd_pmu_cpu_dead+0x3e/0x90
+>  x86_pmu_dead_cpu+0x13/0x20
+>  cpuhp_invoke_callback+0x169/0x4b0
+>  ? __pfx_virtnet_cpu_dead+0x10/0x10
+>  __cpuhp_invoke_callback_range+0x76/0xe0
+>  _cpu_down+0x112/0x270
+>  freeze_secondary_cpus+0x8e/0x280
+>  suspend_devices_and_enter+0x342/0x900
+>  pm_suspend+0x2fd/0x690
+>  state_store+0x71/0xd0
+>  kernfs_fop_write_iter+0x128/0x1c0
+>  vfs_write+0x2db/0x400
+>  ksys_write+0x5f/0xe0
+>  do_syscall_64+0x59/0x90
+> 
