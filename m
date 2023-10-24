@@ -2,101 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 162FA7D5C22
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 22:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C88F7D5E44
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Oct 2023 00:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344271AbjJXUI3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 24 Oct 2023 16:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50982 "EHLO
+        id S1344560AbjJXWfw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Oct 2023 18:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344181AbjJXUI3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 16:08:29 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203F7A2;
-        Tue, 24 Oct 2023 13:08:27 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1e99a55a9c0so752287fac.1;
-        Tue, 24 Oct 2023 13:08:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698178106; x=1698782906;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HEsMZu8Eqayi45LcxRtOZkFhUqbYnUdSwErTzQoK/I8=;
-        b=fN5x0BcrE2MH2lz3tEwkyidkPgVE/5LgRwJlWZVAyOvbKrYyp1K0wKlNDr1UXZBVlX
-         SnI7jQUEZk4cSYg7ChD5CqvntYtioQF9p8XbYBm6c5OHd7t0DEI6P6IPM42WAGC7/ZeK
-         dIPaMGv8O7vwQ2YUZHw83qtOh8UMeTt7Ss6gDinJetN54XCLHYNjE1L7cXv6kwIRkUXE
-         CyT3VrJur0UeQMi96M/H9/v6tR1AoZ+kXHBHN5QAJHp+kf/r36kx6egTUalqVIpzJK6d
-         t9etpiVR7zv8y4ywR9e3Bn3YdciQ4fgYXrHSluS3bEfYefozlqZ56kt5K5KUz/Cep0/x
-         TxsA==
-X-Gm-Message-State: AOJu0YzwQV614VR7g4Z2N7C28rTJDhQNVLDQQCY9KH4x14Jc8EZJIfOO
-        p48r1MV6sK4CiW4OVgze2jZ3BQANmQnqDChopzY=
-X-Google-Smtp-Source: AGHT+IF3IKMVvXAvqIHlVk8xy2u/3N4jetWHGmHiTZ6ATMxW3MKPb5NHIxeV4cKTjgwWGWALKBR9CNSZHnzzLFeiMxU=
-X-Received: by 2002:a05:6870:4d17:b0:1e9:8a7e:5893 with SMTP id
- pn23-20020a0568704d1700b001e98a7e5893mr15978010oab.5.1698178106255; Tue, 24
- Oct 2023 13:08:26 -0700 (PDT)
+        with ESMTP id S1344557AbjJXWfu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 18:35:50 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A521991;
+        Tue, 24 Oct 2023 15:25:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=tdtY+rOfxTbr9drW5NLNeRW9YMJyiKxVA9Zf3q8HibE=; b=ePLGJIvdK78pGMF9dtQv/hD8KY
+        H2uxMOBgTglKUg5+JeAfl7KPq/BEnBPSyV+/hOMXvVo+5Bg6oJDS2Ed+gaLkechO+HUF85Rp+Guw4
+        kVsByxpUsbn4k8Z7Tfw2Qz3Dfq5UxqwSKN8KOuv9z7+PkLnEUf7vSkEIyWrlVOA2CDXynpn+Soyz6
+        hcCm4Y0Zq8B5oTclYAh6eZIYp6SkP6ZHzwecdgvmck1ebyZ+fICYg79naepTJyhWEF+uih/DNq/Uj
+        eNXg7icLxIDuULiiV3alDDGfbMAISM+KO4eGEn6mZlCRQ0n47zKIcoTkJdz97j7aRUpZAn3wh7SER
+        fLDd17Vg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qvPpE-0054eF-Sx; Tue, 24 Oct 2023 22:24:36 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 825E630072F; Wed, 25 Oct 2023 00:24:36 +0200 (CEST)
+Date:   Wed, 25 Oct 2023 00:24:36 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-pm@vger.kernel.org, rafael@kernel.org,
+        pavel@ucw.cz, linux-perf-users@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Subject: Re: [PATCH 2/2] perf/x86/amd: Don't allow pre-emption in
+ amd_pmu_lbr_reset()
+Message-ID: <20231024222436.GG33965@noisy.programming.kicks-ass.net>
+References: <20231023160018.164054-1-mario.limonciello@amd.com>
+ <20231023160018.164054-3-mario.limonciello@amd.com>
+ <ZTd6BYr17ycdHR2a@gmail.com>
+ <ZTf2IxAVPUFq91F4@gmail.com>
+ <0022df64-b7f5-43b4-87ed-5df5d47c5c6a@amd.com>
 MIME-Version: 1.0
-References: <20231004183455.27797-1-ville.syrjala@linux.intel.com> <20231024191719.4041-1-ville.syrjala@linux.intel.com>
-In-Reply-To: <20231024191719.4041-1-ville.syrjala@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 24 Oct 2023 22:08:15 +0200
-Message-ID: <CAJZ5v0i+96sV9DuLk31iBB-K8y=6i9Tq1ef893btCUkvetHVDA@mail.gmail.com>
-Subject: Re: [PATCH v2] powercap: intel_rapl: Downgrade BIOS locked limits
- pr_warn() to pr_debug()
-To:     Ville Syrjala <ville.syrjala@linux.intel.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, Zhang Rui <rui.zhang@intel.com>,
-        Wang Wendy <wendy.wang@intel.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0022df64-b7f5-43b4-87ed-5df5d47c5c6a@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 24, 2023 at 9:17 PM Ville Syrjala
-<ville.syrjala@linux.intel.com> wrote:
->
-> From: Ville Syrjälä <ville.syrjala@linux.intel.com>
->
-> Before the refactoring the pr_warn() only triggered when
-> someone explicitly tried to write to a BIOS locked limit.
-> After the refactoring the warning is also triggering during
-> system resume. The user can't do anything about this so
-> printing scary warnings doesn't make sense
->
-> Keep the printk but make it pr_debug() instead of pr_warn()
-> to make it clear it's not a serious issue.
->
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: Wang Wendy <wendy.wang@intel.com>
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@intel.com>
-> Fixes: 9050a9cd5e4c ("powercap: intel_rapl: Cleanup Power Limits support")
-> Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-> ---
->  drivers/powercap/intel_rapl_common.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-> index 40a2cc649c79..2feed036c1cd 100644
-> --- a/drivers/powercap/intel_rapl_common.c
-> +++ b/drivers/powercap/intel_rapl_common.c
-> @@ -892,7 +892,7 @@ static int rapl_write_pl_data(struct rapl_domain *rd, int pl,
->                 return -EINVAL;
->
->         if (rd->rpl[pl].locked) {
-> -               pr_warn("%s:%s:%s locked by BIOS\n", rd->rp->name, rd->name, pl_names[pl]);
-> +               pr_debug("%s:%s:%s locked by BIOS\n", rd->rp->name, rd->name, pl_names[pl]);
->                 return -EACCES;
->         }
->
-> --
+On Tue, Oct 24, 2023 at 01:30:59PM -0500, Mario Limonciello wrote:
 
-Applied, thanks!
+> In that case - should preemption be disabled for all of x86_pmu_dying_cpu()
+> perhaps?
+> 
+> For good measure x86_pmu_starting_cpu() too?
+
+starting and dying are with IRQs disabled.
