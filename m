@@ -2,139 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BFE67D5C14
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 22:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 162FA7D5C22
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 22:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344105AbjJXUDu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 24 Oct 2023 16:03:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60302 "EHLO
+        id S1344271AbjJXUI3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 24 Oct 2023 16:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343931AbjJXUDu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 16:03:50 -0400
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB6AA2;
-        Tue, 24 Oct 2023 13:03:47 -0700 (PDT)
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-582a82e6d10so836835eaf.0;
-        Tue, 24 Oct 2023 13:03:47 -0700 (PDT)
+        with ESMTP id S1344181AbjJXUI3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 16:08:29 -0400
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203F7A2;
+        Tue, 24 Oct 2023 13:08:27 -0700 (PDT)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1e99a55a9c0so752287fac.1;
+        Tue, 24 Oct 2023 13:08:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698177827; x=1698782627;
+        d=1e100.net; s=20230601; t=1698178106; x=1698782906;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=o+qX/4n2NMuSfs1CHSaW2MKgjMcRj85iCWbWik77oW8=;
-        b=bTjT2pcYbn3TkG+fAsbQvPv9mK8U8HMGNb8kMeKQzMuH73pbQC34pBB3RFsSSmdHQ5
-         8Ip43ec5kfGdf826HlaHRAwMCX+DyUmMb5sO9etmTA4f+VECtBBtNCm2cZcw3chNGpvd
-         7jDVF3Ee3wjFN2BpOpyZ1yagXwCuEalL7fW9DdYRcirVCstUWRQxLzb32uVXiloaLZrs
-         oTm4iylPBClwIodhNO/A/vKVc0nm2DBQCV1zrCF1TFSdMkq9zbdJeMlk/4TAd2I1iiKe
-         EUpq6i1pTF2OFYDGU1lYHAYMSVt7NS8dbb6OAkIDtm42kwrOooLCsAEnINayN0k+mjX8
-         8wwg==
-X-Gm-Message-State: AOJu0YzWgMY+9TUSX7SFuYUxN++0QJ/3dVl8ZLmvFatp4Ve1MGyZ50iC
-        spp0sPeQeZLRUehfGbjtGR74vLk93dyKYjlPY0E=
-X-Google-Smtp-Source: AGHT+IGTJ4XYA9RffuYHKgZVvyF9k3cGpUTxYtE8tnD7+wkdDSCNSvdFhjEC2GY4hzYMdrWdiHBy9WXDvTsqeH01AEw=
-X-Received: by 2002:a05:6870:9d98:b0:1e9:a8ff:67e3 with SMTP id
- pv24-20020a0568709d9800b001e9a8ff67e3mr16125655oab.4.1698177827121; Tue, 24
- Oct 2023 13:03:47 -0700 (PDT)
+        bh=HEsMZu8Eqayi45LcxRtOZkFhUqbYnUdSwErTzQoK/I8=;
+        b=fN5x0BcrE2MH2lz3tEwkyidkPgVE/5LgRwJlWZVAyOvbKrYyp1K0wKlNDr1UXZBVlX
+         SnI7jQUEZk4cSYg7ChD5CqvntYtioQF9p8XbYBm6c5OHd7t0DEI6P6IPM42WAGC7/ZeK
+         dIPaMGv8O7vwQ2YUZHw83qtOh8UMeTt7Ss6gDinJetN54XCLHYNjE1L7cXv6kwIRkUXE
+         CyT3VrJur0UeQMi96M/H9/v6tR1AoZ+kXHBHN5QAJHp+kf/r36kx6egTUalqVIpzJK6d
+         t9etpiVR7zv8y4ywR9e3Bn3YdciQ4fgYXrHSluS3bEfYefozlqZ56kt5K5KUz/Cep0/x
+         TxsA==
+X-Gm-Message-State: AOJu0YzwQV614VR7g4Z2N7C28rTJDhQNVLDQQCY9KH4x14Jc8EZJIfOO
+        p48r1MV6sK4CiW4OVgze2jZ3BQANmQnqDChopzY=
+X-Google-Smtp-Source: AGHT+IF3IKMVvXAvqIHlVk8xy2u/3N4jetWHGmHiTZ6ATMxW3MKPb5NHIxeV4cKTjgwWGWALKBR9CNSZHnzzLFeiMxU=
+X-Received: by 2002:a05:6870:4d17:b0:1e9:8a7e:5893 with SMTP id
+ pn23-20020a0568704d1700b001e98a7e5893mr15978010oab.5.1698178106255; Tue, 24
+ Oct 2023 13:08:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231024183016.14648-1-ansuelsmth@gmail.com>
-In-Reply-To: <20231024183016.14648-1-ansuelsmth@gmail.com>
+References: <20231004183455.27797-1-ville.syrjala@linux.intel.com> <20231024191719.4041-1-ville.syrjala@linux.intel.com>
+In-Reply-To: <20231024191719.4041-1-ville.syrjala@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 24 Oct 2023 22:03:35 +0200
-Message-ID: <CAJZ5v0gzV+nX+dSEShAopkcvx1Zx2Rc2=pjcdH07U9nQhHRe4Q@mail.gmail.com>
-Subject: Re: [PATCH 1/3] cpufreq: fix broken buffer overflow detection in trans_stats
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Jonghwa Lee <jonghwa3.lee@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        stable@vger.kernel.org
+Date:   Tue, 24 Oct 2023 22:08:15 +0200
+Message-ID: <CAJZ5v0i+96sV9DuLk31iBB-K8y=6i9Tq1ef893btCUkvetHVDA@mail.gmail.com>
+Subject: Re: [PATCH v2] powercap: intel_rapl: Downgrade BIOS locked limits
+ pr_warn() to pr_debug()
+To:     Ville Syrjala <ville.syrjala@linux.intel.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, Zhang Rui <rui.zhang@intel.com>,
+        Wang Wendy <wendy.wang@intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 24, 2023 at 8:30 PM Christian Marangi <ansuelsmth@gmail.com> wrote:
+On Tue, Oct 24, 2023 at 9:17 PM Ville Syrjala
+<ville.syrjala@linux.intel.com> wrote:
 >
-> Commit 3c0897c180c6 ("cpufreq: Use scnprintf() for avoiding potential
-> buffer overflow") switched from snprintf to the more secure scnprintf
-> but never updated the exit condition for PAGE_SIZE.
+> From: Ville Syrjälä <ville.syrjala@linux.intel.com>
 >
-> As the commit say and as scnprintf document, what scnprintf returns what
-> is actually written not counting the '\0' end char. This results in the
-> case of len exceeding the size, len set to PAGE_SIZE - 1, as it can be
-> written at max PAGESIZE - 1 (as '\0' is not counted)
+> Before the refactoring the pr_warn() only triggered when
+> someone explicitly tried to write to a BIOS locked limit.
+> After the refactoring the warning is also triggering during
+> system resume. The user can't do anything about this so
+> printing scary warnings doesn't make sense
 >
-> Because of len is never set to PAGE_SIZE, the function never break early,
-> never print the warning and never return -EFBIG.
+> Keep the printk but make it pr_debug() instead of pr_warn()
+> to make it clear it's not a serious issue.
 >
-> Fix this by fixing the condition to PAGE_SIZE -1 to correctly trigger
-> the error condition.
->
-> Cc: stable@vger.kernel.org
-> Fixes: 3c0897c180c6 ("cpufreq: Use scnprintf() for avoiding potential buffer overflow")
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: Wang Wendy <wendy.wang@intel.com>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@intel.com>
+> Fixes: 9050a9cd5e4c ("powercap: intel_rapl: Cleanup Power Limits support")
+> Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
 > ---
->  drivers/cpufreq/cpufreq_stats.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
+>  drivers/powercap/intel_rapl_common.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/cpufreq/cpufreq_stats.c b/drivers/cpufreq/cpufreq_stats.c
-> index a33df3c66c88..40a9ff18da06 100644
-> --- a/drivers/cpufreq/cpufreq_stats.c
-> +++ b/drivers/cpufreq/cpufreq_stats.c
-> @@ -131,23 +131,23 @@ static ssize_t show_trans_table(struct cpufreq_policy *policy, char *buf)
->         len += sysfs_emit_at(buf, len, "   From  :    To\n");
->         len += sysfs_emit_at(buf, len, "         : ");
->         for (i = 0; i < stats->state_num; i++) {
-> -               if (len >= PAGE_SIZE)
-> +               if (len >= PAGE_SIZE - 1)
->                         break;
->                 len += sysfs_emit_at(buf, len, "%9u ", stats->freq_table[i]);
->         }
-> -       if (len >= PAGE_SIZE)
-> -               return PAGE_SIZE;
-> +       if (len >= PAGE_SIZE - 1)
-> +               return PAGE_SIZE - 1;
+> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+> index 40a2cc649c79..2feed036c1cd 100644
+> --- a/drivers/powercap/intel_rapl_common.c
+> +++ b/drivers/powercap/intel_rapl_common.c
+> @@ -892,7 +892,7 @@ static int rapl_write_pl_data(struct rapl_domain *rd, int pl,
+>                 return -EINVAL;
 >
->         len += sysfs_emit_at(buf, len, "\n");
->
->         for (i = 0; i < stats->state_num; i++) {
-> -               if (len >= PAGE_SIZE)
-> +               if (len >= PAGE_SIZE - 1)
->                         break;
->
->                 len += sysfs_emit_at(buf, len, "%9u: ", stats->freq_table[i]);
->
->                 for (j = 0; j < stats->state_num; j++) {
-> -                       if (len >= PAGE_SIZE)
-> +                       if (len >= PAGE_SIZE - 1)
->                                 break;
->
->                         if (pending)
-> @@ -157,12 +157,12 @@ static ssize_t show_trans_table(struct cpufreq_policy *policy, char *buf)
->
->                         len += sysfs_emit_at(buf, len, "%9u ", count);
->                 }
-> -               if (len >= PAGE_SIZE)
-> +               if (len >= PAGE_SIZE - 1)
->                         break;
->                 len += sysfs_emit_at(buf, len, "\n");
+>         if (rd->rpl[pl].locked) {
+> -               pr_warn("%s:%s:%s locked by BIOS\n", rd->rp->name, rd->name, pl_names[pl]);
+> +               pr_debug("%s:%s:%s locked by BIOS\n", rd->rp->name, rd->name, pl_names[pl]);
+>                 return -EACCES;
 >         }
 >
-> -       if (len >= PAGE_SIZE) {
-> +       if (len >= PAGE_SIZE - 1) {
->                 pr_warn_once("cpufreq transition table exceeds PAGE_SIZE. Disabling\n");
->                 return -EFBIG;
->         }
 > --
 
-Applied (with some edits in the subject and changelog) as 6.7 material, thanks!
+Applied, thanks!
