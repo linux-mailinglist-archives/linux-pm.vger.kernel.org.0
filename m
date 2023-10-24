@@ -2,58 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1B17D592F
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 18:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 150887D5947
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 19:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343852AbjJXQwA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Oct 2023 12:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34254 "EHLO
+        id S234909AbjJXRBy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Oct 2023 13:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233092AbjJXQv7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 12:51:59 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101B5AF;
-        Tue, 24 Oct 2023 09:51:53 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-507c50b7c36so6562798e87.3;
-        Tue, 24 Oct 2023 09:51:52 -0700 (PDT)
+        with ESMTP id S232602AbjJXRBu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 13:01:50 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4205118;
+        Tue, 24 Oct 2023 10:01:47 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-54041e33845so4119973a12.3;
+        Tue, 24 Oct 2023 10:01:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698166311; x=1698771111; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1698166906; x=1698771706; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Tt9VMNJm14dclxeRhCE5YUSAtNoTBtrJoCG/7gTbgYc=;
-        b=WXBrBbA/GfXdEMd47dbbQH9euZwTvnuAnEXaF/VFZgJTh6AO2/FFAFwpa/4yqLzxDR
-         EMI9EGD8+1DtRZhEpmaOnLuIBhRm5WzSt3dKcSMEVeFRwachfl4OpvUpklvFRWYTTi5V
-         FQNVXKhIa5EG5MnSimW+HxgzxwFLDSflm1MxjqFmOcwhaL6Gab9HCks6/O8nUFw7L1XR
-         pVlk6el8P3kvxVDRFU/57i/Q1UgViOLxq3VfJiNXf1HJQy4hatrizpSF27LebSh8eDPc
-         uQ/0ErYlq5Li3SU/hOGHSwkIXR+ulDhOiKEq044+SmMSliKUeAv+07QeuV4oLTcF/ZJk
-         B3AQ==
+        bh=tJLSiRFgr+vLugH53T/KVTL1ow4JkI7JxvtTgGarGgg=;
+        b=CVXprM8E3LNLGBlK8gbWhSNMFC0T7cvHR1MMjdbVaxXHRj5DY6xbE6BT3JLDMhtFsm
+         0AJxTc2Ufpwidj788vLJoZEtnFstFB2AJCw8iY8DduOvb9fY8ffmt/AKtEJNfPUZv9Wv
+         WfV+ZK9Qj2WNyHf03LmI3xEWJ9YFnZIIgVYHIHHJih9GP6QXptBXj2/UOc58KRA4Oxk7
+         xJCGuxDdIwgshnksH8kObDYXoze9omw3WoOJ404SQLSFs80CgxcnJxvn2rj8efcMJgqX
+         CYFnUBJNUEbUXx9YPSru1rYYOqa+jOxoE+bKt0Eh7A0F3z00m/6eyRcZMJUaI2xlFl05
+         6asg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698166311; x=1698771111;
+        d=1e100.net; s=20230601; t=1698166906; x=1698771706;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Tt9VMNJm14dclxeRhCE5YUSAtNoTBtrJoCG/7gTbgYc=;
-        b=EuFNQqVi8jkxudr/8xDn5LkkSS5CECLIS5LHByxS52KKZFi57ys3gp812b0B22ymTT
-         FCiNDQqCqVHBYHsogFbRuea3nmVGFHPXrJlo0nGVfUtvgmI/piNZwmexehfJGCgTHEIX
-         5kJxr6EBSf5GditHj05NCwLpHSqjsfnbNgKSv4Zp1UJNw4osZzdy2lzPFEoH8nPYgTev
-         gcZfCjiJRfntNCT3QXUS9AD5iqC110y7qtbgmjIGDBUeD968tWR8EVU5l38zOrQTqoxZ
-         OJDXylsP9EmrgsOf0oTI8zarg/dX40p3iprCKlCT5FKysvRoifKktRMbUOAxwHtFW9+L
-         20Lw==
-X-Gm-Message-State: AOJu0YxVFHIpvG1qsigs5/8LLpGzPrxo66C8sCZKrNAHgrPsGm54m2NQ
-        GlNqyc+gBsK2VqBTsLuNCJo=
-X-Google-Smtp-Source: AGHT+IEgFXhtOsauhH1Njd4JIw/Q9HdWjMZpYxXGKriVaZAVypy+uOSK2ZD1Db6QYV6iOvYlQMwh6g==
-X-Received: by 2002:a19:6745:0:b0:507:9fc1:ca7e with SMTP id e5-20020a196745000000b005079fc1ca7emr8477325lfj.51.1698166310742;
-        Tue, 24 Oct 2023 09:51:50 -0700 (PDT)
+        bh=tJLSiRFgr+vLugH53T/KVTL1ow4JkI7JxvtTgGarGgg=;
+        b=VS9f55CxZYSYQwUWpYydAps0+/zSvgUt6lTBMknxuh4eZDnVjQgcutwWvZHYHNvKfq
+         Bizk1zs54520x47hKN4msGaC3T6kFIgpMbi7GTuLwhnp+XRGTGqOg7/L4dWdBB22SFtP
+         Wmvv2WPNEfAKtxl3Rr50RKoCwRv/MAqzPpUXSH34YHwJ9mH42H/qWiylgRRl/BE3CfkP
+         TIwvGzjdjFDEBT+QYO3Mw2jFYn5KkSV0LZHpy7kMFdswxc7TUQP5KiXs1vSzXy1szPrR
+         whV7naq1gQt4VpuE4J81Bj/WPCOXfSs8ti+XxIngjHFBeTmp5y6GCcmVCMjTuCkJs+cA
+         QVag==
+X-Gm-Message-State: AOJu0YxpNnxRHrBE3wOhZOwU2D0Q1Dc/53fFYaDFpHlyHTDwNx1bPhMF
+        sm7iXa0X7jmgpDfWAUsUWxk=
+X-Google-Smtp-Source: AGHT+IHL7UMfiDcI9b7i6CuEP2RbI/XnIVBaFe2aZzyRZY7FPfL0RBwkSa6uIa0OZH/cy5TAIXfvcg==
+X-Received: by 2002:a50:bae5:0:b0:53d:e5d7:4148 with SMTP id x92-20020a50bae5000000b0053de5d74148mr9651463ede.1.1698166905845;
+        Tue, 24 Oct 2023 10:01:45 -0700 (PDT)
 Received: from gmail.com (1F2EF1E7.nat.pool.telekom.hu. [31.46.241.231])
-        by smtp.gmail.com with ESMTPSA id u20-20020a50a414000000b005346925a474sm815553edb.43.2023.10.24.09.51.49
+        by smtp.gmail.com with ESMTPSA id dn22-20020a05640222f600b005401a4184ddsm5235818edb.27.2023.10.24.10.01.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Oct 2023 09:51:50 -0700 (PDT)
+        Tue, 24 Oct 2023 10:01:45 -0700 (PDT)
 Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Tue, 24 Oct 2023 18:51:47 +0200
+Date:   Tue, 24 Oct 2023 19:01:42 +0200
 From:   Ingo Molnar <mingo@kernel.org>
 To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
+Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Borislav Petkov <bp@alien8.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
@@ -69,16 +70,17 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Namhyung Kim <namhyung@kernel.org>,
         Ian Rogers <irogers@google.com>,
         Adrian Hunter <adrian.hunter@intel.com>
-Subject: Re: [PATCH 2/2] perf/x86/amd: Don't allow pre-emption in
- amd_pmu_lbr_reset()
-Message-ID: <ZTf2IxAVPUFq91F4@gmail.com>
+Subject: Re: [PATCH 1/2] x86: Enable x2apic during resume from suspend if
+ used previously
+Message-ID: <ZTf4dtWBTjiKIntj@gmail.com>
 References: <20231023160018.164054-1-mario.limonciello@amd.com>
- <20231023160018.164054-3-mario.limonciello@amd.com>
- <ZTd6BYr17ycdHR2a@gmail.com>
+ <20231023160018.164054-2-mario.limonciello@amd.com>
+ <ZTeB9K4NYu1sRiZ1@gmail.com>
+ <6894bebf-15ed-4bd2-aebc-f4ac0a30a395@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZTd6BYr17ycdHR2a@gmail.com>
+In-Reply-To: <6894bebf-15ed-4bd2-aebc-f4ac0a30a395@amd.com>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
@@ -90,69 +92,112 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-* Ingo Molnar <mingo@kernel.org> wrote:
+* Mario Limonciello <mario.limonciello@amd.com> wrote:
 
+> +Tom
 > 
-> * Mario Limonciello <mario.limonciello@amd.com> wrote:
-> 
-> > Fixes a BUG reported during suspend to ram testing.
+> On 10/24/2023 03:36, Ingo Molnar wrote:
 > > 
-> > ```
-> > [  478.274752] BUG: using smp_processor_id() in preemptible [00000000] code: rtcwake/2948
-> > [  478.274754] caller is amd_pmu_lbr_reset+0x19/0xc0
-> > ```
+> > * Mario Limonciello <mario.limonciello@amd.com> wrote:
 > > 
-> > Cc: stable@vger.kernel.org # 6.1+
-> > Fixes: ca5b7c0d9621 ("perf/x86/amd/lbr: Add LbrExtV2 branch record support")
-> > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > ---
-> >  arch/x86/events/amd/lbr.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > > If x2apic was enabled during boot with parallel startup
+> > > it will be needed during resume from suspend to ram as well.
+> > > 
+> > > Store whether to enable into the smpboot_control global variable
+> > > and during startup re-enable it if necessary.
+> > > 
+> > > Cc: stable@vger.kernel.org # 6.5+
+> > > Fixes: 0c7ffa32dbd6 ("x86/smpboot/64: Implement arch_cpuhp_init_parallel_bringup() and enable it")
+> > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> > > ---
+> > >   arch/x86/include/asm/smp.h   |  1 +
+> > >   arch/x86/kernel/acpi/sleep.c | 12 ++++++++----
+> > >   arch/x86/kernel/head_64.S    | 15 +++++++++++++++
+> > >   3 files changed, 24 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/arch/x86/include/asm/smp.h b/arch/x86/include/asm/smp.h
+> > > index c31c633419fe..86584ffaebc3 100644
+> > > --- a/arch/x86/include/asm/smp.h
+> > > +++ b/arch/x86/include/asm/smp.h
+> > > @@ -190,6 +190,7 @@ extern unsigned long apic_mmio_base;
+> > >   #endif /* !__ASSEMBLY__ */
+> > >   /* Control bits for startup_64 */
+> > > +#define STARTUP_ENABLE_X2APIC	0x40000000
+> > >   #define STARTUP_READ_APICID	0x80000000
+> > >   /* Top 8 bits are reserved for control */
+> > > diff --git a/arch/x86/kernel/acpi/sleep.c b/arch/x86/kernel/acpi/sleep.c
+> > > index 6dfecb27b846..29734a1299f6 100644
+> > > --- a/arch/x86/kernel/acpi/sleep.c
+> > > +++ b/arch/x86/kernel/acpi/sleep.c
+> > > @@ -11,6 +11,7 @@
+> > >   #include <linux/dmi.h>
+> > >   #include <linux/cpumask.h>
+> > >   #include <linux/pgtable.h>
+> > > +#include <asm/apic.h>
+> > >   #include <asm/segment.h>
+> > >   #include <asm/desc.h>
+> > >   #include <asm/cacheflush.h>
+> > > @@ -129,11 +130,14 @@ int x86_acpi_suspend_lowlevel(void)
+> > >   	 */
+> > >   	current->thread.sp = (unsigned long)temp_stack + sizeof(temp_stack);
+> > >   	/*
+> > > -	 * Ensure the CPU knows which one it is when it comes back, if
+> > > -	 * it isn't in parallel mode and expected to work that out for
+> > > -	 * itself.
+> > > +	 * Ensure x2apic is re-enabled if necessary and the CPU knows which
+> > > +	 * one it is when it comes back, if it isn't in parallel mode and
+> > > +	 * expected to work that out for itself.
+> > >   	 */
+> > > -	if (!(smpboot_control & STARTUP_PARALLEL_MASK))
+> > > +	if (smpboot_control & STARTUP_PARALLEL_MASK) {
+> > > +		if (x2apic_enabled())
+> > > +			smpboot_control |= STARTUP_ENABLE_X2APIC;
+> > > +	} else
+> > >   		smpboot_control = smp_processor_id();
 > > 
-> > diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
-> > index eb31f850841a..5b98e8c7d8b7 100644
-> > --- a/arch/x86/events/amd/lbr.c
-> > +++ b/arch/x86/events/amd/lbr.c
-> > @@ -321,7 +321,7 @@ int amd_pmu_lbr_hw_config(struct perf_event *event)
-> >  
-> >  void amd_pmu_lbr_reset(void)
-> >  {
-> > -	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-> > +	struct cpu_hw_events *cpuc = get_cpu_ptr(&cpu_hw_events);
-> >  	int i;
-> >  
-> >  	if (!x86_pmu.lbr_nr)
-> > @@ -335,6 +335,7 @@ void amd_pmu_lbr_reset(void)
-> >  
-> >  	cpuc->last_task_ctx = NULL;
-> >  	cpuc->last_log_id = 0;
-> > +	put_cpu_ptr(&cpu_hw_events);
-> >  	wrmsrl(MSR_AMD64_LBR_SELECT, 0);
-> >  }
+> > Yeah, so instead of adding further kludges to the 'parallel bringup is
+> > possible' code path, which is arguably a functional feature that shouldn't
+> > have hardware-management coupled to it, would it be possible to fix
+> > parallel bringup to AMD-SEV systems, so that this code path isn't a
+> > quirk-dependent "parallel boot" codepath, but simply the "x86 SMP boot
+> > codepath", where all SMP x86 systems do a parallel bootup?
+> > 
+> > The original commit by Thomas says:
+> > 
+> >    0c7ffa32dbd6 ("x86/smpboot/64: Implement arch_cpuhp_init_parallel_bringup() and enable it")
+> > 
+> >    | Unfortunately there is no RDMSR GHCB protocol at the moment, so enabling
+> >    | AMD-SEV guests for parallel startup needs some more thought.
+> > 
+> > But that was half a year ago, isn't there RDMSR GHCB access code available now?
+> > 
+> > This code would all read a lot more natural if it was the regular x86 SMP
+> > bootup path - which it is 'almost' today already, modulo quirk.
+> > 
+> > Obviously coupling functional features with hardware quirks is fragile, for
+> > example your patch extending x86 SMP parallel bringup doesn't extend the
+> > AMD-SEV case, which may or may not matter in practice.
+> > 
+> > So, if it's possible, it would be nice to fix AMD-SEV systems as well and
+> > remove this artificial coupling.
 > 
-> Weird, amd_pmu_lbr_reset() is called from these places:
-> 
->   - amd_pmu_lbr_sched_task(): during task sched-in during 
->     context-switching, this should already have preemption disabled.
-> 
->   - amd_pmu_lbr_add(): this gets indirectly called by amd_pmu::add 
->     (amd_pmu_add_event()), called by event_sched_in(), which too should have 
->     preemption disabled.
-> 
-> I clearly must have missed some additional place it gets called in.
+> It probably isn't clear since I didn't mention it in the commit message, but
+> this is not a system that supports AMD-SEV.  This is a workstation that
+> supports x2apic.  I'll clarify that for V2.
 
-Just for completeness, the additional place I missed is 
-amd_pmu_cpu_reset():
+Yes, I suspected as much, but that's irrelevant to the arguments I 
+outlined, that extending upon this quirk that makes SMP parallel bringup HW 
+environment dependent, and then coupling s2ram x2apic re-enablement to that 
+functional feature is inviting trouble in the long run.
 
-                static_call(amd_pmu_branch_reset)();
+For example, what guarantees that the x2apic will be turned back on after 
+suspend if a system is booted with maxcpus=1?
 
-... and the amd_pmu_branch_reset static call is set up with 
-amd_pmu_lbr_reset, which is why git grep missed it.
+Obviously something very close to your fix is needed.
 
-Anyway, amd_pmu_cpu_reset() is very much something that should run 
-non-preemptable to begin with, so your patch only papers over the real 
-problem AFAICS.
+> I've looped Tom in to comment whether it's possible to improve AMD-SEV as 
+> well.
 
-Thanks,
+Thanks!
 
 	Ingo
