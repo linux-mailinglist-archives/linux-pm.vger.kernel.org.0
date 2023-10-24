@@ -2,38 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48AFC7D587F
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 18:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF1B17D592F
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Oct 2023 18:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234767AbjJXQfN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Oct 2023 12:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
+        id S1343852AbjJXQwA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Oct 2023 12:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343931AbjJXQfM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 12:35:12 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462E812B;
-        Tue, 24 Oct 2023 09:35:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=7aiZywvRsY6Q9Q6XdkE7hDVMPUu+CQ0jOQmrFXLh59M=; b=kQisp2ZwovIQVYckoNXGBwGKrG
-        3e5egzEVLe1e9mWSI3TxFDX2czlSZvM4r5St10+3Ba15FiqYx6/kgC6Ao/O2QQ3RFynG1n30yjLGl
-        0Q+aRCWgyu285A3GXng3Wv3VO5dd7T47Mlf3QyhvuBQRKylud7r7l6Se6giPpbRbMLsUVDM1zEs/h
-        BMPcGl/VXrAj7TbDJliAzOz0HPLD+lvQPpxqI9bjQXzYrhNUp3YqCYgbdwbbIRZk4QKxJG3jFh+G1
-        xf0KanQY+iQxsK6T6gyqjJJb4aB+0PltrXFk33g/5NTp+XJSKg6XyTlX9NsiLrAPpWR8b/Yl83hRs
-        qiKuv7Gw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qvKMl-00Fdwy-0L;
-        Tue, 24 Oct 2023 16:34:51 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BD326300392; Tue, 24 Oct 2023 18:34:50 +0200 (CEST)
-Date:   Tue, 24 Oct 2023 18:34:50 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
+        with ESMTP id S233092AbjJXQv7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Oct 2023 12:51:59 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101B5AF;
+        Tue, 24 Oct 2023 09:51:53 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-507c50b7c36so6562798e87.3;
+        Tue, 24 Oct 2023 09:51:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698166311; x=1698771111; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Tt9VMNJm14dclxeRhCE5YUSAtNoTBtrJoCG/7gTbgYc=;
+        b=WXBrBbA/GfXdEMd47dbbQH9euZwTvnuAnEXaF/VFZgJTh6AO2/FFAFwpa/4yqLzxDR
+         EMI9EGD8+1DtRZhEpmaOnLuIBhRm5WzSt3dKcSMEVeFRwachfl4OpvUpklvFRWYTTi5V
+         FQNVXKhIa5EG5MnSimW+HxgzxwFLDSflm1MxjqFmOcwhaL6Gab9HCks6/O8nUFw7L1XR
+         pVlk6el8P3kvxVDRFU/57i/Q1UgViOLxq3VfJiNXf1HJQy4hatrizpSF27LebSh8eDPc
+         uQ/0ErYlq5Li3SU/hOGHSwkIXR+ulDhOiKEq044+SmMSliKUeAv+07QeuV4oLTcF/ZJk
+         B3AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698166311; x=1698771111;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Tt9VMNJm14dclxeRhCE5YUSAtNoTBtrJoCG/7gTbgYc=;
+        b=EuFNQqVi8jkxudr/8xDn5LkkSS5CECLIS5LHByxS52KKZFi57ys3gp812b0B22ymTT
+         FCiNDQqCqVHBYHsogFbRuea3nmVGFHPXrJlo0nGVfUtvgmI/piNZwmexehfJGCgTHEIX
+         5kJxr6EBSf5GditHj05NCwLpHSqjsfnbNgKSv4Zp1UJNw4osZzdy2lzPFEoH8nPYgTev
+         gcZfCjiJRfntNCT3QXUS9AD5iqC110y7qtbgmjIGDBUeD968tWR8EVU5l38zOrQTqoxZ
+         OJDXylsP9EmrgsOf0oTI8zarg/dX40p3iprCKlCT5FKysvRoifKktRMbUOAxwHtFW9+L
+         20Lw==
+X-Gm-Message-State: AOJu0YxVFHIpvG1qsigs5/8LLpGzPrxo66C8sCZKrNAHgrPsGm54m2NQ
+        GlNqyc+gBsK2VqBTsLuNCJo=
+X-Google-Smtp-Source: AGHT+IEgFXhtOsauhH1Njd4JIw/Q9HdWjMZpYxXGKriVaZAVypy+uOSK2ZD1Db6QYV6iOvYlQMwh6g==
+X-Received: by 2002:a19:6745:0:b0:507:9fc1:ca7e with SMTP id e5-20020a196745000000b005079fc1ca7emr8477325lfj.51.1698166310742;
+        Tue, 24 Oct 2023 09:51:50 -0700 (PDT)
+Received: from gmail.com (1F2EF1E7.nat.pool.telekom.hu. [31.46.241.231])
+        by smtp.gmail.com with ESMTPSA id u20-20020a50a414000000b005346925a474sm815553edb.43.2023.10.24.09.51.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Oct 2023 09:51:50 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Tue, 24 Oct 2023 18:51:47 +0200
+From:   Ingo Molnar <mingo@kernel.org>
 To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>,
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Sandipan Das <sandipan.das@amd.com>,
@@ -50,62 +71,88 @@ Cc:     Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>,
         Adrian Hunter <adrian.hunter@intel.com>
 Subject: Re: [PATCH 2/2] perf/x86/amd: Don't allow pre-emption in
  amd_pmu_lbr_reset()
-Message-ID: <20231024163450.GB13938@noisy.programming.kicks-ass.net>
+Message-ID: <ZTf2IxAVPUFq91F4@gmail.com>
 References: <20231023160018.164054-1-mario.limonciello@amd.com>
  <20231023160018.164054-3-mario.limonciello@amd.com>
  <ZTd6BYr17ycdHR2a@gmail.com>
- <38ea48b4-aaba-4ba4-84a1-e88d6cb9df94@amd.com>
- <20231024155939.GF33965@noisy.programming.kicks-ass.net>
- <47518940-2803-4a6b-88fd-8cfc872b4219@amd.com>
- <20231024163038.GC40044@noisy.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231024163038.GC40044@noisy.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZTd6BYr17ycdHR2a@gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 24, 2023 at 06:30:38PM +0200, Peter Zijlstra wrote:
-> On Tue, Oct 24, 2023 at 11:04:06AM -0500, Mario Limonciello wrote:
+
+* Ingo Molnar <mingo@kernel.org> wrote:
+
 > 
-> > > IIRC this is the hotplug thread running a teardown function on that CPU
-> > > itself. It being a strict per-cpu thread should not trip
-> > > smp_processor_id() wanrs.
-> > > 
+> * Mario Limonciello <mario.limonciello@amd.com> wrote:
+> 
+> > Fixes a BUG reported during suspend to ram testing.
 > > 
-> > BUG: using smp_processor_id() in preemptible [00000000] code: rtcwake/2960
-> > caller is amd_pmu_lbr_reset+0x19/0xc0
-> > CPU: 104 PID: 2960 Comm: rtcwake Not tainted 6.6.0-rc6-00002-g3e2c7f3ac51f
+> > ```
+> > [  478.274752] BUG: using smp_processor_id() in preemptible [00000000] code: rtcwake/2948
+> > [  478.274754] caller is amd_pmu_lbr_reset+0x19/0xc0
+> > ```
+> > 
+> > Cc: stable@vger.kernel.org # 6.1+
+> > Fixes: ca5b7c0d9621 ("perf/x86/amd/lbr: Add LbrExtV2 branch record support")
+> > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> > ---
+> >  arch/x86/events/amd/lbr.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
+> > index eb31f850841a..5b98e8c7d8b7 100644
+> > --- a/arch/x86/events/amd/lbr.c
+> > +++ b/arch/x86/events/amd/lbr.c
+> > @@ -321,7 +321,7 @@ int amd_pmu_lbr_hw_config(struct perf_event *event)
+> >  
+> >  void amd_pmu_lbr_reset(void)
+> >  {
+> > -	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+> > +	struct cpu_hw_events *cpuc = get_cpu_ptr(&cpu_hw_events);
+> >  	int i;
+> >  
+> >  	if (!x86_pmu.lbr_nr)
+> > @@ -335,6 +335,7 @@ void amd_pmu_lbr_reset(void)
+> >  
+> >  	cpuc->last_task_ctx = NULL;
+> >  	cpuc->last_log_id = 0;
+> > +	put_cpu_ptr(&cpu_hw_events);
+> >  	wrmsrl(MSR_AMD64_LBR_SELECT, 0);
+> >  }
 > 
-> Very much not the cpuhp/%u thread :/, let me try and figure out how that
-> happens.
-
-Uhh, my bad, these are the PREPARE/DEAD handlers, they run before online
-and after dying. The CPU is completely dead. Running lbr_reset() here
-makes no sense.
-
-Did that want to be in amd_pmu_cpu_dying() ?
-
+> Weird, amd_pmu_lbr_reset() is called from these places:
 > 
-> > #1025
-> > Call Trace:
-> >  <TASK>
-> >  dump_stack_lvl+0x44/0x60
-> >  check_preemption_disabled+0xce/0xf0
-> >  ? __pfx_x86_pmu_dead_cpu+0x10/0x10
-> >  amd_pmu_lbr_reset+0x19/0xc0
-> >  ? __pfx_x86_pmu_dead_cpu+0x10/0x10
-> >  amd_pmu_cpu_reset.constprop.0+0x51/0x60
-> >  amd_pmu_cpu_dead+0x3e/0x90
-> >  x86_pmu_dead_cpu+0x13/0x20
-> >  cpuhp_invoke_callback+0x169/0x4b0
-> >  ? __pfx_virtnet_cpu_dead+0x10/0x10
-> >  __cpuhp_invoke_callback_range+0x76/0xe0
-> >  _cpu_down+0x112/0x270
-> >  freeze_secondary_cpus+0x8e/0x280
+>   - amd_pmu_lbr_sched_task(): during task sched-in during 
+>     context-switching, this should already have preemption disabled.
+> 
+>   - amd_pmu_lbr_add(): this gets indirectly called by amd_pmu::add 
+>     (amd_pmu_add_event()), called by event_sched_in(), which too should have 
+>     preemption disabled.
+> 
+> I clearly must have missed some additional place it gets called in.
+
+Just for completeness, the additional place I missed is 
+amd_pmu_cpu_reset():
+
+                static_call(amd_pmu_branch_reset)();
+
+... and the amd_pmu_branch_reset static call is set up with 
+amd_pmu_lbr_reset, which is why git grep missed it.
+
+Anyway, amd_pmu_cpu_reset() is very much something that should run 
+non-preemptable to begin with, so your patch only papers over the real 
+problem AFAICS.
+
+Thanks,
+
+	Ingo
