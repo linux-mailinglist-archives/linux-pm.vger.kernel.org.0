@@ -2,68 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C03D7D6544
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Oct 2023 10:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA847D661C
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Oct 2023 11:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233435AbjJYIg5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Oct 2023 04:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39130 "EHLO
+        id S233150AbjJYJCg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Oct 2023 05:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232897AbjJYIg5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Oct 2023 04:36:57 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8824A129
-        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 01:36:54 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id 5614622812f47-3b2b1af09c5so3181114b6e.0
-        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 01:36:54 -0700 (PDT)
+        with ESMTP id S232272AbjJYJCf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Oct 2023 05:02:35 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E4DB9
+        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 02:02:32 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6b89ab5ddb7so5426311b3a.0
+        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 02:02:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698223014; x=1698827814; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rFUU64/OUuF1nn0EtOhMJ/Ae7a+hOsjEWRp2Dhz9W0c=;
-        b=ZYkUZEm4L7uaBrMrky71FGR/1rk36yfxmK+SVWY7N9XZjVAdc5tAfIAx1nTmDgJGiA
-         AI5bgZH9Ss7LX1N0HA82HJBJju1BZCqMJQZnLTTFSwSz5peJLgaZq8croCLCrcW9g6SA
-         u2/FPr6mosrotu1mOInysUlFM/aCmILPc9HoQAZinaMm2Vn7RiBiB8evcz0VHEcawBkP
-         cFlzaSnA4m+jS8Irc/usevaT9/IYg6n1mnmvAlXMascKv+NEgjKTxqVTwov/d39X2Uc1
-         tTJ1qQVpurfgn4lDTpkh1RSD8TtFUS6CBGKzeLn480VUzXrPXvDcdVQNUumrVukXJtjQ
-         xJUg==
+        d=linaro.org; s=google; t=1698224552; x=1698829352; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4n2kked+3bfxJ6EXIMUDeHZq/0tPr9IzhDqluMrojuQ=;
+        b=KvuUQsvTvbCp/sqt/uGVb68pWrXfdG2LG6Lp0xNY4EDpAAPdsDMwoofTCbo426rgjK
+         x3Q4sn2j7GNRs0/3YQdxwNtWZmutmLv1aqNrTjsVTo/SsUawRUQMq7Da1P+RQNuUNYqw
+         ONwxi9Zjc/XRuwBYDzMisgeNijK14lrhHKOfJHNjbOWYCTfdeeVrPBPWjah5AUuecsGW
+         xwBe2zub4asg4/aoEZQ8zgsvMNLw0E3lAmEZiBQAxdDAP/E8mKGCg98XCtRFanOP42I1
+         FOgmBcn3cv4DixoKxPTfnoJmxMZZ6WjSOSzv+3TFdctTv0qgo4HFjgL68qB+Q4pd5nw8
+         EI2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698223014; x=1698827814;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rFUU64/OUuF1nn0EtOhMJ/Ae7a+hOsjEWRp2Dhz9W0c=;
-        b=N4jzSMggEWO9BKlcTIONAZLb0O4Lah7Pn+joo/YzhBx1VWdAU0mTxu62sSQs9mP7mc
-         JsudNExPrxHdofLMF4mDEgmAPsFaZu4WE3I0W+EXgDwd3GyCpqEkwHTntCF4FHZu1OyP
-         scI/4VJUSYkjqVHWC2TPEzpUEkKJ/L6e1WnfpJryulixN715l8X8HNDeE+ROtwoWDjAb
-         zHrNGwcRS4fi8GyeHUGgweRaW9tWFjX6XRWRSiouk1sWFldyJfV3Ho/RG8/ZSTuOAuu2
-         9481bNgAJOK4iEPPnsccZnS9BIxKdaHv2Y3AF5bg36q75bwuTLqgFuVQ9hi7p1RP8ZTy
-         MmVQ==
-X-Gm-Message-State: AOJu0YzWBqXz18Z6045jZjcXONDt73YSa5mKYZWv4073OB+iXPCHQRuv
-        wlpV77vYyLuOqb9ZKUOx94zCResDHg67L61ELrRmlcJveJ2ayps5XfI=
-X-Google-Smtp-Source: AGHT+IG/GggL0RFatm6CzkOC4Y36ZQHValYB73KmbvVCy3HhRMzE1zGwMdJhW19B90K/3jxacKZkXu64KN1CGeuyGkA=
-X-Received: by 2002:a05:6808:1a88:b0:3ad:fe8d:dfae with SMTP id
- bm8-20020a0568081a8800b003adfe8ddfaemr10855002oib.57.1698223013802; Wed, 25
- Oct 2023 01:36:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231025-topic-sm8650-upstream-rpmpd-v1-0-f25d313104c6@linaro.org>
- <20231025-topic-sm8650-upstream-rpmpd-v1-2-f25d313104c6@linaro.org>
-In-Reply-To: <20231025-topic-sm8650-upstream-rpmpd-v1-2-f25d313104c6@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 25 Oct 2023 11:36:42 +0300
-Message-ID: <CAA8EJppPzjdpeFksu-0h0FbYwy5bC=X0f-61_zPL4-sH=3n6zA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] pmdomain: qcom: rpmhpd: Add SM8650 RPMh Power Domains
+        d=1e100.net; s=20230601; t=1698224552; x=1698829352;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4n2kked+3bfxJ6EXIMUDeHZq/0tPr9IzhDqluMrojuQ=;
+        b=Iuen/OEuuNudgeHrij9Na1b+ogRKCl22ttENz1ZhvFZwGC8e6BQNsXrGS/6dxc2aSf
+         et0MDU4RlASkDv+yUo+uyTyt1YzU08cqNI6OvXtwhUBv042Q/zYMLzD6bCfaTXhSHxHR
+         ZsEltaCb8G27hF4iNfHwNE17QoSn594rA8V+7uAtiOqF0k51YOg5hUkCGaFQi9yTSR1C
+         +RqccPGTeXcAR8asKjVZQ5KSR6013DXRpTZEa/YAUojBXjgtKTpJqkKUi2kfcm47KJue
+         OiVxQj0PiMq8pJB0/3FiIfECOQXA9MtgysffiWmyXBWbIoK0Jq2dlbkc0Bk1HGOYX222
+         WG3A==
+X-Gm-Message-State: AOJu0YxWt7+VwYSXNq1ZcTKfrl99bHQCD82OL0SK9hMmtNiCTuE6DN1W
+        aerC9Zz2dvlfsnW4vEcVzHSPpbFCLfJM8VO2VQg=
+X-Google-Smtp-Source: AGHT+IHlvO6WHkTUoNPCtH3XnUWsHWlqDlLhIZ6DN84y+xqxEAusCOS4G6ZLCtqTKO218dxEh9Ws/g==
+X-Received: by 2002:a05:6a20:12c5:b0:17b:40:ccd6 with SMTP id v5-20020a056a2012c500b0017b0040ccd6mr5787438pzg.2.1698224551695;
+        Wed, 25 Oct 2023 02:02:31 -0700 (PDT)
+Received: from localhost ([122.172.80.14])
+        by smtp.gmail.com with ESMTPSA id g17-20020aa78751000000b00688c733fe92sm8886602pfo.215.2023.10.25.02.02.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Oct 2023 02:02:31 -0700 (PDT)
+Date:   Wed, 25 Oct 2023 14:32:29 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: cpufreq: qcom-hw: document SM8650
+ CPUFREQ Hardware
+Message-ID: <20231025090229.hkuir4vubmpic7me@vireshk-i7>
+References: <20231025-topic-sm8650-upstream-bindings-cpufreq-v2-1-340e1c583f53@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231025-topic-sm8650-upstream-bindings-cpufreq-v2-1-340e1c583f53@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -74,18 +76,36 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 25 Oct 2023 at 10:32, Neil Armstrong <neil.armstrong@linaro.org> wrote:
->
-> Add RPMh Power Domains support for the SM8650 platform.
->
+On 25-10-23, 10:27, Neil Armstrong wrote:
+> Document the CPUFREQ Hardware on the SM8650 Platform.
+> 
 > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
 > ---
->  drivers/pmdomain/qcom/rpmhpd.c | 30 ++++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
+> For convenience, a regularly refreshed linux-next based git tree containing
+> all the SM8650 related work is available at:
+> https://git.codelinaro.org/neil.armstrong/linux/-/tree/topic/sm85650/upstream/integ
+> ---
+> Changes in v2:
+> - Fixed typo in subject
+> - Link to v1: https://lore.kernel.org/r/20231025-topic-sm8650-upstream-bindings-cpufreq-v1-1-31dec4887d14@linaro.org
+> ---
+>  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> index 0177d1ef0bf9..56fc71d6a081 100644
+> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> @@ -43,6 +43,7 @@ properties:
+>                - qcom,sm8350-cpufreq-epss
+>                - qcom,sm8450-cpufreq-epss
+>                - qcom,sm8550-cpufreq-epss
+> +              - qcom,sm8650-cpufreq-epss
+>            - const: qcom,cpufreq-epss
+>  
+>    reg:
+
+Applied. Thanks.
 
 -- 
-With best wishes
-Dmitry
+viresh
