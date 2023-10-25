@@ -2,57 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCBC27D6C6B
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Oct 2023 14:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D4C7D6C87
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Oct 2023 14:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344214AbjJYMyn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Oct 2023 08:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45392 "EHLO
+        id S1344325AbjJYM6k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Oct 2023 08:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234929AbjJYMym (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Oct 2023 08:54:42 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0F3CC
-        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 05:54:39 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-27d0acd0903so3978217a91.1
-        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 05:54:39 -0700 (PDT)
+        with ESMTP id S1344308AbjJYM6j (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Oct 2023 08:58:39 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21995182
+        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 05:58:36 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-565334377d0so4254851a12.2
+        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 05:58:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698238479; x=1698843279; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1698238715; x=1698843515; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CPGldAWJyTZnXByR/bf8zHHVWHLwPdXuNiykPl5PWWs=;
-        b=AsXfvXNB9bok6QDzbgPvuhhCwL5P6ZCRyWz+ef1Daz72BzYgRORqtgHlA2VQxbY1KR
-         b0rjiI2Dex0FFRcrjwqiZnFAMN4iLFC/L46FOY3gpVRiFI0eLNmI8ksAKUhrMULbpYTx
-         quwzwkE/QeHr2c/FszukPkxY3/a4vHtuQBsuwKYI7w2GKCdoYBsBJDNmjNEyW3s56Vh5
-         dm6ZcS6ywljXpbZc8F/utyxLS86Xz+EkWQ8ipasGk20B2AGVns2bHssGTXktinGyOqx1
-         SwihwVVJviSatJ/Qs4a9EF3XLPyQARbuLDXPEUByJkIoU/3+AJLN+/7dtkOq5pT2H2PN
-         9PfA==
+        bh=RXdPX/Ew6vUAH8RT3E33QyyRiIgHD1/PeR48oEvaIy0=;
+        b=ujgIsFmSj0ixw/CUVChpg7tghbDRnMDBnj8ynQbY4JzSZ2NPxJYML6jWhckAY0ASPE
+         GBX2jaVGsJkii10l/vWJfd1XmwRQpZqxxDFEtIEEkYTd1UtGqw1QZ6k+ivz4FRx5slZ9
+         6Q0QteUAspYiRuX9Ien74naace8pNatLxtZTD2MeeoJ6R2MBjHTTNyWutoj4eA7x/BkN
+         EbRU9AJPl9k4CNWxKKtauJlwGlx7Bz+UHeYlaWWzP82CqRn4+t1V4ZXKE1ghIKWGBD/4
+         EjQbFTsng4kPff8s19tBLAoe/kEiq0jDcCZV5p60EQ7S2d7rGk0SmaLAY7skvOLYKubZ
+         /4yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698238479; x=1698843279;
+        d=1e100.net; s=20230601; t=1698238715; x=1698843515;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CPGldAWJyTZnXByR/bf8zHHVWHLwPdXuNiykPl5PWWs=;
-        b=TcMn5e+FuCUtg6K5ofD2hHsuDTnWPimQg+ZF6zjyZvvRXU0E2FwUjMkHhetT8Lg7xp
-         slxG8UNT1r9oBc/zaXfDxiWQNSCJCUwcpB5HLtxlvH907iezM4AV9JycqO8uhghWYwY5
-         k2Tg1gp9f4O9yivzW5pY8dkS7IFkzVHeZGBfoOHCi9XxoxuYCiOCgIMnSKFwrq322e0n
-         ACkRoDFMu+p62rdrzEJYcOWmJkjqAWcxy1lwsnRERw/hRnem6cv4Y05j+QtkDllejmcn
-         tvfSM0FCn7i+uHXiSI+KA57pqK4HhhiaEbRTFJVVEsxs3Ajq8AxhWpUia+vjDprMiQNs
-         XdfQ==
-X-Gm-Message-State: AOJu0Yw7udYVtMn1hPXhje6vAEzr0ZOrDtXNX10QpxGgADyX2I3k+zx+
-        5c/VqXWA5BtJ7TWV7itg2SW0CeO88gyiaHLf4r+rwQ==
-X-Google-Smtp-Source: AGHT+IGjO9L6iksEY/Hs2jEAkHI+wWRAwbfSvy8P3pgIhR7Ie6EzwW/2mIdUqJoPFBumn0d4ymRUai2wBWHygb7yBUk=
-X-Received: by 2002:a17:90a:d44e:b0:27d:9b5:f28d with SMTP id
- cz14-20020a17090ad44e00b0027d09b5f28dmr12291581pjb.8.1698238478933; Wed, 25
- Oct 2023 05:54:38 -0700 (PDT)
+        bh=RXdPX/Ew6vUAH8RT3E33QyyRiIgHD1/PeR48oEvaIy0=;
+        b=SqH8psNusCiY5TcjP0gYBagf7FpplYWEnWP623umGAJEEGWnPG9Jh2jYsKcjPbw3Kc
+         gQ1cH9ZRwVEe/qj4nvuZXmB3S5HRUkBncFZ9BME3i46eBsMbkJ9xlBE4TqjNbi8J8OFD
+         HZ5B08xm9k9lovXHLsxcOGt27aQmceSMeSn1sUztrI/mmnYtKxsyzPqFYdWbTP2B8GVr
+         Xxs8OziQbdtBB5tkFbD8stFnw2qkqI8fwGiHCw69EEPAvEHxIQ+FKvYOamjXsWg9gQ6M
+         uMopsS7MLMNiANCjRme8rUqwjZqAzZJaKq1RT5PsLv2Yfvtz0rhMPw41C7LzHk3asp4+
+         kBbA==
+X-Gm-Message-State: AOJu0YxaJWDn4cCLYf9P9Us2/5ZSW56V63KFsASwSfFPD9U6UKJYFSQl
+        ChILkZA9e4UxBDzIgzFCCCuIt7phyUHg5TXDOur6Fg==
+X-Google-Smtp-Source: AGHT+IHmoJ9xE85jGvst0QuZ8mIaONL518f/RiO/u3OpvoeRZ4onqE5R7ha2FlOK0X/zBrOO+EbV/QXuM3FR8wyWxTg=
+X-Received: by 2002:a17:90a:f312:b0:27d:2cc3:c805 with SMTP id
+ ca18-20020a17090af31200b0027d2cc3c805mr15222491pjb.46.1698238715427; Wed, 25
+ Oct 2023 05:58:35 -0700 (PDT)
 MIME-Version: 1.0
 References: <20231018162540.667646-1-vincent.guittot@linaro.org>
- <20231018162540.667646-5-vincent.guittot@linaro.org> <20231025115456.GD31201@noisy.programming.kicks-ass.net>
-In-Reply-To: <20231025115456.GD31201@noisy.programming.kicks-ass.net>
+ <20231018162540.667646-6-vincent.guittot@linaro.org> <20231025125151.GF31201@noisy.programming.kicks-ass.net>
+In-Reply-To: <20231025125151.GF31201@noisy.programming.kicks-ass.net>
 From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 25 Oct 2023 14:54:27 +0200
-Message-ID: <CAKfTPtDhRcyHQKGy0aNLXLzGJ6LS+Of7ZjeQGGGv5f5qtNxiBg@mail.gmail.com>
-Subject: Re: [PATCH v3 4/6] energy_model: use a fixed reference frequency
+Date:   Wed, 25 Oct 2023 14:58:24 +0200
+Message-ID: <CAKfTPtAb-9VcNKNf1HJOi83STrC_eNRD1Qf0Ra2fm6qspqme7w@mail.gmail.com>
+Subject: Re: [PATCH v3 5/6] cpufreq/cppc: set the frequency used for computing
+ the capacity
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
         paul.walmsley@sifive.com, palmer@dabbelt.com,
@@ -65,9 +66,8 @@ Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
         ionela.voinescu@arm.com, pierre.gondois@arm.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, acpica-devel@lists.linuxfoundation.org,
-        conor.dooley@microchip.com, suagrfillet@gmail.com,
-        ajones@ventanamicro.com, lftan@kernel.org
+        linux-acpi@vger.kernel.org, conor.dooley@microchip.com,
+        suagrfillet@gmail.com, ajones@ventanamicro.com, lftan@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
@@ -79,51 +79,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 25 Oct 2023 at 13:55, Peter Zijlstra <peterz@infradead.org> wrote:
+On Wed, 25 Oct 2023 at 14:52, Peter Zijlstra <peterz@infradead.org> wrote:
 >
-> On Wed, Oct 18, 2023 at 06:25:38PM +0200, Vincent Guittot wrote:
-> > The last item of a performance domain is not always the performance point
-> > that has been used to compute CPU's capacity. This can lead to different
-> > target frequency compared with other part of the system like schedutil and
-> > would result in wrong energy estimation.
-> >
-> > A new arch_scale_freq_ref() is available to return a fixed and coherent
-> > frequency reference that can be used when computing the CPU's frequency
-> > for an level of utilization. Use this function to get this reference
-> > frequency.
-> >
-> > Energy model is never used without defining arch_scale_freq_ref() but
-> > can be compiled. Define a default arch_scale_freq_ref() returning 0
-> > in such case.
+> On Wed, Oct 18, 2023 at 06:25:39PM +0200, Vincent Guittot wrote:
+> > Save the frequency associated to the performance that has been used when
+> > initializing the capacity of CPUs.
+> > Also, cppc cpufreq driver can register an artificial energy model. In such
+> > case, it needs the frequency for this compute capacity.
+> > We moved and renamed cppc_perf_to_khz and cppc_perf_to_khz to use them
+> > outside cppc_cpufreq in topology_init_cpu_capacity_cppc().
 > >
 > > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> > Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-> > Tested-by: Lukasz Luba <lukasz.luba@arm.com>
-> >
 > > ---
-> >  include/linux/energy_model.h | 14 +++++++++++---
-> >  1 file changed, 11 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-> > index b9caa01dfac4..1b0c8490d4bd 100644
-> > --- a/include/linux/energy_model.h
-> > +++ b/include/linux/energy_model.h
-> > @@ -204,6 +204,14 @@ struct em_perf_state *em_pd_get_efficient_state(struct em_perf_domain *pd,
-> >       return ps;
-> >  }
-> >
-> > +#ifndef arch_scale_freq_ref
-> > +static __always_inline
-> > +unsigned int arch_scale_freq_ref(int cpu)
-> > +{
-> > +     return 0;
-> > +}
-> > +#endif
+> >  drivers/acpi/cppc_acpi.c       |  93 ++++++++++++++++++++++
+> >  drivers/base/arch_topology.c   |  15 +++-
+> >  drivers/cpufreq/cppc_cpufreq.c | 141 ++++++---------------------------
+> >  include/acpi/cppc_acpi.h       |   2 +
+> >  4 files changed, 133 insertions(+), 118 deletions(-)
 >
-> Hmm, did I not see the exact same thing in cpufreq.h two patches ago?
+> Perhaps split this patch into code movement and actual change for ease
+> of review? As in, I'm having trouble finding the actual changes ;-)
 
-Probably, this has been added because of error returned by some
-allyes/randconfig on x86
+yes, I can split it.
+
+The actual change is located in drivers/base/arch_topology.c
 
 >
 > _______________________________________________
