@@ -2,76 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D4C7D6C87
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Oct 2023 14:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36CB17D6D40
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Oct 2023 15:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344325AbjJYM6k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Oct 2023 08:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34404 "EHLO
+        id S235014AbjJYNaz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Oct 2023 09:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344308AbjJYM6j (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Oct 2023 08:58:39 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21995182
-        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 05:58:36 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-565334377d0so4254851a12.2
-        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 05:58:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698238715; x=1698843515; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RXdPX/Ew6vUAH8RT3E33QyyRiIgHD1/PeR48oEvaIy0=;
-        b=ujgIsFmSj0ixw/CUVChpg7tghbDRnMDBnj8ynQbY4JzSZ2NPxJYML6jWhckAY0ASPE
-         GBX2jaVGsJkii10l/vWJfd1XmwRQpZqxxDFEtIEEkYTd1UtGqw1QZ6k+ivz4FRx5slZ9
-         6Q0QteUAspYiRuX9Ien74naace8pNatLxtZTD2MeeoJ6R2MBjHTTNyWutoj4eA7x/BkN
-         EbRU9AJPl9k4CNWxKKtauJlwGlx7Bz+UHeYlaWWzP82CqRn4+t1V4ZXKE1ghIKWGBD/4
-         EjQbFTsng4kPff8s19tBLAoe/kEiq0jDcCZV5p60EQ7S2d7rGk0SmaLAY7skvOLYKubZ
-         /4yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698238715; x=1698843515;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RXdPX/Ew6vUAH8RT3E33QyyRiIgHD1/PeR48oEvaIy0=;
-        b=SqH8psNusCiY5TcjP0gYBagf7FpplYWEnWP623umGAJEEGWnPG9Jh2jYsKcjPbw3Kc
-         gQ1cH9ZRwVEe/qj4nvuZXmB3S5HRUkBncFZ9BME3i46eBsMbkJ9xlBE4TqjNbi8J8OFD
-         HZ5B08xm9k9lovXHLsxcOGt27aQmceSMeSn1sUztrI/mmnYtKxsyzPqFYdWbTP2B8GVr
-         Xxs8OziQbdtBB5tkFbD8stFnw2qkqI8fwGiHCw69EEPAvEHxIQ+FKvYOamjXsWg9gQ6M
-         uMopsS7MLMNiANCjRme8rUqwjZqAzZJaKq1RT5PsLv2Yfvtz0rhMPw41C7LzHk3asp4+
-         kBbA==
-X-Gm-Message-State: AOJu0YxaJWDn4cCLYf9P9Us2/5ZSW56V63KFsASwSfFPD9U6UKJYFSQl
-        ChILkZA9e4UxBDzIgzFCCCuIt7phyUHg5TXDOur6Fg==
-X-Google-Smtp-Source: AGHT+IHmoJ9xE85jGvst0QuZ8mIaONL518f/RiO/u3OpvoeRZ4onqE5R7ha2FlOK0X/zBrOO+EbV/QXuM3FR8wyWxTg=
-X-Received: by 2002:a17:90a:f312:b0:27d:2cc3:c805 with SMTP id
- ca18-20020a17090af31200b0027d2cc3c805mr15222491pjb.46.1698238715427; Wed, 25
- Oct 2023 05:58:35 -0700 (PDT)
+        with ESMTP id S234997AbjJYNaw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Oct 2023 09:30:52 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF50199
+        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 06:30:46 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20231025133044euoutp0194b12f2cb2a1610509b8b6fa2dfc01de~RXN5Ye6Nu2922729227euoutp01V
+        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 13:30:44 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20231025133044euoutp0194b12f2cb2a1610509b8b6fa2dfc01de~RXN5Ye6Nu2922729227euoutp01V
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1698240644;
+        bh=ibVd67MhuJloPyDSlMXVA5muSOdLvO6BJNdQITVskso=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=U/5NDoYBPBvjeG+vEVjUpWq+TzxO9em5cTtgxtRlC3AEuJ1F8mSxKwb31anxYtafe
+         FJRb/dPAJgV+vRvah5dMPKKVxyu056ITqlthB5SrcbCiakKvGoQzlHgN7APD/6VDQ2
+         G5rGOnWwX0gh7quKAkEiM9Q8RJxpk77KCRwjmGNI=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20231025133043eucas1p10a5105509c5d9cd6d8b69c450ada4e19~RXN43JiZV1384713847eucas1p1q;
+        Wed, 25 Oct 2023 13:30:43 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id AC.FA.37758.38819356; Wed, 25
+        Oct 2023 14:30:43 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20231025133043eucas1p2f882c015c25c185fb4c1cd5b3d3027e8~RXN4f4fT32484324843eucas1p2i;
+        Wed, 25 Oct 2023 13:30:43 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20231025133043eusmtrp29e8030e7eda883dff8fbeaf923be0dc5~RXN4fDYmz1205012050eusmtrp2O;
+        Wed, 25 Oct 2023 13:30:43 +0000 (GMT)
+X-AuditID: cbfec7f5-815ff7000002937e-30-65391883cc28
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 4F.16.25043.38819356; Wed, 25
+        Oct 2023 14:30:43 +0100 (BST)
+Received: from AMDC4515.eu.corp.samsungelectronics.net (unknown
+        [106.120.51.28]) by eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20231025133042eusmtip2f6fa52d2aaced22b53df598125682045~RXN3ps4lA1378813788eusmtip2q;
+        Wed, 25 Oct 2023 13:30:42 +0000 (GMT)
+From:   Mateusz Majewski <m.majewski2@samsung.com>
+To:     linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Mateusz Majewski <m.majewski2@samsung.com>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Subject: [PATCH v4 0/8] Improve Exynos thermal driver
+Date:   Wed, 25 Oct 2023 15:30:19 +0200
+Message-ID: <20231025133027.524152-1-m.majewski2@samsung.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-References: <20231018162540.667646-1-vincent.guittot@linaro.org>
- <20231018162540.667646-6-vincent.guittot@linaro.org> <20231025125151.GF31201@noisy.programming.kicks-ass.net>
-In-Reply-To: <20231025125151.GF31201@noisy.programming.kicks-ass.net>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 25 Oct 2023 14:58:24 +0200
-Message-ID: <CAKfTPtAb-9VcNKNf1HJOi83STrC_eNRD1Qf0Ra2fm6qspqme7w@mail.gmail.com>
-Subject: Re: [PATCH v3 5/6] cpufreq/cppc: set the frequency used for computing
- the capacity
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
-        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
-        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, viresh.kumar@linaro.org,
-        lenb@kernel.org, robert.moore@intel.com, lukasz.luba@arm.com,
-        ionela.voinescu@arm.com, pierre.gondois@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, conor.dooley@microchip.com,
-        suagrfillet@gmail.com, ajones@ventanamicro.com, lftan@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrOKsWRmVeSWpSXmKPExsWy7djPc7rNEpapBl0HzS0ezNvGZnF4foXF
+        1IdP2Cy+b7nOZDHvs6zF3tdb2S2+Xelgstj0+BqrxeVdc9gsPvceYbSYcX4fk8XCphZ2i4nH
+        JjNbrD1yl91i7pepzBZPHvaxOQh4rJm3htFj56y77B6L97xk8ti0qpPN4861PWwem5fUe/Rt
+        WcXo8XmTXABHFJdNSmpOZllqkb5dAlfG9ykLmAu28Va8WfSQtYHxGVcXIyeHhICJxI9Lt9lA
+        bCGBFYwSB9/UdzFyAdlfGCW+fFnJDuF8ZpS4+GUiC0zHyYbNTBCJ5YwSjW+2s0A4rUwSy/o/
+        sIJUsQkYSDx4s4wdxBYRaGWUmNmkDlLELPCVWeLq6/nMIAlhAVOJpr9NYDaLgKrEn8eXwJp5
+        BWwl5jReh1onL7Fn0XcmiLigxMmZT8DizEDx5q2zmUGGSgh84ZD4vO0JK0SDi8SzVS3MELaw
+        xKvjW9ghbBmJ/zvnM0HY+RIzNr8HGsQBZFdI3D3oBWFaS3w8wwxiMgtoSqzfpQ8RdZT4vsQK
+        wuSTuPFWEGI/n8SkbdOZIcK8Eh1tQhCTVSWO75kEtV1a4knLbaiNHhL9Hceh4RwrMfXsRJYJ
+        jAqzkHw1C8lXsxBOWMDIvIpRPLW0ODc9tdg4L7Vcrzgxt7g0L10vOT93EyMwrZ3+d/zrDsYV
+        rz7qHWJk4mA8xCjBwawkwhvpY5EqxJuSWFmVWpQfX1Sak1p8iFGag0VJnFc1RT5VSCA9sSQ1
+        OzW1ILUIJsvEwSnVwNRrkqfh/9ns5/MLUoIu+yOyZ8vxJ6cenqQhtcl8rnMp35Yajqy9GY/e
+        r86fsTKOX/DXa49nUzbMbRB++rz6yZr3Papvaia90FnRH8YzwWZF3gN321UXvP4tXauZMjsw
+        WPgh0z+PlTkqvCdtrnjPLt6uPvX579YL/YtfCPLL3BQQtVA6YbKZ7fAnn3rJDXyXcg43nbxY
+        +b9y58nCyAk6EZd12/vrq7gsDq2XKu/5z7Zoo7hZ7Lvz1644zXBffEQvU+/46n7pN4wXAv09
+        5O86Pzz2UX+r7bmKgLgQ4Uu7TIU8Nj5rETjA5uMYNEXl+wXv3ZZn6qbYp0QdM3v6uTDZ4NqS
+        8zuVN1td8mXKLpOqtlRiKc5INNRiLipOBAD8H1Mz2gMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEIsWRmVeSWpSXmKPExsVy+t/xe7rNEpapBnuWy1s8mLeNzeLw/AqL
+        qQ+fsFl833KdyWLeZ1mLva+3slt8u9LBZLHp8TVWi8u75rBZfO49wmgx4/w+JouFTS3sFhOP
+        TWa2WHvkLrvF3C9TmS2ePOxjcxDwWDNvDaPHzll32T0W73nJ5LFpVSebx51re9g8Ni+p9+jb
+        sorR4/MmuQCOKD2bovzSklSFjPziElulaEMLIz1DSws9IxNLPUNj81grI1MlfTublNSczLLU
+        In27BL2M71MWMBds4614s+ghawPjM64uRk4OCQETiZMNm5m6GLk4hASWMkrcOzCHGSIhLXH4
+        yxR2CFtY4s+1LjaIomYmiV0nesASbAIGEg/eLGMHSYgIdDJKdG0+xwSSYBb4zyzxdaYCiC0s
+        YCrR9LcJbCqLgKrEn8eXWEFsXgFbiTmN11kgNshL7Fn0nQkiLihxcuYTFog58hLNW2czT2Dk
+        m4UkNQtJagEj0ypGkdTS4tz03GIjveLE3OLSvHS95PzcTYzAyNp27OeWHYwrX33UO8TIxMF4
+        iFGCg1lJhDfSxyJViDclsbIqtSg/vqg0J7X4EKMp0H0TmaVEk/OBsZ1XEm9oZmBqaGJmaWBq
+        aWasJM7rWdCRKCSQnliSmp2aWpBaBNPHxMEp1cBUHjrzl+LHZ7sPt/QefHvi2V/G6e6nPRIt
+        52rJZzSkH1A6c8z5275tZUuZJNeKr3ibOX1d9A/Gm1kvj1bb38q+J96i256z4W96W/1+rzyj
+        8JsdK3tq5KebvVkp/1JxfkuIuuv1sH2nk+8lRD7cWnD4lc05kZ55O0wijjayrV7w7oDSY2/9
+        YKertU+dQnXKH5y7eD3y4CSWc8y+szJ3PpOVbD6hcvZ8/LylF9yvvwhKOb8oqtVk6ZYtgtHX
+        uWZZr6l6aFl7Q4idkfkEy8SPK1S/Jub17Wa8U6r0batccNC2K67yMfWWnk/3TP3/jm8J87G7
+        4uIaR1Y/lvlzl/2r7Ys/G8Xulfk2GXlseMO7w/h6iBJLcUaioRZzUXEiAFGMcfc1AwAA
+X-CMS-MailID: 20231025133043eucas1p2f882c015c25c185fb4c1cd5b3d3027e8
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20231025133043eucas1p2f882c015c25c185fb4c1cd5b3d3027e8
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20231025133043eucas1p2f882c015c25c185fb4c1cd5b3d3027e8
+References: <CGME20231025133043eucas1p2f882c015c25c185fb4c1cd5b3d3027e8@eucas1p2.samsung.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,33 +120,47 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 25 Oct 2023 at 14:52, Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Wed, Oct 18, 2023 at 06:25:39PM +0200, Vincent Guittot wrote:
-> > Save the frequency associated to the performance that has been used when
-> > initializing the capacity of CPUs.
-> > Also, cppc cpufreq driver can register an artificial energy model. In such
-> > case, it needs the frequency for this compute capacity.
-> > We moved and renamed cppc_perf_to_khz and cppc_perf_to_khz to use them
-> > outside cppc_cpufreq in topology_init_cpu_capacity_cppc().
-> >
-> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> > ---
-> >  drivers/acpi/cppc_acpi.c       |  93 ++++++++++++++++++++++
-> >  drivers/base/arch_topology.c   |  15 +++-
-> >  drivers/cpufreq/cppc_cpufreq.c | 141 ++++++---------------------------
-> >  include/acpi/cppc_acpi.h       |   2 +
-> >  4 files changed, 133 insertions(+), 118 deletions(-)
->
-> Perhaps split this patch into code movement and actual change for ease
-> of review? As in, I'm having trouble finding the actual changes ;-)
+This work improves Exynos thermal driver in various ways. This is
+related to the discussion in
+https://lore.kernel.org/all/97201878-3bb8-eac5-7fac-a690322ac43a@linaro.org/
 
-yes, I can split it.
+The primary issue being fixed is a lockdep warning, which is fixed by
+the thermal: exynos: use set_trips patch. We also simplify the code in
+general.
 
-The actual change is located in drivers/base/arch_topology.c
+Changelog:
+ v4:
+   - Resolved merge conflict when applying thermal: exynos: split
+     initialization of TMU and the thermal zone
+   - Reordered calls done when leaving exynos_tmu_initialize for
+     symmetry
+ v3:
+   - Fixed regulator initialization
+   - Fixed formatting of some comments
+ v2:
+   - Added missing field descriptions
+   - Removed an unnecessary field description
+   - Removed the commits that made clock management more fine-grained
+     (need more discussion), and adapted the new code to manage clocks
+   - Removed the devicetree changes (will be uploaded separately),
+     changing the recipient list accordingly
+   - Improved formatting of the devm_request_threaded_irq call
 
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+Mateusz Majewski (8):
+  thermal: exynos: remove an unnecessary field description
+  thermal: exynos: drop id field
+  thermal: exynos: switch from workqueue-driven interrupt handling to
+    threaded interrupts
+  thermal: exynos: handle devm_regulator_get_optional return value
+    correctly
+  thermal: exynos: simplify regulator (de)initialization
+  thermal: exynos: stop using the threshold mechanism on Exynos 4210
+  thermal: exynos: split initialization of TMU and the thermal zone
+  thermal: exynos: use set_trips
+
+ drivers/thermal/samsung/exynos_tmu.c | 538 ++++++++++++++-------------
+ 1 file changed, 283 insertions(+), 255 deletions(-)
+
+-- 
+2.42.0
+
