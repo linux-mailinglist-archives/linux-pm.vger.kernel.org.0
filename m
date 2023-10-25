@@ -2,61 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B2207D62E8
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Oct 2023 09:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 838337D62E6
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Oct 2023 09:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233166AbjJYHcj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Oct 2023 03:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
+        id S232777AbjJYHci (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Oct 2023 03:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233802AbjJYHcP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Oct 2023 03:32:15 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A47110E6
-        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 00:32:12 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2c51388ccebso78872861fa.3
-        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 00:32:11 -0700 (PDT)
+        with ESMTP id S233273AbjJYHcQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Oct 2023 03:32:16 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36B510FA
+        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 00:32:13 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-53de0d1dc46so8674754a12.3
+        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 00:32:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698219130; x=1698823930; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1698219131; x=1698823931; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LkK06hkxzdwxK+868ZNfQOlrMKOnjIUgKDjw97JuG+E=;
-        b=CP6fAhQdNQHxbFCGvyNAig0lhqLQCpHazulAV2WIYg2LEV7xR9Bg2TG1wls42fO+W7
-         4rqwexrp0ImsZDIfhMz5hBxI43dtY6roRPtmznmnRtHdtbp3fUabCqoWxEEpuzkf/Ihb
-         BsY6CCZnsk6/FXc3dwtv95x9saEKdTNpKwjXcTrNFdcW99lyfi9cdUHMwgAFoDTJdD7G
-         s2Qa0oTflZCleCTA+oWcJaZzTCxxq5+B4uEUIGDF35UOd8q1HVyBFfVRs2J+TeVbzfCm
-         dlHMxaPZVwRAhZlxzfXuo+LNJn9eFNqpSTzVJ/UwuAwMcE10dURyCDfRrOkvRURDEDXp
-         DyHQ==
+        bh=DEl6CeVofgkSmlxhJVVUPe8R9z1EBoEri4+KtLhRxgw=;
+        b=DImA6h1AF6io1ZOH4AVndCw3fdjKP/lURon640gvhNdF7HezOTQiIiZaNUjPcBo6H/
+         ISFeIz5BUkuyMyk5nU8aUvA75N6bnY4kVnr+boPOOhQ34aggXVmWB165GYx8Ih8AJWF3
+         14y0XFO7JaMRjSqP7dIO/fnTaYa8Wq7aXgWfWsWU4c8/wROj1VqzvTaJg9VDkVF3726J
+         N0gYZOI8YaFkXYpyieErF25/n72P8JFaxgZg88BTtG5WSrQE9ITZnBQxc6gYIeajfQDG
+         fjvzd8gXi19imiXKpzf0uaVMRwj3zpd6LlCY5r+QqrCXmteJZyaGjwbydCCAkdCejpyD
+         k33g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698219130; x=1698823930;
+        d=1e100.net; s=20230601; t=1698219131; x=1698823931;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LkK06hkxzdwxK+868ZNfQOlrMKOnjIUgKDjw97JuG+E=;
-        b=KrDt8nxoR8NhuTbZ1YMUw9G+pybUro64/cV/B24CqOrjUCjh2fzLAqHxMIFtuaMTff
-         PDNWjqdUE+FBOdXYiMzk7LC2mzz+lCD/U4cFRc+zYe+e+ntPOjPiaC5GZCBh+jyZhUw9
-         6/wYWmvaAalz/g1o8ZAv8q7Lf13WXnJu3aBM8XFEa17XDWgZxGLfSJ3PHvpQSnGCtY2V
-         ghj2zn5HkF9cu1dzQQHiPffr+6WFdZUvxhmU8NNGd73EM81AZgM7qU5B5CH3Ug4UHy2f
-         P9rFsNEei7/pyfdyV9di2yOvIbKQDwtuyhr1zG2cgDuyiUCxsyT2pr8Otc83v292L8xf
-         E/8A==
-X-Gm-Message-State: AOJu0YwK2S0yFEVXSywlUJPoAyvlCijHvYGIcA1MyA7eYm4DIM3u8ppL
-        qi+MU0R5R0vNMfWy6OuW8+wVaQ==
-X-Google-Smtp-Source: AGHT+IH+Yira0OYgCUa++PaIdfxYJvBb1lvUtqlD4An+snbTHt/sntEuCvgnEiScLvU95z7u0RShvg==
-X-Received: by 2002:a2e:b790:0:b0:2c2:a337:5ea with SMTP id n16-20020a2eb790000000b002c2a33705eamr10722063ljo.27.1698219130228;
-        Wed, 25 Oct 2023 00:32:10 -0700 (PDT)
+        bh=DEl6CeVofgkSmlxhJVVUPe8R9z1EBoEri4+KtLhRxgw=;
+        b=iwu8f8PFpj3SsdpDb+xyzgRrPWmM/SkdsKBaG41V52UUmhnuKThxbf8IIvclo1kq3b
+         V6AvlDHEbyBPgXG2KgKJyio0FxwWe0Oej/GPOPoAy8fE9L2JKIcsFI52u1e2tLq2kl1U
+         lQq0ea1gcmIWC21YVyvf28I4+5axSxzFLkE1+TC34ApyqTz+boV1ACoqan/DTzueK5BW
+         /HbtiTE2Q471XKY774JXtpjMkuVQ/nYhgyLzYnG9Mt1iC3mNB1DFxZ7dAYPMTYtf35jJ
+         7Vm5qXo7waj7FgiVIDun0hCjofT/drb4JmV0ZNoIs+X9Rh7BLHKi8S3tbLvnKeQSAl5d
+         c6zg==
+X-Gm-Message-State: AOJu0YzW1b9j+STmozwSoh8qzzZBxKbImw3E0dmskDnP/9HloVNemXga
+        fh/8kN73QfRvE0t0pxBGcRl9EQ==
+X-Google-Smtp-Source: AGHT+IElI56qjtNbDfhubW0NsRm+A8KF20hs9WE+8zIIXTxBtKHRPgg8lCt/G61OsoBsfC6wkcJecg==
+X-Received: by 2002:a17:907:2d08:b0:9bf:d65d:dc0f with SMTP id gs8-20020a1709072d0800b009bfd65ddc0fmr10692726ejc.4.1698219131278;
+        Wed, 25 Oct 2023 00:32:11 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id m21-20020a05600c4f5500b0040841e79715sm14036237wmq.27.2023.10.25.00.32.09
+        by smtp.gmail.com with ESMTPSA id m21-20020a05600c4f5500b0040841e79715sm14036237wmq.27.2023.10.25.00.32.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Oct 2023 00:32:09 -0700 (PDT)
+        Wed, 25 Oct 2023 00:32:10 -0700 (PDT)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Wed, 25 Oct 2023 09:32:02 +0200
-Subject: [PATCH 1/2] dt-bindings: power: qcom,rpmpd: document the SM8650
- RPMh Power Domains
+Date:   Wed, 25 Oct 2023 09:32:03 +0200
+Subject: [PATCH 2/2] pmdomain: qcom: rpmhpd: Add SM8650 RPMh Power Domains
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231025-topic-sm8650-upstream-rpmpd-v1-1-f25d313104c6@linaro.org>
+Message-Id: <20231025-topic-sm8650-upstream-rpmpd-v1-2-f25d313104c6@linaro.org>
 References: <20231025-topic-sm8650-upstream-rpmpd-v1-0-f25d313104c6@linaro.org>
 In-Reply-To: <20231025-topic-sm8650-upstream-rpmpd-v1-0-f25d313104c6@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -70,24 +69,24 @@ Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Neil Armstrong <neil.armstrong@linaro.org>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1245;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1963;
  i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=iyrV9MsmSRaFXNkt/CNnLJ+tmAlijZsh8rTitKBaq6g=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBlOMR3jqfahPM5bx7B4kHScB4B7os/yKbaBRvnfuAh
- 57/rSfiJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZTjEdwAKCRB33NvayMhJ0UtIEA
- Cops3457fn46b3U7vAcShT+c9Ygo+mADKziI7dm1hbLr4QG4NGE+FIODg3wwZKokavLf0eFByaK/DX
- qUJfNKjL5NRXTtzK47e1Qx4TNYk2bVZKAUgNf2exI2xDT+J7bXJViJefoXRMigdUstrFITmgXYlQrl
- tFlnGOEZ/f/E0FnnsUrntmxqx/ItUkCTT1lSUBjjVzZYNeFYU+aJKbvJ+WUDCqZajTsoJrY92B1Sq7
- S8LCfi/lBWrClR5HlKYXzMSizhDNt+SUG6gwJmtJmA2/8ASpd/t7Db6YCq9Mx5EsYyeh2z311IqROM
- uiUEjEeXKxN5ViXMh0uW+NYcflAwAGF8ZpBl8lsSlRJn/M4WEfOdL8qmua9c5hnT7HcOXAVifjchIF
- rPVTcr/d7u5TSKxBSfUBMaF3xsesYOwWMXzPbxXxPICaO5Fesl98sxoXvt2XDXr0pSCqHcTKg0ayM7
- piTzkOU1ABgvx//823/PfXqyDl+hHrjLC6/1uUK4IVcupAwSmCAJ4JxaKbVxoXC5hEl41Vwp7tmvn2
- nNtMfPam9ZE6vbFyk509Yt4tEnvBCHM0Yccze/ibipTa7l662LbhgoFZZpiGX/HbmavmOfriqljZB7
- POm21Sw47PoozQbGOJhZKuwDZJrDOe1u3CJKgvjuChbkoXAzqwZEXJcU18vA==
+ bh=hAT6chxV+deZaIvy8RroY/kbSzlU1xIefmMxtRfKR3o=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBlOMR3RL+P9o31avF2mPaUE2cMVo/LbJq7wbh5e6FX
+ VMGIf76JAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZTjEdwAKCRB33NvayMhJ0ZjrD/
+ 4+eDSbc2bLZplcv3gQehQWjyhBHBFVkYF0zwyKTKVGKC0hyCouIuGxHrMETElQRdemQyB3jBApsHoT
+ HxxL8zSa2NuXADp7KuqCX5HTqQIc7J52grprYWaq3Wo91ZEQYRbYbaljxeudK7oYuUXAoj6PT+LmWa
+ 7jkj20LCorT0g5xHyZFe8IJeUcjtGoxy5Zj1YqY4TTaNvIZStAfgcsNi3lgIQXRRz/qYl42FcRlRjd
+ A1fiRxJsCEQ2VXwjeNTcFx+sMStc/ibpwMQWg3xBcLx7FiMAeX9zD4h2H/gOFVmi+/TS/75cN6lq1U
+ HONnbqnPGWEFYH0yZnL86d/lZbQ3hbWvAP1XOMHlwsLkErzguIPAtr/3OOSUFqe3ZGCC1E88MSxMEI
+ MB1lZtvbRCaSw5KF5SlIqwh45FvUfuhq0Cz+NKEynsv5n87jC0lt3eWAH7Nj9s9MVv7rg6JeM46oaN
+ lc0p/J3kBxczbAn3y9Ax2Bxc3c58u5GRodCLq14pPpaodoCFt/DjNWgMm4PG08FZaiO1bMt5LEjaJw
+ d2ZJeLdsYd2Kj9D5GGesV02qmcNhXmSFY5WTBzcVwJOyskLdI8OwZ1JxppTvpRrtS9XS6JQ5pMg9kv
+ m+9JrF46X0jxeIjWKTsbdB3YuZMccu9csx5KW73tRHHy/K9pdPxivsqorVFg==
 X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
  fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -96,37 +95,68 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Document the RPMh Power Domains on the SM8650 Platform.
+Add RPMh Power Domains support for the SM8650 platform.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- Documentation/devicetree/bindings/power/qcom,rpmpd.yaml | 1 +
- include/dt-bindings/power/qcom,rpmhpd.h                 | 1 +
- 2 files changed, 2 insertions(+)
+ drivers/pmdomain/qcom/rpmhpd.c | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
-index d38c762e1280..2803f7d56821 100644
---- a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
-+++ b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
-@@ -55,6 +55,7 @@ properties:
-           - qcom,sm8350-rpmhpd
-           - qcom,sm8450-rpmhpd
-           - qcom,sm8550-rpmhpd
-+          - qcom,sm8650-rpmhpd
-       - items:
-           - enum:
-               - qcom,msm8937-rpmpd
-diff --git a/include/dt-bindings/power/qcom,rpmhpd.h b/include/dt-bindings/power/qcom,rpmhpd.h
-index 7c201a66bc69..0f6a74e09970 100644
---- a/include/dt-bindings/power/qcom,rpmhpd.h
-+++ b/include/dt-bindings/power/qcom,rpmhpd.h
-@@ -26,5 +26,6 @@
- #define RPMHPD_QPHY             16
- #define RPMHPD_DDR              17
- #define RPMHPD_XO               18
-+#define RPMHPD_NSP2             19
+diff --git a/drivers/pmdomain/qcom/rpmhpd.c b/drivers/pmdomain/qcom/rpmhpd.c
+index a631fe1f9a06..cf25ba1cac66 100644
+--- a/drivers/pmdomain/qcom/rpmhpd.c
++++ b/drivers/pmdomain/qcom/rpmhpd.c
+@@ -197,6 +197,11 @@ static struct rpmhpd nsp1 = {
+ 	.res_name = "nsp1.lvl",
+ };
  
- #endif
++static struct rpmhpd nsp2 = {
++	.pd = { .name = "nsp2", },
++	.res_name = "nsp2.lvl",
++};
++
+ static struct rpmhpd qphy = {
+ 	.pd = { .name = "qphy", },
+ 	.res_name = "qphy.lvl",
+@@ -475,6 +480,30 @@ static const struct rpmhpd_desc sm8550_desc = {
+ 	.num_pds = ARRAY_SIZE(sm8550_rpmhpds),
+ };
+ 
++/* SM8650 RPMH powerdomains */
++static struct rpmhpd *sm8650_rpmhpds[] = {
++	[RPMHPD_CX] = &cx,
++	[RPMHPD_CX_AO] = &cx_ao,
++	[RPMHPD_EBI] = &ebi,
++	[RPMHPD_GFX] = &gfx,
++	[RPMHPD_LCX] = &lcx,
++	[RPMHPD_LMX] = &lmx,
++	[RPMHPD_MMCX] = &mmcx_w_cx_parent,
++	[RPMHPD_MMCX_AO] = &mmcx_ao_w_cx_parent,
++	[RPMHPD_MSS] = &mss,
++	[RPMHPD_MX] = &mx,
++	[RPMHPD_MX_AO] = &mx_ao,
++	[RPMHPD_MXC] = &mxc,
++	[RPMHPD_MXC_AO] = &mxc_ao,
++	[RPMHPD_NSP] = &nsp,
++	[RPMHPD_NSP2] = &nsp2,
++};
++
++static const struct rpmhpd_desc sm8650_desc = {
++	.rpmhpds = sm8650_rpmhpds,
++	.num_pds = ARRAY_SIZE(sm8650_rpmhpds),
++};
++
+ /* QDU1000/QRU1000 RPMH powerdomains */
+ static struct rpmhpd *qdu1000_rpmhpds[] = {
+ 	[QDU1000_CX] = &cx,
+@@ -585,6 +614,7 @@ static const struct of_device_id rpmhpd_match_table[] = {
+ 	{ .compatible = "qcom,sm8350-rpmhpd", .data = &sm8350_desc },
+ 	{ .compatible = "qcom,sm8450-rpmhpd", .data = &sm8450_desc },
+ 	{ .compatible = "qcom,sm8550-rpmhpd", .data = &sm8550_desc },
++	{ .compatible = "qcom,sm8650-rpmhpd", .data = &sm8650_desc },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, rpmhpd_match_table);
 
 -- 
 2.34.1
