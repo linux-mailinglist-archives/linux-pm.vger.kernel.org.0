@@ -2,76 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 744F67D70D6
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Oct 2023 17:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7B97D7106
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Oct 2023 17:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235125AbjJYPZ4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Oct 2023 11:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50406 "EHLO
+        id S232469AbjJYPgd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Oct 2023 11:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235118AbjJYPZz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Oct 2023 11:25:55 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843EB1A1
-        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 08:24:34 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1c9a1762b43so49549715ad.1
-        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 08:24:34 -0700 (PDT)
+        with ESMTP id S232042AbjJYPgc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Oct 2023 11:36:32 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73942136
+        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 08:36:30 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-5a7c7262d5eso57902227b3.1
+        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 08:36:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698247474; x=1698852274; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7vZjLIO/B5y+VzrWSbSd7j37eEPFfuFTft2CL1N1rIc=;
-        b=aigjgpdaJVTvapQSOu+jqJbJnzI34GKjvzP9oMk8sXEZ8MDL8KfhdiYiDyBmgV1s71
-         +blV9hGL+7XOV/rNYEmhMYJuk43cs0jXGhxSKVU8C+3n2HlMx1rrNS1RzM1m4axqYWiR
-         wt90/pmfERTbLJMgWeQL2S8h79zCVawhdDaLZ4Ggp2H+i1COXBwga/0NKkh419usPvQL
-         Gzb+R4fjH66zTVW6e1CY55tcQYKWErnoKfL5FLNge3+/dpmkR4RnQtxwmx5VS7BqgxvH
-         AWhWiM7idtgD9DV4NgzN3zOVliA1AyHTrk2ydm4TWpBFZUD+Dy4IzMx4xi4wh0vifTsc
-         6HFg==
+        d=linaro.org; s=google; t=1698248189; x=1698852989; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=m5aG2kcj/gzSuQIJp+50pi5/4/8aKwFFMZ9BHteXapM=;
+        b=AT7jZDn3RJEV3a6K5n3pcq2q9ZSH0F3Nft7Nv5gLekYgMkhVH+fdnSdeJ7gp33HCZ6
+         4eIfwSYdDfZZmTSHnx0FFIMBWGQG2OP//7qjfodnl8bc+aqcS0BHhcfNu3ULAaKmn0Tt
+         u5WQYD39XEo769U29836K+wocW54K1lsVibLtP1O8qnSPEuP9M/702nUaWodVJB5yAB/
+         9tLGOucLHDMTDjZ8yIP8qPfVxwC24oOkGltBAzuI1V++oOHPFIBRg6eM6ra09uumMn5j
+         71dn5dgShRJ/JcKHHFHOLfDRKyChXArihpsf4QLQCzQdXYPPVOcoPRUzkpX9JYZIQ6Vi
+         ACEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698247474; x=1698852274;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7vZjLIO/B5y+VzrWSbSd7j37eEPFfuFTft2CL1N1rIc=;
-        b=c+JLmeZPJfMiYoteNAGQO+L3WQmsM8/MS1V6YUlmcmYkdK3+rV1OeKsYd4x1obN6GX
-         BTnEBWX+W//2uyS8s0T+7pfSmV+NNSwq1wTqP42SostVHw6yYSlZf6L3n2/QksRPp5Or
-         C+2Ea19kvtkq4E2lrtzVQnaxWSGWwHQOMkvJfg7kKefsPc3990qPoQ/O+D6rfiJAC6Sh
-         XUWM6tZF6HAKsJwE/3MQ1TFs90xKfLpin2lFT/wQEeKO8lYaO+PE/8Wll3kxRjYqFUep
-         OvgeV7w1jzr8lpfze4JvtC6rap5AxnYPQ7lJu0cqgTxn9oT8mkhtevD4D1jvU5jz+8hz
-         EDZA==
-X-Gm-Message-State: AOJu0YxQFXaHs/FEhz1eiSeg64J/KE1bNw4BulEL+QdtYdp/9N/Plb83
-        6uqAjtmJQNATR7odplBaIiVnsQ==
-X-Google-Smtp-Source: AGHT+IGOH8yxX2TQRPmdnmOQ31wmTeOOWm8jyE86Ea52rjoYugP159wJW6o+gx9zasYHQG9Bq0s3Fw==
-X-Received: by 2002:a17:903:1112:b0:1c6:117b:7086 with SMTP id n18-20020a170903111200b001c6117b7086mr16982450plh.5.1698247473983;
-        Wed, 25 Oct 2023 08:24:33 -0700 (PDT)
-Received: from localhost ([122.172.80.14])
-        by smtp.gmail.com with ESMTPSA id ja13-20020a170902efcd00b001c59f23a3fesm9354069plb.251.2023.10.25.08.24.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Oct 2023 08:24:33 -0700 (PDT)
-Date:   Wed, 25 Oct 2023 20:54:31 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] OPP: Use _set_opp_level() for single genpd case
-Message-ID: <20231025152431.bhdv772dwbufocck@vireshk-i7>
-References: <cover.1697710527.git.viresh.kumar@linaro.org>
- <f709e9e273004be43efe3a2854a7e7b51a777f99.1697710527.git.viresh.kumar@linaro.org>
- <CAPDyKFqbnsdT0nqKwQhai875CwwpW_vepr816fL+i8yLh=YQhw@mail.gmail.com>
- <20231025065458.z3klmhahrcqh6qyw@vireshk-i7>
- <CAPDyKFr4vdsKVYEx0aF5k_a1bTjp3NzMpNgaXDJOJrvujT7iRg@mail.gmail.com>
- <ZTkciw5AwufxQYnB@gerhold.net>
+        d=1e100.net; s=20230601; t=1698248189; x=1698852989;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m5aG2kcj/gzSuQIJp+50pi5/4/8aKwFFMZ9BHteXapM=;
+        b=pNYwecalacwqMjPZPPO+DSm5TR/Ti9KA4HKGOIdH4Cj3oHlIwbuypZyxWzE49SwXFQ
+         fL90h46rFlV9zKBHR6AjiBRU6Av8RjvGsXMLp6AQvi0A8DEy99SuAtxUA2ipTijtKLL+
+         6TL3sfp4a9FD0XAQ3pszdaFiAiAUg+yL/ws+bmt5qLwGpdguc1Tz2l933XfL5iJARPJ7
+         aQWJBahhapmJ048EPofuUXquJah5ZeLPXu73mt5RxETG15EIJ/LGF0B3HIqgY7eiw65+
+         3EvmqWionimHfrtasUlO5TGjr6B3m/zw/tJWDd4id6u1xjGUQSA7LVqm/mAsi/KdOuR0
+         4vGA==
+X-Gm-Message-State: AOJu0YwvSWCK/7RcWkGDgJCubfKpNFd9ccSJ7TGge7ra7m/AYBo/HgDS
+        dhUox3+PO4IM8xL85drJhyRQOV3bVhnRhgYm/wKomA==
+X-Google-Smtp-Source: AGHT+IErzJaQp0MmnTtxqePxF7meHNj3cKaB8ijukeX40b3F8jxWGNXuxPEzN8ao8l3g9hPEzy91wCxNh2V+VykAbWY=
+X-Received: by 2002:a81:a1c9:0:b0:595:887f:e180 with SMTP id
+ y192-20020a81a1c9000000b00595887fe180mr16292147ywg.40.1698248189639; Wed, 25
+ Oct 2023 08:36:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZTkciw5AwufxQYnB@gerhold.net>
+References: <20231012132214.257207-1-emkan@prevas.dk> <CAGETcx9mUVzERc8Uf3FWYtMv+RZyNgvjm1oOtQZq6yN4_3Bp8Q@mail.gmail.com>
+ <CAPDyKFrjtZH-yHu9od7bAA69=AdUHmsFr-amhhW70JLCKZGH5g@mail.gmail.com>
+ <hhx2tqxmgrjbhz2wnhozffpcq63spuli4mrensvbnmilrvbh2d@6qo444ddawc2>
+ <CAPDyKFrSzepC0c7-XGeGcHSsfpEGpF0a9ATGpemxvcc8mtL86g@mail.gmail.com>
+ <CAPDyKFotwRPBLpOe6q86b7JhS8t36wP2wvn2hid5uZ-57J9Ytw@mail.gmail.com> <3jw4nompbmwfigjetvob6pxxac56tbavifzvf3kbvsubtvxwvk@oskzm5ihpc74>
+In-Reply-To: <3jw4nompbmwfigjetvob6pxxac56tbavifzvf3kbvsubtvxwvk@oskzm5ihpc74>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 25 Oct 2023 17:35:53 +0200
+Message-ID: <CAPDyKFo+sa7xutrpLs0avceV3Ybd6koUkEhBXV6FTAhpPG7A_g@mail.gmail.com>
+Subject: Re: [PATCH] pmdomain: imx: gpc: set fwnode from parent device
+To:     Emil Kronborg Andersen <emkan@prevas.dk>
+Cc:     festevam@gmail.com, Pengfei Li <pengfei.li_1@nxp.com>,
+        Saravana Kannan <saravanak@google.com>,
+        linux-pm@vger.kernel.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, linux-imx@nxp.com,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -81,49 +72,49 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25-10-23, 15:47, Stephan Gerhold wrote:
-> FWIW I'm hitting this WARNing when trying to set up the parent domain
-> setup for CPR->RPMPD(MX) on MSM8916 that I discussed with Uffe recently
-> [1]. I know, me and all my weird OPP setups. :'D
-> 
-> Basically, I have cpufreq voting for performance states of the CPR genpd
-> (via required-opps). CPR is supposed to have <&rpmpd MSM8916_VDDMX_AO>
-> as parent genpd and translates to the parent performance state using the
-> "required-opps" in the *CPR* OPP table:
-> 
-> 	cpr: power-controller@b018000 {
-> 		compatible = "qcom,msm8916-cpr", "qcom,cpr";
-> 		reg = <0x0b018000 0x1000>;
-> 		/* ... */
-> 		#power-domain-cells = <0>;
-> 		operating-points-v2 = <&cpr_opp_table>;
-> 		/* Supposed to be parent domain, not consumer */
-> 		power-domains = <&rpmpd MSM8916_VDDMX_AO>;
-> 
-> 		cpr_opp_table: opp-table {
-> 			compatible = "operating-points-v2-qcom-level";
-> 
-> 			cpr_opp1: opp1 {
-> 				opp-level = <1>;
-> 				qcom,opp-fuse-level = <1>;
-> 				required-opps = <&rpmpd_opp_svs_soc>;
-> 			};
-> 			cpr_opp2: opp2 {
-> 				opp-level = <2>;
-> 				qcom,opp-fuse-level = <2>;
-> 				required-opps = <&rpmpd_opp_nom>;
-> 			};
-> 			cpr_opp3: opp3 {
-> 				opp-level = <3>;
-> 				qcom,opp-fuse-level = <3>;
-> 				required-opps = <&rpmpd_opp_super_turbo>;
-> 			};
-> 		};
-> 	};
+On Wed, 25 Oct 2023 at 12:12, Emil Kronborg Andersen <emkan@prevas.dk> wrote:
+>
+> On Tue, Oct 24, 2023 at 14:42 +0200, Ulf Hansson wrote:
+> > I had a bit closer look at this. If I understand things correctly,
+> > this problem is because the imx_gpc_driver's ->probe() (imx_gpc_probe)
+> > is allocating/adding a new platform device, per child-of-node to
+> > represent a power-domain.
+> >
+> > I suspect in most other cases where a platform device is being
+> > allocated per child node, is when the child node has a
+> > compatible-string and the parent driver is calling
+> > of_platform_populate(), or similar. In those cases, the "dev.fwnode"
+> > would be set accordingly, but not in the imx_gpc_driver case as it
+> > needs to be set explicitly.
+> >
+> > That said, it looks like we should move forward with the $subject
+> > patch. However, it looks like the patch [1] from Pengfei Li is more
+> > correct than the $subject patch.
+> >
+> > Kind regards
+> > Uffe
+> >
+> > [1]
+> > https://lore.kernel.org/all/20231020185949.537083-1-pengfei.li_1@nxp.com/
+>
+> That is also how I understand it works.
+>
+> I was unsure if the patch from Pengfei Li [1] solves the same issue as
+> this patch, since there are no errors included in the commit message.
+> However, after testing the patch in [1], I can confirm that it fixes:
+>
+> [    1.039830] imx-gpc 20dc000.gpc: Failed to create device link (0x180) with 20c8000.anatop:regulator-vddpu
+>
+> I based my solution on other patches, where device_set_node() is used.
+> For example, a26cc2934331 ("drm/mipi-dsi: Set the fwnode for
+> mipi_dsi_device") and 6dbe6c07f94f ("gpio: Propagate firmware node from
+> a parent"). I am curious: Why is the approach in [1] considered more
+> correct? It seems logical to set the fwnode as early as possible from
+> the parent its device.
 
-I have forgotten a bit about this usecase. How exactly does the
-configurations work currently for this ? I mean genpd core must be
-setting the vote finally for only one of them or something else ?
+Why do we want to use the parent's node? The devices (platform-device)
+that we allocate belongs to the corresponding parsed child node,
+doesn't it?
 
--- 
-viresh
+Kind regards
+Uffe
