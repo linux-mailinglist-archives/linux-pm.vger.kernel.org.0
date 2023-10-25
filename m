@@ -2,184 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727207D66E7
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Oct 2023 11:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9EB17D67B2
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Oct 2023 11:58:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234431AbjJYJds (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Oct 2023 05:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
+        id S232985AbjJYJ6p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Oct 2023 05:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234397AbjJYJdq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Oct 2023 05:33:46 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4EBDC;
-        Wed, 25 Oct 2023 02:33:44 -0700 (PDT)
-Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4SFkF60pgzz15NlK;
-        Wed, 25 Oct 2023 17:30:50 +0800 (CST)
-Received: from huawei.com (10.175.103.91) by kwepemi500024.china.huawei.com
- (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Wed, 25 Oct
- 2023 17:33:40 +0800
-From:   Zeng Heng <zengheng4@huawei.com>
-To:     <broonie@kernel.org>, <joey.gouly@arm.com>, <will@kernel.org>,
-        <amit.kachhap@arm.com>, <rafael@kernel.org>,
-        <catalin.marinas@arm.com>, <james.morse@arm.com>,
-        <mark.rutland@arm.com>, <maz@kernel.org>,
-        <viresh.kumar@linaro.org>, <sumitg@nvidia.com>,
-        <yang@os.amperecomputing.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <wangxiongfeng2@huawei.com>, <xiexiuqi@huawei.com>
-Subject: [PATCH 3/3] cpufreq: CPPC: Eliminate the impact of cpc_read() latency error
-Date:   Wed, 25 Oct 2023 17:38:47 +0800
-Message-ID: <20231025093847.3740104-4-zengheng4@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231025093847.3740104-1-zengheng4@huawei.com>
-References: <20231025093847.3740104-1-zengheng4@huawei.com>
+        with ESMTP id S232584AbjJYJ6o (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Oct 2023 05:58:44 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DCFB9C
+        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 02:58:43 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1ca6809fb8aso39421445ad.1
+        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 02:58:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1698227923; x=1698832723; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=aRyfqwVe4epC4ninZBr4B9QSxVHuHLaPNDy5xwVEjfA=;
+        b=YNiIJFqRKhQlSbySOrZbGrFX52dGVhhlCozKMITE4mfP92ZIJyerazuwAo8dnS5UsA
+         90oio8xkYmmeksE8AI/KIpR4xKUWav6CGqSHZQS6oEtLwCuKjN+hMaGp6mbuZRm/jbvI
+         cwOgcPXLFUEbANtJRr0eq/nZLWci6J32Ch3JM2PpzYN2aEhU16t6U2INh5bTnm8SW8MF
+         WtX0rlqiUZCftFPY7sics2RuZ73BlEttVaBn+XZg/sbT2gi0rxplg606pTXFGZ10ZvDE
+         sBZCrHp/emqplR8O6zxATjSmvtbBXUpKvU/fiaWsN9Fv4u7p+GpWxpMxchsMf9CZJUQZ
+         wIVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698227923; x=1698832723;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aRyfqwVe4epC4ninZBr4B9QSxVHuHLaPNDy5xwVEjfA=;
+        b=MfzF8neACDdjlO4um4/aQCHbU05jkVbFamXnmSHI8JG6bKX2jh3V0M8QczBGL9S1Ku
+         elAaVeG4+xkzQOQtQ+hUGeo94L2t6AXM69YeIOXp6qm3eFRjO0ubyQNtO9gFDHMtlnKF
+         UpMSM+5OBdpelm174Joc66WioC1VsQNYjA07L8ezTzuF/dpYWsJQDbPLaijJ05W/+gmL
+         4HJz8F826ILuucwpraxMfXfSYFy6LvEjJy2Wd6KDybP4dpD3LdmDX5969dQp6/S5r47Q
+         AIiBVXEmG7irZzPI6/lpFrfw6TjTfpI1fUECmJBG0g+eRmlo26JRF1TbYoUdEqsZoG5E
+         dJ0Q==
+X-Gm-Message-State: AOJu0YxLA9h+zcJaR9mjfbdrK9fczQnyjJXIsXJIE986JttSNHshCHjk
+        nheEzqn/exrpLq5RoNJXLZp02g==
+X-Google-Smtp-Source: AGHT+IFgwT+DIbRaW7h4tJrDM7OF1h02sBkSa/yVOAr+EDDL+Zq2GbUeIJfHoPbysS4bcS+M/zAlWQ==
+X-Received: by 2002:a17:903:110e:b0:1c4:72c9:64fc with SMTP id n14-20020a170903110e00b001c472c964fcmr13776668plh.22.1698227922837;
+        Wed, 25 Oct 2023 02:58:42 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id ix4-20020a170902f80400b001c74718f2f3sm8868032plb.119.2023.10.25.02.58.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Oct 2023 02:58:42 -0700 (PDT)
+Message-ID: <6538e6d2.170a0220.af259.d369@mx.google.com>
+Date:   Wed, 25 Oct 2023 02:58:42 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500024.china.huawei.com (7.221.188.100)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.6-rc7-168-g29c6df37ad20
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing baseline: 48 runs,
+ 1 regressions (v6.6-rc7-168-g29c6df37ad20)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-We have found significant differences in the latency of cpc_read() between
-regular scenarios and scenarios with high memory access pressure. Ignoring
-this error can result in getting rate interface occasionally returning
-absurd values.
+pm/testing baseline: 48 runs, 1 regressions (v6.6-rc7-168-g29c6df37ad20)
 
-Here provides a high memory access sample test by stress-ng. My local
-testing platform includes 160 CPUs, the CPC registers is accessed by mmio
-method, and the cpuidle feature is disabled (the AMU always works online):
+Regressions Summary
+-------------------
 
-~~~
-./stress-ng --memrate 160 --timeout 180
-~~~
+platform           | arch  | lab         | compiler | defconfig | regressio=
+ns
+-------------------+-------+-------------+----------+-----------+----------=
+--
+kontron-pitx-imx8m | arm64 | lab-kontron | gcc-10   | defconfig | 1        =
+  =
 
-The following data is sourced from ftrace statistics towards
-cppc_get_perf_ctrs():
 
-              Regular scenarios               ||      High memory access pressure scenarios
-104)               |  cppc_get_perf_ctrs() {  ||  133)               |  cppc_get_perf_ctrs() {
-104)   0.800 us    |    cpc_read.isra.0();    ||  133)   4.580 us    |    cpc_read.isra.0();
-104)   0.640 us    |    cpc_read.isra.0();    ||  133)   7.780 us    |    cpc_read.isra.0();
-104)   0.450 us    |    cpc_read.isra.0();    ||  133)   2.550 us    |    cpc_read.isra.0();
-104)   0.430 us    |    cpc_read.isra.0();    ||  133)   0.570 us    |    cpc_read.isra.0();
-104)   4.610 us    |  }                       ||  133) ! 157.610 us  |  }
-104)               |  cppc_get_perf_ctrs() {  ||  133)               |  cppc_get_perf_ctrs() {
-104)   0.720 us    |    cpc_read.isra.0();    ||  133)   0.760 us    |    cpc_read.isra.0();
-104)   0.720 us    |    cpc_read.isra.0();    ||  133)   4.480 us    |    cpc_read.isra.0();
-104)   0.510 us    |    cpc_read.isra.0();    ||  133)   0.520 us    |    cpc_read.isra.0();
-104)   0.500 us    |    cpc_read.isra.0();    ||  133) + 10.100 us   |    cpc_read.isra.0();
-104)   3.460 us    |  }                       ||  133) ! 120.850 us  |  }
-108)               |  cppc_get_perf_ctrs() {  ||   87)               |  cppc_get_perf_ctrs() {
-108)   0.820 us    |    cpc_read.isra.0();    ||   87) ! 255.200 us  |    cpc_read.isra.0();
-108)   0.850 us    |    cpc_read.isra.0();    ||   87)   2.910 us    |    cpc_read.isra.0();
-108)   0.590 us    |    cpc_read.isra.0();    ||   87)   5.160 us    |    cpc_read.isra.0();
-108)   0.610 us    |    cpc_read.isra.0();    ||   87)   4.340 us    |    cpc_read.isra.0();
-108)   5.080 us    |  }                       ||   87) ! 315.790 us  |  }
-108)               |  cppc_get_perf_ctrs() {  ||   87)               |  cppc_get_perf_ctrs() {
-108)   0.630 us    |    cpc_read.isra.0();    ||   87)   0.800 us    |    cpc_read.isra.0();
-108)   0.630 us    |    cpc_read.isra.0();    ||   87)   6.310 us    |    cpc_read.isra.0();
-108)   0.420 us    |    cpc_read.isra.0();    ||   87)   1.190 us    |    cpc_read.isra.0();
-108)   0.430 us    |    cpc_read.isra.0();    ||   87) + 11.620 us   |    cpc_read.isra.0();
-108)   3.780 us    |  }                       ||   87) ! 207.010 us  |  }
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.6-rc7=
+-168-g29c6df37ad20/plan/baseline/
 
-My local testing platform works under 3000000hz, but the cpuinfo_cur_freq
-interface returns values that are not even close to the actual frequency:
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v6.6-rc7-168-g29c6df37ad20
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      29c6df37ad201908c1985e8e7f1dc59457348246 =
 
-[root@localhost ~]# cd /sys/devices/system/cpu
-[root@localhost cpu]# for i in {0..159}; do cat cpu$i/cpufreq/cpuinfo_cur_freq; done
-5127812
-2952127
-3069001
-3496183
-922989768
-2419194
-3427042
-2331869
-3594611
-8238499
-...
 
-The reason is when under heavy memory access pressure, the execution of
-cpc_read() delay has increased from sub-microsecond to several hundred
-microseconds. Moving the cpc_read function into a critical section by irq
-disable/enable has minimal impact on the result.
 
-  cppc_get_perf_ctrs()[0]                    cppc_get_perf_ctrs()[1]
-/                    \                      /                      \
-cpc_read         cpc_read                  cpc_read            cpc_read
- ref[0]        delivered[0]                 ref[1]            delivered[1]
-    |              |                           |                    |
-    v              v                           v                    v
------------------------------------------------------------------------> time
-     <--delta[0]--> <------sample_period------> <-----delta[1]----->
+Test Regressions
+---------------- =
 
-Since that,
-  freq = ref_freq * (delivered[1] - delivered[0]) / (ref[1] - ref[0])
-and
-  delivered[1] - delivered[0] = freq * (delta[1] + sample_period),
-  ref[1] - ref[0] = ref_freq * (delta[0] + sample_period)
 
-To eliminate the impact of system memory access latency, setting a
-sampling period of 2us is far from sufficient. Consequently, we suggest
-cppc_cpufreq_get_rate() only can be called in the process context, and
-adopt a longer sampling period to neutralize the impact of random latency.
 
-Here we call the cond_resched() function instead of sleep-like functions
-to ensure that `taskset -c $i cat cpu$i/cpufreq/cpuinfo_cur_freq` could
-work when cpuidle feature is enabled.
+platform           | arch  | lab         | compiler | defconfig | regressio=
+ns
+-------------------+-------+-------------+----------+-----------+----------=
+--
+kontron-pitx-imx8m | arm64 | lab-kontron | gcc-10   | defconfig | 1        =
+  =
 
-Reported-by: Yang Shi <yang@os.amperecomputing.com>
-Link: https://lore.kernel.org/all/20230328193846.8757-1-yang@os.amperecomputing.com/
-Signed-off-by: Zeng Heng <zengheng4@huawei.com>
----
- drivers/cpufreq/cppc_cpufreq.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index 321a9dc9484d..a7c5418bcda7 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -851,12 +851,26 @@ static int cppc_get_perf_ctrs_pair(void *val)
- 	struct fb_ctr_pair *fb_ctrs = val;
- 	int cpu = fb_ctrs->cpu;
- 	int ret;
-+	unsigned long timeout;
- 
- 	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs->fb_ctrs_t0);
- 	if (ret)
- 		return ret;
- 
--	udelay(2); /* 2usec delay between sampling */
-+	if (likely(!irqs_disabled())) {
-+		/*
-+		 * Set 1ms as sampling interval, but never schedule
-+		 * to the idle task to prevent the AMU counters from
-+		 * stopping working.
-+		 */
-+		timeout = jiffies + msecs_to_jiffies(1);
-+		while (!time_after(jiffies, timeout))
-+			cond_resched();
-+
-+	} else {
-+		pr_warn_once("CPU%d: Get rate in atomic context", cpu);
-+		udelay(2); /* 2usec delay between sampling */
-+	}
- 
- 	return cppc_get_perf_ctrs(cpu, &fb_ctrs->fb_ctrs_t1);
- }
--- 
-2.25.1
+  Details:     https://kernelci.org/test/plan/id/6538dd94508ed6c9b3efcef6
 
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.6-rc7-168-g29c6d=
+f37ad20/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-imx8m.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.6-rc7-168-g29c6d=
+f37ad20/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-imx8m.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6538dd94508ed6c9b3efc=
+ef7
+        new failure (last pass: v6.6-rc6-164-ga1b138ca64c6) =
+
+ =20
