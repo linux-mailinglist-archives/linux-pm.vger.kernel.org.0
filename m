@@ -2,117 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5CF7D6E4C
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Oct 2023 16:04:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01ED67D6E1B
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Oct 2023 16:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235035AbjJYNuj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Oct 2023 09:50:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
+        id S235015AbjJYNwa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Oct 2023 09:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235046AbjJYNue (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Oct 2023 09:50:34 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B5718A
-        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 06:50:26 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9be3b66f254so810113866b.3
-        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 06:50:26 -0700 (PDT)
+        with ESMTP id S1344006AbjJYNw2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Oct 2023 09:52:28 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB0C19B
+        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 06:52:21 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id 46e09a7af769-6ce2988d62eso3538851a34.1
+        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 06:52:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698241825; x=1698846625; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zlFrqy2n4jMGFeX5yqzkCap/aItgCW38V/WXrjhEwkQ=;
-        b=XBu+iwT6ElNNbUpziO75cIm15hkxJ6GXn6mwhgf476Y/0mU4GwVU46LbNR5at5VdHo
-         VX05+8Xk4XGuvDPc6Rdxi1WbBmiolN8pgs43Qx3WolhK0hSlsWIC8S3ehgGSmExaGvd2
-         D3OfZzN1awrqmDHF8pEPqDj32MNLVdrvfF1aUD5if9iy1tMTOXL7CYCOCM4ZLSenD2Oy
-         LyBtaCd2NeJvWlE/eBarmj70OkYOypGC4UgcWOcP2o2fhBoDMT9IdUDIiO44wQz5HpUH
-         LWgl7Tx5DS8obFJTkk+n6fnLJgPM9ADAfH2wczPGZqhVSJHMtAdwVdMYqVPxOPPLt6Nz
-         B5PA==
+        d=linaro.org; s=google; t=1698241940; x=1698846740; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mf/tOcZ/6jE6930UPVsDhW3+wB63K7ieLNSBZLgxFJI=;
+        b=ZPjEoxuS5R59F2zrlFA6WWCM974AtzUlOe0xRXViOjAc4pJwoGRHqXXvlMnXUiQO4s
+         74U4VMuansi8SsSh8Iu7pJx/VGMI5oplOX6TZS5MoN0lcLHYXhNlUuSq595IvH/FY/dP
+         1FbXWo1q8Zmp4NuFU2WvOtaLpr5WEzIctfS8A+vt1e20we1GRbB2h3W3aWeapXHngJp4
+         LzcAO3QsI5Z7ZPHYA8y04TivS/uQ0k+uGSKoNZ/J+BQnqQf6/v6ld7kLTLnbqJRteVmD
+         ddCZZIheF1Womisa65bb4QZ5yv0LWGfsqxpx8LCXSVPrmS6UbnV4IDxG0BGqt/dZehq3
+         28tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698241825; x=1698846625;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zlFrqy2n4jMGFeX5yqzkCap/aItgCW38V/WXrjhEwkQ=;
-        b=XIkTijzeL0YJBfVO7oWeNFgc1uVRPDTF6qZytPXWGK5JJnBrAGL4vvdO7841dHm0jJ
-         erI30Dzv13eSHh//rogOsAo7AzaI/XGT5KcA3B/WsO+a9fvU4Wmu3/68wy8AE8LedkvA
-         iQshMGm77b0jY/jv9Xjqps6xq/+4bzg8YwJJ9YOpytVU+K4h21DrYako7dPojgiwMqi8
-         IO7g+NgzNnxgzxbSvt32Z4B7jLN4YzsO7a+lfrV8E3p7HRYoqcYz/lCba4vYJIuuapq8
-         /9XmCYYjt4O13ENGh7YzsQktMzcJYZNhBqezc/ZgS83pvqoVcinZuEwfcamrgfNHUd08
-         bjdg==
-X-Gm-Message-State: AOJu0YxS8OmzAPrpiy8WtjWIIz7PJlR1Jzg6ykzWByZyUuuURgF3UQHd
-        WmMdxtMkYpoC+npvXrpJTf6RwA==
-X-Google-Smtp-Source: AGHT+IEixrfDcdtPzYMFUVRxieMPrVod97N8gmxr4oqwLzaBaVMniP5dj9RJz2iumUwUsutXnv8Gqw==
-X-Received: by 2002:a17:907:e91:b0:9bf:6200:fe33 with SMTP id ho17-20020a1709070e9100b009bf6200fe33mr14068860ejc.16.1698241824848;
-        Wed, 25 Oct 2023 06:50:24 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.218.126])
-        by smtp.gmail.com with ESMTPSA id s20-20020a170906355400b009bf7a4d591csm10158234eja.11.2023.10.25.06.50.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Oct 2023 06:50:24 -0700 (PDT)
-Message-ID: <67345a93-2c29-4b66-95dc-34917affd3b1@linaro.org>
-Date:   Wed, 25 Oct 2023 15:50:22 +0200
+        d=1e100.net; s=20230601; t=1698241940; x=1698846740;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mf/tOcZ/6jE6930UPVsDhW3+wB63K7ieLNSBZLgxFJI=;
+        b=Ytm9vPtaM2BR9Rqp5K+BUMdHL36Xy4TsvLfbVbqERZ6MFoLAU1jcbawx3bhPnLj55f
+         Z5FP/PVs76ONRSwX7FNOmttL6Jldt7TRoAtoi++717Tohssv8p5ZvcFmhFr6JjHufjlG
+         Ihd9aT0dfKH22u5StizGQPubXpzgxiM+t+ytfNBBKGv/UDORljO4k4peF+UU0yf0nJ5/
+         GHEWWndy7J5rOIE5vUAGb90zJA4SFgFUL80Ic5DxCtlrodUldri/on/6ulTJKJf0iuoA
+         +h195OMUSaerGRPFyzd+sfkwRnKhcCIgFeBLVZoFHBxXa1jtvhh0shf/fn+s8+U6fOVG
+         kl5Q==
+X-Gm-Message-State: AOJu0YzvTQVy/5bYJt/0KgATg9IY9umaoIWXnolYPg/db/N4pHmnHF7j
+        PYMGIeW7g5UsgXXEWjwK+llOhvxXgk0e8yRCURpnIg==
+X-Google-Smtp-Source: AGHT+IFMoW8roXMXarWSypKnJrf/6MjvgsvKah8L+3caWOq7aUiIdJho9FtYtlh2vc095UiJNLahg6+nRgN6fJgYkUg=
+X-Received: by 2002:a05:6830:2693:b0:6bd:cf64:d105 with SMTP id
+ l19-20020a056830269300b006bdcf64d105mr18356016otu.12.1698241940472; Wed, 25
+ Oct 2023 06:52:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: interconnect: Add Qualcomm SC8380XP SoC
-Content-Language: en-US
-To:     Sibi Sankar <quic_sibis@quicinc.com>, andersson@kernel.org,
-        djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     agross@kernel.org, conor+dt@kernel.org, quic_rjendra@quicinc.com,
-        abel.vesa@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_tsoni@quicinc.com,
-        neil.armstrong@linaro.org
-References: <20231025134049.9734-1-quic_sibis@quicinc.com>
- <20231025134049.9734-2-quic_sibis@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231025134049.9734-2-quic_sibis@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <cover.1697710527.git.viresh.kumar@linaro.org> <6de4fcb5bb943a131d0cdf0a858bd35af02a2f88.1697710527.git.viresh.kumar@linaro.org>
+In-Reply-To: <6de4fcb5bb943a131d0cdf0a858bd35af02a2f88.1697710527.git.viresh.kumar@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 25 Oct 2023 15:51:44 +0200
+Message-ID: <CAPDyKFrxFmNZpNdwQs3CS0NzmDjtCaNSQWkT=zW1Tm+MommWkA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] OPP: Call dev_pm_opp_set_opp() for required OPPs
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -123,49 +72,180 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25/10/2023 15:40, Sibi Sankar wrote:
-> From: Rajendra Nayak <quic_rjendra@quicinc.com>
-> 
-> The Qualcomm SC8380XP SoC has several bus fabrics that could be controlled
-> and tuned dynamically according to the bandwidth demand.
+On Thu, 19 Oct 2023 at 12:22, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> Configuring the required OPP was never properly implemented, we just
+> took an exception for genpds and configured them directly, while leaving
+> out all other required OPP types.
+>
+> Now that a standard call to dev_pm_opp_set_opp() takes care of
+> configuring the opp->level too, the special handling for genpds can be
+> avoided by simply calling dev_pm_opp_set_opp() for the required OPPs,
+> which shall eventually configure the corresponding level for genpds.
+>
+> This also makes it possible for us to configure other type of required
+> OPPs (no concrete users yet though), via the same path. This is how
+> other frameworks take care of parent nodes, like clock, regulators, etc,
+> where we recursively call the same helper.
+>
+> In order to call dev_pm_opp_set_opp() for the virtual genpd devices,
+> they must share the OPP table of the genpd. Call _add_opp_dev() for them
+> to get that done.
+>
+> This commit also extends the struct dev_pm_opp_config to pass required
+> devices, for non-genpd cases, which can be used to call
+> dev_pm_opp_set_opp() for the non-genpd required devices.
+>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  drivers/opp/core.c     | 144 ++++++++++++++++++-----------------------
+>  drivers/opp/of.c       |  12 ++--
+>  drivers/opp/opp.h      |   8 +--
+>  include/linux/pm_opp.h |   7 +-
+>  4 files changed, 76 insertions(+), 95 deletions(-)
+>
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index aab8c8e79146..056b51abc501 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
 
+[...]
 
-...
+> -static int _opp_set_required_opps_genpd(struct device *dev,
+> -       struct opp_table *opp_table, struct dev_pm_opp *opp, bool scaling_down)
+> +/* This is only called for PM domain for now */
+> +static int _set_required_opps(struct device *dev, struct opp_table *opp_table,
+> +                             struct dev_pm_opp *opp, bool up)
+>  {
+> -       struct device **genpd_virt_devs = opp_table->genpd_virt_devs;
+> +       struct device **devs = opp_table->required_devs;
+>         int index, target, delta, ret;
+>
+> -       if (!genpd_virt_devs)
+> -               return 0;
 
-> +  reg:
-> +    maxItems: 1
+Rather than continue the path below, wouldn't it be better to return 0
+"if (!devs)" here?
+
+If I understand correctly, the code below does manage this condition,
+so it's not strictly needed though.
+
+> +       /* required-opps not fully initialized yet */
+> +       if (lazy_linking_pending(opp_table))
+> +               return -EBUSY;
+>
+>         /* Scaling up? Set required OPPs in normal order, else reverse */
+> -       if (!scaling_down) {
+> +       if (up) {
+>                 index = 0;
+>                 target = opp_table->required_opp_count;
+>                 delta = 1;
+> @@ -1092,9 +1069,11 @@ static int _opp_set_required_opps_genpd(struct device *dev,
+>         }
+>
+>         while (index != target) {
+> -               ret = _set_performance_state(dev, genpd_virt_devs[index], opp, index);
+> -               if (ret)
+> -                       return ret;
+> +               if (devs[index]) {
+> +                       ret = dev_pm_opp_set_opp(devs[index], opp);
+> +                       if (ret)
+> +                               return ret;
+> +               }
+>
+>                 index += delta;
+>         }
+
+[...]
+
+>
+>  /*
+> @@ -2429,15 +2374,10 @@ static int _opp_attach_genpd(struct opp_table *opp_table, struct device *dev,
+>         int index = 0, ret = -EINVAL;
+>         const char * const *name = names;
+>
+> -       if (opp_table->genpd_virt_devs)
+> +       /* Checking only the first one is enough ? */
+> +       if (opp_table->required_devs[0])
+
+The allocation of opp_table->required_devs is being done from
+_opp_table_alloc_required_tables(), which doesn't necessarily
+allocate/assign the data for it.
+
+Maybe check "opp_table->required_devs" instead, to make that clear?
+
+>                 return 0;
+>
+> -       opp_table->genpd_virt_devs = kcalloc(opp_table->required_opp_count,
+> -                                            sizeof(*opp_table->genpd_virt_devs),
+> -                                            GFP_KERNEL);
+> -       if (!opp_table->genpd_virt_devs)
+> -               return -ENOMEM;
+> -
+>         while (*name) {
+>                 if (index >= opp_table->required_opp_count) {
+>                         dev_err(dev, "Index can't be greater than required-opp-count - 1, %s (%d : %d)\n",
+> @@ -2452,13 +2392,25 @@ static int _opp_attach_genpd(struct opp_table *opp_table, struct device *dev,
+>                         goto err;
+>                 }
+>
+> -               opp_table->genpd_virt_devs[index] = virt_dev;
+> +               /*
+> +                * Add the virtual genpd device as a user of the OPP table, so
+> +                * we can call dev_pm_opp_set_opp() on it directly.
+> +                *
+> +                * This will be automatically removed when the OPP table is
+> +                * removed, don't need to handle that here.
+> +                */
+> +               if (!_add_opp_dev(virt_dev, opp_table->required_opp_tables[index])) {
+> +                       ret = -ENOMEM;
+> +                       goto err;
+> +               }
 > +
-> +allOf:
-> +  - $ref: qcom,rpmh-common.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sc8380xp-clk-virt
-> +              - qcom,sc8380xp-mc-virt
-> +    then:
-> +      properties:
-> +        reg: false
-> +    else:
-> +      required:
-> +        - reg
+> +               opp_table->required_devs[index] = virt_dev;
+>                 index++;
+>                 name++;
+>         }
+>
+>         if (virt_devs)
+> -               *virt_devs = opp_table->genpd_virt_devs;
+> +               *virt_devs = opp_table->required_devs;
+>
+>         return 0;
+>
+> @@ -2468,10 +2420,34 @@ static int _opp_attach_genpd(struct opp_table *opp_table, struct device *dev,
+>
+>  }
+>
+> +static void _opp_set_required_devs(struct opp_table *opp_table,
+> +                                  struct device **required_devs)
+> +{
+> +       int i;
 > +
-> +required:
-> +  - compatible
+> +       /* Another CPU that shares the OPP table has set the required devs ? */
 
-By convention we put required: block before allOf: and that's what
-existing recent code has (qcom,sc8280xp-rpmh.yaml or
-qcom,sc7280-rpmh.yaml' for example). Please use recent files as a
-template for new bindings, so there will not be a need to fix the same
-things again.
+Not sure I fully understand the above comment. Is this the only
+relevant use-case or could there be others too?
 
-With fixes like in qcom,sc7280-rpmh.yaml:
+> +       if (opp_table->required_devs[0])
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Maybe check opp_table->required_devs instead?
 
+> +               return;
 > +
-> +unevaluatedProperties: false
-Best regards,
-Krzysztof
+> +       for (i = 0; i < opp_table->required_opp_count; i++)
+> +               opp_table->required_devs[i] = required_devs[i];
 
+To be safe, don't we need to check the in-parameter required_devs?
+
+Or we should simply rely on the callers of dev_pm_opp_set_config() to
+do the right thing?
+
+[...]
+
+Besides the minor things above, this looks really great to me! Feel free to add:
+
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+Kind regards
+Uffe
