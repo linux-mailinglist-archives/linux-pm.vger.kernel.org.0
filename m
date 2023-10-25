@@ -2,129 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 371B37D6968
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Oct 2023 12:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A76B07D6997
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Oct 2023 12:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233187AbjJYKsR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Oct 2023 06:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49528 "EHLO
+        id S234785AbjJYKyh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Oct 2023 06:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232281AbjJYKsQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Oct 2023 06:48:16 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D66AC
-        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 03:48:13 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-6b709048d8eso4440659b3a.2
-        for <linux-pm@vger.kernel.org>; Wed, 25 Oct 2023 03:48:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698230893; x=1698835693; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ucyvmypzRWKXaw2KCmPDs3/ttcZLG0HVnAvEwAPFzTE=;
-        b=L7eNDkYlsLkf6Fe00FrdSdoNMOO8cdii5WAj+8r7Bog4c3a93/ptCZZ0bjGjttp/nN
-         RmFzM/NeTksb+kxfgBE7l1M86fKv7WvRWK2JQaS+FbkHuejNpu1JLvafa/dvtXKsK0oY
-         joAEO/TpM6FPRE+OEo5yZgYbiUUZ6Dhm+ETL1Px9+foKZFYivaYfbG1M4q5BBI+3ccLJ
-         NTqQrslcJ6HVKhgYWXTDoonkpBzfzRKVxLnJ7o6TqdXZFSkrpl8az4I6N0IZVG8KR2gv
-         DXQVens7HmqqAIgPy239dtiMPG1e+j3dJq+zKplsG8Pr+RW5lzy6ugRbgC+DEnjlEYZl
-         vkbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698230893; x=1698835693;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ucyvmypzRWKXaw2KCmPDs3/ttcZLG0HVnAvEwAPFzTE=;
-        b=idKhOZ3d3jbeRjvrocmHpw4I08WzX+MWotgLPDYfSORUSKb0bYoPQwCKfqmbN10UMz
-         rc8IgRSt0mPCQswajwvGQFutJx5yhpYqUZKdBZc1HtLB9eaFOvKdPZTZJuvSTTyJnwVu
-         27JLfOH8vmUphPJqLTpeLZsnSjiaKuE4hzvHzGJSmEtoyMGpUUD06rRp/Es8g7/54QY7
-         AuRoWTaM4zWxvmFgPFxoUvIZNOpdxeO56h2lX2UvDXSvOa+hmXT0qvkgHYNFpFTY3O8v
-         Lvj81KwwxJYkhjIoTP6WnCakXSFIOFPCGFOzqt9Vv2N6LrqDr+pMeAYI9xx75+Wu9nDp
-         80Kw==
-X-Gm-Message-State: AOJu0YxsE5p4l9rzVdu4SqZdW8NMIpOnc30ViXrAvKiJMzYAsBPI+KBw
-        Y3HkJOO0W0MWxvuxtn30cAK82w==
-X-Google-Smtp-Source: AGHT+IHQW0HxR8+Aje2Th3RFiifKUkwDJ1Is+qfsdlOGHXXQwskp771O+cVur9WHS/Mhan6K19LRvA==
-X-Received: by 2002:a05:6a20:918b:b0:16b:abad:87c5 with SMTP id v11-20020a056a20918b00b0016babad87c5mr5789222pzd.10.1698230893058;
-        Wed, 25 Oct 2023 03:48:13 -0700 (PDT)
-Received: from localhost ([122.172.80.14])
-        by smtp.gmail.com with ESMTPSA id 23-20020a630f57000000b0059cc2f1b7basm8387031pgp.11.2023.10.25.03.48.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Oct 2023 03:48:11 -0700 (PDT)
-Date:   Wed, 25 Oct 2023 16:18:09 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] OPP: Use _set_opp_level() for single genpd case
-Message-ID: <20231025104809.qw5vk3liuffgtqk3@vireshk-i7>
-References: <cover.1697710527.git.viresh.kumar@linaro.org>
- <f709e9e273004be43efe3a2854a7e7b51a777f99.1697710527.git.viresh.kumar@linaro.org>
- <CAPDyKFqbnsdT0nqKwQhai875CwwpW_vepr816fL+i8yLh=YQhw@mail.gmail.com>
- <20231025065458.z3klmhahrcqh6qyw@vireshk-i7>
- <CAPDyKFr4vdsKVYEx0aF5k_a1bTjp3NzMpNgaXDJOJrvujT7iRg@mail.gmail.com>
+        with ESMTP id S234804AbjJYKyc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Oct 2023 06:54:32 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 824DD130;
+        Wed, 25 Oct 2023 03:54:23 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1E9FB2F4;
+        Wed, 25 Oct 2023 03:55:04 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.69.205])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EB5AF3F738;
+        Wed, 25 Oct 2023 03:54:19 -0700 (PDT)
+Date:   Wed, 25 Oct 2023 11:54:16 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Zeng Heng <zengheng4@huawei.com>
+Cc:     broonie@kernel.org, joey.gouly@arm.com, will@kernel.org,
+        amit.kachhap@arm.com, rafael@kernel.org, catalin.marinas@arm.com,
+        james.morse@arm.com, maz@kernel.org, viresh.kumar@linaro.org,
+        sumitg@nvidia.com, yang@os.amperecomputing.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, wangxiongfeng2@huawei.com,
+        xiexiuqi@huawei.com, Ionela Voinescu <ionela.voinescu@arm.com>
+Subject: Re: [PATCH 2/3] cpufreq: CPPC: Keep the target core awake when
+ reading its cpufreq rate
+Message-ID: <ZTjz2Ox_iqorbejw@FVFF77S0Q05N>
+References: <20231025093847.3740104-1-zengheng4@huawei.com>
+ <20231025093847.3740104-3-zengheng4@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFr4vdsKVYEx0aF5k_a1bTjp3NzMpNgaXDJOJrvujT7iRg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20231025093847.3740104-3-zengheng4@huawei.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25-10-23, 12:40, Ulf Hansson wrote:
-> On Wed, 25 Oct 2023 at 08:55, Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > On 19-10-23, 13:16, Ulf Hansson wrote:
-> > > On Thu, 19 Oct 2023 at 12:22, Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > > > +       if (required_table->is_genpd && opp_table->required_opp_count == 1 &&
-> > > > +           !opp_table->genpd_virt_devs) {
-> > > > +               if (!WARN_ON(opp->level))
-> > >
-> > > Hmm. Doesn't this introduce an unnecessary limitation?
-> > >
-> > > An opp node that has a required-opps phande, may have "opp-hz",
-> > > "opp-microvolt", etc. Why would we not allow the "opp-level" to be
-> > > used too?
-> >
-> > Coming back to this, why would we ever want a device to have "opp-level" and
-> > "required-opp" (set to genpd's table) ? That would mean we will call:
-> >
-> > dev_pm_domain_set_performance_state() twice to set different level values.
-> 
-> Yes - and that would be weird, especially since the PM domain (genpd)
-> is already managing the aggregation and propagation to parent domains.
-> 
-> I guess I got a bit confused by the commit message for patch2/2, where
-> it sounded like you were striving towards introducing recursive calls
-> to set OPPs. Having a closer look, I realize that isn't the case,
-> which I think makes sense.
-> 
-> >
-> > And so it should be safe to force that if required-opp table is set to a genpd,
-> > then opp-level shouldn't be set. Maybe we should fail in that case, which isn't
-> > happening currently.
-> 
-> Yes, it seems better to fail earlier during the OF parsing of the
-> required-opps or when adding an OPP dynamically. In that way, the
-> WARN_ON above could be removed.
+[adding Ionela]
 
-For now I will leave the WARN as is, will reconsider if it makes more
-sense to fail and return early. And send a separate patch for that.
-
-> That said, sorry for the noise and either way, feel free to add (for
-> $subject patch):
+On Wed, Oct 25, 2023 at 05:38:46PM +0800, Zeng Heng wrote:
+> As ARM AMU's document says, all counters are subject to any changes
+> in clock frequency, including clock stopping caused by the WFI and WFE
+> instructions.
 > 
-> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Therefore, using smp_call_on_cpu() to trigger target CPU to
+> read self's AMU counters, which ensures the counters are working
+> properly while cstate feature is enabled.
 
-Thanks.
+IIUC there's a pretty deliberate split with all the actual reading of the AMU
+living in arch/arm64/kernel/topolgy.c, and the driver code being (relatively)
+generic.
 
--- 
-viresh
+We already have code in arch/arm64/kernel/topolgy.c to read counters on a
+specific CPU; why can't e reuse that (and avoid exporting cpu_has_amu_feat())?
+
+Mark.
+
+> 
+> Reported-by: Sumit Gupta <sumitg@nvidia.com>
+> Link: https://lore.kernel.org/all/20230418113459.12860-7-sumitg@nvidia.com/
+> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+> ---
+>  drivers/cpufreq/cppc_cpufreq.c | 39 ++++++++++++++++++++++++++--------
+>  1 file changed, 30 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index fe08ca419b3d..321a9dc9484d 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -90,6 +90,12 @@ static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
+>  				 struct cppc_perf_fb_ctrs *fb_ctrs_t0,
+>  				 struct cppc_perf_fb_ctrs *fb_ctrs_t1);
+>  
+> +struct fb_ctr_pair {
+> +	u32 cpu;
+> +	struct cppc_perf_fb_ctrs fb_ctrs_t0;
+> +	struct cppc_perf_fb_ctrs fb_ctrs_t1;
+> +};
+> +
+>  /**
+>   * cppc_scale_freq_workfn - CPPC arch_freq_scale updater for frequency invariance
+>   * @work: The work item.
+> @@ -840,9 +846,24 @@ static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
+>  	return (reference_perf * delta_delivered) / delta_reference;
+>  }
+>  
+> +static int cppc_get_perf_ctrs_pair(void *val)
+> +{
+> +	struct fb_ctr_pair *fb_ctrs = val;
+> +	int cpu = fb_ctrs->cpu;
+> +	int ret;
+> +
+> +	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs->fb_ctrs_t0);
+> +	if (ret)
+> +		return ret;
+> +
+> +	udelay(2); /* 2usec delay between sampling */
+> +
+> +	return cppc_get_perf_ctrs(cpu, &fb_ctrs->fb_ctrs_t1);
+> +}
+> +
+>  static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
+>  {
+> -	struct cppc_perf_fb_ctrs fb_ctrs_t0 = {0}, fb_ctrs_t1 = {0};
+> +	struct fb_ctr_pair fb_ctrs = { .cpu = cpu, };
+>  	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+>  	struct cppc_cpudata *cpu_data = policy->driver_data;
+>  	u64 delivered_perf;
+> @@ -850,18 +871,18 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
+>  
+>  	cpufreq_cpu_put(policy);
+>  
+> -	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t0);
+> -	if (ret)
+> -		return 0;
+> -
+> -	udelay(2); /* 2usec delay between sampling */
+> +	if (cpu_has_amu_feat(cpu))
+> +		ret = smp_call_on_cpu(cpu, cppc_get_perf_ctrs_pair,
+> +				      &fb_ctrs, false);
+> +	else
+> +		ret = cppc_get_perf_ctrs_pair(&fb_ctrs);
+>  
+> -	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
+>  	if (ret)
+>  		return 0;
+>  
+> -	delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
+> -					       &fb_ctrs_t1);
+> +	delivered_perf = cppc_perf_from_fbctrs(cpu_data,
+> +					      &fb_ctrs.fb_ctrs_t0,
+> +					      &fb_ctrs.fb_ctrs_t1);
+>  
+>  	return cppc_cpufreq_perf_to_khz(cpu_data, delivered_perf);
+>  }
+> -- 
+> 2.25.1
+> 
