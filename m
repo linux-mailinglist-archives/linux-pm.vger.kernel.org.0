@@ -2,97 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F657D619F
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Oct 2023 08:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 106667D61DE
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Oct 2023 08:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232082AbjJYGZQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Oct 2023 02:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41066 "EHLO
+        id S230284AbjJYGzF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Oct 2023 02:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232111AbjJYGZP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Oct 2023 02:25:15 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A22D132
-        for <linux-pm@vger.kernel.org>; Tue, 24 Oct 2023 23:25:12 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1ca816f868fso35456635ad.1
-        for <linux-pm@vger.kernel.org>; Tue, 24 Oct 2023 23:25:12 -0700 (PDT)
+        with ESMTP id S229498AbjJYGzD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Oct 2023 02:55:03 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D9491
+        for <linux-pm@vger.kernel.org>; Tue, 24 Oct 2023 23:55:02 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-6b709048f32so4400814b3a.0
+        for <linux-pm@vger.kernel.org>; Tue, 24 Oct 2023 23:55:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698215111; x=1698819911; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1698216901; x=1698821701; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YRNx4/VhgJBUmPLhfW0nzhO+j+HC6thHIfSQat4cc5Q=;
-        b=E2TrS5twCMhJnRkIHOMNNqcEgDS2AEsF0M3m9s/HaI9gY729q04tRAq/7QNZ7+cBOU
-         Ba3IzzbiUn1t9ozMz5lMCVCxxV04VZsgGe7Mef8ndh2b3IbF9I90FaV3B6AIbdmEendN
-         7V6BQMSzkID7eUnXBxSTDFx30/8UNfiT6V0slAQzrxjyddUaNQXMC/r1hhKmpZjRa9BL
-         1RcKEPoEXeWiwUNaknv0M6FSUYhkpcaq760kb502SEUH4C9ycryn4f5cmCVnW9PKqalD
-         OSx8eu6mq9eDvN3qx/UaZ2be5KHJqA1ebie6Or7IrZ3otksLjy9AanbrLfstZjfBjCUr
-         xImw==
+        bh=Y5dui3OIhxBVatDTTZ5Hf8HfCYDRD2Zxo6QlZVP8Vrc=;
+        b=yEoBY53H3+Qmi34C06XUKBnG3Ce6w3dfnKGolkF35zhFPnbtaszryWtfJFO7qHPwvT
+         irOjyc98eskUXHpoCoNm2ot/8va0oeRdr0gP4mqkb/FTdL2BjfepjQ9RDp8Sz9Tqh7X+
+         l33eGhFTNlfA8YGxwRsn2FKySpRgTKIqfyAUarY8qUBg4B0AtvOgS7kvWV8VBP6an5iW
+         rqGKpz9+ZvSyDxagdodptuTwhzwO2/Y1wz6kO0m60vqqgVElP2vlZWEmpPO8lp9yBOj3
+         I2zpBXr013xzha6XimQrN+WNLnH1y4iQvccevdaLHJE2/UCTDFX1YnVPtL+AIaCoIpPs
+         drbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698215111; x=1698819911;
+        d=1e100.net; s=20230601; t=1698216901; x=1698821701;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YRNx4/VhgJBUmPLhfW0nzhO+j+HC6thHIfSQat4cc5Q=;
-        b=mIrdp4V9gaH2Tu1nHsKtBiCH6nLDj4VuZQooSjhQmyEmEQztCELEQ6lOPN2g6aMeOq
-         PaIl0cWQTnzU/q1ysMlsIslAKbarhwmr54KMsjeVOWyH8zed1dnfYBiN6Twj8bzpjGwd
-         UH563Wpsj0p3yxdJxNn8x0JEHXl5p1Eyi2FbrxFh9MqC1NXo+jQZmDNytkPii3P/V+90
-         4Ol4BqKZOissyUPSchShpC55B5J2RNnasg7zJelC9ClHadlP6bbxB9rlMtYhfWubC46+
-         2SQRnEsSC1tVpIvrpsPF+YD5+V3xUeuxAy1CJBu/rCUBTx4ec/btQ54RTQoCPaKKM/dM
-         5vpg==
-X-Gm-Message-State: AOJu0Yyhp3hYRDvoAYjm27PqRy+UCzPb+Tr+yk3Wccav6DrJ53r5ySc7
-        E1pOPqocVetsK4SdHmMKY7UB4Q==
-X-Google-Smtp-Source: AGHT+IGohNcTFzm2Bh0bFriQkaNYjeD1yBiORs4U/Gyp7N7O3RPbMKBRyGUEMkF90cJRpigxhPHV9Q==
-X-Received: by 2002:a17:903:11cd:b0:1c7:29fd:33b6 with SMTP id q13-20020a17090311cd00b001c729fd33b6mr13396486plh.40.1698215111463;
-        Tue, 24 Oct 2023 23:25:11 -0700 (PDT)
+        bh=Y5dui3OIhxBVatDTTZ5Hf8HfCYDRD2Zxo6QlZVP8Vrc=;
+        b=hmVGr6m3UOuWA+TQfZ+7YPNaCg4ZRMcqyzbImQE7+8YU6JE/E5eDnR0WhWRNbNrsRn
+         5Dl7gVxlul/qqMdLHaOSzA9vxm0lSOxFLg2iYgg/Ba7dhZ3ulCFmuAAOjoq01zy5UaoE
+         8AXqXcxzE3bITuSZAadGTav+98QvERIYUG+PnjvqP03RBMSRtqYLXPi0F01Q+RYwBH9N
+         jU6mo48g+sxNaDkIH++epgXvJBYOGBN2nynTZ06baOtW0eEJpPi5DQB8LLqCL2mIhAO+
+         M51jgzzoVcMeUmF4dyFikZYNoIIOPmm5E1Qrie3DBLeLUFm0MYhSM8ZYdGchgk3W1I3a
+         vyGQ==
+X-Gm-Message-State: AOJu0Yz5L0uGK1wPTOV0xH9tD8i2SiubjdOGGI8wsvTIA6W3aTZcaQ9F
+        cdzrR9lXIvlK4pVRrmpaVTnRZg==
+X-Google-Smtp-Source: AGHT+IGiBGcFTbqUF8uqCvsX/8xoVFFIwZb+WJMflR1Tq9mvTNDjmFTBuZ/uNMHY47fdPzOHlkBrgA==
+X-Received: by 2002:a05:6a00:1389:b0:68f:d35d:217e with SMTP id t9-20020a056a00138900b0068fd35d217emr13140695pfg.2.1698216901494;
+        Tue, 24 Oct 2023 23:55:01 -0700 (PDT)
 Received: from localhost ([122.172.80.14])
-        by smtp.gmail.com with ESMTPSA id u17-20020a170902e5d100b001b89a6164desm8371393plf.118.2023.10.24.23.25.09
+        by smtp.gmail.com with ESMTPSA id o67-20020a634146000000b005742092c211sm8119201pga.64.2023.10.24.23.54.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Oct 2023 23:25:10 -0700 (PDT)
-Date:   Wed, 25 Oct 2023 11:55:08 +0530
+        Tue, 24 Oct 2023 23:55:00 -0700 (PDT)
+Date:   Wed, 25 Oct 2023 12:24:58 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        rafael@kernel.org, ilia.lin@kernel.org, sivaprak@codeaurora.org,
-        quic_kathirav@quicinc.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5 0/9] Enable cpufreq for IPQ5332 & IPQ9574
-Message-ID: <20231025062508.vccrmkem45p3fnwe@vireshk-i7>
-References: <cover.1697781921.git.quic_varada@quicinc.com>
- <20231020070947.cwigtaa2haij56hz@vireshk-i7>
- <20231020080339.GA6197@varda-linux.qualcomm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] OPP: Use _set_opp_level() for single genpd case
+Message-ID: <20231025065458.z3klmhahrcqh6qyw@vireshk-i7>
+References: <cover.1697710527.git.viresh.kumar@linaro.org>
+ <f709e9e273004be43efe3a2854a7e7b51a777f99.1697710527.git.viresh.kumar@linaro.org>
+ <CAPDyKFqbnsdT0nqKwQhai875CwwpW_vepr816fL+i8yLh=YQhw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231020080339.GA6197@varda-linux.qualcomm.com>
+In-Reply-To: <CAPDyKFqbnsdT0nqKwQhai875CwwpW_vepr816fL+i8yLh=YQhw@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-10-23, 13:33, Varadarajan Narayanan wrote:
-> On Fri, Oct 20, 2023 at 12:39:47PM +0530, Viresh Kumar wrote:
-> > On 20-10-23, 11:49, Varadarajan Narayanan wrote:
-> > > Varadarajan Narayanan (9):
-> > >   cpufreq: qti: Enable cpufreq for ipq53xx
-> > >   cpufreq: qti: Introduce cpufreq for ipq95xx
+On 19-10-23, 13:16, Ulf Hansson wrote:
+> On Thu, 19 Oct 2023 at 12:22, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > +static int _link_required_opps(struct dev_pm_opp *opp, struct opp_table *opp_table,
+> >                                struct opp_table *required_table, int index)
+> >  {
+> >         struct device_node *np;
+> > @@ -314,6 +314,25 @@ static int _link_required_opps(struct dev_pm_opp *opp,
+> >                 return -ENODEV;
+> >         }
 > >
-> > Can I pick just these two ?
+> > +       /*
+> > +        * There are two genpd (as required-opp) cases that we need to handle,
+> > +        * devices with a single genpd and ones with multiple genpds.
+> > +        *
+> > +        * The single genpd case requires special handling as we need to use the
+> > +        * same `dev` structure (instead of a virtual one provided by genpd
+> > +        * core) for setting the performance state. Lets treat this as a case
+> > +        * where the OPP's level is directly available without required genpd
+> > +        * link in the DT.
+> > +        *
+> > +        * Just update the `level` with the right value, which
+> > +        * dev_pm_opp_set_opp() will take care of in the normal path itself.
+> > +        */
+> > +       if (required_table->is_genpd && opp_table->required_opp_count == 1 &&
+> > +           !opp_table->genpd_virt_devs) {
+> > +               if (!WARN_ON(opp->level))
 > 
-> ipq53xx patch is dependent on the previous safe source switching
-> patch, hence not safe to pick that.
+> Hmm. Doesn't this introduce an unnecessary limitation?
 > 
-> 	No -> cpufreq: qti: Enable cpufreq for ipq53xx
-> 	Yes -> cpufreq: qti: Introduce cpufreq for ipq95xx
+> An opp node that has a required-opps phande, may have "opp-hz",
+> "opp-microvolt", etc. Why would we not allow the "opp-level" to be
+> used too?
 
-The patches don't apply cleanly. Please resend.
+Coming back to this, why would we ever want a device to have "opp-level" and
+"required-opp" (set to genpd's table) ? That would mean we will call:
+
+dev_pm_domain_set_performance_state() twice to set different level values.
+
+And so it should be safe to force that if required-opp table is set to a genpd,
+then opp-level shouldn't be set. Maybe we should fail in that case, which isn't
+happening currently.
 
 -- 
 viresh
