@@ -2,118 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 145667D7542
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Oct 2023 22:13:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD6CF7D7A85
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Oct 2023 03:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbjJYUNX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Oct 2023 16:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
+        id S229877AbjJZBzr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Oct 2023 21:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjJYUNW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Oct 2023 16:13:22 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 975BEDC;
-        Wed, 25 Oct 2023 13:13:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E9CF62F4;
-        Wed, 25 Oct 2023 13:14:00 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C9A543F738;
-        Wed, 25 Oct 2023 13:13:13 -0700 (PDT)
-Message-ID: <f5e398f3-fbb7-4840-9084-14c8254b2118@arm.com>
-Date:   Wed, 25 Oct 2023 22:13:12 +0200
+        with ESMTP id S229705AbjJZBzq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Oct 2023 21:55:46 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B094E115;
+        Wed, 25 Oct 2023 18:55:43 -0700 (PDT)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4SG80p2JlFzNpB9;
+        Thu, 26 Oct 2023 09:51:38 +0800 (CST)
+Received: from [10.174.179.163] (10.174.179.163) by
+ kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.31; Thu, 26 Oct 2023 09:55:40 +0800
+Message-ID: <abb15757-cbe6-037f-e8d3-5df9fbbf6c04@huawei.com>
+Date:   Thu, 26 Oct 2023 09:55:39 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/6] cpufreq/schedutil: use a fixed reference frequency
-To:     Vincent Guittot <vincent.guittot@linaro.org>,
-        linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
-        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, viresh.kumar@linaro.org, lenb@kernel.org,
-        robert.moore@intel.com, lukasz.luba@arm.com,
-        ionela.voinescu@arm.com, pierre.gondois@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, acpica-devel@lists.linuxfoundation.org
-Cc:     conor.dooley@microchip.com, suagrfillet@gmail.com,
-        ajones@ventanamicro.com, lftan@kernel.org
-References: <20231018162540.667646-1-vincent.guittot@linaro.org>
- <20231018162540.667646-4-vincent.guittot@linaro.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 3/3] cpufreq: CPPC: Eliminate the impact of cpc_read()
+ latency error
 Content-Language: en-US
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20231018162540.667646-4-vincent.guittot@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+To:     Mark Rutland <mark.rutland@arm.com>
+CC:     <broonie@kernel.org>, <joey.gouly@arm.com>, <will@kernel.org>,
+        <amit.kachhap@arm.com>, <rafael@kernel.org>,
+        <catalin.marinas@arm.com>, <james.morse@arm.com>, <maz@kernel.org>,
+        <viresh.kumar@linaro.org>, <sumitg@nvidia.com>,
+        <yang@os.amperecomputing.com>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <wangxiongfeng2@huawei.com>, <xiexiuqi@huawei.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>
+References: <20231025093847.3740104-1-zengheng4@huawei.com>
+ <20231025093847.3740104-4-zengheng4@huawei.com>
+ <ZTj1fMsMj-Mekfn3@FVFF77S0Q05N>
+From:   Zeng Heng <zengheng4@huawei.com>
+In-Reply-To: <ZTj1fMsMj-Mekfn3@FVFF77S0Q05N>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.163]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500024.china.huawei.com (7.221.188.100)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18/10/2023 18:25, Vincent Guittot wrote:
-> cpuinfo.max_freq can change at runtime because of boost as an example. This
-> implies that the value could be different than the one that has been
-> used when computing the capacity of a CPU.
-> 
-> The new arch_scale_freq_ref() returns a fixed and coherent reference
-> frequency that can be used when computing a frequency based on utilization.
-> 
-> Use this arch_scale_freq_ref() when available and fallback to
-> policy otherwise.
-> 
-> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-> Tested-by: Lukasz Luba <lukasz.luba@arm.com>
-> 
-> ---
->  kernel/sched/cpufreq_schedutil.c | 26 ++++++++++++++++++++++++--
->  1 file changed, 24 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> index 458d359f5991..6e4030482ae8 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -114,6 +114,28 @@ static void sugov_deferred_update(struct sugov_policy *sg_policy)
->  	}
->  }
->  
-> +/**
-> + * cpufreq_get_capacity_ref_freq - get the reference frequency of a given CPU that
 
-s/cpufreq_get_capacity_ref_freq/get_capacity_ref_freq
+在 2023/10/25 19:01, Mark Rutland 写道:
+> On Wed, Oct 25, 2023 at 05:38:47PM +0800, Zeng Heng wrote:
+>
+> The previous patch added this function, and calls it with smp_call_on_cpu(),
+> where it'll run in IRQ context with IRQs disabled...
 
-s/of a given CPU/for a given cpufreq policy ? (of which the CPU managing
-it is used for the arch_scale_freq_ref() call in the function.
+smp_call_on_cpu() puts the work to the bind-cpu worker.
 
-> + * has been used to correlate frequency and compute capacity.
-> + * @policy: the cpufreq policy of the CPU in question.
-> + * @use_current: Fallback to current freq instead of policy->cpuinfo.max_freq.
-
-Looks like use_current does not exists as a parameter.
-
-> + *
-> + * Return: the reference CPU frequency to compute a capacity.
-> + */
-> +static __always_inline
-> +unsigned long get_capacity_ref_freq(struct cpufreq_policy *policy)
-> +{
-> +	unsigned int freq = arch_scale_freq_ref(policy->cpu);
-> +
-> +	if (freq)
-> +		return freq;
-> +
-> +	if (arch_scale_freq_invariant())
-> +		return policy->cpuinfo.max_freq;
-> +
-> +	return policy->cur;
-> +}
-
-Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+And this function will be called in task context, and IRQs is certainly enabled.
 
 
+Zeng Heng
 
+>>   	struct fb_ctr_pair *fb_ctrs = val;
+>>   	int cpu = fb_ctrs->cpu;
+>>   	int ret;
+>> +	unsigned long timeout;
+>>   
+>>   	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs->fb_ctrs_t0);
+>>   	if (ret)
+>>   		return ret;
+>>   
+>> -	udelay(2); /* 2usec delay between sampling */
+>> +	if (likely(!irqs_disabled())) {
+>> +		/*
+>> +		 * Set 1ms as sampling interval, but never schedule
+>> +		 * to the idle task to prevent the AMU counters from
+>> +		 * stopping working.
+>> +		 */
+>> +		timeout = jiffies + msecs_to_jiffies(1);
+>> +		while (!time_after(jiffies, timeout))
+>> +			cond_resched();
+>> +
+>> +	} else {
+> ... so we'll enter this branch of the if-else ...
+>
+>> +		pr_warn_once("CPU%d: Get rate in atomic context", cpu);
+> ... and pr_warn_once() for something that's apparently normal and outside of
+> the user's control?
+>
+> That doesn't make much sense to me.
+>
+> Mark.
+>
+>> +		udelay(2); /* 2usec delay between sampling */
+>> +	}
+>>   
+>>   	return cppc_get_perf_ctrs(cpu, &fb_ctrs->fb_ctrs_t1);
+>>   }
+>> -- 
+>> 2.25.1
+>>
