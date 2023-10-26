@@ -2,62 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF047D84A5
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Oct 2023 16:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6707A7D84A7
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Oct 2023 16:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjJZO1d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Oct 2023 10:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
+        id S235052AbjJZO1k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Oct 2023 10:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230507AbjJZO1c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Oct 2023 10:27:32 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332CD128
-        for <linux-pm@vger.kernel.org>; Thu, 26 Oct 2023 07:27:30 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-da0344eb3fdso676708276.3
-        for <linux-pm@vger.kernel.org>; Thu, 26 Oct 2023 07:27:30 -0700 (PDT)
+        with ESMTP id S230507AbjJZO1j (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Oct 2023 10:27:39 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884BD9C
+        for <linux-pm@vger.kernel.org>; Thu, 26 Oct 2023 07:27:37 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id 46e09a7af769-6cd09f51fe0so505900a34.1
+        for <linux-pm@vger.kernel.org>; Thu, 26 Oct 2023 07:27:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698330449; x=1698935249; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1698330457; x=1698935257; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EIua5hiq7Ss/snyDGyH3jPMUL/d7t9Mf97skCzkhvrc=;
-        b=FtgeCOAbxObRYXwFhRvdqzG0KPduASBB9v6ZJS9EFQLtXrW2gROzG2RnogTBa/sick
-         XKgq0tQ7FBk4wji4JVdNeDQkHNXZN2k+lX8uFPviROukrBelBdAHc70sIp+GQrQgA8+x
-         o3HOrZHp01WSzt/WoP6ImYLPsM4lufmLQTMxiPuK1oME+HeAtBlPRd3VJ+eLk3EVLuci
-         rsDACjzl5ltixzYh8RfsXhpS8YbXkOq6BM46hWo7NUWaU2ByVYWjJxuVxotk2E2JduS7
-         hjXtGlOeI8zGpalLPqTIoUxGkEYxIkcy6phTEBQ4pB/YPv3rmZF1gbsW1XQxQWWFZPC2
-         1wDw==
+        bh=GhsfFnZU92WVFFrLtVVI1l5X1Oa/Mn3OJb2wIrC8HxY=;
+        b=S8A3L/KFwrMW1qgZRTEsPZ+r1M+Gs9TSGv+0/fHkUsYmXv+SFlJVlixeTztoACBq5h
+         0niVURbFcYmck7HJoM8FOnPsYMg74H1bEoif/2fyVyavTQtEwda/xQOaBInE+k+QDAwH
+         nf7zj3atpindmcvfQAhnmhTgqQzXGgblTD/ZbFPcZiYkHIDQfHJdic8mgEY+QikyBT7i
+         d93ZmwcDJkuh79+DjPEF0dp4Ero3xMUgeTsIGobEqQqfsKhB5X6o1qOWT/HZS0t3CZhX
+         Hoj2/CmsfYjeJi9cJpqTgDTlfT4hMf2GeWV06emR+bsCqLFXisMNonUGBckeC2EUywaJ
+         5sVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698330449; x=1698935249;
+        d=1e100.net; s=20230601; t=1698330457; x=1698935257;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EIua5hiq7Ss/snyDGyH3jPMUL/d7t9Mf97skCzkhvrc=;
-        b=lr5v7OfoL0d7UjMEhEVHopMeG545mZ/n/y91iLxGFwCMxQtY4XBxFmdgzl13mMsVl3
-         VDgKDb/3/tFYe0dF4Ky3Fd6z8d0akm8XjjLLMETbf1SJPUtZfnEkHo//5bE5g666E9uW
-         oRm3bBs+XuRLBJhXLxdCEt9XN/mQt8hn53e5Pow8a8kcAs47puHm6Ad2Tp87V9t+b+R7
-         +mcxXMQnoL0pLfYdMYxnvs0g+bHngNR83SVpXt0cyof9wYgRZbPOBCTH8t+oUD5cRyDq
-         ewVLiXGMtO2Qc6rqcdhvwWo5yPPrpYHcFeg4gYCrjG1hMXObLp3wUcZFdLuJSBp9c8zA
-         eSNw==
-X-Gm-Message-State: AOJu0YxQWIajBw/aVTNiU+fg5l8xruqoqeygcT9jPAYhRbL4FPZLpK0H
-        s3j0y7d6LaAwLZ5zvHz3BSpqxHmAIdMhB4ezMRdIyg==
-X-Google-Smtp-Source: AGHT+IGl0kMJiIHVgiKxB0yAdsTyFDDToHMGbI+mtD1CScPU20O/2PCND5ja9EcQGuq+JNqqtL7movH9VvK1ot0Fvu4=
-X-Received: by 2002:a5b:651:0:b0:da0:76eb:3d31 with SMTP id
- o17-20020a5b0651000000b00da076eb3d31mr4793177ybq.15.1698330449175; Thu, 26
- Oct 2023 07:27:29 -0700 (PDT)
+        bh=GhsfFnZU92WVFFrLtVVI1l5X1Oa/Mn3OJb2wIrC8HxY=;
+        b=u0qibyWCW0Q1InQqvuS8T+coVeFht9iTG4w043pXrVgAdcopVnAiQq86sA0kQGbNRF
+         +bt5a/jbrfQyYG+qUnREuArQhLT+4BB/Bo2EaBYVugB21YxdWw3pPgAaAGqu6sQLkh26
+         V2X9xrvOs/8Uxja2Q4wNveYsJo17t3VxiI4R0LzIvhj1bvMPsOIr+ivPuVu9f6HGmF2v
+         ciahO0JvwHkAN1HMDZ+AV+eqUKpJAYKjF3KQxENlP7jy5fPGFSZChAWxxTeiJhCpCGfP
+         AJ1yohfs1gkjmob1pblHEG9IkUpJUL+XjkKY+EFl3BatQ2cHxEhPK3dN9hcl2HTmQSds
+         WLLg==
+X-Gm-Message-State: AOJu0YyQaFrGxcnTQB/7dLcMw7uwbNJwdI1WbzSOMyqksQr4UjdUAT/3
+        xWnHa+fpwnN1wO54Vfq/wtntlZdGfs2HYWlR2KrqCA==
+X-Google-Smtp-Source: AGHT+IGxE2Xrpad4dfWbz2DEnioRFB5E9UqGa5TGGzFeHITk4UUxpgjyIjrhQGMQUGjqU0chVHmctgxOD1J/cdNLLec=
+X-Received: by 2002:a05:6830:910:b0:6b9:c4b1:7a86 with SMTP id
+ v16-20020a056830091000b006b9c4b17a86mr23867125ott.3.1698330456853; Thu, 26
+ Oct 2023 07:27:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231020185949.537083-1-pengfei.li_1@nxp.com> <hm4ae2dr234wvrcjqkltmudlxqybkpommqewkfqqdo47s6jffi@swy7wtro7rdy>
-In-Reply-To: <hm4ae2dr234wvrcjqkltmudlxqybkpommqewkfqqdo47s6jffi@swy7wtro7rdy>
+References: <20231025-topic-sm8650-upstream-rpmpd-v1-0-f25d313104c6@linaro.org>
+In-Reply-To: <20231025-topic-sm8650-upstream-rpmpd-v1-0-f25d313104c6@linaro.org>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 26 Oct 2023 16:26:53 +0200
-Message-ID: <CAPDyKFoRMHEO-cvq_gz25kKn-HtDXJYYM784ie+oDuxuQNtRYw@mail.gmail.com>
-Subject: Re: [PATCH] pmdomain: imx: Make imx pgc power domain also set the fwnode
-To:     Pengfei Li <pengfei.li_1@nxp.com>,
-        Emil Kronborg Andersen <emkan@prevas.dk>
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linus.walleij@linaro.org,
-        rafael@kernel.org, heiko@sntech.de, robh@kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Date:   Thu, 26 Oct 2023 16:27:01 +0200
+Message-ID: <CAPDyKFpXURm-kE-mhgyU7bO4EeApKA6PSrmcNp4a_39Eba-Lcg@mail.gmail.com>
+Subject: Re: [PATCH 0/2] pmdomain: qcom: rpmhpd: Introduce Power Domains
+ support for SM8650
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
@@ -69,59 +73,29 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 26 Oct 2023 at 09:54, Emil Kronborg Andersen <emkan@prevas.dk> wrote:
+On Wed, 25 Oct 2023 at 09:32, Neil Armstrong <neil.armstrong@linaro.org> wrote:
 >
-> On Sat, Oct 21, 2023 at 02:59 +0800, Pengfei Li wrote:
-> > Currently, The imx pgc power domain doesn't set the fwnode
-> > pointer, which results in supply regulator device can't get
-> > consumer imx pgc power domain device from fwnode when creating
-> > a link.
-> >
-> > This causes the driver core to instead try to create a link
-> > between the parent gpc device of imx pgc power domain device and
-> > supply regulator device. However, at this point, the gpc device
-> > has already been bound, and the link creation will fail. So adding
-> > the fwnode pointer to the imx pgc power domain device will fix
-> > this issue.
-> >
-> > Signed-off-by: Pengfei Li <pengfei.li_1@nxp.com>
-> > ---
-> >  drivers/pmdomain/imx/gpc.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/pmdomain/imx/gpc.c b/drivers/pmdomain/imx/gpc.c
-> > index 114f44ca07dd..7d81e3171d39 100644
-> > --- a/drivers/pmdomain/imx/gpc.c
-> > +++ b/drivers/pmdomain/imx/gpc.c
-> > @@ -497,6 +497,7 @@ static int imx_gpc_probe(struct platform_device *pdev)
-> >
-> >                       pd_pdev->dev.parent = &pdev->dev;
-> >                       pd_pdev->dev.of_node = np;
-> > +                     pd_pdev->dev.fwnode = of_fwnode_handle(np);
-> >
-> >                       ret = platform_device_add(pd_pdev);
-> >                       if (ret) {
-> > --
-> > 2.34.1
+> Add Power Domains and Bindings for SM8650 platform, it uses
+> a new NSP2 power domain.
 >
-> I originally proposed [1] to address errors like the one below:
+> Dependencies: None
 >
-> [    1.039830] imx-gpc 20dc000.gpc: Failed to create device link (0x180) with 20c8000.anatop:regulator-vddpu
+> For convenience, a regularly refreshed linux-next based git tree containing
+> all the SM8650 related work is available at:
+> https://git.codelinaro.org/neil.armstrong/linux/-/tree/topic/sm85650/upstream/integ
 >
-> I tested this patch on an i.MX 6Quad board, and it also fixes these
-> errors.
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+> Neil Armstrong (2):
+>       dt-bindings: power: qcom,rpmpd: document the SM8650 RPMh Power Domains
+>       pmdomain: qcom: rpmhpd: Add SM8650 RPMh Power Domains
 >
-> Tested-by: Emil Kronborg <emil.kronborg@protonmail.com>
->
-> [1]
-> https://lore.kernel.org/linux-arm-kernel/20231012132214.257207-1-emkan@prevas.dk/T/
->
-> Best regards,
-> Emil
+>  .../devicetree/bindings/power/qcom,rpmpd.yaml      |  1 +
+>  drivers/pmdomain/qcom/rpmhpd.c                     | 30 ++++++++++++++++++++++
+>  include/dt-bindings/power/qcom,rpmhpd.h            |  1 +
+>  3 files changed, 32 insertions(+)
 
-Okay, so I decided to pick this one for fixes, instead of [1] as it
-looks like it's ready to be applied as is. I added a fixes/stable tag
-to it too.
+Applied for next, thanks!
 
 Kind regards
 Uffe
