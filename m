@@ -2,46 +2,39 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 990B57D81C4
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Oct 2023 13:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0D777D8285
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Oct 2023 14:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbjJZL0j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Oct 2023 07:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47754 "EHLO
+        id S230405AbjJZMWN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Oct 2023 08:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbjJZL0i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Oct 2023 07:26:38 -0400
+        with ESMTP id S229642AbjJZMWN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Oct 2023 08:22:13 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9DA811A6;
-        Thu, 26 Oct 2023 04:26:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 28A01B9;
+        Thu, 26 Oct 2023 05:22:10 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E84CA2F4;
-        Thu, 26 Oct 2023 04:27:16 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.70.231])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB90E3F738;
-        Thu, 26 Oct 2023 04:26:32 -0700 (PDT)
-Date:   Thu, 26 Oct 2023 12:26:20 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Zeng Heng <zengheng4@huawei.com>
-Cc:     broonie@kernel.org, joey.gouly@arm.com, will@kernel.org,
-        amit.kachhap@arm.com, rafael@kernel.org, catalin.marinas@arm.com,
-        james.morse@arm.com, maz@kernel.org, viresh.kumar@linaro.org,
-        sumitg@nvidia.com, yang@os.amperecomputing.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, wangxiongfeng2@huawei.com,
-        xiexiuqi@huawei.com, Ionela Voinescu <ionela.voinescu@arm.com>
-Subject: Re: [PATCH 3/3] cpufreq: CPPC: Eliminate the impact of cpc_read()
- latency error
-Message-ID: <ZTpM3OXZ8C1OrBIQ@FVFF77S0Q05N>
-References: <20231025093847.3740104-1-zengheng4@huawei.com>
- <20231025093847.3740104-4-zengheng4@huawei.com>
- <ZTj1fMsMj-Mekfn3@FVFF77S0Q05N>
- <abb15757-cbe6-037f-e8d3-5df9fbbf6c04@huawei.com>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5205B2F4;
+        Thu, 26 Oct 2023 05:22:51 -0700 (PDT)
+Received: from [10.57.81.157] (unknown [10.57.81.157])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D11B63F738;
+        Thu, 26 Oct 2023 05:22:08 -0700 (PDT)
+Message-ID: <ce8f1a13-b56f-4419-a954-8d987af44112@arm.com>
+Date:   Thu, 26 Oct 2023 13:22:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/7] Minor cleanup for thermal gov power allocator
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, rui.zhang@intel.com
+References: <20231025192225.468228-1-lukasz.luba@arm.com>
+ <CAJZ5v0gniBtFduwjhDku+OZzjvkCaFK7ew0uJTfW254XKTOyyw@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAJZ5v0gniBtFduwjhDku+OZzjvkCaFK7ew0uJTfW254XKTOyyw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <abb15757-cbe6-037f-e8d3-5df9fbbf6c04@huawei.com>
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -50,62 +43,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 26, 2023 at 09:55:39AM +0800, Zeng Heng wrote:
-> 
-> 在 2023/10/25 19:01, Mark Rutland 写道:
-> > On Wed, Oct 25, 2023 at 05:38:47PM +0800, Zeng Heng wrote:
-> > 
-> > The previous patch added this function, and calls it with smp_call_on_cpu(),
-> > where it'll run in IRQ context with IRQs disabled...
-> 
-> smp_call_on_cpu() puts the work to the bind-cpu worker.
 
-Ah, sorry -- I had confused this with the smp_call_function*() family, which do
-this in IRQ context.
 
-> And this function will be called in task context, and IRQs is certainly enabled.
-
-Understood; given that, please ignore my comments below.
-
-Mark.
-
+On 10/26/23 09:54, Rafael J. Wysocki wrote:
+> On Wed, Oct 25, 2023 at 9:21 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>> Hi all,
+>>
+>> The patch set does some small clean up for Intelligent Power Allocator.
+>> Those changes are not expected to alter the general functionality. They just
+>> improve the code reading. Only patch 3/7 might improve the use case for
+>> binding the governor to thermal zone (very unlikely in real products, but
+>> it's needed for correctness).
+>>
+>> The changes are based on top of current PM thermal branch, so with the
+>> new trip points.
+>>
+>> Regards,
+>> Lukasz
+>>
+>> Lukasz Luba (7):
+>>    thermal: gov_power_allocator: Rename trip_max_desired_temperature
+>>    thermal: gov_power_allocator: Setup trip points earlier
+>>    thermal: gov_power_allocator: Check the cooling devices only for
+>>      trip_max
+>>    thermal: gov_power_allocator: Rearrange the order of variables
+>>    thermal: gov_power_allocator: Use shorter variable when possible
+>>    thermal: gov_power_allocator: Remove unneeded local variables
+>>    thermal: gov_power_allocator: Clean needed variables at the beginning
+>>
+>>   drivers/thermal/gov_power_allocator.c | 123 ++++++++++++++------------
+>>   1 file changed, 64 insertions(+), 59 deletions(-)
+>>
+>> --
 > 
-> 
-> Zeng Heng
-> 
-> > >   	struct fb_ctr_pair *fb_ctrs = val;
-> > >   	int cpu = fb_ctrs->cpu;
-> > >   	int ret;
-> > > +	unsigned long timeout;
-> > >   	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs->fb_ctrs_t0);
-> > >   	if (ret)
-> > >   		return ret;
-> > > -	udelay(2); /* 2usec delay between sampling */
-> > > +	if (likely(!irqs_disabled())) {
-> > > +		/*
-> > > +		 * Set 1ms as sampling interval, but never schedule
-> > > +		 * to the idle task to prevent the AMU counters from
-> > > +		 * stopping working.
-> > > +		 */
-> > > +		timeout = jiffies + msecs_to_jiffies(1);
-> > > +		while (!time_after(jiffies, timeout))
-> > > +			cond_resched();
-> > > +
-> > > +	} else {
-> > ... so we'll enter this branch of the if-else ...
-> > 
-> > > +		pr_warn_once("CPU%d: Get rate in atomic context", cpu);
-> > ... and pr_warn_once() for something that's apparently normal and outside of
-> > the user's control?
-> > 
-> > That doesn't make much sense to me.
-> > 
-> > Mark.
-> > 
-> > > +		udelay(2); /* 2usec delay between sampling */
-> > > +	}
-> > >   	return cppc_get_perf_ctrs(cpu, &fb_ctrs->fb_ctrs_t1);
-> > >   }
-> > > -- 
-> > > 2.25.1
-> > > 
+> The series looks good to me overall, but I'd prefer to make these
+> changes in the 6.8 cycle, because the 6.7 merge window is around the
+> corner and there is quite a bit of thermal material in this cycle
+> already.
+
+Thanks for having a look! Yes, I agree, we can wait after the
+merge window. It just have to be cleaned one day a bit and I postponed
+this a few times, so no rush ;)
