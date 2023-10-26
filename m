@@ -2,112 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5B67D7EEE
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Oct 2023 10:53:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB3F7D7F00
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Oct 2023 10:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjJZIxh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Oct 2023 04:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33448 "EHLO
+        id S234866AbjJZIzC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 26 Oct 2023 04:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344757AbjJZIxa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Oct 2023 04:53:30 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 21DD410E3;
-        Thu, 26 Oct 2023 01:53:27 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2F3592F4;
-        Thu, 26 Oct 2023 01:54:08 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5154F3F762;
-        Thu, 26 Oct 2023 01:53:24 -0700 (PDT)
-Date:   Thu, 26 Oct 2023 09:53:21 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Zeng Heng <zengheng4@huawei.com>
-Cc:     <broonie@kernel.org>, <joey.gouly@arm.com>, <will@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>, <amit.kachhap@arm.com>,
-        <rafael@kernel.org>, <catalin.marinas@arm.com>,
-        <james.morse@arm.com>, <mark.rutland@arm.com>, <maz@kernel.org>,
-        <viresh.kumar@linaro.org>, <sumitg@nvidia.com>,
-        <yang@os.amperecomputing.com>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <wangxiongfeng2@huawei.com>, <xiexiuqi@huawei.com>
-Subject: Re: [PATCH 2/3] cpufreq: CPPC: Keep the target core awake when
- reading its cpufreq rate
-Message-ID: <ZTopAUnBQXGIuM5f@bogus>
-References: <20231025093847.3740104-1-zengheng4@huawei.com>
- <20231025093847.3740104-3-zengheng4@huawei.com>
- <20231025111301.ng5eaeaixfs3jjpg@bogus>
- <dcc4dfd7-fbef-7b46-5037-3916077ec696@huawei.com>
+        with ESMTP id S234976AbjJZIyv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Oct 2023 04:54:51 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8180AD4C;
+        Thu, 26 Oct 2023 01:54:32 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-1d542f05b9aso88955fac.1;
+        Thu, 26 Oct 2023 01:54:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698310471; x=1698915271;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vJBpOf233+yopPlepXZVOesYvg63ifr+iPe/TQKxFsU=;
+        b=e4PuMMkfYKmOoDLQF/cbBdpB2nxEdPDeCC3cpiMS28VdSNSALNbua0Qs/8dUdJkaDz
+         6+OSTspn7RiC9r3I5kMGjAR0p9voxcZi5kxt3R/AzV5bVyBdNgE//vKR24PGSSlf8Zbm
+         1JeD65VVaVio7kjL9DahQEgWm16Fgh9dFCjoid97FmeeNdIcAdeolLPF1+7frdlHS4oU
+         BV/eW+rz4siNFTGMf09gL29iOgetBtcilmLC6t7IDc+rZ2tVnUAXw61SW7afWkXxow7V
+         MuQkAj2OfN0pKmxfgEwyIvx8Sxc1rT0qmWABDy3f48c3qsaJhLRkGZKwgPzydw+lf3Fy
+         3OPA==
+X-Gm-Message-State: AOJu0YyBiaD1BGbSczOp8buGQEViB8JSe4qu5zwOgdoncZaHv724+sWX
+        wJrJKgXMPDB/9Az/5sHfX2FuLEQT7SZtkrYJu8A=
+X-Google-Smtp-Source: AGHT+IHVzrR+8RXsnZG1qtBgse4jbzcb9JTiKw+8kC9DGQakYWn6zEsHWTpc5DVgDihroHVH9Mu3Oyf/zqoTES03ipg=
+X-Received: by 2002:a4a:b985:0:b0:586:7095:126d with SMTP id
+ e5-20020a4ab985000000b005867095126dmr7403490oop.0.1698310471356; Thu, 26 Oct
+ 2023 01:54:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <dcc4dfd7-fbef-7b46-5037-3916077ec696@huawei.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20231025192225.468228-1-lukasz.luba@arm.com>
+In-Reply-To: <20231025192225.468228-1-lukasz.luba@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 26 Oct 2023 10:54:19 +0200
+Message-ID: <CAJZ5v0gniBtFduwjhDku+OZzjvkCaFK7ew0uJTfW254XKTOyyw@mail.gmail.com>
+Subject: Re: [PATCH 0/7] Minor cleanup for thermal gov power allocator
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
+        rafael@kernel.org, linux-pm@vger.kernel.org, rui.zhang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 26, 2023 at 10:24:54AM +0800, Zeng Heng wrote:
-> 
-> 在 2023/10/25 19:13, Sudeep Holla 写道:
-> > On Wed, Oct 25, 2023 at 05:38:46PM +0800, Zeng Heng wrote:
-> > > As ARM AMU's document says, all counters are subject to any changes
-> > > in clock frequency, including clock stopping caused by the WFI and WFE
-> > > instructions.
-> > > 
-> > > Therefore, using smp_call_on_cpu() to trigger target CPU to
-> > > read self's AMU counters, which ensures the counters are working
-> > > properly while cstate feature is enabled.
-> > > 
-> > > Reported-by: Sumit Gupta <sumitg@nvidia.com>
-> > > Link: https://lore.kernel.org/all/20230418113459.12860-7-sumitg@nvidia.com/
-> > > Signed-off-by: Zeng Heng <zengheng4@huawei.com>
-> > > ---
-> > >   drivers/cpufreq/cppc_cpufreq.c | 39 ++++++++++++++++++++++++++--------
-> > >   1 file changed, 30 insertions(+), 9 deletions(-)
-> > > 
-> > > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> > > index fe08ca419b3d..321a9dc9484d 100644
-> > > --- a/drivers/cpufreq/cppc_cpufreq.c
-> > > +++ b/drivers/cpufreq/cppc_cpufreq.c
-> > [...]
-> > 
-> > > @@ -850,18 +871,18 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
-> > >   	cpufreq_cpu_put(policy);
-> > > -	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t0);
-> > > -	if (ret)
-> > > -		return 0;
-> > > -
-> > > -	udelay(2); /* 2usec delay between sampling */
-> > > +	if (cpu_has_amu_feat(cpu))
-> > Have you compiled this on x86 ? Even if you have somehow managed to,
-> > this is not the right place to check the presence of AMU feature on
-> > the CPU.
-> > If AMU registers are used in CPPC, they must be using FFH GAS, in which
-> > case the interpretation of FFH is architecture dependent code.
+On Wed, Oct 25, 2023 at 9:21 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
 >
-> According to drivers/cpufreq/Makefile, cppc_cpufreq.c is only compiled with
-> ARM architecture.
+> Hi all,
 >
-
-Well that's true but this change doesn't belong to cppc_cpufreq.c, it must
-be part of drivers/acpi/cppc_acpi.c IMO and sorry I assumed that without
-explicitly mentioning that here.
-
-> But here, I would change cpu_has_amu_feat() with cpc_ffh_supported(), which
-> belongs to FFH APIs.
+> The patch set does some small clean up for Intelligent Power Allocator.
+> Those changes are not expected to alter the general functionality. They just
+> improve the code reading. Only patch 3/7 might improve the use case for
+> binding the governor to thermal zone (very unlikely in real products, but
+> it's needed for correctness).
 >
+> The changes are based on top of current PM thermal branch, so with the
+> new trip points.
+>
+> Regards,
+> Lukasz
+>
+> Lukasz Luba (7):
+>   thermal: gov_power_allocator: Rename trip_max_desired_temperature
+>   thermal: gov_power_allocator: Setup trip points earlier
+>   thermal: gov_power_allocator: Check the cooling devices only for
+>     trip_max
+>   thermal: gov_power_allocator: Rearrange the order of variables
+>   thermal: gov_power_allocator: Use shorter variable when possible
+>   thermal: gov_power_allocator: Remove unneeded local variables
+>   thermal: gov_power_allocator: Clean needed variables at the beginning
+>
+>  drivers/thermal/gov_power_allocator.c | 123 ++++++++++++++------------
+>  1 file changed, 64 insertions(+), 59 deletions(-)
+>
+> --
 
-It is not like that. cppc_acpi.c will know the GAS is FFH based so no need to
-check anything there. I see counters_read_on_cpu() called from cpc_ffh_read()
-already takes care of reading the AMUs on the right CPU. What exactly is
-the issue you are seeing ? I don't if this change is needed at all.
-
---
-Regards,
-Sudeep
+The series looks good to me overall, but I'd prefer to make these
+changes in the 6.8 cycle, because the 6.7 merge window is around the
+corner and there is quite a bit of thermal material in this cycle
+already.
