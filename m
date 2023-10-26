@@ -2,56 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2B37D7ADD
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Oct 2023 04:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C967D7AF1
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Oct 2023 04:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjJZCZC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Oct 2023 22:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39926 "EHLO
+        id S230522AbjJZCgV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Oct 2023 22:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjJZCZC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Oct 2023 22:25:02 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5922D12F;
-        Wed, 25 Oct 2023 19:24:59 -0700 (PDT)
-Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4SG8fL58PbzMmF3;
-        Thu, 26 Oct 2023 10:20:42 +0800 (CST)
+        with ESMTP id S229596AbjJZCgV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Oct 2023 22:36:21 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D164910A;
+        Wed, 25 Oct 2023 19:36:18 -0700 (PDT)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4SG8vd5cJbzNpW6;
+        Thu, 26 Oct 2023 10:32:13 +0800 (CST)
 Received: from [10.174.179.163] (10.174.179.163) by
  kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Thu, 26 Oct 2023 10:24:55 +0800
-Message-ID: <dcc4dfd7-fbef-7b46-5037-3916077ec696@huawei.com>
-Date:   Thu, 26 Oct 2023 10:24:54 +0800
+ 15.1.2507.31; Thu, 26 Oct 2023 10:36:16 +0800
+Message-ID: <1369cedf-e66b-82eb-4501-a6976bb8c558@huawei.com>
+Date:   Thu, 26 Oct 2023 10:36:15 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 2/3] cpufreq: CPPC: Keep the target core awake when
- reading its cpufreq rate
+Subject: Re: [PATCH -next] cpufreq: userspace: Keep the current frequency when
+ set userspace policy
 Content-Language: en-US
-To:     Sudeep Holla <sudeep.holla@arm.com>
-CC:     <broonie@kernel.org>, <joey.gouly@arm.com>, <will@kernel.org>,
-        <amit.kachhap@arm.com>, <rafael@kernel.org>,
-        <catalin.marinas@arm.com>, <james.morse@arm.com>,
-        <mark.rutland@arm.com>, <maz@kernel.org>,
-        <viresh.kumar@linaro.org>, <sumitg@nvidia.com>,
-        <yang@os.amperecomputing.com>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <wangxiongfeng2@huawei.com>, <xiexiuqi@huawei.com>
-References: <20231025093847.3740104-1-zengheng4@huawei.com>
- <20231025093847.3740104-3-zengheng4@huawei.com>
- <20231025111301.ng5eaeaixfs3jjpg@bogus>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     <rafael@kernel.org>, <liwei391@huawei.com>,
+        <linux-pm@vger.kernel.org>, <xiexiuqi@huawei.com>,
+        <wangxiongfeng2@huawei.com>, <linux-kernel@vger.kernel.org>
+References: <20231025080910.3245690-1-zengheng4@huawei.com>
+ <20231025111821.pp3hdpilddbx4yzr@vireshk-i7>
 From:   Zeng Heng <zengheng4@huawei.com>
-In-Reply-To: <20231025111301.ng5eaeaixfs3jjpg@bogus>
+In-Reply-To: <20231025111821.pp3hdpilddbx4yzr@vireshk-i7>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Originating-IP: [10.174.179.163]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
  kwepemi500024.china.huawei.com (7.221.188.100)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,64 +53,46 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-在 2023/10/25 19:13, Sudeep Holla 写道:
-> On Wed, Oct 25, 2023 at 05:38:46PM +0800, Zeng Heng wrote:
->> As ARM AMU's document says, all counters are subject to any changes
->> in clock frequency, including clock stopping caused by the WFI and WFE
->> instructions.
+在 2023/10/25 19:18, Viresh Kumar 写道:
+> On 25-10-23, 16:09, Zeng Heng wrote:
+>> When switching to the userspace policy, if the current frequency is within
+>> the range of policy's min and max values, the current frequency value
+>> should be remained. The .limit() function is called when changing governor
+>> or updating governor limits, so in both cases, there is no need to update
+>> frequency if the current frequency does not exceed the threshold.
 >>
->> Therefore, using smp_call_on_cpu() to trigger target CPU to
->> read self's AMU counters, which ensures the counters are working
->> properly while cstate feature is enabled.
+>> Additionally, when changing to userspace governor, the default value of
+>> set_speed is set by reading the current frequency of the CPU, but there
+>> is inevitable error between the frequency coming from .get_rate() interface
+>> and the actual working frequency. Consequently, when switching to userspace
+>> policy, keeping the current frequency can avoid unexpected changes.
 >>
->> Reported-by: Sumit Gupta <sumitg@nvidia.com>
->> Link: https://lore.kernel.org/all/20230418113459.12860-7-sumitg@nvidia.com/
 >> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
 >> ---
->>   drivers/cpufreq/cppc_cpufreq.c | 39 ++++++++++++++++++++++++++--------
->>   1 file changed, 30 insertions(+), 9 deletions(-)
+>>   drivers/cpufreq/cpufreq_userspace.c | 4 +---
+>>   1 file changed, 1 insertion(+), 3 deletions(-)
 >>
->> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
->> index fe08ca419b3d..321a9dc9484d 100644
->> --- a/drivers/cpufreq/cppc_cpufreq.c
->> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> [...]
+>> diff --git a/drivers/cpufreq/cpufreq_userspace.c b/drivers/cpufreq/cpufreq_userspace.c
+>> index 2c42fee76daa..fe55a7bb663c 100644
+>> --- a/drivers/cpufreq/cpufreq_userspace.c
+>> +++ b/drivers/cpufreq/cpufreq_userspace.c
+>> @@ -117,9 +117,7 @@ static void cpufreq_userspace_policy_limits(struct cpufreq_policy *policy)
+>>   	else if (policy->min > userspace->setspeed)
+>>   		__cpufreq_driver_target(policy, policy->min,
+>>   					CPUFREQ_RELATION_L);
+>> -	else
+>> -		__cpufreq_driver_target(policy, userspace->setspeed,
+>> -					CPUFREQ_RELATION_L);
+>> +	/* Otherwise, keep the current frequency. */
+>>
+>>   	mutex_unlock(&userspace->mutex);
+>>   }
+> Here is some reasoning why it should be done the way it is:
 >
->> @@ -850,18 +871,18 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
->>   
->>   	cpufreq_cpu_put(policy);
->>   
->> -	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t0);
->> -	if (ret)
->> -		return 0;
->> -
->> -	udelay(2); /* 2usec delay between sampling */
->> +	if (cpu_has_amu_feat(cpu))
-> Have you compiled this on x86 ? Even if you have somehow managed to,
-> this is not the right place to check the presence of AMU feature on
-> the CPU.
-> If AMU registers are used in CPPC, they must be using FFH GAS, in which
-> case the interpretation of FFH is architecture dependent code.
+> commit e43e94c1eda7 ("cpufreq: Fix GOV_LIMITS handling for the userspace governor")
 
 
-According to drivers/cpufreq/Makefile, cppc_cpufreq.c is only compiled with
-
-ARM architecture.
-
-But here, I would change cpu_has_amu_feat() with cpc_ffh_supported(), which
-
-belongs to FFH APIs.
-
-Thanks for the suggestion.
-
-
-Thanks again,
+Get it, thanks for the response.
 
 Zeng Heng
 
-
-
-> --
-> Regards,
-> Sudeep
->
