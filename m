@@ -2,106 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DFF7D84F4
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Oct 2023 16:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6AD77D85A9
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Oct 2023 17:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235056AbjJZOmJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Oct 2023 10:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
+        id S231532AbjJZPL4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Oct 2023 11:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231303AbjJZOmH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Oct 2023 10:42:07 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5EB1B2
-        for <linux-pm@vger.kernel.org>; Thu, 26 Oct 2023 07:42:05 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-40859c46447so6941705e9.1
-        for <linux-pm@vger.kernel.org>; Thu, 26 Oct 2023 07:42:05 -0700 (PDT)
+        with ESMTP id S231490AbjJZPL4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Oct 2023 11:11:56 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1288E187
+        for <linux-pm@vger.kernel.org>; Thu, 26 Oct 2023 08:11:53 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-27d45f5658fso853390a91.3
+        for <linux-pm@vger.kernel.org>; Thu, 26 Oct 2023 08:11:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698331323; x=1698936123; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :references:cc:to:content-language:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HBTq3tUneTFtyngE2KsPOx/aCroyGP8+hR+mE0hQyN8=;
-        b=qXcNjvnmPfpEXEhE6tmK27Omg5pfl53NGKG5rfyDLNLbpDOx523jUcEkKuXT1BQuaB
-         TRH8Z0fbd2Fh0sw7AFh0k17NA1xoVaVnhk4292F1KsaK5jfXFnsg5vtY7iNo6PkPUd2m
-         kspNqqs/BCdzqS+cEyztpsjVrlFqXbH+MzHV9+uaxB6inTpqr7B5p+nCtGSwFeIyoNso
-         xcOOdcwdHPcdpdgCLYb74oZ1Xe6M5oQsUVEBUtK1gaFyxP6UkUlWX+0pAnPk6sFwdP0t
-         0mLxNw02JThi1ERr7/xRgbLCTdW0euLtPL2PSMrcOSwFCMuUEXataEDTnu1ZHdpYurRi
-         YJnw==
+        d=linaro.org; s=google; t=1698333112; x=1698937912; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ytsMrbKsot6WqXNJXipm4PjB22ZW+bd5xJwfX2BfFqw=;
+        b=xNrR6YmeDBcRl/LMCaJskbH+tvvcBWrVWyOdLswjoDtw2xvU2HWoIo/9Fbw8FpQR3G
+         RyderwScS5nuF6odSBy1fBonmK64/YTtyQdJ7O+I7xMYXbAYQmJxEAPGqLTiRTImQ4i6
+         R4pBB1AbDYgYIe91Ov4C3FfuPOrlOyPc2pKZ9Y0f5w6JHBnLho0HwZs2zEV4UsorR9XZ
+         5n4KoNwb3RH+x8UEl2qaV89mY1zrkWk8Yced1DRC+tsfzEKrQzNO085N6HliHkxitfSE
+         zIJQWNhiBzXF94Rlr9p0eGteo3XsJTrN4dcEWWlNBLQbQ5LcDEfYeOsieNGydAYCeo3p
+         gO/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698331323; x=1698936123;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :references:cc:to:content-language:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=HBTq3tUneTFtyngE2KsPOx/aCroyGP8+hR+mE0hQyN8=;
-        b=wXdvEMxqEXbt4WGmi8E0sG/+WnLEzlmqoaqxg/CZSrQ/uK3iHiOvgxlUoAyEL93Q4O
-         M/hPxPiiTzTGaNZSay3Afj8V7poCt04PR4g4ad8n+OBGnn0HFlmAegV71NjHIZuPP4bV
-         zzZ9wrA5MJogNQhRbn25i8Hbz3EcXn5z6y0AS7LRorCrrH7+p8FC01ygRNQDUFvuCy/C
-         RzQtVW+ZacebdtbkXmXlUmM6nLLUbzybjR5jTKMk3+3nyK0eeYcq2L6CD730LIXesOOf
-         gUaKIviLbqK5Kue8c55E4Bn3xlnsE+e26S67LD3JylteThKnHwXkj07T3E3+U/RXGR9+
-         GuDw==
-X-Gm-Message-State: AOJu0YwGmonDB2Eorw4+gaq42FnM/UvqWx6wBEIG/o12KyVU4hUQTnHR
-        bsPegavPILu3hf8fusjj71fXPQ==
-X-Google-Smtp-Source: AGHT+IHgpcFwHSm2zVcUODCW5JcshsHhtbkvJSp0EmQ1ldqTh2Z3SffwnMZ+PTTzMy37ZPdH+p1OfQ==
-X-Received: by 2002:a05:600c:19d1:b0:405:7b92:453e with SMTP id u17-20020a05600c19d100b004057b92453emr15618178wmq.37.1698331323261;
-        Thu, 26 Oct 2023 07:42:03 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:f57f:eb08:d29b:8c9c? ([2a01:e0a:982:cbb0:f57f:eb08:d29b:8c9c])
-        by smtp.gmail.com with ESMTPSA id bg9-20020a05600c3c8900b004063cd8105csm2790955wmb.22.2023.10.26.07.42.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Oct 2023 07:42:02 -0700 (PDT)
-Message-ID: <7497e738-b9de-4dcb-90f8-06d6b1a86047@linaro.org>
-Date:   Thu, 26 Oct 2023 16:42:01 +0200
+        d=1e100.net; s=20230601; t=1698333112; x=1698937912;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ytsMrbKsot6WqXNJXipm4PjB22ZW+bd5xJwfX2BfFqw=;
+        b=tgrwNBdyj1n4q3rPgK1JFyvIzIFk27RPgeeUvTJrg8cwpgYfLRMveXreGZzIqSWyeY
+         nstKfy0ENIubor4wzFDswXyuw0jNcZPNV2j3v34CXH0fcv3q0pGsFALrQfXHo9x4bOjG
+         71UCDndZMaN44KudEv+Qhre8OoZRTAxgMGnzRzdsAcj7Pq0J/2c1J7dE9rUqFkw0IUFg
+         tMjMovVkO5TeNfyCx9dg1Al2cTCT/fKd44tCyaKTcBZhS0VF2bsNozB73HBssC8vGxKw
+         PMxlFLklc6SbvJ6/WZ+pAVQBrYpoLFc5O9BZPFWcG7teBPBTVBlhSJFcFQWRPaDG33+e
+         os3w==
+X-Gm-Message-State: AOJu0YzVn0fi3qpNotzQaEnwFfhZ/1pGTukrY5QoNtaHAbkZMgfu6RYA
+        IExODPA4EbefvjchLE3H7oIvcIiBHltunI03voWPOA==
+X-Google-Smtp-Source: AGHT+IHEqfVw5yZzhWJoBelucQkwYypQPy+fwFGVC3DqN1XMc2p4jSCcTNaOLvj+aj+bajUcTWoYmYQ9sIr9SL5Y6fw=
+X-Received: by 2002:a17:90a:1602:b0:27d:4dae:3c62 with SMTP id
+ n2-20020a17090a160200b0027d4dae3c62mr17689374pja.27.1698333112298; Thu, 26
+ Oct 2023 08:11:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 2/2] pmdomain: amlogic: Fix mask for the second NNA mem PD
- domain
-Content-Language: en-US, fr
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Tomeu Vizoso <tomeu@tomeuvizoso.net>
-Cc:     linux-kernel@vger.kernel.org, Da Xue <da@libre.computer>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-pm@vger.kernel.org
-References: <20231016080205.41982-1-tomeu@tomeuvizoso.net>
- <20231016080205.41982-2-tomeu@tomeuvizoso.net>
- <CAPDyKFqEP50MBE0_t5tAfsrdx8EOy5MGQWqfX0a_8FA-3cJe8A@mail.gmail.com>
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro Developer Services
-In-Reply-To: <CAPDyKFqEP50MBE0_t5tAfsrdx8EOy5MGQWqfX0a_8FA-3cJe8A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20231013151450.257891-1-vincent.guittot@linaro.org> <20231026101731.2q6u4mhfhuqrnmbk@BLR-5CG13462PL.amd.com>
+In-Reply-To: <20231026101731.2q6u4mhfhuqrnmbk@BLR-5CG13462PL.amd.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Thu, 26 Oct 2023 17:11:40 +0200
+Message-ID: <CAKfTPtDcS3H5rqd3NpxpUYOttNWsRS8ifZKHg=RePC2_NT3OVQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Rework interface between scheduler and schedutil governor
+To:     Wyes Karny <wyes.karny@amd.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        rafael@kernel.org, viresh.kumar@linaro.org, qyousef@layalina.io,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        lukasz.luba@arm.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -112,56 +70,249 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Ulf,
+Hi Wyes,
 
-On 26/10/2023 16:36, Ulf Hansson wrote:
-> On Mon, 16 Oct 2023 at 10:02, Tomeu Vizoso <tomeu@tomeuvizoso.net> wrote:
->>
->> Without this change, the NPU hangs when the 8th NN core is used.
->>
->> It matches what the out-of-tree driver does.
->>
->> Signed-off-by: Tomeu Vizoso <tomeu@tomeuvizoso.net>
-> 
-> The change looks good to me, but I have been awaiting an ack from some
-> of the platform/soc maintainers before applying.
-> 
-> That said, it looks like we need a fixes/stable tag too. Is there a
-> certain commit this fixes?
+On Thu, 26 Oct 2023 at 12:19, Wyes Karny <wyes.karny@amd.com> wrote:
+>
+> Hi Vincent,
+>
+> On 13 Oct 17:14, Vincent Guittot wrote:
+> > Following the discussion with Qais [1] about how to handle uclamp
+> > requirements and after syncing with him, we agreed that I should move
+> > forward on the patchset to rework the interface between scheduler and
+> > schedutil governor to provide more information to the latter. Scheduler
+> > (and EAS in particular) doesn't need anymore to guess estimate which
+> > headroom the governor wants to apply and will directly ask for the target
+> > freq. Then the governor directly gets the actual utilization and new
+> > minimum and maximum boundaries to select this target frequency and
+> > doesn't have to deal anymore with scheduler internals like uclamp when
+> > including iowait boost.
+>
+> I ran a duty_cycle (one cpu 1) test which does timed busy and idle repeatedly based on user input.
+>
 
-It looks good for me, you can add:
+Thanks for the tests. IIUC your result below, you don't see any
+significant difference in the figures with and without the patch which
+is exactly the goal in your case. The difference happens when you use
+either uclamp_min/max or deadline tasks or EAS or
+cpufreq_driver_adjust_perf()
 
-Fixes: 9a217b7e8953 ("soc: amlogic: meson-pwrc: Add NNA power domain for A311D")
+> I used below bpftrace program to trace effective utilization:
+> bpftrace -e 'kretprobe:effective_cpu_util / cpu == 1/ { @eff_util[cpu] = stats(retval); @eff_util_hist[cpu] = hist(retval);}'
 
-and
-
-Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
+Minor point but this should not make any difference in your case
+The new effective_cpu_util() replaces the legacy
+effective_cpu_util(cpu, util_cfs, type == ENERGY_UTIL, p)
+And the new sugov_effective_cpu_perf() replaces the legacy
+effective_cpu_util(cpu, util_cfs, type == FREQUENCY_UTIL, p) + dvfs
+headroom
 
 Thanks,
-Neil
+Vincent
 
-> 
-> Kind regards
-> Uffe
-> 
->> ---
->>   drivers/pmdomain/amlogic/meson-ee-pwrc.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/pmdomain/amlogic/meson-ee-pwrc.c b/drivers/pmdomain/amlogic/meson-ee-pwrc.c
->> index cfb796d40d9d..0dd71cd814c5 100644
->> --- a/drivers/pmdomain/amlogic/meson-ee-pwrc.c
->> +++ b/drivers/pmdomain/amlogic/meson-ee-pwrc.c
->> @@ -228,7 +228,7 @@ static struct meson_ee_pwrc_mem_domain sm1_pwrc_mem_audio[] = {
->>
->>   static struct meson_ee_pwrc_mem_domain g12a_pwrc_mem_nna[] = {
->>          { G12A_HHI_NANOQ_MEM_PD_REG0, GENMASK(31, 0) },
->> -       { G12A_HHI_NANOQ_MEM_PD_REG1, GENMASK(23, 0) },
->> +       { G12A_HHI_NANOQ_MEM_PD_REG1, GENMASK(31, 0) },
->>   };
->>
->>   #define VPU_PD(__name, __top_pd, __mem, __is_pwr_off, __resets, __clks)        \
->> --
->> 2.41.0
->>
-
+>
+> Below are the results on AMD server system:
+>
+> --------------------------------------------------------------------------------+ -------------------------------------------------------------------------------+
+>                            Without patches on 6.6-rc6                           |                             With patches on 6.6-rc6                            |
+> ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------|
+> busy: 0%, idle: 100% :                                                          | busy: 0%, idle: 100% :                                                         |
+>                                                                                 |                                                                                |
+> @eff_util[1]: count 4923, average 22, total 110935                              | @eff_util[1]: count 5556, average 10, total 58857                              |
+>                                                                                 |                                                                                |
+> @eff_util_hist[1]:                                                              | @eff_util_hist[1]:                                                             |
+> [1]                    6 |                                                    | | [1]                   14 |                                                    ||
+> [2, 4)                10 |                                                    | | [2, 4)                16 |                                                    ||
+> [4, 8)               862 |@@@@@@@@@@@                                         | | [4, 8)              1628 |@@@@@@@@@@@@@@@@@@@@@                               ||
+> [8, 16)             3782 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@| | [8, 16)             3896 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@||
+> [16, 32)              52 |                                                    | | [16, 32)               2 |                                                    ||
+> [32, 64)              44 |                                                    | |                                                                                |
+> [64, 128)             40 |                                                    | |                                                                                |
+> [128, 256)            38 |                                                    | |                                                                                |
+> [256, 512)            43 |                                                    | |                                                                                |
+> [512, 1K)             40 |                                                    | |                                                                                |
+> [1K, 2K)               6 |                                                    | |                                                                                |
+> ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------|
+> busy: 100%, idle: 0% :                                                          | busy: 100%, idle: 0% :                                                         |
+>                                                                                 |                                                                                |
+> @eff_util[1]: count 5544, average 974, total 5400203                            | @eff_util[1]: count 5588, average 972, total 5435602                           |
+>                                                                                 |                                                                                |
+> @eff_util_hist[1]:                                                              | @eff_util_hist[1]:                                                             |
+> [0]                    9 |                                                    | | [0]                   17 |                                                    ||
+> [1]                    0 |                                                    | | [1]                    0 |                                                    ||
+> [2, 4)                 0 |                                                    | | [2, 4)                 0 |                                                    ||
+> [4, 8)                 0 |                                                    | | [4, 8)                 0 |                                                    ||
+> [8, 16)                0 |                                                    | | [8, 16)                0 |                                                    ||
+> [16, 32)               0 |                                                    | | [16, 32)               0 |                                                    ||
+> [32, 64)               0 |                                                    | | [32, 64)               0 |                                                    ||
+> [64, 128)              0 |                                                    | | [64, 128)              0 |                                                    ||
+> [128, 256)             1 |                                                    | | [128, 256)             0 |                                                    ||
+> [256, 512)             0 |                                                    | | [256, 512)             0 |                                                    ||
+> [512, 1K)           5532 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@| | [512, 1K)           5571 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@||
+> [1K, 2K)               2 |                                                    | |                                                                                |
+> ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------|
+> busy: 10%, idle: 90% :                                                          | busy: 10%, idle: 90% :                                                         |
+>                                                                                 |                                                                                |
+> @eff_util[1]: count 5073, average 102, total 519454                             | @eff_util[1]: count 5555, average 101, total 566563                            |
+>                                                                                 |                                                                                |
+> @eff_util_hist[1]:                                                              | @eff_util_hist[1]:                                                             |
+> [1]                   10 |                                                    | | [1]                   21 |                                                    ||
+> [2, 4)                 6 |                                                    | | [2, 4)                10 |                                                    ||
+> [4, 8)                 0 |                                                    | | [4, 8)                 0 |                                                    ||
+> [8, 16)                0 |                                                    | | [8, 16)                0 |                                                    ||
+> [16, 32)               0 |                                                    | | [16, 32)               0 |                                                    ||
+> [32, 64)               0 |                                                    | | [32, 64)               0 |                                                    ||
+> [64, 128)           5057 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@| | [64, 128)           5524 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@||
+> ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------|
+> busy: 20%, idle: 80% :                                                          | busy: 20%, idle: 80% :                                                         |
+>                                                                                 |                                                                                |
+> @eff_util[1]: count 5112, average 198, total 1017056                            | @eff_util[1]: count 5553, average 201, total 1118650                           |
+>                                                                                 |                                                                                |
+> @eff_util_hist[1]:                                                              | @eff_util_hist[1]:                                                             |
+> [1]                   13 |                                                    | | [2, 4)                22 |                                                    ||
+> [2, 4)                 6 |                                                    | | [4, 8)                10 |                                                    ||
+> [4, 8)                 0 |                                                    | | [8, 16)                0 |                                                    ||
+> [8, 16)                1 |                                                    | | [16, 32)               0 |                                                    ||
+> [16, 32)               0 |                                                    | | [32, 64)               0 |                                                    ||
+> [32, 64)               0 |                                                    | | [64, 128)              0 |                                                    ||
+> [64, 128)              0 |                                                    | | [128, 256)          5521 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@||
+> [128, 256)          5092 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@| |                                                                                |
+> ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------|
+> busy: 30%, idle: 70% :                                                          | busy: 30%, idle: 70% :                                                         |
+>                                                                                 |                                                                                |
+> @eff_util[1]: count 5136, average 297, total 1528840                            | @eff_util[1]: count 5548, average 297, total 1650683                           |
+>                                                                                 |                                                                                |
+> @eff_util_hist[1]:                                                              | @eff_util_hist[1]:                                                             |
+> [1]                    7 |                                                    | | [0]                   17 |                                                    ||
+> [2, 4)                 8 |                                                    | | [1]                    0 |                                                    ||
+> [4, 8)                 0 |                                                    | | [2, 4)                 0 |                                                    ||
+> [8, 16)                1 |                                                    | | [4, 8)                 0 |                                                    ||
+> [16, 32)               0 |                                                    | | [8, 16)                0 |                                                    ||
+> [32, 64)               0 |                                                    | | [16, 32)               0 |                                                    ||
+> [64, 128)              0 |                                                    | | [32, 64)               0 |                                                    ||
+> [128, 256)             0 |                                                    | | [64, 128)              0 |                                                    ||
+> [256, 512)          5120 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@| | [128, 256)             0 |                                                    ||
+>                                                                                 | [256, 512)          5531 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@||
+> ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------|
+> busy: 40%, idle: 60% :                                                          | busy: 40%, idle: 60% :                                                         |
+>                                                                                 |                                                                                |
+> @eff_util[1]: count 5161, average 394, total 2036421                            | @eff_util[1]: count 5552, average 394, total 2189976                           |
+>                                                                                 |                                                                                |
+> @eff_util_hist[1]:                                                              | @eff_util_hist[1]:                                                             |
+> [0]                    2 |                                                    | | [0]                   16 |                                                    ||
+> [1]                    9 |                                                    | | [1]                    0 |                                                    ||
+> [2, 4)                 2 |                                                    | | [2, 4)                 0 |                                                    ||
+> [4, 8)                 0 |                                                    | | [4, 8)                 0 |                                                    ||
+> [8, 16)                0 |                                                    | | [8, 16)                0 |                                                    ||
+> [16, 32)               0 |                                                    | | [16, 32)               0 |                                                    ||
+> [32, 64)               0 |                                                    | | [32, 64)               0 |                                                    ||
+> [64, 128)              0 |                                                    | | [64, 128)              0 |                                                    ||
+> [128, 256)             0 |                                                    | | [128, 256)             0 |                                                    ||
+> [256, 512)          5148 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@| | [256, 512)          5536 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@||
+> ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------|
+> busy: 50%, idle: 50% :                                                          | busy: 50%, idle: 50% :                                                         |
+>                                                                                 |                                                                                |
+> @eff_util[1]: count 5226, average 491, total 2567889                            | @eff_util[1]: count 5559, average 489, total 2722999                           |
+>                                                                                 |                                                                                |
+> @eff_util_hist[1]:                                                              | @eff_util_hist[1]:                                                             |
+> [0]                   10 |                                                    | | [0]                    2 |                                                    ||
+> [1]                    0 |                                                    | | [1]                   20 |                                                    ||
+> [2, 4)                 0 |                                                    | | [2, 4)                 6 |                                                    ||
+> [4, 8)                 0 |                                                    | | [4, 8)                 0 |                                                    ||
+> [8, 16)                0 |                                                    | | [8, 16)                0 |                                                    ||
+> [16, 32)               0 |                                                    | | [16, 32)               0 |                                                    ||
+> [32, 64)               0 |                                                    | | [32, 64)               0 |                                                    ||
+> [64, 128)              0 |                                                    | | [64, 128)              0 |                                                    ||
+> [128, 256)             0 |                                                    | | [128, 256)             0 |                                                    ||
+> [256, 512)          5188 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@| | [256, 512)          5526 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@||
+> [512, 1K)             28 |                                                    | | [512, 1K)              5 |                                                    ||
+> ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------|
+> busy: 60%, idle: 40% :                                                          | busy: 60%, idle: 40% :                                                         |
+>                                                                                 |                                                                                |
+> @eff_util[1]: count 5303, average 587, total 3115494                            | @eff_util[1]: count 5549, average 588, total 3264071                           |
+>                                                                                 |                                                                                |
+> @eff_util_hist[1]:                                                              | @eff_util_hist[1]:                                                             |
+> [1]                    2 |                                                    | | [0]                   17 |                                                    ||
+> [2, 4)                 8 |                                                    | | [1]                    0 |                                                    ||
+> [4, 8)                 4 |                                                    | | [2, 4)                 0 |                                                    ||
+> [8, 16)                0 |                                                    | | [4, 8)                 0 |                                                    ||
+> [16, 32)               0 |                                                    | | [8, 16)                0 |                                                    ||
+> [32, 64)               0 |                                                    | | [16, 32)               0 |                                                    ||
+> [64, 128)              0 |                                                    | | [32, 64)               0 |                                                    ||
+> [128, 256)             0 |                                                    | | [64, 128)              0 |                                                    ||
+> [256, 512)             0 |                                                    | | [128, 256)             0 |                                                    ||
+> [512, 1K)           5289 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@| | [256, 512)             0 |                                                    ||
+>                                                                                 | [512, 1K)           5532 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@||
+> ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------|
+> busy: 70%, idle: 30% :                                                          | busy: 70%, idle: 30% :                                                         |
+>                                                                                 |                                                                                |
+> @eff_util[1]: count 5325, average 685, total 3648392                            | @eff_util[1]: count 5542, average 685, total 3796277                           |
+>                                                                                 |                                                                                |
+> @eff_util_hist[1]:                                                              | @eff_util_hist[1]:                                                             |
+> [0]                    9 |                                                    | | [0]                   15 |                                                    ||
+> [1]                    0 |                                                    | | [1]                    2 |                                                    ||
+> [2, 4)                 0 |                                                    | | [2, 4)                 0 |                                                    ||
+> [4, 8)                 0 |                                                    | | [4, 8)                 0 |                                                    ||
+> [8, 16)                0 |                                                    | | [8, 16)                0 |                                                    ||
+> [16, 32)               0 |                                                    | | [16, 32)               0 |                                                    ||
+> [32, 64)               0 |                                                    | | [32, 64)               0 |                                                    ||
+> [64, 128)              1 |                                                    | | [64, 128)              0 |                                                    ||
+> [128, 256)             0 |                                                    | | [128, 256)             0 |                                                    ||
+> [256, 512)             0 |                                                    | | [256, 512)             0 |                                                    ||
+> [512, 1K)           5315 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@| | [512, 1K)           5525 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@||
+> ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------|
+> busy: 80%, idle: 20% :                                                          | busy: 80%, idle: 20% :                                                         |
+>                                                                                 |                                                                                |
+> @eff_util[1]: count 5327, average 780, total 4160266                            | @eff_util[1]: count 5541, average 780, total 4326164                           |
+>                                                                                 |                                                                                |
+> @eff_util_hist[1]:                                                              | @eff_util_hist[1]:                                                             |
+> [1]                    8 |                                                    | | [0]                   17 |                                                    ||
+> [2, 4)                 6 |                                                    | | [1]                    0 |                                                    ||
+> [4, 8)                 0 |                                                    | | [2, 4)                 0 |                                                    ||
+> [8, 16)                0 |                                                    | | [4, 8)                 0 |                                                    ||
+> [16, 32)               0 |                                                    | | [8, 16)                0 |                                                    ||
+> [32, 64)               0 |                                                    | | [16, 32)               0 |                                                    ||
+> [64, 128)              0 |                                                    | | [32, 64)               0 |                                                    ||
+> [128, 256)             0 |                                                    | | [64, 128)              0 |                                                    ||
+> [256, 512)             0 |                                                    | | [128, 256)             0 |                                                    ||
+> [512, 1K)           5313 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@| | [256, 512)             0 |                                                    ||
+>                                                                                 | [512, 1K)           5524 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@||
+> ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------|
+> busy: 90%, idle: 10% :                                                          | busy: 90%, idle: 10% :                                                         |
+>                                                                                 |                                                                                |
+> @eff_util[1]: count 5424, average 877, total 4762032                            | @eff_util[1]: count 5548, average 877, total 4869975                           |
+>                                                                                 |                                                                                |
+> @eff_util_hist[1]:                                                              | @eff_util_hist[1]:                                                             |
+> [0]                    9 |                                                    | | [0]                   17 |                                                    ||
+> [1]                    0 |                                                    | | [1]                    0 |                                                    ||
+> [2, 4)                 0 |                                                    | | [2, 4)                 0 |                                                    ||
+> [4, 8)                 0 |                                                    | | [4, 8)                 0 |                                                    ||
+> [8, 16)                0 |                                                    | | [8, 16)                0 |                                                    ||
+> [16, 32)               0 |                                                    | | [16, 32)               0 |                                                    ||
+> [32, 64)               0 |                                                    | | [32, 64)               0 |                                                    ||
+> [64, 128)              1 |                                                    | | [64, 128)              0 |                                                    ||
+> [128, 256)             0 |                                                    | | [128, 256)             0 |                                                    ||
+> [256, 512)             0 |                                                    | | [256, 512)             0 |                                                    ||
+> [512, 1K)           5412 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@| | [512, 1K)           5531 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@||
+> [1K, 2K)               2 |                                                    | |                                                                                |
+> --------------------------------------------------------------------------------+ -------------------------------------------------------------------------------|
+>
+> Thanks,
+> Wyes
+> >
+> > [1] https://lore.kernel.org/lkml/CAKfTPtA5JqNCauG-rP3wGfq+p8EEVx9Tvwj6ksM3SYCwRmfCTg@mail.gmail.com/
+> >
+> > Vincent Guittot (2):
+> >   sched/schedutil: rework performance estimation
+> >   sched/schedutil: rework iowait boost
+> >
+> >  include/linux/energy_model.h     |  1 -
+> >  kernel/sched/core.c              | 85 ++++++++++++--------------------
+> >  kernel/sched/cpufreq_schedutil.c | 72 +++++++++++++++++----------
+> >  kernel/sched/fair.c              | 22 +++++++--
+> >  kernel/sched/sched.h             | 84 +++----------------------------
+> >  5 files changed, 105 insertions(+), 159 deletions(-)
+> >
+> > --
+> > 2.34.1
+> >
