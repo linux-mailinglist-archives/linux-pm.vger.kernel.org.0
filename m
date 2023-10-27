@@ -2,121 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F151D7D900E
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Oct 2023 09:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF8107D909A
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Oct 2023 10:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235014AbjJ0HkF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Oct 2023 03:40:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34140 "EHLO
+        id S235058AbjJ0IEO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Oct 2023 04:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235003AbjJ0HkE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Oct 2023 03:40:04 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111471BF
-        for <linux-pm@vger.kernel.org>; Fri, 27 Oct 2023 00:40:01 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-507c5249d55so2636306e87.3
-        for <linux-pm@vger.kernel.org>; Fri, 27 Oct 2023 00:40:00 -0700 (PDT)
+        with ESMTP id S230523AbjJ0IEN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Oct 2023 04:04:13 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74CF1B4
+        for <linux-pm@vger.kernel.org>; Fri, 27 Oct 2023 01:04:06 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-40842752c6eso13866185e9.1
+        for <linux-pm@vger.kernel.org>; Fri, 27 Oct 2023 01:04:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698392399; x=1698997199; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GXUjM3EOPX7iEP2l6z+R1euqXv6dNw8ofuLQ19H53CE=;
-        b=EcnoKNHno6NIdDPSJtcNhc7DG1u4RptPxeu+y4ZBrJMIgfULJtZsofEnjMVFDgEeOU
-         yaGpvDecrPa64zJ3D8MVYIawXa0pypgNrHSeLFUAz0sLyRuqFUB0TS6ck+iBNdybShGi
-         uQ6zeolR4RMTnTTalPaNuxEvvndDP8w/fvbdqh3zjJW0giH6euAf3iq8NCPXemHPOYL1
-         xLGtyVoU6n32/dJfWaQbGqqhnijbS/e8HyL9/xLUXomNX8viGQ1E8iV05yJL+XMPropU
-         XRmRg5GwtcPGuDrKNlFAr0zUIR1CO17w3odKBQfk0Zih2fVu3ar7j9hncwMI2glzdxAG
-         muLg==
+        d=linaro.org; s=google; t=1698393845; x=1698998645; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=boXAGtuda+Qb9m4tektze7XbzOBCPPY4QNhYroPvhtw=;
+        b=zl3P/gHpDw0RPFvixqZOSnOTWc94wvoSnLV5QwtVI0dzs9bDhV0MtGjCNcEH1MUgqz
+         uV7T8Sr0/odz/xFTVsIK8ulhrNDaad6kxHlG4m86itcPb3NxuPFie0aFC7XDolTDDEPD
+         RTUDWaRxybH9ik7xHI+3ASPuyV6z7LDT3xt5t40UP7ZoN7EUNfji3/X/Wad2KQ6igHCs
+         uWm+8eJBuof3rht+Bvs6lNpvkbSXYWZ5A2U+6TYpR08GFI2bLKPmE1BBZCqXqQ3PS4DT
+         3/HkKLj1NiwawMkRpD2O6nHCprEvoDko0e1dXJ4Zd5s4I8W7MLxFnGswa7T8oofj+FkA
+         w9nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698392399; x=1698997199;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GXUjM3EOPX7iEP2l6z+R1euqXv6dNw8ofuLQ19H53CE=;
-        b=g8Y4pcBrmxLp2Z9GSM8N6NLsnfsvwE0tectKYhHWKMy2quQAXvhuGqGPrvVpVbOhcY
-         ffjOT4+nIaWdSFHqwDMPxv6ranJ82B8zDfaj4YPsV5UNWEMm8x1IW9VoQSNnh5gfxJQl
-         740VGbZ9eVy7AZ28aIGpDZLeWJc1Rmux/A1eA2nmz8398SJNemjiMjPxCZv7levFFZWi
-         EKoml9hW6zLj/U6ySh0Gro0cR1ngI3HHYiAQL17Vmk5Ba7gU85YYnT+7DBFoS4+t4ZDR
-         rK+khiVT2TAE3ZED+1P1EamS47BGtqTc0V2RxOKsZrUQJd/DxQydj7eNnlub0s3/FENA
-         dkcw==
-X-Gm-Message-State: AOJu0Yz3f88CaHz1gRGB5Lk5SYITHP3paUrUnObUyBnx+EeNNWgDTllF
-        6lQu+dARC1qpZ/ZVv6jDg4tqJg==
-X-Google-Smtp-Source: AGHT+IHnVbXL0w1nNa4w7HVpthktbqpCspWP5hjziUi17hNqgeMMIf3fVQPLprqOfJAZTpunZYcTYA==
-X-Received: by 2002:ac2:5293:0:b0:500:92f1:c341 with SMTP id q19-20020ac25293000000b0050092f1c341mr1180386lfm.54.1698392399105;
-        Fri, 27 Oct 2023 00:39:59 -0700 (PDT)
-Received: from [192.168.0.22] ([78.10.206.168])
-        by smtp.gmail.com with ESMTPSA id be16-20020a056512251000b004f13cd61ebbsm169705lfb.175.2023.10.27.00.39.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Oct 2023 00:39:58 -0700 (PDT)
-Message-ID: <4a2113ea-5e52-4caa-80f6-661c6ad64091@linaro.org>
-Date:   Fri, 27 Oct 2023 09:39:57 +0200
+        d=1e100.net; s=20230601; t=1698393845; x=1698998645;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=boXAGtuda+Qb9m4tektze7XbzOBCPPY4QNhYroPvhtw=;
+        b=OST71LP+RlzjJ1u1UiJmg3O93kTl0pnFWoehedc3c5MocdSz1GN9LlSQgCwm+YgJtn
+         aXd8Lbq3bcseCR3p88/Ze0OKiT+s/qz2dQxuyZAchK74eHLoJUGKed8PTfwRqCQq3WVl
+         +2XgRpVrU5yXmRN6kLLds2C8rjQncqFeRph6LEHUm4WaNTYYvKVBaNkOqU2rLEA7z7od
+         ulATkAKFuRlWffVj/IWEm/RIRn+DMLryuBrPwVQzjBD/07bfxFkK4KPU2pWZVm5AHitD
+         uBubzkoi1I/zvZ/rtcVQ8SiNoPKQBQHY1ne0ojD9xu/VUxwY4dFOwi8kyySNE5yGNr11
+         yfbw==
+X-Gm-Message-State: AOJu0YwJtDWzgo1HaoIrr39pN6lCUHJNLA7GCVqMnMUr3RAC3BE+bR6S
+        m32t4zRrC0zmqc2GHGDfkG8a/Q==
+X-Google-Smtp-Source: AGHT+IH55gRvNIIGzxY2wtfBzfKIjKSV3fYf5Htk7gWA3H0RGtGe6nmb/WOdKqFqMmC7RaRaxT+LWQ==
+X-Received: by 2002:a05:600c:a44:b0:3fc:dd9:91fd with SMTP id c4-20020a05600c0a4400b003fc0dd991fdmr1629085wmq.40.1698393845086;
+        Fri, 27 Oct 2023 01:04:05 -0700 (PDT)
+Received: from vingu-book.. ([2a01:e0a:f:6020:c5e:e24e:ad0b:58c6])
+        by smtp.gmail.com with ESMTPSA id 17-20020a05600c025100b004083729fc14sm4397488wmj.20.2023.10.27.01.04.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Oct 2023 01:04:04 -0700 (PDT)
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+To:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
+        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
+        lukasz.luba@arm.com, ionela.voinescu@arm.com,
+        pierre.gondois@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org
+Cc:     conor.dooley@microchip.com, suagrfillet@gmail.com,
+        ajones@ventanamicro.com, lftan@kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [PATCH v4 0/7] consolidate and cleanup CPU capacity
+Date:   Fri, 27 Oct 2023 10:03:53 +0200
+Message-Id: <20231027080400.56703-1-vincent.guittot@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: interconnect: document the RPMh
- Network-On-Chip Interconnect in Qualcomm SM8650 SoC
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Abel Vesa <abel.vesa@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231025-topic-sm8650-upstream-interconnect-v1-0-b7277e03aa3d@linaro.org>
- <20231025-topic-sm8650-upstream-interconnect-v1-1-b7277e03aa3d@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231025-topic-sm8650-upstream-interconnect-v1-1-b7277e03aa3d@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
@@ -127,76 +81,74 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25/10/2023 09:33, Neil Armstrong wrote:
-> Document the RPMh Network-On-Chip Interconnect of the SM8650 platform.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  .../bindings/interconnect/qcom,sm8650-rpmh.yaml    | 136 ++++++++++++++++++
->  .../dt-bindings/interconnect/qcom,sm8650-rpmh.h    | 154 +++++++++++++++++++++
->  2 files changed, 290 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sm8650-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sm8650-rpmh.yaml
-> new file mode 100644
-> index 000000000000..65b239ac2afd
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,sm8650-rpmh.yaml
-> @@ -0,0 +1,136 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/interconnect/qcom,sm8650-rpmh.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm RPMh Network-On-Chip Interconnect on SM8650
-> +
-> +maintainers:
-> +  - Abel Vesa <abel.vesa@linaro.org>
-> +  - Neil Armstrong <neil.armstrong@linaro.org>
-> +
-> +description: |
-> +  RPMh interconnect providers support system bandwidth requirements through
-> +  RPMh hardware accelerators known as Bus Clock Manager (BCM). The provider is
-> +  able to communicate with the BCM through the Resource State Coordinator (RSC)
-> +  associated with each execution environment. Provider nodes must point to at
-> +  least one RPMh device child node pertaining to their RSC and each provider
-> +  can map to multiple RPMh resources.
-> +
-> +  See also:: include/dt-bindings/interconnect/qcom,sm8650-rpmh.h
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,sm8650-aggre1-noc
-> +      - qcom,sm8650-aggre2-noc
-> +      - qcom,sm8650-clk-virt
-> +      - qcom,sm8650-cnoc-main
-> +      - qcom,sm8650-config-noc
-> +      - qcom,sm8650-gem-noc
-> +      - qcom,sm8650-lpass-ag-noc
-> +      - qcom,sm8650-lpass-lpiaon-noc
-> +      - qcom,sm8650-lpass-lpicx-noc
-> +      - qcom,sm8650-mc-virt
-> +      - qcom,sm8650-mmss-noc
-> +      - qcom,sm8650-nsp-noc
-> +      - qcom,sm8650-pcie-anoc
-> +      - qcom,sm8650-system-noc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 1
-> +    maxItems: 2
+This is the 1st part of consolidating how the max compute capacity is
+used in the scheduler and how we calculate the frequency for a level of
+utilization.
 
-If there is going to be resend/new version:
+Fix some unconsistancy when computing frequency for an utilization. There
+can be a mismatch between energy model and schedutil.
 
-Please put required: block here.
+Next step will be to make a difference between the original
+max compute capacity of a CPU and what is currently available when
+there is a capping applying forever (i.e. seconds or more).
 
-In any case:
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Changes since v3:
+- Split patch 5 cpufreq/cppc
+- Fix topology_init_cpu_capacity_cppc() 
+- Fix init if AMU ratio
+- Added some tags
 
-Best regards,
-Krzysztof
+Changes since v2:
+- Remove the 1st patch which has been queued in tip
+- Rework how to initialize the reference frequency for cppc_cpufreq and
+  change topology_init_cpu_capacity_cppc() to also set capacity_ref_freq
+- Add a RFC to convert AMU to use arch_scale_freq_ref and move the config
+  of the AMU ratio to be done when intializing cpu capacity and
+  capacity_ref_freq
+- Added some tags
+
+Changes since v1:
+- Fix typos
+- Added changes in cpufreq to use arch_scale_freq_ref() when calling
+  arch_set_freq_scale (patch 3).
+- arch_scale_freq_ref() is always defined and returns 0 (as proposed
+  by Ionela) when not defined by the arch. This simplifies the code with
+  the addition of patch 3.
+- Simplify Energy Model which always uses arch_scale_freq_ref(). The
+  latter returns 0 when not defined by arch instead of last item of the 
+  perf domain. This is not a problem because the function is only defined
+  for compilation purpose in this case and we don't care about the
+  returned value. (patch 5)
+- Added changes in cppc cpufreq to set capacity_ref_freq (patch 6)
+- Added reviewed tag for patch 1 which got a minor change but not for
+  others as I did some changes which could make previous reviewed tag
+  no more relevant.
+
+Vincent Guittot (7):
+  topology: add a new arch_scale_freq_reference
+  cpufreq: use the fixed and coherent frequency for scaling capacity
+  cpufreq/schedutil: use a fixed reference frequency
+  energy_model: use a fixed reference frequency
+  cpufreq/cppc: move and rename cppc_cpufreq_{perf_to_khz|khz_to_perf}
+  cpufreq/cppc: set the frequency used for computing the capacity
+  arm64/amu: use capacity_ref_freq to set AMU ratio
+
+ arch/arm/include/asm/topology.h   |   1 +
+ arch/arm64/include/asm/topology.h |   1 +
+ arch/arm64/kernel/topology.c      |  26 +++---
+ arch/riscv/include/asm/topology.h |   1 +
+ drivers/acpi/cppc_acpi.c          |  93 +++++++++++++++++++++
+ drivers/base/arch_topology.c      |  55 ++++++++----
+ drivers/cpufreq/cppc_cpufreq.c    | 134 ++++--------------------------
+ drivers/cpufreq/cpufreq.c         |   4 +-
+ include/acpi/cppc_acpi.h          |   2 +
+ include/linux/arch_topology.h     |   8 ++
+ include/linux/cpufreq.h           |   9 ++
+ include/linux/energy_model.h      |  14 +++-
+ kernel/sched/cpufreq_schedutil.c  |  26 +++++-
+ 13 files changed, 221 insertions(+), 153 deletions(-)
+
+-- 
+2.34.1
 
