@@ -2,126 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0712D7D9CC6
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Oct 2023 17:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA9A7D9E44
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Oct 2023 18:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345887AbjJ0PTX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Oct 2023 11:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
+        id S230101AbjJ0Q7R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Oct 2023 12:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231785AbjJ0PTW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Oct 2023 11:19:22 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9E818A
-        for <linux-pm@vger.kernel.org>; Fri, 27 Oct 2023 08:19:20 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-5b8a88038b4so2511925a12.1
-        for <linux-pm@vger.kernel.org>; Fri, 27 Oct 2023 08:19:20 -0700 (PDT)
+        with ESMTP id S229454AbjJ0Q7Q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Oct 2023 12:59:16 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF01411B;
+        Fri, 27 Oct 2023 09:59:14 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id 98e67ed59e1d1-2800ab6fa66so881705a91.3;
+        Fri, 27 Oct 2023 09:59:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698419960; x=1699024760; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=W/jyxUKjs+ivpArfOLxbtvoP8jhQ6Kn3kdcGQik3464=;
-        b=t5dz3JOSfKZgW8Sobzq+LJBU5J1pp60EKogyCKLZ2CwqFxpDX6CpsOZ19rrk5SBNtp
-         VZTgFKZ5R13bAqMFf8EALaD+grB8h1bso+csJX7T6+BKCuMHiCKIR3oCDUge40PQv0sP
-         bTv25e2d1YI2GOIV3AlzTgKqRF8XqXzmxsnQAv/QnalnMnmZ3rBMN1vxEU//CO3TN7TR
-         B8RIJsvcOR6j2T6TO+ru0E6ZRim8p6dMorFviqqVC761UFld3qw0yjY0N3UbAi4ELVFm
-         +33ZAaqA5OOw47zMdDFxgmAoOxKLvow315DyoO6+3mjXNO3YGRe6DmrRvwrWR79kfo8r
-         mcyg==
+        d=gmail.com; s=20230601; t=1698425954; x=1699030754; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=l2XOiyO7ELntzgtLuOwOBKhVQExybEKPgHk4URVDgho=;
+        b=TaXdggCfuxcnoE3f7wujFBb8G5rfCzEQXCsOLdMruV4SRYxEXcbMj2mXFEfSUMKS94
+         ES82gfraay+Ip729LlK8pgOjUOSmJTTlLMhI0XOJYo6m3kXjGeTQ4Fya+po6VKM+8lHA
+         Lhv42BDhXWMOQaXeK3wtgdSW2Mk2hCntYfMi6oTdR52TsLfep3BNky17LU8tWBrrOBim
+         6j1H9yhv7jCDq8IpzbFa7oorOQYUN2WN1pmXDsmi+pxe3lxegRE47LkLVCFphGhamhMU
+         wRwmM80i1n7/sNtJUQ8dkPB7Cuy1UUydS2Cm9Ja21l04cQ4tU9+9IpE02Zt2UsQohU7f
+         oGcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698419960; x=1699024760;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1698425954; x=1699030754;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=W/jyxUKjs+ivpArfOLxbtvoP8jhQ6Kn3kdcGQik3464=;
-        b=K9a9n+Alh79idAV0PhXOSFMXjjh6oJcXx0kuH8c2woo2W4HogS2YSUYKuLhzKFyI4r
-         RWMosWHhXlTk95aVqhwgCYOiZQDSrk159BeQAXdPeBla8TmR/U++HtgIXCb6/sEGgZN3
-         0cO+I1AcRNB1pSJbOed7OdrALkc6YZaEjWIMtK9Sq7Hz9/+Ins5f3icOhkwNXESF03Bo
-         FQzV3QjTTw6GvxUi6RkfKym6cr2qAc8Fc6jEJuBQs/FYVDbCscrlYrbOJSkNOw8gt6VA
-         n8dW0qdqJd/9IVlsrbFDVyHUnOtcLJAQ2KHPZLyFsFbFFdUjMZwLAdRQ121jVsF6KmIq
-         K09Q==
-X-Gm-Message-State: AOJu0YzaypMMiIrT651ajnmdAyvJXPJRv2kEUO9VDZMnoVNOqMR025VI
-        mRx0Kr0K59Pcj2twGoP/5T7bJ2cplYrQw0wpsHA8fg==
-X-Google-Smtp-Source: AGHT+IGUKBp+yhr0SGL/r8fauv9ZI3qMIv5o/cI5+TiZ/hDpbOWH1EASH2mun47zrYT67G9szswD5PDJM//8CmhEj8w=
-X-Received: by 2002:a17:90b:33c8:b0:274:77b3:64d0 with SMTP id
- lk8-20020a17090b33c800b0027477b364d0mr7422882pjb.17.1698419959769; Fri, 27
- Oct 2023 08:19:19 -0700 (PDT)
+        bh=l2XOiyO7ELntzgtLuOwOBKhVQExybEKPgHk4URVDgho=;
+        b=sfyj5tpvP/Tk+pndESDBUiDtTx4oXu3nBDODEPpF7V54MbKUaxtktueyvfqi/Uf6qU
+         tdsyVqw/Q3qWI+i1331B3rRN3/L94c2R/QLKWTVVjGbd+WYAbP4EyeoHiBtVgZe+SiTo
+         wWsDajLzwg0vuJp+J63HnXpKlwXFEPcsmry05hS69rZh+KUXM1F71row3XYvLHyFSCTW
+         dBFN6V/277qdy4axvo3dq5KB666IxdPByCVnyPtOgey/LZge3qaAlsQP4vmbrt/sMM57
+         ANbo7L3pYtktJ+sVJ8xuy4M3ZrMEgPIw7DCo/wMxXKfnvDnuDZcXPSznIYGXceuDj2ek
+         MO+Q==
+X-Gm-Message-State: AOJu0YxqKPNwGlZSjyPWA8mJKV+rwho6vHkl1KnCLPYOJJjoEjC2/RIX
+        SbkcRjIjOk6Xg/oMc9EUCJc=
+X-Google-Smtp-Source: AGHT+IGmj0N9Vkha046UwwcpchKPTTZ+UtBOMnjmz7YeYZi5yoFGRN7OlD9zVh2noyVB62tlU/Jayw==
+X-Received: by 2002:a17:90a:1a0b:b0:280:1022:f00e with SMTP id 11-20020a17090a1a0b00b002801022f00emr1807988pjk.29.1698425954002;
+        Fri, 27 Oct 2023 09:59:14 -0700 (PDT)
+Received: from localhost ([2a00:79e1:abd:4a00:6c80:7c10:75a0:44f4])
+        by smtp.gmail.com with ESMTPSA id s31-20020a17090a2f2200b0028017a2a8fasm733629pjd.3.2023.10.27.09.59.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Oct 2023 09:59:13 -0700 (PDT)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@chromium.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        amd-gfx@lists.freedesktop.org (open list:RADEON and AMDGPU DRM DRIVERS),
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Dong Chenchen <dongchenchen2@huawei.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Guchun Chen <guchun.chen@amd.com>,
+        Jack Xiao <Jack.Xiao@amd.com>, James Zhu <James.Zhu@amd.com>,
+        Jonathan Kim <jonathan.kim@amd.com>, Lang Yu <Lang.Yu@amd.com>,
+        linux-kernel@vger.kernel.org (open list),
+        linux-pm@vger.kernel.org (open list:SUSPEND TO RAM),
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        nouveau@lists.freedesktop.org (open list:DRM DRIVER FOR NVIDIA
+        GEFORCE/QUADRO GPUS), Philip Yang <Philip.Yang@amd.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sean Paul <sean@poorly.run>,
+        Shashank Sharma <shashank.sharma@amd.com>,
+        Srinivasan Shanmugam <srinivasan.shanmugam@amd.com>
+Subject: [PATCH 0/7] drm/msm/gem: drm_exec conversion
+Date:   Fri, 27 Oct 2023 09:58:34 -0700
+Message-ID: <20231027165859.395638-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-References: <20231027080400.56703-1-vincent.guittot@linaro.org>
- <20231027080400.56703-2-vincent.guittot@linaro.org> <ZTuDW8lXZLQP1Ruq@gmail.com>
-In-Reply-To: <ZTuDW8lXZLQP1Ruq@gmail.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Fri, 27 Oct 2023 17:19:07 +0200
-Message-ID: <CAKfTPtDgUiY3COzR4xMZ80yKuK2FWNx=wnVXhRTR8vZ6JSnAoA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/7] topology: add a new arch_scale_freq_reference
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
-        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
-        lukasz.luba@arm.com, ionela.voinescu@arm.com,
-        pierre.gondois@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        acpica-devel@lists.linuxfoundation.org, conor.dooley@microchip.com,
-        suagrfillet@gmail.com, ajones@ventanamicro.com, lftan@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 27 Oct 2023 at 11:31, Ingo Molnar <mingo@kernel.org> wrote:
->
->
-> * Vincent Guittot <vincent.guittot@linaro.org> wrote:
->
-> > --- a/include/linux/arch_topology.h
-> > +++ b/include/linux/arch_topology.h
-> > @@ -27,6 +27,13 @@ static inline unsigned long topology_get_cpu_scale(int cpu)
-> >
-> >  void topology_set_cpu_scale(unsigned int cpu, unsigned long capacity);
-> >
-> > +DECLARE_PER_CPU(unsigned long, capacity_ref_freq);
-> > +
-> > +static inline unsigned long topology_get_freq_ref(int cpu)
-> > +{
-> > +     return per_cpu(capacity_ref_freq, cpu);
-> > +}
-> > +
-> >  DECLARE_PER_CPU(unsigned long, arch_freq_scale);
->
-> So mind naming it in a way that expresses that this is indeed a maximum
-> frequency? arch_scale_ref_freq_max or so?
+From: Rob Clark <robdclark@chromium.org>
 
-This does not always have to be the max frequency of the CPU but the
-frequency that has been used to compute the capacity of the CPU so
-it's the "reference" frequency used for computing the capacity and
-that must be used to compute  the capacity for a given frequency and
-the other way. That 's why I have intentionally not used freq_max
+Simplify the exec path (removing a legacy optimization) and convert to
+drm_exec.  One drm_exec patch to allow passing in the expected # of GEM
+objects to avoid re-allocation.
 
-Then other similar functions start with arch_scale_freq_something
+I'd be a bit happier if I could avoid the extra objects table allocation
+in drm_exec in the first place, but wasn't really happy with any of the
+things I tried to get rid of that.
 
->
-> Also, is there any particular concept behind naming one new symbol
-> 'freq_ref', the other 'ref_freq'? If not then please standardize on one
-> variant.
+Rob Clark (7):
+  drm/msm/gem: Remove "valid" tracking
+  drm/msm/gem: Remove submit_unlock_unpin_bo()
+  drm/msm/gem: Don't queue job to sched in error cases
+  drm/msm/gem: Split out submit_unpin_objects() helper
+  drm/msm/gem: Cleanup submit_cleanup_bo()
+  drm/exec: Pass in initial # of objects
+  drm/msm/gem: Convert to drm_exec
 
-no particular reason. ref_freq comes from "reference frequency" but
-interfaces follows arch_scale_freq_something or
-topology_*_freq_something
+ drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c  |   2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_csa.c |   4 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c |   4 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c |   4 +-
+ drivers/gpu/drm/drm_exec.c              |  15 +-
+ drivers/gpu/drm/msm/Kconfig             |   1 +
+ drivers/gpu/drm/msm/msm_gem.h           |  13 +-
+ drivers/gpu/drm/msm/msm_gem_submit.c    | 197 ++++++------------------
+ drivers/gpu/drm/msm/msm_ringbuffer.c    |   3 +-
+ drivers/gpu/drm/nouveau/nouveau_exec.c  |   2 +-
+ drivers/gpu/drm/nouveau/nouveau_uvmm.c  |   2 +-
+ include/drm/drm_exec.h                  |   2 +-
+ 12 files changed, 79 insertions(+), 170 deletions(-)
 
-so we should keep freq_ref to keep interfaces aligned
+-- 
+2.41.0
 
->
-> Thanks,
->
->         Ingo
