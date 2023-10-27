@@ -2,265 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F14867D9A98
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Oct 2023 15:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0712D7D9CC6
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Oct 2023 17:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345996AbjJ0N7p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Oct 2023 09:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
+        id S1345887AbjJ0PTX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Oct 2023 11:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346016AbjJ0N7o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Oct 2023 09:59:44 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C79194;
-        Fri, 27 Oct 2023 06:59:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698415181; x=1729951181;
-  h=date:from:to:cc:subject:message-id;
-  bh=7J1dO21THtFrZ95x/9g0/FrKuB/T5ybQUKomlQySmqA=;
-  b=cdQpGLun7depIsCjCyPq44ZOE5NgG/ZamRRjNS+gYS/BBOMwxDs1mYeF
-   20ocZ5muoeTcL+bgY/2/fbH1Qqbjvw227GaDNrZ0mjnrPE3APCF3D0Oui
-   TIEex8HhBI2WxajJxNmDaA5Y1hUR26VH0ykrcmRjBckyF7IEBp/F0AyWn
-   MX/a/PbmJtbzF9t5tQKFO2Zn0p5X1M4f/A9z2ybwQ896dCD/dI/6PaOzS
-   b7yhUb/tmOBGpBJXX7jx0lD7RS3y/PL8vk78fE63j9X8K61DUUn5Yk5Iq
-   iR88wRc2sB92gxwuKl3ZH26jJFwcRniSlCgrIJWW6tvIrjI0yIFcBpAIo
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="452016450"
-X-IronPort-AV: E=Sophos;i="6.03,256,1694761200"; 
-   d="scan'208";a="452016450"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2023 06:59:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="794583649"
-X-IronPort-AV: E=Sophos;i="6.03,256,1694761200"; 
-   d="scan'208";a="794583649"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 27 Oct 2023 06:59:38 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qwNNA-000AuV-1R;
-        Fri, 27 Oct 2023 13:59:36 +0000
-Date:   Fri, 27 Oct 2023 21:59:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 3335ef03ad81e7ec516494af41ee417b630dd843
-Message-ID: <202310272124.ZPP7D7XR-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231785AbjJ0PTW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Oct 2023 11:19:22 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9E818A
+        for <linux-pm@vger.kernel.org>; Fri, 27 Oct 2023 08:19:20 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-5b8a88038b4so2511925a12.1
+        for <linux-pm@vger.kernel.org>; Fri, 27 Oct 2023 08:19:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1698419960; x=1699024760; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=W/jyxUKjs+ivpArfOLxbtvoP8jhQ6Kn3kdcGQik3464=;
+        b=t5dz3JOSfKZgW8Sobzq+LJBU5J1pp60EKogyCKLZ2CwqFxpDX6CpsOZ19rrk5SBNtp
+         VZTgFKZ5R13bAqMFf8EALaD+grB8h1bso+csJX7T6+BKCuMHiCKIR3oCDUge40PQv0sP
+         bTv25e2d1YI2GOIV3AlzTgKqRF8XqXzmxsnQAv/QnalnMnmZ3rBMN1vxEU//CO3TN7TR
+         B8RIJsvcOR6j2T6TO+ru0E6ZRim8p6dMorFviqqVC761UFld3qw0yjY0N3UbAi4ELVFm
+         +33ZAaqA5OOw47zMdDFxgmAoOxKLvow315DyoO6+3mjXNO3YGRe6DmrRvwrWR79kfo8r
+         mcyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698419960; x=1699024760;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=W/jyxUKjs+ivpArfOLxbtvoP8jhQ6Kn3kdcGQik3464=;
+        b=K9a9n+Alh79idAV0PhXOSFMXjjh6oJcXx0kuH8c2woo2W4HogS2YSUYKuLhzKFyI4r
+         RWMosWHhXlTk95aVqhwgCYOiZQDSrk159BeQAXdPeBla8TmR/U++HtgIXCb6/sEGgZN3
+         0cO+I1AcRNB1pSJbOed7OdrALkc6YZaEjWIMtK9Sq7Hz9/+Ins5f3icOhkwNXESF03Bo
+         FQzV3QjTTw6GvxUi6RkfKym6cr2qAc8Fc6jEJuBQs/FYVDbCscrlYrbOJSkNOw8gt6VA
+         n8dW0qdqJd/9IVlsrbFDVyHUnOtcLJAQ2KHPZLyFsFbFFdUjMZwLAdRQ121jVsF6KmIq
+         K09Q==
+X-Gm-Message-State: AOJu0YzaypMMiIrT651ajnmdAyvJXPJRv2kEUO9VDZMnoVNOqMR025VI
+        mRx0Kr0K59Pcj2twGoP/5T7bJ2cplYrQw0wpsHA8fg==
+X-Google-Smtp-Source: AGHT+IGUKBp+yhr0SGL/r8fauv9ZI3qMIv5o/cI5+TiZ/hDpbOWH1EASH2mun47zrYT67G9szswD5PDJM//8CmhEj8w=
+X-Received: by 2002:a17:90b:33c8:b0:274:77b3:64d0 with SMTP id
+ lk8-20020a17090b33c800b0027477b364d0mr7422882pjb.17.1698419959769; Fri, 27
+ Oct 2023 08:19:19 -0700 (PDT)
+MIME-Version: 1.0
+References: <20231027080400.56703-1-vincent.guittot@linaro.org>
+ <20231027080400.56703-2-vincent.guittot@linaro.org> <ZTuDW8lXZLQP1Ruq@gmail.com>
+In-Reply-To: <ZTuDW8lXZLQP1Ruq@gmail.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Fri, 27 Oct 2023 17:19:07 +0200
+Message-ID: <CAKfTPtDgUiY3COzR4xMZ80yKuK2FWNx=wnVXhRTR8vZ6JSnAoA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/7] topology: add a new arch_scale_freq_reference
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
+        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
+        lukasz.luba@arm.com, ionela.voinescu@arm.com,
+        pierre.gondois@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org, conor.dooley@microchip.com,
+        suagrfillet@gmail.com, ajones@ventanamicro.com, lftan@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 3335ef03ad81e7ec516494af41ee417b630dd843  Merge branch 'pm' into linux-next
+On Fri, 27 Oct 2023 at 11:31, Ingo Molnar <mingo@kernel.org> wrote:
+>
+>
+> * Vincent Guittot <vincent.guittot@linaro.org> wrote:
+>
+> > --- a/include/linux/arch_topology.h
+> > +++ b/include/linux/arch_topology.h
+> > @@ -27,6 +27,13 @@ static inline unsigned long topology_get_cpu_scale(int cpu)
+> >
+> >  void topology_set_cpu_scale(unsigned int cpu, unsigned long capacity);
+> >
+> > +DECLARE_PER_CPU(unsigned long, capacity_ref_freq);
+> > +
+> > +static inline unsigned long topology_get_freq_ref(int cpu)
+> > +{
+> > +     return per_cpu(capacity_ref_freq, cpu);
+> > +}
+> > +
+> >  DECLARE_PER_CPU(unsigned long, arch_freq_scale);
+>
+> So mind naming it in a way that expresses that this is indeed a maximum
+> frequency? arch_scale_ref_freq_max or so?
 
-elapsed time: 1462m
+This does not always have to be the max frequency of the CPU but the
+frequency that has been used to compute the capacity of the CPU so
+it's the "reference" frequency used for computing the capacity and
+that must be used to compute  the capacity for a given frequency and
+the other way. That 's why I have intentionally not used freq_max
 
-configs tested: 188
-configs skipped: 2
+Then other similar functions start with arch_scale_freq_something
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+>
+> Also, is there any particular concept behind naming one new symbol
+> 'freq_ref', the other 'ref_freq'? If not then please standardize on one
+> variant.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20231026   gcc  
-arc                   randconfig-001-20231027   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                   randconfig-001-20231027   gcc  
-arm                       spear13xx_defconfig   clang
-arm64                            allmodconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-hexagon                           allnoconfig   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20231026   gcc  
-i386         buildonly-randconfig-001-20231027   gcc  
-i386         buildonly-randconfig-002-20231026   gcc  
-i386         buildonly-randconfig-002-20231027   gcc  
-i386         buildonly-randconfig-003-20231026   gcc  
-i386         buildonly-randconfig-003-20231027   gcc  
-i386         buildonly-randconfig-004-20231026   gcc  
-i386         buildonly-randconfig-004-20231027   gcc  
-i386         buildonly-randconfig-005-20231026   gcc  
-i386         buildonly-randconfig-005-20231027   gcc  
-i386         buildonly-randconfig-006-20231026   gcc  
-i386         buildonly-randconfig-006-20231027   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20231026   gcc  
-i386                  randconfig-001-20231027   gcc  
-i386                  randconfig-002-20231026   gcc  
-i386                  randconfig-002-20231027   gcc  
-i386                  randconfig-003-20231026   gcc  
-i386                  randconfig-003-20231027   gcc  
-i386                  randconfig-004-20231026   gcc  
-i386                  randconfig-004-20231027   gcc  
-i386                  randconfig-005-20231026   gcc  
-i386                  randconfig-005-20231027   gcc  
-i386                  randconfig-006-20231026   gcc  
-i386                  randconfig-006-20231027   gcc  
-i386                  randconfig-011-20231027   gcc  
-i386                  randconfig-012-20231027   gcc  
-i386                  randconfig-013-20231027   gcc  
-i386                  randconfig-014-20231027   gcc  
-i386                  randconfig-015-20231027   gcc  
-i386                  randconfig-016-20231027   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20231026   gcc  
-loongarch             randconfig-001-20231027   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                         apollo_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                          hp300_defconfig   gcc  
-m68k                        mvme147_defconfig   gcc  
-m68k                          sun3x_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                         cobalt_defconfig   gcc  
-mips                     loongson1b_defconfig   gcc  
-mips                      loongson3_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-powerpc                      katmai_defconfig   clang
-powerpc                     ksi8560_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                    nommu_virt_defconfig   clang
-riscv                 randconfig-001-20231026   gcc  
-riscv                 randconfig-001-20231027   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20231026   gcc  
-s390                  randconfig-001-20231027   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                ecovec24-romimage_defconfig   gcc  
-sh                            hp6xx_defconfig   gcc  
-sh                           se7750_defconfig   gcc  
-sh                           se7780_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                 randconfig-001-20231027   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           alldefconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-001-20231026   gcc  
-x86_64       buildonly-randconfig-001-20231027   gcc  
-x86_64       buildonly-randconfig-002-20231026   gcc  
-x86_64       buildonly-randconfig-002-20231027   gcc  
-x86_64       buildonly-randconfig-003-20231026   gcc  
-x86_64       buildonly-randconfig-003-20231027   gcc  
-x86_64       buildonly-randconfig-004-20231026   gcc  
-x86_64       buildonly-randconfig-004-20231027   gcc  
-x86_64       buildonly-randconfig-005-20231026   gcc  
-x86_64       buildonly-randconfig-005-20231027   gcc  
-x86_64       buildonly-randconfig-006-20231026   gcc  
-x86_64       buildonly-randconfig-006-20231027   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                randconfig-001-20231026   gcc  
-x86_64                randconfig-001-20231027   gcc  
-x86_64                randconfig-002-20231026   gcc  
-x86_64                randconfig-002-20231027   gcc  
-x86_64                randconfig-003-20231026   gcc  
-x86_64                randconfig-003-20231027   gcc  
-x86_64                randconfig-004-20231026   gcc  
-x86_64                randconfig-004-20231027   gcc  
-x86_64                randconfig-005-20231026   gcc  
-x86_64                randconfig-005-20231027   gcc  
-x86_64                randconfig-006-20231026   gcc  
-x86_64                randconfig-006-20231027   gcc  
-x86_64                randconfig-011-20231027   gcc  
-x86_64                randconfig-012-20231027   gcc  
-x86_64                randconfig-013-20231027   gcc  
-x86_64                randconfig-014-20231027   gcc  
-x86_64                randconfig-015-20231027   gcc  
-x86_64                randconfig-016-20231027   gcc  
-x86_64                randconfig-071-20231027   gcc  
-x86_64                randconfig-072-20231027   gcc  
-x86_64                randconfig-073-20231027   gcc  
-x86_64                randconfig-074-20231027   gcc  
-x86_64                randconfig-075-20231027   gcc  
-x86_64                randconfig-076-20231027   gcc  
-x86_64                           rhel-8.3-bpf   gcc  
-x86_64                          rhel-8.3-func   gcc  
-x86_64                    rhel-8.3-kselftests   gcc  
-x86_64                         rhel-8.3-kunit   gcc  
-x86_64                           rhel-8.3-ltp   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa                          iss_defconfig   gcc  
+no particular reason. ref_freq comes from "reference frequency" but
+interfaces follows arch_scale_freq_something or
+topology_*_freq_something
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+so we should keep freq_ref to keep interfaces aligned
+
+>
+> Thanks,
+>
+>         Ingo
