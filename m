@@ -2,135 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5445E7DA0AA
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Oct 2023 20:39:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24BE17DA141
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Oct 2023 21:24:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232582AbjJ0SjB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Oct 2023 14:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34778 "EHLO
+        id S231707AbjJ0TY4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Oct 2023 15:24:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232615AbjJ0SjB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Oct 2023 14:39:01 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD1812A;
-        Fri, 27 Oct 2023 11:38:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698431938; x=1729967938;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/rfTV7fW5gKjZQKtJuxH2JY/OrmY4+1jcnMI1v2wl1A=;
-  b=bBaMWZp1YEZkITkLDEAuod+7S9HBKmaeoD6QGcM98tsKgFaoYW+dwysq
-   ht1Mpc9Ln+noQ8oGpebtzuzkDy7jaOCyLL49u7t3Heg4w8UFDea5eGwYB
-   A179VN4GPIV8my+RhWgxvV2KeLrRCSR1+/AN/cp5TiyeEu6KM+alswiDV
-   s2+ydUDBCGYs9eB5ps12T5kUmH/e/dKuGdyw/dAUskcv4/hdtqqrQRC7a
-   1dwdbksaU+SPktiP412cW3yff3oE0H3toJiyL7pDvX/+qNBDou6O/4CAf
-   HGykLSbn9E/iwQ0TEm/1zveD7zNsbm2/jjBYcUx5HI35MRDVGv7d/URMY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="387644126"
-X-IronPort-AV: E=Sophos;i="6.03,256,1694761200"; 
-   d="scan'208";a="387644126"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2023 11:38:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.03,256,1694761200"; 
-   d="scan'208";a="867292"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 27 Oct 2023 11:38:19 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qwRjQ-000B83-0V;
-        Fri, 27 Oct 2023 18:38:52 +0000
-Date:   Sat, 28 Oct 2023 02:38:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        with ESMTP id S230451AbjJ0TYz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Oct 2023 15:24:55 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E036B1A6;
+        Fri, 27 Oct 2023 12:24:53 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1698434691;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y6gnZpsQuWc7QehQoZvEcvl+2gz1FD+UGg7ogB7c+Mw=;
+        b=fztehdxZgXdYiuafxUo0BfgKIezeZzAeY128OpSvoDNhdoFlFLazsML0vZRHoiZJ40ArvJ
+        qhAaZCKvSnVJFErH+aU9kf1ojRtZSV2wjicVOm6U+YExMn7l3Dp7PkgY1I4/IVur/tAvgw
+        4qIM+LPr/fO9o0l9VDxjAUlLE46OLJ/0OibI2idTKI4CiDl8PG00saEEwtehr6/wPdUtnx
+        J0xQVNOVZEmKVv9sTYKCWpGuB4UXrYQnO0KQQ4ERF1AztZBKy7w5zBZKEsLcH86cUtvUC6
+        3M9ii5AywCRefRvANIAiT8DKV3Zz1Ox548hXrrjdTYNm7kfsUAZvrrEcTTDt8A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1698434691;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y6gnZpsQuWc7QehQoZvEcvl+2gz1FD+UGg7ogB7c+Mw=;
+        b=pv7w3r2F7uuzJtN4Rc2L0gETerL1TJKOQDhA0+r2uQg45RN0nmClkiMNs/zJXDADeCU6L2
+        2jym8hNyfoJFKeCA==
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>
-Cc:     oe-kbuild-all@lists.linux.dev, suleiman@google.com,
-        briannorris@google.com, Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] PM: sleep: Expose last succeeded resumed timestamp in
- sysfs
-Message-ID: <202310280256.JJlmxwDy-lkp@intel.com>
-References: <169841470363.1307628.18049455026067747896.stgit@mhiramat.roam.corp.google.com>
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Sandipan Das <sandipan.das@amd.com>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-perf-users@vger.kernel.org>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-kernel@vger.kernel.org>,
+        "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>,
+        "open list:ACPI" <linux-acpi@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH v2 0/2] Fixes for s3 with parallel bootup
+In-Reply-To: <20231026170330.4657-1-mario.limonciello@amd.com>
+References: <20231026170330.4657-1-mario.limonciello@amd.com>
+Date:   Fri, 27 Oct 2023 21:24:51 +0200
+Message-ID: <87zg0327i4.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <169841470363.1307628.18049455026067747896.stgit@mhiramat.roam.corp.google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Masami,
+On Thu, Oct 26 2023 at 12:03, Mario Limonciello wrote:
+> Parallel bootup on systems that use x2apic broke suspend to ram.
+> This series ensures x2apic is re-enabled at startup and fixes an exposed
+> pre-emption issue.
 
-kernel test robot noticed the following build warnings:
+The PMU issue has absolutely nothing to do with parallel bootup.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.6-rc7 next-20231027]
-[cannot apply to pavel-leds/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Masami-Hiramatsu-Google/PM-sleep-Expose-last-succeeded-resumed-timestamp-in-sysfs/20231027-215311
-base:   linus/master
-patch link:    https://lore.kernel.org/r/169841470363.1307628.18049455026067747896.stgit%40mhiramat.roam.corp.google.com
-patch subject: [PATCH] PM: sleep: Expose last succeeded resumed timestamp in sysfs
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20231028/202310280256.JJlmxwDy-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231028/202310280256.JJlmxwDy-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310280256.JJlmxwDy-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   kernel/power/main.c: In function 'last_success_resume_time_show':
->> kernel/power/main.c:427:32: warning: format '%lu' expects argument of type 'long unsigned int', but argument 3 has type 'time64_t' {aka 'long long int'} [-Wformat=]
-     427 |         return sprintf(buf, "%lu.%lu\n",
-         |                              ~~^
-         |                                |
-         |                                long unsigned int
-         |                              %llu
-     428 |                        suspend_stats.last_success_resume_time.tv_sec,
-         |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                                              |
-         |                                                              time64_t {aka long long int}
-   kernel/power/main.c: In function 'suspend_stats_show':
-   kernel/power/main.c:528:58: warning: format '%lu' expects argument of type 'long unsigned int', but argument 3 has type 'time64_t' {aka 'long long int'} [-Wformat=]
-     528 |         seq_printf(s,   "  last_success_resume_time:\t%-lu.%lu\n",
-         |                                                       ~~~^
-         |                                                          |
-         |                                                          long unsigned int
-         |                                                       %-llu
-     529 |                    suspend_stats.last_success_resume_time.tv_sec,
-         |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                                          |
-         |                                                          time64_t {aka long long int}
-
-
-vim +427 kernel/power/main.c
-
-   423	
-   424	static ssize_t last_success_resume_time_show(struct kobject *kobj,
-   425			struct kobj_attribute *attr, char *buf)
-   426	{
- > 427		return sprintf(buf, "%lu.%lu\n",
-   428			       suspend_stats.last_success_resume_time.tv_sec,
-   429			       suspend_stats.last_success_resume_time.tv_nsec);
-   430	}
-   431	static struct kobj_attribute last_success_resume_time =
-   432				__ATTR_RO(last_success_resume_time);
-   433	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Can you please describe stuff coherently?
