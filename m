@@ -2,76 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38C137D8FC1
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Oct 2023 09:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F151D7D900E
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Oct 2023 09:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345442AbjJ0H0V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Oct 2023 03:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45744 "EHLO
+        id S235014AbjJ0HkF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Oct 2023 03:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345405AbjJ0H0U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Oct 2023 03:26:20 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7ED0192
-        for <linux-pm@vger.kernel.org>; Fri, 27 Oct 2023 00:26:17 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-507973f3b65so2697096e87.3
-        for <linux-pm@vger.kernel.org>; Fri, 27 Oct 2023 00:26:17 -0700 (PDT)
+        with ESMTP id S235003AbjJ0HkE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Oct 2023 03:40:04 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111471BF
+        for <linux-pm@vger.kernel.org>; Fri, 27 Oct 2023 00:40:01 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-507c5249d55so2636306e87.3
+        for <linux-pm@vger.kernel.org>; Fri, 27 Oct 2023 00:40:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698391576; x=1698996376; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1698392399; x=1698997199; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=b3l5eiPgjqB3yPgjpBs4NrKU8xun61Csjfy/N/87VvY=;
-        b=Kl5Ib74hBoQbIL/RGpaYJbfno48eZzSg/fyMWwPZlzJE429kWbTN9vWzoxoTxamhfH
-         Q/696F/Qkp7GrOWIPLvz0vuqtCA0EHxXvsbT7FLNCN4uLacXElS4pTp765YAur9iuCvA
-         ogmBdkAOdztkYzgjix+WiSUiA0uquPGJfAI4955KVIlDcfwSGRmKV1qb4w1LVGVJA4ie
-         1ASxYAODv7G4Ne8OfBz9AGdi3X8HrRPJAHVm75QODR7fL++uumJ0EYQq0UnvVsHl5XUE
-         pe8sWDauUUyz4JQrd+oGRoNNurBjwuk6SO88nPNkzdE2zCXW/LJZ/hiEyi042CU7fIB7
-         KyEA==
+        bh=GXUjM3EOPX7iEP2l6z+R1euqXv6dNw8ofuLQ19H53CE=;
+        b=EcnoKNHno6NIdDPSJtcNhc7DG1u4RptPxeu+y4ZBrJMIgfULJtZsofEnjMVFDgEeOU
+         yaGpvDecrPa64zJ3D8MVYIawXa0pypgNrHSeLFUAz0sLyRuqFUB0TS6ck+iBNdybShGi
+         uQ6zeolR4RMTnTTalPaNuxEvvndDP8w/fvbdqh3zjJW0giH6euAf3iq8NCPXemHPOYL1
+         xLGtyVoU6n32/dJfWaQbGqqhnijbS/e8HyL9/xLUXomNX8viGQ1E8iV05yJL+XMPropU
+         XRmRg5GwtcPGuDrKNlFAr0zUIR1CO17w3odKBQfk0Zih2fVu3ar7j9hncwMI2glzdxAG
+         muLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698391576; x=1698996376;
+        d=1e100.net; s=20230601; t=1698392399; x=1698997199;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b3l5eiPgjqB3yPgjpBs4NrKU8xun61Csjfy/N/87VvY=;
-        b=fnNssKvzR9I2kkny45Jm4FC4PZ1PyplmtTx/YBatpYPcpFWgRzVuWvkXRf8LZOjtLO
-         ++PzMg+19qcQsa/FvDLTgeFfRvqpp0d1VRdZQWB/GfQrDxMKicT5xx9V2k3zZoTjOcem
-         s+tiaxra90HAE5GAOC42GBj/TzgtdxuQxeEGOKs0hrw+L5D0GEy4SHzN2J/kJH7eFTvn
-         VjXj/fSWOFQIMcv7MCrtr+cL7xhIHS6thaY7OA5ujXOE9eUvpK8VE/KOuEfuw6HqJFJ9
-         o71cRf0N3s1mjX9q2nEULSfMUXdRLQprhaxgoK6kAX/1+f7WSSqLgGeE3r/SehP6kXnC
-         QOxw==
-X-Gm-Message-State: AOJu0YxCakCdgnsdk1SfyyVCl8LFU+ikShy1TvIByktv1LEY4v1PFUnx
-        5/7OHr8ZOhuk+hYV43a6Wf4emQ==
-X-Google-Smtp-Source: AGHT+IFMzxnf4rd5M9vQsSI4tCRtG7+f/honwpysf1uGKvUDWFMbso896OZUP0fbZcUDmtL0ELW/dA==
-X-Received: by 2002:a05:6512:e92:b0:504:7bb0:9d7e with SMTP id bi18-20020a0565120e9200b005047bb09d7emr1398577lfb.27.1698391576091;
-        Fri, 27 Oct 2023 00:26:16 -0700 (PDT)
+        bh=GXUjM3EOPX7iEP2l6z+R1euqXv6dNw8ofuLQ19H53CE=;
+        b=g8Y4pcBrmxLp2Z9GSM8N6NLsnfsvwE0tectKYhHWKMy2quQAXvhuGqGPrvVpVbOhcY
+         ffjOT4+nIaWdSFHqwDMPxv6ranJ82B8zDfaj4YPsV5UNWEMm8x1IW9VoQSNnh5gfxJQl
+         740VGbZ9eVy7AZ28aIGpDZLeWJc1Rmux/A1eA2nmz8398SJNemjiMjPxCZv7levFFZWi
+         EKoml9hW6zLj/U6ySh0Gro0cR1ngI3HHYiAQL17Vmk5Ba7gU85YYnT+7DBFoS4+t4ZDR
+         rK+khiVT2TAE3ZED+1P1EamS47BGtqTc0V2RxOKsZrUQJd/DxQydj7eNnlub0s3/FENA
+         dkcw==
+X-Gm-Message-State: AOJu0Yz3f88CaHz1gRGB5Lk5SYITHP3paUrUnObUyBnx+EeNNWgDTllF
+        6lQu+dARC1qpZ/ZVv6jDg4tqJg==
+X-Google-Smtp-Source: AGHT+IHnVbXL0w1nNa4w7HVpthktbqpCspWP5hjziUi17hNqgeMMIf3fVQPLprqOfJAZTpunZYcTYA==
+X-Received: by 2002:ac2:5293:0:b0:500:92f1:c341 with SMTP id q19-20020ac25293000000b0050092f1c341mr1180386lfm.54.1698392399105;
+        Fri, 27 Oct 2023 00:39:59 -0700 (PDT)
 Received: from [192.168.0.22] ([78.10.206.168])
-        by smtp.gmail.com with ESMTPSA id k4-20020ac24f04000000b00507b0b9145fsm164790lfr.177.2023.10.27.00.26.14
+        by smtp.gmail.com with ESMTPSA id be16-20020a056512251000b004f13cd61ebbsm169705lfb.175.2023.10.27.00.39.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Oct 2023 00:26:15 -0700 (PDT)
-Message-ID: <f4bbe0e4-9905-4f24-9363-bc4e35a3d0f5@linaro.org>
-Date:   Fri, 27 Oct 2023 09:26:14 +0200
+        Fri, 27 Oct 2023 00:39:58 -0700 (PDT)
+Message-ID: <4a2113ea-5e52-4caa-80f6-661c6ad64091@linaro.org>
+Date:   Fri, 27 Oct 2023 09:39:57 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] dt-bindings: thermal: qcom-tsens: document the SM8650
- Temperature Sensor
+Subject: Re: [PATCH 1/2] dt-bindings: interconnect: document the RPMh
+ Network-On-Chip Interconnect in Qualcomm SM8650 SoC
 Content-Language: en-US
 To:     Neil Armstrong <neil.armstrong@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
+        Georgi Djakov <djakov@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Conor Dooley <conor+dt@kernel.org>,
+        Abel Vesa <abel.vesa@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231025-topic-sm8650-upstream-bindings-tsens-v2-1-5add2ac04943@linaro.org>
+References: <20231025-topic-sm8650-upstream-interconnect-v1-0-b7277e03aa3d@linaro.org>
+ <20231025-topic-sm8650-upstream-interconnect-v1-1-b7277e03aa3d@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -117,11 +114,11 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231025-topic-sm8650-upstream-bindings-tsens-v2-1-5add2ac04943@linaro.org>
+In-Reply-To: <20231025-topic-sm8650-upstream-interconnect-v1-1-b7277e03aa3d@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -130,12 +127,73 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25/10/2023 10:24, Neil Armstrong wrote:
-> Document the Temperature Sensor (TSENS) on the SM8650 Platform.
+On 25/10/2023 09:33, Neil Armstrong wrote:
+> Document the RPMh Network-On-Chip Interconnect of the SM8650 platform.
 > 
 > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
-> For convenience, a regularly refreshed linux-next based git tree containing
+>  .../bindings/interconnect/qcom,sm8650-rpmh.yaml    | 136 ++++++++++++++++++
+>  .../dt-bindings/interconnect/qcom,sm8650-rpmh.h    | 154 +++++++++++++++++++++
+>  2 files changed, 290 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sm8650-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sm8650-rpmh.yaml
+> new file mode 100644
+> index 000000000000..65b239ac2afd
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,sm8650-rpmh.yaml
+> @@ -0,0 +1,136 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interconnect/qcom,sm8650-rpmh.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm RPMh Network-On-Chip Interconnect on SM8650
+> +
+> +maintainers:
+> +  - Abel Vesa <abel.vesa@linaro.org>
+> +  - Neil Armstrong <neil.armstrong@linaro.org>
+> +
+> +description: |
+> +  RPMh interconnect providers support system bandwidth requirements through
+> +  RPMh hardware accelerators known as Bus Clock Manager (BCM). The provider is
+> +  able to communicate with the BCM through the Resource State Coordinator (RSC)
+> +  associated with each execution environment. Provider nodes must point to at
+> +  least one RPMh device child node pertaining to their RSC and each provider
+> +  can map to multiple RPMh resources.
+> +
+> +  See also:: include/dt-bindings/interconnect/qcom,sm8650-rpmh.h
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,sm8650-aggre1-noc
+> +      - qcom,sm8650-aggre2-noc
+> +      - qcom,sm8650-clk-virt
+> +      - qcom,sm8650-cnoc-main
+> +      - qcom,sm8650-config-noc
+> +      - qcom,sm8650-gem-noc
+> +      - qcom,sm8650-lpass-ag-noc
+> +      - qcom,sm8650-lpass-lpiaon-noc
+> +      - qcom,sm8650-lpass-lpicx-noc
+> +      - qcom,sm8650-mc-virt
+> +      - qcom,sm8650-mmss-noc
+> +      - qcom,sm8650-nsp-noc
+> +      - qcom,sm8650-pcie-anoc
+> +      - qcom,sm8650-system-noc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 2
+
+If there is going to be resend/new version:
+
+Please put required: block here.
+
+In any case:
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
