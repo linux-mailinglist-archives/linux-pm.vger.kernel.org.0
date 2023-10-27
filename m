@@ -2,31 +2,34 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D4F7D8CE5
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Oct 2023 03:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5921C7D8D0D
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Oct 2023 04:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbjJ0B4A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Oct 2023 21:56:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36078 "EHLO
+        id S229437AbjJ0CNM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Oct 2023 22:13:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjJ0Bz7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Oct 2023 21:55:59 -0400
+        with ESMTP id S229501AbjJ0CNL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Oct 2023 22:13:11 -0400
 Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id F0F18AB;
-        Thu, 26 Oct 2023 18:55:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4A23C194;
+        Thu, 26 Oct 2023 19:13:08 -0700 (PDT)
 Received: from localhost.localdomain (unknown [219.141.250.2])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 6CCE26027ECD5;
-        Fri, 27 Oct 2023 09:55:40 +0800 (CST)
-X-MD-Sfrom: zeming@nfschina.com
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 20EFA6027FD55;
+        Fri, 27 Oct 2023 10:13:06 +0800 (CST)
+X-MD-Sfrom: kunyu@nfschina.com
 X-MD-SrcIP: 219.141.250.2
-From:   Li zeming <zeming@nfschina.com>
+From:   Li kunyu <kunyu@nfschina.com>
 To:     rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Li zeming <zeming@nfschina.com>
-Subject: [PATCH] power: swap: Assign a value when removing the 'error' definition
-Date:   Fri, 27 Oct 2023 09:55:33 +0800
-Message-Id: <20231027015533.25391-1-zeming@nfschina.com>
+        Li kunyu <kunyu@nfschina.com>
+Subject: [PATCH] =?UTF-8?q?power:=20swap:=20Remove=20unnecessary=20?= =?UTF-8?q?=E2=80=980=E2=80=99=20values=20from=20ret?=
+Date:   Fri, 27 Oct 2023 10:13:03 +0800
+Message-Id: <20231027021303.26187-1-kunyu@nfschina.com>
 X-Mailer: git-send-email 2.18.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -35,27 +38,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-'error' first receives the function result before it is used, and it
-does not need to be assigned a value during definition.
+'ret 'is first assigned a value and then used, it does not need to be
+assigned at definition time.
 
-Signed-off-by: Li zeming <zeming@nfschina.com>
+Signed-off-by: Li kunyu <kunyu@nfschina.com>
 ---
- kernel/power/swap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/power/swap.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index 74edbce2320ba..90bb583c57bf7 100644
+index 90bb583c57bf7..32e8cb6ceaea4 100644
 --- a/kernel/power/swap.c
 +++ b/kernel/power/swap.c
-@@ -450,7 +450,7 @@ static int get_swap_writer(struct swap_map_handle *handle)
- static int swap_write_page(struct swap_map_handle *handle, void *buf,
- 		struct hib_bio_batch *hb)
+@@ -679,7 +679,7 @@ static int save_image_lzo(struct swap_map_handle *handle,
+                           unsigned int nr_to_write)
  {
--	int error = 0;
-+	int error;
- 	sector_t offset;
- 
- 	if (!handle->cur)
+ 	unsigned int m;
+-	int ret = 0;
++	int ret;
+ 	int nr_pages;
+ 	int err2;
+ 	struct hib_bio_batch hb;
+@@ -1060,7 +1060,7 @@ static int load_image(struct swap_map_handle *handle,
+                       unsigned int nr_to_read)
+ {
+ 	unsigned int m;
+-	int ret = 0;
++	int ret;
+ 	ktime_t start;
+ 	ktime_t stop;
+ 	struct hib_bio_batch hb;
+@@ -1166,7 +1166,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
+                           unsigned int nr_to_read)
+ {
+ 	unsigned int m;
+-	int ret = 0;
++	int ret;
+ 	int eof = 0;
+ 	struct hib_bio_batch hb;
+ 	ktime_t start;
 -- 
 2.18.2
 
