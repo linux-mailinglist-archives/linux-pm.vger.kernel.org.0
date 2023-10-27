@@ -2,159 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D277D9F0E
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Oct 2023 19:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5445E7DA0AA
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Oct 2023 20:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231484AbjJ0Ry7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Oct 2023 13:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55548 "EHLO
+        id S232582AbjJ0SjB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Oct 2023 14:39:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbjJ0Ry6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Oct 2023 13:54:58 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E396F3
-        for <linux-pm@vger.kernel.org>; Fri, 27 Oct 2023 10:54:56 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-32d9d8284abso1508582f8f.3
-        for <linux-pm@vger.kernel.org>; Fri, 27 Oct 2023 10:54:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698429294; x=1699034094; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9/G0/hXTO/wVO1WKjXijEm0YjJ2pMeeOLr8e9nDbTNc=;
-        b=dUQS9sQP1QR+D1B4Sdv5Sc4jwvHCgK+6k3UW2MkZAhk48nesC4UbtOnIB0uetJtWEm
-         pSzY1kpxnKJGsHDA5wJI5GVl8STtfyE8pQ+j/mSKPGtbN4woRgiwi+u384Z4KmQ8Bc6t
-         fVsis8/Dhk//8HEEht9bU4JF4iHVVP9DuyGE+GRyj1VPzun81td02fnb60NNB/cOltfW
-         VTnCOQWBcU0F7TVmmfSXiH3z2IKr56vdup+k/b2zrqbRV3wSHKKEAaaVPMVZRNHADid/
-         lqo2YookVSL2QGucQdaLw2NRPXXvfXxNzsCHgB1jCSUC6YFKeTwn7BFj3EO/qLtkyfRz
-         puiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698429294; x=1699034094;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9/G0/hXTO/wVO1WKjXijEm0YjJ2pMeeOLr8e9nDbTNc=;
-        b=gQ0wkrlUVX2Zde8BGc1z16CXcsUcknij2PDPPkRKXPfCF9xMExzt+rm3GSKZ7UB2jR
-         BsmhTXIN3W2uvojROlkVseGPn1iPRjdFcew9E1A9t9vXGlHp+LiTB8VkRphEX2pha4uS
-         fzjZeWRbc0utXYft1O4IfypsgjSr025fw6Jf8ZMklpuIN37f18/Kuf2APfzjTlGSRVcU
-         qenmhsvl+txK5NcZEBw9inEtOy2uEEX1Z7X9yuLZ4Yb4xTf4jq8La+rX97qq4eM8d85O
-         peVNz6o3vx05WLbKHjMbb2hE1I2J4rH5w4BhjVCOgcWKe4HrVqvquUOcFGecLHcwf7xC
-         7fFw==
-X-Gm-Message-State: AOJu0YzUBZ9KYVkAqiZodzDJIPJhwcOW7kCUkTUWwL+6Vivr412qwqby
-        YbM+77W0sC7QbAWePyLHFrPITQ==
-X-Google-Smtp-Source: AGHT+IGBd4JF6iFQocFnF6AKP8wEFDW+L/050slnQZIOgn5MjnycELrA8f5CeAZc/hTNU6rpZWNR6Q==
-X-Received: by 2002:a5d:550c:0:b0:32d:9fd1:91f9 with SMTP id b12-20020a5d550c000000b0032d9fd191f9mr2266418wrv.60.1698429294553;
-        Fri, 27 Oct 2023 10:54:54 -0700 (PDT)
-Received: from [192.168.1.15] (host-2-99-112-229.as13285.net. [2.99.112.229])
-        by smtp.gmail.com with ESMTPSA id u9-20020a5d6ac9000000b0032d687fd9d0sm2207853wrw.19.2023.10.27.10.54.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Oct 2023 10:54:53 -0700 (PDT)
-Message-ID: <a5268c46-11c7-49bd-8ad2-17e06adb3d7f@linaro.org>
-Date:   Fri, 27 Oct 2023 18:54:53 +0100
+        with ESMTP id S232615AbjJ0SjB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Oct 2023 14:39:01 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD1812A;
+        Fri, 27 Oct 2023 11:38:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698431938; x=1729967938;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/rfTV7fW5gKjZQKtJuxH2JY/OrmY4+1jcnMI1v2wl1A=;
+  b=bBaMWZp1YEZkITkLDEAuod+7S9HBKmaeoD6QGcM98tsKgFaoYW+dwysq
+   ht1Mpc9Ln+noQ8oGpebtzuzkDy7jaOCyLL49u7t3Heg4w8UFDea5eGwYB
+   A179VN4GPIV8my+RhWgxvV2KeLrRCSR1+/AN/cp5TiyeEu6KM+alswiDV
+   s2+ydUDBCGYs9eB5ps12T5kUmH/e/dKuGdyw/dAUskcv4/hdtqqrQRC7a
+   1dwdbksaU+SPktiP412cW3yff3oE0H3toJiyL7pDvX/+qNBDou6O/4CAf
+   HGykLSbn9E/iwQ0TEm/1zveD7zNsbm2/jjBYcUx5HI35MRDVGv7d/URMY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="387644126"
+X-IronPort-AV: E=Sophos;i="6.03,256,1694761200"; 
+   d="scan'208";a="387644126"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2023 11:38:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.03,256,1694761200"; 
+   d="scan'208";a="867292"
+Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 27 Oct 2023 11:38:19 -0700
+Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qwRjQ-000B83-0V;
+        Fri, 27 Oct 2023 18:38:52 +0000
+Date:   Sat, 28 Oct 2023 02:38:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>
+Cc:     oe-kbuild-all@lists.linux.dev, suleiman@google.com,
+        briannorris@google.com, Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] PM: sleep: Expose last succeeded resumed timestamp in
+ sysfs
+Message-ID: <202310280256.JJlmxwDy-lkp@intel.com>
+References: <169841470363.1307628.18049455026067747896.stgit@mhiramat.roam.corp.google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: PM QoS performance aggregator
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-References: <734738ec-b72f-49b4-9a4e-6aaf2a44c9f3@linaro.org>
- <CAJZ5v0j4ceLwx3sh-AOPwtPk6_mya0TvtMRC+d_v0r_hk8jnsQ@mail.gmail.com>
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-In-Reply-To: <CAJZ5v0j4ceLwx3sh-AOPwtPk6_mya0TvtMRC+d_v0r_hk8jnsQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <169841470363.1307628.18049455026067747896.stgit@mhiramat.roam.corp.google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Masami,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.6-rc7 next-20231027]
+[cannot apply to pavel-leds/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Masami-Hiramatsu-Google/PM-sleep-Expose-last-succeeded-resumed-timestamp-in-sysfs/20231027-215311
+base:   linus/master
+patch link:    https://lore.kernel.org/r/169841470363.1307628.18049455026067747896.stgit%40mhiramat.roam.corp.google.com
+patch subject: [PATCH] PM: sleep: Expose last succeeded resumed timestamp in sysfs
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20231028/202310280256.JJlmxwDy-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231028/202310280256.JJlmxwDy-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310280256.JJlmxwDy-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   kernel/power/main.c: In function 'last_success_resume_time_show':
+>> kernel/power/main.c:427:32: warning: format '%lu' expects argument of type 'long unsigned int', but argument 3 has type 'time64_t' {aka 'long long int'} [-Wformat=]
+     427 |         return sprintf(buf, "%lu.%lu\n",
+         |                              ~~^
+         |                                |
+         |                                long unsigned int
+         |                              %llu
+     428 |                        suspend_stats.last_success_resume_time.tv_sec,
+         |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                                              |
+         |                                                              time64_t {aka long long int}
+   kernel/power/main.c: In function 'suspend_stats_show':
+   kernel/power/main.c:528:58: warning: format '%lu' expects argument of type 'long unsigned int', but argument 3 has type 'time64_t' {aka 'long long int'} [-Wformat=]
+     528 |         seq_printf(s,   "  last_success_resume_time:\t%-lu.%lu\n",
+         |                                                       ~~~^
+         |                                                          |
+         |                                                          long unsigned int
+         |                                                       %-llu
+     529 |                    suspend_stats.last_success_resume_time.tv_sec,
+         |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                                          |
+         |                                                          time64_t {aka long long int}
 
 
-On 16/10/2023 18:46, Rafael J. Wysocki wrote:
-> On Mon, Oct 16, 2023 at 3:03 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->>
->> Hi,
->>
->> the kernel provides an API to specify latency timings for devices and
->> CPUs. In addition, it allows to deal with the frequencies.
->>
->> However, the unit is Hz and that may not fit very well with some devices
->> where the performance is an index. The devices can have different
->> performance capping mechanisms under the hood (IOW the firmware).
->>
->> The pm QoS seems to not have an interface to describe constraints based
->> on performance index.
->>
->> In the same page, the devices can also be requesting power values
->> instead of performance indexes or frequencies. So having a power based
->> pm QoS would make also sense IMO.
->>
->> Actually, performance indexes, power values, frequencies are just all
->> values but in different units.
->>
->> Would it make sense to create a generic PM QoS constraint with values
->> and units ?
-> 
-> All of the existing QoS types are frontends to the same underlying
-> mechanism and each of them is about using a specific unit, so it's a
-> matter of creating a new one for each new unit.
-> 
-> That said, using performance indices as QoS values directly is
-> fundamentally problematic IMV, because they are device-specific and
-> not portable in any way and letting user space operate them would be a
-> mistake.
+vim +427 kernel/power/main.c
 
-In some cases it isn't possible to have a nice unit, the Qualcomm modem
-and DSPs expose a service for activating certain thermal mitigations
-such as limiting the baseband power. This firmware interface was
-designed *for* the cooling_device framework, as such the controls all
-have arbitrary maximum states (1, 3, 5, 50, etc) that don't relate
-directly to any unit.
-
-Other cases like restricting the charging speed to improve thermal
-headroom would actually fit into a generic framework quite well. You
-just need to know the current "performance state", maximum state, and
-some normalised cost/benefit of moving to a lower/higher state.
-
-The power supply framework would then be able to say "hey you can limit
-charging by this much without much impact, but going further will be
-quite bad (as the device will start discharging)".
-
-This also neatly describes the camera ISP and video transcoding
-co-processors, they might be able to estimate their current performance
-state so that userspace could then handle restricting them, and the
-values could be used to inform the system at least.
-
-Having the scheduler, userspace, and/or firmware be able to express
-priorities for specific devices would then allow us to dynamically
-adjust device performance based on the current usecase.
-
-The classic example is limiting charging current when gaming, this is an
-obvious choice over limiting CPU/GPU frequencies, a performance QoS
-framework should allow us to make these choices with little/no input
-from userspace.
-
-In another case, we might be trying to maximise battery life, this could
-impose some hard limits on the max performance of certain devices, and
-when we are on charge maybe we want to give as much thermal headroom as
-possible to the charger instead of other components.
-
-
-Apologies if the signal/noise ratio is pretty rough here, I think in
-general it would be nicer to try and have some fairly generic framework
-rather than having a bunch of different ones with different units and
-trying to tie them all together somehow.
-
-Thanks and regards,
+   423	
+   424	static ssize_t last_success_resume_time_show(struct kobject *kobj,
+   425			struct kobj_attribute *attr, char *buf)
+   426	{
+ > 427		return sprintf(buf, "%lu.%lu\n",
+   428			       suspend_stats.last_success_resume_time.tv_sec,
+   429			       suspend_stats.last_success_resume_time.tv_nsec);
+   430	}
+   431	static struct kobj_attribute last_success_resume_time =
+   432				__ATTR_RO(last_success_resume_time);
+   433	
 
 -- 
-// Caleb (they/them)
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
