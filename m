@@ -2,99 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 209FD7DA2A2
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Oct 2023 23:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F777DA4A2
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Oct 2023 03:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235083AbjJ0Vuj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Oct 2023 17:50:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48588 "EHLO
+        id S232912AbjJ1Bbd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Oct 2023 21:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjJ0Vui (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Oct 2023 17:50:38 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60451B5;
-        Fri, 27 Oct 2023 14:50:35 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1698443434;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kkILUqwqrraMqZjxG6n6efB1Hqc2b1hkA5CpetbdHWk=;
-        b=KI86MEfEM4VXKns1K+hOAvzMDzwY0Z7KduIurPmGv74uYAz8Wj6pr4LMGKMZ12wBKAyA69
-        genCcOSpV8EcqEk/YqaMbH+skffgSwgXznlk4+33cl/bq8Kh0hFa4ohvR6TCCdydaOP1e7
-        r42MNuXZSMt11NKYvOOWjjBCsJbOHSSjRo1grwvAGjsS9qb6mKTz8AgUTbVM0bjOMI9LxX
-        imo4GABJWUjo6Qw/nfJsT9nq4MwLgYR3DSjwP04kHMxlJN80bvVmpt3heAwcSbVIRyAwtq
-        dgwJk1Y3sCLBVXwAJOpzQweT4vWRIZk3iWXRb0th6stOqv/6beZ1yJY6drRF6Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1698443434;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kkILUqwqrraMqZjxG6n6efB1Hqc2b1hkA5CpetbdHWk=;
-        b=xcZk7Apxiyk+Poe14k36DHbPGxwC4I61RejgcN6QurYm3dvvgCmkzqRwHDgft9ncStH4Cd
-        AW8UZd9HvNf1duCA==
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Sandipan Das <sandipan.das@amd.com>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-perf-users@vger.kernel.org>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-kernel@vger.kernel.org>,
-        "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>
-Subject: Re: [PATCH v2 0/2] Fixes for s3 with parallel bootup
-In-Reply-To: <de56ddad-ee57-4ff0-b384-522c05e88c91@amd.com>
-References: <20231026170330.4657-1-mario.limonciello@amd.com>
- <87zg0327i4.ffs@tglx> <de56ddad-ee57-4ff0-b384-522c05e88c91@amd.com>
-Date:   Fri, 27 Oct 2023 23:50:33 +0200
-Message-ID: <87r0lf20ra.ffs@tglx>
+        with ESMTP id S229446AbjJ1Bbc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Oct 2023 21:31:32 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E1AF0;
+        Fri, 27 Oct 2023 18:31:30 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C174BC433C7;
+        Sat, 28 Oct 2023 01:31:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698456690;
+        bh=jECE/egUu/Yw0oA6/yd/NwJCk8+qMfbbDsviyOVsKN4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KrNP+nJjO+I8ev1FvcacHpfxJFl1V5z7OXu8JoxNjBrrRe9o70VGdK+Y/fQVESROa
+         vZl0S0CWccrULB3I/rEtz89qFVI7c411nwv6pWNnhLHz0sovsXwKYXeUvLt7Oie1cL
+         13Tky8tJPFcblA63mjYpVSUOvMTelnPDSsaXGFxhvrWcAl/s3ugrP6RLpkW5w4Kqra
+         lm8RUEI7EfVjW+WHSw2aVMih86PdWRWUXVQjuBqjWFZ5ALbzo+AK0kx2raODdaqSdi
+         mPbXifLU+PReVY++k5fd26a2/5L3faxac9iomA/5QLhxT6F6OrWNura68XlLXvBu/c
+         G+58TRPdl8RbA==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>
+Cc:     suleiman@google.com, briannorris@google.com,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH v2] PM: sleep: Expose last succeeded resumed timestamp in sysfs
+Date:   Sat, 28 Oct 2023 10:31:26 +0900
+Message-ID:  <169845668624.1319505.1097714089024984847.stgit@mhiramat.roam.corp.google.com>
+X-Mailer: git-send-email 2.42.0.820.g83a721a137-goog
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 27 2023 at 14:29, Mario Limonciello wrote:
-> On 10/27/2023 14:24, Thomas Gleixner wrote:
->> On Thu, Oct 26 2023 at 12:03, Mario Limonciello wrote:
->>> Parallel bootup on systems that use x2apic broke suspend to ram.
->>> This series ensures x2apic is re-enabled at startup and fixes an exposed
->>> pre-emption issue.
->> 
->> The PMU issue has absolutely nothing to do with parallel bootup.
->> 
->> Can you please describe stuff coherently?
->
-> They are both issues found with S3 testing.
-> The PMU issue wasn't being observed with cpuhp.parallel=0.
+From: Masami Hiramatsu <mhiramat@kernel.org>
 
-It does not matter whether you cannot observe it under a certain
-conditions. What matters is the proper analysis of the root cause and
-that is clearly neither related to suspend nor cpuhp.parallel=0.
+Expose last succeeded resumed timestamp as last_success_resume_time
+attribute of suspend_stats in sysfs. This timestamp is recorded in
+CLOCK_MONOTONIC. So user can find the actual resumed time and
+measure the elapsed time from the time when the kernel finished
+the resume to the user-space action (e.g. display the UI).
 
-Stop this 'fix the symptom' approach before it becomes a habit.
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+---
+ Changes in v2:
+  - Use %llu instead of %lu for printing u64 value.
+  - Remove unneeded indent spaces from the last_success_resume_time
+    line in the debugfs suspend_stat file.
+---
+ Documentation/ABI/testing/sysfs-power |   10 ++++++++++
+ include/linux/suspend.h               |    2 ++
+ kernel/power/main.c                   |   14 ++++++++++++++
+ kernel/power/suspend.c                |    1 +
+ 4 files changed, 27 insertions(+)
 
-Thanks,
+diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
+index a3942b1036e2..63659765dee1 100644
+--- a/Documentation/ABI/testing/sysfs-power
++++ b/Documentation/ABI/testing/sysfs-power
+@@ -442,6 +442,16 @@ Description:
+ 		'total_hw_sleep' and 'last_hw_sleep' may not be accurate.
+ 		This number is measured in microseconds.
+ 
++What:		/sys/power/suspend_stats/last_success_resume_time
++Date:		Oct 2023
++Contact:	Masami Hiramatsu <mhiramat@kernel.org>
++Description:
++		The /sys/power/suspend_stats/last_success_resume_time file
++		contains the timestamp of when the kernel successfully
++		resumed from suspend/hibernate.
++		This floating number is measured in seconds by monotonic
++		clock.
++
+ What:		/sys/power/sync_on_suspend
+ Date:		October 2019
+ Contact:	Jonas Meurer <jonas@freesources.org>
+diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+index ef503088942d..ddd789044960 100644
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -8,6 +8,7 @@
+ #include <linux/pm.h>
+ #include <linux/mm.h>
+ #include <linux/freezer.h>
++#include <linux/timekeeping.h>
+ #include <asm/errno.h>
+ 
+ #ifdef CONFIG_VT
+@@ -71,6 +72,7 @@ struct suspend_stats {
+ 	u64	last_hw_sleep;
+ 	u64	total_hw_sleep;
+ 	u64	max_hw_sleep;
++	struct timespec64 last_success_resume_time;
+ 	enum suspend_stat_step	failed_steps[REC_FAILED_NUM];
+ };
+ 
+diff --git a/kernel/power/main.c b/kernel/power/main.c
+index f6425ae3e8b0..5803f6f2a2c2 100644
+--- a/kernel/power/main.c
++++ b/kernel/power/main.c
+@@ -421,6 +421,16 @@ static ssize_t last_failed_step_show(struct kobject *kobj,
+ }
+ static struct kobj_attribute last_failed_step = __ATTR_RO(last_failed_step);
+ 
++static ssize_t last_success_resume_time_show(struct kobject *kobj,
++		struct kobj_attribute *attr, char *buf)
++{
++	return sprintf(buf, "%llu.%llu\n",
++		       suspend_stats.last_success_resume_time.tv_sec,
++		       suspend_stats.last_success_resume_time.tv_nsec);
++}
++static struct kobj_attribute last_success_resume_time =
++			__ATTR_RO(last_success_resume_time);
++
+ static struct attribute *suspend_attrs[] = {
+ 	&success.attr,
+ 	&fail.attr,
+@@ -438,6 +448,7 @@ static struct attribute *suspend_attrs[] = {
+ 	&last_hw_sleep.attr,
+ 	&total_hw_sleep.attr,
+ 	&max_hw_sleep.attr,
++	&last_success_resume_time.attr,
+ 	NULL,
+ };
+ 
+@@ -514,6 +525,9 @@ static int suspend_stats_show(struct seq_file *s, void *unused)
+ 			suspend_step_name(
+ 				suspend_stats.failed_steps[index]));
+ 	}
++	seq_printf(s,	"last_success_resume_time:\t%-llu.%llu\n",
++		   suspend_stats.last_success_resume_time.tv_sec,
++		   suspend_stats.last_success_resume_time.tv_nsec);
+ 
+ 	return 0;
+ }
+diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+index fa3bf161d13f..33334565d5a6 100644
+--- a/kernel/power/suspend.c
++++ b/kernel/power/suspend.c
+@@ -622,6 +622,7 @@ int pm_suspend(suspend_state_t state)
+ 		dpm_save_failed_errno(error);
+ 	} else {
+ 		suspend_stats.success++;
++		ktime_get_ts64(&suspend_stats.last_success_resume_time);
+ 	}
+ 	pr_info("suspend exit\n");
+ 	return error;
 
-        tglx
