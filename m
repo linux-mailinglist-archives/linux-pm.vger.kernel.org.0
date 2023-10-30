@@ -2,179 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 808827DB4A3
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Oct 2023 08:58:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A1A77E0DC8
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Nov 2023 05:34:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231876AbjJ3H6n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Oct 2023 03:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
+        id S230367AbjKDEeE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 4 Nov 2023 00:34:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbjJ3H6n (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Oct 2023 03:58:43 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8652B7;
-        Mon, 30 Oct 2023 00:58:40 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 821ECC433C7;
-        Mon, 30 Oct 2023 07:58:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698652720;
-        bh=CRAUdHvS9QkMm16wVLc6TV/2vTpVx6bFf10+cLRHuFs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=awVQx+h5t0llTywpnypw1WmX/HFRMt2xtWWxd3Ab9xE6ZPLpbwYcVhsBW+ri8JyeB
-         icXEQ6Ue51UUQGJEN2iBdFFnazg6ehGOvjFQI31Weyivd9H49e+KRNlmWXg87mK/1L
-         ZNd43nDl5zcNud/BIKkQLr5W+JWHpV64jEiOnBS1+j9WIW5rydZz8yZ/pVCyVKwvd5
-         ITRZRJS9VIZCcll4n1t5owZI4m0n11SSquZluhv0NaP8f+CrmFsYf8Sf634P7pKy13
-         UpctSBYBl4DgIxIcHzsPgCK46v70yVjFiF+7/zcMvFykAHZt7tyGLrxk/yjIIPNBNk
-         GZ60bl9SX4awg==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     suleiman@google.com, briannorris@google.com,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH v4] PM: sleep: Expose last succeeded resumed timestamp in sysfs
-Date:   Mon, 30 Oct 2023 16:58:36 +0900
-Message-ID:  <169865271630.102723.17346936890436522603.stgit@mhiramat.roam.corp.google.com>
-X-Mailer: git-send-email 2.42.0.820.g83a721a137-goog
-User-Agent: StGit/0.19
+        with ESMTP id S229509AbjKDEeD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Nov 2023 00:34:03 -0400
+X-Greylist: delayed 4198 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 03 Nov 2023 21:34:01 PDT
+Received: from mail.profitpathwaygo.com (mail.profitpathwaygo.com [141.94.21.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116C7D47
+        for <linux-pm@vger.kernel.org>; Fri,  3 Nov 2023 21:34:00 -0700 (PDT)
+Received: by mail.profitpathwaygo.com (Postfix, from userid 1002)
+        id B178453889; Mon, 30 Oct 2023 08:30:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=profitpathwaygo.com;
+        s=mail; t=1698654950;
+        bh=qp3Ofokho6Ql+WtI8ZPVilyHYhskXL7fod7u9CWs8W4=;
+        h=Date:From:To:Subject:From;
+        b=gjsOnlV5UASaESbpWs1emFpTvHzPwEn4bN77Olj7WY8jzkHQFaOLfZTsLZKHTJRhg
+         g82ucnpIfrPquGhOXCMdLM8GQrTU2joJ+p1V6sIT4/7yOF/hwolb6dwE3Tmrk6eOGH
+         9QrHHp/yrh0tunlgTmHtwFIUAgEWP38KfXiDy+ap5Lf73mT8+yWssMzOVXMcKX+XJI
+         6PjG4fA8FudxjhjlwdfPbVgROscZwtZHtdVdPcZ5kES8eZ2BtpOKLM6QGWfJ4ZGGza
+         svfxANkOh2lx3fDKj3smenzDur2+APGOpunOODEJ01GssBJ378LIXt686hUyxn5WDP
+         LPppU8rzrtE+g==
+Received: by mail.profitpathwaygo.com for <linux-pm@vger.kernel.org>; Mon, 30 Oct 2023 08:30:28 GMT
+Message-ID: <20231030074500-0.1.2s.15545.0.0e803fotr1@profitpathwaygo.com>
+Date:   Mon, 30 Oct 2023 08:30:28 GMT
+From:   "Adam Charachuta" <adam.charachuta@profitpathwaygo.com>
+To:     <linux-pm@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania_?=
+X-Mailer: mail.profitpathwaygo.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED,URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
+        *      blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [URIs: profitpathwaygo.com]
+        *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
+        *      blocklist
+        *      [URIs: profitpathwaygo.com]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [141.94.21.238 listed in zen.spamhaus.org]
+        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
+        *      blocklist
+        *      [URIs: profitpathwaygo.com]
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0066]
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [141.94.21.238 listed in bl.score.senderscore.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Masami Hiramatsu <mhiramat@kernel.org>
+Dzie=C5=84 dobry,
 
-Expose last succeeded resumed timestamp as last_success_resume_time
-attribute of suspend_stats in sysfs.
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-There are some printk()s for printing the similar resume timing to
-dmesg, but those are recorded with local_clock(), and user can not
-compare it with current time. We also have tracing events but it
-requires CAP_SYS_ADMIN to use it.
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-This suspend_stats attribute is easy to access and only expose the
-timestamp in CLOCK_MONOTONIC. So user can find the actual resumed
-time and measure the elapsed time from the time when the kernel
-finished the resume to the user-space action (e.g. display the UI).
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- Changes in v4:
-  - Update description to add why.
-  - Fix document typo.
- Changes in v3:
-  - Add (unsigned long long) casting for %llu.
-  - Add a line after last_success_resume_time_show().
- Changes in v2:
-  - Use %llu instead of %lu for printing u64 value.
-  - Remove unneeded indent spaces from the last_success_resume_time
-    line in the debugfs suspend_stat file.
----
- Documentation/ABI/testing/sysfs-power |   10 ++++++++++
- include/linux/suspend.h               |    2 ++
- kernel/power/main.c                   |   15 +++++++++++++++
- kernel/power/suspend.c                |    1 +
- 4 files changed, 28 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
-index a3942b1036e2..63659765dee1 100644
---- a/Documentation/ABI/testing/sysfs-power
-+++ b/Documentation/ABI/testing/sysfs-power
-@@ -442,6 +442,16 @@ Description:
- 		'total_hw_sleep' and 'last_hw_sleep' may not be accurate.
- 		This number is measured in microseconds.
- 
-+What:		/sys/power/suspend_stats/last_success_resume_time
-+Date:		Oct 2023
-+Contact:	Masami Hiramatsu <mhiramat@kernel.org>
-+Description:
-+		The /sys/power/suspend_stats/last_success_resume_time file
-+		contains the timestamp of when the kernel successfully
-+		resumed from suspend/hibernate.
-+		This floating number is measured in seconds by monotonic
-+		clock.
-+
- What:		/sys/power/sync_on_suspend
- Date:		October 2019
- Contact:	Jonas Meurer <jonas@freesources.org>
-diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-index ef503088942d..ddd789044960 100644
---- a/include/linux/suspend.h
-+++ b/include/linux/suspend.h
-@@ -8,6 +8,7 @@
- #include <linux/pm.h>
- #include <linux/mm.h>
- #include <linux/freezer.h>
-+#include <linux/timekeeping.h>
- #include <asm/errno.h>
- 
- #ifdef CONFIG_VT
-@@ -71,6 +72,7 @@ struct suspend_stats {
- 	u64	last_hw_sleep;
- 	u64	total_hw_sleep;
- 	u64	max_hw_sleep;
-+	struct timespec64 last_success_resume_time;
- 	enum suspend_stat_step	failed_steps[REC_FAILED_NUM];
- };
- 
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index f6425ae3e8b0..2ab23fd3daac 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -421,6 +421,17 @@ static ssize_t last_failed_step_show(struct kobject *kobj,
- }
- static struct kobj_attribute last_failed_step = __ATTR_RO(last_failed_step);
- 
-+static ssize_t last_success_resume_time_show(struct kobject *kobj,
-+		struct kobj_attribute *attr, char *buf)
-+{
-+	return sprintf(buf, "%llu.%llu\n",
-+		(unsigned long long)suspend_stats.last_success_resume_time.tv_sec,
-+		(unsigned long long)suspend_stats.last_success_resume_time.tv_nsec);
-+}
-+
-+static struct kobj_attribute last_success_resume_time =
-+			__ATTR_RO(last_success_resume_time);
-+
- static struct attribute *suspend_attrs[] = {
- 	&success.attr,
- 	&fail.attr,
-@@ -438,6 +449,7 @@ static struct attribute *suspend_attrs[] = {
- 	&last_hw_sleep.attr,
- 	&total_hw_sleep.attr,
- 	&max_hw_sleep.attr,
-+	&last_success_resume_time.attr,
- 	NULL,
- };
- 
-@@ -514,6 +526,9 @@ static int suspend_stats_show(struct seq_file *s, void *unused)
- 			suspend_step_name(
- 				suspend_stats.failed_steps[index]));
- 	}
-+	seq_printf(s,	"last_success_resume_time:\t%-llu.%llu\n",
-+		   (unsigned long long)suspend_stats.last_success_resume_time.tv_sec,
-+		   (unsigned long long)suspend_stats.last_success_resume_time.tv_nsec);
- 
- 	return 0;
- }
-diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-index fa3bf161d13f..33334565d5a6 100644
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -622,6 +622,7 @@ int pm_suspend(suspend_state_t state)
- 		dpm_save_failed_errno(error);
- 	} else {
- 		suspend_stats.success++;
-+		ktime_get_ts64(&suspend_stats.last_success_resume_time);
- 	}
- 	pr_info("suspend exit\n");
- 	return error;
-
+Pozdrawiam serdecznie
+Adam Charachuta
