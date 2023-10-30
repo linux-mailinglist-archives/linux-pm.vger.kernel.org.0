@@ -2,50 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634A07DBA7F
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Oct 2023 14:20:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1EAB7DBAED
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Oct 2023 14:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232291AbjJ3NUC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Oct 2023 09:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44316 "EHLO
+        id S229568AbjJ3Nh1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Oct 2023 09:37:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232176AbjJ3NUB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Oct 2023 09:20:01 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D1301C9;
-        Mon, 30 Oct 2023 06:19:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1DFABFEC;
-        Mon, 30 Oct 2023 06:20:40 -0700 (PDT)
-Received: from e129154.nice.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F25103F64C;
-        Mon, 30 Oct 2023 06:19:53 -0700 (PDT)
-Date:   Mon, 30 Oct 2023 14:19:06 +0100
-From:   Beata Michalska <beata.michalska@arm.com>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     Zeng Heng <zengheng4@huawei.com>, broonie@kernel.org,
-        joey.gouly@arm.com, will@kernel.org, amit.kachhap@arm.com,
-        rafael@kernel.org, catalin.marinas@arm.com, james.morse@arm.com,
-        maz@kernel.org, viresh.kumar@linaro.org,
-        yang@os.amperecomputing.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        wangxiongfeng2@huawei.com, xiexiuqi@huawei.com,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH 2/3] cpufreq: CPPC: Keep the target core awake when
- reading its cpufreq rate
-Message-ID: <ZT-tSoCYR-818pa3@e129154.nice.arm.com>
-References: <20231025093847.3740104-1-zengheng4@huawei.com>
- <20231025093847.3740104-3-zengheng4@huawei.com>
- <ZTjz2Ox_iqorbejw@FVFF77S0Q05N>
- <28a6e60c-4492-105b-5fcf-3129ca868349@nvidia.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <28a6e60c-4492-105b-5fcf-3129ca868349@nvidia.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        with ESMTP id S229537AbjJ3Nh1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Oct 2023 09:37:27 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E187AA2;
+        Mon, 30 Oct 2023 06:37:24 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48F53C433C8;
+        Mon, 30 Oct 2023 13:37:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698673044;
+        bh=xgrSUtzCIyimkvkqPcm5cQu355vBStn8Nf7zgaVsVaA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=K0ioALA5b54Lxhs760+Z08LF52iDAIOaAwaEFE8MqGokajFVuxUfpndwg0vmszEYe
+         4NTSLSs0s7EKha3L/NoNeJwrMcLJXKOWaM+NwlXXn42X3DU+A6PjaHrKFOO7Q8ZrGi
+         EJfy0z2pgQT66oUG5rW7Xt+h6Kfih/WkhrUqT64oUlDTZ4H2qnT4crBoAGrG+N8ROh
+         wmgUHoiLaqwogjyb1Z72qkHQJ7yF1WA49BZ0QNyWknfaf1Wj+7g456YdzMNLM41xCi
+         U72ICET9pSXgOKHzasljgdNDFOt/Wof4iAvaKytjZAVl3+n1Tcn9pDXBQ2h9asjHsV
+         Y8+g0ng+mdmlw==
+Date:   Mon, 30 Oct 2023 22:37:20 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>, suleiman@google.com,
+        briannorris@google.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4] PM: sleep: Expose last succeeded resumed timestamp
+ in sysfs
+Message-Id: <20231030223720.30c95dbe73c2c8c6b455b5e4@kernel.org>
+In-Reply-To: <169865271630.102723.17346936890436522603.stgit@mhiramat.roam.corp.google.com>
+References: <169865271630.102723.17346936890436522603.stgit@mhiramat.roam.corp.google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,136 +53,145 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 25, 2023 at 08:27:23PM +0530, Sumit Gupta wrote:
-> 
-> 
-> 
-> > [adding Ionela]
-> > 
-> > On Wed, Oct 25, 2023 at 05:38:46PM +0800, Zeng Heng wrote:
-> > > As ARM AMU's document says, all counters are subject to any changes
-> > > in clock frequency, including clock stopping caused by the WFI and WFE
-> > > instructions.
-> > > 
-> > > Therefore, using smp_call_on_cpu() to trigger target CPU to
-> > > read self's AMU counters, which ensures the counters are working
-> > > properly while cstate feature is enabled.
-> > 
-> > IIUC there's a pretty deliberate split with all the actual reading of the AMU
-> > living in arch/arm64/kernel/topolgy.c, and the driver code being (relatively)
-> > generic.
-> > 
-> > We already have code in arch/arm64/kernel/topolgy.c to read counters on a
-> > specific CPU; why can't e reuse that (and avoid exporting cpu_has_amu_feat())?
-> 
-> 
-> This patch seems mostly based on my previous patch [1] and discussed here
-> [2] already. Beata [CCed] shared an alternate approach [3] leveraging
-> existing code from 'topology.c' to get the average freq for last tick
-> period.
-> 
-> 
-> Beata,
-> 
-> Could you share v2 of [3] with the request to merge. We can try to solve the
-> issue with CPU IDLE case later on top?
->
-Will do (same for the below request if feasible)
+Sorry, please ignore this v4, because I found this does not typo fix.
+I sent v4.1. in
 
----
-BR
-B.
-> Additionally, also please include the fix in [4] if it looks fine.
+https://lore.kernel.org/all/169865961255.107850.9724026775256278587.stgit@mhiramat.roam.corp.google.com/
+
+Thanks,
+
+On Mon, 30 Oct 2023 16:58:36 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+
+> From: Masami Hiramatsu <mhiramat@kernel.org>
 > 
-> Best Regards,
-> Sumit Gupta
+> Expose last succeeded resumed timestamp as last_success_resume_time
+> attribute of suspend_stats in sysfs.
 > 
-> [1] https://lore.kernel.org/all/20230418113459.12860-7-sumitg@nvidia.com/
-> [2] https://lore.kernel.org/lkml/cde1d8a9-3a21-e82b-7895-40603a14d898@nvidia.com/T/#m2174305de4706006e0bd9c103a0e5ff61cea7a12
-> [3]
-> https://lore.kernel.org/lkml/20230606155754.245998-1-beata.michalska@arm.com/
-> [4]
-> https://lore.kernel.org/lkml/6a5710f6-bfbb-5dfd-11cd-0cd02220cee7@nvidia.com/
+> There are some printk()s for printing the similar resume timing to
+> dmesg, but those are recorded with local_clock(), and user can not
+> compare it with current time. We also have tracing events but it
+> requires CAP_SYS_ADMIN to use it.
 > 
+> This suspend_stats attribute is easy to access and only expose the
+> timestamp in CLOCK_MONOTONIC. So user can find the actual resumed
+> time and measure the elapsed time from the time when the kernel
+> finished the resume to the user-space action (e.g. display the UI).
 > 
-> > > 
-> > > Reported-by: Sumit Gupta <sumitg@nvidia.com>
-> > > Link: https://lore.kernel.org/all/20230418113459.12860-7-sumitg@nvidia.com/
-> > > Signed-off-by: Zeng Heng <zengheng4@huawei.com>
-> > > ---
-> > >   drivers/cpufreq/cppc_cpufreq.c | 39 ++++++++++++++++++++++++++--------
-> > >   1 file changed, 30 insertions(+), 9 deletions(-)
-> > > 
-> > > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> > > index fe08ca419b3d..321a9dc9484d 100644
-> > > --- a/drivers/cpufreq/cppc_cpufreq.c
-> > > +++ b/drivers/cpufreq/cppc_cpufreq.c
-> > > @@ -90,6 +90,12 @@ static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
-> > >                                 struct cppc_perf_fb_ctrs *fb_ctrs_t0,
-> > >                                 struct cppc_perf_fb_ctrs *fb_ctrs_t1);
-> > > 
-> > > +struct fb_ctr_pair {
-> > > +     u32 cpu;
-> > > +     struct cppc_perf_fb_ctrs fb_ctrs_t0;
-> > > +     struct cppc_perf_fb_ctrs fb_ctrs_t1;
-> > > +};
-> > > +
-> > >   /**
-> > >    * cppc_scale_freq_workfn - CPPC arch_freq_scale updater for frequency invariance
-> > >    * @work: The work item.
-> > > @@ -840,9 +846,24 @@ static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
-> > >        return (reference_perf * delta_delivered) / delta_reference;
-> > >   }
-> > > 
-> > > +static int cppc_get_perf_ctrs_pair(void *val)
-> > > +{
-> > > +     struct fb_ctr_pair *fb_ctrs = val;
-> > > +     int cpu = fb_ctrs->cpu;
-> > > +     int ret;
-> > > +
-> > > +     ret = cppc_get_perf_ctrs(cpu, &fb_ctrs->fb_ctrs_t0);
-> > > +     if (ret)
-> > > +             return ret;
-> > > +
-> > > +     udelay(2); /* 2usec delay between sampling */
-> > > +
-> > > +     return cppc_get_perf_ctrs(cpu, &fb_ctrs->fb_ctrs_t1);
-> > > +}
-> > > +
-> > >   static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
-> > >   {
-> > > -     struct cppc_perf_fb_ctrs fb_ctrs_t0 = {0}, fb_ctrs_t1 = {0};
-> > > +     struct fb_ctr_pair fb_ctrs = { .cpu = cpu, };
-> > >        struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
-> > >        struct cppc_cpudata *cpu_data = policy->driver_data;
-> > >        u64 delivered_perf;
-> > > @@ -850,18 +871,18 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
-> > > 
-> > >        cpufreq_cpu_put(policy);
-> > > 
-> > > -     ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t0);
-> > > -     if (ret)
-> > > -             return 0;
-> > > -
-> > > -     udelay(2); /* 2usec delay between sampling */
-> > > +     if (cpu_has_amu_feat(cpu))
-> > > +             ret = smp_call_on_cpu(cpu, cppc_get_perf_ctrs_pair,
-> > > +                                   &fb_ctrs, false);
-> > > +     else
-> > > +             ret = cppc_get_perf_ctrs_pair(&fb_ctrs);
-> > > 
-> > > -     ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
-> > >        if (ret)
-> > >                return 0;
-> > > 
-> > > -     delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
-> > > -                                            &fb_ctrs_t1);
-> > > +     delivered_perf = cppc_perf_from_fbctrs(cpu_data,
-> > > +                                           &fb_ctrs.fb_ctrs_t0,
-> > > +                                           &fb_ctrs.fb_ctrs_t1);
-> > > 
-> > >        return cppc_cpufreq_perf_to_khz(cpu_data, delivered_perf);
-> > >   }
-> > > --
-> > > 2.25.1
-> > > 
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> ---
+>  Changes in v4:
+>   - Update description to add why.
+>   - Fix document typo.
+>  Changes in v3:
+>   - Add (unsigned long long) casting for %llu.
+>   - Add a line after last_success_resume_time_show().
+>  Changes in v2:
+>   - Use %llu instead of %lu for printing u64 value.
+>   - Remove unneeded indent spaces from the last_success_resume_time
+>     line in the debugfs suspend_stat file.
+> ---
+>  Documentation/ABI/testing/sysfs-power |   10 ++++++++++
+>  include/linux/suspend.h               |    2 ++
+>  kernel/power/main.c                   |   15 +++++++++++++++
+>  kernel/power/suspend.c                |    1 +
+>  4 files changed, 28 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
+> index a3942b1036e2..63659765dee1 100644
+> --- a/Documentation/ABI/testing/sysfs-power
+> +++ b/Documentation/ABI/testing/sysfs-power
+> @@ -442,6 +442,16 @@ Description:
+>  		'total_hw_sleep' and 'last_hw_sleep' may not be accurate.
+>  		This number is measured in microseconds.
+>  
+> +What:		/sys/power/suspend_stats/last_success_resume_time
+> +Date:		Oct 2023
+> +Contact:	Masami Hiramatsu <mhiramat@kernel.org>
+> +Description:
+> +		The /sys/power/suspend_stats/last_success_resume_time file
+> +		contains the timestamp of when the kernel successfully
+> +		resumed from suspend/hibernate.
+> +		This floating number is measured in seconds by monotonic
+> +		clock.
+> +
+>  What:		/sys/power/sync_on_suspend
+>  Date:		October 2019
+>  Contact:	Jonas Meurer <jonas@freesources.org>
+> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> index ef503088942d..ddd789044960 100644
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -8,6 +8,7 @@
+>  #include <linux/pm.h>
+>  #include <linux/mm.h>
+>  #include <linux/freezer.h>
+> +#include <linux/timekeeping.h>
+>  #include <asm/errno.h>
+>  
+>  #ifdef CONFIG_VT
+> @@ -71,6 +72,7 @@ struct suspend_stats {
+>  	u64	last_hw_sleep;
+>  	u64	total_hw_sleep;
+>  	u64	max_hw_sleep;
+> +	struct timespec64 last_success_resume_time;
+>  	enum suspend_stat_step	failed_steps[REC_FAILED_NUM];
+>  };
+>  
+> diff --git a/kernel/power/main.c b/kernel/power/main.c
+> index f6425ae3e8b0..2ab23fd3daac 100644
+> --- a/kernel/power/main.c
+> +++ b/kernel/power/main.c
+> @@ -421,6 +421,17 @@ static ssize_t last_failed_step_show(struct kobject *kobj,
+>  }
+>  static struct kobj_attribute last_failed_step = __ATTR_RO(last_failed_step);
+>  
+> +static ssize_t last_success_resume_time_show(struct kobject *kobj,
+> +		struct kobj_attribute *attr, char *buf)
+> +{
+> +	return sprintf(buf, "%llu.%llu\n",
+> +		(unsigned long long)suspend_stats.last_success_resume_time.tv_sec,
+> +		(unsigned long long)suspend_stats.last_success_resume_time.tv_nsec);
+> +}
+> +
+> +static struct kobj_attribute last_success_resume_time =
+> +			__ATTR_RO(last_success_resume_time);
+> +
+>  static struct attribute *suspend_attrs[] = {
+>  	&success.attr,
+>  	&fail.attr,
+> @@ -438,6 +449,7 @@ static struct attribute *suspend_attrs[] = {
+>  	&last_hw_sleep.attr,
+>  	&total_hw_sleep.attr,
+>  	&max_hw_sleep.attr,
+> +	&last_success_resume_time.attr,
+>  	NULL,
+>  };
+>  
+> @@ -514,6 +526,9 @@ static int suspend_stats_show(struct seq_file *s, void *unused)
+>  			suspend_step_name(
+>  				suspend_stats.failed_steps[index]));
+>  	}
+> +	seq_printf(s,	"last_success_resume_time:\t%-llu.%llu\n",
+> +		   (unsigned long long)suspend_stats.last_success_resume_time.tv_sec,
+> +		   (unsigned long long)suspend_stats.last_success_resume_time.tv_nsec);
+>  
+>  	return 0;
+>  }
+> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> index fa3bf161d13f..33334565d5a6 100644
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -622,6 +622,7 @@ int pm_suspend(suspend_state_t state)
+>  		dpm_save_failed_errno(error);
+>  	} else {
+>  		suspend_stats.success++;
+> +		ktime_get_ts64(&suspend_stats.last_success_resume_time);
+>  	}
+>  	pr_info("suspend exit\n");
+>  	return error;
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
