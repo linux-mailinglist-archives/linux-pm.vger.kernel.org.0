@@ -2,182 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C34077DB6C4
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Oct 2023 10:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A719E7DB800
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Oct 2023 11:25:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232853AbjJ3JzL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Oct 2023 05:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46152 "EHLO
+        id S233114AbjJ3KZB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Oct 2023 06:25:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232427AbjJ3Jyr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Oct 2023 05:54:47 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6A7D59;
-        Mon, 30 Oct 2023 02:53:37 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B39DC433C8;
-        Mon, 30 Oct 2023 09:53:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698659617;
-        bh=Ow413Gt1+hkdiL1Zt/+V0ffiq6AHrwB002YRhc+9a+E=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ZYicV++WR+i+pgSeXIy91MWahUAI7Hiyc5aon4FQgrCH6QYxFhgi3Rx4EVRO3XPxT
-         bpje5Ds2H1TI6uCETZgO2ltNVRbs/dp2kgilPsSsDq7lfHOmJFaKtaAHIFt21doftz
-         5d4mA9+bGjYIU9UCynYc2mKB/38JFLphqx2GkOaPmiCimSMrOe54tNFh5gxfj4NIyD
-         JMmLkXZ2prj5w2UZpcr8hPAOqmmzU5R/zD3y1oR9yD3q9FbWG2gIeO1xs2jfwqU+9n
-         VzKHQUMyUPqV4hD/uEaVP8oZUcvtDwP7OkUuh8a/1ql84vF0QAKqMM67HH1N+O8DaE
-         KfzzzVC2WNVhw==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     suleiman@google.com, briannorris@google.com,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH v4.1] PM: sleep: Expose last succeeded resumed timestamp in sysfs
-Date:   Mon, 30 Oct 2023 18:53:32 +0900
-Message-ID:  <169865961255.107850.9724026775256278587.stgit@mhiramat.roam.corp.google.com>
-X-Mailer: git-send-email 2.42.0.820.g83a721a137-goog
-User-Agent: StGit/0.19
+        with ESMTP id S233141AbjJ3KYr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Oct 2023 06:24:47 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C461995
+        for <linux-pm@vger.kernel.org>; Mon, 30 Oct 2023 03:24:23 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1cc4f777ab9so4657825ad.0
+        for <linux-pm@vger.kernel.org>; Mon, 30 Oct 2023 03:24:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1698661463; x=1699266263; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1N/2Vj2C4PIiKfPHSCW4+mtkbqzibb/OcJadYL0Oz5c=;
+        b=yHEycjEW0VG2+u+jLQ13QzBh5JafkHVbuiYlSPXGgZa5v7ZhEJrcJ2CU5lb8dn8DOe
+         xUgkLljiPcOKXkfgTsgBkTDZsg9YOGNWEWQi+5Aqssd3Ivj2gVUDE0r4v2Wocj8umKRo
+         joLmnmckRiDnwXrhmDoyTlVGAl4hHMTY6e3bjYa2IpMqHzHxO7/3dBptqbokvAqMGHh4
+         7NLvsMA86pxIxSHi04zJZV1ewtoRX/LpZrrBddIiFCo6hH19JuiCN8TmOZPV4NB3ls0D
+         p9lSueXKkioW5lPQXgicZubvPciDA76/zQ/+14Q+Rwi09xOV8nX49HPBdWB9hUBUj/ul
+         p3Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698661463; x=1699266263;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1N/2Vj2C4PIiKfPHSCW4+mtkbqzibb/OcJadYL0Oz5c=;
+        b=HmDXTnRLkNDIPZaNa57comUoJ+FXOBoNc9miuU58IVKuQTVAzmcXPbP40VzJsdKkPw
+         PB8preAXxJ1iWFYjR/HiDALpwMb+mvYuyD5lT+V7/IBDCprMaF9gKjkqNKB1UR4zSrs2
+         gnxim1Fh3ggW39A94pX6zOqd5aQCE4Dh2iNwy6lvVmv8JlfjEsyzw9t89VStNSB2es+R
+         7jAob9/fDFgyH+OkRveWhL7Vc5pVyfbSCO7N5Nki0FypOOQQqGmODop9VMtZ3jMbfkW5
+         a/fuxmZr/l9tjxdKRNB1134vwBaAt9CQIWckm3MDDKPi7mGOB26cKiHvuDTs4xaxZ+4B
+         ebRQ==
+X-Gm-Message-State: AOJu0YwLCzlqc+MfGjrFSin6AnLuOT8SmX+PPONTyooaITWOOGXVPscD
+        kceJbQk1NdYNod//iRgVP6LDAw==
+X-Google-Smtp-Source: AGHT+IELQz5vCIEIK/PxKIFaPg7UmdGIp1vUHtveCLRcztnmaIm2nPugxTN1VWQQOzrKZy73LLrrBw==
+X-Received: by 2002:a17:90b:1904:b0:280:16bb:8169 with SMTP id mp4-20020a17090b190400b0028016bb8169mr4115127pjb.40.1698661463214;
+        Mon, 30 Oct 2023 03:24:23 -0700 (PDT)
+Received: from localhost ([122.172.80.14])
+        by smtp.gmail.com with ESMTPSA id s63-20020a17090a69c500b00263b9e75aecsm5641272pjj.41.2023.10.30.03.24.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Oct 2023 03:24:22 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Nishanth Menon <nm@ti.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V2 0/3] OPP: Simplify required-opp handling
+Date:   Mon, 30 Oct 2023 15:54:14 +0530
+Message-Id: <cover.1698661048.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Masami Hiramatsu <mhiramat@kernel.org>
+Hello,
 
-Expose last succeeded resumed timestamp as last_success_resume_time
-attribute of suspend_stats in sysfs.
+I wasn't able to test this locally (despite trying to hack it around) and need
+help from someone who is `virt_devs` field of `struct dev_pm_opp_config`.
 
-There are some printk()s for printing the similar resume timing to
-dmesg, but those are recorded with local_clock(), and user can not
-compare it with current time. We also have tracing events but it
-requires CAP_SYS_ADMIN to use it.
+Pushed here:
 
-This suspend_stats attribute is easy to access and only expose the
-timestamp in CLOCK_MONOTONIC. So user can find the actual resumed
-time and measure the elapsed time from the time when the kernel
-finished the resume to the user-space action (e.g. display the UI).
+git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/required-opps
 
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- Changes in v4.1:
-  - Fix document typo (again).
- Changes in v4:
-  - Update description to add why.
-  - Fix document typo.
- Changes in v3:
-  - Add (unsigned long long) casting for %llu.
-  - Add a line after last_success_resume_time_show().
- Changes in v2:
-  - Use %llu instead of %lu for printing u64 value.
-  - Remove unneeded indent spaces from the last_success_resume_time
-    line in the debugfs suspend_stat file.
----
- Documentation/ABI/testing/sysfs-power |   10 ++++++++++
- include/linux/suspend.h               |    2 ++
- kernel/power/main.c                   |   15 +++++++++++++++
- kernel/power/suspend.c                |    1 +
- 4 files changed, 28 insertions(+)
+-------------------------8<-------------------------
 
-diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
-index a3942b1036e2..e14975859766 100644
---- a/Documentation/ABI/testing/sysfs-power
-+++ b/Documentation/ABI/testing/sysfs-power
-@@ -442,6 +442,16 @@ Description:
- 		'total_hw_sleep' and 'last_hw_sleep' may not be accurate.
- 		This number is measured in microseconds.
- 
-+What:		/sys/power/suspend_stats/last_success_resume_time
-+Date:		Oct 2023
-+Contact:	Masami Hiramatsu <mhiramat@kernel.org>
-+Description:
-+		The /sys/power/suspend_stats/last_success_resume_time file
-+		contains the timestamp of when the kernel successfully
-+		resumed from suspend/hibernate.
-+		This floating point number is measured in seconds by monotonic
-+		clock.
-+
- What:		/sys/power/sync_on_suspend
- Date:		October 2019
- Contact:	Jonas Meurer <jonas@freesources.org>
-diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-index ef503088942d..ddd789044960 100644
---- a/include/linux/suspend.h
-+++ b/include/linux/suspend.h
-@@ -8,6 +8,7 @@
- #include <linux/pm.h>
- #include <linux/mm.h>
- #include <linux/freezer.h>
-+#include <linux/timekeeping.h>
- #include <asm/errno.h>
- 
- #ifdef CONFIG_VT
-@@ -71,6 +72,7 @@ struct suspend_stats {
- 	u64	last_hw_sleep;
- 	u64	total_hw_sleep;
- 	u64	max_hw_sleep;
-+	struct timespec64 last_success_resume_time;
- 	enum suspend_stat_step	failed_steps[REC_FAILED_NUM];
- };
- 
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index f6425ae3e8b0..2ab23fd3daac 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -421,6 +421,17 @@ static ssize_t last_failed_step_show(struct kobject *kobj,
- }
- static struct kobj_attribute last_failed_step = __ATTR_RO(last_failed_step);
- 
-+static ssize_t last_success_resume_time_show(struct kobject *kobj,
-+		struct kobj_attribute *attr, char *buf)
-+{
-+	return sprintf(buf, "%llu.%llu\n",
-+		(unsigned long long)suspend_stats.last_success_resume_time.tv_sec,
-+		(unsigned long long)suspend_stats.last_success_resume_time.tv_nsec);
-+}
-+
-+static struct kobj_attribute last_success_resume_time =
-+			__ATTR_RO(last_success_resume_time);
-+
- static struct attribute *suspend_attrs[] = {
- 	&success.attr,
- 	&fail.attr,
-@@ -438,6 +449,7 @@ static struct attribute *suspend_attrs[] = {
- 	&last_hw_sleep.attr,
- 	&total_hw_sleep.attr,
- 	&max_hw_sleep.attr,
-+	&last_success_resume_time.attr,
- 	NULL,
- };
- 
-@@ -514,6 +526,9 @@ static int suspend_stats_show(struct seq_file *s, void *unused)
- 			suspend_step_name(
- 				suspend_stats.failed_steps[index]));
- 	}
-+	seq_printf(s,	"last_success_resume_time:\t%-llu.%llu\n",
-+		   (unsigned long long)suspend_stats.last_success_resume_time.tv_sec,
-+		   (unsigned long long)suspend_stats.last_success_resume_time.tv_nsec);
- 
- 	return 0;
- }
-diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-index fa3bf161d13f..33334565d5a6 100644
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -622,6 +622,7 @@ int pm_suspend(suspend_state_t state)
- 		dpm_save_failed_errno(error);
- 	} else {
- 		suspend_stats.success++;
-+		ktime_get_ts64(&suspend_stats.last_success_resume_time);
- 	}
- 	pr_info("suspend exit\n");
- 	return error;
+Configuring the required OPP was never properly implemented, we just
+took an exception for genpds and configured them directly, while leaving
+out all other required OPP types.
+
+Now that a standard call to dev_pm_opp_set_opp() takes care of
+configuring the opp->level too, the special handling for genpds can be
+avoided by simply calling dev_pm_opp_set_opp() for the required OPPs,
+which shall eventually configure the corresponding level for genpds.
+
+This also makes it possible for us to configure other type of required
+OPPs (no concrete users yet though), via the same path. This is how
+other frameworks take care of parent nodes, like clock, regulators, etc,
+where we recursively call the same helper.
+
+V1->V2:
+- Support opp-level 0, drop vote i.e..
+- Fix OPP pointer while calling dev_pm_opp_set_opp() recursively.
+- Minor checks and fixes.
+- Add Reviewed-by from Ulf.
+
+--
+Viresh
+
+Viresh Kumar (3):
+  OPP: Level zero is valid
+  OPP: Use _set_opp_level() for single genpd case
+  OPP: Call dev_pm_opp_set_opp() for required OPPs
+
+ drivers/opp/core.c     | 176 ++++++++++++++++++++++-------------------
+ drivers/opp/of.c       |  48 ++++++++---
+ drivers/opp/opp.h      |   8 +-
+ include/linux/pm_opp.h |  12 ++-
+ 4 files changed, 145 insertions(+), 99 deletions(-)
+
+-- 
+2.31.1.272.g89b43f80a514
 
