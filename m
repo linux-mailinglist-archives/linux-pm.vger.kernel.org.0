@@ -2,257 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3147DC970
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Oct 2023 10:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 930587DC9C7
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Oct 2023 10:41:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343811AbjJaJZm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Oct 2023 05:25:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48336 "EHLO
+        id S229715AbjJaJlV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Oct 2023 05:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343853AbjJaJZl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Oct 2023 05:25:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E81EB7;
-        Tue, 31 Oct 2023 02:25:30 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DBDF3C15;
-        Tue, 31 Oct 2023 02:26:11 -0700 (PDT)
-Received: from [10.57.4.28] (unknown [10.57.4.28])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C053E3F67D;
-        Tue, 31 Oct 2023 02:25:27 -0700 (PDT)
-Message-ID: <2c4b6c1b-b9e7-42b2-8f7b-446ebe9d15ac@arm.com>
-Date:   Tue, 31 Oct 2023 09:26:19 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 8/8] thermal: exynos: use set_trips
-Content-Language: en-US
-To:     Mateusz Majewski <m.majewski2@samsung.com>
-Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-pm@vger.kernel.org
-References: <20231025133027.524152-1-m.majewski2@samsung.com>
- <CGME20231025133100eucas1p14e6de58e52560d165bdb8b809e406278@eucas1p1.samsung.com>
- <20231025133027.524152-9-m.majewski2@samsung.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20231025133027.524152-9-m.majewski2@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229603AbjJaJlU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Oct 2023 05:41:20 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B588ED8
+        for <linux-pm@vger.kernel.org>; Tue, 31 Oct 2023 02:41:16 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-da07b5e6f75so5535151276.0
+        for <linux-pm@vger.kernel.org>; Tue, 31 Oct 2023 02:41:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1698745276; x=1699350076; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=AAE8DZ37OcIWWcnHaRuH9NBD5aoBnldXmYIwxjbhOaA=;
+        b=KH2KR+sdtQpHU8T/m8rxtdxeszlvRfGg+jb91Qu68O6LhKppAx7PNRzkEkw8cv3c/g
+         yuCxfpA6s5qeX1lLHpWKuHd15lSS3LsKxjTvv8YqBpbMWnHmnY2C85S9sw9sCGS4eb0I
+         Yuuk5uZYcnpD9nqgsWBfCmxl7YP1eojF790tprUlWJnsXksraEs3FNQtL7ZamSirA9vU
+         V47lLjttRby5nA+UBLHXv7dQt54Gx1LgzfGCllcaZKbFYkCv4azgEf2Q+bEAmXfKIQau
+         NQE47hMS2+lW9gW38E01pCfZzbEp0r8oFMp/iC3mMcJBDhl9YOtQGzjeIzmRz/bV8cr2
+         WF4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698745276; x=1699350076;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AAE8DZ37OcIWWcnHaRuH9NBD5aoBnldXmYIwxjbhOaA=;
+        b=AGcM8DFVqmtEU+KxnyZHGJ/Z2Zm/XP3tutSxQw4hua6jWrmb5J32gPp88enU2oxigb
+         RWZg31Q/WbUkeekukCGhxHlUi9YwYDKk45PhbovGW3xFjkYML+m20DDzCgwTdBy5+jn+
+         l1N9kMelwW/O4RSRGKvZxhiACiikI4PQeBUwKq7HqW0eqc0TJwTQ6s8gs03/iBCx/4nc
+         vxvHbSpFxfyBwbeYoDUwTU342zEBCZYONaYEtVyi679a78kct9HlGVqRgWEeDz2DpVxA
+         cs1b3j3IYs1gx8aZPoZLQYMlsOhFPqRrzt3NzSUM01qSefakx7lVdBSTjoaCePdye7DI
+         LzMA==
+X-Gm-Message-State: AOJu0Yy3EKyKaBJx7BQ3vyj3y0R3vrG9yaanF+15V8GCyLExiEFe5wbJ
+        Kt/kFSz2ZL0J4XO9kmU3XyCDSSHNTv/laJY=
+X-Google-Smtp-Source: AGHT+IGx9jY0E4VFXMuDOvKB8tsPm8Ew4oBVBmQYjB1u2E6jaMuplNkYOYJxCKtK6SX1UAEi06SAlLGGnaLQueg=
+X-Received: from guanyulin-p620linsp01.ntc.corp.google.com ([2401:fa00:fc:202:a5e:4630:6c4b:b198])
+ (user=guanyulin job=sendgmr) by 2002:a25:a526:0:b0:da0:c924:4fdc with SMTP id
+ h35-20020a25a526000000b00da0c9244fdcmr44590ybi.6.1698745275891; Tue, 31 Oct
+ 2023 02:41:15 -0700 (PDT)
+Date:   Tue, 31 Oct 2023 17:38:55 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.42.0.820.g83a721a137-goog
+Message-ID: <20231031093921.755204-1-guanyulin@google.com>
+Subject: [PATCH] rpm: pm: enable PM_RPM_EXCEPTION config flag
+From:   Guan-Yu Lin <guanyulin@google.com>
+To:     gregkh@linuxfoundation.org, rafael@kernel.org, len.brown@intel.com,
+        pavel@ucw.cz, stern@rowland.harvard.edu,
+        heikki.krogerus@linux.intel.com, mkl@pengutronix.de,
+        hadess@hadess.net, mailhol.vincent@wanadoo.fr,
+        ivan.orlov0322@gmail.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, pumahsu@google.com, raychi@google.com,
+        albertccwang@google.com, Guan-Yu Lin <guanyulin@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Introducing PM_RPM_EXCEPTION config flag, which may alter the priority
+between system power management and runtime power management. In
+suspend-to-idle flow, PM core will suspend all devices to avoid device
+interact with the system. However, chances are devices might be used by
+other systems rather than a single system. In this case, PM core shouldn't
+suspend the devices. One may use PM_RPM_EXCEPTION config flag to mark
+such exception, and determine the power state of a device with runtime
+power management rather than system power management.
 
+Signed-off-by: Guan-Yu Lin <guanyulin@google.com>
+---
+ drivers/usb/core/generic.c |  6 ++++++
+ drivers/usb/core/usb.h     | 16 ++++++++++++++++
+ kernel/power/Kconfig       |  8 ++++++++
+ 3 files changed, 30 insertions(+)
 
-On 10/25/23 14:30, Mateusz Majewski wrote:
-> Currently, each trip point defined in the device tree corresponds to a
-> single hardware interrupt. This commit instead switches to using two
-> hardware interrupts, whose values are set dynamically using the
-> set_trips callback. Additionally, the critical temperature threshold is
-> handled specifically.
-> 
+diff --git a/drivers/usb/core/generic.c b/drivers/usb/core/generic.c
+index 740342a2812a..bb0dfcfc9764 100644
+--- a/drivers/usb/core/generic.c
++++ b/drivers/usb/core/generic.c
+@@ -266,6 +266,9 @@ int usb_generic_driver_suspend(struct usb_device *udev, pm_message_t msg)
+ {
+ 	int rc;
+ 
++	if (usb_runtime_pm_exception(udev))
++		return 0;
++
+ 	/* Normal USB devices suspend through their upstream port.
+ 	 * Root hubs don't have upstream ports to suspend,
+ 	 * so we have to shut down their downstream HC-to-USB
+@@ -294,6 +297,9 @@ int usb_generic_driver_resume(struct usb_device *udev, pm_message_t msg)
+ {
+ 	int rc;
+ 
++	if (usb_runtime_pm_exception(udev))
++		return 0;
++
+ 	/* Normal USB devices resume/reset through their upstream port.
+ 	 * Root hubs don't have upstream ports to resume or reset,
+ 	 * so we have to start up their downstream HC-to-USB
+diff --git a/drivers/usb/core/usb.h b/drivers/usb/core/usb.h
+index 60363153fc3f..14a054f814a2 100644
+--- a/drivers/usb/core/usb.h
++++ b/drivers/usb/core/usb.h
+@@ -90,6 +90,22 @@ extern void usb_major_cleanup(void);
+ extern int usb_device_supports_lpm(struct usb_device *udev);
+ extern int usb_port_disable(struct usb_device *udev);
+ 
++#ifdef	CONFIG_PM_RPM_EXCEPTION
++
++static inline int usb_runtime_pm_exception(struct usb_device *udev)
++{
++	return atomic_read(&udev->dev.power.usage_count);
++}
++
++#else
++
++static inline int usb_runtime_pm_exception(struct usb_device *udev)
++{
++	return 0;
++}
++
++#endif
++
+ #ifdef	CONFIG_PM
+ 
+ extern int usb_suspend(struct device *dev, pm_message_t msg);
+diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+index 4b31629c5be4..beba7a0f3947 100644
+--- a/kernel/power/Kconfig
++++ b/kernel/power/Kconfig
+@@ -193,6 +193,14 @@ config PM
+ 	  responsible for the actual handling of device suspend requests and
+ 	  wake-up events.
+ 
++config PM_RPM_EXCEPTION
++	bool "Prioritize Runtime Power Management more than Power Management"
++	default n
++	help
++	Provides a way to prioritize Runtime Power Management more than Power
++	Management. This way system can suspnd with maintaining specific
++	components in operation.
++
+ config PM_DEBUG
+ 	bool "Power Management Debug Support"
+ 	depends on PM
+-- 
+2.42.0.820.g83a721a137-goog
 
-[snip]
-
->   
-> -static void exynos4210_tmu_set_trip_temp(struct exynos_tmu_data *data,
-> -					 int trip_id, u8 temp)
-> +static void exynos_tmu_update_bit(struct exynos_tmu_data *data, int reg_off,
-> +				  int bit_off, bool enable)
->   {
-> -	temp = temp_to_code(data, temp);
-> -	writeb(temp, data->base + EXYNOS4210_TMU_REG_TRIG_LEVEL0 + trip_id * 4);
-> +	u32 interrupt_en;
-> +
-> +	interrupt_en = readl(data->base + reg_off);
-> +	if (enable)
-> +		interrupt_en |= 1 << bit_off;
-> +	else
-> +		interrupt_en &= ~(1 << bit_off);
-
-Why not to use dedicated stuff for this?
-val |= BIT(x)
-val &= ~BIT(x)
-You can find plenty of example in the kernel
-
-> +	writel(interrupt_en, data->base + reg_off);
->   }
->   
-
-[snip]
-
-> -static void exynos4412_tmu_set_trip_temp(struct exynos_tmu_data *data,
-> -					 int trip, u8 temp)
-> -{
-> -	u32 th, con;
-> -
-> -	th = readl(data->base + EXYNOS_THD_TEMP_RISE);
-> -	th &= ~(0xff << 8 * trip);
-> -	th |= temp_to_code(data, temp) << 8 * trip;
-> -	writel(th, data->base + EXYNOS_THD_TEMP_RISE);
-> -
-> -	if (trip == 3) {
-> -		con = readl(data->base + EXYNOS_TMU_REG_CONTROL);
-> -		con |= (1 << EXYNOS_TMU_THERM_TRIP_EN_SHIFT);
-> -		writel(con, data->base + EXYNOS_TMU_REG_CONTROL);
-> -	}
-> -}
-> -
-> -static void exynos4412_tmu_set_trip_hyst(struct exynos_tmu_data *data,
-> -					 int trip, u8 temp, u8 hyst)
-> +static void exynos4412_tmu_set_low_temp(struct exynos_tmu_data *data, u8 temp)
->   {
->   	u32 th;
->   
->   	th = readl(data->base + EXYNOS_THD_TEMP_FALL);
-> -	th &= ~(0xff << 8 * trip);
-> -	if (hyst)
-> -		th |= temp_to_code(data, temp - hyst) << 8 * trip;
-> +	th &= ~(0xff << 0);
-> +	th |= temp_to_code(data, temp) << 0;
-
-This 2-line pattern repeats a few times. It looks like a nice cadidate
-for an inline function which can abstract that. Something like:
-
-val = update_temp_value(data, temp, threshold, LOW_TEMP_SHIFT)
-
-Assisted with the macros {LOW|HIGH|CRIT}_TEMP_SHIFT, the code
-would look less convoluted IMO.
-(The old code with the multiplication for the shift value wasn't
-cleaner nor faster).
-
->   	writel(th, data->base + EXYNOS_THD_TEMP_FALL);
-> +
-> +	exynos_tmu_update_bit(data, EXYNOS_TMU_REG_INTEN,
-> +			      EXYNOS_TMU_INTEN_FALL0_SHIFT, true);
-> +}
-
-[snip]
-
-> -static void exynos7_tmu_set_trip_temp(struct exynos_tmu_data *data,
-> -				      int trip, u8 temp)
-> +static void exynos7_tmu_update_temp(struct exynos_tmu_data *data, u8 temp,
-> +				    int idx, bool rise)
->   {
->   	unsigned int reg_off, bit_off;
->   	u32 th;
-> +	void __iomem *reg;
->   
-> -	reg_off = ((7 - trip) / 2) * 4;
-> -	bit_off = ((8 - trip) % 2);
-> +	reg_off = ((7 - idx) / 2) * 4;
-
-Why can't we just have a set of defined register macros and pick one
-in some small function?
-A lot of operations here, also some assumption.
-
-> +	bit_off = ((8 - idx) % 2);
-
-So this can only be 0 or 1 and than it's used for the shift
-multiplication. Also I don't know the history of older code and
-if it was missed after some cleaning, but 'idx % 2' gives
-equal values but w/o subtraction.
-
-BTW, the code assumes the 'idx' values are under control somewhere else.
-Is that because the DT make sure in the schema that the range cannot be
-too big?
-What are the possible values for 'idx'?
-
->   
-> -	th = readl(data->base + EXYNOS7_THD_TEMP_RISE7_6 + reg_off);
-> +	reg = data->base +
-> +	      (rise ? EXYNOS7_THD_TEMP_RISE7_6 : EXYNOS7_THD_TEMP_FALL7_6) +
-> +	      reg_off;
-> +	th = readl(reg);
->   	th &= ~(EXYNOS7_TMU_TEMP_MASK << (16 * bit_off));
->   	th |= temp_to_code(data, temp) << (16 * bit_off);
-
-Can you simplify and abstract those bit_off usage and use some
-macros and less math operations?
-
-> -	writel(th, data->base + EXYNOS7_THD_TEMP_RISE7_6 + reg_off);
-> +	writel(th, reg);
-> +
-> +	exynos_tmu_update_bit(data, EXYNOS5433_TMU_REG_INTEN,
-> +			      (rise ? EXYNOS7_TMU_INTEN_RISE0_SHIFT :
-> +				      EXYNOS_TMU_INTEN_FALL0_SHIFT) +
-> +				      idx,
-> +			      true);
->   }
-
-[snip]
-
->   
-> -	if (on) {
-> -		for (i = 0; i < data->ntrip; i++) {
-> -			if (thermal_zone_get_trip(tz, i, &trip))
-> -				continue;
-> -
-> -			interrupt_en |=
-> -				(1 << (EXYNOS_TMU_INTEN_RISE0_SHIFT + i * 4));
-> -		}
-> -
-> -		if (data->soc != SOC_ARCH_EXYNOS4210)
-> -			interrupt_en |=
-> -				interrupt_en << EXYNOS_TMU_INTEN_FALL0_SHIFT;
-> -
-> +	if (on)
->   		con |= (1 << EXYNOS_TMU_CORE_EN_SHIFT);
-> -	} else {
-> +	else
->   		con &= ~(1 << EXYNOS_TMU_CORE_EN_SHIFT);
-
-Please also consider the BIT() helper here and above...
-
-> -	}
->   
-> -	writel(interrupt_en, data->base + EXYNOS_TMU_REG_INTEN);
->   	writel(con, data->base + EXYNOS_TMU_REG_CONTROL);
->   }
->   
->   static void exynos5433_tmu_control(struct platform_device *pdev, bool on)
->   {
->   	struct exynos_tmu_data *data = platform_get_drvdata(pdev);
-> -	struct thermal_zone_device *tz = data->tzd;
-> -	struct thermal_trip trip;
-> -	unsigned int con, interrupt_en = 0, pd_det_en, i;
-> +	unsigned int con, pd_det_en;
->   
->   	con = get_con_reg(data, readl(data->base + EXYNOS_TMU_REG_CONTROL));
->   
-> -	if (on) {
-> -		for (i = 0; i < data->ntrip; i++) {
-> -			if (thermal_zone_get_trip(tz, i, &trip))
-> -				continue;
-> -
-> -			interrupt_en |=
-> -				(1 << (EXYNOS7_TMU_INTEN_RISE0_SHIFT + i));
-> -		}
-> -
-> -		interrupt_en |=
-> -			interrupt_en << EXYNOS_TMU_INTEN_FALL0_SHIFT;
-> -
-> +	if (on)
->   		con |= (1 << EXYNOS_TMU_CORE_EN_SHIFT);
-> -	} else
-> +	else
->   		con &= ~(1 << EXYNOS_TMU_CORE_EN_SHIFT);
-
-... and here. Basically in all places where it's possible.
-
-Regards,
-Lukasz
