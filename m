@@ -2,52 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65CD57DD27C
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Oct 2023 17:45:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7AD27DD3AC
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Oct 2023 18:01:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346314AbjJaQpY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Oct 2023 12:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37600 "EHLO
+        id S235817AbjJaRB0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Oct 2023 13:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346151AbjJaQpD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Oct 2023 12:45:03 -0400
+        with ESMTP id S231797AbjJaRBO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Oct 2023 13:01:14 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745E719AE;
-        Tue, 31 Oct 2023 09:34:27 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDA81C433CA;
-        Tue, 31 Oct 2023 16:34:26 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301C87D90
+        for <linux-pm@vger.kernel.org>; Tue, 31 Oct 2023 09:58:38 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00C5FC433C7;
+        Tue, 31 Oct 2023 16:58:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698770066;
-        bh=pZs5rfnOW3Hix1tjsUggJ963xrDWi7btCSCpkKyU+IE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Bnq9Zq4I7oVJrfeOna2uSfpqtDBgo3GEXHXAOMKE1p2NcYajYMkYCKa5T7//DE0Ey
-         KlXU5vJuXuCklcDHKIKUhBxIU/tH909VPN2+5eWCffOYkwVYos9YJngqj/jsYMEbmU
-         +AgCo2zt6hIDFnJoHY/rmcw3P2RKZl7CQp8gjZeOPbBB1BTh/KRqttSNs70NE/EqkX
-         YFjdadu5GJRTYoy4EPDP2RZ+O3NNly7Gu5obgpmbc+LLOKIdo87aJZ44o6ujdiPOG7
-         vnmea9BX8UdgFTMikN6QICOiiQOtYHZXqJY80rm7Of4bLe9j+XypODv+ny3kvNgJWA
-         6qrOy/YWzBeuw==
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-507a3b8b113so8474158e87.0;
-        Tue, 31 Oct 2023 09:34:26 -0700 (PDT)
-X-Gm-Message-State: AOJu0YzmvsX+KLKnS4TbnKNHA2ImNm9j8aiO7gcLwk4sRapFHGT8r/6n
-        2BKSauFFBYuL9cVQL6oxcBsvD87oNDUKMFVbuQ==
-X-Google-Smtp-Source: AGHT+IEYiSmFZUL5q+DiJoXnU2ouM+e5NUrLNnjV9M4bdG4Lx26ipN+xox2BXaou74oZflON3SNBTacyhY5nekVUzyI=
-X-Received: by 2002:a19:670b:0:b0:4f9:5426:6622 with SMTP id
- b11-20020a19670b000000b004f954266622mr8898618lfc.69.1698770064915; Tue, 31
- Oct 2023 09:34:24 -0700 (PDT)
+        s=k20201202; t=1698771504;
+        bh=EXc7FfdhWkgC8EXJESwgVLIiX4BW4W7aviY/soY+zWw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WUjz+M83TAJK5a62H2SN2uk4JxXlZQ3BaeWfgLG5GNO7sZGmFTLEo4M+nUUg9iCd5
+         NadizlmTzfR4oQYqpZ6s0+4UdQ7kw0MkX6Xidgq7qgxKJBbPacuAVI8ytdCFq7N6yb
+         Ge6m3gLJEq2Poy/zPILHVloMWRzp/8C/6GMEjx+MiQrYQqbwZYJ6KV9cvOIRSIjQzU
+         u2t82g3K52zeoCDcXEfEItaV3EDSVEso7XOVfm9blV3e5Z6upZox2zZkyKGo4OAnb5
+         XynAYeF4m8FimQbBzwPcGgrqUqS/aZyPg3jcgUqhO5gXG75KV1dpWB4a8Gp6QORBUU
+         7ltuJt6Ux2WXA==
+Date:   Tue, 31 Oct 2023 16:58:16 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Binbin Zhou <zhoubinbin@loongson.cn>
+Cc:     Binbin Zhou <zhoubb.aaron@gmail.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        loongson-kernel@lists.loongnix.cn, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, Yinbo Zhu <zhuyinbo@loongson.cn>,
+        WANG Xuerui <git@xen0n.name>, loongarch@lists.linux.dev
+Subject: Re: [PATCH 1/2] dt-bindings: thermal: loongson,ls2k-thermal: Fix
+ binding check issues
+Message-ID: <20231031-negative-giveaway-6191a2da0cd5@spud>
+References: <cover.1698743706.git.zhoubinbin@loongson.cn>
+ <944559ea3bf7ba0a1540f831ccd7d33591622b22.1698743706.git.zhoubinbin@loongson.cn>
 MIME-Version: 1.0
-References: <20231030135411.776744-1-robh@kernel.org> <20231031034551.iiroxfz7qoz5r7yn@vireshk-i7>
-In-Reply-To: <20231031034551.iiroxfz7qoz5r7yn@vireshk-i7>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 31 Oct 2023 11:34:12 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJ=ceJpboLA+UjRVhSiN73RhVhh-zrUz8-Xv99LomCUjQ@mail.gmail.com>
-Message-ID: <CAL_JsqJ=ceJpboLA+UjRVhSiN73RhVhh-zrUz8-Xv99LomCUjQ@mail.gmail.com>
-Subject: Re: [RESEND PATCH] opp: ti: Use device_get_match_data()
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="MmKz63fqu/mZqg9d"
+Content-Disposition: inline
+In-Reply-To: <944559ea3bf7ba0a1540f831ccd7d33591622b22.1698743706.git.zhoubinbin@loongson.cn>
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,30 +62,83 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 30, 2023 at 10:45=E2=80=AFPM Viresh Kumar <viresh.kumar@linaro.=
-org> wrote:
->
-> Hmm, somehow I didn't receive the direct mail last time to my Linaro acco=
-unt
-> (alias of kernel.org). I do see the message being posted to LKML though.
 
-That was an issue on my side.
+--MmKz63fqu/mZqg9d
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->
-> On 30-10-23, 08:54, Rob Herring wrote:
->
-> Isn't it is compulsory to add some details in the commit log ?
+On Tue, Oct 31, 2023 at 07:05:49PM +0800, Binbin Zhou wrote:
+> Add the missing 'thermal-sensor-cells' property which is required for
+> every thermal sensor as it's used when using phandles.
+> And add the thermal-sensor.yaml reference.
+>=20
+> Fixes: 72684d99a854 ("thermal: dt-bindings: add loongson-2 thermal")
+> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> ---
+>  .../bindings/thermal/loongson,ls2k-thermal.yaml        | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/thermal/loongson,ls2k-ther=
+mal.yaml b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.=
+yaml
+> index 7538469997f9..b634f57cd011 100644
+> --- a/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
+> @@ -10,6 +10,9 @@ maintainers:
+>    - zhanghongchen <zhanghongchen@loongson.cn>
+>    - Yinbo Zhu <zhuyinbo@loongson.cn>
+> =20
+> +allOf:
+> +  - $ref: /schemas/thermal/thermal-sensor.yaml#
+> +
+>  properties:
+>    compatible:
+>      oneOf:
+> @@ -26,12 +29,16 @@ properties:
+>    interrupts:
+>      maxItems: 1
+> =20
+> +  '#thermal-sensor-cells':
+> +    const: 1
+> +
+>  required:
+>    - compatible
+>    - reg
+>    - interrupts
+> +  - '#thermal-sensor-cells'
 
-Sigh, I missed adding it on this one. It should be:
+Why does it need to be a required property now though?
+Adding new required properties is technically an ABI break.
 
-Use preferred device_get_match_data() instead of of_match_device() to
-get the driver match data. With this, adjust the includes to explicitly
-include the correct headers.
+Cheers,
+Conor.
 
-As this driver only does DT based matching, of_match_device() will never
-return NULL if we've gotten to probe(). Therefore, the NULL check and
-error return for it can be dropped.
+> =20
+> -additionalProperties: false
+> +unevaluatedProperties: false
+> =20
+>  examples:
+>    - |
+> @@ -41,4 +48,5 @@ examples:
+>          reg =3D <0x1fe01500 0x30>;
+>          interrupt-parent =3D <&liointc0>;
+>          interrupts =3D <7 IRQ_TYPE_LEVEL_LOW>;
+> +        #thermal-sensor-cells =3D <1>;
+>      };
+> --=20
+> 2.39.3
+>=20
 
-Will fix and repost.
+--MmKz63fqu/mZqg9d
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Rob
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZUEyKAAKCRB4tDGHoIJi
+0k0cAQDPw6O0fZMpvQeC7hVo6AKxjMU7IA9SCENIscLXKwsmigD/T+WLG3cAvHjw
+9M/MySMq/6DajsHg0C6nsGeWj3na/QU=
+=MXOh
+-----END PGP SIGNATURE-----
+
+--MmKz63fqu/mZqg9d--
