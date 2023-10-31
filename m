@@ -2,99 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5FD07DCF71
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Oct 2023 15:43:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CD57DD27C
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Oct 2023 17:45:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344254AbjJaOjY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Oct 2023 10:39:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48828 "EHLO
+        id S1346314AbjJaQpY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Oct 2023 12:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233719AbjJaOjX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Oct 2023 10:39:23 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0EC8DDB
-        for <linux-pm@vger.kernel.org>; Tue, 31 Oct 2023 07:39:19 -0700 (PDT)
-Received: (qmail 717485 invoked by uid 1000); 31 Oct 2023 10:39:19 -0400
-Date:   Tue, 31 Oct 2023 10:39:19 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Guan-Yu Lin <guanyulin@google.com>
-Cc:     gregkh@linuxfoundation.org, rafael@kernel.org, len.brown@intel.com,
-        pavel@ucw.cz, heikki.krogerus@linux.intel.com, mkl@pengutronix.de,
-        hadess@hadess.net, mailhol.vincent@wanadoo.fr,
-        ivan.orlov0322@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        pumahsu@google.com, raychi@google.com, albertccwang@google.com
-Subject: Re: [PATCH] rpm: pm: enable PM_RPM_EXCEPTION config flag
-Message-ID: <f75d6cd2-fa9f-4820-969f-2a8839d78c9e@rowland.harvard.edu>
-References: <20231031093921.755204-1-guanyulin@google.com>
+        with ESMTP id S1346151AbjJaQpD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Oct 2023 12:45:03 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745E719AE;
+        Tue, 31 Oct 2023 09:34:27 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDA81C433CA;
+        Tue, 31 Oct 2023 16:34:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698770066;
+        bh=pZs5rfnOW3Hix1tjsUggJ963xrDWi7btCSCpkKyU+IE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Bnq9Zq4I7oVJrfeOna2uSfpqtDBgo3GEXHXAOMKE1p2NcYajYMkYCKa5T7//DE0Ey
+         KlXU5vJuXuCklcDHKIKUhBxIU/tH909VPN2+5eWCffOYkwVYos9YJngqj/jsYMEbmU
+         +AgCo2zt6hIDFnJoHY/rmcw3P2RKZl7CQp8gjZeOPbBB1BTh/KRqttSNs70NE/EqkX
+         YFjdadu5GJRTYoy4EPDP2RZ+O3NNly7Gu5obgpmbc+LLOKIdo87aJZ44o6ujdiPOG7
+         vnmea9BX8UdgFTMikN6QICOiiQOtYHZXqJY80rm7Of4bLe9j+XypODv+ny3kvNgJWA
+         6qrOy/YWzBeuw==
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-507a3b8b113so8474158e87.0;
+        Tue, 31 Oct 2023 09:34:26 -0700 (PDT)
+X-Gm-Message-State: AOJu0YzmvsX+KLKnS4TbnKNHA2ImNm9j8aiO7gcLwk4sRapFHGT8r/6n
+        2BKSauFFBYuL9cVQL6oxcBsvD87oNDUKMFVbuQ==
+X-Google-Smtp-Source: AGHT+IEYiSmFZUL5q+DiJoXnU2ouM+e5NUrLNnjV9M4bdG4Lx26ipN+xox2BXaou74oZflON3SNBTacyhY5nekVUzyI=
+X-Received: by 2002:a19:670b:0:b0:4f9:5426:6622 with SMTP id
+ b11-20020a19670b000000b004f954266622mr8898618lfc.69.1698770064915; Tue, 31
+ Oct 2023 09:34:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231031093921.755204-1-guanyulin@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20231030135411.776744-1-robh@kernel.org> <20231031034551.iiroxfz7qoz5r7yn@vireshk-i7>
+In-Reply-To: <20231031034551.iiroxfz7qoz5r7yn@vireshk-i7>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 31 Oct 2023 11:34:12 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJ=ceJpboLA+UjRVhSiN73RhVhh-zrUz8-Xv99LomCUjQ@mail.gmail.com>
+Message-ID: <CAL_JsqJ=ceJpboLA+UjRVhSiN73RhVhh-zrUz8-Xv99LomCUjQ@mail.gmail.com>
+Subject: Re: [RESEND PATCH] opp: ti: Use device_get_match_data()
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 31, 2023 at 05:38:55PM +0800, Guan-Yu Lin wrote:
-> Introducing PM_RPM_EXCEPTION config flag, which may alter the priority
-> between system power management and runtime power management. In
-> suspend-to-idle flow, PM core will suspend all devices to avoid device
+On Mon, Oct 30, 2023 at 10:45=E2=80=AFPM Viresh Kumar <viresh.kumar@linaro.=
+org> wrote:
+>
+> Hmm, somehow I didn't receive the direct mail last time to my Linaro acco=
+unt
+> (alias of kernel.org). I do see the message being posted to LKML though.
 
-Your patch affects all forms of system suspend, not just 
-suspend-to-idle.  What do you actually mean here?
+That was an issue on my side.
 
-> interact with the system. However, chances are devices might be used by
-> other systems rather than a single system. In this case, PM core shouldn't
-> suspend the devices. One may use PM_RPM_EXCEPTION config flag to mark
-> such exception, and determine the power state of a device with runtime
-> power management rather than system power management.
+>
+> On 30-10-23, 08:54, Rob Herring wrote:
+>
+> Isn't it is compulsory to add some details in the commit log ?
 
-This sort of arrangement -- a device shared between two different 
-systems -- could happen with any sort of device.  Why does your patch 
-affect only USB devices?
+Sigh, I missed adding it on this one. It should be:
 
-> diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
-> index 4b31629c5be4..beba7a0f3947 100644
-> --- a/kernel/power/Kconfig
-> +++ b/kernel/power/Kconfig
-> @@ -193,6 +193,14 @@ config PM
->  	  responsible for the actual handling of device suspend requests and
->  	  wake-up events.
->  
-> +config PM_RPM_EXCEPTION
-> +	bool "Prioritize Runtime Power Management more than Power Management"
+Use preferred device_get_match_data() instead of of_match_device() to
+get the driver match data. With this, adjust the includes to explicitly
+include the correct headers.
 
-Runtime Power Management is a form of Power Management, so what you 
-wrote doesn't make sense.  What you really meant is: Prioritize Runtime 
-Power Management more than System Power Management.
+As this driver only does DT based matching, of_match_device() will never
+return NULL if we've gotten to probe(). Therefore, the NULL check and
+error return for it can be dropped.
 
-> +	default n
-> +	help
-> +	Provides a way to prioritize Runtime Power Management more than Power
-> +	Management. This way system can suspnd with maintaining specific
+Will fix and repost.
 
-s/suspnd/suspend/
-s/with/while/
-
-> +	components in operation.
-
-Your patch does not allow _specific_ components to be kept in operation.  
-_All_ in-use components that support prioritized PM (with this patch, 
-all USB components) will remain powered during system suspend, even if 
-the user wants only _some_ of them to be kept powered.
-
-Alan Stern
-
-> +
->  config PM_DEBUG
->  	bool "Power Management Debug Support"
->  	depends on PM
-> -- 
-> 2.42.0.820.g83a721a137-goog
-> 
+Rob
