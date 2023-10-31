@@ -2,58 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7AD27DD3AC
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Oct 2023 18:01:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C267C7DD603
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Oct 2023 19:27:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235817AbjJaRB0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Oct 2023 13:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
+        id S230241AbjJaS1M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Oct 2023 14:27:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231797AbjJaRBO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Oct 2023 13:01:14 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301C87D90
-        for <linux-pm@vger.kernel.org>; Tue, 31 Oct 2023 09:58:38 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00C5FC433C7;
-        Tue, 31 Oct 2023 16:58:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698771504;
-        bh=EXc7FfdhWkgC8EXJESwgVLIiX4BW4W7aviY/soY+zWw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WUjz+M83TAJK5a62H2SN2uk4JxXlZQ3BaeWfgLG5GNO7sZGmFTLEo4M+nUUg9iCd5
-         NadizlmTzfR4oQYqpZ6s0+4UdQ7kw0MkX6Xidgq7qgxKJBbPacuAVI8ytdCFq7N6yb
-         Ge6m3gLJEq2Poy/zPILHVloMWRzp/8C/6GMEjx+MiQrYQqbwZYJ6KV9cvOIRSIjQzU
-         u2t82g3K52zeoCDcXEfEItaV3EDSVEso7XOVfm9blV3e5Z6upZox2zZkyKGo4OAnb5
-         XynAYeF4m8FimQbBzwPcGgrqUqS/aZyPg3jcgUqhO5gXG75KV1dpWB4a8Gp6QORBUU
-         7ltuJt6Ux2WXA==
-Date:   Tue, 31 Oct 2023 16:58:16 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Binbin Zhou <zhoubinbin@loongson.cn>
-Cc:     Binbin Zhou <zhoubb.aaron@gmail.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
+        with ESMTP id S229881AbjJaS1L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Oct 2023 14:27:11 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA37EA3;
+        Tue, 31 Oct 2023 11:27:08 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39VEhXBa017754;
+        Tue, 31 Oct 2023 18:27:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : date :
+ subject : mime-version : content-type : content-transfer-encoding :
+ message-id : to : cc; s=qcppdkim1;
+ bh=1aiqPfkqrfk24xscMr9ACJG5fDGrPxUrkLLtvpjW5+c=;
+ b=QxhqddASfaQkzNbmIYP+03ntGnE8tmSfJyXoisOotsm0g/xDo9EFX4ebMDsz0W5URsxP
+ cTd5xIjS853ouRf2d443tx50lu1Zwon98zoP0GwW80Whqkk+lIH5vod0VDHkQx2stlzt
+ op2d3tszUkiovmnyUE3dmY3Tie4JdNmcv4VDTLkTmiIZe2M/8boynhPWmOjRBwovzU3c
+ kpPbc75lyy06MlsXNkc7tgRwdTm4FsYvXBl1jLTfJ5Dj6pLovui3LPSK4OzH/X/LtKKH
+ +ZCT2vVFUxrxrpOZl+lFiQOrAqCxX6DevN6aiZPRQE8ZrId8uAGPJ6T+N0499sPtnIXf xg== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3u30xe9are-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Oct 2023 18:27:05 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39VIR5Uv030324
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Oct 2023 18:27:05 GMT
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.39; Tue, 31 Oct 2023 11:27:04 -0700
+From:   Elliot Berman <quic_eberman@quicinc.com>
+Date:   Tue, 31 Oct 2023 11:27:00 -0700
+Subject: [PATCH] dt-bindings: power: reset: $ref reboot-mode in
+ syscon-reboot-mode
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20231031-ref-reboot-mode-v1-1-18dde4faf7e8@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAPNGQWUC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI2NDA2ND3aLUNCBOys8v0c3NT0nVTUtNSrOwSElNNDBPUgLqKgAqyKwAmxg
+ dW1sLAHcrPx5hAAAA
+To:     Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        loongson-kernel@lists.loongnix.cn, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, Yinbo Zhu <zhuyinbo@loongson.cn>,
-        WANG Xuerui <git@xen0n.name>, loongarch@lists.linux.dev
-Subject: Re: [PATCH 1/2] dt-bindings: thermal: loongson,ls2k-thermal: Fix
- binding check issues
-Message-ID: <20231031-negative-giveaway-6191a2da0cd5@spud>
-References: <cover.1698743706.git.zhoubinbin@loongson.cn>
- <944559ea3bf7ba0a1540f831ccd7d33591622b22.1698743706.git.zhoubinbin@loongson.cn>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="MmKz63fqu/mZqg9d"
-Content-Disposition: inline
-In-Reply-To: <944559ea3bf7ba0a1540f831ccd7d33591622b22.1698743706.git.zhoubinbin@loongson.cn>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        Conor Dooley <conor+dt@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Elliot Berman <quic_eberman@quicinc.com>
+X-Mailer: b4 0.13-dev
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 4-gsh6VaMGoQ-hNXe2ytBmMeok-j81h-
+X-Proofpoint-ORIG-GUID: 4-gsh6VaMGoQ-hNXe2ytBmMeok-j81h-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-31_05,2023-10-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 clxscore=1011 mlxscore=0 priorityscore=1501 malwarescore=0
+ adultscore=0 impostorscore=0 mlxlogscore=998 phishscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2310240000 definitions=main-2310310148
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,83 +82,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+syscon-reboot-mode.yaml should $ref: reboot-mode.yaml, but instead
+rewrites the properties. Update so it $refs instead.
 
---MmKz63fqu/mZqg9d
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+---
+ .../devicetree/bindings/power/reset/syscon-reboot-mode.yaml       | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-On Tue, Oct 31, 2023 at 07:05:49PM +0800, Binbin Zhou wrote:
-> Add the missing 'thermal-sensor-cells' property which is required for
-> every thermal sensor as it's used when using phandles.
-> And add the thermal-sensor.yaml reference.
->=20
-> Fixes: 72684d99a854 ("thermal: dt-bindings: add loongson-2 thermal")
-> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> ---
->  .../bindings/thermal/loongson,ls2k-thermal.yaml        | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/thermal/loongson,ls2k-ther=
-mal.yaml b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.=
-yaml
-> index 7538469997f9..b634f57cd011 100644
-> --- a/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-> @@ -10,6 +10,9 @@ maintainers:
->    - zhanghongchen <zhanghongchen@loongson.cn>
->    - Yinbo Zhu <zhuyinbo@loongson.cn>
-> =20
-> +allOf:
-> +  - $ref: /schemas/thermal/thermal-sensor.yaml#
-> +
->  properties:
->    compatible:
->      oneOf:
-> @@ -26,12 +29,16 @@ properties:
->    interrupts:
->      maxItems: 1
-> =20
-> +  '#thermal-sensor-cells':
-> +    const: 1
-> +
->  required:
->    - compatible
->    - reg
->    - interrupts
-> +  - '#thermal-sensor-cells'
+diff --git a/Documentation/devicetree/bindings/power/reset/syscon-reboot-mode.yaml b/Documentation/devicetree/bindings/power/reset/syscon-reboot-mode.yaml
+index 9b1ffceefe3d..b6acff199cde 100644
+--- a/Documentation/devicetree/bindings/power/reset/syscon-reboot-mode.yaml
++++ b/Documentation/devicetree/bindings/power/reset/syscon-reboot-mode.yaml
+@@ -29,12 +29,10 @@ properties:
+     $ref: /schemas/types.yaml#/definitions/uint32
+     description: Offset in the register map for the mode register (in bytes)
+ 
+-patternProperties:
+-  "^mode-.+":
+-    $ref: /schemas/types.yaml#/definitions/uint32
+-    description: Vendor-specific mode value written to the mode register
++allOf:
++  - $ref: reboot-mode.yaml#
+ 
+-additionalProperties: false
++unevaluatedProperties: false
+ 
+ required:
+   - compatible
 
-Why does it need to be a required property now though?
-Adding new required properties is technically an ABI break.
+---
+base-commit: ffc253263a1375a65fa6c9f62a893e9767fbebfa
+change-id: 20231031-ref-reboot-mode-febf88dea07b
 
-Cheers,
-Conor.
+Best regards,
+-- 
+Elliot Berman <quic_eberman@quicinc.com>
 
-> =20
-> -additionalProperties: false
-> +unevaluatedProperties: false
-> =20
->  examples:
->    - |
-> @@ -41,4 +48,5 @@ examples:
->          reg =3D <0x1fe01500 0x30>;
->          interrupt-parent =3D <&liointc0>;
->          interrupts =3D <7 IRQ_TYPE_LEVEL_LOW>;
-> +        #thermal-sensor-cells =3D <1>;
->      };
-> --=20
-> 2.39.3
->=20
-
---MmKz63fqu/mZqg9d
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZUEyKAAKCRB4tDGHoIJi
-0k0cAQDPw6O0fZMpvQeC7hVo6AKxjMU7IA9SCENIscLXKwsmigD/T+WLG3cAvHjw
-9M/MySMq/6DajsHg0C6nsGeWj3na/QU=
-=MXOh
------END PGP SIGNATURE-----
-
---MmKz63fqu/mZqg9d--
