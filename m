@@ -2,72 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E4A7DC88F
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Oct 2023 09:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3147DC970
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Oct 2023 10:25:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234944AbjJaIoS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Oct 2023 04:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
+        id S1343811AbjJaJZm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Oct 2023 05:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235623AbjJaIoQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Oct 2023 04:44:16 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BB6D8
-        for <linux-pm@vger.kernel.org>; Tue, 31 Oct 2023 01:44:13 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1cbf47fa563so41788725ad.2
-        for <linux-pm@vger.kernel.org>; Tue, 31 Oct 2023 01:44:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698741853; x=1699346653; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YZyTDgOu+Mk84MW1y8TY9+DV7jPCPdy2MJyiStmLRmc=;
-        b=wteoQUuS/mcbK96HWeBn6VsU3LJA4ZC11ZPSxAQreZjuQcceCTeHStrIq22y1/4+c1
-         7hAYNeK3kfNAxIcJBHED1JH+s3z/ECfnvDxHdRH0kCinE298Sv9wJg+/FWL9f13isKzS
-         0C264Zy8PULh7zEEdgYeYUQcVE9ToFgqzNZf/1xUYCjc6PT/aB+u60F2z9gI8SFFQqBl
-         r+QLTHs+5YFbPXtIIen7CQfJoEhEpVU5/Mgk9du6J+RgiGePrE7nUvioqR0ZCa4JR6Bz
-         8Y5TBMsxHNc1XdzkIdS9vFTdDbdeMyuAmqAUAihYXwhlfAETkkeSygkwS8qQevfaSfKB
-         mrBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698741853; x=1699346653;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YZyTDgOu+Mk84MW1y8TY9+DV7jPCPdy2MJyiStmLRmc=;
-        b=U/IwWlZgB6134bJIfjIr9kDu1DYTF1Eydu5hjVjyKBUgoFuSVR41KLPB236KOLS99E
-         T8UgYT2XvkohukJ52FdgkvAbxK3uPzwqjfcufTaJd32eo/e92weumSn03I0JNEz5PN+L
-         GOAhr1ObdvP4O21/Cz6bY0st/6d8ffTNq8OW8AEPCfxmtjfYbpV2K2bHxO/9ZfoQDLES
-         mPfCio9uBpId60Op3hQeuGuGVfOyhU/IzevrMiSar7Q1eySspgYqlgY5iL6sv39FAZKi
-         q5HfjKkYsXWYaxOOLm3oq4RF78NOMZObAg5hBujeJ1GkkFG0j+3nPbWe1oB38OQvn631
-         o0eg==
-X-Gm-Message-State: AOJu0YzNP0YXXbgwfGfrlLnJSGAvmgYXRJ6JCWv9/jeFBgNUkFN1NFEG
-        1XZO9DBZTsVYkNheuMDen/qi2Q==
-X-Google-Smtp-Source: AGHT+IE46TBsZ8WZ5WIF5n2a0wgB/ZoCaZ+M9uHGlPT7/gAOdKWxWCF6QOdyRyEewyBzqw8yxRCZYA==
-X-Received: by 2002:a17:902:ab81:b0:1cc:e66:3732 with SMTP id f1-20020a170902ab8100b001cc0e663732mr8974222plr.19.1698741852707;
-        Tue, 31 Oct 2023 01:44:12 -0700 (PDT)
-Received: from localhost ([122.172.80.14])
-        by smtp.gmail.com with ESMTPSA id 6-20020a170902c10600b001ca4c20003dsm812711pli.69.2023.10.31.01.44.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Oct 2023 01:44:11 -0700 (PDT)
-Date:   Tue, 31 Oct 2023 14:14:09 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        rafael@kernel.org, ilia.lin@kernel.org, sivaprak@codeaurora.org,
-        quic_kathirav@quicinc.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v6 0/2] Enable cpufreq for IPQ5332 & IPQ9574
-Message-ID: <20231031084409.x5kqcs4ubmd5jh47@vireshk-i7>
-References: <cover.1698735972.git.quic_varada@quicinc.com>
+        with ESMTP id S1343853AbjJaJZl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Oct 2023 05:25:41 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E81EB7;
+        Tue, 31 Oct 2023 02:25:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DBDF3C15;
+        Tue, 31 Oct 2023 02:26:11 -0700 (PDT)
+Received: from [10.57.4.28] (unknown [10.57.4.28])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C053E3F67D;
+        Tue, 31 Oct 2023 02:25:27 -0700 (PDT)
+Message-ID: <2c4b6c1b-b9e7-42b2-8f7b-446ebe9d15ac@arm.com>
+Date:   Tue, 31 Oct 2023 09:26:19 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1698735972.git.quic_varada@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 8/8] thermal: exynos: use set_trips
+Content-Language: en-US
+To:     Mateusz Majewski <m.majewski2@samsung.com>
+Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-pm@vger.kernel.org
+References: <20231025133027.524152-1-m.majewski2@samsung.com>
+ <CGME20231025133100eucas1p14e6de58e52560d165bdb8b809e406278@eucas1p1.samsung.com>
+ <20231025133027.524152-9-m.majewski2@samsung.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20231025133027.524152-9-m.majewski2@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,72 +56,203 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 31-10-23, 12:41, Varadarajan Narayanan wrote:
-> This patch series aims to enable cpufreq for IPQ5332 and IPQ9574.
-> For IPQ5332, a minor enhancement to Stromer Plus ops and a safe
-> source switch is needed before cpu freq can be enabled.
-> 
-> These are also included in this series. Posting this as a single
-> series. Please let me know if this is not correct, will split in
-> the subsequent revisions.
-> 
-> Passed the following DT related validations
-> make W=1 ARCH=arm64 -j16 DT_CHECKER_FLAGS='-v -m' dt_binding_check DT_SCHEMA_FILES=qcom
-> make W=1 ARCH=arm64 -j16 CHECK_DTBS=y DT_SCHEMA_FILES=qcom dtbs_check
-> 
-> For IPQ5332:
-> ~~~~~~~~~~~
-> 	* This patch series introduces stromer plus ops which
-> 	  builds on stromer ops and implements a different
-> 	  set_rate and determine_rate.
-> 
-> 	  A different set_rate is needed since stromer plus PLLs
-> 	  do not support dynamic frequency scaling. To switch
-> 	  between frequencies, we have to shut down the PLL,
-> 	  configure the L and ALPHA values and turn on again. So
-> 	  introduce the separate set of ops for Stromer Plus PLL.
-> 
-> 	* Update ipq_pll_stromer_plus to use clk_alpha_pll_stromer_plus_ops
-> 	  instead of clk_alpha_pll_stromer_ops.
-> 
-> 	* Set 'l' value to a value that is supported on all SKUs.
-> 
-> 	* Provide safe source switch for a53pll
-> 
-> 	* Include IPQ5332 in cpufreq nvmem framework
-> 
-> 	* Add OPP details to device tree
-> 
-> For IPQ9574:
-> ~~~~~~~~~~~
-> 	* Include IPQ9574 in cpufreq nvmem framework
-> 
-> 	* Add OPP details to device tree
-> 
-> Removed 2 patches from V1 as they have been merged
-> 	* dt-bindings: cpufreq: qcom-cpufreq-nvmem: document IPQ5332
-> 	* dt-bindings: cpufreq: qcom-cpufreq-nvmem: document IPQ9574
-> 
-> v4:	Included a patch to fix 'kernel test robot' build error --
-> 	https://lore.kernel.org/r/202310181650.g8THtfsm-lkp@intel.com/
-> 
-> v5:	Use devm_clk_notifier_register
-> 	Merge IPQ53xx and IPQ95xx cases with APQ8096 for speed bin selection
-> 	Add reviewed by tags
-> 
-> v6:	Except these 2 patches, rest have been merged...
-> 	Rebased these to latest top as they don't apply cleanly
-> 	(https://lore.kernel.org/linux-arm-msm/20231025062508.vccrmkem45p3fnwe@vireshk-i7/)
-> 
-> Varadarajan Narayanan (2):
->   cpufreq: qti: Enable cpufreq for ipq53xx
->   cpufreq: qti: Introduce cpufreq for ipq95xx
-> 
->  drivers/cpufreq/cpufreq-dt-platdev.c |  2 ++
->  drivers/cpufreq/qcom-cpufreq-nvmem.c | 12 ++++++++++++
->  2 files changed, 14 insertions(+)
 
-Applied. Thanks.
 
--- 
-viresh
+On 10/25/23 14:30, Mateusz Majewski wrote:
+> Currently, each trip point defined in the device tree corresponds to a
+> single hardware interrupt. This commit instead switches to using two
+> hardware interrupts, whose values are set dynamically using the
+> set_trips callback. Additionally, the critical temperature threshold is
+> handled specifically.
+> 
+
+[snip]
+
+>   
+> -static void exynos4210_tmu_set_trip_temp(struct exynos_tmu_data *data,
+> -					 int trip_id, u8 temp)
+> +static void exynos_tmu_update_bit(struct exynos_tmu_data *data, int reg_off,
+> +				  int bit_off, bool enable)
+>   {
+> -	temp = temp_to_code(data, temp);
+> -	writeb(temp, data->base + EXYNOS4210_TMU_REG_TRIG_LEVEL0 + trip_id * 4);
+> +	u32 interrupt_en;
+> +
+> +	interrupt_en = readl(data->base + reg_off);
+> +	if (enable)
+> +		interrupt_en |= 1 << bit_off;
+> +	else
+> +		interrupt_en &= ~(1 << bit_off);
+
+Why not to use dedicated stuff for this?
+val |= BIT(x)
+val &= ~BIT(x)
+You can find plenty of example in the kernel
+
+> +	writel(interrupt_en, data->base + reg_off);
+>   }
+>   
+
+[snip]
+
+> -static void exynos4412_tmu_set_trip_temp(struct exynos_tmu_data *data,
+> -					 int trip, u8 temp)
+> -{
+> -	u32 th, con;
+> -
+> -	th = readl(data->base + EXYNOS_THD_TEMP_RISE);
+> -	th &= ~(0xff << 8 * trip);
+> -	th |= temp_to_code(data, temp) << 8 * trip;
+> -	writel(th, data->base + EXYNOS_THD_TEMP_RISE);
+> -
+> -	if (trip == 3) {
+> -		con = readl(data->base + EXYNOS_TMU_REG_CONTROL);
+> -		con |= (1 << EXYNOS_TMU_THERM_TRIP_EN_SHIFT);
+> -		writel(con, data->base + EXYNOS_TMU_REG_CONTROL);
+> -	}
+> -}
+> -
+> -static void exynos4412_tmu_set_trip_hyst(struct exynos_tmu_data *data,
+> -					 int trip, u8 temp, u8 hyst)
+> +static void exynos4412_tmu_set_low_temp(struct exynos_tmu_data *data, u8 temp)
+>   {
+>   	u32 th;
+>   
+>   	th = readl(data->base + EXYNOS_THD_TEMP_FALL);
+> -	th &= ~(0xff << 8 * trip);
+> -	if (hyst)
+> -		th |= temp_to_code(data, temp - hyst) << 8 * trip;
+> +	th &= ~(0xff << 0);
+> +	th |= temp_to_code(data, temp) << 0;
+
+This 2-line pattern repeats a few times. It looks like a nice cadidate
+for an inline function which can abstract that. Something like:
+
+val = update_temp_value(data, temp, threshold, LOW_TEMP_SHIFT)
+
+Assisted with the macros {LOW|HIGH|CRIT}_TEMP_SHIFT, the code
+would look less convoluted IMO.
+(The old code with the multiplication for the shift value wasn't
+cleaner nor faster).
+
+>   	writel(th, data->base + EXYNOS_THD_TEMP_FALL);
+> +
+> +	exynos_tmu_update_bit(data, EXYNOS_TMU_REG_INTEN,
+> +			      EXYNOS_TMU_INTEN_FALL0_SHIFT, true);
+> +}
+
+[snip]
+
+> -static void exynos7_tmu_set_trip_temp(struct exynos_tmu_data *data,
+> -				      int trip, u8 temp)
+> +static void exynos7_tmu_update_temp(struct exynos_tmu_data *data, u8 temp,
+> +				    int idx, bool rise)
+>   {
+>   	unsigned int reg_off, bit_off;
+>   	u32 th;
+> +	void __iomem *reg;
+>   
+> -	reg_off = ((7 - trip) / 2) * 4;
+> -	bit_off = ((8 - trip) % 2);
+> +	reg_off = ((7 - idx) / 2) * 4;
+
+Why can't we just have a set of defined register macros and pick one
+in some small function?
+A lot of operations here, also some assumption.
+
+> +	bit_off = ((8 - idx) % 2);
+
+So this can only be 0 or 1 and than it's used for the shift
+multiplication. Also I don't know the history of older code and
+if it was missed after some cleaning, but 'idx % 2' gives
+equal values but w/o subtraction.
+
+BTW, the code assumes the 'idx' values are under control somewhere else.
+Is that because the DT make sure in the schema that the range cannot be
+too big?
+What are the possible values for 'idx'?
+
+>   
+> -	th = readl(data->base + EXYNOS7_THD_TEMP_RISE7_6 + reg_off);
+> +	reg = data->base +
+> +	      (rise ? EXYNOS7_THD_TEMP_RISE7_6 : EXYNOS7_THD_TEMP_FALL7_6) +
+> +	      reg_off;
+> +	th = readl(reg);
+>   	th &= ~(EXYNOS7_TMU_TEMP_MASK << (16 * bit_off));
+>   	th |= temp_to_code(data, temp) << (16 * bit_off);
+
+Can you simplify and abstract those bit_off usage and use some
+macros and less math operations?
+
+> -	writel(th, data->base + EXYNOS7_THD_TEMP_RISE7_6 + reg_off);
+> +	writel(th, reg);
+> +
+> +	exynos_tmu_update_bit(data, EXYNOS5433_TMU_REG_INTEN,
+> +			      (rise ? EXYNOS7_TMU_INTEN_RISE0_SHIFT :
+> +				      EXYNOS_TMU_INTEN_FALL0_SHIFT) +
+> +				      idx,
+> +			      true);
+>   }
+
+[snip]
+
+>   
+> -	if (on) {
+> -		for (i = 0; i < data->ntrip; i++) {
+> -			if (thermal_zone_get_trip(tz, i, &trip))
+> -				continue;
+> -
+> -			interrupt_en |=
+> -				(1 << (EXYNOS_TMU_INTEN_RISE0_SHIFT + i * 4));
+> -		}
+> -
+> -		if (data->soc != SOC_ARCH_EXYNOS4210)
+> -			interrupt_en |=
+> -				interrupt_en << EXYNOS_TMU_INTEN_FALL0_SHIFT;
+> -
+> +	if (on)
+>   		con |= (1 << EXYNOS_TMU_CORE_EN_SHIFT);
+> -	} else {
+> +	else
+>   		con &= ~(1 << EXYNOS_TMU_CORE_EN_SHIFT);
+
+Please also consider the BIT() helper here and above...
+
+> -	}
+>   
+> -	writel(interrupt_en, data->base + EXYNOS_TMU_REG_INTEN);
+>   	writel(con, data->base + EXYNOS_TMU_REG_CONTROL);
+>   }
+>   
+>   static void exynos5433_tmu_control(struct platform_device *pdev, bool on)
+>   {
+>   	struct exynos_tmu_data *data = platform_get_drvdata(pdev);
+> -	struct thermal_zone_device *tz = data->tzd;
+> -	struct thermal_trip trip;
+> -	unsigned int con, interrupt_en = 0, pd_det_en, i;
+> +	unsigned int con, pd_det_en;
+>   
+>   	con = get_con_reg(data, readl(data->base + EXYNOS_TMU_REG_CONTROL));
+>   
+> -	if (on) {
+> -		for (i = 0; i < data->ntrip; i++) {
+> -			if (thermal_zone_get_trip(tz, i, &trip))
+> -				continue;
+> -
+> -			interrupt_en |=
+> -				(1 << (EXYNOS7_TMU_INTEN_RISE0_SHIFT + i));
+> -		}
+> -
+> -		interrupt_en |=
+> -			interrupt_en << EXYNOS_TMU_INTEN_FALL0_SHIFT;
+> -
+> +	if (on)
+>   		con |= (1 << EXYNOS_TMU_CORE_EN_SHIFT);
+> -	} else
+> +	else
+>   		con &= ~(1 << EXYNOS_TMU_CORE_EN_SHIFT);
+
+... and here. Basically in all places where it's possible.
+
+Regards,
+Lukasz
