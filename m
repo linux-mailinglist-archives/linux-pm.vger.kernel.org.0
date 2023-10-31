@@ -2,72 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1862E7DC5DD
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Oct 2023 06:26:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 658807DC6F4
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Oct 2023 08:12:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjJaF0d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Oct 2023 01:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48140 "EHLO
+        id S1343541AbjJaHMt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Oct 2023 03:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjJaF0d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Oct 2023 01:26:33 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AFDC1
-        for <linux-pm@vger.kernel.org>; Mon, 30 Oct 2023 22:26:30 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1c9b7c234a7so47507235ad.3
-        for <linux-pm@vger.kernel.org>; Mon, 30 Oct 2023 22:26:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698729990; x=1699334790; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zWWTAw4O7AjDj0Sh1SsAmZTItwGjI/fDezH/BgyVAlw=;
-        b=iyrIthBau1EczbLqvOsotIzapV+5EhdWLZ9IKJsAaWCZxzqAwYlOyJIbQoEZX2oVHg
-         Fn7HyX7H6nWQn3mHBgTbZMO0pQyMnwj7SxbeNp0IrMYvNOlc3q6iqKq4bCPU8zoT7xCs
-         u0XnBmqy0CYAMjh4gyG6CvRbPASF9NOABXo0EtAjpDBJ7dFN10e6aOFNzEsg+WoT8pEs
-         8nMd3TbxEAjJQz7h4aCc5F/bxDneK7OKsnHDSAD8wC7mLPwqzedFBbjALFRdCXmsxc1N
-         /FkLCqgWvUd3eqBxmzH0GOhqjvHH5plGNJYsR+Vdac9cjUBDBkV/bG8G0ILnvpxzYWhP
-         KQJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698729990; x=1699334790;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zWWTAw4O7AjDj0Sh1SsAmZTItwGjI/fDezH/BgyVAlw=;
-        b=NBGLoSmUgx6od9muxTa0Ugz/4zQ9YeETquIzNy+pIjXXqKYULcz1lmb8BPL+FRGnh7
-         /jJW5ImxUmTbmjbw00ol8JbJ1gZp3SR1e9+4MPPD45u0jTE4ldKKbCUpODeqmEHv0DVt
-         fVB8osHfcewARzkpUENriMg3PbfW5Rg5Pfbq4oBO68fldX9cds3sAUE2te71TKZsfkI6
-         hMJQEqozVs4yQxRg4Mmb7JAa4K5sxDgwgWEt5or92kXsc4+DgXMhzhI3TabLTofYjSCa
-         DOdV1sqib2JHYOxtLT4OcAcKS9bHvl9yZ63Huzra6kxgYEmOGMk4evdJ3Hoy+5Nvy2Mm
-         JI2g==
-X-Gm-Message-State: AOJu0Yzyc75WnkQ4guTCvm5lfS7sux/TqT3iuzfrh4wlOOYgbpTxJ8d5
-        QM88OTdY0TPE8G77d7DF6ofGgA==
-X-Google-Smtp-Source: AGHT+IFRsDvU9Ch0ArXYOjF51BybtwVhnioDTXiPUiKEzIPIm4/O5fxqCwWUN5s5DgpBwf+zLj58Iw==
-X-Received: by 2002:a17:902:e404:b0:1cc:33ee:ddf with SMTP id m4-20020a170902e40400b001cc33ee0ddfmr6596269ple.33.1698729990342;
-        Mon, 30 Oct 2023 22:26:30 -0700 (PDT)
-Received: from localhost ([122.172.80.14])
-        by smtp.gmail.com with ESMTPSA id l15-20020a170902f68f00b001b86dd825e7sm399274plg.108.2023.10.30.22.26.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Oct 2023 22:26:29 -0700 (PDT)
-Date:   Tue, 31 Oct 2023 10:56:27 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 1/3] OPP: Level zero is valid
-Message-ID: <20231031052627.3xuryhy3o4rk5nb2@vireshk-i7>
-References: <cover.1698661048.git.viresh.kumar@linaro.org>
- <36de122e568dcba371d3581e5f936243b405a874.1698661048.git.viresh.kumar@linaro.org>
- <3d686b62-13a2-4107-86ff-d9753cb177fb@linaro.org>
+        with ESMTP id S1343497AbjJaHMs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Oct 2023 03:12:48 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C9BBB;
+        Tue, 31 Oct 2023 00:12:46 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39V2doOx007914;
+        Tue, 31 Oct 2023 07:12:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=DGc89/LkVBj7LFjVtuq1SQIPGuwD8Fsui9aN/ARipZo=;
+ b=pOssUApblMfgM6s8T/Qohb6V2EYwLE3RBQFa4hXO/JvL54Z4w9sS+63BteLI5gYIxymn
+ 4bGJ5zIrYMs8GfS9uzJ0U0rimm4azFiQ8wZTndp6gpORk64gr/kt6BiWUF4CYTeowvg3
+ GY4HXPClbYn0ejPWOsiwqL2NWrsMzvWPex/Xru7iQeoS7QfqWW8YJPpX5ZGImMCfj7u9
+ aYCeB4ulKfAVkMLcPQo6aJjXMqa+FvoHqSPd160eRkotOVE1L/wSP9DcycV+UJnedqBT
+ tUdGhzwcgLdvYW5uiAGdhS6GNy4hL0ZUUsRKE38F2W37c1KtOhruC+MlTAT89VFJbSzx gA== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3u2fuvhkhm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Oct 2023 07:12:12 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39V7CAcI004048
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Oct 2023 07:12:10 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.39; Tue, 31 Oct 2023 00:12:04 -0700
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <ilia.lin@kernel.org>,
+        <sivaprak@codeaurora.org>, <quic_kathirav@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: [PATCH v6 0/2] Enable cpufreq for IPQ5332 & IPQ9574
+Date:   Tue, 31 Oct 2023 12:41:37 +0530
+Message-ID: <cover.1698735972.git.quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3d686b62-13a2-4107-86ff-d9753cb177fb@linaro.org>
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: HYfTC8sYS48ABBb2_FJWDb7disZEA_wR
+X-Proofpoint-GUID: HYfTC8sYS48ABBb2_FJWDb7disZEA_wR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-30_13,2023-10-31_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ spamscore=0 suspectscore=0 lowpriorityscore=0 clxscore=1011 mlxscore=0
+ priorityscore=1501 phishscore=0 mlxlogscore=962 adultscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2310240000 definitions=main-2310310054
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -77,29 +78,70 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30-10-23, 19:47, Konrad Dybcio wrote:
-> On 30.10.2023 11:24, Viresh Kumar wrote:
-> > The level zero can be used by some OPPs to drop performance state vote
-> > for the device. It is perfectly fine to allow the same.
-> > 
-> > _set_opp_level() considers it as an invalid value currently and returns
-> > early.
+This patch series aims to enable cpufreq for IPQ5332 and IPQ9574.
+For IPQ5332, a minor enhancement to Stromer Plus ops and a safe
+source switch is needed before cpu freq can be enabled.
 
-> So, currently if the device is PM-enabled, but OPP requirements are lifted,
+These are also included in this series. Posting this as a single
+series. Please let me know if this is not correct, will split in
+the subsequent revisions.
 
-How exactly are the OPP requirements lifted ?
+Passed the following DT related validations
+make W=1 ARCH=arm64 -j16 DT_CHECKER_FLAGS='-v -m' dt_binding_check DT_SCHEMA_FILES=qcom
+make W=1 ARCH=arm64 -j16 CHECK_DTBS=y DT_SCHEMA_FILES=qcom dtbs_check
 
-By calling dev_pm_opp_set_opp(dev, NULL) ?
+For IPQ5332:
+~~~~~~~~~~~
+	* This patch series introduces stromer plus ops which
+	  builds on stromer ops and implements a different
+	  set_rate and determine_rate.
 
-This will work fine even without this commit.
+	  A different set_rate is needed since stromer plus PLLs
+	  do not support dynamic frequency scaling. To switch
+	  between frequencies, we have to shut down the PLL,
+	  configure the L and ALPHA values and turn on again. So
+	  introduce the separate set of ops for Stromer Plus PLL.
 
-> is the API currently internally stuck at the last non-zero level?
-> 
-> Just trying to understand if this could fix some silent issues
+	* Update ipq_pll_stromer_plus to use clk_alpha_pll_stromer_plus_ops
+	  instead of clk_alpha_pll_stromer_ops.
 
-Also the issue I am trying to solve here came in existence only during the 6.7
-merge window and doesn't affect the genpds linked via required-opps. And this
-commit will soon be merged.
+	* Set 'l' value to a value that is supported on all SKUs.
+
+	* Provide safe source switch for a53pll
+
+	* Include IPQ5332 in cpufreq nvmem framework
+
+	* Add OPP details to device tree
+
+For IPQ9574:
+~~~~~~~~~~~
+	* Include IPQ9574 in cpufreq nvmem framework
+
+	* Add OPP details to device tree
+
+Removed 2 patches from V1 as they have been merged
+	* dt-bindings: cpufreq: qcom-cpufreq-nvmem: document IPQ5332
+	* dt-bindings: cpufreq: qcom-cpufreq-nvmem: document IPQ9574
+
+v4:	Included a patch to fix 'kernel test robot' build error --
+	https://lore.kernel.org/r/202310181650.g8THtfsm-lkp@intel.com/
+
+v5:	Use devm_clk_notifier_register
+	Merge IPQ53xx and IPQ95xx cases with APQ8096 for speed bin selection
+	Add reviewed by tags
+
+v6:	Except these 2 patches, rest have been merged...
+	Rebased these to latest top as they don't apply cleanly
+	(https://lore.kernel.org/linux-arm-msm/20231025062508.vccrmkem45p3fnwe@vireshk-i7/)
+
+Varadarajan Narayanan (2):
+  cpufreq: qti: Enable cpufreq for ipq53xx
+  cpufreq: qti: Introduce cpufreq for ipq95xx
+
+ drivers/cpufreq/cpufreq-dt-platdev.c |  2 ++
+ drivers/cpufreq/qcom-cpufreq-nvmem.c | 12 ++++++++++++
+ 2 files changed, 14 insertions(+)
 
 -- 
-viresh
+2.7.4
+
