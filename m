@@ -2,169 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B087DD69F
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Oct 2023 20:18:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE997DD73F
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Oct 2023 21:46:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231844AbjJaTSG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Oct 2023 15:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40210 "EHLO
+        id S233888AbjJaUqS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Oct 2023 16:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbjJaTSF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Oct 2023 15:18:05 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D625EF4
-        for <linux-pm@vger.kernel.org>; Tue, 31 Oct 2023 12:18:03 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-6c10f098a27so2134325b3a.2
-        for <linux-pm@vger.kernel.org>; Tue, 31 Oct 2023 12:18:03 -0700 (PDT)
+        with ESMTP id S231546AbjJaUqS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Oct 2023 16:46:18 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7545F5
+        for <linux-pm@vger.kernel.org>; Tue, 31 Oct 2023 13:46:15 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-35904093540so4506205ab.1
+        for <linux-pm@vger.kernel.org>; Tue, 31 Oct 2023 13:46:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1698779883; x=1699384683; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
+        d=linuxfoundation.org; s=google; t=1698785175; x=1699389975; darn=vger.kernel.org;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=gaOdVV28en+bigehZXIS6mwlGAf/xiDNfB+PWkvzx7Q=;
-        b=dhsd1mRzHEfJEyoUOlyN69RCXR+5SK1mr47C3bly6xIOIo8jR5pBFrsPviU3VXE3Jl
-         s/g8TATr32Tl+WCH6cX1y2Pxd2/hwwQ4uRN61j3Lg/fSVjsSp0GmBT2W1z3QArjTzDYi
-         R9hC+cfyqGGasVJf89COKEu7Bc6njRJ3CzxMQixW5t5OepQkyTZ6oF4cnjYa8CdxhII1
-         Me9JnoAC9sqGiHBPiQU8OVhXEx65j2isNh3I8X/ZqxHUicmVhLB/6n9Y2TIUCMUY0Ds1
-         WaSQA+hrYWO49ECegGVOCtIZbckVCQmGdyeMamkquLsPeSjgzPUSTyShcDMArGKIT38s
-         9y/A==
+        bh=7eXo0ddf+sciRuQugdUDq24628/XZno+8x5fyRm3rT0=;
+        b=iaiipl/GGdOYRL98K4uLSs8KCogs9PnSOleZWt1laNpE1/7DNAUO3k2hFMiEhh1uTs
+         kl0ydjhvVBvR2X2MoZXur8THLCJ0U4HPO+R0cdcd4AG29NIJyi2Yv4ovvZJ/O8OZLId6
+         DXTWslgCF2KY77V+C0HAFcBO34wIXKGtkHF5o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698779883; x=1699384683;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
+        d=1e100.net; s=20230601; t=1698785175; x=1699389975;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gaOdVV28en+bigehZXIS6mwlGAf/xiDNfB+PWkvzx7Q=;
-        b=B6e4X6c3rZjBf/yOkL2HDBOj9oZ2u4xBFAU2S2qSnOd1E5psZINJBMBm7ozktAIXhB
-         ywqJ5l9BAXx20+cTSmYa3IjF3tICvz5hWv6pSEi1qrBHdpN7ww//Zs1SrjiXOfhc9L5S
-         k2FoiOnjJhhUITCJxZCsc+vSfyQBDATJZUK0L79aAn73XrUv5X/gAgg4FG+QFBjgV6gd
-         nmKixRVU6yVOV2toRe/qcEvn3H1vWSQZO8SYV5yWxDwTmQVX5sw3Noftl82zTuCskqHJ
-         P0aL5khvxDl4DupNrT+WenM+a2XmNULkOEgwh0NfHKXwNSR1WIqGtqYk6lNXvARvRFaW
-         obNw==
-X-Gm-Message-State: AOJu0YxkoFMyhsacDyOgixdkey1DHe1Siz2y78p7kZJlfAN/zyf/SqN3
-        FVeZ4mZoh8wBQsLqvTyq+3kuzA==
-X-Google-Smtp-Source: AGHT+IGDnMPah92yK4OA7oaucruAr2zF4IZ2StQNXXGGVkMVuTIHTTgOp6Lh9AMnrTQBNmJZ3WJyjQ==
-X-Received: by 2002:a05:6a20:a12b:b0:17a:e03f:5665 with SMTP id q43-20020a056a20a12b00b0017ae03f5665mr12196448pzk.31.1698779883354;
-        Tue, 31 Oct 2023 12:18:03 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id b8-20020a17090ae38800b002805740d668sm1461929pjz.4.2023.10.31.12.18.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Oct 2023 12:18:02 -0700 (PDT)
-Message-ID: <654152ea.170a0220.bd24d.3abf@mx.google.com>
-Date:   Tue, 31 Oct 2023 12:18:02 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        bh=7eXo0ddf+sciRuQugdUDq24628/XZno+8x5fyRm3rT0=;
+        b=gRABLFL8IFe+l4O39Vq0SKMxM1Mab6bQw1rBCiTa2acSzFS9CpXOA00HtEnNEg+A6A
+         5xKF+7gaTi/BibVOLG9flBFliFdwCaEun9tA2dEN0VDIQjS2K2GzU4UVd56XunzroKLQ
+         22JkS0aRS41cLbIqPCRj72h5QkD80SBEj+JVJ2w8EZOh5o+WBxCNSWz8k6yiOfppzhTR
+         kWGFeI0x7ja9f8Dvh5Xnunz3pafk8RXcnBPGMLpUYL8S03R9V/LadVdfRNwDJYNBsmxD
+         B2RzKrYkwkjlkZnDbcLGqjjiO7X1SCHqBZ6JHm3aqpdZyyu7DBYFxD0+fYhevZqGHco4
+         +vcg==
+X-Gm-Message-State: AOJu0Yzis9ml7EdZHi+o2ZV6bm5wy8XuQ2pGbe2+jOtRdZWYOdrZeMRm
+        iQFWOTorWBTR6b5onTmaYNgRu1uDJId3vj0O0NE=
+X-Google-Smtp-Source: AGHT+IHiv4MyuMnuGvdptxenePWIcQYm+rdtE9PV44sipnpUH4f1tTqlhq2fHE/CQYl5z3RzKMuhDw==
+X-Received: by 2002:a6b:500a:0:b0:792:6068:dcc8 with SMTP id e10-20020a6b500a000000b007926068dcc8mr15387509iob.2.1698785175129;
+        Tue, 31 Oct 2023 13:46:15 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id p30-20020a056638191e00b004596858b397sm540000jal.7.2023.10.31.13.46.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Oct 2023 13:46:14 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------oSst4u9RT5c61q10b1otNbDp"
+Message-ID: <30046a10-bd4d-4c5d-ac55-f8862f01e141@linuxfoundation.org>
+Date:   Tue, 31 Oct 2023 14:46:14 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: acpi-6.7-rc1-200-g25839bdc2530
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 4 warnings (acpi-6.7-rc1-200-g25839bdc2530)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Thomas Renninger <trenn@suse.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] cpupower update for Linux 6.7-rc1
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (acpi-6.7-rc1-20=
-0-g25839bdc2530)
+This is a multi-part message in MIME format.
+--------------oSst4u9RT5c61q10b1otNbDp
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/acp=
-i-6.7-rc1-200-g25839bdc2530/
+Hi Rafael,
 
-Tree: pm
-Branch: testing
-Git Describe: acpi-6.7-rc1-200-g25839bdc2530
-Git Commit: 25839bdc2530446faa0704f1bc6119ba6f161415
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+Please pull the following cpupower update for Linux 6.7-rc1.
 
-Warnings Detected:
+Please include it in your next pull if you already sent your
+PR.
 
-arc:
+This cpupower update for Linux 6.7-rc1 consists of a single fix to
+documentation to fix reference to a removed document.
 
-arm64:
+diff is attached.
 
-arm:
+thanks,
+-- Shuah
 
-i386:
+----------------------------------------------------------------
 
-mips:
+The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
-riscv:
+   Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
 
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
+are available in the Git repository at:
 
-x86_64:
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-cpupower-6.7-rc1
 
+for you to fetch changes up to 6feb1a9641197ee630bf43b5c34ea1d9f8b4a0aa:
 
-Warnings summary:
+   cpupower: fix reference to nonexistent document (2023-10-25 10:14:35 -0600)
 
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
+----------------------------------------------------------------
+linux-cpupower-6.7-rc1
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+This cpupower update for Linux 6.7-rc1 consists of a single fix to
+documentation to fix reference to a removed document.
 
-Detailed per-defconfig build reports:
+----------------------------------------------------------------
+Vegard Nossum (1):
+       cpupower: fix reference to nonexistent document
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
+  tools/power/cpupower/man/cpupower-powercap-info.1 | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+----------------------------------------------------------------
+--------------oSst4u9RT5c61q10b1otNbDp
+Content-Type: text/x-patch; charset=UTF-8; name="linux-cpupower-6.7-rc1.diff"
+Content-Disposition: attachment; filename="linux-cpupower-6.7-rc1.diff"
+Content-Transfer-Encoding: base64
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL21hbi9jcHVwb3dlci1wb3dlcmNh
+cC1pbmZvLjEgYi90b29scy9wb3dlci9jcHVwb3dlci9tYW4vY3B1cG93ZXItcG93ZXJjYXAt
+aW5mby4xCmluZGV4IGRmMzA4NzAwMGVmYi4uMTQ1ZDZmMDZmYTcyIDEwMDY0NAotLS0gYS90
+b29scy9wb3dlci9jcHVwb3dlci9tYW4vY3B1cG93ZXItcG93ZXJjYXAtaW5mby4xCisrKyBi
+L3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL21hbi9jcHVwb3dlci1wb3dlcmNhcC1pbmZvLjEKQEAg
+LTE3LDcgKzE3LDcgQEAgc2V0dGluZ3Mgb2YgYWxsIGNvcmVzLCBzZWUgY3B1cG93ZXIoMSkg
+aG93IHRvIGNob29zZSBzcGVjaWZpYyBjb3Jlcy4KIC5TSCAiRE9DVU1FTlRBVElPTiIKIAog
+a2VybmVsIHNvdXJjZXM6Ci1Eb2N1bWVudGF0aW9uL3Bvd2VyL3Bvd2VyY2FwL3Bvd2VyY2Fw
+LnR4dAorRG9jdW1lbnRhdGlvbi9wb3dlci9wb3dlcmNhcC9wb3dlcmNhcC5yc3QKIAogCiAu
+U0ggIlNFRSBBTFNPIgo=
 
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+--------------oSst4u9RT5c61q10b1otNbDp--
