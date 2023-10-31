@@ -2,31 +2,31 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99BDF7DD849
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Oct 2023 23:29:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D94F47DD844
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Oct 2023 23:29:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346625AbjJaW33 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Oct 2023 18:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43458 "EHLO
+        id S1346723AbjJaW31 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Oct 2023 18:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346693AbjJaW31 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Oct 2023 18:29:27 -0400
+        with ESMTP id S1344905AbjJaW30 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Oct 2023 18:29:26 -0400
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D265FE
-        for <linux-pm@vger.kernel.org>; Tue, 31 Oct 2023 15:29:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C79102
+        for <linux-pm@vger.kernel.org>; Tue, 31 Oct 2023 15:29:23 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qxxEZ-0000Yf-Dn; Tue, 31 Oct 2023 23:29:15 +0100
+        id 1qxxEZ-0000Ym-Jx; Tue, 31 Oct 2023 23:29:15 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qxxEZ-005fLR-10; Tue, 31 Oct 2023 23:29:15 +0100
+        id 1qxxEZ-005fLW-7M; Tue, 31 Oct 2023 23:29:15 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qxxEY-00AENX-O0; Tue, 31 Oct 2023 23:29:14 +0100
+        id 1qxxEY-00AENb-Ua; Tue, 31 Oct 2023 23:29:14 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Georgi Djakov <djakov@kernel.org>
@@ -34,18 +34,17 @@ Cc:     Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rob Herring <robh@kernel.org>, linux-pm@vger.kernel.org,
+        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 4/9] interconnect: imx8mp: Convert to platform remove callback returning void
-Date:   Tue, 31 Oct 2023 23:28:56 +0100
-Message-ID: <20231031222851.3126434-15-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 5/9] interconnect: imx8mq: Convert to platform remove callback returning void
+Date:   Tue, 31 Oct 2023 23:28:57 +0100
+Message-ID: <20231031222851.3126434-16-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231031222851.3126434-11-u.kleine-koenig@pengutronix.de>
 References: <20231031222851.3126434-11-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1564; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=PB9kfzo0BIYxhsepXd2OaPl9TvdCdk197xfusYeoLGY=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlQX+oAN7bgOxquXhoiqGFSdJPs93OyyF7EATZD 1VbqJDhpByJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZUF/qAAKCRCPgPtYfRL+ TrueB/9BEfdLyvkZBRYeErlI84KXBIZNbsGmvmk/+06qKuSUmJhLhaqXjP1n6Ii4E6eaIY6j/8Q /bZxhVnCmZtjWFAYIdOR23FS3igE3k3sWnBhKK6vJdEKCatoKauj1dZoCxoviciDQQlyUZiGJc/ +vc7AKrmD4Bw1G7OiK/ADbB+8uwXnmwvEkvUAhyPoSvdBlqq6wWoA/LGnGdL98YVAjpzPTakM+N EXc163FP/ONhgdH99dSUl+h67Y47izoq5zHpikMTFpcrrGPDg3AxeA4gr38Z2MKwaZS8lrQpE1e d2fNDZL6Jd1m39yoW+c44jChk9nZph+EtsJpsErGKbjdgQrI
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1577; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=taNzagSKaBhKw6UDioBLRBsalPK+EE5FvvTipViIrCw=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlQX+plcv5lFSUXen42JIkcGWmtz02+gq8ajSLx llkmYmah9KJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZUF/qQAKCRCPgPtYfRL+ TmJCB/9490h57GuG7CXAOa+4WR6rRNTcQgTIyMHDH9kV5jY9m2yUJcL80n25UyYAeg+sAZAXtLV rXDfJMUHtbBXcVW1EsuitX6DOVo2XmiBpZm6fC8BHMug1b95eHD5y/RHpRNevXDQU6itzkFTzaR HPfMJHrZR4+CueXOhQY72YsM+kzxPChcmHUyT4/BhktJHN1o3asatYTWspvonmajzK/U8XO34Pz 4C25q+R2hZYOF0WZcwkp6ve/Yo+tHbJTPwj3zONoweWcW0P8pyRqB+vgiVTUVoc9mibb2gG+oPm nO8SgBRUGiG9BP0CWYtl+zotfge6J6gPzv0QWBpfrmZ3JY9T
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -76,31 +75,31 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/interconnect/imx/imx8mp.c | 9 +--------
+ drivers/interconnect/imx/imx8mq.c | 9 +--------
  1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/drivers/interconnect/imx/imx8mp.c b/drivers/interconnect/imx/imx8mp.c
-index a66ae3638b18..d218bb47757a 100644
---- a/drivers/interconnect/imx/imx8mp.c
-+++ b/drivers/interconnect/imx/imx8mp.c
-@@ -239,16 +239,9 @@ static int imx8mp_icc_probe(struct platform_device *pdev)
- 	return imx_icc_register(pdev, nodes, ARRAY_SIZE(nodes), noc_setting_nodes);
+diff --git a/drivers/interconnect/imx/imx8mq.c b/drivers/interconnect/imx/imx8mq.c
+index b6fb71305c99..8bbd672b346e 100644
+--- a/drivers/interconnect/imx/imx8mq.c
++++ b/drivers/interconnect/imx/imx8mq.c
+@@ -85,16 +85,9 @@ static int imx8mq_icc_probe(struct platform_device *pdev)
+ 	return imx_icc_register(pdev, nodes, ARRAY_SIZE(nodes), NULL);
  }
  
--static int imx8mp_icc_remove(struct platform_device *pdev)
+-static int imx8mq_icc_remove(struct platform_device *pdev)
 -{
 -	imx_icc_unregister(pdev);
 -
 -	return 0;
 -}
 -
- static struct platform_driver imx8mp_icc_driver = {
- 	.probe = imx8mp_icc_probe,
--	.remove = imx8mp_icc_remove,
+ static struct platform_driver imx8mq_icc_driver = {
+ 	.probe = imx8mq_icc_probe,
+-	.remove = imx8mq_icc_remove,
 +	.remove_new = imx_icc_unregister,
  	.driver = {
- 		.name = "imx8mp-interconnect",
- 	},
+ 		.name = "imx8mq-interconnect",
+ 		.sync_state = icc_sync_state,
 -- 
 2.42.0
 
