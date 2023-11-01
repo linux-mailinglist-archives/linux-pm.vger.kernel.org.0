@@ -2,118 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E1F27DDDA4
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Nov 2023 09:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3AE7DDDFD
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Nov 2023 10:05:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbjKAIPE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Nov 2023 04:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54688 "EHLO
+        id S233230AbjKAJEe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Nov 2023 05:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231570AbjKAIPD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Nov 2023 04:15:03 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BDD102
-        for <linux-pm@vger.kernel.org>; Wed,  1 Nov 2023 01:14:57 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-5401bab7525so11084381a12.2
-        for <linux-pm@vger.kernel.org>; Wed, 01 Nov 2023 01:14:57 -0700 (PDT)
+        with ESMTP id S233002AbjKAJEc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Nov 2023 05:04:32 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C412101
+        for <linux-pm@vger.kernel.org>; Wed,  1 Nov 2023 02:04:23 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-543c3756521so183881a12.2
+        for <linux-pm@vger.kernel.org>; Wed, 01 Nov 2023 02:04:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698826496; x=1699431296; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=GbaW3G6/UQZ8xqJW3bOdy45l2C83yzYanXLOPDxs0sw=;
-        b=mHAWAbJ2xGTSeFQx/MvXnju8DfLfj3y7NhpZ9ynbHRwWUW4poS3PsGORt7LZUIT7e7
-         1ILf+8DlGOx/QPAAw5kDehzttmquY7xffX4+bnXYcqj8OvRTTp2Kdy7buQxa76CPEhGY
-         hyX4TFBMqUjQUj8H6aMiX1oi2uOe53qMEzzuMMe4fIhPEiEAJVyPxtjd4do4dyIpbcxz
-         4mMmQomEMIhoCACmCsU+g7xGClviMRibq02pcRFoTozOgHVRnsLTotR8kn1O3TKHjKVM
-         ABz+/1SA95sBO58+HemA1C+k8mjex0T6KvXT/lEiF/0hlSqgKZkOC8tlEbQOniT/emTn
-         VsuA==
+        d=linaro.org; s=google; t=1698829461; x=1699434261; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xAgADHr8F66v1cbu28V1cj8/cSQmipxI6WLHMltxgpQ=;
+        b=RPSn18fzes6e2b/JtI1UvjoemLWI/NDclJQkEyBCcg106ZoS0agTlS1IUNIRQ9K8DX
+         d6WW60yDjWgS/M8oWXq++0gKJWyk2aSME2w0FiDUKeT6XLNwlTMW4q0GGU+Cd2ZHWUNt
+         Uy9sD0SObPcfvy5HvQlK89eEf7IUPqdXyyVBi7zbxQt+csgjAiDmmxiUDRu4LCKwRJQI
+         9l67Tq+1xs3oWApsf59egESXDWVPRwwPy531padYqlioIYze8l2KkWoThTT0nXMHvJWw
+         aw7cmPaE/0eEwx4E9fz2KrMKSkE/wkztaVUnC0shoIElApy2fxqBDYoPZMRBw27c4cOb
+         3BNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698826496; x=1699431296;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GbaW3G6/UQZ8xqJW3bOdy45l2C83yzYanXLOPDxs0sw=;
-        b=U6jqV/pJJQEZGmTHGxrGBXEwWzQsFU+UiJP+LJ7eC1qoq5E1QVIivPUF+GV0H76c8b
-         bVU3AHHrMWZCx+Lk/M73goR6OANuRt1VyvZa+aL2snxVgUdSHBIJa4O73s7W7XgzwxM8
-         fpJCLVa5e0+lTyMK8JAgcFZOkLdXo67HiZmwNXwXAl8w2Em+cVnmOXQOtMVoDHpNBQTF
-         LltnJiCss2z11SOJ0buQixAoMqlfOelSo9s/hBqovq+z0O4272iYD25KsIHcnMcD+GaC
-         CW9mUL/CTEG6ae1IiKGvBh3qR59a4GGcuRLU3kUzQDhC7J/waoJxH15Qq/hfbmtVCGnS
-         WiiA==
-X-Gm-Message-State: AOJu0YyP/3Q3F+HG388jS1zRQnWN30er8GWUXz4TPEXFRpWNrhTsigdT
-        ORExfxfHmyF1mhbBjw5yvmFidA==
-X-Google-Smtp-Source: AGHT+IF218mVabA2aSOHRnWcwPB3z8JHzKse34q0niROlK8048LKxuY1vNcHIklmsV5vU0XiUq7huw==
-X-Received: by 2002:a17:907:1b02:b0:9b2:6d09:847c with SMTP id mp2-20020a1709071b0200b009b26d09847cmr1333144ejc.10.1698826496307;
-        Wed, 01 Nov 2023 01:14:56 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.218.126])
-        by smtp.gmail.com with ESMTPSA id dv16-20020a170906b81000b00982a92a849asm2117174ejb.91.2023.11.01.01.14.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Nov 2023 01:14:55 -0700 (PDT)
-Message-ID: <d6cd3675-5bed-458c-81c0-5ce3204727d9@linaro.org>
-Date:   Wed, 1 Nov 2023 09:14:52 +0100
+        d=1e100.net; s=20230601; t=1698829461; x=1699434261;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xAgADHr8F66v1cbu28V1cj8/cSQmipxI6WLHMltxgpQ=;
+        b=qZV0CR4x+IxMFhhFbw5u3RhqQAFZl1p+TLeoCSvM3pcLn8hoxOhDA2r+PP85isuh3t
+         W9XJ7Clxd0aKK5AzkGPEI2Vy5BiiWnP7LaYjgwEwkXGNQ2ZIALSEA0i44w/jxH6o2q1u
+         xxSrpPRMJsBKErsPBjmQv+Qx6GpvkSaRG0JtYFL5yB/YT7g5SmesVFEAgicrFmQm7b1K
+         8M31gjODhyHNv5UoboW+dVn6/pCrVDMTdjkJpJH63KSPopMddhtqiIovWrtTphVAixtw
+         oszLN7pC05Ug1JGCJYtb57U+5vKuTIvrtLT0h6vx6nD92aQDpECyYLAMg5FY88ZC0bvq
+         b7fg==
+X-Gm-Message-State: AOJu0YxcCLlvRZm9V05fs5j2sVIJdJGu9hMafSpgV9J2jc0fp5yq25/U
+        2g11p+TIsAfFNjO8ibBVpPSp9g==
+X-Google-Smtp-Source: AGHT+IG/oxz6Hjy41Gw/rCWlijHAqZQYXIkwi5awktL6htxV3fZ98awAExkMrsPT43rS0fRw5YRBGg==
+X-Received: by 2002:a17:906:dac4:b0:9ae:5120:5147 with SMTP id xi4-20020a170906dac400b009ae51205147mr1491707ejb.38.1698829461446;
+        Wed, 01 Nov 2023 02:04:21 -0700 (PDT)
+Received: from [127.0.1.1] ([86.122.213.220])
+        by smtp.gmail.com with ESMTPSA id l25-20020a170906a41900b0099cd1c0cb21sm2152781ejz.129.2023.11.01.02.04.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Nov 2023 02:04:20 -0700 (PDT)
+From:   Abel Vesa <abel.vesa@linaro.org>
+Subject: [PATCH RESEND v3 0/5] PM: domains: Add control for switching back
+ and forth to HW control
+Date:   Wed, 01 Nov 2023 11:04:06 +0200
+Message-Id: <20231101-gdsc-hwctrl-v3-0-0740ae6b2b04@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 9/9] interconnect: exynos: Convert to platform remove
- callback returning void
-To:     =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de
-References: <20231031222851.3126434-11-u.kleine-koenig@pengutronix.de>
- <20231031222851.3126434-20-u.kleine-koenig@pengutronix.de>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231031222851.3126434-20-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIYUQmUC/x2NsQrCMBBAf6Xc7NGkAQdnuzroKA7J5doENNVca
+ YXSfzdxfPAebwPhHFng1GyQeYkSp1TAHBqgYNPIGH1h6FRntFYaRy+EYaU5P1GbQWm2R0XOQym
+ cFUaXbaJQmw9Nr7b6bVixBtV5Zx7i93+8w7W/9ZczPPb9BwrOThaJAAAA
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Taniya Das <tdas@qti.qualcomm.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-media@vger.kernel.org,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1535; i=abel.vesa@linaro.org;
+ h=from:subject:message-id; bh=IMghRN0GHIaYwd3qOqpxrh49MQz/bpL0aj591dU6KPY=;
+ b=owEBbQKS/ZANAwAKARtfRMkAlRVWAcsmYgBlQhSItQu7eU6tRAk2KSC1vO4XZNRtKRF3QXL6b
+ e3vVamqDhGJAjMEAAEKAB0WIQRO8+4RTnqPKsqn0bgbX0TJAJUVVgUCZUIUiAAKCRAbX0TJAJUV
+ VvN3EAC4Vw8ic4lltLGvppV48k2HtbT7bCdgtSOVW+ajY/kiMZfMyL43s8U0s/gEHjbfwfn2zSM
+ NZO56shVcbFdLo9kwMKpVC3+3J4qK74vSgNl4nIPvOxUP3toZMPNN/ouOs4OTkvRAe6ZcM7yqjd
+ 7coaHqfKqDtcCAprgnpRN1A1JxxdCrapM3IYAxeZkdVecSR4OeazJAuJ1n9k4a+RFm0uDy3mnBg
+ MK4YhSfRGdq5R2xzI5+KaFhNlFQ4tF6EeS31fDsH0DRpjibsezNgtZi8MrtoKCGUaTOwDCjLwoo
+ QBlL/IdHpMXxU7cWqrnxcsPqBi9k+CjzH5ktI8p8KQ60k/oUoZO0iPCGBnfnPtse4k1Q0MLZOwA
+ sHzLIcam9ZYmVhEP+niuuGQqy+ldNrkJ373/KhmC8xMC6XG8NeQ36ui76dJqfqoqlAlxlCio+k8
+ HULfB7BgyKd3JDfPVQ0Gh7qgdxTA/qi6v2LE9pyzyKCNUFB4OMoAlfiNMxxZUSDKjYiW+2uboTe
+ NNaDhPdGzpDqDK0NvMBtkTADYzk/EjUz0iN0qMTQkE2tYKztJqZTK0KZX8KNs19J/1lqR7COm4i
+ jLfE4SgOt1BBT74m4et3gDO2p8aETtVHv7lw2U4UBArBSNGqy/oNXMJ35rr1dTUI5nwvT5lwBTs
+ C6j6j5EBRax9w6g==
+X-Developer-Key: i=abel.vesa@linaro.org; a=openpgp;
+ fpr=6AFF162D57F4223A8770EF5AF7BF214136F41FAE
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -124,24 +106,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 31/10/2023 23:29, Uwe Kleine-König wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is ignored (apart
-> from emitting a warning) and this typically results in resource leaks.
-> 
-> To improve here there is a quest to make the remove callback return
-> void. In the first step of this quest all drivers are converted to
-> .remove_new(), which already returns void. Eventually after all drivers
-> are converted, .remove_new() will be renamed to .remove().
-> 
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+This is just a resend of v3:
+https://lore.kernel.org/lkml/20230923115008.1698384-1-abel.vesa@linaro.org/
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+---
+Abel Vesa (1):
+      PM: domains: Add the domain HW-managed mode to the summary
+
+Jagadeesh Kona (3):
+      clk: qcom: gdsc: Add set and get hwmode callbacks to switch GDSC mode
+      clk: qcom: Use HW_CTRL_TRIGGER flag to switch video GDSC to HW mode
+      venus: pm_helpers: Use dev_pm_genpd_set_hwmode to switch GDSC mode
+
+Ulf Hansson (1):
+      PM: domains: Allow devices attached to genpd to be managed by HW
+
+ drivers/base/power/domain.c                    | 84 +++++++++++++++++++++++++-
+ drivers/clk/qcom/gdsc.c                        | 32 ++++++++++
+ drivers/clk/qcom/gdsc.h                        |  1 +
+ drivers/clk/qcom/videocc-sc7180.c              |  2 +-
+ drivers/clk/qcom/videocc-sc7280.c              |  2 +-
+ drivers/clk/qcom/videocc-sdm845.c              |  4 +-
+ drivers/clk/qcom/videocc-sm8250.c              |  4 +-
+ drivers/clk/qcom/videocc-sm8550.c              |  4 +-
+ drivers/media/platform/qcom/venus/core.c       |  4 ++
+ drivers/media/platform/qcom/venus/core.h       |  1 +
+ drivers/media/platform/qcom/venus/pm_helpers.c | 47 ++++++--------
+ include/linux/pm_domain.h                      | 17 ++++++
+ 12 files changed, 165 insertions(+), 37 deletions(-)
+---
+base-commit: fa7d0c17278644aa691f96d08bef8001b762f9cd
+change-id: 20231101-gdsc-hwctrl-13f01ea60cbd
 
 Best regards,
-Krzysztof
+-- 
+Abel Vesa <abel.vesa@linaro.org>
 
