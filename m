@@ -2,61 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8020F7DDE0D
+	by mail.lfdr.de (Postfix) with ESMTP id D6A447DDE0E
 	for <lists+linux-pm@lfdr.de>; Wed,  1 Nov 2023 10:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233491AbjKAJEg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Nov 2023 05:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36460 "EHLO
+        id S233142AbjKAJEh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Nov 2023 05:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233142AbjKAJEe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Nov 2023 05:04:34 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7ED0DE
-        for <linux-pm@vger.kernel.org>; Wed,  1 Nov 2023 02:04:26 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9d23be183c6so584654866b.0
-        for <linux-pm@vger.kernel.org>; Wed, 01 Nov 2023 02:04:26 -0700 (PDT)
+        with ESMTP id S233460AbjKAJEg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Nov 2023 05:04:36 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E8C102
+        for <linux-pm@vger.kernel.org>; Wed,  1 Nov 2023 02:04:28 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-52bd9ddb741so11385780a12.0
+        for <linux-pm@vger.kernel.org>; Wed, 01 Nov 2023 02:04:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698829465; x=1699434265; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1698829467; x=1699434267; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wy1RT/8l0KHF5wsFu6GhibgFreZIXSZSGpoMQMm9nKQ=;
-        b=KqiPf3MKfoqZ7kc+yN5OIXBb2QyaOjsUv5r0X0Z5KVP//hHHS3g1IAgP0CP5jD+rHc
-         6w6DW70S1gc1bPYd9V526AE8OAOo11MvoZ+iQTYI0KrvPY5nlOwnSr4/ddO43Reri+O5
-         /jBwzPfisXtN1GxAQZ155cHPnBnAMddb6BPong/fJofVtEIlghhCKC5ONz3ZQCzrjomG
-         MCdZ3dVgHJugAHjdvO98uhIRFmv5QPjNcu/8eO9cY30hP1Nx67GVjzlIeZNTVSgZDVnc
-         X9F3r9c1jy9JfrPc9qeu7wLhemqAI6gO7Vqcunt6N2LnJhDXao+qXVSsoWZ6x2zPCsmW
-         iTkA==
+        bh=EAFvtLcQDFS/Q8L7M01rdBdkMHl28eyjzLsx2k43AE0=;
+        b=cIN5wO3XLicD2PI2pVAy1olw/wCInoZUzH7Tv6GeYLYkKKkx/n+Ddr85Qp7YEhAeHO
+         phuSIF1/X//JQ32DPhoyan7Id1p3JpLJbOJj+vw7YQ2+z9QHuXwbWSEAToiLCHOSgQUj
+         NZY8EUBFPNgcYDMGUoUfLQnyy68drrw3E+UbN7Q9H0J9VrmXb3Cf4qaDYj1a9crZn+/x
+         mc4L0Dur3WYlKrk3pnchLQn2ZKovA0XEUG36ObtKhiSZH+Qob8+C9YL+DCW5stXcyAmG
+         kF7cariiu0LZemx7p7sVP19HEWU5aU0Pdl//We/anfhvvMWd+qxMzySwz6MRzOfv690s
+         RQ6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698829465; x=1699434265;
+        d=1e100.net; s=20230601; t=1698829467; x=1699434267;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wy1RT/8l0KHF5wsFu6GhibgFreZIXSZSGpoMQMm9nKQ=;
-        b=FaN5OOqcp9HIlvFLksFYElOEsAgrTxKLTygqTjCK7woHPAWvyNnt7RkOUzTYDUifEY
-         D63yZDvjSzvJokHdkk5pqvB52KFlqE8zYI2PcBoLtW3sB0+Vp71VwbLx7EMDtLGaF/zX
-         Szo/ZTc5Rx4i5El/uRrizzK0T7R9c+8bJ0V9jnGX0ilWBhYrWnyTp+nX/cG+tpezuP6q
-         0UPx308xIhLG3FvYscxNCu3dKBqqKftcMsL7HSITnoJN77WJ6ZfScLqJYbmr6Fpg9+q6
-         khrNsfeZCR0DHoqdnbYY41/7pX/3w+hZgPYjSuBdtrJ97PA1CpOFBy3aEoajwavsO+KO
-         v0XA==
-X-Gm-Message-State: AOJu0YzjVP5R4KxQjbGzIJtQKKV850d9eY/9I/2G6cZ4f1wnGyK7G7LZ
-        OEHCNhdD0CORztc1pKMh4Xb8OQ==
-X-Google-Smtp-Source: AGHT+IF0uQ6L63mtTK6fvz1bIka3oLMpIDS//D4L4ujaEmxmgdeLqCOWEMLFLMvYXy05/lYBAL/xdw==
-X-Received: by 2002:a17:907:26c4:b0:9d4:771b:69b4 with SMTP id bp4-20020a17090726c400b009d4771b69b4mr1343872ejc.44.1698829465256;
-        Wed, 01 Nov 2023 02:04:25 -0700 (PDT)
+        bh=EAFvtLcQDFS/Q8L7M01rdBdkMHl28eyjzLsx2k43AE0=;
+        b=Hu9ASJtrBW6C7921ezISa6zpj2zJnu1SLO26Y/4gJNW2LfQeZknVE1SV6V7yVwccDS
+         0EdDUhjDsWoUAdcrJDj86DLFDrnMT4ozOIDKCBH9CXIt3o0ParhxEOd0RAbFzT0dYKam
+         Thsdv728Dr539qMyxWh9jI4MUymDNM5h7SESkfZDa7yyiBNFFIIDBoDZVz8M4YffXW1M
+         evuVFp8sow7moMggK4vxx/+bkGosAAVZtzzAf4U43wDXo7cU+W8rV6ioVV1X4CdOxAQe
+         EnBVYdd3S99q3z8iwXsYNdyICIQ6Lu9RqLCH+myEOLQ0Td/b+0VQxkHFAbsZQF+dbYC9
+         8s3w==
+X-Gm-Message-State: AOJu0YzWagAFD9d712JnaRi1Qne++iZOWl27W3CU8BRvPTF0GdSSo5I6
+        TVsB1SV73WvmG8ToTEL2g7CD+A==
+X-Google-Smtp-Source: AGHT+IH6/UzCpc3F7hxSdFehBqOrOsXpQjueAuqVPvGjjAt3jyLxZ42E0wby2MHKxuJpbqOB294Frg==
+X-Received: by 2002:a17:907:6ea9:b0:9c5:45f8:c529 with SMTP id sh41-20020a1709076ea900b009c545f8c529mr1663704ejc.20.1698829467054;
+        Wed, 01 Nov 2023 02:04:27 -0700 (PDT)
 Received: from [127.0.1.1] ([86.122.213.220])
-        by smtp.gmail.com with ESMTPSA id l25-20020a170906a41900b0099cd1c0cb21sm2152781ejz.129.2023.11.01.02.04.23
+        by smtp.gmail.com with ESMTPSA id l25-20020a170906a41900b0099cd1c0cb21sm2152781ejz.129.2023.11.01.02.04.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Nov 2023 02:04:24 -0700 (PDT)
+        Wed, 01 Nov 2023 02:04:26 -0700 (PDT)
 From:   Abel Vesa <abel.vesa@linaro.org>
-Date:   Wed, 01 Nov 2023 11:04:08 +0200
-Subject: [PATCH RESEND v3 2/5] PM: domains: Add the domain HW-managed mode
- to the summary
+Date:   Wed, 01 Nov 2023 11:04:09 +0200
+Subject: [PATCH RESEND v3 3/5] clk: qcom: gdsc: Add set and get hwmode
+ callbacks to switch GDSC mode
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231101-gdsc-hwctrl-v3-2-0740ae6b2b04@linaro.org>
+Message-Id: <20231101-gdsc-hwctrl-v3-3-0740ae6b2b04@linaro.org>
 References: <20231101-gdsc-hwctrl-v3-0-0740ae6b2b04@linaro.org>
 In-Reply-To: <20231101-gdsc-hwctrl-v3-0-0740ae6b2b04@linaro.org>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -77,85 +77,123 @@ Cc:     Taniya Das <tdas@qti.qualcomm.com>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-media@vger.kernel.org,
         Abel Vesa <abel.vesa@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>
+        Jagadeesh Kona <quic_jkona@quicinc.com>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2157; i=abel.vesa@linaro.org;
- h=from:subject:message-id; bh=mHCbi3fcCtSdQT1eVVDhxrqekocNkt9Tq7L+ASfI19c=;
- b=owEBbQKS/ZANAwAKARtfRMkAlRVWAcsmYgBlQhSOhLKXMJSo21lGzR3ysdpejTLKwJBoQxkYh
- MH83w6uWJ2JAjMEAAEKAB0WIQRO8+4RTnqPKsqn0bgbX0TJAJUVVgUCZUIUjgAKCRAbX0TJAJUV
- Vo2aD/9YiFkZJAlAo90gqui3KRk45JLMQKlpflWTNJZdCvZRVYf+wotXkWcS8jRWqYg7BIcdi7e
- 2mY9aRzvMNSMdcCD6Tc4LEFFzusUyBWLDuo+R6i7eKK5//FdPYVo8aArCKXRPN/JSXxNNiZcE2m
- I7e1wNExM8MvNjWbrIf1bDeFV2xegv3IIpNXUplfttlxRyO0AKpsZ0Vrae9Rfnna7vQb0wBnc1k
- 1SpTMwYJD/2I8/qsEC9A6AuE/7OjfoFmqZSmovl7IcpSKon03Xm9/cK2F1+mKdAWpdFCM9pJSZh
- 51Enr+10aABCccaH6jI+MC/02CosSvTJcOhHt/5A0wgf7al3gVubTf0G82MM8JAjfLsCwhiO3pb
- x7DPW19h67/tuh9A2KOS9NaN+1ozEpGzB2dfEJxWyUpL6JLNTSOHGsUCP5NBWUI6LuV4UhhaO5K
- M/mADvROhxudpOLxFCQaMZt6ZIHwlYGxaKwdB+14TMkAN/vvlXLw1EJvSRQljAsGFp1UCm5lJJ1
- MxM4LfgooUIXcdh/muKWmqXViGAVyA1Q8TX99Rsw/y7tnsiEht+wvWThIYT6I8AB0WWWL7L9bza
- Snsrp8DkgULIWOspS+coIBw1P7wg/kKQ3jScDlPDXqbGW8HLWwNvYddd7iqvyx+DJAYEQvugZhP
- DG22z09XDbhQOrw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3005; i=abel.vesa@linaro.org;
+ h=from:subject:message-id; bh=dmM9Qksk+QeZ3gA1LIqXc2D7T/oP/OYmfjqi8kIlD9c=;
+ b=owEBbQKS/ZANAwAKARtfRMkAlRVWAcsmYgBlQhSQGvrYdhdnKHK9C8Ljnoq6z1YGTD3WeM0a9
+ Zk3qYpNlUyJAjMEAAEKAB0WIQRO8+4RTnqPKsqn0bgbX0TJAJUVVgUCZUIUkAAKCRAbX0TJAJUV
+ VtnmD/0UKZWZWFdfjBII/4cQuPdLRDcbr5BdbRtGanjzTq6dReA8MnnIBghStcaoCJ4u5AKfcHX
+ WM7bz7LU+ccIMzYTNjWjLxMUJO1qmo+A4QtbbQY7IugpTbIaIgzgS7vfdwkQpnUuKHd9brv/udl
+ TEX//HErRiDpdwD9NwVZXcthR8KxtCh5GTt71S+psbNSZ0kVp2i/Px2Uh2MbSA1YnrDHTSXR+ka
+ bv4KaxWPgxObVscLZsC9Jk81n2uYoGv0LfdkgUWUCwIR2cZXNAME2fGJTdS75FBur+OaGf8yt1f
+ CSrzFttgKvlt/2pvDTE06M5H0nHNworLkdElYli3DZqK0+pXpNjDMqriT+aOOinBzv/LUml8odH
+ bGjWK4sspwzwuu4Oh8CrP85/GgrE9+LsAPPbU3frUhLgMAV8kqvXU4fLHw4flOV20CKSwxFvbcz
+ 4N6vti39r7/29yMVv7RONzaW1KkPidwW9MAAHxMnrR/nlgZ7cgNw7QA6VOaVoDcUcNtOeM1aFyi
+ CAvr+oLnH0iugXwmS225z3lFyRyStZFZjgxQrpLkexQFRgnncMCpDCIRnB2P7TAmCfAvCUCoXCh
+ bCNpeAr1s4f78U4gWlBP2f1u3807HWhKmXEi28b6U9Zs8jKGeQ8hn4prTFgN2XtyvU73WJ9jfUv
+ bsFOsi0ykM7IyHw==
 X-Developer-Key: i=abel.vesa@linaro.org; a=openpgp;
  fpr=6AFF162D57F4223A8770EF5AF7BF214136F41FAE
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Now that genpd supports dynamically switching the control for an
-attached device between hardware- and software-mode,  let's add this
-information to the genpd summary in debugfs.
+From: Jagadeesh Kona <quic_jkona@quicinc.com>
 
-Suggested-by: Taniya Das <quic_tdas@quicinc.com>
+Add support for set and get hwmode callbacks to switch the GDSC between
+SW and HW modes. Currently, the GDSC is moved to HW control mode
+using HW_CTRL flag and if this flag is present, GDSC is moved to HW
+mode as part of GDSC enable itself. The intention is to keep the
+HW_CTRL flag functionality as is, since many older chipsets still use
+this flag.
+
+Introduce a new HW_CTRL_TRIGGER flag to switch the GDSC back and forth
+between HW/SW modes dynamically at runtime. If HW_CTRL_TRIGGER flag is
+present, register set_hwmode_dev callback to switch the GDSC mode which
+can be invoked from consumer drivers using dev_pm_genpd_set_hwmode
+function. Unlike HW_CTRL flag, HW_CTRL_TRIGGER won't move the GDSC to HW
+control mode as part of GDSC enable itself, GDSC will be moved to HW
+control mode only when consumer driver explicity calls
+dev_pm_genpd_set_hwmode to switch to HW mode. Also add the
+dev_pm_genpd_get_hwmode to allow the consumers to read the actual
+HW/SW mode from hardware.
+
+Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
 Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- drivers/base/power/domain.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ drivers/clk/qcom/gdsc.c | 32 ++++++++++++++++++++++++++++++++
+ drivers/clk/qcom/gdsc.h |  1 +
+ 2 files changed, 33 insertions(+)
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 3fb1a234c7f2..7044271ec93b 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -3181,6 +3181,15 @@ static void rtpm_status_str(struct seq_file *s, struct device *dev)
- 	seq_printf(s, "%-25s  ", p);
+diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+index 5358e28122ab..c763524cd5da 100644
+--- a/drivers/clk/qcom/gdsc.c
++++ b/drivers/clk/qcom/gdsc.c
+@@ -363,6 +363,34 @@ static int gdsc_disable(struct generic_pm_domain *domain)
+ 	return 0;
  }
  
-+static void mode_status_str(struct seq_file *s, struct device *dev)
++static int gdsc_set_hwmode(struct generic_pm_domain *domain, struct device *dev, bool mode)
 +{
-+	struct generic_pm_domain_data *gpd_data;
++	struct gdsc *sc = domain_to_gdsc(domain);
 +
-+	gpd_data = to_gpd_data(dev->power.subsys_data->domain_data);
++	if (sc->rsupply && !regulator_is_enabled(sc->rsupply)) {
++		pr_err("Cannot set mode while parent is disabled\n");
++		return -EIO;
++	}
 +
-+	seq_printf(s, "%20s", gpd_data->hw_mode ? "HW" : "SW");
++	return gdsc_hwctrl(sc, mode);
 +}
 +
- static void perf_status_str(struct seq_file *s, struct device *dev)
- {
- 	struct generic_pm_domain_data *gpd_data;
-@@ -3239,6 +3248,7 @@ static int genpd_summary_one(struct seq_file *s,
- 		seq_printf(s, "\n    %-50s  ", kobj_path);
- 		rtpm_status_str(s, pm_data->dev);
- 		perf_status_str(s, pm_data->dev);
-+		mode_status_str(s, pm_data->dev);
- 		kfree(kobj_path);
- 	}
- 
-@@ -3255,8 +3265,9 @@ static int summary_show(struct seq_file *s, void *data)
- 	int ret = 0;
- 
- 	seq_puts(s, "domain                          status          children                           performance\n");
--	seq_puts(s, "    /device                                             runtime status\n");
--	seq_puts(s, "----------------------------------------------------------------------------------------------\n");
-+	seq_puts(s, "    /device                                             runtime status                           managed by\n");
-+	seq_puts(s, "------------------------------------------------------------------------------------------------------------\n");
++static bool gdsc_get_hwmode(struct generic_pm_domain *domain, struct device *dev)
++{
++	struct gdsc *sc = domain_to_gdsc(domain);
++	u32 val;
++	int ret;
 +
++	ret = regmap_read(sc->regmap, sc->gdscr, &val);
++	if (ret)
++		return ret;
++
++	if (val & HW_CONTROL_MASK)
++		return true;
++
++	return false;
++}
++
+ static int gdsc_init(struct gdsc *sc)
+ {
+ 	u32 mask, val;
+@@ -451,6 +479,10 @@ static int gdsc_init(struct gdsc *sc)
+ 		sc->pd.power_off = gdsc_disable;
+ 	if (!sc->pd.power_on)
+ 		sc->pd.power_on = gdsc_enable;
++	if (sc->flags & HW_CTRL_TRIGGER) {
++		sc->pd.set_hwmode_dev = gdsc_set_hwmode;
++		sc->pd.get_hwmode_dev = gdsc_get_hwmode;
++	}
  
- 	ret = mutex_lock_interruptible(&gpd_list_lock);
+ 	ret = pm_genpd_init(&sc->pd, NULL, !on);
  	if (ret)
+diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
+index 803512688336..1e2779b823d1 100644
+--- a/drivers/clk/qcom/gdsc.h
++++ b/drivers/clk/qcom/gdsc.h
+@@ -67,6 +67,7 @@ struct gdsc {
+ #define ALWAYS_ON	BIT(6)
+ #define RETAIN_FF_ENABLE	BIT(7)
+ #define NO_RET_PERIPH	BIT(8)
++#define HW_CTRL_TRIGGER	BIT(9)
+ 	struct reset_controller_dev	*rcdev;
+ 	unsigned int			*resets;
+ 	unsigned int			reset_count;
 
 -- 
 2.34.1
