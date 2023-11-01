@@ -2,75 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A955B7DE521
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Nov 2023 18:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A99B7DE750
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Nov 2023 22:14:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344598AbjKARO6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 1 Nov 2023 13:14:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43526 "EHLO
+        id S232713AbjKAVOE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Nov 2023 17:14:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344562AbjKARO5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Nov 2023 13:14:57 -0400
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1AEBD;
-        Wed,  1 Nov 2023 10:14:55 -0700 (PDT)
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-587310758ccso3306eaf.0;
-        Wed, 01 Nov 2023 10:14:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698858895; x=1699463695;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b6irXt2HPa6/qTlgvmtKNDDj+Spoz+b92gnZoTUz0Dc=;
-        b=C8kj3wvpkABxRKRY6qyBvSt71gqJLnUxNXzYGtjhxkF54HdAjn3V6ZgSc9hRCt451L
-         ml29MntiGYHWnGvR5rMzkBVkNkXRqVNbOUqjl4xe0R/xn8G6qFuHv949dGG/F3iDs8l3
-         p7Nq8yOu44w/u8HwgmtSUWrxQk5SIXBGK0tyFS0275Pt3gS611n7lOTrLVNc/FHcaPcS
-         IY5PKwiyZpq7lFAHzhSIjlC+f3sPjghUoybHjo6l/7g7VeKjswTBpyb3T5AAAH6H+KbS
-         UU5n7+t/m10Zy/pS9aOMPjuAwXC3oOLIuOBw0E7si5YMaFOd0I9s70FiPmf/MarhFN9+
-         WKkQ==
-X-Gm-Message-State: AOJu0YxeI/bHkuFhxo30Wz3h1Qw1wnM6t/azpuTqRbKkJe6UQVUmY/R4
-        ++Yj0C+LQ2qlmgP2sdpmQTR8h822J0b6EU9afZH83niH
-X-Google-Smtp-Source: AGHT+IF87ZQfQerqkIZ1542x4dQRiTH0vDbQllcAactL/pZJaB1xoaLqSrKy6OZ0c3sAX45oR0ct/g1s06o2I+lNeJU=
-X-Received: by 2002:a4a:dbd8:0:b0:583:ec88:e0 with SMTP id t24-20020a4adbd8000000b00583ec8800e0mr17347583oou.0.1698858895016;
- Wed, 01 Nov 2023 10:14:55 -0700 (PDT)
+        with ESMTP id S1345228AbjKAVN6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Nov 2023 17:13:58 -0400
+X-Greylist: delayed 11999 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Nov 2023 14:13:53 PDT
+Received: from 12.mo584.mail-out.ovh.net (12.mo584.mail-out.ovh.net [178.33.104.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C400C111
+        for <linux-pm@vger.kernel.org>; Wed,  1 Nov 2023 14:13:53 -0700 (PDT)
+Received: from director4.ghost.mail-out.ovh.net (unknown [10.109.138.174])
+        by mo584.mail-out.ovh.net (Postfix) with ESMTP id C3B5527CFC
+        for <linux-pm@vger.kernel.org>; Wed,  1 Nov 2023 17:36:38 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-k8p4s (unknown [10.108.4.11])
+        by director4.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 3EE021FD7A;
+        Wed,  1 Nov 2023 17:36:37 +0000 (UTC)
+Received: from foxhound.fi ([37.59.142.103])
+        by ghost-submission-6684bf9d7b-k8p4s with ESMTPSA
+        id Yc+/CaWMQmUEEgAAHOvW/w
+        (envelope-from <jose.pekkarinen@foxhound.fi>); Wed, 01 Nov 2023 17:36:37 +0000
+Authentication-Results: garm.ovh; auth=pass (GARM-103G0057af23061-cf36-4f4c-8b48-a29c5d4dfc4c,
+                    E3092659390FA2EDB47E70EC17E7DF57E79FF282) smtp.auth=jose.pekkarinen@foxhound.fi
+X-OVh-ClientIp: 87.94.110.27
+From:   =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@foxhound.fi>
+To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, skhan@linuxfoundation.org
+Cc:     =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@foxhound.fi>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        syzbot+95f2e2439b97575ec3c0@syzkaller.appspotmail.com
+Subject: [PATCH] drivers core: lookup sysfs power group before removal
+Date:   Wed,  1 Nov 2023 19:36:27 +0200
+Message-Id: <20231101173627.2658-1-jose.pekkarinen@foxhound.fi>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <CAJZ5v0iBWcy2LyeXE0vxqKZOWBK5yWgofktygEvo4B3=6J8Wjg@mail.gmail.com>
- <CAHk-=wgYWb+LtHvQM+ULLWjfOLnfGcuDXNLrefEQbwCu=7apGQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wgYWb+LtHvQM+ULLWjfOLnfGcuDXNLrefEQbwCu=7apGQ@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 1 Nov 2023 18:14:43 +0100
-Message-ID: <CAJZ5v0iBpbsifm01HMa_CQW6Wdtjwh1yJXOhOw9qYc-cDmDKJw@mail.gmail.com>
-Subject: Re: [GIT PULL] Power management updates for v6.7-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 10134788012345763331
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedruddtgedguddtvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpeflohhsrocurfgvkhhkrghrihhnvghnuceojhhoshgvrdhpvghkkhgrrhhinhgvnhesfhhogihhohhunhgurdhfiheqnecuggftrfgrthhtvghrnhepfedtleeuteeitedvtedtteeuieevudejfeffvdetfeekleehhfelleefteetjeejnecukfhppeduvdejrddtrddtrddupdekjedrleegrdduuddtrddvjedpfeejrdehledrudegvddruddtfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehjohhsvgdrphgvkhhkrghrihhnvghnsehfohighhhouhhnugdrfhhiqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekgedpmhhouggvpehsmhhtphhouhht
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 1, 2023 at 4:26 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Fri, 27 Oct 2023 at 03:52, Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > Please pull from the tag
-> >
-> >  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
-> >  pm-6.7-rc1
-> >
-> > with top-most commit bf224871c27a7c7e2146d667176977ffe3752750
->
-> Not sure why this didn't get the pr-tracker-bot attention, but it's
-> merged, so here's the manual version,
+Hinted by syzboot, there is a few cases where the sysfs power group may
+not be there, like the failure while adding it, or adding its runtime
+group, or when the sysfs firmware loader fallback fail to populate. In
+the last case, the device_del function will be called leading to attempt
+to remove the sysfs group. This patch will lookup for it in advance to
+grant that it is effectively there before cleaning it up.
 
-Thank you!
+Reported-by: syzbot+95f2e2439b97575ec3c0@syzkaller.appspotmail.com
+
+Signed-off-by: José Pekkarinen <jose.pekkarinen@foxhound.fi>
+---
+ drivers/base/power/sysfs.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
+index a1474fb67db9..6601729c4698 100644
+--- a/drivers/base/power/sysfs.c
++++ b/drivers/base/power/sysfs.c
+@@ -834,5 +834,7 @@ void dpm_sysfs_remove(struct device *dev)
+ 	dev_pm_qos_constraints_destroy(dev);
+ 	rpm_sysfs_remove(dev);
+ 	sysfs_unmerge_group(&dev->kobj, &pm_wakeup_attr_group);
+-	sysfs_remove_group(&dev->kobj, &pm_attr_group);
++
++	if (kernfs_find_and_get((&dev->kobj)->sd, pm_attr_group.name))
++		sysfs_remove_group(&dev->kobj, &pm_attr_group);
+ }
+-- 
+2.39.2
+
