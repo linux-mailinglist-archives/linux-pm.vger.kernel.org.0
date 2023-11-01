@@ -2,118 +2,256 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B787DE412
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Nov 2023 16:47:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 421B47DE37D
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Nov 2023 16:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232332AbjKAPpw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Nov 2023 11:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42080 "EHLO
+        id S230254AbjKAO4d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Nov 2023 10:56:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344665AbjKAOqp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Nov 2023 10:46:45 -0400
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3273EDC;
-        Wed,  1 Nov 2023 07:46:43 -0700 (PDT)
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6ce2eaf7c2bso4523438a34.0;
-        Wed, 01 Nov 2023 07:46:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698850002; x=1699454802;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3jeA19kl1acYj+K5OAp8lk/hS9qxEtIjfOF2DeOY2Wk=;
-        b=oR8sOc8IS7ND8q7t6Dpf9jTtI7ICLx3r9zVXXSDumYHXKIU8LVQvbRTq9MujYec6GK
-         DUPoVs3LVmL3CoOforCS6uflkAMK2z/H3Rk7z8tjuyuCqyS94IsammqJGa6YSGUb+ttR
-         5aFg9sb1Pj8EN0Yf1dDU+/VIqPgrGZAWomvNpJ6fTT/g0uAoX+hnSDKlXp0oOfx12qEW
-         QZQ5idyNNEZtDz67h2tJfOzRKbrnxjL26jxAY1sZvRnmHcQOSH040EnHP/P1cj+SvubC
-         yxv12qcs6eUSRW0z4NEUIWiuTRIFP5j/hBxx9pcXZmoPnZBf+aYT59gu0FZ9ufbSJZZV
-         7xmw==
-X-Gm-Message-State: AOJu0YxvPWuzedPRQTQ5/nM51hiC7gyc78VGd9JPxcUcB19Lwk3BLyGa
-        1tPYdkL+w20f9wHjPgUVsQ==
-X-Google-Smtp-Source: AGHT+IE+dz1IOeT7KVIPxGWJde5p4oVtUL0RCQEmKwS1I+MeRIbZm2OK92ubWKocNbqh109fS8FEdQ==
-X-Received: by 2002:a9d:6197:0:b0:6cd:da93:90ce with SMTP id g23-20020a9d6197000000b006cdda9390cemr15395286otk.19.1698850002398;
-        Wed, 01 Nov 2023 07:46:42 -0700 (PDT)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id a13-20020a0568300b8d00b006b8c87551e8sm216507otv.35.2023.11.01.07.46.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Nov 2023 07:46:41 -0700 (PDT)
-Received: (nullmailer pid 121158 invoked by uid 1000);
-        Wed, 01 Nov 2023 14:46:40 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] opp: ti: Use device_get_match_data()
-Date:   Wed,  1 Nov 2023 09:45:00 -0500
-Message-ID: <20231101144501.118972-1-robh@kernel.org>
-X-Mailer: git-send-email 2.42.0
+        with ESMTP id S229567AbjKAO4c (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Nov 2023 10:56:32 -0400
+Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD10110C;
+        Wed,  1 Nov 2023 07:56:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kernkonzept.com; s=mx1; h=In-Reply-To:Content-Type:MIME-Version:References:
+        Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:Reply-To:
+        Content-ID:Content-Description;
+        bh=2OitxQ/ndqBrxlaO/t3PZApPqvhNvUnxSmmdj8bUi1o=; b=TLMz5jcMPUMHKCqqaVE2eDGCv6
+        MfEjncZPQ6PZTjZWqBM8qgKjGVkodYTXB1l8EMkOoI/4V8yhDIYbEJggi/F4IsYEX1sa3XqHs0BWI
+        mfXampdWmXkN3jz7WN7oO+c2LGGqhNF5MCIFLT1PzMmHh+t3y81Ubj/gO6kLW2PcFz9J3e8G08To/
+        tf+Mv+5PVtTuEb64H6Mg5a0J2WQ5brAWlL4XQBZHfK69qy3KiNKNcPkVDjbdK0oa7Bks201XuaKPW
+        c3gkrapt/cK3IA4iFn069hEgDcghFVqeZ2Mt4I/1w+vCeFbOjWDQMF9spozzcjVwQAwTDwV0EPRDf
+        adeP5T7w==;
+Received: from [10.22.3.24] (helo=kernkonzept.com)
+        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.96)
+        id 1qyCdn-002MbQ-2q;
+        Wed, 01 Nov 2023 15:56:19 +0100
+Date:   Wed, 1 Nov 2023 15:56:13 +0100
+From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Stephan Gerhold <stephan@gerhold.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] cpufreq: qcom-nvmem: Enable virtual power domain
+ devices
+Message-ID: <ZUJm-r43cj0E-vBP@kernkonzept.com>
+References: <20231018-msm8909-cpufreq-v2-0-0962df95f654@kernkonzept.com>
+ <20231018-msm8909-cpufreq-v2-2-0962df95f654@kernkonzept.com>
+ <CAPDyKFot9=M1ooP_Q1AOgG5o_4DTQ2qsyai1ZdXAzBwf89W4uA@mail.gmail.com>
+ <CAPDyKFr5A-P=UhWs4rUMBWup3pH75WAhcZ56Y2_Sfk3=WfxRCQ@mail.gmail.com>
+ <ZTeyhR7YY7VgWQlU@kernkonzept.com>
+ <CAPDyKFrcV8iJnJ904j1jkx0E8PaOLmiTZ7CKk7EV8qQ71AZdbA@mail.gmail.com>
+ <ZTfBZqBwqskhFydZ@kernkonzept.com>
+ <CAPDyKFooPLCmJeqjhiMm7HRdW5UrEw0yHvGF9fgLvOigsgbWxg@mail.gmail.com>
+ <ZTfv-Dea693UqLXB@gerhold.net>
+ <CAPDyKFpFJd+ipv6kb77MgnDtXtFPa3=BX2RgaKq5i5r6WpVmJQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFpFJd+ipv6kb77MgnDtXtFPa3=BX2RgaKq5i5r6WpVmJQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use preferred device_get_match_data() instead of of_match_device() to
-get the driver match data. With this, adjust the includes to explicitly
-include the correct headers.
+On Wed, Oct 25, 2023 at 12:05:49PM +0200, Ulf Hansson wrote:
+> On Tue, 24 Oct 2023 at 18:25, Stephan Gerhold <stephan@gerhold.net> wrote:
+> > On Tue, Oct 24, 2023 at 06:11:34PM +0200, Ulf Hansson wrote:
+> > > On Tue, 24 Oct 2023 at 15:07, Stephan Gerhold
+> > > <stephan.gerhold@kernkonzept.com> wrote:
+> > > > On Tue, Oct 24, 2023 at 02:49:32PM +0200, Ulf Hansson wrote:
+> > > > > On Tue, 24 Oct 2023 at 14:03, Stephan Gerhold
+> > > > > <stephan.gerhold@kernkonzept.com> wrote:
+> > > > > > On Thu, Oct 19, 2023 at 01:26:19PM +0200, Ulf Hansson wrote:
+> > > > > > > On Thu, 19 Oct 2023 at 12:24, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > > > > > > > On Wed, 18 Oct 2023 at 10:06, Stephan Gerhold
+> > > > > > > > <stephan.gerhold@kernkonzept.com> wrote:
+> > > > > > > > >
+> > > > > > > > > The genpd core caches performance state votes from devices that are
+> > > > > > > > > runtime suspended as of commit 3c5a272202c2 ("PM: domains: Improve
+> > > > > > > > > runtime PM performance state handling"). They get applied once the
+> > > > > > > > > device becomes active again.
+> > > > > > > > >
+> > > > > > > > > To attach the power domains needed by qcom-cpufreq-nvmem the OPP core
+> > > > > > > > > calls genpd_dev_pm_attach_by_id(). This results in "virtual" dummy
+> > > > > > > > > devices that use runtime PM only to control the enable and performance
+> > > > > > > > > state for the attached power domain.
+> > > > > > > > >
+> > > > > > > > > However, at the moment nothing ever resumes the virtual devices created
+> > > > > > > > > for qcom-cpufreq-nvmem. They remain permanently runtime suspended. This
+> > > > > > > > > means that performance state votes made during cpufreq scaling get
+> > > > > > > > > always cached and never applied to the hardware.
+> > > > > > > > >
+> > > > > > > > > Fix this by enabling the devices after attaching them and use
+> > > > > > > > > dev_pm_syscore_device() to ensure the power domains also stay on when
+> > > > > > > > > going to suspend. Since it supplies the CPU we can never turn it off
+> > > > > > > > > from Linux. There are other mechanisms to turn it off when needed,
+> > > > > > > > > usually in the RPM firmware (RPMPD) or the cpuidle path (CPR genpd).
+> > > > > > > >
+> > > > > > > > I believe we discussed using dev_pm_syscore_device() for the previous
+> > > > > > > > version. It's not intended to be used for things like the above.
+> > > > > > > >
+> > > > > > > > Moreover, I was under the impression that it wasn't really needed. In
+> > > > > > > > fact, I would think that this actually breaks things for system
+> > > > > > > > suspend/resume, as in this case the cpr driver's genpd
+> > > > > > > > ->power_on|off() callbacks are no longer getting called due this,
+> > > > > > > > which means that the cpr state machine isn't going to be restored
+> > > > > > > > properly. Or did I get this wrong?
+> > > > > > >
+> > > > > > > BTW, if you really need something like the above, the proper way to do
+> > > > > > > it would instead be to call device_set_awake_path() for the device.
+> > > > > > >
+> > > > > >
+> > > > > > Unfortunately this does not work correctly. When I use
+> > > > > > device_set_awake_path() it does set dev->power.wakeup_path = true.
+> > > > > > However, this flag is cleared again in device_prepare() when entering
+> > > > > > suspend. To me it looks a bit like wakeup_path is not supposed to be set
+> > > > > > directly by drivers? Before and after your commit 8512220c5782 ("PM /
+> > > > > > core: Assign the wakeup_path status flag in __device_prepare()") it
+> > > > > > seems to be internally bound to device_may_wakeup().
+> > > > > >
+> > > > > > It works if I make device_may_wakeup() return true, with
+> > > > > >
+> > > > > >         device_set_wakeup_capable(dev, true);
+> > > > > >         device_wakeup_enable(dev);
+> > > > > >
+> > > > > > but that also allows *disabling* the wakeup from sysfs which doesn't
+> > > > > > really make sense for the CPU.
+> > > > > >
+> > > > > > Any ideas?
+> > > > >
+> > > > > The device_set_awake_path() should be called from a system suspend
+> > > > > callback. So you need to add that callback for the cpufreq driver.
+> > > > >
+> > > > > Sorry, if that wasn't clear.
+> > > > >
+> > > >
+> > > > Hmm, but at the moment I'm calling this on the virtual genpd devices.
+> > > > How would it work for them? I don't have a suspend callback for them.
+> > > >
+> > > > I guess could loop over the virtual devices in the cpufreq driver
+> > > > suspend callback, but is my driver suspend callback really guaranteed to
+> > > > run before the device_prepare() that clears "wakeup_path" on the virtual
+> > > > devices?
+> > >
+> > > Yes, that's guaranteed. dpm_prepare() (which calls device_prepare())
+> > > is always being executed before dpm_suspend().
+> > >
+> >
+> > Thanks, I think I understand. Maybe. :-)
+> >
+> > Just to confirm, I should call device_set_awake_path() for the virtual
+> > genpd devices as part of the PM ->suspend() callback? And this will be
+> > guaranteed to run after the "prepare" phase but before the
+> > "suspend_noirq" phase where the genpd core will check the wakeup flag?
+> 
+> Correct!
+> 
 
-As this driver only does DT based matching, of_match_device() will never
-return NULL if we've gotten to probe(). Therefore, the NULL check and
-error return for it can be dropped.
+Thanks, this seems to works as intended! The diff I tested is below, in
+case you already have some comments.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
-v2:
- - Add missing commit msg
----
- drivers/opp/ti-opp-supply.c | 13 +++----------
- 1 file changed, 3 insertions(+), 10 deletions(-)
+I'll put this into proper patches and will send a v3 after the merge
+window.
 
-diff --git a/drivers/opp/ti-opp-supply.c b/drivers/opp/ti-opp-supply.c
-index 8f3f13fbbb25..e3b97cd1fbbf 100644
---- a/drivers/opp/ti-opp-supply.c
-+++ b/drivers/opp/ti-opp-supply.c
-@@ -18,6 +18,7 @@
+Stephan
+
+diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+index 7e9202080c98..e0c82c958018 100644
+--- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
++++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+@@ -23,6 +23,7 @@
+ #include <linux/nvmem-consumer.h>
  #include <linux/of.h>
  #include <linux/platform_device.h>
++#include <linux/pm.h>
+ #include <linux/pm_domain.h>
  #include <linux/pm_opp.h>
-+#include <linux/property.h>
- #include <linux/regulator/consumer.h>
- #include <linux/slab.h>
+ #include <linux/pm_runtime.h>
+@@ -426,6 +427,18 @@ static const struct qcom_cpufreq_match_data match_data_ipq8074 = {
+ 	.get_version = qcom_cpufreq_ipq8074_name_version,
+ };
  
-@@ -373,23 +374,15 @@ static int ti_opp_supply_probe(struct platform_device *pdev)
++static void qcom_cpufreq_suspend_virt_devs(struct qcom_cpufreq_drv *drv, unsigned cpu)
++{
++	const char * const *name = drv->data->genpd_names;
++	int i;
++
++	if (!drv->cpus[cpu].virt_devs)
++		return;
++
++	for (i = 0; *name; i++, name++)
++		device_set_awake_path(drv->cpus[cpu].virt_devs[i]);
++}
++
+ static void qcom_cpufreq_put_virt_devs(struct qcom_cpufreq_drv *drv, unsigned cpu)
  {
- 	struct device *dev = &pdev->dev;
- 	struct device *cpu_dev = get_cpu_device(0);
--	const struct of_device_id *match;
- 	const struct ti_opp_supply_of_data *of_data;
- 	int ret = 0;
+ 	const char * const *name = drv->data->genpd_names;
+@@ -542,9 +555,6 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
  
--	match = of_match_device(ti_opp_supply_of_match, dev);
--	if (!match) {
--		/* We do not expect this to happen */
--		dev_err(dev, "%s: Unable to match device\n", __func__);
--		return -ENODEV;
--	}
--	if (!match->data) {
-+	of_data = device_get_match_data(dev);
-+	if (!of_data) {
- 		/* Again, unlikely.. but mistakes do happen */
- 		dev_err(dev, "%s: Bad data in match\n", __func__);
- 		return -EINVAL;
- 	}
--	of_data = match->data;
+ 					goto free_opp;
+ 				}
 -
- 	dev_set_drvdata(dev, (void *)of_data);
+-				/* Keep CPU power domain always-on */
+-				dev_pm_syscore_device(virt_devs[i], true);
+ 			}
+ 			drv->cpus[cpu].virt_devs = virt_devs;
+ 		}
+@@ -581,11 +591,25 @@ static void qcom_cpufreq_remove(struct platform_device *pdev)
+ 	}
+ }
  
- 	/* If we need optimized voltage */
--- 
-2.42.0
++static int qcom_cpufreq_suspend(struct device *dev)
++{
++	struct qcom_cpufreq_drv *drv = dev_get_drvdata(dev);
++	unsigned int cpu;
++
++	for_each_possible_cpu(cpu)
++		qcom_cpufreq_suspend_virt_devs(drv, cpu);
++
++	return 0;
++}
++
++static DEFINE_SIMPLE_DEV_PM_OPS(qcom_cpufreq_pm_ops, qcom_cpufreq_suspend, NULL);
++
+ static struct platform_driver qcom_cpufreq_driver = {
+ 	.probe = qcom_cpufreq_probe,
+ 	.remove_new = qcom_cpufreq_remove,
+ 	.driver = {
+ 		.name = "qcom-cpufreq-nvmem",
++		.pm = pm_sleep_ptr(&qcom_cpufreq_pm_ops),
+ 	},
+ };
+ 
+diff --git a/drivers/pmdomain/qcom/rpmpd.c b/drivers/pmdomain/qcom/rpmpd.c
+index abb62e4a2bdf..0f91e00b5909 100644
+--- a/drivers/pmdomain/qcom/rpmpd.c
++++ b/drivers/pmdomain/qcom/rpmpd.c
+@@ -1050,6 +1050,7 @@ static int rpmpd_probe(struct platform_device *pdev)
+ 		rpmpds[i]->pd.power_off = rpmpd_power_off;
+ 		rpmpds[i]->pd.power_on = rpmpd_power_on;
+ 		rpmpds[i]->pd.set_performance_state = rpmpd_set_performance;
++		rpmpds[i]->pd.flags = GENPD_FLAG_ACTIVE_WAKEUP;
+ 		pm_genpd_init(&rpmpds[i]->pd, NULL, true);
+ 
+ 		data->domains[i] = &rpmpds[i]->pd;
 
+-- 
+Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Kernkonzept GmbH at Dresden, Germany, HRB 31129, CEO Dr.-Ing. Michael Hohmuth
