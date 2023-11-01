@@ -2,65 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9EAC7DE39A
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Nov 2023 16:37:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D777DE420
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Nov 2023 16:48:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233774AbjKAPZH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Nov 2023 11:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38288 "EHLO
+        id S233678AbjKAPr5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Nov 2023 11:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233988AbjKAPZG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Nov 2023 11:25:06 -0400
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C5F10C;
-        Wed,  1 Nov 2023 08:25:01 -0700 (PDT)
-Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-6d2fedd836fso1852238a34.1;
-        Wed, 01 Nov 2023 08:25:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698852301; x=1699457101;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bozvejefCHTTSfjvuu0aaoVgbRnxlhlTjic682S1lbI=;
-        b=MIPQuRu62hCjhsG83wk3wtUP7yoTaID9+oWct3Itv3KgcovEaJmO+3/syWDHSJNL5Z
-         HonQDIPkNgzjArjLd9ER3PDYRRfQjS7n66h8YjmeJiXfwiYURamd0hEUoKvof9phEamJ
-         sEQhYlSvzQcMPg1Uw+paJZ4t2VdAQDsGM5BhnkSYh6+oaRnMuCLiL9ORPDPSnM1Kgnf2
-         G6rsqXPpTKqfg4fifhUSWFAN29VdPKuqjepR0iWRfp1GNClCfyiYfakYDuU97wVBxVy0
-         5UvuDCALROZii+87TnhXyjaMXtqeRXtpLmtRhBDSls5cLZWL8IvrTSKIzdPVihccJmFB
-         aD4Q==
-X-Gm-Message-State: AOJu0YwGGZG3fnrhOKtKVtN8QrAppE45ORJmGnyCtcA9gVrp0AwWKNd1
-        aogr76e6qSzTleUrMyCD319fzxVoaA==
-X-Google-Smtp-Source: AGHT+IEYN8x9bXiuUbuf+qfeGYLHvQyPLqgNx1U8v0X75YtJDLybB108jIoN/mEm5DI81Ty8xLs9JA==
-X-Received: by 2002:a05:6830:3499:b0:6bd:152f:990e with SMTP id c25-20020a056830349900b006bd152f990emr21769798otu.5.1698852300984;
-        Wed, 01 Nov 2023 08:25:00 -0700 (PDT)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id be14-20020a056830350e00b006ce32aac3e4sm230090otb.48.2023.11.01.08.24.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Nov 2023 08:25:00 -0700 (PDT)
-Received: (nullmailer pid 316059 invoked by uid 1000);
-        Wed, 01 Nov 2023 15:24:59 -0000
-Date:   Wed, 1 Nov 2023 10:24:59 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Elliot Berman <quic_eberman@quicinc.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        devicetree@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+        with ESMTP id S234146AbjKAPr4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Nov 2023 11:47:56 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F03BE12E;
+        Wed,  1 Nov 2023 08:47:44 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A1EHSWl000923;
+        Wed, 1 Nov 2023 15:47:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=owa8O8xm4O+CR6cBywaNZb9A1GNgekDluOYlBTuZTVw=;
+ b=F+QNmUALlawaqHLKrRu3Iis0CSJ1+0B6R7MRd5pwyCtaUdWGLhl8Gyq0Rc9/y0vC0yvg
+ NoGwa9Iiv3YyP5HqqjT3S/dsn2i1EnkbQT/TrB2bTlrYMYUdufJXgiewm6YVOWFEXkrg
+ IC+f0Qi6zi0WDz+eU22gWWlbZbioaPhIkv6uksMGu+i0HveEkjyRCBFyhtvz1V21ieJu
+ hb/JqNWrh2oFl9fQOo6afim0VHjU8H5OciQBoDZamPdc3wp8ypTxb8K/MvX9h+0jtOy7
+ Cjp0fr+9x1lf7jBSriGUKiiMFCXnrVVBcEK5MXVNUHtoQ8peC9YtYijlCrjWYSTHmL5V Dg== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3u3e06tb98-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Nov 2023 15:47:39 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3A1FlcRA031748
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 1 Nov 2023 15:47:38 GMT
+Received: from [10.216.63.119] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Wed, 1 Nov
+ 2023 08:47:33 -0700
+Message-ID: <2683c865-7775-a2ef-0417-01f9aca80b6a@quicinc.com>
+Date:   Wed, 1 Nov 2023 21:17:24 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
 Subject: Re: [PATCH] dt-bindings: power: reset: $ref reboot-mode in
  nvmem-reboot-mode
-Message-ID: <169885229755.315654.10498316199571342193.robh@kernel.org>
+Content-Language: en-US
+To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
 References: <20231031-ref-nvmem-reboot-mode-v1-1-c1af9070ce52@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
 In-Reply-To: <20231031-ref-nvmem-reboot-mode-v1-1-c1af9070ce52@quicinc.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: PlbOTgSHSA7NPNztDGjwcT57MQBwB0Zr
+X-Proofpoint-GUID: PlbOTgSHSA7NPNztDGjwcT57MQBwB0Zr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-01_13,2023-11-01_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ impostorscore=0 mlxscore=0 clxscore=1011 phishscore=0 adultscore=0
+ lowpriorityscore=0 suspectscore=0 priorityscore=1501 bulkscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2310240000 definitions=main-2311010128
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -68,15 +85,49 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-On Tue, 31 Oct 2023 11:28:22 -0700, Elliot Berman wrote:
+
+On 10/31/2023 11:58 PM, Elliot Berman wrote:
 > nvmem-reboot-mode.yaml should $ref: reboot-mode.yaml, but instead
 > rewrites the properties. Update so it $refs instead.
 > 
 > Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+
+Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
+
+-Mukesh
+
 > ---
->  .../devicetree/bindings/power/reset/nvmem-reboot-mode.yaml        | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
+>   .../devicetree/bindings/power/reset/nvmem-reboot-mode.yaml        | 8 +++-----
+>   1 file changed, 3 insertions(+), 5 deletions(-)
 > 
-
-Reviewed-by: Rob Herring <robh@kernel.org>
-
+> diff --git a/Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.yaml b/Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.yaml
+> index 14a262bcbf7c..627f8a6078c2 100644
+> --- a/Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.yaml
+> +++ b/Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.yaml
+> @@ -28,17 +28,15 @@ properties:
+>       items:
+>         - const: reboot-mode
+>   
+> -patternProperties:
+> -  "^mode-.+":
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+> -    description: Vendor-specific mode value written to the mode register
+> +allOf:
+> +  - $ref: reboot-mode.yaml#
+>   
+>   required:
+>     - compatible
+>     - nvmem-cells
+>     - nvmem-cell-names
+>   
+> -additionalProperties: false
+> +unevaluatedProperties: false
+>   
+>   examples:
+>     - |
+> 
+> ---
+> base-commit: ffc253263a1375a65fa6c9f62a893e9767fbebfa
+> change-id: 20231031-ref-nvmem-reboot-mode-1369970436e4
+> 
+> Best regards,
