@@ -2,75 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A66E7DDE09
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Nov 2023 10:05:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 761A67DE023
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Nov 2023 12:07:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233257AbjKAJEv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Nov 2023 05:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
+        id S235080AbjKALHi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Nov 2023 07:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234266AbjKAJEq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Nov 2023 05:04:46 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6695D122
-        for <linux-pm@vger.kernel.org>; Wed,  1 Nov 2023 02:04:40 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-5b9a453d3d3so2272369a12.0
-        for <linux-pm@vger.kernel.org>; Wed, 01 Nov 2023 02:04:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698829480; x=1699434280; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=T97XsuQPDMRDtHy08B+rqECq/pabjxSIR/W6V7wvFWM=;
-        b=wDR/u07J09wey+Tzfc9wT2uc3JDwIYuShLiN2TlGprBgCfFRjfv8xR8r3Lo8t9BrG+
-         yI0fYEEM/bfAH1gvXNxhC+vF9g7sQWRyi8uqH1tvhxh2H93ZKtVIb4Fr2bHJpulosKeK
-         qHoTqaDYKKD7OwXWnTBMIqqQ2hvoHbV2rTXhQheMKWZFHN+Q248QE2pMr6WXL5wUjgnr
-         YLM1BHjvcEOgUcrX1Qxwnalb4WSq2uQUOR/nCghOSD50HRCED/4tq17cPGP/lSKa1QZn
-         Q9rGJ7lGWoqmub44HKvLQDahlLIyix6jZ1uCMhfpewTfcspqAJkzbQP+dvjqfu1c/lZT
-         /WpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698829480; x=1699434280;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=T97XsuQPDMRDtHy08B+rqECq/pabjxSIR/W6V7wvFWM=;
-        b=CY7caagpckknTqbyX4flA10nTPk7MMg5AGf7qFBfzKvW0OImmPt5Pyq8+vLJ8eV6Bw
-         YSDTCSjB4V1u0pNO41eTTDK6FxTetDY92eaqQMBvWA1xx/x8B8SoO0v3CNwI+KsA8mOC
-         8+1PKN9oGd5QBWvCtJBuEyZQBvP4DvRV70sw6BgcWM6wwl8cb+yb4iMJFWRM+2H16mZd
-         CadkQj1HQ0IV/W97oO+ZAYxulRMxMeLkBOR68TQ0Paecx5Y0Nx4+tgSdHVQ4bM9OS0v7
-         3P81Cq4axOXBSdnXoxAZaGitDhpc4FizmQ3sZGF36+0In4okT3aKvCV0UiyVIYKSJi+7
-         IdBQ==
-X-Gm-Message-State: AOJu0Yxu14jyOcaLfs881RhWSK2IVPRwXspEmjyncHNSIP6WzW3ZgHtj
-        kPX1zB1qMqy7+cZn7nmOLAkYrMuz6AiiEoCn6UqBpw==
-X-Google-Smtp-Source: AGHT+IE3lvIVL/RqHctY3lvCHB1fhOmc51H/phVezjStkLmOqrn9OaDOQHPPmsK4zrwvjKKx4RwmqYLMKXfHu3BQP9o=
-X-Received: by 2002:a05:6a20:4327:b0:16b:b4a0:e06b with SMTP id
- h39-20020a056a20432700b0016bb4a0e06bmr14390989pzk.43.1698829479791; Wed, 01
- Nov 2023 02:04:39 -0700 (PDT)
+        with ESMTP id S235067AbjKALHh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Nov 2023 07:07:37 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA97ED;
+        Wed,  1 Nov 2023 04:07:32 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D075C433CA;
+        Wed,  1 Nov 2023 11:07:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1698836851;
+        bh=FpYGREr0r2q03KNrsg6xFSDgTmphiss/PYjEsRpTcIg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YzssRzmBTGlNAfXtVDEXaXuRugDWUcmNSEQaAkVbBL9MEcu32GGMtpO4l7Vi7rGVy
+         7HxZVxk5McUWigkNa3LLxWJYb5+5jmaoWfIXvD9UvcepdTvqzcp7uOHPN0u+hOiHax
+         GvR4Lc989p7hOkNQatmg/pJAaNBC2SErAIrpg3As=
+Date:   Wed, 1 Nov 2023 12:07:28 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Taniya Das <tdas@qti.qualcomm.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-media@vger.kernel.org,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>
+Subject: Re: [PATCH RESEND v3 0/5] PM: domains: Add control for switching
+ back and forth to HW control
+Message-ID: <2023110106-shabby-stagnant-9a6a@gregkh>
+References: <20231101-gdsc-hwctrl-v3-0-0740ae6b2b04@linaro.org>
 MIME-Version: 1.0
-References: <20231027080400.56703-1-vincent.guittot@linaro.org>
- <20231027080400.56703-8-vincent.guittot@linaro.org> <ZUGUvdjrpw9NHSex@e129154.nice.arm.com>
-In-Reply-To: <ZUGUvdjrpw9NHSex@e129154.nice.arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 1 Nov 2023 10:04:27 +0100
-Message-ID: <CAKfTPtDDouduP57P8GH6J4qDjbKUasVRe-K0QUKcZHC2NZ+syQ@mail.gmail.com>
-Subject: Re: [PATCH v4 7/7] arm64/amu: use capacity_ref_freq to set AMU ratio
-To:     Beata Michalska <beata.michalska@arm.com>
-Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
-        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
-        lukasz.luba@arm.com, ionela.voinescu@arm.com,
-        pierre.gondois@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        acpica-devel@lists.linuxfoundation.org, conor.dooley@microchip.com,
-        suagrfillet@gmail.com, ajones@ventanamicro.com, lftan@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231101-gdsc-hwctrl-v3-0-0740ae6b2b04@linaro.org>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,80 +62,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Beata,
+On Wed, Nov 01, 2023 at 11:04:06AM +0200, Abel Vesa wrote:
+> This is just a resend of v3:
+> https://lore.kernel.org/lkml/20230923115008.1698384-1-abel.vesa@linaro.org/
 
-On Wed, 1 Nov 2023 at 00:59, Beata Michalska <beata.michalska@arm.com> wrote:
->
-> On Fri, Oct 27, 2023 at 10:04:00AM +0200, Vincent Guittot wrote:
-> > Use the new capacity_ref_freq to set the ratio that is used by AMU for
-> > computing the arch_scale_freq_capacity().
-> > This helps to keep everything aligned using the same reference for
-> > computing CPUs capacity.
-> >
+Why?
 
-[..]
+It's the middle of the merge window, not much we can do until -rc1 is
+out...
 
-> > @@ -381,6 +385,9 @@ void topology_init_cpu_capacity_cppc(void)
-> >       }
-> >
-> >       for_each_possible_cpu(cpu) {
-> > +             freq_inv_set_max_ratio(cpu,
-> > +                                    per_cpu(capacity_ref_freq, cpu) * HZ_PER_KHZ);
-> > +
-> The capacity_ref_freq set earlier will still lead to units mismatch,
-> as at the point of calling topology_init_cpu_capacity_cppc the lowest & nominal
-> frequencies will be provided in MHz (unless I have missed smth).
+thanks,
 
-I don't get your point:
-the unit of per_cpu(capacity_freq_ref, cpu) is Khz
-
-For cppc, we have
-per_cpu(capacity_freq_ref, cpu) = cppc_perf_to_khz(&perf_caps,
-raw_capacity[cpu]);
-
-freq_inv_set_max_ratio() uses
-arch_timer_get_rate() which returns a freq in Hz
-and
-per_cpu(capacity_freq_ref, cpu) * HZ_PER_KHZ. to get a freq in Hz too.
-
-> This means that use of both, the capacity_ref_freq and the arch_freq_scale
-> will generate unexpected results, so I guess this should get amended in the
-> preceding patch (?) [1]
->
-> ---
-> BR
-> B.
->
-> [1] https://lore.kernel.org/linux-arm-kernel/20231027080400.56703-4-vincent.guittot@linaro.org/T/#m42daa167097edc190b1cfc05382c385ed801d909
->
-> >               capacity = raw_capacity[cpu];
-> >               capacity = div64_u64(capacity << SCHED_CAPACITY_SHIFT,
-> >                                    capacity_scale);
-> > @@ -422,8 +429,11 @@ init_cpu_capacity_callback(struct notifier_block *nb,
-> >
-> >       cpumask_andnot(cpus_to_visit, cpus_to_visit, policy->related_cpus);
-> >
-> > -     for_each_cpu(cpu, policy->related_cpus)
-> > +     for_each_cpu(cpu, policy->related_cpus) {
-> >               per_cpu(capacity_ref_freq, cpu) = policy->cpuinfo.max_freq;
-> > +             freq_inv_set_max_ratio(cpu,
-> > +                                    per_cpu(capacity_ref_freq, cpu) * HZ_PER_KHZ);
-> > +     }
-> >
-> >       if (cpumask_empty(cpus_to_visit)) {
-> >               topology_normalize_cpu_scale();
-> > diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-> > index 38ca6c76af56..ffdf0b7c55fa 100644
-> > --- a/include/linux/arch_topology.h
-> > +++ b/include/linux/arch_topology.h
-> > @@ -99,6 +99,7 @@ void update_siblings_masks(unsigned int cpu);
-> >  void remove_cpu_topology(unsigned int cpuid);
-> >  void reset_cpu_topology(void);
-> >  int parse_acpi_topology(void);
-> > +void freq_inv_set_max_ratio(int cpu, u64 max_rate);
-> >  #endif
-> >
-> >  #endif /* _LINUX_ARCH_TOPOLOGY_H_ */
-> > --
-> > 2.34.1
-> >
+greg k-h
