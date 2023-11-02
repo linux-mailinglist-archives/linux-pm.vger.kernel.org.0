@@ -2,74 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8E827DF428
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Nov 2023 14:43:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB0187DF44E
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Nov 2023 14:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235116AbjKBNnd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Nov 2023 09:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
+        id S1376666AbjKBNvC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Nov 2023 09:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjKBNnc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Nov 2023 09:43:32 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D987CA6
-        for <linux-pm@vger.kernel.org>; Thu,  2 Nov 2023 06:43:26 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-533d31a8523so1534310a12.1
-        for <linux-pm@vger.kernel.org>; Thu, 02 Nov 2023 06:43:26 -0700 (PDT)
+        with ESMTP id S1376664AbjKBNvB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Nov 2023 09:51:01 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B798EA6
+        for <linux-pm@vger.kernel.org>; Thu,  2 Nov 2023 06:50:55 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-280165bba25so871979a91.2
+        for <linux-pm@vger.kernel.org>; Thu, 02 Nov 2023 06:50:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698932605; x=1699537405; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xFhUVh3CuTxMB3qEjHHzdyET4eOvydg87z4/z27t8TU=;
-        b=HnHjvBu4GellnOSW99XF8iPOvcbTu10rFvcqmwgha621J7MvngRoMb40VxmgCj14hL
-         F2+HwziSO0ctKBb5iexi7KgZslf+srzDItp8niwXCUVPQsz9bLVfU1CyUgIFyrJ63ltP
-         m46Jn6hSMgaGcL58fvYoaOgjTeFMDmtkEzZgjN+pirgMe/oGk2DNVgRrPlovm81E6snx
-         jTCqAoMkkxhy014tmBC6S2QuKs170bv0udoYSD4wY1EuOXd1X79SsU4xLuPOozvIY1UJ
-         iNklSOobHhNQk/uMajgSxRasruNVJit4t2BuuLOCibL0J+UKP5nwYPi1yYZoOngeMPDW
-         T9hQ==
+        d=linaro.org; s=google; t=1698933055; x=1699537855; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vQsf0uxz+p9a7ZD7Gz0obekgX/RPQUCjSUYXjonlb9s=;
+        b=hw639FMK9g3NA1vIVLnw9CBPU5fEiTPwftoz+Ej2cImRAWRpBILLrIxhFLyttWK3GU
+         qENtJ/JcwTrLENeQifUJv11Wehgm/aKy6Z1qjYG4/+fh2Cso8CWeFjHxkbX2czHynEwr
+         vRwQkbOYPDMe+r2delixxNoCbvK46l8LQjRt5uwMI5BRcq9fnlvzi6qlTf33cxHkVorx
+         DQKz6gqvEcn58ZrmOFKnmYnV1E9Jl2wPb6fv4E4YHwjK2COzZTtRDcumGgU83VsO9pXd
+         7fGYe8tFKD9lDU6x0BktjKDstwwDddS7jUMvIspyYD7Ogrk+riXS1dONcMSmYjFnHq50
+         ImHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698932605; x=1699537405;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=xFhUVh3CuTxMB3qEjHHzdyET4eOvydg87z4/z27t8TU=;
-        b=UMkVmN1J9YPYbJKbGKlLAOeGdQwDuZ1ndcf0RdpHNwzHFTjg1G4puQm3elI+w1fweO
-         KkM9zmOuNc9hdsn8BihU+fJg/P01lxv45hLdmBq/h9uSUYcaxUocIQoM0dqnmkip+TCM
-         5fyCdG0c+RErndgiek6be0EB653YXHQ3KzzGBKLj57lsWlKswWozKjHqgqY0tzo6P+Ol
-         RFcrQo852Vq+EkxzLcaL4KNAuCigWTr21G+q4lFrdbZBbraAtHwnF0Sq9EWPycrFcQY1
-         qGJCkPUcSGaS84ZfEjN6hAe4dUlrdOjJUBsdolBgAVnl0wphT9cux6/oPqgL4pWlp8+Z
-         AC2w==
-X-Gm-Message-State: AOJu0Yx+QBsC5iZ6/M4slDP431/qXDgY9rvdU5Myb1132DvCp8kutrFw
-        IwqIk9rf37NnKwSPMnInuX7UMg==
-X-Google-Smtp-Source: AGHT+IE9nqeCnJwsw76xX1IEOlhGWExW41+OZQQdczrb9v6gAaklL9Q6P1hqax771Osvj08CLCICVw==
-X-Received: by 2002:aa7:d8d2:0:b0:543:5789:4d6c with SMTP id k18-20020aa7d8d2000000b0054357894d6cmr7125794eds.2.1698932605464;
-        Thu, 02 Nov 2023 06:43:25 -0700 (PDT)
-Received: from [192.168.1.118] (abyj199.neoplus.adsl.tpnet.pl. [83.9.29.199])
-        by smtp.gmail.com with ESMTPSA id i35-20020a0564020f2300b005402b190108sm2353218eda.39.2023.11.02.06.43.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Nov 2023 06:43:25 -0700 (PDT)
-Message-ID: <8ccd6953-b15b-d187-cdbb-0d85dde57442@linaro.org>
-Date:   Thu, 2 Nov 2023 14:43:23 +0100
+        d=1e100.net; s=20230601; t=1698933055; x=1699537855;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vQsf0uxz+p9a7ZD7Gz0obekgX/RPQUCjSUYXjonlb9s=;
+        b=NRrjDMVQCKK7ahj7WBZvwMnmh4Y1kq2Y7oIJL1mNqiC97Fg7WRc8k5Ws0wbQBDMcCt
+         ycEzuBr9JbMws6XjH4MkVTRjZSuPuhdVYhyjyTZPvSM6fJeaMSf+TMaruHEnEHOEU2z/
+         UyPjfIuO4V69goQKoBr5zC58PC2ikHzBkjnj2GhmzSvhP7q1wuFvZ+oCnJZPbdl/+Djr
+         MfoQNKZiqMONPKu5jd5MDyaVtZpxvBs4GCb1wV9GqFrbJ9TeCxEa+G3HBq4vyroMS7f/
+         9qvvTLFGzi9xx/DueMZuZB5fQuSsNKkcn8JmlGoKHkRMoKCZQnfgyiTV5QagH1OjviMT
+         nJxQ==
+X-Gm-Message-State: AOJu0YxOrybprIh3LssL9xkar4WaGLQ5RdkDPozTWFndH5im89UH4f1L
+        kqfgxTurUzyTQj9xM5mlWqq8fj3dwg2Kxz1MWYJ6wQ==
+X-Google-Smtp-Source: AGHT+IGE6VrTzGimyIx/5AqMdiH/F+ab3llp7q4Er0Tig+PZspNmxu8j8yjkEz6hamAecMX4JJJElojuPrceWNTn8Z4=
+X-Received: by 2002:a17:90a:bf07:b0:27d:1df4:26f3 with SMTP id
+ c7-20020a17090abf0700b0027d1df426f3mr14996247pjs.15.1698933055202; Thu, 02
+ Nov 2023 06:50:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH 8/9] interconnect: qcom/smd-rpm: Convert to platform
- remove callback returning void
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        kernel@pengutronix.de
-References: <20231031222851.3126434-11-u.kleine-koenig@pengutronix.de>
- <20231031222851.3126434-19-u.kleine-koenig@pengutronix.de>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20231031222851.3126434-19-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20231027080400.56703-1-vincent.guittot@linaro.org>
+ <20231027080400.56703-8-vincent.guittot@linaro.org> <ZUGUvdjrpw9NHSex@e129154.nice.arm.com>
+ <CAKfTPtDDouduP57P8GH6J4qDjbKUasVRe-K0QUKcZHC2NZ+syQ@mail.gmail.com>
+ <ZUN6K4d9FD31phbs@e129154.nice.arm.com> <CAKfTPtATBHyCvGkoKrN1Y9LpWX7nb3njY2zFPiJyj2bTSfbcNw@mail.gmail.com>
+In-Reply-To: <CAKfTPtATBHyCvGkoKrN1Y9LpWX7nb3njY2zFPiJyj2bTSfbcNw@mail.gmail.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Thu, 2 Nov 2023 14:50:43 +0100
+Message-ID: <CAKfTPtCv1WUDr72eqWeJh6iakkn+d4rX1N0d=8G8TEdyeOxH3g@mail.gmail.com>
+Subject: Re: [PATCH v4 7/7] arm64/amu: use capacity_ref_freq to set AMU ratio
+To:     Beata Michalska <beata.michalska@arm.com>, pierre.gondois@arm.com
+Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
+        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
+        lukasz.luba@arm.com, ionela.voinescu@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, acpica-devel@lists.linuxfoundation.org,
+        conor.dooley@microchip.com, suagrfillet@gmail.com,
+        ajones@ventanamicro.com, lftan@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,24 +81,120 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, 2 Nov 2023 at 11:40, Vincent Guittot <vincent.guittot@linaro.org> wrote:
+>
+> On Thu, 2 Nov 2023 at 11:31, Beata Michalska <beata.michalska@arm.com> wrote:
+> >
+> > Hi Vincent,
+> >
+> > On Wed, Nov 01, 2023 at 10:04:27AM +0100, Vincent Guittot wrote:
+> > > Hi Beata,
+> > >
+> > > On Wed, 1 Nov 2023 at 00:59, Beata Michalska <beata.michalska@arm.com> wrote:
+> > > >
+> > > > On Fri, Oct 27, 2023 at 10:04:00AM +0200, Vincent Guittot wrote:
+> > > > > Use the new capacity_ref_freq to set the ratio that is used by AMU for
+> > > > > computing the arch_scale_freq_capacity().
+> > > > > This helps to keep everything aligned using the same reference for
+> > > > > computing CPUs capacity.
+> > > > >
+> > >
+> > > [..]
+> > >
+> > > > > @@ -381,6 +385,9 @@ void topology_init_cpu_capacity_cppc(void)
+> > > > >       }
+> > > > >
+> > > > >       for_each_possible_cpu(cpu) {
+> > > > > +             freq_inv_set_max_ratio(cpu,
+> > > > > +                                    per_cpu(capacity_ref_freq, cpu) * HZ_PER_KHZ);
+> > > > > +
+> > > > The capacity_ref_freq set earlier will still lead to units mismatch,
+> > > > as at the point of calling topology_init_cpu_capacity_cppc the lowest & nominal
+> > > > frequencies will be provided in MHz (unless I have missed smth).
+> > >
+> > > I don't get your point:
+> > > the unit of per_cpu(capacity_freq_ref, cpu) is Khz
+> > >
+> > > For cppc, we have
+> > > per_cpu(capacity_freq_ref, cpu) = cppc_perf_to_khz(&perf_caps,
+> > > raw_capacity[cpu]);
+> > >
+> > > freq_inv_set_max_ratio() uses
+> > > arch_timer_get_rate() which returns a freq in Hz
+> > > and
+> > > per_cpu(capacity_freq_ref, cpu) * HZ_PER_KHZ. to get a freq in Hz too.
+> > >
+> > Apologies, I should have been more verbose here.
+> > Before the change made in [1] the cppc_perf_to_khz was indeed operating on
+> > lowest & nominal frequency values expressed in kHZ, as those were appropriately
+> > amended:
+> > cppc_cpufreq_cpu_init
+> >         |__> cppc_cpufreq_get_cpu_data:
+> >                 |__>    ...
+> >                         /* Convert the lowest and nominal freq from MHz to KHz */
+> >                         cpu_data->perf_caps.lowest_freq *= 1000;
+> >                         cpu_data->perf_caps.nominal_freq *= 1000;
+> >
+> > So far cppc_perf_to_khz (previously cppc_cpufreq_perf_to_khz) was being called
+> > with the post-processed CPC data (through cppc_cpufreq_get_cpu_data) and thus
+> > guaranteed to be operating on values in kHz.
+> > With the new changes the cppc_perf_to_khz will operate on raw CPC data,
+> > which are expressed in MHz.(as per acpi spec)
+>
+> Ok, thanks for the explanation. I haven't noticed that cppc_cpufreq
+> was processing the raw CPC data  (*1000) before using them. I'm going
+> to fix that.
 
+With cppc_perf_to_khz() being moved into the generic cppc_acpi.c, we
+can't change perf_caps.nominal_freq and perf_caps.lowest_freq
+directly. So, I'm planning to add the conversion from MHz to kHz in
+the functions cppc_perf_to_khz() and cppc_khz_to_perf() and remove the
+2 conversions above in cppc_cpufreq_get_cpu_data().
 
-On 31/10/2023 23:29, Uwe Kleine-König wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is ignored (apart
-> from emitting a warning) and this typically results in resource leaks.
-> 
-> To improve here there is a quest to make the remove callback return
-> void. In the first step of this quest all drivers are converted to
-> .remove_new(), which already returns void. Eventually after all drivers
-> are converted, .remove_new() will be renamed to .remove().
-> 
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
+>
+>
+> >
+> > ---
+> > Best Regards
+> > B.
+> > > > This means that use of both, the capacity_ref_freq and the arch_freq_scale
+> > > > will generate unexpected results, so I guess this should get amended in the
+> > > > preceding patch (?) [1]
+> > > >
+> > > > ---
+> > > > BR
+> > > > B.
+> > > >
+> > > > [1] https://lore.kernel.org/linux-arm-kernel/20231027080400.56703-4-vincent.guittot@linaro.org/T/#m42daa167097edc190b1cfc05382c385ed801d909
+> > > >
+> > > > >               capacity = raw_capacity[cpu];
+> > > > >               capacity = div64_u64(capacity << SCHED_CAPACITY_SHIFT,
+> > > > >                                    capacity_scale);
+> > > > > @@ -422,8 +429,11 @@ init_cpu_capacity_callback(struct notifier_block *nb,
+> > > > >
+> > > > >       cpumask_andnot(cpus_to_visit, cpus_to_visit, policy->related_cpus);
+> > > > >
+> > > > > -     for_each_cpu(cpu, policy->related_cpus)
+> > > > > +     for_each_cpu(cpu, policy->related_cpus) {
+> > > > >               per_cpu(capacity_ref_freq, cpu) = policy->cpuinfo.max_freq;
+> > > > > +             freq_inv_set_max_ratio(cpu,
+> > > > > +                                    per_cpu(capacity_ref_freq, cpu) * HZ_PER_KHZ);
+> > > > > +     }
+> > > > >
+> > > > >       if (cpumask_empty(cpus_to_visit)) {
+> > > > >               topology_normalize_cpu_scale();
+> > > > > diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
+> > > > > index 38ca6c76af56..ffdf0b7c55fa 100644
+> > > > > --- a/include/linux/arch_topology.h
+> > > > > +++ b/include/linux/arch_topology.h
+> > > > > @@ -99,6 +99,7 @@ void update_siblings_masks(unsigned int cpu);
+> > > > >  void remove_cpu_topology(unsigned int cpuid);
+> > > > >  void reset_cpu_topology(void);
+> > > > >  int parse_acpi_topology(void);
+> > > > > +void freq_inv_set_max_ratio(int cpu, u64 max_rate);
+> > > > >  #endif
+> > > > >
+> > > > >  #endif /* _LINUX_ARCH_TOPOLOGY_H_ */
+> > > > > --
+> > > > > 2.34.1
+> > > > >
