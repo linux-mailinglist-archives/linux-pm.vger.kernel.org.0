@@ -2,67 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 737507DF306
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Nov 2023 13:59:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E8A7DF41E
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Nov 2023 14:42:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234890AbjKBM7H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Nov 2023 08:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51576 "EHLO
+        id S1376642AbjKBNm4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Nov 2023 09:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjKBM7G (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Nov 2023 08:59:06 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CBC125
-        for <linux-pm@vger.kernel.org>; Thu,  2 Nov 2023 05:58:58 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6bd32d1a040so944647b3a.3
-        for <linux-pm@vger.kernel.org>; Thu, 02 Nov 2023 05:58:58 -0700 (PDT)
+        with ESMTP id S1376644AbjKBNmy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Nov 2023 09:42:54 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEAB283
+        for <linux-pm@vger.kernel.org>; Thu,  2 Nov 2023 06:42:46 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-5406c099cebso1497906a12.2
+        for <linux-pm@vger.kernel.org>; Thu, 02 Nov 2023 06:42:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698929938; x=1699534738; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nda+509MTdCcAVWnvqFmQxdRWuc9tM4Iop32+RA3uJI=;
-        b=RmcStXAWix7qlknAkqx5yQFYCAJVukqqHWjujWeya71mEuNsb5KxZRSS6wnLFy6QYr
-         OGEfTOjvyjOISMhyd1Qa1nBUrt4q3M6UzSHcvMEjuMEQAG5QS2g1NXJlTetEX22Uh1+q
-         s5q9q/WweykMqTJGu6dsFii1SpCkY32z0d35A5YVXtYcWG8TjSn/YX99GAiUixIb/lhj
-         BN/1ibxP0K7yCzQRmNyQzCoJycAz0Eah6NqwTYzU9JQYzHy+GTf4dVfQ7+SN3hFcnQEP
-         qpY34sqA0E2rw5HUHRf6hhGa5RoXBv9bM2dkSndKvV4NvMXp5b1FKc2sTWQXHUYa1FBJ
-         u1iw==
+        d=linaro.org; s=google; t=1698932565; x=1699537365; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iJQ2jo+b5Qkq3Y2Odwegmv33MoxIrem3qGRlD2iLbtw=;
+        b=Ce9hs8W5DSYifNslmuMMVmrcGY7cV/myUctHz7IrMMMgUjRmiKNjG738CnbfUSySz7
+         VOXdzGDFZzH+WnfzMU7vVNPOLfSWOnzVASQiIMIBEZFo13t+4SXFXBynHQTTq1vFRxSd
+         w08TifiSdI4Q+sL5C9smKqj01rmX5uqtXmeVc1zZKCT2hnGA2Sie+wh3NVuo3XUMsC5I
+         TDZn2nSaDV4AqvweRcKdsGyJhUpdQuRgZR/BxGsT2Ddo+o/TFUZo/uHQpouqhUgm+Wkz
+         h7ZnZk8b5+f7+kaP6HRdU79a4QDlXxR5C4yEQ8QP9XfPsEwd+sEq6wVsU6mTBNuA7Iex
+         RgiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698929938; x=1699534738;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nda+509MTdCcAVWnvqFmQxdRWuc9tM4Iop32+RA3uJI=;
-        b=KMwdp1v69PNCJOBml12kxcDIWn0X3DMl54orlI26aAo6AC8+Z+P9pSVORo9GII36dk
-         yFiV9jy86/7RyWBBU88wo5Qe9L4C0pgVXbZ8n8HF28TI/+/iHtxW0gNZ6DDTO0+Fih+H
-         Y552QEMQjDXYMWcxAS9Gjo/XjrLt3ZDsZhIT1PGLvaNo4BKFDBA8b3/AyYDRMn6RR0Y+
-         VYE8vEvmc+VJZ/XCY+9Qves47HLMd/MvNHWP0yXYcRdjjTAY7Ovy+Mp0v6E5Qj4Xui4U
-         EzjgisUYIT+OAVQaMw9LW14+t0CgVKBvBFLS1LLuVU9iZ+JfqFQHaKzTEp5m1aI18Gzj
-         E4TQ==
-X-Gm-Message-State: AOJu0Yw6WM7uP0DpqT7K2hdun8zdHRdXX+oDKgFRnXb8PVcvOcv+B4sx
-        15zPqhKeRg/ORhKT4XxtZ8xR0UVccquw5pNnqPM0CQ==
-X-Google-Smtp-Source: AGHT+IGcERc9A5+LQJd0yCaWrk5coa9BWF3xAQl9PA2emohs1RVO0PyRtm3wTujla4WbJcSj/gYbaELHViLae3BeBtU=
-X-Received: by 2002:a05:6a20:7d88:b0:16b:8067:23a7 with SMTP id
- v8-20020a056a207d8800b0016b806723a7mr23055795pzj.24.1698929937710; Thu, 02
- Nov 2023 05:58:57 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1698932565; x=1699537365;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=iJQ2jo+b5Qkq3Y2Odwegmv33MoxIrem3qGRlD2iLbtw=;
+        b=Lc2ETuxlpjiCY+T1/3HaGJ/mjyNsBmdv9g+DNY7HPicKMuGMOCl04oEToP0eq5d3li
+         VWMceC5HtR5KyLGuGWxf3Z4rYcXzUFG33ZU/D4bC9VpDr/1dN8HtebfRYyXUJpA8Iu6Z
+         9Bt5GdkQ0exsTiOJjjwfkYygjE3I1kg9gTMap8ZatY8ylrUpaf1gEXaFGW+WOHhmjFID
+         AIG4NAQhcCByMIKXgAP8DJYxS+Jmf0GN5huldGT0kI1qh0dvvF97bfvKKljXvEzLbHv9
+         yssv76BLmPowdkmVBGCL92CzHImBtWkxQNHuUDjZ2EaHAK1NqpLjq1dAra3/mAMvyptR
+         +VhQ==
+X-Gm-Message-State: AOJu0Ywr1UzWlBwv2rpH2q9/U/Ojvf9aV1z9rqE74lH3dqsxJvFd4PvG
+        Tnwh/HB3d+vGKMSvGT6YLSd22A==
+X-Google-Smtp-Source: AGHT+IFB81CxcdzPfZmMQ4mqrKjuc+lV3+TUt6zJu2uTS9EGvGvTM7v+feVJ//Z6zFzUeAIfOr+stA==
+X-Received: by 2002:a17:907:3601:b0:9c6:c987:4434 with SMTP id bk1-20020a170907360100b009c6c9874434mr3996848ejc.45.1698932565099;
+        Thu, 02 Nov 2023 06:42:45 -0700 (PDT)
+Received: from [192.168.1.118] (abyj199.neoplus.adsl.tpnet.pl. [83.9.29.199])
+        by smtp.gmail.com with ESMTPSA id kq2-20020a170906abc200b009b95787eb6dsm1149466ejb.48.2023.11.02.06.42.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Nov 2023 06:42:44 -0700 (PDT)
+Message-ID: <b00d10a9-136a-20a6-f9da-767f249a838a@linaro.org>
+Date:   Thu, 2 Nov 2023 14:42:43 +0100
 MIME-Version: 1.0
-References: <20231026170913.32605-1-vincent.guittot@linaro.org>
- <20231026170913.32605-2-vincent.guittot@linaro.org> <c9e89355-9503-4623-9320-e4a4f57dcd98@arm.com>
-In-Reply-To: <c9e89355-9503-4623-9320-e4a4f57dcd98@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Thu, 2 Nov 2023 13:58:46 +0100
-Message-ID: <CAKfTPtDB50ytNap_XhiNtopZ8KLMVvJEspaEfsTOXS_TPKtkaA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] sched/schedutil: rework performance estimation
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, rafael@kernel.org,
-        viresh.kumar@linaro.org, qyousef@layalina.io,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        lukasz.luba@arm.com, wyes.karny@amd.com, beata.michalska@arm.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH 1/9] interconnect: qcom: Make qnoc_remove return void
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        kernel@pengutronix.de
+References: <20231031222851.3126434-11-u.kleine-koenig@pengutronix.de>
+ <20231031222851.3126434-12-u.kleine-koenig@pengutronix.de>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20231031222851.3126434-12-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,45 +77,25 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 2 Nov 2023 at 13:03, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
->
-> On 26/10/2023 19:09, Vincent Guittot wrote:
->
-> [...]
->
-> > @@ -153,14 +152,38 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
-> >       return cpufreq_driver_resolve_freq(policy, freq);
-> >  }
-> >
-> > +unsigned long sugov_effective_cpu_perf(int cpu, unsigned long actual,
-> > +                              unsigned long min,
-> > +                              unsigned long max)
-> > +{
-> > +     unsigned long target;
-> > +     struct rq *rq = cpu_rq(cpu);
-> > +
-> > +     if (rt_rq_is_runnable(&rq->rt))
-> > +             return max;
-> > +
-> > +     /* Provide at least enough capacity for DL + IRQ */
-> > +     target = min;
-> > +
-> > +     actual = map_util_perf(actual);
-> > +     /* Actually we don't need to target the max performance */
-> > +     if (actual < max)
-> > +             max = actual;
-> > +
-> > +     /*
-> > +      * Ensure at least minimum performance while providing more compute
-> > +      * capacity when possible.
-> > +      */
-> > +     return max(target, max);
->
-> The superfluous `unsigned long target` is still there?
 
-Yeah, I forgot to add the change in this version but it's in the next one
 
->
->   return max(min, max) is much cleaer.
->
-> [...]
+On 31/10/2023 23:28, Uwe Kleine-König wrote:
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is ignored (apart
+> from emitting a warning) and this typically results in resource leaks.
+> 
+> To improve here there is a quest to make the remove callback return
+> void. In the first step of this quest all drivers are converted to
+> .remove_new(), which already returns void. Eventually after all drivers
+> are converted, .remove_new() will be renamed to .remove().
+> 
+> Several interconnect/qcom drivers use qnoc_remove() as remove callback.
+> Make this function return void (instead of unconditionally zero) and
+> adapt the drivers using this function accordingly.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
