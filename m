@@ -2,172 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B66E97DE825
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Nov 2023 23:34:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B667DEB28
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Nov 2023 04:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235031AbjKAWe0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Nov 2023 18:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54342 "EHLO
+        id S1346835AbjKBDJg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Nov 2023 23:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232848AbjKAWeZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Nov 2023 18:34:25 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88E1210F;
-        Wed,  1 Nov 2023 15:34:22 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D673F2F4;
-        Wed,  1 Nov 2023 15:35:03 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 073F43F64C;
-        Wed,  1 Nov 2023 15:34:19 -0700 (PDT)
-Message-ID: <9c6f1e12-ed49-4b3d-ad20-cf2b32741836@arm.com>
-Date:   Wed, 1 Nov 2023 23:34:18 +0100
+        with ESMTP id S1347265AbjKBDJe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Nov 2023 23:09:34 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F409F;
+        Wed,  1 Nov 2023 20:09:32 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9c3aec5f326so311392866b.1;
+        Wed, 01 Nov 2023 20:09:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698894570; x=1699499370; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=3Ws5cIdqhbDjyHMeqOLI87dAIVT3SXF9kKQ0h2q3cUw=;
+        b=STUw6btNTuZQ25gfQDNmqhEvQpFF81DZhTirFbU8F0GOW9YiT4OZFGBNItMnHbXG79
+         dV8qztqc4mNAKJqneKNgjkrrKO7+FLULvT9Ugvjp8D8E3+yq2WUGRsKuaucP/r12Oc+F
+         IPFcjzz1/uskoUj5p+BJwSpzzK6NIdTDJD/aaD+SRTUdLxrgSVNI6a2Duw7nzDfDdAIF
+         9At/VB+VUV244lVL5sXrqAtbg51zUzGTOR2Ckwai0+8bJxg8an+Cfc2OSYAvuVcJJFxT
+         kyD0rzG59XpxvVJkcA9NRD1pSUtVR/bI83jQ2aDvR0hGp4mhwaOPKdmS7AB5WaHKYxOS
+         QpbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698894570; x=1699499370;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3Ws5cIdqhbDjyHMeqOLI87dAIVT3SXF9kKQ0h2q3cUw=;
+        b=FS6jPiD9ruMo2F1bBR6OWVujwrhzCxGRFLfJ9lcAG7iJ/cSvXp6MsPnSNvb8NOcmVi
+         e5EvNTTyiez72jpLHdfcYKmi9hetIaL9vUuzRwHkb80kcqb7Bw9jchF0K/tUiFiRpy9R
+         J3bWmgx6jpTOXPf8KndzgVmW1DrkiHESPG8sa0bxJmkY/I4ZD7unexBG4joxzL2ylAIK
+         ViO3INJ8DRMKY8GoTS/Q3wHfNZdUR4tgKrAtNJTezy1FyEIuUdCLEunJg2ThoTdvo26v
+         mkZzBljRtRWjbZ1tddtjvVogswzev/8hI/4wulVRsUkSy3v4XtZmlhTv7LW0Fn2QWYLg
+         VtEw==
+X-Gm-Message-State: AOJu0YxEGFdZHPA1kJpkxOvJtm/MOmDCfPGlkFIR3pogIljdbh8v7QI2
+        eB1YXzle2XwJ+ZRVDDnSj9yfYNJqEAsjYWR9vQY=
+X-Google-Smtp-Source: AGHT+IFAtl+rLYtejtLai72vFFnNvc5TovGXtJmqRU+tQdEzKZe5Vm43nbzb/yHXv0fz4InrCD418r/OL1G6d6rWDgM=
+X-Received: by 2002:a17:906:248e:b0:9db:6437:ef42 with SMTP id
+ e14-20020a170906248e00b009db6437ef42mr751502ejb.18.1698894570207; Wed, 01 Nov
+ 2023 20:09:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 3/6] sched/fair: Use CFS util_avg_uclamp for
- utilization and frequency
-Content-Language: en-US
-To:     Hongyan Xia <Hongyan.Xia2@arm.com>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Qais Yousef <qyousef@layalina.io>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Christian Loehle <christian.loehle@arm.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <cover.1696345700.git.Hongyan.Xia2@arm.com>
- <b2fc40b143f90ce652a02950503cbe744bc1d112.1696345700.git.Hongyan.Xia2@arm.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <b2fc40b143f90ce652a02950503cbe744bc1d112.1696345700.git.Hongyan.Xia2@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   sean yang <seanyang230@gmail.com>
+Date:   Thu, 2 Nov 2023 11:09:18 +0800
+Message-ID: <CADGqjFLEJ8WK+_DHJo4APfJGkDf8PLNRR0JboEVk2TL2oC2iog@mail.gmail.com>
+Subject: [PATCH] driver: thermal: simplify the traverse of sensor in thermal_zone.
+To:     xinglong.yang@cixtech.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04/10/2023 11:04, Hongyan Xia wrote:
-> From: Hongyan Xia <hongyan.xia2@arm.com>
-> 
-> Switch to the new util_avg_uclamp for task and runqueue utilization.
-> Since util_est() calls task_util(), this means util_est is now also a
-> clamped value.
+The number of sensor in a thermal zone needs to be greater than zero
+and equal to one. Add the opinion when the number of sensor is greater
+than one in a thermal zone.
 
-s/util_est()/task_util_est()
+There is also no need to traverse the sensor in the thermal zone,
+because there is only one sensor on one thermal zone.
 
-but task_util_est() is max(task_util(p), _task_util_est(p))
+Signed-off-by: xinglong.yang <xinglong.yang@cixtech.com>
+---
+ drivers/thermal/thermal_of.c | 34 +++++++++++++++++-----------------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
 
-So I don't immediately spot why util_est is a clamped value as well now.
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index e615f735f4c0..a405754c42cd 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -186,6 +186,7 @@ static struct device_node
+*of_thermal_zone_find(struct device_node *sensor, int
+  for_each_available_child_of_node(np, tz) {
 
-We have a naming mismatch between CPU and task related function on this
-level: cpu_util() vs. task_util_est().
+  int count, i;
++ int ret;
 
-> Now that we have the sum aggregated CFS util value, we do not need to
-> consult uclamp buckets to know how the frequency should be clamped. We
-> simply look at the aggregated top level root_cfs_util_uclamp to know
-> what frequency to choose. Because we simulate PELT decay in
-> root_cfs_util_uclamp anyway, there's no need in cpufreq_schedutil.c to
-> avoid premature frequency drops.
-> 
-> Consequently, there is no need for uclamp_rq_util_with(). This function
-> takes the un-clamped util value and sends it through various clamping
-> filters to get the final value. However, util_avg_uclamp is propagated
-> with clamping in mind already, so it does not need to be clamped again.
-> 
-> TODO: There are two major caveats in this patch.
-> 1. At the moment sum aggregation does not consider RT tasks. The avg_rt
->    signal considers all RT tasks on this rq as a single entity, which
->    means the utilization of individual RT tasks is not tracked
->    separately. If we want to use sum aggregation, we might have to track
->    utilization of RT tasks individually.
+  count = of_count_phandle_with_args(tz, "thermal-sensors",
+     "#thermal-sensor-cells");
+@@ -193,26 +194,25 @@ static struct device_node
+*of_thermal_zone_find(struct device_node *sensor, int
+  pr_err("%pOFn: missing thermal sensor\n", tz);
+  tz = ERR_PTR(-EINVAL);
+  goto out;
++ } else if (count > 1) {
++ pr_err("%pOFn: number of thermal sensor greater than one\n", tz);
++ tz = ERR_PTR(-EINVAL);
++ goto out;
+  }
 
-Not sure if the RT class will except PELT task tracking (plus there is
-CONFIG_RT_GROUP_SCHED too).
+- for (i = 0; i < count; i++) {
+-
+- int ret;
+-
+- ret = of_parse_phandle_with_args(tz, "thermal-sensors",
+- "#thermal-sensor-cells",
+- i, &sensor_specs);
+- if (ret < 0) {
+- pr_err("%pOFn: Failed to read thermal-sensors cells: %d\n", tz, ret);
+- tz = ERR_PTR(ret);
+- goto out;
+- }
++ ret = of_parse_phandle_with_args(tz, "thermal-sensors",
++ "#thermal-sensor-cells",
++ 0, &sensor_specs);
++ if (ret < 0) {
++ pr_err("%pOFn: Failed to read thermal-sensors cells: %d\n", tz, ret);
++ tz = ERR_PTR(ret);
++ goto out;
++ }
 
-> 2. Busy time accounting in compute_energy() now takes the uclamp'ed
->    value. Ideally, it should reflect reality and use the un-clamp'ed
->    values. However, that would require maintaining both the normal and
->    uclamp'ed values for util_est. This needs to be revisited if it
->    causes real problems in practice.
-
-You could use your new rq->root_cfs_util_uclamp for eenv_pd_max_util
-(FREQUENCY_UTIL) and use rq->cfs.avg.util_avg in eenv_pd_busy_time()
-(ENERGY_UTIL).
-
-[...]
-
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index efe3848978a0..32511ee63f01 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -7402,10 +7402,12 @@ int sched_core_idle_cpu(int cpu)
->   * The DL bandwidth number otoh is not a measured metric but a value computed
->   * based on the task model parameters and gives the minimal utilization
->   * required to meet deadlines.
-> + *
-> + * The util_cfs parameter has already taken uclamp into account (unless uclamp
-> + * support is not compiled in).
->   */
->  unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
-> -				 enum cpu_util_type type,
-> -				 struct task_struct *p)
-> +				 enum cpu_util_type type)
-
-There are changes proposed in the area of uclamping right now in:
-
-https://lkml.kernel.org/r/20231026170913.32605-2-vincent.guittot@linaro.org
-
-[...]
-
->  /**
-> @@ -282,7 +281,11 @@ static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
->  	 * into the same scale so we can compare.
->  	 */
->  	boost = (sg_cpu->iowait_boost * max_cap) >> SCHED_CAPACITY_SHIFT;
-> -	boost = uclamp_rq_util_with(cpu_rq(sg_cpu->cpu), boost, NULL);
-> +	/*
-> +	 * TODO: Investigate what should be done here. In sum aggregation there
-> +	 * is no such thing as uclamp_max on a rq, so how do we cap the boost
-> +	 * value, or do we want to cap the boost frequency here at all?
-> +	 */
-
-https://lkml.kernel.org/r/20231026170913.32605-3-vincent.guittot@linaro.org
-
-is proposing to cap iowait boost with max (set in effective_cpu_util()
-and max depends on uclamp_rq_get(rq, UCLAMP_MAX) too.
-
-So you could cap iowait boost in case uclamp_rq_is_capped(), i.e. when:
-
-  if (rq->cfs.avg.util_avg > rq->root_cfs_util_uclamp + margin)
-
-[...]
-
-> @@ -7468,11 +7459,13 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
->  static unsigned long
->  cpu_util(int cpu, struct task_struct *p, int dst_cpu, int boost)
->  {
-> -	struct cfs_rq *cfs_rq = &cpu_rq(cpu)->cfs;
-> -	unsigned long util = READ_ONCE(cfs_rq->avg.util_avg);
-> +	struct rq *rq = cpu_rq(cpu);
-> +	struct cfs_rq *cfs_rq = &rq->cfs;
-> +	unsigned long util = root_cfs_util(rq);
-> +	bool capped = uclamp_rq_is_capped(rq);
->  	unsigned long runnable;
->  
-> -	if (boost) {
-> +	if (boost && !capped) {
->  		runnable = READ_ONCE(cfs_rq->avg.runnable_avg);
->  		util = max(util, runnable);
->  	}
-
-IMHO, this makes sense. Only allow runnable boosting in case the rq is
-not uclamp_max capped.
-
-[...]
+- if ((sensor == sensor_specs.np) && id == (sensor_specs.args_count ?
+-   sensor_specs.args[0] : 0)) {
+- pr_debug("sensor %pOFn id=%d belongs to %pOFn\n", sensor, id, tz);
+- goto out;
+- }
++ if ((sensor == sensor_specs.np) && id == (sensor_specs.args_count ?
++   sensor_specs.args[0] : 0)) {
++ pr_debug("sensor %pOFn id=%d belongs to %pOFn\n", sensor, id, tz);
++ goto out;
+  }
+  }
+  tz = ERR_PTR(-ENODEV);
+-- 
+2.42.0
