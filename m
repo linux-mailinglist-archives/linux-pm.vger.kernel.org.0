@@ -2,45 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 522EF7DF21B
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Nov 2023 13:16:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03FFF7DF208
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Nov 2023 13:09:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235375AbjKBMQ4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Nov 2023 08:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
+        id S229919AbjKBMJy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Nov 2023 08:09:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346548AbjKBMQk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Nov 2023 08:16:40 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A17BD198;
-        Thu,  2 Nov 2023 05:03:36 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 95CEC2F4;
-        Thu,  2 Nov 2023 05:04:18 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 899CC3F67D;
-        Thu,  2 Nov 2023 05:03:33 -0700 (PDT)
-Message-ID: <c9e89355-9503-4623-9320-e4a4f57dcd98@arm.com>
-Date:   Thu, 2 Nov 2023 13:03:32 +0100
+        with ESMTP id S229806AbjKBMJy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Nov 2023 08:09:54 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41760128;
+        Thu,  2 Nov 2023 05:09:52 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A021FC433C7;
+        Thu,  2 Nov 2023 12:09:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698926991;
+        bh=IwE9+OvFRLx91Mib23swemUFGjVhO8KF9WcxPps/jzs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=SRW8Tc5FZ8RxUVh+wdGHrbvjyKFIYpnUUNw2ZsH8qdEMiE0mEzoRZRaybRTTlYzDA
+         NlxH7vHPtKL0xnIFxITJPqC6pr4xMU7oFmTKcYVPm5Ze2CJf+qsbXtCyhhBgEvh00w
+         TUIsqio11IPhFjZK4IKJ6HTN2oFsZXKCxhHeRePwL2yuhU04m7c4LRsJL80RW1ETam
+         nT5l44sn4SnYmLPAT1/n9uVMPjd9ysMXaCtTS1NefKIW6AM40widFo4v2IC61Ui63R
+         PRm503pvXhyS2XsGk485oiiaq6n1PIo3xjnFWSZ4DiJFQb15aChjHPFh1Ie+6HXYzC
+         AQvxUrpbeF2Rw==
+Date:   Thu, 2 Nov 2023 07:09:50 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org, mani@kernel.org,
+        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, rafael@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_vbadigan@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, quic_parass@quicinc.com
+Subject: Re: [PATCH v5 5/5] PCI: qcom: Add OPP support to scale performance
+ state of power domain
+Message-ID: <20231102120950.GA115288@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] sched/schedutil: rework performance estimation
-Content-Language: en-US
-To:     Vincent Guittot <vincent.guittot@linaro.org>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, rafael@kernel.org, viresh.kumar@linaro.org,
-        qyousef@layalina.io, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     lukasz.luba@arm.com, wyes.karny@amd.com, beata.michalska@arm.com
-References: <20231026170913.32605-1-vincent.guittot@linaro.org>
- <20231026170913.32605-2-vincent.guittot@linaro.org>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20231026170913.32605-2-vincent.guittot@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231102053013.7yt7pxin5awlu7w7@vireshk-i7>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,40 +57,14 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26/10/2023 19:09, Vincent Guittot wrote:
+On Thu, Nov 02, 2023 at 11:00:13AM +0530, Viresh Kumar wrote:
+> On 01-11-23, 17:17, Bjorn Helgaas wrote:
+> > Can you expand "OPP" somewhere so we know what it stands for?  I'm
+> > sure everybody knows except me :)
+> 
+> It is "Operating Performance Points", defined here:
+> 
+> Documentation/power/opp.rst
 
-[...]
-
-> @@ -153,14 +152,38 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
->  	return cpufreq_driver_resolve_freq(policy, freq);
->  }
->  
-> +unsigned long sugov_effective_cpu_perf(int cpu, unsigned long actual,
-> +				 unsigned long min,
-> +				 unsigned long max)
-> +{
-> +	unsigned long target;
-> +	struct rq *rq = cpu_rq(cpu);
-> +
-> +	if (rt_rq_is_runnable(&rq->rt))
-> +		return max;
-> +
-> +	/* Provide at least enough capacity for DL + IRQ */
-> +	target = min;
-> +
-> +	actual = map_util_perf(actual);
-> +	/* Actually we don't need to target the max performance */
-> +	if (actual < max)
-> +		max = actual;
-> +
-> +	/*
-> +	 * Ensure at least minimum performance while providing more compute
-> +	 * capacity when possible.
-> +	 */
-> +	return max(target, max);
-
-The superfluous `unsigned long target` is still there?
-
-  return max(min, max) is much cleaer.
-
-[...]
+Thanks; I meant in the subject or commit log of the next revision, of
+course.
