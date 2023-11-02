@@ -2,101 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DB1D7DF054
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Nov 2023 11:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 675BD7DF057
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Nov 2023 11:40:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346639AbjKBKfS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Nov 2023 06:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33660 "EHLO
+        id S1346371AbjKBKkU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Nov 2023 06:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346371AbjKBKfR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Nov 2023 06:35:17 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5F1136
-        for <linux-pm@vger.kernel.org>; Thu,  2 Nov 2023 03:35:11 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20231102103508euoutp01645022da02da8af708d953204b9d799e~Tx_3LHSsL1066610666euoutp01i
-        for <linux-pm@vger.kernel.org>; Thu,  2 Nov 2023 10:35:08 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20231102103508euoutp01645022da02da8af708d953204b9d799e~Tx_3LHSsL1066610666euoutp01i
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1698921308;
-        bh=Jq2CkGwzkZthS/INfqDfza5GmIinX06fg7ozai2WyPg=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=uCtUEatTc7cb1m5tRmMz81U6kR31b4LAz/jJ5jrSuIJZ8VU8jFBo22cPiomAI4otF
-         N0Z3o40NkikNftfudJqFVOClzC6k1A+UEVK2Iz1eGYdocFMhfvmAg9MTnON4IK+xwG
-         /fy+P64f2gzgdyCJsdfgcmwrHwenYpKPsDulw7Yo=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20231102103508eucas1p1d660b46f2f487811bb5162191beb3b4f~Tx_20XxLE2095820958eucas1p12;
-        Thu,  2 Nov 2023 10:35:08 +0000 (GMT)
-X-AuditID: cbfec7f4-97dff70000022c38-4d-65437b5c055d
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id DC.8F.11320.C5B73456; Thu,  2
-        Nov 2023 10:35:08 +0000 (GMT)
-Mime-Version: 1.0
-Subject: RE: Re: [PATCH v4 8/8] thermal: exynos: use set_trips
-Reply-To: m.majewski2@samsung.com
-Sender: Mateusz Majewski <m.majewski2@samsung.com>
-From:   Mateusz Majewski <m.majewski2@samsung.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-CC:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <2c4b6c1b-b9e7-42b2-8f7b-446ebe9d15ac@arm.com>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20231102103507eucms1p4aea91982ebcc4a9a6314d9c4e03050fc@eucms1p4>
-Date:   Thu, 02 Nov 2023 11:35:07 +0100
-X-CMS-MailID: 20231102103507eucms1p4aea91982ebcc4a9a6314d9c4e03050fc
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20231025133100eucas1p14e6de58e52560d165bdb8b809e406278
-X-EPHeader: Mail
-X-ConfirmMail: N,general
-CMS-TYPE: 201P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrAKsWRmVeSWpSXmKPExsWy7djPc7ox1c6pBov/Mls8mLeNzeLw/AqL
-        qQ+fsFl833KdyWLeZ1mLva+3slt8u9LBZLHp8TVWi8u75rBZfO49wmgx4/w+JouFTS3sFmuP
-        3GW3mPtlKrPFk4d9bA78HmvmrWH02DnrLrvH4j0vmTw2repk87hzbQ+bx+Yl9R59W1Yxenze
-        JBfAEcVlk5Kak1mWWqRvl8CVcfzEfPaCN24Vd7f9YGpg/OXSxcjJISFgIvH0cztTFyMXh5DA
-        CkaJBb2/GbsYOTh4BQQl/u4QBjGFBewkLnxLASkXElCU6Nz+hg3EFhYwkjj0YheYzSZgIPHg
-        zTJ2EFtEQFXi2oW7LCAjmQX2sEqcu7KOCWIXr8SM9qcsELa0xPblWxlBbE4Ba4lLf26yQ8RF
-        JW6ufgtnvz82nxHCFpFovXeWGcIWlHjwczdUXEbi5IJlUHaxxMu1l6BqKiSOL5kONcdcYtPc
-        NawgNq+Ar8Sc41PBbBagQxf0XoWqcZF40vIKrJdZQFti2cLXzCC/MwtoSqzfpQ9R4iixYVI/
-        K4QtILHmxByoVRISW1uesEK08klM2jadGebdHfOeQL2uKnF8zyRmmNeftNxmmsCoNAsR0LOQ
-        LJ6FsHgBI/MqRvHU0uLc9NRio7zUcr3ixNzi0rx0veT83E2MwER2+t/xLzsYl7/6qHeIkYmD
-        8RCjBAezkgjvYVOHVCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8qinyqUIC6YklqdmpqQWpRTBZ
-        Jg5OqQamfjmpXbIP3tx/c/pf6vX1/4XXP09qEwr80ffPS7486SLzd/ucHtumSQUNk63TIx0k
-        mNI+Lv7gsFRvT9AXsayzT27rXxY52jLPMP5f1Gq2EK7cpfUpjfsen5zzfgqvTuH5hyu2XQr0
-        3HWn8NdZ5fiNzVkvDbn3nWpsMoy85zfNa0OOaMfRbyuWCra2rt1avuHHmw5RJh7v21fCn8qs
-        c7t4uvLHTpu6Kw/eNEXqTw+R87qz6tOGijU6ci2TJklfOzZz/vaWp8eqFl/+6l+++YjGgS/2
-        X3d4367TWNV3f13siWdOl9aFOUu6hF/ce5z5OEuC42y9yWnVBbfKrJ3LRFKEeNbfLsszLHrN
-        rB2dvemirhJLcUaioRZzUXEiANz728/TAwAA
-X-CMS-RootMailID: 20231025133100eucas1p14e6de58e52560d165bdb8b809e406278
-References: <2c4b6c1b-b9e7-42b2-8f7b-446ebe9d15ac@arm.com>
-        <20231025133027.524152-1-m.majewski2@samsung.com>
-        <20231025133027.524152-9-m.majewski2@samsung.com>
-        <CGME20231025133100eucas1p14e6de58e52560d165bdb8b809e406278@eucms1p4>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        with ESMTP id S1347152AbjKBKkT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Nov 2023 06:40:19 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4AC13A
+        for <linux-pm@vger.kernel.org>; Thu,  2 Nov 2023 03:40:13 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-5bcf83a8f6cso557039a12.2
+        for <linux-pm@vger.kernel.org>; Thu, 02 Nov 2023 03:40:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1698921613; x=1699526413; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VHJLc1G73+gqKTC2Xm9NWInBDGQy6v8U6DlQWiOstY8=;
+        b=QIFrL7WLTMG8tdpmDHHKeRgnocRyEmka3vFTaqJWE83xY5q+xV0h+UacsjBmKE9M/G
+         HP0udXAX2cvehhW82N6ufULdIJb1mcXGaSpQzPQIJJVaHFcD0Qr/II3VGjHaLLjW7DEG
+         CwiJNUJruBFm6aOE5Zo3wu3rVZ7aGpxYGCqpSUjubQVfsPX02lK68+yl6Uj9RFaAC6E4
+         OfoFa3/UjNZfydac3rjdq16g6l1nHD5yJtc17Z13tmw0GoT3H39tdaI8dGuVAGa/rKkh
+         yAOfKPXbDhCozM/DLINxx0VlPUMSCFiCW3X/9n7OiDm/49sfKAN4i0ep2LcPun7MzXqo
+         ryQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698921613; x=1699526413;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VHJLc1G73+gqKTC2Xm9NWInBDGQy6v8U6DlQWiOstY8=;
+        b=rbakGwb7WjuiqEOagP5nOWWpEMemsThHzi0awRoNFSq4H5pyGlxN3PbjNDTT5ejHxy
+         tli6g0p7nl3MJlzwcNjBsgUn6Y5oSgCTeY4otHHN95WKAGLcn6ex3Wac6saVyjpj7g0m
+         qrq9rJTRxQSH+ge0gX5ShVBaLX/pT/oH2nWqElOwU/tPjFwJSnCCN64jQQO8I8TK/Qhk
+         4bUL+AoCItJ6dM6gcZ1gJxk2kbGsmhIq86OhP/frn2QnsF4Urq2mwBL41VXa7+FJuulr
+         XByb0fKOrlW/in19dMdoh+K9sJNL4cvpYsRBBP5VCbUZoirUsHrvm/Bb5j55tdP/my96
+         PckQ==
+X-Gm-Message-State: AOJu0YzSuPfvNGCqsFcqCjF0xD7zR3zGiRo9rKxfaei2cVx3eC7HJ3hW
+        hQhCXneunNmo7kU5PpCYPFobijVEAgQPHDrNjGNN3A==
+X-Google-Smtp-Source: AGHT+IG5Fx/wk5pJZI518EDcIhQ6yyQekshydKB4BpCdePXFbqLsJh6vVHLwUIeOLqdzX/f0W5WUrKqS/GQhQnehIKs=
+X-Received: by 2002:a17:90b:1946:b0:27d:8fbd:be8c with SMTP id
+ nk6-20020a17090b194600b0027d8fbdbe8cmr16042687pjb.28.1698921613003; Thu, 02
+ Nov 2023 03:40:13 -0700 (PDT)
+MIME-Version: 1.0
+References: <20231027080400.56703-1-vincent.guittot@linaro.org>
+ <20231027080400.56703-8-vincent.guittot@linaro.org> <ZUGUvdjrpw9NHSex@e129154.nice.arm.com>
+ <CAKfTPtDDouduP57P8GH6J4qDjbKUasVRe-K0QUKcZHC2NZ+syQ@mail.gmail.com> <ZUN6K4d9FD31phbs@e129154.nice.arm.com>
+In-Reply-To: <ZUN6K4d9FD31phbs@e129154.nice.arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Thu, 2 Nov 2023 11:40:01 +0100
+Message-ID: <CAKfTPtATBHyCvGkoKrN1Y9LpWX7nb3njY2zFPiJyj2bTSfbcNw@mail.gmail.com>
+Subject: Re: [PATCH v4 7/7] arm64/amu: use capacity_ref_freq to set AMU ratio
+To:     Beata Michalska <beata.michalska@arm.com>
+Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
+        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
+        lukasz.luba@arm.com, ionela.voinescu@arm.com,
+        pierre.gondois@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org, conor.dooley@microchip.com,
+        suagrfillet@gmail.com, ajones@ventanamicro.com, lftan@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,123 +80,111 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Thu, 2 Nov 2023 at 11:31, Beata Michalska <beata.michalska@arm.com> wrote:
+>
+> Hi Vincent,
+>
+> On Wed, Nov 01, 2023 at 10:04:27AM +0100, Vincent Guittot wrote:
+> > Hi Beata,
+> >
+> > On Wed, 1 Nov 2023 at 00:59, Beata Michalska <beata.michalska@arm.com> wrote:
+> > >
+> > > On Fri, Oct 27, 2023 at 10:04:00AM +0200, Vincent Guittot wrote:
+> > > > Use the new capacity_ref_freq to set the ratio that is used by AMU for
+> > > > computing the arch_scale_freq_capacity().
+> > > > This helps to keep everything aligned using the same reference for
+> > > > computing CPUs capacity.
+> > > >
+> >
+> > [..]
+> >
+> > > > @@ -381,6 +385,9 @@ void topology_init_cpu_capacity_cppc(void)
+> > > >       }
+> > > >
+> > > >       for_each_possible_cpu(cpu) {
+> > > > +             freq_inv_set_max_ratio(cpu,
+> > > > +                                    per_cpu(capacity_ref_freq, cpu) * HZ_PER_KHZ);
+> > > > +
+> > > The capacity_ref_freq set earlier will still lead to units mismatch,
+> > > as at the point of calling topology_init_cpu_capacity_cppc the lowest & nominal
+> > > frequencies will be provided in MHz (unless I have missed smth).
+> >
+> > I don't get your point:
+> > the unit of per_cpu(capacity_freq_ref, cpu) is Khz
+> >
+> > For cppc, we have
+> > per_cpu(capacity_freq_ref, cpu) = cppc_perf_to_khz(&perf_caps,
+> > raw_capacity[cpu]);
+> >
+> > freq_inv_set_max_ratio() uses
+> > arch_timer_get_rate() which returns a freq in Hz
+> > and
+> > per_cpu(capacity_freq_ref, cpu) * HZ_PER_KHZ. to get a freq in Hz too.
+> >
+> Apologies, I should have been more verbose here.
+> Before the change made in [1] the cppc_perf_to_khz was indeed operating on
+> lowest & nominal frequency values expressed in kHZ, as those were appropriately
+> amended:
+> cppc_cpufreq_cpu_init
+>         |__> cppc_cpufreq_get_cpu_data:
+>                 |__>    ...
+>                         /* Convert the lowest and nominal freq from MHz to KHz */
+>                         cpu_data->perf_caps.lowest_freq *= 1000;
+>                         cpu_data->perf_caps.nominal_freq *= 1000;
+>
+> So far cppc_perf_to_khz (previously cppc_cpufreq_perf_to_khz) was being called
+> with the post-processed CPC data (through cppc_cpufreq_get_cpu_data) and thus
+> guaranteed to be operating on values in kHz.
+> With the new changes the cppc_perf_to_khz will operate on raw CPC data,
+> which are expressed in MHz.(as per acpi spec)
 
-> > +=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20th=20&=3D=20=7E(0xff=20<<=200);=0D=
-=0A>=20>=20+=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20th=20=7C=3D=20temp_to_code(=
-data,=20temp)=20<<=200;=0D=0A>=C2=A0=0D=0A>=20This=202-line=20pattern=20rep=
-eats=20a=20few=20times.=20It=20looks=20like=20a=20nice=20cadidate=0D=0A>=20=
-for=20an=20inline=20function=20which=20can=20abstract=20that.=20Something=
-=20like:=0D=0A>=C2=A0=0D=0A>=20val=20=3D=20update_temp_value(data,=20temp,=
-=20threshold,=20LOW_TEMP_SHIFT)=0D=0A>=C2=A0=0D=0A>=20Assisted=20with=20the=
-=20macros=20=7BLOW=7CHIGH=7CCRIT=7D_TEMP_SHIFT,=20the=20code=0D=0A>=20would=
-=20look=20less=20convoluted=20IMO.=0D=0A>=20(The=20old=20code=20with=20the=
-=20multiplication=20for=20the=20shift=20value=20wasn't=0D=0A>=20cleaner=20n=
-or=20faster).=0D=0A=0D=0AWhat=20would=20you=20think=20about=20something=20l=
-ike=20this?=0D=0A=0D=0Astatic=20void=20exynos_tmu_update_temp(struct=20exyn=
-os_tmu_data=20*data,=20int=20reg_off,=0D=0A=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0int=20bit_off,=20u8=
-=20temp)=0D=0A=7B=0D=0A=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20u32=20th;=0D=0A=
-=0D=0A=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20th=20=3D=20readl(data->base=20+=
-=20reg_off);=0D=0A=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20th=20&=3D=20=7E(0xff=
-=20<<=20bit_off);=0D=0A=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20th=20=7C=3D=20te=
-mp_to_code(data,=20temp)=20<<=20bit_off;=0D=0A=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20writel(th,=20data->base=20+=20reg_off);=0D=0A=7D=0D=0A=0D=0AAnd=20=
-then,=20it=20would=20be=20used=20like=20this:=0D=0A=0D=0Astatic=20void=20ex=
-ynos4412_tmu_set_crit_temp(struct=20exynos_tmu_data=20*data,=20u8=20temp)=
-=0D=0A=7B=0D=0A=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20exynos_tmu_update_temp(d=
-ata,=20EXYNOS_THD_TEMP_RISE,=2024,=20temp);=0D=0A=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20exynos_tmu_update_bit(data,=20EXYNOS_TMU_REG_CONTROL,=0D=0A=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20EXYNOS_TMU_THERM_T=
-RIP_EN_SHIFT,=20true);=0D=0A=7D=0D=0A=0D=0AGranted=20it's=20not=20as=20clea=
-r=20as=20if=20we=20had=20some=20macro=20like=20CRIT_TEMP_SHIFT,=20but=0D=0A=
-we=20would=20need=20more=20than=20one=20variant=20anyway,=20as=20Exynos=205=
-433=20uses=20different=0D=0Avalues=20of=20reg_off,=20and=20the=20new=20func=
-tion=20looks=20short=20and=20inviting=20IMHO.=0D=0A=0D=0A>=20>=20-static=20=
-void=20exynos7_tmu_set_trip_temp(struct=20exynos_tmu_data=20*data,=0D=0A>=
-=20>=20-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20int=20trip,=20u8=20temp)=0D=0A>=20>=20+static=
-=20void=20exynos7_tmu_update_temp(struct=20exynos_tmu_data=20*data,=20u8=20=
-temp,=0D=0A>=20>=20+=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20int=20idx,=20bool=20rise)=0D=0A>=20>=C2=A0=
-=20=C2=A0=7B=0D=0A>=20>=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0u=
-nsigned=20int=20reg_off,=20bit_off;=0D=0A>=20>=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0u32=20th;=0D=0A>=20>=20+=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20void=20__iomem=20*reg;=0D=0A>=20>=C2=A0=20=C2=A0=0D=0A>=20>=20-=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20reg_off=20=3D=20((7=20-=20trip)=20/=202)=
-=20*=204;=0D=0A>=20>=20-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20bit_off=20=3D=
-=20((8=20-=20trip)=20%=202);=0D=0A>=20>=20+=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20reg_off=20=3D=20((7=20-=20idx)=20/=202)=20*=204;=0D=0A>=C2=A0=0D=0A>=
-=20Why=20can't=20we=20just=20have=20a=20set=20of=20defined=20register=20mac=
-ros=20and=20pick=20one=0D=0A>=20in=20some=20small=20function?=0D=0A>=20A=20=
-lot=20of=20operations=20here,=20also=20some=20assumption.=0D=0A>=C2=A0=0D=
-=0A>=20>=20+=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20bit_off=20=3D=20((8=20-=20i=
-dx)=20%=202);=0D=0A>=C2=A0=0D=0A>=20So=20this=20can=20only=20be=200=20or=20=
-1=20and=20than=20it's=20used=20for=20the=20shift=0D=0A>=20multiplication.=
-=20Also=20I=20don't=20know=20the=20history=20of=20older=20code=20and=0D=0A>=
-=20if=20it=20was=20missed=20after=20some=20cleaning,=20but=20'idx=20%=202'=
-=20gives=0D=0A>=20equal=20values=20but=20w/o=20subtraction.=0D=0A>=C2=A0=0D=
-=0A>=20BTW,=20the=20code=20assumes=20the=20'idx'=20values=20are=20under=20c=
-ontrol=20somewhere=20else.=0D=0A>=20Is=20that=20because=20the=20DT=20make=
-=20sure=20in=20the=20schema=20that=20the=20range=20cannot=20be=0D=0A>=20too=
-=20big?=0D=0A>=20What=20are=20the=20possible=20values=20for=20'idx'?=0D=0A=
-=0D=0AIn=20the=20old=20code,=20the=20values=20of=20trip=20(which=20is=20the=
-=20same=20thing,=20I=20will=0D=0Achange=20the=20name=20back=20from=20idx)=
-=20were=20limited=20by=20the=20value=20of=20data->ntrip,=0D=0Awhich=20was=
-=20always=208=20(value=20is=20per=20SoC).=20In=20the=20new=20code,=20there=
-=20are=20only=20three=0D=0Avariants:=0D=0A=0D=0Astatic=20void=20exynos7_tmu=
-_set_low_temp(struct=20exynos_tmu_data=20*data,=20u8=20temp)=0D=0A=7B=0D=0A=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20exynos7_tmu_update_temp(data,=20temp,=
-=200,=20false);=0D=0A=7D=0D=0A=0D=0Astatic=20void=20exynos7_tmu_set_high_te=
-mp(struct=20exynos_tmu_data=20*data,=20u8=20temp)=0D=0A=7B=0D=0A=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20exynos7_tmu_update_temp(data,=20temp,=201,=20tru=
-e);=0D=0A=7D=0D=0A=0D=0Astatic=20void=20exynos7_tmu_set_crit_temp(struct=20=
-exynos_tmu_data=20*data,=20u8=20temp)=0D=0A=7B=0D=0A=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20/*=0D=0A=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0*=20Like=
-=20Exynos=204210,=20Exynos=207=20does=20not=20seem=20to=20support=20critica=
-l=20temperature=0D=0A=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0*=20handling=
-=20in=20hardware.=20Again,=20we=20still=20set=20a=20separate=20interrupt=20=
-for=20it.=0D=0A=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0*/=0D=0A=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20exynos7_tmu_update_temp(data,=20temp,=207,=20tru=
-e);=0D=0A=7D=0D=0A=0D=0ATo=20be=20fair,=20considering=20the=20values=20are=
-=20constant=20like=20this,=20I=20should=20probably=0D=0Ajust=20do=20the=20c=
-alculations=20myself=20and=20then=20in=20code=20just=20call=20exynos_tmu_up=
-date_temp=0D=0A(from=20above)=20and=20exynos_tmu_update_bit,=20like=20on=20=
-all=20other=20SoCs.=20I=20guess=20I=20were=0D=0Aa=20bit=20too=20scared=20to=
-=20touch=20Exynos=207=20code...=0D=0A=0D=0A>=20>=20-=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20if=20(on)=20=7B=0D=0A>=20>=20-=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20for=20(i=20=3D=200;=20i=20<=20dat=
-a->ntrip;=20i++)=20=7B=0D=0A>=20>=20-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20if=
-=20(thermal_zone_get_trip(tz,=20i,=20&trip))=0D=0A>=20>=20-=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20continue;=0D=0A>=20>=
-=20-=0D=0A>=20>=20-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20interrupt_en=20=7C=3D=
-=0D=0A>=20>=20-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20(1=20<<=20(EXYNOS_TMU_INTEN_RISE0_SHIFT=20+=20i=20*=204));=0D=0A>=
-=20>=20-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=7D=0D=0A>=20>=20-=0D=0A>=20>=20-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20if=20(data->soc=20=21=3D=20SOC_ARCH_EXY=
-NOS4210)=0D=0A>=20>=20-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20interrupt_en=20=7C=
-=3D=0D=0A>=20>=20-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20interrupt_en=20<<=20EXYNOS_TMU_INTEN_FALL0_SHIFT;=0D=0A>=20>=20=
--=0D=0A>=20>=20+=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20if=20(on)=0D=0A>=20>=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0con=20=7C=3D=20(1=20<<=20EXYNOS_TMU_CORE_EN_SHIFT);=0D=0A>=20>=20-=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=7D=20else=20=7B=0D=0A>=20>=20+=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20else=0D=0A>=20>=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0con=20&=3D=20=7E(1=
-=20<<=20EXYNOS_TMU_CORE_EN_SHIFT);=0D=0A>=C2=A0=0D=0A>=20Please=20also=20co=
-nsider=20the=20BIT()=20helper=20here=20and=20above...=0D=0A=0D=0AWill=20do,=
-=20but=20should=20I=20do=20this=20in=20a=20separate=20patch=20in=20these=20=
-cases?=20I=20don't=20touch=0D=0Athe=20con=20lines=20otherwise,=20and=20this=
-=20patch=20is=20already=20humongous.=0D=0A=0D=0AThank=20you=20:)=0D=0AMateu=
-sz
+Ok, thanks for the explanation. I haven't noticed that cppc_cpufreq
+was processing the raw CPC data  (*1000) before using them. I'm going
+to fix that.
+
+
+>
+> ---
+> Best Regards
+> B.
+> > > This means that use of both, the capacity_ref_freq and the arch_freq_scale
+> > > will generate unexpected results, so I guess this should get amended in the
+> > > preceding patch (?) [1]
+> > >
+> > > ---
+> > > BR
+> > > B.
+> > >
+> > > [1] https://lore.kernel.org/linux-arm-kernel/20231027080400.56703-4-vincent.guittot@linaro.org/T/#m42daa167097edc190b1cfc05382c385ed801d909
+> > >
+> > > >               capacity = raw_capacity[cpu];
+> > > >               capacity = div64_u64(capacity << SCHED_CAPACITY_SHIFT,
+> > > >                                    capacity_scale);
+> > > > @@ -422,8 +429,11 @@ init_cpu_capacity_callback(struct notifier_block *nb,
+> > > >
+> > > >       cpumask_andnot(cpus_to_visit, cpus_to_visit, policy->related_cpus);
+> > > >
+> > > > -     for_each_cpu(cpu, policy->related_cpus)
+> > > > +     for_each_cpu(cpu, policy->related_cpus) {
+> > > >               per_cpu(capacity_ref_freq, cpu) = policy->cpuinfo.max_freq;
+> > > > +             freq_inv_set_max_ratio(cpu,
+> > > > +                                    per_cpu(capacity_ref_freq, cpu) * HZ_PER_KHZ);
+> > > > +     }
+> > > >
+> > > >       if (cpumask_empty(cpus_to_visit)) {
+> > > >               topology_normalize_cpu_scale();
+> > > > diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
+> > > > index 38ca6c76af56..ffdf0b7c55fa 100644
+> > > > --- a/include/linux/arch_topology.h
+> > > > +++ b/include/linux/arch_topology.h
+> > > > @@ -99,6 +99,7 @@ void update_siblings_masks(unsigned int cpu);
+> > > >  void remove_cpu_topology(unsigned int cpuid);
+> > > >  void reset_cpu_topology(void);
+> > > >  int parse_acpi_topology(void);
+> > > > +void freq_inv_set_max_ratio(int cpu, u64 max_rate);
+> > > >  #endif
+> > > >
+> > > >  #endif /* _LINUX_ARCH_TOPOLOGY_H_ */
+> > > > --
+> > > > 2.34.1
+> > > >
