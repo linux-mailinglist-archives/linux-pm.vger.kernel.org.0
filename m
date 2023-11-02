@@ -2,135 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90B667DEB28
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Nov 2023 04:09:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B19877DEC46
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Nov 2023 06:30:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346835AbjKBDJg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Nov 2023 23:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36436 "EHLO
+        id S1348542AbjKBFaW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Nov 2023 01:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347265AbjKBDJe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Nov 2023 23:09:34 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F409F;
-        Wed,  1 Nov 2023 20:09:32 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9c3aec5f326so311392866b.1;
-        Wed, 01 Nov 2023 20:09:31 -0700 (PDT)
+        with ESMTP id S1348523AbjKBFaW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Nov 2023 01:30:22 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA4412E
+        for <linux-pm@vger.kernel.org>; Wed,  1 Nov 2023 22:30:16 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id 98e67ed59e1d1-280137f1a1bso549271a91.1
+        for <linux-pm@vger.kernel.org>; Wed, 01 Nov 2023 22:30:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698894570; x=1699499370; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=3Ws5cIdqhbDjyHMeqOLI87dAIVT3SXF9kKQ0h2q3cUw=;
-        b=STUw6btNTuZQ25gfQDNmqhEvQpFF81DZhTirFbU8F0GOW9YiT4OZFGBNItMnHbXG79
-         dV8qztqc4mNAKJqneKNgjkrrKO7+FLULvT9Ugvjp8D8E3+yq2WUGRsKuaucP/r12Oc+F
-         IPFcjzz1/uskoUj5p+BJwSpzzK6NIdTDJD/aaD+SRTUdLxrgSVNI6a2Duw7nzDfDdAIF
-         9At/VB+VUV244lVL5sXrqAtbg51zUzGTOR2Ckwai0+8bJxg8an+Cfc2OSYAvuVcJJFxT
-         kyD0rzG59XpxvVJkcA9NRD1pSUtVR/bI83jQ2aDvR0hGp4mhwaOPKdmS7AB5WaHKYxOS
-         QpbQ==
+        d=linaro.org; s=google; t=1698903015; x=1699507815; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JKCEzf5yVHcpzkImikTuiO91O0VK+CR5uA5YIy3x1ew=;
+        b=kU2w6Jhj8XZy/W2bEICFrHfug8qqWmT1twPkLkSsHbXASZ4b4Nmw4XyfHANykw7ON2
+         ZANemY5oNRoXQQEB4XxPfUS5+kr6dZtGp+WGchK1phtfc+IRPMw9YtB/GRQPcn/tf+Gn
+         sch+K7b7OAPTvYrSumF/83GyzifyKRfKCVy9WrrdK1vGPFHHCarMjMJYQ2bu1usCQSeP
+         lcKaxfYC88Y3iC3Uet/q1llpCFpBEk9teiqCIvxHZNevLw4sVBML4t04kaW6qEuivMiT
+         asCfSojo9rkXEW1KJ3/IqI/iS7Ig7DxtojT/gguGFCWLRjYLxRe45Te7XsotbqSBVUEM
+         MPiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698894570; x=1699499370;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3Ws5cIdqhbDjyHMeqOLI87dAIVT3SXF9kKQ0h2q3cUw=;
-        b=FS6jPiD9ruMo2F1bBR6OWVujwrhzCxGRFLfJ9lcAG7iJ/cSvXp6MsPnSNvb8NOcmVi
-         e5EvNTTyiez72jpLHdfcYKmi9hetIaL9vUuzRwHkb80kcqb7Bw9jchF0K/tUiFiRpy9R
-         J3bWmgx6jpTOXPf8KndzgVmW1DrkiHESPG8sa0bxJmkY/I4ZD7unexBG4joxzL2ylAIK
-         ViO3INJ8DRMKY8GoTS/Q3wHfNZdUR4tgKrAtNJTezy1FyEIuUdCLEunJg2ThoTdvo26v
-         mkZzBljRtRWjbZ1tddtjvVogswzev/8hI/4wulVRsUkSy3v4XtZmlhTv7LW0Fn2QWYLg
-         VtEw==
-X-Gm-Message-State: AOJu0YxEGFdZHPA1kJpkxOvJtm/MOmDCfPGlkFIR3pogIljdbh8v7QI2
-        eB1YXzle2XwJ+ZRVDDnSj9yfYNJqEAsjYWR9vQY=
-X-Google-Smtp-Source: AGHT+IFAtl+rLYtejtLai72vFFnNvc5TovGXtJmqRU+tQdEzKZe5Vm43nbzb/yHXv0fz4InrCD418r/OL1G6d6rWDgM=
-X-Received: by 2002:a17:906:248e:b0:9db:6437:ef42 with SMTP id
- e14-20020a170906248e00b009db6437ef42mr751502ejb.18.1698894570207; Wed, 01 Nov
- 2023 20:09:30 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1698903015; x=1699507815;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JKCEzf5yVHcpzkImikTuiO91O0VK+CR5uA5YIy3x1ew=;
+        b=dbDcEUpL2D9FrPUqZsiXa5+1Pmk6nze6tIzPMFePKiVkNL87HIN4CBZhk1u4QOg3ob
+         ERd4EasG1HXIJ52ch7NL1InpOVmVSTDsQDx7CWeNI3DExY2IBDZ2fednXT48C04t3tvQ
+         7S50XEwAXn0paIwfruyJgqWFpeKV2yOaxdlZt2JorTUB2vRIjFCXgeWllOmxEsFBank6
+         1li4CuFTMjpo2qBBZTsokHYo2f2CKTvMOzoEIPCejUDdKbcBqXmbeVfTqnQuiUY3RjDa
+         QqPsiFZB5+ZGvJt9AAqrfrrbIneQP4jKuAM4wpMiUuiFMXcRwJq1t9kN1LJ/VUJ4HKAI
+         WhzQ==
+X-Gm-Message-State: AOJu0YwriFqwsQyuTfZPO+DystrK0muOP+Wpa1j+5VbE3BLEP2+g2LJR
+        yd3GWjOMjswxCi15gmrqfb2MPA==
+X-Google-Smtp-Source: AGHT+IG3F8uXNqd5WC2MJ/q+sokfpm9k5oUWZuAemt4onAJ/8yGMHkAdTP+qn3Wq/lucbP1uCp1EJQ==
+X-Received: by 2002:a17:90a:9b03:b0:280:1d6c:a6a8 with SMTP id f3-20020a17090a9b0300b002801d6ca6a8mr13213526pjp.23.1698903015532;
+        Wed, 01 Nov 2023 22:30:15 -0700 (PDT)
+Received: from localhost ([122.172.80.14])
+        by smtp.gmail.com with ESMTPSA id i1-20020a17090aee8100b0028012be0764sm1648185pjz.20.2023.11.01.22.30.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Nov 2023 22:30:15 -0700 (PDT)
+Date:   Thu, 2 Nov 2023 11:00:13 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org, mani@kernel.org,
+        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, rafael@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_vbadigan@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, quic_parass@quicinc.com
+Subject: Re: [PATCH v5 5/5] PCI: qcom: Add OPP support to scale performance
+ state of power domain
+Message-ID: <20231102053013.7yt7pxin5awlu7w7@vireshk-i7>
+References: <1694066433-8677-6-git-send-email-quic_krichai@quicinc.com>
+ <20231101221742.GA101112@bhelgaas>
 MIME-Version: 1.0
-From:   sean yang <seanyang230@gmail.com>
-Date:   Thu, 2 Nov 2023 11:09:18 +0800
-Message-ID: <CADGqjFLEJ8WK+_DHJo4APfJGkDf8PLNRR0JboEVk2TL2oC2iog@mail.gmail.com>
-Subject: [PATCH] driver: thermal: simplify the traverse of sensor in thermal_zone.
-To:     xinglong.yang@cixtech.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231101221742.GA101112@bhelgaas>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The number of sensor in a thermal zone needs to be greater than zero
-and equal to one. Add the opinion when the number of sensor is greater
-than one in a thermal zone.
+On 01-11-23, 17:17, Bjorn Helgaas wrote:
+> Can you expand "OPP" somewhere so we know what it stands for?  I'm
+> sure everybody knows except me :)
 
-There is also no need to traverse the sensor in the thermal zone,
-because there is only one sensor on one thermal zone.
+It is "Operating Performance Points", defined here:
 
-Signed-off-by: xinglong.yang <xinglong.yang@cixtech.com>
----
- drivers/thermal/thermal_of.c | 34 +++++++++++++++++-----------------
- 1 file changed, 17 insertions(+), 17 deletions(-)
+Documentation/power/opp.rst
 
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index e615f735f4c0..a405754c42cd 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -186,6 +186,7 @@ static struct device_node
-*of_thermal_zone_find(struct device_node *sensor, int
-  for_each_available_child_of_node(np, tz) {
-
-  int count, i;
-+ int ret;
-
-  count = of_count_phandle_with_args(tz, "thermal-sensors",
-     "#thermal-sensor-cells");
-@@ -193,26 +194,25 @@ static struct device_node
-*of_thermal_zone_find(struct device_node *sensor, int
-  pr_err("%pOFn: missing thermal sensor\n", tz);
-  tz = ERR_PTR(-EINVAL);
-  goto out;
-+ } else if (count > 1) {
-+ pr_err("%pOFn: number of thermal sensor greater than one\n", tz);
-+ tz = ERR_PTR(-EINVAL);
-+ goto out;
-  }
-
-- for (i = 0; i < count; i++) {
--
-- int ret;
--
-- ret = of_parse_phandle_with_args(tz, "thermal-sensors",
-- "#thermal-sensor-cells",
-- i, &sensor_specs);
-- if (ret < 0) {
-- pr_err("%pOFn: Failed to read thermal-sensors cells: %d\n", tz, ret);
-- tz = ERR_PTR(ret);
-- goto out;
-- }
-+ ret = of_parse_phandle_with_args(tz, "thermal-sensors",
-+ "#thermal-sensor-cells",
-+ 0, &sensor_specs);
-+ if (ret < 0) {
-+ pr_err("%pOFn: Failed to read thermal-sensors cells: %d\n", tz, ret);
-+ tz = ERR_PTR(ret);
-+ goto out;
-+ }
-
-- if ((sensor == sensor_specs.np) && id == (sensor_specs.args_count ?
--   sensor_specs.args[0] : 0)) {
-- pr_debug("sensor %pOFn id=%d belongs to %pOFn\n", sensor, id, tz);
-- goto out;
-- }
-+ if ((sensor == sensor_specs.np) && id == (sensor_specs.args_count ?
-+   sensor_specs.args[0] : 0)) {
-+ pr_debug("sensor %pOFn id=%d belongs to %pOFn\n", sensor, id, tz);
-+ goto out;
-  }
-  }
-  tz = ERR_PTR(-ENODEV);
 -- 
-2.42.0
+viresh
