@@ -2,140 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B91E7DEC86
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Nov 2023 06:52:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 933937DEDDE
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Nov 2023 09:05:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232212AbjKBFvm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Nov 2023 01:51:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33234 "EHLO
+        id S229737AbjKBIFS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Nov 2023 04:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbjKBFvm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Nov 2023 01:51:42 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9D3116;
-        Wed,  1 Nov 2023 22:51:38 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id 5614622812f47-3b3e13fc1f7so358764b6e.0;
-        Wed, 01 Nov 2023 22:51:38 -0700 (PDT)
+        with ESMTP id S233053AbjKBIFR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Nov 2023 04:05:17 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01619111;
+        Thu,  2 Nov 2023 01:05:15 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-5b9a456798eso451105a12.3;
+        Thu, 02 Nov 2023 01:05:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698904298; x=1699509098; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1rNVTOYzg1T8LSeT98N14So2HKEm2/4/i4nFsHZ5hrA=;
-        b=IvTmaMLW8ZR6fjUHcABC37Jm8e1wrkvYmGcEHlOcSvw/Wj/36VJ2iAcPwiy8eTZzhS
-         qNa1NOrJs3N2rYf5Gm+AZPXRBwQy0I/F7ra3lT6hlv+lRU4lgJ66ffchpU8o+vqG/bT1
-         vcVf0PF8ftGks4Wo///eHMIpek1ERSpYpSf1BdMz+I1B5iaHOQNhYNaoYzZe3I/sadLI
-         UxjDMxleagv2iekYp3Vd2A8gMrVxbAuViuRG6TUSY8TMcLdDhHQlv1Lx48iIopW+TtQJ
-         UQHINgdSueCnAh2c2qUuUHEc15rUte0KJBO57AOFOOYVh7B9X94YRf0QiezO5zCPerJr
-         9/xA==
+        d=gmail.com; s=20230601; t=1698912314; x=1699517114; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qm047SCnALoyYPhnGrJPWTE0UoF+m8QEisH8xFHbuwA=;
+        b=cdXMCMtzIXIr9ixN3j9KUm8CiBKYEg8wYHZH2VLgeZ8w6Ez0pjmsy4AZs+npdbzRLN
+         uvXxqYRQh+2CffLoFltzlll9DhHcuIvL6MO9R6bNjLDpCRo6xFYFe275lzXsru8rdXzP
+         OjL4cQ5K6BjibL62f8ycIgoZmmJSgDqJqE/00wrHPASZ/8H7i+Mp+s/ziVGnEttJZPsJ
+         GOwm+o/gwix5dk/rkrc3jsxVeJgMrBEI0jUZ55SC70sqrsxyTxPEW7pWxCtu10vOpTXI
+         pKyDf6eAdrSWEPBCznrBqnlZeo7GDraM4h5cZMlKUme+zFTpYYbyqEVyGo7Gq0I9zHkP
+         yXgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698904298; x=1699509098;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1rNVTOYzg1T8LSeT98N14So2HKEm2/4/i4nFsHZ5hrA=;
-        b=mcit172+NevKZZzkFn+RnPWds+IMtvdd1jbe0lYwZT5oXAA5+SYE0VHZHViJZBXwK6
-         9/+m6/1Jo4oiPlT5RrT+3w6LAiwqOnDF3LdTPVAwBm6z+AjFGtboHpXbya+lyxybS2cm
-         WhpZxcIsnAssMctXxtq1WUy1NzBWi+zZsXAef9uhP+72D+V4HXCVn7DVy5lhS6la7Zkv
-         n5PJPRqMZHK9q3RBZA2/Wbfz9Sc30+RzsjCbxOA1Gu5Z99R87BxyOFgqvZzk7mBxeQ6U
-         +mZcQT5mKGqSr/qOqdyyRqoKaYkDSrSXbD4xAD/5lgxCmdX+dWhDh+iwI9rtvdw4SLrr
-         fmxw==
-X-Gm-Message-State: AOJu0YzZIVztQzYA/W5WjYR7WYbR8zVB9+yXXIP52lG4X4KpVXalMq4e
-        n160CxaU13APAwZKptn77dg=
-X-Google-Smtp-Source: AGHT+IHYMFpEG3Jl5+tmBRGQz8dDUvy6BpTDMmz4f3y6MvPNlpNgM3G12CxKGKU1/VE7HETeK0eWeQ==
-X-Received: by 2002:a05:6808:1528:b0:3b5:75e7:bcea with SMTP id u40-20020a056808152800b003b575e7bceamr6458060oiw.57.1698904298091;
-        Wed, 01 Nov 2023 22:51:38 -0700 (PDT)
-Received: from localhost.localdomain ([58.48.52.254])
-        by smtp.gmail.com with ESMTPSA id i10-20020aa787ca000000b0069337938be8sm2090023pfo.110.2023.11.01.22.51.34
+        d=1e100.net; s=20230601; t=1698912314; x=1699517114;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qm047SCnALoyYPhnGrJPWTE0UoF+m8QEisH8xFHbuwA=;
+        b=ZyUc0PIsNQ0xsicL5PlmPmVqAMfevbH+8SKqzmfytkZPtBKPg/Wkv1MhwGy+dEEY3g
+         7DHRa7pPnCH7zdDk2/Yz4WWhNnP6oaix026/Mi98cDBPn7pMQ1wlrWGM2Cd/iwclHIT5
+         JSqRt8GbUiyjusQMvpwisl/GPgPO7tjoCuDvjH63N9q1wYX+6Duq09waRWIESxCS3yFr
+         7G3x3b2zucqVZBJsShcJDPKfucwzAYMZM9rA9fNrtJDRoFLO0Iar22TfQderOpsMXC28
+         1Op1iJju1yo1eZGp+Z1DvNhq2XLSkQo1VQjJmblMaN5CtTd3wnnkayuaZAWsThFq+0l4
+         8y8A==
+X-Gm-Message-State: AOJu0YwV9DmP7uLRAZvHqEa1/nobof9BHonuhpN1AGtqf3G9Yd9qdqRL
+        opOFpVWgkOktX0Xf6SwmnlI=
+X-Google-Smtp-Source: AGHT+IFIL6VIw66cK4zpLiHDgDf8OIP34pUNG8oTkJtXAdQZP0h9DhMj83aCFzRYsJSB7uHCcpIhXA==
+X-Received: by 2002:a17:902:f682:b0:1cc:7d96:3fe7 with SMTP id l2-20020a170902f68200b001cc7d963fe7mr4181116plg.28.1698912314313;
+        Thu, 02 Nov 2023 01:05:14 -0700 (PDT)
+Received: from debian.me ([103.131.18.64])
+        by smtp.gmail.com with ESMTPSA id g10-20020a170902740a00b001c9bc811d59sm2484716pll.307.2023.11.02.01.05.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Nov 2023 22:51:37 -0700 (PDT)
-From:   "xinglong.yang" <seanyang230@gmail.com>
-X-Google-Original-From: "xinglong.yang" <xinglong.yang@cixtech.com>
-To:     xinglong.yang@cixtech.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] driver: thermal: simplify the traverse of sensor in thermal_zone.
-Date:   Thu,  2 Nov 2023 13:51:20 +0800
-Message-ID: <20231102055120.1192015-1-xinglong.yang@cixtech.com>
-X-Mailer: git-send-email 2.42.0
+        Thu, 02 Nov 2023 01:05:13 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 32F169201A25; Thu,  2 Nov 2023 15:05:09 +0700 (WIB)
+Date:   Thu, 2 Nov 2023 15:05:08 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Huang Rui <ray.huang@amd.com>, Meng Li <li.meng@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Mateusz Guzik <mjguzik@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Michele Della Guardia <micheledellaguardia@yahoo.it>,
+        Linux Power Management <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>
+Subject: Re: Fwd: Abnormal battery drain with kernel 6.5 (Ryzen 5500u)
+Message-ID: <ZUNYNEnGC8cm6ALH@debian.me>
+References: <bede02c1-ef90-8e30-aa8b-e6fae49a8ccf@gmail.com>
+ <ZPql6tqBCnXJh64J@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bFrQyoCjDpyscnAV"
+Content-Disposition: inline
+In-Reply-To: <ZPql6tqBCnXJh64J@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The number of sensor in a thermal zone needs to be greater than zero
-and equal to one. Add the opinion when the number of sensor is greater
-than one in a thermal zone.
 
-There is also no need to traverse the sensor in the thermal zone,
-because there is only one sensor on one thermal zone.
+--bFrQyoCjDpyscnAV
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: xinglong.yang <xinglong.yang@cixtech.com>
----
- drivers/thermal/thermal_of.c | 34 +++++++++++++++++-----------------
- 1 file changed, 17 insertions(+), 17 deletions(-)
+On Fri, Sep 08, 2023 at 12:41:14PM +0800, Huang Rui wrote:
+> On Fri, Sep 01, 2023 at 05:42:22PM +0800, Bagas Sanjaya wrote:
+> > Hi,
+> >=20
+> > I notice a regression report on Bugzilla [1] that have been already han=
+dled
+> > there. Quoting from it:
+> >=20
+> > > After switching from 6.4.x kernel to 6.5 I experienced an abnormal ba=
+ttery drain since my laptop is actually never idle.
+> > > I accepted default CPUfreq to schedutil and AMD Processor P-State mod=
+e is 3 (active).=20
+> > >=20
+> > > I expected a different behaviour, but am I missing something?
+> > > In my boot configuration I had "amd_pstate.shared_mem=3D1" and tried =
+to remove this switch, but did not affect my power consuption.
+> > >=20
+> > > Is there something changed from 6.4.x to 6.5 that requires a differen=
+t configuration to get an optimal power consumption?
+> > >=20
+> > > Thanks a lot for your attention
+> >=20
+> > See Bugzilla for the full thread.
+> >=20
+> > Anyway, I'm adding it to regzbot:
+> >=20
+> > #regzbot introduced: v6.4..v6.5 https://bugzilla.kernel.org/show_bug.cg=
+i?id=3D217853
+> >=20
+>=20
+> + Meng Li/Perry,
+>=20
+> May we know which CPU type are you using? Try "lscpu"?
+>=20
 
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index e615f735f4c0..a405754c42cd 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -186,6 +186,7 @@ static struct device_node *of_thermal_zone_find(struct device_node *sensor, int
- 	for_each_available_child_of_node(np, tz) {
- 
- 		int count, i;
-+		int ret;
- 
- 		count = of_count_phandle_with_args(tz, "thermal-sensors",
- 						   "#thermal-sensor-cells");
-@@ -193,26 +194,25 @@ static struct device_node *of_thermal_zone_find(struct device_node *sensor, int
- 			pr_err("%pOFn: missing thermal sensor\n", tz);
- 			tz = ERR_PTR(-EINVAL);
- 			goto out;
-+		} else if (count > 1) {
-+			pr_err("%pOFn: number of thermal sensor greater than one\n", tz);
-+			tz = ERR_PTR(-EINVAL);
-+			goto out;
- 		}
- 
--		for (i = 0; i < count; i++) {
--
--			int ret;
--
--			ret = of_parse_phandle_with_args(tz, "thermal-sensors",
--							 "#thermal-sensor-cells",
--							 i, &sensor_specs);
--			if (ret < 0) {
--				pr_err("%pOFn: Failed to read thermal-sensors cells: %d\n", tz, ret);
--				tz = ERR_PTR(ret);
--				goto out;
--			}
-+		ret = of_parse_phandle_with_args(tz, "thermal-sensors",
-+						 "#thermal-sensor-cells",
-+						 0, &sensor_specs);
-+		if (ret < 0) {
-+			pr_err("%pOFn: Failed to read thermal-sensors cells: %d\n", tz, ret);
-+			tz = ERR_PTR(ret);
-+			goto out;
-+		}
- 
--			if ((sensor == sensor_specs.np) && id == (sensor_specs.args_count ?
--								  sensor_specs.args[0] : 0)) {
--				pr_debug("sensor %pOFn id=%d belongs to %pOFn\n", sensor, id, tz);
--				goto out;
--			}
-+		if ((sensor == sensor_specs.np) && id == (sensor_specs.args_count ?
-+							  sensor_specs.args[0] : 0)) {
-+			pr_debug("sensor %pOFn id=%d belongs to %pOFn\n", sensor, id, tz);
-+			goto out;
- 		}
- 	}
- 	tz = ERR_PTR(-ENODEV);
--- 
-2.42.0
+Sorry for the replying just now.
 
+The reporter (on Bugzilla) had bisected to commit c8afaa1b0f8bc9 ("locking:
+remove spin_lock_prefetch"). Telling regzbot:
+
+#regzbot introduced: c8afaa1b0f8bc9
+#regzbot title: spin_lock_prefetch() removal causes abnormal battery drain =
+on Ryzen 5500u
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--bFrQyoCjDpyscnAV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZUNYLwAKCRD2uYlJVVFO
+owZYAQDsb6Cd0wndv9wWOxPcE7C6GSlUhC+p6Vc2i0w7Ge2crwD9FjZVdMAnD7jZ
+aptnxPSv+I+4kMDvo/d32CBDN4MTXww=
+=xS7j
+-----END PGP SIGNATURE-----
+
+--bFrQyoCjDpyscnAV--
