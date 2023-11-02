@@ -2,199 +2,187 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB0187DF44E
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Nov 2023 14:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE977DF58E
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Nov 2023 16:01:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376666AbjKBNvC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Nov 2023 09:51:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45336 "EHLO
+        id S229569AbjKBPBo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Nov 2023 11:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376664AbjKBNvB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Nov 2023 09:51:01 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B798EA6
-        for <linux-pm@vger.kernel.org>; Thu,  2 Nov 2023 06:50:55 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-280165bba25so871979a91.2
-        for <linux-pm@vger.kernel.org>; Thu, 02 Nov 2023 06:50:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698933055; x=1699537855; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vQsf0uxz+p9a7ZD7Gz0obekgX/RPQUCjSUYXjonlb9s=;
-        b=hw639FMK9g3NA1vIVLnw9CBPU5fEiTPwftoz+Ej2cImRAWRpBILLrIxhFLyttWK3GU
-         qENtJ/JcwTrLENeQifUJv11Wehgm/aKy6Z1qjYG4/+fh2Cso8CWeFjHxkbX2czHynEwr
-         vRwQkbOYPDMe+r2delixxNoCbvK46l8LQjRt5uwMI5BRcq9fnlvzi6qlTf33cxHkVorx
-         DQKz6gqvEcn58ZrmOFKnmYnV1E9Jl2wPb6fv4E4YHwjK2COzZTtRDcumGgU83VsO9pXd
-         7fGYe8tFKD9lDU6x0BktjKDstwwDddS7jUMvIspyYD7Ogrk+riXS1dONcMSmYjFnHq50
-         ImHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698933055; x=1699537855;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vQsf0uxz+p9a7ZD7Gz0obekgX/RPQUCjSUYXjonlb9s=;
-        b=NRrjDMVQCKK7ahj7WBZvwMnmh4Y1kq2Y7oIJL1mNqiC97Fg7WRc8k5Ws0wbQBDMcCt
-         ycEzuBr9JbMws6XjH4MkVTRjZSuPuhdVYhyjyTZPvSM6fJeaMSf+TMaruHEnEHOEU2z/
-         UyPjfIuO4V69goQKoBr5zC58PC2ikHzBkjnj2GhmzSvhP7q1wuFvZ+oCnJZPbdl/+Djr
-         MfoQNKZiqMONPKu5jd5MDyaVtZpxvBs4GCb1wV9GqFrbJ9TeCxEa+G3HBq4vyroMS7f/
-         9qvvTLFGzi9xx/DueMZuZB5fQuSsNKkcn8JmlGoKHkRMoKCZQnfgyiTV5QagH1OjviMT
-         nJxQ==
-X-Gm-Message-State: AOJu0YxOrybprIh3LssL9xkar4WaGLQ5RdkDPozTWFndH5im89UH4f1L
-        kqfgxTurUzyTQj9xM5mlWqq8fj3dwg2Kxz1MWYJ6wQ==
-X-Google-Smtp-Source: AGHT+IGE6VrTzGimyIx/5AqMdiH/F+ab3llp7q4Er0Tig+PZspNmxu8j8yjkEz6hamAecMX4JJJElojuPrceWNTn8Z4=
-X-Received: by 2002:a17:90a:bf07:b0:27d:1df4:26f3 with SMTP id
- c7-20020a17090abf0700b0027d1df426f3mr14996247pjs.15.1698933055202; Thu, 02
- Nov 2023 06:50:55 -0700 (PDT)
+        with ESMTP id S233564AbjKBPBm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Nov 2023 11:01:42 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19A0138;
+        Thu,  2 Nov 2023 08:01:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BftJCjIWJkQL7RG7FS3xGzAACBIMMZ2OmOHU7Tt9iv1WjHmko08lDLSqQhy5XNFeXSo6KJiCfn+cZJrJ8gZcI3ARfiLNIdjGlV9rib3JSEPzazHd1yYHSpzGVgLP5oe3ovs7QV43AKFZxH0Kdn0H0KQQKpzt9aQqPa1nrc8+1IDkbD+Tk4Y0zIrfagvNIxuc+jS28udB128v4s/SRgswZr+5W7chNohMW3EJ4FY/04dYdcrMRHusjQ7zFgH8eX8o3VL+qfuC7CAj2nPJYrzZK9RnIhH+JX7erqUR/vmtJz39014SzrHvdPj2ebr1VsBksD0oznvBzRgtCWAGCGd4lQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5miL9hnVSQfh+RYw7Plin0/9UfHhWP3kbV5XeMqCaxQ=;
+ b=QNMUGS96vhQg2zn4njTcYGy7c7koVvbORx1ZRr+g82gTQN+hhmwFhxPiTd4qsGdoR9PFQn7KICHidgQgj6AEOxVJ0ffRA4xG+LSCMG7dGweGdxH+BVnrTAbTMGqvLZYF0py0sl7o04L6JA7J6+3I1gQmEukawsU8LG+xzTkKQibyVyg7LZ+1bZUBL1pKKH5+8kYB+qkHk3Qmw6SqBZ1HIHtrzoqfl2rELyxjUN34tzoqiYR7GvRkhitZZqbQrBR8w//ehhNpPXi63DCv5fs9w+2rZyEcBIhW3tXhEgnlmXhJGKzTdBWG4B1z7yWAwPhQSOIHqJzoNo/svcHtXlAwxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5miL9hnVSQfh+RYw7Plin0/9UfHhWP3kbV5XeMqCaxQ=;
+ b=F04G6zdC/SIOdcVuE2UeHQNiQBud859F4HCrQY1aCyFWeNjWlzkC4XoyGeMn2U6sZD4QDU4M20FLqbwdulTQvbEcUU7wxnwyx931CzeWR5l6c/7SqVmInR1sYrZW6UsoUToveNKyHLTTGoLbHhA2+zmCr6hhTOtlp/B/MzQ1uBc=
+Received: from BL1PR13CA0131.namprd13.prod.outlook.com (2603:10b6:208:2bb::16)
+ by SJ2PR12MB8009.namprd12.prod.outlook.com (2603:10b6:a03:4c7::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.28; Thu, 2 Nov
+ 2023 15:01:34 +0000
+Received: from BL6PEPF0001AB51.namprd04.prod.outlook.com
+ (2603:10b6:208:2bb:cafe::eb) by BL1PR13CA0131.outlook.office365.com
+ (2603:10b6:208:2bb::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6977.10 via Frontend
+ Transport; Thu, 2 Nov 2023 15:01:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL6PEPF0001AB51.mail.protection.outlook.com (10.167.242.75) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6954.21 via Frontend Transport; Thu, 2 Nov 2023 15:01:33 +0000
+Received: from BLR-5CG13462PL.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.32; Thu, 2 Nov
+ 2023 10:01:30 -0500
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     <lenb@kernel.org>
+CC:     Wyes Karny <wyes.karny@amd.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Doug Smythies <dsmythies@telus.net>, <rafael@kernel.org>
+Subject: Re: [PATCH v2] tools/power turbostat: Increase the limit for fd opened
+Date:   Thu, 2 Nov 2023 20:31:20 +0530
+Message-ID: <20231102145915.35yrzu3q72737gez@BLR-5CG13462PL.amd.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231003050751.525932-1-wyes.karny@amd.com>
+References: <20231003050751.525932-1-wyes.karny@amd.com>
 MIME-Version: 1.0
-References: <20231027080400.56703-1-vincent.guittot@linaro.org>
- <20231027080400.56703-8-vincent.guittot@linaro.org> <ZUGUvdjrpw9NHSex@e129154.nice.arm.com>
- <CAKfTPtDDouduP57P8GH6J4qDjbKUasVRe-K0QUKcZHC2NZ+syQ@mail.gmail.com>
- <ZUN6K4d9FD31phbs@e129154.nice.arm.com> <CAKfTPtATBHyCvGkoKrN1Y9LpWX7nb3njY2zFPiJyj2bTSfbcNw@mail.gmail.com>
-In-Reply-To: <CAKfTPtATBHyCvGkoKrN1Y9LpWX7nb3njY2zFPiJyj2bTSfbcNw@mail.gmail.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Thu, 2 Nov 2023 14:50:43 +0100
-Message-ID: <CAKfTPtCv1WUDr72eqWeJh6iakkn+d4rX1N0d=8G8TEdyeOxH3g@mail.gmail.com>
-Subject: Re: [PATCH v4 7/7] arm64/amu: use capacity_ref_freq to set AMU ratio
-To:     Beata Michalska <beata.michalska@arm.com>, pierre.gondois@arm.com
-Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
-        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
-        lukasz.luba@arm.com, ionela.voinescu@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, acpica-devel@lists.linuxfoundation.org,
-        conor.dooley@microchip.com, suagrfillet@gmail.com,
-        ajones@ventanamicro.com, lftan@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB51:EE_|SJ2PR12MB8009:EE_
+X-MS-Office365-Filtering-Correlation-Id: c4c91aff-51e1-4c41-104a-08dbdbb49aa4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jX2mw0u3PG/2KOf6qQy0VrGifNNpINcMMKyWeQt8f0MJoEJqQTalQ4jzOiA1Zpf5A/VsWyhGwUivPxV09pJEH8VamlXJSj+U9RSuY5KicmbcvSC4G2uGZzco1aKBi8b5k340kOiDi4WNtQuAKL1gQGwNaAyn7mlV6fiuKFHns7y1afzIC5qn5FllOuuJatdFG1OhN33GM9bE1Oj34Qi2A61ZYvsUkXL23R5KmAaAmwZZzgorYlea038YwgFtj+CHxUgMv00poMmd+VcIs5ztwkd8OajdLEcaNRkwcCC/1ZrVHW+P0h65c/ovSK/kSjhY54zGGW/5vPWKy1dL4qz0WSX52vN6vMhqsZ4e4b58SFg8iZM65pSxMth+iI/w5yDDjvUYaSJOKsz1W6g5yvOBF2k2tS55x+QPkLrYkiU94Mc5fJP+LjK7NmkgqkUKi3zIDXN/CYNgH/AtmjZIgSsL/b4zpAvF71/FMJmbgEKu0IfVJQIo5nUKMH+yktDJeF84LJAM6ljHUVCztO5wf5iBqh3CO6+cFAltj1nE/JYX0IA8k3QeNx3qh7q5HNRqDKr5+DE5sJPY9N6BT6vcSj4/L/p1uRmflaTujfi/UoWZ6jGzg4kzOuIOEqnYNyv4m4Y+QgHRYHN0HvIJGUu1fa3Q+ZuTJWUeWB42YFJLWaT2spW/ookOl0vnroG648YZKeRL/DUWKTNb+RXFZcbME75YAi2Dy3GOvVs0TPskZW+VvtYveaKNrGfcDWX2BGotl4ehBjfp5Ns6Caf/U4F3n9+qSg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(346002)(396003)(39860400002)(136003)(376002)(230922051799003)(64100799003)(82310400011)(1800799009)(186009)(451199024)(40470700004)(46966006)(36840700001)(356005)(81166007)(83380400001)(36860700001)(426003)(26005)(40140700001)(336012)(55016003)(7696005)(1076003)(82740400003)(16526019)(86362001)(47076005)(70206006)(40480700001)(70586007)(44832011)(4326008)(40460700003)(8936002)(8676002)(5660300002)(41300700001)(6666004)(2906002)(54906003)(316002)(478600001)(6916009)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2023 15:01:33.5909
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c4c91aff-51e1-4c41-104a-08dbdbb49aa4
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL6PEPF0001AB51.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8009
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 2 Nov 2023 at 11:40, Vincent Guittot <vincent.guittot@linaro.org> wrote:
->
-> On Thu, 2 Nov 2023 at 11:31, Beata Michalska <beata.michalska@arm.com> wrote:
-> >
-> > Hi Vincent,
-> >
-> > On Wed, Nov 01, 2023 at 10:04:27AM +0100, Vincent Guittot wrote:
-> > > Hi Beata,
-> > >
-> > > On Wed, 1 Nov 2023 at 00:59, Beata Michalska <beata.michalska@arm.com> wrote:
-> > > >
-> > > > On Fri, Oct 27, 2023 at 10:04:00AM +0200, Vincent Guittot wrote:
-> > > > > Use the new capacity_ref_freq to set the ratio that is used by AMU for
-> > > > > computing the arch_scale_freq_capacity().
-> > > > > This helps to keep everything aligned using the same reference for
-> > > > > computing CPUs capacity.
-> > > > >
-> > >
-> > > [..]
-> > >
-> > > > > @@ -381,6 +385,9 @@ void topology_init_cpu_capacity_cppc(void)
-> > > > >       }
-> > > > >
-> > > > >       for_each_possible_cpu(cpu) {
-> > > > > +             freq_inv_set_max_ratio(cpu,
-> > > > > +                                    per_cpu(capacity_ref_freq, cpu) * HZ_PER_KHZ);
-> > > > > +
-> > > > The capacity_ref_freq set earlier will still lead to units mismatch,
-> > > > as at the point of calling topology_init_cpu_capacity_cppc the lowest & nominal
-> > > > frequencies will be provided in MHz (unless I have missed smth).
-> > >
-> > > I don't get your point:
-> > > the unit of per_cpu(capacity_freq_ref, cpu) is Khz
-> > >
-> > > For cppc, we have
-> > > per_cpu(capacity_freq_ref, cpu) = cppc_perf_to_khz(&perf_caps,
-> > > raw_capacity[cpu]);
-> > >
-> > > freq_inv_set_max_ratio() uses
-> > > arch_timer_get_rate() which returns a freq in Hz
-> > > and
-> > > per_cpu(capacity_freq_ref, cpu) * HZ_PER_KHZ. to get a freq in Hz too.
-> > >
-> > Apologies, I should have been more verbose here.
-> > Before the change made in [1] the cppc_perf_to_khz was indeed operating on
-> > lowest & nominal frequency values expressed in kHZ, as those were appropriately
-> > amended:
-> > cppc_cpufreq_cpu_init
-> >         |__> cppc_cpufreq_get_cpu_data:
-> >                 |__>    ...
-> >                         /* Convert the lowest and nominal freq from MHz to KHz */
-> >                         cpu_data->perf_caps.lowest_freq *= 1000;
-> >                         cpu_data->perf_caps.nominal_freq *= 1000;
-> >
-> > So far cppc_perf_to_khz (previously cppc_cpufreq_perf_to_khz) was being called
-> > with the post-processed CPC data (through cppc_cpufreq_get_cpu_data) and thus
-> > guaranteed to be operating on values in kHz.
-> > With the new changes the cppc_perf_to_khz will operate on raw CPC data,
-> > which are expressed in MHz.(as per acpi spec)
->
-> Ok, thanks for the explanation. I haven't noticed that cppc_cpufreq
-> was processing the raw CPC data  (*1000) before using them. I'm going
-> to fix that.
+Gentle ping.
 
-With cppc_perf_to_khz() being moved into the generic cppc_acpi.c, we
-can't change perf_caps.nominal_freq and perf_caps.lowest_freq
-directly. So, I'm planning to add the conversion from MHz to kHz in
-the functions cppc_perf_to_khz() and cppc_khz_to_perf() and remove the
-2 conversions above in cppc_cpufreq_get_cpu_data().
+Thanks,
+Wyes
 
->
->
-> >
-> > ---
-> > Best Regards
-> > B.
-> > > > This means that use of both, the capacity_ref_freq and the arch_freq_scale
-> > > > will generate unexpected results, so I guess this should get amended in the
-> > > > preceding patch (?) [1]
-> > > >
-> > > > ---
-> > > > BR
-> > > > B.
-> > > >
-> > > > [1] https://lore.kernel.org/linux-arm-kernel/20231027080400.56703-4-vincent.guittot@linaro.org/T/#m42daa167097edc190b1cfc05382c385ed801d909
-> > > >
-> > > > >               capacity = raw_capacity[cpu];
-> > > > >               capacity = div64_u64(capacity << SCHED_CAPACITY_SHIFT,
-> > > > >                                    capacity_scale);
-> > > > > @@ -422,8 +429,11 @@ init_cpu_capacity_callback(struct notifier_block *nb,
-> > > > >
-> > > > >       cpumask_andnot(cpus_to_visit, cpus_to_visit, policy->related_cpus);
-> > > > >
-> > > > > -     for_each_cpu(cpu, policy->related_cpus)
-> > > > > +     for_each_cpu(cpu, policy->related_cpus) {
-> > > > >               per_cpu(capacity_ref_freq, cpu) = policy->cpuinfo.max_freq;
-> > > > > +             freq_inv_set_max_ratio(cpu,
-> > > > > +                                    per_cpu(capacity_ref_freq, cpu) * HZ_PER_KHZ);
-> > > > > +     }
-> > > > >
-> > > > >       if (cpumask_empty(cpus_to_visit)) {
-> > > > >               topology_normalize_cpu_scale();
-> > > > > diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-> > > > > index 38ca6c76af56..ffdf0b7c55fa 100644
-> > > > > --- a/include/linux/arch_topology.h
-> > > > > +++ b/include/linux/arch_topology.h
-> > > > > @@ -99,6 +99,7 @@ void update_siblings_masks(unsigned int cpu);
-> > > > >  void remove_cpu_topology(unsigned int cpuid);
-> > > > >  void reset_cpu_topology(void);
-> > > > >  int parse_acpi_topology(void);
-> > > > > +void freq_inv_set_max_ratio(int cpu, u64 max_rate);
-> > > > >  #endif
-> > > > >
-> > > > >  #endif /* _LINUX_ARCH_TOPOLOGY_H_ */
-> > > > > --
-> > > > > 2.34.1
-> > > > >
+On 03 Oct 05:07, Wyes Karny wrote:
+> When running turbostat, a system with 512 cpus reaches the limit for
+> maximum number of file descriptors that can be opened. To solve this
+> problem, the limit is raised to 2^15, which is a large enough number.
+> 
+> Below data is collected from AMD server systems while running turbostat:
+> 
+> |-----------+-------------------------------|
+> | # of cpus | # of opened fds for turbostat |
+> |-----------+-------------------------------|
+> | 128       | 260                           |
+> |-----------+-------------------------------|
+> | 192       | 388                           |
+> |-----------+-------------------------------|
+> | 512       | 1028                          |
+> |-----------+-------------------------------|
+> 
+> So, the new max limit would be sufficient up to 2^14 cpus (but this
+> also depends on how many counters are enabled).
+> 
+> Reviewed-by: Doug Smythies <dsmythies@telus.net>
+> Tested-by: Doug Smythies <dsmythies@telus.net>
+> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+> ---
+> v1 -> v2:
+> - Take care of already higher rlim_max, rlim_curr
+> - Minor tweak in commit text
+> 
+>  tools/power/x86/turbostat/turbostat.c | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+> 
+> diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+> index 9a10512e3407..1563a0ae7e4c 100644
+> --- a/tools/power/x86/turbostat/turbostat.c
+> +++ b/tools/power/x86/turbostat/turbostat.c
+> @@ -53,6 +53,8 @@
+>  #define	NAME_BYTES 20
+>  #define PATH_BYTES 128
+>  
+> +#define MAX_NOFILE 0x8000
+> +
+>  enum counter_scope { SCOPE_CPU, SCOPE_CORE, SCOPE_PACKAGE };
+>  enum counter_type { COUNTER_ITEMS, COUNTER_CYCLES, COUNTER_SECONDS, COUNTER_USEC };
+>  enum counter_format { FORMAT_RAW, FORMAT_DELTA, FORMAT_PERCENT };
+> @@ -6717,6 +6719,22 @@ void cmdline(int argc, char **argv)
+>  	}
+>  }
+>  
+> +void set_rlimit(void)
+> +{
+> +	struct rlimit limit;
+> +
+> +	if (getrlimit(RLIMIT_NOFILE, &limit) < 0)
+> +		err(1, "Failed to get rlimit");
+> +
+> +	if (limit.rlim_max < MAX_NOFILE)
+> +		limit.rlim_max = MAX_NOFILE;
+> +	if (limit.rlim_cur < MAX_NOFILE)
+> +		limit.rlim_cur = MAX_NOFILE;
+> +
+> +	if (setrlimit(RLIMIT_NOFILE, &limit) < 0)
+> +		err(1, "Failed to set rlimit");
+> +}
+> +
+>  int main(int argc, char **argv)
+>  {
+>  	outf = stderr;
+> @@ -6729,6 +6747,9 @@ int main(int argc, char **argv)
+>  
+>  	probe_sysfs();
+>  
+> +	if (!getuid())
+> +		set_rlimit();
+> +
+>  	turbostat_init();
+>  
+>  	msr_sum_record();
+> -- 
+> 2.34.1
+> 
