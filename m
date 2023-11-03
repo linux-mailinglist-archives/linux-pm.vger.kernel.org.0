@@ -2,99 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EECB37E0249
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Nov 2023 12:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0475D7E026D
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Nov 2023 12:59:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233216AbjKCLiB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Nov 2023 07:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48150 "EHLO
+        id S231594AbjKCL7K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Nov 2023 07:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233073AbjKCLiA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Nov 2023 07:38:00 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A350D49;
-        Fri,  3 Nov 2023 04:37:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=plA7feRLjmw4qX8KHH4SK8cHKzi6R1RnGQsSzHXmiyI=; b=r8gKUdsct6x4xUzkDbnVrAliys
-        rU49OJZGVR/coPFqdct2gl3oH8umMdcw78VUvbESCMCAkfM1BwnJZ3Ph0C45+elImNUCpr60BqSsH
-        539nSH/dnv/1zwwWt2HOm3bEUk+vWS0Wb0jqiMy4Iz2c2QcWlv6e8NnvBAxX4OSyrSuJI8JjcPM/6
-        faPhoJ57lVoPb/s24YOWGJeMJ4E24vPer/AYqlbG6QT/lZTSodAEzGt7NWfZhoMB/ItsbabE7KPyC
-        ZlxVdQBM2mEMWzCRZUQscCv1BgID5FJi8m5rOU62HUGCiIGYAfh1CjAzm/rE0HQbqLaN9Yvdsxlth
-        T8Ya2edg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33780)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1qysUl-0005UH-1j;
-        Fri, 03 Nov 2023 11:37:47 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qysUi-0008MP-VI; Fri, 03 Nov 2023 11:37:44 +0000
-Date:   Fri, 3 Nov 2023 11:37:44 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     James Morse <james.morse@arm.com>
-Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-        x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        jianyong.wu@arm.com, justin.he@arm.com
-Subject: Re: [RFC PATCH v2 15/35] ACPI: processor: Add support for processors
- described as container packages
-Message-ID: <ZUTbiO2/SSFcTPAV@shell.armlinux.org.uk>
-References: <20230913163823.7880-1-james.morse@arm.com>
- <20230913163823.7880-16-james.morse@arm.com>
+        with ESMTP id S229486AbjKCL7J (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Nov 2023 07:59:09 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A46D47
+        for <linux-pm@vger.kernel.org>; Fri,  3 Nov 2023 04:59:03 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-da41acaea52so1211580276.3
+        for <linux-pm@vger.kernel.org>; Fri, 03 Nov 2023 04:59:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1699012743; x=1699617543; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zvso5yHREiVwxjCHbrYyDil+XqHPe3XS0+4PTOkM2qI=;
+        b=hubobDWHSQG3TH/0+hzipaVhvcLIZTEBXdTqPFRvddWhXKNuO1905HuK3lP2kgJpdl
+         3JQJ3tUCX+V9WcZg+2dnoxbN7Bk+c7fGSeGitawfTNYNmIIfKV8h3y6KOAKOjkOjfLFo
+         cdTmNg1zq4IWeUffZ9F8MfnIbYepk5T0V7biBUFZ5gcqLjZfx9M1SYdwSTe+L10vNITR
+         3cRakD+Uhb51XHWn/IuKxkb+rqaSN2egyByAb3EA7Sb5z2uVWCCRFn6iKnzvTClFwIG8
+         6yeVSy5ePQf94EmEkVg9EQuI+E1rmoT2tu5mvl6S9dFS0iWrvt7dNRuK5F/AcBoWtanD
+         uFtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699012743; x=1699617543;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zvso5yHREiVwxjCHbrYyDil+XqHPe3XS0+4PTOkM2qI=;
+        b=KhNNjLd/kMG/HmAafpBwcraN6D6i85o7F3KGhHM6EN3xyrxhCsdCkBFUq2EG4pg0kd
+         iuNP13zRxwWW+PLpk7Imeu8ngrBFoxPjVEt9kUm6tkDxzfSZVPO1xyIi2KoyhvIuoznF
+         lCO7zFV4C4UHX2f/2rniEpLE83MZrBGCquztVzlpvHCtrVpceF5JXf/9dpYOgEcENhcu
+         aqR0+3Cr3SuzCq4hh/by6JwivgAc42XzacoZKmJUHgs9zsC1J8YTAX/H89PMMbx7OeiG
+         PIGr3r65Aw0RICbhRxJvCMb+QtOc/97Wjzsrj1YF9LEVx3KIeE8jads+oNb1GbRHeSvt
+         c64g==
+X-Gm-Message-State: AOJu0YwrhWJhCXL+vzGGe5f0aaGHZFbsKjH9NcWf+GOmRhdBV2N68fc5
+        d77PN6ra4lm0hBdBAuLyCEEz8Otd2eRV8TiVqsm9XA==
+X-Google-Smtp-Source: AGHT+IFSD/qkngXLUXcqDqwoE0FkLiw5mf758D+BXCEqBIspX23Cv09fe3PgFzm3+Mnc0nGBHKOHiyCX8VJjHb8fZyg=
+X-Received: by 2002:a25:7407:0:b0:da0:39ed:3ebb with SMTP id
+ p7-20020a257407000000b00da039ed3ebbmr20712012ybc.3.1699012743083; Fri, 03 Nov
+ 2023 04:59:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230913163823.7880-16-james.morse@arm.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+References: <cover.1697710527.git.viresh.kumar@linaro.org> <f709e9e273004be43efe3a2854a7e7b51a777f99.1697710527.git.viresh.kumar@linaro.org>
+ <CAPDyKFqbnsdT0nqKwQhai875CwwpW_vepr816fL+i8yLh=YQhw@mail.gmail.com>
+ <20231025065458.z3klmhahrcqh6qyw@vireshk-i7> <CAPDyKFr4vdsKVYEx0aF5k_a1bTjp3NzMpNgaXDJOJrvujT7iRg@mail.gmail.com>
+ <ZTkciw5AwufxQYnB@gerhold.net> <CAPDyKFq+zsoeF-4h5TfT4Z+S46a501_pUq8y2c1x==Tt6EKBGA@mail.gmail.com>
+ <20231030102944.nrw4bta467zxes5c@vireshk-i7>
+In-Reply-To: <20231030102944.nrw4bta467zxes5c@vireshk-i7>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 3 Nov 2023 12:58:26 +0100
+Message-ID: <CAPDyKFrn97POKuNc3cMM9TOaw-f-ufLwYtUY8_L2w8+hzECWOA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] OPP: Use _set_opp_level() for single genpd case
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Stephan Gerhold <stephan@gerhold.net>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 13, 2023 at 04:38:03PM +0000, James Morse wrote:
-> ACPI has two ways of describing processors in the DSDT. Either as a device
-> object with HID ACPI0007, or as a type 'C' package inside a Processor
-> Container.
+On Mon, 30 Oct 2023 at 11:29, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 26-10-23, 11:53, Ulf Hansson wrote:
+> > On Wed, 25 Oct 2023 at 15:49, Stephan Gerhold <stephan@gerhold.net> wrote:
+> > >  2. The OPP WARNing triggers with both variants because it just checks
+> > >     if "required-opps" has a single entry. I guess we need extra checks
+> > >     to exclude the "parent genpd" case compared to the "OPP" case.
+> > >
+> > >         [    1.116244] WARNING: CPU: 2 PID: 36 at drivers/opp/of.c:331 _link_required_opps+0x180/0x1cc
+> > >         [    1.125897] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+> > >         [    1.146887] pc : _link_required_opps+0x180/0x1cc
+> > >         [    1.146902] lr : _link_required_opps+0xdc/0x1cc
+> > >         [    1.276408] Call trace:
+> > >         [    1.283519]  _link_required_opps+0x180/0x1cc
+> > >         [    1.285779]  _of_add_table_indexed+0x61c/0xd40
+> > >         [    1.290292]  dev_pm_opp_of_add_table+0x10/0x18
+> > >         [    1.294546]  of_genpd_add_provider_simple+0x80/0x160
+> > >         [    1.298974]  cpr_probe+0x6a0/0x97c
+> > >         [    1.304092]  platform_probe+0x64/0xbc
+> > >
+> > > It does seem to work correctly, with and without this patch. So I guess
+> > > another option might be to simply silence this WARN_ON(). :')
+> >
+> > Oh, thanks for pointing this out! This case haven't crossed my mind yet!
+> >
+> > Allow me to think a bit more about it. I will get back to you again
+> > with a suggestion soon, unless Viresh comes back first. :-)
+>
+> I have resent the series now.
+>
+> Stephan, please give it a try again. Thanks.
+>
+> Regarding this case where a genpd's table points to a parent genpd's table via
+> the required-opps, it is a bit tricky to solve and the only way around that I
+> could think of is that someone needs to call dev_pm_opp_set_config() with the
+> right device pointer, with that we won't hit the warning anymore and things will
+> work as expected.
+>
+> In this case the OPP core needs to call dev_pm_domain_set_performance_state()
+> for device and then its genpd. We need the right device pointers :(
+>
+> Ulf, also another important thing here is that maybe we would want the genpd
+> core to not propagate the voting anymore to the parent genpd's ? The
+> dev_pm_opp_set_opp() call is better placed at handling all things and not just
+> the performance state, like clk, regulator, bandwidth and so the recursion
+> should happen at OPP level only.
 
-I'm struggling with the reference to a "type 'C' package inside a
-Processor Container".
+Are you saying that the OPP library should be capable of managing the
+parent-clock-rates too, when there is a new rate being requested for a
+clock that belongs to an OPP? To me, that sounds like replicating
+framework specific knowledge into the OPP library, no? Why do we want
+this?
 
-ACPI 6.0, which introduced the Processor Container, says: "This optional
-device is a container object that acts much like a bus node in a
-namespace. It may contain child objects that are either processor devices
-or other processor containers"
+Unless I totally misunderstood your suggestion, I think it would be
+better if the OPP library remained simple and didn't run recursive
+calls, but instead relied on each framework to manage the aggregation
+and propagation to parents.
 
-For "Processor device":
+> For now my series shouldn't break anything,
+> just that we will try to set performance state twice for the parent genpd, the
+> second call should silently return as the target state should be equal to
+> current state.
+>
+> --
+> viresh
 
-"For more information on the declaration of the processor device object,
-see Section 19.6.30, "Device (Declare Device Package).""
-
-which leads one to the Device() object, not the Processor() object.
-It also states:
-
-"A Device definition for a processor is declared using the ACPI0007
-hardware identifier (HID)."
-
-My understanding from this is that Processor() is not allowed to be
-used within a Processor Container, only Device()s with _HID of
-ACPI0007 are permitted.
-
-In light of this, please could you clarify your first sentence, as it
-seems to be contrary to what is stated in ACPI 6.x specs. Thanks.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Kind regards
+Uffe
