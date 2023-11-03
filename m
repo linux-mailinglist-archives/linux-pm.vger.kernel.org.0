@@ -2,201 +2,314 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2BB7E05B2
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Nov 2023 16:42:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F257E05CF
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Nov 2023 16:56:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233463AbjKCPm1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Nov 2023 11:42:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42212 "EHLO
+        id S234251AbjKCP4s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Nov 2023 11:56:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjKCPm0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Nov 2023 11:42:26 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCBE1BD;
-        Fri,  3 Nov 2023 08:42:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699026141; x=1730562141;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=KdKB9aJmwvfMZP5v+YnozyLbdMRDa6Ot69LEe5vbZeU=;
-  b=Fhrg/C0xsmaBzFCQDmJCiLjvBfgmuNDkcxzuatslDYVzPvi//3zEQ1ys
-   VSO8sTPJSBcH6f3usxObziJLD3OCH9XXmL+xZGqR9e8dAhshEXH9xwIbd
-   w9m+3Ts5UbydGeeFT5QrXgffWgS0VacrwWTOzGZnsn2o2dTKUrObRc3Ui
-   ap8EyyMXGGbPxD2ThpxKWxDdNPfuHDyeiPCze+UKd5XvgejJs4eRUwuWz
-   CLGEOMwUZtwh0xvsJioSOz4v8FipwmIZUBc7LrtZDdaXeuotddkuuq4/o
-   ockPTejl3FtahDOFblsRcbN2uVj5uhNy5WAChzDE61AXPYftemt0cfkjU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10883"; a="391834296"
-X-IronPort-AV: E=Sophos;i="6.03,273,1694761200"; 
-   d="scan'208";a="391834296"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2023 08:42:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.03,273,1694761200"; 
-   d="scan'208";a="2937967"
-Received: from tinggan-mobl.amr.corp.intel.com (HELO [10.213.173.96]) ([10.213.173.96])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2023 08:42:19 -0700
-Message-ID: <6b22f4715641bc4ffc76eea8a4e6358bcbea9e1c.camel@linux.intel.com>
-Subject: Re: [PATCH v2] thermal: core: Add trip thresholds for trip crossing
- detection
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Date:   Fri, 03 Nov 2023 11:42:07 -0400
-In-Reply-To: <12317335.O9o76ZdvQC@kreacher>
-References: <12317335.O9o76ZdvQC@kreacher>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+        with ESMTP id S230175AbjKCP4r (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Nov 2023 11:56:47 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51661BF
+        for <linux-pm@vger.kernel.org>; Fri,  3 Nov 2023 08:56:40 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-40836ea8cbaso16149155e9.0
+        for <linux-pm@vger.kernel.org>; Fri, 03 Nov 2023 08:56:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google; t=1699026999; x=1699631799; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5Y/ZjzGOYf3uFvR4OqP02C9g68KQxKGfJ/zZcpHtn+k=;
+        b=XjxNe+FS0k9Y6qkwdVA2MEvHCu607XofalfLUaXNpd4dahSC99thY5YwMmdrlvvt13
+         K0jF0OkPrKg4dPCpTgLFAITwbS8k9/BQq0fvoxaBSm4Kx4baIXI96Mv9QuK6GhJMpHbE
+         M2bwJmdXk4OpFTZYth9HiCwBAOPK6h9BKTHp/yYYu0XAHUbl94UHtZ8DKFm+xQ1/U9u/
+         0t6RhPv8rk3+RRQ0QIWeD3Sim7B5OkzS/SgQifAhidxAK5ZGCi8hji+596VT+o+/WMn7
+         uxQd/nZvYqLl3bMDZN2fGCGfGABZkVUcxlNVQpgi1OqVbcghDOzGRWn3TasWiOh1rulO
+         CvTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699026999; x=1699631799;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5Y/ZjzGOYf3uFvR4OqP02C9g68KQxKGfJ/zZcpHtn+k=;
+        b=fHH796VZX/BgXEMhJIvJaLdZRZIbJziyytlmFK15vRsV57TmbleqWsV6BwBVgf/KnI
+         mtrNZFdry8xiURSueftbILaj8S7fHJu6uaB2fluB7HoUFOllY+rLBjxIdR6otLQzbaW0
+         tUbTp/qFcz66laaMDlzSNhn0SgYFdbfWqvhOdkowjX9MS+nMHuQc+tp2vC0xd6dbFwr6
+         /wg4lnaO4GDrhowf6ThTY3syj9/xFpcstrxGS1NmKx5IgU/ASmUIeaHeEA2+d0VAhDK+
+         zUagXYQJT3nWfB6mD1LCdHv+aW9T9ydsiwdCWA7itR4Vk/REhZJszzkCWWHIINJnER1c
+         FWkQ==
+X-Gm-Message-State: AOJu0YwkgqFcFClXQXHVnKcSxcUCw4jFhDgtZ1iYUWDVvd72VO79Xqtp
+        DOTkrJ/VO12Uc0rGG4uCSVM5JAZ24Eu1l3KuNYEUhQ==
+X-Google-Smtp-Source: AGHT+IGTDlR1kMzo7Q8s1aofjqF9TBtqnKsq48wjkvuAfJPcwBkAF7KJXKeOa9SaNjlzNwAaiAkx4HluN8PnF2wMa78=
+X-Received: by 2002:a05:600c:4687:b0:409:5a92:470c with SMTP id
+ p7-20020a05600c468700b004095a92470cmr6936361wmo.13.1699026999264; Fri, 03 Nov
+ 2023 08:56:39 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <4169555.5IIHXK4Dsd@kreacher> <2786976.RHVxHup3hB@kreacher> <a5105853-6b36-7221-0d06-e726d33492fb@huawei.com>
+In-Reply-To: <a5105853-6b36-7221-0d06-e726d33492fb@huawei.com>
+From:   Doug Smythies <dsmythies@telus.net>
+Date:   Fri, 3 Nov 2023 08:56:29 -0700
+Message-ID: <CAAYoRsUrun69UQmx1VR+0CcuM0oyQC-Sm6zAS-TETLdAyHo9Sw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] cpufreq: intel_pstate: Add ->offline and ->online callbacks
+To:     Jinjie Ruan <ruanjinjie@huawei.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Doug Smythies <dsmythies@telus.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gRnJpLCAyMDIzLTExLTAzIGF0IDE1OjU2ICswMTAwLCBSYWZhZWwgSi4gV3lzb2NraSB3cm90
-ZToKPiBGcm9tOiBSYWZhZWwgSi4gV3lzb2NraSA8cmFmYWVsLmoud3lzb2NraUBpbnRlbC5jb20+
-Cj4gCj4gVGhlIHRyaXAgY3Jvc3NpbmcgZGV0ZWN0aW9uIGluIGhhbmRsZV90aGVybWFsX3RyaXAo
-KSBkb2VzIG5vdCB3b3JrCj4gY29ycmVjdGx5IGluIHRoZSBjYXNlcyB3aGVuIGEgdHJpcCBwb2lu
-dCBpcyBjcm9zc2VkIG9uIHRoZSB3YXkgdXAgYW5kCj4gdGhlbiB0aGUgem9uZSB0ZW1wZXJhdHVy
-ZSBzdGF5cyBhYm92ZSBpdHMgbG93IHRlbXBlcmF0dXJlICh0aGF0IGlzLAo+IGl0cwo+IHRlbXBl
-cmF0dXJlIGRlY3JlYXNlZCBieSBpdHMgaHlzdGVyZXNpcykuwqAgVGhlIHRyaXAgdGVtcGVyYXR1
-cmUgbWF5Cj4gYmUgcGFzc2VkIGJ5IHRoZSB6b25lIHRlbXBlcmF0dXJlIHN1YnNlcXVlbnRseSBp
-biB0aGF0IGNhc2UsIGV2ZW4KPiBtdWx0aXBsZSB0aW1lcywgYnV0IHRoYXQgZG9lcyBub3QgY291
-bnQgYXMgdGhlIHRyaXAgY3Jvc3NpbmcgYXMgbG9uZwo+IGFzCj4gdGhlIHpvbmUgdGVtcGVyYXR1
-cmUgZG9lcyBub3QgZmFsbCBiZWxvdyB0aGUgdHJpcCdzIGxvdyB0ZW1wZXJhdHVyZQo+IG9yLAo+
-IGluIG90aGVyIHdvcmRzLCB1bnRpbCB0aGUgdHJpcCBpcyBjcm9zc2VkIG9uIHRoZSB3YXkgZG93
-bi4KCkluIG90aGVyIHdvcmRzIHlvdSB3YW50IHRvIGF2b2lkIG11bHRpcGxlIHRyaXAgVVAgbm90
-aWZpY2F0aW9ucyB3aXRob3V0CmEgY29ycmVzcG9uZGluZyBET1dOIG5vdGlmaWNhdGlvbi4KClRo
-aXMgd2lsbCByZWR1Y2UgdW5uZWNlc3Nhcnkgbm9pc2UgdG8gdXNlciBzcGFjZS4gSXMgdGhpcyB0
-aGUKaW50ZW50aW9uPwoKVGhhbmtzLApTcmluaXZhcwoKPiAKPiA+IC0tLS0tLS0tLS0tbG93LS0t
-LS0tLS1oaWdoLS0tLS0tLS0tLS0tfAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8PC0tLS0t
-LS0tLT58Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoMKgwqAgaHlzdMKgwqAgfAo+IMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqDCoMKgwqDCoMKgwqDCoMKgwqAgfAo+IMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoCB8wqDCoMKgwqDCoMKgwqDCoMKgIC18LS0+IGNyb3NzZWQgb24gdGhl
-IHdheSB1cAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8Cj4gwqDCoMKgwqDCoMKgwqDCoCA8
-LS0tfC0tIGNyb3NzZWQgb24gdGhlIHdheSBkb3duCj4gCj4gSG93ZXZlciwgaGFuZGxlX3RoZXJt
-YWxfdHJpcCgpIHdpbGwgaW52b2tlCj4gdGhlcm1hbF9ub3RpZnlfdHpfdHJpcF91cCgpCj4gZXZl
-cnkgdGltZSB0aGUgdHJpcCB0ZW1wZXJhdHVyZSBpcyBwYXNzZWQgYnkgdGhlIHpvbmUgdGVtcGVy
-YXR1cmUgb24KPiB0aGUgd2F5IHVwIHJlZ2FyZGxlc3Mgb2Ygd2hldGhlciBvciBub3QgdGhlIHRy
-aXAgaGFzIGJlZW4gY3Jvc3NlZCBvbgo+IHRoZSB3YXkgZG93biB5ZXQuwqAgTW9yZW92ZXIsIGl0
-IHdpbGwgbm90IGNhbGwKPiB0aGVybWFsX25vdGlmeV90el90cmlwX2Rvd24oKQo+IGlmIHRoZSBs
-YXN0IHpvbmUgdGVtcGVyYXR1cmUgd2FzIGJldHdlZW4gdGhlIHRyaXAncyB0ZW1wZXJhdHVyZSBh
-bmQKPiBpdHMKPiBsb3cgdGVtcGVyYXR1cmUsIHNvIHNvbWUgInRyaXAgY3Jvc3NlZCBvbiB0aGUg
-d2F5IGRvd24iIGV2ZW50cyBtYXkKPiBub3QKPiBiZSByZXBvcnRlZC4KPiAKPiBUbyBhZGRyZXNz
-IHRoaXMgaXNzdWUsIGludHJvZHVjZSB0cmlwIHRocmVzaG9sZHMgZXF1YWwgdG8gZWl0aGVyIHRo
-ZQo+IHRlbXBlcmF0dXJlIG9mIHRoZSBnaXZlbiB0cmlwLCBvciBpdHMgbG93IHRlbXBlcmF0dXJl
-LCBzdWNoIHRoYXQgaWYKPiB0aGUgdHJpcCdzIHRocmVzaG9sZCBpcyBwYXNzZWQgYnkgdGhlIHpv
-bmUgdGVtcGVyYXR1cmUgb24gdGhlIHdheSB1cCwKPiBpdHMgdmFsdWUgd2lsbCBiZSBzZXQgdG8g
-dGhlIHRyaXAncyBsb3cgdGVtcGVyYXR1cmUgYW5kCj4gdGhlcm1hbF9ub3RpZnlfdHpfdHJpcF91
-cCgpIHdpbGwgYmUgY2FsbGVkLCBhbmQgaWYgdGhlIHRyaXAncwo+IHRocmVzaG9sZAo+IGlzIHBh
-c3NlZCBieSB0aGUgem9uZSB0ZW1wZXJhdHVyZSBvbiB0aGUgd2F5IGRvd24sIGl0cyB2YWx1ZSB3
-aWxsIGJlCj4gc2V0Cj4gdG8gdGhlIHRyaXAncyB0ZW1wZXJhdHVyZSAoaGlnaCkgYW5kIHRoZXJt
-YWxfbm90aWZ5X3R6X3RyaXBfZG93bigpCj4gd2lsbAo+IGJlIGNhbGxlZC7CoCBBY2NvcmRpbmds
-eSwgaWYgdGhlIHRocmVzaG9sZCBpcyBwYXNzZWQgb24gdGhlIHdheSB1cCwgaXQKPiBjYW5ub3Qg
-YmUgcGFzc2VkIG9uIHRoZSB3YXkgdXAgYWdhaW4gdW50aWwgaXRzIHBhc3NlZCBvbiB0aGUgd2F5
-IGRvd24KPiBhbmQgaWYgaXQgaXMgcGFzc2VkIG9uIHRoZSB3YXkgZG93biwgaXQgY2Fubm90IGJl
-IHBhc3NlZCBvbiB0aGUgd2F5Cj4gZG93bgo+IGFnYWluIHVudGlsIGl0IGlzIHBhc3NlZCBvbiB0
-aGUgd2F5IHVwIHdoaWNoIGd1YXJhbnRlZXMgY29ycmVjdAo+IHRyaWdnZXJpbmcgb2YgdHJpcCBj
-cm9zc2luZyBub3RpZmljYXRpb25zLgo+IAo+IElmIHRoZSBsYXN0IHRlbXBlcmF0dXJlIG9mIHRo
-ZSB6b25lIGlzIGludmFsaWQsIHRoZSB0cmlwJ3MgdGhyZXNob2xkCj4gd2lsbCBiZSBzZXQgZGVw
-ZW5kaW5nIG9mIHRoZSB6b25lJ3MgY3VycmVudCB0ZW1wZXJhdHVyZTogSWYgdGhhdAo+IHRlbXBl
-cmF0dXJlIGlzIGFib3ZlIHRoZSB0cmlwJ3MgdGVtcGVyYXR1cmUsIGl0cyB0aHJlc2hvbGQgd2ls
-bCBiZQo+IHNldCB0byBpdHMgbG93IHRlbXBlcmF0dXJlIG9yIG90aGVyd2lzZSBpdHMgdGhyZXNo
-b2xkIHdpbGwgYmUgc2V0IHRvCj4gaXRzIChoaWdoKSB0ZW1wZXJhdHVyZS7CoCBCZWNhdXNlIHRo
-ZSB6b25lIHRlbXBlcmF0dXJlIGlzIGluaXRpYWxseQo+IHNldCB0byBpbnZhbGlkIGFuZCB0ei0+
-bGFzdF90ZW1wZXJhdHVyZSBpcyBvbmx5IHVwZGF0ZWQgYnkKPiB1cGRhdGVfdGVtcGVyYXR1cmUo
-KSwgdGhpcyBpcyBzdWZmaWNpZW50IHRvIHNldCB0aGUgY29ycmVjdCBpbml0aWFsCj4gdGhyZXNo
-b2xkIHZhbHVlcyBmb3IgYWxsIHRyaXBzLgo+IAo+IExpbms6Cj4gaHR0cHM6Ly9sb3JlLmtlcm5l
-bC5vcmcvYWxsLzIwMjIwNzE4MTQ1MDM4LjExMTQzNzktNC1kYW5pZWwubGV6Y2Fub0BsaW5hcm8u
-b3JnCj4gU2lnbmVkLW9mZi1ieTogUmFmYWVsIEouIFd5c29ja2kgPHJhZmFlbC5qLnd5c29ja2lA
-aW50ZWwuY29tPgo+IC0tLQo+IAo+IHYxIChSRkMpIC0+IHYyOiBBZGQgbWlzc2luZyBkZXNjcmlw
-dGlvbiBvZiBhIG5ldyBzdHJ1Y3QgdGhlcm1hbF90cmlwCj4gZmllbGQuCj4gCj4gQW5kIGJlY2F1
-c2Ugbm8gY29tbWVudHMgaGF2ZSBiZWVuIHNlbnQgZm9yIGEgd2VlaywgdGhpcyBpcyBub3QgYW4g
-UkZDCj4gYW55IG1vcmUuCj4gCj4gLS0tCj4gwqBkcml2ZXJzL3RoZXJtYWwvdGhlcm1hbF9jb3Jl
-LmMgfMKgwqAgMjEgKysrKysrKysrKysrKystLS0tLS0tCj4gwqBpbmNsdWRlL2xpbnV4L3RoZXJt
-YWwuaMKgwqDCoMKgwqDCoMKgIHzCoMKgwqAgMiArKwo+IMKgMiBmaWxlcyBjaGFuZ2VkLCAxNiBp
-bnNlcnRpb25zKCspLCA3IGRlbGV0aW9ucygtKQo+IAo+IEluZGV4OiBsaW51eC1wbS9kcml2ZXJz
-L3RoZXJtYWwvdGhlcm1hbF9jb3JlLmMKPiA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Cj4gLS0tIGxpbnV4LXBtLm9yaWcv
-ZHJpdmVycy90aGVybWFsL3RoZXJtYWxfY29yZS5jCj4gKysrIGxpbnV4LXBtL2RyaXZlcnMvdGhl
-cm1hbC90aGVybWFsX2NvcmUuYwo+IEBAIC0zNDUsMjIgKzM0NSwyOSBAQCBzdGF0aWMgdm9pZCBo
-YW5kbGVfY3JpdGljYWxfdHJpcHMoc3RydWN0Cj4gwqB9Cj4gwqAKPiDCoHN0YXRpYyB2b2lkIGhh
-bmRsZV90aGVybWFsX3RyaXAoc3RydWN0IHRoZXJtYWxfem9uZV9kZXZpY2UgKnR6LAo+IC3CoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oGNvbnN0IHN0cnVjdCB0aGVybWFsX3RyaXAgKnRyaXApCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc3RydWN0IHRoZXJtYWxf
-dHJpcCAqdHJpcCkKPiDCoHsKPiDCoMKgwqDCoMKgwqDCoMKgaWYgKHRyaXAtPnRlbXBlcmF0dXJl
-ID09IFRIRVJNQUxfVEVNUF9JTlZBTElEKQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgcmV0dXJuOwo+IMKgCj4gLcKgwqDCoMKgwqDCoMKgaWYgKHR6LT5sYXN0X3RlbXBlcmF0dXJl
-ICE9IFRIRVJNQUxfVEVNUF9JTlZBTElEKSB7Cj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoGlmICh0ei0+bGFzdF90ZW1wZXJhdHVyZSA8IHRyaXAtPnRlbXBlcmF0dXJlICYmCj4gLcKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB0ei0+dGVtcGVyYXR1cmUgPj0gdHJp
-cC0+dGVtcGVyYXR1cmUpCj4gK8KgwqDCoMKgwqDCoMKgaWYgKHR6LT5sYXN0X3RlbXBlcmF0dXJl
-ID09IFRIRVJNQUxfVEVNUF9JTlZBTElEKSB7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoHRyaXAtPnRocmVzaG9sZCA9IHRyaXAtPnRlbXBlcmF0dXJlOwo+ICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqBpZiAodHotPnRlbXBlcmF0dXJlID49IHRyaXAtPnRlbXBlcmF0dXJl
-KQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdHJpcC0+
-dGhyZXNob2xkIC09IHRyaXAtPmh5c3RlcmVzaXM7Cj4gK8KgwqDCoMKgwqDCoMKgfSBlbHNlIHsK
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKHR6LT5sYXN0X3RlbXBlcmF0dXJl
-IDwgdHJpcC0+dGhyZXNob2xkICYmCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCB0ei0+dGVtcGVyYXR1cmUgPj0gdHJpcC0+dGhyZXNob2xkKSB7Cj4gwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdGhlcm1hbF9ub3RpZnlfdHpfdHJp
-cF91cCh0ei0+aWQsCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAK
-PiB0aGVybWFsX3pvbmVfdHJpcF9pZCh0eiwgdHJpcCksCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgdHotPnRlbXBlcmF0dXJlKTsKPiAtwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgaWYgKHR6LT5sYXN0X3RlbXBlcmF0dXJlID49IHRyaXAtPnRlbXBlcmF0
-dXJlICYmCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB0ei0+dGVtcGVy
-YXR1cmUgPCB0cmlwLT50ZW1wZXJhdHVyZSAtIHRyaXAtCj4gPmh5c3RlcmVzaXMpCj4gK8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB0cmlwLT50aHJlc2hvbGQg
-PSB0cmlwLT50ZW1wZXJhdHVyZSAtIHRyaXAtCj4gPmh5c3RlcmVzaXM7Cj4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoH0gZWxzZSBpZiAodHotPmxhc3RfdGVtcGVyYXR1cmUgPj0gdHJp
-cC0+dGhyZXNob2xkICYmCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIHR6LT50ZW1wZXJhdHVyZSA8IHRyaXAtPnRocmVzaG9sZCkgewo+IMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHRoZXJtYWxfbm90aWZ5
-X3R6X3RyaXBfZG93bih0ei0+aWQsCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgCj4gdGhlcm1hbF96b25lX3RyaXBfaWQodHosIHRyaXApLAo+IMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB0ei0+dGVtcGVyYXR1cmUpOwo+
-ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdHJpcC0+dGhy
-ZXNob2xkID0gdHJpcC0+dGVtcGVyYXR1cmU7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoH0KPiDCoMKgwqDCoMKgwqDCoMKgfQo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoGlmICh0cmlw
-LT50eXBlID09IFRIRVJNQUxfVFJJUF9DUklUSUNBTCB8fCB0cmlwLT50eXBlID09Cj4gVEhFUk1B
-TF9UUklQX0hPVCkKPiBAQCAtNDAzLDcgKzQxMCw3IEBAIHN0YXRpYyB2b2lkIHRoZXJtYWxfem9u
-ZV9kZXZpY2VfaW5pdChzdHIKPiDCoHZvaWQgX190aGVybWFsX3pvbmVfZGV2aWNlX3VwZGF0ZShz
-dHJ1Y3QgdGhlcm1hbF96b25lX2RldmljZSAqdHosCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGVudW0gdGhlcm1hbF9u
-b3RpZnlfZXZlbnQgZXZlbnQpCj4gwqB7Cj4gLcKgwqDCoMKgwqDCoMKgY29uc3Qgc3RydWN0IHRo
-ZXJtYWxfdHJpcCAqdHJpcDsKPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgdGhlcm1hbF90cmlwICp0
-cmlwOwo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoGlmIChhdG9taWNfcmVhZCgmaW5fc3VzcGVuZCkp
-Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm47Cj4gSW5kZXg6IGxpbnV4
-LXBtL2luY2x1ZGUvbGludXgvdGhlcm1hbC5oCj4gPT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQo+IC0tLSBsaW51eC1wbS5v
-cmlnL2luY2x1ZGUvbGludXgvdGhlcm1hbC5oCj4gKysrIGxpbnV4LXBtL2luY2x1ZGUvbGludXgv
-dGhlcm1hbC5oCj4gQEAgLTU3LDEyICs1NywxNCBAQCBlbnVtIHRoZXJtYWxfbm90aWZ5X2V2ZW50
-IHsKPiDCoCAqIHN0cnVjdCB0aGVybWFsX3RyaXAgLSByZXByZXNlbnRhdGlvbiBvZiBhIHBvaW50
-IGluIHRlbXBlcmF0dXJlCj4gZG9tYWluCj4gwqAgKiBAdGVtcGVyYXR1cmU6IHRlbXBlcmF0dXJl
-IHZhbHVlIGluIG1pbGlDZWxzaXVzCj4gwqAgKiBAaHlzdGVyZXNpczogcmVsYXRpdmUgaHlzdGVy
-ZXNpcyBpbiBtaWxpQ2Vsc2l1cwo+ICsgKiBAdGhyZXNob2xkOiB0cmlwIGNyb3NzaW5nIG5vdGlm
-aWNhdGlvbiB0aHJlc2hvbGQgbWlsaUNlbHNpdXMKPiDCoCAqIEB0eXBlOiB0cmlwIHBvaW50IHR5
-cGUKPiDCoCAqIEBwcml2OiBwb2ludGVyIHRvIGRyaXZlciBkYXRhIGFzc29jaWF0ZWQgd2l0aCB0
-aGlzIHRyaXAKPiDCoCAqLwo+IMKgc3RydWN0IHRoZXJtYWxfdHJpcCB7Cj4gwqDCoMKgwqDCoMKg
-wqDCoGludCB0ZW1wZXJhdHVyZTsKPiDCoMKgwqDCoMKgwqDCoMKgaW50IGh5c3RlcmVzaXM7Cj4g
-K8KgwqDCoMKgwqDCoMKgaW50IHRocmVzaG9sZDsKPiDCoMKgwqDCoMKgwqDCoMKgZW51bSB0aGVy
-bWFsX3RyaXBfdHlwZSB0eXBlOwo+IMKgwqDCoMKgwqDCoMKgwqB2b2lkICpwcml2Owo+IMKgfTsK
-PiAKPiAKPiAKCg==
+On Fri, Nov 3, 2023 at 3:57=E2=80=AFAM Jinjie Ruan <ruanjinjie@huawei.com> =
+wrote:
+> On 2020/8/25 1:43, Rafael J. Wysocki wrote:
+> > From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+> >
+> > Add ->offline and ->online driver callbacks to prepare for taking a
+> > CPU offline and to restore its working configuration when it goes
+> > back online, respectively, to avoid invoking the ->init callback on
+> > every CPU online which is quite a bit of unnecessary overhead.
+> >
+> > Define ->offline and ->online so that they can be used in the
+> > passive mode as well as in the active mode and because ->offline
+> > will do the majority of ->stop_cpu work, the passive mode does
+> > not need that callback any more, so drop it.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >
+> > -> v2: Typo fixes and changelog edits (Doug).
+> >
+> > ---
+> >  drivers/cpufreq/intel_pstate.c | 38 ++++++++++++++++++++++++++++------
+> >  1 file changed, 32 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pst=
+ate.c
+> > index 3d18934fa975..98836ac299db 100644
+> > --- a/drivers/cpufreq/intel_pstate.c
+> > +++ b/drivers/cpufreq/intel_pstate.c
+> > @@ -2297,28 +2297,51 @@ static int intel_pstate_verify_policy(struct cp=
+ufreq_policy_data *policy)
+> >       return 0;
+> >  }
+> >
+> > -static void intel_cpufreq_stop_cpu(struct cpufreq_policy *policy)
+> > +static int intel_pstate_cpu_offline(struct cpufreq_policy *policy)
+> >  {
+> > +     pr_debug("CPU %d going offline\n", policy->cpu);
+> > +
+> > +     intel_pstate_exit_perf_limits(policy);
+> > +
+> > +     /*
+> > +      * If the CPU is an SMT thread and it goes offline with the perfo=
+rmance
+> > +      * settings different from the minimum, it will prevent its sibli=
+ng
+> > +      * from getting to lower performance levels, so force the minimum
+> > +      * performance on CPU offline to prevent that from happening.
+> > +      */
+> >       if (hwp_active)
+> >               intel_pstate_hwp_force_min_perf(policy->cpu);
+> >       else
+> >               intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int intel_pstate_cpu_online(struct cpufreq_policy *policy)
+> > +{
+> > +     pr_debug("CPU %d going online\n", policy->cpu);
+> > +
+> > +     intel_pstate_init_acpi_perf_limits(policy);
+> > +
+> > +     if (hwp_active)
+> > +             wrmsrl_on_cpu(policy->cpu, MSR_HWP_REQUEST,
+> > +                           all_cpu_data[policy->cpu]->hwp_req_cached);
+> > +
+> > +     return 0;
+> >  }
+>
+> On Ice Lake server, there seems a bug when CONFIG_X86_INTEL_PSTATE=3Dy an=
+d
+> not configure intel_pstate=3Dxxx in command line.
+>
+> Although the Performance tuner is used, the CPU have the lowest
+> frequency in scaling_cur_freq after the CPU goes offline and then goes
+> online, running the same infinite loop load.
+>
+> How to produce:
+>
+> echo performance > /sys/devices/system/cpu/cpu12/cpufreq/scaling_governor
+>
+> cat while_true.c
+> #include <stdio.h>
+> void main(void)
+> {
+>         while(1);
+> }
+>
+>
+> [root@localhost freq_test]# cat test.sh
+> #!/bin/bash
+>
+> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
+> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_governor
+> taskset -c ${1} ./while_true &
+> sleep 1s
+>
+> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
+>
+> echo 0 > /sys/devices/system/cpu/cpu${1}/online
+>
+> sleep 1s
+> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
+>
+> sleep 1s
+>
+> echo 1 > /sys/devices/system/cpu/cpu${1}/online
+> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
+>
+> taskset -c ${1} ./while_true &
+>
+> sleep 1s
+> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
+>
+> sleep 1s
+> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
+>
+> sleep 1s
+> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
+>
+>
+> [root@localhost freq_test]# sh test.sh 40
+> 2300000
+> performance
+> 2299977
+> cat: /sys/devices/system/cpu/cpu40/cpufreq/scaling_cur_freq: Device or
+> resource busy
+> 2300000
+> 2300022
+> 2300000
+> 2299953
+> [root@localhost freq_test]# sh test.sh 50
+> 2300000
+> performance
+> 2300000
+> cat: /sys/devices/system/cpu/cpu50/cpufreq/scaling_cur_freq: Device or
+> resource busy
+> 2300000
+> 2299977
+> 2300022
+> 2299977
+> [root@localhost freq_test]# sh test.sh 20
+> 2300000
+> performance
+> 2299977
+> cat: /sys/devices/system/cpu/cpu20/cpufreq/scaling_cur_freq: Device or
+> resource busy
+> 800000
+> 800000
+> 800000
+> 799992
+> [root@localhost freq_test]# sh test.sh 21
+> 2300000
+> performance
+> 2300000
+> cat: /sys/devices/system/cpu/cpu21/cpufreq/scaling_cur_freq: Device or
+> resource busy
+> 800000
+> 800000
+> 800000
+> 800000
+>
+> [root@localhost freq_test]# cat
+> /sys/devices/system/cpu/cpu21/cpufreq/scaling_max_freq
+> 2300000
+> [root@localhost freq_test]# cat
+> /sys/devices/system/cpu/cpu21/cpufreq/scaling_min_freq
+> 800000
 
+Hi,
+
+I followed your "how to reproduce" notes exactly.
+So far, I have been unable to reproduce your issue.
+
+I am using kernel 6.6.
+My processor is:
+Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
+
+Results:
+root@s19:/home/doug/pstate# ./test.sh 8
+800000
+performance
+4799994
+cat: /sys/devices/system/cpu/cpu8/cpufreq/scaling_cur_freq: Device or
+resource busy
+4799999
+4800000
+4800001
+4799996
+root@s19:/home/doug/pstate# ./test.sh 7
+800000
+performance
+4800001
+cat: /sys/devices/system/cpu/cpu7/cpufreq/scaling_cur_freq: Device or
+resource busy
+4799967
+4800028
+4800006
+4799997
+root@s19:/home/doug/pstate# ./test.sh 6
+800000
+performance
+4800001
+cat: /sys/devices/system/cpu/cpu6/cpufreq/scaling_cur_freq: Device or
+resource busy
+4799983
+4800001
+4799993
+4800002
+root@s19:/home/doug/pstate# ./test.sh 5
+800000
+performance
+4799990
+cat: /sys/devices/system/cpu/cpu5/cpufreq/scaling_cur_freq: Device or
+resource busy
+4800006
+4800002
+4800011
+4799980
+root@s19:/home/doug/pstate# ./test.sh 4
+4799940
+performance
+4799985
+cat: /sys/devices/system/cpu/cpu4/cpufreq/scaling_cur_freq: Device or
+resource busy
+4799975
+4799994
+4799984
+4799996
+root@s19:/home/doug/pstate# ./test.sh 3
+4799986
+performance
+4799990
+cat: /sys/devices/system/cpu/cpu3/cpufreq/scaling_cur_freq: Device or
+resource busy
+4799976
+4800015
+4800000
+4799995
+
+... Doug
