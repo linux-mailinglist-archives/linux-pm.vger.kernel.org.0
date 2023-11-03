@@ -2,101 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99EFF7DFEB6
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Nov 2023 06:29:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E7D7E015B
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Nov 2023 11:31:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbjKCF3D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Nov 2023 01:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59168 "EHLO
+        id S235339AbjKCILs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Nov 2023 04:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjKCF3D (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Nov 2023 01:29:03 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE3E18B
-        for <linux-pm@vger.kernel.org>; Thu,  2 Nov 2023 22:28:57 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id 46e09a7af769-6ce2ee17cb5so928676a34.2
-        for <linux-pm@vger.kernel.org>; Thu, 02 Nov 2023 22:28:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698989337; x=1699594137; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R5BuWds/Km7S1ap/RjvexaNEcZ8RFMVEsbKbJHRq8sI=;
-        b=J9zcEp3qm+4bRTtdvA/9kaLHA+PkHKw2mOzybVUOvLH2JNHwG5ej6tZgg9La0Dlotk
-         pLG2QwMIV1ApCKOxXpbqXScqV0bh/dqPjbei8OrSwrTQX/8lqfSiZhLIDCF783cLRm4i
-         QVz+CR4CtZfH9q6iaCvXWp6RKOXBqqdHrs/l2jbq9xr6Z6DJlRDr31lviyKUtt6V16fb
-         JGYP3VkdG2c0X5oJ3XMsPy0mVJyTfnX0OX2q2VLrAPcaO0o68INpa1pbSKRQ+ahjbRtY
-         Ch8tTaWaV5dJzqST+e6Tn1layj05meqP8nmNxh/ypbnEG7nJKMp277Rb4uIJeOOKNlib
-         vQ/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698989337; x=1699594137;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R5BuWds/Km7S1ap/RjvexaNEcZ8RFMVEsbKbJHRq8sI=;
-        b=jvV69PdGUx1RlUtPq6IBOBmEzVIMRtR4k93bGVLMMC430FdGEzefd26/YDJIitHQ90
-         B4acl9mwzzgqPl9QuTYg7QPka+4TYQzPfxDPWZkXPzi0Be3HXIDXxVqsjdSlwr5Bb2uS
-         X5z07tYn9yaGs1xkeY21V7ZC4grz2Xf83+GT3T6LKREEnQsTxu3GnYVN2HARfUenjgQy
-         iSD4Cu58CIezfRn2B4//clSonKDItCarjcEITbJMm/TbejCejdF9uY1A/0AOCa8NAzQb
-         /QmBkmw1+sjVYNo0FfJcTIPg6IiIQO5aC7GYTf1w8A/VKt0M4PhjELqxqzpxWSZsVPfG
-         O/ww==
-X-Gm-Message-State: AOJu0Yw2AGl3zo7QfpuNUGGUgwo7P7LBXbnC2pPuksdPP0W8XYrRo9zi
-        4JMeYJg8Gnnk1LrL7lWqP4zKtA==
-X-Google-Smtp-Source: AGHT+IEvTVDta+QU5POWQFXjIRIq+4Spd7NzF6ZNGRMoKviplKh2yc6/E+96Cv7AM3VXzgvFFAAbSQ==
-X-Received: by 2002:a05:6830:1d9:b0:6c0:e5c3:40b5 with SMTP id r25-20020a05683001d900b006c0e5c340b5mr20551418ota.6.1698989336873;
-        Thu, 02 Nov 2023 22:28:56 -0700 (PDT)
-Received: from localhost ([122.172.80.14])
-        by smtp.gmail.com with ESMTPSA id r19-20020aa78b93000000b0069343e474bcsm592667pfd.104.2023.11.02.22.28.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Nov 2023 22:28:56 -0700 (PDT)
-Date:   Fri, 3 Nov 2023 10:58:54 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 0/3] OPP: Simplify required-opp handling
-Message-ID: <20231103052854.bc7jqaubc5uj6ncj@vireshk-i7>
-References: <cover.1698661048.git.viresh.kumar@linaro.org>
+        with ESMTP id S235098AbjKCILr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Nov 2023 04:11:47 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29701A8;
+        Fri,  3 Nov 2023 01:11:41 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A359R76014714;
+        Fri, 3 Nov 2023 08:11:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=u3JwXlcRcYPnxvK4HEmxg7Tn23cs0JQWAl1lXbwAKV0=;
+ b=C2ssioIo2o3NeAxVbkPngBn48yRuC9fY5RUWjUHzkmB/RKMa1uv1MpH6/G9kCM9p3GSv
+ GVeMaHq9RuAUzlAFddNsBKDEXBELfYHdc34Kbtln/z+3xg8lAJ4FXxNYrP65j9C+Ujd8
+ KAR245B0IDRgbBLOe8yPmeshctzMT9e0omuMKrQwl2vEy5dZqHnkS7SEySHgziXPDDoZ
+ 90p8K+zM4Ld4NlJpNZA4YRrO1qdkwy1f028gIbKEb/aS8a+3uyh9umJslu7dsryXReeO
+ X5nb0yiNhL09p01FFDeNWWDWaa+zprCJTm5hOspS5kdyKYGVP7R3MqqqWGP+y//eN540 lA== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3u477ptpat-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Nov 2023 08:11:34 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3A38BX1o006588
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 3 Nov 2023 08:11:33 GMT
+Received: from [10.216.16.147] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Fri, 3 Nov
+ 2023 01:11:27 -0700
+Message-ID: <b6a023e9-bb54-44d6-8a48-5f6204da5b95@quicinc.com>
+Date:   Fri, 3 Nov 2023 13:41:23 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1698661048.git.viresh.kumar@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH V3 4/4] arm64: dts: qcom: ipq5018: Add tsens node
+Content-Language: en-US
+To:     Robert Marko <robimarko@gmail.com>
+CC:     Sricharan R <srichara@win-platform-upstream01.qualcomm.com>,
+        <krzysztof.kozlowski@linaro.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <srinivas.kandagatla@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <dmitry.baryshkov@linaro.org>
+References: <20230922115116.2748804-1-srichara@win-platform-upstream01.qualcomm.com>
+ <20230922115116.2748804-5-srichara@win-platform-upstream01.qualcomm.com>
+ <1c6ecc92-89d3-3b7e-c2d0-e2fded9b446d@gmail.com>
+ <f44b6e59-c26e-1026-49b7-e02ff02d7562@quicinc.com>
+ <CAOX2RU6j75+8tFMTu=fVKY=mBkv8OaZJzWYUfnqkwfJY01QqYw@mail.gmail.com>
+From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
+In-Reply-To: <CAOX2RU6j75+8tFMTu=fVKY=mBkv8OaZJzWYUfnqkwfJY01QqYw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: dJiFYVTVgberLcXSF2KIYI7ivCo-g49y
+X-Proofpoint-ORIG-GUID: dJiFYVTVgberLcXSF2KIYI7ivCo-g49y
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-03_06,2023-11-02_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ phishscore=0 adultscore=0 clxscore=1011 priorityscore=1501 mlxscore=0
+ mlxlogscore=999 bulkscore=0 impostorscore=0 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2310240000 definitions=main-2311030066
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30-10-23, 15:54, Viresh Kumar wrote:
-> Hello,
-> 
-> I wasn't able to test this locally (despite trying to hack it around) and need
-> help from someone who is `virt_devs` field of `struct dev_pm_opp_config`.
-> 
-> Pushed here:
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/required-opps
-> 
-> V1->V2:
-> - Support opp-level 0, drop vote i.e..
-> - Fix OPP pointer while calling dev_pm_opp_set_opp() recursively.
-> - Minor checks and fixes.
-> - Add Reviewed-by from Ulf.
+<..>
 
-Stephan, Ulf,
+>>> On 22. 09. 2023. 13:51, Sricharan R wrote:
+>>>> From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+>>>>
+>>>> IPQ5018 has tsens V1.0 IP with 4 sensors.
+>>>> There is no RPM, so tsens has to be manually enabled. Adding the tsens
+>>>> and nvmem node and IPQ5018 has 4 thermal sensors (zones). With the
+>>>> critical temperature being 120'C and action is to reboot. Adding all
+>>>> the 4 zones here.
+>>>>
+>>>> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+>>>> ---
+>>>>    [v3] Ordered the qfprom device node properties as per
+>>>>         Krzysztof's comments
+>>>>
+>>>>    arch/arm64/boot/dts/qcom/ipq5018.dtsi | 169 ++++++++++++++++++++++++++
+>>>>    1 file changed, 169 insertions(+)
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/qcom/ipq5018.dtsi
+>>>> b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
+>>>> index 9f13d2dcdfd5..9e28b54ebcbd 100644
+>>>> --- a/arch/arm64/boot/dts/qcom/ipq5018.dtsi
+>>>> +++ b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
+>>>> @@ -93,6 +93,117 @@ soc: soc@0 {
+>>>>            #size-cells = <1>;
+>>>>            ranges = <0 0 0 0xffffffff>;
+>>>> +        qfprom: qfprom@a0000 {
+>>>> +            compatible = "qcom,ipq5018-qfprom", "qcom,qfprom";
+>>> Hi,
+>>>
+>>> "qcom,ipq5018-qfprom" needs to be documented in QFPROM bindings first.
+>>
+>>    Already posted here [1]. Initially had it in the same series, but kept
+>>    it separately based on review comments.
+>>
+>>    [1] https://www.spinics.net/lists/devicetree/msg633408.html
+> 
+> Well, if it's not part of the same series then this addition would
+> cause a warning as its
+> undocumented.
+> 
+> I also dont see where is it documented as part of the v2 series.
 
-Any feedback on this before I merge it ?
+  Then in that case, will keep it in same series again in V4
 
--- 
-viresh
+Regards,
+  Sricharan
