@@ -2,73 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0475D7E026D
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Nov 2023 12:59:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63E157E0330
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Nov 2023 13:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231594AbjKCL7K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Nov 2023 07:59:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
+        id S230104AbjKCMwj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Nov 2023 08:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjKCL7J (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Nov 2023 07:59:09 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A46D47
-        for <linux-pm@vger.kernel.org>; Fri,  3 Nov 2023 04:59:03 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-da41acaea52so1211580276.3
-        for <linux-pm@vger.kernel.org>; Fri, 03 Nov 2023 04:59:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699012743; x=1699617543; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zvso5yHREiVwxjCHbrYyDil+XqHPe3XS0+4PTOkM2qI=;
-        b=hubobDWHSQG3TH/0+hzipaVhvcLIZTEBXdTqPFRvddWhXKNuO1905HuK3lP2kgJpdl
-         3JQJ3tUCX+V9WcZg+2dnoxbN7Bk+c7fGSeGitawfTNYNmIIfKV8h3y6KOAKOjkOjfLFo
-         cdTmNg1zq4IWeUffZ9F8MfnIbYepk5T0V7biBUFZ5gcqLjZfx9M1SYdwSTe+L10vNITR
-         3cRakD+Uhb51XHWn/IuKxkb+rqaSN2egyByAb3EA7Sb5z2uVWCCRFn6iKnzvTClFwIG8
-         6yeVSy5ePQf94EmEkVg9EQuI+E1rmoT2tu5mvl6S9dFS0iWrvt7dNRuK5F/AcBoWtanD
-         uFtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699012743; x=1699617543;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zvso5yHREiVwxjCHbrYyDil+XqHPe3XS0+4PTOkM2qI=;
-        b=KhNNjLd/kMG/HmAafpBwcraN6D6i85o7F3KGhHM6EN3xyrxhCsdCkBFUq2EG4pg0kd
-         iuNP13zRxwWW+PLpk7Imeu8ngrBFoxPjVEt9kUm6tkDxzfSZVPO1xyIi2KoyhvIuoznF
-         lCO7zFV4C4UHX2f/2rniEpLE83MZrBGCquztVzlpvHCtrVpceF5JXf/9dpYOgEcENhcu
-         aqR0+3Cr3SuzCq4hh/by6JwivgAc42XzacoZKmJUHgs9zsC1J8YTAX/H89PMMbx7OeiG
-         PIGr3r65Aw0RICbhRxJvCMb+QtOc/97Wjzsrj1YF9LEVx3KIeE8jads+oNb1GbRHeSvt
-         c64g==
-X-Gm-Message-State: AOJu0YwrhWJhCXL+vzGGe5f0aaGHZFbsKjH9NcWf+GOmRhdBV2N68fc5
-        d77PN6ra4lm0hBdBAuLyCEEz8Otd2eRV8TiVqsm9XA==
-X-Google-Smtp-Source: AGHT+IFSD/qkngXLUXcqDqwoE0FkLiw5mf758D+BXCEqBIspX23Cv09fe3PgFzm3+Mnc0nGBHKOHiyCX8VJjHb8fZyg=
-X-Received: by 2002:a25:7407:0:b0:da0:39ed:3ebb with SMTP id
- p7-20020a257407000000b00da039ed3ebbmr20712012ybc.3.1699012743083; Fri, 03 Nov
- 2023 04:59:03 -0700 (PDT)
+        with ESMTP id S229790AbjKCMwi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Nov 2023 08:52:38 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E23FCE;
+        Fri,  3 Nov 2023 05:52:32 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4SMLGZ168Hz6K982;
+        Fri,  3 Nov 2023 20:51:34 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Fri, 3 Nov
+ 2023 12:52:29 +0000
+Date:   Fri, 3 Nov 2023 12:52:28 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+CC:     James Morse <james.morse@arm.com>, <linux-pm@vger.kernel.org>,
+        <loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+        <linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+        <x86@kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        <jianyong.wu@arm.com>, <justin.he@arm.com>
+Subject: Re: [RFC PATCH v2 15/35] ACPI: processor: Add support for
+ processors described as container packages
+Message-ID: <20231103125228.00005c94@Huawei.com>
+In-Reply-To: <ZUTOwuZVLvzptuuP@shell.armlinux.org.uk>
+References: <20230913163823.7880-1-james.morse@arm.com>
+        <20230913163823.7880-16-james.morse@arm.com>
+        <20230914145353.000072e2@Huawei.com>
+        <ZUTOwuZVLvzptuuP@shell.armlinux.org.uk>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-References: <cover.1697710527.git.viresh.kumar@linaro.org> <f709e9e273004be43efe3a2854a7e7b51a777f99.1697710527.git.viresh.kumar@linaro.org>
- <CAPDyKFqbnsdT0nqKwQhai875CwwpW_vepr816fL+i8yLh=YQhw@mail.gmail.com>
- <20231025065458.z3klmhahrcqh6qyw@vireshk-i7> <CAPDyKFr4vdsKVYEx0aF5k_a1bTjp3NzMpNgaXDJOJrvujT7iRg@mail.gmail.com>
- <ZTkciw5AwufxQYnB@gerhold.net> <CAPDyKFq+zsoeF-4h5TfT4Z+S46a501_pUq8y2c1x==Tt6EKBGA@mail.gmail.com>
- <20231030102944.nrw4bta467zxes5c@vireshk-i7>
-In-Reply-To: <20231030102944.nrw4bta467zxes5c@vireshk-i7>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 3 Nov 2023 12:58:26 +0100
-Message-ID: <CAPDyKFrn97POKuNc3cMM9TOaw-f-ufLwYtUY8_L2w8+hzECWOA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] OPP: Use _set_opp_level() for single genpd case
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Stephan Gerhold <stephan@gerhold.net>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,71 +59,89 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 30 Oct 2023 at 11:29, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 26-10-23, 11:53, Ulf Hansson wrote:
-> > On Wed, 25 Oct 2023 at 15:49, Stephan Gerhold <stephan@gerhold.net> wrote:
-> > >  2. The OPP WARNing triggers with both variants because it just checks
-> > >     if "required-opps" has a single entry. I guess we need extra checks
-> > >     to exclude the "parent genpd" case compared to the "OPP" case.
-> > >
-> > >         [    1.116244] WARNING: CPU: 2 PID: 36 at drivers/opp/of.c:331 _link_required_opps+0x180/0x1cc
-> > >         [    1.125897] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-> > >         [    1.146887] pc : _link_required_opps+0x180/0x1cc
-> > >         [    1.146902] lr : _link_required_opps+0xdc/0x1cc
-> > >         [    1.276408] Call trace:
-> > >         [    1.283519]  _link_required_opps+0x180/0x1cc
-> > >         [    1.285779]  _of_add_table_indexed+0x61c/0xd40
-> > >         [    1.290292]  dev_pm_opp_of_add_table+0x10/0x18
-> > >         [    1.294546]  of_genpd_add_provider_simple+0x80/0x160
-> > >         [    1.298974]  cpr_probe+0x6a0/0x97c
-> > >         [    1.304092]  platform_probe+0x64/0xbc
-> > >
-> > > It does seem to work correctly, with and without this patch. So I guess
-> > > another option might be to simply silence this WARN_ON(). :')
-> >
-> > Oh, thanks for pointing this out! This case haven't crossed my mind yet!
-> >
-> > Allow me to think a bit more about it. I will get back to you again
-> > with a suggestion soon, unless Viresh comes back first. :-)
->
-> I have resent the series now.
->
-> Stephan, please give it a try again. Thanks.
->
-> Regarding this case where a genpd's table points to a parent genpd's table via
-> the required-opps, it is a bit tricky to solve and the only way around that I
-> could think of is that someone needs to call dev_pm_opp_set_config() with the
-> right device pointer, with that we won't hit the warning anymore and things will
-> work as expected.
->
-> In this case the OPP core needs to call dev_pm_domain_set_performance_state()
-> for device and then its genpd. We need the right device pointers :(
->
-> Ulf, also another important thing here is that maybe we would want the genpd
-> core to not propagate the voting anymore to the parent genpd's ? The
-> dev_pm_opp_set_opp() call is better placed at handling all things and not just
-> the performance state, like clk, regulator, bandwidth and so the recursion
-> should happen at OPP level only.
+On Fri, 3 Nov 2023 10:43:14 +0000
+"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
 
-Are you saying that the OPP library should be capable of managing the
-parent-clock-rates too, when there is a new rate being requested for a
-clock that belongs to an OPP? To me, that sounds like replicating
-framework specific knowledge into the OPP library, no? Why do we want
-this?
+> On Thu, Sep 14, 2023 at 02:53:53PM +0100, Jonathan Cameron wrote:
+> > On Wed, 13 Sep 2023 16:38:03 +0000
+> > James Morse <james.morse@arm.com> wrote:
+> >   
+> > > ACPI has two ways of describing processors in the DSDT. Either as a device
+> > > object with HID ACPI0007, or as a type 'C' package inside a Processor
+> > > Container. The ACPI processor driver probes CPUs described as devices, but
+> > > not those described as packages.
+> > >   
+> > 
+> > Specification reference needed...
+> > 
+> > Terminology wise, I'd just refer to Processor() objects as I think they
+> > are named objects rather than data terms like a package (Which include
+> > a PkgLength etc)  
+> 
+> I'm not sure what kind of reference you want for the above. Looking in
+> ACPI 6.5, I've found in 5.2.12:
+> 
+> "Starting with ACPI Specification 6.3, the use of the Processor() object
+> was deprecated. Only legacy systems should continue with this usage. On
+> the Itanium architecture only, a _UID is provided for the Processor()
+> that is a string object. This usage of _UID is also deprecated since it
+> can preclude an OSPM from being able to match a processor to a
+> non-enumerable device, such as those defined in the MADT. From ACPI
+> Specification 6.3 onward, all processor objects for all architectures
+> except Itanium must now use Device() objects with an _HID of ACPI0007,
+> and use only integer _UID values."
+> 
+> Also, there is:
+> 
+> https://uefi.org/specs/ACPI/6.5/08_Processor_Configuration_and_Control.html#declaring-processors
 
-Unless I totally misunderstood your suggestion, I think it would be
-better if the OPP library remained simple and didn't run recursive
-calls, but instead relied on each framework to manage the aggregation
-and propagation to parents.
+That pair of refs, just as 'where to look if you care' cross references, seem
+to cover it as well as possible.
 
-> For now my series shouldn't break anything,
-> just that we will try to set performance state twice for the parent genpd, the
-> second call should silently return as the target state should be equal to
-> current state.
->
-> --
-> viresh
+> 
+> Unfortunately, using the search facility on that site to try and find
+> Processor() doesn't work - it appears to strip the "()" characters from
+> the search (which is completely dumb, why do search facilities do that?)
 
-Kind regards
-Uffe
+Yeah. Not great.
+
+> 
+> > > The missing probe for CPUs described as packages creates a problem for
+> > > moving the cpu_register() calls into the acpi_processor driver, as CPUs
+> > > described like this don't get registered, leading to errors from other
+> > > subsystems when they try to add new sysfs entries to the CPU node.
+> > > (e.g. topology_sysfs_init()'s use of topology_add_dev() via cpuhp)
+> > > 
+> > > To fix this, parse the processor container and call acpi_processor_add()
+> > > for each processor that is discovered like this. The processor container
+> > > handler is added with acpi_scan_add_handler(), so no detach call will
+> > > arrive.
+> > > 
+> > > Qemu TCG describes CPUs using packages in a processor container.  
+> > 
+> > processor terms in a processor container.   
+> 
+> Are you wanting this to be:
+> 
+> "Qemu TCG describes CPUs using processor terms in a processor
+> container."
+> 
+> ? Searching the ACPI spec for "processor terms" (with or without quotes)
+> only brings up results for "terms" - yet another reason to hate site-
+> provided search facilities, I don't know why sites bother. :(
+Yup. I just use the PDFs partly for that reason.
+
+Not possible to find in 6.5 because as it's deprecated they removed the information..
+Look at ACPI 6.3 and there is 19.6.108 Processor (Declare Processor)
+deep in the ASL operator reference
+
+Wording wise I'm not sure exactly what they should be other than they
+aren't packages (if my rough ASL understanding is right).
+Different byte encoding.
+
+Jonathan
+
+
+
+> 
+
