@@ -2,261 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EFAE7E03B4
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Nov 2023 14:18:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C147E0462
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Nov 2023 15:09:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377656AbjKCNSm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Nov 2023 09:18:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39648 "EHLO
+        id S230312AbjKCOJQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Nov 2023 10:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377609AbjKCNSk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Nov 2023 09:18:40 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788FCD5E
-        for <linux-pm@vger.kernel.org>; Fri,  3 Nov 2023 06:18:29 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-40839652b97so16041835e9.3
-        for <linux-pm@vger.kernel.org>; Fri, 03 Nov 2023 06:18:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699017508; x=1699622308; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MMhZpNg5qvSUb3GObDAJDoBlrGoMrTREaqDW44ExX70=;
-        b=KldbSS+EFCCP7HVG4VI4DBGVIrdCV/Hhtuf5rN3ln30/zJ63Q397n0YgVmnBmIy8ea
-         /m0Eg8LOi9hQRn/g28Pxs28AQlkl6sB/yjRM3zEPQ6sbCHt9nnks/MT1uOaxGR/QyBcL
-         Uj08CVfG+twi5E1aK16l4Cjh7W1CRNS/lrIsLXT9yRqzDmK7F5ChFP2de++Vd1JO9sUR
-         Jj4nSPEgvxcxOKNo/clNX+j1RHc85HdQ1g9wEt4d/g3G5bYeWqPhOT8xdIjb4uTJqB/6
-         ++SOQtkh7lwnbTwtqZzF7tD7GS9EPfkLfG/3R9x79cMpfN2RBOSTOZ67pUeuG+Nb3shj
-         JTTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699017508; x=1699622308;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MMhZpNg5qvSUb3GObDAJDoBlrGoMrTREaqDW44ExX70=;
-        b=F0Nw3B27ktYqWBYlTlYkDvS6o8EfGvY7+qbxbfafcUJf4/BZewWhQMEeQ54RH0npkU
-         rZTG+PsJDt1scHJN2SzLf1sikNDGcNRGGvCSb+73Iz3qANucPpcE/wkPghBmfLJ3hyB+
-         QreQKGoyPK4dVcUQ5A2eVUa1XSTw66zVrIU08aQw8fa9LJ4teloxf15vs9gBfqELAcO+
-         eDXz9UXXymqIh9sa+OUdk/bYRbaSNvJCPa8if4VhXNbiSHjVYgtDZ6t5cT+Rg8uXQG+j
-         NgToKijgRuq/o3x4r53cujr4om5tDWJsaIpVI8b0Ol+ZhlmrHxX3uIose78C+dcOnTOg
-         nj5A==
-X-Gm-Message-State: AOJu0YxQZS+ZjB6MHwJ39IGCfpVy/+J7GZ29AHD8aPjC/n1FLlwdVVaM
-        N8S8k1Bb8xGQ2BELWTll0H1nlw==
-X-Google-Smtp-Source: AGHT+IGWrAN/H+X8FEYNP67uf3M/vt9LdJmfFS0VyN03+MkYI7ACUhX0kx9ubSO+ftLUYUoii0blkA==
-X-Received: by 2002:a05:600c:3d9a:b0:408:5ba9:d707 with SMTP id bi26-20020a05600c3d9a00b004085ba9d707mr17721293wmb.16.1699017507814;
-        Fri, 03 Nov 2023 06:18:27 -0700 (PDT)
-Received: from vingu-book.. ([2a01:e0a:f:6020:3172:eb13:5bac:126a])
-        by smtp.gmail.com with ESMTPSA id p14-20020a5d68ce000000b0032daf848f68sm1877565wrw.59.2023.11.03.06.18.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Nov 2023 06:18:26 -0700 (PDT)
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        rafael@kernel.org, viresh.kumar@linaro.org, qyousef@layalina.io,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     lukasz.luba@arm.com, wyes.karny@amd.com, beata.michalska@arm.com,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH v3 2/2] sched/schedutil: Rework iowait boost
-Date:   Fri,  3 Nov 2023 14:18:21 +0100
-Message-Id: <20231103131821.1176294-3-vincent.guittot@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231103131821.1176294-1-vincent.guittot@linaro.org>
-References: <20231103131821.1176294-1-vincent.guittot@linaro.org>
+        with ESMTP id S229965AbjKCOJP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Nov 2023 10:09:15 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179A41BD;
+        Fri,  3 Nov 2023 07:09:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=BFRj35KrFXvb8dOU4qKYIZykCYryvGHUV2gtHG32BRc=; b=N7IAMLo8B8O672s8M7tRvaa4vK
+        DGmi9axnE8hQbJFc2awa2avk/xkDbNbAesNI8bOCGQMeNHTgd5uaSG/MxrOyUrOzM/bTjGbPz7BAf
+        fKI5aHNokx2hjf9s8+LgyqcuezHU6GHfnHU59ulY6EIwPOE8Bsz1lEPZnyD2K35gp/S/D/QqVB8uR
+        h/v8UICVLbZ2Q9/zCAc00Ts6T6a5STzH4Vo+4PZMK/THvyto6roi7Oy5ElRGk5C5yPz8dAKE4FjkI
+        lxYEMem3w8reGnxHatoVy9sP+4VxDz/xb9X0ztnFkj6yGNL3ki1Qzrz4XU3My8Ih7lJ8XXzk47bBQ
+        y63qvj1A==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:52238)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1qyur8-0005as-2z;
+        Fri, 03 Nov 2023 14:09:03 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1qyur8-0008Si-5S; Fri, 03 Nov 2023 14:09:02 +0000
+Date:   Fri, 3 Nov 2023 14:09:02 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+        x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        jianyong.wu@arm.com, justin.he@arm.com
+Subject: Re: [RFC PATCH v2 22/35] ACPI: Check _STA present bit before making
+ CPUs not present
+Message-ID: <ZUT+/rpSrMMH12mu@shell.armlinux.org.uk>
+References: <20230913163823.7880-1-james.morse@arm.com>
+ <20230913163823.7880-23-james.morse@arm.com>
+ <20230914153110.00003e38@Huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230914153110.00003e38@Huawei.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use the max value that has already been computed inside sugov_get_util()
-to cap the iowait boost and remove dependency with uclamp_rq_util_with()
-which is not used anymore.
+On Thu, Sep 14, 2023 at 03:31:10PM +0100, Jonathan Cameron wrote:
+> On Wed, 13 Sep 2023 16:38:10 +0000
+> James Morse <james.morse@arm.com> wrote:
+> > -#ifdef CONFIG_ACPI_HOTPLUG_PRESENT_CPU
+> >  /* Removal */
+> > -static void acpi_processor_post_eject(struct acpi_device *device)
+> > +static void acpi_processor_make_not_present(struct acpi_device *device)
+> >  {
+> >  	struct acpi_processor *pr;
+> >  
+> > -	if (!device || !acpi_driver_data(device))
+> > +	if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU))
+> 
+> Would it be possible to do all the ifdef to IS_ENABLED changes in a separate
+> patch?  I haven't figure out if any of them have dependencies on the other
+> changes, but they do create a bunch of noise I'd rather not see in the more
+> complex corners of this.
 
-Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
----
- kernel/sched/cpufreq_schedutil.c | 29 ++++++++-------
- kernel/sched/sched.h             | 60 --------------------------------
- 2 files changed, 14 insertions(+), 75 deletions(-)
+I'm also wondering why we want to do this check here, rather than...
 
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 38accd8c854b..068c895517fb 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -174,11 +174,12 @@ unsigned long sugov_effective_cpu_perf(int cpu, unsigned long actual,
- 	return max(min, max);
- }
- 
--static void sugov_get_util(struct sugov_cpu *sg_cpu)
-+static void sugov_get_util(struct sugov_cpu *sg_cpu, unsigned long boost)
- {
- 	unsigned long min, max, util = cpu_util_cfs_boost(sg_cpu->cpu);
- 
- 	util = effective_cpu_util(sg_cpu->cpu, util, &min, &max);
-+	util = max(util, boost);
- 	sg_cpu->bw_min = map_util_perf(min);
- 	sg_cpu->util = sugov_effective_cpu_perf(sg_cpu->cpu, util, min, max);
- }
-@@ -271,18 +272,16 @@ static void sugov_iowait_boost(struct sugov_cpu *sg_cpu, u64 time,
-  * This mechanism is designed to boost high frequently IO waiting tasks, while
-  * being more conservative on tasks which does sporadic IO operations.
-  */
--static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
-+static unsigned long sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
- 			       unsigned long max_cap)
- {
--	unsigned long boost;
--
- 	/* No boost currently required */
- 	if (!sg_cpu->iowait_boost)
--		return;
-+		return 0;
- 
- 	/* Reset boost if the CPU appears to have been idle enough */
- 	if (sugov_iowait_reset(sg_cpu, time, false))
--		return;
-+		return 0;
- 
- 	if (!sg_cpu->iowait_boost_pending) {
- 		/*
-@@ -291,7 +290,7 @@ static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
- 		sg_cpu->iowait_boost >>= 1;
- 		if (sg_cpu->iowait_boost < IOWAIT_BOOST_MIN) {
- 			sg_cpu->iowait_boost = 0;
--			return;
-+			return 0;
- 		}
- 	}
- 
-@@ -301,10 +300,7 @@ static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
- 	 * sg_cpu->util is already in capacity scale; convert iowait_boost
- 	 * into the same scale so we can compare.
- 	 */
--	boost = (sg_cpu->iowait_boost * max_cap) >> SCHED_CAPACITY_SHIFT;
--	boost = uclamp_rq_util_with(cpu_rq(sg_cpu->cpu), boost, NULL);
--	if (sg_cpu->util < boost)
--		sg_cpu->util = boost;
-+	return (sg_cpu->iowait_boost * max_cap) >> SCHED_CAPACITY_SHIFT;
- }
- 
- #ifdef CONFIG_NO_HZ_COMMON
-@@ -334,6 +330,8 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
- 					      u64 time, unsigned long max_cap,
- 					      unsigned int flags)
- {
-+	unsigned long boost;
-+
- 	sugov_iowait_boost(sg_cpu, time, flags);
- 	sg_cpu->last_update = time;
- 
-@@ -342,8 +340,8 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
- 	if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
- 		return false;
- 
--	sugov_get_util(sg_cpu);
--	sugov_iowait_apply(sg_cpu, time, max_cap);
-+	boost = sugov_iowait_apply(sg_cpu, time, max_cap);
-+	sugov_get_util(sg_cpu, boost);
- 
- 	return true;
- }
-@@ -444,9 +442,10 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
- 
- 	for_each_cpu(j, policy->cpus) {
- 		struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
-+		unsigned long boost;
- 
--		sugov_get_util(j_sg_cpu);
--		sugov_iowait_apply(j_sg_cpu, time, max_cap);
-+		boost = sugov_iowait_apply(j_sg_cpu, time, max_cap);
-+		sugov_get_util(j_sg_cpu, boost);
- 
- 		util = max(j_sg_cpu->util, util);
- 	}
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 302b451a3fd8..e3cb8e004bd1 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -3025,59 +3025,6 @@ static inline bool uclamp_rq_is_idle(struct rq *rq)
- 	return rq->uclamp_flags & UCLAMP_FLAG_IDLE;
- }
- 
--/**
-- * uclamp_rq_util_with - clamp @util with @rq and @p effective uclamp values.
-- * @rq:		The rq to clamp against. Must not be NULL.
-- * @util:	The util value to clamp.
-- * @p:		The task to clamp against. Can be NULL if you want to clamp
-- *		against @rq only.
-- *
-- * Clamps the passed @util to the max(@rq, @p) effective uclamp values.
-- *
-- * If sched_uclamp_used static key is disabled, then just return the util
-- * without any clamping since uclamp aggregation at the rq level in the fast
-- * path is disabled, rendering this operation a NOP.
-- *
-- * Use uclamp_eff_value() if you don't care about uclamp values at rq level. It
-- * will return the correct effective uclamp value of the task even if the
-- * static key is disabled.
-- */
--static __always_inline
--unsigned long uclamp_rq_util_with(struct rq *rq, unsigned long util,
--				  struct task_struct *p)
--{
--	unsigned long min_util = 0;
--	unsigned long max_util = 0;
--
--	if (!static_branch_likely(&sched_uclamp_used))
--		return util;
--
--	if (p) {
--		min_util = uclamp_eff_value(p, UCLAMP_MIN);
--		max_util = uclamp_eff_value(p, UCLAMP_MAX);
--
--		/*
--		 * Ignore last runnable task's max clamp, as this task will
--		 * reset it. Similarly, no need to read the rq's min clamp.
--		 */
--		if (uclamp_rq_is_idle(rq))
--			goto out;
--	}
--
--	min_util = max_t(unsigned long, min_util, uclamp_rq_get(rq, UCLAMP_MIN));
--	max_util = max_t(unsigned long, max_util, uclamp_rq_get(rq, UCLAMP_MAX));
--out:
--	/*
--	 * Since CPU's {min,max}_util clamps are MAX aggregated considering
--	 * RUNNABLE tasks with _different_ clamps, we can end up with an
--	 * inversion. Fix it now when the clamps are applied.
--	 */
--	if (unlikely(min_util >= max_util))
--		return min_util;
--
--	return clamp(util, min_util, max_util);
--}
--
- /* Is the rq being capped/throttled by uclamp_max? */
- static inline bool uclamp_rq_is_capped(struct rq *rq)
- {
-@@ -3115,13 +3062,6 @@ static inline unsigned long uclamp_eff_value(struct task_struct *p,
- 	return SCHED_CAPACITY_SCALE;
- }
- 
--static inline
--unsigned long uclamp_rq_util_with(struct rq *rq, unsigned long util,
--				  struct task_struct *p)
--{
--	return util;
--}
--
- static inline bool uclamp_rq_is_capped(struct rq *rq) { return false; }
- 
- static inline bool uclamp_is_used(void)
+> > +static void acpi_processor_post_eject(struct acpi_device *device)
+> > +{
+> > +	struct acpi_processor *pr;
+> > +	unsigned long long sta;
+> > +	acpi_status status;
+
+... here, because none of the code below has any effect if
+acpi_processor_make_not_present() merely returns. So the below seems
+like a waste of code space when CONFIG_ACPI_HOTPLUG_PRESENT_CPU is
+disabled.
+
+> > +
+> > +	if (!device)
+> > +		return;
+> > +
+> > +	pr = acpi_driver_data(device);
+> > +	if (!pr || pr->id >= nr_cpu_ids || invalid_phys_cpuid(pr->phys_id))
+> > +		return;
+> > +
+> > +	status = acpi_evaluate_integer(pr->handle, "_STA", NULL, &sta);
+> > +	if (ACPI_FAILURE(status))
+> > +		return;
+> > +
+> > +	if (cpu_present(pr->id) && !(sta & ACPI_STA_DEVICE_PRESENT)) {
+> > +		acpi_processor_make_not_present(device);
+> > +		return;
+> > +	}
+> > +}
+
 -- 
-2.34.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
