@@ -2,67 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F257E05CF
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Nov 2023 16:56:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9747E0693
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Nov 2023 17:30:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234251AbjKCP4s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Nov 2023 11:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36262 "EHLO
+        id S234319AbjKCQag (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Nov 2023 12:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjKCP4r (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Nov 2023 11:56:47 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51661BF
-        for <linux-pm@vger.kernel.org>; Fri,  3 Nov 2023 08:56:40 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-40836ea8cbaso16149155e9.0
-        for <linux-pm@vger.kernel.org>; Fri, 03 Nov 2023 08:56:40 -0700 (PDT)
+        with ESMTP id S230121AbjKCQaf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Nov 2023 12:30:35 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25D7DC
+        for <linux-pm@vger.kernel.org>; Fri,  3 Nov 2023 09:30:29 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-4084b0223ccso16822295e9.2
+        for <linux-pm@vger.kernel.org>; Fri, 03 Nov 2023 09:30:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google; t=1699026999; x=1699631799; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5Y/ZjzGOYf3uFvR4OqP02C9g68KQxKGfJ/zZcpHtn+k=;
-        b=XjxNe+FS0k9Y6qkwdVA2MEvHCu607XofalfLUaXNpd4dahSC99thY5YwMmdrlvvt13
-         K0jF0OkPrKg4dPCpTgLFAITwbS8k9/BQq0fvoxaBSm4Kx4baIXI96Mv9QuK6GhJMpHbE
-         M2bwJmdXk4OpFTZYth9HiCwBAOPK6h9BKTHp/yYYu0XAHUbl94UHtZ8DKFm+xQ1/U9u/
-         0t6RhPv8rk3+RRQ0QIWeD3Sim7B5OkzS/SgQifAhidxAK5ZGCi8hji+596VT+o+/WMn7
-         uxQd/nZvYqLl3bMDZN2fGCGfGABZkVUcxlNVQpgi1OqVbcghDOzGRWn3TasWiOh1rulO
-         CvTw==
+        d=linaro.org; s=google; t=1699029028; x=1699633828; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gIkzMbx9D/76gKi93VnRryrPgyBjD5wxQisCsbr7Cg8=;
+        b=Ortm+lvKn+zEQR8KE8FnEhPGcp2+sFQr377n4QRhMt8q8y3lJMxuoB0E/R8D0wcDZW
+         CkOH1frrJGmwUVFK4w/QGmXvf+TWTdKg95y6GC7g1+f/z2aE85zMzur38lm1Q4haEeO2
+         gKtmWnrYmD5nmCVMZyZATJu1zT3ibnkKq3pAHNtIX0VGKZoZiDTffTHHzXDmTfK8qsfw
+         hgnm+vF1DLPKsfER5s2ajmZ+4RTktnLVb5UrpwtMIG3ljGdYjSJ1ujbo0a9U/+f5lKYc
+         27x9IDy+Cbe+YhvTXhgLBhD3HUMKPGaNTblx/IqWvHS2/q5qmdpAiB2CUl39zAGsFEIA
+         PH9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699026999; x=1699631799;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5Y/ZjzGOYf3uFvR4OqP02C9g68KQxKGfJ/zZcpHtn+k=;
-        b=fHH796VZX/BgXEMhJIvJaLdZRZIbJziyytlmFK15vRsV57TmbleqWsV6BwBVgf/KnI
-         mtrNZFdry8xiURSueftbILaj8S7fHJu6uaB2fluB7HoUFOllY+rLBjxIdR6otLQzbaW0
-         tUbTp/qFcz66laaMDlzSNhn0SgYFdbfWqvhOdkowjX9MS+nMHuQc+tp2vC0xd6dbFwr6
-         /wg4lnaO4GDrhowf6ThTY3syj9/xFpcstrxGS1NmKx5IgU/ASmUIeaHeEA2+d0VAhDK+
-         zUagXYQJT3nWfB6mD1LCdHv+aW9T9ydsiwdCWA7itR4Vk/REhZJszzkCWWHIINJnER1c
-         FWkQ==
-X-Gm-Message-State: AOJu0YwkgqFcFClXQXHVnKcSxcUCw4jFhDgtZ1iYUWDVvd72VO79Xqtp
-        DOTkrJ/VO12Uc0rGG4uCSVM5JAZ24Eu1l3KuNYEUhQ==
-X-Google-Smtp-Source: AGHT+IGTDlR1kMzo7Q8s1aofjqF9TBtqnKsq48wjkvuAfJPcwBkAF7KJXKeOa9SaNjlzNwAaiAkx4HluN8PnF2wMa78=
-X-Received: by 2002:a05:600c:4687:b0:409:5a92:470c with SMTP id
- p7-20020a05600c468700b004095a92470cmr6936361wmo.13.1699026999264; Fri, 03 Nov
- 2023 08:56:39 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1699029028; x=1699633828;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gIkzMbx9D/76gKi93VnRryrPgyBjD5wxQisCsbr7Cg8=;
+        b=xRfcfUSarftTJoPfznTBiMxNc2YrKL9ExNDtkyyAOzivSHfblplNyoSPrp0DRyq/3h
+         MTj3bpN+A9FqKCUoXK5GW0/A+hq9Reot2/2bi7q1yBO4bzKrPlZwO1Sz6luUmL29KnfC
+         gf7hvrmo8A5pP56rUkH2YGZzh3FTBBeaqGBeRP6TZlWPA7emVnE+bpa0QsbCQ/p4o0JI
+         gII1lfu2TVmnrJClaJbaEP98pHiKck6q5fqcwRuhxu0aIaZI6uC5eAIhe182XjBVgIss
+         4qrYNwCEp43mw9H3pddQ/kBc6zX0BmEeFI4hn5CwGZgfSdnVKKrCsCQRyXDeqAlRwHCL
+         ijDg==
+X-Gm-Message-State: AOJu0Yzhc9roxPk6TkzWEyVkKTT7Z3uZ7WMtqdPo+B1VJvyOD1moA08h
+        a5XNibRtHNT3M1rRu3avrB5RcA==
+X-Google-Smtp-Source: AGHT+IHTu1tR0p32Loha6gIBv3u6cccdwtqrVuQM2e78wXiyYxzOhNg6m4CurIuBKv0iKA4ermztHw==
+X-Received: by 2002:a05:600c:4897:b0:401:38dc:8916 with SMTP id j23-20020a05600c489700b0040138dc8916mr17906557wmp.10.1699029028073;
+        Fri, 03 Nov 2023 09:30:28 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:7a26:df60:2875:9dfb? ([2a05:6e02:1041:c10:7a26:df60:2875:9dfb])
+        by smtp.googlemail.com with ESMTPSA id bh5-20020a05600c3d0500b004094e565e71sm3121394wmb.23.2023.11.03.09.30.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Nov 2023 09:30:27 -0700 (PDT)
+Message-ID: <3fe787bc-f85c-4268-833f-86922415c4d3@linaro.org>
+Date:   Fri, 3 Nov 2023 17:30:26 +0100
 MIME-Version: 1.0
-References: <4169555.5IIHXK4Dsd@kreacher> <2786976.RHVxHup3hB@kreacher> <a5105853-6b36-7221-0d06-e726d33492fb@huawei.com>
-In-Reply-To: <a5105853-6b36-7221-0d06-e726d33492fb@huawei.com>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Fri, 3 Nov 2023 08:56:29 -0700
-Message-ID: <CAAYoRsUrun69UQmx1VR+0CcuM0oyQC-Sm6zAS-TETLdAyHo9Sw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] cpufreq: intel_pstate: Add ->offline and ->online callbacks
-To:     Jinjie Ruan <ruanjinjie@huawei.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Doug Smythies <dsmythies@telus.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] thermal: core: Add trip thresholds for trip crossing
+ detection
+Content-Language: en-US
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
+References: <12317335.O9o76ZdvQC@kreacher>
+ <6b22f4715641bc4ffc76eea8a4e6358bcbea9e1c.camel@linux.intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <6b22f4715641bc4ffc76eea8a4e6358bcbea9e1c.camel@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,245 +79,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 3, 2023 at 3:57=E2=80=AFAM Jinjie Ruan <ruanjinjie@huawei.com> =
-wrote:
-> On 2020/8/25 1:43, Rafael J. Wysocki wrote:
-> > From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-> >
-> > Add ->offline and ->online driver callbacks to prepare for taking a
-> > CPU offline and to restore its working configuration when it goes
-> > back online, respectively, to avoid invoking the ->init callback on
-> > every CPU online which is quite a bit of unnecessary overhead.
-> >
-> > Define ->offline and ->online so that they can be used in the
-> > passive mode as well as in the active mode and because ->offline
-> > will do the majority of ->stop_cpu work, the passive mode does
-> > not need that callback any more, so drop it.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >
-> > -> v2: Typo fixes and changelog edits (Doug).
-> >
-> > ---
-> >  drivers/cpufreq/intel_pstate.c | 38 ++++++++++++++++++++++++++++------
-> >  1 file changed, 32 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pst=
-ate.c
-> > index 3d18934fa975..98836ac299db 100644
-> > --- a/drivers/cpufreq/intel_pstate.c
-> > +++ b/drivers/cpufreq/intel_pstate.c
-> > @@ -2297,28 +2297,51 @@ static int intel_pstate_verify_policy(struct cp=
-ufreq_policy_data *policy)
-> >       return 0;
-> >  }
-> >
-> > -static void intel_cpufreq_stop_cpu(struct cpufreq_policy *policy)
-> > +static int intel_pstate_cpu_offline(struct cpufreq_policy *policy)
-> >  {
-> > +     pr_debug("CPU %d going offline\n", policy->cpu);
-> > +
-> > +     intel_pstate_exit_perf_limits(policy);
-> > +
-> > +     /*
-> > +      * If the CPU is an SMT thread and it goes offline with the perfo=
-rmance
-> > +      * settings different from the minimum, it will prevent its sibli=
-ng
-> > +      * from getting to lower performance levels, so force the minimum
-> > +      * performance on CPU offline to prevent that from happening.
-> > +      */
-> >       if (hwp_active)
-> >               intel_pstate_hwp_force_min_perf(policy->cpu);
-> >       else
-> >               intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int intel_pstate_cpu_online(struct cpufreq_policy *policy)
-> > +{
-> > +     pr_debug("CPU %d going online\n", policy->cpu);
-> > +
-> > +     intel_pstate_init_acpi_perf_limits(policy);
-> > +
-> > +     if (hwp_active)
-> > +             wrmsrl_on_cpu(policy->cpu, MSR_HWP_REQUEST,
-> > +                           all_cpu_data[policy->cpu]->hwp_req_cached);
-> > +
-> > +     return 0;
-> >  }
->
-> On Ice Lake server, there seems a bug when CONFIG_X86_INTEL_PSTATE=3Dy an=
-d
-> not configure intel_pstate=3Dxxx in command line.
->
-> Although the Performance tuner is used, the CPU have the lowest
-> frequency in scaling_cur_freq after the CPU goes offline and then goes
-> online, running the same infinite loop load.
->
-> How to produce:
->
-> echo performance > /sys/devices/system/cpu/cpu12/cpufreq/scaling_governor
->
-> cat while_true.c
-> #include <stdio.h>
-> void main(void)
-> {
->         while(1);
-> }
->
->
-> [root@localhost freq_test]# cat test.sh
-> #!/bin/bash
->
-> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
-> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_governor
-> taskset -c ${1} ./while_true &
-> sleep 1s
->
-> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
->
-> echo 0 > /sys/devices/system/cpu/cpu${1}/online
->
-> sleep 1s
-> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
->
-> sleep 1s
->
-> echo 1 > /sys/devices/system/cpu/cpu${1}/online
-> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
->
-> taskset -c ${1} ./while_true &
->
-> sleep 1s
-> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
->
-> sleep 1s
-> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
->
-> sleep 1s
-> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
->
->
-> [root@localhost freq_test]# sh test.sh 40
-> 2300000
-> performance
-> 2299977
-> cat: /sys/devices/system/cpu/cpu40/cpufreq/scaling_cur_freq: Device or
-> resource busy
-> 2300000
-> 2300022
-> 2300000
-> 2299953
-> [root@localhost freq_test]# sh test.sh 50
-> 2300000
-> performance
-> 2300000
-> cat: /sys/devices/system/cpu/cpu50/cpufreq/scaling_cur_freq: Device or
-> resource busy
-> 2300000
-> 2299977
-> 2300022
-> 2299977
-> [root@localhost freq_test]# sh test.sh 20
-> 2300000
-> performance
-> 2299977
-> cat: /sys/devices/system/cpu/cpu20/cpufreq/scaling_cur_freq: Device or
-> resource busy
-> 800000
-> 800000
-> 800000
-> 799992
-> [root@localhost freq_test]# sh test.sh 21
-> 2300000
-> performance
-> 2300000
-> cat: /sys/devices/system/cpu/cpu21/cpufreq/scaling_cur_freq: Device or
-> resource busy
-> 800000
-> 800000
-> 800000
-> 800000
->
-> [root@localhost freq_test]# cat
-> /sys/devices/system/cpu/cpu21/cpufreq/scaling_max_freq
-> 2300000
-> [root@localhost freq_test]# cat
-> /sys/devices/system/cpu/cpu21/cpufreq/scaling_min_freq
-> 800000
+On 03/11/2023 16:42, srinivas pandruvada wrote:
+> On Fri, 2023-11-03 at 15:56 +0100, Rafael J. Wysocki wrote:
+>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>
+>> The trip crossing detection in handle_thermal_trip() does not work
+>> correctly in the cases when a trip point is crossed on the way up and
+>> then the zone temperature stays above its low temperature (that is,
+>> its
+>> temperature decreased by its hysteresis).  The trip temperature may
+>> be passed by the zone temperature subsequently in that case, even
+>> multiple times, but that does not count as the trip crossing as long
+>> as
+>> the zone temperature does not fall below the trip's low temperature
+>> or,
+>> in other words, until the trip is crossed on the way down.
+> 
+> In other words you want to avoid multiple trip UP notifications without
+> a corresponding DOWN notification.
+> 
+> This will reduce unnecessary noise to user space. Is this the
+> intention?
 
-Hi,
+Not only reduce noise but give a correct information. Otherwise the 
+userspace will have to figure out if there are duplicate events after 
+the first event happened. The same happen (less often) when crossing the 
+trip point the way down.
 
-I followed your "how to reproduce" notes exactly.
-So far, I have been unable to reproduce your issue.
 
-I am using kernel 6.6.
-My processor is:
-Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
 
-Results:
-root@s19:/home/doug/pstate# ./test.sh 8
-800000
-performance
-4799994
-cat: /sys/devices/system/cpu/cpu8/cpufreq/scaling_cur_freq: Device or
-resource busy
-4799999
-4800000
-4800001
-4799996
-root@s19:/home/doug/pstate# ./test.sh 7
-800000
-performance
-4800001
-cat: /sys/devices/system/cpu/cpu7/cpufreq/scaling_cur_freq: Device or
-resource busy
-4799967
-4800028
-4800006
-4799997
-root@s19:/home/doug/pstate# ./test.sh 6
-800000
-performance
-4800001
-cat: /sys/devices/system/cpu/cpu6/cpufreq/scaling_cur_freq: Device or
-resource busy
-4799983
-4800001
-4799993
-4800002
-root@s19:/home/doug/pstate# ./test.sh 5
-800000
-performance
-4799990
-cat: /sys/devices/system/cpu/cpu5/cpufreq/scaling_cur_freq: Device or
-resource busy
-4800006
-4800002
-4800011
-4799980
-root@s19:/home/doug/pstate# ./test.sh 4
-4799940
-performance
-4799985
-cat: /sys/devices/system/cpu/cpu4/cpufreq/scaling_cur_freq: Device or
-resource busy
-4799975
-4799994
-4799984
-4799996
-root@s19:/home/doug/pstate# ./test.sh 3
-4799986
-performance
-4799990
-cat: /sys/devices/system/cpu/cpu3/cpufreq/scaling_cur_freq: Device or
-resource busy
-4799976
-4800015
-4800000
-4799995
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-... Doug
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
