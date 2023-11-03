@@ -2,56 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E157E0330
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Nov 2023 13:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 326837E03B1
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Nov 2023 14:18:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjKCMwj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Nov 2023 08:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59744 "EHLO
+        id S1376671AbjKCNSj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Nov 2023 09:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbjKCMwi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Nov 2023 08:52:38 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E23FCE;
-        Fri,  3 Nov 2023 05:52:32 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4SMLGZ168Hz6K982;
-        Fri,  3 Nov 2023 20:51:34 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Fri, 3 Nov
- 2023 12:52:29 +0000
-Date:   Fri, 3 Nov 2023 12:52:28 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-CC:     James Morse <james.morse@arm.com>, <linux-pm@vger.kernel.org>,
-        <loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-        <linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-        <x86@kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        <jianyong.wu@arm.com>, <justin.he@arm.com>
-Subject: Re: [RFC PATCH v2 15/35] ACPI: processor: Add support for
- processors described as container packages
-Message-ID: <20231103125228.00005c94@Huawei.com>
-In-Reply-To: <ZUTOwuZVLvzptuuP@shell.armlinux.org.uk>
-References: <20230913163823.7880-1-james.morse@arm.com>
-        <20230913163823.7880-16-james.morse@arm.com>
-        <20230914145353.000072e2@Huawei.com>
-        <ZUTOwuZVLvzptuuP@shell.armlinux.org.uk>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        with ESMTP id S1346524AbjKCNSi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Nov 2023 09:18:38 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EEC8D65
+        for <linux-pm@vger.kernel.org>; Fri,  3 Nov 2023 06:18:26 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-40806e4106dso12808795e9.1
+        for <linux-pm@vger.kernel.org>; Fri, 03 Nov 2023 06:18:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1699017505; x=1699622305; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5A8Puvc3tXgvKjqlI5JohnMI9TNDved82zD5N88oqxk=;
+        b=aVlLMIMwxyE03I3unUT1CvYnTjUZcwFksyIVp43s78P8pwBT0SKEvkRMVt3//Xezn1
+         RdgiEprMQ1tEQSw2RWo3oKBehTSME6xa3f/TuLDqew0EH2Pfvz4rUQSPqnLBVy6tZTvG
+         rD/TnK7RGgWLdPU3JcTBNf2j3K9u0xRfWPK8chSoBj4wybTzYCc1WaAueyN5PSqYb8hY
+         RvIspfgMkV3Rz5q8OhH9+rlVWVFUpGX6MyjZunp6oAy+YH9GcYIrl4zg/3TlqDTuXYRf
+         yaD1dEcAxF65pvcGxhabyYDvaBWwlDuWeaqxRPvrOqpHjfliaYwgEqRA7fqORyqZtPFg
+         oEBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699017505; x=1699622305;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5A8Puvc3tXgvKjqlI5JohnMI9TNDved82zD5N88oqxk=;
+        b=FBir5aaCK1M1eRtQsGGE6/0gRU2m100SGQsIqaEg/3CfsQOYolQpy9Mk0jXU9BIE2y
+         C/fCbnJtQuu21wJDsZIekC82UwTCpCbsZMrhQ3rZB54r19OE11EGi9rlJt6StBOcXVjo
+         i8sGTqMzDQs30AjWslyoRA0h+VSE8ZFzRrW39tXDPAUn2u/D1yZxGKIqjZL9obO93m0R
+         Y1KnypeHxKLlod5pqxaj8q1VZ2WffBHSj3+Iw6XoX16FzUURgT8WrUYV5utl+MD7xGl3
+         M5AEBtBGAqZlk6ZFvIYLe5UkiIKVuS1NPP+ADyk7UAR64qc6J5mCgcAlypsfwejEID6s
+         oUUg==
+X-Gm-Message-State: AOJu0YzE6UDAwWCSZIcRXVmW92n3k7hmTdwY2zDGwzx1p+SEcgO64OtU
+        XpgD3800FwngDrHrq+oUUPQ7Hw==
+X-Google-Smtp-Source: AGHT+IG1kqJfeOvzc/Snj2/C9xmkjqtq0qde9O8tKCR16KEoG4ydWAHxVMWl7YGf0C/DSNjJqaNHvw==
+X-Received: by 2002:a05:600c:4f47:b0:405:784a:d53e with SMTP id m7-20020a05600c4f4700b00405784ad53emr2708296wmq.20.1699017504885;
+        Fri, 03 Nov 2023 06:18:24 -0700 (PDT)
+Received: from vingu-book.. ([2a01:e0a:f:6020:3172:eb13:5bac:126a])
+        by smtp.gmail.com with ESMTPSA id p14-20020a5d68ce000000b0032daf848f68sm1877565wrw.59.2023.11.03.06.18.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Nov 2023 06:18:24 -0700 (PDT)
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        rafael@kernel.org, viresh.kumar@linaro.org, qyousef@layalina.io,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     lukasz.luba@arm.com, wyes.karny@amd.com, beata.michalska@arm.com,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [PATCH v3 0/2] Rework interface between scheduler and schedutil governor
+Date:   Fri,  3 Nov 2023 14:18:19 +0100
+Message-Id: <20231103131821.1176294-1-vincent.guittot@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,89 +72,37 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 3 Nov 2023 10:43:14 +0000
-"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
+Following the discussion with Qais [1] about how to handle uclamp
+requirements and after syncing with him, we agreed that I should move
+forward on the patchset to rework the interface between scheduler and
+schedutil governor to provide more information to the latter. Scheduler
+(and EAS in particular) doesn't need anymore to guess estimate which
+headroom the governor wants to apply and will directly ask for the target
+freq. Then the governor directly gets the actual utilization and new
+minimum and maximum boundaries to select this target frequency and
+doesn't have to deal anymore with scheduler internals like uclamp when
+including iowait boost.
 
-> On Thu, Sep 14, 2023 at 02:53:53PM +0100, Jonathan Cameron wrote:
-> > On Wed, 13 Sep 2023 16:38:03 +0000
-> > James Morse <james.morse@arm.com> wrote:
-> >   
-> > > ACPI has two ways of describing processors in the DSDT. Either as a device
-> > > object with HID ACPI0007, or as a type 'C' package inside a Processor
-> > > Container. The ACPI processor driver probes CPUs described as devices, but
-> > > not those described as packages.
-> > >   
-> > 
-> > Specification reference needed...
-> > 
-> > Terminology wise, I'd just refer to Processor() objects as I think they
-> > are named objects rather than data terms like a package (Which include
-> > a PkgLength etc)  
-> 
-> I'm not sure what kind of reference you want for the above. Looking in
-> ACPI 6.5, I've found in 5.2.12:
-> 
-> "Starting with ACPI Specification 6.3, the use of the Processor() object
-> was deprecated. Only legacy systems should continue with this usage. On
-> the Itanium architecture only, a _UID is provided for the Processor()
-> that is a string object. This usage of _UID is also deprecated since it
-> can preclude an OSPM from being able to match a processor to a
-> non-enumerable device, such as those defined in the MADT. From ACPI
-> Specification 6.3 onward, all processor objects for all architectures
-> except Itanium must now use Device() objects with an _HID of ACPI0007,
-> and use only integer _UID values."
-> 
-> Also, there is:
-> 
-> https://uefi.org/specs/ACPI/6.5/08_Processor_Configuration_and_Control.html#declaring-processors
+[1] https://lore.kernel.org/lkml/CAKfTPtA5JqNCauG-rP3wGfq+p8EEVx9Tvwj6ksM3SYCwRmfCTg@mail.gmail.com/
 
-That pair of refs, just as 'where to look if you care' cross references, seem
-to cover it as well as possible.
+Changes since v2:
+- remove useless target variable
 
-> 
-> Unfortunately, using the search facility on that site to try and find
-> Processor() doesn't work - it appears to strip the "()" characters from
-> the search (which is completely dumb, why do search facilities do that?)
+Changes since v1:
+- fix a bug (always set max even when returning early)
+- fix typos
+  
+Vincent Guittot (2):
+  sched/schedutil: Rework performance estimation
+  sched/schedutil: Rework iowait boost
 
-Yeah. Not great.
+ include/linux/energy_model.h     |  1 -
+ kernel/sched/core.c              | 82 ++++++++++++-------------------
+ kernel/sched/cpufreq_schedutil.c | 69 ++++++++++++++++----------
+ kernel/sched/fair.c              | 22 +++++++--
+ kernel/sched/sched.h             | 84 +++-----------------------------
+ 5 files changed, 100 insertions(+), 158 deletions(-)
 
-> 
-> > > The missing probe for CPUs described as packages creates a problem for
-> > > moving the cpu_register() calls into the acpi_processor driver, as CPUs
-> > > described like this don't get registered, leading to errors from other
-> > > subsystems when they try to add new sysfs entries to the CPU node.
-> > > (e.g. topology_sysfs_init()'s use of topology_add_dev() via cpuhp)
-> > > 
-> > > To fix this, parse the processor container and call acpi_processor_add()
-> > > for each processor that is discovered like this. The processor container
-> > > handler is added with acpi_scan_add_handler(), so no detach call will
-> > > arrive.
-> > > 
-> > > Qemu TCG describes CPUs using packages in a processor container.  
-> > 
-> > processor terms in a processor container.   
-> 
-> Are you wanting this to be:
-> 
-> "Qemu TCG describes CPUs using processor terms in a processor
-> container."
-> 
-> ? Searching the ACPI spec for "processor terms" (with or without quotes)
-> only brings up results for "terms" - yet another reason to hate site-
-> provided search facilities, I don't know why sites bother. :(
-Yup. I just use the PDFs partly for that reason.
-
-Not possible to find in 6.5 because as it's deprecated they removed the information..
-Look at ACPI 6.3 and there is 19.6.108 Processor (Declare Processor)
-deep in the ASL operator reference
-
-Wording wise I'm not sure exactly what they should be other than they
-aren't packages (if my rough ASL understanding is right).
-Different byte encoding.
-
-Jonathan
-
-
-
-> 
+-- 
+2.34.1
 
