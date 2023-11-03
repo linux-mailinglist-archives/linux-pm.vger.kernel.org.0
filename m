@@ -2,187 +2,201 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7284E7E0519
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Nov 2023 15:57:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E2BB7E05B2
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Nov 2023 16:42:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232341AbjKCO47 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Nov 2023 10:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32774 "EHLO
+        id S233463AbjKCPm1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Nov 2023 11:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232500AbjKCO46 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Nov 2023 10:56:58 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29AB9D4C;
-        Fri,  3 Nov 2023 07:56:52 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id d0fcaf3b17e78cab; Fri, 3 Nov 2023 15:56:50 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by cloudserver094114.home.pl (Postfix) with ESMTPSA id CAC876678B2;
-        Fri,  3 Nov 2023 15:56:49 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        with ESMTP id S230110AbjKCPm0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Nov 2023 11:42:26 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCBE1BD;
+        Fri,  3 Nov 2023 08:42:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699026141; x=1730562141;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=KdKB9aJmwvfMZP5v+YnozyLbdMRDa6Ot69LEe5vbZeU=;
+  b=Fhrg/C0xsmaBzFCQDmJCiLjvBfgmuNDkcxzuatslDYVzPvi//3zEQ1ys
+   VSO8sTPJSBcH6f3usxObziJLD3OCH9XXmL+xZGqR9e8dAhshEXH9xwIbd
+   w9m+3Ts5UbydGeeFT5QrXgffWgS0VacrwWTOzGZnsn2o2dTKUrObRc3Ui
+   ap8EyyMXGGbPxD2ThpxKWxDdNPfuHDyeiPCze+UKd5XvgejJs4eRUwuWz
+   CLGEOMwUZtwh0xvsJioSOz4v8FipwmIZUBc7LrtZDdaXeuotddkuuq4/o
+   ockPTejl3FtahDOFblsRcbN2uVj5uhNy5WAChzDE61AXPYftemt0cfkjU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10883"; a="391834296"
+X-IronPort-AV: E=Sophos;i="6.03,273,1694761200"; 
+   d="scan'208";a="391834296"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2023 08:42:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.03,273,1694761200"; 
+   d="scan'208";a="2937967"
+Received: from tinggan-mobl.amr.corp.intel.com (HELO [10.213.173.96]) ([10.213.173.96])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2023 08:42:19 -0700
+Message-ID: <6b22f4715641bc4ffc76eea8a4e6358bcbea9e1c.camel@linux.intel.com>
+Subject: Re: [PATCH v2] thermal: core: Add trip thresholds for trip crossing
+ detection
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Linux PM <linux-pm@vger.kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Lukasz Luba <lukasz.luba@arm.com>
-Subject: [PATCH v2] thermal: core: Add trip thresholds for trip crossing detection
-Date:   Fri, 03 Nov 2023 15:56:49 +0100
-Message-ID: <12317335.O9o76ZdvQC@kreacher>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+Date:   Fri, 03 Nov 2023 11:42:07 -0400
+In-Reply-To: <12317335.O9o76ZdvQC@kreacher>
+References: <12317335.O9o76ZdvQC@kreacher>
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedruddtkedgieelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghl
- rdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-The trip crossing detection in handle_thermal_trip() does not work
-correctly in the cases when a trip point is crossed on the way up and
-then the zone temperature stays above its low temperature (that is, its
-temperature decreased by its hysteresis).  The trip temperature may
-be passed by the zone temperature subsequently in that case, even
-multiple times, but that does not count as the trip crossing as long as
-the zone temperature does not fall below the trip's low temperature or,
-in other words, until the trip is crossed on the way down.
-
-|-----------low--------high------------|
-             |<--------->|
-             |    hyst   |
-             |           |
-             |          -|--> crossed on the way up
-             |
-         <---|-- crossed on the way down
-
-However, handle_thermal_trip() will invoke thermal_notify_tz_trip_up()
-every time the trip temperature is passed by the zone temperature on
-the way up regardless of whether or not the trip has been crossed on
-the way down yet.  Moreover, it will not call thermal_notify_tz_trip_down()
-if the last zone temperature was between the trip's temperature and its
-low temperature, so some "trip crossed on the way down" events may not
-be reported.
-
-To address this issue, introduce trip thresholds equal to either the
-temperature of the given trip, or its low temperature, such that if
-the trip's threshold is passed by the zone temperature on the way up,
-its value will be set to the trip's low temperature and
-thermal_notify_tz_trip_up() will be called, and if the trip's threshold
-is passed by the zone temperature on the way down, its value will be set
-to the trip's temperature (high) and thermal_notify_tz_trip_down() will
-be called.  Accordingly, if the threshold is passed on the way up, it
-cannot be passed on the way up again until its passed on the way down
-and if it is passed on the way down, it cannot be passed on the way down
-again until it is passed on the way up which guarantees correct
-triggering of trip crossing notifications.
-
-If the last temperature of the zone is invalid, the trip's threshold
-will be set depending of the zone's current temperature: If that
-temperature is above the trip's temperature, its threshold will be
-set to its low temperature or otherwise its threshold will be set to
-its (high) temperature.  Because the zone temperature is initially
-set to invalid and tz->last_temperature is only updated by
-update_temperature(), this is sufficient to set the correct initial
-threshold values for all trips.
-
-Link: https://lore.kernel.org/all/20220718145038.1114379-4-daniel.lezcano@linaro.org
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-v1 (RFC) -> v2: Add missing description of a new struct thermal_trip field.
-
-And because no comments have been sent for a week, this is not an RFC
-any more.
-
----
- drivers/thermal/thermal_core.c |   21 ++++++++++++++-------
- include/linux/thermal.h        |    2 ++
- 2 files changed, 16 insertions(+), 7 deletions(-)
-
-Index: linux-pm/drivers/thermal/thermal_core.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_core.c
-+++ linux-pm/drivers/thermal/thermal_core.c
-@@ -345,22 +345,29 @@ static void handle_critical_trips(struct
- }
- 
- static void handle_thermal_trip(struct thermal_zone_device *tz,
--				const struct thermal_trip *trip)
-+				struct thermal_trip *trip)
- {
- 	if (trip->temperature == THERMAL_TEMP_INVALID)
- 		return;
- 
--	if (tz->last_temperature != THERMAL_TEMP_INVALID) {
--		if (tz->last_temperature < trip->temperature &&
--		    tz->temperature >= trip->temperature)
-+	if (tz->last_temperature == THERMAL_TEMP_INVALID) {
-+		trip->threshold = trip->temperature;
-+		if (tz->temperature >= trip->temperature)
-+			trip->threshold -= trip->hysteresis;
-+	} else {
-+		if (tz->last_temperature < trip->threshold &&
-+		    tz->temperature >= trip->threshold) {
- 			thermal_notify_tz_trip_up(tz->id,
- 						  thermal_zone_trip_id(tz, trip),
- 						  tz->temperature);
--		if (tz->last_temperature >= trip->temperature &&
--		    tz->temperature < trip->temperature - trip->hysteresis)
-+			trip->threshold = trip->temperature - trip->hysteresis;
-+		} else if (tz->last_temperature >= trip->threshold &&
-+			   tz->temperature < trip->threshold) {
- 			thermal_notify_tz_trip_down(tz->id,
- 						    thermal_zone_trip_id(tz, trip),
- 						    tz->temperature);
-+			trip->threshold = trip->temperature;
-+		}
- 	}
- 
- 	if (trip->type == THERMAL_TRIP_CRITICAL || trip->type == THERMAL_TRIP_HOT)
-@@ -403,7 +410,7 @@ static void thermal_zone_device_init(str
- void __thermal_zone_device_update(struct thermal_zone_device *tz,
- 				  enum thermal_notify_event event)
- {
--	const struct thermal_trip *trip;
-+	struct thermal_trip *trip;
- 
- 	if (atomic_read(&in_suspend))
- 		return;
-Index: linux-pm/include/linux/thermal.h
-===================================================================
---- linux-pm.orig/include/linux/thermal.h
-+++ linux-pm/include/linux/thermal.h
-@@ -57,12 +57,14 @@ enum thermal_notify_event {
-  * struct thermal_trip - representation of a point in temperature domain
-  * @temperature: temperature value in miliCelsius
-  * @hysteresis: relative hysteresis in miliCelsius
-+ * @threshold: trip crossing notification threshold miliCelsius
-  * @type: trip point type
-  * @priv: pointer to driver data associated with this trip
-  */
- struct thermal_trip {
- 	int temperature;
- 	int hysteresis;
-+	int threshold;
- 	enum thermal_trip_type type;
- 	void *priv;
- };
-
-
+T24gRnJpLCAyMDIzLTExLTAzIGF0IDE1OjU2ICswMTAwLCBSYWZhZWwgSi4gV3lzb2NraSB3cm90
+ZToKPiBGcm9tOiBSYWZhZWwgSi4gV3lzb2NraSA8cmFmYWVsLmoud3lzb2NraUBpbnRlbC5jb20+
+Cj4gCj4gVGhlIHRyaXAgY3Jvc3NpbmcgZGV0ZWN0aW9uIGluIGhhbmRsZV90aGVybWFsX3RyaXAo
+KSBkb2VzIG5vdCB3b3JrCj4gY29ycmVjdGx5IGluIHRoZSBjYXNlcyB3aGVuIGEgdHJpcCBwb2lu
+dCBpcyBjcm9zc2VkIG9uIHRoZSB3YXkgdXAgYW5kCj4gdGhlbiB0aGUgem9uZSB0ZW1wZXJhdHVy
+ZSBzdGF5cyBhYm92ZSBpdHMgbG93IHRlbXBlcmF0dXJlICh0aGF0IGlzLAo+IGl0cwo+IHRlbXBl
+cmF0dXJlIGRlY3JlYXNlZCBieSBpdHMgaHlzdGVyZXNpcykuwqAgVGhlIHRyaXAgdGVtcGVyYXR1
+cmUgbWF5Cj4gYmUgcGFzc2VkIGJ5IHRoZSB6b25lIHRlbXBlcmF0dXJlIHN1YnNlcXVlbnRseSBp
+biB0aGF0IGNhc2UsIGV2ZW4KPiBtdWx0aXBsZSB0aW1lcywgYnV0IHRoYXQgZG9lcyBub3QgY291
+bnQgYXMgdGhlIHRyaXAgY3Jvc3NpbmcgYXMgbG9uZwo+IGFzCj4gdGhlIHpvbmUgdGVtcGVyYXR1
+cmUgZG9lcyBub3QgZmFsbCBiZWxvdyB0aGUgdHJpcCdzIGxvdyB0ZW1wZXJhdHVyZQo+IG9yLAo+
+IGluIG90aGVyIHdvcmRzLCB1bnRpbCB0aGUgdHJpcCBpcyBjcm9zc2VkIG9uIHRoZSB3YXkgZG93
+bi4KCkluIG90aGVyIHdvcmRzIHlvdSB3YW50IHRvIGF2b2lkIG11bHRpcGxlIHRyaXAgVVAgbm90
+aWZpY2F0aW9ucyB3aXRob3V0CmEgY29ycmVzcG9uZGluZyBET1dOIG5vdGlmaWNhdGlvbi4KClRo
+aXMgd2lsbCByZWR1Y2UgdW5uZWNlc3Nhcnkgbm9pc2UgdG8gdXNlciBzcGFjZS4gSXMgdGhpcyB0
+aGUKaW50ZW50aW9uPwoKVGhhbmtzLApTcmluaXZhcwoKPiAKPiA+IC0tLS0tLS0tLS0tbG93LS0t
+LS0tLS1oaWdoLS0tLS0tLS0tLS0tfAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8PC0tLS0t
+LS0tLT58Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoMKgwqAgaHlzdMKgwqAgfAo+IMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqDCoMKgwqDCoMKgwqDCoMKgwqAgfAo+IMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCB8wqDCoMKgwqDCoMKgwqDCoMKgIC18LS0+IGNyb3NzZWQgb24gdGhl
+IHdheSB1cAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8Cj4gwqDCoMKgwqDCoMKgwqDCoCA8
+LS0tfC0tIGNyb3NzZWQgb24gdGhlIHdheSBkb3duCj4gCj4gSG93ZXZlciwgaGFuZGxlX3RoZXJt
+YWxfdHJpcCgpIHdpbGwgaW52b2tlCj4gdGhlcm1hbF9ub3RpZnlfdHpfdHJpcF91cCgpCj4gZXZl
+cnkgdGltZSB0aGUgdHJpcCB0ZW1wZXJhdHVyZSBpcyBwYXNzZWQgYnkgdGhlIHpvbmUgdGVtcGVy
+YXR1cmUgb24KPiB0aGUgd2F5IHVwIHJlZ2FyZGxlc3Mgb2Ygd2hldGhlciBvciBub3QgdGhlIHRy
+aXAgaGFzIGJlZW4gY3Jvc3NlZCBvbgo+IHRoZSB3YXkgZG93biB5ZXQuwqAgTW9yZW92ZXIsIGl0
+IHdpbGwgbm90IGNhbGwKPiB0aGVybWFsX25vdGlmeV90el90cmlwX2Rvd24oKQo+IGlmIHRoZSBs
+YXN0IHpvbmUgdGVtcGVyYXR1cmUgd2FzIGJldHdlZW4gdGhlIHRyaXAncyB0ZW1wZXJhdHVyZSBh
+bmQKPiBpdHMKPiBsb3cgdGVtcGVyYXR1cmUsIHNvIHNvbWUgInRyaXAgY3Jvc3NlZCBvbiB0aGUg
+d2F5IGRvd24iIGV2ZW50cyBtYXkKPiBub3QKPiBiZSByZXBvcnRlZC4KPiAKPiBUbyBhZGRyZXNz
+IHRoaXMgaXNzdWUsIGludHJvZHVjZSB0cmlwIHRocmVzaG9sZHMgZXF1YWwgdG8gZWl0aGVyIHRo
+ZQo+IHRlbXBlcmF0dXJlIG9mIHRoZSBnaXZlbiB0cmlwLCBvciBpdHMgbG93IHRlbXBlcmF0dXJl
+LCBzdWNoIHRoYXQgaWYKPiB0aGUgdHJpcCdzIHRocmVzaG9sZCBpcyBwYXNzZWQgYnkgdGhlIHpv
+bmUgdGVtcGVyYXR1cmUgb24gdGhlIHdheSB1cCwKPiBpdHMgdmFsdWUgd2lsbCBiZSBzZXQgdG8g
+dGhlIHRyaXAncyBsb3cgdGVtcGVyYXR1cmUgYW5kCj4gdGhlcm1hbF9ub3RpZnlfdHpfdHJpcF91
+cCgpIHdpbGwgYmUgY2FsbGVkLCBhbmQgaWYgdGhlIHRyaXAncwo+IHRocmVzaG9sZAo+IGlzIHBh
+c3NlZCBieSB0aGUgem9uZSB0ZW1wZXJhdHVyZSBvbiB0aGUgd2F5IGRvd24sIGl0cyB2YWx1ZSB3
+aWxsIGJlCj4gc2V0Cj4gdG8gdGhlIHRyaXAncyB0ZW1wZXJhdHVyZSAoaGlnaCkgYW5kIHRoZXJt
+YWxfbm90aWZ5X3R6X3RyaXBfZG93bigpCj4gd2lsbAo+IGJlIGNhbGxlZC7CoCBBY2NvcmRpbmds
+eSwgaWYgdGhlIHRocmVzaG9sZCBpcyBwYXNzZWQgb24gdGhlIHdheSB1cCwgaXQKPiBjYW5ub3Qg
+YmUgcGFzc2VkIG9uIHRoZSB3YXkgdXAgYWdhaW4gdW50aWwgaXRzIHBhc3NlZCBvbiB0aGUgd2F5
+IGRvd24KPiBhbmQgaWYgaXQgaXMgcGFzc2VkIG9uIHRoZSB3YXkgZG93biwgaXQgY2Fubm90IGJl
+IHBhc3NlZCBvbiB0aGUgd2F5Cj4gZG93bgo+IGFnYWluIHVudGlsIGl0IGlzIHBhc3NlZCBvbiB0
+aGUgd2F5IHVwIHdoaWNoIGd1YXJhbnRlZXMgY29ycmVjdAo+IHRyaWdnZXJpbmcgb2YgdHJpcCBj
+cm9zc2luZyBub3RpZmljYXRpb25zLgo+IAo+IElmIHRoZSBsYXN0IHRlbXBlcmF0dXJlIG9mIHRo
+ZSB6b25lIGlzIGludmFsaWQsIHRoZSB0cmlwJ3MgdGhyZXNob2xkCj4gd2lsbCBiZSBzZXQgZGVw
+ZW5kaW5nIG9mIHRoZSB6b25lJ3MgY3VycmVudCB0ZW1wZXJhdHVyZTogSWYgdGhhdAo+IHRlbXBl
+cmF0dXJlIGlzIGFib3ZlIHRoZSB0cmlwJ3MgdGVtcGVyYXR1cmUsIGl0cyB0aHJlc2hvbGQgd2ls
+bCBiZQo+IHNldCB0byBpdHMgbG93IHRlbXBlcmF0dXJlIG9yIG90aGVyd2lzZSBpdHMgdGhyZXNo
+b2xkIHdpbGwgYmUgc2V0IHRvCj4gaXRzIChoaWdoKSB0ZW1wZXJhdHVyZS7CoCBCZWNhdXNlIHRo
+ZSB6b25lIHRlbXBlcmF0dXJlIGlzIGluaXRpYWxseQo+IHNldCB0byBpbnZhbGlkIGFuZCB0ei0+
+bGFzdF90ZW1wZXJhdHVyZSBpcyBvbmx5IHVwZGF0ZWQgYnkKPiB1cGRhdGVfdGVtcGVyYXR1cmUo
+KSwgdGhpcyBpcyBzdWZmaWNpZW50IHRvIHNldCB0aGUgY29ycmVjdCBpbml0aWFsCj4gdGhyZXNo
+b2xkIHZhbHVlcyBmb3IgYWxsIHRyaXBzLgo+IAo+IExpbms6Cj4gaHR0cHM6Ly9sb3JlLmtlcm5l
+bC5vcmcvYWxsLzIwMjIwNzE4MTQ1MDM4LjExMTQzNzktNC1kYW5pZWwubGV6Y2Fub0BsaW5hcm8u
+b3JnCj4gU2lnbmVkLW9mZi1ieTogUmFmYWVsIEouIFd5c29ja2kgPHJhZmFlbC5qLnd5c29ja2lA
+aW50ZWwuY29tPgo+IC0tLQo+IAo+IHYxIChSRkMpIC0+IHYyOiBBZGQgbWlzc2luZyBkZXNjcmlw
+dGlvbiBvZiBhIG5ldyBzdHJ1Y3QgdGhlcm1hbF90cmlwCj4gZmllbGQuCj4gCj4gQW5kIGJlY2F1
+c2Ugbm8gY29tbWVudHMgaGF2ZSBiZWVuIHNlbnQgZm9yIGEgd2VlaywgdGhpcyBpcyBub3QgYW4g
+UkZDCj4gYW55IG1vcmUuCj4gCj4gLS0tCj4gwqBkcml2ZXJzL3RoZXJtYWwvdGhlcm1hbF9jb3Jl
+LmMgfMKgwqAgMjEgKysrKysrKysrKysrKystLS0tLS0tCj4gwqBpbmNsdWRlL2xpbnV4L3RoZXJt
+YWwuaMKgwqDCoMKgwqDCoMKgIHzCoMKgwqAgMiArKwo+IMKgMiBmaWxlcyBjaGFuZ2VkLCAxNiBp
+bnNlcnRpb25zKCspLCA3IGRlbGV0aW9ucygtKQo+IAo+IEluZGV4OiBsaW51eC1wbS9kcml2ZXJz
+L3RoZXJtYWwvdGhlcm1hbF9jb3JlLmMKPiA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Cj4gLS0tIGxpbnV4LXBtLm9yaWcv
+ZHJpdmVycy90aGVybWFsL3RoZXJtYWxfY29yZS5jCj4gKysrIGxpbnV4LXBtL2RyaXZlcnMvdGhl
+cm1hbC90aGVybWFsX2NvcmUuYwo+IEBAIC0zNDUsMjIgKzM0NSwyOSBAQCBzdGF0aWMgdm9pZCBo
+YW5kbGVfY3JpdGljYWxfdHJpcHMoc3RydWN0Cj4gwqB9Cj4gwqAKPiDCoHN0YXRpYyB2b2lkIGhh
+bmRsZV90aGVybWFsX3RyaXAoc3RydWN0IHRoZXJtYWxfem9uZV9kZXZpY2UgKnR6LAo+IC3CoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oGNvbnN0IHN0cnVjdCB0aGVybWFsX3RyaXAgKnRyaXApCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc3RydWN0IHRoZXJtYWxf
+dHJpcCAqdHJpcCkKPiDCoHsKPiDCoMKgwqDCoMKgwqDCoMKgaWYgKHRyaXAtPnRlbXBlcmF0dXJl
+ID09IFRIRVJNQUxfVEVNUF9JTlZBTElEKQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgcmV0dXJuOwo+IMKgCj4gLcKgwqDCoMKgwqDCoMKgaWYgKHR6LT5sYXN0X3RlbXBlcmF0dXJl
+ICE9IFRIRVJNQUxfVEVNUF9JTlZBTElEKSB7Cj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoGlmICh0ei0+bGFzdF90ZW1wZXJhdHVyZSA8IHRyaXAtPnRlbXBlcmF0dXJlICYmCj4gLcKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB0ei0+dGVtcGVyYXR1cmUgPj0gdHJp
+cC0+dGVtcGVyYXR1cmUpCj4gK8KgwqDCoMKgwqDCoMKgaWYgKHR6LT5sYXN0X3RlbXBlcmF0dXJl
+ID09IFRIRVJNQUxfVEVNUF9JTlZBTElEKSB7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoHRyaXAtPnRocmVzaG9sZCA9IHRyaXAtPnRlbXBlcmF0dXJlOwo+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqBpZiAodHotPnRlbXBlcmF0dXJlID49IHRyaXAtPnRlbXBlcmF0dXJl
+KQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdHJpcC0+
+dGhyZXNob2xkIC09IHRyaXAtPmh5c3RlcmVzaXM7Cj4gK8KgwqDCoMKgwqDCoMKgfSBlbHNlIHsK
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKHR6LT5sYXN0X3RlbXBlcmF0dXJl
+IDwgdHJpcC0+dGhyZXNob2xkICYmCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCB0ei0+dGVtcGVyYXR1cmUgPj0gdHJpcC0+dGhyZXNob2xkKSB7Cj4gwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdGhlcm1hbF9ub3RpZnlfdHpfdHJp
+cF91cCh0ei0+aWQsCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAK
+PiB0aGVybWFsX3pvbmVfdHJpcF9pZCh0eiwgdHJpcCksCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgdHotPnRlbXBlcmF0dXJlKTsKPiAtwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgaWYgKHR6LT5sYXN0X3RlbXBlcmF0dXJlID49IHRyaXAtPnRlbXBlcmF0
+dXJlICYmCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB0ei0+dGVtcGVy
+YXR1cmUgPCB0cmlwLT50ZW1wZXJhdHVyZSAtIHRyaXAtCj4gPmh5c3RlcmVzaXMpCj4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB0cmlwLT50aHJlc2hvbGQg
+PSB0cmlwLT50ZW1wZXJhdHVyZSAtIHRyaXAtCj4gPmh5c3RlcmVzaXM7Cj4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoH0gZWxzZSBpZiAodHotPmxhc3RfdGVtcGVyYXR1cmUgPj0gdHJp
+cC0+dGhyZXNob2xkICYmCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIHR6LT50ZW1wZXJhdHVyZSA8IHRyaXAtPnRocmVzaG9sZCkgewo+IMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHRoZXJtYWxfbm90aWZ5
+X3R6X3RyaXBfZG93bih0ei0+aWQsCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgCj4gdGhlcm1hbF96b25lX3RyaXBfaWQodHosIHRyaXApLAo+IMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB0ei0+dGVtcGVyYXR1cmUpOwo+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdHJpcC0+dGhy
+ZXNob2xkID0gdHJpcC0+dGVtcGVyYXR1cmU7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoH0KPiDCoMKgwqDCoMKgwqDCoMKgfQo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoGlmICh0cmlw
+LT50eXBlID09IFRIRVJNQUxfVFJJUF9DUklUSUNBTCB8fCB0cmlwLT50eXBlID09Cj4gVEhFUk1B
+TF9UUklQX0hPVCkKPiBAQCAtNDAzLDcgKzQxMCw3IEBAIHN0YXRpYyB2b2lkIHRoZXJtYWxfem9u
+ZV9kZXZpY2VfaW5pdChzdHIKPiDCoHZvaWQgX190aGVybWFsX3pvbmVfZGV2aWNlX3VwZGF0ZShz
+dHJ1Y3QgdGhlcm1hbF96b25lX2RldmljZSAqdHosCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGVudW0gdGhlcm1hbF9u
+b3RpZnlfZXZlbnQgZXZlbnQpCj4gwqB7Cj4gLcKgwqDCoMKgwqDCoMKgY29uc3Qgc3RydWN0IHRo
+ZXJtYWxfdHJpcCAqdHJpcDsKPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgdGhlcm1hbF90cmlwICp0
+cmlwOwo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoGlmIChhdG9taWNfcmVhZCgmaW5fc3VzcGVuZCkp
+Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm47Cj4gSW5kZXg6IGxpbnV4
+LXBtL2luY2x1ZGUvbGludXgvdGhlcm1hbC5oCj4gPT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQo+IC0tLSBsaW51eC1wbS5v
+cmlnL2luY2x1ZGUvbGludXgvdGhlcm1hbC5oCj4gKysrIGxpbnV4LXBtL2luY2x1ZGUvbGludXgv
+dGhlcm1hbC5oCj4gQEAgLTU3LDEyICs1NywxNCBAQCBlbnVtIHRoZXJtYWxfbm90aWZ5X2V2ZW50
+IHsKPiDCoCAqIHN0cnVjdCB0aGVybWFsX3RyaXAgLSByZXByZXNlbnRhdGlvbiBvZiBhIHBvaW50
+IGluIHRlbXBlcmF0dXJlCj4gZG9tYWluCj4gwqAgKiBAdGVtcGVyYXR1cmU6IHRlbXBlcmF0dXJl
+IHZhbHVlIGluIG1pbGlDZWxzaXVzCj4gwqAgKiBAaHlzdGVyZXNpczogcmVsYXRpdmUgaHlzdGVy
+ZXNpcyBpbiBtaWxpQ2Vsc2l1cwo+ICsgKiBAdGhyZXNob2xkOiB0cmlwIGNyb3NzaW5nIG5vdGlm
+aWNhdGlvbiB0aHJlc2hvbGQgbWlsaUNlbHNpdXMKPiDCoCAqIEB0eXBlOiB0cmlwIHBvaW50IHR5
+cGUKPiDCoCAqIEBwcml2OiBwb2ludGVyIHRvIGRyaXZlciBkYXRhIGFzc29jaWF0ZWQgd2l0aCB0
+aGlzIHRyaXAKPiDCoCAqLwo+IMKgc3RydWN0IHRoZXJtYWxfdHJpcCB7Cj4gwqDCoMKgwqDCoMKg
+wqDCoGludCB0ZW1wZXJhdHVyZTsKPiDCoMKgwqDCoMKgwqDCoMKgaW50IGh5c3RlcmVzaXM7Cj4g
+K8KgwqDCoMKgwqDCoMKgaW50IHRocmVzaG9sZDsKPiDCoMKgwqDCoMKgwqDCoMKgZW51bSB0aGVy
+bWFsX3RyaXBfdHlwZSB0eXBlOwo+IMKgwqDCoMKgwqDCoMKgwqB2b2lkICpwcml2Owo+IMKgfTsK
+PiAKPiAKPiAKCg==
 
