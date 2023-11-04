@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BDA37E112B
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Nov 2023 22:16:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC937E1129
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Nov 2023 22:15:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbjKDVQA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 4 Nov 2023 17:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
+        id S230164AbjKDVP7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 4 Nov 2023 17:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbjKDVQA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Nov 2023 17:16:00 -0400
+        with ESMTP id S230138AbjKDVP6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Nov 2023 17:15:58 -0400
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9948DD6E
-        for <linux-pm@vger.kernel.org>; Sat,  4 Nov 2023 14:15:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346DDEB
+        for <linux-pm@vger.kernel.org>; Sat,  4 Nov 2023 14:15:55 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qzNza-0007wm-IE; Sat, 04 Nov 2023 22:15:42 +0100
+        id 1qzNza-0007wn-IF; Sat, 04 Nov 2023 22:15:42 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qzNzY-006e17-55; Sat, 04 Nov 2023 22:15:40 +0100
+        id 1qzNzY-006e1A-BU; Sat, 04 Nov 2023 22:15:40 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qzNzX-00D1ar-SF; Sat, 04 Nov 2023 22:15:39 +0100
+        id 1qzNzY-00D1av-2F; Sat, 04 Nov 2023 22:15:40 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+Cc:     Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@tuxon.dev>,
         linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         kernel@pengutronix.de, linux-kbuild@vger.kernel.org
-Subject: [PATCH 02/14] power: reset: at91-reset:: Stop using module_platform_driver_probe()
-Date:   Sat,  4 Nov 2023 22:15:04 +0100
-Message-ID: <20231104211501.3676352-18-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 03/14] power: reset: at91-sama5d2_shdwc: Stop using module_platform_driver_probe()
+Date:   Sat,  4 Nov 2023 22:15:05 +0100
+Message-ID: <20231104211501.3676352-19-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231104211501.3676352-16-u.kleine-koenig@pengutronix.de>
 References: <20231104211501.3676352-16-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2325; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=W8lRBZ3yUwV5kFWyZd9/5kHcgWF/rPGzltu4aD14g1o=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlRrRYymQvOHfodVzwcRCWertvLfogz7aGBheYQ 1WkI05tJCWJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZUa0WAAKCRCPgPtYfRL+ TvvNB/wKZ0WHQZz9CBCFBmiha3yOJNmxfjag1cOSSWpe2KT8nDL7OLZNoGv91LYSe+TqaMV9z1H gOYIltEwIh6KgU4ht4CUsUx6mLUgZygelv8VpsAoXidiDlHPTZZA8XK+Ke5kzqjE5cUpFBJttwV EHm0xoz4lr6FKXa4B3cBP25MUihfdWVFzZDnTJYR74ExSIy9/2irtmj/eUZuMKVMIU0wW82/pZd ZvfbIH3IUYyaBHWUCT5IaKJ9998XVfo+uGs97xiXxAqmRgpKoeKWQuBC/0qfwoE6cyhrtsHKEF9 j3nW3JG8XaS69ZUEuFoAeH9vLuOhAg+nhKeNysxEcumnsI+k
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2338; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=CzfLFzFhdKZJS53HV7olnleoDV2ECmztZSZ0hXx6qvU=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlRrRZvSUmVm+Ux2DDRAvxRKgCWmH6x9Tx/AWBs S3Mcf5rWu6JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZUa0WQAKCRCPgPtYfRL+ Tld8CACz7r9Zk4EtBHkBDdUVbuoeGgQPmN5+wiA8GgVpHuG7h7S5CNtvi59p2VYTke10Ooq0I3C mf4ZDqQ5I7hm4Htbb7EMc8AtBPljMUsPG/JTKAaxtqkPvt0pIzRpyPGzluwNStGHG4UOzv4puLq o1AzzH6ryb4UyP4qXcbKmdFGrZgnIulWB6F3ZK6vvUdMJjIiCK6Iaf7cw1SEtJLthS0Sqke39+/ SJAZZuMnLz/w+/93LjfPVhYUv+sXK9Vu6XqaPCR5nN3UDJTTjxGy9D9WXqC7rk6olJry5SjGzo6 FLXYgDeBqndSVhrWg7wEVZPcWyj7x2kdAn4glugVboSEkxXk
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -74,48 +74,48 @@ needed to suppress a (W=1) modpost warning.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/power/reset/at91-reset.c | 9 +++++----
+ drivers/power/reset/at91-sama5d2_shdwc.c | 9 +++++----
  1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/power/reset/at91-reset.c b/drivers/power/reset/at91-reset.c
-index aa9b012d3d00..af85f2f929ba 100644
---- a/drivers/power/reset/at91-reset.c
-+++ b/drivers/power/reset/at91-reset.c
-@@ -337,7 +337,7 @@ static int at91_rcdev_init(struct at91_reset *reset,
- 	return devm_reset_controller_register(&pdev->dev, &reset->rcdev);
- }
+diff --git a/drivers/power/reset/at91-sama5d2_shdwc.c b/drivers/power/reset/at91-sama5d2_shdwc.c
+index e76b102b57b1..ef8add623363 100644
+--- a/drivers/power/reset/at91-sama5d2_shdwc.c
++++ b/drivers/power/reset/at91-sama5d2_shdwc.c
+@@ -329,7 +329,7 @@ static const struct of_device_id at91_pmc_ids[] = {
+ 	{ /* Sentinel. */ }
+ };
  
--static int __init at91_reset_probe(struct platform_device *pdev)
-+static int at91_reset_probe(struct platform_device *pdev)
+-static int __init at91_shdwc_probe(struct platform_device *pdev)
++static int at91_shdwc_probe(struct platform_device *pdev)
  {
  	const struct of_device_id *match;
- 	struct at91_reset *reset;
-@@ -417,7 +417,7 @@ static int __init at91_reset_probe(struct platform_device *pdev)
+ 	struct device_node *np;
+@@ -421,7 +421,7 @@ static int __init at91_shdwc_probe(struct platform_device *pdev)
  	return ret;
  }
  
--static int __exit at91_reset_remove(struct platform_device *pdev)
-+static int at91_reset_remove(struct platform_device *pdev)
+-static int __exit at91_shdwc_remove(struct platform_device *pdev)
++static int at91_shdwc_remove(struct platform_device *pdev)
  {
- 	struct at91_reset *reset = platform_get_drvdata(pdev);
+ 	struct shdwc *shdw = platform_get_drvdata(pdev);
  
-@@ -428,13 +428,14 @@ static int __exit at91_reset_remove(struct platform_device *pdev)
+@@ -442,13 +442,14 @@ static int __exit at91_shdwc_remove(struct platform_device *pdev)
  }
  
- static struct platform_driver at91_reset_driver = {
--	.remove = __exit_p(at91_reset_remove),
-+	.probe = at91_reset_probe,
-+	.remove = at91_reset_remove,
+ static struct platform_driver at91_shdwc_driver = {
+-	.remove = __exit_p(at91_shdwc_remove),
++	.probe = at91_shdwc_probe,
++	.remove = at91_shdwc_remove,
  	.driver = {
- 		.name = "at91-reset",
- 		.of_match_table = at91_reset_of_match,
+ 		.name = "at91-shdwc",
+ 		.of_match_table = at91_shdwc_of_match,
  	},
  };
--module_platform_driver_probe(at91_reset_driver, at91_reset_probe);
-+module_platform_driver(at91_reset_driver);
+-module_platform_driver_probe(at91_shdwc_driver, at91_shdwc_probe);
++module_platform_driver(at91_shdwc_driver);
  
- MODULE_AUTHOR("Atmel Corporation");
- MODULE_DESCRIPTION("Reset driver for Atmel SoCs");
+ MODULE_AUTHOR("Nicolas Ferre <nicolas.ferre@atmel.com>");
+ MODULE_DESCRIPTION("Atmel shutdown controller driver");
 -- 
 2.42.0
 
