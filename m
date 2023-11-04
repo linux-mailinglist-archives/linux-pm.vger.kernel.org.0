@@ -2,87 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9CDE7E0F44
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Nov 2023 13:01:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 161157E1023
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Nov 2023 16:49:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbjKDMBC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 4 Nov 2023 08:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
+        id S229505AbjKDPti (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 4 Nov 2023 11:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjKDMBB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Nov 2023 08:01:01 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9EFFB
-        for <linux-pm@vger.kernel.org>; Sat,  4 Nov 2023 05:00:58 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9ae2cc4d17eso455310666b.1
-        for <linux-pm@vger.kernel.org>; Sat, 04 Nov 2023 05:00:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699099256; x=1699704056; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=B5Yt0+TL7qwu2OzCEiBStN1gkCqYNrb0qxd9SfM0lAY=;
-        b=Dc/g4py5zMFuqTYWhkAY16G8xLtp8UYLqZx0vFWpSGc3zOo8MP4xVIv+Ah9rKDY3w1
-         EQoE7fZ/j7ZtiKkLrZNCj70ifdzDM0EJpYQJ9PIFrvQim1pcorVxYk63t7/Y5nRhX6Yx
-         91faJTa9tNwOCLvCMgb8D/MyVF2lLfnCwejsUk+PaQEtybxKSUoE0ARNDCwhLX7XYyc7
-         QDlUf4knDi6W2lx/e20JPgt8PwYg+kGoUsC+YaegvpOcVqvgFOuhXSimdJyh9dd4G2mk
-         AHkkjC/yiAyUKyGVAdyrG3mlnKMcB2oWiDeAosTTIMkcQqNw0pj1tD5xsvzMiBM4VRmq
-         OCSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699099256; x=1699704056;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B5Yt0+TL7qwu2OzCEiBStN1gkCqYNrb0qxd9SfM0lAY=;
-        b=iin5CSK0YLpHef6I/pGb3UYwcFJml2Lz5YrNnW4+1AigSyNn1VW4rKL9i02nxXTAXD
-         knkjY43jLlRpUhrh4km0LhC3a80CXPHj6lIWNxGlEsDGsJkcpMEVJqUCXNhdyyIfkfJz
-         3mlutnb8hc3NSWNG63T4X1YiXyCFPrO5SgYynMpe0OHKVpNorWLGYsLndKcK3w3QiEaF
-         vJOjN4NQNlWF/xrK5hskszOtUrTgV+fojPkTTfCrTk5DlaDSfrNK+IUpc2a/c+cM0dmX
-         P0ZZoFnzKy7hmZC9xXheUGL6wAlWd0QjvIYyCSJOgDeFPrLY3Ywrpo2uZS4LMouD3o5h
-         2axw==
-X-Gm-Message-State: AOJu0YyyavXTWjBX//ANrB5ASidT9Mq4sAZ9gYXsY4nSgSAQ6fU20zeP
-        Ej1olImTZEuZLe9F4u2nJemCrg==
-X-Google-Smtp-Source: AGHT+IEf2aG1zYzvkplVu8QxKBB5EH4uxsOMWiRATX+cU9J2QXHRp6TCbOa+4AdBleHq3fmacdjruQ==
-X-Received: by 2002:a17:907:6d24:b0:9c3:d356:ad0c with SMTP id sa36-20020a1709076d2400b009c3d356ad0cmr8602893ejc.24.1699099256471;
-        Sat, 04 Nov 2023 05:00:56 -0700 (PDT)
-Received: from [192.168.0.153] (178235177017.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.17])
-        by smtp.gmail.com with ESMTPSA id r1-20020a170906a20100b00997d76981e0sm1860925ejy.208.2023.11.04.05.00.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Nov 2023 05:00:56 -0700 (PDT)
-Message-ID: <c1d2ce7b-7467-46b4-9587-cfe3d99a5b79@linaro.org>
-Date:   Sat, 4 Nov 2023 13:00:53 +0100
+        with ESMTP id S229453AbjKDPth (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Nov 2023 11:49:37 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF2B19D
+        for <linux-pm@vger.kernel.org>; Sat,  4 Nov 2023 08:49:33 -0700 (PDT)
+Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id A079586FF2;
+        Sat,  4 Nov 2023 16:49:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1699112970;
+        bh=jCizlydCKi5lNIqwtZ5Pt5h4wmg7TCkhotbtq3DlS9Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Hf23CKzOW9q4VpdKS87jULRNwuvhPmGKuD544K3NtnSeRSo6ZQiCQOKA/FbD3GcuJ
+         u+2EjhqKDDkhbrEaRUhtQhQxzQMybbK/B0NHEonGPFXi3fF1OLAhwE1jBJDNJ9uwpG
+         bHur4qoerpblq9BUL1qk0SGEPFCGPSvaB0A/r15q7bALIUgVWDNR+onIV95FOfyHxg
+         MLfXDJRHQv3ntUTunc5eayN1JAJL1TbBqgyawGpia1KPuL5pxGra1+2hul4LxWxqRe
+         Oi61CVc5NVTbMMM8gAXtzE+tpiMC+AM2xYkRlQDeHuMafHtmm3hJChKhMIXNHwLCVt
+         GTBmQGDBK0fsw==
+From:   Marek Vasut <marex@denx.de>
+To:     linux-pm@vger.kernel.org
+Cc:     Marek Vasut <marex@denx.de>, Hans de Goede <hdegoede@redhat.com>,
+        Sebastian Reichel <sre@kernel.org>
+Subject: [PATCH] power: supply: bq27xxx: Stop and start delayed work in suspend and resume
+Date:   Sat,  4 Nov 2023 16:49:06 +0100
+Message-ID: <20231104154920.68585-1-marex@denx.de>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v3 5/5] venus: pm_helpers: Use
- dev_pm_genpd_set_hwmode to switch GDSC mode
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Taniya Das <tdas@qti.qualcomm.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-media@vger.kernel.org,
-        Jagadeesh Kona <quic_jkona@quicinc.com>
-References: <20231101-gdsc-hwctrl-v3-0-0740ae6b2b04@linaro.org>
- <20231101-gdsc-hwctrl-v3-5-0740ae6b2b04@linaro.org>
- <fe05a0f5-2f57-4f98-afe6-3b0acbaa96fe@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <fe05a0f5-2f57-4f98-afe6-3b0acbaa96fe@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,38 +52,84 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+This driver uses delayed work to perform periodic battery state read out.
+This delayed work is not stopped across suspend and resume cycle. The
+read out can occur early in the resume cycle. In case of an I2C variant
+of this hardware, that read out triggers I2C transfer. That I2C transfer
+may happen while the I2C controller is still suspended, which produces a
+WARNING in the kernel log.
 
+Fix this by introducing trivial PM ops, which stop the delayed work before
+the system enters suspend, and schedule the delayed work right after the
+system resumes.
 
-On 11/3/23 11:44, Bryan O'Donoghue wrote:
-> On 01/11/2023 09:04, Abel Vesa wrote:
->> From: Jagadeesh Kona <quic_jkona@quicinc.com>
->>
->> This change demonstrates the use of dev_pm_genpd_set_hwmode API from
->> video driver to switch the video mvs0 gdsc to SW/HW modes at runtime
->> based on requirement.
->>
->> This change adds a new boolean array member vcodec_pmdomains_hwctrl in
->> venus_resources structure to indicate if GDSC's have HW control support
->> or not. This data is used in vcodec_control_v4() to check if GDSC has
->> support to switch to HW control mode and then call dev_pm_genpd_set_hwmode
->> to switch the GDSC mode.
->>
->> Before the GDSC HWCTL was available to the consumer, the venus driver
->> needed to somehow keep the power from collapsing while under the driver
->> control. The only way to do that was to clear the CORE_PWR_DISABLE bit
->> (in wrapper POWER_CONTROL register) and, respectively, set it back after
->> the driver control was completed.
->>
->> Now, that there is a way to switch the GDSC HW/SW control back and
->> forth, the CORE_PWR_DISABLE toggling can be dropped.
->>
->> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
->> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> 
-> So I plan to give this a test on rb5 and db410c
-> 
-> My q here though is - has anybody on the submission list tested this through suspend/resume and vdd min ?
-I think that only chromebooks (sc7[12]80) and sc7180-acer-aspire1.dts
-are able to hit vddmin upstream as of today
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Hans de Goede <hdegoede@redhat.com>
+Cc: Sebastian Reichel <sre@kernel.org>
+Cc: linux-pm@vger.kernel.org
+---
+ drivers/power/supply/bq27xxx_battery.c     | 22 ++++++++++++++++++++++
+ drivers/power/supply/bq27xxx_battery_i2c.c |  1 +
+ include/linux/power/bq27xxx_battery.h      |  1 +
+ 3 files changed, 24 insertions(+)
 
-Konrad
+diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
+index 4296600e8912a..1c4a9d1377442 100644
+--- a/drivers/power/supply/bq27xxx_battery.c
++++ b/drivers/power/supply/bq27xxx_battery.c
+@@ -2162,6 +2162,28 @@ void bq27xxx_battery_teardown(struct bq27xxx_device_info *di)
+ }
+ EXPORT_SYMBOL_GPL(bq27xxx_battery_teardown);
+ 
++#ifdef CONFIG_PM_SLEEP
++static int bq27xxx_battery_suspend(struct device *dev)
++{
++	struct bq27xxx_device_info *di = dev_get_drvdata(dev);
++
++	cancel_delayed_work(&di->work);
++	return 0;
++}
++
++static int bq27xxx_battery_resume(struct device *dev)
++{
++	struct bq27xxx_device_info *di = dev_get_drvdata(dev);
++
++	schedule_delayed_work(&di->work, 0);
++	return 0;
++}
++#endif /* CONFIG_PM_SLEEP */
++
++SIMPLE_DEV_PM_OPS(bq27xxx_battery_battery_pm_ops,
++		  bq27xxx_battery_suspend, bq27xxx_battery_resume);
++EXPORT_SYMBOL_GPL(bq27xxx_battery_battery_pm_ops);
++
+ MODULE_AUTHOR("Rodolfo Giometti <giometti@linux.it>");
+ MODULE_DESCRIPTION("BQ27xxx battery monitor driver");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/power/supply/bq27xxx_battery_i2c.c b/drivers/power/supply/bq27xxx_battery_i2c.c
+index 9b5475590518f..3a1798b0c1a79 100644
+--- a/drivers/power/supply/bq27xxx_battery_i2c.c
++++ b/drivers/power/supply/bq27xxx_battery_i2c.c
+@@ -295,6 +295,7 @@ static struct i2c_driver bq27xxx_battery_i2c_driver = {
+ 	.driver = {
+ 		.name = "bq27xxx-battery",
+ 		.of_match_table = of_match_ptr(bq27xxx_battery_i2c_of_match_table),
++		.pm = &bq27xxx_battery_battery_pm_ops,
+ 	},
+ 	.probe = bq27xxx_battery_i2c_probe,
+ 	.remove = bq27xxx_battery_i2c_remove,
+diff --git a/include/linux/power/bq27xxx_battery.h b/include/linux/power/bq27xxx_battery.h
+index 7c8d65414a70a..7d8025fb74b70 100644
+--- a/include/linux/power/bq27xxx_battery.h
++++ b/include/linux/power/bq27xxx_battery.h
+@@ -83,5 +83,6 @@ struct bq27xxx_device_info {
+ void bq27xxx_battery_update(struct bq27xxx_device_info *di);
+ int bq27xxx_battery_setup(struct bq27xxx_device_info *di);
+ void bq27xxx_battery_teardown(struct bq27xxx_device_info *di);
++extern const struct dev_pm_ops bq27xxx_battery_battery_pm_ops;
+ 
+ #endif
+-- 
+2.42.0
+
