@@ -2,463 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 675727E0DEA
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Nov 2023 06:12:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E07F7E0EEB
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Nov 2023 12:04:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230465AbjKDFMx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 4 Nov 2023 01:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53422 "EHLO
+        id S231952AbjKDK7R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 4 Nov 2023 06:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbjKDFMw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Nov 2023 01:12:52 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2050.outbound.protection.outlook.com [40.107.255.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A5A187;
-        Fri,  3 Nov 2023 22:12:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BNq5Fpi62ZpZftDec2h2OK3W4aCrNLQoUO7qu+2n+FrGPDxMneQrvyFBRTkt5Ihv3POF+dNwx9xV5EIUpqkluc7xvjFzB1arD/zmz11LmB/vj2RcFaAAviUOXe+6ENfFLKwRVkXHgeT3ASTFnf1NoLYJfPkK+vDC5/++PIrILEWwPis/gEJ5yuspnuYi53dEECdEgvgOtHVabJ/qhxDkfjHrLGFlrKf+QHGOmJ1b3da9Vj52tk/dY0VuNywJ3c0ltIImzM5zxe4LMH4XRx8JTWW1a1TQZhGHN7t+madsgvzIg3PBGCQmTpeNUcbfv9FKJjUT3WsaRO2hCyiZNRN4cg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=T2Ftr2xwwYAw9GywVSN1FeSxgbZOYoaKPdNP95i7HSA=;
- b=Kmcr65uzV1RzbIL0pXoS/afp6b0q1Yb328TjlRGoGzTNPVlqQfA1Da3IoVLIIcy5ytJnHfaxdR+JW7gdyRKvZBu8xUliQi/LH/JUlwD0Azlv9xoE7eCKg1tXQoFxF8ob0eeWEVnR+xZjYjvYNbKhWtlkva8Ov6HLIXpTnXGR3NQ0TKHi2RVyQfaKzbjOA/snwqq0EINLVdw6y6wmz79JmT52sVgc1E/EdXciVWUtGbSjyxgw74eentQhk6YXFN4l1sDHoy9roasRn7dR7mQ2WBZKTMuG9wUrhJgvh4H7CjqFxlQ9aIcpO8CZX489/Laz9tRtKHauv501Fa6RLY173A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 58.252.5.68) smtp.rcpttodomain=samsung.com smtp.mailfrom=oppo.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=oppo.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=T2Ftr2xwwYAw9GywVSN1FeSxgbZOYoaKPdNP95i7HSA=;
- b=PJhSUn5mP3ShZmMPiUz84EhXlF4rxuV1XIJCL4uGkCHHu9RPflWUZU1jrMEFSgowpe4moJpKQYaAw0ETQYesfDlipRJ9OOBvCszExC0b2vcajwAAmPkh/PdGd9Zo6XPpGK692HSbbLiFwKIOujKBE/icV82WL23b9y4bUT3ODBQ=
-Received: from PS2PR04CA0002.apcprd04.prod.outlook.com (2603:1096:300:55::14)
- by JH0PR02MB6778.apcprd02.prod.outlook.com (2603:1096:990:49::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.24; Sat, 4 Nov
- 2023 05:12:43 +0000
-Received: from HK3PEPF0000021F.apcprd03.prod.outlook.com
- (2603:1096:300:55:cafe::a9) by PS2PR04CA0002.outlook.office365.com
- (2603:1096:300:55::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.22 via Frontend
- Transport; Sat, 4 Nov 2023 05:12:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 58.252.5.68)
- smtp.mailfrom=oppo.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=oppo.com;
-Received-SPF: Pass (protection.outlook.com: domain of oppo.com designates
- 58.252.5.68 as permitted sender) receiver=protection.outlook.com;
- client-ip=58.252.5.68; helo=mail.oppo.com; pr=C
-Received: from mail.oppo.com (58.252.5.68) by
- HK3PEPF0000021F.mail.protection.outlook.com (10.167.8.41) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6907.20 via Frontend Transport; Sat, 4 Nov 2023 05:12:42 +0000
-Received: from PA80318969.adc.com (172.16.40.118) by mailappw30.adc.com
- (172.16.56.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Sat, 4 Nov
- 2023 13:12:41 +0800
-From:   huangzaiyang <huangzaiyang@oppo.com>
-To:     <myungjoo.ham@samsung.com>, <kyungmin.park@samsung.com>,
-        <cw00.choi@samsung.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        huangzaiyang <joyyoung.wang@gmail.com>,
-        ZaiYang Huang <hzy0719@163.com>
-Subject: [PATCH] Performance: devfreq: avoid devfreq delay work re-init before queue, which will cause delayed work queue reentry.
-Date:   Sat, 4 Nov 2023 13:12:26 +0800
-Message-ID: <20231104051226.6249-1-huangzaiyang@oppo.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S231816AbjKDK7Q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Nov 2023 06:59:16 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5ADD44
+        for <linux-pm@vger.kernel.org>; Sat,  4 Nov 2023 03:59:13 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-40836ea8cbaso20963295e9.0
+        for <linux-pm@vger.kernel.org>; Sat, 04 Nov 2023 03:59:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1699095552; x=1699700352; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NNExFK3YGciyQ9GJGSArLtOwz5E+OA3aCyO23C6vxdQ=;
+        b=x0D4Gomiwj75uXfAEQGEze26zaPXwl+UFCzW5PMgCfRR8Y3imYU42IbgBZFDeSVhI5
+         rXZwlt1J3NGUmZVAdMXyRZi5Ul43P94hIYeFklGmfey47+SGYvhfD9TO0c68e9JblaCv
+         mRfyRPrLlGU7DsDF7An5Ze86VW1buB2nWvEK2w1ppZrH5hjScLFWD2ln6wq/T8ImAPOd
+         xh6avVIOpUKxH97209JCzlNm/vn5ISxSixcHymvD1idHNeyVReIXgmHfBB2eiS9LrWSi
+         q9VYkJW/u/4sR+o/iPvEnS3JMQrJarmu8ApZRAG5PLBbD9A3UUzG4ZqU10tYwDMlQiU5
+         Seeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699095552; x=1699700352;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NNExFK3YGciyQ9GJGSArLtOwz5E+OA3aCyO23C6vxdQ=;
+        b=rVsc1fJY79CDUaUT6C/w/iQETKTjzTZJYWFQrmE1E8MNdiaTHNIwj1+q7K7qI5cTEg
+         GISA2/pwATBnIXVq/t6xDlURgz/k0hMzBT3oJDodN7XFhIpbBnxhDAJwVAcYNleeH4Qq
+         MXS4jR+AdEoyWwjyFKegXIS33m1YN2nP713qMrJ2cV1xA1olsyU3UgKZf2LHSNiGB93i
+         9FLrUNMkY7nB33AVkEAeW2JR3CFufHgr3gv7x4QchT+Mjr/kXxjkCiCz7XKlewaklxEh
+         R/tQOQWGL2DFrqp8DnIggDuSsAuz4QVjEEV3gm9Yb2rWa7w9urajWhRfb9z9CBbaiDYQ
+         uxIA==
+X-Gm-Message-State: AOJu0Ywrpo4CgY1A5zW8iwfkJh3wTct2SuE+Sz69aINJaA9pVXQ4NrH8
+        kgOreHSycsA1Ftc4sK3HM8C7Kw==
+X-Google-Smtp-Source: AGHT+IGp4uWcYlP4kHjc0lmFKbWKIFKggNnAnfbnbMYGOblrMi2XBzxq72tIY/+NQsPArSEgCst3GQ==
+X-Received: by 2002:a05:600c:1c90:b0:405:37bb:d942 with SMTP id k16-20020a05600c1c9000b0040537bbd942mr20094215wms.4.1699095551951;
+        Sat, 04 Nov 2023 03:59:11 -0700 (PDT)
+Received: from vingu-book.. ([2a01:e0a:f:6020:3172:eb13:5bac:126a])
+        by smtp.gmail.com with ESMTPSA id p6-20020a05600c358600b004053a6b8c41sm5315809wmq.12.2023.11.04.03.59.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Nov 2023 03:59:11 -0700 (PDT)
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+To:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
+        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
+        lukasz.luba@arm.com, ionela.voinescu@arm.com,
+        pierre.gondois@arm.com, beata.michalska@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Cc:     conor.dooley@microchip.com, suagrfillet@gmail.com,
+        ajones@ventanamicro.com, lftan@kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [PATCH v5 0/7] consolidate and cleanup CPU capacity
+Date:   Sat,  4 Nov 2023 11:59:00 +0100
+Message-Id: <20231104105907.1365392-1-vincent.guittot@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Originating-IP: [172.16.40.118]
-X-ClientProxiedBy: mailappw31.adc.com (172.16.56.198) To mailappw30.adc.com
- (172.16.56.197)
-Content-Transfer-Encoding: quoted-printable
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: HK3PEPF0000021F:EE_|JH0PR02MB6778:EE_
-X-MS-Office365-Filtering-Correlation-Id: 33918595-5b10-4f34-b30f-08dbdcf4ac7e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cu8EsvYvPMWe2BZ/RvdKu6+BqbGFJ9cK8quh2Bt7Y0bZcW8rGo9sxdy5Cc4c3dU0TH0urupiZVTcilkxS46A8bEwR6lz+DpZMvO9bKhW7K7kMKb/2kCvmLG9gbkdc+HOBXhCA5pATJIX4gecnX7DJLH3pisstBuy6Ekcbr01CXKxdaCkiUi+IbGZrceq/BY3js+O4ogGDBX6euL6SU0KDyf3KsrTn9QqMzfdbLT0RTstN/k89qritDKTCTAOD1YZ3zKeVafSlKJj9cD5ATmS75n8xzNS8sjJhlXxss6B2WKwoGobioRjME0BDtS6MeyIyPEgV/5jroWNwOEqQQvBT2d0OhKa4K1MtjeL+UVOsop1kPzlZAtO3xRk2+sQlIy3IEDlcfWTWBKWALcTruD/CTYcqg4PHTWXdCBGKwx7WduyYijnLcGHplOPx8E4b9aSHHdd5os0C4xadMGRM3PJygY4WsiumJ9sY3lf4CRJSq7HIoZKhmzEPZKheWJnIgq7nsvRjWdumSWrSmv7y45f0Q2UP7D4VStl8lr2WuhMLya8jhrSh4YdO08S+AFkSd4shwibwAdQjV7+YA504QCB6CweO9+x1HGSff081oEtRezutURT1/dGxyptjaITrNQWv4dv/jtIJO4ZjRKyuS9B4njRlWPDYd25Ee9iENXAVUE1FSpIcxDggLIQe6eYhRKJNHgkjcs7wJM2IMnDh2I4PGM6miiDmmageaRhqjem6FcaRAeYhdjZFRJVFS+E/WrjmZgdjDxNdTpeg6OIMydsBw==
-X-Forefront-Antispam-Report: CIP:58.252.5.68;CTRY:CN;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.oppo.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(376002)(39860400002)(396003)(346002)(230922051799003)(82310400011)(451199024)(1800799009)(186009)(64100799003)(46966006)(36840700001)(40470700004)(2906002)(1076003)(86362001)(356005)(81166007)(110136005)(316002)(26005)(5660300002)(16526019)(36860700001)(41300700001)(6666004)(2616005)(30864003)(8936002)(478600001)(336012)(40460700003)(82740400003)(83380400001)(40480700001)(70586007)(70206006)(54906003)(36756003)(4326008)(8676002)(47076005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: oppo.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2023 05:12:42.5610
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 33918595-5b10-4f34-b30f-08dbdcf4ac7e
-X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f1905eb1-c353-41c5-9516-62b4a54b5ee6;Ip=[58.252.5.68];Helo=[mail.oppo.com]
-X-MS-Exchange-CrossTenant-AuthSource: HK3PEPF0000021F.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: JH0PR02MB6778
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: huangzaiyang <joyyoung.wang@gmail.com>
+This is the 1st part of consolidating how the max compute capacity is
+used in the scheduler and how we calculate the frequency for a level of
+utilization.
 
-There is a timer_list race condition when executing the following test shel=
-l script:
-'''
-#!/vendor/bin/sh
-while true
-do
-        echo "simple_ondemand" > /sys/class/devfreq/1d84000.ufshc/governor
-        echo "performance" > /sys/class/devfreq/1d84000.ufshc/governor
-done
-'''
+Fix some unconsistancy when computing frequency for an utilization. There
+can be a mismatch between energy model and schedutil.
 
-[13511.214366][    C3] Unable to handle kernel paging request at virtual ad=
-dress dead00000000012a
-[13511.214393][    C3] Mem abort info:
-[13511.214398][    C3]   ESR =3D 0x96000044
-[13511.214404][    C3]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
-[13511.214409][    C3]   SET =3D 0, FnV =3D 0
-[13511.214414][    C3]   EA =3D 0, S1PTW =3D 0
-[13511.214417][    C3] Data abort info:
-[13511.214422][    C3]   ISV =3D 0, ISS =3D 0x00000044
-[13511.214427][    C3]   CM =3D 0, WnR =3D 1
-[13511.214432][    C3] [dead00000000012a] address between user and kernel a=
-ddress ranges
-[13511.214439][    C3] Internal error: Oops: 96000044 [#1] PREEMPT SMP
-[13511.215449][    C3] CPU: 3 PID: 0 Comm: swapper/3 Tainted: G S      W  O=
-      5.10.168-android12-9-o-g63cc297a7b34 #1
-[13511.215454][    C3] Hardware name: Qualcomm Technologies, Inc. Cape MTP,=
- Whiteswan (DT)
-[13511.215460][    C3] pstate: 82400085 (Nzcv daIf +PAN -UAO +TCO BTYPE=3D-=
--)
-[13511.215472][    C3] pc : expire_timers+0x9c/0x428
-[13511.215478][    C3] lr : __run_timers+0x1f0/0x328
-[13511.215483][    C3] sp : ffffffc00801bdd0
-[13511.215487][    C3] x29: ffffffc00801bdf0 x28: ffffffdb87b31698
-[13511.215493][    C3] x27: ffffffdb87999e58 x26: ffffffdb87966008
-[13511.215499][    C3] x25: 0000000000000001 x24: ffffff8001734a00
-[13511.215506][    C3] x23: 00000000000000e0 x22: dead000000000122
-[13511.215512][    C3] x21: 000000010032658e x20: ffffff89f7a9ae80
-[13511.215518][    C3] x19: ffffffc00801be50 x18: ffffffc00801d038
-[13511.215525][    C3] x17: 0000000000000240 x16: 0000000000000201
-[13511.215532][    C3] x15: ffffffffffffffff x14: ffffff89f7a9aef8
-[13511.215538][    C3] x13: 0000000000000240 x12: ffffff89f7a9aea8
-[13511.215544][    C3] x11: 0000000000000021 x10: 000000014032658e
-[13511.215550][    C3] x9 : ffffffc00801be50 x8 : dead000000000122
-[13511.215556][    C3] x7 : ffff71646c68735e x6 : ffffff89f7aaae58
-[13511.215563][    C3] x5 : 0000000000000000 x4 : 0000000000000101
-[13511.215569][    C3] x3 : ffffff89f7a9aef0 x2 : ffffff89f7a9aef0
-[13511.215575][    C3] x1 : ffffffc00801be50 x0 : ffffff8045804428
-[13511.215581][    C3] Call trace:
-[13511.215586][    C3]  expire_timers+0x9c/0x428
-[13511.215591][    C3]  __run_timers+0x1f0/0x328
-[13511.215596][    C3]  run_timer_softirq+0x28/0x58
-[13511.215602][    C3]  efi_header_end+0x168/0x5ec
-[13511.215610][    C3]  __irq_exit_rcu+0x108/0x124
-[13511.215617][    C3]  __handle_domain_irq+0x118/0x1e4
-[13511.215625][    C3]  gic_handle_irq.31230+0x6c/0x250
-[13511.215630][    C3]  el1_irq+0xe4/0x1c0
-[13511.215638][    C3]  cpuidle_enter_state+0x3a4/0xa04
-[13511.215644][    C3]  do_idle+0x308/0x574
-[13511.215649][    C3]  cpu_startup_entry+0x84/0x90
-[13511.215656][    C3]  secondary_start_kernel+0x204/0x274
-[13511.215664][    C3] Code: d503201f a9402408 f9000128 b4000048 (f9000509)
-[13511.215670][    C3] ---[ end trace 5100bad72a35d566 ]---
-[13511.215676][    C3] Kernel panic - not syncing: Oops: Fatal exception in=
- interrupt
+Next step will be to make a difference between the original
+max compute capacity of a CPU and what is currently available when
+there is a capping applying forever (i.e. seconds or more).
 
-This is because when switching the governor through the sys node,
-the devfreq_monitor_start function will re-initialize the delayed work task=
-,
-which will cause the delay work pending flag to become invalid, and the tim=
-er pending judgment contained in the delayed work will also become invalid,
-and then the pending interception will be executed when the queue is execut=
-ed.
+Changes since v4:
+- Capitalize the verb in subject
+- Remove usless parentheses in cppc_get_dmi_max_khz()
+- Use freq_ref pattern everywhere
+- Fix MHz / kHz units conversion for cppc_cpufreq
+- Move default definition of arch_scale_freq_ref() in
+  include/linux/sched/topology.h beside arch_scale_cpu_capacity
+  which faces similar default declaration behavior. This location covers
+  all cases with arch and CONFIG_* which was not the case with previous
+  attempts.
 
-So we remove the delay work'initialization work to the devfreq_add_device a=
-nd timer_store functions,
-and the delay work pending judgment is performed before the devfreq_monitor=
-_start function performs the queue operation.
+Changes since v3:
+- Split patch 5 cpufreq/cppc
+- Fix topology_init_cpu_capacity_cppc() 
+- Fix init if AMU ratio
+- Added some tags
 
-Signed-off-by: ZaiYang Huang <hzy0719@163.com>
----
- drivers/devfreq/devfreq.c | 38 +++++++++++++++++++++++++-------------
- 1 file changed, 25 insertions(+), 13 deletions(-)
+Changes since v2:
+- Remove the 1st patch which has been queued in tip
+- Rework how to initialize the reference frequency for cppc_cpufreq and
+  change topology_init_cpu_capacity_cppc() to also set capacity_ref_freq
+- Add a RFC to convert AMU to use arch_scale_freq_ref and move the config
+  of the AMU ratio to be done when intializing cpu capacity and
+  capacity_ref_freq
+- Added some tags
 
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index b3a68d5833bd..ce4e1bbb6fea 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -480,21 +480,10 @@ static void devfreq_monitor(struct work_struct *work)
-  */
- void devfreq_monitor_start(struct devfreq *devfreq)
- {
--       if (IS_SUPPORTED_FLAG(devfreq->governor->flags, IRQ_DRIVEN))
-+       if (devfreq->governor->interrupt_driven)
-                return;
+Changes since v1:
+- Fix typos
+- Added changes in cpufreq to use arch_scale_freq_ref() when calling
+  arch_set_freq_scale (patch 3).
+- arch_scale_freq_ref() is always defined and returns 0 (as proposed
+  by Ionela) when not defined by the arch. This simplifies the code with
+  the addition of patch 3.
+- Simplify Energy Model which always uses arch_scale_freq_ref(). The
+  latter returns 0 when not defined by arch instead of last item of the 
+  perf domain. This is not a problem because the function is only defined
+  for compilation purpose in this case and we don't care about the
+  returned value. (patch 5)
+- Added changes in cppc cpufreq to set capacity_ref_freq (patch 6)
+- Added reviewed tag for patch 1 which got a minor change but not for
+  others as I did some changes which could make previous reviewed tag
+  no more relevant.
 
--       switch (devfreq->profile->timer) {
--       case DEVFREQ_TIMER_DEFERRABLE:
--               INIT_DEFERRABLE_WORK(&devfreq->work, devfreq_monitor);
--               break;
--       case DEVFREQ_TIMER_DELAYED:
--               INIT_DELAYED_WORK(&devfreq->work, devfreq_monitor);
--               break;
--       default:
--               return;
--       }
--
--       if (devfreq->profile->polling_ms)
-+       if (devfreq->profile->polling_ms && !delayed_work_pending(&devfreq-=
->work))
-                queue_delayed_work(devfreq_wq, &devfreq->work,
-                        msecs_to_jiffies(devfreq->profile->polling_ms));
- }
-@@ -830,6 +819,17 @@ struct devfreq *devfreq_add_device(struct device *dev,
-                goto err_dev;
-        }
+Vincent Guittot (7):
+  topology: Add a new arch_scale_freq_reference
+  cpufreq: Use the fixed and coherent frequency for scaling capacity
+  cpufreq/schedutil: Use a fixed reference frequency
+  energy_model: Use a fixed reference frequency
+  cpufreq/cppc: Move and rename cppc_cpufreq_{perf_to_khz|khz_to_perf}
+  cpufreq/cppc: Set the frequency used for computing the capacity
+  arm64/amu: Use capacity_ref_freq to set AMU ratio
 
-+       switch (devfreq->profile->timer) {
-+       case DEVFREQ_TIMER_DEFERRABLE:
-+               INIT_DEFERRABLE_WORK(&devfreq->work, devfreq_monitor);
-+               break;
-+       case DEVFREQ_TIMER_DELAYED:
-+               INIT_DELAYED_WORK(&devfreq->work, devfreq_monitor);
-+               break;
-+       default:
-+               dev_err(dev, "%s: Target devfreq(%s)'s profile timer has no=
- settings \n", devfreq->governor_name,
-+                       __func__);
-+       }
-        if (!devfreq->profile->max_state || !devfreq->profile->freq_table) =
-{
-                mutex_unlock(&devfreq->lock);
-                err =3D set_freq_table(devfreq);
-@@ -1860,6 +1860,18 @@ static ssize_t timer_store(struct device *dev, struc=
-t device_attribute *attr,
-        df->profile->timer =3D timer;
-        mutex_unlock(&df->lock);
+ arch/arm/include/asm/topology.h   |   1 +
+ arch/arm64/include/asm/topology.h |   1 +
+ arch/arm64/kernel/topology.c      |  26 +++---
+ arch/riscv/include/asm/topology.h |   1 +
+ drivers/acpi/cppc_acpi.c          | 104 ++++++++++++++++++++++
+ drivers/base/arch_topology.c      |  56 ++++++++----
+ drivers/cpufreq/cppc_cpufreq.c    | 139 ++++--------------------------
+ drivers/cpufreq/cpufreq.c         |   4 +-
+ include/acpi/cppc_acpi.h          |   2 +
+ include/linux/arch_topology.h     |   8 ++
+ include/linux/cpufreq.h           |   1 +
+ include/linux/energy_model.h      |   6 +-
+ include/linux/sched/topology.h    |   8 ++
+ kernel/sched/cpufreq_schedutil.c  |  26 +++++-
+ 14 files changed, 225 insertions(+), 158 deletions(-)
 
-+       switch (df->profile->timer) {
-+       case DEVFREQ_TIMER_DEFERRABLE:
-+               INIT_DEFERRABLE_WORK(&df->work, devfreq_monitor);
-+               break;
-+       case DEVFREQ_TIMER_DELAYED:
-+               INIT_DELAYED_WORK(&df->work, devfreq_monitor);
-+               break;
-+       default:
-+               dev_err(dev, "%s: Target devfreq(%s)'s profile timer has no=
- settings \n", df->governor_name,
-+                       __func__);
-+       }
-+
-        ret =3D df->governor->event_handler(df, DEVFREQ_GOV_STOP, NULL);
-        if (ret) {
-                dev_warn(dev, "%s: Governor %s not stopped(%d)\n",
---
-2.17.1
+-- 
+2.34.1
 
-________________________________
-OPPO
-
-=C2=B1=C2=BE=C2=B5=C3=A7=C3=97=C3=93=C3=93=C3=8A=C2=BC=C3=BE=C2=BC=C2=B0=C3=
-=86=C3=A4=C2=B8=C2=BD=C2=BC=C3=BE=C2=BA=C2=AC=C3=93=C3=90OPPO=C2=B9=C2=AB=
-=C3=8B=C2=BE=C2=B5=C3=84=C2=B1=C2=A3=C3=83=C3=9C=C3=90=C3=85=C3=8F=C2=A2=C2=
-=A3=C2=AC=C2=BD=C3=B6=C3=8F=C3=9E=C3=93=C3=9A=C3=93=C3=8A=C2=BC=C3=BE=C3=96=
-=C2=B8=C3=83=C3=B7=C2=B5=C3=84=C3=8A=C3=95=C2=BC=C3=BE=C3=88=C3=8B=C2=A3=C2=
-=A8=C2=B0=C3=BC=C2=BA=C2=AC=C2=B8=C3=B6=C3=88=C3=8B=C2=BC=C2=B0=C3=88=C2=BA=
-=C3=97=C3=A9=C2=A3=C2=A9=C3=8A=C2=B9=C3=93=C3=83=C2=A1=C2=A3=C2=BD=C3=BB=C3=
-=96=C2=B9=C3=88=C3=8E=C2=BA=C3=8E=C3=88=C3=8B=C3=94=C3=9A=C3=8E=C2=B4=C2=BE=
-=C2=AD=C3=8A=C3=9A=C3=88=C2=A8=C2=B5=C3=84=C3=87=C3=A9=C2=BF=C3=B6=C3=8F=C3=
-=82=C3=92=C3=94=C3=88=C3=8E=C2=BA=C3=8E=C3=90=C3=8E=C3=8A=C2=BD=C3=8A=C2=B9=
-=C3=93=C3=83=C2=A1=C2=A3=C3=88=C3=A7=C2=B9=C3=BB=C3=84=C3=BA=C2=B4=C3=AD=C3=
-=8A=C3=95=C3=81=C3=8B=C2=B1=C2=BE=C3=93=C3=8A=C2=BC=C3=BE=C2=A3=C2=AC=C3=87=
-=C3=90=C3=8E=C3=B0=C2=B4=C2=AB=C2=B2=C2=A5=C2=A1=C2=A2=C2=B7=C3=96=C2=B7=C2=
-=A2=C2=A1=C2=A2=C2=B8=C2=B4=C3=96=C3=86=C2=A1=C2=A2=C3=93=C2=A1=C3=8B=C2=A2=
-=C2=BB=C3=B2=C3=8A=C2=B9=C3=93=C3=83=C2=B1=C2=BE=C3=93=C3=8A=C2=BC=C3=BE=C3=
-=96=C2=AE=C3=88=C3=8E=C2=BA=C3=8E=C2=B2=C2=BF=C2=B7=C3=96=C2=BB=C3=B2=C3=86=
-=C3=A4=C3=8B=C3=B9=C3=94=C3=98=C3=96=C2=AE=C3=88=C3=8E=C2=BA=C3=8E=C3=84=C3=
-=9A=C3=88=C3=9D=C2=A3=C2=AC=C2=B2=C2=A2=C3=87=C3=AB=C3=81=C2=A2=C2=BC=C2=B4=
-=C3=92=C3=94=C2=B5=C3=A7=C3=97=C3=93=C3=93=C3=8A=C2=BC=C3=BE=C3=8D=C2=A8=C3=
-=96=C2=AA=C2=B7=C2=A2=C2=BC=C3=BE=C3=88=C3=8B=C2=B2=C2=A2=C3=89=C2=BE=C2=B3=
-=C3=BD=C2=B1=C2=BE=C3=93=C3=8A=C2=BC=C3=BE=C2=BC=C2=B0=C3=86=C3=A4=C2=B8=C2=
-=BD=C2=BC=C3=BE=C2=A1=C2=A3
-=C3=8D=C3=B8=C3=82=C3=A7=C3=8D=C2=A8=C3=91=C2=B6=C2=B9=C3=8C=C3=93=C3=90=C3=
-=88=C2=B1=C3=8F=C3=9D=C2=BF=C3=89=C3=84=C3=9C=C2=B5=C2=BC=C3=96=C3=82=C3=93=
-=C3=8A=C2=BC=C3=BE=C2=B1=C2=BB=C2=BD=C3=98=C3=81=C3=B4=C2=A1=C2=A2=C3=90=C3=
-=9E=C2=B8=C3=84=C2=A1=C2=A2=C2=B6=C2=AA=C3=8A=C2=A7=C2=A1=C2=A2=C3=86=C3=86=
-=C2=BB=C2=B5=C2=BB=C3=B2=C2=B0=C3=BC=C2=BA=C2=AC=C2=BC=C3=86=C3=8B=C3=A3=C2=
-=BB=C3=BA=C2=B2=C2=A1=C2=B6=C2=BE=C2=B5=C3=88=C2=B2=C2=BB=C2=B0=C2=B2=C3=88=
-=C2=AB=C3=87=C3=A9=C2=BF=C3=B6=C2=A3=C2=ACOPPO=C2=B6=C3=94=C2=B4=C3=8B=C3=
-=80=C3=A0=C2=B4=C3=AD=C3=8E=C3=B3=C2=BB=C3=B2=C3=92=C3=85=C3=82=C2=A9=C2=B6=
-=C3=B8=C3=92=C3=BD=C3=96=C3=82=C3=96=C2=AE=C3=88=C3=8E=C2=BA=C3=8E=C3=8B=C3=
-=B0=C3=8A=C2=A7=C2=B8=C3=85=C2=B2=C2=BB=C2=B3=C3=90=C2=B5=C2=A3=C3=94=C3=B0=
-=C3=88=C3=8E=C2=B2=C2=A2=C2=B1=C2=A3=C3=81=C3=B4=C3=93=C3=AB=C2=B1=C2=BE=C3=
-=93=C3=8A=C2=BC=C3=BE=C3=8F=C3=A0=C2=B9=C3=98=C3=96=C2=AE=C3=92=C2=BB=C3=87=
-=C3=90=C3=88=C2=A8=C3=80=C3=BB=C2=A1=C2=A3
-=C2=B3=C3=BD=C2=B7=C3=87=C3=83=C3=B7=C3=88=C2=B7=C3=8B=C2=B5=C3=83=C3=B7=C2=
-=A3=C2=AC=C2=B1=C2=BE=C3=93=C3=8A=C2=BC=C3=BE=C2=BC=C2=B0=C3=86=C3=A4=C2=B8=
-=C2=BD=C2=BC=C3=BE=C3=8E=C3=9E=C3=92=C3=A2=C3=97=C3=B7=C3=8E=C2=AA=C3=94=C3=
-=9A=C3=88=C3=8E=C2=BA=C3=8E=C2=B9=C3=BA=C2=BC=C3=92=C2=BB=C3=B2=C2=B5=C3=98=
-=C3=87=C3=B8=C3=96=C2=AE=C3=92=C2=AA=C3=94=C2=BC=C2=A1=C2=A2=C3=95=C3=90=C3=
-=80=C2=BF=C2=BB=C3=B2=C2=B3=C3=90=C3=85=C2=B5=C2=A3=C2=AC=C3=92=C3=A0=C3=8E=
-=C3=9E=C3=92=C3=A2=C3=97=C3=B7=C3=8E=C2=AA=C3=88=C3=8E=C2=BA=C3=8E=C2=BD=C2=
-=BB=C3=92=C3=97=C2=BB=C3=B2=C2=BA=C3=8F=C3=8D=C2=AC=C3=96=C2=AE=C3=95=C3=BD=
-=C3=8A=C2=BD=C3=88=C2=B7=C3=88=C3=8F=C2=A1=C2=A3 =C2=B7=C2=A2=C2=BC=C3=BE=
-=C3=88=C3=8B=C2=A1=C2=A2=C3=86=C3=A4=C3=8B=C3=B9=C3=8A=C3=B4=C2=BB=C3=BA=C2=
-=B9=C2=B9=C2=BB=C3=B2=C3=8B=C3=B9=C3=8A=C3=B4=C2=BB=C3=BA=C2=B9=C2=B9=C3=96=
-=C2=AE=C2=B9=C3=98=C3=81=C2=AA=C2=BB=C3=BA=C2=B9=C2=B9=C2=BB=C3=B2=C3=88=C3=
-=8E=C2=BA=C3=8E=C3=89=C3=8F=C3=8A=C3=B6=C2=BB=C3=BA=C2=B9=C2=B9=C3=96=C2=AE=
-=C2=B9=C3=89=C2=B6=C2=AB=C2=A1=C2=A2=C2=B6=C2=AD=C3=8A=C3=82=C2=A1=C2=A2=C2=
-=B8=C3=9F=C2=BC=C2=B6=C2=B9=C3=9C=C3=80=C3=AD=C3=88=C3=8B=C3=94=C2=B1=C2=A1=
-=C2=A2=C3=94=C2=B1=C2=B9=C2=A4=C2=BB=C3=B2=C3=86=C3=A4=C3=8B=C3=BB=C3=88=C3=
-=8E=C2=BA=C3=8E=C3=88=C3=8B=C2=A3=C2=A8=C3=92=C3=94=C3=8F=C3=82=C2=B3=C3=86=
-=C2=A1=C2=B0=C2=B7=C2=A2=C2=BC=C3=BE=C3=88=C3=8B=C2=A1=C2=B1=C2=BB=C3=B2=C2=
-=A1=C2=B0OPPO=C2=A1=C2=B1=C2=A3=C2=A9=C2=B2=C2=BB=C3=92=C3=B2=C2=B1=C2=BE=
-=C3=93=C3=8A=C2=BC=C3=BE=C3=96=C2=AE=C3=8E=C3=B3=C3=8B=C3=8D=C2=B6=C3=B8=C2=
-=B7=C3=85=C3=86=C3=BA=C3=86=C3=A4=C3=8B=C3=B9=C3=8F=C3=AD=C3=96=C2=AE=C3=88=
-=C3=8E=C2=BA=C3=8E=C3=88=C2=A8=C3=80=C3=BB=C2=A3=C2=AC=C3=92=C3=A0=C2=B2=C2=
-=BB=C2=B6=C3=94=C3=92=C3=B2=C2=B9=C3=8A=C3=92=C3=A2=C2=BB=C3=B2=C2=B9=C3=BD=
-=C3=8A=C2=A7=C3=8A=C2=B9=C3=93=C3=83=C2=B8=C3=83=C2=B5=C3=88=C3=90=C3=85=C3=
-=8F=C2=A2=C2=B6=C3=B8=C3=92=C3=BD=C2=B7=C2=A2=C2=BB=C3=B2=C2=BF=C3=89=C3=84=
-=C3=9C=C3=92=C3=BD=C2=B7=C2=A2=C2=B5=C3=84=C3=8B=C3=B0=C3=8A=C2=A7=C2=B3=C3=
-=90=C2=B5=C2=A3=C3=88=C3=8E=C2=BA=C3=8E=C3=94=C3=B0=C3=88=C3=8E=C2=A1=C2=A3
-=C3=8E=C3=84=C2=BB=C2=AF=C2=B2=C3=AE=C3=92=C3=AC=C3=85=C3=BB=C3=82=C2=B6=C2=
-=A3=C2=BA=C3=92=C3=B2=C3=88=C2=AB=C3=87=C3=B2=C3=8E=C3=84=C2=BB=C2=AF=C2=B2=
-=C3=AE=C3=92=C3=AC=C3=93=C2=B0=C3=8F=C3=AC=C2=A3=C2=AC=C2=B5=C2=A5=C2=B4=C2=
-=BF=C3=92=C3=94YES\OK=C2=BB=C3=B2=C3=86=C3=A4=C3=8B=C3=BB=C2=BC=C3=B2=C2=B5=
-=C2=A5=C2=B4=C3=8A=C2=BB=C3=A3=C2=B5=C3=84=C2=BB=C3=98=C2=B8=C2=B4=C2=B2=C2=
-=A2=C2=B2=C2=BB=C2=B9=C2=B9=C2=B3=C3=89=C2=B7=C2=A2=C2=BC=C3=BE=C3=88=C3=8B=
-=C2=B6=C3=94=C3=88=C3=8E=C2=BA=C3=8E=C2=BD=C2=BB=C3=92=C3=97=C2=BB=C3=B2=C2=
-=BA=C3=8F=C3=8D=C2=AC=C3=96=C2=AE=C3=95=C3=BD=C3=8A=C2=BD=C3=88=C2=B7=C3=88=
-=C3=8F=C2=BB=C3=B2=C2=BD=C3=93=C3=8A=C3=9C=C2=A3=C2=AC=C3=87=C3=AB=C3=93=C3=
-=AB=C2=B7=C2=A2=C2=BC=C3=BE=C3=88=C3=8B=C3=94=C3=99=C2=B4=C3=8E=C3=88=C2=B7=
-=C3=88=C3=8F=C3=92=C3=94=C2=BB=C3=B1=C2=B5=C3=83=C3=83=C3=B7=C3=88=C2=B7=C3=
-=8A=C3=A9=C3=83=C3=A6=C3=92=C3=A2=C2=BC=C3=BB=C2=A1=C2=A3=C2=B7=C2=A2=C2=BC=
-=C3=BE=C3=88=C3=8B=C2=B2=C2=BB=C2=B6=C3=94=C3=88=C3=8E=C2=BA=C3=8E=C3=8A=C3=
-=9C=C3=8E=C3=84=C2=BB=C2=AF=C2=B2=C3=AE=C3=92=C3=AC=C3=93=C2=B0=C3=8F=C3=AC=
-=C2=B6=C3=B8=C2=B5=C2=BC=C3=96=C3=82=C2=B9=C3=8A=C3=92=C3=A2=C2=BB=C3=B2=C2=
-=B4=C3=AD=C3=8E=C3=B3=C3=8A=C2=B9=C3=93=C3=83=C2=B8=C3=83=C2=B5=C3=88=C3=90=
-=C3=85=C3=8F=C2=A2=C3=8B=C3=B9=C3=94=C3=AC=C2=B3=C3=89=C2=B5=C3=84=C3=88=C3=
-=8E=C2=BA=C3=8E=C3=96=C2=B1=C2=BD=C3=93=C2=BB=C3=B2=C2=BC=C3=A4=C2=BD=C3=93=
-=C3=8B=C3=B0=C2=BA=C2=A6=C2=B3=C3=90=C2=B5=C2=A3=C3=94=C3=B0=C3=88=C3=8E=C2=
-=A1=C2=A3
-This e-mail and its attachments contain confidential information from OPPO,=
- which is intended only for the person or entity whose address is listed ab=
-ove. Any use of the information contained herein in any way (including, but=
- not limited to, total or partial disclosure, reproduction, or disseminatio=
-n) by persons other than the intended recipient(s) is prohibited. If you ar=
-e not the intended recipient, please do not read, copy, distribute, or use =
-this information. If you have received this transmission in error, please n=
-otify the sender immediately by reply e-mail and then delete this message.
-Electronic communications may contain computer viruses or other defects inh=
-erently, may not be accurately and/or timely transmitted to other systems, =
-or may be intercepted, modified ,delayed, deleted or interfered. OPPO shall=
- not be liable for any damages that arise or may arise from such matter and=
- reserves all rights in connection with the email.
-Unless expressly stated, this e-mail and its attachments are provided witho=
-ut any warranty, acceptance or promise of any kind in any country or region=
-, nor constitute a formal confirmation or acceptance of any transaction or =
-contract. The sender, together with its affiliates or any shareholder, dire=
-ctor, officer, employee or any other person of any such institution (herein=
-after referred to as "sender" or "OPPO") does not waive any rights and shal=
-l not be liable for any damages that arise or may arise from the intentiona=
-l or negligent use of such information.
-Cultural Differences Disclosure: Due to global cultural differences, any re=
-ply with only YES\OK or other simple words does not constitute any confirma=
-tion or acceptance of any transaction or contract, please confirm with the =
-sender again to ensure clear opinion in written form. The sender shall not =
-be responsible for any direct or indirect damages resulting from the intent=
-ional or misuse of such information.
-________________________________
-OPPO
-
-=E6=9C=AC=E7=94=B5=E5=AD=90=E9=82=AE=E4=BB=B6=E5=8F=8A=E5=85=B6=E9=99=84=E4=
-=BB=B6=E5=90=AB=E6=9C=89OPPO=E5=85=AC=E5=8F=B8=E7=9A=84=E4=BF=9D=E5=AF=86=
-=E4=BF=A1=E6=81=AF=EF=BC=8C=E4=BB=85=E9=99=90=E4=BA=8E=E9=82=AE=E4=BB=B6=E6=
-=8C=87=E6=98=8E=E7=9A=84=E6=94=B6=E4=BB=B6=E4=BA=BA=EF=BC=88=E5=8C=85=E5=90=
-=AB=E4=B8=AA=E4=BA=BA=E5=8F=8A=E7=BE=A4=E7=BB=84=EF=BC=89=E4=BD=BF=E7=94=A8=
-=E3=80=82=E7=A6=81=E6=AD=A2=E4=BB=BB=E4=BD=95=E4=BA=BA=E5=9C=A8=E6=9C=AA=E7=
-=BB=8F=E6=8E=88=E6=9D=83=E7=9A=84=E6=83=85=E5=86=B5=E4=B8=8B=E4=BB=A5=E4=BB=
-=BB=E4=BD=95=E5=BD=A2=E5=BC=8F=E4=BD=BF=E7=94=A8=E3=80=82=E5=A6=82=E6=9E=9C=
-=E6=82=A8=E9=94=99=E6=94=B6=E4=BA=86=E6=9C=AC=E9=82=AE=E4=BB=B6=EF=BC=8C=E5=
-=88=87=E5=8B=BF=E4=BC=A0=E6=92=AD=E3=80=81=E5=88=86=E5=8F=91=E3=80=81=E5=A4=
-=8D=E5=88=B6=E3=80=81=E5=8D=B0=E5=88=B7=E6=88=96=E4=BD=BF=E7=94=A8=E6=9C=AC=
-=E9=82=AE=E4=BB=B6=E4=B9=8B=E4=BB=BB=E4=BD=95=E9=83=A8=E5=88=86=E6=88=96=E5=
-=85=B6=E6=89=80=E8=BD=BD=E4=B9=8B=E4=BB=BB=E4=BD=95=E5=86=85=E5=AE=B9=EF=BC=
-=8C=E5=B9=B6=E8=AF=B7=E7=AB=8B=E5=8D=B3=E4=BB=A5=E7=94=B5=E5=AD=90=E9=82=AE=
-=E4=BB=B6=E9=80=9A=E7=9F=A5=E5=8F=91=E4=BB=B6=E4=BA=BA=E5=B9=B6=E5=88=A0=E9=
-=99=A4=E6=9C=AC=E9=82=AE=E4=BB=B6=E5=8F=8A=E5=85=B6=E9=99=84=E4=BB=B6=E3=80=
-=82
-=E7=BD=91=E7=BB=9C=E9=80=9A=E8=AE=AF=E5=9B=BA=E6=9C=89=E7=BC=BA=E9=99=B7=E5=
-=8F=AF=E8=83=BD=E5=AF=BC=E8=87=B4=E9=82=AE=E4=BB=B6=E8=A2=AB=E6=88=AA=E7=95=
-=99=E3=80=81=E4=BF=AE=E6=94=B9=E3=80=81=E4=B8=A2=E5=A4=B1=E3=80=81=E7=A0=B4=
-=E5=9D=8F=E6=88=96=E5=8C=85=E5=90=AB=E8=AE=A1=E7=AE=97=E6=9C=BA=E7=97=85=E6=
-=AF=92=E7=AD=89=E4=B8=8D=E5=AE=89=E5=85=A8=E6=83=85=E5=86=B5=EF=BC=8COPPO=
-=E5=AF=B9=E6=AD=A4=E7=B1=BB=E9=94=99=E8=AF=AF=E6=88=96=E9=81=97=E6=BC=8F=E8=
-=80=8C=E5=BC=95=E8=87=B4=E4=B9=8B=E4=BB=BB=E4=BD=95=E6=8D=9F=E5=A4=B1=E6=A6=
-=82=E4=B8=8D=E6=89=BF=E6=8B=85=E8=B4=A3=E4=BB=BB=E5=B9=B6=E4=BF=9D=E7=95=99=
-=E4=B8=8E=E6=9C=AC=E9=82=AE=E4=BB=B6=E7=9B=B8=E5=85=B3=E4=B9=8B=E4=B8=80=E5=
-=88=87=E6=9D=83=E5=88=A9=E3=80=82
-=E9=99=A4=E9=9D=9E=E6=98=8E=E7=A1=AE=E8=AF=B4=E6=98=8E=EF=BC=8C=E6=9C=AC=E9=
-=82=AE=E4=BB=B6=E5=8F=8A=E5=85=B6=E9=99=84=E4=BB=B6=E6=97=A0=E6=84=8F=E4=BD=
-=9C=E4=B8=BA=E5=9C=A8=E4=BB=BB=E4=BD=95=E5=9B=BD=E5=AE=B6=E6=88=96=E5=9C=B0=
-=E5=8C=BA=E4=B9=8B=E8=A6=81=E7=BA=A6=E3=80=81=E6=8B=9B=E6=8F=BD=E6=88=96=E6=
-=89=BF=E8=AF=BA=EF=BC=8C=E4=BA=A6=E6=97=A0=E6=84=8F=E4=BD=9C=E4=B8=BA=E4=BB=
-=BB=E4=BD=95=E4=BA=A4=E6=98=93=E6=88=96=E5=90=88=E5=90=8C=E4=B9=8B=E6=AD=A3=
-=E5=BC=8F=E7=A1=AE=E8=AE=A4=E3=80=82 =E5=8F=91=E4=BB=B6=E4=BA=BA=E3=80=81=
-=E5=85=B6=E6=89=80=E5=B1=9E=E6=9C=BA=E6=9E=84=E6=88=96=E6=89=80=E5=B1=9E=E6=
-=9C=BA=E6=9E=84=E4=B9=8B=E5=85=B3=E8=81=94=E6=9C=BA=E6=9E=84=E6=88=96=E4=BB=
-=BB=E4=BD=95=E4=B8=8A=E8=BF=B0=E6=9C=BA=E6=9E=84=E4=B9=8B=E8=82=A1=E4=B8=9C=
-=E3=80=81=E8=91=A3=E4=BA=8B=E3=80=81=E9=AB=98=E7=BA=A7=E7=AE=A1=E7=90=86=E4=
-=BA=BA=E5=91=98=E3=80=81=E5=91=98=E5=B7=A5=E6=88=96=E5=85=B6=E4=BB=96=E4=BB=
-=BB=E4=BD=95=E4=BA=BA=EF=BC=88=E4=BB=A5=E4=B8=8B=E7=A7=B0=E2=80=9C=E5=8F=91=
-=E4=BB=B6=E4=BA=BA=E2=80=9D=E6=88=96=E2=80=9COPPO=E2=80=9D=EF=BC=89=E4=B8=
-=8D=E5=9B=A0=E6=9C=AC=E9=82=AE=E4=BB=B6=E4=B9=8B=E8=AF=AF=E9=80=81=E8=80=8C=
-=E6=94=BE=E5=BC=83=E5=85=B6=E6=89=80=E4=BA=AB=E4=B9=8B=E4=BB=BB=E4=BD=95=E6=
-=9D=83=E5=88=A9=EF=BC=8C=E4=BA=A6=E4=B8=8D=E5=AF=B9=E5=9B=A0=E6=95=85=E6=84=
-=8F=E6=88=96=E8=BF=87=E5=A4=B1=E4=BD=BF=E7=94=A8=E8=AF=A5=E7=AD=89=E4=BF=A1=
-=E6=81=AF=E8=80=8C=E5=BC=95=E5=8F=91=E6=88=96=E5=8F=AF=E8=83=BD=E5=BC=95=E5=
-=8F=91=E7=9A=84=E6=8D=9F=E5=A4=B1=E6=89=BF=E6=8B=85=E4=BB=BB=E4=BD=95=E8=B4=
-=A3=E4=BB=BB=E3=80=82
-=E6=96=87=E5=8C=96=E5=B7=AE=E5=BC=82=E6=8A=AB=E9=9C=B2=EF=BC=9A=E5=9B=A0=E5=
-=85=A8=E7=90=83=E6=96=87=E5=8C=96=E5=B7=AE=E5=BC=82=E5=BD=B1=E5=93=8D=EF=BC=
-=8C=E5=8D=95=E7=BA=AF=E4=BB=A5YES\OK=E6=88=96=E5=85=B6=E4=BB=96=E7=AE=80=E5=
-=8D=95=E8=AF=8D=E6=B1=87=E7=9A=84=E5=9B=9E=E5=A4=8D=E5=B9=B6=E4=B8=8D=E6=9E=
-=84=E6=88=90=E5=8F=91=E4=BB=B6=E4=BA=BA=E5=AF=B9=E4=BB=BB=E4=BD=95=E4=BA=A4=
-=E6=98=93=E6=88=96=E5=90=88=E5=90=8C=E4=B9=8B=E6=AD=A3=E5=BC=8F=E7=A1=AE=E8=
-=AE=A4=E6=88=96=E6=8E=A5=E5=8F=97=EF=BC=8C=E8=AF=B7=E4=B8=8E=E5=8F=91=E4=BB=
-=B6=E4=BA=BA=E5=86=8D=E6=AC=A1=E7=A1=AE=E8=AE=A4=E4=BB=A5=E8=8E=B7=E5=BE=97=
-=E6=98=8E=E7=A1=AE=E4=B9=A6=E9=9D=A2=E6=84=8F=E8=A7=81=E3=80=82=E5=8F=91=E4=
-=BB=B6=E4=BA=BA=E4=B8=8D=E5=AF=B9=E4=BB=BB=E4=BD=95=E5=8F=97=E6=96=87=E5=8C=
-=96=E5=B7=AE=E5=BC=82=E5=BD=B1=E5=93=8D=E8=80=8C=E5=AF=BC=E8=87=B4=E6=95=85=
-=E6=84=8F=E6=88=96=E9=94=99=E8=AF=AF=E4=BD=BF=E7=94=A8=E8=AF=A5=E7=AD=89=E4=
-=BF=A1=E6=81=AF=E6=89=80=E9=80=A0=E6=88=90=E7=9A=84=E4=BB=BB=E4=BD=95=E7=9B=
-=B4=E6=8E=A5=E6=88=96=E9=97=B4=E6=8E=A5=E6=8D=9F=E5=AE=B3=E6=89=BF=E6=8B=85=
-=E8=B4=A3=E4=BB=BB=E3=80=82
-This e-mail and its attachments contain confidential information from OPPO,=
- which is intended only for the person or entity whose address is listed ab=
-ove. Any use of the information contained herein in any way (including, but=
- not limited to, total or partial disclosure, reproduction, or disseminatio=
-n) by persons other than the intended recipient(s) is prohibited. If you ar=
-e not the intended recipient, please do not read, copy, distribute, or use =
-this information. If you have received this transmission in error, please n=
-otify the sender immediately by reply e-mail and then delete this message.
-Electronic communications may contain computer viruses or other defects inh=
-erently, may not be accurately and/or timely transmitted to other systems, =
-or may be intercepted, modified ,delayed, deleted or interfered. OPPO shall=
- not be liable for any damages that arise or may arise from such matter and=
- reserves all rights in connection with the email.
-Unless expressly stated, this e-mail and its attachments are provided witho=
-ut any warranty, acceptance or promise of any kind in any country or region=
-, nor constitute a formal confirmation or acceptance of any transaction or =
-contract. The sender, together with its affiliates or any shareholder, dire=
-ctor, officer, employee or any other person of any such institution (herein=
-after referred to as "sender" or "OPPO") does not waive any rights and shal=
-l not be liable for any damages that arise or may arise from the intentiona=
-l or negligent use of such information.
-Cultural Differences Disclosure: Due to global cultural differences, any re=
-ply with only YES\OK or other simple words does not constitute any confirma=
-tion or acceptance of any transaction or contract, please confirm with the =
-sender again to ensure clear opinion in written form. The sender shall not =
-be responsible for any direct or indirect damages resulting from the intent=
-ional or misuse of such information.
