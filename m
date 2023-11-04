@@ -2,175 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A3E7E104A
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Nov 2023 17:09:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 666D87E1080
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Nov 2023 18:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232311AbjKDP5P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 4 Nov 2023 11:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
+        id S230346AbjKDRd2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 4 Nov 2023 13:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbjKDP5P (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Nov 2023 11:57:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C390D47
-        for <linux-pm@vger.kernel.org>; Sat,  4 Nov 2023 08:56:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1699113389;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tu0yxQVgh8LZcS06ybl4uuzt7ICJ1NlebM+PyuIfalc=;
-        b=Nf/huB3i5QnF+crZfMr4AUav60vVzMm/d+CHUeoDuFylKZB2OB/najW8m2RhsTzH1cf3Iq
-        Phgdl0snAaRL1ZC+h4mAZBpUJO86fXd1X8srXzgtm918OO3IdNMAqVE0BHjT/Cc3jMu9in
-        VFpi4RGjPXDIk/0J79Mbfy2xe2g0Cxw=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-296-JoSw9NX0OQuUuRf9asrYPQ-1; Sat, 04 Nov 2023 11:56:27 -0400
-X-MC-Unique: JoSw9NX0OQuUuRf9asrYPQ-1
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-9c7f0a33afbso220131866b.3
-        for <linux-pm@vger.kernel.org>; Sat, 04 Nov 2023 08:56:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699113386; x=1699718186;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tu0yxQVgh8LZcS06ybl4uuzt7ICJ1NlebM+PyuIfalc=;
-        b=OT5k8S38/w8qInzqFpJJI6a9tBM+jMGfLxIJfAcvPRNe2t6jjrY4TVFfFrVlsSm8dr
-         Lc4g7QNFf+v+zx+JcWqRjFWr/FWqS18vCzXMgD9I2T5p09YdE9WULK2kCQeigc/qITne
-         8nsqJBjWpxxhbUhzd1Dsc8wPI7qY5TDAiL/aN92URI2uSlYATQyF4Rv0N1ipaxgVZRYl
-         3QciAEsK5TvznIivTZ3XzKe+eu8xCzcb8g6+rnmcEe/bDXvQpUACptH7SdEEHAheK74a
-         NIx9DFcNOnnT4+X77budc2BMIVud4dqndJIn1GalMmgxG01j9J2nBuCkMbNA5+VbzYti
-         LASg==
-X-Gm-Message-State: AOJu0YyplRqmSXtGPlLi9FZn7FRtQngYf02n435Scx+jA9afEGGm83CC
-        o3OfLzJdVZcK7fKgq+MfBVR+nOpVC1lomZzonlAIsUAR6lQWVh9m6Z5rECBuENE+9t7nWVELg0b
-        yEWMfWTSiD8DtI6yLJrs=
-X-Received: by 2002:a17:907:d2a:b0:9de:cfa1:f072 with SMTP id gn42-20020a1709070d2a00b009decfa1f072mr807495ejc.25.1699113386585;
-        Sat, 04 Nov 2023 08:56:26 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEA+DKP1FMkR8SLdZDfao0XD7Ls7CDn0QfL8+3lymuJOxppHd8ZmET41G37Zyo4X2YI9O7/zw==
-X-Received: by 2002:a17:907:d2a:b0:9de:cfa1:f072 with SMTP id gn42-20020a1709070d2a00b009decfa1f072mr807490ejc.25.1699113386250;
-        Sat, 04 Nov 2023 08:56:26 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id uz29-20020a170907119d00b009920e9a3a73sm2077712ejb.115.2023.11.04.08.56.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Nov 2023 08:56:25 -0700 (PDT)
-Message-ID: <c79c8955-36b0-d2bd-f70d-ce898afcbeab@redhat.com>
-Date:   Sat, 4 Nov 2023 16:56:24 +0100
+        with ESMTP id S229514AbjKDRd2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Nov 2023 13:33:28 -0400
+X-Greylist: delayed 1196 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 04 Nov 2023 10:33:25 PDT
+Received: from l2mail1.panix.com (l2mail1.panix.com [166.84.1.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A0C1BF
+        for <linux-pm@vger.kernel.org>; Sat,  4 Nov 2023 10:33:24 -0700 (PDT)
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+        by l2mail1.panix.com (Postfix) with ESMTPS id 4SN42J5cCDzDST
+        for <linux-pm@vger.kernel.org>; Sat,  4 Nov 2023 13:13:28 -0400 (EDT)
+Received: from xps-9320 (ip70-164-218-85.oc.oc.cox.net [70.164.218.85])
+        by mailbackend.panix.com (Postfix) with ESMTPSA id 4SN42G1hKhzKZx;
+        Sat,  4 Nov 2023 13:13:26 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+        t=1699118007; bh=u7EIG0EvfDuYk/dOF0Yu6AZmkXKYvTrht2OIEK++7U8=;
+        h=Date:From:Reply-To:To:cc:Subject;
+        b=E7aF+kVokJDhCpp1gHRtKspc5NOna8oHfLmQqGVK96Na/jf2L+4Et6PFQ32XvlqHh
+         MocNQ6VYmOXepPUuDAPcN8h126ErmVkfWYQHhvzIHftSxiNaheJUAoRm9QDqUaN0+n
+         r2i8mjDSZuQ7aMmaT7637wWk1D7X1oKva1hDMpXA=
+Date:   Sat, 4 Nov 2023 10:13:24 -0700 (PDT)
+From:   "Kenneth R. Crudup" <kenny@panix.com>
+Reply-To: "Kenneth R. Crudup" <kenny@panix.com>
+To:     "Kenneth R. Crudup" <kenny@panix.com>
+cc:     vidyas@nvidia.com, bhelgaas@google.com,
+        kai.heng.feng@canonical.com, andrea.righi@canonical.com,
+        vicamo.yang@canonical.com, linux-pm@vger.kernel.org
+Subject: My AlderLake Dell (XPS-9320) needs these patches to get full
+ standby/low-power modes
+Message-ID: <218aa81f-9c6-5929-578d-8dc15f83dd48@panix.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] power: supply: bq27xxx: Stop and start delayed work in
- suspend and resume
-Content-Language: en-US, nl
-To:     Marek Vasut <marex@denx.de>, linux-pm@vger.kernel.org
-Cc:     Sebastian Reichel <sre@kernel.org>
-References: <20231104154920.68585-1-marex@denx.de>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20231104154920.68585-1-marex@denx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1999187219-1699118006=:25114"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Marek,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On 11/4/23 16:49, Marek Vasut wrote:
-> This driver uses delayed work to perform periodic battery state read out.
-> This delayed work is not stopped across suspend and resume cycle. The
-> read out can occur early in the resume cycle. In case of an I2C variant
-> of this hardware, that read out triggers I2C transfer. That I2C transfer
-> may happen while the I2C controller is still suspended, which produces a
-> WARNING in the kernel log.
-> 
-> Fix this by introducing trivial PM ops, which stop the delayed work before
-> the system enters suspend, and schedule the delayed work right after the
-> system resumes.
-> 
-> Signed-off-by: Marek Vasut <marex@denx.de>
-
-Thanks, patch looks good to me:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
+--8323329-1999187219-1699118006=:25114
+Content-Type: text/plain; charset=US-ASCII
 
 
+I have a Dell XPS-9320 with an Alderlake chipset, and the NVMe behind a
+VMD device:
 
-> ---
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: linux-pm@vger.kernel.org
-> ---
->  drivers/power/supply/bq27xxx_battery.c     | 22 ++++++++++++++++++++++
->  drivers/power/supply/bq27xxx_battery_i2c.c |  1 +
->  include/linux/power/bq27xxx_battery.h      |  1 +
->  3 files changed, 24 insertions(+)
-> 
-> diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-> index 4296600e8912a..1c4a9d1377442 100644
-> --- a/drivers/power/supply/bq27xxx_battery.c
-> +++ b/drivers/power/supply/bq27xxx_battery.c
-> @@ -2162,6 +2162,28 @@ void bq27xxx_battery_teardown(struct bq27xxx_device_info *di)
->  }
->  EXPORT_SYMBOL_GPL(bq27xxx_battery_teardown);
->  
-> +#ifdef CONFIG_PM_SLEEP
-> +static int bq27xxx_battery_suspend(struct device *dev)
-> +{
-> +	struct bq27xxx_device_info *di = dev_get_drvdata(dev);
-> +
-> +	cancel_delayed_work(&di->work);
-> +	return 0;
-> +}
-> +
-> +static int bq27xxx_battery_resume(struct device *dev)
-> +{
-> +	struct bq27xxx_device_info *di = dev_get_drvdata(dev);
-> +
-> +	schedule_delayed_work(&di->work, 0);
-> +	return 0;
-> +}
-> +#endif /* CONFIG_PM_SLEEP */
-> +
-> +SIMPLE_DEV_PM_OPS(bq27xxx_battery_battery_pm_ops,
-> +		  bq27xxx_battery_suspend, bq27xxx_battery_resume);
-> +EXPORT_SYMBOL_GPL(bq27xxx_battery_battery_pm_ops);
-> +
->  MODULE_AUTHOR("Rodolfo Giometti <giometti@linux.it>");
->  MODULE_DESCRIPTION("BQ27xxx battery monitor driver");
->  MODULE_LICENSE("GPL");
-> diff --git a/drivers/power/supply/bq27xxx_battery_i2c.c b/drivers/power/supply/bq27xxx_battery_i2c.c
-> index 9b5475590518f..3a1798b0c1a79 100644
-> --- a/drivers/power/supply/bq27xxx_battery_i2c.c
-> +++ b/drivers/power/supply/bq27xxx_battery_i2c.c
-> @@ -295,6 +295,7 @@ static struct i2c_driver bq27xxx_battery_i2c_driver = {
->  	.driver = {
->  		.name = "bq27xxx-battery",
->  		.of_match_table = of_match_ptr(bq27xxx_battery_i2c_of_match_table),
-> +		.pm = &bq27xxx_battery_battery_pm_ops,
->  	},
->  	.probe = bq27xxx_battery_i2c_probe,
->  	.remove = bq27xxx_battery_i2c_remove,
-> diff --git a/include/linux/power/bq27xxx_battery.h b/include/linux/power/bq27xxx_battery.h
-> index 7c8d65414a70a..7d8025fb74b70 100644
-> --- a/include/linux/power/bq27xxx_battery.h
-> +++ b/include/linux/power/bq27xxx_battery.h
-> @@ -83,5 +83,6 @@ struct bq27xxx_device_info {
->  void bq27xxx_battery_update(struct bq27xxx_device_info *di);
->  int bq27xxx_battery_setup(struct bq27xxx_device_info *di);
->  void bq27xxx_battery_teardown(struct bq27xxx_device_info *di);
-> +extern const struct dev_pm_ops bq27xxx_battery_battery_pm_ops;
->  
->  #endif
+----
+[    0.127342] smpboot: CPU0: 12th Gen Intel(R) Core(TM) i7-1280P (family: 0x6, model: 0x9a, stepping: 0x3)
+----
+0000:00:0e.0 0104: 8086:467f
+        Subsystem: 1028:0af3
+        Flags: bus master, fast devsel, latency 0, IOMMU group 9
+        Memory at 603c000000 (64-bit, non-prefetchable) [size=32M]
+        Memory at 72000000 (32-bit, non-prefetchable) [size=32M]
+a7152be79b6        Memory at 6040100000 (64-bit, non-prefetchable) [size=1M]
+        Capabilities: <access denied>
+        Kernel driver in use: vmd
+----
 
+The only release kernel that was able to get this laptop to fully get into
+low-power (unfortunately only s0ix) was the Ubuntu-6.2.0- ... series from
+Ubuntu
+(remote git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/lunar).
+
+I'd bisected it to the following commits (in this order):
+
+4ff116d0d5fd PCI/ASPM: Save L1 PM Substates Capability for suspend/resume
+5e85eba6f50d PCI/ASPM: Refactor L1 PM Substates Control Register programming
+1a0102a08f20 UBUNTU: SAUCE: PCI/ASPM: Enable ASPM for links under VMD domain
+47c7bfd31514 UBUNTU: SAUCE: PCI/ASPM: Enable LTR for endpoints behind VMD
+154d48da2c57 UBUNTU: SAUCE: vmd: fixup bridge ASPM by driver name instead
+
+Without the patches I never see Pkg%PC8 or higher(? lower?), nor i915 states
+DC5/6, all necssary for SYS%LPI/CPU%LPI. I've attached a little script I use
+alongside turbostat for verifying low-power operation (and also for seeing
+what chipset subsystem may be preventing it).
+
+The first two are in Linus' trees, but were reverted (4ff116d0d5fd in
+a7152be79b6, 5e85eba6f50d in ff209ecc376a). The last three come from Ubuntu's
+Linux trees (see remote spec above). The first two remain reverted in the
+Ubuntu trees, but if I put them back, I get increased power savings during
+suspend/resume cycles.
+
+Considering the power draw is really significant without these patches (10s
+of %s per hour) and I'd think Dell would have sold some decent number of
+these laptops, I'd been patiently waiting for these patches, or some variant
+to show up in the stable trees, but so far I'm up to the 6.6 stable kernel
+and still having to manually cherry-pick these, so I thought maybe I could
+bring this to the PM maintainers' attention so at least start a discussion
+about this issue.
+
+Apologies about the Maintainer Spam, and if this is already being discussed.
+
+	-Kenny
+
+-- 
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange County CA
+--8323329-1999187219-1699118006=:25114
+Content-Type: text/plain; charset=US-ASCII; name=list-sleep-params
+Content-Transfer-Encoding: BASE64
+Content-Description: 
+Content-Disposition: attachment; filename=list-sleep-params
+
+IyEvYmluL2Jhc2ggLWUNCmRhdGUNCmVncmVwIC1IciAuIC9zeXMvY2xhc3Mv
+ZHJtL2NhcmQwL3Bvd2VyL3JjNl9yZXNpZGVuY3lfbXMgXA0KIC9zeXMvZGV2
+aWNlcy9zeXN0ZW0vY3B1L2NwdWlkbGUvbG93X3Bvd2VyX2lkbGVfc3lzdGVt
+X3Jlc2lkZW5jeV91cyBcDQogL3N5cy9rZXJuZWwvZGVidWcvcG1jX2NvcmUv
+cGFja2FnZV9jc3RhdGVfc2hvdyBcDQogL3N5cy9rZXJuZWwvZGVidWcvcG1j
+X2NvcmUvc2xwX3MwX3Jlc2lkZW5jeV91c2VjIFwNCiAvc3lzL2tlcm5lbC9k
+ZWJ1Zy9kcmkvMC9pOTE1X2VkcF9wc3Jfc3RhdHVzIFwNCiAvc3lzL2tlcm5l
+bC9kZWJ1Zy9kcmkvMC9pOTE1X2RtY19pbmZvIHwgdGVlIC1hIH4vRHJvcGJv
+eC9YUFMtNzM5MC9zbGVlcC1wYXJhbXMNCmVncmVwICdcKG5zXCk6IFteMF0n
+IC9zeXMva2VybmVsL2RlYnVnL3BtY19jb3JlL2x0cl9zaG93IHwgY3V0IC1k
+JwknIC1mMSwzLDQgfCBzZWQgLWUgJ3M7WwldWwldKjsgOycgfCB0ZWUgLWEg
+fi9Ecm9wYm94L1hQUy03MzkwL3NsZWVwLXBhcmFtcw0KZWdyZXAgLUhyICI6
+IE9uIiAvc3lzL2tlcm5lbC9kZWJ1Zy9wbWNfY29yZS9wY2hfaXBfcG93ZXJf
+Z2F0aW5nX3N0YXR1cyB8IHRlZSAtYSAvZGV2L3R0eSB8IHRlZSAtYSB+L0Ry
+b3Bib3gvWFBTLTczOTAvc2xlZXAtcGFyYW1zIHwgd2MgLWwNCmVncmVwIE5v
+IC9zeXMva2VybmVsL2RlYnVnL3BtY19jb3JlL3NscF9zMF9kZWJ1Z19zdGF0
+dXMgMj4vZGV2L251bGwgfCB0ZWUgLWEgfi9Ecm9wYm94L1hQUy03MzkwL3Ns
+ZWVwLXBhcmFtcw0K
+
+--8323329-1999187219-1699118006=:25114--
