@@ -2,81 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 264DA7E1730
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Nov 2023 23:00:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BBA67E1813
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Nov 2023 01:02:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbjKEWAh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 5 Nov 2023 17:00:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56382 "EHLO
+        id S229986AbjKFACi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 5 Nov 2023 19:02:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjKEWAg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Nov 2023 17:00:36 -0500
-X-Greylist: delayed 5245 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 05 Nov 2023 14:00:33 PST
-Received: from SMTP-HCRC-200.brggroup.vn (unknown [42.112.212.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93774CC;
-        Sun,  5 Nov 2023 14:00:33 -0800 (PST)
-Received: from SMTP-HCRC-200.brggroup.vn (localhost [127.0.0.1])
-        by SMTP-HCRC-200.brggroup.vn (SMTP-CTTV) with ESMTP id AFA2819099;
-        Mon,  6 Nov 2023 01:57:30 +0700 (+07)
-Received: from zimbra.hcrc.vn (unknown [192.168.200.66])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by SMTP-HCRC-200.brggroup.vn (SMTP-CTTV) with ESMTPS id A8AC619036;
-        Mon,  6 Nov 2023 01:57:30 +0700 (+07)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.hcrc.vn (Postfix) with ESMTP id 460231B8250B;
-        Mon,  6 Nov 2023 01:57:32 +0700 (+07)
-Received: from zimbra.hcrc.vn ([127.0.0.1])
-        by localhost (zimbra.hcrc.vn [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 2W2E4AAgbIIz; Mon,  6 Nov 2023 01:57:32 +0700 (+07)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.hcrc.vn (Postfix) with ESMTP id 1726C1B8223A;
-        Mon,  6 Nov 2023 01:57:32 +0700 (+07)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra.hcrc.vn 1726C1B8223A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hcrc.vn;
-        s=64D43D38-C7D6-11ED-8EFE-0027945F1BFA; t=1699210652;
-        bh=WOZURJ77pkiMUL2pPLC14ifVPRvyTQIBEQmxuN1ezAA=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=wQS7fBvDW0tfvsWyqXNXchtnV0Ehyqy1dRs9nUOMfqk0ornzdebBOCl7EVdTF/BJx
-         /dptsGOEHGLNOLKKr7c0sYQpiCqI49iLSjRxgny5G4hVG+bYUhlwlGjaKHcTfT/Nth
-         Sp4lYuafKwmVrzzYsOd/xhxeuwZ2niiCC/fXOYvEIe65KDhw3VeAz3o5wkWjYyLcEG
-         r/FcZkR9ZD0PBY9pfZ7fgGk46SsJ5UnweMwWFAQOT0mT0w7Ub0jlLcWHJhXcOGq+6c
-         rmDEJfwliqcwFJDYZMbjPp2RYc8gvMIymbLQZc+IccjZnLQDXlIXBbWfYsERxUoyOV
-         P/nzEDQEKEsdg==
-X-Virus-Scanned: amavisd-new at hcrc.vn
-Received: from zimbra.hcrc.vn ([127.0.0.1])
-        by localhost (zimbra.hcrc.vn [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id TQZUY-aHrg1n; Mon,  6 Nov 2023 01:57:32 +0700 (+07)
-Received: from [192.168.1.152] (unknown [51.179.100.52])
-        by zimbra.hcrc.vn (Postfix) with ESMTPSA id B80B41B8250B;
-        Mon,  6 Nov 2023 01:57:25 +0700 (+07)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229485AbjKFACh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Nov 2023 19:02:37 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A262DB
+        for <linux-pm@vger.kernel.org>; Sun,  5 Nov 2023 16:02:34 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-32faea0fa1fso2029285f8f.1
+        for <linux-pm@vger.kernel.org>; Sun, 05 Nov 2023 16:02:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1699228952; x=1699833752; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=J1AYyM8WMgGaJPfSt8fkmKPCmurjYQvKjXkBlzKHwao=;
+        b=T65BnQt7GdaGf91W48Is3AWtj1PvJVhY4kKuXBEP2vQ1/OE8ivVbFbvuVnszVSl/Pl
+         gAbxJnO/4/bDtJwiePL+WNCqaeGi96rSDoL9sdewtqqJvMaeBjTd0j0Aa5jgkHWznD2D
+         /JsnysPfBTN9ID1LwxiSOb8AsFV08dbeWlpxErBAZF7nQnQLAUWyFoh2ju8ZpP3jfLFK
+         czOWVGjiz42ewdWkEP/Hd7tzeF6AY9T58TS/0rPvCIaJUo/20/91qOnjHEpts6FbhaUP
+         v22ezo2bq1SmUUWyh0u9UcoZJAZb8cil4A9UCGYxqnmp/iKIDC9HkDKDgCuE3lbOvP9U
+         syPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699228952; x=1699833752;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=J1AYyM8WMgGaJPfSt8fkmKPCmurjYQvKjXkBlzKHwao=;
+        b=Dn64DDd1AXjE4EVMJJKq7aZwzgUT6rD+dpI950T6LiDGz8dNN6JVdiGM+kFp6P+LQm
+         zlOu4/QorJwsWNc9K+7+NgPUo6nqWsClyabFL5ZFioi/juUvzKDd5yu7LYU1/3/mcN+r
+         EACn3NE5Xw6uysS0lPUZGjtKyAwHqcuG/6XDB5mQ3e8pozrPWE45A51BZOEW/Fx9gG7v
+         XoXCqDRsPR/Y9RpQjoKJ1nvWOeQPLonqPEINXxCkIfyAGQdZMAT6QerkkUPzTRCcC4Ey
+         uCDqCkkfLYu658kJj3/9LMB+ZJV0lvEj/f+YxUxEcpzxQ5pGVTPnaRblbk8EyUQ2KTsE
+         oepw==
+X-Gm-Message-State: AOJu0YxtwTzUQ1VMo1vBe8WqCmwx3F5sAX7OC6DXHJoVpGqSyBMUvzGc
+        wFgU9+tqVYavdG6LGWPwiY2RUA==
+X-Google-Smtp-Source: AGHT+IG1SlWCrb8exGbqnTO8eoBdntnUvQrXYJfIuCg2LsAQitLdPnyoxiskqKc3Y3arWbSVTJYrwA==
+X-Received: by 2002:a5d:5887:0:b0:32f:b47c:f1f6 with SMTP id n7-20020a5d5887000000b0032fb47cf1f6mr8893115wrf.32.1699228952385;
+        Sun, 05 Nov 2023 16:02:32 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:3442:eeb4:7620:ee3d? ([2a05:6e02:1041:c10:3442:eeb4:7620:ee3d])
+        by smtp.googlemail.com with ESMTPSA id i7-20020adfe487000000b0032de6f95fb3sm7834663wrm.40.2023.11.05.16.02.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Nov 2023 16:02:31 -0800 (PST)
+Message-ID: <283d4abe-885b-415d-a24d-681408a23845@linaro.org>
+Date:   Mon, 6 Nov 2023 01:02:30 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?b?4oKsIDEwMC4wMDAuMDAwPw==?=
-To:     Recipients <ch.31hamnghi@hcrc.vn>
-From:   ch.31hamnghi@hcrc.vn
-Date:   Sun, 05 Nov 2023 19:57:15 +0100
-Reply-To: joliushk@gmail.com
-Message-Id: <20231105185725.B80B41B8250B@zimbra.hcrc.vn>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] thermal: core: Add trip thresholds for trip crossing
+ detection
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
+References: <12317335.O9o76ZdvQC@kreacher>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <12317335.O9o76ZdvQC@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Goededag,
-Ik ben mevrouw Joanna Liu en een medewerker van Citi Bank Hong Kong.
-Kan ik =E2=82=AC 100.000.000 aan u overmaken? Kan ik je vertrouwen
+
+Hi Rafael,
 
 
-Ik wacht op jullie reacties
-Met vriendelijke groeten
-mevrouw Joanna Liu
+On 03/11/2023 15:56, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> The trip crossing detection in handle_thermal_trip() does not work
+> correctly in the cases when a trip point is crossed on the way up and
+> then the zone temperature stays above its low temperature (that is, its
+> temperature decreased by its hysteresis).  The trip temperature may
+> be passed by the zone temperature subsequently in that case, even
+> multiple times, but that does not count as the trip crossing as long as
+> the zone temperature does not fall below the trip's low temperature or,
+> in other words, until the trip is crossed on the way down.
+> 
+> |-----------low--------high------------|
+>               |<--------->|
+>               |    hyst   |
+>               |           |
+>               |          -|--> crossed on the way up
+>               |
+>           <---|-- crossed on the way down
+> 
+> However, handle_thermal_trip() will invoke thermal_notify_tz_trip_up()
+> every time the trip temperature is passed by the zone temperature on
+> the way up regardless of whether or not the trip has been crossed on
+> the way down yet.  Moreover, it will not call thermal_notify_tz_trip_down()
+> if the last zone temperature was between the trip's temperature and its
+> low temperature, so some "trip crossed on the way down" events may not
+> be reported.
+> 
+> To address this issue, introduce trip thresholds equal to either the
+> temperature of the given trip, or its low temperature, such that if
+> the trip's threshold is passed by the zone temperature on the way up,
+> its value will be set to the trip's low temperature and
+> thermal_notify_tz_trip_up() will be called, and if the trip's threshold
+> is passed by the zone temperature on the way down, its value will be set
+> to the trip's temperature (high) and thermal_notify_tz_trip_down() will
+> be called.  Accordingly, if the threshold is passed on the way up, it
+> cannot be passed on the way up again until its passed on the way down
+> and if it is passed on the way down, it cannot be passed on the way down
+> again until it is passed on the way up which guarantees correct
+> triggering of trip crossing notifications.
+> 
+> If the last temperature of the zone is invalid, the trip's threshold
+> will be set depending of the zone's current temperature: If that
+> temperature is above the trip's temperature, its threshold will be
+> set to its low temperature or otherwise its threshold will be set to
+> its (high) temperature.  Because the zone temperature is initially
+> set to invalid and tz->last_temperature is only updated by
+> update_temperature(), this is sufficient to set the correct initial
+> threshold values for all trips.
+> 
+> Link: https://lore.kernel.org/all/20220718145038.1114379-4-daniel.lezcano@linaro.org
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> v1 (RFC) -> v2: Add missing description of a new struct thermal_trip field.
+> 
+> And because no comments have been sent for a week, this is not an RFC
+> any more.
+
+Can you give me a few days to review this patch and test it with some 
+debugfs code planned to be submitted?
+
+Thanks
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
