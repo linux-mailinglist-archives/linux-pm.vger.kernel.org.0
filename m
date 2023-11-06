@@ -2,204 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF997E1D1B
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Nov 2023 10:18:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EAC47E2196
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Nov 2023 13:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbjKFJSf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Nov 2023 04:18:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
+        id S231618AbjKFMcE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 6 Nov 2023 07:32:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230475AbjKFJSe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Nov 2023 04:18:34 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 52C2BDB;
-        Mon,  6 Nov 2023 01:18:31 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EAB531FB;
-        Mon,  6 Nov 2023 01:19:14 -0800 (PST)
-Received: from [10.57.1.27] (unknown [10.57.1.27])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1AB433F6C4;
-        Mon,  6 Nov 2023 01:18:27 -0800 (PST)
-Message-ID: <bae19559-0aea-422f-931f-b51aa8f3f5a3@arm.com>
-Date:   Mon, 6 Nov 2023 09:19:21 +0000
+        with ESMTP id S231594AbjKFMcD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Nov 2023 07:32:03 -0500
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1C8A6;
+        Mon,  6 Nov 2023 04:32:00 -0800 (PST)
+Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-6d3099818c0so844715a34.1;
+        Mon, 06 Nov 2023 04:32:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699273920; x=1699878720;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7CLVxleqpC3jykHoWGx0Ji2wnYrlU1c1ECpgQ5J60lY=;
+        b=SlE0L7/5utAhSVPh5TTvmmhNce6lbAo5O+ObBHZ2ES1F3kgjDMZnjwV+AErtHYwiAs
+         ST7jKDJj7zw8s8WH4xJi8yNXM2sHBDdBgxLre8NMSRZdo6ZB+CFD4vc+A0mll+jRACl0
+         1vmXLAj5nfCJG+hO6blws3PpTnVa1hl7vRZGLYmzTBrp5LHfJrjTH4zMTUbPeRAuSfFH
+         jjFv4TG3e62C1LuoAQjrdjIjalnM6UREjl8NDuCN047wSWar5ZprOcGvzAPU5E0qDlNt
+         LJulLZcMMMUFKyUvsbsDiLiGX++occLjv5tPjU4tfOlY3tZ2Sc6r5XqtWxJ0HwINxD9g
+         QAng==
+X-Gm-Message-State: AOJu0YxMY1xfrNu+TvEaCmUKxIT5AhjhVDwkFn8QlyhZkaDzBYrl+GsS
+        GLHriOebtcSOiqJ5iv1eNn6IxncB1qPDyWhlU98=
+X-Google-Smtp-Source: AGHT+IFQoW2nVBuX929i+dbzG3KeetbDlK3NJUcu72+xfX4/rzo7XvmH22n8MppWzSLj8pP4kshs++1RdDUvwBlC/iQ=
+X-Received: by 2002:a05:6820:1899:b0:581:e7b8:dd77 with SMTP id
+ bm25-20020a056820189900b00581e7b8dd77mr33128497oob.1.1699273919708; Mon, 06
+ Nov 2023 04:31:59 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Subject: Re: [PATCH v4 8/8] thermal: exynos: use set_trips
-To:     m.majewski2@samsung.com
-Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+References: <12317335.O9o76ZdvQC@kreacher> <283d4abe-885b-415d-a24d-681408a23845@linaro.org>
+In-Reply-To: <283d4abe-885b-415d-a24d-681408a23845@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 6 Nov 2023 13:31:41 +0100
+Message-ID: <CAJZ5v0g3C=wV-4s+hFae5cNrTwLXdXScn40oEp6=Ju6-pKptPQ@mail.gmail.com>
+Subject: Re: [PATCH v2] thermal: core: Add trip thresholds for trip crossing detection
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-References: <2c4b6c1b-b9e7-42b2-8f7b-446ebe9d15ac@arm.com>
- <20231025133027.524152-1-m.majewski2@samsung.com>
- <20231025133027.524152-9-m.majewski2@samsung.com>
- <CGME20231025133100eucas1p14e6de58e52560d165bdb8b809e406278@eucms1p4>
- <20231102103507eucms1p4aea91982ebcc4a9a6314d9c4e03050fc@eucms1p4>
-Content-Language: en-US
-In-Reply-To: <20231102103507eucms1p4aea91982ebcc4a9a6314d9c4e03050fc@eucms1p4>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Daniel,
 
+On Mon, Nov 6, 2023 at 1:02 AM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+>
+> Hi Rafael,
+>
+>
+> On 03/11/2023 15:56, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > The trip crossing detection in handle_thermal_trip() does not work
+> > correctly in the cases when a trip point is crossed on the way up and
+> > then the zone temperature stays above its low temperature (that is, its
+> > temperature decreased by its hysteresis).  The trip temperature may
+> > be passed by the zone temperature subsequently in that case, even
+> > multiple times, but that does not count as the trip crossing as long as
+> > the zone temperature does not fall below the trip's low temperature or,
+> > in other words, until the trip is crossed on the way down.
+> >
+> > |-----------low--------high------------|
+> >               |<--------->|
+> >               |    hyst   |
+> >               |           |
+> >               |          -|--> crossed on the way up
+> >               |
+> >           <---|-- crossed on the way down
+> >
+> > However, handle_thermal_trip() will invoke thermal_notify_tz_trip_up()
+> > every time the trip temperature is passed by the zone temperature on
+> > the way up regardless of whether or not the trip has been crossed on
+> > the way down yet.  Moreover, it will not call thermal_notify_tz_trip_down()
+> > if the last zone temperature was between the trip's temperature and its
+> > low temperature, so some "trip crossed on the way down" events may not
+> > be reported.
+> >
+> > To address this issue, introduce trip thresholds equal to either the
+> > temperature of the given trip, or its low temperature, such that if
+> > the trip's threshold is passed by the zone temperature on the way up,
+> > its value will be set to the trip's low temperature and
+> > thermal_notify_tz_trip_up() will be called, and if the trip's threshold
+> > is passed by the zone temperature on the way down, its value will be set
+> > to the trip's temperature (high) and thermal_notify_tz_trip_down() will
+> > be called.  Accordingly, if the threshold is passed on the way up, it
+> > cannot be passed on the way up again until its passed on the way down
+> > and if it is passed on the way down, it cannot be passed on the way down
+> > again until it is passed on the way up which guarantees correct
+> > triggering of trip crossing notifications.
+> >
+> > If the last temperature of the zone is invalid, the trip's threshold
+> > will be set depending of the zone's current temperature: If that
+> > temperature is above the trip's temperature, its threshold will be
+> > set to its low temperature or otherwise its threshold will be set to
+> > its (high) temperature.  Because the zone temperature is initially
+> > set to invalid and tz->last_temperature is only updated by
+> > update_temperature(), this is sufficient to set the correct initial
+> > threshold values for all trips.
+> >
+> > Link: https://lore.kernel.org/all/20220718145038.1114379-4-daniel.lezcano@linaro.org
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >
+> > v1 (RFC) -> v2: Add missing description of a new struct thermal_trip field.
+> >
+> > And because no comments have been sent for a week, this is not an RFC
+> > any more.
+>
+> Can you give me a few days to review this patch and test it with some
+> debugfs code planned to be submitted?
 
-On 11/2/23 10:35, Mateusz Majewski wrote:
-> Hi,
-> 
->>> +        th &= ~(0xff << 0);
->>> +        th |= temp_to_code(data, temp) << 0;
->>   
->> This 2-line pattern repeats a few times. It looks like a nice cadidate
->> for an inline function which can abstract that. Something like:
->>   
->> val = update_temp_value(data, temp, threshold, LOW_TEMP_SHIFT)
->>   
->> Assisted with the macros {LOW|HIGH|CRIT}_TEMP_SHIFT, the code
->> would look less convoluted IMO.
->> (The old code with the multiplication for the shift value wasn't
->> cleaner nor faster).
-> 
-> What would you think about something like this?
-> 
-> static void exynos_tmu_update_temp(struct exynos_tmu_data *data, int reg_off,
->                                     int bit_off, u8 temp)
-> {
->          u32 th;
-> 
->          th = readl(data->base + reg_off);
->          th &= ~(0xff << bit_off);
->          th |= temp_to_code(data, temp) << bit_off;
->          writel(th, data->base + reg_off);
-> }
-> 
-> And then, it would be used like this:
-> 
-> static void exynos4412_tmu_set_crit_temp(struct exynos_tmu_data *data, u8 temp)
-> {
->          exynos_tmu_update_temp(data, EXYNOS_THD_TEMP_RISE, 24, temp);
->          exynos_tmu_update_bit(data, EXYNOS_TMU_REG_CONTROL,
->                                EXYNOS_TMU_THERM_TRIP_EN_SHIFT, true);
-> }
+Sure, I'm not going to do anything with it until 6.7-rc1 is out anyway.
 
-Yes, this looks good.
-
-> 
-> Granted it's not as clear as if we had some macro like CRIT_TEMP_SHIFT, but
-> we would need more than one variant anyway, as Exynos 5433 uses different
-> values of reg_off, and the new function looks short and inviting IMHO.
-
-Fair enough.
-
-> 
->>> -static void exynos7_tmu_set_trip_temp(struct exynos_tmu_data *data,
->>> -                                      int trip, u8 temp)
->>> +static void exynos7_tmu_update_temp(struct exynos_tmu_data *data, u8 temp,
->>> +                                    int idx, bool rise)
->>>     {
->>>             unsigned int reg_off, bit_off;
->>>             u32 th;
->>> +        void __iomem *reg;
->>>     
->>> -        reg_off = ((7 - trip) / 2) * 4;
->>> -        bit_off = ((8 - trip) % 2);
->>> +        reg_off = ((7 - idx) / 2) * 4;
->>   
->> Why can't we just have a set of defined register macros and pick one
->> in some small function?
->> A lot of operations here, also some assumption.
->>   
->>> +        bit_off = ((8 - idx) % 2);
->>   
->> So this can only be 0 or 1 and than it's used for the shift
->> multiplication. Also I don't know the history of older code and
->> if it was missed after some cleaning, but 'idx % 2' gives
->> equal values but w/o subtraction.
->>   
->> BTW, the code assumes the 'idx' values are under control somewhere else.
->> Is that because the DT make sure in the schema that the range cannot be
->> too big?
->> What are the possible values for 'idx'?
-> 
-> In the old code, the values of trip (which is the same thing, I will
-> change the name back from idx) were limited by the value of data->ntrip,
-> which was always 8 (value is per SoC). In the new code, there are only three
-> variants:
-> 
-> static void exynos7_tmu_set_low_temp(struct exynos_tmu_data *data, u8 temp)
-> {
->          exynos7_tmu_update_temp(data, temp, 0, false);
-> }
-> 
-> static void exynos7_tmu_set_high_temp(struct exynos_tmu_data *data, u8 temp)
-> {
->          exynos7_tmu_update_temp(data, temp, 1, true);
-> }
-> 
-> static void exynos7_tmu_set_crit_temp(struct exynos_tmu_data *data, u8 temp)
-> {
->          /*
->           * Like Exynos 4210, Exynos 7 does not seem to support critical temperature
->           * handling in hardware. Again, we still set a separate interrupt for it.
->           */
->          exynos7_tmu_update_temp(data, temp, 7, true);
-> }
-> 
-> To be fair, considering the values are constant like this, I should probably
-> just do the calculations myself and then in code just call exynos_tmu_update_temp
-> (from above) and exynos_tmu_update_bit, like on all other SoCs. I guess I were
-> a bit too scared to touch Exynos 7 code...
-
-Yes, anything that can be pre-calculated with nice comment, would be
-more desired. I would suggest to not be afraid about touching that
-Exynos 7 code.
-
-> 
->>> -        if (on) {
->>> -                for (i = 0; i < data->ntrip; i++) {
->>> -                        if (thermal_zone_get_trip(tz, i, &trip))
->>> -                                continue;
->>> -
->>> -                        interrupt_en |=
->>> -                                (1 << (EXYNOS_TMU_INTEN_RISE0_SHIFT + i * 4));
->>> -                }
->>> -
->>> -                if (data->soc != SOC_ARCH_EXYNOS4210)
->>> -                        interrupt_en |=
->>> -                                interrupt_en << EXYNOS_TMU_INTEN_FALL0_SHIFT;
->>> -
->>> +        if (on)
->>>                     con |= (1 << EXYNOS_TMU_CORE_EN_SHIFT);
->>> -        } else {
->>> +        else
->>>                     con &= ~(1 << EXYNOS_TMU_CORE_EN_SHIFT);
->>   
->> Please also consider the BIT() helper here and above...
-> 
-> Will do, but should I do this in a separate patch in these cases? I don't touch
-> the con lines otherwise, and this patch is already humongous.
-
-That would definitely deserve an extra patch to address it. Please add
-to the patch set.
-
-Regards,
-Lukasz
+Thanks!
