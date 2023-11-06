@@ -2,61 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F17E7E288D
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Nov 2023 16:22:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0319D7E28E5
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Nov 2023 16:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231827AbjKFPWm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Nov 2023 10:22:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
+        id S231750AbjKFPmA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Nov 2023 10:42:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbjKFPWl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Nov 2023 10:22:41 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D746D8
-        for <linux-pm@vger.kernel.org>; Mon,  6 Nov 2023 07:22:38 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5a8ada42c2aso52803447b3.3
-        for <linux-pm@vger.kernel.org>; Mon, 06 Nov 2023 07:22:38 -0800 (PST)
+        with ESMTP id S232072AbjKFPl7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Nov 2023 10:41:59 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7802E118
+        for <linux-pm@vger.kernel.org>; Mon,  6 Nov 2023 07:41:55 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-d9a58f5f33dso4686274276.1
+        for <linux-pm@vger.kernel.org>; Mon, 06 Nov 2023 07:41:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699284158; x=1699888958; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1699285314; x=1699890114; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CfNEIWDHgSE3pUG9rhjfsEcnlg782by1zvc5CufYugE=;
-        b=c84mRhc3EgkuTjvXE9ge4xEzIDJabU3pvYEdjSGCR5TsGNacd9Eg20x1bSVqYoMsy8
-         LSpds81s9P7OhwncDc0CHqj9LSo9FWW53CI5fZygREexBsNEj4il5bGeRlKx8bgIGdIL
-         2D6mh69C+nVwttQ3ZB3m6GxSkptZEz2MjW++fzSC0sQhQEYlKWi5tEY8QGgc7BnTRo3T
-         kGDFAmTQjRxmqI7Hx9keFvAlrtdfW1cbSaNZnQS9dXfzrYVNLtWr42KesL66TjgSmVdd
-         3EoykVndkZzAHRbOzZkU107+mdhlE4MNRBr4VxMAlweSq2CcRbdQpO8mukoUPNe7l8rl
-         IzHA==
+        bh=zFsHwFdMSzfDdOBIFA7K/yvGX5wUXDR0ViZVLr0N5ZA=;
+        b=kttzcWpkkXww/BzeeF5piE/WVes8GdD+tqp7vBoO8rX89HaITuppjuBHXFrrXR7iKh
+         uh+mn0xFsYvdyCFy/j6F+pR8tr5MwKNINBRJlniQb0r2PTEARWFD6kkWTMs92A7pUCkK
+         dCHvUxo+sL0wLGxBMODwK+Lb/QvyaGKSVDzwbOrHJG8mtW0U9eLrDDYWb5fzLUUhGC2W
+         zm7C5wMhlII0R39zHARw0ZqANk5zlTFa5+ALk6pfwSz6rliocAjs1AEcRCetLPplr3Ab
+         xbzYqj4zqxXCc5Zj10pj7HxFfhrV+Iea/5UdDOdBFSdEHBcPb1hX5nI7Bk4C5+4xlXv6
+         fCOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699284158; x=1699888958;
+        d=1e100.net; s=20230601; t=1699285314; x=1699890114;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CfNEIWDHgSE3pUG9rhjfsEcnlg782by1zvc5CufYugE=;
-        b=ECWnPIU5UyM32DuWSEQai8wPQBNqeogs9rmdwlU4mFYkKZR05/e2Gu9KyHri3bOMWG
-         /ERIsTGMtRg3Ki4377sgGcZf3+2j4D698gACBrS3Mq1Pgr8ccmCUwhFk/0H4zB3N22t8
-         RjAelQSYLF9Zy44sqih36OE9JYv25Nv4kUAwud5dHxenuIWf8dc7Qi116C/pIf7po7zB
-         W+2Bw/C0TcoFT1Wl6Gyct9Rf29kazqW+xThKEbD5o0I3GdCN1FPih3VquzN5m415QixA
-         EGyQ8GSCKto9vVF2vF0xjteBwPJv65ThovupWWxU4v4Jtxd8uTb4CSHtQmc39xbcHYyV
-         RcyA==
-X-Gm-Message-State: AOJu0YxD7sNXWeCWxpnnzEXCpdCgo1TU47VPTkJt3bC+Uo5eIYPrh/CI
-        w297vam48/X/Tggr9mt2ir4eK9d+dTjVo0FmoCa1WY2S82FvHTUS+o0=
-X-Google-Smtp-Source: AGHT+IGjxRlMNlUxUN5P42Lqg572iPhqbjml/dJIbcBCLbUVSbReCv9ZSQoxJ8TC1qK3VHDBT9xjQLAuY40Ax6O7Two=
-X-Received: by 2002:a81:7102:0:b0:5a1:fb1d:740a with SMTP id
- m2-20020a817102000000b005a1fb1d740amr11168419ywc.51.1699284157798; Mon, 06
- Nov 2023 07:22:37 -0800 (PST)
+        bh=zFsHwFdMSzfDdOBIFA7K/yvGX5wUXDR0ViZVLr0N5ZA=;
+        b=wVvPeBWVj29FoLwzpv9jtcQNRBzKRt8/3wZD33wMfxvAB3JOdzoe+a0LxFYaWq/ive
+         ZTiSBGuCM4fG1C4uJqzSypb53357Wt4mo81xjXVUhpz15hHyeEZ1pPH/qrLPKWEcYQpo
+         mgIEVJtZDkLetqtEK+o5nDHjMYgI6qVDM5dn2qrHoD9w91ktudd6oNxbXNzf/yp+scsr
+         b7IoW6DwyapxpH4zL8xNUkgMVdp/JCGFf0d2lwh7zB3+Q5WRgSfghyWFq2exfD8DtUXE
+         V5gYLEyULVPtWQ6Uz+t4mTkw61wr8s9KEW6WyEp5jQqhfhfuO6tHK+d8gAiSfnevGp+U
+         FCtw==
+X-Gm-Message-State: AOJu0Yy6mEalRraNy8sB6nKkENzgRdXcV55YFhTHyP6xfiMhdHfLkWdb
+        8gDgazs2jXkUisFhF7SQgaPHnWnteB237aHZslMmrQ==
+X-Google-Smtp-Source: AGHT+IHmhUsFkec8OZHbmuEZ9wd5vJ5jAvEIPZHTTWsHd5XJUJcgV7Pj+uVgyv4ObOEueBpZ5AIPAIZYScr68U+5ZeQ=
+X-Received: by 2002:a25:9805:0:b0:da0:c5eb:a6c6 with SMTP id
+ a5-20020a259805000000b00da0c5eba6c6mr26313363ybo.32.1699285314491; Mon, 06
+ Nov 2023 07:41:54 -0800 (PST)
 MIME-Version: 1.0
-References: <CAKHBV251ALNTBUHYG_EJzSkToj2LuR8nChTKjJvUaTNXjRYnEA@mail.gmail.com>
-In-Reply-To: <CAKHBV251ALNTBUHYG_EJzSkToj2LuR8nChTKjJvUaTNXjRYnEA@mail.gmail.com>
+References: <cover.1698661048.git.viresh.kumar@linaro.org> <36de122e568dcba371d3581e5f936243b405a874.1698661048.git.viresh.kumar@linaro.org>
+In-Reply-To: <36de122e568dcba371d3581e5f936243b405a874.1698661048.git.viresh.kumar@linaro.org>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 6 Nov 2023 16:22:01 +0100
-Message-ID: <CAPDyKFrGEMq7H9dfw5iCAEot-2Mme_R3HMxmonfq8sfsh4ALYg@mail.gmail.com>
-Subject: Re: Using Genpd notifiers vs RPM callbacks for driver re-configuration
-To:     Michael Shavit <mshavit@google.com>
-Cc:     Saravana Kannan <saravanak@google.com>, linux-pm@vger.kernel.org,
-        Quang Hoang <quangh@google.com>,
-        Koudai Iwahori <koudai@google.com>,
-        Pranjal Shrivastava <praan@google.com>
+Date:   Mon, 6 Nov 2023 16:41:18 +0100
+Message-ID: <CAPDyKFpsfzdarSz5h_XuyLbfXKCWPQdV5M+mOb_Q6GhhgzCXAA@mail.gmail.com>
+Subject: Re: [PATCH V2 1/3] OPP: Level zero is valid
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
@@ -68,88 +72,145 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 6 Nov 2023 at 05:50, Michael Shavit <mshavit@google.com> wrote:
+On Mon, 30 Oct 2023 at 11:24, Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> Hi all
+> The level zero can be used by some OPPs to drop performance state vote
+> for the device. It is perfectly fine to allow the same.
 >
-> Reaching out to get some design advice on drivers that we'll
-> eventually be upstreaming. I'd like to get clarification on whether
-> using dev_pm_genpd_add_notifier is appropriate and acceptable from the
-> upstream community for our use-case.
+> _set_opp_level() considers it as an invalid value currently and returns
+> early.
 >
-> Given a supplier driver (as defined by devlinks documentation) whose
-> hardware needs to be reconfigured when its power is flipped from off
-> to on, what's the best way to reconfigure it:
+> In order to support this properly, initialize the level field with
+> U32_MAX, which denotes unused level field.
 >
-> Option 1: In the driver's runtime_resume hook:
-> In this case, we reconfigure the component only when it's going to be
-> used. Assuming that devlinks with the DL_FLAG_PM_RUNTIME are created
-> between the supplier and all of its consumers, then the supplier
-> driver's runtime_resume hook will be called whenever at least one of
-> its consumers becomes active.
+> Reported-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-The above option is the preferred and recommended one.
-
-The genpd's power on/off notifiers are intended for more special
-cases, for example:
-1) Due to HW limitations, the consumer (genpd consumer) driver can't
-reconfigure its device unless the PM domain has been power gated.
-Typically the device also lacks a reset control in this case.
-
-2) The consumer (genpd consumer) driver may have additional
-"last/first-man power-off/on-tasks" to carry out, when the PM domain
-gets power gated. CPUidle makes use of this.
-
->
-> AFAICT this is the intended way to do such things, but there's a few
-> unpleasant caveats:
-> Cons:
-> 1. Such devlinks can automatically be created by fw_devlinks, but
-> requires that the fw_devlink=rpm boot parameter is set. This can be a
->  fragile due to various timeouts that can remove devlinks or downgrade the
-> DL_FLAG_PM_RUNTIME flag from the devlink when modules aren't all
-> immediately loaded during boot (depending on the Kernel's configuration).
-> 2. If the consumer device is attached to multiple power-domains, then
-> it must manually create devlinks for the virtual devices created by
-> genpd_dev_pm_attach_by_id (which it should arguably be doing
-> anyways).
-
-I don't think the above should be considered as caveats. If a supplier
-device has a consumer device (not necessarily a genpd consumer) to
-consider from a runtime PM point of view, that simply needs to be
-managed, no matter what.
-
-> 3. It may be reconfigured unnecessarily, if the power-domain wasn't
-> cycled off/on between the driver's runtime_suspend resume calls. This can
-> happen if a consumer depends on a supplier that lives in a different
-> power domain.
-
-Yes, this is correct.
-
-Although, in most cases the re-configuration is done rather quickly.
-In many cases, the driver also implements the runtime PM autosuspend
-feature, which means that there needs to be a small idle period of
-inactivity, before the device gets runtime suspended.
-
->
-> Option 2: By registering a dev_pm_genpd_add_notifier notifier:
-> Pros: It's easier to reason about. The component is always
-> reconfigured whenever its power-domain is flipped back on and thus
-> always in a functional state.
-> Cons: It's not clear if this is an intended use-case for the
-> dev_pm_genpd_add_notifier callback. It may also be reconfigured when
-> it's not used, if the power-domain
-> was powered-on for a use-case that doesn't make use of this component.
-
-To be clear, option 1 is preferred, while strictly not required.
-
-Note that, if all consumer drivers would use the genpd's power on/off
-notifiers instead of the runtime PM callbacks, this would lead to a
-"thundering-herd" problem. All devices sharing the same PM domain(s)
-would then typically be runtime suspended/resumed simultaneously,
-rather than in parallel.
-
-Did that make sense?
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
 Kind regards
 Uffe
+
+
+> ---
+>  drivers/opp/core.c     | 24 ++++++++++++++++++++----
+>  drivers/opp/of.c       |  8 +++++++-
+>  include/linux/pm_opp.h |  5 ++++-
+>  3 files changed, 31 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 84f345c69ea5..f2e2aa07b431 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -201,7 +201,7 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_get_freq_indexed);
+>   * @opp:       opp for which level value has to be returned for
+>   *
+>   * Return: level read from device tree corresponding to the opp, else
+> - * return 0.
+> + * return U32_MAX.
+>   */
+>  unsigned int dev_pm_opp_get_level(struct dev_pm_opp *opp)
+>  {
+> @@ -221,7 +221,7 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_get_level);
+>   * @index:     index of the required opp
+>   *
+>   * Return: performance state read from device tree corresponding to the
+> - * required opp, else return 0.
+> + * required opp, else return U32_MAX.
+>   */
+>  unsigned int dev_pm_opp_get_required_pstate(struct dev_pm_opp *opp,
+>                                             unsigned int index)
+> @@ -808,6 +808,14 @@ struct dev_pm_opp *dev_pm_opp_find_level_ceil(struct device *dev,
+>         struct dev_pm_opp *opp;
+>
+>         opp = _find_key_ceil(dev, &temp, 0, true, _read_level, NULL);
+> +
+> +       /* False match */
+> +       if (temp == OPP_LEVEL_UNSET) {
+> +               dev_err(dev, "%s: OPP levels aren't available\n", __func__);
+> +               dev_pm_opp_put(opp);
+> +               return ERR_PTR(-ENODEV);
+> +       }
+> +
+>         *level = temp;
+>         return opp;
+>  }
+> @@ -1049,12 +1057,18 @@ static int _set_opp_bw(const struct opp_table *opp_table,
+>  static int _set_performance_state(struct device *dev, struct device *pd_dev,
+>                                   struct dev_pm_opp *opp, int i)
+>  {
+> -       unsigned int pstate = likely(opp) ? opp->required_opps[i]->level: 0;
+> +       unsigned int pstate = 0;
+>         int ret;
+>
+>         if (!pd_dev)
+>                 return 0;
+>
+> +       if (likely(opp)) {
+> +               pstate = opp->required_opps[i]->level;
+> +               if (pstate == OPP_LEVEL_UNSET)
+> +                       return 0;
+> +       }
+> +
+>         ret = dev_pm_domain_set_performance_state(pd_dev, pstate);
+>         if (ret) {
+>                 dev_err(dev, "Failed to set performance state of %s: %d (%d)\n",
+> @@ -1135,7 +1149,7 @@ static int _set_opp_level(struct device *dev, struct opp_table *opp_table,
+>         int ret = 0;
+>
+>         if (opp) {
+> -               if (!opp->level)
+> +               if (opp->level == OPP_LEVEL_UNSET)
+>                         return 0;
+>
+>                 level = opp->level;
+> @@ -1867,6 +1881,8 @@ struct dev_pm_opp *_opp_allocate(struct opp_table *opp_table)
+>
+>         INIT_LIST_HEAD(&opp->node);
+>
+> +       opp->level = OPP_LEVEL_UNSET;
+> +
+>         return opp;
+>  }
+>
+> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+> index 81fa27599d58..85fad7ca0007 100644
+> --- a/drivers/opp/of.c
+> +++ b/drivers/opp/of.c
+> @@ -1393,8 +1393,14 @@ int of_get_required_opp_performance_state(struct device_node *np, int index)
+>
+>         opp = _find_opp_of_np(opp_table, required_np);
+>         if (opp) {
+> -               pstate = opp->level;
+> +               if (opp->level == OPP_LEVEL_UNSET) {
+> +                       pr_err("%s: OPP levels aren't available for %pOF\n",
+> +                              __func__, np);
+> +               } else {
+> +                       pstate = opp->level;
+> +               }
+>                 dev_pm_opp_put(opp);
+> +
+>         }
+>
+>         dev_pm_opp_put_opp_table(opp_table);
+> diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+> index ccd97bcef269..af53101a1383 100644
+> --- a/include/linux/pm_opp.h
+> +++ b/include/linux/pm_opp.h
+> @@ -92,9 +92,12 @@ struct dev_pm_opp_config {
+>         struct device ***virt_devs;
+>  };
+>
+> +#define OPP_LEVEL_UNSET                        U32_MAX
+> +
+>  /**
+>   * struct dev_pm_opp_data - The data to use to initialize an OPP.
+> - * @level: The performance level for the OPP.
+> + * @level: The performance level for the OPP. Set level to OPP_LEVEL_UNSET if
+> + * level field isn't used.
+>   * @freq: The clock rate in Hz for the OPP.
+>   * @u_volt: The voltage in uV for the OPP.
+>   */
+> --
+> 2.31.1.272.g89b43f80a514
+>
