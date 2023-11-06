@@ -2,76 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BBA67E1813
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Nov 2023 01:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 514547E190D
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Nov 2023 04:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjKFACi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 5 Nov 2023 19:02:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55518 "EHLO
+        id S230117AbjKFDER (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 5 Nov 2023 22:04:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjKFACh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Nov 2023 19:02:37 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A262DB
-        for <linux-pm@vger.kernel.org>; Sun,  5 Nov 2023 16:02:34 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-32faea0fa1fso2029285f8f.1
-        for <linux-pm@vger.kernel.org>; Sun, 05 Nov 2023 16:02:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699228952; x=1699833752; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=J1AYyM8WMgGaJPfSt8fkmKPCmurjYQvKjXkBlzKHwao=;
-        b=T65BnQt7GdaGf91W48Is3AWtj1PvJVhY4kKuXBEP2vQ1/OE8ivVbFbvuVnszVSl/Pl
-         gAbxJnO/4/bDtJwiePL+WNCqaeGi96rSDoL9sdewtqqJvMaeBjTd0j0Aa5jgkHWznD2D
-         /JsnysPfBTN9ID1LwxiSOb8AsFV08dbeWlpxErBAZF7nQnQLAUWyFoh2ju8ZpP3jfLFK
-         czOWVGjiz42ewdWkEP/Hd7tzeF6AY9T58TS/0rPvCIaJUo/20/91qOnjHEpts6FbhaUP
-         v22ezo2bq1SmUUWyh0u9UcoZJAZb8cil4A9UCGYxqnmp/iKIDC9HkDKDgCuE3lbOvP9U
-         syPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699228952; x=1699833752;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J1AYyM8WMgGaJPfSt8fkmKPCmurjYQvKjXkBlzKHwao=;
-        b=Dn64DDd1AXjE4EVMJJKq7aZwzgUT6rD+dpI950T6LiDGz8dNN6JVdiGM+kFp6P+LQm
-         zlOu4/QorJwsWNc9K+7+NgPUo6nqWsClyabFL5ZFioi/juUvzKDd5yu7LYU1/3/mcN+r
-         EACn3NE5Xw6uysS0lPUZGjtKyAwHqcuG/6XDB5mQ3e8pozrPWE45A51BZOEW/Fx9gG7v
-         XoXCqDRsPR/Y9RpQjoKJ1nvWOeQPLonqPEINXxCkIfyAGQdZMAT6QerkkUPzTRCcC4Ey
-         uCDqCkkfLYu658kJj3/9LMB+ZJV0lvEj/f+YxUxEcpzxQ5pGVTPnaRblbk8EyUQ2KTsE
-         oepw==
-X-Gm-Message-State: AOJu0YxtwTzUQ1VMo1vBe8WqCmwx3F5sAX7OC6DXHJoVpGqSyBMUvzGc
-        wFgU9+tqVYavdG6LGWPwiY2RUA==
-X-Google-Smtp-Source: AGHT+IG1SlWCrb8exGbqnTO8eoBdntnUvQrXYJfIuCg2LsAQitLdPnyoxiskqKc3Y3arWbSVTJYrwA==
-X-Received: by 2002:a5d:5887:0:b0:32f:b47c:f1f6 with SMTP id n7-20020a5d5887000000b0032fb47cf1f6mr8893115wrf.32.1699228952385;
-        Sun, 05 Nov 2023 16:02:32 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:3442:eeb4:7620:ee3d? ([2a05:6e02:1041:c10:3442:eeb4:7620:ee3d])
-        by smtp.googlemail.com with ESMTPSA id i7-20020adfe487000000b0032de6f95fb3sm7834663wrm.40.2023.11.05.16.02.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Nov 2023 16:02:31 -0800 (PST)
-Message-ID: <283d4abe-885b-415d-a24d-681408a23845@linaro.org>
-Date:   Mon, 6 Nov 2023 01:02:30 +0100
+        with ESMTP id S229447AbjKFDER (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Nov 2023 22:04:17 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC8B100;
+        Sun,  5 Nov 2023 19:04:11 -0800 (PST)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4SNx0d3fpBzPnvV;
+        Mon,  6 Nov 2023 11:00:01 +0800 (CST)
+Received: from [10.67.109.254] (10.67.109.254) by
+ kwepemi500008.china.huawei.com (7.221.188.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.31; Mon, 6 Nov 2023 11:03:34 +0800
+Message-ID: <f1d7a59b-5f99-344a-15d3-0d1625923057@huawei.com>
+Date:   Mon, 6 Nov 2023 11:03:34 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] thermal: core: Add trip thresholds for trip crossing
- detection
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2 3/5] cpufreq: intel_pstate: Add ->offline and ->online
+ callbacks
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
+To:     Doug Smythies <dsmythies@telus.net>
+CC:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>
-References: <12317335.O9o76ZdvQC@kreacher>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <12317335.O9o76ZdvQC@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        LKML <linux-kernel@vger.kernel.org>
+References: <4169555.5IIHXK4Dsd@kreacher> <2786976.RHVxHup3hB@kreacher>
+ <a5105853-6b36-7221-0d06-e726d33492fb@huawei.com>
+ <CAAYoRsUrun69UQmx1VR+0CcuM0oyQC-Sm6zAS-TETLdAyHo9Sw@mail.gmail.com>
+From:   Jinjie Ruan <ruanjinjie@huawei.com>
+In-Reply-To: <CAAYoRsUrun69UQmx1VR+0CcuM0oyQC-Sm6zAS-TETLdAyHo9Sw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.109.254]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500008.china.huawei.com (7.221.188.139)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,78 +56,259 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-Hi Rafael,
 
+On 2023/11/3 23:56, Doug Smythies wrote:
+> On Fri, Nov 3, 2023 at 3:57 AM Jinjie Ruan <ruanjinjie@huawei.com> wrote:
+>> On 2020/8/25 1:43, Rafael J. Wysocki wrote:
+>>> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+>>>
+>>> Add ->offline and ->online driver callbacks to prepare for taking a
+>>> CPU offline and to restore its working configuration when it goes
+>>> back online, respectively, to avoid invoking the ->init callback on
+>>> every CPU online which is quite a bit of unnecessary overhead.
+>>>
+>>> Define ->offline and ->online so that they can be used in the
+>>> passive mode as well as in the active mode and because ->offline
+>>> will do the majority of ->stop_cpu work, the passive mode does
+>>> not need that callback any more, so drop it.
+>>>
+>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>> ---
+>>>
+>>> -> v2: Typo fixes and changelog edits (Doug).
+>>>
+>>> ---
+>>>  drivers/cpufreq/intel_pstate.c | 38 ++++++++++++++++++++++++++++------
+>>>  1 file changed, 32 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+>>> index 3d18934fa975..98836ac299db 100644
+>>> --- a/drivers/cpufreq/intel_pstate.c
+>>> +++ b/drivers/cpufreq/intel_pstate.c
+>>> @@ -2297,28 +2297,51 @@ static int intel_pstate_verify_policy(struct cpufreq_policy_data *policy)
+>>>       return 0;
+>>>  }
+>>>
+>>> -static void intel_cpufreq_stop_cpu(struct cpufreq_policy *policy)
+>>> +static int intel_pstate_cpu_offline(struct cpufreq_policy *policy)
+>>>  {
+>>> +     pr_debug("CPU %d going offline\n", policy->cpu);
+>>> +
+>>> +     intel_pstate_exit_perf_limits(policy);
+>>> +
+>>> +     /*
+>>> +      * If the CPU is an SMT thread and it goes offline with the performance
+>>> +      * settings different from the minimum, it will prevent its sibling
+>>> +      * from getting to lower performance levels, so force the minimum
+>>> +      * performance on CPU offline to prevent that from happening.
+>>> +      */
+>>>       if (hwp_active)
+>>>               intel_pstate_hwp_force_min_perf(policy->cpu);
+>>>       else
+>>>               intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
+>>> +
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static int intel_pstate_cpu_online(struct cpufreq_policy *policy)
+>>> +{
+>>> +     pr_debug("CPU %d going online\n", policy->cpu);
+>>> +
+>>> +     intel_pstate_init_acpi_perf_limits(policy);
+>>> +
+>>> +     if (hwp_active)
+>>> +             wrmsrl_on_cpu(policy->cpu, MSR_HWP_REQUEST,
+>>> +                           all_cpu_data[policy->cpu]->hwp_req_cached);
+>>> +
+>>> +     return 0;
+>>>  }
+>>
+>> On Ice Lake server, there seems a bug when CONFIG_X86_INTEL_PSTATE=y and
+>> not configure intel_pstate=xxx in command line.
+>>
+>> Although the Performance tuner is used, the CPU have the lowest
+>> frequency in scaling_cur_freq after the CPU goes offline and then goes
+>> online, running the same infinite loop load.
+>>
+>> How to produce:
+>>
+>> echo performance > /sys/devices/system/cpu/cpu12/cpufreq/scaling_governor
+>>
+>> cat while_true.c
+>> #include <stdio.h>
+>> void main(void)
+>> {
+>>         while(1);
+>> }
+>>
+>>
+>> [root@localhost freq_test]# cat test.sh
+>> #!/bin/bash
+>>
+>> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
+>> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_governor
+>> taskset -c ${1} ./while_true &
+>> sleep 1s
+>>
+>> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
+>>
+>> echo 0 > /sys/devices/system/cpu/cpu${1}/online
+>>
+>> sleep 1s
+>> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
+>>
+>> sleep 1s
+>>
+>> echo 1 > /sys/devices/system/cpu/cpu${1}/online
+>> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
+>>
+>> taskset -c ${1} ./while_true &
+>>
+>> sleep 1s
+>> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
+>>
+>> sleep 1s
+>> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
+>>
+>> sleep 1s
+>> cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
+>>
+>>
+>> [root@localhost freq_test]# sh test.sh 40
+>> 2300000
+>> performance
+>> 2299977
+>> cat: /sys/devices/system/cpu/cpu40/cpufreq/scaling_cur_freq: Device or
+>> resource busy
+>> 2300000
+>> 2300022
+>> 2300000
+>> 2299953
+>> [root@localhost freq_test]# sh test.sh 50
+>> 2300000
+>> performance
+>> 2300000
+>> cat: /sys/devices/system/cpu/cpu50/cpufreq/scaling_cur_freq: Device or
+>> resource busy
+>> 2300000
+>> 2299977
+>> 2300022
+>> 2299977
+>> [root@localhost freq_test]# sh test.sh 20
+>> 2300000
+>> performance
+>> 2299977
+>> cat: /sys/devices/system/cpu/cpu20/cpufreq/scaling_cur_freq: Device or
+>> resource busy
+>> 800000
+>> 800000
+>> 800000
+>> 799992
+>> [root@localhost freq_test]# sh test.sh 21
+>> 2300000
+>> performance
+>> 2300000
+>> cat: /sys/devices/system/cpu/cpu21/cpufreq/scaling_cur_freq: Device or
+>> resource busy
+>> 800000
+>> 800000
+>> 800000
+>> 800000
+>>
+>> [root@localhost freq_test]# cat
+>> /sys/devices/system/cpu/cpu21/cpufreq/scaling_max_freq
+>> 2300000
+>> [root@localhost freq_test]# cat
+>> /sys/devices/system/cpu/cpu21/cpufreq/scaling_min_freq
+>> 800000
+> 
+> Hi,
+> 
+> I followed your "how to reproduce" notes exactly.
+> So far, I have been unable to reproduce your issue.
 
-On 03/11/2023 15:56, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> The trip crossing detection in handle_thermal_trip() does not work
-> correctly in the cases when a trip point is crossed on the way up and
-> then the zone temperature stays above its low temperature (that is, its
-> temperature decreased by its hysteresis).  The trip temperature may
-> be passed by the zone temperature subsequently in that case, even
-> multiple times, but that does not count as the trip crossing as long as
-> the zone temperature does not fall below the trip's low temperature or,
-> in other words, until the trip is crossed on the way down.
-> 
-> |-----------low--------high------------|
->               |<--------->|
->               |    hyst   |
->               |           |
->               |          -|--> crossed on the way up
->               |
->           <---|-- crossed on the way down
-> 
-> However, handle_thermal_trip() will invoke thermal_notify_tz_trip_up()
-> every time the trip temperature is passed by the zone temperature on
-> the way up regardless of whether or not the trip has been crossed on
-> the way down yet.  Moreover, it will not call thermal_notify_tz_trip_down()
-> if the last zone temperature was between the trip's temperature and its
-> low temperature, so some "trip crossed on the way down" events may not
-> be reported.
-> 
-> To address this issue, introduce trip thresholds equal to either the
-> temperature of the given trip, or its low temperature, such that if
-> the trip's threshold is passed by the zone temperature on the way up,
-> its value will be set to the trip's low temperature and
-> thermal_notify_tz_trip_up() will be called, and if the trip's threshold
-> is passed by the zone temperature on the way down, its value will be set
-> to the trip's temperature (high) and thermal_notify_tz_trip_down() will
-> be called.  Accordingly, if the threshold is passed on the way up, it
-> cannot be passed on the way up again until its passed on the way down
-> and if it is passed on the way down, it cannot be passed on the way down
-> again until it is passed on the way up which guarantees correct
-> triggering of trip crossing notifications.
-> 
-> If the last temperature of the zone is invalid, the trip's threshold
-> will be set depending of the zone's current temperature: If that
-> temperature is above the trip's temperature, its threshold will be
-> set to its low temperature or otherwise its threshold will be set to
-> its (high) temperature.  Because the zone temperature is initially
-> set to invalid and tz->last_temperature is only updated by
-> update_temperature(), this is sufficient to set the correct initial
-> threshold values for all trips.
-> 
-> Link: https://lore.kernel.org/all/20220718145038.1114379-4-daniel.lezcano@linaro.org
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> 
-> v1 (RFC) -> v2: Add missing description of a new struct thermal_trip field.
-> 
-> And because no comments have been sent for a week, this is not an RFC
-> any more.
+It seems that this issue is platform-specific.
 
-Can you give me a few days to review this patch and test it with some 
-debugfs code planned to be submitted?
+The following CPU family has the issue:
 
-Thanks
+1、Products formerly Haswell
 
+2、Model name:            Intel(R) Xeon(R) Platinum 8380 CPU @
+2.30GHz(Ice Lake server)
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+But the following CPU family do not have the issue:
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+1、Model name:                         Intel(R) Xeon(R) CPU E5-2620 v2 @
+2.10GHz
 
+2、Model name:     Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
+
+> 
+> I am using kernel 6.6.
+> My processor is:
+> Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
+> 
+> Results:
+> root@s19:/home/doug/pstate# ./test.sh 8
+> 800000
+> performance
+> 4799994
+> cat: /sys/devices/system/cpu/cpu8/cpufreq/scaling_cur_freq: Device or
+> resource busy
+> 4799999
+> 4800000
+> 4800001
+> 4799996
+> root@s19:/home/doug/pstate# ./test.sh 7
+> 800000
+> performance
+> 4800001
+> cat: /sys/devices/system/cpu/cpu7/cpufreq/scaling_cur_freq: Device or
+> resource busy
+> 4799967
+> 4800028
+> 4800006
+> 4799997
+> root@s19:/home/doug/pstate# ./test.sh 6
+> 800000
+> performance
+> 4800001
+> cat: /sys/devices/system/cpu/cpu6/cpufreq/scaling_cur_freq: Device or
+> resource busy
+> 4799983
+> 4800001
+> 4799993
+> 4800002
+> root@s19:/home/doug/pstate# ./test.sh 5
+> 800000
+> performance
+> 4799990
+> cat: /sys/devices/system/cpu/cpu5/cpufreq/scaling_cur_freq: Device or
+> resource busy
+> 4800006
+> 4800002
+> 4800011
+> 4799980
+> root@s19:/home/doug/pstate# ./test.sh 4
+> 4799940
+> performance
+> 4799985
+> cat: /sys/devices/system/cpu/cpu4/cpufreq/scaling_cur_freq: Device or
+> resource busy
+> 4799975
+> 4799994
+> 4799984
+> 4799996
+> root@s19:/home/doug/pstate# ./test.sh 3
+> 4799986
+> performance
+> 4799990
+> cat: /sys/devices/system/cpu/cpu3/cpufreq/scaling_cur_freq: Device or
+> resource busy
+> 4799976
+> 4800015
+> 4800000
+> 4799995
+> 
+> ... Doug
+> 
