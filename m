@@ -2,98 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86207E477D
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Nov 2023 18:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3224B7E478A
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Nov 2023 18:48:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232544AbjKGRrn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Nov 2023 12:47:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
+        id S235206AbjKGRsY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Nov 2023 12:48:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234059AbjKGRrk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Nov 2023 12:47:40 -0500
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E7012B;
-        Tue,  7 Nov 2023 09:47:37 -0800 (PST)
-Received: from mail.denx.de (unknown [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: festevam@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 5BA6A86A4B;
-        Tue,  7 Nov 2023 18:47:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1699379255;
-        bh=z2skP0QUuom9Ov5APPRdXBVMApL55yJrBa+TcMmxoQU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Yw5kdngFnOTAS7eWIR/o6di5DUvkthxkDPFFhVvDyN16Kw2uRLH686n37ZCkS0X+a
-         2l8iEiJTc6V9zN9iNaYJBEqHg0fNUc/uvFkxuejLlCJr7EbnyNoYwiBeLIRdPA21Os
-         wetV5ZibCWWYDPe0zGGrE98nsKX85VFAwU/eIFJHN42F0g9VqrKq/WTr3yuFsO+GoL
-         +zJPLAix2+kIqqaNdj/h/cGI+OlzwudcqqPc0xvkY/WtZghzZAss4BxXPOIyyvsO10
-         u8TNY0IM7vEIZiQMvvaCLaCB03H08uNdAYpOfEJYZbbq7qudSWj3kE+GPfPeJ9rvMJ
-         QjXBDGuavSaPg==
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 07 Nov 2023 14:47:35 -0300
-From:   Fabio Estevam <festevam@denx.de>
-To:     Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        =?UTF-8?Q?S=C3=A9bastien_Szymanski?= 
-        <sebastien.szymanski@armadeus.com>, Stefan Agner <stefan@agner.ch>,
-        Shawn Guo <shawnguo@kernel.org>, Marek Vasut <marex@denx.de>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: imx6q: Only disabling 792MHz OPP for i.MX6ULL
- types below 792MHz
-In-Reply-To: <20231107163136.63440-1-cniedermaier@dh-electronics.com>
-References: <20231107163136.63440-1-cniedermaier@dh-electronics.com>
-Message-ID: <188c5e1cddc05f9bd44510e0a4f988df@denx.de>
-X-Sender: festevam@denx.de
-User-Agent: Roundcube Webmail/1.3.6
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
+        with ESMTP id S235222AbjKGRsL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Nov 2023 12:48:11 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C427A10C1
+        for <linux-pm@vger.kernel.org>; Tue,  7 Nov 2023 09:48:09 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1cc53d0030fso47330705ad.0
+        for <linux-pm@vger.kernel.org>; Tue, 07 Nov 2023 09:48:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1699379288; x=1699984088; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ywd9froD7aOGJqc09ImjtHrARMhZvSCpgT2M8r3eM5I=;
+        b=22o835uwXX++RGJEcKz+duCGRpOkcuVAJo41fEXDdIFFod9H0yEPM1teCwJa0EaUhi
+         fs+XXJgKWhTdwXh4FJPpdIc1A/WpIrDNp1nMSyVyDpeC6d5LR/QPLtWOUMI81QjUxlJv
+         A2F5rBmW1d4iJRtZ4NxWOg+jwHYjtqe09HN+pwMs+QaCXIPTQG0Hsrwq1dyVT3jyxxYD
+         9TaI7frLncsn/DnaXktkJHItoynQtq+bmCBNzSp/8U5yb/5i7IwY233d/Pv1JNrEyuLP
+         +h39bCZopmkpvZnrueMz2lnx2vZAdFKj5wr+8eEsDXiFREjwo5EsJzcNYfEy0e3QgJDZ
+         p6Yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699379288; x=1699984088;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ywd9froD7aOGJqc09ImjtHrARMhZvSCpgT2M8r3eM5I=;
+        b=pF8i0C0SaaHzd9b+l6NQ9w+GYzGhHr/XI9vhiiczhRqzt5s7wMFFO2esij0Yx5uAk/
+         Z5GyGmIo1F+vDNHFEVxwfkkKPF1UnJlfUYClHEUjbrTRe8pqz7OSqJOSCTDOaS637yS+
+         Nuptqo8LHcegiJPsCjWs0l4BXnN3B8LGKlFfX6i+o/CPz6SbxSjuJOmlwwpTYbAvSnnH
+         oazwLzngOp2WoQj9jpo6ncOyZVaj5gdNRvKaRYVwsfN60n7HQBeD/UeGhrdP6q8L6adD
+         n5ytaEIFfqKTw16MAgp/CgRP39FFa49v7/caJ5/o9xcHM5Fzs/jTaxm4d+lk4plMhV8b
+         cGnw==
+X-Gm-Message-State: AOJu0YxTSBAIMbE2N+yKQgfojgtEWYNWpGHN7DKueDIMSQ+gauFkZnFa
+        8Gt58gjjuLGUzc5CfPyfMAHr0iKec+zCmxiBGSMaoA==
+X-Google-Smtp-Source: AGHT+IE1O0IZeedx9DdABfISL9vUc/qLEJImXP8G88Ji0nXKSIqNVitCPYUEuOTU6Qgy+/VgBOwBhA==
+X-Received: by 2002:a17:902:d4ce:b0:1cc:32df:8ebd with SMTP id o14-20020a170902d4ce00b001cc32df8ebdmr5416391plg.25.1699379288440;
+        Tue, 07 Nov 2023 09:48:08 -0800 (PST)
+Received: from localhost ([192.184.165.199])
+        by smtp.gmail.com with ESMTPSA id iy3-20020a170903130300b001c9dac0fbbasm115552plb.63.2023.11.07.09.48.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Nov 2023 09:48:07 -0800 (PST)
+Date:   Tue, 07 Nov 2023 09:48:07 -0800 (PST)
+X-Google-Original-Date: Tue, 07 Nov 2023 09:47:58 PST (-0800)
+Subject:     Re: [PATCH RFC 21/22] riscv: Switch over to GENERIC_CPU_DEVICES
+In-Reply-To: <E1r0JMQ-00CTyb-Ee@rmk-PC.armlinux.org.uk>
+CC:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+        x86@kernel.org, linux-csky@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-parisc@vger.kernel.org, salil.mehta@huawei.com,
+        jean-philippe@linaro.org, jianyong.wu@arm.com, justin.he@arm.com,
+        james.morse@arm.com, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     rmk+kernel@armlinux.org.uk
+Message-ID: <mhng-6d9a28af-d626-410e-913f-33bc01890537@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Christoph,
+On Tue, 07 Nov 2023 02:31:06 PST (-0800), rmk+kernel@armlinux.org.uk wrote:
+> From: James Morse <james.morse@arm.com>
+>
+> Now that GENERIC_CPU_DEVICES calls arch_register_cpu(), which can be
+> overridden by the arch code, switch over to this to allow common code
+> to choose when the register_cpu() call is made.
+>
+> This allows topology_init() to be removed.
+>
+> This is an intermediate step to the logic being moved to drivers/acpi,
+> where GENERIC_CPU_DEVICES will do the work when booting with acpi=off.
+>
+> This patch also has the effect of moving the registration of CPUs from
+> subsys to driver core initialisation, prior to any initcalls running.
+>
+> Signed-off-by: James Morse <james.morse@arm.com>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> ---
+> Changes since RFC v2:
+>  * Add note about initialisation order change.
+> ---
+>  arch/riscv/Kconfig        |  1 +
+>  arch/riscv/kernel/setup.c | 19 ++++---------------
+>  2 files changed, 5 insertions(+), 15 deletions(-)
+>
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index eaa15a20e6ae..264aa466aec3 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -69,6 +69,7 @@ config RISCV
+>  	select GENERIC_ARCH_TOPOLOGY
+>  	select GENERIC_ATOMIC64 if !64BIT
+>  	select GENERIC_CLOCKEVENTS_BROADCAST if SMP
+> +	select GENERIC_CPU_DEVICES
+>  	select GENERIC_EARLY_IOREMAP
+>  	select GENERIC_ENTRY
+>  	select GENERIC_GETTIMEOFDAY if HAVE_GENERIC_VDSO
+> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+> index 0624f44d43ec..f8875ae1b0aa 100644
+> --- a/arch/riscv/kernel/setup.c
+> +++ b/arch/riscv/kernel/setup.c
+> @@ -50,7 +50,6 @@ atomic_t hart_lottery __section(".sdata")
+>  #endif
+>  ;
+>  unsigned long boot_cpu_hartid;
+> -static DEFINE_PER_CPU(struct cpu, cpu_devices);
+>
+>  /*
+>   * Place kernel memory regions on the resource tree so that
+> @@ -295,23 +294,13 @@ void __init setup_arch(char **cmdline_p)
+>  	riscv_set_dma_cache_alignment();
+>  }
+>
+> -static int __init topology_init(void)
+> +int arch_register_cpu(int cpu)
+>  {
+> -	int i, ret;
+> +	struct cpu *c = &per_cpu(cpu_devices, cpu);
+>
+> -	for_each_possible_cpu(i) {
+> -		struct cpu *cpu = &per_cpu(cpu_devices, i);
+> -
+> -		cpu->hotpluggable = cpu_has_hotplug(i);
+> -		ret = register_cpu(cpu, i);
+> -		if (unlikely(ret))
+> -			pr_warn("Warning: %s: register_cpu %d failed (%d)\n",
+> -			       __func__, i, ret);
+> -	}
+> -
+> -	return 0;
+> +	c->hotpluggable = cpu_has_hotplug(cpu);
+> +	return register_cpu(c, cpu);
+>  }
+> -subsys_initcall(topology_init);
+>
+>  void free_initmem(void)
+>  {
 
-Thanks for your patch.
-
-On 07/11/2023 13:31, Christoph Niedermaier wrote:
-> For a 900MHz i.MX6ULL CPU the 792MHz OPP is disabled. There is no
-> convincing reason to disable this OPP. If a CPU can run at 900MHz,
-> it should also be able to cope with 792MHz. Looking at the voltage
-> level of 792MHz in [1] (page 24, table 10. "Operating Ranges") the
-> current defined OPP is above the minimum. So the voltage level
-> shouldn't be a problem. Although in [2] (page 24, table 10.
-> "Operating Ranges") 792MHz isn't mentioned there isn't note that
-> 792MHz OPP isn't allowed. Change it to only disable 792MHz OPP for
-
-I find this part:
-
-"792MHz isn't mentioned there isn't note that 792MHz OPP isn't allowed."
-
-a bit confusing.
-
-Maybe:
-
-"However in [2] (page 24, table 10. "Operating Ranges"), it is not 
-mentioned that 792MHz OPP isn't allowed."
-
-
-> [1] https://www.nxp.com/docs/en/data-sheet/IMX6ULLIEC.pdf
-> [2] https://www.nxp.com/docs/en/data-sheet/IMX6ULLCEC.pdf
-> 
-> Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-> Reviewed-by: Marek Vasut <marex@denx.de>
-
-I think it is worth adding a Fixes tag so that this fix could be 
-backported
-to stable kernels.
-
-Reviewed-by: Fabio Estevam <festevam@denx.de>
-
-Thanks
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
