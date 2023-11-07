@@ -2,109 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E86ED7E4654
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Nov 2023 17:42:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 028D47E4962
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Nov 2023 20:47:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234598AbjKGQmm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Nov 2023 11:42:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
+        id S232385AbjKGTrn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Nov 2023 14:47:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjKGQml (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Nov 2023 11:42:41 -0500
-X-Greylist: delayed 432 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Nov 2023 08:42:39 PST
-Received: from mx2.securetransport.de (mx2.securetransport.de [188.68.39.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0FBB993
-        for <linux-pm@vger.kernel.org>; Tue,  7 Nov 2023 08:42:38 -0800 (PST)
-Received: from mail.dh-electronics.com (unknown [77.24.89.57])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx2.securetransport.de (Postfix) with ESMTPSA id 8BF085E8E0;
-        Tue,  7 Nov 2023 17:34:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
-        s=dhelectronicscom; t=1699374865;
-        bh=/6rLoGMICSuiHaXxLKc1zcRf/OWuoJW4dmdquv6xRk4=;
-        h=From:To:CC:Subject:Date:From;
-        b=LD8dc0JJ1a40j0ROun3FsclkQle9pFlXJin4eADT7B+E48YA6mSPSVU3gKKgXB0dJ
-         0ykflkZc6+WnNU8wHCSuF/tuK3RL2gTLPHWc66h3kyZPzEcinGk1yFLk2WgW2t4Dlt
-         D4rJhJcDA3U+EftfHS504rnrcVeYi/eZoyky8Du+x4KIsB1OhnSHHYSJj7bLmhqUXX
-         57Btwn7PsPhN9hNSLIx42zY+dPOJt+P56aVaSGWRL5KzY/mx3iLtQgP3tSmUpBWdYk
-         gIzerZckpAx1dZnS0pwB5CXnGBoboyRfbBPgBoManNBiz/5Rx/IbFXHccAZEYSulXO
-         9MhweAkNDprkg==
-Received: from DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) by
- DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.27; Tue, 7 Nov 2023 17:34:14 +0100
-Received: from localhost.localdomain (172.16.51.3) by
- DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.27 via Frontend Transport; Tue, 7 Nov 2023 17:34:14 +0100
-From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
-To:     <linux-arm-kernel@lists.infradead.org>
-CC:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        =?UTF-8?q?S=C3=A9bastien=20Szymanski?= 
-        <sebastien.szymanski@armadeus.com>, Stefan Agner <stefan@agner.ch>,
-        Shawn Guo <shawnguo@kernel.org>, Marek Vasut <marex@denx.de>,
-        Fabio Estevam <festevam@denx.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] cpufreq: imx6q: Only disabling 792MHz OPP for i.MX6ULL types below 792MHz
-Date:   Tue, 7 Nov 2023 17:31:36 +0100
-Message-ID: <20231107163136.63440-1-cniedermaier@dh-electronics.com>
-X-Mailer: git-send-email 2.11.0
-X-klartext: yes
+        with ESMTP id S229789AbjKGTrm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Nov 2023 14:47:42 -0500
+X-Greylist: delayed 7798 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Nov 2023 11:47:40 PST
+Received: from 12.mo582.mail-out.ovh.net (12.mo582.mail-out.ovh.net [178.32.125.228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0300E184
+        for <linux-pm@vger.kernel.org>; Tue,  7 Nov 2023 11:47:39 -0800 (PST)
+Received: from director6.ghost.mail-out.ovh.net (unknown [10.109.156.60])
+        by mo582.mail-out.ovh.net (Postfix) with ESMTP id E459B28658
+        for <linux-pm@vger.kernel.org>; Tue,  7 Nov 2023 17:20:10 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-ch27t (unknown [10.110.171.220])
+        by director6.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 3002E1FD2F;
+        Tue,  7 Nov 2023 17:20:10 +0000 (UTC)
+Received: from RCM-web9.webmail.mail.ovh.net ([151.80.29.21])
+        by ghost-submission-6684bf9d7b-ch27t with ESMTPSA
+        id sbZmCcpxSmVvfwEAiK7Wbg
+        (envelope-from <jose.pekkarinen@foxhound.fi>); Tue, 07 Nov 2023 17:20:10 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+Date:   Tue, 07 Nov 2023 19:20:09 +0200
+From:   =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@foxhound.fi>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
+        skhan@linuxfoundation.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        syzbot+95f2e2439b97575ec3c0@syzkaller.appspotmail.com
+Subject: Re: [PATCH] drivers core: lookup sysfs power group before removal
+In-Reply-To: <2023110706-mustiness-arbitrary-fc9f@gregkh>
+References: <20231101173627.2658-1-jose.pekkarinen@foxhound.fi>
+ <2023110139-dupe-snipping-5700@gregkh>
+ <835b2930c710381b8da38eca821aa92d@foxhound.fi>
+ <2023110353-bring-contented-c9f8@gregkh>
+ <e13104c9e55b0bd8eee0a333b3ed7975@foxhound.fi>
+ <2023110706-mustiness-arbitrary-fc9f@gregkh>
+User-Agent: Roundcube Webmail/1.4.15
+Message-ID: <e8dccfb0ec240014a98660493aa34fc2@foxhound.fi>
+X-Sender: jose.pekkarinen@foxhound.fi
+Organization: Foxhound Ltd.
+X-Originating-IP: 45.141.215.21
+X-Webmail-UserID: jose.pekkarinen@foxhound.fi
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 8199366075018552835
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedruddujedgtdejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggffhffvvefujghffgfkgihoihgtgfesthekjhdttderjeenucfhrhhomheplfhoshorucfrvghkkhgrrhhinhgvnhcuoehjohhsvgdrphgvkhhkrghrihhnvghnsehfohighhhouhhnugdrfhhiqeenucggtffrrghtthgvrhhnpeekhfeguddufeegvdelgedtvdffgeehvddtkeevkeejvedvgeeitdefleehtdeitdenucfkphepuddvjedrtddrtddruddpgeehrddugedurddvudehrddvuddpudehuddrkedtrddvledrvddunecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeojhhoshgvrdhpvghkkhgrrhhinhgvnhesfhhogihhohhunhgurdhfiheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkedvpdhmohguvgepshhmthhpohhuth
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-For a 900MHz i.MX6ULL CPU the 792MHz OPP is disabled. There is no
-convincing reason to disable this OPP. If a CPU can run at 900MHz,
-it should also be able to cope with 792MHz. Looking at the voltage
-level of 792MHz in [1] (page 24, table 10. "Operating Ranges") the
-current defined OPP is above the minimum. So the voltage level
-shouldn't be a problem. Although in [2] (page 24, table 10.
-"Operating Ranges") 792MHz isn't mentioned there isn't note that
-792MHz OPP isn't allowed. Change it to only disable 792MHz OPP for
-i.MX6ULL types below 792 MHz.
+On 2023-11-07 11:53, Greg KH wrote:
+> On Tue, Nov 07, 2023 at 10:56:20AM +0200, José Pekkarinen wrote:
+>> On 2023-11-03 20:36, Greg KH wrote:
+>> > On Fri, Nov 03, 2023 at 07:49:39PM +0200, José Pekkarinen wrote:
+>> > > On 2023-11-01 19:54, Greg KH wrote:
+>> > > > On Wed, Nov 01, 2023 at 07:36:27PM +0200, José Pekkarinen wrote:
+>> > > > > Hinted by syzboot, there is a few cases where the sysfs power group
+>> > > > > may
+>> > > > > not be there, like the failure while adding it, or adding its runtime
+>> > > > > group, or when the sysfs firmware loader fallback fail to populate. In
+>> > > > > the last case, the device_del function will be called leading to
+>> > > > > attempt
+>> > > > > to remove the sysfs group. This patch will lookup for it in advance to
+>> > > > > grant that it is effectively there before cleaning it up.
+>> > > > >
+>> > > > > Reported-by: syzbot+95f2e2439b97575ec3c0@syzkaller.appspotmail.com
+>> > > > >
+>> > > > > Signed-off-by: José Pekkarinen <jose.pekkarinen@foxhound.fi>
+>> > > > > ---
+>> > > > >  drivers/base/power/sysfs.c | 4 +++-
+>> > > > >  1 file changed, 3 insertions(+), 1 deletion(-)
+>> > > > >
+>> > > > > diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
+>> > > > > index a1474fb67db9..6601729c4698 100644
+>> > > > > --- a/drivers/base/power/sysfs.c
+>> > > > > +++ b/drivers/base/power/sysfs.c
+>> > > > > @@ -834,5 +834,7 @@ void dpm_sysfs_remove(struct device *dev)
+>> > > > >  	dev_pm_qos_constraints_destroy(dev);
+>> > > > >  	rpm_sysfs_remove(dev);
+>> > > > >  	sysfs_unmerge_group(&dev->kobj, &pm_wakeup_attr_group);
+>> > > > > -	sysfs_remove_group(&dev->kobj, &pm_attr_group);
+>> > > > > +
+>> > > > > +	if (kernfs_find_and_get((&dev->kobj)->sd, pm_attr_group.name))
+>> > > > > +		sysfs_remove_group(&dev->kobj, &pm_attr_group);
+>> > > >
+>> > > > What's to keep it from going away right after finding it?
+>> > > >
+>> > > > In other words, what is wrong with removing a group that is not there?
+>> > > > What error happens?  It should be fine, or are you seeing real code
+>> > > > failures somewhere?
+>> > >
+>> > >     No, this is just hitting a warning that sysbot complains about by
+>> > > setting panic on warning, no big deal, though it can be a wrong
+>> > > behaviour
+>> > > in ueagle-atm driver, since it defines to disconnect the device if the
+>> > > firmware is not there, no matter the sysfs fallback.
+>> >
+>> > Then fix the driver please.
+>> 
+>>     I'm afraid I was wrong in the assumption that the probe return 
+>> value
+>> of the driver would influence the testing result, so this no longer 
+>> seems
+>> fixable from driver side.
+> 
+> Why is it not fixable from the driver side?  It is the code that is
+> creating, and then removing, the files, not the driver core, or am I
+> missing something here?
 
-[1] https://www.nxp.com/docs/en/data-sheet/IMX6ULLIEC.pdf
-[2] https://www.nxp.com/docs/en/data-sheet/IMX6ULLCEC.pdf
+     I don't think this is much of a problem since the situation is 
+unlikely to
+happen. The reproducer is attempting to register a simulated ueagle 
+modem and
+checks if the device becomes ready. If it doesn't for any reason, in 
+this case,
+the lack of the firmware, it just disconnect it and try to populate it 
+again.
+After a few minutes banging the kernel this way it hits the situation 
+where the
+asynchronous firmware loader didn't yet populate the sysfs files before 
+the
+device is getting removed, and hit the warning of missing the power 
+attributes
+in sysfs, while removing the sysfs groups. If it is a problem, it is 
+certainly
+not a top priority problem to solve for sure.
 
-Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Reviewed-by: Marek Vasut <marex@denx.de>
----
-Cc: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
-Cc: Stefan Agner <stefan@agner.ch>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Marek Vasut <marex@denx.de>
-Cc: Fabio Estevam <festevam@denx.de>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: linux-pm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-To: linux-arm-kernel@lists.infradead.org
----
- drivers/cpufreq/imx6q-cpufreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/cpufreq/imx6q-cpufreq.c b/drivers/cpufreq/imx6q-cpufreq.c
-index 494d044b9e72..33728c242f66 100644
---- a/drivers/cpufreq/imx6q-cpufreq.c
-+++ b/drivers/cpufreq/imx6q-cpufreq.c
-@@ -327,7 +327,7 @@ static int imx6ul_opp_check_speed_grading(struct device *dev)
- 			imx6x_disable_freq_in_opp(dev, 696000000);
- 
- 	if (of_machine_is_compatible("fsl,imx6ull")) {
--		if (val != OCOTP_CFG3_6ULL_SPEED_792MHZ)
-+		if (val < OCOTP_CFG3_6ULL_SPEED_792MHZ)
- 			imx6x_disable_freq_in_opp(dev, 792000000);
- 
- 		if (val != OCOTP_CFG3_6ULL_SPEED_900MHZ)
--- 
-2.11.0
-
+     José.
