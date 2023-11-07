@@ -2,169 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC5CB7E335E
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Nov 2023 03:59:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2BA87E3452
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Nov 2023 04:51:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbjKGC7O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Nov 2023 21:59:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57084 "EHLO
+        id S233360AbjKGDvK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Nov 2023 22:51:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjKGC7N (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Nov 2023 21:59:13 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBAF811C;
-        Mon,  6 Nov 2023 18:59:08 -0800 (PST)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4SPXwy5byKzvQPx;
-        Tue,  7 Nov 2023 10:58:58 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
- (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Tue, 7 Nov
- 2023 10:59:05 +0800
-From:   Jinjie Ruan <ruanjinjie@huawei.com>
-To:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
+        with ESMTP id S233368AbjKGDvK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Nov 2023 22:51:10 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752F3D47;
+        Mon,  6 Nov 2023 19:51:07 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC68CC433C8;
+        Tue,  7 Nov 2023 03:51:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1699329067;
+        bh=+X/hKJ32hWOaYLZj2LTvR6+JnyM9c+DOTeGM5OWPGd0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mISH3v7+T+GCIROhQKnt36obHCbBRgrPkPS4NNc53prAZ9MQ94P06ipdtp3U/ZZRW
+         nQ/KQcYeWhmoQGV7eZi6DLG1ezyNHN13mqUsx5e0NTdDP/Z4CIkdpAwXZs+edy9fzH
+         Nl7pzb+nMQPGEDX8bxlCZ+XyQ8ArVG0z5Nh8bsQh7emOfD5x8GqfX9k59moV4MduaQ
+         ptc/Xplz8EwviVZdaHPZosg34pyHWeiopFrj99l9pgsMZSEVSeiwMPoVxwvLWnSjSy
+         XQaXpaYdHgoqEt3lILVcdM4WZdgvazTVmxDw+hWblh3jqsfgiQAooh1RSo6+zi7AFB
+         jE8zVpiTm+RUw==
+Date:   Mon, 6 Nov 2023 19:55:07 -0800
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Caleb Connolly <caleb.connolly@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bhupesh Sharma <bhupesh.linux@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <ruanjinjie@huawei.com>, <zhaowenhui8@huawei.com>
-Subject: [PATCH] cpufreq: intel_pstate: Fix CPU lowest Frequency bug when offline/online for passive
-Date:   Tue, 7 Nov 2023 10:58:38 +0800
-Message-ID: <20231107025838.2806500-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/4] dt-bindings: thermal: Add qcom,qmi-cooling yaml
+ bindings
+Message-ID: <6mgpjpdfsswww7mqqtub45afjz6mjyqfkigji3zsy73qwnq57u@rlstudlwkddn>
+References: <20230905-caleb-qmi_cooling-v1-0-5aa39d4164a7@linaro.org>
+ <20230905-caleb-qmi_cooling-v1-2-5aa39d4164a7@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.73]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500008.china.huawei.com (7.221.188.139)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230905-caleb-qmi_cooling-v1-2-5aa39d4164a7@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is a bug in passive mode for intel pstate when
-CONFIG_X86_INTEL_PSTATE = y and configure intel_pstate = passive in command
-line. On Ice Lake server, although the performance tuner is used, the CPU
-have the lowest frequency in scaling_cur_freq after the CPU goes offline and
-then goes online, running the same infinite loop load.
+On Fri, Sep 29, 2023 at 05:16:18PM +0100, Caleb Connolly wrote:
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom,qmi-cooling.yaml b/Documentation/devicetree/bindings/thermal/qcom,qmi-cooling.yaml
+> +definitions:
+> +  tmd:
+> +    type: object
+> +    description: |
 
-How to reproduce:
+No need to preserve formatting (which is what '|' denotes).
 
-cat while_true.c
-	#include <stdio.h>
-	void main(void)
-	{
-	        while(1);
-	}
+> +      A single Thermal Mitigation Device exposed by a remote subsystem.
+> +    properties:
+> +      label:
+> +        maxItems: 1
+> +      "#cooling-cells":
+> +        $ref: /schemas/thermal/thermal-cooling-devices.yaml#/properties/#cooling-cells
+> +
+> +    required:
+> +      - label
+> +      - "#cooling-cells"
+> +
+> +    additionalProperties: false
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,qmi-cooling-modem
+> +      - qcom,qmi-cooling-adsp
+> +      - qcom,qmi-cooling-cdsp
+> +      - qcom,qmi-cooling-slpi
+> +
+> +  vdd:
+> +    $ref: "#/definitions/tmd"
+> +    description:
+> +      Restrict primary rail minimum voltage to "nominal" setting.
 
-[root@localhost freq_test]# cat test.sh
-	#!/bin/bash
+Isn't this one of the "heating" thermal mitigations? (I.e. something
+being tripped when the temperature goes below some level) Which afaik
+the framework doesn't support still?
 
-	cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
-	cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_governor
-	taskset -c ${1} ./while_true &
-	sleep 1s
-
-	cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
-
-	echo 0 > /sys/devices/system/cpu/cpu${1}/online
-
-	sleep 1s
-	cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
-
-	sleep 1s
-
-	echo 1 > /sys/devices/system/cpu/cpu${1}/online
-	cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
-
-	taskset -c ${1} ./while_true &
-
-	sleep 1s
-	cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
-
-	sleep 1s
-	cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
-
-	sleep 1s
-	cat /sys/devices/system/cpu/cpu${1}/cpufreq/scaling_cur_freq
-
-The CPU frequency is adjusted to the minimum after offline and online:
-
-[root@localhost freq_test]# sh test.sh 20
-	2300000
-	performance
-	2299977
-	cat: /sys/devices/system/cpu/cpu20/cpufreq/scaling_cur_freq: Device or
-	resource busy
-	800000
-	800000
-	800000
-	799992
-[root@localhost freq_test]# sh test.sh 21
-	2300000
-	performance
-	2300000
-	cat: /sys/devices/system/cpu/cpu21/cpufreq/scaling_cur_freq: Device or
-	resource busy
-	800000
-	800000
-	800000
-	800000
-
-As in __cpufreq_driver_target(), the cpufreq core will not call intel
-cpufreq's target() callback if the target freq is equal with policy->cur
-and do not set CPUFREQ_NEED_UPDATE_LIMITS flag, but the hardware also not
-proactively keep CPU with the policy->cur frequency. So also set
-CPUFREQ_NEED_UPDATE_LIMITS for passive mode. After applying this patch,
-the CPU frequency is consistent as what performance tuner expected after
-CPU offline and online as below:
-
-[root@localhost freq_test]# sh test.sh 20
-	2300000
-	performance
-	2300000
-	cat: /sys/devices/system/cpu/cpu20/cpufreq/scaling_cur_freq: Device or resource busy
-	2300000
-	2300000
-	2299977
-	2299977
-[root@localhost freq_test]# sh test.sh 21
-	2300000
-	performance
-	2300000
-	cat: /sys/devices/system/cpu/cpu21/cpufreq/scaling_cur_freq: Device or resource busy
-	2300000
-	2300000
-	2300000
-	2300000
-[root@localhost freq_test]# cat /sys/devices/system/cpu/intel_pstate/status
-	passive
-
-Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
----
- drivers/cpufreq/intel_pstate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index a534a1f7f1ee..73403f1292b0 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -3091,7 +3091,7 @@ static int intel_cpufreq_suspend(struct cpufreq_policy *policy)
- }
- 
- static struct cpufreq_driver intel_cpufreq = {
--	.flags		= CPUFREQ_CONST_LOOPS,
-+	.flags		= CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_UPDATE_LIMITS,
- 	.verify		= intel_cpufreq_verify_policy,
- 	.target		= intel_cpufreq_target,
- 	.fast_switch	= intel_cpufreq_fast_switch,
--- 
-2.34.1
-
+Regards,
+Bjorn
