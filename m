@@ -2,104 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FC497E478F
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Nov 2023 18:48:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 251C77E4978
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Nov 2023 20:56:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235249AbjKGRs2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Nov 2023 12:48:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43870 "EHLO
+        id S231962AbjKGT4g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Nov 2023 14:56:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbjKGRsQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Nov 2023 12:48:16 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501C310E2
-        for <linux-pm@vger.kernel.org>; Tue,  7 Nov 2023 09:48:11 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1cc9784dbc1so36210055ad.2
-        for <linux-pm@vger.kernel.org>; Tue, 07 Nov 2023 09:48:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1699379290; x=1699984090; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TY15kIau+eDARAHjRIt1BbGYq8C7hJS6gitrNXYnQoM=;
-        b=HousSzc/TjsP9QqgcvSIDoufRgk897tprX2D8mQ95adj1B/2RgSgyZNdoHXOAi4POE
-         RyGSeJv4XJeNzp1qJCFnJQQdRkoq56vsC4XirAWI7snyChYAVnTwpS3fa+wBy9WrqElS
-         9R2e8WFkuuqV43XkSuhbARRfsELb92BgB/q37zaN2ZiYWtYUWAt96mKJdUdjhiN0/0FP
-         o4hxVnfu24k/VrGRdQn2TDq9wXbKSdRoTirQs8urvQaLa+An1fTZu6enivRYHA9IM7Yb
-         c87zXju/6oae3/n4iaoZqgW34MushccCIy0qF6RXIroGfOWMsOEZEH+xsciQFGCCFpP0
-         jVmQ==
+        with ESMTP id S229737AbjKGT4f (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Nov 2023 14:56:35 -0500
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44715184;
+        Tue,  7 Nov 2023 11:56:33 -0800 (PST)
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5841a3ffd50so1273597eaf.1;
+        Tue, 07 Nov 2023 11:56:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699379290; x=1699984090;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TY15kIau+eDARAHjRIt1BbGYq8C7hJS6gitrNXYnQoM=;
-        b=NqZykZCZHSFwsRns3cUM2Au4yql4/VcG9lbYWrMY39ek2VSLJSs+LWOsSjdv40LNXe
-         QZ/YF3VKpH3MlV8yi/HNbk7xOPZZGolzNyjTuhXandHWVbRULEjIxcxnz2aJz2MdIYKG
-         9p4IQsVxjq5nSPT9ERmtuE+hAcWiNR3asW5qhdZ7iMHP6rcnmTFfnn4+3k0walYGKl8u
-         Hvb0ysYpOR5opeePcEgB+d7UYtAQnSBzrkJv28ET5KJ2kBBHANCNw6vj+CAQw1Lbqrya
-         w46zwuqNCOg89menyyPYNvl+bfXULEcYOXI1SuLwiohrlNr25Ys02tyx4reNvtJNR3RO
-         uykw==
-X-Gm-Message-State: AOJu0Yw9rksSno/GWqRJ+OP9MjWByZogiki+TzGWWr8YEUKk/aiUoWjY
-        AH6n2gfuuSJ6MUprwudyjYbV2TFUP4anPR8fxaVyrw==
-X-Google-Smtp-Source: AGHT+IE1uUN1bCnM0e+Ov1l1naTtElUtLA3DgMMTfPPCXEEwKaTGd4dv0hVEl36p8Py1780zIW4h7w==
-X-Received: by 2002:a17:902:ccca:b0:1bd:c7e2:462 with SMTP id z10-20020a170902ccca00b001bdc7e20462mr31928892ple.11.1699379290316;
-        Tue, 07 Nov 2023 09:48:10 -0800 (PST)
-Received: from localhost ([192.184.165.199])
-        by smtp.gmail.com with ESMTPSA id l12-20020a170903244c00b001b9be3b94d3sm102654pls.140.2023.11.07.09.48.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Nov 2023 09:48:09 -0800 (PST)
-Date:   Tue, 07 Nov 2023 09:48:09 -0800 (PST)
-X-Google-Original-Date: Tue, 07 Nov 2023 09:48:06 PST (-0800)
-Subject:     Re: [PATCH RFC 22/22] riscv: convert to use arch_cpu_is_hotpluggable()
-In-Reply-To: <E1r0JMV-00CTyh-It@rmk-PC.armlinux.org.uk>
-CC:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-        x86@kernel.org, linux-csky@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-parisc@vger.kernel.org, salil.mehta@huawei.com,
-        jean-philippe@linaro.org, jianyong.wu@arm.com, justin.he@arm.com,
-        james.morse@arm.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     rmk+kernel@armlinux.org.uk
-Message-ID: <mhng-b535d186-b241-4fe8-a6b5-b06aff516d1c@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20230601; t=1699386992; x=1699991792;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=L+67Fow4SDoQzTb3iQORdk0PeLGfng3C8Clxn36Up9o=;
+        b=PG9z78NyRpp1mjPvogIp1npJwj5XP7QWC3WVAeYq84StHmqpffwImj5DVo34D7b+Ci
+         8kV/7S5FgEplZcUkmtPEZktUKN2UyjvPrUoXB3dKKW4l6Ag5WB4t+R82p+ETzMztmTm1
+         dMQ+mXOAo067jto0JGTLpcuxcgHGdwuTDzrAmFLH60wrBVVF4Un3/R6HmfiUXXb5AKKz
+         Kb8xdkifbyc8A4tUsVOmiCNX+ZuBu4VEGMLC8rJqg6+OtcCUmLMBPCwH5Ol0HwfnJy6O
+         p2rn+RphzCJbYCHs1LwYZFuTuaVNl0NG1IupNn9mNDc9pPyQb2Nq/8xBZIZu0YHGmg+j
+         ZUpQ==
+X-Gm-Message-State: AOJu0YytX1tg6t8FMiOjouybOK9N8BupGpupWWWAVL0tnL768II23m6L
+        6yqY/PFze0ChYG6PcxAOPx52oRZCBIfXccpbcVAj4RqbqNY=
+X-Google-Smtp-Source: AGHT+IFDHEbdEEGZPP3XT78f8ZjPsc9hJlOtuXXAeyPrcJoYDnp3iBYWM3w3bcg/LScm10toBmXkTour9Cx2afeM3vQ=
+X-Received: by 2002:a05:6808:30a:b0:3b2:9c2f:50e0 with SMTP id
+ i10-20020a056808030a00b003b29c2f50e0mr29973171oie.5.1699386991944; Tue, 07
+ Nov 2023 11:56:31 -0800 (PST)
+MIME-Version: 1.0
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 7 Nov 2023 20:56:20 +0100
+Message-ID: <CAJZ5v0gggsvrHYyOJn3g3Wd3M8vpG0sPdcWO8k7hDx4_wsq5cQ@mail.gmail.com>
+Subject: [GIT PULL] More power management updates for v6.7-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 07 Nov 2023 02:31:11 PST (-0800), rmk+kernel@armlinux.org.uk wrote:
-> Convert riscv to use the arch_cpu_is_hotpluggable() helper rather than
-> arch_register_cpu().
->
-> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> ---
->  arch/riscv/kernel/setup.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> index f8875ae1b0aa..168f0db63d53 100644
-> --- a/arch/riscv/kernel/setup.c
-> +++ b/arch/riscv/kernel/setup.c
-> @@ -294,12 +294,9 @@ void __init setup_arch(char **cmdline_p)
->  	riscv_set_dma_cache_alignment();
->  }
->
-> -int arch_register_cpu(int cpu)
-> +bool arch_cpu_is_hotpluggable(int cpu)
->  {
-> -	struct cpu *c = &per_cpu(cpu_devices, cpu);
-> -
-> -	c->hotpluggable = cpu_has_hotplug(cpu);
-> -	return register_cpu(c, cpu);
-> +	return cpu_has_hotplug(cpu);
->  }
->
->  void free_initmem(void)
+Hi Linus,
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Please pull from the tag
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.7-rc1-2
+
+with top-most commit 36cbb924d60bf2f1f684b3739edc61cba8350160
+
+ Merge branch 'pm-tools'
+
+on top of commit 3062a9879afbca810d9f1613698963ecfcb35701
+
+ Merge tag 'acpi-6.7-rc1-2' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+
+to receive more power management updates for 6.7-rc1.
+
+These add new hardware support to a cpufreq driver and fix cpupower
+utility documentation:
+
+ - Add support for several Qualcomm SoC versions to the Qualcomm cpufreq
+   driver (Robert Marko, Varadarajan Narayanan).
+
+ - Fix a reference to a removed document in the cpupower utility
+   documentation (Vegard Nossum).
+
+Thanks!
+
+
+---------------
+
+Robert Marko (1):
+      cpufreq: qcom-nvmem: add support for IPQ8074
+
+Varadarajan Narayanan (2):
+      cpufreq: qcom-nvmem: Enable cpufreq for ipq53xx
+      cpufreq: qcom-nvmem: Introduce cpufreq for ipq95xx
+
+Vegard Nossum (1):
+      cpupower: fix reference to nonexistent document
+
+---------------
+
+ drivers/cpufreq/cpufreq-dt-platdev.c              |  3 ++
+ drivers/cpufreq/qcom-cpufreq-nvmem.c              | 60 +++++++++++++++++++++++
+ tools/power/cpupower/man/cpupower-powercap-info.1 |  2 +-
+ 3 files changed, 64 insertions(+), 1 deletion(-)
