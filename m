@@ -2,181 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C99A7E5359
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Nov 2023 11:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2F37E55C0
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Nov 2023 12:45:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344022AbjKHK3y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Nov 2023 05:29:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44496 "EHLO
+        id S229924AbjKHLpi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Nov 2023 06:45:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbjKHK3x (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Nov 2023 05:29:53 -0500
+        with ESMTP id S230013AbjKHLph (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Nov 2023 06:45:37 -0500
 Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 961211BD7
-        for <linux-pm@vger.kernel.org>; Wed,  8 Nov 2023 02:29:51 -0800 (PST)
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4A7198A
+        for <linux-pm@vger.kernel.org>; Wed,  8 Nov 2023 03:45:34 -0800 (PST)
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 2D5213F129
-        for <linux-pm@vger.kernel.org>; Wed,  8 Nov 2023 10:29:48 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 7F2E440C4E
+        for <linux-pm@vger.kernel.org>; Wed,  8 Nov 2023 11:45:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1699439388;
-        bh=JPnUP2dhK6rq2OT2zp59qDXCzcw2C/MeNwbO6irKsM8=;
+        s=20210705; t=1699443932;
+        bh=2IgvXekzOkaF6fsnoEIuCg4cvc2eO7MUjZCXAyZm+lo=;
         h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
          To:Cc:Content-Type;
-        b=QxjeHl3HuUYSKwAg8nm/gLIGxyOT/SuAWmmnzT2SXQh3+eSE56aRVttDXBF5jmP0b
-         OZnFnOabjENcix6k6Nl/lpcxoU193Vk9RoE5LkOhDoQR58KOBGpYgrWjx88p6VOioZ
-         gg426JUdKOSnxWqXB1Buuq0JWQoOmP+0ep87Hiklt1IzPlwlfPmGgy2HZrw0RGiINh
-         XQ4zuoOzp5PxWIGaBcDYswLPc/IWO6Fr01SayMmEMvV2iDNcwNjdh5yUqlkcMuEOar
-         lE2gXRLZQNx+dQBr2bKygIcecePq8lyHoaJ4FgLjMweLcfFawyTiSSWuN5v4RHgzE6
-         ZkB95gQZo4sQA==
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-58b2d243b26so5041126a12.3
-        for <linux-pm@vger.kernel.org>; Wed, 08 Nov 2023 02:29:48 -0800 (PST)
+        b=cZwSj0dam4Z1srulGHExEgAvZGJAtaXaV5iFn9emM2kaWMpuUGTaDPkc+j4exIFVu
+         nvb54zx8YWxAXotL52GZUtmYOSCdm9PiOp/jlFsj4GbwpavipGlKpbHNJa9mfCOyts
+         30mCgcpNXbhnTOhWeJ3psr4j9CqZzZfFvgS3hmQRe7xxVTdV8CK17cGBsrnlrVeRdH
+         Myu01lEqB72z4Do8WgkVVgZNvo8wEQi6zQTRBC8STm012PmgDy4iLaO+BZkvJOh/A4
+         gulTlYrwzISmUD8Yc1iDVt4LDfYtvPwYzbZE8TwurTCffg7aOfmdsK8Msn0Ah3u39P
+         Me/PZup0dP+Vw==
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-1cc2786a8ebso60829495ad.0
+        for <linux-pm@vger.kernel.org>; Wed, 08 Nov 2023 03:45:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699439387; x=1700044187;
+        d=1e100.net; s=20230601; t=1699443931; x=1700048731;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JPnUP2dhK6rq2OT2zp59qDXCzcw2C/MeNwbO6irKsM8=;
-        b=NJfPnImhiR/UfBGSWFD4VZ1Tqckr0eiYEkcJH4uN8GyQSlx58G+OiC702kGkaQqZLc
-         EmEIVI6ngC7C+wTfGOrPYr0DcLlLihOpPjxUtPcYocaYisheN+Pntgzi8KPmjX2L7w8V
-         x+nwd3M0pwlwuxO2MDnnGdhtmyeRtohaR1K7LxKpbeXzEtGlXHZmRQGY+YqdLOadRAsE
-         gYdflAa24lBOSdxfhKn7ZlKejir2vX2nKtwfFZRE6AdILiqoToPjCuxVKFsD03FMLm5T
-         S6pFFeq8UDliySFiKocIWSuuU02NfVdn8y7g62AUQtIETkJbjORfE9AbukFQrckQyxR/
-         bjiQ==
-X-Gm-Message-State: AOJu0YyrUvmcdgrjSpKmSEvEGsgLAy/jfGl2CPzT1rYnePp3LuCWb2OE
-        A3P4dq1Fj/6nVTP9njdbv5gkxprv9ugVZwdV3quy0Ebp2eqyVQ6QExJnSLsHaDSR0WyaXqiXicu
-        fTsFMZHYK82bhokhqFJmkIL1JlnID0Fl123XlvrtkJLb+J5xROWlm
-X-Received: by 2002:a05:6a20:441d:b0:14c:c393:692 with SMTP id ce29-20020a056a20441d00b0014cc3930692mr2027845pzb.7.1699439386902;
-        Wed, 08 Nov 2023 02:29:46 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFboe2yTK4xo9PqvpxUzC3jlXy/epT3vmB6XsIMqWHzujx8gpq9+ZMU6Xblm9e+XufQk7xJ3brIYpcN30jCvUY=
-X-Received: by 2002:a05:6a20:441d:b0:14c:c393:692 with SMTP id
- ce29-20020a056a20441d00b0014cc3930692mr2027833pzb.7.1699439386603; Wed, 08
- Nov 2023 02:29:46 -0800 (PST)
+        bh=2IgvXekzOkaF6fsnoEIuCg4cvc2eO7MUjZCXAyZm+lo=;
+        b=EWlsd+qTs3SMqKNyWGsE3UifSBuh8nY9+CxAlyBDXUIuBsi8IB35+Mc6litSu+PRyq
+         dddf3I+/TGs7zPW+jcAFJOoGra83kLLlbrVjMxYukVdxpIlizaVB0zoo6hfb2H5aLcot
+         oixOzqgtaDCg9nichXivU96r1WhhiCF613RACOIHOTFTrdSdPwkLn5lMcMNQ9PRVurBd
+         rqA9XWIhw0fTvcA/8vy5W+dVzXxOLfIkp3kgHHB1U2ye4MyJZ1/GMBt+CBVJ3dg6Qzj2
+         1hgqR4+KR8STRpzmXWBVNkjhkwEGk0DUaj9sqqpu9PwyCV1tV0/aTN6MOvcNVQzBqJ3K
+         qjUg==
+X-Gm-Message-State: AOJu0YzavQDO5rLncvUX3T64O1gq/UmAE4AUZHRAD0IT34HkrO3xh3yr
+        HD3i/1AsO2akjJOlkQ6V7Lkdko5N3GYEQCPIUi+DsFKP2Dyq6AeIZ18GgU52BHeaDUgompK3TZx
+        uRt1g6bg55nLwbDcIf6g0UEKR5g9Cw9HTxUE/i//frqzeOkrdTv9tx9YTBtmCOC33Tg==
+X-Received: by 2002:a17:902:f686:b0:1cc:510c:a0b9 with SMTP id l6-20020a170902f68600b001cc510ca0b9mr1829656plg.34.1699443931003;
+        Wed, 08 Nov 2023 03:45:31 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEVG8KGj2/ZVjZ1tuZ/h9a06xFJ8bdulWnVrqn/MP8xbkcpUq8oyynRfMODCGDUPcRiJKmK25BUwPZbW98TCKA=
+X-Received: by 2002:a17:902:f686:b0:1cc:510c:a0b9 with SMTP id
+ l6-20020a170902f68600b001cc510ca0b9mr1829644plg.34.1699443930660; Wed, 08 Nov
+ 2023 03:45:30 -0800 (PST)
 MIME-Version: 1.0
-References: <20231016040132.23824-1-kai.heng.feng@canonical.com>
- <20231016093210.GA22952@wunner.de> <263982e90fc046cf977ecb8727003690@realtek.com>
- <20231018094435.GA21090@wunner.de> <02ee7e47166a463d8d4e491b61cdd33f@realtek.com>
- <20231019143504.GA25140@wunner.de>
-In-Reply-To: <20231019143504.GA25140@wunner.de>
+References: <218aa81f-9c6-5929-578d-8dc15f83dd48@panix.com>
+In-Reply-To: <218aa81f-9c6-5929-578d-8dc15f83dd48@panix.com>
 From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Wed, 8 Nov 2023 12:29:34 +0200
-Message-ID: <CAAd53p7jx=_Yh8sPwdsu-6Bc-hNgiExscMNGhgcbH=rzOBMOXQ@mail.gmail.com>
-Subject: Re: [PATCH] PCI: pciehp: Prevent child devices from doing RPM on PCIe
- Link Down
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Ricky WU <ricky_wu@realtek.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Wed, 8 Nov 2023 13:45:18 +0200
+Message-ID: <CAAd53p5+WaHCDav_3yLBg9mJiyi6saQiXTqx35nqZte=0mM-pA@mail.gmail.com>
+Subject: Re: My AlderLake Dell (XPS-9320) needs these patches to get full
+ standby/low-power modes
+To:     "Kenneth R. Crudup" <kenny@panix.com>
+Cc:     vidyas@nvidia.com, bhelgaas@google.com, andrea.righi@canonical.com,
+        vicamo.yang@canonical.com, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Lukas and Ricky,
+Hi Kenneth,
 
-On Thu, Oct 19, 2023 at 5:35=E2=80=AFPM Lukas Wunner <lukas@wunner.de> wrot=
-e:
+On Sat, Nov 4, 2023 at 7:13=E2=80=AFPM Kenneth R. Crudup <kenny@panix.com> =
+wrote:
 >
-> On Thu, Oct 19, 2023 at 01:49:50AM +0000, Ricky WU wrote:
-> > [    0.267813] pci 0000:00:1c.0: [8086:a33c] type 01 class 0x060400
 >
-> Cannon Lake PCH Root Port
+> I have a Dell XPS-9320 with an Alderlake chipset, and the NVMe behind a
+> VMD device:
 >
-> > [    0.275241] pci 0000:01:00.0: [10ec:5261] type 00 class 0xff0000
-> > [    0.275315] pci 0000:01:00.0: reg 0x10: [mem 0xa3b00000-0xa3b00fff]
-> > [    0.275782] pci 0000:01:00.0: supports D1 D2
-> > [    0.275784] pci 0000:01:00.0: PME# supported from D1 D2 D3hot D3cold
-> > [    0.276490] pci 0000:00:1c.0: PCI bridge to [bus 01]
+> ----
+> [    0.127342] smpboot: CPU0: 12th Gen Intel(R) Core(TM) i7-1280P (family=
+: 0x6, model: 0x9a, stepping: 0x3)
+> ----
+> 0000:00:0e.0 0104: 8086:467f
+>         Subsystem: 1028:0af3
+>         Flags: bus master, fast devsel, latency 0, IOMMU group 9
+>         Memory at 603c000000 (64-bit, non-prefetchable) [size=3D32M]
+>         Memory at 72000000 (32-bit, non-prefetchable) [size=3D32M]
+> a7152be79b6        Memory at 6040100000 (64-bit, non-prefetchable) [size=
+=3D1M]
+>         Capabilities: <access denied>
+>         Kernel driver in use: vmd
+> ----
 >
-> Device below Root Port is initially a Realtek RTS5261 card reader.
+> The only release kernel that was able to get this laptop to fully get int=
+o
+> low-power (unfortunately only s0ix) was the Ubuntu-6.2.0- ... series from
+> Ubuntu
+> (remote git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/=
+lunar).
 >
-> > [    0.395968] pcieport 0000:00:1c.0: PME: Signaling with IRQ 122
-> > [    0.396009] pcieport 0000:00:1c.0: pciehp: Slot #8 AttnBtn- PwrCtrl-=
- MRL- AttnInd- PwrInd- HotPlug+ Surprise+ Interlock- NoCompl+ IbPresDis- LL=
-ActRep+
+> I'd bisected it to the following commits (in this order):
 >
-> Root Port is hotplug-capable.
+> 4ff116d0d5fd PCI/ASPM: Save L1 PM Substates Capability for suspend/resume
+> 5e85eba6f50d PCI/ASPM: Refactor L1 PM Substates Control Register programm=
+ing
+> 1a0102a08f20 UBUNTU: SAUCE: PCI/ASPM: Enable ASPM for links under VMD dom=
+ain
+> 47c7bfd31514 UBUNTU: SAUCE: PCI/ASPM: Enable LTR for endpoints behind VMD
+> 154d48da2c57 UBUNTU: SAUCE: vmd: fixup bridge ASPM by driver name instead
 >
-> > [   43.180701] pcieport 0000:00:1c.0: pciehp: Slot(8): Link Down
-> > [   43.180709] pcieport 0000:00:1c.0: pciehp: Slot(8): Card not present
-> > [   44.403768] pcieport 0000:00:1c.0: pciehp: Slot(8): Card present
-> > [   44.403772] pcieport 0000:00:1c.0: pciehp: Slot(8): Link Up
-> > [   44.540631] pci 0000:01:00.0: [15b7:5007] type 00 class 0x010802
+> Without the patches I never see Pkg%PC8 or higher(? lower?), nor i915 sta=
+tes
+> DC5/6, all necssary for SYS%LPI/CPU%LPI. I've attached a little script I =
+use
+> alongside turbostat for verifying low-power operation (and also for seein=
+g
+> what chipset subsystem may be preventing it).
 >
-> Card reader is unplugged and replaced by SanDisk SN530 NVMe SSD.
->
-> > [   51.682628] pcieport 0000:00:1c.0: pciehp: Slot(8): Link Down
-> > [   51.716800] nvme0n1: detected capacity change from 495050752 to 0
-> > [   51.793382] pcieport 0000:00:1c.0: pciehp: Slot(8): Card present
-> > [   51.793392] pcieport 0000:00:1c.0: pciehp: Slot(8): Link Up
-> > [   51.928633] pci 0000:01:00.0: [10ec:5261] type 00 class 0xff0000
->
-> NVMe SSD replaced by the card reader again.
->
-> > [   54.872928] pcieport 0000:00:1c.0: pciehp: Slot(8): Link Down
-> > [   56.146581] pcieport 0000:00:1c.0: pciehp: Slot(8): Card present
-> > [   56.146584] pcieport 0000:00:1c.0: pciehp: Slot(8): Link Up
-> > [   56.284632] pci 0000:01:00.0: [15b7:5007] type 00 class 0x010802
->
-> Card reader replaced by NVMe SSD, second time.
->
-> > [   60.635845] pcieport 0000:00:1c.0: pciehp: Slot(8): Link Down
-> > [   60.676842] nvme0n1: detected capacity change from 495050752 to 0
-> > [   60.748953] pcieport 0000:00:1c.0: pciehp: Slot(8): Card present
-> > [   60.748958] pcieport 0000:00:1c.0: pciehp: Slot(8): Link Up
-> > [   60.884619] pci 0000:01:00.0: [10ec:5261] type 00 class 0xff0000
->
-> NVMe SSD replaced by the card reader, second time.
->
-> > [   63.898861] pcieport 0000:00:1c.0: pciehp: Slot(8): Link Down
-> > [   63.912118] BUG: unable to handle page fault for address: ffffb24d40=
-3e5010
->
-> Card reader replaced with NVMe SSD, third time.
->
-> So it took three tries to reproduce the page fault.
->
-> Thanks for the log, the issue is a little less murky now.
-> But it's still unclear what the root cause is and thus
-> what the proper solution is.  I think this needs more
-> in-depth debugging, see my previous e-mail.
->
-> Hope that helps!  Thanks,
+> The first two are in Linus' trees, but were reverted (4ff116d0d5fd in
+> a7152be79b6, 5e85eba6f50d in ff209ecc376a). The last three come from Ubun=
+tu's
+> Linux trees (see remote spec above). The first two remain reverted in the
+> Ubuntu trees, but if I put them back, I get increased power savings durin=
+g
+> suspend/resume cycles.
 
-I think the following approach should cover all the cases?
-Ricky, can you please give it a try?
+I am working on this, hopefully I can come up with an upstream worthy
+patch soon.
 
-diff --git a/drivers/pci/remove.c b/drivers/pci/remove.c
-index d749ea8250d6..907d60587227 100644
---- a/drivers/pci/remove.c
-+++ b/drivers/pci/remove.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <linux/pci.h>
- #include <linux/module.h>
-+#include <linux/pm_runtime.h>
- #include "pci.h"
-
- static void pci_free_resources(struct pci_dev *dev)
-@@ -89,6 +90,8 @@ static void pci_remove_bus_device(struct pci_dev *dev)
-        struct pci_bus *bus =3D dev->subordinate;
-        struct pci_dev *child, *tmp;
-
-+       pm_runtime_barrier(&dev->dev);
-+
-        if (bus) {
-                list_for_each_entry_safe(child, tmp,
-                                         &bus->devices, bus_list)
-
+Kai-Heng
 
 >
-> Lukas
+> Considering the power draw is really significant without these patches (1=
+0s
+> of %s per hour) and I'd think Dell would have sold some decent number of
+> these laptops, I'd been patiently waiting for these patches, or some vari=
+ant
+> to show up in the stable trees, but so far I'm up to the 6.6 stable kerne=
+l
+> and still having to manually cherry-pick these, so I thought maybe I coul=
+d
+> bring this to the PM maintainers' attention so at least start a discussio=
+n
+> about this issue.
+>
+> Apologies about the Maintainer Spam, and if this is already being discuss=
+ed.
+>
+>         -Kenny
+>
+> --
+> Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange Coun=
+ty CA
