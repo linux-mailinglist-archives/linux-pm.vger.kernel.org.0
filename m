@@ -2,156 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2F37E55C0
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Nov 2023 12:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F9A7E561D
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Nov 2023 13:20:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbjKHLpi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Nov 2023 06:45:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
+        id S234029AbjKHMUs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Nov 2023 07:20:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbjKHLph (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Nov 2023 06:45:37 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4A7198A
-        for <linux-pm@vger.kernel.org>; Wed,  8 Nov 2023 03:45:34 -0800 (PST)
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+        with ESMTP id S229924AbjKHMUq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Nov 2023 07:20:46 -0500
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2C019A5;
+        Wed,  8 Nov 2023 04:20:44 -0800 (PST)
+Received: from localhost.localdomain (unknown [10.101.196.174])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 7F2E440C4E
-        for <linux-pm@vger.kernel.org>; Wed,  8 Nov 2023 11:45:32 +0000 (UTC)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 6D9283F6DC;
+        Wed,  8 Nov 2023 12:20:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1699443932;
-        bh=2IgvXekzOkaF6fsnoEIuCg4cvc2eO7MUjZCXAyZm+lo=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=cZwSj0dam4Z1srulGHExEgAvZGJAtaXaV5iFn9emM2kaWMpuUGTaDPkc+j4exIFVu
-         nvb54zx8YWxAXotL52GZUtmYOSCdm9PiOp/jlFsj4GbwpavipGlKpbHNJa9mfCOyts
-         30mCgcpNXbhnTOhWeJ3psr4j9CqZzZfFvgS3hmQRe7xxVTdV8CK17cGBsrnlrVeRdH
-         Myu01lEqB72z4Do8WgkVVgZNvo8wEQi6zQTRBC8STm012PmgDy4iLaO+BZkvJOh/A4
-         gulTlYrwzISmUD8Yc1iDVt4LDfYtvPwYzbZE8TwurTCffg7aOfmdsK8Msn0Ah3u39P
-         Me/PZup0dP+Vw==
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-1cc2786a8ebso60829495ad.0
-        for <linux-pm@vger.kernel.org>; Wed, 08 Nov 2023 03:45:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699443931; x=1700048731;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2IgvXekzOkaF6fsnoEIuCg4cvc2eO7MUjZCXAyZm+lo=;
-        b=EWlsd+qTs3SMqKNyWGsE3UifSBuh8nY9+CxAlyBDXUIuBsi8IB35+Mc6litSu+PRyq
-         dddf3I+/TGs7zPW+jcAFJOoGra83kLLlbrVjMxYukVdxpIlizaVB0zoo6hfb2H5aLcot
-         oixOzqgtaDCg9nichXivU96r1WhhiCF613RACOIHOTFTrdSdPwkLn5lMcMNQ9PRVurBd
-         rqA9XWIhw0fTvcA/8vy5W+dVzXxOLfIkp3kgHHB1U2ye4MyJZ1/GMBt+CBVJ3dg6Qzj2
-         1hgqR4+KR8STRpzmXWBVNkjhkwEGk0DUaj9sqqpu9PwyCV1tV0/aTN6MOvcNVQzBqJ3K
-         qjUg==
-X-Gm-Message-State: AOJu0YzavQDO5rLncvUX3T64O1gq/UmAE4AUZHRAD0IT34HkrO3xh3yr
-        HD3i/1AsO2akjJOlkQ6V7Lkdko5N3GYEQCPIUi+DsFKP2Dyq6AeIZ18GgU52BHeaDUgompK3TZx
-        uRt1g6bg55nLwbDcIf6g0UEKR5g9Cw9HTxUE/i//frqzeOkrdTv9tx9YTBtmCOC33Tg==
-X-Received: by 2002:a17:902:f686:b0:1cc:510c:a0b9 with SMTP id l6-20020a170902f68600b001cc510ca0b9mr1829656plg.34.1699443931003;
-        Wed, 08 Nov 2023 03:45:31 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEVG8KGj2/ZVjZ1tuZ/h9a06xFJ8bdulWnVrqn/MP8xbkcpUq8oyynRfMODCGDUPcRiJKmK25BUwPZbW98TCKA=
-X-Received: by 2002:a17:902:f686:b0:1cc:510c:a0b9 with SMTP id
- l6-20020a170902f68600b001cc510ca0b9mr1829644plg.34.1699443930660; Wed, 08 Nov
- 2023 03:45:30 -0800 (PST)
-MIME-Version: 1.0
-References: <218aa81f-9c6-5929-578d-8dc15f83dd48@panix.com>
-In-Reply-To: <218aa81f-9c6-5929-578d-8dc15f83dd48@panix.com>
+        s=20210705; t=1699446043;
+        bh=E9tPQVwzEhlooRe4K4Q7wJl4JNG7qDs+SM/Us4/qStU=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=j6+GfkbJEKd30I/ExzPH+erSfujCAlTYCzF5l1oJIE7vbNa2ZxRpjNrHGnV4PFapP
+         v+tRR0AOcsUQqm5PmHMKvOkvTobTqQs+gfVdg+ab2GA6OmqWWMe4r5vY7b2KRYx+V7
+         w6n4lcUaftoWYhdb0QGWJxgoZHxbNO/T7szw4BVcOBgakNmT9CIERutKOXCg6Ju6nA
+         wl/XfL++SlUflfDR2K7NI+w9FJ3k5dOEXIY7Zf1/XRvh7Abj182fjN6QP5aycKgpDA
+         cIjQuiuLaGv+NAZNT9BWoUdWsya1jFDzy+dQKzlTez5ui28G8zNOWaRzJXDLFAoUuh
+         X6cMt063Cx1aQ==
 From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Wed, 8 Nov 2023 13:45:18 +0200
-Message-ID: <CAAd53p5+WaHCDav_3yLBg9mJiyi6saQiXTqx35nqZte=0mM-pA@mail.gmail.com>
-Subject: Re: My AlderLake Dell (XPS-9320) needs these patches to get full
- standby/low-power modes
-To:     "Kenneth R. Crudup" <kenny@panix.com>
-Cc:     vidyas@nvidia.com, bhelgaas@google.com, andrea.righi@canonical.com,
-        vicamo.yang@canonical.com, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To:     srinivas.pandruvada@linux.intel.com, jikos@kernel.org,
+        benjamin.tissoires@redhat.com
+Cc:     linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Jian Hui Lee <jianhui.lee@canonical.com>,
+        Even Xu <even.xu@intel.com>, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] HID: intel-ish-hid: ipc: Rework EHL OOB wakeup
+Date:   Wed,  8 Nov 2023 14:19:39 +0200
+Message-Id: <20231108121940.288005-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Kenneth,
+Since PCI core and ACPI core already handles PCI PME wake and GPE wake
+when the device has wakeup capability, use device_init_wakeup() to let
+them do the wakeup setting work.
 
-On Sat, Nov 4, 2023 at 7:13=E2=80=AFPM Kenneth R. Crudup <kenny@panix.com> =
-wrote:
->
->
-> I have a Dell XPS-9320 with an Alderlake chipset, and the NVMe behind a
-> VMD device:
->
-> ----
-> [    0.127342] smpboot: CPU0: 12th Gen Intel(R) Core(TM) i7-1280P (family=
-: 0x6, model: 0x9a, stepping: 0x3)
-> ----
-> 0000:00:0e.0 0104: 8086:467f
->         Subsystem: 1028:0af3
->         Flags: bus master, fast devsel, latency 0, IOMMU group 9
->         Memory at 603c000000 (64-bit, non-prefetchable) [size=3D32M]
->         Memory at 72000000 (32-bit, non-prefetchable) [size=3D32M]
-> a7152be79b6        Memory at 6040100000 (64-bit, non-prefetchable) [size=
-=3D1M]
->         Capabilities: <access denied>
->         Kernel driver in use: vmd
-> ----
->
-> The only release kernel that was able to get this laptop to fully get int=
-o
-> low-power (unfortunately only s0ix) was the Ubuntu-6.2.0- ... series from
-> Ubuntu
-> (remote git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/=
-lunar).
->
-> I'd bisected it to the following commits (in this order):
->
-> 4ff116d0d5fd PCI/ASPM: Save L1 PM Substates Capability for suspend/resume
-> 5e85eba6f50d PCI/ASPM: Refactor L1 PM Substates Control Register programm=
-ing
-> 1a0102a08f20 UBUNTU: SAUCE: PCI/ASPM: Enable ASPM for links under VMD dom=
-ain
-> 47c7bfd31514 UBUNTU: SAUCE: PCI/ASPM: Enable LTR for endpoints behind VMD
-> 154d48da2c57 UBUNTU: SAUCE: vmd: fixup bridge ASPM by driver name instead
->
-> Without the patches I never see Pkg%PC8 or higher(? lower?), nor i915 sta=
-tes
-> DC5/6, all necssary for SYS%LPI/CPU%LPI. I've attached a little script I =
-use
-> alongside turbostat for verifying low-power operation (and also for seein=
-g
-> what chipset subsystem may be preventing it).
->
-> The first two are in Linus' trees, but were reverted (4ff116d0d5fd in
-> a7152be79b6, 5e85eba6f50d in ff209ecc376a). The last three come from Ubun=
-tu's
-> Linux trees (see remote spec above). The first two remain reverted in the
-> Ubuntu trees, but if I put them back, I get increased power savings durin=
-g
-> suspend/resume cycles.
+Also add a shutdown callback which uses pci_prepare_to_sleep() to let
+PCI and ACPI set OOB wakeup for S5.
 
-I am working on this, hopefully I can come up with an upstream worthy
-patch soon.
+Cc: Jian Hui Lee <jianhui.lee@canonical.com>
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+v2:
+ Rebase on ("HID: intel-ish-hid: ipc: Disable and reenable ACPI GPE bit")
 
-Kai-Heng
+ drivers/hid/intel-ish-hid/ipc/pci-ish.c | 67 ++++++-------------------
+ 1 file changed, 15 insertions(+), 52 deletions(-)
 
->
-> Considering the power draw is really significant without these patches (1=
-0s
-> of %s per hour) and I'd think Dell would have sold some decent number of
-> these laptops, I'd been patiently waiting for these patches, or some vari=
-ant
-> to show up in the stable trees, but so far I'm up to the 6.6 stable kerne=
-l
-> and still having to manually cherry-pick these, so I thought maybe I coul=
-d
-> bring this to the PM maintainers' attention so at least start a discussio=
-n
-> about this issue.
->
-> Apologies about the Maintainer Spam, and if this is already being discuss=
-ed.
->
->         -Kenny
->
-> --
-> Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange Coun=
-ty CA
+diff --git a/drivers/hid/intel-ish-hid/ipc/pci-ish.c b/drivers/hid/intel-ish-hid/ipc/pci-ish.c
+index 710fda5f19e1..65e7eeb2fa64 100644
+--- a/drivers/hid/intel-ish-hid/ipc/pci-ish.c
++++ b/drivers/hid/intel-ish-hid/ipc/pci-ish.c
+@@ -119,50 +119,6 @@ static inline bool ish_should_leave_d0i3(struct pci_dev *pdev)
+ 	return !pm_resume_via_firmware() || pdev->device == CHV_DEVICE_ID;
+ }
+ 
+-static int enable_gpe(struct device *dev)
+-{
+-#ifdef CONFIG_ACPI
+-	acpi_status acpi_sts;
+-	struct acpi_device *adev;
+-	struct acpi_device_wakeup *wakeup;
+-
+-	adev = ACPI_COMPANION(dev);
+-	if (!adev) {
+-		dev_err(dev, "get acpi handle failed\n");
+-		return -ENODEV;
+-	}
+-	wakeup = &adev->wakeup;
+-
+-	/*
+-	 * Call acpi_disable_gpe(), so that reference count
+-	 * gpe_event_info->runtime_count doesn't overflow.
+-	 * When gpe_event_info->runtime_count = 0, the call
+-	 * to acpi_disable_gpe() simply return.
+-	 */
+-	acpi_disable_gpe(wakeup->gpe_device, wakeup->gpe_number);
+-
+-	acpi_sts = acpi_enable_gpe(wakeup->gpe_device, wakeup->gpe_number);
+-	if (ACPI_FAILURE(acpi_sts)) {
+-		dev_err(dev, "enable ose_gpe failed\n");
+-		return -EIO;
+-	}
+-
+-	return 0;
+-#else
+-	return -ENODEV;
+-#endif
+-}
+-
+-static void enable_pme_wake(struct pci_dev *pdev)
+-{
+-	if ((pci_pme_capable(pdev, PCI_D0) ||
+-	     pci_pme_capable(pdev, PCI_D3hot) ||
+-	     pci_pme_capable(pdev, PCI_D3cold)) && !enable_gpe(&pdev->dev)) {
+-		pci_pme_active(pdev, true);
+-		dev_dbg(&pdev->dev, "ish ipc driver pme wake enabled\n");
+-	}
+-}
+-
+ /**
+  * ish_probe() - PCI driver probe callback
+  * @pdev:	pci device
+@@ -233,7 +189,7 @@ static int ish_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 
+ 	/* Enable PME for EHL */
+ 	if (pdev->device == EHL_Ax_DEVICE_ID)
+-		enable_pme_wake(pdev);
++		device_init_wakeup(dev, true);
+ 
+ 	ret = ish_init(ishtp);
+ 	if (ret)
+@@ -256,6 +212,19 @@ static void ish_remove(struct pci_dev *pdev)
+ 	ish_device_disable(ishtp_dev);
+ }
+ 
++
++/**
++ * ish_shutdown() - PCI driver shutdown callback
++ * @pdev:	pci device
++ *
++ * This function sets up wakeup for S5
++ */
++static void ish_shutdown(struct pci_dev *pdev)
++{
++	if (pdev->device == EHL_Ax_DEVICE_ID)
++		pci_prepare_to_sleep(pdev);
++}
++
+ static struct device __maybe_unused *ish_resume_device;
+ 
+ /* 50ms to get resume response */
+@@ -378,13 +347,6 @@ static int __maybe_unused ish_resume(struct device *device)
+ 	struct pci_dev *pdev = to_pci_dev(device);
+ 	struct ishtp_device *dev = pci_get_drvdata(pdev);
+ 
+-	/* add this to finish power flow for EHL */
+-	if (dev->pdev->device == EHL_Ax_DEVICE_ID) {
+-		pci_set_power_state(pdev, PCI_D0);
+-		enable_pme_wake(pdev);
+-		dev_dbg(dev->devc, "set power state to D0 for ehl\n");
+-	}
+-
+ 	ish_resume_device = device;
+ 	dev->resume_flag = 1;
+ 
+@@ -400,6 +362,7 @@ static struct pci_driver ish_driver = {
+ 	.id_table = ish_pci_tbl,
+ 	.probe = ish_probe,
+ 	.remove = ish_remove,
++	.shutdown = ish_shutdown,
+ 	.driver.pm = &ish_pm_ops,
+ };
+ 
+-- 
+2.34.1
+
