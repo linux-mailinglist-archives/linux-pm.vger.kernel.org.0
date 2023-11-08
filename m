@@ -2,110 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F297E4EF3
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Nov 2023 03:34:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF6D7E4FD2
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Nov 2023 06:03:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjKHCcp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Nov 2023 21:32:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        id S229610AbjKHFDy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Nov 2023 00:03:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbjKHCco (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Nov 2023 21:32:44 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E2A10F8;
-        Tue,  7 Nov 2023 18:32:42 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A828BBl008611;
-        Wed, 8 Nov 2023 02:32:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=g4Cv5ypflLdXhHFj4Pj/RaVxQ6QZsT6ZxFVJnc4pP1c=;
- b=XFBb1Ga/BlR9EWzRmIeehfQNpy6scDDk2zhmDMAzsclD9tPZPtLMJL4TH389oiX/qZ1Y
- nDAWOtPnJabiKUCFb8g2elk4EZBMFY+NPtws2AtRZR54tpdqC//m6AXbSZj9E79mODur
- Q1SyXfgkXK6sNnXWNyKXgnFz7FDojcJXWEHX7he+0QGeSPm1PwSShkoXA6ketOypluVz
- Ls8GZ4HG4O682Wjl0dcuB0WHCCYtkBMKxiNcJR5dMaVWB6ePrDcPG+NusRy8dYWZ7R0B
- ht4Nu7mB/zPoMkB0EryduOLj6ZwnKRhd3wemjpmgw0Hppii8E+17tmxsqHcnEjDguMLM Vw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3u7w2cgfqq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Nov 2023 02:32:34 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3A82WYHd028868
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 8 Nov 2023 02:32:34 GMT
-Received: from [10.216.1.136] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Tue, 7 Nov
- 2023 18:32:23 -0800
-Message-ID: <15a98ec0-214b-218b-1e3c-c09f770fce2e@quicinc.com>
-Date:   Wed, 8 Nov 2023 08:02:18 +0530
+        with ESMTP id S229554AbjKHFDw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Nov 2023 00:03:52 -0500
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D59E193;
+        Tue,  7 Nov 2023 21:03:50 -0800 (PST)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1f084cb8b54so3119756fac.1;
+        Tue, 07 Nov 2023 21:03:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699419829; x=1700024629;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+mXIe3ow1mFEMt04rvTqBGGASGscS5l/XOeHbFK93js=;
+        b=Yr96nqVp7B1aLdDOSTrWLLMgdSZpJLSbQkZk6YwX/a4y759L8DA0hPhFnknUdjkHSV
+         X04rfk7X/BExrT8+kFHWg/e2m4kDpu7NzqcNoF/wNV/EQaeFn4wTHdqJQ/sUPFJTl/hB
+         qPAuJxIfKtRgltNk+aDiO/xgQ2ZaM8HBiIDghzlPGAl4v/n4TdNqVO31n5uMoYy0L9SU
+         ZqY1DnVd5/gLVB553ZuGkuONRIR1MsU6uTFC8Vk2pCm5dSG0zexwcBW6S1E2gQJzJT2y
+         U6ltSm4ZVmvYz3SsXmND3YveBXVBKM0L6CpXiJygsiXCaqDf9xf3bJjVtT6s8wZ8xjei
+         oVjw==
+X-Gm-Message-State: AOJu0YyNDB6dE5gnT8/hbjd4v8QI25DUBMYdd6SnG6KfVjY1rSV9f88w
+        oi5DVKTH3lzouDjF6Xnbr+IUB6/2vbVyBOiGscFKLGYtcNg=
+X-Google-Smtp-Source: AGHT+IGobaHBjxJLeayKmXGfu42hh/r4EY3452A+r0Rm+imGMJdTaYEM+XIsp7nExNHYn72iv24l8Ob10tzwet5DPzQ=
+X-Received: by 2002:a05:6870:1699:b0:1e9:bba3:4902 with SMTP id
+ j25-20020a056870169900b001e9bba34902mr709700oae.37.1699419829348; Tue, 07 Nov
+ 2023 21:03:49 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v5 5/5] PCI: qcom: Add OPP support to scale performance
- state of power domain
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Bjorn Helgaas <helgaas@kernel.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <vireshk@kernel.org>, <nm@ti.com>,
-        <sboyd@kernel.org>, <mani@kernel.org>, <lpieralisi@kernel.org>,
-        <kw@linux.com>, <robh@kernel.org>, <bhelgaas@google.com>,
-        <rafael@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <quic_vbadigan@quicinc.com>, <quic_nitegupt@quicinc.com>,
-        <quic_skananth@quicinc.com>, <quic_ramkri@quicinc.com>,
-        <quic_parass@quicinc.com>
-References: <20231102053013.7yt7pxin5awlu7w7@vireshk-i7>
- <20231102120950.GA115288@bhelgaas>
- <20231103051247.u4cnckzstcvs4lf5@vireshk-i7>
-From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
-In-Reply-To: <20231103051247.u4cnckzstcvs4lf5@vireshk-i7>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 2-gJotlcQ3gh9-6L_23Y87F28GMFBywc
-X-Proofpoint-ORIG-GUID: 2-gJotlcQ3gh9-6L_23Y87F28GMFBywc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-08_01,2023-11-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 spamscore=0 clxscore=1011 malwarescore=0 phishscore=0
- bulkscore=0 mlxlogscore=850 suspectscore=0 adultscore=0 priorityscore=1501
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311080019
+From:   Len Brown <lenb@kernel.org>
+Date:   Wed, 8 Nov 2023 00:03:38 -0500
+Message-ID: <CAJvTdKn-xtmin9OjnzHg8wy4PM8Lc3Per=3y3UWORhjdroYP3w@mail.gmail.com>
+Subject: [GIT PULL] turbostat for Linux-6.7
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Linus,
 
-On 11/3/2023 10:42 AM, Viresh Kumar wrote:
-> On 02-11-23, 07:09, Bjorn Helgaas wrote:
->> On Thu, Nov 02, 2023 at 11:00:13AM +0530, Viresh Kumar wrote:
->>> On 01-11-23, 17:17, Bjorn Helgaas wrote:
->>>> Can you expand "OPP" somewhere so we know what it stands for?  I'm
->>>> sure everybody knows except me :)
->>> It is "Operating Performance Points", defined here:
->>>
->>> Documentation/power/opp.rst
->> Thanks; I meant in the subject or commit log of the next revision, of
->> course.
-> Yeah, I understood that. Krishna shall do it in next version I believe.
->
-Hi All,
+Please pull these turbostat patches.
 
-I will do this in my next patch both commit message and ICC voting 
-through OPP
+Turbostat features are now table-driven (Rui Zhang)
+Add support for some new platforms (Sumeet Pawnikar, Rui Zhang)
+Gracefully run in configs when CPUs are limited (Rui Zhang, Srinivas Pandruvada)
+misc minor fixes.
 
-got stuck in some other work, will try to send new series as soon as 
-possible.
+thanks!
+Len Brown, Intel Open Source Technology Center
 
-- Krishna Chaitanya.
+The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
+  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git turbostat
+
+for you to fetch changes up to b8337e6a780dad9505f9d44da07c0a5c52fa0a04:
+
+  tools/power turbostat: version 2023.11.07 (2023-11-07 23:28:30 -0500)
+
+----------------------------------------------------------------
+Chen Yu (1):
+      tools/power/turbostat: Enable the C-state Pre-wake printing
+
+Len Brown (2):
+      tools/power/turbostat: bugfix "--show IPC"
+      tools/power turbostat: version 2023.11.07
+
+Srinivas Pandruvada (1):
+      tools/power/turbostat: Move process to root cgroup
+
+Sumeet Pawnikar (2):
+      tools/power/turbostat: Add initial support for ArrowLake
+      tools/power/turbostat: Add initial support for LunarLake
+
+Zhang Rui (80):
+      tools/power/turbostat: Fix failure with new uncore sysfs
+      tools/power/turbostat: Fix a knl bug
+      tools/power/turbostat: Enable TCC Offset on more models
+      tools/power/turbostat: Support alternative graphics sysfs knobs
+      tools/power/turbostat: Replace raw value cpu model with Macro
+      tools/power/turbostat: Remove redundant duplicates
+      tools/power/turbostat: Remove pseudo check for two models
+      tools/power/turbostat: Add skeleton support for table driven
+feature enumeration
+      tools/power/turbostat: Abstract MSR_MISC_FEATURE_CONTROL support
+      tools/power/turbostat: Abstract MSR_MISC_PWR_MGMT support
+      tools/power/turbostat: Abstract BCLK frequency support
+      tools/power/turbostat: Abstract Package cstate limit decoding support
+      tools/power/turbostat: Abstract Nehalem MSRs support
+      tools/power/turbostat: Remove a redundant check
+      tools/power/turbostat: Rename some functions
+      tools/power/turbostat: Abstract Turbo Ratio Limit MSRs support
+      tools/power/turbostat: Rename some TRL functions
+      tools/power/turbostat: Abstract Config TDP MSRs support
+      tools/power/turbostat: Abstract TCC Offset bits support
+      tools/power/turbostat: Abstract Perf Limit Reasons MSRs support
+      tools/power/turbostat: Abstract Automatic Cstate Conversion support
+      tools/power/turbostat: Abstract hardcoded Crystal Clock frequency
+      tools/power/turbostat: Redefine RAPL macros
+      tools/power/turbostat: Simplify the logic for RAPL enumeration
+      tools/power/turbostat: Abstract RAPL MSRs support
+      tools/power/turbostat: Abstract Per Core RAPL support
+      tools/power/turbostat: Abstract RAPL divisor support
+      tools/power/turbostat: Abstract fixed DRAM Energy unit support
+      tools/power/turbostat: Abstract hardcoded TDP value
+      tools/power/turbostat: Remove unused family/model parameters for
+RAPL functions
+      tools/power/turbostat: Abstract TSC tweak support
+      tools/power/turbostat: Add skeleton support for cstate enumeration
+      tools/power/turbostat: Adjust cstate for models with .has_nhm_msrs set
+      tools/power/turbostat: Adjust cstate for has_snb_msrs() models
+      tools/power/turbostat: Adjust cstate for models with .cst_limit set
+      tools/power/turbostat: Adjust cstate for has_snb_msrs() models
+      tools/power/turbostat: Adjust cstate for has_slv_msrs() models
+      tools/power/turbostat: Adjust cstate for is_jvl() models
+      tools/power/turbostat: Adjust cstate for is_dnv() models
+      tools/power/turbostat: Adjust cstate for is_skx()/is_icx()/is_spr() models
+      tools/power/turbostat: Adjust cstate for is_bdx() models
+      tools/power/turbostat: Adjust cstate for has_c8910_msrs() models
+      tools/power/turbostat: Adjust cstate for
+is_slm()/is_knl()/is_cnl()/is_ehl() models
+      tools/power/turbostat: Use fine grained IRTL output
+      tools/power/turbostat: Abstract IRTL support
+      tools/power/turbostat: Abstract MSR_CORE_C1_RES support
+      tools/power/turbostat: Abstract MSR_MODULE_C6_RES_MS support
+      tools/power/turbostat: Abstract MSR_CC6/MC6_DEMOTION_POLICY_CONFIG support
+      tools/power/turbostat: Abstract MSR_ATOM_PKG_C6_RESIDENCY support
+      tools/power/turbostat: Abstract MSR_KNL_CORE_C6_RESIDENCY support
+      tools/power/turbostat: Abstract extended cstate MSRs support
+      tools/power/turbostat: Abstract aperf/mperf multiplier support
+      tools/power/turbostat: Abstract cstate prewake bit support
+      tools/power/turbostat: Delete intel_model_duplicates()
+      tools/power/turbostat: Improve probe_platform_features() logic
+      tools/power/turbostat: Relocate cstate probing code
+      tools/power/turbostat: Relocate pstate probing code
+      tools/power/turbostat: Rename uncore probing function
+      tools/power/turbostat: Rename rapl probing function
+      tools/power/turbostat: Relocate graphics probing code
+      tools/power/turbostat: Relocate lpi probing code
+      tools/power/turbostat: Relocate thermal probing code
+      tools/power/turbostat: Reorder some functions
+      tools/power/turbostat: Relocate more probing related code
+      tools/power/turbostat: Introduce probe_pm_features()
+      tools/power/turbostat: Enable MSR_CORE_C1_RES on recent Intel
+client platforms
+      tools/power/turbostat: Remove PC7/PC9 support on ADL/RPL
+      tools/power/turbostat: Introduce cpu_allowed_set
+      tools/power/turbostat: Obey allowed CPUs when accessing CPU counters
+      tools/power/turbostat: Obey allowed CPUs during startup
+      tools/power/turbostat: Abstract several functions
+      tools/power/turbostat: Obey allowed CPUs for primary thread/core detection
+      tools/power/turbostat: Obey allowed CPUs for system summary
+      tools/power/turbostat: Handle offlined CPUs in cpu_subset
+      tools/power/turbostat: Abstrct function for parsing cpu string
+      tools/power/turbostat: Handle cgroup v2 cpu limitation
+      tools/power/turbostat: Add MSR_CORE_C1_RES support for spr_features
+      tools/power/turbostat: Add initial support for GraniteRapids
+      tools/power/turbostat: Add initial support for SierraForest
+      tools/power/turbostat: Add initial support for GrandRidge
+
+ tools/power/x86/turbostat/turbostat.c | 3074 ++++++++++++++++-----------------
+ 1 file changed, 1537 insertions(+), 1537 deletions(-)
