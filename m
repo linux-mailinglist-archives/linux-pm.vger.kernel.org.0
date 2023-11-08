@@ -2,61 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1C27E5213
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Nov 2023 09:44:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDCE7E521B
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Nov 2023 09:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233262AbjKHIok (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Nov 2023 03:44:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
+        id S234499AbjKHIp7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Nov 2023 03:45:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjKHIoj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Nov 2023 03:44:39 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1BF1710
-        for <linux-pm@vger.kernel.org>; Wed,  8 Nov 2023 00:44:37 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-53eeb28e8e5so6962a12.1
-        for <linux-pm@vger.kernel.org>; Wed, 08 Nov 2023 00:44:37 -0800 (PST)
+        with ESMTP id S232723AbjKHIp6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Nov 2023 03:45:58 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23331717
+        for <linux-pm@vger.kernel.org>; Wed,  8 Nov 2023 00:45:55 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-54366bb1c02so7151a12.1
+        for <linux-pm@vger.kernel.org>; Wed, 08 Nov 2023 00:45:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1699433076; x=1700037876; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1699433154; x=1700037954; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3qu6xuDhGJ5JPWC5oSGyyY7P53x8jjCQYiy8YEQLeeo=;
-        b=R8QooS0vDNoKoV3XJANVjelsz9aaQFjE/CtumDCIubPSnH27LQd+D7oCwCNc1wbCxn
-         fpyO/eIINl6muOmwwfmuv/yxtkTsBpf0ssKOX8Ceabhnr0Lh4qeWw914gNco4azDtiu9
-         oA3tZeLm1s5UVBfdbcz+Z3OpXsOsTZDxCErgnydcH2AI3iYhmH7163uMiQHV8JDlH8BW
-         R3Uwpi2hm1K3IVCl1Lm1Gnz+v19c0/PzurB9oPBfxDIAnf0PzmronhrJtlW+DPUK4DIn
-         v0xyTXaiVsAoh1WVDeGrtrQ5zUBupX4MW+vM3D2ZvH/AFHp96EWGhFTS7VKJ8F/gQJCs
-         v8PQ==
+        bh=pnYR7bmgd7KfD+AkE17auBtmcY5ZsQOdpLALwgXFEH4=;
+        b=vgGSK1SnFwOdreuBoQIe37R2MUQdJ8CaAUB13Sbhq8XCk8NtjkoVgC0hkpuIX0MOjD
+         Ymiv+MJFF82Zv1tdR+prIev9ohM/gcM85T2jNHdH4LMeQMErhmzdI9ua3to3BLxsiMX9
+         PNw8Uw0OwZVC6CfvwmJs48KuwtS1TmRBgzILrue5OA5dVYcoQQdFvDqnQHbQ9Q5lo8E1
+         N6KMN+4x/JEnjondlWHEb7yXhTxPgf2iPbFUxHElLDpk3QYtB96bS2PLDglFWmmzV9Ss
+         M2t9xr59ZhAnNyHO5r4RF731uFCTiVzFHuNjzwdby7+M2WqCywYM+MWv2+05RM9PzeOJ
+         mNKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699433076; x=1700037876;
+        d=1e100.net; s=20230601; t=1699433154; x=1700037954;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3qu6xuDhGJ5JPWC5oSGyyY7P53x8jjCQYiy8YEQLeeo=;
-        b=nbsaHewc8JqsDnRZmQBHQi+/hY/+XwMFivFipJXUB2CU3Wsaq2IWFLDgTnf1l7Kmtf
-         Ig7eqkFOGr4XZLd5nAw54N+4isR9Ouxuvu7loFKQmZrecU0hMEz0w6X+L+1/HwXnePJq
-         P7eGCXir0QLtu+9+lVirGvQG+78Qd+nGCeYVnmPdvZZqHuxHanOraN7S3lkV0J18FH1p
-         XdcD0KUnBscYg9nifqjBKWUXrN7HJ756XLMTJSq3eWqstIGzfEpegSWqdBVhy8iJb/5M
-         huu3Scy5M6y9hm6wdXtDFMGCLZPiHJLomMfMJenW0T2RIOmIY0q4SJ2fzhq0zzkXVWrK
-         Z4iQ==
-X-Gm-Message-State: AOJu0YzS0upIR+cbmKbZIQcudKs4vupmG9th3dsHXuT1oFDvtY3f6Z1l
-        lrAWgb8yFRsGQJFl19Fn/8AIPtX5Fh5MlgZqfBrf2Q==
-X-Google-Smtp-Source: AGHT+IGyWNKdsQPn0juqLKFUlvmF17TwBL6KgBg6m2mliS9T29mVwbiqFgwdC+K06dLDG1APWCHyg0Dmv5+/5eV19Dg=
-X-Received: by 2002:a50:9eeb:0:b0:544:4762:608 with SMTP id
- a98-20020a509eeb000000b0054447620608mr246797edf.2.1699433075593; Wed, 08 Nov
- 2023 00:44:35 -0800 (PST)
+        bh=pnYR7bmgd7KfD+AkE17auBtmcY5ZsQOdpLALwgXFEH4=;
+        b=jqz3f5PSCHHONqxZsv9mauItkKTtJ2ZqQiUYvAr43brtZTq/dE+JyQjCOyQe7XKU2q
+         v5nb/DFhiD8lzzeys0EMONcMRG0YmMYj10wJPc+ZjtAp+aFW6/FbDZ63Z94racYHze5I
+         kRfeWrfG+qjOUn4/u//6OQnpSRTkGT0L3uVwxQps0jz0ZwBKMwZI3omALucbnGx0P5nW
+         Gh5bhWhHt3A5XIp38cD57SdC06KVMauDxhJv7UP9k2nPRn5HnQRw64rN8ziRaZ63XbYk
+         m2n7XupGJOI/blSHFDpdyNTceC8svGOQEHZe4bQkPm+raHRqj/pgM6JrNvkA525sFuA9
+         OQOw==
+X-Gm-Message-State: AOJu0YzvuCWu7X1br1U/w3j8iHFSuRTHaApL2c2hEJHbBq6P6CIeJQXX
+        R3+apddftGSF6oRQTi8V45mKN1i4efPn7nICk+uwtA==
+X-Google-Smtp-Source: AGHT+IHAGDE6Z1bTpaCcy23RjlMGNDAdGNwJ4C1SrldWsiu21577HL+eBwG41/PmtCgI9MYo+YHDL4vN6GX348PYOEw=
+X-Received: by 2002:a05:6402:528e:b0:544:e37e:d597 with SMTP id
+ en14-20020a056402528e00b00544e37ed597mr233926edb.7.1699433154082; Wed, 08 Nov
+ 2023 00:45:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20231031093921.755204-1-guanyulin@google.com> <2023103133-kelp-copartner-8e9c@gregkh>
-In-Reply-To: <2023103133-kelp-copartner-8e9c@gregkh>
+References: <20231031093921.755204-1-guanyulin@google.com> <f75d6cd2-fa9f-4820-969f-2a8839d78c9e@rowland.harvard.edu>
+In-Reply-To: <f75d6cd2-fa9f-4820-969f-2a8839d78c9e@rowland.harvard.edu>
 From:   Guan-Yu Lin <guanyulin@google.com>
-Date:   Wed, 8 Nov 2023 16:44:24 +0800
-Message-ID: <CAOuDEK3x95u6+68e=fkejnjWhRrA5Yt1qTaAG3Prje8C-+6dmw@mail.gmail.com>
+Date:   Wed, 8 Nov 2023 16:45:43 +0800
+Message-ID: <CAOuDEK0NcijUKAL3fGtO=Ks+Y38TRhJcVx+ff-QUyUA0LcQ1Bw@mail.gmail.com>
 Subject: Re: [PATCH] rpm: pm: enable PM_RPM_EXCEPTION config flag
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        stern@rowland.harvard.edu, heikki.krogerus@linux.intel.com,
-        mkl@pengutronix.de, hadess@hadess.net, mailhol.vincent@wanadoo.fr,
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org, len.brown@intel.com,
+        pavel@ucw.cz, heikki.krogerus@linux.intel.com, mkl@pengutronix.de,
+        hadess@hadess.net, mailhol.vincent@wanadoo.fr,
         ivan.orlov0322@gmail.com, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         pumahsu@google.com, raychi@google.com, albertccwang@google.com
@@ -66,80 +66,28 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 31, 2023 at 5:48=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
+On Tue, Oct 31, 2023 at 10:39=E2=80=AFPM Alan Stern <stern@rowland.harvard.=
+edu> wrote:
 >
 > On Tue, Oct 31, 2023 at 05:38:55PM +0800, Guan-Yu Lin wrote:
 > > Introducing PM_RPM_EXCEPTION config flag, which may alter the priority
 > > between system power management and runtime power management. In
 > > suspend-to-idle flow, PM core will suspend all devices to avoid device
+>
+> Your patch affects all forms of system suspend, not just
+> suspend-to-idle.  What do you actually mean here?
+>
 > > interact with the system. However, chances are devices might be used by
 > > other systems rather than a single system. In this case, PM core should=
 n't
 > > suspend the devices. One may use PM_RPM_EXCEPTION config flag to mark
 > > such exception, and determine the power state of a device with runtime
 > > power management rather than system power management.
-> >
-> > Signed-off-by: Guan-Yu Lin <guanyulin@google.com>
-> > ---
-> >  drivers/usb/core/generic.c |  6 ++++++
-> >  drivers/usb/core/usb.h     | 16 ++++++++++++++++
-> >  kernel/power/Kconfig       |  8 ++++++++
-> >  3 files changed, 30 insertions(+)
-> >
-> > diff --git a/drivers/usb/core/generic.c b/drivers/usb/core/generic.c
-> > index 740342a2812a..bb0dfcfc9764 100644
-> > --- a/drivers/usb/core/generic.c
-> > +++ b/drivers/usb/core/generic.c
-> > @@ -266,6 +266,9 @@ int usb_generic_driver_suspend(struct usb_device *u=
-dev, pm_message_t msg)
-> >  {
-> >       int rc;
-> >
-> > +     if (usb_runtime_pm_exception(udev))
-> > +             return 0;
-> > +
-> >       /* Normal USB devices suspend through their upstream port.
-> >        * Root hubs don't have upstream ports to suspend,
-> >        * so we have to shut down their downstream HC-to-USB
-> > @@ -294,6 +297,9 @@ int usb_generic_driver_resume(struct usb_device *ud=
-ev, pm_message_t msg)
-> >  {
-> >       int rc;
-> >
-> > +     if (usb_runtime_pm_exception(udev))
-> > +             return 0;
-> > +
-> >       /* Normal USB devices resume/reset through their upstream port.
-> >        * Root hubs don't have upstream ports to resume or reset,
-> >        * so we have to start up their downstream HC-to-USB
-> > diff --git a/drivers/usb/core/usb.h b/drivers/usb/core/usb.h
-> > index 60363153fc3f..14a054f814a2 100644
-> > --- a/drivers/usb/core/usb.h
-> > +++ b/drivers/usb/core/usb.h
-> > @@ -90,6 +90,22 @@ extern void usb_major_cleanup(void);
-> >  extern int usb_device_supports_lpm(struct usb_device *udev);
-> >  extern int usb_port_disable(struct usb_device *udev);
-> >
-> > +#ifdef       CONFIG_PM_RPM_EXCEPTION
-> > +
-> > +static inline int usb_runtime_pm_exception(struct usb_device *udev)
-> > +{
-> > +     return atomic_read(&udev->dev.power.usage_count);
-> > +}
-> > +
-> > +#else
-> > +
-> > +static inline int usb_runtime_pm_exception(struct usb_device *udev)
-> > +{
-> > +     return 0;
-> > +}
-> > +
-> > +#endif
-> > +
-> >  #ifdef       CONFIG_PM
-> >
-> >  extern int usb_suspend(struct device *dev, pm_message_t msg);
+>
+> This sort of arrangement -- a device shared between two different
+> systems -- could happen with any sort of device.  Why does your patch
+> affect only USB devices?
+>
 > > diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
 > > index 4b31629c5be4..beba7a0f3947 100644
 > > --- a/kernel/power/Kconfig
@@ -152,35 +100,62 @@ and
 > > +config PM_RPM_EXCEPTION
 > > +     bool "Prioritize Runtime Power Management more than Power Managem=
 ent"
+>
+> Runtime Power Management is a form of Power Management, so what you
+> wrote doesn't make sense.  What you really meant is: Prioritize Runtime
+> Power Management more than System Power Management.
+>
 > > +     default n
->
-> The default is always 'n' so no need to specify it.
->
-
-Thanks, I will include this in the next version.
-
 > > +     help
 > > +     Provides a way to prioritize Runtime Power Management more than P=
 ower
 > > +     Management. This way system can suspnd with maintaining specific
+>
+> s/suspnd/suspend/
+> s/with/while/
+>
 > > +     components in operation.
 >
-> This really doesn't give me a good description of why someone would ever
-> want to enable this at all.
+> Your patch does not allow _specific_ components to be kept in operation.
+> _All_ in-use components that support prioritized PM (with this patch,
+> all USB components) will remain powered during system suspend, even if
+> the user wants only _some_ of them to be kept powered.
 >
-> And why does this have to be a build option?  That feels very heavy, why
-> not make it changable at runtime?
+> Alan Stern
 >
-> If this is a build option, how are you going to get all the distros and
-> all of the Android/ChromeOS systems in the world to enable it?
->
-> thanks,
->
-> greg k-h
+> > +
+> >  config PM_DEBUG
+> >       bool "Power Management Debug Support"
+> >       depends on PM
+> > --
+> > 2.42.0.820.g83a721a137-goog
+> >
 
-Let's reach a consensus on what this patch should do first. I'll then
-change the description and implementation accordingly if needed. Please
-see the next reply for an explanation of my idea.
+Thanks for the questions. Let me first introduce my motivation for
+proposing this feature. We can discuss the implementation details later.
+
+Motivation:
+Currently, system PM operations always override runtime PM operations.
+As runtime PM reflects the power status of devices, there is a
+possibility that runtime PM states that a device is in use, but system
+PM decides to suspend it. Up to now, we have assumed that a device can't
+function without resources from the system, so the device should acquire
+a wakelock to prevent this from happening. However, what if the device
+does not need the system's support to function? Or only needs limited
+resources (e.g., only limited power source or clock) to function? In this
+situation, we would like to keep the device on but allow the system to
+suspend. This is an example where we would like devices to follow runtime
+PM rather than system PM.
+
+Feature Supported:
+1. Devices could control the priority of system PM and runtime PM during
+   runtime.
+2. The control should be at the device level, meaning that different
+   devices should control their own priorities.
+
+Goal of This Patch:
+1. Design a framework to support features above.
+2. Apply it into usb for demonstration.
 
 Thanks,
 Guan-Yu
