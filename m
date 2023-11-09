@@ -2,91 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 353D77E6CF6
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Nov 2023 16:11:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F537E71EA
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Nov 2023 20:08:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234541AbjKIPLw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Nov 2023 10:11:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38334 "EHLO
+        id S1344916AbjKITIo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Nov 2023 14:08:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234536AbjKIPLu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Nov 2023 10:11:50 -0500
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FB435B1
-        for <linux-pm@vger.kernel.org>; Thu,  9 Nov 2023 07:11:47 -0800 (PST)
-Received: by mail-pl1-x642.google.com with SMTP id d9443c01a7336-1cc5b705769so9067175ad.0
-        for <linux-pm@vger.kernel.org>; Thu, 09 Nov 2023 07:11:47 -0800 (PST)
+        with ESMTP id S1344704AbjKITIo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Nov 2023 14:08:44 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F47130EB;
+        Thu,  9 Nov 2023 11:08:42 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-280165bba25so1063884a91.2;
+        Thu, 09 Nov 2023 11:08:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699542707; x=1700147507; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SfO0vj2nASWy3ReruduhK0+7yDo2Je44FrP4T9dAGIU=;
-        b=DtxNJCi0NXxIBo/YhztjL6nMVYgap3UdLr0Xwt7vTNqW5Fw/3CGrNxzcuNqOEVgiJT
-         vp2/UqG1BR05qcccdeZS5Rb6jOcP1UInpjYmcOlEmuPKYn+OCYywguPFt5Rt0lUWHrnu
-         GDtTdJztzGDHQSEH6rAWv67MfqF36c6vE8RiplxfxE7xX6Y5Dwoz5VORGbZKD9i9sRde
-         t8DNf4cvNPbYy0hpfkKfj0oxo/bXXtjHfEMBDZiN2MdZ2kP1V5I5WcwVcdVu/6wzpuvi
-         4wEx36Fe5X+7tpSU21mok/92V7Et4VkGpy0sxhDy6gL8yhiTsE6dKy+C1E+uGKypeVQ/
-         K2+w==
+        d=gmail.com; s=20230601; t=1699556921; x=1700161721; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=npAIX4H7GIRegyucDnBbB08OaARn4b9MKFCtEnd9Z7U=;
+        b=H39Viedvuru8lFvMNT3sCYgi7QaIX4l9Y2Xm6L88HQaav9DhtYEo965P6yVeoyoIwr
+         wP+mOObD/nHC/Ja1hDSLla0W0REWh3YIMhIAejeSBCV2OdH74m1ixW84sQhlW9XgQmP7
+         53gDcUxtbvnpKUIJHQE7Ms6pliUUsieG2XBm19arB0UPe1PimF3kdbMGJUe7uUQZ0xXo
+         fOiks2BontqSmd7aHVdinIcB0+V2VeKQb6sc0pFq0+hRo3sg4py+xQm1DKttDlM46eNI
+         JX5GPpGVygcwGmOOw7CwdjoA6tOrDjLYV8W4jjv0mTZ+8ATyC0QPcA6eNKcndVINW14F
+         I/lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699542707; x=1700147507;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SfO0vj2nASWy3ReruduhK0+7yDo2Je44FrP4T9dAGIU=;
-        b=mKs3MeQvekHDAclZfTmO1khh1RYaJmRgxYeqI4F3rmlIYjNaJGxwf1C/VYYAWWLZZ8
-         /gdaOgXmyi6qZqY0l7+5zhhmFNPWLvf+KlWuuX9YBfElcX5CTn+UVeMSnh7IKrgm3vF8
-         MrJljwXaPkyZe9coTMGsoOFOOTqcG25HVt8gVJqcW8mSPM+U9/ua0WfVYDrEsylYdf1V
-         5K5L70qyqEF2N82K0dvaasnYjIy3nM0N9wjtKnHBupSGPrrffSLAYPXDCXPegIQR4Wla
-         AHSiDsWDXxUL2W8II8UQNJCyoTJrOg7buBkRYKwoCp0IV6l+3ogwfR+bAykCzOmFPFBo
-         uZog==
-X-Gm-Message-State: AOJu0YxFWOV+DEfOEbxcdyNFmrubX75JzAdciCrCKGEzstgXIXKxpqE9
-        f+3WvCNB+han2XJ1cWFxXhNBXVXqWua2RmrrXQ==
-X-Google-Smtp-Source: AGHT+IGaAXooCMKKCV105U9Hteo6inqeahtRFXRa3XeLWlJieHM2isS+qasQkQi8m5SRPa3mommNhCc9W3kI4ZrUmPg=
-X-Received: by 2002:a17:903:4281:b0:1cc:68c1:cab5 with SMTP id
- ju1-20020a170903428100b001cc68c1cab5mr5002521plb.14.1699542707259; Thu, 09
- Nov 2023 07:11:47 -0800 (PST)
+        d=1e100.net; s=20230601; t=1699556921; x=1700161721;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=npAIX4H7GIRegyucDnBbB08OaARn4b9MKFCtEnd9Z7U=;
+        b=T2BbfjNSQBprB+fXjdjaK1c4/R2x7E/CjxVGJhCUmrGqQFj4yRsEKHNAednHS2eWNT
+         5UNv4kA0jyg2dglAOYB1RzGhtb2yGHMjefFit9wm5/8uItDq/tWvBjMy64Ofi/ptkZb9
+         iH9ACRH1kG/FrUv68L1skICt1nSnQJnIKFTMJ1hmyYMPikJ8Vna9wANa0EqBqQBD2wnK
+         edkUNAnLM87v25BlgzxAXzXz+c/zuP0b8eBDyDsCm3L9KNGxOVSzoyazyTa4izFJ4cGl
+         5WPW13d5q34juK9U1Uzr1Ja+SE5VMZt4aNWY38K/ftBqe1reu1OXET5cIOYcpieGS0UO
+         it0w==
+X-Gm-Message-State: AOJu0Yz2vTr9BsCTvlcpDRovCWIW+I3XWaoIsBRBKvX9r5TZ7eXKvQA5
+        qjpv6gFwG5ZeIP02w+FoJTg=
+X-Google-Smtp-Source: AGHT+IHANweqCAVqfZMYyy8BrIodOf/S3c/ozotfwvar93GAbDNaJdXSTIsp1f0jdVE3vUyj50hSvA==
+X-Received: by 2002:a17:90a:1a4a:b0:27d:58a8:fa7f with SMTP id 10-20020a17090a1a4a00b0027d58a8fa7fmr2559321pjl.37.1699556921602;
+        Thu, 09 Nov 2023 11:08:41 -0800 (PST)
+Received: from localhost ([2620:10d:c090:400::4:7384])
+        by smtp.gmail.com with ESMTPSA id z10-20020a17090a8b8a00b0026b3f76a063sm117323pjn.44.2023.11.09.11.08.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Nov 2023 11:08:41 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 9 Nov 2023 09:08:39 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, jstultz@google.com, tglx@linutronix.de,
+        sboyd@kernel.org, jiangshanlai@gmail.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: timer list corruption in devfreq
+Message-ID: <ZU0uNy6l0ZuzBmlf@slm.duckdns.org>
+References: <1699459797-21703-1-git-send-email-quic_mojha@quicinc.com>
 MIME-Version: 1.0
-Received: by 2002:a17:902:8c98:b0:1cc:2be6:281d with HTTP; Thu, 9 Nov 2023
- 07:11:46 -0800 (PST)
-Reply-To: mrskathleens37@gmail.com
-From:   "Mrs. Gottfried S. Kathleen" <mrsmarois329@gmail.com>
-Date:   Thu, 9 Nov 2023 07:11:46 -0800
-Message-ID: <CADzi4QRorJEN1swjY-+LGs46YHbvUfby3q+MNAuWtCQkQDp7cg@mail.gmail.com>
-Subject: I am Mrs. Gottfried S. Kathleen
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1699459797-21703-1-git-send-email-quic_mojha@quicinc.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dearest Beloved.
+Hello,
 
-I am Mrs. Gottfried S. Kathleen, I decided to donate what I have to
-you for investment towards the good work of charity organizations, and
-also to help the motherless and the less privileged ones and to carry
-out charitable works in your Country and around the World on my
-Behalf.
+On Wed, Nov 08, 2023 at 09:39:57PM +0530, Mukesh Ojha wrote:
+> We are facing an issue on 6.1 kernel while using devfreq framework
+> and looks like the devfreq_monitor_stop()/devfreq_monitor_start is
+> vulnerable if frequent governor change is being done from user space
+> in a loop.
+> 
+> echo simple_ondemand > /sys/class/devfreq/1d84000.ufshc/governor
+> echo performance > /sys/class/devfreq/1d84000.ufshc/governor
+> 
+> Here, we are using ufs device, but could be any device.
+> 
+> Issue is because same instance of timer is being queued from two
+> places one from devfreq_monitor() and one from devfreq_monitor_start() as
+> cancel_delayed_work_sync() from devfreq_monitor_stop() was not
+> able to delete the delayed work time completely due to which
+> devfreq_monitor() work rearmed the same timer.
+> 
+> But there looks to be issue in the timer framework where
+> it was initially discussed in [1] and later fixed in [2]
+> but not sure being whether is it issue in cancel_delayed_work_sync()
+> where del_timer() inside try_to_grab_pending() need to be replaced
+> with timer_delete[_sync]() or devfreq_monitor_stop() need to use
+> this api's and then delete the work.
 
-I am diagnosing of throat Cancer, hospitalize for good 2 years and
-some months now and quite obvious that I have few days to live, and I
-am a Widow no child,  I decided to will/donate the sum of $7.8 Million
-to you for the good work of God, and also to help the motherless
-endless privilege and also forth assistance of the widows,  at the
-moment I cannot take any telephone calls right now due to the fact
-that my relatives (that have squandered the funds for this purpose
-before) are around me and my health status also, I have adjusted my
-will and my Bank is aware.
+So, having shutdown can be more convenient in some cases and that'd be a
+useful addition to workqueue both for immediate and delayed work items. That
+said, that's usually not essential in fixing these issues - e.g. Can't you
+just synchronize devfreq_monitor_start() and stop()?
 
-I have willed those properties to you by quoting my Personal File
-Routing and Account Information. And I have also notified the bank
-that I am willing to give that property to you for good effective and
-prudent work, It is right to say that I have been directed to do this
-by God, I will be going in for a surgery soon and I want to make sure
-that I make this donation before undergoing this surgery.
+Thanks.
 
-I will need your support to make this dream come through, could you
-let me know your interest to enable me to give you further
-information.
-
-Thank you once again and warm regards.
-Yours Sick Sister in Christ.
-Mrs. Gottfried S. Kathleen
+-- 
+tejun
