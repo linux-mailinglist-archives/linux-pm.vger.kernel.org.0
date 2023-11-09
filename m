@@ -2,55 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C607E6108
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Nov 2023 00:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE30F7E665D
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Nov 2023 10:14:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjKHXaw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Nov 2023 18:30:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55552 "EHLO
+        id S229509AbjKIJOJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Nov 2023 04:14:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjKHXav (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Nov 2023 18:30:51 -0500
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9564825B2;
-        Wed,  8 Nov 2023 15:30:49 -0800 (PST)
+        with ESMTP id S229450AbjKIJOI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Nov 2023 04:14:08 -0500
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F7A2592;
+        Thu,  9 Nov 2023 01:14:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699486250; x=1731022250;
+  t=1699521246; x=1731057246;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sDGggQs47CObbC8qeaZj1TVKzgCjiVj9GqYw2S8QnGk=;
-  b=eBfxswuvYgvPHLEs7iHVW+0kTxxMhtDvKeAJvrx5mvNOEQij0albpEUc
-   W5fQ/XXgrvmx9A9aOZl+XGNQhCB5Oo/hDJHU1ZBmhBavbQpf0vk+ysSbc
-   OE9gn3yJR+xYlDOiGtsodQo+7D5VtH0LDPnz1G2Dnrg+Nb9qZFyZsj684
-   T73VU8pyn2ofe5WBkiPdCjewo7Yc4KK41xUCA+Bnlw3TnCnggel/UjPU7
-   ITvI5hWU8BHXgUMI1qaUbADxyX/iEiYcJS+t/LyWaL9i5GXqtQmMxcMNg
-   gNDy/3EL03ZVUYotiYGL3G62wgFmR6edizU0Yc52zx6B/T3JRi0wF+S1V
+  bh=GS8dbLhC+m1/CpSugFOf9ABa4muzjNydMqJPnmvrbiE=;
+  b=FREdehzEdLmizhvtP29rvdfDOOPr5kBxJWFD/egrCq/JZmpHbG+AxSiS
+   0TfvWUBJ/JvKc8VcXLhPqGH8CfCokLrsfmBgf6ICAM92gjY4uoyOqO842
+   iDM8Oueb+aNMpcZPth1vyi5mAU1sqOLqADO055fDx9ywndcmtwMnNnkGg
+   vp9LWwCVi7tOo0V+IvfdHSeTmsdgfRhE6e5Nkk1bvwved10Lg6t+AQefP
+   bPZc5z4ROED+KETQZ/ibXcdk6EkqX8UkQiT1Nw2kYpjboWiW3Cr/eoo32
+   W233xMuzXQsbBZCsr49BlzQctKZzSwN/Fcm+aa1wN9bG7El1LgbbR452f
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="11434839"
-X-IronPort-AV: E=Sophos;i="6.03,287,1694761200"; 
-   d="scan'208";a="11434839"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2023 15:30:49 -0800
+X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="454251091"
+X-IronPort-AV: E=Sophos;i="6.03,289,1694761200"; 
+   d="scan'208";a="454251091"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2023 01:14:05 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="739665046"
-X-IronPort-AV: E=Sophos;i="6.03,287,1694761200"; 
-   d="scan'208";a="739665046"
+X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="880535126"
+X-IronPort-AV: E=Sophos;i="6.03,289,1694761200"; 
+   d="scan'208";a="880535126"
 Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 08 Nov 2023 15:30:47 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 09 Nov 2023 01:14:03 -0800
 Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1r0s0R-0008Ia-2f;
-        Wed, 08 Nov 2023 23:30:43 +0000
-Date:   Thu, 9 Nov 2023 07:28:46 +0800
+        id 1r116v-0008br-1I;
+        Thu, 09 Nov 2023 09:14:01 +0000
+Date:   Thu, 9 Nov 2023 17:13:48 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-        devel@acpica.org, linux-pm@vger.kernel.org,
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org,
         Sakari Ailus <sakari.ailus@linux.intel.com>
 Subject: [rafael-pm:acpi-mipi-disco-img 5/7]
- drivers/acpi/mipi-disco-img.c:536:42: warning: format '%d' expects argument
- of type 'int', but argument 4 has type 'long unsigned int'
-Message-ID: <202311090735.0tfXwPGn-lkp@intel.com>
+ drivers/acpi/mipi-disco-img.c:537:6: warning: format specifies type 'int'
+ but the argument has type 'unsigned long'
+Message-ID: <202311091629.3jyzqiV7-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -61,34 +62,27 @@ X-Mailing-List: linux-pm@vger.kernel.org
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-mipi-disco-img
 head:   54d87fab9fb060ff0489886ca0fdb101f6a3c03f
 commit: a5dbdbb2bfb28643b71d23f75205845cb23af965 [5/7] ACPI: scan: Extract MIPI DisCo for Imaging data into swnodes
-config: loongarch-randconfig-002-20231109 (https://download.01.org/0day-ci/archive/20231109/202311090735.0tfXwPGn-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231109/202311090735.0tfXwPGn-lkp@intel.com/reproduce)
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231109/202311091629.3jyzqiV7-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231109/202311091629.3jyzqiV7-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311090735.0tfXwPGn-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311091629.3jyzqiV7-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/acpi/mipi-disco-img.c:21:
-   drivers/acpi/mipi-disco-img.c: In function 'init_csi2_port':
->> drivers/acpi/mipi-disco-img.c:536:42: warning: format '%d' expects argument of type 'int', but argument 4 has type 'long unsigned int' [-Wformat=]
-     536 |                 acpi_handle_info(handle, "Too few lane polarity bytes (%d vs. %d)\n",
-         |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/acpi.h:1216:47: note: in definition of macro 'acpi_handle_info'
-    1216 |         acpi_handle_printk(KERN_INFO, handle, fmt, ##__VA_ARGS__)
-         |                                               ^~~
-   drivers/acpi/mipi-disco-img.c:536:73: note: format string is defined here
-     536 |                 acpi_handle_info(handle, "Too few lane polarity bytes (%d vs. %d)\n",
-         |                                                                        ~^
-         |                                                                         |
-         |                                                                         int
-         |                                                                        %ld
+>> drivers/acpi/mipi-disco-img.c:537:6: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
+                                    ret * BITS_PER_TYPE(u8), num_lanes + 1);
+                                    ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/acpi.h:1216:47: note: expanded from macro 'acpi_handle_info'
+           acpi_handle_printk(KERN_INFO, handle, fmt, ##__VA_ARGS__)
+                                                 ~~~    ^~~~~~~~~~~
+   1 warning generated.
 
 
-vim +536 drivers/acpi/mipi-disco-img.c
+vim +537 drivers/acpi/mipi-disco-img.c
 
    481	
    482	static void init_csi2_port(struct acpi_device *adev,
@@ -145,8 +139,8 @@ vim +536 drivers/acpi/mipi-disco-img.c
    533		if (ret < 0) {
    534			acpi_handle_debug(handle, "Lane polarity bytes missing\n");
    535		} else if (ret * BITS_PER_TYPE(u8) < num_lanes + 1) {
- > 536			acpi_handle_info(handle, "Too few lane polarity bytes (%d vs. %d)\n",
-   537					 ret * BITS_PER_TYPE(u8), num_lanes + 1);
+   536			acpi_handle_info(handle, "Too few lane polarity bytes (%d vs. %d)\n",
+ > 537					 ret * BITS_PER_TYPE(u8), num_lanes + 1);
    538		} else {
    539			unsigned long mask = 0;
    540			int byte_count = ret;
