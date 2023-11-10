@@ -2,60 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7434A7E7F63
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Nov 2023 18:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B45DE7E802F
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Nov 2023 19:07:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbjKJRxc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Nov 2023 12:53:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50722 "EHLO
+        id S234723AbjKJSHW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Nov 2023 13:07:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjKJRwq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Nov 2023 12:52:46 -0500
+        with ESMTP id S235774AbjKJSFU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Nov 2023 13:05:20 -0500
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF5C900D;
-        Fri, 10 Nov 2023 00:32:32 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AA7exJO018675;
-        Fri, 10 Nov 2023 08:32:21 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7C99EEC;
+        Fri, 10 Nov 2023 00:33:18 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AA7gBBN011899;
+        Fri, 10 Nov 2023 08:33:11 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
  mime-version : subject : to : cc : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=qcppdkim1;
- bh=25mtvY+NTGW9DCzRWztwAgArQMlHdGCwKfpiRg2qsK0=;
- b=FwrtrwUR95NVAjgV+k2R1coe7//+z1by3KpeZ2ar/C6mL+a9qpqXnnmGLkicsvdpWo+i
- 57SpGz7kl52hKEbeMj4N83SaeKDiq0OmblPkAFaO8JHRqIvnx0IIg3PY6djISSgVvr9Q
- VJk+gcBi21KmJCdnZOYDGNcBWe9hj8653HA3JskDbSagkHTO6i3BRY41mIM830f38us4
- NdkP0xozw92ZmEgZmGtWMIiTTedesHjZj8JTPfEL+CRpglbiLrZ7WdpUadQfc/TF74N7
- YK7zcD1ECARn2y7bhBDNIm7fH3ffZsDrJBdY3HMPI4CXBJx1b4q/Zu9FjuxupNIeyf+M fw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3u8y39aevj-1
+ bh=0g31E2AhP85G9hfjyKxjq/sbrz0JScFMKaVi/mJsAwo=;
+ b=jDuAgLMb6c32yAx6FjS3JGSfRmlrNRsKOoCfcnRQwC0xryPBhmI3ezbjJuBTBQ3FsqJx
+ YFz00HKaP7FqQRGQ9x+Dc7mCvG9mdick2sYXrBrG1XPvwsAbegGfICSTmHXdcLB4E40i
+ /vDandvS1lusgMEsUZFRkFInmlIPV7u/gQK9GPpiFQj/kuzfZCbCVo8xno+9OJ4Dq2/j
+ L0bX/MoZVKvzXC67CGlPXHesrM5MKUUwszLdyy+NKO7ccN4jlC/ap3Y6zgZ5Sh+rxJMG
+ ndS8YjqUSynipDsCgN3wIcfM7MA1dEY7AJ9PvD34+rTprS8US6LVGD7pedmxXvAsdmEq Ww== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3u93tq9pes-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Nov 2023 08:32:21 +0000
+        Fri, 10 Nov 2023 08:33:10 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3AA8WKhs016764
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3AA8XA7e016922
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Nov 2023 08:32:20 GMT
+        Fri, 10 Nov 2023 08:33:10 GMT
 Received: from [10.217.216.47] (10.80.80.8) by nalasex01a.na.qualcomm.com
  (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Fri, 10 Nov
- 2023 00:32:13 -0800
-Message-ID: <d716fbbe-b681-af41-bfe7-85448cc47c7c@quicinc.com>
-Date:   Fri, 10 Nov 2023 14:02:10 +0530
+ 2023 00:33:01 -0800
+Message-ID: <5b3315fe-f59b-cdf3-b980-a5a68bceb6a9@quicinc.com>
+Date:   Fri, 10 Nov 2023 14:02:58 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH RESEND v3 4/5] clk: qcom: Use HW_CTRL_TRIGGER flag to
- switch video GDSC to HW mode
+Subject: Re: [PATCH RESEND v3 3/5] clk: qcom: gdsc: Add set and get hwmode
+ callbacks to switch GDSC mode
 Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>,
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Abel Vesa <abel.vesa@linaro.org>
 CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Kevin Hilman <khilman@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Andy Gross" <agross@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
+        "Michael Turquette" <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
         Vikash Garodia <quic_vgarodia@quicinc.com>,
@@ -65,10 +66,10 @@ CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <linux-clk@vger.kernel.org>, <linux-media@vger.kernel.org>
 References: <20231101-gdsc-hwctrl-v3-0-0740ae6b2b04@linaro.org>
- <20231101-gdsc-hwctrl-v3-4-0740ae6b2b04@linaro.org>
- <v4dnsawo7s74spccrsvjwmal73tqfq4aptiny25tyyp6ungxha@jlbywvcssqtl>
+ <20231101-gdsc-hwctrl-v3-3-0740ae6b2b04@linaro.org>
+ <CAA8EJpqTafxkXfAZXdTCat1VphvHUTTWe1TUjbpMvqta1Jf+Cw@mail.gmail.com>
 From:   Jagadeesh Kona <quic_jkona@quicinc.com>
-In-Reply-To: <v4dnsawo7s74spccrsvjwmal73tqfq4aptiny25tyyp6ungxha@jlbywvcssqtl>
+In-Reply-To: <CAA8EJpqTafxkXfAZXdTCat1VphvHUTTWe1TUjbpMvqta1Jf+Cw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.80.80.8]
@@ -76,16 +77,16 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: uP73AjW-MR_JJ8huakF3mrlf6qgG7jJS
-X-Proofpoint-ORIG-GUID: uP73AjW-MR_JJ8huakF3mrlf6qgG7jJS
+X-Proofpoint-GUID: 0yWIBZBRQecYYPSMJiHBmWTOIVmjEPrP
+X-Proofpoint-ORIG-GUID: 0yWIBZBRQecYYPSMJiHBmWTOIVmjEPrP
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-10_04,2023-11-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 clxscore=1015 spamscore=0 phishscore=0 malwarescore=0
- lowpriorityscore=0 mlxscore=0 priorityscore=1501 adultscore=0
- mlxlogscore=947 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2311060000 definitions=main-2311100071
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ suspectscore=0 clxscore=1015 priorityscore=1501 mlxlogscore=999
+ spamscore=0 phishscore=0 impostorscore=0 bulkscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311060000 definitions=main-2311100071
 X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -98,157 +99,129 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
-On 11/4/2023 1:45 AM, Bjorn Andersson wrote:
-> On Wed, Nov 01, 2023 at 11:04:10AM +0200, Abel Vesa wrote:
+On 11/2/2023 2:58 AM, Dmitry Baryshkov wrote:
+> On Wed, 1 Nov 2023 at 11:06, Abel Vesa <abel.vesa@linaro.org> wrote:
+>>
 >> From: Jagadeesh Kona <quic_jkona@quicinc.com>
 >>
->> The current HW_CTRL flag switches the video GDSC to HW control mode as
->> part of GDSC enable itself, instead of that use HW_CTRL_TRIGGER flag to
->> give consumer drivers more control and switch the GDSC mode as and when
->> required.
+>> Add support for set and get hwmode callbacks to switch the GDSC between
+>> SW and HW modes. Currently, the GDSC is moved to HW control mode
+>> using HW_CTRL flag and if this flag is present, GDSC is moved to HW
+>> mode as part of GDSC enable itself. The intention is to keep the
+>> HW_CTRL flag functionality as is, since many older chipsets still use
+>> this flag.
 >>
->> HW_CTRL_TRIGGER flag allows consumer drivers to switch the video GDSC to
->> HW/SW control modes at runtime using dev_pm_genpd_set_hwmode API.
->>
+>> Introduce a new HW_CTRL_TRIGGER flag to switch the GDSC back and forth
+>> between HW/SW modes dynamically at runtime. If HW_CTRL_TRIGGER flag is
+>> present, register set_hwmode_dev callback to switch the GDSC mode which
+>> can be invoked from consumer drivers using dev_pm_genpd_set_hwmode
+>> function. Unlike HW_CTRL flag, HW_CTRL_TRIGGER won't move the GDSC to HW
+>> control mode as part of GDSC enable itself, GDSC will be moved to HW
+>> control mode only when consumer driver explicity calls
+>> dev_pm_genpd_set_hwmode to switch to HW mode. Also add the
+>> dev_pm_genpd_get_hwmode to allow the consumers to read the actual
+>> HW/SW mode from hardware.
 > 
-> This states what the code currently does, and what the new code will do.
-> But I don't find that it adequately describes _why_ this is done.
+> Can we add two new flags:
+> - HW_CTRL_TRIGGER
+> - DEFAULT_HW_TRIGGER
 > 
+> And then define HW_CTRL as HW_CTRL_TRIGGER | DEFAULT_HW_TRIGGER ?
 > 
-> In the current implementation, the hardware is might collapse the GDSC
-> anytime between gdsc_enable() and gdsc_disable(). By giving "drivers
-> more control" the time spent in this state is reduced to some fraction
-> of that span, which to me implies higher power consumption.
-> 
-> Under the assumption that we don't want to consume more power without
-> reason, I'm forced to guess that there might be some scenarios that we
-> want this feature to keep the GDSC non-collapsed against the indication
-> of the hardware - to avoid some instability somewhere, perhaps?
+> This way older platforms will keep existing behaviour, but can
+> gradually migrate to the new callbacks?
 > 
 
-Thanks Bjorn for your review. Sure, will update commit text with details 
-in next series.
+Thanks Dmitry for your review,
 
-Normally, consumers will enable the GDSC and then the required clocks. 
-If GDSC is moved to HW mode in gdsc_enable() itself, the subsequent 
-clocks enablement that are dependent on GDSC might fail since GDSC could 
-be turned off by HW. The consumers can still switch the GDSC to HW mode 
-with new API right after the clocks are enabled and the control will be 
-taken back to SW mode just before disabling the GDSC, so even with the 
-newer implementation, HW can collapse the GDSC anytime for most of the 
-duration between gdsc_enable() and gdsc_disable(). This API adds more 
-flexibility for consumer drivers to control the GDSC mode as per their
-requirements.
+The current usecases we have for GDSC's are either use the existing 
+HW_CTRL flag to switch the GDSC to HW mode in gdsc_enable() and back to 
+SW mode in gdsc_disable(). The second usecase is don't switch GDSC mode 
+in gdsc_enable() & gdsc_disable() at all, and switch the GDSC mode only 
+in new callbacks when consumers explicitly request it using 
+dev_pm_genpd_set_hwmode(), this can be achieved using the new 
+HW_CTRL_TRIGGER flag.
+
+By defining HW_CTRL as HW_CTRL_TRIGGER | DEFAULT_HW_TRIGGER, it switches 
+the GDSC mode both in enable & disable callbacks and in new callbacks as 
+well. But we currently don't have any usecase that requires this behaviour.
 
 Thanks,
 Jagadeesh
 
-> Regards,
-> Bjorn
-> 
+>>
 >> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
 >> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 >> ---
->>   drivers/clk/qcom/videocc-sc7180.c | 2 +-
->>   drivers/clk/qcom/videocc-sc7280.c | 2 +-
->>   drivers/clk/qcom/videocc-sdm845.c | 4 ++--
->>   drivers/clk/qcom/videocc-sm8250.c | 4 ++--
->>   drivers/clk/qcom/videocc-sm8550.c | 4 ++--
->>   5 files changed, 8 insertions(+), 8 deletions(-)
+>>   drivers/clk/qcom/gdsc.c | 32 ++++++++++++++++++++++++++++++++
+>>   drivers/clk/qcom/gdsc.h |  1 +
+>>   2 files changed, 33 insertions(+)
 >>
->> diff --git a/drivers/clk/qcom/videocc-sc7180.c b/drivers/clk/qcom/videocc-sc7180.c
->> index 5b9b54f616b8..51439f7ba70c 100644
->> --- a/drivers/clk/qcom/videocc-sc7180.c
->> +++ b/drivers/clk/qcom/videocc-sc7180.c
->> @@ -166,7 +166,7 @@ static struct gdsc vcodec0_gdsc = {
->>   	.pd = {
->>   		.name = "vcodec0_gdsc",
->>   	},
->> -	.flags = HW_CTRL,
->> +	.flags = HW_CTRL_TRIGGER,
->>   	.pwrsts = PWRSTS_OFF_ON,
->>   };
->>   
->> diff --git a/drivers/clk/qcom/videocc-sc7280.c b/drivers/clk/qcom/videocc-sc7280.c
->> index 615695d82319..3d07b1e95986 100644
->> --- a/drivers/clk/qcom/videocc-sc7280.c
->> +++ b/drivers/clk/qcom/videocc-sc7280.c
->> @@ -236,7 +236,7 @@ static struct gdsc mvs0_gdsc = {
->>   		.name = "mvs0_gdsc",
->>   	},
->>   	.pwrsts = PWRSTS_OFF_ON,
->> -	.flags = HW_CTRL | RETAIN_FF_ENABLE,
->> +	.flags = HW_CTRL_TRIGGER | RETAIN_FF_ENABLE,
->>   };
->>   
->>   static struct gdsc mvsc_gdsc = {
->> diff --git a/drivers/clk/qcom/videocc-sdm845.c b/drivers/clk/qcom/videocc-sdm845.c
->> index c77a4dd5d39c..dad011c48973 100644
->> --- a/drivers/clk/qcom/videocc-sdm845.c
->> +++ b/drivers/clk/qcom/videocc-sdm845.c
->> @@ -260,7 +260,7 @@ static struct gdsc vcodec0_gdsc = {
->>   	},
->>   	.cxcs = (unsigned int []){ 0x890, 0x930 },
->>   	.cxc_count = 2,
->> -	.flags = HW_CTRL | POLL_CFG_GDSCR,
->> +	.flags = HW_CTRL_TRIGGER | POLL_CFG_GDSCR,
->>   	.pwrsts = PWRSTS_OFF_ON,
->>   };
->>   
->> @@ -271,7 +271,7 @@ static struct gdsc vcodec1_gdsc = {
->>   	},
->>   	.cxcs = (unsigned int []){ 0x8d0, 0x950 },
->>   	.cxc_count = 2,
->> -	.flags = HW_CTRL | POLL_CFG_GDSCR,
->> +	.flags = HW_CTRL_TRIGGER | POLL_CFG_GDSCR,
->>   	.pwrsts = PWRSTS_OFF_ON,
->>   };
->>   
->> diff --git a/drivers/clk/qcom/videocc-sm8250.c b/drivers/clk/qcom/videocc-sm8250.c
->> index ad46c4014a40..c1b73d852f1c 100644
->> --- a/drivers/clk/qcom/videocc-sm8250.c
->> +++ b/drivers/clk/qcom/videocc-sm8250.c
->> @@ -293,7 +293,7 @@ static struct gdsc mvs0_gdsc = {
->>   	.pd = {
->>   		.name = "mvs0_gdsc",
->>   	},
->> -	.flags = HW_CTRL,
->> +	.flags = HW_CTRL_TRIGGER,
->>   	.pwrsts = PWRSTS_OFF_ON,
->>   };
->>   
->> @@ -302,7 +302,7 @@ static struct gdsc mvs1_gdsc = {
->>   	.pd = {
->>   		.name = "mvs1_gdsc",
->>   	},
->> -	.flags = HW_CTRL,
->> +	.flags = HW_CTRL_TRIGGER,
->>   	.pwrsts = PWRSTS_OFF_ON,
->>   };
->>   
->> diff --git a/drivers/clk/qcom/videocc-sm8550.c b/drivers/clk/qcom/videocc-sm8550.c
->> index f3c9dfaee968..404c6600edae 100644
->> --- a/drivers/clk/qcom/videocc-sm8550.c
->> +++ b/drivers/clk/qcom/videocc-sm8550.c
->> @@ -322,7 +322,7 @@ static struct gdsc video_cc_mvs0_gdsc = {
->>   	},
->>   	.pwrsts = PWRSTS_OFF_ON,
->>   	.parent = &video_cc_mvs0c_gdsc.pd,
->> -	.flags = POLL_CFG_GDSCR | RETAIN_FF_ENABLE | HW_CTRL,
->> +	.flags = POLL_CFG_GDSCR | RETAIN_FF_ENABLE | HW_CTRL_TRIGGER,
->>   };
->>   
->>   static struct gdsc video_cc_mvs1c_gdsc = {
->> @@ -347,7 +347,7 @@ static struct gdsc video_cc_mvs1_gdsc = {
->>   	},
->>   	.pwrsts = PWRSTS_OFF_ON,
->>   	.parent = &video_cc_mvs1c_gdsc.pd,
->> -	.flags = POLL_CFG_GDSCR | RETAIN_FF_ENABLE | HW_CTRL,
->> +	.flags = POLL_CFG_GDSCR | RETAIN_FF_ENABLE | HW_CTRL_TRIGGER,
->>   };
->>   
->>   static struct clk_regmap *video_cc_sm8550_clocks[] = {
+>> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+>> index 5358e28122ab..c763524cd5da 100644
+>> --- a/drivers/clk/qcom/gdsc.c
+>> +++ b/drivers/clk/qcom/gdsc.c
+>> @@ -363,6 +363,34 @@ static int gdsc_disable(struct generic_pm_domain *domain)
+>>          return 0;
+>>   }
 >>
->> -- 
+>> +static int gdsc_set_hwmode(struct generic_pm_domain *domain, struct device *dev, bool mode)
+>> +{
+>> +       struct gdsc *sc = domain_to_gdsc(domain);
+>> +
+>> +       if (sc->rsupply && !regulator_is_enabled(sc->rsupply)) {
+>> +               pr_err("Cannot set mode while parent is disabled\n");
+>> +               return -EIO;
+>> +       }
+>> +
+>> +       return gdsc_hwctrl(sc, mode);
+>> +}
+>> +
+>> +static bool gdsc_get_hwmode(struct generic_pm_domain *domain, struct device *dev)
+>> +{
+>> +       struct gdsc *sc = domain_to_gdsc(domain);
+>> +       u32 val;
+>> +       int ret;
+>> +
+>> +       ret = regmap_read(sc->regmap, sc->gdscr, &val);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       if (val & HW_CONTROL_MASK)
+>> +               return true;
+>> +
+>> +       return false;
+>> +}
+>> +
+>>   static int gdsc_init(struct gdsc *sc)
+>>   {
+>>          u32 mask, val;
+>> @@ -451,6 +479,10 @@ static int gdsc_init(struct gdsc *sc)
+>>                  sc->pd.power_off = gdsc_disable;
+>>          if (!sc->pd.power_on)
+>>                  sc->pd.power_on = gdsc_enable;
+>> +       if (sc->flags & HW_CTRL_TRIGGER) {
+>> +               sc->pd.set_hwmode_dev = gdsc_set_hwmode;
+>> +               sc->pd.get_hwmode_dev = gdsc_get_hwmode;
+>> +       }
+>>
+>>          ret = pm_genpd_init(&sc->pd, NULL, !on);
+>>          if (ret)
+>> diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
+>> index 803512688336..1e2779b823d1 100644
+>> --- a/drivers/clk/qcom/gdsc.h
+>> +++ b/drivers/clk/qcom/gdsc.h
+>> @@ -67,6 +67,7 @@ struct gdsc {
+>>   #define ALWAYS_ON      BIT(6)
+>>   #define RETAIN_FF_ENABLE       BIT(7)
+>>   #define NO_RET_PERIPH  BIT(8)
+>> +#define HW_CTRL_TRIGGER        BIT(9)
+>>          struct reset_controller_dev     *rcdev;
+>>          unsigned int                    *resets;
+>>          unsigned int                    reset_count;
+>>
+>> --
 >> 2.34.1
 >>
+> 
+> 
