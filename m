@@ -2,74 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 206BD7E800E
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Nov 2023 19:04:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27FAE7E80B1
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Nov 2023 19:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbjKJSEM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Nov 2023 13:04:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51120 "EHLO
+        id S1345104AbjKJSRY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Nov 2023 13:17:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbjKJSC6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Nov 2023 13:02:58 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DCA43821E;
-        Fri, 10 Nov 2023 05:55:19 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-54366784377so3339096a12.3;
-        Fri, 10 Nov 2023 05:55:19 -0800 (PST)
+        with ESMTP id S1345363AbjKJSPs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Nov 2023 13:15:48 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80150171B;
+        Fri, 10 Nov 2023 05:58:20 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9e62b14c9eeso108572666b.2;
+        Fri, 10 Nov 2023 05:58:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699624518; x=1700229318; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1699624699; x=1700229499; darn=vger.kernel.org;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UswF9wK9RxveNOhJEzFqGZeqyG/2CbmNW7YwWxlNx9Y=;
-        b=kObNMqbFoSq+C9Z+y0630uHbW7gg1XxcTO9LwxelRoqse/+iFLBl9PuYr26Rcuqt1z
-         TXWPnkteSPzr+enLFU0TDXG6sNy3eBqN/6hZp0IklKqAeiSc09V08wtkGmpnMdfOhprF
-         pmDXdAHYIhxrS9pkudCID5z5cYA8HF4EoY8A8dWgBHm23mtXgjgWV3zgvLNHxM8/ePZK
-         p1KozMuor5efO6Q/shOyyaE38V31uWMr1rHM+JjGeoo25hLmLTXlaV5XqHUmIUSv6ly0
-         +ZsTQ2o4mrr4jDtTmPLvEJEKfw6FqOJYHKIAL3ovY8wUaguyCJ8x0ADAaJrnLuh6d6Ud
-         n1Jg==
+        bh=hNjbt0EtWa2A1C+JeS9QVXzbju/y/OeX+qJLYHRr0y4=;
+        b=TMF8ZURBzTgVMbTf9asmaZtswCAe/1pIpUjReXju+AoOSQc11qdRC5l9HFnB18M6L1
+         VCsTOijD6AeLUTigjeRkiQVfMs2ndwxkYBykZNOkOJAhNnDzBmjl6wZWpvuQvpp3JBDp
+         /4HDVhB2tqLg944+gesA33ledsuNfj92DSff4PWatqWcrCQdcsF3PKd3GVT6j9Q9ujn9
+         R0IAD4qxesr+WE3mzNNK+shdGvl6J/mnxxQv46E1B9wppLGeBM3ru1zr2mFDI6hDAneg
+         X7JFhApP/7JwqMR3hQm8e3nYVmwEE+Z9xuL/dEvudELM3ExQ6EkKXH6c6M5OkXLAmXV/
+         0aDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699624518; x=1700229318;
+        d=1e100.net; s=20230601; t=1699624699; x=1700229499;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UswF9wK9RxveNOhJEzFqGZeqyG/2CbmNW7YwWxlNx9Y=;
-        b=I/o+yVMNL69iv31ZDjT+QTzrHwI1wAlBKqCoOajqv1rPpRxROTSSIgdws9wl5Q5Ukk
-         Y4RXEmusV6Ltjl8hbZlCosWnU25VctjSUenMoOfXmJ9vxU1tYJDaB5LtAv12T7yT/cYn
-         2U/04FWBH9Ohi3Lsw5mQap9DLK5iVtwLfMhaWbCvaXwtlz8+bVpMFIip31dVafk6ys7J
-         x+S3V/xNyu3hQamOKjDbr8YHsPFLbRgi6HXknh4/bbKxo/9TmBAXeFGANhPy6MRaYjH7
-         Wk9pfzxDfij4MkcWW6SFgn38M0zWiatPpRCA/e2aDcvXEY3Yz74/77yY8CLI4bkE3WPQ
-         lGpw==
-X-Gm-Message-State: AOJu0Yx5Gzj4iD8+d02Hncnp+VhgkHoIe1hEA4YQpfI044rFHLdtV3SP
-        mAkA4RiPfASJzCVc+YDv3WI=
-X-Google-Smtp-Source: AGHT+IEkxvsbJHesJxJKfEdDzxhg4FI5naEHpbkF9lSpoTT7SFYoAjys9SfU2a4kKs4y9A8VgVxhpQ==
-X-Received: by 2002:a50:c050:0:b0:543:74e6:9da2 with SMTP id u16-20020a50c050000000b0054374e69da2mr7671284edd.0.1699624517451;
-        Fri, 10 Nov 2023 05:55:17 -0800 (PST)
+        bh=hNjbt0EtWa2A1C+JeS9QVXzbju/y/OeX+qJLYHRr0y4=;
+        b=fE+jDHwfgk0gfd6uiQm8xfjm6Z2WVsGSqXZdF9ZHgBARy1UjrnGSkryvKKUySpVZX8
+         UfPZr3uHqJo59o+4mVVpAZ/ROOy5DSenqJ03Qamib/EJIDJ2o9v0zQtJcsi7PY725Vns
+         Mosdvb6iFK9qzSct4VN+WgDp7GLb0bTWF/7eP6x9lxCKXDxpHbx5xT5eraTmuzQJgZ8I
+         otII6IQX1ud53a34wxfdcjO/qQhH44OriBX+9xI+q8juLNwWcqS9YOHUYeyICGeC1Ab+
+         vqX050Kv9nscRFV8f6QrR3MTepYLxtdGsbeUDsi4d6qbAFZEg69wY9fTYgSngw8jagWa
+         3orQ==
+X-Gm-Message-State: AOJu0YxcheMQiNgprOqqPLy2yXb4ItXDZ2DGCyBCyoKGRuRteSMN9bFI
+        SKO4gdtXRXfDfx9SiuKTtn4=
+X-Google-Smtp-Source: AGHT+IGVQ1Y1WUrgKjE0Ruzh3iRLkcjv8OxVq2OuRdMai07SfdEZi65obyfpOC0335sUnZnRwKjZVA==
+X-Received: by 2002:a17:907:9802:b0:9de:32bb:fa96 with SMTP id ji2-20020a170907980200b009de32bbfa96mr7549574ejc.9.1699624698722;
+        Fri, 10 Nov 2023 05:58:18 -0800 (PST)
 Received: from orome.fritz.box (p200300e41f0fa600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f0f:a600:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id a2-20020a50ff02000000b0053e8f1f79afsm1165989edu.30.2023.11.10.05.55.16
+        by smtp.gmail.com with ESMTPSA id b4-20020a170906038400b0099bc8bd9066sm3988035eja.150.2023.11.10.05.58.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Nov 2023 05:55:16 -0800 (PST)
-Date:   Fri, 10 Nov 2023 14:55:15 +0100
+        Fri, 10 Nov 2023 05:58:18 -0800 (PST)
+Date:   Fri, 10 Nov 2023 14:58:16 +0100
 From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Rob Herring <robh@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Jon Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v2 06/13] thermal: tegra: Do not register cooling device
-Message-ID: <ZU42Qx0TbtEswEuA@orome.fritz.box>
+Subject: Re: [PATCH v2 02/13] dt-bindings: thermal: tegra: Document throttle
+ temperature
+Message-ID: <ZU42-H6Lk6kOPuKS@orome.fritz.box>
 References: <20231012175836.3408077-1-thierry.reding@gmail.com>
- <20231012175836.3408077-7-thierry.reding@gmail.com>
- <ea6c4056-9e7c-4aa3-b207-a97436682b8e@linaro.org>
+ <20231012175836.3408077-3-thierry.reding@gmail.com>
+ <20231016140249.GA2655027-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="2ifyYy2hSJpHxEx3"
+        protocol="application/pgp-signature"; boundary="IL1DOl7t2BE0L6Kx"
 Content-Disposition: inline
-In-Reply-To: <ea6c4056-9e7c-4aa3-b207-a97436682b8e@linaro.org>
+In-Reply-To: <20231016140249.GA2655027-robh@kernel.org>
 User-Agent: Mutt/2.2.12 (2023-09-09)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -82,110 +83,84 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---2ifyYy2hSJpHxEx3
-Content-Type: text/plain; charset=us-ascii
+--IL1DOl7t2BE0L6Kx
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 13, 2023 at 05:57:13PM +0200, Daniel Lezcano wrote:
-> On 12/10/2023 19:58, Thierry Reding wrote:
+On Mon, Oct 16, 2023 at 09:02:49AM -0500, Rob Herring wrote:
+> On Thu, Oct 12, 2023 at 07:58:23PM +0200, Thierry Reding wrote:
 > > From: Thierry Reding <treding@nvidia.com>
 > >=20
-> > The SOCTHERM's built-in throttling mechanism doesn't map well to the
-> > concept of a cooling device because it will automatically start to
-> > throttle when the programmed temperature threshold is crossed.
+> > Each throttling configuration needs to specify the temperature threshold
+> > at which it should start throttling. Previously this was tied to a given
+> > trip point as a cooling device and used the temperature specified for
+> > that trip point. This doesn't work well because the throttling mechanism
+> > is not a cooling device in the traditional sense.
 > >=20
-> > Remove the cooling device implementation and instead unconditionally
-> > program the throttling for the CPU and GPU thermal zones.
+> > Instead, allow device trees to specify the throttle temperature in the
+> > throttle configuration directly so that the throttle doesn't need to be
+> > exposed as a cooling device.
 > >=20
 > > Signed-off-by: Thierry Reding <treding@nvidia.com>
 > > ---
+> > Changes in v2:
+> > - rename temperature to temperature-millicelsius and drop $ref
+> > - add hysteresis-millicelsius property
+> >=20
+> >  .../bindings/thermal/nvidia,tegra124-soctherm.yaml | 14 ++++++++++++++
+> >  1 file changed, 14 insertions(+)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/thermal/nvidia,tegra124-=
+soctherm.yaml b/Documentation/devicetree/bindings/thermal/nvidia,tegra124-s=
+octherm.yaml
+> > index 04a2ba1aa946..0eb6277082fe 100644
+> > --- a/Documentation/devicetree/bindings/thermal/nvidia,tegra124-socther=
+m.yaml
+> > +++ b/Documentation/devicetree/bindings/thermal/nvidia,tegra124-socther=
+m.yaml
+> > @@ -121,6 +121,20 @@ properties:
+> >                # high (85%, TEGRA_SOCTHERM_THROT_LEVEL_HIGH)
+> >                - 3
+> > =20
+> > +          temperature-millicelsius:
 >=20
-> [ ... ]
->=20
-> > +	ret =3D of_property_read_u32(np, "temperature-millicelsius",
-> > +				   &stc->temperature);
-> > +	if (ret < 0)
-> > +		goto err;
-> > +
-> > +	ret =3D of_property_read_u32(np, "hysteresis-millicelsius",
-> > +				   &stc->hysteresis);
-> > +	if (ret < 0)
-> > +		goto err;
-> > +
-> > +	stc->num_zones =3D of_count_phandle_with_args(np, "nvidia,thermal-zon=
-es",
-> > +						    NULL);
-> > +	if (stc->num_zones > 0) {
-> > +		struct device_node *zone;
-> > +		unsigned int i;
-> > +
-> > +		stc->zones =3D devm_kcalloc(ts->dev, stc->num_zones, sizeof(zone),
-> > +					  GFP_KERNEL);
-> > +		if (!stc->zones)
-> > +			return -ENOMEM;
-> > +
-> > +		for (i =3D 0; i < stc->num_zones; i++) {
-> > +			zone =3D of_parse_phandle(np, "nvidia,thermal-zones", i);
-> > +			stc->zones[i] =3D zone;
-> > +		}
-> > +	}
->=20
-> What is the connection between the temperature sensor and the hardware
-> limiter?
->=20
-> I mean, one hand there is the hardware limiter which is not connected to =
-the
-> sensor neither a thermal zone and it could be self contained in a separate
-> driver. And then there is the temperature sensor.
->=20
-> The thermal zone phandle things connected with the throttling bindings
-> sounds like strange to me.
->=20
-> What prevents to split the throttling and the sensor into separate code?
+> 'temperature' is redundant since we have units. Perhaps=20
+> 'throttle-millicelsius' or 'auto-throttle-millicelsius' instead to say=20
+> what the temperature is for.
 
-Both the temperature sensor and the hardware throttle mechanism are part
-of the same IP block, so it would be quite difficult (and unnecessary)
-to split them into separate drivers.
+Okay, will do.
 
-The hardware throttler uses the temperature sensor's data to initiate
-throttling automatically when certain (programmable) temperature
-thresholds are reached.
+>=20
+> > +            minimum: -273000
+> > +            maximum: 200000
+>=20
+> Quite impressive operating range.
 
-The reason why we need to reference the thermal zone is because the
-registers needed to program the throttler are contained within the
-sensor group (which are effectively mapped to thermal zones).
-
-I suppose there are a number of other ways how this could be described.
-The thermal zones could be extended with extra information about the
-throttling, or we could use just the sensor group ID instead of a full
-phandle to reference this.
-
-I was sort of trying to keep things somewhat aligned with the concept of
-thermal zones and not rewrite the entire thing, but perhaps I should go
-back to the drawing board and think about whether there's an even better
-way to describe this in DT.
+Yeah, I don't actually know where these come from. Looking at the manual
+these sensors are actually limited to -127=C2=B0C - 127=C2=B0C. I'll fix th=
+at up.
 
 Thierry
 
---2ifyYy2hSJpHxEx3
+--IL1DOl7t2BE0L6Kx
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmVONkAACgkQ3SOs138+
-s6FLgQ/+L/ArqQGbn+pd8w9dyyEkvK0jYYuf2nmQyyj/6o01UxsJoBNFREXDlBt7
-2Qwd8eHD1hTkPrphvBX1BbO03pxG/wUk7nYesjGTEKot9CdEDdIpIgx5j8CnONxu
-BYiIwOLCYiaGG46H5eEMM9fVfqNmU7zLf1zLERUEDbPNY2dpGKRRrBnsTT1KzChy
-6ynwh+Yvbtohnw3I9OFsDKRf/8y+X8aqnXFLHRf3pbiZFEIShuJFflKbwidfincl
-QY8pFOA9W3avFbykVPU6i3pH5JB6Z7D+3Xq5G92PCjcoIP0H3QRMw/Ai9PJY0FYv
-YZj8JOmHdEKJfzh0DtFICAKFdBTUzQDgZPjOcmJ9LuCDt8SLQwbiloDxuJBb8Q9j
-BsSJckkWZ4I2AcxSpgkHWYYH+uW4q4vCkRSVGpzCovUtT5Mz1zOKJeTANTbonXT5
-zKdpCDTuyNIYdzj5F5Xnw/tRf9yNBqXsc9P9gDecY7Hgsu4iAcQnUCjm5CBpDRoJ
-tTgzsfFl72WaAgLnMqSGQ6uOwFPLJM8rgsUfi0K5L3X6ufoWziz62YZGxAyTroVi
-0weQCtzTwiYoij9sem3NuLyIi0FdtQPEVCMFMuWw0TdiPDLiTDpOJlSTK24AsJQR
-r+tRXyeLmY98I1s5EoEHaLScLDBdqgBxjIlah8xQNBf3tuMlu+M=
-=XD6k
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmVONvgACgkQ3SOs138+
+s6Fqfg//Wrvd1xbopW4sXoP86ueodfIy1oZbQEWuPK1X0QLTbougyvBWkAu0qFmS
+ztxjspB29ruwaGAYju4ShhMuORc+4W8co5TIpmGZUXrtHzzNGaIxqlmYbypsQQGR
+JlOrOdui73QlAkyV/Avu5s+UQ1CP+7t2Nlx5iTVJECygoF/msZQ05K0iRrl2J3B4
+/KNMecnCoosxnQz5baPVfWPqOqjMtGStwcBqOh/LOlToYn7JLV5VJDRFLDH3vTY5
+mSk4jij0pMo+RLmKQZwIYUwKN/kITXLZ9k/Toy7nfnvT/ScJCXwBaK5e4beGLNDf
+s+OPGn4IVZixIsMb87lJsZeMFslHm4qwuPhEUEYjFYzUvfryVE4A8xowsINLQ9D5
+C9MMr2grhQ/hpTpuFRfWD0r7Eo7nB/fJYFNiWidCb7WhLpEfa9fIjJGa12ivbQzE
+5ywBHAG1cmil0kXCRfYxzr3Aa9VuQ6UA52mEGXtmuxH1PfNzjP/CH0U9w+U62F6m
+sQdu3tCFZj0w4IWFUZ5ripF3sRtKwBu/xaDCMy+K92ThnHv1q24QrqR05pueniwJ
+XSDbsB9TOBNmTdVaUkn/JVXtH16C5ko+Jgzdgn6ElKtguV0UwfbZNpXRX+uwDkmE
+w4uuQcP/wP2tCP8IWiLWxkgjgkfSH+OoqxywPXfMjvV4diSbjCg=
+=cB6H
 -----END PGP SIGNATURE-----
 
---2ifyYy2hSJpHxEx3--
+--IL1DOl7t2BE0L6Kx--
