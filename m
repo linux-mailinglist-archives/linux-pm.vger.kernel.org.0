@@ -2,370 +2,186 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F04A7E8801
-	for <lists+linux-pm@lfdr.de>; Sat, 11 Nov 2023 02:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB017E88F5
+	for <lists+linux-pm@lfdr.de>; Sat, 11 Nov 2023 04:39:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345356AbjKKBuE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Nov 2023 20:50:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57708 "EHLO
+        id S230168AbjKKDjT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Nov 2023 22:39:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234613AbjKKBuD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Nov 2023 20:50:03 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0846E44BA
-        for <linux-pm@vger.kernel.org>; Fri, 10 Nov 2023 17:49:57 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-daa2684f67eso2109573276.0
-        for <linux-pm@vger.kernel.org>; Fri, 10 Nov 2023 17:49:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1699667396; x=1700272196; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=n5zYvNy11wPFSXtbOCMF1jmCxoULUPk8AuRfEcB+0ec=;
-        b=ai2g+uoYus0H1rcrIVWAChCtNoh+LJ09G+R3nXuo0yvoYXgfA3IGd4fMlAGL+6U2VW
-         dMI1Z1j7c8LcSqsXVH1e+4byaRtLV+YGqbUfnFe3h62TeKz3m298KX/HaLKN2I9TWKOy
-         PBOPerUR+YY8SBFQJLVE5XkMIDrsZ7YIQGf9Lp6VSM+dVQhR+3QHJ984xWRUsVOMafmm
-         0uoXr2Ri5GKBWZnq6vw6cf3z2/PYHLI9QSU3fRKtRtDIKJMhOYDZbjfPAMKu/kzYsw5+
-         9II5mc+La7Ysr93/7Ad5HoZW9/q0jtYfoaLf4mRYTTWGn5XhLaFGki7sZzPI6MFPW4oo
-         dFCQ==
+        with ESMTP id S230149AbjKKDjT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Nov 2023 22:39:19 -0500
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836761FEF;
+        Fri, 10 Nov 2023 19:39:16 -0800 (PST)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-1e9a757e04eso1934289fac.0;
+        Fri, 10 Nov 2023 19:39:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699667396; x=1700272196;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n5zYvNy11wPFSXtbOCMF1jmCxoULUPk8AuRfEcB+0ec=;
-        b=P89isFzIcdxxUBMVU+Zd9Kyx/rTP0lRnisSNRN+j2q6AGaXbcn8QLN7Au8XaN/cI5F
-         voMz9R4s8W98VsdOHqtYt8vkDo90Z4kQvXWfwQVnMvnZkXa+acjYSqnzq19oEgTp47gS
-         JBHSpP681bx79lWR00MofnbPsn+hcmjC14aSNw9Ux+RLWJcK+p2jgBRBLOWXRBfKvAFG
-         yc7MOib4GtaDoVEZ6Kkq9v2Gem8kIdQJYJtEYZH18/M6zMFIZZm4//TkBjjnBxX+k9QW
-         gzbqNTFIniM72JCLacmM77sjuiRTJZDiAS24dkdjeARl1CDH8nKDlmd77TjO8XnJk8D8
-         vkcQ==
-X-Gm-Message-State: AOJu0Yxl0aNq0NR+15GxrPUBOeWLW5z0l0ieiU93Fobo9CYC2x33NAy8
-        Lmn1XnCBqVS1EeqV+zZuHwnrcwhbK4zx
-X-Google-Smtp-Source: AGHT+IGlkaHWtGqV0UkJu0rvtA1k9ZZ57Gs66Jwq7SIIgYI9wrEfdfCXzyPpZ9/K7DvXZAhRDM+MJo8CPWkW
-X-Received: from davidai2.mtv.corp.google.com ([2620:15c:211:201:77fa:5ee:8100:77])
- (user=davidai job=sendgmr) by 2002:a25:9e88:0:b0:d9c:f811:eb9e with SMTP id
- p8-20020a259e88000000b00d9cf811eb9emr27355ybq.4.1699667396287; Fri, 10 Nov
- 2023 17:49:56 -0800 (PST)
-Date:   Fri, 10 Nov 2023 17:49:30 -0800
-In-Reply-To: <20231111014933.1934562-1-davidai@google.com>
-Mime-Version: 1.0
-References: <20231111014933.1934562-1-davidai@google.com>
-X-Mailer: git-send-email 2.42.0.869.gea05f2083d-goog
-Message-ID: <20231111014933.1934562-3-davidai@google.com>
-Subject: [PATCH v4 2/2] cpufreq: add virtual-cpufreq driver
-From:   David Dai <davidai@google.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        David Dai <davidai@google.com>,
-        Saravana Kannan <saravanak@google.com>
-Cc:     Quentin Perret <qperret@google.com>,
-        Masami Hiramatsu <mhiramat@google.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Gupta Pankaj <pankaj.gupta@amd.com>,
-        Mel Gorman <mgorman@suse.de>, kernel-team@android.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        d=1e100.net; s=20230601; t=1699673956; x=1700278756;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ahlpqsctH1VRnueWF+JaC2Li/R0xH14IQP2HTxHkR4Y=;
+        b=gBHKD3ej76E9MQMEVdIAcww4YTQY9kPHOcsfA4ubHzbolmIS8JBset0yJOIFDMNj/k
+         +JNsOOD3489AeREu6nSvXWZtP4B2A6DlVcmT0tX7/S078LA+AOpria+h1v7ORt9x44FB
+         TJRtszSiC/1oArGm6Ph9WQR0alMMzJvqkrCC3oGCIMNeXauHnS4vkybsg2R+hBbOh2/0
+         L5eG8OzuJHA0hJc4DVe+2gOG1L3SIXOBK5PY3kj/TwwMsyeTM6ssDxqexZmydYU/iHaF
+         +qkOcIRQ8LBjUsz4ndtbK0tIGwIqtqzD6Tri32zGn4ekUK3XtSgIQt/t4B96Hh1xzpp0
+         bTiQ==
+X-Gm-Message-State: AOJu0YwxYpuE9JAW6aGvVLbt8gXJM9f/0qYVF/XK1jvIGHCoDcZ+CB5i
+        y5DVUFzTQ6Kaa1VvYzny6vadpGTAr0H7zX2W7SfAYgpI
+X-Google-Smtp-Source: AGHT+IEu/KIseL3eYLtC3vD7pzVOV4vETyO5SV7cuz2l+hRsngOBkiJy6qW7p2MymEHXrvHUUix5Q3a9NDmdSYikGrg=
+X-Received: by 2002:a05:6870:c69c:b0:1e9:dfe6:38b4 with SMTP id
+ cv28-20020a056870c69c00b001e9dfe638b4mr470115oab.15.1699673955808; Fri, 10
+ Nov 2023 19:39:15 -0800 (PST)
+MIME-Version: 1.0
+References: <CAJvTdKn-xtmin9OjnzHg8wy4PM8Lc3Per=3y3UWORhjdroYP3w@mail.gmail.com>
+ <CAHk-=wjvJ44a9Z=tkR2o-heQ4XLp0sgynDOhe6JH2fgg=MMMXA@mail.gmail.com>
+In-Reply-To: <CAHk-=wjvJ44a9Z=tkR2o-heQ4XLp0sgynDOhe6JH2fgg=MMMXA@mail.gmail.com>
+From:   Len Brown <lenb@kernel.org>
+Date:   Fri, 10 Nov 2023 22:39:04 -0500
+Message-ID: <CAJvTdK=OSTgYkut=-r95nAYOvVfUt3Cah92qudifeQW4ZJHT7Q@mail.gmail.com>
+Subject: [GIT PULL] turbostat for Linux-6.7 (with signed tag)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Introduce a virtualized cpufreq driver for guest kernels to improve
-performance and power of workloads within VMs.
+Hi Linus,
 
-This driver does two main things:
+(Same code as previous pull request, with addition of a signed tag.
+ Hopefully it verifies okay at your end.)
 
-1. Sends the frequency of vCPUs as a hint to the host. The host uses the
-hint to schedule the vCPU threads and decide physical CPU frequency.
+Turbostat features are now table-driven (Rui Zhang)
+Add support for some new platforms (Sumeet Pawnikar, Rui Zhang)
+Gracefully run in configs when CPUs are limited (Rui Zhang, Srinivas Pandruvada)
+misc minor fixes.
 
-2. If a VM does not support a virtualized FIE(like AMUs), it queries the
-host CPU frequency by reading a MMIO region of a virtual cpufreq device
-to update the guest's frequency scaling factor periodically. This enables
-accurate Per-Entity Load Tracking for tasks running in the guest.
+thanks!
+Len Brown, Intel Open Source Technology Center
 
-Co-developed-by: Saravana Kannan <saravanak@google.com>
-Signed-off-by: Saravana Kannan <saravanak@google.com>
-Signed-off-by: David Dai <davidai@google.com>
----
- drivers/cpufreq/Kconfig           |  15 +++
- drivers/cpufreq/Makefile          |   1 +
- drivers/cpufreq/virtual-cpufreq.c | 201 ++++++++++++++++++++++++++++++
- include/linux/arch_topology.h     |   1 +
- 4 files changed, 218 insertions(+)
- create mode 100644 drivers/cpufreq/virtual-cpufreq.c
+The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
-diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
-index 35efb53d5492..f2d37075aa10 100644
---- a/drivers/cpufreq/Kconfig
-+++ b/drivers/cpufreq/Kconfig
-@@ -217,6 +217,21 @@ config CPUFREQ_DT
- 
- 	  If in doubt, say N.
- 
-+config CPUFREQ_VIRT
-+	tristate "Virtual cpufreq driver"
-+	depends on OF
-+	select PM_OPP
-+	help
-+	  This adds a virtualized cpufreq driver for guest kernels that
-+	  read/writes to a MMIO region for a virtualized cpufreq device to
-+	  communicate with the host. It sends frequency updates to the host
-+	  which gets used as a hint to schedule vCPU threads and select CPU
-+	  frequency. If a VM does not support a virtualized FIE such as AMUs,
-+	  it updates the frequency scaling factor by polling host CPU frequency
-+	  to enable accurate Per-Entity Load Tracking for tasks running in the guest.
-+
-+	  If in doubt, say N.
-+
- config CPUFREQ_DT_PLATDEV
- 	tristate "Generic DT based cpufreq platdev driver"
- 	depends on OF
-diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
-index 8d141c71b016..eb72ecdc24db 100644
---- a/drivers/cpufreq/Makefile
-+++ b/drivers/cpufreq/Makefile
-@@ -16,6 +16,7 @@ obj-$(CONFIG_CPU_FREQ_GOV_ATTR_SET)	+= cpufreq_governor_attr_set.o
- 
- obj-$(CONFIG_CPUFREQ_DT)		+= cpufreq-dt.o
- obj-$(CONFIG_CPUFREQ_DT_PLATDEV)	+= cpufreq-dt-platdev.o
-+obj-$(CONFIG_CPUFREQ_VIRT)		+= virtual-cpufreq.o
- 
- # Traces
- CFLAGS_amd-pstate-trace.o               := -I$(src)
-diff --git a/drivers/cpufreq/virtual-cpufreq.c b/drivers/cpufreq/virtual-cpufreq.c
-new file mode 100644
-index 000000000000..f828d3345a68
---- /dev/null
-+++ b/drivers/cpufreq/virtual-cpufreq.c
-@@ -0,0 +1,201 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2023 Google LLC
-+ */
-+
-+#include <linux/arch_topology.h>
-+#include <linux/cpufreq.h>
-+#include <linux/init.h>
-+#include <linux/sched.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of_address.h>
-+#include <linux/of_platform.h>
-+#include <linux/pm_opp.h>
-+#include <linux/slab.h>
-+
-+#define REG_CUR_FREQ_KHZ_OFFSET 0x0
-+#define REG_SET_FREQ_KHZ_OFFSET 0x4
-+#define PER_CPU_OFFSET 0x8
-+
-+static void __iomem *base;
-+
-+static void virt_scale_freq_tick(void)
-+{
-+	int cpu = smp_processor_id();
-+	u32 max_freq = (u32)cpufreq_get_hw_max_freq(cpu);
-+	u64 cur_freq;
-+	unsigned long scale;
-+
-+	cur_freq = (u64)readl_relaxed(base + cpu * PER_CPU_OFFSET
-+			+ REG_CUR_FREQ_KHZ_OFFSET);
-+
-+	cur_freq <<= SCHED_CAPACITY_SHIFT;
-+	scale = (unsigned long)div_u64(cur_freq, max_freq);
-+	scale = min(scale, SCHED_CAPACITY_SCALE);
-+
-+	this_cpu_write(arch_freq_scale, scale);
-+}
-+
-+static struct scale_freq_data virt_sfd = {
-+	.source = SCALE_FREQ_SOURCE_VIRT,
-+	.set_freq_scale = virt_scale_freq_tick,
-+};
-+
-+static unsigned int virt_cpufreq_set_perf(struct cpufreq_policy *policy)
-+{
-+	writel_relaxed(policy->cached_target_freq,
-+		       base + policy->cpu * PER_CPU_OFFSET + REG_SET_FREQ_KHZ_OFFSET);
-+	return 0;
-+}
-+
-+static unsigned int virt_cpufreq_fast_switch(struct cpufreq_policy *policy,
-+					     unsigned int target_freq)
-+{
-+	virt_cpufreq_set_perf(policy);
-+	return target_freq;
-+}
-+
-+static int virt_cpufreq_target_index(struct cpufreq_policy *policy,
-+				     unsigned int index)
-+{
-+	return virt_cpufreq_set_perf(policy);
-+}
-+
-+static int virt_cpufreq_cpu_init(struct cpufreq_policy *policy)
-+{
-+	struct cpufreq_frequency_table *table;
-+	struct device *cpu_dev;
-+	int ret;
-+
-+	cpu_dev = get_cpu_device(policy->cpu);
-+	if (!cpu_dev)
-+		return -ENODEV;
-+
-+	ret = dev_pm_opp_of_add_table(cpu_dev);
-+	if (ret)
-+		return ret;
-+
-+	ret = dev_pm_opp_get_opp_count(cpu_dev);
-+	if (ret <= 0) {
-+		dev_err(cpu_dev, "OPP table can't be empty\n");
-+		return -ENODEV;
-+	}
-+
-+	ret = dev_pm_opp_init_cpufreq_table(cpu_dev, &table);
-+	if (ret) {
-+		dev_err(cpu_dev, "failed to init cpufreq table: %d\n", ret);
-+		return ret;
-+	}
-+
-+	policy->freq_table = table;
-+
-+	/*
-+	 * To simplify and improve latency of handling frequency requests on
-+	 * the host side, this ensures that the vCPU thread triggering the MMIO
-+	 * abort is the same thread whose performance constraints (Ex. uclamp
-+	 * settings) need to be updated. This simplifies the VMM (Virtual
-+	 * Machine Manager) having to find the correct vCPU thread and/or
-+	 * facing permission issues when configuring other threads.
-+	 */
-+	policy->dvfs_possible_from_any_cpu = false;
-+	policy->fast_switch_possible = true;
-+
-+	/*
-+	 * Using the default SCALE_FREQ_SOURCE_CPUFREQ is insufficient since
-+	 * the actual physical CPU frequency may not match requested frequency
-+	 * from the vCPU thread due to frequency update latencies or other
-+	 * inputs to the physical CPU frequency selection. This additional FIE
-+	 * source allows for more accurate freq_scale updates and only takes
-+	 * effect if another FIE source such as AMUs have not been registered.
-+	 */
-+	topology_set_scale_freq_source(&virt_sfd, policy->cpus);
-+
-+	return 0;
-+}
-+
-+static int virt_cpufreq_cpu_exit(struct cpufreq_policy *policy)
-+{
-+	topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_VIRT, policy->related_cpus);
-+	kfree(policy->freq_table);
-+	policy->freq_table = NULL;
-+	return 0;
-+}
-+
-+static int virt_cpufreq_online(struct cpufreq_policy *policy)
-+{
-+	/* Nothing to restore. */
-+	return 0;
-+}
-+
-+static int virt_cpufreq_offline(struct cpufreq_policy *policy)
-+{
-+	/* Dummy offline() to avoid exit() being called and freeing resources. */
-+	return 0;
-+}
-+
-+static struct cpufreq_driver cpufreq_virt_driver = {
-+	.name		= "virt-cpufreq",
-+	.init		= virt_cpufreq_cpu_init,
-+	.exit		= virt_cpufreq_cpu_exit,
-+	.online         = virt_cpufreq_online,
-+	.offline        = virt_cpufreq_offline,
-+	.verify		= cpufreq_generic_frequency_table_verify,
-+	.target_index	= virt_cpufreq_target_index,
-+	.fast_switch	= virt_cpufreq_fast_switch,
-+	.attr		= cpufreq_generic_attr,
-+};
-+
-+static int virt_cpufreq_driver_probe(struct platform_device *pdev)
-+{
-+	int ret;
-+
-+	base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(base))
-+		return PTR_ERR(base);
-+
-+	ret = cpufreq_register_driver(&cpufreq_virt_driver);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Virtual CPUFreq driver failed to register: %d\n", ret);
-+		return ret;
-+	}
-+
-+	dev_dbg(&pdev->dev, "Virtual CPUFreq driver initialized\n");
-+	return 0;
-+}
-+
-+static int virt_cpufreq_driver_remove(struct platform_device *pdev)
-+{
-+	cpufreq_unregister_driver(&cpufreq_virt_driver);
-+	return 0;
-+}
-+
-+static const struct of_device_id virt_cpufreq_match[] = {
-+	{ .compatible = "qemu,virtual-cpufreq", .data = NULL},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, virt_cpufreq_match);
-+
-+static struct platform_driver virt_cpufreq_driver = {
-+	.probe = virt_cpufreq_driver_probe,
-+	.remove = virt_cpufreq_driver_remove,
-+	.driver = {
-+		.name = "virt-cpufreq",
-+		.of_match_table = virt_cpufreq_match,
-+	},
-+};
-+
-+static int __init virt_cpufreq_init(void)
-+{
-+	return platform_driver_register(&virt_cpufreq_driver);
-+}
-+postcore_initcall(virt_cpufreq_init);
-+
-+static void __exit virt_cpufreq_exit(void)
-+{
-+	platform_driver_unregister(&virt_cpufreq_driver);
-+}
-+module_exit(virt_cpufreq_exit);
-+
-+MODULE_DESCRIPTION("Virtual cpufreq driver");
-+MODULE_LICENSE("GPL");
-diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-index a07b510e7dc5..888282dce2ba 100644
---- a/include/linux/arch_topology.h
-+++ b/include/linux/arch_topology.h
-@@ -42,6 +42,7 @@ enum scale_freq_source {
- 	SCALE_FREQ_SOURCE_CPUFREQ = 0,
- 	SCALE_FREQ_SOURCE_ARCH,
- 	SCALE_FREQ_SOURCE_CPPC,
-+	SCALE_FREQ_SOURCE_VIRT,
- };
- 
- struct scale_freq_data {
--- 
-2.42.0.869.gea05f2083d-goog
+  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git turbostat
+
+for you to fetch changes up to b8337e6a780dad9505f9d44da07c0a5c52fa0a04:
+
+  tools/power turbostat: version 2023.11.07 (2023-11-07 23:28:30 -0500)
+
+----------------------------------------------------------------
+Chen Yu (1):
+      tools/power/turbostat: Enable the C-state Pre-wake printing
+
+Len Brown (2):
+      tools/power/turbostat: bugfix "--show IPC"
+      tools/power turbostat: version 2023.11.07
+
+Srinivas Pandruvada (1):
+      tools/power/turbostat: Move process to root cgroup
+
+Sumeet Pawnikar (2):
+      tools/power/turbostat: Add initial support for ArrowLake
+      tools/power/turbostat: Add initial support for LunarLake
+
+Zhang Rui (80):
+      tools/power/turbostat: Fix failure with new uncore sysfs
+      tools/power/turbostat: Fix a knl bug
+      tools/power/turbostat: Enable TCC Offset on more models
+      tools/power/turbostat: Support alternative graphics sysfs knobs
+      tools/power/turbostat: Replace raw value cpu model with Macro
+      tools/power/turbostat: Remove redundant duplicates
+      tools/power/turbostat: Remove pseudo check for two models
+      tools/power/turbostat: Add skeleton support for table driven
+feature enumeration
+      tools/power/turbostat: Abstract MSR_MISC_FEATURE_CONTROL support
+      tools/power/turbostat: Abstract MSR_MISC_PWR_MGMT support
+      tools/power/turbostat: Abstract BCLK frequency support
+      tools/power/turbostat: Abstract Package cstate limit decoding support
+      tools/power/turbostat: Abstract Nehalem MSRs support
+      tools/power/turbostat: Remove a redundant check
+      tools/power/turbostat: Rename some functions
+      tools/power/turbostat: Abstract Turbo Ratio Limit MSRs support
+      tools/power/turbostat: Rename some TRL functions
+      tools/power/turbostat: Abstract Config TDP MSRs support
+      tools/power/turbostat: Abstract TCC Offset bits support
+      tools/power/turbostat: Abstract Perf Limit Reasons MSRs support
+      tools/power/turbostat: Abstract Automatic Cstate Conversion support
+      tools/power/turbostat: Abstract hardcoded Crystal Clock frequency
+      tools/power/turbostat: Redefine RAPL macros
+      tools/power/turbostat: Simplify the logic for RAPL enumeration
+      tools/power/turbostat: Abstract RAPL MSRs support
+      tools/power/turbostat: Abstract Per Core RAPL support
+      tools/power/turbostat: Abstract RAPL divisor support
+      tools/power/turbostat: Abstract fixed DRAM Energy unit support
+      tools/power/turbostat: Abstract hardcoded TDP value
+      tools/power/turbostat: Remove unused family/model parameters for
+RAPL functions
+      tools/power/turbostat: Abstract TSC tweak support
+      tools/power/turbostat: Add skeleton support for cstate enumeration
+      tools/power/turbostat: Adjust cstate for models with .has_nhm_msrs set
+      tools/power/turbostat: Adjust cstate for has_snb_msrs() models
+      tools/power/turbostat: Adjust cstate for models with .cst_limit set
+      tools/power/turbostat: Adjust cstate for has_snb_msrs() models
+      tools/power/turbostat: Adjust cstate for has_slv_msrs() models
+      tools/power/turbostat: Adjust cstate for is_jvl() models
+      tools/power/turbostat: Adjust cstate for is_dnv() models
+      tools/power/turbostat: Adjust cstate for is_skx()/is_icx()/is_spr() models
+      tools/power/turbostat: Adjust cstate for is_bdx() models
+      tools/power/turbostat: Adjust cstate for has_c8910_msrs() models
+      tools/power/turbostat: Adjust cstate for
+is_slm()/is_knl()/is_cnl()/is_ehl() models
+      tools/power/turbostat: Use fine grained IRTL output
+      tools/power/turbostat: Abstract IRTL support
+      tools/power/turbostat: Abstract MSR_CORE_C1_RES support
+      tools/power/turbostat: Abstract MSR_MODULE_C6_RES_MS support
+      tools/power/turbostat: Abstract MSR_CC6/MC6_DEMOTION_POLICY_CONFIG support
+      tools/power/turbostat: Abstract MSR_ATOM_PKG_C6_RESIDENCY support
+      tools/power/turbostat: Abstract MSR_KNL_CORE_C6_RESIDENCY support
+      tools/power/turbostat: Abstract extended cstate MSRs support
+      tools/power/turbostat: Abstract aperf/mperf multiplier support
+      tools/power/turbostat: Abstract cstate prewake bit support
+      tools/power/turbostat: Delete intel_model_duplicates()
+      tools/power/turbostat: Improve probe_platform_features() logic
+      tools/power/turbostat: Relocate cstate probing code
+      tools/power/turbostat: Relocate pstate probing code
+      tools/power/turbostat: Rename uncore probing function
+      tools/power/turbostat: Rename rapl probing function
+      tools/power/turbostat: Relocate graphics probing code
+      tools/power/turbostat: Relocate lpi probing code
+      tools/power/turbostat: Relocate thermal probing code
+      tools/power/turbostat: Reorder some functions
+      tools/power/turbostat: Relocate more probing related code
+      tools/power/turbostat: Introduce probe_pm_features()
+      tools/power/turbostat: Enable MSR_CORE_C1_RES on recent Intel
+client platforms
+      tools/power/turbostat: Remove PC7/PC9 support on ADL/RPL
+      tools/power/turbostat: Introduce cpu_allowed_set
+      tools/power/turbostat: Obey allowed CPUs when accessing CPU counters
+      tools/power/turbostat: Obey allowed CPUs during startup
+      tools/power/turbostat: Abstract several functions
+      tools/power/turbostat: Obey allowed CPUs for primary thread/core detection
+      tools/power/turbostat: Obey allowed CPUs for system summary
+      tools/power/turbostat: Handle offlined CPUs in cpu_subset
+      tools/power/turbostat: Abstrct function for parsing cpu string
+      tools/power/turbostat: Handle cgroup v2 cpu limitation
+      tools/power/turbostat: Add MSR_CORE_C1_RES support for spr_features
+      tools/power/turbostat: Add initial support for GraniteRapids
+      tools/power/turbostat: Add initial support for SierraForest
+      tools/power/turbostat: Add initial support for GrandRidge
+
+ tools/power/x86/turbostat/turbostat.c | 3074 ++++++++++++++++-----------------
+ 1 file changed, 1537 insertions(+), 1537 deletions(-)
