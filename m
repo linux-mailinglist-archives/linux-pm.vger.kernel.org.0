@@ -2,186 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB017E88F5
-	for <lists+linux-pm@lfdr.de>; Sat, 11 Nov 2023 04:39:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8177E8C09
+	for <lists+linux-pm@lfdr.de>; Sat, 11 Nov 2023 19:18:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbjKKDjT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Nov 2023 22:39:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
+        id S229519AbjKKSSj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 11 Nov 2023 13:18:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbjKKDjT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Nov 2023 22:39:19 -0500
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836761FEF;
-        Fri, 10 Nov 2023 19:39:16 -0800 (PST)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-1e9a757e04eso1934289fac.0;
-        Fri, 10 Nov 2023 19:39:16 -0800 (PST)
+        with ESMTP id S229379AbjKKSSi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 11 Nov 2023 13:18:38 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75032D77;
+        Sat, 11 Nov 2023 10:18:33 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-507a0907896so4148744e87.2;
+        Sat, 11 Nov 2023 10:18:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1699726712; x=1700331512; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Os4KBIFKBrhxCNe2iV6sYOSUCifSAC9wTubOo6x2YGA=;
+        b=ldh8Gy7H+fB07WnLwLs4whDNnMWJ9t73ETCn0BOh3NQjk1P1KoAlxgUQzAeWW8GcEn
+         jzLSifyLLc751Uhmr6jpH6gTwvteDNMBluLUa3smHHCpHWKKDWUN4dw3Q8Dn3lJzrVtn
+         xEw0kEw4h4uaZge4XWlBny6oXs5UkBAyI0NcnaLEEDIU37btmMlQnuiTj9RID6/QzKY6
+         FZaIhrW49f6tl7kkn+onwyBlDyVwEeuEvAi6yBSPDyy237djg6kfIAWH8TPD4WgoasJj
+         CHY9BOytR4oy1nGYgsmRCW/GSxsy158ud7ywWmUzL6pxcwW84MUFaekqH3WgVGMuX8C6
+         K+fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699673956; x=1700278756;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ahlpqsctH1VRnueWF+JaC2Li/R0xH14IQP2HTxHkR4Y=;
-        b=gBHKD3ej76E9MQMEVdIAcww4YTQY9kPHOcsfA4ubHzbolmIS8JBset0yJOIFDMNj/k
-         +JNsOOD3489AeREu6nSvXWZtP4B2A6DlVcmT0tX7/S078LA+AOpria+h1v7ORt9x44FB
-         TJRtszSiC/1oArGm6Ph9WQR0alMMzJvqkrCC3oGCIMNeXauHnS4vkybsg2R+hBbOh2/0
-         L5eG8OzuJHA0hJc4DVe+2gOG1L3SIXOBK5PY3kj/TwwMsyeTM6ssDxqexZmydYU/iHaF
-         +qkOcIRQ8LBjUsz4ndtbK0tIGwIqtqzD6Tri32zGn4ekUK3XtSgIQt/t4B96Hh1xzpp0
-         bTiQ==
-X-Gm-Message-State: AOJu0YwxYpuE9JAW6aGvVLbt8gXJM9f/0qYVF/XK1jvIGHCoDcZ+CB5i
-        y5DVUFzTQ6Kaa1VvYzny6vadpGTAr0H7zX2W7SfAYgpI
-X-Google-Smtp-Source: AGHT+IEu/KIseL3eYLtC3vD7pzVOV4vETyO5SV7cuz2l+hRsngOBkiJy6qW7p2MymEHXrvHUUix5Q3a9NDmdSYikGrg=
-X-Received: by 2002:a05:6870:c69c:b0:1e9:dfe6:38b4 with SMTP id
- cv28-20020a056870c69c00b001e9dfe638b4mr470115oab.15.1699673955808; Fri, 10
- Nov 2023 19:39:15 -0800 (PST)
-MIME-Version: 1.0
-References: <CAJvTdKn-xtmin9OjnzHg8wy4PM8Lc3Per=3y3UWORhjdroYP3w@mail.gmail.com>
- <CAHk-=wjvJ44a9Z=tkR2o-heQ4XLp0sgynDOhe6JH2fgg=MMMXA@mail.gmail.com>
-In-Reply-To: <CAHk-=wjvJ44a9Z=tkR2o-heQ4XLp0sgynDOhe6JH2fgg=MMMXA@mail.gmail.com>
-From:   Len Brown <lenb@kernel.org>
-Date:   Fri, 10 Nov 2023 22:39:04 -0500
-Message-ID: <CAJvTdK=OSTgYkut=-r95nAYOvVfUt3Cah92qudifeQW4ZJHT7Q@mail.gmail.com>
-Subject: [GIT PULL] turbostat for Linux-6.7 (with signed tag)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20230601; t=1699726712; x=1700331512;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Os4KBIFKBrhxCNe2iV6sYOSUCifSAC9wTubOo6x2YGA=;
+        b=rDwZOUddggUx0kGP8x3bgps8bw0XOL69m5Xdbnci9ss2kVsz6ANLdI5s3Y+KSbIpPU
+         /HpwQGGBlLio72Nn5u/WDECuImnOIB6YKWuMhabbUITXyMJG13KLar2QK+3G7o/CgRUT
+         QDenmyAWgDClNK0uASFgveKvnoL+GkLAgxHM1HjN745fXoG7i1VpTcLxfWAXtz+MK5+g
+         ef3JDJx6RGIx2T7iikvmKKj/zWh6yB16+TgS550TnACKWhOabFmOWS3D91CzJIADLAd1
+         kh59cCpsAAbCPeGCCb/I5Z7RaoBaGJ24W7RUikiBPsP4T8tMzfEVYy5RAZa3QV+JpJzD
+         YzxQ==
+X-Gm-Message-State: AOJu0YyoYna2ZbQlghrWUrG/L99ZoFMxRCgiVHqKkmxFbL32PCkBRsKB
+        DLkDLgT5gynjqGHCQXhjo4Q=
+X-Google-Smtp-Source: AGHT+IGWSLvEEWKMjKSkylq9sGZ0KV/8c86kVFIgYc1m0RkjmWY37s2qpjH05vtA3bG5UrjESvvwcA==
+X-Received: by 2002:a05:6512:2399:b0:500:be57:ce53 with SMTP id c25-20020a056512239900b00500be57ce53mr2275395lfv.42.1699726711568;
+        Sat, 11 Nov 2023 10:18:31 -0800 (PST)
+Received: from giga-mm.home ([2a02:1210:8629:800:82ee:73ff:feb8:99e3])
+        by smtp.gmail.com with ESMTPSA id n20-20020a170906b31400b009e656ce2930sm1403421ejz.60.2023.11.11.10.18.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Nov 2023 10:18:30 -0800 (PST)
+Message-ID: <80ed91bb971516638fa1793d648939815eba7630.camel@gmail.com>
+Subject: Re: [PATCH v3 14/42] power: reset: Add a driver for the ep93xx reset
+From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To:     Andy Shevchenko <andy@kernel.org>, nikita.shubin@maquefel.me
+Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
+        Lennert Buytenhek <kernel@wantstofly.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Lukasz Majewski <lukma@denx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Michael Peters <mpeters@embeddedts.com>,
+        Kris Bahnsen <kris@embeddedts.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-input@vger.kernel.org, alsa-devel@alsa-project.org
+Date:   Sat, 11 Nov 2023 19:18:28 +0100
+In-Reply-To: <ZLq0Z0QgBdCoDpV+@smile.fi.intel.com>
+References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
+         <20230605-ep93xx-v3-14-3d63a5f1103e@maquefel.me>
+         <ZLq0Z0QgBdCoDpV+@smile.fi.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+Hi Andy,
 
-(Same code as previous pull request, with addition of a signed tag.
- Hopefully it verifies okay at your end.)
+On Fri, 2023-07-21 at 19:37 +0300, Andy Shevchenko wrote:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Issue the reboot */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ep93xx_devcfg_set_clear(priv=
+->map, EP93XX_SYSCON_DEVCFG_SWRST, 0x00);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ep93xx_devcfg_set_clear(priv=
+->map, 0x00, EP93XX_SYSCON_DEVCFG_SWRST);
+>=20
+>=20
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mdelay(1000);
+>=20
+> Atomic?! Such a huge delay must be explained, esp. why it's atomic.
 
-Turbostat features are now table-driven (Rui Zhang)
-Add support for some new platforms (Sumeet Pawnikar, Rui Zhang)
-Gracefully run in configs when CPUs are limited (Rui Zhang, Srinivas Pandruvada)
-misc minor fixes.
+atomic or not, SoC is supposed to reset itself here.
+However there is an errata [1] and the SoC can lockup instead.
+So even pr_emerg() makes sense to me.
 
-thanks!
-Len Brown, Intel Open Source Technology Center
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pr_emerg("Unable to restart =
+system\n");
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return NOTIFY_DONE;
 
-The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
+[1] http://web.archive.org/web/20161130230727/http://www.cirrus.com/en/pubs=
+/appNote/AN258REV2.pdf
 
-  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
+--=20
+Alexander Sverdlin.
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git turbostat
-
-for you to fetch changes up to b8337e6a780dad9505f9d44da07c0a5c52fa0a04:
-
-  tools/power turbostat: version 2023.11.07 (2023-11-07 23:28:30 -0500)
-
-----------------------------------------------------------------
-Chen Yu (1):
-      tools/power/turbostat: Enable the C-state Pre-wake printing
-
-Len Brown (2):
-      tools/power/turbostat: bugfix "--show IPC"
-      tools/power turbostat: version 2023.11.07
-
-Srinivas Pandruvada (1):
-      tools/power/turbostat: Move process to root cgroup
-
-Sumeet Pawnikar (2):
-      tools/power/turbostat: Add initial support for ArrowLake
-      tools/power/turbostat: Add initial support for LunarLake
-
-Zhang Rui (80):
-      tools/power/turbostat: Fix failure with new uncore sysfs
-      tools/power/turbostat: Fix a knl bug
-      tools/power/turbostat: Enable TCC Offset on more models
-      tools/power/turbostat: Support alternative graphics sysfs knobs
-      tools/power/turbostat: Replace raw value cpu model with Macro
-      tools/power/turbostat: Remove redundant duplicates
-      tools/power/turbostat: Remove pseudo check for two models
-      tools/power/turbostat: Add skeleton support for table driven
-feature enumeration
-      tools/power/turbostat: Abstract MSR_MISC_FEATURE_CONTROL support
-      tools/power/turbostat: Abstract MSR_MISC_PWR_MGMT support
-      tools/power/turbostat: Abstract BCLK frequency support
-      tools/power/turbostat: Abstract Package cstate limit decoding support
-      tools/power/turbostat: Abstract Nehalem MSRs support
-      tools/power/turbostat: Remove a redundant check
-      tools/power/turbostat: Rename some functions
-      tools/power/turbostat: Abstract Turbo Ratio Limit MSRs support
-      tools/power/turbostat: Rename some TRL functions
-      tools/power/turbostat: Abstract Config TDP MSRs support
-      tools/power/turbostat: Abstract TCC Offset bits support
-      tools/power/turbostat: Abstract Perf Limit Reasons MSRs support
-      tools/power/turbostat: Abstract Automatic Cstate Conversion support
-      tools/power/turbostat: Abstract hardcoded Crystal Clock frequency
-      tools/power/turbostat: Redefine RAPL macros
-      tools/power/turbostat: Simplify the logic for RAPL enumeration
-      tools/power/turbostat: Abstract RAPL MSRs support
-      tools/power/turbostat: Abstract Per Core RAPL support
-      tools/power/turbostat: Abstract RAPL divisor support
-      tools/power/turbostat: Abstract fixed DRAM Energy unit support
-      tools/power/turbostat: Abstract hardcoded TDP value
-      tools/power/turbostat: Remove unused family/model parameters for
-RAPL functions
-      tools/power/turbostat: Abstract TSC tweak support
-      tools/power/turbostat: Add skeleton support for cstate enumeration
-      tools/power/turbostat: Adjust cstate for models with .has_nhm_msrs set
-      tools/power/turbostat: Adjust cstate for has_snb_msrs() models
-      tools/power/turbostat: Adjust cstate for models with .cst_limit set
-      tools/power/turbostat: Adjust cstate for has_snb_msrs() models
-      tools/power/turbostat: Adjust cstate for has_slv_msrs() models
-      tools/power/turbostat: Adjust cstate for is_jvl() models
-      tools/power/turbostat: Adjust cstate for is_dnv() models
-      tools/power/turbostat: Adjust cstate for is_skx()/is_icx()/is_spr() models
-      tools/power/turbostat: Adjust cstate for is_bdx() models
-      tools/power/turbostat: Adjust cstate for has_c8910_msrs() models
-      tools/power/turbostat: Adjust cstate for
-is_slm()/is_knl()/is_cnl()/is_ehl() models
-      tools/power/turbostat: Use fine grained IRTL output
-      tools/power/turbostat: Abstract IRTL support
-      tools/power/turbostat: Abstract MSR_CORE_C1_RES support
-      tools/power/turbostat: Abstract MSR_MODULE_C6_RES_MS support
-      tools/power/turbostat: Abstract MSR_CC6/MC6_DEMOTION_POLICY_CONFIG support
-      tools/power/turbostat: Abstract MSR_ATOM_PKG_C6_RESIDENCY support
-      tools/power/turbostat: Abstract MSR_KNL_CORE_C6_RESIDENCY support
-      tools/power/turbostat: Abstract extended cstate MSRs support
-      tools/power/turbostat: Abstract aperf/mperf multiplier support
-      tools/power/turbostat: Abstract cstate prewake bit support
-      tools/power/turbostat: Delete intel_model_duplicates()
-      tools/power/turbostat: Improve probe_platform_features() logic
-      tools/power/turbostat: Relocate cstate probing code
-      tools/power/turbostat: Relocate pstate probing code
-      tools/power/turbostat: Rename uncore probing function
-      tools/power/turbostat: Rename rapl probing function
-      tools/power/turbostat: Relocate graphics probing code
-      tools/power/turbostat: Relocate lpi probing code
-      tools/power/turbostat: Relocate thermal probing code
-      tools/power/turbostat: Reorder some functions
-      tools/power/turbostat: Relocate more probing related code
-      tools/power/turbostat: Introduce probe_pm_features()
-      tools/power/turbostat: Enable MSR_CORE_C1_RES on recent Intel
-client platforms
-      tools/power/turbostat: Remove PC7/PC9 support on ADL/RPL
-      tools/power/turbostat: Introduce cpu_allowed_set
-      tools/power/turbostat: Obey allowed CPUs when accessing CPU counters
-      tools/power/turbostat: Obey allowed CPUs during startup
-      tools/power/turbostat: Abstract several functions
-      tools/power/turbostat: Obey allowed CPUs for primary thread/core detection
-      tools/power/turbostat: Obey allowed CPUs for system summary
-      tools/power/turbostat: Handle offlined CPUs in cpu_subset
-      tools/power/turbostat: Abstrct function for parsing cpu string
-      tools/power/turbostat: Handle cgroup v2 cpu limitation
-      tools/power/turbostat: Add MSR_CORE_C1_RES support for spr_features
-      tools/power/turbostat: Add initial support for GraniteRapids
-      tools/power/turbostat: Add initial support for SierraForest
-      tools/power/turbostat: Add initial support for GrandRidge
-
- tools/power/x86/turbostat/turbostat.c | 3074 ++++++++++++++++-----------------
- 1 file changed, 1537 insertions(+), 1537 deletions(-)
