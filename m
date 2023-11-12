@@ -2,109 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 879DB7E8D15
-	for <lists+linux-pm@lfdr.de>; Sat, 11 Nov 2023 23:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5327E8FAB
+	for <lists+linux-pm@lfdr.de>; Sun, 12 Nov 2023 12:52:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbjKKWRy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 11 Nov 2023 17:17:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38858 "EHLO
+        id S231351AbjKLLwU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 12 Nov 2023 06:52:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjKKWRx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 11 Nov 2023 17:17:53 -0500
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A57030D6;
-        Sat, 11 Nov 2023 14:17:50 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id AF6453200902;
-        Sat, 11 Nov 2023 17:17:47 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sat, 11 Nov 2023 17:17:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1699741067; x=1699827467; bh=c48DBOfgVp
-        eDa3sB5YGp5kIVd2kfZONDSWIzOlaX3HU=; b=Vkj+5/h87hSL4lrSt4zApn/c6Z
-        j3oB5AtWOgDYukeunId0KJQDy+KFsYTWQiqBdDl4uagEkpMDEHST5cskt7coFTNq
-        sMra/BLpz4RGY48jR/xuuGfg72Ntj1C0KtA4W1B6eFdQttkHXJSrWO+mqP86x9qx
-        XpkBJVNFQKBkdO4Y5HU7r1jNzyIRuA2D8wv79YbS+ZYGtgMme/QV12c69up+jF1H
-        XWbFdEBWBosnHcdFIpUapoppmnBpn4677NlnhouHYawjo6q+l2U0P8ZRK6byT623
-        sGyVWmujrPq6M+hGFocbj+BKOKHrKNvIzDsz15r7/vNtKxbJv03BX0epO4lQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1699741067; x=1699827467; bh=c48DBOfgVpeDa
-        3sB5YGp5kIVd2kfZONDSWIzOlaX3HU=; b=tHSFGYDd+9bDWgTQFirVYFqvv4GJF
-        DiXHjYKTOMSUKzQa7JH7cHebbYjp0hvFKGDrO1FdZnnHOOPDeEjnVn1yQB8w1DcZ
-        X58dpMm9zMBHiMhE4fu3OEDBiLu8uHD8AdGpts7YpaRu+f0uftN1w8y2NKce5w4Z
-        5hKEJxHvjH0ISxQ5gdbUuJH7pdNNJJzBVhhX79JQ9HsIT0C2DyzQDuvCej/Rctz9
-        yPECcuhqmMg2IvCe99ru9r7lZHGJnxttajrlBmNf2an+IDnXC+dfO4773ldEkkxS
-        QGRdgCbxR96RX+CuYetMYFshvV9wqn9v/rsfejf3SqFevjYkoky3zkNsw==
-X-ME-Sender: <xms:iv1PZY_HzxKoQ37tvYAiNGclbZQ1h1CeeQV0_cDqoHaTpio-fWLeJQ>
-    <xme:iv1PZQuOjPGdISI_rlpPAB37WqGlxj2XQDAsf4_7LsiSvkWEKEyzkDuO3Ke3N7FDe
-    hjooZ-EHRE68M5nZw>
-X-ME-Received: <xmr:iv1PZeC0-pMPmrMJPDEis1MVhiMDf5vOK-9o3IziKnkB4jtcmdF1jx7XcsxfyoNc_jx9TIzUgmCe7Ons1QNhz-yjpOLEWCHw7A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedruddvhedgudehlecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeflrghnucfr
-    rghluhhsuceojhhprghluhhssehfrghsthhmrghilhdrtghomheqnecuggftrfgrthhtvg
-    hrnhephfekvddvgeekhfejudeiveeuiefhudekheejhfelheduhffhleeggfettdetuedt
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhprg
-    hluhhssehfrghsthhmrghilhdrtghomh
-X-ME-Proxy: <xmx:iv1PZYevo4MIzxamVJsX2tViCl8wY7yE0ZRq5TkFhoEClKXInjdHdg>
-    <xmx:iv1PZdPKHDtnHIq7r_wOmXgfdkksqSMjWtYt6LlVGsGs7GIqRLR69A>
-    <xmx:iv1PZSmK5n4PHf_Z0MoO589-CKeb3NhxiV4TaNhoUi6Mf-x9r5iafw>
-    <xmx:i_1PZeqrHODSPMqaLNe7--p8AAiLyZ4EyFdqzm3fGsecJOFfbwkw2g>
-Feedback-ID: i01894241:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 11 Nov 2023 17:17:46 -0500 (EST)
-From:   Jan Palus <jpalus@fastmail.com>
-To:     Tobias Schrammm <t.schramm@manjaro.org>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jan Palus <jpalus@fastmail.com>
-Subject: [PATCH] power: supply: cw2015: correct time_to_empty units in sysfs
-Date:   Sat, 11 Nov 2023 23:17:04 +0100
-Message-ID: <20231111221704.5579-1-jpalus@fastmail.com>
-X-Mailer: git-send-email 2.42.1
+        with ESMTP id S231364AbjKLLwT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Nov 2023 06:52:19 -0500
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C5C2702;
+        Sun, 12 Nov 2023 03:52:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699789936; x=1731325936;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=c6ExBF+wBoWPFPJvEml6ZUBLXMjGD5qgTHfmERRwIHY=;
+  b=FQAth22M6foNOthx24LdbApc5jFEvT+AJZL59lZL3VaRHwL9szF0w/p+
+   h91LzBJEYZ04PPJ/gz3LRuAzhxAXZfJem2MPVhjZX4o7hnAA1kgN/iZ04
+   /FE7esCfccvTgMf10tMufNXft59ZiYLlQSeSH+qkia733WKSF3r4m3NKX
+   p7P9YKNe0Ubw54P2iHOrM6/XitzZ9FJRu1LQufklWoKRlusA4qGoIffHv
+   gGQ9USpfTbCl8j/a1WnYmgGJUNqP2eceIJ9eQsGPC6KNBYeuMMCiaEU3S
+   X8C8yotfTwYQKPKQVG2IGaiJ5cbYnlusCcLH2GeLGmcrGHnlvFi+GMtlH
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10891"; a="454624780"
+X-IronPort-AV: E=Sophos;i="6.03,297,1694761200"; 
+   d="scan'208";a="454624780"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2023 03:52:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10891"; a="834496288"
+X-IronPort-AV: E=Sophos;i="6.03,297,1694761200"; 
+   d="scan'208";a="834496288"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2023 03:52:15 -0800
+Received: from abityuts-desk1.ger.corp.intel.com (abityuts-desk1.fi.intel.com [10.237.68.150])
+        by linux.intel.com (Postfix) with ESMTP id 77869580DAB;
+        Sun, 12 Nov 2023 03:52:13 -0800 (PST)
+Message-ID: <e0869b55706915821a6aa1ba0140a784d263b01e.camel@linux.intel.com>
+Subject: Re: [PATCH] intel_idle: add CPUIDLE_FLAG_IRQ_ENABLE to SPR C1 and
+ C1E
+From:   Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+To:     Jon Kohler <jon@nutanix.com>
+Cc:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Date:   Sun, 12 Nov 2023 13:52:12 +0200
+In-Reply-To: <22D82855-259A-425A-B401-2F51EEC3C746@nutanix.com>
+References: <20220630194309.40465-1-jon@nutanix.com>
+         <b35cf10b03b441a95704648e816ff1acc150f38b.camel@linux.intel.com>
+         <20B0D65B-CB72-4F56-BF8F-7B212D04A7EA@nutanix.com>
+         <22D82855-259A-425A-B401-2F51EEC3C746@nutanix.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-RRT_ALRT register holds remaining battery time in minutes therefore it
-needs to be scaled accordingly when exposing TIME_TO_EMPTY via sysfs
-expressed in seconds
+On Fri, 2023-11-10 at 20:00 +0000, Jon Kohler wrote:
+> CPUIDLE_FLAG_IRQ_ENABLE
 
-Fixes: b4c7715c10c1 ("power: supply: add CellWise cw2015 fuel gauge driver")
-Signed-off-by: Jan Palus <jpalus@fastmail.com>
----
- drivers/power/supply/cw2015_battery.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi, yes, I did run several experiments, and found that this change would ma=
+ke
+some micro benchmarks give worse score. I did a lot of repetitions assuming=
+ I
+was mixing noise with signal, but every time confirmed that enabling interr=
+upts
+in C1 made the score worse (like 1%).
 
-diff --git a/drivers/power/supply/cw2015_battery.c b/drivers/power/supply/cw2015_battery.c
-index bb29e9ebd24a..99f3ccdc30a6 100644
---- a/drivers/power/supply/cw2015_battery.c
-+++ b/drivers/power/supply/cw2015_battery.c
-@@ -491,7 +491,7 @@ static int cw_battery_get_property(struct power_supply *psy,
- 
- 	case POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW:
- 		if (cw_battery_valid_time_to_empty(cw_bat))
--			val->intval = cw_bat->time_to_empty;
-+			val->intval = cw_bat->time_to_empty * 60;
- 		else
- 			val->intval = 0;
- 		break;
--- 
-2.42.1
+I do not have explanation for this phenomena, but decided to not pursue thi=
+s
+idea.
 
+Artem.=20
