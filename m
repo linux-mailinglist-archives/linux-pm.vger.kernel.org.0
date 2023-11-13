@@ -2,233 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0392A7E99AF
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Nov 2023 11:02:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABCCC7E99B7
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Nov 2023 11:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233401AbjKMKCg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Nov 2023 05:02:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
+        id S233255AbjKMKEu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Nov 2023 05:04:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232587AbjKMKCf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Nov 2023 05:02:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4A510CA
-        for <linux-pm@vger.kernel.org>; Mon, 13 Nov 2023 02:01:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1699869709;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BAMalQgNM0C7HuKoU35TO9KZ8bUeH1IJgfZxeS8F7ZM=;
-        b=U69dgpQ7EZyItc6N9BCvkuVQGLcL1px63FpFVzG8w4dCckFeWJ4cdf5A1p7Ctd4fOLP5QV
-        ic0yZy3gWiQz37sv7ZeLY5OwNejXGCti8c/sMbBI3DLbAfqdLbchJJ98wq0+GhaVO4Vc9g
-        jiqnXeU3CPu8UX5LoyM+87ezV4GglLk=
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
- [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-317-JPPZfb6jMI6FL2DRBuPvSg-1; Mon, 13 Nov 2023 05:01:47 -0500
-X-MC-Unique: JPPZfb6jMI6FL2DRBuPvSg-1
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-35abb017ea1so6521555ab.3
-        for <linux-pm@vger.kernel.org>; Mon, 13 Nov 2023 02:01:47 -0800 (PST)
+        with ESMTP id S229988AbjKMKEt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Nov 2023 05:04:49 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68CF7135;
+        Mon, 13 Nov 2023 02:04:46 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2c6cb4a79deso46807271fa.1;
+        Mon, 13 Nov 2023 02:04:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1699869884; x=1700474684; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=wYZtbNfscHtuB7ayNjS/FaQpaEtL1M0UhXyvKDUhQKc=;
+        b=Z60A1PtV6wctcDkg281eoddUSzcfWo5ujQzheRn36EJCMQZjbRvmuk3kioiYBOco9R
+         +A6K5qxjUhLLak7EkIDHlH/x7ka6ZUMMb7ca4J5TGFpaBQDxrk9jTc9x+qTeIe8ON06X
+         w/aV6JRsj8Z/FyJzvhuDBJaDelZxkKwJ5Z8pW29T16C+PlKKcUELf9+rN3fVPlOiE2JD
+         T0hhyuPq6jpgiZjGYd1B4ULq6Kf/rHfdHjDqpTdHcUBhgsfuHXMQXoA91S14BB9GDwPy
+         LaN3Lj9E3nINL3MniXBVDKnzmCCr449S/9dEqaZYaFNozj0KgqjKnXJMHeaK3UQdpjK0
+         JSUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699869707; x=1700474507;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BAMalQgNM0C7HuKoU35TO9KZ8bUeH1IJgfZxeS8F7ZM=;
-        b=iNmymHlYBZKf67VIscor9kizpu0jKMF6Z8jILZHvv1qOboMXFJnk/dDJD76OWcB/7m
-         a7h/vq9Wvf+IRWepNsYwGbzowGGd7dCyEuvFNtguF6C8UUHwg1pUbbeNfnsZ/r+bgov8
-         HBt83iTnqGaP/Xc9ao5h+RqY/F/v8vJwKIXxtmGhPat9sV0nb8uQV1OG/gKKRW1emVcL
-         CQWZVcK33gL38AwFANrX/LB2+8Dn3a+hh22HB4F/StQloupUGMRR1ZFTTQ60XSMzov3y
-         nT6REwfs1X3JCt7t9wGozC7PjrBXqGyfgsyEWhgxzaC34F1a0qChoNovJE256NoayNik
-         IF9A==
-X-Gm-Message-State: AOJu0YzIJ6MrmkLcfOEMHa4fjEn6WcApfsurCVl8U16q4kGX6nXvpUa/
-        EXQJDxY4LDk1SkkaWhY2qIfoyB/sZYbZsDs2qi7zz80RLzMRe/QSUw11QVHVSC7Hf4tiOLa9oXb
-        XLjkDmDe2ZCkMCBD4mNQkkU6m8kc=
-X-Received: by 2002:a05:6e02:1bc7:b0:359:56d2:aa19 with SMTP id x7-20020a056e021bc700b0035956d2aa19mr7258842ilv.6.1699869706806;
-        Mon, 13 Nov 2023 02:01:46 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IH7tmXC6qf2sfNPHtOUIMeBRO/dIRdXhrQyw4Al19wk8aveBy1a/L2HugzHzm+0XUXK3jdUog==
-X-Received: by 2002:a05:6e02:1bc7:b0:359:56d2:aa19 with SMTP id x7-20020a056e021bc700b0035956d2aa19mr7258823ilv.6.1699869706458;
-        Mon, 13 Nov 2023 02:01:46 -0800 (PST)
-Received: from ?IPV6:2001:8003:e5b0:9f00:b890:3e54:96bb:2a15? ([2001:8003:e5b0:9f00:b890:3e54:96bb:2a15])
-        by smtp.gmail.com with ESMTPSA id c9-20020a62e809000000b006c306943730sm3652442pfi.91.2023.11.13.02.01.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Nov 2023 02:01:46 -0800 (PST)
-Message-ID: <29090279-a682-43ff-9710-181cb91bbf91@redhat.com>
-Date:   Mon, 13 Nov 2023 20:01:27 +1000
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 05/22] ACPI: Move ACPI_HOTPLUG_CPU to be disabled on
- arm64 and riscv
-Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-        x86@kernel.org, linux-csky@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        jianyong.wu@arm.com, justin.he@arm.com,
-        James Morse <james.morse@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
+        d=1e100.net; s=20230601; t=1699869884; x=1700474684;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wYZtbNfscHtuB7ayNjS/FaQpaEtL1M0UhXyvKDUhQKc=;
+        b=Ioj+dItuf8Zyxyq/sVAKneDoONaaKqbYyLGF2I/HEQaD7oDkh3aoxsy4EOY7cIlxbx
+         7MsL2T8YAeS5agtPP96OBC9Da2Ipsu2K+D4aRjljux176zGhYwPkHmDrPcluhTynTYHS
+         dVRTUCEXCGGZonXYJgfDPd2BSBdr+Hz78sR9A+RLiyqS0Tc24oTIyEu1ZdmFb3sdy471
+         D6MwedbNKJSXAvtw74fKcuBp2Krdem9ls9r7IimpnCHPN29QVjSulSPPHNVi9XZGJwP5
+         ZhhfojIrRfttKwlm0bNvztB4uiJfwQCiuRG/zTk2meiKjQaJ3V9Ili4iaoqQFPHyMsVC
+         0K6A==
+X-Gm-Message-State: AOJu0YydsF0OctARVawTpslY/P75FLPiY0Hl4MzPoV4wlR7rafLH2KTK
+        Rddljg4F7fmSeyyAZgYlFNeKkLYk0Sx82w==
+X-Google-Smtp-Source: AGHT+IFY0VBv65sXA0Ec0khQRe36/4QIzik1qErLOvxwk7VCfLMt8d6A4Y8Yy/Esbvbw7QCTYBejoA==
+X-Received: by 2002:a05:6402:520b:b0:543:5144:1779 with SMTP id s11-20020a056402520b00b0054351441779mr8907514edd.11.1699869864130;
+        Mon, 13 Nov 2023 02:04:24 -0800 (PST)
+Received: from giga-mm.home ([2a02:1210:8629:800:82ee:73ff:feb8:99e3])
+        by smtp.gmail.com with ESMTPSA id a67-20020a509ec9000000b0053e43492ef1sm3514675edf.65.2023.11.13.02.04.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Nov 2023 02:04:23 -0800 (PST)
+Message-ID: <0cf1d748cb4a672483991f44d638a271218effe6.camel@gmail.com>
+Subject: Re: [PATCH v3 14/42] power: reset: Add a driver for the ep93xx reset
+From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Andy Shevchenko <andy@kernel.org>, nikita.shubin@maquefel.me,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Lennert Buytenhek <kernel@wantstofly.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Lukasz Majewski <lukma@denx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-References: <ZUoRY33AAHMc5ThW@shell.armlinux.org.uk>
- <E1r0JL6-00CTws-3z@rmk-PC.armlinux.org.uk>
- <8e288692-7460-4aa4-86f3-500327256bc3@redhat.com>
- <ZVHkykFMp+CMUqyf@shell.armlinux.org.uk>
-From:   Gavin Shan <gshan@redhat.com>
-In-Reply-To: <ZVHkykFMp+CMUqyf@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Michael Peters <mpeters@embeddedts.com>,
+        Kris Bahnsen <kris@embeddedts.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-input@vger.kernel.org, alsa-devel@alsa-project.org
+Date:   Mon, 13 Nov 2023 11:04:21 +0100
+In-Reply-To: <CAHp75VeYHscM-r94kTrpH44W=OGVq+qoNNQZoVrR5_n-_K_Xsw@mail.gmail.com>
+References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
+         <20230605-ep93xx-v3-14-3d63a5f1103e@maquefel.me>
+         <ZLq0Z0QgBdCoDpV+@smile.fi.intel.com>
+         <80ed91bb971516638fa1793d648939815eba7630.camel@gmail.com>
+         <CAHp75VeYHscM-r94kTrpH44W=OGVq+qoNNQZoVrR5_n-_K_Xsw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Andy!
 
-On 11/13/23 18:56, Russell King (Oracle) wrote:
-> On Mon, Nov 13, 2023 at 10:29:39AM +1000, Gavin Shan wrote:
->> On 11/7/23 20:29, Russell King (Oracle) wrote:
->>> From: James Morse <james.morse@arm.com>
->>>
->>> Neither arm64 nor riscv support physical hotadd of CPUs that were not
->>> present at boot. For arm64 much of the platform description is in static
->>> tables which do not have update methods. arm64 does support HOTPLUG_CPU,
->>> which is backed by a firmware interface to turn CPUs on and off.
->>>
->>> acpi_processor_hotadd_init() and acpi_processor_remove() are for adding
->>> and removing CPUs that were not present at boot. arm64 systems that do this
->>> are not supported as there is currently insufficient information in the
->>> platform description. (e.g. did the GICR get removed too?)
->>>
->>> arm64 currently relies on the MADT enabled flag check in map_gicc_mpidr()
->>> to prevent CPUs that were not described as present at boot from being
->>> added to the system. Similarly, riscv relies on the same check in
->>> map_rintc_hartid(). Both architectures also rely on the weak 'always fails'
->>> definitions of acpi_map_cpu() and arch_register_cpu().
->>>
->>> Subsequent changes will redefine ACPI_HOTPLUG_CPU as making possible
->>> CPUs present. Neither arm64 nor riscv support this.
->>>
->>> Disable ACPI_HOTPLUG_CPU for arm64 and riscv by removing 'default y' and
->>> selecting it on the other three ACPI architectures. This allows the weak
->>> definitions of some symbols to be removed.
->>>
->>> Signed-off-by: James Morse <james.morse@arm.com>
->>> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
->>> ---
->>> Changes since RFC:
->>>    * Expanded conditions to avoid ACPI_HOTPLUG_CPU being enabled when
->>>      HOTPLUG_CPU isn't.
->>> Changes since RFC v3:
->>>    * Dropped ia64 changes
->>> ---
->>>    arch/loongarch/Kconfig        |  1 +
->>>    arch/x86/Kconfig              |  1 +
->>>    drivers/acpi/Kconfig          |  1 -
->>>    drivers/acpi/acpi_processor.c | 18 ------------------
->>>    4 files changed, 2 insertions(+), 19 deletions(-)
->>>
->>
->> With the following nits addressed:
->>
->> Reviewed-by: Gavin Shan <gshan@redhat.com>
->>
->>> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
->>> index d889a0b97bc1..64620e90c12c 100644
->>> --- a/arch/loongarch/Kconfig
->>> +++ b/arch/loongarch/Kconfig
->>> @@ -5,6 +5,7 @@ config LOONGARCH
->>>    	select ACPI
->>>    	select ACPI_GENERIC_GSI if ACPI
->>>    	select ACPI_MCFG if ACPI
->>> +	select ACPI_HOTPLUG_CPU if ACPI_PROCESSOR && HOTPLUG_CPU
->>>    	select ACPI_PPTT if ACPI
->>>    	select ACPI_SYSTEM_POWER_STATES_SUPPORT	if ACPI
->>>    	select ARCH_BINFMT_ELF_STATE
->>> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
->>> index 3762f41bb092..dbdcfc708369 100644
->>> --- a/arch/x86/Kconfig
->>> +++ b/arch/x86/Kconfig
->>> @@ -59,6 +59,7 @@ config X86
->>>    	#
->>>    	select ACPI_LEGACY_TABLES_LOOKUP	if ACPI
->>>    	select ACPI_SYSTEM_POWER_STATES_SUPPORT	if ACPI
->>> +	select ACPI_HOTPLUG_CPU			if ACPI_PROCESSOR && HOTPLUG_CPU
->>>    	select ARCH_32BIT_OFF_T			if X86_32
->>>    	select ARCH_CLOCKSOURCE_INIT
->>>    	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE
->>> diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
->>> index f819e760ff19..a3acfc750fce 100644
->>> --- a/drivers/acpi/Kconfig
->>> +++ b/drivers/acpi/Kconfig
->>> @@ -310,7 +310,6 @@ config ACPI_HOTPLUG_CPU
->>>    	bool
->>>    	depends on ACPI_PROCESSOR && HOTPLUG_CPU
->>>    	select ACPI_CONTAINER
->>> -	default y
->>>    config ACPI_PROCESSOR_AGGREGATOR
->>>    	tristate "Processor Aggregator"
->>> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
->>> index 0f5218e361df..4fe2ef54088c 100644
->>> --- a/drivers/acpi/acpi_processor.c
->>> +++ b/drivers/acpi/acpi_processor.c
->>> @@ -184,24 +184,6 @@ static void __init acpi_pcc_cpufreq_init(void) {}
->>>    /* Initialization */
->>>    #ifdef CONFIG_ACPI_HOTPLUG_CPU
->>> -int __weak acpi_map_cpu(acpi_handle handle,
->>> -		phys_cpuid_t physid, u32 acpi_id, int *pcpu)
->>> -{
->>> -	return -ENODEV;
->>> -}
->>> -
->>> -int __weak acpi_unmap_cpu(int cpu)
->>> -{
->>> -	return -ENODEV;
->>> -}
->>> -
->>> -int __weak arch_register_cpu(int cpu)
->>> -{
->>> -	return -ENODEV;
->>> -}
->>> -
->>> -void __weak arch_unregister_cpu(int cpu) {}
->>> -
->>
->> Since we're here, EXPORT_SYMBOL() can be dropped for these functions on
->> x86 and loongarch because they're not called from a module?
-> 
-> I'm confused, and don't understand your comment. You've r-b the
-> previous two patches that remove the EXPORT_SYMBOL()s for
-> arch_register_cpu() and arch_unregister_cpu() from x86 and loongarch.
-> So it seems your comment is already addressed, and thus makes no
-> sense.
-> 
-> Please clarify.
-> 
+On Mon, 2023-11-13 at 11:59 +0200, Andy Shevchenko wrote:
+> On Sat, Nov 11, 2023 at 8:18=E2=80=AFPM Alexander Sverdlin
+> <alexander.sverdlin@gmail.com> wrote:
+> > On Fri, 2023-07-21 at 19:37 +0300, Andy Shevchenko wrote:
+>=20
+> ...
 
-Exactly, I must be looking into wrong code when reviewing this patch.
-Please ignore my comments and my r-b still valid. Sorry for the
-unnecessary confusion.
+[1]
 
-Thanks,
-Gavin
+>=20
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mdelay(1000);
+> > >=20
+> > > Atomic?! Such a huge delay must be explained, esp. why it's atomic.
+> >=20
+> > atomic or not, SoC is supposed to reset itself here.
+> > However there is an errata [1] and the SoC can lockup instead.
+>=20
+> Good, and what I'm saying is that this piece of code must have a
+> comment explaining this.
+
+And it has, but for some reason you've trimmed it in your reply...
+
+--=20
+Alexander Sverdlin.
 
