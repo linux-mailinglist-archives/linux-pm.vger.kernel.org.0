@@ -2,65 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C1D7E937E
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Nov 2023 01:09:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3AA7E9384
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Nov 2023 01:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbjKMAJg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 12 Nov 2023 19:09:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
+        id S230322AbjKMAMh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 12 Nov 2023 19:12:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjKMAJf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Nov 2023 19:09:35 -0500
+        with ESMTP id S230036AbjKMAMg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Nov 2023 19:12:36 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93865211B
-        for <linux-pm@vger.kernel.org>; Sun, 12 Nov 2023 16:08:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3A710CE
+        for <linux-pm@vger.kernel.org>; Sun, 12 Nov 2023 16:11:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1699834132;
+        s=mimecast20190719; t=1699834313;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=LZoVE59pXWGm0JQT+CMJNCgS+fu8REHYPUoz78JAFk8=;
-        b=VOvWfk3frlAdT2f75dfTeT4ZpG5d7tOblk7SDU2Sr6+8PAbp8SrekcoN47qW7ptdVxKEbW
-        1Vc2CiT+MVEgaHAyooP2iKbIddrnbfaESxs1miWd/kE0sKKIWvLT8p6oyk/kk88y9va9tf
-        DBPtjbytJr5vcsd+njKmnYTzLMGf/vs=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=UQiJJ/dxNEHd77f2PC0oaN2B9+v5Hs6KtuITs8AqQVc=;
+        b=XCXMkA5QOB0SBJCrwFOA7lVQxltMIBDSjs7jIsXedmQuofdQWUtIZ9ikOs3jAVZ2aDmDSk
+        2rBOsrF/wDFq/DXq8lfzWT9nAzjusb9F/vQfsgK8yZzK8HJsrPQcLjyx2UJUwliD5GIWNX
+        qJFOwcRalWgqYeM61if0BTvFpaSaY3M=
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
+ [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-483-gv1-tZYxOIe30POaU5-I6Q-1; Sun, 12 Nov 2023 19:08:51 -0500
-X-MC-Unique: gv1-tZYxOIe30POaU5-I6Q-1
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-5b7bf1c206fso3792309a12.2
-        for <linux-pm@vger.kernel.org>; Sun, 12 Nov 2023 16:08:51 -0800 (PST)
+ us-mta-663-X8wn5t-mPYuyJkgSEp_R8A-1; Sun, 12 Nov 2023 19:11:52 -0500
+X-MC-Unique: X8wn5t-mPYuyJkgSEp_R8A-1
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-1cc502d401eso45316355ad.0
+        for <linux-pm@vger.kernel.org>; Sun, 12 Nov 2023 16:11:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699834130; x=1700438930;
+        d=1e100.net; s=20230601; t=1699834311; x=1700439111;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LZoVE59pXWGm0JQT+CMJNCgS+fu8REHYPUoz78JAFk8=;
-        b=exT/yFHwLsFBfhgWjajxX6oWRpQA5dL5qtdvdNuRU0c+cq74MmOWfNqCWCDQzujvC7
-         HMrSWXkplpqxNvXMzwCHpSaGuUtDfDzcOaR1Dk7WlHUziNf5nmY538I8XsgndQ+uFRdp
-         8ozaiB4XRwJ7ktfIw/MMOSgQeGiBR0Ungij83Tz2l2V3cDYcBRRyqkjm2VHKeWjgM94F
-         YHH3oc7wuAxaaXUprvIbUWW06w2LftI/mv1wdcsnAh5mT8m1y48vbkh+0Mksexr5wLk0
-         6fQXEUqqONxzr22nFgYxXj9WU6jrZtfSDnu1g9pfVQCSzFHULWAkLIdEpUoNpkRJLq0y
-         Xi+A==
-X-Gm-Message-State: AOJu0Yw/0AfPUBsiYyphox5h7Zky+96cg0uAA6hoA7eXXFZNhAY5oSnt
-        wKkc37FApioaqKbLlCPqyUB0J4N+SkCcDgYXB6EmguqlG4HytgUzpsyl5fnO/m2fptw96L8IG3i
-        zmGMCb93y3x9U28kQJIw=
-X-Received: by 2002:a05:6a20:748b:b0:186:603b:6b53 with SMTP id p11-20020a056a20748b00b00186603b6b53mr1091856pzd.0.1699834130296;
-        Sun, 12 Nov 2023 16:08:50 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEuXsyqcDEY3uU8V/1tkBaOM8ZFpVTqspPi9KzQF+bgKRFukH+13LuLcTE/aP13+7JgHA4Nsg==
-X-Received: by 2002:a05:6a20:748b:b0:186:603b:6b53 with SMTP id p11-20020a056a20748b00b00186603b6b53mr1091836pzd.0.1699834129822;
-        Sun, 12 Nov 2023 16:08:49 -0800 (PST)
+        bh=UQiJJ/dxNEHd77f2PC0oaN2B9+v5Hs6KtuITs8AqQVc=;
+        b=ks4SaAcx4fwiv7e9Z3A9943Xl+rPKkJ7hgxYX87EeWKYQl0YM7JP2sUB8NAP0LUGTN
+         Ke0eCYAHArWlWAeOo5NSDRxcV4M17spu+K4ibd3kc6prxOqadUr+4uKapYgdn4uAfvpd
+         IPxhe2bHT8BgiC4/+TJLQTE0Z8ZrvO72Fmm7NQTKGF7ZLT6NXF/L6JUOLbVQf+Sm7u28
+         N0vIlp2EIMXotr2Wj9MVBSrOifhfd/5IzFAIEBCdpmi9ZY9qAWnm2hh3v0UDlmxY5uek
+         50BIjM9dIrlVxGSyH4XqjQXxhtFBNFSrRNZSWUTUbzWAejngYsh22WWxafr0v2WUz52v
+         EEHg==
+X-Gm-Message-State: AOJu0YxCFJQyTMbyT98lvr35zJoyi59KVoiNBAtEDIYuafO5OKcKH8zu
+        ELanQXoNU3GDzmVS1T2eqr0PKPaeIFmjk+bqxuHLuddxmyxEDhZRFSHTeawVaNMJYiT+qsajPun
+        EbLYa3UNO2ubUZOeOTzg=
+X-Received: by 2002:a17:902:eecd:b0:1c3:4b24:d89d with SMTP id h13-20020a170902eecd00b001c34b24d89dmr6067394plb.40.1699834311419;
+        Sun, 12 Nov 2023 16:11:51 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEdqJareZ27x0vWYdkv//f/HJqmqCsdd3lWu5y3OyZlPyNdejWbYRbuSoSv157Xo1Ur4thQ4Q==
+X-Received: by 2002:a17:902:eecd:b0:1c3:4b24:d89d with SMTP id h13-20020a170902eecd00b001c34b24d89dmr6067370plb.40.1699834311176;
+        Sun, 12 Nov 2023 16:11:51 -0800 (PST)
 Received: from ?IPV6:2001:8003:e5b0:9f00:b890:3e54:96bb:2a15? ([2001:8003:e5b0:9f00:b890:3e54:96bb:2a15])
-        by smtp.gmail.com with ESMTPSA id y18-20020a1709027c9200b001b53c8659fesm2998333pll.30.2023.11.12.16.08.42
+        by smtp.gmail.com with ESMTPSA id m16-20020a170902db1000b001c9b8f76a89sm3022112plx.82.2023.11.12.16.11.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Nov 2023 16:08:49 -0800 (PST)
-Message-ID: <baa98649-1840-48aa-89ac-0c27a08559d5@redhat.com>
-Date:   Mon, 13 Nov 2023 10:08:40 +1000
+        Sun, 12 Nov 2023 16:11:50 -0800 (PST)
+Message-ID: <fffd8a37-bb23-4c76-aec7-aec2f1361817@redhat.com>
+Date:   Mon, 13 Nov 2023 10:11:42 +1000
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 03/22] x86/topology: remove arch_*register_cpu()
- exports
+Subject: Re: [PATCH RFC 04/22] Loongarch: remove arch_*register_cpu() exports
 Content-Language: en-US
 To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
         linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
@@ -74,14 +73,12 @@ Cc:     Salil Mehta <salil.mehta@huawei.com>,
         Jean-Philippe Brucker <jean-philippe@linaro.org>,
         jianyong.wu@arm.com, justin.he@arm.com,
         James Morse <james.morse@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
 References: <ZUoRY33AAHMc5ThW@shell.armlinux.org.uk>
- <E1r0JKv-00CTwf-R9@rmk-PC.armlinux.org.uk>
+ <E1r0JL0-00CTwm-VX@rmk-PC.armlinux.org.uk>
 From:   Gavin Shan <gshan@redhat.com>
-In-Reply-To: <E1r0JKv-00CTwf-R9@rmk-PC.armlinux.org.uk>
+In-Reply-To: <E1r0JL0-00CTwm-VX@rmk-PC.armlinux.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -104,7 +101,7 @@ On 11/7/23 20:29, Russell King (Oracle) wrote:
 > 
 > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 > ---
->   arch/x86/kernel/topology.c | 2 --
+>   arch/loongarch/kernel/topology.c | 2 --
 >   1 file changed, 2 deletions(-)
 > 
 
