@@ -2,104 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B197F7E9568
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Nov 2023 04:21:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEBF27E95D8
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Nov 2023 05:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232926AbjKMDVw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Sun, 12 Nov 2023 22:21:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
+        id S233083AbjKMEFD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 12 Nov 2023 23:05:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232876AbjKMDVw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Nov 2023 22:21:52 -0500
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA3D171A;
-        Sun, 12 Nov 2023 19:21:49 -0800 (PST)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1ef9f1640a5so2521519fac.3;
-        Sun, 12 Nov 2023 19:21:49 -0800 (PST)
+        with ESMTP id S233089AbjKMEE7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Nov 2023 23:04:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4701C1BD4
+        for <linux-pm@vger.kernel.org>; Sun, 12 Nov 2023 20:04:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1699848247;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MtNFooCff3vqCOUxCEz1jHRl+QbfPpBEZibpqDAaoCg=;
+        b=WScoH7oSmJK2ItcuXNdJ8OGgS8uuM+z4JLdbliAQIFzJoA+BeNxMvxsQpI2UKS1O+mbDin
+        iTS8b22lNGWI86UdyaYrTWut8m7NMWfBNHfHjU8dvO2vTlDNHYBfQKQPpi2CgvZcqeSTEY
+        2xPFm8CMzaLVTBRLRywxzXFTbYtV/BY=
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
+ [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-42-rTvC6NA6OravUQrMdg7KgA-1; Sun, 12 Nov 2023 23:04:04 -0500
+X-MC-Unique: rTvC6NA6OravUQrMdg7KgA-1
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-1cc2786a8ebso54597775ad.0
+        for <linux-pm@vger.kernel.org>; Sun, 12 Nov 2023 20:04:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699845705; x=1700450505;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0IXaHoWTH5TfdwPuBhxO14PPRkamm2oo7dJQsnN3xB4=;
-        b=aGRNtMmrGgKtQ1gjHfWhbNPX0/mZ5DI5aR1vDVO3IDUJRafLuY6lVSGB1sLZIaPWdP
-         JkpHXDe7YNcx96zY0okqgIwZDUdJg65OYfDI6kXpYh65Bv4HdSoAPpx07xM1LUjBEH7E
-         s/tY8iOg0Ncf6WTsR9s16DSe6BrBNzGL/Z/S8+5n0pupuVbyU3VDew6dYkRBWoj3aOWU
-         JwI945E13syjpUMoR8r5B9pU5QAr1TR87NyVgQg5uo47v1MBHXXmq1ZxiYqA40yS978e
-         o6LlMykRr4pUesxnYC9VhXStCS4BxtauM48WQBW8b89yQ6fiqDIWFdCD/1PXsbrshdgP
-         6rIA==
-X-Gm-Message-State: AOJu0YxUgzFnlPbDskkZ9OUvRgl4ncNCxiduZcBdWYYjkGKfr8Ha1o3P
-        PXqWJjemgLcgks3O6Dnhn0p6BakOhF5HG2LXtuM=
-X-Google-Smtp-Source: AGHT+IEm0cqoDvrOkrZPoECzg54LBCYQyrtnHyH0Jyw/MEHgPLdqfdb+bCZuIioHUR/Jm8i15kxOz+UbC2lDC3gcglc=
-X-Received: by 2002:a05:6870:c4b:b0:1db:70ee:efed with SMTP id
- lf11-20020a0568700c4b00b001db70eeefedmr7409499oab.18.1699845705545; Sun, 12
- Nov 2023 19:21:45 -0800 (PST)
+        d=1e100.net; s=20230601; t=1699848243; x=1700453043;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MtNFooCff3vqCOUxCEz1jHRl+QbfPpBEZibpqDAaoCg=;
+        b=NMsXf/ThIaKubD4siDvvItPthXZMI9s0n3ZLI8r+ocgsFHfo/e1p8QKN9ypArA7Yuu
+         1Uq7YHu1+Ef1GMCESUROnnKhIO0AyX/IUnpNOFpYTyQ4io3yMNu/klx9mFLTZzi8ypYX
+         lvhQu1o5647sg/EyPmju1HhRh2WZNiBhzEna8P8YOS6P+2ph0/kMRCDYgTzjP8hGZzZK
+         Pk+PHqiSI1C9g5oEHLCyCRDVn01KH0MwhHUo2+XwbBye1fhZDwz/5pSzQOR/EySJ+G3l
+         YJbqWm7rpuZowxSR8lSL1wnNiBr12o0CZVdPHOJBonhywuhqZL+5FttXf5EY75gE10pC
+         i5xQ==
+X-Gm-Message-State: AOJu0Yx8DkSxLipaG3JzsgICdFhSzmz4tml1w6ak5+hOYsamVZzIcWr/
+        KXaUYqeIPF4CIyaZ3jvdmSGk7lL8MeEhdAraXDgbW4LVdqG1I/zj2ipnBQkAc6srBtYqJiVZY31
+        bO7bS1zQQYz0aRS+NJ3U=
+X-Received: by 2002:a17:903:124b:b0:1cc:3f10:4175 with SMTP id u11-20020a170903124b00b001cc3f104175mr7395306plh.28.1699848243620;
+        Sun, 12 Nov 2023 20:04:03 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHIUBgi1/lc4Y3idUGi3EHadW6QYxPGSgwR1L+ZBVEJt2K4HesJHzLX8fXA3t0WRPADwpmGUg==
+X-Received: by 2002:a17:903:124b:b0:1cc:3f10:4175 with SMTP id u11-20020a170903124b00b001cc3f104175mr7395280plh.28.1699848243280;
+        Sun, 12 Nov 2023 20:04:03 -0800 (PST)
+Received: from ?IPV6:2001:8003:e5b0:9f00:b890:3e54:96bb:2a15? ([2001:8003:e5b0:9f00:b890:3e54:96bb:2a15])
+        by smtp.gmail.com with ESMTPSA id u18-20020a170902e5d200b001c62d63b817sm3216342plf.179.2023.11.12.20.03.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Nov 2023 20:04:02 -0800 (PST)
+Message-ID: <c4a0af68-153e-41a8-ae82-8ebb2b4c4bc9@redhat.com>
+Date:   Mon, 13 Nov 2023 14:03:53 +1000
 MIME-Version: 1.0
-References: <CAJvTdKn-xtmin9OjnzHg8wy4PM8Lc3Per=3y3UWORhjdroYP3w@mail.gmail.com>
- <CAHk-=wjvJ44a9Z=tkR2o-heQ4XLp0sgynDOhe6JH2fgg=MMMXA@mail.gmail.com>
- <CAJvTdK=OSTgYkut=-r95nAYOvVfUt3Cah92qudifeQW4ZJHT7Q@mail.gmail.com> <CAAYoRsXvKwhrw3gRQJ-STO48_7yxEiqwt5tgzDbkzA--N_XX6A@mail.gmail.com>
-In-Reply-To: <CAAYoRsXvKwhrw3gRQJ-STO48_7yxEiqwt5tgzDbkzA--N_XX6A@mail.gmail.com>
-From:   Len Brown <lenb@kernel.org>
-Date:   Sun, 12 Nov 2023 22:21:34 -0500
-Message-ID: <CAJvTdKnqCOALF6k_PqFz75AGwFpoB41vv8fo1PxaEW71zdqcRA@mail.gmail.com>
-Subject: Re: [GIT PULL] turbostat for Linux-6.7 (with signed tag)
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 12/22] drivers: base: Print a warning instead of
+ panic() when register_cpu() fails
+Content-Language: en-US
+To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+        x86@kernel.org, linux-csky@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-parisc@vger.kernel.org
+Cc:     Salil Mehta <salil.mehta@huawei.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        jianyong.wu@arm.com, justin.he@arm.com,
+        James Morse <james.morse@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+References: <ZUoRY33AAHMc5ThW@shell.armlinux.org.uk>
+ <E1r0JLg-00CTxd-31@rmk-PC.armlinux.org.uk>
+From:   Gavin Shan <gshan@redhat.com>
+In-Reply-To: <E1r0JLg-00CTxd-31@rmk-PC.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Doug,
-Thanks for the ping.
-Yes, I look in patchwork for those assigned to me (looks like rafael
-didn't assign those) and also for the word "turbostat".
-My oversight that I didn't notice there were some in there -- will
-catch in next batch.
+On 11/7/23 20:30, Russell King (Oracle) wrote:
+> From: James Morse <james.morse@arm.com>
+> 
+> loongarch, mips, parisc, riscv and sh all print a warning if
+> register_cpu() returns an error. Architectures that use
+> GENERIC_CPU_DEVICES call panic() instead.
+> 
+> Errors in this path indicate something is wrong with the firmware
+> description of the platform, but the kernel is able to keep running.
+> 
+> Downgrade this to a warning to make it easier to debug this issue.
+> 
+> This will allow architectures that switching over to GENERIC_CPU_DEVICES
+> to drop their warning, but keep the existing behaviour.
+> 
+> Signed-off-by: James Morse <james.morse@arm.com>
+> Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> ---
+>   drivers/base/cpu.c | 7 ++++---
+>   1 file changed, 4 insertions(+), 3 deletions(-)
+> 
 
-thanks,
--Len
+Reviewed-by: Gavin Shan <gshan@redhat.com>
 
-On Sun, Nov 12, 2023 at 10:51 AM Doug Smythies <dsmythies@telus.net> wrote:
->
-> On Fri, Nov 10, 2023 at 7:39 PM Len Brown <lenb@kernel.org> wrote:
-> ...
-> >
-> > (Same code as previous pull request, with addition of a signed tag.
-> >  Hopefully it verifies okay at your end.)
-> >
-> > Turbostat features are now table-driven (Rui Zhang)
-> > Add support for some new platforms (Sumeet Pawnikar, Rui Zhang)
-> > Gracefully run in configs when CPUs are limited (Rui Zhang, Srinivas Pandruvada)
-> > misc minor fixes.
->
-> Hi Len,
-> What about the patches that have been submitted since your last turbostat update
-> release of 2023.03.17? I submitted one on 2023.04.03. I haven't sent "RESEND"s,
-> because I know you only do update releases every 1/2 year or so, and in the past
-> you have always dealt with the interim patches then.
->
-> Reference:
-> https://patchwork.kernel.org/project/linux-pm/list/?series=&submitter=&state=&q=&archive=&delegate=107
->
-> ... Doug
->
-> >
-> > thanks!
-> > Len Brown, Intel Open Source Technology Center
-> >
-> ... [deleted]...
-
-
-
--- 
-Len Brown, Intel
