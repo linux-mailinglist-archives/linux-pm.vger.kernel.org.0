@@ -2,103 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E103D7E918F
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Nov 2023 16:51:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DEE47E9370
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Nov 2023 01:04:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231573AbjKLPvX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 12 Nov 2023 10:51:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
+        id S232476AbjKMAEV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 12 Nov 2023 19:04:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231542AbjKLPvX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Nov 2023 10:51:23 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9672B273F
-        for <linux-pm@vger.kernel.org>; Sun, 12 Nov 2023 07:51:19 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-408382da7f0so29720725e9.0
-        for <linux-pm@vger.kernel.org>; Sun, 12 Nov 2023 07:51:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google; t=1699804278; x=1700409078; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=06FGZWGUBCJOABY8OhfcQeWfBbAdPr3WTfWSMv9j+Xs=;
-        b=NZpnxj4b6aIC1LnVCsaASKH7F1nP+3ZdxuMOi+D2bNoDw0l/xeEpDUNIF2vr9nqSdP
-         0mAwTf9SGEbIKqcHa9WndYfBFpiP2M9fHBHQK3BuFChUlda3CEgZOaqJeSoW864UKu1k
-         BsxDmYLPJmH0GIntELpyZIkcJzQ7G673tqLsGP6fHV+ALk0xzGpMOk/f9kuls/mtbEFr
-         AH7FBkEkvhvRe0qxLo/E2SLx37k1nUaBCZyNpWbrRnCYD71eJie+QtcNEo1jXm7c7/ce
-         Pl736F0R59W2zcPtXl1OEDC3uZfFYbGLtXeZBuHD2ct8m+TeDk+fXyfKmldSm7JnpDMe
-         M+9Q==
+        with ESMTP id S230096AbjKMAEU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Nov 2023 19:04:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695471FFB
+        for <linux-pm@vger.kernel.org>; Sun, 12 Nov 2023 16:03:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1699833810;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+ZHIbA5dSDa0YFUBZZETUQKKTVizuf5JaF0jClraxRM=;
+        b=d1f23R4z4J7igoUx6O4n+PBCHwLpONwfAsSnhIgC4GvGIowSKfk6qf6UxT80F9sjTYJzZu
+        zcKuhjWoyb/e+4Y8YDWci5HlDbhlMNjvZNoNy2g4lJZj8ByT6vYo6XLB5znFJVYAcKpLM/
+        yPWvUpsFCOLgfemle8hx1EqVVrxEumU=
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
+ [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-644-vp4g5YKTPxupdEKZ67ovFw-1; Sun, 12 Nov 2023 19:03:28 -0500
+X-MC-Unique: vp4g5YKTPxupdEKZ67ovFw-1
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-1cc42d3f61eso43401135ad.3
+        for <linux-pm@vger.kernel.org>; Sun, 12 Nov 2023 16:03:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699804278; x=1700409078;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=06FGZWGUBCJOABY8OhfcQeWfBbAdPr3WTfWSMv9j+Xs=;
-        b=Vg14qv3VuSXVdUU7ZXeOukumI6SESvu+EInWIE0dfrSdjyc2OsA/bU6R9nEN9j6/wE
-         02Qyj06JiHcXMfUD9PwyXGO2RrP9Z5EtkBEtVoP208vk74Zd+atOsBPJCj5YHp9YkwCz
-         wJzTyNszAH5QdCuSJMEQ7Z1GLrdH/NFCbwyW3yYmg5A8TGJ5Z8XL22RukyhcX3+QElle
-         DU66Amd6A0M0Aj7p/w1yIHCo8U8oQNPN8+4nTfFNKTkbmVH0eCkBBcHOBpZBIqa5cXVz
-         v3ONfKo10PrShMXuuQ1MVzQFoBCJB+5+C6cFqcISNfE8a1XrNZ9unfcDJ5N5r8BobHYG
-         r6JQ==
-X-Gm-Message-State: AOJu0YyWHtfCKQwhfntkflh2MGj3PU2oDR6esRy6GEQXx3YJbz/WXIwJ
-        869S/8UAgBn86ZfJawWIRbsAkPBws3hf2DhhdjPxEUSfghtbwzs2jis=
-X-Google-Smtp-Source: AGHT+IH655xfKIRArLgTo/emHQxkrBk5h0lVZ/QPaWgFBoXCKhuqJWeFEgT+w8xdiOqxPnWZcCILNf27KInac22sjaM=
-X-Received: by 2002:a05:600c:35c2:b0:408:80bb:ae80 with SMTP id
- r2-20020a05600c35c200b0040880bbae80mr3996599wmq.7.1699804278030; Sun, 12 Nov
- 2023 07:51:18 -0800 (PST)
+        d=1e100.net; s=20230601; t=1699833808; x=1700438608;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+ZHIbA5dSDa0YFUBZZETUQKKTVizuf5JaF0jClraxRM=;
+        b=HAVpCzgDnqCfkcsQiP2wxhvl/O7bzqHYpFYjijddIwG7ZGVw4nyaaasYcVIvFA/3Vv
+         z3kRYpMkTjWncArZmFCZkp9d7jzXZzAv4f02i1Zhk9j6umYCw+KEOVowMiNe++EF9vf8
+         /KcRQ8SnhBi7pPMgn+/QpgL6S1Cq8tI6jLOXAmdYsCNITUndfaOehhvHwRFdHhUBdI11
+         dTiVL2RR3dkQQUIkbDGGLNXOOSHnS4DZulB906KJihitWxe7dYoniSVCiHjC9r4b2qAk
+         pG6zzGnFIejMrP2CKXvyUwgqk3HyoqbevYZ8gfe57pRR6Uu+aqMsw+zxprQm++ZqVX6m
+         cQbQ==
+X-Gm-Message-State: AOJu0YwOsQTGKc6YrqRHDKXOgdBmvWPv1W3QfYkgEBRIW3lDqzYHlyZ3
+        KAYBPAKQq+2nj1SUIeK7naydEY5H7WbxOtRIFkLisD8CqBM0D4gZ9tTC8GfR+sx37JIUfFyLesF
+        4t2ZkNkr0XqRnfhwqEag=
+X-Received: by 2002:a17:903:124a:b0:1ca:7f91:aa5d with SMTP id u10-20020a170903124a00b001ca7f91aa5dmr7816469plh.16.1699833807824;
+        Sun, 12 Nov 2023 16:03:27 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IECTuRNfb72TOfAtkV7pMmjD+8xBNsdITfj8lqsTmhB+HwPaZ/5CGTlMF5gZ/CbtXGVZnzltA==
+X-Received: by 2002:a17:903:124a:b0:1ca:7f91:aa5d with SMTP id u10-20020a170903124a00b001ca7f91aa5dmr7816433plh.16.1699833807525;
+        Sun, 12 Nov 2023 16:03:27 -0800 (PST)
+Received: from ?IPV6:2001:8003:e5b0:9f00:b890:3e54:96bb:2a15? ([2001:8003:e5b0:9f00:b890:3e54:96bb:2a15])
+        by smtp.gmail.com with ESMTPSA id jj3-20020a170903048300b001cc29ffcd96sm3038705plb.192.2023.11.12.16.03.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Nov 2023 16:03:27 -0800 (PST)
+Message-ID: <e4f752f9-3c8c-4d96-8efd-d9dc157cc976@redhat.com>
+Date:   Mon, 13 Nov 2023 10:03:17 +1000
 MIME-Version: 1.0
-References: <CAJvTdKn-xtmin9OjnzHg8wy4PM8Lc3Per=3y3UWORhjdroYP3w@mail.gmail.com>
- <CAHk-=wjvJ44a9Z=tkR2o-heQ4XLp0sgynDOhe6JH2fgg=MMMXA@mail.gmail.com> <CAJvTdK=OSTgYkut=-r95nAYOvVfUt3Cah92qudifeQW4ZJHT7Q@mail.gmail.com>
-In-Reply-To: <CAJvTdK=OSTgYkut=-r95nAYOvVfUt3Cah92qudifeQW4ZJHT7Q@mail.gmail.com>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Sun, 12 Nov 2023 07:51:08 -0800
-Message-ID: <CAAYoRsXvKwhrw3gRQJ-STO48_7yxEiqwt5tgzDbkzA--N_XX6A@mail.gmail.com>
-Subject: Re: [GIT PULL] turbostat for Linux-6.7 (with signed tag)
-To:     Len Brown <lenb@kernel.org>
-Cc:     Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Doug Smythies <dsmythies@telus.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 02/22] x86: intel_epb: Don't rely on link order
+Content-Language: en-US
+To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+        x86@kernel.org, linux-csky@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-parisc@vger.kernel.org
+Cc:     Salil Mehta <salil.mehta@huawei.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        jianyong.wu@arm.com, justin.he@arm.com,
+        James Morse <james.morse@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <ZUoRY33AAHMc5ThW@shell.armlinux.org.uk>
+ <E1r0JKq-00CTwZ-Mh@rmk-PC.armlinux.org.uk>
+From:   Gavin Shan <gshan@redhat.com>
+In-Reply-To: <E1r0JKq-00CTwZ-Mh@rmk-PC.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 10, 2023 at 7:39=E2=80=AFPM Len Brown <lenb@kernel.org> wrote:
-...
->
-> (Same code as previous pull request, with addition of a signed tag.
->  Hopefully it verifies okay at your end.)
->
-> Turbostat features are now table-driven (Rui Zhang)
-> Add support for some new platforms (Sumeet Pawnikar, Rui Zhang)
-> Gracefully run in configs when CPUs are limited (Rui Zhang, Srinivas Pand=
-ruvada)
-> misc minor fixes.
+On 11/7/23 20:29, Russell King (Oracle) wrote:
+> From: James Morse <james.morse@arm.com>
+> 
+> intel_epb_init() is called as a subsys_initcall() to register cpuhp
+> callbacks. The callbacks make use of get_cpu_device() which will return
+> NULL unless register_cpu() has been called. register_cpu() is called
+> from topology_init(), which is also a subsys_initcall().
+> 
+> This is fragile. Moving the register_cpu() to a different
+> subsys_initcall()  leads to a NULL dereference during boot.
+> 
+> Make intel_epb_init() a late_initcall(), user-space can't provide a
+> policy before this point anyway.
+> 
+> Signed-off-by: James Morse <james.morse@arm.com>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> ---
+> subsys_initcall_sync() would be an option, but moving the register_cpu()
+> calls into ACPI also means adding a safety net for CPUs that are online
+> but not described properly by firmware. This lives in subsys_initcall_sync().
+> ---
+>   arch/x86/kernel/cpu/intel_epb.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-Hi Len,
-What about the patches that have been submitted since your last turbostat u=
-pdate
-release of 2023.03.17? I submitted one on 2023.04.03. I haven't sent "RESEN=
-D"s,
-because I know you only do update releases every 1/2 year or so, and in the=
- past
-you have always dealt with the interim patches then.
+Reviewed-by: Gavin Shan <gshan@redhat.com>
 
-Reference:
-https://patchwork.kernel.org/project/linux-pm/list/?series=3D&submitter=3D&=
-state=3D&q=3D&archive=3D&delegate=3D107
-
-... Doug
-
->
-> thanks!
-> Len Brown, Intel Open Source Technology Center
->
-... [deleted]...
