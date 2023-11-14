@@ -2,134 +2,252 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3FCF7EA944
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Nov 2023 05:01:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 257787EAABF
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Nov 2023 08:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbjKNEBd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Nov 2023 23:01:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
+        id S231382AbjKNHG2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Nov 2023 02:06:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjKNEBb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Nov 2023 23:01:31 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588881A7;
-        Mon, 13 Nov 2023 20:01:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:Cc:References:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=ICOM/1lLq6M4iGCToEMqpHVG/JsUrNFcJQW0PHvUXB8=; b=ZxC88kTf/604YrfS788fJtHtdn
-        Z/737Rxz+sM+TCTZBaIcuLd413jVv2IZrnJaiGnPzZIimtqLdopv5OpOaUboe9u3T7j7tXROnXZTg
-        I1zSCvOTFR9F2f+5ehpidXwVDpzLo64VqszhhIsVmH1mxNr1A2cU03fzUwH6q7FAiZw9t6Wp5YNkY
-        BOgnCcbICOqzC54GMJtZ70yDKwRXftEy2KxdTB5T4rhA2ftcdthzMkwo7bdbuylfM5v9DA1v3LGJD
-        qYpslw0XN4ZtTfOT5BLDwhF9Mb/6KDVi+Hwh7jqKWcW3NckveZytRmM73es6kgbbLINc/JjTkoQEn
-        qZyy06hA==;
-Received: from [50.53.46.231] (helo=[192.168.254.15])
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1r2kcA-00F82H-2A;
-        Tue, 14 Nov 2023 04:01:26 +0000
-Message-ID: <a66a805c-3e1f-4b9a-a38e-aca84b8678a6@infradead.org>
-Date:   Mon, 13 Nov 2023 20:01:26 -0800
+        with ESMTP id S230451AbjKNHG1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Nov 2023 02:06:27 -0500
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A44013E;
+        Mon, 13 Nov 2023 23:06:23 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.129.93])
+        by gateway (Coremail) with SMTP id _____8Bx5fBtHFNlQN05AA--.49116S3;
+        Tue, 14 Nov 2023 15:06:21 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.129.93])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxrdxoHFNlvqRBAA--.12287S2;
+        Tue, 14 Nov 2023 15:06:17 +0800 (CST)
+From:   Hongchen Zhang <zhanghongchen@loongson.cn>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Weihao Li <liweihao@loongson.cn>
+Subject: [PATCH] PM: hibernate: use acquire/release ordering when compress/decompress image
+Date:   Tue, 14 Nov 2023 15:05:53 +0800
+Message-Id: <20231114070553.1568212-1-zhanghongchen@loongson.cn>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC] Add a lockdown_hibernate parameter
-Content-Language: en-US
-To:     Kelvie Wong <kelvie@kelvie.ca>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20231114022503.6310-1-kelvie@kelvie.ca>
-Cc:     linux-security-module <linux-security-module@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20231114022503.6310-1-kelvie@kelvie.ca>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_PDS_OTHER_BAD_TLD,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxrdxoHFNlvqRBAA--.12287S2
+X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/1tbiAQAOB2VRh6kbhABdsQ
+X-Coremail-Antispam: 1Uk129KBj93XoW3Gw4rWw15ZF47tw43Jr1rZrc_yoW7uFW8pF
+        W8Xan0kr4UXrs8Z39rAay8Z345AFnYyFZrGrsxC34fuasIgrsYya40gF9Yvr1YyFy8t34v
+        9w47K34qgryqqFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUU9Yb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        AVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
+        AKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v2
+        6r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
+        CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
+        0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
+        AIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIev
+        Ja73UjIFyTuYvjxUc0eHDUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[add security & dhowells]
+When we test S4(suspend to disk) on LoongArch 3A6000 platform, the
+test case sometimes fails. The dmesg log shows the following error:
+	Invalid LZO compressed length
+After we dig into the code, we find out that:
+When compress/decompress the image, the synchronization operation
+between the control thread and the compress/decompress/crc thread
+uses relaxed ordering interface, which is unreliable, and the
+following situation may occur:
+CPU 0					CPU 1
+save_image_lzo				lzo_compress_threadfn
+					  atomic_set(&d->stop, 1);
+  atomic_read(&data[thr].stop)
+  data[thr].cmp = data[thr].cmp_len;
+	  				  WRITE data[thr].cmp_len
+Then CPU0 get a old cmp_len and write to disk. When cpu resume from S4,
+wrong cmp_len is loaded.
 
-On 11/13/23 18:23, Kelvie Wong wrote:
-> This allows the user to tell the kernel that they know better (namely,
-> they secured their swap properly), and that it can enable hibernation.
-> 
-> I've been using this for about a year now, as it doesn't seem like
-> proper secure hibernation was going to be implemented back then, and
-> it's now been a year since I've been building my own kernels with this
-> patch, so getting this upstreamed would save some CO2 from me building
-> my own kernels every upgrade.
-> 
-> Some other not-me users have also tested the patch:
-> 
-> https://community.frame.work/t/guide-fedora-36-hibernation-with-enabled-secure-boot-and-full-disk-encryption-fde-decrypting-over-tpm2/25474/17
-> 
-> Signed-off-by: Kelvie Wong <kelvie@kelvie.ca>
-> ---
->  Documentation/admin-guide/kernel-parameters.txt |  5 +++++
->  kernel/power/hibernate.c                        | 10 +++++++++-
->  2 files changed, 14 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 426fa892d311..54785faba9e0 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -2804,6 +2804,11 @@
->  			to extract confidential information from the kernel
->  			are also disabled.
->  
-> +	lockdown_hibernate	[HIBERNATION]
-> +			Enable hibernation even if lockdown is enabled. Enable this only if
-> +			your swap is encrypted and secured properly, as an attacker can
-> +			modify the kernel offline during hibernation.
-> +
->  	locktorture.nreaders_stress= [KNL]
->  			Set the number of locking read-acquisition kthreads.
->  			Defaults to being automatically set based on the
-> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> index 89c71fce225d..2221c531d54c 100644
-> --- a/kernel/power/hibernate.c
-> +++ b/kernel/power/hibernate.c
-> @@ -36,6 +36,7 @@
->  #include "power.h"
->  
->  
-> +static int lockdown_hibernate;
->  static int nocompress;
->  static int noresume;
->  static int nohibernate;
-> @@ -82,7 +83,7 @@ void hibernate_release(void)
->  bool hibernation_available(void)
->  {
->  	return nohibernate == 0 &&
-> -		!security_locked_down(LOCKDOWN_HIBERNATION) &&
-> +		(lockdown_hibernate || !security_locked_down(LOCKDOWN_HIBERNATION)) &&
->  		!secretmem_active() && !cxl_mem_active();
->  }
->  
-> @@ -1340,6 +1341,12 @@ static int __init nohibernate_setup(char *str)
->  	return 1;
->  }
->  
-> +static int __init lockdown_hibernate_setup(char *str)
-> +{
-> +	lockdown_hibernate = 1;
-> +	return 1;
-> +}
-> +
->  __setup("noresume", noresume_setup);
->  __setup("resume_offset=", resume_offset_setup);
->  __setup("resume=", resume_setup);
-> @@ -1347,3 +1354,4 @@ __setup("hibernate=", hibernate_setup);
->  __setup("resumewait", resumewait_setup);
->  __setup("resumedelay=", resumedelay_setup);
->  __setup("nohibernate", nohibernate_setup);
-> +__setup("lockdown_hibernate", lockdown_hibernate_setup);
+To maintain data consistency between two threads, we should use the
+acquire/release ordering interface. So we change atomic_read/atomic_set
+to atomic_read_acquire/atomic_set_release.
 
+Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
+Signed-off-by: Weihao Li <liweihao@loongson.cn>
+---
+ kernel/power/swap.c | 38 +++++++++++++++++++-------------------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
+
+diff --git a/kernel/power/swap.c b/kernel/power/swap.c
+index a2cb0babb5ec..d44f5937f1e5 100644
+--- a/kernel/power/swap.c
++++ b/kernel/power/swap.c
+@@ -606,11 +606,11 @@ static int crc32_threadfn(void *data)
+ 	unsigned i;
+ 
+ 	while (1) {
+-		wait_event(d->go, atomic_read(&d->ready) ||
++		wait_event(d->go, atomic_read_acquire(&d->ready) ||
+ 		                  kthread_should_stop());
+ 		if (kthread_should_stop()) {
+ 			d->thr = NULL;
+-			atomic_set(&d->stop, 1);
++			atomic_set_release(&d->stop, 1);
+ 			wake_up(&d->done);
+ 			break;
+ 		}
+@@ -619,7 +619,7 @@ static int crc32_threadfn(void *data)
+ 		for (i = 0; i < d->run_threads; i++)
+ 			*d->crc32 = crc32_le(*d->crc32,
+ 			                     d->unc[i], *d->unc_len[i]);
+-		atomic_set(&d->stop, 1);
++		atomic_set_release(&d->stop, 1);
+ 		wake_up(&d->done);
+ 	}
+ 	return 0;
+@@ -649,12 +649,12 @@ static int lzo_compress_threadfn(void *data)
+ 	struct cmp_data *d = data;
+ 
+ 	while (1) {
+-		wait_event(d->go, atomic_read(&d->ready) ||
++		wait_event(d->go, atomic_read_acquire(&d->ready) ||
+ 		                  kthread_should_stop());
+ 		if (kthread_should_stop()) {
+ 			d->thr = NULL;
+ 			d->ret = -1;
+-			atomic_set(&d->stop, 1);
++			atomic_set_release(&d->stop, 1);
+ 			wake_up(&d->done);
+ 			break;
+ 		}
+@@ -663,7 +663,7 @@ static int lzo_compress_threadfn(void *data)
+ 		d->ret = lzo1x_1_compress(d->unc, d->unc_len,
+ 		                          d->cmp + LZO_HEADER, &d->cmp_len,
+ 		                          d->wrk);
+-		atomic_set(&d->stop, 1);
++		atomic_set_release(&d->stop, 1);
+ 		wake_up(&d->done);
+ 	}
+ 	return 0;
+@@ -798,7 +798,7 @@ static int save_image_lzo(struct swap_map_handle *handle,
+ 
+ 			data[thr].unc_len = off;
+ 
+-			atomic_set(&data[thr].ready, 1);
++			atomic_set_release(&data[thr].ready, 1);
+ 			wake_up(&data[thr].go);
+ 		}
+ 
+@@ -806,12 +806,12 @@ static int save_image_lzo(struct swap_map_handle *handle,
+ 			break;
+ 
+ 		crc->run_threads = thr;
+-		atomic_set(&crc->ready, 1);
++		atomic_set_release(&crc->ready, 1);
+ 		wake_up(&crc->go);
+ 
+ 		for (run_threads = thr, thr = 0; thr < run_threads; thr++) {
+ 			wait_event(data[thr].done,
+-			           atomic_read(&data[thr].stop));
++				atomic_read_acquire(&data[thr].stop));
+ 			atomic_set(&data[thr].stop, 0);
+ 
+ 			ret = data[thr].ret;
+@@ -850,7 +850,7 @@ static int save_image_lzo(struct swap_map_handle *handle,
+ 			}
+ 		}
+ 
+-		wait_event(crc->done, atomic_read(&crc->stop));
++		wait_event(crc->done, atomic_read_acquire(&crc->stop));
+ 		atomic_set(&crc->stop, 0);
+ 	}
+ 
+@@ -1132,12 +1132,12 @@ static int lzo_decompress_threadfn(void *data)
+ 	struct dec_data *d = data;
+ 
+ 	while (1) {
+-		wait_event(d->go, atomic_read(&d->ready) ||
++		wait_event(d->go, atomic_read_acquire(&d->ready) ||
+ 		                  kthread_should_stop());
+ 		if (kthread_should_stop()) {
+ 			d->thr = NULL;
+ 			d->ret = -1;
+-			atomic_set(&d->stop, 1);
++			atomic_set_release(&d->stop, 1);
+ 			wake_up(&d->done);
+ 			break;
+ 		}
+@@ -1150,7 +1150,7 @@ static int lzo_decompress_threadfn(void *data)
+ 			flush_icache_range((unsigned long)d->unc,
+ 					   (unsigned long)d->unc + d->unc_len);
+ 
+-		atomic_set(&d->stop, 1);
++		atomic_set_release(&d->stop, 1);
+ 		wake_up(&d->done);
+ 	}
+ 	return 0;
+@@ -1335,7 +1335,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
+ 		}
+ 
+ 		if (crc->run_threads) {
+-			wait_event(crc->done, atomic_read(&crc->stop));
++			wait_event(crc->done, atomic_read_acquire(&crc->stop));
+ 			atomic_set(&crc->stop, 0);
+ 			crc->run_threads = 0;
+ 		}
+@@ -1371,7 +1371,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
+ 					pg = 0;
+ 			}
+ 
+-			atomic_set(&data[thr].ready, 1);
++			atomic_set_release(&data[thr].ready, 1);
+ 			wake_up(&data[thr].go);
+ 		}
+ 
+@@ -1390,7 +1390,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
+ 
+ 		for (run_threads = thr, thr = 0; thr < run_threads; thr++) {
+ 			wait_event(data[thr].done,
+-			           atomic_read(&data[thr].stop));
++				atomic_read_acquire(&data[thr].stop));
+ 			atomic_set(&data[thr].stop, 0);
+ 
+ 			ret = data[thr].ret;
+@@ -1421,7 +1421,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
+ 				ret = snapshot_write_next(snapshot);
+ 				if (ret <= 0) {
+ 					crc->run_threads = thr + 1;
+-					atomic_set(&crc->ready, 1);
++					atomic_set_release(&crc->ready, 1);
+ 					wake_up(&crc->go);
+ 					goto out_finish;
+ 				}
+@@ -1429,13 +1429,13 @@ static int load_image_lzo(struct swap_map_handle *handle,
+ 		}
+ 
+ 		crc->run_threads = thr;
+-		atomic_set(&crc->ready, 1);
++		atomic_set_release(&crc->ready, 1);
+ 		wake_up(&crc->go);
+ 	}
+ 
+ out_finish:
+ 	if (crc->run_threads) {
+-		wait_event(crc->done, atomic_read(&crc->stop));
++		wait_event(crc->done, atomic_read_acquire(&crc->stop));
+ 		atomic_set(&crc->stop, 0);
+ 	}
+ 	stop = ktime_get();
 -- 
-~Randy
+2.33.0
+
