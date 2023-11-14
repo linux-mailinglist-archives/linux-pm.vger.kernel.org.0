@@ -2,252 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 257787EAABF
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Nov 2023 08:06:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F34417EAC9F
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Nov 2023 10:09:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231382AbjKNHG2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Nov 2023 02:06:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51368 "EHLO
+        id S232480AbjKNJJP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Nov 2023 04:09:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbjKNHG1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Nov 2023 02:06:27 -0500
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A44013E;
-        Mon, 13 Nov 2023 23:06:23 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.129.93])
-        by gateway (Coremail) with SMTP id _____8Bx5fBtHFNlQN05AA--.49116S3;
-        Tue, 14 Nov 2023 15:06:21 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.129.93])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxrdxoHFNlvqRBAA--.12287S2;
-        Tue, 14 Nov 2023 15:06:17 +0800 (CST)
-From:   Hongchen Zhang <zhanghongchen@loongson.cn>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Weihao Li <liweihao@loongson.cn>
-Subject: [PATCH] PM: hibernate: use acquire/release ordering when compress/decompress image
-Date:   Tue, 14 Nov 2023 15:05:53 +0800
-Message-Id: <20231114070553.1568212-1-zhanghongchen@loongson.cn>
-X-Mailer: git-send-email 2.33.0
+        with ESMTP id S232563AbjKNJIt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Nov 2023 04:08:49 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464EE1988
+        for <linux-pm@vger.kernel.org>; Tue, 14 Nov 2023 01:08:43 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-53eeb28e8e5so7092a12.1
+        for <linux-pm@vger.kernel.org>; Tue, 14 Nov 2023 01:08:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1699952921; x=1700557721; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gBqGDewyQb1wIg3vSqoaW/U1G0Rs3GT3EROexmJYFD4=;
+        b=qFAYzuRO4Tri8pcZlpOaqz3ocjTp/5191Q0dwFaRpXSsaarU3QhWBrDoFtucUW7/RG
+         gJiEamrtVJElKv8+tIOwNoSOnnUys21RiI+s2VEfqLM2y7UubeYuZy/GTTbtaE35+Gu/
+         Apc/t8qgqJUZBFj2BbHDVip4llFeHFCnbLnWKgf51g5PC/3VUMOwPieR7f0QgobP2o0f
+         p6gczxBaE1VLdWGQlB/XW6xRCCTsYf4mtO8ASlEVhGgQ52aws4jdD6HA8RVfksC7sznC
+         s+lr1mGYbykyHaQnFkPIi+1jfmgnxZO7iVko4iWfkaDNQB1ELi66aajwoir2Trc4eH+F
+         +YxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699952921; x=1700557721;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gBqGDewyQb1wIg3vSqoaW/U1G0Rs3GT3EROexmJYFD4=;
+        b=XdyXULsF+k/mZhZcTh2dU7HzeWALP7IXcm0HJJjLlbxKH8DrhNkkG91A3h6YCNcDgv
+         PZ7HUSeXwdXaT7IrVGp3JdtI50QsQGk/PRXOTUOeCCcfks0MMQXjyQeSLvpSSPuj5eaL
+         cog0rI1TUpkkh6uphSQQJWJ1lEJ3Q6QDesahd2aX+HxDx3Ip2lrwlBfd9/TyR1eLw2QO
+         lkK34mANvPtGpn9LGNN6iCkHo+OpcH/EEHw+z1YI3rMt4ry3uzG7wJkmqmXS8VNmIpLK
+         KzLW+PTskKNNlOLeSh8D4rmmRxQHWQQzzbJegXG5E5t1nngSNOBW4sFRndWB7LyLBhwm
+         DSpw==
+X-Gm-Message-State: AOJu0YyfMMasbvBFHFE56Jb7WK+Z11oE72i+Z8AOl1P4h30cVv45ivKY
+        dSvJSFIaxomyPbkvFOFNaV39Jw3H0v80xDMsw+nEP1ggQVTNo4pwhJTSc1Yu
+X-Google-Smtp-Source: AGHT+IEM89+rvpoYdVEvpOvoyQvbxLoJZXGfsA++k6fh+jX9l9VBf8QUHCETEiq8I3BkHbE+15Kb97BCpgmg9wRPams=
+X-Received: by 2002:a05:6402:1cc8:b0:545:279:d075 with SMTP id
+ ds8-20020a0564021cc800b005450279d075mr108521edb.1.1699952921166; Tue, 14 Nov
+ 2023 01:08:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxrdxoHFNlvqRBAA--.12287S2
-X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/1tbiAQAOB2VRh6kbhABdsQ
-X-Coremail-Antispam: 1Uk129KBj93XoW3Gw4rWw15ZF47tw43Jr1rZrc_yoW7uFW8pF
-        W8Xan0kr4UXrs8Z39rAay8Z345AFnYyFZrGrsxC34fuasIgrsYya40gF9Yvr1YyFy8t34v
-        9w47K34qgryqqFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUU9Yb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        AVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
-        AKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v2
-        6r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
-        CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
-        0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
-        AIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIev
-        Ja73UjIFyTuYvjxUc0eHDUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20231031093921.755204-1-guanyulin@google.com> <f75d6cd2-fa9f-4820-969f-2a8839d78c9e@rowland.harvard.edu>
+ <CAOuDEK0NcijUKAL3fGtO=Ks+Y38TRhJcVx+ff-QUyUA0LcQ1Bw@mail.gmail.com> <3fe5414a-570f-4bfa-aa2f-909d7799551b@rowland.harvard.edu>
+In-Reply-To: <3fe5414a-570f-4bfa-aa2f-909d7799551b@rowland.harvard.edu>
+From:   Guan-Yu Lin <guanyulin@google.com>
+Date:   Tue, 14 Nov 2023 17:08:29 +0800
+Message-ID: <CAOuDEK1935=DmToUky8eXA5KxZFu+-phMjGB=Wv7Ox+k5fDvbQ@mail.gmail.com>
+Subject: Re: [PATCH] rpm: pm: enable PM_RPM_EXCEPTION config flag
+To:     linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     gregkh@linuxfoundation.org, len.brown@intel.com, pavel@ucw.cz,
+        heikki.krogerus@linux.intel.com, mkl@pengutronix.de,
+        hadess@hadess.net, mailhol.vincent@wanadoo.fr,
+        ivan.orlov0322@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pumahsu@google.com,
+        raychi@google.com, albertccwang@google.com,
+        Alan Stern <stern@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When we test S4(suspend to disk) on LoongArch 3A6000 platform, the
-test case sometimes fails. The dmesg log shows the following error:
-	Invalid LZO compressed length
-After we dig into the code, we find out that:
-When compress/decompress the image, the synchronization operation
-between the control thread and the compress/decompress/crc thread
-uses relaxed ordering interface, which is unreliable, and the
-following situation may occur:
-CPU 0					CPU 1
-save_image_lzo				lzo_compress_threadfn
-					  atomic_set(&d->stop, 1);
-  atomic_read(&data[thr].stop)
-  data[thr].cmp = data[thr].cmp_len;
-	  				  WRITE data[thr].cmp_len
-Then CPU0 get a old cmp_len and write to disk. When cpu resume from S4,
-wrong cmp_len is loaded.
+On Wed, Nov 8, 2023 at 11:56=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
+du> wrote:
+>
+> On Wed, Nov 08, 2023 at 04:45:43PM +0800, Guan-Yu Lin wrote:
+> > Thanks for the questions. Let me first introduce my motivation for
+> > proposing this feature. We can discuss the implementation details later=
+.
+> >
+> > Motivation:
+> > Currently, system PM operations always override runtime PM operations.
+> > As runtime PM reflects the power status of devices, there is a
+> > possibility that runtime PM states that a device is in use, but system
+> > PM decides to suspend it. Up to now, we have assumed that a device can'=
+t
+> > function without resources from the system, so the device should acquir=
+e
+> > a wakelock to prevent this from happening. However, what if the device
+>
+> [From the fact that you mention wakelocks, I assume that you're trying
+> to implement something for Android systems rather than Linux systems
+> in general.]
+>
 
-To maintain data consistency between two threads, we should use the
-acquire/release ordering interface. So we change atomic_read/atomic_set
-to atomic_read_acquire/atomic_set_release.
+Apologies, I should use "wakeup source" here.
 
-Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
-Signed-off-by: Weihao Li <liweihao@loongson.cn>
----
- kernel/power/swap.c | 38 +++++++++++++++++++-------------------
- 1 file changed, 19 insertions(+), 19 deletions(-)
+> > does not need the system's support to function? Or only needs limited
+> > resources (e.g., only limited power source or clock) to function? In th=
+is
+> > situation, we would like to keep the device on but allow the system to
+> > suspend. This is an example where we would like devices to follow runti=
+me
+> > PM rather than system PM.
+>
+> To put it more simply, you want a way to leave some devices in an active
+> state while the rest of the system is suspended.  It's not clear why you
+> have dragged runtime PM into the discussion (apart from the obvious fact
+> that you won't want to keep a device active if it isn't active already).
+>
+> This sounds like a major change, not something to be done with a simple
+> override.  You should discuss it with Rafael Wysocki and the linux-pm
+> mailing list before trying to implement anything.
+>
+> > Feature Supported:
+> > 1. Devices could control the priority of system PM and runtime PM durin=
+g
+> >    runtime.
+>
+> This seems like a totally unnecessary side issue.  Forget about runtime
+> PM for the time being and concentrate instead on which devices you want
+> to keep active.
+>
+> > 2. The control should be at the device level, meaning that different
+> >    devices should control their own priorities.
+> >
+> > Goal of This Patch:
+> > 1. Design a framework to support features above.
+> > 2. Apply it into usb for demonstration.
+>
+> You may find that it is easier (and less work in the long run) to design
+> the general framework and get it working than to concentrate on one
+> particular subsystem.
+>
+> Alan Stern
 
-diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index a2cb0babb5ec..d44f5937f1e5 100644
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -606,11 +606,11 @@ static int crc32_threadfn(void *data)
- 	unsigned i;
- 
- 	while (1) {
--		wait_event(d->go, atomic_read(&d->ready) ||
-+		wait_event(d->go, atomic_read_acquire(&d->ready) ||
- 		                  kthread_should_stop());
- 		if (kthread_should_stop()) {
- 			d->thr = NULL;
--			atomic_set(&d->stop, 1);
-+			atomic_set_release(&d->stop, 1);
- 			wake_up(&d->done);
- 			break;
- 		}
-@@ -619,7 +619,7 @@ static int crc32_threadfn(void *data)
- 		for (i = 0; i < d->run_threads; i++)
- 			*d->crc32 = crc32_le(*d->crc32,
- 			                     d->unc[i], *d->unc_len[i]);
--		atomic_set(&d->stop, 1);
-+		atomic_set_release(&d->stop, 1);
- 		wake_up(&d->done);
- 	}
- 	return 0;
-@@ -649,12 +649,12 @@ static int lzo_compress_threadfn(void *data)
- 	struct cmp_data *d = data;
- 
- 	while (1) {
--		wait_event(d->go, atomic_read(&d->ready) ||
-+		wait_event(d->go, atomic_read_acquire(&d->ready) ||
- 		                  kthread_should_stop());
- 		if (kthread_should_stop()) {
- 			d->thr = NULL;
- 			d->ret = -1;
--			atomic_set(&d->stop, 1);
-+			atomic_set_release(&d->stop, 1);
- 			wake_up(&d->done);
- 			break;
- 		}
-@@ -663,7 +663,7 @@ static int lzo_compress_threadfn(void *data)
- 		d->ret = lzo1x_1_compress(d->unc, d->unc_len,
- 		                          d->cmp + LZO_HEADER, &d->cmp_len,
- 		                          d->wrk);
--		atomic_set(&d->stop, 1);
-+		atomic_set_release(&d->stop, 1);
- 		wake_up(&d->done);
- 	}
- 	return 0;
-@@ -798,7 +798,7 @@ static int save_image_lzo(struct swap_map_handle *handle,
- 
- 			data[thr].unc_len = off;
- 
--			atomic_set(&data[thr].ready, 1);
-+			atomic_set_release(&data[thr].ready, 1);
- 			wake_up(&data[thr].go);
- 		}
- 
-@@ -806,12 +806,12 @@ static int save_image_lzo(struct swap_map_handle *handle,
- 			break;
- 
- 		crc->run_threads = thr;
--		atomic_set(&crc->ready, 1);
-+		atomic_set_release(&crc->ready, 1);
- 		wake_up(&crc->go);
- 
- 		for (run_threads = thr, thr = 0; thr < run_threads; thr++) {
- 			wait_event(data[thr].done,
--			           atomic_read(&data[thr].stop));
-+				atomic_read_acquire(&data[thr].stop));
- 			atomic_set(&data[thr].stop, 0);
- 
- 			ret = data[thr].ret;
-@@ -850,7 +850,7 @@ static int save_image_lzo(struct swap_map_handle *handle,
- 			}
- 		}
- 
--		wait_event(crc->done, atomic_read(&crc->stop));
-+		wait_event(crc->done, atomic_read_acquire(&crc->stop));
- 		atomic_set(&crc->stop, 0);
- 	}
- 
-@@ -1132,12 +1132,12 @@ static int lzo_decompress_threadfn(void *data)
- 	struct dec_data *d = data;
- 
- 	while (1) {
--		wait_event(d->go, atomic_read(&d->ready) ||
-+		wait_event(d->go, atomic_read_acquire(&d->ready) ||
- 		                  kthread_should_stop());
- 		if (kthread_should_stop()) {
- 			d->thr = NULL;
- 			d->ret = -1;
--			atomic_set(&d->stop, 1);
-+			atomic_set_release(&d->stop, 1);
- 			wake_up(&d->done);
- 			break;
- 		}
-@@ -1150,7 +1150,7 @@ static int lzo_decompress_threadfn(void *data)
- 			flush_icache_range((unsigned long)d->unc,
- 					   (unsigned long)d->unc + d->unc_len);
- 
--		atomic_set(&d->stop, 1);
-+		atomic_set_release(&d->stop, 1);
- 		wake_up(&d->done);
- 	}
- 	return 0;
-@@ -1335,7 +1335,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
- 		}
- 
- 		if (crc->run_threads) {
--			wait_event(crc->done, atomic_read(&crc->stop));
-+			wait_event(crc->done, atomic_read_acquire(&crc->stop));
- 			atomic_set(&crc->stop, 0);
- 			crc->run_threads = 0;
- 		}
-@@ -1371,7 +1371,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
- 					pg = 0;
- 			}
- 
--			atomic_set(&data[thr].ready, 1);
-+			atomic_set_release(&data[thr].ready, 1);
- 			wake_up(&data[thr].go);
- 		}
- 
-@@ -1390,7 +1390,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
- 
- 		for (run_threads = thr, thr = 0; thr < run_threads; thr++) {
- 			wait_event(data[thr].done,
--			           atomic_read(&data[thr].stop));
-+				atomic_read_acquire(&data[thr].stop));
- 			atomic_set(&data[thr].stop, 0);
- 
- 			ret = data[thr].ret;
-@@ -1421,7 +1421,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
- 				ret = snapshot_write_next(snapshot);
- 				if (ret <= 0) {
- 					crc->run_threads = thr + 1;
--					atomic_set(&crc->ready, 1);
-+					atomic_set_release(&crc->ready, 1);
- 					wake_up(&crc->go);
- 					goto out_finish;
- 				}
-@@ -1429,13 +1429,13 @@ static int load_image_lzo(struct swap_map_handle *handle,
- 		}
- 
- 		crc->run_threads = thr;
--		atomic_set(&crc->ready, 1);
-+		atomic_set_release(&crc->ready, 1);
- 		wake_up(&crc->go);
- 	}
- 
- out_finish:
- 	if (crc->run_threads) {
--		wait_event(crc->done, atomic_read(&crc->stop));
-+		wait_event(crc->done, atomic_read_acquire(&crc->stop));
- 		atomic_set(&crc->stop, 0);
- 	}
- 	stop = ktime_get();
--- 
-2.33.0
+Hi Rafael,
+We'd like to implement a feature to allow system suspend with several
+devices still active. Do you have any consideration on this?
 
+Thanks,
+Guan-Yu
