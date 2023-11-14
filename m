@@ -1,70 +1,75 @@
-Return-Path: <linux-pm+bounces-48-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-49-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA2F57F3432
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Nov 2023 17:48:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4BD97F346D
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Nov 2023 18:02:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B45461C21D02
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Nov 2023 16:48:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5DB18282793
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Nov 2023 17:02:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D1B851C3E;
-	Tue, 21 Nov 2023 16:48:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 261512563;
+	Tue, 21 Nov 2023 17:02:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="gaHcTXh3"
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="vBFX28TR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5340E100
-	for <linux-pm@vger.kernel.org>; Tue, 21 Nov 2023 08:48:45 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-40a4848c6e1so23660805e9.1
-        for <linux-pm@vger.kernel.org>; Tue, 21 Nov 2023 08:48:45 -0800 (PST)
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90EB113
+	for <linux-pm@vger.kernel.org>; Tue, 21 Nov 2023 09:02:43 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-50a6ff9881fso8438548e87.1
+        for <linux-pm@vger.kernel.org>; Tue, 21 Nov 2023 09:02:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1700585324; x=1701190124; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dl6jzCpJc5F+w+WFK8foUYFSJQiUHkYrw+vDeVrDCAo=;
-        b=gaHcTXh3pJK+6m2qUIAgeAzOsA3X6F0eZlaQdFAyjXoxqrpQO8So/F5uwUUWLXHDJC
-         J+7aQG13G/WcCLdxPCmuJWVESaCa3qPcnhIporslDPpBPax3+cNknQafkNW5H0X/NeNX
-         kNummQht3z5Pm/XxWIOvI7zfzVJV+owBVcwWnTpnz0Nzeu9Yj+YPcHMQ2GuQlaqQSpOS
-         nCVBFSaYGPQhgAo19eqnFSVYzHR6mKTEMzAfWjtcUuIl0fc3SP9T3REKgl8eU1Qt3F+d
-         as4rXPOSYXY0fDb8dVBvdsVovyIhW+vO6whK5bFDwpnOgCpOfDaIrPCvFl0kGK5I85Yg
-         YWgA==
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1700586162; x=1701190962; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=RY5bcl1x0MOfQG1a+xI6jyP9NlPUMrTJp9SfZPaMtRU=;
+        b=vBFX28TR2bJC6tSdQXVe3UL/sE/o35fhE/8cq3/EVycTKBMmR2yN+slXCatW8C3WEJ
+         FFNGr7fiV+y5eKVUOcP2HDENJyjQ2H5eFIi4zM8IQ9J0RIZ+4zrE4MO+r9Rtj23JEKT/
+         K2QoTG7rOmrmKD+Q1he8kgRjZmPzMPjbPZSrPz/q2mwYJrQ+csUvOxLt47gFZVfXs1Lc
+         dvKiOniDnHy1CfPiLs4YEO1zYuCm95sxXzXFnesAsD/4BkAEfQt2JHNSGCJmT+p+PEOZ
+         /L5UQH9XOP1WWK22R4jWkZiausMJwcBT232LEwG6hSH4AjEmdN96qUtLrxH07wruebnQ
+         VSpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700585324; x=1701190124;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Dl6jzCpJc5F+w+WFK8foUYFSJQiUHkYrw+vDeVrDCAo=;
-        b=fjsMWJasr7EopBYV/I/9Iy+KDltadKZUVx0A09nCTqwmmBJsjxXZqxnMXRlDC/ceLq
-         Q3Y01eX4ACw8gPFw6txAttLCkrrBlhnjnrCGLAYCXPAGCDR85GpUO7XIzVjMPWDRJECn
-         8ijMa6dceybazapfFgm2kkicang2UQ73CEoeOFZfuTteIBalItO/qp78qldP4ZaqcbzO
-         X76euntBg+YQe/jgedcMfiNiZLVgsHZjVs/56yYEpNZIgWBckgOxAgV/cv90GGcUSgK8
-         i2L3D27osXkyI41ByMVrB+Vczfo5wCRBHH7p40OMN5LYokfVHBLgZ3ej02JyzRzDRpEh
-         C12w==
-X-Gm-Message-State: AOJu0YzhbYvJ7k84ydqJZwhiR9Owrhxo2sKTO7km0L/6hyU0QTQPni+N
-	NilWbvH2Q9W/nMHQXxsCrXn/hQ==
-X-Google-Smtp-Source: AGHT+IG4dX7H/wqKA+5EWhJPHEt3WhqgO8tiLLdqJWn9aVJj7sNqBLUK1KzJFtvHSv6RGb7mUmrDJQ==
-X-Received: by 2002:a05:600c:a4c:b0:40a:4609:9c90 with SMTP id c12-20020a05600c0a4c00b0040a46099c90mr9626807wmq.29.1700585323529;
-        Tue, 21 Nov 2023 08:48:43 -0800 (PST)
+        d=1e100.net; s=20230601; t=1700586162; x=1701190962;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RY5bcl1x0MOfQG1a+xI6jyP9NlPUMrTJp9SfZPaMtRU=;
+        b=Cq/EC1zq83umkaze5rvINxyQCeZYjKQ6NOJUPvxBt/OLMaRuKpNB5S9esCgRhkaSfx
+         u3J+1Be2kLGd6XyHKo/nRuFKW9F2wcEb/oIsAcQKGCtOA06MbJpgh041yZwVvv+DU8ux
+         MyVg6Xdx6uA879M3f6FhWXPV5BRLUmlN3TJuMUcuM26RJk9HnjY65j/DGBjfPmgE1+MK
+         lmrIL9yK6GuAy6SbRhB0KmkiNMoUxAqdFvbrvJzoE3d+MnDheIqJOM/bOchXKsPxXhGO
+         V4DrneOMr68T26CzVi28+vUiMmJnAbH9pRxU/HHxQBtfIowsz88mdWqk6lNSgrk0bTBK
+         Upvw==
+X-Gm-Message-State: AOJu0Yx2WIg07TB0FR3Qy8QOfi5P4Fv0tvMdh5hYOf+nwg8HMKZgWqGg
+	yO3DiWnMKMToDWg/9/TJeB5eIg==
+X-Google-Smtp-Source: AGHT+IHWCWoNHIImsBka/l40pqodUCB/BIiBTxP670O+sPPNIcGbx21bgGmTyfJmWQu0QXTVfIcyFg==
+X-Received: by 2002:a2e:878d:0:b0:2c5:4a0:f3cb with SMTP id n13-20020a2e878d000000b002c504a0f3cbmr7237202lji.11.1700586158495;
+        Tue, 21 Nov 2023 09:02:38 -0800 (PST)
 Received: from airbuntu (host109-151-228-202.range109-151.btcentralplus.com. [109.151.228.202])
-        by smtp.gmail.com with ESMTPSA id c20-20020a7bc854000000b0040a43d458c9sm21640037wml.25.2023.11.21.08.48.42
+        by smtp.gmail.com with ESMTPSA id k7-20020a7bc407000000b003fd2d3462fcsm703126wmi.1.2023.11.21.09.02.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Nov 2023 08:48:43 -0800 (PST)
-Date: Tue, 14 Nov 2023 20:59:38 +0000
+        Tue, 21 Nov 2023 09:02:38 -0800 (PST)
+Date: Tue, 14 Nov 2023 21:13:32 +0000
 From: Qais Yousef <qyousef@layalina.io>
-To: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-	rafael@kernel.org, viresh.kumar@linaro.org,
+To: Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>, mingo@redhat.com,
+	juri.lelli@redhat.com, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+	bristot@redhat.com, vschneid@redhat.com, viresh.kumar@linaro.org,
 	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
 	lukasz.luba@arm.com, wyes.karny@amd.com, beata.michalska@arm.com
-Subject: Re: [PATCH v3 2/2] sched/schedutil: Rework iowait boost
-Message-ID: <20231114205938.kspmq6rtidwdsu4f@airbuntu>
+Subject: Re: [PATCH v3 0/2] Rework interface between scheduler and schedutil
+ governor
+Message-ID: <20231114211332.c3yhmfm7vxgysi72@airbuntu>
 References: <20231103131821.1176294-1-vincent.guittot@linaro.org>
- <20231103131821.1176294-3-vincent.guittot@linaro.org>
+ <CAJZ5v0g4N2UojiQqJn7fxWj2=h=6sgFfGEqEVx1wuh2VdvaH6Q@mail.gmail.com>
+ <20231116143450.GF8262@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -73,205 +78,79 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231103131821.1176294-3-vincent.guittot@linaro.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231116143450.GF8262@noisy.programming.kicks-ass.net>
 X-Spam-Level: *
 
-On 11/03/23 14:18, Vincent Guittot wrote:
-> Use the max value that has already been computed inside sugov_get_util()
-> to cap the iowait boost and remove dependency with uclamp_rq_util_with()
-> which is not used anymore.
+On 11/16/23 15:34, Peter Zijlstra wrote:
+> On Mon, Nov 06, 2023 at 04:05:40PM +0100, Rafael J. Wysocki wrote:
+> > On Fri, Nov 3, 2023 at 2:18 PM Vincent Guittot
+> > <vincent.guittot@linaro.org> wrote:
+> > >
+> > > Following the discussion with Qais [1] about how to handle uclamp
+> > > requirements and after syncing with him, we agreed that I should move
+> > > forward on the patchset to rework the interface between scheduler and
+> > > schedutil governor to provide more information to the latter. Scheduler
+> > > (and EAS in particular) doesn't need anymore to guess estimate which
+> > > headroom the governor wants to apply and will directly ask for the target
+> > > freq. Then the governor directly gets the actual utilization and new
+> > > minimum and maximum boundaries to select this target frequency and
+> > > doesn't have to deal anymore with scheduler internals like uclamp when
+> > > including iowait boost.
+
+Thanks a lot for taking over Vincent and helping with this! And sorry for
+delayed review, was out travelling between holiday and LPC so haven't caught up
+with the list properly yet..
+
+Beside the comments on patch 1, it looks good to me. Do we want to generalize
+the way the interface is called though so that scheduler is not tightly coupled
+to schedutil? Speaking with Intel folks in LPC, it seemed they rely on firmware
+to make a lot of decision and if we further generalize how the interface is
+called (I think we need a new cpufreq wrapper akin to cpufreq_update_util()) to
+allow governors to hook into it and do their own thing. This could allow them
+to use uclamp and these min/max perf hints.
+
+But I haven't thought this fully through. So something to consider separately
+anyway to not hold this up unnecessarily. Maybe we do want to keep schedutil
+tightly integrated and get people to switch to schedutil instead..
+
+> > >
+> > > [1] https://lore.kernel.org/lkml/CAKfTPtA5JqNCauG-rP3wGfq+p8EEVx9Tvwj6ksM3SYCwRmfCTg@mail.gmail.com/
+> > >
+> > > Changes since v2:
+> > > - remove useless target variable
+> > >
+> > > Changes since v1:
+> > > - fix a bug (always set max even when returning early)
+> > > - fix typos
+> > >
+> > > Vincent Guittot (2):
+> > >   sched/schedutil: Rework performance estimation
+> > >   sched/schedutil: Rework iowait boost
+> > >
+> > >  include/linux/energy_model.h     |  1 -
+> > >  kernel/sched/core.c              | 82 ++++++++++++-------------------
+> > >  kernel/sched/cpufreq_schedutil.c | 69 ++++++++++++++++----------
+> > >  kernel/sched/fair.c              | 22 +++++++--
+> > >  kernel/sched/sched.h             | 84 +++-----------------------------
+> > >  5 files changed, 100 insertions(+), 158 deletions(-)
+> > >
+> > > --
+> > 
+> > For the schedutil changes in the series:
+> > 
+> > Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+> > 
+> > and I'm assuming this series to be targeted at sched.
 > 
-> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> ---
+> Sure, I'll go queue it. Thanks!
 
-Reviewed-by: Qais Yousef <qyousef@layalina.io>
-
-I didn't get a chance to reproduce the original issue I've seen with iowait
-boost to test this, but will do and confirm back.
+Sorry for being late. If this wasn't queued already I think worth waiting to
+iron out some comments on patch 1 first.
 
 
 Thanks!
 
 --
 Qais Yousef
-
->  kernel/sched/cpufreq_schedutil.c | 29 ++++++++-------
->  kernel/sched/sched.h             | 60 --------------------------------
->  2 files changed, 14 insertions(+), 75 deletions(-)
-> 
-> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> index 38accd8c854b..068c895517fb 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -174,11 +174,12 @@ unsigned long sugov_effective_cpu_perf(int cpu, unsigned long actual,
->  	return max(min, max);
->  }
->  
-> -static void sugov_get_util(struct sugov_cpu *sg_cpu)
-> +static void sugov_get_util(struct sugov_cpu *sg_cpu, unsigned long boost)
->  {
->  	unsigned long min, max, util = cpu_util_cfs_boost(sg_cpu->cpu);
->  
->  	util = effective_cpu_util(sg_cpu->cpu, util, &min, &max);
-> +	util = max(util, boost);
->  	sg_cpu->bw_min = map_util_perf(min);
->  	sg_cpu->util = sugov_effective_cpu_perf(sg_cpu->cpu, util, min, max);
->  }
-> @@ -271,18 +272,16 @@ static void sugov_iowait_boost(struct sugov_cpu *sg_cpu, u64 time,
->   * This mechanism is designed to boost high frequently IO waiting tasks, while
->   * being more conservative on tasks which does sporadic IO operations.
->   */
-> -static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
-> +static unsigned long sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
->  			       unsigned long max_cap)
->  {
-> -	unsigned long boost;
-> -
->  	/* No boost currently required */
->  	if (!sg_cpu->iowait_boost)
-> -		return;
-> +		return 0;
->  
->  	/* Reset boost if the CPU appears to have been idle enough */
->  	if (sugov_iowait_reset(sg_cpu, time, false))
-> -		return;
-> +		return 0;
->  
->  	if (!sg_cpu->iowait_boost_pending) {
->  		/*
-> @@ -291,7 +290,7 @@ static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
->  		sg_cpu->iowait_boost >>= 1;
->  		if (sg_cpu->iowait_boost < IOWAIT_BOOST_MIN) {
->  			sg_cpu->iowait_boost = 0;
-> -			return;
-> +			return 0;
->  		}
->  	}
->  
-> @@ -301,10 +300,7 @@ static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
->  	 * sg_cpu->util is already in capacity scale; convert iowait_boost
->  	 * into the same scale so we can compare.
->  	 */
-> -	boost = (sg_cpu->iowait_boost * max_cap) >> SCHED_CAPACITY_SHIFT;
-> -	boost = uclamp_rq_util_with(cpu_rq(sg_cpu->cpu), boost, NULL);
-> -	if (sg_cpu->util < boost)
-> -		sg_cpu->util = boost;
-> +	return (sg_cpu->iowait_boost * max_cap) >> SCHED_CAPACITY_SHIFT;
->  }
->  
->  #ifdef CONFIG_NO_HZ_COMMON
-> @@ -334,6 +330,8 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
->  					      u64 time, unsigned long max_cap,
->  					      unsigned int flags)
->  {
-> +	unsigned long boost;
-> +
->  	sugov_iowait_boost(sg_cpu, time, flags);
->  	sg_cpu->last_update = time;
->  
-> @@ -342,8 +340,8 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
->  	if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
->  		return false;
->  
-> -	sugov_get_util(sg_cpu);
-> -	sugov_iowait_apply(sg_cpu, time, max_cap);
-> +	boost = sugov_iowait_apply(sg_cpu, time, max_cap);
-> +	sugov_get_util(sg_cpu, boost);
->  
->  	return true;
->  }
-> @@ -444,9 +442,10 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
->  
->  	for_each_cpu(j, policy->cpus) {
->  		struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
-> +		unsigned long boost;
->  
-> -		sugov_get_util(j_sg_cpu);
-> -		sugov_iowait_apply(j_sg_cpu, time, max_cap);
-> +		boost = sugov_iowait_apply(j_sg_cpu, time, max_cap);
-> +		sugov_get_util(j_sg_cpu, boost);
->  
->  		util = max(j_sg_cpu->util, util);
->  	}
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index 302b451a3fd8..e3cb8e004bd1 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -3025,59 +3025,6 @@ static inline bool uclamp_rq_is_idle(struct rq *rq)
->  	return rq->uclamp_flags & UCLAMP_FLAG_IDLE;
->  }
->  
-> -/**
-> - * uclamp_rq_util_with - clamp @util with @rq and @p effective uclamp values.
-> - * @rq:		The rq to clamp against. Must not be NULL.
-> - * @util:	The util value to clamp.
-> - * @p:		The task to clamp against. Can be NULL if you want to clamp
-> - *		against @rq only.
-> - *
-> - * Clamps the passed @util to the max(@rq, @p) effective uclamp values.
-> - *
-> - * If sched_uclamp_used static key is disabled, then just return the util
-> - * without any clamping since uclamp aggregation at the rq level in the fast
-> - * path is disabled, rendering this operation a NOP.
-> - *
-> - * Use uclamp_eff_value() if you don't care about uclamp values at rq level. It
-> - * will return the correct effective uclamp value of the task even if the
-> - * static key is disabled.
-> - */
-> -static __always_inline
-> -unsigned long uclamp_rq_util_with(struct rq *rq, unsigned long util,
-> -				  struct task_struct *p)
-> -{
-> -	unsigned long min_util = 0;
-> -	unsigned long max_util = 0;
-> -
-> -	if (!static_branch_likely(&sched_uclamp_used))
-> -		return util;
-> -
-> -	if (p) {
-> -		min_util = uclamp_eff_value(p, UCLAMP_MIN);
-> -		max_util = uclamp_eff_value(p, UCLAMP_MAX);
-> -
-> -		/*
-> -		 * Ignore last runnable task's max clamp, as this task will
-> -		 * reset it. Similarly, no need to read the rq's min clamp.
-> -		 */
-> -		if (uclamp_rq_is_idle(rq))
-> -			goto out;
-> -	}
-> -
-> -	min_util = max_t(unsigned long, min_util, uclamp_rq_get(rq, UCLAMP_MIN));
-> -	max_util = max_t(unsigned long, max_util, uclamp_rq_get(rq, UCLAMP_MAX));
-> -out:
-> -	/*
-> -	 * Since CPU's {min,max}_util clamps are MAX aggregated considering
-> -	 * RUNNABLE tasks with _different_ clamps, we can end up with an
-> -	 * inversion. Fix it now when the clamps are applied.
-> -	 */
-> -	if (unlikely(min_util >= max_util))
-> -		return min_util;
-> -
-> -	return clamp(util, min_util, max_util);
-> -}
-> -
->  /* Is the rq being capped/throttled by uclamp_max? */
->  static inline bool uclamp_rq_is_capped(struct rq *rq)
->  {
-> @@ -3115,13 +3062,6 @@ static inline unsigned long uclamp_eff_value(struct task_struct *p,
->  	return SCHED_CAPACITY_SCALE;
->  }
->  
-> -static inline
-> -unsigned long uclamp_rq_util_with(struct rq *rq, unsigned long util,
-> -				  struct task_struct *p)
-> -{
-> -	return util;
-> -}
-> -
->  static inline bool uclamp_rq_is_capped(struct rq *rq) { return false; }
->  
->  static inline bool uclamp_is_used(void)
-> -- 
-> 2.34.1
-> 
 
