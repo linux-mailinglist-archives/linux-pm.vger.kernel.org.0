@@ -2,146 +2,223 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F34417EAC9F
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Nov 2023 10:09:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F4067EAD85
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Nov 2023 11:04:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232480AbjKNJJP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Nov 2023 04:09:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41778 "EHLO
+        id S230045AbjKNKEi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Nov 2023 05:04:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232563AbjKNJIt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Nov 2023 04:08:49 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464EE1988
-        for <linux-pm@vger.kernel.org>; Tue, 14 Nov 2023 01:08:43 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-53eeb28e8e5so7092a12.1
-        for <linux-pm@vger.kernel.org>; Tue, 14 Nov 2023 01:08:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1699952921; x=1700557721; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gBqGDewyQb1wIg3vSqoaW/U1G0Rs3GT3EROexmJYFD4=;
-        b=qFAYzuRO4Tri8pcZlpOaqz3ocjTp/5191Q0dwFaRpXSsaarU3QhWBrDoFtucUW7/RG
-         gJiEamrtVJElKv8+tIOwNoSOnnUys21RiI+s2VEfqLM2y7UubeYuZy/GTTbtaE35+Gu/
-         Apc/t8qgqJUZBFj2BbHDVip4llFeHFCnbLnWKgf51g5PC/3VUMOwPieR7f0QgobP2o0f
-         p6gczxBaE1VLdWGQlB/XW6xRCCTsYf4mtO8ASlEVhGgQ52aws4jdD6HA8RVfksC7sznC
-         s+lr1mGYbykyHaQnFkPIi+1jfmgnxZO7iVko4iWfkaDNQB1ELi66aajwoir2Trc4eH+F
-         +YxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699952921; x=1700557721;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gBqGDewyQb1wIg3vSqoaW/U1G0Rs3GT3EROexmJYFD4=;
-        b=XdyXULsF+k/mZhZcTh2dU7HzeWALP7IXcm0HJJjLlbxKH8DrhNkkG91A3h6YCNcDgv
-         PZ7HUSeXwdXaT7IrVGp3JdtI50QsQGk/PRXOTUOeCCcfks0MMQXjyQeSLvpSSPuj5eaL
-         cog0rI1TUpkkh6uphSQQJWJ1lEJ3Q6QDesahd2aX+HxDx3Ip2lrwlBfd9/TyR1eLw2QO
-         lkK34mANvPtGpn9LGNN6iCkHo+OpcH/EEHw+z1YI3rMt4ry3uzG7wJkmqmXS8VNmIpLK
-         KzLW+PTskKNNlOLeSh8D4rmmRxQHWQQzzbJegXG5E5t1nngSNOBW4sFRndWB7LyLBhwm
-         DSpw==
-X-Gm-Message-State: AOJu0YyfMMasbvBFHFE56Jb7WK+Z11oE72i+Z8AOl1P4h30cVv45ivKY
-        dSvJSFIaxomyPbkvFOFNaV39Jw3H0v80xDMsw+nEP1ggQVTNo4pwhJTSc1Yu
-X-Google-Smtp-Source: AGHT+IEM89+rvpoYdVEvpOvoyQvbxLoJZXGfsA++k6fh+jX9l9VBf8QUHCETEiq8I3BkHbE+15Kb97BCpgmg9wRPams=
-X-Received: by 2002:a05:6402:1cc8:b0:545:279:d075 with SMTP id
- ds8-20020a0564021cc800b005450279d075mr108521edb.1.1699952921166; Tue, 14 Nov
- 2023 01:08:41 -0800 (PST)
+        with ESMTP id S230411AbjKNKEi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Nov 2023 05:04:38 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB690199;
+        Tue, 14 Nov 2023 02:04:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=MliSkT+C97r/xoKb00has1+pOVRxGmmTM9aHZqmFb/M=; b=w4XFJJSuIadpNAeBv0oFJvheSh
+        XwUK9PQmPMEhgdmwSDbAapoeDa9K9HWgMz38zdIGLe/sPLp7TUYkOcvYDg3LX9m6snr5MAMtXZp1G
+        vIR6D8/EEfGWaAmd1K5HqJ20zzwHZj47NTHQMs5MZLrvpche7UN5fFTZUSmZeSZsKEMQLad0LQu28
+        zunJCFl41N8ZLAphzoOqhGQGVtYmuTDPoGwmCXhpcmyCL6DPgOGWWOwereFReVboNc6aRwnyTdllh
+        LRSDUTGxHde7yh8aZ/Yc3qmiS/Sv9HtEFiSqz9Vn7XPbLYjDyO5VYNCX+0/pgAR76YDhy0QX4GYMr
+        Kd1NjHnw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:44278)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1r2qHP-0007em-2q;
+        Tue, 14 Nov 2023 10:04:23 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1r2qHO-0005UR-In; Tue, 14 Nov 2023 10:04:22 +0000
+Date:   Tue, 14 Nov 2023 10:04:22 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+        x86@kernel.org, Salil Mehta <salil.mehta@huawei.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        jianyong.wu@arm.com, justin.he@arm.com, gregkh@linuxfoundation.org
+Subject: Re: [RFC PATCH v2 11/35] arch_topology: Make
+ register_cpu_capacity_sysctl() tolerant to late CPUs
+Message-ID: <ZVNGJuUEkwei+CwY@shell.armlinux.org.uk>
+References: <20230913163823.7880-1-james.morse@arm.com>
+ <20230913163823.7880-12-james.morse@arm.com>
+ <20230914130126.000069db@Huawei.com>
+ <ZTKEQz0DJuv/tqNH@shell.armlinux.org.uk>
 MIME-Version: 1.0
-References: <20231031093921.755204-1-guanyulin@google.com> <f75d6cd2-fa9f-4820-969f-2a8839d78c9e@rowland.harvard.edu>
- <CAOuDEK0NcijUKAL3fGtO=Ks+Y38TRhJcVx+ff-QUyUA0LcQ1Bw@mail.gmail.com> <3fe5414a-570f-4bfa-aa2f-909d7799551b@rowland.harvard.edu>
-In-Reply-To: <3fe5414a-570f-4bfa-aa2f-909d7799551b@rowland.harvard.edu>
-From:   Guan-Yu Lin <guanyulin@google.com>
-Date:   Tue, 14 Nov 2023 17:08:29 +0800
-Message-ID: <CAOuDEK1935=DmToUky8eXA5KxZFu+-phMjGB=Wv7Ox+k5fDvbQ@mail.gmail.com>
-Subject: Re: [PATCH] rpm: pm: enable PM_RPM_EXCEPTION config flag
-To:     linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     gregkh@linuxfoundation.org, len.brown@intel.com, pavel@ucw.cz,
-        heikki.krogerus@linux.intel.com, mkl@pengutronix.de,
-        hadess@hadess.net, mailhol.vincent@wanadoo.fr,
-        ivan.orlov0322@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pumahsu@google.com,
-        raychi@google.com, albertccwang@google.com,
-        Alan Stern <stern@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZTKEQz0DJuv/tqNH@shell.armlinux.org.uk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 8, 2023 at 11:56=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
->
-> On Wed, Nov 08, 2023 at 04:45:43PM +0800, Guan-Yu Lin wrote:
-> > Thanks for the questions. Let me first introduce my motivation for
-> > proposing this feature. We can discuss the implementation details later=
-.
-> >
-> > Motivation:
-> > Currently, system PM operations always override runtime PM operations.
-> > As runtime PM reflects the power status of devices, there is a
-> > possibility that runtime PM states that a device is in use, but system
-> > PM decides to suspend it. Up to now, we have assumed that a device can'=
-t
-> > function without resources from the system, so the device should acquir=
-e
-> > a wakelock to prevent this from happening. However, what if the device
->
-> [From the fact that you mention wakelocks, I assume that you're trying
-> to implement something for Android systems rather than Linux systems
-> in general.]
->
+Okay, after 25 days, I'm now changing James' comment to:
 
-Apologies, I should use "wakeup source" here.
+    If the offline CPUs thing is a problem for the tools that consume
+    this value, we'd need to move cpu_capacity to be part of cpu.c's
+    common_cpu_attr_groups. However, attempts to discuss this just end
+    up in a black hole, so this is a non-starter. Thus, if this needs
+    to be done, it can be done as a separate patch.
 
-> > does not need the system's support to function? Or only needs limited
-> > resources (e.g., only limited power source or clock) to function? In th=
-is
-> > situation, we would like to keep the device on but allow the system to
-> > suspend. This is an example where we would like devices to follow runti=
-me
-> > PM rather than system PM.
->
-> To put it more simply, you want a way to leave some devices in an active
-> state while the rest of the system is suspended.  It's not clear why you
-> have dragged runtime PM into the discussion (apart from the obvious fact
-> that you won't want to keep a device active if it isn't active already).
->
-> This sounds like a major change, not something to be done with a simple
-> override.  You should discuss it with Rafael Wysocki and the linux-pm
-> mailing list before trying to implement anything.
->
-> > Feature Supported:
-> > 1. Devices could control the priority of system PM and runtime PM durin=
-g
-> >    runtime.
->
-> This seems like a totally unnecessary side issue.  Forget about runtime
-> PM for the time being and concentrate instead on which devices you want
-> to keep active.
->
-> > 2. The control should be at the device level, meaning that different
-> >    devices should control their own priorities.
-> >
-> > Goal of This Patch:
-> > 1. Design a framework to support features above.
-> > 2. Apply it into usb for demonstration.
->
-> You may find that it is easier (and less work in the long run) to design
-> the general framework and get it working than to concentrate on one
-> particular subsystem.
->
-> Alan Stern
+and thus I'm going to consider this patch acceptable to everyone.
 
-Hi Rafael,
-We'd like to implement a feature to allow system suspend with several
-devices still active. Do you have any consideration on this?
+On Fri, Oct 20, 2023 at 02:44:35PM +0100, Russell King (Oracle) wrote:
+> On Thu, Sep 14, 2023 at 01:01:26PM +0100, Jonathan Cameron wrote:
+> > On Wed, 13 Sep 2023 16:37:59 +0000
+> > James Morse <james.morse@arm.com> wrote:
+> > 
+> > > register_cpu_capacity_sysctl() adds a property to sysfs that describes
+> > > the CPUs capacity. This is done from a subsys_initcall() that assumes
+> > > all possible CPUs are registered.
+> > > 
+> > > With CPU hotplug, possible CPUs aren't registered until they become
+> > > present, (or for arm64 enabled). This leads to messages during boot:
+> > > | register_cpu_capacity_sysctl: too early to get CPU1 device!
+> > > and once these CPUs are added to the system, the file is missing.
+> > > 
+> > > Move this to a cpuhp callback, so that the file is created once
+> > > CPUs are brought online. This covers CPUs that are added late by
+> > > mechanisms like hotplug.
+> > > One observable difference is the file is now missing for offline CPUs.
+> > > 
+> > > Signed-off-by: James Morse <james.morse@arm.com>
+> > > ---
+> > > If the offline CPUs thing is a problem for the tools that consume
+> > > this value, we'd need to move cpu_capacity to be part of cpu.c's
+> > > common_cpu_attr_groups.
+> > 
+> > I think we should do that anyway and then use an is_visible() if we want to
+> > change whether it is visible in offline cpus.
+> > 
+> > Dynamic sysfs file creation is horrible - particularly when done
+> > from an totally different file from where the rest of the attributes
+> > are registered.  I'm curious what the history behind that is.
+> > 
+> > Whilst here, why is there a common_cpu_attr_groups which is
+> > identical to the hotpluggable_cpu_attr_groups in base/cpu.c?
+> 
+> Looking into doing this, the easy bit is adding the attribute group
+> with an appropriate .is_visible dependent on cpu_present(), but we
+> need to be able to call sysfs_update_groups() when the state of the
+> .is_visible() changes.
+> 
+> Given the comment in sysfs_update_groups() about "if an error occurs",
+> rather than making this part of common_cpu_attr_groups, would it be
+> better that it's part of its own set of groups, thus limiting the
+> damage from a possible error? I suspect, however, that any error at
+> that point means that the system is rather fatally wounded.
+> 
+> This is what I have so far to implement your idea, less the necessary
+> sysfs_update_groups() call when we need to change the visibility of
+> the attributes.
+> 
+> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> index 9ccb7daee78e..06c9fc6620d2 100644
+> --- a/drivers/base/arch_topology.c
+> +++ b/drivers/base/arch_topology.c
+> @@ -215,43 +215,24 @@ static ssize_t cpu_capacity_show(struct device *dev,
+>  	return sysfs_emit(buf, "%lu\n", topology_get_cpu_scale(cpu->dev.id));
+>  }
+>  
+> -static void update_topology_flags_workfn(struct work_struct *work);
+> -static DECLARE_WORK(update_topology_flags_work, update_topology_flags_workfn);
+> -
+>  static DEVICE_ATTR_RO(cpu_capacity);
+>  
+> -static int cpu_capacity_sysctl_add(unsigned int cpu)
+> -{
+> -	struct device *cpu_dev = get_cpu_device(cpu);
+> -
+> -	if (!cpu_dev)
+> -		return -ENOENT;
+> -
+> -	device_create_file(cpu_dev, &dev_attr_cpu_capacity);
+> -
+> -	return 0;
+> -}
+> -
+> -static int cpu_capacity_sysctl_remove(unsigned int cpu)
+> +static umode_t cpu_present_attrs_visible(struct kobject *kobi,
+> +					 struct attribute *attr, int index)
+>  {
+> -	struct device *cpu_dev = get_cpu_device(cpu);
+> -
+> -	if (!cpu_dev)
+> -		return -ENOENT;
+> -
+> -	device_remove_file(cpu_dev, &dev_attr_cpu_capacity);
+> +	struct device *dev = kobj_to_dev(kobj);
+> +	struct cpu *cpu = container_of(dev, struct cpu, dev);
+>  
+> -	return 0;
+> +	return cpu_present(cpu->dev.id) ? attr->mode : 0;
+>  }
+>  
+> -static int register_cpu_capacity_sysctl(void)
+> -{
+> -	cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "topology/cpu-capacity",
+> -			  cpu_capacity_sysctl_add, cpu_capacity_sysctl_remove);
+> +const struct attribute_group cpu_capacity_attr_group = {
+> +	.is_visible = cpu_present_attrs_visible,
+> +	.attrs = cpu_capacity_attrs
+> +};
+>  
+> -	return 0;
+> -}
+> -subsys_initcall(register_cpu_capacity_sysctl);
+> +static void update_topology_flags_workfn(struct work_struct *work);
+> +static DECLARE_WORK(update_topology_flags_work, update_topology_flags_workfn);
+>  
+>  static int update_topology;
+>  
+> diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+> index a19a8be93102..954b045705c2 100644
+> --- a/drivers/base/cpu.c
+> +++ b/drivers/base/cpu.c
+> @@ -192,6 +192,9 @@ static const struct attribute_group crash_note_cpu_attr_group = {
+>  static const struct attribute_group *common_cpu_attr_groups[] = {
+>  #ifdef CONFIG_KEXEC
+>  	&crash_note_cpu_attr_group,
+> +#endif
+> +#ifdef CONFIG_GENERIC_ARCH_TOPOLOGY
+> +	&cpu_capacity_attr_group,
+>  #endif
+>  	NULL
+>  };
+> diff --git a/include/linux/cpu.h b/include/linux/cpu.h
+> index e117c06e0c6b..745ad21e3dc8 100644
+> --- a/include/linux/cpu.h
+> +++ b/include/linux/cpu.h
+> @@ -30,6 +30,8 @@ struct cpu {
+>  	struct device dev;
+>  };
+>  
+> +extern const struct attribute_group cpu_capacity_attr_group;
+> +
+>  extern void boot_cpu_init(void);
+>  extern void boot_cpu_hotplug_init(void);
+>  extern void cpu_init(void);
+> 
+> -- 
+> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+> FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
-Thanks,
-Guan-Yu
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
