@@ -2,218 +2,265 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE97A7EAE06
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Nov 2023 11:27:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC647EAE1B
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Nov 2023 11:31:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjKNK1v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Nov 2023 05:27:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54914 "EHLO
+        id S232651AbjKNKbo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Nov 2023 05:31:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjKNK1u (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Nov 2023 05:27:50 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E2783;
-        Tue, 14 Nov 2023 02:27:44 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AE9lpqi005329;
-        Tue, 14 Nov 2023 10:27:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=REeZzKF2rsqLjNC1YywmV+SEyFMzmlpW5huEYDn24Zs=;
- b=n4x1byOZCfKkhuyTmMWR1tQrysc5I3Q/wiomgYpEAakAE1snOpsXQqY0f/16rit7mqQw
- c8YeWsDRb9vjJuIABmXVgtDZWSURUdtSzZkHLL+gWyC1IsZME4tBi9Ftb5dYdCuzcQbc
- XxWKvTMSVn7aPfyy9EK5ePhQneo62hfPJefr+A6HDvCk+MjOh4xtjPHIM1iwJvmHvfYa
- 8v6ETm2yBNeyj5FY/1Hjl0t6LpHDx6EGCeQEMy/iNjGVD7mZcd4dhoXNTUBRc5tLqWOS
- eBoez5QI1Viwj13N6rVVu/02ppJfhMePCH/SGPKMeMrMXgB7w9msnH0J2MoWPhj6TH6p 1A== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ubj732c27-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Nov 2023 10:27:40 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3AEARdem005801
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Nov 2023 10:27:39 GMT
-Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
- nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.39; Tue, 14 Nov 2023 02:27:36 -0800
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-To:     <myungjoo.ham@samsung.com>, <kyungmin.park@samsung.com>,
-        <cw00.choi@samsung.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Mukesh Ojha <quic_mojha@quicinc.com>
-Subject: [PATCH] PM / devfreq: Synchronize queuing the same timer instance twice
-Date:   Tue, 14 Nov 2023 15:57:28 +0530
-Message-ID: <1699957648-31299-1-git-send-email-quic_mojha@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        with ESMTP id S231945AbjKNKbn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Nov 2023 05:31:43 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6947E121;
+        Tue, 14 Nov 2023 02:31:39 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 593DBC15;
+        Tue, 14 Nov 2023 02:32:24 -0800 (PST)
+Received: from [10.57.3.30] (unknown [10.57.3.30])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 63DDC3F641;
+        Tue, 14 Nov 2023 02:31:37 -0800 (PST)
+Message-ID: <93c5b287-a643-4e95-a38b-ed301d5cbcb2@arm.com>
+Date:   Tue, 14 Nov 2023 10:32:35 +0000
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Lmcwf-dUmthPVbaEM42TD129_IHlube4
-X-Proofpoint-ORIG-GUID: Lmcwf-dUmthPVbaEM42TD129_IHlube4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-14_09,2023-11-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- clxscore=1015 malwarescore=0 bulkscore=0 phishscore=0 adultscore=0
- lowpriorityscore=0 spamscore=0 suspectscore=0 impostorscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311140081
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: Various Exynos targets never return to no cooling
+Content-Language: en-US
+To:     Mateusz Majewski <m.majewski2@samsung.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <CGME20231113130451eucas1p293985c1bee8dc71b9c78a013663ce8e6@eucas1p2.samsung.com>
+ <20231113130435.500353-1-m.majewski2@samsung.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20231113130435.500353-1-m.majewski2@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is a chance if a frequent switch of the governor
-done in a loop result in timer list corruption where
-timer_cancel being done from two place one from
-cancel_delayed_work_sync() and followed by expire_timers()
-can be seen from the traces[1], however, looks like
-device_monitor_[start/stop] need to synchronized too.
+Hi Mateusz,
 
-Let's use polling flag to synchronize the queueing the
-timer instance twice.
+On 11/13/23 13:04, Mateusz Majewski wrote:
+> Hi,
+> 
+> While working on some fixes on the Exynos thermal driver, I have found that some
+> of the Exynos-based boards will never return to no cooling. That is, after
+> heating the board a bit and letting it cool, we see in the sysfs output similar
+> to this:
+> 
+> root@target:~# cat /sys/class/thermal/thermal_zone*/temp
+> 30000
+> 29000
+> 32000
+> 31000
+> 30000
+> root@target:~# cat /sys/class/thermal/cooling_device*/cur_state
+> 1
+> 0
+> 0
+> 0
 
-[1]
-...
-..
-<idle>-0    [003]   9436.209662:  timer_cancel   timer=0xffffff80444f0428
-<idle>-0    [003]   9436.209664:  timer_expire_entry   timer=0xffffff80444f0428  now=0x10022da1c  function=__typeid__ZTSFvP10timer_listE_global_addr  baseclk=0x10022da1c
-<idle>-0    [003]   9436.209718:  timer_expire_exit   timer=0xffffff80444f0428
-kworker/u16:6-14217    [003]   9436.209863:  timer_start   timer=0xffffff80444f0428  function=__typeid__ZTSFvP10timer_listE_global_addr  expires=0x10022da2b  now=0x10022da1c  flags=182452227
-vendor.xxxyyy.ha-1593    [004]   9436.209888:  timer_cancel   timer=0xffffff80444f0428
-vendor.xxxyyy.ha-1593    [004]   9436.216390:  timer_init   timer=0xffffff80444f0428
-vendor.xxxyyy.ha-1593    [004]   9436.216392:  timer_start   timer=0xffffff80444f0428  function=__typeid__ZTSFvP10timer_listE_global_addr  expires=0x10022da2c  now=0x10022da1d  flags=186646532
-vendor.xxxyyy.ha-1593    [005]   9436.220992:  timer_cancel   timer=0xffffff80444f0428
-xxxyyyTraceManag-7795    [004]   9436.261641:  timer_cancel   timer=0xffffff80444f0428
+You can also use this command:
+$ grep . /sys/class/thermal/cooling_device*/cur_state
 
-[2]
+That would print also the names.
 
- 9436.261653][    C4] Unable to handle kernel paging request at virtual address dead00000000012a
-[ 9436.261664][    C4] Mem abort info:
-[ 9436.261666][    C4]   ESR = 0x96000044
-[ 9436.261669][    C4]   EC = 0x25: DABT (current EL), IL = 32 bits
-[ 9436.261671][    C4]   SET = 0, FnV = 0
-[ 9436.261673][    C4]   EA = 0, S1PTW = 0
-[ 9436.261675][    C4] Data abort info:
-[ 9436.261677][    C4]   ISV = 0, ISS = 0x00000044
-[ 9436.261680][    C4]   CM = 0, WnR = 1
-[ 9436.261682][    C4] [dead00000000012a] address between user and kernel address ranges
-[ 9436.261685][    C4] Internal error: Oops: 96000044 [#1] PREEMPT SMP
-[ 9436.261701][    C4] Skip md ftrace buffer dump for: 0x3a982d0
-...
+> 
+> This is on the Odroid XU4 board, where the lowest trip point is 50 deg. C.
+> Similar behavior happens on some other boards, for example TM2E. The issue
+> happens when the stepwise governor is being used and I have not tested the
+> behavior of the other governors.
 
-[ 9436.262138][    C4] CPU: 4 PID: 7795 Comm: TraceManag Tainted: G S      W  O      5.10.149-android12-9-o-g17f915d29d0c #1
-[ 9436.262141][    C4] Hardware name: Qualcomm Technologies, Inc.  (DT)
-[ 9436.262144][    C4] pstate: 22400085 (nzCv daIf +PAN -UAO +TCO BTYPE=--)
-[ 9436.262161][    C4] pc : expire_timers+0x9c/0x438
-[ 9436.262164][    C4] lr : expire_timers+0x2a4/0x438
-[ 9436.262168][    C4] sp : ffffffc010023dd0
-[ 9436.262171][    C4] x29: ffffffc010023df0 x28: ffffffd0636fdc18
-[ 9436.262178][    C4] x27: ffffffd063569dd0 x26: ffffffd063536008
-[ 9436.262182][    C4] x25: 0000000000000001 x24: ffffff88f7c69280
-[ 9436.262185][    C4] x23: 00000000000000e0 x22: dead000000000122
-[ 9436.262188][    C4] x21: 000000010022da29 x20: ffffff8af72b4e80
-[ 9436.262191][    C4] x19: ffffffc010023e50 x18: ffffffc010025038
-[ 9436.262195][    C4] x17: 0000000000000240 x16: 0000000000000201
-[ 9436.262199][    C4] x15: ffffffffffffffff x14: ffffff889f3c3100
-[ 9436.262203][    C4] x13: ffffff889f3c3100 x12: 00000000049f56b8
-[ 9436.262207][    C4] x11: 00000000049f56b8 x10: 00000000ffffffff
-[ 9436.262212][    C4] x9 : ffffffc010023e50 x8 : dead000000000122
-[ 9436.262216][    C4] x7 : ffffffffffffffff x6 : ffffffc0100239d8
-[ 9436.262220][    C4] x5 : 0000000000000000 x4 : 0000000000000101
-[ 9436.262223][    C4] x3 : 0000000000000080 x2 : ffffff889edc155c
-[ 9436.262227][    C4] x1 : ffffff8001005200 x0 : ffffff80444f0428
-[ 9436.262232][    C4] Call trace:
-[ 9436.262236][    C4]  expire_timers+0x9c/0x438
-[ 9436.262240][    C4]  __run_timers+0x1f0/0x330
-[ 9436.262245][    C4]  run_timer_softirq+0x28/0x58
-[ 9436.262255][    C4]  efi_header_end+0x168/0x5ec
-[ 9436.262265][    C4]  __irq_exit_rcu+0x108/0x124
-[ 9436.262274][    C4]  __handle_domain_irq+0x118/0x1e4
-[ 9436.262282][    C4]  gic_handle_irq.30369+0x6c/0x2bc
-[ 9436.262286][    C4]  el0_irq_naked+0x60/0x6c
+You won't be able easily test IPA on odroidxu4, but if you like ping me
+offline.
 
-Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
----
-This is further to the issue reported at 
+IPA won't work with this current DT thermal, so there is no issue.
+Also, IPA works in polling mode only, more about why you can find below.
 
-https://lore.kernel.org/all/1699459797-21703-1-git-send-email-quic_mojha@quicinc.com/
+> 
+> I have attempted to fix this myself, but the issue seems somewhat complex and
+> over my level of understanding. I did some debugging, and here is what I think
+> is happening:
+> 
+> 1. Since there is no temperature polling enabled on the mentioned boards, the
+>     governor will only be called when a trip point is being passed.
+> 2. The board heats up and a couple trip points get passed through. Each time,
+>     the governor is called for each trip point.
+> 3. For the lowest thermal instance, it will find out that the temperature is
+>     higher than the lowest trip point (i.e. throttle is true), and that the trend
+>     is THERMAL_TREND_RAISING. Therefore, it will attempt to increase the target
+>     state each time and the state will be set to the higher limit.
+> 4. Let's now say that the temperature starts falling, which means that the trip
+>     points get passed from the other side. Again, the governor will be called for
+>     each trip point.
+> 5. For the lowest thermal instance, the trend will be THERMAL_TREND_DROPPING. The
+>     temperature will be higher than the lowest trip point all but one time (i.e.
+>     throttle will be true). This will mean that in these cases, nothing will
+>     happen and the state will remain at the higher limit.
+
+Tricky corner case, but possible for your interrupt only mode. The way
+how step_wise is designed with this activation/deactivation of the
+passive mode linked to the cooling state returned values is confusing
+IMO.
+
+> 6. Finally, when the lowest trip point is passed and the governor is called for
+>     its thermal instance, the trend will still be THERMAL_TREND_DROPPING and the
+>     temperature will be lower than the trip point (i.e. throttle will be false).
+>     Therefore, the governor will reduce the state, but it is unlikely that this
+>     will result in deactivation of the thermal instance, since the state has been
+>     at the higher limit up until this point.
+
+That's possible. That's why I would separate that control mode, so this
+corner case would not happen. That governor unfortunately has quite a
+lot of legacy platforms with polling only mode.
+
+> 7. Now the governor will never be called anymore, and the state will never
+>     change from this point.
+> 
+> I have found two workarounds, but neither seem satisfactory:
+> 
+> 1. The issue doesn't appear when at least two lowest trip points have their
+>     lower state limit equal to the higher state limit. For instance, for TM2E,
+>     the following change is enough for the issue to not appear:
+> 
+> diff --git a/arch/arm64/boot/dts/exynos/exynos5433-tmu.dtsi b/arch/arm64/boot/dts/exynos/exynos5433-tmu.dtsi
+> index 81b72393dd0d..145c4c80893a 100644
+> --- a/arch/arm64/boot/dts/exynos/exynos5433-tmu.dtsi
+> +++ b/arch/arm64/boot/dts/exynos/exynos5433-tmu.dtsi
+> @@ -55,14 +55,14 @@ cooling-maps {
+>               map0 {
+>                   /* Set maximum frequency as 1800MHz  */
+>                   trip = <&atlas0_alert_0>;
+> -                cooling-device = <&cpu4 1 2>, <&cpu5 1 2>,
+> -                         <&cpu6 1 2>, <&cpu7 1 2>;
+> +                cooling-device = <&cpu4 1 1>, <&cpu5 1 1>,
+> +                         <&cpu6 1 1>, <&cpu7 1 1>;
+>               };
+>               map1 {
+>                   /* Set maximum frequency as 1700MHz  */
+>                   trip = <&atlas0_alert_1>;
+> -                cooling-device = <&cpu4 2 3>, <&cpu5 2 3>,
+> -                         <&cpu6 2 3>, <&cpu7 2 3>;
+> +                cooling-device = <&cpu4 2 2>, <&cpu5 2 2>,
+> +                         <&cpu6 2 2>, <&cpu7 2 2>;
+>               };
+>               map2 {
+>                   /* Set maximum frequency as 1600MHz  */
+> @@ -229,14 +229,14 @@ cooling-maps {
+>               map0 {
+>                   /* Set maximum frequency as 1200MHz  */
+>                   trip = <&apollo_alert_2>;
+> -                cooling-device = <&cpu0 1 2>, <&cpu1 1 2>,
+> -                         <&cpu2 1 2>, <&cpu3 1 2>;
+> +                cooling-device = <&cpu0 1 1>, <&cpu1 1 1>,
+> +                         <&cpu2 1 1>, <&cpu3 1 1>;
+>               };
+>               map1 {
+>                   /* Set maximum frequency as 1100MHz  */
+>                   trip = <&apollo_alert_3>;
+> -                cooling-device = <&cpu0 2 3>, <&cpu1 2 3>,
+> -                         <&cpu2 2 3>, <&cpu3 2 3>;
+> +                cooling-device = <&cpu0 2 2>, <&cpu1 2 2>,
+> +                         <&cpu2 2 2>, <&cpu3 2 2>;
+>               };
+>               map2 {
+>                   /* Set maximum frequency as 1000MHz  */
+> 
+>     Two trip points need to change and not only one, since the calculation in the
+>     governor is based on the maximum of all states and not only the state of a
+>     single instance. It's not clear if that would be enough in all cases, but
+>     this feels hacky anyway. Though since we only give the governor information
+>     when the trip point is passed, it does make some limited sense to make it
+>     simply set the state to a specific value instead of making decisions.
+
+Yes, this is problematic - playing with the limits for scope in the DT
++ step_wise governor + only interrupt mode.
+
+Also, I never like this approach, since we are dealing with dynamic
+system (nonlinear) and control with static approach is not recommended.
+BTW, IPA was born to introduce dynamic control alg.
+
+> 2. The issue also disappears when polling is enabled, since this means that the
+>     governor is called periodically. However, it would be great to not have to do
+>     so and keep using only interrupts, since we already have them in our SoC.
+
+There are pros and cons with the polling approach. The thermal and
+temperature is a dynamic system and observability is important. The
+interrupt mode limits the observability, that's what you've shown.
+
+I understand your requirement for the interrupts only mode, but
+maybe till the moment there is no fix upstream, you can enable
+it as well?
+
+> 
+> It seems that in the past, there has been an attempt to handle this case
+> differently: https://lore.kernel.org/all/1352348786-24255-1-git-send-email-amit.kachhap@linaro.org/
+> However it seems that the attempt has never been completed, and the remains
+> have been removed: https://lore.kernel.org/all/20220629151012.3115773-2-daniel.lezcano@linaro.org/
+> 
+> There also might be a race condition possible here, as it might be the case
+> that after the interrupt, when the thermal framework calls get_temp, the value
+> will already change to a value that would not trigger the trip point. This
+> could be problematic when the temperature is raising, as then the governor will
+> essentially ignore that trip point (trend will be RAISING, but throttle will be
+> false, so nothing will happen). It is less problematic when the temperature is
+> falling, as the temperature will be much lower than the trip point due to
+> hysteresis. However, for the Exynos 5433 SoC, hysteresis is unfortunately set
+> to 1 deg. C and the temperature values are also rounded to 1 deg. C. This means
+> that the race condition might also be possible in this direction on this SoC. I
+> have once managed to get the state stuck at 2 instead of the usual 1 on TM2E. I
+> have not investigated that further, but it seems that this race condition is a
+> good explanation of this behavior.
+
+Interesting. That's really tough situation in that platform. AFAICS the
+code_to_temp() cannot do much, that rounding happens in the HW.
+
+In such situation that you've described: temp value can 'oscillate'
+very fast around the value point (next gets rounded in HW) in the
+meantime the run of the code is progressing. I would not relay on
+interrupt only mode in this case.
+
+The value stuck at 2 worries me because even if you change those
+values in the DT as above, the race condition could happen and leave
+you with state stuck at 1.
+
+Escaping the control algorithm while going down is less dangerous,
+but based on the code AFAICS it might be also in theory possible
+while going up with the temperature. Very unlikely for the 2nd
+trip point, because the temp would be higher than 1st trip. That would
+set the throttling to true for 1st trip (because we loop over all
+possible trip points). I'm worried about last trip point, because
+it could escape the control alg there. Furthermore, since those
+cooling state values are limited-space and hard-coded for the last
+trip points, the temp can reach hot/critical trip point and shut
+down the device (fortunately it's not handled by the governor
+interpretation code, but fwk and it would work fine).
+So please make sure you have hot/critical trip point as last one,
+if you already don't have that.
 
 
- drivers/devfreq/devfreq.c | 21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+> 
+> I feel very incompetent to attempt to resolve these issues, as I have only read
+> the thermal framework code for a bit. What do you think should be done here?
+> 
 
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 474d81831ad3..09b93104521b 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -461,10 +461,14 @@ static void devfreq_monitor(struct work_struct *work)
- 	if (err)
- 		dev_err(&devfreq->dev, "dvfs failed with (%d) error\n", err);
- 
-+	if (devfreq->stop_polling)
-+		goto out;
-+
- 	queue_delayed_work(devfreq_wq, &devfreq->work,
- 				msecs_to_jiffies(devfreq->profile->polling_ms));
--	mutex_unlock(&devfreq->lock);
- 
-+out:
-+	mutex_unlock(&devfreq->lock);
- 	trace_devfreq_monitor(devfreq);
- }
- 
-@@ -483,6 +487,7 @@ void devfreq_monitor_start(struct devfreq *devfreq)
- 	if (IS_SUPPORTED_FLAG(devfreq->governor->flags, IRQ_DRIVEN))
- 		return;
- 
-+	mutex_lock(&devfreq->lock);
- 	switch (devfreq->profile->timer) {
- 	case DEVFREQ_TIMER_DEFERRABLE:
- 		INIT_DEFERRABLE_WORK(&devfreq->work, devfreq_monitor);
-@@ -491,12 +496,16 @@ void devfreq_monitor_start(struct devfreq *devfreq)
- 		INIT_DELAYED_WORK(&devfreq->work, devfreq_monitor);
- 		break;
- 	default:
--		return;
-+		goto out;
- 	}
- 
- 	if (devfreq->profile->polling_ms)
- 		queue_delayed_work(devfreq_wq, &devfreq->work,
- 			msecs_to_jiffies(devfreq->profile->polling_ms));
-+
-+	devfreq->stop_polling = false;
-+out:
-+	mutex_unlock(&devfreq->lock);
- }
- EXPORT_SYMBOL(devfreq_monitor_start);
- 
-@@ -513,6 +522,14 @@ void devfreq_monitor_stop(struct devfreq *devfreq)
- 	if (IS_SUPPORTED_FLAG(devfreq->governor->flags, IRQ_DRIVEN))
- 		return;
- 
-+	mutex_lock(&devfreq->lock);
-+	if (devfreq->stop_polling) {
-+		mutex_unlock(&devfreq->lock);
-+		return;
-+	}
-+
-+	devfreq->stop_polling = true;
-+	mutex_unlock(&devfreq->lock);
- 	cancel_delayed_work_sync(&devfreq->work);
- }
- EXPORT_SYMBOL(devfreq_monitor_stop);
--- 
-2.7.4
+Therefore, IMO this deserves a fix in step_wise governor code. It has to
+be re-designed how it interprets trip point that has checked vs.
+the temperature comparisons. Also, this confusing passive mode
+handled with the cooling state values comparisons (not ideal)...
+
+Regards,
+Lukasz
 
