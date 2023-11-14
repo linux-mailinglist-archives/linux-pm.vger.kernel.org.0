@@ -2,250 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D562B7EAE1E
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Nov 2023 11:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4147EAF70
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Nov 2023 12:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjKNKeA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Nov 2023 05:34:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
+        id S229999AbjKNLpB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Nov 2023 06:45:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjKNKd7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Nov 2023 05:33:59 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FEECD9;
-        Tue, 14 Nov 2023 02:33:55 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AE9oAUT007228;
-        Tue, 14 Nov 2023 10:33:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=3ULhedtaV0XLSfNu8W0jmu2jCdoQ6/Fn8e2UKpNKH+A=;
- b=pBZxuQFVezSl2edyBA90H8iJxKN8vu0WTsQ0W+++pT1bGqsaiWQgH0xHz2DS7o0WAahd
- WxnovsrILcOeLt+pGJOSL3PSIA2JpWLKGCzkuxD6dX0eeQo3WLXfKpMByTpFXta2R3fG
- xwvddetgs5SiuWUp/jRcy6EebVkHYy73pqBOLdcQhUtZjSgHF5xFL4Ql6LfSmO31qlbc
- QJKoPftjKsPRI54uujKjp6oFI5v+nfHB0oQFIhjjM4sEv7dDkEMc17LVwp2djO7yERI7
- n07LrUwS11/oqXIHzIcJ5RJGTSYHOrPcVNb2WZBfA5s83k/QN3SJYgdjHJ/vlSLOD/7M BQ== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ubwskh23r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Nov 2023 10:33:45 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3AEAXik6007401
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Nov 2023 10:33:44 GMT
-Received: from [10.216.63.64] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Tue, 14 Nov
- 2023 02:33:41 -0800
-Message-ID: <bf09fff7-bc13-6545-029e-2bd518111906@quicinc.com>
-Date:   Tue, 14 Nov 2023 16:03:20 +0530
+        with ESMTP id S229441AbjKNLpA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Nov 2023 06:45:00 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FDEA7;
+        Tue, 14 Nov 2023 03:44:57 -0800 (PST)
+Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C2216223;
+        Tue, 14 Nov 2023 12:44:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1699962270;
+        bh=nVXLAM6hu4HEohOhi+g/me75tKaN6ccLrhxS53GSTp4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XAKGdCGXMn7/V5wmK5B8jPgf0bzlcpV+zcKlMKqd8tv5x4ioZfXbSlXacN+ZaOmiA
+         Nq5q99PQETcM1McfIeF4MAjGfI4R9GW9JDS8tZttyBeTPMqii25EOCyzPEx+SzaWYO
+         iuOWjd3hYUFNoSq0pMFa4Z5ks2tKcZnnbYa6VI78=
+Message-ID: <d667b74e-faed-44f4-a0c4-959aede16fb8@ideasonboard.com>
+Date:   Tue, 14 Nov 2023 11:44:52 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] Performance: devfreq: avoid devfreq delay work re-init
- before
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: power: meson-g12a-power: document ISP
+ power domain
 Content-Language: en-US
-To:     huangzaiyang <huangzaiyang@oppo.com>, <myungjoo.ham@samsung.com>,
-        <kyungmin.park@samsung.com>, <cw00.choi@samsung.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        huangzaiyang <joyyoung.wang@gmail.com>
-References: <20231110093457.458-1-huangzaiyang@oppo.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20231110093457.458-1-huangzaiyang@oppo.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: kehTum09broLdiB3L8kbjbrzcIEtsQju
-X-Proofpoint-ORIG-GUID: kehTum09broLdiB3L8kbjbrzcIEtsQju
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-14_09,2023-11-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- suspectscore=0 spamscore=0 clxscore=1011 priorityscore=1501 adultscore=0
- mlxscore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311060000
- definitions=main-2311140082
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20231114-topic-amlogic-upstream-isp-pmdomain-v1-0-f01e6fca67a0@linaro.org>
+ <20231114-topic-amlogic-upstream-isp-pmdomain-v1-1-f01e6fca67a0@linaro.org>
+From:   Dan Scally <dan.scally@ideasonboard.com>
+Autocrypt: addr=dan.scally@ideasonboard.com; keydata=
+ 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
+In-Reply-To: <20231114-topic-amlogic-upstream-isp-pmdomain-v1-1-f01e6fca67a0@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Just saw this mail, i have posted a patch to synchronize 
-devfreq_monitor_start/stop.
+Hi Neil
 
-https://lore.kernel.org/all/1699957648-31299-1-git-send-email-quic_mojha@quicinc.com/
-
-let me know if that works too.
-
--Mukesh
-
-On 11/10/2023 3:04 PM, huangzaiyang wrote:
-> From: huangzaiyang <joyyoung.wang@gmail.com>
-> 
-> There is a timer_list race condition when executing the following test shell script:
-> '''
-> while true
-> do
->          echo "simple_ondemand" > /sys/class/devfreq/1d84000.ufshc/governor
->          echo "performance" > /sys/class/devfreq/1d84000.ufshc/governor
-> done
-> '''
-> 
-> [13511.214366][    C3] Unable to handle kernel paging request at virtual address dead00000000012a
-> [13511.214393][    C3] Mem abort info:
-> [13511.214398][    C3]   ESR = 0x96000044
-> [13511.214404][    C3]   EC = 0x25: DABT (current EL), IL = 32 bits
-> [13511.214409][    C3]   SET = 0, FnV = 0
-> [13511.214414][    C3]   EA = 0, S1PTW = 0
-> [13511.214417][    C3] Data abort info:
-> [13511.214422][    C3]   ISV = 0, ISS = 0x00000044
-> [13511.214427][    C3]   CM = 0, WnR = 1
-> [13511.214432][    C3] [dead00000000012a] address between user and kernel address ranges
-> [13511.214439][    C3] Internal error: Oops: 96000044 [#1] PREEMPT SMP
-> [13511.215449][    C3] CPU: 3 PID: 0 Comm: swapper/3 Tainted: G S      W  O      5.10.168-android12-9-o-g63cc297a7b34 #1
-> [13511.215454][    C3] Hardware name: Qualcomm Technologies, Inc. Cape MTP, Whiteswan (DT)
-> [13511.215460][    C3] pstate: 82400085 (Nzcv daIf +PAN -UAO +TCO BTYPE=--)
-> [13511.215472][    C3] pc : expire_timers+0x9c/0x428
-> [13511.215478][    C3] lr : __run_timers+0x1f0/0x328
-> [13511.215483][    C3] sp : ffffffc00801bdd0
-> [13511.215487][    C3] x29: ffffffc00801bdf0 x28: ffffffdb87b31698
-> [13511.215493][    C3] x27: ffffffdb87999e58 x26: ffffffdb87966008
-> [13511.215499][    C3] x25: 0000000000000001 x24: ffffff8001734a00
-> [13511.215506][    C3] x23: 00000000000000e0 x22: dead000000000122
-> [13511.215512][    C3] x21: 000000010032658e x20: ffffff89f7a9ae80
-> [13511.215518][    C3] x19: ffffffc00801be50 x18: ffffffc00801d038
-> [13511.215525][    C3] x17: 0000000000000240 x16: 0000000000000201
-> [13511.215532][    C3] x15: ffffffffffffffff x14: ffffff89f7a9aef8
-> [13511.215538][    C3] x13: 0000000000000240 x12: ffffff89f7a9aea8
-> [13511.215544][    C3] x11: 0000000000000021 x10: 000000014032658e
-> [13511.215550][    C3] x9 : ffffffc00801be50 x8 : dead000000000122
-> [13511.215556][    C3] x7 : ffff71646c68735e x6 : ffffff89f7aaae58
-> [13511.215563][    C3] x5 : 0000000000000000 x4 : 0000000000000101
-> [13511.215569][    C3] x3 : ffffff89f7a9aef0 x2 : ffffff89f7a9aef0
-> [13511.215575][    C3] x1 : ffffffc00801be50 x0 : ffffff8045804428
-> [13511.215581][    C3] Call trace:
-> [13511.215586][    C3]  expire_timers+0x9c/0x428
-> [13511.215591][    C3]  __run_timers+0x1f0/0x328
-> [13511.215596][    C3]  run_timer_softirq+0x28/0x58
-> [13511.215602][    C3]  efi_header_end+0x168/0x5ec
-> [13511.215610][    C3]  __irq_exit_rcu+0x108/0x124
-> [13511.215617][    C3]  __handle_domain_irq+0x118/0x1e4
-> [13511.215625][    C3]  gic_handle_irq.31230+0x6c/0x250
-> [13511.215630][    C3]  el1_irq+0xe4/0x1c0
-> [13511.215638][    C3]  cpuidle_enter_state+0x3a4/0xa04
-> [13511.215644][    C3]  do_idle+0x308/0x574
-> [13511.215649][    C3]  cpu_startup_entry+0x84/0x90
-> [13511.215656][    C3]  secondary_start_kernel+0x204/0x274
-> [13511.215664][    C3] Code: d503201f a9402408 f9000128 b4000048 (f9000509)
-> [13511.215670][    C3] ---[ end trace 5100bad72a35d566 ]---
-> [13511.215676][    C3] Kernel panic - not syncing: Oops: Fatal exception in interrupt
-> 
-> This is because when switching the governor through the sys node,
-> the devfreq_monitor_start function will re-initialize the delayed work task,
-> which will cause the delay work pending flag to become invalid, and the timer pending judgment contained in the delayed work will also become invalid,
-> and then the pending interception will be executed when the queue is executed.
-> 
-> So we remove the delay work'initialization work to the devfreq_add_device and timer_store functions,
-> and the delay work pending judgment is performed before the devfreq_monitor_start function performs the queue operation.
-> 
-> Signed-off-by: ZaiYang Huang <huangzaiyang@oppo.com>
+On 14/11/2023 10:19, Neil Armstrong wrote:
+> Add MIPI ISP power domain ID to the G12A Power domains bindings header
+>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
->   drivers/devfreq/devfreq.c | 36 ++++++++++++++++++++++++------------
->   1 file changed, 24 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index b3a68d5833bd..8ae6f853a21e 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -483,18 +483,7 @@ void devfreq_monitor_start(struct devfreq *devfreq)
->          if (IS_SUPPORTED_FLAG(devfreq->governor->flags, IRQ_DRIVEN))
->                  return;
-> 
-> -       switch (devfreq->profile->timer) {
-> -       case DEVFREQ_TIMER_DEFERRABLE:
-> -               INIT_DEFERRABLE_WORK(&devfreq->work, devfreq_monitor);
-> -               break;
-> -       case DEVFREQ_TIMER_DELAYED:
-> -               INIT_DELAYED_WORK(&devfreq->work, devfreq_monitor);
-> -               break;
-> -       default:
-> -               return;
-> -       }
-> -
-> -       if (devfreq->profile->polling_ms)
-> +       if (devfreq->profile->polling_ms && !delayed_work_pending(&devfreq->work))
->                  queue_delayed_work(devfreq_wq, &devfreq->work,
->                          msecs_to_jiffies(devfreq->profile->polling_ms));
->   }
-> @@ -830,6 +819,17 @@ struct devfreq *devfreq_add_device(struct device *dev,
->                  goto err_dev;
->          }
-> 
-> +       switch (devfreq->profile->timer) {
-> +       case DEVFREQ_TIMER_DEFERRABLE:
-> +               INIT_DEFERRABLE_WORK(&devfreq->work, devfreq_monitor);
-> +               break;
-> +       case DEVFREQ_TIMER_DELAYED:
-> +               INIT_DELAYED_WORK(&devfreq->work, devfreq_monitor);
-> +               break;
-> +       default:
-> +               dev_err(dev, "%s: Target devfreq(%s)'s profile timer has no settings \n", devfreq->governor_name,
-> +                       __func__);
-> +       }
->          if (!devfreq->profile->max_state || !devfreq->profile->freq_table) {
->                  mutex_unlock(&devfreq->lock);
->                  err = set_freq_table(devfreq);
-> @@ -1860,6 +1860,18 @@ static ssize_t timer_store(struct device *dev, struct device_attribute *attr,
->          df->profile->timer = timer;
->          mutex_unlock(&df->lock);
-> 
-> +       switch (df->profile->timer) {
-> +       case DEVFREQ_TIMER_DEFERRABLE:
-> +               INIT_DEFERRABLE_WORK(&df->work, devfreq_monitor);
-> +               break;
-> +       case DEVFREQ_TIMER_DELAYED:
-> +               INIT_DELAYED_WORK(&df->work, devfreq_monitor);
-> +               break;
-> +       default:
-> +               dev_err(dev, "%s: Target devfreq(%s)'s profile timer has no settings \n", df->governor_name,
-> +                       __func__);
-> +       }
-> +
->          ret = df->governor->event_handler(df, DEVFREQ_GOV_STOP, NULL);
->          if (ret) {
->                  dev_warn(dev, "%s: Governor %s not stopped(%d)\n",
-> --
-> 2.17.1
-> 
-> ________________________________
-> OPPO
-> 
-> ±¾µç×ÓÓÊ¼þ¼°Æä¸½¼þº¬ÓÐOPPO¹«Ë¾µÄ±£ÃÜÐÅÏ¢£¬½öÏÞÓÚÓÊ¼þÖ¸Ã÷µÄÊÕ¼þÈË£¨°üº¬¸öÈË¼°Èº×é£©Ê¹ÓÃ¡£½ûÖ¹ÈÎºÎÈËÔÚÎ´¾­ÊÚÈ¨µÄÇé¿öÏÂÒÔÈÎºÎÐÎÊ½Ê¹ÓÃ¡£Èç¹ûÄú´íÊÕÁË±¾ÓÊ¼þ£¬ÇÐÎð´«²¥¡¢·Ö·¢¡¢¸´ÖÆ¡¢Ó¡Ë¢»òÊ¹ÓÃ±¾ÓÊ¼þÖ®ÈÎºÎ²¿·Ö»òÆäËùÔØÖ®ÈÎºÎÄÚÈÝ£¬²¢ÇëÁ¢¼´ÒÔµç×ÓÓÊ¼þÍ¨Öª·¢¼þÈË²¢É¾³ý±¾ÓÊ¼þ¼°Æä¸½¼þ¡£
-> ÍøÂçÍ¨Ñ¶¹ÌÓÐÈ±ÏÝ¿ÉÄÜµ¼ÖÂÓÊ¼þ±»½ØÁô¡¢ÐÞ¸Ä¡¢¶ªÊ§¡¢ÆÆ»µ»ò°üº¬¼ÆËã»ú²¡¶¾µÈ²»°²È«Çé¿ö£¬OPPO¶Ô´ËÀà´íÎó»òÒÅÂ©¶øÒýÖÂÖ®ÈÎºÎËðÊ§¸Å²»³Ðµ£ÔðÈÎ²¢±£ÁôÓë±¾ÓÊ¼þÏà¹ØÖ®Ò»ÇÐÈ¨Àû¡£
-> ³ý·ÇÃ÷È·ËµÃ÷£¬±¾ÓÊ¼þ¼°Æä¸½¼þÎÞÒâ×÷ÎªÔÚÈÎºÎ¹ú¼Ò»òµØÇøÖ®ÒªÔ¼¡¢ÕÐÀ¿»ò³ÐÅµ£¬ÒàÎÞÒâ×÷ÎªÈÎºÎ½»Ò×»òºÏÍ¬Ö®ÕýÊ½È·ÈÏ¡£ ·¢¼þÈË¡¢ÆäËùÊô»ú¹¹»òËùÊô»ú¹¹Ö®¹ØÁª»ú¹¹»òÈÎºÎÉÏÊö»ú¹¹Ö®¹É¶«¡¢¶­ÊÂ¡¢¸ß¼¶¹ÜÀíÈËÔ±¡¢Ô±¹¤»òÆäËûÈÎºÎÈË£¨ÒÔÏÂ³Æ¡°·¢¼þÈË¡±»ò¡°OPPO¡±£©²»Òò±¾ÓÊ¼þÖ®ÎóËÍ¶ø·ÅÆúÆäËùÏíÖ®ÈÎºÎÈ¨Àû£¬Òà²»¶ÔÒò¹ÊÒâ»ò¹ýÊ§Ê¹ÓÃ¸ÃµÈÐÅÏ¢¶øÒý·¢»ò¿ÉÄÜÒý·¢µÄËðÊ§³Ðµ£ÈÎºÎÔðÈÎ¡£
-> ÎÄ»¯²îÒìÅûÂ¶£ºÒòÈ«ÇòÎÄ»¯²îÒìÓ°Ïì£¬µ¥´¿ÒÔYES\OK»òÆäËû¼òµ¥´Ê»ãµÄ»Ø¸´²¢²»¹¹³É·¢¼þÈË¶ÔÈÎºÎ½»Ò×»òºÏÍ¬Ö®ÕýÊ½È·ÈÏ»ò½ÓÊÜ£¬ÇëÓë·¢¼þÈËÔÙ´ÎÈ·ÈÏÒÔ»ñµÃÃ÷È·ÊéÃæÒâ¼û¡£·¢¼þÈË²»¶ÔÈÎºÎÊÜÎÄ»¯²îÒìÓ°Ïì¶øµ¼ÖÂ¹ÊÒâ»ò´íÎóÊ¹ÓÃ¸ÃµÈÐÅÏ¢ËùÔì³ÉµÄÈÎºÎÖ±½Ó»ò¼ä½ÓËðº¦³Ðµ£ÔðÈÎ¡£
-> This e-mail and its attachments contain confidential information from OPPO, which is intended only for the person or entity whose address is listed above. Any use of the information contained herein in any way (including, but not limited to, total or partial disclosure, reproduction, or dissemination) by persons other than the intended recipient(s) is prohibited. If you are not the intended recipient, please do not read, copy, distribute, or use this information. If you have received this transmission in error, please notify the sender immediately by reply e-mail and then delete this message.
-> Electronic communications may contain computer viruses or other defects inherently, may not be accurately and/or timely transmitted to other systems, or may be intercepted, modified ,delayed, deleted or interfered. OPPO shall not be liable for any damages that arise or may arise from such matter and reserves all rights in connection with the email.
-> Unless expressly stated, this e-mail and its attachments are provided without any warranty, acceptance or promise of any kind in any country or region, nor constitute a formal confirmation or acceptance of any transaction or contract. The sender, together with its affiliates or any shareholder, director, officer, employee or any other person of any such institution (hereinafter referred to as "sender" or "OPPO") does not waive any rights and shall not be liable for any damages that arise or may arise from the intentional or negligent use of such information.
-> Cultural Differences Disclosure: Due to global cultural differences, any reply with only YES\OK or other simple words does not constitute any confirmation or acceptance of any transaction or contract, please confirm with the sender again to ensure clear opinion in written form. The sender shall not be responsible for any direct or indirect damages resulting from the intentional or misuse of such information.
-> ________________________________
-> OPPO
-> 
-> 本电子邮件及其附件含有OPPO公司的保密信息，仅限于邮件指明的收件人（包含个人及群组）使用。禁止任何人在未经授权的情况下以任何形式使用。如果您错收了本邮件，切勿传播、分发、复制、印刷或使用本邮件之任何部分或其所载之任何内容，并请立即以电子邮件通知发件人并删除本邮件及其附件。
-> 网络通讯固有缺陷可能导致邮件被截留、修改、丢失、破坏或包含计算机病毒等不安全情况，OPPO对此类错误或遗漏而引致之任何损失概不承担责任并保留与本邮件相关之一切权利。
-> 除非明确说明，本邮件及其附件无意作为在任何国家或地区之要约、招揽或承诺，亦无意作为任何交易或合同之正式确认。 发件人、其所属机构或所属机构之关联机构或任何上述机构之股东、董事、高级管理人员、员工或其他任何人（以下称“发件人”或“OPPO”）不因本邮件之误送而放弃其所享之任何权利，亦不对因故意或过失使用该等信息而引发或可能引发的损失承担任何责任。
-> 文化差异披露：因全球文化差异影响，单纯以YES\OK或其他简单词汇的回复并不构成发件人对任何交易或合同之正式确认或接受，请与发件人再次确认以获得明确书面意见。发件人不对任何受文化差异影响而导致故意或错误使用该等信息所造成的任何直接或间接损害承担责任。
-> This e-mail and its attachments contain confidential information from OPPO, which is intended only for the person or entity whose address is listed above. Any use of the information contained herein in any way (including, but not limited to, total or partial disclosure, reproduction, or dissemination) by persons other than the intended recipient(s) is prohibited. If you are not the intended recipient, please do not read, copy, distribute, or use this information. If you have received this transmission in error, please notify the sender immediately by reply e-mail and then delete this message.
-> Electronic communications may contain computer viruses or other defects inherently, may not be accurately and/or timely transmitted to other systems, or may be intercepted, modified ,delayed, deleted or interfered. OPPO shall not be liable for any damages that arise or may arise from such matter and reserves all rights in connection with the email.
-> Unless expressly stated, this e-mail and its attachments are provided without any warranty, acceptance or promise of any kind in any country or region, nor constitute a formal confirmation or acceptance of any transaction or contract. The sender, together with its affiliates or any shareholder, director, officer, employee or any other person of any such institution (hereinafter referred to as "sender" or "OPPO") does not waive any rights and shall not be liable for any damages that arise or may arise from the intentional or negligent use of such information.
-> Cultural Differences Disclosure: Due to global cultural differences, any reply with only YES\OK or other simple words does not constitute any confirmation or acceptance of any transaction or contract, please confirm with the sender again to ensure clear opinion in written form. The sender shall not be responsible for any direct or indirect damages resulting from the intentional or misuse of such information.
+
+Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
+
+Tested-by: Daniel Scally <dan.scally@ideasonboard.com>
+
+>   include/dt-bindings/power/meson-g12a-power.h | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/include/dt-bindings/power/meson-g12a-power.h b/include/dt-bindings/power/meson-g12a-power.h
+> index 44ec0c50e340..01fd0ac4dd08 100644
+> --- a/include/dt-bindings/power/meson-g12a-power.h
+> +++ b/include/dt-bindings/power/meson-g12a-power.h
+> @@ -10,5 +10,6 @@
+>   #define PWRC_G12A_VPU_ID		0
+>   #define PWRC_G12A_ETH_ID		1
+>   #define PWRC_G12A_NNA_ID		2
+> +#define PWRC_G12A_ISP_ID		3
+>   
+>   #endif
+>
