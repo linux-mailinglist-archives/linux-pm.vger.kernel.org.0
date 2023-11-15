@@ -2,79 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 873197EBD3B
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Nov 2023 07:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 057ED7EBD58
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Nov 2023 08:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234603AbjKOGvD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Nov 2023 01:51:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44290 "EHLO
+        id S234603AbjKOHIU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Nov 2023 02:08:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234602AbjKOGu6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Nov 2023 01:50:58 -0500
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E45EB;
-        Tue, 14 Nov 2023 22:50:54 -0800 (PST)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-5a7b91faf40so75248647b3.1;
-        Tue, 14 Nov 2023 22:50:54 -0800 (PST)
+        with ESMTP id S229600AbjKOHIT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Nov 2023 02:08:19 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F94F0
+        for <linux-pm@vger.kernel.org>; Tue, 14 Nov 2023 23:08:14 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-54744e66d27so10000a12.0
+        for <linux-pm@vger.kernel.org>; Tue, 14 Nov 2023 23:08:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700031053; x=1700635853; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1700032092; x=1700636892; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=POR86ACWq50gnyaMlW3Qse0dtzLOhtouY3Pos+VsSEI=;
-        b=aXebQ5bkyoFbSHg5SDogMSy4C4sKKIoOewXqPj45PpfKStbwv+Jeq8gk+iCkRcaySa
-         SSKreVUDHpMVR6WdNOnnK6RfRy2hpbh2gwrriBxuGKzo7s8L8UOVLJIQ7CsqQnA5R1FO
-         w1zQeatnbqPd04rDEb/+/sqXQnWIDd7QcXG261ucb6GomiufANQX5YYJEKOupVdnblsm
-         zkyEBHY46NLtbD7wqRqnATLFEQV2VEBNg2GvIaTckX+AthzRZPm0+Oy7f4eBXQc5weVO
-         z4NcJmKJWLN975su65y/kQ1UCRQdzpwWYRLrd78RG9X1ArSz6Y+kpmm9rWKSvyxEXRXR
-         T0tg==
+        bh=sjgDYCiVZoQHvB83kALIeM9OtG/SOdaCJiN+nH0BdL0=;
+        b=PWFchHxOLnIDxyxQOW7xkwrUL4GrQYkU7STtHNvjjtK24qbbpOBVd6RqWcdQeOXWmk
+         b/XrC2McPwJpyuC2lH0eDdK/NSd2Tx5lpY51GgWlNwZDIevaZADJp7saj2I3noNTkE/N
+         bEczc7939AoxqKnpzqTF4wyrVrBX8z5OJ8wQZMYzc/ZyV75tX1WIdZ0f1URKw3v4XyF1
+         73MZaarDAWBW2PWioeAB7lWGNSxB0r6d2rWvJKZZRBe/RbWk0h6RBbKPEv35qFPTccoR
+         RM4HhthEvGjHhwnebUjwuSAuoOGAJNqOkRkaKkOK5HV7IZdlLtfuAoGg/dLexRdgIWMP
+         11iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700031053; x=1700635853;
+        d=1e100.net; s=20230601; t=1700032092; x=1700636892;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=POR86ACWq50gnyaMlW3Qse0dtzLOhtouY3Pos+VsSEI=;
-        b=I2qUf7TYurStwOYYbFNjxLWPsH8EuyScSR5/lQRikLBEeAwpKD7Lwn3WAyTF8PSU0X
-         9K7ARqYzBGaMKyYbgqMHSLphLk2beC323bQo7jCpiKBfL5OhEYHP0FV/IXE8Qu28fUgZ
-         6KKdWRMlq85OxobAyWifH7pXH6cD1RcqJYOCoF+oNjG69RwRYfmZZHNnrpD7fSY5uJZg
-         9aSt1VLPl+L1QV+TTgClbUUw4ky8+m15WFl3RLv8I4PCzCbmMQ/X0T4JmnHApXIasdX4
-         zI6QQS/Jj3v98ydwfoJbx87j0ZfpLH+xAkM6Vr5a2MRVD/HjcGjhh3O9Hqedicj4pktM
-         ceMg==
-X-Gm-Message-State: AOJu0YzMVSP+PP5uLD92sFl6kjLPSnRjSxwUDV8tuDgFSc3L86VlZHCM
-        keqBZtpDmoYWLbeDsJ6/gns1QYKMkYMFhjMaK1tXlYpb7Z4=
-X-Google-Smtp-Source: AGHT+IEvWU+xADG1vVrhuo05S5yemv8lG8npJc7Gem1sHpS7JujsnjhW9DN6x9wSerRwOITRWwumplSH2YEoe+kS57E=
-X-Received: by 2002:a25:383:0:b0:da0:6257:8da4 with SMTP id
- 125-20020a250383000000b00da062578da4mr9881399ybd.57.1700031053336; Tue, 14
- Nov 2023 22:50:53 -0800 (PST)
+        bh=sjgDYCiVZoQHvB83kALIeM9OtG/SOdaCJiN+nH0BdL0=;
+        b=ES09pQNF5e8CxrgtPmIG485CptTMIZDYSD/WL2uUQwLR3pDsZGXFi5XWUl5CBrUr4J
+         Sqpw4lrdfDhOEGvoId2YZJNrZbN24wzWWYeuUb5ZiwKeolzpLAlyOjmPNj1eOO2Wsu+z
+         eqTwj/Fc44R6LNDK3aIELjevmkicZOa3DIRMR39leH94IdgtaLS/RjRIIew5MfyYQUaz
+         PcI78xLC41gBxZMVW4kbMdTbaZJCCuCQb91szTERhgG6yqWE9uZ483RLkWLa9ycoXoQ0
+         ct612HjfRLPLC5aY7uD5OXpBmh8QOnO3bTBCr4FCk7lyBH1GhmlHMdnEwg4BRJsC+snd
+         +fcA==
+X-Gm-Message-State: AOJu0Yw9xUEHOU1C+CbLmQbZwgnDAsEI+RNJ4ewPjDIjtz2u6A0WKxNU
+        6LL6rVqKldZQSmBFWsP0iiBE4oyK7Sf3DwCbhISd3A==
+X-Google-Smtp-Source: AGHT+IEe/GNSXejvYayQJoBdKOorcpj9IYPMyfVBFxUm3h3zM4PXIN9nobRvzoCrHFQpIYokeDhIZ64IC16bT6CHdfw=
+X-Received: by 2002:a05:6402:1948:b0:546:d479:9c90 with SMTP id
+ f8-20020a056402194800b00546d4799c90mr69953edz.5.1700032092427; Tue, 14 Nov
+ 2023 23:08:12 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1698743706.git.zhoubinbin@loongson.cn> <944559ea3bf7ba0a1540f831ccd7d33591622b22.1698743706.git.zhoubinbin@loongson.cn>
- <20231031-negative-giveaway-6191a2da0cd5@spud> <CAMpQs4+3T9RATpJ5VycnEzkOTx_M2vdt6WPJv_B1Efy81RzCjA@mail.gmail.com>
- <20231101-clone-facsimile-fd4c37333842@spud>
-In-Reply-To: <20231101-clone-facsimile-fd4c37333842@spud>
-From:   Binbin Zhou <zhoubb.aaron@gmail.com>
-Date:   Wed, 15 Nov 2023 12:50:41 +0600
-Message-ID: <CAMpQs4L_85yPQXR4t=kaCEuwXK-Jr=L6G=omhAtrOn7CWUMCKw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: thermal: loongson,ls2k-thermal: Fix
- binding check issues
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        loongson-kernel@lists.loongnix.cn, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, Yinbo Zhu <zhuyinbo@loongson.cn>,
-        WANG Xuerui <git@xen0n.name>, loongarch@lists.linux.dev
+References: <20231031093921.755204-1-guanyulin@google.com> <f75d6cd2-fa9f-4820-969f-2a8839d78c9e@rowland.harvard.edu>
+ <CAOuDEK0NcijUKAL3fGtO=Ks+Y38TRhJcVx+ff-QUyUA0LcQ1Bw@mail.gmail.com> <3fe5414a-570f-4bfa-aa2f-909d7799551b@rowland.harvard.edu>
+In-Reply-To: <3fe5414a-570f-4bfa-aa2f-909d7799551b@rowland.harvard.edu>
+From:   Guan-Yu Lin <guanyulin@google.com>
+Date:   Wed, 15 Nov 2023 15:08:01 +0800
+Message-ID: <CAOuDEK3UuVGgP63NG9HtuJ0D2ERZsFGBwF5+GNynk=P7zSVUhg@mail.gmail.com>
+Subject: Re: [PATCH] rpm: pm: enable PM_RPM_EXCEPTION config flag
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        gregkh@linuxfoundation.org, len.brown@intel.com, pavel@ucw.cz,
+        heikki.krogerus@linux.intel.com, mkl@pengutronix.de,
+        hadess@hadess.net, mailhol.vincent@wanadoo.fr,
+        ivan.orlov0322@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        pumahsu@google.com, raychi@google.com, albertccwang@google.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,98 +75,81 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 1, 2023 at 1:59=E2=80=AFPM Conor Dooley <conor@kernel.org> wrot=
-e:
+On Wed, Nov 8, 2023 at 11:56=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
+du> wrote:
 >
-> On Wed, Nov 01, 2023 at 07:38:39AM +0600, Binbin Zhou wrote:
-> > On Tue, Oct 31, 2023 at 10:58=E2=80=AFPM Conor Dooley <conor@kernel.org=
-> wrote:
-> > >
-> > > On Tue, Oct 31, 2023 at 07:05:49PM +0800, Binbin Zhou wrote:
-> > > > Add the missing 'thermal-sensor-cells' property which is required f=
-or
-> > > > every thermal sensor as it's used when using phandles.
-> > > > And add the thermal-sensor.yaml reference.
-> > > >
-> > > > Fixes: 72684d99a854 ("thermal: dt-bindings: add loongson-2 thermal"=
-)
-> > > > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> > > > ---
-> > > >  .../bindings/thermal/loongson,ls2k-thermal.yaml        | 10 ++++++=
-+++-
-> > > >  1 file changed, 9 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/thermal/loongson,ls2=
-k-thermal.yaml b/Documentation/devicetree/bindings/thermal/loongson,ls2k-th=
-ermal.yaml
-> > > > index 7538469997f9..b634f57cd011 100644
-> > > > --- a/Documentation/devicetree/bindings/thermal/loongson,ls2k-therm=
-al.yaml
-> > > > +++ b/Documentation/devicetree/bindings/thermal/loongson,ls2k-therm=
-al.yaml
-> > > > @@ -10,6 +10,9 @@ maintainers:
-> > > >    - zhanghongchen <zhanghongchen@loongson.cn>
-> > > >    - Yinbo Zhu <zhuyinbo@loongson.cn>
-> > > >
-> > > > +allOf:
-> > > > +  - $ref: /schemas/thermal/thermal-sensor.yaml#
-> > > > +
-> > > >  properties:
-> > > >    compatible:
-> > > >      oneOf:
-> > > > @@ -26,12 +29,16 @@ properties:
-> > > >    interrupts:
-> > > >      maxItems: 1
-> > > >
-> > > > +  '#thermal-sensor-cells':
-> > > > +    const: 1
-> > > > +
-> > > >  required:
-> > > >    - compatible
-> > > >    - reg
-> > > >    - interrupts
-> > > > +  - '#thermal-sensor-cells'
-> > >
-> > > Why does it need to be a required property now though?
-> > > Adding new required properties is technically an ABI break.
+> On Wed, Nov 08, 2023 at 04:45:43PM +0800, Guan-Yu Lin wrote:
+> > Thanks for the questions. Let me first introduce my motivation for
+> > proposing this feature. We can discuss the implementation details later=
+.
 > >
-> > Hi Conor:
-> >
-> > I don't think it makes sense to have a separate thermal sensor
-> > definition, it needs thermal-zones to describe specific behaviors,
-> > e.g. cpu-thermal, so we need '#thermal-sensor-cells' to specify the
-> > reference.
-> > And the Loongson-2K1000 has 4 sets of control registers, we need to
-> > specify the id when referencing it.
+> > Motivation:
+> > Currently, system PM operations always override runtime PM operations.
+> > As runtime PM reflects the power status of devices, there is a
+> > possibility that runtime PM states that a device is in use, but system
+> > PM decides to suspend it. Up to now, we have assumed that a device can'=
+t
+> > function without resources from the system, so the device should acquir=
+e
+> > a wakelock to prevent this from happening. However, what if the device
 >
-> Unfortunately, none of this is an answer to my question.
+> [From the fact that you mention wakelocks, I assume that you're trying
+> to implement something for Android systems rather than Linux systems
+> in general.]
+>
+> > does not need the system's support to function? Or only needs limited
+> > resources (e.g., only limited power source or clock) to function? In th=
+is
+> > situation, we would like to keep the device on but allow the system to
+> > suspend. This is an example where we would like devices to follow runti=
+me
+> > PM rather than system PM.
+>
+> To put it more simply, you want a way to leave some devices in an active
+> state while the rest of the system is suspended.  It's not clear why you
+> have dragged runtime PM into the discussion (apart from the obvious fact
+> that you won't want to keep a device active if it isn't active already).
+>
 
-Hi Conor:
+The determination of which device should remain active when the system
+suspends can be based on various factors. One straightforward approach
+is to consider the device's runtime pm state. Alternatively, we could
+explore more elaborate techniques that consider additional criteria.
 
-Sorry for my late reply.
+> This sounds like a major change, not something to be done with a simple
+> override.  You should discuss it with Rafael Wysocki and the linux-pm
+> mailing list before trying to implement anything.
+>
+> > Feature Supported:
+> > 1. Devices could control the priority of system PM and runtime PM durin=
+g
+> >    runtime.
+>
+> This seems like a totally unnecessary side issue.  Forget about runtime
+> PM for the time being and concentrate instead on which devices you want
+> to keep active.
+>
+> > 2. The control should be at the device level, meaning that different
+> >    devices should control their own priorities.
+> >
+> > Goal of This Patch:
+> > 1. Design a framework to support features above.
+> > 2. Apply it into usb for demonstration.
+>
+> You may find that it is easier (and less work in the long run) to design
+> the general framework and get it working than to concentrate on one
+> particular subsystem.
+>
+> Alan Stern
 
-Over the past few days, I've been communicating offline with Yinbo
-(the driver author) about the use of the '#thermal-sensor-cells'
-attribute. He retested the attribute and determined that it is
-'required'.
+The big picture is "a way to leave some devices in an active state
+while the rest of the system is suspended", I think it could be
+separated into:
+(1) Each system should be able to choose which device(s) is included
+    in this feature.
+(2) For devices chosen in (1), each of them should have the flexibility
+    to determine when it will not suspend with the system, not just
+    always being active when the system suspends.
 
-We can see that the '#thermal-sensor-cells' attribute in the
-dt-binding was dropped between the V12 patchset[1] and the V13
-patchset[2]. Yinbo may have misunderstood Daniel's comment and removed
-the '#thermal-sensor-cells' attribute from the dt-binding. But the
-attribute was carelessly still left in the dts file, resulting in the
-issue not being found during functional validation.
-
-Indeed, re-adding the '#thermal-sensor-cells' attribute as "required"
-is technically an ABI breakage, but the driver does not work properly
-under the current dt-binding rules.
-Also, the driver is only valid under LoongArch and will have no effect
-on other architectures.
-
-[1]=EF=BC=9Ahttps://lore.kernel.org/all/20221114024709.7975-2-zhuyinbo@loon=
-gson.cn/
-[2]=EF=BC=9Ahttps://lore.kernel.org/all/20230221095355.9799-2-zhuyinbo@loon=
-gson.cn/
-
-Thanks.
-Binbin
+Regards,
+Guan-Yu
