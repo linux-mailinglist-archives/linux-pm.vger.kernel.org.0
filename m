@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E117EBD0C
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Nov 2023 07:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5177E7EBD14
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Nov 2023 07:29:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234549AbjKOG1s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Nov 2023 01:27:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51082 "EHLO
+        id S234570AbjKOG3l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Nov 2023 01:29:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234545AbjKOG1s (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Nov 2023 01:27:48 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42861CE
-        for <linux-pm@vger.kernel.org>; Tue, 14 Nov 2023 22:27:44 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-2809a824bbbso152436a91.3
-        for <linux-pm@vger.kernel.org>; Tue, 14 Nov 2023 22:27:44 -0800 (PST)
+        with ESMTP id S234545AbjKOG3k (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Nov 2023 01:29:40 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F1AE7
+        for <linux-pm@vger.kernel.org>; Tue, 14 Nov 2023 22:29:35 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-5c194b111d6so2378099a12.0
+        for <linux-pm@vger.kernel.org>; Tue, 14 Nov 2023 22:29:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700029664; x=1700634464; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1700029775; x=1700634575; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AKSOBVjj+YjOcXAU8cJCuporBoTYiy5nHyba5GnlAqQ=;
-        b=agaLieDSj7L8eCTTz775oRhZLMFY0SzOJ7NAh1P1ga0w8nx2UIh3SY3BBeZ4Es35aE
-         Hek8wiRKc+DazloKR1aW1NQNcTG2x5LSZhKpiJElFlryujlvZ2GUcrIWLoQ2EmbyHsaB
-         2XHstflom80TWlZSJbT710fih6XDJNyKIQPAf628p74zaGE6zW/v+234mp0hOaEwMp8o
-         +KLALvnP4txEw4OyoRrpsRqqGPhQkTi9q4rFZQOtFzAQufJ6QXdrbmK7m388W6HBltno
-         AawqUFSQ0CaflKFE5/AAaJF9uHrVsmfebP2DNRsFRWCtleu7joCImd+hT0CqF4FAWU6S
-         G+Jw==
+        bh=ijWgB/n7wQWOhBbaV1md72p8BCrVtoBj2gz5Jm1idO0=;
+        b=BrLPsIcbbxEeDIlp/W6DNYnO7aFe9v/lWyJ9wXQfaHy54r50+uLkAZfeeY9P1lAhBn
+         S9+G2/jnK2ZaDjho2gMvEYxlniqc2qT9Ty9VMUVgBfSGerEly11jSY/0TU5+MnsNl0yT
+         S0256uC4zYisWcT10Z+uz2XW/xpZkSwONPhZCxcqKDwrrMeDa4ujhK5USuhTvmjdtTuH
+         D/LeRBeHntStjb63XuvRPQdyLYXJ1soFFSjvD+iNnfVwkviglGfkPQhnHZWIc2wUeECM
+         Uhj4VPju1NxAF4lVVrxgpvmHRdjndMyFdGtnBOiHbYJFj4ogEi61KuA7KkWb0gWTo/Qi
+         JsnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700029664; x=1700634464;
+        d=1e100.net; s=20230601; t=1700029775; x=1700634575;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AKSOBVjj+YjOcXAU8cJCuporBoTYiy5nHyba5GnlAqQ=;
-        b=aGxZ7cTqhINEAktd4raOBdkXcQ52WtFVouMDhHE3QrQoEcOMxU/uChfT5e55lhhkj/
-         L4DlPIvNoFBAq69VNHZTutc4G6PQLX60dFpIWFiuJ2GujIxm53vWDlP0BUSvwKaeUYco
-         BLd3UAyTKkPNVXAFtGbLHyADgUzjNOTDtz639cTHYPXfIbDVXjiJ5WfFtJ4gLPH2tb/5
-         +uM0A4YAe2trMPXhSW4zx4FHPEF86NsXxbedtDpksuLjdbArKTRMIB1SpXgmp6CckmxV
-         Q7GngAA6MBxGI411pRhx+LD/f8GVk68NWaAHJXOmE29RuAC4wnLQRSZmJlr68/p+n986
-         XAsQ==
-X-Gm-Message-State: AOJu0YyXuV3JlLcQRtVM0k3U5aiP+ptD9EADW7csrTf/+OQ7oYzpWq/9
-        rBoluS74eU3jabgse8Ty6QE+TA==
-X-Google-Smtp-Source: AGHT+IHLjecUpYnZT1aX8sOnGe785XxMzOTpOQh8BD10EBM3cElVJkFW7QBKAP+68Bxnn0Wv3wq58w==
-X-Received: by 2002:a17:90b:3a8c:b0:280:2652:d41 with SMTP id om12-20020a17090b3a8c00b0028026520d41mr9717051pjb.4.1700029663650;
-        Tue, 14 Nov 2023 22:27:43 -0800 (PST)
+        bh=ijWgB/n7wQWOhBbaV1md72p8BCrVtoBj2gz5Jm1idO0=;
+        b=HQpV99esQ9wE6C0RBR30F6P2l3t09Qwv4+PN3KtYn/aq2x4eSQZJMuXToUvt+j2ozz
+         vcWqEINCOe8IMXDf8Qs2wKo/8nAFCU/zfsW1eWOPBVC1GSu05o2SApo2LNCiHCOn5X21
+         JoV5gGkckU31OvitJRNzaiiiTptRKSMVMqGhNEWVkUaQcMU+pbxFhjRDxADmSYcOsdpR
+         OJFSWy1AXeQvBJgj5f1CPKAWAXWva18r08Lw6jZ3hdytrOmUVZT3z5EdJsmsekdyKkqr
+         ML6R+RytRQc8TeZqhDlETPcPOfbyeZMaTv93yeumf2hUpKOQze6ghnjhDdjGHV+Nsx4O
+         nRwg==
+X-Gm-Message-State: AOJu0YxtA49rzJerTE2cu83GrRetDy1Wdjjvihvzz85rWW61hKCNGgmx
+        G7pxxqDWuDdCS9VluQOPuId2Qw==
+X-Google-Smtp-Source: AGHT+IHNQoS9uDAn0ReyTwQP6t3z0RVvRg7vMQN4mCOr0kGFtghMcGt9yzA+q1gHzzOarfaJd1+BRw==
+X-Received: by 2002:a05:6a20:244e:b0:15e:d84:1c5e with SMTP id t14-20020a056a20244e00b0015e0d841c5emr15202326pzc.38.1700029775212;
+        Tue, 14 Nov 2023 22:29:35 -0800 (PST)
 Received: from localhost ([122.172.82.6])
-        by smtp.gmail.com with ESMTPSA id 23-20020a17090a1a1700b0027ced921e80sm8998415pjk.38.2023.11.14.22.27.42
+        by smtp.gmail.com with ESMTPSA id oo3-20020a17090b1c8300b0028328057c67sm5810344pjb.45.2023.11.14.22.29.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Nov 2023 22:27:43 -0800 (PST)
-Date:   Wed, 15 Nov 2023 11:57:41 +0530
+        Tue, 14 Nov 2023 22:29:34 -0800 (PST)
+Date:   Wed, 15 Nov 2023 11:59:32 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     David Dai <davidai@google.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -70,17 +70,17 @@ Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Mel Gorman <mgorman@suse.de>, kernel-team@android.com,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] dt-bindings: cpufreq: add virtual cpufreq device
-Message-ID: <20231115062741.v3tpm337c2lidxzr@vireshk-i7>
+Subject: Re: [PATCH v4 2/2] cpufreq: add virtual-cpufreq driver
+Message-ID: <20231115062932.vz2tyg6wgux5lx6t@vireshk-i7>
 References: <20231111014933.1934562-1-davidai@google.com>
- <20231111014933.1934562-2-davidai@google.com>
+ <20231111014933.1934562-3-davidai@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231111014933.1934562-2-davidai@google.com>
+In-Reply-To: <20231111014933.1934562-3-davidai@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,13 +89,21 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 10-11-23, 17:49, David Dai wrote:
-> diff --git a/Documentation/devicetree/bindings/cpufreq/qemu,cpufreq-virtual.yaml b/Documentation/devicetree/bindings/cpufreq/qemu,cpufreq-virtual.yaml
-> +$id: http://devicetree.org/schemas/cpufreq/qemu,cpufreq-virtual.yaml#
-> +properties:
-> +  compatible:
-> +    const: qemu,virtual-cpufreq
+> diff --git a/drivers/cpufreq/virtual-cpufreq.c b/drivers/cpufreq/virtual-cpufreq.c
+> +static unsigned int virt_cpufreq_set_perf(struct cpufreq_policy *policy)
+> +{
+> +	writel_relaxed(policy->cached_target_freq,
 
-Not sure why we need to mention QEMU here.. Why limit this to just QEMU ?
+Drivers shouldn't be using the cached_target_freq directly. Use the target freq
+or index passed from cpufreq core.
+
+> +static int virt_cpufreq_cpu_exit(struct cpufreq_policy *policy)
+> +{
+> +	topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_VIRT, policy->related_cpus);
+> +	kfree(policy->freq_table);
+> +	policy->freq_table = NULL;
+
+No need of doing this. Also the order of above two calls is wrong anyway.
 
 -- 
 viresh
