@@ -2,132 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF9597EBEBB
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Nov 2023 09:44:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E477EBED0
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Nov 2023 09:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234685AbjKOIoK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Nov 2023 03:44:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
+        id S234684AbjKOItn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Nov 2023 03:49:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234651AbjKOIoJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Nov 2023 03:44:09 -0500
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E30C10D
-        for <linux-pm@vger.kernel.org>; Wed, 15 Nov 2023 00:44:06 -0800 (PST)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-5a84204e7aeso75809437b3.0
-        for <linux-pm@vger.kernel.org>; Wed, 15 Nov 2023 00:44:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700037845; x=1700642645; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=O435LHbyv7oQ7r66GVQ2a6a9TDfwdSVJ9URtMEVc7Uk=;
-        b=N8kpExpZxhhvnMoSnOfcDGhC4PxvigNcTwlX3/d8MaLqUf3UjDMLKp5UYDWFitdLTo
-         KyG4nwwnX22SigFXUklXM0JWi68RGRVYExPFQQdbjWINw1CYmdXRhF3WiRrjgfZBRuk1
-         nyV1T5CFuMB7MNtAZ2sQjRdvDSZMIvGG4VhDmVnRHOutBUV7V3ZHoW3PzC7hRVeHT50R
-         7lq9akVokC2luxIs9myICzLf2ujxbUP2nhPpwSq3EQRa+9aJmUA2Dw0AWVMBw8XXJ+wQ
-         /cGOJm6UOCklgFXm4bzN12lGpmKalLSmfBmFAtdnFd3YPmU5yNBGE2jq+RXhh1NhHHTK
-         lMEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700037845; x=1700642645;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O435LHbyv7oQ7r66GVQ2a6a9TDfwdSVJ9URtMEVc7Uk=;
-        b=Wz24NCRxp2I2fZJfZjNVX4G+05BT71U+ezYmIbxLc8fCib4qu3dfijtC2Z7xD/uzOO
-         kQutj034xrtjGjoQby2hme50XWrBYKJ5pzYw7/6uOdqevlKYGi/QYXAyKl8qX5omTWWN
-         5qnPGbhBvhyej9nwmkVWqA6WitjCvAfr6uaqmpv7Xm2mzgeKZFDXj4w+yy5dg3hpxJ9D
-         gnD0uhfSheo/89/p6t6YlcW1+XVE2Cen/jbne6/nx3fKef7A8/qL1ONstLE5zdC2gA35
-         Npm3Lczat2k3p4NtzmyovSL3LD47tRgJkYmxg8MdUZFEL6abucgSLJu0K61EMx2BZwnu
-         GnNw==
-X-Gm-Message-State: AOJu0Yw9XFAojUFYt2jRCJg9gDe59Ylxw92yFSK7Hb7cGx7hTz6tbCbW
-        G9Wx0i3Csi9L2onAN2NSQrewHAu5WsMuIok8/LxKgw==
-X-Google-Smtp-Source: AGHT+IGYyMbXo0cenT7MAhAK2LCaEB9+Xb+FoInpMblxB77kbQVUXJEQUSN6Df2UdZWuepVN2y/hrda9iVITRdFay/M=
-X-Received: by 2002:a0d:cd86:0:b0:5a7:af0c:bf97 with SMTP id
- p128-20020a0dcd86000000b005a7af0cbf97mr12883973ywd.6.1700037845260; Wed, 15
- Nov 2023 00:44:05 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1669012140.git.viresh.kumar@linaro.org> <c03c4f2b9d4dcc3264d1902606c6c5c464b4b043.1669012140.git.viresh.kumar@linaro.org>
- <Y3snGQet8yc7HnJK@hovoldconsulting.com> <20221121073946.GE11945@thinkpad>
- <20230125042145.hrjpnskywwqn7b6v@vireshk-i7> <20230216064727.GA2420@thinkpad>
- <20231011054858.3vvnr76u5enu5lf6@vireshk-i7> <20231115063201.rc3pf3pga6zhoqb5@vireshk-i7>
- <20231115075542.GA20982@workstation>
-In-Reply-To: <20231115075542.GA20982@workstation>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 15 Nov 2023 10:43:53 +0200
-Message-ID: <CAA8EJpqhYxvgXsbQfdrYs=tdbbqE=uTwtB71kqFDBAfnTtNwAA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] OPP: Disallow "opp-hz" property without a
- corresponding clk
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Johan Hovold <johan@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        with ESMTP id S234651AbjKOItm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Nov 2023 03:49:42 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADE710D;
+        Wed, 15 Nov 2023 00:49:40 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A18C433C8;
+        Wed, 15 Nov 2023 08:49:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1700038179;
+        bh=OuPjk+emTE9UpaDXpxTR2qXCGW+CArulEmPHaMPj4bA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tMzx3OoeufNFnHcPm2vccBzmaOR9CI/LswpZ1a0O/7q6bd7TmS2suyLznB6y9RrzA
+         oZZDcr7qD6w20IH6UnlQ0TfRwp+5JWKmJ5igrfKzmCcqf/1uzqIqA7wSAC+Q9+03t9
+         f02TWQ/JBDhBZyh45o/Xp9wU3Yf3fVOWNxP3DmwvsiPOKADgPYGlaA6UAY0gNYc5UO
+         xgBiojyhlHAFXOXoZvW62D+rmWyjfmFBDkHULDADzE1sXZd/f0CwGqP4Ao5DpW2b/M
+         6ME9+xQ1/grSTFVGKawehQi9twHV0ddRWTYEecJBEt8vGT77DTMOTzg2wXa92HI5D8
+         MzYB1/83M5Pbw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1r3Bab-00DFvg-0w;
+        Wed, 15 Nov 2023 08:49:37 +0000
+Date:   Wed, 15 Nov 2023 08:49:36 +0000
+Message-ID: <865y231jvj.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     David Dai <davidai@google.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Masami Hiramatsu <mhiramat@google.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        robdclark@gmail.com, freedreno <freedreno@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Oliver Upton <oliver.upton@linux.dev>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Gupta Pankaj <pankaj.gupta@amd.com>,
+        Mel Gorman <mgorman@suse.de>, kernel-team@android.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] dt-bindings: cpufreq: add virtual cpufreq device
+In-Reply-To: <20231111014933.1934562-2-davidai@google.com>
+References: <20231111014933.1934562-1-davidai@google.com>
+        <20231111014933.1934562-2-davidai@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: davidai@google.com, rafael@kernel.org, viresh.kumar@linaro.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, sudeep.holla@arm.com, saravanak@google.com, qperret@google.com, mhiramat@google.com, will@kernel.org, peterz@infradead.org, vincent.guittot@linaro.org, oliver.upton@linux.dev, dietmar.eggemann@arm.com, quic_pkondeti@quicinc.com, pankaj.gupta@amd.com, mgorman@suse.de, kernel-team@android.com, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 15 Nov 2023 at 09:55, Manivannan Sadhasivam
-<manivannan.sadhasivam@linaro.org> wrote:
->
-> + Dmitry
->
-> On Wed, Nov 15, 2023 at 12:02:01PM +0530, Viresh Kumar wrote:
-> > On 11-10-23, 11:18, Viresh Kumar wrote:
-> > > On 16-02-23, 12:17, Manivannan Sadhasivam wrote:
-> > > > Sorry for the delay. I've submitted the dts changes [1] to handle the CPU clocks
-> > > > for the rest of the Qcom SoCs.
-> > > >
-> > > > For the Qcom GPUs, I've CCed Rob Clark who is the maintainer.
-> > > >
-> > > > Rob, here is the background on the issue that is being discussed in this
-> > > > thread:
-> > > >
-> > > > Viresh submitted a series [2] back in July to improve the OPP framework, but
-> > > > that ended up breaking cpufreq on multiple Qcom SoCs. After investigation, it
-> > > > was found that the series was expecting the clocks supplied to the OPP end
-> > > > devices like CPUs/GPUs to be modeled in DT. But on Qcom platforms even though
-> > > > the clocks for these nodes are supplied by a separate entity, like CPUFreq
-> > > > (EPSS/OSM) for CPUs and GMU for GPUs, there was no clock property present in
-> > > > the respective nodes. And these nodes are using OPP table to switch frequencies
-> > > > dynamically.
-> > > >
-> > > > While the series was merged with a hack that still allows the OPP nodes without
-> > > > clock property in DT, we came to an agreement that the clock hierarchy should
-> > > > be modeled properly.
-> > > >
-> > > > So I submitted a series [3] that added clock provider support to cpufreq driver
-> > > > and sourced the clock from cpufreq node to CPU nodes in DT.
-> > > >
-> > > > Likewise, it should be handled for the adreno GPUs whose clock is managed by
-> > > > GMU on newer SoCs. Can you take a look at this?
-> > >
-> > > Any update on this ?
-> >
-> > Mani,
-> >
-> > Ping.
-> >
->
-> Dmitry, can you please look into this? Please read my above reply to Rob
-> to get the background.
+On Sat, 11 Nov 2023 01:49:29 +0000,
+David Dai <davidai@google.com> wrote:
+> 
+> Adding bindings to represent a virtual cpufreq device.
+> 
+> Virtual machines may expose MMIO regions for a virtual cpufreq device
+> for guests to read frequency information or to request frequency
+> selection. The virtual cpufreq device has an individual controller for
+> each frequency domain.
 
-The issue is that we don't have an actual clock that corresponds to
-the GPU frequency. Not even a read-only one.
-Can we get away by manually setting config_clocks()?
+I would really refrain form having absolute frequencies here. A
+virtual machine can be migrated, and there are *zero* guarantees that
+the target system has the same clock range as the source.
 
-Also could you please remind me, can we sleep inside the config_clks() callback?
+This really should be a relative number, much like the capacity. That,
+at least, can be migrated across systems.
+
+Thanks,
+
+	M.
 
 -- 
-With best wishes
-Dmitry
+Without deviation from the norm, progress is not possible.
