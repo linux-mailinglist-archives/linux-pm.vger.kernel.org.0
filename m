@@ -2,63 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D827EC668
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Nov 2023 15:54:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 810727EC699
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Nov 2023 16:03:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234977AbjKOOy0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Nov 2023 09:54:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38438 "EHLO
+        id S1344336AbjKOPCr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Nov 2023 10:02:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234954AbjKOOy0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Nov 2023 09:54:26 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77ED6A9
-        for <linux-pm@vger.kernel.org>; Wed, 15 Nov 2023 06:54:23 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E51AC433C8;
-        Wed, 15 Nov 2023 14:54:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1700060063;
-        bh=qJzZTmMjUOCQgaFSR0cAlyelD4CebJxSHi50IvMMUXo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sZBjEbY7ekjmsPtfiYZ7Qes3zmOewOIk3dgwa4I4mBP3Ew/Zkl+nv6jT5TcTA0sso
-         tnXS6s2x92qXATCgr4gauZDg6Cm4OD+QvZMmzaVB8tL7YP3MR/e7tqVcjnPc3RADGe
-         46rxBZJNMU8z7pMFI5fxDNOVs8my4USq3fMe8GUZZRTVh0+XeJpJ3XhO/mzMLMqfe1
-         6k2kyzwwGr4bo8dWA7f7q4Rx2YrR0FbKCe3jsqkR/6PVZPBRX2EeLqpKS2/+e9jxUA
-         Hy2KGZCZ/A2ftHDhNVd/AE5uNEsHGcScCrCuvyBcyx8EGFM/+R4vpA0FGGb9aVTxwH
-         A70dtOc8HgFfA==
-Date:   Wed, 15 Nov 2023 14:54:19 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Binbin Zhou <zhoubb.aaron@gmail.com>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        loongson-kernel@lists.loongnix.cn, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, Yinbo Zhu <zhuyinbo@loongson.cn>,
-        WANG Xuerui <git@xen0n.name>, loongarch@lists.linux.dev
-Subject: Re: [PATCH 1/2] dt-bindings: thermal: loongson,ls2k-thermal: Fix
- binding check issues
-Message-ID: <20231115-frantic-charter-ccd33e3478de@squawk>
-References: <cover.1698743706.git.zhoubinbin@loongson.cn>
- <944559ea3bf7ba0a1540f831ccd7d33591622b22.1698743706.git.zhoubinbin@loongson.cn>
- <20231031-negative-giveaway-6191a2da0cd5@spud>
- <CAMpQs4+3T9RATpJ5VycnEzkOTx_M2vdt6WPJv_B1Efy81RzCjA@mail.gmail.com>
- <20231101-clone-facsimile-fd4c37333842@spud>
- <CAMpQs4L_85yPQXR4t=kaCEuwXK-Jr=L6G=omhAtrOn7CWUMCKw@mail.gmail.com>
+        with ESMTP id S1344328AbjKOPCq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Nov 2023 10:02:46 -0500
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558AD125;
+        Wed, 15 Nov 2023 07:02:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700060564; x=1731596564;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QEUjGSpL6orxUQ+6h440g1bWRxTgIYCOricGGKyI/i0=;
+  b=mRf2JVv/6lKjkrUMprUb+9QbhI2c+dcpQdy6EV+xXturYQThoGfgx14Z
+   x3Dqc3WuXtvRata1z6DU9nFOyRUBvx2ukIzYlhc29IfNqFIK5IL9xYN+Y
+   g6VK/f71BQtaCWQUf3qgZnb/WMV7Y/THKQ6qvonLJvklcW2ij7MaBc7BC
+   u3hOP/tP5bOMSrJ4KxKAqPi2M8ek3Ik4FUsdrbgdDCbkXWDqi9e4m0JtN
+   pjdymC2JodghFwZ8QxLMWtsujfXOM7zvbxR7SUEGc4nl9o8P7l8HeYYRE
+   RhZAl1hTDg4n8BRllWIUbbtLcjBhkVDlTAtRyncihAKi1mniOcLVGlYxG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="3970790"
+X-IronPort-AV: E=Sophos;i="6.03,305,1694761200"; 
+   d="scan'208";a="3970790"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2023 07:02:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.03,305,1694761200"; 
+   d="scan'208";a="6195338"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 15 Nov 2023 07:02:23 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1r3HPI-0000Qr-0D;
+        Wed, 15 Nov 2023 15:02:20 +0000
+Date:   Wed, 15 Nov 2023 23:01:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, rafael@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, daniel.lezcano@linaro.org,
+        rui.zhang@intel.com, lukasz.luba@arm.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        wenst@chromium.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH] thermal: Add support for device tree thermal zones
+ consumers
+Message-ID: <202311152213.NNF5X5wd-lkp@intel.com>
+References: <20231114131514.89031-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="onz20QwnE0RQyYcQ"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMpQs4L_85yPQXR4t=kaCEuwXK-Jr=L6G=omhAtrOn7CWUMCKw@mail.gmail.com>
+In-Reply-To: <20231114131514.89031-1-angelogioacchino.delregno@collabora.com>
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,119 +69,56 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi AngeloGioacchino,
 
---onz20QwnE0RQyYcQ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+kernel test robot noticed the following build errors:
 
-On Wed, Nov 15, 2023 at 12:50:41PM +0600, Binbin Zhou wrote:
-> On Wed, Nov 1, 2023 at 1:59=E2=80=AFPM Conor Dooley <conor@kernel.org> wr=
-ote:
-> >
-> > On Wed, Nov 01, 2023 at 07:38:39AM +0600, Binbin Zhou wrote:
-> > > On Tue, Oct 31, 2023 at 10:58=E2=80=AFPM Conor Dooley <conor@kernel.o=
-rg> wrote:
-> > > >
-> > > > On Tue, Oct 31, 2023 at 07:05:49PM +0800, Binbin Zhou wrote:
-> > > > > Add the missing 'thermal-sensor-cells' property which is required=
- for
-> > > > > every thermal sensor as it's used when using phandles.
-> > > > > And add the thermal-sensor.yaml reference.
-> > > > >
-> > > > > Fixes: 72684d99a854 ("thermal: dt-bindings: add loongson-2 therma=
-l")
-> > > > > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> > > > > ---
-> > > > >  .../bindings/thermal/loongson,ls2k-thermal.yaml        | 10 ++++=
-+++++-
-> > > > >  1 file changed, 9 insertions(+), 1 deletion(-)
-> > > > >
-> > > > > diff --git a/Documentation/devicetree/bindings/thermal/loongson,l=
-s2k-thermal.yaml b/Documentation/devicetree/bindings/thermal/loongson,ls2k-=
-thermal.yaml
-> > > > > index 7538469997f9..b634f57cd011 100644
-> > > > > --- a/Documentation/devicetree/bindings/thermal/loongson,ls2k-the=
-rmal.yaml
-> > > > > +++ b/Documentation/devicetree/bindings/thermal/loongson,ls2k-the=
-rmal.yaml
-> > > > > @@ -10,6 +10,9 @@ maintainers:
-> > > > >    - zhanghongchen <zhanghongchen@loongson.cn>
-> > > > >    - Yinbo Zhu <zhuyinbo@loongson.cn>
-> > > > >
-> > > > > +allOf:
-> > > > > +  - $ref: /schemas/thermal/thermal-sensor.yaml#
-> > > > > +
-> > > > >  properties:
-> > > > >    compatible:
-> > > > >      oneOf:
-> > > > > @@ -26,12 +29,16 @@ properties:
-> > > > >    interrupts:
-> > > > >      maxItems: 1
-> > > > >
-> > > > > +  '#thermal-sensor-cells':
-> > > > > +    const: 1
-> > > > > +
-> > > > >  required:
-> > > > >    - compatible
-> > > > >    - reg
-> > > > >    - interrupts
-> > > > > +  - '#thermal-sensor-cells'
-> > > >
-> > > > Why does it need to be a required property now though?
-> > > > Adding new required properties is technically an ABI break.
-> > >
-> > > Hi Conor:
-> > >
-> > > I don't think it makes sense to have a separate thermal sensor
-> > > definition, it needs thermal-zones to describe specific behaviors,
-> > > e.g. cpu-thermal, so we need '#thermal-sensor-cells' to specify the
-> > > reference.
-> > > And the Loongson-2K1000 has 4 sets of control registers, we need to
-> > > specify the id when referencing it.
-> >
-> > Unfortunately, none of this is an answer to my question.
->=20
-> Hi Conor:
->=20
-> Sorry for my late reply.
->=20
-> Over the past few days, I've been communicating offline with Yinbo
-> (the driver author) about the use of the '#thermal-sensor-cells'
-> attribute. He retested the attribute and determined that it is
-> 'required'.
->=20
-> We can see that the '#thermal-sensor-cells' attribute in the
-> dt-binding was dropped between the V12 patchset[1] and the V13
-> patchset[2]. Yinbo may have misunderstood Daniel's comment and removed
-> the '#thermal-sensor-cells' attribute from the dt-binding. But the
-> attribute was carelessly still left in the dts file, resulting in the
-> issue not being found during functional validation.
->=20
-> Indeed, re-adding the '#thermal-sensor-cells' attribute as "required"
-> is technically an ABI breakage, but the driver does not work properly
-> under the current dt-binding rules.
+[auto build test ERROR on rafael-pm/thermal]
+[also build test ERROR on linus/master v6.7-rc1 next-20231115]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I was going to say that you should add some comment about this in the
-commit message, but at the end of the day - you're not much of a thermal
-sensor without having thermal-sensor-cells, so I think your commit
-message is actually fine.
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/thermal-Add-support-for-device-tree-thermal-zones-consumers/20231114-211656
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20231114131514.89031-1-angelogioacchino.delregno%40collabora.com
+patch subject: [PATCH] thermal: Add support for device tree thermal zones consumers
+config: arm-randconfig-004-20231115 (https://download.01.org/0day-ci/archive/20231115/202311152213.NNF5X5wd-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231115/202311152213.NNF5X5wd-lkp@intel.com/reproduce)
 
-and I probably should have recognised that earlier.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311152213.NNF5X5wd-lkp@intel.com/
 
-Thanks,
-Conor
+All errors (new ones prefixed by >>):
 
---onz20QwnE0RQyYcQ
-Content-Type: application/pgp-signature; name="signature.asc"
+   arm-linux-gnueabi-ld: drivers/power/supply/power_supply_core.o: in function `thermal_of_get_zone_by_index':
+>> power_supply_core.c:(.text+0x167c): multiple definition of `thermal_of_get_zone_by_index'; drivers/soc/qcom/qcom_aoss.o:qcom_aoss.c:(.text+0x5a4): first defined here
+   arm-linux-gnueabi-ld: drivers/power/supply/power_supply_core.o: in function `thermal_of_get_zone':
+>> power_supply_core.c:(.text+0x1684): multiple definition of `thermal_of_get_zone'; drivers/soc/qcom/qcom_aoss.o:qcom_aoss.c:(.text+0x5ac): first defined here
+   arm-linux-gnueabi-ld: drivers/hwmon/hwmon.o: in function `thermal_of_get_zone_by_index':
+   hwmon.c:(.text+0x9cc): multiple definition of `thermal_of_get_zone_by_index'; drivers/soc/qcom/qcom_aoss.o:qcom_aoss.c:(.text+0x5a4): first defined here
+   arm-linux-gnueabi-ld: drivers/hwmon/hwmon.o: in function `thermal_of_get_zone':
+   hwmon.c:(.text+0x9d4): multiple definition of `thermal_of_get_zone'; drivers/soc/qcom/qcom_aoss.o:qcom_aoss.c:(.text+0x5ac): first defined here
+   arm-linux-gnueabi-ld: drivers/hwmon/tc654.o: in function `thermal_of_get_zone_by_index':
+   tc654.c:(.text+0x5c8): multiple definition of `thermal_of_get_zone_by_index'; drivers/soc/qcom/qcom_aoss.o:qcom_aoss.c:(.text+0x5a4): first defined here
+   arm-linux-gnueabi-ld: drivers/hwmon/tc654.o: in function `thermal_of_get_zone':
+   tc654.c:(.text+0x5d0): multiple definition of `thermal_of_get_zone'; drivers/soc/qcom/qcom_aoss.o:qcom_aoss.c:(.text+0x5ac): first defined here
+   arm-linux-gnueabi-ld: drivers/hwmon/mlxreg-fan.o: in function `thermal_of_get_zone_by_index':
+   mlxreg-fan.c:(.text+0x3f0): multiple definition of `thermal_of_get_zone_by_index'; drivers/soc/qcom/qcom_aoss.o:qcom_aoss.c:(.text+0x5a4): first defined here
+   arm-linux-gnueabi-ld: drivers/hwmon/mlxreg-fan.o: in function `thermal_of_get_zone':
+   mlxreg-fan.c:(.text+0x3f8): multiple definition of `thermal_of_get_zone'; drivers/soc/qcom/qcom_aoss.o:qcom_aoss.c:(.text+0x5ac): first defined here
+   arm-linux-gnueabi-ld: drivers/hwmon/pwm-fan.o: in function `thermal_of_get_zone_by_index':
+   pwm-fan.c:(.text+0x9c): multiple definition of `thermal_of_get_zone_by_index'; drivers/soc/qcom/qcom_aoss.o:qcom_aoss.c:(.text+0x5a4): first defined here
+   arm-linux-gnueabi-ld: drivers/hwmon/pwm-fan.o: in function `thermal_of_get_zone':
+   pwm-fan.c:(.text+0xa4): multiple definition of `thermal_of_get_zone'; drivers/soc/qcom/qcom_aoss.o:qcom_aoss.c:(.text+0x5ac): first defined here
+   arm-linux-gnueabi-ld: drivers/cpufreq/cpufreq.o: in function `thermal_of_get_zone_by_index':
+   cpufreq.c:(.text+0x1a7c): multiple definition of `thermal_of_get_zone_by_index'; drivers/soc/qcom/qcom_aoss.o:qcom_aoss.c:(.text+0x5a4): first defined here
+   arm-linux-gnueabi-ld: drivers/cpufreq/cpufreq.o: in function `thermal_of_get_zone':
+   cpufreq.c:(.text+0x1a84): multiple definition of `thermal_of_get_zone'; drivers/soc/qcom/qcom_aoss.o:qcom_aoss.c:(.text+0x5ac): first defined here
 
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZVTbkAAKCRB4tDGHoIJi
-0kPGAP4vCF3zOgWBTIduTnedLvxu7tAfmldsc4YY9a/LZhSwHgEAx41v6AmfunzY
-vAEB1T1BmgPRc8b0RFtCKVscJocGXwg=
-=GzLQ
------END PGP SIGNATURE-----
-
---onz20QwnE0RQyYcQ--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
