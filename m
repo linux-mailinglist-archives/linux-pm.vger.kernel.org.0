@@ -2,44 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 339CB7EB9A4
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Nov 2023 23:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A32347EBB05
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Nov 2023 02:52:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbjKNWxq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 14 Nov 2023 17:53:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35678 "EHLO
+        id S233990AbjKOBwu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Nov 2023 20:52:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjKNWxp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Nov 2023 17:53:45 -0500
-X-Greylist: delayed 1232 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Nov 2023 14:53:42 PST
-Received: from mail.jan.ne.jp (mail.jan.ne.jp [211.10.90.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D750FD0
-        for <linux-pm@vger.kernel.org>; Tue, 14 Nov 2023 14:53:42 -0800 (PST)
-Received: from www10.jan.ne.jp (www10.jan.ne.jp [211.10.90.141])
-        by mail.jan.ne.jp (Postfix) with SMTP id 4070419F579
-        for <linux-pm@vger.kernel.org>; Wed, 15 Nov 2023 07:27:44 +0900 (JST)
-Received: (qmail 16915 invoked from network); 15 Nov 2023 05:34:55 +0900
-Received: from unknown (HELO ?51.195.53.194?) (eiji.i@isono-body.co.jp@51.195.53.194)
-  by www10.jan.ne.jp with SMTP; 15 Nov 2023 05:34:55 +0900
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S229457AbjKOBwt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Nov 2023 20:52:49 -0500
+X-Greylist: delayed 61 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Nov 2023 17:52:46 PST
+Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF709D5
+        for <linux-pm@vger.kernel.org>; Tue, 14 Nov 2023 17:52:46 -0800 (PST)
+Received: from localhost (88-113-24-34.elisa-laajakaista.fi [88.113.24.34])
+        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+        id 8641ad29-8359-11ee-abf4-005056bdd08f;
+        Wed, 15 Nov 2023 03:51:42 +0200 (EET)
+From:   andy.shevchenko@gmail.com
+Date:   Wed, 15 Nov 2023 03:51:42 +0200
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Joy Chakraborty <joychakr@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, manugautam@google.com,
+        aniketmaurya@google.com
+Subject: Re: [RFC PATCH] PM: runtime: Apply pinctrl settings if defined
+Message-ID: <ZVQkLqDB3KtOlIpK@surfacebook.localdomain>
+References: <20231110102054.1393570-1-joychakr@google.com>
+ <CACRpkdZ9RHcHh4o5g62ywK0eQHpLZuGUF0Ud6jogk9Sfqe4krA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: my subject
-To:     Recipients <eiji.i@isono-body.co.jp>
-From:   "Ms Toni" <eiji.i@isono-body.co.jp>
-Date:   Tue, 14 Nov 2023 12:34:43 -0800
-Reply-To: tran24358@gmail.com
-Message-ID: <20231114203456.15767.qmail@www10.jan.ne.jp>
-X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACRpkdZ9RHcHh4o5g62ywK0eQHpLZuGUF0Ud6jogk9Sfqe4krA@mail.gmail.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-I'm Toni Harris and I'm looking for a partner to work with in your country. I need assistance investing funds in your country. Email me to discuss this opportunity with you. Contact email: tran24358@gmail.com
+Tue, Nov 14, 2023 at 02:01:48PM +0100, Linus Walleij kirjoitti:
+> On Fri, Nov 10, 2023 at 11:21 AM Joy Chakraborty <joychakr@google.com> wrote:
+> 
+> > Apply pinctrl state from  runtime framework device state transtion.
+> >
+> > Pinctrl states if defined in DT are bookmarked in device structures
+> > but they need to be explicitly applied from device driver callbacks
+> > which is boiler plate code and also not present in many drivers.
+> >
+> > If there is a specific order of setting pinctrl state with other driver
+> > actions then the device driver can choose to do it from its pm callbacks,
+> > in such a case this call will be a no-op from the pinctrl core framework
+> > since the desired pinctrl state would already be set.
+> >
+> > We could also add a Kconfig knob to enable/disable this, but I do not
+> > see a need to.
+
+Besides questionable code style (inline functions in the C file)...
+
+> It has a certain beauty to it does it not!
+> 
+> The reason it wasn't done like this from the start was, if I recall correctly,
+> that in some cases a device needs to do the pin control state switching
+> in a special sequence with other operations, that can not be reordered,
+> i.e.:
+> 
+> 1. The pin control state change is not context-free.
+> 
+> 2. The order of events, i.e. context, does not necessarily match the
+>      order that Linux subsystems happen to do things.
+> 
+> When looking through the kernel tree I don't see that people use
+> the sleep state and idle state much, so we could very well go
+> with this, and then expect people that need special-casing to name
+> their states differently.
+> 
+> What do people thing about that?
+
+...I think the patch is incomplete(?) due to misterious ways of PM runtime
+calls. For example, in some cases we force runtime PM during system suspend
+which may have an undesired effect of the switching pin control states
+(hence glitches or some real issues with the hardware, up to hanging the
+system). Some pins may be critical to work with and shuffling their states
+in an unappropriate time can lead to a disaster.
+
+So, I would consider this change okay if and only if it will have a detailed
+research for all existing users to prove there will be no changes in the whole
+set of possible scenarious (of system sleep / resume, runtime, runtime with a
+custom ->prepare callback and so on).
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
