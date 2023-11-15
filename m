@@ -2,107 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6DA7EC98F
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Nov 2023 18:21:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A94F7ED4F2
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Nov 2023 21:59:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbjKORVj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Nov 2023 12:21:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
+        id S1344891AbjKOU7j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Nov 2023 15:59:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjKORVi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Nov 2023 12:21:38 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B39BB;
-        Wed, 15 Nov 2023 09:21:35 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EE19C433C8;
-        Wed, 15 Nov 2023 17:21:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1700068894;
-        bh=keotLdJ3OuMV7zjvLmTI9+oSoIh1qPKq5R+BhIJz/Xo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=afIyOxIMiyp8+lnr8JqutH076LZNxhNF9sD6cDlr/guK4S7rriUT+XqpAkxBJSAVT
-         ygF2AHTiog+Z5dYurkwoU8w57GsFZbeFocixCiaStmrGZz9JliwdpDACMVywmiRwi8
-         gb6iwv3HYGzzrUulLHwoYFMo2R0+qYcWXt2p95lAlENDz2P0eGG3fCRCe6odYQXKDt
-         Q0cRdilOSuc6dW7HLNzT6e5HQQ8zt1VDeHkWbzWKc2tsS6xJ5Ye6+Ea+ijWCxu9Z7u
-         qfjJu6jGI2s3i54ZHkw6Uf/705yKjH21A74sXZ1hPdbktZxCZIWYuzAAoHbAsf64d6
-         4NXSLO3jPNlAQ==
-Date:   Wed, 15 Nov 2023 12:21:26 -0500
-From:   Wolfram Sang <wsa@kernel.org>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Len Brown <lenb@kernel.org>,
-        Todd E Brandt <todd.e.brandt@linux.intel.com>,
-        Xueqin Luo <luoxueqin@kylinos.cn>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH]  PM: tools: Fix sleepgraph syntax error
-Message-ID: <ZVT+Fq1yVZ9G8pqx@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>, Len Brown <lenb@kernel.org>,
-        Todd E Brandt <todd.e.brandt@linux.intel.com>,
-        Xueqin Luo <luoxueqin@kylinos.cn>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <a5f86bcf03b2ed809245d57f5971ae42a8b85128.camel@infradead.org>
+        with ESMTP id S1344922AbjKOU7U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Nov 2023 15:59:20 -0500
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47AAFBD;
+        Wed, 15 Nov 2023 12:58:44 -0800 (PST)
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6cd0a8bc6dcso43405a34.2;
+        Wed, 15 Nov 2023 12:58:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700081923; x=1700686723;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2DNw5hefDLTG0j4qbA4dW0wqpyWD+OlJB5Qqx3rsaXk=;
+        b=LtFWxHtCHE14MQVKqvU1+L/vfgEL+mUwv4SpXmumSlvC11781XSmtR6AEyq/oYA/YY
+         tf1rTuu4LJqbjuAQ2dsUHR3UPxppfIumTzPNLhI4esRlRkJ+YAHGn5f6PuW2QNnVpp1b
+         GR1SLKe3yTp5TQ4DAa7I3ZpTOSb3rF7CyWjfx2x/8hR2etDvtp3x282cl2tudvk8ksFa
+         2JKrveoMhYBCbKWyNSyeUd/qB0AyAetr9ID1lyXBQ41QdL2XRychwfo2U0AM/4JsBSRL
+         DJYJumL7Q8XkMIp+naiZGCCWgYjNzk1j1fCBhRX+ezo/Fp00LY8DYBCpqBDu6TSp6hLN
+         S7Vw==
+X-Gm-Message-State: AOJu0YwT291S7P6H2nCY1tCFkJNaRhaCSmOIhQ13ylvONS/RNkGW7EwB
+        9crnPo3dmgU/zszMxGz+FA==
+X-Google-Smtp-Source: AGHT+IGo6Yb7kPPy3PY7Ndx1XXPFo8iME5kmXwWIiLRanl+Wen5CAgy7ryBYlF7h8/a7/4RKzPQq9g==
+X-Received: by 2002:a9d:7648:0:b0:6b9:4d79:e08a with SMTP id o8-20020a9d7648000000b006b94d79e08amr7245073otl.32.1700081923514;
+        Wed, 15 Nov 2023 12:58:43 -0800 (PST)
+Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id a18-20020a056830101200b006cdf9935af2sm493131otp.53.2023.11.15.12.58.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Nov 2023 12:58:42 -0800 (PST)
+Received: (nullmailer pid 3732498 invoked by uid 1000);
+        Wed, 15 Nov 2023 20:58:41 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     zhanghongchen <zhanghongchen@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH] thermal: loongson2: Replace of_device.h with explicit includes
+Date:   Wed, 15 Nov 2023 14:58:28 -0600
+Message-ID: <20231115205828.3732207-1-robh@kernel.org>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pjjjDalug1el5NOW"
-Content-Disposition: inline
-In-Reply-To: <a5f86bcf03b2ed809245d57f5971ae42a8b85128.camel@infradead.org>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The DT of_device.h and of_platform.h date back to the separate
+of_platform_bus_type before it as merged into the regular platform bus.
+As part of that merge prepping Arm DT support 13 years ago, they
+"temporarily" include each other. They also include platform_device.h
+and of.h.
 
---pjjjDalug1el5NOW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+of_device.h isn't needed, but mod_devicetable.h and property.h were
+implicitly included.
 
-On Wed, Nov 15, 2023 at 11:47:51AM -0500, David Woodhouse wrote:
-> From: David Woodhouse <dwmw@amazon.co.uk>
->=20
-> The sleepgraph tool currently fails:
->=20
->   File "/usr/bin/sleepgraph", line 4155
->     or re.match('psci: CPU(?P<cpu>[0-9]*) killed.*', msg)):
->                                                          ^
-> SyntaxError: unmatched ')'
->=20
-> Fixes: 34ea427e01ea ("PM: tools: sleepgraph: Recognize "CPU killed" messa=
-ges")
-> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ drivers/thermal/loongson2_thermal.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Had the same issue:
+diff --git a/drivers/thermal/loongson2_thermal.c b/drivers/thermal/loongson2_thermal.c
+index 133098dc0854..644596f5e3bb 100644
+--- a/drivers/thermal/loongson2_thermal.c
++++ b/drivers/thermal/loongson2_thermal.c
+@@ -8,9 +8,10 @@
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/minmax.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
++#include <linux/property.h>
+ #include <linux/thermal.h>
+ #include <linux/units.h>
+ #include "thermal_hwmon.h"
+-- 
+2.42.0
 
-Reviewed-by: Wolfram Sang <wsa@kernel.org>
-
-
---pjjjDalug1el5NOW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmVU/hMACgkQFA3kzBSg
-Kbb7dw/9FDJNZjoZia5jzZPGExrXDVMCyniisbfjPnr9Ej7RcV+jsTm8Cypm9kl4
-Ifn531OBY2Ch7wsJiPNAfnde6p2mcnmy5Wzc9OgCHyzxSHJpX6OMs8QAEzfqpnRs
-AMA7UuDMiqQNIYeU/9VqvIyHPuSv9EZjPxu3vOmShNonjNiaNdQRYlb8CGeQMWCV
-LB46EjEu92DzJFwN9XZZZlutlIHZkIv9mBwznXBF7GodIUAPWnEHvIeoJXfZowgN
-VZgO2fzNRU7NKjBJ+kdi7oUAUl7TIYD/7JHfZP6yW9fJ+FV3wD3i5UioMGcxA2Qd
-WGAqf5I/NF38L4o86D9WIavnSdmPwhwODM3GC/+2DnddUV0xgSD1zHJ/yIkQsu7x
-sdZTkoCdpI8LZKXyfjEatG6uicwvOdF4DzDd0XaYYQgYdYoUCUkaFBq30mYsurr2
-3ahRtDpC3UPcd/tvq5n3AZIHnZhlAFixjMnMgVfIuQcZ0nqnEx3x26kJs4zveL/a
-Ub9AHlM40ixvktIXEHWFnFv4Rc/fgc51iThf7BW3mN3A/MrtL0j/gRfgXtHk9d8a
-fZhU96aAe4ADJr8cxqId3VzyNEpwFbmJgnRrCKJ0acVbZZCdUBMKYpF08hWnSicN
-gAVzoQipG5ePMzBe474jPxs7nVegJJnvlGzEA30fQhq/OFLAMqw=
-=2NWQ
------END PGP SIGNATURE-----
-
---pjjjDalug1el5NOW--
