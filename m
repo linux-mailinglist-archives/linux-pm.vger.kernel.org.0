@@ -2,104 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A32347EBB05
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Nov 2023 02:52:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 441897EBCC8
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Nov 2023 06:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233990AbjKOBwu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Nov 2023 20:52:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59984 "EHLO
+        id S234497AbjKOFcy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Nov 2023 00:32:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjKOBwt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Nov 2023 20:52:49 -0500
-X-Greylist: delayed 61 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Nov 2023 17:52:46 PST
-Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF709D5
-        for <linux-pm@vger.kernel.org>; Tue, 14 Nov 2023 17:52:46 -0800 (PST)
-Received: from localhost (88-113-24-34.elisa-laajakaista.fi [88.113.24.34])
-        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
-        id 8641ad29-8359-11ee-abf4-005056bdd08f;
-        Wed, 15 Nov 2023 03:51:42 +0200 (EET)
-From:   andy.shevchenko@gmail.com
-Date:   Wed, 15 Nov 2023 03:51:42 +0200
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Joy Chakraborty <joychakr@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        with ESMTP id S229600AbjKOFcx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Nov 2023 00:32:53 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C038D0
+        for <linux-pm@vger.kernel.org>; Tue, 14 Nov 2023 21:32:50 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1cc0d0a0355so49569685ad.3
+        for <linux-pm@vger.kernel.org>; Tue, 14 Nov 2023 21:32:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1700026370; x=1700631170; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wn0zR94MODGMnkK7iYRg3HxxZuO2tLtbCdWXHHLP9tA=;
+        b=xW6E0Qdpd+ltYldXhAWQZtbJnw9IAqXzju4v8AhVyD0mHVlRKVx3QUoyXeHAObx5BH
+         H6Leoqks9t7/vj/oUAcPLCX8+WZupd2j41gYOjUSRrAYrZkd+2hWWBj8/PROqERucpte
+         Z/s7RUM2pP4FhGSEoW2pS8JxXm+laYcRuwOuZyoshc+LCjXIcGeoyebQXkwaR0hOZ4mV
+         3nvceya59JyoA0vseXFHntUiGpmppfMEtPekzoSNVU5PGIkuqa8fptX+LCGvd9e5/2NX
+         JRgLg2++joAzlTHBDVjrgGdS9TpjMQ62Q5PWyAmjRb1R1fxrIw+ivwEdQ3wwuGhXAiZu
+         Gcmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700026370; x=1700631170;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wn0zR94MODGMnkK7iYRg3HxxZuO2tLtbCdWXHHLP9tA=;
+        b=KE1Fm8Qm1NzMCx1sipuRzjWsZO6nz0UABICmizHIRti3rSo/oJ00sbeGMH1tNQ1AlF
+         IRXU3eDHlj+AEgcJF/lpx5Q0dlt962XBTkvQOBItnEE8S3hxnNiyZs5WTyy72DX75BOm
+         SdLaZ7MY/+RyKpj8XLotGPDUoWqN750Z1iGo91PyrZRqcQCsJ349ZjWZ9MG4N3mm1Jvy
+         vUHJPOTTGO739PsSFQP7/lcq3/F4hB526SwC1a2bfAeKvgnOBPO4x9+zuWNhaNXErdV9
+         8EoZKnhXX2dqDSR7B0qYBiVkwDeEtBFTFIwXtixBLWvmSaxLM+d37HhfajKaF8l4uu0a
+         PYgA==
+X-Gm-Message-State: AOJu0YwZP+w7bsis/cBqu15ycwwIHylvS2oZDz/7GNt6cduRRJ3nTRRu
+        4A09o+w8lje35ClHzQw+Ht7jWg==
+X-Google-Smtp-Source: AGHT+IEFZaA4NAKfIV9zxh+7zPwUJ/gat7funlktQfai7iTSSU+VmcJXORoDZziDD5/nZaQpwYFSNg==
+X-Received: by 2002:a17:903:234b:b0:1cc:9781:4782 with SMTP id c11-20020a170903234b00b001cc97814782mr5616546plh.62.1700026369734;
+        Tue, 14 Nov 2023 21:32:49 -0800 (PST)
+Received: from localhost ([122.172.82.6])
+        by smtp.gmail.com with ESMTPSA id t18-20020a1709028c9200b001bdeedd8579sm6571007plo.252.2023.11.14.21.32.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Nov 2023 21:32:48 -0800 (PST)
+Date:   Wed, 15 Nov 2023 11:02:46 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Stephan Gerhold <stephan@gerhold.net>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, manugautam@google.com,
-        aniketmaurya@google.com
-Subject: Re: [RFC PATCH] PM: runtime: Apply pinctrl settings if defined
-Message-ID: <ZVQkLqDB3KtOlIpK@surfacebook.localdomain>
-References: <20231110102054.1393570-1-joychakr@google.com>
- <CACRpkdZ9RHcHh4o5g62ywK0eQHpLZuGUF0Ud6jogk9Sfqe4krA@mail.gmail.com>
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] OPP: Use _set_opp_level() for single genpd case
+Message-ID: <20231115053246.i5x4bdgtrjvoui2e@vireshk-i7>
+References: <f709e9e273004be43efe3a2854a7e7b51a777f99.1697710527.git.viresh.kumar@linaro.org>
+ <CAPDyKFqbnsdT0nqKwQhai875CwwpW_vepr816fL+i8yLh=YQhw@mail.gmail.com>
+ <20231025065458.z3klmhahrcqh6qyw@vireshk-i7>
+ <CAPDyKFr4vdsKVYEx0aF5k_a1bTjp3NzMpNgaXDJOJrvujT7iRg@mail.gmail.com>
+ <ZTkciw5AwufxQYnB@gerhold.net>
+ <CAPDyKFq+zsoeF-4h5TfT4Z+S46a501_pUq8y2c1x==Tt6EKBGA@mail.gmail.com>
+ <20231030102944.nrw4bta467zxes5c@vireshk-i7>
+ <CAPDyKFrn97POKuNc3cMM9TOaw-f-ufLwYtUY8_L2w8+hzECWOA@mail.gmail.com>
+ <20231106070830.7sd3ux3nvywpb54z@vireshk-i7>
+ <CAPDyKFpgPdMLR12ajYFasCjm-Y-ZyVVtQz3j1CZVWfN9T3Gg0w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACRpkdZ9RHcHh4o5g62ywK0eQHpLZuGUF0Ud6jogk9Sfqe4krA@mail.gmail.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAPDyKFpgPdMLR12ajYFasCjm-Y-ZyVVtQz3j1CZVWfN9T3Gg0w@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Tue, Nov 14, 2023 at 02:01:48PM +0100, Linus Walleij kirjoitti:
-> On Fri, Nov 10, 2023 at 11:21 AM Joy Chakraborty <joychakr@google.com> wrote:
+On 10-11-23, 14:50, Ulf Hansson wrote:
+> If this is only for required-opps and devices being hooked up to a PM
+> domain (genpd), my suggestion would be to keep avoiding doing the
+> propagation to required-opps-parents. For the similar reasons to why
+> we don't do it for clock/regulators, the propagation and aggregation,
+> seems to me, to belong better in genpd.
 > 
-> > Apply pinctrl state from  runtime framework device state transtion.
-> >
-> > Pinctrl states if defined in DT are bookmarked in device structures
-> > but they need to be explicitly applied from device driver callbacks
-> > which is boiler plate code and also not present in many drivers.
-> >
-> > If there is a specific order of setting pinctrl state with other driver
-> > actions then the device driver can choose to do it from its pm callbacks,
-> > in such a case this call will be a no-op from the pinctrl core framework
-> > since the desired pinctrl state would already be set.
-> >
-> > We could also add a Kconfig knob to enable/disable this, but I do not
-> > see a need to.
+> Did that make sense?
 
-Besides questionable code style (inline functions in the C file)...
-
-> It has a certain beauty to it does it not!
-> 
-> The reason it wasn't done like this from the start was, if I recall correctly,
-> that in some cases a device needs to do the pin control state switching
-> in a special sequence with other operations, that can not be reordered,
-> i.e.:
-> 
-> 1. The pin control state change is not context-free.
-> 
-> 2. The order of events, i.e. context, does not necessarily match the
->      order that Linux subsystems happen to do things.
-> 
-> When looking through the kernel tree I don't see that people use
-> the sleep state and idle state much, so we could very well go
-> with this, and then expect people that need special-casing to name
-> their states differently.
-> 
-> What do people thing about that?
-
-...I think the patch is incomplete(?) due to misterious ways of PM runtime
-calls. For example, in some cases we force runtime PM during system suspend
-which may have an undesired effect of the switching pin control states
-(hence glitches or some real issues with the hardware, up to hanging the
-system). Some pins may be critical to work with and shuffling their states
-in an unappropriate time can lead to a disaster.
-
-So, I would consider this change okay if and only if it will have a detailed
-research for all existing users to prove there will be no changes in the whole
-set of possible scenarious (of system sleep / resume, runtime, runtime with a
-custom ->prepare callback and so on).
+Hmm, it does. Let me see what I can do on this..
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+viresh
