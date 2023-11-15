@@ -2,98 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A94F7ED4F2
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Nov 2023 21:59:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DB707ED723
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Nov 2023 23:24:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344891AbjKOU7j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Nov 2023 15:59:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
+        id S234927AbjKOWYh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Nov 2023 17:24:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344922AbjKOU7U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Nov 2023 15:59:20 -0500
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47AAFBD;
-        Wed, 15 Nov 2023 12:58:44 -0800 (PST)
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6cd0a8bc6dcso43405a34.2;
-        Wed, 15 Nov 2023 12:58:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700081923; x=1700686723;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2DNw5hefDLTG0j4qbA4dW0wqpyWD+OlJB5Qqx3rsaXk=;
-        b=LtFWxHtCHE14MQVKqvU1+L/vfgEL+mUwv4SpXmumSlvC11781XSmtR6AEyq/oYA/YY
-         tf1rTuu4LJqbjuAQ2dsUHR3UPxppfIumTzPNLhI4esRlRkJ+YAHGn5f6PuW2QNnVpp1b
-         GR1SLKe3yTp5TQ4DAa7I3ZpTOSb3rF7CyWjfx2x/8hR2etDvtp3x282cl2tudvk8ksFa
-         2JKrveoMhYBCbKWyNSyeUd/qB0AyAetr9ID1lyXBQ41QdL2XRychwfo2U0AM/4JsBSRL
-         DJYJumL7Q8XkMIp+naiZGCCWgYjNzk1j1fCBhRX+ezo/Fp00LY8DYBCpqBDu6TSp6hLN
-         S7Vw==
-X-Gm-Message-State: AOJu0YwT291S7P6H2nCY1tCFkJNaRhaCSmOIhQ13ylvONS/RNkGW7EwB
-        9crnPo3dmgU/zszMxGz+FA==
-X-Google-Smtp-Source: AGHT+IGo6Yb7kPPy3PY7Ndx1XXPFo8iME5kmXwWIiLRanl+Wen5CAgy7ryBYlF7h8/a7/4RKzPQq9g==
-X-Received: by 2002:a9d:7648:0:b0:6b9:4d79:e08a with SMTP id o8-20020a9d7648000000b006b94d79e08amr7245073otl.32.1700081923514;
-        Wed, 15 Nov 2023 12:58:43 -0800 (PST)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id a18-20020a056830101200b006cdf9935af2sm493131otp.53.2023.11.15.12.58.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Nov 2023 12:58:42 -0800 (PST)
-Received: (nullmailer pid 3732498 invoked by uid 1000);
-        Wed, 15 Nov 2023 20:58:41 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH] thermal: loongson2: Replace of_device.h with explicit includes
-Date:   Wed, 15 Nov 2023 14:58:28 -0600
-Message-ID: <20231115205828.3732207-1-robh@kernel.org>
-X-Mailer: git-send-email 2.42.0
+        with ESMTP id S229912AbjKOWYg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Nov 2023 17:24:36 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07531A8;
+        Wed, 15 Nov 2023 14:24:32 -0800 (PST)
+Received: from mercury (cola.collaboradmins.com [195.201.22.229])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3A04C660731B;
+        Wed, 15 Nov 2023 22:24:31 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1700087071;
+        bh=WdfO82We6xf1GigqFgRt6NA0I8OKWnoJqDezVvwjbnA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G7xDrnHdTlOLbBCoI6tMeK19bQ1k/9Nd3iqyWwOTNOq/5siEqtshuWOJ7ZBH1IQsj
+         Nf8OwmAiI1MbzsES5J6GLsyJB8vx69MDpRSNGqI3/tZFTqybanba6Jk1Pp8OEDzOKD
+         qdOSD4OLQ/ljn6IT0QpCbGGUYiIXRrWEKcsZSvOjXoDQ0mlcWIoLwfp59U/awBRhGV
+         K+XkANefsvqPyemWWzYjnK/X1NltGwwMXgVyLbPnxq8xGUm5QGBlEY3jb4nOXV1u4n
+         ag/QAemxr1/uGQ08PNi00dYhbT6s8FwlXuTit0QtJruWx9rJblhYuBLyo3uOADNf5M
+         cLpoN3b1wdALg==
+Received: by mercury (Postfix, from userid 1000)
+        id 7F2A61062B52; Wed, 15 Nov 2023 23:24:28 +0100 (CET)
+Date:   Wed, 15 Nov 2023 23:24:28 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Nikita Kiryushin <kiryushin@ancud.ru>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Pramod Gurav <pramod.gurav@smartplayin.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: Re: [PATCH] power: reset: msm: Process register_restart_handler()
+ error
+Message-ID: <20231115222428.rhykr6e5koyzsyw6@mercury.elektranox.org>
+References: <feeb1a89-59bd-4fd6-81a5-1d828f95b0f0@ancud.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6ouri3jfeknszkjz"
+Content-Disposition: inline
+In-Reply-To: <feeb1a89-59bd-4fd6-81a5-1d828f95b0f0@ancud.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The DT of_device.h and of_platform.h date back to the separate
-of_platform_bus_type before it as merged into the regular platform bus.
-As part of that merge prepping Arm DT support 13 years ago, they
-"temporarily" include each other. They also include platform_device.h
-and of.h.
 
-of_device.h isn't needed, but mod_devicetable.h and property.h were
-implicitly included.
+--6ouri3jfeknszkjz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- drivers/thermal/loongson2_thermal.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Hi,
 
-diff --git a/drivers/thermal/loongson2_thermal.c b/drivers/thermal/loongson2_thermal.c
-index 133098dc0854..644596f5e3bb 100644
---- a/drivers/thermal/loongson2_thermal.c
-+++ b/drivers/thermal/loongson2_thermal.c
-@@ -8,9 +8,10 @@
- #include <linux/interrupt.h>
- #include <linux/io.h>
- #include <linux/minmax.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
--#include <linux/of_device.h>
- #include <linux/platform_device.h>
-+#include <linux/property.h>
- #include <linux/thermal.h>
- #include <linux/units.h>
- #include "thermal_hwmon.h"
--- 
-2.42.0
+On Wed, Nov 08, 2023 at 08:27:57PM +0300, Nikita Kiryushin wrote:
+> If registering restart handler fails for msm-restart result is not checke=
+d.
+> It may be irrelevant now (as stated in comment to register_restart_handle=
+r,
+> the function currently always returns zero), but if the behavior changes
+> in the future, an error at registration of handler will be silently skipp=
+ed.
+>=20
+> Add return error code and print error message too debug log in case of
+> non-zero result of register_restart_handler.
+>=20
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>=20
+> Fixes: 18a702e0de98 ("power: reset: use restart_notifier mechanism for
+> msm-poweroff")
+>=20
+> Signed-off-by: Nikita Kiryushin <kiryushin@ancud.ru>
+> ---
 
+If register_restart_handler fails, it might actually be a good idea
+to continue and at least have a poweroff handler :)
+
+>  drivers/power/reset/msm-poweroff.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/reset/msm-poweroff.c
+> b/drivers/power/reset/msm-poweroff.c
+> index b9a401bd280b..5877a1ba2778 100644
+> --- a/drivers/power/reset/msm-poweroff.c
+> +++ b/drivers/power/reset/msm-poweroff.c
+> @@ -35,11 +35,16 @@ static void do_msm_poweroff(void)
+>   static int msm_restart_probe(struct platform_device *pdev)
+>  {
+> +	int ret =3D -EINVAL;
+
+no need to initialize, it's overwritten before being used.
+
+>  	msm_ps_hold =3D devm_platform_ioremap_resource(pdev, 0);
+>  	if (IS_ERR(msm_ps_hold))
+>  		return PTR_ERR(msm_ps_hold);
+>  -	register_restart_handler(&restart_nb);
+> +	ret =3D register_restart_handler(&restart_nb);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "unable to register restart handler, %d\n", ret);
+> +		return ret;
+
+There is dev_err_probe() for this, but as mentioned above it's more
+sensible not to fail here.
+
+-- Sebastian
+
+> +	}
+>   	pm_power_off =3D do_msm_poweroff;
+>  -- 2.34.1
+>=20
+
+--6ouri3jfeknszkjz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmVVRRgACgkQ2O7X88g7
++pqI/Q//UzlIPHOkLnn8rNBgiRTj+0aHo5M12V75qJoce+s1EPhX1T7XNgtOfZCl
+EYzgc+RgHOI+YpvPM/X07RO8LNubyvjdEBZJdG6LXua5dpxyi0FOhFYM0GJeHH2f
+uP7UP6T0sJeNB3tv2Gy6HzouIcItS1IKJoGiGRHOuyPTR5cojCFbN/hG1TOFNRyp
+gK8mSpeGNVzJtDfAfZgZ7X0gZAKj8tOSemHg397RTOMlMZhdu0aRt7Xx3zryn5SO
+C2QYZjCf5SJ6EFlaoL5aifqBNejppko8rLzRukmh4itKPF7FD20paPUkE5Trr2Ka
+E1IHJ2v02iDqTyMH/tc+lzoQVwq7IVtGWDBGxhtzbMN37ezncEDSL1+xgOwOPo00
+3eq5pHujH0L8kYkZx5Fy9I6AyHiao3GlqC/HRtJF+QqTHMRgtjtI0cJgVVF3P2zE
+vuNpRJ6gh0ekLg5TwnAG/dhM/mh8cA9B1k3CCCiDAlmWMXrYh3iMk76Hxu/MQXb7
+ZVNgHA4qSbqOGxDJyivHHGLw2EEdDQj+EDtJLzzStc7MnNrH1L1/ASjbspN3gQsr
+T2AB7k9p0uaOpGgZhNCRM6y0nI+ecHkxpQUd6kgggGpWdoys4S0VaeJVp6iewEZL
+JGxHgV4/w4zSzNgQqQo8vPrGjVDQFWX83vj0zyD7FbtHaq0wYxg=
+=sYCK
+-----END PGP SIGNATURE-----
+
+--6ouri3jfeknszkjz--
