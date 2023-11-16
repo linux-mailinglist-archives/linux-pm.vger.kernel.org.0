@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 022E17EE303
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Nov 2023 15:38:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B627EE30B
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Nov 2023 15:39:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbjKPOim (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Nov 2023 09:38:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52740 "EHLO
+        id S234934AbjKPOju (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Nov 2023 09:39:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233558AbjKPOil (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Nov 2023 09:38:41 -0500
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80234181
-        for <linux-pm@vger.kernel.org>; Thu, 16 Nov 2023 06:38:37 -0800 (PST)
-Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-778927f2dd3so43960685a.2
-        for <linux-pm@vger.kernel.org>; Thu, 16 Nov 2023 06:38:37 -0800 (PST)
+        with ESMTP id S232592AbjKPOjt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Nov 2023 09:39:49 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A0AD4D
+        for <linux-pm@vger.kernel.org>; Thu, 16 Nov 2023 06:39:46 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-77896da2118so50606085a.1
+        for <linux-pm@vger.kernel.org>; Thu, 16 Nov 2023 06:39:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700145516; x=1700750316; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1700145585; x=1700750385; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Bm2RzTQJq4kxmpZeDLnmc54Iix97y+OC5pYL0ktassI=;
-        b=jfqXiIRrRwbo5mtPxbSRl9YD+U3aeRkI7Y407NV3O5EGOjQM80/n+k4cTFj0ECfRq2
-         vpDfKGmsuVdn6BQsq9r1kO8IQqUY4kiazlvUzdn52i+dlZXjmy2iXmnvLimxKMGInCCg
-         +tcFr2WokK39nQGIbZmGiMjnCSTxB4n2L62f5CgRX0DNJYrDEELI+EXSD1hxuLNZirB1
-         vGw8PppYx88FGzGdachPQM58JAtavm2lhogEHneC7qutSavA/TTfj8CvDP/CIxCFE+cX
-         L52GPJ07sFOXRMRcFrc4skkL8rXkS3QjMCLMetOf1cI7SxBvgA05FFiGoFK+Gly46TqY
-         +cqg==
+        bh=G8x9m07rVl5SKHa83K+oZHoiEsMEscf7mSS9P25vw08=;
+        b=gDKZr70CwPzAkTfDOAm0uR3Edep0GZyZ5LG83ca+QR5WmLmcqCbfgb1u081JDBS7zw
+         mVRAi+zZQYgV9pmjNSG/aNpuWGDPUBjumjBYUcBWywe5l5bGrOOaBjx2dXh+VDMBGY7m
+         cjmpP+QV9EPRwBtmP0fxOI0VlHc0Qzbjga1UUQRiRoetQde/jYzpF6XSXwRi577BIA9F
+         fKRGaFQZBZ6kB5AA+clf7lYwk6f6+pPTUWCR9Xw+LTkSmmF+8x9FLWb/p2HFeWB7gb3X
+         X4P4mFNz3gxx6run8p2KKv69Bx+9FyFKjnaIumwQXM5qpubnp8NGNDgzuzfGXCf+e6Mz
+         E4jQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700145516; x=1700750316;
+        d=1e100.net; s=20230601; t=1700145585; x=1700750385;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bm2RzTQJq4kxmpZeDLnmc54Iix97y+OC5pYL0ktassI=;
-        b=Ig1E4vfuMnqdtFMw+maQwaC/BV8e12lMbldDLvZ2k98m2JmhVnM/Eq1Xm1VOozjZ1+
-         mJ9QGhbjR9nC+M/93VkgXpuLUYS7hnVpzJGr5CXtXDJdmUqfD+bqtFUItluT9ru2uDfs
-         PezkUbaxjrMNuUN8ysBnl3tGgwNEp7KeudKf6p1FeUhl35S9knz5LH22bz2hTo5yAMYE
-         ZEensTuChg9VzGN722cZajjpm5xraGUW1tmNEYL4wCfxoryW5FAAZapGXzK/EEx8uMJF
-         wYbXDd/o3WoVcq5kCLHw3d8jmrWy6p40qIeR6un0XwHezchcrXLnm7XXVojOsrPUUqEp
-         s32Q==
-X-Gm-Message-State: AOJu0Yyhvluujf9oVfbFBLPzl8vZHrk7XaiINaT59sHyQXZSdx9WnIPr
-        KMOJZNCCe8sDOLuvRgHzANCD1A==
-X-Google-Smtp-Source: AGHT+IHkfG2EtNEBccfsPbZQdfjg2kps5NLHZmzHvHHDc5M3LjUWwk8uRM9kdxfTEIesGr2NPAVyCA==
-X-Received: by 2002:a05:620a:3721:b0:76f:17ad:3c83 with SMTP id de33-20020a05620a372100b0076f17ad3c83mr9663931qkb.47.1700145516633;
-        Thu, 16 Nov 2023 06:38:36 -0800 (PST)
+        bh=G8x9m07rVl5SKHa83K+oZHoiEsMEscf7mSS9P25vw08=;
+        b=sJIML+nFarljvp1rG6ryQ4LiIqBg3vph1OvmF12SEbd9rn3cRNPdhZwFD55bgHGnVL
+         DQPC3UN14/vgpGbnMCg0QGgjZa3UqsbrhWwxii/edRgqra1+kk6A+pdBN0ygwL90Od5i
+         3murxa4VwzOMb/M4YuQWSjqy7DM3j/D9LA3uXQqRYgDWSHEGBtaePBhNzSVBq1nLSYui
+         Y5zF0DOqraVRm/1Zjf7/eyFu1ZEqIGlqHU+7qlD1gCKuaqCZ1wiP/rBFtO5A+sDhxS/O
+         kbTwM8z7lM2Je/GPKz/BKHrVnmimKI4sDAP+NjZ0gg5bjwtbzqw/UnUY3Iz4ds5nCU0f
+         MVtA==
+X-Gm-Message-State: AOJu0YyqrSt6sZzW82k0nzKnc4H5PX9eNCtRtmuHGsKnfUsQL90Y6RYC
+        3aH3YbydEcO1ckuDuQbu5P87Mw==
+X-Google-Smtp-Source: AGHT+IFd/fNrxur5uy0bROGLYTvuKPpMTKJCcd+sXxDxk9JzDfOWbYDgDBtcAUR+Qk2qnVNRzYpndA==
+X-Received: by 2002:a05:620a:c42:b0:775:d7d7:cdbb with SMTP id u2-20020a05620a0c4200b00775d7d7cdbbmr9762689qki.38.1700145585327;
+        Thu, 16 Nov 2023 06:39:45 -0800 (PST)
 Received: from [10.50.4.74] ([50.201.115.146])
-        by smtp.gmail.com with ESMTPSA id m11-20020a05620a290b00b007743382121esm4315994qkp.84.2023.11.16.06.38.35
+        by smtp.gmail.com with ESMTPSA id m11-20020a05620a290b00b007743382121esm4315994qkp.84.2023.11.16.06.39.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Nov 2023 06:38:36 -0800 (PST)
-Message-ID: <b475d496-c97b-4178-9cdb-6f7d640e9877@linaro.org>
-Date:   Thu, 16 Nov 2023 15:38:35 +0100
+        Thu, 16 Nov 2023 06:39:45 -0800 (PST)
+Message-ID: <b9290a88-f52a-4880-bf14-2b7f64762498@linaro.org>
+Date:   Thu, 16 Nov 2023 15:39:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: thermal: convert Mediatek Thermal to the
+Subject: Re: [PATCH V2] dt-bindings: thermal: convert Mediatek Thermal to the
  json-schema
 Content-Language: en-US
 To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
@@ -66,12 +66,13 @@ To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
 Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org,
         =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20231116120225.29999-1-zajec5@gmail.com>
+References: <20231116131316.5897-1-zajec5@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -117,11 +118,11 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231116120225.29999-1-zajec5@gmail.com>
+In-Reply-To: <20231116131316.5897-1-zajec5@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -130,81 +131,18 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/11/2023 13:02, Rafał Miłecki wrote:
+On 16/11/2023 14:13, Rafał Miłecki wrote:
 > From: Rafał Miłecki <rafal@milecki.pl>
 > 
 > This helps validating DTS files.
 > 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> ---
 
-...
+Please implement all my comments from previous version.
 
-mal.yaml b/Documentation/devicetree/bindings/thermal/mediatek-thermal.yaml
-> new file mode 100644
-> index 000000000000..0e036b22b82b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/mediatek-thermal.yaml
-
-mediatek,thermal.yaml
-
-> @@ -0,0 +1,98 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/mediatek-thermal.yaml#
-
-mediatek,thermal.yaml
-
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Mediatek Thermal
-
-SoC? PMIC?
-
-> +
-> +description: >
-
-Drop >
-
-> +  This describes the device tree binding for the Mediatek thermal controller
-
-Drop redundant part. Describe hardware, not the binding. There is no
-point to say that a binding describes a binding.
-
-> +  which measures the on-SoC temperatures. This device does not have its own ADC,
-> +  instead it directly controls the AUXADC via AHB bus accesses. For this reason
-> +  this device needs phandles to the AUXADC. Also it controls a mux in the
-> +  apmixedsys register space via AHB bus accesses, so a phandle to the APMIXEDSYS
-> +  is also needed.
-> +
-> +allOf:
-
-...
-
-> +  mediatek,auxadc:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: A phandle to the AUXADC which the thermal controller uses
-> +
-> +  mediatek,apmixedsys:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: A phandle to the APMIXEDSYS controller
-> +
-> +  resets: Reference to the reset controller controlling the thermal controller.
-> +
-
-Not tested. You miss constraints. Drop totally redundant description.
-
-> +
-> +unevaluatedProperties: false
-> +
-> +required:
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - mediatek,auxadc
-> +  - mediatek,apmixedsys
-
-unevaluatedProperties go here.
+Also, one patch per day, so you get testing (since you do no test) and
+also allow people to actually do review.
 
 Best regards,
 Krzysztof
