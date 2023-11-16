@@ -2,99 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C607EE167
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Nov 2023 14:19:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E42B7EE181
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Nov 2023 14:26:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345007AbjKPNTL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Nov 2023 08:19:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48844 "EHLO
+        id S231130AbjKPN0j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Nov 2023 08:26:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbjKPNTI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Nov 2023 08:19:08 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D78C81A5;
-        Thu, 16 Nov 2023 05:19:05 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AA3591595;
-        Thu, 16 Nov 2023 05:19:51 -0800 (PST)
-Received: from [10.57.3.57] (unknown [10.57.3.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CCA963F73F;
-        Thu, 16 Nov 2023 05:19:02 -0800 (PST)
-Message-ID: <90c9d5b5-fbb1-437d-a961-efd0da61d6f7@arm.com>
-Date:   Thu, 16 Nov 2023 13:19:59 +0000
+        with ESMTP id S230348AbjKPN0i (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Nov 2023 08:26:38 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BCD1A5;
+        Thu, 16 Nov 2023 05:26:31 -0800 (PST)
+X-UUID: bec66c48848311ee8051498923ad61e6-20231116
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=y1Rm5jlVn5t0id/m/TPD/9lVjA4G13LLAk8j5q37gsw=;
+        b=qwo0KZcqGzBreHoIaewzH3LX/RwJRuN7riv7yL2UvJlJGkEVTqgywAjt1GT2lySvGo+wb9VRVAJDA2MH0HeUFdpPm9FT0Sj+Q6hDe0wgdGsZWvhULoWAc/VgicTRrdOuYULJjC7KIDoknWs/hSOv/+vXAIBLL2eyB1h0NYnjrAQ=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.33,REQID:04cc521c-c76a-4815-a28f-b6e785132362,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:364b77b,CLOUDID:6d8c2360-c89d-4129-91cb-8ebfae4653fc,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
+        NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_ULN,TF_CID_SPAM_SNR
+X-UUID: bec66c48848311ee8051498923ad61e6-20231116
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+        (envelope-from <bo.ye@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 413711698; Thu, 16 Nov 2023 21:26:27 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 16 Nov 2023 21:26:25 +0800
+Received: from mcddlt001.gcn.mediatek.inc (10.19.240.15) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Thu, 16 Nov 2023 21:26:24 +0800
+From:   Bo Ye <bo.ye@mediatek.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     <yongdong.zhang@mediatek.com>, mtk24676 <C.Cheng@mediatek.com>,
+        "bo . ye" <bo.ye@mediatek.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH] cpuidle: idle exit_latency overflow
+Date:   Thu, 16 Nov 2023 21:26:19 +0800
+Message-ID: <20231116132619.69500-1-bo.ye@mediatek.com>
+X-Mailer: git-send-email 2.17.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] sched/schedutil: Rework performance estimation
-Content-Language: en-US
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     wyes.karny@amd.com, beata.michalska@arm.com, juri.lelli@redhat.com,
-        mingo@redhat.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, viresh.kumar@linaro.org,
-        rafael@kernel.org, vschneid@redhat.com, bristot@redhat.com,
-        mgorman@suse.de, bsegall@google.com, rostedt@goodmis.org,
-        dietmar.eggemann@arm.com, peterz@infradead.org, qyousef@layalina.io
-References: <20231103131821.1176294-1-vincent.guittot@linaro.org>
- <20231103131821.1176294-2-vincent.guittot@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20231103131821.1176294-2-vincent.guittot@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-AS-Result: No-10--2.336600-8.000000
+X-TMASE-MatchedRID: q6Mcoqip180V3w3L8QuNEG3NvezwBrVmgRykyfrH1xlaW2Ktn+I8/hjt
+        AEYMnZ1a+a6+c8HVVTTkY5jnILkv8QfOsX0b+fZzA9lly13c/gF9LQinZ4QefPcjNeVeWlqY+gt
+        Hj7OwNO2mZ396Gt5HhbRDDFNIh3eVt7VBaHOUXTmiHbKhgq+wjecLkJ18YygSpmkWtXcgBB8O5f
+        DUOrhTJDcG0AuzN2tmcPptgJdP32/rxtqtWRjZinZrUbEZipAEiWT09mQz7szw9kH8zAy44aOuV
+        Lnx3A74
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--2.336600-8.000000
+X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-SNTS-SMTP: 4E0647C9374209A165167659E1BEC95B48EA7C03306E9BBFA04062C7CE3E4B892000:8
+X-MTK:  N
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RDNS_NONE,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Vincent,
+From: mtk24676 <C.Cheng@mediatek.com>
 
-On 11/3/23 13:18, Vincent Guittot wrote:
-> The current method to take into account uclamp hints when estimating the
-> target frequency can end into situation where the selected target
-> frequency is finally higher than uclamp hints whereas there are no real
-> needs. Such cases mainly happen because we are currently mixing the
-> traditional scheduler utilization signal with the uclamp performance
-> hints. By adding these 2 metrics, we loose an important information when
-> it comes to select the target frequency and we have to make some
-> assumptions which can't fit all cases.
-> 
-> Rework the interface between the scheduler and schedutil governor in order
-> to propagate all information down to the cpufreq governor.
-> 
-> effective_cpu_util() interface changes and now returns the actual
-> utilization of the CPU with 2 optional inputs:
-> - The minimum performance for this CPU; typically the capacity to handle
->    the deadline task and the interrupt pressure. But also uclamp_min
->    request when available.
-> - The maximum targeting performance for this CPU which reflects the
->    maximum level that we would like to not exceed. By default it will be
->    the CPU capacity but can be reduced because of some performance hints
->    set with uclamp. The value can be lower than actual utilization and/or
->    min performance level.
-> 
-> A new sugov_effective_cpu_perf() interface is also available to compute
-> the final performance level that is targeted for the CPU after applying
-> some cpufreq headroom and taking into account all inputs.
-> 
-> With these 2 functions, schedutil is now able to decide when it must go
-> above uclamp hints. It now also have a generic way to get the min
-> perfromance level.
-> 
-> The dependency between energy model and cpufreq governor and its headroom
-> policy doesn't exist anymore.
-> 
-> eenv_pd_max_util asks schedutil for the targeted performance after
-> applying the impact of the waking task.
-> 
-> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+In detail:
+In kernel-6.1, in the __cpuidle_driver_init function in
+driver/cpuidle/driver.c, there is a line of code that causes
+an overflow. The line is s->exit_latency_ns = s->exit_latency
+* NSEC_PER_USEC. The overflow occurs because the product of an
+int type and a constant exceeds the range of the int type.
 
-Just in case you are waiting for me. The patch should be OK as
-you explained to me in v2. I'm not able to test it right now
-on my pixel6 downstream-tracking-mainline kernel, so please
-go forward not waiting for me. (the pixel6 is the only platform
-that I have now which is normally using the uclamp).
+In C language, when you perform a multiplication operation, if
+both operands are of int type, the multiplication operation is
+performed on the int type, and then the result is converted to
+the target type. This means that if the product of int type
+multiplication exceeds the range that int type can represent,
+an overflow will occur even if you store the result in a
+variable of int64_t type.
 
-Regards,
-Lukasz
+Signed-off-by: mtk24676 <C.Cheng@mediatek.com>
+Signed-off-by: bo.ye <bo.ye@mediatek.com>
+---
+
+diff --git a/drivers/cpuidle/driver.c b/drivers/cpuidle/driver.c
+index d9cda7f..631ca16 100644
+--- a/drivers/cpuidle/driver.c
++++ b/drivers/cpuidle/driver.c
+@@ -187,7 +187,7 @@
+ 			s->target_residency = div_u64(s->target_residency_ns, NSEC_PER_USEC);
+ 
+ 		if (s->exit_latency > 0)
+-			s->exit_latency_ns = s->exit_latency * NSEC_PER_USEC;
++			s->exit_latency_ns = (u64)s->exit_latency * NSEC_PER_USEC;
+ 		else if (s->exit_latency_ns < 0)
+ 			s->exit_latency_ns =  0;
+ 		else
