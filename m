@@ -2,67 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 164B17EDEAF
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Nov 2023 11:43:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9137A7EDEB1
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Nov 2023 11:43:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235610AbjKPKn0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Nov 2023 05:43:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
+        id S235700AbjKPKn3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Nov 2023 05:43:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235234AbjKPKnW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Nov 2023 05:43:22 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598D9D1
-        for <linux-pm@vger.kernel.org>; Thu, 16 Nov 2023 02:43:19 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1cc394f4cdfso5967415ad.0
-        for <linux-pm@vger.kernel.org>; Thu, 16 Nov 2023 02:43:19 -0800 (PST)
+        with ESMTP id S1345027AbjKPKn2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Nov 2023 05:43:28 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A561B2
+        for <linux-pm@vger.kernel.org>; Thu, 16 Nov 2023 02:43:22 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1ce28faa92dso5884265ad.2
+        for <linux-pm@vger.kernel.org>; Thu, 16 Nov 2023 02:43:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700131399; x=1700736199; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1700131402; x=1700736202; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UtC8Hkqp39VdOkkGa+oSqv3EzGyQo+AktZrizfGIeEc=;
-        b=k+3Uj5GrEcIGlGmv8swGd0kfO07hKdSpoSlw9c2SPvFG8dyQk7KwzOwskhER+nqO40
-         a/2Z31pnBGnTnRLhOlDghU3BqpRDl+hsRPZbWjfnqL+/c5j/J23bqKGjMqoyM2LNLzOf
-         dWJxINBKVGqmeATjsNVVAZPFEhcKY5bmX/Nrh8u/rhvtIH8acMnzdkvrMZGom95JKQvn
-         mR4cqpuFCSIu6ATuaeHXCiAU5tBp2MS9GjBTMcHTOg4uRNAMqT/vx1eDbqEc1Ax5wKWk
-         ZzuqdmcfnPLwQ5fIfJY/fWVKnm8SNYxIvxgK9R5VS35mnALb5NGc5ABySLsodAAY2tQX
-         F6gA==
+        bh=N9BTLIceKJGW92qKd3ko8bGti/Wwlg3EknEGU5HzzG8=;
+        b=ZJdA3UgW5qM31WGwmfS1N/ABXivzwRJRqCX+fe4VMpMFl1ry7xUqZ3ayZYfP9sEkVC
+         jZTBaWsv1BHzyvhF7hiYJq7yFGuEISL0B8y0Xtum0ZiKSWY5AZfcrHJd7q/NQsz9lN6i
+         qVPfggn8RcDxUdnmiYzG18sNBtszsx9Yye0V5aipji/Fymz1AWbvrB/WBlu1HPxHR6Ve
+         nlcndLc/N7VAerxN810GNAlVdVKM7EOiP6skZSj5CkNt7DtwJw4QjKeH+1LnFL0pywd8
+         M0D9sxHdbFPbv6QmE2YiEozgEaSwPMSknUG9aF/L00F9nB6ckDj2gFr1GOoYefs14GfB
+         0y1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700131399; x=1700736199;
+        d=1e100.net; s=20230601; t=1700131402; x=1700736202;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UtC8Hkqp39VdOkkGa+oSqv3EzGyQo+AktZrizfGIeEc=;
-        b=e/bXTG74D0V+Z2OrJB6yv/KDbXG5VbTsqdfz0HQxyRI/66/Zk3Xfnb94fyFYFLvOjb
-         Al53Ol0M8cy66QjBi81Kq93t8QTyN+LGbg/d2JOJr64AdhTDJHTOizWHirhTkDsRWEWd
-         6dK/US2SL3ujsAGpg9M8m9qM6PMfD7KVsAoTKyH6MfHMK09y7VYtQ823S1Mh/Qwwbiqa
-         XXCrJ4T2+iIukVtRcFW8KWxTwXvFR5kDLyKbOmgIscwJM3r+hRQE7IWLAyv4guwCXKaE
-         SkpgBJHQWzrMSjB7XWlbUahpxEEf4jZlhQzy7t5/8tP9J5ETF9Q9PUuRkpEZFHj9ONgH
-         +Naw==
-X-Gm-Message-State: AOJu0YzHx/BZjPEYcvOmADYNnTI57ZzB/M6CGprmBEOifYZhDRh+z4kF
-        RMFx2byzrz84EvfmZkMPMDyLLA==
-X-Google-Smtp-Source: AGHT+IF+lLCjAJlkXERdKhnkQRcLuiOMhIXIZ8Un4tFtKHyyQLgswdzWIFtSbmdHtKcVwWQaySXPZA==
-X-Received: by 2002:a17:902:ce86:b0:1b5:561a:5ca9 with SMTP id f6-20020a170902ce8600b001b5561a5ca9mr9977070plg.50.1700131398716;
-        Thu, 16 Nov 2023 02:43:18 -0800 (PST)
+        bh=N9BTLIceKJGW92qKd3ko8bGti/Wwlg3EknEGU5HzzG8=;
+        b=oAmzkALcxGbu9QfQ8DLIJQemgUh9Z8r7DbeOX+ioiurVN0I/bHNMauQhCIM3s3dim/
+         4G/vqulgsNcPiQ8f7UAT0hAgaQzlNYMBNkSulJQrQkNhrNnUnC8slMOz6Kaaqm1Gftp4
+         MXRoGtLLPquWrIKBWitpxapfoZLr6A98q1kM9fVZZ3Bz+JZGeWDGB0xvSdkqKMxiitTm
+         BlAXwR1DbOrr6RESa/tBh0EVHP3+Q2l51ChI4Kyht6y6+tUCwCYorBpYmp4MJcn+bmzv
+         CLyluj4mzCiKLNno0crjWrPBAv55uASVz10Ad/T8voE+jKwsrQEd14Jy1LFhatHSHxTg
+         94fg==
+X-Gm-Message-State: AOJu0Yxq5M1TggwVN4G2JLDotOYostnwaEt2NpKssxqN3f2L/UndJIGC
+        cbpjq+cbUz6fLB/SMvauVH2oMQ==
+X-Google-Smtp-Source: AGHT+IH1j0bxjDkRH01TYL8RmeGGUObFnJhKV7GL8eCxgG0N5Mc9E0g5N/jXAb/814C9ibjPgPqeJQ==
+X-Received: by 2002:a17:902:dace:b0:1bb:6875:5a73 with SMTP id q14-20020a170902dace00b001bb68755a73mr9742084plx.2.1700131402233;
+        Thu, 16 Nov 2023 02:43:22 -0800 (PST)
 Received: from localhost ([122.172.82.6])
-        by smtp.gmail.com with ESMTPSA id n2-20020a1709026a8200b001c44dbc92a2sm8859446plk.184.2023.11.16.02.43.17
+        by smtp.gmail.com with ESMTPSA id u10-20020a170903124a00b001c9c879ee4asm8906686plh.17.2023.11.16.02.43.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Nov 2023 02:43:18 -0800 (PST)
+        Thu, 16 Nov 2023 02:43:21 -0800 (PST)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Ulf Hansson <ulf.hansson@linaro.org>,
         Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
         Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V3 1/3] OPP: Use _set_opp_level() for single genpd case
-Date:   Thu, 16 Nov 2023 16:13:05 +0530
-Message-Id: <5e04c29cd98cf309cd9810dcb13e7789b4a17ada.1700131353.git.viresh.kumar@linaro.org>
+Subject: [PATCH V3 2/3] OPP: Call dev_pm_opp_set_opp() for required OPPs
+Date:   Thu, 16 Nov 2023 16:13:06 +0530
+Message-Id: <57ba55c5568ac4131429124661b37581b6cd6b7a.1700131353.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1700131353.git.viresh.kumar@linaro.org>
 References: <cover.1700131353.git.viresh.kumar@linaro.org>
@@ -79,119 +79,427 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There are two genpd (as required-opp) cases that we need to handle,
-devices with a single genpd and ones with multiple genpds.
+Configuring the required OPP was never properly implemented, we just
+took an exception for genpds and configured them directly, while leaving
+out all other required OPP types.
 
-The multiple genpds case is clear, where the OPP core calls
-dev_pm_domain_attach_by_name() for them and uses the virtual devices
-returned by this helper to call dev_pm_domain_set_performance_state()
-later to change the performance state.
+Now that a standard call to dev_pm_opp_set_opp() takes care of
+configuring the opp->level too, the special handling for genpds can be
+avoided by simply calling dev_pm_opp_set_opp() for the required OPPs,
+which shall eventually configure the corresponding level for genpds.
 
-The single genpd case however requires special handling as we need to
-use the same `dev` structure (instead of a virtual one provided by genpd
-core) for setting the performance state via
-dev_pm_domain_set_performance_state().
+This also makes it possible for us to configure other type of required
+OPPs (no concrete users yet though), via the same path. This is how
+other frameworks take care of parent nodes, like clock, regulators, etc,
+where we recursively call the same helper.
 
-As we move towards more generic code to take care of the required OPPs,
-where we will recursively call dev_pm_opp_set_opp() for all the required
-OPPs, the above special case becomes a problem.
+In order to call dev_pm_opp_set_opp() for the virtual genpd devices,
+they must share the OPP table of the genpd. Call _add_opp_dev() for them
+to get that done.
 
-It doesn't make sense for a device's DT entry to have both "opp-level"
-and single "required-opps" entry pointing to a genpd's OPP, as that
-would make the OPP core call dev_pm_domain_set_performance_state() for
-two different values for the same device structure. And so we can reuse
-the 'opp->level" field in such a case and call _set_opp_level() for the
-device.
+This commit also extends the struct dev_pm_opp_config to pass required
+devices, for non-genpd cases, which can be used to call
+dev_pm_opp_set_opp() for the non-genpd required devices.
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- drivers/opp/core.c |  6 ++++--
- drivers/opp/of.c   | 31 ++++++++++++++++++++++++++++---
- 2 files changed, 32 insertions(+), 5 deletions(-)
+ drivers/opp/core.c     | 168 ++++++++++++++++++++---------------------
+ drivers/opp/of.c       |  17 +++--
+ drivers/opp/opp.h      |   8 +-
+ include/linux/pm_opp.h |   7 +-
+ 4 files changed, 100 insertions(+), 100 deletions(-)
 
 diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index f2e2aa07b431..aeb216f7e978 100644
+index aeb216f7e978..e08375ed50aa 100644
 --- a/drivers/opp/core.c
 +++ b/drivers/opp/core.c
-@@ -1088,10 +1088,12 @@ static int _opp_set_required_opps_generic(struct device *dev,
- static int _opp_set_required_opps_genpd(struct device *dev,
- 	struct opp_table *opp_table, struct dev_pm_opp *opp, bool scaling_down)
- {
--	struct device **genpd_virt_devs =
--		opp_table->genpd_virt_devs ? opp_table->genpd_virt_devs : &dev;
-+	struct device **genpd_virt_devs = opp_table->genpd_virt_devs;
- 	int index, target, delta, ret;
- 
-+	if (!genpd_virt_devs)
-+		return 0;
-+
- 	/* Scaling up? Set required OPPs in normal order, else reverse */
- 	if (!scaling_down) {
- 		index = 0;
-diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index 85fad7ca0007..4cdeeab5ceee 100644
---- a/drivers/opp/of.c
-+++ b/drivers/opp/of.c
-@@ -296,7 +296,7 @@ void _of_clear_opp(struct opp_table *opp_table, struct dev_pm_opp *opp)
- 	of_node_put(opp->np);
- }
- 
--static int _link_required_opps(struct dev_pm_opp *opp,
-+static int _link_required_opps(struct dev_pm_opp *opp, struct opp_table *opp_table,
- 			       struct opp_table *required_table, int index)
- {
- 	struct device_node *np;
-@@ -314,6 +314,31 @@ static int _link_required_opps(struct dev_pm_opp *opp,
- 		return -ENODEV;
- 	}
- 
-+	/*
-+	 * There are two genpd (as required-opp) cases that we need to handle,
-+	 * devices with a single genpd and ones with multiple genpds.
-+	 *
-+	 * The single genpd case requires special handling as we need to use the
-+	 * same `dev` structure (instead of a virtual one provided by genpd
-+	 * core) for setting the performance state.
-+	 *
-+	 * It doesn't make sense for a device's DT entry to have both
-+	 * "opp-level" and single "required-opps" entry pointing to a genpd's
-+	 * OPP, as that would make the OPP core call
-+	 * dev_pm_domain_set_performance_state() for two different values for
-+	 * the same device structure. Lets treat single genpd configuration as a
-+	 * case where the OPP's level is directly available without required-opp
-+	 * link in the DT.
-+	 *
-+	 * Just update the `level` with the right value, which
-+	 * dev_pm_opp_set_opp() will take care of in the normal path itself.
-+	 */
-+	if (required_table->is_genpd && opp_table->required_opp_count == 1 &&
-+	    !opp_table->genpd_virt_devs) {
-+		if (!WARN_ON(opp->level != OPP_LEVEL_UNSET))
-+			opp->level = opp->required_opps[0]->level;
-+	}
-+
+@@ -1054,48 +1054,22 @@ static int _set_opp_bw(const struct opp_table *opp_table,
  	return 0;
  }
  
-@@ -338,7 +363,7 @@ static int _of_opp_alloc_required_opps(struct opp_table *opp_table,
- 		if (IS_ERR_OR_NULL(required_table))
+-static int _set_performance_state(struct device *dev, struct device *pd_dev,
+-				  struct dev_pm_opp *opp, int i)
+-{
+-	unsigned int pstate = 0;
+-	int ret;
+-
+-	if (!pd_dev)
+-		return 0;
+-
+-	if (likely(opp)) {
+-		pstate = opp->required_opps[i]->level;
+-		if (pstate == OPP_LEVEL_UNSET)
+-			return 0;
+-	}
+-
+-	ret = dev_pm_domain_set_performance_state(pd_dev, pstate);
+-	if (ret) {
+-		dev_err(dev, "Failed to set performance state of %s: %d (%d)\n",
+-			dev_name(pd_dev), pstate, ret);
+-	}
+-
+-	return ret;
+-}
+-
+-static int _opp_set_required_opps_generic(struct device *dev,
+-	struct opp_table *opp_table, struct dev_pm_opp *opp, bool scaling_down)
+-{
+-	dev_err(dev, "setting required-opps isn't supported for non-genpd devices\n");
+-	return -ENOENT;
+-}
+-
+-static int _opp_set_required_opps_genpd(struct device *dev,
+-	struct opp_table *opp_table, struct dev_pm_opp *opp, bool scaling_down)
++/* This is only called for PM domain for now */
++static int _set_required_opps(struct device *dev, struct opp_table *opp_table,
++			      struct dev_pm_opp *opp, bool up)
+ {
+-	struct device **genpd_virt_devs = opp_table->genpd_virt_devs;
++	struct device **devs = opp_table->required_devs;
+ 	int index, target, delta, ret;
+ 
+-	if (!genpd_virt_devs)
++	if (!devs)
+ 		return 0;
+ 
++	/* required-opps not fully initialized yet */
++	if (lazy_linking_pending(opp_table))
++		return -EBUSY;
++
+ 	/* Scaling up? Set required OPPs in normal order, else reverse */
+-	if (!scaling_down) {
++	if (up) {
+ 		index = 0;
+ 		target = opp_table->required_opp_count;
+ 		delta = 1;
+@@ -1106,9 +1080,11 @@ static int _opp_set_required_opps_genpd(struct device *dev,
+ 	}
+ 
+ 	while (index != target) {
+-		ret = _set_performance_state(dev, genpd_virt_devs[index], opp, index);
+-		if (ret)
+-			return ret;
++		if (devs[index]) {
++			ret = dev_pm_opp_set_opp(devs[index], opp->required_opps[index]);
++			if (ret)
++				return ret;
++		}
+ 
+ 		index += delta;
+ 	}
+@@ -1116,34 +1092,6 @@ static int _opp_set_required_opps_genpd(struct device *dev,
+ 	return 0;
+ }
+ 
+-/* This is only called for PM domain for now */
+-static int _set_required_opps(struct device *dev, struct opp_table *opp_table,
+-			      struct dev_pm_opp *opp, bool up)
+-{
+-	/* required-opps not fully initialized yet */
+-	if (lazy_linking_pending(opp_table))
+-		return -EBUSY;
+-
+-	if (opp_table->set_required_opps)
+-		return opp_table->set_required_opps(dev, opp_table, opp, up);
+-
+-	return 0;
+-}
+-
+-/* Update set_required_opps handler */
+-void _update_set_required_opps(struct opp_table *opp_table)
+-{
+-	/* Already set */
+-	if (opp_table->set_required_opps)
+-		return;
+-
+-	/* All required OPPs will belong to genpd or none */
+-	if (opp_table->required_opp_tables[0]->is_genpd)
+-		opp_table->set_required_opps = _opp_set_required_opps_genpd;
+-	else
+-		opp_table->set_required_opps = _opp_set_required_opps_generic;
+-}
+-
+ static int _set_opp_level(struct device *dev, struct opp_table *opp_table,
+ 			  struct dev_pm_opp *opp)
+ {
+@@ -2406,19 +2354,13 @@ static void _opp_detach_genpd(struct opp_table *opp_table)
+ {
+ 	int index;
+ 
+-	if (!opp_table->genpd_virt_devs)
+-		return;
+-
+ 	for (index = 0; index < opp_table->required_opp_count; index++) {
+-		if (!opp_table->genpd_virt_devs[index])
++		if (!opp_table->required_devs[index])
  			continue;
  
--		ret = _link_required_opps(opp, required_table, i);
-+		ret = _link_required_opps(opp, opp_table, required_table, i);
- 		if (ret)
- 			goto free_required_opps;
+-		dev_pm_domain_detach(opp_table->genpd_virt_devs[index], false);
+-		opp_table->genpd_virt_devs[index] = NULL;
++		dev_pm_domain_detach(opp_table->required_devs[index], false);
++		opp_table->required_devs[index] = NULL;
  	}
-@@ -359,7 +384,7 @@ static int lazy_link_required_opps(struct opp_table *opp_table,
- 	int ret;
+-
+-	kfree(opp_table->genpd_virt_devs);
+-	opp_table->genpd_virt_devs = NULL;
+ }
  
- 	list_for_each_entry(opp, &opp_table->opp_list, node) {
--		ret = _link_required_opps(opp, new_table, index);
-+		ret = _link_required_opps(opp, opp_table, new_table, index);
- 		if (ret)
- 			return ret;
+ /*
+@@ -2445,14 +2387,14 @@ static int _opp_attach_genpd(struct opp_table *opp_table, struct device *dev,
+ 	int index = 0, ret = -EINVAL;
+ 	const char * const *name = names;
+ 
+-	if (opp_table->genpd_virt_devs)
+-		return 0;
++	if (!opp_table->required_devs) {
++		dev_err(dev, "Required OPPs not available, can't attach genpd\n");
++		return -EINVAL;
++	}
+ 
+-	opp_table->genpd_virt_devs = kcalloc(opp_table->required_opp_count,
+-					     sizeof(*opp_table->genpd_virt_devs),
+-					     GFP_KERNEL);
+-	if (!opp_table->genpd_virt_devs)
+-		return -ENOMEM;
++	/* Checking only the first one is enough ? */
++	if (opp_table->required_devs[0])
++		return 0;
+ 
+ 	while (*name) {
+ 		if (index >= opp_table->required_opp_count) {
+@@ -2468,13 +2410,25 @@ static int _opp_attach_genpd(struct opp_table *opp_table, struct device *dev,
+ 			goto err;
+ 		}
+ 
+-		opp_table->genpd_virt_devs[index] = virt_dev;
++		/*
++		 * Add the virtual genpd device as a user of the OPP table, so
++		 * we can call dev_pm_opp_set_opp() on it directly.
++		 *
++		 * This will be automatically removed when the OPP table is
++		 * removed, don't need to handle that here.
++		 */
++		if (!_add_opp_dev(virt_dev, opp_table->required_opp_tables[index])) {
++			ret = -ENOMEM;
++			goto err;
++		}
++
++		opp_table->required_devs[index] = virt_dev;
+ 		index++;
+ 		name++;
  	}
+ 
+ 	if (virt_devs)
+-		*virt_devs = opp_table->genpd_virt_devs;
++		*virt_devs = opp_table->required_devs;
+ 
+ 	return 0;
+ 
+@@ -2484,10 +2438,42 @@ static int _opp_attach_genpd(struct opp_table *opp_table, struct device *dev,
+ 
+ }
+ 
++static int _opp_set_required_devs(struct opp_table *opp_table,
++				  struct device *dev,
++				  struct device **required_devs)
++{
++	int i;
++
++	if (!opp_table->required_devs) {
++		dev_err(dev, "Required OPPs not available, can't set required devs\n");
++		return -EINVAL;
++	}
++
++	/* Another device that shares the OPP table has set the required devs ? */
++	if (opp_table->required_devs[0])
++		return 0;
++
++	for (i = 0; i < opp_table->required_opp_count; i++)
++		opp_table->required_devs[i] = required_devs[i];
++
++	return 0;
++}
++
++static void _opp_put_required_devs(struct opp_table *opp_table)
++{
++	int i;
++
++	for (i = 0; i < opp_table->required_opp_count; i++)
++		opp_table->required_devs[i] = NULL;
++}
++
+ static void _opp_clear_config(struct opp_config_data *data)
+ {
+-	if (data->flags & OPP_CONFIG_GENPD)
++	if (data->flags & OPP_CONFIG_REQUIRED_DEVS)
++		_opp_put_required_devs(data->opp_table);
++	else if (data->flags & OPP_CONFIG_GENPD)
+ 		_opp_detach_genpd(data->opp_table);
++
+ 	if (data->flags & OPP_CONFIG_REGULATOR)
+ 		_opp_put_regulators(data->opp_table);
+ 	if (data->flags & OPP_CONFIG_SUPPORTED_HW)
+@@ -2601,12 +2587,22 @@ int dev_pm_opp_set_config(struct device *dev, struct dev_pm_opp_config *config)
+ 
+ 	/* Attach genpds */
+ 	if (config->genpd_names) {
++		if (config->required_devs)
++			goto err;
++
+ 		ret = _opp_attach_genpd(opp_table, dev, config->genpd_names,
+ 					config->virt_devs);
+ 		if (ret)
+ 			goto err;
+ 
+ 		data->flags |= OPP_CONFIG_GENPD;
++	} else if (config->required_devs) {
++		ret = _opp_set_required_devs(opp_table, dev,
++					     config->required_devs);
++		if (ret)
++			goto err;
++
++		data->flags |= OPP_CONFIG_REQUIRED_DEVS;
+ 	}
+ 
+ 	ret = xa_alloc(&opp_configs, &id, data, XA_LIMIT(1, INT_MAX),
+diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+index 4cdeeab5ceee..5a7e294e56b7 100644
+--- a/drivers/opp/of.c
++++ b/drivers/opp/of.c
+@@ -165,7 +165,7 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
+ 	struct opp_table **required_opp_tables;
+ 	struct device_node *required_np, *np;
+ 	bool lazy = false;
+-	int count, i;
++	int count, i, size;
+ 
+ 	/* Traversing the first OPP node is all we need */
+ 	np = of_get_next_available_child(opp_np, NULL);
+@@ -179,12 +179,13 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
+ 	if (count <= 0)
+ 		goto put_np;
+ 
+-	required_opp_tables = kcalloc(count, sizeof(*required_opp_tables),
+-				      GFP_KERNEL);
++	size = sizeof(*required_opp_tables) + sizeof(*opp_table->required_devs);
++	required_opp_tables = kcalloc(count, size, GFP_KERNEL);
+ 	if (!required_opp_tables)
+ 		goto put_np;
+ 
+ 	opp_table->required_opp_tables = required_opp_tables;
++	opp_table->required_devs = (void *)(required_opp_tables + count);
+ 	opp_table->required_opp_count = count;
+ 
+ 	for (i = 0; i < count; i++) {
+@@ -208,8 +209,6 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
+ 		mutex_lock(&opp_table_lock);
+ 		list_add(&opp_table->lazy, &lazy_opp_tables);
+ 		mutex_unlock(&opp_table_lock);
+-	} else {
+-		_update_set_required_opps(opp_table);
+ 	}
+ 
+ 	goto put_np;
+@@ -332,9 +331,14 @@ static int _link_required_opps(struct dev_pm_opp *opp, struct opp_table *opp_tab
+ 	 *
+ 	 * Just update the `level` with the right value, which
+ 	 * dev_pm_opp_set_opp() will take care of in the normal path itself.
++	 *
++	 * There is another case though, where a genpd's OPP table has
++	 * required-opps set to a parent genpd. The OPP core expects the user to
++	 * set the respective required `struct device` pointer via
++	 * dev_pm_opp_set_config().
+ 	 */
+ 	if (required_table->is_genpd && opp_table->required_opp_count == 1 &&
+-	    !opp_table->genpd_virt_devs) {
++	    !opp_table->required_devs[0]) {
+ 		if (!WARN_ON(opp->level != OPP_LEVEL_UNSET))
+ 			opp->level = opp->required_opps[0]->level;
+ 	}
+@@ -447,7 +451,6 @@ static void lazy_link_required_opp_table(struct opp_table *new_table)
+ 
+ 		/* All required opp-tables found, remove from lazy list */
+ 		if (!lazy) {
+-			_update_set_required_opps(opp_table);
+ 			list_del_init(&opp_table->lazy);
+ 
+ 			list_for_each_entry(opp, &opp_table->opp_list, node)
+diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
+index 08366f90f16b..23dcb2fbf8c3 100644
+--- a/drivers/opp/opp.h
++++ b/drivers/opp/opp.h
+@@ -35,6 +35,7 @@ extern struct list_head opp_tables;
+ #define OPP_CONFIG_PROP_NAME		BIT(3)
+ #define OPP_CONFIG_SUPPORTED_HW		BIT(4)
+ #define OPP_CONFIG_GENPD		BIT(5)
++#define OPP_CONFIG_REQUIRED_DEVS	BIT(6)
+ 
+ /**
+  * struct opp_config_data - data for set config operations
+@@ -160,9 +161,9 @@ enum opp_table_access {
+  * @rate_clk_single: Currently configured frequency for single clk.
+  * @current_opp: Currently configured OPP for the table.
+  * @suspend_opp: Pointer to OPP to be used during device suspend.
+- * @genpd_virt_devs: List of virtual devices for multiple genpd support.
+  * @required_opp_tables: List of device OPP tables that are required by OPPs in
+  *		this table.
++ * @required_devs: List of devices for required OPP tables.
+  * @required_opp_count: Number of required devices.
+  * @supported_hw: Array of version number to support.
+  * @supported_hw_count: Number of elements in supported_hw array.
+@@ -180,7 +181,6 @@ enum opp_table_access {
+  * @path_count: Number of interconnect paths
+  * @enabled: Set to true if the device's resources are enabled/configured.
+  * @is_genpd: Marks if the OPP table belongs to a genpd.
+- * @set_required_opps: Helper responsible to set required OPPs.
+  * @dentry:	debugfs dentry pointer of the real device directory (not links).
+  * @dentry_name: Name of the real dentry.
+  *
+@@ -211,8 +211,8 @@ struct opp_table {
+ 	struct dev_pm_opp *current_opp;
+ 	struct dev_pm_opp *suspend_opp;
+ 
+-	struct device **genpd_virt_devs;
+ 	struct opp_table **required_opp_tables;
++	struct device **required_devs;
+ 	unsigned int required_opp_count;
+ 
+ 	unsigned int *supported_hw;
+@@ -229,8 +229,6 @@ struct opp_table {
+ 	unsigned int path_count;
+ 	bool enabled;
+ 	bool is_genpd;
+-	int (*set_required_opps)(struct device *dev,
+-		struct opp_table *opp_table, struct dev_pm_opp *opp, bool scaling_down);
+ 
+ #ifdef CONFIG_DEBUG_FS
+ 	struct dentry *dentry;
+diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+index af53101a1383..81dff7facdc9 100644
+--- a/include/linux/pm_opp.h
++++ b/include/linux/pm_opp.h
+@@ -74,8 +74,10 @@ typedef int (*config_clks_t)(struct device *dev, struct opp_table *opp_table,
+  * @supported_hw_count: Number of elements in the array.
+  * @regulator_names: Array of pointers to the names of the regulator, NULL terminated.
+  * @genpd_names: Null terminated array of pointers containing names of genpd to
+- *		 attach.
+- * @virt_devs: Pointer to return the array of virtual devices.
++ *		attach. Mutually exclusive with required_devs.
++ * @virt_devs: Pointer to return the array of genpd virtual devices. Mutually
++ *		exclusive with required_devs.
++ * @required_devs: Required OPP devices. Mutually exclusive with genpd_names/virt_devs.
+  *
+  * This structure contains platform specific OPP configurations for the device.
+  */
+@@ -90,6 +92,7 @@ struct dev_pm_opp_config {
+ 	const char * const *regulator_names;
+ 	const char * const *genpd_names;
+ 	struct device ***virt_devs;
++	struct device **required_devs;
+ };
+ 
+ #define OPP_LEVEL_UNSET			U32_MAX
 -- 
 2.31.1.272.g89b43f80a514
 
