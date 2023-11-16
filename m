@@ -2,173 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 072E27EE475
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Nov 2023 16:34:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C82C7EE50E
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Nov 2023 17:22:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230508AbjKPPef (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Nov 2023 10:34:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36416 "EHLO
+        id S229785AbjKPQW4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Nov 2023 11:22:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbjKPPee (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Nov 2023 10:34:34 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACEA194
-        for <linux-pm@vger.kernel.org>; Thu, 16 Nov 2023 07:34:30 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9f2a53704aaso126895766b.3
-        for <linux-pm@vger.kernel.org>; Thu, 16 Nov 2023 07:34:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1700148869; x=1700753669; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PVNPAkisoMvkTyEW/8SK0tYA7Rxlmav3LfVvFoFHM20=;
-        b=TWBX3+dFKB6YDGnBNNRGVJsl1S5ajnnZVcPODjnz5+0EnYsMt0l12mH9Pr+eRfXaS0
-         HJOSnoNEtSNYX5hMHEd6Hkg/3DuV0C8srrxjzV/FTQgS5Dz/y2RubeGZukn0i1cBTFws
-         Gt1j26x+Jy21AAXtTqPE19RbWB9zCwjO9kwV45o69i09K2cIWi6/v2/DZw5Iz8CctgRK
-         1jkYg5QkuLlBQwplsYv4TMV7eXGY/i1Dmk11zB3bOUAcp/P4m7gpw5OLbHzmgXw6EbQN
-         pb6P8b8pa3XWwdaApSx5oqk0UUmXGaVPLiu9+2NKkpZmo8VuR6kG8I9aJaRgzfASmL4q
-         zmPA==
+        with ESMTP id S229562AbjKPQWz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Nov 2023 11:22:55 -0500
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79252189;
+        Thu, 16 Nov 2023 08:22:52 -0800 (PST)
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5875c300becso558346eaf.0;
+        Thu, 16 Nov 2023 08:22:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700148869; x=1700753669;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PVNPAkisoMvkTyEW/8SK0tYA7Rxlmav3LfVvFoFHM20=;
-        b=dyGUg4BXlEDPoQGoybBMerqGpVBcJQ4APnhIB4Q47dYOX3wO68CM5DAiUZORsD/kBv
-         BBNGY5DUki4oG0RYVW7uU6h0+c5iSt+y2Ot7r8Pogl13ZZ4IbGDC+oPj9P9ffjXRT9C4
-         DhQu8zqufYUpOdATknAOKEq54wsd4aeJvhdzMP3bibTqDqFYXN0oX3S9tRAECDxgvuEd
-         VL4E/nXJQKbztnnGhOzQKfbB+LtzitzOKIeIcWu/1JH0Ne/ehAjY1JqCnnb79m3ZyOwR
-         644OwpcBZ8Ogp1uKgf/XVhpGizuhKXMy682UFWtrBa7kJfNwFAKoYu4IalJjdg9CiPKb
-         nEFQ==
-X-Gm-Message-State: AOJu0YyjVfCNHARBG21eTYvfrZ14IPa+X2Ud/A+TodA2rqrFa+2umLT6
-        BbKc9NMlsZnpCIyPoBYANAAeoWF0cn8SyWYLFbifeQ==
-X-Google-Smtp-Source: AGHT+IGU8LjTyWo7/9a7JJdcmY7OssfjuZLP7hCvG5OsrxE9r6+CaW//NaZNOOaBBhBG0Oezv/75uldG2UfPdUmoR4M=
-X-Received: by 2002:a17:906:2348:b0:9d0:51d4:4d87 with SMTP id
- m8-20020a170906234800b009d051d44d87mr12024787eja.62.1700148868828; Thu, 16
- Nov 2023 07:34:28 -0800 (PST)
-MIME-Version: 1.0
-References: <20231110102054.1393570-1-joychakr@google.com> <CACRpkdZ9RHcHh4o5g62ywK0eQHpLZuGUF0Ud6jogk9Sfqe4krA@mail.gmail.com>
- <ZVQkLqDB3KtOlIpK@surfacebook.localdomain>
-In-Reply-To: <ZVQkLqDB3KtOlIpK@surfacebook.localdomain>
-From:   Joy Chakraborty <joychakr@google.com>
-Date:   Thu, 16 Nov 2023 21:04:15 +0530
-Message-ID: <CAOSNQF3QeFd857RCJE8wfJ=__-K7Bi4vfMeTVP-+O+LJ7y9SmQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] PM: runtime: Apply pinctrl settings if defined
-To:     andy.shevchenko@gmail.com
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        d=1e100.net; s=20230601; t=1700151772; x=1700756572;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Bs8icm+iMMidy4R85L/9ZGbmCFlh9//SffKirAVv9pQ=;
+        b=BkVVVDhVU0yOLcdoM8XbCtYBZE63WSqRBfyCc0fzYZqxT4bNJVcuQvgMxr0sZK+Cj0
+         6/l+tZkhrGQikjxsAm+0M6CCFxzpHnh7ePBjwS1bTCNg68i3JBMCGAS7Yq6V6N5hvw5L
+         LU9+kdaVgEklRv4GCCN+up4Cu9/s7kkovz1Y15hqFSOkP5lMUVfu52OHi8tD25+x6Sws
+         QS9jaldNDkN14VifA49R2VHwA55YwAjTcV/CVPbWpWBjQ5Pl1ypr5gPOD28lh34es1ij
+         me4SGeAVkWni5GqX9ja1iIvxFA+S1wpmXA5g2axroEi5tmqML08t9ZHQjc/a5ROwBxlS
+         aBVA==
+X-Gm-Message-State: AOJu0YwuC859e7j8xUBnQ7xJMasgbBgBGgnTIx/pYihUJ5huhnDWdbjt
+        ToFh+FtOzvaKBTTqvDEhUg==
+X-Google-Smtp-Source: AGHT+IFnKbCB5st7hQU+OKvwZLFiA+nmISbSf/raMUvn3R7EMCMOsFN+4Xt1evr/F2ThXJZzS1wIIw==
+X-Received: by 2002:a4a:3443:0:b0:581:40d0:7166 with SMTP id n3-20020a4a3443000000b0058140d07166mr16693216oof.8.1700151767156;
+        Thu, 16 Nov 2023 08:22:47 -0800 (PST)
+Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c1-20020a4aacc1000000b0058a1d87d96csm1088314oon.41.2023.11.16.08.22.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Nov 2023 08:22:46 -0800 (PST)
+Received: (nullmailer pid 2431114 invoked by uid 1000);
+        Thu, 16 Nov 2023 16:22:45 -0000
+Date:   Thu, 16 Nov 2023 10:22:45 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     David Dai <davidai@google.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, manugautam@google.com,
-        aniketmaurya@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Masami Hiramatsu <mhiramat@google.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Gupta Pankaj <pankaj.gupta@amd.com>,
+        Mel Gorman <mgorman@suse.de>, kernel-team@android.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] dt-bindings: cpufreq: add virtual cpufreq device
+Message-ID: <20231116162245.GA2424810-robh@kernel.org>
+References: <20231111014933.1934562-1-davidai@google.com>
+ <20231111014933.1934562-2-davidai@google.com>
+ <20231115062741.v3tpm337c2lidxzr@vireshk-i7>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231115062741.v3tpm337c2lidxzr@vireshk-i7>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 15, 2023 at 7:21=E2=80=AFAM <andy.shevchenko@gmail.com> wrote:
->
-> Tue, Nov 14, 2023 at 02:01:48PM +0100, Linus Walleij kirjoitti:
-> > On Fri, Nov 10, 2023 at 11:21=E2=80=AFAM Joy Chakraborty <joychakr@goog=
-le.com> wrote:
-> >
-> > > Apply pinctrl state from  runtime framework device state transtion.
-> > >
-> > > Pinctrl states if defined in DT are bookmarked in device structures
-> > > but they need to be explicitly applied from device driver callbacks
-> > > which is boiler plate code and also not present in many drivers.
-> > >
-> > > If there is a specific order of setting pinctrl state with other driv=
-er
-> > > actions then the device driver can choose to do it from its pm callba=
-cks,
-> > > in such a case this call will be a no-op from the pinctrl core framew=
-ork
-> > > since the desired pinctrl state would already be set.
-> > >
-> > > We could also add a Kconfig knob to enable/disable this, but I do not
-> > > see a need to.
->
-> Besides questionable code style (inline functions in the C file)...
+On Wed, Nov 15, 2023 at 11:57:41AM +0530, Viresh Kumar wrote:
+> On 10-11-23, 17:49, David Dai wrote:
+> > diff --git a/Documentation/devicetree/bindings/cpufreq/qemu,cpufreq-virtual.yaml b/Documentation/devicetree/bindings/cpufreq/qemu,cpufreq-virtual.yaml
+> > +$id: http://devicetree.org/schemas/cpufreq/qemu,cpufreq-virtual.yaml#
+> > +properties:
+> > +  compatible:
+> > +    const: qemu,virtual-cpufreq
+> 
+> Not sure why we need to mention QEMU here.. Why limit this to just QEMU ?
 
-Sure, I can change that.
+Because that is the implementation. And also to discourage anyone from 
+using this on their hardware or thinking it is generic and the way to 
+extend it to another implementation is adding properties.
 
->
-> > It has a certain beauty to it does it not!
-> >
-> > The reason it wasn't done like this from the start was, if I recall cor=
-rectly,
-> > that in some cases a device needs to do the pin control state switching
-> > in a special sequence with other operations, that can not be reordered,
-> > i.e.:
-> >
-> > 1. The pin control state change is not context-free.
-> >
-> > 2. The order of events, i.e. context, does not necessarily match the
-> >      order that Linux subsystems happen to do things.
-> >
-> > When looking through the kernel tree I don't see that people use
-> > the sleep state and idle state much, so we could very well go
-> > with this, and then expect people that need special-casing to name
-> > their states differently.
-> >
-> > What do people thing about that?
->
-> ...I think the patch is incomplete(?) due to misterious ways of PM runtim=
-e
-> calls. For example, in some cases we force runtime PM during system suspe=
-nd
-> which may have an undesired effect of the switching pin control states
-> (hence glitches or some real issues with the hardware, up to hanging the
-> system). Some pins may be critical to work with and shuffling their state=
-s
-> in an unappropriate time can lead to a disaster.
->
-> So, I would consider this change okay if and only if it will have a detai=
-led
-> research for all existing users to prove there will be no changes in the =
-whole
-> set of possible scenarious (of system sleep / resume, runtime, runtime wi=
-th a
-> custom ->prepare callback and so on).
->
-
-I tried to place the calls to set the pinctrl states after driver/user
-callback  based on my understanding of runtime code so that existing
-users do get a chance to set the state with any special sequence that
-needs to be performed post which doing another call to set the state
-would be ignored in the pinctrl framework.
-
-But this only would be possible with the assumption that even in any
-special sequences executed by users they set nothing but "default"
-state in runtime_resume, "idle" state in runtime_idle and "'sleep"
-state in their runtime suspend callbacks.
-And like Andy mentions about "->prepare callback", if there are
-drivers that are setting pinctrl state "default", "sleep" or "idle"
-from any callback but
-...
-int (*runtime_suspend)(struct device *dev);
-int (*runtime_resume)(struct device *dev);
-int (*runtime_idle)(struct device *dev);
-...
-it could indeed be a problem.
-I'll dig into users of pinctrl_select_sleep/default/idle and see if
-there are such cases or if it could be done in some other way.
-
-Thanks
-Joy
-
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+Rob
