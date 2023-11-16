@@ -2,203 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D71A7EDE05
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Nov 2023 10:54:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1BE7EDEAD
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Nov 2023 11:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbjKPJyS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Nov 2023 04:54:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36198 "EHLO
+        id S230353AbjKPKnU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Nov 2023 05:43:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjKPJyS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Nov 2023 04:54:18 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D023E0
-        for <linux-pm@vger.kernel.org>; Thu, 16 Nov 2023 01:54:14 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-545557de8e6so9944a12.0
-        for <linux-pm@vger.kernel.org>; Thu, 16 Nov 2023 01:54:14 -0800 (PST)
+        with ESMTP id S230193AbjKPKnT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Nov 2023 05:43:19 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9B418B
+        for <linux-pm@vger.kernel.org>; Thu, 16 Nov 2023 02:43:16 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1ccbb7f79cdso5757675ad.3
+        for <linux-pm@vger.kernel.org>; Thu, 16 Nov 2023 02:43:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1700128453; x=1700733253; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MLQdK0PLkPgbZpmnpIM+hlNxS7X74nHsOVnDPoi/MMI=;
-        b=gqakr0mJyyix209cnpqdAKE8rlVzuMRWwon8dFQIz4K5Dgl2AAnNlgEyqx9dBDylkw
-         J6+bOyFRXm9maQEhmEQBBqeUHZXPK/Ghs86XWFh3HjtI2gD17xgSvfZm2eaBeB9+PGBm
-         XebzVvN7hx03bLVl7RDFIkU9x2heqQmD21lRmy4XPcgs++6ikkQY1osuyBkapwJZ3Kbh
-         KAAB59qdnI2rUzEVM5IzWu4mLN+0mZ24PWO7MFmfsHlrFQSg8RWVxDK9xntTimCC54/q
-         pVhlxU21ahyLXxM8B5Y2gYR63uoU34M+p13K+dIgLZXmEuSI1UiUxCK/veTT11nWxI29
-         JNqQ==
+        d=linaro.org; s=google; t=1700131396; x=1700736196; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pBCtZrQ5H8T1TJ4dOAfwL/GAJ5Ua7JQfulVL3ulFxHg=;
+        b=cIolR5mmT90CwgMmOYgQTvSjmHBJ37YYjOxL7KZFwEVgsT83yx594wWoBtGJYAEmBM
+         ecIacn7Oq5dxY2pCSQXHUgUvgLIMgVRr3+X3nKpnCaLwyTNyZnga22FQrYwB0DhXy5aa
+         Ynvch+aY5AVtENWxuFGvH4lOMNYLHz4CSD85676wA182LxvOcGMavnoePhIpJrSqCgHJ
+         D/BK+608DIypvPA1fEKO6pPhPfjz+ehdkqrmaVG8doIGsZc4BovSLA6yqsOKPlGPF4jR
+         k3reA/4YaX/6mSvOjFH7mNmbgLozm7J/yhNADEBwdtXgTeZYzfxHnZD06YZOP8rwGxk/
+         4uYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700128453; x=1700733253;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MLQdK0PLkPgbZpmnpIM+hlNxS7X74nHsOVnDPoi/MMI=;
-        b=qhNNON9Ktzr4gKcvVY1fFnV9aAiNFtz1jsfI8DvMab7Cpbg7O9tQ4JCFzwShzKprfr
-         jzGVtrD+wO7oEBa7JgHlhOwbQIEQLUr2h/Ll0Vft8PBm/cznj2QN44/D86Wamm6HMGQk
-         BrUSDF+oWGtham5/uKjNHEf8GbdSvkWTOuqRd/Mu6vZzu1pAoJxIKT2oGs9J0RHtzlXO
-         bHrAKF+nFJQIgz9msj/iXGmzNqVcx7zvJUFsn/DYBPYpwL23w80d5Qg1bo7GdXfWibHp
-         8G/iHlWy0xVR1YaSkgjLk9hOd14kcaiC2NU+o5x7GrPMyacTbmtSGpwUskZGswVi7I7K
-         42WQ==
-X-Gm-Message-State: AOJu0YwwK1jkKtqss4xckJt+bHFFdfkwgBpolRQEU9nlou6nKD2EZA7R
-        frooqRuY9FeO0XaVaJ/YXGimaPTiWbYS7ebVTr86Rg==
-X-Google-Smtp-Source: AGHT+IEDR1q7Da+YvzRz4+svEYmFMPz1ROgkRbBFp+eFx4Jjr4wnvOnJi+lx8lSCvPW9fwl+a4axtp4udoCrAfJpjWM=
-X-Received: by 2002:aa7:c78c:0:b0:545:94d:7b with SMTP id n12-20020aa7c78c000000b00545094d007bmr91808eds.4.1700128452617;
- Thu, 16 Nov 2023 01:54:12 -0800 (PST)
+        d=1e100.net; s=20230601; t=1700131396; x=1700736196;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pBCtZrQ5H8T1TJ4dOAfwL/GAJ5Ua7JQfulVL3ulFxHg=;
+        b=MLDyoYC6MKHk9R38rtgz+pLQ27EhoWCaZBdt1tkUzh5ZTerFrx1dQ0kGiAhWXFstY7
+         ccT0PxswrlkDyHFDLSn7qcBvM5FCGdvTDaWrkNgL7wyM5Efkqyl7VbWmGsCGEg0t6yEa
+         aigU0nQkL7pECwBNE9M1lh8g7tGwsOcvpspxxi0tZ12WE6Wy3ovMnl32Bi8pxjDVQ8l3
+         Y5oPi56QmPrZ47Al3Vzk6N09EyAsgwFc9URvYBLHwCHDL8vJ7fyeYV9nRxRFwZo6pN0U
+         Xs481KovfJv/mhwi4fHfJMX8/rvNHiEPZF2Ge2mzkAUO3pJbGhBNXWANCgsbRFWWBS3m
+         DYUQ==
+X-Gm-Message-State: AOJu0YxXaH2d9/lBT8BpFdZne/Y4IXvJz+fXxw2o2dp2g9G9yCJzRPhq
+        ZhA5tYhuVww1FyafRAAq82h8Hg==
+X-Google-Smtp-Source: AGHT+IEU86RYQ2iJlNRS2Ow2xZr6+w+lY/jO6UV8ohs0jeJQBJx1+/f/9TBfJ/d0ByM0ZWTxCAOC0w==
+X-Received: by 2002:a17:903:2289:b0:1cc:345b:c7e1 with SMTP id b9-20020a170903228900b001cc345bc7e1mr9101817plh.60.1700131395561;
+        Thu, 16 Nov 2023 02:43:15 -0800 (PST)
+Received: from localhost ([122.172.82.6])
+        by smtp.gmail.com with ESMTPSA id w7-20020a170902e88700b001acae9734c0sm8880495plg.266.2023.11.16.02.43.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Nov 2023 02:43:15 -0800 (PST)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Nishanth Menon <nm@ti.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V3 0/3]  OPP: Simplify required-opp handling
+Date:   Thu, 16 Nov 2023 16:13:04 +0530
+Message-Id: <cover.1700131353.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 MIME-Version: 1.0
-References: <20231031093921.755204-1-guanyulin@google.com> <f75d6cd2-fa9f-4820-969f-2a8839d78c9e@rowland.harvard.edu>
- <CAOuDEK0NcijUKAL3fGtO=Ks+Y38TRhJcVx+ff-QUyUA0LcQ1Bw@mail.gmail.com>
- <3fe5414a-570f-4bfa-aa2f-909d7799551b@rowland.harvard.edu>
- <CAOuDEK3UuVGgP63NG9HtuJ0D2ERZsFGBwF5+GNynk=P7zSVUhg@mail.gmail.com> <CAJZ5v0j-JdoGADG6rYNOEY1ePtDz0vsV4T1wX2TO1t+5kPyJ8Q@mail.gmail.com>
-In-Reply-To: <CAJZ5v0j-JdoGADG6rYNOEY1ePtDz0vsV4T1wX2TO1t+5kPyJ8Q@mail.gmail.com>
-From:   Guan-Yu Lin <guanyulin@google.com>
-Date:   Thu, 16 Nov 2023 17:54:01 +0800
-Message-ID: <CAOuDEK1hiVyFuZ__YFnOhfWV_JqMw83wCtPnX2a1xj6pb4Q5QA@mail.gmail.com>
-Subject: Re: [PATCH] rpm: pm: enable PM_RPM_EXCEPTION config flag
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, gregkh@linuxfoundation.org,
-        len.brown@intel.com, pavel@ucw.cz, heikki.krogerus@linux.intel.com,
-        mkl@pengutronix.de, hadess@hadess.net, mailhol.vincent@wanadoo.fr,
-        ivan.orlov0322@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        pumahsu@google.com, raychi@google.com, albertccwang@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 15, 2023 at 10:10=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.o=
-rg> wrote:
->
-> On Wed, Nov 15, 2023 at 8:08=E2=80=AFAM Guan-Yu Lin <guanyulin@google.com=
-> wrote:
-> >
-> > On Wed, Nov 8, 2023 at 11:56=E2=80=AFPM Alan Stern <stern@rowland.harva=
-rd.edu> wrote:
-> > >
-> > > On Wed, Nov 08, 2023 at 04:45:43PM +0800, Guan-Yu Lin wrote:
-> > > > Thanks for the questions. Let me first introduce my motivation for
-> > > > proposing this feature. We can discuss the implementation details l=
-ater.
-> > > >
-> > > > Motivation:
-> > > > Currently, system PM operations always override runtime PM operatio=
-ns.
-> > > > As runtime PM reflects the power status of devices, there is a
-> > > > possibility that runtime PM states that a device is in use, but sys=
-tem
-> > > > PM decides to suspend it. Up to now, we have assumed that a device =
-can't
-> > > > function without resources from the system, so the device should ac=
-quire
-> > > > a wakelock to prevent this from happening. However, what if the dev=
-ice
-> > >
-> > > [From the fact that you mention wakelocks, I assume that you're tryin=
-g
-> > > to implement something for Android systems rather than Linux systems
-> > > in general.]
-> > >
-> > > > does not need the system's support to function? Or only needs limit=
-ed
-> > > > resources (e.g., only limited power source or clock) to function? I=
-n this
-> > > > situation, we would like to keep the device on but allow the system=
- to
-> > > > suspend. This is an example where we would like devices to follow r=
-untime
-> > > > PM rather than system PM.
-> > >
-> > > To put it more simply, you want a way to leave some devices in an act=
-ive
-> > > state while the rest of the system is suspended.  It's not clear why =
-you
-> > > have dragged runtime PM into the discussion (apart from the obvious f=
-act
-> > > that you won't want to keep a device active if it isn't active alread=
-y).
-> > >
-> >
-> > The determination of which device should remain active when the system
-> > suspends can be based on various factors. One straightforward approach
-> > is to consider the device's runtime pm state.
->
-> Not really.  The runtime PM status has no bearing on whether or not
-> the device should remain active over a system suspend/resume cycle.
->
+Hello,
 
-Thanks for the information.
+Configuring the required OPP was never properly implemented, we just
+took an exception for genpds and configured them directly, while leaving
+out all other required OPP types.
 
-> > Alternatively, we could
-> > explore more elaborate techniques that consider additional criteria.
->
-> In fact, the device's driver decides what is going to happen to it
-> during the system suspend transition.  It very well may decide to
-> leave the device in the operational state, but it needs to take
-> dependencies between into account.
+Now that a standard call to dev_pm_opp_set_opp() takes care of
+configuring the opp->level too, the special handling for genpds can be
+avoided by simply calling dev_pm_opp_set_opp() for the required OPPs,
+which shall eventually configure the corresponding level for genpds.
 
-Seems like it would be better for each device to modify its suspend/
-resume code rather than designing a generic framework. As the specific
-use cases of each component are not yet fully understood, the device
-driver provides ample flexibility for customization at this stage.
+This also makes it possible for us to configure other type of required
+OPPs (no concrete users yet though), via the same path. This is how
+other frameworks take care of parent nodes, like clock, regulators, etc,
+where we recursively call the same helper.
 
->
-> > > This sounds like a major change, not something to be done with a simp=
-le
-> > > override.  You should discuss it with Rafael Wysocki and the linux-pm
-> > > mailing list before trying to implement anything.
-> > >
-> > > > Feature Supported:
-> > > > 1. Devices could control the priority of system PM and runtime PM d=
-uring
-> > > >    runtime.
-> > >
-> > > This seems like a totally unnecessary side issue.  Forget about runti=
-me
-> > > PM for the time being and concentrate instead on which devices you wa=
-nt
-> > > to keep active.
-> > >
-> > > > 2. The control should be at the device level, meaning that differen=
-t
-> > > >    devices should control their own priorities.
-> > > >
-> > > > Goal of This Patch:
-> > > > 1. Design a framework to support features above.
-> > > > 2. Apply it into usb for demonstration.
-> > >
-> > > You may find that it is easier (and less work in the long run) to des=
-ign
-> > > the general framework and get it working than to concentrate on one
-> > > particular subsystem.
-> > >
-> > > Alan Stern
-> >
-> > The big picture is "a way to leave some devices in an active state
-> > while the rest of the system is suspended", I think it could be
-> > separated into:
-> > (1) Each system should be able to choose which device(s) is included
-> >     in this feature.
-> > (2) For devices chosen in (1), each of them should have the flexibility
-> >     to determine when it will not suspend with the system, not just
-> >     always being active when the system suspends.
->
-> A specific use case, please.
+Pushed here:
 
-We have a sub-system sharing some devices (e.g., usb controller, host
-controller) with the main system. In the current system power
-management framework, when the main system suspends, the devices will
-suspend, too. However, sometimes these devices are still used by the
-sub-system, so we don't want the main system to always suspend the
-devices.
+git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/required-opps
 
-Regards,
-Guan-Yu
+V2->V3:
+- Dropped patch 1/3, merged.
+- Added a new commit to avoid propagation and a WARN() for parent genpd case.
+
+V1->V2:
+- Support opp-level 0, drop vote i.e..
+- Fix OPP pointer while calling dev_pm_opp_set_opp() recursively.
+- Minor checks and fixes.
+- Add Reviewed-by from Ulf.
+
+--
+Viresh
+
+Viresh Kumar (3):
+  OPP: Use _set_opp_level() for single genpd case
+  OPP: Call dev_pm_opp_set_opp() for required OPPs
+  OPP: Don't set OPP recursively for a parent genpd
+
+ drivers/opp/core.c     | 180 ++++++++++++++++++++++-------------------
+ drivers/opp/of.c       |  49 ++++++++---
+ drivers/opp/opp.h      |   8 +-
+ include/linux/pm_opp.h |   7 +-
+ 4 files changed, 144 insertions(+), 100 deletions(-)
+
+-- 
+2.31.1.272.g89b43f80a514
+
