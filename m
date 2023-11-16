@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC6F7EE051
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Nov 2023 13:02:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 873F57EE128
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Nov 2023 14:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344985AbjKPMCl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Nov 2023 07:02:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55128 "EHLO
+        id S230371AbjKPNNl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Nov 2023 08:13:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344966AbjKPMCj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Nov 2023 07:02:39 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20EFBC4;
-        Thu, 16 Nov 2023 04:02:36 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-53e70b0a218so1100665a12.2;
-        Thu, 16 Nov 2023 04:02:36 -0800 (PST)
+        with ESMTP id S235695AbjKPNNg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Nov 2023 08:13:36 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A85610D5;
+        Thu, 16 Nov 2023 05:13:25 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9c603e2354fso152904866b.1;
+        Thu, 16 Nov 2023 05:13:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700136154; x=1700740954; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1700140404; x=1700745204; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vTrltGVBCvBoexMeOs/zFwHzylci7LZMUjyCRLBI0xs=;
-        b=IaqL6myCEQ0eMgZ0LW6zavN9II+IRRqcA+BljqoI5w2CQ4jmDFIVYpOZ1PDaEZHtl+
-         JAq5BDBm1VZQ900wOQIoFDjLug7wcLoY1CKgBQFCA/B2oGhIoM9ijVW5VMbYAal9AGZD
-         197B4bHY6tH3zUk4Tvfaf3NAML84hrPf43Vb48pDcnt2HMmT1cEFlgATdoY4LRfAESak
-         C7pNjgCzB93Yr898L+EdGqmy8KuP5td2e3yWKmXmcWJpwLlVRh5tInS02MspmlrXABIt
-         3cso1xqIX1lubkP44sf8xh5QbQiUo724U04I9OgXeKtQo9/fJeWBkr797bXV4K7KBp9j
-         VyPQ==
+        bh=Fnxhr1dk/vfohyQfMfgOpH3tTQBBu2nuppfYXXpJ6wA=;
+        b=H1oUfAE+1QrnehJZkBuHjvmsPK0HCTA4vu6rQn5VTwUWdD1PpFiQ94xyv04e6glrG5
+         YgV0QkyPvjI8fC45JIR959oN5lP3t49Jn450YXF67UOHpIHlYwK3zfN82UtsKHAA2zrG
+         NEcKVmjpVG8yMqpOtSGV81qwcNvptg8p6Ym8pGTeTNESS8ih96vF4On/izYsmGQde4a+
+         f8boRsbt3eASmZJQXUipad7jekHe7ZIgplQ3Z9h623JVwfNVAqw6Dv2DP9PNgVt8VGFL
+         Ub9lCgqPrDCbzVC0/d0At8Jj8GBzsE2nPuhPQwrtHDuOPzudPE8gnZ1dijBn7pYpdrFw
+         iTsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700136154; x=1700740954;
+        d=1e100.net; s=20230601; t=1700140404; x=1700745204;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vTrltGVBCvBoexMeOs/zFwHzylci7LZMUjyCRLBI0xs=;
-        b=dOmRi2Q56LwJCqgEfFuU6GVxVm1MFsg80vpWs9ueN6fqL7ADspPVsCctz4LQXaksrl
-         EO6Rc9f3KuwVyCjUeDsRycAZpgzNRuqtLpxFZeVNmNfEFLRvCiLLNoSM50exPhXOmRNw
-         K7L32byT7dqJ5xWMCtEexE5v+FpPjKxmAfVON6Cy5CLx70ndnEhvfj4TKZsrmcfxn+E/
-         vaD//O3zd2NViX4OcOHUlUDTyq4EvK/gB8XMgEir8bor931alWPpQEDwaSHiW6JfIim/
-         V451/ehcRnZ4iMeVJqGwTnupmdSicOZ4BGBPqSttKJQZH7uKNkT//7WNHVN8MTzPIc80
-         OjFg==
-X-Gm-Message-State: AOJu0YywGx2rkS3vSRnSZ17Ng4XrKdV0ZNvdxZbrbs+5ydCnuQRxSTLC
-        3yy8uAOJpkvnwXY2v1ttrkA=
-X-Google-Smtp-Source: AGHT+IE+l1WxERw88wPP4jgQbj0W+HTBU6BoowIoSnFHFejeJjqWxu2+n49WhcpSktk8OPVh8CX1uw==
-X-Received: by 2002:a17:906:fa9b:b0:9e1:e1f5:2bb9 with SMTP id lt27-20020a170906fa9b00b009e1e1f52bb9mr11833141ejb.30.1700136154241;
-        Thu, 16 Nov 2023 04:02:34 -0800 (PST)
+        bh=Fnxhr1dk/vfohyQfMfgOpH3tTQBBu2nuppfYXXpJ6wA=;
+        b=ZIbfSl+NEZiNWxeAXSKY+dO8FhzP4mjvtA52NKCrX2W+duKXeMasxxc+LsZKZtqA6G
+         Z8BC9SRTEpDXMm+UNmYSAXzbNS84gd5OBl0sXdtWrcPFPOX9IX8wCGIW+tRDgk67hu/i
+         Xr+B6gfK0DUI4cFmw9FTW24iHRGBtOdpjPjfXHJZnzPtDAHVYCFQs2Cn9bKv4YmDP8vS
+         w7RHaqVf8D5YFRjqwpV3xPTtcqDXWkjpmDJf8+zT2/uj1kZfZ9Mogta6J5jcXdUL+atq
+         ZDeYyS0mDCfeT3Y3KTJqp0yiuTktdV9EdIZWpG5khmiZzY8MnRT5YLdelfCKnol5TNzb
+         YjYg==
+X-Gm-Message-State: AOJu0Yx6Th+dAYXJVCpRTl0khh0HSNJrlaxrxMVd5lwInXNE2YUQf4B6
+        ff0TNtvcK7/f5N6YKx/bmMs=
+X-Google-Smtp-Source: AGHT+IEl2Xlwo1h4vrkBr9Yyi0WKoUvKYSm60dyFK8pkJfjBaHrRZa6CGJkO4HvqqcrARMGr96+9Yg==
+X-Received: by 2002:a17:907:75d7:b0:9b2:be5e:3674 with SMTP id jl23-20020a17090775d700b009b2be5e3674mr1401307ejc.36.1700140403737;
+        Thu, 16 Nov 2023 05:13:23 -0800 (PST)
 Received: from localhost.lan (031011218106.poznan.vectranet.pl. [31.11.218.106])
-        by smtp.gmail.com with ESMTPSA id h5-20020a170906718500b009ddf38056f8sm8320317ejk.118.2023.11.16.04.02.32
+        by smtp.gmail.com with ESMTPSA id u10-20020a170906408a00b009e5d30422ebsm8412710ejj.101.2023.11.16.05.13.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Nov 2023 04:02:33 -0800 (PST)
+        Thu, 16 Nov 2023 05:13:23 -0800 (PST)
 From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -58,14 +58,15 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org,
         =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH] dt-bindings: thermal: convert Mediatek Thermal to the json-schema
-Date:   Thu, 16 Nov 2023 13:02:25 +0100
-Message-Id: <20231116120225.29999-1-zajec5@gmail.com>
+Subject: [PATCH V2] dt-bindings: thermal: convert Mediatek Thermal to the json-schema
+Date:   Thu, 16 Nov 2023 14:13:16 +0100
+Message-Id: <20231116131316.5897-1-zajec5@gmail.com>
 X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -87,9 +88,11 @@ This helps validating DTS files.
 
 Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 ---
- .../bindings/thermal/mediatek-thermal.txt     | 52 ----------
- .../bindings/thermal/mediatek-thermal.yaml    | 98 +++++++++++++++++++
- 2 files changed, 98 insertions(+), 52 deletions(-)
+V2: Add "maintainers"
+
+ .../bindings/thermal/mediatek-thermal.txt     |  52 ---------
+ .../bindings/thermal/mediatek-thermal.yaml    | 101 ++++++++++++++++++
+ 2 files changed, 101 insertions(+), 52 deletions(-)
  delete mode 100644 Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek-thermal.yaml
 
@@ -153,10 +156,10 @@ index ac39c7156fde..000000000000
 -	};
 diff --git a/Documentation/devicetree/bindings/thermal/mediatek-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek-thermal.yaml
 new file mode 100644
-index 000000000000..0e036b22b82b
+index 000000000000..faeb4d6c6dd4
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/thermal/mediatek-thermal.yaml
-@@ -0,0 +1,98 @@
+@@ -0,0 +1,101 @@
 +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 +%YAML 1.2
 +---
@@ -164,6 +167,9 @@ index 000000000000..0e036b22b82b
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
 +title: Mediatek Thermal
++
++maintainers:
++  - Sascha Hauer <s.hauer@pengutronix.de>
 +
 +description: >
 +  This describes the device tree binding for the Mediatek thermal controller
