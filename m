@@ -2,77 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CF967EE432
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Nov 2023 16:28:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 072E27EE475
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Nov 2023 16:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbjKPP2L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Nov 2023 10:28:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60110 "EHLO
+        id S230508AbjKPPef (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Nov 2023 10:34:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjKPP2K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Nov 2023 10:28:10 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0A518D
-        for <linux-pm@vger.kernel.org>; Thu, 16 Nov 2023 07:28:05 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-d852b28ec3bso945470276.2
-        for <linux-pm@vger.kernel.org>; Thu, 16 Nov 2023 07:28:05 -0800 (PST)
+        with ESMTP id S230019AbjKPPee (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Nov 2023 10:34:34 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACEA194
+        for <linux-pm@vger.kernel.org>; Thu, 16 Nov 2023 07:34:30 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9f2a53704aaso126895766b.3
+        for <linux-pm@vger.kernel.org>; Thu, 16 Nov 2023 07:34:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700148485; x=1700753285; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XbQyuv98++24BgGDt8H4Wvh2xIc39NqFPTht4ua8dxA=;
-        b=dQwVOEE/Zy3pUtFvWhyTR0qcpqTr5kkpKN7Vdiu5iBoS2kRDkC1enK3Ww/5TkXwDpm
-         r2xHQH9hw5Pj9tGlpHkkOxPRJQqUyijj+yik3lLCZrSUqiM9sCcNPOjb6Q0QjHOlS0Zq
-         bepkUeylH36g3OZ3++xw0uY+DckkaAFaBag3NT01CsNDVFhnYrDL1q2ln2dPWilJYUjg
-         SwZeDpIj8Ar8oHw2gGIsTy91AXd2pp0z0YddiYpCUMMO5DK5x8qZZh4/Nqb5nAgPycM+
-         Bq2BC4X6SzHRWqcX33HilQuWZhysWEcoaLqWtgcs68hMtjUmZ9plMwEq8V9wygLMTOCC
-         3SXg==
+        d=google.com; s=20230601; t=1700148869; x=1700753669; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PVNPAkisoMvkTyEW/8SK0tYA7Rxlmav3LfVvFoFHM20=;
+        b=TWBX3+dFKB6YDGnBNNRGVJsl1S5ajnnZVcPODjnz5+0EnYsMt0l12mH9Pr+eRfXaS0
+         HJOSnoNEtSNYX5hMHEd6Hkg/3DuV0C8srrxjzV/FTQgS5Dz/y2RubeGZukn0i1cBTFws
+         Gt1j26x+Jy21AAXtTqPE19RbWB9zCwjO9kwV45o69i09K2cIWi6/v2/DZw5Iz8CctgRK
+         1jkYg5QkuLlBQwplsYv4TMV7eXGY/i1Dmk11zB3bOUAcp/P4m7gpw5OLbHzmgXw6EbQN
+         pb6P8b8pa3XWwdaApSx5oqk0UUmXGaVPLiu9+2NKkpZmo8VuR6kG8I9aJaRgzfASmL4q
+         zmPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700148485; x=1700753285;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XbQyuv98++24BgGDt8H4Wvh2xIc39NqFPTht4ua8dxA=;
-        b=FVqqGcmbbyd9VHDUacecikZTktsAXG1mPAR1/NfTFaptEBrELoEtoIDjkSCmHMf22Z
-         h7EhGZNnWiJFN7GEGyAC5Ll5mvBkrF4gOczG6bX38NvoYcPx9UvTM5vRdjgz4rrFQtks
-         P+rjuEfUXckqYiVaGt/zWhxY/baboWNPn0F478ydoXGIGl48qnY4C4JCo6qkPSHn7Q7r
-         AHOQ0+ZRdA3AXoCo+jKCINYy/XwwPLzn5zqQ1LW3GT1au5P6uWvP+ZgJ4xtc8FQStQHm
-         jOwQUydRbEE93n1LlJ3YZAWX1436ocF6cY+in/V0NVW2lBX8GTLZP+dzWFpdoGURhd7V
-         hSOw==
-X-Gm-Message-State: AOJu0Yzn0J4PTj3V+8aUkBrT4Wst/ZDgiuXHY8CR/45rdYygMhZNJDVy
-        qTRhBkSmwt4G2geMfaiavMffwmQapwFxNoVQVBErhA==
-X-Google-Smtp-Source: AGHT+IGWS1tsiAv66z5V1gCYE+nGUFQ0gxoi/k71NwlWQQguiLtl6Q3qrrPBu3fNc4Ew6ZcZxspdMLaia8OHgAfzKks=
-X-Received: by 2002:a25:c792:0:b0:d9a:5895:2c74 with SMTP id
- w140-20020a25c792000000b00d9a58952c74mr14868240ybe.42.1700148484865; Thu, 16
- Nov 2023 07:28:04 -0800 (PST)
+        d=1e100.net; s=20230601; t=1700148869; x=1700753669;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PVNPAkisoMvkTyEW/8SK0tYA7Rxlmav3LfVvFoFHM20=;
+        b=dyGUg4BXlEDPoQGoybBMerqGpVBcJQ4APnhIB4Q47dYOX3wO68CM5DAiUZORsD/kBv
+         BBNGY5DUki4oG0RYVW7uU6h0+c5iSt+y2Ot7r8Pogl13ZZ4IbGDC+oPj9P9ffjXRT9C4
+         DhQu8zqufYUpOdATknAOKEq54wsd4aeJvhdzMP3bibTqDqFYXN0oX3S9tRAECDxgvuEd
+         VL4E/nXJQKbztnnGhOzQKfbB+LtzitzOKIeIcWu/1JH0Ne/ehAjY1JqCnnb79m3ZyOwR
+         644OwpcBZ8Ogp1uKgf/XVhpGizuhKXMy682UFWtrBa7kJfNwFAKoYu4IalJjdg9CiPKb
+         nEFQ==
+X-Gm-Message-State: AOJu0YyjVfCNHARBG21eTYvfrZ14IPa+X2Ud/A+TodA2rqrFa+2umLT6
+        BbKc9NMlsZnpCIyPoBYANAAeoWF0cn8SyWYLFbifeQ==
+X-Google-Smtp-Source: AGHT+IGU8LjTyWo7/9a7JJdcmY7OssfjuZLP7hCvG5OsrxE9r6+CaW//NaZNOOaBBhBG0Oezv/75uldG2UfPdUmoR4M=
+X-Received: by 2002:a17:906:2348:b0:9d0:51d4:4d87 with SMTP id
+ m8-20020a170906234800b009d051d44d87mr12024787eja.62.1700148868828; Thu, 16
+ Nov 2023 07:34:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20231116032644.753370-1-quic_jprakash@quicinc.com>
- <20231116032644.753370-2-quic_jprakash@quicinc.com> <f7065032-206f-423e-bb03-0b808ff16868@linaro.org>
-In-Reply-To: <f7065032-206f-423e-bb03-0b808ff16868@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 16 Nov 2023 17:27:53 +0200
-Message-ID: <CAA8EJprn7NfYAPGygus-Yxyu=kCiGYyEksVv9S3QkP5HNwVzVg@mail.gmail.com>
-Subject: Re: [PATCH V2 3/3] dt-bindings: iio/adc: Move QCOM ADC bindings to
- iio/adc folder
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jishnu Prakash <quic_jprakash@quicinc.com>, jic23@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, daniel.lezcano@linaro.org,
-        linus.walleij@linaro.org, linux-arm-msm@vger.kernel.org,
-        andriy.shevchenko@linux.intel.com, quic_subbaram@quicinc.com,
-        quic_collinsd@quicinc.com, quic_amelende@quicinc.com,
-        quic_kamalw@quicinc.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, marijn.suijten@somainline.org,
-        lars@metafoo.de, luca@z3ntu.xyz, linux-iio@vger.kernel.org,
-        lee@kernel.org, rafael@kernel.org, rui.zhang@intel.com,
-        lukasz.luba@arm.com, cros-qcom-dts-watchers@chromium.org,
-        sboyd@kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm-owner@vger.kernel.org, kernel@quicinc.com
+References: <20231110102054.1393570-1-joychakr@google.com> <CACRpkdZ9RHcHh4o5g62ywK0eQHpLZuGUF0Ud6jogk9Sfqe4krA@mail.gmail.com>
+ <ZVQkLqDB3KtOlIpK@surfacebook.localdomain>
+In-Reply-To: <ZVQkLqDB3KtOlIpK@surfacebook.localdomain>
+From:   Joy Chakraborty <joychakr@google.com>
+Date:   Thu, 16 Nov 2023 21:04:15 +0530
+Message-ID: <CAOSNQF3QeFd857RCJE8wfJ=__-K7Bi4vfMeTVP-+O+LJ7y9SmQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] PM: runtime: Apply pinctrl settings if defined
+To:     andy.shevchenko@gmail.com
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, manugautam@google.com,
+        aniketmaurya@google.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,44 +75,100 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 16 Nov 2023 at 13:44, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On Wed, Nov 15, 2023 at 7:21=E2=80=AFAM <andy.shevchenko@gmail.com> wrote:
 >
-> On 16/11/2023 04:26, Jishnu Prakash wrote:
-> > There are several files containing QCOM ADC macros for channel names
-> > right now in the include/dt-bindings/iio folder. Since all of these
-> > are specifically for adc, move the files to the
-> > include/dt-bindings/iio/adc folder.
+> Tue, Nov 14, 2023 at 02:01:48PM +0100, Linus Walleij kirjoitti:
+> > On Fri, Nov 10, 2023 at 11:21=E2=80=AFAM Joy Chakraborty <joychakr@goog=
+le.com> wrote:
 > >
-> > Also update all affected devicetree and driver files to fix compilation
-> > errors seen with this move and update documentation files to fix
-> > dtbinding check errors for the same.
+> > > Apply pinctrl state from  runtime framework device state transtion.
+> > >
+> > > Pinctrl states if defined in DT are bookmarked in device structures
+> > > but they need to be explicitly applied from device driver callbacks
+> > > which is boiler plate code and also not present in many drivers.
+> > >
+> > > If there is a specific order of setting pinctrl state with other driv=
+er
+> > > actions then the device driver can choose to do it from its pm callba=
+cks,
+> > > in such a case this call will be a no-op from the pinctrl core framew=
+ork
+> > > since the desired pinctrl state would already be set.
+> > >
+> > > We could also add a Kconfig knob to enable/disable this, but I do not
+> > > see a need to.
+>
+> Besides questionable code style (inline functions in the C file)...
+
+Sure, I can change that.
+
+>
+> > It has a certain beauty to it does it not!
 > >
-> > Signed-off-by: Jishnu Prakash <quic_jprakash@quicinc.com>
-> > ---
-> >  .../devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml       | 4 ++--
-> >  Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 2 +-
-> >  .../devicetree/bindings/thermal/qcom-spmi-adc-tm-hc.yaml  | 2 +-
-> >  .../devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml    | 6 +++---
-> >  arch/arm64/boot/dts/qcom/pm2250.dtsi                      | 2 +-
-> >  arch/arm64/boot/dts/qcom/pm6125.dtsi                      | 2 +-
+> > The reason it wasn't done like this from the start was, if I recall cor=
+rectly,
+> > that in some cases a device needs to do the pin control state switching
+> > in a special sequence with other operations, that can not be reordered,
+> > i.e.:
+> >
+> > 1. The pin control state change is not context-free.
+> >
+> > 2. The order of events, i.e. context, does not necessarily match the
+> >      order that Linux subsystems happen to do things.
+> >
+> > When looking through the kernel tree I don't see that people use
+> > the sleep state and idle state much, so we could very well go
+> > with this, and then expect people that need special-casing to name
+> > their states differently.
+> >
+> > What do people thing about that?
 >
-> NAK, bindings are always separate from the other changes.
-
-In this case I'd even try to appeal :-)
-They are doing `git mv` and then fixing the failouts. I think this
-should be fine.
-
+> ...I think the patch is incomplete(?) due to misterious ways of PM runtim=
+e
+> calls. For example, in some cases we force runtime PM during system suspe=
+nd
+> which may have an undesired effect of the switching pin control states
+> (hence glitches or some real issues with the hardware, up to hanging the
+> system). Some pins may be critical to work with and shuffling their state=
+s
+> in an unappropriate time can lead to a disaster.
 >
-> Please run scripts/checkpatch.pl and fix reported warnings. Some
-> warnings can be ignored, but the code here looks like it needs a fix.
-> Feel free to get in touch if the warning is not clear.
->
-> Best regards,
-> Krzysztof
+> So, I would consider this change okay if and only if it will have a detai=
+led
+> research for all existing users to prove there will be no changes in the =
+whole
+> set of possible scenarious (of system sleep / resume, runtime, runtime wi=
+th a
+> custom ->prepare callback and so on).
 >
 
+I tried to place the calls to set the pinctrl states after driver/user
+callback  based on my understanding of runtime code so that existing
+users do get a chance to set the state with any special sequence that
+needs to be performed post which doing another call to set the state
+would be ignored in the pinctrl framework.
 
--- 
-With best wishes
-Dmitry
+But this only would be possible with the assumption that even in any
+special sequences executed by users they set nothing but "default"
+state in runtime_resume, "idle" state in runtime_idle and "'sleep"
+state in their runtime suspend callbacks.
+And like Andy mentions about "->prepare callback", if there are
+drivers that are setting pinctrl state "default", "sleep" or "idle"
+from any callback but
+...
+int (*runtime_suspend)(struct device *dev);
+int (*runtime_resume)(struct device *dev);
+int (*runtime_idle)(struct device *dev);
+...
+it could indeed be a problem.
+I'll dig into users of pinctrl_select_sleep/default/idle and see if
+there are such cases or if it could be done in some other way.
+
+Thanks
+Joy
+
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
