@@ -2,117 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E42B7EE181
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Nov 2023 14:26:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5557EE183
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Nov 2023 14:27:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbjKPN0j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Nov 2023 08:26:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
+        id S1345007AbjKPN1O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Nov 2023 08:27:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbjKPN0i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Nov 2023 08:26:38 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BCD1A5;
-        Thu, 16 Nov 2023 05:26:31 -0800 (PST)
-X-UUID: bec66c48848311ee8051498923ad61e6-20231116
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=y1Rm5jlVn5t0id/m/TPD/9lVjA4G13LLAk8j5q37gsw=;
-        b=qwo0KZcqGzBreHoIaewzH3LX/RwJRuN7riv7yL2UvJlJGkEVTqgywAjt1GT2lySvGo+wb9VRVAJDA2MH0HeUFdpPm9FT0Sj+Q6hDe0wgdGsZWvhULoWAc/VgicTRrdOuYULJjC7KIDoknWs/hSOv/+vXAIBLL2eyB1h0NYnjrAQ=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.33,REQID:04cc521c-c76a-4815-a28f-b6e785132362,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:364b77b,CLOUDID:6d8c2360-c89d-4129-91cb-8ebfae4653fc,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
-        NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_ULN,TF_CID_SPAM_SNR
-X-UUID: bec66c48848311ee8051498923ad61e6-20231116
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
-        (envelope-from <bo.ye@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 413711698; Thu, 16 Nov 2023 21:26:27 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 16 Nov 2023 21:26:25 +0800
-Received: from mcddlt001.gcn.mediatek.inc (10.19.240.15) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Thu, 16 Nov 2023 21:26:24 +0800
-From:   Bo Ye <bo.ye@mediatek.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        with ESMTP id S230348AbjKPN1N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Nov 2023 08:27:13 -0500
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67182CE;
+        Thu, 16 Nov 2023 05:27:10 -0800 (PST)
+Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3b2f507c03cso442282b6e.2;
+        Thu, 16 Nov 2023 05:27:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700141229; x=1700746029;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=EiATJ9Ae1Pi7ofcD6bHPkPAkJ7RwAhGEYTi2JIxus3w=;
+        b=B4SLrCgTk6nIgbKK0kl+IQ0T6+l/8IYa7IaYbO/EKpbQcO8dS9XekWCp0FIlXLWEJm
+         +5MNAjzZBBN6SsMBJiCizI5z9uJGBhLiL46v4nPEh8yVJQHi/fnMqCnraUx3VCbxUopd
+         OdGgAuOl7FRt/eqheMrptkavD7xhEPuSMfHTTCclW/LFGg6W5nZTt258gOQ/nSxC2Mt2
+         5g8t+BPXOeWhFZoz/3YHNtaTs2Jl8Y/nSbWk2TrzgI3YUhgh2oy/KroCdI7xXeDtHTmr
+         Ts3ioIxFVhHPm+50br8siN4d1lpxsKvOnP+jAvOcCbKE4zGHr//vwyoSFKLnECtKLSty
+         EQbw==
+X-Gm-Message-State: AOJu0YyHge4v8DvhbY0bFFmnfqPPvDIHLzeJIEPgRMq74MBsjGvso0gF
+        F4x01nl6VmJiCAAjtP4eIw==
+X-Google-Smtp-Source: AGHT+IHNttpWJHud5egHX7x35FHNuN5x7ZpDa2udGMDZU3OfKdGWUGV4Qavil1YBq7dDUwm1Psyq/g==
+X-Received: by 2002:a05:6808:290d:b0:3b5:64c9:5146 with SMTP id ev13-20020a056808290d00b003b564c95146mr14830718oib.42.1700141229661;
+        Thu, 16 Nov 2023 05:27:09 -0800 (PST)
+Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b24-20020a9d4798000000b006c4edf462d7sm906748otf.43.2023.11.16.05.27.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Nov 2023 05:27:09 -0800 (PST)
+Received: (nullmailer pid 1870084 invoked by uid 1000);
+        Thu, 16 Nov 2023 13:27:07 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <zajec5@gmail.com>
+Cc:     =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org,
         Matthias Brugger <matthias.bgg@gmail.com>,
         AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     <yongdong.zhang@mediatek.com>, mtk24676 <C.Cheng@mediatek.com>,
-        "bo . ye" <bo.ye@mediatek.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH] cpuidle: idle exit_latency overflow
-Date:   Thu, 16 Nov 2023 21:26:19 +0800
-Message-ID: <20231116132619.69500-1-bo.ye@mediatek.com>
-X-Mailer: git-send-email 2.17.0
-MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--2.336600-8.000000
-X-TMASE-MatchedRID: q6Mcoqip180V3w3L8QuNEG3NvezwBrVmgRykyfrH1xlaW2Ktn+I8/hjt
-        AEYMnZ1a+a6+c8HVVTTkY5jnILkv8QfOsX0b+fZzA9lly13c/gF9LQinZ4QefPcjNeVeWlqY+gt
-        Hj7OwNO2mZ396Gt5HhbRDDFNIh3eVt7VBaHOUXTmiHbKhgq+wjecLkJ18YygSpmkWtXcgBB8O5f
-        DUOrhTJDcG0AuzN2tmcPptgJdP32/rxtqtWRjZinZrUbEZipAEiWT09mQz7szw9kH8zAy44aOuV
-        Lnx3A74
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--2.336600-8.000000
-X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP: 4E0647C9374209A165167659E1BEC95B48EA7C03306E9BBFA04062C7CE3E4B892000:8
-X-MTK:  N
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RDNS_NONE,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+In-Reply-To: <20231116120225.29999-1-zajec5@gmail.com>
+References: <20231116120225.29999-1-zajec5@gmail.com>
+Message-Id: <170014122769.1870053.16125262341176189916.robh@kernel.org>
+Subject: Re: [PATCH] dt-bindings: thermal: convert Mediatek Thermal to the
+ json-schema
+Date:   Thu, 16 Nov 2023 07:27:07 -0600
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: mtk24676 <C.Cheng@mediatek.com>
 
-In detail:
-In kernel-6.1, in the __cpuidle_driver_init function in
-driver/cpuidle/driver.c, there is a line of code that causes
-an overflow. The line is s->exit_latency_ns = s->exit_latency
-* NSEC_PER_USEC. The overflow occurs because the product of an
-int type and a constant exceeds the range of the int type.
+On Thu, 16 Nov 2023 13:02:25 +0100, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
+> 
+> This helps validating DTS files.
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> ---
+>  .../bindings/thermal/mediatek-thermal.txt     | 52 ----------
+>  .../bindings/thermal/mediatek-thermal.yaml    | 98 +++++++++++++++++++
+>  2 files changed, 98 insertions(+), 52 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
+>  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek-thermal.yaml
+> 
 
-In C language, when you perform a multiplication operation, if
-both operands are of int type, the multiplication operation is
-performed on the int type, and then the result is converted to
-the target type. This means that if the product of int type
-multiplication exceeds the range that int type can represent,
-an overflow will occur even if you store the result in a
-variable of int64_t type.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Signed-off-by: mtk24676 <C.Cheng@mediatek.com>
-Signed-off-by: bo.ye <bo.ye@mediatek.com>
----
+yamllint warnings/errors:
 
-diff --git a/drivers/cpuidle/driver.c b/drivers/cpuidle/driver.c
-index d9cda7f..631ca16 100644
---- a/drivers/cpuidle/driver.c
-+++ b/drivers/cpuidle/driver.c
-@@ -187,7 +187,7 @@
- 			s->target_residency = div_u64(s->target_residency_ns, NSEC_PER_USEC);
- 
- 		if (s->exit_latency > 0)
--			s->exit_latency_ns = s->exit_latency * NSEC_PER_USEC;
-+			s->exit_latency_ns = (u64)s->exit_latency * NSEC_PER_USEC;
- 		else if (s->exit_latency_ns < 0)
- 			s->exit_latency_ns =  0;
- 		else
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/mediatek-thermal.yaml: properties:resets: 'Reference to the reset controller controlling the thermal controller.' is not of type 'object', 'boolean'
+	from schema $id: http://json-schema.org/draft-07/schema#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/mediatek-thermal.yaml: properties:resets: 'Reference to the reset controller controlling the thermal controller.' is not of type 'object', 'boolean'
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/mediatek-thermal.yaml: 'maintainers' is a required property
+	hint: Metaschema for devicetree binding documentation
+	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
+Traceback (most recent call last):
+  File "/usr/local/bin/dt-validate", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/dtschema/dtb_validate.py", line 144, in main
+    sg.check_dtb(filename)
+  File "/usr/local/lib/python3.11/dist-packages/dtschema/dtb_validate.py", line 89, in check_dtb
+    self.check_subtree(dt, subtree, False, "/", "/", filename)
+  File "/usr/local/lib/python3.11/dist-packages/dtschema/dtb_validate.py", line 82, in check_subtree
+    self.check_subtree(tree, value, disabled, name, fullname + name, filename)
+  File "/usr/local/lib/python3.11/dist-packages/dtschema/dtb_validate.py", line 82, in check_subtree
+    self.check_subtree(tree, value, disabled, name, fullname + name, filename)
+  File "/usr/local/lib/python3.11/dist-packages/dtschema/dtb_validate.py", line 77, in check_subtree
+    self.check_node(tree, subtree, disabled, nodename, fullname, filename)
+  File "/usr/local/lib/python3.11/dist-packages/dtschema/dtb_validate.py", line 33, in check_node
+    for error in self.validator.iter_errors(node, filter=match_schema_file):
+  File "/usr/local/lib/python3.11/dist-packages/dtschema/validator.py", line 393, in iter_errors
+    for error in self.DtValidator(sch,
+  File "/usr/local/lib/python3.11/dist-packages/jsonschema/validators.py", line 288, in iter_errors
+    for error in errors:
+  File "/usr/local/lib/python3.11/dist-packages/jsonschema/_validators.py", line 414, in if_
+    yield from validator.descend(instance, then, schema_path="then")
+  File "/usr/local/lib/python3.11/dist-packages/jsonschema/validators.py", line 305, in descend
+    for error in self.evolve(schema=schema).iter_errors(instance):
+  File "/usr/local/lib/python3.11/dist-packages/jsonschema/validators.py", line 288, in iter_errors
+    for error in errors:
+  File "/usr/local/lib/python3.11/dist-packages/jsonschema/_validators.py", line 332, in properties
+    yield from validator.descend(
+  File "/usr/local/lib/python3.11/dist-packages/jsonschema/validators.py", line 305, in descend
+    for error in self.evolve(schema=schema).iter_errors(instance):
+  File "/usr/local/lib/python3.11/dist-packages/jsonschema/validators.py", line 278, in iter_errors
+    scope = id_of(_schema)
+            ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/jsonschema/validators.py", line 101, in _id_of
+    return schema.get("$id", "")
+           ^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'get'
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20231116120225.29999-1-zajec5@gmail.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
