@@ -2,259 +2,182 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E317ED8BB
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Nov 2023 01:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03D2C7EDA1C
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Nov 2023 04:26:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbjKPA41 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Nov 2023 19:56:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59946 "EHLO
+        id S235663AbjKPD0Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Nov 2023 22:26:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjKPA40 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Nov 2023 19:56:26 -0500
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D38ADAF;
-        Wed, 15 Nov 2023 16:56:21 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.129.93])
-        by gateway (Coremail) with SMTP id _____8Dx_7uzaFVlU2Y6AA--.56070S3;
-        Thu, 16 Nov 2023 08:56:19 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.129.93])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxri+waFVlAIZDAA--.15990S2;
-        Thu, 16 Nov 2023 08:56:16 +0800 (CST)
-From:   Hongchen Zhang <zhanghongchen@loongson.cn>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Bojan Smojver <bojan@rexursive.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        stable@vger.kernel.org, Weihao Li <liweihao@loongson.cn>
-Subject: [PATCH v2] PM: hibernate: use acquire/release ordering when compress/decompress image
-Date:   Thu, 16 Nov 2023 08:56:09 +0800
-Message-Id: <20231116005609.1583858-1-zhanghongchen@loongson.cn>
-X-Mailer: git-send-email 2.33.0
+        with ESMTP id S235471AbjKPD0Y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Nov 2023 22:26:24 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF44C19B;
+        Wed, 15 Nov 2023 19:26:20 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AFNgUL9014504;
+        Thu, 16 Nov 2023 03:26:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=VTI/9uwHcNkV17TzrV9s/BWIg1bxZ5lNUYXNNH2gbJk=;
+ b=SaGR6M/Yx5VXte0T30CcBs7FZlF1i/HSXK8Fze7uE8Jzmg8ief1KgqDfWaMY0EZ2DMTT
+ XMnbgHUgEAjzrGTiAqQBEIvuZG4s2rD+gIo/TokRMoV7J5wQKNO2hsz/ptMsYLObyGeV
+ vDU4b6zAO5wckFFFNB+ss3nEzyr6Viku0cu8j7wnd7CUiQNbYRuYGaiq9biyY+QpcBUg
+ 29Q7ducb68r2i1WIReoIS5uwZGwIwssNd3GXv8XAZTV2qRMI9U/dK9zJibla4p+sMj+1
+ 3m5t6bXtSt0jrJx+MfSFkC/2EO+mv+bJcvO5RaDUCP/bDenigVsmRLlPCzr+4BQeEQel IA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ud7b8rdx2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Nov 2023 03:25:59 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3AG3Pxe3012313
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Nov 2023 03:25:59 GMT
+Received: from hu-jprakash-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.39; Wed, 15 Nov 2023 19:25:47 -0800
+From:   Jishnu Prakash <quic_jprakash@quicinc.com>
+To:     <jic23@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <daniel.lezcano@linaro.org>,
+        <dmitry.baryshkov@linaro.org>, <linus.walleij@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <andriy.shevchenko@linux.intel.com>, <quic_subbaram@quicinc.com>,
+        <quic_collinsd@quicinc.com>, <quic_amelende@quicinc.com>,
+        <quic_kamalw@quicinc.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <marijn.suijten@somainline.org>
+CC:     <lars@metafoo.de>, <luca@z3ntu.xyz>, <linux-iio@vger.kernel.org>,
+        <lee@kernel.org>, <rafael@kernel.org>, <rui.zhang@intel.com>,
+        <lukasz.luba@arm.com>, <cros-qcom-dts-watchers@chromium.org>,
+        <sboyd@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-arm-msm-owner@vger.kernel.org>, <kernel@quicinc.com>,
+        Jishnu Prakash <quic_jprakash@quicinc.com>
+Subject: [PATCH V2 0/3] iio: adc: Add support for QCOM SPMI PMIC5 Gen3 ADC
+Date:   Thu, 16 Nov 2023 08:55:27 +0530
+Message-ID: <20231116032530.753192-1-quic_jprakash@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cxri+waFVlAIZDAA--.15990S2
-X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/1tbiAQAQB2VUKqkG2gABs5
-X-Coremail-Antispam: 1Uk129KBj93XoW3Gw47uFWkJrW7ZFyrXFWkGrX_yoW7KFy5pF
-        W8Xan0kr4UXrs8Z39rAay8Z345A3ZYyFZrGrsxG34fuasIgrsYya40gF9Yvr1YyFy8t34v
-        9a17K34qgryqqFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-        Gr0_Gr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
-        twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
-        8JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
-        6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
-        AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
-        0xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
-        v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AK
-        xVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcbAwUUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: vrV0z_b0dM8_XPPRK5pRLazJWrCDLWj9
+X-Proofpoint-GUID: vrV0z_b0dM8_XPPRK5pRLazJWrCDLWj9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-15_20,2023-11-15_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ mlxscore=0 bulkscore=0 phishscore=0 spamscore=0 priorityscore=1501
+ malwarescore=0 impostorscore=0 mlxlogscore=922 clxscore=1011
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311060000 definitions=main-2311160025
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When we test S4(suspend to disk) on LoongArch 3A6000 platform, the
-test case sometimes fails. The dmesg log shows the following error:
-	Invalid LZO compressed length
-After we dig into the code, we find out that:
-When compress/decompress the image, the synchronization operation
-between the control thread and the compress/decompress/crc thread
-uses relaxed ordering interface, which is unreliable, and the
-following situation may occur:
-CPU 0					CPU 1
-save_image_lzo				lzo_compress_threadfn
-					  atomic_set(&d->stop, 1);
-  atomic_read(&data[thr].stop)
-  data[thr].cmp = data[thr].cmp_len;
-	  				  WRITE data[thr].cmp_len
-Then CPU0 get a old cmp_len and write to disk. When cpu resume from S4,
-wrong cmp_len is loaded.
+PMIC5 Gen3 has a similar ADC architecture to that on PMIC5 Gen2,
+with all SW communication to ADC going through PMK8550 which
+communicates with other PMICs through PBS. The major difference is
+that the register interface used here is that of an SDAM present on
+PMK8550, rather than a dedicated ADC peripheral. There may be more than one
+SDAM used for ADC5 Gen3. Each ADC SDAM has eight channels, each of which may
+be used for either immediate reads (same functionality as previous PMIC5 and
+PMIC5 Gen2 ADC peripherals) or recurring measurements (same as PMIC5 and PMIC5
+Gen2 ADC_TM functionality). In this case, we have VADC and ADC_TM functionality
+combined into the same driver.
 
-To maintain data consistency between two threads, we should use the
-acquire/release ordering interface. So we change atomic_read/atomic_set
-to atomic_read_acquire/atomic_set_release.
+Patches 1 adds bindings for ADC5 Gen3 peripheral.
 
-Fixes: 081a9d043c98 ("PM / Hibernate: Improve performance of LZO/plain hibernation, checksum image")
-Cc: stable@vger.kernel.org
-Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
-Signed-off-by: Weihao Li <liweihao@loongson.cn>
----
-v1 -> v2:
-	1. add Cc: stable@vger.kernel.org in commit log
-	2. add Fixes: line in commit log
----
- kernel/power/swap.c | 38 +++++++++++++++++++-------------------
- 1 file changed, 19 insertions(+), 19 deletions(-)
+Patches 2 adds driver support for ADC5 Gen3.
 
-diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index a2cb0babb5ec..d44f5937f1e5 100644
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -606,11 +606,11 @@ static int crc32_threadfn(void *data)
- 	unsigned i;
- 
- 	while (1) {
--		wait_event(d->go, atomic_read(&d->ready) ||
-+		wait_event(d->go, atomic_read_acquire(&d->ready) ||
- 		                  kthread_should_stop());
- 		if (kthread_should_stop()) {
- 			d->thr = NULL;
--			atomic_set(&d->stop, 1);
-+			atomic_set_release(&d->stop, 1);
- 			wake_up(&d->done);
- 			break;
- 		}
-@@ -619,7 +619,7 @@ static int crc32_threadfn(void *data)
- 		for (i = 0; i < d->run_threads; i++)
- 			*d->crc32 = crc32_le(*d->crc32,
- 			                     d->unc[i], *d->unc_len[i]);
--		atomic_set(&d->stop, 1);
-+		atomic_set_release(&d->stop, 1);
- 		wake_up(&d->done);
- 	}
- 	return 0;
-@@ -649,12 +649,12 @@ static int lzo_compress_threadfn(void *data)
- 	struct cmp_data *d = data;
- 
- 	while (1) {
--		wait_event(d->go, atomic_read(&d->ready) ||
-+		wait_event(d->go, atomic_read_acquire(&d->ready) ||
- 		                  kthread_should_stop());
- 		if (kthread_should_stop()) {
- 			d->thr = NULL;
- 			d->ret = -1;
--			atomic_set(&d->stop, 1);
-+			atomic_set_release(&d->stop, 1);
- 			wake_up(&d->done);
- 			break;
- 		}
-@@ -663,7 +663,7 @@ static int lzo_compress_threadfn(void *data)
- 		d->ret = lzo1x_1_compress(d->unc, d->unc_len,
- 		                          d->cmp + LZO_HEADER, &d->cmp_len,
- 		                          d->wrk);
--		atomic_set(&d->stop, 1);
-+		atomic_set_release(&d->stop, 1);
- 		wake_up(&d->done);
- 	}
- 	return 0;
-@@ -798,7 +798,7 @@ static int save_image_lzo(struct swap_map_handle *handle,
- 
- 			data[thr].unc_len = off;
- 
--			atomic_set(&data[thr].ready, 1);
-+			atomic_set_release(&data[thr].ready, 1);
- 			wake_up(&data[thr].go);
- 		}
- 
-@@ -806,12 +806,12 @@ static int save_image_lzo(struct swap_map_handle *handle,
- 			break;
- 
- 		crc->run_threads = thr;
--		atomic_set(&crc->ready, 1);
-+		atomic_set_release(&crc->ready, 1);
- 		wake_up(&crc->go);
- 
- 		for (run_threads = thr, thr = 0; thr < run_threads; thr++) {
- 			wait_event(data[thr].done,
--			           atomic_read(&data[thr].stop));
-+				atomic_read_acquire(&data[thr].stop));
- 			atomic_set(&data[thr].stop, 0);
- 
- 			ret = data[thr].ret;
-@@ -850,7 +850,7 @@ static int save_image_lzo(struct swap_map_handle *handle,
- 			}
- 		}
- 
--		wait_event(crc->done, atomic_read(&crc->stop));
-+		wait_event(crc->done, atomic_read_acquire(&crc->stop));
- 		atomic_set(&crc->stop, 0);
- 	}
- 
-@@ -1132,12 +1132,12 @@ static int lzo_decompress_threadfn(void *data)
- 	struct dec_data *d = data;
- 
- 	while (1) {
--		wait_event(d->go, atomic_read(&d->ready) ||
-+		wait_event(d->go, atomic_read_acquire(&d->ready) ||
- 		                  kthread_should_stop());
- 		if (kthread_should_stop()) {
- 			d->thr = NULL;
- 			d->ret = -1;
--			atomic_set(&d->stop, 1);
-+			atomic_set_release(&d->stop, 1);
- 			wake_up(&d->done);
- 			break;
- 		}
-@@ -1150,7 +1150,7 @@ static int lzo_decompress_threadfn(void *data)
- 			flush_icache_range((unsigned long)d->unc,
- 					   (unsigned long)d->unc + d->unc_len);
- 
--		atomic_set(&d->stop, 1);
-+		atomic_set_release(&d->stop, 1);
- 		wake_up(&d->done);
- 	}
- 	return 0;
-@@ -1335,7 +1335,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
- 		}
- 
- 		if (crc->run_threads) {
--			wait_event(crc->done, atomic_read(&crc->stop));
-+			wait_event(crc->done, atomic_read_acquire(&crc->stop));
- 			atomic_set(&crc->stop, 0);
- 			crc->run_threads = 0;
- 		}
-@@ -1371,7 +1371,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
- 					pg = 0;
- 			}
- 
--			atomic_set(&data[thr].ready, 1);
-+			atomic_set_release(&data[thr].ready, 1);
- 			wake_up(&data[thr].go);
- 		}
- 
-@@ -1390,7 +1390,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
- 
- 		for (run_threads = thr, thr = 0; thr < run_threads; thr++) {
- 			wait_event(data[thr].done,
--			           atomic_read(&data[thr].stop));
-+				atomic_read_acquire(&data[thr].stop));
- 			atomic_set(&data[thr].stop, 0);
- 
- 			ret = data[thr].ret;
-@@ -1421,7 +1421,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
- 				ret = snapshot_write_next(snapshot);
- 				if (ret <= 0) {
- 					crc->run_threads = thr + 1;
--					atomic_set(&crc->ready, 1);
-+					atomic_set_release(&crc->ready, 1);
- 					wake_up(&crc->go);
- 					goto out_finish;
- 				}
-@@ -1429,13 +1429,13 @@ static int load_image_lzo(struct swap_map_handle *handle,
- 		}
- 
- 		crc->run_threads = thr;
--		atomic_set(&crc->ready, 1);
-+		atomic_set_release(&crc->ready, 1);
- 		wake_up(&crc->go);
- 	}
- 
- out_finish:
- 	if (crc->run_threads) {
--		wait_event(crc->done, atomic_read(&crc->stop));
-+		wait_event(crc->done, atomic_read_acquire(&crc->stop));
- 		atomic_set(&crc->stop, 0);
- 	}
- 	stop = ktime_get();
+Patch 3 is a cleanup, to move the QCOM ADC dt-bindings files from
+dt-bindings/iio to dt-bindings/iio/adc folder, as they are
+specifically for ADC devices. It also fixes all compilation errors
+with this change in driver and devicetree files and similar errors
+in documentation for dtbinding check.
+
+Changes since v1:
+- Dropped patches 1-5 for changing 'ADC7' peripheral name to 'ADC5 Gen2'.
+- Addressed reviewer comments for binding and driver patches for ADC5 Gen3.
+- Combined patches 8-11 into a single patch as requested by reviewers to make
+  the change clearer and made all fixes required in same patch.
+
+Jishnu Prakash (3):
+  dt-bindings: iio: adc: Add QCOM PMIC5 Gen3 ADC bindings
+  iio: adc: Add support for QCOM PMIC5 Gen3 ADC
+  dt-bindings: iio/adc: Move QCOM ADC bindings to iio/adc folder
+
+ .../bindings/iio/adc/qcom,spmi-vadc.yaml      |  185 ++-
+ .../bindings/mfd/qcom,spmi-pmic.yaml          |    2 +-
+ .../bindings/thermal/qcom-spmi-adc-tm-hc.yaml |    2 +-
+ .../bindings/thermal/qcom-spmi-adc-tm5.yaml   |    6 +-
+ arch/arm64/boot/dts/qcom/pm2250.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/pm6125.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/pm6150.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/pm6150l.dtsi         |    2 +-
+ arch/arm64/boot/dts/qcom/pm660.dtsi           |    2 +-
+ arch/arm64/boot/dts/qcom/pm660l.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/pm7250b.dtsi         |    2 +-
+ arch/arm64/boot/dts/qcom/pm8150.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/pm8150b.dtsi         |    2 +-
+ arch/arm64/boot/dts/qcom/pm8150l.dtsi         |    2 +-
+ arch/arm64/boot/dts/qcom/pm8916.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/pm8950.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/pm8953.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/pm8994.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/pm8998.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/pmi632.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/pmi8950.dtsi         |    2 +-
+ arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi     |    2 +-
+ arch/arm64/boot/dts/qcom/pmp8074.dtsi         |    2 +-
+ arch/arm64/boot/dts/qcom/pms405.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts       |    2 +-
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi      |    2 +-
+ arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi    |    4 +-
+ arch/arm64/boot/dts/qcom/sc8180x-pmics.dtsi   |    2 +-
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    |    6 +-
+ .../boot/dts/qcom/sm7225-fairphone-fp4.dts    |    2 +-
+ arch/arm64/boot/dts/qcom/sm8450-hdk.dts       |    8 +-
+ drivers/iio/adc/Kconfig                       |   25 +
+ drivers/iio/adc/Makefile                      |    1 +
+ drivers/iio/adc/qcom-spmi-adc5-gen3.c         | 1189 +++++++++++++++++
+ drivers/iio/adc/qcom-spmi-adc5.c              |    2 +-
+ drivers/iio/adc/qcom-spmi-vadc.c              |    2 +-
+ .../iio/adc/qcom,spmi-adc5-gen3-pm8550.h      |   50 +
+ .../iio/adc/qcom,spmi-adc5-gen3-pm8550b.h     |   89 ++
+ .../iio/adc/qcom,spmi-adc5-gen3-pm8550vx.h    |   22 +
+ .../iio/adc/qcom,spmi-adc5-gen3-pmk8550.h     |   56 +
+ .../iio/{ => adc}/qcom,spmi-adc7-pm8350.h     |    2 +-
+ .../iio/{ => adc}/qcom,spmi-adc7-pm8350b.h    |    2 +-
+ .../iio/{ => adc}/qcom,spmi-adc7-pmk8350.h    |    2 +-
+ .../iio/{ => adc}/qcom,spmi-adc7-pmr735a.h    |    2 +-
+ .../iio/{ => adc}/qcom,spmi-adc7-pmr735b.h    |    0
+ .../iio/{ => adc}/qcom,spmi-vadc.h            |   81 ++
+ 46 files changed, 1725 insertions(+), 61 deletions(-)
+ create mode 100644 drivers/iio/adc/qcom-spmi-adc5-gen3.c
+ create mode 100644 include/dt-bindings/iio/adc/qcom,spmi-adc5-gen3-pm8550.h
+ create mode 100644 include/dt-bindings/iio/adc/qcom,spmi-adc5-gen3-pm8550b.h
+ create mode 100644 include/dt-bindings/iio/adc/qcom,spmi-adc5-gen3-pm8550vx.h
+ create mode 100644 include/dt-bindings/iio/adc/qcom,spmi-adc5-gen3-pmk8550.h
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pm8350.h (98%)
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pm8350b.h (99%)
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pmk8350.h (97%)
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pmr735a.h (95%)
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pmr735b.h (100%)
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-vadc.h (77%)
+
 -- 
-2.33.0
+2.25.1
 
