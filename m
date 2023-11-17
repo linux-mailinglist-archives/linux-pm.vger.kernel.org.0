@@ -2,275 +2,299 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC6AE7EEBEE
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Nov 2023 06:22:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C19FE7EEC50
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Nov 2023 07:40:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjKQFWy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Nov 2023 00:22:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57074 "EHLO
+        id S229914AbjKQGjF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Nov 2023 01:39:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbjKQFWx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Nov 2023 00:22:53 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1748D52;
-        Thu, 16 Nov 2023 21:22:48 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9c3aec5f326so544155766b.1;
-        Thu, 16 Nov 2023 21:22:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700198567; x=1700803367; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=v27wSqqrShCzztVlfwu/zWkCL4FJgwhMdx/No5LYqKU=;
-        b=fCIWPhNrmcUuocfy+nJNKMMmwWH2q8is6D+RLwtc52vR8fyp5uE6wJLXECNy9meFQ+
-         joxreVmcf4g1knIpmY5UQHR9wRSN6tZ39VO6rNrFr4dbGRaQp5PRSSFxD+s0ns3sxUwD
-         ZyhJhBHgkj80jDoMuInIa9Axn/5bqW+loKs/GXxRaa9kztC58ZYpEkNKyiyQMU8XHY74
-         BpzLbjgsrbfv9g8xCYLeEd3jp+lvoBxkrAQqjQCYk5+kHlTNTkurIff/MkdsVjTo3sD0
-         qNi4q0RYZ97m1TrjKlInC2tOc2S8kl+810OV0TDowHbsjnVrSKZ8aFZBAD3w5ZKhZ2Yt
-         DZWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700198567; x=1700803367;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=v27wSqqrShCzztVlfwu/zWkCL4FJgwhMdx/No5LYqKU=;
-        b=XeOSiUyY9XPCa7HUYh0ZlQ0ji6o7jky4uEOmuq37jwWXyf4iZ4JuwiP9oSgjqyndvf
-         NMWZQv/VjKfbffE2LNnkdNFhfydNTWxnVvVA1wq+5rV+Rn9DoH7xvmVSc2aaRfsVJCYj
-         xQSinamUFS46zupY8qxbF3YwjPksICTI2py9a/N3KL1vNCHk8IaSshmGgsi90s4FmZOi
-         ZSCGuiBdTXUmecy10P81L3JkXhRZ12FiReTpbxvIWW+eRCnWFNcpOVhYApMgi5Jp1gnj
-         DFz1ur0657bd/OdgjuT2eZ7ee3+quDIU4CZYV7tqpBjAPxbOb6VqKqC5QxyPQWD+HL8e
-         ARhw==
-X-Gm-Message-State: AOJu0YyB+N1X8kLeCZ6JUW7njRI6BA372pUPDAFAFJVKKeWdTb3pyfOc
-        30/q5iLcBCyi6xmByg9lRNc=
-X-Google-Smtp-Source: AGHT+IFWYXXsNUiwsA640Taj8FVTPG3BMMTjDOpghUVLL6KpPkR4Qh5oftQ0IlSbTvHeL6rafpGPEw==
-X-Received: by 2002:a17:907:970f:b0:9ad:e3fd:d46c with SMTP id jg15-20020a170907970f00b009ade3fdd46cmr4388479ejc.10.1700198567153;
-        Thu, 16 Nov 2023 21:22:47 -0800 (PST)
-Received: from localhost.lan (031011218106.poznan.vectranet.pl. [31.11.218.106])
-        by smtp.gmail.com with ESMTPSA id lt16-20020a170906fa9000b009e71efcce28sm380238ejb.210.2023.11.16.21.22.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Nov 2023 21:22:46 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH V3] dt-bindings: thermal: convert Mediatek Thermal to the json-schema
-Date:   Fri, 17 Nov 2023 06:22:14 +0100
-Message-Id: <20231117052214.24554-1-zajec5@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        with ESMTP id S229436AbjKQGjE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Nov 2023 01:39:04 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2070.outbound.protection.outlook.com [40.107.92.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6275AD50;
+        Thu, 16 Nov 2023 22:39:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H6aunRcmsvedwmJFjmQI9qnyLIggSCnfBICL7drDbHK7VJYR+PqMnFQN55s1J+5SON6NPAK6SshZpCd0GT6Z3ZMYNOMogH4GY2svH82Xmkj1w0FCbCGB/mrztI7ABmkUYH3fSZcy1Wo6uY/LfrK0FZh+/z0772zBXqX8KpSy8Ngync/5uuyGioje0jD75fNQyA/L3sGhi0gVrwPL6HMSbvVVMbamq2NCnmOlpDoapMFs50ObiuNKKmbL7Ej3rs15jvirIEI4lZ7q1O0HpI5rCiaCu8szD1LnIluabMyLymCeIPNqLcKFYw/HMEfoBeFeZqRyB7Xbe2sUv834Q5MGHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8Oa4rnZprkhnD/Mi5QpLAGGDsW2julIJJOSWgoldDbs=;
+ b=IfLjFezCV3LLVUq84mgr4d9yhPO1j7S1aA/YRHb30Grwico1ID7jW9qVvc+15OjyPvIZzTh54l+GHU7ZiKdfiNyj1iA4fWS6QzFRTCtNf3HRJOFWFSI/67vRs+EeEyH9TOuIvjdw0ovIC1ZJGaC8LbRCxCQjcY6F3I5hrXrcQ80vDjJ6cLILQjPOI4W11iFx1qDVsZ6nKiHNSMCSWdfrgWacxDZVdCUL+ZygqDqfz/b4lcIr6zdi95iEHYI7i2Q4TUvbjqntnZ2Xbbfp+rdAazN9tDsdiSGHGJWNpij57HWLii/eMbaFdCbaqkbc89KnZvNxfU9+7ELTaQY2W/L3iQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8Oa4rnZprkhnD/Mi5QpLAGGDsW2julIJJOSWgoldDbs=;
+ b=Ki7XTzKUr9sy58lmtLaGZvoXMRc9kSjKFP6nQD4fgtS61miFSadeSDD9UCOft4Em0vRp8AAsYpx7r72XWImd1Xaz9iaC1as1OsVwoA3m2LOQH0t3kWLdYl6LIyB3q/OR1I+gbNZ+fvU8jnaDkJHjDnlhVyVxkyJKmxQjiT/F6lQ=
+Received: from MW2PR16CA0057.namprd16.prod.outlook.com (2603:10b6:907:1::34)
+ by MW4PR12MB7429.namprd12.prod.outlook.com (2603:10b6:303:21b::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.23; Fri, 17 Nov
+ 2023 06:38:58 +0000
+Received: from CO1PEPF000044FD.namprd21.prod.outlook.com
+ (2603:10b6:907:1:cafe::97) by MW2PR16CA0057.outlook.office365.com
+ (2603:10b6:907:1::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.23 via Frontend
+ Transport; Fri, 17 Nov 2023 06:38:58 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF000044FD.mail.protection.outlook.com (10.167.241.203) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7025.8 via Frontend Transport; Fri, 17 Nov 2023 06:38:57 +0000
+Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.32; Fri, 17 Nov
+ 2023 00:38:54 -0600
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     <rafael@kernel.org>, <ray.huang@amd.com>, <viresh.kumar@linaro.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <perry.yuan@amd.com>, Wyes Karny <wyes.karny@amd.com>
+Subject: [PATCH v2] cpufreq/amd-pstate: Fix scaling_min_freq and scaling_max_freq update
+Date:   Fri, 17 Nov 2023 06:38:39 +0000
+Message-ID: <20231117063839.17465-1-wyes.karny@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000044FD:EE_|MW4PR12MB7429:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1b60189c-1c06-48f7-c3bb-08dbe737e087
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Dn8AkuKDQA6KmujvTM+TvwQjlAnBXJ/ZOXdWL4RFgKQBLHrGHcEBmmTuZJH59985f4cc2Jujy4vtDBNNmQR4vO1Sao2YS21j33DWxO8E4aFPO4F3519gSuqQIBxQ1FdRRr/g1kdfjnHOrVRf8jOeQpYX6yAv6YG27MtAZLbHxXdYANHqgm6I0CkhsGMhfPGsuPdfsOTLMnxQdg3L7h0t/k6b2xAhB5/N2t0liY6+fk5m/dkKI5RU5he7qIp7H8Eyic1ffQpZz0w1+tgjs9yS4jWJkYe9HILR8N7MzHdMQy8aAbA73UHlfMgG5VZL3G3HWe7Ccb0BFmxDgp/NNPZvM3GTpqAm3alimY8K6N4y4qMdgsKUszYKx7po4pUWCTlHH6ki80crzm/EBqVaQElE3L1z21pl/IHCHU74V461mmMKcBmNonGCYUkM+DZQIZ3Ut/ZAPRlo/POp8x2F2/rmgLE+WdFlNPYjuli/mueRcvBrqu2IxJJHvCwqphI33Nx17jr4IcpIjHSyfsGYvNiqnzabZt1HDw2L44a0St3cT2Y1lIKp9NUg7yeIRksNB3F3Xu5U1WjHl2W55RUwghDwhyromh25bwnkdPeVsgK8tdrCbSo/8K+vTr2yHbhMyLo5KSeCZIg9rwLpYT8Gfdh4AKP+X7KP9olM9MAgxNd6VDArhN7KonEUcatuKvCBHCXiTQHkcgKgeOTjkagICiawjMDqw6whyXCI8ovSuf/KL0zxIN/y80HdIb8AoAVjKnWNIzth6473HupyhiLY972ZWC6mRJPdE1ZBTqgDU5mgeGE=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(396003)(376002)(136003)(346002)(230922051799003)(451199024)(186009)(64100799003)(1800799009)(82310400011)(46966006)(36840700001)(40470700004)(40480700001)(16526019)(40460700003)(81166007)(70206006)(70586007)(110136005)(54906003)(1076003)(356005)(36756003)(86362001)(82740400003)(83380400001)(36860700001)(26005)(7696005)(336012)(426003)(2616005)(6666004)(2906002)(478600001)(316002)(44832011)(8676002)(47076005)(5660300002)(4326008)(8936002)(41300700001)(15650500001)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2023 06:38:57.7549
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1b60189c-1c06-48f7-c3bb-08dbe737e087
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000044FD.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7429
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+When amd_pstate is running, writing to scaling_min_freq and
+scaling_max_freq has no effect. These values are only passed to the
+policy level, but not to the platform level. This means that the
+platform does not know about the frequency limits set by the user. To
+fix this, update the min_perf and max_perf values at the platform level
+whenever the user changes the scaling_min_freq and scaling_max_freq
+values.
 
-This helps validating DTS files. Introduced changes:
-1. Improved title
-2. Simplified description (dropped "This describes the device tree...")
-3. Dropped undocumented "reset-names" from example
-
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Fixes: ffa5096a7c33 ("cpufreq: amd-pstate: implement Pstate EPP support for the AMD processors")
+Acked-by: Huang Rui <ray.huang@amd.com>
+Signed-off-by: Wyes Karny <wyes.karny@amd.com>
 ---
-V2: Add "maintainers"
-V3: Introduce changes described in commit body
-    Fix schema syntax
-    Move unevaluatedProperties to the bottom
-    Rename file to match compatible more closely
+Changelog:
+v1 -> v2:
+- Rebase
+- Pick up ack from Ray
+- Add fixes tag
 
-I'm totally sorry for sending broken schema patch yesterday. Brainfart.
-There is no excuse for sth that doesn't even pass dt_binding_check.
-  DTEX    Documentation/devicetree/bindings/thermal/mediatek,thermal.example.dts
-  DTC_CHK Documentation/devicetree/bindings/thermal/mediatek,thermal.example.dtb
+ drivers/cpufreq/amd-pstate.c | 60 ++++++++++++++++++++++++++++--------
+ include/linux/amd-pstate.h   |  4 +++
+ 2 files changed, 51 insertions(+), 13 deletions(-)
 
- .../bindings/thermal/mediatek,thermal.yaml    | 99 +++++++++++++++++++
- .../bindings/thermal/mediatek-thermal.txt     | 52 ----------
- 2 files changed, 99 insertions(+), 52 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml
- delete mode 100644 Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
-
-diff --git a/Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml
-new file mode 100644
-index 000000000000..d96a2e32bd8f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml
-@@ -0,0 +1,99 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/mediatek,thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Mediatek thermal controller for on-SoC temperatures
-+
-+maintainers:
-+  - Sascha Hauer <s.hauer@pengutronix.de>
-+
-+description:
-+  This device does not have its own ADC, instead it directly controls the AUXADC
-+  via AHB bus accesses. For this reason it needs phandles to the AUXADC. Also it
-+  controls a mux in the apmixedsys register space via AHB bus accesses, so a
-+  phandle to the APMIXEDSYS is also needed.
-+
-+allOf:
-+  - $ref: thermal-sensor.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt2701-thermal
-+      - mediatek,mt2712-thermal
-+      - mediatek,mt7622-thermal
-+      - mediatek,mt7981-thermal
-+      - mediatek,mt7986-thermal
-+      - mediatek,mt8173-thermal
-+      - mediatek,mt8183-thermal
-+      - mediatek,mt8365-thermal
-+      - mediatek,mt8516-thermal
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: Main clock needed for register access
-+      - description: The AUXADC clock
-+
-+  clock-names:
-+    items:
-+      - const: therm
-+      - const: auxadc
-+
-+  mediatek,auxadc:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: A phandle to the AUXADC which the thermal controller uses
-+
-+  mediatek,apmixedsys:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: A phandle to the APMIXEDSYS controller
-+
-+  resets:
-+    description: Reset controller controlling the thermal controller
-+
-+  nvmem-cells:
-+    items:
-+      - description:
-+          NVMEM cell with EEPROMA phandle to the calibration data provided by an
-+          NVMEM device. If unspecified default values shall be used.
-+
-+  nvmem-cell-names:
-+    items:
-+      - const: calibration-data
-+
-+required:
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - mediatek,auxadc
-+  - mediatek,apmixedsys
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/clock/mt8173-clk.h>
-+    #include <dt-bindings/reset/mt8173-resets.h>
-+
-+    thermal@1100b000 {
-+        compatible = "mediatek,mt8173-thermal";
-+        reg = <0x1100b000 0x1000>;
-+        interrupts = <0 70 IRQ_TYPE_LEVEL_LOW>;
-+        clocks = <&pericfg CLK_PERI_THERM>, <&pericfg CLK_PERI_AUXADC>;
-+        clock-names = "therm", "auxadc";
-+        resets = <&pericfg MT8173_PERI_THERM_SW_RST>;
-+        mediatek,auxadc = <&auxadc>;
-+        mediatek,apmixedsys = <&apmixedsys>;
-+        nvmem-cells = <&thermal_calibration_data>;
-+        nvmem-cell-names = "calibration-data";
-+        #thermal-sensor-cells = <1>;
-+    };
-diff --git a/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt b/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
-deleted file mode 100644
-index ac39c7156fde..000000000000
---- a/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
-+++ /dev/null
-@@ -1,52 +0,0 @@
--* Mediatek Thermal
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index 9a1e194d5cf8..4839cdd2715e 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -307,11 +307,11 @@ static int pstate_init_perf(struct amd_cpudata *cpudata)
+ 		highest_perf = AMD_CPPC_HIGHEST_PERF(cap1);
+ 
+ 	WRITE_ONCE(cpudata->highest_perf, highest_perf);
 -
--This describes the device tree binding for the Mediatek thermal controller
--which measures the on-SoC temperatures. This device does not have its own ADC,
--instead it directly controls the AUXADC via AHB bus accesses. For this reason
--this device needs phandles to the AUXADC. Also it controls a mux in the
--apmixedsys register space via AHB bus accesses, so a phandle to the APMIXEDSYS
--is also needed.
++	WRITE_ONCE(cpudata->max_limit_perf, highest_perf);
+ 	WRITE_ONCE(cpudata->nominal_perf, AMD_CPPC_NOMINAL_PERF(cap1));
+ 	WRITE_ONCE(cpudata->lowest_nonlinear_perf, AMD_CPPC_LOWNONLIN_PERF(cap1));
+ 	WRITE_ONCE(cpudata->lowest_perf, AMD_CPPC_LOWEST_PERF(cap1));
 -
--Required properties:
--- compatible:
--  - "mediatek,mt8173-thermal" : For MT8173 family of SoCs
--  - "mediatek,mt2701-thermal" : For MT2701 family of SoCs
--  - "mediatek,mt2712-thermal" : For MT2712 family of SoCs
--  - "mediatek,mt7622-thermal" : For MT7622 SoC
--  - "mediatek,mt7981-thermal", "mediatek,mt7986-thermal" : For MT7981 SoC
--  - "mediatek,mt7986-thermal" : For MT7986 SoC
--  - "mediatek,mt8183-thermal" : For MT8183 family of SoCs
--  - "mediatek,mt8365-thermal" : For MT8365 family of SoCs
--  - "mediatek,mt8516-thermal", "mediatek,mt2701-thermal : For MT8516 family of SoCs
--- reg: Address range of the thermal controller
--- interrupts: IRQ for the thermal controller
--- clocks, clock-names: Clocks needed for the thermal controller. required
--                       clocks are:
--		       "therm":	 Main clock needed for register access
--		       "auxadc": The AUXADC clock
--- mediatek,auxadc: A phandle to the AUXADC which the thermal controller uses
--- mediatek,apmixedsys: A phandle to the APMIXEDSYS controller.
--- #thermal-sensor-cells : Should be 0. See Documentation/devicetree/bindings/thermal/thermal-sensor.yaml for a description.
++	WRITE_ONCE(cpudata->min_limit_perf, AMD_CPPC_LOWEST_PERF(cap1));
+ 	return 0;
+ }
+ 
+@@ -329,11 +329,12 @@ static int cppc_init_perf(struct amd_cpudata *cpudata)
+ 		highest_perf = cppc_perf.highest_perf;
+ 
+ 	WRITE_ONCE(cpudata->highest_perf, highest_perf);
 -
--Optional properties:
--- resets: Reference to the reset controller controlling the thermal controller.
--- nvmem-cells: A phandle to the calibration data provided by a nvmem device. If
--               unspecified default values shall be used.
--- nvmem-cell-names: Should be "calibration-data"
++	WRITE_ONCE(cpudata->max_limit_perf, highest_perf);
+ 	WRITE_ONCE(cpudata->nominal_perf, cppc_perf.nominal_perf);
+ 	WRITE_ONCE(cpudata->lowest_nonlinear_perf,
+ 		   cppc_perf.lowest_nonlinear_perf);
+ 	WRITE_ONCE(cpudata->lowest_perf, cppc_perf.lowest_perf);
++	WRITE_ONCE(cpudata->min_limit_perf, cppc_perf.lowest_perf);
+ 
+ 	if (cppc_state == AMD_PSTATE_ACTIVE)
+ 		return 0;
+@@ -432,6 +433,10 @@ static void amd_pstate_update(struct amd_cpudata *cpudata, u32 min_perf,
+ 	u64 prev = READ_ONCE(cpudata->cppc_req_cached);
+ 	u64 value = prev;
+ 
++	min_perf = clamp_t(unsigned long, min_perf, cpudata->min_limit_perf,
++			cpudata->max_limit_perf);
++	max_perf = clamp_t(unsigned long, max_perf, cpudata->min_limit_perf,
++			cpudata->max_limit_perf);
+ 	des_perf = clamp_t(unsigned long, des_perf, min_perf, max_perf);
+ 
+ 	if ((cppc_state == AMD_PSTATE_GUIDED) && (gov_flags & CPUFREQ_GOV_DYNAMIC_SWITCHING)) {
+@@ -470,6 +475,22 @@ static int amd_pstate_verify(struct cpufreq_policy_data *policy)
+ 	return 0;
+ }
+ 
++static int amd_pstate_update_min_max_limit(struct cpufreq_policy *policy)
++{
++	u32 max_limit_perf, min_limit_perf;
++	struct amd_cpudata *cpudata = policy->driver_data;
++
++	max_limit_perf = div_u64(policy->max * cpudata->highest_perf, cpudata->max_freq);
++	min_limit_perf = div_u64(policy->min * cpudata->highest_perf, cpudata->max_freq);
++
++	WRITE_ONCE(cpudata->max_limit_perf, max_limit_perf);
++	WRITE_ONCE(cpudata->min_limit_perf, min_limit_perf);
++	WRITE_ONCE(cpudata->max_limit_freq, policy->max);
++	WRITE_ONCE(cpudata->min_limit_freq, policy->min);
++
++	return 0;
++}
++
+ static int amd_pstate_update_freq(struct cpufreq_policy *policy,
+ 				  unsigned int target_freq, bool fast_switch)
+ {
+@@ -480,6 +501,9 @@ static int amd_pstate_update_freq(struct cpufreq_policy *policy,
+ 	if (!cpudata->max_freq)
+ 		return -ENODEV;
+ 
++	if (policy->min != cpudata->min_limit_freq || policy->max != cpudata->max_limit_freq)
++		amd_pstate_update_min_max_limit(policy);
++
+ 	cap_perf = READ_ONCE(cpudata->highest_perf);
+ 	min_perf = READ_ONCE(cpudata->lowest_perf);
+ 	max_perf = cap_perf;
+@@ -532,6 +556,10 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
+ 	struct amd_cpudata *cpudata = policy->driver_data;
+ 	unsigned int target_freq;
+ 
++	if (policy->min != cpudata->min_limit_freq || policy->max != cpudata->max_limit_freq)
++		amd_pstate_update_min_max_limit(policy);
++
++
+ 	cap_perf = READ_ONCE(cpudata->highest_perf);
+ 	lowest_nonlinear_perf = READ_ONCE(cpudata->lowest_nonlinear_perf);
+ 	max_freq = READ_ONCE(cpudata->max_freq);
+@@ -745,6 +773,8 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
+ 	/* Initial processor data capability frequencies */
+ 	cpudata->max_freq = max_freq;
+ 	cpudata->min_freq = min_freq;
++	cpudata->max_limit_freq = max_freq;
++	cpudata->min_limit_freq = min_freq;
+ 	cpudata->nominal_freq = nominal_freq;
+ 	cpudata->lowest_nonlinear_freq = lowest_nonlinear_freq;
+ 
+@@ -1183,16 +1213,25 @@ static int amd_pstate_epp_cpu_exit(struct cpufreq_policy *policy)
+ 	return 0;
+ }
+ 
+-static void amd_pstate_epp_init(unsigned int cpu)
++static void amd_pstate_epp_update_limit(struct cpufreq_policy *policy)
+ {
+-	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+ 	struct amd_cpudata *cpudata = policy->driver_data;
+-	u32 max_perf, min_perf;
++	u32 max_perf, min_perf, min_limit_perf, max_limit_perf;
+ 	u64 value;
+ 	s16 epp;
+ 
+ 	max_perf = READ_ONCE(cpudata->highest_perf);
+ 	min_perf = READ_ONCE(cpudata->lowest_perf);
++	max_limit_perf = div_u64(policy->max * cpudata->highest_perf, cpudata->max_freq);
++	min_limit_perf = div_u64(policy->min * cpudata->highest_perf, cpudata->max_freq);
++
++	max_perf = clamp_t(unsigned long, max_perf, cpudata->min_limit_perf,
++			cpudata->max_limit_perf);
++	min_perf = clamp_t(unsigned long, min_perf, cpudata->min_limit_perf,
++			cpudata->max_limit_perf);
++
++	WRITE_ONCE(cpudata->max_limit_perf, max_limit_perf);
++	WRITE_ONCE(cpudata->min_limit_perf, min_limit_perf);
+ 
+ 	value = READ_ONCE(cpudata->cppc_req_cached);
+ 
+@@ -1210,9 +1249,6 @@ static void amd_pstate_epp_init(unsigned int cpu)
+ 	value &= ~AMD_CPPC_DES_PERF(~0L);
+ 	value |= AMD_CPPC_DES_PERF(0);
+ 
+-	if (cpudata->epp_policy == cpudata->policy)
+-		goto skip_epp;
 -
--Example:
--
--	thermal: thermal@1100b000 {
--		#thermal-sensor-cells = <1>;
--		compatible = "mediatek,mt8173-thermal";
--		reg = <0 0x1100b000 0 0x1000>;
--		interrupts = <0 70 IRQ_TYPE_LEVEL_LOW>;
--		clocks = <&pericfg CLK_PERI_THERM>, <&pericfg CLK_PERI_AUXADC>;
--		clock-names = "therm", "auxadc";
--		resets = <&pericfg MT8173_PERI_THERM_SW_RST>;
--		reset-names = "therm";
--		mediatek,auxadc = <&auxadc>;
--		mediatek,apmixedsys = <&apmixedsys>;
--		nvmem-cells = <&thermal_calibration_data>;
--		nvmem-cell-names = "calibration-data";
--	};
+ 	cpudata->epp_policy = cpudata->policy;
+ 
+ 	/* Get BIOS pre-defined epp value */
+@@ -1222,7 +1258,7 @@ static void amd_pstate_epp_init(unsigned int cpu)
+ 		 * This return value can only be negative for shared_memory
+ 		 * systems where EPP register read/write not supported.
+ 		 */
+-		goto skip_epp;
++		return;
+ 	}
+ 
+ 	if (cpudata->policy == CPUFREQ_POLICY_PERFORMANCE)
+@@ -1236,8 +1272,6 @@ static void amd_pstate_epp_init(unsigned int cpu)
+ 
+ 	WRITE_ONCE(cpudata->cppc_req_cached, value);
+ 	amd_pstate_set_epp(cpudata, epp);
+-skip_epp:
+-	cpufreq_cpu_put(policy);
+ }
+ 
+ static int amd_pstate_epp_set_policy(struct cpufreq_policy *policy)
+@@ -1252,7 +1286,7 @@ static int amd_pstate_epp_set_policy(struct cpufreq_policy *policy)
+ 
+ 	cpudata->policy = policy->policy;
+ 
+-	amd_pstate_epp_init(policy->cpu);
++	amd_pstate_epp_update_limit(policy);
+ 
+ 	return 0;
+ }
+diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h
+index 446394f84606..6ad02ad9c7b4 100644
+--- a/include/linux/amd-pstate.h
++++ b/include/linux/amd-pstate.h
+@@ -70,6 +70,10 @@ struct amd_cpudata {
+ 	u32	nominal_perf;
+ 	u32	lowest_nonlinear_perf;
+ 	u32	lowest_perf;
++	u32     min_limit_perf;
++	u32     max_limit_perf;
++	u32     min_limit_freq;
++	u32     max_limit_freq;
+ 
+ 	u32	max_freq;
+ 	u32	min_freq;
 -- 
-2.35.3
+2.34.1
 
