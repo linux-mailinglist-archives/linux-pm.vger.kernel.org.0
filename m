@@ -2,243 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 971147EF610
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Nov 2023 17:20:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4968A7EF92D
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Nov 2023 22:09:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232579AbjKQQUw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Nov 2023 11:20:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
+        id S1346196AbjKQVJl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Nov 2023 16:09:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232906AbjKQQUv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Nov 2023 11:20:51 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85895194;
-        Fri, 17 Nov 2023 08:20:47 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AHEkMOI029888;
-        Fri, 17 Nov 2023 16:20:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=mKxl7mcNGcLSLkngeUuCtfO8PYAu/Usr2ex5A/C5PEA=;
- b=a9draQvGqS4wNbHwnO9JUwq0xZnKaH4QC6Zg/35/BZCrVKWFRwlPbt0v9QvoKjhXUiBd
- tGCS0P8iMgXFhutQyDnQJ1JN/QqMEEwwWszYPyNbnUW397Po3yg9CMZ1JQR6rmqU1R+7
- VpPK+eyfrkEg7T4xCeOCj5CUdHkpUeDG082DzJa6es4/ejzmoItUqi6aOBBoZIxgO1ef
- G6hqMJZwACi8VBEmvfCme47hqPmLXCD0kawDWAfI56sDYPQKeLq2qAPQr+dkYSFXVahf
- PN0vUmz8jb2sqZ4dYmJOjTDtR9moEOKioui7EyU4OlIcbizq6gTBSAxcGJ8hCnT1Vx7b 7Q== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ue6varmmh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Nov 2023 16:20:42 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3AHGKf1d017071
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Nov 2023 16:20:41 GMT
-Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
- nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Fri, 17 Nov 2023 08:20:39 -0800
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-To:     <myungjoo.ham@samsung.com>, <kyungmin.park@samsung.com>,
-        <cw00.choi@samsung.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Mukesh Ojha <quic_mojha@quicinc.com>
-Subject: [PATCH v3] PM / devfreq: Synchronize device_monitor_[start/stop]
-Date:   Fri, 17 Nov 2023 21:50:27 +0530
-Message-ID: <1700238027-20518-1-git-send-email-quic_mojha@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        with ESMTP id S229535AbjKQVJk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Nov 2023 16:09:40 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2071.outbound.protection.outlook.com [40.107.223.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27D6D5B;
+        Fri, 17 Nov 2023 13:09:35 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JJ8sHXJfTWmaChe7C9Iuou7ui1zPDa9M1DaHOJ+vsGIsRL+Be4f7BsQjd6eZ/CvcnnTsTlbJrAjVBo2TIOGAUlHUS1nJ/ZQwS4e/qkWCdHyy/ILE36JmSG4f9VDW1v7XJNp6SF3E1jdAnUgNWnNWbRTDDKvt21xLSLa8q9Ip/6KXTl+Oa8oRR52cqBuxve6LG85yieyzlKc1FDxcl4ykXVZb3NhtVTY+E5D5OsoDcC5SdDV0JRk5ZrZRBEwTl5Kv/8ypjVUI6NhR5u+ULTM8O3ojUM/S/N3WQL0wOGztzqVjcUKWKudMQ4sUQqqQkdiZsZ7vYFbV/P0kYbDLIFQ4rg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lFjVBSYbKgfE2Bz/hC5nGqwjQMdNyTyT0qijuDVXIy0=;
+ b=duWF1LpR67FjaTYDndrSogNxRHNnmsXgCybEhLg3GUGihmCJD7sE3LSHyIf/IQvxOEL3/AdQ/YUWovYMa0KEpMgvH/+2UgFH924cOmAmsoJUDO3p4uVKtCBEnMe8yiMc67FsUs+8IxMkMbkNi9y0CygS6ALry5spT2j7suXfUTo26Tr9rp/xTCEWmKgTMyvaC4qpeXcYCwX/Jo//gNuYFdiEdcOuybXNCfXPUfWfNAM5EYKSMiaHa0RuLuWtz+7QX6gStDnN9wjCgh8xXOtg6myNBhFg1QuSTxGxBOrMiSz+wKlFM4aXGIOnMIJdyHXwY/WSe5QW0IOCrBUsWegBlg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=o2.pl smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lFjVBSYbKgfE2Bz/hC5nGqwjQMdNyTyT0qijuDVXIy0=;
+ b=W6u6acKbD0t/2j9nQ2Zm/Tc/3O7GrUMIGaRoiZZ/uHBwLHWbg2gfrRV320Ud5a0+ivgB7MD2jBQMFNLlWkG2YtbklNT9zamhdYgKh/AX+mOwKdISpGhCkh87pT4khx7+U/Hv0Rzxu85VJWK3NV/hN6htuYrosRA6s7XelP1LTSQ=
+Received: from MW4P220CA0020.NAMP220.PROD.OUTLOOK.COM (2603:10b6:303:115::25)
+ by DM6PR12MB4960.namprd12.prod.outlook.com (2603:10b6:5:1bc::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.21; Fri, 17 Nov
+ 2023 21:09:33 +0000
+Received: from CO1PEPF000042AA.namprd03.prod.outlook.com
+ (2603:10b6:303:115:cafe::b7) by MW4P220CA0020.outlook.office365.com
+ (2603:10b6:303:115::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.21 via Frontend
+ Transport; Fri, 17 Nov 2023 21:09:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF000042AA.mail.protection.outlook.com (10.167.243.39) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7025.12 via Frontend Transport; Fri, 17 Nov 2023 21:09:32 +0000
+Received: from AUS-P9-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.32; Fri, 17 Nov
+ 2023 15:09:30 -0600
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC:     "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <tobrohl@gmail.com>,
+        <aalsing@gmail.com>, <Dhaval.Giani@amd.com>, <xmb8dsv4@gmail.com>,
+        <x86@kernel.org>, Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH 0/4] Extend time to wait for UIP for some callers
+Date:   Fri, 17 Nov 2023 00:32:16 -0600
+Message-ID: <20231117063220.65093-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: -Wcl2VhZ7_6xmn9P-J99qfzp6zn4T0vE
-X-Proofpoint-ORIG-GUID: -Wcl2VhZ7_6xmn9P-J99qfzp6zn4T0vE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-17_14,2023-11-17_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- spamscore=0 lowpriorityscore=0 clxscore=1015 bulkscore=0 malwarescore=0
- phishscore=0 impostorscore=0 mlxlogscore=999 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311060000
- definitions=main-2311170122
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000042AA:EE_|DM6PR12MB4960:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4a33e4c4-1b6c-4ae4-edb7-08dbe7b17f09
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vUXEEU8JLmrbNDgVcCcqLKP+l6sNvP5UHZnjdoVxaJU99v9L/T6S8zou0tI022uS9cUwrN1OJx4odG0xopXyf7L4yOpNo+PmLqGV3jn15m1Y68q8WrrAwSFoFJX0kZ3xPoFp+421FgxuFdN5TefbXJ4fzwbgkZCKDbdkruNMIH2fRvEjvvKsarOU/VVcP59rT57YxYUPtzz17tttXzKj8ReOSOuBSZ9moOGg7ymdYKAe7jEdSPjcyY2E3afUMI00gfkOGNzOUOZM1+0XNyhoAVizVujojAODmI46LJt+QxoAYhyExD/EM+65dpLJ7kCmPcpB54uvc+jteNYQ0wOFGu6D3tWZLVkeGjDSYq4bMUWSCzJ5fQPTDOQe2v2WL0j391wwe7MEpL49uU2XqboCzAw0F2yipKnMmHfk/4kNMWGvKMMIyvq4iowodOSr0X1uTNPjaqZO9S8slsYjIJqB8PtayCmjMguPogFzrx4eQvZ8jG9d1WwFyl9Aw98f2ydsLg+2MVgHfSV4HdUbHxObjlnYqDrNdNP054CvvEHmXuoi6TNT5sUD1GxPPc2vdlhivCqtP+DxmtdQ1hRkoF1FmE/21ItzOEtqZPm9d60ZIcwOh1CNLjKz+UNszMAWlFdxGVDUgx6yD+rP6u5NjfNf6FS9/ALlhn6em/U5zqBr6uNoowjGUrmgh4nlUIScOIV0ijiYdPRguHAFNHPQTWzDWQsRC/lyj3Y2kdWC+sl7HNTtbbIYu81PX0OHfxraMsf8
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(396003)(376002)(136003)(39860400002)(346002)(230922051799003)(451199024)(186009)(64100799003)(1800799009)(82310400011)(36840700001)(46966006)(40470700004)(70586007)(70206006)(110136005)(41300700001)(316002)(54906003)(86362001)(5660300002)(2906002)(4326008)(40460700003)(8936002)(7416002)(8676002)(44832011)(47076005)(81166007)(356005)(36860700001)(66574015)(426003)(336012)(82740400003)(83380400001)(6666004)(966005)(478600001)(40480700001)(36756003)(1076003)(16526019)(7696005)(2616005)(26005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2023 21:09:32.7923
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a33e4c4-1b6c-4ae4-edb7-08dbe7b17f09
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000042AA.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4960
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_PDS_OTHER_BAD_TLD,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is a chance if a frequent switch of the governor
-done in a loop result in timer list corruption where
-timer cancel being done from two place one from
-cancel_delayed_work_sync() and followed by expire_timers()
-can be seen from the traces[1].
+A number of users have reported their system will have a failure reading
+the RTC around s2idle entry or exit.
 
-while true
-do
-        echo "simple_ondemand" > /sys/class/devfreq/1d84000.ufshc/governor
-        echo "performance" > /sys/class/devfreq/1d84000.ufshc/governor
-done
+This failure manifests as UIP clear taking longer than 10ms. Affected users
+have reported that after this happens the clock jumps forward to 2077, which
+is presumably from epoch + century bit.
 
+Users who used a debugging patch provided by Mateusz Jończyk demonstrated
+that this has taken upwards of 480ms in some cases.
 
-It looks to be issue with devfreq driver where
-device_monitor_[start/stop] need to synchronized so that
-delayed work should get corrupted while it is either
-being queued or running or being cancelled.
+This series adjusts the UIP timeout to be configurable by the caller and
+changes some callers which aren't called in an interrupt context to allow
+longer timeouts.
 
-Let's use polling flag and devfreq lock to synchronize the
-queueing the timer instance twice and work data being
-corrupted.
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=217626
+Link: https://community.frame.work/t/responded-fw13-amd-fedora-39-system-clock-advances-50-years-during-overnight-suspend
+Mario Limonciello (4):
+  rtc: mc146818-lib: Adjust failure return code for mc146818_get_time()
+  rtc: Adjust failure return code for cmos_set_alarm()
+  rtc: Add support for configuring the UIP timeout for RTC reads
+  rtc: Extend timeout for waiting for UIP to clear to 1s
 
-[1]
-...
-..
-<idle>-0    [003]   9436.209662:  timer_cancel   timer=0xffffff80444f0428
-<idle>-0    [003]   9436.209664:  timer_expire_entry   timer=0xffffff80444f0428  now=0x10022da1c  function=__typeid__ZTSFvP10timer_listE_global_addr  baseclk=0x10022da1c
-<idle>-0    [003]   9436.209718:  timer_expire_exit   timer=0xffffff80444f0428
-kworker/u16:6-14217    [003]   9436.209863:  timer_start   timer=0xffffff80444f0428  function=__typeid__ZTSFvP10timer_listE_global_addr  expires=0x10022da2b  now=0x10022da1c  flags=182452227
-vendor.xxxyyy.ha-1593    [004]   9436.209888:  timer_cancel   timer=0xffffff80444f0428
-vendor.xxxyyy.ha-1593    [004]   9436.216390:  timer_init   timer=0xffffff80444f0428
-vendor.xxxyyy.ha-1593    [004]   9436.216392:  timer_start   timer=0xffffff80444f0428  function=__typeid__ZTSFvP10timer_listE_global_addr  expires=0x10022da2c  now=0x10022da1d  flags=186646532
-vendor.xxxyyy.ha-1593    [005]   9436.220992:  timer_cancel   timer=0xffffff80444f0428
-xxxyyyTraceManag-7795    [004]   9436.261641:  timer_cancel   timer=0xffffff80444f0428
+ arch/alpha/kernel/rtc.c        |  2 +-
+ arch/x86/kernel/hpet.c         |  2 +-
+ arch/x86/kernel/rtc.c          |  2 +-
+ drivers/base/power/trace.c     |  2 +-
+ drivers/rtc/rtc-cmos.c         |  8 ++++----
+ drivers/rtc/rtc-mc146818-lib.c | 35 ++++++++++++++++++++++++----------
+ include/linux/mc146818rtc.h    |  3 ++-
+ 7 files changed, 35 insertions(+), 19 deletions(-)
 
-[2]
-
- 9436.261653][    C4] Unable to handle kernel paging request at virtual address dead00000000012a
-[ 9436.261664][    C4] Mem abort info:
-[ 9436.261666][    C4]   ESR = 0x96000044
-[ 9436.261669][    C4]   EC = 0x25: DABT (current EL), IL = 32 bits
-[ 9436.261671][    C4]   SET = 0, FnV = 0
-[ 9436.261673][    C4]   EA = 0, S1PTW = 0
-[ 9436.261675][    C4] Data abort info:
-[ 9436.261677][    C4]   ISV = 0, ISS = 0x00000044
-[ 9436.261680][    C4]   CM = 0, WnR = 1
-[ 9436.261682][    C4] [dead00000000012a] address between user and kernel address ranges
-[ 9436.261685][    C4] Internal error: Oops: 96000044 [#1] PREEMPT SMP
-[ 9436.261701][    C4] Skip md ftrace buffer dump for: 0x3a982d0
-...
-
-[ 9436.262138][    C4] CPU: 4 PID: 7795 Comm: TraceManag Tainted: G S      W  O      5.10.149-android12-9-o-g17f915d29d0c #1
-[ 9436.262141][    C4] Hardware name: Qualcomm Technologies, Inc.  (DT)
-[ 9436.262144][    C4] pstate: 22400085 (nzCv daIf +PAN -UAO +TCO BTYPE=--)
-[ 9436.262161][    C4] pc : expire_timers+0x9c/0x438
-[ 9436.262164][    C4] lr : expire_timers+0x2a4/0x438
-[ 9436.262168][    C4] sp : ffffffc010023dd0
-[ 9436.262171][    C4] x29: ffffffc010023df0 x28: ffffffd0636fdc18
-[ 9436.262178][    C4] x27: ffffffd063569dd0 x26: ffffffd063536008
-[ 9436.262182][    C4] x25: 0000000000000001 x24: ffffff88f7c69280
-[ 9436.262185][    C4] x23: 00000000000000e0 x22: dead000000000122
-[ 9436.262188][    C4] x21: 000000010022da29 x20: ffffff8af72b4e80
-[ 9436.262191][    C4] x19: ffffffc010023e50 x18: ffffffc010025038
-[ 9436.262195][    C4] x17: 0000000000000240 x16: 0000000000000201
-[ 9436.262199][    C4] x15: ffffffffffffffff x14: ffffff889f3c3100
-[ 9436.262203][    C4] x13: ffffff889f3c3100 x12: 00000000049f56b8
-[ 9436.262207][    C4] x11: 00000000049f56b8 x10: 00000000ffffffff
-[ 9436.262212][    C4] x9 : ffffffc010023e50 x8 : dead000000000122
-[ 9436.262216][    C4] x7 : ffffffffffffffff x6 : ffffffc0100239d8
-[ 9436.262220][    C4] x5 : 0000000000000000 x4 : 0000000000000101
-[ 9436.262223][    C4] x3 : 0000000000000080 x2 : ffffff889edc155c
-[ 9436.262227][    C4] x1 : ffffff8001005200 x0 : ffffff80444f0428
-[ 9436.262232][    C4] Call trace:
-[ 9436.262236][    C4]  expire_timers+0x9c/0x438
-[ 9436.262240][    C4]  __run_timers+0x1f0/0x330
-[ 9436.262245][    C4]  run_timer_softirq+0x28/0x58
-[ 9436.262255][    C4]  efi_header_end+0x168/0x5ec
-[ 9436.262265][    C4]  __irq_exit_rcu+0x108/0x124
-[ 9436.262274][    C4]  __handle_domain_irq+0x118/0x1e4
-[ 9436.262282][    C4]  gic_handle_irq.30369+0x6c/0x2bc
-[ 9436.262286][    C4]  el0_irq_naked+0x60/0x6c
-
-Reported-by: Joyyoung Huang <huangzaiyang@oppo.com>
-Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
----
-Changes in v3: https://lore.kernel.org/lkml/1700235522-31105-1-git-send-email-quic_mojha@quicinc.com/
- - Remove the unexpected 'twice' from the subject.
-
-Changes in v2: https://lore.kernel.org/lkml/1699957648-31299-1-git-send-email-quic_mojha@quicinc.com/
- - Changed subject.
- - Added lock to avoid work data corruption due to
-   parallel calls to devfreq_monitor_start while work
-   is queued in flight.
- - Added lock to cover the same as above case while the
-   work is being cancelled.
- - Added Reported-by for similar issue reported at
-   https://lore.kernel.org/lkml/SEYPR02MB565398175FA093AC3E63EE7BA3B0A@SEYPR02MB5653.apcprd02.prod.outlook.com/
-
- drivers/devfreq/devfreq.c | 24 ++++++++++++++++++++++--
- 1 file changed, 22 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 474d81831ad3..a25c74fc31d7 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -461,10 +461,14 @@ static void devfreq_monitor(struct work_struct *work)
- 	if (err)
- 		dev_err(&devfreq->dev, "dvfs failed with (%d) error\n", err);
- 
-+	if (devfreq->stop_polling)
-+		goto out;
-+
- 	queue_delayed_work(devfreq_wq, &devfreq->work,
- 				msecs_to_jiffies(devfreq->profile->polling_ms));
--	mutex_unlock(&devfreq->lock);
- 
-+out:
-+	mutex_unlock(&devfreq->lock);
- 	trace_devfreq_monitor(devfreq);
- }
- 
-@@ -483,6 +487,10 @@ void devfreq_monitor_start(struct devfreq *devfreq)
- 	if (IS_SUPPORTED_FLAG(devfreq->governor->flags, IRQ_DRIVEN))
- 		return;
- 
-+	mutex_lock(&devfreq->lock);
-+	if (delayed_work_pending(&devfreq->work))
-+		goto out;
-+
- 	switch (devfreq->profile->timer) {
- 	case DEVFREQ_TIMER_DEFERRABLE:
- 		INIT_DEFERRABLE_WORK(&devfreq->work, devfreq_monitor);
-@@ -491,12 +499,16 @@ void devfreq_monitor_start(struct devfreq *devfreq)
- 		INIT_DELAYED_WORK(&devfreq->work, devfreq_monitor);
- 		break;
- 	default:
--		return;
-+		goto out;
- 	}
- 
- 	if (devfreq->profile->polling_ms)
- 		queue_delayed_work(devfreq_wq, &devfreq->work,
- 			msecs_to_jiffies(devfreq->profile->polling_ms));
-+
-+out:
-+	devfreq->stop_polling = false;
-+	mutex_unlock(&devfreq->lock);
- }
- EXPORT_SYMBOL(devfreq_monitor_start);
- 
-@@ -513,7 +525,15 @@ void devfreq_monitor_stop(struct devfreq *devfreq)
- 	if (IS_SUPPORTED_FLAG(devfreq->governor->flags, IRQ_DRIVEN))
- 		return;
- 
-+	mutex_lock(&devfreq->lock);
-+	if (devfreq->stop_polling) {
-+		mutex_unlock(&devfreq->lock);
-+		return;
-+	}
-+
-+	devfreq->stop_polling = true;
- 	cancel_delayed_work_sync(&devfreq->work);
-+	mutex_unlock(&devfreq->lock);
- }
- EXPORT_SYMBOL(devfreq_monitor_stop);
- 
 -- 
-2.7.4
+2.34.1
 
