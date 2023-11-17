@@ -2,141 +2,275 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 869E77EEBB3
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Nov 2023 05:29:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC6AE7EEBEE
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Nov 2023 06:22:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbjKQEaA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Nov 2023 23:30:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51544 "EHLO
+        id S230005AbjKQFWy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Nov 2023 00:22:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbjKQE37 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Nov 2023 23:29:59 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D121A1;
-        Thu, 16 Nov 2023 20:29:56 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AH2r1Kb022534;
-        Fri, 17 Nov 2023 04:29:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=UMZOIO9trN3OtwWbqyrliZaioQtUGn+fkfAHSFLVDpw=;
- b=D7d9F09Du5Gk6iuwjy/PdYgQkI36DHQKXFKO6K6rpEG6BVCTJ+S5ibncM/B++i+tU8N6
- ftseZ/N4p8r+y6HaJusUIMxQEWSFYejhbc7N7YmeB70exm2kqCNGkyqXUXH5OtXD3BHh
- LpPWMHLE+k31IDKkVlVwdstkqRY0OuqYiDE6XexKIeUF59IJdqGBtP1r2z4GF3Uglpih
- ZXTjgO4pHLWXMpZ0uL9+AwokgFDY9H8F7X4TH40fNe2BCRUyTIqQ+imtp964Gyip0K2z
- ktywBNxLEtd9SOyPGkQgrZ0pfryFpEZ3+gAM7CaHA46fMlYYCGyi3M1bkCeIQU/dG2OO 1A== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3udxs3880j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Nov 2023 04:29:53 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3AH4Tq28015854
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Nov 2023 04:29:52 GMT
-Received: from [10.79.43.91] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Thu, 16 Nov
- 2023 20:29:47 -0800
-Message-ID: <d01ea2be-176c-aa0e-38d6-f721a1a29edb@quicinc.com>
-Date:   Fri, 17 Nov 2023 09:59:44 +0530
+        with ESMTP id S229995AbjKQFWx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Nov 2023 00:22:53 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1748D52;
+        Thu, 16 Nov 2023 21:22:48 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9c3aec5f326so544155766b.1;
+        Thu, 16 Nov 2023 21:22:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700198567; x=1700803367; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=v27wSqqrShCzztVlfwu/zWkCL4FJgwhMdx/No5LYqKU=;
+        b=fCIWPhNrmcUuocfy+nJNKMMmwWH2q8is6D+RLwtc52vR8fyp5uE6wJLXECNy9meFQ+
+         joxreVmcf4g1knIpmY5UQHR9wRSN6tZ39VO6rNrFr4dbGRaQp5PRSSFxD+s0ns3sxUwD
+         ZyhJhBHgkj80jDoMuInIa9Axn/5bqW+loKs/GXxRaa9kztC58ZYpEkNKyiyQMU8XHY74
+         BpzLbjgsrbfv9g8xCYLeEd3jp+lvoBxkrAQqjQCYk5+kHlTNTkurIff/MkdsVjTo3sD0
+         qNi4q0RYZ97m1TrjKlInC2tOc2S8kl+810OV0TDowHbsjnVrSKZ8aFZBAD3w5ZKhZ2Yt
+         DZWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700198567; x=1700803367;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v27wSqqrShCzztVlfwu/zWkCL4FJgwhMdx/No5LYqKU=;
+        b=XeOSiUyY9XPCa7HUYh0ZlQ0ji6o7jky4uEOmuq37jwWXyf4iZ4JuwiP9oSgjqyndvf
+         NMWZQv/VjKfbffE2LNnkdNFhfydNTWxnVvVA1wq+5rV+Rn9DoH7xvmVSc2aaRfsVJCYj
+         xQSinamUFS46zupY8qxbF3YwjPksICTI2py9a/N3KL1vNCHk8IaSshmGgsi90s4FmZOi
+         ZSCGuiBdTXUmecy10P81L3JkXhRZ12FiReTpbxvIWW+eRCnWFNcpOVhYApMgi5Jp1gnj
+         DFz1ur0657bd/OdgjuT2eZ7ee3+quDIU4CZYV7tqpBjAPxbOb6VqKqC5QxyPQWD+HL8e
+         ARhw==
+X-Gm-Message-State: AOJu0YyB+N1X8kLeCZ6JUW7njRI6BA372pUPDAFAFJVKKeWdTb3pyfOc
+        30/q5iLcBCyi6xmByg9lRNc=
+X-Google-Smtp-Source: AGHT+IFWYXXsNUiwsA640Taj8FVTPG3BMMTjDOpghUVLL6KpPkR4Qh5oftQ0IlSbTvHeL6rafpGPEw==
+X-Received: by 2002:a17:907:970f:b0:9ad:e3fd:d46c with SMTP id jg15-20020a170907970f00b009ade3fdd46cmr4388479ejc.10.1700198567153;
+        Thu, 16 Nov 2023 21:22:47 -0800 (PST)
+Received: from localhost.lan (031011218106.poznan.vectranet.pl. [31.11.218.106])
+        by smtp.gmail.com with ESMTPSA id lt16-20020a170906fa9000b009e71efcce28sm380238ejb.210.2023.11.16.21.22.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Nov 2023 21:22:46 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH V3] dt-bindings: thermal: convert Mediatek Thermal to the json-schema
+Date:   Fri, 17 Nov 2023 06:22:14 +0100
+Message-Id: <20231117052214.24554-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2] dt-bindings: interconnect: Add Qualcomm SC8380XP SoC
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <andersson@kernel.org>, <djakov@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <agross@kernel.org>, <conor+dt@kernel.org>,
-        <quic_rjendra@quicinc.com>, <abel.vesa@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_tsoni@quicinc.com>, <neil.armstrong@linaro.org>
-References: <20231025134049.9734-1-quic_sibis@quicinc.com>
- <20231025134049.9734-2-quic_sibis@quicinc.com>
- <67345a93-2c29-4b66-95dc-34917affd3b1@linaro.org>
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-In-Reply-To: <67345a93-2c29-4b66-95dc-34917affd3b1@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: VG2Dv0oFjuG4lKVWFbs7MvnkNCIVrd4Q
-X-Proofpoint-ORIG-GUID: VG2Dv0oFjuG4lKVWFbs7MvnkNCIVrd4Q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-17_01,2023-11-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 bulkscore=0 clxscore=1011 mlxlogscore=893 mlxscore=0
- adultscore=0 spamscore=0 priorityscore=1501 malwarescore=0 suspectscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311170031
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hey Krzysztof,
+From: Rafał Miłecki <rafal@milecki.pl>
 
+This helps validating DTS files. Introduced changes:
+1. Improved title
+2. Simplified description (dropped "This describes the device tree...")
+3. Dropped undocumented "reset-names" from example
 
-On 10/25/23 19:20, Krzysztof Kozlowski wrote:
-> On 25/10/2023 15:40, Sibi Sankar wrote:
->> From: Rajendra Nayak <quic_rjendra@quicinc.com>
->>
->> The Qualcomm SC8380XP SoC has several bus fabrics that could be controlled
->> and tuned dynamically according to the bandwidth demand.
-> 
-> 
-> ...
-> 
->> +  reg:
->> +    maxItems: 1
->> +
->> +allOf:
->> +  - $ref: qcom,rpmh-common.yaml#
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            enum:
->> +              - qcom,sc8380xp-clk-virt
->> +              - qcom,sc8380xp-mc-virt
->> +    then:
->> +      properties:
->> +        reg: false
->> +    else:
->> +      required:
->> +        - reg
->> +
->> +required:
->> +  - compatible
-> 
-> By convention we put required: block before allOf: and that's what
-> existing recent code has (qcom,sc8280xp-rpmh.yaml or
-> qcom,sc7280-rpmh.yaml' for example). Please use recent files as a
-> template for new bindings, so there will not be a need to fix the same
-> things again.
-> 
-> With fixes like in qcom,sc7280-rpmh.yaml:
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+V2: Add "maintainers"
+V3: Introduce changes described in commit body
+    Fix schema syntax
+    Move unevaluatedProperties to the bottom
+    Rename file to match compatible more closely
 
-Thanks will fix ^^
+I'm totally sorry for sending broken schema patch yesterday. Brainfart.
+There is no excuse for sth that doesn't even pass dt_binding_check.
+  DTEX    Documentation/devicetree/bindings/thermal/mediatek,thermal.example.dts
+  DTC_CHK Documentation/devicetree/bindings/thermal/mediatek,thermal.example.dtb
 
--Sibi
+ .../bindings/thermal/mediatek,thermal.yaml    | 99 +++++++++++++++++++
+ .../bindings/thermal/mediatek-thermal.txt     | 52 ----------
+ 2 files changed, 99 insertions(+), 52 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml
+ delete mode 100644 Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
 
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
->> +
->> +unevaluatedProperties: false
-> Best regards,
-> Krzysztof
-> 
+diff --git a/Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml
+new file mode 100644
+index 000000000000..d96a2e32bd8f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml
+@@ -0,0 +1,99 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/mediatek,thermal.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Mediatek thermal controller for on-SoC temperatures
++
++maintainers:
++  - Sascha Hauer <s.hauer@pengutronix.de>
++
++description:
++  This device does not have its own ADC, instead it directly controls the AUXADC
++  via AHB bus accesses. For this reason it needs phandles to the AUXADC. Also it
++  controls a mux in the apmixedsys register space via AHB bus accesses, so a
++  phandle to the APMIXEDSYS is also needed.
++
++allOf:
++  - $ref: thermal-sensor.yaml#
++
++properties:
++  compatible:
++    enum:
++      - mediatek,mt2701-thermal
++      - mediatek,mt2712-thermal
++      - mediatek,mt7622-thermal
++      - mediatek,mt7981-thermal
++      - mediatek,mt7986-thermal
++      - mediatek,mt8173-thermal
++      - mediatek,mt8183-thermal
++      - mediatek,mt8365-thermal
++      - mediatek,mt8516-thermal
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: Main clock needed for register access
++      - description: The AUXADC clock
++
++  clock-names:
++    items:
++      - const: therm
++      - const: auxadc
++
++  mediatek,auxadc:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: A phandle to the AUXADC which the thermal controller uses
++
++  mediatek,apmixedsys:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: A phandle to the APMIXEDSYS controller
++
++  resets:
++    description: Reset controller controlling the thermal controller
++
++  nvmem-cells:
++    items:
++      - description:
++          NVMEM cell with EEPROMA phandle to the calibration data provided by an
++          NVMEM device. If unspecified default values shall be used.
++
++  nvmem-cell-names:
++    items:
++      - const: calibration-data
++
++required:
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - mediatek,auxadc
++  - mediatek,apmixedsys
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/clock/mt8173-clk.h>
++    #include <dt-bindings/reset/mt8173-resets.h>
++
++    thermal@1100b000 {
++        compatible = "mediatek,mt8173-thermal";
++        reg = <0x1100b000 0x1000>;
++        interrupts = <0 70 IRQ_TYPE_LEVEL_LOW>;
++        clocks = <&pericfg CLK_PERI_THERM>, <&pericfg CLK_PERI_AUXADC>;
++        clock-names = "therm", "auxadc";
++        resets = <&pericfg MT8173_PERI_THERM_SW_RST>;
++        mediatek,auxadc = <&auxadc>;
++        mediatek,apmixedsys = <&apmixedsys>;
++        nvmem-cells = <&thermal_calibration_data>;
++        nvmem-cell-names = "calibration-data";
++        #thermal-sensor-cells = <1>;
++    };
+diff --git a/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt b/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
+deleted file mode 100644
+index ac39c7156fde..000000000000
+--- a/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
++++ /dev/null
+@@ -1,52 +0,0 @@
+-* Mediatek Thermal
+-
+-This describes the device tree binding for the Mediatek thermal controller
+-which measures the on-SoC temperatures. This device does not have its own ADC,
+-instead it directly controls the AUXADC via AHB bus accesses. For this reason
+-this device needs phandles to the AUXADC. Also it controls a mux in the
+-apmixedsys register space via AHB bus accesses, so a phandle to the APMIXEDSYS
+-is also needed.
+-
+-Required properties:
+-- compatible:
+-  - "mediatek,mt8173-thermal" : For MT8173 family of SoCs
+-  - "mediatek,mt2701-thermal" : For MT2701 family of SoCs
+-  - "mediatek,mt2712-thermal" : For MT2712 family of SoCs
+-  - "mediatek,mt7622-thermal" : For MT7622 SoC
+-  - "mediatek,mt7981-thermal", "mediatek,mt7986-thermal" : For MT7981 SoC
+-  - "mediatek,mt7986-thermal" : For MT7986 SoC
+-  - "mediatek,mt8183-thermal" : For MT8183 family of SoCs
+-  - "mediatek,mt8365-thermal" : For MT8365 family of SoCs
+-  - "mediatek,mt8516-thermal", "mediatek,mt2701-thermal : For MT8516 family of SoCs
+-- reg: Address range of the thermal controller
+-- interrupts: IRQ for the thermal controller
+-- clocks, clock-names: Clocks needed for the thermal controller. required
+-                       clocks are:
+-		       "therm":	 Main clock needed for register access
+-		       "auxadc": The AUXADC clock
+-- mediatek,auxadc: A phandle to the AUXADC which the thermal controller uses
+-- mediatek,apmixedsys: A phandle to the APMIXEDSYS controller.
+-- #thermal-sensor-cells : Should be 0. See Documentation/devicetree/bindings/thermal/thermal-sensor.yaml for a description.
+-
+-Optional properties:
+-- resets: Reference to the reset controller controlling the thermal controller.
+-- nvmem-cells: A phandle to the calibration data provided by a nvmem device. If
+-               unspecified default values shall be used.
+-- nvmem-cell-names: Should be "calibration-data"
+-
+-Example:
+-
+-	thermal: thermal@1100b000 {
+-		#thermal-sensor-cells = <1>;
+-		compatible = "mediatek,mt8173-thermal";
+-		reg = <0 0x1100b000 0 0x1000>;
+-		interrupts = <0 70 IRQ_TYPE_LEVEL_LOW>;
+-		clocks = <&pericfg CLK_PERI_THERM>, <&pericfg CLK_PERI_AUXADC>;
+-		clock-names = "therm", "auxadc";
+-		resets = <&pericfg MT8173_PERI_THERM_SW_RST>;
+-		reset-names = "therm";
+-		mediatek,auxadc = <&auxadc>;
+-		mediatek,apmixedsys = <&apmixedsys>;
+-		nvmem-cells = <&thermal_calibration_data>;
+-		nvmem-cell-names = "calibration-data";
+-	};
+-- 
+2.35.3
+
