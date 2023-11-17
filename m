@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A727EF2D0
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Nov 2023 13:39:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 410C57EF2D8
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Nov 2023 13:40:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231301AbjKQMje (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Nov 2023 07:39:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
+        id S231311AbjKQMkT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Nov 2023 07:40:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbjKQMjd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Nov 2023 07:39:33 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF0C196
-        for <linux-pm@vger.kernel.org>; Fri, 17 Nov 2023 04:39:29 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9becde9ea7bso613663466b.0
-        for <linux-pm@vger.kernel.org>; Fri, 17 Nov 2023 04:39:29 -0800 (PST)
+        with ESMTP id S230513AbjKQMkS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Nov 2023 07:40:18 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B8B196
+        for <linux-pm@vger.kernel.org>; Fri, 17 Nov 2023 04:40:15 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9d2e7726d5bso255629466b.0
+        for <linux-pm@vger.kernel.org>; Fri, 17 Nov 2023 04:40:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700224768; x=1700829568; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1700224813; x=1700829613; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=GtKE5t7YJb1CvH51THiPQgpjAacGkG2ZB1gsUcc03vc=;
-        b=eL3V5s77PJKQv0qjlzn9agqzeFPv4Pg2BFu7qif9TcG0WR4UTjuncZ9AlQY0XW34pZ
-         ahtbOX0CxlWbDXW3XJWQQHwiDHqewqfXmSW5v7mMAxQxkaRfHihHgcDvWXezaRFdpoXQ
-         tMdQc2DU+mERUqLOyeXQ8h49E+Q6bq5tMO47aZAAxwRFUIv8E/Yrg3Q1CntRYpxRwIY+
-         L88dpzh4VRO1YL4vDbj/VVbm9y3WFuYAmG6NVOeV6R3r2IJF9nBZ018Nw4yi8rZ5AdNO
-         7gbEVx1G2q9CQMOk1pj+KJwKYF1KH4sIJHbCGT/blchmrinnGF6/ltJZaOMOHy+j/l3f
-         /+zg==
+        bh=w1NfgTSwXq1QR0EJ6yee2R9RUgXhO7JnLNb6QXo3duo=;
+        b=DqM7lHcuzRACa0q4v7n7j4gFCJ4yr6wDk6at2KtuYLrMR8766iY3gA4EXmZ5PGc5+x
+         Cf4O419Psy4f0jJhpgeEfD40/rkw5UrFmJJm0TnfhCvwDklVrdZzV5Lsx2idTOTqYXSv
+         hFhM1apyDEIWnKfRe3Yu+l2fCUeHk+ssXBHcPimQCstFh07wPkuEBYjDcLMcof9zcUnF
+         j2kZmX+9fTgfWGa2IOSAJ9bm8CORQE4KWiDSdo12a3gNI8r2QJkQJ9il+grzqEC/c9n3
+         NHONwY40BU9veam2j2xXA4b2BDTgSmdIb7B8+93feS7ftTJKR0N9Puio/ZdmryK1UR4B
+         ciMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700224768; x=1700829568;
+        d=1e100.net; s=20230601; t=1700224813; x=1700829613;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GtKE5t7YJb1CvH51THiPQgpjAacGkG2ZB1gsUcc03vc=;
-        b=odQ75D0qE/AVJPwRk+7Dc7ehf4TEhZ6xfIBJUbIQfBS4l/g+rjDo4WF3VGWHXhIi9T
-         +HymJ/kroGldMv0NBmv/48ERIqORNez9rIOYIqEug6O+7u5II5Kf/XJigf5/+q/NZZn4
-         lw23pB5bWxKc/qNS+Q7CYnz7ftrWL1oEiIYO0cVV3cBKSLzfiNDt2CSXnfJzuEQYIXpG
-         b7FKcYPpm56UC0Hq5PhPK8CurJ1Kj9At0KhhY/qDqajzvRzI9jcsVVFcE6FXl8BHyf1I
-         euGxEEDiy9/JSIfLcUeANwlEuCadZYtbS9kXzrGN9LaPANcMrxsdtjrVMl49uUgkI1Zn
-         yH3g==
-X-Gm-Message-State: AOJu0YxgabALVV0oo5RQKsJT8OmACS7r7Ye47nHdJizquuBy4K53k/ru
-        ILCxwdfRnV7Ibfjp4Cuzmmzwpw==
-X-Google-Smtp-Source: AGHT+IEZgv+64xrNQhpRFOMuilyEs5lROiinNRe1Cwv+5tBtiBFw2uv08PFerRlo3mOsMdMd7060Rg==
-X-Received: by 2002:a17:906:f899:b0:9c5:7f5d:42dc with SMTP id lg25-20020a170906f89900b009c57f5d42dcmr4265273ejb.33.1700224767959;
-        Fri, 17 Nov 2023 04:39:27 -0800 (PST)
+        bh=w1NfgTSwXq1QR0EJ6yee2R9RUgXhO7JnLNb6QXo3duo=;
+        b=AoALeuoMGVHq8Ouy9o+8WIclcXAz4zLFhy0QUUeiVIiwTH6j+b40GCODywpFEdeL7K
+         fVKqlPNZUat+HXlK04CdRmsAaJbb6SwLulwiLOsGos++q/68pDzb44IF2Z4R6m64oUtk
+         3X9GnyPWRrzNCUea/g5+NT1x1hKCllolbLFGi8so81wEE71sGIcBrajJAKNgpPbXFf7N
+         af+Zqs3WfEkj+k5jflk4UBXeyHJ/p1BB/Fxq1UZPtpcbubG9MgpflsT2YCPfjor/yVEO
+         BYIobhB0npFJJePhd1t9zehdMXGUsREyGOQajbIrIE3CXcwKBq2ErFU7/HaVvSROPSiv
+         3QZw==
+X-Gm-Message-State: AOJu0YyP9MPJ+jO2IBPK5HMNJAgk6v3lhLGxpFSStFjyrNOeufd0KRKR
+        iP0WCJqbS8TJiwFFgVWZfyunxA==
+X-Google-Smtp-Source: AGHT+IHTQeBG1zApat9wJvfKn7HS+rs2/GH6cLpvApkosXzN+SGL6/azB6M90Ogpe/xTCYbfxe4Umg==
+X-Received: by 2002:a17:906:fd1:b0:9be:6ccb:6a8f with SMTP id c17-20020a1709060fd100b009be6ccb6a8fmr14131282ejk.48.1700224813450;
+        Fri, 17 Nov 2023 04:40:13 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.126])
-        by smtp.gmail.com with ESMTPSA id k13-20020a170906158d00b009920e9a3a73sm752987ejd.115.2023.11.17.04.39.26
+        by smtp.gmail.com with ESMTPSA id k13-20020a170906158d00b009920e9a3a73sm752987ejd.115.2023.11.17.04.40.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Nov 2023 04:39:27 -0800 (PST)
-Message-ID: <81a1bfee-851c-4f05-b816-47abcebed99c@linaro.org>
-Date:   Fri, 17 Nov 2023 13:39:25 +0100
+        Fri, 17 Nov 2023 04:40:11 -0800 (PST)
+Message-ID: <bf7c7478-a7f3-4dca-b329-7771f3dbcd30@linaro.org>
+Date:   Fri, 17 Nov 2023 13:40:09 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: power: rpmpd: Update part number to
+Subject: Re: [PATCH 2/2] pmdomain: qcom: rpmhpd: Update part number to
  X1E80100
 Content-Language: en-US
 To:     Sibi Sankar <quic_sibis@quicinc.com>, andersson@kernel.org,
@@ -65,9 +65,9 @@ Cc:     agross@kernel.org, conor+dt@kernel.org, quic_rjendra@quicinc.com,
         linux-pm@vger.kernel.org, quic_tsoni@quicinc.com,
         neil.armstrong@linaro.org
 References: <20231117104254.28862-1-quic_sibis@quicinc.com>
- <20231117104254.28862-2-quic_sibis@quicinc.com>
- <8fafbba6-86de-4ddc-966e-48e2152f6b1a@linaro.org>
- <97216704-a102-532d-1039-c9342a19e2fd@quicinc.com>
+ <20231117104254.28862-3-quic_sibis@quicinc.com>
+ <be3c67fa-29b4-430c-8de6-c4753e7831fa@linaro.org>
+ <2965dbc9-2e19-5bc1-dfde-a0b821fd5a59@quicinc.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -113,37 +113,38 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <97216704-a102-532d-1039-c9342a19e2fd@quicinc.com>
+In-Reply-To: <2965dbc9-2e19-5bc1-dfde-a0b821fd5a59@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17/11/2023 12:46, Sibi Sankar wrote:
+On 17/11/2023 12:50, Sibi Sankar wrote:
 > Hey Krzysztof,
 > 
-> Thanks for taking time to review the series.
 > 
-> On 11/17/23 16:35, Krzysztof Kozlowski wrote:
+> On 11/17/23 16:36, Krzysztof Kozlowski wrote:
 >> On 17/11/2023 11:42, Sibi Sankar wrote:
 >>> Replace SC8380xp with the updated part number (X1E80100).
 >>>
+>>> Fixes: 2050c9bc4f7b ("pmdomain: qcom: rpmhpd: Add SC8380XP power domains")
 >>
->> You need to explain why. We don't update compatibles based on marketing
->> wishes.
+>> No, there was no bug or at least you did not describe a bug. If it was a
+>> bug, please define it in the commit msg.
 > 
-> What we imply is that X1E80100 is the part number you would get when you
-> read out from a Snapdragon X Elite device in the wild, when it is
-> available and we didn't have this information when we posted out v1.
+> It's technically replacing an obsolete part number with the correct
+> on, so I thought using the fixes tag makes sense. Let me add more
+> details on the next re-spin.
 
-The commit msg must explain why.
+You are not replacing any obsolete device. It's purely naming style, so
+no, that's not a valid reason for a fix. Drop fixes tag from both patches.
 
 Best regards,
 Krzysztof
