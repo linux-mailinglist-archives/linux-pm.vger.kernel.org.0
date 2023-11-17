@@ -2,339 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC587EFC26
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Nov 2023 00:36:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3612A7EFC30
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Nov 2023 00:40:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjKQXgZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Nov 2023 18:36:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
+        id S232457AbjKQXkW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Nov 2023 18:40:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjKQXgY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Nov 2023 18:36:24 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26ABFD6D;
-        Fri, 17 Nov 2023 15:36:21 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-6c3363a2b93so2455638b3a.3;
-        Fri, 17 Nov 2023 15:36:21 -0800 (PST)
+        with ESMTP id S231533AbjKQXkW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Nov 2023 18:40:22 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4C510F4
+        for <linux-pm@vger.kernel.org>; Fri, 17 Nov 2023 15:40:18 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-5437269a661so7095954a12.0
+        for <linux-pm@vger.kernel.org>; Fri, 17 Nov 2023 15:40:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700264180; x=1700868980; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=D9qNCEpN9tV4OA/IjVzX3FD26FjmpjuQwgfoGVnG3ls=;
-        b=PWXkDy+e7HVH2GGLNmelsS/SYz1ewvikUqDUiOk9u3Vn7PWhFSqm18Bf64g5Ua/DZs
-         ikZKo9UJmt7y0r7PfPpVPy5OjEm2EjrDn5aNzprP/XHvK5SIU3+C57xxAt0CgTac6qzO
-         w5eSyqVDmt0TKLYjiayXlcz2k9wEPjZBHMKacrw8Mrrmmq4PzJBTkmQPLaFcYYpzqWcz
-         6AaOOGy86q+RF09XBvjSyivNIXT8Mk1DnZy+ws4bn3WCrbxE9B1KE/6/ePQvhO0attbB
-         gN0SiAhN15K99XoPHNfZIaKp1A3Jk12YGHViyjY+7QTZFGlF9gvOE8qy4/N/56wx2GQo
-         iFIA==
+        d=linaro.org; s=google; t=1700264417; x=1700869217; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OlqVaq6D41QiTKqXp+cP559TOMOF0nz23L1kNSeWPn4=;
+        b=iqFv1s5berimbDCqL3GM2It6vnp5LMLhb1UJWyHfazF0ULJ+xakbq+YE65trFt7LrK
+         4CieDymQWjHMfh50k07tCR0vycJkSd2oShIAWj/I8/IQhHjGeIVw6aEtcXC9Czbd36MH
+         oJjH77awIrgKebNhX2YFyPOfiFDawx2/iU/AZnulsTFM/NWXOKJnlh/F9ISaKTOC1Sm+
+         tktVmByWFzvKMKRsRVL26U7JUoqGNgffJA+IVYM9YgN7b5RoPgnStnzkIunctdZUsWmy
+         vXVvgGcx3jSHaIx/eWJGKxZkDH4fw4nubPK/Lodd4nU3Ojc0A9+xOBuyFJFrMQ5pg5Z+
+         9wrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700264180; x=1700868980;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D9qNCEpN9tV4OA/IjVzX3FD26FjmpjuQwgfoGVnG3ls=;
-        b=L098r8Ei+G/GldQDFStken7TL0vTvGFajiPilhqZ9Gq7JTN+hLkyFpn5ZSERNz53xf
-         LIag1ZPJOAY28uSeKWOxmaYjx2Az6qtThMCJ0YfFrs6ovKkRr0PUGjRTh76miYMlL4Ff
-         ZR2CMNYHtWxPek0cpc5dATagE1aAcrYFVxrs9e3IU7Z4K3FHVLYCNlXyrJdRIuqRlSGJ
-         tx0rwYkADPnMiGL6z+9fYmPYBZwbo1Tcz7+xxRM1emRNetU3LMlYgl+x4z1o3FJTP+ci
-         HnUtQ0sk8y2O7IEHRkMlN+K5mr/18MkyzHOmLGn9AlAERjzT6bGyNLXSxQrg5aeDi8Jg
-         6LWg==
-X-Gm-Message-State: AOJu0Yx3oZ5fo0dKxrIx1tk8kE3QZMeMmslhte8VClRp8W7E/ol9XLTW
-        51bCK548vYOw9st4vhPFwUM=
-X-Google-Smtp-Source: AGHT+IEx78fKhIYOg1XKcHZwD81wxiY5Xcft89Ye+RLAYq9c3MhIHYCTdZ3FXyoLD7I/y6tzJIaHTA==
-X-Received: by 2002:a05:6a00:1d89:b0:6bf:50df:2df5 with SMTP id z9-20020a056a001d8900b006bf50df2df5mr1267005pfw.13.1700264180517;
-        Fri, 17 Nov 2023 15:36:20 -0800 (PST)
-Received: from archie.me ([103.131.18.64])
-        by smtp.gmail.com with ESMTPSA id o14-20020a056a001b4e00b006c33bf9905fsm1915488pfv.25.2023.11.17.15.36.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Nov 2023 15:36:20 -0800 (PST)
-Received: by archie.me (Postfix, from userid 1000)
-        id 5355B102070AC; Sat, 18 Nov 2023 06:36:17 +0700 (WIB)
-Date:   Sat, 18 Nov 2023 06:36:16 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Charalampos Mitrodimas <charmitro@posteo.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        qinyu <qinyu32@huawei.com>, Nick Alcock <nick.alcock@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Ian Molton <spyro@f2s.com>,
-        Szabolcs Gyurko <szabolcs.gyurko@tlt.hu>,
-        Anton Vorontsov <cbou@mail.ru>
-Cc:     Linux Power Management <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] power: supply: Fix indentation and some other warnings
-Message-ID: <ZVf48PWBpvKULeXT@archie.me>
-References: <20231117230658.65809-1-charmitro@posteo.net>
+        d=1e100.net; s=20230601; t=1700264417; x=1700869217;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OlqVaq6D41QiTKqXp+cP559TOMOF0nz23L1kNSeWPn4=;
+        b=AjU5gMNHN5Akh4GMJj4RwsF1FQXLSRpRf+KQ7C41JQAxmb8nGdrwLiKg05zeD4jmpn
+         hQE8RBH6ct0IWaAV88BCXsNKlmqsDRiGaRGUmcCkQGum+G8VEXURYqEwDlAP0Xz16oVj
+         OmIZc8vOvBF9usEUAEygl4uBjnoECxTTpXjCSXFdkadZWPQcLxQ/epVlU0JUXIqTNPun
+         FQKRV+GoknnWLWxsOUjMTupDZu+mAlLORoAb3S3bULeVajBQvObUgMO17xoPNH2go0B5
+         QB6o2NIoJXnUyfurGuui3XzUr/2ZI06BKU3/ixfVuBSj9Rgvobkw3i3uFJYZi9xrtAdn
+         Jrtw==
+X-Gm-Message-State: AOJu0Yw4FRTR/0maAzOEyAJ+9zYzrivTDvRigD0p+8APthG70e6MAJnr
+        Q2kQvK1etPFmdxdKiY+pU3CiSQ==
+X-Google-Smtp-Source: AGHT+IGE5JB/nYaBzZXWXm85KHIOGc2UA6YFUsCTrsBvUGlcytqCP9PDGe4vWuZPvrJe3cpJJOwG6Q==
+X-Received: by 2002:a17:906:6810:b0:9c7:6523:407b with SMTP id k16-20020a170906681000b009c76523407bmr5633991ejr.17.1700264416891;
+        Fri, 17 Nov 2023 15:40:16 -0800 (PST)
+Received: from [192.168.201.100] (178235187040.dynamic-4-waw-k-2-3-0.vectranet.pl. [178.235.187.40])
+        by smtp.gmail.com with ESMTPSA id lt16-20020a170906fa9000b009e71efcce28sm1269357ejb.210.2023.11.17.15.40.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Nov 2023 15:40:16 -0800 (PST)
+Message-ID: <796fd7be-2008-460e-acf7-e335de780104@linaro.org>
+Date:   Sat, 18 Nov 2023 00:40:13 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+tJVt8GoTANVf/9m"
-Content-Disposition: inline
-In-Reply-To: <20231117230658.65809-1-charmitro@posteo.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: power: rpmpd: Update part number to
+ X1E80100
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>, andersson@kernel.org,
+        ulf.hansson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     agross@kernel.org, conor+dt@kernel.org, quic_rjendra@quicinc.com,
+        abel.vesa@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_tsoni@quicinc.com,
+        neil.armstrong@linaro.org
+References: <20231117104254.28862-1-quic_sibis@quicinc.com>
+ <20231117104254.28862-2-quic_sibis@quicinc.com>
+ <8fafbba6-86de-4ddc-966e-48e2152f6b1a@linaro.org>
+ <97216704-a102-532d-1039-c9342a19e2fd@quicinc.com>
+ <81a1bfee-851c-4f05-b816-47abcebed99c@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <81a1bfee-851c-4f05-b816-47abcebed99c@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 17.11.2023 13:39, Krzysztof Kozlowski wrote:
+> On 17/11/2023 12:46, Sibi Sankar wrote:
+>> Hey Krzysztof,
+>>
+>> Thanks for taking time to review the series.
+>>
+>> On 11/17/23 16:35, Krzysztof Kozlowski wrote:
+>>> On 17/11/2023 11:42, Sibi Sankar wrote:
+>>>> Replace SC8380xp with the updated part number (X1E80100).
+>>>>
+>>>
+>>> You need to explain why. We don't update compatibles based on marketing
+>>> wishes.
+>>
+>> What we imply is that X1E80100 is the part number you would get when you
+>> read out from a Snapdragon X Elite device in the wild, when it is
+>> available and we didn't have this information when we posted out v1.
+> 
+> The commit msg must explain why.
+(what Krzysztof meant is that your explanation is ok but it needs to be
+part of the commit message and not just a reply here)
 
---+tJVt8GoTANVf/9m
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Moreover, it would also be good to say something like "this binding has
+no users and has been erroneusly introduced very recently, so it was
+decided that changing it is okay", as this is a rather special case.
 
-On Fri, Nov 17, 2023 at 11:06:58PM +0000, Charalampos Mitrodimas wrote:
-> These were mentioned by checkpatch:
-> 	Errors:
-> 		(1) code indent should use tabs where possible
-> 		(2) switch and case should be at the same indent
-> 	Warnings:
-> 		(1) quoted string split across lines
-> 		(2) Missing a blank line after declarations
->=20
-> Based on this comment from "include/linux/module.h", modules with
-> multiple authors should use multiple MODULE_AUTHOR() statements.
-> 	/*
-> 	 * Author(s), use "Name <email>" or just "Name", for multiple
-> 	 * authors use multiple MODULE_AUTHOR() statements/lines.
-> 	 */
-> 	#define MODULE_AUTHOR(_author) MODULE_INFO(author, _author)
-
-Shouldn't MODULE_AUTHOR fix be separate patch?
-
->=20
-> Signed-off-by: Charalampos Mitrodimas <charmitro@posteo.net>
-> ---
->  drivers/power/supply/power_supply_core.c | 167 ++++++++++++-----------
->  1 file changed, 84 insertions(+), 83 deletions(-)
->=20
-> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/sup=
-ply/power_supply_core.c
-> index 73265001dd4b..ecef35ac3b7e 100644
-> --- a/drivers/power/supply/power_supply_core.c
-> +++ b/drivers/power/supply/power_supply_core.c
-> @@ -861,44 +861,44 @@ const size_t power_supply_battery_info_properties_s=
-ize =3D ARRAY_SIZE(power_supply
->  EXPORT_SYMBOL_GPL(power_supply_battery_info_properties_size);
-> =20
->  bool power_supply_battery_info_has_prop(struct power_supply_battery_info=
- *info,
-> -				        enum power_supply_property psp)
-> +					enum power_supply_property psp)
-
-Looks OK.
-
->  {
->  	if (!info)
->  		return false;
-> =20
->  	switch (psp) {
-> -		case POWER_SUPPLY_PROP_TECHNOLOGY:
-> -			return info->technology !=3D POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
-> -		case POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN:
-> -			return info->energy_full_design_uwh >=3D 0;
-> -		case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
-> -			return info->charge_full_design_uah >=3D 0;
-> -		case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
-> -			return info->voltage_min_design_uv >=3D 0;
-> -		case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
-> -			return info->voltage_max_design_uv >=3D 0;
-> -		case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
-> -			return info->precharge_current_ua >=3D 0;
-> -		case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
-> -			return info->charge_term_current_ua >=3D 0;
-> -		case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
-> -			return info->constant_charge_current_max_ua >=3D 0;
-> -		case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
-> -			return info->constant_charge_voltage_max_uv >=3D 0;
-> -		case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MIN:
-> -			return info->temp_ambient_alert_min > INT_MIN;
-> -		case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MAX:
-> -			return info->temp_ambient_alert_max < INT_MAX;
-> -		case POWER_SUPPLY_PROP_TEMP_ALERT_MIN:
-> -			return info->temp_alert_min > INT_MIN;
-> -		case POWER_SUPPLY_PROP_TEMP_ALERT_MAX:
-> -			return info->temp_alert_max < INT_MAX;
-> -		case POWER_SUPPLY_PROP_TEMP_MIN:
-> -			return info->temp_min > INT_MIN;
-> -		case POWER_SUPPLY_PROP_TEMP_MAX:
-> -			return info->temp_max < INT_MAX;
-> -		default:
-> -			return false;
-> +	case POWER_SUPPLY_PROP_TECHNOLOGY:
-> +		return info->technology !=3D POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
-> +	case POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN:
-> +		return info->energy_full_design_uwh >=3D 0;
-> +	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
-> +		return info->charge_full_design_uah >=3D 0;
-> +	case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
-> +		return info->voltage_min_design_uv >=3D 0;
-> +	case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
-> +		return info->voltage_max_design_uv >=3D 0;
-> +	case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
-> +		return info->precharge_current_ua >=3D 0;
-> +	case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
-> +		return info->charge_term_current_ua >=3D 0;
-> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
-> +		return info->constant_charge_current_max_ua >=3D 0;
-> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
-> +		return info->constant_charge_voltage_max_uv >=3D 0;
-> +	case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MIN:
-> +		return info->temp_ambient_alert_min > INT_MIN;
-> +	case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MAX:
-> +		return info->temp_ambient_alert_max < INT_MAX;
-> +	case POWER_SUPPLY_PROP_TEMP_ALERT_MIN:
-> +		return info->temp_alert_min > INT_MIN;
-> +	case POWER_SUPPLY_PROP_TEMP_ALERT_MAX:
-> +		return info->temp_alert_max < INT_MAX;
-> +	case POWER_SUPPLY_PROP_TEMP_MIN:
-> +		return info->temp_min > INT_MIN;
-> +	case POWER_SUPPLY_PROP_TEMP_MAX:
-> +		return info->temp_max < INT_MAX;
-> +	default:
-> +		return false;
->  	}
-
-This one LGTM.
-
->  }
->  EXPORT_SYMBOL_GPL(power_supply_battery_info_has_prop);
-> @@ -914,53 +914,53 @@ int power_supply_battery_info_get_prop(struct power=
-_supply_battery_info *info,
->  		return -EINVAL;
-> =20
->  	switch (psp) {
-> -		case POWER_SUPPLY_PROP_TECHNOLOGY:
-> -			val->intval =3D info->technology;
-> -			return 0;
-> -		case POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN:
-> -			val->intval =3D info->energy_full_design_uwh;
-> -			return 0;
-> -		case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
-> -			val->intval =3D info->charge_full_design_uah;
-> -			return 0;
-> -		case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
-> -			val->intval =3D info->voltage_min_design_uv;
-> -			return 0;
-> -		case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
-> -			val->intval =3D info->voltage_max_design_uv;
-> -			return 0;
-> -		case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
-> -			val->intval =3D info->precharge_current_ua;
-> -			return 0;
-> -		case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
-> -			val->intval =3D info->charge_term_current_ua;
-> -			return 0;
-> -		case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
-> -			val->intval =3D info->constant_charge_current_max_ua;
-> -			return 0;
-> -		case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
-> -			val->intval =3D info->constant_charge_voltage_max_uv;
-> -			return 0;
-> -		case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MIN:
-> -			val->intval =3D info->temp_ambient_alert_min;
-> -			return 0;
-> -		case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MAX:
-> -			val->intval =3D info->temp_ambient_alert_max;
-> -			return 0;
-> -		case POWER_SUPPLY_PROP_TEMP_ALERT_MIN:
-> -			val->intval =3D info->temp_alert_min;
-> -			return 0;
-> -		case POWER_SUPPLY_PROP_TEMP_ALERT_MAX:
-> -			val->intval =3D info->temp_alert_max;
-> -			return 0;
-> -		case POWER_SUPPLY_PROP_TEMP_MIN:
-> -			val->intval =3D info->temp_min;
-> -			return 0;
-> -		case POWER_SUPPLY_PROP_TEMP_MAX:
-> -			val->intval =3D info->temp_max;
-> -			return 0;
-> -		default:
-> -			return -EINVAL;
-> +	case POWER_SUPPLY_PROP_TECHNOLOGY:
-> +		val->intval =3D info->technology;
-> +		return 0;
-> +	case POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN:
-> +		val->intval =3D info->energy_full_design_uwh;
-> +		return 0;
-> +	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
-> +		val->intval =3D info->charge_full_design_uah;
-> +		return 0;
-> +	case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
-> +		val->intval =3D info->voltage_min_design_uv;
-> +		return 0;
-> +	case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
-> +		val->intval =3D info->voltage_max_design_uv;
-> +		return 0;
-> +	case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
-> +		val->intval =3D info->precharge_current_ua;
-> +		return 0;
-> +	case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
-> +		val->intval =3D info->charge_term_current_ua;
-> +		return 0;
-> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
-> +		val->intval =3D info->constant_charge_current_max_ua;
-> +		return 0;
-> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
-> +		val->intval =3D info->constant_charge_voltage_max_uv;
-> +		return 0;
-> +	case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MIN:
-> +		val->intval =3D info->temp_ambient_alert_min;
-> +		return 0;
-> +	case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MAX:
-> +		val->intval =3D info->temp_ambient_alert_max;
-> +		return 0;
-> +	case POWER_SUPPLY_PROP_TEMP_ALERT_MIN:
-> +		val->intval =3D info->temp_alert_min;
-> +		return 0;
-> +	case POWER_SUPPLY_PROP_TEMP_ALERT_MAX:
-> +		val->intval =3D info->temp_alert_max;
-> +		return 0;
-> +	case POWER_SUPPLY_PROP_TEMP_MIN:
-> +		val->intval =3D info->temp_min;
-> +		return 0;
-> +	case POWER_SUPPLY_PROP_TEMP_MAX:
-> +		val->intval =3D info->temp_max;
-> +		return 0;
-> +	default:
-> +		return -EINVAL;
-
-And this one too.
-
-> @@ -1636,6 +1637,6 @@ subsys_initcall(power_supply_class_init);
->  module_exit(power_supply_class_exit);
-> =20
->  MODULE_DESCRIPTION("Universal power supply monitor class");
-> -MODULE_AUTHOR("Ian Molton <spyro@f2s.com>, "
-> -	      "Szabolcs Gyurko, "
-> -	      "Anton Vorontsov <cbou@mail.ru>");
-> +MODULE_AUTHOR("Ian Molton <spyro@f2s.com>");
-> +MODULE_AUTHOR("Szabolcs Gyurko");
-> +MODULE_AUTHOR("Anton Vorontsov <cbou@mail.ru>");
-
-And also this one.
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---+tJVt8GoTANVf/9m
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZVf47QAKCRD2uYlJVVFO
-o0etAP9SgY3bzx/cimWhS/4zcERQn9QAUE305M86+AupreQdeAD/Vpi5jdF9ahGN
-NYDkY6/YfcM0vAf7sCO8EC3+OJRRcgA=
-=MrqQ
------END PGP SIGNATURE-----
-
---+tJVt8GoTANVf/9m--
+Konrad
