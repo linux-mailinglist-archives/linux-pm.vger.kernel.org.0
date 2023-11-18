@@ -2,109 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 642687F00CB
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Nov 2023 16:59:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 850007F01C2
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Nov 2023 19:02:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233095AbjKRP7K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 18 Nov 2023 10:59:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41796 "EHLO
+        id S231263AbjKRSCO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 18 Nov 2023 13:02:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231225AbjKRP7A (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Nov 2023 10:59:00 -0500
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECFB2103
-        for <linux-pm@vger.kernel.org>; Sat, 18 Nov 2023 07:57:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700323070; x=1731859070;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=skP3LCXJ9xsI3+N/L6EA++C4Xkj5EvMu+Gb62HwFpxI=;
-  b=SttlCeejDsdFlKMWRntT5wFLxzqCF308utTZnWq4cZCbTL+cxurt9dNw
-   sMt+Og/bGZkoC0RTytG6oPGV/fTM51hw0r8T+WVJImoZKYg6o9z+XOYEC
-   O1GTzTutcLgAOwBATNb1ireaSTErQBOy6NBTCcZoTHvw6fL7yKQpeK/Lz
-   E7K0ntHQ9AqEdsdF9sX0Gdy4KRxvuhRAIEqMJGq+CY14txtpOdJDwoewG
-   wJpUiBpeF49A4m0RGcbLQOZ/FjXRU0p3DCOhGhkO5S7cTDE7kc9SusLtA
-   xZ3bjaUPtoJR7M8oSw0UDcxAPwJKCK0XbkNolIhcdlCMA0Tn6eB7MudgN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="4534374"
-X-IronPort-AV: E=Sophos;i="6.04,209,1695711600"; 
-   d="scan'208";a="4534374"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2023 07:56:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="769483332"
-X-IronPort-AV: E=Sophos;i="6.04,209,1695711600"; 
-   d="scan'208";a="769483332"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 18 Nov 2023 07:56:01 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1r4Nfr-000427-1L;
-        Sat, 18 Nov 2023 15:55:59 +0000
-Date:   Sat, 18 Nov 2023 23:54:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Radu Solea <radusolea@google.com>, linux-pm@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, rafael@kernel.org,
-        Radu Solea <radusolea@google.com>
-Subject: Re: [PATCH RESEND] thermal core: add option to run PM_POST_SUSPEND
- asynchronously
-Message-ID: <202311182337.iQCfkhrO-lkp@intel.com>
-References: <20231116222842.2121193-1-radusolea@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231116222842.2121193-1-radusolea@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S230438AbjKRSCN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Nov 2023 13:02:13 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8373BD5;
+        Sat, 18 Nov 2023 10:02:10 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 29984C433C9;
+        Sat, 18 Nov 2023 18:02:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1700330530;
+        bh=QveyNC18qMIv/bml2ZxJ4NFNmiVSUsho0mFebwctKaw=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=L+2DXsacGRlI/eD7NWD6hDxgTdVWfvMvEd5VtHhOSPoeYKKgnFJPczzcRL0JBNmhA
+         j8nKRvnyVQp0XzqasGIglPxj05FR3WXtrNN0NbtT6aJKU1q6+9Pd6gHj/2omReGTSN
+         fGlKEWJzKVVBkXo4xFeXBzuihkjdqH7+qHmCNjAHxC8+3Yb9QrFk/3/qJ9aZ4b0iHs
+         +KPI3EI3hfF5kYXSEcHGIxxZsRJXxnH0sb0P1cypJC0oUnYYLrOgN+IKB0ZZLNNh7C
+         4VBq275pkRW9M8yTMlA7A5RNqTqsxb3H62W7S3WyMnQ5FRd2mKdvuG8rKdvTqTtUth
+         vztiV+0vbCXYA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0DE19EA6300;
+        Sat, 18 Nov 2023 18:02:10 +0000 (UTC)
+Subject: Re: [GIT PULL] turbostat for Linux-6.7
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJvTdKn-xtmin9OjnzHg8wy4PM8Lc3Per=3y3UWORhjdroYP3w@mail.gmail.com>
+References: <CAJvTdKn-xtmin9OjnzHg8wy4PM8Lc3Per=3y3UWORhjdroYP3w@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJvTdKn-xtmin9OjnzHg8wy4PM8Lc3Per=3y3UWORhjdroYP3w@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git turbostat
+X-PR-Tracked-Commit-Id: b8337e6a780dad9505f9d44da07c0a5c52fa0a04
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 9ea991a50dd559ad2f1a5094d73f9583811979a5
+Message-Id: <170033053005.28320.5678620610990243596.pr-tracker-bot@kernel.org>
+Date:   Sat, 18 Nov 2023 18:02:10 +0000
+To:     Len Brown <lenb@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Radu,
+The pull request you sent on Wed, 8 Nov 2023 00:03:38 -0500:
 
-kernel test robot noticed the following build warnings:
+> git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git turbostat
 
-[auto build test WARNING on rafael-pm/thermal]
-[also build test WARNING on linus/master v6.7-rc1 next-20231117]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/9ea991a50dd559ad2f1a5094d73f9583811979a5
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Radu-Solea/thermal-core-add-option-to-run-PM_POST_SUSPEND-asynchronously/20231117-063150
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-patch link:    https://lore.kernel.org/r/20231116222842.2121193-1-radusolea%40google.com
-patch subject: [PATCH RESEND] thermal core: add option to run PM_POST_SUSPEND asynchronously
-config: csky-randconfig-r111-20231118 (https://download.01.org/0day-ci/archive/20231118/202311182337.iQCfkhrO-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 13.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20231118/202311182337.iQCfkhrO-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311182337.iQCfkhrO-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/thermal/thermal_core.c:49:20: sparse: sparse: symbol 'resume_thermal_zones_wk' was not declared. Should it be static?
-   drivers/thermal/thermal_core.c: note: in included file (through include/linux/rculist.h, include/linux/pid.h, include/linux/sched.h, ...):
-   include/linux/list.h:83:21: sparse: sparse: self-comparison always evaluates to true
-   include/linux/list.h:83:21: sparse: sparse: self-comparison always evaluates to true
-   include/linux/list.h:83:21: sparse: sparse: self-comparison always evaluates to true
-   include/linux/list.h:83:21: sparse: sparse: self-comparison always evaluates to true
-   include/linux/list.h:83:21: sparse: sparse: self-comparison always evaluates to true
-
-vim +/resume_thermal_zones_wk +49 drivers/thermal/thermal_core.c
-
-    47	
-    48	#ifdef CONFIG_THERMAL_ASYNC_RESUME
-  > 49	struct work_struct *resume_thermal_zones_wk;
-    50	#endif /* CONFIG_THERMAL_ASYNC_RESUME */
-    51	
+Thank you!
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
