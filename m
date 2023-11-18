@@ -2,59 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD037EFE36
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Nov 2023 08:08:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD397EFEE8
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Nov 2023 11:36:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbjKRHIP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 18 Nov 2023 02:08:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
+        id S229510AbjKRKg1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 18 Nov 2023 05:36:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbjKRHIP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Nov 2023 02:08:15 -0500
-X-Greylist: delayed 450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 17 Nov 2023 23:08:11 PST
-Received: from smtp.smtpout.orange.fr (smtp-27.smtpout.orange.fr [80.12.242.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B5043D75
-        for <linux-pm@vger.kernel.org>; Fri, 17 Nov 2023 23:08:11 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 4FJcrhCyonYhw4FJdrn5OM; Sat, 18 Nov 2023 08:00:38 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1700290838;
-        bh=ImfOXGXy4cC/EU6Ogokf0M7lLV+mAmE9eifGpialzMY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=b4WS4N4xMKW5QDWhALBbAWJK2NO1GAoPH9IbyTN60cNre0mnNzIhRXiqZ78AlKOfo
-         AIuQvUR+JuUI9rucUY/EK/zYlmhHTHH/ELLGTlC1Jy2xNTIDXiGYxve2FKumxmrGyX
-         5JfTcFGsPW4bsTcuuXe+n1Gx4vknfP3MWTzjKQWGb77hrKETcLHxiOXW4IpefdSYs/
-         ttmRjhUnBgfx9N6TvGfJHCIbERdLbe5664ZsVIkNwtHC47R+hs6WPxgfCU4V+UY/ea
-         NO+VQr2VLIkWicewXCpwB14gJgzgYPcgB/sc6elHnohZtm2mz1so0mOPEAMOfc3tUW
-         e6oiEKtfXpEAQ==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 18 Nov 2023 08:00:38 +0100
-X-ME-IP: 86.243.2.178
-Message-ID: <2e919694-e124-4864-aa02-01d47495032b@wanadoo.fr>
-Date:   Sat, 18 Nov 2023 08:00:27 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpufreq: scmi: process the result of
- devm_of_clk_add_hw_provider()
-To:     =?UTF-8?B?0JDQu9C10LrRgdCw0L3QtNGA0LAg0JTRjtC/0LjQvdCw?= 
-        <adiupina@astralinux.ru>, Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Cristian Marussi <cristian.marussi@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-References: <20231117074911.14427-1-adiupina@astralinux.ru>
- <fe85f03b-1c2a-3a99-c62b-abdf7e1eccb4@astralinux.ru>
-Content-Language: fr, en-GB
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <fe85f03b-1c2a-3a99-c62b-abdf7e1eccb4@astralinux.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S229469AbjKRKg1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Nov 2023 05:36:27 -0500
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CADA5D79
+        for <linux-pm@vger.kernel.org>; Sat, 18 Nov 2023 02:36:19 -0800 (PST)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id 8D39C24002B
+        for <linux-pm@vger.kernel.org>; Sat, 18 Nov 2023 11:36:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1700303777; bh=NX9gCi73wwTwdwKip7o7APQwlao0YIT5W8yeNUhkgck=;
+        h=Mime-Version:Content-Transfer-Encoding:Date:From:To:Cc:Subject:
+         Message-Id:From;
+        b=oLWhOnzJU5LxXKLAETBkTbP7vrjooCWKW2qk/pLuBRAPQPhwHzpOAw0JFQujy++0H
+         DtpkIRZqz/Vebs8uPCogAEp1YICgAM0pAs9QbUJFQpqBLGhlWmK0bV4fFVs9cOm7PD
+         n0eVWOR+9bIN9RWNTjHKJncmGhGzYGMAS4kC89z1TLy86VqbAtmTYb/tGAjQvZbtBI
+         8YzN0uSGk16cefMw5hO0KVt37tRgSPdNkXeyFYK+53TziHQw0nvqaOG7sGdFZaZMgK
+         GjvqevLJkTBSuJPo6Kucbjs0lBOOEUpjnSXgoZfEBWRu6iBR4ix6jZqj+oFOVEMiK1
+         G+wkDcdmiYOhw==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4SXVYV2hG0z6twV;
+        Sat, 18 Nov 2023 11:36:14 +0100 (CET)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Sat, 18 Nov 2023 10:36:16 +0000
+From:   "Charalampos Mitrodimas" <charmitro@posteo.net>
+To:     "Bagas Sanjaya" <bagasdotme@gmail.com>,
+        "Sebastian Reichel" <sre@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        "Mario Limonciello" <mario.limonciello@amd.com>,
+        "qinyu" <qinyu32@huawei.com>,
+        "Nick Alcock" <nick.alcock@oracle.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "Kai-Heng Feng" <kai.heng.feng@canonical.com>,
+        "Andreas Kemnade" <andreas@kemnade.info>,
+        "Ian Molton" <spyro@f2s.com>,
+        "Szabolcs Gyurko" <szabolcs.gyurko@tlt.hu>,
+        "Anton Vorontsov" <cbou@mail.ru>
+Cc:     "Linux Power Management" <linux-pm@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] power: supply: Fix indentation and some other warnings
+Message-Id: <CX1VDFVCGNKO.3JX5QY0LZQ51B@beast>
+References: <20231117230658.65809-1-charmitro@posteo.net>
+ <ZVf48PWBpvKULeXT@archie.me>
+In-Reply-To: <ZVf48PWBpvKULeXT@archie.me>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,62 +66,252 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Le 17/11/2023 à 12:14, Александра Дюпина a écrit :
-> I'm sorry, I forgot to add "return ret;" after
-> calling the dev_err() function. Before I post
-> the second version of the patch, please let me
-> know what you think about this fix, keeping in
-> mind what I wanted to add "return ret;"
+Hi Bagas,
 
-This is a probe function.
-So, maybe using dev_err_probe() would be slightly nicer?
+On Sat Nov 18, 2023 at 1:36 AM EET, Bagas Sanjaya wrote:
+> On Fri, Nov 17, 2023 at 11:06:58PM +0000, Charalampos Mitrodimas wrote:
+> > These were mentioned by checkpatch:
+> > 	Errors:
+> > 		(1) code indent should use tabs where possible
+> > 		(2) switch and case should be at the same indent
+> > 	Warnings:
+> > 		(1) quoted string split across lines
+> > 		(2) Missing a blank line after declarations
+> >=20
+> > Based on this comment from "include/linux/module.h", modules with
+> > multiple authors should use multiple MODULE_AUTHOR() statements.
+> > 	/*
+> > 	 * Author(s), use "Name <email>" or just "Name", for multiple
+> > 	 * authors use multiple MODULE_AUTHOR() statements/lines.
+> > 	 */
+> > 	#define MODULE_AUTHOR(_author) MODULE_INFO(author, _author)
+>
+> Shouldn't MODULE_AUTHOR fix be separate patch?
 
-If yes, the dev_err() that is already there could be updated as well in 
-an other patch.
+Sorry, I should have mentioned in the commit that the warnings "quoted
+string split across lines" pertained to the MODULE_AUTHOR line.=20
 
-CJ
+In the commit message I'm just clarifying why I used multiple
+MODULE_AUTHOR statements.
 
-> 
-> 17.11.2023 10:49, Alexandra Diupina пишет:
->> devm_of_clk_add_hw_provider() may return an errno, so
->> add a return value check
->>
->> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->>
->> Fixes: 8410e7f3b31e ("cpufreq: scmi: Fix OPP addition failure with a 
->> dummy clock provider")
->> Signed-off-by: Alexandra Diupina <adiupina@astralinux.ru>
->> ---
->>   drivers/cpufreq/scmi-cpufreq.c | 9 +++++++--
->>   1 file changed, 7 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/cpufreq/scmi-cpufreq.c 
->> b/drivers/cpufreq/scmi-cpufreq.c
->> index c8a7ccc42c16..4037945663bf 100644
->> --- a/drivers/cpufreq/scmi-cpufreq.c
->> +++ b/drivers/cpufreq/scmi-cpufreq.c
->> @@ -334,8 +334,13 @@ static int scmi_cpufreq_probe(struct scmi_device 
->> *sdev)
->>   #ifdef CONFIG_COMMON_CLK
->>       /* dummy clock provider as needed by OPP if clocks property is 
->> used */
->> -    if (of_property_present(dev->of_node, "#clock-cells"))
->> -        devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get, NULL);
->> +    if (of_property_present(dev->of_node, "#clock-cells")) {
->> +        ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get, 
->> NULL);
->> +        if (ret) {
->> +            dev_err(dev, "%s: registering clock provider failed, err: 
->> %d\n",
->> +                __func__, ret);
->> +        }
->> +    }
->>   #endif
->>       ret = cpufreq_register_driver(&scmi_cpufreq_driver);
-> 
-> 
-> Regards,
-> 
-> Alexandra Diupina
-> 
+Should I send a v2 patch with a revised commit description?
 
+>
+> >=20
+> > Signed-off-by: Charalampos Mitrodimas <charmitro@posteo.net>
+> > ---
+> >  drivers/power/supply/power_supply_core.c | 167 ++++++++++++-----------
+> >  1 file changed, 84 insertions(+), 83 deletions(-)
+> >=20
+> > diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/s=
+upply/power_supply_core.c
+> > index 73265001dd4b..ecef35ac3b7e 100644
+> > --- a/drivers/power/supply/power_supply_core.c
+> > +++ b/drivers/power/supply/power_supply_core.c
+> > @@ -861,44 +861,44 @@ const size_t power_supply_battery_info_properties=
+_size =3D ARRAY_SIZE(power_supply
+> >  EXPORT_SYMBOL_GPL(power_supply_battery_info_properties_size);
+> > =20
+> >  bool power_supply_battery_info_has_prop(struct power_supply_battery_in=
+fo *info,
+> > -				        enum power_supply_property psp)
+> > +					enum power_supply_property psp)
+>
+> Looks OK.
+>
+> >  {
+> >  	if (!info)
+> >  		return false;
+> > =20
+> >  	switch (psp) {
+> > -		case POWER_SUPPLY_PROP_TECHNOLOGY:
+> > -			return info->technology !=3D POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
+> > -		case POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN:
+> > -			return info->energy_full_design_uwh >=3D 0;
+> > -		case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
+> > -			return info->charge_full_design_uah >=3D 0;
+> > -		case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
+> > -			return info->voltage_min_design_uv >=3D 0;
+> > -		case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
+> > -			return info->voltage_max_design_uv >=3D 0;
+> > -		case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
+> > -			return info->precharge_current_ua >=3D 0;
+> > -		case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
+> > -			return info->charge_term_current_ua >=3D 0;
+> > -		case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
+> > -			return info->constant_charge_current_max_ua >=3D 0;
+> > -		case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
+> > -			return info->constant_charge_voltage_max_uv >=3D 0;
+> > -		case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MIN:
+> > -			return info->temp_ambient_alert_min > INT_MIN;
+> > -		case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MAX:
+> > -			return info->temp_ambient_alert_max < INT_MAX;
+> > -		case POWER_SUPPLY_PROP_TEMP_ALERT_MIN:
+> > -			return info->temp_alert_min > INT_MIN;
+> > -		case POWER_SUPPLY_PROP_TEMP_ALERT_MAX:
+> > -			return info->temp_alert_max < INT_MAX;
+> > -		case POWER_SUPPLY_PROP_TEMP_MIN:
+> > -			return info->temp_min > INT_MIN;
+> > -		case POWER_SUPPLY_PROP_TEMP_MAX:
+> > -			return info->temp_max < INT_MAX;
+> > -		default:
+> > -			return false;
+> > +	case POWER_SUPPLY_PROP_TECHNOLOGY:
+> > +		return info->technology !=3D POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
+> > +	case POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN:
+> > +		return info->energy_full_design_uwh >=3D 0;
+> > +	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
+> > +		return info->charge_full_design_uah >=3D 0;
+> > +	case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
+> > +		return info->voltage_min_design_uv >=3D 0;
+> > +	case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
+> > +		return info->voltage_max_design_uv >=3D 0;
+> > +	case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
+> > +		return info->precharge_current_ua >=3D 0;
+> > +	case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
+> > +		return info->charge_term_current_ua >=3D 0;
+> > +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
+> > +		return info->constant_charge_current_max_ua >=3D 0;
+> > +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
+> > +		return info->constant_charge_voltage_max_uv >=3D 0;
+> > +	case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MIN:
+> > +		return info->temp_ambient_alert_min > INT_MIN;
+> > +	case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MAX:
+> > +		return info->temp_ambient_alert_max < INT_MAX;
+> > +	case POWER_SUPPLY_PROP_TEMP_ALERT_MIN:
+> > +		return info->temp_alert_min > INT_MIN;
+> > +	case POWER_SUPPLY_PROP_TEMP_ALERT_MAX:
+> > +		return info->temp_alert_max < INT_MAX;
+> > +	case POWER_SUPPLY_PROP_TEMP_MIN:
+> > +		return info->temp_min > INT_MIN;
+> > +	case POWER_SUPPLY_PROP_TEMP_MAX:
+> > +		return info->temp_max < INT_MAX;
+> > +	default:
+> > +		return false;
+> >  	}
+>
+> This one LGTM.
+>
+> >  }
+> >  EXPORT_SYMBOL_GPL(power_supply_battery_info_has_prop);
+> > @@ -914,53 +914,53 @@ int power_supply_battery_info_get_prop(struct pow=
+er_supply_battery_info *info,
+> >  		return -EINVAL;
+> > =20
+> >  	switch (psp) {
+> > -		case POWER_SUPPLY_PROP_TECHNOLOGY:
+> > -			val->intval =3D info->technology;
+> > -			return 0;
+> > -		case POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN:
+> > -			val->intval =3D info->energy_full_design_uwh;
+> > -			return 0;
+> > -		case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
+> > -			val->intval =3D info->charge_full_design_uah;
+> > -			return 0;
+> > -		case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
+> > -			val->intval =3D info->voltage_min_design_uv;
+> > -			return 0;
+> > -		case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
+> > -			val->intval =3D info->voltage_max_design_uv;
+> > -			return 0;
+> > -		case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
+> > -			val->intval =3D info->precharge_current_ua;
+> > -			return 0;
+> > -		case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
+> > -			val->intval =3D info->charge_term_current_ua;
+> > -			return 0;
+> > -		case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
+> > -			val->intval =3D info->constant_charge_current_max_ua;
+> > -			return 0;
+> > -		case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
+> > -			val->intval =3D info->constant_charge_voltage_max_uv;
+> > -			return 0;
+> > -		case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MIN:
+> > -			val->intval =3D info->temp_ambient_alert_min;
+> > -			return 0;
+> > -		case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MAX:
+> > -			val->intval =3D info->temp_ambient_alert_max;
+> > -			return 0;
+> > -		case POWER_SUPPLY_PROP_TEMP_ALERT_MIN:
+> > -			val->intval =3D info->temp_alert_min;
+> > -			return 0;
+> > -		case POWER_SUPPLY_PROP_TEMP_ALERT_MAX:
+> > -			val->intval =3D info->temp_alert_max;
+> > -			return 0;
+> > -		case POWER_SUPPLY_PROP_TEMP_MIN:
+> > -			val->intval =3D info->temp_min;
+> > -			return 0;
+> > -		case POWER_SUPPLY_PROP_TEMP_MAX:
+> > -			val->intval =3D info->temp_max;
+> > -			return 0;
+> > -		default:
+> > -			return -EINVAL;
+> > +	case POWER_SUPPLY_PROP_TECHNOLOGY:
+> > +		val->intval =3D info->technology;
+> > +		return 0;
+> > +	case POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN:
+> > +		val->intval =3D info->energy_full_design_uwh;
+> > +		return 0;
+> > +	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
+> > +		val->intval =3D info->charge_full_design_uah;
+> > +		return 0;
+> > +	case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
+> > +		val->intval =3D info->voltage_min_design_uv;
+> > +		return 0;
+> > +	case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
+> > +		val->intval =3D info->voltage_max_design_uv;
+> > +		return 0;
+> > +	case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
+> > +		val->intval =3D info->precharge_current_ua;
+> > +		return 0;
+> > +	case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
+> > +		val->intval =3D info->charge_term_current_ua;
+> > +		return 0;
+> > +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
+> > +		val->intval =3D info->constant_charge_current_max_ua;
+> > +		return 0;
+> > +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
+> > +		val->intval =3D info->constant_charge_voltage_max_uv;
+> > +		return 0;
+> > +	case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MIN:
+> > +		val->intval =3D info->temp_ambient_alert_min;
+> > +		return 0;
+> > +	case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MAX:
+> > +		val->intval =3D info->temp_ambient_alert_max;
+> > +		return 0;
+> > +	case POWER_SUPPLY_PROP_TEMP_ALERT_MIN:
+> > +		val->intval =3D info->temp_alert_min;
+> > +		return 0;
+> > +	case POWER_SUPPLY_PROP_TEMP_ALERT_MAX:
+> > +		val->intval =3D info->temp_alert_max;
+> > +		return 0;
+> > +	case POWER_SUPPLY_PROP_TEMP_MIN:
+> > +		val->intval =3D info->temp_min;
+> > +		return 0;
+> > +	case POWER_SUPPLY_PROP_TEMP_MAX:
+> > +		val->intval =3D info->temp_max;
+> > +		return 0;
+> > +	default:
+> > +		return -EINVAL;
+>
+> And this one too.
+>
+> > @@ -1636,6 +1637,6 @@ subsys_initcall(power_supply_class_init);
+> >  module_exit(power_supply_class_exit);
+> > =20
+> >  MODULE_DESCRIPTION("Universal power supply monitor class");
+> > -MODULE_AUTHOR("Ian Molton <spyro@f2s.com>, "
+> > -	      "Szabolcs Gyurko, "
+> > -	      "Anton Vorontsov <cbou@mail.ru>");
+> > +MODULE_AUTHOR("Ian Molton <spyro@f2s.com>");
+> > +MODULE_AUTHOR("Szabolcs Gyurko");
+> > +MODULE_AUTHOR("Anton Vorontsov <cbou@mail.ru>");
+>
+> And also this one.
+>
+> Thanks.
+>
+> --=20
+> An old man doll... just what I always wanted! - Clara
+
+Thanks
