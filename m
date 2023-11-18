@@ -2,86 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E76947EFFDF
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Nov 2023 14:30:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 642687F00CB
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Nov 2023 16:59:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbjKRNap (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 18 Nov 2023 08:30:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50244 "EHLO
+        id S233095AbjKRP7K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 18 Nov 2023 10:59:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbjKRNao (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Nov 2023 08:30:44 -0500
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADE0196
-        for <linux-pm@vger.kernel.org>; Sat, 18 Nov 2023 05:30:39 -0800 (PST)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id A0AC024002A
-        for <linux-pm@vger.kernel.org>; Sat, 18 Nov 2023 14:30:37 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1700314237; bh=ppeSPYByp7ZY04Nxe+RB15OngC/qv/0ZK9gTwKftWFc=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:
-         Content-Transfer-Encoding:From;
-        b=R25U3z2UdyDFHzSI05ePIS6J6Otb7N969k/ubFPsry/p4fPmPxXaRc3h/cmG8ed9W
-         q5U0eW/IGRlzg5uM4y0HmCeuq/k2Ep7sQTG2uHD5oa/kEiphKOuiM3OmtBCGt/X7km
-         XMp7x9Zd1IO2TAMJSBZKCCMqTmr7mzBTaLkAERhkJDdIoqoR2aONCwL5MsXupMGpC9
-         ZMtEx+3CXhkXDDbaf4qB/Rva6m7P417ZsN8zsR6thBljP8DqGcvQ26iEPIGcZyDx4S
-         vyBalMdn7zIiiIBqUkcMMjvP9Al14fJKrEkt8lk9rMg4VYRp2uhJS3TnLz5ORr142c
-         gXc6JioidGwjA==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4SXZQh54nQz6tyH;
-        Sat, 18 Nov 2023 14:30:36 +0100 (CET)
-From:   Charalampos Mitrodimas <charmitro@posteo.net>
-To:     sre@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Charalampos Mitrodimas <charmitro@posteo.net>
-Subject: [PATCH 2/2] power: supply: Use multiple MODULE_AUTHOR statements
-Date:   Sat, 18 Nov 2023 13:29:58 +0000
-Message-Id: <20231118132958.157238-3-charmitro@posteo.net>
-In-Reply-To: <20231118132958.157238-1-charmitro@posteo.net>
-References: <20231118132958.157238-1-charmitro@posteo.net>
+        with ESMTP id S231225AbjKRP7A (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Nov 2023 10:59:00 -0500
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECFB2103
+        for <linux-pm@vger.kernel.org>; Sat, 18 Nov 2023 07:57:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700323070; x=1731859070;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=skP3LCXJ9xsI3+N/L6EA++C4Xkj5EvMu+Gb62HwFpxI=;
+  b=SttlCeejDsdFlKMWRntT5wFLxzqCF308utTZnWq4cZCbTL+cxurt9dNw
+   sMt+Og/bGZkoC0RTytG6oPGV/fTM51hw0r8T+WVJImoZKYg6o9z+XOYEC
+   O1GTzTutcLgAOwBATNb1ireaSTErQBOy6NBTCcZoTHvw6fL7yKQpeK/Lz
+   E7K0ntHQ9AqEdsdF9sX0Gdy4KRxvuhRAIEqMJGq+CY14txtpOdJDwoewG
+   wJpUiBpeF49A4m0RGcbLQOZ/FjXRU0p3DCOhGhkO5S7cTDE7kc9SusLtA
+   xZ3bjaUPtoJR7M8oSw0UDcxAPwJKCK0XbkNolIhcdlCMA0Tn6eB7MudgN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="4534374"
+X-IronPort-AV: E=Sophos;i="6.04,209,1695711600"; 
+   d="scan'208";a="4534374"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2023 07:56:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="769483332"
+X-IronPort-AV: E=Sophos;i="6.04,209,1695711600"; 
+   d="scan'208";a="769483332"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 18 Nov 2023 07:56:01 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1r4Nfr-000427-1L;
+        Sat, 18 Nov 2023 15:55:59 +0000
+Date:   Sat, 18 Nov 2023 23:54:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Radu Solea <radusolea@google.com>, linux-pm@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, rafael@kernel.org,
+        Radu Solea <radusolea@google.com>
+Subject: Re: [PATCH RESEND] thermal core: add option to run PM_POST_SUSPEND
+ asynchronously
+Message-ID: <202311182337.iQCfkhrO-lkp@intel.com>
+References: <20231116222842.2121193-1-radusolea@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231116222842.2121193-1-radusolea@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This resolves checkpatch warning "quoted string split across lines" on:
-	1640: WARNING: quoted string split across lines
-	1641: WARNING: quoted string split across lines
+Hi Radu,
 
-The motive to use multiple MODULE_AUTHOR statements came from this
-comment from "include/linux/module.h":
-	/*
-	 * Author(s), use "Name <email>" or just "Name", for multiple
-	 * authors use multiple MODULE_AUTHOR() statements/lines.
-	 */
-	#define MODULE_AUTHOR(_author) MODULE_INFO(author, _author)
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Charalampos Mitrodimas <charmitro@posteo.net>
----
- drivers/power/supply/power_supply_core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+[auto build test WARNING on rafael-pm/thermal]
+[also build test WARNING on linus/master v6.7-rc1 next-20231117]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-index 4a5b570dff44..ecef35ac3b7e 100644
---- a/drivers/power/supply/power_supply_core.c
-+++ b/drivers/power/supply/power_supply_core.c
-@@ -1637,6 +1637,6 @@ subsys_initcall(power_supply_class_init);
- module_exit(power_supply_class_exit);
- 
- MODULE_DESCRIPTION("Universal power supply monitor class");
--MODULE_AUTHOR("Ian Molton <spyro@f2s.com>, "
--	      "Szabolcs Gyurko, "
--	      "Anton Vorontsov <cbou@mail.ru>");
-+MODULE_AUTHOR("Ian Molton <spyro@f2s.com>");
-+MODULE_AUTHOR("Szabolcs Gyurko");
-+MODULE_AUTHOR("Anton Vorontsov <cbou@mail.ru>");
+url:    https://github.com/intel-lab-lkp/linux/commits/Radu-Solea/thermal-core-add-option-to-run-PM_POST_SUSPEND-asynchronously/20231117-063150
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20231116222842.2121193-1-radusolea%40google.com
+patch subject: [PATCH RESEND] thermal core: add option to run PM_POST_SUSPEND asynchronously
+config: csky-randconfig-r111-20231118 (https://download.01.org/0day-ci/archive/20231118/202311182337.iQCfkhrO-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 13.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20231118/202311182337.iQCfkhrO-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311182337.iQCfkhrO-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/thermal/thermal_core.c:49:20: sparse: sparse: symbol 'resume_thermal_zones_wk' was not declared. Should it be static?
+   drivers/thermal/thermal_core.c: note: in included file (through include/linux/rculist.h, include/linux/pid.h, include/linux/sched.h, ...):
+   include/linux/list.h:83:21: sparse: sparse: self-comparison always evaluates to true
+   include/linux/list.h:83:21: sparse: sparse: self-comparison always evaluates to true
+   include/linux/list.h:83:21: sparse: sparse: self-comparison always evaluates to true
+   include/linux/list.h:83:21: sparse: sparse: self-comparison always evaluates to true
+   include/linux/list.h:83:21: sparse: sparse: self-comparison always evaluates to true
+
+vim +/resume_thermal_zones_wk +49 drivers/thermal/thermal_core.c
+
+    47	
+    48	#ifdef CONFIG_THERMAL_ASYNC_RESUME
+  > 49	struct work_struct *resume_thermal_zones_wk;
+    50	#endif /* CONFIG_THERMAL_ASYNC_RESUME */
+    51	
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
