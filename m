@@ -2,39 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6F87F0678
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Nov 2023 14:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B9F7F0683
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Nov 2023 14:43:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229441AbjKSNky (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 19 Nov 2023 08:40:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34900 "EHLO
+        id S229441AbjKSNnO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 19 Nov 2023 08:43:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbjKSNky (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Nov 2023 08:40:54 -0500
+        with ESMTP id S229715AbjKSNnN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Nov 2023 08:43:13 -0500
 Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108C1E6;
-        Sun, 19 Nov 2023 05:40:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7109E8F;
+        Sun, 19 Nov 2023 05:43:09 -0800 (PST)
 Received: from [192.168.0.183] (ip5f5af668.dynamic.kabel-deutschland.de [95.90.246.104])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id D6F0561E5FE01;
-        Sun, 19 Nov 2023 14:40:35 +0100 (CET)
-Message-ID: <d994bd71-8d8b-4b6a-855e-8ea5bfede3ca@molgen.mpg.de>
-Date:   Sun, 19 Nov 2023 14:40:35 +0100
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 24A9961E5FE01;
+        Sun, 19 Nov 2023 14:42:59 +0100 (CET)
+Message-ID: <22494842-a785-4151-915d-6f3a677d96cb@molgen.mpg.de>
+Date:   Sun, 19 Nov 2023 14:42:58 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
+Subject: Re: Qualcomm Atheros QCA61x4 keeps drawing 0.85 W despite Bluetooth
+ being disable in GNOME
 Content-Language: en-US
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
 To:     Marcel Holtmann <marcel@holtmann.org>,
         Johan Hedberg <johan.hedberg@gmail.com>,
         Luiz Augusto von Dentz <luiz.dentz@gmail.com>
 Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
         Hans de Goede <hdegoede@redhat.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: Qulcomm Atheros QCA61x4 keeps drawing 0.85 W despite Bluetooth being
- disable in GNOME
+References: <d994bd71-8d8b-4b6a-855e-8ea5bfede3ca@molgen.mpg.de>
+In-Reply-To: <d994bd71-8d8b-4b6a-855e-8ea5bfede3ca@molgen.mpg.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -45,6 +47,8 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
+
+[Fix typo in subject line]
 
 Dear Linux folks,
 
