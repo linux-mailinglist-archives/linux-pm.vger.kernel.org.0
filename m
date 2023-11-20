@@ -2,54 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0476E7F17EA
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Nov 2023 16:55:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 485857F1907
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Nov 2023 17:46:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232079AbjKTPzD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 20 Nov 2023 10:55:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33138 "EHLO
+        id S233365AbjKTQqp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Nov 2023 11:46:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbjKTPzC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Nov 2023 10:55:02 -0500
-X-Greylist: delayed 164017 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 20 Nov 2023 07:54:59 PST
-Received: from s770432.srvape.com (unknown [IPv6:2a11:3b80:1:0:1f0::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15958B4
-        for <linux-pm@vger.kernel.org>; Mon, 20 Nov 2023 07:54:58 -0800 (PST)
-Received: from allprojectfundings.com (localhost [IPv6:::1])
-        by s770432.srvape.com (Postfix) with ESMTP id CC28729BFCD
-        for <linux-pm@vger.kernel.org>; Mon, 20 Nov 2023 16:49:08 +0100 (CET)
-Reply-To: amiraziz@wealthconsultantmanagers.com
-From:   Amir Aziz <funding@allprojectfundings.com>
-To:     linux-pm@vger.kernel.org
-Subject: We Can Finance Your Business / Projects
-Date:   20 Nov 2023 07:49:10 -0800
-Message-ID: <20231120074910.E5466CA48261A6F0@allprojectfundings.com>
+        with ESMTP id S233990AbjKTQq0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Nov 2023 11:46:26 -0500
+Received: from relay163.nicmail.ru (relay163.nicmail.ru [91.189.117.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1E8D6F;
+        Mon, 20 Nov 2023 08:45:40 -0800 (PST)
+Received: from [10.28.138.152] (port=50740 helo=[192.168.95.111])
+        by relay.hosting.mail.nic.ru with esmtp (Exim 5.55)
+        (envelope-from <kiryushin@ancud.ru>)
+        id 1r57Ox-0000kZ-BK; Mon, 20 Nov 2023 19:45:36 +0300
+Received: from [87.245.155.195] (account kiryushin@ancud.ru HELO [192.168.95.111])
+        by incarp1104.mail.hosting.nic.ru (Exim 5.55)
+        with id 1r57Ox-002hz6-0z;
+        Mon, 20 Nov 2023 19:45:35 +0300
+Message-ID: <958b96ee-9224-4289-a3f6-b654d2b49f13@ancud.ru>
+Date:   Mon, 20 Nov 2023 19:45:34 +0300
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=4.1 required=5.0 tests=BAYES_50,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla Thunderbird
+From:   Nikita Kiryushin <kiryushin@ancud.ru>
+Subject: [PATCH v2] power: reset: msm: Process register_restart_handler()
+ error
+To:     Andy Gross <agross@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-MS-Exchange-Organization-SCL: -1
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Greetings,
+If registering restart handler fails for msm-restart result is not checked.
+It may be irrelevant now (as stated in comment to register_restart_handler,
+the function currently always returns zero), but if the behavior changes in
+the future, an error at registration of handler will be silently skipped.
 
-We are a consultancy firm situated in Bahrain currently looking 
-to finance new or existing projects in any industry.
+Add return error code and print error message too debug log in case of
+non-zero result of register_restart_handler.
 
-Currently we are sourcing for opportunities for our review and 
-consideration and would be delighted to discuss further.
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-Please feel free to contact us if you wish to proceed via our 
-email : amiraziz@wealthconsultantmanagers.com
+Fixes: 18a702e0de98 ("power: reset: use restart_notifier mechanism for 
+msm-poweroff")
 
-Regards,
-Amir Aziz
+Signed-off-by: Nikita Kiryushin <kiryushin@ancud.ru>
+---
+v2: remove superfluous initialization, use specialized error handler for 
+probes,
+set poweroff handler regardless of restart handler registration failure
+as Sebastian Reichel <sebastian.reichel@collabora.com> suggested.
+  drivers/power/reset/msm-poweroff.c | 7 +++++--
+  1 file changed, 5 insertions(+), 2 deletions(-)
 
-N:B We will never charge or ask for any upfront fees of any sort.
+diff --git a/drivers/power/reset/msm-poweroff.c 
+b/drivers/power/reset/msm-poweroff.c
+index d96d248a6e25..0d568805e70e 100644
+--- a/drivers/power/reset/msm-poweroff.c
++++ b/drivers/power/reset/msm-poweroff.c
+@@ -35,14 +35,17 @@ static void do_msm_poweroff(void)
+   static int msm_restart_probe(struct platform_device *pdev)
+  {
++	int ret;
+  	msm_ps_hold = devm_platform_ioremap_resource(pdev, 0);
+  	if (IS_ERR(msm_ps_hold))
+  		return PTR_ERR(msm_ps_hold);
+  -	register_restart_handler(&restart_nb);
+-
+  	pm_power_off = do_msm_poweroff;
+  +	ret = register_restart_handler(&restart_nb);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "unable to register restart 
+handler\n");
++
+  	return 0;
+  }
+  -- 2.34.1
+
