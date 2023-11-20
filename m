@@ -2,139 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17C77F1C09
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Nov 2023 19:10:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E017F1CFD
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Nov 2023 19:59:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbjKTSKg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Nov 2023 13:10:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36882 "EHLO
+        id S229623AbjKTS77 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Nov 2023 13:59:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbjKTSKg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Nov 2023 13:10:36 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 21E11C9
-        for <linux-pm@vger.kernel.org>; Mon, 20 Nov 2023 10:10:29 -0800 (PST)
-Received: (qmail 1457695 invoked by uid 1000); 20 Nov 2023 13:10:29 -0500
-Date:   Mon, 20 Nov 2023 13:10:29 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mike Jones <mike@mjones.io>
-Subject: Re: Qualcomm Atheros QCA61x4 keeps drawing 0.85 W despite Bluetooth
- being disable in GNOME
-Message-ID: <41253614-764e-4e95-b052-a46bf5587c29@rowland.harvard.edu>
-References: <d994bd71-8d8b-4b6a-855e-8ea5bfede3ca@molgen.mpg.de>
- <22494842-a785-4151-915d-6f3a677d96cb@molgen.mpg.de>
- <1f3cb0cc-4bb0-471f-a785-a5d237cd46a3@rowland.harvard.edu>
- <d63ebc5f-9b72-4457-949b-3e90883bd3c0@molgen.mpg.de>
- <d61ae9a8-2228-4af1-a5f0-912e7763fbd1@rowland.harvard.edu>
- <de236c7d-e265-452a-a60e-b10293a5b944@molgen.mpg.de>
+        with ESMTP id S229497AbjKTS76 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Nov 2023 13:59:58 -0500
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59DFCF;
+        Mon, 20 Nov 2023 10:59:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700506794; x=1732042794;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Ye5Zm2pgA7I5UpHkkRalvaMuQWs3i6Zl+XGw5GrzJ/k=;
+  b=VClgUoqeM4Q3xxaQkckQ3SrzIycsQGP276SLRaoOzt8oX2wGEzQ6eOil
+   pjxS4GLSL4RlnpemqiJ8eCu4/d/R2bvoivgvut1SSitdEicd8BRCeNQNr
+   Ebnqi1c1lyqqM+C9qxNUSiTOhZt2KfBjP7h7tq7xuO36OLC0xIwys6VKS
+   ht2NFzbfykEQfBD3T2NwcPD1nIaX3UCnuIfzmKAe8FaSTHshxo33B4R9Y
+   xD3Ix3TvZdu6CHZdRFyqQi0FS7mdWUR06EXabsMesp+I7wasUJ8afe1ot
+   0CEWnJ2DZtmu7eSa093N82mLTWTI0u4sqcBqj3bxk8IURtKUSrYA0Pd3s
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="10354829"
+X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
+   d="scan'208";a="10354829"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 10:59:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="1013672570"
+X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
+   d="scan'208";a="1013672570"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.14])
+  by fmsmga006.fm.intel.com with ESMTP; 20 Nov 2023 10:59:53 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, viresh.kumar@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] cpufreq: intel_pstate: Allow firmware balance performance EPP without code change
+Date:   Mon, 20 Nov 2023 10:59:42 -0800
+Message-Id: <20231120185942.2320424-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <de236c7d-e265-452a-a60e-b10293a5b944@molgen.mpg.de>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 20, 2023 at 08:52:19AM +0100, Paul Menzel wrote:
-> Dear Alan,
-> 
-> 
-> Than you again for your quick reply.
-> 
-> Am 20.11.23 um 03:26 schrieb Alan Stern:
-> > On Sun, Nov 19, 2023 at 11:09:32PM +0100, Paul Menzel wrote:
-> > > $ sudo modprobe btusb
-> > 
-> > > $ grep . /sys/bus/usb/devices/1-3/power/*
-> > > /sys/bus/usb/devices/1-3/power/active_duration:119053224
-> > > /sys/bus/usb/devices/1-3/power/async:enabled
-> > > /sys/bus/usb/devices/1-3/power/autosuspend:2
-> > > /sys/bus/usb/devices/1-3/power/autosuspend_delay_ms:2000
-> > > /sys/bus/usb/devices/1-3/power/connected_duration:148065372
-> > > /sys/bus/usb/devices/1-3/power/control:auto
-> > > /sys/bus/usb/devices/1-3/power/level:auto
-> > > /sys/bus/usb/devices/1-3/power/persist:1
-> > > /sys/bus/usb/devices/1-3/power/runtime_active_kids:0
-> > > /sys/bus/usb/devices/1-3/power/runtime_active_time:119060567
-> > > /sys/bus/usb/devices/1-3/power/runtime_enabled:enabled
-> > > /sys/bus/usb/devices/1-3/power/runtime_status:active
-> > > /sys/bus/usb/devices/1-3/power/runtime_suspended_time:28831453
-> > > /sys/bus/usb/devices/1-3/power/runtime_usage:0
-> > > /sys/bus/usb/devices/1-3/power/wakeup:disabled
-> > > ```
-> > 
-> > Hmmm.  It's not immediately clear why the device isn't being suspended.
-> > The btusb driver does support autosuspend.
-> > 
-> > Can you also post the output from
-> > 
-> > 	grep . /sys/bus/usb/devices/1-3:*/power/*
-> > 
-> > with the driver module loaded?  I should have asked for it before.
-> 
-> ```
-> $ sudo modprobe btusb
-> $ sudo dmesg | tail -9
-> [319747.390712] r8152 4-1.2:1.0 enx18dbf22dccf3: carrier on
-> [320256.946094] bluetooth hci0: firmware: direct-loading firmware
-> qca/rampatch_usb_00000302.bin
-> [320256.949333] Bluetooth: hci0: using rampatch file:
-> qca/rampatch_usb_00000302.bin
-> [320256.949349] Bluetooth: hci0: QCA: patch rome 0x302 build 0x3e8, firmware
-> rome 0x302 build 0x111
-> [320256.949643] usbcore: registered new interface driver btusb
-> [320257.308935] bluetooth hci0: firmware: direct-loading firmware
-> qca/nvm_usb_00000302.bin
-> [320257.309043] Bluetooth: hci0: using NVM file: qca/nvm_usb_00000302.bin
-> [320257.336220] Bluetooth: hci0: HCI Enhanced Setup Synchronous Connection
-> command is advertised, but not supported.
-> [320257.638188] Bluetooth: MGMT ver 1.22
-> $ /sbin/rfkill
-> ID TYPE      DEVICE    SOFT      HARD
->  1 wlan      phy0   blocked unblocked
-> 28 bluetooth hci0   blocked unblocked
-> $ grep . /sys/bus/usb/devices/1-3:*/power/*
-> /sys/bus/usb/devices/1-3:1.0/power/async:enabled
-> /sys/bus/usb/devices/1-3:1.0/power/runtime_active_kids:0
-> /sys/bus/usb/devices/1-3:1.0/power/runtime_enabled:enabled
-> /sys/bus/usb/devices/1-3:1.0/power/runtime_status:suspended
-> /sys/bus/usb/devices/1-3:1.0/power/runtime_usage:0
-> /sys/bus/usb/devices/1-3:1.1/power/async:enabled
-> /sys/bus/usb/devices/1-3:1.1/power/runtime_active_kids:0
-> /sys/bus/usb/devices/1-3:1.1/power/runtime_enabled:enabled
-> /sys/bus/usb/devices/1-3:1.1/power/runtime_status:suspended
-> /sys/bus/usb/devices/1-3:1.1/power/runtime_usage:0
-> ```
+Firmware can specify balance performance EPP value by enabling HWP and
+set EPP to a desired value. The current implementation requires code
+change for every generation to add an entry to intel_epp_balance_perf
+table.
 
-Again, nothing out of the ordinary.  Maybe dynamic debugging will give 
-us a clue.  Try doing this:
+Some distributions like Chrome, which uses old kernels should be able
+to update balance performance EPP, without code change.
 
-	Unload the btusb module.
+There is a check to avoid updating EPP when the balance performance
+EPP is not changed and is power up default of 0x80. Move this check
+after checking if the HWP is enabled by the firmware and there is
+a valid EPP value set by the firmware.
 
-	echo module usbcore +p >/sys/kernel/debug/dynamic_debug/control
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ drivers/cpufreq/intel_pstate.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-	Load the btusb module
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index a534a1f7f1ee..dd6d23e389f1 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -1691,13 +1691,6 @@ static void intel_pstate_update_epp_defaults(struct cpudata *cpudata)
+ {
+ 	cpudata->epp_default = intel_pstate_get_epp(cpudata, 0);
+ 
+-	/*
+-	 * If this CPU gen doesn't call for change in balance_perf
+-	 * EPP return.
+-	 */
+-	if (epp_values[EPP_INDEX_BALANCE_PERFORMANCE] == HWP_EPP_BALANCE_PERFORMANCE)
+-		return;
+-
+ 	/*
+ 	 * If the EPP is set by firmware, which means that firmware enabled HWP
+ 	 * - Is equal or less than 0x80 (default balance_perf EPP)
+@@ -1710,6 +1703,13 @@ static void intel_pstate_update_epp_defaults(struct cpudata *cpudata)
+ 		return;
+ 	}
+ 
++	/*
++	 * If this CPU gen doesn't call for change in balance_perf
++	 * EPP return.
++	 */
++	if (epp_values[EPP_INDEX_BALANCE_PERFORMANCE] == HWP_EPP_BALANCE_PERFORMANCE)
++		return;
++
+ 	/*
+ 	 * Use hard coded value per gen to update the balance_perf
+ 	 * and default EPP.
+-- 
+2.34.1
 
-	Make sure that Bluetooth is turned off in Gnome
-
-	Wait a few seconds
-
-	echo module usbcore -p >/sys/kernel/debug/dynamic_debug/control
-
-Then let's see what the dmesg log contains for that time period.
-
-Also, please post the output from "lsusb -v" for the Bluetooth device.
-
-Alan Stern
