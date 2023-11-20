@@ -2,136 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0666E7F16D3
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Nov 2023 16:11:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 999F97F1732
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Nov 2023 16:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234279AbjKTPLh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Nov 2023 10:11:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59192 "EHLO
+        id S233163AbjKTPX6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Nov 2023 10:23:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234328AbjKTPLa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Nov 2023 10:11:30 -0500
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B992ED;
-        Mon, 20 Nov 2023 07:11:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700493084; x=1732029084;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DmNtpirpP7FYaYPM29SydoZP1gej1xVLaVAOvU6FEFg=;
-  b=IOLRtmeBYdAhWspyX/ibdWzREAfiryjValk1jONP8CIzlT2agAmWcNqO
-   S9niuHt4dnUugMuxo+hSAyOjYkz25jaE/72j7AZf7cIE0M07Prw8Jzq0J
-   +pafqA9uY7L5go7HzzHT5nwxvATioS4TzenRZfFmXfxJxvUPJ0hLx+8/j
-   bkQ25+cNQxT27DD4o+woNCCvaGIJqEy8cEOoCb+YyZInXyJNjWa2OyhQs
-   gpAcA8Ir/Fi202YH4AdE65gBAxXGMuBm11+azXDt5uwxkPSvkyec6EfnA
-   sUM+uiFOj5ZRRjhJMMmYemGpjdox1Y0B77P26oWUSDYJ8BkV4BPqOT1vy
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="376670632"
-X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
-   d="scan'208";a="376670632"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 07:04:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="889940568"
-X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
-   d="scan'208";a="889940568"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 20 Nov 2023 07:04:09 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1r55oF-0006YG-1R;
-        Mon, 20 Nov 2023 15:03:38 +0000
-Date:   Mon, 20 Nov 2023 22:55:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chris Feng <chris.feng@mediatek.com>, rafael@kernel.org,
-        pavel@ucw.cz, len.brown@intel.com
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@kernel.org, hua.yang@mediatek.com, ting.wang@mediatek.com,
-        liang.lu@mediatek.com, chetan.kumar@mediatek.com,
-        Chris Feng <chris.feng@mediatek.com>
-Subject: Re: [PATCH v2] PM: hibernate: Fix the bug where wake events cannot
- wake system during hibernation
-Message-ID: <202311202258.eqaMpEXc-lkp@intel.com>
-References: <20231120081516.55172-1-chris.feng@mediatek.com>
+        with ESMTP id S232515AbjKTPX6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Nov 2023 10:23:58 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B35EFBE;
+        Mon, 20 Nov 2023 07:23:54 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BCC73FEC;
+        Mon, 20 Nov 2023 07:24:40 -0800 (PST)
+Received: from [10.57.4.99] (unknown [10.57.4.99])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D8863F6C4;
+        Mon, 20 Nov 2023 07:23:51 -0800 (PST)
+Message-ID: <96565d08-8d6b-4a37-8a83-90bdd53ba89a@arm.com>
+Date:   Mon, 20 Nov 2023 15:24:52 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231120081516.55172-1-chris.feng@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 8/9] thermal: exynos: use BIT wherever possible
+Content-Language: en-US
+To:     Mateusz Majewski <m.majewski2@samsung.com>
+Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+References: <20231120145049.310509-1-m.majewski2@samsung.com>
+ <CGME20231120145107eucas1p13ed9ea8772346c404d2d7f47d4c80f5a@eucas1p1.samsung.com>
+ <20231120145049.310509-9-m.majewski2@samsung.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20231120145049.310509-9-m.majewski2@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Chris,
+Hi Mateusz,
 
-kernel test robot noticed the following build errors:
+On 11/20/23 14:50, Mateusz Majewski wrote:
+> The original driver did not use that macro and it allows us to make our
+> intentions slightly clearer.
+> 
+> Signed-off-by: Mateusz Majewski <m.majewski2@samsung.com>
+> ---
+>   drivers/thermal/samsung/exynos_tmu.c | 24 ++++++++++++------------
+>   1 file changed, 12 insertions(+), 12 deletions(-)
+> 
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.7-rc2 next-20231120]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[snip]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Feng/PM-hibernate-Fix-the-bug-where-wake-events-cannot-wake-system-during-hibernation/20231120-161752
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20231120081516.55172-1-chris.feng%40mediatek.com
-patch subject: [PATCH v2] PM: hibernate: Fix the bug where wake events cannot wake system during hibernation
-config: arm-randconfig-003-20231120 (https://download.01.org/0day-ci/archive/20231120/202311202258.eqaMpEXc-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231120/202311202258.eqaMpEXc-lkp@intel.com/reproduce)
+> @@ -590,15 +590,15 @@ static void exynos5433_tmu_control(struct platform_device *pdev, bool on)
+>   				continue;
+>   
+>   			interrupt_en |=
+> -				(1 << (EXYNOS7_TMU_INTEN_RISE0_SHIFT + i));
+> +				BIT(EXYNOS7_TMU_INTEN_RISE0_SHIFT + i);
+>   		}
+>   
+>   		interrupt_en |=
+>   			interrupt_en << EXYNOS_TMU_INTEN_FALL0_SHIFT;
+>   
+> -		con |= (1 << EXYNOS_TMU_CORE_EN_SHIFT);
+> +		con |= BIT(EXYNOS_TMU_CORE_EN_SHIFT);
+>   	} else
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311202258.eqaMpEXc-lkp@intel.com/
+Minor issue: the if-else segment here. When the 'if' has the
+brackets, then the 'else' should have them as well,
+even if there is only a single line under 'else'.
+It's not strictly to this patch, but you can address that
+later somewhere (just saw it here).
 
-All errors (new ones prefixed by >>):
+> -		con &= ~(1 << EXYNOS_TMU_CORE_EN_SHIFT);
+> +		con &= ~BIT(EXYNOS_TMU_CORE_EN_SHIFT);
+>   
+>   	pd_det_en = on ? EXYNOS5433_PD_DET_EN : 0;
+>   
+> @@ -622,17 +622,17 @@ static void exynos7_tmu_control(struct platform_device *pdev, bool on)
+>   				continue;
+>   
+>   			interrupt_en |=
+> -				(1 << (EXYNOS7_TMU_INTEN_RISE0_SHIFT + i));
+> +				BIT(EXYNOS7_TMU_INTEN_RISE0_SHIFT + i);
+>   		}
+>   
+>   		interrupt_en |=
+>   			interrupt_en << EXYNOS_TMU_INTEN_FALL0_SHIFT;
+>   
+> -		con |= (1 << EXYNOS_TMU_CORE_EN_SHIFT);
+> -		con |= (1 << EXYNOS7_PD_DET_EN_SHIFT);
+> +		con |= BIT(EXYNOS_TMU_CORE_EN_SHIFT);
+> +		con |= BIT(EXYNOS7_PD_DET_EN_SHIFT);
+>   	} else {
+> -		con &= ~(1 << EXYNOS_TMU_CORE_EN_SHIFT);
+> -		con &= ~(1 << EXYNOS7_PD_DET_EN_SHIFT);
+> +		con &= ~BIT(EXYNOS_TMU_CORE_EN_SHIFT);
+> +		con &= ~BIT(EXYNOS7_PD_DET_EN_SHIFT);
+>   	}
+>   
+>   	writel(interrupt_en, data->base + EXYNOS7_TMU_REG_INTEN);
 
->> kernel/power/hibernate.c:672:4: error: call to undeclared function 'swsusp_unmark'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           swsusp_unmark();
-                           ^
-   1 error generated.
 
+The patch LGTM,
 
-vim +/swsusp_unmark +672 kernel/power/hibernate.c
+Reviewed-by Lukasz Luba <lukasz.luba@arm.com>
 
-   664	
-   665		switch (hibernation_mode) {
-   666		case HIBERNATION_REBOOT:
-   667			kernel_restart(NULL);
-   668			break;
-   669		case HIBERNATION_PLATFORM:
-   670			error = hibernation_platform_enter();
-   671			if (error == -EAGAIN || error == -EBUSY) {
- > 672				swsusp_unmark();
-   673				events_check_enabled = false;
-   674				pr_err("Hibernation Abort.\n");
-   675				return;
-   676			}
-   677			fallthrough;
-   678		case HIBERNATION_SHUTDOWN:
-   679			if (kernel_can_power_off())
-   680				kernel_power_off();
-   681			break;
-   682		}
-   683		kernel_halt();
-   684		/*
-   685		 * Valid image is on the disk, if we continue we risk serious data
-   686		 * corruption after resume.
-   687		 */
-   688		pr_crit("Power down manually\n");
-   689		while (1)
-   690			cpu_relax();
-   691	}
-   692	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Lukasz
