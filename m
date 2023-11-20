@@ -2,53 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F1C7F1F2A
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Nov 2023 22:28:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C40D67F1FCF
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Nov 2023 22:58:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbjKTV2R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Nov 2023 16:28:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40970 "EHLO
+        id S229689AbjKTV63 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Nov 2023 16:58:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjKTV2Q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Nov 2023 16:28:16 -0500
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F9B99;
-        Mon, 20 Nov 2023 13:28:13 -0800 (PST)
+        with ESMTP id S229524AbjKTV63 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Nov 2023 16:58:29 -0500
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3733ECB;
+        Mon, 20 Nov 2023 13:58:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700515693; x=1732051693;
+  t=1700517505; x=1732053505;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QOZ009XPlc8q/cW8PvOmx+Fl7NzUUd/iH64JSXsiqKo=;
-  b=J12vOeiJoAxK9mMlm/qT0vui9lC1amwW0gsHePt24Lwo5+VSqYnv2RyM
-   uVhvlaM+RGehG/25bYsMZIhxyB8353vvCmaY28bEbWp2MeQwqjhNsOGDt
-   l1eaYTpN0Ep+lTETcXitRlfUHkPYecvUpGDOMFU8IwQZcJk03ypU5Yu+Z
-   aXV9LP9KIvg2Qb3pihkXGs3BQsXyWT73yH/abeJg5y6yN6I2/pVklvDLI
-   uzHi1pdZoXieNhHmlGUgn6rSz+CKJ7tG8tGEV0dU3r+WKtUll5a/NG7XH
-   JxvfMZq8uEQm89Uv5YKKMqu8WEfUOSUdhoX18qiB9dYaPODIqOtgOKHDg
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="4823352"
+  bh=RUVd5dQlPkTNx/mYNqXBDe31H3anIGZCPPAlDc79GMA=;
+  b=Rj4a0FedPOSf68a/sz+ZE/CvilwAaqGqDjPsjM6wO9b4GV3s2XYxFUFp
+   UKa1U/2c/pPxtCHrOmRUgYTvB01FT+E0AQ1x108JISKUxgWUibeYIlDWP
+   Jtoin/V4IrBtpzdJFnX4xd+rxkL1X2YeRkrJiXmoYEOtjvXazhuTfmCBe
+   7clh+GpjWYESd/kBsQS7+CJHLpK/ToNB1PKlzvWvciLPsJ8E174Zro+vm
+   L9vHCfQMEAMR13WYKiQgTeKyjmpimIYUJo7WciHfw8+KKCLyCOclS8l69
+   5CzLxnOQMipNaC+gc3l0UdLlY878o2h9mRa3Bm78ODFlH5p7MAsByNUz9
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="477920169"
 X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
-   d="scan'208";a="4823352"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 13:28:12 -0800
+   d="scan'208";a="477920169"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 13:58:24 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
-   d="scan'208";a="7688812"
+   d="scan'208";a="7850310"
 Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 20 Nov 2023 13:28:11 -0800
+  by fmviesa002.fm.intel.com with ESMTP; 20 Nov 2023 13:58:23 -0800
 Received: from kbuild by b8de5498638e with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1r5BoO-0006wS-09;
-        Mon, 20 Nov 2023 21:28:08 +0000
-Date:   Tue, 21 Nov 2023 05:27:12 +0800
+        id 1r5CHX-0006xu-2D;
+        Mon, 20 Nov 2023 21:58:19 +0000
+Date:   Tue, 21 Nov 2023 05:57:34 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge 12/27] drivers/acpi/thermal_lib.c:46:5:
- warning: no previous prototype for function 'acpi_active_trip_temp'
-Message-ID: <202311210522.8Y0cnwJ2-lkp@intel.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
+        devel@acpica.org, linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge 13/27] thermal.c:undefined reference to
+ `acpi_passive_trip_temp'
+Message-ID: <202311210503.P7Q5J2On-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -64,77 +63,27 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
 head:   f437a8d1debff5412e36a1c9454adee193b31950
-commit: 932d2c2fd0b1e8242ba7bcb7b8c2553e663e174f [12/27] ACPI: thermal_lib: Add functions returning temperature in deci-Kelvin
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231121/202311210522.8Y0cnwJ2-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311210522.8Y0cnwJ2-lkp@intel.com/reproduce)
+commit: d967ccd25df78cb5bd789ce9799d4463ea77eb5b [13/27] ACPI: thermal: Use library functions to obtain trip point temperature values
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20231121/202311210503.P7Q5J2On-lkp@intel.com/config)
+compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311210503.P7Q5J2On-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311210522.8Y0cnwJ2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311210503.P7Q5J2On-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/acpi/thermal_lib.c:46:5: warning: no previous prototype for function 'acpi_active_trip_temp' [-Wmissing-prototypes]
-   int acpi_active_trip_temp(struct acpi_device *adev, int id, int *ret_temp)
-       ^
-   drivers/acpi/thermal_lib.c:46:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int acpi_active_trip_temp(struct acpi_device *adev, int id, int *ret_temp)
-   ^
-   static 
->> drivers/acpi/thermal_lib.c:56:5: warning: no previous prototype for function 'acpi_passive_trip_temp' [-Wmissing-prototypes]
-   int acpi_passive_trip_temp(struct acpi_device *adev, int *ret_temp)
-       ^
-   drivers/acpi/thermal_lib.c:56:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int acpi_passive_trip_temp(struct acpi_device *adev, int *ret_temp)
-   ^
-   static 
->> drivers/acpi/thermal_lib.c:61:5: warning: no previous prototype for function 'acpi_hot_trip_temp' [-Wmissing-prototypes]
-   int acpi_hot_trip_temp(struct acpi_device *adev, int *ret_temp)
-       ^
-   drivers/acpi/thermal_lib.c:61:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int acpi_hot_trip_temp(struct acpi_device *adev, int *ret_temp)
-   ^
-   static 
->> drivers/acpi/thermal_lib.c:66:5: warning: no previous prototype for function 'acpi_critical_trip_temp' [-Wmissing-prototypes]
-   int acpi_critical_trip_temp(struct acpi_device *adev, int *ret_temp)
-       ^
-   drivers/acpi/thermal_lib.c:66:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int acpi_critical_trip_temp(struct acpi_device *adev, int *ret_temp)
-   ^
-   static 
-   4 warnings generated.
-
-
-vim +/acpi_active_trip_temp +46 drivers/acpi/thermal_lib.c
-
-    45	
-  > 46	int acpi_active_trip_temp(struct acpi_device *adev, int id, int *ret_temp)
-    47	{
-    48		char obj_name[] = {'_', 'A', 'C', '0' + id, '\0'};
-    49	
-    50		if (id < 0 || id > 9)
-    51			return -EINVAL;
-    52	
-    53		return acpi_trip_temp(adev, obj_name, ret_temp);
-    54	}
-    55	
-  > 56	int acpi_passive_trip_temp(struct acpi_device *adev, int *ret_temp)
-    57	{
-    58		return acpi_trip_temp(adev, "_PSV", ret_temp);
-    59	}
-    60	
-  > 61	int acpi_hot_trip_temp(struct acpi_device *adev, int *ret_temp)
-    62	{
-    63		return acpi_trip_temp(adev, "_HOT", ret_temp);
-    64	}
-    65	
-  > 66	int acpi_critical_trip_temp(struct acpi_device *adev, int *ret_temp)
-    67	{
-    68		return acpi_trip_temp(adev, "_CRT", ret_temp);
-    69	}
-    70	
+   ld: drivers/acpi/thermal.o: in function `get_active_temp':
+   thermal.c:(.text+0x22): undefined reference to `acpi_active_trip_temp'
+   ld: drivers/acpi/thermal.o: in function `acpi_thermal_init_trip':
+>> thermal.c:(.text+0x356): undefined reference to `acpi_passive_trip_temp'
+   ld: drivers/acpi/thermal.o: in function `acpi_thermal_adjust_trip':
+   thermal.c:(.text+0x872): undefined reference to `acpi_passive_trip_temp'
+   ld: drivers/acpi/thermal.o: in function `acpi_thermal_add':
+>> thermal.c:(.text+0xaec): undefined reference to `acpi_hot_trip_temp'
+>> ld: thermal.c:(.text+0xd79): undefined reference to `acpi_critical_trip_temp'
 
 -- 
 0-DAY CI Kernel Test Service
