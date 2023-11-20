@@ -2,107 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5147F1A8B
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Nov 2023 18:37:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B17C77F1C09
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Nov 2023 19:10:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233752AbjKTRhS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Nov 2023 12:37:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59106 "EHLO
+        id S229645AbjKTSKg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Nov 2023 13:10:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234078AbjKTRhD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Nov 2023 12:37:03 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F90F4;
-        Mon, 20 Nov 2023 09:36:55 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AKHHUS3010738;
-        Mon, 20 Nov 2023 17:36:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : date :
- subject : mime-version : content-type : content-transfer-encoding :
- message-id : references : in-reply-to : to : cc; s=qcppdkim1;
- bh=EbzvNwj4CIbtC07B2c+ircX4/1kNKJO9XKufiyTSIJ0=;
- b=aTxztQnt/n3kiYWGSnST6eD2k8dwK874GKNJptFmMhM1Gc+kY5UyQqMD4uNSzsThTlme
- zNpLm0jQi9F0fmq0TMzqNrCQprZVOPY4660oUPQgIhKzAaCXnKjLL4i7b/6gW5Ifp2h6
- ipuYpiZyrvxumOCxXWXw7YTfyX8ph2hKIbc9Izg7V0WD1r0tU36g+s7aCVhLopmBqJC9
- DevQ+oNZSWrdD5G5a9zosJer0Dl3FXFM5kFOxQdp8aNg9ns7KgAHuxQoC8u5Au/9f/M3
- IpEqsinsH9AWGkGXpY5FvuOy7NL1R3UITdqcJIGgdKE2IJunnkLeoJmK/mafsyyC0mOp wA== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uem80msb5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Nov 2023 17:36:44 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3AKHahSD023791
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Nov 2023 17:36:43 GMT
-Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Mon, 20 Nov 2023 09:36:43 -0800
-From:   Elliot Berman <quic_eberman@quicinc.com>
-Date:   Mon, 20 Nov 2023 09:36:32 -0800
-Subject: [PATCH 2/2] freezer,sched: clean saved_state when restoring it
- during thaw
+        with ESMTP id S231599AbjKTSKg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Nov 2023 13:10:36 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 21E11C9
+        for <linux-pm@vger.kernel.org>; Mon, 20 Nov 2023 10:10:29 -0800 (PST)
+Received: (qmail 1457695 invoked by uid 1000); 20 Nov 2023 13:10:29 -0500
+Date:   Mon, 20 Nov 2023 13:10:29 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mike Jones <mike@mjones.io>
+Subject: Re: Qualcomm Atheros QCA61x4 keeps drawing 0.85 W despite Bluetooth
+ being disable in GNOME
+Message-ID: <41253614-764e-4e95-b052-a46bf5587c29@rowland.harvard.edu>
+References: <d994bd71-8d8b-4b6a-855e-8ea5bfede3ca@molgen.mpg.de>
+ <22494842-a785-4151-915d-6f3a677d96cb@molgen.mpg.de>
+ <1f3cb0cc-4bb0-471f-a785-a5d237cd46a3@rowland.harvard.edu>
+ <d63ebc5f-9b72-4457-949b-3e90883bd3c0@molgen.mpg.de>
+ <d61ae9a8-2228-4af1-a5f0-912e7763fbd1@rowland.harvard.edu>
+ <de236c7d-e265-452a-a60e-b10293a5b944@molgen.mpg.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20231120-freezer-state-multiple-thaws-v1-2-f2e1dd7ce5a2@quicinc.com>
-References: <20231120-freezer-state-multiple-thaws-v1-0-f2e1dd7ce5a2@quicinc.com>
-In-Reply-To: <20231120-freezer-state-multiple-thaws-v1-0-f2e1dd7ce5a2@quicinc.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, "Ingo Molnar" <mingo@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        "Aiqun Yu (Maria)" <quic_aiquny@quicinc.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Elliot Berman <quic_eberman@quicinc.com>
-X-Mailer: b4 0.13-dev
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: MCZ21FUTc8k25bPy33QfEDP9AkGXZS95
-X-Proofpoint-ORIG-GUID: MCZ21FUTc8k25bPy33QfEDP9AkGXZS95
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-20_17,2023-11-20_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=665
- adultscore=0 priorityscore=1501 phishscore=0 malwarescore=0
- impostorscore=0 lowpriorityscore=0 mlxscore=0 spamscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311200126
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <de236c7d-e265-452a-a60e-b10293a5b944@molgen.mpg.de>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Clean saved_state after using it during thaw. Cleaning the saved_state
-allows us to avoid some unnecessary branches in ttwu_state_match.
+On Mon, Nov 20, 2023 at 08:52:19AM +0100, Paul Menzel wrote:
+> Dear Alan,
+> 
+> 
+> Than you again for your quick reply.
+> 
+> Am 20.11.23 um 03:26 schrieb Alan Stern:
+> > On Sun, Nov 19, 2023 at 11:09:32PM +0100, Paul Menzel wrote:
+> > > $ sudo modprobe btusb
+> > 
+> > > $ grep . /sys/bus/usb/devices/1-3/power/*
+> > > /sys/bus/usb/devices/1-3/power/active_duration:119053224
+> > > /sys/bus/usb/devices/1-3/power/async:enabled
+> > > /sys/bus/usb/devices/1-3/power/autosuspend:2
+> > > /sys/bus/usb/devices/1-3/power/autosuspend_delay_ms:2000
+> > > /sys/bus/usb/devices/1-3/power/connected_duration:148065372
+> > > /sys/bus/usb/devices/1-3/power/control:auto
+> > > /sys/bus/usb/devices/1-3/power/level:auto
+> > > /sys/bus/usb/devices/1-3/power/persist:1
+> > > /sys/bus/usb/devices/1-3/power/runtime_active_kids:0
+> > > /sys/bus/usb/devices/1-3/power/runtime_active_time:119060567
+> > > /sys/bus/usb/devices/1-3/power/runtime_enabled:enabled
+> > > /sys/bus/usb/devices/1-3/power/runtime_status:active
+> > > /sys/bus/usb/devices/1-3/power/runtime_suspended_time:28831453
+> > > /sys/bus/usb/devices/1-3/power/runtime_usage:0
+> > > /sys/bus/usb/devices/1-3/power/wakeup:disabled
+> > > ```
+> > 
+> > Hmmm.  It's not immediately clear why the device isn't being suspended.
+> > The btusb driver does support autosuspend.
+> > 
+> > Can you also post the output from
+> > 
+> > 	grep . /sys/bus/usb/devices/1-3:*/power/*
+> > 
+> > with the driver module loaded?  I should have asked for it before.
+> 
+> ```
+> $ sudo modprobe btusb
+> $ sudo dmesg | tail -9
+> [319747.390712] r8152 4-1.2:1.0 enx18dbf22dccf3: carrier on
+> [320256.946094] bluetooth hci0: firmware: direct-loading firmware
+> qca/rampatch_usb_00000302.bin
+> [320256.949333] Bluetooth: hci0: using rampatch file:
+> qca/rampatch_usb_00000302.bin
+> [320256.949349] Bluetooth: hci0: QCA: patch rome 0x302 build 0x3e8, firmware
+> rome 0x302 build 0x111
+> [320256.949643] usbcore: registered new interface driver btusb
+> [320257.308935] bluetooth hci0: firmware: direct-loading firmware
+> qca/nvm_usb_00000302.bin
+> [320257.309043] Bluetooth: hci0: using NVM file: qca/nvm_usb_00000302.bin
+> [320257.336220] Bluetooth: hci0: HCI Enhanced Setup Synchronous Connection
+> command is advertised, but not supported.
+> [320257.638188] Bluetooth: MGMT ver 1.22
+> $ /sbin/rfkill
+> ID TYPE      DEVICE    SOFT      HARD
+>  1 wlan      phy0   blocked unblocked
+> 28 bluetooth hci0   blocked unblocked
+> $ grep . /sys/bus/usb/devices/1-3:*/power/*
+> /sys/bus/usb/devices/1-3:1.0/power/async:enabled
+> /sys/bus/usb/devices/1-3:1.0/power/runtime_active_kids:0
+> /sys/bus/usb/devices/1-3:1.0/power/runtime_enabled:enabled
+> /sys/bus/usb/devices/1-3:1.0/power/runtime_status:suspended
+> /sys/bus/usb/devices/1-3:1.0/power/runtime_usage:0
+> /sys/bus/usb/devices/1-3:1.1/power/async:enabled
+> /sys/bus/usb/devices/1-3:1.1/power/runtime_active_kids:0
+> /sys/bus/usb/devices/1-3:1.1/power/runtime_enabled:enabled
+> /sys/bus/usb/devices/1-3:1.1/power/runtime_status:suspended
+> /sys/bus/usb/devices/1-3:1.1/power/runtime_usage:0
+> ```
 
-Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
----
- kernel/freezer.c | 1 +
- 1 file changed, 1 insertion(+)
+Again, nothing out of the ordinary.  Maybe dynamic debugging will give 
+us a clue.  Try doing this:
 
-diff --git a/kernel/freezer.c b/kernel/freezer.c
-index 759006a9a910..f57aaf96b829 100644
---- a/kernel/freezer.c
-+++ b/kernel/freezer.c
-@@ -187,6 +187,7 @@ static int __restore_freezer_state(struct task_struct *p, void *arg)
- 
- 	if (state != TASK_RUNNING) {
- 		WRITE_ONCE(p->__state, state);
-+		p->saved_state = TASK_RUNNING;
- 		return 1;
- 	}
- 
+	Unload the btusb module.
 
--- 
-2.41.0
+	echo module usbcore +p >/sys/kernel/debug/dynamic_debug/control
 
+	Load the btusb module
+
+	Make sure that Bluetooth is turned off in Gnome
+
+	Wait a few seconds
+
+	echo module usbcore -p >/sys/kernel/debug/dynamic_debug/control
+
+Then let's see what the dmesg log contains for that time period.
+
+Also, please post the output from "lsusb -v" for the Bluetooth device.
+
+Alan Stern
