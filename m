@@ -2,112 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E017F1CFD
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Nov 2023 19:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 445857F1DE4
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Nov 2023 21:16:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbjKTS77 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Nov 2023 13:59:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52186 "EHLO
+        id S229627AbjKTUQG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Nov 2023 15:16:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjKTS76 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Nov 2023 13:59:58 -0500
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59DFCF;
-        Mon, 20 Nov 2023 10:59:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700506794; x=1732042794;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Ye5Zm2pgA7I5UpHkkRalvaMuQWs3i6Zl+XGw5GrzJ/k=;
-  b=VClgUoqeM4Q3xxaQkckQ3SrzIycsQGP276SLRaoOzt8oX2wGEzQ6eOil
-   pjxS4GLSL4RlnpemqiJ8eCu4/d/R2bvoivgvut1SSitdEicd8BRCeNQNr
-   Ebnqi1c1lyqqM+C9qxNUSiTOhZt2KfBjP7h7tq7xuO36OLC0xIwys6VKS
-   ht2NFzbfykEQfBD3T2NwcPD1nIaX3UCnuIfzmKAe8FaSTHshxo33B4R9Y
-   xD3Ix3TvZdu6CHZdRFyqQi0FS7mdWUR06EXabsMesp+I7wasUJ8afe1ot
-   0CEWnJ2DZtmu7eSa093N82mLTWTI0u4sqcBqj3bxk8IURtKUSrYA0Pd3s
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="10354829"
-X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
-   d="scan'208";a="10354829"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 10:59:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="1013672570"
-X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
-   d="scan'208";a="1013672570"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.14])
-  by fmsmga006.fm.intel.com with ESMTP; 20 Nov 2023 10:59:53 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org, viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] cpufreq: intel_pstate: Allow firmware balance performance EPP without code change
-Date:   Mon, 20 Nov 2023 10:59:42 -0800
-Message-Id: <20231120185942.2320424-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.40.1
+        with ESMTP id S229539AbjKTUQF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Nov 2023 15:16:05 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21730C7;
+        Mon, 20 Nov 2023 12:16:02 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2c88750e7d1so10141321fa.3;
+        Mon, 20 Nov 2023 12:16:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20230601; t=1700511360; x=1701116160; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UN/JaGs58VC/59LNr+VTcKEJIUnlEUBkYK0zXNn4XiM=;
+        b=RgP6LbXNj8T/rWOEBj+R++Mu7IMJuqWdFn6TUIlD6NNy3Kks8f2op+6RUbhjlIasDz
+         Itt33d2X0W/SO8vvbx7Jh39rK0Mv85+gvMWw/k8hqNER3biUd8zkM3XnbM7sodxGZS27
+         I60kvj+d/iARZWLGQx1T6KsJnwBm7PVSXXdJFeSETX6NvUfygsX1AYU+ORb6wZ6mSsoB
+         GtS0Lgdsa7PnzHcAAHZXT/K4EX8EF6699iCQvKFWYpZXer1gTeVPNpi84VRK1m+YY+8Q
+         FxZcrq2fuRFuHNf1GUX4HQgnB7661+Rfgb0J+qyuftVLzqEbKt6aLazdOcxIe+lEMCQM
+         Qi4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700511360; x=1701116160;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UN/JaGs58VC/59LNr+VTcKEJIUnlEUBkYK0zXNn4XiM=;
+        b=W/S+c20oGZXInKuQZfjBzr7fHBXcuKRvftCmkZRtxVo/ZTrKVjsiIPoBmXp42W5qx8
+         oPEE7BGzbKAGOJnYkn+GSzRb7IyJEGXHCscCjpa/L2aV1lh5eFOGzT1rR8lbUEvHUV86
+         IQAZm9+1Mt2y66m/q7bLEGGxMkuWwIhL659sV1xBQIc8K3sSATIGHmc6GYYEvZCKgqXO
+         ihqLmZkljz8tVHYO3/gMj0NMCruMSaEnNJ5MDwmQV9GuBlRDsZB5RIdC3mduvp4/LuGT
+         7Phhe31SdKvyGYW0uiGBJgb405QOUPwc09FvB1eZ8uQfcd8Ra3ZtGpsvNB5pSLan+A5e
+         Z3Ag==
+X-Gm-Message-State: AOJu0Ywh+LKRwUpT3HtgMCk+7IW4hXKxsDovGWIvhLX8KegALgxhHsKt
+        egBWjwLEGeK6lYGtnmwOKrG5RCXgTT+j/MgFHGg=
+X-Google-Smtp-Source: AGHT+IEl/IXOE7od2X9WWhu+ZG0SDFd09Zq8exF4njB3w++Fo4CbFsOu9XbAGRiMyS6YdIDcYfwLVlLccZYXYBThqaE=
+X-Received: by 2002:a2e:a30c:0:b0:2c5:ab3b:d676 with SMTP id
+ l12-20020a2ea30c000000b002c5ab3bd676mr6035262lje.9.1700511359989; Mon, 20 Nov
+ 2023 12:15:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20231114-topic-amlogic-upstream-isp-pmdomain-v1-0-f01e6fca67a0@linaro.org>
+ <20231114-topic-amlogic-upstream-isp-pmdomain-v1-2-f01e6fca67a0@linaro.org>
+In-Reply-To: <20231114-topic-amlogic-upstream-isp-pmdomain-v1-2-f01e6fca67a0@linaro.org>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Mon, 20 Nov 2023 21:15:49 +0100
+Message-ID: <CAFBinCDe3yoEBd6SzozNZtC=zGaUHt4VeO_uhV1s5XBaWp0w1Q@mail.gmail.com>
+Subject: Re: [PATCH 2/2] pmdomain: amlogic: meson-ee-pwrc: add support for
+ G12A ISP power domain
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Daniel Scally <dan.scally@ideasonboard.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Firmware can specify balance performance EPP value by enabling HWP and
-set EPP to a desired value. The current implementation requires code
-change for every generation to add an entry to intel_epp_balance_perf
-table.
+Hi Neil,
 
-Some distributions like Chrome, which uses old kernels should be able
-to update balance performance EPP, without code change.
+On Tue, Nov 14, 2023 at 11:19=E2=80=AFAM Neil Armstrong
+<neil.armstrong@linaro.org> wrote:
+[...]
+> +static struct meson_ee_pwrc_mem_domain g12a_pwrc_mem_isp[] =3D {
+> +       { G12A_HHI_ISP_MEM_PD_REG0, GENMASK(31, 0) },
+> +       { G12A_HHI_ISP_MEM_PD_REG0, GENMASK(31, 0) },
+I expected this second line to use G12A_HHI_ISP_MEM_PD_REG1 (note the
+number at the end: 0 vs 1)
+Is this correct?
 
-There is a check to avoid updating EPP when the balance performance
-EPP is not changed and is power up default of 0x80. Move this check
-after checking if the HWP is enabled by the firmware and there is
-a valid EPP value set by the firmware.
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- drivers/cpufreq/intel_pstate.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index a534a1f7f1ee..dd6d23e389f1 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -1691,13 +1691,6 @@ static void intel_pstate_update_epp_defaults(struct cpudata *cpudata)
- {
- 	cpudata->epp_default = intel_pstate_get_epp(cpudata, 0);
- 
--	/*
--	 * If this CPU gen doesn't call for change in balance_perf
--	 * EPP return.
--	 */
--	if (epp_values[EPP_INDEX_BALANCE_PERFORMANCE] == HWP_EPP_BALANCE_PERFORMANCE)
--		return;
--
- 	/*
- 	 * If the EPP is set by firmware, which means that firmware enabled HWP
- 	 * - Is equal or less than 0x80 (default balance_perf EPP)
-@@ -1710,6 +1703,13 @@ static void intel_pstate_update_epp_defaults(struct cpudata *cpudata)
- 		return;
- 	}
- 
-+	/*
-+	 * If this CPU gen doesn't call for change in balance_perf
-+	 * EPP return.
-+	 */
-+	if (epp_values[EPP_INDEX_BALANCE_PERFORMANCE] == HWP_EPP_BALANCE_PERFORMANCE)
-+		return;
-+
- 	/*
- 	 * Use hard coded value per gen to update the balance_perf
- 	 * and default EPP.
--- 
-2.34.1
-
+Best regards,
+Martin
