@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C36F7F2027
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Nov 2023 23:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9FA27F206C
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Nov 2023 23:35:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232336AbjKTWWj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Nov 2023 17:22:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45822 "EHLO
+        id S229524AbjKTWfq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Nov 2023 17:35:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233190AbjKTWVv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Nov 2023 17:21:51 -0500
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9709F97;
-        Mon, 20 Nov 2023 14:21:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700518907; x=1732054907;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sNIlOQYBsnz8Arkj044RtaI1xcSPw1WnuxuGcYJQAlk=;
-  b=D90YX4A8HebaUF8fW8YQd/QZGIri8WaEGh4NOiPkFN+srONOLi5FViXu
-   KgGc6/Q5kb/eMsiwSmhbxHS+nfHw2eaSLEmam3SSF4UBKJmOEiZkMq4WX
-   n7f3cCAUHIwrID6rwbdxoyxNkjknr+a/Qbr+zLxfUvr2tpEZlOTXrWTAV
-   qQeALbz3ATAKWavOGYkulOx0aKec+7aZVKA4GYHzp3g6Vl+ryGgvudvSS
-   y0AYiN5EzKy5HX/opFFTEu8i0uuDmStJEVmP9LbP1adC/1oe4ige8gbxs
-   mUrkgLg9EHYITH8tNfi6FG9H7sSOayLHr+FcgGLXL+LqTch7Op2D0Y0pc
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="371058712"
-X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
-   d="scan'208";a="371058712"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 14:21:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="857130428"
-X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
-   d="scan'208";a="857130428"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Nov 2023 14:21:45 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1r5CeF-0006zh-2s;
-        Mon, 20 Nov 2023 22:21:43 +0000
-Date:   Tue, 21 Nov 2023 06:20:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-        devel@acpica.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge 13/27] thermal.c:undefined reference to
- `acpi_active_trip_temp'
-Message-ID: <202311210507.hprTtxhv-lkp@intel.com>
+        with ESMTP id S229476AbjKTWfp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Nov 2023 17:35:45 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E1FC4
+        for <linux-pm@vger.kernel.org>; Mon, 20 Nov 2023 14:35:41 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4C1FC433C7;
+        Mon, 20 Nov 2023 22:35:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1700519741;
+        bh=x9xycIkTae6WcCNvi+WWU3VyU+4mfQhz9WaLpAhlaeM=;
+        h=From:Date:Subject:To:Cc:From;
+        b=uwrhbGV3OS9sJPKBM9X2WcwKPk7LUKY3lWFErrqTlqmSykQ3jVvGMto8aSJhwlcgn
+         MmuBxRpQIoQOMzFFJ6vfEwO8iYNjsirvcgpS5yudOcSk3yqwfyhiK3fdXYA3COUbPi
+         07LdoCUnctrj/w8MkclmN+sri0rOYDpuP/7pYjz0XgIHppx8tQDhV4ph/3Cu9DAmio
+         YORdYG8FVYpyr5g7om/mZYbBAp3BYuFiRaO7GEwu2rwpKMt+JM4O5Fs+55rEuebdCg
+         SAawLHEHzRTdaVi5Dd9j0BIvPn7/K46/UOf9nJCpzPm0hOuP7e6Ir4dNEkPbjN/7+9
+         v+B0HA99ZcqiQ==
+From:   Nathan Chancellor <nathan@kernel.org>
+Date:   Mon, 20 Nov 2023 15:35:32 -0700
+Subject: [PATCH] power: reset: at91: Drop '__init' from
+ at91_wakeup_status()
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20231120-fix-at91-modpost-warnings-v1-1-813671933863@kernel.org>
+X-B4-Tracking: v=1; b=H4sIADPfW2UC/x2MMQrDMAwAvxI0R2ArQ2m/UjLItppqqB2skASC/
+ x7T8eDuLjCpKgav4YIqu5qW3MGPA8Qv50VQU2cgR5P35PCjJ/L29PgraS224cE1a14Mg3BIFDg
+ +iKD3a5Uu/9/vubUb3tJXt2sAAAA=
+To:     sre@kernel.org
+Cc:     nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@tuxon.dev, u.kleine-koenig@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2244; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=x9xycIkTae6WcCNvi+WWU3VyU+4mfQhz9WaLpAhlaeM=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDKnR920m3DViLfbOF5/cnsE4x5xr4Yr4KpX5viyJhfdO/
+ mGILufuKGVhEONikBVTZKl+rHrc0HDOWcYbpybBzGFlAhnCwMUpABOZZM7I0Dk1QXr6hNUfJtUz
+ WE1SaRb8nKa7PmFLrkuX8UlLC8ZdwQz/tGMv7RT2eyUQvuLUMlGJFNuN4gn3ctynrBN+zrK/7MF
+ +RgA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,30 +62,56 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   f437a8d1debff5412e36a1c9454adee193b31950
-commit: d967ccd25df78cb5bd789ce9799d4463ea77eb5b [13/27] ACPI: thermal: Use library functions to obtain trip point temperature values
-config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20231121/202311210507.hprTtxhv-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311210507.hprTtxhv-lkp@intel.com/reproduce)
+When building with clang, there are two section mismatch warnings:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311210507.hprTtxhv-lkp@intel.com/
+  WARNING: modpost: vmlinux: section mismatch in reference: at91_poweroff_probe+0x7c (section: .text) -> at91_wakeup_status (section: .init.text)
+  WARNING: modpost: vmlinux: section mismatch in reference: at91_shdwc_probe+0xcc (section: .text) -> at91_wakeup_status (section: .init.text)
 
-All errors (new ones prefixed by >>):
+Drop '__init' from at91_wakeup_status() to clear up the mismatch.
 
-   ld: vmlinux.o: in function `acpi_thermal_adjust_trip':
->> thermal.c:(.text+0x5e6de6): undefined reference to `acpi_active_trip_temp'
->> ld: thermal.c:(.text+0x5e6e54): undefined reference to `acpi_passive_trip_temp'
-   ld: vmlinux.o: in function `acpi_thermal_init_trip':
-   thermal.c:(.text+0x5e7089): undefined reference to `acpi_active_trip_temp'
-   ld: thermal.c:(.text+0x5e71f3): undefined reference to `acpi_passive_trip_temp'
-   ld: vmlinux.o: in function `acpi_thermal_add':
->> thermal.c:(.text+0x5e73bf): undefined reference to `acpi_critical_trip_temp'
->> ld: thermal.c:(.text+0x5e73eb): undefined reference to `acpi_hot_trip_temp'
+Fixes: dde74a5de817 ("power: reset: at91-sama5d2_shdwc: Stop using module_platform_driver_probe()")
+Fixes: 099806de68b7 ("power: reset: at91-poweroff: Stop using module_platform_driver_probe()")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+I suspect this is not visible for GCC due to inlining
+at91_wakeup_status() but I did not actually check.
+---
+ drivers/power/reset/at91-poweroff.c      | 2 +-
+ drivers/power/reset/at91-sama5d2_shdwc.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/power/reset/at91-poweroff.c b/drivers/power/reset/at91-poweroff.c
+index 126e774e210c..93eece027865 100644
+--- a/drivers/power/reset/at91-poweroff.c
++++ b/drivers/power/reset/at91-poweroff.c
+@@ -57,7 +57,7 @@ static struct shdwc {
+ 	void __iomem *mpddrc_base;
+ } at91_shdwc;
+ 
+-static void __init at91_wakeup_status(struct platform_device *pdev)
++static void at91_wakeup_status(struct platform_device *pdev)
+ {
+ 	const char *reason;
+ 	u32 reg = readl(at91_shdwc.shdwc_base + AT91_SHDW_SR);
+diff --git a/drivers/power/reset/at91-sama5d2_shdwc.c b/drivers/power/reset/at91-sama5d2_shdwc.c
+index af95c7b39cb3..959ce0dbe91d 100644
+--- a/drivers/power/reset/at91-sama5d2_shdwc.c
++++ b/drivers/power/reset/at91-sama5d2_shdwc.c
+@@ -107,7 +107,7 @@ static const unsigned long long sdwc_dbc_period[] = {
+ 	0, 3, 32, 512, 4096, 32768,
+ };
+ 
+-static void __init at91_wakeup_status(struct platform_device *pdev)
++static void at91_wakeup_status(struct platform_device *pdev)
+ {
+ 	struct shdwc *shdw = platform_get_drvdata(pdev);
+ 	const struct reg_config *rcfg = shdw->rcfg;
+
+---
+base-commit: b55d073e6501dc6077edaa945a6dad8ac5c8bbab
+change-id: 20231120-fix-at91-modpost-warnings-beabd2bac722
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nathan Chancellor <nathan@kernel.org>
+
