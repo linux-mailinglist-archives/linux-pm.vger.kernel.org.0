@@ -2,75 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445857F1DE4
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Nov 2023 21:16:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 755977F1E8C
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Nov 2023 22:12:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbjKTUQG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Nov 2023 15:16:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
+        id S230170AbjKTVMs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Nov 2023 16:12:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjKTUQF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Nov 2023 15:16:05 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21730C7;
-        Mon, 20 Nov 2023 12:16:02 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2c88750e7d1so10141321fa.3;
-        Mon, 20 Nov 2023 12:16:02 -0800 (PST)
+        with ESMTP id S229585AbjKTVMr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Nov 2023 16:12:47 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D055AA
+        for <linux-pm@vger.kernel.org>; Mon, 20 Nov 2023 13:12:43 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-db37c6a4d48so2068067276.2
+        for <linux-pm@vger.kernel.org>; Mon, 20 Nov 2023 13:12:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20230601; t=1700511360; x=1701116160; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1700514762; x=1701119562; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UN/JaGs58VC/59LNr+VTcKEJIUnlEUBkYK0zXNn4XiM=;
-        b=RgP6LbXNj8T/rWOEBj+R++Mu7IMJuqWdFn6TUIlD6NNy3Kks8f2op+6RUbhjlIasDz
-         Itt33d2X0W/SO8vvbx7Jh39rK0Mv85+gvMWw/k8hqNER3biUd8zkM3XnbM7sodxGZS27
-         I60kvj+d/iARZWLGQx1T6KsJnwBm7PVSXXdJFeSETX6NvUfygsX1AYU+ORb6wZ6mSsoB
-         GtS0Lgdsa7PnzHcAAHZXT/K4EX8EF6699iCQvKFWYpZXer1gTeVPNpi84VRK1m+YY+8Q
-         FxZcrq2fuRFuHNf1GUX4HQgnB7661+Rfgb0J+qyuftVLzqEbKt6aLazdOcxIe+lEMCQM
-         Qi4g==
+        bh=sqlmM8DM6G+5eGbay1lkfj8kQgtwPw9Yngebn56yPS8=;
+        b=N3DLIT91qWAL2Osha8R+ljRp1/K7nvYIqatKViALNXewTixhSPKrM8uudt/b2tzqXO
+         Uvi99AL4MI3HzHZqMpLZq3e4U50hPuGIg2dLDqwOOqcdLQAAhNaQqmGBf5M4GqNlbAYk
+         38KtRDj6CTbsPF7WxLpjLPF6WHDumtl+M2JUusDCBY+SyMqrSY27UWkAcV76NxurG7LA
+         6nr2x0XtJhpUH6Mypgt6zSVnAO3IXEM13TmxLTN+5efJG+djDGel74K2Kxk8rM5nzN2N
+         Me+1QpTp5d38NwQUnTPQg03WHj29+OsfgpBzYWZ7st5iBa+aDooYwkKHKRjrupzQZKLV
+         T0lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700511360; x=1701116160;
+        d=1e100.net; s=20230601; t=1700514762; x=1701119562;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UN/JaGs58VC/59LNr+VTcKEJIUnlEUBkYK0zXNn4XiM=;
-        b=W/S+c20oGZXInKuQZfjBzr7fHBXcuKRvftCmkZRtxVo/ZTrKVjsiIPoBmXp42W5qx8
-         oPEE7BGzbKAGOJnYkn+GSzRb7IyJEGXHCscCjpa/L2aV1lh5eFOGzT1rR8lbUEvHUV86
-         IQAZm9+1Mt2y66m/q7bLEGGxMkuWwIhL659sV1xBQIc8K3sSATIGHmc6GYYEvZCKgqXO
-         ihqLmZkljz8tVHYO3/gMj0NMCruMSaEnNJ5MDwmQV9GuBlRDsZB5RIdC3mduvp4/LuGT
-         7Phhe31SdKvyGYW0uiGBJgb405QOUPwc09FvB1eZ8uQfcd8Ra3ZtGpsvNB5pSLan+A5e
-         Z3Ag==
-X-Gm-Message-State: AOJu0Ywh+LKRwUpT3HtgMCk+7IW4hXKxsDovGWIvhLX8KegALgxhHsKt
-        egBWjwLEGeK6lYGtnmwOKrG5RCXgTT+j/MgFHGg=
-X-Google-Smtp-Source: AGHT+IEl/IXOE7od2X9WWhu+ZG0SDFd09Zq8exF4njB3w++Fo4CbFsOu9XbAGRiMyS6YdIDcYfwLVlLccZYXYBThqaE=
-X-Received: by 2002:a2e:a30c:0:b0:2c5:ab3b:d676 with SMTP id
- l12-20020a2ea30c000000b002c5ab3bd676mr6035262lje.9.1700511359989; Mon, 20 Nov
- 2023 12:15:59 -0800 (PST)
+        bh=sqlmM8DM6G+5eGbay1lkfj8kQgtwPw9Yngebn56yPS8=;
+        b=YlUveaNRI1iDxMopENwPaDFMZit03nZQ1ZjVMd+ID5kehQvrYsfvY5TFSHRbY0D7x8
+         fz2WDyTj5QPF3FM3TfmpyAQhuOoXKmuTbP0gHVh56+qL4x2D1oMhAjP67I4klZEgXeIE
+         8LqQ+oXR1WlNEQ/L9wUpSCifuNE4KQMOq5cUtkXEqXUsG4agbMRfqFYvP+fQ4tituErK
+         xRFE0xRzP5g7NBEZS45wh+iZMTVx0r3VE7hDj4QVFBN8wIauoPjf9oPIytDJtj3q/j43
+         gezACn0fVUxp4k9a+hGy+7uNFgLwFOouNyOMXyQBPBZ1nTRAyOovNBgWk2JW3xwxO11A
+         sfBg==
+X-Gm-Message-State: AOJu0YxopZx6rXy/HFl+FLTCB7uAhwmkCS6mUUxbfLk566SGZP6K7HGn
+        zLS39uheAmns1T4CwM/NEgL7K/QGLi+T58Alra6r
+X-Google-Smtp-Source: AGHT+IHmkzLN6Hy1NnfaHz7dCug+kcrwZfp5oehCARoKr0odBnL3RXk+goVDU0SJt1+bJmoJY2sAHzXK22OKdoWv+us=
+X-Received: by 2002:a25:417:0:b0:db0:6cde:3859 with SMTP id
+ 23-20020a250417000000b00db06cde3859mr8659754ybe.41.1700514762565; Mon, 20 Nov
+ 2023 13:12:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20231114-topic-amlogic-upstream-isp-pmdomain-v1-0-f01e6fca67a0@linaro.org>
- <20231114-topic-amlogic-upstream-isp-pmdomain-v1-2-f01e6fca67a0@linaro.org>
-In-Reply-To: <20231114-topic-amlogic-upstream-isp-pmdomain-v1-2-f01e6fca67a0@linaro.org>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Mon, 20 Nov 2023 21:15:49 +0100
-Message-ID: <CAFBinCDe3yoEBd6SzozNZtC=zGaUHt4VeO_uhV1s5XBaWp0w1Q@mail.gmail.com>
-Subject: Re: [PATCH 2/2] pmdomain: amlogic: meson-ee-pwrc: add support for
- G12A ISP power domain
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Daniel Scally <dan.scally@ideasonboard.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
+References: <20231114022503.6310-1-kelvie@kelvie.ca> <a66a805c-3e1f-4b9a-a38e-aca84b8678a6@infradead.org>
+In-Reply-To: <a66a805c-3e1f-4b9a-a38e-aca84b8678a6@infradead.org>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 20 Nov 2023 16:12:31 -0500
+Message-ID: <CAHC9VhR6mr0XRrq=Apy00HD3tdgpKi4RyMr8f5kdx2sjA0sfig@mail.gmail.com>
+Subject: Re: [PATCH RFC] Add a lockdown_hibernate parameter
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Kelvie Wong <kelvie@kelvie.ca>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,18 +70,78 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Neil,
+On Mon, Nov 13, 2023 at 11:01=E2=80=AFPM Randy Dunlap <rdunlap@infradead.or=
+g> wrote:
+>
+> [add security & dhowells]
+>
+> On 11/13/23 18:23, Kelvie Wong wrote:
+> > This allows the user to tell the kernel that they know better (namely,
+> > they secured their swap properly), and that it can enable hibernation.
+> >
+> > I've been using this for about a year now, as it doesn't seem like
+> > proper secure hibernation was going to be implemented back then, and
+> > it's now been a year since I've been building my own kernels with this
+> > patch, so getting this upstreamed would save some CO2 from me building
+> > my own kernels every upgrade.
+> >
+> > Some other not-me users have also tested the patch:
+> >
+> > https://community.frame.work/t/guide-fedora-36-hibernation-with-enabled=
+-secure-boot-and-full-disk-encryption-fde-decrypting-over-tpm2/25474/17
+> >
+> > Signed-off-by: Kelvie Wong <kelvie@kelvie.ca>
+> > ---
+> >  Documentation/admin-guide/kernel-parameters.txt |  5 +++++
+> >  kernel/power/hibernate.c                        | 10 +++++++++-
+> >  2 files changed, 14 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Document=
+ation/admin-guide/kernel-parameters.txt
+> > index 426fa892d311..54785faba9e0 100644
+> > --- a/Documentation/admin-guide/kernel-parameters.txt
+> > +++ b/Documentation/admin-guide/kernel-parameters.txt
+> > @@ -2804,6 +2804,11 @@
+> >                       to extract confidential information from the kern=
+el
+> >                       are also disabled.
+> >
+> > +     lockdown_hibernate      [HIBERNATION]
+> > +                     Enable hibernation even if lockdown is enabled. E=
+nable this only if
+> > +                     your swap is encrypted and secured properly, as a=
+n attacker can
+> > +                     modify the kernel offline during hibernation.
+> > +
+> >       locktorture.nreaders_stress=3D [KNL]
+> >                       Set the number of locking read-acquisition kthrea=
+ds.
+> >                       Defaults to being automatically set based on the
+> > diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> > index 89c71fce225d..2221c531d54c 100644
+> > --- a/kernel/power/hibernate.c
+> > +++ b/kernel/power/hibernate.c
+> > @@ -36,6 +36,7 @@
+> >  #include "power.h"
+> >
+> >
+> > +static int lockdown_hibernate;
+> >  static int nocompress;
+> >  static int noresume;
+> >  static int nohibernate;
+> > @@ -82,7 +83,7 @@ void hibernate_release(void)
+> >  bool hibernation_available(void)
+> >  {
+> >       return nohibernate =3D=3D 0 &&
+> > -             !security_locked_down(LOCKDOWN_HIBERNATION) &&
+> > +             (lockdown_hibernate || !security_locked_down(LOCKDOWN_HIB=
+ERNATION)) &&
+> >               !secretmem_active() && !cxl_mem_active();
+> >  }
 
-On Tue, Nov 14, 2023 at 11:19=E2=80=AFAM Neil Armstrong
-<neil.armstrong@linaro.org> wrote:
-[...]
-> +static struct meson_ee_pwrc_mem_domain g12a_pwrc_mem_isp[] =3D {
-> +       { G12A_HHI_ISP_MEM_PD_REG0, GENMASK(31, 0) },
-> +       { G12A_HHI_ISP_MEM_PD_REG0, GENMASK(31, 0) },
-I expected this second line to use G12A_HHI_ISP_MEM_PD_REG1 (note the
-number at the end: 0 vs 1)
-Is this correct?
+I would feel a lot better about this if there was a way to verify that
+the swap was protected as opposed to leaving that as a note in a doc
+that the majority of users will never see, read, or understand.
 
-
-Best regards,
-Martin
+--=20
+paul-moore.com
