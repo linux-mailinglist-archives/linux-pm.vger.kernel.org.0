@@ -1,94 +1,192 @@
-Return-Path: <linux-pm+bounces-18-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B643B7F2DF1
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Nov 2023 14:06:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD7F37F2E19
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Nov 2023 14:14:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7F541C20FEA
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Nov 2023 13:06:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D00851C21487
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Nov 2023 13:14:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ED4348787;
-	Tue, 21 Nov 2023 13:06:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D2BF4A9A7;
+	Tue, 21 Nov 2023 13:14:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GDpQK5zo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A246D52;
-	Tue, 21 Nov 2023 05:06:11 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ACA9EFEC;
-	Tue, 21 Nov 2023 05:06:57 -0800 (PST)
-Received: from [10.57.2.14] (unknown [10.57.2.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AC39C3F7A6;
-	Tue, 21 Nov 2023 05:06:08 -0800 (PST)
-Message-ID: <64d598b7-cff3-4036-8b6b-dea3083dd716@arm.com>
-Date: Tue, 21 Nov 2023 13:07:08 +0000
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4546348CD2;
+	Tue, 21 Nov 2023 13:14:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7789EC433C8;
+	Tue, 21 Nov 2023 13:14:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700572481;
+	bh=sde8UH1s+S4ZJXYAO43tWVBaZyVwRo176bP2DijjLOI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GDpQK5zo9UpeD6GkT0WYJk0auFna8sxeBC4CdhCQMBp49+MoYKwjHAGpgOvsAEPNg
+	 fCqE40vgBm7by3wYeVxKARR21bCTugAiNX2my51TLcaJ8QbOzU3jgIXvfLmsa57jYm
+	 v+BfyGsD59pQoFcD2opzjY5rtDJlYlFmfJ9VdHeeVNi5QaXEh0d1+ZLsp7ovuPxjXs
+	 staHh5fbiivWv9bHPX3P1x1e2LwXdkAyWW4yLs6UymSS/rvQcqPvPoBaeW4dxD9OOc
+	 bY5HZ9TPwh3nbaDJ7/umMYtNYjbvzP9hWLeM0duhJiie4u33DwomW9AATV9/TQLV/7
+	 3GZuKf/TNC4Iw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+	id 0C86440094; Tue, 21 Nov 2023 10:14:39 -0300 (-03)
+Date: Tue, 21 Nov 2023 10:14:38 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Benjamin Gray <bgray@linux.ibm.com>, linux-ia64@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	llvm@lists.linux.dev, linux-pm@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+	Ian Abbott <abbotti@mev.co.uk>,
+	H Hartley Sweeten <hsweeten@visionengravers.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Jan Kiszka <jan.kiszka@siemens.com>,
+	Kieran Bingham <kbingham@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Ian Rogers <irogers@google.com>, linux-perf-users@vger.kernel.org,
+	Todd E Brandt <todd.e.brandt@linux.intel.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v2 5/7] tools/perf: fix Python string escapes
+Message-ID: <ZVytPl1AjNw3IzSu@kernel.org>
+References: <20230912060801.95533-1-bgray@linux.ibm.com>
+ <20230912060801.95533-6-bgray@linux.ibm.com>
+ <340eae90-d270-5e52-4982-a67459bc46dd@intel.com>
+ <d603d3b3-7563-d1c9-5086-c5bb78ea2e52@linux.ibm.com>
+ <592b8fd2-bfe3-0f8d-2814-d8340bbc75ee@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 8/9] thermal: exynos: use BIT wherever possible
-Content-Language: en-US
-To: m.majewski2@samsung.com
-Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-samsung-soc@vger.kernel.org" <linux-samsung-soc@vger.kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- ALIM AKHTAR <alim.akhtar@samsung.com>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>, Marek Szyprowski <m.szyprowski@samsung.com>
-References: <96565d08-8d6b-4a37-8a83-90bdd53ba89a@arm.com>
- <20231120145049.310509-1-m.majewski2@samsung.com>
- <20231120145049.310509-9-m.majewski2@samsung.com>
- <CGME20231120145107eucas1p13ed9ea8772346c404d2d7f47d4c80f5a@eucms1p4>
- <20231121125400eucms1p40c19eedff56881e1a1a9f1560ac9a2d9@eucms1p4>
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20231121125400eucms1p40c19eedff56881e1a1a9f1560ac9a2d9@eucms1p4>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <592b8fd2-bfe3-0f8d-2814-d8340bbc75ee@intel.com>
+X-Url: http://acmel.wordpress.com
 
-
-
-On 11/21/23 12:54, Mateusz Majewski wrote:
-> Hi,
+Em Wed, Sep 13, 2023 at 08:53:26AM +0300, Adrian Hunter escreveu:
+> On 13/09/23 03:26, Benjamin Gray wrote:
+> > On 12/9/23 8:56 pm, Adrian Hunter wrote:
+> >> On 12/09/23 09:07, Benjamin Gray wrote:
+> >>> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
+> >>> index a7e88332276d..980f080a5a2c 100755
+> >>> --- a/tools/perf/pmu-events/jevents.py
+> >>> +++ b/tools/perf/pmu-events/jevents.py
+> >>> @@ -83,7 +83,7 @@ def c_len(s: str) -> int:
+> >>>     """Return the length of s a C string
+> >>>       This doesn't handle all escape characters properly. It first assumes
+> >>> -  all \ are for escaping, it then adjusts as it will have over counted
+> >>> +  all \\ are for escaping, it then adjusts as it will have over counted
+> >>
+> >> It looks like the whole string should be a raw string
+> >>
+> > ...
+> >>> -                s = value.replace("%", "\%")
+> >>> -                s = s.replace("_", "\_")
+> >>> +                s = value.replace("%", "\\%")
+> >>> +                s = s.replace("_", "\\_")
+> >>
+> >> Raw strings seem more readable, so could be
+> >> used here too
+> > 
+> > Yeah, sounds good. I normally use r strings only for regex, but there shouldn't be any ambiguity here (it might have been misleading if the search argument to replace looked like a regex).
+> > 
+> > Having the docstring be an r string is a good catch. There's probably a few like that in the kernel, but finding them is a little more complicated because they might be 'valid' syntax (e.g., the '\000' just becomes a null byte. This series is focused on the syntax errors though, so I'll just leave it be.
+> > 
+> > How is the following?
+> > ---
+> > Subject: [PATCH] tools/perf: fix Python string escapes
+> > 
+> > Python 3.6 introduced a DeprecationWarning for invalid escape sequences.
+> > This is upgraded to a SyntaxWarning in Python 3.12, and will eventually
+> > be a syntax error.
+> > 
+> > Fix these now to get ahead of it before it's an error.
+> > 
+> > Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
 > 
->>> @@ -590,15 +590,15 @@ static void exynos5433_tmu_control(struct platform_device *pdev, bool on)
->>>  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â continue;
->>>     
->>>  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â interrupt_en |=
->>> -Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  (1 << (EXYNOS7_TMU_INTEN_RISE0_SHIFT + i));
->>> +Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  BIT(EXYNOS7_TMU_INTEN_RISE0_SHIFT + i);
->>>  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â }
->>>     
->>>  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â interrupt_en |=
->>>  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â interrupt_en << EXYNOS_TMU_INTEN_FALL0_SHIFT;
->>>     
->>> -Â  Â  Â  Â  Â  Â  Â  Â  con |= (1 << EXYNOS_TMU_CORE_EN_SHIFT);
->>> +Â  Â  Â  Â  Â  Â  Â  Â  con |= BIT(EXYNOS_TMU_CORE_EN_SHIFT);
->>>  Â  Â  Â  Â  Â  Â } else
->>
->> Minor issue: the if-else segment here. When the 'if' has the
->> brackets, then the 'else' should have them as well,
->> even if there is only a single line under 'else'.
->> It's not strictly to this patch, but you can address that
->> later somewhere (just saw it here).
+> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+
+applied the tools/perf one.
+
+- Arnaldo
+ 
+> > ---
+> >  tools/perf/pmu-events/jevents.py                 | 2 +-
+> >  tools/perf/scripts/python/arm-cs-trace-disasm.py | 4 ++--
+> >  tools/perf/scripts/python/compaction-times.py    | 2 +-
+> >  tools/perf/scripts/python/exported-sql-viewer.py | 4 ++--
+> >  4 files changed, 6 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
+> > index a7e88332276d..1b4519333a28 100755
+> > --- a/tools/perf/pmu-events/jevents.py
+> > +++ b/tools/perf/pmu-events/jevents.py
+> > @@ -80,7 +80,7 @@ def file_name_to_table_name(prefix: str, parents: Sequence[str],
+> > 
+> > 
+> >  def c_len(s: str) -> int:
+> > -  """Return the length of s a C string
+> > +  r"""Return the length of s a C string
+> > 
+> >    This doesn't handle all escape characters properly. It first assumes
+> >    all \ are for escaping, it then adjusts as it will have over counted
+> > diff --git a/tools/perf/scripts/python/arm-cs-trace-disasm.py b/tools/perf/scripts/python/arm-cs-trace-disasm.py
+> > index d59ff53f1d94..de58991c78bb 100755
+> > --- a/tools/perf/scripts/python/arm-cs-trace-disasm.py
+> > +++ b/tools/perf/scripts/python/arm-cs-trace-disasm.py
+> > @@ -45,8 +45,8 @@ parser = OptionParser(option_list=option_list)
+> >  # Initialize global dicts and regular expression
+> >  disasm_cache = dict()
+> >  cpu_data = dict()
+> > -disasm_re = re.compile("^\s*([0-9a-fA-F]+):")
+> > -disasm_func_re = re.compile("^\s*([0-9a-fA-F]+)\s.*:")
+> > +disasm_re = re.compile(r"^\s*([0-9a-fA-F]+):")
+> > +disasm_func_re = re.compile(r"^\s*([0-9a-fA-F]+)\s.*:")
+> >  cache_size = 64*1024
+> > 
+> >  glb_source_file_name    = None
+> > diff --git a/tools/perf/scripts/python/compaction-times.py b/tools/perf/scripts/python/compaction-times.py
+> > index 2560a042dc6f..9401f7c14747 100644
+> > --- a/tools/perf/scripts/python/compaction-times.py
+> > +++ b/tools/perf/scripts/python/compaction-times.py
+> > @@ -260,7 +260,7 @@ def pr_help():
+> > 
+> >  comm_re = None
+> >  pid_re = None
+> > -pid_regex = "^(\d*)-(\d*)$|^(\d*)$"
+> > +pid_regex = r"^(\d*)-(\d*)$|^(\d*)$"
+> > 
+> >  opt_proc = popt.DISP_DFL
+> >  opt_disp = topt.DISP_ALL
+> > diff --git a/tools/perf/scripts/python/exported-sql-viewer.py b/tools/perf/scripts/python/exported-sql-viewer.py
+> > index 13f2d8a81610..78763531fe5a 100755
+> > --- a/tools/perf/scripts/python/exported-sql-viewer.py
+> > +++ b/tools/perf/scripts/python/exported-sql-viewer.py
+> > @@ -677,8 +677,8 @@ class CallGraphModelBase(TreeModel):
+> >              #   sqlite supports GLOB (text only) which uses * and ? and is case sensitive
+> >              if not self.glb.dbref.is_sqlite3:
+> >                  # Escape % and _
+> > -                s = value.replace("%", "\%")
+> > -                s = s.replace("_", "\_")
+> > +                s = value.replace("%", r"\%")
+> > +                s = s.replace("_", r"\_")
+> >                  # Translate * and ? into SQL LIKE pattern characters % and _
+> >                  trans = string.maketrans("*?", "%_")
+> >                  match = " LIKE '" + str(s).translate(trans) + "'"
 > 
-> For what it's worth, this issue disappears after the final patch of this series,
-> because the other branch reduces to a single line too (all the interrupt_en
-> operations are done in the tmu_set_*_temp functions).
 
-That sounds perfect.
+-- 
 
-I'm planning to build&run the patch set today evening, so I will finish
-the review of the patch 9/9.
+- Arnaldo
 
