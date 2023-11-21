@@ -1,185 +1,168 @@
-Return-Path: <linux-pm+bounces-50-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-51-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4904E7F349F
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Nov 2023 18:13:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BCFB7F34D8
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Nov 2023 18:21:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03C1D281A99
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Nov 2023 17:13:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C1F41C20B09
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Nov 2023 17:21:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AE0458130;
-	Tue, 21 Nov 2023 17:13:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17AFF5B1EA;
+	Tue, 21 Nov 2023 17:21:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E2Z+lWyJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4ACD4B;
-	Tue, 21 Nov 2023 09:12:59 -0800 (PST)
-Received: from [10.0.3.168] (unknown [93.240.169.83])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id AEB2561E5FE01;
-	Tue, 21 Nov 2023 18:12:33 +0100 (CET)
-Message-ID: <d8fba4f9-f868-4ef3-938b-f202e5bcc4ad@molgen.mpg.de>
-Date: Tue, 21 Nov 2023 18:12:30 +0100
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79035A4;
+	Tue, 21 Nov 2023 09:21:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700587293; x=1732123293;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tPFNAp0rBeOeoHA+0LkUJewIhopjNxORZEBoCvlOfDA=;
+  b=E2Z+lWyJsYnEM9DU9SurtJr4HIUJC7MvALpkaE50kH5+ewX8YAoDzzPN
+   cKAR3kjaELKHwVsOwXL9XCpWGtNQ5U/pbY30Ri95ICDtkrE34nEvfD2fH
+   XPfBobH8IlPDMe3dLiqczFWeZBFKbmVgNkdBVqjfza+nDFdsAWZchaN8Y
+   YRkbZrh97A4LhCNQntF3fLyItZV8PRhhhi29iVbvqdTjKC2J75O691kNN
+   Xkt5d+B5L5Mrbjc3CmdJVqPXW9HCZmeLwv0MbTCEoMwl+Tc4INDIonC8N
+   N1zkbQeb5d10J0FxdMlI0P8V2VeclD26sIkLapSK6lFnPtMFgdD9vXBvh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="10555047"
+X-IronPort-AV: E=Sophos;i="6.04,216,1695711600"; 
+   d="scan'208";a="10555047"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 09:21:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="1013974523"
+X-IronPort-AV: E=Sophos;i="6.04,216,1695711600"; 
+   d="scan'208";a="1013974523"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 21 Nov 2023 09:21:30 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r5URD-000858-2i;
+	Tue, 21 Nov 2023 17:21:27 +0000
+Date: Wed, 22 Nov 2023 01:21:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hermes Zhang <Hermes.Zhang@axis.com>, sre@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	kernel@axis.com, Hermes Zhang <chenhuiz@axis.com>,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] power: supply: bq24190_charger: Add support for
+  BQ24296
+Message-ID: <202311220111.umAlhsjl-lkp@intel.com>
+References: <20231121070505.3061304-3-Hermes.Zhang@axis.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Qualcomm Atheros QCA61x4 keeps drawing 0.85 W despite Bluetooth
- being disable in GNOME
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Marcel Holtmann <marcel@holtmann.org>,
- Johan Hedberg <johan.hedberg@gmail.com>,
- Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
- linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
- Hans de Goede <hdegoede@redhat.com>, Mike Jones <mike@mjones.io>,
- Rocky Liao <quic_rjliao@quicinc.com>
-References: <d994bd71-8d8b-4b6a-855e-8ea5bfede3ca@molgen.mpg.de>
- <22494842-a785-4151-915d-6f3a677d96cb@molgen.mpg.de>
- <1f3cb0cc-4bb0-471f-a785-a5d237cd46a3@rowland.harvard.edu>
- <d63ebc5f-9b72-4457-949b-3e90883bd3c0@molgen.mpg.de>
- <d61ae9a8-2228-4af1-a5f0-912e7763fbd1@rowland.harvard.edu>
- <de236c7d-e265-452a-a60e-b10293a5b944@molgen.mpg.de>
- <41253614-764e-4e95-b052-a46bf5587c29@rowland.harvard.edu>
- <3489df64-0f8f-43e1-a05f-ccb145ff6d59@molgen.mpg.de>
- <fd84c14a-1866-4643-8ce9-0d6da5c4b82e@rowland.harvard.edu>
-Content-Language: en-US
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <fd84c14a-1866-4643-8ce9-0d6da5c4b82e@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231121070505.3061304-3-Hermes.Zhang@axis.com>
 
-Dear Alan,
+Hi Hermes,
 
+kernel test robot noticed the following build errors:
 
-Thank you for your reply.
+[auto build test ERROR on sre-power-supply/for-next]
+[also build test ERROR on linus/master v6.7-rc2 next-20231121]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Am 21.11.23 um 17:23 schrieb Alan Stern:
-> On Mon, Nov 20, 2023 at 11:05:04PM +0100, Paul Menzel wrote:
->> [Cc: +Rocky Liao as Qualcomm developer]
-> 
->> Am 20.11.23 um 19:10 schrieb Alan Stern:
->>> Again, nothing out of the ordinary.  Maybe dynamic debugging will give
->>> us a clue.  Try doing this:
->>>
->>> 	Unload the btusb module.
->>>
->>> 	echo module usbcore +p >/sys/kernel/debug/dynamic_debug/control
->>>
->>> 	Load the btusb module
->>>
->>> 	Make sure that Bluetooth is turned off in Gnome
->>>
->>> 	Wait a few seconds
->>>
->>> 	echo module usbcore -p >/sys/kernel/debug/dynamic_debug/control
->>>
->>> Then let's see what the dmesg log contains for that time period.
->>
->> ```
->> $ sudo modprobe -r btusb
->> $ sudo dmesg | tail -1
->> [340309.272439] usbcore: deregistering interface driver btusb
->> $ echo module usbcore +p | sudo tee /sys/kernel/debug/dynamic_debug/control
->> module usbcore +p
->> $ sudo modprobe btusb
->> $ /sbin/rfkill
->> ID TYPE      DEVICE      SOFT      HARD
->>   1 wlan      phy0   unblocked unblocked
->> 36 bluetooth hci0     blocked unblocked
->> $ echo module usbcore -p | sudo tee /sys/kernel/debug/dynamic_debug/control
->> module usbcore -p
->> $ sudo modprobe -r btusb
->> $ sudo dmesg | tail -1
->> [340608.761313] usbcore: deregistering interface driver btusb
->> $ sudo dmesg
->> […]
->> [340309.272439] usbcore: deregistering interface driver btusb
->> [340560.326182] xhci_hcd 0000:00:14.0: hcd_pci_runtime_resume: 0
->> [340560.326214] usb usb1: usb auto-resume
->> [340560.326258] hub 1-0:1.0: hub_resume
->> [340560.326381] usb usb1-port3: status 0107 change 0000
->> [340560.326418] usb usb1-port4: status 0107 change 0000
->> [340560.326451] usb usb1-port5: status 0507 change 0000
->> [340560.326650] hub 1-0:1.0: state 7 ports 12 chg 0000 evt 0000
->> [340560.326807] hub 1-0:1.0: state 7 ports 12 chg 0000 evt 0000
->> [340560.373988] usb 1-3: usb auto-resume
->> [340560.373998] hub 1-0:1.0: state 7 ports 12 chg 0000 evt 0008
->> [340560.441936] usb 1-3: Waited 0ms for CONNECT
->> [340560.441957] usb 1-3: finish reset-resume
->> [340560.570940] usb 1-3: reset full-speed USB device number 2 using xhci_hcd
-> 
-> Those two lines are unexpected.  Why does the device need to be reset?
-> While the btusb module is loaded, does anything show up in
-> /sys/bus/usb/devices/1-3/quirks?
+url:    https://github.com/intel-lab-lkp/linux/commits/Hermes-Zhang/dt-bindings-power-supply-bq24190-Add-BQ24296-compatible/20231121-151103
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+patch link:    https://lore.kernel.org/r/20231121070505.3061304-3-Hermes.Zhang%40axis.com
+patch subject: [PATCH v3 2/2] power: supply: bq24190_charger: Add support for  BQ24296
+config: powerpc64-randconfig-r071-20231121 (https://download.01.org/0day-ci/archive/20231122/202311220111.umAlhsjl-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231122/202311220111.umAlhsjl-lkp@intel.com/reproduce)
 
-     $ more /sys/bus/usb/devices/1-3/quirks
-     0x2
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311220111.umAlhsjl-lkp@intel.com/
 
->>> Also, please post the output from "lsusb -v" for the Bluetooth device.
->>
->> ```
->> $ sudo lsusb -d 0cf3:e300 -v
->>
->> Bus 001 Device 002: ID 0cf3:e300 Qualcomm Atheros Communications QCA61x4
->> Bluetooth 4.0
->> Device Descriptor:
->>    bLength                18
->>    bDescriptorType         1
->>    bcdUSB               2.01
->>    bDeviceClass          224 Wireless
->>    bDeviceSubClass         1 Radio Frequency
->>    bDeviceProtocol         1 Bluetooth
->>    bMaxPacketSize0        64
->>    idVendor           0x0cf3 Qualcomm Atheros Communications
->>    idProduct          0xe300 QCA61x4 Bluetooth 4.0
->>    bcdDevice            0.01
->>    iManufacturer           0
->>    iProduct                0
->>    iSerial                 0
->>    bNumConfigurations      1
->>    Configuration Descriptor:
->>      bLength                 9
->>      bDescriptorType         2
->>      wTotalLength       0x00b1
->>      bNumInterfaces          2
->>      bConfigurationValue     1
->>      iConfiguration          0
->>      bmAttributes         0xe0
->>        Self Powered
->>        Remote Wakeup
-> 
-> That's what I was interested in.  The device does support remote wakeup.
+All errors (new ones prefixed by >>):
 
-That would make sense so it can be resumed? (It does not necessarily 
-mean something like Wake-On-LAN, right?
-
-Also, for this device it’s disabled?
-
-     $ grep . /sys/bus/usb/devices/1-3/power/wakeup
-     disabled
-
->> PPS: Looking through the commit log/history for `drivers/bluetooth/btusb.c`,
->> I found commit 7ecacafc2406 (Bluetooth: btusb: Disable runtime suspend on
->> Realtek devices) [1] authored on December 5th, 2019. This is for Realtek
->> devices though, and not Qualcomm.
-> 
-> Furthermore the driver has changed considerably since 2019.  See
-> commits 8274db0776d1, 895915226a59, 7bd9fb058d77, and 34ec58b9fd1c.
-
-Thank you for the references.
+>> drivers/power/supply/bq24190_charger.c:1975:16: error: use of undeclared identifier 'bq24190_vbus_desc'
+    1975 |                 .vbus_desc = bq24190_vbus_desc,
+         |                              ^
+   drivers/power/supply/bq24190_charger.c:1984:16: error: use of undeclared identifier 'bq24190_vbus_desc'
+    1984 |                 .vbus_desc = bq24190_vbus_desc,
+         |                              ^
+   drivers/power/supply/bq24190_charger.c:1993:16: error: use of undeclared identifier 'bq24190_vbus_desc'
+    1993 |                 .vbus_desc = bq24190_vbus_desc,
+         |                              ^
+   drivers/power/supply/bq24190_charger.c:2002:16: error: use of undeclared identifier 'bq24190_vbus_desc'
+    2002 |                 .vbus_desc = bq24190_vbus_desc,
+         |                              ^
+>> drivers/power/supply/bq24190_charger.c:2011:16: error: use of undeclared identifier 'bq24296_vbus_desc'
+    2011 |                 .vbus_desc = bq24296_vbus_desc,
+         |                              ^
+   5 errors generated.
 
 
-Kind regards,
+vim +/bq24190_vbus_desc +1975 drivers/power/supply/bq24190_charger.c
 
-Paul
+  1971	
+  1972	static const struct bq24190_chip_info bq24190_chip_info_tbl[] = {
+  1973		[BQ24190] = {
+  1974			.ichg_array_size = ARRAY_SIZE(bq24190_ccc_ichg_values),
+> 1975			.vbus_desc = bq24190_vbus_desc,
+  1976			.check_chip = bq24190_check_chip,
+  1977			.set_chg_config = bq24190_battery_set_chg_config,
+  1978			.ntc_fault_mask = BQ24190_REG_F_NTC_FAULT_MASK,
+  1979			.get_ntc_status = bq24190_charger_get_ntc_status,
+  1980			.set_otg_vbus = bq24190_set_otg_vbus,
+  1981		},
+  1982		[BQ24192] = {
+  1983			.ichg_array_size = ARRAY_SIZE(bq24190_ccc_ichg_values),
+  1984			.vbus_desc = bq24190_vbus_desc,
+  1985			.check_chip = bq24190_check_chip,
+  1986			.set_chg_config = bq24190_battery_set_chg_config,
+  1987			.ntc_fault_mask = BQ24190_REG_F_NTC_FAULT_MASK,
+  1988			.get_ntc_status = bq24190_charger_get_ntc_status,
+  1989			.set_otg_vbus = bq24190_set_otg_vbus,
+  1990		},
+  1991		[BQ24192i] = {
+  1992			.ichg_array_size = ARRAY_SIZE(bq24190_ccc_ichg_values),
+  1993			.vbus_desc = bq24190_vbus_desc,
+  1994			.check_chip = bq24190_check_chip,
+  1995			.set_chg_config = bq24190_battery_set_chg_config,
+  1996			.ntc_fault_mask = BQ24190_REG_F_NTC_FAULT_MASK,
+  1997			.get_ntc_status = bq24190_charger_get_ntc_status,
+  1998			.set_otg_vbus = bq24190_set_otg_vbus,
+  1999		},
+  2000		[BQ24196] = {
+  2001			.ichg_array_size = ARRAY_SIZE(bq24190_ccc_ichg_values),
+  2002			.vbus_desc = bq24190_vbus_desc,
+  2003			.check_chip = bq24190_check_chip,
+  2004			.set_chg_config = bq24190_battery_set_chg_config,
+  2005			.ntc_fault_mask = BQ24190_REG_F_NTC_FAULT_MASK,
+  2006			.get_ntc_status = bq24190_charger_get_ntc_status,
+  2007			.set_otg_vbus = bq24190_set_otg_vbus,
+  2008		},
+  2009		[BQ24296] = {
+  2010			.ichg_array_size = BQ24296_CCC_ICHG_VALUES_LEN,
+> 2011			.vbus_desc = bq24296_vbus_desc,
+  2012			.check_chip = bq24296_check_chip,
+  2013			.set_chg_config = bq24296_battery_set_chg_config,
+  2014			.ntc_fault_mask = BQ24296_REG_F_NTC_FAULT_MASK,
+  2015			.get_ntc_status = bq24296_charger_get_ntc_status,
+  2016			.set_otg_vbus = bq24296_set_otg_vbus,
+  2017		},
+  2018	};
+  2019	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
