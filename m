@@ -1,124 +1,142 @@
-Return-Path: <linux-pm+bounces-2-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 940657F21EA
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Nov 2023 01:03:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECEDD7F2248
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Nov 2023 01:40:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E9332828DE
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Nov 2023 00:03:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A226B282819
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Nov 2023 00:40:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0D34369;
-	Tue, 21 Nov 2023 00:03:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EFB21380;
+	Tue, 21 Nov 2023 00:40:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NsJzfgTR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NEd17WkY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1528995;
-	Mon, 20 Nov 2023 16:03:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700524999; x=1732060999;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lddF/OI0/Y8y8Q++HK52CXKXAHqrpG6VUE1f+V8L0g8=;
-  b=NsJzfgTRYFDaqIYl54+frRmp0M7/to3YfGdvYhdqONKIHlYPew/dFc8t
-   tVhS6DrzPk8nrEorVu3K2hitQDHmAl2I04llBl0ahpAfVkk9MWckOntTT
-   RCuz2vw0EJ2z13PWNw5qolj1WsgRJU1EqB7hEPuGww4kjyP3z47e19fsw
-   0GDzhCbXCexzY2u7Z4y8MlGzfzw+nMtvFz16Bp6uNMshPzsOG7ljTHhDJ
-   q+Sl2njV+p5Tf8jjKE3DyVmCJ2H05zTcE2oDCIhxbcghryeoGaIlkd76c
-   umP8GsxLHMu5s38jfFXVgtlMx5dfqUEzlYiKcoSwkP+/2qaTxSfpzS/ES
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="458222984"
-X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
-   d="scan'208";a="458222984"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 16:03:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
-   d="scan'208";a="7886119"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 20 Nov 2023 16:03:16 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r5EEU-00075C-1Q;
-	Tue, 21 Nov 2023 00:03:14 +0000
-Date: Tue, 21 Nov 2023 08:02:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-	devel@acpica.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge 12/27] drivers/acpi/thermal_lib.c:46:5:
- warning: no previous prototype for 'acpi_active_trip_temp'
-Message-ID: <202311210725.tPlWJipc-lkp@intel.com>
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70228CA;
+	Mon, 20 Nov 2023 16:40:03 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1ce5e76912aso29926485ad.2;
+        Mon, 20 Nov 2023 16:40:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700527203; x=1701132003; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bWNEMhZS/K0TJv2uoFh3uKzFoySYNwsIpa4bcavYV+M=;
+        b=NEd17WkYF+NXhfS2etPmsRD8sEAko3mlUFF1icHnojB9KRYhsi5f8Fwk7SWou6xlim
+         ++LilX841XWudSJZTMVr2FICGLjEYvWbz/fM0nGBFFw5vTVMsFLb+XQLcGPrhkLf31H5
+         13VRP/WEbFwM2XaGsoSXelHGWfYC8hxLjz4xJV+IZ2kFSyeQBp3WfrpQeNSJTh6J4XpZ
+         N/GblDuy+jq8tlqZsWXihjfJH5xF9YMu60CDGYW7esg6KJwDc8I9HK/K+L2sSM3OL57n
+         y2T2Z5MnK48vFaqyjui5tACRdA024D+8FSSNmbaBC57I9XZ9FzcDSN/sBtXOKcBF+g3J
+         8L5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700527203; x=1701132003;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bWNEMhZS/K0TJv2uoFh3uKzFoySYNwsIpa4bcavYV+M=;
+        b=Et1qt+l9CSSItPLXjhrxz4ldvSBv8tXGToc/xNOgpuWdnYUixLK6KKrfdxpGZur262
+         NATlUo8j4bNC2A9XH5DG9YRdEJvD4f0mwSE88hh9aadW9mhDKXoTVM5oEO3FywIXztZf
+         Z+jQ29XNHrKve2tv1t0Wmrw52fFtR2iCINxvuSDY2QpNahkc+WAC/Z/Rc2KXuUmdQCsk
+         pXnn2mUS6Hch3J3+sR5hhM+9cbQ4tnksZ/5kKUb/izGn64Kgz/LcHgT5WyJPAW1qJqWv
+         fH/DQ5D4nwDF+7k6fHa6apqaAKXtG/hQwUK1/N5uQWHuYeST/eUFGdFgXVOH/8KH03lE
+         vwCw==
+X-Gm-Message-State: AOJu0YwJt/hhFPtnhMoajxKmLvnDK5h5vx/Q7nbZhjaWFFgVvBwtTQRI
+	QeZsvpbJVJXbIwSfa5leaPQ=
+X-Google-Smtp-Source: AGHT+IFXhiAAFyErJlqOO1DTQVYb7f74uon84kYLMLdTjeTRCnwI6JR3VAOwwCqryfnQrGSMB9oxFQ==
+X-Received: by 2002:a17:902:eccd:b0:1cf:54e1:8c8c with SMTP id a13-20020a170902eccd00b001cf54e18c8cmr9016957plh.63.1700527202832;
+        Mon, 20 Nov 2023 16:40:02 -0800 (PST)
+Received: from localhost ([47.215.232.245])
+        by smtp.gmail.com with ESMTPSA id g3-20020a170902868300b001cc436e9806sm6636258plo.81.2023.11.20.16.40.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Nov 2023 16:40:02 -0800 (PST)
+From: Rob Clark <robdclark@gmail.com>
+To: dri-devel@lists.freedesktop.org
+Cc: freedreno@lists.freedesktop.org,
+	linux-arm-msm@vger.kernel.org,
+	Rob Clark <robdclark@chromium.org>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	amd-gfx@lists.freedesktop.org (open list:AMD KFD),
+	Arthur Grillo <arthurgrillo@riseup.net>,
+	Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
+	Boris Brezillon <boris.brezillon@collabora.com>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	Danilo Krummrich <dakr@redhat.com>,
+	Felix Kuehling <Felix.Kuehling@amd.com>,
+	Guchun Chen <guchun.chen@amd.com>,
+	Jack Xiao <Jack.Xiao@amd.com>,
+	Jonathan Kim <jonathan.kim@amd.com>,
+	Lang Yu <Lang.Yu@amd.com>,
+	Leo Liu <leo.liu@amd.com>,
+	Lijo Lazar <lijo.lazar@amd.com>,
+	linux-kernel@vger.kernel.org (open list),
+	linux-pm@vger.kernel.org (open list:POWER MANAGEMENT CORE),
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	nouveau@lists.freedesktop.org (open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS),
+	Philip Yang <Philip.Yang@amd.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Sean Paul <sean@poorly.run>,
+	Shashank Sharma <shashank.sharma@amd.com>,
+	Srinivasan Shanmugam <srinivasan.shanmugam@amd.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+	Veerabadhran Gopalakrishnan <Veerabadhran.Gopalakrishnan@amd.com>
+Subject: [PATCH v2 0/7] drm/msm/gem: drm_exec conversion
+Date: Mon, 20 Nov 2023 16:38:44 -0800
+Message-ID: <20231121003935.5868-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   f437a8d1debff5412e36a1c9454adee193b31950
-commit: 932d2c2fd0b1e8242ba7bcb7b8c2553e663e174f [12/27] ACPI: thermal_lib: Add functions returning temperature in deci-Kelvin
-config: x86_64-buildonly-randconfig-003-20231121 (https://download.01.org/0day-ci/archive/20231121/202311210725.tPlWJipc-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311210725.tPlWJipc-lkp@intel.com/reproduce)
+From: Rob Clark <robdclark@chromium.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311210725.tPlWJipc-lkp@intel.com/
+Simplify the exec path (removing a legacy optimization) and convert to
+drm_exec.  One drm_exec patch to allow passing in the expected # of GEM
+objects to avoid re-allocation.
 
-All warnings (new ones prefixed by >>):
+I'd be a bit happier if I could avoid the extra objects table allocation
+in drm_exec in the first place, but wasn't really happy with any of the
+things I tried to get rid of that.
 
->> drivers/acpi/thermal_lib.c:46:5: warning: no previous prototype for 'acpi_active_trip_temp' [-Wmissing-prototypes]
-      46 | int acpi_active_trip_temp(struct acpi_device *adev, int id, int *ret_temp)
-         |     ^~~~~~~~~~~~~~~~~~~~~
->> drivers/acpi/thermal_lib.c:56:5: warning: no previous prototype for 'acpi_passive_trip_temp' [-Wmissing-prototypes]
-      56 | int acpi_passive_trip_temp(struct acpi_device *adev, int *ret_temp)
-         |     ^~~~~~~~~~~~~~~~~~~~~~
->> drivers/acpi/thermal_lib.c:61:5: warning: no previous prototype for 'acpi_hot_trip_temp' [-Wmissing-prototypes]
-      61 | int acpi_hot_trip_temp(struct acpi_device *adev, int *ret_temp)
-         |     ^~~~~~~~~~~~~~~~~~
->> drivers/acpi/thermal_lib.c:66:5: warning: no previous prototype for 'acpi_critical_trip_temp' [-Wmissing-prototypes]
-      66 | int acpi_critical_trip_temp(struct acpi_device *adev, int *ret_temp)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~
+v2: updates in 6/7 and other nit-addressing
 
+Rob Clark (7):
+  drm/msm/gem: Remove "valid" tracking
+  drm/msm/gem: Remove submit_unlock_unpin_bo()
+  drm/msm/gem: Don't queue job to sched in error cases
+  drm/msm/gem: Split out submit_unpin_objects() helper
+  drm/msm/gem: Cleanup submit_cleanup_bo()
+  drm/exec: Pass in initial # of objects
+  drm/msm/gem: Convert to drm_exec
 
-vim +/acpi_active_trip_temp +46 drivers/acpi/thermal_lib.c
-
-    45	
-  > 46	int acpi_active_trip_temp(struct acpi_device *adev, int id, int *ret_temp)
-    47	{
-    48		char obj_name[] = {'_', 'A', 'C', '0' + id, '\0'};
-    49	
-    50		if (id < 0 || id > 9)
-    51			return -EINVAL;
-    52	
-    53		return acpi_trip_temp(adev, obj_name, ret_temp);
-    54	}
-    55	
-  > 56	int acpi_passive_trip_temp(struct acpi_device *adev, int *ret_temp)
-    57	{
-    58		return acpi_trip_temp(adev, "_PSV", ret_temp);
-    59	}
-    60	
-  > 61	int acpi_hot_trip_temp(struct acpi_device *adev, int *ret_temp)
-    62	{
-    63		return acpi_trip_temp(adev, "_HOT", ret_temp);
-    64	}
-    65	
-  > 66	int acpi_critical_trip_temp(struct acpi_device *adev, int *ret_temp)
-    67	{
-    68		return acpi_trip_temp(adev, "_CRT", ret_temp);
-    69	}
-    70	
+ .../gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c  |   8 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c        |   2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_csa.c       |   4 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c       |   4 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c       |   4 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_umsch_mm.c  |   4 +-
+ drivers/gpu/drm/amd/amdkfd/kfd_svm.c          |   2 +-
+ drivers/gpu/drm/drm_exec.c                    |  13 +-
+ drivers/gpu/drm/msm/Kconfig                   |   1 +
+ drivers/gpu/drm/msm/msm_gem.h                 |  13 +-
+ drivers/gpu/drm/msm/msm_gem_submit.c          | 199 +++++-------------
+ drivers/gpu/drm/msm/msm_ringbuffer.c          |   3 +-
+ drivers/gpu/drm/nouveau/nouveau_exec.c        |   2 +-
+ drivers/gpu/drm/nouveau/nouveau_uvmm.c        |   2 +-
+ drivers/gpu/drm/tests/drm_exec_test.c         |  16 +-
+ include/drm/drm_exec.h                        |   2 +-
+ 16 files changed, 92 insertions(+), 187 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.42.0
+
 
