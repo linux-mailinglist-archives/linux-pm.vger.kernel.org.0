@@ -1,122 +1,149 @@
-Return-Path: <linux-pm+bounces-8-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2923F7F247C
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Nov 2023 04:07:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B26A87F2615
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Nov 2023 08:05:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 323B9B21976
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Nov 2023 03:07:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A5CD281256
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Nov 2023 07:05:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B63E613FF0;
-	Tue, 21 Nov 2023 03:07:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70D601DA47;
+	Tue, 21 Nov 2023 07:05:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kelvie.ca header.i=@kelvie.ca header.b="oDbnF1ZC"
+	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="eEKX1ACl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-108-mta118.mxroute.com (mail-108-mta118.mxroute.com [136.175.108.118])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD68BC
-	for <linux-pm@vger.kernel.org>; Mon, 20 Nov 2023 19:07:17 -0800 (PST)
-Received: from filter006.mxroute.com ([136.175.111.2] filter006.mxroute.com)
- (Authenticated sender: mN4UYu2MZsgR)
- by mail-108-mta118.mxroute.com (ZoneMTA) with ESMTPSA id 18befd89f01000190b.003
- for <linux-pm@vger.kernel.org>
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Tue, 21 Nov 2023 03:07:13 +0000
-X-Zone-Loop: ab646c5e58377167c9dc0b18ba066d1ffc4e193774e0
-X-Originating-IP: [136.175.111.2]
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kelvie.ca;
-	s=x; h=Content-Transfer-Encoding:Content-Type:Cc:To:Subject:Message-ID:Date:
-	From:In-Reply-To:References:MIME-Version:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=yv3ur+VJgPZw5HSVfRVyxfBSzyF5tf8z7FkRU5st0L8=; b=oDbnF1ZC4la1YdwywqU+G9G6Qe
-	88QaVloZ0eYUc3Q8326JwRDRR9L7KpUQDUeJHaBpl6vvrw9TPp9mLGogorfxAA8ocY3E2oYaW9fPM
-	nqi6zTnljzLw/5sdUQRGM4YlPHb3sfFtlco5NTPNlx5uaXx5K+//rWwp2R2EXRRvdJey09ucj6AHv
-	w7AJbKxjX+iQIzgqN2rqYHrSYku+Iuq/ONlfFCv1aQnZUqsfUM+KOlsNCQFN3X+OpRF8tbPgj6O9q
-	n/1zy96mP0v3cVtBYBw62qqaRj2s9V7iOUz4fEjBLC66aeRJ2CoiS+hN3CAC8/yrxY+phHLYLTT81
-	zhqqziwg==;
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2851b271e51so1416788a91.1;
-        Mon, 20 Nov 2023 19:07:11 -0800 (PST)
-X-Gm-Message-State: AOJu0Yx7tyGV0qyJbexqXA/sKLzQoyKaLi1uOh8nh69fys8AIvAxm1vc
-	wIXG1Wj5hPZEIYwEm189QkFjwT3Lf9BYZuF36qQ=
-X-Google-Smtp-Source: AGHT+IHon8FUuNWN6OAvDXiT56AU977GCXjbZnY29yNHWhPtGrU+rTKXg7n8CadQaTmdi00890/QXuJBCYzK0xTkkfk=
-X-Received: by 2002:a17:90a:6881:b0:280:a4a1:5d03 with SMTP id
- a1-20020a17090a688100b00280a4a15d03mr2108500pjd.4.1700536030830; Mon, 20 Nov
- 2023 19:07:10 -0800 (PST)
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2046.outbound.protection.outlook.com [40.107.6.46])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A49CBC;
+	Mon, 20 Nov 2023 23:05:18 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hh9socSdin742ZggBlvIt1ikPUzZq2jR7IiUZ/kCoGapPxYlyQl6KkwL3Al6OrO2Ie+ZmM3aZ/vtpchWzs10vVTRCsuqOxUqQuTX3BOrNJ0YkB3IJ9NvbOrtpm/9F9feuRbub0xHHRcuBBmq9JHn3ARQDvY7p9gtUFAIBSRTlpiYQl9PhTdQ02iip3XZSITA0OOrj+MplxBHD98pPVFk770Re2EhjANXkoc029GjT6fPWRoLhseYl/NFgSFt/4J6ZDucmQHnujGlOQOPT5Gogx4pdB69Zx4c8DGCP+GXs6xPZ4rYBQqUqwwX57bfteih0xFD7waSI3m7a+3xjNoUlg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=97141ulRIXfjPLSYCfixVI8yid1sjARqDM3/8D4TL1s=;
+ b=SPNHkcRDdhXWkLe4vyTbsFxWVBLJZZoZpDQBdWWmE5B41diEv61SuuacmHT5D2hmE3Fl2so0PEGqPjUaMLjx/9nPTqPc60STO8EFgniUkFKTd9kBDVSCfOGQ7yjVssH1xsQ0/4vcyST2mJA3ONOX851a5wrJn7C6LQHKJv3vJ12zmLcj+Ao8hXK44UEu7gV1zWk4pNmOi3MumIlMpZ/0sU+F/0jThENZozVujwB6hpaFjShacgVi2F4tEfPTZfiNC4xb6JtNGqaoqMQSDQi75DL/Jk0ndT9lmsxCKNd4Qz6EbSUgnDs8S/CrtGQJhWSaH/9DOX/DEY2WJ3l9ZW//nQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 195.60.68.100) smtp.rcpttodomain=kernel.org smtp.mailfrom=axis.com;
+ dmarc=fail (p=none sp=none pct=100) action=none header.from=axis.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=97141ulRIXfjPLSYCfixVI8yid1sjARqDM3/8D4TL1s=;
+ b=eEKX1AClU3++Q1VBj395nsUt0jko5KF8W2SBmzu6r+Q9kcvpy0PZPxxM89bqMcIuBbPgGsIlnaqW+K+/vUIEG2/CH4pvia5Uh47lsis+YCkIJ7SQeYle4AqcGfYviiMisLb4O4N2qxHKEH2XTDgRLi5IA+vkzKTjNmk9iSgmL68=
+Received: from DB8P191CA0007.EURP191.PROD.OUTLOOK.COM (2603:10a6:10:130::17)
+ by DBBPR02MB10529.eurprd02.prod.outlook.com (2603:10a6:10:52c::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.27; Tue, 21 Nov
+ 2023 07:05:15 +0000
+Received: from DU6PEPF0000B61C.eurprd02.prod.outlook.com
+ (2603:10a6:10:130:cafe::d5) by DB8P191CA0007.outlook.office365.com
+ (2603:10a6:10:130::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.27 via Frontend
+ Transport; Tue, 21 Nov 2023 07:05:15 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 195.60.68.100)
+ smtp.mailfrom=axis.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=axis.com;
+Received-SPF: Fail (protection.outlook.com: domain of axis.com does not
+ designate 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
+ client-ip=195.60.68.100; helo=mail.axis.com;
+Received: from mail.axis.com (195.60.68.100) by
+ DU6PEPF0000B61C.mail.protection.outlook.com (10.167.8.135) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7025.12 via Frontend Transport; Tue, 21 Nov 2023 07:05:15 +0000
+Received: from se-mail01w.axis.com (10.20.40.7) by se-mail01w.axis.com
+ (10.20.40.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 21 Nov
+ 2023 08:05:15 +0100
+Received: from se-intmail01x.se.axis.com (10.0.5.60) by se-mail01w.axis.com
+ (10.20.40.7) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Tue, 21 Nov 2023 08:05:15 +0100
+Received: from lnxchenhuiz2.sh.cn.axis.com (lnxchenhuiz2.sh.cn.axis.com [192.168.77.59])
+	by se-intmail01x.se.axis.com (Postfix) with ESMTP id B7341E4C8;
+	Tue, 21 Nov 2023 08:05:14 +0100 (CET)
+Received: from lnxchenhuiz2.sh.cn.axis.com (localhost [127.0.0.1])
+	by lnxchenhuiz2.sh.cn.axis.com (8.17.1.9/8.17.1.9/Debian-2) with ESMTP id 3AL75Cfa3061354;
+	Tue, 21 Nov 2023 15:05:12 +0800
+Received: (from chenhuiz@localhost)
+	by lnxchenhuiz2.sh.cn.axis.com (8.17.1.9/8.17.1.9/Submit) id 3AL75CF43061351;
+	Tue, 21 Nov 2023 15:05:12 +0800
+From: Hermes Zhang <Hermes.Zhang@axis.com>
+To: <sre@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+	<robh+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <kernel@axis.com>, Hermes Zhang
+	<chenhuiz@axis.com>, Conor Dooley <conor.dooley@microchip.com>,
+	<linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v3 1/2] dt-bindings: power: supply: bq24190: Add BQ24296 compatible
+Date: Tue, 21 Nov 2023 15:05:04 +0800
+Message-ID: <20231121070505.3061304-2-Hermes.Zhang@axis.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231121070505.3061304-1-Hermes.Zhang@axis.com>
+References: <20231121070505.3061304-1-Hermes.Zhang@axis.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231114022503.6310-1-kelvie@kelvie.ca> <a66a805c-3e1f-4b9a-a38e-aca84b8678a6@infradead.org>
- <CAHC9VhR6mr0XRrq=Apy00HD3tdgpKi4RyMr8f5kdx2sjA0sfig@mail.gmail.com>
-In-Reply-To: <CAHC9VhR6mr0XRrq=Apy00HD3tdgpKi4RyMr8f5kdx2sjA0sfig@mail.gmail.com>
-From: Kelvie Wong <kelvie@kelvie.ca>
-Date: Mon, 20 Nov 2023 19:06:59 -0800
-X-Gmail-Original-Message-ID: <CAK2bC5rN_P7WP_E57wJjz+7icVjrwS0e6fqg_5uNaPhy3YR2dQ@mail.gmail.com>
-Message-ID: <CAK2bC5rN_P7WP_E57wJjz+7icVjrwS0e6fqg_5uNaPhy3YR2dQ@mail.gmail.com>
-Subject: Re: [PATCH RFC] Add a lockdown_hibernate parameter
-To: Paul Moore <paul@paul-moore.com>
-Cc: Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-security-module <linux-security-module@vger.kernel.org>, David Howells <dhowells@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Authenticated-Id: kelvie@kelvie.ca
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU6PEPF0000B61C:EE_|DBBPR02MB10529:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1da6a01a-d20f-4eb9-4cc6-08dbea60369b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	Ict2WSFi+UqqYu95ta3DATwOECDUI5l5DL4ULtAuPkacsstbP4je2bD8jkSuEnVEA2pPNG8uDHoHmaIzSfc6yKFT/xjoYWxj3F1SLLpuoKoJZ8RQU8uUZpk4yFY1i9NhqrJbPPNxOgLaaimUClKzfgLbQvV6Y3AUBMSeemdK3+A2/T61i/cbNpi1gDx7lpvRS3189B43gNocanAdk6rchb+37CSjC9qOSXRSmLGWC9iASJleJJKvEKvW9nzSw788DUVU1t+VqUUZRxmg8qel/8KH+LspAOiG25EZinJprlzIahnDEs3AAjhoxFjhHX/U2VdxAVb81Y7MFbbun9FhOtWLOhXdCFp96Idgn6c5AHwrZVpswo1tda9jJs1ttc851AXSG5gHOY6IcS6tPIXf7s67oxYI+MiNLS+Ua7ZejG+en3aFsr/FlcCTMCDMu+hWcdrmnMIs8fM5gNWlr6lTdBW5XKKvCuF/sibYmZKcf0jvbWLrNK0Reew+4uk6+yqCSo8Ouc7oDYFyJRgBR4GBORbPe1N5LrBcRU+FcbilITyg0+L5sstWgA0C/0ClXGXYeafuXmft9jmUWL/Muk0q9mOvP/7LT301Yt6d0/D/qMWf/rJJ3Zd8hnZMmJJJXXenPoF19oV1kKkHWAK2SX9HKlwvFr97vl4gR3HMqbBjN6uNRmslmrEu3+Gn3999SA/uvPhUuFSU+eAz96buIv9Ta+cQyEzPGmg+1aZRu67wOwV5988Op0TfrPDD6lz5OrbNQEKDeeoLZcMs0x2k667EbQ==
+X-Forefront-Antispam-Report:
+	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(396003)(39860400002)(346002)(376002)(230922051799003)(451199024)(186009)(64100799003)(1800799012)(82310400011)(46966006)(40470700004)(36840700001)(40460700003)(426003)(336012)(83380400001)(82740400003)(86362001)(356005)(81166007)(36756003)(47076005)(36860700001)(41300700001)(70586007)(70206006)(110136005)(54906003)(42186006)(316002)(8676002)(8936002)(4326008)(5660300002)(4744005)(2906002)(1076003)(26005)(2616005)(40480700001)(6666004)(478600001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: axis.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2023 07:05:15.6339
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1da6a01a-d20f-4eb9-4cc6-08dbea60369b
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DU6PEPF0000B61C.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR02MB10529
 
-On Mon, 20 Nov 2023 at 13:12, Paul Moore <paul@paul-moore.com> wrote:
-> On Mon, Nov 13, 2023 at 11:01=E2=80=AFPM Randy Dunlap <rdunlap@infradead.=
-org> wrote:
-> >
-> > [add security & dhowells]
-> >
-> > On 11/13/23 18:23, Kelvie Wong wrote:
-> > > This allows the user to tell the kernel that they know better (namely=
-,
-> > > they secured their swap properly), and that it can enable hibernation=
-.
-> > >
-> > > I've been using this for about a year now, as it doesn't seem like
-> > > proper secure hibernation was going to be implemented back then, and
-> > > it's now been a year since I've been building my own kernels with thi=
-s
-> > > patch, so getting this upstreamed would save some CO2 from me buildin=
-g
-> > > my own kernels every upgrade.
-> > >
-> > > Some other not-me users have also tested the patch:
-> > >
-> > > https://community.frame.work/t/guide-fedora-36-hibernation-with-enabl=
-ed-secure-boot-and-full-disk-encryption-fde-decrypting-over-tpm2/25474/17
-> > >
-> > > Signed-off-by: Kelvie Wong <kelvie@kelvie.ca>
->
-> I would feel a lot better about this if there was a way to verify that
-> the swap was protected as opposed to leaving that as a note in a doc
-> that the majority of users will never see, read, or understand.
+From: Hermes Zhang <chenhuiz@axis.com>
 
-I'd argue that this wouldn't even be necessary if we detect the swap was
-protected -- hibernation should just be enabled in that case without settin=
-g
-any parameters.
+The BQ24296 is most similar to the BQ24196, but the:
+1. OTG config is split from CHG config (REG01)
+2. ICHG (Fast Charge Current limit) range is smaller (<=3008mA)
+3. NTC fault is simplified to 2 bits
 
-My understanding is that it was disabled waiting for this
-functionality, and it's been
-at least a couple of years now [1], so it looks like it's not such an
-easy problem.
+Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+---
 
-Anyway, my argument is that the majority of users will never use this kerne=
-l
-parameter anyway, so I think it's a fair assumption that the power users th=
-at
-*do* use this will educate themselves on why this parameter even exists.
+Notes:
+    v2: restructured the code to support bq24296 and add Acked-by tag
+        from Conor
+    v3: handle the match_info in the modern way
 
-[1] https://lwn.net/Articles/847042/
+ Documentation/devicetree/bindings/power/supply/bq24190.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
---=20
-Kelvie
+diff --git a/Documentation/devicetree/bindings/power/supply/bq24190.yaml b/Documentation/devicetree/bindings/power/supply/bq24190.yaml
+index d3ebc9de8c0b..131b7e57d22f 100644
+--- a/Documentation/devicetree/bindings/power/supply/bq24190.yaml
++++ b/Documentation/devicetree/bindings/power/supply/bq24190.yaml
+@@ -20,6 +20,7 @@ properties:
+       - ti,bq24192
+       - ti,bq24192i
+       - ti,bq24196
++      - ti,bq24296
+ 
+   reg:
+     maxItems: 1
+-- 
+2.39.2
+
 
