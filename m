@@ -1,159 +1,123 @@
-Return-Path: <linux-pm+bounces-77-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-78-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0542F7F46F2
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 13:51:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A2087F47E9
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 14:39:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4A3D28132E
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 12:51:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5AC981C2091A
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 13:39:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77D612D61A;
-	Wed, 22 Nov 2023 12:51:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC98E56448;
+	Wed, 22 Nov 2023 13:39:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="LJvl5TlC"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="s9/ogQDn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCA118D;
-	Wed, 22 Nov 2023 04:51:24 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AM5Vcqs013032;
-	Wed, 22 Nov 2023 12:51:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=27Z8pqIwCURhifVSG9XX//Qs1tVHrqv8hOikZ4CO4PY=;
- b=LJvl5TlCGFNaosRuNZfVGSH7xk+GwH2XL37EmKbaC0SRjyKdgqN5BrdSq3xwgO04BGcU
- xuLqW/Q/C1qwDXDh0fFlC6znlNvQDzn9C8/UngmwE20B1St8+mXt6Fz50Q77+pXbjXsh
- 1R6enMYzurvTKGo9oqLOPy+Em8abG3SdqqAFjkZ5EkFC69Eifs5j2vXp8dCtq91f5tUg
- EkbxDj6MEiPnVSY4W5mg1kj5MYJxQCNrErNK6Zk63yWdhweTb6r+uUvH6uwGOPIdbTKC
- 5gxQn8wYM8fvdmHCPRDOLK4r+/w2wwf+yR7mG1/y3lrg1vlAFEnKmk8UFkLTyDuIS6dh UQ== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uhbjvh6m3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 Nov 2023 12:51:10 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3AMCp9tq022472
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 Nov 2023 12:51:09 GMT
-Received: from [10.206.101.41] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 22 Nov
- 2023 04:51:02 -0800
-Message-ID: <4f5d4019-ffae-1eed-be7f-14e68d933063@quicinc.com>
-Date: Wed, 22 Nov 2023 18:20:59 +0530
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04CED52
+	for <linux-pm@vger.kernel.org>; Wed, 22 Nov 2023 05:39:11 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-40b344101f2so934355e9.0
+        for <linux-pm@vger.kernel.org>; Wed, 22 Nov 2023 05:39:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1700660350; x=1701265150; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IbsclafXVbhvsS395bqo3weKnHOeQwA8LuBg6N0OZoI=;
+        b=s9/ogQDn14KWxJpVfgJ8ef3vbg35WtFMAN9FUzrGRWgPxpDpx1RUhyXj5ia4caA5Cd
+         UhmYMNHXJQ1LEpSNPFzC7DhaPzdV8dplJzXr19FAMrInGy79uiqQfpotVcEKUVeWehds
+         LbG6QtJMzkGKApU4lKD8qo+1UPlQtjrotD3NLhCPqgfLd3DqPT0cRLSARHz0O3Pt09W/
+         CZ4KYppzCbOzKUPQZ/73Jvc0ZNbgba6MgLfLBOVu6sfwYU3FGAXkXvXvU5juhsfJS7mv
+         X6s1yW1vYzneSCSeIIXrR5dbxksus/jdcqFG+wtiAI4HUiH/j7NKw6ovbQFJxjj6BVPD
+         2owA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700660350; x=1701265150;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IbsclafXVbhvsS395bqo3weKnHOeQwA8LuBg6N0OZoI=;
+        b=vRRKF7o+OR25+GoFRHPBy9whq4S0txed8ASEB6Z7tXmB+Ht7v5409ulNESZrH09Ae8
+         YsgnC+aJkCd2KG1eOCl5z0kaq0BS8Z+RyPzJjHlDc6miyPO3/uNAMNSBjI8i4WgiJ/GJ
+         i7r7w8YY327X2mLNwXK45pHDfWSj18nByvQWVIEgrbrZeil0hhSEA1uKYsyc7LM3loFU
+         B/DR/cnAWiNr5c2yFq9Y7BZhfHW7Kp6Vu4rFovC0j6HUaLjexltZJqahBfKZpCPGQE4w
+         G5KondSGxkiiFr220eNv4FrR1HaVZqGq84qD4qltVRoZF6FrlEGtw2vLbztM5qmLrwbw
+         FEtg==
+X-Gm-Message-State: AOJu0Yx6WgF8OX8Q+rHBAeNJN5Eyw+vn1yABRC0y1BYIIamGkDCJSUht
+	vrGaRvCO2aHINhm4cxfX/D0Eb7vBf1E9iFlSTPU=
+X-Google-Smtp-Source: AGHT+IFgJrbH8nkXN/tv9V8BMOmt2L5BDf/1VsasDQLVsnZ8+pdd1f6xmRFoLb71L9I2UNHbQaCBvQ==
+X-Received: by 2002:a05:600c:1503:b0:407:4126:f71c with SMTP id b3-20020a05600c150300b004074126f71cmr5521605wmg.6.1700660350268;
+        Wed, 22 Nov 2023 05:39:10 -0800 (PST)
+Received: from vingu-book.. ([2a01:e0a:f:6020:3a2e:a7f5:93e6:508b])
+        by smtp.gmail.com with ESMTPSA id o31-20020a05600c511f00b00407752bd834sm2307386wms.1.2023.11.22.05.39.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Nov 2023 05:39:09 -0800 (PST)
+From: Vincent Guittot <vincent.guittot@linaro.org>
+To: mingo@redhat.com,
+	peterz@infradead.org,
+	juri.lelli@redhat.com,
+	dietmar.eggemann@arm.com,
+	rostedt@goodmis.org,
+	bsegall@google.com,
+	mgorman@suse.de,
+	bristot@redhat.com,
+	vschneid@redhat.com,
+	rafael@kernel.org,
+	viresh.kumar@linaro.org,
+	qyousef@layalina.io,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Cc: lukasz.luba@arm.com,
+	wyes.karny@amd.com,
+	beata.michalska@arm.com,
+	Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [PATCH v4 0/2] Rework interface between scheduler and schedutil governor
+Date: Wed, 22 Nov 2023 14:39:02 +0100
+Message-Id: <20231122133904.446032-1-vincent.guittot@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH RESEND v3 4/5] clk: qcom: Use HW_CTRL_TRIGGER flag to
- switch video GDSC to HW mode
-To: Jagadeesh Kona <quic_jkona@quicinc.com>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Abel Vesa <abel.vesa@linaro.org>
-CC: "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman
-	<khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>, Pavel Machek
-	<pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Stanimir Varbanov
-	<stanimir.k.varbanov@gmail.com>,
-        Bryan O'Donoghue
-	<bryan.odonoghue@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Taniya Das <tdas@qti.qualcomm.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-media@vger.kernel.org>
-References: <20231101-gdsc-hwctrl-v3-0-0740ae6b2b04@linaro.org>
- <20231101-gdsc-hwctrl-v3-4-0740ae6b2b04@linaro.org>
- <v4dnsawo7s74spccrsvjwmal73tqfq4aptiny25tyyp6ungxha@jlbywvcssqtl>
- <d716fbbe-b681-af41-bfe7-85448cc47c7c@quicinc.com>
-Content-Language: en-US
-From: Vikash Garodia <quic_vgarodia@quicinc.com>
-In-Reply-To: <d716fbbe-b681-af41-bfe7-85448cc47c7c@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: JOFdN4YIviS_rQmdT3WYhksczd3WaO3o
-X-Proofpoint-ORIG-GUID: JOFdN4YIviS_rQmdT3WYhksczd3WaO3o
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-22_08,2023-11-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
- spamscore=0 impostorscore=0 lowpriorityscore=0 mlxlogscore=999
- suspectscore=0 adultscore=0 mlxscore=0 phishscore=0 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311220090
+Content-Transfer-Encoding: 8bit
 
-On 11/10/2023 2:02 PM, Jagadeesh Kona wrote:
-> 
-> 
-> On 11/4/2023 1:45 AM, Bjorn Andersson wrote:
->> On Wed, Nov 01, 2023 at 11:04:10AM +0200, Abel Vesa wrote:
->>> From: Jagadeesh Kona <quic_jkona@quicinc.com>
->>>
->>> The current HW_CTRL flag switches the video GDSC to HW control mode as
->>> part of GDSC enable itself, instead of that use HW_CTRL_TRIGGER flag to
->>> give consumer drivers more control and switch the GDSC mode as and when
->>> required.
->>>
->>> HW_CTRL_TRIGGER flag allows consumer drivers to switch the video GDSC to
->>> HW/SW control modes at runtime using dev_pm_genpd_set_hwmode API.
->>>
->>
->> This states what the code currently does, and what the new code will do.
->> But I don't find that it adequately describes _why_ this is done.
->>
->>
->> In the current implementation, the hardware is might collapse the GDSC
->> anytime between gdsc_enable() and gdsc_disable(). By giving "drivers
->> more control" the time spent in this state is reduced to some fraction
->> of that span, which to me implies higher power consumption.
->>
->> Under the assumption that we don't want to consume more power without
->> reason, I'm forced to guess that there might be some scenarios that we
->> want this feature to keep the GDSC non-collapsed against the indication
->> of the hardware - to avoid some instability somewhere, perhaps?
->>
-> 
-> Thanks Bjorn for your review. Sure, will update commit text with details in next
-> series.
-> 
-> Normally, consumers will enable the GDSC and then the required clocks. If GDSC
-> is moved to HW mode in gdsc_enable() itself, the subsequent clocks enablement
-> that are dependent on GDSC might fail since GDSC could be turned off by HW. The
-> consumers can still switch the GDSC to HW mode with new API right after the
-> clocks are enabled and the control will be taken back to SW mode just before
-> disabling the GDSC, so even with the newer implementation, HW can collapse the
-> GDSC anytime for most of the duration between gdsc_enable() and gdsc_disable().
-> This API adds more flexibility for consumer drivers to control the GDSC mode as
-> per their
-> requirements.
-There is one more scenario where the driver would like GDSC in driver
-controlled. Let say video hardware, which is under vcodec0_gdsc, have registers
-to be programmed by TZ. In such scenario, the GDSC should be non collapsed,
-while TZ programs those registers precisely while loading the firmware and
-bringing hardware out of reset.
+Following the discussion with Qais [1] about how to handle uclamp
+requirements and after syncing with him, we agreed that I should move
+forward on the patchset to rework the interface between scheduler and
+schedutil governor to provide more information to the latter. Scheduler
+(and EAS in particular) doesn't need anymore to guess estimate which
+headroom the governor wants to apply and will directly ask for the target
+freq. Then the governor directly gets the actual utilization and new
+minimum and maximum boundaries to select this target frequency and
+doesn't have to deal anymore with scheduler internals like uclamp when
+including iowait boost.
 
-Regards,
-Vikash
+[1] https://lore.kernel.org/lkml/CAKfTPtA5JqNCauG-rP3wGfq+p8EEVx9Tvwj6ksM3SYCwRmfCTg@mail.gmail.com/
+
+Changes since v3:
+- Fix freq selection with runnable RT
+
+Changes since v2:
+- remove useless target variable
+
+Changes since v1:
+- fix a bug (always set max even when returning early)
+- fix typos
+  
+Vincent Guittot (2):
+  sched/schedutil: Rework performance estimation
+  sched/schedutil: Rework iowait boost
+
+ include/linux/energy_model.h     |  1 -
+ kernel/sched/core.c              | 90 ++++++++++++++------------------
+ kernel/sched/cpufreq_schedutil.c | 64 ++++++++++++++---------
+ kernel/sched/fair.c              | 22 ++++++--
+ kernel/sched/sched.h             | 84 +++--------------------------
+ 5 files changed, 103 insertions(+), 158 deletions(-)
+
+-- 
+2.34.1
 
 
