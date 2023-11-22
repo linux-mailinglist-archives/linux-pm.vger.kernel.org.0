@@ -1,179 +1,235 @@
-Return-Path: <linux-pm+bounces-101-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-100-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 608067F52EC
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 23:01:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E2F57F52A7
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 22:34:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 922611C20AF0
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 22:01:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 346AE281267
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 21:34:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C9611D6A7;
-	Wed, 22 Nov 2023 22:01:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D653D1C6AC;
+	Wed, 22 Nov 2023 21:34:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="CUUhkC3a"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="DGqWAqSp";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="snswto+W"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F46010C
-	for <linux-pm@vger.kernel.org>; Wed, 22 Nov 2023 14:01:22 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-4094301d505so1305255e9.2
-        for <linux-pm@vger.kernel.org>; Wed, 22 Nov 2023 14:01:21 -0800 (PST)
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15D81B3;
+	Wed, 22 Nov 2023 13:34:32 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AMI1sCj024627;
+	Wed, 22 Nov 2023 21:33:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2023-11-20;
+ bh=l00t4r4lDmeQromrVsFWao4+QKl0f1m370See9qT18o=;
+ b=DGqWAqSpzOre83gHaWBpbk8G7rl0Ov5QZ43LZwocl1tkI6cK8lB6njO3pLNVMIRaYXVM
+ SjhLgCL0OU7MJ4aow37Ucm7zN6y94ddLvGuAZRIprWH7x+vZIKGvHoa3HKGsaJ+eG4Ca
+ PhrO48cmDLZuW9yUYMXWub0bPamaVsFARUel+3m3g04xqzjZrhLz4DbLMHvKJcWHqBgZ
+ 4H7PQBubP2VCn2KFlVroojMhEI3J1vr8i5uXA5kzYii5aOGmaShd82QQpjnbI/jRyqLb
+ fBxZpUPmnBVgPmBfFjGKcKl+niSGYJ6uqd9AT6Li6gNsz50TlMEFxqf6n4bG/SOf+6zO Kg== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3uen5bgd51-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 22 Nov 2023 21:33:26 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3AMJaLxG002352;
+	Wed, 22 Nov 2023 21:33:25 GMT
+Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam04lp2169.outbound.protection.outlook.com [104.47.73.169])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3uekq9bs3d-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 22 Nov 2023 21:33:25 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VNm9vYumoi42iTkbhRV2EbSI9swDlmEdg2DJ0Js4XUKa4htNWLOvUrXQLz4xYAA8agxoTSAWcR4p0Px6hIA4dVlwUe7NeKIEqgfHXa+Rns26gh9s6PFC1j7/9UBo3b+Um0qPReTJvztoDsJPhH/ydDtM/u3IoN1fNxdKoKv2ZKhed2B4uk2KD6IIiDoVJGRT7T0naDbtSVv0fYEmq14ts/10nydUefHBBJX2yWI3vzeB7N15dJG3FAjekteQSkTNOqcmchMiTvIGYoIoBje4n/yw05N8KtwuCD5z1VyrJaNsKBzPHxHhbbZkek5/NTogcB/HI9h0+Stosx6dD4QQTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=l00t4r4lDmeQromrVsFWao4+QKl0f1m370See9qT18o=;
+ b=VQ7l/dkV8FlQqiqpxaUx+47sBem9PFLWO4e70eXvCOG7CPB6/oVfujBmP0bxFVozrTwMlrrxbPsAFKabyax0obK6HmF69/PveWfioaxxmslqOuRuO9mRg0cAwxrzMVKoV5w9u4dBvFQ3QoUu6Q1+DaxZQnpEmXngn0KNvD7wfNNMFfCT9XTssRFPrY+/Mr8+uWOgfi8QvpAcNpVcpNNSGO9ERadrLEav+m6zEiZzqlwDxi0kwR4J7tBJkzwd3EYkbyOcLcNZeXVZ08794eIOK/VZ6KpBYICO7jBdr2YtnSWyeblMNq69VFHcI7guaxUkGwp4TkHZV3t7P9sTn7rgrQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1700690480; x=1701295280; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Co9LVBS9UVls7Yfkp1g/G/0zm2miePVKqu+VmR9GULg=;
-        b=CUUhkC3aCNRMDb7cJsp1Oyp8W6ggrDS9JgXsHVHKqv+tKKoOTr8pcHEK8//WWQUhrU
-         /YVjA70bMuYOW30W9zyOc+nXyCwfiIF8New3QYQz6Ge3DhwEe4c+kMxFQNks1ip7SAz4
-         zRW3rJRKomcseyprsbdRPDE/0bCDSX5am7pztquxlUMPjqLTor0OC7Uc+t6ZsbUbz2wL
-         giV44mkKIaHH9Il5jSLgAni47wYvwJuXIBba4eAGl8rmidmvszjuBiMdKZpiuSfP5PNs
-         ymoOO3Il3fZ9WvxZ9uITDn4+IRUq4x/zMu2yJHKlHy1U/NVA9XcZWO3DPAOmPMY5AU2+
-         iGRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700690480; x=1701295280;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Co9LVBS9UVls7Yfkp1g/G/0zm2miePVKqu+VmR9GULg=;
-        b=RuKH2d/s8wEVBjoPMJro0HlhDTcNDSEl6mz43zRCMoBBO+zCb9BifBDNJZByUhdSW8
-         BPVHMynxFLaSQ8QPIMiEOwQFTM6WsZjRD/p5U2w35TeQdLL6wGy2RIbQyQB3zb8YDs7v
-         Vyo85L+dQOVyCLmPeOX9RStPmDk5o9zf6xYTi/tHg+eJwY0ezzOHLIsCAthUn6zH5YUm
-         6tKtlIYdcKuMp2sCNzHRRoFqAzVAvo+kJY+5/LoklsmdnFENZbqiGMr84PMVKdQSkxGi
-         M3wFz/5UaZ0iHzceDEDf4mFyHHd3iQ9JHGZfKbsxk1wVe0x/O1zRbkKeVdWPT7GAz9JW
-         yuvA==
-X-Gm-Message-State: AOJu0YwCnl+FAEQBpwGOzFYuhu2zwfrgQXIvvsEnY8sURTHSqpVIUSyT
-	uWFWLOipEFhclbehA1ffpIbXXA==
-X-Google-Smtp-Source: AGHT+IH4rB5Gnc+aWlXBbdw4olewehGSvln615Pk9fVGk663855Rnwjbt7cGY19KNvWtTEqtko92WA==
-X-Received: by 2002:a05:600c:4514:b0:409:787b:5ab5 with SMTP id t20-20020a05600c451400b00409787b5ab5mr2834278wmo.23.1700690480328;
-        Wed, 22 Nov 2023 14:01:20 -0800 (PST)
-Received: from airbuntu (host109-151-228-202.range109-151.btcentralplus.com. [109.151.228.202])
-        by smtp.gmail.com with ESMTPSA id u11-20020a05600c19cb00b0040a507f546fsm709634wmq.8.2023.11.22.14.01.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Nov 2023 14:01:19 -0800 (PST)
-Date: Tue, 21 Nov 2023 21:17:25 +0000
-From: Qais Yousef <qyousef@layalina.io>
-To: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-	rafael@kernel.org, viresh.kumar@linaro.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	lukasz.luba@arm.com, wyes.karny@amd.com, beata.michalska@arm.com
-Subject: Re: [PATCH v3 1/2] sched/schedutil: Rework performance estimation
-Message-ID: <20231121211725.gaekv6svnqdiq5l4@airbuntu>
-References: <20231103131821.1176294-1-vincent.guittot@linaro.org>
- <20231103131821.1176294-2-vincent.guittot@linaro.org>
- <20231114205422.k5m6y4m5vnw7dvzj@airbuntu>
- <CAKfTPtDMEes6V2xRHavAwWrVuiZBdFAsaaxv9=-psAZCTPQWKg@mail.gmail.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=l00t4r4lDmeQromrVsFWao4+QKl0f1m370See9qT18o=;
+ b=snswto+Ww9qxxIYdakcENNEshMlCaAwReM8uhPPy8aOet24DhvjgkVDJhS2Qc9y1Qse4AwkclRV4iz/+rNonWhvMy+3a6WheDjyJVJLJi98aw8+CRs3aG17Z51PfaO2B+mRlEHLmm+TMTvxUmIj+kUZxVNJ2d4EcAY5DqCJB2b0=
+Received: from PH0PR10MB5894.namprd10.prod.outlook.com (2603:10b6:510:14b::22)
+ by SA1PR10MB6567.namprd10.prod.outlook.com (2603:10b6:806:2bc::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.26; Wed, 22 Nov
+ 2023 21:33:22 +0000
+Received: from PH0PR10MB5894.namprd10.prod.outlook.com
+ ([fe80::77c7:78b0:ea43:e331]) by PH0PR10MB5894.namprd10.prod.outlook.com
+ ([fe80::77c7:78b0:ea43:e331%3]) with mapi id 15.20.7025.019; Wed, 22 Nov 2023
+ 21:33:22 +0000
+Message-ID: <724589ce-7656-4be0-aa37-f6edeb92e1c4@oracle.com>
+Date: Wed, 22 Nov 2023 23:33:13 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 7/7] cpuidle/poll_state: replace cpu_relax with
+ smp_cond_load_relaxed
+Content-Language: ro
+To: Christoph Lameter <cl@linux.com>
+Cc: linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        pbonzini@redhat.com, wanpengli@tencent.com, vkuznets@redhat.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org,
+        akpm@linux-foundation.org, pmladek@suse.com, peterz@infradead.org,
+        dianders@chromium.org, npiggin@gmail.com, rick.p.edgecombe@intel.com,
+        joao.m.martins@oracle.com, juerg.haefliger@canonical.com,
+        mic@digikod.net, arnd@arndb.de, ankur.a.arora@oracle.com
+References: <1700488898-12431-1-git-send-email-mihai.carabas@oracle.com>
+ <1700488898-12431-8-git-send-email-mihai.carabas@oracle.com>
+ <6bd5fd43-552d-b020-1338-d89279f7a517@linux.com>
+From: Mihai Carabas <mihai.carabas@oracle.com>
+In-Reply-To: <6bd5fd43-552d-b020-1338-d89279f7a517@linux.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: LO4P123CA0054.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:152::23) To PH0PR10MB5894.namprd10.prod.outlook.com
+ (2603:10b6:510:14b::22)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtDMEes6V2xRHavAwWrVuiZBdFAsaaxv9=-psAZCTPQWKg@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB5894:EE_|SA1PR10MB6567:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3468d15c-56a4-412e-c63c-08dbeba2a6f6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	KURMWA/LCMiVoleT10biQD3HLoCRfRF8YPClxEVs4ls/hu1PsNq1C1+QDojz0tdV8Ffamnk5pmgmbwxlfZI5v4DJFgPzUBJtUrGHeCwNqRPhpVplHwP51oJQBUErVGjdqJ1sB3PgAd51ss1IAKbe0+ggneUMa1IVo25B58wapX60o6O3pN+TFOFYSZkP9w6fU9oSwzY6eI5MYJtgDfPCr9md7KFkifu+b1Eq42rIsO+daUSwSNHAvun3mXl3mDkNUcvKwwqaSRLzJCRxjKvh/qm53F58GG2T7Gl0Kgp7iH3RamTUIVEtt69YBupw6BGEeD4AN67DhPyQlffHhYMcfkQhfc+aevi6rB6oVpMyOj3Oh4MTxOgh7lpTcFL5StTzfNrt3EMblMum3iZUWoVK+pEZLqQMpBBPV5sipmwGJR7EqJT6HssYvZaHnVRUID3QmZVzAVzR10uqAtBDktBQ4uyTCCujj0/jApIqasrAO+5tk/AO8cXRqG6mh//FYBfZglzZOdISC0e9KSULH+1IRxjxU7IXUIGqdjNS3fUza3F8JJhR3JxDDhoarBBxXUWG5TsRobvbTV5Qmx39WxdF6pxD1q3tf9/rGjanAxlI9xn4HicpeMXFWlcVg7JvGBDEMA5H39S7B1MdZiPZrEAJHQ==
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5894.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(136003)(39860400002)(346002)(396003)(366004)(230922051799003)(451199024)(186009)(1800799012)(64100799003)(2906002)(31696002)(86362001)(7416002)(5660300002)(6916009)(316002)(66556008)(44832011)(4326008)(8676002)(8936002)(36756003)(66946007)(41300700001)(478600001)(6486002)(26005)(6506007)(66476007)(107886003)(38100700002)(6512007)(6666004)(2616005)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?utf-8?B?Y3JxYkF5dHlKSjVJdmF6OXZWY3NLaVJxMW0xdzFLdnpCSmtTZURUYXoyQmUz?=
+ =?utf-8?B?Q3BPUzhvSFNUdXVaZFVsSERwVXBCSTZQT0Q2TXhlVktJV0M0MGUxYzV5YndX?=
+ =?utf-8?B?RXRaQytNaDJrMjh3SFkyZndNa1h0ZjNrcDIvc3JVVVpVcStVTGFtSnQwNlVj?=
+ =?utf-8?B?dHNBTDAvbVVuUjRmZFk5U1VaRWRYejhsZ1ozeSsxeXl4ZzJZc0tjSWNsNEk0?=
+ =?utf-8?B?N2RoaFBQOWZWa1NMRDU5cUM0NlVuM1FibUJ2N1BqcytGYkM5bW5VRmVXTjVu?=
+ =?utf-8?B?SFVLVEZTajgyZEdyRGhRYzZtbmk3UndiWFFFRG85TExKRDJWOGpKd0hMalVF?=
+ =?utf-8?B?eWZLV281ZG1xa0JxWEhWMXFnVnhkeEpVcWpSTzB0NGVjeVN0UW1DVHBpV1JD?=
+ =?utf-8?B?ZGxiNEFndkswZUgwMCtXQnd6WTlFZmZYZkpzZDBJKzBQTXdNaWl5WXMwejlJ?=
+ =?utf-8?B?NldhMEJiTEI5a2VxZ3FzUzdpRDJ5bUVNN0xwVUk3d3BDdnNUVzNwRTJZMUJy?=
+ =?utf-8?B?dTM1Ny9XbVliR2ZYYS9YZ1JHVHBvRVVPY0lSTXYyc3pwL2VGUWZ4RUEvTmdp?=
+ =?utf-8?B?dXBxMnFkNjdhRVlpejZZeVNBZUZ6RGI2a3BNYlhwTnVEbnB5cEhDSXlqbk5T?=
+ =?utf-8?B?VjEzdlI5V0ZVc3ZkUmMrRVM2TnVCS05OT1NpVXpoTXR5c1VyQm1EWUZLek1B?=
+ =?utf-8?B?QUVETFEvRlVWSlZPRHBuUTJHL0pTUFRKdW11Q0JFdkFzSFA4S0NqbDhxakF0?=
+ =?utf-8?B?SHRPbGQ0c25obERFaGViZ1pod3MrOGtnaVdwanJQNzkzVWpjTTlLcjhObVdh?=
+ =?utf-8?B?NkJxSDNGbzYxM2ZYQjUzV0RiN21rUm5sb3JFSXF6RHR3TXNIbUtNMWJaazBs?=
+ =?utf-8?B?cHgwd0xlNE53SnRnd3BtSzZSc25MSHBUNkJxUDcwcjZ2cnJFblN1ZjMzOEYw?=
+ =?utf-8?B?ajY0amN0Zjg5ZzNQWEd2aWhQbUY0ajhWTkZhZ2tUZys0N1YxdGRzanZjS3ZT?=
+ =?utf-8?B?SnpSQm1aZ1o3bE9xQjZvTFU5cFV0MmpQdG5pR21Gb282VTNSdElNb3B1bHpJ?=
+ =?utf-8?B?OC9FeEZUUXVxbDdPOUtZSUlFWllLeDZDRG82ZUV0Mm5VTDYrQitJQjZkNSs4?=
+ =?utf-8?B?SU9BOVlhU1ZxUnpFRGhCREdHeXFTeldkdFR1b1YxL3lUdTVvdlJtUXVPSDdO?=
+ =?utf-8?B?dEhUZVZrc0VFdFp1WUZHRzB4VDBNWlgzY29tNHhaY1V4enptNmhDai9URUNj?=
+ =?utf-8?B?bmJib2ZwQ3pYck8xblB3Wm1MVERUNml4OWx3S2xUNWFYZ3hiVEhBTTdnZzZL?=
+ =?utf-8?B?YVlndVM4aVhrK3B2bTJWOVFmb3FhNVJWbHo0Z2s0ZVBzOTMrTFNsOHNFQ0lt?=
+ =?utf-8?B?aDM5MTUrRDBBOW5CTERTeG5xamh0VDB5OVVlRzdHT0tBS1g2clNJVzJYRnlO?=
+ =?utf-8?B?dzBNL3UveG5FWVd1TzFyZzRxNXd1bkh6ZHdxY2VycGhNdHlqWHJ6SVFLb2Ux?=
+ =?utf-8?B?cEdaSWRhczI0ejFpN1ZRNHk4VVpxY0FkajJBbzVzUldidjk1TS96UzhsVjVU?=
+ =?utf-8?B?eFZ6K2FCUHFPNGlZRWRwSDJ3YjRJaDNhSUlBemlIVlRxWXB1TEJQektEZHlk?=
+ =?utf-8?B?RFBYb1JFNHorWERWb1BjYmVaV3JVSWFCYXBGdkR1b2Qxa2dTa0VPNDZ2Ym9H?=
+ =?utf-8?B?T1hUcDI0cU5XMW90N3JhRFJvUmo1MnFkc3RZTDFOckdrOWdtNHR1NVIrbk5j?=
+ =?utf-8?B?ZlRxSFpXd1RDb3ZZeERNUFBaYm1tZTFIQW1DaDBvZUxvb0tFWStDdVlZNDBQ?=
+ =?utf-8?B?WWN4a213QzFmUVMwejRLcVFudTd0VnlqTVR5c3EwVm51bjJTbGtzS0dxYTVk?=
+ =?utf-8?B?U0F2OWMrSEhaY21xTWNleTRoRkVFeTMxbk50dDhKMlBnWVhua3p1NTBXbXRG?=
+ =?utf-8?B?akFXVTNmNmdYUUY2eDJRTGIzbWlrQ09wSFNBeWlXYkZ3WTNGY0NBZVJPWlk3?=
+ =?utf-8?B?VzZQNUs1QmVWTWZaWWc3L1ptd3ViSzgyK2lmYW50RSt6UCtsQWRFUmVLcGNQ?=
+ =?utf-8?B?eDlCY0Z3cjYxMUZXeGtXSnovRW5tQ2llNHBKajJ6U29mL0ZpWDNWUWNMN2pY?=
+ =?utf-8?B?UXFtTkJXc0IzVzA5YWt0ejZueEtTSHhJckF2a1dQN1RPbDV6QXJUcllDalZx?=
+ =?utf-8?B?VVE9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	=?utf-8?B?UThDUTNsL1JiOXNWUWRVWHExRGI1d2NuWjh2VnlpSE05ekd3U3U5b3kwVDdK?=
+ =?utf-8?B?bGZrUjhDcWdBcTRvb05sNzZ4dzBOK3cycnpjMGNCaXN5cGJNajBiTFp6azZu?=
+ =?utf-8?B?VUp6UkVHaytIT0JZT0trbWp6VVZraE1TVm56UHpYZzNic1B6WEJRSE95U3hV?=
+ =?utf-8?B?STl5bWw3RU5USTBGMmZwdW14LzlNUVRYdTFQUzZ5RlNqV21jMVJuVDdQUDZn?=
+ =?utf-8?B?L3MvZzJKZENTVlZnWkxFbXRuemZnR3pzTkdOeFBkWkwwUWRTQ0M4aEYyU3h4?=
+ =?utf-8?B?bFlhOXNXWjR0aS82dFdGVFJFdTRjSC9DT0ExRU9GWGRneXlzVGhwMWg2b3BB?=
+ =?utf-8?B?YWJqZkFsODZRVDcvMnN0bVhqOW9ZamdVNzNvR0RUUU1KTS9pM3VnVFhkTHFJ?=
+ =?utf-8?B?Yy9tY0l5WEtMTXA2YTFGQVRFRU00RHJoR1YzalBGWVQvOE9oQnFRQ3FDSHU3?=
+ =?utf-8?B?dmh3TVBIN1k4WWNYM0xXWTRTaldGMUpmZ292RW5YbzJCWG4rVm1ua0kvNVdZ?=
+ =?utf-8?B?YlNNNGZEeFFKS2JTL2xQN3QzWlFzaFdHaG04VmdPNUw4UUdTSFJDZSsyMFBU?=
+ =?utf-8?B?SDhEa1l1RUFHZmVzR0Y1SVorcTlJaWxEY0NzTGx0dXA3dmpwSXJYazNnTUV0?=
+ =?utf-8?B?ZWNudStDYWswNDlsamcvSzE2dVczdEh0VnBwajlwMG1tWE5QelBnNXVuM1lq?=
+ =?utf-8?B?OXdzM2J1T2dvMVN5alhMNFdkVGtlYnAvQis3aGttb2R6UnpUcndWdHlBRHVB?=
+ =?utf-8?B?bXBTN0VqZXJPME13UnZTTFlvQ0t1M1R2Vlo4aEN6bWdIdG9BdStTd1lmV1c3?=
+ =?utf-8?B?NHROQTJGTUI0TTZibWhsUlBiZW1wSTJpaC9ydEc1TGhXVkZkRjlHSUdhclBw?=
+ =?utf-8?B?T21MblZodFVuOXl2NkRmaW04NGozUzFURUJnakthOXhmWGtsL0FyKzJqeDI1?=
+ =?utf-8?B?QWtSaWxDT2x5RS9EVG5Oc3Z2ck1XSXFOTldTYUNHM0lnZnNLTUdCRGpFb0Zm?=
+ =?utf-8?B?bmJmSHJOcFM2SkNUdjUyRkNtV3hwZE1MbHZ0aDFWTFZrbWhERW0xSXR6OWc2?=
+ =?utf-8?B?SnF6NG9NbHVKK1FSN3BVSU1VeFdjb0w3b21PNmhOOFFoRGdOaDBYU3h2SGhP?=
+ =?utf-8?B?UlM2S2xhSlJaZDdhN1pkcGNnY3VsRkdOTEhwODBUN0V6UlhCVytkZDhxOThy?=
+ =?utf-8?B?dnVFUm1VOGxRUmhLSk4rSzdFejFqM2dhMHBGcng5d1lNYkhUVGJVZlhwTFdI?=
+ =?utf-8?B?R2JHSHJoaUl3cE5aUEZiZkh6L25zUDdOWk5lWDZzeGtzWStORGJjbDRvUGlv?=
+ =?utf-8?B?NVBEYndNMjdiVWZJQlU4L2ZaU0F5citlYTdiQUNxb2hQVlQxbXJZcmNNUWhG?=
+ =?utf-8?B?R2ltMXRUaXlYUklxNmNEZDYxRzFOR1hqMFFOOVdnNW9qdmp3YlhjUUZVOHBU?=
+ =?utf-8?B?amdBZVFjZ1lMVUdBOE5SNUFWSmp2cHJDRXNJZTcxRVIrb1N0Z25wdWFFL1Ir?=
+ =?utf-8?B?Um4rVmhuZlRYRnJjSFVkTkhNTTZCcnNUR2tHbUxwVVB6eHVIclFLQnRrMEpH?=
+ =?utf-8?B?SjRzdkNwNnV3bXlDZHF0NXdxdGhxSTRZMWlSR2JySWhMRFFMVEl1aVQ5L2FN?=
+ =?utf-8?B?SkkySWhMelZnMmxnZ1JNV1c4c1BUdTQ5M1o5WTlYb211UjUyMHJRVzVidmpE?=
+ =?utf-8?B?bFBRNzN2VStBSi9uQmJlMkZUM3ppUDBmalNnVjJlUUNpSTNwbnRocXlORzAz?=
+ =?utf-8?B?NnJNODhta3I5N3J0RmJ2ZUlyMTd3aUl1MTNiY0VReUtmeEhZYWJORTJkbGs4?=
+ =?utf-8?Q?1aptGc6XJkjYS82Y3faONr6SY5vT/De0vhXOM=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3468d15c-56a4-412e-c63c-08dbeba2a6f6
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5894.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2023 21:33:22.4195
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hz/phF2K/y0Tu995DtTnD3iyBpchAWRO5avIVm4UW7p8SMBUHfGACby/UbcgeHYLkgFa2+pJGc5WVnNfg68cUBrAdIJZw1KodxgQK5koyd8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB6567
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-22_16,2023-11-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 adultscore=0 malwarescore=0
+ spamscore=0 bulkscore=0 phishscore=0 mlxlogscore=558 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311060000
+ definitions=main-2311220159
+X-Proofpoint-GUID: _PHetifthwSWIAxzEfgeW4fxNjr-7tw9
+X-Proofpoint-ORIG-GUID: _PHetifthwSWIAxzEfgeW4fxNjr-7tw9
 
-On 11/22/23 08:38, Vincent Guittot wrote:
+La 22.11.2023 22:51, Christoph Lameter a scris:
+>
+> On Mon, 20 Nov 2023, Mihai Carabas wrote:
+>
+>> cpu_relax on ARM64 does a simple "yield". Thus we replace it with
+>> smp_cond_load_relaxed which basically does a "wfe".
+>
+> Well it clears events first (which requires the first WFE) and then 
+> does a WFE waiting for any events if no events were pending.
+>
+> WFE does not cause a VMEXIT? Or does the inner loop of 
+> smp_cond_load_relaxed now do 2x VMEXITS?
+>
+> KVM ARM64 code seems to indicate that WFE causes a VMEXIT. See 
+> kvm_handle_wfx().
 
-> > > +unsigned long sugov_effective_cpu_perf(int cpu, unsigned long actual,
-> > > +                              unsigned long min,
-> > > +                              unsigned long max)
-> > > +{
-> > > +     struct rq *rq = cpu_rq(cpu);
-> > > +
-> > > +     if (rt_rq_is_runnable(&rq->rt))
-> > > +             return max;
-> >
-> > I think this breaks old behavior. When uclamp_is_used() the frequency of the RT
-> > task is determined by uclamp_min; but you revert this to the old behavior where
-> > we always return max, no? You should check for !uclamp_is_used(); otherwise let
-> > the rest of the function exec as usual.
-> 
-> Yes, I made a shortcut assuming that max would be adjusted to the max
-> allowed freq for RT task whereas it's the min freq that is adjusted by
-> uclamp and that should also be adjusted without uclamp. Let me fix
-> that in effective_cpu_util and remove this early return from
-> sugov_effective_cpu_perf()
+In KVM ARM64 the WFE traping is dynamic: it is enabled only if there are 
+more tasks waiting on the same core (e.g. on an oversubscribed system).
 
-+1
+In arch/arm64/kvm/arm.c:
 
-> > Can we rename this function please? It is not mapping anything, but applying
-> > a dvfs headroom (I suggest apply_dvfs_headroom()). Which would make the comment
-> > also unnecessary ;-)
-> 
-> I didn't want to add unnecessary renaming which often confuses
-> reviewers so I kept  the current function name. But this can the be
-> rename in a follow up patch
+  457 >-------if (single_task_running())
+  458 >------->-------vcpu_clear_wfx_traps(vcpu);
+  459 >-------else
+  460 >------->-------vcpu_set_wfx_traps(vcpu);
 
-Okay.
+This of course can be improved by having a knob where you can completly 
+disable wfx traping by your needs, but I left this as another subject to 
+tackle.
 
-> > >  static void sugov_get_util(struct sugov_cpu *sg_cpu)
-> > >  {
-> > > -     unsigned long util = cpu_util_cfs_boost(sg_cpu->cpu);
-> > > -     struct rq *rq = cpu_rq(sg_cpu->cpu);
-> > > +     unsigned long min, max, util = cpu_util_cfs_boost(sg_cpu->cpu);
-> > >
-> > > -     sg_cpu->bw_dl = cpu_bw_dl(rq);
-> > > -     sg_cpu->util = effective_cpu_util(sg_cpu->cpu, util,
-> > > -                                       FREQUENCY_UTIL, NULL);
-> > > +     util = effective_cpu_util(sg_cpu->cpu, util, &min, &max);
-> > > +     sg_cpu->bw_min = map_util_perf(min);
-> >
-> > Hmm. I don't think we need to apply_dvfs_headroom() to min here. What's the
-> > rationale to give headroom for min perf requirement? I think the headroom is
-> > only required for actual util.
-> 
-> This headroom only applies for bw_min that is used with
-> cpufreq_driver_adjust_perf(). Currently it only takes cpu_bw_dl()
-
-It is also used in ignore_dl_rate_limit() - which is the user that caught my
-eyes more.
-
-I have to admit, I always get caught out with the new adjust_perf stuff. The
-down side of working on older LTS kernels for prolonged time :p
-
-> which seems too low because IRQ can preempt DL. So I added the average
-> irq utilization into bw_min which is only an estimate and needs some
-> headroom. That being said I can probably stay with current behavior
-> for now and remove headroom
-
-I think this is more logical IMHO. DL should never need any headroom. And irq
-needing headroom is questionable everytime I think about it. Does an irq storm
-need a dvfs headroom? I don't think it's a clear cut answer, but I tend towards
-no.
-
-> > And is it right to mix irq and uclamp_min with bw_min which is for DL? We might
-> 
-> cpu_bw_dl() is not the actual utilization by DL task but the computed
-> bandwidth which can be seen as min performance level
-
-Yep. That's why I am not in favour of a dvfs headroom for DL.
-
-But what I meant here is that in effective_cpu_util(), where we populate min
-and max we have
-
-	if (min) {
-	        /*
-	         * The minimum utilization returns the highest level between:
-	         * - the computed DL bandwidth needed with the irq pressure which
-	         *   steals time to the deadline task.
-	         * - The minimum performance requirement for CFS and/or RT.
-	         */
-	        *min = max(irq + cpu_bw_dl(rq), uclamp_rq_get(rq, UCLAMP_MIN));
-
-So if there was an RT/CFS task requesting a UCLAMP_MIN of 1024 for example,
-bw_min will end up being too high, no?
-
-Should we add another arg to sugov_effective_cpu_perf() to populate bw_min too
-for the single user who wants it?
-
-
-Thanks!
-
---
-Qais Yousef
 
