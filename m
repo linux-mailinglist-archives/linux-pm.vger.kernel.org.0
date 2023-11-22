@@ -1,114 +1,159 @@
-Return-Path: <linux-pm+bounces-76-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-77-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34DEB7F461B
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 13:27:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0542F7F46F2
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 13:51:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C98A4B20AFD
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 12:27:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4A3D28132E
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 12:51:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4254A4B5AC;
-	Wed, 22 Nov 2023 12:26:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77D612D61A;
+	Wed, 22 Nov 2023 12:51:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AhTOfsuJ"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="LJvl5TlC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A867C1A58E;
-	Wed, 22 Nov 2023 12:26:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F08AC433C7;
-	Wed, 22 Nov 2023 12:26:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700656015;
-	bh=7C94KGgqCbAA+PUlPyfufke9xGPCyJuKoPOwMFmpILc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AhTOfsuJH4uNL1dxrl8w5XllqdE/f5P54GaWxyRB4RLrlVOx4OyzJwbd6Gc4C0qoc
-	 2Xzg/stYnSjW+1yxZNxWDcAYThqfSNZGkvn072cy+9S7PCy1DxLfO5WnFrM4sglE4g
-	 EuZC1EWJwysoGdyUFGg5RLFi86qdKMxadsVE7CU1Jjc8qMWIzG4yHLhIuuE0rKZSQ7
-	 NqT314x2NNAPQt/bksxbzuhb5k9BmoxRKLTBS+b69yrPvvHLfymaaDCmqGBTY0NX4f
-	 cDXxKth36fatyNGSrEVz8QGzuXhCd95sNhXtTb/LABHPfeC2qDN6Jz2bV0b8GEMhAr
-	 ESh4d4/F0DKAg==
-Date: Wed, 22 Nov 2023 12:26:51 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
-	Yang Yingliang <yangyingliang@huawei.com>,
-	linux-mmc@vger.kernel.org, kernel@pengutronix.de,
-	Ye Bin <yebin10@huawei.com>, Heiner Kallweit <hkallweit1@gmail.com>,
-	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Naresh Solanki <naresh.solanki@9elements.com>,
-	zev@bewilderbeest.net, Sebastian Reichel <sre@kernel.org>,
-	linux-pm@vger.kernel.org,
-	=?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>
-Subject: Re: mmc: handling of Under-Voltage Events in eMMC
-Message-ID: <ZV3zi7jgkBa2W/Fc@finisterre.sirena.org.uk>
-References: <20230929130028.GB2825985@pengutronix.de>
- <CAPDyKFqUtNEbK2tzD+qOK+dFcDyBxvcNwOHWPJDLhTWGGkoHQw@mail.gmail.com>
- <20231122112212.GA783262@pengutronix.de>
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCA118D;
+	Wed, 22 Nov 2023 04:51:24 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AM5Vcqs013032;
+	Wed, 22 Nov 2023 12:51:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=27Z8pqIwCURhifVSG9XX//Qs1tVHrqv8hOikZ4CO4PY=;
+ b=LJvl5TlCGFNaosRuNZfVGSH7xk+GwH2XL37EmKbaC0SRjyKdgqN5BrdSq3xwgO04BGcU
+ xuLqW/Q/C1qwDXDh0fFlC6znlNvQDzn9C8/UngmwE20B1St8+mXt6Fz50Q77+pXbjXsh
+ 1R6enMYzurvTKGo9oqLOPy+Em8abG3SdqqAFjkZ5EkFC69Eifs5j2vXp8dCtq91f5tUg
+ EkbxDj6MEiPnVSY4W5mg1kj5MYJxQCNrErNK6Zk63yWdhweTb6r+uUvH6uwGOPIdbTKC
+ 5gxQn8wYM8fvdmHCPRDOLK4r+/w2wwf+yR7mG1/y3lrg1vlAFEnKmk8UFkLTyDuIS6dh UQ== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uhbjvh6m3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 22 Nov 2023 12:51:10 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3AMCp9tq022472
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 22 Nov 2023 12:51:09 GMT
+Received: from [10.206.101.41] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 22 Nov
+ 2023 04:51:02 -0800
+Message-ID: <4f5d4019-ffae-1eed-be7f-14e68d933063@quicinc.com>
+Date: Wed, 22 Nov 2023 18:20:59 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="GytIA0m4jn6r4+oY"
-Content-Disposition: inline
-In-Reply-To: <20231122112212.GA783262@pengutronix.de>
-X-Cookie: Slow day.  Practice crawling.
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH RESEND v3 4/5] clk: qcom: Use HW_CTRL_TRIGGER flag to
+ switch video GDSC to HW mode
+To: Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Abel Vesa <abel.vesa@linaro.org>
+CC: "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman
+	<khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>, Pavel Machek
+	<pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio
+	<konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Stanimir Varbanov
+	<stanimir.k.varbanov@gmail.com>,
+        Bryan O'Donoghue
+	<bryan.odonoghue@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Taniya Das <tdas@qti.qualcomm.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-media@vger.kernel.org>
+References: <20231101-gdsc-hwctrl-v3-0-0740ae6b2b04@linaro.org>
+ <20231101-gdsc-hwctrl-v3-4-0740ae6b2b04@linaro.org>
+ <v4dnsawo7s74spccrsvjwmal73tqfq4aptiny25tyyp6ungxha@jlbywvcssqtl>
+ <d716fbbe-b681-af41-bfe7-85448cc47c7c@quicinc.com>
+Content-Language: en-US
+From: Vikash Garodia <quic_vgarodia@quicinc.com>
+In-Reply-To: <d716fbbe-b681-af41-bfe7-85448cc47c7c@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: JOFdN4YIviS_rQmdT3WYhksczd3WaO3o
+X-Proofpoint-ORIG-GUID: JOFdN4YIviS_rQmdT3WYhksczd3WaO3o
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-22_08,2023-11-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
+ spamscore=0 impostorscore=0 lowpriorityscore=0 mlxlogscore=999
+ suspectscore=0 adultscore=0 mlxscore=0 phishscore=0 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311060000 definitions=main-2311220090
 
+On 11/10/2023 2:02 PM, Jagadeesh Kona wrote:
+> 
+> 
+> On 11/4/2023 1:45 AM, Bjorn Andersson wrote:
+>> On Wed, Nov 01, 2023 at 11:04:10AM +0200, Abel Vesa wrote:
+>>> From: Jagadeesh Kona <quic_jkona@quicinc.com>
+>>>
+>>> The current HW_CTRL flag switches the video GDSC to HW control mode as
+>>> part of GDSC enable itself, instead of that use HW_CTRL_TRIGGER flag to
+>>> give consumer drivers more control and switch the GDSC mode as and when
+>>> required.
+>>>
+>>> HW_CTRL_TRIGGER flag allows consumer drivers to switch the video GDSC to
+>>> HW/SW control modes at runtime using dev_pm_genpd_set_hwmode API.
+>>>
+>>
+>> This states what the code currently does, and what the new code will do.
+>> But I don't find that it adequately describes _why_ this is done.
+>>
+>>
+>> In the current implementation, the hardware is might collapse the GDSC
+>> anytime between gdsc_enable() and gdsc_disable(). By giving "drivers
+>> more control" the time spent in this state is reduced to some fraction
+>> of that span, which to me implies higher power consumption.
+>>
+>> Under the assumption that we don't want to consume more power without
+>> reason, I'm forced to guess that there might be some scenarios that we
+>> want this feature to keep the GDSC non-collapsed against the indication
+>> of the hardware - to avoid some instability somewhere, perhaps?
+>>
+> 
+> Thanks Bjorn for your review. Sure, will update commit text with details in next
+> series.
+> 
+> Normally, consumers will enable the GDSC and then the required clocks. If GDSC
+> is moved to HW mode in gdsc_enable() itself, the subsequent clocks enablement
+> that are dependent on GDSC might fail since GDSC could be turned off by HW. The
+> consumers can still switch the GDSC to HW mode with new API right after the
+> clocks are enabled and the control will be taken back to SW mode just before
+> disabling the GDSC, so even with the newer implementation, HW can collapse the
+> GDSC anytime for most of the duration between gdsc_enable() and gdsc_disable().
+> This API adds more flexibility for consumer drivers to control the GDSC mode as
+> per their
+> requirements.
+There is one more scenario where the driver would like GDSC in driver
+controlled. Let say video hardware, which is under vcodec0_gdsc, have registers
+to be programmed by TZ. In such scenario, the GDSC should be non collapsed,
+while TZ programs those registers precisely while loading the firmware and
+bringing hardware out of reset.
 
---GytIA0m4jn6r4+oY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Regards,
+Vikash
 
-On Wed, Nov 22, 2023 at 12:22:12PM +0100, Oleksij Rempel wrote:
-
-> Some puzzle parts are now mainline, for example regulator framework
-> can be configured to detect under-voltage events and execute
-> hw_protection_shutdown(). So far it worked good enough to complete
-> mmc_poweroff_notify() withing 100ms window. The problem is, the chance to
-> execute mmc_poweroff_notify() depends on kernel configuration. If there are too
-> many drivers and devices, mmc_poweroff_notify() will be not executed in time.
-
-> For now, I workaround it by registering a reboot notifier for mmc shutdown.
-> It works, because kernel_power_off() is executing all registered reboot
-> notifiers at first place and there are no other slow reboot notifiers.
-> But, it seems to be not reliable enough. Probably notifier prioritization
-> is needed to make it more predictable.
-
-> So far, I have two variants to implement it in more predictable way:
-> variant 1 - forward the under-voltage notification to the mmc framework and
->   execute mmc_poweroff_notify() or bus shutdown.
-> variant 2 - use reboot notifier and introduce reboot notifier prioritization.
-
-> Are there other options? What are your preferences?
-
-My instinct is that we want to have prioritisation scheme rather than
-something MMC specific, I'd guess that this issue applies in some way to
-at least most storage.  It's not a super strongly held opinion though.
-
---GytIA0m4jn6r4+oY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVd84sACgkQJNaLcl1U
-h9Bf8wf/R6d4p2XKeuQW+1xTu9FLSsr7+z0oM/onpGR9JY0w2ky0IFjZjmbxN9U8
-YMxvuqD/mgLNzjJe7arFUiIpbNe7VNVSM56znjxHg8UadfPHYW9ImNUO14OwkCZN
-qXzMYsNpQhrc5/kNxs2pNso4Cg0Emm/8Hnk97vqFpR1d5AV9hlxsd7xjUlJ5Ah67
-3n+VSty5DszMvSQfxW93Xihv4V3BwQ8dRyCIYac+BUG+sXCrDp/VV3t+2EorXL76
-JLZizRhRKta002htsgAlqRNRZZL1NwI6JGlHD6Rm2WSSAEMDjudiPjJn5KNsEjuP
-bhqR/YN5SXZsTjHC3y/qmZJrkoYWsw==
-=WFJZ
------END PGP SIGNATURE-----
-
---GytIA0m4jn6r4+oY--
 
