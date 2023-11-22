@@ -1,144 +1,206 @@
-Return-Path: <linux-pm+bounces-60-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-61-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93FC67F3F60
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 08:59:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 537517F402D
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 09:34:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33F64B20DBB
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 07:59:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E19128113E
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 08:34:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79824208C4;
-	Wed, 22 Nov 2023 07:59:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3DB6C153;
+	Wed, 22 Nov 2023 08:34:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="Sz7JGNi9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LxZee9y8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5F1F9;
-	Tue, 21 Nov 2023 23:59:22 -0800 (PST)
-X-UUID: 07c160b4890d11eea33bb35ae8d461a2-20231122
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=tjhi/K/EhvYr1Lx5fBNjjJus9/yYhqhMddT4+MH2T8E=;
-	b=Sz7JGNi9zi1lbC7Ih3tFU3dTOb7sTARIsQm+QBhpdMWSPzXrI5X+8YdSH2MuqQLgDo+on+D4HbTrhXN0STojaXiKqi5KxGZPg+Lh0CLmNFp9OGk+Q0UvOJJKvB5jFnq9CVugLNKyZ0c6IiaqS8g9TI0i1DAQQmQFdE+9j9W/XGg=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.33,REQID:612889fe-36b5-4ab4-bb20-16dd71dc5a26,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-5
-X-CID-META: VersionHash:364b77b,CLOUDID:5668d1fc-4a48-46e2-b946-12f04f20af8c,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
-	DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 07c160b4890d11eea33bb35ae8d461a2-20231122
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
-	(envelope-from <chris.feng@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1814399489; Wed, 22 Nov 2023 15:59:15 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 22 Nov 2023 15:59:12 +0800
-Received: from mcddlt001.gcn.mediatek.inc (10.19.240.15) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 22 Nov 2023 15:59:11 +0800
-From: Chris Feng <chris.feng@mediatek.com>
-To: <rafael@kernel.org>, <pavel@ucw.cz>, <len.brown@intel.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<stable@kernel.org>, <hua.yang@mediatek.com>, <ting.wang@mediatek.com>,
-	<liang.lu@mediatek.com>, <chetan.kumar@mediatek.com>, Chris Feng
-	<chris.feng@mediatek.com>
-Subject: [PATCH v3] PM: hibernate: Avoid missing wakeup events during hibernation
-Date: Wed, 22 Nov 2023 15:59:08 +0800
-Message-ID: <20231122075908.160929-1-chris.feng@mediatek.com>
-X-Mailer: git-send-email 2.17.0
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85F3F3D969
+	for <linux-pm@vger.kernel.org>; Wed, 22 Nov 2023 08:34:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0E9DBC433C9
+	for <linux-pm@vger.kernel.org>; Wed, 22 Nov 2023 08:34:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700642049;
+	bh=khtkkxyvTBlOe7hqdOjFGqV5PmSpuCZ0eJS6SDtuD8g=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=LxZee9y8kBq45ICiJ9H4gwQoBUrg0s9Z9X5dEexegb0abdyUx16K2xRVKgdhpLfDO
+	 E0+RQ5rLDKmWR+/HlaT6ZaIOYZfFY4/AvZaXS1pLKLdNjI54Fh7p6DFt3HC3TbDpGR
+	 vKVa7o43dHGSLs/MVxb/o5uMkR3bnSEJF4Gh4AcrpofjQXpmQKBI4pVfMB0NRMVzSj
+	 vakPsFneh9jrlUUfaiAjrvPRt+OBWzfSIb/GBBRC8EFgBOkhLHJYR3rpK1cbZtW2GO
+	 1fEGXXOsbw2SvsHthPL5cYgg918KCLMP/JO3hxMB02LCwqDvzGc593IRzaznOlmKIf
+	 wJlnjzDQFU8qg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id F14C8C53BCD; Wed, 22 Nov 2023 08:34:08 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218171] amd-pstate not loading on zen2 threadripper 3960x
+ (trx40
+Date: Wed, 22 Nov 2023 08:34:08 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: badouri.g@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218171-137361-w9tdKWuvSc@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218171-137361@https.bugzilla.kernel.org/>
+References: <bug-218171-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--6.234600-8.000000
-X-TMASE-MatchedRID: gLdsEUOy0hNOgDDV7TiL3UhwlOfYeSqxuCESrx7wlnJ/y29NnT7OA7CQ
-	uJto3I58h3AZ1hceMeKIgaYq5OQMhaiQBIWNRE3ZVU3yVpaj3QzuHZGuwo6K7fgnJH5vm2+gYxq
-	mcULrxeZTE8AzcnZBquJQGiBsCtAIbeOSMcxEZ1oD2WXLXdz+Afi4nVERfgwdCqIJhrrDy28fmy
-	nNioMIj+6/aJF7n+8kHwkV/eq61IT8a7PjRR3cpB3EEAbn+GRbD+LwVja9M4GbKItl61J/yZ+in
-	TK0bC9eKrauXd3MZDVOqcOm3C2NvWGVNMXvAToyRMPuRSWTPC2P1OL0DXy7dsMXgUZVMVkywL6S
-	xPpr1/I=
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--6.234600-8.000000
-X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP:
-	96CFFA4DD65CA6BAF5318E2350D26575DE99F8A2725B33BB71843DF87C8AACBE2000:8
-X-MTK: N
 
-Wakeup events that occur in the hibernation process's
-hibernation_platform_enter() cannot wake up the system. Although the
-current hibernation framework will execute part of the recovery process
-after a wakeup event occurs, it ultimately performs a shutdown operation
-because the system does not check the return value of
-hibernation_platform_enter(). In short, if a wakeup event occurs before
-putting the system into the final low-power state, it will be missed.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218171
 
-To solve this problem, check the return value of
-hibernation_platform_enter(). When it returns -EAGAIN or -EBUSY (indicate
-the occurrence of a wakeup event), execute the hibernation recovery
-process, discard the previously saved image, and ultimately return to the
-working state.
+--- Comment #5 from Gino Badouri (badouri.g@gmail.com) ---
+Hi Perry,
 
-Signed-off-by: Chris Feng <chris.feng@mediatek.com>
----
-[PATCH v2]:
- - Execute the hibernation recovery process and return to the working state
-   when the return value of the function hibernation_platform_enter() is
-   -EAGAIN or -EBUSY. Both of the two values may indicate the occurrence of
-   a wakeup event.
-[PATCH v3]:
- - Use pr_info instead of pr_err, fix undeclared function 'swsusp_unmark'
-   build error, refine commit and printing message.
----
- kernel/power/hibernate.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+Thanks for looking into this.
+I've updated to 6.7 rc2.
 
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index 8d35b9f9aaa3..fb3b63e178b0 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -642,9 +642,9 @@ int hibernation_platform_enter(void)
-  */
- static void power_down(void)
- {
--#ifdef CONFIG_SUSPEND
- 	int error;
- 
-+#ifdef CONFIG_SUSPEND
- 	if (hibernation_mode == HIBERNATION_SUSPEND) {
- 		error = suspend_devices_and_enter(mem_sleep_current);
- 		if (error) {
-@@ -667,7 +667,15 @@ static void power_down(void)
- 		kernel_restart(NULL);
- 		break;
- 	case HIBERNATION_PLATFORM:
--		hibernation_platform_enter();
-+		error = hibernation_platform_enter();
-+		if (error == -EAGAIN || error == -EBUSY) {
-+#ifdef CONFIG_SUSPEND
-+			swsusp_unmark();
-+#endif
-+			events_check_enabled = false;
-+			pr_info("Hibernation process aborted due to detected wakeup event.\n");
-+			return;
-+		}
- 		fallthrough;
- 	case HIBERNATION_SHUTDOWN:
- 		if (kernel_can_power_off())
--- 
-2.17.0
+# uname -a
+Linux pve 6.7.0-060700rc2-generic #202311192332 SMP PREEMPT_DYNAMIC Sun Nov=
+ 19
+23:40:20 UTC 2023 x86_64 GNU/Linux
 
+# cat /proc/cmdline=20
+BOOT_IMAGE=3D/boot/vmlinuz-6.7.0-060700rc2-generic root=3D/dev/mapper/pve-r=
+oot ro
+quiet iommu=3Dpt amd_iommu=3Don kvm_amd.npt=3D1 kvm_amd.avic=3D1 nmi_watchd=
+og=3D0
+video=3Dvesafb:off video=3Defifb:off video=3Dsimplefb:off nomodeset
+initcall_blacklist=3Dsysfb_init modprobe.blacklist=3Dnouveau
+modprobe.blacklist=3Damdgpu modprobe.blacklist=3Dradeon modprobe.blacklist=
+=3Dnvidia
+hugepagesz=3D1G default_hugepagesz=3D2M amd_pstate=3Dactive
+
+# lscpu
+Architecture:            x86_64
+  CPU op-mode(s):        32-bit, 64-bit
+  Address sizes:         43 bits physical, 48 bits virtual
+  Byte Order:            Little Endian
+CPU(s):                  48
+  On-line CPU(s) list:   0-47
+Vendor ID:               AuthenticAMD
+  BIOS Vendor ID:        Advanced Micro Devices, Inc.
+  Model name:            AMD Ryzen Threadripper 3960X 24-Core Processor
+    BIOS Model name:     AMD Ryzen Threadripper 3960X 24-Core Processor=20
+Unknown
+                          CPU @ 3.8GHz
+    BIOS CPU family:     107
+    CPU family:          23
+    Model:               49
+    Thread(s) per core:  2
+    Core(s) per socket:  24
+    Socket(s):           1
+    Stepping:            0
+    Frequency boost:     enabled
+    CPU(s) scaling MHz:  58%
+    CPU max MHz:         3800.0000
+    CPU min MHz:         2200.0000
+    BogoMIPS:            7585.72
+    Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr p=
+ge
+mc
+                         a cmov pat pse36 clflush mmx fxsr sse sse2 ht sysc=
+all
+n
+                         x mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc
+rep_go
+                         od nopl nonstop_tsc cpuid extd_apicid aperfmperf r=
+apl
+p
+                         ni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2
+movbe
+                          popcnt aes xsave avx f16c rdrand lahf_lm cmp_lega=
+cy
+sv
+                         m extapic cr8_legacy abm sse4a misalignsse
+3dnowprefetc
+                         h osvw ibs skinit wdt tce topoext perfctr_core
+perfctr_
+                         nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3
+hw_pstate
+                          ssbd mba ibpb stibp vmmcall fsgsbase bmi1 avx2 sm=
+ep
+bm
+                         i2 cqm rdt_a rdseed adx smap clflushopt clwb sha_ni
+xsa
+                         veopt xsavec xgetbv1 cqm_llc cqm_occup_llc
+cqm_mbm_tota
+                         l cqm_mbm_local clzero irperf xsaveerptr rdpru
+wbnoinvd
+                          amd_ppin arat npt lbrv svm_lock nrip_save tsc_sca=
+le
+vm
+                         cb_clean flushbyasid decodeassists pausefilter
+pfthresh
+                         old avic v_vmsave_vmload vgif v_spec_ctrl umip rdp=
+id
+ov
+                         erflow_recov succor smca sev sev_es
+Virtualization features:=20
+  Virtualization:        AMD-V
+Caches (sum of all):=20=20=20=20=20
+  L1d:                   768 KiB (24 instances)
+  L1i:                   768 KiB (24 instances)
+  L2:                    12 MiB (24 instances)
+  L3:                    128 MiB (8 instances)
+NUMA:=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20
+  NUMA node(s):          1
+  NUMA node0 CPU(s):     0-47
+Vulnerabilities:=20=20=20=20=20=20=20=20=20
+  Gather data sampling:  Not affected
+  Itlb multihit:         Not affected
+  L1tf:                  Not affected
+  Mds:                   Not affected
+  Meltdown:              Not affected
+  Mmio stale data:       Not affected
+  Retbleed:              Mitigation; untrained return thunk; SMT enabled wi=
+th
+ST
+                         IBP protection
+  Spec rstack overflow:  Mitigation; Safe RET
+  Spec store bypass:     Mitigation; Speculative Store Bypass disabled via
+prctl
+  Spectre v1:            Mitigation; usercopy/swapgs barriers and __user
+pointer
+                          sanitization
+  Spectre v2:            Mitigation; Retpolines, IBPB conditional, STIBP
+always-
+                         on, RSB filling, PBRSB-eIBRS Not affected
+  Srbds:                 Not affected
+  Tsx async abort:       Not affected
+
+
+Unfortunately the driver is still printing:
+[    0.640246] amd_pstate: the _CPC object is not present in SBIOS or ACPI
+disabled
+
+If it helps, I've uploaded the acpi tables in both dat and dsl format here:
+https://mega.nz/file/apkElTBL#JEmN0vmBSh7d-hbDiN-V0lwG7mwZQfitqnv4iVk0ACU
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
