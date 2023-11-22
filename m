@@ -1,141 +1,151 @@
-Return-Path: <linux-pm+bounces-84-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-85-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C4667F486F
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 15:01:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D47937F48E8
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 15:27:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 76C3BB20DB3
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 14:01:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8CFDB2815DF
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 14:27:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 262B02576D;
-	Wed, 22 Nov 2023 14:01:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06DA14BAB5;
+	Wed, 22 Nov 2023 14:27:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lAaxW2Li"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="waQsfoa3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5169D45
-	for <linux-pm@vger.kernel.org>; Wed, 22 Nov 2023 06:01:24 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-32faea0fa1fso529126f8f.1
-        for <linux-pm@vger.kernel.org>; Wed, 22 Nov 2023 06:01:24 -0800 (PST)
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FFF195
+	for <linux-pm@vger.kernel.org>; Wed, 22 Nov 2023 06:27:11 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-d9c66e70ebdso6275176276.2
+        for <linux-pm@vger.kernel.org>; Wed, 22 Nov 2023 06:27:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700661683; x=1701266483; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hD1zFhwekBASv0LVRn3WfLSmlJjau+U8Wq2CF3q/Fo0=;
-        b=lAaxW2LirPJu+NuMjl0SIZYxsdaE1a/F9i0gFTWs75ufBnqG6UREbNDyMKyHTW9UW8
-         5dG0VgHDCFwxbXAyHFmP9eDnxp8KoBXSVOdtWtRt6d2Pd/n4TmlJuLUBiOY0ue60x3K1
-         0ROWmoaQqH3IDsXjBfWxsuXBAquZt2e1eJDFHgoXrzYnm59Gm8qjtN4lbF3TqGyqJJTu
-         ScYQmGj6o9zABwz7P+DH5jlPmeV6cRPANC9AzDRj/Mnmj1uInaPCsiHyqKAcmyUA/HnG
-         VZ+GsnHoiSuAaOGO4zSqMTinTTKhPIyPrR2OjnXGxaq2eWAjccJYRs2kFUGJ+GGg2kDD
-         PqHg==
+        d=linaro.org; s=google; t=1700663230; x=1701268030; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vEGlLD2Ow2lZAT02DeB30p2mlAQUUZVJgtqFw5LKgjM=;
+        b=waQsfoa3gBnm8gcsRXLPVTjEGIoddM/SN4mFDkTksRedKjNR0YxDOxfEx0535gkuA0
+         eYqrxwD6LJ22JtYKxM2ZH6AoZj0tHAmbFllE+sFXcQy2sc0g+Nz9IWMWOIWbkW5tVisM
+         E6Zrhwe+YokXqYngXYw6FqvnDztXb6IjWqMuGjEGndF3cn3iE1kFZgmlWrBSScE3ay4T
+         OKeXW3/mWK3zbffuCQoRBdh9UYdTQW7AGU9/a2214zCep95U0gPI/9s03rmXhTOJGhiB
+         qiQ54BLn6R66XJ9+vKqS7g/7wgkZvAI8rhfkti3At1nW/izoMdqidkEyrl8Qf+DpuJU/
+         bK8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700661683; x=1701266483;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1700663230; x=1701268030;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hD1zFhwekBASv0LVRn3WfLSmlJjau+U8Wq2CF3q/Fo0=;
-        b=Qblzg0/8sGOPBciqETgAGRuojvt5Uwlsn6J2vSrSosyfRu3zPTC1Y/ZH0nOkFbI7Hm
-         cu4nVyFPRtcYkvxPKdqWfjhe1iCARTeEkLFXN+EEDXY2W/tXQrD+M1OjvxmTm2da6Zon
-         J7MOeDwMeSsrnF4Dxulef+Xz2qLrOvgatVC6O0JzJ7SlCOZsomlSp15+K3dZVQ65JZfB
-         WjVdSeBRXIWp6k8QMo7ZriZlnNH8Wk5oJaugbP36el7yB2zXMzDrleNVZWu1KSKhzvD3
-         p2qSQ2gKrVEJ+szU8YKhAk1vNg4cWATYMNtu0fe7RAqdEw2sasoTiD/JFvDl2swGe7Vt
-         S5YA==
-X-Gm-Message-State: AOJu0Yw7NxlkRWh0GzEJMmbUX62/I9tnluLO0OY1lkOQ/uQeRpblHtdi
-	tmpZLtq5WNTYfXio+5O+bpa1oQ==
-X-Google-Smtp-Source: AGHT+IF1WdpNgUZP3fGLF0q/5JfKa+9xX/YJ7NdWshlU73MgaUNxlnFDUGTXxuNTIlZgO67jFa8hHw==
-X-Received: by 2002:a05:6000:1aca:b0:32d:d4c5:272b with SMTP id i10-20020a0560001aca00b0032dd4c5272bmr2461824wry.26.1700661683074;
-        Wed, 22 Nov 2023 06:01:23 -0800 (PST)
-Received: from vingu-book.. ([2a01:e0a:f:6020:3a2e:a7f5:93e6:508b])
-        by smtp.gmail.com with ESMTPSA id q10-20020adff94a000000b003317796e0e3sm13283423wrr.65.2023.11.22.06.01.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Nov 2023 06:01:22 -0800 (PST)
-From: Vincent Guittot <vincent.guittot@linaro.org>
-To: mingo@redhat.com,
-	peterz@infradead.org,
-	juri.lelli@redhat.com,
-	dietmar.eggemann@arm.com,
-	rostedt@goodmis.org,
-	bsegall@google.com,
-	mgorman@suse.de,
-	bristot@redhat.com,
-	vschneid@redhat.com,
-	rafael@kernel.org,
-	viresh.kumar@linaro.org,
-	qyousef@layalina.io,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Cc: lukasz.luba@arm.com,
-	Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH] sched/pelt: avoid underestimate of task utilization
-Date: Wed, 22 Nov 2023 15:01:19 +0100
-Message-Id: <20231122140119.472110-1-vincent.guittot@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        bh=vEGlLD2Ow2lZAT02DeB30p2mlAQUUZVJgtqFw5LKgjM=;
+        b=texn/Ex7/wY5Lnt+1iXOIbHsRl0aIsR0PDP1rMHqsjR8SMQ9jE9ndlhHv7HhP8rKVf
+         0wxX0+A2SJeEd4l0uRp7bhrpwGhO+Wyx2eE2yo4eYylUvQBNWvylAa+R7TrG6vPoN0nW
+         n18J/6527GZIOBxdj72cJ3UUzPD/yyHqY+4Deyfw8MURkgJRE24t3bH4Qe2cn/tX8swY
+         1dSYTIckI3WrMye9Dl8YL2XCcCvWbRSpqq4UTGxM+ZP5ovscwgCFtQ9WqiryhPTRzMcN
+         qK0e4bAdNblnbmGOzm1kQV4+/cYNzYrVuSEcm1xuB6wAbm48sbG8vRJSmX5ktxJV4g4B
+         LCwQ==
+X-Gm-Message-State: AOJu0YwrxdPJKqOTtFGsjTzK9K8Q/12N6bTSliM2wEtbaUmiywE8J7du
+	DubwUvr0AGP3zUw0zhFtP7NpBWspcNsWPnVdCWF6bg==
+X-Google-Smtp-Source: AGHT+IE2+q7lrPs5mSsrDj1Dttt3UsvOtu0q+VkkJx8sMENomjWEPq8uZjL3XpWfo4rtj7OvMlXJ3Ubb/nGEP5XSaXg=
+X-Received: by 2002:a25:e20b:0:b0:d9a:51d7:2d1c with SMTP id
+ h11-20020a25e20b000000b00d9a51d72d1cmr1990489ybe.45.1700663230453; Wed, 22
+ Nov 2023 06:27:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1700131353.git.viresh.kumar@linaro.org> <084b6088106da837abc43526c11d7d8bec850c5c.1700131353.git.viresh.kumar@linaro.org>
+In-Reply-To: <084b6088106da837abc43526c11d7d8bec850c5c.1700131353.git.viresh.kumar@linaro.org>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 22 Nov 2023 15:26:34 +0100
+Message-ID: <CAPDyKFqX9LkYP=16guCBOMbNgYSb=HyXgVZvgYg3V8VEGQL11Q@mail.gmail.com>
+Subject: Re: [PATCH V3 3/3] OPP: Don't set OPP recursively for a parent genpd
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Stephan Gerhold <stephan.gerhold@kernkonzept.com>, Viresh Kumar <vireshk@kernel.org>, 
+	Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org, 
+	Vincent Guittot <vincent.guittot@linaro.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-It has been reported that thread's util_est can significantly decrease as
-a result of sharing the CPU with other threads. The use case can be easily
-reproduced with a periodic task TA that runs 1ms and sleeps 100us.
-When the task is alone on the CPU, its max utilization and its util_est is
-around 888. If another similar task starts to run on the same CPU, TA will
-have to share the CPU runtime and its maximum utilization will decrease
-around half the CPU capacity (512) then TA's util_est will follow this new
-maximum trend which is only the result of sharing the CPU with others
-tasks. Such situation can be detected with runnable_avg wich is close or
-equal to util_avg when TA is alone but increases above util_avg when TA
-shares the CPU with other threads and wait on the runqueue.
+On Thu, 16 Nov 2023 at 11:43, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> Like other frameworks (clk, regulator, etc.) genpd core too takes care
+> of propagation to performance state to parent genpds. The OPP core
+> shouldn't attempt the same, or it may result in undefined behavior.
+>
+> Add checks at various places to take care of the same.
+>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
----
+I think this looks good to me, even if I think it's a bit tricky to
+consider the various scenarios. :-) Feel free to add:
 
-This patch implements what I mentioned in [1]. I have been able to
-reproduce such pattern with rt-app.
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-[1] https://lore.kernel.org/lkml/CAKfTPtDd-HhF-YiNTtL9i5k0PfJbF819Yxu4YquzfXgwi7voyw@mail.gmail.com/#t
+Kind regards
+Uffe
 
- kernel/sched/fair.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 07f555857698..eeb505d28905 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -4774,6 +4774,11 @@ static inline unsigned long task_util(struct task_struct *p)
- 	return READ_ONCE(p->se.avg.util_avg);
- }
- 
-+static inline unsigned long task_runnable(struct task_struct *p)
-+{
-+	return READ_ONCE(p->se.avg.runnable_avg);
-+}
-+
- static inline unsigned long _task_util_est(struct task_struct *p)
- {
- 	struct util_est ue = READ_ONCE(p->se.avg.util_est);
-@@ -4892,6 +4897,14 @@ static inline void util_est_update(struct cfs_rq *cfs_rq,
- 	if (task_util(p) > arch_scale_cpu_capacity(cpu_of(rq_of(cfs_rq))))
- 		return;
- 
-+	/*
-+	 * To avoid underestimate of task utilization, skip updates of ewma if
-+	 * we cannot grant that thread got all CPU time it wanted.
-+	 */
-+	if ((ue.enqueued + UTIL_EST_MARGIN) < task_runnable(p))
-+		goto done;
-+
-+
- 	/*
- 	 * Update Task's estimated utilization
- 	 *
--- 
-2.34.1
-
+> ---
+>  drivers/opp/core.c | 16 +++++++++++++++-
+>  drivers/opp/of.c   |  7 +++++--
+>  2 files changed, 20 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index e08375ed50aa..4f1ca84d9ed0 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -2392,6 +2392,12 @@ static int _opp_attach_genpd(struct opp_table *opp_table, struct device *dev,
+>                 return -EINVAL;
+>         }
+>
+> +       /* Genpd core takes care of propagation to parent genpd */
+> +       if (opp_table->is_genpd) {
+> +               dev_err(dev, "%s: Operation not supported for genpds\n", __func__);
+> +               return -EOPNOTSUPP;
+> +       }
+> +
+>         /* Checking only the first one is enough ? */
+>         if (opp_table->required_devs[0])
+>                 return 0;
+> @@ -2453,8 +2459,16 @@ static int _opp_set_required_devs(struct opp_table *opp_table,
+>         if (opp_table->required_devs[0])
+>                 return 0;
+>
+> -       for (i = 0; i < opp_table->required_opp_count; i++)
+> +       for (i = 0; i < opp_table->required_opp_count; i++) {
+> +               /* Genpd core takes care of propagation to parent genpd */
+> +               if (required_devs[i] && opp_table->is_genpd &&
+> +                   opp_table->required_opp_tables[i]->is_genpd) {
+> +                       dev_err(dev, "%s: Operation not supported for genpds\n", __func__);
+> +                       return -EOPNOTSUPP;
+> +               }
+> +
+>                 opp_table->required_devs[i] = required_devs[i];
+> +       }
+>
+>         return 0;
+>  }
+> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+> index 5a7e294e56b7..f9f0b22bccbb 100644
+> --- a/drivers/opp/of.c
+> +++ b/drivers/opp/of.c
+> @@ -339,8 +339,11 @@ static int _link_required_opps(struct dev_pm_opp *opp, struct opp_table *opp_tab
+>          */
+>         if (required_table->is_genpd && opp_table->required_opp_count == 1 &&
+>             !opp_table->required_devs[0]) {
+> -               if (!WARN_ON(opp->level != OPP_LEVEL_UNSET))
+> -                       opp->level = opp->required_opps[0]->level;
+> +               /* Genpd core takes care of propagation to parent genpd */
+> +               if (!opp_table->is_genpd) {
+> +                       if (!WARN_ON(opp->level != OPP_LEVEL_UNSET))
+> +                               opp->level = opp->required_opps[0]->level;
+> +               }
+>         }
+>
+>         return 0;
+> --
+> 2.31.1.272.g89b43f80a514
+>
 
