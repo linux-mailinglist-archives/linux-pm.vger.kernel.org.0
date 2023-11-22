@@ -1,129 +1,102 @@
-Return-Path: <linux-pm+bounces-74-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-75-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E3F97F44D9
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 12:22:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECDD07F4554
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 13:04:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F1DD2811A5
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 11:22:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F3C61F21ACB
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Nov 2023 12:04:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E728C2033A;
-	Wed, 22 Nov 2023 11:22:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CD4E4AF61;
+	Wed, 22 Nov 2023 12:03:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZftmQJou"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD981B9
-	for <linux-pm@vger.kernel.org>; Wed, 22 Nov 2023 03:22:40 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1r5lJ7-0007CM-Sz; Wed, 22 Nov 2023 12:22:13 +0100
-Received: from [2a0a:edc0:2:b01:1d::c0] (helo=ptx.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ore@pengutronix.de>)
-	id 1r5lJ7-00AnbT-0P; Wed, 22 Nov 2023 12:22:13 +0100
-Received: from ore by ptx.whiteo.stw.pengutronix.de with local (Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1r5lJ6-003I31-Ta; Wed, 22 Nov 2023 12:22:12 +0100
-Date: Wed, 22 Nov 2023 12:22:12 +0100
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Ulf Hansson <ulf.hansson@linaro.org>, Mark Brown <broonie@kernel.org>
-Cc: Yang Yingliang <yangyingliang@huawei.com>, linux-mmc@vger.kernel.org,
-	kernel@pengutronix.de, Ye Bin <yebin10@huawei.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Naresh Solanki <naresh.solanki@9elements.com>,
-	zev@bewilderbeest.net, Sebastian Reichel <sre@kernel.org>,
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9F791;
+	Wed, 22 Nov 2023 04:03:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700654636; x=1732190636;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=m040tgcegxw5h4wMsOHvsYLUwbk5maPB4/Q2K6ePJs0=;
+  b=ZftmQJouaUR2JgpkYlZ0Kan0Q4bYpYqHHXngiBA9V2H178JT4icrVyNt
+   Q1gKK+JzF7rF3O9L3riVSJOdzOUDUPAn/TgY/J+24kWHC21jjfF+YXiCO
+   Ahojdatia8wJ8IjDLdKDVWJtNGXSJgbzh19MWGVrgxcQDA7lYPz9fZbtX
+   gO/RVU/Ir82xH67Nenl6zKMLkBADo93nCDWgLshoduZH8POZ0Iewc3ktw
+   MDazyqwSzeRb9bSnVuxQdutNKB3IXYNvcsBQiKPiFYjEFpfeq/rh2g20/
+   67JAmrn9nrTsbMfH+zE7NXb5SvdoL1fK19EVA/Rj5ye8A0X9wo/uhTWM4
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="372218021"
+X-IronPort-AV: E=Sophos;i="6.04,218,1695711600"; 
+   d="scan'208";a="372218021"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2023 04:03:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="1014210364"
+X-IronPort-AV: E=Sophos;i="6.04,218,1695711600"; 
+   d="scan'208";a="1014210364"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2023 04:03:54 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@intel.com>)
+	id 1r5lnj-0000000G516-3Yml;
+	Wed, 22 Nov 2023 13:53:51 +0200
+Date: Wed, 22 Nov 2023 13:53:51 +0200
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Nikita Shubin <nikita.shubin@maquefel.me>
+Cc: Sebastian Reichel <sre@kernel.org>, linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org,
-	=?utf-8?B?U8O4cmVu?= Andersen <san@skov.dk>
-Subject: Re: mmc: handling of Under-Voltage Events in eMMC
-Message-ID: <20231122112212.GA783262@pengutronix.de>
-References: <20230929130028.GB2825985@pengutronix.de>
- <CAPDyKFqUtNEbK2tzD+qOK+dFcDyBxvcNwOHWPJDLhTWGGkoHQw@mail.gmail.com>
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Subject: Re: [PATCH v5 05/39] power: reset: Add a driver for the ep93xx reset
+Message-ID: <ZV3rz8-AGGEGGi1g@smile.fi.intel.com>
+References: <20231122-ep93xx-v5-0-d59a76d5df29@maquefel.me>
+ <20231122-ep93xx-v5-5-d59a76d5df29@maquefel.me>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFqUtNEbK2tzD+qOK+dFcDyBxvcNwOHWPJDLhTWGGkoHQw@mail.gmail.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+In-Reply-To: <20231122-ep93xx-v5-5-d59a76d5df29@maquefel.me>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi Ulf, Hi Mark,
-
-On Tue, Oct 10, 2023 at 04:48:24PM +0200, Ulf Hansson wrote:
-> On Fri, 29 Sept 2023 at 15:00, Oleksij Rempel <o.rempel@pengutronix.de> wrote:
-> >
-> > Hi,
-> >
-> > I'm working on a project aiming to protect eMMC during power loss. Our
-> > hardware setup includes an under-voltage detector, circuits to disable
-> > non-critical components, and enough capacitance to allow the CPU to run
-> > for 100ms.
-> >
-> > I've added an interrupt handler to the fixed regulator to emit
-> > REGULATOR_EVENT_UNDER_VOLTAGE events, and modified
-> > drivers/mmc/host/sdhci.c to receive these events. Currently, the handler
-> > only produces debug output.
-> >
-> > What is the recommended approach for handling under-voltage situations?
-> > Should the driver finish ongoing write commands, block new ones, and
-> > shut down the eMMC? I'm looking for direction here.
+On Wed, Nov 22, 2023 at 11:59:43AM +0300, Nikita Shubin wrote:
+> Implement the reset behaviour of the various EP93xx SoCS in drivers/power/reset.
 > 
-> That's indeed a very good question. From a general point of view, I
-> think the best we can do is to stop any new I/O requests from being
-> managed - and try to complete only the last ongoing one, if any.
-> Exactly how to do that can be a bit tricky though.
-> 
-> Beyond that, we should probably try to send the eMMC specific commands
-> that allow us to inform the eMMC that it's about to be powered-off.
-> Although, I am not sure that we actually will be able to complete
-> these operations within 100ms, so maybe it's not really worth trying?
-> See mmc_poweroff_notify(), for example.
+> It used to be located in arch/arm/mach-ep93xx.
 
-Some puzzle parts are now mainline, for example regulator framework
-can be configured to detect under-voltage events and execute
-hw_protection_shutdown(). So far it worked good enough to complete
-mmc_poweroff_notify() withing 100ms window. The problem is, the chance to
-execute mmc_poweroff_notify() depends on kernel configuration. If there are too
-many drivers and devices, mmc_poweroff_notify() will be not executed in time.
+...
 
-For now, I workaround it by registering a reboot notifier for mmc shutdown.
-It works, because kernel_power_off() is executing all registered reboot
-notifiers at first place and there are no other slow reboot notifiers.
-But, it seems to be not reliable enough. Probably notifier prioritization
-is needed to make it more predictable.
+> +#include <linux/bits.h>
+> +#include <linux/delay.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/notifier.h>
 
-So far, I have two variants to implement it in more predictable way:
-variant 1 - forward the under-voltage notification to the mmc framework and
-  execute mmc_poweroff_notify() or bus shutdown.
-variant 2 - use reboot notifier and introduce reboot notifier prioritization.
+> +#include <linux/of.h>
 
-Are there other options? What are your preferences?
+I believe I already had commented in one of the previous rounds that this cargo
+cult of adding of.h (esp. if it's used as a proxy) is not a good idea. Please,
+revisit _ALL_ (and I mean it) your patches for this kind of issues.
 
-Regards,
-Oleksij
+...
+
+> +#include <linux/reboot.h>
+> +
+> +#include <linux/soc/cirrus/ep93xx.h>
+
+You see, here is a blank line, so I suggest keep it in all your patches for
+consistency's sake.
+
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+With Best Regards,
+Andy Shevchenko
+
+
 
