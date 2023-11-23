@@ -1,142 +1,116 @@
-Return-Path: <linux-pm+bounces-128-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-131-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 525007F6056
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Nov 2023 14:33:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E5BD7F60CE
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Nov 2023 14:51:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0BAFA281D83
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Nov 2023 13:33:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EEC65281E19
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Nov 2023 13:51:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F69724B5C;
-	Thu, 23 Nov 2023 13:33:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 497ED25770;
+	Thu, 23 Nov 2023 13:50:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TuNSM3c+"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="bl1iqIqJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5D5D43
-	for <linux-pm@vger.kernel.org>; Thu, 23 Nov 2023 05:33:04 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6b2018a11efso904108b3a.0
-        for <linux-pm@vger.kernel.org>; Thu, 23 Nov 2023 05:33:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700746384; x=1701351184; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yvVEsznFGOEcHL++JvtqHDNKFWEmCpdzy05jYiWZejk=;
-        b=TuNSM3c+IKndbuqfknq5r3rhJZwn758kINi3ElXTqbNwseMoxPuVALWc+a7p85knKL
-         Q1ZUNWD9wo/39D6ATE2bXlgRP6vatdYD6vopADg0Uy56abCeWtYMflg3i+yCXsyR3qRU
-         tqY9Z+223WCJAY0DEYPUwvfrRokgqTZjyWOIPQDnElZ3A6YeC2l22Wx1BbkhTJO/Cy++
-         oewVm+bvqByQIcn7LGFyLLIvXK1bIjYCq0rdUbHa3q34+jqddTCvWBdzquiGTAW7BWGR
-         2FzwusRw86Ra/5vQf6BOOa9EEqE+z7vfGfZBUmkx04UyyM1zion94Cx0Co+1F2jPGXgW
-         A0ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700746384; x=1701351184;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yvVEsznFGOEcHL++JvtqHDNKFWEmCpdzy05jYiWZejk=;
-        b=NNtq5N6fZ+avizobDVotQf4/ahPT8xnTMt1VasvVi7Z5GgFY2g/AKdEePwpBPclvCv
-         QT/nAYtZNa0AML8xVlDs4wuArVaIPU07fCuQfuohd2jDEfEwpHJXyrxzvP/x27nN1OUJ
-         QO6dRwApICFVR9nOGo9GDwQOIbDmpld9igFkxJp78N22mSHbuNvvTaUJo30jgPqjrEbM
-         ZnmQZTKbsa02BVf0CpQ2SvYw5wCjr8nHMqwJOPWRIyVSVIxy6EsA/uERmjmtalAvH75Q
-         elDkJhB8cYCEFOXBd7Q2PiD5HyZvquaWlneAMEUnykGk++TF2YgEpOjy+kURC8eDkma2
-         gjtA==
-X-Gm-Message-State: AOJu0Yz4LFKM4ZLWDhR+DMGHDjtpmi/7xVa+P1Uc3H5skVlL3HXzMxDE
-	C9QdInASQSizpWlJXHE9rLSka/dnzfN4k2JZ6J3i+g==
-X-Google-Smtp-Source: AGHT+IGeJ8HWTjPQII5hKN4+VrgDmeYXnjKUIUFadHHOWbUsRdPsUh0SMrOCZbLFTxSuF/OxQ+sqNEP5Tm3v5rMIUPY=
-X-Received: by 2002:a05:6a20:7d90:b0:14c:a2e1:65ec with SMTP id
- v16-20020a056a207d9000b0014ca2e165ecmr6520553pzj.38.1700746384045; Thu, 23
- Nov 2023 05:33:04 -0800 (PST)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A2FBA;
+	Thu, 23 Nov 2023 05:50:54 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ANCRMkX017382;
+	Thu, 23 Nov 2023 13:50:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=oZXD2fFXsHF5yC43lnl3y8lNittg+JTRjRA3khNNHHo=;
+ b=bl1iqIqJm9sStgYQqVPd+TXdlj+H1S1lv2FyKix0e8d80IcMqY44Mmt4QOle94DE4jz0
+ jHSKW5iWIpcidV8ebMuzLv0kXhpjkUzxobw3/WISuEZrdlbhTMH2j1wgQ1Dmglak3hz3
+ WY2WVOpNL5mjRt4ee89y8oP6OcjYp6G/QEiaoUNTqiRUEQtwV1zttHGh2Iwg7GTxKuUJ
+ GzsTDnGpzsNZhKSKRCY6FpuhJ2yZ7Zp4GvRNpP7pg6OM26379i5fYXbWLyZgXsvFSaoK
+ Menlwo1/oxJxen/SBtd5crV/v0A6mciAn2Pg5shrLG8s3vjL3vRZNngXR6M1URWK+cEF oA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uj4hwgdfj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 23 Nov 2023 13:50:50 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3ANDonBC023871
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 23 Nov 2023 13:50:49 GMT
+Received: from blr-ubuntu-253.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Thu, 23 Nov 2023 05:50:44 -0800
+From: Sibi Sankar <quic_sibis@quicinc.com>
+To: <andersson@kernel.org>, <djakov@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC: <agross@kernel.org>, <conor+dt@kernel.org>, <quic_rjendra@quicinc.com>,
+        <abel.vesa@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_tsoni@quicinc.com>,
+        <neil.armstrong@linaro.org>, Sibi Sankar <quic_sibis@quicinc.com>
+Subject: [PATCH V3 0/2] interconnect: qcom: Introduce interconnect drivers for X1E80100
+Date: Thu, 23 Nov 2023 19:20:26 +0530
+Message-ID: <20231123135028.29433-1-quic_sibis@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231103131821.1176294-1-vincent.guittot@linaro.org>
- <20231103131821.1176294-2-vincent.guittot@linaro.org> <20231114205422.k5m6y4m5vnw7dvzj@airbuntu>
- <CAKfTPtDMEes6V2xRHavAwWrVuiZBdFAsaaxv9=-psAZCTPQWKg@mail.gmail.com>
- <20231121211725.gaekv6svnqdiq5l4@airbuntu> <CAKfTPtDzAZMcuWOYYOOAjCyvrOQiqyHZJBFVbACAvTqo+pU1gQ@mail.gmail.com>
- <20231121220955.uxk2zanxfemwyfz6@airbuntu>
-In-Reply-To: <20231121220955.uxk2zanxfemwyfz6@airbuntu>
-From: Vincent Guittot <vincent.guittot@linaro.org>
-Date: Thu, 23 Nov 2023 14:32:52 +0100
-Message-ID: <CAKfTPtAHbYCyqA6jLqkoWgQ2X625tann8Mpy0QttgQo5OPvS9w@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] sched/schedutil: Rework performance estimation
-To: Qais Yousef <qyousef@layalina.io>
-Cc: mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com, 
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, 
-	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com, rafael@kernel.org, 
-	viresh.kumar@linaro.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, lukasz.luba@arm.com, wyes.karny@amd.com, 
-	beata.michalska@arm.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: zEdJoelmjJw1LI26UaZtQV8E6x4p4G4M
+X-Proofpoint-ORIG-GUID: zEdJoelmjJw1LI26UaZtQV8E6x4p4G4M
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-23_12,2023-11-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 priorityscore=1501 bulkscore=0 mlxscore=0 mlxlogscore=704
+ suspectscore=0 phishscore=0 spamscore=0 lowpriorityscore=0 clxscore=1015
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311060000 definitions=main-2311230099
 
-On Thu, 23 Nov 2023 at 14:15, Qais Yousef <qyousef@layalina.io> wrote:
->
-> On 11/23/23 08:47, Vincent Guittot wrote:
->
-> > > > > And is it right to mix irq and uclamp_min with bw_min which is for DL? We might
-> > > >
-> > > > cpu_bw_dl() is not the actual utilization by DL task but the computed
-> > > > bandwidth which can be seen as min performance level
-> > >
-> > > Yep. That's why I am not in favour of a dvfs headroom for DL.
-> > >
-> > > But what I meant here is that in effective_cpu_util(), where we populate min
-> > > and max we have
-> > >
-> > >         if (min) {
-> > >                 /*
-> > >                  * The minimum utilization returns the highest level between:
-> > >                  * - the computed DL bandwidth needed with the irq pressure which
-> > >                  *   steals time to the deadline task.
-> > >                  * - The minimum performance requirement for CFS and/or RT.
-> > >                  */
-> > >                 *min = max(irq + cpu_bw_dl(rq), uclamp_rq_get(rq, UCLAMP_MIN));
-> > >
-> > > So if there was an RT/CFS task requesting a UCLAMP_MIN of 1024 for example,
-> > > bw_min will end up being too high, no?
-> >
-> > But at the end, we want at least uclamp_min for cfs or rt just like we
-> > want at least DL bandwidth for DL tasks
->
-> The issue I see is that we do
->
-> static void sugov_get_util()
-> {
-> ..
->         util = effective_cpu_util(.., &min, ..); // min = max(irq + cpu_bw_dl(), rq_uclamp_min)
->         ..
->         sg_cpu->bw_min = min; // bw_min can pick the rq_uclamp_min. Shouldn't it be irq + cpu_bw_dl() only?
->         ..
-> }
->
-> If yes, why the comparison in ignore_dl_rate_limit() is still correct then?
->
->         if (cpu_bw_dl(cpu_rq(sg_cpu->cpu)) > sg_cpu->bw_min)
+This series adds interconnect support for the Qualcomm X1E80100 platform,
+aka Snapdragon X Elite.
 
-yes, this is to ensure enough performance for the deadline task when
-the dl bandwidth increases without waiting the rate limit period which
-would prevent the system from providing enough bandwidth to the
-deadline scheduler. This remains true because it's still at least
-above cpu_bw_dl()
+Our v1 post of the patchsets adding support for Snapdragon X Elite SoC had
+the part number sc8380xp which is now updated to the new part number x1e80100
+based on the new branding scheme and refers to the exact same SoC.
 
->
-> And does cpufreq_driver_adjust_perf() still need the sg_cpu->bw_min arg
-> actually? sg_cpu->util already calculated based on sugov_effective_cpu_perf()
-> which takes all constraints (including bw_min) into account.
+V3:
+* Fix the index numbers of pcie_center_anoc nodes. [Georgi]
 
-cpufreq_driver_adjust_perf() is used for systems on which you can't
-actually set an operating frequency but only a min and a desired
-performance level and let the hw move freely in this range.
+v2:
+* Update the part number from sc8380xp to x1e80100.
+* Fixup required property ordering [Krzysztof]
+* Pickup Rbs.
 
->
->
-> Thanks!
->
-> --
-> Qais Yousef
+Dependencies: None
+Release Link: https://www.qualcomm.com/news/releases/2023/10/qualcomm-unleashes-snapdragon-x-elite--the-ai-super-charged-plat
+
+
+Rajendra Nayak (2):
+  dt-bindings: interconnect: Add Qualcomm X1E80100 SoC
+  interconnect: qcom: Add X1E80100 interconnect provider driver
+
+ .../interconnect/qcom,x1e80100-rpmh.yaml      |   83 +
+ drivers/interconnect/qcom/Kconfig             |    9 +
+ drivers/interconnect/qcom/Makefile            |    2 +
+ drivers/interconnect/qcom/x1e80100.c          | 2328 +++++++++++++++++
+ drivers/interconnect/qcom/x1e80100.h          |  192 ++
+ .../interconnect/qcom,x1e80100-rpmh.h         |  207 ++
+ 6 files changed, 2821 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,x1e80100-rpmh.yaml
+ create mode 100644 drivers/interconnect/qcom/x1e80100.c
+ create mode 100644 drivers/interconnect/qcom/x1e80100.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,x1e80100-rpmh.h
+
+-- 
+2.17.1
+
 
