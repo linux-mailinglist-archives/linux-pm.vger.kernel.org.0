@@ -1,142 +1,141 @@
-Return-Path: <linux-pm+bounces-117-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-118-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDC4E7F5BD1
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Nov 2023 11:01:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E5F77F5C1D
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Nov 2023 11:18:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C1CD1C20D2B
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Nov 2023 10:01:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48F852811FF
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Nov 2023 10:18:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93BEC2233A;
-	Thu, 23 Nov 2023 10:01:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B398224C2;
+	Thu, 23 Nov 2023 10:18:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="LrHfQCbw"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="n2/O/6qn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7D01A4;
-	Thu, 23 Nov 2023 02:01:28 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AN6J7Uw012365;
-	Thu, 23 Nov 2023 10:01:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=x2VHDcxFejIyKJ8k3+tPniadkU0vP7hUQoICBOL2JoY=;
- b=LrHfQCbwhbvhA/234A0y8EvJrOyWLrxi0sOKKBFIOR8SnNjKWMrtg4kzkE2TzdG1uGCb
- msHhVWg7rUepI9GewV6P8NWcxVc1y0Iwoj1QNvVRBe3S4n0sDTaofLa2y8/MBxOjujub
- 27L+9LmGW9miHgHANEgwIjUJqR/j9Zn7uXzvEDGfLdHCKe1k1hi9m61byjqYVRz98krL
- pINZAYbjY3GEggpgSfJT+eqdhSYHY/GZ2UD/0/gZO08gY5EYEBZVJY44tAuw66As30UV
- U7ZcFA0HobxfLmHYLtaUtQPaekGvl/98Z3m5EFDGXnY+VeQFXFdG3J9ZF21qmuv6ULUN YA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uhkfnt9mx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 23 Nov 2023 10:01:23 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3ANA0uTS016116
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 23 Nov 2023 10:00:56 GMT
-Received: from blr-ubuntu-253.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Thu, 23 Nov 2023 02:00:51 -0800
-From: Sibi Sankar <quic_sibis@quicinc.com>
-To: <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <ulf.hansson@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC: <agross@kernel.org>, <conor+dt@kernel.org>, <quic_rjendra@quicinc.com>,
-        <abel.vesa@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_tsoni@quicinc.com>,
-        <neil.armstrong@linaro.org>, Sibi Sankar <quic_sibis@quicinc.com>
-Subject: [PATCH V2 2/2] pmdomain: qcom: rpmhpd: Update part number to X1E80100
-Date: Thu, 23 Nov 2023 15:30:21 +0530
-Message-ID: <20231123100021.10918-3-quic_sibis@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20231123100021.10918-1-quic_sibis@quicinc.com>
-References: <20231123100021.10918-1-quic_sibis@quicinc.com>
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79CA49F
+	for <linux-pm@vger.kernel.org>; Thu, 23 Nov 2023 02:18:25 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-548d311ea5fso910377a12.1
+        for <linux-pm@vger.kernel.org>; Thu, 23 Nov 2023 02:18:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1700734704; x=1701339504; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LLz+eXFvdBSP66/4L8S/wevUKHOd2GFn01wW2gEAwt0=;
+        b=n2/O/6qnVrDT/Qku04tnpQIcoq0geY/zkgqo4RJ2Et0WuNXPPrdubNCryiAklAVN1E
+         ijW3/xUS+7pLAk5V6mzw2pmLFk8LaOvWW4PTwaaG7qWuKOgu1UTN3YjFMJyZa5rTNCVL
+         qbr1Ukml+V3kLWVdaLRUZxPQckLH6qmMr8DHJTRclY3wfnAjRV2AHHg+PjXTTAOylr47
+         DJxEJU4t0FuvYR1ZRTi8zvU0A6kwL2hCl2McmiVloce2TesMWZ4527R/980jfGxgQwmF
+         1svYGTHEqzlnQRQk9ev4kfI/TmvAe7rfsL1J489Bmo/v6Ct/ac10j5TKGiYnBWvB7BWV
+         P2rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700734704; x=1701339504;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LLz+eXFvdBSP66/4L8S/wevUKHOd2GFn01wW2gEAwt0=;
+        b=mn2jb1wVFzuokuqV1zJA/jytcw1LNtpzeDyZobh5VHSK3JekaMelC/IFQmWe3tVm8I
+         Lh5RES1cUJLmpPQqekQdZaqR2GHnKUtcMMMjIMlR49AbFQSFQiBUALxFUwnqPJE1TScK
+         t8YJZhPDxUqnoTGvXEB1CyIZR2tlBrSFUtOB8WcliWpu5ZKzI47rcnrWHH4NReb7UPqu
+         X+b9NhqvMuCnu27Te6nJnCiMCfQ7Vp2DNIxjNBP1SZzB1BmP1+Bh/5yrzwK55wZK4xYy
+         IdotDMfXgAuDX//O6//7i6G8QcB6bexcXEQqOtMAg2hofWxWv/Ah0MB57dDunDIFEKvt
+         iBDg==
+X-Gm-Message-State: AOJu0YwMn84dD9OQ+0WOPHjhmQ5OIjw/R9LmkHXyBaRYXCoMsrmDwdUO
+	Lg7fNu5v/DbhHitmFtfRHvnv7w==
+X-Google-Smtp-Source: AGHT+IESU/oAkOLhBfnH/5FmEgzFitN9JhHbiWKKhc0xNyAX2FXpGjC+JLQhjp23jzbLECMdf6FCHA==
+X-Received: by 2002:a17:906:4ed2:b0:9fa:a075:c329 with SMTP id i18-20020a1709064ed200b009faa075c329mr3581304ejv.61.1700734703943;
+        Thu, 23 Nov 2023 02:18:23 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.218.100])
+        by smtp.gmail.com with ESMTPSA id u17-20020a170906069100b00992ea405a79sm588755ejb.166.2023.11.23.02.18.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Nov 2023 02:18:23 -0800 (PST)
+Message-ID: <e5a58915-73de-425f-9f04-ed305a674990@linaro.org>
+Date: Thu, 23 Nov 2023 11:18:21 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 0QBcPCXLdPuLFpi7PdASVLmfDxUWKCBY
-X-Proofpoint-ORIG-GUID: 0QBcPCXLdPuLFpi7PdASVLmfDxUWKCBY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-23_06,2023-11-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- mlxscore=0 clxscore=1015 spamscore=0 lowpriorityscore=0 adultscore=0
- bulkscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311230071
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2 1/2] dt-bindings: power: rpmpd: Update part number to
+ X1E80100
+Content-Language: en-US
+To: Sibi Sankar <quic_sibis@quicinc.com>, andersson@kernel.org,
+ konrad.dybcio@linaro.org, ulf.hansson@linaro.org, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org
+Cc: agross@kernel.org, conor+dt@kernel.org, quic_rjendra@quicinc.com,
+ abel.vesa@linaro.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, quic_tsoni@quicinc.com, neil.armstrong@linaro.org
+References: <20231123100021.10918-1-quic_sibis@quicinc.com>
+ <20231123100021.10918-2-quic_sibis@quicinc.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20231123100021.10918-2-quic_sibis@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-There was a recent part number update from SC8380XP to X1E80100 and as
-a result of which SC8380xp prefix introduced in the rpmhpd driver is no
-longer correct. Update it to X1E80100, to reflect the bindings change.
+On 23/11/2023 11:00, Sibi Sankar wrote:
+> There was a recent part number update from SC8380XP to X1E80100 and as
+> a result of which the SC8380xp rpmpd bindings introduced is no longer
+> correct. Given that it currently has no users, it was agreed that it
+> can be updated to the correct part number (X1E80100) without causing
+> any binding breakage.
+> 
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> ---
 
-Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
----
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-v2:
-* Add more details to the commit message. [Krzysztof/Konrad]
-
- drivers/pmdomain/qcom/rpmhpd.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/pmdomain/qcom/rpmhpd.c b/drivers/pmdomain/qcom/rpmhpd.c
-index f2e64324deb8..3078896b1300 100644
---- a/drivers/pmdomain/qcom/rpmhpd.c
-+++ b/drivers/pmdomain/qcom/rpmhpd.c
-@@ -598,8 +598,8 @@ static const struct rpmhpd_desc sc8280xp_desc = {
- 	.num_pds = ARRAY_SIZE(sc8280xp_rpmhpds),
- };
- 
--/* SC8380xp RPMH powerdomains */
--static struct rpmhpd *sc8380xp_rpmhpds[] = {
-+/* X1E80100 RPMH powerdomains */
-+static struct rpmhpd *x1e80100_rpmhpds[] = {
- 	[RPMHPD_CX] = &cx,
- 	[RPMHPD_CX_AO] = &cx_ao,
- 	[RPMHPD_EBI] = &ebi,
-@@ -615,9 +615,9 @@ static struct rpmhpd *sc8380xp_rpmhpds[] = {
- 	[RPMHPD_GMXC] = &gmxc,
- };
- 
--static const struct rpmhpd_desc sc8380xp_desc = {
--	.rpmhpds = sc8380xp_rpmhpds,
--	.num_pds = ARRAY_SIZE(sc8380xp_rpmhpds),
-+static const struct rpmhpd_desc x1e80100_desc = {
-+	.rpmhpds = x1e80100_rpmhpds,
-+	.num_pds = ARRAY_SIZE(x1e80100_rpmhpds),
- };
- 
- static const struct of_device_id rpmhpd_match_table[] = {
-@@ -629,7 +629,6 @@ static const struct of_device_id rpmhpd_match_table[] = {
- 	{ .compatible = "qcom,sc7280-rpmhpd", .data = &sc7280_desc },
- 	{ .compatible = "qcom,sc8180x-rpmhpd", .data = &sc8180x_desc },
- 	{ .compatible = "qcom,sc8280xp-rpmhpd", .data = &sc8280xp_desc },
--	{ .compatible = "qcom,sc8380xp-rpmhpd", .data = &sc8380xp_desc },
- 	{ .compatible = "qcom,sdm670-rpmhpd", .data = &sdm670_desc },
- 	{ .compatible = "qcom,sdm845-rpmhpd", .data = &sdm845_desc },
- 	{ .compatible = "qcom,sdx55-rpmhpd", .data = &sdx55_desc},
-@@ -643,6 +642,7 @@ static const struct of_device_id rpmhpd_match_table[] = {
- 	{ .compatible = "qcom,sm8450-rpmhpd", .data = &sm8450_desc },
- 	{ .compatible = "qcom,sm8550-rpmhpd", .data = &sm8550_desc },
- 	{ .compatible = "qcom,sm8650-rpmhpd", .data = &sm8650_desc },
-+	{ .compatible = "qcom,x1e80100-rpmhpd", .data = &x1e80100_desc },
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, rpmhpd_match_table);
--- 
-2.17.1
+Best regards,
+Krzysztof
 
 
