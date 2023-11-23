@@ -1,184 +1,133 @@
-Return-Path: <linux-pm+bounces-112-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-113-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98AF47F5A9F
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Nov 2023 09:54:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD0977F5B27
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Nov 2023 10:38:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53FBB281749
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Nov 2023 08:54:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7745E281773
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Nov 2023 09:38:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DD5F1BDE3;
-	Thu, 23 Nov 2023 08:54:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D3FE21112;
+	Thu, 23 Nov 2023 09:38:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="UirRGr1w"
+	dkim=pass (2048-bit key) header.d=edgeble-ai.20230601.gappssmtp.com header.i=@edgeble-ai.20230601.gappssmtp.com header.b="xklR3hXX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2055.outbound.protection.outlook.com [40.107.94.55])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF4792;
-	Thu, 23 Nov 2023 00:54:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=INYAZCI8uPXka7LbbRKsiZRrG8hiLi3eooRHZse8KNRTqBDoz70dAxgLgsCh6hXCIGOWp7EZtV3TgJ0z62Ot8tN1ZI1MwBavLT0dL+lYwMSTr/cBs21MU3TWfl83rn4DyA1kOgQl+9xaOA48mTCQUN0hSDBql1XvudWxM+ghMEu5Ql5Qi+RUPofVq0kj21w3vo3WlqaRFZuvEHUssiCrhvrpv6p2c7HtIs/kc/NhmmbRsTLLGrA9cgn0EZ685iG8/xA5iQmlbjtNw7ySEYpAybOc88EreVkg4vcjmVStmfV34gPV2PU4w6w4A01lPspJXalKeFAD3wecrgkDUNbbvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gl0riZWCAde+rOOZY74WDBH0mXlu1QWiowkdklUDLBM=;
- b=NX3WU4NKxXmibwosjgeNw1xwEzDTnP3csQP7jtrAP5ygBpVhxhGhSoX9nNJbA+VbpjaRozew+9ccb8RibOUKAxeYaRpvMpXHEoK7l+CJ72eUGWhdXcki2cxC5kewZZGxs32OU4sqYWutROucwXy9hjINIxFi0gr99mtSsnDkFZSYuVLEpG48gnrgon2oC1CzZqI01Nr30UADBtBTY1ZMR/kg2Bs3TV5nQJKYv6UX92XgXfeCTWJ66N1z+JXUBNitPtF4f5vIbXHl9sZJD5bNtTF5G1G/84bNvdGL0vDk+arIryeatZZzneg/vom+U1U8ZJD3qb8rLrV5kvZlMyslEw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gl0riZWCAde+rOOZY74WDBH0mXlu1QWiowkdklUDLBM=;
- b=UirRGr1weHkkHAWuVsp7mg8g3/L28wQWkhC9lUsBLixmiCyKKzYoiE13EeL+G4ZJApW81UNbw/KSDdX+AOfrZDtaILB9aYFbew2mCsfRN0ok7Lt4CmXTF8e6VRC8s9xIrZesx71R0GoS2Gg4/YtR7wTkajk9uRUF6qBsoBcMQ74=
-Received: from CYYPR12MB8655.namprd12.prod.outlook.com (2603:10b6:930:c4::19)
- by MW4PR12MB6731.namprd12.prod.outlook.com (2603:10b6:303:1eb::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.19; Thu, 23 Nov
- 2023 08:54:22 +0000
-Received: from CYYPR12MB8655.namprd12.prod.outlook.com
- ([fe80::581a:5593:3e24:1ee4]) by CYYPR12MB8655.namprd12.prod.outlook.com
- ([fe80::581a:5593:3e24:1ee4%7]) with mapi id 15.20.7025.017; Thu, 23 Nov 2023
- 08:54:21 +0000
-From: "Yuan, Perry" <Perry.Yuan@amd.com>
-To: "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>, "Karny, Wyes"
-	<Wyes.Karny@amd.com>, "Huang, Ray" <Ray.Huang@amd.com>, "Limonciello, Mario"
-	<Mario.Limonciello@amd.com>, "Rafael J . Wysocki" <rafael@kernel.org>, Viresh
- Kumar <viresh.kumar@linaro.org>
-CC: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] cpufreq/amd-pstate: Fix the return value of
- amd_pstate_fast_switch()
-Thread-Topic: [PATCH] cpufreq/amd-pstate: Fix the return value of
- amd_pstate_fast_switch()
-Thread-Index: AQHaHecR1ahp667F60iiBg0s6iMe+LCHl6RA
-Date: Thu, 23 Nov 2023 08:54:21 +0000
-Message-ID:
- <CYYPR12MB86558615B2691F77DEFEE7319CB9A@CYYPR12MB8655.namprd12.prod.outlook.com>
-References: <20231123082757.3527-1-gautham.shenoy@amd.com>
-In-Reply-To: <20231123082757.3527-1-gautham.shenoy@amd.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=18f429a5-f2c3-411f-a1d7-cdf55b2eeb08;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-11-23T08:47:43Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CYYPR12MB8655:EE_|MW4PR12MB6731:EE_
-x-ms-office365-filtering-correlation-id: 5ac421a3-b2fc-4426-f1c3-08dbec01c8d1
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- wVZAMQAGDHSIZ1oy2d2WTZVQUmFq6yqrY2vf6GMzEQXw5nQSxFy1flNhtro63SmDIjIOwiNadMmPceYsJfI2IUkSe9n/7ib0FLpgdXzSRc9mO7e7sOPNWhAIKt7dOwFUsBXC/Wr2O0mZ2TjLwmelII4lwpyKRfVsTvefrmTcPKNwtg2mVioMPmDoOPnWbKiXjVM7Vhhg/6vZSUwZGlFgPEPuW7n3U3h2i9KR8AfkhBq/tFYq1x4V2/RPgnRekvZXsGiuWtt1lMyTUzZ76tdUneiTe1Y0mqbwN4KEorSWMULbJJoBc4o6rXyQxfYykgx0XtQXcsNt+cWyBuIbYy5r1pG7KgN9IoVzX/XDYQrJ0Tdfs9yJmtfuKGlX72osn2wjYj4kH2Daob4vQdNsrunyNlfLBvXnOtDChbf/UGXVyj7xTw7pBcPJosIrleEXenV6A3EJa0jAyTpsJpNmZrqYe5+hHxfjBsVJEVgTAHcLSbZZVSCMR17E8SiOHEKJtU7dXURWQzkR13ysTajlsFGvQ+2XNCpYbKVCU987rzE8kw3vEY735H42YAlR6q2i1jabBcEeUycYtC4+ysDx06OMSdB9+ZcJ9cI6ZbS6Zbv4Zbq2609YujE86gThHFWUoE/HUeI/IMxqpGvvazdvpBCrFw==
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CYYPR12MB8655.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(366004)(376002)(39860400002)(346002)(396003)(230922051799003)(451199024)(1800799012)(186009)(64100799003)(8676002)(2906002)(71200400001)(86362001)(6506007)(66556008)(7696005)(26005)(53546011)(8936002)(9686003)(66446008)(316002)(66476007)(54906003)(76116006)(64756008)(110136005)(4326008)(66946007)(33656002)(122000001)(478600001)(38100700002)(83380400001)(5660300002)(38070700009)(52536014)(921008)(55016003)(41300700001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?qSuLNeSE7YEYTDP4Y0eDXJLnvw0FuBNo4g1zqfH+1FI9HNwL0aBETaxwe7i8?=
- =?us-ascii?Q?/bXqCqorHT4Iu75K8AjF5Ykp/FUu7wiPd/bxu0pzvlJv1u1dw4oTz/zRSq5P?=
- =?us-ascii?Q?pRBMqe8rYz4goHlNoBOI5DN7oywc7QNNeSS7K1UmpyL0TDsLmJ9mFKxKu1jL?=
- =?us-ascii?Q?B0sDePTk7Juy4zX+KEJAc5mNaesmlhXxij5YvazV2KgeBh4jnfXmGsAA+BkX?=
- =?us-ascii?Q?z6RLFKoaIj2mXufc+U8EJJjVf/RFiQTDTGoVbJ3M6/7O804qtvQcpVIm8fxM?=
- =?us-ascii?Q?lRi5F2JtO532BW6iYNkKRnzss7fgS1TQFm9h6aQJH7qUaHd4Mf1fGYtPXOHZ?=
- =?us-ascii?Q?EV4QRIO3aAZDO30UQXmSsHOnQGAPSlwpVwG9IUAqo6roOwh0r88IiPgezjj+?=
- =?us-ascii?Q?sNI6JdHgP+tG9Qh37+Az9NwD0RP+pKYKoGXfbQjy23XYov4RJvDieTL7U9ia?=
- =?us-ascii?Q?fhpgHYVZs14DnMWLO3KzSM54H0hnLEJyvtce4WHp8/vcw1WHc5lukysC0xnj?=
- =?us-ascii?Q?6gvj88ZOA+mk4qQyGhzGGqwxRQRGcjU4pJ4Ww3VgqPVwbbkpQ/cu3acM6VtK?=
- =?us-ascii?Q?zAMq5hp7DX4RCdGzpm+q3+GhtRTC+4k2NE4eNOUsblgOvzSmI/BS12pfC4Pz?=
- =?us-ascii?Q?KISqns004ZGYVH9LhcV8ygTVW/aNgfPNSg2R+y5Qise+pDtuAvexdPOTl1rK?=
- =?us-ascii?Q?cpYWqs89G6kCDQTw/k/U3qW9xfOK4JyMToQoMAs2Ei4CYHkTX6sYRgsOmaaA?=
- =?us-ascii?Q?Jj9mdyEErt9sdtEAqrKAzSjwueLcbWxfgUIKPkxtak7jgia40q4vpl1ksBj1?=
- =?us-ascii?Q?4CwpLvRuEUYmUbz8Rs1LARyPj0LuNevqjSgXkJxKvm5QqqLMII7MQzmwpTVE?=
- =?us-ascii?Q?y5qrCpDHjupo1YDkEZZiZqslsGRqFjZCtgqTAAueU1JE7m0Ck/OokAJ889sc?=
- =?us-ascii?Q?hxq8alfzhc1h5W2Kd7NZeEWxLWqOKCDJaWW2+WP7Akj7Df2oyFdXCn0qZy4c?=
- =?us-ascii?Q?I91cCLgFrwGmxg1fZPlvaymiuC6IXdcmiIRR5uXbEdfCLlzQ8vHDq8JHBVSa?=
- =?us-ascii?Q?JCkXvw0kpiQ29XUSu/U+Q6dZHoMyWebQYXARcjHpVmF3TZ1WpwKPU/HY+QOG?=
- =?us-ascii?Q?DHOZWQnci7EIkztYaub1a8qSzjyZZF8Eub9Q6Kqpcz3VKVV6uVHpC0wWvFFD?=
- =?us-ascii?Q?Af6SAhiSf24BljT+wJeP5DeFHZKS8ryj02i49y8cdJ4kEOOCFF+I+dHuBpub?=
- =?us-ascii?Q?K0WyFwl38/J9vKkzPdLYwY6B9fzxpt9PNRNF128MMOPyrNxBrd7WRFh11Jfj?=
- =?us-ascii?Q?ah8L8ygD1CRhrWPX5iEFC32jae9ocw7H3rYj9Xm4kQ9w72JbsQwNEjQsJVIR?=
- =?us-ascii?Q?LG409i+H7P4zXVFDJILqeiQdjCHjWA/3oO0i9zcPoUQWjZ8o4FjeyE0vxC7b?=
- =?us-ascii?Q?OkKxVqqgDNsJgCaIUXRSFButdDXRvufHnXyk1R9K6xzohQvtmlXEcpMylHXM?=
- =?us-ascii?Q?GsF1SQRq2YQtaDZ6HA9s6r3Y84PZLJTF2b0uQU1oDppvK/EuC4C63f6OJHE1?=
- =?us-ascii?Q?SEkXqK/Sj7S0y47DMrw=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FE21A4
+	for <linux-pm@vger.kernel.org>; Thu, 23 Nov 2023 01:38:36 -0800 (PST)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-5cc86fcea4fso5788727b3.3
+        for <linux-pm@vger.kernel.org>; Thu, 23 Nov 2023 01:38:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=edgeble-ai.20230601.gappssmtp.com; s=20230601; t=1700732315; x=1701337115; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9Cq2uvOez9cvoP5vKajshu6haOx7AM5LMNaL0dM3kCo=;
+        b=xklR3hXXxYD1/dsfxI65Ft68lS1FG/Mrc2y5FlpAuC77X9PVJdqt4EzS6WVLIIh/A/
+         tViaCuJSoylQaqZq9P1esQ0xiipf3N8mttSH1B6hm29k+cEaLu1TCB/I7bsVRIwFyndn
+         QB7jTmJYiGGh/IhvLvRJDPG2FpyYND86PiyLUwIIcAuxwcV8PMwK5dlPR0nAcpIAOh1K
+         cJdiEPPhRZGN/DDisIZdhEIlqw6ut8ihYvva7tKU28FOPcFiMy1cJirZtq+s5oThd7Cj
+         csdYLo/Ii8aLcSFF6YVJ3jpQNDzwd39Pi+lCAlvN1YkEUMNFx/ktEk9C/Sj1WaSqaoZg
+         N2Ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700732315; x=1701337115;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9Cq2uvOez9cvoP5vKajshu6haOx7AM5LMNaL0dM3kCo=;
+        b=UIOMbYV2wY2oCPcnYCMkfSlUM/o6aTYeIhGJ2E7NMgh132xJwrD6cI34X8y2vsWPhi
+         4nLb5gly4PsCRLaF9OgddFUUzu/R34chV60MkOtb21oRUVUsWUHcAMH2eQJUd9TLUiCr
+         lrMnlW0Oz+PR0Hh8iWQI3Hc3vWe7K8D4S+kSPIeWC0qTnhXXk6n+VU0vRmXhPedNz0Oy
+         EHfxExSmuJbsYfP219BFnDySKBC3bd2gUDGCVS+JtaSoYQMaOYam4eKZkGX1+kaGDsy4
+         Uhns4Y+qvDVSh3jP5vHWSBdfvFwyj+PK+zFEztvKllL57Yz6T0aiH9Ae3BQ0Mrpm1YGG
+         4EaQ==
+X-Gm-Message-State: AOJu0YzDNHxsfdltWH9yHF9iN/Zr1owG8vAGoQnDxI5p5yMvAvRtRi+D
+	3ei51BUBExmtyFEmfx/E1/jsSfNGaIs6hOLdNgrVvy9+nZNEuAI0GkvBeg==
+X-Google-Smtp-Source: AGHT+IHUNZ/Kpf46s2OJno2HdyVz1WDaY8aTV/gcTXwP0fy9aTOY2/fgpkJJBKzSzB6foUUtbUHTXljX7Tki6sR+KVY=
+X-Received: by 2002:a0d:f485:0:b0:5b3:3eb5:6624 with SMTP id
+ d127-20020a0df485000000b005b33eb56624mr4241289ywf.46.1700732314987; Thu, 23
+ Nov 2023 01:38:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CYYPR12MB8655.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ac421a3-b2fc-4426-f1c3-08dbec01c8d1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Nov 2023 08:54:21.0983
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: T6DHf3Z04BUPq7i81otlytWOD0yZgIhbvjFWbfTwmq++XNqH3nS08OQTadgPLXSJXq1CCNLVGmWxr4o/1+kinw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6731
+References: <20231018061714.3553817-1-s.hauer@pengutronix.de> <20231018061714.3553817-27-s.hauer@pengutronix.de>
+In-Reply-To: <20231018061714.3553817-27-s.hauer@pengutronix.de>
+From: Jagan Teki <jagan@edgeble.ai>
+Date: Thu, 23 Nov 2023 15:08:23 +0530
+Message-ID: <CA+VMnFz__fdzm-N-jFX9L+n5znqeopD8B3tZN4FiH5fWtzUu4w@mail.gmail.com>
+Subject: Re: [PATCH v8 26/26] arm64: dts: rockchip: rk3588s: Add DFI
+To: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Heiko Stuebner <heiko@sntech.de>, Chanwoo Choi <chanwoo@kernel.org>, 
+	Kyungmin Park <kyungmin.park@samsung.com>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de, 
+	Michael Riesch <michael.riesch@wolfvision.net>, Robin Murphy <robin.murphy@arm.com>, 
+	Vincent Legoll <vincent.legoll@gmail.com>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	devicetree@vger.kernel.org, 
+	Sebastian Reichel <sebastian.reichel@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
 
-[AMD Official Use Only - General]
-
-> -----Original Message-----
-> From: Shenoy, Gautham Ranjal <gautham.shenoy@amd.com>
-> Sent: Thursday, November 23, 2023 4:28 PM
-> To: Karny, Wyes <Wyes.Karny@amd.com>; Huang, Ray
-> <Ray.Huang@amd.com>; Limonciello, Mario <Mario.Limonciello@amd.com>;
-> Yuan, Perry <Perry.Yuan@amd.com>; Rafael J . Wysocki <rafael@kernel.org>;
-> Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org; Shenoy, Gauth=
-am
-> Ranjal <gautham.shenoy@amd.com>
-> Subject: [PATCH] cpufreq/amd-pstate: Fix the return value of
-> amd_pstate_fast_switch()
+On Wed, 18 Oct 2023 at 11:47, Sascha Hauer <s.hauer@pengutronix.de> wrote:
 >
-> cpufreq_driver->fast_switch() callback expects a frequency as a return va=
-lue.
-> amd_pstate_fast_switch() was returning the return value of
-> amd_pstate_update_freq(), which only indicates a success or failure.
+> The DFI unit can be used to measure DRAM utilization using perf. Add the
+> node to the device tree. The DFI needs a rockchip,pmu phandle to the pmu
+> containing registers for SDRAM configuration details. This is added in
+> this patch as well.
 >
-> Fix this by making amd_pstate_fast_switch() return the target_freq when t=
-he
-> call to amd_pstate_update_freq() is successful, and return the current
-> frequency from policy->cur when the call to
-> amd_pstate_update_freq() is unsuccessful.
->
-> Fixes: 4badf2eb1e98 ("cpufreq: amd-pstate: Add ->fast_switch() callback")
-> Signed-off-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
 > ---
->  drivers/cpufreq/amd-pstate.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
 >
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 9a1e194d5cf8..300f81d36291 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -518,7 +518,9 @@ static int amd_pstate_target(struct cpufreq_policy
-> *policy,  static unsigned int amd_pstate_fast_switch(struct cpufreq_polic=
-y
-> *policy,
->                                 unsigned int target_freq)
->  {
-> -     return amd_pstate_update_freq(policy, target_freq, true);
-> +     if (!amd_pstate_update_freq(policy, target_freq, true))
-> +             return target_freq;
-> +     return policy->cur;
->  }
+> Notes:
+>     Changes since v4:
+>      - new patch
 >
->  static void amd_pstate_adjust_perf(unsigned int cpu,
-> --
-> 2.25.1
+>  arch/arm64/boot/dts/rockchip/rk3588s.dtsi | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
+> index 5544f66c6ff41..e693a341f6f27 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
+> @@ -443,6 +443,11 @@ usb_host1_ohci: usb@fc8c0000 {
+>                 status = "disabled";
+>         };
+>
+> +       pmu1grf: syscon@fd58a000 {
+> +               compatible = "rockchip,rk3588-pmugrf", "syscon", "simple-mfd";
+> +               reg = <0x0 0xfd58a000 0x0 0x10000>;
+> +       };
+> +
+>         sys_grf: syscon@fd58c000 {
+>                 compatible = "rockchip,rk3588-sys-grf", "syscon";
+>                 reg = <0x0 0xfd58c000 0x0 0x1000>;
+> @@ -1329,6 +1334,17 @@ pcie2x1l2_intc: legacy-interrupt-controller {
+>                 };
+>         };
+>
+> +       dfi: dfi@fe060000 {
+> +               reg = <0x00 0xfe060000 0x00 0x10000>;
+> +               compatible = "rockchip,rk3588-dfi";
+> +               interrupts = <GIC_SPI 28 IRQ_TYPE_LEVEL_HIGH 0>,
+> +                            <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH 0>,
+> +                            <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH 0>,
+> +                            <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH 0>;
+> +               interrupt-names = "ch0", "ch1", "ch2", "ch3";
 
-LGTM
-Thank you for the fix.
+Look like the names never documented and nor supported explicitly in
+the driver. Do we have any patch for fixing it in the mailing-list?
 
-Reviewed-by: Perry Yuan <perry.yuan@amd.com>
+arch/arm64/boot/dts/rockchip/rk3588-edgeble-neu6b-io.dtb:
+dfi@fe060000: 'interrupt-names' does not match any of the regexes:
+'pinctrl-[0-9]+'
+from schema $id: http://devicetree.org/schemas/devfreq/event/rockchip,dfi.yaml#
+
+Jagan.
 
