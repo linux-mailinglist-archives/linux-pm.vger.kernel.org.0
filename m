@@ -1,37 +1,37 @@
-Return-Path: <linux-pm+bounces-200-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-201-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB8417F862C
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 23:32:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63C767F862F
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 23:32:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67F2B2825A5
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 22:32:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C310BB212B0
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 22:32:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E2A4364BE;
-	Fri, 24 Nov 2023 22:32:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D34A22069;
+	Fri, 24 Nov 2023 22:32:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q/lnFaSV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rHOgFJue"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3C103C478
-	for <linux-pm@vger.kernel.org>; Fri, 24 Nov 2023 22:32:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7070AC433CA;
-	Fri, 24 Nov 2023 22:32:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6A13DB80
+	for <linux-pm@vger.kernel.org>; Fri, 24 Nov 2023 22:32:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 287BFC433C8;
+	Fri, 24 Nov 2023 22:32:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700865166;
-	bh=SruwsS2l79TbUPDZT8+hJEb5a4kT01b9VD/LZ7J5AKM=;
+	s=k20201202; t=1700865169;
+	bh=sUhE/qFaIDHh5RCqYIo7aaxz5Ifr+Yh3RMfcwpeT7hc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=q/lnFaSVMQiMkEsslwmzjqzy22MQXd8r9dOLxCa7TLWnoQvJK3pQYuE+Q6CrbEoyR
-	 39RMK7baBkVlSAzMhxWIcg0mYsY1sVWkYmD7FkCurSO46YSXqsjEIDzPqOUbgXsK63
-	 FrjQ75lmSpZu6ETzAaNH/vz7tuQvdYh2RmvwuKVhJT3Osmh1h/AU7TIvg2inx3mdMd
-	 ZSEbZeLhQldnmaE5WqzqY3UPniXAsGIpPw26G6aZrTQOnaTyR73iSfEFzIgSYztgH1
-	 740u66mQXDlK06o2pQUyCJzQf3vn4xdoPoqlU1Bn+bD2I/HX6a0CQkejm6GKWo+zh0
-	 jjdqFVncadX3A==
+	b=rHOgFJueqacJh3oSGholAxY008YeuYv2dLD8Hx1i+J42ckaCsPEue+U26TfZlARwm
+	 JZW9by+SVFIhonSoEAeY96DUR5A6LRpOk6l+X5lW7jWz8WuKOZORla5W+Tk1XuALgj
+	 MYwIK3qgK9tew6YwvquWXqWd54fnBITkSQXVnS19hVQgzWyRlYjXhPvU4Rg1N4BvgV
+	 AjpcEKOFBoBsU0hsUGCECscZ6jxHwYsEELkWxGucl5t5JB8X3Y+QjKZW/MajGaie0o
+	 MfNTU2ss+3GBqu3nevft7gW6YovD70zEZAYatkvvZs8AwuxvfnjJpAPewKS2KYK1MV
+	 H6HsE5Vo/TsRA==
 From: Frederic Weisbecker <frederic@kernel.org>
 To: LKML <linux-kernel@vger.kernel.org>
 Cc: Frederic Weisbecker <frederic@kernel.org>,
@@ -42,10 +42,11 @@ Cc: Frederic Weisbecker <frederic@kernel.org>,
 	Ingo Molnar <mingo@redhat.com>,
 	Borislav Petkov <bp@alien8.de>,
 	Dave Hansen <dave.hansen@linux.intel.com>,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH 2/7] x86: Add a comment about the "magic" behind shadow sti before mwait
-Date: Fri, 24 Nov 2023 23:32:21 +0100
-Message-ID: <20231124223226.24249-3-frederic@kernel.org>
+	Peter Zijlstra <peterz@infradead.org>,
+	Marcelo Tosatti <mtosatti@redhat.com>
+Subject: [PATCH 3/7] cpuidle: Remove unnecessary current_clr_polling_and_test() from haltpoll
+Date: Fri, 24 Nov 2023 23:32:22 +0100
+Message-ID: <20231124223226.24249-4-frederic@kernel.org>
 X-Mailer: git-send-email 2.42.1
 In-Reply-To: <20231124223226.24249-1-frederic@kernel.org>
 References: <20231124223226.24249-1-frederic@kernel.org>
@@ -57,35 +58,37 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a note to make sure we never miss and break the requirements behind
-it.
+When cpuidle drivers ->enter() callback are called, the TIF_NR_POLLING
+flag is cleared already and TIF_NEED_RESCHED checked by call_cpuidle().
 
+Therefore calling current_clr_polling_and_test() is redundant here and
+further setting of TIF_NEED_RESCHED will result in an IPI and thus an
+idle loop exit. This call can be safely removed.
+
+Cc: Marcelo Tosatti <mtosatti@redhat.com>
 Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 ---
- arch/x86/include/asm/mwait.h | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/cpuidle/cpuidle-haltpoll.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/arch/x86/include/asm/mwait.h b/arch/x86/include/asm/mwait.h
-index bae83810505b..920426d691ce 100644
---- a/arch/x86/include/asm/mwait.h
-+++ b/arch/x86/include/asm/mwait.h
-@@ -87,6 +87,15 @@ static __always_inline void __mwaitx(unsigned long eax, unsigned long ebx,
- 		     :: "a" (eax), "b" (ebx), "c" (ecx));
+diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
+index e66df22f9695..b641bc535102 100644
+--- a/drivers/cpuidle/cpuidle-haltpoll.c
++++ b/drivers/cpuidle/cpuidle-haltpoll.c
+@@ -28,11 +28,8 @@ static enum cpuhp_state haltpoll_hp_state;
+ static int default_enter_idle(struct cpuidle_device *dev,
+ 			      struct cpuidle_driver *drv, int index)
+ {
+-	if (current_clr_polling_and_test()) {
+-		local_irq_enable();
+-		return index;
+-	}
+ 	arch_cpu_idle();
++
+ 	return index;
  }
  
-+/*
-+ * Re-enable interrupts right upon calling mwait in such a way that
-+ * no interrupt can fire _before_ the execution of mwait, ie: no
-+ * instruction must be placed between "sti" and "mwait".
-+ *
-+ * This is necessary because if an interrupt queues a timer before
-+ * executing mwait, it would otherwise go unnoticed and the next tick
-+ * would not be reprogrammed accordingly before mwait ever wakes up.
-+ */
- static __always_inline void __sti_mwait(unsigned long eax, unsigned long ecx)
- {
- 	mds_idle_clear_cpu_buffers();
 -- 
 2.42.1
 
