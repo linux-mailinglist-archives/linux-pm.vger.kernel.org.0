@@ -1,215 +1,172 @@
-Return-Path: <linux-pm+bounces-205-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-206-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1DE37F8634
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 23:33:02 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1A387F8693
+	for <lists+linux-pm@lfdr.de>; Sat, 25 Nov 2023 00:15:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 369A42825BA
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 22:33:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1C34DB2137B
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 23:15:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D34033BB55;
-	Fri, 24 Nov 2023 22:33:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56017364DE;
+	Fri, 24 Nov 2023 23:15:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LG5Q5EEg"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="c9uOgo3x"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B867D39FEA
-	for <linux-pm@vger.kernel.org>; Fri, 24 Nov 2023 22:33:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32778C433CB;
-	Fri, 24 Nov 2023 22:32:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700865180;
-	bh=qkwnYSoqlBcfb84gH/3LY3O2XgUdAI1yXrt+QgVwpng=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=LG5Q5EEgKX6cIW/WbSemc+jpnC4AVH6XFhH2IavHYRsaAdG4Yf+u7scHj7+B1U+6v
-	 xAy6ws8g/2QZl9G9qSIivZfAAFEPDvLaEuigQutSypLnKxUcY7qegY5zBggdPdK5mM
-	 z0/EUYh2gJ00egk/QgMjyJQAAnXHEv6Ubxa7m8wa9lXW2EnpwOYlhxQmPMusty05N7
-	 tBwsmU262FNzth+F8s3JnhxTU7QRrb25NzWeROZxbquU5igA3thQ+tVAKccsE2imGA
-	 4zsxcSoRgJUEWm/QC/O8cjb2+EireCnBmjStyIuN4gdVp1mYDxLynBoxICn14o/EXz
-	 JCheLVxxPDzAA==
-From: Frederic Weisbecker <frederic@kernel.org>
-To: LKML <linux-kernel@vger.kernel.org>
-Cc: Frederic Weisbecker <frederic@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	linux-pm@vger.kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH 7/7] cpuidle: Handle TIF_NR_POLLING on behalf of software polling idle states
-Date: Fri, 24 Nov 2023 23:32:26 +0100
-Message-ID: <20231124223226.24249-8-frederic@kernel.org>
-X-Mailer: git-send-email 2.42.1
-In-Reply-To: <20231124223226.24249-1-frederic@kernel.org>
-References: <20231124223226.24249-1-frederic@kernel.org>
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDD21735
+	for <linux-pm@vger.kernel.org>; Fri, 24 Nov 2023 15:15:38 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-6b2018a11efso2315093b3a.0
+        for <linux-pm@vger.kernel.org>; Fri, 24 Nov 2023 15:15:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1700867738; x=1701472538; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=uy+793CV4Pqoo743qyQu3iwwiDdsR9zvnIGUZnLxkks=;
+        b=c9uOgo3xN6zPaUVL1K5/nWl2fvqE1/9DfXzKPRM8kcLbWi29K/SnmnpeAOb0G1aJWG
+         OGUbqqT/YmZ9ZLxxoMnjEq6D0YAyJpF0Mij5I13P4/znDRU7NbWF2eGRZ9DPPA26oB2Z
+         pDO/JBDFZ2/Ktx8a5rh49+Pzvcy9dTTUOb2OJpEkVXwZ/aGHMo9lv3BM+zyEC008cJTl
+         o9CiCWU+1p/PKELflDn6v2SSV3rQcuN7638xAyofowMki5W/kg2q/UJzOuPdw2UPrXye
+         +QhzP75nyqf8Z3pzDbN7H4zj7VrRxSO0wPdagUkEJE+nDf3BHI/jEhf91PYAE5ngBzgX
+         mFUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700867738; x=1701472538;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uy+793CV4Pqoo743qyQu3iwwiDdsR9zvnIGUZnLxkks=;
+        b=UNcWqo7p5SArGUiHiXuzjlmkwqbQGS7+P/FbFINxhECrkchotblDgt1Y7n9yU/a2gH
+         eWgxLcsLiT0mBzWVuISvq6iL8jXKN96u/T8X5XfymCpsbV0o96nUl57a28aJerH7iW1X
+         7Hw6yh4f64VLx9OHGWTn0GanCBjeK/AgfFNbYNNoGuQmECoHngP6IvmJIvfszaubyXDU
+         +dHzCtrSYXIjXO0lY+P3x8o46QFfcyRYjWhvKkoHdFmWcQbGAPmgcITe2XPEePC4Hnf+
+         jCBEpND6psrhaS/U8BLEJDp9MHYolVZKUJ+UeZvCXCQ/3JJ1BnTOnKvA+vTW/kuYiehA
+         2Knw==
+X-Gm-Message-State: AOJu0YyA3sU1wqt3AxD262m+ispb8PLbHybUJC2CfIJRczAZFA+4NqgN
+	V3ZxBcGfaUWGLp/qWmKqPb5cTQ==
+X-Google-Smtp-Source: AGHT+IHL8tld8j9++rDkUwqEsSwqthE1EY5dF/cOQTVuO8jZjvOBy0wK49Vs6e1ByrwaJ8/QaOIBVA==
+X-Received: by 2002:a05:6a21:3606:b0:18a:e4fe:3b8b with SMTP id yg6-20020a056a21360600b0018ae4fe3b8bmr4247571pzb.19.1700867737851;
+        Fri, 24 Nov 2023 15:15:37 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id 18-20020aa79252000000b006cbb56d4e58sm3334265pfp.65.2023.11.24.15.15.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Nov 2023 15:15:37 -0800 (PST)
+Message-ID: <65612e99.a70a0220.9cc29.87ff@mx.google.com>
+Date: Fri, 24 Nov 2023 15:15:37 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: pm-6.7-rc3-40-g9795b7a7c21ef
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (pm-6.7-rc3-40-g9795b7a7c21ef)
+To: rafael@kernel.org, linux-pm@vger.kernel.org,
+ kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Software polling idle states set again TIF_NR_POLLING and clear it upon
-exit. This involves error prone duplicated code and wasted cycles
-performing atomic operations, sometimes RmW fully ordered.
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (pm-6.7-rc3-40-g=
+9795b7a7c21ef)
 
-To avoid this, benefit instead from the same generic TIF_NR_POLLING
-handling that is currently in use for hardware polling states.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/pm-=
+6.7-rc3-40-g9795b7a7c21ef/
 
-Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+Tree: pm
+Branch: testing
+Git Describe: pm-6.7-rc3-40-g9795b7a7c21ef
+Git Commit: 9795b7a7c21ef0f9dca1ace3954513e2b1e58c96
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
 ---
- drivers/cpuidle/cpuidle-powernv.c | 10 ----------
- drivers/cpuidle/cpuidle-pseries.c | 11 -----------
- drivers/cpuidle/cpuidle.c         |  4 ++--
- drivers/cpuidle/poll_state.c      | 30 ++++++++++++------------------
- 4 files changed, 14 insertions(+), 41 deletions(-)
-
-diff --git a/drivers/cpuidle/cpuidle-powernv.c b/drivers/cpuidle/cpuidle-powernv.c
-index 675b8eb81ebd..b88bbf7ead41 100644
---- a/drivers/cpuidle/cpuidle-powernv.c
-+++ b/drivers/cpuidle/cpuidle-powernv.c
-@@ -71,8 +71,6 @@ static int snooze_loop(struct cpuidle_device *dev,
- {
- 	u64 snooze_exit_time;
- 
--	set_thread_flag(TIF_POLLING_NRFLAG);
--
- 	local_irq_enable();
- 
- 	snooze_exit_time = get_tb() + get_snooze_timeout(dev, drv, index);
-@@ -81,21 +79,13 @@ static int snooze_loop(struct cpuidle_device *dev,
- 	HMT_very_low();
- 	while (!need_resched()) {
- 		if (likely(snooze_timeout_en) && get_tb() > snooze_exit_time) {
--			/*
--			 * Task has not woken up but we are exiting the polling
--			 * loop anyway. Require a barrier after polling is
--			 * cleared to order subsequent test of need_resched().
--			 */
--			clear_thread_flag(TIF_POLLING_NRFLAG);
- 			dev->poll_time_limit = true;
--			smp_mb();
- 			break;
- 		}
- 	}
- 
- 	HMT_medium();
- 	ppc64_runlatch_on();
--	clear_thread_flag(TIF_POLLING_NRFLAG);
- 
- 	local_irq_disable();
- 
-diff --git a/drivers/cpuidle/cpuidle-pseries.c b/drivers/cpuidle/cpuidle-pseries.c
-index 4e08c9a39172..0ae76512b740 100644
---- a/drivers/cpuidle/cpuidle-pseries.c
-+++ b/drivers/cpuidle/cpuidle-pseries.c
-@@ -39,8 +39,6 @@ int snooze_loop(struct cpuidle_device *dev, struct cpuidle_driver *drv,
- {
- 	u64 snooze_exit_time;
- 
--	set_thread_flag(TIF_POLLING_NRFLAG);
--
- 	pseries_idle_prolog();
- 	raw_local_irq_enable();
- 	snooze_exit_time = get_tb() + snooze_timeout;
-@@ -50,21 +48,12 @@ int snooze_loop(struct cpuidle_device *dev, struct cpuidle_driver *drv,
- 		HMT_low();
- 		HMT_very_low();
- 		if (likely(snooze_timeout_en) && get_tb() > snooze_exit_time) {
--			/*
--			 * Task has not woken up but we are exiting the polling
--			 * loop anyway. Require a barrier after polling is
--			 * cleared to order subsequent test of need_resched().
--			 */
- 			dev->poll_time_limit = true;
--			clear_thread_flag(TIF_POLLING_NRFLAG);
--			smp_mb();
- 			break;
- 		}
- 	}
- 
- 	HMT_medium();
--	clear_thread_flag(TIF_POLLING_NRFLAG);
--
- 	raw_local_irq_disable();
- 
- 	pseries_idle_epilog();
-diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-index 49078cc83f4a..9eb811b5d8b6 100644
---- a/drivers/cpuidle/cpuidle.c
-+++ b/drivers/cpuidle/cpuidle.c
-@@ -236,8 +236,8 @@ noinstr int cpuidle_enter_state(struct cpuidle_device *dev,
- 		broadcast = false;
- 	}
- 
--	polling = target_state->flags & CPUIDLE_FLAG_POLLING_HARD;
--
-+	polling = (target_state->flags & (CPUIDLE_FLAG_POLLING_SOFT |
-+					  CPUIDLE_FLAG_POLLING_HARD));
- 	/*
- 	 * If the target state doesn't poll on need_resched(), this is
- 	 * the last check after which further TIF_NEED_RESCHED remote setting
-diff --git a/drivers/cpuidle/poll_state.c b/drivers/cpuidle/poll_state.c
-index a2fe173de117..3bfa251b344a 100644
---- a/drivers/cpuidle/poll_state.c
-+++ b/drivers/cpuidle/poll_state.c
-@@ -13,35 +13,29 @@
- static int __cpuidle poll_idle(struct cpuidle_device *dev,
- 			       struct cpuidle_driver *drv, int index)
- {
--	u64 time_start;
--
--	time_start = local_clock_noinstr();
-+	u64 time_start = local_clock_noinstr();
-+	unsigned int loop_count = 0;
-+	u64 limit;
- 
- 	dev->poll_time_limit = false;
- 
- 	raw_local_irq_enable();
--	if (!current_set_polling_and_test()) {
--		unsigned int loop_count = 0;
--		u64 limit;
- 
--		limit = cpuidle_poll_time(drv, dev);
-+	limit = cpuidle_poll_time(drv, dev);
- 
--		while (!need_resched()) {
--			cpu_relax();
--			if (loop_count++ < POLL_IDLE_RELAX_COUNT)
--				continue;
-+	while (!need_resched()) {
-+		cpu_relax();
-+		if (loop_count++ < POLL_IDLE_RELAX_COUNT)
-+			continue;
- 
--			loop_count = 0;
--			if (local_clock_noinstr() - time_start > limit) {
--				dev->poll_time_limit = true;
--				break;
--			}
-+		loop_count = 0;
-+		if (local_clock_noinstr() - time_start > limit) {
-+			dev->poll_time_limit = true;
-+			break;
- 		}
- 	}
- 	raw_local_irq_disable();
- 
--	current_clr_polling();
--
- 	return index;
- }
- 
--- 
-2.42.1
-
+For more info write to <info@kernelci.org>
 
