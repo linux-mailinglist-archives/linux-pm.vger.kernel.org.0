@@ -1,28 +1,28 @@
-Return-Path: <linux-pm+bounces-165-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-166-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 226007F70A3
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2F8E7F70A4
 	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 10:58:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9F0B9B20F77
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 09:58:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D07C21C20F36
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 09:58:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F15F18037;
-	Fri, 24 Nov 2023 09:58:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06DDE179B8;
+	Fri, 24 Nov 2023 09:58:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A203D68;
-	Fri, 24 Nov 2023 01:58:20 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 14A1210F5;
+	Fri, 24 Nov 2023 01:58:21 -0800 (PST)
 Received: from loongson.cn (unknown [112.20.112.120])
-	by gateway (Coremail) with SMTP id _____8Dx_+u7c2Blc4o8AA--.53211S3;
-	Fri, 24 Nov 2023 17:58:19 +0800 (CST)
+	by gateway (Coremail) with SMTP id _____8CxRui8c2Ble4o8AA--.858S3;
+	Fri, 24 Nov 2023 17:58:20 +0800 (CST)
 Received: from localhost.localdomain (unknown [112.20.112.120])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8CxP925c2BlB4dLAA--.37596S2;
-	Fri, 24 Nov 2023 17:58:18 +0800 (CST)
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8CxP925c2BlB4dLAA--.37596S3;
+	Fri, 24 Nov 2023 17:58:19 +0800 (CST)
 From: Binbin Zhou <zhoubinbin@loongson.cn>
 To: Binbin Zhou <zhoubb.aaron@gmail.com>,
 	Huacai Chen <chenhuacai@loongson.cn>,
@@ -39,11 +39,14 @@ Cc: Huacai Chen <chenhuacai@kernel.org>,
 	Yinbo Zhu <zhuyinbo@loongson.cn>,
 	WANG Xuerui <git@xen0n.name>,
 	loongarch@lists.linux.dev,
-	Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: [PATCH v2 0/2] loongson2_thermal: Fix some issues
-Date: Fri, 24 Nov 2023 17:57:43 +0800
-Message-Id: <cover.1700817227.git.zhoubinbin@loongson.cn>
+	Binbin Zhou <zhoubinbin@loongson.cn>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v2 1/2] dt-bindings: thermal: loongson,ls2k-thermal: Fix binding check issues
+Date: Fri, 24 Nov 2023 17:57:44 +0800
+Message-Id: <6d69362632271ab0af9a5fbfa3bc46a0894f1d54.1700817227.git.zhoubinbin@loongson.cn>
 X-Mailer: git-send-email 2.39.3
+In-Reply-To: <cover.1700817227.git.zhoubinbin@loongson.cn>
+References: <cover.1700817227.git.zhoubinbin@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -51,52 +54,80 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8CxP925c2BlB4dLAA--.37596S2
+X-CM-TRANSID:AQAAf8CxP925c2BlB4dLAA--.37596S3
 X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj9xXoW7Xr4xJr1DWFy5Xryrur48uFX_yoWftrb_ua
-	s7tFyxJ3s7uF13KFy29F13C3s0qa4Du3WrCF48try5Cry2vFyYqrZ5G34a93yxWr4kAFyf
-	Ja1xGwn3Zw17uosvyTuYvTs0mTUanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUbS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y
-	6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-	vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-	Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0
-	cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
-	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
-	14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jOa93UUUUU=
+X-Coremail-Antispam: 1Uk129KBj93XoW7Kr4DXw4kZFWkGF47JFy8tFc_yoW8AF1fpF
+	43Cw1DCr1kKF17Aws8AFy8CwsxKF95KasrXrs2kw1aqFZ8Ja4Sqw15Kr1jq3yrCr10qFy7
+	urZ29r4UCFyDA3gCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUBIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+	tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
+	AKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
+	6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
+	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xII
+	jxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw2
+	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x02
+	67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8XTm3UUUUU==
 
-Hi all:
+Add the missing 'thermal-sensor-cells' property which is required for
+every thermal sensor as it's used when using phandles.
+And add the thermal-sensor.yaml reference.
 
-Some thermal-related DTBS_CHECK warnings and driver issues were found
-when trying to introduce the Loongson-2K DTS{I} for LoongArch.
-This patch series attempts to fix those warnings.
+In fact, it was a careless mistake when submitting the driver that
+caused it to not work properly. So the fix is necessary, although it
+will result in the ABI break.
 
-Thanks.
-
------
-V2:
-- Add Reviewed-by tag;
-- Updated commit message: better comment on why this ABI break is
-  needed.
-
-Link to V1:
-https://lore.kernel.org/all/944559ea3bf7ba0a1540f831ccd7d33591622b22.1698743706.git.zhoubinbin@loongson.cn/
-https://lore.kernel.org/all/59565d152b68b528fc711a89151ea12ed3b73b90.1698743706.git.zhoubinbin@loongson.cn/
-
-Binbin Zhou (2):
-  dt-bindings: thermal: loongson,ls2k-thermal: Fix binding check issues
-  drivers/thermal/loongson2_thermal: Fix incorrect PTR_ERR() judgment
-
+Fixes: 72684d99a854 ("thermal: dt-bindings: add loongson-2 thermal")
+Cc: Yinbo Zhu <zhuyinbo@loongson.cn>
+Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+---
  .../bindings/thermal/loongson,ls2k-thermal.yaml        | 10 +++++++++-
- drivers/thermal/loongson2_thermal.c                    |  2 +-
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
+diff --git a/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
+index 7538469997f9..b634f57cd011 100644
+--- a/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
+@@ -10,6 +10,9 @@ maintainers:
+   - zhanghongchen <zhanghongchen@loongson.cn>
+   - Yinbo Zhu <zhuyinbo@loongson.cn>
+ 
++allOf:
++  - $ref: /schemas/thermal/thermal-sensor.yaml#
++
+ properties:
+   compatible:
+     oneOf:
+@@ -26,12 +29,16 @@ properties:
+   interrupts:
+     maxItems: 1
+ 
++  '#thermal-sensor-cells':
++    const: 1
++
+ required:
+   - compatible
+   - reg
+   - interrupts
++  - '#thermal-sensor-cells'
+ 
+-additionalProperties: false
++unevaluatedProperties: false
+ 
+ examples:
+   - |
+@@ -41,4 +48,5 @@ examples:
+         reg = <0x1fe01500 0x30>;
+         interrupt-parent = <&liointc0>;
+         interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
++        #thermal-sensor-cells = <1>;
+     };
 -- 
 2.39.3
 
