@@ -1,129 +1,159 @@
-Return-Path: <linux-pm+bounces-147-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-148-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D00117F67D5
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Nov 2023 20:50:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 964C17F6B5A
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 05:24:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2AB3AB20FA4
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Nov 2023 19:50:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21CD22812C5
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 04:24:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF57F4D11A;
-	Thu, 23 Nov 2023 19:50:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF46C23A0;
+	Fri, 24 Nov 2023 04:24:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="1Bp+g8pK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA55091;
-	Thu, 23 Nov 2023 11:50:14 -0800 (PST)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1efba24b038so279087fac.1;
-        Thu, 23 Nov 2023 11:50:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700769014; x=1701373814;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SPnVIP7WE+e1m6kbF0iZl32seDul9DiRZGTrCiOrxg0=;
-        b=FNIWBW2c7Kj6ZofayiRNXObglnaSc+VU/SNbg0ft6JE7UTzJc5Mebgwio3mbx1OjpK
-         6zs8uu89SJPbQRvoflVlE8chKohmuZgGOgSR9+5PXUXDWawDo8Tf8MgMZyPCKM9JJ1f4
-         GvlDXoxOEI0JMhAYQrhvBq+hWEZC9vXXmmvZFIp/+ht1a2qNnPJXYhmhaEkpS8TC4zpD
-         Y4OdVYauiQ7/HaUyK9oQFpWhtuOwEv2I0IbJ3F7MpArbSnF5PO8wVKnsHWq8HbVtsvom
-         leRFITfw7BAGE3PhPFRFVsXS6J336C04r3Fhf24HrS+cktjJnSFn4KCjt/s8hvqYi29M
-         awug==
-X-Gm-Message-State: AOJu0YzMXzcUP4hmO2AxCShoIGz0fHgEORzW1hXUyAlY1rAzyYuOLYMy
-	WVBIOiBWF0GWAUg3fptvOEqaNRQuRgBOOa8pg931+S1/
-X-Google-Smtp-Source: AGHT+IFUFtQSgD+W8Yy8QPiwQE4p1RlFzJFt/GSUiRGPuyvIdEEMv1z9wpYE6RAlbcCC6n75J8HSPBnaL6jFaFWFHNM=
-X-Received: by 2002:a05:6871:530f:b0:1d0:e372:6cf8 with SMTP id
- hx15-20020a056871530f00b001d0e3726cf8mr463783oac.2.1700769014104; Thu, 23 Nov
- 2023 11:50:14 -0800 (PST)
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2083.outbound.protection.outlook.com [40.107.101.83])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC65511F;
+	Thu, 23 Nov 2023 20:24:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BkuXLfIDZWUh42v5ffp6sTupZjhZimD61vZWmFscZNDLYxRTfasd4Lkom8PsSriUsrV182l6kilg07xMe3AMlotWYFJWjeVEIqjjkA+6rZsd7Wmk/dgRouvyRbejPBCQtadEnELR32HleDFqWi0C6TRVU6c7JwvH+fQdrAhdvHw5Y8HlpADQQXV7MaukmGUuxXIAQcDpnIs60mc6aKZB+7+6jwpKySJX3+Axy35KDKrp1ieES19EirY38wj1xkmUlY3sB7yq/419PGokguzUNzGo/WOzkIaMbq1YBFBbq/qrPscS8zpAy73B+MQ9xO03n6+NigE1AF+6d32Pq4+u4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kVrLmkkNcvB4mm1wmls6Qvhorl8b2IkdmqVcDoI6+24=;
+ b=fJUvvN0pX7JthIji9Th1WtK3BKOyUUuLNSUH490M31SWwz+vsg8aPshFx6+6b3+ysVXlnlRv/inQku9d8Ei5mWHq0SZBjRCh7w6MG1FXO6wYzRdsy/+nzTxQGBHWMUHw2wWCeOw5HBhkiQpcS5Z+WQ6qJCGlf+4bKuXgxbMsDFvooO1ipZLA+AB9The0qvGUgphzqBRwLoh4GwHWW7E0mDz8w7DuHpYC5/ZOgU5HFj3AbVK8Hifyqx6CXEKXr/4jrrfvsSL/CLqk2qoV0rzWHmY9Ng/6SPvRMb2851TKhKv6XkLtaOqHUsBbs+ALawRkfH2gfNj5OUAnqnXdiz67yA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kVrLmkkNcvB4mm1wmls6Qvhorl8b2IkdmqVcDoI6+24=;
+ b=1Bp+g8pK95uHTTdiKyr850YPlheyrzBOoNE9BQYRT4TqDpkn7SmijnfrqJ0abesqi8pDRSskkjwWRKg7/7CVsgwS4Qp1+701w0446hc6p5tXGJjPhKPlpv10Ey+hHKkzYbYNUDkn5AEwLr+Re0lalpEYK32gi7TlN4DMOBcYNSw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN2PR12MB3888.namprd12.prod.outlook.com (2603:10b6:208:162::32)
+ by SJ0PR12MB6941.namprd12.prod.outlook.com (2603:10b6:a03:448::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.20; Fri, 24 Nov
+ 2023 04:24:09 +0000
+Received: from MN2PR12MB3888.namprd12.prod.outlook.com
+ ([fe80::6cb9:3a50:957a:f6b6]) by MN2PR12MB3888.namprd12.prod.outlook.com
+ ([fe80::6cb9:3a50:957a:f6b6%2]) with mapi id 15.20.7025.021; Fri, 24 Nov 2023
+ 04:24:09 +0000
+Date: Fri, 24 Nov 2023 09:53:58 +0530
+From: Wyes Karny <wyes.karny@amd.com>
+To: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+Cc: Huang Rui <ray.huang@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Perry Yuan <Perry.Yuan@amd.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq/amd-pstate: Fix the return value of
+ amd_pstate_fast_switch()
+Message-ID: <ZWAlXl6MP20khEwB@BLR-5CG13462PL.amd.com>
+References: <20231123082757.3527-1-gautham.shenoy@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231123082757.3527-1-gautham.shenoy@amd.com>
+X-ClientProxiedBy: PN2PR01CA0124.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:6::9) To MN2PR12MB3888.namprd12.prod.outlook.com
+ (2603:10b6:208:162::32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231025192225.468228-1-lukasz.luba@arm.com> <CAJZ5v0gniBtFduwjhDku+OZzjvkCaFK7ew0uJTfW254XKTOyyw@mail.gmail.com>
- <ce8f1a13-b56f-4419-a954-8d987af44112@arm.com> <5fd9ce52-9216-47ae-9ed3-fabb0f3b02fd@arm.com>
-In-Reply-To: <5fd9ce52-9216-47ae-9ed3-fabb0f3b02fd@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 23 Nov 2023 20:50:01 +0100
-Message-ID: <CAJZ5v0jL38PgFYVXFj2Py5NvUU0xFGU45w=TdcBXqr7v+xToag@mail.gmail.com>
-Subject: Re: [PATCH 0/7] Minor cleanup for thermal gov power allocator
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org, 
-	daniel.lezcano@linaro.org, linux-pm@vger.kernel.org, rui.zhang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3888:EE_|SJ0PR12MB6941:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2c47a475-5c08-4732-f88f-08dbeca533f5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	9DZ0IERmSGwk3L2i8emXYNJGOAB311V07eq69Uu7B9i0SOL87gb/NEnu7nfT1X7FDiSUQCNd+lvGdXF5KZIJz7fOn+I43KhRb3k6d5BpP1StKgUojvn7sEzzBKMWdEsPbHX/0ZbkUTtDQ5Izaw+tYS5gBUhX1WSJt3BlbMszZJvQBmFLfK90c6Q5aHnwPWANs8ZyHJgl2bQryOpJhvozuP6Z+1XjVKV41PJ28pOsjvH9uWFxtQ2N4IwPNVEJDCdhWEKfCPGQMVAguc3Vx3Xa6cOKgIZxIwraAxS5PfWYmIGR6Tivb3vMbKa6lDeG0aOIOddugrNyapI3o6HSzw/zL8wrUWHPc0agubUhq2/nIvAx1BbSGDJv8zpXpLZ9umlQqO3z5jR+Ndael2j+69G9lnY/owrPG1ASRq5ogAM2N9o8/3S0V2Si1E5TznK0T9Tly6S4YoSWUDJp4Rtnn0Jn+lcoTkV+KbXjce5T6naGfcYEY5y9PIQL4Eb81Q7TTt4H/AZnqSwPT+z8r855IXTY4w/0koEO9SHFoeirM2vONNfmH+9qq/uN5OSWhfF0TrHT
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3888.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(396003)(376002)(39860400002)(136003)(366004)(230922051799003)(64100799003)(186009)(1800799012)(451199024)(83380400001)(26005)(6666004)(6512007)(66476007)(6506007)(41300700001)(44832011)(6862004)(5660300002)(2906002)(6486002)(316002)(478600001)(8936002)(8676002)(4326008)(6636002)(66556008)(54906003)(66946007)(86362001)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?4iTLR38LZgzGed8tVB67UaEQsqZc0CwYg+nRFlTFfSSXa/civqsX3Y/6LrtZ?=
+ =?us-ascii?Q?32AWYBaJG54LSUMDENvo62pMjFBjYLH1H46IC3AbI0GdFyb8MKayOnRukP0D?=
+ =?us-ascii?Q?TlFQzacjiQAfFN3R9sTK0B7UrHpTgW/8dY+lF0GC/HedsNuqzMkjMSd4hhzM?=
+ =?us-ascii?Q?pZaxGfxEUAaujLCj5ZSD0L2X+3yQu+5636/112LlqOcV/vEtAwvf/L4cMsPv?=
+ =?us-ascii?Q?zoi0WBQnifUXB+pUkgRgzPVeubAQB0Pth+oyA0s4wtp3IDl+vjFnBIv/Lh6R?=
+ =?us-ascii?Q?TzcVg9abRp2NywIEhkslqY03qbqbt71pwHDTX2fRFd3YA5OwUM7GOZNKQj+w?=
+ =?us-ascii?Q?tIRf8sVCFw3aeYpOU2EN0zl1BAuaF944qQGAaP9BdpylCMUT0hFH83iPDLj9?=
+ =?us-ascii?Q?ShBog+2nT/Vhh2EXL2BWlMOOxSASueTgO0orFfKNqje8dgg6yz+l0yHuTivH?=
+ =?us-ascii?Q?579ICEhgEm4DLyLnHwUIH9M8fOGGqVPEYT6ukAElOHWhMOpnvh+CahvJydZ7?=
+ =?us-ascii?Q?Qh3xh9TNxPMe4HsGHr6hzNT5xtAvaPE0UZ6nNxq4OqM3L9XJdrdLeU9ONkuT?=
+ =?us-ascii?Q?juOKvjjtPM+IuM8y0TgywvkZ40TCVWyrMCNn86K8AJdn88OEmoFYlYzmAE8N?=
+ =?us-ascii?Q?WObY+26FbGZ5UrFH4Kr8ZQSzZR43foIYx/bwu05SDpORoRJNkbD9iyPPv1aS?=
+ =?us-ascii?Q?ZKaRHn+ZdEJ/rBxRxbLFLEQmAaPvyPIzouEyuZXhoC3LeyFA5ZQ0ajbE9Ny0?=
+ =?us-ascii?Q?RoL99d6zBFPB4C6Lugt4PBNEUifpiv1WVh1VHRYlzN3wV5DjiIFOeTelPfhL?=
+ =?us-ascii?Q?UCkx62mBs8Ydlg0AtRCGJuZjQqe6lM/A6DVPjASbnrBkGSuKf7f9JKHQ/lEf?=
+ =?us-ascii?Q?imVDxTT86vHhjJvyEiDC/nUGIErLy6k2sPpOOfNWNk2Go4fGF3iDtkWCU/qC?=
+ =?us-ascii?Q?PdSqjAvhXUC3WQwRxBOEwDc7G+vBhVKxw8DZSorvVIrb9sj4CaCNPV6Ae8ml?=
+ =?us-ascii?Q?xTgEfyidbVBp4pY/BVXKrXbvwHU5AvxUHGeOFozfDnuMCihkvA9zWLktLiw1?=
+ =?us-ascii?Q?fzxQ9ejLWD/vWkrUFY3pGy9ttte7STPY+CL6EbB9xyPunKWqPnComM0jpw5c?=
+ =?us-ascii?Q?fMhbx+qd9wjzZxu7y5nw/Lw91UfjdpnqueuIsNNyf7HJiBTFjbREA5jx3SXO?=
+ =?us-ascii?Q?N+bZlQzFnafQsUac8ezwWDSjspAYkveCPt4LmP8TlphzoX/fgpc34S98Nk+U?=
+ =?us-ascii?Q?a/3L+gvPRSjFUpJWZYZiAp25Z8Ye0geXxCCyzPDWNDFGXereyoZDC+M+9ceo?=
+ =?us-ascii?Q?vhcMc/eNypjOMTG/ZdfPtAaABMNH1FLM9ki062VaVBw0ifKZq2NUmtOf/zRb?=
+ =?us-ascii?Q?bQa5g6QJAEprBaGt+b9vCcvRJRXFu1mNMClmWuZRwy1DnXYCYIltj2btB7S5?=
+ =?us-ascii?Q?aoMXOtn3noHuVl54llm1arZ6jEmWy7aNO1u2DOC9DtyBi7naULgj613opCrt?=
+ =?us-ascii?Q?P+MBD4EGav5E1ntZe5Cg3qf0gKoOE642lNaORyaI3RMcLm5ERzEI56uixfgV?=
+ =?us-ascii?Q?7x5nk5kxTaH887A/wzVjVvt2HRBF2SvYfqnsP7aX?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2c47a475-5c08-4732-f88f-08dbeca533f5
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3888.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2023 04:24:09.0595
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kUMnbqdMkd3CHig6rvOGB0bgtlLxh2Hpq7sKRCVsmbC958gRHZJCKq/t7g1sBhFbzErcxmnRA8wW3HTYi+ZBmA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6941
 
-Hi Lukasz,
+On 23 Nov 13:57, Gautham R. Shenoy wrote:
+> cpufreq_driver->fast_switch() callback expects a frequency as a return
+> value. amd_pstate_fast_switch() was returning the return value of
+> amd_pstate_update_freq(), which only indicates a success or failure.
+> 
+> Fix this by making amd_pstate_fast_switch() return the target_freq
+> when the call to amd_pstate_update_freq() is successful, and return
+> the current frequency from policy->cur when the call to
+> amd_pstate_update_freq() is unsuccessful.
+> 
+> Fixes: 4badf2eb1e98 ("cpufreq: amd-pstate: Add ->fast_switch() callback")
 
-On Thu, Nov 23, 2023 at 4:19=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> w=
-rote:
->
-> Hi Rafael,
->
-> Gentle ping
->
-> On 10/26/23 13:22, Lukasz Luba wrote:
-> >
-> >
-> > On 10/26/23 09:54, Rafael J. Wysocki wrote:
-> >> On Wed, Oct 25, 2023 at 9:21=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.c=
-om> wrote:
-> >>>
-> >>> Hi all,
-> >>>
-> >>> The patch set does some small clean up for Intelligent Power Allocato=
-r.
-> >>> Those changes are not expected to alter the general functionality.
-> >>> They just
-> >>> improve the code reading. Only patch 3/7 might improve the use case f=
-or
-> >>> binding the governor to thermal zone (very unlikely in real products,
-> >>> but
-> >>> it's needed for correctness).
-> >>>
-> >>> The changes are based on top of current PM thermal branch, so with th=
-e
-> >>> new trip points.
-> >>>
-> >>> Regards,
-> >>> Lukasz
-> >>>
-> >>> Lukasz Luba (7):
-> >>>    thermal: gov_power_allocator: Rename trip_max_desired_temperature
-> >>>    thermal: gov_power_allocator: Setup trip points earlier
-> >>>    thermal: gov_power_allocator: Check the cooling devices only for
-> >>>      trip_max
-> >>>    thermal: gov_power_allocator: Rearrange the order of variables
-> >>>    thermal: gov_power_allocator: Use shorter variable when possible
-> >>>    thermal: gov_power_allocator: Remove unneeded local variables
-> >>>    thermal: gov_power_allocator: Clean needed variables at the beginn=
-ing
-> >>>
-> >>>   drivers/thermal/gov_power_allocator.c | 123 ++++++++++++++---------=
----
-> >>>   1 file changed, 64 insertions(+), 59 deletions(-)
-> >>>
-> >>> --
-> >>
-> >> The series looks good to me overall, but I'd prefer to make these
-> >> changes in the 6.8 cycle, because the 6.7 merge window is around the
-> >> corner and there is quite a bit of thermal material in this cycle
-> >> already.
-> >
-> > Thanks for having a look! Yes, I agree, we can wait after the
-> > merge window. It just have to be cleaned one day a bit and I postponed
-> > this a few times, so no rush ;)
->
-> I've seen you've created the new pm/thermal. Could you consider to take
-> those in, please?
+Reviewed-by: Wyes Karny <wyes.karny@amd.com>
 
-Sure, I'll get to them presumably tomorrow and if not then early next week.
-
-> I would send some RFC on top showing the issue with reading back the CPU
-> max frequency from the PM_QoS chain.
-
-Sounds good.
+> Signed-off-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+> ---
+>  drivers/cpufreq/amd-pstate.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 9a1e194d5cf8..300f81d36291 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -518,7 +518,9 @@ static int amd_pstate_target(struct cpufreq_policy *policy,
+>  static unsigned int amd_pstate_fast_switch(struct cpufreq_policy *policy,
+>  				  unsigned int target_freq)
+>  {
+> -	return amd_pstate_update_freq(policy, target_freq, true);
+> +	if (!amd_pstate_update_freq(policy, target_freq, true))
+> +		return target_freq;
+> +	return policy->cur;
+>  }
+>  
+>  static void amd_pstate_adjust_perf(unsigned int cpu,
+> -- 
+> 2.25.1
+> 
 
