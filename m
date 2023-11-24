@@ -1,110 +1,103 @@
-Return-Path: <linux-pm+bounces-189-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-190-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 052917F7D9B
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 19:26:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D3917F80F9
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 19:54:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A1A8B21759
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 18:26:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BEA461C2164C
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 18:54:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4DF83A8D8;
-	Fri, 24 Nov 2023 18:26:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD9A4321AD;
+	Fri, 24 Nov 2023 18:54:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="UcTYqK4J"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34301FD5;
-	Fri, 24 Nov 2023 10:24:50 -0800 (PST)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1efba24b038so560215fac.1;
-        Fri, 24 Nov 2023 10:24:50 -0800 (PST)
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8F21BDD
+	for <linux-pm@vger.kernel.org>; Fri, 24 Nov 2023 10:50:52 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id 46e09a7af769-6d7e67c169cso1318137a34.1
+        for <linux-pm@vger.kernel.org>; Fri, 24 Nov 2023 10:50:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1700851851; x=1701456651; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GN2VkgC7Ox1NKiEC9HCdwkrrRrCW+s3lIxVSHnTzVKU=;
+        b=UcTYqK4Jjwn8vgjOlshR6k5n5qTBhMiWVqTgJQIzHwQydGYEs9Qj1+WymB8+QqN9zQ
+         ljBe0NTP9cGykOHz5tHr9xD5L8v4GW+hWWlZgJvdGE9UyI023zhJnbAT5eRjg7Yw749w
+         +IuHmefov1p8+uItZsC3MOPt5+wZFE2zlc8+FpiJmw6QT1JodieZcMRKU493wdDhPEmI
+         X1X2CavVyz6pvqORllHFOIr/n7fBiNAyOElwCRXqQW0S7NZXRQ3TLPtWXW/vqH9wT/5u
+         ZuYxVp8by2XVlaX4mibgiDQ3KaRXx6B5QygeLYCqOfHL8FphQ5U2cipwBNHOjD30EbjM
+         bTxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700850290; x=1701455090;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ar+ThvUpj7eV+zdMuBiTJvuCDtNf2SG+hNoODxv3v1w=;
-        b=hg3fZrfz7Fq3tBm4HKrW8VEF6pnpwWla5rs8NSUOxXMNLy7bVvvDu1rEe7XdV13wLk
-         ponOBPTb0/GV2bTI3VhN94n9AOp/pOIgz1/LJbRC52w3ZOEo7d69vJe0AfdGDifJmJ04
-         8XTDDK7VEp1EpFaniPNy3ZXlt0FGwp/7HKcqSt4O2khhjfYiG+AVqptR5+rsO7PMS9Qm
-         L6QrNUT67jHi88s5w9/U0IqV+3WLX9N3fsJ/mSRCQea/IMBot7lGl0NtYqx4k8H7Q/fo
-         sDGES2PRP/AuH6FeA0IeIaMHcDXedTMnSaz/trWObamu998upMUbvH1Pcb7OUf8NsP1i
-         N5+g==
-X-Gm-Message-State: AOJu0Yz13V5RkYIeNVaN8BPeL4AbsCGy1WHY12dzWAznPxWrEnpkheCh
-	jdbNVC59YBWRCo9LRS1fHJ700vaU8hShn9wavgjKtSpMss0=
-X-Google-Smtp-Source: AGHT+IFoDHMU8QraPdePpGYPcbBSRSp8GngdfE13t9o6t1sh46HSOvIACAeBwowK0F9HefziLEYy8kF7q474RxKZjM4=
-X-Received: by 2002:a05:6870:f78f:b0:1e9:9440:fe4a with SMTP id
- fs15-20020a056870f78f00b001e99440fe4amr4926193oab.3.1700850290144; Fri, 24
- Nov 2023 10:24:50 -0800 (PST)
+        d=1e100.net; s=20230601; t=1700851851; x=1701456651;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GN2VkgC7Ox1NKiEC9HCdwkrrRrCW+s3lIxVSHnTzVKU=;
+        b=UW+JaEyJL+jpMgKf16Yyb8fkB9us/HVSeZ9PvpgqwKC54NiAD3n9V0dvalRoq4s4g9
+         BoecTpolreYCrCQPvmUN/YMfI0NGza46XW3KpynrkkwLidaLeMbM3VXv+dOM1tipJR2k
+         I58vOcpFdgPD6g2tJ2bWw0nfLtW/up5lxBuDuC/TSrcs0QdivhPa9hH8d7H6rPWRq1bj
+         2h3JBBKzWSaRscsbwWzrbVVYziaWLgeFDHOn7iDSenMMsRezXzCPSbSUDahzbqo1/d13
+         MQm9zt4a49WyJ+3aMAQ04KGBNTXSpsKHUVOM+1SF3eqWFdvXiMYfqmnZ/0tDA74NBYnj
+         tnrg==
+X-Gm-Message-State: AOJu0YwI2E9Ga8Ha0uAWdD1ddN2PfsGUCgMzr3KxCzKx66WeqjyvLxEB
+	Wgx3DfUR3rP2uRqXiocF8eT9E9kDxRqLzs0gMtgWvA==
+X-Google-Smtp-Source: AGHT+IGSlMbH/Ck5ElefEgjBJPgaupOZ0YPj68+cSBsnSg8DNXRhAre6QsKPuSm5nqrDd40GTTUtRQ==
+X-Received: by 2002:a9d:7553:0:b0:6d6:567a:c83d with SMTP id b19-20020a9d7553000000b006d6567ac83dmr4211966otl.9.1700851851133;
+        Fri, 24 Nov 2023 10:50:51 -0800 (PST)
+Received: from 6VQ5VV3.attlocal.net ([2600:1700:19e0:a90:c242:2a26:eb7d:4205])
+        by smtp.googlemail.com with ESMTPSA id p2-20020a056830130200b006d7e99c4bfesm584696otq.57.2023.11.24.10.50.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Nov 2023 10:50:50 -0800 (PST)
+From: Stanley Chan <schan@cloudflare.com>
+To: linux-pm@vger.kernel.org
+Cc: kernel-team <kernel-team@cloudflare.com>,
+	Stanley Chan <schan@cloudflare.com>,
+	Thomas Renninger <trenn@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] tools cpupower bench: Override CFLAGS assignments
+Date: Fri, 24 Nov 2023 12:50:41 -0600
+Message-Id: <20231124185042.315148-1-schan@cloudflare.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 24 Nov 2023 19:24:39 +0100
-Message-ID: <CAJZ5v0ikr8Z8KJxqfVzEmCwW4FTg+xLgVKO33D8vqd1XA8+58w@mail.gmail.com>
-Subject: [GIT PULL] ACPI fixes for v6.7-rc3
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: ACPI Devel Maling List <linux-acpi@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Linus,
+Allow user to specify outside CFLAGS values as make argument
 
-Please pull from the tag
+Corrects an issue where CFLAGS is passed as a make argument for
+cpupower, but bench's makefile does not inherit and append to them.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-6.7-rc3
+see also:
+commit dbc4ca339c8d ("tools cpupower: Override CFLAGS assignments")
 
-with top-most commit e37470624e008579fec020c6be062dd200877129
+Signed-off-by: Stanley Chan <schan@cloudflare.com>
+---
+ tools/power/cpupower/bench/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Merge branches 'acpi-video' and 'acpi-processor' into acpi
+diff --git a/tools/power/cpupower/bench/Makefile b/tools/power/cpupower/bench/Makefile
+index d9d9923af85c..a4b902f9e1c4 100644
+--- a/tools/power/cpupower/bench/Makefile
++++ b/tools/power/cpupower/bench/Makefile
+@@ -15,7 +15,7 @@ LIBS = -L../ -L$(OUTPUT) -lm -lcpupower
+ OBJS = $(OUTPUT)main.o $(OUTPUT)parse.o $(OUTPUT)system.o $(OUTPUT)benchmark.o
+ endif
+ 
+-CFLAGS += -D_GNU_SOURCE -I../lib -DDEFAULT_CONFIG_FILE=\"$(confdir)/cpufreq-bench.conf\"
++override CFLAGS += -D_GNU_SOURCE -I../lib -DDEFAULT_CONFIG_FILE=\"$(confdir)/cpufreq-bench.conf\"
+ 
+ $(OUTPUT)%.o : %.c
+ 	$(ECHO) "  CC      " $@
+-- 
+2.34.1
 
-on top of commit 98b1cc82c4affc16f5598d4fa14b1858671b2263
-
- Linux 6.7-rc2
-
-to receive ACPI fixes for 6.7-rc3.
-
-These add an ACPI IRQ override quirk for ASUS ExpertBook B1402CVA
-and fix an ACPI processor idle issue leading to triple-faults in Xen
-HVM guests and an ACPI backlight driver issue that causes GPUs to
-misbehave while their children power is being fixed up.
-
-Specifics:
-
- - Avoid powering up GPUs while attempting to fix up power for their
-   children (Hans de Goede).
-
- - Use raw_safe_halt() instead of safe_halt() in acpi_idle_play_dead()
-   so as to avoid triple-falts during CPU online in Xen HVM guests due
-   to the setting of the hardirqs_enabled flag in safe_halt() (David
-   Woodhouse).
-
- - Add an ACPI IRQ override quirk for ASUS ExpertBook B1402CVA (Hans
-   de Goede).
-
-Thanks!
-
-
----------------
-
-David Woodhouse (1):
-      ACPI: processor_idle: use raw_safe_halt() in acpi_idle_play_dead()
-
-Hans de Goede (3):
-      ACPI: PM: Add acpi_device_fix_up_power_children() function
-      ACPI: video: Use acpi_device_fix_up_power_children()
-      ACPI: resource: Skip IRQ override on ASUS ExpertBook B1402CVA
-
----------------
-
- drivers/acpi/acpi_video.c     |  2 +-
- drivers/acpi/device_pm.c      | 13 +++++++++++++
- drivers/acpi/processor_idle.c |  2 +-
- drivers/acpi/resource.c       |  7 +++++++
- include/acpi/acpi_bus.h       |  1 +
- 5 files changed, 23 insertions(+), 2 deletions(-)
 
