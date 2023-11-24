@@ -1,103 +1,146 @@
-Return-Path: <linux-pm+bounces-190-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-191-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D3917F80F9
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 19:54:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C53817F81CA
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 20:01:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BEA461C2164C
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 18:54:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 665B0B223A6
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 19:01:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD9A4321AD;
-	Fri, 24 Nov 2023 18:54:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="UcTYqK4J"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CE64339BE;
+	Fri, 24 Nov 2023 19:01:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8F21BDD
-	for <linux-pm@vger.kernel.org>; Fri, 24 Nov 2023 10:50:52 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id 46e09a7af769-6d7e67c169cso1318137a34.1
-        for <linux-pm@vger.kernel.org>; Fri, 24 Nov 2023 10:50:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1700851851; x=1701456651; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GN2VkgC7Ox1NKiEC9HCdwkrrRrCW+s3lIxVSHnTzVKU=;
-        b=UcTYqK4Jjwn8vgjOlshR6k5n5qTBhMiWVqTgJQIzHwQydGYEs9Qj1+WymB8+QqN9zQ
-         ljBe0NTP9cGykOHz5tHr9xD5L8v4GW+hWWlZgJvdGE9UyI023zhJnbAT5eRjg7Yw749w
-         +IuHmefov1p8+uItZsC3MOPt5+wZFE2zlc8+FpiJmw6QT1JodieZcMRKU493wdDhPEmI
-         X1X2CavVyz6pvqORllHFOIr/n7fBiNAyOElwCRXqQW0S7NZXRQ3TLPtWXW/vqH9wT/5u
-         ZuYxVp8by2XVlaX4mibgiDQ3KaRXx6B5QygeLYCqOfHL8FphQ5U2cipwBNHOjD30EbjM
-         bTxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700851851; x=1701456651;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GN2VkgC7Ox1NKiEC9HCdwkrrRrCW+s3lIxVSHnTzVKU=;
-        b=UW+JaEyJL+jpMgKf16Yyb8fkB9us/HVSeZ9PvpgqwKC54NiAD3n9V0dvalRoq4s4g9
-         BoecTpolreYCrCQPvmUN/YMfI0NGza46XW3KpynrkkwLidaLeMbM3VXv+dOM1tipJR2k
-         I58vOcpFdgPD6g2tJ2bWw0nfLtW/up5lxBuDuC/TSrcs0QdivhPa9hH8d7H6rPWRq1bj
-         2h3JBBKzWSaRscsbwWzrbVVYziaWLgeFDHOn7iDSenMMsRezXzCPSbSUDahzbqo1/d13
-         MQm9zt4a49WyJ+3aMAQ04KGBNTXSpsKHUVOM+1SF3eqWFdvXiMYfqmnZ/0tDA74NBYnj
-         tnrg==
-X-Gm-Message-State: AOJu0YwI2E9Ga8Ha0uAWdD1ddN2PfsGUCgMzr3KxCzKx66WeqjyvLxEB
-	Wgx3DfUR3rP2uRqXiocF8eT9E9kDxRqLzs0gMtgWvA==
-X-Google-Smtp-Source: AGHT+IGSlMbH/Ck5ElefEgjBJPgaupOZ0YPj68+cSBsnSg8DNXRhAre6QsKPuSm5nqrDd40GTTUtRQ==
-X-Received: by 2002:a9d:7553:0:b0:6d6:567a:c83d with SMTP id b19-20020a9d7553000000b006d6567ac83dmr4211966otl.9.1700851851133;
-        Fri, 24 Nov 2023 10:50:51 -0800 (PST)
-Received: from 6VQ5VV3.attlocal.net ([2600:1700:19e0:a90:c242:2a26:eb7d:4205])
-        by smtp.googlemail.com with ESMTPSA id p2-20020a056830130200b006d7e99c4bfesm584696otq.57.2023.11.24.10.50.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Nov 2023 10:50:50 -0800 (PST)
-From: Stanley Chan <schan@cloudflare.com>
-To: linux-pm@vger.kernel.org
-Cc: kernel-team <kernel-team@cloudflare.com>,
-	Stanley Chan <schan@cloudflare.com>,
-	Thomas Renninger <trenn@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] tools cpupower bench: Override CFLAGS assignments
-Date: Fri, 24 Nov 2023 12:50:41 -0600
-Message-Id: <20231124185042.315148-1-schan@cloudflare.com>
-X-Mailer: git-send-email 2.34.1
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DCBA1FDB
+	for <linux-pm@vger.kernel.org>; Fri, 24 Nov 2023 10:57:36 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1r6bMl-0007D6-1n; Fri, 24 Nov 2023 19:57:27 +0100
+Received: from [2a0a:edc0:2:b01:1d::c0] (helo=ptx.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ore@pengutronix.de>)
+	id 1r6bMj-00BKHf-VY; Fri, 24 Nov 2023 19:57:25 +0100
+Received: from ore by ptx.whiteo.stw.pengutronix.de with local (Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1r6bMj-003gIb-Sq; Fri, 24 Nov 2023 19:57:25 +0100
+Date: Fri, 24 Nov 2023 19:57:25 +0100
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Mark Brown <broonie@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>, kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	=?utf-8?B?U8O4cmVu?= Andersen <san@skov.dk>
+Subject: Re: [PATCH v1 0/3] introduce priority-based shutdown support
+Message-ID: <20231124185725.GA872366@pengutronix.de>
+References: <20231124145338.3112416-1-o.rempel@pengutronix.de>
+ <2023112403-laxative-lustiness-6a7f@gregkh>
+ <ZWC/hKav0JANhWKM@finisterre.sirena.org.uk>
+ <2023112458-stature-commuting-c66f@gregkh>
+ <ZWDGGqsCq9iSnHtO@finisterre.sirena.org.uk>
+ <2023112435-dazzler-crisped-04a6@gregkh>
+ <20231124163234.GC819414@pengutronix.de>
+ <2023112453-flagstick-bullring-8511@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2023112453-flagstick-bullring-8511@gregkh>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-Allow user to specify outside CFLAGS values as make argument
+On Fri, Nov 24, 2023 at 05:26:30PM +0000, Greg Kroah-Hartman wrote:
+> On Fri, Nov 24, 2023 at 05:32:34PM +0100, Oleksij Rempel wrote:
+> > On Fri, Nov 24, 2023 at 03:56:19PM +0000, Greg Kroah-Hartman wrote:
+> > > On Fri, Nov 24, 2023 at 03:49:46PM +0000, Mark Brown wrote:
+> > > > On Fri, Nov 24, 2023 at 03:27:48PM +0000, Greg Kroah-Hartman wrote:
+> > > > > On Fri, Nov 24, 2023 at 03:21:40PM +0000, Mark Brown wrote:
+> > > > 
+> > > > > > This came out of some discussions about trying to handle emergency power
+> > > > > > failure notifications.
+> > > > 
+> > > > > I'm sorry, but I don't know what that means.  Are you saying that the
+> > > > > kernel is now going to try to provide a hard guarantee that some devices
+> > > > > are going to be shut down in X number of seconds when asked?  If so, why
+> > > > > not do this in userspace?
+> > > > 
+> > > > No, it was initially (or when I initially saw it anyway) handling of
+> > > > notifications from regulators that they're in trouble and we have some
+> > > > small amount of time to do anything we might want to do about it before
+> > > > we expire.
+> > > 
+> > > So we are going to guarantee a "time" in which we are going to do
+> > > something?  Again, if that's required, why not do it in userspace using
+> > > a RT kernel?
+> > 
+> > For the HW in question I have only 100ms time before power loss. By
+> > doing it over use space some we will have even less time to react.
+> 
+> Why can't userspace react that fast?  Why will the kernel be somehow
+> faster?  Speed should be the same, just get the "power is cut" signal
+> and have userspace flush and unmount the disk before power is gone.  Why
+> can the kernel do this any differently?
+> 
+> > In fact, this is not a new requirement. It exist on different flavors of
+> > automotive Linux for about 10 years. Linux in cars should be able to
+> > handle voltage drops for example on ignition and so on. The only new thing is
+> > the attempt to mainline it.
+> 
+> But your patch is not guaranteeing anything, it's just doing a "I want
+> this done before the other devices are handled", that's it.  There is no
+> chance that 100ms is going to be a requirement, or that some other
+> device type is not going to come along and demand to be ahead of your
+> device in the list.
+> 
+> So you are going to have a constant fight among device types over the
+> years, and people complaining that the kernel is now somehow going to
+> guarantee that a device is shutdown in a set amount of time, which
+> again, the kernel can not guarantee here.
+> 
+> This might work as a one-off for a specific hardware platform, which is
+> odd, but not anything you really should be adding for anyone else to use
+> here as your reasoning for it does not reflect what the code does.
 
-Corrects an issue where CFLAGS is passed as a make argument for
-cpupower, but bench's makefile does not inherit and append to them.
+I see. Good point.
 
-see also:
-commit dbc4ca339c8d ("tools cpupower: Override CFLAGS assignments")
+In my case umount is not needed, there is not enough time to write down
+the data. We should send a shutdown command to the eMMC ASAP.
 
-Signed-off-by: Stanley Chan <schan@cloudflare.com>
----
- tools/power/cpupower/bench/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+@Ulf, are there a way request mmc shutdown from user space?
+If I see it correctly, sysfs-devices-power-control support only "auto" and
+"on". Unbinding the module will not execute MMC shutdown notification.
+If user space is the way to go, do sysfs-devices-power-control "off"
+command will be acceptable?
 
-diff --git a/tools/power/cpupower/bench/Makefile b/tools/power/cpupower/bench/Makefile
-index d9d9923af85c..a4b902f9e1c4 100644
---- a/tools/power/cpupower/bench/Makefile
-+++ b/tools/power/cpupower/bench/Makefile
-@@ -15,7 +15,7 @@ LIBS = -L../ -L$(OUTPUT) -lm -lcpupower
- OBJS = $(OUTPUT)main.o $(OUTPUT)parse.o $(OUTPUT)system.o $(OUTPUT)benchmark.o
- endif
- 
--CFLAGS += -D_GNU_SOURCE -I../lib -DDEFAULT_CONFIG_FILE=\"$(confdir)/cpufreq-bench.conf\"
-+override CFLAGS += -D_GNU_SOURCE -I../lib -DDEFAULT_CONFIG_FILE=\"$(confdir)/cpufreq-bench.conf\"
- 
- $(OUTPUT)%.o : %.c
- 	$(ECHO) "  CC      " $@
+The other option I have is to add a regulator event handler to the MMC
+framework and do shutdown notification on under-voltage event.
+
+Are there other options?
+
+Regards,
+Oleksij
 -- 
-2.34.1
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
