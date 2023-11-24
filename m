@@ -1,119 +1,95 @@
-Return-Path: <linux-pm+bounces-151-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-152-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE18D7F6D11
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 08:44:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A06467F6D31
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 08:51:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1AD6C1C20D29
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 07:44:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2E690B20FFF
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 07:50:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFC6B63D5;
-	Fri, 24 Nov 2023 07:44:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 385915247;
+	Fri, 24 Nov 2023 07:50:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9728D40;
-	Thu, 23 Nov 2023 23:44:50 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B1B0C1063;
-	Thu, 23 Nov 2023 23:45:36 -0800 (PST)
-Received: from [10.57.4.165] (unknown [10.57.4.165])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 545AA3F73F;
-	Thu, 23 Nov 2023 23:44:49 -0800 (PST)
-Message-ID: <49344fb7-78c0-4fc8-9687-22d039b5318f@arm.com>
-Date: Fri, 24 Nov 2023 07:45:48 +0000
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15497D44;
+	Thu, 23 Nov 2023 23:50:45 -0800 (PST)
+X-UUID: 1552beee8cc441bbb03aba778b822927-20231124
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.32,REQID:f220a046-a202-49f3-b93b-e8478b749bcf,IP:5,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:-10
+X-CID-INFO: VERSION:1.1.32,REQID:f220a046-a202-49f3-b93b-e8478b749bcf,IP:5,URL
+	:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:-10
+X-CID-META: VersionHash:5f78ec9,CLOUDID:7462e7fc-4a48-46e2-b946-12f04f20af8c,B
+	ulkID:231124155029R77NN2E6,BulkQuantity:0,Recheck:0,SF:44|66|38|24|17|19|1
+	02,TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,CO
+	L:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
+X-UUID: 1552beee8cc441bbb03aba778b822927-20231124
+X-User: chentao@kylinos.cn
+Received: from vt.. [(116.128.244.169)] by mailgw
+	(envelope-from <chentao@kylinos.cn>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 2127809040; Fri, 24 Nov 2023 15:50:29 +0800
+From: Kunwu Chan <chentao@kylinos.cn>
+To: agross@kernel.org,
+	andersson@kernel.org,
+	konrad.dybcio@linaro.org,
+	sre@kernel.org,
+	caleb.connolly@linaro.org
+Cc: kunwu.chan@hotmail.com,
+	linux-arm-msm@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Kunwu Chan <chentao@kylinos.cn>
+Subject: [PATCH] power: supply: Fix null pointer dereference in smb2_probe
+Date: Fri, 24 Nov 2023 15:50:21 +0800
+Message-Id: <20231124075021.1335289-1-chentao@kylinos.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/7] Minor cleanup for thermal gov power allocator
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
- linux-pm@vger.kernel.org, rui.zhang@intel.com
-References: <20231025192225.468228-1-lukasz.luba@arm.com>
- <CAJZ5v0gniBtFduwjhDku+OZzjvkCaFK7ew0uJTfW254XKTOyyw@mail.gmail.com>
- <ce8f1a13-b56f-4419-a954-8d987af44112@arm.com>
- <5fd9ce52-9216-47ae-9ed3-fabb0f3b02fd@arm.com>
- <CAJZ5v0jL38PgFYVXFj2Py5NvUU0xFGU45w=TdcBXqr7v+xToag@mail.gmail.com>
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0jL38PgFYVXFj2Py5NvUU0xFGU45w=TdcBXqr7v+xToag@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+devm_kasprintf and devm_kzalloc return a pointer to dynamically
+allocated memory which can be NULL upon failure.
 
+Fixes: 8648aeb5d7b7 ("power: supply: add Qualcomm PMI8998 SMB2 Charger driver")
+Signed-off-by: Kunwu Chan <chentao@kylinos.cn>
+---
+ drivers/power/supply/qcom_pmi8998_charger.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-On 11/23/23 19:50, Rafael J. Wysocki wrote:
-> Hi Lukasz,
-> 
-> On Thu, Nov 23, 2023 at 4:19 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> Hi Rafael,
->>
->> Gentle ping
->>
->> On 10/26/23 13:22, Lukasz Luba wrote:
->>>
->>>
->>> On 10/26/23 09:54, Rafael J. Wysocki wrote:
->>>> On Wed, Oct 25, 2023 at 9:21 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>>>
->>>>> Hi all,
->>>>>
->>>>> The patch set does some small clean up for Intelligent Power Allocator.
->>>>> Those changes are not expected to alter the general functionality.
->>>>> They just
->>>>> improve the code reading. Only patch 3/7 might improve the use case for
->>>>> binding the governor to thermal zone (very unlikely in real products,
->>>>> but
->>>>> it's needed for correctness).
->>>>>
->>>>> The changes are based on top of current PM thermal branch, so with the
->>>>> new trip points.
->>>>>
->>>>> Regards,
->>>>> Lukasz
->>>>>
->>>>> Lukasz Luba (7):
->>>>>     thermal: gov_power_allocator: Rename trip_max_desired_temperature
->>>>>     thermal: gov_power_allocator: Setup trip points earlier
->>>>>     thermal: gov_power_allocator: Check the cooling devices only for
->>>>>       trip_max
->>>>>     thermal: gov_power_allocator: Rearrange the order of variables
->>>>>     thermal: gov_power_allocator: Use shorter variable when possible
->>>>>     thermal: gov_power_allocator: Remove unneeded local variables
->>>>>     thermal: gov_power_allocator: Clean needed variables at the beginning
->>>>>
->>>>>    drivers/thermal/gov_power_allocator.c | 123 ++++++++++++++------------
->>>>>    1 file changed, 64 insertions(+), 59 deletions(-)
->>>>>
->>>>> --
->>>>
->>>> The series looks good to me overall, but I'd prefer to make these
->>>> changes in the 6.8 cycle, because the 6.7 merge window is around the
->>>> corner and there is quite a bit of thermal material in this cycle
->>>> already.
->>>
->>> Thanks for having a look! Yes, I agree, we can wait after the
->>> merge window. It just have to be cleaned one day a bit and I postponed
->>> this a few times, so no rush ;)
->>
->> I've seen you've created the new pm/thermal. Could you consider to take
->> those in, please?
-> 
-> Sure, I'll get to them presumably tomorrow and if not then early next week.
+diff --git a/drivers/power/supply/qcom_pmi8998_charger.c b/drivers/power/supply/qcom_pmi8998_charger.c
+index 8acf63ee6897..9bb777406013 100644
+--- a/drivers/power/supply/qcom_pmi8998_charger.c
++++ b/drivers/power/supply/qcom_pmi8998_charger.c
+@@ -972,10 +972,14 @@ static int smb2_probe(struct platform_device *pdev)
+ 	supply_config.of_node = pdev->dev.of_node;
+ 
+ 	desc = devm_kzalloc(chip->dev, sizeof(smb2_psy_desc), GFP_KERNEL);
++	if (!desc)
++		return -ENOMEM;
+ 	memcpy(desc, &smb2_psy_desc, sizeof(smb2_psy_desc));
+ 	desc->name =
+ 		devm_kasprintf(chip->dev, GFP_KERNEL, "%s-charger",
+ 			       (const char *)device_get_match_data(chip->dev));
++	if (!desc->name)
++		return -ENOMEM;
+ 
+ 	chip->chg_psy =
+ 		devm_power_supply_register(chip->dev, desc, &supply_config);
+-- 
+2.34.1
 
-OK, thank you Rafael!
-
-> 
->> I would send some RFC on top showing the issue with reading back the CPU
->> max frequency from the PM_QoS chain.
-> 
-> Sounds good.
 
