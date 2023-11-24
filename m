@@ -1,35 +1,35 @@
-Return-Path: <linux-pm+bounces-179-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-180-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D64477F7736
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 16:05:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 698187F7741
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 16:07:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5E385B213B1
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 15:05:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24D1B28209A
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Nov 2023 15:07:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB61F2E627;
-	Fri, 24 Nov 2023 15:05:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 946582D781;
+	Fri, 24 Nov 2023 15:07:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="pdevLJfV"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="PXP9b/W1"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B84392C1AE;
-	Fri, 24 Nov 2023 15:05:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEF88C433CA;
-	Fri, 24 Nov 2023 15:05:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71B342C1AE;
+	Fri, 24 Nov 2023 15:07:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74C7BC433C7;
+	Fri, 24 Nov 2023 15:07:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1700838350;
-	bh=Lw4ddp5SRRaHbNDe7CMkDvQErv4vbWF/4A45oJbqhsQ=;
+	s=korg; t=1700838433;
+	bh=AEn7eLNiCWXSCKU/V6dq487QCSOB2Gi18tMF4Q+T8s0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pdevLJfVyCSjjA1P3fYUGSKdZZHBnKVrNkLw7Bo/RLiSgERLtxK3EsjDDdBh7DfSp
-	 BT/ltxx8EX+6aPl761mJCK+kBsI6Xj4Yqpi83meTzIS1A9hSbNQaUUx8qyURovyDs8
-	 bN4RTVQiSHWV/s3DuiLmJUV7jYFviPxaOWnynjLc=
-Date: Fri, 24 Nov 2023 15:05:47 +0000
+	b=PXP9b/W1Cyy4ODd36Mg/WHH8md71tO7eh/829jn6datfyuRX9ObT54PQy6QRxih4U
+	 A7CTFtzIEHRhaFg3z9xr9LOThevoGgvbebSyO/sG1L3fB+/bRNMaF+Rb9tlL2cMY/w
+	 RlWR4eBfj4kAvgpR0VPTX5sidzngqyn71CUCF0P4=
+Date: Fri, 24 Nov 2023 15:07:11 +0000
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: Oleksij Rempel <o.rempel@pengutronix.de>
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -38,9 +38,11 @@ Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
 	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
 	linux-pm@vger.kernel.org,
 	=?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>
-Subject: Re: [PATCH v1 0/3] introduce priority-based shutdown support
-Message-ID: <2023112403-laxative-lustiness-6a7f@gregkh>
+Subject: Re: [PATCH v1 1/3] driver core: move core part of device_shutdown()
+ to a separate function
+Message-ID: <2023112450-unsterile-crushing-c665@gregkh>
 References: <20231124145338.3112416-1-o.rempel@pengutronix.de>
+ <20231124145338.3112416-2-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -49,29 +51,56 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231124145338.3112416-1-o.rempel@pengutronix.de>
+In-Reply-To: <20231124145338.3112416-2-o.rempel@pengutronix.de>
 
-On Fri, Nov 24, 2023 at 03:53:35PM +0100, Oleksij Rempel wrote:
-> Hi,
+On Fri, Nov 24, 2023 at 03:53:36PM +0100, Oleksij Rempel wrote:
+> Split the device_shutdown() as a preparation for the prioritization
+> support.
+
+Nit, this is going to need a lot more description, as at this point in
+time, we do not know what "prioritization support" is.
+
 > 
-> This patch series introduces support for prioritized device shutdown.
-> The main goal is to enable prioritization for shutting down specific
-> devices, particularly crucial in scenarios like power loss where
-> hardware damage can occur if not handled properly.
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  drivers/base/core.c | 110 +++++++++++++++++++++++++-------------------
+>  1 file changed, 63 insertions(+), 47 deletions(-)
+> 
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index 67ba592afc77..0f5646a097d3 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -4719,12 +4719,73 @@ int device_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid)
+>  }
+>  EXPORT_SYMBOL_GPL(device_change_owner);
+>  
+> +/**
 
-Oh fun, now we will have drivers and subsystems fighting over their
-priority, with each one insisting that they are the most important!
+This doesn't need kernel-doc for a static function, right?
 
-/s
+> + * device_shutdown_one - shut down a device
+> + * @dev: device to shut down
+> + *
+> + * It is called with the device lock held.
+> + *
+> + * The device must be on the devices_kset list.
+> + */
+> +static void device_shutdown_one_locked(struct device *dev)
+> +{
+> +	struct device *parent;
+> +
+> +	lockdep_assert_held(&devices_kset->list_lock);
+> +	/*
+> +	 * hold reference count of device's parent to
+> +	 * prevent it from being freed because parent's
+> +	 * lock is to be held
+> +	 */
+> +	parent = get_device(dev->parent);
+> +	get_device(dev);
+> +	/*
 
-Anyway, this is ripe for problems and issues in the long-run, what is so
-special about this hardware that it can not just shutdown in the
-existing order that it has to be "first" over everyone else?  What
-exactly does this prevent and what devices are requiring this?
-
-And most importantly, what has changed in the past 20+ years to
-suddenly require this new functionality and how does any other operating
-system handle it?
+As you are moving the code, might as well make it a bit prettier and add
+proper line breaks before the comments please.
 
 thanks,
 
