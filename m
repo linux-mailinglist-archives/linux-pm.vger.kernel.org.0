@@ -1,62 +1,62 @@
-Return-Path: <linux-pm+bounces-219-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-220-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E0CF7F8B6A
-	for <lists+linux-pm@lfdr.de>; Sat, 25 Nov 2023 15:18:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A57E47F8B6E
+	for <lists+linux-pm@lfdr.de>; Sat, 25 Nov 2023 15:18:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AE6ADB211AA
-	for <lists+linux-pm@lfdr.de>; Sat, 25 Nov 2023 14:18:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D83A21C20C4F
+	for <lists+linux-pm@lfdr.de>; Sat, 25 Nov 2023 14:18:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0BBA18041;
-	Sat, 25 Nov 2023 14:18:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92B3B168AD;
+	Sat, 25 Nov 2023 14:18:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qcLUpqji"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JVI45ek3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2DB10D8
-	for <linux-pm@vger.kernel.org>; Sat, 25 Nov 2023 06:17:58 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-9ffef4b2741so376403166b.3
-        for <linux-pm@vger.kernel.org>; Sat, 25 Nov 2023 06:17:58 -0800 (PST)
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B494E13A
+	for <linux-pm@vger.kernel.org>; Sat, 25 Nov 2023 06:18:01 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2c8880fbb33so36399751fa.0
+        for <linux-pm@vger.kernel.org>; Sat, 25 Nov 2023 06:18:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700921877; x=1701526677; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1700921880; x=1701526680; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KWCPgxbV31hYh8dy6WyfWoyvdSmmu8EadahKhw6DkWw=;
-        b=qcLUpqjiwzHK5tC+KD+KtHDgUJB5RTkKQPP4XhaNtPXiIcjb7JzabYxYqicZ5HiNLb
-         NhRMp2euNEbewi+QDtjIsNvoAwbAsaJCYLKIAIe39dWa27HDYKMhIDAiYoUoyEudI5Tg
-         e5FxcJE3u+s2+RTQW1KIJGUzZVPaajp7X9yczcPrFDZOWHBNeqicLtyD6HgPYNkdjz92
-         +P7DBicLgpAfqdADC1m1wMVmCFhKWDfDGs+j1M4FBxMEpnmZ38oyvSmIMmlEGnuaHkW+
-         8a2OPzoyAyVLHGDiKeCCFEqt9v94hQnlp3bDZqJgT6Z4f4msJcWA/5KbQFx1SfdvDBJ/
-         1k7Q==
+        bh=OMfZuIt+BqG7KJ9nvVW95qPOCXnGA5QHM/Q3t0t9+4M=;
+        b=JVI45ek3nUjZLPzP4gXrVK6Ab8mYya+JK4b9mYzHFa9kiBUUgmVW6Ybu1S57XM133X
+         sWPLVrKUB1M7pNEFCuz7eD4XAmzvC+6D3TR8kHQAgPPd38FkMkn17vsYbKb59i2meUfU
+         SAWGZDfuF/G6CIujKfDfZtbA0Bemft9M9Cmo5bIwg33LZDJInr6K+D73xo6I50bQAUfZ
+         z9cGALg2Ud+B2vcWHsrnWq4FX3j62ud1TC5RR+tsBGTZ27m7fEVeVX9eCCE784mz4DB/
+         aup5BIVu+Eln1mdCD3Bz44W4j/e+Za7ToZXE+PhXAaaOYF4wPXlUsOb7gnDnXe5kMDwd
+         K1Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700921877; x=1701526677;
+        d=1e100.net; s=20230601; t=1700921880; x=1701526680;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KWCPgxbV31hYh8dy6WyfWoyvdSmmu8EadahKhw6DkWw=;
-        b=Sy/pfQ2Be2uMxxLoZpBe5eXFm9oj4dZnJ7LW7kbvHflAT8Ll8kCSG3iTRBZGn58LmI
-         pftk7g2G5X/uePJb0Hl1cyl6L6lN37mB2dP8HimN4N5SLohXtTNW2kRfpBDlZR49YFCo
-         2NJmXTWeyqLBd+5YOaY7Ez6q4VVQoIOF1Jz24rfSxkA8/VCY36/3X/GpBxBQBKnWfWWT
-         U5C+dm04iDmBGJswi3VbV73PM8CPaciXMSsg6oge0nt0kWX05ghKqBrInezA9je3Xr5h
-         6lceI84durarftv7x6oPb+P3gy/PhMzuAtwc/rvoNR7OcX7qXzVmyAuAwFIkapNyqaAD
-         1KEA==
-X-Gm-Message-State: AOJu0YwFMOU3zvYb5tFmcmMO+nbc1mRj93DoDqo/XOEU9p28xCtMe1e/
-	hW8UROXCrruuK776vE6zGAzDvQ==
-X-Google-Smtp-Source: AGHT+IHvD1QUH58vfrh+JuFXiAspD6f2yTyYe0BNJ9QJi9uFvF8FzZqrsK628r6rcj/cdkeKg5L5Ow==
-X-Received: by 2002:a17:906:608d:b0:9d2:20ee:b18b with SMTP id t13-20020a170906608d00b009d220eeb18bmr4065922ejj.42.1700921877219;
-        Sat, 25 Nov 2023 06:17:57 -0800 (PST)
+        bh=OMfZuIt+BqG7KJ9nvVW95qPOCXnGA5QHM/Q3t0t9+4M=;
+        b=NZ4xWHgTHPcy9/ijjIoai+9s6EZxVZxUb8mxbSDPHQIRnE7+f16Cvjputo4p/lNEx/
+         VW96JApX2FSm7V+LRztalx2h0ZOqPkLeYHPRqXAFhdHmezSoYS/3iEVg1ajPl5kEAT8T
+         GlfPpkMY+tiDHTl18WrNSp8q8PwJsUTLCxrWxp/DbRqG4jHOjCwhiJz4QbCFx6trRcVu
+         0KTgo1HtMQZYuBDtM/gSVjVUz+F1C/hcypXQ0MaMSdt/ffXXgp6r/EWMmjLHLxJ99SK9
+         SYve10sD5cABHx9x/0sxyvFNEIrKSUdGYIItdsB0uDsmPAWhmiDmf96wrD2BlN3MEZ+d
+         pkdw==
+X-Gm-Message-State: AOJu0YxBXKBfHm8zzJYo77vN/TF9oy5/BfrQ7nKwdsmMtFFrPT71kJXv
+	5VVBh+blaONzbVCw0usYAEJ2Iw==
+X-Google-Smtp-Source: AGHT+IGY8/ylhRHLmys2VuwyghOEp5L7XnbE9NC1OHEjDt/EDFIyFNSFmFVQ5bIXBVUTdxQp2wEScQ==
+X-Received: by 2002:a2e:350d:0:b0:2c6:ed74:39bd with SMTP id z13-20020a2e350d000000b002c6ed7439bdmr4479087ljz.12.1700921879933;
+        Sat, 25 Nov 2023 06:17:59 -0800 (PST)
 Received: from [10.167.154.1] (178235187180.dynamic-4-waw-k-2-3-0.vectranet.pl. [178.235.187.180])
-        by smtp.gmail.com with ESMTPSA id 19-20020a170906319300b00992b8d56f3asm3500345ejy.105.2023.11.25.06.17.53
+        by smtp.gmail.com with ESMTPSA id 19-20020a170906319300b00992b8d56f3asm3500345ejy.105.2023.11.25.06.17.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Nov 2023 06:17:56 -0800 (PST)
+        Sat, 25 Nov 2023 06:17:59 -0800 (PST)
 From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Date: Sat, 25 Nov 2023 15:17:33 +0100
-Subject: [PATCH 05/12] dt-bindings: interconnect: qcom,msm8998-bwmon: Add
- QCM2290 bwmon instance
+Date: Sat, 25 Nov 2023 15:17:34 +0100
+Subject: [PATCH 06/12] dt-bindings: firmware: qcom,scm: Allow interconnect
+ for everyone
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -65,7 +65,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231125-topic-rb1_feat-v1-5-11d71b12b058@linaro.org>
+Message-Id: <20231125-topic-rb1_feat-v1-6-11d71b12b058@linaro.org>
 References: <20231125-topic-rb1_feat-v1-0-11d71b12b058@linaro.org>
 In-Reply-To: <20231125-topic-rb1_feat-v1-0-11d71b12b058@linaro.org>
 To: Rob Clark <robdclark@gmail.com>, 
@@ -91,33 +91,48 @@ Cc: Marijn Suijten <marijn.suijten@somainline.org>,
  linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
  iommu@lists.linux.dev, Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1700921858; l=892;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1700921858; l=1089;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=4p1t3ladITCzScGHKWRD4AUO04YXuJiZkuRiWJFiujo=;
- b=HgtcxdLyklPczRRLJMxdrlC1sVeNSeCuWIN6F4Xkr9dxy/a75RHP8Tm9mVxVipeW+jkpJiDqG
- jjrxeMEwW5LBwHqcbF7tqgSlw1eWMPkjI1ABsatTSpX8EHUOrDEKyaC
+ bh=zKRggNekRjMo2HWiE/Zd6htFQdzWQ+j1rvOWJYZk1Dg=;
+ b=J86IamNFPWjvFl8R15HeGrbbKv6nxOgsRyV2gcyGjGQvv0D4Sonw6dL4ASTha1oCz3/d/YNgs
+ sy9rMHIgH7XD+CMd35v3AcW4emIGcmWa0HZbVIBI6fy/CV5AVKhIpjD
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
-QCM2290 has a single BWMONv4 intance for CPU. Document it.
+Every Qualcomm SoC physically has a "CRYPTO0<->DDR" interconnect lane.
+Allow this property to be present, no matter the SoC.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 15 ---------------
+ 1 file changed, 15 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-index 7cb8df757477..a88cea732370 100644
---- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-+++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-@@ -25,6 +25,7 @@ properties:
-       - const: qcom,msm8998-bwmon       # BWMON v4
-       - items:
-           - enum:
-+              - qcom,qcm2290-cpu-bwmon
-               - qcom,sc7180-cpu-bwmon
-               - qcom,sc7280-cpu-bwmon
-               - qcom,sc8280xp-cpu-bwmon
+diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+index 0613a37a851a..f3a87a8426d0 100644
+--- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
++++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+@@ -178,21 +178,6 @@ allOf:
+           minItems: 3
+           maxItems: 3
+ 
+-  # Interconnects
+-  - if:
+-      not:
+-        properties:
+-          compatible:
+-            contains:
+-              enum:
+-                - qcom,scm-qdu1000
+-                - qcom,scm-sc8280xp
+-                - qcom,scm-sm8450
+-                - qcom,scm-sm8550
+-    then:
+-      properties:
+-        interconnects: false
+-
+   # Interrupts
+   - if:
+       not:
 
 -- 
 2.43.0
