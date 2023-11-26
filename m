@@ -1,126 +1,195 @@
-Return-Path: <linux-pm+bounces-239-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-240-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DCAF7F930A
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Nov 2023 15:17:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A7C47F9510
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Nov 2023 20:31:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A574DB20DB9
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Nov 2023 14:17:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 857F81C208A8
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Nov 2023 19:31:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 828E56FB0;
-	Sun, 26 Nov 2023 14:17:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RU4YCTGT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C84C12B91;
+	Sun, 26 Nov 2023 19:31:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27D593
-	for <linux-pm@vger.kernel.org>; Sun, 26 Nov 2023 06:17:36 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-40b2ddab817so23609855e9.3
-        for <linux-pm@vger.kernel.org>; Sun, 26 Nov 2023 06:17:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701008255; x=1701613055; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QcndzPm7z338RHK94VwEZXvnKMZos/UvhLkmjn4xC/Q=;
-        b=RU4YCTGTF3V7MB5nzdM43ikVnMAcZ/vxsb8cq99diNtWf6dyCDXUysxgjaectB4pEv
-         oaGpOZ4oVkGhZQK1M7lja7sV3xFC9z6Foien+Fk7iabEYBxf74EUfy/13SWSYeIKzHAh
-         7JvpMic+hlAoIt6gaArjyIy2d3lPIFycmaCmgdBXrmLBTyoUZjaoY1STxExXt5uJe3mw
-         Ki2MT9dB1Ngt6o3gPCSBloaDGod6qcnYq1nre+r+0FPLcezacgVGdPG8M+eRHzlKn7ps
-         KrKLX8+RbISecip3ISGSkiVsYsy3j5tS5OJi6eSfs2VKaqGbu85vinNKO3fnP6hI7rFD
-         KLaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701008255; x=1701613055;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QcndzPm7z338RHK94VwEZXvnKMZos/UvhLkmjn4xC/Q=;
-        b=CvJPWVgRuhLYojNmCK+q7Y8bkr9HrGJl9AQwDZEyUB/iN2rSGJ8nt2UNk3JGk4JCQQ
-         mlYVJBnL54x8q3PXNqKJQeDGwgu+9kIjGaK4XUaXMYUptp9wf+QStl1wh2oCGdqAv5G2
-         R3hsHmzfVNXhJNjpdPoFCehCvVNWXZapruz9dysQ9CiBuQT4b+97vMd0PdfgkIOkisfx
-         zRKUK+yIMOnM2mv2Mrtc6uNbBzfxiobuXWQ1vZ3rUFKOdJFzUMZ0qYb5JOfTAKA0o3EQ
-         M+FdkRin/c8bPTcVNaSFN9/GnNAwz+Bp9VadvWDXJC4n/1DeHYUOgTUqUyABYjgT1PSx
-         cvfg==
-X-Gm-Message-State: AOJu0YwwrVM4UWtJJZqvEg937yasLeLJ4hNYhlfSNUngqWwqzBR7wrCC
-	FW86mlJzYCXKAOQcM170eE3QdQ==
-X-Google-Smtp-Source: AGHT+IGkk9pdn9r7g1J1o/fcsxC78jPge+mZy3lXPIb8wrgrQCxYQ08bQdBSvKnCzAF2mipxLo0QBg==
-X-Received: by 2002:a05:600c:154f:b0:40b:3dbf:f39 with SMTP id f15-20020a05600c154f00b0040b3dbf0f39mr2924922wmg.37.1701008254426;
-        Sun, 26 Nov 2023 06:17:34 -0800 (PST)
-Received: from [192.168.100.102] ([37.228.218.3])
-        by smtp.gmail.com with ESMTPSA id u17-20020a05600c19d100b004064cd71aa8sm10565101wmq.34.2023.11.26.06.17.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Nov 2023 06:17:33 -0800 (PST)
-Message-ID: <1dce7a79-be67-4d44-b03f-63ef5cbb78e3@linaro.org>
-Date: Sun, 26 Nov 2023 14:17:31 +0000
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FF9F5
+	for <linux-pm@vger.kernel.org>; Sun, 26 Nov 2023 11:31:39 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1r7Kql-00018N-Rj; Sun, 26 Nov 2023 20:31:27 +0100
+Received: from [2a0a:edc0:2:b01:1d::c0] (helo=ptx.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ore@pengutronix.de>)
+	id 1r7Kqj-00BmLa-Jv; Sun, 26 Nov 2023 20:31:25 +0100
+Received: from ore by ptx.whiteo.stw.pengutronix.de with local (Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1r7Kqj-003xyJ-HE; Sun, 26 Nov 2023 20:31:25 +0100
+Date: Sun, 26 Nov 2023 20:31:25 +0100
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Mark Brown <broonie@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>, kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	=?utf-8?B?U8O4cmVu?= Andersen <san@skov.dk>
+Subject: Re: [PATCH v1 0/3] introduce priority-based shutdown support
+Message-ID: <20231126193125.GB877872@pengutronix.de>
+References: <2023112453-flagstick-bullring-8511@gregkh>
+ <20231124185725.GA872366@pengutronix.de>
+ <2023112520-paper-image-ef5d@gregkh>
+ <20231125085038.GA877872@pengutronix.de>
+ <2023112506-unselfish-unkind-adcb@gregkh>
+ <ZWHM0lRPOp/efyD5@finisterre.sirena.org.uk>
+ <2023112541-uptown-tripping-05f3@gregkh>
+ <ZWIWBhBN8AmK7tAJ@finisterre.sirena.org.uk>
+ <2023112504-cathedral-pulmonary-83ce@gregkh>
+ <ZWMaMIGUo9DeyEH+@finisterre.sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/12] dt-bindings: display: msm: qcm2290-mdss: Use the
- non-deprecated DSI compat
-Content-Language: en-US
-To: Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Clark
- <robdclark@gmail.com>, Abhinav Kumar <quic_abhinavk@quicinc.com>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Sean Paul <sean@poorly.run>,
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Loic Poulain <loic.poulain@linaro.org>,
- Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Georgi Djakov <djakov@kernel.org>, Will Deacon <will@kernel.org>,
- Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
- Krishna Manikandan <quic_mkrishn@quicinc.com>,
- Robert Marko <robimarko@gmail.com>, Das Srinagesh <quic_gurus@quicinc.com>
-Cc: Marijn Suijten <marijn.suijten@somainline.org>,
- Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
- dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- iommu@lists.linux.dev
-References: <20231125-topic-rb1_feat-v1-0-11d71b12b058@linaro.org>
- <20231125-topic-rb1_feat-v1-1-11d71b12b058@linaro.org>
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20231125-topic-rb1_feat-v1-1-11d71b12b058@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZWMaMIGUo9DeyEH+@finisterre.sirena.org.uk>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-On 25/11/2023 14:17, Konrad Dybcio wrote:
-> The "qcom,dsi-ctrl-6g-qcm2290" has been deprecated in commit 0c0f65c6dd44
-> ("dt-bindings: msm: dsi-controller-main: Add compatible strings for every
-> current SoC"), but the example hasn't been updated to reflect that.
+On Sun, Nov 26, 2023 at 10:14:45AM +0000, Mark Brown wrote:
+> On Sat, Nov 25, 2023 at 07:58:12PM +0000, Greg Kroah-Hartman wrote:
+> > On Sat, Nov 25, 2023 at 03:43:02PM +0000, Mark Brown wrote:
+> > > On Sat, Nov 25, 2023 at 02:35:41PM +0000, Greg Kroah-Hartman wrote:
 > 
-> Fix that.
+> > > > That would be great, but I don't see that here, do you?  All I see is
+> > > > the shutdown sequence changing because someone wants it to go "faster"
+> > > > with the threat of hardware breaking if we don't meet that "faster"
+> > > > number, yet no knowledge or guarantee that this number can ever be known
+> > > > or happen.
 > 
-> Fixes: 0c0f65c6dd44 ("dt-bindings: msm: dsi-controller-main: Add compatible strings for every current SoC")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   Documentation/devicetree/bindings/display/msm/qcom,qcm2290-mdss.yaml | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
+> > > The idea was to have somewhere to send notifications when the hardware
+> > > starts reporting things like power supplies starting to fail.  We do
+> > > have those from hardware, we just don't do anything terribly useful
+> > > with them yet.
 > 
-> diff --git a/Documentation/devicetree/bindings/display/msm/qcom,qcm2290-mdss.yaml b/Documentation/devicetree/bindings/display/msm/qcom,qcm2290-mdss.yaml
-> index 5ad155612b6c..3d82c00a9f85 100644
-> --- a/Documentation/devicetree/bindings/display/msm/qcom,qcm2290-mdss.yaml
-> +++ b/Documentation/devicetree/bindings/display/msm/qcom,qcm2290-mdss.yaml
-> @@ -56,7 +56,9 @@ patternProperties:
->   
->       properties:
->         compatible:
-> -        const: qcom,dsi-ctrl-6g-qcm2290
-> +        items:
-> +          - const: qcom,qcm2290-dsi-ctrl
-> +          - const: qcom,mdss-dsi-ctrl
->   
->     "^phy@[0-9a-f]+$":
->       type: object
+> > Ok, but that's not what I recall this patchset doing, or did I missing
+> > something?  All I saw was a "reorder the shutdown sequence" set of
+> > changes.  Or at least that's all I remember at this point in time,
+> > sorry, it's been a few days, but at least that lines up with what the
+> > Subject line says above :)
 > 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> That's not in the series, a bunch of it is merged in some form (eg, see
+> hw_protection_shutdown()) and more of it would need to be built on top
+> if this were merged.
+
+The current kernel has enough infrastructure to manage essential functions
+related to hardware protection:
+- The Device Tree specifies the source of interrupts for detecting
+  under-voltage events. It also details critical system regulators and some
+  of specification of backup power supplied by the board.
+- Various frameworks within the kernel can identify critical hardware
+  conditions like over-temperature and under-voltage. Upon detection, these
+  frameworks invoke the hw_protection_shutdown() function.
+
+> > > > Agreed, but I don't think this patch is going to actually work properly
+> > > > over time as there is no time values involved :)
+
+If we're to implement a deadline for each shutdown call (as the requirement for
+"time values" suggests?), then prioritization becomes essential. Without
+establishing a shutdown order, the inclusion of time values might not be
+effectively utilized.  Am I overlooking anything in this regard?
+
+> > > This seems to be more into the area of mitigation than firm solution, I
+> > > suspect users will be pleased if they can make a noticable dent in the
+> > > number of failures they're seeing.
+>
+> > Mitigation is good, but this patch series is just a hack by doing "throw
+> > this device type at the front of the shutdown list because we have
+> > hardware that crashes a lot" :)
+
+The root of the issue seems to be the choice of primary storage device.
+
+All storage technologies - HDD, SSD, eMMC, NAND - are vulnerable to power
+loss. The only foolproof safeguard is a backup power source, but this
+introduces its own set of challenges:
+
+1. Batteries: While they provide a backup, they come with limitations like a
+finite number of charge cycles, sensitivity to temperature (a significant
+concern in industrial and automotive environments), higher costs, and
+increased device size. For most embedded applications, a UPS isn't a viable
+solution.
+
+2. Capacitors: A potential alternative, but they cannot offer prolonged
+backup time. Increasing the number of capacitors to extend backup time leads
+to additional issues:
+   - Increased costs and space requirements on the PCB.
+   - The need to manage partially charged capacitors during power failures.
+   - The requirement for a power supply capable of rapid charging.
+   - The risk of not reaching a safe state before the backup energy
+     depletes.
+   - In specific environments, like explosive atmospheres, storing large
+     amounts of energy can be hazardous.
+
+Given these considerations, it's crucial to understand that such design choices
+aren't merely "hacks". They represent a balance between different types of
+trade-offs.
+
+> > > It feels like if we're concerned about mitigating physical damage during
+> > > the process of power failure that's a very limited set of devices - the
+> > > storage case where we're in the middle of writing to flash or whatever
+> > > is the most obvious case.
+> 
+> > Then why isn't userspace handling this?  This is a policy decision that
+> > it needs to take to properly know what hardware needs to be shut down,
+> > and what needs to happen in order to do that (i.e. flush, unmount,
+> > etc.?)  And userspace today should be able to say, "power down this
+> > device now!" for any device in the system based on the sysfs device
+> > tree, or at the very least, force it to a specific power state.  So why
+> > not handle this policy there?
+> 
+> Given the tight timelines it does seem reasonable to have some of this
+> in the kernel - the specific decisions about how to handle these events
+> can always be controlled from userspace (eg, with a sysfs file like we
+> do for autosuspend delay times which seem to be in a similar ballpark).
+
+Upon investigating the feasibility of a user space solution for eMMC
+power control, I've concluded that it's likely not possible. The primary
+issue is that most board designs don't include reset signaling for
+eMMCs. Additionally, the eMMC power rail is usually linked to the
+system's main power controller. While powering off is doable, cleanly
+powering it back on isn’t feasible. This is especially problematic when
+the rootfs is located on the eMMC, as power cycling the storage device
+could lead to system instability.
+
+Therefore, any user space method to power off eMMC wouldn't be reliable
+or safe, as there's no way to ensure it can be turned back on without
+risking the integrity of the system. The design rationale is clear:
+avoiding the risks associated with powering off the primary storage
+device.
+
+Considering these constraints, the only practical implementation I see
+is integrating this functionality into the system's shutdown sequence.
+This approach ensures a controlled environment for powering off the
+eMMC, avoiding potential issues.
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
