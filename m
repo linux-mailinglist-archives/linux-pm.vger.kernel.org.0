@@ -1,49 +1,78 @@
-Return-Path: <linux-pm+bounces-240-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-241-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A7C47F9510
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Nov 2023 20:31:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A12F07F9519
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Nov 2023 20:42:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 857F81C208A8
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Nov 2023 19:31:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0842B20A4C
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Nov 2023 19:42:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C84C12B91;
-	Sun, 26 Nov 2023 19:31:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C955A12E47;
+	Sun, 26 Nov 2023 19:42:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mOW9z3IU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FF9F5
-	for <linux-pm@vger.kernel.org>; Sun, 26 Nov 2023 11:31:39 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1r7Kql-00018N-Rj; Sun, 26 Nov 2023 20:31:27 +0100
-Received: from [2a0a:edc0:2:b01:1d::c0] (helo=ptx.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ore@pengutronix.de>)
-	id 1r7Kqj-00BmLa-Jv; Sun, 26 Nov 2023 20:31:25 +0100
-Received: from ore by ptx.whiteo.stw.pengutronix.de with local (Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1r7Kqj-003xyJ-HE; Sun, 26 Nov 2023 20:31:25 +0100
-Date: Sun, 26 Nov 2023 20:31:25 +0100
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Mark Brown <broonie@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>, kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	=?utf-8?B?U8O4cmVu?= Andersen <san@skov.dk>
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5DDFD;
+	Sun, 26 Nov 2023 11:42:05 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-54af61f2a40so2921410a12.3;
+        Sun, 26 Nov 2023 11:42:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701027724; x=1701632524; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KOCmptmAB6UfkXSt722yHurhoVbq5oDNcrfXA2j4bCc=;
+        b=mOW9z3IUmrCRd9R9WeXuCRzgUJIP6yCkhZJEQzqRN+XiBk3rKcVnWlJ5u92wcluXpi
+         YLAqFXdspmX0vGQct0Tpxoxtqa4GlsX6NQAMLE2oH9IA/ikmYabGAIiYHlrtE4XoLZmf
+         z/dr/7vZyzj1RySFbLokTrCeROQXbgI3LY4/uZ1CVxKy4qLSmsy014f0wRVUVszG5B61
+         KHUGMpqDzHLIG7hXvcXrvzNJdVQEv15+/gwr3Uv+k0SbkIly2NOp7lURdymynZpmnlF1
+         Ql6GPdh7+muC71GZFcStpjlHO8dfshilFAgCerW4e0qpJLaGvUg/F7cXcJF3eMzsa4R3
+         VXtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701027724; x=1701632524;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KOCmptmAB6UfkXSt722yHurhoVbq5oDNcrfXA2j4bCc=;
+        b=F2Ua71XzCtzt2r5sDBD45S+lHfOISAx04qiVFlgM08nb0i+ViYourzS4Cghj3qKJfK
+         vYuLTyAvj3a0nDiRUh4spzZZp6jPgovcC+PSOc7lEN269KkSAUdnCkYr2XaKI521eDCD
+         6O7t3EM9uBc4bh7NEmFa9sCWYbsfyHwSjmVFYRTHD2nOoqifZfvZ3rdLZUK+WakIyo+b
+         k/E1/AnFe4fqvO4nbZHZ2RWkJPgNyOuqgTiuQNHFDWRChPEdXbbD0ukMFCl4dbdJvcHJ
+         qydGf0SzxUMGsNDuZfI7/jRBHYz7N2pCikGnar7ga+YfOD7RCIOYqI9HjpaqCnl4xwQ5
+         KeXg==
+X-Gm-Message-State: AOJu0Yy6hscXlMjyvijAC/8faGbU0occcVGbFAMZQXRu+Gq31DgCk5t3
+	XekHy7WngY+TzX5TPU3Hi3MgOXmEqyrLvA==
+X-Google-Smtp-Source: AGHT+IGNsndX0mZDL6xhaZhqeXodkDKJ/F3YGdtCKQMqY6FLRc5fAqBMaSEmL1AE1zinOIU4z40h3A==
+X-Received: by 2002:a50:fb0e:0:b0:54b:d16:4c4a with SMTP id d14-20020a50fb0e000000b0054b0d164c4amr4559109edq.6.1701027723530;
+        Sun, 26 Nov 2023 11:42:03 -0800 (PST)
+Received: from ?IPV6:2a02:a466:68ed:1:cab4:d2c1:ac38:6635? (2a02-a466-68ed-1-cab4-d2c1-ac38-6635.fixed6.kpn.net. [2a02:a466:68ed:1:cab4:d2c1:ac38:6635])
+        by smtp.gmail.com with ESMTPSA id t18-20020a056402021200b0053dec545c8fsm4438506edv.3.2023.11.26.11.42.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Nov 2023 11:42:03 -0800 (PST)
+Message-ID: <56823ff4-69fa-4c92-8912-51fbfd71403a@gmail.com>
+Date: Sun, 26 Nov 2023 20:42:02 +0100
+Precedence: bulk
+X-Mailing-List: linux-pm@vger.kernel.org
+List-Id: <linux-pm.vger.kernel.org>
+List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v1 0/3] introduce priority-based shutdown support
-Message-ID: <20231126193125.GB877872@pengutronix.de>
-References: <2023112453-flagstick-bullring-8511@gregkh>
- <20231124185725.GA872366@pengutronix.de>
- <2023112520-paper-image-ef5d@gregkh>
+To: Mark Brown <broonie@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Ulf Hansson
+ <ulf.hansson@linaro.org>, kernel@pengutronix.de,
+ linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+ linux-pm@vger.kernel.org, =?UTF-8?Q?S=C3=B8ren_Andersen?= <san@skov.dk>
+References: <20231124163234.GC819414@pengutronix.de>
+ <2023112453-flagstick-bullring-8511@gregkh>
+ <20231124185725.GA872366@pengutronix.de> <2023112520-paper-image-ef5d@gregkh>
  <20231125085038.GA877872@pengutronix.de>
  <2023112506-unselfish-unkind-adcb@gregkh>
  <ZWHM0lRPOp/efyD5@finisterre.sirena.org.uk>
@@ -51,145 +80,108 @@ References: <2023112453-flagstick-bullring-8511@gregkh>
  <ZWIWBhBN8AmK7tAJ@finisterre.sirena.org.uk>
  <2023112504-cathedral-pulmonary-83ce@gregkh>
  <ZWMaMIGUo9DeyEH+@finisterre.sirena.org.uk>
-Precedence: bulk
-X-Mailing-List: linux-pm@vger.kernel.org
-List-Id: <linux-pm.vger.kernel.org>
-List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+From: Ferry Toth <fntoth@gmail.com>
 In-Reply-To: <ZWMaMIGUo9DeyEH+@finisterre.sirena.org.uk>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sun, Nov 26, 2023 at 10:14:45AM +0000, Mark Brown wrote:
+Ha ha,
+
+Funny discussion. As a hardware engineer (with no experience in 
+automotive, but actual experience in industrial applications and 
+debugging issues arising from bad shutdowns) let me add my 5ct at the end.
+
+Op 26-11-2023 om 11:14 schreef Mark Brown:
 > On Sat, Nov 25, 2023 at 07:58:12PM +0000, Greg Kroah-Hartman wrote:
-> > On Sat, Nov 25, 2023 at 03:43:02PM +0000, Mark Brown wrote:
-> > > On Sat, Nov 25, 2023 at 02:35:41PM +0000, Greg Kroah-Hartman wrote:
+>> On Sat, Nov 25, 2023 at 03:43:02PM +0000, Mark Brown wrote:
+>>> On Sat, Nov 25, 2023 at 02:35:41PM +0000, Greg Kroah-Hartman wrote:
 > 
-> > > > That would be great, but I don't see that here, do you?  All I see is
-> > > > the shutdown sequence changing because someone wants it to go "faster"
-> > > > with the threat of hardware breaking if we don't meet that "faster"
-> > > > number, yet no knowledge or guarantee that this number can ever be known
-> > > > or happen.
+>>>> That would be great, but I don't see that here, do you?  All I see is
+>>>> the shutdown sequence changing because someone wants it to go "faster"
+>>>> with the threat of hardware breaking if we don't meet that "faster"
+>>>> number, yet no knowledge or guarantee that this number can ever be known
+>>>> or happen.
 > 
-> > > The idea was to have somewhere to send notifications when the hardware
-> > > starts reporting things like power supplies starting to fail.  We do
-> > > have those from hardware, we just don't do anything terribly useful
-> > > with them yet.
+>>> The idea was to have somewhere to send notifications when the hardware
+>>> starts reporting things like power supplies starting to fail.  We do
+>>> have those from hardware, we just don't do anything terribly useful
+>>> with them yet.
 > 
-> > Ok, but that's not what I recall this patchset doing, or did I missing
-> > something?  All I saw was a "reorder the shutdown sequence" set of
-> > changes.  Or at least that's all I remember at this point in time,
-> > sorry, it's been a few days, but at least that lines up with what the
-> > Subject line says above :)
+>> Ok, but that's not what I recall this patchset doing, or did I missing
+>> something?  All I saw was a "reorder the shutdown sequence" set of
+>> changes.  Or at least that's all I remember at this point in time,
+>> sorry, it's been a few days, but at least that lines up with what the
+>> Subject line says above :)
 > 
 > That's not in the series, a bunch of it is merged in some form (eg, see
 > hw_protection_shutdown()) and more of it would need to be built on top
 > if this were merged.
-
-The current kernel has enough infrastructure to manage essential functions
-related to hardware protection:
-- The Device Tree specifies the source of interrupts for detecting
-  under-voltage events. It also details critical system regulators and some
-  of specification of backup power supplied by the board.
-- Various frameworks within the kernel can identify critical hardware
-  conditions like over-temperature and under-voltage. Upon detection, these
-  frameworks invoke the hw_protection_shutdown() function.
-
-> > > > Agreed, but I don't think this patch is going to actually work properly
-> > > > over time as there is no time values involved :)
-
-If we're to implement a deadline for each shutdown call (as the requirement for
-"time values" suggests?), then prioritization becomes essential. Without
-establishing a shutdown order, the inclusion of time values might not be
-effectively utilized.  Am I overlooking anything in this regard?
-
-> > > This seems to be more into the area of mitigation than firm solution, I
-> > > suspect users will be pleased if they can make a noticable dent in the
-> > > number of failures they're seeing.
->
-> > Mitigation is good, but this patch series is just a hack by doing "throw
-> > this device type at the front of the shutdown list because we have
-> > hardware that crashes a lot" :)
-
-The root of the issue seems to be the choice of primary storage device.
-
-All storage technologies - HDD, SSD, eMMC, NAND - are vulnerable to power
-loss. The only foolproof safeguard is a backup power source, but this
-introduces its own set of challenges:
-
-1. Batteries: While they provide a backup, they come with limitations like a
-finite number of charge cycles, sensitivity to temperature (a significant
-concern in industrial and automotive environments), higher costs, and
-increased device size. For most embedded applications, a UPS isn't a viable
-solution.
-
-2. Capacitors: A potential alternative, but they cannot offer prolonged
-backup time. Increasing the number of capacitors to extend backup time leads
-to additional issues:
-   - Increased costs and space requirements on the PCB.
-   - The need to manage partially charged capacitors during power failures.
-   - The requirement for a power supply capable of rapid charging.
-   - The risk of not reaching a safe state before the backup energy
-     depletes.
-   - In specific environments, like explosive atmospheres, storing large
-     amounts of energy can be hazardous.
-
-Given these considerations, it's crucial to understand that such design choices
-aren't merely "hacks". They represent a balance between different types of
-trade-offs.
-
-> > > It feels like if we're concerned about mitigating physical damage during
-> > > the process of power failure that's a very limited set of devices - the
-> > > storage case where we're in the middle of writing to flash or whatever
-> > > is the most obvious case.
 > 
-> > Then why isn't userspace handling this?  This is a policy decision that
-> > it needs to take to properly know what hardware needs to be shut down,
-> > and what needs to happen in order to do that (i.e. flush, unmount,
-> > etc.?)  And userspace today should be able to say, "power down this
-> > device now!" for any device in the system based on the sysfs device
-> > tree, or at the very least, force it to a specific power state.  So why
-> > not handle this policy there?
+>>>> Agreed, but I don't think this patch is going to actually work properly
+>>>> over time as there is no time values involved :)
+> 
+>>> This seems to be more into the area of mitigation than firm solution, I
+>>> suspect users will be pleased if they can make a noticable dent in the
+>>> number of failures they're seeing.
+> 
+>> Mitigation is good, but this patch series is just a hack by doing "throw
+>> this device type at the front of the shutdown list because we have
+>> hardware that crashes a lot" :)
+> 
+> Sounds like a mitigation to me.
+> 
+>>> It feels like if we're concerned about mitigating physical damage during
+>>> the process of power failure that's a very limited set of devices - the
+>>> storage case where we're in the middle of writing to flash or whatever
+>>> is the most obvious case.
+> 
+>> Then why isn't userspace handling this?  This is a policy decision that
+>> it needs to take to properly know what hardware needs to be shut down,
+>> and what needs to happen in order to do that (i.e. flush, unmount,
+>> etc.?)  And userspace today should be able to say, "power down this
+>> device now!" for any device in the system based on the sysfs device
+>> tree, or at the very least, force it to a specific power state.  So why
+>> not handle this policy there?
 > 
 > Given the tight timelines it does seem reasonable to have some of this
 > in the kernel - the specific decisions about how to handle these events
 > can always be controlled from userspace (eg, with a sysfs file like we
 > do for autosuspend delay times which seem to be in a similar ballpark).
 
-Upon investigating the feasibility of a user space solution for eMMC
-power control, I've concluded that it's likely not possible. The primary
-issue is that most board designs don't include reset signaling for
-eMMCs. Additionally, the eMMC power rail is usually linked to the
-system's main power controller. While powering off is doable, cleanly
-powering it back on isn’t feasible. This is especially problematic when
-the rootfs is located on the eMMC, as power cycling the storage device
-could lead to system instability.
+I'd prefer not to call the HW broken in this case. The life of hardware 
+(unlike software) continues during and after power down. That means 
+there may be requirements and specs for it to conform to during those 
+transitions and states. Unlike broken hardware, which does not conform 
+to its specs. Typically, a HDD that autoparks its heads to a safe 
+position on its last rotation energy, that's not broken, that's 
+carefully designed.
 
-Therefore, any user space method to power off eMMC wouldn't be reliable
-or safe, as there's no way to ensure it can be turned back on without
-risking the integrity of the system. The design rationale is clear:
-avoiding the risks associated with powering off the primary storage
-device.
+That said, I agree with Greg, if there is a hard requirement to shutdown 
+safely to prevent damage, the solution is not to shutdown fast. The 
+solution is to shutdown on time.
 
-Considering these constraints, the only practical implementation I see
-is integrating this functionality into the system's shutdown sequence.
-This approach ensures a controlled environment for powering off the
-eMMC, avoiding potential issues.
+In fact, if the software needs more energy to shutdown safely, any 
+hardware engineer will consider that a requirement. And ask the 
+appropriate question: "how much energy do you need exactly?". There are 
+various reasons why that can not be answered in general. The most funny 
+answer I ever got (thanks Albert) being: "My software doesn't consume 
+energy".
+Now, we do need to keep in mind that storing J in a supercap, executing 
+a CPU at GHz, storing GB data do not come free. So, after making sure 
+things shutdown in time, it often pays off to shorten that deadline, and 
+indeed make it faster.
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Looking at the above discussion from the different angles:
+1) The hardware mentioned does not need to shutdown (as said, it doesn't 
+need to be unmounted). It needs to be placed into a safe state on time. 
+And the only thing here that can know for the particular hardware what 
+is a safe state, is the driver itself.
+2) To get a signal (Low Power Warning) to the driver on time, the 
+PREEMPT_RT kernel seems like a natural choice.
+3) To me (but hey who am I) it makes sense to have a generic mechanism 
+from drivers to transition to their safe state if they require that.
+4) I wouldn't worry about drivers fighting for priority, these systems 
+are normally "embedded" with fixed hardware. Otherwise there is no way 
+to calculate shutdown energy required and do proper hardware design.
 
