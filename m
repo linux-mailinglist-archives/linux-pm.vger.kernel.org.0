@@ -1,109 +1,148 @@
-Return-Path: <linux-pm+bounces-274-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-275-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 188277FA291
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 15:24:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B5307FA344
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 15:44:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C3402281952
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 14:24:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 453E5281887
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 14:44:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6960315B6;
-	Mon, 27 Nov 2023 14:24:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD2FB1C292;
+	Mon, 27 Nov 2023 14:44:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P8p8fU0x"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Wi/9CQiV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC409A3;
+	Mon, 27 Nov 2023 06:44:09 -0800 (PST)
+Received: from relay2.suse.de (unknown [149.44.160.134])
+	by smtp-out2.suse.de (Postfix) with ESMTP id 2F22A1FD66;
+	Mon, 27 Nov 2023 14:44:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1701096247; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/EIUmcxqSgQwR4h8SpanHMweNQIyGH/GNtp1VB6r9BU=;
+	b=Wi/9CQiV+1JjyObULZrfGvMIUo08Fe24MCed3hduQTi9M1+j2YbDl7R/VBbhjm6AOrnDnX
+	Pjb3F66pw9WOH5HBSlg1Y70VR+D+atS5eU4h7JRDPQjE/c9DjBHh5C44OvWz07QVHzmGuB
+	q1btyyvK0QLgIcK9VEcp3W6nfXLwgvU=
+Received: from suse.cz (pmladek.udp.ovpn2.prg.suse.de [10.100.201.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B01D918027;
-	Mon, 27 Nov 2023 14:24:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18C7AC433C7;
-	Mon, 27 Nov 2023 14:24:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701095078;
-	bh=6o6WiiW5vMWoso1wugzB6W7zAENqZGxNfsw46EhA5Gc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=P8p8fU0xHZI1AT78w1hQe0jjlSkJjrwNVQq/L+MQE5tLmPq6aTL1T3u5P3vHRRPfG
-	 voyE9HYuCFj/fKyx9mjB9AzO38gX1ljTnl+gKfDWhl8DR1/Ff8iQLUld4uY5Ly+Zpf
-	 WCtIeYRwYPG6hFDHfFj3sO95UNcEsOJJoabPkX82UxPOMEJDEETv4EOi4vl0CH9HnE
-	 r74t01i88hlV1GQZNN8BwZHHNDfNp2HK9jN7pGqzp9f15y+g+me9cWIgqeP9R46gaO
-	 DfjyvkZP/fOpsc3tXsFOXQCah/1Etg9+FZ7FvRN6IUw0boP56OxnBHm0ng4KHkY/qj
-	 vXdFx3fmVWTKQ==
-Date: Mon, 27 Nov 2023 14:24:21 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Matti Vaittinen <mazziesaccount@gmail.com>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>, kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	=?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>
-Subject: Re: [PATCH v1 0/3] introduce priority-based shutdown support
-Message-ID: <ZWSmlfWYSbQHVvOk@finisterre.sirena.org.uk>
-References: <20231124145338.3112416-1-o.rempel@pengutronix.de>
- <2023112403-laxative-lustiness-6a7f@gregkh>
- <ZWC/hKav0JANhWKM@finisterre.sirena.org.uk>
- <2023112458-stature-commuting-c66f@gregkh>
- <ZWDGGqsCq9iSnHtO@finisterre.sirena.org.uk>
- <2023112435-dazzler-crisped-04a6@gregkh>
- <20231124163234.GC819414@pengutronix.de>
- <2023112453-flagstick-bullring-8511@gregkh>
- <CANhJrGPop=tL8y+chvPwMpSZYF1pkeWeRp3xL+7JsuY=U0fyag@mail.gmail.com>
- <2023112722-headdress-kissing-8c9f@gregkh>
+	by relay2.suse.de (Postfix) with ESMTPS id 6F0962C16B;
+	Mon, 27 Nov 2023 14:44:04 +0000 (UTC)
+Date: Mon, 27 Nov 2023 15:44:03 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: Mihai Carabas <mihai.carabas@oracle.com>
+Cc: linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
+	mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+	pbonzini@redhat.com, wanpengli@tencent.com, vkuznets@redhat.com,
+	rafael@kernel.org, daniel.lezcano@linaro.org,
+	akpm@linux-foundation.org, peterz@infradead.org,
+	dianders@chromium.org, npiggin@gmail.com,
+	rick.p.edgecombe@intel.com, joao.m.martins@oracle.com,
+	juerg.haefliger@canonical.com, mic@digikod.net, arnd@arndb.de,
+	ankur.a.arora@oracle.com
+Subject: Re: [PATCH 1/7] x86: Move ARCH_HAS_CPU_RELAX to arch
+Message-ID: <ZWSrMzHEbdynTA8A@alley>
+References: <1700488898-12431-1-git-send-email-mihai.carabas@oracle.com>
+ <1700488898-12431-2-git-send-email-mihai.carabas@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="GnVq4IS3znoTYk/l"
-Content-Disposition: inline
-In-Reply-To: <2023112722-headdress-kissing-8c9f@gregkh>
-X-Cookie: Slow day.  Practice crawling.
-
-
---GnVq4IS3znoTYk/l
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1700488898-12431-2-git-send-email-mihai.carabas@oracle.com>
+X-Spamd-Bar: +++++++++++++++++++++
+X-Spam-Score: 21.50
+X-Rspamd-Server: rspamd1
+Authentication-Results: smtp-out2.suse.de;
+	dkim=none;
+	spf=fail (smtp-out2.suse.de: domain of pmladek@suse.com does not designate 149.44.160.134 as permitted sender) smtp.mailfrom=pmladek@suse.com;
+	dmarc=fail reason="No valid SPF, No valid DKIM" header.from=suse.com (policy=quarantine)
+X-Rspamd-Queue-Id: 2F22A1FD66
+X-Spamd-Result: default: False [21.50 / 50.00];
+	 RDNS_NONE(1.00)[];
+	 SPAMHAUS_XBL(0.00)[149.44.160.134:from];
+	 TO_DN_SOME(0.00)[];
+	 RWL_MAILSPIKE_GOOD(0.00)[149.44.160.134:from];
+	 HFILTER_HELO_IP_A(1.00)[relay2.suse.de];
+	 HFILTER_HELO_NORES_A_OR_MX(0.30)[relay2.suse.de];
+	 R_RATELIMIT(0.00)[ip(RLkk1mdgxgu4i4849a6y),rip(RLa6h5sh378tcam5q78u)];
+	 MX_GOOD(-0.01)[];
+	 RCVD_NO_TLS_LAST(0.10)[];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 R_DKIM_NA(2.20)[];
+	 MIME_TRACE(0.00)[0:+];
+	 BAYES_HAM(-0.00)[13.92%];
+	 RDNS_DNSFAIL(0.00)[];
+	 ARC_NA(0.00)[];
+	 R_SPF_FAIL(1.00)[-all];
+	 FROM_HAS_DN(0.00)[];
+	 DMARC_POLICY_QUARANTINE(1.50)[suse.com : No valid SPF, No valid DKIM,quarantine];
+	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 NEURAL_SPAM_SHORT(3.00)[1.000];
+	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	 VIOLATED_DIRECT_SPF(3.50)[];
+	 NEURAL_SPAM_LONG(3.50)[1.000];
+	 RCPT_COUNT_TWELVE(0.00)[27];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 MID_RHS_NOT_FQDN(0.50)[];
+	 FREEMAIL_CC(0.00)[lists.infradead.org,vger.kernel.org,arm.com,kernel.org,linutronix.de,redhat.com,alien8.de,zytor.com,tencent.com,linaro.org,linux-foundation.org,infradead.org,chromium.org,gmail.com,intel.com,oracle.com,canonical.com,digikod.net,arndb.de];
+	 RCVD_COUNT_TWO(0.00)[2];
+	 HFILTER_HOSTNAME_UNKNOWN(2.50)[]
 
-On Mon, Nov 27, 2023 at 01:08:24PM +0000, Greg Kroah-Hartman wrote:
+On Mon 2023-11-20 16:01:32, Mihai Carabas wrote:
+> From: Joao Martins <joao.m.martins@oracle.com>
+> 
+> ARM64 is going to use it for haltpoll support (for poll-state)
+> so move the definition to be arch-agnostic and allow architectures
+> to override it.
 
-> Yes, using device tree would be good, but now you have created something
-> that is device-tree-specific and not all the world is device tree :(
+This says that the definition is moved.
 
-AFAICT the idiomatic thing for ACPI would be platform quirks based on
-DMI information.  Yay ACPI.  If the system is more Linux targetted then
-you can use _DSD properties to store DT properties, these can then be
-parsed out in a firmware interface neutral way via the fwnode API.  I'm
-not sure there's any avoiding dealing with firmware interface specifics
-at some point if we need platform description.
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index 4a85a10b12fd..92af0e9bc35e 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -1371,6 +1371,9 @@ config RELR
+>  config ARCH_HAS_MEM_ENCRYPT
+>  	bool
+>  
+> +config ARCH_HAS_CPU_RELAX
+> +	bool
+> +
+>  config ARCH_HAS_CC_PLATFORM
+>  	bool
+>  
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index d1c362f479d9..0c77670d020e 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -73,6 +73,7 @@ config X86
+>  	select ARCH_HAS_CACHE_LINE_SIZE
+>  	select ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+>  	select ARCH_HAS_CPU_FINALIZE_INIT
+> +	select ARCH_HAS_CPU_RELAX
+>  	select ARCH_HAS_CURRENT_STACK_POINTER
+>  	select ARCH_HAS_DEBUG_VIRTUAL
+>  	select ARCH_HAS_DEBUG_VM_PGTABLE	if !X86_PAE
 
-> Also, many devices are finally moving out to non-device-tree busses,
-> like PCI and USB, so how would you handle them in this type of scheme?
+But the definion is only added here.
 
-DT does have bindings for devices on discoverable buses like PCI - I
-think the original thing was for vendors cheaping out on EEPROMs though
-it's also useful when things are soldered down in embedded systems.
+I would expect that the patch also removes the original definion.
 
---GnVq4IS3znoTYk/l
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVkppQACgkQJNaLcl1U
-h9DzJgf/XZUIgoFfylrAspVzy9yXRhGFCwnuYJ3iQcB6u9nrbRn4Q23KaWhqcE0D
-jOJpQrRYwe5aO4uKTjd0aVhVrG1CxKduAiFumXEv4cklRha0Q+wL8KNakiP4RCJQ
-q48wd503qPV3zXpNrzTQiJfoP2um+AhLoy3b+xRAwkc+GH4r6m21KEfPQ55LVo1j
-34LrG9W97d/PsfdRyejjSbEl2iXD6Axs1z7/kCixJ4+6mckRgpgnpokNEav3RBoN
-DNkDOMZG88u8wtjnMiqupqw4SoWrK0LD+OjxITxu5O9PajfAlmzW2OHGsVmw5dBw
-7FynB37oyWMtsKfu+RUQz9rtt2McZg==
-=W9Ia
------END PGP SIGNATURE-----
-
---GnVq4IS3znoTYk/l--
+Best Regards,
+Petr
 
