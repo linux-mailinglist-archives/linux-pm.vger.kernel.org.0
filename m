@@ -1,108 +1,97 @@
-Return-Path: <linux-pm+bounces-272-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-273-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E43497FA23B
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 15:16:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A4AB7FA27F
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 15:22:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 20D781C20DC6
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 14:16:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 239942817CF
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 14:22:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76BAC30FB9;
-	Mon, 27 Nov 2023 14:16:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zd0+u8SN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C718315B6;
+	Mon, 27 Nov 2023 14:22:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8B33159D;
-	Mon, 27 Nov 2023 14:16:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 359FDC433C9;
-	Mon, 27 Nov 2023 14:16:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701094588;
-	bh=hLHjKJzz8IdTK+ucHC/mbOa5ERIt+OH27L69qBoQ2xk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Zd0+u8SNJtgR+IDLZNKBjj8S5xHR+n/l92lz/sdgcAgyPBHN3gYUhpJvDL5syOXe9
-	 /1kdSNfj3KZQjzOzyVFXFScgPgMMYnhNac6QT+vHr4FK5lvepEXOo0EhXZvfUlJT0r
-	 CYIlyorzvdpZsmRlnyjZnCBXXuopc1R9YG/yhFiTXpkEXa6UPH3imZqFpmU4CXyiZo
-	 BRyUyywllkDN+C/4r5sil2gSKXp5yg3ZkzylY24/gX2FvdyyvFOMzyrZ3g6E7Necg2
-	 +jNRq53AMyRDLQb0FxU/nvcVq1qUtZ57AQOqZhWoLn0XcvPSjNEXTh8kvWOUcywJwf
-	 Shk6Nw48jv4Qg==
-Message-ID: <1356b1fc-fcdb-42af-a8df-0f7c2e2be9f3@kernel.org>
-Date: Mon, 27 Nov 2023 16:16:22 +0200
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F46198;
+	Mon, 27 Nov 2023 06:22:03 -0800 (PST)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-5cca68f6e01so42530557b3.2;
+        Mon, 27 Nov 2023 06:22:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701094922; x=1701699722;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=834pVqsGyG/ThloFCq4Fg8uGigDw1US55aPZgUr69AE=;
+        b=hZgxPAobZDD2wyA6PCv3abu3HYrdfeTdF3Y+Kjwkzx1BfAUIq0SXTU3FPSQoS5+G+s
+         lPF8r9g3h07Rk9sret3Zs3/qhcPzZH8q0Swm2Ruves73yq0jxjWHiGBHmtzCXU4ySWS6
+         hbBWIJAAKAqCAj66cq5Fs329tAxx9F1DCcdqg/qiHayf2LGenx5Yd2KG/H5oa2OXoJvK
+         fWu9OdhBut4NGzU7RLwWQCNTFTzZHw1nY60O+xNn4NltRFP1rYZDjczI7+hlrL0sXv17
+         9ao6uBHyxeeOFrFbRCl0oUudlihSIhgjlXcxuW5+CLC3Mmo9v4+R1YMLgsdjrrQ+i35w
+         iNRQ==
+X-Gm-Message-State: AOJu0YwT8soz50xGXB4jQ3HTJ0zUI8D9VpIWFvPZOHao3bFXqDbX3raY
+	V5wdiTIyX+l5QfmeCwOjgy9DSnIk5Y8Fag==
+X-Google-Smtp-Source: AGHT+IHIry33GnwZYxjABz1zje1OAyuJ5yzdqY1RHUsCssQtdGrmsmjetxCAOQFmRXv717eoprhxog==
+X-Received: by 2002:a81:a507:0:b0:5cb:d645:8cdf with SMTP id u7-20020a81a507000000b005cbd6458cdfmr11688215ywg.48.1701094922153;
+        Mon, 27 Nov 2023 06:22:02 -0800 (PST)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id y66-20020a81a145000000b005b4501cb71csm3231244ywg.29.2023.11.27.06.22.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Nov 2023 06:22:01 -0800 (PST)
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-daf26d84100so3819090276.3;
+        Mon, 27 Nov 2023 06:22:01 -0800 (PST)
+X-Received: by 2002:a25:6cc5:0:b0:d9a:6b1e:ef51 with SMTP id
+ h188-20020a256cc5000000b00d9a6b1eef51mr10902367ybc.2.1701094921451; Mon, 27
+ Nov 2023 06:22:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V3 0/2] interconnect: qcom: Introduce interconnect drivers
- for X1E80100
-Content-Language: en-US
-To: Sibi Sankar <quic_sibis@quicinc.com>, andersson@kernel.org
-Cc: agross@kernel.org, conor+dt@kernel.org, quic_rjendra@quicinc.com,
- abel.vesa@linaro.org, linux-arm-msm@vger.kernel.org,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, quic_tsoni@quicinc.com,
- neil.armstrong@linaro.org, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org
-References: <20231123135028.29433-1-quic_sibis@quicinc.com>
-From: Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20231123135028.29433-1-quic_sibis@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20231124092121.16866-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20231124092121.16866-1-krzysztof.kozlowski@linaro.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 27 Nov 2023 15:21:50 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU7cs_DCwkbD4FGy=OgxsfLe4poU0916dM1xUB62ahqqg@mail.gmail.com>
+Message-ID: <CAMuHMdU7cs_DCwkbD4FGy=OgxsfLe4poU0916dM1xUB62ahqqg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: correct white-spaces in examples
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-iio@vger.kernel.org, 
+	linux-mmc@vger.kernel.org, netdev@vger.kernel.org, linux-pci@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-renesas-soc@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-remoteproc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 23.11.23 15:50, Sibi Sankar wrote:
-> This series adds interconnect support for the Qualcomm X1E80100 platform,
-> aka Snapdragon X Elite.
-> 
-> Our v1 post of the patchsets adding support for Snapdragon X Elite SoC had
-> the part number sc8380xp which is now updated to the new part number x1e80100
-> based on the new branding scheme and refers to the exact same SoC.
-> 
-> V3:
-> * Fix the index numbers of pcie_center_anoc nodes. [Georgi]
+On Fri, Nov 24, 2023 at 10:21=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> Use only one and exactly one space around '=3D' in DTS example.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Thanks for updating the patches, Sibi! Now LGTM.
+>  .../bindings/pinctrl/renesas,rzg2l-pinctrl.yaml           | 6 +++---
 
-Hi Bjorn,
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Here is a stable branch with the DT header in case you need it:
-https://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git/log/?h=icc-x1e80100
+Gr{oetje,eeting}s,
 
-Thanks,
-Georgi
+                        Geert
 
-> 
-> v2:
-> * Update the part number from sc8380xp to x1e80100.
-> * Fixup required property ordering [Krzysztof]
-> * Pickup Rbs.
-> 
-> Dependencies: None
-> Release Link: https://www.qualcomm.com/news/releases/2023/10/qualcomm-unleashes-snapdragon-x-elite--the-ai-super-charged-plat
-> 
-> 
-> Rajendra Nayak (2):
->    dt-bindings: interconnect: Add Qualcomm X1E80100 SoC
->    interconnect: qcom: Add X1E80100 interconnect provider driver
-> 
->   .../interconnect/qcom,x1e80100-rpmh.yaml      |   83 +
->   drivers/interconnect/qcom/Kconfig             |    9 +
->   drivers/interconnect/qcom/Makefile            |    2 +
->   drivers/interconnect/qcom/x1e80100.c          | 2328 +++++++++++++++++
->   drivers/interconnect/qcom/x1e80100.h          |  192 ++
->   .../interconnect/qcom,x1e80100-rpmh.h         |  207 ++
->   6 files changed, 2821 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,x1e80100-rpmh.yaml
->   create mode 100644 drivers/interconnect/qcom/x1e80100.c
->   create mode 100644 drivers/interconnect/qcom/x1e80100.h
->   create mode 100644 include/dt-bindings/interconnect/qcom,x1e80100-rpmh.h
-> 
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
