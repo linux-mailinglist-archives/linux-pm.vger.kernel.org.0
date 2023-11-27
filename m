@@ -1,89 +1,101 @@
-Return-Path: <linux-pm+bounces-312-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-313-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A2867FAC49
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 22:09:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26E2C7FAC5F
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 22:12:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CAAA31C20DB0
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 21:09:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58A701C20FA4
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 21:12:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12D773FB04;
-	Mon, 27 Nov 2023 21:09:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="hipEVxjp"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8FB33EA8D;
+	Mon, 27 Nov 2023 21:11:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47881D59
-	for <linux-pm@vger.kernel.org>; Mon, 27 Nov 2023 13:09:18 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-35cd93add9fso1618265ab.0
-        for <linux-pm@vger.kernel.org>; Mon, 27 Nov 2023 13:09:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1701119357; x=1701724157; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KSTA5AxGidSyTaTLg4RSb2BlNCyrBOixWgjNXj4yZ5I=;
-        b=hipEVxjpW8Zu4xcO9ZQhNa7vPJQI6D/hEAcqCnkJEf2W3jm/I7CRSHFXvKtiulIrmX
-         oNEVVA9nvFaLVh+Yb4NlI9XxnFUxDG5eEfYAVntuwbhURlTEC7+5H0WaSIoARmvN00iA
-         k899Ft6gnyocbIX6c1mboD7E/T2/tG5gGEATc=
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2929510D2
+	for <linux-pm@vger.kernel.org>; Mon, 27 Nov 2023 13:11:54 -0800 (PST)
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-58787a6583aso170153eaf.1
+        for <linux-pm@vger.kernel.org>; Mon, 27 Nov 2023 13:11:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701119357; x=1701724157;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KSTA5AxGidSyTaTLg4RSb2BlNCyrBOixWgjNXj4yZ5I=;
-        b=TsV3WZUn5hx7/MI+f7QXKeuSn8COKDtE7nOIaflgZl3NdwnMVR78P+GNhgI6Ur3rdh
-         TG+gus2fNj16W9yvj5vmvqLFiUpyHoF4CP/ZlgfEdJ/6f6cPCXvgtji8jeB+FwGxdQp2
-         8qOJi15q5g1F5GyRBv8mKbNiuXAiuebKKoAQND1nDYQF09HfGL9yuGteIAbgI096Yp/+
-         IkaIthwgcK78IhKDfK2wGBP3EoB1vJIzI6gUHsy7ZohrL8FEidGkjcSs+3B5FgRwoxl7
-         4CVVfGX/odKQ4rffrUxQuFOLleQvVcbbHJrrgmRxYiVkHf2Yc4bJVqxszPNU7evaS7fp
-         CHcw==
-X-Gm-Message-State: AOJu0Ywr/ooBBe8o+24LNBYxwQvdPiIoYXPEBQOPdhuE9ULRd+JIFNqK
-	A6vRXDTuIZx0VpkJOKTpISY86w==
-X-Google-Smtp-Source: AGHT+IEDfv//1mMXVgo9PqXe+/pr1A5gpV6QqcsMlT5ROeF3Ctnhg1wy+WAJgRG0QNmfDlm+EQnbgg==
-X-Received: by 2002:a05:6602:2e0f:b0:792:6068:dcc8 with SMTP id o15-20020a0566022e0f00b007926068dcc8mr16208973iow.2.1701119357620;
-        Mon, 27 Nov 2023 13:09:17 -0800 (PST)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id b20-20020a05663801b400b00463f8b3e34asm2613346jaq.23.2023.11.27.13.09.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Nov 2023 13:09:17 -0800 (PST)
-Message-ID: <42bcba90-f32a-4b99-a68d-b4e8e37c202c@linuxfoundation.org>
-Date: Mon, 27 Nov 2023 14:09:16 -0700
+        d=1e100.net; s=20230601; t=1701119513; x=1701724313;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zVuvnLDret0q36FPIUVgCq1rFqP7t64pTb1+6wjkDJk=;
+        b=WC+sdY1PfqKVLWOcpWRQL4jQ6Tftwh5ZXTsb4cLZV9F/KNPq6VmGwhPFl9+i+NgxHv
+         yAowl5AMGe0UXeemU6j1T13DjAhnw7gAhLOFZ8LbJykHqiod7ss4OMupSP3CHOXZpiZU
+         MMxNox5x9wLEjKDqTOfPkQjWs4xcR/pkxpO5RaqXSE6x69O14pIio6SJ+mH9QrDGIkK5
+         BAPyey4AUoqufwUOeNKL0A5SlVnkV/ctPE2jR/WjfX6yZ+ef6DMMAbdQHCy3j926LcSh
+         bqilYRKVWDkhqT67TNf2nx6h97JxFqI6h3V76Lbxf4xDqEH0126/SuHb9GclRIe29Zxo
+         9Fjg==
+X-Gm-Message-State: AOJu0YySf9+1jOHEt7u3lrJOPOGLn6dJXp1GBM52uz0OLGC5RbcTEa5d
+	qltzPzebVWFE7zskT482h4eJdia19PAU/8XBkgcn2Z2+
+X-Google-Smtp-Source: AGHT+IHnO3a1YMII1YwFsY/W3dI6YwY3e3tnkDNyg81CQVbxjStRHtgQymgKEZcOyunpdvtzVoXdll7rTpATug26m6Q=
+X-Received: by 2002:a05:6820:b0b:b0:58a:7cff:2406 with SMTP id
+ df11-20020a0568200b0b00b0058a7cff2406mr11416027oob.0.1701119513495; Mon, 27
+ Nov 2023 13:11:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] tools cpupower bench: Override CFLAGS assignments
-Content-Language: en-US
-To: Stanley Chan <schan@cloudflare.com>, linux-pm@vger.kernel.org
-Cc: kernel-team <kernel-team@cloudflare.com>,
- Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20231124185042.315148-1-schan@cloudflare.com>
- <CX79UGJ80EBU.34DF47O8X8C7V@cloudflare.com>
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CX79UGJ80EBU.34DF47O8X8C7V@cloudflare.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20231127043144.kkyyaut4e7gpzr2r@vireshk-i7>
+In-Reply-To: <20231127043144.kkyyaut4e7gpzr2r@vireshk-i7>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 27 Nov 2023 22:11:42 +0100
+Message-ID: <CAJZ5v0ifcNJPoKPaLYyHQPnJWoCjLFsNXuYmysVuOHtEVNPQnw@mail.gmail.com>
+Subject: Re: [GIT PULL] cpufreq/arm fixes for 6.7-rc4
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Stephan Gerhold <stephan.gerhold@kernkonzept.com>, Ulf Hansson <ulf.hansson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11/24/23 11:59, Stanley Chan wrote:
-> Apologies, this is my first patch so I'm still learning.
-> Meant to add
-> 
-> Fixes: dbc4ca339c8d ("tools cpupower: Override CFLAGS assignments")
-> 
+Hi Viresh,
 
+On Mon, Nov 27, 2023 at 5:31=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
+rg> wrote:
+>
+> Hi Rafael,
+>
+> The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa=
+86:
+>
+>   Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/ar=
+m/linux-next
+>
+> for you to fetch changes up to 8f96e29aae31354191227ad476dc7f6147ef1d75:
+>
+>   pmdomain: qcom: rpmpd: Set GENPD_FLAG_ACTIVE_WAKEUP (2023-11-23 13:08:0=
+1 +0530)
+>
+> ----------------------------------------------------------------
+> Christoph Niedermaier (1):
+>       cpufreq: imx6q: Don't disable 792 Mhz OPP unnecessarily
+>
+> Stephan Gerhold (3):
+>       cpufreq: qcom-nvmem: Enable virtual power domain devices
+>       cpufreq: qcom-nvmem: Preserve PM domain votes in system suspend
+>       pmdomain: qcom: rpmpd: Set GENPD_FLAG_ACTIVE_WAKEUP
+>
+>  drivers/cpufreq/imx6q-cpufreq.c      |  2 +-
+>  drivers/cpufreq/qcom-cpufreq-nvmem.c | 73 ++++++++++++++++++++++++++++++=
+++++--
+>  drivers/pmdomain/qcom/rpmpd.c        |  1 +
+>  3 files changed, 72 insertions(+), 4 deletions(-)
+>
+> --
 
-Thank you for the fix. Please send me v2 with this fixes tag.
+Pulled, but it would be kind of nice to get some description of the
+material other than the shorlog.
 
-thanks,
--- Shuah
-
-
+Thanks!
 
