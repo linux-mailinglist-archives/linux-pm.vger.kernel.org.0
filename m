@@ -1,142 +1,195 @@
-Return-Path: <linux-pm+bounces-259-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-260-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 257B77F9E39
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 12:12:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BCF87F9E8F
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 12:27:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AD8D4B20DCC
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 11:12:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 95F9BB20FED
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 11:27:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 364BA18E0A;
-	Mon, 27 Nov 2023 11:11:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="OSHZvQXG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1EB919BA6;
+	Mon, 27 Nov 2023 11:27:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2044.outbound.protection.outlook.com [40.107.243.44])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93B810EC;
-	Mon, 27 Nov 2023 03:11:44 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Qz/moAwjLIqAGMPY+2wuHYWN86BqxhFZu8Ix5Axe2UjJpwtfeXCqzChCrMVOpwTKbps9RZ0OWJsc40QF2gqjA+yNcyLxF6CwO7shOgjunG2YMH/7TL28wFTn9KXOXbFvYKoMNR9ViooiQZGIqvVGyPGJiJU9nGugCVsTkUKnmwVpK7YA69e6BxowobVy3XgbHAMtua8erimZZS8667o1YJbmW1g+NhV5nefdWfq69ArEu4ZjxOOUf0txepNO4T8AbIi75Os40hMa6Aa/Nvqtl2u2yhn+uv4jZA8HZ53Rz0YYtnsr42fuHJAPuWhwgC7JXbjFTd8DBOydF6zVtr5xJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Y+xsk5LsYEu45Dc01fxtOf/fnYXI0t3QZGcQYRi+L9s=;
- b=CMZIz9AWI1CqHgSION/G/Mk65rjd6dpFwQ62Jyx0fL5zLsreLd9879uxuahhvd3H+mtkFLgE64ty3kTKzpMNhOzlp2068eqvJSC/3RhlmwiCrAUa+NlloLZSgzBbQZj/+LvKNFXD1fos7t//jRz54ioikRO5pAibgdV7oBDRruVT4KxfwY72XkbYuZHA4eOdwo94t4P+iGPhDF5HGqEjY9blSKzqJpVNNTBQS9Z41IysO56N6xBFR+ruGPrDrbjUfOPipOX3F3e88npOG5otReqgpKFrT956rok03BL/F52+e5XvuAYgObaiaSo6tk59K5Xz8hhrtUlmpzYjkx3U2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Y+xsk5LsYEu45Dc01fxtOf/fnYXI0t3QZGcQYRi+L9s=;
- b=OSHZvQXGL+m6qN9C5a63VSUr0rTNgLmZozBm7MlsF9rmEGpkWxdhNukJQt4cozL1t4z//DjuD4ZmGEA1/cxeFIvn8SYFZSi4h5VraZ2jgwbz7U8WAKgqwUZsGcL0hUDkInTATWJ0MVjVTQJo4wOW+9ILem+9btxStv+kPwzXFjc=
-Received: from MW4PR03CA0272.namprd03.prod.outlook.com (2603:10b6:303:b5::7)
- by MN0PR12MB5836.namprd12.prod.outlook.com (2603:10b6:208:37b::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.25; Mon, 27 Nov
- 2023 11:11:42 +0000
-Received: from MWH0EPF000971E2.namprd02.prod.outlook.com
- (2603:10b6:303:b5:cafe::50) by MW4PR03CA0272.outlook.office365.com
- (2603:10b6:303:b5::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.27 via Frontend
- Transport; Mon, 27 Nov 2023 11:11:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- MWH0EPF000971E2.mail.protection.outlook.com (10.167.243.69) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7046.17 via Frontend Transport; Mon, 27 Nov 2023 11:11:41 +0000
-Received: from BLR-5CG11610CF.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Mon, 27 Nov
- 2023 05:11:38 -0600
-From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-To: Wyes Karny <wyes.karny@amd.com>, Huang Rui <ray.huang@amd.com>, "Mario
- Limonciello" <mario.limonciello@amd.com>, Perry Yuan <Perry.Yuan@amd.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>, Viresh Kumar
-	<viresh.kumar@linaro.org>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Gautham R.
- Shenoy" <gautham.shenoy@amd.com>, Perry Yuan <perry.yuan@amd.com>,
-	<stable@vger.kernel.org>
-Subject: [PATCH v2] cpufreq/amd-pstate: Fix the return value of amd_pstate_fast_switch()
-Date: Mon, 27 Nov 2023 16:41:21 +0530
-Message-ID: <20231127111121.400-1-gautham.shenoy@amd.com>
-X-Mailer: git-send-email 2.25.1
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5DB9A186;
+	Mon, 27 Nov 2023 03:27:36 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AE4B22F4;
+	Mon, 27 Nov 2023 03:28:23 -0800 (PST)
+Received: from [10.57.71.110] (unknown [10.57.71.110])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CDAFC3F73F;
+	Mon, 27 Nov 2023 03:27:33 -0800 (PST)
+Message-ID: <8ffb32c8-907c-4266-b8be-c7309418b9f0@arm.com>
+Date: Mon, 27 Nov 2023 11:27:31 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 0/3] introduce priority-based shutdown support
+Content-Language: en-US
+To: Oleksij Rempel <o.rempel@pengutronix.de>, Mark Brown <broonie@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Ulf Hansson
+ <ulf.hansson@linaro.org>, kernel@pengutronix.de,
+ linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+ linux-pm@vger.kernel.org, =?UTF-8?Q?S=C3=B8ren_Andersen?= <san@skov.dk>
+References: <2023112453-flagstick-bullring-8511@gregkh>
+ <20231124185725.GA872366@pengutronix.de> <2023112520-paper-image-ef5d@gregkh>
+ <20231125085038.GA877872@pengutronix.de>
+ <2023112506-unselfish-unkind-adcb@gregkh>
+ <ZWHM0lRPOp/efyD5@finisterre.sirena.org.uk>
+ <2023112541-uptown-tripping-05f3@gregkh>
+ <ZWIWBhBN8AmK7tAJ@finisterre.sirena.org.uk>
+ <2023112504-cathedral-pulmonary-83ce@gregkh>
+ <ZWMaMIGUo9DeyEH+@finisterre.sirena.org.uk>
+ <20231126193125.GB877872@pengutronix.de>
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <20231126193125.GB877872@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000971E2:EE_|MN0PR12MB5836:EE_
-X-MS-Office365-Filtering-Correlation-Id: 26de8913-8021-40ce-ad03-08dbef39a253
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	3TW06TE8/NNuY+xM3w8MQPmA4M8O3CRVrDf76ROhS9wpSuzOSTjoFExFc5Rk7fLf6eLSGrXndRUsELwVCIYUdmul+IB5UD9JrC38ay4kP4i34LvFql8bst/kxwimX32Sdr7+TIpRndfEOf0VvWJYVltao9kdtc/A/6CvBg7CJJJhmEAgPLfy35mkP0dew86LNuW7r48OGxrl0EKl0kzdv4pRaC8kNggB0MJJ5ETCRK6zSOxXN31iklZ164cePz8oNcSzqHIspSvteVzB4Z/xWnJtgFsVDW0h63deMzLmcJdNLJ+dtnE9GHkBWj4WPf65ATksGkHgODs47cLs6YSBcg55nCA7pwQo6Y0+A8pDRI/230Pf4hi+g9B9adhDE0xLGAZCm3oN7T4sbyO1I3H2H5ZwABHhkaOWrDPPfx4y+v2G3v1a1VGz9zrtmADjQ5vvX7qzTuiZ4H/TOYnKAErNKJgxzllai5PQvBJafMswuV9Ouis9pzLbe0HtD3rqdFrhtSAgu04waJJr2qT1O6PnOsR11R0e1jTXvxUbCRGnn/hRO5CPD3gxaWWYxkNYRypA5ovD5WePVgOrj6yeOdFFmjQ0N4YYn0aMnIkMBA9s+ZkVYB1+LmFuY6LjiisFJIVK5YdBV242lOeBM/loOSMJ9kMDtHC4ngGHbDUYPDX3LnpPba5bSd6KeBenYgJnM/jhcZJTQyA+DCsFU6P+/rgCJ4rvmJbXmr6HeAv0qEDGVW0K10Bnneqgwm4C3iCTOSMLqLu7WXUK4NW5EPozKHI80g==
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(39860400002)(346002)(396003)(376002)(230922051799003)(64100799003)(82310400011)(451199024)(1800799012)(186009)(36840700001)(46966006)(40470700004)(2906002)(26005)(36860700001)(5660300002)(40460700003)(16526019)(36756003)(478600001)(86362001)(41300700001)(2616005)(82740400003)(81166007)(1076003)(356005)(8936002)(8676002)(6666004)(54906003)(4326008)(40480700001)(7696005)(83380400001)(336012)(110136005)(316002)(426003)(70586007)(70206006)(47076005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2023 11:11:41.7061
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 26de8913-8021-40ce-ad03-08dbef39a253
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MWH0EPF000971E2.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5836
 
-cpufreq_driver->fast_switch() callback expects a frequency as a return
-value. amd_pstate_fast_switch() was returning the return value of
-amd_pstate_update_freq(), which only indicates a success or failure.
+On 26/11/2023 19:31, Oleksij Rempel wrote:
+> On Sun, Nov 26, 2023 at 10:14:45AM +0000, Mark Brown wrote:
+>> On Sat, Nov 25, 2023 at 07:58:12PM +0000, Greg Kroah-Hartman wrote:
+>>> On Sat, Nov 25, 2023 at 03:43:02PM +0000, Mark Brown wrote:
+>>>> On Sat, Nov 25, 2023 at 02:35:41PM +0000, Greg Kroah-Hartman wrote:
+>>
+>>>>> That would be great, but I don't see that here, do you?  All I see is
+>>>>> the shutdown sequence changing because someone wants it to go "faster"
+>>>>> with the threat of hardware breaking if we don't meet that "faster"
+>>>>> number, yet no knowledge or guarantee that this number can ever be known
+>>>>> or happen.
+>>
+>>>> The idea was to have somewhere to send notifications when the hardware
+>>>> starts reporting things like power supplies starting to fail.  We do
+>>>> have those from hardware, we just don't do anything terribly useful
+>>>> with them yet.
+>>
+>>> Ok, but that's not what I recall this patchset doing, or did I missing
+>>> something?  All I saw was a "reorder the shutdown sequence" set of
+>>> changes.  Or at least that's all I remember at this point in time,
+>>> sorry, it's been a few days, but at least that lines up with what the
+>>> Subject line says above :)
+>>
+>> That's not in the series, a bunch of it is merged in some form (eg, see
+>> hw_protection_shutdown()) and more of it would need to be built on top
+>> if this were merged.
+> 
+> The current kernel has enough infrastructure to manage essential functions
+> related to hardware protection:
+> - The Device Tree specifies the source of interrupts for detecting
+>   under-voltage events. It also details critical system regulators and some
+>   of specification of backup power supplied by the board.
+> - Various frameworks within the kernel can identify critical hardware
+>   conditions like over-temperature and under-voltage. Upon detection, these
+>   frameworks invoke the hw_protection_shutdown() function.
+> 
+>>>>> Agreed, but I don't think this patch is going to actually work properly
+>>>>> over time as there is no time values involved :)
+> 
+> If we're to implement a deadline for each shutdown call (as the requirement for
+> "time values" suggests?), then prioritization becomes essential. Without
+> establishing a shutdown order, the inclusion of time values might not be
+> effectively utilized.  Am I overlooking anything in this regard?
+> 
+>>>> This seems to be more into the area of mitigation than firm solution, I
+>>>> suspect users will be pleased if they can make a noticable dent in the
+>>>> number of failures they're seeing.
+>>
+>>> Mitigation is good, but this patch series is just a hack by doing "throw
+>>> this device type at the front of the shutdown list because we have
+>>> hardware that crashes a lot" :)
+> 
+> The root of the issue seems to be the choice of primary storage device.
+> 
+> All storage technologies - HDD, SSD, eMMC, NAND - are vulnerable to power
+> loss. The only foolproof safeguard is a backup power source, but this
+> introduces its own set of challenges:
 
-Fix this by making amd_pstate_fast_switch() return the target_freq
-when the call to amd_pstate_update_freq() is successful, and return
-the current frequency from policy->cur when the call to
-amd_pstate_update_freq() is unsuccessful.
+I disagree and would say that any storage device sold as "industrial" should
+guarantee power-fail safety. Plus, you mentioned data loss isn't even your concern,
+but the storage device fails/bricks.
+> 
+> 1. Batteries: While they provide a backup, they come with limitations like a
+> finite number of charge cycles, sensitivity to temperature (a significant
+> concern in industrial and automotive environments), higher costs, and
+> increased device size. For most embedded applications, a UPS isn't a viable
+> solution.
+> 
+> 2. Capacitors: A potential alternative, but they cannot offer prolonged
+> backup time. Increasing the number of capacitors to extend backup time leads
+> to additional issues:
+>    - Increased costs and space requirements on the PCB.
+>    - The need to manage partially charged capacitors during power failures.
+>    - The requirement for a power supply capable of rapid charging.
+>    - The risk of not reaching a safe state before the backup energy
+>      depletes.
+>    - In specific environments, like explosive atmospheres, storing large
+>      amounts of energy can be hazardous.
 
-Fixes: 4badf2eb1e98 ("cpufreq: amd-pstate: Add ->fast_switch() callback")
-Acked-by: Huang Rui <ray.huang@amd.com>
-Reviewed-by: Wyes Karny <wyes.karny@amd.com>
-Reviewed-by: Perry Yuan <perry.yuan@amd.com>
-Cc: stable@vger.kernel.org # v6.4+
-Signed-off-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
----
- drivers/cpufreq/amd-pstate.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+And also just practically, ensuring a safe power down could be in the order
+of a second, so it would be quite a capacitor.
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 9a1e194d5cf8..300f81d36291 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -518,7 +518,9 @@ static int amd_pstate_target(struct cpufreq_policy *policy,
- static unsigned int amd_pstate_fast_switch(struct cpufreq_policy *policy,
- 				  unsigned int target_freq)
- {
--	return amd_pstate_update_freq(policy, target_freq, true);
-+	if (!amd_pstate_update_freq(policy, target_freq, true))
-+		return target_freq;
-+	return policy->cur;
- }
- 
- static void amd_pstate_adjust_perf(unsigned int cpu,
--- 
-2.25.1
+> 
+> Given these considerations, it's crucial to understand that such design choices
+> aren't merely "hacks". They represent a balance between different types of
+> trade-offs.
+> 
+>>>> It feels like if we're concerned about mitigating physical damage during
+>>>> the process of power failure that's a very limited set of devices - the
+>>>> storage case where we're in the middle of writing to flash or whatever
+>>>> is the most obvious case.
+>>
+>>> Then why isn't userspace handling this?  This is a policy decision that
+>>> it needs to take to properly know what hardware needs to be shut down,
+>>> and what needs to happen in order to do that (i.e. flush, unmount,
+>>> etc.?)  And userspace today should be able to say, "power down this
+>>> device now!" for any device in the system based on the sysfs device
+>>> tree, or at the very least, force it to a specific power state.  So why
+>>> not handle this policy there?
+>>
+>> Given the tight timelines it does seem reasonable to have some of this
+>> in the kernel - the specific decisions about how to handle these events
+>> can always be controlled from userspace (eg, with a sysfs file like we
+>> do for autosuspend delay times which seem to be in a similar ballpark).
+> 
+> Upon investigating the feasibility of a user space solution for eMMC
+> power control, I've concluded that it's likely not possible. The primary
+> issue is that most board designs don't include reset signaling for
+> eMMCs. Additionally, the eMMC power rail is usually linked to the
+> system's main power controller. While powering off is doable, cleanly
+> powering it back on isn’t feasible. This is especially problematic when
+> the rootfs is located on the eMMC, as power cycling the storage device
+> could lead to system instability.
+> 
+> Therefore, any user space method to power off eMMC wouldn't be reliable
+> or safe, as there's no way to ensure it can be turned back on without
+> risking the integrity of the system. The design rationale is clear:
+> avoiding the risks associated with powering off the primary storage
+> device.
+> 
+> Considering these constraints, the only practical implementation I see
+> is integrating this functionality into the system's shutdown sequence.
+> This approach ensures a controlled environment for powering off the
+> eMMC, avoiding potential issues.
 
+You don't need the RST signal, in fact even if you had it it would be
+the wrong thing to do. (Implementation is vendor-specific but RST
+assumes that eMMCs' VCC and VCCQ are left untouched.)
+You can try turning off eMMC cache completely and/or sending power down
+notification on 'emergency shutdown', but since power-loss/fail behavior
+is vendor-specific asking the storage device vendor how to ensure a safe
+power-down.
+Anyway the proper eMMC power-down methods are up to a second in timeouts,
+so infeasible for your requirements from what I can see.
+
+BR,
+Christian
 
