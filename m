@@ -1,280 +1,100 @@
-Return-Path: <linux-pm+bounces-308-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-309-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 257717FAAC1
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 20:59:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE5487FAB2A
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 21:17:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80EF51F20EDF
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 19:59:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 89D1F281B86
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 20:17:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E94345966;
-	Mon, 27 Nov 2023 19:59:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6954645C09;
+	Mon, 27 Nov 2023 20:17:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BDDA1;
-	Mon, 27 Nov 2023 11:59:23 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id dbc98fb5fa75a51d; Mon, 27 Nov 2023 20:59:21 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 73BCF668204;
-	Mon, 27 Nov 2023 20:59:21 +0100 (CET)
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>
-Subject: [PATCH v1] thermal: trip: Rework thermal_zone_set_trip() and its callers
-Date: Mon, 27 Nov 2023 20:59:21 +0100
-Message-ID: <4892163.31r3eYUQgx@kreacher>
+Received: from gentwo.org (gentwo.org [IPv6:2a02:4780:10:3cd9::1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8566D1B6;
+	Mon, 27 Nov 2023 12:17:45 -0800 (PST)
+Received: by gentwo.org (Postfix, from userid 1003)
+	id B7CFE41AEE; Mon, 27 Nov 2023 12:17:43 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+	by gentwo.org (Postfix) with ESMTP id B6CC641AED;
+	Mon, 27 Nov 2023 12:17:43 -0800 (PST)
+Date: Mon, 27 Nov 2023 12:17:43 -0800 (PST)
+From: "Christoph Lameter (Ampere)" <cl@linux.com>
+To: Mihai Carabas <mihai.carabas@oracle.com>
+cc: linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org, 
+    linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+    catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de, 
+    mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com, 
+    pbonzini@redhat.com, wanpengli@tencent.com, vkuznets@redhat.com, 
+    rafael@kernel.org, daniel.lezcano@linaro.org, akpm@linux-foundation.org, 
+    pmladek@suse.com, peterz@infradead.org, dianders@chromium.org, 
+    npiggin@gmail.com, rick.p.edgecombe@intel.com, joao.m.martins@oracle.com, 
+    juerg.haefliger@canonical.com, mic@digikod.net, arnd@arndb.de, 
+    ankur.a.arora@oracle.com
+Subject: Re: [PATCH 7/7] cpuidle/poll_state: replace cpu_relax with
+ smp_cond_load_relaxed
+In-Reply-To: <724589ce-7656-4be0-aa37-f6edeb92e1c4@oracle.com>
+Message-ID: <277fbd0d-25ea-437e-2ea7-6121c4e269db@linux.com>
+References: <1700488898-12431-1-git-send-email-mihai.carabas@oracle.com> <1700488898-12431-8-git-send-email-mihai.carabas@oracle.com> <6bd5fd43-552d-b020-1338-d89279f7a517@linux.com> <724589ce-7656-4be0-aa37-f6edeb92e1c4@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrudeiuddgudefvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghl
- rdgtohhmpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+Content-Type: multipart/mixed; boundary="8323329-1152771662-1701116263=:544079"
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Both trip_point_temp_store() and trip_point_hyst_store() use
-thermal_zone_set_trip() to update a given trip point, but none of them
-actually needs to change more than one field in struct thermal_trip
-representing it.  However, each of them effectively calls
-__thermal_zone_get_trip() twice in a row for the same trip index value,
-once directly and once via thermal_zone_set_trip(), which is not
-particularly efficient, and the way in which thermal_zone_set_trip()
-carries out the update is not particularly straightforward.
+--8323329-1152771662-1701116263=:544079
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
 
-Moreover, some checks done by them both need not go under the thermal
-zone lock and code duplication between them can be reduced quilte a bit
-by moving the majority of logic into thermal_zone_set_trip().
+On Wed, 22 Nov 2023, Mihai Carabas wrote:
 
-Rework all of the above funtcions to address the above.
+> La 22.11.2023 22:51, Christoph Lameter a scris:
+>> 
+>> On Mon, 20 Nov 2023, Mihai Carabas wrote:
+>> 
+>>> cpu_relax on ARM64 does a simple "yield". Thus we replace it with
+>>> smp_cond_load_relaxed which basically does a "wfe".
+>> 
+>> Well it clears events first (which requires the first WFE) and then does a 
+>> WFE waiting for any events if no events were pending.
+>> 
+>> WFE does not cause a VMEXIT? Or does the inner loop of 
+>> smp_cond_load_relaxed now do 2x VMEXITS?
+>> 
+>> KVM ARM64 code seems to indicate that WFE causes a VMEXIT. See 
+>> kvm_handle_wfx().
+>
+> In KVM ARM64 the WFE traping is dynamic: it is enabled only if there are more 
+> tasks waiting on the same core (e.g. on an oversubscribed system).
+>
+> In arch/arm64/kvm/arm.c:
+>
+>  457 >-------if (single_task_running())
+>  458 >------->-------vcpu_clear_wfx_traps(vcpu);
+>  459 >-------else
+>  460 >------->-------vcpu_set_wfx_traps(vcpu);
 
-No intentional functional impact.
+Ahh. Cool did not know about that. But still: Lots of VMEXITs once the 
+load has to be shared.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/thermal_core.h  |    9 +++++
- drivers/thermal/thermal_sysfs.c |   52 +++++++---------------------------
- drivers/thermal/thermal_trip.c  |   61 ++++++++++++++++++++++++++--------------
- include/linux/thermal.h         |    3 -
- 4 files changed, 61 insertions(+), 64 deletions(-)
+> This of course can be improved by having a knob where you can completly 
+> disable wfx traping by your needs, but I left this as another subject to 
+> tackle.
 
-Index: linux-pm/drivers/thermal/thermal_core.h
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_core.h
-+++ linux-pm/drivers/thermal/thermal_core.h
-@@ -122,6 +122,15 @@ void __thermal_zone_device_update(struct
- void __thermal_zone_set_trips(struct thermal_zone_device *tz);
- int __thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
- 			    struct thermal_trip *trip);
-+
-+enum thermal_set_trip_target {
-+	THERMAL_TRIP_SET_TEMP,
-+	THERMAL_TRIP_SET_HYST,
-+};
-+
-+int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
-+			  enum thermal_set_trip_target what, const char *buf);
-+
- int thermal_zone_trip_id(struct thermal_zone_device *tz,
- 			 const struct thermal_trip *trip);
- int __thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp);
-Index: linux-pm/drivers/thermal/thermal_sysfs.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_sysfs.c
-+++ linux-pm/drivers/thermal/thermal_sysfs.c
-@@ -120,31 +120,17 @@ trip_point_temp_store(struct device *dev
- 		      const char *buf, size_t count)
- {
- 	struct thermal_zone_device *tz = to_thermal_zone(dev);
--	struct thermal_trip trip;
--	int trip_id, ret;
-+	int trip_id;
-+	int ret;
-+
-+	if (!device_is_registered(dev))
-+		return -ENODEV;
- 
- 	if (sscanf(attr->attr.name, "trip_point_%d_temp", &trip_id) != 1)
- 		return -EINVAL;
- 
--	mutex_lock(&tz->lock);
--
--	if (!device_is_registered(dev)) {
--		ret = -ENODEV;
--		goto unlock;
--	}
--
--	ret = __thermal_zone_get_trip(tz, trip_id, &trip);
--	if (ret)
--		goto unlock;
--
--	ret = kstrtoint(buf, 10, &trip.temperature);
--	if (ret)
--		goto unlock;
-+	ret = thermal_zone_set_trip(tz, trip_id, THERMAL_TRIP_SET_TEMP, buf);
- 
--	ret = thermal_zone_set_trip(tz, trip_id, &trip);
--unlock:
--	mutex_unlock(&tz->lock);
--	
- 	return ret ? ret : count;
- }
- 
-@@ -179,30 +165,16 @@ trip_point_hyst_store(struct device *dev
- 		      const char *buf, size_t count)
- {
- 	struct thermal_zone_device *tz = to_thermal_zone(dev);
--	struct thermal_trip trip;
--	int trip_id, ret;
-+	int trip_id;
-+	int ret;
-+
-+	if (!device_is_registered(dev))
-+		return -ENODEV;
- 
- 	if (sscanf(attr->attr.name, "trip_point_%d_hyst", &trip_id) != 1)
- 		return -EINVAL;
- 
--	mutex_lock(&tz->lock);
--
--	if (!device_is_registered(dev)) {
--		ret = -ENODEV;
--		goto unlock;
--	}
--
--	ret = __thermal_zone_get_trip(tz, trip_id, &trip);
--	if (ret)
--		goto unlock;
--
--	ret = kstrtoint(buf, 10, &trip.hysteresis);
--	if (ret)
--		goto unlock;
--
--	ret = thermal_zone_set_trip(tz, trip_id, &trip);
--unlock:
--	mutex_unlock(&tz->lock);
-+	ret = thermal_zone_set_trip(tz, trip_id, THERMAL_TRIP_SET_HYST, buf);
- 
- 	return ret ? ret : count;
- }
-Index: linux-pm/drivers/thermal/thermal_trip.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_trip.c
-+++ linux-pm/drivers/thermal/thermal_trip.c
-@@ -148,42 +148,61 @@ int thermal_zone_get_trip(struct thermal
- EXPORT_SYMBOL_GPL(thermal_zone_get_trip);
- 
- int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
--			  const struct thermal_trip *trip)
-+			  enum thermal_set_trip_target what, const char *buf)
- {
--	struct thermal_trip t;
--	int ret;
-+	struct thermal_trip *trip;
-+	int val, ret = 0;
- 
--	if (!tz->ops->set_trip_temp && !tz->ops->set_trip_hyst && !tz->trips)
--		return -EINVAL;
-+	if (trip_id < 0 || trip_id >= tz->num_trips)
-+		ret = -EINVAL;
- 
--	ret = __thermal_zone_get_trip(tz, trip_id, &t);
-+	ret = kstrtoint(buf, 10, &val);
- 	if (ret)
- 		return ret;
- 
--	if (t.type != trip->type)
--		return -EINVAL;
-+	mutex_lock(&tz->lock);
- 
--	if (t.temperature != trip->temperature && tz->ops->set_trip_temp) {
--		ret = tz->ops->set_trip_temp(tz, trip_id, trip->temperature);
--		if (ret)
--			return ret;
--	}
-+	trip = &tz->trips[trip_id];
- 
--	if (t.hysteresis != trip->hysteresis && tz->ops->set_trip_hyst) {
--		ret = tz->ops->set_trip_hyst(tz, trip_id, trip->hysteresis);
--		if (ret)
--			return ret;
-+	switch (what) {
-+	case THERMAL_TRIP_SET_TEMP:
-+		if (val == trip->temperature)
-+			goto unlock;
-+
-+		if (tz->ops->set_trip_temp) {
-+			ret = tz->ops->set_trip_temp(tz, trip_id, val);
-+			if (ret)
-+				goto unlock;
-+		}
-+		trip->temperature = val;
-+		break;
-+
-+	case THERMAL_TRIP_SET_HYST:
-+		if (val == trip->hysteresis)
-+			goto unlock;
-+
-+		if (tz->ops->set_trip_hyst) {
-+			ret = tz->ops->set_trip_hyst(tz, trip_id, val);
-+			if (ret)
-+				goto unlock;
-+		}
-+		trip->hysteresis = val;
-+		break;
-+
-+	default:
-+		ret = -EINVAL;
-+		goto unlock;
- 	}
- 
--	if (tz->trips && (t.temperature != trip->temperature || t.hysteresis != trip->hysteresis))
--		tz->trips[trip_id] = *trip;
--
- 	thermal_notify_tz_trip_change(tz->id, trip_id, trip->type,
- 				      trip->temperature, trip->hysteresis);
- 
- 	__thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED);
- 
--	return 0;
-+unlock:
-+	mutex_unlock(&tz->lock);
-+
-+	return ret;
- }
- 
- int thermal_zone_trip_id(struct thermal_zone_device *tz,
-Index: linux-pm/include/linux/thermal.h
-===================================================================
---- linux-pm.orig/include/linux/thermal.h
-+++ linux-pm/include/linux/thermal.h
-@@ -283,9 +283,6 @@ int __thermal_zone_get_trip(struct therm
- int thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
- 			  struct thermal_trip *trip);
- 
--int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
--			  const struct thermal_trip *trip);
--
- int for_each_thermal_trip(struct thermal_zone_device *tz,
- 			  int (*cb)(struct thermal_trip *, void *),
- 			  void *data);
+kvm_arch_vcpu_load() looks strange. On the one hand we pass a cpu 
+number into it and then we use functions that only work if we are running 
+on that cpu?
 
-
-
+It would be better to use smp_processor_id() in the function 
+and not pass the cpu number to it.
+--8323329-1152771662-1701116263=:544079--
 
