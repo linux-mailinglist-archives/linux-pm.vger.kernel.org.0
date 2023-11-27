@@ -1,155 +1,143 @@
-Return-Path: <linux-pm+bounces-252-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-253-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6C2A7F9C97
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 10:27:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B0B97F9D3A
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 11:14:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D79901C20A99
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 09:27:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B6AE1C20B4B
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 10:13:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD0C513AEB;
-	Mon, 27 Nov 2023 09:27:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 962D5182A4;
+	Mon, 27 Nov 2023 10:13:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 892EC1A5;
-	Mon, 27 Nov 2023 01:27:50 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DF3713A;
+	Mon, 27 Nov 2023 02:13:55 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC9AE2F4;
-	Mon, 27 Nov 2023 01:28:37 -0800 (PST)
-Received: from e129166.arm.com (unknown [10.57.4.90])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0A7E63F6C4;
-	Mon, 27 Nov 2023 01:27:48 -0800 (PST)
-From: Lukasz Luba <lukasz.luba@arm.com>
-To: linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	daniel.lezcano@linaro.org
-Cc: lukasz.luba@arm.com,
-	rafael@kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH] powercap: DTPM: Fix unneeded conversion to micro-Watts
-Date: Mon, 27 Nov 2023 09:28:19 +0000
-Message-Id: <20231127092819.2019744-1-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.25.1
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9D3392F4;
+	Mon, 27 Nov 2023 02:14:42 -0800 (PST)
+Received: from [10.57.71.110] (unknown [10.57.71.110])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F37CB3F73F;
+	Mon, 27 Nov 2023 02:13:52 -0800 (PST)
+Message-ID: <a85b2d7e-4036-4bab-addf-45e0c2f6c335@arm.com>
+Date: Mon, 27 Nov 2023 10:13:49 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 0/3] introduce priority-based shutdown support
+To: Oleksij Rempel <o.rempel@pengutronix.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Mark Brown <broonie@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>, kernel@pengutronix.de,
+ linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+ linux-pm@vger.kernel.org, =?UTF-8?Q?S=C3=B8ren_Andersen?= <san@skov.dk>
+References: <20231124145338.3112416-1-o.rempel@pengutronix.de>
+ <2023112403-laxative-lustiness-6a7f@gregkh>
+ <ZWC/hKav0JANhWKM@finisterre.sirena.org.uk>
+ <2023112458-stature-commuting-c66f@gregkh>
+ <ZWDGGqsCq9iSnHtO@finisterre.sirena.org.uk>
+ <2023112435-dazzler-crisped-04a6@gregkh>
+ <20231124163234.GC819414@pengutronix.de>
+ <2023112453-flagstick-bullring-8511@gregkh>
+ <20231124185725.GA872366@pengutronix.de> <2023112520-paper-image-ef5d@gregkh>
+ <20231125085038.GA877872@pengutronix.de>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <20231125085038.GA877872@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The Power values coming from the Energy Model are already in uW.
-The PowerCap and DTPM framework operate on uW, thus all places should
-just use the values from EM. Fix the code which left and still does
-the unneeded conversion.
+On 25/11/2023 08:50, Oleksij Rempel wrote:
+> On Sat, Nov 25, 2023 at 06:51:55AM +0000, Greg Kroah-Hartman wrote:
+>> On Fri, Nov 24, 2023 at 07:57:25PM +0100, Oleksij Rempel wrote:
+>>> On Fri, Nov 24, 2023 at 05:26:30PM +0000, Greg Kroah-Hartman wrote:
+>>>> On Fri, Nov 24, 2023 at 05:32:34PM +0100, Oleksij Rempel wrote:
+>>>>> On Fri, Nov 24, 2023 at 03:56:19PM +0000, Greg Kroah-Hartman wrote:
+>>>>>> On Fri, Nov 24, 2023 at 03:49:46PM +0000, Mark Brown wrote:
+>>>>>>> On Fri, Nov 24, 2023 at 03:27:48PM +0000, Greg Kroah-Hartman wrote:
+>>>>>>>> On Fri, Nov 24, 2023 at 03:21:40PM +0000, Mark Brown wrote:
+>>>>>>>
+>>>>>>>>> This came out of some discussions about trying to handle emergency power
+>>>>>>>>> failure notifications.
+>>>>>>>
+>>>>>>>> I'm sorry, but I don't know what that means.  Are you saying that the
+>>>>>>>> kernel is now going to try to provide a hard guarantee that some devices
+>>>>>>>> are going to be shut down in X number of seconds when asked?  If so, why
+>>>>>>>> not do this in userspace?
+>>>>>>>
+>>>>>>> No, it was initially (or when I initially saw it anyway) handling of
+>>>>>>> notifications from regulators that they're in trouble and we have some
+>>>>>>> small amount of time to do anything we might want to do about it before
+>>>>>>> we expire.
+>>>>>>
+>>>>>> So we are going to guarantee a "time" in which we are going to do
+>>>>>> something?  Again, if that's required, why not do it in userspace using
+>>>>>> a RT kernel?
+>>>>>
+>>>>> For the HW in question I have only 100ms time before power loss. By
+>>>>> doing it over use space some we will have even less time to react.
+>>>>
+>>>> Why can't userspace react that fast?  Why will the kernel be somehow
+>>>> faster?  Speed should be the same, just get the "power is cut" signal
+>>>> and have userspace flush and unmount the disk before power is gone.  Why
+>>>> can the kernel do this any differently?
+>>>>
+>>>>> In fact, this is not a new requirement. It exist on different flavors of
+>>>>> automotive Linux for about 10 years. Linux in cars should be able to
+>>>>> handle voltage drops for example on ignition and so on. The only new thing is
+>>>>> the attempt to mainline it.
+>>>>
+>>>> But your patch is not guaranteeing anything, it's just doing a "I want
+>>>> this done before the other devices are handled", that's it.  There is no
+>>>> chance that 100ms is going to be a requirement, or that some other
+>>>> device type is not going to come along and demand to be ahead of your
+>>>> device in the list.
+>>>>
+>>>> So you are going to have a constant fight among device types over the
+>>>> years, and people complaining that the kernel is now somehow going to
+>>>> guarantee that a device is shutdown in a set amount of time, which
+>>>> again, the kernel can not guarantee here.
+>>>>
+>>>> This might work as a one-off for a specific hardware platform, which is
+>>>> odd, but not anything you really should be adding for anyone else to use
+>>>> here as your reasoning for it does not reflect what the code does.
+>>>
+>>> I see. Good point.
+>>>
+>>> In my case umount is not needed, there is not enough time to write down
+>>> the data. We should send a shutdown command to the eMMC ASAP.
+>>
+>> If you don't care about the data, why is a shutdown command to the
+>> hardware needed?  What does that do that makes anything "safe" if your
+>> data is lost.
+> 
+> It prevents HW damage. In a typical automotive under-voltage labor it is
+> usually possible to reproduce X amount of bricked eMMCs or NANDs on Y
+> amount of under-voltage cycles (I do not have exact numbers right now).
+> Even if the numbers not so high in the labor tests (sometimes something
+> like one bricked device in a month of tests), the field returns are
+> significant enough to care about software solution for this problem.
+> 
+> Same problem was seen not only in automotive devices, but also in
+> industrial or agricultural. With other words, it is important enough to bring
+> some kind of solution mainline.
+> 
 
-Fixes: ae6ccaa65038 (PM: EM: convert power field to micro-Watts precision and align drivers)
-Cc: <stable@vger.kernel.org> # v5.19+
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
----
-Hi Daniel,
+IMO that is a serious problem with the used storage / eMMC in that case and it
+is not suitable for industrial/automotive uses?
+Any industrial/automotive-suitable storage device should detect under-voltage and
+just treat it as a power-down/loss, and while that isn't nice for the storage device,
+it really shouldn't be able to brick a device (within <1M cycles anyway).
+What does the storage module vendor say about this?
 
-I have found an issue due to the uW in the EM. My apologies for that.
-I have check those with the Rockpi dev board with your DTPM module there.
-BTW, if you like to check the DTPM_devfreq there, you can apply that
-patch. It should create EM for your GPU there and setup DTPM GPU:
-https://lore.kernel.org/all/20231127081511.1911706-1-lukasz.luba@arm.com/
-
-Regards,
-Lukasz
-
-
- drivers/powercap/dtpm_cpu.c     |  6 +-----
- drivers/powercap/dtpm_devfreq.c | 11 +++--------
- 2 files changed, 4 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
-index 2ff7717530bf..8a2f18fa3faf 100644
---- a/drivers/powercap/dtpm_cpu.c
-+++ b/drivers/powercap/dtpm_cpu.c
-@@ -24,7 +24,6 @@
- #include <linux/of.h>
- #include <linux/pm_qos.h>
- #include <linux/slab.h>
--#include <linux/units.h>
- 
- struct dtpm_cpu {
- 	struct dtpm dtpm;
-@@ -104,8 +103,7 @@ static u64 get_pd_power_uw(struct dtpm *dtpm)
- 		if (pd->table[i].frequency < freq)
- 			continue;
- 
--		return scale_pd_power_uw(pd_mask, pd->table[i].power *
--					 MICROWATT_PER_MILLIWATT);
-+		return scale_pd_power_uw(pd_mask, pd->table[i].power);
- 	}
- 
- 	return 0;
-@@ -122,11 +120,9 @@ static int update_pd_power_uw(struct dtpm *dtpm)
- 	nr_cpus = cpumask_weight(&cpus);
- 
- 	dtpm->power_min = em->table[0].power;
--	dtpm->power_min *= MICROWATT_PER_MILLIWATT;
- 	dtpm->power_min *= nr_cpus;
- 
- 	dtpm->power_max = em->table[em->nr_perf_states - 1].power;
--	dtpm->power_max *= MICROWATT_PER_MILLIWATT;
- 	dtpm->power_max *= nr_cpus;
- 
- 	return 0;
-diff --git a/drivers/powercap/dtpm_devfreq.c b/drivers/powercap/dtpm_devfreq.c
-index 91276761a31d..612c3b59dd5b 100644
---- a/drivers/powercap/dtpm_devfreq.c
-+++ b/drivers/powercap/dtpm_devfreq.c
-@@ -39,10 +39,8 @@ static int update_pd_power_uw(struct dtpm *dtpm)
- 	struct em_perf_domain *pd = em_pd_get(dev);
- 
- 	dtpm->power_min = pd->table[0].power;
--	dtpm->power_min *= MICROWATT_PER_MILLIWATT;
- 
- 	dtpm->power_max = pd->table[pd->nr_perf_states - 1].power;
--	dtpm->power_max *= MICROWATT_PER_MILLIWATT;
- 
- 	return 0;
- }
-@@ -54,13 +52,10 @@ static u64 set_pd_power_limit(struct dtpm *dtpm, u64 power_limit)
- 	struct device *dev = devfreq->dev.parent;
- 	struct em_perf_domain *pd = em_pd_get(dev);
- 	unsigned long freq;
--	u64 power;
- 	int i;
- 
- 	for (i = 0; i < pd->nr_perf_states; i++) {
--
--		power = pd->table[i].power * MICROWATT_PER_MILLIWATT;
--		if (power > power_limit)
-+		if (pd->table[i].power > power_limit)
- 			break;
- 	}
- 
-@@ -68,7 +63,7 @@ static u64 set_pd_power_limit(struct dtpm *dtpm, u64 power_limit)
- 
- 	dev_pm_qos_update_request(&dtpm_devfreq->qos_req, freq);
- 
--	power_limit = pd->table[i - 1].power * MICROWATT_PER_MILLIWATT;
-+	power_limit = pd->table[i - 1].power;
- 
- 	return power_limit;
- }
-@@ -110,7 +105,7 @@ static u64 get_pd_power_uw(struct dtpm *dtpm)
- 		if (pd->table[i].frequency < freq)
- 			continue;
- 
--		power = pd->table[i].power * MICROWATT_PER_MILLIWATT;
-+		power = pd->table[i].power;
- 		power *= status.busy_time;
- 		power >>= 10;
- 
--- 
-2.25.1
-
+BR,
+Christian
 
