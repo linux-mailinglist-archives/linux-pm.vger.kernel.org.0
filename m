@@ -1,308 +1,155 @@
-Return-Path: <linux-pm+bounces-251-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-252-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DF707F9B7D
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 09:17:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6C2A7F9C97
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 10:27:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6A7B280D5E
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 08:17:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D79901C20A99
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 09:27:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0F89111B4;
-	Mon, 27 Nov 2023 08:17:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WwuBrYig"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD0C513AEB;
+	Mon, 27 Nov 2023 09:27:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C825413D
-	for <linux-pm@vger.kernel.org>; Mon, 27 Nov 2023 00:17:43 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-5482df11e73so5176015a12.0
-        for <linux-pm@vger.kernel.org>; Mon, 27 Nov 2023 00:17:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701073062; x=1701677862; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xwogz74TVrwjUzkMeqQ40ZCgOgHK0fa8tbIJvLR1fg0=;
-        b=WwuBrYig1oBAOz/Yn99PpTF4yI0WBVr/jyvBpFGD12i5xWn/OeVkVQrGCsqApFoiqn
-         QYrtyVo9CwemaOZE3NkdTPfMZEgyzDkOCkwMdfW8NLVD/0ZU096sbEwmu5BA+cvEe/5u
-         NKFY+zBSAJ8JdlCvkkIbRHGYbqE3gJQ8YdgZ+d6vzSI49PX2UFjs4CVmmS24wgxaJcw+
-         2e8eVbnVZPbrM9kqze6gGfUheKq0p/OXMglz0nsr968E7wlnJJcH1uIf2bvj0DIiP5RY
-         wN4cQYMZM8mThjCJnQrwAHAwl68luOh+2cXenNNrdrzQ42UuhsDOAC9A/fmHmZ4xec+b
-         dzzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701073062; x=1701677862;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xwogz74TVrwjUzkMeqQ40ZCgOgHK0fa8tbIJvLR1fg0=;
-        b=fenc6ayjNY5DysRqfdamC9LWxNeJ74Xy/WPIXEzni+9iD0sIvabmIktu6admhGOdpN
-         JpibAA9ExJGSLqfo8ZrUHEemtwyklt2Gru0rzGfghJZGBW5B9R5BITbMlIS/vj1/VEYQ
-         rbYtmZbEXEsxQswC+LTOcxbOURhzAvvUKmFaeIVKEIS8J263CWjp9yphhkAYfsD8zQRm
-         /WUZIAoziBQe7ksEagWMFW+K+DboHZdhYhmLNsdXT73vA7+gqUGp9EOiemO1+dz/xRSA
-         M47DGddqFLBrRWm1Uitm2/DFwgfRBF+lHRSjaFa4T8WwPllZicFl0PnBdt6eSUsI+2rE
-         kR2Q==
-X-Gm-Message-State: AOJu0YyahHWbzM3UeibsJtKDah8U1+ETrz29/Ov6+T0RZ6K0fHZvyIfP
-	r3o1GFKafD1qyV7onRJADKcsaA==
-X-Google-Smtp-Source: AGHT+IF43LQPkBuIn6W1Z6uVUk1i+FRWlpVYdLYRswxN/UVMTHHOhMJyv92BWvR8fdfypPHM3AfFuQ==
-X-Received: by 2002:a17:906:e99:b0:a04:7d85:fcc with SMTP id p25-20020a1709060e9900b00a047d850fccmr7513169ejf.51.1701073062258;
-        Mon, 27 Nov 2023 00:17:42 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.223.109])
-        by smtp.gmail.com with ESMTPSA id m3-20020a170906160300b00a00b4d9df54sm5379634ejd.5.2023.11.27.00.17.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Nov 2023 00:17:41 -0800 (PST)
-Message-ID: <8366b046-068e-41df-9dd6-9aa4beefc6ca@linaro.org>
-Date: Mon, 27 Nov 2023 09:17:39 +0100
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 892EC1A5;
+	Mon, 27 Nov 2023 01:27:50 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC9AE2F4;
+	Mon, 27 Nov 2023 01:28:37 -0800 (PST)
+Received: from e129166.arm.com (unknown [10.57.4.90])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0A7E63F6C4;
+	Mon, 27 Nov 2023 01:27:48 -0800 (PST)
+From: Lukasz Luba <lukasz.luba@arm.com>
+To: linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	daniel.lezcano@linaro.org
+Cc: lukasz.luba@arm.com,
+	rafael@kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH] powercap: DTPM: Fix unneeded conversion to micro-Watts
+Date: Mon, 27 Nov 2023 09:28:19 +0000
+Message-Id: <20231127092819.2019744-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: interconnect: Add Qualcomm SM6115 NoC
-Content-Language: en-US
-To: Konrad Dybcio <konrad.dybcio@linaro.org>, Andy Gross <agross@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>, Georgi Djakov <djakov@kernel.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: Marijn Suijten <marijn.suijten@somainline.org>,
- linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- Konrad Dybcio <konradybcio@kernel.org>
-References: <20231125-topic-6115icc-v1-0-fa51c0b556c9@linaro.org>
- <20231125-topic-6115icc-v1-1-fa51c0b556c9@linaro.org>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231125-topic-6115icc-v1-1-fa51c0b556c9@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 25/11/2023 16:59, Konrad Dybcio wrote:
-> Add bindings for Qualcomm SM6115 Network-On-Chip interconnect.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../bindings/interconnect/qcom,sm6115.yaml         | 128 +++++++++++++++++++++
->  include/dt-bindings/interconnect/qcom,sm6115.h     | 111 ++++++++++++++++++
->  2 files changed, 239 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sm6115.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sm6115.yaml
-> new file mode 100644
-> index 000000000000..8908946eb391
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,sm6115.yaml
-> @@ -0,0 +1,128 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/interconnect/qcom,sm6115.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm SM6115 Network-On-Chip interconnect
-> +
-> +maintainers:
-> +  - Konrad Dybcio <konradybcio@kernel.org>
-> +
-> +description: |
+The Power values coming from the Energy Model are already in uW.
+The PowerCap and DTPM framework operate on uW, thus all places should
+just use the values from EM. Fix the code which left and still does
+the unneeded conversion.
 
-Do not need '|' unless you need to preserve formatting.
+Fixes: ae6ccaa65038 (PM: EM: convert power field to micro-Watts precision and align drivers)
+Cc: <stable@vger.kernel.org> # v5.19+
+Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+---
+Hi Daniel,
 
-> +  The Qualcomm SM6115 interconnect providers support adjusting the
-> +  bandwidth requirements between the various NoC fabrics.
-> +
-> +properties:
-> +  reg:
-> +    maxItems: 1
-> +
-> +  compatible:
+I have found an issue due to the uW in the EM. My apologies for that.
+I have check those with the Rockpi dev board with your DTPM module there.
+BTW, if you like to check the DTPM_devfreq there, you can apply that
+patch. It should create EM for your GPU there and setup DTPM GPU:
+https://lore.kernel.org/all/20231127081511.1911706-1-lukasz.luba@arm.com/
 
-compatible is the first in properties (move it before reg).
-
-> +    enum:
-> +      - qcom,sm6115-bimc
-> +      - qcom,sm6115-cnoc
-> +      - qcom,sm6115-snoc
-> +
-
-Add clocks: with min/maxItems here. Same with clock-names.
+Regards,
+Lukasz
 
 
-> +# Child node's properties
-> +patternProperties:
-> +  '^interconnect-[a-z0-9]+$':
-> +    type: object
-> +    description:
-> +      The interconnect providers do not have a separate QoS register space,
-> +      but share parent's space.
-> +
-> +    allOf:
+ drivers/powercap/dtpm_cpu.c     |  6 +-----
+ drivers/powercap/dtpm_devfreq.c | 11 +++--------
+ 2 files changed, 4 insertions(+), 13 deletions(-)
 
-Drop allOf, just $ref.
-
-> +      - $ref: qcom,rpm-common.yaml#
-> +
-> +    properties:
-> +      compatible:
-> +        enum:
-> +          - qcom,sm6115-clk-virt
-> +          - qcom,sm6115-mmrt-virt
-> +          - qcom,sm6115-mmnrt-virt
-> +
-> +    required:
-> +      - compatible
-> +
-> +    unevaluatedProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-
-Put it after allOf: block.
-
-> +
-> +allOf:
-> +  - $ref: qcom,rpm-common.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          const: qcom,sm6115-cnoc
-> +
-> +    then:
-> +      properties:
-> +        clocks:
-> +          items:
-> +            - description: USB-NoC AXI clock
-> +
-> +        clock-names:
-> +          items:
-> +            - const: usb_axi
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          const: qcom,sm6115-snoc
-> +
-> +    then:
-> +      properties:
-> +        clocks:
-> +          items:
-> +            - description: CPU-NoC AXI clock.
-> +            - description: UFS-NoC AXI clock.
-> +            - description: USB-NoC AXI clock.
-> +            - description: IPA clock.
-> +
-> +        clock-names:
-> +          items:
-> +            - const: cpu_axi
-> +            - const: ufs_axi
-> +            - const: usb_axi
-> +            - const: ipa
-
-Add if: for remaining variant disallowing clocks and clock-names.
-(clocks: false)
-
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/qcom,rpmcc.h>
-
-Is it used?
-
-> +
-> +    snoc: interconnect@1880000 {
-> +        compatible = "qcom,sm6115-snoc";
-> +        reg = <0x01880000 0x60200>;
-> +        #interconnect-cells = <1>;
-
-Missing clocks.
-
-> +
-> +        qup_virt: interconnect-qup {
-> +            compatible = "qcom,sm6115-qup-virt";
-> +            #interconnect-cells = <1>;
-> +        };
-> +
-> +        mmnrt_virt: interconnect-mmnrt {
-> +            compatible = "qcom,sm6115-mmnrt-virt";
-> +            #interconnect-cells = <1>;
-> +        };
-> +
-> +        mmrt_virt: interconnect-mmrt {
-> +            compatible = "qcom,sm6115-mmrt-virt";
-> +            #interconnect-cells = <1>;
-> +        };
-> +    };
-> +
-> +    cnoc: interconnect@1900000 {
-> +        compatible = "qcom,sm6115-cnoc";
-> +        reg = <0x01900000 0x8200>;
-> +        #interconnect-cells = <1>;
-> +    };
-> +
-> +    bimc: interconnect@4480000 {
-> +        compatible = "qcom,sm6115-bimc";
-> +        reg = <0x04480000 0x80000>;
-> +        #interconnect-cells = <1>;
-> +    };
-
-Drop this node, duplicates cnoc.
-
-> diff --git a/include/dt-bindings/interconnect/qcom,sm6115.h b/include/dt-bindings/interconnect/qcom,sm6115.h
-> new file mode 100644
-> index 000000000000..21090e585f05
-
-
-
-Best regards,
-Krzysztof
+diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
+index 2ff7717530bf..8a2f18fa3faf 100644
+--- a/drivers/powercap/dtpm_cpu.c
++++ b/drivers/powercap/dtpm_cpu.c
+@@ -24,7 +24,6 @@
+ #include <linux/of.h>
+ #include <linux/pm_qos.h>
+ #include <linux/slab.h>
+-#include <linux/units.h>
+ 
+ struct dtpm_cpu {
+ 	struct dtpm dtpm;
+@@ -104,8 +103,7 @@ static u64 get_pd_power_uw(struct dtpm *dtpm)
+ 		if (pd->table[i].frequency < freq)
+ 			continue;
+ 
+-		return scale_pd_power_uw(pd_mask, pd->table[i].power *
+-					 MICROWATT_PER_MILLIWATT);
++		return scale_pd_power_uw(pd_mask, pd->table[i].power);
+ 	}
+ 
+ 	return 0;
+@@ -122,11 +120,9 @@ static int update_pd_power_uw(struct dtpm *dtpm)
+ 	nr_cpus = cpumask_weight(&cpus);
+ 
+ 	dtpm->power_min = em->table[0].power;
+-	dtpm->power_min *= MICROWATT_PER_MILLIWATT;
+ 	dtpm->power_min *= nr_cpus;
+ 
+ 	dtpm->power_max = em->table[em->nr_perf_states - 1].power;
+-	dtpm->power_max *= MICROWATT_PER_MILLIWATT;
+ 	dtpm->power_max *= nr_cpus;
+ 
+ 	return 0;
+diff --git a/drivers/powercap/dtpm_devfreq.c b/drivers/powercap/dtpm_devfreq.c
+index 91276761a31d..612c3b59dd5b 100644
+--- a/drivers/powercap/dtpm_devfreq.c
++++ b/drivers/powercap/dtpm_devfreq.c
+@@ -39,10 +39,8 @@ static int update_pd_power_uw(struct dtpm *dtpm)
+ 	struct em_perf_domain *pd = em_pd_get(dev);
+ 
+ 	dtpm->power_min = pd->table[0].power;
+-	dtpm->power_min *= MICROWATT_PER_MILLIWATT;
+ 
+ 	dtpm->power_max = pd->table[pd->nr_perf_states - 1].power;
+-	dtpm->power_max *= MICROWATT_PER_MILLIWATT;
+ 
+ 	return 0;
+ }
+@@ -54,13 +52,10 @@ static u64 set_pd_power_limit(struct dtpm *dtpm, u64 power_limit)
+ 	struct device *dev = devfreq->dev.parent;
+ 	struct em_perf_domain *pd = em_pd_get(dev);
+ 	unsigned long freq;
+-	u64 power;
+ 	int i;
+ 
+ 	for (i = 0; i < pd->nr_perf_states; i++) {
+-
+-		power = pd->table[i].power * MICROWATT_PER_MILLIWATT;
+-		if (power > power_limit)
++		if (pd->table[i].power > power_limit)
+ 			break;
+ 	}
+ 
+@@ -68,7 +63,7 @@ static u64 set_pd_power_limit(struct dtpm *dtpm, u64 power_limit)
+ 
+ 	dev_pm_qos_update_request(&dtpm_devfreq->qos_req, freq);
+ 
+-	power_limit = pd->table[i - 1].power * MICROWATT_PER_MILLIWATT;
++	power_limit = pd->table[i - 1].power;
+ 
+ 	return power_limit;
+ }
+@@ -110,7 +105,7 @@ static u64 get_pd_power_uw(struct dtpm *dtpm)
+ 		if (pd->table[i].frequency < freq)
+ 			continue;
+ 
+-		power = pd->table[i].power * MICROWATT_PER_MILLIWATT;
++		power = pd->table[i].power;
+ 		power *= status.busy_time;
+ 		power >>= 10;
+ 
+-- 
+2.25.1
 
 
