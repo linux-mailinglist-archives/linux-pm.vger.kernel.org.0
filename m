@@ -1,47 +1,55 @@
-Return-Path: <linux-pm+bounces-310-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-311-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17EC27FAB96
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 21:31:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F217D7FABB0
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 21:37:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A126B21154
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 20:31:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0BC2AB21149
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 20:37:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B70393D3B7;
-	Mon, 27 Nov 2023 20:31:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A5233EA7E;
+	Mon, 27 Nov 2023 20:37:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=o2.pl header.i=@o2.pl header.b="U+iHv3Hd"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="vEF+hA5g"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.158])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A87210D4
-	for <linux-pm@vger.kernel.org>; Mon, 27 Nov 2023 12:31:25 -0800 (PST)
-Received: (wp-smtpd smtp.tlen.pl 29066 invoked from network); 27 Nov 2023 21:31:20 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1701117080; bh=AVLfSEKQHabLjQ2op4Bnsbc4bMus8YV3MiHTkOWOTvE=;
-          h=Subject:To:Cc:From;
-          b=U+iHv3Hd+CuZ2OKDVmzz+RgPnHjEqi2CladEWxSy3bln6TX+CIMBzlyEq/5AXSfvb
-           0OJI8B/RtbP54v2PcX07GE4wSZxLJMZhwEFnkomcm2o+46bsy6mgTIdcF1DVPEXhDN
-           OYWq5WcfH9vXlaKhKUBgJUgcMPCP68EI+rjxpagY=
-Received: from aaez25.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.129.25])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <mario.limonciello@amd.com>; 27 Nov 2023 21:31:20 +0100
-Message-ID: <c179a0cb-1b98-4a4f-a3c6-cad7b980a337@o2.pl>
-Date: Mon, 27 Nov 2023 21:31:16 +0100
-Precedence: bulk
-X-Mailing-List: linux-pm@vger.kernel.org
-List-Id: <linux-pm.vger.kernel.org>
-List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2075.outbound.protection.outlook.com [40.107.95.75])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52375D4B;
+	Mon, 27 Nov 2023 12:37:51 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gb9jviCYG7NFTrdz5g2ZkQQJS6+Kw66Zcb7brPD4Q4XgOcx2jF1zYQLUZJCs3sBxEdyU+6D1JTm7prCrQnqk4/5xphx4TA8uYgWg9QK4p8UPI2BNJasPHFjwO4x41oJLz8S9wAM0PVB5I3VWvWQlpGe3/rr+htiMqATEl8pz/HF5S8ZZi0W3FyN7q9N3+qjN/ib9BJyCBcCNBtvV6RBayCyoTRN3EjGhiAWxo8rLcx7r7ZzPGDyCFCjeUXC3xg7pw5zRvHnMqZGY9xz07YQshhnrANAf6z5klGlwn6pP/7L+/sQkQ6wrmCy1Q494Y0LO43xMcxEofyT61PuSSV1mHg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aBKswFDI+aObYTSc29wPDJofLkkbwufY1hg0comR8hI=;
+ b=d05VxX++PmM6hQiTQteuxtxja3/JpnIiIYDjaWduWyFB1tJ7Jn2Re+5Z3P+FEE0NmBld+ofvl4POZa2g+aOHdk0LF+aRIGdEH/B5rBvWWlazahs5Bwuw1LnlEsYmR/iQgCpBFiRG7iKwwiJrOuwhZJWYBbrS0Apd3Ib8LMePqXCgv/K4xjGj/tcpdDr62GxvFjGWgqC56W5tsfuPfgXsp/Hmi4TnO3U41olKmJ/CiMtAa8zbi8h27rEgkHNGCSHWwrm3gLBV0LTzYhA2z2mNCI2TbgwNJyJSeoCWrvR/u2Wh/KdwvKaru0y+CDHdcbLC/zucUPa+r/ViblBNtESPOQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aBKswFDI+aObYTSc29wPDJofLkkbwufY1hg0comR8hI=;
+ b=vEF+hA5gnsz72F6E3NzxFHAE2TkazMLJFlVzvuh0EiPNhpYgvO9CmkLuA5681YoG6V5x6Im0eFxyxcCUiQaNK1IzsxtNKOF3+9UId8vLFjpZplwApYEsw005dmjvqdsxKUht69qtCYRpG/c4naAFmUH3R6f4Ro+6LKMWHxIbaNs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by BN9PR12MB5100.namprd12.prod.outlook.com (2603:10b6:408:119::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.28; Mon, 27 Nov
+ 2023 20:37:48 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::83d7:9c4f:4d9b:1f2a]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::83d7:9c4f:4d9b:1f2a%5]) with mapi id 15.20.7025.022; Mon, 27 Nov 2023
+ 20:37:48 +0000
+Message-ID: <4332dbf1-76be-434a-a65a-d4686cb4d2fd@amd.com>
+Date: Mon, 27 Nov 2023 14:37:45 -0600
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 3/4] rtc: Add support for configuring the UIP timeout
  for RTC reads
-Content-Language: en-GB
-To: Mario Limonciello <mario.limonciello@amd.com>,
+Content-Language: en-US
+To: =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
  Alessandro Zummo <a.zummo@towertech.it>,
  Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc: "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" <linux-rtc@vger.kernel.org>,
@@ -53,169 +61,197 @@ Cc: "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" <linux-rtc@vger.kernel.org>,
  Ingo Molnar <mingo@redhat.com>
 References: <20231127192553.9734-1-mario.limonciello@amd.com>
  <20231127192553.9734-4-mario.limonciello@amd.com>
-From: =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-Autocrypt: addr=mat.jonczyk@o2.pl; keydata=
- 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
- TANkZ3QqXNX2
-In-Reply-To: <20231127192553.9734-4-mario.limonciello@amd.com>
-Content-Type: text/plain; charset=UTF-8
+ <c179a0cb-1b98-4a4f-a3c6-cad7b980a337@o2.pl>
+From: Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <c179a0cb-1b98-4a4f-a3c6-cad7b980a337@o2.pl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-WP-MailID: 1a138dafb272c999ed76f246b5ecae23
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [sYMB]                               
+X-ClientProxiedBy: DM6PR05CA0039.namprd05.prod.outlook.com
+ (2603:10b6:5:335::8) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
+Precedence: bulk
+X-Mailing-List: linux-pm@vger.kernel.org
+List-Id: <linux-pm.vger.kernel.org>
+List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|BN9PR12MB5100:EE_
+X-MS-Office365-Filtering-Correlation-Id: e64fb3e3-ae0b-4a11-1124-08dbef88b7b4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	8OWz/WcSE0jkmGLPb5VPnF3HocpT1FXL9eusZaR1Ko6nkURAwfk7u5U4cGVnTCGjCKZlysUo0HJz8gkp5BqbsMfwj25sZg9BDAFEOXgasZ1jdC7TSSLEfA7DaZgSYjoj9YnzQ//z3KpOwckU/uduQsb6ammKqLgpFOrSSbdjjrCRlIkl4UGiP099nnWBYpXqp/Zh4bcCk2gdJmANpeg6I2cH1MBQet4qcIwcW6uLKMymA5rf25k4prj4OfxSmNK3U2vqrXpZxMbu52msNKOXUhqNWPlVPWd+mro/4D1iysnidUBXck8d+8c8jsvtkmwlBecMrxrbPQSn82cgPNwwjnRnaiEos9vKM7OM3PLv3RFGpUNhvE/kg5PHlNHP4Gqb3Y6PS4m7yONrz9qQJ05VDkPze59DO0fqNWpoyGyX9J8zh4eJogqWt4Ko1hCFCyxIUFDzHJY8OXqlAASZffIY9LaRltSg6BCcWMnGBvf2HX1CloWNxt9F23obpT7oli4BKhS3A/g+OYeEScCOejPVd1t1LyfpCXs5j1epS35JaycLhEovC51ylk+eLSjfPA76dAZIeBTWa1xdPV/jDBE5R1sUi/IIUsjKkmrMPqx0psmMabsQUfwNO2tyydvHdxzDpwh+2AkgoUL9IybNTAs8SWVc9KGZU2SYh58Uth3dak9A+9wjke+wI7BRbinllQWZVmjeUfUbtgxRvbX62UoWfpTLBQEBzfOgNJrkthB4DNc=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(396003)(39860400002)(346002)(136003)(366004)(230922051799003)(230173577357003)(230273577357003)(1800799012)(186009)(64100799003)(451199024)(38100700002)(41300700001)(36756003)(31686004)(86362001)(83380400001)(5660300002)(7416002)(66574015)(26005)(44832011)(2616005)(2906002)(31696002)(6512007)(53546011)(6506007)(6666004)(8676002)(4326008)(45080400002)(8936002)(478600001)(6486002)(66946007)(110136005)(54906003)(66476007)(66556008)(316002)(557034005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZVRvOW94VzgwVzNIOWFVSTJ3V1p5cVE3K1BGUmxkZ3BYNVI0MlpONTZNVXVo?=
+ =?utf-8?B?NHFxRm1ocU5Pb0w3Qjd0N0pVVXVKNFZJYjVZd2pUUnpkKzJROXVOQ3ptd1Va?=
+ =?utf-8?B?b1lOdmppZzYwZHFZUXJJWkVKTmc3MnppYlBpc3BYbE1adDI2YndMNnhuUmlP?=
+ =?utf-8?B?ejZyRzNvWkltY2g1N3Jsd3BKRkVLa0F1bFdZUzVxWVhUSGtJQ3NVZHNaSU9Q?=
+ =?utf-8?B?dEFSY1dKWjdhcG5mdm5weFZHUXNOWFBpL05LRDlQaWdwUEowVEdYWXg0c3ho?=
+ =?utf-8?B?d2FOTS9ER084TWJSTE1NQlM3d3VKN3Zsem8rQjBVVHM0cnBxUzhHOEJ4VUw5?=
+ =?utf-8?B?ZlVpbk9VVzhuWDBLVmxpTHhxc0J1ZVBjUzFQRExHdHJjdURaY3pGTmtYTmh6?=
+ =?utf-8?B?Yk40OStydmZlUEpSTUQyVjdVV1kzZTQzMmlLRG5BeEd0OXF4eVk1UkdGUUpD?=
+ =?utf-8?B?T2xQRWwxQU9LTWQ1aS9zdWQvNnBtc1c4VkpidzJ1WDBtQUdVOHo4RXhHSGR4?=
+ =?utf-8?B?eDNhc3pqVTdBblcwUVdUcHFFWmFFMWZWdkYybVFmU09uVHJ2ZXpSL3ZkZUZR?=
+ =?utf-8?B?SE40enc3NCtlekpmTGx2a2I4Ylh3U1oxenpNUXU2R05pWFJtTEpzdDlOQUc2?=
+ =?utf-8?B?RDYySFVISUdhaDVXaTkxaUVMbVdVbkxia3NBejhHYWs0blRRWnJqeWw2azd1?=
+ =?utf-8?B?ejBaSklOSVNvUVREc0ZSaklkZEhjMXBFcmM2b3ZkNDhWaFY3VmZDRjhWcXox?=
+ =?utf-8?B?RkR4dUZLN1kyeWh3Z3lmaFpqOWJuZFA0UWp4T0psc2h3R1czd1NlbGNhbmZj?=
+ =?utf-8?B?NUZtZWxOczYrUUxneXBwQ1BOeGV5SnpCY201WCs1c3Y0aFFCcXV0QVpsS21K?=
+ =?utf-8?B?eEFINTRsM3g1Z2JxVitycHFtSlBPaEgwa2FVV1JlZ1NjK1BhL1IzWmR3ZWhv?=
+ =?utf-8?B?VU40Z3k4U25oK2xSRjAybjIvcnFHWEpzdmxDRmViNVp5QmZ5UmxPOFo5Skpm?=
+ =?utf-8?B?N1NpYVorYXZxWFdnUHNRNURWQ0FkcHlGZmJWTWZrTnlBTUdQSmxoMlYzRHNv?=
+ =?utf-8?B?OHAzYVNWcDNENTB3WS85Q0FaMzI5ZWdtN1l6YWlOb1Z2K1hnQ0FWcHVFZmJC?=
+ =?utf-8?B?eUVCSEJudEhZOFh5U0ZGVVh1RUFVeGFOcUZrRFhuRWVWQ2hCVU1YSFRsR0Z3?=
+ =?utf-8?B?WlpJano5ZitRWEVxSDZFSnJub2w4eXFPajFkaFJndkdoclhsTmRFMFRaT3p3?=
+ =?utf-8?B?VlRMN1JqVXFQWmVTdzVpTk4ra29CMERTcmt0Sk5HY3A5MFgraHExamV2L1NW?=
+ =?utf-8?B?Mmw2WjJMcnIzOTNwaXYyUVZtcFdQcTdzVXUzckQ1RGxpcHVUZnhDOHJpK1Jw?=
+ =?utf-8?B?UHByR211YVpyNUtOLy9tSzFIZFk4bUNZWUNHdUNGWkdJTXJhY2ZhL0RrZ2tH?=
+ =?utf-8?B?ZjZqV3h6NE9razZSZTUrL1dtSEJjeGw1R213dVhDaFJMcUVSdWF2Q2ZlU1JO?=
+ =?utf-8?B?UmJwdW41V1NqcFVOSks4UHBiRnBzUWNlYnBYbVRJWTk0dWlZTWc1Wmg5c3Fv?=
+ =?utf-8?B?eE5nLzhveHIwUG5kWC9jSlNQU25yOWliaVh3ZjJNVEloaEJOUGhDUjRwdUN3?=
+ =?utf-8?B?ZS9USUc1OGNXV0ZHV0dZclJTdmdNZ2orcFdwVUozbGtKWEN2emo4ano5R1lH?=
+ =?utf-8?B?Tm9Eam1LQ1lnSW1PUnlDYmJDN3FqcG9FVkYxTW41a3RoUENtOG9HN3BBTDRn?=
+ =?utf-8?B?N3lFUW94Vk1QenE0U2xWS0Y3NmlVQjNMOXAySkp4VmJRYkg5cWt4NG5qa2s3?=
+ =?utf-8?B?aS9SL0ErTlJsbVNYdngzYis5NStORUU0YmFKODMyVGl0Vk84OHpwRHJTZjJ4?=
+ =?utf-8?B?eWdxVTVDT0owYlpMWUtxNFJhYXNZeEJScnVWckUzMG5jL0FDQUpVTHpjdWVO?=
+ =?utf-8?B?LytWMHI1V1QyeEhaWVFSNFRTVm9XVWozeURPdms5ZHJuTi9Qcm1ybjIzeGs3?=
+ =?utf-8?B?MFBTTUNMV1JVcXVWOTFtcUV1OGVkeURYeDhnUnNmeGtxZzJIZyttZ0VYdXQ1?=
+ =?utf-8?B?YUwyb2x6NjJvMGo4SExmaUwvUGF0RFlkYnJaYlcwbGp2RXBtR2Vxa1RybjNI?=
+ =?utf-8?Q?IRWHrn0TqLTEY18mNulgDAyYr?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e64fb3e3-ae0b-4a11-1124-08dbef88b7b4
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2023 20:37:48.1764
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: okqRz9risEMsrXer38X1Or6Ykk4oFp56cFpyomrxLTWrXA4826vpINyHzcu58UdS+mk0O6nm4llt1zWC7/y+OA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5100
 
-W dniu 27.11.2023 o 20:25, Mario Limonciello pisze:
-> The UIP timeout is hardcoded to 10ms for all RTC reads, but in some
-> contexts this might not be enough time. Add a timeout parameter to
-> mc146818_get_time() and mc146818_get_time_callback().
->
-> If UIP timeout is configured by caller to be >=100 ms and a call
-> takes this long, log a warning.
->
-> Make all callers use 10ms to ensure no functional changes.
->
-> Cc: stable@vger.kernel.org # 6.1.y
-> Fixes: ec5895c0f2d8 ("rtc: mc146818-lib: extract mc146818_avoid_UIP")
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
-> v2->v3:
->  * Logic adjustments
->  * Clarify warning message
-> v1->v2:
->  * Add a warning if 100ms or more
->  * Add stable and fixes tags
-[snip]
-> diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
-> index 43a28e82674e..ab077dde397b 100644
-> --- a/drivers/rtc/rtc-mc146818-lib.c
-> +++ b/drivers/rtc/rtc-mc146818-lib.c
-> @@ -8,26 +8,31 @@
->  #include <linux/acpi.h>
->  #endif
->  
-> +#define UIP_RECHECK_DELAY		100	/* usec */
-> +#define UIP_RECHECK_DELAY_MS		(USEC_PER_MSEC / UIP_RECHECK_DELAY)
-> +#define UIP_RECHECK_TIMEOUT_MS(x)	(x / UIP_RECHECK_DELAY_MS)
-> +
->  /*
->   * Execute a function while the UIP (Update-in-progress) bit of the RTC is
-> - * unset.
-> + * unset. The timeout is configurable by the caller in ms.
->   *
->   * Warning: callback may be executed more then once.
->   */
->  bool mc146818_avoid_UIP(void (*callback)(unsigned char seconds, void *param),
-> +			int timeout,
->  			void *param)
->  {
->  	int i;
->  	unsigned long flags;
->  	unsigned char seconds;
->  
-> -	for (i = 0; i < 100; i++) {
-> +	for (i = 0; i < UIP_RECHECK_TIMEOUT_MS(timeout); i++) {
+On 11/27/2023 14:31, Mateusz Jończyk wrote:
+> W dniu 27.11.2023 o 20:25, Mario Limonciello pisze:
+>> The UIP timeout is hardcoded to 10ms for all RTC reads, but in some
+>> contexts this might not be enough time. Add a timeout parameter to
+>> mc146818_get_time() and mc146818_get_time_callback().
+>>
+>> If UIP timeout is configured by caller to be >=100 ms and a call
+>> takes this long, log a warning.
+>>
+>> Make all callers use 10ms to ensure no functional changes.
+>>
+>> Cc: stable@vger.kernel.org # 6.1.y
+>> Fixes: ec5895c0f2d8 ("rtc: mc146818-lib: extract mc146818_avoid_UIP")
+>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>> ---
+>> v2->v3:
+>>   * Logic adjustments
+>>   * Clarify warning message
+>> v1->v2:
+>>   * Add a warning if 100ms or more
+>>   * Add stable and fixes tags
+> [snip]
+>> diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
+>> index 43a28e82674e..ab077dde397b 100644
+>> --- a/drivers/rtc/rtc-mc146818-lib.c
+>> +++ b/drivers/rtc/rtc-mc146818-lib.c
+>> @@ -8,26 +8,31 @@
+>>   #include <linux/acpi.h>
+>>   #endif
+>>   
+>> +#define UIP_RECHECK_DELAY		100	/* usec */
+>> +#define UIP_RECHECK_DELAY_MS		(USEC_PER_MSEC / UIP_RECHECK_DELAY)
+>> +#define UIP_RECHECK_TIMEOUT_MS(x)	(x / UIP_RECHECK_DELAY_MS)
+>> +
+>>   /*
+>>    * Execute a function while the UIP (Update-in-progress) bit of the RTC is
+>> - * unset.
+>> + * unset. The timeout is configurable by the caller in ms.
+>>    *
+>>    * Warning: callback may be executed more then once.
+>>    */
+>>   bool mc146818_avoid_UIP(void (*callback)(unsigned char seconds, void *param),
+>> +			int timeout,
+>>   			void *param)
+>>   {
+>>   	int i;
+>>   	unsigned long flags;
+>>   	unsigned char seconds;
+>>   
+>> -	for (i = 0; i < 100; i++) {
+>> +	for (i = 0; i < UIP_RECHECK_TIMEOUT_MS(timeout); i++) {
+> 
+> Sorry, this will not work. UIP_RECHECK_DELAY_MS is 10, so
+> UIP_RECHECK_TIMEOUT_MS(timeout) will be 1 for timeout=10. Should be
+> 
+>        for (i = 0; UIP_RECHECK_TIMEOUT_MS(i) < timeout; i++) {
+> 
+> With this, for i == 99, UIP_RECHECK_TIMEOUT_MS(i) = 9
+> for i == 100, UIP_RECHECK_TIMEOUT_MS(i) = 10 and the loop correctly terminates.
+> 
+> The macro should probably be renamed UIP_RECHECK_LOOPS_MS as it converts
+> loop count to ms.
 
-Sorry, this will not work. UIP_RECHECK_DELAY_MS is 10, so
-UIP_RECHECK_TIMEOUT_MS(timeout) will be 1 for timeout=10. Should be
+Got it; thanks for that.
 
-      for (i = 0; UIP_RECHECK_TIMEOUT_MS(i) < timeout; i++) {
-
-With this, for i == 99, UIP_RECHECK_TIMEOUT_MS(i) = 9
-for i == 100, UIP_RECHECK_TIMEOUT_MS(i) = 10 and the loop correctly terminates.
-
-The macro should probably be renamed UIP_RECHECK_LOOPS_MS as it converts
-loop count to ms.
-
->  		spin_lock_irqsave(&rtc_lock, flags);
->  
->  		/*
->  		 * Check whether there is an update in progress during which the
->  		 * readout is unspecified. The maximum update time is ~2ms. Poll
-> -		 * every 100 usec for completion.
-> +		 * for completion.
->  		 *
->  		 * Store the second value before checking UIP so a long lasting
->  		 * NMI which happens to hit after the UIP check cannot make
-> @@ -37,7 +42,7 @@ bool mc146818_avoid_UIP(void (*callback)(unsigned char seconds, void *param),
->  
->  		if (CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP) {
->  			spin_unlock_irqrestore(&rtc_lock, flags);
-> -			udelay(100);
-> +			udelay(UIP_RECHECK_DELAY);
->  			continue;
->  		}
->  
-> @@ -56,7 +61,7 @@ bool mc146818_avoid_UIP(void (*callback)(unsigned char seconds, void *param),
->  		 */
->  		if (CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP) {
->  			spin_unlock_irqrestore(&rtc_lock, flags);
-> -			udelay(100);
-> +			udelay(UIP_RECHECK_DELAY);
->  			continue;
->  		}
->  
-> @@ -72,6 +77,10 @@ bool mc146818_avoid_UIP(void (*callback)(unsigned char seconds, void *param),
->  		}
->  		spin_unlock_irqrestore(&rtc_lock, flags);
->  
-> +		if (i >= UIP_RECHECK_TIMEOUT_MS(100))
-
-Same, should be:
-
-          if (UIP_RECHECK_TIMEOUT_MS(i) >= 100)
-
-> +			pr_warn("Reading current time from RTC took around %d ms\n",
-> +				UIP_RECHECK_TIMEOUT_MS(i));
-> +
->  		return true;
->  	}
->  	return false;
-
-[snip]
-
-Greetings,
-
-Mateusz
-
+> 
+>>   		spin_lock_irqsave(&rtc_lock, flags);
+>>   
+>>   		/*
+>>   		 * Check whether there is an update in progress during which the
+>>   		 * readout is unspecified. The maximum update time is ~2ms. Poll
+>> -		 * every 100 usec for completion.
+>> +		 * for completion.
+>>   		 *
+>>   		 * Store the second value before checking UIP so a long lasting
+>>   		 * NMI which happens to hit after the UIP check cannot make
+>> @@ -37,7 +42,7 @@ bool mc146818_avoid_UIP(void (*callback)(unsigned char seconds, void *param),
+>>   
+>>   		if (CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP) {
+>>   			spin_unlock_irqrestore(&rtc_lock, flags);
+>> -			udelay(100);
+>> +			udelay(UIP_RECHECK_DELAY);
+>>   			continue;
+>>   		}
+>>   
+>> @@ -56,7 +61,7 @@ bool mc146818_avoid_UIP(void (*callback)(unsigned char seconds, void *param),
+>>   		 */
+>>   		if (CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP) {
+>>   			spin_unlock_irqrestore(&rtc_lock, flags);
+>> -			udelay(100);
+>> +			udelay(UIP_RECHECK_DELAY);
+>>   			continue;
+>>   		}
+>>   
+>> @@ -72,6 +77,10 @@ bool mc146818_avoid_UIP(void (*callback)(unsigned char seconds, void *param),
+>>   		}
+>>   		spin_unlock_irqrestore(&rtc_lock, flags);
+>>   
+>> +		if (i >= UIP_RECHECK_TIMEOUT_MS(100))
+> 
+> Same, should be:
+> 
+>            if (UIP_RECHECK_TIMEOUT_MS(i) >= 100)
+> 
+>> +			pr_warn("Reading current time from RTC took around %d ms\n",
+>> +				UIP_RECHECK_TIMEOUT_MS(i));
+>> +
+>>   		return true;
+>>   	}
+>>   	return false;
+> 
+> [snip]
+> 
+> Greetings,
+> 
+> Mateusz
+> 
+> 
 
 
