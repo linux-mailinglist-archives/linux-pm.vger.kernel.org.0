@@ -1,172 +1,88 @@
-Return-Path: <linux-pm+bounces-316-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-317-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E71697FAD99
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 23:38:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D30867FAEAB
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 00:47:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8DE21C20BCF
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 22:38:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D45C2816DC
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 23:47:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD2953EA9F;
-	Mon, 27 Nov 2023 22:38:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2389D49F77;
+	Mon, 27 Nov 2023 23:47:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="wp2KEdx9"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="wB9/gKBq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D72A5
-	for <linux-pm@vger.kernel.org>; Mon, 27 Nov 2023 14:38:34 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1cf80a7be0aso40677325ad.1
-        for <linux-pm@vger.kernel.org>; Mon, 27 Nov 2023 14:38:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1701124714; x=1701729514; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=kEbY7J3L+mkAtd3S0ZaTWPHnRWB7faqVxxNyXRWUYbQ=;
-        b=wp2KEdx9NAAFb6racuice7z2kio22+wI5m8T87eE6FHdy1Vrda6Dy5nZpR9Thkyq0f
-         FMHipYNK4pOdz62ip3mrMGj3H/5hUhAfc8Xe75CvrjstHELY7sK827D5U0J892HIdUPo
-         ln1n7aS16HvC6PYDYX6+G3jKpSo5Phs0yq1sBC2l2+hT2FEjICFNxl6bdcrvxQSz63td
-         B7jXkZEKu7m0ldloWs97SFQ10/dr4JRbwnvhXA3hmRX0JZ0q4fXilw/SMVmj53XNiG6q
-         HfiZNlC7mv3qpKVQyNDKsQI7P/ikEH/qyKVIe+7emRBDdYhVGJlrXt6dqNyeLBWYqO6A
-         RK3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701124714; x=1701729514;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kEbY7J3L+mkAtd3S0ZaTWPHnRWB7faqVxxNyXRWUYbQ=;
-        b=Oqp0aD4l2g+S371I6paxbxdNtUbUEFx+qieIEY6axM5ImaHPY6ud9mtKBOSyuS0Hc6
-         ZM2Lo9yf79adP2IF3bwmynska6F5WcpMUzflIDTtDvvyaNuw9oNqtuQMHPad4L6n5ZwF
-         X1fIjNYiXJlT9fN+RMGW1nbAPqc+ufj93GlcvYcnvk8KB/Y8x0d03Gbx9AWUECWzR47s
-         R0hb7aGSG54jErI/TRthNiy7DaBa/fpdf6+9BeDqRZF9JUby/5sN2VjLjZQ2DkYdPZaE
-         xoA+Do9VRxqhZOh9D1YLSBc+wDUDIaHmsYe7ydAd46+SBytrRU+781/LRJ0Q9GnrmnhS
-         zzMw==
-X-Gm-Message-State: AOJu0YxKhOkOzX0zbHE38MZYuyLUiaPQytfcUZ/TpJaEl6Mmg4NQaXEi
-	oPYKsd34RcwOH7kAQq9TZCRH/w==
-X-Google-Smtp-Source: AGHT+IERuqU7kxgpqtWKl/jQRmt39VJ0yh4j8dETn5XNWgtZUSDdtuz0NCq7vqbaO5lfsx/SUksZTA==
-X-Received: by 2002:a17:902:d489:b0:1cf:f7c3:1e32 with SMTP id c9-20020a170902d48900b001cff7c31e32mr52772plg.27.1701124714015;
-        Mon, 27 Nov 2023 14:38:34 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id 26-20020a630d5a000000b005898e4acf2dsm8161966pgn.49.2023.11.27.14.38.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Nov 2023 14:38:33 -0800 (PST)
-Message-ID: <65651a69.630a0220.babae.4320@mx.google.com>
-Date: Mon, 27 Nov 2023 14:38:33 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138AE10F0;
+	Mon, 27 Nov 2023 15:47:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=coo1mUhNKEbB7zpzsIDS96POvmXQMHwqPRZiekd+CmI=; b=wB9/gKBqr6F+MhLzrYnNfoBZ0d
+	WxMFM3ctnyahkLXi0XuAzxWHwSh8eJP6hHwtZtKgPllQyXL6byFPTyVdeKOdhkY53o977GVzHm+et
+	jmqS4QhQp3hje+jNN2ncvX770fUMihH1X+bKEgwVeM8R9ljIVHOVjQNPEAjoFQsCRoyEZkThWO/g3
+	IPNBKDD2DvXxMGBKA9XrN2seD0PJh4MQyZ27VdmnCWYnBSM15X526WYOl56QQWZY1XD4wAw2aNcLy
+	li6ZGUkudDtKo/9D9KlH53KvFuq0CW5WoOCLd3WiYDemXPNSXi0fmEZjYLSitigEsJ9yOa1LH1zaC
+	TQu4ZDnA==;
+Received: from [50.53.46.231] (helo=[192.168.254.15])
+	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1r7lJg-003hTz-0m;
+	Mon, 27 Nov 2023 23:47:04 +0000
+Message-ID: <6e664be1-dc6b-461e-b75d-2be49641402c@infradead.org>
+Date: Mon, 27 Nov 2023 15:47:01 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v6.7-rc3-33-g381d926a5d2dd
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.7-rc3-33-g381d926a5d2dd)
-To: rafael@kernel.org, linux-pm@vger.kernel.org,
- kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5] PM: sleep: Expose last succeeded resumed timestamp in
+ sysfs
+Content-Language: en-US
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+ "Rafael J . Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+ Len Brown <len.brown@intel.com>
+Cc: suleiman@google.com, briannorris@google.com,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <170108151076.780347.2482745314490930894.stgit@mhiramat.roam.corp.google.com>
+ <170108152012.780347.6355289232990337333.stgit@mhiramat.roam.corp.google.com>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <170108152012.780347.6355289232990337333.stgit@mhiramat.roam.corp.google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.7-rc3-33-g38=
-1d926a5d2dd)
-
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-7-rc3-33-g381d926a5d2dd/
-
-Tree: pm
-Branch: testing
-Git Describe: v6.7-rc3-33-g381d926a5d2dd
-Git Commit: 381d926a5d2dd2c205c9c2b7045c2c80987cf651
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
+Hi--
 
 
-Warnings summary:
+On 11/27/23 02:38, Masami Hiramatsu (Google) wrote:
+> From: Masami Hiramatsu <mhiramat@kernel.org>
+> 
 
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
+> diff --git a/kernel/power/main.c b/kernel/power/main.c
+> index f6425ae3e8b0..2ab23fd3daac 100644
+> --- a/kernel/power/main.c
+> +++ b/kernel/power/main.c
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+> @@ -514,6 +526,9 @@ static int suspend_stats_show(struct seq_file *s, void *unused)
+>  			suspend_step_name(
+>  				suspend_stats.failed_steps[index]));
+>  	}
+> +	seq_printf(s,	"last_success_resume_time:\t%-llu.%llu\n",
 
-Detailed per-defconfig build reports:
+The <TAB> after "s," is a bit odd IMO, but I don't see a need to resend it
+just for that.
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
+> +		   (unsigned long long)suspend_stats.last_success_resume_time.tv_sec,
+> +		   (unsigned long long)suspend_stats.last_success_resume_time.tv_nsec);
+>  
+>  	return 0;
+>  }
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+-- 
+~Randy
 
