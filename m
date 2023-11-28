@@ -1,60 +1,30 @@
-Return-Path: <linux-pm+bounces-374-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-375-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95DC17FBC95
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 15:19:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B460D7FBCAA
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 15:23:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 20A3AB2171E
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 14:19:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E64371C20E6E
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 14:23:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 241615ABB3;
-	Tue, 28 Nov 2023 14:19:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h/Xod48i"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E7A65AB9D;
+	Tue, 28 Nov 2023 14:23:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E767C1;
-	Tue, 28 Nov 2023 06:19:25 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1cfc35090b0so21159225ad.1;
-        Tue, 28 Nov 2023 06:19:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701181164; x=1701785964; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S6XhNRARmqH+4x0OwGlgRfFmZJPzHtmJD0IS9paEElc=;
-        b=h/Xod48iE+rQTOiopv7O9uNU46PbUTIP+qFhIrocbRocdql58bj86gTCakysGkthdv
-         S8ISGsISLmra74nQDU/p3oPwiZnYxgTw7whmFj5RxzGLSLm0wzN7LFu/3O2tJi0Tddiy
-         054USO/oQTGJz2qR8Eck7LaL7bsSi6OJdjs0/ABSsWqJD0Lq1QubfXQJC3yzf8HaoRh5
-         vW4xZEWERag6J3iQ1LnRh0KG77BZbUQIE4jiOUdoEhJKCzm+EYd7d5UFpGAYG8zclsSZ
-         tCFoGpkWBlpd4XxzGWwDagBJcBhSsYDQxazFcXCP35E02wxmqPTaXtcrayo0Qp9+uNWE
-         hqcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701181164; x=1701785964;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S6XhNRARmqH+4x0OwGlgRfFmZJPzHtmJD0IS9paEElc=;
-        b=hB/0m8wtDU5F+mjPKqs/QuhZVHws6omq27qYn79zGHwvDor1fI2he4GXEaZWhtnOWS
-         7r0ojg87C2+dAQYuwnpXFQLSbs1bY4O4vjvBgJv1GWwcozh6lVkWFXywbCHftUlBLPDn
-         BqUJwkVIMM0p0gMa/j7ZXOAPfVJjc26cugSs0adu64Le2VDHz4gc6PuNtR1rLYQYcdtY
-         wHVMIrMYc5ww39FTWNs5jsmivuAqSegVMoQe1fe4T5EZn+0ywXj0XjpknuINEB0/Au9S
-         kd6LpYwADWt0XZUAIosgnXIWDOV7s8KqBOzx1cC3SxEUmI4VOrBPNYX1ilplEyT9+J2Q
-         /rQA==
-X-Gm-Message-State: AOJu0YzfxYB/kXmCYXF3valbF+6wRC0ZWqVR/zhVB0RZ0JGk9MWNgbEy
-	ceG4DhyP21rfHGJuC41wA6I=
-X-Google-Smtp-Source: AGHT+IGeC7mc0cJX07FMHsmska8S2jhN0dx43giDBl3kNLeg0J2yYUNXit5A04Bvwnt0hwj/iQjGxw==
-X-Received: by 2002:a17:902:c1d5:b0:1cc:3829:8355 with SMTP id c21-20020a170902c1d500b001cc38298355mr13359009plc.12.1701181164472;
-        Tue, 28 Nov 2023 06:19:24 -0800 (PST)
-Received: from [192.168.0.106] ([103.131.18.64])
-        by smtp.gmail.com with ESMTPSA id k18-20020a170902c41200b001cfaba4bfbdsm7781532plk.83.2023.11.28.06.19.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Nov 2023 06:19:24 -0800 (PST)
-Message-ID: <9b424bac-b15c-476d-893e-9e6b54de70c3@gmail.com>
-Date: Tue, 28 Nov 2023 21:19:18 +0700
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 473C1B7;
+	Tue, 28 Nov 2023 06:23:41 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5C434C15;
+	Tue, 28 Nov 2023 06:24:28 -0800 (PST)
+Received: from [10.57.2.117] (unknown [10.57.2.117])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 07CAF3F6C4;
+	Tue, 28 Nov 2023 06:23:39 -0800 (PST)
+Message-ID: <95757bf5-a7c3-48ac-86b8-62e28680d903@arm.com>
+Date: Tue, 28 Nov 2023 14:24:39 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -62,39 +32,56 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: Fwd: Intel hybrid CPU scheduler always prefers E cores
+Subject: Re: [PATCH] powercap: DTPM: Fix unneeded conversion to micro-Watts
 Content-Language: en-US
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Regressions <regressions@lists.linux.dev>,
- Linux Power Management <linux-pm@vger.kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, Ingo Molnar <mingo@redhat.com>,
- Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Ramses VdP <ramses@well-founded.dev>, ricardo.neri-calderon@linux.intel.com
-References: <01df8329-06d7-4fd1-9c7a-05296f33231e@gmail.com>
- <20231128140225.GS8262@noisy.programming.kicks-ass.net>
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20231128140225.GS8262@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ daniel.lezcano@linaro.org, stable@vger.kernel.org
+References: <20231127092819.2019744-1-lukasz.luba@arm.com>
+ <CAJZ5v0hun3D29w0DMgaSoaGpLNLP4dWN-mYpRHYESdFwP6iRsQ@mail.gmail.com>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAJZ5v0hun3D29w0DMgaSoaGpLNLP4dWN-mYpRHYESdFwP6iRsQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 11/28/23 21:02, Peter Zijlstra wrote:
-> On Tue, Nov 28, 2023 at 08:22:27PM +0700, Bagas Sanjaya wrote:
->> Hi,
+
+
+On 11/28/23 14:17, Rafael J. Wysocki wrote:
+> On Mon, Nov 27, 2023 at 10:27 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
 >>
->> I come across an interesting bug report on Bugzilla [1]. The reporter
->> wrote:
+>> The Power values coming from the Energy Model are already in uW.
+>> The PowerCap and DTPM framework operate on uW, thus all places should
+>> just use the values from EM. Fix the code which left and still does
+>> the unneeded conversion.
+>>
+>> Fixes: ae6ccaa65038 (PM: EM: convert power field to micro-Watts precision and align drivers)
+>> Cc: <stable@vger.kernel.org> # v5.19+
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>> Hi Daniel,
+>>
+>> I have found an issue due to the uW in the EM. My apologies for that.
 > 
-> Thanks for forwarding, what happend in bugzilla staysi in bugzilla etc..
+> No need to apologize, you are making the code better.
+
+I apologize because I introduced this uW change in the EM fwk :)
+although I missed those DTPM bits which are now fixed.
+
+Daniel told me last week that I can easily test the DTPM using
+the rockpi code (because it was a pain for me in some hacks
+trying to test DTPM).
+
 > 
-> Did you perchance Cc the reporter?
+>> I have check those with the Rockpi dev board with your DTPM module there.
+>> BTW, if you like to check the DTPM_devfreq there, you can apply that
+>> patch. It should create EM for your GPU there and setup DTPM GPU:
+>> https://lore.kernel.org/all/20231127081511.1911706-1-lukasz.luba@arm.com/
+>>
+
+[snip]
+
 > 
+> Applied as 6.7-rc material, thanks!
 
-Yes, I CC'ed him.
-
--- 
-An old man doll... just what I always wanted! - Clara
-
+thanks Rafael!
 
