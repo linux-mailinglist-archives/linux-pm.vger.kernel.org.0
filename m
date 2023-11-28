@@ -1,121 +1,105 @@
-Return-Path: <linux-pm+bounces-332-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-333-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD76D7FB0A6
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 04:45:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C26AE7FB25B
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 08:09:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 09F0C1C20A8B
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 03:45:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7DADA281D21
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 07:09:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E8AA6AD8;
-	Tue, 28 Nov 2023 03:45:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 537D711726;
+	Tue, 28 Nov 2023 07:09:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zVC8UVKG"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BrkX1gFF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A376D1AA
-	for <linux-pm@vger.kernel.org>; Mon, 27 Nov 2023 19:45:03 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1cff3a03dfaso3772885ad.3
-        for <linux-pm@vger.kernel.org>; Mon, 27 Nov 2023 19:45:03 -0800 (PST)
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF754197
+	for <linux-pm@vger.kernel.org>; Mon, 27 Nov 2023 23:09:14 -0800 (PST)
+Received: by mail-oo1-xc2c.google.com with SMTP id 006d021491bc7-58db7d8f2ebso31711eaf.0
+        for <linux-pm@vger.kernel.org>; Mon, 27 Nov 2023 23:09:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701143103; x=1701747903; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=aqENqkO0tzrRX6nk+5fxLZVKpn8EWHtoTOpSeab41CI=;
-        b=zVC8UVKGgInZwiFTyJjth1vIwQi+4PzCK0cbicx9tD9Dv81pJk4WdKIWQ94kI9onu0
-         16ktOGtWPECtj1fBCJOgUYmIOPEiJy5RddSoCkfEDJIMjphvdKr08yea8SLgs6R53BV+
-         SeHI06qgnKX1qTVQnlwCXr5mmR7OHA1SoIfzw6XnhVGzX9rpBz2PkAEWith7MgC+hsor
-         oynu3wvcYTcFxH8ElKO3yJ+lXXuMOP9chRHsg8EAKYL4q+w2OzDoobnYEdc2M+/Eaz2y
-         43ZWQ8O+h/nZge2XKd26a9mekVOsdnyPymQaIlYOUcOhmr80fuyoQpiD67+5Bx9lziLn
-         hfbA==
+        d=linaro.org; s=google; t=1701155354; x=1701760154; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3DfVtya4RBsfO21aPZQimz87Ty2xKQDd/O6zJS+ytuc=;
+        b=BrkX1gFFbVKElH0gabTl1nw2cvkPGbYPoO0dTp39wLntPiyY/Xi1yew3opTJe5gQSl
+         prN3QNlqBWAv1rPjoVsFHKS6Oqvn6ttSfEvsN0zN6fomGBRdulnfGHcYuc7Sr+xGpscN
+         H5siQDf6kJ5YQa3D1VXRlpNs8hGc+kv7Q7wn2UGmI1P8opQWUtZNi1pqHh0KfCrJnzE/
+         JDhmQa6gKg/UczkneuvHC80zEjF3gQIWTRI71N7oa+ADOEDbC4WyjqiY92ipLUpoVllh
+         lQZ/YGVUBECVbtItcf8g1I0F88rtK8t6Z9Wb8GyjH7Vpku7U4wqZGW6De/jHUariA5+q
+         vQLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701143103; x=1701747903;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aqENqkO0tzrRX6nk+5fxLZVKpn8EWHtoTOpSeab41CI=;
-        b=gV8cXUf8/iUo9sk0yOijVYUPqLJKHGnKWf7AtWHuGxNo3Sbkadee5FP5rvsijgbYUF
-         +l/1LtxsEqte08hySXZ7pWyr6r+TcWLZdG2PGTU0h9kT1f/hNJQPQsJMQg2hoCfQ1sIU
-         uvZfmfEbem9qFZFOh5i02NuF/dSA17fTVAp/9E9de1VSVOaKYzyOwYIJzwexJii6u1j1
-         YCMmxsvo/4gxrtYPgTa5pjU/YJLEa2+vTzey2udNpZtOiLGsHeYpaOWNyOBeASId6T0N
-         8lgF9VzBBXx6lw01FHLiRnyBx09qUv4JSGNef1b/6a90xlMeFqKiagUtLYJkTjrd8Qy8
-         ibdw==
-X-Gm-Message-State: AOJu0YwR3xIDlFzQ/n/5B0vYBmQvlJTD3w0TnR5xegp+Jg5OmSr6V4ev
-	U94py8feZw2uUzsQseAU9B2YZw==
-X-Google-Smtp-Source: AGHT+IEaUMiQHyszTrL36vf+MA6N6446tYXLZrlSLesGkGZOlRqtuYMkwapte9LMbq0x55O5SJp21w==
-X-Received: by 2002:a17:902:d48d:b0:1cf:c78a:f50 with SMTP id c13-20020a170902d48d00b001cfc78a0f50mr5942861plg.23.1701143103077;
-        Mon, 27 Nov 2023 19:45:03 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701155354; x=1701760154;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3DfVtya4RBsfO21aPZQimz87Ty2xKQDd/O6zJS+ytuc=;
+        b=hs8g/FlGdRlmitmXet6Zdr5o2UZxpVe7KB13sxDw8XdP6cwe1oMN6mXhEs/ChctHkk
+         u5KiLQnroZQlQzAdWZM110frvRibAUP3/2fMlhCj1i6vTHalq/qdeHxY+90y9MqD7JH6
+         iQHQSzWSieHn4/NklJV3WWwoJ3PA/6yEvHlHyhhZH2N8RCbKy7D4ri1z0D+ymD9kBO7T
+         FRzoeVsky3UxdNVt55c6tYxxvIE1op0GHFRBMDwSNMEA0WnlP5fKEakwu02AbzUbgETc
+         WDD3szJRcDS9u0WS9fz4f2SyggyLSMU3QAFo1f11CFneT7pYV5x1sbK644aOc5/gVJpt
+         ekMA==
+X-Gm-Message-State: AOJu0YwVTyH+3stY2YnpH5DSSCOWwPFeYprwEcRFB09lSvYO2g/Gb/Dq
+	uKtk87h0NEJ9j395zCE2KRL5zg==
+X-Google-Smtp-Source: AGHT+IH7FQgKd0fBaTnW20DKZfN/lO92e7D73F9a16o4SUVO0itFXdjiYg1ryLnRHh7o+XxouhfCAg==
+X-Received: by 2002:a05:6820:60a:b0:58d:9c58:428e with SMTP id e10-20020a056820060a00b0058d9c58428emr4726750oow.5.1701155353956;
+        Mon, 27 Nov 2023 23:09:13 -0800 (PST)
 Received: from localhost ([122.172.82.6])
-        by smtp.gmail.com with ESMTPSA id t18-20020a170902d21200b001cfad45d6bbsm6199748ply.247.2023.11.27.19.45.01
+        by smtp.gmail.com with ESMTPSA id o18-20020a63e352000000b005b1bf3a200fsm9070147pgj.1.2023.11.27.23.09.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Nov 2023 19:45:02 -0800 (PST)
-Date: Tue, 28 Nov 2023 09:14:59 +0530
+        Mon, 27 Nov 2023 23:09:13 -0800 (PST)
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>,
-	Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+To: Viresh Kumar <vireshk@kernel.org>,
+	Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>,
 	Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: [GIT PULL] cpufreq/arm fixes for 6.7-rc4
-Message-ID: <20231128034459.fwgzqilxo2gl32ep@vireshk-i7>
-References: <20231127043144.kkyyaut4e7gpzr2r@vireshk-i7>
- <CAJZ5v0ifcNJPoKPaLYyHQPnJWoCjLFsNXuYmysVuOHtEVNPQnw@mail.gmail.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>,
+	linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] OPP: Check for invalid OPP in dev_pm_opp_find_level_ceil()
+Date: Tue, 28 Nov 2023 12:39:06 +0530
+Message-Id: <51b7d5dec3d4f3a677b355b12fac9dcac63828cf.1701155328.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0ifcNJPoKPaLYyHQPnJWoCjLFsNXuYmysVuOHtEVNPQnw@mail.gmail.com>
 X-Spam-Level: *
 
-On 27-11-23, 22:11, Rafael J. Wysocki wrote:
-> Hi Viresh,
-> 
-> On Mon, Nov 27, 2023 at 5:31 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> >
-> > Hi Rafael,
-> >
-> > The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
-> >
-> >   Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
-> >
-> > are available in the Git repository at:
-> >
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
-> >
-> > for you to fetch changes up to 8f96e29aae31354191227ad476dc7f6147ef1d75:
-> >
-> >   pmdomain: qcom: rpmpd: Set GENPD_FLAG_ACTIVE_WAKEUP (2023-11-23 13:08:01 +0530)
-> >
-> > ----------------------------------------------------------------
-> > Christoph Niedermaier (1):
-> >       cpufreq: imx6q: Don't disable 792 Mhz OPP unnecessarily
-> >
-> > Stephan Gerhold (3):
-> >       cpufreq: qcom-nvmem: Enable virtual power domain devices
-> >       cpufreq: qcom-nvmem: Preserve PM domain votes in system suspend
-> >       pmdomain: qcom: rpmpd: Set GENPD_FLAG_ACTIVE_WAKEUP
-> >
-> >  drivers/cpufreq/imx6q-cpufreq.c      |  2 +-
-> >  drivers/cpufreq/qcom-cpufreq-nvmem.c | 73 ++++++++++++++++++++++++++++++++++--
-> >  drivers/pmdomain/qcom/rpmpd.c        |  1 +
-> >  3 files changed, 72 insertions(+), 4 deletions(-)
-> >
-> > --
-> 
-> Pulled, but it would be kind of nice to get some description of the
-> material other than the shorlog.
+_find_key_ceil() may return an error and that must be checked before
+passing the same to dev_pm_opp_put().
 
-Ahh, my fault. I created the pull request using the branch name instead of the
-tag. I usually do the right thing and so the description comes by itself.
+Fixes: 41907aa4ae37 ("OPP: Level zero is valid")
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ drivers/opp/core.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 4f1ca84d9ed0..c022d548067d 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -808,6 +808,8 @@ struct dev_pm_opp *dev_pm_opp_find_level_ceil(struct device *dev,
+ 	struct dev_pm_opp *opp;
+ 
+ 	opp = _find_key_ceil(dev, &temp, 0, true, _read_level, NULL);
++	if (IS_ERR(opp))
++		return opp;
+ 
+ 	/* False match */
+ 	if (temp == OPP_LEVEL_UNSET) {
 -- 
-viresh
+2.31.1.272.g89b43f80a514
+
 
