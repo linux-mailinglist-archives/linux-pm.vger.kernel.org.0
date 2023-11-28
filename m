@@ -1,453 +1,378 @@
-Return-Path: <linux-pm+bounces-352-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-353-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC7EC7FBA5F
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 13:45:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBF107FBA8F
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 13:54:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3FE741F20FDF
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 12:45:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 39902B21464
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 12:54:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38A863457D;
-	Tue, 28 Nov 2023 12:45:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gerhold.net header.i=@gerhold.net header.b="BoO+G5sW";
-	dkim=permerror (0-bit key) header.d=gerhold.net header.i=@gerhold.net header.b="IzmrX3mf"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62394446B2;
+	Tue, 28 Nov 2023 12:54:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-pm@vger.kernel.org
-X-Greylist: delayed 181 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 28 Nov 2023 04:45:05 PST
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.164])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4979CD5B;
-	Tue, 28 Nov 2023 04:45:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1701175322; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=oAvSZlvrEVIFs9exHkMFKW3+YoVO7gKmlBuHFpcNlEYCkX8wijvmUZ6aq12dEMxX3v
-    NoCrZkl8asmN0fmCMXalhhEK8NROcPAIIlybnUkAmEmogZMhrQZSboXHXDRUbEr4Nhxg
-    KO2BAom4A+6hhtG9Rzy9E1iFaZBeDOM+XkZY0PY34IDu6KA+QJIoGActSU2bMxCkvAvO
-    1u00QefNwyafrSgoWQrjlWxVHueUdn4CLFuq8WlyLjIZ+CENqBrDIELTym02Ho5XA1iV
-    s+sdwH1oRZ9x0IzTaYbIBUCT2a4IMOlq+3CzlHeUlorxSEFNyqBd5q4N8QM0HCoU79XC
-    2m8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1701175322;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=TS8/WXeqr+m6rKcDo8NKgNdTMbcPnyKqnODnr8gI8hs=;
-    b=Q/gfLd4L4xzjF91QdYPUPNqocXqvunJdg0rPc6CGdR4QHAk6lK13LNbUEs30P5UljZ
-    uqMP0xqu8kNAAsbjud2bppeY+OiRyzvFXyp/xoH8WBeiq9CAFFroU131wUeVnioI/3sU
-    JW3EGTpFTqwRozdUuuDMf+LWeto4maffmGJDcHr5NFQTeGsQRGOKCf3vXBoab2GXhbw/
-    frYcQ1R9zxQrFLvy9ReG/r9oDdawP2YVJRsg0Y9HLWo82uveDMihRKR/sxVeB1rFExSZ
-    yEt0zrzQkvTIRmcEVh09m4BNoNkBJDu3k3htMkvXUiY1CLyrRSxzKHXGqYZbC1XrRKxK
-    Zo7w==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1701175322;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=TS8/WXeqr+m6rKcDo8NKgNdTMbcPnyKqnODnr8gI8hs=;
-    b=BoO+G5sWWQNmY/5dRxdbHlFH9pxjZj/RYZ+xf6VhQtMHgqcbFe/9c9gPyYE3FSRSE6
-    A8eiahSXghyaNtt7r+MuCCsvUpskPODuvMlhNYVHD8oHqJWX+yFbaYeYODXe+nDxsZ3B
-    k1/pJO3FnDZNzqM/V4th58pz2ndK2JKLGsW5dPNB+EHfO/1Efhn9JGVG+0dXY0N+VRVY
-    7okcarziiU+RFwm2Wb9xiS1HB0Pnh3/kL0hRS3YhUMumJRXd7eJExn/ePak+73LnJm/y
-    U3+KX8iscb7leQ6/euMwW3vTEWYF0UmmJXHHNPa/T8r0/KNrI24n2sKB44xpf0ewzD4k
-    83ug==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1701175322;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=TS8/WXeqr+m6rKcDo8NKgNdTMbcPnyKqnODnr8gI8hs=;
-    b=IzmrX3mfqfsZT9NHUBJSSsUiqhdkaXvkf/Rj4TM1Kqski1PWl9IFsvBLubhdi5REoE
-    Wl7Ma/qr7iuT6izExVBg==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4peA8paF1A=="
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.9.1 DYNA|AUTH)
-    with ESMTPSA id t3efe7zASCg2mDV
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Tue, 28 Nov 2023 13:42:02 +0100 (CET)
-Date: Tue, 28 Nov 2023 13:41:56 +0100
-From: Stephan Gerhold <stephan@gerhold.net>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Ilia Lin <ilia.lin@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/4] cpufreq: qcom-nvmem: Handling multiple power domains
-Message-ID: <ZWXgFNKgm9QaFuzx@gerhold.net>
-References: <20230912-msm8909-cpufreq-v1-0-767ce66b544b@kernkonzept.com>
- <20230912-msm8909-cpufreq-v1-1-767ce66b544b@kernkonzept.com>
- <CAPDyKFq6U-MR4Bd+GmixYseRECDh142RhydtKbiPd3NHV2g6aw@mail.gmail.com>
- <ZQGqfMigCFZP_HLA@gerhold.net>
- <CAPDyKFppdXe1AZo1jm2Bc_ZR18hw5Bmh1x+2P7Obhb_rJ2gc4Q@mail.gmail.com>
- <ZRcC2IRRv6dtKY65@gerhold.net>
- <CAPDyKFoiup8KNv=1LFGKDdDLA1pHsdJUgTTWMdgxnikEmReXzg@mail.gmail.com>
- <ZSg-XtwMxg3_fWxc@gerhold.net>
- <CAPDyKFoH5EOvRRKy-Bgp_B9B3rf=PUKK5N45s5PNgfBi55PaOQ@mail.gmail.com>
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9FE010D4;
+	Tue, 28 Nov 2023 04:54:07 -0800 (PST)
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-6d815062598so871708a34.0;
+        Tue, 28 Nov 2023 04:54:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701176045; x=1701780845;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KansKB/I6JMABnep2eO/OwfMWyW5lRyhE+ZO5W+A/ws=;
+        b=cHVMkKQjb2/3hAfY2clot2YmI6PaEOiLfqgoFZAfmWL3XjZJRzf9mwyeWOqh467EwY
+         sORBJgHhJdg7yZRzvhXkj68t4Su97edQZt5kk0UxUGt26ZdYIymzPNEYfSaYV/0SpKm0
+         T5TawRQUpher0tjniLpKLKksc2YgRJuxSDqPVA+EnlqRRUHx6dC+zTnVzYxEY38EMI8u
+         4XQs+T+/s69CKTnQcxYGtNWblp63AiD4xE62hXyxI8S9wNYVqOi3mDQUMkL23WP8GRR8
+         oKTaaXD/rjFqci7pDZ48mw7Y8s7jQSezEE3iZwJG6IeNVsFJE8fjrV3XtC8Yc7ysr2CC
+         4Bug==
+X-Gm-Message-State: AOJu0YzGYoCVrMpuXJAQCRzclSqwgCju/WRDyJ1wvvYWASIJ1mTvKmk9
+	sILwuOwmvp2qIvh7sUSCZSMMFYG/Qf5v8JXQsr4=
+X-Google-Smtp-Source: AGHT+IEPoptBOm+FCdrsD7uMUnoB/xFwq4DwM8OLtwgqU3ZrwwVTieoVYv+j/HqoSQetrl66aq3gAlFezhhjcgjCihA=
+X-Received: by 2002:a05:6820:b0b:b0:58a:7cff:2406 with SMTP id
+ df11-20020a0568200b0b00b0058a7cff2406mr13172699oob.0.1701176045412; Tue, 28
+ Nov 2023 04:54:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFoH5EOvRRKy-Bgp_B9B3rf=PUKK5N45s5PNgfBi55PaOQ@mail.gmail.com>
-Content-Transfer-Encoding: 7bit
+References: <4892163.31r3eYUQgx@kreacher> <f3b2dc4d-3d20-4f90-95ce-5d62fc7ef685@arm.com>
+In-Reply-To: <f3b2dc4d-3d20-4f90-95ce-5d62fc7ef685@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 28 Nov 2023 13:53:54 +0100
+Message-ID: <CAJZ5v0iYy90+WPceFrJdv15jBg4NKUz0gj9DsxjCYQr38GznBQ@mail.gmail.com>
+Subject: Re: [PATCH v1] thermal: trip: Rework thermal_zone_set_trip() and its callers
+To: Lukasz Luba <lukasz.luba@arm.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux PM <linux-pm@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Uffe,
+Hi Lukasz,
 
-On Mon, Oct 16, 2023 at 04:47:52PM +0200, Ulf Hansson wrote:
-> [...]
-> > > >   - MSM8916 (CPR+RPMPD):
-> > > >     https://github.com/msm8916-mainline/linux/commit/8880f39108206d7a60a0a8351c0373bddf58657c
-> > >
-> > > This looks a bit odd to me. Does a CPU really have four different
-> > > power-domains, where three of them are performance-domains?
-> > >
+On Tue, Nov 28, 2023 at 9:16=E2=80=AFAM Lukasz Luba <lukasz.luba@arm.com> w=
+rote:
+>
+> Hi Rafael,
+>
+> On 11/27/23 19:59, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > >
-> > Good question. I think we're largely entering "uncharted territory" with
-> > these questions, I can just try to answer it the best I can from the
-> > limited documentation and knowledge I have. :)
+> > Both trip_point_temp_store() and trip_point_hyst_store() use
+> > thermal_zone_set_trip() to update a given trip point, but none of them
+> > actually needs to change more than one field in struct thermal_trip
+> > representing it.  However, each of them effectively calls
+> > __thermal_zone_get_trip() twice in a row for the same trip index value,
+> > once directly and once via thermal_zone_set_trip(), which is not
+> > particularly efficient, and the way in which thermal_zone_set_trip()
+> > carries out the update is not particularly straightforward.
 > >
-> > The CPU does indeed use four different power domains. There also seem to
-> > be additional power switches that gate power for some components without
-> > having to turn off the entire supply.
+> > Moreover, some checks done by them both need not go under the thermal
+> > zone lock and code duplication between them can be reduced quilte a bit
+>
+> s/quilte/quite/
+>
+> > by moving the majority of logic into thermal_zone_set_trip().
 > >
-> > I'll list them twice from two points of view: Once mapping component ->
-> > power domain, then again showing each power domain separately to make it
-> > more clear. At the end I also want to make clear that MSM8909 (with the
-> > "single" power domain) is actually exactly the same SoC design, just
-> > with different regulators supplying the power domains.
+> > Rework all of the above funtcions to address the above.
+>
+> s/funtcions/functions/
+
+Thanks for spotting the typos!
+
 > >
-> > It's totally fine if you just skim over it. I'm listing it in detail
-> > also as reference for myself. :D
+> > No intentional functional impact.
 > >
-> > # Components
-> >  - SoC
-> >    - CPU subsystem ("APPS")
-> >      - CPU cluster
-> >        - 4x CPU core (logic and L1 cache) -> VDD_APC
-> >        - Shared L2 cache
-> >          - Logic -> VDD_APC
-> >          - Memory -> VDD_MX
-> >      - CPU clock controller (logic) -> VDD_CX
-> >        - Provides CPU frequency from different clock sources
-> >        - L2 cache runs at 1/2 of CPU frequency
-> >        => Both VDD_APC and VDD_MX must be scaled based on frequency
-> >      - CPU PLL clock source
-> >        - Generates the higher (GHz) CPU frequencies
-> >        - Logic (?, unsure) -> VDD_CX
-> >        - ??? -> VDD_SR2_APPS_PLL
-> >        => VDD_CX must be scaled based on PLL frequency
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >   drivers/thermal/thermal_core.h  |    9 +++++
+> >   drivers/thermal/thermal_sysfs.c |   52 +++++++-----------------------=
+----
+> >   drivers/thermal/thermal_trip.c  |   61 ++++++++++++++++++++++++++----=
+----------
+> >   include/linux/thermal.h         |    3 -
+> >   4 files changed, 61 insertions(+), 64 deletions(-)
 > >
-> > # Power Domains
-> > ## VDD_APC
-> >  - dedicated for CPU
-> >  - powered off completely in deepest cluster cpuidle state
+> > Index: linux-pm/drivers/thermal/thermal_core.h
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > --- linux-pm.orig/drivers/thermal/thermal_core.h
+> > +++ linux-pm/drivers/thermal/thermal_core.h
+> > @@ -122,6 +122,15 @@ void __thermal_zone_device_update(struct
+> >   void __thermal_zone_set_trips(struct thermal_zone_device *tz);
+> >   int __thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_=
+id,
+> >                           struct thermal_trip *trip);
+> > +
+> > +enum thermal_set_trip_target {
+> > +     THERMAL_TRIP_SET_TEMP,
+> > +     THERMAL_TRIP_SET_HYST,
+> > +};
+> > +
+> > +int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
+> > +                       enum thermal_set_trip_target what, const char *=
+buf);
+> > +
+> >   int thermal_zone_trip_id(struct thermal_zone_device *tz,
+> >                        const struct thermal_trip *trip);
+> >   int __thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp=
+);
+> > Index: linux-pm/drivers/thermal/thermal_sysfs.c
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > --- linux-pm.orig/drivers/thermal/thermal_sysfs.c
+> > +++ linux-pm/drivers/thermal/thermal_sysfs.c
+> > @@ -120,31 +120,17 @@ trip_point_temp_store(struct device *dev
+> >                     const char *buf, size_t count)
+> >   {
+> >       struct thermal_zone_device *tz =3D to_thermal_zone(dev);
+> > -     struct thermal_trip trip;
+> > -     int trip_id, ret;
+> > +     int trip_id;
+> > +     int ret;
+> > +
+> > +     if (!device_is_registered(dev))
+> > +             return -ENODEV;
 > >
-> >  - per-core power switch (per-core cpuidle)
-> >    - CPU logic
-> >    - L1 cache controller/logic and maybe memory(?, unsure)
-> >  - shared L2 cache controller/logic
+> >       if (sscanf(attr->attr.name, "trip_point_%d_temp", &trip_id) !=3D =
+1)
+> >               return -EINVAL;
 > >
-> >  => must be scaled based on CPU frequency
+> > -     mutex_lock(&tz->lock);
+> > -
+> > -     if (!device_is_registered(dev)) {
+> > -             ret =3D -ENODEV;
+> > -             goto unlock;
+> > -     }
+> > -
+> > -     ret =3D __thermal_zone_get_trip(tz, trip_id, &trip);
+> > -     if (ret)
+> > -             goto unlock;
+> > -
+> > -     ret =3D kstrtoint(buf, 10, &trip.temperature);
+> > -     if (ret)
+> > -             goto unlock;
+> > +     ret =3D thermal_zone_set_trip(tz, trip_id, THERMAL_TRIP_SET_TEMP,=
+ buf);
 > >
-> > ## VDD_MX
-> >  - global SoC power domain for "on-chip memories"
-> >  - always on, reduced to minimal voltage when entire SoC is idle
+> > -     ret =3D thermal_zone_set_trip(tz, trip_id, &trip);
+> > -unlock:
+> > -     mutex_unlock(&tz->lock);
+> > -
+> >       return ret ? ret : count;
+> >   }
 > >
-> >  - power switch (controlled by deepest cluster cpuidle state?, unsure)
-> >    - L2 cache memory
+> > @@ -179,30 +165,16 @@ trip_point_hyst_store(struct device *dev
+> >                     const char *buf, size_t count)
+> >   {
+> >       struct thermal_zone_device *tz =3D to_thermal_zone(dev);
+> > -     struct thermal_trip trip;
+> > -     int trip_id, ret;
+> > +     int trip_id;
+> > +     int ret;
+> > +
+> > +     if (!device_is_registered(dev))
+> > +             return -ENODEV;
 > >
-> >  => must be scaled based on L2 frequency (=> 1/2 CPU frequency)
+> >       if (sscanf(attr->attr.name, "trip_point_%d_hyst", &trip_id) !=3D =
+1)
+> >               return -EINVAL;
 > >
-> > ## VDD_CX
-> >  - global SoC power domain for "digital logic"
-> >  - always on, reduced to minimal voltage when entire SoC is idle
-> >  - voting for VDD_CX in the RPM firmware also affects VDD_MX performance
-> >    state (firmware implicitly sets VDD_MX >= VDD_CX)
+> > -     mutex_lock(&tz->lock);
+> > -
+> > -     if (!device_is_registered(dev)) {
+> > -             ret =3D -ENODEV;
+> > -             goto unlock;
+> > -     }
+> > -
+> > -     ret =3D __thermal_zone_get_trip(tz, trip_id, &trip);
+> > -     if (ret)
+> > -             goto unlock;
+> > -
+> > -     ret =3D kstrtoint(buf, 10, &trip.hysteresis);
+> > -     if (ret)
+> > -             goto unlock;
+> > -
+> > -     ret =3D thermal_zone_set_trip(tz, trip_id, &trip);
+> > -unlock:
+> > -     mutex_unlock(&tz->lock);
+> > +     ret =3D thermal_zone_set_trip(tz, trip_id, THERMAL_TRIP_SET_HYST,=
+ buf);
 > >
-> >  - CPU clock controller logic, CPU PLL logic(?, unsure)
+> >       return ret ? ret : count;
+> >   }
+> > Index: linux-pm/drivers/thermal/thermal_trip.c
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > --- linux-pm.orig/drivers/thermal/thermal_trip.c
+> > +++ linux-pm/drivers/thermal/thermal_trip.c
+> > @@ -148,42 +148,61 @@ int thermal_zone_get_trip(struct thermal
+> >   EXPORT_SYMBOL_GPL(thermal_zone_get_trip);
 > >
-> >  => must be scaled based on CPU PLL frequency
+> >   int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id=
+,
+> > -                       const struct thermal_trip *trip)
+> > +                       enum thermal_set_trip_target what, const char *=
+buf)
+> >   {
+> > -     struct thermal_trip t;
+> > -     int ret;
+> > +     struct thermal_trip *trip;
+> > +     int val, ret =3D 0;
 > >
-> > ## VDD_SR2_APPS_PLL
-> >  - global SoC power domain for CPU clock PLLs
-> >  - on MSM8916: always on with constant voltage
+> > -     if (!tz->ops->set_trip_temp && !tz->ops->set_trip_hyst && !tz->tr=
+ips)
+> > -             return -EINVAL;
+>
+> Here we could bail out when there are no callbacks.
+
+Not really, because the trip is updated regardless.
+
+>
+> > +     if (trip_id < 0 || trip_id >=3D tz->num_trips)
+> > +             ret =3D -EINVAL;
 > >
-> >  => ignored in Linux at the moment
+> > -     ret =3D __thermal_zone_get_trip(tz, trip_id, &t);
+> > +     ret =3D kstrtoint(buf, 10, &val);
+> >       if (ret)
+> >               return ret;
 > >
-> > # Power Domain Regulators
-> > These power domains are literally input pins on the SoC chip. In theory
-> > one could connect any suitable regulator to each of those. In practice
-> > there are just a couple of standard reference designs that everyone
-> > uses:
+> > -     if (t.type !=3D trip->type)
+> > -             return -EINVAL;
+> > +     mutex_lock(&tz->lock);
 > >
-> > ## MSM8916 (SoC) + PM8916 (PMIC)
-> > We need to scale 3 power domains together with cpufreq:
+> > -     if (t.temperature !=3D trip->temperature && tz->ops->set_trip_tem=
+p) {
+> > -             ret =3D tz->ops->set_trip_temp(tz, trip_id, trip->tempera=
+ture);
+> > -             if (ret)
+> > -                     return ret;
+> > -     }
+> > +     trip =3D &tz->trips[trip_id];
 > >
-> >  - VDD_APC (CPU logic) = &pm8916_spmi_s2 (via CPR)
-> >  - VDD_MX  (L2 memory) = &pm8916_l3 (via RPMPD: MSM8916_VDDMX)
-> >  - VDD_CX  (CPU PLL)   = &pm8916_s1 (via RPMPD: MSM8916_VDDCX)
+> > -     if (t.hysteresis !=3D trip->hysteresis && tz->ops->set_trip_hyst)=
+ {
+> > -             ret =3D tz->ops->set_trip_hyst(tz, trip_id, trip->hystere=
+sis);
+> > -             if (ret)
+> > -                     return ret;
+> > +     switch (what) {
+> > +     case THERMAL_TRIP_SET_TEMP:
+> > +             if (val =3D=3D trip->temperature)
+> > +                     goto unlock;
+> > +
+> > +             if (tz->ops->set_trip_temp) {
+> > +                     ret =3D tz->ops->set_trip_temp(tz, trip_id, val);
+> > +                     if (ret)
+> > +                             goto unlock;
+> > +             }
+>
+> But here we don't bail out and go line below
+>
+> > +             trip->temperature =3D val;
+>
+> where we modify the actual '&tz->trips[trip_id]'.
+
+Right, the trip is updated regardless unless the callback invocation
+fails, in which case it is better to retain the existing configuration
+for consistency.
+
+The current logic is exactly this AFAICS except that it is hard to untangle=
+.
+
+> Shouldn't be something like the code flow below?
+> --------------------------------------------8<---------------------------=
+--
+>                 if (!tz->ops->set_trip_temp)
+>                         goto unlock;
+>
+>                 ret =3D tz->ops->set_trip_temp(tz, trip_id, val);
+>                 if (ret)
+>                         goto unlock;
+>
+>                 trip->temperature =3D val;
+>                 break
+> ----------------------------------->8------------------------------------=
+--
+
+Not really.
+
+>
+>
+>
+>
+> > +             break;
+> > +
+> > +     case THERMAL_TRIP_SET_HYST:
+> > +             if (val =3D=3D trip->hysteresis)
+> > +                     goto unlock;
+> > +
+> > +             if (tz->ops->set_trip_hyst) {
+> > +                     ret =3D tz->ops->set_trip_hyst(tz, trip_id, val);
+> > +                     if (ret)
+> > +                             goto unlock;
+> > +             }
+> > +             trip->hysteresis =3D val;
+>
+> Similar question here.
+>
+> > +             break;
+> > +
+> > +     default:
+> > +             ret =3D -EINVAL;
+> > +             goto unlock;
+> >       }
 > >
-> > ## MSM8909 (SoC) + PM8909 (PMIC)
-> > We need to scale 1 power domain together with cpufreq:
+> > -     if (tz->trips && (t.temperature !=3D trip->temperature || t.hyste=
+resis !=3D trip->hysteresis))
+> > -             tz->trips[trip_id] =3D *trip;
+> > -
+> >       thermal_notify_tz_trip_change(tz->id, trip_id, trip->type,
+> >                                     trip->temperature, trip->hysteresis=
+);
 > >
-> >  - VDD_APC = VDD_CX    = &pm8909_s1 (via RPMPD: MSM8909_VDDCX)
-> >    (CPU logic, L2 logic and CPU PLL)
-> > (- VDD_MX  (L2 memory) = &pm8909_l3 (RPM firmware enforces VDD_MX >= VDD_CX))
+> >       __thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED);
 > >
-> > There is implicit magic in the RPM firmware here that saves us from
-> > scaling VDD_MX. VDD_CX/APC are the same power rail.
+> > -     return 0;
+> > +unlock:
+> > +     mutex_unlock(&tz->lock);
+> > +
+> > +     return ret;
+> >   }
 > >
-> > ## MSM8909 (SoC) + PM8916 (PMIC)
-> > When MSM8909 is paired with PM8916 instead of PM8909, the setup is
-> > identical to MSM8916+PM8916. We need to scale 3 power domains.
+> >   int thermal_zone_trip_id(struct thermal_zone_device *tz,
+> > Index: linux-pm/include/linux/thermal.h
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > --- linux-pm.orig/include/linux/thermal.h
+> > +++ linux-pm/include/linux/thermal.h
+> > @@ -283,9 +283,6 @@ int __thermal_zone_get_trip(struct therm
+> >   int thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id=
+,
+> >                         struct thermal_trip *trip);
 > >
-> > > In a way it sounds like an option could be to hook up the cpr to the
-> > > rpmpd:s instead (possibly even set it as a child-domains to the
-> > > rpmpd:s), assuming that is a better description of the HW, which it
-> > > may not be, of course.
-> >
-> > Hm. It's definitely an option. I must admit I haven't really looked
-> > much at child-domains so far, so spontaneously I'm not sure about
-> > the implications, for both the abstract hardware description and
-> > the implementation.
-> >
-> > There seems to be indeed some kind of relation between MX <=> CX/APC:
-> >
-> >  - When voting for CX in the RPM firmware, it will always implicitly
-> >    adjust the MX performance state to be MX >= CX.
-> >
-> >  - When scaling APC up, we must increase MX before APC.
-> >  - When scaling APC down, we must decrease MX after APC.
-> >  => Clearly MX >= APC. Not in terms of raw voltage, but at least for the
-> >     abstract performance state.
-> >
-> > Is this some kind of parent-child relationship between MX <=> CX and
-> > MX <=> APC?
-> 
-> Thanks for sharing the above. Yes, to me, it looks like there is a
-> parent/child-domain relationship that could be worth describing/using.
-> 
-> >
-> > If yes, maybe we could indeed bind MX to the CPR genpd somehow. They use
-> > different performance state numbering, so we need some kind of
-> > translation. I'm not entirely sure how that would be described.
-> 
-> Both the power-domain and the required-opps DT bindings
-> (Documentation/devicetree/bindings/opp/opp-v2-base.yaml) are already
-> allowing us to describe these kinds of hierarchical
-> dependencies/layouts.
-> 
-> In other words, to scale performance for a child domain, the child may
-> rely on that we scale performance for the parent domain too. This is
-> already supported by genpd and through the opp library - so it should
-> just work. :-)
-> 
+> > -int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
+> > -                       const struct thermal_trip *trip);
+> > -
+>
+> Surprisingly, nothing outside thermal fwk uses it...
+> Maybe it's worth to check other functions there.
 
-I'm getting back to the "multiple power domains" case of MSM8916 now, as
-discussed above. I've tried modelling MX as parent genpd of CPR, to
-avoid having to scale multiple power domains as part of cpufreq.
+Fair enough, but that's outside this patch IMO.
 
-Basically, it looks like the following:
+> Other than that, it looks like a good idea.
 
-	cpr: power-controller@b018000 {
-		compatible = "qcom,msm8916-cpr", "qcom,cpr";
-		reg = <0x0b018000 0x1000>;
-		/* ... */
-		#power-domain-cells = <0>;
-		operating-points-v2 = <&cpr_opp_table>;
-		/* Supposed to be parent domain, not consumer */
-		power-domains = <&rpmpd MSM8916_VDDMX_AO>;
-
-		cpr_opp_table: opp-table {
-			compatible = "operating-points-v2-qcom-level";
-
-			cpr_opp1: opp1 {
-				opp-level = <1>;
-				qcom,opp-fuse-level = <1>;
-				required-opps = <&rpmpd_opp_svs_soc>;
-			};
-			cpr_opp2: opp2 {
-				opp-level = <2>;
-				qcom,opp-fuse-level = <2>;
-				required-opps = <&rpmpd_opp_nom>;
-			};
-			cpr_opp3: opp3 {
-				opp-level = <3>;
-				qcom,opp-fuse-level = <3>;
-				required-opps = <&rpmpd_opp_super_turbo>;
-			};
-		};
-	};
-
-As already discussed [1] it's a bit annoying that the genpd core
-attaches the power domain as consumer by default, but I work around this
-by calling of_genpd_add_subdomain() followed by dev_pm_domain_detach()
-in the CPR driver.
-
-The actual scaling works fine, performance states of the MX power domain
-are updated when CPR performance state. I added some debug prints and it
-looks e.g. as follows (CPR is the power-controller@):
-
-    [   24.498218] PM: mx_ao set performance state 6
-    [   24.498788] PM: power-controller@b018000 set performance state 3
-    [   24.511025] PM: mx_ao set performance state 3
-    [   24.511526] PM: power-controller@b018000 set performance state 1
-    [   24.521189] PM: mx_ao set performance state 4
-    [   24.521660] PM: power-controller@b018000 set performance state 2
-    [   24.533183] PM: mx_ao set performance state 6
-    [   24.533535] PM: power-controller@b018000 set performance state 3
-
-There is one remaining problem here: Consider e.g. the switch from CPR
-performance state 3 -> 1. In both cases the parent genpd state is set
-*before* the child genpd. When scaling down, the parent genpd state must
-be reduced *after* the child genpd. Otherwise, we can't guarantee that
-the parent genpd state is always >= of the child state.
-
-In the OPP core, the order of such operations is always chosen based on
-whether we are scaling up or down. When scaling up, power domain states
-are set before the frequency is changed, and the other way around for
-scaling down.
-
-Is this something you could imagine changing in the GENPD core, either
-unconditionally for everyone, or as an option?
-
-I tried to hack this in for a quick test and came up with the following
-(the diff is unreadable so I'll just post the entire changed
-(_genpd_set_performance_state() function). Admittedly it's a bit ugly.
-
-With these changes the sequence from above looks more like:
-
-    [   22.374555] PM: mx_ao set performance state 6
-    [   22.375175] PM: power-controller@b018000 set performance state 3
-    [   22.424661] PM: power-controller@b018000 set performance state 1
-    [   22.425169] PM: mx_ao set performance state 3
-    [   22.434932] PM: mx_ao set performance state 4
-    [   22.435331] PM: power-controller@b018000 set performance state 2
-    [   22.461197] PM: mx_ao set performance state 6
-    [   22.461968] PM: power-controller@b018000 set performance state 3
-
-Which is correct now.
-
-Let me know if you have any thoughts about this. :-)
-
-Thanks for taking the time to discuss this!
-Stephan
-
-[1]: https://lore.kernel.org/linux-pm/CAPDyKFq+zsoeF-4h5TfT4Z+S46a501_pUq8y2c1x==Tt6EKBGA@mail.gmail.com/
-
-static int _genpd_set_performance_state(struct generic_pm_domain *genpd,
-					unsigned int state, int depth);
-
-static void _genpd_rollback_parent_state(struct gpd_link *link, int depth)
-{
-	struct generic_pm_domain *parent = link->parent;
-	int parent_state;
-
-	genpd_lock_nested(parent, depth + 1);
-
-	parent_state = link->prev_performance_state;
-	link->performance_state = parent_state;
-
-	parent_state = _genpd_reeval_performance_state(parent, parent_state);
-	if (_genpd_set_performance_state(parent, parent_state, depth + 1)) {
-		pr_err("%s: Failed to roll back to %d performance state\n",
-		       parent->name, parent_state);
-	}
-
-	genpd_unlock(parent);
-}
-
-static int _genpd_set_parent_state(struct generic_pm_domain *genpd,
-				   struct gpd_link *link,
-				   unsigned int state, int depth)
-{
-	struct generic_pm_domain *parent = link->parent;
-	int parent_state, ret;
-
-	/* Find parent's performance state */
-	ret = genpd_xlate_performance_state(genpd, parent, state);
-	if (unlikely(ret < 0))
-		return ret;
-
-	parent_state = ret;
-
-	genpd_lock_nested(parent, depth + 1);
-
-	link->prev_performance_state = link->performance_state;
-	link->performance_state = parent_state;
-	parent_state = _genpd_reeval_performance_state(parent,
-						parent_state);
-	ret = _genpd_set_performance_state(parent, parent_state, depth + 1);
-	if (ret)
-		link->performance_state = link->prev_performance_state;
-
-	genpd_unlock(parent);
-
-	return ret;
-}
-
-static int _genpd_set_performance_state(struct generic_pm_domain *genpd,
-					unsigned int state, int depth)
-{
-	struct gpd_link *link = NULL;
-	int ret;
-
-	if (state == genpd->performance_state)
-		return 0;
-
-	/* When scaling up, propagate to parents first in normal order */
-	if (state > genpd->performance_state) {
-		list_for_each_entry(link, &genpd->child_links, child_node) {
-			ret = _genpd_set_parent_state(genpd, link, state, depth);
-			if (ret)
-				goto rollback_parents_up;
-		}
-	}
-
-	if (genpd->set_performance_state) {
-		pr_err("%s set performance state %d\n", genpd->name, state);
-		ret = genpd->set_performance_state(genpd, state);
-		if (ret) {
-			if (link)
-				goto rollback_parents_up;
-			return ret;
-		}
-	}
-
-	/* When scaling down, propagate to parents after in reverse order */
-	if (state < genpd->performance_state) {
-		list_for_each_entry_reverse(link, &genpd->child_links, child_node) {
-			ret = _genpd_set_parent_state(genpd, link, state, depth);
-			if (ret)
-				goto rollback_parents_down;
-		}
-	}
-
-	genpd->performance_state = state;
-	return 0;
-
-rollback_parents_up:
-	list_for_each_entry_continue_reverse(link, &genpd->child_links, child_node)
-		_genpd_rollback_parent_state(link, depth);
-	return ret;
-rollback_parents_down:
-	list_for_each_entry_continue(link, &genpd->child_links, child_node)
-		_genpd_rollback_parent_state(link, depth);
-	return ret;
-}
-
+Thanks for the review!
 
