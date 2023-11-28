@@ -1,199 +1,121 @@
-Return-Path: <linux-pm+bounces-331-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-332-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81BD87FB04A
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 04:02:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD76D7FB0A6
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 04:45:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B1C0C1C20E42
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 03:02:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 09F0C1C20A8B
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 03:45:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D6AD746F;
-	Tue, 28 Nov 2023 03:02:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E8AA6AD8;
+	Tue, 28 Nov 2023 03:45:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L89B5vte"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zVC8UVKG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92601E6;
-	Mon, 27 Nov 2023 19:02:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701140533; x=1732676533;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GHfgwWLsu9jzuKtJnQ3BCNFmuSuFaxa27DukiFUuftg=;
-  b=L89B5vte26YSR3O+wlziguUYlBrUE0Cru0rGnc5X/J09a3fR1RfXFRw5
-   DlAdgz7lUbRivW7XPFVKARXsSDA/d3uzBHfX/rb8KZJLolrC80+gRU8Hp
-   cdVK9fy/50J1PfawD1PxRa0wDrva088lDQkhwIZUHe+28Eu8UN54+DScr
-   HQyQ6oLdHfWaKqKB16AsdQYvTlNfceyFNQizYjP4p+Tgy/EK3FJ8ZrN9m
-   hJ5NASj/PwbRkIn28V7mz9/rGxImxYxNNEwwUARKzQsjPYhfaTSvTwTbm
-   /S4jnggwiGkRg2ZU7yws+ytU9mMLSylnbpT/cz21rdDkEfUck8soZSCdd
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="457170208"
-X-IronPort-AV: E=Sophos;i="6.04,232,1695711600"; 
-   d="scan'208";a="457170208"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2023 19:02:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,232,1695711600"; 
-   d="scan'208";a="16482931"
-Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 27 Nov 2023 19:02:07 -0800
-Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r7oMP-0006v8-1E;
-	Tue, 28 Nov 2023 03:02:05 +0000
-Date: Tue, 28 Nov 2023 11:01:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>,
-	Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: oe-kbuild-all@lists.linux.dev,
-	"open list:REAL TIME CLOCK (RTC) SUBSYSTEM" <linux-rtc@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org,
-	tobrohl@gmail.com, aalsing@gmail.com, Dhaval.Giani@amd.com,
-	xmb8dsv4@gmail.com, x86@kernel.org, dhaval.giani@gmail.com,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Borislav Petkov <bp@alien8.de>, "H . Peter Anvin" <hpa@zytor.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH v3 3/4] rtc: Add support for configuring the UIP timeout
- for RTC reads
-Message-ID: <202311280845.YrtuJ0eq-lkp@intel.com>
-References: <20231127192553.9734-4-mario.limonciello@amd.com>
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A376D1AA
+	for <linux-pm@vger.kernel.org>; Mon, 27 Nov 2023 19:45:03 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1cff3a03dfaso3772885ad.3
+        for <linux-pm@vger.kernel.org>; Mon, 27 Nov 2023 19:45:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1701143103; x=1701747903; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=aqENqkO0tzrRX6nk+5fxLZVKpn8EWHtoTOpSeab41CI=;
+        b=zVC8UVKGgInZwiFTyJjth1vIwQi+4PzCK0cbicx9tD9Dv81pJk4WdKIWQ94kI9onu0
+         16ktOGtWPECtj1fBCJOgUYmIOPEiJy5RddSoCkfEDJIMjphvdKr08yea8SLgs6R53BV+
+         SeHI06qgnKX1qTVQnlwCXr5mmR7OHA1SoIfzw6XnhVGzX9rpBz2PkAEWith7MgC+hsor
+         oynu3wvcYTcFxH8ElKO3yJ+lXXuMOP9chRHsg8EAKYL4q+w2OzDoobnYEdc2M+/Eaz2y
+         43ZWQ8O+h/nZge2XKd26a9mekVOsdnyPymQaIlYOUcOhmr80fuyoQpiD67+5Bx9lziLn
+         hfbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701143103; x=1701747903;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aqENqkO0tzrRX6nk+5fxLZVKpn8EWHtoTOpSeab41CI=;
+        b=gV8cXUf8/iUo9sk0yOijVYUPqLJKHGnKWf7AtWHuGxNo3Sbkadee5FP5rvsijgbYUF
+         +l/1LtxsEqte08hySXZ7pWyr6r+TcWLZdG2PGTU0h9kT1f/hNJQPQsJMQg2hoCfQ1sIU
+         uvZfmfEbem9qFZFOh5i02NuF/dSA17fTVAp/9E9de1VSVOaKYzyOwYIJzwexJii6u1j1
+         YCMmxsvo/4gxrtYPgTa5pjU/YJLEa2+vTzey2udNpZtOiLGsHeYpaOWNyOBeASId6T0N
+         8lgF9VzBBXx6lw01FHLiRnyBx09qUv4JSGNef1b/6a90xlMeFqKiagUtLYJkTjrd8Qy8
+         ibdw==
+X-Gm-Message-State: AOJu0YwR3xIDlFzQ/n/5B0vYBmQvlJTD3w0TnR5xegp+Jg5OmSr6V4ev
+	U94py8feZw2uUzsQseAU9B2YZw==
+X-Google-Smtp-Source: AGHT+IEaUMiQHyszTrL36vf+MA6N6446tYXLZrlSLesGkGZOlRqtuYMkwapte9LMbq0x55O5SJp21w==
+X-Received: by 2002:a17:902:d48d:b0:1cf:c78a:f50 with SMTP id c13-20020a170902d48d00b001cfc78a0f50mr5942861plg.23.1701143103077;
+        Mon, 27 Nov 2023 19:45:03 -0800 (PST)
+Received: from localhost ([122.172.82.6])
+        by smtp.gmail.com with ESMTPSA id t18-20020a170902d21200b001cfad45d6bbsm6199748ply.247.2023.11.27.19.45.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Nov 2023 19:45:02 -0800 (PST)
+Date: Tue, 28 Nov 2023 09:14:59 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [GIT PULL] cpufreq/arm fixes for 6.7-rc4
+Message-ID: <20231128034459.fwgzqilxo2gl32ep@vireshk-i7>
+References: <20231127043144.kkyyaut4e7gpzr2r@vireshk-i7>
+ <CAJZ5v0ifcNJPoKPaLYyHQPnJWoCjLFsNXuYmysVuOHtEVNPQnw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231127192553.9734-4-mario.limonciello@amd.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0ifcNJPoKPaLYyHQPnJWoCjLFsNXuYmysVuOHtEVNPQnw@mail.gmail.com>
+X-Spam-Level: *
 
-Hi Mario,
+On 27-11-23, 22:11, Rafael J. Wysocki wrote:
+> Hi Viresh,
+> 
+> On Mon, Nov 27, 2023 at 5:31 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > Hi Rafael,
+> >
+> > The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
+> >
+> >   Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
+> >
+> > are available in the Git repository at:
+> >
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
+> >
+> > for you to fetch changes up to 8f96e29aae31354191227ad476dc7f6147ef1d75:
+> >
+> >   pmdomain: qcom: rpmpd: Set GENPD_FLAG_ACTIVE_WAKEUP (2023-11-23 13:08:01 +0530)
+> >
+> > ----------------------------------------------------------------
+> > Christoph Niedermaier (1):
+> >       cpufreq: imx6q: Don't disable 792 Mhz OPP unnecessarily
+> >
+> > Stephan Gerhold (3):
+> >       cpufreq: qcom-nvmem: Enable virtual power domain devices
+> >       cpufreq: qcom-nvmem: Preserve PM domain votes in system suspend
+> >       pmdomain: qcom: rpmpd: Set GENPD_FLAG_ACTIVE_WAKEUP
+> >
+> >  drivers/cpufreq/imx6q-cpufreq.c      |  2 +-
+> >  drivers/cpufreq/qcom-cpufreq-nvmem.c | 73 ++++++++++++++++++++++++++++++++++--
+> >  drivers/pmdomain/qcom/rpmpd.c        |  1 +
+> >  3 files changed, 72 insertions(+), 4 deletions(-)
+> >
+> > --
+> 
+> Pulled, but it would be kind of nice to get some description of the
+> material other than the shorlog.
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 2cc14f52aeb78ce3f29677c2de1f06c0e91471ab]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/rtc-mc146818-lib-Adjust-failure-return-code-for-mc146818_get_time/20231128-032825
-base:   2cc14f52aeb78ce3f29677c2de1f06c0e91471ab
-patch link:    https://lore.kernel.org/r/20231127192553.9734-4-mario.limonciello%40amd.com
-patch subject: [PATCH v3 3/4] rtc: Add support for configuring the UIP timeout for RTC reads
-config: i386-randconfig-141-20231128 (https://download.01.org/0day-ci/archive/20231128/202311280845.YrtuJ0eq-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231128/202311280845.YrtuJ0eq-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311280845.YrtuJ0eq-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/rtc/rtc-mc146818-lib.c:82:5: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
-                                   UIP_RECHECK_TIMEOUT_MS(i));
-                                   ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:508:37: note: expanded from macro 'pr_warn'
-           printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-                                      ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/rtc/rtc-mc146818-lib.c:13:35: note: expanded from macro 'UIP_RECHECK_TIMEOUT_MS'
-   #define UIP_RECHECK_TIMEOUT_MS(x)       (x / UIP_RECHECK_DELAY_MS)
-                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +82 drivers/rtc/rtc-mc146818-lib.c
-
-    14	
-    15	/*
-    16	 * Execute a function while the UIP (Update-in-progress) bit of the RTC is
-    17	 * unset. The timeout is configurable by the caller in ms.
-    18	 *
-    19	 * Warning: callback may be executed more then once.
-    20	 */
-    21	bool mc146818_avoid_UIP(void (*callback)(unsigned char seconds, void *param),
-    22				int timeout,
-    23				void *param)
-    24	{
-    25		int i;
-    26		unsigned long flags;
-    27		unsigned char seconds;
-    28	
-    29		for (i = 0; i < UIP_RECHECK_TIMEOUT_MS(timeout); i++) {
-    30			spin_lock_irqsave(&rtc_lock, flags);
-    31	
-    32			/*
-    33			 * Check whether there is an update in progress during which the
-    34			 * readout is unspecified. The maximum update time is ~2ms. Poll
-    35			 * for completion.
-    36			 *
-    37			 * Store the second value before checking UIP so a long lasting
-    38			 * NMI which happens to hit after the UIP check cannot make
-    39			 * an update cycle invisible.
-    40			 */
-    41			seconds = CMOS_READ(RTC_SECONDS);
-    42	
-    43			if (CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP) {
-    44				spin_unlock_irqrestore(&rtc_lock, flags);
-    45				udelay(UIP_RECHECK_DELAY);
-    46				continue;
-    47			}
-    48	
-    49			/* Revalidate the above readout */
-    50			if (seconds != CMOS_READ(RTC_SECONDS)) {
-    51				spin_unlock_irqrestore(&rtc_lock, flags);
-    52				continue;
-    53			}
-    54	
-    55			if (callback)
-    56				callback(seconds, param);
-    57	
-    58			/*
-    59			 * Check for the UIP bit again. If it is set now then
-    60			 * the above values may contain garbage.
-    61			 */
-    62			if (CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP) {
-    63				spin_unlock_irqrestore(&rtc_lock, flags);
-    64				udelay(UIP_RECHECK_DELAY);
-    65				continue;
-    66			}
-    67	
-    68			/*
-    69			 * A NMI might have interrupted the above sequence so check
-    70			 * whether the seconds value has changed which indicates that
-    71			 * the NMI took longer than the UIP bit was set. Unlikely, but
-    72			 * possible and there is also virt...
-    73			 */
-    74			if (seconds != CMOS_READ(RTC_SECONDS)) {
-    75				spin_unlock_irqrestore(&rtc_lock, flags);
-    76				continue;
-    77			}
-    78			spin_unlock_irqrestore(&rtc_lock, flags);
-    79	
-    80			if (i >= UIP_RECHECK_TIMEOUT_MS(100))
-    81				pr_warn("Reading current time from RTC took around %d ms\n",
-  > 82					UIP_RECHECK_TIMEOUT_MS(i));
-    83	
-    84			return true;
-    85		}
-    86		return false;
-    87	}
-    88	EXPORT_SYMBOL_GPL(mc146818_avoid_UIP);
-    89	
+Ahh, my fault. I created the pull request using the branch name instead of the
+tag. I usually do the right thing and so the description comes by itself.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+viresh
 
