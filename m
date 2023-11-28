@@ -1,122 +1,130 @@
-Return-Path: <linux-pm+bounces-326-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-327-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 376C87FAF67
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 02:11:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D87D17FAFAE
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 02:40:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8D4D0B20EAF
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 01:11:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0990A1C20AC5
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 01:40:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9276315C9;
-	Tue, 28 Nov 2023 01:11:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C385186D;
+	Tue, 28 Nov 2023 01:40:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C3D135;
-	Mon, 27 Nov 2023 17:11:02 -0800 (PST)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-1f9decb7446so2459060fac.2;
-        Mon, 27 Nov 2023 17:11:02 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2907BD;
+	Mon, 27 Nov 2023 17:40:08 -0800 (PST)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-1fa37df6da8so1186082fac.2;
+        Mon, 27 Nov 2023 17:40:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701133861; x=1701738661;
+        d=1e100.net; s=20230601; t=1701135608; x=1701740408;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ne/1BGfawz38RnpEDcGFX2lcTtrweNNkz2EvVODo1EA=;
-        b=dQz0XNEm5qU7FVlNN//Ce7Ti20FNoWWsO6OHeGYDz2vzaqP7b9Jj6Ci0A9GN2Xs1KN
-         kbuwJ7pZ5Fqi2PMXJvcMtdywvF1PKXol2MZI+c/jtQaILfG+T0SsajaFDYoVP8+//cN0
-         BLyt+AmLK/5SshT2gdISw7ynAEQUUBYalyGyqmgL+cHnhs6NGJBUPsi9a4NnYGpAfmOd
-         +sLVoV070z/CzWuLtEIJFsbwQD8RamBScpa1QVritij6zdKFBCvOR1iofOk9z+4dcVd0
-         WC1HPMlH0ckyDDHx0fpXC3bvrV93b4yxnQJBdXQuaqNDQ/u/XG/gRQxUiO+iVDY6S4Mv
-         1yFw==
-X-Gm-Message-State: AOJu0YwROMARTqjxLe6ru+F3ZT5f6NiktbpTJKJ9mOZQCYVP3sVACtgp
-	j/Qu3PZ8TrC75bveB24XWMsaTB13gsqUdDhctkBJZ7Np
-X-Google-Smtp-Source: AGHT+IFj+A9tDPPZZ1IPR3GhrwcRUxIkAARPbua8/pydDU5x95PxtY53KncURTsCPPPLL6cuSqdeRSt66DasCi1Tqv0=
-X-Received: by 2002:a05:6871:5811:b0:1f9:5e2a:ea2d with SMTP id
- oj17-20020a056871581100b001f95e2aea2dmr15726384oac.37.1701133861529; Mon, 27
- Nov 2023 17:11:01 -0800 (PST)
+        bh=9KMijVoZzKjmnAsmxupu7gb2DhrWpe//b9T4lGH4FwY=;
+        b=jExPtyAWDITjC35tZOtKw0MnzoBfV4eroRXZYXcJVnBUOvUjeR/UEdCI7jjxj7ViWZ
+         KZOmEK2nS0RwzyH45TYzB/BYQv7mJQd+XUV8QyEHx9qfrRsXPb05rD/7NbD5dKZDJNP9
+         pm0rDB+g296vpV/LkjoiGL77cEPmxVMuBCmv3eZOGcy8qfIFbHXbwp0u+7yKla4ZQrY8
+         bbkNXdw273rL+Ynie7JwpqDMRwLDiJdDhROXfQ8iE92sHQTq825uML3W4kIKQsx1YgHr
+         v8mrwL6oCSv0NwVrMg2iY/t4qFqQslmDljGYYXClk6TttpNQjuxbgkLWEzdbs5bhf+uU
+         0VFw==
+X-Gm-Message-State: AOJu0Yx8cAsGw7Y7aIhNDKJc9w1VXyl+370TK8UrYsQhJGIBJIk2bUoD
+	yJ0Amj6RVh3eR4dZELabPm/dWYQyi+zE+RRrDuOaOnpftPE=
+X-Google-Smtp-Source: AGHT+IF2SsjExQsB/NHhZaU7EPVIoJQYuKioTorE0GXNez6nQUnzk/cFrZt3ZhgCVyn3kk8ec2GS517W3vmuiKfFEqU=
+X-Received: by 2002:a05:6870:5a8b:b0:1f0:8122:554c with SMTP id
+ dt11-20020a0568705a8b00b001f08122554cmr13274814oab.45.1701135608186; Mon, 27
+ Nov 2023 17:40:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231022055221.569634-1-yu.c.chen@intel.com>
-In-Reply-To: <20231022055221.569634-1-yu.c.chen@intel.com>
+References: <TYCP286MB214616F6AE3E088C5D781A2EC6C8A@TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM>
+ <TYCP286MB21465F970BF56AAE5D0CEB72C6A1A@TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM>
+ <002801da0da1$adb83fc0$0928bf40$@telus.net>
+In-Reply-To: <002801da0da1$adb83fc0$0928bf40$@telus.net>
 From: Len Brown <lenb@kernel.org>
-Date: Mon, 27 Nov 2023 20:10:50 -0500
-Message-ID: <CAJvTdKkFLTzWdU7bssUSJkTW4ocfKcFEu5c+8m=EVNZ44+iXug@mail.gmail.com>
-Subject: Re: [RFC PATCH] tools/power turbostat: Do not print negative LPI residency
-To: Chen Yu <yu.c.chen@intel.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Todd Brandt <todd.e.brandt@intel.com>
+Date: Mon, 27 Nov 2023 20:39:57 -0500
+Message-ID: <CAJvTdKmJRsWzr8MSZdUv+1AA8AXBAoMF_CaNDAJE5EgThP5+EA@mail.gmail.com>
+Subject: Re: [PATCH] tools/power turbostat: Fix Bzy_MHz calculation equation
+To: Doug Smythies <dsmythies@telus.net>
+Cc: Peng Liu <pngliu@hotmail.com>, Wyes Karny <wyes.karny@amd.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, liupeng17@lenovo.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-BIOS bugs:-(
+Peng Liu,
+Thanks for the close read of the documentation, and the patch.
+I've applied it, though I re-wrote the commit message (below) to make
+it clear it is a documentation fix, as the code was already correct.
 
-I agree that printing 0 is an improvement over printing an insane
-negative number.
+thanks,
+-Len
 
-But printing 0 suggests that there was no residency, and that could be
-misleading...
+ps. I would have replied to your original e-mail, but there was a
+period where gmail dropped mail due to space limitations.
+No worries, as Doug said, everything is in patchwork.
 
-Maybe we should output some kind of warning about the broken BIOS?
 
-On Sun, Oct 22, 2023 at 1:53=E2=80=AFAM Chen Yu <yu.c.chen@intel.com> wrote=
-:
+    tools/power turbostat: Fix Bzy_MHz documentation typo
+
+    The code calculates Bzy_MHz by multiplying TSC_delta *
+APERF_delta/MPERF_delta
+    The man page erroneously showed that TSC_delta was divided.
+
+On Thu, Nov 2, 2023 at 11:31=E2=80=AFAM Doug Smythies <dsmythies@telus.net>=
+ wrote:
 >
-> turbostat prints the abnormal SYS%LPI across suspend-to-idle:
-> SYS%LPI =3D 114479815993277.50
+> Hi Peng and Wyes,
 >
-> This is reproduced by:
-> Run a freeze cycle, e.g. "sleepgraph -m freeze -rtcwake 15".
-> Then do a reboot. After boot up, launch the suspend-idle-idle
-> and check the SYS%LPI field.
+> Just for your information about your recent "ping"s about your turbostat =
+patches:
 >
-> The slp_so residence counter is in LPIT table, and BIOS does not
-> clears this register across reset. The PMC expects the OS to calculate
-> the LPI residency based on the delta. However, there is an firmware
-> issue that the LPIT gets cleared to 0 during the second suspend
-> to idle after the reboot, which brings negative delta value.
+> Please be aware that there is rarely any reply. There tends to be about 2=
+ turbostat updates released per year. Your patches are in patchworks [1], a=
+s are some others, including an old one of mine from 2023.04.03
+> Eventually there will be an update, and hopefully it will include all our=
+ patches.
 >
-> Prints a simple 0 to indicate this error to not confuse the user.
+> [1] https://patchwork.kernel.org/project/linux-pm/list/?series=3D&submitt=
+er=3D&state=3D&q=3D&archive=3D&delegate=3D107
 >
-> Reported-by: Todd Brandt <todd.e.brandt@intel.com>
-> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
-> ---
->  tools/power/x86/turbostat/turbostat.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
+> ... Doug
 >
-> diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turb=
-ostat/turbostat.c
-> index 9a10512e3407..3fa5f9a0218a 100644
-> --- a/tools/power/x86/turbostat/turbostat.c
-> +++ b/tools/power/x86/turbostat/turbostat.c
-> @@ -1472,8 +1472,16 @@ int delta_package(struct pkg_data *new, struct pkg=
-_data *old)
->         old->pc8 =3D new->pc8 - old->pc8;
->         old->pc9 =3D new->pc9 - old->pc9;
->         old->pc10 =3D new->pc10 - old->pc10;
-> -       old->cpu_lpi =3D new->cpu_lpi - old->cpu_lpi;
-> -       old->sys_lpi =3D new->sys_lpi - old->sys_lpi;
-> +       if (new->cpu_lpi > old->cpu_lpi) {
-> +               old->cpu_lpi =3D new->cpu_lpi - old->cpu_lpi;
-> +       } else {
-> +               old->cpu_lpi =3D 0;
-> +       }
-> +       if (new->sys_lpi > old->sys_lpi) {
-> +               old->sys_lpi =3D new->sys_lpi - old->sys_lpi;
-> +       } else {
-> +               old->sys_lpi =3D 0;
-> +       }
->         old->pkg_temp_c =3D new->pkg_temp_c;
+> On 2023.10.29 08:12 Peng Liu wrote:
 >
->         /* flag an error when rc6 counter resets/wraps */
-> --
-> 2.25.1
+> > Ping
+> >
+> > On 2023/10/7 13:46, Peng Liu wrote:
+> >> From: Peng Liu <liupeng17@lenovo.com>
+> >>
+> >> To calculate Bzy_MHz, TSC_delta should multiply APERF_delta instead
+> >> of dividing it.
+> >>
+> >> Signed-off-by: Peng Liu <liupeng17@lenovo.com>
+> >> ---
+> >>   tools/power/x86/turbostat/turbostat.8 | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/tools/power/x86/turbostat/turbostat.8 b/tools/power/x86/t=
+urbostat/turbostat.8
+> >> index 8f08c3fd498d..1ba6340d3b3d 100644
+> >> --- a/tools/power/x86/turbostat/turbostat.8
+> >> +++ b/tools/power/x86/turbostat/turbostat.8
+> >> @@ -370,7 +370,7 @@ below the processor's base frequency.
+> >>
+> >>   Busy% =3D MPERF_delta/TSC_delta
+> >>
+> >> -Bzy_MHz =3D TSC_delta/APERF_delta/MPERF_delta/measurement_interval
+> >> +Bzy_MHz =3D TSC_delta*APERF_delta/MPERF_delta/measurement_interval
+> >>
+> >>   Note that these calculations depend on TSC_delta, so they
+> >>   are not reliable during intervals when TSC_MHz is not running at the=
+ base frequency.
 >
 
 
