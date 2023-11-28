@@ -1,207 +1,102 @@
-Return-Path: <linux-pm+bounces-414-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-415-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E45B87FC066
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 18:39:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EB69F7FC0AB
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 18:54:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 21FB11C20C80
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 17:39:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28AC31C20C26
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 17:54:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66D1C39AC6;
-	Tue, 28 Nov 2023 17:39:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9564A39AF9;
+	Tue, 28 Nov 2023 17:54:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mXwS6BiV"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Kai/m4r7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293A710CA;
-	Tue, 28 Nov 2023 09:39:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701193161; x=1732729161;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=E+As1VEvubpOiVH0Ou+RDAjr7+3D05qZrxWeULMmbqU=;
-  b=mXwS6BiVP+OwkSGUrmBEub3KNYwyDBKAJlzrzrdbd6FKUKAhacOdLIYV
-   1i9v3uDEq+KKqpzU+vEDp2wTq3DHVMjwWtgcCgyMH2DW1uY2V4hDO+4A6
-   UnF8RxoHrPOQudHge2XP9HxPjjIOi1v50FAqCJrRazvEZ+sjvrgbaxG3h
-   3wjDIFHlNKQbxDXAeZbQmwFhSr8UUVdLQWL/H4CZQIqOcn5CTf0OCsGZW
-   LL0rPf48m7tPgB3Iusw/En0M1tHJfNqGHVMWGeaIoA2IrdVN7KhP+Buoh
-   IKClQ0kW2pGA9zVzywnzciLpTl4+/tk4UD3uHh7T1pFiw6GFdtojF3fUe
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="378001818"
-X-IronPort-AV: E=Sophos;i="6.04,234,1695711600"; 
-   d="scan'208";a="378001818"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2023 09:39:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="859514426"
-X-IronPort-AV: E=Sophos;i="6.04,234,1695711600"; 
-   d="scan'208";a="859514426"
-Received: from bmnolan-mobl.amr.corp.intel.com (HELO [10.209.106.201]) ([10.209.106.201])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2023 09:33:25 -0800
-Message-ID: <b2b9121c6d2003b45f7fde6a97bb479a1ed634c7.camel@linux.intel.com>
-Subject: Re: Fwd: Intel hybrid CPU scheduler always prefers E cores
-From: Tim Chen <tim.c.chen@linux.intel.com>
-To: Bagas Sanjaya <bagasdotme@gmail.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Regressions
- <regressions@lists.linux.dev>,  Linux Power Management
- <linux-pm@vger.kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar
- <viresh.kumar@linaro.org>, Ingo Molnar <mingo@redhat.com>, Peter Zijlstra
- <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot
- <vincent.guittot@linaro.org>, Ramses VdP <ramses@well-founded.dev>, Yu Chen
- <yu.c.chen@intel.com>
-Date: Tue, 28 Nov 2023 09:33:24 -0800
-In-Reply-To: <01df8329-06d7-4fd1-9c7a-05296f33231e@gmail.com>
-References: <01df8329-06d7-4fd1-9c7a-05296f33231e@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC6719AC;
+	Tue, 28 Nov 2023 09:54:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=DaSxSk00T76/qmCPgVeD4qkkC3Ewg2huSC46XkFQpW0=; b=Kai/m4r7JmROqhB2gxx2uYcqY5
+	BT2Sa80TbKPKtCutvjTYk9B42PvEvOUIrxjPiGc/eMz1gpg8fqZ4t2MJXAYPRteCCpbvw/lLJhiAn
+	3pmPz7oj343D6q0v6slZOkbOzPgJFVSPsnxy02S3/yyARh8VVqwLzVOWLmW1DNCQpwTim6z8WTm52
+	BR6BDtRTD9s0s64jJnf3FtO2tZbtltVdFOYpw8PsjmJYhQWYGZl0NfHbznc/0c8sHHZvwml2PUAAP
+	z5/VwBywP/Y2RtVu7LhYNkm35ak0lS7e72Xnlu3JgMd/X4iE0Gusufsc5MSeIOPGsOLLfwtWzViiv
+	HH8VERrw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1r82Hn-00GgI5-2Z;
+	Tue, 28 Nov 2023 17:54:16 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 0F4033003F0; Tue, 28 Nov 2023 18:54:15 +0100 (CET)
+Date: Tue, 28 Nov 2023 18:54:14 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Elliot Berman <quic_eberman@quicinc.com>
+Cc: "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>, Ingo Molnar <mingo@kernel.org>,
+	linux-arm-msm@vger.kernel.org,
+	Pavan Kondeti <quic_pkondeti@quicinc.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Abhijeet Dharmapurikar <quic_adharmap@quicinc.com>
+Subject: Re: [PATCH 0/2] freezer,sched: do not restore saved_state of a
+ thawed task
+Message-ID: <20231128175414.GD3818@noisy.programming.kicks-ass.net>
+References: <20231120-freezer-state-multiple-thaws-v1-0-f2e1dd7ce5a2@quicinc.com>
+ <a86228f5-c1ae-4afe-87bd-5144633a9601@quicinc.com>
+ <20231128173119.GC3818@noisy.programming.kicks-ass.net>
+ <8be8ab72-0670-4821-b235-1f8e4ea170b2@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8be8ab72-0670-4821-b235-1f8e4ea170b2@quicinc.com>
 
-On Tue, 2023-11-28 at 20:22 +0700, Bagas Sanjaya wrote:
-> Hi,
->=20
-> I come across an interesting bug report on Bugzilla [1]. The reporter
-> wrote:
->=20
-> > I am running an intel alder lake system (Core i7-1260P), with a mix of =
-P and E cores.
-> >=20
-> > Since Linux 6.6, and also on the current 6.7 RC, the scheduler seems to=
- have a strong preference for the E cores, and single threaded workloads ar=
-e consistently scheduled on one of the E cores.
-> >=20
-> > With Linux 6.4 and before, when I ran a single threaded CPU-bound proce=
-ss, it was scheduled on a P core. With 6.5, it seems that the choice of P o=
-r E seemed rather random.
-> >=20
-> > I tested these by running "stress" with different amounts of threads. W=
-ith a single thread on Linux 6.6 and 6.7, I always have an E core at 100% a=
-nd no load on the P cores. Starting from 3 threads I get some load on the P=
- cores as well, but the E cores stay more heavily loaded.
-> > With "taskset" I can force a process to run on a P core, but clearly it=
-'s not very practical to have to do CPU scheduling manually.
-> >=20
-> > This severely affects single-threaded performance of my CPU since the E=
- cores are considerably slower. Several of my workflows are now a lot slowe=
-r due to them being single-threaded and heavily CPU-bound and being schedul=
-ed on E cores whereas they would run on P cores before.
-> >=20
-> > I am not sure what the exact desired behaviour is here, to balance powe=
-r consumption and performance, but currently my P cores are barely used for=
- single-threaded workloads.
-> >=20
-> > Is this intended behaviour or is this indeed a regression? Or is there =
-perhaps any configuration that I should have done from my side? Is there an=
-y further info that I can provide to help you figure out what's going on?
->=20
-> PM and scheduler people, is this a regression or works as intended?
->=20
-> Thanks.
->=20
-> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=3D218195
->=20
+On Tue, Nov 28, 2023 at 11:33:23AM -0600, Elliot Berman wrote:
+> 
+> 
+> On 11/28/2023 11:31 AM, Peter Zijlstra wrote:
+> > On Tue, Nov 28, 2023 at 05:12:00PM +0800, Aiqun(Maria) Yu wrote:
+> >> On 11/21/2023 1:36 AM, Elliot Berman wrote:
+> >>> This series applies couple fixes to commit 8f0eed4a78a8 ("freezer,sched:
+> >>> Use saved_state to reduce some spurious wakeups") which was found while
+> >>> testing with legacy cgroup freezer. My original testing was only with
+> >>> system-wide freezer. We found that thaw_task could be called on a task
+> >>> which was already frozen. Prior to commit 8f0eed4a78a8 ("freezer,sched:
+> >>> Use saved_state to reduce some spurious wakeups"), this wasn't an issue
+> >>> as kernel would try to wake up TASK_FROZEN, which wouldn't match the
+> >>> thawed task state, and no harm done to task. After commit 8f0eed4a78a8
+> >>> ("freezer,sched: Use saved_state to reduce some spurious wakeups"), it
+> >>> was possible to overwrite the state of thawed task.
+> >>>
+> >>> To: Rafael J. Wysocki <rafael@kernel.org>
+> >>> To: Pavel Machek <pavel@ucw.cz>
+> >>> To: Ingo Molnar <mingo@kernel.org>
+> >>> To: Peter Zijlstra (Intel) <peterz@infradead.org>
+> >>> Cc:  <linux-arm-msm@vger.kernel.org>
+> >>> Cc: Pavan Kondeti <quic_pkondeti@quicinc.com>
+> >>> Cc: Aiqun Yu (Maria) <quic_aiquny@quicinc.com>
+> >>> Cc:  <linux-pm@vger.kernel.org>
+> >>> Cc:  <linux-kernel@vger.kernel.org>
+> >>> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> >> Shall we add Fixed tag and Cc: stable@vger.kernel.org ?
+> >> Since it is fixing a stable user thread hung issue.
+> > 
+> > If you want this routed through urgent, then yes.
+> 
+> Fixes tag is added to https://lore.kernel.org/all/20231120-freezer-state-multiple-thaws-v1-1-f2e1dd7ce5a2@quicinc.com/
+> 
+> Is CC'ing stable what triggers routing through urgent?
 
-I have noticed that the current code sometimes is quite trigger happy
-moving tasks off P-core, whenever there are more than 2 tasks on a core.
-Sometimes, Short running house keeping tasks
-could disturb the running task on P-core as a result.
-
-Can you try the following patch?  On my Alder Lake system, I see as I add s=
-ingle
-threaded tasks, they first run on P-cores, then followed by E-cores with th=
-is
-patch on 6.6.
-
-Tim
-
-From 68a15ef01803c252261ebb47d86dfc1f2c68ae1e Mon Sep 17 00:00:00 2001
-From: Tim Chen <tim.c.chen@linux.intel.com>
-Date: Fri, 6 Oct 2023 15:58:56 -0700
-Subject: [PATCH] sched/fair: Don't force smt balancing when CPU has spare
- capacity
-
-Currently group_smt_balance is picked whenever there are more
-than two tasks on a core with two SMT.  However, the utilization
-of those tasks may be low and do not warrant a task
-migration to a CPU of lower priority.
-
-Adjust sched group clssification and sibling_imbalance()
-to reflect this consideration.  Use sibling_imbalance() to
-compute imbalance in calculate_imbalance() for the group_smt_balance
-case.
-
-Signed-off-by: Tim Chen <tim.c.chen@linux.intel.com>
-
----
- kernel/sched/fair.c | 23 +++++++++++------------
- 1 file changed, 11 insertions(+), 12 deletions(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index ef7490c4b8b4..7dd7c2d2367a 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -9460,14 +9460,15 @@ group_type group_classify(unsigned int imbalance_pc=
-t,
- 	if (sgs->group_asym_packing)
- 		return group_asym_packing;
-=20
--	if (sgs->group_smt_balance)
--		return group_smt_balance;
--
- 	if (sgs->group_misfit_task_load)
- 		return group_misfit_task;
-=20
--	if (!group_has_capacity(imbalance_pct, sgs))
--		return group_fully_busy;
-+	if (!group_has_capacity(imbalance_pct, sgs)) {
-+		if (sgs->group_smt_balance)
-+			return group_smt_balance;
-+		else
-+			return group_fully_busy;
-+	}
-=20
- 	return group_has_spare;
- }
-@@ -9573,6 +9574,11 @@ static inline long sibling_imbalance(struct lb_env *=
-env,
- 	if (env->idle =3D=3D CPU_NOT_IDLE || !busiest->sum_nr_running)
- 		return 0;
-=20
-+	/* Do not pull tasks off preferred group with spare capacity */
-+	if (busiest->group_type =3D=3D group_has_spare &&
-+	    sched_asym_prefer(sds->busiest->asym_prefer_cpu, env->dst_cpu))
-+		return 0;
-+
- 	ncores_busiest =3D sds->busiest->cores;
- 	ncores_local =3D sds->local->cores;
-=20
-@@ -10411,13 +10417,6 @@ static inline void calculate_imbalance(struct lb_e=
-nv *env, struct sd_lb_stats *s
- 		return;
- 	}
-=20
--	if (busiest->group_type =3D=3D group_smt_balance) {
--		/* Reduce number of tasks sharing CPU capacity */
--		env->migration_type =3D migrate_task;
--		env->imbalance =3D 1;
--		return;
--	}
--
- 	if (busiest->group_type =3D=3D group_imbalanced) {
- 		/*
- 		 * In the group_imb case we cannot rely on group-wide averages
---=20
-2.32.0
-
-
+Fixes tag should be enough, lemme go find that other copy then.. so much
+email :/
 
