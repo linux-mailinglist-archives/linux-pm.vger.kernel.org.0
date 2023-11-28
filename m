@@ -1,88 +1,140 @@
-Return-Path: <linux-pm+bounces-317-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-318-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D30867FAEAB
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 00:47:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AAF87FAEEF
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 01:19:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D45C2816DC
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Nov 2023 23:47:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A9051C20D36
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 00:19:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2389D49F77;
-	Mon, 27 Nov 2023 23:47:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A76937B;
+	Tue, 28 Nov 2023 00:19:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="wB9/gKBq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h1pzkjNv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138AE10F0;
-	Mon, 27 Nov 2023 15:47:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=coo1mUhNKEbB7zpzsIDS96POvmXQMHwqPRZiekd+CmI=; b=wB9/gKBqr6F+MhLzrYnNfoBZ0d
-	WxMFM3ctnyahkLXi0XuAzxWHwSh8eJP6hHwtZtKgPllQyXL6byFPTyVdeKOdhkY53o977GVzHm+et
-	jmqS4QhQp3hje+jNN2ncvX770fUMihH1X+bKEgwVeM8R9ljIVHOVjQNPEAjoFQsCRoyEZkThWO/g3
-	IPNBKDD2DvXxMGBKA9XrN2seD0PJh4MQyZ27VdmnCWYnBSM15X526WYOl56QQWZY1XD4wAw2aNcLy
-	li6ZGUkudDtKo/9D9KlH53KvFuq0CW5WoOCLd3WiYDemXPNSXi0fmEZjYLSitigEsJ9yOa1LH1zaC
-	TQu4ZDnA==;
-Received: from [50.53.46.231] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1r7lJg-003hTz-0m;
-	Mon, 27 Nov 2023 23:47:04 +0000
-Message-ID: <6e664be1-dc6b-461e-b75d-2be49641402c@infradead.org>
-Date: Mon, 27 Nov 2023 15:47:01 -0800
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0557218B;
+	Mon, 27 Nov 2023 16:19:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701130783; x=1732666783;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0Rd3Vb1JaVg5OHjVl34S/KFwWCmxnNJ5+oTqaqueB10=;
+  b=h1pzkjNvkxp+uXGHnmmyLZKOKZYZJMzSQUjztuoojjkIO9yQFuVs8KHZ
+   yqoVfQqqZ+aFhzsm6PYWBbCtatYxQ4Lp8xaycspXFKSJVOmzYU2/8PAma
+   T4YfLbQURx+2c8F7UAuFpHYul8jllfJl6oBAFk8PrNath/C6mK25llOlY
+   L1iZlEHk2h+nf7ck4PlwAfkPKxvgWXqYCxMvBIo9ftM7tTwDQEnNuBSBc
+   QUydMzH6M4YYnyXi/RkFSKkqSYD7To/sHkWpSpDf/Fq5EF676k9QNLPLP
+   cvbXS2eX6BALyKIfofHsO7RWL0eN9Z8Hq90KZec8tMVOKe2ljdj/UJe7C
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="14374368"
+X-IronPort-AV: E=Sophos;i="6.04,232,1695711600"; 
+   d="scan'208";a="14374368"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2023 16:19:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="941743824"
+X-IronPort-AV: E=Sophos;i="6.04,232,1695711600"; 
+   d="scan'208";a="941743824"
+Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 27 Nov 2023 16:19:37 -0800
+Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r7lp9-0006no-0D;
+	Tue, 28 Nov 2023 00:19:35 +0000
+Date: Tue, 28 Nov 2023 08:19:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>,
+	Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: oe-kbuild-all@lists.linux.dev,
+	"open list:REAL TIME CLOCK (RTC) SUBSYSTEM" <linux-rtc@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org,
+	tobrohl@gmail.com, aalsing@gmail.com, Dhaval.Giani@amd.com,
+	xmb8dsv4@gmail.com, x86@kernel.org, dhaval.giani@gmail.com,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Borislav Petkov <bp@alien8.de>, "H . Peter Anvin" <hpa@zytor.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH v3 3/4] rtc: Add support for configuring the UIP timeout
+ for RTC reads
+Message-ID: <202311280605.EB8LQAVD-lkp@intel.com>
+References: <20231127192553.9734-4-mario.limonciello@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5] PM: sleep: Expose last succeeded resumed timestamp in
- sysfs
-Content-Language: en-US
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
- "Rafael J . Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
- Len Brown <len.brown@intel.com>
-Cc: suleiman@google.com, briannorris@google.com,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <170108151076.780347.2482745314490930894.stgit@mhiramat.roam.corp.google.com>
- <170108152012.780347.6355289232990337333.stgit@mhiramat.roam.corp.google.com>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <170108152012.780347.6355289232990337333.stgit@mhiramat.roam.corp.google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231127192553.9734-4-mario.limonciello@amd.com>
 
-Hi--
+Hi Mario,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 2cc14f52aeb78ce3f29677c2de1f06c0e91471ab]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/rtc-mc146818-lib-Adjust-failure-return-code-for-mc146818_get_time/20231128-032825
+base:   2cc14f52aeb78ce3f29677c2de1f06c0e91471ab
+patch link:    https://lore.kernel.org/r/20231127192553.9734-4-mario.limonciello%40amd.com
+patch subject: [PATCH v3 3/4] rtc: Add support for configuring the UIP timeout for RTC reads
+config: alpha-defconfig (https://download.01.org/0day-ci/archive/20231128/202311280605.EB8LQAVD-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231128/202311280605.EB8LQAVD-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311280605.EB8LQAVD-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/asm-generic/bug.h:22,
+                    from arch/alpha/include/asm/bug.h:23,
+                    from include/linux/bug.h:5,
+                    from include/linux/thread_info.h:13,
+                    from include/asm-generic/current.h:6,
+                    from ./arch/alpha/include/generated/asm/current.h:1,
+                    from include/linux/sched.h:12,
+                    from include/linux/delay.h:23,
+                    from drivers/rtc/rtc-mc146818-lib.c:3:
+   drivers/rtc/rtc-mc146818-lib.c: In function 'mc146818_avoid_UIP':
+>> include/linux/kern_levels.h:5:25: warning: format '%d' expects argument of type 'int', but argument 2 has type 'long int' [-Wformat=]
+       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
+         |                         ^~~~~~
+   include/linux/printk.h:427:25: note: in definition of macro 'printk_index_wrap'
+     427 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ^~~~
+   include/linux/printk.h:508:9: note: in expansion of macro 'printk'
+     508 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+         |         ^~~~~~
+   include/linux/kern_levels.h:12:25: note: in expansion of macro 'KERN_SOH'
+      12 | #define KERN_WARNING    KERN_SOH "4"    /* warning conditions */
+         |                         ^~~~~~~~
+   include/linux/printk.h:508:16: note: in expansion of macro 'KERN_WARNING'
+     508 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+         |                ^~~~~~~~~~~~
+   drivers/rtc/rtc-mc146818-lib.c:81:25: note: in expansion of macro 'pr_warn'
+      81 |                         pr_warn("Reading current time from RTC took around %d ms\n",
+         |                         ^~~~~~~
 
 
-On 11/27/23 02:38, Masami Hiramatsu (Google) wrote:
-> From: Masami Hiramatsu <mhiramat@kernel.org>
-> 
+vim +5 include/linux/kern_levels.h
 
-> diff --git a/kernel/power/main.c b/kernel/power/main.c
-> index f6425ae3e8b0..2ab23fd3daac 100644
-> --- a/kernel/power/main.c
-> +++ b/kernel/power/main.c
-
-> @@ -514,6 +526,9 @@ static int suspend_stats_show(struct seq_file *s, void *unused)
->  			suspend_step_name(
->  				suspend_stats.failed_steps[index]));
->  	}
-> +	seq_printf(s,	"last_success_resume_time:\t%-llu.%llu\n",
-
-The <TAB> after "s," is a bit odd IMO, but I don't see a need to resend it
-just for that.
-
-> +		   (unsigned long long)suspend_stats.last_success_resume_time.tv_sec,
-> +		   (unsigned long long)suspend_stats.last_success_resume_time.tv_nsec);
->  
->  	return 0;
->  }
+314ba3520e513a Joe Perches 2012-07-30  4  
+04d2c8c83d0e3a Joe Perches 2012-07-30 @5  #define KERN_SOH	"\001"		/* ASCII Start Of Header */
+04d2c8c83d0e3a Joe Perches 2012-07-30  6  #define KERN_SOH_ASCII	'\001'
+04d2c8c83d0e3a Joe Perches 2012-07-30  7  
 
 -- 
-~Randy
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
