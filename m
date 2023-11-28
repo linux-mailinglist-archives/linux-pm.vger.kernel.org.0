@@ -1,74 +1,126 @@
-Return-Path: <linux-pm+bounces-404-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-403-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F5407FBE4C
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 16:40:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC1537FBE1C
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 16:31:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 350661C20CF1
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 15:40:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 979471C20F7B
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 15:31:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32DEB1E494;
-	Tue, 28 Nov 2023 15:40:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC78D5D4BB;
+	Tue, 28 Nov 2023 15:31:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D8C131;
-	Tue, 28 Nov 2023 07:40:43 -0800 (PST)
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4SfmJQ05Jlz6J6lH;
-	Tue, 28 Nov 2023 23:16:38 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 3FF19140D1D;
-	Tue, 28 Nov 2023 23:21:10 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 28 Nov
- 2023 15:21:09 +0000
-Date: Tue, 28 Nov 2023 15:21:08 +0000
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-CC: <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
-	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-	<x86@kernel.org>, <linux-csky@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-ia64@vger.kernel.org>, <linux-parisc@vger.kernel.org>, Salil Mehta
-	<salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	<jianyong.wu@arm.com>, <justin.he@arm.com>, James Morse
-	<james.morse@arm.com>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer
- Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
-Subject: Re: [PATCH RFC 22/22] riscv: convert to use
- arch_cpu_is_hotpluggable()
-Message-ID: <20231128152108.00006939@Huawei.com>
-In-Reply-To: <E1r0JMV-00CTyh-It@rmk-PC.armlinux.org.uk>
-References: <ZUoRY33AAHMc5ThW@shell.armlinux.org.uk>
-	<E1r0JMV-00CTyh-It@rmk-PC.armlinux.org.uk>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 87E98D1;
+	Tue, 28 Nov 2023 07:31:03 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 96A38C15;
+	Tue, 28 Nov 2023 07:31:50 -0800 (PST)
+Received: from [10.57.2.117] (unknown [10.57.2.117])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1A24F3F6C4;
+	Tue, 28 Nov 2023 07:31:01 -0800 (PST)
+Message-ID: <234a0b43-a1e7-4224-bb14-b3cda27370eb@arm.com>
+Date: Tue, 28 Nov 2023 15:32:01 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/7] Minor cleanup for thermal gov power allocator
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
+ linux-pm@vger.kernel.org, rui.zhang@intel.com
+References: <20231025192225.468228-1-lukasz.luba@arm.com>
+ <CAJZ5v0gniBtFduwjhDku+OZzjvkCaFK7ew0uJTfW254XKTOyyw@mail.gmail.com>
+ <ce8f1a13-b56f-4419-a954-8d987af44112@arm.com>
+ <5fd9ce52-9216-47ae-9ed3-fabb0f3b02fd@arm.com>
+ <CAJZ5v0jL38PgFYVXFj2Py5NvUU0xFGU45w=TdcBXqr7v+xToag@mail.gmail.com>
+ <49344fb7-78c0-4fc8-9687-22d039b5318f@arm.com>
+ <CAJZ5v0iq7sbNdxfVd1HAKKHpqHWSzcHE3EH9hK3s65OLDQFeEQ@mail.gmail.com>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAJZ5v0iq7sbNdxfVd1HAKKHpqHWSzcHE3EH9hK3s65OLDQFeEQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, 07 Nov 2023 10:31:11 +0000
-"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk> wrote:
 
-> Convert riscv to use the arch_cpu_is_hotpluggable() helper rather than
-> arch_register_cpu().
+
+On 11/28/23 15:17, Rafael J. Wysocki wrote:
+> On Fri, Nov 24, 2023 at 8:44 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>>
+>>
+>> On 11/23/23 19:50, Rafael J. Wysocki wrote:
+>>> Hi Lukasz,
+>>>
+>>> On Thu, Nov 23, 2023 at 4:19 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>>>
+>>>> Hi Rafael,
+>>>>
+>>>> Gentle ping
+>>>>
+>>>> On 10/26/23 13:22, Lukasz Luba wrote:
+>>>>>
+>>>>>
+>>>>> On 10/26/23 09:54, Rafael J. Wysocki wrote:
+>>>>>> On Wed, Oct 25, 2023 at 9:21 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>>>>>>
+>>>>>>> Hi all,
+>>>>>>>
+>>>>>>> The patch set does some small clean up for Intelligent Power Allocator.
+>>>>>>> Those changes are not expected to alter the general functionality.
+>>>>>>> They just
+>>>>>>> improve the code reading. Only patch 3/7 might improve the use case for
+>>>>>>> binding the governor to thermal zone (very unlikely in real products,
+>>>>>>> but
+>>>>>>> it's needed for correctness).
+>>>>>>>
+>>>>>>> The changes are based on top of current PM thermal branch, so with the
+>>>>>>> new trip points.
+>>>>>>>
+>>>>>>> Regards,
+>>>>>>> Lukasz
+>>>>>>>
+>>>>>>> Lukasz Luba (7):
+>>>>>>>      thermal: gov_power_allocator: Rename trip_max_desired_temperature
+>>>>>>>      thermal: gov_power_allocator: Setup trip points earlier
+>>>>>>>      thermal: gov_power_allocator: Check the cooling devices only for
+>>>>>>>        trip_max
+>>>>>>>      thermal: gov_power_allocator: Rearrange the order of variables
+>>>>>>>      thermal: gov_power_allocator: Use shorter variable when possible
+>>>>>>>      thermal: gov_power_allocator: Remove unneeded local variables
+>>>>>>>      thermal: gov_power_allocator: Clean needed variables at the beginning
+>>>>>>>
+>>>>>>>     drivers/thermal/gov_power_allocator.c | 123 ++++++++++++++------------
+>>>>>>>     1 file changed, 64 insertions(+), 59 deletions(-)
+>>>>>>>
+>>>>>>> --
+>>>>>>
+>>>>>> The series looks good to me overall, but I'd prefer to make these
+>>>>>> changes in the 6.8 cycle, because the 6.7 merge window is around the
+>>>>>> corner and there is quite a bit of thermal material in this cycle
+>>>>>> already.
+>>>>>
+>>>>> Thanks for having a look! Yes, I agree, we can wait after the
+>>>>> merge window. It just have to be cleaned one day a bit and I postponed
+>>>>> this a few times, so no rush ;)
+>>>>
+>>>> I've seen you've created the new pm/thermal. Could you consider to take
+>>>> those in, please?
+>>>
+>>> Sure, I'll get to them presumably tomorrow and if not then early next week.
+>>
+>> OK, thank you Rafael!
 > 
-> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> I've queued up the whole lot for 6.8 and in the process I've edited
+> all of the changelogs and some subjects for clarity and English
+> grammar improvements.
 
-Thanks for driving this forwards.
-
-Jonathan
+Thank you and I really appreciate the improvements!
 
