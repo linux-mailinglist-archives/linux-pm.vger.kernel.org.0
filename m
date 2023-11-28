@@ -1,60 +1,60 @@
-Return-Path: <linux-pm+bounces-339-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-340-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06DE87FB3FF
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 09:23:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32AA77FB414
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 09:30:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B35942822AD
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 08:23:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 540AA1C20D49
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 08:30:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6DC4179BE;
-	Tue, 28 Nov 2023 08:23:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E6E4182C6;
+	Tue, 28 Nov 2023 08:30:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JO38VfZH"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YYSYKioU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBF2F5
-	for <linux-pm@vger.kernel.org>; Tue, 28 Nov 2023 00:23:48 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-54b0e553979so4363503a12.2
-        for <linux-pm@vger.kernel.org>; Tue, 28 Nov 2023 00:23:48 -0800 (PST)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B43B10A
+	for <linux-pm@vger.kernel.org>; Tue, 28 Nov 2023 00:29:58 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-54af2498e85so5346675a12.0
+        for <linux-pm@vger.kernel.org>; Tue, 28 Nov 2023 00:29:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701159827; x=1701764627; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1701160196; x=1701764996; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=1UOlh2DBPRlglTZsxnljR4k/aNf8IkPiVHCesZDf2rE=;
-        b=JO38VfZHNED7W57A5XEiewGldQ3v8+aA81xO1gn2VvIqp2ogIBWLJEeFOktHYYvl/e
-         NOtMraWDaJk7NSy4GEwwZsod9Aac9k0n18e0Gv/3VEjbmGjS+13hPRPWEkKLjHiUQ9T5
-         tpg2DxoM25M/EeUcuTUf8sD8/mLzkM/qxEwV+9DtADJoEgTlfT5CG3TRM57JahHGZErY
-         jpq3olRyuxwE0Ps2UFBohHAmnuv/UPvbyJf+Iew88ZihGGZzxbVoGV+rKfeBeVpca5yd
-         CqxPAsn5tIsV2QTFZXS99R251vpqAkegBb6S5MGPXSokn3nUa6LWyP13TAx154hl0LLe
-         99mw==
+        bh=w4bRNpFiSzLK6cVfUytAf53mRO8EhEdNBIKbabLDxRU=;
+        b=YYSYKioUIAWwE3W63A76MaOlNCcAJn0x0AoIKVoOC+tvzwfD/sgv6usseIx01gtEAj
+         JR2bK6A5QSec4lfTOF0Dm74JExGWglG2vfocSFiyZVokvlj6d/A/7ls1kKSGyzYD6DCZ
+         PdL82ZfX+7GutA4egjZXKMsrzqkkz2zB4H1P3KSUe/Bq4DelI1oEPErwMVxqdQ7X1slA
+         NjfJYPlnehi+UljkfzttbL3VdbRq7WRhLL6lwWINsygBgvjIQuGgDhiuxYReerrTi04j
+         hOvPQEtX3+mAyXhukYpTfZDPEME4UE4bh/Vm9AsZDP6ijC0Z11zCbEReZhtLgZ25dFiv
+         zsew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701159827; x=1701764627;
+        d=1e100.net; s=20230601; t=1701160196; x=1701764996;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1UOlh2DBPRlglTZsxnljR4k/aNf8IkPiVHCesZDf2rE=;
-        b=EvV4EGRr9a63tPeSqO3DVIq7QufEFdkAziiqOEmkerhKfuBDP9Uz5tzn/ZZ8eHGHxL
-         INRsx4SvdovbX+yzdQiwYzbOpvPXgy+pHod6/+dhy2F2XsfkH6p0E3MB4WBClMDnyiMD
-         k4amLlmYpWbFZyVXCxo90Ta+xhEeTYvCCq76EF/W6L4eVw2pjnDE2E9NSUyn8IG/Ggjy
-         jQaHxSnroW+PY+SOMKb+ZdifXCEc3MnAeIT+0+YFAQPAhyd5qFn1S8kLpOqjez8V1bnc
-         ycTEb3i4PlnMIYHqEthArFSWkNKdDbzdYFrLmzfIMiGuSxTOuel3RyFppF8cKCut330W
-         tM/g==
-X-Gm-Message-State: AOJu0Ywr3az8bH9mgkjlVXkbHF7CccSXuBhlc6+TqTW9JpOFkJEpe3vB
-	32tYxzVc4w8D2v/FIu2+D99RBA==
-X-Google-Smtp-Source: AGHT+IEWSLfSH2rm0ZeDonvf6plZljG4gTf78THbXKuJ5NkitUThcGz4eAHzdOYzRW5mLVZYsC0kWQ==
-X-Received: by 2002:a05:6402:42c5:b0:54a:ed2a:fa7e with SMTP id i5-20020a05640242c500b0054aed2afa7emr13330706edc.24.1701159827034;
-        Tue, 28 Nov 2023 00:23:47 -0800 (PST)
+        bh=w4bRNpFiSzLK6cVfUytAf53mRO8EhEdNBIKbabLDxRU=;
+        b=eJmaPUElzsUlud4QtFtaC62KBz3Ew8Bkv5xr/87aDFXotEXZlKp4IWcqzuQHOW7abJ
+         zNnHulq/Tk0vlV53F8cEGWkkAjclDIeoPgguG+yxnDhGPSLCabMmGfIrm9mJ+Uzig2kb
+         68tk5Q/34RzDo0tGJkho7BVnVbeAyq/RLBK0BSv5wd4EfAMTchnfmRQPjxq8N/3hIkVH
+         RESmQUBWqeyWdStwGGA5qk4tpdfnOvwqbtOCyMC5V4YQekhQk0HSF3zAF8FZucwlnKE6
+         NjeHFeZ7ZFQRxbQvgxAke2sPy2pCwm76kye9bqgs4AIyjgNhRcCQBhgec1V9SqzDxOSF
+         ZyZw==
+X-Gm-Message-State: AOJu0YyRhgUp80kgFCfcNmrGu7EQTLUckzKazPdr1l45DTlH102rypIh
+	TzoacXHez8V5Ekw/SEVgtM0rsg==
+X-Google-Smtp-Source: AGHT+IGno0t+XkMKOuPVDblxCpifdT7rK3Ux76sBxiH7LbncBB41ZO6XDrJsjG0dY6t1NyeTp5BdiQ==
+X-Received: by 2002:a17:906:18:b0:a14:b151:72e6 with SMTP id 24-20020a170906001800b00a14b15172e6mr809122eja.21.1701160196490;
+        Tue, 28 Nov 2023 00:29:56 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.223.109])
-        by smtp.gmail.com with ESMTPSA id x1-20020aa7d381000000b00548ab1abc75sm6180302edq.51.2023.11.28.00.23.43
+        by smtp.gmail.com with ESMTPSA id g20-20020a170906595400b009b947f81c4asm6514450ejr.155.2023.11.28.00.29.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Nov 2023 00:23:46 -0800 (PST)
-Message-ID: <79916a3e-70c2-4eaa-b4eb-9375c859f53e@linaro.org>
-Date: Tue, 28 Nov 2023 09:23:43 +0100
+        Tue, 28 Nov 2023 00:29:56 -0800 (PST)
+Message-ID: <9045f837-3370-46e9-8631-7464c796d643@linaro.org>
+Date: Tue, 28 Nov 2023 09:29:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -62,33 +62,26 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 02/12] dt-bindings: display: msm: Add reg bus and
- rotator interconnects
+Subject: Re: [PATCH v3 4/6] thermal: sun8i: add syscon register access code
 Content-Language: en-US
-To: Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Clark
- <robdclark@gmail.com>, Abhinav Kumar <quic_abhinavk@quicinc.com>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Sean Paul <sean@poorly.run>,
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+To: wens@csie.org
+Cc: Andre Przywara <andre.przywara@arm.com>,
+ Vasily Khoruzhick <anarsoul@gmail.com>, Yangtao Li <tiny.windzz@gmail.com>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Samuel Holland <samuel@sholland.org>, "Rafael J . Wysocki"
+ <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
  Rob Herring <robh+dt@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Loic Poulain <loic.poulain@linaro.org>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>, Andy Gross
- <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Georgi Djakov <djakov@kernel.org>, Will Deacon <will@kernel.org>,
- Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
- Krishna Manikandan <quic_mkrishn@quicinc.com>,
- Robert Marko <robimarko@gmail.com>, Das Srinagesh <quic_gurus@quicinc.com>,
- cros-qcom-dts-watchers@chromium.org
-Cc: Marijn Suijten <marijn.suijten@somainline.org>,
- Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
- dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- iommu@lists.linux.dev
-References: <20231125-topic-rb1_feat-v2-0-979b28f35e4a@linaro.org>
- <20231125-topic-rb1_feat-v2-2-979b28f35e4a@linaro.org>
+ Conor Dooley <conor+dt@kernel.org>,
+ Martin Botka <martin.botka@somainline.org>,
+ Bob McChesney <bob@electricworry.net>, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-sunxi@lists.linux.dev
+References: <20231128005849.19044-1-andre.przywara@arm.com>
+ <20231128005849.19044-5-andre.przywara@arm.com>
+ <ddceb30f-1778-4312-af91-97813fe3c6fb@linaro.org>
+ <CAGb2v66YpYBS78C7H-O3zef2NTs+7=ec3A7jrZ+DxjYEyBmWxQ@mail.gmail.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -134,30 +127,60 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231125-topic-rb1_feat-v2-2-979b28f35e4a@linaro.org>
+In-Reply-To: <CAGb2v66YpYBS78C7H-O3zef2NTs+7=ec3A7jrZ+DxjYEyBmWxQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 27/11/2023 16:28, Konrad Dybcio wrote:
-> Apart from the already handled data bus (MAS_MDP_Pn<->DDR), there are
-> other connection paths:
-> - a path that connects rotator block to the DDR.
-> - a path that needs to be handled to ensure MDSS register access
->   functions properly, namely the "reg bus", a.k.a the CPU-MDSS CFG
->   interconnect.
+On 28/11/2023 08:50, Chen-Yu Tsai wrote:
+> On Tue, Nov 28, 2023 at 3:43 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 28/11/2023 01:58, Andre Przywara wrote:
+>>>
+>>> +static struct regmap *sun8i_ths_get_syscon_regmap(struct device_node *node)
+>>> +{
+>>> +     struct device_node *syscon_node;
+>>> +     struct platform_device *syscon_pdev;
+>>> +     struct regmap *regmap = NULL;
+>>> +
+>>> +     syscon_node = of_parse_phandle(node, "syscon", 0);
+>>
+>> Nope. For the 100th time, this cannot be generic.
+>>
+>>> +     if (!syscon_node)
+>>> +             return ERR_PTR(-ENODEV);
+>>> +
+>>> +     syscon_pdev = of_find_device_by_node(syscon_node);
+>>> +     if (!syscon_pdev) {
+>>> +             /* platform device might not be probed yet */
+>>> +             regmap = ERR_PTR(-EPROBE_DEFER);
+>>> +             goto out_put_node;
+>>> +     }
+>>> +
+>>> +     /* If no regmap is found then the other device driver is at fault */
+>>> +     regmap = dev_get_regmap(&syscon_pdev->dev, NULL);
+>>> +     if (!regmap)
+>>> +             regmap = ERR_PTR(-EINVAL);
+>>
+>> Aren't you open-coding existing API to get regmap from syscon?
 > 
-> Describe these paths to allow using them in device trees and in the
-> driver.
+> Not really. This is to get a regmap exported by the device. Syscon's regmap
+> is not tied to the device at all.
+
+I am talking about open-coding existing API. Look at syscon.h.
+
 > 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> [Konrad: rework for one vs two MDP paths, update examples]
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
+> With this scheme a device to could export just enough registers for the
+> consumer to use, instead of the whole address range.
+> 
+> We do this in the R40 clock controller as well, which has some bits that
+> tweak the ethernet controllers RGMII delay...
 
-Thanks, looks good.
+Not related.
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> 
+> ChenYu
 
 Best regards,
 Krzysztof
