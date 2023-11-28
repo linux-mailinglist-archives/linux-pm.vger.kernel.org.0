@@ -1,130 +1,147 @@
-Return-Path: <linux-pm+bounces-327-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-328-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D87D17FAFAE
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 02:40:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC00B7FAFBF
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 02:48:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0990A1C20AC5
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 01:40:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8142728140C
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 01:48:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C385186D;
-	Tue, 28 Nov 2023 01:40:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AF951C2E;
+	Tue, 28 Nov 2023 01:48:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2907BD;
-	Mon, 27 Nov 2023 17:40:08 -0800 (PST)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-1fa37df6da8so1186082fac.2;
-        Mon, 27 Nov 2023 17:40:08 -0800 (PST)
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C213138;
+	Mon, 27 Nov 2023 17:48:07 -0800 (PST)
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3b837d974ecso3095293b6e.2;
+        Mon, 27 Nov 2023 17:48:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701135608; x=1701740408;
+        d=1e100.net; s=20230601; t=1701136086; x=1701740886;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9KMijVoZzKjmnAsmxupu7gb2DhrWpe//b9T4lGH4FwY=;
-        b=jExPtyAWDITjC35tZOtKw0MnzoBfV4eroRXZYXcJVnBUOvUjeR/UEdCI7jjxj7ViWZ
-         KZOmEK2nS0RwzyH45TYzB/BYQv7mJQd+XUV8QyEHx9qfrRsXPb05rD/7NbD5dKZDJNP9
-         pm0rDB+g296vpV/LkjoiGL77cEPmxVMuBCmv3eZOGcy8qfIFbHXbwp0u+7yKla4ZQrY8
-         bbkNXdw273rL+Ynie7JwpqDMRwLDiJdDhROXfQ8iE92sHQTq825uML3W4kIKQsx1YgHr
-         v8mrwL6oCSv0NwVrMg2iY/t4qFqQslmDljGYYXClk6TttpNQjuxbgkLWEzdbs5bhf+uU
-         0VFw==
-X-Gm-Message-State: AOJu0Yx8cAsGw7Y7aIhNDKJc9w1VXyl+370TK8UrYsQhJGIBJIk2bUoD
-	yJ0Amj6RVh3eR4dZELabPm/dWYQyi+zE+RRrDuOaOnpftPE=
-X-Google-Smtp-Source: AGHT+IF2SsjExQsB/NHhZaU7EPVIoJQYuKioTorE0GXNez6nQUnzk/cFrZt3ZhgCVyn3kk8ec2GS517W3vmuiKfFEqU=
-X-Received: by 2002:a05:6870:5a8b:b0:1f0:8122:554c with SMTP id
- dt11-20020a0568705a8b00b001f08122554cmr13274814oab.45.1701135608186; Mon, 27
- Nov 2023 17:40:08 -0800 (PST)
+        bh=JVr3F2hxQwUzP61DpYsFkJ3ETcJcTqVqqeZTUprliR8=;
+        b=xUTX/z2Sw2rW1o/yVrd0h2yysRxMsGTGGdmgLoNCwfyaAAjnPj0nzrAPcvnAR+iERr
+         EKyMNxR2RwZ/uwZvO2CemnjXOUauaE3YMjme9f2e5aPTqac6z81vKlsuNC4XkvPa64vq
+         ljhfNGdhAM31tThyQsCOWBPJVWexyxLOcxEn1DpOc9DbjkMQSBAq2PrNsQihn+0Kua0l
+         P2nbIEMhpaYrX2IbnTFPZamHb/kan2ReIUoajQQ33DLxqmxlUoTMUmY9rPoVnT8JjgX8
+         EGTPgcp76JMpSWqKSVCSUj4DoaL22jvk6Tj+IQr9zDlgTI0ox5OIAmyvPTACd5iWMRzH
+         Y77A==
+X-Gm-Message-State: AOJu0YxeTV17EpdiEx9k8HV2eH9sBcwyyTkCx54ustoSP38FivdUS+lp
+	rzEKbYeIapA6Qr5RAPFjjWv074ZL0irctc7eO5k=
+X-Google-Smtp-Source: AGHT+IGvxNlGukeQgZNcXeGDTi+TJJ93S20Hj8BOi49VO0yFr6+9IKAW+lVKp5+sV6kNLbcACqkrXXBiDVMzccFfCUw=
+X-Received: by 2002:a05:6871:296:b0:1fa:3b7d:1573 with SMTP id
+ i22-20020a056871029600b001fa3b7d1573mr8676008oae.7.1701136086592; Mon, 27 Nov
+ 2023 17:48:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <TYCP286MB214616F6AE3E088C5D781A2EC6C8A@TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM>
- <TYCP286MB21465F970BF56AAE5D0CEB72C6A1A@TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM>
- <002801da0da1$adb83fc0$0928bf40$@telus.net>
-In-Reply-To: <002801da0da1$adb83fc0$0928bf40$@telus.net>
+References: <20231003050751.525932-1-wyes.karny@amd.com>
+In-Reply-To: <20231003050751.525932-1-wyes.karny@amd.com>
 From: Len Brown <lenb@kernel.org>
-Date: Mon, 27 Nov 2023 20:39:57 -0500
-Message-ID: <CAJvTdKmJRsWzr8MSZdUv+1AA8AXBAoMF_CaNDAJE5EgThP5+EA@mail.gmail.com>
-Subject: Re: [PATCH] tools/power turbostat: Fix Bzy_MHz calculation equation
-To: Doug Smythies <dsmythies@telus.net>
-Cc: Peng Liu <pngliu@hotmail.com>, Wyes Karny <wyes.karny@amd.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, liupeng17@lenovo.com
+Date: Mon, 27 Nov 2023 20:47:55 -0500
+Message-ID: <CAJvTdKnE4RW7fkHX2r6MvtrC80ynMazgP90KGi7Yump-s3-09g@mail.gmail.com>
+Subject: Re: [PATCH v2] tools/power turbostat: Increase the limit for fd opened
+To: Wyes Karny <wyes.karny@amd.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Doug Smythies <dsmythies@telus.net>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Peng Liu,
-Thanks for the close read of the documentation, and the patch.
-I've applied it, though I re-wrote the commit message (below) to make
-it clear it is a documentation fix, as the code was already correct.
+Applied
 
-thanks,
--Len
+Thanks Wyes!
 
-ps. I would have replied to your original e-mail, but there was a
-period where gmail dropped mail due to space limitations.
-No worries, as Doug said, everything is in patchwork.
-
-
-    tools/power turbostat: Fix Bzy_MHz documentation typo
-
-    The code calculates Bzy_MHz by multiplying TSC_delta *
-APERF_delta/MPERF_delta
-    The man page erroneously showed that TSC_delta was divided.
-
-On Thu, Nov 2, 2023 at 11:31=E2=80=AFAM Doug Smythies <dsmythies@telus.net>=
- wrote:
+On Tue, Oct 3, 2023 at 1:08=E2=80=AFAM Wyes Karny <wyes.karny@amd.com> wrot=
+e:
 >
-> Hi Peng and Wyes,
+> When running turbostat, a system with 512 cpus reaches the limit for
+> maximum number of file descriptors that can be opened. To solve this
+> problem, the limit is raised to 2^15, which is a large enough number.
 >
-> Just for your information about your recent "ping"s about your turbostat =
-patches:
+> Below data is collected from AMD server systems while running turbostat:
 >
-> Please be aware that there is rarely any reply. There tends to be about 2=
- turbostat updates released per year. Your patches are in patchworks [1], a=
-s are some others, including an old one of mine from 2023.04.03
-> Eventually there will be an update, and hopefully it will include all our=
- patches.
+> |-----------+-------------------------------|
+> | # of cpus | # of opened fds for turbostat |
+> |-----------+-------------------------------|
+> | 128       | 260                           |
+> |-----------+-------------------------------|
+> | 192       | 388                           |
+> |-----------+-------------------------------|
+> | 512       | 1028                          |
+> |-----------+-------------------------------|
 >
-> [1] https://patchwork.kernel.org/project/linux-pm/list/?series=3D&submitt=
-er=3D&state=3D&q=3D&archive=3D&delegate=3D107
+> So, the new max limit would be sufficient up to 2^14 cpus (but this
+> also depends on how many counters are enabled).
 >
-> ... Doug
+> Reviewed-by: Doug Smythies <dsmythies@telus.net>
+> Tested-by: Doug Smythies <dsmythies@telus.net>
+> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+> ---
+> v1 -> v2:
+> - Take care of already higher rlim_max, rlim_curr
+> - Minor tweak in commit text
 >
-> On 2023.10.29 08:12 Peng Liu wrote:
+>  tools/power/x86/turbostat/turbostat.c | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
 >
-> > Ping
-> >
-> > On 2023/10/7 13:46, Peng Liu wrote:
-> >> From: Peng Liu <liupeng17@lenovo.com>
-> >>
-> >> To calculate Bzy_MHz, TSC_delta should multiply APERF_delta instead
-> >> of dividing it.
-> >>
-> >> Signed-off-by: Peng Liu <liupeng17@lenovo.com>
-> >> ---
-> >>   tools/power/x86/turbostat/turbostat.8 | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/tools/power/x86/turbostat/turbostat.8 b/tools/power/x86/t=
-urbostat/turbostat.8
-> >> index 8f08c3fd498d..1ba6340d3b3d 100644
-> >> --- a/tools/power/x86/turbostat/turbostat.8
-> >> +++ b/tools/power/x86/turbostat/turbostat.8
-> >> @@ -370,7 +370,7 @@ below the processor's base frequency.
-> >>
-> >>   Busy% =3D MPERF_delta/TSC_delta
-> >>
-> >> -Bzy_MHz =3D TSC_delta/APERF_delta/MPERF_delta/measurement_interval
-> >> +Bzy_MHz =3D TSC_delta*APERF_delta/MPERF_delta/measurement_interval
-> >>
-> >>   Note that these calculations depend on TSC_delta, so they
-> >>   are not reliable during intervals when TSC_MHz is not running at the=
- base frequency.
+> diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turb=
+ostat/turbostat.c
+> index 9a10512e3407..1563a0ae7e4c 100644
+> --- a/tools/power/x86/turbostat/turbostat.c
+> +++ b/tools/power/x86/turbostat/turbostat.c
+> @@ -53,6 +53,8 @@
+>  #define        NAME_BYTES 20
+>  #define PATH_BYTES 128
+>
+> +#define MAX_NOFILE 0x8000
+> +
+>  enum counter_scope { SCOPE_CPU, SCOPE_CORE, SCOPE_PACKAGE };
+>  enum counter_type { COUNTER_ITEMS, COUNTER_CYCLES, COUNTER_SECONDS, COUN=
+TER_USEC };
+>  enum counter_format { FORMAT_RAW, FORMAT_DELTA, FORMAT_PERCENT };
+> @@ -6717,6 +6719,22 @@ void cmdline(int argc, char **argv)
+>         }
+>  }
+>
+> +void set_rlimit(void)
+> +{
+> +       struct rlimit limit;
+> +
+> +       if (getrlimit(RLIMIT_NOFILE, &limit) < 0)
+> +               err(1, "Failed to get rlimit");
+> +
+> +       if (limit.rlim_max < MAX_NOFILE)
+> +               limit.rlim_max =3D MAX_NOFILE;
+> +       if (limit.rlim_cur < MAX_NOFILE)
+> +               limit.rlim_cur =3D MAX_NOFILE;
+> +
+> +       if (setrlimit(RLIMIT_NOFILE, &limit) < 0)
+> +               err(1, "Failed to set rlimit");
+> +}
+> +
+>  int main(int argc, char **argv)
+>  {
+>         outf =3D stderr;
+> @@ -6729,6 +6747,9 @@ int main(int argc, char **argv)
+>
+>         probe_sysfs();
+>
+> +       if (!getuid())
+> +               set_rlimit();
+> +
+>         turbostat_init();
+>
+>         msr_sum_record();
+> --
+> 2.34.1
 >
 
 
