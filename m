@@ -1,28 +1,28 @@
-Return-Path: <linux-pm+bounces-323-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-324-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33FB47FAF5B
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 02:00:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06A117FAF5E
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 02:00:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E23C2281AB8
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 01:00:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30D461C20E3E
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 01:00:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD84317E6;
-	Tue, 28 Nov 2023 01:00:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40BE91852;
+	Tue, 28 Nov 2023 01:00:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7DD11B8;
-	Mon, 27 Nov 2023 17:00:47 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6439FC2;
+	Mon, 27 Nov 2023 17:00:50 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 181E12F4;
-	Mon, 27 Nov 2023 17:01:35 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BCF9BC15;
+	Mon, 27 Nov 2023 17:01:37 -0800 (PST)
 Received: from localhost.localdomain (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 01B1C3F6C4;
-	Mon, 27 Nov 2023 17:00:44 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A57653F6C4;
+	Mon, 27 Nov 2023 17:00:47 -0800 (PST)
 From: Andre Przywara <andre.przywara@arm.com>
 To: Vasily Khoruzhick <anarsoul@gmail.com>,
 	Yangtao Li <tiny.windzz@gmail.com>,
@@ -42,9 +42,9 @@ Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
 	devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-sunxi@lists.linux.dev
-Subject: [PATCH v3 4/6] thermal: sun8i: add syscon register access code
-Date: Tue, 28 Nov 2023 00:58:47 +0000
-Message-Id: <20231128005849.19044-5-andre.przywara@arm.com>
+Subject: [PATCH v3 5/6] thermal: sun8i: add support for H616 THS controller
+Date: Tue, 28 Nov 2023 00:58:48 +0000
+Message-Id: <20231128005849.19044-6-andre.przywara@arm.com>
 X-Mailer: git-send-email 2.35.8
 In-Reply-To: <20231128005849.19044-1-andre.przywara@arm.com>
 References: <20231128005849.19044-1-andre.przywara@arm.com>
@@ -56,119 +56,118 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Allwinner H616 SoC needs to clear a bit in one register in the SRAM
-controller (exported as a syscon), to report reasonable temperature
-values. On reset, bit 16 in register 0x3000000 is set, which leads to the
-driver reporting temperatures around 200C. Clearing this bit brings the
-values down to the expected range. The BSP code does a one-time write in
-U-Boot, with a comment just mentioning the effect on the THS, but offering
-no further explanation.
+From: Martin Botka <martin.botka@somainline.org>
 
-To not rely on firmware to set things up for us, add code that queries
-the syscon device via a DT phandle link, then clear just this single
-bit.
+Add support for the thermal sensor found in H616 SoCs, which slightly
+resembles the H6 thermal sensor controller, with a few changes like
+four sensors.
+Also the registers readings are wrong, unless a bit in the first SYS_CFG
+register cleared, so set needs_syscon to trigger that code
 
+Signed-off-by: Martin Botka <martin.botka@somainline.org>
 Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 ---
- drivers/thermal/sun8i_thermal.c | 50 +++++++++++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
+ drivers/thermal/sun8i_thermal.c | 73 +++++++++++++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
 
 diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
-index 44554c3efc96c..920e419ce7343 100644
+index 920e419ce7343..9a404fa9d76a9 100644
 --- a/drivers/thermal/sun8i_thermal.c
 +++ b/drivers/thermal/sun8i_thermal.c
-@@ -15,6 +15,7 @@
- #include <linux/module.h>
- #include <linux/nvmem-consumer.h>
- #include <linux/of.h>
-+#include <linux/of_platform.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
- #include <linux/reset.h>
-@@ -66,6 +67,7 @@ struct tsensor {
- struct ths_thermal_chip {
- 	bool            has_mod_clk;
- 	bool            has_bus_clk_reset;
-+	bool		needs_syscon;
- 	int		sensor_num;
- 	int		offset;
- 	int		scale;
-@@ -83,6 +85,7 @@ struct ths_device {
- 	const struct ths_thermal_chip		*chip;
- 	struct device				*dev;
- 	struct regmap				*regmap;
-+	struct regmap_field			*syscon_regmap_field;
- 	struct reset_control			*reset;
- 	struct clk				*bus_clk;
- 	struct clk                              *mod_clk;
-@@ -325,6 +328,34 @@ static void sun8i_ths_reset_control_assert(void *data)
- 	reset_control_assert(data);
+@@ -280,6 +280,64 @@ static int sun50i_h6_ths_calibrate(struct ths_device *tmdev,
+ 	return 0;
  }
  
-+static struct regmap *sun8i_ths_get_syscon_regmap(struct device_node *node)
++static int sun50i_h616_ths_calibrate(struct ths_device *tmdev,
++				     u16 *caldata, int callen)
 +{
-+	struct device_node *syscon_node;
-+	struct platform_device *syscon_pdev;
-+	struct regmap *regmap = NULL;
++	struct device *dev = tmdev->dev;
++	int i, ft_temp;
 +
-+	syscon_node = of_parse_phandle(node, "syscon", 0);
-+	if (!syscon_node)
-+		return ERR_PTR(-ENODEV);
++	if (!caldata[0])
++		return -EINVAL;
 +
-+	syscon_pdev = of_find_device_by_node(syscon_node);
-+	if (!syscon_pdev) {
-+		/* platform device might not be probed yet */
-+		regmap = ERR_PTR(-EPROBE_DEFER);
-+		goto out_put_node;
++	/*
++	 * h616 efuse THS calibration data layout:
++	 *
++	 * 0      11  16     27   32     43   48    57
++	 * +----------+-----------+-----------+-----------+
++	 * |  temp |  |sensor0|   |sensor1|   |sensor2|   |
++	 * +----------+-----------+-----------+-----------+
++	 *                      ^           ^           ^
++	 *                      |           |           |
++	 *                      |           |           sensor3[11:8]
++	 *                      |           sensor3[7:4]
++	 *                      sensor3[3:0]
++	 *
++	 * The calibration data on the H616 is the ambient temperature and
++	 * sensor values that are filled during the factory test stage.
++	 *
++	 * The unit of stored FT temperature is 0.1 degree celsius.
++	 */
++	ft_temp = caldata[0] & FT_TEMP_MASK;
++
++	for (i = 0; i < tmdev->chip->sensor_num; i++) {
++		int delta, cdata, offset, reg, temp;
++
++		if (i == 3)
++			reg = (caldata[1] >> 12)
++			      | ((caldata[2] >> 12) << 4)
++			      | ((caldata[3] >> 12) << 8);
++		else
++			reg = (int)caldata[i + 1] & TEMP_CALIB_MASK;
++
++		temp = tmdev->chip->calc_temp(tmdev, i, reg);
++		delta = ((temp - ft_temp * 100) * 10) / tmdev->chip->scale;
++		cdata = CALIBRATE_DEFAULT - delta;
++		if (cdata & ~TEMP_CALIB_MASK) {
++			dev_warn(dev, "sensor%d is not calibrated.\n", i);
++
++			continue;
++		}
++
++		offset = (i % 2) * 16;
++		regmap_update_bits(tmdev->regmap,
++				   SUN50I_H6_THS_TEMP_CALIB + (i / 2 * 4),
++				   TEMP_CALIB_MASK << offset,
++				   cdata << offset);
 +	}
 +
-+	/* If no regmap is found then the other device driver is at fault */
-+	regmap = dev_get_regmap(&syscon_pdev->dev, NULL);
-+	if (!regmap)
-+		regmap = ERR_PTR(-EINVAL);
-+
-+	platform_device_put(syscon_pdev);
-+out_put_node:
-+	of_node_put(syscon_node);
-+	return regmap;
++	return 0;
 +}
 +
- static int sun8i_ths_resource_init(struct ths_device *tmdev)
+ static int sun8i_ths_calibrate(struct ths_device *tmdev)
  {
- 	struct device *dev = tmdev->dev;
-@@ -369,6 +400,21 @@ static int sun8i_ths_resource_init(struct ths_device *tmdev)
- 	if (ret)
- 		return ret;
+ 	struct nvmem_cell *calcell;
+@@ -659,6 +717,20 @@ static const struct ths_thermal_chip sun50i_h6_ths = {
+ 	.calc_temp = sun8i_ths_calc_temp,
+ };
  
-+	if (tmdev->chip->needs_syscon) {
-+		const struct reg_field sun8i_syscon_reg_field =
-+			REG_FIELD(0x0, 16, 16);
-+		struct regmap *regmap;
++static const struct ths_thermal_chip sun50i_h616_ths = {
++	.sensor_num = 4,
++	.has_bus_clk_reset = true,
++	.needs_syscon = true,
++	.ft_deviation = 8000,
++	.offset = 263655,
++	.scale = 810,
++	.temp_data_base = SUN50I_H6_THS_TEMP_DATA,
++	.calibrate = sun50i_h616_ths_calibrate,
++	.init = sun50i_h6_thermal_init,
++	.irq_ack = sun50i_h6_irq_ack,
++	.calc_temp = sun8i_ths_calc_temp,
++};
 +
-+		regmap = sun8i_ths_get_syscon_regmap(dev->of_node);
-+		if (IS_ERR(regmap))
-+			return PTR_ERR(regmap);
-+		tmdev->syscon_regmap_field = devm_regmap_field_alloc(dev,
-+						      regmap,
-+						      sun8i_syscon_reg_field);
-+		if (IS_ERR(tmdev->syscon_regmap_field))
-+			return PTR_ERR(tmdev->syscon_regmap_field);
-+	}
-+
- 	ret = sun8i_ths_calibrate(tmdev);
- 	if (ret)
- 		return ret;
-@@ -415,6 +461,10 @@ static int sun50i_h6_thermal_init(struct ths_device *tmdev)
- {
- 	int val;
- 
-+	/* The H616 needs to have a bit in the SRAM control register cleared. */
-+	if (tmdev->syscon_regmap_field)
-+		regmap_field_write(tmdev->syscon_regmap_field, 0);
-+
- 	/*
- 	 * The manual recommends an overall sample frequency of 50 KHz (20us,
- 	 * 480 cycles at 24 MHz), which provides plenty of time for both the
+ static const struct of_device_id of_ths_match[] = {
+ 	{ .compatible = "allwinner,sun8i-a83t-ths", .data = &sun8i_a83t_ths },
+ 	{ .compatible = "allwinner,sun8i-h3-ths", .data = &sun8i_h3_ths },
+@@ -667,6 +739,7 @@ static const struct of_device_id of_ths_match[] = {
+ 	{ .compatible = "allwinner,sun50i-a100-ths", .data = &sun50i_a100_ths },
+ 	{ .compatible = "allwinner,sun50i-h5-ths", .data = &sun50i_h5_ths },
+ 	{ .compatible = "allwinner,sun50i-h6-ths", .data = &sun50i_h6_ths },
++	{ .compatible = "allwinner,sun50i-h616-ths", .data = &sun50i_h616_ths },
+ 	{ /* sentinel */ },
+ };
+ MODULE_DEVICE_TABLE(of, of_ths_match);
 -- 
 2.35.8
 
