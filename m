@@ -1,40 +1,60 @@
-Return-Path: <linux-pm+bounces-349-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-350-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 659A67FB7D5
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 11:30:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D5427FB7F3
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 11:34:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 08EB6B2184A
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 10:30:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CDD1E1C2121E
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 10:34:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 471224EB5D;
-	Tue, 28 Nov 2023 10:29:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B0884C3BC;
+	Tue, 28 Nov 2023 10:34:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernkonzept.com header.i=@kernkonzept.com header.b="aLdRprn3"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vNg89kuF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7920F5B8A;
-	Tue, 28 Nov 2023 02:29:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=kernkonzept.com; s=mx1; h=In-Reply-To:Content-Type:MIME-Version:References:
-	Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:Reply-To:
-	Content-ID:Content-Description;
-	bh=EpPTjdpeYg0w4loH5/do8EUAnKxDsHXE57/3N6Z68X8=; b=aLdRprn3bm9/VdAqUWI8sZMDGy
-	4Ueng9SKAuU2e4Wskgkno4UbZJlnpP1eXl7/6jV83jVYOdflrys0QAs5XEyLEhJAVz+3zfCG1nQ/K
-	UsECCbRLlUpCwUYGqIKNij7GFXm/zEzzUhop4GmiIe29IczYFLyBNWr6ND5nCi5U6/EY5SEBMYaVG
-	Ts4FZFbJTzvcmHSneNFdPCkUT/xUVlPJDP46mN09+1yQnBgpvVdEKHDorkkVgSkg3hTloxLFZUcgX
-	Ae1wbZ+mlHK2lNlDk6tFANDHpBn6pf2/rXnN5qDETiZmVfpSq4NOfeer3tEfxtBlRYoeTXdMjxUek
-	/R1p8+7w==;
-Received: from [10.22.3.24] (helo=kernkonzept.com)
-	by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.96)
-	id 1r7vLD-008QQS-33;
-	Tue, 28 Nov 2023 11:29:19 +0100
-Date: Tue, 28 Nov 2023 11:29:11 +0100
-From: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-To: Viresh Kumar <viresh.kumar@linaro.org>
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B53CD45
+	for <linux-pm@vger.kernel.org>; Tue, 28 Nov 2023 02:34:31 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-6cb66fbc63dso3825748b3a.0
+        for <linux-pm@vger.kernel.org>; Tue, 28 Nov 2023 02:34:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1701167671; x=1701772471; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8Yyve/MpYopjqzKEDi1Y9CR3K8+cxDXLytjrxavvjAU=;
+        b=vNg89kuFzkutHT6nenw0wB5E+SvIdw2AOS0ytnHwaQyfmaGrcTNUNvFLv8DBdHTZ3B
+         g70V+bf5M5PiaUsFBKsJFummHFMx76ca3WHH+bgR4ajRa70uWWBnmC3e6tL2sEEO1/gh
+         QwMyGR0pu/N//0xIliW5odG1ccMfY48PWVuuU0dshLqnmn3j7+PQx1RJa8kmQtNBMDhS
+         38CXQRmdPKG02dlO6DAL/KbZpeZNRU32AXYOMsDpdEzjYH9i4O96kEoBazNzmK9ntfdM
+         Osj1LrbmJwkjx49P5ks07aIpe6l0e2gqrL6SEzaV3BBCsrj7E+trIQzrf+i62hxs59xD
+         Mwsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701167671; x=1701772471;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8Yyve/MpYopjqzKEDi1Y9CR3K8+cxDXLytjrxavvjAU=;
+        b=gXkZYP4CWkyd8+8Z+fJSQ7OPM2W9DFqt6UkhyfawuPFoafAE9bHPoktNzLUyaQx093
+         y5Urj8ApvDJQ5iZHDjgwmTlV8Wdzjj2prTgVennJd523iCNeQCIfakwloDxT9AygbCvs
+         Gi8PdRwyEyMi9uiDrP8/WhcD8hpZgVIna4OyZZvAfnZsJUi0WczSQU+FM6WvnpC/yGY9
+         KXnpKZ3PnBqgb9K+dmIa2nnFNDOcncCHpAbVBei12uGa6XUUeptnCD/UGeQLSh/fgPKh
+         2f0KafiFmG2aXPzrRWu+E+xK8LGqnF+QNro8CQQ/aqW1jQ8IXUoRnC5GUMFdaoz9ud++
+         rs6A==
+X-Gm-Message-State: AOJu0Ywruy+pmNcvGJLFQVT+/X69YIcyFGr3t4Qx34kAzDcpdjuu8Uy+
+	Jdtm1RbK12OT2CNfAjwD2aCDKg==
+X-Google-Smtp-Source: AGHT+IFphre2IOCGQmscY6xeXA4mJ80hFOQLqrzgfqIhwhyj3EcjqOVFv1DI9ExufEeI4z1KX4HrYQ==
+X-Received: by 2002:a05:6a20:8f01:b0:18c:a983:a5f2 with SMTP id b1-20020a056a208f0100b0018ca983a5f2mr7390871pzk.29.1701167670999;
+        Tue, 28 Nov 2023 02:34:30 -0800 (PST)
+Received: from localhost ([122.172.82.6])
+        by smtp.gmail.com with ESMTPSA id by6-20020a056a02058600b005c216d903bdsm7982692pgb.89.2023.11.28.02.34.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Nov 2023 02:34:30 -0800 (PST)
+Date: Tue, 28 Nov 2023 16:04:28 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
 Cc: Ulf Hansson <ulf.hansson@linaro.org>, Nishanth Menon <nm@ti.com>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
 	Stephen Boyd <sboyd@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
@@ -44,8 +64,9 @@ Cc: Ulf Hansson <ulf.hansson@linaro.org>, Nishanth Menon <nm@ti.com>,
 	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH V3 0/3]  OPP: Simplify required-opp handling
-Message-ID: <ZWXA9_VDRKzMA9Nj@kernkonzept.com>
+Message-ID: <20231128103428.hckenu5khg3n5cok@vireshk-i7>
 References: <cover.1700131353.git.viresh.kumar@linaro.org>
+ <ZWXA9_VDRKzMA9Nj@kernkonzept.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -54,71 +75,28 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1700131353.git.viresh.kumar@linaro.org>
+In-Reply-To: <ZWXA9_VDRKzMA9Nj@kernkonzept.com>
+X-Spam-Level: *
 
-On Thu, Nov 16, 2023 at 04:13:04PM +0530, Viresh Kumar wrote:
-> Configuring the required OPP was never properly implemented, we just
-> took an exception for genpds and configured them directly, while leaving
-> out all other required OPP types.
+On 28-11-23, 11:29, Stephan Gerhold wrote:
+> Sorry for the delay. I tested the "opp/linux-next" branch (which seems
+> to contain the changes in this series already now) with the following
+> configurations:
 > 
-> Now that a standard call to dev_pm_opp_set_opp() takes care of
-> configuring the opp->level too, the special handling for genpds can be
-> avoided by simply calling dev_pm_opp_set_opp() for the required OPPs,
-> which shall eventually configure the corresponding level for genpds.
+>  - Single genpd used for cpufreq (MSM8909): Works
+>  - Multiple genpd used for cpufreq (MSM8916): Works
+>  - Single genpd used for cpufreq + parent genpd (MSM8916): Works, warning gone
 > 
-> This also makes it possible for us to configure other type of required
-> OPPs (no concrete users yet though), via the same path. This is how
-> other frameworks take care of parent nodes, like clock, regulators, etc,
-> where we recursively call the same helper.
-> 
-> Pushed here:
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/required-opps
-> 
+> Thanks for fixing this! :-)
 
-Sorry for the delay. I tested the "opp/linux-next" branch (which seems
-to contain the changes in this series already now) with the following
-configurations:
+Thanks a lot.
 
- - Single genpd used for cpufreq (MSM8909): Works
- - Multiple genpd used for cpufreq (MSM8916): Works
- - Single genpd used for cpufreq + parent genpd (MSM8916): Works, warning gone
+> I guess I'm too late now but FWIW:
+> 
+> Tested-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
 
-Thanks for fixing this! :-)
-
-I guess I'm too late now but FWIW:
-
-Tested-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-
-> V2->V3:
-> - Dropped patch 1/3, merged.
-> - Added a new commit to avoid propagation and a WARN() for parent genpd case.
-> 
-> V1->V2:
-> - Support opp-level 0, drop vote i.e..
-> - Fix OPP pointer while calling dev_pm_opp_set_opp() recursively.
-> - Minor checks and fixes.
-> - Add Reviewed-by from Ulf.
-> 
-> --
-> Viresh
-> 
-> Viresh Kumar (3):
->   OPP: Use _set_opp_level() for single genpd case
->   OPP: Call dev_pm_opp_set_opp() for required OPPs
->   OPP: Don't set OPP recursively for a parent genpd
-> 
->  drivers/opp/core.c     | 180 ++++++++++++++++++++++-------------------
->  drivers/opp/of.c       |  49 ++++++++---
->  drivers/opp/opp.h      |   8 +-
->  include/linux/pm_opp.h |   7 +-
->  4 files changed, 144 insertions(+), 100 deletions(-)
-> 
-> -- 
-> 2.31.1.272.g89b43f80a514
-> 
+Updated the commits with your tag :)
 
 -- 
-Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Kernkonzept GmbH at Dresden, Germany, HRB 31129, CEO Dr.-Ing. Michael Hohmuth
+viresh
 
