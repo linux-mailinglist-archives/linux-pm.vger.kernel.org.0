@@ -1,91 +1,187 @@
-Return-Path: <linux-pm+bounces-419-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-420-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D56CF7FC826
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 22:43:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 838B37FC99C
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 23:37:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 138301C20F28
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 21:43:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 27679B21545
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Nov 2023 22:37:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6F2C481A0;
-	Tue, 28 Nov 2023 21:43:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3396E40C0E;
+	Tue, 28 Nov 2023 22:37:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=well-founded.dev header.i=@well-founded.dev header.b="crzWIkss"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id D1153BD;
-	Tue, 28 Nov 2023 13:43:04 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F198C1FB;
-	Tue, 28 Nov 2023 13:43:51 -0800 (PST)
-Received: from [10.57.2.117] (unknown [10.57.2.117])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8DC6F3F73F;
-	Tue, 28 Nov 2023 13:43:03 -0800 (PST)
-Message-ID: <23b21239-4268-43e2-acc3-4ebc454944e7@arm.com>
-Date: Tue, 28 Nov 2023 21:44:04 +0000
+Received: from w4.tutanota.de (w4.tutanota.de [81.3.6.165])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9B71710;
+	Tue, 28 Nov 2023 14:37:17 -0800 (PST)
+Received: from tutadb.w10.tutanota.de (unknown [192.168.1.10])
+	by w4.tutanota.de (Postfix) with ESMTP id 8AD961060166;
+	Tue, 28 Nov 2023 22:37:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1701211036;
+	s=s1; d=well-founded.dev;
+	h=From:From:To:To:Subject:Subject:Content-Description:Content-ID:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Cc:Cc:Date:Date:In-Reply-To:In-Reply-To:MIME-Version:MIME-Version:Message-ID:Message-ID:Reply-To:References:References:Sender;
+	bh=d8Q7hAqIb/PUzl9v9MP4WxmBc/5Ztd5hTU3n2F9SrU4=;
+	b=crzWIkssbFPdgDuNJyelgjAS9CjAQ/1t9Vc1TFighEL+yJw4TuRyxo+2wwXMqy7B
+	uahN7RZur6/+rz7zRH9lJhXOBkE+IdfMpj5ckxQDGO0e85v7lQHvF0cZn1T+pJ792Iq
+	jxwhep8PYsd5u1YUkIoLHrLXCu/LA4V9nSNc74+Lnl2g2JkLj8pKLn3nQHTytg7yF1P
+	35CJ462ZS8pJGtfUCIQNAMvy4z1CP7osOBBRDA1/+usgWSwN8EsaO6f+OE1H3N/vagG
+	5YAvbd/WyYh1NTZTfxtjIRQMOCdoEKv7opUfl4We0+t3mL8EuAdo1mSg/8LSq7dwyyC
+	s8TRmMeS4Q==
+Date: Tue, 28 Nov 2023 23:37:16 +0100 (CET)
+From: Ramses <ramses@well-founded.dev>
+To: Tim Chen <tim.c.chen@linux.intel.com>
+Cc: Bagas Sanjaya <bagasdotme@gmail.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Regressions <regressions@lists.linux.dev>,
+	Linux Power Management <linux-pm@vger.kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Yu Chen <yu.c.chen@intel.com>
+Message-ID: <NkN44cg--3-9@well-founded.dev>
+In-Reply-To: <b2b9121c6d2003b45f7fde6a97bb479a1ed634c7.camel@linux.intel.com>
+References: <01df8329-06d7-4fd1-9c7a-05296f33231e@gmail.com> <b2b9121c6d2003b45f7fde6a97bb479a1ed634c7.camel@linux.intel.com>
+Subject: Re: Fwd: Intel hybrid CPU scheduler always prefers E cores
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] thermal: trip: Drop a redundant check from
- thermal_zone_set_trip()
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Zhang Rui <rui.zhang@intel.com>
-References: <6010559.lOV4Wx5bFT@kreacher> <4544904.LvFx2qVVIh@kreacher>
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <4544904.LvFx2qVVIh@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
+(Sending again since I accidentally sent my last mail as HTML.)
+
+I applied the patch on top of 6.6.2, but unfortunately I see more or less the same behaviour as before, with single-threaded CPU-bound tasks running almost exclusively on E cores.
+
+Ramses
 
 
-On 11/28/23 13:56, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> After recent changes in the thermal framework, a trip points array is
-> required for registering a thermal zone that is not tripless, so the
-> tz->trips pointer in thermal_zone_set_trip() is never NULL and the
-> check involving it is redundant.  Drop that check.
-> 
-> No functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Nov 28, 2023, 18:39 by tim.c.chen@linux.intel.com:
+
+> On Tue, 2023-11-28 at 20:22 +0700, Bagas Sanjaya wrote:
+>
+>> Hi,
+>>
+>> I come across an interesting bug report on Bugzilla [1]. The reporter
+>> wrote:
+>>
+>> > I am running an intel alder lake system (Core i7-1260P), with a mix of P and E cores.
+>> > 
+>> > Since Linux 6.6, and also on the current 6.7 RC, the scheduler seems to have a strong preference for the E cores, and single threaded workloads are consistently scheduled on one of the E cores.
+>> > 
+>> > With Linux 6.4 and before, when I ran a single threaded CPU-bound process, it was scheduled on a P core. With 6.5, it seems that the choice of P or E seemed rather random.
+>> > 
+>> > I tested these by running "stress" with different amounts of threads. With a single thread on Linux 6.6 and 6.7, I always have an E core at 100% and no load on the P cores. Starting from 3 threads I get some load on the P cores as well, but the E cores stay more heavily loaded.
+>> > With "taskset" I can force a process to run on a P core, but clearly it's not very practical to have to do CPU scheduling manually.
+>> > 
+>> > This severely affects single-threaded performance of my CPU since the E cores are considerably slower. Several of my workflows are now a lot slower due to them being single-threaded and heavily CPU-bound and being scheduled on E cores whereas they would run on P cores before.
+>> > 
+>> > I am not sure what the exact desired behaviour is here, to balance power consumption and performance, but currently my P cores are barely used for single-threaded workloads.
+>> > 
+>> > Is this intended behaviour or is this indeed a regression? Or is there perhaps any configuration that I should have done from my side? Is there any further info that I can provide to help you figure out what's going on?
+>>
+>> PM and scheduler people, is this a regression or works as intended?
+>>
+>> Thanks.
+>>
+>> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=218195
+>>
+>
+> I have noticed that the current code sometimes is quite trigger happy
+> moving tasks off P-core, whenever there are more than 2 tasks on a core.
+> Sometimes, Short running house keeping tasks
+> could disturb the running task on P-core as a result.
+>
+> Can you try the following patch?  On my Alder Lake system, I see as I add single
+> threaded tasks, they first run on P-cores, then followed by E-cores with this
+> patch on 6.6.
+>
+> Tim
+>
+> From 68a15ef01803c252261ebb47d86dfc1f2c68ae1e Mon Sep 17 00:00:00 2001
+> From: Tim Chen <tim.c.chen@linux.intel.com>
+> Date: Fri, 6 Oct 2023 15:58:56 -0700
+> Subject: [PATCH] sched/fair: Don't force smt balancing when CPU has spare
+>  capacity
+>
+> Currently group_smt_balance is picked whenever there are more
+> than two tasks on a core with two SMT.  However, the utilization
+> of those tasks may be low and do not warrant a task
+> migration to a CPU of lower priority.
+>
+> Adjust sched group clssification and sibling_imbalance()
+> to reflect this consideration.  Use sibling_imbalance() to
+> compute imbalance in calculate_imbalance() for the group_smt_balance
+> case.
+>
+> Signed-off-by: Tim Chen <tim.c.chen@linux.intel.com>
+>
 > ---
-> 
-> New patch in v2.
-> 
-> ---
->   drivers/thermal/thermal_trip.c |    3 ---
->   1 file changed, 3 deletions(-)
-> 
-> Index: linux-pm/drivers/thermal/thermal_trip.c
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_trip.c
-> +++ linux-pm/drivers/thermal/thermal_trip.c
-> @@ -153,9 +153,6 @@ int thermal_zone_set_trip(struct thermal
->   	struct thermal_trip t;
->   	int ret;
->   
-> -	if (!tz->ops->set_trip_temp && !tz->ops->set_trip_hyst && !tz->trips)
-> -		return -EINVAL;
+>  kernel/sched/fair.c | 23 +++++++++++------------
+>  1 file changed, 11 insertions(+), 12 deletions(-)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index ef7490c4b8b4..7dd7c2d2367a 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -9460,14 +9460,15 @@ group_type group_classify(unsigned int imbalance_pct,
+>  if (sgs->group_asym_packing)
+>  return group_asym_packing;
+>  
+> -	if (sgs->group_smt_balance)
+> -		return group_smt_balance;
 > -
->   	ret = __thermal_zone_get_trip(tz, trip_id, &t);
->   	if (ret)
->   		return ret;
-> 
-> 
-> 
+>  if (sgs->group_misfit_task_load)
+>  return group_misfit_task;
+>  
+> -	if (!group_has_capacity(imbalance_pct, sgs))
+> -		return group_fully_busy;
+> +	if (!group_has_capacity(imbalance_pct, sgs)) {
+> +		if (sgs->group_smt_balance)
+> +			return group_smt_balance;
+> +		else
+> +			return group_fully_busy;
+> +	}
+>  
+>  return group_has_spare;
+>  }
+> @@ -9573,6 +9574,11 @@ static inline long sibling_imbalance(struct lb_env *env,
+>  if (env->idle == CPU_NOT_IDLE || !busiest->sum_nr_running)
+>  return 0;
+>  
+> +	/* Do not pull tasks off preferred group with spare capacity */
+> +	if (busiest->group_type == group_has_spare &&
+> +	    sched_asym_prefer(sds->busiest->asym_prefer_cpu, env->dst_cpu))
+> +		return 0;
+> +
+>  ncores_busiest = sds->busiest->cores;
+>  ncores_local = sds->local->cores;
+>  
+> @@ -10411,13 +10417,6 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
+>  return;
+>  }
+>  
+> -	if (busiest->group_type == group_smt_balance) {
+> -		/* Reduce number of tasks sharing CPU capacity */
+> -		env->migration_type = migrate_task;
+> -		env->imbalance = 1;
+> -		return;
+> -	}
+> -
+>  if (busiest->group_type == group_imbalanced) {
+>  /*
+>  * In the group_imb case we cannot rely on group-wide averages
+> -- 
+> 2.32.0
+>
 
-LGTM
-
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
